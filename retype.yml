@@ -129,7 +129,8 @@ exclude:                      # Files or folders to exclude from the build
                               # See also: include
   - "*_temp/"                 # Wildcards are valid
   - "/src/temp.md"            # Exclude a specific file
-  - "codebase/"               
+  - "codebase/"    
+  - README.md           
 
 # -----------------------------------------------------------------------------
 
