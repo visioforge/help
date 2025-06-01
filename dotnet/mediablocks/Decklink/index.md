@@ -462,4 +462,4 @@ For complete working examples, refer to these sample applications:
 
 The Blackmagic Decklink blocks in the VisioForge Media Blocks SDK provide a powerful and flexible way to integrate professional video and audio hardware into your .NET applications. By leveraging the specific source and sink blocks, including the combined audio/video blocks, you can efficiently implement complex capture and playback workflows. Always refer to the specific settings classes for detailed configuration options.
 
-For additional support or questions, please refer to our [documentation](https://www.visioforge.com/documentation) or contact our support team.
+For additional support or questions, please contact our support team.
