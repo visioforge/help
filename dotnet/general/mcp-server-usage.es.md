@@ -312,7 +312,7 @@ El servidor MCP se actualiza regularmente, pero si nota información incorrecta:
 
 1. **Verifique la versión del SDK** - Asegúrese de estar usando la última versión del SDK
 2. **Verifique versiones de paquetes** - Compare con [NuGet.org](https://www.nuget.org/packages?q=VisioForge)
-3. **Reporte problemas** - Contacte al [soporte de VisioForge](https://support.visioforge.com/)
+3. **Reporte problemas** - Contacte a nuestro equipo de soporte (vea Recursos Adicionales abajo)
 
 ### Asistente IA No Usa el Servidor MCP
 
@@ -373,11 +373,14 @@ El servidor MCP ofrece:
 - [Especificación del Protocolo MCP](https://modelcontextprotocol.io/)
 - [Documentación de Claude Code](https://claude.ai/code)
 
-### Soporte
+### Soporte y Comunidad
 
-- [Portal de Soporte de VisioForge](https://support.visioforge.com/)
-- [Comunidad Discord](https://discord.com/invite/yvXUG56WCH)
-- [Muestras en GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
+¿Necesita ayuda? Póngase en contacto:
+
+- **[Portal de Soporte](https://support.visioforge.com/)** - Soporte técnico y reporte de problemas
+- **[Comunidad Discord](https://discord.com/invite/yvXUG56WCH)** - Chatea con desarrolladores y obtén respuestas rápidas
+- **[Muestras en GitHub](https://github.com/visioforge/.Net-SDK-s-samples)** - Proyectos de ejemplo completos
+- **Correo electrónico:** <support@visioforge.com>
 
 ### Guías Relacionadas
 
@@ -391,13 +394,3 @@ El servidor MCP ofrece:
 El Servidor MCP de VisioForge transforma el desarrollo asistido por IA al proporcionar a su asistente de codificación acceso directo a documentación completa y actualizada del SDK. Ya sea que esté construyendo una aplicación de captura de video en Android, un reproductor multimedia en Windows o una herramienta de edición multiplataforma con Avalonia, el servidor MCP asegura que su asistente IA tenga el conocimiento para ayudarlo a tener éxito.
 
 ¡Conéctese hoy y experimente el futuro del desarrollo de SDK con IA!
-
----
-
-**¿Necesita Ayuda?**
-
-Si tiene preguntas sobre el uso del servidor MCP o encuentra algún problema, comuníquese con nuestro equipo de soporte:
-
-- [Portal de Soporte](https://support.visioforge.com/)
-- [Comunidad Discord](https://discord.com/invite/yvXUG56WCH)
-- Correo electrónico: support@visioforge.com

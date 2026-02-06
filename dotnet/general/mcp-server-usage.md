@@ -312,7 +312,7 @@ The MCP server is updated regularly, but if you notice incorrect information:
 
 1. **Check the SDK version** - Ensure you're using the latest SDK version
 2. **Verify package versions** - Compare with [NuGet.org](https://www.nuget.org/packages?q=VisioForge)
-3. **Report issues** - Contact [VisioForge support](https://support.visioforge.com/)
+3. **Report issues** - Contact our support team (see Additional Resources below)
 
 ### AI Assistant Not Using MCP Server
 
@@ -373,11 +373,14 @@ The MCP server features:
 - [MCP Protocol Specification](https://modelcontextprotocol.io/)
 - [Claude Code Documentation](https://claude.ai/code)
 
-### Support
+### Support & Community
 
-- [VisioForge Support Portal](https://support.visioforge.com/)
-- [Discord Community](https://discord.com/invite/yvXUG56WCH)
-- [GitHub Samples](https://github.com/visioforge/.Net-SDK-s-samples)
+Need help? Get in touch:
+
+- **[Support Portal](https://support.visioforge.com/)** - Technical support and issue reporting
+- **[Discord Community](https://discord.com/invite/yvXUG56WCH)** - Chat with developers and get quick answers
+- **[GitHub Samples](https://github.com/visioforge/.Net-SDK-s-samples)** - Complete example projects
+- **Email:** <support@visioforge.com>
 
 ### Related Guides
 
@@ -391,13 +394,3 @@ The MCP server features:
 The VisioForge MCP Server transforms AI-assisted development by providing your coding assistant with direct access to comprehensive, up-to-date SDK documentation. Whether you're building a video capture app on Android, a media player on Windows, or a cross-platform editing tool with Avalonia, the MCP server ensures your AI assistant has the knowledge to help you succeed.
 
 Connect today and experience the future of AI-powered SDK development!
-
----
-
-**Need Help?**
-
-If you have questions about using the MCP server or encounter any issues, reach out to our support team:
-
-- [Support Portal](https://support.visioforge.com/)
-- [Discord Community](https://discord.com/invite/yvXUG56WCH)
-- Email: support@visioforge.com
