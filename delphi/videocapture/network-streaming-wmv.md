@@ -1,7 +1,6 @@
 ---
 title: Network WMV Streaming in Delphi Applications
-description: Master Windows Media Video network streaming in Delphi applications. Learn how to configure WMV profiles, manage client connections, set network ports, and implement robust video broadcasting functionality with our detailed implementation guide and code examples.
-sidebar_label: Network streaming using WMV format
+description: Implement WMV network streaming in Delphi - configure profiles, manage client connections, set ports, and broadcast video with code examples.
 ---
 
 # WMV Network Streaming Implementation Guide
@@ -112,5 +111,4 @@ If you encounter issues with your streaming implementation:
 - Validate network connectivity between the server and potential clients
 
 ---
-
 Please get in touch with [support](https://support.visioforge.com/) if you have questions about this implementation. Visit our [GitHub](https://github.com/visioforge/) page for additional code samples and resources.

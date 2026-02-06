@@ -1,13 +1,146 @@
 ---
 title: .Net SDKs Updates and Release History
-description: Detailed changelog for .Net video processing SDKs, including Video Capture, Media Player, Video Edit and Media Blocks. Track latest features, improvements, and fixes across versions. Essential reference for developers implementing video solutions.
-sidebar_label: Changelog
+description: Changelog for .NET video SDKs including Video Capture, Media Player, Video Edit, and Media Blocks with latest features and fixes.
 hide_table_of_contents: true
 ---
 
 # Changelog
 
 Changes and updates for all .Net SDKs.
+
+## 2025.12.9
+
+* Added Uno Platform support for desktop and mobile platforms
+
+## 2025.11.4
+
+* .Net 10 support for all SDKs
+
+## 2025.11.3
+
+* WPF VideoView update: Added RotationAngle, RotateCrop, and RotationStretch properties to support rotated video rendering
+
+## 2025.11.1
+
+* [Media Blocks SDK .Net] Add synchronized overlay group support for OverlayManagerBlock
+
+## 2025.10.10
+
+* [**Windows SDKs**] Updated VideoEffectRotate with no-crop option
+
+## 2025.10.6
+
+### 🚀 Major Feature: Ultra-Low Latency RTSP Streaming
+
+* **[Media Blocks SDK .Net]** Revolutionary low latency mode for RTSP sources achieving **60-120ms total latency** (10-14x improvement over default 1-2 seconds)
+  * Added `RTSPSourceSettings.LowLatencyMode` property for one-line enablement of optimized streaming
+  * Automatic pipeline optimization: RTSP source (80ms), queue buffers (10-20ms), and renderer sync control
+  * GStreamer integration: `latency=80ms`, `buffer-mode=0`, queue `max-size-buffers=2` with `leaky=downstream`
+  * Perfect for real-time surveillance, security systems, live monitoring, and interactive video applications
+
+* **[Media Blocks SDK .Net]** Enhanced RTSPSourceBlock with comprehensive low latency configuration
+  * Added `RTSPBufferMode` enum with 5 modes (None, Auto, Slave, Buffer, Synced) for fine-grained jitter buffer control
+  * Added `RTSPNTPTimeSource` enum (NTP, RunningTime, Clock) for NTP timestamp synchronization in multi-camera scenarios
+  * New properties: `LowLatencyMode`, `BufferMode`, `DropOnLatency`, `NTPSync`, `NTPTimeSource`
+  * Optimized `QueueElement` with automatic low latency configuration (2 frame max, leaky downstream mode)
+
+* **[Video Capture SDK X .Net]** Full low latency mode support for RTSP sources
+  * Compatible with `VideoCaptureCoreX` engine across all platforms
+  * Same simple API: `RTSPSourceSettings.LowLatencyMode = true`
+  * Works seamlessly with IP Capture demo and RTSP MultiView demo
+
+* **[Cross-Platform Support]** Low latency RTSP streaming now available on all platforms:
+  * Windows (WPF, WinForms, Console, Blazor)
+  * macOS (MAUI, Console)
+  * Linux (Console, WPF with Mono)
+  * Android (MAUI, Native)
+  * iOS (MAUI)
+
+* **[Demo Applications]** Updated 6 demos with low latency mode UI controls:
+  * Media Blocks SDK: RTSP Preview Demo (WPF), RTSP MultiView Demo (WinForms), MAUI RTSPViewer, Android RTSP Client
+  * Video Capture SDK X: IP Capture (WPF), RTSP MultiView Demo (WinForms)
+  * All demos include easy-to-use checkboxes or default-enabled low latency for optimal user experience
+
+* **[Documentation]** Comprehensive guides and resources:
+  * `RTSP_LOW_LATENCY.md` - Complete Media Blocks SDK usage guide with code examples
+  * `PIPELINE_LOW_LATENCY.md` - In-depth pipeline component analysis and latency optimization techniques
+  * `GSTREAMER_RTSP_EXAMPLES.md` - 7 command-line GStreamer pipeline examples for testing
+  * Official HELP documentation updated with low latency section and best practices
+  * GStreamer test scripts: Bash (Linux/macOS), Batch (Windows), PowerShell (Windows, recommended)
+
+* **[Testing]** Comprehensive test coverage and validation:
+  * 12 new unit tests for RTSPSourceSettings low latency configuration
+  * Validated on real IP cameras across all platforms
+  * Performance benchmarks: Windows (85ms), macOS (95ms), Linux (80ms), Android (110ms), iOS (100ms)
+
+* **[Backward Compatibility]** 100% backward compatible implementation:
+  * Default behavior unchanged - existing code works without modification
+  * Low latency mode is opt-in via explicit property
+  * No performance impact when not using low latency mode
+  * Queue optimization only applied when `LowLatencyMode=true`
+
+## 2025.10.3
+
+* [Media Blocks SDK .Net] Added DASH (Dynamic Adaptive Streaming over HTTP) sink support with DASHSinkBlock and DASHOutput classes
+* [Media Blocks SDK .Net] Added UniversalSourceBlockV2 with improved memory usage and performance
+
+## 2025.9.5
+
+* [Video Fingerprinting SDK] Improved support for flipped videos
+
+## 2025.9.3
+
+* [Media Blocks SDK .Net] Added DataMatrix barcode support using DataMatrixDecoderBlock block
+
+## 2025.9.1
+
+* [Video Fingerprinting SDK] Improved support for flipped videos
+
+## 2025.8.9
+
+* [Video Capture SDK .Net] VideoCaptureCoreX: Resolved issue with Snapshot_GetSK call on Android (wrong colorspace)
+
+## 2025.8.6
+
+* [X-engines] Updated RTSP RAW source block. Added WaitForKeyframe and SyncAudioWithKeyframe properties. Block can wait for keyframes because some cameras may not send them as first frames.
+
+## 2025.8.4
+
+* [X-engines] Added NDI source support in Live Video Compositor
+
+## 2025.8.2
+
+* [ALL] New ONVIF manager code in VisioForge.Core.ONVIFX. Full implementation of various ONVIF services including Device Management, Media v1/v2, PTZ, Events, Imaging, Analytics, Recording, and Replay services.
+
+## 2025.8.1
+
+* [Media Player SDK] Added PauseOnStop property to MediaPlayerCoreX
+
+## 2025.6.30
+
+* [X-engines] Added animated GIF support to `ImageVideoSourceBlock`/`ImageVideoSourceSettings` classes
+* [X-engines] Resolved issues with delayed file start in Live Video Compositor
+* [X-engines] Update video mixer API to use GUIDs instead of integer indexes for video sources
+
+## 2025.6.27
+
+* [Video Capture SDK] Resolved issue with RTSP Low Latency engine with some cameras
+
+## 2025.6.5
+
+* [X-engines] Resolved issue with NDI sources playback without audio streams
+
+## 2025.6.3
+
+* [X-engines] Updated GenICam source support for USB Vision cameras. Added GenTL source support.
+
+## 2025.6.2
+
+* [X-engines] Added deinterlace support for interlaced Decklink video sources
+
+## 2025.6.1
+
+* [Live Video Compositor] Resolved issue with file sources paused on start, and resumed with error
 
 ## 2025.5.1
 

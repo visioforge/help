@@ -1,6 +1,6 @@
 ---
 title: .Net SDKs - Info, Manuals & Usage Guides
-description: Discover comprehensive info, manuals & guides for VisioForge .Net SDKs (Video Capture, Media Player, Video Edit). Build powerful .NET multimedia apps.
+description: Comprehensive guides for VisioForge .NET SDKs covering video capture, media playback, editing, encoders, effects, and network streaming.
 sidebar_label: General Information
 order: 18
 
@@ -16,6 +16,7 @@ This section provides essential information, detailed software manuals, and prac
 ## Guides
 
 - [Video capture to MPEG-TS in VisioForge SDKs](guides/video-capture-to-mpegts.md)
+- [Record and Edit WMA Files in C# and .NET](guides/wma-recording-editing.md)
 
 ## SDK Components
 

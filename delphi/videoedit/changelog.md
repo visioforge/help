@@ -1,7 +1,6 @@
 ---
 title: TVFVideoEdit Library Version History & Updates
-description: Detailed version history of the TVFVideoEdit library for Delphi and ActiveX developers. Explore all features, bug fixes, performance improvements, and compatibility updates from versions 2.1 through 10.0, including Windows 8 support, FFMPEG integration, and advanced video effects.
-sidebar_label: Changelog
+description: TVFVideoEdit version history from 2.1 to 10.0 with features, bug fixes, FFMPEG integration, Windows 8 support, and video effects updates.
 ---
 
 # TVFVideoEdit Library: Complete Version History

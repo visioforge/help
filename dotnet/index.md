@@ -1,10 +1,8 @@
 ---
 title: .NET SDKs for Video & Media Development
-description: Professional .NET SDKs for video capture, editing, playback and media processing. Cross-platform support for Windows, macOS, Linux, Android and iOS with hardware acceleration for optimal performance.
+description: .NET SDKs for video capture, editing, playback, and processing on Windows, macOS, Linux, Android, and iOS with hardware acceleration.
 sidebar_label: .Net SDKs
 order: 20
-icon: ../static/dotnet.svg
-route: /docs/dotnet/
 ---
 
 # .NET SDKs for Professional Media Development

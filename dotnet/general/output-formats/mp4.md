@@ -1,12 +1,11 @@
 ---
 title: MP4 Video Output Integration for .NET
-description: Learn how to implement MP4 video output in .NET applications using hardware-accelerated encoders. Guide covers H.264/HEVC encoding, audio configuration, and best practices for optimal video processing performance.
-sidebar_label: MP4
+description: Implement MP4 output in .NET with H.264/HEVC hardware encoding, audio configuration, and optimized performance for video processing apps.
 ---
 
 # MP4 file output
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 MP4 (MPEG-4 Part 14), introduced in 2001, is a digital multimedia container format most commonly used to store video and audio. It also supports subtitles and images. MP4 is known for its high compression and compatibility across various devices and platforms, making it a popular choice for streaming and sharing.
 
@@ -16,7 +15,7 @@ To capture video in MP4 format using Video Capture SDK, you need to configure vi
 
 ## Cross-platform MP4 output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The [MP4Output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.MP4Output.html?q=MP4Output) class provides a flexible and powerful way to configure MP4 video output settings for video capture and editing operations. This guide will walk you through how to use the MP4Output class effectively, covering its key features and common usage patterns.
 
@@ -115,6 +114,148 @@ var mp4SinkSettings = new MP4SinkSettings("output.mp4");
 var mp4Output = new MP4OutputBlock(mp4SinkSettings, h264, aac);
 ```
 
+### File Splitting
+
+The [MP4SplitSinkSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.MP4SplitSinkSettings.html) class provides automatic file splitting capabilities, allowing you to split MP4 output into multiple files based on size, duration, or timecode. This class can be used with both `MP4OutputBlock` (which includes encoding) and `MP4SinkBlock` (muxing only). This is particularly useful for:
+
+- Long recording sessions that need to be broken into manageable file sizes
+- Creating time-based segments for easier archival or distribution
+- Managing disk space by limiting the number of files kept on storage
+- Implementing rolling buffer recording where only recent files are retained
+
+**Split by File Size**
+
+Split the output when a file reaches a specific size in bytes:
+
+```csharp
+var h264 = new OpenH264EncoderSettings();
+var aac = new VOAACEncoderSettings();
+
+// Create split sink settings with filename pattern
+var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
+
+// Split when file reaches 100 MB (104857600 bytes)
+splitSettings.SplitFileSize = 104857600;
+
+// Disable duration-based splitting (default is 1 minute)
+splitSettings.SplitDuration = TimeSpan.Zero;
+
+// Create output block
+var mp4Output = new MP4OutputBlock(splitSettings, h264, aac);
+```
+
+**Split by Duration**
+
+Split the output when a file reaches a specific duration:
+
+```csharp
+var h264 = new OpenH264EncoderSettings();
+var aac = new VOAACEncoderSettings();
+
+// Create split sink settings with filename pattern
+var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
+
+// Split every 5 minutes
+splitSettings.SplitDuration = TimeSpan.FromMinutes(5);
+
+// Create output block
+var mp4Output = new MP4OutputBlock(splitSettings, h264, aac);
+```
+
+**Limit Maximum Files**
+
+Control the maximum number of files to keep on disk. Once the limit is reached, the oldest files are automatically deleted:
+
+```csharp
+var h264 = new OpenH264EncoderSettings();
+var aac = new VOAACEncoderSettings();
+
+// Create split sink settings
+var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
+
+// Split every 10 minutes
+splitSettings.SplitDuration = TimeSpan.FromMinutes(10);
+
+// Keep only the last 6 files (1 hour of recordings)
+splitSettings.SplitMaxFiles = 6;
+
+// Create output block
+var mp4Output = new MP4OutputBlock(splitSettings, h264, aac);
+```
+
+**Split by Timecode**
+
+Split the output based on timecode difference between first and last frame:
+
+```csharp
+var h264 = new OpenH264EncoderSettings();
+var aac = new VOAACEncoderSettings();
+
+// Create split sink settings
+var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
+
+// Split when timecode difference reaches 1 hour
+// Format: "HH:MM:SS:FF" where FF is frames
+splitSettings.SplitMaxSizeTimecode = "01:00:00:00";
+
+// Disable other splitting methods
+splitSettings.SplitFileSize = 0;
+splitSettings.SplitDuration = TimeSpan.Zero;
+
+// Create output block
+var mp4Output = new MP4OutputBlock(splitSettings, h264, aac);
+```
+
+**Combined Settings**
+
+You can combine splitting criteria. The file will split when any of the enabled criteria is met:
+
+```csharp
+var h264 = new OpenH264EncoderSettings();
+var aac = new VOAACEncoderSettings();
+
+// Create split sink settings
+var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
+
+// Split at 200 MB OR 10 minutes, whichever comes first
+splitSettings.SplitFileSize = 209715200; // 200 MB
+splitSettings.SplitDuration = TimeSpan.FromMinutes(10);
+
+// Keep only last 12 files
+splitSettings.SplitMaxFiles = 12;
+
+// Start numbering from 1 instead of 0
+splitSettings.StartIndex = 1;
+
+// Create output block
+var mp4Output = new MP4OutputBlock(splitSettings, h264, aac);
+```
+
+**Using with MP4SinkBlock**
+
+For scenarios where you already have encoded streams and only need muxing (container creation), use `MP4SinkBlock` with `MP4SplitSinkSettings`:
+
+```csharp
+// Create split sink settings
+var splitSettings = new MP4SplitSinkSettings("output_%05d.mp4");
+splitSettings.SplitDuration = TimeSpan.FromMinutes(5);
+
+// Create MP4 sink block (muxing only, no encoding)
+var mp4Sink = new MP4SinkBlock(splitSettings);
+
+// Connect your pre-encoded streams to the sink block
+// (connection logic depends on your pipeline structure)
+```
+
+**Important Notes:**
+
+- The filename parameter must include a format specifier (like `%05d`) for the file index
+- Set `SplitFileSize` to 0 to disable size-based splitting (default is 0)
+- The default `SplitDuration` is 1 minute; set to `TimeSpan.Zero` to disable duration-based splitting
+- Set `SplitMaxFiles` to 0 to keep all files (default is 0, no deletion)
+- When combining criteria, splitting occurs when ANY criterion is met
+- The `StartIndex` property controls the initial file number (default is 0)
+
 ### Best Practices
 
 **Hardware Acceleration**: When possible, use hardware-accelerated encoders (NVENC, AMF, QSV) for better performance:
@@ -161,7 +302,7 @@ if (!NVENCH264EncoderSettings.IsAvailable())
 
 ## Windows-only MP4 output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 `The same sample code can be used for Video Edit SDK .Net. Use the VideoEditCore class instead of VideoCaptureCore.`
 
@@ -314,5 +455,4 @@ Finally, when we're done capturing the video, we need to stop the video capture 
 - MP4 redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

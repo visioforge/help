@@ -1,23 +1,21 @@
 ---
 title: Windows Media Audio Encoder Integration Guide
-description: Learn how to implement WMA audio encoding in .NET applications with cross-platform and Windows-specific approaches. Includes code examples, bitrate controls, and best practices for audio encoding implementation.
-sidebar_label: Windows Media Audio
-
+description: Implement WMA audio encoding in .NET with cross-platform and Windows-specific approaches, bitrate controls, and codec configuration.
 ---
 
 # Windows Media Audio encoder
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Windows Media Audio (WMA) is a popular audio codec developed by Microsoft for efficient audio compression. This documentation covers the WMA encoder implementations available in the VisioForge .Net SDKs.
 
 ## Overview
 
-The VisioForge SDK provides two distinct approaches for WMA encoding: the platform-specific [WMAOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.WMAOutput.html) for Windows environments and the cross-platform [WMAEncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.WMAEncoderSettings.html). Let's explore both implementations in detail to understand their capabilities and use cases.
+The VisioForge SDK provides two distinct approaches for WMA encoding: the platform-specific [WMAOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WMAOutput.html) for Windows environments and the cross-platform [WMAEncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.WMAEncoderSettings.html). Let's explore both implementations in detail to understand their capabilities and use cases.
 
 ## Cross-platform WMA output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The `WMAEncoderSettings` provides a cross-platform solution for WMA encoding. This implementation is built on SDK and offers consistent behavior across different operating systems.
 
@@ -94,7 +92,7 @@ if (!MP3EncoderSettings.IsAvailable())
 
 ## Windows-only WMA output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 The `WMAOutput` class provides a comprehensive Windows-specific implementation with advanced features and configuration options. This implementation leverages the Windows Media Format SDK for optimal performance on Windows systems.
 

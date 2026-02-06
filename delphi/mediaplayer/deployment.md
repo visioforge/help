@@ -1,7 +1,6 @@
 ---
 title: Media Player Library Deployment for Delphi & ActiveX
-description: Comprehensive guide for deploying media player components in Delphi and ActiveX applications. Learn both automated and manual installation methods, including codec setup, DirectShow filters, and environment configuration.
-sidebar_label: Deployment Guide
+description: Deploy TVFMediaPlayer in Delphi and ActiveX - automated and manual installation methods, codec setup, DirectShow filters, and dependencies.
 ---
 
 # Deployment Guide for TVFMediaPlayer
@@ -33,18 +32,18 @@ VisioForge provides separate installers for the base library and optional codec 
 This package installs the core TVFMediaPlayer components and essential DirectShow filters. It's always required, regardless of the media sources your application uses. Choose the installer corresponding to your development environment (Delphi or ActiveX) and target architecture (x86 or x64).
 
 * **Delphi:**
-  * [x86 Installer](http://files.visioforge.com/redists_delphi/redist_media_player_base_delphi.exe)
-  * [x64 Installer](http://files.visioforge.com/redists_delphi/redist_media_player_base_delphi_x64.exe)
+  * [x86 Installer](https://files.visioforge.com/redists_delphi/redist_media_player_base_delphi.exe)
+  * [x64 Installer](https://files.visioforge.com/redists_delphi/redist_media_player_base_delphi_x64.exe)
 * **ActiveX:**
-  * [x86 Installer](http://files.visioforge.com/redists_delphi/redist_media_player_base_ax.exe)
-  * [x64 Installer](http://files.visioforge.com/redists_delphi/redist_media_player_base_ax_x64.exe)
+  * [x86 Installer](https://files.visioforge.com/redists_delphi/redist_media_player_base_ax.exe)
+  * [x64 Installer](https://files.visioforge.com/redists_delphi/redist_media_player_base_ax_x64.exe)
 
 #### FFMPEG Package (Optional - For File/IP Camera Sources)
 
 If your application needs to play local files or stream from IP cameras using the FFMPEG engine, you must deploy this package. FFMPEG provides a wide range of codec support.
 
 * **FFMPEG:**
-  * [x86 Installer](http://files.visioforge.com/redists_delphi/redist_media_player_ffmpeg.exe)
+  * [x86 Installer](https://files.visioforge.com/redists_delphi/redist_media_player_ffmpeg.exe)
   * *Note: An x64 FFMPEG installer link was not explicitly provided in the original source; assume x86 covers most needs or consult VisioForge documentation for x64 specifics if required.*
 
 #### VLC Source Package (Optional - For File/IP Camera Sources)
@@ -79,8 +78,8 @@ Before copying library files, ensure the necessary runtime dependencies are pres
 The TVFMediaPlayer library relies on the Microsoft Visual C++ 2010 SP1 runtime. Install the appropriate version (x86 or x64) for your application's target architecture.
 
 * **VC++ 2010 SP1:**
-  * [x86 Redistributable](http://files.visioforge.com/shared/vcredist_2010_x86.exe)
-  * [x64 Redistributable](http://files.visioforge.com/shared/vcredist_2010_x64.exe)
+  * [x86 Redistributable](https://files.visioforge.com/shared/vcredist_2010_x86.exe)
+  * [x64 Redistributable](https://files.visioforge.com/shared/vcredist_2010_x64.exe)
 
 Run these installers before proceeding with the library file deployment.
 
@@ -104,7 +103,7 @@ Follow these steps to manually install the base library components:
         regsvr32.exe VisioForge_Video_Effects_Pro.ax
         ```
 
-        Alternatively, VisioForge provides a utility `reg_special.exe` in the redistributables. Copy this utility to the folder containing the `.ax` files and run it with administrator privileges to register all filters in that directory automatically. Refer to Microsoft's documentation for troubleshooting `regsvr32.exe` errors: [How to use the Regsvr32 tool](https://support.microsoft.com/en-us/help/249873/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages).
+        Alternatively, VisioForge provides a utility `reg_special.exe` in the redistributables. Copy this utility to the folder containing the `.ax` files and run it with administrator privileges to register all filters in that directory automatically. Refer to Microsoft's documentation for troubleshooting `regsvr32.exe` errors: [How to use the Regsvr32 tool](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5).
 3. **Update System PATH (Optional but Recommended):** If the filter DLLs and `.ax` files are placed in a directory separate from your application's executable, you must add the path to this directory to the system's `PATH` environment variable. This allows the operating system and your application to locate these essential files. Failure to do this can result in "DLL not found" or filter registration errors.
 
 ### Deploying Optional Packages Manually
@@ -134,5 +133,4 @@ After deployment, thoroughly test your application on the target machine.
   * Correct architecture (x86/x64) match between your application, the library components, and runtime dependencies.
 
 ---
-
 Need further assistance? Contact [VisioForge Support](https://support.visioforge.com/). Explore more examples on our [GitHub](https://github.com/visioforge/).

@@ -1,14 +1,11 @@
 ---
 title: MPEG-2 Capture with TV Tuner Hardware Encoder
-description: Learn how to implement TV tuner video capture to MPEG-2 files in .NET applications. Step-by-step guide with code examples for WPF, WinForms, and console applications. Improve your media streaming applications with hardware acceleration.
-sidebar_label: MPEG-2 File Using TV Tuner with Internal MPEG Encoder
-order: 14
-
+description: Implement TV tuner video capture to MPEG-2 files in .NET with step-by-step guide and code examples for WPF, WinForms, and Console.
 ---
 
 # MPEG-2 Video Capture Using TV Tuner Hardware Encoder in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction to MPEG-2 Video Capture
 
@@ -170,5 +167,4 @@ Install the appropriate package based on your application's target architecture.
 Implementing MPEG-2 video capture using TV tuners with hardware encoders enables efficient broadcast recording in your .NET applications. The hardware acceleration provides performance benefits while maintaining good video quality. By following the steps outlined in this guide, you can create robust video capture solutions for various broadcast applications.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

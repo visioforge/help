@@ -1,10 +1,9 @@
 ---
 title: Delphi Audio Output Device Selection | VideoCapture
-description: Implement audio output device selection in Delphi applications with this complete guide. Learn volume control, balance adjustment, and proper device configuration with practical code examples for Delphi, C++ MFC, and VB6 developers.
-sidebar_label: Selecting Audio Output Devices
+description: Select audio output devices in Delphi - enumerate devices, control volume, adjust balance with code examples for Delphi, C++, and VB6.
 ---
 
-# Audio Output Device Selection Implementation Guide
+# Audio Output Device Selection in Delphi
 
 This guide provides detailed instructions and code examples for implementing audio output device selection in your video capture applications. Delphi, C++ MFC, and VB6 implementations are covered to help you integrate this functionality into your projects efficiently.
 
@@ -160,5 +159,4 @@ VideoCapture1.Audio_OutputDevice_SetBalance sldBalance.Value
 - Implement visual feedback when volume or balance settings are changed
 
 ---
-
 Please contact our [support team](https://support.visioforge.com/) if you need assistance with this implementation. Visit our [GitHub repository](https://github.com/visioforge/) for additional code samples and resources.

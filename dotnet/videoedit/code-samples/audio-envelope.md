@@ -1,13 +1,11 @@
 ---
 title: Audio Volume Envelope Effects for .NET Video Editing
-description: Learn how to implement professional audio volume envelope effects in your .NET applications with this complete tutorial. Step-by-step code samples show you how to control audio levels precisely in your video editing projects.
-sidebar_label: How to Make an Audio Volume Envelope Effect?
-
+description: Implement professional audio volume envelope effects in .NET applications with complete tutorial and step-by-step code samples.
 ---
 
 # Implementing Audio Volume Envelope Effects in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge variant="dark" size="xl" text="VideoEditCore"]
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
 Audio volume envelopes are essential tools for professional video production, allowing developers to precisely control audio levels throughout a timeline. This tutorial demonstrates how to implement these effects in your .NET applications.
 
@@ -180,5 +178,4 @@ If you encounter problems with your audio envelope implementation:
 Audio volume envelope effects provide essential control over your application's audio experience. By following this guide, you've learned how to implement volume control in your .NET video editing projects, balancing different audio sources for professional results.
 
 ---
-
 For more code samples and advanced techniques, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

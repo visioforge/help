@@ -1,6 +1,6 @@
 ---
 title: Video Capture SDK .Net Video Tutorials
-description: Complete guide to implementing video capture functionality in .NET applications - learn to capture from IP cameras, webcams, and screens with detailed code examples and practical implementation steps.
+description: Implement video capture in .NET apps - learn to capture from IP cameras, webcams, and screens with detailed code examples and steps.
 sidebar_label: Video Tutorials With Sample Code
 order: 1
 

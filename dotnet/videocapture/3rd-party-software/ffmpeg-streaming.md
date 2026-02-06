@@ -1,13 +1,11 @@
 ---
 title: FFMPEG Streaming for Video Capture .NET SDK
-description: Learn how to implement FFMPEG streaming with Video Capture SDK .NET for your WinForms, WPF, and console applications. This guide provides step-by-step instructions, code samples, and advanced configuration options to help you set up efficient video streaming.
-sidebar_label: FFMPEG Streaming
-
+description: Stream video with FFMPEG integration in Video Capture SDK for WinForms, WPF, and Console applications with configuration examples.
 ---
 
 # FFMPEG Streaming Integration with .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to FFMPEG Streaming
 
@@ -224,5 +222,4 @@ Integrating FFMPEG streaming with the Video Capture SDK provides a powerful and 
 Whether you're building a streaming application, a surveillance system, or a video processing tool, this integration offers the performance and flexibility needed for professional-grade solutions.
 
 ---
-
 For more code samples and examples, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

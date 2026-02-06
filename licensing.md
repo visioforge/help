@@ -1,9 +1,6 @@
 ---
 title: VisioForge SDKs Licensing Options
-description: Complete guide to VisioForge SDKs licensing options for developers - understand developer licenses, team licensing, deployment rights, and renewal options for all VisioForge video and media products.
-sidebar_label: Licensing
-order: 1
-
+description: Explore VisioForge SDK licensing - developer licenses, team options, royalty-free deployment, and pricing for video processing SDKs.
 ---
 
 # VisioForge SDKs Licensing Guide
@@ -12,7 +9,7 @@ order: 1
 
 Our licensing model is designed with developers in mind, offering a straightforward and cost-effective approach for integrating powerful video and media capabilities into your applications. Each license provides commercial usage rights with no hidden costs or complicated terms, ensuring you can focus on building great software rather than navigating complex licensing structures.
 
-For complete legal details, please refer to our [End User License Agreement (EULA)](eula.md).
+For complete legal details, please refer to our [End User License Agreement (EULA)](docs/eula.md).
 
 ## Developer-Based Licensing Framework
 
@@ -163,7 +160,5 @@ No, build environment installations don't require separate licenses.
 Renewal notices are sent 30 days before expiration, and renewing maintains continuity of updates and support.
 
 ---
-
 For more implementation examples and code samples, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
-
 For specific licensing questions not addressed here, please contact our sales team.

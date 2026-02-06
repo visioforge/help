@@ -1,13 +1,11 @@
 ---
 title: Troubleshooting with Logs for .NET SDK Products
-description: Learn how to enable, capture and share debug logs for effective troubleshooting and issue resolution in .NET SDK applications. This comprehensive guide includes step-by-step instructions for both demo and production environments.
-sidebar_label: Sending Logs
-
+description: Enable and capture debug logs for .NET SDK troubleshooting with step-by-step instructions for demo and production environments.
 ---
 
 # Troubleshooting with Logs for .NET SDK Products
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Why Logs Matter in SDK Troubleshooting
 

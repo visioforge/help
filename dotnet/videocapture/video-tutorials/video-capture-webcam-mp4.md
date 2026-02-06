@@ -1,13 +1,11 @@
 ---
 title: Webcam to MP4 Recording in .NET - C# Tutorial
-description: Learn how to implement webcam video capture to MP4 files in your .NET applications with detailed C# code examples. This step-by-step guide shows professional developers how to integrate high-quality video recording capabilities with minimal code.
-sidebar_label: Webcam to MP4 Video Capture Implementation
-
+description: Implement webcam video capture to MP4 files in .NET with detailed C# code examples showing high-quality video recording integration.
 ---
 
 # Webcam to MP4 Video Capture Implementation in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Webcam Capture in .NET Applications
 
@@ -24,7 +22,9 @@ When implementing webcam recording capabilities, developers need to consider:
 
 The following video demonstrates the complete process of setting up a webcam capture application:
 
-[!embed](https://www.youtube.com/embed/TunCZ_2bNr8?controls=1)
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/TunCZ_2bNr8?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Source Code Repository
 
@@ -144,5 +144,4 @@ While the example shows a basic implementation, developers can extend the soluti
 - Multiple audio track support
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and implementation examples.

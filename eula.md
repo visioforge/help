@@ -1,8 +1,6 @@
 ---
 title: Software Development Kit License Agreement
-description: Detailed legal terms for SDK usage, distribution rights, and licensing conditions. Covers developer workstation limits, commercial application deployment, intellectual property protection, and technical support terms.
-sidebar_label: End User License Agreement
-route: /docs/eula/
+description: End User License Agreement for VisioForge SDKs covering usage rights, distribution terms, and legal conditions for developers.
 ---
 
 # END USER LICENSE AGREEMENT
@@ -131,7 +129,7 @@ The Software may be subject to export or import regulations. You agree to comply
 
 ## 11. GOVERNING LAW AND JURISDICTION
 
-This Agreement shall be governed by and construed in accordance with the laws of the jurisdiction in which Licensor is located, without giving effect to any principles of conflicts of law. You agree that any legal action arising out of or relating to this Agreement shall be filed exclusively in the competent courts of the jurisdiction in which Licensor is located.
+This Agreement shall be governed by and construed in accordance with the laws of Spain and the European Union, without giving effect to any principles of conflicts of law. You agree that any legal action arising out of or relating to this Agreement shall be filed exclusively in the competent courts of Bilbao, Spain. For customers outside of Spain, additional consumer protection laws of your jurisdiction may apply where required by applicable law.
 
 ## 12. SEVERABILITY
 
@@ -143,10 +141,16 @@ This Agreement constitutes the entire agreement between you and Licensor regardi
 
 ## 14. CONTACT INFORMATION
 
-If you have any questions about this Agreement, please contact Licensor at the contact information provided on the official VisioForge website.
+If you have any questions about this Agreement, please contact Licensor at:
+
+**Roman Miniailov dba VisioForge**
+Calle Urizar 4
+48012 Bilbao, Bizkaia
+Spain
+VAT ID: ESZ0362544T
+Email: support@visioforge.com
+Website: www.visioforge.com
 
 ---
-
 © VisioForge. All rights reserved.
-
-Last Updated: 2025-04-27
+Last Updated: 2025-11-26

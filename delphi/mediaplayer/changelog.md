@@ -1,7 +1,6 @@
 ---
 title: Media Player Library Updates and Features
-description: Comprehensive documentation of media player enhancements, including 4K support, encryption, video effects, streaming capabilities, and performance optimizations. Track the evolution of features from version 3.0 to the latest 10.0 release.
-sidebar_label: Changelog
+description: TVFMediaPlayer changelog - track version history from 3.0 to 10.0 with 4K support, encryption, effects, streaming, and performance updates.
 ---
 
 # TVFMediaPlayer Library Changelog

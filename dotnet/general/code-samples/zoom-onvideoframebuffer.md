@@ -1,13 +1,11 @@
 ---
 title: Implementing Custom Zoom Effects in .NET Video Apps
-description: Learn how to create custom zoom effects using the OnVideoFrameBuffer event in .NET video applications. This step-by-step guide provides detailed C# code examples, implementation techniques, and best practices for video frame manipulation in your applications.
-sidebar_label: Custom Zoom Implementation with OnVideoFrameBuffer
-
+description: Create custom zoom effects with OnVideoFrameBuffer event for dynamic video frame manipulation in .NET video capture, editing, and playback apps.
 ---
 
 # Implementing Custom Zoom Effects with OnVideoFrameBuffer in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -177,5 +175,4 @@ Implementing custom zoom effects using the OnVideoFrameBuffer event gives you pr
 Remember to properly manage memory resources and optimize for performance to ensure smooth playback with your custom effects.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

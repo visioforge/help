@@ -1,6 +1,6 @@
 ---
 title: Media Blocks SDK for .NET Integration Guide
-description: Learn how to leverage Media Blocks SDK for .NET to build powerful multimedia applications. Discover how to play, edit, and capture video content with our modular SDK designed for developers. Explore our extensive guide to video encoding, processing, and rendering features.
+description: Build multimedia applications with Media Blocks SDK for modular video playback, non-linear editing, and multi-source camera capture in .NET.
 sidebar_label: Media Blocks SDK .Net
 order: 14
 
@@ -8,7 +8,7 @@ order: 14
 
 # Media Blocks SDK for .NET Development Platform
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## What is Media Blocks SDK?
 
@@ -58,7 +58,7 @@ This modular design enables you to construct precisely the multimedia processing
 - [Deployment Guide](../deployment-x/index.md)
 - [Changelog](../changelog.md)
 - [End User License Agreement](../../eula.md)
-- [API Documentation](https://api.visioforge.com/dotnet/api/index.html)
+- [API Documentation](https://api.visioforge.org/dotnet/api/index.html)
 
 ## Technical Support and Community
 

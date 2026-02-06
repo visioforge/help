@@ -1,7 +1,6 @@
 ---
 title: Screen Recording in Delphi Applications
-description: Master screen recording functionality in your Delphi applications with TVFVideoCapture. Learn to capture selected screen regions, record full screen content, customize frame rates, track cursor movements, and implement high-quality screen capture features with our detailed guide and code examples.
-sidebar_label: Screen Capture
+description: Implement screen recording in Delphi with TVFVideoCapture - capture regions, full screen, customize frame rates, track cursor with code examples.
 ---
 
 # Screen Recording Implementation in Delphi
@@ -146,5 +145,4 @@ For optimal screen recording performance:
 - Remember that cursor capture adds slight processing overhead
 
 ---
-
 For additional code samples and implementation examples, visit our [GitHub](https://github.com/visioforge/) repository. For technical assistance with implementation, please contact our [support team](https://support.visioforge.com/).

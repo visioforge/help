@@ -1,12 +1,11 @@
 ---
 title: Enable Camera Light on Windows 10+ Tablet Devices
-description: Learn how to programmatically control camera light functionality on Windows 10+ tablets in .NET applications. This guide includes C# code examples, required packages, and implementation steps for developers working with video capture capabilities.
-sidebar_label: Enable Camera Light on Windows 10+ Tablets
+description: Control camera light on Windows 10+ tablets in .NET apps with C# code examples, required packages, and TorchControl API implementation.
 ---
 
 # Enabling Camera Light on Windows 10+ Tablets
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction
 
@@ -131,5 +130,4 @@ If you encounter issues enabling the camera light:
 - Make sure the device reports as torch-capable with TorchControl_GetDevicesAsync()
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to access more code samples and examples.

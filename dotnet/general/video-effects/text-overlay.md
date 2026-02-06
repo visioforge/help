@@ -1,15 +1,13 @@
 ---
 title: Advanced Text Overlays for .NET Video Processing
-description: Learn how to implement custom text overlays in video streams with complete control over font, size, color, position, rotation, and animation effects. Perfect for adding timestamps, captions, and dynamic text to your .NET video applications.
-sidebar_label: Text Overlay
-
+description: Create dynamic text overlays with font, color, position, rotation, and animation control for timestamps, captions, and branding in .NET video.
 ---
 
 # Implementing Text Overlays in Video Streams
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="MediaPlayerCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [MediaPlayerCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 ## Introduction
 
@@ -107,8 +105,16 @@ textOverlay.YPad = 20;
 textOverlay.HorizontalAlignment = TextOverlayHAlign.Left;
 textOverlay.VerticalAlignment = TextOverlayVAlign.Top;
 
-// set Font (System.Drawing.Font)
-textOverlay.Font = new FontSettings("Arial", "Bold", 24);
+// set Font - using object initializer
+textOverlay.Font = new FontSettings
+{
+    Name = "Arial",
+    Size = 24,
+    Weight = FontWeight.Bold
+};
+
+// Alternative: using constructor with font face string
+// textOverlay.Font = new FontSettings("Arial", "Bold", 24);
 
 // set text
 textOverlay.Text = "Hello, world!";
@@ -166,5 +172,4 @@ await videoCapture1.Video_Effects_AddOrUpdateAsync(textOverlay);
 - Test performance impact with complex text effects
 
 ---
-
 For more code examples and implementation details, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

@@ -1,13 +1,11 @@
 ---
 title: Network Video Streaming to Flash Media Server
-description: Learn how to implement network video streaming to Adobe Flash Media Server in .NET applications. Tutorial covers real-time effects, quality settings, and device switching for professional video streaming solutions.
-sidebar_label: Adobe Flash Media Server
-
+description: Stream video to Adobe Flash Media Server in .NET with real-time effects, quality settings, and device switching for professional streaming.
 ---
 
 # Streaming to Adobe Flash Media Server: Advanced Implementation Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) 
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } 
 
 ## Introduction
 
@@ -71,5 +69,4 @@ Streaming to Adobe Flash Media Server using VisioForge's Video Capture or Edit S
 By following this guide, developers can implement robust streaming solutions that leverage the powerful features of both the VisioForge SDKs and Adobe's streaming platform.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and example projects.

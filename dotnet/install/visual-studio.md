@@ -1,14 +1,11 @@
 ---
 title: Integrating .NET SDKs with Visual Studio
-description: Learn how to properly install and configure multimedia .NET SDKs in Microsoft Visual Studio with this detailed step-by-step guide. Covers NuGet package installation, manual setup methods, UI framework integration, and best practices for professional video capture and editing applications.
-sidebar_label: Visual Studio
-order: 14
-
+description: Install and configure multimedia .NET SDKs in Visual Studio with NuGet packages and UI framework integration for video applications.
 ---
 
 # Comprehensive Guide to Integrating .NET SDKs with Visual Studio
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to VisioForge .NET SDKs
 
@@ -41,7 +38,7 @@ First, you'll need a WinForms, WPF, or other .NET project. We recommend using th
 4. Choose "WPF Application" or "Windows Forms Application" with the .NET Core/5/6+ framework
 5. Ensure you select the modern SDK-style project format (this is the default in newer Visual Studio versions)
 
-![Creating a new WPF project with modern SDK project format](vs1.png)
+![Creating a new WPF project with modern SDK project format](vs1.webp)
 
 #### Configuring the Project
 
@@ -52,7 +49,7 @@ After creating a new project, you'll need to configure basic settings:
 3. Select your target framework (.NET 6 or newer recommended for best performance and features)
 4. Click "Create" to generate the project structure
 
-![Selecting project name and configuration options](vs2.png)
+![Selecting project name and configuration options](vs2.webp)
 
 ### Step 2: Access NuGet Package Manager
 
@@ -64,7 +61,7 @@ Once your project is open in Visual Studio:
 
 This interface provides search functionality and package browsing to easily find and install the VisioForge components you need.
 
-![Accessing the NuGet Package Manager](vs3.png)
+![Accessing the NuGet Package Manager](vs3.webp)
 
 ### Step 3: Install the UI Package for Your Framework
 
@@ -74,7 +71,7 @@ VisioForge SDKs offer specialized UI components for different .NET frameworks. Y
 2. Search for "VisioForge.DotNet.Core.UI"
 3. Select the appropriate UI package for your project type from the search results
 
-![Adding the WPF UI package through NuGet](vs4.png)
+![Adding the WPF UI package through NuGet](vs4.webp)
 
 #### Available UI Packages
 
@@ -94,7 +91,7 @@ After installing the UI package, you'll need to add the main SDK package for you
 2. Search for the specific VisioForge SDK you need (e.g., "VisioForge.DotNet.VideoCapture")
 3. Click "Install" on the appropriate package
 
-![Installing the main SDK package](vs5.png)
+![Installing the main SDK package](vs5.webp)
 
 #### Available Core SDK Packages
 
@@ -130,11 +127,11 @@ Then add the VideoView control to your layout:
     VerticalAlignment="Top"/>
 ```
 
-![XAML code for adding VideoView](vs6.png)
+![XAML code for adding VideoView](vs6.webp)
 
 The VideoView control will appear in your designer:
 
-![VideoView control in the application window](vs7.png)
+![VideoView control in the application window](vs7.webp)
 
 #### For WinForms Applications
 
@@ -151,7 +148,7 @@ Depending on your specific implementation, you may need additional redistributio
 2. Search for "VisioForge.DotNet.Redist" to see available redistribution packages
 3. Install the ones relevant to your platform and SDK choice
 
-![Installing redistribution packages](vs8.png)
+![Installing redistribution packages](vs8.webp)
 
 The required redistribution packages vary based on:
 

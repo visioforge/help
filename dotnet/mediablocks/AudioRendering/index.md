@@ -1,13 +1,13 @@
 ---
 title: Audio Rendering Block for .NET Media Processing
-description: Explore the powerful Audio Rendering Block for cross-platform audio output in .NET applications. Learn implementation techniques, performance optimization, and device management for Windows, macOS, Linux, iOS, and Android development.
+description: Output audio streams to devices across Windows, macOS, Linux, iOS, and Android with cross-platform audio rendering and buffer management.
 sidebar_label: Audio Rendering
 
 ---
 
 # Audio Rendering Block: Cross-Platform Audio Output Processing
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Audio Rendering
 

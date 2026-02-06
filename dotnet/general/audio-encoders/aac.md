@@ -1,13 +1,11 @@
 ---
 title: AAC Audio Encoder Implementation Guide
-description: Learn how to implement AAC audio encoding in .NET applications with multiple encoder types, bitrate configurations, and cross-platform support. Includes code examples and best practices for developers.
-sidebar_label: AAC (M4A)
-
+description: Implement AAC audio encoding in .NET with multiple encoder types, bitrate configurations, and cross-platform M4A output support.
 ---
 
 # AAC encoder and M4A output
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The VisioForge SDK provides several AAC encoder implementations, each with unique characteristics and use cases.
 
@@ -17,7 +15,7 @@ M4A is a file format used for storing audio data encoded with the Advanced Audio
 
 ## Cross-platform M4A (AAC) output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The cross-platform capable SDKs (VideoCaptureCoreX, VideoEditCoreX, MediaBlocksPipeline) allow you to utilize several AAC encoder implementations via `M4AOutput`. This guide focuses on three main approaches using dedicated settings objects:
 
@@ -120,7 +118,7 @@ else if (VOAACEncoderSettings.IsAvailable())
 
 ### Getting Started with M4AOutput
 
-The cross-platform implementation uses the [M4AOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.M4AOutput.html) class as the foundation for M4A file creation. To begin using this feature, initialize the class with your desired output filename:
+The cross-platform implementation uses the [M4AOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.M4AOutput.html) class as the foundation for M4A file creation. To begin using this feature, initialize the class with your desired output filename:
 
 ```csharp
 var output = new M4AOutput("output.m4a");
@@ -255,9 +253,9 @@ var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 
 ## Windows-only AAC output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-[M4AOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.M4AOutput.html) is the primary class for configuring M4A (AAC) output settings. It implements both `IVideoEditBaseOutput` and `IVideoCaptureBaseOutput` interfaces.
+[M4AOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.M4AOutput.html) is the primary class for configuring M4A (AAC) output settings. It implements both `IVideoEditBaseOutput` and `IVideoCaptureBaseOutput` interfaces.
 
 ### Properties
 
@@ -331,7 +329,7 @@ var core = new VideoCaptureCore();
 core.Mode = VideoCaptureMode.VideoCapture;
 core.Output_Filename = "output.m4a";
 
-var output = new VisioForge.Core.Types.Output.M4AOutput
+var output = new M4AOutput
 {
     Bitrate = 192,
     Version = AACVersion.MPEG4,

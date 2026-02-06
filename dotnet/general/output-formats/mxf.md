@@ -1,15 +1,13 @@
 ---
 title: Professional MXF Integration for .NET Applications
-description: Master MXF output implementation in VisioForge SDKs with detailed code samples for professional video workflows. Learn hardware acceleration, codec optimization, cross-platform considerations, and best practices for broadcast-ready MXF files in your .NET applications.
-sidebar_label: MXF
-
+description: Generate broadcast MXF files in .NET with hardware acceleration, codec optimization, and professional workflows for broadcast production.
 ---
 
 # MXF Output in VisioForge .NET SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 Material Exchange Format (MXF) is an industry-standard container format designed for professional video applications. It's widely adopted in broadcast environments, post-production workflows, and archival systems. VisioForge SDKs provide robust cross-platform MXF output capabilities that allow developers to integrate this professional format into their applications.
 
@@ -47,7 +45,7 @@ This minimal implementation creates a valid MXF file with default encoding setti
 
 ## Video Encoding Options for MXF
 
-The quality and compatibility of your MXF output largely depends on your choice of video encoder. VisioForge SDKs support multiple encoder options to balance performance, quality, and compatibility.
+The quality and compatibility of your MXF output largely depends on your choice of video encoder. VisioForge SDKs support multiple encoder options to balance performance, quality, and compatibility. For detailed configuration options, see the [H.264 encoder documentation](../video-encoders/h264.md) and [HEVC encoder documentation](../video-encoders/hevc.md).
 
 ### Hardware-Accelerated Encoders
 
@@ -130,7 +128,7 @@ if (NVENCHEVCEncoderSettings.IsAvailable())
 
 ## Audio Encoding for MXF Files
 
-While video often gets the most attention, proper audio encoding is crucial for professional MXF outputs. VisioForge SDKs offer multiple audio encoder options:
+While video often gets the most attention, proper audio encoding is crucial for professional MXF outputs. VisioForge SDKs offer multiple audio encoder options. For detailed configuration options, see the [AAC encoder documentation](../audio-encoders/aac.md) and [MP3 encoder documentation](../audio-encoders/mp3.md).
 
 ### AAC Encoders
 

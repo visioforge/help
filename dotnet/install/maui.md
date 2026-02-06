@@ -1,9 +1,6 @@
 ---
 title: Integrate Media SDKs with .NET MAUI Applications
-description: Learn how to implement powerful video and media capabilities in cross-platform .NET MAUI projects. This guide covers setup, configuration, and optimization across Windows, Android, iOS, and macOS platforms, with platform-specific requirements and best practices for seamless integration.
-sidebar_label: MAUI
-order: 15
-
+description: Implement video and media capabilities in cross-platform .NET MAUI apps for Windows, Android, iOS, and macOS with VisioForge SDKs.
 ---
 
 # Integrating VisioForge SDKs with .NET MAUI Applications
@@ -14,7 +11,7 @@ order: 15
 
 Our SDKs enable powerful multimedia capabilities across all MAUI-supported platforms:
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Getting Started
 

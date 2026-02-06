@@ -1,7 +1,6 @@
 ---
 title: Video Capture to MPEG-TS Files in C# and .NET
-description: Learn how to capture video and audio to MPEG-TS files in C# applications. Step-by-step guide with code samples covering hardware acceleration, format selection, and cross-platform considerations for .NET developers.
-sidebar_label: Video Capture to MPEG-TS
+description: Capture video and audio to MPEG-TS files in C# with hardware acceleration, format selection, and cross-platform support for .NET applications.
 ---
 
 # Video Capture to MPEG-TS in C# and .NET: Complete Guide
@@ -267,6 +266,74 @@ private async Task StopCaptureAsync()
 ## TS Output Configuration with AAC Audio
 
 Both SDKs provide robust support for MPEG-TS output, which is particularly useful for broadcasting and streaming applications due to its error resilience and low latency characteristics.
+
+### File Splitting for MPEG-TS Recording
+
+Both SDKs support automatic file splitting for MPEG-TS output, enabling segmented recording based on duration, file size, or timecode. This is essential for:
+
+- **HLS Streaming**: Create segmented files for HTTP Live Streaming
+- **Storage Management**: Limit file sizes and implement rolling buffers
+- **DVR Functionality**: Record continuous streams with automatic file rotation
+- **Time-Lapse Recording**: Split recordings at regular intervals
+
+#### Using File Splitting with VideoCaptureCoreX
+
+```csharp
+using VisioForge.Core.Types.X.Sinks;
+
+// Create split settings for 5-minute segments
+var mpegtsOutput = new MPEGTSOutput("recording_%05d.ts", useAAC: true);
+mpegtsOutput.Sink = new MPEGTSSplitSinkSettings("recording_%05d.ts")
+{
+    SplitDuration = TimeSpan.FromMinutes(5),  // New file every 5 minutes
+    SplitMaxFiles = 12,  // Keep only last 12 files (1 hour total)
+    M2TSMode = false
+};
+
+// Add to capture pipeline
+videoCapture.Outputs_Add(mpegtsOutput, autostart: true);
+```
+
+#### Using File Splitting with MediaBlocksPipeline
+
+```csharp
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.MediaBlocks.Sinks;
+
+// Create MPEG-TS muxer with split settings
+var splitSettings = new MPEGTSSplitSinkSettings("output_%05d.ts")
+{
+    SplitDuration = TimeSpan.FromMinutes(10),  // Split every 10 minutes
+    SplitFileSize = 100 * 1024 * 1024,  // Or when file reaches 100 MB
+    SplitMaxFiles = 6,  // Keep last 6 files
+    StartIndex = 0
+};
+
+var muxer = new MPEGTSSinkBlock(splitSettings);
+
+// Connect video and audio encoders to the muxer
+pipeline.Connect(videoEncoder.Output, (muxer as IMediaBlockDynamicInputs).CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(audioEncoder.Output, (muxer as IMediaBlockDynamicInputs).CreateNewInput(MediaBlockPadMediaType.Audio));
+```
+
+#### Split Configuration Options
+
+The `MPEGTSSplitSinkSettings` class provides several options:
+
+- **SplitDuration**: Maximum duration per file (TimeSpan)
+- **SplitFileSize**: Maximum file size in bytes (ulong)
+- **SplitMaxSizeTimecode**: Split based on timecode difference (string, format: "HH:MM:SS:FF")
+- **SplitMaxFiles**: Maximum number of files to keep; older files are automatically deleted (uint, 0 = unlimited)
+- **StartIndex**: Starting index for segment numbering (int)
+- **M2TSMode**: Use Blu-ray M2TS format with 192-byte packets (bool)
+
+Files will be split when **any** of the configured criteria (duration, size, or timecode) is met first.
+
+#### Filename Pattern
+
+The filename pattern uses printf-style formatting for segment numbers:
+- `"video_%05d.ts"` → `video_00000.ts`, `video_00001.ts`, ...
+- `"stream_%02d.ts"` → `stream_00.ts`, `stream_01.ts`, ...
 
 Read more about video and audio encoders available for TS capture in .NET:
 

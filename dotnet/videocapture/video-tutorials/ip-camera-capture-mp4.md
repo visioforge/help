@@ -1,13 +1,11 @@
 ---
 title: IP Camera Streaming to MP4 Files in .NET C#
-description: Learn how to implement IP camera video streaming and recording to MP4 files in .NET applications using C#. This detailed guide covers RTSP connection setup, stream configuration, video encoding options, and provides complete code examples for developers.
-sidebar_label: IP Camera Capture to MP4 File
-
+description: Implement IP camera video streaming and recording to MP4 files in .NET using C# with RTSP connection, encoding options, and code examples.
 ---
 
 # Capturing IP Camera Streams to MP4 Files in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to IP Camera Recording
 
@@ -17,7 +15,9 @@ IP cameras provide powerful surveillance and monitoring capabilities through net
 
 The following video walks through the complete implementation process:
 
-[!embed](https://www.youtube.com/embed/qX3AiGyWbO8?controls=1)
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/qX3AiGyWbO8?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 [Source code on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-capture-mp4)
 
@@ -197,5 +197,4 @@ When implementing IP camera capture, be prepared to address these common challen
 5. **Camera Compatibility** - Different camera models may require specific configuration adjustments
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

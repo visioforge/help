@@ -1,12 +1,11 @@
 ---
 title: Computer Vision Implementation for Developers
-description: Learn how to implement and integrate powerful computer vision capabilities in your applications across multiple platforms. This guide covers deployment requirements, package installation, and platform-specific configurations for Windows, Linux, and macOS environments.
-sidebar_label: Computer Vision Deployment
+description: Implement computer vision in applications on Windows, Linux, and macOS with VisioForge CV and CVD NuGet packages for .NET development.
 ---
 
 # Computer Vision Implementation Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net), [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net), [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }, [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }, [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview of Available Packages
 
@@ -78,5 +77,4 @@ For implementation examples and technical guidance:
 - Access community-contributed examples and solutions
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

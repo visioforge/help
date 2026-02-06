@@ -1,7 +1,6 @@
 ---
 title: Delphi Video Capture to DV File Format Guide
-description: Complete guide for Delphi developers on implementing video capture functionality to DV file format with or without compression. Learn step-by-step implementation techniques with working code examples for professional video applications.
-sidebar_label: Video capture to DV file
+description: Implement DV video capture in Delphi - compressed and uncompressed formats with step-by-step implementation and working code examples.
 ---
 
 # Video Capture to DV File Format: Implementation Guide
@@ -298,5 +297,4 @@ Implementing DV video capture in your Delphi, C++ MFC, or VB6 applications provi
 By following the implementation examples in this guide, you can integrate professional-grade video capture capabilities into your custom software solutions.
 
 ---
-
 Need additional assistance with your video capture implementation? Visit our [GitHub](https://github.com/visioforge/) page for more code samples or contact our [support team](https://support.visioforge.com/) for personalized guidance.

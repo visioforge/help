@@ -1,13 +1,11 @@
 ---
 title: NDI Network Video Streaming Integration Guide
-description: Learn how to implement high-performance NDI streaming in .NET applications. Step-by-step guide for developers to set up low-latency video/audio transmission over IP networks with code examples and best practices.
-sidebar_label: NDI
-
+description: Implement high-performance NDI streaming in .NET for low-latency video and audio transmission over IP networks with professional workflows.
 ---
 
 # Network Device Interface (NDI) Streaming Integration
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## What is NDI and Why Use It?
 
@@ -29,14 +27,14 @@ The inherent flexibility and efficiency of NDI streaming technology substantiall
 
 To successfully implement NDI streaming functionality within your application, you must install one of the following official NDI software packages:
 
-1. **[NDI SDK](https://ndi.video/download-ndi-sdk/)** - Recommended for developers who need comprehensive access to NDI functionality
+1. **[NDI SDK](https://ndi.video/for-developers/ndi-sdk/download/)** - Recommended for developers who need comprehensive access to NDI functionality
 2. **[NDI Tools](https://ndi.video/tools/)** - Suitable for basic implementation and testing scenarios
 
 These packages provide the necessary runtime components that enable NDI communication across your network infrastructure.
 
 ## Cross-Platform NDI Output Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 ### Understanding the NDIOutput Class Architecture
 
@@ -180,7 +178,7 @@ core.Outputs_Add(ndiOutput); // core represents the VideoCaptureCoreX instance
 
 ## Windows-Specific NDI Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 For Windows-specific implementations, the SDK provides additional configuration options through the VideoCaptureCore or VideoEditCore components.
 
@@ -253,5 +251,4 @@ When implementing NDI streaming in production environments, consider the followi
 - **MediaBlockPadMediaType** - Enum used to specify the type of media (video or audio) for input connections
 
 ---
-
 Visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) for additional code samples and implementation examples.

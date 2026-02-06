@@ -1,19 +1,17 @@
 ---
 title: MPEG-TS File Output Guide for .NET
-description: Learn how to implement MPEG Transport Stream (MPEG-TS) file output in .NET applications. Covers video and audio encoding options, hardware acceleration, cross-platform considerations, and best practices for developers working with media streaming.
-sidebar_label: MPEG-TS
-
+description: Implement MPEG Transport Stream output in .NET with video and audio encoding, hardware acceleration, and cross-platform streaming support.
 ---
 
 # MPEG-TS Output
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The MPEG-TS (Transport Stream) output module in VisioForge SDK functionality for creating MPEG transport stream files with various video and audio encoding options. This guide explains how to configure and use the `MPEGTSOutput` class effectively.
 
 ## Cross-platform MPEG-TS output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 To create a new MPEG-TS output, use the following constructor:
 
@@ -105,6 +103,102 @@ string currentFile = output.GetFilename();
 output.SetFilename("new_output.ts");
 ```
 
+### File Splitting
+
+The `MPEGTSSplitSinkSettings` class enables automatic splitting of MPEG-TS output into multiple files based on size, duration, or timecode. This is useful for:
+
+- Creating segmented files for HLS streaming
+- Managing storage by limiting file sizes
+- Recording time-lapse videos
+- Implementing rolling buffer recording
+
+#### Configuration Options
+
+```csharp
+using VisioForge.Core.Types.X.Sinks;
+
+// Create split settings with filename pattern
+// %05d will be replaced with segment number (00000, 00001, etc.)
+var splitSettings = new MPEGTSSplitSinkSettings("video_%05d.ts")
+{
+    // Split by duration (e.g., every 5 minutes)
+    SplitDuration = TimeSpan.FromMinutes(5),
+    
+    // Split by file size (e.g., 100 MB, 0 = disabled)
+    SplitFileSize = 100 * 1024 * 1024,
+    
+    // Maximum number of files to keep (older files deleted, 0 = unlimited)
+    SplitMaxFiles = 10,
+    
+    // Split by timecode difference (optional)
+    SplitMaxSizeTimecode = "01:00:00:00", // 1 hour
+    
+    // Starting index for segment numbering
+    StartIndex = 0,
+    
+    // M2TS mode (Blu-ray format with 192-byte packets)
+    M2TSMode = false
+};
+
+// Apply to output
+output.Sink = splitSettings;
+```
+
+#### Split Triggers
+
+Files will be split when any of these conditions are met:
+
+1. **Duration-based**: `SplitDuration` - New file created after specified time
+2. **Size-based**: `SplitFileSize` - New file created when size limit reached
+3. **Timecode-based**: `SplitMaxSizeTimecode` - New file when timecode difference reached
+
+#### Filename Pattern
+
+The filename pattern uses printf-style formatting for segment numbers:
+
+```csharp
+// Examples of filename patterns
+"recording_%02d.ts"   // recording_00.ts, recording_01.ts, ...
+"stream_%05d.ts"      // stream_00000.ts, stream_00001.ts, ...
+"output_%d.ts"        // output_0.ts, output_1.ts, ...
+```
+
+#### Rolling Buffer Recording
+
+To implement a rolling buffer that keeps only the last N segments:
+
+```csharp
+var settings = new MPEGTSSplitSinkSettings("buffer_%03d.ts")
+{
+    SplitDuration = TimeSpan.FromMinutes(1),  // 1 minute segments
+    SplitMaxFiles = 60  // Keep last 60 minutes
+};
+```
+
+#### Usage Example
+
+```csharp
+// Complete example with split settings
+var output = new MPEGTSOutput("video_%05d.ts", useAAC: true);
+
+// Configure split settings
+output.Sink = new MPEGTSSplitSinkSettings("video_%05d.ts")
+{
+    SplitDuration = TimeSpan.FromMinutes(5),
+    SplitMaxFiles = 12,  // Keep last hour (12 x 5 minutes)
+    M2TSMode = false
+};
+
+// Configure encoders
+if (NVENCH264EncoderSettings.IsAvailable())
+{
+    output.Video = new NVENCH264EncoderSettings();
+}
+
+// Use with VideoCaptureCoreX or MediaBlocksPipeline
+// The filename pattern will be used automatically
+```
+
 ### Advanced Features
 
 #### Custom Processing
@@ -193,7 +287,7 @@ output.CustomAudioProcessor = new YourCustomAudioProcessor();
 
 ## Windows-only MPEG-TS output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 The `MPEGTSOutput` class provides configuration settings for MPEG Transport Stream (MPEG-TS) output in the VisioForge video processing framework. This class inherits from `MFBaseOutput` and implements the `IVideoCaptureBaseOutput` interface, enabling it to be used specifically for video capture scenarios with MPEG-TS formatting.
 
@@ -206,9 +300,9 @@ MFBaseOutput
 
 ### Inherited Video Settings
 
-The [MPEGTSOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.MPEGTSOutput.html) class inherits video encoding capabilities from [MFBaseOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.MFBaseOutput.html), which includes:
+The [MPEGTSOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.MPEGTSOutput.html) class inherits video encoding capabilities from MFBaseOutput, which includes:
 
-**Video Encoding Configuration**: Through the `Video` property of type [MFVideoEncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.MFVideoEncoderSettings.html), supporting:
+**Video Encoding Configuration**: Through the `Video` property, supporting:
 
 - Multiple codec options (H.264/H.265) with hardware acceleration support
 - Bitrate control (CBR/VBR)
@@ -219,7 +313,7 @@ The [MPEGTSOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.O
 
 ### Inherited Audio Settings
 
-Audio configuration is handled through the inherited `Audio` property of type [M4AOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.M4AOutput.html), which includes:
+Audio configuration is handled through the inherited `Audio` property of type M4AOutput, which includes:
 
 AAC audio encoding with configurable:
 
@@ -326,5 +420,4 @@ The `MPEGTSOutput` class initializes with these default settings:
 - MP4 redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

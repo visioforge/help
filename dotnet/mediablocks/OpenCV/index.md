@@ -1,12 +1,12 @@
 ---
 title: .Net Media OpenCV Blocks Guide
-description: Explore a complete guide to .Net Media SDK OpenCV blocks. Learn about various OpenCV video processing capabilities.
+description: Implement computer vision tasks with OpenCV blocks for object detection, tracking, image manipulation, and video processing in .NET SDKs.
 sidebar_label: OpenCV
 ---
 
 # OpenCV Blocks - VisioForge Media Blocks SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 OpenCV (Open Source Computer Vision Library) blocks provide powerful video processing capabilities within the VisioForge Media Blocks SDK .Net. These blocks enable a wide range of computer vision tasks, from basic image manipulation to complex object detection and tracking.
 

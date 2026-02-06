@@ -1,12 +1,12 @@
 ---
 title: .Net Media AWS S3 Blocks Guide
-description: Explore a complete guide to .Net Media SDK AWS S3 source and sink blocks. Learn how to read from and write to AWS S3 for your media processing pipelines.
+description: Read from and write to AWS S3 storage with source and sink blocks for media processing pipelines in Media Blocks SDK .NET applications.
 sidebar_label: Amazon Web Services
 ---
 
 # AWS S3 Blocks - VisioForge Media Blocks SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 AWS S3 blocks enable interaction with Amazon Simple Storage Service (S3) to read media files as sources or write media files as sinks within your pipelines.
 

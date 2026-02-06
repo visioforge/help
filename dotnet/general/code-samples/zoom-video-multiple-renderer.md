@@ -1,13 +1,11 @@
 ---
 title: Setting Zoom Parameters for Multiple Video Renderers
-description: Learn how to configure zoom settings for multiple video renderers in .NET applications. This guide provides detailed code samples, implementation tips, and best practices for optimizing video display across multiple screens.
-sidebar_label: Configuring Zoom for Multiple Video Renderers
-
+description: Configure independent zoom and position parameters for multiple video renderers across multi-screen displays in .NET multimedia applications.
 ---
 
 # Configuring Zoom Settings for Multiple Video Renderers in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 When developing multimedia applications that utilize multiple video renderers, controlling the zoom and position parameters independently for each display is essential for creating professional-quality user interfaces. This guide covers the implementation details, parameter configurations, and best practices for setting up multiple video renderers with customized zoom settings in your .NET applications.
 

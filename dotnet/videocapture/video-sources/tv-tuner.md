@@ -1,13 +1,10 @@
 ---
 title: FM Radio & TV Tuning Integration in .NET SDK
-description: Complete guide for C# developers to implement FM radio and TV tuning features in their applications. Learn to scan frequencies, manage channels, and integrate broadcast capabilities in WPF, WinForms, and console applications.
-sidebar_label: FM Radio and TV Tuning
-order: 2
-
+description: Implement FM radio and TV tuning in C# apps to scan frequencies, manage channels, and integrate broadcast capabilities in .NET.
 ---
 # FM Radio and TV Tuning Integration for .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction to Broadcast Integration
 
@@ -247,5 +244,4 @@ When implementing tuner functionality:
 By following this guide, you can implement full FM radio and TV tuning capabilities in your .NET applications. These features can enhance media applications, home automation systems, or specialized broadcast software. The SDK provides a clean, consistent API that handles the complexities of different tuner hardware.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

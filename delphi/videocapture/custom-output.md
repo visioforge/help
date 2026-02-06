@@ -1,7 +1,6 @@
 ---
 title: DirectShow Output Formats in Delphi - Complete Guide
-description: Master DirectShow output formats implementation in Delphi, C++ MFC and VB6 applications. Step-by-step guide with practical code examples for integrating third-party filters, codecs, and multiplexers for video capture and processing
-sidebar_label: Custom output formats
+description: Implement DirectShow custom output formats in Delphi, C++, VB6 - integrate third-party filters, codecs, and multiplexers with code examples.
 ---
 
 # Code sample - Custom output formats
@@ -263,5 +262,4 @@ VideoCapture1.Start
 ```
 
 ---
-
 Please get in touch with [support](https://support.visioforge.com/) to get help with this tutorial. Visit our [GitHub](https://github.com/visioforge/) page to get more code samples.

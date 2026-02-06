@@ -1,6 +1,6 @@
 ---
 title: Video & Audio Format Guide for .NET Development
-description: Learn about video and audio formats for .NET applications - from MP4 and WebM to AVI and MKV. Includes practical implementation examples, codec comparisons, and a detailed compatibility matrix for developers.
+description: Comprehensive guide to video and audio formats for .NET including MP4, WebM, AVI, MKV with codec comparisons and compatibility matrices.
 sidebar_label: Output Formats
 order: 17
 
@@ -8,7 +8,7 @@ order: 17
 
 # Output Formats for .NET Media SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 

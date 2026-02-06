@@ -1,13 +1,11 @@
 ---
 title: Integrating OBS Streaming in Video Capture SDK .Net
-description: Learn how to implement OBS streaming with video and audio sources using Video Capture SDK .Net. Detailed guide with code examples for WinForms, WPF, and console applications to create professional broadcast solutions.
-sidebar_label: OBS (Open Broadcaster Software) Streaming
-
+description: Stream video and audio with OBS integration in Video Capture SDK for professional broadcast solutions in WinForms, WPF, and Console.
 ---
 
 # Integrating OBS Streaming in Video Capture SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to OBS Integration
 
@@ -127,5 +125,4 @@ Integrating OBS streaming capabilities into your .NET applications using the Vid
 By following the implementation guide and best practices outlined in this document, developers can create sophisticated streaming applications that leverage the combined strengths of the SDK and OBS.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

@@ -1,13 +1,11 @@
 ---
 title: RTSP Video Streaming Implementation in .NET
-description: Learn how to implement RTSP streaming in .NET applications with hardware acceleration, cross-platform support, and best practices. Master video encoding, server configuration, and real-time streaming for security cameras and live broadcasting.
-sidebar_label: RTSP Streaming
-
+description: Implement RTSP streaming with H.264 and AAC codecs for security cameras, live broadcasting, and real-time media control in .NET applications.
 ---
 
 # Mastering RTSP Streaming with VisioForge SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to RTSP
 
@@ -24,7 +22,7 @@ This guide delves into the specifics of implementing RTSP streaming using VisioF
 
 ## Cross-Platform RTSP Output (Recommended)
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The modern VisioForge SDKs (`CoreX` versions and Media Blocks) provide a flexible and powerful cross-platform RTSP server implementation built upon the robust GStreamer framework. This approach offers greater control, wider codec support, and compatibility across Windows, Linux, macOS, and other platforms.
 
@@ -220,7 +218,7 @@ Optimizing RTSP streaming involves balancing quality, latency, and resource usag
 
 ## Windows-Only RTSP Output (Legacy)
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 The implementation includes several error handling mechanisms:
 
@@ -274,5 +272,4 @@ VideoCapture1.Network_Streaming_URL = "rtsp://localhost:5554/vfstream";
 **Note:** This legacy method often relies on DirectShow filters or Media Foundation transforms available on the specific Windows system, making it less predictable and portable than the GStreamer-based cross-platform solution.
 
 ---
-
 For more detailed examples and advanced use cases, explore the code samples provided in our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

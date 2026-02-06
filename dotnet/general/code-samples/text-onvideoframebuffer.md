@@ -1,12 +1,11 @@
 ---
 title: Text Overlay Implementation with OnVideoFrameBuffer
-description: Learn how to create custom text overlays in video applications using the OnVideoFrameBuffer event in .NET video processing. This detailed guide with C# code examples shows you how to implement dynamic text elements on video frames for professional applications.
-sidebar_label: Draw Text Overlay Using OnVideoFrameBuffer Event
+description: Create custom text overlays on video frames with OnVideoFrameBuffer event for dynamic text rendering and professional video processing in .NET.
 ---
 
 # Creating Custom Text Overlays with OnVideoFrameBuffer in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Text Overlays in Video Processing
 
@@ -239,5 +238,4 @@ The OnVideoFrameBuffer event provides a powerful mechanism for implementing cust
 This approach is particularly valuable when standard text overlay APIs don't provide the flexibility or features required for your application. With the techniques demonstrated in this guide, you can implement professional-quality text overlays for a wide range of video processing scenarios.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

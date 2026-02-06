@@ -1,13 +1,17 @@
 ---
 title: Save Original RTSP Stream (No Video Re-encoding)
-description: Learn how to save an RTSP stream to file (MP4) from your IP camera without re-encoding video. This guide covers how to record RTSP video streams, a common task when users want to save camera footage. Alternatives like ffmpeg save rtsp stream or VLC save rtsp stream to file exist, but this method uses .NET with VisioForge Media Blocks for programmatic control.
-sidebar_label: Save RTSP Video without Re-encoding
-order: 20
+description: Save RTSP stream to file (MP4) from IP camera without re-encoding video using .NET with VisioForge Media Blocks for programmatic control.
 ---
 
 # How to Save RTSP Stream to File: Record IP Camera Video without Re-encoding
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+!!!info Demo Sample
+For a complete working example of recording RTSP streams without re-encoding, see the [RTSP MultiView Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/RTSP%20MultiView%20Demo).
+
+For ONVIF camera-specific documentation, see the [ONVIF IP Camera Integration Guide](../../videocapture/video-sources/ip-cameras/onvif.md).
+!!!
 
 ## Table of Contents
 
@@ -430,5 +434,4 @@ Common issues and their solutions when saving RTSP streams:
 - Recording storage considerations
 
 ---
-
 This guide provides a foundational understanding of how to save an RTSP stream's original video while flexibly handling the audio stream using the VisioForge Media Blocks SDK. By leveraging the `RTSPRAWSourceBlock` and direct pipeline connections, you can achieve efficient, high-quality recordings.

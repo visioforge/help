@@ -1,6 +1,6 @@
 ---
 title: Media Player SDK .Net (MediaPlayerCore)
-description: SDK usage tutorials for VisioForge Media Player SDK .Net
+description: Implement video playback, streaming, and media playback capabilities in .NET applications with Media Player SDK usage tutorials.
 sidebar_label: Media Player SDK .Net
 order: 13
 
@@ -8,7 +8,7 @@ order: 13
 
 # Media Player SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Media Player SDK .Net is a video player SDK with a wide range of features.
 
@@ -91,9 +91,10 @@ WinForms
 
 ## Documentation  
 
+- [Additional Guides](guides/index.md)
 - [Code samples](code-samples/index.md)
 - [Deployment](deployment.md)
-- [API](https://api.visioforge.com/dotnet/api/index.html)
+- [API](https://api.visioforge.org/dotnet/api/index.html)
 
 ## Links
 

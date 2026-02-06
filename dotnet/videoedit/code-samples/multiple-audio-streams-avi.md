@@ -1,13 +1,11 @@
 ---
 title: Adding Multiple Audio Streams to AVI Files in .NET
-description: Learn how to implement multiple audio streams in AVI files using Video Edit SDK for .NET. This step-by-step guide with C# code examples shows developers how to create multi-language or commentary tracks in video files.
-sidebar_label: Adding Multiple Audio Streams to AVI Files
-
+description: Implement multiple audio streams in AVI files using Video Edit SDK for .NET with step-by-step guide and C# code examples for multi-language.
 ---
 
 # Adding Multiple Audio Streams to AVI Files in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge variant="dark" size="xl" text="VideoEditCore"]
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
 ## Introduction
 
@@ -51,5 +49,4 @@ To implement this functionality, you'll need:
 For details on installing or deploying the required dependencies to end-user systems, refer to our [deployment guide](../deployment.md).
 
 ---
-
 Find additional code examples and implementation details on our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

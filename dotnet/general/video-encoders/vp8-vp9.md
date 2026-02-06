@@ -1,13 +1,11 @@
 ---
-title: Implementing VP8 and VP9 Encoders in VisioForge .Net SDK
-description: Learn how to configure VP8 and VP9 video encoders in VisioForge SDK for optimal streaming, recording and processing performance
-sidebar_label: VP8/VP9
-
+title: VP8 and VP9 Encoders in VisioForge .NET
+description: Configure VP8 and VP9 video encoders for optimal streaming, recording, and processing performance in VisioForge .NET applications.
 ---
 
-# VP8 and VP9 Video Encoders Guide
+# VP8 and VP9 Encoders in VisioForge .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 This guide shows you how to implement VP8 and VP9 video encoding in VisioForge .NET SDKs. You'll learn about the available encoder options and how to optimize them for your specific application needs.
 
@@ -17,13 +15,13 @@ VisioForge SDK provides multiple encoder implementations based on your platform 
 
 ### Windows Platform Encoders
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-- Software-based VP8 and VP9 encoders configured through the [WebMOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.WebMOutput.html) class
+- Software-based VP8 and VP9 encoders configured through the [WebMOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WebMOutput.html) class
 
 ### Cross-Platform X-Engine Options
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 - VP8 software encoder via [VP8EncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.VP8EncoderSettings.html)
 - VP9 software encoder via [VP9EncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.VP9EncoderSettings.html)

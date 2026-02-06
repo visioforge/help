@@ -1,13 +1,11 @@
 ---
 title: Video Transitions and SMPTE Wipe Effects for .NET
-description: Explore the full range of video transition effects available in Video Edit SDK for .NET, including over 100 SMPTE standard wipes with customizable properties like border color, softness, width, and positioning. Learn how to implement professional-grade transitions in your .NET video applications.
-sidebar_label: Transitions
-
+description: Explore 100+ video transition effects in Video Edit SDK for .NET with SMPTE standard wipes and customizable border, softness, and positioning.
 ---
 
 # Transitions
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net)
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The SMPTE Wipe transition produces any of the standard wipes defined by the Society of Motion Picture and Television Engineers (SMPTE) in SMPTE document 258M-1993, except for the quad split.
 
@@ -101,5 +99,4 @@ This transition supports the following standard SMPTE wipes:
 | 207    | Radial, 4-way                     | 409    | Random mask                                |
   
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

@@ -1,8 +1,6 @@
 ---
 title: Guide to IIS Smooth Streaming Implementation
-description: Complete tutorial for implementing Microsoft IIS Smooth Streaming in .NET applications with VisioForge SDKs. Learn step-by-step configuration, adaptive bitrate streaming setup, mobile compatibility, and troubleshooting for high-quality video delivery across all devices.
-sidebar_label: IIS Smooth Streaming
-
+description: Configure Microsoft IIS Smooth Streaming in .NET with adaptive bitrate, mobile compatibility, and troubleshooting for quality video delivery.
 ---
 
 # Comprehensive Guide to IIS Smooth Streaming Implementation
@@ -11,9 +9,9 @@ IIS Smooth Streaming is Microsoft's implementation of adaptive streaming technol
 
 ## Compatible VisioForge SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"] 
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button } 
 
 ## Overview of IIS Smooth Streaming
 
@@ -230,5 +228,4 @@ IIS Smooth Streaming, when implemented with VisioForge SDKs, provides a robust s
 For additional code samples and implementation examples, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
 
 ---
-
 *This documentation is provided by VisioForge. For additional support or information about our SDKs, please visit [www.visioforge.com](https://www.visioforge.com).*

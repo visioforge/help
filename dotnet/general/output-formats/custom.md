@@ -1,15 +1,13 @@
 ---
 title: DirectShow Custom Video Format Integration in .NET
-description: Learn how to implement custom video output formats using DirectShow filters in .NET applications. Step-by-step guide for developers to create specialized video processing pipelines with codec configuration and format handling.
-sidebar_label: Custom Output Formats
-
+description: Implement custom video output formats with DirectShow filters for specialized processing pipelines and codec configuration in .NET applications.
 ---
 
 # Creating Custom Video Output Formats with DirectShow Filters
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 ## Overview
 
@@ -230,5 +228,4 @@ If you encounter problems, verify that all required filters are properly registe
 Custom output formats using DirectShow filters provide powerful capabilities for .NET developers working with video applications. Whether you choose the flexibility of a three-component pipeline or the simplicity of an all-in-one filter approach, VisioForge's SDKs give you the tools you need to create exactly the output format your application requires.
 
 ---
-
 For more code samples and implementation examples, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

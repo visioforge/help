@@ -1,7 +1,6 @@
 ---
 title: Audio Capture to MP3 Files in Delphi, C++ MFC & VB6
-description: Complete step-by-step guide for developers implementing MP3 audio capture functionality in Delphi, C++ MFC, and VB6 applications. Learn how to configure LAME encoder settings, manage channels, handle bitrates and create high-quality audio recordings.
-sidebar_label: Audio capture to MP3 file
+description: Implement MP3 audio capture in Delphi, C++, and VB6 - configure LAME encoder, manage bitrates, and create high-quality audio recordings.
 ---
 
 # Audio Capture to MP3 Files in Delphi, C++ MFC & VB6
@@ -247,5 +246,4 @@ Implementing MP3 audio capture in your applications provides users with a widely
 The VideoCapture component makes this implementation straightforward in Delphi, C++ MFC, and VB6 applications, allowing you to focus on creating a great user experience around the audio capture functionality.
 
 ---
-
 For additional code samples and advanced implementation techniques, visit our GitHub repository. If you encounter any issues during implementation, contact our technical support team for assistance.

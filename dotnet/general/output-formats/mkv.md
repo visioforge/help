@@ -1,15 +1,13 @@
 ---
 title: MKV Container Format for .NET Video Applications
-description: Learn how to implement MKV output in .NET applications with hardware-accelerated encoding, multiple audio tracks, and custom video processing. Master video and audio encoding options for high-performance multimedia applications.
-sidebar_label: MKV (Matroska)
-
+description: Implement MKV output in .NET with hardware-accelerated encoding, multiple audio tracks, and flexible Matroska container support for video apps.
 ---
 
 # MKV Output in VisioForge .NET SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 ## Introduction to MKV Format
 
@@ -44,7 +42,7 @@ The MKV format supports multiple video codecs, giving developers flexibility in 
 
 ### H.264 Encoder Options
 
-H.264 remains one of the most widely supported video codecs, providing excellent compression and quality:
+H.264 remains one of the most widely supported video codecs, providing excellent compression and quality. For detailed configuration options, see the [H.264 encoder documentation](../video-encoders/h264.md).
 
 - **OpenH264**: Software-based encoder, used as default when hardware acceleration isn't available
 - **NVENC H.264**: NVIDIA GPU-accelerated encoding for superior performance
@@ -53,7 +51,7 @@ H.264 remains one of the most widely supported video codecs, providing excellent
 
 ### HEVC (H.265) Encoder Options
 
-For applications requiring higher compression efficiency or 4K content:
+For applications requiring higher compression efficiency or 4K content, see the [HEVC encoder documentation](../video-encoders/hevc.md) for detailed settings:
 
 - **MF HEVC**: Windows Media Foundation implementation (Windows-only)
 - **NVENC HEVC**: NVIDIA GPU acceleration for H.265
@@ -72,15 +70,15 @@ Audio quality is equally important for most applications. VisioForge SDKs provid
 
 ### Supported Audio Codecs
 
-- **AAC Encoders**:
+- **AAC Encoders** - See [AAC encoder documentation](../audio-encoders/aac.md):
   - **VO AAC**: Default choice for non-Windows platforms
   - **AVENC AAC**: FFMPEG AAC implementation
   - **MF AAC**: Windows Media Foundation implementation (default on Windows)
   
 - **Alternative Audio Formats**:
-  - **MP3**: Common format with wide compatibility
-  - **Vorbis**: Open source audio codec
-  - **OPUS**: Modern codec with excellent quality-to-size ratio
+  - **[MP3](../audio-encoders/mp3.md)**: Common format with wide compatibility
+  - **[Vorbis](../audio-encoders/vorbis.md)**: Open source audio codec
+  - **[OPUS](../audio-encoders/opus.md)**: Modern codec with excellent quality-to-size ratio
 
 ### Configuring Audio Encoding
 

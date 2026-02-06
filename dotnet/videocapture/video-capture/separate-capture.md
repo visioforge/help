@@ -1,14 +1,11 @@
 ---
 title: Start/Stop Video Capture Without Stopping Preview
-description: Learn how to implement separate video capture and preview management in your .NET applications. This guide provides step-by-step code examples for efficiently starting and stopping video capture without interrupting the preview functionality.
-sidebar_label: Start/Stop Capture Without Stopping Preview
-order: 1
-
+description: Control video capture and preview independently in .NET with step-by-step code examples for efficient recording and streaming management.
 ---
 
 # Managing Video Capture and Preview Independently in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -29,148 +26,151 @@ There are several advantages to separating preview and capture functionality:
 
 There are two main approaches to implementing this functionality depending on which SDK version you're using:
 
-+++ VideoCaptureCoreX
+=== "VideoCaptureCoreX"
 
-### Method 1: Using VideoCaptureCoreX
+    
+    ### Method 1: Using VideoCaptureCoreX
+    
+    The VideoCaptureCoreX approach offers a streamlined way to manage outputs and control capture states.
+    
+    #### Step 1: Configure the Output
+    
+    First, add a new output with your desired settings. In this example, we'll use MP4 output. Note the `false` parameter which indicates we don't want to start capture immediately:
+    
+    ```cs
+    VideoCapture1.Outputs_Add(new MP4Output("output.mp4"), false); // false - don't start capture immediately. 
+    ```
+    
+    #### Step 2: Start Preview Only
+    
+    Next, start the video preview without initiating capture:
+    
+    ```cs
+    await VideoCapture1.StartAsync();
+    ```
+    
+    #### Step 3: Start Capture When Needed
+    
+    When you want to begin recording, start the actual video capture to your output destination:
+    
+    ```cs
+    await VideoCapture1.StartCaptureAsync(0, "output.mp4"); // 0 - index of the output.
+    ```
+    
+    #### Step 4: Stop Capture While Maintaining Preview
+    
+    To stop recording while keeping the preview active:
+    
+    ```cs
+    await VideoCapture1.StopCaptureAsync(0); // 0 - index of the output.
+    ```
+    
+    ### Advanced Output Management
+    
+    You can add multiple outputs with different settings:
+    
+    ```cs
+    // Add MP4 output
+    VideoCapture1.Outputs_Add(new MP4Output("primary_recording.mp4"), false);
+    
+    // Add additional output for streaming
+    VideoCapture1.Outputs_Add(new RTMPOutput("rtmp://streaming.example.com/live/stream"), false);
+    
+    // Start preview
+    await VideoCapture1.StartAsync();
+    
+    // Start recording to both outputs
+    await VideoCapture1.StartCaptureAsync(0, "primary_recording.mp4");
+    await VideoCapture1.StartCaptureAsync(1, "rtmp://streaming.example.com/live/stream");
+    ```
+    
+    ### Output Control With Indices
+    
+    When managing multiple outputs, the index parameter becomes crucial:
+    
+    ```cs
+    // Stop the MP4 recording but continue streaming
+    await VideoCapture1.StopCaptureAsync(0);
+    
+    // Later, stop the stream too
+    await VideoCapture1.StopCaptureAsync(1);
+    ```
+    
 
-The VideoCaptureCoreX approach offers a streamlined way to manage outputs and control capture states.
+=== "VideoCaptureCore"
 
-#### Step 1: Configure the Output
+    
+    ### Method 2: Using VideoCaptureCore
+    
+    The older VideoCaptureCore approach uses a different pattern with explicit separate capture enablement.
+    
+    #### Step 1: Enable Separate Capture Mode
+    
+    Begin by enabling the separate capture functionality:
+    
+    ```cs
+    VideoCapture1.SeparateCapture_Enabled = true;
+    ```
+    
+    #### Step 2: Configure Capture Mode
+    
+    Set the appropriate capture mode for your application:
+    
+    ```cs
+    VideoCapture1.Mode = VideoCaptureMode.VideoCapture;
+    // Other options include:
+    // VideoCaptureMode.ScreenCapture
+    // VideoCaptureMode.AudioCapture
+    // etc.
+    ```
+    
+    #### Step 3: Configure Output Format
+    
+    Set your desired output format configuration:
+    
+    ```cs
+    VideoCapture1.Output_Format = ...
+    ```
+    
+    #### Step 4: Start Preview
+    
+    Begin the preview without starting the actual recording:
+    
+    ```cs
+    await VideoCapture1.StartAsync();
+    ```
+    
+    #### Step 5: Start Capture When Needed
+    
+    When you want to begin recording, start the separate capture process:
+    
+    ```cs
+    await VideoCapture1.SeparateCapture_StartAsync();
+    ```
+    
+    #### Step 6: Stop Capture While Maintaining Preview
+    
+    To stop recording while keeping the preview active:
+    
+    ```cs
+    await VideoCapture1.SeparateCapture_StopAsync();
+    ```
+    
+    ### Dynamic Filename Changes
+    
+    A key advantage of the separate capture approach is the ability to change the output filename during an active recording session:
+    
+    ```cs
+    await VideoCapture1.SeparateCapture_ChangeFilenameOnTheFlyAsync("newfile.mp4");
+    ```
+    
+    This is particularly useful for:
+    
+    - Creating sequential file segments
+    - Implementing file size limits with automatic continuation
+    - Responding to user-initiated filename changes
+    
 
-First, add a new output with your desired settings. In this example, we'll use MP4 output. Note the `false` parameter which indicates we don't want to start capture immediately:
-
-```cs
-VideoCapture1.Outputs_Add(new MP4Output("output.mp4"), false); // false - don't start capture immediately. 
-```
-
-#### Step 2: Start Preview Only
-
-Next, start the video preview without initiating capture:
-
-```cs
-await VideoCapture1.StartAsync();
-```
-
-#### Step 3: Start Capture When Needed
-
-When you want to begin recording, start the actual video capture to your output destination:
-
-```cs
-await VideoCapture1.StartCaptureAsync(0, "output.mp4"); // 0 - index of the output.
-```
-
-#### Step 4: Stop Capture While Maintaining Preview
-
-To stop recording while keeping the preview active:
-
-```cs
-await VideoCapture1.StopCaptureAsync(0); // 0 - index of the output.
-```
-
-### Advanced Output Management
-
-You can add multiple outputs with different settings:
-
-```cs
-// Add MP4 output
-VideoCapture1.Outputs_Add(new MP4Output("primary_recording.mp4"), false);
-
-// Add additional output for streaming
-VideoCapture1.Outputs_Add(new RTMPOutput("rtmp://streaming.example.com/live/stream"), false);
-
-// Start preview
-await VideoCapture1.StartAsync();
-
-// Start recording to both outputs
-await VideoCapture1.StartCaptureAsync(0, "primary_recording.mp4");
-await VideoCapture1.StartCaptureAsync(1, "rtmp://streaming.example.com/live/stream");
-```
-
-### Output Control With Indices
-
-When managing multiple outputs, the index parameter becomes crucial:
-
-```cs
-// Stop the MP4 recording but continue streaming
-await VideoCapture1.StopCaptureAsync(0);
-
-// Later, stop the stream too
-await VideoCapture1.StopCaptureAsync(1);
-```
-
-+++ VideoCaptureCore
-
-### Method 2: Using VideoCaptureCore
-
-The older VideoCaptureCore approach uses a different pattern with explicit separate capture enablement.
-
-#### Step 1: Enable Separate Capture Mode
-
-Begin by enabling the separate capture functionality:
-
-```cs
-VideoCapture1.SeparateCapture_Enabled = true;
-```
-
-#### Step 2: Configure Capture Mode
-
-Set the appropriate capture mode for your application:
-
-```cs
-VideoCapture1.Mode = VideoCaptureMode.VideoCapture;
-// Other options include:
-// VideoCaptureMode.ScreenCapture
-// VideoCaptureMode.AudioCapture
-// etc.
-```
-
-#### Step 3: Configure Output Format
-
-Set your desired output format configuration:
-
-```cs
-VideoCapture1.Output_Format = ...
-```
-
-#### Step 4: Start Preview
-
-Begin the preview without starting the actual recording:
-
-```cs
-await VideoCapture1.StartAsync();
-```
-
-#### Step 5: Start Capture When Needed
-
-When you want to begin recording, start the separate capture process:
-
-```cs
-await VideoCapture1.SeparateCapture_StartAsync();
-```
-
-#### Step 6: Stop Capture While Maintaining Preview
-
-To stop recording while keeping the preview active:
-
-```cs
-await VideoCapture1.SeparateCapture_StopAsync();
-```
-
-### Dynamic Filename Changes
-
-A key advantage of the separate capture approach is the ability to change the output filename during an active recording session:
-
-```cs
-await VideoCapture1.SeparateCapture_ChangeFilenameOnTheFlyAsync("newfile.mp4");
-```
-
-This is particularly useful for:
-
-- Creating sequential file segments
-- Implementing file size limits with automatic continuation
-- Responding to user-initiated filename changes
-
-+++
 
 ## Implementation Considerations
 
@@ -206,5 +206,4 @@ Separating video capture and preview operations provides greater flexibility and
 These techniques can be applied to a wide range of scenarios including webcam recording, screen capture, surveillance systems, and professional video production tools.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

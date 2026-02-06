@@ -1,12 +1,11 @@
 ---
 title: Face Detection in .NET Video Applications
-description: Learn how to implement powerful face detection capabilities in your .NET applications with complete code examples, configuration options, and optimization techniques for webcams, IP cameras, and video streams.
-sidebar_label: How to Configure Face Detection?
+description: Implement face detection in .NET apps with code examples, configuration options, and optimization techniques for video streams.
 ---
 
 # Implementing Face Detection in .NET Video Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Face Detection Technology
 

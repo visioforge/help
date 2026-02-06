@@ -1,13 +1,11 @@
 ---
 title: Cross-platform .Net deployment manual for Android
-description: Step-by-step guide for .NET developers implementing VisioForge SDKs in Android apps. Learn package management, architecture support, VideoView integration, and deployment best practices with code examples and troubleshooting tips
-sidebar_label: Android
-
+description: VisioForge .NET SDK Android deployment with package management, VideoView integration, architecture support, and permissions configuration.
 ---
 
 # Android Implementation and Deployment Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to VisioForge SDKs for Android
 
@@ -233,7 +231,6 @@ dotnet build -f net8.0-android -c Release /p:AndroidPackageFormat=aab
 
 If you encounter issues with your VisioForge SDK deployment on Android, please consult:
 
-- [Online Documentation](https://www.visioforge.com/help/)
 - [Support Portal](https://support.visioforge.com)
 - [GitHub Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 

@@ -1,12 +1,11 @@
 ---
 title: Adding Professional Text Overlays to Videos in .NET
-description: Learn how to implement dynamic text overlays with complete control over font, color, position, timing, and animations in your video editing applications. This detailed guide includes step-by-step code examples for .NET developers.
-sidebar_label: Adding Text Overlays to Videos
+description: Implement dynamic text overlays with complete control over font, color, position, timing, and animations with step-by-step code examples.
 ---
 
 # Implementing Text Overlays in Video Projects
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge variant="dark" size="xl" text="VideoEditCoreX"]
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
 
 ## Introduction to Text Overlays
 
@@ -62,22 +61,23 @@ textOverlay.BackgroundColor = SkiaSharp.SKColors.Transparent;
 videoEdit.Video_TextOverlays.Add(textOverlay);
 ```
 
-## Positioning and Alignment Options
+## Positioning Options
 
-By default, the SDK uses the X and Y coordinates for absolute positioning. For more flexible positioning options:
+The SDK uses the X and Y coordinates for absolute positioning. X and Y represent pixel coordinates from the top-left corner of the video frame:
 
 ```cs
-// For custom positioning using X and Y coordinates:
-textOverlay.HAlign = TextOverlayHAlign.Custom;
-textOverlay.VAlign = TextOverlayVAlign.Custom;
+// Position text at specific coordinates (in pixels)
+textOverlay.X = 50;   // Horizontal position from left edge
+textOverlay.Y = 50;   // Vertical position from top edge
 
-// For centered text:
-// textOverlay.HAlign = TextOverlayHAlign.Center;
-// textOverlay.VAlign = TextOverlayVAlign.Center;
+// You can also position text in other areas:
+// Bottom-right corner (assuming 1920x1080 video):
+// textOverlay.X = 1820;  // 1920 - 100 for some margin
+// textOverlay.Y = 980;   // 1080 - 100 for some margin
 
-// For right-aligned text at the bottom:
-// textOverlay.HAlign = TextOverlayHAlign.Right;
-// textOverlay.VAlign = TextOverlayVAlign.Bottom;
+// Centered (assuming 1920x1080 video and measuring text size):
+// textOverlay.X = 960;   // Half of video width
+// textOverlay.Y = 540;   // Half of video height
 ```
 
 ## Working with Fonts

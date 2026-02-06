@@ -1,7 +1,6 @@
 ---
 title: Camera Video Adjustments for Delphi Applications
-description: Master hardware video adjustments in Delphi applications - control brightness, contrast, saturation and more with TVFVideoCapture. This developer guide includes practical code examples and implementation strategies for building professional video capture solutions.
-sidebar_label: Hardware Video Adjustments
+description: Adjust camera brightness, contrast, and saturation in Delphi with TVFVideoCapture hardware controls and parameter configuration examples.
 ---
 
 # Implementing Hardware Video Adjustments in Delphi Applications

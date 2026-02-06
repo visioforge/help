@@ -1,8 +1,6 @@
 ---
 title: Integrate Media SDKs with Avalonia Applications
-description: Learn how to implement powerful video and media capabilities in cross-platform Avalonia projects. This guide covers setup, configuration, and optimization across Windows, macOS, Linux, Android, and iOS platforms, with platform-specific requirements and best practices for seamless integration.
-sidebar_label: Avalonia
-order: 14
+description: Build cross-platform Avalonia apps with multimedia capabilities for Windows, macOS, Linux, Android, and iOS using VisioForge video SDKs.
 ---
 
 # Building Media-Rich Avalonia Applications with VisioForge
@@ -13,7 +11,7 @@ Avalonia UI stands out as a versatile, truly cross-platform .NET UI framework wi
 
 Our suite of SDKs empowers Avalonia developers with extensive multimedia capabilities:
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Setup and Configuration
 

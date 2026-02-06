@@ -1,12 +1,11 @@
 ---
 title: Setting Custom Volume for Audio Tracks in C#
-description: Learn how to implement custom volume controls for individual audio tracks in your video editing application. This detailed guide provides C# code examples for precise audio level management within your .NET projects.
-sidebar_label: How to Set the Custom Volume for an Audio Track?
+description: Implement custom volume controls for individual audio tracks in video editing apps with detailed guide and C# code examples for .NET.
 ---
 
 # Setting Custom Volume Levels for Audio Tracks in C# Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge variant="dark" size="xl" text="VideoEditCore"]
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
 ## Overview
 
@@ -44,7 +43,5 @@ To implement this functionality, you'll need the following redistributable packa
 For information about installing or deploying the required components to your end users' systems, please refer to our [deployment guide](../deployment.md).
 
 ---
-
 ## Additional Resources
-
 For more code examples and implementation techniques, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) with complete sample projects.

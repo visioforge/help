@@ -1,7 +1,6 @@
 ---
 title: Video Capture to AVI Files in Delphi Applications
-description: Learn how to implement video capture functionality to AVI files in your Delphi applications using TVFVideoCapture component. This guide covers codec selection, audio configuration, and complete implementation steps with code examples.
-sidebar_label: Video capture to AVI file
+description: Record video to AVI format in Delphi with TVFVideoCapture using codec selection, audio configuration, and complete implementation examples.
 ---
 
 # Complete Guide to Video Capture to AVI Files in Delphi
@@ -420,5 +419,4 @@ The TVFVideoCapture component provides a wide range of additional features and c
 Remember to test your video capture implementation thoroughly with different codecs and audio configurations to ensure the best quality for your specific use case.
 
 ---
-
 For additional code samples and implementation guidance, visit our GitHub repository. If you need further assistance with this tutorial, our support team is available to help.

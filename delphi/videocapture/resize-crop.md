@@ -1,7 +1,6 @@
 ---
 title: Delphi Video Processing - Resize & Crop Tutorial
-description: Step-by-step guide for implementing video resizing and cropping in Delphi applications. Includes code examples for real-time video processing, aspect ratio handling, and performance optimization techniques for developers.
-sidebar_label: Resize and crop
+description: Implement video resizing and cropping in Delphi - real-time processing, aspect ratio handling, and performance optimization with code samples.
 ---
 
 # Video Resizing and Cropping in Delphi TVFVideoCapture
@@ -198,5 +197,4 @@ For optimal results when implementing video resizing and cropping:
 - For best results, resize to dimensions that are multiples of 8 or 16
 
 ---
-
 For additional code samples and implementation examples, visit our [GitHub](https://github.com/visioforge/) repository. Need technical assistance? Contact our support team for personalized guidance.

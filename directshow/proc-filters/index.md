@@ -1,8 +1,8 @@
 ---
 title: DirectShow Processing Filters for Media Applications
-description: Advanced DirectShow filters for professional media manipulation in Windows applications. Transform your video and audio content with high-performance effects, mixing, overlays, and specialized processing tools for developers.
+description: 35+ DirectShow video effects and audio filters with video mixer, chroma key, deinterlacing, and noise reduction for Windows applications.
 sidebar_label: Processing Filters Pack
-
+order: 7
 ---
 
 # DirectShow Processing Filters for Media Applications
@@ -12,6 +12,23 @@ sidebar_label: Processing Filters Pack
 The DirectShow Processing Filters Pack delivers a powerful collection of specialized filters built for sophisticated audio and video manipulation in Windows applications. These filters enable developers to implement professional-grade media processing capabilities without developing complex algorithms from scratch.
 
 Designed for developers seeking to enhance their applications with advanced media functionality, this toolkit offers a streamlined approach to implementing robust audio-visual features with minimal code overhead.
+
+---
+
+## Installation
+
+Before using the code samples and integrating the filters into your application, you must first install the DirectShow Processing Filters Pack from the [product page](https://www.visioforge.com/processing-filters-pack).
+
+**Installation Steps**:
+
+1. Download the Processing Filters Pack installer from the product page
+2. Run the installer with administrative privileges
+3. The installer will register all processing filters
+4. Sample applications and source code will be available in the installation directory
+
+**Note**: All filters must be properly registered on the system before they can be used in your applications. The installer handles this automatically.
+
+---
 
 ## Key Capabilities and Benefits
 
@@ -89,7 +106,7 @@ Designed for developers seeking to enhance their applications with advanced medi
 ## Additional Resources
 
 - [Complete Product Information](https://www.visioforge.com/processing-filters-pack)
-- [API Documentation](https://api.visioforge.com/proc_filters/api/index.html)
+- [API Documentation](https://api.visioforge.org/proc_filters/api/index.html)
 - [Licensing Information](../../eula.md)
 
 ## Version History and Updates

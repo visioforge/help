@@ -1,7 +1,6 @@
 ---
 title: TVFVideoEdit Integration for C++ Builder
-description: Step-by-step guide for installing and configuring TVFVideoEdit ActiveX components in all versions of C++ Builder (5/6, 2006, and newer). Learn how to import controls, create packages, and add features to your media applications.
-sidebar_label: C++ Builder
+description: Import and configure TVFVideoEdit ActiveX components in C++ Builder 5/6, 2006, and newer versions with package and control setup.
 ---
 
 # Complete Guide to TVFVideoEdit Installation in C++ Builder

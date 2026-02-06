@@ -1,12 +1,11 @@
 ---
 title: Reading Media File Information in C# for Developers
-description: Learn how to extract detailed information from video and audio files in C# with step-by-step code examples. Discover how to access codecs, resolution, frame rate, bitrate, and metadata tags for building robust media applications.
-sidebar_label: Reading Media File Information
+description: Extract codecs, resolution, frame rate, bitrate, duration, and metadata from video and audio files using MediaInfoReader in C# applications.
 ---
 
 # Reading Media File Information in C#
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 

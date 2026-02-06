@@ -1,13 +1,11 @@
 ---
-title: Memory Playback Implementation in .NET Media Player SDK
-description: Learn how to implement memory-based media playback in C# applications using stream objects, byte arrays, and memory management techniques. This guide provides code examples and best practices for efficient memory handling during audio and video playback.
-sidebar_label: Memory Playback
-order: 2
+title: Play Media from Memory in .NET SDK
+description: Play media from memory streams and byte arrays with efficient memory management for audio and video playback in C# applications.
 ---
 
-# Memory-Based Media Playback in .NET Applications
+# Play Media from Memory in .NET SDK
 
-[!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Memory-Based Media Playback
 

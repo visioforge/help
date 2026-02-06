@@ -1,13 +1,11 @@
 ---
 title: WAV Audio Format Integration in .NET Applications
-description: Learn how to implement WAV audio processing in .NET applications with step-by-step examples. Discover best practices for sample rates, channel configuration, and format selection. Includes cross-platform implementation guides and code samples.
-sidebar_label: WAV
-
+description: Implement WAV audio processing in .NET with sample rates, channel configuration, PCM format selection, and cross-platform support.
 ---
 
 # Implementing WAV Audio in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## What is WAV Format?
 
@@ -35,7 +33,7 @@ For example, a one-minute stereo WAV file sampled at 44.1kHz with 16-bit samples
 
 ## Cross-Platform WAV Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 ### Key Features
 
@@ -174,7 +172,7 @@ int[] channels = settings.GetSupportedChannelCounts();
 
 ## Windows-Specific WAV Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 ### Enumerating Available Audio Codecs
 

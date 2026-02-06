@@ -1,10 +1,9 @@
 ---
-title: TVFVideoEdit Installation Guide for Delphi Developers
-description: Step-by-step instructions for installing and configuring TVFVideoEdit library in various Delphi versions (6/7, 2005+, 11+). Learn how to properly set up library paths, build packages, and troubleshoot common installation issues.
-sidebar_label: Borland Delphi
+title: Install TVFVideoEdit in Delphi
+description: Install TVFVideoEdit packages in Delphi 6/7, 2005+, and 11+ with library paths, package building, and troubleshooting configuration.
 ---
 
-# TVFVideoEdit Installation Guide for Delphi Developers
+# Install TVFVideoEdit in Delphi
 
 > Related products: [VisioForge All-in-One Media Framework (Delphi / ActiveX)](https://www.visioforge.com/all-in-one-media-framework)
 
@@ -112,5 +111,4 @@ For additional code examples and implementations, visit our [GitHub repository](
 If you need personalized assistance with installation or implementation, please contact our [technical support team](https://support.visioforge.com/) who can provide guidance specific to your development environment.
 
 ---
-
 For technical questions or installation assistance with this library, please reach out to our [development support team](https://support.visioforge.com/). Browse additional code samples and resources on our [GitHub](https://github.com/visioforge/) page.

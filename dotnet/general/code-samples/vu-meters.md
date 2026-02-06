@@ -1,12 +1,11 @@
 ---
 title: Implementing Audio VU Meters & Waveform Visualizers
-description: Complete guide to implementing VU meters and waveform visualizers in .NET applications. Learn how to display real-time audio levels with WinForms and WPF, including code examples for mono and stereo channel visualization.
-sidebar_label: VU Meter and Waveform Painter
+description: Build VU meters and waveform visualizers in WinForms and WPF for real-time audio level monitoring with mono and stereo channel support in .NET.
 ---
 
 # Audio Visualization: Implementing VU Meters and Waveform Displays in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Audio visualization is a crucial component of modern media applications, providing users with visual feedback about audio levels and waveform patterns. This guide demonstrates how to implement VU (Volume Unit) meters and waveform visualizers in both WinForms and WPF applications.
 
@@ -244,5 +243,4 @@ Implementing VU meters and waveform painters adds valuable visual feedback to me
 By following the implementation steps outlined in this guide, you can enhance your .NET media applications with professional-quality audio visualization features that improve the overall user experience.
 
 ---
-
 For more code examples and related SDKs, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

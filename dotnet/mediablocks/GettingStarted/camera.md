@@ -1,13 +1,11 @@
 ---
 title: Creating Camera Applications with Media Blocks SDK
-description: Learn how to build powerful camera viewing applications with Media Blocks SDK .Net. This step-by-step tutorial covers device enumeration, format selection, camera configuration, pipeline creation, and video rendering for desktop and mobile platforms.
-sidebar_label: Camera Applications
-
+description: Build camera apps with Media Blocks SDK featuring device enumeration, format selection, video rendering, and cross-platform capture support.
 ---
 
 # Building Camera Applications with Media Blocks SDK
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 

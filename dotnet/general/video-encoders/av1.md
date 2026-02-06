@@ -1,15 +1,13 @@
 ---
 title: AV1 encoders usage in VisioForge .Net SDKs
-description: AV1 encoders usage in Video Capture SDK .Net, Video Edit SDK .Net, and Media Blocks SDK .Net
-sidebar_label: AV1
-
+description: Configure AV1 encoders in cross-platform Video Capture, Video Edit, and Media Blocks SDKs for efficient next-generation video compression.
 ---
 
 # AV1 Encoders
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 VisioForge supports multiple AV1 encoder implementations, each with its own unique features and capabilities. This document covers the available encoders and their configuration options.
 

@@ -1,7 +1,6 @@
 ---
 title: Fixing .otares File Errors in Delphi Packages
-description: Step-by-step solutions for resolving missing .otares file errors when installing Delphi packages. Learn how to troubleshoot resource file issues, fix package compilation errors, and implement practical solutions for Delphi developers facing resource file problems.
-sidebar_label: Fixing .otares errors in Delphi
+description: Resolve missing .otares file errors in Delphi - troubleshoot resource issues, fix compilation errors, and restore package functionality.
 ---
 
 # Fixing .otares File Errors in Delphi Packages
@@ -107,5 +106,4 @@ When basic fixes don't work, try these advanced approaches:
    - Confirm library paths in IDE options
 
 ---
-
 For personalized assistance with this issue, [contact our support team](https://support.visioforge.com/) and our technical experts will guide you through resolving your specific package installation problems.

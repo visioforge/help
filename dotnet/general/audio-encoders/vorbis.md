@@ -1,13 +1,11 @@
 ---
 title: Vorbis Audio Encoding Guide for .NET Development
-description: Master Vorbis audio encoding in .NET applications with practical implementation strategies, quality optimization techniques, and cross-platform considerations. Learn to balance audio quality with file size for streaming and multimedia projects.
-sidebar_label: Vorbis
-
+description: Implement Vorbis audio encoding in .NET with quality optimization, cross-platform support, and efficient compression for streaming.
 ---
 
 # Vorbis Audio Encoding for .NET Developers
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Vorbis in VisioForge SDK
 
@@ -17,7 +15,7 @@ This guide will help you navigate the various Vorbis implementation options avai
 
 ## Cross-Platform Vorbis Encoder
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 VisioForge's Vorbis implementations work across multiple platforms, giving you flexibility in deployment environments. The cross-platform components are specifically designed to function consistently across different operating systems.
 
@@ -27,13 +25,13 @@ The SDK provides three distinct approaches to Vorbis encoding, each tailored to 
 
 #### 1. WebM Container with Vorbis Audio
 
-The [WebM output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.WebMOutput.html) implementation encapsulates Vorbis audio within the WebM container format. This option is particularly well-suited for web-based applications and HTML5 video projects where broad browser compatibility is required.
+The [WebM output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WebMOutput.html) implementation encapsulates Vorbis audio within the WebM container format. This option is particularly well-suited for web-based applications and HTML5 video projects where broad browser compatibility is required.
 
 **Availability:** Windows platforms only
 
 #### 2. OGG Vorbis Dedicated Output
 
-For audio-focused applications, the [OGG Vorbis output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.OGGVorbisOutput.html) provides a specialized encoder designed specifically for the OGG container format. This implementation offers more detailed control over audio encoding parameters.
+For audio-focused applications, the [OGG Vorbis output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.OGGVorbisOutput.html) provides a specialized encoder designed specifically for the OGG container format. This implementation offers more detailed control over audio encoding parameters.
 
 **Availability:** Windows platforms only
 
@@ -51,113 +49,123 @@ Choosing the appropriate rate control mode is crucial for balancing audio qualit
 
 Quality-based VBR is the recommended approach for most applications, as it dynamically adjusts bitrate to maintain consistent perceptual quality throughout the audio stream.
 
-+++ WebMOutput
-WebMOutput implements a simplified quality-based approach with an easy-to-understand scale:
+=== "WebMOutput"
 
-```cs
-// Create and configure WebM output with high-quality Vorbis audio
-var webmOutput = new WebMOutput();
+    WebMOutput implements a simplified quality-based approach with an easy-to-understand scale:
+    
+    ```cs
+    // Create and configure WebM output with high-quality Vorbis audio
+    var webmOutput = new WebMOutput();
+    
+    // Quality range: 20 (lowest) to 100 (highest)
+    // Values 70-80 provide excellent quality for most content
+    webmOutput.Audio_Quality = 80;
+    
+    // Higher values produce better audio quality with larger files
+    // Lower values prioritize file size over audio fidelity
+    ```
+    
+    Key considerations:
+    
+    - Quality setting directly impacts perceived audio quality and file size
+    - Values around 70-80 work well for most professional content
+    - Lower settings (40-60) may be suitable for voice-only recordings
 
-// Quality range: 20 (lowest) to 100 (highest)
-// Values 70-80 provide excellent quality for most content
-webmOutput.Audio_Quality = 80;
+=== "OGGVorbisOutput"
 
-// Higher values produce better audio quality with larger files
-// Lower values prioritize file size over audio fidelity
-```
+    OGGVorbisOutput offers more explicit quality mode selection:
+    
+    ```cs
+    // Initialize OGG Vorbis output for quality-focused encoding
+    var oggOutput = new OGGVorbisOutput();
+    
+    // Set the encoding mode to quality-based VBR
+    oggOutput.Mode = VorbisMode.Quality;
+    
+    // Configure quality level (range: 20-100)
+    // 80: High quality for music and complex audio
+    // 60: Good quality for general purpose use
+    // 40: Acceptable quality for voice recordings
+    oggOutput.Quality = 80;
+    ```
+    
+    This implementation gives you direct control over the quality-to-size tradeoff, making it ideal for applications with varying content types.
 
-Key considerations:
+=== "VorbisEncoderSettings"
 
-- Quality setting directly impacts perceived audio quality and file size
-- Values around 70-80 work well for most professional content
-- Lower settings (40-60) may be suitable for voice-only recordings
-+++ OGGVorbisOutput
-OGGVorbisOutput offers more explicit quality mode selection:
+    VorbisEncoderSettings uses the native Vorbis quality scale:
+    
+    ```cs
+    // Create Vorbis encoder with quality-based rate control
+    var vorbisEncoder = new VorbisEncoderSettings();
+    
+    // Set rate control mode to quality-based VBR
+    vorbisEncoder.RateControl = VorbisEncoderRateControl.Quality;
+    
+    // Configure quality level using Vorbis scale (-1 to 10)
+    // -1: Very low quality (~45 kbps)
+    // 3: Good quality (~112 kbps)
+    // 5: Very good quality (~160 kbps) 
+    // 8: Excellent quality (~224 kbps)
+    // 10: Highest quality (~320 kbps)
+    vorbisEncoder.Quality = 5;
+    ```
+    
+    The VorbisEncoderSettings implementation provides the most precise quality control, using the established Vorbis quality scale that audio engineers are familiar with.
 
-```cs
-// Initialize OGG Vorbis output for quality-focused encoding
-var oggOutput = new OGGVorbisOutput();
-
-// Set the encoding mode to quality-based VBR
-oggOutput.Mode = VorbisMode.Quality;
-
-// Configure quality level (range: 20-100)
-// 80: High quality for music and complex audio
-// 60: Good quality for general purpose use
-// 40: Acceptable quality for voice recordings
-oggOutput.Quality = 80;
-```
-
-This implementation gives you direct control over the quality-to-size tradeoff, making it ideal for applications with varying content types.
-+++ VorbisEncoderSettings
-VorbisEncoderSettings uses the native Vorbis quality scale:
-
-```cs
-// Create Vorbis encoder with quality-based rate control
-var vorbisEncoder = new VorbisEncoderSettings();
-
-// Set rate control mode to quality-based VBR
-vorbisEncoder.RateControl = VorbisEncoderRateControl.Quality;
-
-// Configure quality level using Vorbis scale (-1 to 10)
-// -1: Very low quality (~45 kbps)
-// 3: Good quality (~112 kbps)
-// 5: Very good quality (~160 kbps) 
-// 8: Excellent quality (~224 kbps)
-// 10: Highest quality (~320 kbps)
-vorbisEncoder.Quality = 5;
-```
-
-The VorbisEncoderSettings implementation provides the most precise quality control, using the established Vorbis quality scale that audio engineers are familiar with.
-+++
 
 #### Bitrate-Constrained Encoding
 
 For scenarios with specific bandwidth limitations or target file sizes, bitrate-constrained encoding offers more predictable output sizes.
 
-+++ WebMOutput
-WebMOutput does not support explicit bitrate control for Vorbis audio. Developers should use the quality parameter instead and test to determine the resulting bitrates.
-+++ OGGVorbisOutput
-OGGVorbisOutput provides comprehensive bitrate management tools:
+=== "WebMOutput"
 
-```cs
-// Set up OGG output with specific bitrate constraints
-var oggOutput = new OGGVorbisOutput();
+    WebMOutput does not support explicit bitrate control for Vorbis audio. Developers should use the quality parameter instead and test to determine the resulting bitrates.
 
-// Enable bitrate-controlled encoding mode
-oggOutput.Mode = VorbisMode.Bitrate;
+=== "OGGVorbisOutput"
 
-// Configure bitrate parameters (all values in Kbps)
-oggOutput.MinBitRate = 96;     // Minimum bitrate floor
-oggOutput.AvgBitRate = 160;    // Target average bitrate
-oggOutput.MaxBitRate = 240;    // Maximum bitrate ceiling
+    OGGVorbisOutput provides comprehensive bitrate management tools:
+    
+    ```cs
+    // Set up OGG output with specific bitrate constraints
+    var oggOutput = new OGGVorbisOutput();
+    
+    // Enable bitrate-controlled encoding mode
+    oggOutput.Mode = VorbisMode.Bitrate;
+    
+    // Configure bitrate parameters (all values in Kbps)
+    oggOutput.MinBitRate = 96;     // Minimum bitrate floor
+    oggOutput.AvgBitRate = 160;    // Target average bitrate
+    oggOutput.MaxBitRate = 240;    // Maximum bitrate ceiling
+    
+    // These settings create a controlled VBR encode that
+    // averages 160 Kbps but can fluctuate between limits
+    ```
+    
+    This approach is ideal for streaming applications where bandwidth prediction is important.
 
-// These settings create a controlled VBR encode that
-// averages 160 Kbps but can fluctuate between limits
-```
+=== "VorbisEncoderSettings"
 
-This approach is ideal for streaming applications where bandwidth prediction is important.
-+++ VorbisEncoderSettings
-VorbisEncoderSettings offers the most detailed bitrate control options:
+    VorbisEncoderSettings offers the most detailed bitrate control options:
+    
+    ```cs
+    // Initialize Vorbis encoder with bitrate constraints
+    var vorbisEncoder = new VorbisEncoderSettings();
+    
+    // Set rate control mode to bitrate-based
+    vorbisEncoder.RateControl = VorbisEncoderRateControl.Bitrate;
+    
+    // Configure bitrate parameters (all values in Kbps)
+    vorbisEncoder.Bitrate = 192;      // Target average bitrate
+    vorbisEncoder.MinBitrate = 128;   // Minimum allowed bitrate
+    vorbisEncoder.MaxBitrate = 256;   // Maximum allowed bitrate
+    
+    // These settings are ideal for applications requiring
+    // predictable file sizes or streaming bandwidth
+    ```
+    
+    The flexible bitrate controls allow for precise audio encoding tailored to specific delivery requirements.
 
-```cs
-// Initialize Vorbis encoder with bitrate constraints
-var vorbisEncoder = new VorbisEncoderSettings();
-
-// Set rate control mode to bitrate-based
-vorbisEncoder.RateControl = VorbisEncoderRateControl.Bitrate;
-
-// Configure bitrate parameters (all values in Kbps)
-vorbisEncoder.Bitrate = 192;      // Target average bitrate
-vorbisEncoder.MinBitrate = 128;   // Minimum allowed bitrate
-vorbisEncoder.MaxBitrate = 256;   // Maximum allowed bitrate
-
-// These settings are ideal for applications requiring
-// predictable file sizes or streaming bandwidth
-```
-
-The flexible bitrate controls allow for precise audio encoding tailored to specific delivery requirements.
-+++
 
 Check the [VorbisEncoderBlock](../../mediablocks/AudioEncoders/index.md) and [OGGSinkBlock](../../mediablocks/Sinks/index.md) for more information.
 
@@ -188,7 +196,7 @@ To achieve optimal results with Vorbis encoding in your .NET applications, consi
 
 ## Windows-only output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 The `OGGVorbisOutput` class provides configuration and functionality for encoding audio using the Vorbis codec.
 

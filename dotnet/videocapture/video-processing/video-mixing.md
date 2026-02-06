@@ -1,12 +1,11 @@
 ---
 title: Combining Multiple Video Streams in .NET
-description: Learn to implement Picture-in-Picture functionality with multiple video sources in .NET applications. This guide provides complete C# code examples for mixing video streams from cameras, screens, and IP cameras with different resolutions, frame rates, and custom layouts.
-sidebar_label: Video streams mixing
+description: Implement Picture-in-Picture with multiple video sources in .NET using C# code examples for mixing streams with custom layouts.
 ---
 
 # Mixing Multiple Video Streams in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Video Stream Mixing
 
@@ -282,5 +281,4 @@ The video mixing capabilities enable numerous application scenarios:
 - Test different layout configurations for optimal visual results
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page for additional code samples and implementation examples.

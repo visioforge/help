@@ -1,6 +1,6 @@
 ---
 title: Video Capture SDK for .NET Development
-description: Learn how to implement advanced video capture, processing, and streaming capabilities in your .NET applications. Complete developer guide with tutorials, code examples, and integration tips for building powerful multimedia applications.
+description: Implement advanced video capture, processing, and streaming in .NET applications with comprehensive developer tutorials and code examples.
 sidebar_label: Video Capture SDK .Net
 order: 15
 
@@ -79,7 +79,7 @@ You can explore all features on the [product page](https://www.visioforge.com/vi
 
 * [Code Samples Repository](https://github.com/visioforge/.Net-SDK-s-samples/)
 * [Deployment Guidelines](deployment.md)
-* [API Reference Documentation](https://api.visioforge.com/dotnet/api/index.html)
+* [API Reference Documentation](https://api.visioforge.org/dotnet/api/index.html)
 * [Changelog and Updates](../changelog.md)
 * [End User License Agreement](../../eula.md)
-* [Licensing Information](../../licensing.md)
+* [Licensing Information](../../../licensing.md)

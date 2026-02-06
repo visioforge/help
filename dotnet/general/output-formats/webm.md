@@ -1,13 +1,11 @@
 ---
 title: WebM Video Output for .NET - Developer Guide
-description: Master WebM video implementation in .NET with detailed code examples for VP8, VP9, and AV1 codecs. Learn optimization strategies for quality, performance, and file size to create efficient web-ready videos across Windows and cross-platform applications.
-sidebar_label: WebM
-
+description: Create WebM videos in .NET with VP8, VP9, and AV1 codecs for efficient web-ready video streaming and HTML5 content delivery.
 ---
 
 # WebM Video Output in VisioForge .NET SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## What is WebM?
 
@@ -23,9 +21,9 @@ The key advantages of WebM include:
 
 ## Windows Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-On Windows platforms, VisioForge's implementation leverages the [WebMOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.WebMOutput.html) class from the `VisioForge.Core.Types.Output` namespace.
+On Windows platforms, VisioForge's implementation leverages the [WebMOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WebMOutput.html) class from the `VisioForge.Core.Types.X.Output` namespace.
 
 ### Basic Configuration
 
@@ -105,7 +103,7 @@ webmOutput.Video_OvershootPct = 50;   // Allows bitrate to exceed target tempora
 
 ## Cross-Platform Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 For cross-platform applications, VisioForge provides the [WebMOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WebMOutput.html) class from the `VisioForge.Core.Types.X.Output` namespace, offering enhanced codec flexibility.
 

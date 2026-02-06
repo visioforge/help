@@ -1,12 +1,12 @@
 ---
 title: .Net Media Video Decoder Blocks Guide
-description: Explore a complete guide to .Net Media SDK video decoder blocks. Learn about various video decoders for your media processing pipelines.
+description: Decompress encoded video streams with hardware-accelerated decoder blocks supporting H.264, HEVC, VP9, and more codecs in Media Blocks SDK.
 sidebar_label: Video Decoders
 ---
 
 # Video Decoder Blocks - VisioForge Media Blocks SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Video Decoder blocks are essential components in a media pipeline, responsible for decompressing encoded video streams into raw video frames that can be further processed or rendered. VisioForge Media Blocks SDK .Net offers a variety of video decoder blocks supporting numerous codecs and hardware acceleration technologies.
 
@@ -55,9 +55,10 @@ var h264Decoder = new H264DecoderBlock();
 // Example: Create a basic file source, demuxer, and renderer
 var basicFileSource = new BasicFileSourceBlock("test_h264.mp4");
 
-// You'll need MediaFileInfo, typically obtained using MediaInfoReader
-// Assuming MediaInfoReader.GetMediaInfoAsync is available:
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_h264.mp4");
+// Get media info using MediaInfoReaderX
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_h264.mp4");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -168,7 +169,9 @@ var nvH264Decoder = new NVH264DecoderBlock();
 // Example: Create a basic file source, demuxer, and renderer
 var basicFileSource = new BasicFileSourceBlock("test_h264.mp4");
 
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_h264.mp4");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_h264.mp4");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -228,7 +231,9 @@ var nvH265Decoder = new NVH265DecoderBlock();
 // Example: Create a basic file source, demuxer, and renderer
 var basicFileSource = new BasicFileSourceBlock("test_h265.mp4");
 
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_h265.mp4");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_h265.mp4");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -291,7 +296,9 @@ var nvJpegDecoder = new NVJPEGDecoderBlock();
 // Ensure "test.mjpg" contains a Motion JPEG stream.
 var basicFileSource = new BasicFileSourceBlock("test.mjpg");
 
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test.mjpg");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test.mjpg");
+var mediaInfo = reader.Info;
 if (mediaInfo == null || mediaInfo.VideoStreams.Count == 0 || !mediaInfo.VideoStreams[0].Codec.Contains("jpeg"))
 {
     Console.WriteLine("Failed to get MJPEG media info or not an MJPEG file.");
@@ -351,7 +358,9 @@ var nvMpeg1Decoder = new NVMPEG1DecoderBlock();
 // Example: Create a basic file source, demuxer, and renderer
 var basicFileSource = new BasicFileSourceBlock("test_mpeg1.mpg");
 
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_mpeg1.mpg");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_mpeg1.mpg");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -411,7 +420,9 @@ var nvMpeg2Decoder = new NVMPEG2DecoderBlock();
 // Example: Create a basic file source, demuxer, and renderer
 var basicFileSource = new BasicFileSourceBlock("test_mpeg2.mpg");
 
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_mpeg2.mpg");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_mpeg2.mpg");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -471,7 +482,9 @@ var nvMpeg4Decoder = new NVMPEG4DecoderBlock();
 // Example: Create a basic file source, demuxer, and renderer
 var basicFileSource = new BasicFileSourceBlock("test_mpeg4.avi");
 
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_mpeg4.avi");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_mpeg4.avi");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -531,7 +544,9 @@ var nvVp8Decoder = new NVVP8DecoderBlock();
 // Example: Create a basic file source, demuxer, and renderer
 var basicFileSource = new BasicFileSourceBlock("test_vp8.webm");
 
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_vp8.webm");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_vp8.webm");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -591,7 +606,9 @@ var nvVp9Decoder = new NVVP9DecoderBlock();
 // Example: Create a basic file source, demuxer, and renderer
 var basicFileSource = new BasicFileSourceBlock("test_vp9.webm");
 
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_vp9.webm");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_vp9.webm");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -644,7 +661,9 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 var vaapiH264Decoder = new VAAPIH264DecoderBlock();
 var basicFileSource = new BasicFileSourceBlock("test_h264.mp4");
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_h264.mp4");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_h264.mp4");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -696,7 +715,9 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 var vaapiHevcDecoder = new VAAPIHEVCDecoderBlock();
 var basicFileSource = new BasicFileSourceBlock("test_hevc.mp4");
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_hevc.mp4");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_hevc.mp4");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -792,7 +813,9 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 var vaapiVc1Decoder = new VAAPIVC1DecoderBlock();
 var basicFileSource = new BasicFileSourceBlock("test_vc1.wmv");
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_vc1.wmv");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_vc1.wmv");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -853,7 +876,9 @@ var pipeline = new MediaBlocksPipeline();
 var d3d11Av1Decoder = new D3D11AV1DecoderBlock();
 
 var basicFileSource = new BasicFileSourceBlock("test_av1.mkv");
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_av1.mkv");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_av1.mkv");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -910,7 +935,9 @@ var pipeline = new MediaBlocksPipeline();
 var d3d11H264Decoder = new D3D11H264DecoderBlock();
 
 var basicFileSource = new BasicFileSourceBlock("test_h264.mp4");
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_h264.mp4");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_h264.mp4");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -967,7 +994,9 @@ var pipeline = new MediaBlocksPipeline();
 var d3d11H265Decoder = new D3D11H265DecoderBlock();
 
 var basicFileSource = new BasicFileSourceBlock("test_h265.mp4");
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_h265.mp4");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_h265.mp4");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -1024,7 +1053,9 @@ var pipeline = new MediaBlocksPipeline();
 var d3d11Mpeg2Decoder = new D3D11MPEG2DecoderBlock();
 
 var basicFileSource = new BasicFileSourceBlock("test_mpeg2.mpg");
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_mpeg2.mpg");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_mpeg2.mpg");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -1081,7 +1112,9 @@ var pipeline = new MediaBlocksPipeline();
 var d3d11Vp8Decoder = new D3D11VP8DecoderBlock();
 
 var basicFileSource = new BasicFileSourceBlock("test_vp8.webm");
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_vp8.webm");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_vp8.webm");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");
@@ -1138,7 +1171,9 @@ var pipeline = new MediaBlocksPipeline();
 var d3d11Vp9Decoder = new D3D11VP9DecoderBlock();
 
 var basicFileSource = new BasicFileSourceBlock("test_vp9.webm");
-var mediaInfo = await MediaInfoReader.GetMediaInfoAsync("test_vp9.webm");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_vp9.webm");
+var mediaInfo = reader.Info;
 if (mediaInfo == null)
 {
     Console.WriteLine("Failed to get media info.");

@@ -1,6 +1,6 @@
 ---
 title: TVFVideoEdit installation in IDEs
-description: How to install TVFVideoEdit in Delphi and other IDEs
+description: Install TVFVideoEdit library in Delphi and ActiveX-compatible IDEs including MFC, VB6, and C++ Builder with package and control setup.
 sidebar_label: Installation
 ---
 

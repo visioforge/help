@@ -1,7 +1,6 @@
 ---
 title: Installing TVFVideoCapture in VB6 for Delphi Users
-description: A detailed step-by-step guide for Delphi developers on integrating the TVFVideoCapture ActiveX control within Visual Basic 6 environments. Learn how to enhance your cross-platform development capabilities with this powerful video capture solution.
-sidebar_label: Visual Basic 6
+description: Integrate TVFVideoCapture ActiveX control in Visual Basic 6 with x86 compatibility and full video capture feature access.
 ---
 
 # Integrating TVFVideoCapture with Visual Basic 6
@@ -54,7 +53,5 @@ When implementing the TVFVideoCapture control in your VB6 application, consider 
 ## Technical Support and Additional Resources
 
 ---
-
 For technical questions or implementation challenges, please contact our [support team](https://support.visioforge.com/) who specialize in assisting developers with integration requirements. 
-
 For additional code examples and implementation patterns, visit our [GitHub repository](https://github.com/visioforge/) which contains numerous samples demonstrating optimal usage patterns.

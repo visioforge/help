@@ -1,6 +1,6 @@
 ---
 title: Video Capture SDK .Net for Advanced Recording
-description: Powerful .NET Video Capture SDK offering extensive format support, hardware integration, and flexible implementation options for developers building professional recording applications. Supports MP4, WebM, AVI, WMV, and specialized formats.
+description: Powerful .NET Video Capture SDK with extensive format support, hardware integration, and flexible implementation for recording apps.
 sidebar_label: Video Capture
 order: 11
 
@@ -8,7 +8,7 @@ order: 11
 
 # Video Capture SDK for .NET Developers
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 

@@ -1,19 +1,19 @@
 ---
 title: Webcam to WMV Capture in .NET | Video SDK Tutorial
-description: Learn how to implement webcam video capture to WMV format in .NET applications with step-by-step instructions, C# code examples, NuGet package information, and best practices for Windows application developers. Complete integration guide for building video capture functionality.
-sidebar_label: Webcam to WMV Capture
-
+description: Implement webcam video capture to WMV format in .NET with step-by-step instructions, C# code examples, and integration best practices.
 ---
 
 # Webcam Video Capture to WMV Format in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Video Implementation Tutorial
 
 This tutorial demonstrates how to create a Windows Forms application that captures video from a webcam and saves it in WMV format using the Video Capture SDK .NET. The example below provides a complete walkthrough with fully commented source code.
 
-[!embed](https://www.youtube.com/embed/Bqss-zdalXg?controls=1)
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/Bqss-zdalXg?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Source Code Access
 
@@ -128,5 +128,4 @@ The SDK provides additional options not shown in this basic example:
 - Check Windows permissions for camera access in newer operating systems
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and advanced implementation examples.

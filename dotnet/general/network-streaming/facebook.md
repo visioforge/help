@@ -1,13 +1,11 @@
 ---
 title: Facebook Live Integration for .NET Development
-description: Learn how to implement Facebook Live streaming in .NET applications with hardware-accelerated video encoding, real-time broadcasting, and platform-specific optimizations. Master RTMP streaming with code examples and best practices.
-sidebar_label: Facebook Live
-
+description: Stream to Facebook Live in .NET with hardware-accelerated encoding, RTMP broadcasting, and platform-specific optimizations for real-time video.
 ---
 
 # Facebook Live Streaming with VisioForge SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Facebook Live Streaming
 
@@ -17,7 +15,7 @@ This comprehensive guide explains how to implement Facebook Live streaming using
 
 ## Core Components for Facebook Live Integration
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The cornerstone of Facebook Live integration in VisioForge is the `FacebookLiveOutput` class, which provides a complete implementation of the RTMP protocol required for Facebook streaming. This class implements multiple interfaces to ensure compatibility across various SDK components:
 

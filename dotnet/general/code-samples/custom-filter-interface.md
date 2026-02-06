@@ -1,12 +1,11 @@
 ---
-title: Working with Custom DirectShow Filter Interfaces in .NET
-description: Learn how to implement and use custom DirectShow filter interfaces in .NET applications. This guide provides step-by-step examples for accessing and manipulating DirectShow components through the IBaseFilter interface in your multimedia applications.
-sidebar_label: Custom Filter Interface Usage
+title: Use Custom DirectShow Filter Interfaces
+description: Implement custom DirectShow filter interfaces in .NET with IBaseFilter access and manipulation for multimedia applications.
 ---
 
-# Working with Custom DirectShow Filter Interfaces in .NET
+# Use Custom DirectShow Filter Interfaces
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 *Note: The API shown in this guide is the same across all our SDK products, including Video Capture SDK .Net, Video Edit SDK .Net, and Media Player SDK .Net.*
 

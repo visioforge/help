@@ -1,13 +1,11 @@
 ---
 title: iOS Cross-Platform .NET App Deployment Guide
-description: Step-by-step guide for .NET developers on deploying cross-platform applications to iOS devices. Learn about required permissions, SDK integration, architecture support, and best practices for successful iOS app deployment.
-sidebar_label: iOS
-
+description: Deploy .NET apps to iOS with VisioForge SDK integration, permissions, architecture support, and cross-platform deployment best practices.
 ---
 
 # Apple iOS Deployment Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview
 
@@ -312,5 +310,4 @@ If you encounter errors loading native libraries:
 - Browse the [VisioForge API documentation](https://api.visioforge.org/dotnet/api/index.html) for comprehensive SDK reference
 
 ---
-
 By following this deployment guide, you should be able to successfully create, configure, and deploy VisioForge-powered applications to iOS devices. For specific questions or advanced configuration needs, please contact VisioForge technical support.

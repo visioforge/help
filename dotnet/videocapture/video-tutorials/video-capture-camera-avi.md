@@ -1,13 +1,11 @@
 ---
 title: Webcam to AVI Recording in .NET C# Applications
-description: Learn how to implement webcam to AVI file recording in your .NET applications with this step-by-step tutorial. Includes complete C# code example with async operations, device selection, and proper implementation patterns for Windows Forms applications.
-sidebar_label: Webcam to AVI Recording
-
+description: Implement webcam to AVI file recording in .NET with step-by-step tutorial including complete C# code example with async and device selection.
 ---
 
 # Webcam to AVI File Recording in .NET C# Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview
 
@@ -17,7 +15,9 @@ This tutorial demonstrates how to capture video from a webcam and save it direct
 
 Watch our detailed video tutorial covering the implementation process:
 
-[!embed](https://www.youtube.com/embed/8yFKz1QOJbk?controls=1)
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/8yFKz1QOJbk?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Source Code Repository
 
@@ -143,5 +143,4 @@ The SDK provides numerous customization options including:
 - Video effects and transformations
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and explore additional implementation scenarios.

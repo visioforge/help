@@ -1,13 +1,13 @@
 ---
 title: Network Streaming Guide for .NET Development
-description: Learn how to implement RTMP, RTSP, HLS, and NDI streaming in .NET applications. Includes code examples for live broadcasting, hardware acceleration, and integration with major streaming platforms.
+description: Implement RTMP, RTSP, HLS, NDI, and other streaming protocols in .NET with hardware acceleration for live broadcasting and media platforms.
 sidebar_label: Network Streaming
 order: 16
 ---
 
 # Comprehensive Network Streaming Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Network Streaming
 

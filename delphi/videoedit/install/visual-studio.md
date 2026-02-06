@@ -1,10 +1,9 @@
 ---
-title: TVFVideoEdit Integration Guide for Visual Studio 2010+
-description: Complete step-by-step tutorial for installing and configuring TVFVideoEdit ActiveX components in Visual Studio 2010 and later versions. Learn how to set up video editing capabilities in your C#, C++, or VB.NET projects.
-sidebar_label: Visual Studio 2010 and later
+title: Install TVFVideoEdit in Visual Studio
+description: Install TVFVideoEdit ActiveX controls in Visual Studio 2010+ for C++, C#, and VB.NET projects with wrapper assembly configuration.
 ---
 
-# Installing TVFVideoEdit in Visual Studio 2010 and Later Versions
+# Install TVFVideoEdit in Visual Studio
 
 ## Overview
 

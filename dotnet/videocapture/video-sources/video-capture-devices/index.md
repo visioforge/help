@@ -1,13 +1,13 @@
 ---
 title: Using Video Capture Devices in .NET Applications
-description: Learn how to implement video capture device integration in your .NET applications. This comprehensive guide covers device enumeration, camera control, PTZ functionality, video adjustments, and specialized features for professional development.
+description: Implement video capture device integration in .NET with device enumeration, camera control, PTZ functionality, and video adjustments.
 sidebar_label: Video Capture Devices
 order: 20
 ---
 
 # Integrating Video Capture Devices in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Getting Started with Video Capture Devices
 

@@ -1,12 +1,11 @@
 ---
 title: Speex Audio Encoder Integration for .NET
-description: Learn how to implement Speex speech compression in .NET applications. Master audio capture, encoding, and streaming with optimized settings for voice applications. Includes code examples and best practices for developers.
-sidebar_label: Speex
+description: Implement Speex speech compression in .NET with optimized voice encoding settings, quality controls, and cross-platform audio capture.
 ---
 
 # Speex Audio Encoder for .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Speex
 
@@ -25,7 +24,7 @@ The Speex encoder in VisioForge SDKs supports:
 
 ## Cross-platform Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 ### Encoder Modes
 

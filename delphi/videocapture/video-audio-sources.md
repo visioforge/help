@@ -1,7 +1,6 @@
 ---
 title: Delphi Video Capture - Device Selection Guide
-description: Master video and audio device selection in Delphi applications with practical code examples. Learn to implement device listing, format configuration, frame rate settings, and audio input selection with step-by-step Delphi, C++ MFC, and VB6 code samples.
-sidebar_label: How to select video and audio capture devices?
+description: Select video and audio devices in Delphi - enumerate devices, configure formats, set frame rates with code examples for Delphi, C++, and VB6.
 ---
 
 # Code sample - How to select video and audio capture devices?
@@ -309,5 +308,4 @@ VideoCapture1.Audio_CaptureLine = cbAudioInputLine.Text
 ```
 
 ---
-
 Please get in touch with [support](https://support.visioforge.com/) to get help with this tutorial. Visit our [GitHub](https://github.com/visioforge/) page to get more code samples.

@@ -1,12 +1,11 @@
 ---
-title: Integrating 3rd-party Video Processing Filters in .NET
-description: Learn how to implement and leverage third-party video processing filters in .NET applications. This practical guide provides code examples, best practices, and troubleshooting tips for developers working with DirectShow filters across multiple video SDK platforms.
-sidebar_label: 3rd-Party Video Effects
+title: Use Third-Party Video Filters in .NET
+description: Implement third-party DirectShow video filters in .NET with code examples, best practices, and troubleshooting for Video SDK platforms.
 ---
 
-# Integrating 3rd-party Video Processing Filters in .NET
+# Use Third-Party Video Filters in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -177,5 +176,4 @@ Third-party video processing filters offer powerful capabilities for enhancing y
 Remember to test thoroughly with your target environment configurations to ensure optimal performance and compatibility.
 
 ---
-
 For more code samples and implementation details, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

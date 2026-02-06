@@ -1,13 +1,13 @@
 ---
 title: .Net Audio Visualizer Blocks
-description: Explore a comprehensive set of .NET audio visualizer blocks for building powerful audio-reactive applications. Includes Spacescope, Spectrascope, Synaescope, and Wavescope.
+description: Build audio-reactive applications with Spacescope, Spectrascope, Synaescope, and Wavescope visualizer blocks for dynamic audio rendering.
 sidebar_label: Audio Visualizers
 
 ---
 
 # Audio visualizer blocks
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 VisioForge Media Blocks SDK .Net includes a set of audio visualizer blocks that allow you to create audio-reactive visualizations for your applications. These blocks take audio input and produce video output representing the audio characteristics.
 
@@ -196,3 +196,267 @@ await pipeline.StartAsync();
 #### Platforms
 
 Windows, macOS, Linux, iOS, Android.
+
+## LibVisual Bumpscope
+
+LibVisual Bumpscope creates a bumpmapped oscilloscope visualization effect.
+
+### Block info
+
+Name: LibVisualBumpscopeBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input audio | uncompressed audio | 1 |
+| Output video | uncompressed video | 1 |
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+
+var bumpscope = new LibVisualBumpscopeBlock();
+pipeline.Connect(audioSource.AudioOutput, bumpscope.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(bumpscope.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux.
+
+## LibVisual Corona
+
+LibVisual Corona creates a radiant corona visualization effect.
+
+### Block info
+
+Name: LibVisualCoronaBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input audio | uncompressed audio | 1 |
+| Output video | uncompressed video | 1 |
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+
+var corona = new LibVisualCoronaBlock();
+pipeline.Connect(audioSource.AudioOutput, corona.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(corona.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux.
+
+## LibVisual Infinite
+
+LibVisual Infinite creates an infinite tunnel visualization effect.
+
+### Block info
+
+Name: LibVisualInfiniteBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input audio | uncompressed audio | 1 |
+| Output video | uncompressed video | 1 |
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+
+var infinite = new LibVisualInfiniteBlock();
+pipeline.Connect(audioSource.AudioOutput, infinite.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(infinite.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux.
+
+## LibVisual Jakdaw
+
+LibVisual Jakdaw creates a dynamic visualization effect.
+
+### Block info
+
+Name: LibVisualJakdawBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input audio | uncompressed audio | 1 |
+| Output video | uncompressed video | 1 |
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+
+var jakdaw = new LibVisualJakdawBlock();
+pipeline.Connect(audioSource.AudioOutput, jakdaw.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(jakdaw.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux.
+
+## LibVisual Jess
+
+LibVisual Jess creates a particle-based visualization effect.
+
+### Block info
+
+Name: LibVisualJessBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input audio | uncompressed audio | 1 |
+| Output video | uncompressed video | 1 |
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+
+var jess = new LibVisualJessBlock();
+pipeline.Connect(audioSource.AudioOutput, jess.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(jess.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux.
+
+## LibVisual LV Analyzer
+
+LibVisual LV Analyzer creates a frequency analyzer visualization.
+
+### Block info
+
+Name: LibVisualLVAnalyzerBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input audio | uncompressed audio | 1 |
+| Output video | uncompressed video | 1 |
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+
+var analyzer = new LibVisualLVAnalyzerBlock();
+pipeline.Connect(audioSource.AudioOutput, analyzer.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(analyzer.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux.
+
+## LibVisual LV Scope
+
+LibVisual LV Scope creates a classic oscilloscope visualization.
+
+### Block info
+
+Name: LibVisualLVScopeBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input audio | uncompressed audio | 1 |
+| Output video | uncompressed video | 1 |
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+
+var scope = new LibVisualLVScopeBlock();
+pipeline.Connect(audioSource.AudioOutput, scope.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(scope.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux.
+
+## LibVisual Oinksie
+
+LibVisual Oinksie creates a playful visualization effect.
+
+### Block info
+
+Name: LibVisualOinksieBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input audio | uncompressed audio | 1 |
+| Output video | uncompressed video | 1 |
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+
+var oinksie = new LibVisualOinksieBlock();
+pipeline.Connect(audioSource.AudioOutput, oinksie.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(oinksie.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux.

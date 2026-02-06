@@ -1,9 +1,7 @@
 ---
 title: Build Video Editing Apps with .NET SDK
-description: Master video editing in .NET applications with our advanced SDK. Learn to create professional video editors with customizable timelines, multiple formats support, transitions, effects, and real-time previews. Follow our step-by-step guide for developers building robust media applications.
-sidebar_label: Getting Started
+description: Master video editing in .NET SDK with customizable timelines, multiple formats, transitions, effects, and real-time previews for developers.
 sidebar_position: 0
-
 ---
 
 # Building Professional Video Editing Applications with .NET SDK
@@ -26,23 +24,26 @@ For a smooth setup process, please refer to our detailed [installation guide](..
 
 The SDK provides a robust core editing object that serves as the foundation of your video editing application. Follow these steps to create and initialize this essential component:
 
-+++ VideoEditCore
+=== "VideoEditCore"
 
-```cs
-private VideoEditCore core;
+    
+    ```cs
+    private VideoEditCore core;
+    
+    core = new VideoEditCore(VideoView1 as IVideoView);
+    ```
+    
 
-core = new VideoEditCore(VideoView1 as IVideoView);
-```
+=== "VideoEditCoreX"
 
-+++ VideoEditCoreX
+    
+    ```cs
+    private VideoEditCoreX core;
+    
+    core = new VideoEditCoreX(VideoView1 as IVideoView);
+    ```
+    
 
-```cs
-private VideoEditCoreX core;
-
-core = new VideoEditCoreX(VideoView1 as IVideoView);
-```
-
-+++
 
 You'll need to specify a Video View object as a parameter to enable video preview functionality during editing operations.
 
@@ -91,20 +92,23 @@ private void Core_OnStop(object sender, EventArgs e)
 
 Before adding media sources to your project, you must establish the basic timeline parameters such as frame rate and resolution, which vary depending on which engine you're using:
 
-+++ VideoEditCore
+=== "VideoEditCore"
 
-```cs
-core.Video_FrameRate = new VideoFrameRate(30);
-```
+    
+    ```cs
+    core.Video_FrameRate = new VideoFrameRate(30);
+    ```
+    
 
-+++ VideoEditCoreX
+=== "VideoEditCoreX"
 
-```cs
-core.Output_VideoSize = new VisioForge.Core.Types.Size(1920, 1080);
-core.Output_VideoFrameRate = new VideoFrameRate(30);
-```
+    
+    ```cs
+    core.Output_VideoSize = new VisioForge.Core.Types.Size(1920, 1080);
+    core.Output_VideoFrameRate = new VideoFrameRate(30);
+    ```
+    
 
-+++
 
 ## Working with Media Sources
 
@@ -120,122 +124,131 @@ First, create a video source object and set the source file path. You can specif
 
 For files with multiple video streams, you can select which stream to use by specifying the stream number.
 
-+++ VideoEditCore
+=== "VideoEditCore"
 
-```cs
-var videoFile = new VisioForge.Core.Types.VideoEdit.VideoSource(
-    filename,
-    null,
-    null, 
-    VideoEditStretchMode.Letterbox, 
-    0, 
-    1.0);
-```
+    
+    ```cs
+    var videoFile = new VisioForge.Core.Types.VideoEdit.VideoSource(
+        filename,
+        null,
+        null, 
+        VideoEditStretchMode.Letterbox, 
+        0, 
+        1.0);
+    ```
+    
+    API:
+    
+    ```cs
+    public VideoSource(
+        string filename,
+        TimeSpan? startTime = null,
+        TimeSpan? stopTime = null,
+        VideoEditStretchMode stretchMode = VideoEditStretchMode.Letterbox,
+        int streamNumber = 0,
+        double rate = 1.0)
+    ```
+    
 
-API:
+=== "VideoEditCoreX"
 
-```cs
-public VideoSource(
-    string filename,
-    TimeSpan? startTime = null,
-    TimeSpan? stopTime = null,
-    VideoEditStretchMode stretchMode = VideoEditStretchMode.Letterbox,
-    int streamNumber = 0,
-    double rate = 1.0)
-```
+    
+    ```cs
+    var videoFile = new VisioForge.Core.Types.X.VideoEdit.VideoFileSource(
+        filename,
+        null,
+        null, 
+        0, 
+        1.0);
+    ```
+    
+    API:
+    
+    ```cs
+    public VideoFileSource(
+        string filename,
+        TimeSpan? startTime = null,
+        TimeSpan? stopTime = null,
+        int streamNumber = 0,
+        double rate = 1.0)
+    ```
+    
 
-+++ VideoEditCoreX
-
-```cs
-var videoFile = new VisioForge.Core.Types.X.VideoEdit.VideoFileSource(
-    filename,
-    null,
-    null, 
-    0, 
-    1.0);
-```
-
-API:
-
-```cs
-public VideoFileSource(
-    string filename,
-    TimeSpan? startTime = null,
-    TimeSpan? stopTime = null,
-    int streamNumber = 0,
-    double rate = 1.0)
-```
-
-+++
 
 You can control playback speed by adjusting the rate parameter. For example, setting the rate to 2.0 will play the file at twice the normal speed.
 
 An alternative constructor allows you to add multiple file segments:
 
-+++ VideoEditCore
+=== "VideoEditCore"
 
-```cs
-public VideoSource(
-    string filename,
-    FileSegment[] segments,
-    VideoEditStretchMode stretchMode = VideoEditStretchMode.Letterbox,
-    int streamNumber = 0,
-    double rate = 1.0)
-```
+    
+    ```cs
+    public VideoSource(
+        string filename,
+        FileSegment[] segments,
+        VideoEditStretchMode stretchMode = VideoEditStretchMode.Letterbox,
+        int streamNumber = 0,
+        double rate = 1.0)
+    ```
+    
 
-+++ VideoEditCoreX
+=== "VideoEditCoreX"
 
-```cs
-public VideoFileSource(
-    string filename,
-    FileSegment[] segments,
-    int streamNumber = 0,
-    double rate = 1.0)
-```
+    
+    ```cs
+    public VideoFileSource(
+        string filename,
+        FileSegment[] segments,
+        int streamNumber = 0,
+        double rate = 1.0)
+    ```
+    
 
-+++
 
 To add the source to your timeline, use the following methods:
 
-+++ VideoEditCore
+=== "VideoEditCore"
 
-```cs
-await core.Input_AddVideoFileAsync(
-    videoFile, 
-    null, 
-    0);
-```
+    
+    ```cs
+    await core.Input_AddVideoFileAsync(
+        videoFile, 
+        null, 
+        0);
+    ```
+    
+    The third parameter specifies the destination video stream number. Use 0 to add the source to the first video stream.
+    
+    API:
+    
+    ```cs
+    public Task<bool> Input_AddVideoFileAsync(
+        VideoSource fileSource,
+        TimeSpan? timelineInsertTime = null,
+        int targetVideoStream = 0,
+        int customWidth = 0,
+        int customHeight = 0)
+    ```
+    
 
-The third parameter specifies the destination video stream number. Use 0 to add the source to the first video stream.
+=== "VideoEditCoreX"
 
-API:
+    
+    ```cs
+    core.Input_AddVideoFile(
+        videoFile,
+        null);
+    ```
+    
+    API:
+    
+    ```cs
+    public bool Input_AddVideoFile(
+        VideoFileSource source, 
+        TimeSpan? insertTime = null)
+    ```
+    
 
-```cs
-public Task<bool> Input_AddVideoFileAsync(
-    VideoSource fileSource,
-    TimeSpan? timelineInsertTime = null,
-    int targetVideoStream = 0,
-    int customWidth = 0,
-    int customHeight = 0)
-```
-
-+++ VideoEditCoreX
-
-```cs
-core.Input_AddVideoFile(
-    videoFile,
-    null);
-```
-
-API:
-
-```cs
-public bool Input_AddVideoFile(
-    VideoFileSource source, 
-    TimeSpan? insertTime = null)
-```
-
-+++
 
 The second parameter determines the timeline position. Using null automatically adds the source at the end of the existing timeline.
 
@@ -243,82 +256,89 @@ The second parameter determines the timeline position. Using null automatically 
 
 The SDK supports numerous audio formats including AAC, MP3, WMA, OPUS, Vorbis and more. The process for adding audio is similar to adding video:
 
-+++ VideoEditCore
+=== "VideoEditCore"
 
-```cs
-var audioFile = new VisioForge.Core.Types.VideoEdit.AudioSource(
-    filename,
-    startTime: null,
-    stopTime: null,
-    fileToSync: string.Empty,
-    streamNumber: 0,
-    rate: 1.0);                      
-```
+    
+    ```cs
+    var audioFile = new VisioForge.Core.Types.VideoEdit.AudioSource(
+        filename,
+        startTime: null,
+        stopTime: null,
+        fileToSync: string.Empty,
+        streamNumber: 0,
+        rate: 1.0);                      
+    ```
+    
+    The `fileToSync` parameter enables audio-video synchronization. When working with separate video and audio files, you can specify the video filename in this parameter to ensure the audio synchronizes correctly with the video.
+    
+    ```cs
+    await core.Input_AddAudioFileAsync(
+        audioFile,
+        insertTime: null, 
+        0);
+    ```
+    
 
-The `fileToSync` parameter enables audio-video synchronization. When working with separate video and audio files, you can specify the video filename in this parameter to ensure the audio synchronizes correctly with the video.
+=== "VideoEditCoreX"
 
-```cs
-await core.Input_AddAudioFileAsync(
-    audioFile,
-    insertTime: null, 
-    0);
-```
+    
+    ```cs
+    var audioFile = new AudioFileSource(
+        filename,
+        startTime: null,
+        stopTime: null);
+    
+    core.Input_AddAudioFile(
+        audioFile,
+        insertTime: null);
+    ```
+    
 
-+++ VideoEditCoreX
-
-```cs
-var audioFile = new AudioFileSource(
-    filename,
-    startTime: null,
-    stopTime: null);
-
-core.Input_AddAudioFile(
-    audioFile,
-    insertTime: null);
-```
-
-+++
 
 ### Combining Video and Audio Sources
 
 For efficiency, you can add combined video and audio sources with a single method call:
 
-+++ VideoEditCoreX
+=== "VideoEditCoreX"
 
-```cs
-core.Input_AddAudioVideoFile(
-    filename,
-    startTime: null,
-    stopTime: null,
-    insertTime: null);
-```
+    
+    ```cs
+    core.Input_AddAudioVideoFile(
+        filename,
+        startTime: null,
+        stopTime: null,
+        insertTime: null);
+    ```
+    
 
-+++
 
 ### Working with Static Images
 
 The SDK supports adding still images to your timeline, including JPG, PNG, BMP, and GIF formats. When adding an image, you'll need to specify how long it should appear on the timeline:
 
-+++ VideoEditCore
+=== "VideoEditCore"
 
-```cs
-await core.Input_AddImageFileAsync(
-    filename,
-    duration: TimeSpan.FromMilliseconds(2000),
-    timelineInsertTime: null,
-    stretchMode: VideoEditStretchMode.Letterbox);
-```
+    
+    ```cs
+    await core.Input_AddImageFileAsync(
+        filename,
+        duration: TimeSpan.FromMilliseconds(2000),
+        timelineInsertTime: null,
+        stretchMode: VideoEditStretchMode.Letterbox);
+    ```
+    
 
-+++ VideoEditCoreX
+=== "VideoEditCoreX"
 
-```cs
-core.Input_AddImageFile(
-    filename,
-    duration: TimeSpan.FromMilliseconds(2000),
-    insertTime: null);
-```
+    
+    ```cs
+    core.Input_AddImageFile(
+        filename,
+        duration: TimeSpan.FromMilliseconds(2000),
+        insertTime: null);
+    ```
+    
 
-+++
 
 ## Configuring Output Settings
 
@@ -328,21 +348,24 @@ The SDK offers flexible output options with support for numerous video and audio
 
 Use the `Output_Format` property to configure your desired output format:
 
-+++ VideoEditCore
+=== "VideoEditCore"
 
-```cs
-var mp4Output = new MP4HWOutput();
-core.Output_Format = mp4Output;
-```
+    
+    ```cs
+    var mp4Output = new MP4HWOutput();
+    core.Output_Format = mp4Output;
+    ```
+    
 
-+++ VideoEditCoreX
+=== "VideoEditCoreX"
 
-```cs
-var mp4Output = new MP4Output("output.mp4");
-core.Output_Format = mp4Output;
-```
+    
+    ```cs
+    var mp4Output = new MP4Output("output.mp4");
+    core.Output_Format = mp4Output;
+    ```
+    
 
-+++
 
 For a comprehensive list of supported output formats and detailed code examples, please refer to our [Output Formats](../general/output-formats/index.md) documentation section.
 
@@ -364,19 +387,22 @@ To create professional-looking transitions between video clips, check our detail
 
 Once you've configured all your sources, effects, and output settings, you can initiate the editing process:
 
-+++ VideoEditCore
+=== "VideoEditCore"
 
-```cs
-await core.StartAsync();
-```
+    
+    ```cs
+    await core.StartAsync();
+    ```
+    
 
-+++ VideoEditCoreX
+=== "VideoEditCoreX"
 
-```cs
-core.Start();
-```
+    
+    ```cs
+    core.Start();
+    ```
+    
 
-+++
 
 During the editing process, your application will receive progress updates through the event handlers you've implemented, and you'll be notified when the operation completes via the stop event.
 

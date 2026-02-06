@@ -1,15 +1,13 @@
 ---
 title: FFMPEG Integration for VisioForge Video SDKs
-description: Implement powerful FFMPEG.exe output in VisioForge .Net SDKs for video capture, editing, and processing. Learn how to configure video codecs, hardware acceleration, custom encoding parameters, and optimize performance for professional video applications.
-sidebar_label: FFMPEG (exe)
-
+description: Configure FFMPEG.exe output in .NET for video capture and editing with hardware acceleration, custom codecs, and professional encoding options.
 ---
 
 # FFMPEG.exe Integration with VisioForge .Net SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 ## Introduction to FFMPEG Output in .NET
 
@@ -231,7 +229,6 @@ Install-Package VisioForge.DotNet.Core.Redist.FFMPEGEXE.x86
 - Choose appropriate presets based on your quality/speed requirements
 - Set reasonable bitrates based on content type and resolution
 - Consider two-pass encoding for non-realtime scenarios requiring highest quality
-
 
 ## Additional Resources
 

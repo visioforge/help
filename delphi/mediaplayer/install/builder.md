@@ -1,7 +1,6 @@
 ---
 title: TVFMediaPlayer Installation in C++ Builder
-description: A detailed walkthrough on installing the TVFMediaPlayer component within Embarcadero C++ Builder (versions 5, 6, 2006, and later)
-sidebar_label: C++ Builder
+description: Install TVFMediaPlayer in C++ Builder - step-by-step guide for versions 5, 6, 2006, and later with prerequisites, setup, and troubleshooting.
 ---
 
 # Installing TVFMediaPlayer in C++ Builder
@@ -159,5 +158,4 @@ The VisioForge Media Framework provides both 32-bit (x86) and 64-bit (x64) versi
 Integrating TVFMediaPlayer into C++ Builder provides a powerful solution for adding media playback to your applications. By following the appropriate steps for your IDE version, carefully managing x86/x64 architectures, and understanding the package system, you can successfully incorporate this component. Remember to consult the official VisioForge documentation and examples for more advanced usage and API details.
 
 ---
-
 For further assistance or specific issues not covered here, please contact VisioForge [support](https://support.visioforge.com/). Explore more advanced examples and source code on the VisioForge [GitHub](https://github.com/visioforge/) repository.

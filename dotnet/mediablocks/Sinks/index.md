@@ -1,12 +1,12 @@
 ---
 title: .Net Media Sinks - File & Network Streaming
-description: Discover .Net media sink blocks for saving or streaming audio/video. Learn about file sinks like MP4, MKV, AVI, and network sinks such as RTMP, HLS, SRT for versatile media output.
+description: Save or stream media with sink blocks for MP4, MKV, AVI files and RTMP, HLS, SRT network protocols in Media Blocks SDK pipelines.
 sidebar_label: Sinks
 ---
 
 # Sinks
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Sinks are blocks that save or stream data. They are the last blocks in the pipeline.
 Optionally, some sinks can have output pins to pass data to the next block in the pipeline.
@@ -916,9 +916,15 @@ Windows, macOS, Linux, iOS, Android.
 
 ### HLS
 
-HLS (HTTP Live Streaming) is an HTTP-based adaptive streaming communications protocol developed by Apple. It enables adaptive bitrate streaming by breaking the stream into a sequence of small HTTP-based file segments, typically using MPEG-TS fragments as the container.
+HLS (HTTP Live Streaming) is an HTTP-based adaptive streaming communications protocol developed by Apple. It enables adaptive bitrate streaming by breaking the stream into a sequence of small HTTP-based file segments.
 
-Use the `HLSSinkSettings` class to set the parameters.
+The HLS sink supports multiple implementations:
+- **hlssink3** (recommended): Latest implementation with MPEG-TS segments and advanced features
+- **hlsmultivariantsink**: Multi-bitrate adaptive streaming with automatic master playlist generation
+- **hlscmafsink**: CMAF/fMP4 segments for better compatibility with modern players
+- **hlssink2** (legacy): Original implementation with MPEG-TS segments
+
+Use the `HLSSinkSettings` class to configure parameters. The sink automatically selects the best available implementation by default.
 
 #### Block info
 
@@ -955,6 +961,8 @@ graph LR;
 
 #### Sample code
 
+##### Basic HLS Streaming (Auto mode)
+
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
@@ -973,14 +981,18 @@ pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock1.Input);
 pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock2.Input);
 pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock3.Input);
 
-// Configure HLS sink
-var hlsSettings = new HLSSinkSettings("./output/")
+// Configure HLS sink with automatic selection (prefers hlssink3)
+var hlsSettings = new HLSSinkSettings()
 {
-    PlaylistName = "playlist.m3u8",
-    SegmentDuration = 6,
+    Location = @"c:\inetpub\wwwroot\hls\segment_%05d.ts",
+    PlaylistLocation = @"c:\inetpub\wwwroot\hls\playlist.m3u8",
+    PlaylistRoot = "http://localhost/hls/",
+    TargetDuration = TimeSpan.FromSeconds(6),
+    PlaylistLength = 5,
+    MaxFiles = 10,
     PlaylistType = HLSPlaylistType.Event,
-    HTTPServerEnabled = true,
-    HTTPServerPort = 8080
+    Custom_HTTP_Server_Enabled = true,
+    Custom_HTTP_Server_Port = 8080
 };
 
 var sinkBlock = new HLSSinkBlock(hlsSettings);
@@ -989,12 +1001,108 @@ var sinkBlock = new HLSSinkBlock(hlsSettings);
 pipeline.Connect(audioEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 // Connect video variants
-pipeline.Connect(videoEncoderBlock1.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video, "1080p"));
-pipeline.Connect(videoEncoderBlock2.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video, "720p"));
-pipeline.Connect(videoEncoderBlock3.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video, "480p"));
+pipeline.Connect(videoEncoderBlock1.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(videoEncoderBlock2.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(videoEncoderBlock3.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
 
 await pipeline.StartAsync();
 ```
+
+##### CMAF/fMP4 Streaming (for better compatibility)
+
+```csharp
+// Configure HLS sink with CMAF/fMP4 segments
+var hlsSettings = new HLSSinkSettings()
+{
+    SinkType = HLSSinkType.HlsCmafSink,
+    Location = @"c:\inetpub\wwwroot\hls\segment_%05d.m4s",
+    InitLocation = @"c:\inetpub\wwwroot\hls\init_%03d.mp4",
+    PlaylistLocation = @"c:\inetpub\wwwroot\hls\playlist.m3u8",
+    TargetDuration = TimeSpan.FromSeconds(6),
+    PlaylistType = HLSPlaylistType.Event,
+    EnableProgramDateTime = true,
+    Sync = true  // Required for live streaming with CMAF
+};
+
+var sinkBlock = new HLSSinkBlock(hlsSettings);
+// Connect streams as in the basic example
+```
+
+##### VOD (Video on Demand) Streaming
+
+```csharp
+// Configure HLS sink for VOD
+var hlsSettings = new HLSSinkSettings()
+{
+    SinkType = HLSSinkType.HlsSink3,
+    Location = @"c:\videos\hls\segment_%05d.ts",
+    PlaylistLocation = @"c:\videos\hls\playlist.m3u8",
+    TargetDuration = TimeSpan.FromSeconds(10),
+    PlaylistType = HLSPlaylistType.Vod,  // VOD mode
+    EnableEndlist = true,  // Adds #EXT-X-ENDLIST tag
+    PlaylistLength = 0  // Keep all segments for VOD
+};
+
+var sinkBlock = new HLSSinkBlock(hlsSettings);
+// Connect streams as in the basic example
+```
+
+##### Multi-Variant Adaptive Streaming (Master Playlist)
+
+```csharp
+// Configure HLS sink with multivariant support for true adaptive bitrate streaming
+var hlsSettings = new HLSSinkSettings()
+{
+    SinkType = HLSSinkType.HlsMultivariantSink,
+    PlaylistLocation = @"c:\inetpub\wwwroot\hls\master.m3u8",
+    TargetDuration = TimeSpan.FromSeconds(6)
+};
+
+var sinkBlock = new HLSSinkBlock(hlsSettings);
+
+// Connect multiple video variants with different qualities
+// hlsmultivariantsink automatically creates variant playlists and master playlist
+pipeline.Connect(videoEncoderBlock1.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(videoEncoderBlock2.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(videoEncoderBlock3.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(audioEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
+```
+
+#### HLS Sink Features
+
+##### Sink Types
+
+- **Auto** (default): Automatically selects the best available implementation (prefers hlssink3 → hlsmultivariantsink → hlscmafsink → hlssink2)
+- **HlsSink3**: Latest implementation with MPEG-TS segments, supports playlist types, program date time, and improved features
+- **HlsMultivariantSink**: Multi-bitrate adaptive streaming with automatic master playlist generation for multiple quality variants
+- **HlsCmafSink**: CMAF/fMP4 segments for better compatibility with modern browsers and players
+- **HlsSink2**: Legacy implementation for backward compatibility
+
+##### Playlist Types
+
+- **Unspecified**: Live streaming without explicit playlist type tag
+- **Event**: Event-style playlist where segments are not removed. #EXT-X-ENDLIST is added at the end
+- **Vod**: Video on Demand playlist. Behaves like Event but sets #EXT-X-PLAYLIST-TYPE:VOD at completion
+
+##### Key Settings
+
+| Property | Description | Sink Support |
+|----------|-------------|--------------|
+| `SinkType` | Choose sink implementation (Auto, HlsSink2, HlsSink3, HlsCmafSink, HlsMultivariantSink) | All |
+| `Location` | Segment file pattern (e.g., segment_%05d.ts or .m4s) | All except HlsMultivariantSink |
+| `InitLocation` | Init segment pattern for CMAF (e.g., init_%03d.mp4) | HlsCmafSink |
+| `PlaylistLocation` | Output playlist file path (.m3u8, master.m3u8 for multivariant) | All |
+| `PlaylistRoot` | Base URL for segments in playlist | All except HlsMultivariantSink |
+| `TargetDuration` | Target segment duration (TimeSpan) | All |
+| `PlaylistLength` | Number of segments in playlist (0=unlimited) | All except HlsMultivariantSink |
+| `MaxFiles` | Maximum files to keep on disk | All except HlsMultivariantSink |
+| `PlaylistType` | Playlist type (Unspecified, Event, Vod) | HlsSink3, HlsCmafSink |
+| `EnableProgramDateTime` | Add #EXT-X-PROGRAM-DATE-TIME tags | HlsSink3, HlsCmafSink |
+| `EnableEndlist` | Add #EXT-X-ENDLIST at end | HlsSink3, HlsCmafSink |
+| `IFramesOnly` | Create I-frames only playlist | HlsSink3 |
+| `Sync` | Sync with clock (required for live CMAF) | HlsCmafSink |
+| `Latency` | Latency (TimeSpan) | HlsCmafSink |
+| `SendKeyframeRequests` | Request keyframes from encoder | HlsSink2, HlsSink3 |
 
 #### Platforms
 
@@ -1380,7 +1488,7 @@ var shoutcastSettings = new ShoutcastSinkSettings
     StreamName = "My Radio Stream",
     Genre = "Various",
     Description = "My awesome internet radio station",
-    URL = "http://my-radio-website.com", // Homepage URL for your stream (shows up in directory metadata)
+    URL = "https://my-radio-website.com", // Homepage URL for your stream (shows up in directory metadata)
     Public = true,                       // Set to true to list on public directories (if server supports)
     Username = "source"                  // Username for authentication (often "source"; check server config)
     // Other stream parameters like audio bitrate, samplerate, channels are typically determined

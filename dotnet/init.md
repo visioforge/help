@@ -1,14 +1,11 @@
 ---
 title: .NET SDK Setup and Configuration Guide
-description: Learn how to properly initialize and deinitialize .NET SDKs for video capture, editing, and media playback. Includes code examples for both Windows-only and cross-platform X-engines, with best practices for clean application exit.
-sidebar_label: Initialization
-order: 20
-
+description: Initialize and deinitialize .NET SDKs for video capture, editing, and playback with DirectShow and cross-platform X-engines.
 ---
 
 # Initialization
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Type of SDK engines
 
@@ -54,5 +51,4 @@ Moreover, the SDK can be destroyed from any thread, providing flexibility in how
 Implementing these practices ensures that your application exits smoothly without hanging, providing a seamless experience for the users. Properly managing the SDK deinitialization is crucial for maintaining the stability and performance of your application.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

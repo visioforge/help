@@ -1,7 +1,6 @@
 ---
 title: Installing TVFMediaPlayer Library in Visual Basic 6
-description: A detailed guide on how to install, integrate, and utilize the TVFMediaPlayer library within Microsoft Visual Basic 6. Learn about ActiveX integration, handling 32-bit limitations, implementing basic playback functionality, and proper deployment practices.
-sidebar_label: Visual Basic 6
+description: Install and integrate TVFMediaPlayer in VB6 - ActiveX setup, 32-bit considerations, basic playback implementation, and deployment practices.
 ---
 
 # Integrating TVFMediaPlayer with Visual Basic 6: A Comprehensive Guide
@@ -115,5 +114,4 @@ While TVFMediaPlayer provides a bridge for adding modern multimedia features to 
 The TVFMediaPlayer library, through its ActiveX control, offers a powerful and accessible way for Visual Basic 6 developers to incorporate advanced multimedia functionalities into their applications. By understanding the installation process, the 32-bit limitations, basic control usage, and deployment requirements outlined in this guide, developers can effectively leverage VisioForge technology to enhance their VB6 projects. While VB6 is a legacy platform, tools like TVFMediaPlayer help extend its useful life for specific application needs.
 
 ---
-
 For further assistance or more complex scenarios, please get in touch with [VisioForge support](https://support.visioforge.com/). Explore the extensive code samples available on the VisioForge [GitHub repository](https://github.com/visioforge/) for more advanced examples and techniques.

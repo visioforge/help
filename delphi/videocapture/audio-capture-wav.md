@@ -1,7 +1,6 @@
 ---
 title: Delphi WAV Audio Capture Implementation Guide
-description: Master WAV file audio capture in Delphi applications with this developer tutorial. Learn codec selection, audio parameter configuration, and implementation techniques for creating high-quality audio recording functionality. Includes sample code for mono/stereo recording, compression options, and troubleshooting tips.
-sidebar_label: Audio capture to WAV file
+description: Capture audio to WAV files in Delphi with codec selection, compression options, and stereo recording using TVFVideoCapture code examples.
 ---
 
 # Audio Capture to WAV Files: Developer Implementation Guide
@@ -280,5 +279,4 @@ For complex implementations or specific technical challenges, our support team i
 Visit our GitHub page for more code samples and implementation examples that demonstrate advanced audio capture techniques and integration patterns.
 
 ---
-
 For technical assistance with this implementation, please contact our support team. Additional code samples are available on our GitHub page.

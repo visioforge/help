@@ -1,12 +1,11 @@
 ---
 title: Resize and Crop Operations in Video Capture SDK .Net
-description: Learn how to implement professional video resizing and cropping in your .NET applications with optimized code examples for webcams, screen captures, IP cameras, and other video sources. Improve video quality with multiple resize algorithms.
-sidebar_label: Video resize and crop
+description: Implement professional video resizing and cropping in .NET apps with optimized code examples for webcams, screen captures, and IP cameras.
 ---
 
 # Video Resize and Crop Operations for .NET Developers
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Video Processing
 

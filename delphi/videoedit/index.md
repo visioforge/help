@@ -1,6 +1,6 @@
 ---
 title: TVFVideoEdit Library for Delphi Developers
-description: Powerful video editing library for Delphi applications. Learn how to build advanced video editing software with TVFVideoEdit - supporting multiple formats, effects, transitions, timeline editing, motion detection, encryption, and audio processing capabilities.
+description: Build video editing software in Delphi with TVFVideoEdit - supporting multiple formats, effects, transitions, timeline editing, and encryption.
 sidebar_label: TVFVideoEdit
 ---
 
@@ -71,7 +71,7 @@ TVFVideoEdit supports royalty-free distribution, making it a cost-effective solu
 Accelerate your development with these valuable resources:
 
 - [Product Information](https://www.visioforge.com/all-in-one-media-framework)
-- [API Documentation](https://api.visioforge.com/delphi/video_edit_sdk/index.html)
+- [API Documentation](https://api.visioforge.org/delphi/video_edit_sdk/index.html)
 - [Changelog](changelog.md)
 - [Installation Guide](install/index.md)
 - [Deployment Instructions](deployment.md)

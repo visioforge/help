@@ -1,12 +1,12 @@
 ---
 title: .Net Media Parser Blocks Guide
-description: Explore a complete guide to .Net Media SDK parser blocks. Learn about various video and audio parsers for your media processing pipelines.
+description: Parse elementary video and audio streams to extract metadata and prepare content for decoding and multiplexing in Media Blocks SDK.
 sidebar_label: Parsers
 ---
 
 # Parser Blocks - VisioForge Media Blocks SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Parser blocks are essential components in media processing pipelines. They are used to parse elementary streams, which might be raw or partially processed, to extract metadata, and to prepare the streams for further processing like decoding or multiplexing. VisioForge Media Blocks SDK .Net offers a variety of parser blocks for common video and audio codecs.
 
@@ -317,5 +317,163 @@ graph LR;
 ```
 
 #### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+## Individual Parser Blocks
+
+### AV1 Parse
+
+Parses AV1 video streams to extract frame boundaries and metadata.
+
+#### Block info
+
+Name: AV1ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | AV1 compressed | 1 |
+| Output | AV1 parsed | 1 |
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+var av1Parse = new AV1ParseBlock();
+// Connect to AV1 stream source and decoder
+await pipeline.StartAsync();
+```
+
+### H263 Parse
+
+Parses H.263 video streams for frame boundary detection.
+
+#### Block info
+
+Name: H263ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | H.263 compressed | 1 |
+| Output | H.263 parsed | 1 |
+
+### H264 Parse
+
+Parses H.264/AVC video streams to extract NAL units and frame information.
+
+#### Block info
+
+Name: H264ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | H.264 compressed | 1 |
+| Output | H.264 parsed | 1 |
+
+### H265 Parse
+
+Parses H.265/HEVC video streams to extract NAL units and coding information.
+
+#### Block info
+
+Name: H265ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | H.265 compressed | 1 |
+| Output | H.265 parsed | 1 |
+
+### JPEG2000 Parse
+
+Parses JPEG2000 video streams.
+
+#### Block info
+
+Name: JPEG2000ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | JPEG2000 compressed | 1 |
+| Output | JPEG2000 parsed | 1 |
+
+### MPEG-1/2 Video Parse
+
+Parses MPEG-1 and MPEG-2 video streams.
+
+#### Block info
+
+Name: MPEG12VideoParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | MPEG-1/2 compressed | 1 |
+| Output | MPEG-1/2 parsed | 1 |
+
+### MPEG-4 Parse
+
+Parses MPEG-4 video streams.
+
+#### Block info
+
+Name: MPEG4ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | MPEG-4 compressed | 1 |
+| Output | MPEG-4 parsed | 1 |
+
+### MPEG Audio Parse
+
+Parses MPEG audio streams (MP1, MP2, MP3).
+
+#### Block info
+
+Name: MPEGAudioParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | MPEG audio compressed | 1 |
+| Output | MPEG audio parsed | 1 |
+
+### PNG Parse
+
+Parses PNG image streams.
+
+#### Block info
+
+Name: PNGParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | PNG compressed | 1 |
+| Output | PNG parsed | 1 |
+
+### VC-1 Parse
+
+Parses VC-1 video streams (Windows Media Video 9).
+
+#### Block info
+
+Name: VC1ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | VC-1 compressed | 1 |
+| Output | VC-1 parsed | 1 |
+
+### VP9 Parse
+
+Parses VP9 video streams.
+
+#### Block info
+
+Name: VP9ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | VP9 compressed | 1 |
+| Output | VP9 parsed | 1 |
+
+## Platforms
 
 Windows, macOS, Linux, iOS, Android.

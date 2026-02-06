@@ -1,160 +1,164 @@
 ---
 title: Video sample grabber usage
-description: C# code sample - how to use video sample grabber in Video Capture SDK .Net, Media Player SDK .Net, Video Edit SDK .Net.
-sidebar_label: Video Sample Grabber Usage
+description: Extract RAW video frames from Video Capture, Media Player, and Video Edit SDKs with managed memory access and bitmap conversion in C#.
 ---
 
 # Video sample grabber usage
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Getting RAW video frames as unmanaged memory pointer inside the structure
 
-+++ X-engines
+=== "X-engines"
 
-```csharp
-// Subscribe to the video frame buffer event
-VideoCapture1.OnVideoFrameBuffer += OnVideoFrameBuffer;
-
-private void OnVideoFrameBuffer(object sender, VideoFrameXBufferEventArgs e)
-{
-    // Process the VideoFrameX object
-    ProcessFrame(e.Frame);
     
-    // If you've modified the frame and want to update the video stream
-    e.UpdateData = true;
-}
-
-// Example of processing a VideoFrameX frame - adjusting brightness
-private void ProcessFrame(VideoFrameX frame)
-{
-    // Only process RGB/BGR/RGBA/BGRA formats
-    if (frame.Format != VideoFormatX.RGB && 
-        frame.Format != VideoFormatX.BGR && 
-        frame.Format != VideoFormatX.RGBA && 
-        frame.Format != VideoFormatX.BGRA)
+    ```csharp
+    // Subscribe to the video frame buffer event
+    VideoCapture1.OnVideoFrameBuffer += OnVideoFrameBuffer;
+    
+    private void OnVideoFrameBuffer(object sender, VideoFrameXBufferEventArgs e)
     {
-        return;
+        // Process the VideoFrameX object
+        ProcessFrame(e.Frame);
+        
+        // If you've modified the frame and want to update the video stream
+        e.UpdateData = true;
     }
     
-    // Get the data as a byte array for manipulation
-    byte[] data = frame.ToArray();
-    
-    // Determine the pixel size based on format
-    int pixelSize = (frame.Format == VideoFormatX.RGB || frame.Format == VideoFormatX.BGR) ? 3 : 4;
-    
-    // Brightness factor (1.2 = 20% brighter, 0.8 = 20% darker)
-    float brightnessFactor = 1.2f;
-    
-    // Process each pixel
-    for (int i = 0; i < data.Length; i += pixelSize)
+    // Example of processing a VideoFrameX frame - adjusting brightness
+    private void ProcessFrame(VideoFrameX frame)
     {
-        // Adjust R, G, B channels
-        for (int j = 0; j < 3; j++)
+        // Only process RGB/BGR/RGBA/BGRA formats
+        if (frame.Format != VideoFormatX.RGB && 
+            frame.Format != VideoFormatX.BGR && 
+            frame.Format != VideoFormatX.RGBA && 
+            frame.Format != VideoFormatX.BGRA)
         {
-            int newValue = (int)(data[i + j] * brightnessFactor);
-            data[i + j] = (byte)Math.Min(255, newValue);
+            return;
         }
-    }
-    
-    // Copy the modified data back to the frame
-    Marshal.Copy(data, 0, frame.Data, data.Length);
-}
-```
-
-+++ Classic engines
-
-```csharp
-// Subscribe to the video frame buffer event
-VideoCapture1.OnVideoFrameBuffer += OnVideoFrameBuffer;
-
-private void OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
-{
-    // Process the VideoFrame structure
-    ProcessFrame(e.Frame);
-    
-    // If you've modified the frame and want to update the video stream
-    e.UpdateData = true;
-}
-
-// Example of processing a VideoFrame - adjusting brightness
-private void ProcessFrame(VideoFrame frame)
-{
-    // Only process RGB format for this example
-    if (frame.Info.Colorspace != RAWVideoColorSpace.RGB24)
-    {
-        return;
-    }
-    
-    // Get the data as a byte array for manipulation
-    byte[] data = frame.ToArray();
-    
-    // Brightness factor (1.2 = 20% brighter, 0.8 = 20% darker)
-    float brightnessFactor = 1.2f;
-    
-    // Process each pixel (RGB24 format = 3 bytes per pixel)
-    for (int i = 0; i < data.Length; i += 3)
-    {
-        // Adjust R, G, B channels
-        for (int j = 0; j < 3; j++)
+        
+        // Get the data as a byte array for manipulation
+        byte[] data = frame.ToArray();
+        
+        // Determine the pixel size based on format
+        int pixelSize = (frame.Format == VideoFormatX.RGB || frame.Format == VideoFormatX.BGR) ? 3 : 4;
+        
+        // Brightness factor (1.2 = 20% brighter, 0.8 = 20% darker)
+        float brightnessFactor = 1.2f;
+        
+        // Process each pixel
+        for (int i = 0; i < data.Length; i += pixelSize)
         {
-            int newValue = (int)(data[i + j] * brightnessFactor);
-            data[i + j] = (byte)Math.Min(255, newValue);
+            // Adjust R, G, B channels
+            for (int j = 0; j < 3; j++)
+            {
+                int newValue = (int)(data[i + j] * brightnessFactor);
+                data[i + j] = (byte)Math.Min(255, newValue);
+            }
         }
+        
+        // Copy the modified data back to the frame
+        Marshal.Copy(data, 0, frame.Data, data.Length);
+    }
+    ```
+    
+
+=== "Classic engines"
+
+    
+    ```csharp
+    // Subscribe to the video frame buffer event
+    VideoCapture1.OnVideoFrameBuffer += OnVideoFrameBuffer;
+    
+    private void OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
+    {
+        // Process the VideoFrame structure
+        ProcessFrame(e.Frame);
+        
+        // If you've modified the frame and want to update the video stream
+        e.UpdateData = true;
     }
     
-    // Copy the modified data back to the frame
-    Marshal.Copy(data, 0, frame.Data, data.Length);
-}
-```
-
-+++ Media Blocks SDK
-
-```csharp
-// Create and set up video sample grabber block
-var videoSampleGrabberBlock = new VideoSampleGrabberBlock(VideoFormatX.RGB);
-videoSampleGrabberBlock.OnVideoFrameBuffer += OnVideoFrameBuffer;
-
-private void OnVideoFrameBuffer(object sender, VideoFrameXBufferEventArgs e)
-{
-    // Process the VideoFrameX object
-    ProcessFrame(e.Frame);
-    
-    // If you've modified the frame and want to update the video stream
-    e.UpdateData = true;
-}
-
-// Example of processing a VideoFrameX frame - adjusting brightness
-private void ProcessFrame(VideoFrameX frame)
-{
-    if (frame.Format != VideoFormatX.RGB)
+    // Example of processing a VideoFrame - adjusting brightness
+    private void ProcessFrame(VideoFrame frame)
     {
-        return;
-    }
-    
-    // Get the data as a byte array for manipulation
-    byte[] data = frame.ToArray();
-    
-    // Brightness factor (1.2 = 20% brighter, 0.8 = 20% darker)
-    float brightnessFactor = 1.2f;
-    
-    // Process each pixel (RGB format = 3 bytes per pixel)
-    for (int i = 0; i < data.Length; i += 3)
-    {
-        // Adjust R, G, B channels
-        for (int j = 0; j < 3; j++)
+        // Only process RGB format for this example
+        if (frame.Info.Colorspace != RAWVideoColorSpace.RGB24)
         {
-            int newValue = (int)(data[i + j] * brightnessFactor);
-            data[i + j] = (byte)Math.Min(255, newValue);
+            return;
         }
+        
+        // Get the data as a byte array for manipulation
+        byte[] data = frame.ToArray();
+        
+        // Brightness factor (1.2 = 20% brighter, 0.8 = 20% darker)
+        float brightnessFactor = 1.2f;
+        
+        // Process each pixel (RGB24 format = 3 bytes per pixel)
+        for (int i = 0; i < data.Length; i += 3)
+        {
+            // Adjust R, G, B channels
+            for (int j = 0; j < 3; j++)
+            {
+                int newValue = (int)(data[i + j] * brightnessFactor);
+                data[i + j] = (byte)Math.Min(255, newValue);
+            }
+        }
+        
+        // Copy the modified data back to the frame
+        Marshal.Copy(data, 0, frame.Data, data.Length);
+    }
+    ```
+    
+
+=== "Media Blocks SDK"
+
+    
+    ```csharp
+    // Create and set up video sample grabber block
+    var videoSampleGrabberBlock = new VideoSampleGrabberBlock(VideoFormatX.RGB);
+    videoSampleGrabberBlock.OnVideoFrameBuffer += OnVideoFrameBuffer;
+    
+    private void OnVideoFrameBuffer(object sender, VideoFrameXBufferEventArgs e)
+    {
+        // Process the VideoFrameX object
+        ProcessFrame(e.Frame);
+        
+        // If you've modified the frame and want to update the video stream
+        e.UpdateData = true;
     }
     
-    // Copy the modified data back to the frame
-    Marshal.Copy(data, 0, frame.Data, data.Length);
-}
-```
+    // Example of processing a VideoFrameX frame - adjusting brightness
+    private void ProcessFrame(VideoFrameX frame)
+    {
+        if (frame.Format != VideoFormatX.RGB)
+        {
+            return;
+        }
+        
+        // Get the data as a byte array for manipulation
+        byte[] data = frame.ToArray();
+        
+        // Brightness factor (1.2 = 20% brighter, 0.8 = 20% darker)
+        float brightnessFactor = 1.2f;
+        
+        // Process each pixel (RGB format = 3 bytes per pixel)
+        for (int i = 0; i < data.Length; i += 3)
+        {
+            // Adjust R, G, B channels
+            for (int j = 0; j < 3; j++)
+            {
+                int newValue = (int)(data[i + j] * brightnessFactor);
+                data[i + j] = (byte)Math.Min(255, newValue);
+            }
+        }
+        
+        // Copy the modified data back to the frame
+        Marshal.Copy(data, 0, frame.Data, data.Length);
+    }
+    ```
+    
 
-+++
 
 ## Working with bitmap frames
 
@@ -348,5 +352,4 @@ The `OnVideoFrameBuffer` event is faster and provides the unmanaged memory point
 4. When using `OnVideoFrameSKBitmap`, select either RGBA or BGRA as the frame format when creating the VideoSampleGrabberBlock.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

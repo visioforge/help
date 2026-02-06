@@ -1,6 +1,6 @@
 ---
 title: Advanced Video Processing with .NET SDK
-description: Learn how to enhance your video capture projects with resizing, cropping, rotation, text overlays, image effects, color adjustments, and special filters using our powerful .NET video processing tools for developers.
+description: Enhance video capture with resizing, cropping, rotation, text overlays, image effects, color adjustments, and filters in .NET.
 sidebar_label: Video Processing And Effects
 order: 13
 
@@ -8,7 +8,7 @@ order: 13
 
 # Video Processing and Effects for .NET Developers
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Transform Your Video Content with Powerful Processing Tools
 

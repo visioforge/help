@@ -1,13 +1,13 @@
 ---
 title: Video Edit SDK .NET Code Examples & Tutorials
-description: Practical .NET video editing code examples for developers working with VideoEditCore engine (Windows). Learn how to implement common video editing features in your applications with our detailed tutorials and samples.
+description: Practical .NET video editing code examples for developers working with VideoEditCore engine (Windows) with detailed tutorials.
 sidebar_label: Code Examples
 
 ---
 
 # .NET Video Editing Code Examples & Tutorials
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net)
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Available Code Examples
 
@@ -32,6 +32,10 @@ Browse our collection of ready-to-use code examples that demonstrate key feature
 - [**Transition Effects Between Video Fragments**](transition-video.md) - Implementing smooth transitions between clips
 - [**Generating Videos from Image Sequences**](video-images-console.md) - Console application example for image-to-video conversion
 - [**Multi-Audio Stream Video Integration**](adding-video-file-with-multiple-audio-streams.md) - Working with complex audio-video combinations
+
+## iOS
+
+- [iOS Video Editor](ios-video-editor.md) - Building video editing apps for iPhone and iPad
 
 ## Additional Resources
 

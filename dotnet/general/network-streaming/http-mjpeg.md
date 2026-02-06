@@ -1,19 +1,17 @@
 ---
 title: HTTP MJPEG Video Streaming Implementation Guide
-description: Learn how to implement HTTP MJPEG video streaming in .NET applications. Step-by-step guide for setting up real-time video feeds, handling client connections, and managing stream delivery with code examples and best practices.
-sidebar_label: HTTP MJPEG
-
+description: Implement HTTP MJPEG streaming in .NET for real-time video feeds with client connection handling and adjustable frame rates for web streaming.
 ---
 
 # HTTP MJPEG streaming
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The SDK's feature of streaming video encoded as Motion JPEG (MJPEG) over HTTP is advantageous for its simplicity and broad compatibility. MJPEG encodes each video frame individually as a JPEG image, which simplifies decoding and is ideal for applications like web streaming and surveillance. The use of HTTP ensures easy integration and high compatibility across different platforms and devices and is effective even in networks with strict configurations. This method is particularly suitable for real-time video feeds and applications requiring straightforward frame-by-frame analysis. With adjustable frame rates and resolutions, the SDK offers flexibility for various network conditions and quality requirements, making it a versatile choice for developers implementing video streaming in their applications.
 
 ## Cross-platform MJPEG output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The streaming functionality is implemented through two main classes:
 
@@ -181,7 +179,7 @@ To consume the MJPEG stream:
 
 ## Windows-only MJPEG output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 Set the `Network_Streaming_Enabled` property to true to enable network streaming.
 
@@ -202,5 +200,4 @@ VideoCapture1.Network_Streaming_Output = new MJPEGOutput(8080);
 ```
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

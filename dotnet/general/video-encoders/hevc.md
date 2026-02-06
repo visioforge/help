@@ -1,15 +1,13 @@
 ---
 title: HEVC Encoding with VisioForge .Net SDKs
-description: Learn how to implement hardware HEVC encoding with AMD, NVIDIA, and Intel GPUs in your .NET applications
-sidebar_label: HEVC
-
+description: Implement hardware-accelerated HEVC (H.265) encoding with AMD, NVIDIA, and Intel GPUs for efficient video compression in .NET applications.
 ---
 
 # HEVC Hardware Encoding in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 This guide explores hardware-accelerated HEVC (H.265) encoding options available in VisioForge .NET SDKs. We'll cover implementation details for AMD, NVIDIA, and Intel GPU encoders, helping you choose the right solution for your video processing needs.
 

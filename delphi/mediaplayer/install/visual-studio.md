@@ -1,7 +1,6 @@
 ---
 title: Installing TVFMediaPlayer ActiveX in Visual Studio
-description: Learn how to integrate TVFMediaPlayer ActiveX control into Visual Studio projects with step-by-step instructions. Covers C++, C#, and VB.NET implementation, troubleshooting tips, and explains why migrating to native .NET SDK is recommended for modern development.
-sidebar_label: Visual Studio
+description: Integrate TVFMediaPlayer ActiveX in Visual Studio - setup for C++, C#, VB.NET projects with troubleshooting and migration to .NET SDK guidance.
 ---
 
 # Installing TVFMediaPlayer ActiveX in Visual Studio 2010 and Later
@@ -159,5 +158,4 @@ You can find the native [.Net version of the SDK here](https://www.visioforge.co
 Integrating the `TVFMediaPlayer` ActiveX control into Visual Studio 2010+ is achievable by adding it via the "Choose Toolbox Items" dialog. Visual Studio handles the generation of wrapper assemblies for .NET projects, allowing interaction via standard properties, methods, and events. However, due to the complexities, limitations, and deployment challenges associated with ActiveX/COM Interop in the .NET environment, **it is strongly advised to use the native VisioForge Media Player SDK for .NET for any new WinForms, WPF, or MAUI development.** The native SDK provides a more robust, performant, and developer-friendly experience aligned with modern application development practices.
 
 ---
-
 Need further assistance? Please contact [VisioForge Support](https://support.visioforge.com/) or explore more examples on our [GitHub](https://github.com/visioforge/) page.

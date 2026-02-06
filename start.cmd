@@ -1,2 +1,0 @@
-retype start
-pause

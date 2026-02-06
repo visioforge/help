@@ -1,13 +1,13 @@
 ---
 title: Media Blocks SDK .Net - Developer Quick Start Guide
-description: Learn to integrate Media Blocks SDK .Net into your applications with our detailed tutorial. From installation to implementation, discover how to create powerful multimedia pipelines, process video streams, and build robust media applications.
+description: Integrate Media Blocks SDK into applications with installation guide, pipeline architecture, and multimedia processing block tutorials.
 sidebar_label: Getting Started
 order: 20
 ---
 
 # Media Blocks SDK .Net - Developer Quick Start Guide
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 

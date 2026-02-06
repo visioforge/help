@@ -1,7 +1,6 @@
 ---
 title: TVFVideoCapture Deployment Guide for Delphi
-description: Complete step-by-step deployment instructions for the TVFVideoCapture library in Delphi projects. Learn how to properly install necessary components, register DirectShow filters, and configure your development environment for successful application deployment.
-sidebar_label: Deployment
+description: Deploy TVFVideoCapture in Delphi - install components, register DirectShow filters, configure environment for successful application deployment.
 ---
 
 # Complete TVFVideoCapture Library Deployment Guide
@@ -19,19 +18,19 @@ These pre-configured installers handle dependencies automatically and can be int
 ### Essential Components
 
 - **Base Package** (mandatory for all deployments) 
-  - [Delphi Version](http://files.visioforge.com/redists_delphi/redist_video_capture_base_delphi.exe)
-  - [ActiveX Version](http://files.visioforge.com/redists_delphi/redist_video_capture_base_ax.exe)
+  - [Delphi Version](https://files.visioforge.com/redists_delphi/redist_video_capture_base_delphi.exe)
+  - [ActiveX Version](https://files.visioforge.com/redists_delphi/redist_video_capture_base_ax.exe)
 
 ### Optional Feature Components
 
 - **FFMPEG Package** (required for file or IP camera sources)
-  - [x86 Architecture](http://files.visioforge.com/redists_delphi/redist_video_capture_ffmpeg.exe)
+  - [x86 Architecture](https://files.visioforge.com/redists_delphi/redist_video_capture_ffmpeg.exe)
 
 - **MP4 Output Support**
   - [x86 Architecture](https://files.visioforge.com/redists_delphi/redist_video_capture_mp4.exe)
 
 - **VLC Source Package** (alternative option for file or IP camera sources)
-  - [x86 Architecture](http://files.visioforge.com/redists_delphi/redist_video_capture_vlc.exe)
+  - [x86 Architecture](https://files.visioforge.com/redists_delphi/redist_video_capture_vlc.exe)
 
 ## Manual Installation Process (Requires Admin Rights)
 
@@ -40,17 +39,17 @@ For more control over the deployment process, follow these detailed steps:
 ### Step 1: Install Required Dependencies
 
 1. Deploy Visual C++ 2010 SP1 redistributables:
-   - [x86 Architecture](http://files.visioforge.com/shared/vcredist_2010_x86.exe)
-   - [x64 Architecture](http://files.visioforge.com/shared/vcredist_2010_x64.exe)
+   - [x86 Architecture](https://files.visioforge.com/shared/vcredist_2010_x86.exe)
+   - [x64 Architecture](https://files.visioforge.com/shared/vcredist_2010_x64.exe)
 
 ### Step 2: Deploy Core Components
 
 1. Copy all Media Foundation Platform (MFP) DLLs from the `Redist\Filters` directory to your application folder
-2. For ActiveX implementations: copy and register the OCX file using [regsvr32.exe](https://support.microsoft.com/en-us/help/249873/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages)
+2. For ActiveX implementations: copy and register the OCX file using [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5)
 
 ### Step 3: Register DirectShow Filters
 
-Using [regsvr32.exe](https://support.microsoft.com/en-us/help/249873/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages), register these essential DirectShow filters:
+Using [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5), register these essential DirectShow filters:
 
 - `VisioForge_Audio_Effects_4.ax`
 - `VisioForge_Dump.ax`
@@ -86,7 +85,7 @@ Using [regsvr32.exe](https://support.microsoft.com/en-us/help/249873/how-to-use-
 
 ### Container Format Support
 
-- **WebM Support:** Install free codecs from [xiph.org](https://www.xiph.com)
+- **WebM Support:** Install free codecs from [xiph.org](https://www.xiph.org)
 - **Matroska Support:** Deploy `Haali Matroska Splitter`
 
 ### MP4 Output Configuration
@@ -118,5 +117,4 @@ Using [regsvr32.exe](https://support.microsoft.com/en-us/help/249873/how-to-use-
 To simplify DirectShow filter registration, you can use the `reg_special.exe` utility from the framework setup. Place this executable in your filter directory and run it with administrator privileges to register all filters at once.
 
 ---
-
 For additional code samples and implementation examples, visit our [GitHub repository](https://github.com/visioforge/). If you encounter any difficulties with deployment, please contact [technical support](https://support.visioforge.com/) for personalized assistance.

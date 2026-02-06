@@ -1,7 +1,6 @@
 ---
 title: TVFMediaPlayer Installation in Delphi
-description: A detailed walkthrough on installing the TVFMediaPlayer library in various Delphi versions (6, 7, 2005, and later), covering prerequisites, configuration, verification, and troubleshooting.
-sidebar_label: Delphi Installation
+description: Install TVFMediaPlayer in Delphi 6, 7, 2005 and later - prerequisites, package installation, configuration, verification, and troubleshooting.
 ---
 
 # Installing TVFMediaPlayer in Delphi
@@ -161,5 +160,4 @@ With `TVFMediaPlayer` successfully installed, you can now explore its extensive 
 * **Seek Support:** If you encounter persistent issues or have specific questions not covered here, contact [VisioForge support](https://support.visioforge.com/) for assistance.
 
 ---
-
 Please get in touch with [support](https://support.visioforge.com/) to get help with this tutorial. Visit our [GitHub](https://github.com/visioforge/) page to get more code samples.

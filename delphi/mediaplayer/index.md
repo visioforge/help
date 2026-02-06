@@ -1,6 +1,6 @@
 ---
 title: Media Player SDK for Delphi and ActiveX Development
-description: Comprehensive media playback SDK for Delphi and ActiveX applications. Features rich format support, advanced playback controls, video processing, network streaming, and seamless integration capabilities for Windows development.
+description: Comprehensive media playback SDK for Delphi and ActiveX with format support, advanced controls, video processing, and network streaming.
 sidebar_label: TVFMediaPlayer
 ---
 
@@ -91,7 +91,7 @@ It's crucial to consult the official VisioForge website or licensing documentati
 To delve deeper into the capabilities and usage of the TVFMediaPlayer library, explore the following official resources:
 
 * **Product Page:** [VisioForge Media Player SDK](https://www.visioforge.com/all-in-one-media-framework)
-* **API Documentation:** [Delphi Media Player API Reference](https://api.visioforge.com/delphi/media_player_sdk/index.html)
+* **API Documentation:** [Delphi Media Player API Reference](https://api.visioforge.org/delphi/media_player_sdk/index.html)
 * **Changelog:** [View recent updates and fixes](changelog.md)
 * **Installation Guide:** [Steps for setting up the library](install/index.md)
 * **Deployment:** [Information on distributing your application](deployment.md)

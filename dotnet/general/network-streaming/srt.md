@@ -1,13 +1,11 @@
 ---
 title: Implementing SRT Protocol Streaming in .NET
-description: Learn how to integrate SRT (Secure Reliable Transport) protocol for low-latency video streaming in .NET applications. Includes code examples, hardware acceleration options, and best practices for reliable video delivery.
-sidebar_label: SRT
-
+description: Integrate SRT protocol for secure, low-latency video streaming with error recovery and encryption in .NET applications for reliable delivery.
 ---
 
 # SRT Streaming Implementation Guide for VisioForge .NET SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## What is SRT and Why Should You Use It?
 
@@ -19,7 +17,7 @@ The VisioForge .NET SDKs provide comprehensive support for SRT streaming through
 
 ### Supported SDK Platforms
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 ### Basic SRT Configuration
 

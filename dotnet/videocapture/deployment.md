@@ -1,14 +1,11 @@
 ---
 title: Video Capture SDK .NET Deployment Guide
-description: Learn how to deploy Video Capture SDK .NET applications using NuGet packages, silent installers, or manual installation. Includes step-by-step instructions for x86/x64 architectures and component-specific deployment options.
-sidebar_label: Deployment
-order: 0
-
+description: Deploy Video Capture SDK apps with NuGet packages, silent installers, or manual installation for x86/x64 architectures in .NET.
 ---
 
 # Comprehensive Deployment Guide for Video Capture SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 When deploying the Video Capture SDK .Net to systems without the SDK pre-installed, proper component deployment is essential for functionality. For AnyCPU applications, both x86 and x64 redistributables must be deployed to ensure compatibility across different system architectures.
 
@@ -55,16 +52,16 @@ For scenarios where administrator access is available, silent installers provide
 
 **Core Components:**
 
-- Base Package (required): [x86](http://files.visioforge.com/redists_net/redist_dotnet_base_x86.exe) | [x64](http://files.visioforge.com/redists_net/redist_dotnet_base_x64.exe)
+- Base Package (required): [x86](https://files.visioforge.com/redists_net/redist_dotnet_base_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_base_x64.exe)
 - .NET Assemblies: Can be installed in the Global Assembly Cache (GAC) or used from a local folder
 
 **Feature-Specific Installers:**
 
-- FFMPEG Integration: [x86](http://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x86.exe) | [x64](http://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x64.exe)
-- MP4 Output Support: [x86](http://files.visioforge.com/redists_net/redist_dotnet_mp4_x86.exe) | [x64](http://files.visioforge.com/redists_net/redist_dotnet_mp4_x64.exe)
-- VLC Source Integration: [x86](http://files.visioforge.com/redists_net/redist_dotnet_vlc_x86.exe) | [x64](http://files.visioforge.com/redists_net/redist_dotnet_vlc_x64.exe)
-- Additional Format Support: WebM ([x86](http://files.visioforge.com/redists_net/redist_dotnet_webm_x86.exe)) and XIPH formats ([x86](http://files.visioforge.com/redists_net/redist_dotnet_xiph_x86.exe) | [x64](http://files.visioforge.com/redists_net/redist_dotnet_xiph_x64.exe))
-- LAV Filters: [x86](http://files.visioforge.com/redists_net/redist_dotnet_lav_x86.exe) | [x64](http://files.visioforge.com/redists_net/redist_dotnet_lav_x64.exe)
+- FFMPEG Integration: [x86](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x64.exe)
+- MP4 Output Support: [x86](https://files.visioforge.com/redists_net/redist_dotnet_mp4_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_mp4_x64.exe)
+- VLC Source Integration: [x86](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x64.exe)
+- Additional Format Support: WebM ([x86](https://files.visioforge.com/redists_net/redist_dotnet_webm_x86.exe)) and XIPH formats ([x86](https://files.visioforge.com/redists_net/redist_dotnet_xiph_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_xiph_x64.exe))
+- LAV Filters: [x86](https://files.visioforge.com/redists_net/redist_dotnet_lav_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_lav_x64.exe)
 
 > **Uninstallation Note:** To remove the package, run the installer executable with administrator privileges using the `/x //` parameter.
 

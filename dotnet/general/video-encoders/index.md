@@ -1,14 +1,14 @@
 ---
-title: Complete Guide to Video Encoders in VisioForge .NET SDKs
-description: Detailed overview of video encoders for .NET developers using Video Capture, Video Edit, and Media Blocks SDKs - features, performance, and implementation
+title: Video Encoders for VisioForge .NET
+description: Comprehensive overview of video encoders with hardware acceleration, codec features, and performance optimization for .NET video applications.
 sidebar_label: Video Encoders
 
 order: 19
 ---
 
-# Video Encoders in VisioForge .NET SDKs
+# Video Encoders for VisioForge .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Video Encoders
 

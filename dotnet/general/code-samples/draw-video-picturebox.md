@@ -1,13 +1,11 @@
 ---
 title: Drawing Video on PictureBox in .NET Applications
-description: Learn step-by-step implementation of video rendering on PictureBox controls in WinForms applications. This tutorial covers frame handling, memory management, efficient rendering techniques, and best practices for smooth video display in desktop applications.
-sidebar_label: Drawing Video on PictureBox
-
+description: Implement video rendering on PictureBox controls in WinForms with frame handling, memory management, and efficient rendering techniques.
 ---
 
 # Drawing Video on PictureBox in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Video Rendering in WinForms
 
@@ -316,5 +314,4 @@ Implementing video rendering on a PictureBox control provides a straightforward 
 Remember that while PictureBox is suitable for many applications, high-performance video applications might benefit from more specialized rendering approaches using DirectX or OpenGL.
 
 ---
-
 For more code samples, visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) repository.

@@ -1,6 +1,6 @@
 ---
 title: .NET Audio Rendering in Video Capture SDK
-description: Master audio rendering in .NET applications with detailed tutorials on device selection, volume control, and performance optimization. Learn best practices for implementing high-quality audio output in your video applications.
+description: Master audio rendering in .NET with device selection, volume control, performance optimization, and high-quality output tutorials.
 sidebar_label: Audio Rendering
 order: 12
 
@@ -8,7 +8,7 @@ order: 12
 
 # Audio Rendering in .NET Video Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction to Audio Rendering
 
@@ -30,28 +30,31 @@ This guide walks through the essential aspects of implementing audio rendering i
 
 The first step in implementing audio rendering is to identify and list all available audio output devices. This allows users to select their preferred output device for audio playback.
 
-+++ VideoCaptureCoreX
+=== "VideoCaptureCoreX"
 
-```csharp
-var audioSinks = await VideoCapture1.Audio_OutputsAsync();
-foreach (var sink in audioSinks)
-{
-    // add to some combobox
-    cbAudioOutputDevice.Items.Add(sink.DisplayName);
-}
-```
+    
+    ```csharp
+    var audioSinks = await VideoCapture1.Audio_OutputsAsync();
+    foreach (var sink in audioSinks)
+    {
+        // add to some combobox
+        cbAudioOutputDevice.Items.Add(sink.DisplayName);
+    }
+    ```
+    
 
-+++ VideoCaptureCore
+=== "VideoCaptureCore"
 
-```csharp
-foreach (var device in VideoCapture1.Audio_OutputDevices())
-{
-    // add to some combobox
-    cbAudioOutputDevice.Items.Add(device.Name);
-}
-```
+    
+    ```csharp
+    foreach (var device in VideoCapture1.Audio_OutputDevices())
+    {
+        // add to some combobox
+        cbAudioOutputDevice.Items.Add(device.Name);
+    }
+    ```
+    
 
-+++
 
 The above code demonstrates how to retrieve all available audio output devices and populate a selection control such as a ComboBox. This gives users the flexibility to choose their preferred audio output device.
 
@@ -59,21 +62,24 @@ The above code demonstrates how to retrieve all available audio output devices a
 
 Once the user has selected an audio output device, you need to configure the SDK to use that device for audio playback.
 
-+++ VideoCaptureCoreX
+=== "VideoCaptureCoreX"
 
-```csharp
-var audioOutputDevice = (await VideoCapture1.Audio_OutputDevices()).Where(device => device.DisplayName == cbAudioOutputDevice.Text).First();
-VideoCapture1.Audio_OutputDevice = new AudioRendererSettings(audioOutputDevice);
-```
+    
+    ```csharp
+    var audioOutputDevice = (await VideoCapture1.Audio_OutputDevices()).Where(device => device.DisplayName == cbAudioOutputDevice.Text).First();
+    VideoCapture1.Audio_OutputDevice = new AudioRendererSettings(audioOutputDevice);
+    ```
+    
 
-+++ VideoCaptureCore
+=== "VideoCaptureCore"
 
-```csharp
-VideoCapture1.Audio_PlayAudio = true;
-VideoCapture1.Audio_OutputDevice = "Device name";
-```
+    
+    ```csharp
+    VideoCapture1.Audio_PlayAudio = true;
+    VideoCapture1.Audio_OutputDevice = "Device name";
+    ```
+    
 
-+++
 
 In VideoCaptureCoreX, we first retrieve the selected device object and then create an AudioRendererSettings instance to configure the output. In VideoCaptureCore, the process is simpler, requiring only the device name string and enabling audio playback.
 
@@ -81,19 +87,22 @@ In VideoCaptureCoreX, we first retrieve the selected device object and then crea
 
 Volume control is an essential feature for any audio application. The SDK provides straightforward methods to adjust the output volume during playback.
 
-+++ VideoCaptureCoreX
+=== "VideoCaptureCoreX"
 
-```csharp
-VideoCapture1.Audio_OutputDevice_Volume = 0.75; // 75%
-```
+    
+    ```csharp
+    VideoCapture1.Audio_OutputDevice_Volume = 0.75; // 75%
+    ```
+    
 
-+++ VideoCaptureCore
+=== "VideoCaptureCore"
 
-```csharp
-VideoCapture1.Audio_OutputDevice_Volume_Set(75); // 75%
-```
+    
+    ```csharp
+    VideoCapture1.Audio_OutputDevice_Volume_Set(75); // 75%
+    ```
+    
 
-+++
 
 Both implementations allow setting the volume as a percentage (0-100%). In VideoCaptureCoreX, the volume is set as a floating-point value between 0 and 1, while VideoCaptureCore uses an integer percentage.
 

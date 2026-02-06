@@ -1,13 +1,11 @@
 ---
 title: Creating Custom Video Effects in C# Applications
-description: Learn how to implement custom video effects in C# applications using OnVideoFrameBitmap and OnVideoFrameBuffer events. Discover practical code examples for real-time video processing including text overlays, grayscale conversion, brightness adjustments, and timestamp watermarks.
-sidebar_label: Custom Video Effects with Frame Events
-
+description: Implement custom video effects in C# with OnVideoFrameBitmap and OnVideoFrameBuffer events for real-time video processing and overlays.
 ---
 
 # Creating Custom Real-time Video Effects in C# Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Video Frame Processing
 
@@ -152,7 +150,5 @@ private void VideoCapture1_OnVideoFrameBuffer(object sender, VideoFrameBufferEve
 * **External Libraries**: Consider using Intel IPP or other optimized image-processing libraries for complex operations
 
 ---
-
 ## Additional Resources
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to access more code samples and complete project examples.

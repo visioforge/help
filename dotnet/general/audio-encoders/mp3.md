@@ -1,12 +1,11 @@
 ---
 title: Record, Capture & Edit MP3 Audio in C#
-description: Learn how to use C# and the VisioForge .NET SDK to record, capture, and edit MP3 audio. Configure output settings and integrate audio features into your .NET applications with our guideline.
-sidebar_label: MP3
+description: Record, capture, and edit MP3 audio in C# with VisioForge .NET SDK using LAME encoder for high-quality audio processing.
 ---
 
 # Mastering MP3 Audio: Record, Capture & Edit in C# and .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The VisioForge SDK empowers developers to seamlessly record, capture, and edit MP3 audio within C# applications. This guide explores how to leverage our robust .NET SDK for high-quality MP3 audio processing. Whether you need to capture media streams, record MP3 files, or edit audio waveforms, our C# media toolkit provides comprehensive tools using the LAME library. MP3, a widely adopted lossy audio compression format, is ideal for audio streaming and efficient storage.
 
@@ -18,7 +17,7 @@ You can use MP3 encode to encode audio in MP4, AVI, MKV, and other containers.
 
 ## Cross-platform MP3 Audio Capture and Recording
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The [MP3EncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.MP3EncoderSettings.html) class provides developers with a streamlined approach to configure MP3 encoding for C# audio capture projects. This cross-platform solution supports various rate controls and quality settings, making it ideal for record .NET MP3 applications across different operating systems.
 
@@ -243,9 +242,9 @@ var streamingSettings = new MP3EncoderSettings
 
 ## Windows-only MP3 output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-The [MP3 file output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.MP3Output.html) class provides advanced configuration options for MP3 encoding in C# audio video capture and editing scenarios.
+The [MP3 file output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.MP3Output.html) class provides advanced configuration options for MP3 encoding in C# audio video capture and editing scenarios.
 
 ### Key Features
 

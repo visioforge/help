@@ -1,13 +1,11 @@
 ---
 title: Mastering Camera Image Controls in .NET
-description: Learn how to programmatically control camera settings including brightness, contrast, hue, saturation, and more using Video Capture SDK in .NET applications. Discover practical code examples for implementing custom video adjustments in your software development projects.
-sidebar_label: Camera Video Adjustments
-
+description: Control camera settings including brightness, contrast, hue, and saturation in .NET with Video Capture SDK code examples for adjustments.
 ---
 
 # Mastering Camera Image Controls in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction to Camera Hardware Adjustments
 

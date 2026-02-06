@@ -1,18 +1,17 @@
 ---
 title: FLAC Audio Encoder Integration Guide
-description: Learn how to implement FLAC lossless audio compression in .NET applications. Configure quality settings, optimize performance, and handle advanced compression parameters for high-quality audio processing.
-sidebar_label: FLAC
+description: Implement FLAC lossless audio compression in .NET with quality settings, compression parameters, and high-quality audio processing.
 ---
 
 # FLAC encoder and output
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The FLAC (Free Lossless Audio Codec) encoder provides high-quality lossless audio compression while preserving the original audio quality.
 
 ## Cross-platform FLAC output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 ### Features
 
@@ -223,9 +222,9 @@ if (!FLACEncoderSettings.IsAvailable())
 
 ## Windows-only FLAC output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-The [FLACOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.FLACOutput.html) class provides Windows-only settings for the FLAC encoder. This class implements both `IVideoEditBaseOutput` and `IVideoCaptureBaseOutput` interfaces, making it suitable for both video editing and capture scenarios.
+The [FLACOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.FLACOutput.html) class provides Windows-only settings for the FLAC encoder. This class implements both `IVideoEditBaseOutput` and `IVideoCaptureBaseOutput` interfaces, making it suitable for both video editing and capture scenarios.
 
 ### Properties
 

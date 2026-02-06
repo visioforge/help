@@ -1,19 +1,19 @@
 ---
 title: Screen Capture to AVI - C# Tutorial for Developers
-description: Learn how to implement screen capture with mouse cursor to AVI video files in C#. This step-by-step guide provides complete source code examples for recording your screen to AVI format with full control over video settings.
-sidebar_label: Screen Capture to AVI File
-
+description: Implement screen capture with mouse cursor to AVI video files in C# with step-by-step guide and complete source code examples for recording.
 ---
 
 # C# Screen Capture to AVI Implementation Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Video Tutorial Walkthrough
 
 Watch our detailed tutorial that demonstrates the implementation process:
 
-[!embed](https://www.youtube.com/embed/AUT8oVPinUs?controls=1)
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/AUT8oVPinUs?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Source Code Repository
 

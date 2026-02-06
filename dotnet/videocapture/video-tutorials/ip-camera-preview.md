@@ -1,19 +1,19 @@
 ---
 title: IP Camera Preview in .NET - Setup Guide
-description: Learn how to implement real-time IP camera preview functionality in your .NET applications. This step-by-step tutorial with complete C# code examples works for WinForms, WPF, and console applications, helping you integrate camera feeds seamlessly.
-sidebar_label: IP Camera Preview
-
+description: Implement real-time IP camera preview in .NET apps with step-by-step tutorial and complete C# code examples for WinForms, WPF, Console.
 ---
 
 # IP Camera Preview Implementation Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Video Walkthrough
 
 This tutorial demonstrates how to set up IP camera preview functionality in your .NET applications:
 
-[!embed](https://www.youtube.com/embed/9n44ChQJT7s?controls=1)
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/9n44ChQJT7s?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 [Source code on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-preview)
 
@@ -123,5 +123,4 @@ For production applications, consider implementing:
 - Frame rate and resolution control
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to explore more code samples.

@@ -1,19 +1,17 @@
 ---
 title: GIF Animation Encoding for .NET Development
-description: Learn how to implement and optimize GIF animation encoding in .NET applications. Explore frame rate control, resolution settings, and performance tuning with detailed code examples for both cross-platform and Windows environments.
-sidebar_label: GIF
-
+description: Create GIF animations from video in .NET with frame rate control, resolution settings, and optimization for cross-platform applications.
 ---
 
 # GIF Encoder
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The GIF encoder is a component of the VisioForge SDK that enables video encoding to the GIF format. This document provides detailed information about the GIF encoder settings and implementation guidelines.
 
 ## Cross-platform GIF output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The GIF encoder settings are managed through the `GIFEncoderSettings` class, which provides configuration options for controlling the encoding process.
 
@@ -132,7 +130,7 @@ var gifOutput = new GIFEncoderBlock(gifSettings, "output.gif");
 
 ## Windows-only GIF output
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 The `AnimatedGIFOutput` class is a specialized configuration class within the `VisioForge.Core.Types.Output` namespace that handles settings for generating animated GIF files. This class is designed to work with both video capture and video editing operations, implementing both `IVideoEditBaseOutput` and `IVideoCaptureBaseOutput` interfaces.
 

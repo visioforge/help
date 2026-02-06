@@ -1,12 +1,12 @@
 ---
 title: .Net Media OpenGL Video Effects Guide
-description: Explore a comprehensive guide to OpenGL video effects available in VisioForge Media Blocks SDK .Net. Learn about various effects, their settings, and related OpenGL functionalities.
+description: Apply hardware-accelerated OpenGL video effects with GLVideoEffectsBlock for real-time video manipulation in Media Blocks SDK pipelines.
 sidebar_label: OpenGL Effects
 ---
 
 # OpenGL Video Effects - VisioForge Media Blocks SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 OpenGL video effects in VisioForge Media Blocks SDK .Net allow for powerful, hardware-accelerated manipulation of video streams. These effects can be applied to video content processed within an OpenGL context, typically via blocks like `GLVideoEffectsBlock` or custom OpenGL rendering pipelines. This guide covers the available effects, their configuration settings, and other related OpenGL types.
 

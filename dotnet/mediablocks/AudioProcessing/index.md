@@ -1,13 +1,13 @@
 ---
 title: .Net Audio Processing & Effect Blocks
-description: Explore a comprehensive set of .NET audio processing and effect blocks for building powerful audio pipelines. Includes converters, resamplers, mixers, EQs, and more.
+description: Create audio pipelines with converters, resamplers, mixers, equalizers, and effects for professional audio processing in .NET applications.
 sidebar_label: Audio Processing and Effects
 
 ---
 
 # Audio processing and effect blocks
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 VisioForge Media Blocks SDK .Net includes a set of audio processing and effect blocks that allow you to create audio processing pipelines for your applications.
 
@@ -908,3 +908,361 @@ await pipeline.StartAsync();
 #### Platforms
 
 Windows, macOS, Linux, iOS, Android.
+
+## Audio Effects
+
+### Audio Effects
+
+The AudioEffects block provides a comprehensive collection of audio processing effects that can be applied to audio streams.
+
+#### Block info
+
+Name: AudioEffectsBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio | 1
+Output | Uncompressed audio | 1
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->AudioEffectsBlock;
+    AudioEffectsBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var audioEffects = new AudioEffectsBlock();
+pipeline.Connect(fileSource.AudioOutput, audioEffects.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(audioEffects.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### Audio Loudness Normalization
+
+The AudioLoudNorm block normalizes audio loudness according to EBU R128 standards, ensuring consistent perceived loudness across different audio content.
+
+#### Block info
+
+Name: AudioLoudNormBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio | 1
+Output | Uncompressed audio | 1
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->AudioLoudNormBlock;
+    AudioLoudNormBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var loudNorm = new AudioLoudNormBlock();
+pipeline.Connect(fileSource.AudioOutput, loudNorm.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(loudNorm.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### RNN Noise Reduction
+
+The AudioRNNoise block uses recurrent neural network (RNN) based noise reduction to remove background noise from audio streams while preserving speech quality.
+
+#### Block info
+
+Name: AudioRNNoiseBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio | 1
+Output | Uncompressed audio | 1
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->AudioRNNoiseBlock;
+    AudioRNNoiseBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "noisy_audio.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var rnnoise = new AudioRNNoiseBlock();
+pipeline.Connect(fileSource.AudioOutput, rnnoise.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(rnnoise.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### Remove Silence
+
+The RemoveSilence block automatically detects and removes silent portions from audio streams, useful for podcasts, voice recordings, and audio editing.
+
+#### Block info
+
+Name: RemoveSilenceBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio | 1
+Output | Uncompressed audio | 1
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->RemoveSilenceBlock;
+    RemoveSilenceBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "podcast.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var removeSilence = new RemoveSilenceBlock();
+pipeline.Connect(fileSource.AudioOutput, removeSilence.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(removeSilence.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### Csound Filter
+
+The CsoundFilter block provides advanced audio synthesis and processing using the Csound audio programming language.
+
+#### Block info
+
+Name: CsoundFilterBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio | 1
+Output | Uncompressed audio | 1
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->CsoundFilterBlock;
+    CsoundFilterBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var csoundSettings = new CsoundFilterSettings
+{
+    CsdPath = "filter.csd" // Csound script file
+};
+var csound = new CsoundFilterBlock(csoundSettings);
+pipeline.Connect(fileSource.AudioOutput, csound.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(csound.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux (requires Csound).
+
+### EBU R128 Level
+
+The EbuR128Level block measures audio loudness according to the EBU R128 standard, providing accurate loudness measurements for broadcast compliance.
+
+#### Block info
+
+Name: EbuR128LevelBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio | 1
+Output | Uncompressed audio | 1
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->EbuR128LevelBlock;
+    EbuR128LevelBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var ebuR128 = new EbuR128LevelBlock();
+ebuR128.LoudnessUpdated += (sender, args) =>
+{
+    Console.WriteLine($"Momentary: {args.MomentaryLoudness:F2} LUFS");
+    Console.WriteLine($"Short-term: {args.ShortTermLoudness:F2} LUFS");
+};
+pipeline.Connect(fileSource.AudioOutput, ebuR128.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(ebuR128.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### HRTF Render
+
+The HRTFRender block applies Head-Related Transfer Function (HRTF) processing to create 3D spatial audio effects from stereo or multi-channel audio.
+
+#### Block info
+
+Name: HRTFRenderBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio | 1
+Output | Uncompressed audio | 1
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->HRTFRenderBlock;
+    HRTFRenderBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var hrtfSettings = new HRTFRenderSettings
+{
+    Azimuth = 45.0,  // Direction in degrees
+    Elevation = 0.0
+};
+var hrtf = new HRTFRenderBlock(hrtfSettings);
+pipeline.Connect(fileSource.AudioOutput, hrtf.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(hrtf.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### RS Audio Echo
+
+The RSAudioEcho block provides high-quality echo effects using the rsaudiofx GStreamer plugin.
+
+#### Block info
+
+Name: RSAudioEchoBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio | 1
+Output | Uncompressed audio | 1
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->RSAudioEchoBlock;
+    RSAudioEchoBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var echoSettings = new RSAudioEchoSettings
+{
+    Delay = 500,      // Delay in milliseconds
+    Intensity = 0.5,  // Echo intensity (0-1)
+    Feedback = 0.3    // Feedback amount (0-1)
+};
+var rsEcho = new RSAudioEchoBlock(echoSettings);
+pipeline.Connect(fileSource.AudioOutput, rsEcho.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(rsEcho.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux (requires rsaudiofx plugin).

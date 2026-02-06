@@ -1,14 +1,11 @@
 ---
 title: Integrate .NET SDKs with Visual Studio for Mac
-description: Learn how to install, configure, and implement .NET SDKs in Visual Studio for Mac for macOS and iOS development. This step-by-step guide covers environment setup, package installation, UI component configuration, and troubleshooting to help you build powerful multimedia applications for Apple platforms.
-sidebar_label: Visual Studio for Mac
-order: 13
-
+description: Install and configure VisioForge .NET SDKs in Visual Studio for Mac for multimedia macOS and iOS application development.
 ---
 
 # Complete Guide to Integrating VisioForge .NET SDKs with Visual Studio for Mac
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to VisioForge SDKs on macOS
 
@@ -48,7 +45,7 @@ Let's begin by creating a new macOS project in Visual Studio for Mac. This will 
 
 This creates a basic macOS application with the standard project structure required for VisioForge SDK integration.
 
-![Creating a new macOS project in Visual Studio for Mac](vsmac1.png)
+![Creating a new macOS project in Visual Studio for Mac](vsmac1.webp)
 
 ## Installing VisioForge SDK Packages
 
@@ -76,7 +73,7 @@ Available NuGet packages:
 
 The installation process will automatically resolve dependencies and add references to your project.
 
-![Installing the main SDK package via NuGet](vsmac2.png)
+![Installing the main SDK package via NuGet](vsmac2.webp)
 
 ### Adding the Apple UI Package
 
@@ -88,7 +85,7 @@ For macOS and iOS applications, you'll need the Apple-specific UI components tha
 
 This package includes specialized controls designed specifically for Apple platforms, ensuring proper visual integration and performance optimization.
 
-![Installing the Apple UI package via NuGet](vsmac3.png)
+![Installing the Apple UI package via NuGet](vsmac3.webp)
 
 ## Integrating Video Preview Capabilities
 
@@ -108,9 +105,9 @@ The VideoView control is the primary component for displaying video content in y
 
 This Custom View will serve as a container for the VisioForge VideoView control, which will be added programmatically.
 
-![Adding a Custom View in XCode Interface Builder](vsmac4.png)
+![Adding a Custom View in XCode Interface Builder](vsmac4.webp)
 
-![Setting properties for the Custom View](vsmac5.png)
+![Setting properties for the Custom View](vsmac5.webp)
 
 ### Initializing the VideoView in Code
 

@@ -1,13 +1,11 @@
 ---
 title: Working with Audio Sample Grabber in .NET SDKs
-description: Learn how to capture and process audio frames in real-time using the Audio Sample Grabber functionality across Video Capture, Media Player, and Video Edit .NET SDKs. Complete tutorial with code examples for both X-engines and Classic engines.
-sidebar_label: Audio Sample Grabber Usage
-
+description: Capture and process real-time audio frames using Audio Sample Grabber with X-engines and Classic engines in .NET SDK applications.
 ---
 
 # Working with Audio Sample Grabber in .NET SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Audio Sample Grabber
 
@@ -44,48 +42,53 @@ Each time the `OnAudioFrameBuffer` event fires, it provides an `AudioFrameBuffer
 
 The setup process varies slightly depending on whether you're using our newer X-engines or the Classic engines. Let's explore both approaches:
 
-+++ X-engines
+=== "X-engines"
 
-For X-engines, setting up the Audio Sample Grabber is straightforward. You simply need to create an event handler for the `OnAudioFrameBuffer` event:
+    
+    For X-engines, setting up the Audio Sample Grabber is straightforward. You simply need to create an event handler for the `OnAudioFrameBuffer` event:
+    
+    ```csharp
+    VideoCapture1.OnAudioFrameBuffer += OnAudioFrameBuffer;
+    ```
+    
+    The X-engines architecture automatically enables audio sample grabbing when you subscribe to this event, with no additional configuration required.
+    
 
-```csharp
-VideoCapture1.OnAudioFrameBuffer += OnAudioFrameBuffer;
-```
+=== "Classic engines"
 
-The X-engines architecture automatically enables audio sample grabbing when you subscribe to this event, with no additional configuration required.
+    
+    When using Classic engines, you need to explicitly enable the Audio Sample Grabber functionality before creating the event handler:
+    
+    ```csharp
+    VideoCapture1.Audio_Sample_Grabber_Enabled = true;
+    ```
+    
+    Then, as with X-engines, create your event handler:
+    
+    ```csharp
+    VideoCapture1.OnAudioFrameBuffer += OnAudioFrameBuffer;
+    ```
+    
+    **Note**: The `Audio_Sample_Grabber_Enabled` property is not required for the VideoEditCore component, which has audio sample grabbing enabled by default.
+    
 
-+++ Classic engines
+=== "Media Blocks SDK"
 
-When using Classic engines, you need to explicitly enable the Audio Sample Grabber functionality before creating the event handler:
+    
+    The Media Blocks SDK also supports audio sample grabbing. Use the `AudioSampleGrabberBlock` component to capture audio frames.
+    
+    ```csharp
+    private AudioSampleGrabberBlock _audioSampleGrabberSink;
+    ```
+    
+    Then, as with X-engines, create your event handler, and specify the audio format:
+    
+    ```csharp
+    _audioSampleGrabberBlock = new AudioSampleGrabberBlock(VisioForge.Core.Types.X.AudioFormatX.S16);
+    _audioSampleGrabberBlock.OnAudioSampleGrabber += OnAudioFrameBuffer;
+    ```
+    
 
-```csharp
-VideoCapture1.Audio_Sample_Grabber_Enabled = true;
-```
-
-Then, as with X-engines, create your event handler:
-
-```csharp
-VideoCapture1.OnAudioFrameBuffer += OnAudioFrameBuffer;
-```
-
-**Note**: The `Audio_Sample_Grabber_Enabled` property is not required for the VideoEditCore component, which has audio sample grabbing enabled by default.
-
-+++ Media Blocks SDK
-
-The Media Blocks SDK also supports audio sample grabbing. Use the `AudioSampleGrabberBlock` component to capture audio frames.
-
-```csharp
-private AudioSampleGrabberBlock _audioSampleGrabberSink;
-```
-
-Then, as with X-engines, create your event handler, and specify the audio format:
-
-```csharp
-_audioSampleGrabberBlock = new AudioSampleGrabberBlock(VisioForge.Core.Types.X.AudioFormatX.S16);
-_audioSampleGrabberBlock.OnAudioSampleGrabber += OnAudioFrameBuffer;
-```
-
-+++
 
 ## Processing Audio Frames
 
@@ -242,5 +245,4 @@ The Audio Sample Grabber provides a powerful way to access and process raw audio
 Whether you're building a professional audio application, implementing audio visualization, or integrating with speech recognition services, the Audio Sample Grabber gives you the raw data you need to bring your audio processing ideas to life.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

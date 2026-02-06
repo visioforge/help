@@ -1,6 +1,6 @@
 ---
 title: Essential .NET SDK Code Samples for Developers
-description: Practical implementation examples for DirectShow filters, audio/video processing, rendering techniques, and media manipulation in .NET applications - designed to accelerate your development workflow.
+description: Implementation examples for DirectShow filters, audio/video processing, rendering, and media manipulation in .NET SDK applications.
 sidebar_label: Code Samples
 
 order: -4

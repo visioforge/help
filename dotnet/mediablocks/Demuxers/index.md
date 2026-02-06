@@ -1,13 +1,13 @@
 ---
 title: .Net Media Demuxer Blocks Guide
-description: Explore a complete guide to .Net Media SDK demuxer blocks. Learn about MPEG-TS, QT (MP4/MOV), and Universal demuxers for your media processing pipelines.
+description: Demux media containers with MPEG-TS, QT (MP4/MOV), and Universal demuxers for separating audio and video streams in .NET pipelines.
 sidebar_label: Demuxers
 
 ---
 
 # Demuxer Blocks - VisioForge Media Blocks SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Demuxer blocks are essential components in media processing pipelines. They take a multimedia stream, typically from a file or network source, and separate it into its constituent elementary streams, such as video, audio, and subtitles. This allows for individual processing or rendering of each stream. VisioForge Media Blocks SDK .Net provides several demuxer blocks to handle various container formats.
 

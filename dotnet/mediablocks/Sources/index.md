@@ -1,13 +1,12 @@
 ---
 title: .Net Media Source Blocks Guide
-description: Explore a complete guide to .Net Media SDK source blocks. Learn about hardware, file, network, and virtual sources for your media processing pipelines.
+description: Ingest media from hardware devices, files, network streams, and virtual sources with comprehensive source blocks for Media Blocks SDK pipelines.
 sidebar_label: Sources
-
 ---
 
 # Source Blocks - VisioForge Media Blocks SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Source blocks provide data to the pipeline and are typically the first blocks in any media processing chain. VisioForge Media Blocks SDK .Net provides a comprehensive collection of source blocks for various inputs including hardware devices, files, networks, and virtual sources.
 
@@ -546,9 +545,8 @@ Name: `StreamSourceBlock`.
 (Pin information is dynamic, similar to `UniversalSourceBlock`, based on stream content. Typically, it would have an output that connects to a demuxer/decoder like `DecodeBinBlock`, or provide decoded audio/video pins if it includes demuxing/decoding capabilities.)
 
 | Pin direction | Media type         | Pins count |
-|---------------|:--------------------:|:----------:|
+|---------------|:------------------:|:----------:|
 | Output data   | Varies (raw stream)| 1          |
-_Alternatively, if it decodes:_
 | Output video  | Depends on stream  | 0 or 1     |
 | Output audio  | Depends on stream  | 0 or 1+    |
 
@@ -1031,27 +1029,7 @@ await pipeline.StartAsync();
 
 - [GenICam Source Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/GenICam%20Source%20Demo)
 
-#### Prerequisites
-
-##### macOS
-
-Install the `Aravis` package using Homebrew:
-
-```bash
-brew install aravis
-```
-
-##### Linux
-
-Install the `Aravis` package using the package manager:
-
-```bash
-sudo apt-get install libaravis-0.8-dev
-```
-
-##### Windows
-
-Install the `VisioForge.CrossPlatform.GenICam.Windows.x64` package to your project using NuGet.
+Read more about the [GenICam Source](../../videocapture/video-sources/usb3v-gige-genicam/index.md).
 
 #### Platforms
 
@@ -1839,6 +1817,151 @@ await pipeline.StartAsync();
 #### Platforms
 
 Windows, macOS, Linux, iOS, Android.
+
+### H264 Push Source Block
+
+The H264 Push Source Block allows pushing raw H.264 encoded data directly into a Media Blocks pipeline for decoding and rendering. It wraps a GStreamer `appsrc` element configured for H.264 byte-stream input.
+
+This block is designed for scenarios where you receive raw H.264 encoded data from an external source (such as an RTSP callback, a custom network transport, or a file reader) and need to decode and display it. It automatically handles:
+
+- **AVC-to-byte-stream conversion**: RTSP and many other sources deliver H.264 in AVC format (4-byte length-prefixed NAL units). The block automatically converts this to Annex B byte-stream format (start codes) expected by GStreamer's H.264 parser.
+- **PTS rebasing**: Presentation timestamps from external sources (e.g., RTSP cameras) are on the source's time base, which may be far from zero. The block rebases all timestamps relative to the first frame so the pipeline clock starts near zero, preventing display delays.
+
+#### Block info
+
+Name: H264PushSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | H.264 encoded (byte-stream) | 1 |
+
+#### Properties
+
+- `DoTimestamp` (bool): When `true`, the appsrc auto-generates timestamps using the pipeline clock (lowest latency, but breaks A/V sync). When `false` (default), the PTS provided to `PushData()` is used after rebasing. Must be set before pipeline start.
+
+#### Methods
+
+- `PushData(byte[] data, int length, TimeSpan timestamp)`: Push H.264 encoded data with a presentation timestamp. Handles AVC-to-byte-stream conversion and PTS rebasing automatically. Returns `FlowReturn` status.
+- `PushData(byte[] data, int length)`: Push H.264 data without a timestamp (uses `TimeSpan.Zero`).
+- `SendEOS()`: Signal end of stream to the pipeline.
+
+#### The sample pipeline
+
+The typical pipeline connects H264PushSourceBlock through a parser and decoder to a video renderer:
+
+```mermaid
+graph LR;
+    H264PushSourceBlock-->H264ParseBlock;
+    H264ParseBlock-->H264DecoderBlock;
+    H264DecoderBlock-->VideoRendererBlock;
+```
+
+#### Two-pipeline architecture with RTSP callback
+
+A common use case is the two-pipeline pattern: one pipeline captures raw H.264 from an RTSP camera, and a second pipeline decodes and displays it. This gives you access to the raw encoded bytes between capture and decode.
+
+```mermaid
+graph LR;
+    subgraph "Pipeline 1 - Grabber"
+        RTSPRAWSourceBlock-->BufferSinkBlock;
+    end
+    subgraph "Pipeline 2 - Player"
+        H264PushSourceBlock-->H264ParseBlock;
+        H264ParseBlock-->H264DecoderBlock;
+        H264DecoderBlock-->VideoRendererBlock;
+    end
+    BufferSinkBlock-.PushData callback.->H264PushSourceBlock;
+```
+
+#### Sample code
+
+```csharp
+// === Pipeline 2: Player (decode and render) ===
+var playerPipeline = new MediaBlocksPipeline();
+
+// Create H264 push source - this is where raw H.264 data will be injected
+var h264Source = new H264PushSourceBlock();
+
+// Create parser, decoder, and renderer
+var h264Parser = new H264ParseBlock();
+var h264Decoder = new H264DecoderBlock(new FFmpegVideoDecoderSettings());
+var videoRenderer = new VideoRendererBlock(playerPipeline, VideoView1);
+
+// Connect: push source -> parser -> decoder -> renderer
+playerPipeline.Connect(h264Source.Output, h264Parser.Input);
+playerPipeline.Connect(h264Parser.Output, h264Decoder.Input);
+playerPipeline.Connect(h264Decoder.Output, videoRenderer.Input);
+
+// Preload the player pipeline (creates elements but stays in PAUSED state)
+await playerPipeline.StartAsync(onlyPreload: true);
+
+// === Pipeline 1: Grabber (RTSP capture) ===
+var grabberPipeline = new MediaBlocksPipeline();
+
+var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(
+    new Uri("rtsp://admin:password@192.168.1.64:554/stream"),
+    "admin", "password");
+rtspSettings.Latency = 50;
+
+var rtspSource = new RTSPRAWSourceBlock(rtspSettings);
+var bufferSink = new BufferSinkBlock();
+
+// Wire up the callback to push raw H.264 data into the player pipeline
+bufferSink.OnDataFrameBuffer += (sender, args) =>
+{
+    // Copy raw H.264 data from unmanaged memory
+    var data = new byte[args.Size];
+    System.Runtime.InteropServices.Marshal.Copy(args.Data, data, 0, args.Size);
+
+    // Push into the player pipeline (AVC-to-byte-stream conversion is automatic)
+    h264Source.PushData(data, args.Size, args.Timestamp);
+};
+
+grabberPipeline.Connect(rtspSource.Output, bufferSink.Input);
+
+// Start grabber (begins RTSP connection and H.264 frame delivery)
+await grabberPipeline.StartAsync();
+
+// Wait for initial data to arrive, then resume the player
+await Task.Delay(1000);
+await playerPipeline.ResumeAsync();
+```
+
+#### Pipeline startup sequence
+
+The startup order is critical for live streaming with two pipelines:
+
+1. **Create and connect** the player pipeline blocks.
+2. **Preload** the player pipeline (`StartAsync(onlyPreload: true)`) -- transitions to PAUSED, creates GStreamer elements and links pads.
+3. **Create and start** the grabber pipeline -- RTSP connection is established, H.264 frames arrive via the callback.
+4. **Push data** into the paused player pipeline -- `h264parse` accumulates SPS/PPS parameter sets.
+5. **Resume** the player pipeline (`ResumeAsync()`) -- transitions to PLAYING, decoder starts producing frames.
+
+#### AVC vs byte-stream format
+
+RTSP sources typically deliver H.264 in AVC format where each NAL unit is prefixed with a 4-byte big-endian length:
+
+```text
+AVC:         [00 00 00 17][NAL data...][00 00 1C CC][NAL data...]
+              length=23                 length=7372
+```
+
+GStreamer's `h264parse` expects Annex B byte-stream format with start codes:
+
+```text
+Byte-stream: [00 00 00 01][NAL data...][00 00 00 01][NAL data...]
+              start code               start code
+```
+
+The `PushData()` method converts AVC to byte-stream automatically and in-place (both use 4-byte prefixes, so no buffer reallocation is needed). Data already in byte-stream format is detected and passed through unchanged.
+
+#### Sample applications
+
+- [RTSP RAW Camera With H264 Callback Sample (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20RAW%20Camera%20With%20H264%20Callback%20Sample)
+
+#### Platforms
+
+Windows, macOS, Linux.
 
 ## Apple Platform Source Blocks
 

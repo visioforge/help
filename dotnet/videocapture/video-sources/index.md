@@ -1,6 +1,6 @@
 ---
 title: Video Sources for .NET SDK - Developer Guide
-description: Master every video input source for .NET applications - from webcams and Decklink devices to IP cameras, screen capture, and industrial cameras. Learn integration techniques, performance optimization, and implementation strategies for robust video processing solutions.
+description: Master video input sources for .NET including webcams, Decklink, IP cameras, screen capture, and industrial cameras with integration.
 sidebar_label: Video Sources
 order: 16
 
@@ -8,7 +8,7 @@ order: 16
 
 # Video Sources for .NET Developers
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Video Input Sources
 

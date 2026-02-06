@@ -1,13 +1,11 @@
 ---
 title: NDI Integration for Video Capture in .NET
-description: Learn how to implement NDI video sources in your .NET applications with our SDK. Complete guide to enumerating, connecting to, and capturing high-quality video from NDI cameras and NDI-enabled software in C#.
-sidebar_label: NDI Source
-order: 18
+description: Implement NDI video sources in .NET SDK with complete guide to enumerate, connect, and capture high-quality video from NDI cameras in C#.
 ---
 
 # Implementing NDI Video Sources in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction to NDI Technology
 
@@ -30,27 +28,30 @@ The first step in working with NDI is to enumerate available sources. Our SDK ma
 
 ### Enumerating Available NDI Sources
 
-+++ VideoCaptureCore
+=== "VideoCaptureCore"
 
-```cs
-var lst = await VideoCapture1.IP_Camera_NDI_ListSourcesAsync();
-foreach (var uri in lst)
-{
-    cbIPCameraURL.Items.Add(uri);
-}
-```
+    
+    ```cs
+    var lst = await VideoCapture1.IP_Camera_NDI_ListSourcesAsync();
+    foreach (var uri in lst)
+    {
+        cbIPCameraURL.Items.Add(uri);
+    }
+    ```
+    
 
-+++ VideoCaptureCoreX
+=== "VideoCaptureCoreX"
 
-```cs
-var lst = await DeviceEnumerator.Shared.NDISourcesAsync();
-foreach (var uri in lst)
-{
-    cbIPCameraURL.Items.Add(uri.URL);
-}
-```
+    
+    ```cs
+    var lst = await DeviceEnumerator.Shared.NDISourcesAsync();
+    foreach (var uri in lst)
+    {
+        cbIPCameraURL.Items.Add(uri.URL);
+    }
+    ```
+    
 
-+++
 
 The asynchronous enumeration methods scan your network and return a list of available NDI sources. Each source has a unique identifier that you'll use to establish a connection. The enumeration process typically takes a few seconds, depending on network conditions and the number of available sources.
 
@@ -60,54 +61,57 @@ Once you've identified the NDI sources on your network, the next step is to esta
 
 ### Configuring NDI Source Settings
 
-+++ VideoCaptureCore
+=== "VideoCaptureCore"
 
-```cs
-// Create an IP camera source settings object
-settings = new IPCameraSourceSettings
-{
-    URL = new Uri("NDI source URL")
-};
+    
+    ```cs
+    // Create an IP camera source settings object
+    settings = new IPCameraSourceSettings
+    {
+        URL = new Uri("NDI source URL")
+    };
+    
+    // Set the source type to NDI
+    settings.Type = IPSourceEngine.NDI;
+    
+    // Enable or disable audio capture
+    settings.AudioCapture = false; 
+    
+    // Set login information if needed
+    settings.Login = "username";
+    settings.Password = "password";
+    
+    // Set the source to the VideoCaptureCore object
+    VideoCapture1.IP_Camera_Source = settings;
+    ```
+    
+    After setting up the source, you'll need to use the `IPPreview` or `IPCapture` mode to preview or capture video from the device.
+    
 
-// Set the source type to NDI
-settings.Type = IPSourceEngine.NDI;
+=== "VideoCaptureCoreX"
 
-// Enable or disable audio capture
-settings.AudioCapture = false; 
+    
+    In VideoCaptureCoreX, you have two options for creating NDI source settings:
+    
+    **Option 1: Using the NDI source URL**
+    
+    ```cs
+    var ndiSettings = await NDISourceSettings.CreateAsync(VideoCapture1.GetContext(), null, "NDI URL");
+    ```
+    
+    **Option 2: Using the NDI source name**
+    
+    ```cs
+    var ndiSettings = await NDISourceSettings.CreateAsync(VideoCapture1.GetContext(), cbIPURL.Text, null);
+    ```
+    
+    Finally, set the source to the VideoCaptureCoreX object:
+    
+    ```cs
+    VideoCapture1.Video_Source = ndiSettings;
+    ```  
+    
 
-// Set login information if needed
-settings.Login = "username";
-settings.Password = "password";
-
-// Set the source to the VideoCaptureCore object
-VideoCapture1.IP_Camera_Source = settings;
-```
-
-After setting up the source, you'll need to use the `IPPreview` or `IPCapture` mode to preview or capture video from the device.
-
-+++ VideoCaptureCoreX
-
-In VideoCaptureCoreX, you have two options for creating NDI source settings:
-
-**Option 1: Using the NDI source URL**
-
-```cs
-var ndiSettings = await NDISourceSettings.CreateAsync(VideoCapture1.GetContext(), null, "NDI URL");
-```
-
-**Option 2: Using the NDI source name**
-
-```cs
-var ndiSettings = await NDISourceSettings.CreateAsync(VideoCapture1.GetContext(), cbIPURL.Text, null);
-```
-
-Finally, set the source to the VideoCaptureCoreX object:
-
-```cs
-VideoCapture1.Video_Source = ndiSettings;
-```  
-
-+++
 
 ## Advanced NDI Configuration Options
 
@@ -179,19 +183,22 @@ NDI sources can be seamlessly integrated with other components of your video pro
 
 To help you get started with NDI implementation, we provide several sample applications that demonstrate different aspects of NDI functionality.
 
-+++ VideoCaptureCore
+=== "VideoCaptureCore"
 
-- [NDI source capture to MP4 format (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/NDI%20Source)
-- [Main SDK sample (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/Main%20Demo)
-- [NDI and other source sample (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/IP_Capture)
-- [Main SDK sample (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/Main_Demo)
+    
+    - [NDI source capture to MP4 format (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/NDI%20Source)
+    - [Main SDK sample (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/Main%20Demo)
+    - [NDI and other source sample (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/IP_Capture)
+    - [Main SDK sample (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/Main_Demo)
+    
 
-+++ VideoCaptureCoreX
+=== "VideoCaptureCoreX"
 
-- [NDI source preview (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/NDI%20Source%20Demo)
-- [NDI (and other sources) preview and capture (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture)
+    
+    - [NDI source preview (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/NDI%20Source%20Demo)
+    - [NDI (and other sources) preview and capture (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture)
+    
 
-+++
 
 ## Best Practices for NDI Implementation
 
@@ -214,5 +221,4 @@ NDI technology offers powerful capabilities for network video integration in .NE
 The code samples provided demonstrate the essential patterns for working with NDI sources, from enumeration and connection to capture and processing. By following these patterns and best practices, you can create robust NDI-enabled applications that deliver exceptional performance and reliability.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

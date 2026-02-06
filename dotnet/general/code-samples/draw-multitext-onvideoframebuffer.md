@@ -1,13 +1,11 @@
 ---
 title: Implementing Dynamic Text Overlays on Video Frames
-description: Learn how to create, position, and update multiple text overlays on video frames using the OnVideoFrameBuffer event in .NET. This detailed guide with code examples shows you how to customize text properties, handle dynamic updates, and optimize performance.
-sidebar_label: Draw Multiple Text Overlays Using OnVideoFrameBuffer Event
-
+description: Create multiple text overlays on video frames with OnVideoFrameBuffer event for customizable text properties and dynamic updates in .NET.
 ---
 
 # Implementing Dynamic Text Overlays on Video Frames in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -347,5 +345,4 @@ Implementing custom text overlays using the `OnVideoFrameBuffer` event provides 
 By following the patterns demonstrated in this guide, you can create dynamic, high-quality text overlays that can be updated in real-time, providing a rich user experience in your video applications.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

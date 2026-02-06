@@ -1,7 +1,6 @@
 ---
 title: DV Camcorder Integration in Delphi Applications
-description: Master DV camcorder control in your Delphi applications with the TVFVideoCapture component. This guide provides detailed code examples for playback, navigation, and transport controls with practical implementations for real-world development scenarios.
-sidebar_label: DV camcorder control
+description: Control DV camcorders in Delphi with TVFVideoCapture - playback, navigation, transport controls with code examples for Delphi, C++, and VB6.
 ---
 
 # Complete Guide to DV Camcorder Control

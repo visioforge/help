@@ -1,6 +1,6 @@
 ---
 title: Delphi Libraries for Professional Multimedia Dev
-description: Discover powerful Delphi/ActiveX libraries for building advanced multimedia applications. Our components enable developers to create high-performance video capture, media playback, and editing solutions with minimal coding effort. Browse documentation, examples, and troubleshooting guides.
+description: Professional Delphi/ActiveX multimedia libraries for video capture, playback, and editing with comprehensive documentation and examples.
 sidebar_label: General information
 ---
 

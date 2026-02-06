@@ -1,7 +1,6 @@
 ---
 title: Integrating TVFVideoEdit ActiveX in VB6 Projects
-description: Learn how to successfully install and implement the TVFVideoEdit ActiveX control in Visual Basic 6 development environments. This step-by-step guide shows developers how to enhance their applications with powerful video editing capabilities.
-sidebar_label: Visual Basic 6
+description: Install TVFVideoEdit ActiveX control in Visual Basic 6 with x86 compatibility for video editing features in legacy applications.
 ---
 
 # Installing TVFVideoEdit ActiveX Control in Visual Basic 6
@@ -76,5 +75,4 @@ To begin using the control in your application:
 * Test your application thoroughly with various media formats
 
 ---
-
 For technical questions or implementation challenges, contact our [support team](https://support.visioforge.com/). Access additional code examples and resources on our [GitHub repository](https://github.com/visioforge/).

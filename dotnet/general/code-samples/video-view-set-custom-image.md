@@ -1,12 +1,11 @@
 ---
 title: Setting Custom Images for VideoView in .NET SDKs
-description: Learn how to implement custom image display in VideoView controls when no video is playing. This detailed guide includes code examples, troubleshooting tips, and best practices for .NET developers working with video display components.
-sidebar_label: Setting Custom Image for VideoView
+description: Display custom placeholder images in VideoView controls when no video is playing for professional branding and enhanced user experience in .NET.
 ---
 
 # Setting Custom Images for VideoView Controls in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -280,5 +279,4 @@ Remember the key points:
 With these techniques, you can create more polished and user-friendly video applications in .NET.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and implementation examples.

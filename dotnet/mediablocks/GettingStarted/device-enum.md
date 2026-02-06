@@ -1,14 +1,11 @@
 ---
 title: Complete Guide to Media Device Enumeration in .NET
-description: Learn how to efficiently enumerate video cameras, audio inputs/outputs, Blackmagic Decklink devices, NDI sources, and GenICam/GigE Vision cameras in your .NET applications using the Media Blocks SDK. This tutorial provides practical code examples for device discovery and integration.
-sidebar_label: Device Enumeration
-order: 0
-
+description: Enumerate video cameras, audio inputs/outputs, Decklink devices, NDI sources, and GenICam cameras in .NET with practical code examples.
 ---
 
 # Complete Guide to Media Device Enumeration in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The Media Blocks SDK provides a powerful and efficient way to discover and work with various media devices in your .NET applications. This guide will walk you through the process of enumerating different types of media devices using the SDK's `DeviceEnumerator` class.
 

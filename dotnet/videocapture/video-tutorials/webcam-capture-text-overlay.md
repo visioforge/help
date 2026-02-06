@@ -1,19 +1,19 @@
 ---
 title: Add Text Overlay to Webcam Video in C# .NET
-description: Learn how to capture webcam video and add custom text overlays in C# .NET applications. This detailed tutorial includes step-by-step instructions, complete code samples, and techniques for implementing dynamic text on video streams for professional application development.
-sidebar_label: Video Capture from a Camera with Text Overlay
-
+description: Capture webcam video and add custom text overlays in C# .NET with step-by-step instructions, complete code samples, and techniques.
 ---
 
 # Adding Text Overlays to Webcam Video Capture in C# .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Video Tutorial Walkthrough
 
 The following video demonstrates the process of capturing video from a webcam and adding text overlays using C# and .NET:
 
-[!embed](https://www.youtube.com/embed/D_JPo9A9HMA?controls=1)
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/D_JPo9A9HMA?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Source Code Access
 

@@ -1,15 +1,13 @@
 ---
 title: Video Edit SDK .Net Deployment Guide | Windows
-description: Complete guide to deploying Video Edit SDK .Net on Windows systems. Learn all deployment methods including NuGet packages, silent installers, and manual setups for both x86 and x64 architectures. Master DirectShow filters and component integration for professional video editing applications.
-sidebar_label: Deployment
-
+description: Deploy Video Edit SDK .Net on Windows with NuGet packages, silent installers, and manual setups for x86 and x64 architectures.
 ---
 
 # Comprehensive Deployment Guide for Video Edit SDK .Net
 
 ## Introduction to VideoEditCore Deployment
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net)
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The VisioForge Video Edit SDK for .Net provides a powerful set of tools for video processing, editing, and analysis in Windows environments. This comprehensive guide details the deployment options for ensuring the SDK functions correctly on target systems.
 
@@ -66,17 +64,17 @@ For scenarios where administrative rights are available, silent installers provi
 
 **Base Components**:
 
-- Base Package (Always Required): [x86](http://files.visioforge.com/redists_net/redist_dotnet_base_x86.exe) | [x64](http://files.visioforge.com/redists_net/redist_dotnet_base_x64.exe)
+- Base Package (Always Required): [x86](https://files.visioforge.com/redists_net/redist_dotnet_base_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_base_x64.exe)
 
 **Media Source Components**:
 
-- FFMPEG Package: [x86](http://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x86.exe) | [x64](http://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x64.exe)
-- VLC Source Package: [x86](http://files.visioforge.com/redists_net/redist_dotnet_vlc_x86.exe) | [x64](http://files.visioforge.com/redists_net/redist_dotnet_vlc_x64.exe)
-- LAV Filters: [x86](http://files.visioforge.com/redists_net/redist_dotnet_lav_x86.exe) | [x64](http://files.visioforge.com/redists_net/redist_dotnet_lav_x64.exe)
+- FFMPEG Package: [x86](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x64.exe)
+- VLC Source Package: [x86](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x64.exe)
+- LAV Filters: [x86](https://files.visioforge.com/redists_net/redist_dotnet_lav_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_lav_x64.exe)
 
 **Format-Specific Components**:
 
-- XIPH Formats (Ogg, Vorbis, FLAC): [x86](http://files.visioforge.com/redists_net/redist_dotnet_xiph_x86.exe) | [x64](http://files.visioforge.com/redists_net/redist_dotnet_xiph_x64.exe)
+- XIPH Formats (Ogg, Vorbis, FLAC): [x86](https://files.visioforge.com/redists_net/redist_dotnet_xiph_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_xiph_x64.exe)
 
 **Installation and Uninstallation**:
 
@@ -99,7 +97,7 @@ Manual installation provides the highest level of control over the deployment pr
    - Copy .NET assemblies to the application folder or install them to the Global Assembly Cache (GAC)
 
 3. **DirectShow Filters**:
-   - Copy and COM-register SDK DirectShow filters using [regsvr32.exe](https://support.microsoft.com/en-us/help/249873/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages) or an equivalent method
+   - Copy and COM-register SDK DirectShow filters using [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5) or an equivalent method
    - If your application executable is in a different folder, add the folder containing the filters to the system PATH environment variable
 
 ## Essential DirectShow Filters Reference

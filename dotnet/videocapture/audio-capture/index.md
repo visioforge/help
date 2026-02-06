@@ -1,6 +1,6 @@
 ---
 title: Audio Capture for .NET - Complete Developer Guide
-description: Master audio capture in .NET applications with our powerful SDK. Learn how to implement microphone, line-in, and streaming audio recording with multiple format support, advanced processing, and real-time monitoring capabilities.
+description: Implement microphone, line-in, and streaming audio recording in .NET with format support, processing, and real-time monitoring.
 sidebar_label: Audio Capture
 order: 10
 
@@ -8,7 +8,7 @@ order: 10
 
 # Audio Capture for .NET Developers
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Audio Capture
 

@@ -1,7 +1,6 @@
 ---
 title: TVFVideoEdit Library Deployment Guide
-description: Learn how to deploy the TVFVideoEdit library in your Delphi and ActiveX applications. This step-by-step guide covers installation options, required components, and troubleshooting for developers implementing video editing functionality.
-sidebar_label: Deployment
+description: Deploy TVFVideoEdit in Delphi and ActiveX applications with automatic installers or manual setup for required components and dependencies.
 ---
 
 # TVFVideoEdit Library Deployment Guide
@@ -21,16 +20,16 @@ For streamlined deployment, we offer silent installer packages that handle all n
 #### Required Base Package
 
 * **Base components** (always required):
-  * [Delphi version](http://files.visioforge.com/redists_delphi/redist_video_edit_base_delphi.exe)
-  * [ActiveX version](http://files.visioforge.com/redists_delphi/redist_video_edit_base_ax.exe)
+  * [Delphi version](https://files.visioforge.com/redists_delphi/redist_video_edit_base_delphi.exe)
+  * [ActiveX version](https://files.visioforge.com/redists_delphi/redist_video_edit_base_ax.exe)
 
 #### Optional Feature Packages
 
 * **FFMPEG package** (required for file and IP camera support (only for FFMPEG source engine)):
-  * [x86 architecture](http://files.visioforge.com/redists_delphi/redist_video_edit_ffmpeg.exe)
+  * [x86 architecture](https://files.visioforge.com/redists_delphi/redist_video_edit_ffmpeg.exe)
 
 * **MP4 output package** (for MP4 video creation):
-  * [x86 architecture](http://files.visioforge.com/redists_delphi/redist_video_edit_mp4.exe)
+  * [x86 architecture](https://files.visioforge.com/redists_delphi/redist_video_edit_mp4.exe)
 
 ### Manual Installation Process
 
@@ -38,14 +37,14 @@ For situations where you need precise control over component deployment, follow 
 
 1. **Install Visual C++ Dependencies**
    * Install VC++ 2010 SP1 redistributable:
-     * [x86 version](http://files.visioforge.com/shared/vcredist_2010_x86.exe)
-     * [x64 version](http://files.visioforge.com/shared/vcredist_2010_x64.exe)
+     * [x86 version](https://files.visioforge.com/shared/vcredist_2010_x86.exe)
+     * [x64 version](https://files.visioforge.com/shared/vcredist_2010_x64.exe)
 
 2. **Deploy Core Media Foundation Components**
    * Copy all MFP DLLs from the `Redist\Filters` directory to your application folder
 
 3. **Register DirectShow Filters**
-   * Copy and COM-register these essential DirectShow filters using [regsvr32.exe](https://support.microsoft.com/en-us/help/249873/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages):
+   * Copy and COM-register these essential DirectShow filters using [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5):
      * `VisioForge_Audio_Effects_4.ax`
      * `VisioForge_Dump.ax`
      * `VisioForge_RGB2YUV.ax`
@@ -96,7 +95,7 @@ For WebM encoding and decoding:
 
 For MKV format compatibility:
 
-* Install [Haali Matroska Splitter](http://haali.su/mkv/) for proper encoding and decoding
+* Install [Haali Matroska Splitter](https://haali.net/mkv/) for proper encoding and decoding
 
 ### MP4 H264/AAC Output - Modern Encoder
 
@@ -139,5 +138,4 @@ Common issues during deployment often include:
 Ensure all required files are properly deployed and registered before launching your application.
 
 ---
-
 Please contact [our support team](https://support.visioforge.com/) if you encounter any issues with this deployment process. Visit our [GitHub repository](https://github.com/visioforge/) for additional code samples and implementation examples.

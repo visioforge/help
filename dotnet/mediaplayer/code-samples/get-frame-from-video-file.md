@@ -1,14 +1,11 @@
 ---
 title: Extracting Video Frames in .NET - Complete Guide
-description: Learn how to extract and capture specific frames from video files using .NET libraries. This tutorial covers multiple approaches with code examples for both Windows-specific and cross-platform solutions for developers working with video processing.
-sidebar_label: Extract Video Frames from Files
-order: 1
-
+description: Extract and capture specific frames from video files with Windows-specific and cross-platform video processing solutions in .NET.
 ---
 
 # Extracting Video Frames from Video Files in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Video frame extraction is a common requirement in many multimedia applications. Whether you're building a video editing tool, creating thumbnails, or performing video analysis, extracting specific frames from video files is an essential capability. This guide explains different approaches to capturing frames from video files in .NET applications.
 
@@ -216,5 +213,4 @@ Extracting frames from video files is a powerful capability for .NET developers 
 By understanding the different approaches and following best practices, you can implement robust frame extraction functionality in your .NET applications.
 
 ---
-
 For more code samples and examples, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

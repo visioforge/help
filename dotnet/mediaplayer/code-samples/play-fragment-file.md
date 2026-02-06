@@ -1,14 +1,11 @@
 ---
 title: Play Video & Audio File Segments in C# .NET Apps
-description: Complete guide to implementing precise media fragment playback in your C# applications using .NET Media Player SDK. Learn how to create time-based segments in videos and audio files with step-by-step code examples for both Windows and cross-platform applications.
-sidebar_label: Playing Media File Fragments
-order: 3
-
+description: Play precise time-based segments of video and audio files with Media Player SDK for Windows and cross-platform .NET applications.
 ---
 
 # Playing Media File Fragments: Implementation Guide for .NET Developers
 
-[!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 When developing media applications, one frequently requested feature is the ability to play specific segments of a video or audio file. This functionality is crucial for creating video editors, highlight reels, educational platforms, or any application requiring precise media segment playback.
 

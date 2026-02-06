@@ -1,13 +1,11 @@
 ---
 title: Multiple Output Video Screens in WPF Applications
-description: Learn how to implement multiple video output screens in WPF applications using C# and the Image control. This guide covers event handling, memory management, rendering optimizations, and practical implementation techniques for creating high-performance multi-display video applications.
-sidebar_label: Multiple Output Video Screens for WPF Controls
-
+description: Create multi-display video applications in WPF with Image controls, event handling, memory management, and performance optimization techniques.
 ---
 
 # Implementing Multiple Video Output Screens in WPF Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 When developing WPF applications that require handling multiple video feeds simultaneously, developers often face challenges with performance, synchronization, and resource management. This guide provides a comprehensive approach to implementing multiple video output screens in your WPF applications using C# and the Image control.
 
@@ -206,5 +204,4 @@ private void VideoCapture1_OnVideoFrameBuffer(object sender, VideoFrameBufferEve
 ```
 
 ---
-
 For more code samples and advanced implementation techniques, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

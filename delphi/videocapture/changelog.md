@@ -1,7 +1,6 @@
 ---
 title: TVFVideoCapture Library Version History
-description: Explore the complete evolution of our Delphi/ActiveX video capture library, featuring GPU acceleration, streaming capabilities, and format support. Track all updates from version 4.1 to 11.0 with detailed release notes and technical improvements.
-sidebar_label: Changelog
+description: TVFVideoCapture version history - GPU acceleration, streaming capabilities, format updates from version 4.1 to 11.0 with detailed release notes.
 ---
 
 # TVFVideoCapture Version History

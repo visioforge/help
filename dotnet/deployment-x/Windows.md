@@ -1,12 +1,11 @@
 ---
 title: Cross-platform SDK .Net deployment for Windows
-description: Comprehensive guide for installing and deploying VisioForge SDK for .Net applications on Windows. Learn how to set up development environments, manage dependencies, and troubleshoot common issues for multimedia applications.
-sidebar_label: Windows
+description: VisioForge SDK .NET deployment for Windows with NuGet packages, dependencies, and x86/x64 architecture configuration for multimedia apps.
 ---
 
 # Windows Installation and Deployment Guide for VisioForge Cross-Platform SDK
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to VisioForge SDK Installation and Deployment
 
@@ -172,5 +171,4 @@ By unblocking the file, you remove the MOTW, allowing Visual Studio to process i
 For additional assistance, visit the [VisioForge support site](https://support.visioforge.com/) or consult the [API documentation](https://api.visioforge.org/dotnet/api/index.html).
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

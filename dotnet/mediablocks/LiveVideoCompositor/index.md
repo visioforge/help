@@ -1,12 +1,12 @@
 ---
 title: .Net Live Video Compositor
-description: Master real-time video compositing in .Net. Add/remove multiple live video/audio sources and outputs on the fly. Build dynamic streaming & recording apps.
+description: Composite multiple live video and audio sources in real-time with dynamic add/remove capabilities for streaming and recording applications.
 sidebar_label: Live Video Compositor
 ---
 
 # Live Video Compositor
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Live Video Compositor is a part of the [VisioForge Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) that allows you to add and remove sources and outputs in real time to a pipeline.
 

@@ -1,7 +1,6 @@
 ---
 title: YouTube Live Streaming Integration for .NET Apps
-description: Learn how to implement YouTube RTMP streaming in .NET applications with step-by-step guidance on video encoders, audio configuration, and cross-platform optimization. Includes code examples and best practices for developers.
-sidebar_label: YouTube Streaming
+description: Stream to YouTube Live with RTMP in .NET applications using optimized video encoders, audio configuration, and cross-platform support.
 ---
 
 # YouTube Live Streaming with VisioForge SDKs
@@ -12,7 +11,7 @@ The YouTube RTMP output functionality in VisioForge SDKs enables developers to c
 
 ## Supported SDK Platforms
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 All major VisioForge SDK platforms provide cross-platform capabilities for YouTube streaming, ensuring consistent functionality across Windows, macOS, and other operating systems.
 

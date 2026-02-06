@@ -1,13 +1,11 @@
 ---
 title: Media Player SDK .Net Deployment Guide
-description: Step-by-step deployment instructions for Media Player SDK .Net applications. Learn how to deploy using NuGet packages, silent installers, and manual configuration. Includes runtime dependencies, DirectShow filters, and environment setup for Windows and cross-platform development.
-sidebar_label: Deployment Guide
-
+description: Deploy Media Player SDK applications with NuGet packages, runtime dependencies, DirectShow filters for Windows and cross-platform environments.
 ---
 
 # Media Player SDK .Net Deployment Guide
 
-[!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 This comprehensive guide covers all deployment scenarios for the Media Player SDK .Net, ensuring your applications work correctly across different environments. Whether you're developing cross-platform applications or Windows-specific solutions, this guide provides the necessary steps for successful deployment.
 
@@ -42,21 +40,21 @@ NuGet packages provide the simplest deployment method, automatically handling th
 #### Core Packages (Always Required)
 
 * **SDK Base Package**:
-  * [x86 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x86/)
-  * [x64 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x64/)
+  * [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x86/)
+  * [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x64/)
 * **Media Player SDK Package**:
-  * [x86 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x86/)
-  * [x64 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x64/)
+  * [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x86/)
+  * [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x64/)
 
 #### Feature-Specific Packages (Add as Needed)
 
 ##### Media Format Support
 
 * **FFMPEG Package** (for file playback using FFMPEG source mode):
-  * [x86 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
-  * [x64 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/)
+  * [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
+  * [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/)
 * **MP4 Output Package**:
-  * [x86 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/)
+  * [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/)
   * [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
 * **WebM Output Package**:
   * [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.WebM.x86/)
@@ -64,20 +62,20 @@ NuGet packages provide the simplest deployment method, automatically handling th
 ##### Source Support
 
 * **VLC Source Package** (for file/IP camera sources):
-  * [x86 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x86/)
-  * [x64 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x64/)
+  * [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x86/)
+  * [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x64/)
 
 ##### Audio Format Support
 
 * **XIPH Formats Package** (Ogg, Vorbis, FLAC output/source):
-  * [x86 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x86/)
-  * [x64 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x64/)
+  * [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x86/)
+  * [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x64/)
 
 ##### Filter Support
 
 * **LAV Filters Package**:
-  * [x86 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/)
-  * [x64 Version](http://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
+  * [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/)
+  * [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
 
 ## Automatic Silent Installers
 
@@ -88,32 +86,32 @@ For scenarios where you prefer installer-based deployment, the SDK offers automa
 #### Core Components
 
 * **Base Package** (always required):
-  * [x86 Installer](http://files.visioforge.com/redists_net/redist_dotnet_base_x86.exe)
-  * [x64 Installer](http://files.visioforge.com/redists_net/redist_dotnet_base_x64.exe)
+  * [x86 Installer](https://files.visioforge.com/redists_net/redist_dotnet_base_x86.exe)
+  * [x64 Installer](https://files.visioforge.com/redists_net/redist_dotnet_base_x64.exe)
 
 #### Media Format Support
 
 * **FFMPEG Package** (for file/IP camera sources):
-  * [x86 Installer](http://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x86.exe)
-  * [x64 Installer](http://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x64.exe)
+  * [x86 Installer](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x86.exe)
+  * [x64 Installer](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x64.exe)
 
 #### Source Support
 
 * **VLC Source Package** (for file/IP camera sources):
-  * [x86 Installer](http://files.visioforge.com/redists_net/redist_dotnet_vlc_x86.exe)
-  * [x64 Installer](http://files.visioforge.com/redists_net/redist_dotnet_vlc_x64.exe)
+  * [x86 Installer](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x86.exe)
+  * [x64 Installer](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x64.exe)
 
 #### Audio Format Support
 
 * **XIPH Formats Package** (Ogg, Vorbis, FLAC output/source):
-  * [x86 Installer](http://files.visioforge.com/redists_net/redist_dotnet_xiph_x86.exe)
-  * [x64 Installer](http://files.visioforge.com/redists_net/redist_dotnet_xiph_x64.exe)
+  * [x86 Installer](https://files.visioforge.com/redists_net/redist_dotnet_xiph_x86.exe)
+  * [x64 Installer](https://files.visioforge.com/redists_net/redist_dotnet_xiph_x64.exe)
 
 #### Filter Support
 
 * **LAV Filters Package**:
-  * [x86 Installer](http://files.visioforge.com/redists_net/redist_dotnet_lav_x86.exe)
-  * [x64 Installer](http://files.visioforge.com/redists_net/redist_dotnet_lav_x64.exe)
+  * [x86 Installer](https://files.visioforge.com/redists_net/redist_dotnet_lav_x86.exe)
+  * [x64 Installer](https://files.visioforge.com/redists_net/redist_dotnet_lav_x64.exe)
 
 > **Note**: To uninstall any installed package, run the executable with administrative privileges using the parameters: `/x //`
 
@@ -136,7 +134,7 @@ For advanced deployment scenarios requiring precise control over component insta
 
 ### Step 4: DirectShow Filters
 
-* Copy and COM-register SDK DirectShow filters using [regsvr32.exe](https://support.microsoft.com/en-us/help/249873/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages) or another suitable method.
+* Copy and COM-register SDK DirectShow filters using [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5) or another suitable method.
 
 ### Step 5: Environment Configuration
 
@@ -227,5 +225,4 @@ The SDK uses various DirectShow filters for specific functionality. Below is a c
 To simplify the COM registration process for all DirectShow filters in a directory, place the "reg_special.exe" file from the SDK redist into the filters folder and run it with administrative privileges.
 
 ---
-
 For more code samples and examples, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

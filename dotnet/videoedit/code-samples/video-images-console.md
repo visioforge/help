@@ -1,13 +1,11 @@
 ---
 title: Creating Videos from Images in C# Console Apps
-description: Learn how to programmatically generate video files from image sequences in C# console applications with step-by-step guidance, code examples, performance tips, and troubleshooting advice for .NET developers.
-sidebar_label: Video from Images in a Console Application
-
+description: Generate video files from image sequences in C# console apps with step-by-step guidance, code examples, and performance tips for .NET.
 ---
 
 # Creating Videos from Images in C# Console Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge variant="dark" size="xl" text="VideoEditCore"]
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
 ## Introduction
 
@@ -238,5 +236,4 @@ Creating videos from images in a C# console application is straightforward with 
 Remember to adjust the parameters to match your specific requirements, particularly the image duration, frame rate, and output format settings.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page for more code samples and implementations.

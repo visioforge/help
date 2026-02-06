@@ -1,6 +1,6 @@
 ---
 title: .NET SDKs Installation Guide for Developers
-description: Complete guide for installing multimedia .NET SDKs in Visual Studio, Rider, and other IDEs. Learn step-by-step installation methods, platform-specific configuration, framework support, and troubleshooting for Windows, macOS, iOS, Android, and Linux environments.
+description: Install multimedia .NET SDKs in Visual Studio and Rider with platform-specific configuration for Windows, macOS, iOS, Android, and Linux.
 sidebar_label: Installation
 order: 21
 
@@ -8,7 +8,7 @@ order: 21
 
 # VisioForge .NET SDKs Installation Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 VisioForge offers powerful multimedia SDKs for .NET developers that enable advanced video capture, editing, playback, and media processing capabilities in your applications. This guide covers everything you need to know to properly install and configure our SDKs in your development environment.
 
@@ -50,6 +50,7 @@ Additional UI-specific packages may be required depending on your target platfor
 Install-Package VisioForge.DotNet.Core.UI.MAUI
 Install-Package VisioForge.DotNet.Core.UI.WinUI
 Install-Package VisioForge.DotNet.Core.UI.Avalonia
+Install-Package VisioForge.DotNet.Core.UI.Uno
 ```
 
 ## IDE Integration and Setup
@@ -177,6 +178,16 @@ See our [detailed MAUI guide](maui.md) for complete instructions.
 - Configure platform-specific dependencies
 
 Our [Avalonia integration guide](avalonia.md) provides complete setup instructions.
+
+### Uno Platform Applications
+
+[Uno Platform projects](uno.md) enable building applications for Windows, Android, iOS, macOS, and Linux from a single codebase:
+
+- Add the `VisioForge.DotNet.Core.UI.Uno` NuGet package
+- Use Uno Platform-specific video view controls
+- Configure platform-specific redistributables
+
+See our [Uno Platform guide](uno.md) for complete setup instructions.
 
 ## SDK Initialization for Cross-Platform Engines
 

@@ -1,13 +1,11 @@
 ---
 title: .NET Cross-Platform Deployment Guide for Ubuntu
-description: Step-by-step guide for deploying .NET multimedia applications on Ubuntu Linux. Learn how to set up dependencies, configure hardware, and optimize performance for cross-platform development. Includes GStreamer setup and troubleshooting tips.
-sidebar_label: Ubuntu
-
+description: Deploy .NET multimedia apps on Ubuntu Linux with GStreamer setup, hardware configuration, and cross-platform performance optimization.
 ---
 
 # Ubuntu Deployment Guide for VisioForge SDK Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -29,7 +27,7 @@ Before deploying your application, ensure your Ubuntu environment meets these mi
 
 ### Installing .NET
 
-Download the latest [.NET installer](https://dotnet.microsoft.com/download/dotnet) package from the Microsoft website and follow the installation instructions.
+Download the latest [.NET installer](https://dotnet.microsoft.com/en-us/download/dotnet) package from the Microsoft website and follow the installation instructions.
 
 ## GStreamer Installation
 
@@ -184,5 +182,4 @@ Deploying VisioForge SDK applications on Ubuntu provides a powerful, flexible en
 For specific deployment scenarios or troubleshooting assistance, refer to the comprehensive documentation available on the VisioForge website or contact our technical support team.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

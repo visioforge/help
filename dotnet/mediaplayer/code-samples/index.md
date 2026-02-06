@@ -1,13 +1,13 @@
 ---
 title: .NET Media Player SDK Code Examples & Tutorials
-description: Explore our extensive library of .NET Media Player SDK code examples for C# and VB.NET developers. Learn to implement video playback, frame extraction, playlists, and more in WinForms, WPF, Console, and Service applications with detailed tutorials and practical implementations.
+description: Implement video playback, frame extraction, playlists, and streaming in C# and VB.NET with WinForms, WPF, and Console code examples.
 sidebar_label: Code Examples
 
 ---
 
 # .NET Media Player SDK Implementation Examples
 
-[!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Getting Started with Code Examples
 

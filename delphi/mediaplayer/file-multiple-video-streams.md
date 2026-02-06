@@ -1,7 +1,6 @@
 ---
 title: Play Multiple Video Streams from Single File
-description: Learn how to handle and play video files containing multiple video streams, including different camera angles and resolutions. Includes code examples for Delphi, C++, and VB6 with detailed implementation steps and best practices.
-sidebar_label: How do I play a video file with multiple video streams?
+description: Handle multiple video streams in files - select camera angles, switch resolutions, and manage tracks with code examples for Delphi, C++, and VB6.
 ---
 
 # Playing Video Files with Multiple Video Streams
@@ -209,5 +208,4 @@ The ability to play video files with multiple streams opens up numerous possibil
 By following the techniques outlined in this guide, you can effectively incorporate multiple video stream support into your applications, enhancing user experience and expanding the capabilities of your multimedia projects.
 
 ---
-
 Please get in touch with [support](https://support.visioforge.com/) if you need assistance with this functionality. Visit our [GitHub](https://github.com/visioforge/) page for additional code samples and implementation examples.

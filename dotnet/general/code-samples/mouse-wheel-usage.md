@@ -1,13 +1,11 @@
 ---
 title: Implementing Mouse Wheel Events in .NET SDKs
-description: Learn how to implement mouse wheel events in .NET applications for video processing. This comprehensive guide includes code examples, best practices, troubleshooting tips, and performance optimization techniques for developers.
-sidebar_label: Mouse Wheel Event Usage
-
+description: Handle mouse wheel events in .NET video apps for zooming, scrolling, and timeline navigation with best practices and optimization techniques.
 ---
 
 # Implementing Mouse Wheel Events in .NET SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Mouse Wheel Events
 
@@ -271,5 +269,4 @@ Mouse wheel event handling is an essential aspect of creating intuitive and user
 The implementation can vary depending on your specific requirements, but the core principles remain the same: handle focus properly, normalize wheel delta values, and apply appropriate changes based on user input.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

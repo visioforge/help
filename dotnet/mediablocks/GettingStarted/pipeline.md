@@ -1,14 +1,11 @@
 ---
 title: Media Blocks Pipeline Core for Media Processing
-description: Discover how to efficiently utilize the Media Blocks Pipeline to create powerful media applications for video playback, recording, and streaming. Learn essential pipeline operations including creation, block connections, error handling, and proper resource management.
-sidebar_label: Pipeline Core Usage
-order: 0
-
+description: Create media pipelines for playback, recording, and streaming with modular blocks, connections, and resource management in Media Blocks SDK.
 ---
 
 # Media Blocks Pipeline: Core Functionality
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview of Pipeline and Block Structure
 

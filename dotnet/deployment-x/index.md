@@ -1,13 +1,13 @@
 ---
 title: Cross-Platform .NET SDK Deployment Guide
-description: Learn how to deploy .NET applications across Windows, macOS, iOS, Android, and Linux. Step-by-step instructions for handling native libraries, platform dependencies, and UI framework integration for multimedia applications.
+description: Deploy .NET applications on Windows, macOS, iOS, Android, and Linux with native libraries, platform dependencies, and UI framework integration.
 sidebar_label: Deployment
 order: 17
 ---
 
 # Cross-Platform Deployment Guide for VisioForge .NET SDK
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to VisioForge SDK Deployment
 
@@ -43,7 +43,7 @@ Windows deployment is the most straightforward, with comprehensive NuGet package
 - **Package Distribution**: All components available via NuGet
 - **Architecture Support**: Both x86 and x64 architectures fully supported
 - **Native Libraries**: Automatically deployed alongside your application
-- **UI Framework Options**: Windows Forms, WPF, WinUI, Avalonia, and MAUI supported
+- **UI Framework Options**: Windows Forms, WPF, WinUI, Avalonia, Uno, and MAUI supported
 
 For detailed Windows deployment instructions, see the [Windows deployment guide](Windows.md).
 
@@ -94,6 +94,18 @@ Linux deployment requires manual installation of GStreamer dependencies:
 - **UI Options**: Primarily Avalonia UI framework supported
 
 Linux deployment often involves distribution-specific package management. The [Ubuntu deployment guide](Ubuntu.md) provides instructions for Ubuntu-based distributions.
+
+### Uno Platform Deployment
+
+Uno Platform enables deploying applications from a single codebase to multiple platforms:
+
+- **Package Distribution**: Core components available via NuGet with platform-specific redistributables
+- **Supported Platforms**: Windows, Android, iOS, macOS (Catalyst), WebAssembly, and Linux Desktop
+- **Architecture Support**: Varies by target platform
+- **Native Libraries**: Platform-specific redistributables required for each target
+- **UI Integration**: Uno-specific VideoView control adapts to each platform
+
+Uno Platform simplifies multi-platform development while leveraging native capabilities. See the [Uno Platform deployment guide](uno.md) for comprehensive instructions.
 
 ### Runtime Requirements
 

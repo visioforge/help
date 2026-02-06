@@ -1,12 +1,12 @@
 ---
 title: Media Streaming Video Renderer Block SDK
-description: Display video streams on multiple platforms (Windows, macOS, Linux, iOS, Android) with DirectX, OpenGL, and Metal support using our Video Renderer Block SDK.
+description: Render video across Windows, macOS, Linux, iOS, and Android with DirectX, OpenGL, Metal hardware acceleration for multimedia applications.
 sidebar_label: Video Renderer
 ---
 
 # Video Renderer Block
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview
 

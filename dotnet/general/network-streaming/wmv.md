@@ -1,13 +1,11 @@
 ---
 title: WMV Network Streaming with .NET Development
-description: Learn how to implement Windows Media Video (WMV) streaming in .NET applications. Step-by-step guide for developers covering setup, configuration, client connections, and performance optimization for network video streaming.
-sidebar_label: Windows Media Video
-
+description: Implement Windows Media Video streaming in .NET with compression algorithms, adaptive bitrates, and bandwidth optimization for network delivery.
 ---
 
 # Windows Media Video (WMV) Network Streaming Implementation Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction to WMV Streaming Technology
 
@@ -40,7 +38,7 @@ WMV implements the Advanced Systems Format (ASF) container, which provides sever
 
 ## Windows-Only WMV Streaming Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[VideoCaptureCore](#){ .md-button }
 
 The VisioForge SDK provides a robust framework for implementing WMV streaming in Windows environments. This implementation allows applications to broadcast video over networks while simultaneously capturing to a file if desired.
 

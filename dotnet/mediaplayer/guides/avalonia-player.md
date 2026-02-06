@@ -1,10 +1,8 @@
-# How to Create a Cross-Platform Media Player using Avalonia MVVM and VisioForge SDK
+# Avalonia Media Player with VisioForge
 
 This guide will walk you through the process of building a cross-platform media player application using Avalonia UI with the Model-View-ViewModel (MVVM) pattern and the VisioForge Media Player SDK. The application will be capable of playing video files on Windows, macOS, Linux, Android, and iOS.
 
 We will be referencing the `SimplePlayerMVVM` example project, which demonstrates the core concepts and implementation details.
-
-`[SCREENSHOT: Final application running on multiple platforms]`
 
 ## 1. Prerequisites
 
@@ -32,8 +30,6 @@ The `SimplePlayerMVVM` solution consists of several projects:
 * **SimplePlayerMVVM.Android**: The Android-specific head project.
 * **SimplePlayerMVVM.Desktop**: The desktop-specific head project (Windows, macOS, Linux).
 * **SimplePlayerMVVM.iOS**: The iOS-specific head project.
-
-`[SCREENSHOT: Solution structure in the IDE]`
 
 ### 2.2. Core Project (`SimplePlayerMVVM.csproj`)
 
@@ -196,8 +192,6 @@ namespace Simple_Player_MVVM.ViewModels
 
 Any ViewModel that needs to notify the UI of property changes should inherit from `ViewModelBase`.
 
-`[SCREENSHOT: ViewModelBase.cs code]`
-
 ### 3.2. `ViewLocator.cs`
 
 The `ViewLocator` class is responsible for locating and instantiating Views based on the type of their corresponding ViewModel. It implements Avalonia's `IDataTemplate` interface.
@@ -239,8 +233,6 @@ namespace Simple_Player_MVVM
 When Avalonia needs to display a ViewModel, the `ViewLocator`'s `Match` method checks if the data object is a `ViewModelBase`. If it is, the `Build` method attempts to find a corresponding View by replacing "ViewModel" with "View" in the ViewModel's class name and instantiates it.
 
 This convention-based approach simplifies the association between Views and ViewModels.
-
-`[SCREENSHOT: ViewLocator.cs code]`
 
 ### 3.3. Application Initialization (`App.axaml` and `App.axaml.cs`)
 
@@ -328,13 +320,9 @@ namespace Simple_Player_MVVM
 
 This setup ensures that the `MainViewModel` has access to the necessary UI components for video playback and interaction, regardless of the platform.
 
-`[SCREENSHOT: App.axaml.cs code focusing on OnFrameworkInitializationCompleted]`
-
 ## 4. MainViewModel Implementation (`MainViewModel.cs`)
 
 The `MainViewModel` is central to the media player's functionality. It manages the player's state, handles user interactions, and communicates with the VisioForge `MediaPlayerCoreX` engine.
-
-`[SCREENSHOT: MainViewModel.cs overall structure or class definition]`
 
 Key components of `MainViewModel`:
 
@@ -439,8 +427,6 @@ Key steps:
 5. Uses `UniversalSourceSettings.CreateAsync(Filename)` to create source settings appropriate for the selected file.
 6. Opens the media source using `_player.OpenAsync(sourceSettings)`.
 
-`[SCREENSHOT: CreateEngineAsync method code]`
-
 ### 4.5. File Opening (`OpenFileAsync`)
 
 This method is responsible for allowing the user to select a media file.
@@ -503,8 +489,6 @@ Platform-specific considerations:
 * **iOS:** Uses an `IDocumentPickerService` (resolved via `Locator.Current.GetService`) to present the native document picker. `IOSHelper.CheckFileAccess` is used to ensure the app has permission to access the selected file. The filename is stored as an `NSUrl`.
 * **Android:** If the path obtained from the file picker is a content URI, `FileDialogHelper.GetFilePathFromUri` (from `VisioForge.Core.UI.Android`) is used to convert it to an actual file path. This requires an `IAndroidHelper` to get the Android context.
 * **Desktop/Other:** Uses `TopLevel.StorageProvider.OpenFilePickerAsync` for the standard Avalonia file dialog.
-
-`[SCREENSHOT: OpenFileAsync method with platform-specific blocks highlighted]`
 
 ### 4.6. Playback Controls
 
@@ -644,8 +628,6 @@ Key actions:
 5. Uses `Dispatcher.UIThread.InvokeAsync` to ensure UI updates happen on the UI thread.
 6. Sets `_isTimerUpdate = true` before updating `SeekingValue` and `false` after, to prevent the `OnSeekingValueChanged` handler from re-seeking when the timer updates the slider position.
 
-`[SCREENSHOT: tmPosition_Elapsed method]`
-
 ### 4.9. Seeking (`OnSeekingValueChanged`)
 
 Called when the `SeekingValue` property changes (i.e., the user moves the seeking slider).
@@ -722,8 +704,6 @@ The user interface is defined using Avalonia XAML (`.axaml` files).
 ### 5.1. `MainView.axaml` - The Player Interface
 
 This `UserControl` defines the layout and controls for the media player.
-
-`[SCREENSHOT: MainView.axaml rendered UI design]`
 
 **Key UI Elements:**
 
@@ -803,8 +783,6 @@ The view uses a `Grid` to arrange the `VideoView` and a `StackPanel` for the con
 ```
 
 The `x:DataType="vm:MainViewModel"` directive enables compiled bindings, providing better performance and compile-time checking of binding paths. The `Design.DataContext` is used to provide data for the XAML previewer in IDEs.
-
-`[SCREENSHOT: MainView.axaml XAML code, perhaps highlighting binding expressions]`
 
 ### 5.2. `MainView.axaml.cs` - Code-Behind
 
@@ -898,8 +876,6 @@ namespace Simple_Player_MVVM.Views
 
 When the window closes, it checks if the `DataContext` is a `MainViewModel` and then executes its `WindowClosingCommand`. This ensures that the `MainViewModel` can perform necessary cleanup, such as disposing of the `MediaPlayerCoreX` instance and calling `VisioForgeX.DestroySDK()`.
 
-`[SCREENSHOT: MainWindow.axaml.cs code, highlighting the Closing event handler]`
-
 ## 6. Platform-Specific Implementation Details
 
 While Avalonia and .NET provide a high degree of cross-platform compatibility, certain aspects like file system access and permissions require platform-specific handling.
@@ -941,8 +917,6 @@ To abstract platform-specific functionality, interfaces are defined in the core 
 
 ### 6.2. Android Implementation (`SimplePlayerMVVM.Android` project)
 
-`[SCREENSHOT: Android project structure or MainActivity.cs]`
-
 * **`MainActivity.cs`:**
   * Inherits from `AvaloniaMainActivity<App>` and implements `IAndroidHelper`.
   * **`CustomizeAppBuilder`:** Standard Avalonia Android setup.
@@ -980,8 +954,6 @@ To abstract platform-specific functionality, interfaces are defined in the core 
 * **Project File (`SimplePlayerMVVM.Android.csproj`):** Configures the Android-specific build, target SDK versions, and includes necessary VisioForge Android libraries.
 
 ### 6.3. iOS Implementation (`SimplePlayerMVVM.iOS` project)
-
-`[SCREENSHOT: iOS project structure or AppDelegate.cs]`
 
 * **`AppDelegate.cs`:**
   * Inherits from `AvaloniaAppDelegate<App>`.
@@ -1025,8 +997,6 @@ To abstract platform-specific functionality, interfaces are defined in the core 
     }
     ```
 
-    `[SCREENSHOT: IOSDocumentPickerService.cs showing picker setup or result handling]`
-
 * **`Info.plist`:**
   * This file is crucial for iOS apps. It must include keys like `NSPhotoLibraryUsageDescription` if accessing the photo library, or other relevant permissions depending on where files are stored/accessed. The provided `Info.plist` includes:
 
@@ -1040,8 +1010,6 @@ To abstract platform-specific functionality, interfaces are defined in the core 
 * **Project File (`SimplePlayerMVVM.iOS.csproj`):** Configures the iOS-specific build, target OS version, and includes VisioForge iOS libraries.
 
 ### 6.4. Desktop Implementation (`SimplePlayerMVVM.Desktop` project)
-
-`[SCREENSHOT: Desktop project structure or Program.cs]`
 
 * **`Program.cs`:**
   * Contains the `Main` entry point for desktop applications.
@@ -1107,8 +1075,6 @@ This application leverages several key components from the VisioForge Media Play
 
 Understanding these components is crucial for working with the VisioForge SDK and extending the player's functionality.
 
-`[SCREENSHOT: Diagram showing interaction between MainViewModel, MediaPlayerCoreX, and VideoView]`
-
 ## 8. Building and Running the Application
 
 1. **Clone/Download the Source Code:** Obtain the `SimplePlayerMVVM` example project.
@@ -1122,11 +1088,6 @@ Understanding these components is crucial for working with the VisioForge SDK an
         * Ensure Xcode and developer tools are correctly configured.
         * You might need to trust the developer certificate on the device.
 4. **Build and Run:** Build the selected startup project and run it.
-
-`[SCREENSHOT: IDE showing startup project selection and run button]`
-`[SCREENSHOT: Application running on Android emulator]`
-`[SCREENSHOT: Application running on iOS simulator]`
-`[SCREENSHOT: Application running on Windows/macOS/Linux desktop]`
 
 ## 9. Conclusion
 

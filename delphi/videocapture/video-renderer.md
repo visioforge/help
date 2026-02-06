@@ -1,7 +1,6 @@
 ---
 title: Video Renderer Options for Delphi Video Capture
-description: Implement optimal video renderers in your Delphi applications with this developer guide. Learn how to use Video Renderer, VMR9, and EVR with detailed code examples for better performance, hardware acceleration, and compatibility across different Windows environments.
-sidebar_label: Select video renderer
+description: Select optimal video renderers in Delphi - Video Renderer, VMR9, EVR with code examples for performance and hardware acceleration on Windows.
 ---
 
 # Video Renderer Selection Guide for TVFVideoCapture
@@ -164,5 +163,4 @@ When selecting a renderer for your application, consider these factors:
 4. Compatibility needs for your deployment environment
 
 ---
-
 Please get in touch with [support](https://support.visioforge.com/) if you need technical assistance with this implementation. Visit our [GitHub](https://github.com/visioforge/) repository for additional code samples and resources.

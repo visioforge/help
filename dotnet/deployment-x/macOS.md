@@ -1,13 +1,11 @@
 ---
-title: Cross-platform .NET Development Guide for macOS
-description: Step-by-step guide for developers on deploying .NET SDKs in macOS environments. Covers native app development, architecture support, package deployment, and troubleshooting for both Intel and Apple Silicon platforms.
-sidebar_label: macOS
-
+title: Cross-platform .Net deployment manual for macOS
+description: VisioForge .NET SDK macOS deployment with NSView integration, permissions, app store publishing, and native library configuration guide.
 ---
 
 # Apple macOS Deployment Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -321,5 +319,4 @@ VisioForge .NET SDKs provide powerful media capabilities for macOS and iOS devel
 For any additional questions or support needs, please contact our technical support team or visit our forums for community assistance.
 
 ---
-
 *This documentation is regularly updated to reflect the latest SDK features and compatibility information.*

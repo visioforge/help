@@ -1,15 +1,13 @@
 ---
 title: WavPack Audio Encoder Integration for .NET
-description: Master WavPack audio compression in .NET applications with detailed guidance on compression modes, quality settings, and real-world implementation examples. Learn to optimize audio encoding for your specific needs.
-sidebar_label: WavPack
-
+description: Implement WavPack lossless and hybrid lossy audio compression in .NET with quality settings, correction modes, and stereo encoding.
 ---
 
 # WavPack Audio Encoder for .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 ## Introduction to WavPack
 
@@ -207,25 +205,30 @@ pipeline.Connect(wavPackOutput.Output, fileSink.Input); // pipeline is MediaBloc
 
 For optimal encoder performance and quality balance:
 
-+++ Default
+=== "Default"
 
-- Use `Normal` mode for everyday encoding tasks
-- Enable `ExtraProcessing` only when encoding time isn't critical
-- Maintain `JointStereoMode` as `Auto` for most content types
+    
+    - Use `Normal` mode for everyday encoding tasks
+    - Enable `ExtraProcessing` only when encoding time isn't critical
+    - Maintain `JointStereoMode` as `Auto` for most content types
+    
 
-+++ Archival
+=== "Archival"
 
-- Implement `High` or `VeryHigh` mode for archival purposes
-- Enable MD5 hash generation for content verification
-- Consider lossless encoding for critical audio preservation
+    
+    - Implement `High` or `VeryHigh` mode for archival purposes
+    - Enable MD5 hash generation for content verification
+    - Consider lossless encoding for critical audio preservation
+    
 
-+++ Streaming
+=== "Streaming"
 
-- Use `Fast` mode for real-time encoding scenarios
-- Select an appropriate bitrate based on bandwidth constraints
-- Disable additional processing features to minimize latency
+    
+    - Use `Fast` mode for real-time encoding scenarios
+    - Select an appropriate bitrate based on bandwidth constraints
+    - Disable additional processing features to minimize latency
+    
 
-+++
 
 ## Best Practices
 

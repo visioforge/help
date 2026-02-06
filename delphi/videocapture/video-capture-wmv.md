@@ -1,7 +1,6 @@
 ---
 title: Video Capture to WMV - Implementation Guide
-description: Learn how to implement video capture functionality to Windows Media Video (WMV) files in your applications. This step-by-step guide covers external profile selection, output format configuration, and capture execution for Delphi, C++ MFC, and VB6 platforms.
-sidebar_label: Video capture to WMV file
+description: Capture video to WMV format - external profiles, output configuration, and implementation for Delphi, C++ MFC, and VB6 with code examples.
 ---
 
 # Video Capture to Windows Media Video (WMV) Using External Profiles
@@ -175,5 +174,4 @@ Implementing video capture to WMV format using external profiles provides flexib
 By using external profiles, you can quickly switch between different quality settings without changing your code, which is ideal for applications that need to adapt to different use cases or hardware capabilities.
 
 ---
-
 For additional code samples, visit our GitHub repository. If you need technical assistance with implementation, our support team is available to help.

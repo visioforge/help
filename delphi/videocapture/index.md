@@ -1,6 +1,6 @@
 ---
 title: TVFVideoCapture for Delphi Developers
-description: Professional video capture and processing library for Delphi developers. Create powerful applications with support for multiple devices, formats, and advanced video processing capabilities. Full ActiveX integration.
+description: Professional Delphi video capture library - capture from devices, process video, and integrate with ActiveX. API docs, tutorials, and examples.
 sidebar_label: TVFVideoCapture
 ---
 
@@ -20,7 +20,7 @@ For detailed implementation guidance, explore these essential resources:
 - [Installation and Configuration Guide](install/index.md)
 - [Deployment Best Practices](deployment.md)
 - [Licensing Information and EULA](../../eula.md)
-- [Comprehensive API Documentation](https://api.visioforge.com/delphi/video_capture_sdk/index.html)
+- [Comprehensive API Documentation](https://api.visioforge.org/delphi/video_capture_sdk/index.html)
   
 ## Implementation Tutorials
 

@@ -1,13 +1,13 @@
 ---
 title: Blackmagic Decklink Integration for .NET Developers
-description: Integrate professional Blackmagic Decklink devices for high-quality audio/video capture and rendering in your .NET applications. Learn to implement SDI, HDMI inputs/outputs, configure multiple devices, and build advanced media workflows with our comprehensive code examples and API.
+description: Integrate Blackmagic Decklink devices for professional SDI and HDMI capture and rendering with multi-device support in .NET applications.
 sidebar_label: Blackmagic Decklink
 
 ---
 
 # Blackmagic Decklink Integration with Media Blocks SDK
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Decklink Integration
 
@@ -189,20 +189,20 @@ Create and configure the video sink block:
 var deviceInfo = (await DecklinkVideoSinkBlock.GetDevicesAsync()).FirstOrDefault();
 
 // Create settings for the selected device
+// Note: Mode is required and must be specified in the constructor
 DecklinkVideoSinkSettings videoSinkSettings = null;
 if (deviceInfo != null)
 {
-    videoSinkSettings = new DecklinkVideoSinkSettings(deviceInfo);
-    
-    // Configure video output format and mode
-    videoSinkSettings.Mode = DecklinkMode.HD1080i60;
-    videoSinkSettings.VideoFormat = DecklinkVideoFormat.YUV_10bit; // Use VideoFormat
-    
-    // Optional: Additional configuration
-    // videoSinkSettings.KeyerMode = DecklinkKeyerMode.Internal;
-    // videoSinkSettings.KeyerLevel = 128;
-    // videoSinkSettings.Profile = DecklinkProfileID.Default;
-    // videoSinkSettings.TimecodeFormat = DecklinkTimecodeFormat.RP188Any;
+    // Mode is required - specify the output video resolution and frame rate
+    videoSinkSettings = new DecklinkVideoSinkSettings(deviceInfo, DecklinkMode.HD1080i60)
+    {
+        VideoFormat = DecklinkVideoFormat.YUV_10bit,
+        // Optional: Additional configuration
+        // KeyerMode = DecklinkKeyerMode.Internal,
+        // KeyerLevel = 128,
+        // Profile = DecklinkProfileID.Default,
+        // TimecodeFormat = DecklinkTimecodeFormat.RP188Any
+    };
 }
 
 // Create the block with the configured settings
@@ -213,14 +213,18 @@ var decklinkVideoSink = new DecklinkVideoSinkBlock(videoSinkSettings);
 
 The `DecklinkVideoSinkSettings` class includes properties like:
 
-- `DeviceNumber`: The output device instance to use.
-- `Mode`: Specifies the video resolution and frame rate (e.g., `DecklinkMode.HD1080i60`, `HD720p60`). Default `Unknown`.
+- `DeviceNumber`: The output device instance to use (read-only, set via constructor).
+- `Mode`: Specifies the video resolution and frame rate (e.g., `DecklinkMode.HD1080i60`, `HD720p60`). **Required** - must be specified in the constructor.
 - `VideoFormat`: Defines the pixel format using `DecklinkVideoFormat` enum (e.g., `DecklinkVideoFormat.YUV_8bit`, `YUV_10bit`). Default `YUV_8bit`.
 - `KeyerMode`: Controls keying/compositing options using `DecklinkKeyerMode` (if supported by the device). Default `Off`.
 - `KeyerLevel`: Sets the keyer level (0-255). Default `255`.
 - `Profile`: Specifies the Decklink profile to use with `DecklinkProfileID`.
 - `TimecodeFormat`: Specifies the timecode format for playback using `DecklinkTimecodeFormat`. Default `RP188Any`.
+- `CustomVideoSize`: Optional resize effect to apply before output.
+- `CustomFrameRate`: Optional frame rate conversion before output.
 - `IsSync`: Enables synchronization (default: true).
+
+**Important**: The `Mode` parameter is required and determines the output frame rate and resolution. If not specified correctly, the Decklink hardware may output at an unexpected frame rate.
 
 ## Working with Decklink Video Source Block
 
@@ -350,9 +354,11 @@ var audioSinkDeviceInfo = (await DecklinkAudioSinkBlock.GetDevicesAsync()).First
 DecklinkVideoSinkSettings videoSinkSettings = null;
 if (videoSinkDeviceInfo != null)
 {
-    videoSinkSettings = new DecklinkVideoSinkSettings(videoSinkDeviceInfo);
-    videoSinkSettings.Mode = DecklinkMode.HD1080i60;
-    videoSinkSettings.VideoFormat = DecklinkVideoFormat.YUV_8bit;
+    // Mode is required - specify the output video resolution and frame rate
+    videoSinkSettings = new DecklinkVideoSinkSettings(videoSinkDeviceInfo, DecklinkMode.HD1080i60)
+    {
+        VideoFormat = DecklinkVideoFormat.YUV_8bit
+    };
 }
 
 DecklinkAudioSinkSettings audioSinkSettings = null;
@@ -461,5 +467,3 @@ For complete working examples, refer to these sample applications:
 ## Conclusion
 
 The Blackmagic Decklink blocks in the VisioForge Media Blocks SDK provide a powerful and flexible way to integrate professional video and audio hardware into your .NET applications. By leveraging the specific source and sink blocks, including the combined audio/video blocks, you can efficiently implement complex capture and playback workflows. Always refer to the specific settings classes for detailed configuration options.
-
-For additional support or questions, please contact our support team.

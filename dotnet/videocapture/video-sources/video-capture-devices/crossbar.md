@@ -1,13 +1,11 @@
 ---
 title: Configure Device Input Connections with Crossbar API
-description: Learn how to select and configure multiple hardware video inputs for TV tuners and capture cards in .NET applications. Complete C# implementation with step-by-step instructions for managing device inputs through the crossbar interface.
-sidebar_label: Configure Device Input Connections (Crossbar)
-
+description: Select and configure multiple hardware video inputs for TV tuners and capture cards in .NET with C# crossbar implementation steps.
 ---
 
 # Configuring Multiple Hardware Video Inputs with Crossbar
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction to Crossbar Functionality
 
@@ -86,5 +84,4 @@ To implement crossbar functionality, your application must include the appropria
 - Changes may not take effect until after the capture session is started
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) repository for additional code samples and implementation examples.

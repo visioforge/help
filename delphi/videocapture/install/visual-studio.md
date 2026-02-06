@@ -1,7 +1,6 @@
 ---
 title: TVFVideoCapture Integration for Delphi in VS
-description: Complete step-by-step guide for Delphi developers on installing and configuring TVFVideoCapture ActiveX controls in Visual Studio environments. Learn how to leverage video capture functionality in your development projects.
-sidebar_label: Visual Studio 2010 and later
+description: Install TVFVideoCapture ActiveX controls in Visual Studio 2010+ with C++ and managed code integration for video capture projects.
 ---
 
 # Installing TVFVideoCapture in Visual Studio 2010 and Later
@@ -72,5 +71,4 @@ While ActiveX integration is fully supported, .NET developers may benefit from u
 Explore our extensive documentation for advanced configuration options and optimization techniques. Our development team continuously updates resources to address common implementation challenges.
 
 ---
-
 For technical assistance with this installation process, please contact our [support team](https://support.visioforge.com/). Additional code samples and implementation examples are available on our [GitHub repository](https://github.com/visioforge/).

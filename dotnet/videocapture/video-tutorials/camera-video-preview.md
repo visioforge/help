@@ -1,13 +1,11 @@
 ---
 title: Webcam Frame Capture & Preview in C#
-description: Learn how to implement real-time webcam video preview with frame capture functionality in C# .NET applications. Complete tutorial with working code examples for WinForms, WPF, and console applications. Perfect for building custom camera solutions.
-sidebar_label: Webcam Frame Capture & Preview
-
+description: Implement real-time webcam video preview with frame capture in C# .NET with working code examples for WinForms, WPF, and Console.
 ---
 
 # Implementing Webcam Video Preview with Frame Capture in C#
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview
 
@@ -17,7 +15,9 @@ This tutorial demonstrates how to create a professional webcam video preview app
 
 Watch our detailed video walkthrough that covers all aspects of webcam integration:
 
-[!embed](https://www.youtube.com/embed/kxC6JrJddek?controls=1)
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/kxC6JrJddek?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Getting Started
 

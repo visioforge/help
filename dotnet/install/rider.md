@@ -1,16 +1,13 @@
 ---
 title: Integrate .Net SDKs into JetBrains Rider | Tutorial
-description: Learn how to integrate .Net SDKs with JetBrains Rider in this step-by-step tutorial. From project setup to adding NuGet packages, UI components, and platform dependencies - master cross-platform development with WPF, MAUI, WinUI, and Avalonia integration for Windows, macOS, iOS and Android apps.
-sidebar_label: JetBrains Rider
-order: 12
-
+description: Integrate VisioForge .NET SDKs with JetBrains Rider for cross-platform development with WPF, MAUI, WinUI, and Avalonia frameworks.
 ---
 
 # .Net SDKs Integration with JetBrains Rider
 
 ## Introduction
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 This comprehensive guide walks you through the process of installing and configuring VisioForge .Net SDKs within JetBrains Rider, a powerful cross-platform IDE for .NET development. While we'll use a Windows application with WPF as our primary example, these installation steps can be readily adapted for macOS, iOS, or Android applications as well. JetBrains Rider provides a consistent development experience across Windows, macOS, and Linux platforms, making it an excellent choice for cross-platform .NET development.
 
@@ -26,7 +23,7 @@ Begin by launching JetBrains Rider and creating a new project. For this tutorial
 4. Configure your project settings, ensuring you select the modern project format
 5. Click "Create" to generate your project structure
 
-![Project creation screen in Rider](rider1.png)
+![Project creation screen in Rider](rider1.webp)
 
 ## Adding Required NuGet Packages
 
@@ -39,7 +36,7 @@ Each VisioForge SDK has a corresponding main package that provides core function
 3. In the NuGet Package Manager, search for the VisioForge package that corresponds to your desired SDK
 4. Select the latest stable version and click "Install"
 
-![Adding the main SDK package through NuGet](rider2.png)
+![Adding the main SDK package through NuGet](rider2.webp)
 
 ### Available Main SDK Packages
 

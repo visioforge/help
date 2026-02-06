@@ -1,7 +1,6 @@
 ---
 title: Delphi Video Input Source Selection with Crossbar
-description: Master video input source selection in Delphi applications using crossbar technology. Learn to programmatically configure composite, S-Video, HDMI inputs with step-by-step code examples. Implement robust camera input switching for professional Delphi video capture applications.
-sidebar_label: Video Input Selection (Crossbar)
+description: Select video input sources in Delphi with crossbar - configure composite, S-Video, HDMI inputs with step-by-step code examples for Delphi.
 ---
 
 # Selecting Video Input Sources with Crossbar Technology
@@ -266,5 +265,4 @@ Proper implementation of crossbar technology in your video capture applications 
 The code samples provided demonstrate how to initialize the crossbar, enumerate available inputs, and connect selected inputs to the video decoder output. With these fundamentals in place, you can build sophisticated video capture applications that support a wide range of input devices and connection types.
 
 ---
-
 For additional assistance with implementing this functionality, explore our other documentation pages and code samples repository for more advanced techniques and solutions.

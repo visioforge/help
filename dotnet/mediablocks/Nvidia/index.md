@@ -1,12 +1,12 @@
 ---
 title: .Net Media Nvidia Blocks Guide
-description: Explore a complete guide to .Net Media SDK Nvidia blocks. Learn about Nvidia-specific blocks for your media processing pipelines.
+description: Accelerate media processing with Nvidia GPU blocks for data transfer, video conversion, and resizing in Media Blocks SDK pipelines.
 sidebar_label: Nvidia
 ---
 
 # Nvidia Blocks - VisioForge Media Blocks SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Nvidia blocks leverage Nvidia GPU capabilities for accelerated media processing tasks such as data transfer, video conversion, and resizing.
 
@@ -237,3 +237,66 @@ Use `NVVideoResizeBlock.IsAvailable()` to check if the block can be used.
 #### Platforms
 
 Windows, Linux (Requires Nvidia GPU and appropriate drivers/SDK).
+
+## NVDSDewarpBlock
+
+Nvidia DeepStream dewarp block. Performs dewarping transformations for fisheye and wide-angle camera distortion correction using GPU acceleration.
+
+#### Block info
+
+Name: NVDSDewarpBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input video | Video (GPU memory) | 1 |
+| Output video | Video (GPU memory) | 1 |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    NVDataUploadBlock-->NVDSDewarpBlock-->NVDataDownloadBlock;
+```
+
+#### Sample code
+
+```csharp
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// Upload video to GPU memory
+var nvUpload = new NVDataUploadBlock();
+
+// Configure dewarp settings for fisheye correction
+var dewarpSettings = new NVDSDewarpSettings
+{
+    SourceType = DewarpSourceType.FisheyeCamera,
+    ProjectionType = DewarpProjectionType.PushBroom,
+    TopAngle = 180,
+    BottomAngle = 180
+};
+
+// Create dewarp block
+var nvDewarp = new NVDSDewarpBlock(dewarpSettings);
+
+// Download from GPU if needed
+var nvDownload = new NVDataDownloadBlock();
+
+// Connect blocks
+pipeline.Connect(nvUpload.Output, nvDewarp.Input);
+pipeline.Connect(nvDewarp.Output, nvDownload.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+#### Remarks
+
+The `NVDSDewarpBlock` is part of Nvidia's DeepStream SDK and provides GPU-accelerated dewarping for correcting distortion from fisheye and wide-angle cameras. This is essential for surveillance, automotive, and 360-degree video applications.
+
+Requires Nvidia DeepStream SDK and compatible GPU.
+Use `NVDSDewarpBlock.IsAvailable()` to check availability.
+
+#### Platforms
+
+Linux (Requires Nvidia DeepStream SDK, Jetson or compatible GPU).

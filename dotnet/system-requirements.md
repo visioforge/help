@@ -1,12 +1,11 @@
 ---
 title: .NET SDK Platform Requirements & Compatibility Guide
-description: Detailed technical guide covering platform support, system requirements, and framework compatibility for .NET SDKs across Windows, macOS, Linux, iOS, and Android. Includes deployment specifications for desktop and mobile development.
-sidebar_label: System Requirements
+description: .NET SDK platform support and system requirements for Windows, macOS, Linux, iOS, and Android with framework compatibility details.
 ---
 
 # System Requirements for .NET SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 This guide details the system requirements and platform compatibility for VisioForge's suite of .NET SDKs, designed for high-performance video processing and playback applications.
 
@@ -204,7 +203,7 @@ For Windows developers, we offer a dedicated installer package that includes:
 
 ## Licensing and Deployment
 
-Check out our [Licensing](../licensing.md) page for more information on the different licensing options available for our SDKs.
+Check out our [Licensing](../../licensing.md) page for more information on the different licensing options available for our SDKs.
 
 ## Technical Support Resources
 
@@ -227,5 +226,4 @@ Visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) 
 * Migration guides for version transitions
 
 ---
-
 This technical specification document outlines the system requirements and compatibility matrix for our Video Capture SDK .Net and related products. For specific implementation details or custom integration scenarios, please contact our developer support team.

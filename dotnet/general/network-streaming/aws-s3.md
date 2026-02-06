@@ -1,15 +1,13 @@
 ---
 title: Stream Video and Audio to Amazon S3 Storage
-description: Learn how to implement AWS S3 video and audio streaming in .NET applications. Step-by-step guide for developers covering configuration, encoding settings, error handling, and best practices for S3 media output integration.
-sidebar_label: AWS S3
-
+description: Implement AWS S3 video and audio streaming in .NET with configuration, encoding settings, error handling, and best practices for media output.
 ---
 
 # AWS S3 Output
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The AWS S3 Output functionality in VisioForge SDKs enables direct video and audio output streaming to Amazon S3 storage. This guide will walk you through setting up and using AWS S3 output in your applications.
 

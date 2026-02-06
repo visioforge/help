@@ -1,14 +1,11 @@
 ---
 title: .NET SDKs - Platform & Feature Matrix
-description: Explore .NET SDK cross-platform support - video/audio codecs, hardware acceleration, capture devices & network protocols on Windows, Linux, macOS, Android, iOS.
-sidebar_label: Platform & Feature Matrix
-order: 17
-
+description: .NET SDK cross-platform support for video/audio codecs, hardware acceleration, capture devices on Windows, Linux, macOS, Android, iOS.
 ---
 
 # .NET SDK: Supported Features and Platforms
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Discover the comprehensive feature set and broad platform compatibility of VisioForge .NET SDKs. The tables below detail supported input/output formats, video/audio codecs, hardware acceleration, capture devices, and network protocols across Windows, Linux, macOS, Android, and iOS.
 

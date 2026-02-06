@@ -1,8 +1,6 @@
 ---
 title: Reverse Video Playback for .NET Applications
-description: Master reverse video playback in .NET applications with detailed C# code examples, frame-by-frame navigation techniques, performance optimization tips, and platform-specific implementations for both cross-platform and Windows-specific scenarios.
-sidebar_label: Reverse Video Playback
-order: 4
+description: Implement reverse playback with frame-by-frame navigation and performance optimization for Windows and cross-platform video applications.
 ---
 
 # Implementing Reverse Video Playback in .NET Applications
@@ -232,5 +230,4 @@ For complex media applications requiring advanced reverse playback features, con
 Implementing reverse video playback adds significant value to media applications, providing users with enhanced control over content navigation. By following the implementation patterns in this guide, developers can create robust, performant reverse playback experiences in .NET applications.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page for more complete code samples and implementation examples.

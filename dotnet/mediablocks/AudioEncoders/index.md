@@ -1,13 +1,13 @@
 ---
 title: Audio Encoders for .NET Media Processing
-description: Comprehensive guide to audio compression formats including AAC, MP3, FLAC, and more with VisioForge Media Blocks SDK for .NET. Learn implementation with code examples.
+description: Comprehensive audio compression with AAC, MP3, FLAC, Opus, and more codecs in Media Blocks SDK for efficient encoding and streaming.
 sidebar_label: Audio Encoders
 order: 19
 ---
 
 # Audio encoders blocks
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Audio encoding is the process of converting raw audio data into a compressed format. This process is essential for reducing the size of audio files, making them easier to store and stream over the internet. VisioForge Media Blocks SDK provides a wide range of audio encoders that support various formats and codecs.
 
@@ -148,6 +148,114 @@ pipeline.Connect(adpcmEncoderBlock.Output, wavSinkBlock.Input);
 
 await pipeline.StartAsync();
 ```
+
+## AptX encoder
+
+`AptX`: A psychoacoustic audio codec algorithm that provides CD-like audio quality with low latency for Bluetooth audio applications. Uses 4:1 compression ratio and supports stereo audio only, making it ideal for wireless audio transmission.
+
+### Block info
+
+Name: AptXEncoderBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | PCM | 1
+Output | AptX | 1
+
+### Constructor options
+
+```csharp
+// Constructor with custom settings
+public AptXEncoderBlock(AptXEncoderSettings settings)
+```
+
+### Settings
+
+The `AptXEncoderBlock` requires `AptXEncoderSettings` for configuration.
+
+### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->AptXEncoderBlock;
+    AptXEncoderBlock-->AudioRendererBlock;
+```
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.wav";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var aptxSettings = new AptXEncoderSettings();
+var aptxEncoder = new AptXEncoderBlock(aptxSettings);
+pipeline.Connect(fileSource.AudioOutput, aptxEncoder.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(aptxEncoder.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux (requires GStreamer AptX plugin).
+
+## AptX decoder
+
+`AptX Decoder`: Decodes AptX compressed audio streams into raw PCM audio. This decoder handles AptX bitstreams from Bluetooth audio sources and outputs high-quality stereo PCM audio.
+
+### Block info
+
+Name: AptXDecoderBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | AptX | 1
+Output | PCM | 1
+
+### Constructor options
+
+```csharp
+// Constructor with custom settings
+public AptXDecoderBlock(AptXDecoderSettings settings)
+```
+
+### Settings
+
+The `AptXDecoderBlock` requires `AptXDecoderSettings` for configuration.
+
+### The sample pipeline
+
+```mermaid
+graph LR;
+    AptXSourceBlock-->AptXDecoderBlock;
+    AptXDecoderBlock-->AudioRendererBlock;
+```
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Assume we have an AptX source (e.g., Bluetooth receiver)
+var aptxSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("aptx_stream")));
+
+var aptxSettings = new AptXDecoderSettings();
+var aptxDecoder = new AptXDecoderBlock(aptxSettings);
+pipeline.Connect(aptxSource.AudioOutput, aptxDecoder.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(aptxDecoder.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux (requires GStreamer AptX plugin).
 
 ## ALAW encoder
 

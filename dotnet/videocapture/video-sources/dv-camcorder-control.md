@@ -1,13 +1,11 @@
 ---
 title: DV Camcorder Integration for .NET Video Capture
-description: Complete guide for .NET developers to implement DV/HDV camcorder control in C# applications. Learn essential commands, implementation patterns, and best practices for seamless camcorder integration in WPF, WinForms, and console applications with practical code examples.
-sidebar_label: DV Camcorder Control
-order: 0
+description: Implement DV/HDV camcorder control in C# apps with essential commands, implementation patterns, and practical code examples for .NET.
 ---
 
 # DV Camcorder Control for .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction to DV Camcorder Integration
 

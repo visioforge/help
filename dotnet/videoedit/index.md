@@ -1,13 +1,13 @@
 ---
 title: Video Editing SDK for .NET Developers
-description: Build professional video editing applications with our powerful .NET SDK. Features include timeline editing, transitions, effects, hardware acceleration, and multi-format support. Cross-platform development for Windows, macOS, Linux, Android, and iOS.
+description: Build video editing apps with .NET SDK featuring timeline editing, transitions, effects, hardware acceleration, and multi-format support.
 sidebar_label: Video Edit SDK .Net
 order: 12
 ---
 
 # Video Edit SDK .Net: Professional Video Editing for Developers
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net)
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Video Edit SDK .Net
 
@@ -113,7 +113,7 @@ Our comprehensive documentation helps you get started quickly and addresses comm
 
 Access our technical resources to maximize your development efficiency:
 
-- [API Documentation](https://api.visioforge.com/dotnet/api/index.html) - Complete API reference
+- [API Documentation](https://api.visioforge.org/dotnet/api/index.html) - Complete API reference
 - [Changelog](../changelog.md) - Stay updated on the latest improvements
 - [End User License Agreement](../../eula.md) - License terms and conditions
 

@@ -2,3 +2,6 @@
 output.zip
 retype.manifest
 codebase/
+__pycache__/
+*.pyc
+.venv/

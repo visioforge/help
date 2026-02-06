@@ -1,12 +1,12 @@
 ---
 title: .Net Media Output Blocks Guide
-description: Explore a complete guide to .Net Media SDK output blocks. Learn about file and network sinks for your media processing pipelines.
+description: Write media to files and network streams with comprehensive output sink blocks for MP4, MKV, RTMP, HLS, and more in Media Blocks SDK.
 sidebar_label: Outputs
 ---
 
 # Output Blocks - VisioForge Media Blocks SDK .Net
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Output blocks, also known as sinks, are responsible for writing media data to files, network streams, or other destinations. They are typically the last blocks in any media processing chain. VisioForge Media Blocks SDK .Net provides a comprehensive collection of output blocks for various formats and protocols.
 

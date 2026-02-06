@@ -1,10 +1,8 @@
 ---
 title: Delphi Media Framework for Video Processing
-description: Powerful Delphi/ActiveX libraries for video playback, capture, and editing. Build professional media applications with our All-in-One Media Framework supporting Delphi 6 through 11 and beyond, with full x64 compatibility and ActiveX integration.
+description: Powerful Delphi/ActiveX libraries for video playback, capture, and editing with x64 support for professional media applications.
 sidebar_label: All-in-One Media Framework (Delphi/ActiveX)
 order: 18
-icon: ../static/delphi.svg
-route: /docs/delphi/
 ---
 
 # All-in-One Media Framework

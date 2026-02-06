@@ -1,7 +1,6 @@
 ---
 title: TVFVideoCapture Installation Guide for Delphi
-description: Complete step-by-step instructions for installing the TVFVideoCapture library in various Delphi versions. This developer guide covers installation processes for Delphi 6/7 through Delphi 11+, including troubleshooting common issues and configuration requirements.
-sidebar_label: Delphi
+description: Install TVFVideoCapture packages in Delphi 6/7 through Delphi 11+ with complete setup instructions, library paths, and configuration.
 ---
 
 # Comprehensive TVFVideoCapture Installation Guide for Delphi Developers
@@ -90,19 +89,19 @@ After installing the framework, navigate to the installation folder and open the
 
 Choose the Release build configuration to ensure optimal component performance.
 
-![Selecting Release build configuration](delphi11-1.png)
+![Selecting Release build configuration](delphi11-1.webp)
 
 ### Step 3: Install the Component Package
 
 Complete the installation process through the IDE's package installation interface.
 
-![Installing the component package](delphi11-2.png)
+![Installing the component package](delphi11-2.webp)
 
 ### Step 4: Verify Installation Success
 
 Confirm that the installation completed successfully before proceeding with development.
 
-![Verification of successful installation](delphi11-3.png)
+![Verification of successful installation](delphi11-3.webp)
 
 ## Project Configuration Requirements and Best Practices
 

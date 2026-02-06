@@ -1,12 +1,11 @@
 ---
 title: Media Player SDK .Net Playlist API Guide
-description: Learn how to implement powerful playlist functionality in your .NET applications using our Media Player SDK. Complete code examples for WinForms, WPF, and console applications with step-by-step implementation guide.
-sidebar_label: Playlist API
+description: Implement playlist functionality in WinForms, WPF, and Console applications with sequential media playback management in .NET.
 ---
 
 # Complete Guide to Playlist API Implementation in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge variant="dark" size="xl" text="MediaPlayerCore"]
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [MediaPlayerCore](#){ .md-button }
 
 ## Introduction to Playlist Management
 

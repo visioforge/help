@@ -1,13 +1,11 @@
 ---
 title: Screen Capture Source for .NET Video SDK
-description: Learn how to implement powerful screen capture functionality in your .NET applications. Capture full screens, specific windows, or custom screen areas with high performance DirectX integration and cursor support.
-sidebar_label: Screen Source
-order: 17
+description: Implement screen capture in .NET apps to capture full screens, windows, or custom areas with DirectX integration and cursor support.
 ---
 
 # Screen Capture Implementation Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction to Screen Capture
 
@@ -32,121 +30,127 @@ On Windows platforms, the SDK leverages the power of DirectX technologies to ach
 
 DirectX 11 is particularly recommended for window capture scenarios due to its improved handling of window composition and superior performance characteristics.
 
-+++ VideoCaptureCore
+=== "VideoCaptureCore"
 
-### Core Capture Configuration
+    
+    ### Core Capture Configuration
+    
+    The VideoCaptureCore implementation provides straightforward configuration options to control the capture process:
+    
+    - `AllowCaptureMouseCursor`: Enable or disable cursor visibility in the captured content
+    - `DisplayIndex`: Select which display to capture in multi-monitor setups (zero-indexed)
+    - `ScreenPreview` / `ScreenCapture`: Set the operational mode for viewing or recording
+    
 
-The VideoCaptureCore implementation provides straightforward configuration options to control the capture process:
+=== "VideoCaptureCoreX"
 
-- `AllowCaptureMouseCursor`: Enable or disable cursor visibility in the captured content
-- `DisplayIndex`: Select which display to capture in multi-monitor setups (zero-indexed)
-- `ScreenPreview` / `ScreenCapture`: Set the operational mode for viewing or recording
+    
+    ### Advanced Capture Configuration
+    
+    VideoCaptureCoreX offers more granular control through dedicated configuration classes:
+    
+    - `ScreenCaptureDX9SourceSettings`: Configure DirectX 9 based capture
+    - `ScreenCaptureD3D11SourceSettings`: Configure DirectX 11 based capture with enhanced performance
+    
 
-+++ VideoCaptureCoreX
-
-### Advanced Capture Configuration
-
-VideoCaptureCoreX offers more granular control through dedicated configuration classes:
-
-- `ScreenCaptureDX9SourceSettings`: Configure DirectX 9 based capture
-- `ScreenCaptureD3D11SourceSettings`: Configure DirectX 11 based capture with enhanced performance
-
-+++
 
 ## Full Screen and Region Capture Implementation
 
 Capturing either a complete screen or a defined screen region is a common requirement for many applications. Below are the implementation approaches for both VideoCaptureCore and VideoCaptureCoreX.
 
-+++ VideoCaptureCore
+=== "VideoCaptureCore"
 
-### Configuring Full Screen and Region Capture
-
-The following code demonstrates how to configure screen capture settings for either full screen mode or a specific rectangular region:
-
-```csharp
-// Set screen capture source settings
-VideoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings
-{
-     // Set to true to capture the full screen
-    FullScreen = false,
-
-     // Set the left position of the screen area
-    Left = 0,
-
-    // Set the top position of the screen area
-    Top = 0, 
-
-    // Set the width of the screen area
-    Width = 640, 
-
-    // Set the height of the screen area
-    Height = 480, 
-
-    // Set the display index
-    DisplayIndex = 0, 
-
-    // Set the frame rate
-    FrameRate = new VideoFrameRate(25), 
-
-     // Set to true to capture the mouse cursor
-    AllowCaptureMouseCursor = true
-};
-```
-
-When `FullScreen` is set to `true`, the `Left`, `Top`, `Width`, and `Height` properties are ignored, and the entire screen specified by `DisplayIndex` is captured.
-
-For multi-monitor setups, the `DisplayIndex` property identifies which monitor to capture, with 0 representing the primary display.
-
-+++ VideoCaptureCoreX
-
-### Advanced Screen Capture with DirectX 11
-
-VideoCaptureCoreX provides a more powerful implementation using DirectX 11 technology:
-
-```cs
-// Display index
-var screenID = 0;
-
-// Create a new screen capture source using DirectX 11
-var source = new ScreenCaptureD3D11SourceSettings(); 
-
-// Set the capture API
-source.API = D3D11ScreenCaptureAPI.WGC; 
-
-// Set the frame rate
-source.FrameRate = new VideoFrameRate(25);
-
-// Set the screen area or full screen mode
-if (fullscreen)
-{
-    // Enumerate all screens and set the screen area
-    for (int i = 0; i < System.Windows.Forms.Screen.AllScreens.Length; i++)
+    
+    ### Configuring Full Screen and Region Capture
+    
+    The following code demonstrates how to configure screen capture settings for either full screen mode or a specific rectangular region:
+    
+    ```csharp
+    // Set screen capture source settings
+    VideoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings
     {
-        if (i == screenID)
+         // Set to true to capture the full screen
+        FullScreen = false,
+    
+         // Set the left position of the screen area
+        Left = 0,
+    
+        // Set the top position of the screen area
+        Top = 0, 
+    
+        // Set the width of the screen area
+        Width = 640, 
+    
+        // Set the height of the screen area
+        Height = 480, 
+    
+        // Set the display index
+        DisplayIndex = 0, 
+    
+        // Set the frame rate
+        FrameRate = new VideoFrameRate(25), 
+    
+         // Set to true to capture the mouse cursor
+        AllowCaptureMouseCursor = true
+    };
+    ```
+    
+    When `FullScreen` is set to `true`, the `Left`, `Top`, `Width`, and `Height` properties are ignored, and the entire screen specified by `DisplayIndex` is captured.
+    
+    For multi-monitor setups, the `DisplayIndex` property identifies which monitor to capture, with 0 representing the primary display.
+    
+
+=== "VideoCaptureCoreX"
+
+    
+    ### Advanced Screen Capture with DirectX 11
+    
+    VideoCaptureCoreX provides a more powerful implementation using DirectX 11 technology:
+    
+    ```cs
+    // Display index
+    var screenID = 0;
+    
+    // Create a new screen capture source using DirectX 11
+    var source = new ScreenCaptureD3D11SourceSettings(); 
+    
+    // Set the capture API
+    source.API = D3D11ScreenCaptureAPI.WGC; 
+    
+    // Set the frame rate
+    source.FrameRate = new VideoFrameRate(25);
+    
+    // Set the screen area or full screen mode
+    if (fullscreen)
+    {
+        // Enumerate all screens and set the screen area
+        for (int i = 0; i < System.Windows.Forms.Screen.AllScreens.Length; i++)
         {
-            source.Rectangle = new VisioForge.Core.Types.Rect(System.Windows.Forms.Screen.AllScreens[i].Bounds);
+            if (i == screenID)
+            {
+                source.Rectangle = new VisioForge.Core.Types.Rect(System.Windows.Forms.Screen.AllScreens[i].Bounds);
+            }
         }
     }
-}
-else
-{
-    // Set the screen area
-    source.Rectangle = new VisioForge.Core.Types.Rect(0, 0, 1280, 720); 
-}
+    else
+    {
+        // Set the screen area
+        source.Rectangle = new VisioForge.Core.Types.Rect(0, 0, 1280, 720); 
+    }
+    
+    // Set to true to capture the mouse cursor
+    source.CaptureCursor = true; 
+    
+    // Set the monitor index
+    source.MonitorIndex = screenID; 
+    
+    // Set the screen capture source
+    VideoCapture1.Video_Source = source; 
+    ```
+    
+    The Windows Graphics Capture (WGC) API option provides excellent performance on Windows 10 and higher. This approach also demonstrates the use of `System.Windows.Forms.Screen.AllScreens` to programmatically determine the bounds of available displays.
+    
 
-// Set to true to capture the mouse cursor
-source.CaptureCursor = true; 
-
-// Set the monitor index
-source.MonitorIndex = screenID; 
-
-// Set the screen capture source
-VideoCapture1.Video_Source = source; 
-```
-
-The Windows Graphics Capture (WGC) API option provides excellent performance on Windows 10 and higher. This approach also demonstrates the use of `System.Windows.Forms.Screen.AllScreens` to programmatically determine the bounds of available displays.
-
-+++
 
 ## Window Capture Implementation
 
@@ -156,57 +160,60 @@ Capturing specific application windows allows for targeted recording of individu
 - Software demos
 - Support scenarios where only a single application is relevant
 
-+++ VideoCaptureCore
+=== "VideoCaptureCore"
 
-### Basic Window Capture
+    
+    ### Basic Window Capture
+    
+    To capture a specific window with VideoCaptureCore:
+    
+    ```csharp
+    // Set screen capture source settings
+    VideoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings
+    {
+        // Disable full screen capture
+        FullScreen = false, 
+    
+        // Set the window handle
+        WindowHandle = windowHandle, 
+    
+         // Set the frame rate
+        FrameRate = new VideoFrameRate(25),
+    
+         // Set to true to capture the mouse cursor
+        AllowCaptureMouseCursor = true
+    };
+    ```
+    
+    The `windowHandle` parameter should contain a valid handle to the target window. This can be obtained using Windows API functions like `FindWindow` or by using UI automation libraries.
+    
 
-To capture a specific window with VideoCaptureCore:
+=== "VideoCaptureCoreX"
 
-```csharp
-// Set screen capture source settings
-VideoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings
-{
-    // Disable full screen capture
-    FullScreen = false, 
-
+    
+    ### Enhanced Window Capture
+    
+    VideoCaptureCoreX provides an optimized window capture implementation:
+    
+    ```cs
+    // Create Direct3D11 source
+    var source = new ScreenCaptureD3D11SourceSettings();
+    
+    // Set the capture API
+    source.API = D3D11ScreenCaptureAPI.WGC; 
+    
+    // Set frame rate
+    source.FrameRate = new VideoFrameRate(25);
+    
     // Set the window handle
-    WindowHandle = windowHandle, 
+    source.WindowHandle = windowHandle;
+    
+    VideoCapture1.Video_Source = source; // Set the screen capture source
+    ```
+    
+    The DirectX 11 implementation offers better performance, particularly for capturing applications that use hardware acceleration.
+    
 
-     // Set the frame rate
-    FrameRate = new VideoFrameRate(25),
-
-     // Set to true to capture the mouse cursor
-    AllowCaptureMouseCursor = true
-};
-```
-
-The `windowHandle` parameter should contain a valid handle to the target window. This can be obtained using Windows API functions like `FindWindow` or by using UI automation libraries.
-
-+++ VideoCaptureCoreX
-
-### Enhanced Window Capture
-
-VideoCaptureCoreX provides an optimized window capture implementation:
-
-```cs
-// Create Direct3D11 source
-var source = new ScreenCaptureD3D11SourceSettings();
-
-// Set the capture API
-source.API = D3D11ScreenCaptureAPI.WGC; 
-
-// Set frame rate
-source.FrameRate = new VideoFrameRate(25);
-
-// Set the window handle
-source.WindowHandle = windowHandle;
-
-VideoCapture1.Video_Source = source; // Set the screen capture source
-```
-
-The DirectX 11 implementation offers better performance, particularly for capturing applications that use hardware acceleration.
-
-+++
 
 ## Performance Optimization Techniques
 
@@ -330,5 +337,4 @@ Screen capture functionality enables developers to create powerful applications 
 By leveraging the appropriate configuration options for your specific requirements, you can implement high-performance screen capture features in your .NET applications.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

@@ -1,10 +1,10 @@
 ---
-title: Comprehensive Guide to Installing TVFMediaPlayer Library
-description: Detailed instructions on installing the TVFMediaPlayer library in Delphi, C++ Builder, Visual Basic 6, Visual Studio, and other ActiveX-compatible environments.
+title: Install the TVFMediaPlayer Library
+description: Install TVFMediaPlayer in Delphi, C++ Builder, Visual Basic 6, Visual Studio, and ActiveX environments with detailed setup instructions.
 sidebar_label: Installation Guide
 ---
 
-# Comprehensive TVFMediaPlayer Library Installation Guide
+# Install the TVFMediaPlayer Library
 
 Welcome to the detailed installation guide for the VisioForge TVFMediaPlayer library, a core component of the powerful All-in-One Media Framework. This guide provides comprehensive steps for installing the library across various Integrated Development Environments (IDEs), ensuring you can leverage its rich media playback capabilities effectively in your projects.
 

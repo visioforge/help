@@ -1,13 +1,11 @@
 ---
 title: Display First Frame in Video Files with .NET
-description: Learn how to display the first frame of a video file in your .NET applications using the Media Player SDK. Complete C# code examples for WinForms, WPF, and console applications with detailed implementation steps.
-sidebar_label: How to Show the First Frame?
-
+description: Show the first video frame in WinForms, WPF, and Console applications with C# implementation examples using Media Player SDK.
 ---
 
 # Displaying the First Frame of Video Files in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Overview
 

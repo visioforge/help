@@ -1,13 +1,11 @@
 ---
 title: Video Renderer Selection Guide for .NET Applications
-description: Learn how to implement and optimize video renderers in .NET applications using DirectShow-based SDK engines. This in-depth guide covers VideoRenderer, VMR9, and EVR with practical code examples for WinForms development.
-sidebar_label: Select Video Renderer (WinForms)
-
+description: Choose and optimize DirectShow video renderers (VideoRenderer, VMR9, EVR) for WinForms applications with performance optimization techniques.
 ---
 
 # Video Renderer Selection Guide for WinForms Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Video Rendering in .NET
 
@@ -281,5 +279,4 @@ Selecting and configuring the right video renderer is an important decision in d
 The optimal choice depends on your specific requirements, target audience, and the nature of your video content. In most modern applications, EVR should be your first choice, with VMR9 as a reliable fallback option.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

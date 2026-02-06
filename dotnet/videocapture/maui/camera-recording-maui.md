@@ -1,7 +1,6 @@
 ---
 title: Video Capture & Processing in .NET MAUI Apps
-description: Learn to implement powerful video capture functionality in your .NET MAUI apps with cross-platform support for iOS, Android, macCatalyst and Windows. This guide shows how to integrate camera preview, add real-time video effects, implement recording features, and save videos using native APIs for each platform.
-sidebar_label: Capture and Process Video in .NET MAUI Apps
+description: Implement video capture in .NET MAUI apps with cross-platform support for iOS, Android, macCatalyst, and Windows camera recording.
 ---
 
 # How to Capture and Process Video in .NET MAUI Apps Using VisioForge SDK

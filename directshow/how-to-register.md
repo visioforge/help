@@ -1,11 +1,9 @@
 ---
 title: DirectShow Filter SDK Registration Guide
-description: Complete guide to registering DirectShow filters and SDKs in multiple programming languages. Learn implementation techniques for C++, C#, and Delphi with code examples and alternative registration methods.
-sidebar_label: DirectShow Filter SDK Registration Guide
-
+description: Register DirectShow filters and SDKs in C++, C#, and Delphi with IVFRegister interface and alternative registration code examples.
 ---
 
-# DirectShow Filter and SDK Registration Guide
+# SDK Registration Guide
 
 DirectShow filters and SDK components often require proper registration to function correctly within your applications. This guide provides detailed implementation methods for registering DirectShow filters across multiple programming languages.
 
@@ -89,28 +87,3 @@ type
     procedure SetLicenseKey(licenseKey: PWideChar); stdcall;
   end;
 ```
-
-## Alternative Registration Approaches
-
-Beyond the IVFRegister interface, several other registration methods are available:
-
-### System Registry Registration
-
-DirectShow filters can be registered directly in the Windows registry using appropriate registry keys. This approach is particularly useful for system-wide filter availability.
-
-### Custom Build Integration
-
-For specialized deployment scenarios, custom build processes can automate the registration of DirectShow filters during application installation or initialization.
-
-### COM Registration
-
-Standard COM registration techniques can also be applied to DirectShow filters, leveraging tools like regsvr32 for DLL-based filters.
-
-## Best Practices for Filter Registration
-
-When implementing DirectShow filter registration:
-
-1. Consider application permission requirements
-2. Handle registration failures gracefully
-3. Implement unregistration logic for clean application removal
-4. Test registration under various user permission scenarios

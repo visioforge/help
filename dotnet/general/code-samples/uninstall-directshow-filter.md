@@ -1,12 +1,11 @@
 ---
-title: Uninstalling DirectShow Filters in Windows Applications
-description: Learn how to properly uninstall DirectShow filters from your system using multiple methods. This guide explains manual uninstallation techniques, troubleshooting steps, and best practices for .NET developers working with multimedia applications.
-sidebar_label: Uninstall DirectShow Filters
+title: Remove DirectShow Filters in Windows
+description: Properly uninstall DirectShow filters with manual techniques, troubleshooting steps, and best practices for .NET multimedia applications.
 ---
 
-# Uninstalling DirectShow Filters in Windows Applications
+# Remove DirectShow Filters in Windows
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 DirectShow filters are essential components for multimedia applications in Windows environments. They enable software to process audio and video data efficiently. However, there may be situations where you need to uninstall these filters, such as when upgrading your application, resolving conflicts, or completely removing a software package. This guide provides detailed instructions on how to properly uninstall DirectShow filters from your system.
 
@@ -133,5 +132,4 @@ After uninstalling DirectShow filters, verify the removal was successful:
 3. Test any applications that previously used the filters to ensure they handle the absence gracefully
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and implementation examples for working with DirectShow and multimedia applications in .NET.

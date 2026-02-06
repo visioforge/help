@@ -1,13 +1,13 @@
 ---
 title: Mastering Video Encoders in .NET SDK
-description: Unlock high-performance video encoding in .NET projects. This guide covers various video encoders, codecs like AV1, H264, HEVC, and GPU acceleration techniques.
+description: Encode video with AV1, H264, HEVC, VP9, and more codecs using GPU acceleration and optimized settings in Media Blocks SDK for .NET.
 sidebar_label: Video Encoders
 order: 18
 ---
 
 # Video encoding
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Video encoding is the process of converting raw video data into a compressed format. This process is essential for reducing the size of video files, making them easier to store and stream over the internet. VisioForge Media Blocks SDK provides a wide range of video encoders that support various formats and codecs.
 
@@ -146,6 +146,132 @@ pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
 
 var sinkBlock = new AVISinkBlock(new AVISinkSettings(@"output.avi"));
 pipeline.Connect(videoEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+## Custom Video encoder
+
+The CustomVideoEncoder block provides a flexible framework for integrating third-party or specialized video encoders that are not directly supported by the SDK. This enables integration of proprietary codecs, experimental encoders, or platform-specific encoding solutions.
+
+### Block info
+
+Name: CustomVideoEncoderBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed video | 1
+Output | Compressed video | 1
+
+### Settings
+
+#### CustomVideoEncoderSettings
+
+```csharp
+public class CustomVideoEncoderSettings
+{
+    // GStreamer encoder element name (e.g., "x264enc", "nvh264enc")
+    public string EncoderName { get; set; }
+    
+    // Dictionary of encoder-specific properties
+    public Dictionary<string, object> Properties { get; set; }
+}
+```
+
+### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->CustomVideoEncoderBlock;
+    CustomVideoEncoderBlock-->MP4SinkBlock;
+```
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+// Configure custom encoder (example with x264enc)
+var customSettings = new CustomVideoEncoderSettings
+{
+    EncoderName = "x264enc",
+    Properties = new Dictionary<string, object>
+    {
+        { "bitrate", 2000 },
+        { "speed-preset", "medium" }
+    }
+};
+var customEncoder = new CustomVideoEncoderBlock(customSettings);
+pipeline.Connect(fileSource.VideoOutput, customEncoder.Input);
+
+var mp4Sink = new MP4SinkBlock(new MP4SinkSettings("output.mp4"));
+pipeline.Connect(customEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux (requires appropriate GStreamer plugins).
+
+## GIF encoder
+
+The GIF encoder block creates animated GIF images from video streams, suitable for web content, social media, and documentation.
+
+### Block info
+
+Name: GIFEncoderBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed video | 1
+Output | GIF | 1
+
+### Settings
+
+#### GIFEncoderSettings
+
+```csharp
+public class GIFEncoderSettings
+{
+    // Frame rate for the output GIF
+    public VideoFrameRate FrameRate { get; set; }
+    
+    // Enable dithering for better color representation
+    public bool Dither { get; set; }
+}
+```
+
+### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->GIFEncoderBlock;
+    GIFEncoderBlock-->FileSink;
+```
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var gifSettings = new GIFEncoderSettings
+{
+    FrameRate = new VideoFrameRate(10, 1), // 10 fps for smaller file size
+    Dither = true
+};
+var gifEncoder = new GIFEncoderBlock(gifSettings, "output.gif");
+pipeline.Connect(fileSource.VideoOutput, gifEncoder.Input);
 
 await pipeline.StartAsync();
 ```
@@ -659,6 +785,64 @@ await pipeline.StartAsync();
 ### Platforms
 
 Windows, macOS, Linux.
+
+## PNG encoder
+
+The PNG encoder block provides lossless image compression with high quality, suitable for archival, screenshots, and applications requiring perfect image quality with transparency support.
+
+### Block info
+
+Name: PNGEncoderBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed video | 1
+Output | PNG | 1
+
+### Settings
+
+#### PNGEncoderSettings
+
+```csharp
+public class PNGEncoderSettings
+{
+    // Compression level (0-9, higher = better compression but slower)
+    public int CompressionLevel { get; set; }
+    
+    // PNG filter type for optimal compression
+    public PNGFilterType FilterType { get; set; }
+}
+```
+
+### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->PNGEncoderBlock;
+    PNGEncoderBlock-->FileSink;
+```
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4"; // Input file
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var pngSettings = new PNGEncoderSettings
+{
+    CompressionLevel = 6 // Balanced compression
+};
+var pngEncoder = new PNGEncoderBlock(pngSettings, "frame.png");
+pipeline.Connect(fileSource.VideoOutput, pngEncoder.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android.
 
 ## Apple ProRes encoder
 

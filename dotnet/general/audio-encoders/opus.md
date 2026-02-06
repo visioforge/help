@@ -1,13 +1,11 @@
 ---
 title: Optimizing OPUS Audio Encoding in .NET Applications
-description: Comprehensive guide to implementing and optimizing OPUS audio encoding in .NET applications using VisioForge SDKs. Learn how to configure bitrate control modes, adjust complexity settings, and implement proper frame durations for high-quality, bandwidth-efficient audio streaming and storage solutions across various application scenarios from VoIP to music streaming.
-sidebar_label: OPUS
-
+description: Implement OPUS audio encoding in .NET with bitrate control, complexity settings, and frame durations for VoIP and music streaming.
 ---
 
 # Mastering OPUS Audio Encoding in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to OPUS Audio Encoding
 
@@ -30,7 +28,7 @@ These advantages make OPUS particularly valuable for developers building applica
 
 ## Implementing OPUS in Cross-Platform .NET Applications
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 When working with VisioForge's cross-platform X-engines, developers can leverage the [OPUSEncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.OPUSEncoderSettings.html) class to configure OPUS encoding parameters precisely for their application needs.
 

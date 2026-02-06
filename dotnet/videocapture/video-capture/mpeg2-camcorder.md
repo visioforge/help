@@ -1,14 +1,11 @@
 ---
 title: Capture Camcorder Video to MPEG-2 Format in .NET
-description: Learn how to implement high-quality video capture from camcorders to MPEG-2 format in your .NET applications. This developer guide covers implementation steps, code examples, performance optimization techniques, and troubleshooting tips.
-sidebar_label: MPEG-2 File from Camcorder
-order: 15
-
+description: Implement high-quality camcorder video capture to MPEG-2 in .NET with implementation steps, code examples, and optimization techniques.
 ---
 
 # Capturing Camcorder Video to MPEG-2 Format
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction
 

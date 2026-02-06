@@ -1,13 +1,11 @@
 ---
 title: AVI File Output Guide for .NET SDK Development
-description: Learn how to implement AVI file output in .NET applications with step-by-step examples. Covers video and audio encoding options, hardware acceleration, cross-platform support, and best practices for developers working with multimedia container formats.
-sidebar_label: AVI
-
+description: Implement AVI file output in .NET with video and audio encoding, hardware acceleration, and cross-platform multimedia container support.
 ---
 
 # AVI File Output in VisioForge .NET SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 AVI (Audio Video Interleave) is a Microsoft-developed multimedia container format that stores both audio and video data in a single file with synchronized playback. It supports both compressed and uncompressed data, offering flexibility while sometimes resulting in larger file sizes.
 
@@ -25,9 +23,9 @@ Despite newer container formats like MP4 and MKV offering more features, AVI rem
 
 ## Cross-Platform AVI Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
-The [AVIOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.AVIOutput.html) class provides a robust way to configure and generate AVI files with various encoding options.
+The [AVIOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.AVIOutput.html) class provides a robust way to configure and generate AVI files with various encoding options.
 
 ### Setting Up AVI Output
 
@@ -44,7 +42,7 @@ This constructor automatically initializes default encoders:
 
 ### Video Encoder Options
 
-Configure video encoding through the `Video` property with several available encoders:
+Configure video encoding through the `Video` property with several available encoders. For detailed configuration options, see the [H.264 encoder documentation](../video-encoders/h264.md), [HEVC encoder documentation](../video-encoders/hevc.md), and [MJPEG encoder documentation](../video-encoders/mjpeg.md):
 
 #### Standard Encoder
 
@@ -78,7 +76,7 @@ aviOutput.Video = new MJPEGEncoderSettings();
 
 ### Audio Encoder Options
 
-The `Audio` property lets you configure audio encoding settings:
+The `Audio` property lets you configure audio encoding settings. For detailed configuration options, see the [MP3 encoder documentation](../audio-encoders/mp3.md) and [AAC encoder documentation](../audio-encoders/aac.md):
 
 ```csharp
 // Standard MP3 encoding
@@ -144,7 +142,7 @@ aviOutput.Audio = new VOAACEncoderSettings();
 
 ## Windows-Specific AVI Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 The Windows-only components provide additional options for AVI output configuration.
 

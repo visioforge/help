@@ -1,12 +1,11 @@
 ---
 title: Adding Image Overlays to Video in .NET SDK
-description: Learn how to implement image overlays in videos with .NET SDK. This detailed guide provides step-by-step instructions with code examples for both VideoEditCoreX and VideoEditCore engines, including positioning, transparency, and timing.
-sidebar_label: Adding Image Overlays to Videos
+description: Implement image overlays in videos with .NET SDK using step-by-step guide with code examples for positioning, transparency, and timing.
 ---
 
 # Adding Image Overlays to Videos in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge variant="dark" size="xl" text="VideoEditCoreX"]
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
 
 ## Introduction to Image Overlays
 

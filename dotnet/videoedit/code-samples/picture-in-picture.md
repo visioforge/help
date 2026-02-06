@@ -1,12 +1,11 @@
 ---
 title: Creating Dynamic Picture-in-Picture Videos in .NET
-description: Learn how to implement Picture-in-Picture, side-by-side videos, and custom video layouts in your C# applications. Complete code samples for video overlays, vertical/horizontal splits, and custom positioning with the Video Edit SDK.
-sidebar_label: Picture-In-Picture
+description: Implement Picture-in-Picture, side-by-side videos, and custom video layouts in C# with complete code samples for overlay positioning.
 ---
 
 # Creating Picture-in-Picture and Split-Screen Videos in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge variant="dark" size="xl" text="VideoEditCore"]
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
 ## Introduction to Video Composition Techniques
 
@@ -183,5 +182,4 @@ When working with multiple video sources, especially at high resolutions, be min
 Picture-in-Picture and split-screen video compositions add professional capabilities to media applications. The Video Edit SDK for .NET makes implementing these features straightforward with its intuitive API. Whether you're developing a video editing application, a streaming platform, or integrating video processing into a larger system, these techniques provide powerful ways to combine and present multiple video sources.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

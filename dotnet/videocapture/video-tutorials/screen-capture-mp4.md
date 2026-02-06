@@ -1,17 +1,17 @@
 ---
 title: Screen Capture to MP4 with .NET | C# Video Recording
-description: Learn how to implement screen recording to MP4 with C# in your .NET applications. This tutorial provides complete code examples for both audio and silent screen captures, using H264/AAC encoding with simple async implementation for smooth desktop recordings.
-sidebar_label: Screen Capture to MP4 File
-
+description: Implement screen recording to MP4 with C# in .NET using complete code examples for audio and silent captures with H264/AAC encoding.
 ---
 
 # Screen capture to MP4 file
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## YouTube tutorial
 
-[!embed](https://www.youtube.com/embed/fPJEoOz6lIM?controls=1)
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/fPJEoOz6lIM?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 [Source code on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/screen-capture-mp4)
 
@@ -164,5 +164,4 @@ This Windows Forms application demonstrates screen capture functionality with an
 The application demonstrates how to configure different capture scenarios with minimal code using the SDK's fluent interface and async patterns.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

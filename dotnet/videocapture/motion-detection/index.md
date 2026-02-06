@@ -1,13 +1,13 @@
 ---
 title: Motion Detection for Video Processing in .NET
-description: Learn how to implement advanced and simple motion detection features in your .NET applications with multiple detector types, customizable settings, and real-time processing capabilities for video streams.
+description: Implement advanced and simple motion detection in .NET with multiple detector types, customizable settings, and real-time processing.
 sidebar_label: Motion Detection
 order: 6
 ---
 
 # Motion Detection for Video Processing
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview
 
@@ -20,7 +20,7 @@ These motion detection tools enable developers to implement sophisticated video 
 
 ## Simple Motion Detector
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[VideoCaptureCore](#){ .md-button }
 
 ### How It Works
 
@@ -81,7 +81,7 @@ This data can be used to trigger alerts, record events, or initiate application-
 
 ## Advanced Motion Detector
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
 ### Enhanced Capabilities
 
@@ -136,19 +136,22 @@ motionDetector.DetectorType = MotionDetectorType.CustomFrameDifference;
 
 4. Apply the settings to your video capture component:
 
-+++ VideoCaptureCoreX
+=== "VideoCaptureCoreX"
 
-```cs
-VideoCapture1.Motion_Detection = motionDetector;
-```
+    
+    ```cs
+    VideoCapture1.Motion_Detection = motionDetector;
+    ```
+    
 
-+++ VideoCaptureCore
+=== "VideoCaptureCore"
 
-```cs
-VideoCapture1.Motion_DetectionEx = motionDetector;
-```
+    
+    ```cs
+    VideoCapture1.Motion_DetectionEx = motionDetector;
+    ```
+    
 
-+++
 
 5. Implement the corresponding event handler to receive detection data:
 

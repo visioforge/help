@@ -1,12 +1,11 @@
 ---
 title: Media Blocks SDK .Net Player Implementation Guide
-description: Learn how to build a robust video player application with Media Blocks SDK .Net. This step-by-step tutorial covers essential components including source blocks, video rendering, audio output configuration, pipeline creation, and advanced playback controls for .NET developers.
-sidebar_label: Player Sample
+description: Build video player apps with Media Blocks SDK using source blocks, audio/video rendering, and playback controls with step-by-step tutorial.
 ---
 
 # Building a Feature-Rich Video Player with Media Blocks SDK
 
-[!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 This detailed tutorial walks you through the process of creating a professional-grade video player application using Media Blocks SDK .Net. By following these instructions, you'll understand how to implement key functionalities including media loading, playback control, and audio-video rendering.
 

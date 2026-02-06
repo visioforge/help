@@ -1,8 +1,6 @@
 ---
 title: Video Fingerprinting SDK Release Notes
-description: Track the evolution of our Video Fingerprinting SDK through detailed version history. Discover new features, performance updates, and technical improvements across multiple releases, from version 3.0 to the latest 12.1 update.
-sidebar_label: Changelog
-
+description: Track Video Fingerprinting SDK evolution through detailed version history with new features, performance updates, and technical improvements.
 ---
 
 # Video Fingerprinting SDK Version History

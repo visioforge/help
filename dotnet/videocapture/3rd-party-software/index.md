@@ -1,13 +1,13 @@
 ---
 title: Video Capture SDK Third-Party Integration Guide
-description: Master video capture integration with DirectShow applications. Learn to connect OBS, FFMPEG, and VLC with our SDK. Step-by-step tutorials for WinForms, WPF, and console apps. Perfect for developers building video processing solutions.
+description: Integrate OBS, FFMPEG, and VLC streaming tools with Video Capture SDK DirectShow for WinForms, WPF, and Console applications in .NET.
 sidebar_label: 3rd-Party Software Usage
 order: 4
 ---
 
 # Integrating Third-Party Software with Video Capture SDK
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview
 

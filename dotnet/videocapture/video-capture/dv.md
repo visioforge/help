@@ -1,14 +1,11 @@
 ---
 title: Video Capture to DV Format in .NET Applications
-description: Learn how to implement DV video capture functionality in your .NET applications. This guide covers both recompression and direct capture methods with code examples and best practices for developers.
-sidebar_label: DV Format
-order: 18
-
+description: Implement DV video capture in .NET apps with recompression and direct capture methods using code examples and best practices.
 ---
 
 # Capturing Video to DV Format in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge variant="dark" size="xl" text="VideoCaptureCore"]
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 DV (Digital Video) is a professional-grade digital video format widely used in the broadcasting and film industry. Originally developed for camcorders, DV provides exceptional quality while maintaining reasonable file sizes, making it suitable for both consumer and professional video production environments.
 
@@ -165,7 +162,6 @@ await VideoCapture1.StartAsync();
 // Stop capture when done
 await VideoCapture1.StopAsync();
 ```
-
 
 ### Custom Audio Settings
 

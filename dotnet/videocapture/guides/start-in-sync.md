@@ -1,12 +1,11 @@
 ---
-title: Synchronize Multiple Video Captures in .NET Applications
-description: Learn how to perfectly synchronize multiple video capture streams in .NET with practical code examples, troubleshooting tips, and best practices for professional video recording applications.
-sidebar_label: Synchronize Multiple Video Captures
+title: Sync Multiple Video Captures in .NET
+description: Synchronize multiple video capture streams in .NET with code examples, troubleshooting tips, and best practices for recording apps.
 ---
 
-# Synchronizing Multiple Video Capture Sources in .NET Applications
+# Sync Multiple Video Captures in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Multi-Source Video Capture
 
@@ -217,5 +216,4 @@ Properly synchronizing multiple video capture sources is essential for creating 
 This approach separates the initialization phase from the recording phase, allowing all devices to be prepared before any begin recording, resulting in significantly improved synchronization between sources.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

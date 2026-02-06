@@ -1,12 +1,11 @@
 ---
 title: Working with Multiple Audio Streams in Video Files
-description: Learn how to effectively handle video files containing multiple audio streams in .NET applications. This detailed guide covers implementation techniques, workarounds for common challenges, and provides complete code examples for developers building advanced video processing applications.
-sidebar_label: Working with Multiple Audio Streams
+description: Handle video files with multiple audio streams in .NET using implementation techniques, workarounds, and complete code examples.
 ---
 
 # Working with Multiple Audio Streams in Video Files
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge variant="dark" size="xl" text="VideoEditCore"]
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
 ## Introduction to Multiple Audio Streams
 
@@ -44,7 +43,7 @@ The AVI splitter provides excellent support for multiple audio streams. When wor
 
 This is demonstrated in the filter graph visualization below:
 
-![Filter graph for AVI](adding-video-1.png)
+![Filter graph for AVI](adding-video-1.webp)
 
 As visible in the diagram, the AVI splitter creates separate pathways for each audio stream, making them independently accessible through the SDK's API.
 
@@ -54,7 +53,7 @@ Modern container formats like MP4, MKV, and MOV often use more sophisticated spl
 
 The filter graph for LAV Splitter demonstrates this limitation:
 
-![Filter graph for LAV](adding-video-2.png)
+![Filter graph for LAV](adding-video-2.webp)
 
 LAV Splitter, though excellent for format support, does not expose multiple audio streams in a way that allows direct access to secondary streams through the DES engine. This limitation necessitates alternative approaches.
 
@@ -109,5 +108,4 @@ Effectively handling multiple audio streams in video files requires understandin
 For advanced implementation scenarios and additional code examples, check out our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

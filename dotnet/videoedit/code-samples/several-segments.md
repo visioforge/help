@@ -1,12 +1,11 @@
 ---
 title: Adding Multiple Segments from a Single Video File
-description: Learn how to efficiently extract and combine multiple segments from the same video or audio file in your C# applications. Step-by-step guide with code examples for .NET developers working with video editing.
-sidebar_label: Adding Multiple Segments from a Single File
+description: Extract and combine multiple segments from the same video or audio file in C# with step-by-step guide and code examples for .NET.
 ---
 
 # Adding Multiple Segments from a Single Video File in C#
 
-[!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge variant="dark" size="xl" text="VideoEditCore"]
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
 ## Introduction
 
@@ -181,5 +180,4 @@ Extracting and combining multiple segments from a video file is a powerful techn
 This approach gives you fine-grained control over which portions of a video are included in your final output, allowing for creative editing possibilities without requiring complex manual video editing tools.
 
 ---
-
 Visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) for more code samples and examples.

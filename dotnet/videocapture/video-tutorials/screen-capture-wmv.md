@@ -1,18 +1,19 @@
 ---
 title: C# Screen Recording to WMV - .NET Implementation
-description: Learn how to implement professional screen recording functionality in your .NET applications with C#. This step-by-step guide includes working code samples, configuration options, and best practices for capturing screen activity to WMV format.
-sidebar_label: Screen Capture to a WMV File
+description: Implement professional screen recording in .NET apps with C# using step-by-step guide, working code samples, and configuration options.
 ---
 
 # Implementing Screen Recording to WMV in C# .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Video Tutorial Walkthrough
 
 Watch our detailed video walkthrough that demonstrates each step of the implementation process:
 
-[!embed](https://www.youtube.com/embed/8JYSDw2JeAo?controls=1)
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/8JYSDw2JeAo?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Source Code Repository
 
@@ -133,5 +134,4 @@ For applications that need to record in the background:
 4. Implement proper resource management
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and implementation examples.

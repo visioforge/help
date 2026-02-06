@@ -1,13 +1,11 @@
 ---
 title: RTMP Live Streaming for .NET Applications
-description: Learn how to implement RTMP streaming in .NET apps with practical code examples. Covers hardware acceleration, cross-platform support, error handling, and integration with popular streaming platforms like YouTube and Facebook Live.
-sidebar_label: RTMP
-
+description: Implement RTMP streaming in .NET with hardware acceleration, cross-platform support, and integration with YouTube and Facebook Live platforms.
 ---
 
 # RTMP Streaming with VisioForge SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to RTMP Streaming
 
@@ -17,7 +15,7 @@ This guide covers implementation details for RTMP streaming across different Vis
 
 ## Cross-Platform RTMP Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The `RTMPOutput` class serves as the central configuration point for RTMP streaming in cross-platform scenarios. It implements multiple interfaces including `IVideoEditXBaseOutput` and `IVideoCaptureXBaseOutput`, making it versatile for both video editing and capture workflows.
 
@@ -220,7 +218,7 @@ rtmpOutput.Sink = new RTMPSinkSettings
 
 ## Windows-Specific RTMP Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 For Windows-only applications, VisioForge provides an alternative implementation using FFmpeg:
 

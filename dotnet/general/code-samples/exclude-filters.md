@@ -1,12 +1,11 @@
 ---
 title: Excluding DirectShow Filters in .NET Applications
-description: Learn how to identify problematic DirectShow filters and exclude them from your multimedia processing pipeline. Comprehensive guide with code examples for .NET developers working with video capture, editing, and playback applications.
-sidebar_label: Excluding DirectShow Filters
+description: Identify and exclude problematic DirectShow filters from multimedia pipelines in .NET video capture, editing, and playback applications.
 ---
 
 # Excluding DirectShow Filters in .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -187,5 +186,4 @@ Excluding problematic DirectShow filters provides a powerful tool for optimizing
 Remember to test thoroughly after implementing filter exclusions, as the DirectShow filter graph may behave differently when certain components are unavailable.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and implementation examples.

@@ -1,13 +1,11 @@
 ---
 title: UDP Video and Audio Streaming in .NET
-description: Learn how to implement high-performance UDP streaming for video and audio in .NET applications. Detailed guide covers encoding, configuration, multicast support, and best practices for real-time media transmission.
-sidebar_label: UDP
-
+description: Stream video with UDP protocol for low-latency broadcasts, surveillance, and multicast transmission with minimal overhead in .NET applications.
 ---
 
 # UDP Streaming with VisioForge SDKs
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to UDP Streaming
 
@@ -64,7 +62,7 @@ The implementation prioritizes low latency while maintaining sufficient quality 
 
 ## Windows-only UDP Output Implementation
 
-[!badge variant="dark" size="xl" text="VideoCaptureCore"] [!badge variant="dark" size="xl" text="VideoEditCore"]
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 ### Step 1: Enable Network Streaming
 
@@ -216,5 +214,4 @@ UDP streaming with VisioForge SDKs provides a powerful solution for real-time vi
 The flexibility of the SDK allows for fine-tuning of all streaming parameters, enabling optimization for specific network conditions and quality requirements. Whether implementing a simple point-to-point stream or a complex multicast distribution system, VisioForge's UDP streaming capabilities provide the necessary tools for success.
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and working demonstrations of UDP streaming implementations.

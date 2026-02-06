@@ -1,15 +1,13 @@
 ---
 title: Motion JPEG (MJPEG) Encoders in VisioForge .NET SDKs
-description: Complete guide to implementing MJPEG video encoders in .NET applications using VisioForge SDKs, with CPU and GPU acceleration options
-sidebar_label: Motion JPEG
-
+description: Implement MJPEG video encoders in .NET with CPU and GPU acceleration for frame-by-frame compression and streaming applications.
 ---
 
 # Motion JPEG (MJPEG) Video Encoders for .NET Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 ## Introduction to MJPEG Encoding in VisioForge
 

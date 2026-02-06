@@ -1,7 +1,26 @@
-# VisioForge SDK Documentation Hub
+﻿# VisioForge SDK Documentation
 
-Welcome to the VisioForge SDK Documentation Hub repository! This repository contains comprehensive documentation, tutorials, and code samples for all VisioForge SDK products, including .NET, DirectShow, Delphi/ActiveX SDKs, and Video Fingerprinting SDK.
+Source documentation for all VisioForge SDK products. This repository is automatically
+synced from the internal documentation source.
 
-Check out the [live documentation](https://www.visioforge.com/help/) to get started!
+## Live Documentation
 
-LLMS-ready text files: [llms-full.txt](https://www.visioforge.com/llms-full.txt) and [llmss.txt](https://www.visioforge.com/llms.txt).
+- [visioforge.com/help](https://www.visioforge.com/help/) - Full documentation site
+- [API Reference](https://api.visioforge.org/) - API documentation
+
+## LLM-Ready Files
+
+- [llms.txt](llms.txt) - Summary for AI agents (follows [llmstxt.org](https://llmstxt.org) spec)
+- [llms-full.txt](llms-full.txt) - Comprehensive documentation + website content
+
+## Structure
+
+- `dotnet/` - .NET SDK documentation (Media Blocks, Video Capture, Media Player, Video Edit)
+- `delphi/` - Delphi/ActiveX SDK documentation
+- `directshow/` - DirectShow SDK documentation
+- `vfp/` - Video Fingerprinting SDK documentation
+- `static/` - Images and icons
+
+## License
+
+CC-BY-4.0

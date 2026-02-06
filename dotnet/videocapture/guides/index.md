@@ -1,6 +1,6 @@
 ---
 title: Video Capture SDK .Net - Advanced Guides & Tutorials
-description: Master advanced Video Capture SDK .Net techniques with our in-depth guides. Learn synchronization, DirectShow capture, webcam photo features, explore code samples, and access support.
+description: Master synchronization, DirectShow capture, and webcam photo features with in-depth guides, code samples, and support resources.
 sidebar_label: Additional Guides
 order: 1
 
@@ -8,7 +8,7 @@ order: 1
 
 # Advanced Video Capture SDK .Net Guides & Tutorials
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview
 
@@ -27,8 +27,6 @@ This curated collection of guides addresses specific advanced functionalities wi
 Explore specialized guides on integrating various camera functionalities and mastering different capture technologies.
 
 * [**Web Camera Photo Capture Implementation**](make-photo-using-webcam.md) - Beyond continuous video recording, the ability to capture high-quality still images using webcams is a frequent requirement in diverse applications. This step-by-step guide details how to implement robust photo capture functionality. It covers device selection, resolution configuration, image format choices (like JPEG, PNG, BMP), and saving the captured frames. Common use cases include integrating profile picture capture in user registration forms, developing simple document scanning utilities, or adding snapshot capabilities to security and monitoring applications. The guide simplifies the process, enabling developers to quickly add valuable still image capture features.
-
-* [**Webcam Capture (DirectShow)**](webcam-capture-directshow.md) - For Windows developers seeking granular control and access to a wide array of media processing capabilities, Microsoft DirectShow remains a cornerstone technology. This comprehensive guide explains how to build C# webcam capture applications by leveraging the DirectShow backend within the Video Capture SDK .Net. It covers essential topics such as device enumeration, selecting specific video and audio sources, configuring formats and properties, and managing the capture pipeline. DirectShow is particularly powerful for scenarios requiring custom filter graphs, integration with third-party DirectShow filters, or when dealing with legacy hardware. Understanding its intricacies can unlock advanced video processing and control, and this guide provides a solid foundation for C# developers.
 
 ## Additional Resources
 

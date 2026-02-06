@@ -1,14 +1,13 @@
 ---
 title: Implementing Video Effects in .NET Applications
-description: Master the implementation of video effects in .NET with this detailed tutorial. Learn to add, update, and configure video effect parameters in multiple SDK environments including capture, playback, and editing applications with practical C# code examples.
-sidebar_label: Implementing Video Effects
+description: Add and configure video effects in .NET SDK environments for capture, playback, and editing with parameter management and practical C# examples.
 ---
 
 # Implementing Video Effects in .NET SDK Applications
 
 Video effects can significantly enhance the visual quality and user experience of your media applications. This guide demonstrates how to properly implement and manage video effects across various .NET SDK environments.
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Implementation Overview
 
@@ -84,5 +83,4 @@ To successfully implement video effects in your .NET application, you'll need:
 For more advanced implementations and examples of video effect techniques:
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) repository for additional code samples and complete projects.

@@ -1,13 +1,11 @@
 ---
 title: ASF/WMV File Indexing in .NET - Complete Guide
-description: Learn how to implement robust indexing for ASF, WMV, and WMA files in .NET applications. This comprehensive tutorial with code examples shows developers how to solve seeking issues and optimize media file performance.
-sidebar_label: ASF and WMV Files Indexing
-
+description: Implement robust ASF, WMV, and WMA file indexing in .NET to solve seeking issues and optimize media file playback performance.
 ---
 
 # Complete Guide to ASF and WMV File Indexing in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 When working with Windows Media files in your .NET applications, you'll likely encounter challenges with seeking functionality, especially with files lacking proper index structures. This guide explains how to implement efficient indexing for ASF, WMV, and WMA files to ensure smooth playback and navigation capabilities in your applications.
 
@@ -177,5 +175,4 @@ Proper indexing of ASF, WMV, and WMA files significantly enhances the media hand
 Remember that indexing is a processor-intensive operation that should ideally be performed only once per file, with the results cached or saved for future use. This approach ensures optimal performance while still providing all the benefits of properly indexed media files.
 
 ---
-
 For more code samples and advanced media processing techniques, check out our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

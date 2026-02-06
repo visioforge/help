@@ -1,8 +1,6 @@
 ---
 title: Capturing Photos Using Webcam in .NET Applications
-description: Learn how to implement webcam photo capture in .NET applications with step-by-step tutorials, code samples, and best practices. Master still frame capture, frame processing, and image saving techniques for professional webcam integration.
-sidebar_label: Webcam Photo Capture in .NET
-
+description: Implement webcam photo capture in .NET with step-by-step tutorials, still frame capture, and image saving techniques for integration.
 ---
 
 # Capturing Photos Using Webcam in .NET Applications
@@ -152,5 +150,4 @@ Implementing webcam photo capture in .NET applications provides valuable functio
 Remember to test your implementation across different webcam models and configurations to ensure consistent performance and reliability.
 
 ---
-
 For more code samples and implementation examples, visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) repository.

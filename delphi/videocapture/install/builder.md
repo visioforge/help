@@ -1,7 +1,6 @@
 ---
 title: TVFVideoCapture Integration for C++ Builder
-description: Complete step-by-step guide for Delphi developers on installing and configuring TVFVideoCapture ActiveX control in C++ Builder environments. Learn implementation techniques across Builder versions 5/6, 2006, and newer releases.
-sidebar_label: C++ Builder
+description: Import and configure TVFVideoCapture ActiveX control in C++ Builder 5/6, 2006, and newer versions with detailed installation steps.
 ---
 
 # TVFVideoCapture Integration Guide for C++ Builder

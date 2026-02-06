@@ -1,15 +1,13 @@
 ---
 title: MOV File Encoding with VisioForge .NET SDKs
-description: Learn how to implement high-performance MOV file output in your .NET applications using VisioForge SDKs. This developer guide covers hardware-accelerated encoding options, cross-platform implementation, audio/video configuration, and integration workflows for professional video applications.
-sidebar_label: MOV
-
+description: Generate MOV files in .NET with hardware-accelerated encoding, cross-platform support, and professional audio/video configuration options.
 ---
 
 # MOV File Output for .NET Video Applications
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Blocks SDK .Net"](https://www.visioforge.com/media-blocks-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[!badge variant="dark" size="xl" text="VideoCaptureCoreX"] [!badge variant="dark" size="xl" text="VideoEditCoreX"] [!badge variant="dark" size="xl" text="MediaBlocksPipeline"]
+[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 ## Introduction to MOV Output in VisioForge
 
@@ -56,7 +54,7 @@ MOV output supports a variety of video encoders to accommodate different perform
 
 ### Supported Video Encoders
 
-The MOV output supports these video encoders:
+The MOV output supports these video encoders. For detailed configuration options, see the [H.264 encoder documentation](../video-encoders/h264.md) and [HEVC encoder documentation](../video-encoders/hevc.md):
 
 | Encoder | Technology | Platform | Best For |
 |---------|------------|----------|----------|
@@ -118,6 +116,8 @@ else
 Audio quality is critical for most video applications. The SDK provides several audio encoders optimized for different use cases.
 
 ### Supported Audio Encoders
+
+For audio codec configuration details, see the [AAC encoder documentation](../audio-encoders/aac.md) and [MP3 encoder documentation](../audio-encoders/mp3.md):
 
 | Encoder | Type | Platform | Quality | Use Case |
 |---------|------|----------|---------|----------|
@@ -216,8 +216,6 @@ Add MOV output to a capture workflow:
 ```csharp
 // Create and configure capture core
 var core = new VideoCaptureCoreX();
-
-
 
 // Add capture devices
 // ..

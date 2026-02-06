@@ -1,12 +1,11 @@
 ---
-title: Mastering OnVideoFrameBitmap in .NET Video Processing
-description: Learn how to manipulate video frames in real-time with OnVideoFrameBitmap events in .NET applications. This detailed guide provides practical code examples, performance tips, and advanced techniques for C# developers working with video processing in .NET SDK environments.
-sidebar_label: OnVideoFrameBitmap Event Usage
+title: OnVideoFrameBitmap Real-Time Frame Guide
+description: Access and modify video frames in real-time with OnVideoFrameBitmap events for advanced video manipulation in C# applications.
 ---
 
-# Mastering Real-Time Video Frame Manipulation with OnVideoFrameBitmap
+# OnVideoFrameBitmap Real-Time Frame Guide
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The `OnVideoFrameBitmap` event is a powerful feature in .NET video processing libraries that allows developers to access and modify video frames in real-time. This guide explores the practical applications, implementation techniques, and performance considerations when working with bitmap frame manipulation in C# applications.
 
@@ -246,5 +245,4 @@ To use the functionality described in this guide, you'll need:
 - Windows GDI+ support
 
 ---
-
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and projects demonstrating these techniques in action.

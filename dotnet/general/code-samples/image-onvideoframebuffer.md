@@ -1,13 +1,11 @@
 ---
 title: Drawing Images with OnVideoFrameBuffer in .NET
-description: Learn how to implement image drawing using the OnVideoFrameBuffer event in .NET applications. This step-by-step guide with C# code samples shows you how to efficiently overlay images on video frames in real-time for video processing applications.
-sidebar_label: Drawing Images with OnVideoFrameBuffer
-
+description: Overlay images on video frames with OnVideoFrameBuffer event for watermarks, logos, and visual elements in .NET video processing apps.
 ---
 
 # Drawing Images with OnVideoFrameBuffer in .NET
 
-[!badge size="xl" target="blank" variant="info" text="Video Capture SDK .Net"](https://www.visioforge.com/video-capture-sdk-net) [!badge size="xl" target="blank" variant="info" text="Video Edit SDK .Net"](https://www.visioforge.com/video-edit-sdk-net) [!badge size="xl" target="blank" variant="info" text="Media Player SDK .Net"](https://www.visioforge.com/media-player-sdk-net)
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -209,5 +207,4 @@ The `OnVideoFrameBuffer` event provides a powerful way to manipulate video frame
 The technique demonstrated here works across multiple SDK products and can be adapted for various video processing scenarios in your .NET applications.
 
 ---
-
 Looking for more code samples? Visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) for additional examples and resources.
