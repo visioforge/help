@@ -10,6 +10,7 @@ order: 18
 
 This section provides essential information, detailed software manuals, and practical usage guides for the suite of VisioForge .Net SDKs. Whether you're working with video capture, media playback, or video editing, find the resources you need below.
 
+- **[MCP Server Usage Guide](mcp-server-usage.md)** - Connect your AI coding assistant to the VisioForge MCP Server for instant access to API documentation, deployment guides, and code examples
 - [Code samples](code-samples/index.md)
 - [How to send logs?](sendlogs.md)
 
