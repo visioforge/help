@@ -11,7 +11,7 @@ El `OverlayManagerBlock` es un componente poderoso de MediaBlocks que proporcion
 
 ## Características Principales
 
-- **Múltiples Tipos de Superposición**: Texto, texto desplazable, imágenes, GIFs, SVG, formas (rectángulos, círculos, triángulos, estrellas, líneas), video en vivo (NDI, Decklink)
+- **Múltiples Tipos de Superposición**: Texto, texto desplazable, imágenes, secuencias de imágenes, GIFs, SVG, formas (rectángulos, círculos, triángulos, estrellas, líneas), video en vivo (NDI, Decklink)
 - **Efectos Squeezeback**: Escala el video a un rectángulo personalizado con imagen superpuesta (estilo broadcast)
 - **Transformaciones de Video**: Efectos de zoom y panorámica que transforman todo el cuadro de video
 - **Soporte de Animación**: Anima la posición/escala del video con funciones de suavizado
@@ -195,6 +195,166 @@ public class OverlayManagerGIF : IOverlayManagerElement, IDisposable
 ```csharp
 var gif = new OverlayManagerGIF("animacion.gif", new SKPoint(150, 150));
 overlayManager.Video_Overlay_Add(gif);
+```
+
+### OverlayManagerImageSequence
+
+Muestra una secuencia de imágenes, cada una mostrada durante una duración especificada, con soporte para bucle, animación, efectos de desvanecimiento y todas las propiedades estándar de superposición.
+
+```csharp
+public class OverlayManagerImageSequence : IOverlayManagerElement, IDisposable
+```
+
+| Propiedad         | Tipo                             | Predeterminado | Descripción                                        |
+|-------------------|----------------------------------|----------------|----------------------------------------------------|
+| `X`               | `int`                            | -              | Posición X                                         |
+| `Y`               | `int`                            | -              | Posición Y                                         |
+| `Width`           | `int`                            | `0`            | Ancho de visualización (0 = original)              |
+| `Height`          | `int`                            | `0`            | Alto de visualización (0 = original)               |
+| `Loop`            | `bool`                           | `true`         | Reiniciar secuencia después del último cuadro      |
+| `StretchMode`     | `OverlayManagerImageStretchMode` | `None`         | Modo de escalado de imagen                         |
+| `AnimationLength` | `TimeSpan`                       | -              | Duración total de todos los cuadros (solo lectura) |
+| `FrameCount`      | `int`                            | -              | Número de cuadros cargados (solo lectura)          |
+
+**Propiedades de Animación:**
+
+| Propiedad             | Tipo                      | Predeterminado | Descripción                            |
+|-----------------------|---------------------------|----------------|----------------------------------------|
+| `AnimationEnabled`    | `bool`                    | `false`        | Habilitar animación de posición/tamaño |
+| `TargetX`             | `int`                     | `0`            | X destino de la animación              |
+| `TargetY`             | `int`                     | `0`            | Y destino de la animación              |
+| `TargetWidth`         | `int`                     | `0`            | Ancho destino (0 = mantener actual)    |
+| `TargetHeight`        | `int`                     | `0`            | Alto destino (0 = mantener actual)     |
+| `AnimationStartTime`  | `TimeSpan`                | `Zero`         | Tiempo de inicio de la animación       |
+| `AnimationEndTime`    | `TimeSpan`                | `Zero`         | Tiempo de fin de la animación          |
+| `Easing`              | `OverlayManagerPanEasing` | `Linear`       | Función de suavizado de posición       |
+
+**Propiedades de Desvanecimiento:**
+
+| Propiedad       | Tipo                      | Predeterminado | Descripción                                |
+|-----------------|---------------------------|----------------|--------------------------------------------|
+| `FadeEnabled`   | `bool`                    | `false`        | Habilitar animación de desvanecimiento     |
+| `FadeType`      | `OverlayManagerFadeType`  | `FadeIn`       | Dirección del desvanecimiento              |
+| `FadeStartTime` | `TimeSpan`                | `Zero`         | Tiempo de inicio del desvanecimiento       |
+| `FadeEndTime`   | `TimeSpan`                | `Zero`         | Tiempo de fin del desvanecimiento          |
+| `FadeEasing`    | `OverlayManagerPanEasing` | `Linear`       | Función de suavizado                       |
+
+**Constructores:**
+
+```csharp
+// Básico: solo posición
+new OverlayManagerImageSequence(IEnumerable<ImageSequenceItem> items, int x, int y)
+
+// Completo: posición, tamaño y modo de escalado
+new OverlayManagerImageSequence(
+    IEnumerable<ImageSequenceItem> items,
+    int x, int y,
+    int width, int height,
+    OverlayManagerImageStretchMode stretchMode = None)
+```
+
+**Métodos:**
+
+```csharp
+// Agregar un cuadro dinámicamente durante la reproducción
+void AddFrame(string filename, TimeSpan duration)
+
+// Iniciar animación de posición/tamaño
+void StartAnimation(int targetX, int targetY, int targetWidth, int targetHeight,
+    TimeSpan startTime, TimeSpan duration, OverlayManagerPanEasing easing = Linear)
+
+// Obtener posición/tamaño interpolado en el tiempo dado
+(int X, int Y, int Width, int Height) GetCurrentRect(TimeSpan currentTime)
+
+// Efectos de desvanecimiento
+void StartFadeIn(TimeSpan startTime, TimeSpan duration, OverlayManagerPanEasing easing = Linear)
+void StartFadeOut(TimeSpan startTime, TimeSpan duration, OverlayManagerPanEasing easing = Linear)
+double GetCurrentOpacity(TimeSpan currentTime)
+```
+
+**Ejemplo - Secuencia de Imágenes Básica:**
+
+```csharp
+// Definir imágenes con duraciones por cuadro
+var items = new List<ImageSequenceItem>
+{
+    new ImageSequenceItem("diapositiva1.png", TimeSpan.FromSeconds(3)),
+    new ImageSequenceItem("diapositiva2.png", TimeSpan.FromSeconds(2)),
+    new ImageSequenceItem("diapositiva3.png", TimeSpan.FromSeconds(4))
+};
+
+// Crear secuencia en posición (100, 100), escalada a 320x240
+var sequence = new OverlayManagerImageSequence(items, 100, 100, 320, 240)
+{
+    Loop = true,
+    Opacity = 0.9,
+    ZIndex = 5,
+    Name = "SlideShow"
+};
+
+overlayManager.Video_Overlay_Add(sequence);
+```
+
+**Ejemplo - Con Animación y Desvanecimiento:**
+
+```csharp
+// Animar la secuencia desde arriba a la izquierda hacia el centro en 3 segundos
+sequence.StartAnimation(
+    targetX: 400, targetY: 200,
+    targetWidth: 640, targetHeight: 480,
+    startTime: TimeSpan.FromSeconds(2),
+    duration: TimeSpan.FromSeconds(3),
+    easing: OverlayManagerPanEasing.EaseInOut);
+
+// Aparecer gradualmente durante los primeros 1.5 segundos
+sequence.StartFadeIn(
+    startTime: TimeSpan.Zero,
+    duration: TimeSpan.FromSeconds(1.5),
+    easing: OverlayManagerPanEasing.EaseOut);
+```
+
+**Métodos de Conveniencia en OverlayManagerBlock:**
+
+```csharp
+// Agregar superposición de secuencia de imágenes
+var element = overlayManager.Video_Overlay_AddImageSequence(
+    items, x: 100, y: 100, width: 320, height: 240,
+    loop: true, name: "SlideShow");
+
+// Actualizar posición
+overlayManager.Video_Overlay_UpdateImageSequencePosition(
+    "SlideShow", x: 200, y: 150, width: 400, height: 300);
+
+// Animar posición/tamaño
+overlayManager.Video_Overlay_AnimateImageSequence(
+    "SlideShow", targetX: 500, targetY: 300, targetWidth: 640, targetHeight: 480,
+    startTime: currentPosition, duration: TimeSpan.FromSeconds(2),
+    easing: OverlayManagerPanEasing.EaseInOut);
+
+// Efectos de desvanecimiento
+overlayManager.Video_Overlay_ImageSequenceFadeIn(
+    "SlideShow", startTime: currentPosition, duration: TimeSpan.FromSeconds(1));
+overlayManager.Video_Overlay_ImageSequenceFadeOut(
+    "SlideShow", startTime: currentPosition, duration: TimeSpan.FromSeconds(1));
+```
+
+#### ImageSequenceItem
+
+Representa un cuadro de imagen individual en una secuencia de imágenes.
+
+```csharp
+public class ImageSequenceItem
+```
+
+| Propiedad  | Tipo       | Descripción                               |
+|------------|------------|-------------------------------------------|
+| `Filename` | `string`   | Ruta completa al archivo de imagen        |
+| `Duration` | `TimeSpan` | Duración de visualización de esta imagen  |
+
+```csharp
+// Constructores
+new ImageSequenceItem()
+new ImageSequenceItem(string filename, TimeSpan duration)
 ```
 
 ### OverlayManagerDateTime
@@ -763,7 +923,7 @@ overlayManager.Video_Overlay_Update(title);
 
 4. **Actualizaciones**: Usa `Video_Overlay_Update()` para elementos existentes en lugar de operaciones de eliminar/agregar.
 
-5. **Gestión de Recursos**: Libera superposiciones de imagen y GIF cuando ya no se necesiten para liberar memoria.
+5. **Gestión de Recursos**: Libera superposiciones de imagen, GIF y secuencia de imágenes cuando ya no se necesiten para liberar memoria.
 
 ## Notas de Plataforma
 
@@ -782,4 +942,4 @@ El overlay manager usa bloqueo interno para operaciones seguras entre hilos. Pue
 
 2. **El texto aparece borroso**: Asegura que el tamaño de fuente sea apropiado para la resolución del video.
 
-3. **Uso de memoria**: Libera superposiciones de imagen/GIF no usadas y usa tamaños de imagen apropiados.
+3. **Uso de memoria**: Libera superposiciones de imagen/GIF/secuencia de imágenes no usadas y usa tamaños de imagen apropiados.

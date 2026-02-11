@@ -11,7 +11,7 @@ The `OverlayManagerBlock` is a powerful MediaBlocks component that provides dyna
 
 ## Key Features
 
-- **Multiple Overlay Types**: Text, scrolling text, images, GIFs, SVG, shapes (rectangles, circles, triangles, stars, lines), live video (NDI, Decklink)
+- **Multiple Overlay Types**: Text, scrolling text, images, image sequences, GIFs, SVG, shapes (rectangles, circles, triangles, stars, lines), live video (NDI, Decklink)
 - **Squeezeback Effects**: Scale video to a custom rectangle with overlay image on top (broadcast-style)
 - **Video Transformations**: Zoom and pan effects that transform the entire video frame
 - **Animation Support**: Animate video position/scale with easing functions
@@ -195,6 +195,173 @@ public class OverlayManagerGIF : IOverlayManagerElement, IDisposable
 ```csharp
 var gif = new OverlayManagerGIF("animation.gif", new SKPoint(150, 150));
 overlayManager.Video_Overlay_Add(gif);
+```
+
+### OverlayManagerImageSequence
+
+Displays a sequence of images, each shown for a specified duration, with support for looping, animation, fade effects, and all standard overlay properties.
+
+```csharp
+public class OverlayManagerImageSequence : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `X` | `int` | - | X position |
+| `Y` | `int` | - | Y position |
+| `Width` | `int` | `0` | Display width (0 = original) |
+| `Height` | `int` | `0` | Display height (0 = original) |
+| `Loop` | `bool` | `true` | Restart sequence after last frame |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `None` | Image scaling mode |
+| `AnimationLength` | `TimeSpan` | - | Total duration of all frames (read-only) |
+| `FrameCount` | `int` | - | Number of loaded frames (read-only) |
+
+**Animation Properties:**
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `AnimationEnabled` | `bool` | `false` | Enable position/size animation |
+| `TargetX` | `int` | `0` | Animation target X |
+| `TargetY` | `int` | `0` | Animation target Y |
+| `TargetWidth` | `int` | `0` | Animation target width (0 = keep current) |
+| `TargetHeight` | `int` | `0` | Animation target height (0 = keep current) |
+| `AnimationStartTime` | `TimeSpan` | `Zero` | Animation start time |
+| `AnimationEndTime` | `TimeSpan` | `Zero` | Animation end time |
+| `Easing` | `OverlayManagerPanEasing` | `Linear` | Position animation easing |
+
+**Fade Properties:**
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `FadeEnabled` | `bool` | `false` | Enable fade animation |
+| `FadeType` | `OverlayManagerFadeType` | `FadeIn` | Fade direction |
+| `FadeStartTime` | `TimeSpan` | `Zero` | Fade start time |
+| `FadeEndTime` | `TimeSpan` | `Zero` | Fade end time |
+| `FadeEasing` | `OverlayManagerPanEasing` | `Linear` | Fade easing function |
+
+**Constructors:**
+
+```csharp
+// Basic: position only
+new OverlayManagerImageSequence(IEnumerable<ImageSequenceItem> items, int x, int y)
+
+// Full: position, size, and stretch mode
+new OverlayManagerImageSequence(
+    IEnumerable<ImageSequenceItem> items,
+    int x, int y,
+    int width, int height,
+    OverlayManagerImageStretchMode stretchMode = None)
+```
+
+**Methods:**
+
+```csharp
+// Add a frame dynamically during playback
+void AddFrame(string filename, TimeSpan duration)
+
+// Start position/size animation
+void StartAnimation(int targetX, int targetY, int targetWidth, int targetHeight,
+    TimeSpan startTime, TimeSpan duration, OverlayManagerPanEasing easing = Linear)
+
+// Get interpolated position/size at the given time
+(int X, int Y, int Width, int Height) GetCurrentRect(TimeSpan currentTime)
+
+// Fade effects
+void StartFadeIn(TimeSpan startTime, TimeSpan duration, OverlayManagerPanEasing easing = Linear)
+void StartFadeOut(TimeSpan startTime, TimeSpan duration, OverlayManagerPanEasing easing = Linear)
+double GetCurrentOpacity(TimeSpan currentTime)
+```
+
+**Example - Basic Image Sequence:**
+
+```csharp
+// Define images with per-frame durations
+var items = new List<ImageSequenceItem>
+{
+    new ImageSequenceItem("slide1.png", TimeSpan.FromSeconds(3)),
+    new ImageSequenceItem("slide2.png", TimeSpan.FromSeconds(2)),
+    new ImageSequenceItem("slide3.png", TimeSpan.FromSeconds(4))
+};
+
+// Create sequence at position (100, 100), scaled to 320x240
+var sequence = new OverlayManagerImageSequence(items, 100, 100, 320, 240)
+{
+    Loop = true,
+    Opacity = 0.9,
+    ZIndex = 5,
+    Name = "SlideShow"
+};
+
+overlayManager.Video_Overlay_Add(sequence);
+```
+
+**Example - With Animation and Fade:**
+
+```csharp
+// Animate the sequence from top-left to center over 3 seconds
+sequence.StartAnimation(
+    targetX: 400, targetY: 200,
+    targetWidth: 640, targetHeight: 480,
+    startTime: TimeSpan.FromSeconds(2),
+    duration: TimeSpan.FromSeconds(3),
+    easing: OverlayManagerPanEasing.EaseInOut);
+
+// Fade in over the first 1.5 seconds
+sequence.StartFadeIn(
+    startTime: TimeSpan.Zero,
+    duration: TimeSpan.FromSeconds(1.5),
+    easing: OverlayManagerPanEasing.EaseOut);
+```
+
+**Example - Add Frames Dynamically:**
+
+```csharp
+// Add a new frame to a running sequence
+sequence.AddFrame("slide4.png", TimeSpan.FromSeconds(2.5));
+```
+
+**Convenience Methods on OverlayManagerBlock:**
+
+```csharp
+// Add image sequence overlay
+var element = overlayManager.Video_Overlay_AddImageSequence(
+    items, x: 100, y: 100, width: 320, height: 240,
+    loop: true, name: "SlideShow");
+
+// Update position
+overlayManager.Video_Overlay_UpdateImageSequencePosition(
+    "SlideShow", x: 200, y: 150, width: 400, height: 300);
+
+// Animate position/size
+overlayManager.Video_Overlay_AnimateImageSequence(
+    "SlideShow", targetX: 500, targetY: 300, targetWidth: 640, targetHeight: 480,
+    startTime: currentPosition, duration: TimeSpan.FromSeconds(2),
+    easing: OverlayManagerPanEasing.EaseInOut);
+
+// Fade effects
+overlayManager.Video_Overlay_ImageSequenceFadeIn(
+    "SlideShow", startTime: currentPosition, duration: TimeSpan.FromSeconds(1));
+overlayManager.Video_Overlay_ImageSequenceFadeOut(
+    "SlideShow", startTime: currentPosition, duration: TimeSpan.FromSeconds(1));
+```
+
+#### ImageSequenceItem
+
+Represents a single image frame in an image sequence.
+
+```csharp
+public class ImageSequenceItem
+```
+
+| Property   | Type       | Description                     |
+|------------|------------|---------------------------------|
+| `Filename` | `string`   | Full path to the image file     |
+| `Duration` | `TimeSpan` | How long this image is displayed |
+
+```csharp
+// Constructors
+new ImageSequenceItem()
+new ImageSequenceItem(string filename, TimeSpan duration)
 ```
 
 ### OverlayManagerDateTime
@@ -866,7 +1033,7 @@ overlayManager.Video_Overlay_Update(title);
 
 4. **Updates**: Use `Video_Overlay_Update()` for existing elements rather than remove/add operations.
 
-5. **Resource Management**: Dispose image and GIF overlays when no longer needed to free memory.
+5. **Resource Management**: Dispose image, GIF, and image sequence overlays when no longer needed to free memory.
 
 ## Platform Notes
 
@@ -885,4 +1052,4 @@ The overlay manager uses internal locking for thread-safe operations. You can sa
 
 2. **Text appears blurry**: Ensure font size is appropriate for video resolution.
 
-3. **Memory usage**: Dispose unused image/GIF overlays and use appropriate image sizes.
+3. **Memory usage**: Dispose unused image/GIF/image sequence overlays and use appropriate image sizes.

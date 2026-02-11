@@ -454,6 +454,70 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
+### Weighted Channel Mix
+
+The weighted channel mix block mixes left and right stereo channels with independently adjustable weights. Perfect for CD+G karaoke files where left channel contains instrumental music and right channel contains full mix with vocals.
+
+#### Block info
+
+Name: WeightedChannelMixBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio (stereo) | 1
+Output | Uncompressed audio (mono or stereo) | 1
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    CDGSourceBlock-->WeightedChannelMixBlock;
+    WeightedChannelMixBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var cdgSource = new CDGSourceBlock(new CDGSourceSettings { Filename = "song.cdg" });
+
+// Create weighted channel mix block with custom weights
+var channelMix = new WeightedChannelMixBlock();
+channelMix.LeftChannelWeight = 0.7f;   // 70% of left (music)
+channelMix.RightChannelWeight = 0.3f;  // 30% of right (music+vocals)
+
+pipeline.Connect(cdgSource.AudioOutput, channelMix.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(channelMix.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+
+// Adjust weights during playback
+channelMix.LeftChannelWeight = 0.5f;   // Reduce music to 50%
+channelMix.RightChannelWeight = 0.5f;  // Increase vocals to 50%
+```
+
+#### Properties
+
+* **LeftChannelWeight** (float): Weight for left channel (default 0.5). Range: 0.0 - 1.0
+* **RightChannelWeight** (float): Weight for right channel (default 0.5). Range: 0.0 - 1.0
+* **OutputStereo** (bool): Output as stereo with mono duplicated to both L+R (true, default) or mono (false)
+
+#### Use Case
+
+This block is specifically designed for CD+G karaoke files with dual-mono audio encoding where:
+
+* Left channel: Instrumental backing track (music only)
+* Right channel: Full mix including lead vocals
+
+Users can control the vocal level by adjusting the left and right channel weights. For example, to reduce vocals, increase LeftChannelWeight and decrease RightChannelWeight.
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
 ### Reverberation
 
 The reverberation block adds reverb effects to the audio stream.
