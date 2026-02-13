@@ -197,4 +197,4 @@ Al implementar captura de cámara IP, prepárate para abordar estos desafíos co
 5. **Compatibilidad de Cámara** - Diferentes modelos de cámara pueden requerir ajustes de configuración específicos
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.
+Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código. ¿Necesitas la URL RTSP para tu cámara? Consulta nuestro [directorio de marcas de cámaras IP](../../camera-brands/index.md).

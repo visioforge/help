@@ -866,3 +866,4 @@ else
 - [Demo RTSP MultiView](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/RTSP%20MultiView%20Demo) - Grabación de múltiples cámaras sin re-codificación
 - [Demo RTSP Preview](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) - Vista previa y grabación con postprocesamiento
 - [Demo IP Capture](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) - Integración completa de cámara IP con control PTZ
+- [Directorio de Marcas de Cámaras IP](../../../camera-brands/index.md) - URLs RTSP y guías de conexión para más de 60 fabricantes de cámaras

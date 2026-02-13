@@ -32,6 +32,8 @@ The SDK offers extensive compatibility with various network video sources, inclu
 
 Each protocol offers specific advantages depending on your application requirements, from low-latency needs to high-quality video transmission.
 
+Looking for RTSP URLs for a specific camera brand? Browse our [IP camera brands directory](../../../camera-brands/index.md) for connection guides covering 60+ manufacturers including Hikvision, Dahua, Axis, Reolink, and more.
+
 ## Universal Source Implementation for Network Protocols
 
 Our SDK provides a universal approach to handling most network video sources including RTSP, RTMP, HTTP, and others. This flexibility allows developers to focus on application logic rather than protocol-specific implementation details.

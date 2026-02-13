@@ -140,48 +140,6 @@ effect.FilterBand = 220;
 effect.FilterWidth = 100;
 ```
 
-### Mezcla de Canales Ponderada
-
-**Disponibilidad:** ✅ Multiplataforma (Media Blocks, VideoCaptureCoreX, MediaPlayerCoreX)
-**Elemento de Audio:** Bin GStreamer personalizado (deinterleave + volume + audiomixer)
-**Tipo de Bloque:** `WeightedChannelMixBlock`
-
-Mezcla de canales ponderada para fuentes de audio dual-mono como archivos de karaoke CD+G. Mezcla los canales estéreo izquierdo y derecho con pesos ajustables independientemente y envía la señal combinada a ambos altavoces. Perfecto para aplicaciones de karaoke donde el canal izquierdo contiene solo música y el canal derecho contiene música + voces.
-
-**Propiedades:**
-
-- **LeftChannelWeight** (float): Peso para el canal izquierdo (0.0 - 1.0, predeterminado 0.5)
-- **RightChannelWeight** (float): Peso para el canal derecho (0.0 - 1.0, predeterminado 0.5)
-- **OutputStereo** (bool): Salida como estéreo (mono duplicado a L+R) o mono (predeterminado true)
-
-**Uso Típico (SDKs Multiplataforma):**
-```csharp
-// Crear efecto con pesos de canal personalizados
-var effect = new WeightedChannelMixAudioEffect(0.7f, 0.3f);
-effect.LeftChannelWeight = 0.7f;  // 70% del izquierdo (música)
-effect.RightChannelWeight = 0.3f; // 30% del derecho (música+voces)
-
-// Media Blocks SDK
-audioEffectsBlock.AddOrUpdate(effect);
-
-// VideoCaptureCoreX / MediaPlayerCoreX
-mediaPlayerX.Audio_Effects_AddOrUpdate(effect);
-```
-
-**Uso del Media Blocks SDK:**
-```csharp
-// Crear bloque de mezcla de canales ponderada
-var channelMix = new WeightedChannelMixBlock();
-channelMix.LeftChannelWeight = 0.7f;   // 70% del izquierdo (música)
-channelMix.RightChannelWeight = 0.3f;  // 30% del derecho (música+voces)
-
-// Conectar en pipeline
-pipeline.Connect(cdgSource.AudioOutput, channelMix.Input);
-pipeline.Connect(channelMix.Output, audioRenderer.Input);
-```
-
-**Caso de Uso:** Archivos de karaoke CD+G con audio dual-mono donde los usuarios necesitan controlar los niveles de voz mezclando entre instrumental (izquierda) y mezcla completa con voces (derecha).
-
 ## Efectos de Retardo y Modulación
 
 ### Eco
@@ -381,43 +339,16 @@ effect.Characteristics = AudioDynamicCharacteristics.SoftKnee;
 ## Tono y Tempo
 
 ### Cambio de Tono
-
-**Disponibilidad:** ✅ Multiplataforma (Media Blocks, VideoCaptureCoreX, MediaPlayerCoreX) | ✅ SDKs Classic (Windows)
-**Elemento de Audio:** `pitch` (plugin soundtouch)
-
 Usa algoritmo SoundTouch para cambiar el tono sin afectar el tempo.
 
 **Propiedades:**
-
-- **Pitch** (float): Multiplicador de tono (0.5 = octava abajo, 1.0 = sin cambio, 2.0 = octava arriba)
-- **PitchSemitones** (double): Cambio de tono en semitonos (-12 a +12, propiedad de conveniencia)
-- **Tempo** (float): Multiplicador de tempo (1.0 = sin cambio, 2.0 = doble velocidad, 0.5 = media velocidad)
-- **Rate** (float): Multiplicador de tasa (1.0 = sin cambio)
+- **Pitch** (float): Multiplicador de tono (0.5 = octava abajo, 2.0 = octava arriba)
 
 **Intervalos Musicales:**
-
-- 0.5 = -12 semitonos (una octava abajo)
+- 0.5 = -12 semitonos
 - 1.059 = +1 semitono
 - 1.122 = +2 semitonos
-- 2.0 = +12 semitonos (una octava arriba)
-
-**Uso Típico:**
-
-```csharp
-// Método 1: Usando semitonos (más fácil para aplicaciones musicales)
-var effect = new PitchAudioEffect();
-effect.PitchSemitones = 5; // Subir 5 semitonos
-
-// Método 2: Usando multiplicador de tono
-var effect = new PitchAudioEffect();
-effect.Pitch = 1.5f; // Subir ~7 semitonos
-
-// Media Blocks SDK
-audioEffectsBlock.AddOrUpdate(effect);
-
-// VideoCaptureCoreX / MediaPlayerCoreX
-videoCaptureX.Audio_Effects_AddOrUpdate(effect);
-```
+- 2.0 = +12 semitonos
 
 ### Escalar Tempo
 **Elemento de Audio:** `scaletempo`
@@ -703,7 +634,6 @@ Video Capture SDK, Media Player SDK y Video Edit SDK usan efectos DSP solo de Wi
 | Balance | ✅ | ❌ | Multiplataforma |
 | Wide Stereo | ✅ | ❌ | Multiplataforma |
 | Karaoke | ✅ | ❌ | Multiplataforma |
-| Weighted Channel Mix | ✅ | ❌ | Multiplataforma |
 | **Retardo y Modulación** |
 | Echo | ✅ | ✅ | Multiplataforma / Windows |
 | Reverberation (Freeverb) | ✅ | ❌ | Multiplataforma |
@@ -769,7 +699,6 @@ Video Capture SDK, Media Player SDK y Video Edit SDK usan efectos DSP solo de Wi
 | Echo | audioecho | audiofx |
 | Karaoke | audiokaraoke | audiofx |
 | Wide Stereo | stereo | audiofx |
-| Weighted Channel Mix | deinterleave + volume + audiomixer | coreelements |
 | Reverberation | freeverb | freeverb |
 | Equalizer 10-band | equalizer-10bands | audiofx |
 | High-Pass | audiocheblimit | audiofx |

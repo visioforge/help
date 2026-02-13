@@ -53,7 +53,7 @@ Our SDKs leverage cutting-edge GPU-accelerated encoding and decoding technologie
 Efficiently capture high-quality video from multiple sources including:
 
 - Webcams and USB cameras
-- Network IP cameras
+- Network IP cameras — [browse supported brands](camera-brands/index.md)
 - HDMI capture devices
 - Screen recording
 - Custom video sources

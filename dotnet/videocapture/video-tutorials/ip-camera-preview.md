@@ -123,4 +123,4 @@ For production applications, consider implementing:
 - Frame rate and resolution control
 
 ---
-Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to explore more code samples.
+Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to explore more code samples. Need the RTSP URL for your camera? Check our [IP camera brands directory](../../camera-brands/index.md).

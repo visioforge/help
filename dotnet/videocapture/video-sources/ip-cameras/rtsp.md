@@ -131,3 +131,5 @@ When working with RTSP cameras, you may encounter connectivity issues related to
 - Check if firewalls are blocking required ports (typically 554 for RTSP)
 - Consider using TCP instead of UDP if experiencing packet loss
 - Test camera streams with VLC or similar tools to isolate application-specific issues
+
+Need the RTSP URL for your camera? Browse our [IP camera brands directory](../../../camera-brands/index.md) for brand-specific RTSP URLs and connection examples.

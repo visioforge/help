@@ -140,48 +140,6 @@ effect.FilterBand = 220;
 effect.FilterWidth = 100;
 ```
 
-### Weighted Channel Mix
-
-**Availability:** ✅ Cross-platform (Media Blocks, VideoCaptureCoreX, MediaPlayerCoreX)
-**Audio Element:** Custom GStreamer bin (deinterleave + volume + audiomixer)
-**Block Type:** `WeightedChannelMixBlock`
-
-Weighted channel mixing for dual-mono audio sources like CD+G karaoke files. Mixes left and right stereo channels with independently adjustable weights and outputs the merged signal to both speakers. Perfect for karaoke applications where left channel contains music only and right channel contains music + vocals.
-
-**Properties:**
-
-- **LeftChannelWeight** (float): Weight for left channel (0.0 - 1.0, default 0.5)
-- **RightChannelWeight** (float): Weight for right channel (0.0 - 1.0, default 0.5)
-- **OutputStereo** (bool): Output as stereo (mono duplicated to L+R) or mono (default true)
-
-**Typical Usage (Cross-Platform SDKs):**
-```csharp
-// Create effect with custom channel weights
-var effect = new WeightedChannelMixAudioEffect(0.7f, 0.3f);
-effect.LeftChannelWeight = 0.7f;  // 70% of left (music)
-effect.RightChannelWeight = 0.3f; // 30% of right (music+vocals)
-
-// Media Blocks SDK
-audioEffectsBlock.AddOrUpdate(effect);
-
-// VideoCaptureCoreX / MediaPlayerCoreX
-mediaPlayerX.Audio_Effects_AddOrUpdate(effect);
-```
-
-**Media Blocks SDK Usage:**
-```csharp
-// Create weighted channel mix block
-var channelMix = new WeightedChannelMixBlock();
-channelMix.LeftChannelWeight = 0.7f;   // 70% of left (music)
-channelMix.RightChannelWeight = 0.3f;  // 30% of right (music+vocals)
-
-// Connect in pipeline
-pipeline.Connect(cdgSource.AudioOutput, channelMix.Input);
-pipeline.Connect(channelMix.Output, audioRenderer.Input);
-```
-
-**Use Case:** CD+G karaoke files with dual-mono audio where users need to control vocal levels by mixing between instrumental (left) and full mix with vocals (right).
-
 ## Delay and Modulation Effects
 
 ### Echo
@@ -381,43 +339,16 @@ effect.Characteristics = AudioDynamicCharacteristics.SoftKnee;
 ## Pitch and Tempo
 
 ### Pitch Shift
-
-**Availability:** ✅ Cross-platform (Media Blocks, VideoCaptureCoreX, MediaPlayerCoreX) | ✅ Classic SDKs (Windows)
-**Audio Element:** `pitch` (soundtouch plugin)
-
 Uses SoundTouch algorithm to change pitch without affecting tempo.
 
 **Properties:**
-
-- **Pitch** (float): Pitch multiplier (0.5 = octave down, 1.0 = no change, 2.0 = octave up)
-- **PitchSemitones** (double): Pitch shift in semitones (-12 to +12, convenience property)
-- **Tempo** (float): Tempo multiplier (1.0 = no change, 2.0 = double speed, 0.5 = half speed)
-- **Rate** (float): Rate multiplier (1.0 = no change)
+- **Pitch** (float): Pitch multiplier (0.5 = octave down, 2.0 = octave up)
 
 **Musical Intervals:**
-
-- 0.5 = -12 semitones (one octave down)
+- 0.5 = -12 semitones
 - 1.059 = +1 semitone
 - 1.122 = +2 semitones
-- 2.0 = +12 semitones (one octave up)
-
-**Typical Usage:**
-
-```csharp
-// Method 1: Using semitones (easier for musical applications)
-var effect = new PitchAudioEffect();
-effect.PitchSemitones = 5; // Shift up by 5 semitones
-
-// Method 2: Using pitch multiplier
-var effect = new PitchAudioEffect();
-effect.Pitch = 1.5f; // Shift up by ~7 semitones
-
-// Media Blocks SDK
-audioEffectsBlock.AddOrUpdate(effect);
-
-// VideoCaptureCoreX / MediaPlayerCoreX
-videoCaptureX.Audio_Effects_AddOrUpdate(effect);
-```
+- 2.0 = +12 semitones
 
 ### Scale Tempo
 **Audio Element:** `scaletempo`
@@ -703,7 +634,6 @@ Video Capture SDK, Media Player SDK, and Video Edit SDK use Windows-only DSP eff
 | Balance | ✅ | ❌ | Cross-platform |
 | Wide Stereo | ✅ | ❌ | Cross-platform |
 | Karaoke | ✅ | ❌ | Cross-platform |
-| Weighted Channel Mix | ✅ | ❌ | Cross-platform |
 | **Delay and Modulation** |
 | Echo | ✅ | ✅ | Cross-platform / Windows |
 | Reverberation (Freeverb) | ✅ | ❌ | Cross-platform |
@@ -769,7 +699,6 @@ Video Capture SDK, Media Player SDK, and Video Edit SDK use Windows-only DSP eff
 | Echo | audioecho | audiofx |
 | Karaoke | audiokaraoke | audiofx |
 | Wide Stereo | stereo | audiofx |
-| Weighted Channel Mix | deinterleave + volume + audiomixer | coreelements |
 | Reverberation | freeverb | freeverb |
 | Equalizer 10-band | equalizer-10bands | audiofx |
 | High-Pass | audiocheblimit | audiofx |

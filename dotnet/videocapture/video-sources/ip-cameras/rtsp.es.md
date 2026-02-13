@@ -133,5 +133,7 @@ Explora estas aplicaciones de ejemplo para ver la integración de cámaras RTSP 
 4. **Implementar reconexión automática** - Las conexiones de red pueden fallar
 5. **Considerar seguridad** - Usar autenticación y considerar RTSP sobre TLS
 
+¿Necesitas la URL RTSP para tu cámara? Consulta nuestro [directorio de marcas de cámaras IP](../../../camera-brands/index.md) para URLs RTSP específicas por marca y ejemplos de conexión.
+
 ---
 Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para acceder a muestras de código adicionales y recursos de implementación.

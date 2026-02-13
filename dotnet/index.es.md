@@ -51,7 +51,7 @@ Nuestros SDKs aprovechan tecnologías de codificación y decodificación acelera
 Captura eficientemente video de alta calidad desde múltiples fuentes incluyendo:
 
 - Cámaras web y cámaras USB
-- Cámaras IP de red
+- Cámaras IP de red — [explorar marcas compatibles](camera-brands/index.md)
 - Dispositivos de captura HDMI
 - Grabación de pantalla
 - Fuentes de video personalizadas

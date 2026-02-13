@@ -272,4 +272,4 @@ VideoCapture1.Network_Streaming_URL = "rtsp://localhost:5554/vfstream";
 **Note:** This legacy method often relies on DirectShow filters or Media Foundation transforms available on the specific Windows system, making it less predictable and portable than the GStreamer-based cross-platform solution.
 
 ---
-For more detailed examples and advanced use cases, explore the code samples provided in our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
+For more detailed examples and advanced use cases, explore the code samples provided in our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples). For brand-specific RTSP URLs, see our [IP camera brands directory](../../camera-brands/index.md).

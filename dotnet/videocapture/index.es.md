@@ -29,6 +29,8 @@ Puedes explorar todas las características en la [página del producto](https://
 * Cámaras IP compatibles con ONVIF
 * Fuentes de stream de red SRT
 
+Consulta nuestro [directorio de marcas de cámaras IP](../camera-brands/index.md) para URLs RTSP específicas por marca y guías de conexión cubriendo más de 60 fabricantes.
+
 ### Equipos Profesionales
 
 * Dispositivos de captura profesional Blackmagic Decklink
