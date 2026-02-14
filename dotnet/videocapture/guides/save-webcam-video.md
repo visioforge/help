@@ -255,3 +255,8 @@ With support for industry-standard formats like MP4 and WebM, modern codecs incl
 The SDK's cross-platform compatibility, extending to macOS and MAUI applications, ensures that your webcam capture solution works consistently across different operating systems. Whether you're building a video conferencing tool, a surveillance application, or any other software requiring webcam functionality, Video Capture SDK .Net offers the tools you need to implement these features quickly.
 
 Getting started is as simple as following the step-by-step tutorial and code examples provided above. For more advanced use cases and detailed documentation on how to record webcam video using .NET, visit our website or refer to the SDK documentation.
+
+## See also
+
+- [Barcode & QR Code Scanner](../../mediablocks/Guides/barcode-qr-reader-guide.md) — scan barcodes and QR codes from webcam video in real time
+- [Pre-Event Recording](pre-event-recording.md) — circular buffer recording with motion detection triggers for webcams and IP cameras

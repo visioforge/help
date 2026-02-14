@@ -267,6 +267,12 @@ The Video Capture SDK for .NET provides comprehensive support for IP cameras and
 
 For additional implementation examples and advanced usage scenarios, explore our GitHub repository with complete code samples.
 
+## See also
+
+* [Pre-Event Recording](../../guides/pre-event-recording.md) — circular buffer recording with motion detection for IP cameras and webcams
+* [IP Camera Capture to MP4](../../video-tutorials/ip-camera-capture-mp4.md) — save IP camera video to MP4 file
+* [Barcode & QR Code Scanner](../../../mediablocks/Guides/barcode-qr-reader-guide.md) — scan barcodes and QR codes from IP camera video streams
+
 ---
 
 Visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) for more comprehensive code samples and demo applications.

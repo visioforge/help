@@ -1192,3 +1192,9 @@ It's crucial to configure encoder settings (bitrate, resolution, frame rate) acc
 ### Platforms
 
 Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer RTMP support and H.264/AAC encoder availability).
+
+## Pre-Event Recording Block
+
+The `PreEventRecordingBlock` implements circular buffer (pre-event) recording. It continuously buffers encoded video and audio in memory and writes event clips to disk on trigger, including footage from before the event occurred.
+
+For full documentation, settings, state machine, and code samples, see the dedicated [Pre-Event Recording Block](pre-event-recording.md) page.

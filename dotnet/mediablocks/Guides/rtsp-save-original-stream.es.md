@@ -432,5 +432,10 @@ Problemas comunes y sus soluciones al guardar streams RTSP:
 - Errores de inicialización de stream
 - Consideraciones de almacenamiento de grabación
 
+## Ver también
+
+- [Grabación Pre-Evento con Cámara IP](pre-event-recording.md) — almacenar video RTSP en buffer y grabar al detectar movimiento
+- [Streaming de Video RTSP](../../general/network-streaming/rtsp.md) — fundamentos de streaming RTSP y configuración de servidor
+
 ---
 Esta guía proporciona una comprensión fundamental de cómo guardar un stream RTSP preservando el video original mientras maneja flexiblemente el stream de audio usando el SDK de VisioForge Media Blocks. Al aprovechar el `RTSPRAWSourceBlock` y conexiones directas de pipeline, puede lograr grabaciones eficientes y de alta calidad.

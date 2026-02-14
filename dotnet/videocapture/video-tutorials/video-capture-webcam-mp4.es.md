@@ -143,5 +143,10 @@ Mientras el ejemplo muestra una implementación básica, los desarrolladores pue
 - Efectos de video y transformaciones al vuelo
 - Soporte de múltiples pistas de audio
 
+## Ver también
+
+- [Grabación Pre-Evento](../guides/pre-event-recording.md) — grabación con buffer circular con disparadores de detección de movimiento para webcams y cámaras IP
+- [Vista Previa de Video de Cámara](camera-video-preview.md) — mostrar video de cámara en vivo con captura de fotogramas
+
 ---
 Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código y ejemplos de implementación.

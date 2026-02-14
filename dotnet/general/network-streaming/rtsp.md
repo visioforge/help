@@ -271,5 +271,11 @@ VideoCapture1.Network_Streaming_URL = "rtsp://localhost:5554/vfstream";
 
 **Note:** This legacy method often relies on DirectShow filters or Media Foundation transforms available on the specific Windows system, making it less predictable and portable than the GStreamer-based cross-platform solution.
 
+## See also
+
+* [Pre-Event Recording with IP Camera](../../mediablocks/Guides/pre-event-recording.md) — record RTSP streams with circular buffer and motion detection triggers
+* [Save Original RTSP Stream](../../mediablocks/Guides/rtsp-save-original-stream.md) — save RTSP video without re-encoding
+* [Barcode & QR Code Scanner](../../mediablocks/Guides/barcode-qr-reader-guide.md) — scan barcodes from RTSP IP camera streams in real time
+
 ---
 For more detailed examples and advanced use cases, explore the code samples provided in our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples). For brand-specific RTSP URLs, see our [IP camera brands directory](../../camera-brands/index.md).

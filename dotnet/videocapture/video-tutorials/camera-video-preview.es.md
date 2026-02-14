@@ -147,4 +147,7 @@ Este código puede extenderse para soportar varias aplicaciones del mundo real:
 
 ## Recursos Adicionales
 
+- [Grabación Pre-Evento](../guides/pre-event-recording.md) — almacenar video de cámara en buffer y guardar clips con detección de movimiento o disparador manual
+- [Captura de Webcam a MP4](video-capture-webcam-mp4.md) — grabar video de webcam a archivo MP4
+
 Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para explorar más ejemplos de código y técnicas de implementación avanzada.

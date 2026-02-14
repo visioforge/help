@@ -534,7 +534,9 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Barcode Detector
 
-El bloque BarcodeDetector detecta y decodifica diversos formatos de códigos de barras en streams de video.
+El bloque BarcodeDetector detecta y decodifica diversos formatos de códigos de barras (códigos QR, DataMatrix, Code128, EAN-13, y más) en streams de video en tiempo real.
+
+Para una guía completa con ejemplos multiplataforma, consulte la [Guía de Escáner de Códigos de Barras y QR](../Guides/barcode-qr-reader-guide.md).
 
 ### Información del bloque
 
@@ -543,7 +545,7 @@ Nombre: BarcodeDetectorBlock.
 | Dirección del pin | Tipo de medio | Conteo de pines |
 | --- | :---: | :---: |
 | Entrada | video sin comprimir | 1 |
-| Salida | video sin comprimir | 1 |
+| Salida | video sin comprimir | 1 (modo InputOutput) o 0 (modo InputOnly) |
 
 ### Código de muestra
 
@@ -552,10 +554,10 @@ var pipeline = new MediaBlocksPipeline();
 
 var videoSource = new SystemVideoSourceBlock(videoSettings);
 
-var barcodeDetector = new BarcodeDetectorBlock();
+var barcodeDetector = new BarcodeDetectorBlock(BarcodeDetectorMode.InputOutput);
 barcodeDetector.OnBarcodeDetected += (sender, args) =>
 {
-    Console.WriteLine($"Código de barras detectado: {args.Type} - {args.Data}");
+    Console.WriteLine($"Código de barras detectado: {args.BarcodeType} - {args.Value}");
 };
 pipeline.Connect(videoSource.Output, barcodeDetector.Input);
 

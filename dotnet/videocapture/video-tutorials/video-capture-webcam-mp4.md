@@ -143,5 +143,10 @@ While the example shows a basic implementation, developers can extend the soluti
 - On-the-fly video effects and transformations
 - Multiple audio track support
 
+## See also
+
+- [Pre-Event Recording](../guides/pre-event-recording.md) — circular buffer recording with motion detection triggers for webcams and IP cameras
+- [Camera Video Preview](camera-video-preview.md) — display live camera video with frame capture
+
 ---
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and implementation examples.
