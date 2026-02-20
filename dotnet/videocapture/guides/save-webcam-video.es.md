@@ -206,31 +206,30 @@ Video Capture SDK .Net depende de bibliotecas nativas para acceder a dispositivo
 
 ### Referencia de Paquete
 
-Paquete principal del SDK (administrado):
+Paquete principal del SDK:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.VideoCaptureX" Version="15.x.x" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.2.19" />
 ```
 
-### Dependencias Nativas
+### Paquetes Redist Específicos de Plataforma
 
-Dependencias nativas para Windows x64:
+Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.Redist.VideoCapture.x64" Version="15.x.x" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2025.11.0" />
 ```
 
-Para plataformas alternativas (macOS, Linux, Android, iOS), use las dependencias nativas correspondientes:
+Para otras plataformas:
 
 ```xml
-<!-- Para Windows 32-bit -->
-<PackageReference Include="VisioForge.DotNet.Core.Redist.VideoCapture.x86" Version="15.x.x" />
+<!-- macOS -->
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.9.1" />
 
-<!-- Para macOS -->
-<PackageReference Include="VisioForge.DotNet.Core.Redist.VideoCapture.macOS" Version="15.x.x" />
-
-<!-- Para Linux -->
-<PackageReference Include="VisioForge.DotNet.Core.Redist.VideoCapture.Linux" Version="15.x.x" />
+<!-- Linux x64 -->
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Linux.x64" Version="2025.11.0" />
 ```
 
 ## Compatibilidad Multiplataforma
@@ -255,3 +254,38 @@ Con soporte para formatos estándar de la industria como MP4 y WebM, códecs mod
 La compatibilidad multiplataforma del SDK, extendiéndose a macOS y aplicaciones MAUI, asegura que su solución de captura de webcam funcione consistentemente en diferentes sistemas operativos. Ya sea que esté construyendo una herramienta de videoconferencia, una aplicación de vigilancia o cualquier otro software que requiera funcionalidad de webcam, Video Capture SDK .Net ofrece las herramientas que necesita para implementar estas características rápidamente.
 
 Comenzar es tan simple como seguir el tutorial paso a paso y los ejemplos de código proporcionados anteriormente. Para casos de uso más avanzados y documentación detallada sobre cómo grabar video de webcam usando .NET, visite nuestro sitio web o consulte la documentación del SDK.
+
+## Preguntas Frecuentes
+
+### ¿Qué formato debo usar para guardar video de webcam — MP4 o WebM?
+
+MP4 con codificación H.264 es la mejor opción para la mayoría de las aplicaciones porque ofrece amplia compatibilidad con dispositivos y reproductores, compresión eficiente y codificación acelerada por hardware en la mayoría de las GPUs. Elija WebM con VP9 o AV1 si necesita un formato libre de regalías para distribución web o reproducción en navegadores. Ambos formatos admiten grabación de audio de alta calidad junto con el video.
+
+### ¿Cómo configuro la resolución y la velocidad de fotogramas para la grabación de webcam?
+
+Use la clase `VideoCaptureDeviceSourceSettings` para seleccionar una resolución y velocidad de fotogramas específicas de los formatos compatibles de su cámara. Después de crear el objeto de configuración de fuente, llame a `GetFormats()` para enumerar los modos disponibles, luego asigne su formato preferido antes de iniciar la captura. El SDK negocia automáticamente la coincidencia más cercana si el formato exacto no está disponible.
+
+### ¿Puedo usar aceleración GPU para grabar video de webcam en C#?
+
+Sí. Video Capture SDK .Net detecta automáticamente el hardware GPU disponible — NVIDIA NVENC, AMD AMF/VCE e Intel Quick Sync Video — y selecciona la codificación acelerada por hardware cuando crea un `MP4Output` o `WebMOutput`. No se requiere configuración adicional. Si no se encuentra una GPU compatible, el SDK recurre a la codificación por software optimizada de forma transparente.
+
+### ¿Cómo grabo video de webcam con audio?
+
+Configure la propiedad `Audio_Source` con un micrófono u otro dispositivo de entrada de audio, luego habilite la grabación con `Audio_Record = true`. Para monitorear el audio durante la captura, establezca `Audio_Play = true` y asigne un `Audio_OutputDevice`. Al guardar en MP4, el audio se codifica como AAC por defecto; WebM usa Vorbis.
+
+### ¿La grabación de webcam funciona en macOS y Linux?
+
+Sí. El SDK es completamente multiplataforma. Agregue los paquetes NuGet redist específicos de plataforma apropiados (macOS, Linux x64) junto con el paquete principal `VisioForge.DotNet.VideoCapture`. El mismo código C# se ejecuta en Windows, macOS y Linux, y el SDK también admite .NET MAUI para implementación móvil y de escritorio multiplataforma.
+
+## Soporte VB.NET
+
+¿Busca grabación de webcam en VB.NET? Consulte nuestra guía dedicada: [Grabar Video de Webcam en VB.NET](record-webcam-vb-net.md).
+
+## Ver También
+
+- [Grabar Video de Webcam en VB.NET](record-webcam-vb-net.md) — misma funcionalidad con ejemplos de código VB.NET
+- [Captura de Pantalla a MP4](../video-tutorials/screen-capture-mp4.md) — grabar la pantalla del escritorio en lugar de la webcam
+- [Tutorial de Webcam a MP4](../video-tutorials/video-capture-webcam-mp4.md) — guía paso a paso para grabación en MP4
+- [Captura de Cámara IP a MP4](../video-tutorials/ip-camera-capture-mp4.md) — grabar desde cámaras de red en lugar de webcams locales
+- [Escáner de Códigos de Barras y QR](../../mediablocks/Guides/barcode-qr-reader-guide.md) — combinar captura de webcam con detección de códigos de barras
+- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas

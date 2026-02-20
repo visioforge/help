@@ -18,6 +18,14 @@ Explora técnicas de implementación avanzadas, guías de uso especializadas y t
 
 Esta colección curada de guías aborda funcionalidades avanzadas específicas dentro del Media Player SDK .Net. Cada guía proporciona instrucciones prácticas e información para ayudarte a implementar características complejas efectivamente.
 
+### Guías de Inicio
+
+* [**Reproductor de Video Multiplataforma — Guía Avalonia y MAUI**](play-video-dotnet.md) - Construya reproductores de video multiplataforma con Avalonia y .NET MAUI usando MediaBlocksPipeline. Cubre configuración específica de plataforma, paquetes NuGet, patrones MVVM y ejemplos de código completos para Windows, macOS, Linux, Android e iOS.
+
+* [**Construir un Reproductor de Video en C#**](video-player-csharp.md) - Guía paso a paso para construir un reproductor de video con funciones completas en C# con reproducción de archivos, búsqueda en línea de tiempo, pausa/reanudación, control de volumen y ajuste de velocidad de reproducción usando las APIs MediaPlayerCoreX y MediaBlocksPipeline.
+
+* [**Construir un Reproductor de Video en VB.NET**](video-player-vb-net.md) - Guía completa de VB.NET para construir una aplicación de reproductor de video con controles de reproducción, búsqueda en línea de tiempo, ajuste de volumen y control de velocidad con ejemplos completos de código Visual Basic.
+
 ### Control y Características de Reproducción
 
 Explora guías especializadas sobre control de reproducción de medios con características avanzadas.

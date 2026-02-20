@@ -227,7 +227,7 @@ VisioForgeX.DestroySDK();
 
 ## Funciones Avanzadas de Lectura de Códigos de Barras
 
-### Prevención de Detección de Duplicados
+### Prevención de Detección de Duplicados {#prevencion-de-deteccion-de-duplicados}
 
 Para prevenir múltiples detecciones del mismo código de barras:
 
@@ -622,6 +622,28 @@ Estos ejemplos demuestran:
 - Seguimiento del historial de detecciones
 - Manejo de errores
 - Compatibilidad multiplataforma
+
+## Preguntas Frecuentes
+
+### ¿Qué formatos de códigos de barras puedo escanear desde una cámara en C#?
+
+El SDK soporta todos los formatos principales de códigos de barras 1D y 2D incluyendo QR Code, DataMatrix, PDF417, Aztec, Code 128, Code 39, EAN-13, EAN-8, UPC-A, UPC-E, Codabar e ITF. Todos los formatos pueden escanearse en tiempo real desde cualquier fuente de video — webcam, cámara IP, stream RTSP o archivo de video.
+
+### ¿Puedo escanear códigos QR desde una cámara IP o stream RTSP?
+
+Sí. Use `UniversalSourceBlock` con una URI RTSP para conectarse a cualquier cámara IP y escanear códigos de barras desde el stream de video en vivo. El pipeline maneja la decodificación, el buffering y la entrega de frames automáticamente. Consulte la [guía de streaming RTSP](../../general/network-streaming/rtsp.md) para detalles de conexión.
+
+### ¿El escáner de códigos de barras funciona en Android, iOS y macOS?
+
+Sí. El `BarcodeDetectorBlock` es completamente multiplataforma. Las aplicaciones .NET MAUI se ejecutan en Android e iOS; las aplicaciones Avalonia se ejecutan en macOS y Linux. Cada plataforma requiere permisos de cámara — consulte la sección de [Configuración de Plataforma](#configuracion-de-plataforma-escaneo-de-codigos-de-barras-en-android-ios-y-macos) para más detalles.
+
+### ¿Cómo evito detecciones duplicadas de códigos de barras?
+
+Implemente una ventana de deduplicación basada en tiempo. Almacene cada valor de código de barras detectado con una marca de tiempo y omita las detecciones que coincidan con una entrada reciente dentro de un intervalo configurable (típicamente 2 segundos). Vea el ejemplo de código de [Prevención de Detección de Duplicados](#prevencion-de-deteccion-de-duplicados) arriba.
+
+### ¿Qué tasa de frames necesito para un escaneo confiable de códigos de barras?
+
+Para la mayoría de los casos de uso, 10–15 FPS proporciona detección confiable con bajo uso de CPU. Los códigos de barras estáticos (etiquetas de almacén, estantes de productos) funcionan bien a 5 FPS. Los códigos de barras en movimiento rápido en una cinta transportadora pueden necesitar 25–30 FPS. Use la tasa de frames más baja que brinde resultados confiables para minimizar el consumo de recursos.
 
 ## Ver También
 

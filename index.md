@@ -1,7 +1,6 @@
 ---
 title: VisioForge SDK Documentation Hub
 description: Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-keywords: video SDK documentation, video capture SDK, video player SDK, video editor SDK, .NET video processing, DirectShow filters, Delphi video SDK, C# video, code samples, video tutorials, API reference
 hide:
   - navigation
   - toc

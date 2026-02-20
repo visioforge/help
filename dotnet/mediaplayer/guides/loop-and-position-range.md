@@ -1,7 +1,6 @@
 ---
 title: Loop & Position Range - Media Player SDK .NET
 description: Implement loop playback and segment control in .NET. Learn DirectShow and GStreamer features for video loops and position range selection.
-keywords: video loop, media player loop, position range playback, segment playback, DirectShow loop, GStreamer loop, video player SDK, continuous playback, kiosk video loop, seamless loop
 sidebar_label: Loop Mode & Position Range
 order: 2
 
@@ -646,13 +645,25 @@ player.Segment_Stop = segmentEnd;
 | **Platform** | Windows only | Cross-platform |
 | **Engine** | DirectShow | GStreamer |
 
-## Related Documentation
+## Frequently Asked Questions
 
-- [MediaPlayerCore API Reference](https://api.visioforge.org/dotnet/api/VisioForge.Core.MediaPlayerX.MediaPlayerCoreX.html)
-- [MediaPlayerCoreX API Reference](https://api.visioforge.org/dotnet/api/VisioForge.Core.MediaPlayerX.MediaPlayerCoreX.html)
+### How do I create a seamless video loop without glitches in C#?
+
+For the DirectShow engine (MediaPlayerCore), set `Loop = true` and `Loop_DoNotSeekToBeginning = true` to avoid a visible seek-back between iterations. For the cross-platform GStreamer engine (MediaPlayerCoreX), seamless restart is built in — simply set `Loop = true`. In both cases, use well-indexed formats like MP4 with H.264 or H.265 encoding for the smoothest transitions.
+
+### Does the Media Player SDK support frame-accurate seeking for segment playback?
+
+Seeking accuracy depends on the media container and codec. MP4 and MKV files with proper keyframe indexing provide the best results. For very short segments (under one second), the player may land on the nearest keyframe rather than the exact requested position. If frame-level precision is critical, encode your source with a short GOP (Group of Pictures) length to increase keyframe density.
+
+### Can I loop a specific time range instead of the entire video file?
+
+Yes. In MediaPlayerCore, enable `Loop` and `Selection_Active`, then set `Selection_Start` and `Selection_Stop` to define the segment. In MediaPlayerCoreX, enable `Loop` and set `Segment_Start` and `Segment_Stop`. The player will continuously repeat only the specified range. See the "Loop Specific Segment" code examples above for both engines.
 
 ## See Also
 
-- [Media Player SDK Overview](../index.md)
-- [Code Samples](../code-samples/index.md)
-- [Additional Guides](index.md)
+- [Build a Video Player in C#](video-player-csharp.md) — full player implementation with playback controls and seeking
+- [Play Video Cross-Platform](play-video-dotnet.md) — Avalonia and MAUI player guide using MediaBlocksPipeline
+- [Avalonia Media Player](avalonia-player.md) — cross-platform player with MVVM pattern
+- [Build a Video Player in VB.NET](video-player-vb-net.md) — VB.NET player with seeking and volume control
+- [Code Samples](../code-samples/index.md) — frame extraction, playlists, and reverse playback examples
+- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — product page and downloads

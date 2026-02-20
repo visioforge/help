@@ -163,5 +163,11 @@ Esta aplicación de Windows Forms demuestra la funcionalidad de captura de panta
 
 La aplicación demuestra cómo configurar diferentes escenarios de captura con código mínimo usando la interfaz fluida del SDK y patrones async.
 
+## Recursos Relacionados
+
+- [Captura de Pantalla en VB.NET](../guides/screen-capture-vb-net.md)
+- [Configuración de Fuente de Pantalla](../video-sources/screen.md)
+- [Página de Producto Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net)
+
 ---
 Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.

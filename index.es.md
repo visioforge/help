@@ -1,7 +1,6 @@
 ---
 title: Centro de Documentación de SDKs VisioForge
 description: Documentación completa para los SDKs de video de VisioForge - captura, reproducción, edición y procesamiento para .NET, Delphi y DirectShow.
-keywords: documentación SDK video, SDK captura video, SDK reproductor video, SDK editor video, procesamiento video .NET, filtros DirectShow, SDK video Delphi, video C#, ejemplos código, tutoriales video, referencia API
 hide:
   - navigation
   - toc

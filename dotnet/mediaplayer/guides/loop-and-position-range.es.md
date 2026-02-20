@@ -1,7 +1,6 @@
 ---
 title: Bucle y Rango de Posición - Media Player SDK
 description: Implementa reproducción en bucle y control de segmentos en .NET. Aprende características de DirectShow y GStreamer para bucles de video.
-keywords: bucle de video, bucle reproductor multimedia, reproducción rango posición, reproducción segmento, bucle DirectShow, bucle GStreamer, SDK reproductor video, reproducción continua, bucle video quiosco, bucle sin interrupciones
 sidebar_label: Modo Bucle y Rango Posición
 order: 2
 
@@ -646,13 +645,25 @@ player.Segment_Stop = segmentEnd;
 | **Plataforma** | Solo Windows | Multiplataforma |
 | **Motor** | DirectShow | GStreamer |
 
-## Documentación Relacionada
+## Preguntas Frecuentes
 
-- [Referencia de API de MediaPlayerCore](https://api.visioforge.org/dotnet/api/VisioForge.Core.MediaPlayerX.MediaPlayerCoreX.html)
-- [Referencia de API de MediaPlayerCoreX](https://api.visioforge.org/dotnet/api/VisioForge.Core.MediaPlayerX.MediaPlayerCoreX.html)
+### ¿Cómo creo un bucle de video sin interrupciones ni fallos en C#?
+
+Para el motor DirectShow (MediaPlayerCore), establezca `Loop = true` y `Loop_DoNotSeekToBeginning = true` para evitar un salto visible entre iteraciones. Para el motor multiplataforma GStreamer (MediaPlayerCoreX), el reinicio sin interrupciones está integrado — simplemente establezca `Loop = true`. En ambos casos, use formatos bien indexados como MP4 con codificación H.264 o H.265 para las transiciones más fluidas.
+
+### ¿El SDK de Media Player admite búsqueda con precisión de fotograma para reproducción de segmentos?
+
+La precisión de la búsqueda depende del contenedor multimedia y el códec. Los archivos MP4 y MKV con indexación adecuada de fotogramas clave proporcionan los mejores resultados. Para segmentos muy cortos (menos de un segundo), el reproductor puede posicionarse en el fotograma clave más cercano en lugar de la posición exacta solicitada. Si la precisión a nivel de fotograma es crítica, codifique su fuente con una longitud de GOP (Grupo de Imágenes) corta para aumentar la densidad de fotogramas clave.
+
+### ¿Puedo reproducir en bucle un rango de tiempo específico en lugar del archivo de video completo?
+
+Sí. En MediaPlayerCore, active `Loop` y `Selection_Active`, luego establezca `Selection_Start` y `Selection_Stop` para definir el segmento. En MediaPlayerCoreX, active `Loop` y establezca `Segment_Start` y `Segment_Stop`. El reproductor repetirá continuamente solo el rango especificado. Consulte los ejemplos de código "Bucle de Segmento Específico" anteriores para ambos motores.
 
 ## Ver También
 
-- [Descripción General del SDK de Media Player](../index.md)
-- [Ejemplos de Código](../code-samples/index.md)
-- [Guías Adicionales](index.md)
+- [Crear un Reproductor de Video en C#](video-player-csharp.md) — implementación completa con controles de reproducción y búsqueda
+- [Reproducir Video Multiplataforma](play-video-dotnet.md) — guía de reproductor Avalonia y MAUI usando MediaBlocksPipeline
+- [Reproductor Multimedia Avalonia](avalonia-player.md) — reproductor multiplataforma con patrón MVVM
+- [Crear un Reproductor de Video en VB.NET](video-player-vb-net.md) — reproductor VB.NET con búsqueda y control de volumen
+- [Ejemplos de Código](../code-samples/index.md) — extracción de fotogramas, listas de reproducción y ejemplos de reproducción inversa
+- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — página del producto y descargas

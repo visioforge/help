@@ -1,6 +1,6 @@
 ---
-title: Media Blocks SDK .Net Player Implementation Guide
-description: Build video player apps with Media Blocks SDK using source blocks, audio/video rendering, and playback controls with step-by-step tutorial.
+title: Build a Video Player in .NET with Media Blocks SDK
+description: Build a video player in .NET using Media Blocks SDK. Step-by-step C# tutorial with source blocks, audio/video rendering, and playback controls.
 ---
 
 # Building a Feature-Rich Video Player with Media Blocks SDK

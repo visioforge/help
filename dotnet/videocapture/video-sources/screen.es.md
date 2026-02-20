@@ -1,6 +1,6 @@
 ﻿---
 title: Fuente de Captura de Pantalla para SDK de Video .NET
-description: Captura pantallas completas, ventanas o áreas personalizadas en apps .NET con integración DirectX, soporte de cursor y alta performance.
+description: SDK de captura de pantalla para .NET — graba pantalla completa, ventanas o regiones personalizadas con DirectX 11/12 y Windows Graphics Capture. Ejemplos de código en C# para grabación de escritorio.
 ---
 
 # Guía de Implementación de Captura de Pantalla
@@ -336,5 +336,28 @@ La funcionalidad de captura de pantalla permite a los desarrolladores crear apli
 
 Aprovechando las opciones de configuración apropiadas para tus requisitos específicos, puedes implementar características de captura de pantalla de alto rendimiento en tus aplicaciones .NET.
 
----
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más muestras de código.
+## Preguntas Frecuentes
+
+### ¿Cuál es la diferencia entre la captura de pantalla con DirectX 9 y DirectX 11/12?
+
+DirectX 11/12 utiliza la API de Duplicación de Escritorio acelerada por GPU o Windows Graphics Capture (WGC), ofreciendo tasas de fotogramas más altas y menor uso de CPU que el enfoque basado en GDI de DirectX 9. DirectX 9 solo es necesario para sistemas antiguos con Windows 7 o anterior. Para todas las aplicaciones modernas de Windows 10/11, use `ScreenCaptureD3D11SourceSettings` con `D3D11ScreenCaptureAPI.WGC` para obtener el mejor rendimiento.
+
+### ¿Puedo capturar una ventana específica en lugar de la pantalla completa en C#?
+
+Sí. Establezca la propiedad `WindowHandle` en `ScreenCaptureSourceSettings` (VideoCaptureCore) o `ScreenCaptureD3D11SourceSettings` (VideoCaptureCoreX) con el handle de la ventana objetivo. Obtenga el handle usando `FindWindow`, UI Automation o enumerando las ventanas abiertas. DirectX 11 con WGC proporciona la captura de ventanas más fiable, incluyendo aplicaciones con aceleración por hardware.
+
+### ¿Cómo capturo el cursor del ratón durante la grabación de pantalla?
+
+Establezca `AllowCaptureMouseCursor = true` en `ScreenCaptureSourceSettings` (VideoCaptureCore) o `CaptureCursor = true` en `ScreenCaptureD3D11SourceSettings` (VideoCaptureCoreX). El cursor se incluye en los datos del fotograma capturado en su posición actual. Desactive esta propiedad cuando grabe tutoriales donde el cursor se añadirá en postproducción.
+
+### ¿Funciona el SDK de captura de pantalla con múltiples monitores?
+
+Sí. Use `DisplayIndex` (VideoCaptureCore) o `MonitorIndex` (VideoCaptureCoreX) para seleccionar qué monitor capturar. Enumere los monitores disponibles con `System.Windows.Forms.Screen.AllScreens` y presente la lista al usuario. Cada monitor se captura de forma independiente — para grabar todos los monitores simultáneamente, cree instancias de captura separadas para cada pantalla.
+
+## Ver También
+
+- [Captura de Pantalla en VB.NET](../guides/screen-capture-vb-net.md) — guía completa de Visual Basic con pantalla completa, captura de región y grabación de audio
+- [Tutorial de Captura de Pantalla a MP4](../video-tutorials/screen-capture-mp4.md) — tutorial de C# para grabar escritorio a MP4 con video explicativo
+- [Guardar Video de Webcam en C#](../guides/save-webcam-video.md) — capturar desde webcam en lugar de pantalla
+- [Captura de Cámaras IP](ip-cameras/index.md) — grabar desde cámaras de red usando RTSP
+- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas

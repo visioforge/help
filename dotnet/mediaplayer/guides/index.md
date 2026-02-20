@@ -18,6 +18,14 @@ Explore advanced implementation techniques, specialized usage guides, and tutori
 
 This curated collection of guides addresses specific advanced functionalities within the Media Player SDK .Net. Each guide provides practical instructions and insights to help you implement complex features effectively.
 
+### Getting Started Guides
+
+* [**Cross-Platform Video Player — Avalonia & MAUI Guide**](play-video-dotnet.md) - Build cross-platform video players with Avalonia and .NET MAUI using MediaBlocksPipeline. Covers platform-specific setup, NuGet packages, MVVM patterns, and complete code examples for Windows, macOS, Linux, Android, and iOS.
+
+* [**Build a Video Player in C#**](video-player-csharp.md) - Step-by-step guide to building a full-featured video player in C# with file playback, timeline seeking, pause/resume, volume control, and playback speed adjustment using both MediaPlayerCoreX and MediaBlocksPipeline APIs.
+
+* [**Build a Video Player in VB.NET**](video-player-vb-net.md) - Complete VB.NET guide for building a video player application with playback controls, timeline seeking, volume adjustment, and speed control with full Visual Basic code examples.
+
 ### Playback Control & Features
 
 Explore specialized guides on controlling media playback with advanced features.

@@ -1198,3 +1198,11 @@ Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer 
 The `PreEventRecordingBlock` implements circular buffer (pre-event) recording. It continuously buffers encoded video and audio in memory and writes event clips to disk on trigger, including footage from before the event occurred.
 
 For full documentation, settings, state machine, and code samples, see the dedicated [Pre-Event Recording Block](pre-event-recording.md) page.
+
+## See Also
+
+- [Getting Started with Media Blocks](../GettingStarted/index.md) — pipeline basics, installation, and first project setup
+- [Pipeline Architecture](../GettingStarted/pipeline.md) — MediaBlocksPipeline lifecycle, connecting blocks, and error handling
+- [Video Encoders](../VideoEncoders/index.md) — H.264, HEVC, VP8/VP9, AV1, and GPU-accelerated encoder blocks
+- [Media Sources](../Sources/index.md) — camera, screen, file, and network source blocks
+- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads

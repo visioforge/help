@@ -1104,7 +1104,7 @@ Para verificar disponibilidad:
 
 ### Plataformas
 
-Primariamente Windows. La disponibilidad en otras plataformas depende del soporte de plugins GStreamer para muxing ASF, WMV, y WMA encoders (que pueden ser limitados fuera de Windows).
+Primariamente Windows. La disponibilidad en otras plataformas depende del soporte de plugins GStreamer para muxing ASF, WMV, y codificadores WMA (que pueden ser limitados fuera de Windows).
 
 ## Bloque de Salida YouTube
 
@@ -1192,3 +1192,17 @@ Es crucial configurar configuraciones de codificador (bitrate, resolución, fram
 ### Plataformas
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte RTMP GStreamer y disponibilidad de codificadores H.264/AAC).
+
+## Bloque de Grabación Pre-Evento
+
+El `PreEventRecordingBlock` implementa grabación de búfer circular (pre-evento). Almacena continuamente video y audio codificados en memoria y escribe clips de eventos a disco al activarse, incluyendo material de antes de que ocurriera el evento.
+
+Para documentación completa, configuraciones, máquina de estados y ejemplos de código, consulte la página dedicada de [Bloque de Grabación Pre-Evento](pre-event-recording.md).
+
+## Ver También
+
+- [Primeros Pasos con Media Blocks](../GettingStarted/index.md) — conceptos básicos de pipeline, instalación y configuración del primer proyecto
+- [Arquitectura de Pipeline](../GettingStarted/pipeline.md) — ciclo de vida de MediaBlocksPipeline, conexión de bloques y manejo de errores
+- [Codificadores de Video](../VideoEncoders/index.md) — bloques de codificación H.264, HEVC, VP8/VP9, AV1 y acelerados por GPU
+- [Fuentes de Medios](../Sources/index.md) — bloques de fuente de cámara, pantalla, archivo y red
+- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas

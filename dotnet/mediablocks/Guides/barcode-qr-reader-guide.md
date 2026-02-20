@@ -623,6 +623,28 @@ These samples demonstrate:
 - Error handling
 - Cross-platform compatibility
 
+## Frequently Asked Questions
+
+### What barcode formats can I scan from a camera in C#?
+
+The SDK supports all major 1D and 2D barcode formats including QR Code, DataMatrix, PDF417, Aztec, Code 128, Code 39, EAN-13, EAN-8, UPC-A, UPC-E, Codabar, and ITF. All formats can be scanned in real time from any video source — webcam, IP camera, RTSP stream, or video file.
+
+### Can I scan QR codes from an IP camera or RTSP stream?
+
+Yes. Use `UniversalSourceBlock` with an RTSP URI to connect to any IP camera and scan barcodes from the live video stream. The pipeline handles decoding, buffering, and frame delivery automatically. See the [RTSP streaming guide](../../general/network-streaming/rtsp.md) for connection details.
+
+### Does the barcode scanner work on Android, iOS, and macOS?
+
+Yes. The `BarcodeDetectorBlock` is fully cross-platform. .NET MAUI apps run on Android and iOS; Avalonia apps run on macOS and Linux. Each platform requires camera permissions — see the [Platform Setup](#platform-setup-android-ios-and-macos-barcode-scanning) section for details.
+
+### How do I prevent duplicate barcode detections?
+
+Implement a time-based deduplication window. Store each detected barcode value with a timestamp and skip detections that match a recent entry within a configurable interval (typically 2 seconds). See the [Duplicate Detection Prevention](#duplicate-detection-prevention) code example above.
+
+### What frame rate do I need for reliable barcode scanning?
+
+For most use cases, 10–15 FPS provides reliable detection with low CPU usage. Static barcodes (warehouse labels, product shelves) work well at 5 FPS. Fast-moving barcodes on a conveyor belt may need 25–30 FPS. Use the lowest frame rate that gives reliable results to minimize resource consumption.
+
 ## See Also
 
 - [Webcam Video Capture in C#](../../videocapture/guides/save-webcam-video.md) — capture and record webcam video using the same SDK

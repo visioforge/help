@@ -1,3 +1,8 @@
+---
+title: Tutorial de Reproductor de Video Avalonia - Guía Multiplataforma MVVM
+description: Tutorial de reproductor de video Avalonia — construya un reproductor multimedia multiplataforma con patrón MVVM para Windows, macOS, Linux, Android e iOS. Código fuente C# completo con ReactiveUI.
+---
+
 # Reproductor Multimedia Avalonia con VisioForge
 
 Esta guía le guiará a través del proceso de construcción de una aplicación de reproductor multimedia multiplataforma utilizando Avalonia UI con el patrón Modelo-Vista-Modelo de Vista (MVVM) y el SDK de Reproductor Multimedia de VisioForge. La aplicación será capaz de reproducir archivos de video en Windows, macOS, Linux, Android e iOS.
@@ -1102,3 +1107,34 @@ Puntos clave:
 * La inicialización adecuada (`VisioForgeX.InitSDK()`) y limpieza (`VisioForgeX.DestroySDK()`) del SDK de VisioForge son esenciales.
 
 Puede extender este ejemplo agregando más características como soporte de listas de reproducción, transmisión en red, efectos de video o controles de UI más avanzados.
+
+## Preguntas Frecuentes
+
+### ¿Qué plataformas soporta el reproductor de video Avalonia?
+
+El reproductor Avalonia se ejecuta en Windows, macOS, Linux, Android e iOS desde una única base de código compartida. Cada plataforma utiliza un proyecto principal dedicado (`SimplePlayerMVVM.Desktop`, `.Android`, `.iOS`) con paquetes NuGet específicos de plataforma para el runtime nativo de GStreamer. La API principal de reproducción (`MediaPlayerCoreX`) y el control `VideoView` son idénticos en todos los destinos.
+
+### ¿Es obligatorio el patrón MVVM para usar el SDK de VisioForge con Avalonia?
+
+No. El SDK funciona con cualquier patrón de arquitectura incluyendo code-behind. Esta guía utiliza ReactiveUI para MVVM porque se integra bien con el sistema de binding de Avalonia y mejora la capacidad de prueba. Las clases principales — `MediaPlayerCoreX` para reproducción y `VideoView` para renderizado — no tienen dependencia de ReactiveUI ni de ningún framework MVVM. También puede usar CommunityToolkit.Mvvm o Prism en su lugar.
+
+### ¿Cómo despliego el reproductor de video Avalonia en Linux?
+
+Publique con `dotnet publish -r linux-x64` (o `linux-arm64` para ARM). En la máquina destino, instale el runtime de GStreamer (`libgstreamer1.0-0` y paquetes de plugins en Ubuntu/Debian, o el equivalente en su distribución). Los paquetes NuGet de VisioForge incluyen los bindings nativos, pero GStreamer debe estar presente en el sistema. No se necesita configuración específica de X11 o Wayland — Avalonia maneja la selección del servidor de pantalla automáticamente.
+
+### ¿El reproductor Avalonia soporta renderizado de video acelerado por GPU?
+
+Sí. `VideoView` utiliza renderizado GPU nativo de la plataforma: Direct3D en Windows, OpenGL o Vulkan en Linux, y Metal en macOS e iOS. El motor GStreamer también soporta decodificación de video acelerada por hardware a través de VA-API en Linux, DXVA/D3D11 en Windows, y VideoToolbox en macOS/iOS. La aceleración por hardware está habilitada por defecto cuando hay una GPU compatible disponible.
+
+### ¿Cómo manejo el acceso a archivos y permisos de almacenamiento en Android e iOS?
+
+Implemente una interfaz `IFilePickerService` específica de plataforma como se muestra en la sección 6 de esta guía. En Android, use `Intent` con `ActionOpenDocument` y declare el permiso `READ_EXTERNAL_STORAGE` en `AndroidManifest.xml`. En iOS, use `UIDocumentPickerViewController` para presentar el selector de archivos del sistema. En escritorio, use el `StorageProvider.OpenFilePickerAsync()` integrado de Avalonia. El SDK acepta cualquier ruta de archivo o stream legible independientemente de cómo se seleccionó el archivo.
+
+## Ver También
+
+- [Crear un Reproductor de Video en C#](video-player-csharp.md) — reproductor WinForms y WPF con configuración de proyecto más simple
+- [Reproducir Video en .NET (Multiplataforma)](play-video-dotnet.md) — descripción general de todos los frameworks UI soportados y destinos de despliegue
+- [Crear un Reproductor de Video en VB.NET](video-player-vb-net.md) — reproductor multimedia VB.NET para WinForms
+- [Modo Loop y Rango de Posición](loop-and-position-range.md) — configurar bucle, repetición A-B y reproducción de segmentos
+- [Ejemplos de Código](../code-samples/index.md) — extracción de fotogramas, listas de reproducción y ejemplos adicionales de reproducción
+- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — página del producto y descargas

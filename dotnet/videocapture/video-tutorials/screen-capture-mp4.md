@@ -163,5 +163,11 @@ This Windows Forms application demonstrates screen capture functionality with an
 
 The application demonstrates how to configure different capture scenarios with minimal code using the SDK's fluent interface and async patterns.
 
+## Related Resources
+
+- [Screen Capture in VB.NET](../guides/screen-capture-vb-net.md)
+- [Screen Source Configuration](../video-sources/screen.md)
+- [Video Capture SDK .Net Product Page](https://www.visioforge.com/video-capture-sdk-net)
+
 ---
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.
