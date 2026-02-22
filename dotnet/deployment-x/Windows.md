@@ -1,5 +1,5 @@
 ---
-title: Cross-platform SDK .Net deployment for Windows
+title: Windows Deployment Guide for VisioForge Cross-Platform SDK
 description: VisioForge SDK .NET deployment for Windows with NuGet packages, dependencies, and x86/x64 architecture configuration for multimedia apps.
 ---
 

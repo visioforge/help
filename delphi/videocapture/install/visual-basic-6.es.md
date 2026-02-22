@@ -1,5 +1,5 @@
 ---
-title: Integración de TVFVideoCapture en Visual Basic 6
+title: Captura de video en Visual Basic 6 con TVFVideoCapture
 description: Integrar control ActiveX TVFVideoCapture en Visual Basic 6 con compatibilidad x86 y acceso completo a características de captura de video.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Processing Filters - Video Mixer Interface
+title: DirectShow Video Mixer Filter - PIP and Chroma Key API
 description: IVFVideoMixer interface for mixing 2-16 video sources with PIP, chroma keying, transparency, and customizable layout configurations.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Captura de Fotos con Webcam en Aplicaciones .NET
+title: Captura de fotos con webcam en .NET con Video Capture SDK
 description: Implementa captura de fotos con webcam en .NET con tutoriales paso a paso, captura de fotogramas fijos y técnicas de guardado de imágenes para integración.
 ---
 

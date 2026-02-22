@@ -1,5 +1,5 @@
 ---
-title: Efectos de Video y Procesamiento en .NET
+title: Efectos de video en .NET SDK - overlays y procesamiento
 description: Aplica efectos de video profesionales, overlays de texto/imagen y procesamiento personalizado con herramientas de mejora visual para apps .NET.
 sidebar_label: Efectos de Video y Procesamiento
 

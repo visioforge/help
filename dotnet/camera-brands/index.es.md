@@ -1,5 +1,5 @@
 ---
-title: Directorio de URLs RTSP de Cámaras IP - Conectar Cualquier Cámara en C# .NET
+title: URLs RTSP de Cámaras IP: Directorio de 62 Marcas en C#
 description: Directorio completo de URLs RTSP para 62 marcas de cámaras IP. Conecta Hikvision, Dahua, Axis, Uniview, EZVIZ, Wisenet, Arlo y más usando VisioForge .NET SDK.
 ---
 
@@ -263,10 +263,6 @@ Ejemplos funcionales completos para integración de cámaras IP:
 - [Vista Previa de Cámara IP (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-preview) — Vista en vivo de la cámara
 - [Grabación de Cámara IP a MP4](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-capture-mp4) — Grabar flujos a archivo
 - [Todos los Ejemplos del SDK .NET](https://github.com/visioforge/.Net-SDK-s-samples) — Repositorio completo de ejemplos
-
-### Prueba Gratuita
-
-[Descargar Prueba Gratuita](https://www.visioforge.com/download){ .md-button .md-button--primary target="_blank" }
 
 ## Recursos Relacionados
 

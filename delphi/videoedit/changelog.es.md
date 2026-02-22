@@ -1,5 +1,5 @@
 ---
-title: Historial de Versiones: Biblioteca TVFVideoEdit
+title: Historial de Versiones de TVFVideoEdit para Delphi SDK
 description: Historial de TVFVideoEdit desde 2.1 hasta 10.0 con características, correcciones, integración FFMPEG y efectos de video.
 ---
 

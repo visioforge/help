@@ -1,5 +1,5 @@
 ---
-title: DVS: Escáner de Videos Duplicados para .NET
+title: Escáner de Videos Duplicados DVS con Video Fingerprinting
 description: Usa DVS para escanear carpetas en busca de videos duplicados o similares con características para encontrar y gestionar tu biblioteca de medios.
 ---
 

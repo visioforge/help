@@ -1,5 +1,5 @@
 ---
-title: NDI Network Video Streaming Integration Guide
+title: NDI Video Streaming in .NET: Setup and C# Examples
 description: Implement high-performance NDI streaming in .NET for low-latency video and audio transmission over IP networks with professional workflows.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Captura de Pantalla a MP4 con C# y .NET
+title: Captura de pantalla a MP4 en C# con Video Capture SDK .Net
 description: Implementa grabación de pantalla a MP4 con C# en .NET usando ejemplos de código completos para capturas con audio y silenciosas con codificación H264/AAC.
 ---
 

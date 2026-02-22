@@ -1,5 +1,5 @@
 ---
-title: DirectShow Virtual Camera SDK for Video Streaming
+title: DirectShow Virtual Camera SDK for Windows Video Streaming
 description: Create virtual webcams for Zoom, Teams, Skype, and OBS with DirectShow SDK for streaming any video source with audio support.
 sidebar_label: Virtual Camera SDK
 order: 6

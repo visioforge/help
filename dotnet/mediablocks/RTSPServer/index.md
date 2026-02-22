@@ -1,5 +1,5 @@
 ---
-title: RTSP Server Block for .Net
+title: RTSP Server Streaming in C# with Media Blocks SDK .Net
 description: Create RTSP streaming servers for low-latency audio and video delivery over networks with H.264/H.265 codec support in Media Blocks SDK.
 sidebar_label: RTSP Server
 ---

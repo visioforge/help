@@ -1,5 +1,5 @@
 ---
-title: Integración de SDKs con Uno Platform
+title: Integrar SDKs multimedia de VisioForge en Uno Platform
 description: Desarrolle aplicaciones multiplataforma Uno Platform con capacidades multimedia para Windows, Android, iOS, macOS y Linux usando los SDKs de VisioForge.
 ---
 

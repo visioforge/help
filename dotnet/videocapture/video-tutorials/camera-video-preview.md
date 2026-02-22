@@ -1,5 +1,5 @@
 ---
-title: Webcam Frame Capture & Preview in C#
+title: C# Webcam Video Preview with Frame Capture Tutorial
 description: Implement real-time webcam video preview with frame capture in C# .NET with working code examples for WinForms, WPF, and Console.
 ---
 

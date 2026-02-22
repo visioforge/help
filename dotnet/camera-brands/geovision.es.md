@@ -1,5 +1,5 @@
 ---
-title: Cómo Conectar una Cámara IP GeoVision en C# .NET
+title: Cámara IP GeoVision: Conexión RTSP con C# .NET y SDK
 description: Conecta cámaras GeoVision en C# .NET con patrones de URL RTSP y ejemplos de código para modelos GV-BL, GV-FD, GV-VD, GV-FE y GV-DVR.
 ---
 

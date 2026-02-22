@@ -1,5 +1,5 @@
 ---
-title: Bloques de Plataforma Windows para .Net
+title: Bloques Windows para captura y procesamiento de medios .NET
 description: Bloques de plataforma Windows para captura y procesamiento de video/audio usando DirectShow, MediaFoundation y Direct3D en Media Blocks SDK .NET.
 ---
 

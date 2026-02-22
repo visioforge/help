@@ -1,5 +1,5 @@
 ---
-title: SDK de Encriptación de Video - Ejemplos de Código
+title: Encriptar video con DirectShow - Ejemplos C#, C++ y Delphi
 description: Ejemplos de código para encriptación y desencriptación de video con filtros DirectShow en C++, C# y Delphi usando contraseñas y claves binarias.
 ---
 

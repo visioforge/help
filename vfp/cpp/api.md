@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprinting SDK C++ API Documentation
+title: Video Fingerprinting C++ API for Search and Comparison
 description: Complete API documentation for VisioForge Video Fingerprinting SDK C++ to generate, compare, and search video fingerprints with examples.
 ---
 

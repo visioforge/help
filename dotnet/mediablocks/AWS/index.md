@@ -1,5 +1,5 @@
 ---
-title: .Net Media AWS S3 Blocks Guide
+title: AWS S3 Media Source and Sink Blocks for .NET SDK Guide
 description: Read from and write to AWS S3 storage with source and sink blocks for media processing pipelines in Media Blocks SDK .NET applications.
 sidebar_label: Amazon Web Services
 ---

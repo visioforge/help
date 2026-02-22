@@ -1,5 +1,5 @@
 ---
-title: .Net Media Output Blocks Guide
+title: Media Output Blocks for MP4, MKV, WebM, and RTMP in .NET
 description: Write media to files and network streams with comprehensive output sink blocks for MP4, MKV, RTMP, HLS, and more in Media Blocks SDK.
 sidebar_label: Outputs
 ---

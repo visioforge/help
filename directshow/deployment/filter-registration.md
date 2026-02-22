@@ -1,5 +1,5 @@
 ---
-title: DirectShow Filter Registration Guide
+title: Register DirectShow Filters: regsvr32, C++, and C# Methods
 description: Register VisioForge DirectShow filters using manual regsvr32, programmatic methods, and installer automation with troubleshooting tips.
 ---
 

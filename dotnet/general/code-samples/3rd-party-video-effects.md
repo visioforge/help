@@ -1,5 +1,5 @@
 ---
-title: Use Third-Party Video Filters in .NET
+title: Using Third-Party DirectShow Video Filters in .NET
 description: Implement third-party DirectShow video filters in .NET with code examples, best practices, and troubleshooting for Video SDK platforms.
 ---
 

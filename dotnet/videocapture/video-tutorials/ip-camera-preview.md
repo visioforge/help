@@ -1,5 +1,5 @@
 ---
-title: IP Camera Preview in .NET - Setup Guide
+title: IP Camera Preview in C# .NET with RTSP Code Example
 description: Implement real-time IP camera preview in .NET apps with step-by-step tutorial and complete C# code examples for WinForms, WPF, Console.
 ---
 

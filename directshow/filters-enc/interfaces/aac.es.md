@@ -1,5 +1,5 @@
 ---
-title: Referencia de la Interfaz del Codificador AAC
+title: Codificador AAC DirectShow - Interfaces y Configuración
 description: Interfaces DirectShow del codificador AAC: control de tasa de bits, configuración de perfil, frecuencia de muestreo y codificación para audio profesional.
 ---
 

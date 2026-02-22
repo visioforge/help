@@ -1,5 +1,5 @@
 ---
-title: Advanced Video Effects & Processing for .Net SDKs
+title: Video Effects SDK for .NET - Overlays and Processing
 description: Implement professional video effects, text/image overlays, and custom video processing with powerful visual enhancement tools for .NET apps.
 sidebar_label: Video Effects And Processing
 

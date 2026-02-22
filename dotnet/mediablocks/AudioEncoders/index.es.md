@@ -1,5 +1,5 @@
 ---
-title: Codificadores de Audio en Media Blocks SDK .NET
+title: Codificadores de audio para .NET: AAC, MP3, FLAC, Opus
 description: Compresión de audio completa con AAC, MP3, FLAC, Opus y más códecs en Media Blocks SDK para codificación y streaming eficiente.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Video Capture SDK Third-Party Integration Guide
+title: OBS, FFMPEG, and VLC Integration with Virtual Camera SDK
 description: Integrate OBS, FFMPEG, and VLC streaming tools with Video Capture SDK DirectShow for WinForms, WPF, and Console applications in .NET.
 sidebar_label: 3rd-Party Software Usage
 order: 4

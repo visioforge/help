@@ -1,6 +1,6 @@
 ---
-title: Tutorial de Reproductor de Video Avalonia - Guía Multiplataforma MVVM
-description: Tutorial de reproductor de video Avalonia — construya un reproductor multimedia multiplataforma con patrón MVVM para Windows, macOS, Linux, Android e iOS. Código fuente C# completo con ReactiveUI.
+title: Reproductor de Video Avalonia Multiplataforma con MVVM
+description: Construya un reproductor de video Avalonia multiplataforma con MVVM y VisioForge SDK para Windows, macOS, Linux, Android e iOS en C#.
 ---
 
 # Reproductor Multimedia Avalonia con VisioForge

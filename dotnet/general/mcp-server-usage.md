@@ -369,8 +369,8 @@ The MCP server features:
 
 ### Documentation
 
-- [VisioForge SDK Documentation](https://docs.visioforge.com/)
-- [MCP Protocol Specification](https://modelcontextprotocol.io/)
+- [VisioForge SDK Documentation](https://www.visioforge.com/help/)
+- [MCP Protocol Specification](https://modelcontextprotocol.io/specification)
 - [Claude Code Documentation](https://claude.ai/code)
 
 ### Support & Community

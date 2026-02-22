@@ -1,5 +1,5 @@
 ---
-title: Ref Interfaz Filtro DirectShow Codificador FFMPEG
+title: Codificador FFMPEG DirectShow para MPEG-2, DVD, FLV, VCD
 description: Interfaz DirectShow del codificador FFMPEG para FLV, MPEG-1, MPEG-2, VCD, SVCD, DVD y Transport Stream con configuración de audio/video.
 ---
 

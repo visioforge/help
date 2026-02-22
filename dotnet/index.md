@@ -1,5 +1,5 @@
 ---
-title: .NET SDKs for Video & Media Development
+title: .NET SDKs for Video Capture, Editing, and Media Playback
 description: .NET SDKs for video capture, editing, playback, and processing on Windows, macOS, Linux, Android, and iOS with hardware acceleration.
 sidebar_label: .Net SDKs
 order: 20

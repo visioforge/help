@@ -1,5 +1,5 @@
 ---
-title: Cómo Conectar una Cámara IP Pelco en C# .NET
+title: Pelco - URLs RTSP para Cámaras Sarix y Spectra en C# .NET
 description: Conecta cámaras Pelco Sarix y Spectra en C# .NET con patrones de URL RTSP y ejemplos de código para modelos IX, IMP, IME y Spectra PTZ.
 ---
 

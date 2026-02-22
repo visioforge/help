@@ -1,5 +1,5 @@
 ---
-title: Dominar Controles de Imagen de Cámara en .NET
+title: Ajuste de brillo, contraste y saturación de cámara .NET
 description: Controla configuraciones de cámara incluyendo brillo, contraste, tono y saturación en .NET con ejemplos de código del Video Capture SDK.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: WAV Audio Format Integration in .NET Applications
+title: WAV PCM Audio Encoder Settings and Code Examples for .NET
 description: Implement WAV audio processing in .NET with sample rates, channel configuration, PCM format selection, and cross-platform support.
 ---
 

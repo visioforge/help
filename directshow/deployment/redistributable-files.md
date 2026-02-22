@@ -1,5 +1,5 @@
 ---
-title: DirectShow SDKs - Redistributable Files Reference
+title: DirectShow SDK Redistributable Files for Deployment
 description: Complete list of redistributable files for VisioForge DirectShow SDKs with dependencies, architecture files, and deployment requirements.
 ---
 

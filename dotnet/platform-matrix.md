@@ -1,5 +1,5 @@
 ---
-title: .NET SDKs - Platform & Feature Matrix
+title: .NET SDK Platform Support Matrix for Video and Audio
 description: .NET SDK cross-platform support for video/audio codecs, hardware acceleration, capture devices on Windows, Linux, macOS, Android, iOS.
 ---
 

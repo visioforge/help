@@ -1,5 +1,5 @@
 ---
-title: IP Camera Streaming to MP4 Files in .NET C#
+title: Record IP Camera RTSP Stream to MP4 in C# .NET Tutorial
 description: Implement IP camera video streaming and recording to MP4 files in .NET using C# with RTSP connection, encoding options, and code examples.
 ---
 

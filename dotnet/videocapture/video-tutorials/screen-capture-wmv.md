@@ -1,5 +1,5 @@
 ---
-title: C# Screen Recording to WMV - .NET Implementation
+title: C# Screen Recorder to WMV - Code Sample and Tutorial
 description: Implement professional screen recording in .NET apps with C# using step-by-step guide, working code samples, and configuration options.
 ---
 

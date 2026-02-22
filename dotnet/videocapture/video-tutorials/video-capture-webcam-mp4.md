@@ -1,5 +1,5 @@
 ---
-title: Webcam to MP4 Recording in .NET - C# Tutorial
+title: Record Webcam Video to MP4 in C# .NET Applications
 description: Implement webcam video capture to MP4 files in .NET with detailed C# code examples showing high-quality video recording integration.
 ---
 

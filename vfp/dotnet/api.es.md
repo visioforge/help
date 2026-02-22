@@ -1,5 +1,5 @@
 ---
-title: API .NET del SDK de Video Fingerprinting
+title: API .NET del SDK de Video Fingerprinting de VisioForge
 description: API completa del SDK de Video Fingerprinting de VisioForge para generar, comparar y buscar huellas de video con ejemplos de código.
 ---
 

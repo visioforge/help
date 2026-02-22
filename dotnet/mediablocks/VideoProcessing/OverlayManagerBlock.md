@@ -1,6 +1,6 @@
 ---
-title: OverlayManagerBlock usage guide
-description: Use OverlayManagerBlock to add overlays to video content with features to manage layers, shadows, rotation, and opacity in real-time.
+title: Video Overlay Composition in C# Using OverlayManagerBlock
+description: Add and manage video overlays in C# with OverlayManagerBlock — text, images, shapes, PiP, WPF controls, and real-time composition in .NET.
 ---
 
 # Overlay Manager Block usage guide
@@ -11,7 +11,10 @@ The `OverlayManagerBlock` is a powerful MediaBlocks component that provides dyna
 
 ## Key Features
 
-- **Multiple Overlay Types**: Text, scrolling text, images, image sequences, GIFs, SVG, shapes (rectangles, circles, triangles, stars, lines), live video (NDI, Decklink)
+- **Multiple Overlay Types**: Text, scrolling text, images, image sequences, GIFs, SVG, shapes (rectangles, circles, triangles, stars, lines), video files/URLs, live video (NDI, Decklink), WPF controls (Windows)
+- **Video File Overlays**: Play video files or stream URLs as overlays with full playback control and optional audio output
+- **WPF Control Overlays**: Render live WPF elements with animations and data binding as video overlays (Windows only)
+- **Overlay Groups**: Synchronize multiple overlays for coordinated start/stop with preloading support
 - **Squeezeback Effects**: Scale video to a custom rectangle with overlay image on top (broadcast-style)
 - **Video Transformations**: Zoom and pan effects that transform the entire video frame
 - **Animation Support**: Animate video position/scale with easing functions
@@ -434,7 +437,7 @@ var scrollingText = new OverlayManagerScrollingText(
     y: 50,
     speed: 3,
     direction: ScrollDirection.RightToLeft);
-    
+
 scrollingText.Font.Size = 24;
 scrollingText.Color = SKColors.Yellow;
 scrollingText.BackgroundTransparent = false;
@@ -462,9 +465,138 @@ scrollingText.Text = "Updated news text...";
 scrollingText.Update();
 ```
 
-### Live Video Overlays
+### Video Overlays
 
-The Overlay Manager supports live video sources as overlays, allowing you to composite real-time video from Decklink capture cards or NDI network sources.
+The Overlay Manager supports video overlays from multiple sources, including video files/URLs, Decklink capture cards, and NDI network sources. Video overlays play within the overlay composition with full playback control.
+
+#### OverlayManagerVideo
+
+Plays video files or stream URLs as overlays on the video composition. Each video overlay runs its own internal playback pipeline with optional audio output.
+
+```csharp
+public class OverlayManagerVideo : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Source` | `string` | - | Video source file path or URL |
+| `X` | `int` | - | X position |
+| `Y` | `int` | - | Y position |
+| `Width` | `int` | - | Overlay width |
+| `Height` | `int` | - | Overlay height |
+| `Loop` | `bool` | `true` | Whether the video loops |
+| `PlaybackRate` | `double` | `1.0` | Playback speed (1.0 = normal) |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | How to fit video |
+| `VideoView` | `IVideoView` | `null` | Optional external video preview window |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings for VideoView |
+| `AudioOutput` | `AudioOutputDeviceInfo` | `null` | Audio output device (null = discard audio) |
+| `AudioOutput_Volume` | `double` | `1.0` | Audio volume (0.0-1.0+, above 1.0 amplifies) |
+| `AudioOutput_Mute` | `bool` | `false` | Mute audio output |
+
+**Methods:**
+
+- `Initialize(bool autoStart)` - Initialize the video pipeline. If `autoStart` is true, begins playing immediately; if false, preloads to PAUSED state.
+- `Play()` - Start or resume video playback
+- `Pause()` - Pause video playback
+- `Stop()` - Stop video playback
+- `Seek(TimeSpan position)` - Seek to a specific position in the video
+- `UpdateSource(string source)` - Change the video source dynamically
+- `Dispose()` - Clean up resources
+
+**Example - Video File Overlay:**
+
+```csharp
+// Create a video file overlay
+var videoOverlay = new OverlayManagerVideo(
+    source: "intro.mp4",
+    x: 100,
+    y: 100,
+    width: 640,
+    height: 360)
+{
+    Loop = true,
+    Opacity = 0.9,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    ZIndex = 5
+};
+
+// Optionally enable audio output
+var audioOutputs = await AudioRendererBlock.GetDevicesAsync(AudioOutputDeviceAPI.DirectSound);
+videoOverlay.AudioOutput = audioOutputs[0];
+videoOverlay.AudioOutput_Volume = 0.5;
+
+// Initialize and add to overlay manager
+if (videoOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(videoOverlay);
+}
+
+// Control playback at runtime
+videoOverlay.Pause();
+videoOverlay.Seek(TimeSpan.FromSeconds(10));
+videoOverlay.Play();
+
+// Change source dynamically
+videoOverlay.UpdateSource("outro.mp4");
+
+// Clean up when done
+videoOverlay.Stop();
+videoOverlay.Dispose();
+```
+
+**Example - Picture-in-Picture:**
+
+```csharp
+// Create a small PiP video in the corner
+var pipVideo = new OverlayManagerVideo(
+    source: "camera_feed.mp4",
+    x: 20,
+    y: 20,
+    width: 240,
+    height: 135)
+{
+    Loop = true,
+    Opacity = 0.9,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    ZIndex = 100,
+    Shadow = new OverlayManagerShadowSettings
+    {
+        Enabled = true,
+        Color = SKColors.DarkGray,
+        Opacity = 0.7,
+        BlurRadius = 8,
+        Depth = 3,
+        Direction = 45
+    }
+};
+
+if (pipVideo.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(pipVideo);
+}
+```
+
+**Example - Stream URL Overlay:**
+
+```csharp
+// Overlay a network stream
+var streamOverlay = new OverlayManagerVideo(
+    source: "rtsp://192.168.1.21:554/Streaming/Channels/101",
+    x: 400,
+    y: 50,
+    width: 320,
+    height: 240)
+{
+    Loop = false,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    ZIndex = 10
+};
+
+if (streamOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(streamOverlay);
+}
+```
 
 #### OverlayManagerDecklinkVideo
 
@@ -495,10 +627,10 @@ decklinkSettings.Mode = DecklinkMode.HD1080p2997;
 
 // Create Decklink overlay
 var decklinkOverlay = new OverlayManagerDecklinkVideo(
-    decklinkSettings, 
-    x: 10, 
-    y: 10, 
-    width: 640, 
+    decklinkSettings,
+    x: 10,
+    y: 10,
+    width: 640,
     height: 360);
 
 // Initialize and add to overlay manager
@@ -537,16 +669,16 @@ public class OverlayManagerNDIVideo : IOverlayManagerElement
 // Discover NDI sources on the network
 var ndiSources = await DeviceEnumerator.Shared.NDISourcesAsync();
 var ndiSettings = await NDISourceSettings.CreateAsync(
-    null, 
-    ndiSources[0].Name, 
+    null,
+    ndiSources[0].Name,
     ndiSources[0].URL);
 
 // Create NDI overlay
 var ndiOverlay = new OverlayManagerNDIVideo(
-    ndiSettings, 
-    x: 10, 
-    y: 10, 
-    width: 640, 
+    ndiSettings,
+    x: 10,
+    y: 10,
+    width: 640,
     height: 360);
 
 // Initialize and add to overlay manager
@@ -560,13 +692,168 @@ ndiOverlay.Stop();
 ndiOverlay.Dispose();
 ```
 
-**Common Methods for Live Video Overlays:**
+**Common Methods for Video Overlays:**
 
-- `Initialize(bool autoStart)` - Initialize the video capture pipeline
-- `Play()` - Start or resume video capture
-- `Pause()` - Pause video capture
-- `Stop()` - Stop video capture
+- `Initialize(bool autoStart)` - Initialize the video pipeline
+- `Play()` - Start or resume video playback/capture
+- `Pause()` - Pause video playback/capture
+- `Stop()` - Stop video playback/capture
 - `Dispose()` - Clean up resources
+
+**Additional Methods (OverlayManagerVideo only):**
+
+- `Seek(TimeSpan position)` - Seek to a specific position
+- `UpdateSource(string source)` - Change the video source dynamically
+
+### OverlayManagerWPFControl (Windows Only)
+
+Renders a WPF `FrameworkElement` as a video overlay. This enables using any WPF visual tree — including controls with Storyboard animations, data binding, and complex layouts — as an overlay. The element is periodically snapshot at a configurable refresh rate.
+
+> **Note**: This overlay type is only available on Windows (`NET_WINDOWS` build target).
+
+```csharp
+public class OverlayManagerWPFControl : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `ElementFactory` | `Func<FrameworkElement>` | - | Factory that creates the WPF element on the internal STA thread |
+| `X` | `int` | - | X position |
+| `Y` | `int` | - | Y position |
+| `Width` | `int` | - | Overlay width (must be > 0) |
+| `Height` | `int` | - | Overlay height (must be > 0) |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `Stretch` | How to fit the rendered control |
+| `RefreshRate` | `int` | `15` | Snapshots per second (1-60) |
+| `Dpi` | `double` | `96` | DPI for rendering |
+
+**Methods:**
+
+- `Initialize()` - Initialize the WPF control overlay and start periodic rendering
+- `InvokeOnUIThread(Action action)` - Execute an action on the WPF STA thread for safe runtime updates
+- `InvokeOnUIThread<T>(Func<T> func)` - Execute a function on the WPF STA thread and return the result
+- `Dispose()` - Clean up resources
+
+**Convenience Method on OverlayManagerBlock:**
+
+```csharp
+public OverlayManagerWPFControl Video_Overlay_AddWPFControl(
+    Func<FrameworkElement> elementFactory,
+    int x, int y, int width, int height,
+    int refreshRate = 15,
+    string name = null)
+```
+
+Creates, initializes, and adds a WPF control overlay in one call. Returns the overlay instance, or `null` if initialization failed.
+
+**Example - Using Convenience Method:**
+
+```csharp
+// Add a color-cycling text overlay using the convenience method
+var wpfOverlay = overlayManager.Video_Overlay_AddWPFControl(
+    elementFactory: () =>
+    {
+        var border = new Border
+        {
+            Width = 350,
+            Height = 60,
+            Background = new SolidColorBrush(Color.FromArgb(160, 0, 0, 0)),
+            CornerRadius = new CornerRadius(8),
+            Padding = new Thickness(15, 5, 15, 5)
+        };
+
+        var text = new TextBlock
+        {
+            Text = "VisioForge Media Framework",
+            FontSize = 28,
+            FontWeight = FontWeights.Bold,
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Center
+        };
+
+        var brush = new SolidColorBrush(Colors.Red);
+        text.Foreground = brush;
+        border.Child = text;
+
+        // Animate text color
+        var colorAnim = new ColorAnimationUsingKeyFrames
+        {
+            Duration = TimeSpan.FromSeconds(5),
+            RepeatBehavior = RepeatBehavior.Forever
+        };
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Red, KeyTime.FromPercent(0.0)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Gold, KeyTime.FromPercent(0.25)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Cyan, KeyTime.FromPercent(0.5)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Magenta, KeyTime.FromPercent(0.75)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Red, KeyTime.FromPercent(1.0)));
+        brush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnim);
+
+        return border;
+    },
+    x: 50, y: 300, width: 350, height: 60,
+    refreshRate: 30, name: "ColorText");
+
+if (wpfOverlay == null)
+{
+    // Initialization failed
+}
+```
+
+**Example - Manual Creation with Animated Clock:**
+
+```csharp
+// Create a WPF analog clock overlay manually
+var clockOverlay = new OverlayManagerWPFControl(
+    elementFactory: () =>
+    {
+        var canvas = new Canvas { Width = 200, Height = 200 };
+
+        // Clock face
+        var face = new Ellipse
+        {
+            Width = 180, Height = 180,
+            Stroke = Brushes.White, StrokeThickness = 3
+        };
+        Canvas.SetLeft(face, 10);
+        Canvas.SetTop(face, 10);
+        canvas.Children.Add(face);
+
+        // Second hand with rotation animation
+        var secondHand = new Line
+        {
+            X1 = 100, Y1 = 100, X2 = 100, Y2 = 25,
+            Stroke = Brushes.Red, StrokeThickness = 1
+        };
+        var secondRotate = new RotateTransform(DateTime.Now.Second * 6, 100, 100);
+        secondHand.RenderTransform = secondRotate;
+        canvas.Children.Add(secondHand);
+
+        var anim = new DoubleAnimation
+        {
+            From = DateTime.Now.Second * 6,
+            To = DateTime.Now.Second * 6 + 360,
+            Duration = TimeSpan.FromSeconds(60),
+            RepeatBehavior = RepeatBehavior.Forever
+        };
+        secondRotate.BeginAnimation(RotateTransform.AngleProperty, anim);
+
+        return canvas;
+    },
+    x: 20, y: 20, width: 200, height: 200, refreshRate: 30);
+
+if (clockOverlay.Initialize())
+{
+    overlayManager.Video_Overlay_Add(clockOverlay);
+}
+
+// Update WPF control at runtime (thread-safe)
+clockOverlay.InvokeOnUIThread(() =>
+{
+    // Safe to modify WPF elements here
+});
+
+// Clean up
+clockOverlay.Dispose();
+```
 
 ### Shape Overlays
 
@@ -675,6 +962,88 @@ callback.OnDraw += (sender, e) => {
     ctx.Fill();
 };
 overlayManager.Video_Overlay_Add(callback);
+```
+
+### OverlayManagerGroup
+
+Groups multiple overlays for synchronized lifecycle management. This is especially useful when you need to preload multiple video overlays and start them at exactly the same time.
+
+```csharp
+public class OverlayManagerGroup : IOverlayManagerElement, IDisposable
+```
+
+| Property   | Type                            | Default    | Description                         |
+|------------|----------------------------------|------------|-------------------------------------|
+| `Overlays` | `List<IOverlayManagerElement>`   | Empty list | Overlays in this group (read-only)  |
+
+> **Note**: The standard `IOverlayManagerElement` properties (`Opacity`, `Rotation`, `ZIndex`, `Shadow`) are present on the group but not applied at the group level — individual overlay properties within the group are used for rendering.
+
+**Methods:**
+
+- `Add(IOverlayManagerElement overlay)` - Add an overlay to the group. Throws `InvalidOperationException` if already initialized.
+- `Remove(IOverlayManagerElement overlay)` - Remove an overlay from the group. Throws `InvalidOperationException` if already initialized.
+- `Initialize()` - Preload all `OverlayManagerVideo` overlays in the group to PAUSED state. Returns `true` if all succeeded. Other overlay types (Decklink, NDI) must be initialized manually.
+- `Play()` - Start all `OverlayManagerVideo` overlays synchronously. Must call `Initialize()` first. Other video overlay types must call `Play()` individually.
+- `Pause()` - Pause all `OverlayManagerVideo` overlays in the group.
+- `Stop()` - Stop all `OverlayManagerVideo` overlays in the group.
+- `GetRenderableOverlays()` - Returns all enabled overlays in the group (used internally).
+- `Dispose()` - Stop and dispose all overlays in the group.
+
+> **Important**: You cannot add or remove overlays after `Initialize()` has been called.
+
+**Why add non-video overlays to a group?** While `Initialize()`, `Play()`, `Pause()`, and `Stop()` only control `OverlayManagerVideo` instances, adding other overlay types (Decklink, NDI, text, images) to a group provides organizational grouping for rendering and centralized disposal — `Dispose()` cleans up **all** overlays in the group regardless of type.
+
+**Example - Synchronized Video + Decklink Group:**
+
+```csharp
+// Create a group for overlays that must start simultaneously
+var group = new OverlayManagerGroup("SyncGroup");
+
+// Add a video file overlay
+var videoOverlay = new OverlayManagerVideo(
+    source: "intro.mp4",
+    x: 10, y: 10, width: 640, height: 360)
+{
+    Loop = true,
+    ZIndex = 10
+};
+group.Add(videoOverlay);
+
+// Add a Decklink capture overlay
+var decklinkSettings = new DecklinkVideoSourceSettings(deviceNumber);
+decklinkSettings.Mode = DecklinkMode.HD1080p2997;
+
+var decklinkOverlay = new OverlayManagerDecklinkVideo(
+    settings: decklinkSettings,
+    x: 660, y: 10, width: 640, height: 360)
+{
+    ZIndex = 11
+};
+
+// Initialize Decklink manually (group handles OverlayManagerVideo only)
+decklinkOverlay.Initialize(autoStart: false);
+group.Add(decklinkOverlay);
+
+// You can also mix in non-video overlays
+var label = new OverlayManagerText("Camera 1", 10, 380);
+label.Font.Size = 14;
+label.Color = SKColors.White;
+group.Add(label);
+
+// Add group to overlay manager
+overlayManager.Video_Overlay_Add(group);
+
+// Start all OverlayManagerVideo overlays in the group
+group.Play();
+// Decklink must be started separately (group.Play() only handles OverlayManagerVideo)
+decklinkOverlay.Play();
+
+// Later, pause/stop all at once
+group.Pause();
+group.Stop();
+
+// Clean up
+group.Dispose();
 ```
 
 ## Video Transformation Effects
@@ -1023,6 +1392,12 @@ title.Text = "Updated Text!";
 overlayManager.Video_Overlay_Update(title);
 ```
 
+## Sample Application
+
+For a complete working example demonstrating all overlay types, refer to:
+
+- [Overlay Manager Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Overlay%20Manager%20Demo)
+
 ## Performance Considerations
 
 1. **Z-Index Ordering**: Elements are sorted by Z-index before rendering. Use appropriate values to minimize sorting overhead.
@@ -1035,9 +1410,16 @@ overlayManager.Video_Overlay_Update(title);
 
 5. **Resource Management**: Dispose image, GIF, and image sequence overlays when no longer needed to free memory.
 
+6. **Video Overlays**: Each `OverlayManagerVideo` overlay runs its own internal GStreamer pipeline. Limit the number of simultaneous video overlays to avoid excessive CPU and memory usage.
+
+7. **WPF Control Overlays**: Higher `RefreshRate` values increase CPU usage. Use the minimum refresh rate needed for smooth visual updates — 15 fps is sufficient for most static or slowly-changing content.
+
+8. **Overlay Groups**: Use `OverlayManagerGroup` to preload video overlays. This avoids staggered start times when multiple video overlays need to begin simultaneously.
+
 ## Platform Notes
 
 - **Windows**: Supports System.Drawing.Bitmap in addition to SkiaSharp
+- **Windows (WPF)**: Supports `OverlayManagerWPFControl` for rendering WPF visual elements as overlays. Requires `NET_WINDOWS` build target.
 - **iOS**: Font defaults to "System-ui"
 - **Android**: Font defaults to "System-ui"
 - **Linux/macOS**: Enumerates available fonts at runtime
@@ -1053,3 +1435,31 @@ The overlay manager uses internal locking for thread-safe operations. You can sa
 2. **Text appears blurry**: Ensure font size is appropriate for video resolution.
 
 3. **Memory usage**: Dispose unused image/GIF/image sequence overlays and use appropriate image sizes.
+
+4. **Video overlay shows no frames**: Ensure `Initialize()` returns `true` before adding to the overlay manager. Check that the source file path is valid and accessible, and that GStreamer has the required codecs.
+
+5. **WPF overlay not updating**: Verify `RefreshRate` is appropriate for your content. Use `InvokeOnUIThread()` for all WPF element modifications to avoid cross-thread exceptions.
+
+6. **Group overlays not starting together**: Ensure all overlays are added to the group before calling `Initialize()`. Overlays cannot be added after initialization.
+
+## Frequently Asked Questions
+
+### How do I overlay a video file on top of another video in C#?
+
+Use `OverlayManagerVideo` to play a video file or stream URL as an overlay. Create an instance with the source path, position, and dimensions, then call `Initialize()` and add it to the `OverlayManagerBlock`. You get full playback control with `Play()`, `Pause()`, `Stop()`, and `Seek()` methods, plus optional audio output. See the [OverlayManagerVideo](#overlaymanagervideo) section for examples.
+
+### Can I use WPF controls as live video overlays?
+
+Yes. `OverlayManagerWPFControl` renders any WPF `FrameworkElement` as a video overlay, including controls with Storyboard animations, data binding, and complex visual trees. The element is periodically snapshot at a configurable refresh rate (1-60 fps). This is Windows-only and requires the `NET_WINDOWS` build target. Use the convenience method `Video_Overlay_AddWPFControl()` for the simplest setup. See the [OverlayManagerWPFControl](#overlaymanagerwpfcontrol-windows-only) section.
+
+### How do I synchronize multiple video overlays to start at the same time?
+
+Use `OverlayManagerGroup` to group overlays that need coordinated lifecycle. Add all overlays to the group before calling `Initialize()`, which preloads video overlays to PAUSED state. Then call `Play()` to start them all simultaneously. This is especially useful for multi-camera compositions. See the [OverlayManagerGroup](#overlaymanagergroup) section.
+
+### Can I play audio from a video file overlay?
+
+Yes. Set the `AudioOutput` property on `OverlayManagerVideo` to an audio output device before calling `Initialize()`. Control volume with `AudioOutput_Volume` (0.0-1.0+) and mute with `AudioOutput_Mute`. If `AudioOutput` is null (the default), audio from the video file is discarded.
+
+### What overlay types does OverlayManagerBlock support?
+
+The OverlayManagerBlock supports: text (`OverlayManagerText`), date/time (`OverlayManagerDateTime`), scrolling text (`OverlayManagerScrollingText`), images (`OverlayManagerImage`), animated GIFs (`OverlayManagerGIF`), image sequences (`OverlayManagerImageSequence`), SVG graphics (`OverlayManagerSVG`), shapes (rectangle, circle, triangle, star, line), video files/URLs (`OverlayManagerVideo`), Decklink capture cards (`OverlayManagerDecklinkVideo`), NDI network sources (`OverlayManagerNDIVideo`), WPF controls (`OverlayManagerWPFControl`, Windows only), overlay groups (`OverlayManagerGroup`), custom Cairo drawing (`OverlayManagerCallback`), and video transformation effects (zoom, pan, fade, squeezeback).

@@ -1,5 +1,5 @@
 ---
-title: Codificadores VP8 y VP9 en VisioForge .NET
+title: Codificadores VP8 y VP9 para streaming en VisioForge .NET
 description: Configure codificadores de video VP8 y VP9 para rendimiento óptimo de streaming, grabación y procesamiento en aplicaciones VisioForge .NET.
 ---
 

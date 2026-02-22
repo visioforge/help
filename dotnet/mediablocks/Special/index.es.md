@@ -250,6 +250,347 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
+## Bloque Encriptador
+
+El bloque Encriptador cifra un stream de medios usando encriptación AES en tiempo real. Puede usarse para proteger video, audio o cualquier otro stream de datos antes de escribirlo en almacenamiento o enviarlo por la red.
+
+### Información del bloque
+
+Nombre: EncryptorBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada | Cualquiera | 1 |
+| Salida | Cualquiera | 1 |
+
+### El pipeline de muestra
+
+```mermaid
+graph LR;
+    BasicFileSourceBlock-->EncryptorBlock;
+    EncryptorBlock-->FileSinkBlock;
+```
+
+### Constructor
+
+```csharp
+EncryptorBlock(EncryptorDecryptorSettings settings)
+```
+
+Parámetros:
+
+- `settings` - La configuración de encriptación AES, incluyendo clave, vector de inicialización y tipo de cifrado.
+
+### Disponibilidad
+
+Llame a `EncryptorBlock.IsAvailable()` para verificar el soporte de encriptación AES antes de crear una instancia.
+
+### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new EncryptorDecryptorSettings(
+    key: "1f9423681beb9a79215820f6bda73d0f",
+    iv: "e9aa8e834d8d70b7e0d254ff670dd718");
+
+var fileSource = new BasicFileSourceBlock("input.mp4");
+var encryptor = new EncryptorBlock(settings);
+var fileSink = new FileSinkBlock("encrypted.bin", false);
+
+pipeline.Connect(fileSource.Output, encryptor.Input);
+pipeline.Connect(encryptor.Output, fileSink.Input);
+
+await pipeline.StartAsync();
+```
+
+### Plataformas
+
+Windows, macOS, Linux.
+
+## Bloque Desencriptador
+
+El bloque Desencriptador descifra un stream de medios cifrado con AES en tiempo real, restaurando los datos originales. La clave y el IV deben coincidir con los usados durante la encriptación. Para una solución completa de reproducción de archivos cifrados, considere usar el [Bloque Reproductor Desencriptador](#bloque-reproductor-desencriptador).
+
+### Información del bloque
+
+Nombre: DecryptorBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada | Cualquiera | 1 |
+| Salida | Cualquiera | 1 |
+
+### El pipeline de muestra
+
+```mermaid
+graph LR;
+    BasicFileSourceBlock-->DecryptorBlock;
+    DecryptorBlock-->QueueBlock;
+    QueueBlock-->DecodeBinBlock;
+    DecodeBinBlock-->VideoRendererBlock;
+```
+
+### Constructor
+
+```csharp
+DecryptorBlock(EncryptorDecryptorSettings settings)
+```
+
+Parámetros:
+
+- `settings` - La configuración de desencriptación AES. La clave y el IV deben coincidir con los ajustes de encriptación.
+
+### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new EncryptorDecryptorSettings(
+    key: "1f9423681beb9a79215820f6bda73d0f",
+    iv: "e9aa8e834d8d70b7e0d254ff670dd718");
+
+var fileSource = new BasicFileSourceBlock("encrypted.bin");
+var decryptor = new DecryptorBlock(settings);
+var queue = new QueueBlock();
+var decodeBin = new DecodeBinBlock();
+
+pipeline.Connect(fileSource.Output, decryptor.Input);
+pipeline.Connect(decryptor.Output, queue.Input);
+pipeline.Connect(queue.Output, decodeBin.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(decodeBin.VideoOutput, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Plataformas
+
+Windows, macOS, Linux.
+
+## Bloque Reproductor Desencriptador
+
+El bloque Reproductor Desencriptador es un bloque fuente compuesto que combina lectura de archivo, desencriptación AES, cola y decodificación en un único bloque fácil de usar. No tiene pad de entrada externo — lee y descifra el archivo internamente. Conecte sus pads de salida directamente a renderizadores o bloques de procesamiento adicionales.
+
+Pipeline interno: `BasicFileSourceBlock → DecryptorBlock → QueueBlock → DecodeBinBlock`
+
+### Información del bloque
+
+Nombre: DecryptorPlayerBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Salida de video | Video sin comprimir | 1 |
+| Salida de audio | Audio sin comprimir | 1 |
+| Salida de subtítulos | Datos de subtítulos | 1 (opcional) |
+
+### El pipeline de muestra
+
+```mermaid
+graph LR;
+    DecryptorPlayerBlock-->VideoRendererBlock;
+    DecryptorPlayerBlock-->AudioRendererBlock;
+```
+
+### Constructor
+
+```csharp
+DecryptorPlayerBlock(MediaBlocksPipeline pipeline, string filename, string key, string iv,
+    bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false)
+```
+
+Parámetros:
+
+- `pipeline` - La instancia del pipeline padre.
+- `filename` - Ruta al archivo de medios cifrado con AES.
+- `key` - Clave de encriptación como cadena hexadecimal (32 caracteres para AES-128, 64 para AES-256).
+- `iv` - Vector de inicialización como cadena hexadecimal (siempre 32 caracteres hex / 16 bytes).
+- `renderVideo` - Si exponer el pad de salida de video. Predeterminado: `true`.
+- `renderAudio` - Si exponer el pad de salida de audio. Predeterminado: `true`.
+- `renderSubtitle` - Si exponer el pad de salida de subtítulos. Predeterminado: `false`.
+
+### Pads de salida
+
+- `VideoOutput` - Frames de video decodificados (disponible cuando `renderVideo` es `true`).
+- `AudioOutput` - Muestras de audio decodificadas (disponible cuando `renderAudio` es `true`).
+- `SubtitleOutput` - Datos de subtítulos decodificados (disponible cuando `renderSubtitle` es `true`).
+
+### Disponibilidad
+
+Llame a `DecryptorPlayerBlock.IsAvailable()` para verificar el soporte de desencriptación antes de crear una instancia.
+
+### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var decryptorPlayer = new DecryptorPlayerBlock(
+    pipeline,
+    filename: "encrypted.bin",
+    key: "1f9423681beb9a79215820f6bda73d0f",
+    iv: "e9aa8e834d8d70b7e0d254ff670dd718");
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+var audioRenderer = new AudioRendererBlock();
+
+pipeline.Connect(decryptorPlayer.VideoOutput, videoRenderer.Input);
+pipeline.Connect(decryptorPlayer.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Plataformas
+
+Windows, macOS, Linux.
+
+## Bloque Encriptador SRTP
+
+El bloque Encriptador SRTP cifra streams RTP usando SRTP (Protocolo de Transporte en Tiempo Real Seguro) según se define en RFC 3711. Proporciona confidencialidad, autenticación de mensajes y protección contra reproducción para streams de medios en tiempo real como videoconferencias o transmisiones en vivo.
+
+### Información del bloque
+
+Nombre: SRTPEncryptorBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada | RTP | 1 |
+| Salida | SRTP | 1 |
+
+### El pipeline de muestra
+
+```mermaid
+graph LR;
+    RTPSourceBlock-->SRTPEncryptorBlock;
+    SRTPEncryptorBlock-->RTPSinkBlock;
+```
+
+### Constructor
+
+```csharp
+SRTPEncryptorBlock(SRTPSettings settings)
+```
+
+Parámetros:
+
+- `settings` - Configuración de encriptación SRTP incluyendo clave maestra, suite de cifrado y método de autenticación.
+
+### Disponibilidad
+
+Llame a `SRTPEncryptorBlock.IsAvailable()` para verificar el soporte SRTP antes de crear una instancia.
+
+### Código de muestra
+
+```csharp
+var settings = new SRTPSettings("000102030405060708090A0B0C0D0E0F")
+{
+    Cipher = SRTPCipher.AES_128_ICM,
+    Auth = SRTPAuth.HMAC_SHA1_80
+};
+
+var encryptor = new SRTPEncryptorBlock(settings);
+```
+
+### Plataformas
+
+Windows, macOS, Linux.
+
+## Bloque Desencriptador SRTP
+
+El bloque Desencriptador SRTP descifra streams RTP cifrados con SRTP de vuelta a RTP en texto plano. Los ajustes deben coincidir con los usados por el encriptador. También verifica las etiquetas de autenticación de mensajes y proporciona protección contra ataques de reproducción.
+
+### Información del bloque
+
+Nombre: SRTPDecryptorBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada | SRTP | 1 |
+| Salida | RTP | 1 |
+
+### El pipeline de muestra
+
+```mermaid
+graph LR;
+    NetworkSourceBlock-->SRTPDecryptorBlock;
+    SRTPDecryptorBlock-->RTPDecoderBlock;
+```
+
+### Constructor
+
+```csharp
+SRTPDecryptorBlock(SRTPSettings settings)
+```
+
+Parámetros:
+
+- `settings` - Configuración de desencriptación SRTP. Debe coincidir con los ajustes de encriptación usados en el lado del emisor.
+
+### Disponibilidad
+
+Llame a `SRTPDecryptorBlock.IsAvailable()` para verificar el soporte SRTP antes de crear una instancia.
+
+### Código de muestra
+
+```csharp
+var settings = new SRTPSettings("000102030405060708090A0B0C0D0E0F");
+var decryptor = new SRTPDecryptorBlock(settings);
+```
+
+### Plataformas
+
+Windows, macOS, Linux.
+
+## SRTPSettings
+
+La clase `SRTPSettings` proporciona configuración para operaciones de encriptación y desencriptación SRTP.
+
+### Propiedades
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | :---: | :---: | --- |
+| Key | string | — | Clave maestra como cadena hex. 32 caracteres hex (16 bytes) para AES-128-ICM; 64 caracteres hex (32 bytes) para AES-256-ICM. |
+| Cipher | SRTPCipher | AES_128_ICM | Algoritmo de encriptación. |
+| Auth | SRTPAuth | HMAC_SHA1_80 | Método de autenticación. |
+| SSRC | uint | 0 | Identificador de Fuente de Sincronización RTP. Use 0 para coincidir con cualquier SSRC. |
+
+### Constructores
+
+- `SRTPSettings()` - Crea ajustes con cifrado AES-128-ICM y autenticación HMAC-SHA1-80.
+- `SRTPSettings(string key)` - Crea ajustes con la clave maestra especificada y valores predeterminados.
+
+### Plataformas
+
+Windows, macOS, Linux.
+
+## SRTPCipher
+
+El enum `SRTPCipher` define los algoritmos de encriptación disponibles para SRTP.
+
+### Valores del Enum
+
+- `NULL` - Sin encriptación. Solo proporciona autenticación.
+- `AES_128_ICM` - AES-128 en Modo Contador Entero. Opción más común; requiere una clave de 16 bytes (32 caracteres hex).
+- `AES_256_ICM` - AES-256 en Modo Contador Entero. Seguridad máxima; requiere una clave de 32 bytes (64 caracteres hex).
+
+### Plataformas
+
+Windows, macOS, Linux.
+
+## SRTPAuth
+
+El enum `SRTPAuth` define los métodos de autenticación de mensajes disponibles para SRTP.
+
+### Valores del Enum
+
+- `NULL` - Sin autenticación. No recomendado para uso en producción.
+- `HMAC_SHA1_80` - HMAC-SHA1 con etiqueta de autenticación de 80 bits. Recomendado para la mayoría de las aplicaciones.
+- `HMAC_SHA1_32` - HMAC-SHA1 con etiqueta de autenticación de 32 bits. Menor sobrecarga de ancho de banda para redes con restricciones.
+
+### Plataformas
+
+Windows, macOS, Linux.
+
 ## AESCipher
 
 El enum `AESCipher` define los tipos de cifrados AES que pueden usarse. (Fuente: `VisioForge.Core/Types/X/Special/AESCipher.cs`)
@@ -878,6 +1219,264 @@ var dataProcessor = new DataProcessorBlock();
 pipeline.Connect(dataSource.Output, dataProcessor.Input);
 
 // Procesar y reenviar datos
+await pipeline.StartAsync();
+```
+
+### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+## Espacio de Color Personalizado
+
+El `CustomColorspaceXBlock` convierte video sin procesar de RGB a YV12 (YUV 4:2:0 planar) usando un plugin de GStreamer en C# integrado. La conversión aplica coeficientes ITU-R BT.601 con promediado de bloque 2×2 para submuestreo de croma.
+
+Las propiedades opcionales `Width`, `Height` y `FrameRate` restringen la negociación de caps; déjelas sin configurar para negociación automática. Los valores de ancho y alto deben ser números pares.
+
+`CustomColorspaceXBlock.IsAvailable()` siempre devuelve `true` — el plugin está implementado en código administrado y no requiere ninguna dependencia externa de GStreamer.
+
+### Información del bloque
+
+Nombre: CustomColorspaceXBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada | video/x-raw (RGB) | 1 |
+| Salida | video/x-raw (YV12) | 1 |
+
+### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var colorspace = new CustomColorspaceXBlock(width: 1280, height: 720);
+pipeline.Connect(fileSource.VideoOutput, colorspace.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(colorspace.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+## Sincronización en Vivo
+
+El `LiveSyncBlock` envuelve el elemento GStreamer `livesync` para mantener un pipeline en vivo en tiempo real. Descarta los fotogramas que llegan tarde y duplica el último fotograma cuando la fuente se detiene, manteniendo una salida en tiempo real fluida sin bloqueos del pipeline. Se admiten tanto flujos de audio como de video.
+
+Use este bloque en pipelines de transmisión en vivo o captura para absorber el jitter de temporización de fuentes de red o hardware.
+
+### Información del bloque
+
+Nombre: LiveSyncBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada | Cualquiera | 1 |
+| Salida | Cualquiera | 1 |
+
+### Disponibilidad
+
+`LiveSyncBlock.IsAvailable()` devuelve `true` si el elemento GStreamer `livesync` está presente.
+
+### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var rtmpSettings = await RTMPSourceSettings.CreateAsync(new Uri("rtmp://example.com/live/stream"));
+var rtmpSource = new RTMPSourceBlock(rtmpSettings);
+
+var liveSync = new LiveSyncBlock();
+pipeline.Connect(rtmpSource.VideoOutput, liveSync.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(liveSync.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Plataformas
+
+Windows, macOS, Linux.
+
+## Custom Media Block
+
+El `CustomMediaBlock` es un puente flexible entre la capa de abstracción de MediaBlocks y los elementos GStreamer sin procesar. Puede envolver cualquier elemento GStreamer por nombre de fábrica o una descripción de pipeline bin, siendo útil para integrar plugins de terceros, elementos experimentales o funcionalidades aún no cubiertas por una clase MediaBlocks dedicada.
+
+La configuración y tipos de pads asociados (`CustomMediaBlockSettings`, `CustomMediaBlockPad`) están documentados en las secciones [CustomMediaBlockSettings](#custommediablocksettings) y [CustomMediaBlockPad](#custommediablockpad) anteriores.
+
+### Información del bloque
+
+Nombre: CustomMediaBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada | Definida por configuración | 0…N |
+| Salida | Definida por configuración | 0…N |
+
+### Características principales
+
+- Envolver cualquier elemento GStreamer por nombre (p. ej., `"videoscale"`) o como descripción bin (p. ej., `"[ videoscale ! videoconvert ]"`).
+- Establecer propiedades del elemento mediante el diccionario `ElementParams` antes de iniciar el pipeline.
+- Recibir el `Gst.Element` sin procesar mediante el evento `OnElementAdded` para configuración adicional.
+- Usar `UsePadAddedEvent = true` para elementos con pads dinámicos (p. ej., demuxers).
+- Aplicar filtros de caps opcionales en pads de salida mediante `CustomMediaBlockPad.CustomCaps`.
+
+### Eventos
+
+- `OnElementAdded` — se dispara inmediatamente después de que el elemento GStreamer es creado y añadido al pipeline, permitiendo configuración directa de propiedades o señales en el elemento nativo.
+
+### El pipeline de muestra
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->CustomMediaBlock;
+    CustomMediaBlock-->VideoRendererBlock;
+```
+
+### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+
+// Envolver el elemento GStreamer videoscale con una propiedad
+var settings = new CustomMediaBlockSettings("videoscale");
+settings.ElementParams["method"] = 0; // vecino más cercano
+settings.Pads.Add(new CustomMediaBlockPad(MediaBlockPadDirection.In, MediaBlockPadMediaType.Video));
+settings.Pads.Add(new CustomMediaBlockPad(MediaBlockPadDirection.Out, MediaBlockPadMediaType.Video));
+
+var customBlock = new CustomMediaBlock(settings);
+customBlock.OnElementAdded += (sender, element) =>
+{
+    // Configuración adicional del elemento después de su creación
+};
+
+pipeline.Connect(fileSource.VideoOutput, customBlock.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(customBlock.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Ejemplo con descripción bin
+
+```csharp
+// Envolver un pipeline multi-elemento de GStreamer como un solo bloque
+var settings = new CustomMediaBlockSettings("[ videoscale ! videoconvert ]");
+settings.Pads.Add(new CustomMediaBlockPad(MediaBlockPadDirection.In, MediaBlockPadMediaType.Video));
+settings.Pads.Add(new CustomMediaBlockPad(MediaBlockPadDirection.Out, MediaBlockPadMediaType.Video));
+
+var customBlock = new CustomMediaBlock(settings);
+```
+
+### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+## Universal Transform Block
+
+El `UniversalTransformBlock` es una clase base abstracta para implementar transformaciones personalizadas de fotogramas de video en código C# administrado. Soporta transformaciones de 1:N fotogramas: un único fotograma de entrada puede producir cero, uno o múltiples fotogramas de salida, habilitando casos de uso como eliminación de fotogramas, duplicación, división o conversión de formato.
+
+Cree una subclase de `UniversalTransformBlock`, proporcione cadenas de caps GStreamer para entrada y salida, y sobreescriba `OnTransformFrame` para implementar la lógica de transformación.
+
+### Información del bloque
+
+Nombre: (subclase definida por el usuario).
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada de video | Video sin comprimir | 1 |
+| Salida de video | Video sin comprimir | 1 |
+
+### Constructor (protegido)
+
+```csharp
+protected UniversalTransformBlock(string inputCaps, string outputCaps)
+```
+
+Parámetros:
+
+- `inputCaps` — cadena de caps GStreamer que describe el formato de entrada aceptado (p. ej., `"video/x-raw,format=RGB,width=1920,height=1080,framerate=30/1"`).
+- `outputCaps` — cadena de caps GStreamer que describe el formato de salida producido.
+
+### Método abstracto a sobreescribir
+
+```csharp
+protected abstract List<Gst.Buffer> OnTransformFrame(
+    Gst.Buffer inputBuffer,
+    Gst.Caps inputCaps,
+    Gst.Caps outputCaps);
+```
+
+Semántica del valor de retorno:
+
+- **Lista vacía** — eliminar el fotograma (no se produce salida).
+- **Un buffer** — transformación estándar 1:1.
+- **Múltiples buffers** — transformación 1:N (p. ej., duplicación o división de fotogramas).
+
+### Métodos auxiliares
+
+- `CreateBuffer(byte[] data, ulong pts, ulong dts, ulong duration)` — crea un `Gst.Buffer` desde un array de bytes administrado.
+- `GetVideoInfo(Caps caps, out string format, out int width, out int height, out int frameRateNum, out int frameRateDen)` — analiza formato de video, dimensiones y tasa de fotogramas desde un objeto caps.
+
+### El pipeline de muestra
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->CustomTransformBlock;
+    CustomTransformBlock-->VideoRendererBlock;
+```
+
+### Código de muestra
+
+```csharp
+// Definir una transformación personalizada: invertir cada fotograma (RGB → RGB)
+public class InvertTransformBlock : UniversalTransformBlock
+{
+    public InvertTransformBlock()
+        : base(
+            inputCaps:  "video/x-raw,format=RGB",
+            outputCaps: "video/x-raw,format=RGB")
+    {
+    }
+
+    protected override List<Gst.Buffer> OnTransformFrame(
+        Gst.Buffer inputBuffer,
+        Gst.Caps inputCaps,
+        Gst.Caps outputCaps)
+    {
+        // Mapear el buffer de entrada, invertir píxeles, retornar nuevo buffer
+        using var map = inputBuffer.Map(Gst.MapFlags.Read);
+        var data = map.Data.ToArray();
+        for (int i = 0; i < data.Length; i++)
+            data[i] = (byte)(255 - data[i]);
+
+        var output = CreateBuffer(data, inputBuffer.Pts, inputBuffer.Dts, inputBuffer.Duration);
+        return new List<Gst.Buffer> { output };
+    }
+}
+
+// Usar en un pipeline
+var pipeline = new MediaBlocksPipeline();
+
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var transform = new InvertTransformBlock();
+
+pipeline.Connect(fileSource.VideoOutput, transform.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(transform.Output, videoRenderer.Input);
+
 await pipeline.StartAsync();
 ```
 

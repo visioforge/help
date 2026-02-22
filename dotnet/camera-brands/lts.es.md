@@ -1,5 +1,5 @@
 ---
-title: Cómo conectar una cámara IP LTS en C# .NET
+title: Cámara IP LTS - URL RTSP y guía de conexión en C# .NET
 description: Conecte cámaras LTS (LT Security) en C# .NET con patrones de URL RTSP y ejemplos de código para series CMIP, CMHR y modelos NVR. LTS usa firmware Hikvision.
 ---
 

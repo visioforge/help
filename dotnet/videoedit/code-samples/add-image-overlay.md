@@ -1,5 +1,5 @@
 ---
-title: Adding Image Overlays to Video in .NET SDK
+title: Add Image Overlay to Video in .NET with Code Examples
 description: Implement image overlays in videos with .NET SDK using step-by-step guide with code examples for positioning, transparency, and timing.
 ---
 

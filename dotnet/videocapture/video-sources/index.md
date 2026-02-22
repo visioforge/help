@@ -1,5 +1,5 @@
 ---
-title: Video Sources for .NET SDK - Developer Guide
+title: Video Capture Sources: Webcam, IP Camera, Screen in .NET
 description: Master video input sources for .NET including webcams, Decklink, IP cameras, screen capture, and industrial cameras with integration.
 sidebar_label: Video Sources
 order: 16

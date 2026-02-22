@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprinting SDK .NET API Documentation
+title: Video Fingerprinting .NET API - Generate, Compare, Search
 description: Complete API documentation for VisioForge Video Fingerprinting SDK to generate, compare, and search video fingerprints with code examples.
 ---
 

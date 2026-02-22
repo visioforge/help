@@ -1,5 +1,5 @@
 ---
-title: Control Avanzado de Cámara y PTZ para SDK .NET
+title: Control de cámara PTZ en .NET: exposición, zoom y enfoque
 description: Implementa características de control de cámara incluyendo Pan, Tilt, Zoom (PTZ), Exposición, Iris y Enfoque en .NET con ejemplos de código C#.
 ---
 

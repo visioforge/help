@@ -1,5 +1,5 @@
 ---
-title: TVFVideoCapture Library Version History
+title: Delphi Video Capture SDK Version Changelog and Notes
 description: TVFVideoCapture version history - GPU acceleration, streaming capabilities, format updates from version 4.1 to 11.0 with detailed release notes.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Processing Filters - Chroma Key Interface
+title: Chroma Key DirectShow Filter - IVFChromaKey Interface
 description: IVFChromaKey interface for green screen and blue screen compositing with tolerance control and background replacement in DirectShow.
 ---
 

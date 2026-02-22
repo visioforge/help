@@ -1,5 +1,5 @@
 ---
-title: SDK de Edición de Video para Desarrolladores .NET
+title: Video Edit SDK .Net - Edicion de Video Profesional en C#
 description: Construye aplicaciones de edición de video con SDK .NET con edición de línea de tiempo, transiciones, efectos, aceleración de hardware y soporte multi-formato.
 ---
 

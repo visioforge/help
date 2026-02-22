@@ -1,6 +1,6 @@
 ---
-title: Guía de uso de OverlayManagerBlock
-description: Usa OverlayManagerBlock para agregar superposiciones a contenido de video con funciones para gestionar capas, sombras, rotación y opacidad en tiempo real.
+title: OverlayManagerBlock - superposiciones de video en .NET
+description: Aprenda a usar OverlayManagerBlock en .NET para agregar superposiciones de texto, imágenes, video y formas con gestión de capas y composición en tiempo real.
 ---
 
 # Guía de Uso del Bloque Overlay Manager
@@ -11,7 +11,10 @@ El `OverlayManagerBlock` es un componente poderoso de MediaBlocks que proporcion
 
 ## Características Principales
 
-- **Múltiples Tipos de Superposición**: Texto, texto desplazable, imágenes, secuencias de imágenes, GIFs, SVG, formas (rectángulos, círculos, triángulos, estrellas, líneas), video en vivo (NDI, Decklink)
+- **Múltiples Tipos de Superposición**: Texto, texto desplazable, imágenes, secuencias de imágenes, GIFs, SVG, formas (rectángulos, círculos, triángulos, estrellas, líneas), archivos de video/URLs, video en vivo (NDI, Decklink), controles WPF (Windows)
+- **Superposiciones de Archivos de Video**: Reproduce archivos de video o URLs de streaming como superposiciones con control completo de reproducción y salida de audio opcional
+- **Superposiciones de Controles WPF**: Renderiza elementos WPF en vivo con animaciones y data binding como superposiciones de video (solo Windows)
+- **Grupos de Superposiciones**: Sincroniza múltiples superposiciones para inicio/parada coordinados con soporte de precarga
 - **Efectos Squeezeback**: Escala el video a un rectángulo personalizado con imagen superpuesta (estilo broadcast)
 - **Transformaciones de Video**: Efectos de zoom y panorámica que transforman todo el cuadro de video
 - **Soporte de Animación**: Anima la posición/escala del video con funciones de suavizado
@@ -384,9 +387,209 @@ dateTime.Y = 30;
 overlayManager.Video_Overlay_Add(dateTime);
 ```
 
-### Superposiciones de Video en Vivo
+### OverlayManagerScrollingText
 
-El Overlay Manager soporta fuentes de video en vivo como superposiciones, permitiéndote componer video en tiempo real desde tarjetas de captura Decklink o fuentes de red NDI.
+Muestra texto desplazable que se mueve a través del video en una dirección especificada.
+
+```csharp
+public class OverlayManagerScrollingText : IOverlayManagerElement
+```
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|-----------|------|----------------|-------------|
+| `Text` | `string` | "Scrolling Text" | Texto a mostrar |
+| `X` | `int` | `0` | Posición X del área de desplazamiento |
+| `Y` | `int` | `100` | Posición Y del área de desplazamiento |
+| `Width` | `int` | `0` | Ancho del área de desplazamiento (0 = usa DefaultWidth) |
+| `Height` | `int` | `0` | Alto del área de desplazamiento (0 = auto según fuente) |
+| `DefaultWidth` | `int` | `1920` | Ancho predeterminado cuando Width es 0 (configurar al ancho del video) |
+| `DefaultHeight` | `int` | `1080` | Alto predeterminado cuando Height es 0 para desplazamiento vertical |
+| `Speed` | `int` | `5` | Velocidad de desplazamiento en píxeles por cuadro |
+| `Direction` | `ScrollDirection` | `RightToLeft` | Dirección de desplazamiento |
+| `Font` | `FontSettings` | Predeterminado del sistema | Configuración de fuente |
+| `Color` | `SKColor` | `White` | Color del texto |
+| `BackgroundTransparent` | `bool` | `true` | Si el fondo es transparente |
+| `BackgroundColor` | `SKColor` | `Black` | Color de fondo (cuando no es transparente) |
+| `Infinite` | `bool` | `true` | Repetir desplazamiento infinitamente |
+| `TextRestarted` | `EventHandler` | `null` | Se llama cuando el texto vuelve al inicio |
+
+**Enumeración ScrollDirection:**
+
+- `LeftToRight` - El texto se desplaza de izquierda a derecha
+- `RightToLeft` - El texto se desplaza de derecha a izquierda
+- `BottomToTop` - El texto se desplaza de abajo hacia arriba
+- `TopToBottom` - El texto se desplaza de arriba hacia abajo
+
+**Ejemplo:**
+
+```csharp
+// Crear un texto desplazable estilo ticker de noticias
+var scrollingText = new OverlayManagerScrollingText(
+    "Última hora: VisioForge Media Framework ahora soporta superposiciones de texto desplazable!",
+    x: 0,
+    y: 50,
+    speed: 3,
+    direction: ScrollDirection.RightToLeft);
+
+scrollingText.Font.Size = 24;
+scrollingText.Color = SKColors.Yellow;
+scrollingText.BackgroundTransparent = false;
+scrollingText.BackgroundColor = SKColors.DarkBlue;
+
+// Establecer el ancho predeterminado para coincidir con la resolución de video
+// Se usa cuando Width no está configurado explícitamente
+scrollingText.DefaultWidth = 1920; // Ancho Full HD
+
+// O configurar Width directamente para un ancho específico del área de desplazamiento
+// scrollingText.Width = 1920;
+
+// Agregar manejador de evento para cuando el texto se reinicie
+scrollingText.TextRestarted += (sender, e) => {
+    Console.WriteLine("El texto desplazable se reinició");
+};
+
+overlayManager.Video_Overlay_Add(scrollingText);
+
+// Para reiniciar la posición de desplazamiento
+scrollingText.Reset();
+
+// Para actualizar después de cambiar texto o fuente
+scrollingText.Text = "Texto de noticias actualizado...";
+scrollingText.Update();
+```
+
+### Superposiciones de Video
+
+El Overlay Manager soporta superposiciones de video de múltiples fuentes, incluyendo archivos de video/URLs, tarjetas de captura Decklink y fuentes de red NDI. Las superposiciones de video se reproducen dentro de la composición con control completo de reproducción.
+
+#### OverlayManagerVideo
+
+Reproduce archivos de video o URLs de streaming como superposiciones en la composición de video. Cada superposición de video ejecuta su propio pipeline de reproducción interno con salida de audio opcional.
+
+```csharp
+public class OverlayManagerVideo : IOverlayManagerElement, IDisposable
+```
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|-----------|------|----------------|-------------|
+| `Source` | `string` | - | Ruta del archivo de video o URL |
+| `X` | `int` | - | Posición X |
+| `Y` | `int` | - | Posición Y |
+| `Width` | `int` | - | Ancho de superposición |
+| `Height` | `int` | - | Alto de superposición |
+| `Loop` | `bool` | `true` | Si el video se repite en bucle |
+| `PlaybackRate` | `double` | `1.0` | Velocidad de reproducción (1.0 = normal) |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | Cómo ajustar el video |
+| `VideoView` | `IVideoView` | `null` | Ventana de vista previa de video externa opcional |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Configuración del renderizador para VideoView |
+| `AudioOutput` | `AudioOutputDeviceInfo` | `null` | Dispositivo de salida de audio (null = descartar audio) |
+| `AudioOutput_Volume` | `double` | `1.0` | Volumen de audio (0.0-1.0+, superior a 1.0 amplifica) |
+| `AudioOutput_Mute` | `bool` | `false` | Silenciar salida de audio |
+
+**Métodos:**
+
+- `Initialize(bool autoStart)` - Inicializar el pipeline de video. Si `autoStart` es true, comienza la reproducción inmediatamente; si es false, precarga en estado PAUSED.
+- `Play()` - Iniciar o reanudar reproducción de video
+- `Pause()` - Pausar reproducción de video
+- `Stop()` - Detener reproducción de video
+- `Seek(TimeSpan position)` - Ir a una posición específica en el video
+- `UpdateSource(string source)` - Cambiar la fuente de video dinámicamente
+- `Dispose()` - Liberar recursos
+
+**Ejemplo - Superposición de Archivo de Video:**
+
+```csharp
+// Crear una superposición de archivo de video
+var videoOverlay = new OverlayManagerVideo(
+    source: "intro.mp4",
+    x: 100,
+    y: 100,
+    width: 640,
+    height: 360)
+{
+    Loop = true,
+    Opacity = 0.9,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    ZIndex = 5
+};
+
+// Opcionalmente habilitar salida de audio
+var audioOutputs = await AudioRendererBlock.GetDevicesAsync(AudioOutputDeviceAPI.DirectSound);
+videoOverlay.AudioOutput = audioOutputs[0];
+videoOverlay.AudioOutput_Volume = 0.5;
+
+// Inicializar y agregar al overlay manager
+if (videoOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(videoOverlay);
+}
+
+// Controlar reproducción en tiempo de ejecución
+videoOverlay.Pause();
+videoOverlay.Seek(TimeSpan.FromSeconds(10));
+videoOverlay.Play();
+
+// Cambiar fuente dinámicamente
+videoOverlay.UpdateSource("outro.mp4");
+
+// Limpiar cuando termine
+videoOverlay.Stop();
+videoOverlay.Dispose();
+```
+
+**Ejemplo - Picture-in-Picture:**
+
+```csharp
+// Crear un video PiP pequeño en la esquina
+var pipVideo = new OverlayManagerVideo(
+    source: "camera_feed.mp4",
+    x: 20,
+    y: 20,
+    width: 240,
+    height: 135)
+{
+    Loop = true,
+    Opacity = 0.9,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    ZIndex = 100,
+    Shadow = new OverlayManagerShadowSettings
+    {
+        Enabled = true,
+        Color = SKColors.DarkGray,
+        Opacity = 0.7,
+        BlurRadius = 8,
+        Depth = 3,
+        Direction = 45
+    }
+};
+
+if (pipVideo.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(pipVideo);
+}
+```
+
+**Ejemplo - Superposición de URL de Streaming:**
+
+```csharp
+// Superponer un stream de red
+var streamOverlay = new OverlayManagerVideo(
+    source: "rtsp://192.168.1.21:554/Streaming/Channels/101",
+    x: 400,
+    y: 50,
+    width: 320,
+    height: 240)
+{
+    Loop = false,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    ZIndex = 10
+};
+
+if (streamOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(streamOverlay);
+}
+```
 
 #### OverlayManagerDecklinkVideo
 
@@ -482,13 +685,168 @@ ndiOverlay.Stop();
 ndiOverlay.Dispose();
 ```
 
-**Métodos Comunes para Superposiciones de Video en Vivo:**
+**Métodos Comunes para Superposiciones de Video:**
 
-- `Initialize(bool autoStart)` - Inicializar el pipeline de captura de video
-- `Play()` - Iniciar o reanudar captura de video
-- `Pause()` - Pausar captura de video
-- `Stop()` - Detener captura de video
+- `Initialize(bool autoStart)` - Inicializar el pipeline de video
+- `Play()` - Iniciar o reanudar reproducción/captura de video
+- `Pause()` - Pausar reproducción/captura de video
+- `Stop()` - Detener reproducción/captura de video
 - `Dispose()` - Limpiar recursos
+
+**Métodos Adicionales (solo OverlayManagerVideo):**
+
+- `Seek(TimeSpan position)` - Ir a una posición específica
+- `UpdateSource(string source)` - Cambiar la fuente de video dinámicamente
+
+### OverlayManagerWPFControl (Solo Windows)
+
+Renderiza un `FrameworkElement` de WPF como superposición de video. Esto permite usar cualquier árbol visual de WPF — incluyendo controles con animaciones Storyboard, data binding y layouts complejos — como superposición. El elemento se captura periódicamente a una tasa de refresco configurable.
+
+> **Nota**: Este tipo de superposición solo está disponible en Windows (target de compilación `NET_WINDOWS`).
+
+```csharp
+public class OverlayManagerWPFControl : IOverlayManagerElement, IDisposable
+```
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|-----------|------|----------------|-------------|
+| `ElementFactory` | `Func<FrameworkElement>` | - | Fábrica que crea el elemento WPF en el hilo STA interno |
+| `X` | `int` | - | Posición X |
+| `Y` | `int` | - | Posición Y |
+| `Width` | `int` | - | Ancho de superposición (debe ser > 0) |
+| `Height` | `int` | - | Alto de superposición (debe ser > 0) |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `Stretch` | Cómo ajustar el control renderizado |
+| `RefreshRate` | `int` | `15` | Capturas por segundo (1-60) |
+| `Dpi` | `double` | `96` | DPI para renderizado |
+
+**Métodos:**
+
+- `Initialize()` - Inicializar la superposición de control WPF y comenzar renderizado periódico
+- `InvokeOnUIThread(Action action)` - Ejecutar una acción en el hilo STA de WPF para actualizaciones seguras en tiempo de ejecución
+- `InvokeOnUIThread<T>(Func<T> func)` - Ejecutar una función en el hilo STA de WPF y retornar el resultado
+- `Dispose()` - Liberar recursos
+
+**Método de Conveniencia en OverlayManagerBlock:**
+
+```csharp
+public OverlayManagerWPFControl Video_Overlay_AddWPFControl(
+    Func<FrameworkElement> elementFactory,
+    int x, int y, int width, int height,
+    int refreshRate = 15,
+    string name = null)
+```
+
+Crea, inicializa y agrega una superposición de control WPF en una sola llamada. Retorna la instancia de la superposición, o `null` si la inicialización falló.
+
+**Ejemplo - Usando Método de Conveniencia:**
+
+```csharp
+// Agregar una superposición de texto con cambio de color usando el método de conveniencia
+var wpfOverlay = overlayManager.Video_Overlay_AddWPFControl(
+    elementFactory: () =>
+    {
+        var border = new Border
+        {
+            Width = 350,
+            Height = 60,
+            Background = new SolidColorBrush(Color.FromArgb(160, 0, 0, 0)),
+            CornerRadius = new CornerRadius(8),
+            Padding = new Thickness(15, 5, 15, 5)
+        };
+
+        var text = new TextBlock
+        {
+            Text = "VisioForge Media Framework",
+            FontSize = 28,
+            FontWeight = FontWeights.Bold,
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Center
+        };
+
+        var brush = new SolidColorBrush(Colors.Red);
+        text.Foreground = brush;
+        border.Child = text;
+
+        // Animar color del texto
+        var colorAnim = new ColorAnimationUsingKeyFrames
+        {
+            Duration = TimeSpan.FromSeconds(5),
+            RepeatBehavior = RepeatBehavior.Forever
+        };
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Red, KeyTime.FromPercent(0.0)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Gold, KeyTime.FromPercent(0.25)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Cyan, KeyTime.FromPercent(0.5)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Magenta, KeyTime.FromPercent(0.75)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Red, KeyTime.FromPercent(1.0)));
+        brush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnim);
+
+        return border;
+    },
+    x: 50, y: 300, width: 350, height: 60,
+    refreshRate: 30, name: "ColorText");
+
+if (wpfOverlay == null)
+{
+    // La inicialización falló
+}
+```
+
+**Ejemplo - Creación Manual con Reloj Animado:**
+
+```csharp
+// Crear una superposición de reloj analógico WPF manualmente
+var clockOverlay = new OverlayManagerWPFControl(
+    elementFactory: () =>
+    {
+        var canvas = new Canvas { Width = 200, Height = 200 };
+
+        // Esfera del reloj
+        var face = new Ellipse
+        {
+            Width = 180, Height = 180,
+            Stroke = Brushes.White, StrokeThickness = 3
+        };
+        Canvas.SetLeft(face, 10);
+        Canvas.SetTop(face, 10);
+        canvas.Children.Add(face);
+
+        // Manecilla de segundos con animación de rotación
+        var secondHand = new Line
+        {
+            X1 = 100, Y1 = 100, X2 = 100, Y2 = 25,
+            Stroke = Brushes.Red, StrokeThickness = 1
+        };
+        var secondRotate = new RotateTransform(DateTime.Now.Second * 6, 100, 100);
+        secondHand.RenderTransform = secondRotate;
+        canvas.Children.Add(secondHand);
+
+        var anim = new DoubleAnimation
+        {
+            From = DateTime.Now.Second * 6,
+            To = DateTime.Now.Second * 6 + 360,
+            Duration = TimeSpan.FromSeconds(60),
+            RepeatBehavior = RepeatBehavior.Forever
+        };
+        secondRotate.BeginAnimation(RotateTransform.AngleProperty, anim);
+
+        return canvas;
+    },
+    x: 20, y: 20, width: 200, height: 200, refreshRate: 30);
+
+if (clockOverlay.Initialize())
+{
+    overlayManager.Video_Overlay_Add(clockOverlay);
+}
+
+// Actualizar control WPF en tiempo de ejecución (seguro entre hilos)
+clockOverlay.InvokeOnUIThread(() =>
+{
+    // Es seguro modificar elementos WPF aquí
+});
+
+// Limpiar
+clockOverlay.Dispose();
+```
 
 ### Superposiciones de Formas
 
@@ -597,6 +955,88 @@ callback.OnDraw += (sender, e) => {
     ctx.Fill();
 };
 overlayManager.Video_Overlay_Add(callback);
+```
+
+### OverlayManagerGroup
+
+Agrupa múltiples superposiciones para gestión sincronizada del ciclo de vida. Esto es especialmente útil cuando necesitas precargar múltiples superposiciones de video e iniciarlas exactamente al mismo tiempo.
+
+```csharp
+public class OverlayManagerGroup : IOverlayManagerElement, IDisposable
+```
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|-----------|------|----------------|-------------|
+| `Overlays` | `List<IOverlayManagerElement>` | Lista vacía | Superposiciones en este grupo (solo lectura) |
+
+> **Nota**: Las propiedades estándar de `IOverlayManagerElement` (`Opacity`, `Rotation`, `ZIndex`, `Shadow`) están presentes en el grupo pero no se aplican a nivel de grupo — se usan las propiedades individuales de cada superposición dentro del grupo para el renderizado.
+
+**Métodos:**
+
+- `Add(IOverlayManagerElement overlay)` - Agregar una superposición al grupo. Lanza `InvalidOperationException` si ya está inicializado.
+- `Remove(IOverlayManagerElement overlay)` - Eliminar una superposición del grupo. Lanza `InvalidOperationException` si ya está inicializado.
+- `Initialize()` - Precargar todas las superposiciones `OverlayManagerVideo` en el grupo a estado PAUSED. Retorna `true` si todas tuvieron éxito. Otros tipos de superposición (Decklink, NDI) deben inicializarse manualmente.
+- `Play()` - Iniciar todas las superposiciones `OverlayManagerVideo` sincrónicamente. Debe llamar `Initialize()` primero. Otros tipos de superposición de video deben llamar `Play()` individualmente.
+- `Pause()` - Pausar todas las superposiciones `OverlayManagerVideo` en el grupo.
+- `Stop()` - Detener todas las superposiciones `OverlayManagerVideo` en el grupo.
+- `GetRenderableOverlays()` - Retorna todas las superposiciones habilitadas en el grupo (uso interno).
+- `Dispose()` - Detener y liberar todas las superposiciones en el grupo.
+
+> **Importante**: No se pueden agregar ni eliminar superposiciones después de que se haya llamado `Initialize()`.
+
+**¿Por qué agregar superposiciones que no son de video a un grupo?** Mientras que `Initialize()`, `Play()`, `Pause()` y `Stop()` solo controlan instancias de `OverlayManagerVideo`, agregar otros tipos de superposición (Decklink, NDI, texto, imágenes) a un grupo proporciona agrupación organizativa para renderizado y liberación centralizada de recursos — `Dispose()` limpia **todas** las superposiciones del grupo independientemente de su tipo.
+
+**Ejemplo - Grupo Sincronizado de Video + Decklink:**
+
+```csharp
+// Crear un grupo para superposiciones que deben iniciar simultáneamente
+var group = new OverlayManagerGroup("SyncGroup");
+
+// Agregar una superposición de archivo de video
+var videoOverlay = new OverlayManagerVideo(
+    source: "intro.mp4",
+    x: 10, y: 10, width: 640, height: 360)
+{
+    Loop = true,
+    ZIndex = 10
+};
+group.Add(videoOverlay);
+
+// Agregar una superposición de captura Decklink
+var decklinkSettings = new DecklinkVideoSourceSettings(deviceNumber);
+decklinkSettings.Mode = DecklinkMode.HD1080p2997;
+
+var decklinkOverlay = new OverlayManagerDecklinkVideo(
+    settings: decklinkSettings,
+    x: 660, y: 10, width: 640, height: 360)
+{
+    ZIndex = 11
+};
+
+// Inicializar Decklink manualmente (el grupo maneja solo OverlayManagerVideo)
+decklinkOverlay.Initialize(autoStart: false);
+group.Add(decklinkOverlay);
+
+// También puedes mezclar superposiciones que no son de video
+var label = new OverlayManagerText("Camera 1", 10, 380);
+label.Font.Size = 14;
+label.Color = SKColors.White;
+group.Add(label);
+
+// Agregar grupo al overlay manager
+overlayManager.Video_Overlay_Add(group);
+
+// Iniciar todas las superposiciones OverlayManagerVideo del grupo
+group.Play();
+// Decklink debe iniciarse por separado (group.Play() solo maneja OverlayManagerVideo)
+decklinkOverlay.Play();
+
+// Más tarde, pausar/detener todas a la vez
+group.Pause();
+group.Stop();
+
+// Limpiar
+group.Dispose();
 ```
 
 ## Efectos de Transformación de Video
@@ -913,6 +1353,12 @@ title.Text = "¡Texto Actualizado!";
 overlayManager.Video_Overlay_Update(title);
 ```
 
+## Aplicación de Ejemplo
+
+Para un ejemplo funcional completo que demuestra todos los tipos de superposición, consulta:
+
+- [Overlay Manager Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Overlay%20Manager%20Demo)
+
 ## Consideraciones de Rendimiento
 
 1. **Ordenamiento Z-Index**: Los elementos se ordenan por Z-index antes del renderizado. Usa valores apropiados para minimizar sobrecarga de ordenamiento.
@@ -925,9 +1371,16 @@ overlayManager.Video_Overlay_Update(title);
 
 5. **Gestión de Recursos**: Libera superposiciones de imagen, GIF y secuencia de imágenes cuando ya no se necesiten para liberar memoria.
 
+6. **Superposiciones de Video**: Cada superposición `OverlayManagerVideo` ejecuta su propio pipeline interno de GStreamer. Limita la cantidad de superposiciones de video simultáneas para evitar uso excesivo de CPU y memoria.
+
+7. **Superposiciones de Controles WPF**: Valores más altos de `RefreshRate` aumentan el uso de CPU. Usa la tasa de refresco mínima necesaria para actualizaciones visuales fluidas — 15 fps es suficiente para la mayoría del contenido estático o que cambia lentamente.
+
+8. **Grupos de Superposiciones**: Usa `OverlayManagerGroup` para precargar superposiciones de video. Esto evita tiempos de inicio escalonados cuando múltiples superposiciones de video necesitan comenzar simultáneamente.
+
 ## Notas de Plataforma
 
 - **Windows**: Soporta System.Drawing.Bitmap además de SkiaSharp
+- **Windows (WPF)**: Soporta `OverlayManagerWPFControl` para renderizar elementos visuales WPF como superposiciones. Requiere target de compilación `NET_WINDOWS`.
 - **iOS**: La fuente predeterminada es "System-ui"
 - **Android**: La fuente predeterminada es "System-ui"
 - **Linux/macOS**: Enumera fuentes disponibles en tiempo de ejecución
@@ -943,3 +1396,31 @@ El overlay manager usa bloqueo interno para operaciones seguras entre hilos. Pue
 2. **El texto aparece borroso**: Asegura que el tamaño de fuente sea apropiado para la resolución del video.
 
 3. **Uso de memoria**: Libera superposiciones de imagen/GIF/secuencia de imágenes no usadas y usa tamaños de imagen apropiados.
+
+4. **La superposición de video no muestra cuadros**: Asegúrate de que `Initialize()` retorne `true` antes de agregar al overlay manager. Verifica que la ruta del archivo fuente sea válida y accesible, y que GStreamer tenga los codecs necesarios.
+
+5. **La superposición WPF no se actualiza**: Verifica que `RefreshRate` sea apropiado para tu contenido. Usa `InvokeOnUIThread()` para todas las modificaciones de elementos WPF para evitar excepciones de hilos cruzados.
+
+6. **Las superposiciones del grupo no inician juntas**: Asegúrate de que todas las superposiciones se agreguen al grupo antes de llamar `Initialize()`. No se pueden agregar superposiciones después de la inicialización.
+
+## Preguntas Frecuentes
+
+### ¿Cómo superpongo un archivo de video encima de otro video en C#?
+
+Usa `OverlayManagerVideo` para reproducir un archivo de video o URL de streaming como superposición. Crea una instancia con la ruta fuente, posición y dimensiones, luego llama `Initialize()` y agrégalo al `OverlayManagerBlock`. Tienes control completo de reproducción con los métodos `Play()`, `Pause()`, `Stop()` y `Seek()`, además de salida de audio opcional. Consulta la sección [OverlayManagerVideo](#overlaymanagervideo) para ejemplos.
+
+### ¿Puedo usar controles WPF como superposiciones de video en vivo?
+
+Sí. `OverlayManagerWPFControl` renderiza cualquier `FrameworkElement` de WPF como superposición de video, incluyendo controles con animaciones Storyboard, data binding y árboles visuales complejos. El elemento se captura periódicamente a una tasa de refresco configurable (1-60 fps). Esto es solo para Windows y requiere el target de compilación `NET_WINDOWS`. Usa el método de conveniencia `Video_Overlay_AddWPFControl()` para la configuración más simple. Consulta la sección [OverlayManagerWPFControl](#overlaymanagerwpfcontrol-solo-windows).
+
+### ¿Cómo sincronizo múltiples superposiciones de video para que inicien al mismo tiempo?
+
+Usa `OverlayManagerGroup` para agrupar superposiciones que necesitan ciclo de vida coordinado. Agrega todas las superposiciones al grupo antes de llamar `Initialize()`, que precarga las superposiciones de video a estado PAUSED. Luego llama `Play()` para iniciarlas todas simultáneamente. Esto es especialmente útil para composiciones multi-cámara. Consulta la sección [OverlayManagerGroup](#overlaymanagergroup).
+
+### ¿Puedo reproducir audio desde una superposición de archivo de video?
+
+Sí. Establece la propiedad `AudioOutput` en `OverlayManagerVideo` a un dispositivo de salida de audio antes de llamar `Initialize()`. Controla el volumen con `AudioOutput_Volume` (0.0-1.0+) y silencia con `AudioOutput_Mute`. Si `AudioOutput` es null (valor predeterminado), el audio del archivo de video se descarta.
+
+### ¿Qué tipos de superposición soporta OverlayManagerBlock?
+
+El OverlayManagerBlock soporta: texto (`OverlayManagerText`), fecha/hora (`OverlayManagerDateTime`), texto desplazable (`OverlayManagerScrollingText`), imágenes (`OverlayManagerImage`), GIFs animados (`OverlayManagerGIF`), secuencias de imágenes (`OverlayManagerImageSequence`), gráficos SVG (`OverlayManagerSVG`), formas (rectángulo, círculo, triángulo, estrella, línea), archivos de video/URLs (`OverlayManagerVideo`), tarjetas de captura Decklink (`OverlayManagerDecklinkVideo`), fuentes de red NDI (`OverlayManagerNDIVideo`), controles WPF (`OverlayManagerWPFControl`, solo Windows), grupos de superposiciones (`OverlayManagerGroup`), dibujo personalizado con Cairo (`OverlayManagerCallback`), y efectos de transformación de video (zoom, panorámica, desvanecimiento, squeezeback).

@@ -1,5 +1,5 @@
 ---
-title: WavPack Audio Encoder Integration for .NET
+title: WavPack Audio Encoder Settings and Configuration in .NET
 description: Implement WavPack lossless and hybrid lossy audio compression in .NET with quality settings, correction modes, and stereo encoding.
 ---
 

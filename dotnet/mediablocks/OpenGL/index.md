@@ -1,5 +1,5 @@
 ---
-title: .Net Media OpenGL Video Effects Guide
+title: OpenGL Video Effects for .NET - GPU-Accelerated Guide
 description: Apply hardware-accelerated OpenGL video effects with GLVideoEffectsBlock for real-time video manipulation in Media Blocks SDK pipelines.
 sidebar_label: OpenGL Effects
 ---

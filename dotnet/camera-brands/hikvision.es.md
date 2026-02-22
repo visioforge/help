@@ -1,5 +1,5 @@
 ---
-title: Cómo Conectar una Cámara IP Hikvision en C# .NET
+title: Conectar Cámara IP Hikvision en C# .NET - URL RTSP
 description: Conecta cámaras Hikvision en C# .NET con patrones de URL RTSP, descubrimiento ONVIF y ejemplos de código completos para modelos DS-2CD, DS-2DE y NVR.
 ---
 

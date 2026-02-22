@@ -1,5 +1,5 @@
 ---
-title: ".NET Blackmagic Decklink Integration Guide"
+title: Blackmagic Decklink Video Capture for .NET Developers
 description: Implement professional video capture in .NET with Blackmagic Decklink devices using code examples for broadcast-quality applications.
 ---
 

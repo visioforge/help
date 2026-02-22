@@ -1,5 +1,5 @@
 ---
-title: Búsqueda de Fragmentos de Video .NET
+title: Búsqueda de Fragmentos de Video en .NET - Guía de vfp_search
 description: Usa vfp_search para buscar fragmentos de video dentro de videos más grandes con características para encontrar y administrar tu biblioteca.
 ---
 

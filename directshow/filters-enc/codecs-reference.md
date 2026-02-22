@@ -1,5 +1,5 @@
 ---
-title: DirectShow Encoding Filters - Codecs Reference
+title: DirectShow Encoding Codecs - H.264, H.265, AAC, and More
 description: DirectShow codec reference with H.264/H.265/VP8/VP9 video, AAC/MP3/Opus audio, and hardware acceleration (NVENC, QuickSync, AMF).
 ---
 

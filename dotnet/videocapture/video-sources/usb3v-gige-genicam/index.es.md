@@ -1,5 +1,5 @@
 ---
-title: Integración USB3 Vision, GigE & GenICam - Guía
+title: Integración USB3 Vision, GigE y GenICam en .NET SDK
 description: Integra cámaras USB3 Vision, GigE y GenICam con drivers DirectShow. Soporte machine vision multiplataforma con .NET SDK y alta velocidad.
 sidebar_label: Cámaras USB3 Vision, GigE y GenICam
 order: 15

@@ -1,5 +1,5 @@
 ---
-title: Complete Video Effects Reference for .NET SDKs
+title: Video Effects SDK Reference: Filters, Overlays, and More
 description: Comprehensive reference guide for all video effects available in VisioForge .NET SDKs including Classic (Windows-only) and Cross-platform effects.
 sidebar_label: Effects Reference
 ---

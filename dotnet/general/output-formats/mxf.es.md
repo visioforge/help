@@ -1,5 +1,5 @@
 ---
-title: Salida de Archivo MXF en SDKs .NET
+title: Formato MXF en .NET - Codificación y Salida para Transmisión
 description: Genere archivos MXF de transmisión en .NET con aceleración de hardware, optimización de códecs y flujos de trabajo profesionales para producción de transmisión.
 ---
 

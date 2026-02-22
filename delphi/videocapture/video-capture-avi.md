@@ -1,5 +1,5 @@
 ---
-title: Video Capture to AVI Files in Delphi Applications
+title: AVI Video Capture in Delphi Using TVFVideoCapture SDK
 description: Record video to AVI format in Delphi with TVFVideoCapture using codec selection, audio configuration, and complete implementation examples.
 ---
 

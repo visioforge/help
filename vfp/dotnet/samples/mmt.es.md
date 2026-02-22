@@ -1,5 +1,5 @@
 ---
-title: Herramienta de Monitoreo de Medios para .Net
+title: Monitoreo de Medios y Detección de Comerciales en .NET
 description: Usa MMT para encontrar fragmentos de video dentro de videos más grandes con características para gestionar tu biblioteca de medios.
 ---
 

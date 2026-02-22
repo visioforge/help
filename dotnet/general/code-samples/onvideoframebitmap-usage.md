@@ -1,5 +1,5 @@
 ---
-title: OnVideoFrameBitmap Real-Time Frame Guide
+title: OnVideoFrameBitmap: Real-Time Video Frame Access in .NET
 description: Access and modify video frames in real-time with OnVideoFrameBitmap events for advanced video manipulation in C# applications.
 ---
 

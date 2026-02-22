@@ -1,5 +1,5 @@
 ---
-title: TVFVideoCapture Deployment Guide for Delphi
+title: Deploying TVFVideoCapture Library in Delphi Projects
 description: Deploy TVFVideoCapture in Delphi - install components, register DirectShow filters, configure environment for successful application deployment.
 ---
 

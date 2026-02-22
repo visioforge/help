@@ -1,5 +1,5 @@
 ---
-title: MP4 Video Output Integration for .NET
+title: Convert and Save Video to MP4 in C# with H264 and AAC
 description: Implement MP4 output in .NET with H.264/HEVC hardware encoding, audio configuration, and optimized performance for video processing apps.
 ---
 

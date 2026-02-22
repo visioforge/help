@@ -1,5 +1,5 @@
 ---
-title: Video Capture SDK for .NET Development
+title: Video Capture SDK .Net - Developer Docs and Tutorials
 description: Implement advanced video capture, processing, and streaming in .NET applications with comprehensive developer tutorials and code examples.
 sidebar_label: Video Capture SDK .Net
 order: 15

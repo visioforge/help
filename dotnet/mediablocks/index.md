@@ -1,5 +1,5 @@
 ---
-title: Media Blocks SDK for .NET Integration Guide
+title: Media Blocks SDK for .NET: Modular Multimedia Pipeline
 description: Build multimedia applications with Media Blocks SDK for modular video playback, non-linear editing, and multi-source camera capture in .NET.
 sidebar_label: Media Blocks SDK .Net
 order: 14

@@ -1,5 +1,5 @@
 ---
-title: Video Capture SDK para Desarrollo .NET
+title: Video Capture SDK .NET - Captura y Streaming de Video
 description: Implementa captura, procesamiento y streaming de video avanzados en aplicaciones .NET con tutoriales completos para desarrolladores y ejemplos de código.
 
 ---

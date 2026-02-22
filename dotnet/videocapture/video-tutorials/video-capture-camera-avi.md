@@ -1,5 +1,5 @@
 ---
-title: Webcam to AVI Recording in .NET C# Applications
+title: Record Webcam Video to AVI File in C# .NET Tutorial
 description: Implement webcam to AVI file recording in .NET with step-by-step tutorial including complete C# code example with async and device selection.
 ---
 

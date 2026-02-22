@@ -1,5 +1,5 @@
 ---
-title: MPEG-2 Capture with TV Tuner Hardware Encoder
+title: MPEG-2 Encoder: TV Tuner Hardware Video Capture in .NET
 description: Implement TV tuner video capture to MPEG-2 files in .NET with step-by-step guide and code examples for WPF, WinForms, and Console.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Solución de Problemas con Registros en SDK .NET
+title: Enviar registros de depuración del VisioForge SDK .NET
 description: Habilite y capture registros de depuración para solucionar problemas del SDK .NET con instrucciones paso a paso para entornos de demostración y producción.
 ---
 

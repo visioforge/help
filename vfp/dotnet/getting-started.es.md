@@ -1,5 +1,5 @@
 ---
-title: Primeros Pasos con Video Fingerprinting SDK .NET
+title: Guia de Inicio - VisioForge Video Fingerprinting SDK .NET
 description: Guía completa de instalación y configuración para VisioForge Video Fingerprinting SDK con configuración, licencias e instrucciones paso a paso.
 ---
 

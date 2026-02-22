@@ -1,5 +1,5 @@
 ---
-title: Instalación de TVFMediaPlayer en Visual Basic 6
+title: Instalar control ActiveX TVFMediaPlayer en Visual Basic 6
 description: Instalar e integrar TVFMediaPlayer en VB6 - configuración ActiveX, consideraciones de 32 bits, implementación básica de reproducción y prácticas de despliegue.
 ---
 

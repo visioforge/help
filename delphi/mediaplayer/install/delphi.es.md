@@ -1,5 +1,5 @@
 ---
-title: Instalación de TVFMediaPlayer en Delphi
+title: Instalar TVFMediaPlayer en Delphi: guía de instalación
 description: Instalar TVFMediaPlayer en Delphi 6, 7, 2005 y posterior - prerrequisitos, instalación de paquetes, configuración, verificación y solución de problemas.
 ---
 

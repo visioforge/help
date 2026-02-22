@@ -1,5 +1,5 @@
 ---
-title: Android Media Player SDK: Video Player for Apps
+title: Android Video Player SDK: Streaming and Playback Guide
 description: Build Android player apps with video playback, streaming, hardware acceleration, and multiple format support using Media Player SDK.
 ---
 

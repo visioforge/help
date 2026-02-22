@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Foscam IP Camera in C# .NET
+title: Foscam IP Camera RTSP URL Guide and C# .NET Integration
 description: Connect to Foscam cameras in C# .NET with RTSP and HTTP URL patterns, CGI API access, and code samples for FI, C1, C2, R2, and R4 models.
 ---
 

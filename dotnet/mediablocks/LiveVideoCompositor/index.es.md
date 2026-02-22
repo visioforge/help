@@ -1,5 +1,5 @@
 ---
-title: Compositor de Video en Vivo .Net
+title: Compositor de video en vivo en tiempo real con .NET SDK
 description: Componga múltiples fuentes de video y audio en vivo en tiempo real con capacidades dinámicas de agregar/eliminar para aplicaciones de streaming y grabación.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Linux Platform Blocks
+title: Linux VA-API Hardware Acceleration for .NET Video Apps
 description: Linux-optimized MediaBlocks with VA-API hardware acceleration for efficient video encoding, decoding, and processing on Ubuntu platforms.
 sidebar_label: Linux Platform
 ---

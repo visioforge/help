@@ -1,5 +1,5 @@
 ---
-title: Video Encryption SDK - Code Examples
+title: Video Encryption SDK Code Examples in C#, C++, and Delphi
 description: Code examples for video encryption and decryption with DirectShow filters in C++, C#, and Delphi using password and binary keys.
 ---
 

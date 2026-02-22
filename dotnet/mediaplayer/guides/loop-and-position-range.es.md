@@ -1,5 +1,5 @@
 ---
-title: Bucle y Rango de Posición - Media Player SDK
+title: Modo bucle y rango de posición en video .NET con C#
 description: Implementa reproducción en bucle y control de segmentos en .NET. Aprende características de DirectShow y GStreamer para bucles de video.
 sidebar_label: Modo Bucle y Rango Posición
 order: 2

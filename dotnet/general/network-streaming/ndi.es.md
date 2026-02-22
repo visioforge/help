@@ -1,5 +1,5 @@
 ---
-title: Integración de Transmisión de Video NDI en .NET
+title: Transmisión NDI en .NET con Video Capture SDK y Media Blocks
 description: Implemente transmisión NDI de alto rendimiento en .NET para transmisión de video y audio de baja latencia sobre redes IP con flujos de trabajo profesionales.
 ---
 

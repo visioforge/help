@@ -1,5 +1,5 @@
 ---
-title: Ejemplos de Código: Filtros de Procesamiento
+title: Filtros de procesamiento DirectShow: ejemplos en C# y C++
 description: Ejemplos de código para Efectos de Video, Mezclador de Video y filtros de Clave de Croma en C++, C# y VB.NET con integración DirectShow.
 ---
 

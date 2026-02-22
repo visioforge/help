@@ -1,5 +1,5 @@
 ---
-title: MP4 Muxer DirectShow Filter Interface Reference
+title: MP4 Muxer DirectShow Filter - Timing and Live Streaming
 description: MP4 muxer DirectShow interfaces with threading configuration, timing correction, and live streaming options for MP4 container output.
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: .Net Audio Visualizer Blocks
-description: Build audio-reactive applications with Spacescope, Spectrascope, Synaescope, and Wavescope visualizer blocks for dynamic audio rendering.
+title: Audio Visualizer Blocks for .NET - Spectrum and Waveform"
+description: Build audio-reactive applications with Spacescope, Spectroscope, Synaescope, and Wavescope visualizer blocks for dynamic audio rendering.
 sidebar_label: Audio Visualizers
 
 ---

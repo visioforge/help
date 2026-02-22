@@ -1,5 +1,5 @@
 ---
-title: Efectos de Video OpenGL en Media Blocks SDK .NET
+title: Efectos de Video OpenGL con VisioForge Media Blocks .NET
 description: Aplicar efectos de video hardware-acelerados OpenGL con GLVideoEffectsBlock para manipulación de video en tiempo real en pipelines de Media Blocks SDK.
 sidebar_label: Efectos OpenGL
 ---

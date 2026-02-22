@@ -1,5 +1,5 @@
 ---
-title: Integración de Facebook Live para Desarrollo .NET
+title: Facebook Live Encoder en .NET con aceleración hardware
 description: Transmite a Facebook Live en .NET con codificación hardware acelerada, broadcasting RTMP y optimizaciones para video en tiempo real.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Verkada Camera in C# .NET - Cloud-Managed Constraints
+title: Verkada Camera RTSP and C# .NET Integration Options
 description: Verkada camera integration options in C# .NET. Understand cloud-managed architecture, RTSP limitations, and alternative approaches for Verkada cameras.
 meta:
   - name: robots

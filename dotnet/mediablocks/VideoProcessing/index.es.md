@@ -32,6 +32,7 @@ sidebar_label: Procesamiento y Efectos de Video
 - [Detector de Fotograma Clave](#detector-de-fotograma-clave)
 - [Procesador LUT](#procesador-lut)
 - [Espejo](#espejo)
+- [Detección de Movimiento](#deteccion-de-movimiento)
 - [Desenfoque en Movimiento](#desenfoque-en-movimiento)
 - [Eco en Movimiento](#eco-en-movimiento)
 - [Eco de Zoom en Movimiento](#eco-de-zoom-en-movimiento)
@@ -55,7 +56,7 @@ sidebar_label: Procesamiento y Efectos de Video
 - [Capturador de Muestra de Video](#capturador-de-muestra-de-video)
 - [Esfera](#esfera)
 - [Cuadrado](#cuadrado)
-- [Retroceso](#retroceso)
+- [Paneo y Zoom](#paneo-y-zoom)
 - [Estirar](#estirar)
 - [Superposición de Texto](#superposicion-de-texto)
 - [Túnel](#tunel)
@@ -2099,7 +2100,7 @@ var squareBlock = new SquareBlock(new SquareVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, squareBlock.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(squareBlock.Output, videoRenderer.Input);            
+pipeline.Connect(squareBlock.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 ```
@@ -2108,27 +2109,63 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Retroceso
+## Paneo y Zoom
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-El bloque Squeezeback crea efectos dinámicos de picture-in-picture al escalar y posicionar contenido de video con transiciones configurables y layouts. Nota: Para casos de uso avanzados, ver SqueezebackBlockV2.
+El `PanZoomBlock` aplica transformaciones de paneo y zoom a un flujo de video usando renderizado Cairo a través del elemento GStreamer `cairooverlay`. El bloque admite paneo y zoom estáticos y animados (interpolados en el tiempo), así como el mapeo del video a un rectángulo destino arbitrario.
 
 ### Información del bloque
 
-Nombre: SqueezebackBlock.
+Nombre: PanZoomBlock.
 
 Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Video sin comprimir | 1
 Salida | Video sin comprimir | 1
 
-### Pipeline de muestra
+### Configuración
+
+El bloque no acepta parámetros en el constructor. Las transformaciones se configuran llamando a métodos en la instancia del bloque:
+
+Método | Clase de configuración | Descripción
+--- | --- | ---
+`SetZoom(settings)` | `VideoStreamZoomSettings` | Aplicar un zoom estático centrado en un punto
+`SetDynamicZoom(settings)` | `VideoStreamDynamicZoomSettings` | Animar el zoom entre valores iniciales y finales a lo largo del tiempo
+`SetPan(settings)` | `VideoStreamPanSettings` | Trasladar el video por un desplazamiento en píxeles
+`SetDynamicPan(settings)` | `VideoStreamDynamicPanSettings` | Animar el paneo entre posiciones iniciales y finales a lo largo del tiempo
+`SetRect(settings)` | `VideoStreamRectSettings` | Mapear el video a un rectángulo destino (tiene prioridad sobre zoom/paneo)
+
+**`VideoStreamZoomSettings`**
+
+Propiedad | Tipo | Predeterminado | Descripción
+--- | --- | :---: | ---
+`ZoomX` | `double` | `1.0` | Factor de zoom horizontal
+`ZoomY` | `double` | `1.0` | Factor de zoom vertical
+`CenterX` | `double` | `0.5` | Centro de zoom horizontal (0.0–1.0)
+`CenterY` | `double` | `0.5` | Centro de zoom vertical (0.0–1.0)
+`Enabled` | `bool` | `true` | Habilitar o deshabilitar esta transformación
+
+**`VideoStreamPanSettings`**
+
+Propiedad | Tipo | Predeterminado | Descripción
+--- | --- | :---: | ---
+`PanX` | `double` | `0.0` | Desplazamiento horizontal en píxeles
+`PanY` | `double` | `0.0` | Desplazamiento vertical en píxeles
+`Enabled` | `bool` | `true` | Habilitar o deshabilitar esta transformación
+
+`VideoStreamDynamicZoomSettings` extiende el zoom estático con `StartTime`/`StopTime` (`TimeSpan`) y valores de zoom y centro iniciales/finales, interpolados linealmente durante la reproducción.
+
+`VideoStreamDynamicPanSettings` extiende el paneo estático con `StartTime`/`StopTime` y valores de paneo iniciales/finales, interpolados linealmente durante la reproducción.
+
+`VideoStreamRectSettings` mapea el video a un `TargetRect` (`Rect`). Cuando está habilitado, tiene prioridad sobre las configuraciones de zoom y paneo.
+
+### El pipeline de muestra
 
 ```mermaid
 graph LR;
-    UniversalSourceBlock-->SqueezebackBlock;
-    SqueezebackBlock-->VideoRendererBlock;
+    UniversalSourceBlock-->PanZoomBlock;
+    PanZoomBlock-->VideoRendererBlock;
 ```
 
 ### Código de muestra
@@ -2136,26 +2173,23 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var mainSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("main.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
 
-// Obtener información de video
-var videoInfo = mainSource.GetInfo().VideoStreams[0];
-var videoFrameInfo = new VideoFrameInfoX(videoInfo.Width, videoInfo.Height, VideoFormatX.NV12);
+var panZoom = new PanZoomBlock();
+panZoom.SetZoom(new VideoStreamZoomSettings(zoomX: 2.0, zoomY: 2.0, centerX: 0.5, centerY: 0.5));
+panZoom.SetPan(new VideoStreamPanSettings(panX: -100, panY: 0));
 
-// Configurar superposición de imagen para fondo
-var imageSettings = new ImageOverlaySettings("background.jpg");
-
-// Definir rectángulo de video para efecto PIP
-var videoRect = new Rect(10, 10, 320, 240);
-
-var squeezeback = new SqueezebackBlock(pipeline, videoFrameInfo, imageSettings, videoRect);
-pipeline.Connect(mainSource.VideoOutput, squeezeback.Input);
+pipeline.Connect(fileSource.VideoOutput, panZoom.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(squeezeback.Output, videoRenderer.Input);
+pipeline.Connect(panZoom.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 ```
+
+### Disponibilidad
+
+`PanZoomBlock.IsAvailable()` devuelve `true` si el elemento GStreamer `cairooverlay` está disponible.
 
 ### Plataformas
 
@@ -3228,3 +3262,78 @@ await pipeline.StartAsync();
 ### Plataformas
 
 Windows (Direct3D 11 requerido).
+
+---
+
+## Detección de Movimiento
+
+[!button text="Más información sobre el SDK" variant="info" target="blank" icon="rocket"](https://www.visioforge.com/media-blocks-sdk)
+
+`MotionDetectionBlock` analiza fotogramas consecutivos para detectar movimiento mediante un algoritmo de diferencia de fotogramas. Produce un nivel de intensidad por fotograma (0–100) y una matriz espacial a través del evento `OnMotionDetected`. Los fotogramas pasan a través del bloque sin modificaciones.
+
+### Información del bloque
+
+Nombre: MotionDetectionBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada | Video sin comprimir | 1 |
+| Salida | Video sin comprimir | 1 |
+
+### Configuración
+
+`MotionDetectionBlockSettings` configura el algoritmo de detección:
+
+| Propiedad | Tipo | Valor predeterminado | Descripción |
+| --- | :---: | :---: | --- |
+| `MotionThreshold` | `int` | `5` | Nivel mínimo de movimiento (0–100) para disparar el evento |
+| `CompareGreyscale` | `bool` | `true` | Comparar fotogramas usando promedio de escala de grises |
+| `GridWidth` | `int` | `8` | Número de celdas horizontales en la matriz de movimiento |
+| `GridHeight` | `int` | `8` | Número de celdas verticales en la matriz de movimiento |
+
+El evento `OnMotionDetected` proporciona:
+
+- `Level` — intensidad de movimiento general (0–100)
+- `Matrix` — `byte[]` de tamaño `GridWidth × GridHeight`, intensidad de movimiento por celda
+
+El evento se dispara solo cuando `Level >= MotionThreshold`. Los manejadores de eventos se ejecutan en un hilo en segundo plano de GStreamer y deben ser seguros para subprocesos.
+
+### El pipeline de muestra
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->MotionDetectionBlock;
+    MotionDetectionBlock-->VideoRendererBlock;
+```
+
+### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var motionSettings = new MotionDetectionBlockSettings
+{
+    MotionThreshold = 10,
+    GridWidth = 8,
+    GridHeight = 8
+};
+var motionDetector = new MotionDetectionBlock(motionSettings);
+motionDetector.OnMotionDetected += (sender, e) =>
+{
+    Console.WriteLine($"Nivel de movimiento: {e.Level}");
+};
+
+pipeline.Connect(fileSource.VideoOutput, motionDetector.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(motionDetector.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Plataformas
+
+Windows, macOS, Linux.

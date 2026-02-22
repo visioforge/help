@@ -1,5 +1,5 @@
 ---
-title: Comparación de Huellas de Video .NET
+title: Comparación de huellas de video para detectar duplicados
 description: Usa vfp_compare para comparar huellas de video y determinar si los videos son similares o idénticos con características para ayudar a administrar tu biblioteca.
 ---
 

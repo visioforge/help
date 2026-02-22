@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Tiandy IP Camera in C# .NET
+title: Tiandy RTSP URL: Connect to IP Camera in C# .NET App
 description: Connect to Tiandy cameras in C# .NET with RTSP URL patterns and code samples for TC-C, TC-NC, and TC-A series IP camera and NVR models.
 ---
 

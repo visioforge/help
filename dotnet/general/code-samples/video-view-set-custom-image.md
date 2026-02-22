@@ -1,5 +1,5 @@
 ---
-title: Setting Custom Images for VideoView in .NET SDKs
+title: Setting Custom Placeholder Images for VideoView .NET
 description: Display custom placeholder images in VideoView controls when no video is playing for professional branding and enhanced user experience in .NET.
 ---
 

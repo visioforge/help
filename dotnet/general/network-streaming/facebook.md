@@ -1,5 +1,5 @@
 ---
-title: Facebook Live Integration for .NET Development
+title: Facebook Live Streaming and Encoding in .NET Applications
 description: Stream to Facebook Live in .NET with hardware-accelerated encoding, RTMP broadcasting, and platform-specific optimizations for real-time video.
 ---
 

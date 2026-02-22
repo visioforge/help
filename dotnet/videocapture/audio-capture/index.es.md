@@ -1,5 +1,5 @@
 ---
-title: Captura de Audio para Desarrolladores .NET
+title: Captura de Audio en .NET con Video Capture SDK de VisioForge
 description: Implemente grabación de micrófono, entrada de línea y audio en streaming en .NET con soporte de formatos, procesamiento y monitoreo en tiempo real.
 sidebar_label: Captura de Audio
 order: 10

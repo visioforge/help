@@ -1,5 +1,5 @@
 ---
-title: Stream Video and Audio to Amazon S3 Storage
+title: Streaming Video and Audio to Amazon S3 in .NET SDK
 description: Implement AWS S3 video and audio streaming in .NET with configuration, encoding settings, error handling, and best practices for media output.
 ---
 

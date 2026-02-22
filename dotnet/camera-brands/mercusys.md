@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Mercusys IP Camera in C# .NET
+title: Mercusys IP Camera RTSP URL and C# .NET Integration
 description: Connect to Mercusys cameras in C# .NET with RTSP URL patterns and code samples for MC, MB series indoor and outdoor security cameras.
 ---
 

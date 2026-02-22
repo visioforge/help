@@ -1,5 +1,5 @@
 ---
-title: Codificación Audio OPUS en Apps .NET
+title: Optimización de Codificación de Audio OPUS en .NET
 description: Implemente codificación de audio OPUS en .NET con control de tasa de bits, configuraciones de complejidad y duraciones de trama para VoIP y streaming de música.
 ---
 

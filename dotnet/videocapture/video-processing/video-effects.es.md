@@ -1,5 +1,5 @@
 ---
-title: Aplicar Efectos de Video en Tiempo Real en .NET
+title: Efectos de Video en Tiempo Real con Video Capture SDK
 description: Mejora aplicaciones de captura de video con efectos de video en tiempo real en .NET usando una guía paso a paso para filtros profesionales durante la captura.
 ---
 

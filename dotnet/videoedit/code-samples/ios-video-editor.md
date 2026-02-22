@@ -1,5 +1,5 @@
 ---
-title: iOS Video Editor | Build Video Apps Faster
+title: iOS Video Editing SDK for .NET with C# Code Samples
 description: Integrate professional video editing into iOS apps with Video Edit SDK. Fast setup, customizable UI, and support for trimming, filters, transitions, effects.
 ---
 

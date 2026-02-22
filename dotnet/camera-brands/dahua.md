@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Dahua IP Camera in C# .NET
+title: Dahua IP Camera RTSP URL Patterns and C# .NET Guide
 description: Connect to Dahua cameras in C# .NET with RTSP URL patterns, ONVIF support, and code samples for IPC-HDW, IPC-HFW, NVR, and DVR models.
 ---
 

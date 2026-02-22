@@ -1,5 +1,5 @@
 ---
-title: Codificador LAME MP3 - Referencia de Interfaz
+title: Codificador LAME MP3 - Configurar bitrate, VBR y calidad
 description: Interfaz IAudioEncoderProperties para codificación LAME MP3 con modos de tasa de bits variable y constante y configuración de calidad.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: .NET SDKs Installation Guide for Developers
+title: Install VisioForge .NET SDKs: NuGet, Visual Studio, Rider
 description: Install multimedia .NET SDKs in Visual Studio and Rider with platform-specific configuration for Windows, macOS, iOS, Android, and Linux.
 sidebar_label: Installation
 order: 21

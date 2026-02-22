@@ -1,5 +1,5 @@
 ---
-title: Integrar Streaming OBS en Video Capture SDK .Net
+title: Streaming con OBS Studio usando Video Capture SDK .Net
 description: Transmite video y audio con integración OBS en Video Capture SDK para soluciones de broadcast profesionales en WinForms, WPF y Consola.
 ---
 

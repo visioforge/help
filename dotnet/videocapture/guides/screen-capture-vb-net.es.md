@@ -1,6 +1,6 @@
 ---
-title: Captura de pantalla en VB.NET - Grabar video del escritorio a MP4
-description: Aprenda a grabar la pantalla del escritorio en VB.NET. Guía completa de captura de pantalla completa y por región a MP4 con audio del sistema usando Video Capture SDK .Net.
+title: Captura de pantalla en VB.NET - Grabar escritorio a MP4
+description: Capture la pantalla del escritorio en VB.NET. Grabación completa o por región a MP4 con audio del sistema usando Video Capture SDK .Net.
 ---
 
 # Captura de pantalla en VB.NET: Guía completa para grabar video del escritorio

@@ -1,5 +1,5 @@
 ---
-title: Crear Videos Dinámicos Imagen-en-Imagen en .NET
+title: Video Imagen en Imagen y Pantalla Dividida en C# .NET
 description: Implementa Imagen-en-Imagen, videos lado a lado y diseños de video personalizados en C# con muestras de código completas para posicionamiento de superposición.
 ---
 

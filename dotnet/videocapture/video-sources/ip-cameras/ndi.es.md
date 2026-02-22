@@ -1,5 +1,5 @@
 ---
-title: Integración NDI para Captura de Video en .NET
+title: Captura de video NDI en .NET - guía de integración C#
 description: Implementa fuentes de video NDI en el SDK .NET con guía completa para enumerar, conectar y capturar video de alta calidad desde cámaras NDI en C#.
 ---
 

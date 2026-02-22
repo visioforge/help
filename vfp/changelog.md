@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprinting SDK Release Notes
+title: Video Fingerprinting SDK Changelog and Version History
 description: Track Video Fingerprinting SDK evolution through detailed version history with new features, performance updates, and technical improvements.
 ---
 

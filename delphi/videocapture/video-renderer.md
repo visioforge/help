@@ -1,5 +1,5 @@
 ---
-title: Video Renderer Options for Delphi Video Capture
+title: Video Renderer Selection in Delphi: EVR, VMR9, and GDI
 description: Select optimal video renderers in Delphi - Video Renderer, VMR9, EVR with code examples for performance and hardware acceleration on Windows.
 ---
 

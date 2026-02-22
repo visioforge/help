@@ -1,5 +1,5 @@
 ---
-title: Media Streaming Video Renderer Block SDK
+title: Video Renderer for .NET: DirectX, OpenGL, Metal Support
 description: Render video across Windows, macOS, Linux, iOS, and Android with DirectX, OpenGL, Metal hardware acceleration for multimedia applications.
 sidebar_label: Video Renderer
 ---

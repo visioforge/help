@@ -1,5 +1,5 @@
 ---
-title: ASF/WMV File Indexing in .NET - Complete Guide
+title: ASF and WMV File Indexing for .NET SDK Applications
 description: Implement robust ASF, WMV, and WMA file indexing in .NET to solve seeking issues and optimize media file playback performance.
 ---
 

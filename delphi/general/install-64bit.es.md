@@ -1,5 +1,5 @@
 ---
-title: Guía de Instalación de Paquetes Delphi de 64 bits
+title: Guia Instalacion del SDK de Delphi de 64 bits Paso
 description: Instala paquetes Delphi de 64 bits: configura rutas de biblioteca, gestiona paquetes en tiempo de ejecución y resuelve problemas de instalación.
 ---
 

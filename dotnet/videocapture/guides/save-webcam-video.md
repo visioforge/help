@@ -1,5 +1,5 @@
 ---
-title: Save Webcam Video Using .NET: Record and Capture
+title: Save Webcam Video in C# .NET: Record and Capture Guide
 description: Complete guide to capture, record, and save webcam video using .NET and C#. Implement webcam functionality with MP4/WebM formats and GPU acceleration.
 ---
 

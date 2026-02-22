@@ -1,5 +1,5 @@
 ---
-title: Excluding DirectShow Filters in .NET Applications
+title: How to Exclude DirectShow Filters in .NET Applications
 description: Identify and exclude problematic DirectShow filters from multimedia pipelines in .NET video capture, editing, and playback applications.
 ---
 

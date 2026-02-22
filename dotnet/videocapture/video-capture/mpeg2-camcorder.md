@@ -1,5 +1,5 @@
 ---
-title: Capture Camcorder Video to MPEG-2 Format in .NET
+title: MPEG-2 Video Capture from Camcorder: .NET Code Examples
 description: Implement high-quality camcorder video capture to MPEG-2 in .NET with implementation steps, code examples, and optimization techniques.
 ---
 

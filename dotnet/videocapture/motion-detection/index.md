@@ -1,5 +1,5 @@
 ---
-title: Motion Detection for Video Processing in .NET
+title: Motion Detection in Video with .NET SDK: Simple and Advanced
 description: Implement advanced and simple motion detection in .NET with multiple detector types, customizable settings, and real-time processing.
 sidebar_label: Motion Detection
 order: 6

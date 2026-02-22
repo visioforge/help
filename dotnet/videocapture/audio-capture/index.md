@@ -1,5 +1,5 @@
 ---
-title: Audio Capture for .NET - Complete Developer Guide
+title: Audio Capture in .NET - Record Microphone and System Audio
 description: Implement microphone, line-in, and streaming audio recording in .NET with format support, processing, and real-time monitoring.
 sidebar_label: Audio Capture
 order: 10

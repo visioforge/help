@@ -1,5 +1,5 @@
 ---
-title: Implementación de Efectos de Video en .NET
+title: Agregar Efectos de Video en SDK .NET con Ejemplos en C#
 description: Agregue y configure efectos de video en entornos SDK .NET para captura, reproducción y edición con gestión de parámetros y ejemplos prácticos en C#.
 ---
 

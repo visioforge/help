@@ -1,5 +1,5 @@
 ---
-title: AVI File Output Guide for .NET SDK Development
+title: AVI File Output Guide for .NET Video and Audio Encoding
 description: Implement AVI file output in .NET with video and audio encoding, hardware acceleration, and cross-platform multimedia container support.
 ---
 

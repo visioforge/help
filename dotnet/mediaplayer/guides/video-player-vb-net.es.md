@@ -1,6 +1,6 @@
 ---
 title: Crear un reproductor de video en VB.NET - Guía completa
-description: Cree un reproductor de video en VB.NET con controles de reproducción, búsqueda en la línea de tiempo y ajuste de volumen. Ejemplos completos de código VB.NET con Media Player SDK .Net.
+description: Aprenda a crear un reproductor de video en VB.NET con controles de reproducción, búsqueda en línea de tiempo y volumen usando Media Player SDK .Net.
 ---
 
 # Crear un reproductor de video en VB.NET

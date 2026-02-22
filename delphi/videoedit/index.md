@@ -1,5 +1,5 @@
 ---
-title: TVFVideoEdit Library for Delphi Developers
+title: TVFVideoEdit - Video Editing SDK for Delphi and ActiveX
 description: Build video editing software in Delphi with TVFVideoEdit - supporting multiple formats, effects, transitions, timeline editing, and encryption.
 sidebar_label: TVFVideoEdit
 ---

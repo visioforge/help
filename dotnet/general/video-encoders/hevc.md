@@ -1,5 +1,5 @@
 ---
-title: HEVC Encoding with VisioForge .Net SDKs
+title: HEVC Hardware Encoding with AMD, NVIDIA, and Intel GPUs
 description: Implement hardware-accelerated HEVC (H.265) encoding with AMD, NVIDIA, and Intel GPUs for efficient video compression in .NET applications.
 ---
 

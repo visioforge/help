@@ -1,5 +1,5 @@
 ---
-title: Etiquetas de Audio en Media Blocks SDK
+title: Etiquetas de metadatos de audio ID3, Vorbis y MP4 en .NET
 description: Escribir etiquetas de audio (ID3, Vorbis, MP4, ASF) en archivos de audio con ejemplos de código prácticos para formatos MP3, OGG y M4A.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Network WMV Streaming in Delphi Applications
+title: Implement WMV Network Streaming in Delphi and ActiveX
 description: Implement WMV network streaming in Delphi - configure profiles, manage client connections, set ports, and broadcast video with code examples.
 ---
 

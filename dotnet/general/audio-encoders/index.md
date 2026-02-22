@@ -1,5 +1,5 @@
 ---
-title: Audio Encoder Integration Guide for .NET SDKs
+title: Audio Encoders for .NET: AAC, FLAC, MP3, Opus Guide
 description: Implement AAC, FLAC, MP3, Opus, and other audio encoders in .NET with optimal settings, performance tips, and best practices.
 sidebar_label: Audio Encoders
 

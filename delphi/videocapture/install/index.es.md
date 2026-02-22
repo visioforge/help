@@ -1,5 +1,5 @@
 ---
-title: Guía de Instalación de TVFVideoCapture para IDEs
+title: Instalar TVFVideoCapture en Delphi, VB6 y Visual Studio
 description: Instalar la biblioteca TVFVideoCapture en Delphi, Visual Studio, C++ Builder y VB6 con configuración de IDE paso a paso e integración ActiveX.
 ---
 

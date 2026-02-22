@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Swann IP Camera in C# .NET
+title: Swann IP Camera RTSP URL and C# .NET Connection Guide
 description: Connect to Swann cameras in C# .NET with RTSP URL patterns and code samples for NHD, SWNHD, DVR/NVR, and legacy ADS models.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Efectos de Envolvente de Volumen de Audio en .NET
+title: Envolvente de Volumen de Audio en .NET con Video Edit SDK
 description: Implementa efectos de envolvente de volumen de audio profesionales en aplicaciones .NET con tutorial completo y muestras de código paso a paso.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Applying Real-Time Video Effects in .NET
+title: Apply Real-Time Video Effects During .NET Video Capture
 description: Enhance video capture apps with real-time video effects in .NET using step-by-step guide for professional filters during capture.
 ---
 

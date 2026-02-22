@@ -1,5 +1,5 @@
 ---
-title: Integración de TVFVideoEdit en VB6
+title: Instalar control ActiveX TVFVideoEdit en Visual Basic 6
 description: Instale el control ActiveX TVFVideoEdit en Visual Basic 6 con compatibilidad x86 para características de edición de video en aplicaciones legacy.
 ---
 

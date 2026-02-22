@@ -1,6 +1,6 @@
 ---
 title: Crear un Reproductor de Video en C# - Guía Completa de .NET
-description: Cree un reproductor de video en C# con controles de reproducción, búsqueda en la línea de tiempo y control de volumen. Guía paso a paso con ejemplos de código completos.
+description: Cree un reproductor de video en C# con controles de reproducción, búsqueda en la línea de tiempo y volumen usando Media Player SDK .Net.
 ---
 
 # Crear un Reproductor de Video en C#

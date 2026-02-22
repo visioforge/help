@@ -1,5 +1,5 @@
 ---
-title: Mostrar el Primer Fotograma de Video en .NET
+title: Mostrar primer fotograma de video con Media Player SDK .NET
 description: Muestra el primer fotograma de video en aplicaciones WinForms, WPF y Consola con ejemplos de implementación en C# usando el SDK de Media Player.
 ---
 

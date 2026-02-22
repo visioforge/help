@@ -1,5 +1,5 @@
 ---
-title: Superposiciones de Imagen en Flujos de Video
+title: Superposicion de imagen y GIF en video con .NET SDK
 description: Superponga imágenes, GIFs animados y PNGs transparentes en flujos de video en .NET para marcas de agua, logotipos y mejoras visuales con transparencia.
 ---
 

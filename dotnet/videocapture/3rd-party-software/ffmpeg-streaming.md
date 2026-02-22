@@ -1,5 +1,5 @@
 ---
-title: FFMPEG Streaming for Video Capture .NET SDK
+title: FFMPEG Streaming Integration for .NET Video Capture SDK
 description: Stream video with FFMPEG integration in Video Capture SDK for WinForms, WPF, and Console applications with configuration examples.
 ---
 

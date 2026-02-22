@@ -1,5 +1,5 @@
 ---
-title: Guide to IIS Smooth Streaming Implementation
+title: IIS Smooth Streaming Setup Guide for .NET Applications
 description: Configure Microsoft IIS Smooth Streaming in .NET with adaptive bitrate, mobile compatibility, and troubleshooting for quality video delivery.
 ---
 

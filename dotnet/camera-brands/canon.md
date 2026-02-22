@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Canon IP Camera in C# .NET
+title: Canon IP Camera RTSP URL and C# .NET Connection Guide
 description: Connect to Canon VB-series IP cameras in C# .NET with RTSP URL patterns and code samples for VB-H, VB-M, VB-S, VB-R, and legacy VB-C models.
 ---
 

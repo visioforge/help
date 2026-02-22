@@ -1,5 +1,5 @@
 ---
-title: Speex Audio Encoder Integration for .NET
+title: Speex Speech Audio Encoder Integration for .NET SDK
 description: Implement Speex speech compression in .NET with optimized voice encoding settings, quality controls, and cross-platform audio capture.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Drawing Video on PictureBox in .NET Applications
+title: Display Video Frames on PictureBox in .NET WinForms
 description: Implement video rendering on PictureBox controls in WinForms with frame handling, memory management, and efficient rendering techniques.
 ---
 

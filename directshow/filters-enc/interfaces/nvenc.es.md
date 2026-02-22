@@ -1,5 +1,5 @@
 ---
-title: Codificador NVENC - Referencia de Interfaz
+title: Codificador NVENC DirectShow - Referencia de Interfaz
 description: Interfaz INVEncConfig para codificación de video por hardware NVIDIA NVENC con códecs H.264 y H.265 y configuración de aceleración GPU.
 ---
 

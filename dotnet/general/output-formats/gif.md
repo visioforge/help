@@ -1,5 +1,5 @@
 ---
-title: GIF Animation Encoding for .NET Development
+title: Video to Animated GIF Encoding in .NET Applications
 description: Create GIF animations from video in .NET with frame rate control, resolution settings, and optimization for cross-platform applications.
 ---
 

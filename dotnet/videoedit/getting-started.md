@@ -1,5 +1,5 @@
 ---
-title: Build Video Editing Apps with .NET SDK
+title: Video Editing SDK for .NET - Getting Started Dev Guide
 description: Master video editing in .NET SDK with customizable timelines, multiple formats, transitions, effects, and real-time previews for developers.
 sidebar_position: 0
 ---

@@ -1,5 +1,5 @@
 ---
-title: Guía de API de Playlist de Media Player SDK .Net
+title: API de Playlist en .NET - Media Player SDK con C# y WPF
 description: Implementa funcionalidad de playlist en aplicaciones WinForms, WPF y Console con gestión de reproducción secuencial de medios en .NET.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Guía de Despliegue de la Biblioteca TVFVideoEdit
+title: Despliegue de TVFVideoEdit en aplicaciones Delphi y ActiveX
 description: Despliegue TVFVideoEdit en aplicaciones Delphi y ActiveX con instaladores automáticos o configuración manual para componentes y dependencias requeridos.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: FLAC Encoder Interface Reference
+title: FLAC Lossless Audio Encoder DirectShow Filter Interface
 description: FLAC encoder DirectShow interface with encoding levels, LPC configuration, block sizes, and compression for lossless audio encoding.
 ---
 

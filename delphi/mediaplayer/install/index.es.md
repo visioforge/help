@@ -1,5 +1,5 @@
 ---
-title: Instalar la Biblioteca TVFMediaPlayer
+title: Instalar TVFMediaPlayer en Delphi, ActiveX y Visual Studio
 description: Instale TVFMediaPlayer en Delphi, C++ Builder, Visual Basic 6, Visual Studio y entornos ActiveX con instrucciones detalladas de configuración.
 ---
 

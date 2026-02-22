@@ -1,5 +1,5 @@
 ---
-title: Integra SDKs .NET con Visual Studio para Mac
+title: Instalar SDKs .NET en Visual Studio para Mac - Guía completa
 description: Instala y configura SDKs .NET de VisioForge en Visual Studio para Mac para desarrollo de aplicaciones multimedia macOS e iOS.
 ---
 

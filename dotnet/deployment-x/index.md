@@ -1,5 +1,5 @@
 ---
-title: Cross-Platform .NET SDK Deployment Guide
+title: VisioForge .NET SDK Cross-Platform Deployment Guide
 description: Deploy .NET applications on Windows, macOS, iOS, Android, and Linux with native libraries, platform dependencies, and UI framework integration.
 sidebar_label: Deployment
 order: 17

@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Mobotix IP Camera in C# .NET
+title: Mobotix RTSP URL Patterns for IP Camera Access in C#
 description: Connect to MOBOTIX cameras in C# .NET with RTSP URL patterns for classic Mx and MOVE series. Includes MxPEG, MJPEG, and H.264 stream options.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Video Edit SDK FFMPEG .Net Release History
+title: Video Edit SDK FFMPEG .Net Changelog and Release Notes
 description: Detailed version history and feature updates for Video Edit SDK FFMPEG .Net with performance improvements and API changes.
 ---
 

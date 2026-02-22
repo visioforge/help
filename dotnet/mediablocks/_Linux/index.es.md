@@ -1,5 +1,5 @@
 ---
-title: Bloques de Plataforma Linux para .Net
+title: Bloques Linux V4L2, VAAPI y PulseAudio en Media Blocks SDK
 description: Bloques específicos de plataforma Linux para captura y procesamiento de video/audio usando V4L2, PulseAudio, VAAPI y más en Media Blocks SDK para .NET.
 ---
 

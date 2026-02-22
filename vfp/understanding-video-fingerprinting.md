@@ -1,5 +1,5 @@
 ---
-title: Understanding Video Fingerprinting Technology
+title: Video Fingerprinting: Algorithms, Perceptual Hashing & More
 description: Deep dive into algorithms and technical implementation behind VisioForge's video fingerprinting SDK with perceptual hashing and scene analysis.
 ---
 

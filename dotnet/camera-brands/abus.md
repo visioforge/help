@@ -1,5 +1,5 @@
 ---
-title: How to Connect to ABUS IP Camera in C# .NET
+title: ABUS IP Camera RTSP URLs and C# .NET Connection Guide
 description: Connect to ABUS cameras in C# .NET with RTSP URL patterns and code samples for TVIP, CASA, Digi-Lan, and TV series models.
 ---
 

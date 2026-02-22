@@ -1,5 +1,5 @@
 ---
-title: MOV File Encoding with VisioForge .NET SDKs
+title: MOV File Encoding and Output in .NET Video Applications
 description: Generate MOV files in .NET with hardware-accelerated encoding, cross-platform support, and professional audio/video configuration options.
 ---
 

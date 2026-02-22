@@ -1,5 +1,5 @@
 ---
-title: Guía de Despliegue de SDK .NET Multiplataforma
+title: Despliegue de VisioForge .NET SDK en todas las plataformas
 description: Despliega aplicaciones .NET en Windows, macOS, iOS, Android y Linux con bibliotecas nativas, dependencias de plataforma e integración de frameworks de UI.
 ---
 

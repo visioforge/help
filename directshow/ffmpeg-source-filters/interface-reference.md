@@ -1,5 +1,5 @@
 ---
-title: FFMPEG Source Filter - Interface Reference
+title: FFmpeg Source DirectShow Filter Interface API Reference
 description: IFFmpegSourceSettings interface with hardware acceleration, buffering modes, custom FFmpeg options, and callbacks for DirectShow.
 ---
 

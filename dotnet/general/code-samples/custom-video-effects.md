@@ -1,5 +1,5 @@
 ---
-title: Creating Custom Video Effects in C# Applications
+title: Creating Custom Real-Time Video Effects in C# .NET
 description: Implement custom video effects in C# with OnVideoFrameBitmap and OnVideoFrameBuffer events for real-time video processing and overlays.
 ---
 

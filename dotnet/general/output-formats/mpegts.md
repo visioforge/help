@@ -1,5 +1,5 @@
 ---
-title: MPEG-TS File Output Guide for .NET
+title: MPEG-TS Encoding and Output Configuration in .NET SDK
 description: Implement MPEG Transport Stream output in .NET with video and audio encoding, hardware acceleration, and cross-platform streaming support.
 ---
 

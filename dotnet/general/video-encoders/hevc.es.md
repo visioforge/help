@@ -1,5 +1,5 @@
 ---
-title: Codificación HEVC con los SDK .Net de VisioForge
+title: Codificación HEVC por hardware con AMD, NVIDIA e Intel .NET
 description: Implemente codificación HEVC (H.265) acelerada por hardware con GPUs AMD, NVIDIA e Intel para compresión de video eficiente en aplicaciones .NET.
 ---
 

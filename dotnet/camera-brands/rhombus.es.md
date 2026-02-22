@@ -1,5 +1,5 @@
 ---
-title: Cómo Conectar una Cámara Rhombus en C# .NET - Plataforma Gestionada en la Nube
+title: Cámaras Rhombus Systems - Guía de Conexión RTSP en C# .NET
 description: Opciones de integración de cámaras Rhombus en C# .NET. Arquitectura gestionada en la nube, acceso API y enfoques alternativos para cámaras Rhombus Systems.
 meta:
   - name: robots

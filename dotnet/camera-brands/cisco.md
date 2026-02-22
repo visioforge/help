@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Cisco IP Camera in C# .NET
+title: Cisco IP Camera RTSP URL Setup and C# .NET Integration
 description: Connect to Cisco CIVS, PVC, VC, and Linksys WVC cameras in C# .NET with RTSP URL patterns and code samples for enterprise and SMB models.
 ---
 

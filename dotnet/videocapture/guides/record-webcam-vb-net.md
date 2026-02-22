@@ -1,6 +1,6 @@
 ---
 title: Record Webcam Video in VB.NET - Capture & Save Guide
-description: Record webcam video in VB.NET — complete Visual Basic code for device enumeration, MP4 recording, live preview, and screenshot capture with async/await examples.
+description: Learn to record webcam video in VB.NET with device enumeration, MP4 output, live preview, and screenshot capture using async/await.
 ---
 
 # Record Webcam Video in VB.NET: Complete Guide

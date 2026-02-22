@@ -1,5 +1,5 @@
 ---
-title: Working with Audio Sample Grabber in .NET SDKs
+title: Audio Sample Grabber for .NET - Capture Raw Audio Frames
 description: Capture and process real-time audio frames using Audio Sample Grabber with X-engines and Classic engines in .NET SDK applications.
 ---
 

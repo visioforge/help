@@ -1,5 +1,5 @@
 ---
-title: How to Connect to INSTAR IP Camera in C# .NET
+title: INSTAR IP Camera RTSP URL and C# .NET Connection Guide
 description: Connect to INSTAR IP cameras in C# .NET with RTSP URL patterns and code samples for IN-6xxx, IN-7xxx, IN-8xxx, IN-9xxx HD and legacy models.
 ---
 

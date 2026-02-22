@@ -1,5 +1,5 @@
 ---
-title: Guía de Despliegue de Video Capture SDK .NET
+title: Despliegue de Video Capture SDK .NET - NuGet e instaladores
 description: Despliegue aplicaciones de Video Capture SDK con paquetes NuGet, instaladores silenciosos, o instalación manual para arquitecturas x86/x64 en .NET.
 ---
 

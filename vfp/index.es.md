@@ -1,5 +1,5 @@
 ---
-title: Tecnología de Huella Digital de Video
+title: Huella Digital de Video SDK para .NET y C++ multiplataforma
 description: Algoritmos de identificación de video con SDK para detectar duplicados, identificar fragmentos y hacer coincidir videos en múltiples plataformas.
 ---
 

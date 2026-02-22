@@ -1,5 +1,5 @@
 ---
-title: Face Detection in .NET Video Applications
+title: Face Detection SDK for .NET Video Capture Applications
 description: Implement face detection in .NET apps with code examples, configuration options, and optimization techniques for video streams.
 ---
 

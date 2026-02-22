@@ -1,5 +1,5 @@
 ---
-title: FFMPEG Integration for VisioForge Video SDKs
+title: FFMPEG.exe Output Format Configuration in .NET Video SDKs
 description: Configure FFMPEG.exe output in .NET for video capture and editing with hardware acceleration, custom codecs, and professional encoding options.
 ---
 

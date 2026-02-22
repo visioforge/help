@@ -1,5 +1,5 @@
 ---
-title: Video Edit SDK .Net Deployment Guide | Windows
+title: Deploy Video Edit SDK .Net on Windows: NuGet and Installers
 description: Deploy Video Edit SDK .Net on Windows with NuGet packages, silent installers, and manual setups for x86 and x64 architectures.
 ---
 

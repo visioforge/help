@@ -1,5 +1,5 @@
 ---
-title: WMV File Output and Encoding Guide
+title: WMV Encoding in .NET: Windows Media Video Output Guide
 description: Implement Windows Media Video encoding in .NET with audio/video configuration, streaming options, and cross-platform profile management.
 ---
 

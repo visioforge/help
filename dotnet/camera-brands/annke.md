@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Annke IP Camera in C# .NET
+title: Annke Camera RTSP URL Patterns with C# .NET Examples
 description: Connect to Annke cameras in C# .NET with RTSP URL patterns and code samples for C500, C800, CZ400, NC400 and NVR models.
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Cómo conectar una cámara IP Arecont Vision en C# .NET
-description: Conecte cámaras Arecont Vision en C# .NET con patrones de URL RTSP y ejemplos de código para modelos AV Series, MegaDome, SurroundVideo y panorámicos multisensor.
+description: Conecte cámaras Arecont Vision en C# .NET con patrones de URL RTSP y ejemplos de código para modelos AV Series, MegaDome y SurroundVideo multisensor.
 ---
 
 # Cómo conectar una cámara IP Arecont Vision en C# .NET

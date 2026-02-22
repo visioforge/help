@@ -1,5 +1,5 @@
 ---
-title: Video Edit FFMPEG SDK para Desarrolladores .NET
+title: SDK de Edición de Video FFmpeg para .NET Multiplataforma
 description: Potente toolkit de edición, procesamiento y conversión de video multiplataforma para .NET con efectos profesionales, superposiciones y codificación.
 
 ---

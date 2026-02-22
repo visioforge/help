@@ -1,5 +1,5 @@
 ---
-title: Video File Comparison Techniques and Methods
+title: Compare Video Files with Video Fingerprinting in .NET
 description: Learn efficient techniques for comparing video files using fingerprinting technology with code examples to analyze frames and signatures.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Media Blocks Pipeline Core for Media Processing
+title: Build Media Processing Pipelines with Media Blocks SDK
 description: Create media pipelines for playback, recording, and streaming with modular blocks, connections, and resource management in Media Blocks SDK.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Formato Video Custom con DirectShow en .NET
+title: Formatos de salida personalizados con DirectShow en SDK .NET
 description: Formatos de video personalizados con filtros DirectShow para pipelines especializados y configuración de códecs en aplicaciones .NET.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Video Edit FFMPEG SDK for .NET Developers
+title: FFmpeg .NET Video Editing SDK - Convert, Edit and Process
 description: Powerful cross-platform video editing, processing, and conversion toolkit for .NET with professional effects, overlays, and encoding.
 sidebar_label: Video Edit SDK FFMPEG .Net
 order: 11

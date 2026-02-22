@@ -1,5 +1,5 @@
 ---
-title: Control de Camcorder DV en Aplicaciones .NET
+title: Control de Camcorder DV y FireWire en Video Capture SDK .Net
 description: Implemente control de camcorder DV/HDV en aplicaciones C# con comandos esenciales, patrones de implementación y ejemplos de código prácticos para .NET.
 ---
 

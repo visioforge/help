@@ -1,5 +1,5 @@
 ---
-title: Empezando con SDK de Video Fingerprinting C++
+title: Video Fingerprinting C++ SDK - Guía de inicio y ejemplos
 description: Instalar y configurar SDK de Video Fingerprinting C++ con configuración Visual Studio, configuración de proyecto y guía de implementación paso a paso.
 ---
 

@@ -264,10 +264,6 @@ Complete working examples for IP camera integration:
 - [IP Camera Recording to MP4](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-capture-mp4) — Record streams to file
 - [All .NET SDK Samples](https://github.com/visioforge/.Net-SDK-s-samples) — Full sample repository
 
-### Free Trial
-
-[Download Free Trial](https://www.visioforge.com/download){ .md-button .md-button--primary target="_blank" }
-
 ## Related Resources
 
 - [RTSP Source Block Documentation](../mediablocks/Sources/index.md)

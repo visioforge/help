@@ -1,5 +1,5 @@
 ---
-title: AAC Encoder Interface Reference
+title: AAC Encoder DirectShow Filter Interface Configuration
 description: AAC encoder DirectShow interfaces with bitrate control, profile configuration, sample rate, and advanced encoding for professional audio.
 ---
 

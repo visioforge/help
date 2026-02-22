@@ -1,5 +1,5 @@
 ---
-title: Delphi Video Input Source Selection with Crossbar
+title: Video Input Crossbar Selection in Delphi Applications
 description: Select video input sources in Delphi with crossbar - configure composite, S-Video, HDMI inputs with step-by-step code examples for Delphi.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: FM Radio & TV Tuning Integration in .NET SDK
+title: TV Tuner and FM Radio Integration Guide for .NET C# Apps
 description: Implement FM radio and TV tuning in C# apps to scan frequencies, manage channels, and integrate broadcast capabilities in .NET.
 ---
 # FM Radio and TV Tuning Integration for .NET Applications

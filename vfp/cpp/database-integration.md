@@ -1,5 +1,5 @@
 ---
-title: C++ Fingerprinting SDK Database Guide
+title: Video Fingerprint Storage in C++ with SQLite and PostgreSQL
 description: Integrate Video Fingerprinting SDK C++ with databases for storing and retrieving fingerprints including SQLite and PostgreSQL examples.
 ---
 

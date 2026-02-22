@@ -1,5 +1,5 @@
 ---
-title: Video sample grabber usage
+title: Video Sample Grabber: Extract RAW Frames in C# .NET
 description: Extract RAW video frames from Video Capture, Media Player, and Video Edit SDKs with managed memory access and bitmap conversion in C#.
 ---
 

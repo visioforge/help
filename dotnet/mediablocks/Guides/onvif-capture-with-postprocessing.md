@@ -1,5 +1,5 @@
 ---
-title: Capture MP4 from ONVIF Camera with Postprocessing
+title: ONVIF IP Camera Capture to MP4 with Video Effects in C#
 description: Capture video from ONVIF IP cameras and apply video processing effects like resizing, brightness adjustment, and filters before saving to MP4.
 ---
 

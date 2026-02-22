@@ -1,5 +1,5 @@
 ---
-title: Cómo Conectar una Cámara IP Vivotek en C# .NET
+title: Vivotek - URL RTSP y Conexión con Cámaras IP en C# .NET
 description: Conecta cámaras IP Vivotek en C# .NET con patrones de URL RTSP y ejemplos de código para modelos FD, IP, SD, FE ojo de pez y servidores de video.
 ---
 

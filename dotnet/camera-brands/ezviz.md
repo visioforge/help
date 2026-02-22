@@ -1,5 +1,5 @@
 ---
-title: How to Connect to EZVIZ IP Camera in C# .NET
+title: EZVIZ IP Camera RTSP URL and Connection Guide for C# .NET
 description: Connect to EZVIZ cameras in C# .NET with RTSP URL patterns for C1C, C3W, C6N, BC1C and other models. Enable RTSP on cloud-first cameras.
 ---
 

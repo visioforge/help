@@ -1,5 +1,5 @@
 ---
-title: FLAC Audio Encoder Integration Guide
+title: FLAC Lossless Audio Encoder for .NET SDK: Full Guide
 description: Implement FLAC lossless audio compression in .NET with quality settings, compression parameters, and high-quality audio processing.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Combining Multiple Video Streams in .NET
+title: Video Mixing and Picture-in-Picture Layout in C# .NET
 description: Implement Picture-in-Picture with multiple video sources in .NET using C# code examples for mixing streams with custom layouts.
 ---
 

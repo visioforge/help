@@ -1,5 +1,5 @@
 ---
-title: Screen Recording in Delphi Applications
+title: Delphi Screen Capture and Recording with TVFVideoCapture
 description: Implement screen recording in Delphi with TVFVideoCapture - capture regions, full screen, customize frame rates, track cursor with code examples.
 ---
 

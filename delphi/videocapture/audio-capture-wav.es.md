@@ -1,5 +1,5 @@
 ---
-title: Captura de Audio a WAV en Delphi
+title: Grabacion de Audio WAV en Delphi - Guia del SDK VideoCapture
 description: Capturar audio a archivos WAV en Delphi con selección de códec, opciones de compresión y grabación estéreo usando ejemplos de código TVFVideoCapture.
 ---
 

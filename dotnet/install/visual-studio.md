@@ -1,5 +1,5 @@
 ---
-title: Integrating .NET SDKs with Visual Studio
+title: How to Install .NET SDKs in Visual Studio Using NuGet
 description: Install and configure multimedia .NET SDKs in Visual Studio with NuGet packages and UI framework integration for video applications.
 ---
 

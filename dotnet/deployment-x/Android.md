@@ -1,5 +1,5 @@
 ---
-title: Cross-platform .Net deployment manual for Android
+title: Android .NET SDK Deployment - NuGet, VideoView, Signing
 description: VisioForge .NET SDK Android deployment with package management, VideoView integration, architecture support, and permissions configuration.
 ---
 

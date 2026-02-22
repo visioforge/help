@@ -1,5 +1,5 @@
 ---
-title: Video Fragment Search Tool for .Net
+title: Search for Video Fragments Using Fingerprints in .NET
 description: Use vfp_search to search for a video fragment within a larger video with features and settings to help find and manage your library.
 ---
 

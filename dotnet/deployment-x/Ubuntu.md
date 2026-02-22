@@ -1,5 +1,5 @@
 ---
-title: .NET Cross-Platform Deployment Guide for Ubuntu
+title: Deploy .NET Apps on Ubuntu with GStreamer and VisioForge SDK
 description: Deploy .NET multimedia apps on Ubuntu Linux with GStreamer setup, hardware configuration, and cross-platform performance optimization.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Delphi 64-bit Package Installation Guide
+title: Delphi SDK 64-bit Package Installation Step-by-Step
 description: Complete guide to installing 64-bit Delphi packages - configure library paths, manage runtime packages, and resolve common installation issues.
 ---
 

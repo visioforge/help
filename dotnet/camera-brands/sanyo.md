@@ -1,6 +1,6 @@
 ---
-title: How to Connect to Sanyo IP Camera in C# .NET
-description: Connect to Sanyo cameras in C# .NET with RTSP URL patterns and code samples for VCC, VDC, and VCC-HD series models.
+title: Sanyo IP Camera RTSP URL Patterns and C# .NET Integration
+description: Connect Sanyo VCC, VDC, and VCC-HD series IP cameras in C# .NET using RTSP URL patterns, snapshot endpoints, and VisioForge SDK code examples.
 ---
 
 # How to Connect to Sanyo IP Camera in C# .NET

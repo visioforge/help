@@ -1,5 +1,5 @@
 ---
-title: Referencia de la Interfaz del Codificador FLAC
+title: Codificador FLAC DirectShow: interfaz y configuración
 description: Interfaz DirectShow del codificador FLAC con niveles de codificación, configuración LPC, tamaños de bloque y compresión para codificación de audio sin pérdida.
 ---
 

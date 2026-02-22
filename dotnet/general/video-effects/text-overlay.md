@@ -1,5 +1,5 @@
 ---
-title: Advanced Text Overlays for .NET Video Processing
+title: Add Text Overlay to Video in C# with Custom Fonts and Fade
 description: Create dynamic text overlays with font, color, position, rotation, and animation control for timestamps, captions, and branding in .NET video.
 ---
 

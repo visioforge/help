@@ -1,5 +1,5 @@
 ---
-title: Streaming en Vivo de YouTube para Apps .NET
+title: Streaming YouTube Live con RTMP en .NET usando VisioForge
 description: Transmita a YouTube Live con RTMP en aplicaciones .NET usando codificadores de video optimizados, configuración de audio y soporte multiplataforma.
 ---
 

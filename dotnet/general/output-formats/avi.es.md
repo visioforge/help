@@ -1,5 +1,5 @@
 ---
-title: Salida de Archivo AVI en SDKs .NET
+title: Salida de archivo AVI en .NET con H.264, HEVC y MJPEG
 description: Implemente salida de archivo AVI en .NET con codificación de video y audio, aceleración de hardware y soporte de contenedor multimedia multiplataforma.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Dominando los Codificadores de Video en .NET SDK
+title: Codificadores de video en Media Blocks SDK para .NET
 description: Codifica video con códecs AV1, H264, HEVC, VP9 y más usando aceleración GPU y configuraciones optimizadas en Media Blocks SDK para .NET.
 sidebar_label: Codificadores de Video
 order: 18

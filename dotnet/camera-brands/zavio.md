@@ -1,6 +1,6 @@
 ---
-title: How to Connect to Zavio IP Camera in C# .NET
-description: Connect to Zavio cameras in C# .NET with RTSP URL patterns and code samples for B, D, F, M, and P series models.
+title: Zavio IP Camera RTSP URL Guide for C# .NET Integration
+description: Connect to Zavio IP cameras in C# .NET with RTSP URL patterns, ONVIF support, and code samples for bullet, dome, fixed, mini, and PTZ models.
 ---
 
 # How to Connect to Zavio IP Camera in C# .NET

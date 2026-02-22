@@ -1,5 +1,5 @@
 ---
-title: Implementing SRT Protocol Streaming in .NET
+title: SRT Video Streaming and Encoding in .NET Applications
 description: Integrate SRT protocol for secure, low-latency video streaming with error recovery and encryption in .NET applications for reliable delivery.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Creating smooth video transitions in C#
+title: Add Video Transition Effects Between Clips in C# Apps
 description: Master video transition effects in C# with step-by-step guide and complete code examples for VideoEditCore and VideoEditCoreX APIs.
 ---
 

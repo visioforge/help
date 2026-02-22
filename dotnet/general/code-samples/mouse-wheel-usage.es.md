@@ -1,5 +1,5 @@
 ---
-title: Eventos de Rueda del Ratón en SDKs .NET
+title: Eventos de Rueda del Ratón en Apps de Video .NET con C#
 description: Maneja eventos de rueda del ratón en aplicaciones de video .NET para zoom, desplazamiento y navegación de línea de tiempo con mejores prácticas.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Video Transitions and SMPTE Wipe Effects for .NET
+title: SMPTE Wipe Transition Effects in Video Edit SDK .Net
 description: Explore 100+ video transition effects in Video Edit SDK for .NET with SMPTE standard wipes and customizable border, softness, and positioning.
 ---
 

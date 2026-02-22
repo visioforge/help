@@ -1,5 +1,5 @@
 ---
-title: Integración de TVFVideoEdit para C++ Builder
+title: Instalar TVFVideoEdit ActiveX en C++ Builder paso a paso
 description: Importe y configure componentes ActiveX de TVFVideoEdit en C++ Builder 5/6, 2006 y versiones más nuevas con configuración de paquetes y controles.
 ---
 

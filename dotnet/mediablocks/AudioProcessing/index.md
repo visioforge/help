@@ -1,5 +1,5 @@
 ---
-title: .Net Audio Processing & Effect Blocks
+title: Audio Processing and Effects for .NET - Mixer, EQ, Filters
 description: Create audio pipelines with converters, resamplers, mixers, equalizers, and effects for professional audio processing in .NET applications.
 sidebar_label: Audio Processing and Effects
 
@@ -1266,3 +1266,168 @@ await pipeline.StartAsync();
 #### Platforms
 
 Windows, macOS, Linux (requires rsaudiofx plugin).
+
+### Pitch Shifter
+
+The `PitchBlock` shifts the pitch of an audio stream without affecting playback speed. It uses the SoundTouch library via the GStreamer `pitch` element, supporting shifts from −12 to +12 semitones (one octave down to one octave up).
+
+#### Block info
+
+Name: PitchBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio | 1
+Output | Uncompressed audio | 1
+
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Semitones` | `int` | `0` | Pitch shift in semitones (−12 to +12) |
+| `Pitch` | `float` | `1.0` | Direct pitch multiplier (1.0 = no change, 2.0 = one octave up, 0.5 = one octave down) |
+
+#### Availability
+
+`PitchBlock.IsAvailable()` returns `true` if the GStreamer `pitch` element (SoundTouch plugin) is present.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->PitchBlock;
+    PitchBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var pitchBlock = new PitchBlock(semitones: 5);
+pipeline.Connect(fileSource.AudioOutput, pitchBlock.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(pitchBlock.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+### Silence Detector
+
+The `SilenceDetectorBlock` analyzes audio levels in real time to detect silence periods based on a configurable dBFS threshold. It is a pass-through block — audio is forwarded unchanged while `OnSilenceStarted` and `OnSilenceEnded` events fire at state transitions. Detected periods can be retrieved as a list or exported as JSON.
+
+#### Block info
+
+Name: SilenceDetectorBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio | 1
+Output | Uncompressed audio | 1
+
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `ThresholdDb` | `double` | `-40.0` | Silence threshold in dBFS; audio below this level is treated as silence |
+
+Key methods:
+
+- `GetSilencePeriods()` — returns all detected `SilencePeriod` objects.
+- `FinalizeSilencePeriods(TimeSpan endTime)` — closes any in-progress period and returns the full list.
+- `ExportSilencePeriodsJson()` — returns a JSON string with start/end timestamps for every detected period.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->SilenceDetectorBlock;
+    SilenceDetectorBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var silenceDetector = new SilenceDetectorBlock(thresholdDb: -35.0);
+silenceDetector.OnSilenceStarted += (s, e) => Console.WriteLine($"Silence started at {e.Timestamp}");
+silenceDetector.OnSilenceEnded += (s, e) => Console.WriteLine($"Silence ended at {e.Timestamp}");
+pipeline.Connect(fileSource.AudioOutput, silenceDetector.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(silenceDetector.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+
+// After pipeline stops, export detected silence periods
+var json = silenceDetector.ExportSilencePeriodsJson();
+Console.WriteLine(json);
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### Weighted Channel Mix
+
+The `WeightedChannelMixBlock` mixes the left and right stereo channels with independently adjustable weights, producing a mono or stereo output. It is primarily used for dual-mono sources such as karaoke audio where one channel carries an instrumental track and the other a full mix.
+
+Weights can be changed at runtime without rebuilding the pipeline. Values above 1.0 boost the channel but may cause clipping.
+
+#### Block info
+
+Name: WeightedChannelMixBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed stereo audio | 1
+Output | Uncompressed audio | 1
+
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `LeftChannelWeight` | `float` | `0.5` | Mix weight for the left channel (0.0–1.0+) |
+| `RightChannelWeight` | `float` | `0.5` | Mix weight for the right channel (0.0–1.0+) |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->WeightedChannelMixBlock;
+    WeightedChannelMixBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "karaoke.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+// Use only the instrumental (left) channel
+var mixer = new WeightedChannelMixBlock(leftWeight: 1.0f, rightWeight: 0.0f);
+pipeline.Connect(fileSource.AudioOutput, mixer.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(mixer.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.

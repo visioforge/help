@@ -1,5 +1,5 @@
 ---
-title: NVENC Encoder - Interface Reference
+title: NVENC DirectShow Encoder Filter Interface Reference
 description: INVEncConfig interface for NVIDIA NVENC hardware video encoding with H.264 and H.265 codecs and GPU acceleration configuration.
 ---
 

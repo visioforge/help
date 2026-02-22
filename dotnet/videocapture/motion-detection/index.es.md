@@ -1,5 +1,5 @@
 ---
-title: Detección de Movimiento en Video .NET
+title: Detección de Movimiento en Video SDK .NET - Guía Completa
 description: Implemente detección de movimiento avanzada y simple en .NET con múltiples tipos de detectores, configuraciones personalizables y procesamiento en tiempo real.
 sidebar_label: Detección de Movimiento
 order: 6

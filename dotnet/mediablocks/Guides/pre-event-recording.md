@@ -1,6 +1,6 @@
 ---
-title: Pre-Event Recording with IP Camera in C#
-description: Record IP camera stream with pre-event circular buffer in C# .NET. Motion detection triggered recording from RTSP cameras and webcams using VisioForge Media Blocks SDK.
+title: Pre-Event Buffering and Recording for IP Cameras in C#
+description: Implement pre-event buffering for IP cameras in C# .NET. Capture RTSP and webcam footage with motion-triggered recording using VisioForge Media Blocks SDK.
 ---
 
 # How to Implement Pre-Event Recording for IP Cameras in C#

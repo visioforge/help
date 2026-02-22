@@ -1,5 +1,5 @@
 ---
-title: Combinar Múltiples Flujos de Video en .NET
+title: Mezcla de Video en .NET con Picture-in-Picture y Multicámara
 description: Implementa Picture-in-Picture con múltiples fuentes de video en .NET usando ejemplos de código C# para mezclar flujos con layouts personalizados.
 ---
 

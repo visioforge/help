@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprinting SDK Code Samples
+title: Video Fingerprinting SDK Samples for .NET Developers
 description: Comprehensive code examples and sample applications demonstrating video fingerprinting, duplicate detection, and fragment search with SDK.
 sidebar_label: Samples
 order: 91

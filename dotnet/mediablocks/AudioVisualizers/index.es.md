@@ -1,5 +1,5 @@
 ---
-title: Bloques de Visualizador de Audio .Net
+title: Visualizadores de audio en .NET con espectro y osciloscopio
 description: Construya aplicaciones reactivas al audio con bloques visualizadores Spacescope, Spectrascope, Synaescope y Wavescope para renderizado de audio dinámico.
 
 ---

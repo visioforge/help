@@ -1,5 +1,5 @@
 ---
-title: Requisitos del Sistema y Compatibilidad SDK .NET
+title: Requisitos del sistema y compatibilidad de VisioForge .NET
 description: Soporte de plataformas y requisitos del sistema del SDK .NET para Windows, macOS, Linux, iOS y Android con detalles de compatibilidad de frameworks.
 ---
 

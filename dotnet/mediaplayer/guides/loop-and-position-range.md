@@ -1,5 +1,5 @@
 ---
-title: Loop & Position Range - Media Player SDK .NET
+title: Loop Video Playback and Position Range in C# .NET SDK
 description: Implement loop playback and segment control in .NET. Learn DirectShow and GStreamer features for video loops and position range selection.
 sidebar_label: Loop Mode & Position Range
 order: 2

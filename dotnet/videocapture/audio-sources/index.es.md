@@ -1,5 +1,5 @@
 ---
-title: Fuentes de Audio en Aplicaciones .NET
+title: Captura de audio en .NET: dispositivos, loopback y red
 description: Integre múltiples fuentes de audio en .NET incluyendo dispositivos de captura, bucle invertido del sistema, cámaras IP y Decklink con ejemplos de código.
 sidebar_label: Fuentes de Audio
 order: 15

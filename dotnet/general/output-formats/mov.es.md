@@ -1,5 +1,5 @@
 ---
-title: Salida de Archivo MOV en Video .NET
+title: Codificador MOV en .NET - Salida de Video Profesional
 description: Genere archivos MOV en .NET con codificación acelerada por hardware, soporte multiplataforma y opciones de configuración profesional de audio/video.
 ---
 

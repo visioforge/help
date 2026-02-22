@@ -1,5 +1,5 @@
 ---
-title: How to Connect to JVC IP Camera in C# .NET
+title: JVC IP Camera RTSP URL and C# .NET Integration Guide
 description: Connect to JVC cameras in C# .NET with RTSP URL patterns and code samples for VN-H, VN-T, VN-C, and VN-X series network cameras.
 ---
 

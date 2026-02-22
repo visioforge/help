@@ -1,6 +1,6 @@
 ---
-title: Cómo Conectar una Cámara Verkada en C# .NET - Restricciones de Gestión en la Nube
-description: Opciones de integración de cámaras Verkada en C# .NET. Comprenda la arquitectura gestionada en la nube, limitaciones RTSP y enfoques alternativos para cámaras Verkada.
+title: Verkada - Cámara en la Nube sin RTSP con C# .NET SDK
+description: Integre cámaras Verkada con C# .NET SDK. Conozca su arquitectura en la nube, la ausencia de RTSP y las alternativas disponibles.
 meta:
   - name: robots
     content: "noindex, follow"

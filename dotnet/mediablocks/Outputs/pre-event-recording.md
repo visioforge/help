@@ -1,6 +1,6 @@
 ---
-title: Pre-Event Recording Block (Circular Buffer)
-description: PreEventRecordingBlock API reference for recording IP camera and webcam video with circular buffer in C# .NET. Settings, state machine, events, and methods for motion-triggered surveillance recording.
+title: Pre-Event Buffering and Recording with Ring Buffer in C#
+description: PreEventRecordingBlock API for buffering and recording pre-event surveillance video from IP cameras and webcams in C# .NET.
 sidebar_label: Pre-Event Recording
 ---
 

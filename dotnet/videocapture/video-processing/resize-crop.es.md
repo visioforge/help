@@ -1,5 +1,5 @@
 ---
-title: Redimensionar y Recortar Video en .NET
+title: Redimensionar y recortar video en .NET con Video Capture SDK
 description: Redimensionamiento y recorte de video profesional en .NET con ejemplos optimizados para webcams, capturas de pantalla y cámaras IP.
 ---
 

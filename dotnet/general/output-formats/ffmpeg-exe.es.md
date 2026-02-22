@@ -1,5 +1,5 @@
 ---
-title: Integración de FFMPEG.exe con SDKs .NET
+title: Salida FFMPEG.exe en .NET: codificación y formatos de video
 description: Configure salida FFMPEG.exe en .NET para captura y edición de video con aceleración de hardware, códecs personalizados y opciones de codificación profesional.
 ---
 

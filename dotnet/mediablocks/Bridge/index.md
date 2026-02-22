@@ -1,5 +1,5 @@
 ---
-title: Link Media Pipelines - Bridge Blocks Guide
+title: Bridge Blocks to Link and Switch Media Pipelines in .NET
 description: Link and dynamically switch between media pipelines for audio, video, and subtitles without interrupting playback or streaming in .NET apps.
 sidebar_label: Video and Audio Bridges
 ---

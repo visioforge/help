@@ -1,5 +1,5 @@
 ---
-title: Guía de Bloques Nvidia para Medios .Net
+title: Bloques Nvidia GPU para procesamiento de video en .NET
 description: Acelere el procesamiento de medios con bloques GPU Nvidia para transferencia de datos, conversión de video y redimensionamiento en pipelines Media Blocks SDK.
 ---
 

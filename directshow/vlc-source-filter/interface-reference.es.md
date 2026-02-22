@@ -1,5 +1,5 @@
 ---
-title: Filtro Fuente VLC - Referencia de Interfaces
+title: Filtro Fuente VLC DirectShow - Referencia de Interfaces
 description: Interfaces de la familia IVlcSrc para audio multi-pista, soporte de subtítulos y opciones personalizadas de línea de comandos VLC en aplicaciones DirectShow.
 ---
 

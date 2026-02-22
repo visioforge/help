@@ -1,5 +1,5 @@
 ---
-title: Display First Frame in Video Files with .NET
+title: Display First Frame of Video in C# .NET Applications
 description: Show the first video frame in WinForms, WPF, and Console applications with C# implementation examples using Media Player SDK.
 ---
 

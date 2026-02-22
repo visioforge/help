@@ -1,5 +1,5 @@
 ---
-title: Uso del capturador de muestras de video
+title: Capturador de muestras de video - cuadros RAW en C# .NET
 description: Extraiga cuadros de video RAW de Video Capture, Media Player y Video Edit SDKs con acceso a memoria administrada y conversión de bitmap en C#.
 ---
 

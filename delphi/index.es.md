@@ -1,5 +1,5 @@
 ---
-title: Framework de Medios Delphi para Video
+title: SDK de Delphi/C++Builder para Procesamiento de Video
 description: Potentes bibliotecas Delphi/ActiveX para reproducción, captura y edición de video con soporte x64 para aplicaciones de medios profesionales.
 ---
 

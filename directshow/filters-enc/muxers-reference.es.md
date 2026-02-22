@@ -1,5 +1,5 @@
 ---
-title: Referencia de Multiplexores DirectShow
+title: Referencia de Multiplexores y Contenedores DirectShow
 description: Referencia de formatos de contenedor DirectShow para multiplexores MP4, MKV, WebM, MPEG-TS y AVI con códecs compatibles y opciones de transmisión.
 ---
 

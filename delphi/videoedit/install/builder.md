@@ -1,5 +1,5 @@
 ---
-title: TVFVideoEdit Integration for C++ Builder
+title: Install TVFVideoEdit ActiveX Control in C++ Builder
 description: Import and configure TVFVideoEdit ActiveX components in C++ Builder 5/6, 2006, and newer versions with package and control setup.
 ---
 

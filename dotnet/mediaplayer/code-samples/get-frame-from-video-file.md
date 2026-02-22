@@ -1,5 +1,5 @@
 ---
-title: Extracting Video Frames in .NET - Complete Guide
+title: Extract Frames from Video in .NET - C# Code Examples
 description: Extract and capture specific frames from video files with Windows-specific and cross-platform video processing solutions in .NET.
 ---
 

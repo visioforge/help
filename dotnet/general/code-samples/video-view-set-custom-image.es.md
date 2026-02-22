@@ -1,5 +1,5 @@
 ---
-title: Imágenes Personalizadas para VideoView en .NET
+title: Configurar Imagen Personalizada para VideoView en .NET
 description: Muestra imágenes de marcador de posición personalizadas en controles VideoView para branding profesional y mejor experiencia de usuario en .NET.
 ---
 

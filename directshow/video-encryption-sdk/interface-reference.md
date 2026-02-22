@@ -1,5 +1,5 @@
 ---
-title: Video Encryption SDK - Interface Reference
+title: Video Encryption SDK Interface Reference - AES-256
 description: Video Encryption SDK API with IVFCryptoConfig, IVFPasswordProvider, and helper methods for C++, C#, and Delphi with AES-256.
 ---
 

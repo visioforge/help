@@ -1,5 +1,5 @@
 ---
-title: Añadir Múltiples Pistas de Audio a AVI en .NET
+title: Cómo añadir múltiples pistas de audio a archivos AVI en C#
 description: Implementa múltiples pistas de audio en archivos AVI usando Video Edit SDK para .NET con guía paso a paso y ejemplos de código C# para multi-idioma.
 ---
 

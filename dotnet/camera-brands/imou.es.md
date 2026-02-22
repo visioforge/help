@@ -1,5 +1,5 @@
 ---
-title: Cómo Conectar una Cámara IP Imou en C# .NET
+title: Imou RTSP en C# .NET - Guía de Conexión de Cámaras IP
 description: Conecte cámaras Imou en C# .NET con patrones de URL RTSP y ejemplos de código para modelos de las series Cruiser, Ranger, Bullet, Cell y Versa.
 ---
 

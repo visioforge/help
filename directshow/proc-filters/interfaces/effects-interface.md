@@ -1,5 +1,5 @@
 ---
-title: Processing Filters - Effects Interfaces Reference
+title: DirectShow Video Effects and Processing Filter API Reference
 description: DirectShow Processing Filters API reference for video effects, audio enhancement, resize, chroma key, and video mixing interfaces.
 ---
 

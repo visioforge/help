@@ -1,5 +1,5 @@
 ---
-title: Crear Videos desde Imágenes en Consola C#
+title: Crear video desde imágenes en consola C# con Video Edit SDK
 description: Genera videos desde secuencias de imágenes en C# con orientación paso a paso, ejemplos de código y consejos de rendimiento para .NET.
 ---
 

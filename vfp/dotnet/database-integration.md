@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprinting Database Guide
+title: Video Fingerprint Storage in MongoDB, SQL Server, PostgreSQL
 description: Complete guide for integrating video fingerprints with MongoDB, SQL Server, PostgreSQL with schemas, indexing, and optimization.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Build a Video Player in VB.NET - Complete Guide
+title: VB.NET Video Player with Playback Controls and Seeking
 description: Build a video player in VB.NET with playback controls, seeking, and volume adjustment. Complete VB.NET code examples using Media Player SDK .Net.
 ---
 

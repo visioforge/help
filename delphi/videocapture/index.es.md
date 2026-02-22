@@ -1,5 +1,5 @@
 ---
-title: Video Capture SDK para Delphi
+title: Captura de video ActiveX con Delphi y Object Pascal
 description: Captura video desde cámaras, webcams y dispositivos usando Video Capture SDK con Delphi/Object Pascal. Incluye ejemplos de código completos.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Avigilon IP Camera in C# .NET
+title: Avigilon IP Camera RTSP URL Patterns and C# .NET Setup
 description: Connect to Avigilon cameras in C# .NET with RTSP URL patterns and code samples for H5A, H5M, H5 Pro, H5SL, and Unity NVR models.
 ---
 

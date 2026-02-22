@@ -1,5 +1,5 @@
 ---
-title: Control de Volumen por Pista de Audio en C#
+title: Ajustar volumen por pista de audio en Video Edit SDK .Net
 description: Controles de volumen personalizados para pistas de audio individuales en edición de video con guía detallada y ejemplos de código C# para .NET.
 ---
 

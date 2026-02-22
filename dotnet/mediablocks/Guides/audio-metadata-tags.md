@@ -1,5 +1,5 @@
 ---
-title: Write Audio Tags with Media Blocks SDK
+title: Write Audio Metadata Tags in .NET: ID3, Vorbis, and MP4
 description: Write audio metadata tags (ID3, Vorbis Comments, MP4 metadata, ASF metadata) to audio files with practical code examples for MP3, OGG, M4A.
 ---
 

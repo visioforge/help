@@ -1,5 +1,5 @@
 ---
-title: Filtro DirectShow VLC Source
+title: Filtro Fuente VLC DirectShow para Aplicaciones Medios
 description: Filtro DirectShow con VLC para reproducir 200+ formatos, video 4K/8K, streams RTSP/HLS con decodificación por hardware para aplicaciones de medios.
 ---
 

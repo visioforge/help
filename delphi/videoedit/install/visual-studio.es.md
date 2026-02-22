@@ -1,5 +1,5 @@
 ---
-title: Instalar TVFVideoEdit en Visual Studio
+title: Instalar control ActiveX TVFVideoEdit en Visual Studio
 description: Instale controles ActiveX TVFVideoEdit en Visual Studio 2010+ para proyectos C++, C# y VB.NET con configuración de ensamblado envoltorio.
 ---
 

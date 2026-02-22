@@ -1,5 +1,5 @@
 ---
-title: Advanced Video Encryption SDK for Developers
+title: DirectShow Advanced Video Encryption SDK for Developers
 description: DirectShow video encryption SDK with AES-256 for H.264/AAC MP4 files, GPU acceleration, and complete API for C++, C#, and Delphi.
 sidebar_label: Video Encryption SDK
 order: 5

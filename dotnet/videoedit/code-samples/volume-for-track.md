@@ -1,5 +1,5 @@
 ---
-title: Setting Custom Volume for Audio Tracks in C#
+title: Set Audio Track Volume in C# Video Editing Applications
 description: Implement custom volume controls for individual audio tracks in video editing apps with detailed guide and C# code examples for .NET.
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: Bloque de Grabación Pre-Evento (Buffer Circular)
-description: Referencia API de PreEventRecordingBlock para grabar video de cámara IP y webcam con buffer circular en C# .NET. Configuración, máquina de estados, eventos y métodos para grabación de vigilancia activada por movimiento.
+title: Grabación Pre-Evento y Buffer Circular en Media Blocks .NET
+description: API de PreEventRecordingBlock en VisioForge Media Blocks .NET para grabación pre-evento con buffer circular en aplicaciones C#.
 sidebar_label: Grabación Pre-Evento
 ---
 

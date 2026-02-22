@@ -1,5 +1,5 @@
 ---
-title: Referencia de Interfaces: Encriptación de Video
+title: "Encriptación de Video AES-256: API e Interfaces del SDK"
 description: API del SDK de Encriptación de Video con IVFCryptoConfig, IVFPasswordProvider y métodos auxiliares para C++, C# y Delphi con AES-256.
 ---
 

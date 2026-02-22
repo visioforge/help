@@ -1,5 +1,5 @@
 ---
-title: Implementing HLS Network Streaming in .NET
+title: HLS Streaming Implementation in .NET with Code Examples
 description: Build HTTP Live Streaming applications in .NET with adaptive bitrate, video encoding, server setup, and cross-platform playback integration.
 ---
 

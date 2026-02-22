@@ -1,5 +1,5 @@
 ---
-title: Streaming de Cámara IP a Archivos MP4 en .NET C#
+title: Captura RTSP de cámara IP y grabación a MP4 en .NET C#
 description: Implementa streaming de video de cámara IP y grabación a archivos MP4 en .NET usando C# con conexión RTSP, opciones de codificación y ejemplos de código.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Media Player SDK .Net (MediaPlayerCore)
+title: Media Player SDK .Net para reproducción de video y audio
 description: Implementa reproducción de video, streaming y capacidades de reproducción de medios en aplicaciones .NET con tutoriales de uso de Media Player SDK.
 
 ---

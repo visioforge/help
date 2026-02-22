@@ -1,5 +1,5 @@
 ---
-title: Filtros de Procesamiento - Referencia de Interfaces de Efectos
+title: Efectos de Video DirectShow - Referencia de Interfaces C#
 description: API de Filtros DirectShow: efectos de video, mejora de audio, redimensionamiento, chroma key e interfaces de mezcla con documentación.
 ---
 

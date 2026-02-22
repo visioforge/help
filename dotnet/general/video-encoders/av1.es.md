@@ -1,5 +1,5 @@
 ---
-title: Codificadores AV1 en SDKs .NET
+title: Codificadores AV1 en .NET - AMF, NVENC, QSV, AOM, RAV1E
 description: Configure codificadores AV1 en los SDK de Video Capture, Video Edit y Media Blocks multiplataforma para compresión de video eficiente de próxima generación.
 ---
 

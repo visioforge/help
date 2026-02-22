@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Reolink IP Camera in C# .NET
+title: Reolink IP Camera RTSP Connection Guide for C# .NET
 description: Connect to Reolink cameras in C# .NET with RTSP URL patterns and code samples for RLC, E1, Argus, CX, and Duo series models.
 ---
 

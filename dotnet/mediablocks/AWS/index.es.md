@@ -1,5 +1,5 @@
 ---
-title: Guía de Bloques AWS S3 para Medios .Net
+title: Bloques AWS S3 Source y Sink en Media Blocks SDK .Net
 description: Lea y escriba en almacenamiento AWS S3 con bloques source y sink para pipelines de procesamiento de medios en aplicaciones Media Blocks SDK .NET.
 ---
 

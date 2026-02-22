@@ -1,5 +1,5 @@
 ---
-title: Video Encoders for VisioForge .NET
+title: Video Encoders for VisioForge .NET: H264, HEVC, AV1
 description: Comprehensive overview of video encoders with hardware acceleration, codec features, and performance optimization for .NET video applications.
 sidebar_label: Video Encoders
 

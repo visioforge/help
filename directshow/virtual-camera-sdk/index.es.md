@@ -1,5 +1,5 @@
 ---
-title: SDK de Cámara Virtual DirectShow para Streaming
+title: SDK de Cámara Virtual DirectShow para Streaming Web
 description: Cree cámaras web virtuales para Zoom, Teams, Skype y OBS con SDK DirectShow para transmitir cualquier fuente de video con soporte de audio.
 ---
 

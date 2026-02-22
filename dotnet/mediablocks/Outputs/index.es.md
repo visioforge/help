@@ -1,5 +1,5 @@
 ---
-title: Guía de Bloques de Salida .Net Media
+title: Salida a MP4, AVI, MKV, WebM y RTMP en Media Blocks SDK .Net
 description: Escriba medios a archivos y flujos de red con bloques de sumidero de salida completos para MP4, MKV, RTMP, HLS y más en Media Blocks SDK.
 sidebar_label: Salidas
 ---

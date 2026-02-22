@@ -1,5 +1,5 @@
 ---
-title: Guía de Integración del Codificador de Audio FLAC
+title: Codificador de Audio FLAC para .NET — Guía Completa
 description: Implemente compresión de audio sin pérdida FLAC en .NET con configuraciones de calidad, parámetros de compresión y procesamiento de audio de alta calidad.
 ---
 

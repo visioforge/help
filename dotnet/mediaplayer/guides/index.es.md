@@ -1,6 +1,6 @@
 ---
-title: Guías y Tutoriales Avanzados: Media Player SDK
-description: Domina reproducción en bucle, control de rango de posición y características específicas de plataforma con guías detalladas, ejemplos de código y recursos de soporte.
+title: Guías de Media Player SDK .Net para reproducción de video
+description: Guías y tutoriales de Media Player SDK .Net para reproducción en bucle, rango de posición e implementación en Avalonia, MAUI y Android.
 sidebar_label: Guías Adicionales
 order: 1
 

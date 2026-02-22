@@ -1,5 +1,5 @@
 ---
-title: Codificadores Motion JPEG (MJPEG) en SDKs .NET
+title: Codificador MJPEG para .NET con aceleración CPU y GPU
 description: Implemente codificadores de video MJPEG en .NET con aceleración de CPU y GPU para compresión cuadro por cuadro y aplicaciones de streaming.
 ---
 

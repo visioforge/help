@@ -1,5 +1,5 @@
 ---
-title: IP Camera Integration for .NET Video Applications
+title: IP Camera Integration in Video Capture SDK for .NET
 description: Implement IP cameras, RTSP/RTMP streams, ONVIF devices, and network video sources in .NET with code samples and best practices.
 sidebar_label: IP Cameras & Network Sources
 order: 19

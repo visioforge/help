@@ -1,5 +1,5 @@
 ---
-title: Filtros de Procesamiento - Interfaz Chroma Key
+title: Chroma Key en DirectShow - Interfaz IVFChromaKey C++/C#
 description: Interfaz IVFChromaKey para composición de pantalla verde y azul con control de tolerancia y reemplazo de fondo en DirectShow.
 ---
 

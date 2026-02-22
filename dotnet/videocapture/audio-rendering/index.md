@@ -1,5 +1,5 @@
 ---
-title: .NET Audio Rendering in Video Capture SDK
+title: Audio Rendering and Volume Control in Video Capture SDK .Net
 description: Master audio rendering in .NET with device selection, volume control, performance optimization, and high-quality output tutorials.
 sidebar_label: Audio Rendering
 order: 12

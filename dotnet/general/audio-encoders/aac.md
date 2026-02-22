@@ -1,5 +1,5 @@
 ---
-title: AAC Audio Encoder Implementation Guide
+title: AAC Audio Encoder for .NET - M4A Output and Bitrate Guide
 description: Implement AAC audio encoding in .NET with multiple encoder types, bitrate configurations, and cross-platform M4A output support.
 ---
 

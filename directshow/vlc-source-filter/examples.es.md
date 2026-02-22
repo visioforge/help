@@ -1,5 +1,5 @@
 ---
-title: Filtro de Fuente VLC - Ejemplos de Código
+title: Filtro Fuente VLC DirectShow - Ejemplos de Código C++
 description: Ejemplos de código para el Filtro de Fuente VLC con múltiples pistas de audio, subtítulos, video 360° y parámetros personalizados de VLC en DirectShow.
 ---
 

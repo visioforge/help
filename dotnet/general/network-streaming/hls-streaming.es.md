@@ -1,5 +1,5 @@
 ---
-title: Implementación de Transmisión de Red HLS en .NET
+title: Transmisión HLS en .NET: guía de implementación SDK
 description: Aplicaciones HTTP Live Streaming en .NET con bitrate adaptativo, codificación de video e integración de reproducción multiplataforma.
 ---
 

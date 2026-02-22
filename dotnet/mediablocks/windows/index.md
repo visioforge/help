@@ -1,5 +1,5 @@
 ---
-title: Windows Platform Blocks
+title: Direct3D 11 GPU Video Decoding and Processing in .NET
 description: Windows-optimized MediaBlocks with Direct3D 11 hardware acceleration, video effects, DirectShow decoders, and platform-specific features.
 sidebar_label: Windows Platform
 ---

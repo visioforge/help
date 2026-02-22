@@ -1,6 +1,6 @@
 ---
-title: Referencia de Efectos de Video SDKs .NET
-description: Referencia de efectos de video en SDKs .NET de VisioForge, incluyendo efectos Classic (Windows) y multiplataforma.
+title: Catálogo de Efectos de Video en SDKs .NET de VisioForge
+description: Catálogo completo de efectos de video en SDKs .NET de VisioForge: ajustes de color, filtros, superposiciones, IA y efectos multiplataforma.
 sidebar_label: Referencia de Efectos
 ---
 

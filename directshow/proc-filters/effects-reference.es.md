@@ -1,5 +1,5 @@
 ---
-title: Filtros de Procesamiento - Referencia de Efectos
+title: Referencia de Efectos de Video DirectShow - 35+ Filtros
 description: Referencia de 35+ efectos de video DirectShow en tiempo real: filtros de color, desentrelazado, eliminación de ruido y efectos artísticos.
 ---
 

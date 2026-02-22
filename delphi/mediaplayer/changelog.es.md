@@ -1,5 +1,5 @@
 ---
-title: Actualizaciones y Funcionalidades de la Biblioteca Media Player
+title: TVFMediaPlayer Delphi SDK: Registro Completo de Cambios
 description: Registro de cambios de TVFMediaPlayer desde 3.0 hasta 10.0: soporte 4K, cifrado, efectos, streaming y actualizaciones de rendimiento.
 ---
 

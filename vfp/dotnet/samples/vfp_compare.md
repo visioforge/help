@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprint Comparison Tool for .Net
+title: Video Fingerprint Comparison Tool for Duplicate Detection
 description: Use vfp_compare to compare video fingerprints and determine if videos are similar or identical with features to help manage your library.
 ---
 

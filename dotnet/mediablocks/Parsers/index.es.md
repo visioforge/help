@@ -1,5 +1,5 @@
 ---
-title: Guía de Bloques Parser de Medios .Net
+title: Parsers de video y audio para Media Blocks SDK .Net
 description: Analice flujos elementales de video y audio para extraer metadatos y preparar contenido para decodificación y multiplexación en Media Blocks SDK.
 ---
 

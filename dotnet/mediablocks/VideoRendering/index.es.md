@@ -1,5 +1,5 @@
 ---
-title: Bloque Renderizador de Video Media Streaming SDK
+title: Renderizador de Video con DirectX, OpenGL y Metal en .NET
 description: Renderice video en Windows, macOS, Linux, iOS y Android con aceleración de hardware DirectX, OpenGL, Metal para aplicaciones multimedia.
 ---
 

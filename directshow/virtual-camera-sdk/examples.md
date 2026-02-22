@@ -1,5 +1,5 @@
 ---
-title: Virtual Camera SDK - Code Examples
+title: Virtual Camera SDK DirectShow Filter Code Examples
 description: Virtual Camera SDK code examples for streaming to virtual camera devices and reading from virtual cameras with frame-by-frame rendering.
 ---
 

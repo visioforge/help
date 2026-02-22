@@ -1,5 +1,5 @@
 ---
-title: Captura de Video a WMV - Guía de Implementación
+title: Captura de video a WMV en Delphi con perfiles externos
 description: Capturar video a formato WMV - perfiles externos, configuración de salida e implementación para Delphi, C++ MFC y VB6 con ejemplos de código.
 ---
 

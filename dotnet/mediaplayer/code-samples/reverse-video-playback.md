@@ -1,5 +1,5 @@
 ---
-title: Reverse Video Playback for .NET Applications
+title: Reverse Video Playback in .NET with C# Code Examples
 description: Implement reverse playback with frame-by-frame navigation and performance optimization for Windows and cross-platform video applications.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Using Video Capture Devices in .NET Applications
+title: Video Capture Devices in .NET with Enumeration and PTZ
 description: Implement video capture device integration in .NET with device enumeration, camera control, PTZ functionality, and video adjustments.
 sidebar_label: Video Capture Devices
 order: 20

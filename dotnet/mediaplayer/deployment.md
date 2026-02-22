@@ -1,5 +1,5 @@
 ---
-title: Media Player SDK .Net Deployment Guide
+title: Deploy Media Player SDK .Net Apps: NuGet and Runtime Setup
 description: Deploy Media Player SDK applications with NuGet packages, runtime dependencies, DirectShow filters for Windows and cross-platform environments.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Renderizado de Audio .NET en Video Capture SDK
+title: Renderizado de Audio .NET - Dispositivos y Volumen
 description: Domine el renderizado de audio en .NET con selección de dispositivos, control de volumen, optimización del rendimiento y tutoriales de salida de alta calidad.
 sidebar_label: Renderizado de Audio
 order: 12

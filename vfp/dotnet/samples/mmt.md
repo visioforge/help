@@ -1,5 +1,5 @@
 ---
-title: Media Monitoring Tool for .Net
+title: Video Fragment Detection in Broadcasts Using .NET SDK
 description: Use MMT to find video fragments within larger videos with features and settings to help find and manage your media library.
 ---
 

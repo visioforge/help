@@ -1,5 +1,5 @@
 ---
-title: VLC Source Filter - Code Examples
+title: VLC Source DirectShow Filter Integration Code Examples
 description: Code examples for VLC Source Filter with multi-track audio, subtitles, 360° video, and custom VLC parameters in DirectShow.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: LAME MP3 Encoder - Interface Reference
+title: LAME MP3 Encoder Settings via DirectShow COM Interface
 description: IAudioEncoderProperties interface for LAME MP3 encoding with variable and constant bitrate modes and quality configuration.
 ---
 

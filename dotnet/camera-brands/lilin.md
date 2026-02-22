@@ -1,6 +1,6 @@
 ---
-title: How to Connect to LILIN IP Camera in C# .NET
-description: Connect to LILIN cameras in C# .NET with RTSP URL patterns and code samples for LR, IPR, Z, D, S, and P series models.
+title: LILIN IP Camera RTSP URL Patterns and C# .NET Setup
+description: Set up LILIN IP camera streaming in C# .NET with RTSP URL patterns, snapshot URLs, and integration code for LR, Z, D, S, and P series cameras.
 ---
 
 # How to Connect to LILIN IP Camera in C# .NET

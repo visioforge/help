@@ -1,5 +1,5 @@
 ---
-title: Network Video Streaming to Flash Media Server
+title: Adobe Flash Media Server Video Streaming in .NET SDK
 description: Stream video to Adobe Flash Media Server in .NET with real-time effects, quality settings, and device switching for professional streaming.
 ---
 

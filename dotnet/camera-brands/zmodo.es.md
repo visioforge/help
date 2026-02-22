@@ -1,5 +1,5 @@
 ---
-title: Cómo conectar una cámara IP Zmodo en C# .NET
+title: Cámara IP Zmodo RTSP: conexión y streaming en C# .NET
 description: Conecte cámaras Zmodo en C# .NET con patrones de URL RTSP y ejemplos de código para modelos ZH Wi-Fi, ZP PoE, CM legacy y DVR/NVR.
 ---
 

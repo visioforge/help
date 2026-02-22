@@ -1,5 +1,5 @@
 ---
-title: Cómo conectar una cámara IP Linksys en C# .NET
+title: Cámaras IP Linksys: URLs RTSP y conexión en C# .NET
 description: Conecte cámaras Linksys WVC, PVC y LCAB en C# .NET con patrones de URL RTSP, flujos ASF/MJPEG y ejemplos de código para modelos descontinuados de la serie WVC.
 ---
 

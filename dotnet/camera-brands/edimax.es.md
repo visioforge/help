@@ -1,5 +1,5 @@
 ---
-title: Cómo Conectar una Cámara IP Edimax en C# .NET
+title: Edimax: URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecte cámaras Edimax en C# .NET con patrones de URL RTSP y ejemplos de código para modelos de las series IC, IR, PT y VS.
 ---
 

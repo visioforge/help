@@ -1,5 +1,5 @@
 ---
-title: Mastering Video Encoders in .NET SDK
+title: Video Encoders: H264, HEVC, AV1, VP9 with GPU Acceleration
 description: Encode video with AV1, H264, HEVC, VP9, and more codecs using GPU acceleration and optimized settings in Media Blocks SDK for .NET.
 sidebar_label: Video Encoders
 order: 18

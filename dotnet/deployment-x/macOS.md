@@ -1,5 +1,5 @@
 ---
-title: Cross-platform .Net deployment manual for macOS
+title: .NET SDK macOS Deployment: NuGet Setup and Configuration
 description: VisioForge .NET SDK macOS deployment with NSView integration, permissions, app store publishing, and native library configuration guide.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Multi Pantallas Salida Video en Apps WPF
+title: Múltiples Pantallas de Salida de Video en Apps WPF
 description: Crea aplicaciones de video multi-pantalla en WPF con controles Image, manejo de eventos, gestión de memoria y técnicas de optimización de rendimiento.
 ---
 

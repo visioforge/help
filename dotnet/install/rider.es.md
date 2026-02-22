@@ -1,5 +1,5 @@
 ---
-title: Integra SDKs .Net en JetBrains Rider | Tutorial
+title: Instalar SDK .NET en JetBrains Rider - Tutorial completo
 description: Integra SDKs .NET de VisioForge con JetBrains Rider para desarrollo multiplataforma con frameworks WPF, MAUI, WinUI y Avalonia.
 ---
 

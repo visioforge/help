@@ -1,5 +1,5 @@
 ---
-title: Use Custom DirectShow Filter Interfaces
+title: Custom DirectShow Filter Interfaces Guide for .NET
 description: Implement custom DirectShow filter interfaces in .NET with IBaseFilter access and manipulation for multimedia applications.
 ---
 

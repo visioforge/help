@@ -1,5 +1,5 @@
 ---
-title: Cómo Conectar una Cámara IP Bosch en C# .NET
+title: Bosch: URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecta cámaras Bosch Security en C# .NET con patrones de URL RTSP y ejemplos de código para modelos Dinion, Flexidome, Autodome y codificadores VIP.
 ---
 

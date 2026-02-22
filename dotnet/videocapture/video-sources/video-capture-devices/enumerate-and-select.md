@@ -1,5 +1,5 @@
 ---
-title: Manage Video Capture Devices in .NET Applications
+title: Enumerate Video Capture Devices in .NET with C# Code
 description: Detect, enumerate, and configure video capture devices in .NET with code examples for listing devices, formats, and frame rates.
 ---
 

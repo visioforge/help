@@ -1,6 +1,6 @@
 ---
 title: Avalonia Video Player Tutorial - MVVM Cross-Platform Guide
-description: Avalonia video player tutorial — build a cross-platform media player with MVVM pattern for Windows, macOS, Linux, Android, and iOS. Complete C# source with ReactiveUI.
+description: Build a cross-platform Avalonia video player with MVVM pattern using VisioForge SDK. Full C# tutorial for Windows, macOS, Linux, Android, and iOS.
 ---
 
 # Avalonia Media Player with VisioForge
@@ -416,7 +416,7 @@ private async Task CreateEngineAsync()
     _player = new MediaPlayerCoreX(VideoViewIntf); // Pass the Avalonia VideoView
     _player.OnError += _player_OnError; // Subscribe to error events
     _player.Audio_Play = true; // Ensure audio is enabled
-    
+
     // Create source settings from the filename
     var sourceSettings = await UniversalSourceSettings.CreateAsync(Filename);
     await _player.OpenAsync(sourceSettings);
@@ -610,7 +610,7 @@ private async void tmPosition_Elapsed(object sender, System.Timers.ElapsedEventA
             }
 
             SeekingValue = Math.Min(progress, (int)(SeekingMaximum ?? progress));
-            
+
             Position = $"{pos.ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture)}";
             Duration = $"{(await _player.DurationAsync()).ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture)}";
 
@@ -870,7 +870,7 @@ namespace Simple_Player_MVVM.Views
                 {
                     // Execute the command and handle potential errors or completion
                     viewModel.WindowClosingCommand.Execute()
-                        .Subscribe(_ => { /* Optional: action on completion */ }, 
+                        .Subscribe(_ => { /* Optional: action on completion */ },
                                    ex => Console.WriteLine($"Error during closing: {ex.Message}"));
                 }
             };
@@ -969,7 +969,7 @@ To abstract platform-specific functionality, interfaces are defined in the core 
         protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
         {
             Locator.CurrentMutable.RegisterConstant(new IOSDocumentPickerService(), typeof(IDocumentPickerService));
-            
+
             return base.CustomizeAppBuilder(builder)
                 .WithInterFont()
                 .UseReactiveUI();

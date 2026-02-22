@@ -1,5 +1,5 @@
 ---
-title: Salida Personalizada DirectShow en Delphi
+title: Formatos de salida personalizada DirectShow en Delphi
 description: Implementar formatos de salida personalizados DirectShow en Delphi, C++, VB6 - integrar filtros de terceros, códecs y multiplexores con ejemplos de código.
 ---
 

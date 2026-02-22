@@ -1,5 +1,5 @@
 ---
-title: Ejemplos de Código
+title: Filtro FFMPEG DirectShow - ejemplos en C++, C# y VB.NET
 description: Ejemplos de código para el Filtro de Fuente FFMPEG en C++, C# y VB.NET con gráficos DirectShow, aceleración de hardware y transmisión de red.
 ---
 

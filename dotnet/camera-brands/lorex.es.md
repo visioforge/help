@@ -1,5 +1,5 @@
 ---
-title: Cómo Conectar una Cámara IP Lorex en C# .NET
+title: Lorex - URLs RTSP para Cámaras de Seguridad en C# .NET
 description: Conecta cámaras de seguridad y NVRs Lorex en C# .NET con patrones de URL RTSP y ejemplos de código para modelos LNB, LNE, LNZ y DVR Lorex.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Audio Encoders for .NET Media Processing
+title: Audio Encoders for .NET - AAC, MP3, FLAC, Opus and More
 description: Comprehensive audio compression with AAC, MP3, FLAC, Opus, and more codecs in Media Blocks SDK for efficient encoding and streaming.
 sidebar_label: Audio Encoders
 order: 19

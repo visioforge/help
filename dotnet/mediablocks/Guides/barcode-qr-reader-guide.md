@@ -1,6 +1,6 @@
 ---
-title: C# Barcode Scanner & QR Code Reader — Cross-Platform .NET SDK Guide
-description: Build a C# barcode scanner and QR code reader with real-time video detection. Read barcodes from webcam, IP camera, RTSP stream, or video file in .NET MAUI, Avalonia, and WPF using VisioForge Media Blocks SDK.
+title: C# Barcode and QR Code Scanner from Live Video in .NET
+description: Build a C# barcode scanner and QR code reader from live video using webcams, IP cameras, or RTSP streams with VisioForge Media Blocks SDK.
 sidebar_label: Barcode & QR Code Scanner
 
 ---

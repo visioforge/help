@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprint Generator Tool for .Net
+title: Video Fingerprint Generator - vfp_gen CLI Tool for .NET
 description: Use vfp_gen to generate video fingerprints and determine if videos are similar or identical with features to help manage your library.
 ---
 

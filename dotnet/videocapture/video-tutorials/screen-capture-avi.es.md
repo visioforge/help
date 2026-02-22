@@ -1,5 +1,5 @@
 ---
-title: Captura de Pantalla a AVI con C#
+title: Captura de pantalla a AVI en C# con Video Capture SDK .Net
 description: Implementa captura de pantalla con cursor del ratón a archivos de video AVI en C# con guía paso a paso y ejemplos de código fuente completos para grabación.
 ---
 

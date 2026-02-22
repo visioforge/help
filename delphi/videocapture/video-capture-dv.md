@@ -1,5 +1,5 @@
 ---
-title: Delphi Video Capture to DV File Format Guide
+title: DV Video Capture in Delphi: Direct Stream and Recompressed
 description: Implement DV video capture in Delphi - compressed and uncompressed formats with step-by-step implementation and working code examples.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: UDP Video and Audio Streaming in .NET
+title: UDP Video and Audio Streaming with MPEG-TS in .NET
 description: Stream video with UDP protocol for low-latency broadcasts, surveillance, and multicast transmission with minimal overhead in .NET applications.
 ---
 

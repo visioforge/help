@@ -1,5 +1,5 @@
 ---
-title: Sync Multiple Video Captures in .NET
+title: Synchronized Multi-Camera Video Recording in C# .NET
 description: Synchronize multiple video capture streams in .NET with code examples, troubleshooting tips, and best practices for recording apps.
 ---
 

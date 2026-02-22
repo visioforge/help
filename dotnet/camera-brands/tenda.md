@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Tenda IP Camera in C# .NET
+title: Tenda IP Camera RTSP URL and C# .NET Connection Guide
 description: Connect to Tenda cameras in C# .NET with RTSP URL patterns and code samples for CP, CT, IT series security cameras and pan/tilt models.
 ---
 

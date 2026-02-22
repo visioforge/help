@@ -1,5 +1,5 @@
 ---
-title: Fixing .otares File Errors in Delphi Packages
+title: Fix .otares File Errors in Delphi SDK Packages Guide
 description: Resolve missing .otares file errors in Delphi - troubleshoot resource issues, fix compilation errors, and restore package functionality.
 ---
 

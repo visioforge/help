@@ -1,5 +1,5 @@
 ---
-title: Integración de Cámaras IP ONVIF - Guía Completa
+title: Cámaras IP ONVIF en .NET: Conexión, PTZ y Streaming
 description: Integración completa de cámaras IP ONVIF en .NET cubriendo descubrimiento, conexión, control PTZ, grabación, streaming y visión por computadora.
 ---
 

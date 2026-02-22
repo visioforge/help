@@ -1,5 +1,5 @@
 ---
-title: Guía de Despliegue de Media Player SDK .Net
+title: Despliegue de Media Player SDK .Net con NuGet y filtros
 description: Despliega aplicaciones de Media Player SDK con paquetes NuGet, dependencias de runtime, filtros DirectShow para Windows y entornos multiplataforma.
 ---
 

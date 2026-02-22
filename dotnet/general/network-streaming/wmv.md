@@ -1,5 +1,5 @@
 ---
-title: WMV Network Streaming with .NET Development
+title: WMV Network Streaming Implementation in .NET Applications
 description: Implement Windows Media Video streaming in .NET with compression algorithms, adaptive bitrates, and bandwidth optimization for network delivery.
 ---
 

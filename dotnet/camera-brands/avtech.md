@@ -1,6 +1,6 @@
 ---
-title: How to Connect to AVTech IP Camera in C# .NET
-description: Connect to AVTech cameras in C# .NET with RTSP URL patterns and code samples for AVM, AVN, AVC, and AVI series models.
+title: AVTech IP Camera RTSP URL and C# .NET Connection Guide
+description: AVTech IP camera integration guide for C# .NET with RTSP URL patterns, DVR/NVR channel URLs, and code samples for AVM, AVN, AVC, and AVI models.
 ---
 
 # How to Connect to AVTech IP Camera in C# .NET

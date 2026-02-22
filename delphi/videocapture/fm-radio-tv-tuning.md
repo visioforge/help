@@ -1,5 +1,5 @@
 ---
-title: Delphi FM Radio & TV Tuner Implementation Guide
+title: FM Radio and TV Tuning in Delphi: Channel Scanning Guide
 description: Implement FM radio and TV tuning in Delphi - channel scanning, frequency management, signal detection with code examples for Delphi, C++, VB6.
 ---
 

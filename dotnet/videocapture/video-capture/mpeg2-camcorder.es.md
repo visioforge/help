@@ -1,5 +1,5 @@
 ---
-title: Captura de Video de Videocámara a MPEG-2 en .NET
+title: Captura de videocámara a MPEG-2 en .NET con ejemplos C#
 description: Implemente captura de video de videocámara de alta calidad a MPEG-2 en .NET con pasos de implementación, ejemplos de código y técnicas de optimización.
 ---
 

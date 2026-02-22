@@ -1,5 +1,5 @@
 ---
-title: Filtro DirectShow FFMPEG Source
+title: Filtro FFMPEG DirectShow Source para decodificar video
 description: Filtro DirectShow FFMPEG para decodificar 100+ formatos incluyendo MP4, MKV, H.265 con aceleración por hardware en aplicaciones C++, C# y Delphi.
 ---
 

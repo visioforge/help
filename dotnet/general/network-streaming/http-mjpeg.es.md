@@ -1,5 +1,5 @@
 ---
-title: Streaming de Video HTTP MJPEG en .NET
+title: Streaming de Video MJPEG over HTTP en .NET con Ejemplos
 description: Streaming HTTP MJPEG en .NET para feeds de video en tiempo real con manejo de conexiones de clientes y tasas de cuadros ajustables.
 ---
 

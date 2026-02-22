@@ -1,5 +1,5 @@
 ---
-title: Audio Rendering Block for .NET Media Processing
+title: Audio Rendering Block for Cross-Platform .NET Applications
 description: Output audio streams to devices across Windows, macOS, Linux, iOS, and Android with cross-platform audio rendering and buffer management.
 sidebar_label: Audio Rendering
 

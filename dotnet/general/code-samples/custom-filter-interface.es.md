@@ -1,5 +1,5 @@
 ---
-title: Interfaces de Filtros DirectShow Personalizados
+title: Usar Interfaces de Filtros DirectShow Personalizados
 description: Implementa interfaces de filtros DirectShow personalizados en .NET con acceso y manipulación de IBaseFilter para aplicaciones multimedia.
 ---
 

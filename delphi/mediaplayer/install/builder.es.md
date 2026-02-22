@@ -1,5 +1,5 @@
 ---
-title: Instalación de TVFMediaPlayer en C++ Builder
+title: Instalar TVFMediaPlayer en C++ Builder paso a paso
 description: Instalar TVFMediaPlayer en C++ Builder - guía paso a paso para versiones 5, 6, 2006 y posteriores con prerrequisitos, configuración y solución de problemas.
 ---
 

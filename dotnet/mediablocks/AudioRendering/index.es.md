@@ -1,5 +1,5 @@
 ---
-title: Bloque de Renderizado de Audio Multiplataforma
+title: Renderizado de Audio Multiplataforma con Media Blocks SDK
 description: Salida de flujos de audio a dispositivos en Windows, macOS, Linux, iOS y Android con renderizado de audio multiplataforma y gestión de buffer.
 
 ---

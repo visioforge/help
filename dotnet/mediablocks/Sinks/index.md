@@ -1,5 +1,5 @@
 ---
-title: .Net Media Sinks - File & Network Streaming
+title: Media Sink Blocks for File Output and Network Streaming
 description: Save or stream media with sink blocks for MP4, MKV, AVI files and RTMP, HLS, SRT network protocols in Media Blocks SDK pipelines.
 sidebar_label: Sinks
 ---
@@ -34,6 +34,7 @@ The following file sinks are available:
 
 The following network streaming sinks are available:
 
+- [DASH](#dash)
 - [Facebook Live](#facebook-live)
 - [HLS](#hls)
 - [MJPEG over HTTP](#mjpeg-over-http)
@@ -42,7 +43,18 @@ The following network streaming sinks are available:
 - [SRT MPEG-TS](#srt-mpeg-ts)
 - [RTMP](#rtmp)
 - [Shoutcast](#shoutcast)
+- [WHIP](#whip)
 - [YouTube Live](#youtube-live)
+- [RIST MPEG-TS](#rist-mpeg-ts)
+
+**Utility sinks**
+
+The following utility sinks are available:
+
+- [Stream Sink](#stream-sink)
+- [File Descriptor Sink](#file-descriptor-sink)
+- [KLV File Sink](#klv-file-sink)
+- [Buffer Sink](#buffer-sink)
 
 ## File Sinks
 
@@ -1520,6 +1532,421 @@ Console.ReadKey();
 // Stop the pipeline (important for graceful disconnection and resource cleanup)
 await pipeline.StopAsync();
 ```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+### DASH
+
+The `DASHSinkBlock` creates MPEG-DASH (Dynamic Adaptive Streaming over HTTP) output — an MPD manifest and media segments — compatible with any DASH-capable player. It supports both VOD (static) and live (dynamic) streaming modes. Multiple video and audio streams can be connected simultaneously to create adaptive bitrate manifests.
+
+#### Block info
+
+Name: DASHSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input video | video/x-h264 | one or more |
+| | video/x-h265 | |
+| | video/x-vp9 | |
+| | video/x-av1 | |
+| Input audio | audio/mpeg | one or more |
+| | audio/x-aac | |
+| | audio/x-opus | |
+
+#### Settings
+
+Use `DASHSinkSettings` to configure the DASH output:
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `MPDFilename` | `string` | `c:\inetpub\wwwroot\dash\manifest.mpd` | Full path for the MPD manifest file |
+| `MPDBaseURL` | `string` | `""` | Base URL prepended to segment filenames in the manifest |
+| `TargetDuration` | `TimeSpan` | 5 s | Target duration per media segment |
+| `MinBufferTime` | `TimeSpan` | 2 s | Minimum buffer time advertised in the manifest |
+| `Dynamic` | `bool` | `false` | `false` = VOD/static; `true` = live stream |
+| `PresentationDelay` | `TimeSpan` | 0 | Presentation delay (live only) |
+| `MinimumUpdatePeriod` | `TimeSpan` | 0 | MPD refresh interval (live only) |
+| `TimeShiftBufferDepth` | `TimeSpan` | 0 | DVR window depth (live only) |
+| `SendKeyframeRequests` | `bool` | `true` | Request keyframes at segment boundaries |
+| `Custom_HTTP_Server_Enabled` | `bool` | `false` | Enable built-in HTTP server for serving segments |
+| `Custom_HTTP_Server_Port` | `int` | 80 | Port for the built-in HTTP server |
+
+Call `settings.CheckAndCreateFolders()` before starting the pipeline to ensure the output directory exists.
+
+Input pads are created dynamically: call `dashSink.CreateNewInput(MediaBlockPadMediaType.Video)` or `dashSink.CreateNewInput(MediaBlockPadMediaType.Audio)` to obtain a pad, then connect your encoder output to it.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock -- Raw Video --> H264EncoderBlock;
+    UniversalSourceBlock -- Raw Audio --> AACEncoderBlock;
+    H264EncoderBlock -- H.264 Video --> DASHSinkBlock;
+    AACEncoderBlock -- AAC Audio --> DASHSinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var dashSettings = new DASHSinkSettings
+{
+    MPDFilename = @"c:\output\dash\manifest.mpd",
+    MPDBaseURL = "http://localhost/dash/",
+    TargetDuration = TimeSpan.FromSeconds(5),
+    Dynamic = false // VOD/static mode; set true for live streaming
+};
+dashSettings.CheckAndCreateFolders();
+var dashSink = new DASHSinkBlock(dashSettings);
+
+var universalSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+var aacEncoder = new AACEncoderBlock();
+
+pipeline.Connect(universalSource.VideoOutput, h264Encoder.Input);
+pipeline.Connect(universalSource.AudioOutput, aacEncoder.Input);
+pipeline.Connect(h264Encoder.Output, dashSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(aacEncoder.Output, dashSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+Check availability using `DASHSinkBlock.IsAvailable()`. Requires the GStreamer `dash` plugin and the correct VisioForge SDK redistribution package.
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+---
+
+### WHIP
+
+The `WHIPSinkBlock` streams media to WebRTC servers using the WHIP (WebRTC-HTTP Ingestion Protocol), enabling low-latency live streaming to services such as MediaMTX, Janus, Cloudflare Stream, and other WHIP-compatible endpoints. Video must be H.264 encoded and audio must be Opus encoded — RTP payloading is handled internally by the block.
+
+#### Block info
+
+Name: WHIPSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input video | video/x-h264 | 1 |
+| Input audio | audio/x-opus | 1 |
+
+#### Settings
+
+Use `WHIPSinkSettings` to configure the WHIP endpoint:
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Location` | `string` | `http://localhost:8889/stream/whip` | WHIP endpoint URL |
+| `AuthToken` | `string` | `null` | Bearer token sent in the `Authorization` HTTP header |
+| `StunServer` | `string` | `null` | STUN server URL (format: `stun://hostname:port`) |
+| `TurnServer` | `string` | `null` | TURN server URL (format: `turn(s)://username:password@host:port`) |
+| `UseLinkHeaders` | `bool` | `true` | Auto-configure ICE servers from WHIP server response `Link` headers |
+| `Timeout` | `TimeSpan` | 15 s | Timeout for WHIP HTTP requests |
+| `IceTransportPolicy` | `WHIPIceTransportPolicy` | `All` | `All` = use STUN and TURN; `Relay` = TURN relay only |
+
+Input pads are created dynamically: call `whipSink.CreateNewInput(MediaBlockPadMediaType.Video)` and `whipSink.CreateNewInput(MediaBlockPadMediaType.Audio)` to obtain pads, then connect your encoders.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock -- Raw Video --> H264EncoderBlock;
+    UniversalSourceBlock -- Raw Audio --> OpusEncoderBlock;
+    H264EncoderBlock -- H.264 Video --> WHIPSinkBlock;
+    OpusEncoderBlock -- Opus Audio --> WHIPSinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var whipSettings = new WHIPSinkSettings
+{
+    Location = "http://localhost:8889/live/whip",
+    AuthToken = "your-bearer-token", // optional
+    StunServer = "stun://stun.l.google.com:19302"
+};
+var whipSink = new WHIPSinkBlock(whipSettings);
+
+var universalSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+var opusEncoder = new OpusEncoderBlock();
+
+pipeline.Connect(universalSource.VideoOutput, h264Encoder.Input);
+pipeline.Connect(universalSource.AudioOutput, opusEncoder.Input);
+pipeline.Connect(h264Encoder.Output, whipSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(opusEncoder.Output, whipSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+Check availability using `WHIPSinkBlock.IsAvailable()`. Requires the GStreamer `webrtc` plugin and the correct VisioForge SDK redistribution package.
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+### RIST MPEG-TS
+
+The `RISTMPEGTSSinkBlock` multiplexes audio and video streams into MPEG-TS, wraps the transport in RTP, and sends it over RIST (Reliable Internet Stream Transport). RIST adds ARQ-based retransmission over UDP, providing reliable low-latency media delivery without the overhead of TCP.
+
+Multiple audio and video input pads are supported. Call `CreateNewInput(MediaBlockPadMediaType.Video)` and `CreateNewInput(MediaBlockPadMediaType.Audio)` to obtain pads before connecting encoders.
+
+#### Block info
+
+Name: RISTMPEGTSSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input video | Encoded video | Dynamic |
+| Input audio | Encoded audio | Dynamic |
+
+#### Settings
+
+Use `RISTSinkSettings` to configure the destination:
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Address` | `string` | `"localhost"` | Destination IPv4 or IPv6 address |
+| `Port` | `uint` | `5004` | Destination RTP port (must be even; RTCP uses Port + 1) |
+| `SenderBuffer` | `TimeSpan` | 1200 ms | Retransmission queue size |
+| `BondingAddresses` | `string` | `null` | Comma-separated `address:port` pairs for bonding; overrides Address/Port |
+| `BondingMethod` | `RISTBondingMethod` | `Broadcast` | `Broadcast` = send to all destinations; `RoundRobin` = alternate |
+| `MulticastInterface` | `string` | `null` | Network interface for multicast |
+| `MulticastTTL` | `int` | `1` | Multicast time-to-live |
+| `DropNullTSPackets` | `bool` | `false` | Remove null MPEG-TS padding packets |
+| `SequenceNumberExtension` | `bool` | `false` | Add RTP sequence number extension |
+| `MinRTCPInterval` | `uint` | `100` | Minimum RTCP packet interval (ms) |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock -- Raw Video --> H264EncoderBlock;
+    UniversalSourceBlock -- Raw Audio --> AACEncoderBlock;
+    H264EncoderBlock --> RISTMPEGTSSinkBlock;
+    AACEncoderBlock --> RISTMPEGTSSinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+
+var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+var aacEncoder = new AACEncoderBlock();
+
+pipeline.Connect(source.VideoOutput, h264Encoder.Input);
+pipeline.Connect(source.AudioOutput, aacEncoder.Input);
+
+var ristSettings = new RISTSinkSettings
+{
+    Address = "192.168.1.100",
+    Port = 5004,
+    SenderBuffer = TimeSpan.FromMilliseconds(1200)
+};
+
+var ristSink = new RISTMPEGTSSinkBlock(ristSettings);
+pipeline.Connect(h264Encoder.Output, ristSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(aacEncoder.Output, ristSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+`RISTMPEGTSSinkBlock.IsAvailable()` returns `true` if the GStreamer `rist` plugin is present.
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+## Utility Sinks
+
+### Stream Sink
+
+The `StreamSinkBlock` writes media data to any .NET `Stream` object, enabling flexible output to memory buffers, files, network connections, encryption layers, or any writable stream.
+
+The stream must remain open and writable for the lifetime of the pipeline. The block does not dispose the stream when the pipeline stops.
+
+#### Block info
+
+Name: StreamSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | Any | 1 |
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+using var outputStream = new FileStream("output.raw", FileMode.Create, FileAccess.Write);
+var streamSink = new StreamSinkBlock(outputStream);
+pipeline.Connect(fileSource.VideoOutput, streamSink.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+`StreamSinkBlock.IsAvailable()` returns `true` if the GStreamer `appsink` element is available.
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### File Descriptor Sink
+
+The `FDSinkBlock` writes media data to a Unix file descriptor (an integer handle). This is useful for outputting to pipes, sockets, or stdin of a child process.
+
+Pass `addQueue: true` (default) to add a buffering queue that prevents the pipeline from blocking on slow descriptor writes.
+
+The descriptor must be open and writable before the pipeline starts. The block does not close it when the pipeline stops.
+
+#### Block info
+
+Name: FDSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | Any | 1 |
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+// Write to stdout (fd 1)
+var fdSink = new FDSinkBlock(descriptor: 1);
+pipeline.Connect(fileSource.VideoOutput, fdSink.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+`FDSinkBlock.IsAvailable()` returns `true` if the GStreamer `fdsink` element is available.
+
+#### Platforms
+
+Linux, macOS. Limited support on Windows.
+
+### KLV File Sink
+
+The `KLVFileSinkBlock` writes KLV (Key-Length-Value) metadata streams to a file. KLV is used in MISB/STANAG 4609 compliant applications — including UAV video, surveillance, and aerospace — to embed geospatial metadata alongside video.
+
+The block accepts `meta/x-klv` data on its input and writes it directly to the specified file via the GStreamer `filesink` element.
+
+#### Block info
+
+Name: KLVFileSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | meta/x-klv | 1 |
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var klvSource = new KLVSourceBlock(/* ... */);
+
+var klvFileSink = new KLVFileSinkBlock("output_metadata.klv");
+pipeline.Connect(klvSource.Output, klvFileSink.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+### Buffer Sink
+
+The `BufferSinkBlock` captures media data into memory and delivers it frame-by-frame via event callbacks, instead of writing to a file or network. It supports video, audio, and arbitrary data streams.
+
+Three constructors cover the common scenarios:
+
+- `BufferSinkBlock(VideoFormatX, bool allowFrameDrop)` — video capture with optional format conversion
+- `BufferSinkBlock(AudioFormatX, bool allowFrameDrop)` — audio capture with optional resampling
+- `BufferSinkBlock()` — auto-detects the media type from the connected upstream element
+
+Key events:
+
+- `OnVideoFrameBuffer` — raised for each decoded video frame
+- `OnAudioFrameBuffer` — raised for each decoded audio frame
+- `OnDataFrameBuffer` — raised for non-AV data streams
+- `OnSample` — low-level GStreamer sample access; when subscribed it suppresses the three events above. **Always dispose the sample after use** to prevent memory leaks.
+
+Set `IsSync = false` for transcoding or analysis workflows where real-time pacing is not required.
+
+#### Block info
+
+Name: BufferSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | Any | 1 |
+
+#### Settings
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `AllowFrameDrop` | `bool` | `false` | Drop frames when callbacks cannot keep up with the media rate |
+| `IsSync` | `bool` | `true` | `true` = pace to real time; `false` = process as fast as possible |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->BufferSinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+
+var bufferSink = new BufferSinkBlock(new VideoFormatX(VideoFormatXName.BGR, 1920, 1080));
+bufferSink.OnVideoFrameBuffer += (sender, e) =>
+{
+    // e.Frame contains BGR pixel data, dimensions, and timestamp
+    Console.WriteLine($"Frame at {e.Frame.Timestamp}: {e.Frame.Width}x{e.Frame.Height}");
+};
+
+pipeline.Connect(source.VideoOutput, bufferSink.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+`BufferSinkBlock.IsAvailable()` returns `true` if the GStreamer `appsink` element is available.
 
 #### Platforms
 

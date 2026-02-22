@@ -1,5 +1,5 @@
 ---
-title: Advanced Camera Control & PTZ for .NET SDK
+title: Camera Control and PTZ Guide for Video Capture SDK .Net
 description: Implement camera control features including Pan, Tilt, Zoom (PTZ), Exposure, Iris, and Focus in .NET with C# code samples for video capture.
 ---
 

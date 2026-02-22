@@ -1,5 +1,5 @@
 ---
-title: Streaming de Video en Red a Flash Media Server
+title: Adobe Flash Media Server - Streaming de Video en .NET
 description: Transmita video a Adobe Flash Media Server en .NET con efectos en tiempo real, ajustes de calidad y cambio de dispositivos para streaming profesional.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Dispositivos de Captura de Video
+title: Dispositivos de captura de video en Video Capture SDK .Net
 description: Usa webcams, tarjetas de captura y dispositivos de video en Video Capture SDK .Net. Configuración, enumeración y control completo de hardware.
 ---
 

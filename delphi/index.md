@@ -1,5 +1,5 @@
 ---
-title: Delphi Media Framework for Video Processing
+title: Delphi/C++Builder SDK for Video and Media Processing
 description: Powerful Delphi/ActiveX libraries for video playback, capture, and editing with x64 support for professional media applications.
 sidebar_label: All-in-One Media Framework (Delphi/ActiveX)
 order: 18

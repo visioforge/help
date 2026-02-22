@@ -1,5 +1,5 @@
 ---
-title: HTTP MJPEG Video Streaming Implementation Guide
+title: MJPEG Over HTTP Video Streaming in .NET with Examples
 description: Implement HTTP MJPEG streaming in .NET for real-time video feeds with client connection handling and adjustable frame rates for web streaming.
 ---
 

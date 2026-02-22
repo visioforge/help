@@ -1,5 +1,5 @@
 ---
-title: Build a Video Player in C# - Complete .NET Guide
+title: C# Video Player: Build with Seeking and Volume Controls
 description: Build a video player in C# with playback controls, timeline seeking, and volume control. Step-by-step guide with complete code examples.
 ---
 

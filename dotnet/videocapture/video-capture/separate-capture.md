@@ -1,5 +1,5 @@
 ---
-title: Start/Stop Video Capture Without Stopping Preview
+title: Start and Stop Video Capture Without Stopping Preview
 description: Control video capture and preview independently in .NET with step-by-step code examples for efficient recording and streaming management.
 ---
 

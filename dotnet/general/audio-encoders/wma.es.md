@@ -1,5 +1,5 @@
 ---
-title: Integración del Codificador Windows Media Audio
+title: Guía de Integración del Codificador Windows Media Audio
 description: Implemente codificación de audio WMA en .NET con enfoques multiplataforma y específicos de Windows, controles de tasa de bits y configuración de códec.
 ---
 

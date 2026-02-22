@@ -1,5 +1,5 @@
 ---
-title: Creating Videos from Images in C# Console Apps
+title: Create Video from Images in a C# Console Application
 description: Generate video files from image sequences in C# console apps with step-by-step guidance, code examples, and performance tips for .NET.
 ---
 

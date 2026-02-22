@@ -1,5 +1,5 @@
 ---
-title: How to Connect to TP-Link IP Camera in C# .NET
+title: TP-Link and Tapo IP Camera RTSP URL Guide for C# .NET
 description: Connect to TP-Link cameras and Tapo cameras in C# .NET with RTSP URL patterns and code samples for TL-SC, NC, and Tapo C series models.
 ---
 

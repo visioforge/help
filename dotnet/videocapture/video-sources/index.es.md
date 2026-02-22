@@ -1,5 +1,5 @@
 ---
-title: Fuentes de Video para Desarrolladores .NET
+title: Fuentes de entrada de video en .NET: webcams, IP, pantalla
 description: Domine fuentes de entrada de video para .NET incluyendo webcams, Decklink, IP cameras, captura de pantalla, y cámaras industriales con integración.
 sidebar_label: Fuentes de Video
 order: 16

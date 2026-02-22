@@ -1,6 +1,6 @@
 ---
-title: Uso del Servidor MCP de VisioForge para Desarrollo Asistido por IA
-description: Conecte su asistente de codificación IA al Servidor MCP de VisioForge para acceso instantáneo a documentación API, guías de implementación, ejemplos de código y conocimiento del SDK.
+title: Uso del Servidor MCP de VisioForge para Desarrollo IA
+description: Conecte su asistente IA al Servidor MCP de VisioForge para acceso instantáneo a documentación API, guías de implementación y ejemplos de código del SDK.
 ---
 
 # Uso del Servidor MCP de VisioForge para Desarrollo Asistido por IA
@@ -369,8 +369,8 @@ El servidor MCP ofrece:
 
 ### Documentación
 
-- [Documentación del SDK de VisioForge](https://docs.visioforge.com/)
-- [Especificación del Protocolo MCP](https://modelcontextprotocol.io/)
+- [Documentación del SDK de VisioForge](https://www.visioforge.com/help/)
+- [Especificación del Protocolo MCP](https://modelcontextprotocol.io/specification)
 - [Documentación de Claude Code](https://claude.ai/code)
 
 ### Soporte y Comunidad

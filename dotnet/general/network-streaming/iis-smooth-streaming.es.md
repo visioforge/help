@@ -1,5 +1,5 @@
 ---
-title: Guía para Implementación de IIS Smooth Streaming
+title: IIS Smooth Streaming en .NET - guía con VisioForge SDK
 description: Configure Microsoft IIS Smooth Streaming en .NET con bitrate adaptativo, compatibilidad móvil y solución de problemas para entrega de video de calidad.
 ---
 

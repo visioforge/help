@@ -1,5 +1,5 @@
 ---
-title: SDK de Huella Digital de Video para C++
+title: SDK C++ para Huella Digital de Video Multiplataforma
 description: Implementación nativa C++ del SDK de Huella Digital de Video con alto rendimiento y soporte multiplataforma para huellas digitales de video robustas.
 ---
 

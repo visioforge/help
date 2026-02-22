@@ -1,5 +1,5 @@
 ---
-title: Reproducir Medios desde Memoria en SDK .NET
+title: Reproducción de medios desde memoria en SDK .NET con C#
 description: Reproduce medios desde streams de memoria y arrays de bytes con gestión de memoria eficiente para reproducción de audio y video en aplicaciones C#.
 ---
 

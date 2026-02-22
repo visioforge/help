@@ -1,5 +1,5 @@
 ---
-title: .Net Media OpenCV Blocks Guide
+title: OpenCV .NET Blocks for Video Processing and Detection
 description: Implement computer vision tasks with OpenCV blocks for object detection, tracking, image manipulation, and video processing in .NET SDKs.
 sidebar_label: OpenCV
 ---

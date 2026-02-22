@@ -1,5 +1,5 @@
 ---
-title: Reproducción de Video en Reversa .NET
+title: Reproducción de Video en Reversa con Media Player SDK .NET
 description: Implementa reproducción en reversa con navegación fotograma a fotograma y optimización de rendimiento para aplicaciones de video Windows y multiplataforma.
 ---
 

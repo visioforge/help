@@ -1,5 +1,5 @@
 ---
-title: .NET SDK Setup and Configuration Guide
+title: Initialize and Configure VisioForge .NET Video SDKs
 description: Initialize and deinitialize .NET SDKs for video capture, editing, and playback with DirectShow and cross-platform X-engines.
 ---
 

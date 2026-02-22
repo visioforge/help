@@ -1,5 +1,5 @@
 ---
-title: Crear Video desde Múltiples Fuentes .NET
+title: Mezclar pistas de video y audio de múltiples fuentes .NET
 description: Combina múltiples archivos de video y audio en una única salida sin recodificación usando C# con guía paso a paso para mezclar pistas.
 ---
 

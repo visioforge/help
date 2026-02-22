@@ -1,5 +1,5 @@
 ---
-title: Guía de Instalación de SDKs .NET
+title: Instalar SDKs multimedia .NET de VisioForge paso a paso
 description: Instala SDKs multimedia .NET en Visual Studio y Rider con configuración específica de plataforma para Windows, macOS, iOS, Android y Linux.
 
 ---

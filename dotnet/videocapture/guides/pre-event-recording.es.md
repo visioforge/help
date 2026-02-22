@@ -1,6 +1,6 @@
 ---
-title: Grabación Pre-Evento Usando C# .NET: Captura con Buffer Circular
-description: Grabar video de webcam y cámara IP con buffer circular pre-evento en C# .NET. Guardar video antes y después de eventos de detección de movimiento con Video Capture SDK .Net.
+title: Grabación Pre-Evento en C# .NET con Buffer Circular
+description: Grabación pre-evento con buffer circular en C# .NET para webcam y cámaras IP. Guía completa con detección de movimiento y Video Capture SDK.
 ---
 
 # Grabación Pre-Evento Usando C# .Net: Captura de Video con Buffer Circular

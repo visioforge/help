@@ -1,5 +1,5 @@
 ---
-title: Windows Media Audio Encoder Integration Guide
+title: Windows Media Audio (WMA) Encoder Integration Guide
 description: Implement WMA audio encoding in .NET with cross-platform and Windows-specific approaches, bitrate controls, and codec configuration.
 ---
 

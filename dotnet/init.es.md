@@ -1,5 +1,5 @@
 ---
-title: Guía de Configuración e Instalación del SDK .NET
+title: Inicialización del SDK .NET para video multiplataforma
 description: Inicializar y desinicializar SDKs .NET para captura, edición y reproducción de video con DirectShow y motores X multiplataforma.
 ---
 

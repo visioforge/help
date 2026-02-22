@@ -1,5 +1,5 @@
 ---
-title: Guía de Implementación de Radio FM y Sintonizador de TV en Delphi
+title: Sintonizador FM y TV en Delphi con Video Capture SDK
 description: Sintonización de radio FM y TV en Delphi: escaneo de canales, gestión de frecuencias y ejemplos de código para Delphi, C++, VB6.
 ---
 

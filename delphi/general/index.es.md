@@ -1,5 +1,5 @@
 ---
-title: Bibliotecas Delphi para Desarrollo Multimedia
+title: Bibliotecas Delphi/ActiveX para Captura y Edicion de Video
 description: Bibliotecas multimedia profesionales Delphi/ActiveX para captura de video, reproducción y edición con documentación completa y ejemplos.
 ---
 

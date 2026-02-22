@@ -1,5 +1,5 @@
 ---
-title: DV Camcorder Integration for .NET Video Capture
+title: DV Camcorder Control in C# - Video Capture SDK .NET
 description: Implement DV/HDV camcorder control in C# apps with essential commands, implementation patterns, and practical code examples for .NET.
 ---
 

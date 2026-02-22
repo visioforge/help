@@ -1,5 +1,5 @@
 ---
-title: Guía de Bloques Demuxer de Medios .Net
+title: Bloques Demuxer de Video y Audio en .NET - SDK MediaBlocks
 description: Demultiplexe contenedores de medios con demuxers MPEG-TS, QT (MP4/MOV) y Universal para separar flujos de audio y video en pipelines .NET.
 
 ---

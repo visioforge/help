@@ -1,5 +1,5 @@
 ---
-title: Audio Effects Reference
+title: Audio Effects for .NET: EQ, Reverb, Echo, and More
 description: Complete guide to audio effects in VisioForge SDKs. Includes volume, EQ, echo, reverb, compression, and more effects for cross-platform audio processing.
 sidebar_label: Audio Effects Reference
 ---

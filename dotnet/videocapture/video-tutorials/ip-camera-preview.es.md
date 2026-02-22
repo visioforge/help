@@ -1,5 +1,5 @@
 ---
-title: Vista Previa de Cámara IP en Aplicaciones .NET
+title: Vista Previa de Cámara IP RTSP en C# .NET - Guía y Código
 description: Implementa vista previa de cámara IP en tiempo real en aplicaciones .NET con tutorial paso a paso y ejemplos de código C# completos para WinForms, WPF, Console.
 ---
 

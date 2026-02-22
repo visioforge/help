@@ -1,5 +1,5 @@
 ---
-title: Advanced Video Processing with .NET SDK
+title: Video Processing and Effects in Video Capture SDK .Net
 description: Enhance video capture with resizing, cropping, rotation, text overlays, image effects, color adjustments, and filters in .NET.
 sidebar_label: Video Processing And Effects
 order: 13

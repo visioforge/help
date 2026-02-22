@@ -1,5 +1,5 @@
 ---
-title: Troubleshooting with Logs for .NET SDK Products
+title: Enable Debug Logs for .NET SDK Troubleshooting Guide
 description: Enable and capture debug logs for .NET SDK troubleshooting with step-by-step instructions for demo and production environments.
 ---
 

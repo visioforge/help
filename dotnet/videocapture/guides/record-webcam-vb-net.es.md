@@ -1,6 +1,6 @@
 ---
-title: Grabar video de webcam en VB.NET - Guía de captura y guardado
-description: Grabar video de webcam en VB.NET — código completo de Visual Basic para enumeración de dispositivos, grabación MP4, vista previa en vivo y captura de pantalla con ejemplos async/await.
+title: Grabar webcam en VB.NET con Video Capture SDK .Net
+description: Grabe video de webcam en VB.NET con Video Capture SDK .Net. Código completo para grabación MP4, vista previa en vivo y capturas de pantalla.
 ---
 
 # Grabar video de webcam en VB.NET: Guía completa

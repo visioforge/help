@@ -1,5 +1,5 @@
 ---
-title: Media Blocks Pipeline: Funcionalidad Principal
+title: Pipeline de Media Blocks SDK .NET - Guía de Funcionalidad
 description: Cree pipelines de medios para reproducción, grabación y streaming con bloques modulares, conexiones y gestión de recursos en Media Blocks SDK.
 ---
 

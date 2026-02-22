@@ -1,5 +1,5 @@
 ---
-title: iOS Cross-Platform .NET App Deployment Guide
+title: iOS Deployment Guide for VisioForge .NET Video SDKs
 description: Deploy .NET apps to iOS with VisioForge SDK integration, permissions, architecture support, and cross-platform deployment best practices.
 ---
 

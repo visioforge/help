@@ -1,5 +1,5 @@
 ---
-title: SDK de Reproductor Multimedia para Android
+title: SDK Reproductor de Video Android con Streaming y .NET
 description: Crea apps de reproductor Android con reproducción de video, streaming, aceleración por hardware y soporte de múltiples formatos con el SDK de Media Player.
 ---
 

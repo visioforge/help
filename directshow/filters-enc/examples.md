@@ -1,5 +1,5 @@
 ---
-title: Encoding Filters Pack - Code Examples
+title: DirectShow NVENC and H.264 Encoding Code Examples in C#
 description: Code examples for NVENC hardware encoding, H.264/H.265/VP8 software encoders, AAC/MP3 audio codecs, and MP4/MKV muxing in DirectShow.
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: Reproductor de Video Multiplataforma - Guía de Avalonia y MAUI
-description: Cree reproductores de video multiplataforma con Avalonia y .NET MAUI. Reproduzca video en Windows, macOS, Linux, Android e iOS desde una única base de código C#.
+title: Reproductor de video multiplataforma con Avalonia y MAUI
+description: Cree reproductores de video multiplataforma con Avalonia y .NET MAUI usando Media Blocks SDK para Windows, macOS, Linux, Android e iOS.
 ---
 
 # Reproductor de Video Multiplataforma: Guía de Avalonia y MAUI

@@ -1,5 +1,5 @@
 ---
-title: Play Video & Audio File Segments in C# .NET Apps
+title: Play Video File Fragments and Segments in C# .NET Apps
 description: Play precise time-based segments of video and audio files with Media Player SDK for Windows and cross-platform .NET applications.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprinting SDK FAQ
+title: Video Fingerprinting FAQ: Licensing, Accuracy, and Formats
 description: Find answers about VisioForge Video Fingerprinting SDK including licensing, performance, accuracy, formats, and platform compatibility.
 ---
 

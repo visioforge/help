@@ -1,5 +1,5 @@
 ---
-title: Técnicas de Comparación de Archivos de Video
+title: Comparar archivos de video con huellas digitales en .NET
 description: Aprende técnicas eficientes para comparar archivos de video usando tecnología de huellas digitales con ejemplos de código para analizar fotogramas y firmas.
 ---
 

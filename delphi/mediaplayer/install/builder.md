@@ -1,5 +1,5 @@
 ---
-title: TVFMediaPlayer Installation in C++ Builder
+title: Install TVFMediaPlayer ActiveX Control in C++ Builder
 description: Install TVFMediaPlayer in C++ Builder - step-by-step guide for versions 5, 6, 2006, and later with prerequisites, setup, and troubleshooting.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Contrato de Licencia de Usuario Final (EULA)
+title: Contrato de Licencia de Usuario Final (EULA) de VisioForge
 description: Contrato de Licencia de Usuario Final para VisioForge SDKs que cubre derechos de uso, términos de distribución y condiciones legales para desarrolladores.
 ---
 

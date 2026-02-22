@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Rhombus Camera in C# .NET - Cloud-Managed Platform
+title: Rhombus Camera RTSP URL and Cloud API C# Integration
 description: Rhombus camera integration options in C# .NET. Cloud-managed architecture, API access, and alternative approaches for Rhombus Systems cameras.
 meta:
   - name: robots

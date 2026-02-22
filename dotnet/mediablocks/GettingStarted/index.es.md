@@ -1,5 +1,5 @@
 ---
-title: Media Blocks SDK .NET: Guía de Inicio Rápido
+title: Media Blocks SDK .NET - Instalación y Pipelines en C#
 description: Integra Media Blocks SDK en aplicaciones con guía de instalación, arquitectura de pipeline y tutoriales de bloques de procesamiento multimedia.
 ---
 

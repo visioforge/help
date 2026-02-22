@@ -1,5 +1,5 @@
 ---
-title: DirectShow Encoding Filters - Muxers Reference
+title: DirectShow Encoding Filters Muxers Reference Guide
 description: DirectShow container formats reference for MP4, MKV, WebM, MPEG-TS, and AVI muxers with supported codecs and streaming options.
 ---
 

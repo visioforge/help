@@ -1,5 +1,5 @@
 ---
-title: VLC Source Filter - Interface Reference
+title: VLC Source DirectShow Filter Full Interface Reference
 description: IVlcSrc family interfaces for multi-track audio, subtitle support, and custom VLC command-line options in DirectShow applications.
 ---
 

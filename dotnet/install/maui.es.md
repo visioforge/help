@@ -1,5 +1,5 @@
 ---
-title: Integra SDKs de Medios con Aplicaciones .NET MAUI
+title: SDK de Captura de Video para .NET MAUI - Instalación
 description: Implementa capacidades de video y medios en aplicaciones multiplataforma .NET MAUI para Windows, Android, iOS y macOS con SDKs de VisioForge.
 ---
 

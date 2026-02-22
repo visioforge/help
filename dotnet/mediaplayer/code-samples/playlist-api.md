@@ -1,5 +1,5 @@
 ---
-title: Media Player SDK .Net Playlist API Guide
+title: Playlist Playback Management in .NET with C# Code Examples
 description: Implement playlist functionality in WinForms, WPF, and Console applications with sequential media playback management in .NET.
 ---
 

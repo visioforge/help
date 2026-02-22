@@ -1,5 +1,5 @@
 ---
-title: Referencia de Interfaz: DirectShow MP4 Muxer
+title: Interfaz DirectShow MP4 Muxer: hilos, tiempo y streaming
 description: Interfaces DirectShow de MP4 muxer con configuración de hilos, corrección de tiempo y opciones de streaming en vivo para salida de contenedor MP4.
 ---
 

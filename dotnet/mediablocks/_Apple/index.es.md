@@ -1,5 +1,5 @@
 ---
-title: Bloques de Plataforma Apple para .Net
+title: Media Blocks de Plataforma Apple .NET — iOS y macOS
 description: Bloques específicos de plataforma Apple para captura y procesamiento de video/audio en iOS y macOS con Media Blocks SDK para .NET.
 ---
 
@@ -321,6 +321,96 @@ Puede verificar si el codificador Apple ProRes está disponible usando:
 ```csharp
 bool available = AppleProResEncoderBlock.IsAvailable();
 ```
+
+#### Plataformas
+
+macOS, iOS.
+
+---
+
+## Procesamiento de Video de Plataforma Apple
+
+### Metal Video Compositor Block
+
+El `MetalVideoCompositorBlock` combina múltiples flujos de video en tiempo real usando el framework Metal de Apple con aceleración GPU. Cada flujo de entrada tiene posición, tamaño, z-order, alfa y operador de mezcla configurables. El bloque produce una única salida de video BGRA.
+
+#### Información del bloque
+
+Nombre: MetalVideoCompositorBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada video | Video sin comprimir | N (uno por flujo) |
+| Salida video | Video sin comprimir | 1 |
+
+#### Configuración
+
+El bloque acepta una instancia de `MetalVideoCompositorSettings`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | :---: | --- |
+| `Width` | `int` | 1920 | Ancho de salida en píxeles |
+| `Height` | `int` | 1080 | Alto de salida en píxeles |
+| `FrameRate` | `VideoFrameRate` | FPS_30 | Tasa de fotogramas de salida |
+| `Background` | `VideoMixerBackground` | Transparent | Modo de fondo |
+| `Streams` | `List<VideoMixerStream>` | Vacío | Configuraciones de flujos de entrada |
+
+Cada flujo de entrada se configura con un `MetalVideoMixerStream`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | :---: | --- |
+| `Rectangle` | `Rect` | requerido | Posición y tamaño dentro del fotograma de salida |
+| `ZOrder` | `uint` | requerido | Orden de apilamiento (mayor = al frente) |
+| `Alpha` | `double` | 1.0 | Opacidad (0.0 transparente – 1.0 opaco) |
+| `BlendOperator` | `MetalVideoMixerBlendOperator` | Over | Modo de mezcla: Source, Over o Add |
+| `KeepAspectRatio` | `bool` | false | Preservar relación de aspecto de la fuente |
+
+#### El pipeline de muestra
+
+```mermaid
+graph LR;
+    VideoSource1-->MetalVideoCompositorBlock;
+    VideoSource2-->MetalVideoCompositorBlock;
+    MetalVideoCompositorBlock-->VideoRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Configurar compositor: 1920x1080 @ 30fps
+var settings = new MetalVideoCompositorSettings(1920, 1080, VideoFrameRate.FPS_30);
+
+// Primer flujo: mitad izquierda de la pantalla
+settings.AddStream(new MetalVideoMixerStream(
+    rectangle: new Rect(0, 0, 960, 1080),
+    zorder: 0));
+
+// Segundo flujo: mitad derecha de la pantalla
+settings.AddStream(new MetalVideoMixerStream(
+    rectangle: new Rect(960, 0, 960, 1080),
+    zorder: 1));
+
+var compositor = new MetalVideoCompositorBlock(settings);
+
+// Renderizar salida compuesta
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(compositor.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+
+// Tiempo real: desvanecer el flujo 0
+compositor.StartFadeOut(settings.Streams[0].ID);
+```
+
+#### Disponibilidad
+
+```csharp
+bool available = MetalVideoCompositorBlock.IsAvailable();
+```
+
+Devuelve `true` si el plugin GStreamer `vfmetalcompositor` está disponible en el sistema actual.
 
 #### Plataformas
 

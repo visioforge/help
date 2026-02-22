@@ -1,5 +1,5 @@
 ---
-title: Integrate Media SDKs with Avalonia Applications
+title: Install VisioForge Media SDKs in Avalonia .NET Apps
 description: Build cross-platform Avalonia apps with multimedia capabilities for Windows, macOS, Linux, Android, and iOS using VisioForge video SDKs.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Captura de Video a MPEG-TS en C# y .NET
+title: "Captura de Video a MPEG-TS en C# .NET: Guía Completa"
 description: Captura video y audio a archivos MPEG-TS en C# con aceleración por hardware, selección de formato y soporte multiplataforma para aplicaciones .NET.
 ---
 

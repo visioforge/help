@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Milesight IP Camera in C# .NET
+title: Milesight IP Camera RTSP URL and C# .NET Connection Guide
 description: Connect to Milesight IP cameras in C# .NET with RTSP URL patterns and code samples for MS-C, MS-A, MS-V, MS-F, and MS-B series models.
 ---
 

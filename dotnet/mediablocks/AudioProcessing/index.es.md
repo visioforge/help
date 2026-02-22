@@ -1,5 +1,5 @@
 ---
-title: Bloques de Procesamiento y Efectos de Audio .Net
+title: Procesamiento de Audio y Efectos en .NET - Media Blocks SDK
 description: Cree pipelines de audio con conversores, resamplers, mezcladores, ecualizadores y efectos para procesamiento de audio profesional en aplicaciones .NET.
 
 ---
@@ -1265,3 +1265,168 @@ await pipeline.StartAsync();
 #### Plataformas
 
 Windows, macOS, Linux (requiere plugin rsaudiofx).
+
+### Cambiador de Tono
+
+El `PitchBlock` cambia el tono de un flujo de audio sin afectar la velocidad de reproducción. Utiliza la biblioteca SoundTouch a través del elemento GStreamer `pitch`, con soporte para cambios de −12 a +12 semitonos (una octava abajo a una octava arriba).
+
+#### Información del bloque
+
+Nombre: PitchBlock.
+
+Dirección del pin | Tipo de medio | Número de pines
+--- | :---: | :---:
+Entrada | Audio sin comprimir | 1
+Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Propiedad | Tipo | Valor predeterminado | Descripción |
+|-----------|------|----------------------|-------------|
+| `Semitones` | `int` | `0` | Cambio de tono en semitonos (−12 a +12) |
+| `Pitch` | `float` | `1.0` | Multiplicador directo de tono (1.0 = sin cambio, 2.0 = una octava arriba, 0.5 = una octava abajo) |
+
+#### Disponibilidad
+
+`PitchBlock.IsAvailable()` devuelve `true` si el elemento GStreamer `pitch` (plugin SoundTouch) está disponible.
+
+#### El pipeline de muestra
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->PitchBlock;
+    PitchBlock-->AudioRendererBlock;
+```
+
+#### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var pitchBlock = new PitchBlock(semitones: 5);
+pipeline.Connect(fileSource.AudioOutput, pitchBlock.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(pitchBlock.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Plataformas
+
+Windows, macOS, Linux.
+
+### Detector de Silencio
+
+El `SilenceDetectorBlock` analiza los niveles de audio en tiempo real para detectar períodos de silencio basándose en un umbral de dBFS configurable. Es un bloque de paso — el audio se reenvía sin cambios mientras los eventos `OnSilenceStarted` y `OnSilenceEnded` se disparan en las transiciones de estado. Los períodos detectados pueden recuperarse como lista o exportarse como JSON.
+
+#### Información del bloque
+
+Nombre: SilenceDetectorBlock.
+
+Dirección del pin | Tipo de medio | Número de pines
+--- | :---: | :---:
+Entrada | Audio sin comprimir | 1
+Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Propiedad | Tipo | Valor predeterminado | Descripción |
+|-----------|------|----------------------|-------------|
+| `ThresholdDb` | `double` | `-40.0` | Umbral de silencio en dBFS; el audio por debajo de este nivel se trata como silencio |
+
+Métodos clave:
+
+- `GetSilencePeriods()` — devuelve todos los objetos `SilencePeriod` detectados.
+- `FinalizeSilencePeriods(TimeSpan endTime)` — cierra cualquier período en curso y devuelve la lista completa.
+- `ExportSilencePeriodsJson()` — devuelve una cadena JSON con marcas de tiempo de inicio/fin para cada período detectado.
+
+#### El pipeline de muestra
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->SilenceDetectorBlock;
+    SilenceDetectorBlock-->AudioRendererBlock;
+```
+
+#### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var silenceDetector = new SilenceDetectorBlock(thresholdDb: -35.0);
+silenceDetector.OnSilenceStarted += (s, e) => Console.WriteLine($"Silencio iniciado en {e.Timestamp}");
+silenceDetector.OnSilenceEnded += (s, e) => Console.WriteLine($"Silencio terminado en {e.Timestamp}");
+pipeline.Connect(fileSource.AudioOutput, silenceDetector.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(silenceDetector.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+
+// Después de que el pipeline se detenga, exportar los períodos de silencio detectados
+var json = silenceDetector.ExportSilencePeriodsJson();
+Console.WriteLine(json);
+```
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+### Mezcla Ponderada de Canales
+
+El `WeightedChannelMixBlock` mezcla los canales estéreo izquierdo y derecho con pesos ajustables de forma independiente, produciendo una salida mono o estéreo. Se utiliza principalmente para fuentes de audio mono dual, como archivos de karaoke, donde un canal lleva la pista instrumental y el otro la mezcla completa.
+
+Los pesos pueden cambiarse en tiempo de ejecución sin reconstruir el pipeline. Valores superiores a 1.0 amplifican el canal, pero pueden causar recorte.
+
+#### Información del bloque
+
+Nombre: WeightedChannelMixBlock.
+
+Dirección del pin | Tipo de medio | Número de pines
+--- | :---: | :---:
+Entrada | Audio estéreo sin comprimir | 1
+Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Propiedad | Tipo | Valor predeterminado | Descripción |
+|-----------|------|----------------------|-------------|
+| `LeftChannelWeight` | `float` | `0.5` | Peso de mezcla para el canal izquierdo (0.0–1.0+) |
+| `RightChannelWeight` | `float` | `0.5` | Peso de mezcla para el canal derecho (0.0–1.0+) |
+
+#### El pipeline de muestra
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->WeightedChannelMixBlock;
+    WeightedChannelMixBlock-->AudioRendererBlock;
+```
+
+#### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "karaoke.mp3";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+// Usar solo el canal instrumental (izquierdo)
+var mixer = new WeightedChannelMixBlock(leftWeight: 1.0f, rightWeight: 0.0f);
+pipeline.Connect(fileSource.AudioOutput, mixer.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(mixer.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.

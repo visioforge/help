@@ -1,5 +1,5 @@
 ---
-title: TVFVideoCapture Integration for Delphi in VS
+title: Install TVFVideoCapture ActiveX Control in Visual Studio
 description: Install TVFVideoCapture ActiveX controls in Visual Studio 2010+ with C++ and managed code integration for video capture projects.
 ---
 

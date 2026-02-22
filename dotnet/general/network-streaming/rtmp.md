@@ -1,5 +1,5 @@
 ---
-title: RTMP Live Streaming for .NET Applications
+title: RTMP Video Streaming in .NET with Hardware Acceleration
 description: Implement RTMP streaming in .NET with hardware acceleration, cross-platform support, and integration with YouTube and Facebook Live platforms.
 ---
 

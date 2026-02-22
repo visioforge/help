@@ -1,6 +1,6 @@
 ---
-title: Escáner de Códigos de Barras y Lector de Códigos QR en C# — Guía SDK .NET Multiplataforma
-description: Crear un escáner de códigos de barras y lector de códigos QR en C# con detección en video en tiempo real. Leer códigos de barras desde webcam, cámara IP, stream RTSP o archivo de video en .NET MAUI, Avalonia y WPF usando VisioForge Media Blocks SDK.
+title: Escáner de Códigos de Barras y QR en Video con C# .NET
+description: Cree un escáner de códigos de barras y lector QR en C# .NET con detección en video en tiempo real usando VisioForge Media Blocks SDK.
 sidebar_label: Escáner de Códigos de Barras y QR
 
 ---

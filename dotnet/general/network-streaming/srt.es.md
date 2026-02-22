@@ -1,5 +1,5 @@
 ---
-title: Transmisión de Protocolo SRT en .NET
+title: Protocolo SRT en .NET - Streaming de Video de Baja Latencia
 description: Integre el protocolo SRT para transmisión de video segura y de baja latencia con recuperación de errores y cifrado en aplicaciones .NET para entrega confiable.
 ---
 

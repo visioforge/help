@@ -1,5 +1,5 @@
 ---
-title: .Net Media Nvidia Blocks Guide
+title: Nvidia GPU Video Processing Blocks in .Net Pipelines
 description: Accelerate media processing with Nvidia GPU blocks for data transfer, video conversion, and resizing in Media Blocks SDK pipelines.
 sidebar_label: Nvidia
 ---

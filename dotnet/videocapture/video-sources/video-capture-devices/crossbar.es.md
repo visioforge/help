@@ -1,5 +1,5 @@
 ---
-title: Configuración de Entradas con API Crossbar (.NET)
+title: Crossbar en .NET: Configurar Entradas de Video Hardware
 description: Configura múltiples entradas de video hardware para sintonizadores TV y tarjetas de captura en .NET con implementación crossbar C#.
 ---
 

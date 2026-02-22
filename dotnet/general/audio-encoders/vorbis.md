@@ -1,5 +1,5 @@
 ---
-title: Vorbis Audio Encoding Guide for .NET Development
+title: Vorbis Audio Encoding Guide for .NET SDK Development
 description: Implement Vorbis audio encoding in .NET with quality optimization, cross-platform support, and efficient compression for streaming.
 ---
 

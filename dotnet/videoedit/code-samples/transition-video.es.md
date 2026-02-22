@@ -1,5 +1,5 @@
 ---
-title: Crear transiciones suaves de video en C#
+title: Transiciones de video suaves en C# con ejemplos de codigo
 description: Domina los efectos de transición de video en C# con guía paso a paso y ejemplos de código completos para las APIs VideoEditCore y VideoEditCoreX.
 ---
 

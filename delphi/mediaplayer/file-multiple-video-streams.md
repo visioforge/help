@@ -1,5 +1,5 @@
 ---
-title: Play Multiple Video Streams from Single File
+title: Play Multiple Video Streams with Delphi SDK Player
 description: Handle multiple video streams in files - select camera angles, switch resolutions, and manage tracks with code examples for Delphi, C++, and VB6.
 ---
 

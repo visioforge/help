@@ -1,5 +1,5 @@
 ---
-title: Archivos Redistribuibles para SDKs DirectShow
+title: Archivos redistribuibles de filtros DirectShow de VisioForge
 description: Lista completa de archivos redistribuibles para SDKs DirectShow de VisioForge con dependencias, archivos de arquitectura y requisitos de despliegue.
 ---
 

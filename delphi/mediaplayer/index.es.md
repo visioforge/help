@@ -1,5 +1,5 @@
 ---
-title: Media Player SDK para Delphi
+title: SDK de Reproductor Multimedia para Delphi en Windows
 description: Guía completa para usar Media Player SDK con Delphi/Object Pascal para reproducción multimedia avanzada con soporte de múltiples formatos y streaming.
 ---
 

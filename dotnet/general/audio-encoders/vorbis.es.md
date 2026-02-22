@@ -1,5 +1,5 @@
 ---
-title: Codificación de Audio Vorbis en .NET
+title: Guía de Codificación de Audio Vorbis para .NET SDK
 description: Implemente codificación de audio Vorbis en .NET con optimización de calidad, soporte multiplataforma y compresión eficiente para streaming.
 ---
 

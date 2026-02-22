@@ -1,5 +1,5 @@
 ---
-title: Camera Video Adjustments for Delphi Applications
+title: Camera Brightness, Contrast and Saturation Control in Delphi
 description: Adjust camera brightness, contrast, and saturation in Delphi with TVFVideoCapture hardware controls and parameter configuration examples.
 ---
 

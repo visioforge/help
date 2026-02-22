@@ -1,5 +1,5 @@
 ---
-title: Implementing Audio Capture in .NET Applications
+title: Audio Capture in .NET: Devices, Loopback, and IP Sources
 description: Integrate multiple audio sources in .NET including capture devices, system loopback, IP cameras, and Decklink with code examples.
 sidebar_label: Audio Sources
 order: 15

@@ -1,5 +1,5 @@
 ---
-title: Implementación de Visión por Computadora en .NET
+title: Despliegue de VisioForge CV y CVD para .NET multiplataforma
 description: Implemente visión por computadora en aplicaciones en Windows, Linux y macOS con los paquetes NuGet VisioForge CV y CVD para desarrollo .NET.
 ---
 

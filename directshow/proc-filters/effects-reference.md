@@ -1,5 +1,5 @@
 ---
-title: Processing Filters - Effects Reference
+title: DirectShow Video Effects Reference - 35+ Filters Guide
 description: Complete reference for 35+ DirectShow video effects including color filters, deinterlacing, denoising, and artistic effects.
 ---
 

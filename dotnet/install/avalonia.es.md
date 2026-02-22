@@ -1,5 +1,5 @@
 ---
-title: Integra SDKs de Medios con Aplicaciones Avalonia
+title: Instalar SDK de Video VisioForge en Aplicaciones Avalonia
 description: Construye aplicaciones Avalonia multiplataforma con capacidades multimedia para Windows, macOS, Linux, Android e iOS usando SDKs de video de VisioForge.
 ---
 

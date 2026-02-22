@@ -1,5 +1,5 @@
 ---
-title: Guía de Integración de Media Blocks SDK para .NET
+title: Media Blocks SDK para .NET - Desarrollo Multimedia Modular
 description: Construye aplicaciones multimedia con Media Blocks SDK para reproducción modular de video, edición no lineal y captura de cámara multi-fuente en .NET.
 
 ---

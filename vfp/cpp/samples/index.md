@@ -1,5 +1,5 @@
 ---
-title: C++ Video Fingerprinting SDK Code Samples
+title: Video Fingerprinting SDK C++ Code Samples and Examples
 description: Native C++ code examples and command-line samples for video fingerprint generation, comparison, and search with VisioForge SDK implementation.
 sidebar_label: C++ Samples
 ---

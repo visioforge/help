@@ -1,5 +1,5 @@
 ---
-title: Captura de Audio a MP3 en Delphi, C++ y VB6
+title: Captura de audio MP3 con codificador LAME en Delphi y C++
 description: Implementar captura de audio MP3 en Delphi, C++ y VB6 - configurar codificador LAME, gestionar tasas de bits y crear grabaciones de audio de alta calidad.
 ---
 

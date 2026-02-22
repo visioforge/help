@@ -1,5 +1,5 @@
 ---
-title: Despliegue Multiplataforma .NET para Android
+title: Despliegue de aplicaciones .NET Android con VisioForge SDK
 description: Despliegue del SDK .NET de VisioForge para Android con gestión de paquetes, integración de VideoView, soporte de arquitectura y configuración de permisos.
 ---
 

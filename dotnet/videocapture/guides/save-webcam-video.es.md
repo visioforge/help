@@ -1,5 +1,5 @@
 ---
-title: Guardar Video de Webcam en .NET: Guía Completa
+title: Capturar y Grabar Video de Webcam en C# .NET - Tutorial
 description: Guía completa para capturar y guardar video de webcam usando .NET y C#. Implemente funcionalidad con formatos MP4/WebM y aceleración GPU.
 ---
 

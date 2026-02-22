@@ -1,5 +1,5 @@
 ---
-title: Drawing Images with OnVideoFrameBuffer in .NET
+title: Image Overlay on Video Frames with OnVideoFrameBuffer
 description: Overlay images on video frames with OnVideoFrameBuffer event for watermarks, logos, and visual elements in .NET video processing apps.
 ---
 

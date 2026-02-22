@@ -1,5 +1,5 @@
 ---
-title: Adding Image Overlays to Video Streams
+title: Image Overlay on Video in .NET: PNG, GIF, and Bitmap
 description: Overlay images, animated GIFs, and transparent PNGs on video streams in .NET for watermarks, logos, and visual enhancements with transparency.
 ---
 

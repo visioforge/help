@@ -1,5 +1,5 @@
 ---
-title: Video Capture & Processing in .NET MAUI Apps
+title: .NET MAUI Camera Capture and Video Recording Tutorial
 description: Implement video capture in .NET MAUI apps with cross-platform support for iOS, Android, macCatalyst, and Windows camera recording.
 ---
 

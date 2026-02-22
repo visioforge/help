@@ -1,5 +1,5 @@
 ---
-title: Integrar Cámaras RTSP en Video Capture SDK .Net
+title: Captura de cámaras RTSP en .NET: latencia y protocolos
 description: Implementa y configura flujos de cámaras RTSP en .NET con opciones de baja latencia, código de ejemplo y mejores prácticas para UDP y TCP.
 ---
 

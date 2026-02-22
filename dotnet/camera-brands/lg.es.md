@@ -1,5 +1,5 @@
 ---
-title: Cómo conectar una cámara IP LG en C# .NET
+title: Cámaras IP LG - URLs RTSP, modelos y conexión en C# .NET
 description: Conecte cámaras LG SmartIP y de la serie LW/LV en C# .NET con patrones de URL RTSP y ejemplos de código para modelos inalámbricos, cableados y empresariales.
 ---
 

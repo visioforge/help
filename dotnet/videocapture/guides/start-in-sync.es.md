@@ -1,5 +1,5 @@
 ---
-title: Sincronizar Múltiples Capturas de Video en .NET
+title: Sincronizar grabación multi-cámara con Video Capture SDK
 description: Sincroniza múltiples flujos de captura de video en .NET con ejemplos de código, consejos de solución de problemas y mejores prácticas para apps de grabación.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Ejemplos de Código: Filtros de Codificación
+title: Codificación DirectShow NVENC y H.264 con ejemplos en C#
 description: Ejemplos de NVENC hardware, codificadores H.264/H.265/VP8, códecs AAC/MP3 y multiplexación MP4/MKV en DirectShow con código.
 ---
 

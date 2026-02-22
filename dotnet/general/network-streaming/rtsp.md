@@ -1,5 +1,5 @@
 ---
-title: RTSP Video Streaming Implementation in .NET
+title: RTSP Streaming in C# and .NET - Server Setup and Examples
 description: Implement RTSP streaming with H.264 and AAC codecs for security cameras, live broadcasting, and real-time media control in .NET applications.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprinting SDK for C++
+title: C++ Video Fingerprinting Library and API Documentation
 description: Native C++ implementation of Video Fingerprinting SDK with high performance and cross-platform support for robust video fingerprints.
 sidebar_label: C++ SDK Documentation
 order: 50

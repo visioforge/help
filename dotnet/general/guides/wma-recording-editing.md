@@ -1,5 +1,5 @@
 ---
-title: Record and Edit WMA Files in C# and .NET
+title: WMA Audio Recording and Editing in .NET SDK with C#
 description: Record WMA audio from microphone and edit WMA files in .NET with VideoCaptureCoreX and VideoEditCoreX classes for Windows Media Audio capture and editing.
 ---
 

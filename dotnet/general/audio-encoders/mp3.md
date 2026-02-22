@@ -1,5 +1,5 @@
 ---
-title: Record, Capture & Edit MP3 Audio in C#
+title: MP3 Audio Encoding: Record, Capture and Edit in C#
 description: Record, capture, and edit MP3 audio in C# with VisioForge .NET SDK using LAME encoder for high-quality audio processing.
 ---
 

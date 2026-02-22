@@ -1,5 +1,5 @@
 ---
-title: Software Development Kit License Agreement
+title: SDK License Agreement: Usage Rights and Distribution Terms
 description: End User License Agreement for VisioForge SDKs covering usage rights, distribution terms, and legal conditions for developers.
 ---
 

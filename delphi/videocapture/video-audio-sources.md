@@ -1,5 +1,5 @@
 ---
-title: Delphi Video Capture - Device Selection Guide
+title: Select Video and Audio Capture Devices in Delphi and VB6
 description: Select video and audio devices in Delphi - enumerate devices, configure formats, set frame rates with code examples for Delphi, C++, and VB6.
 ---
 

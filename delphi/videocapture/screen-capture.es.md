@@ -1,5 +1,5 @@
 ---
-title: Grabación de Pantalla en Aplicaciones Delphi
+title: Captura de pantalla Delphi - SDK y ejemplos de código
 description: Grabación de pantalla en Delphi con TVFVideoCapture: captura regiones, pantalla completa, tasas de fotogramas y cursor con ejemplos de código.
 ---
 

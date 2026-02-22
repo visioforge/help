@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Honeywell IP Camera in C# .NET
+title: Honeywell IP Camera RTSP URL Guide for C# .NET Apps
 description: Connect to Honeywell Performance Series and equIP cameras in C# .NET with RTSP URL patterns and code samples for HD, HDZ, HBD, HBW, and PSIA models.
 ---
 

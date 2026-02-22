@@ -1,5 +1,5 @@
 ---
-title: DirectShow Filter Deployment & Installation Guide
+title: DirectShow Filter Deployment Guide - VisioForge SDKs
 description: Deploy DirectShow SDKs with COM registration, WiX/NSIS installer integration, redistributable files, and Windows troubleshooting.
 sidebar_label: Deployment
 ---

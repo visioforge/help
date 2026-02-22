@@ -1,5 +1,5 @@
 ---
-title: YouTube Live Streaming Integration for .NET Apps
+title: YouTube Live Streaming in C# .NET with RTMP Output
 description: Stream to YouTube Live with RTMP in .NET applications using optimized video encoders, audio configuration, and cross-platform support.
 ---
 

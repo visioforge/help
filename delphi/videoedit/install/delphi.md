@@ -1,5 +1,5 @@
 ---
-title: Install TVFVideoEdit in Delphi
+title: Install TVFVideoEdit in Delphi - Setup and Configuration
 description: Install TVFVideoEdit packages in Delphi 6/7, 2005+, and 11+ with library paths, package building, and troubleshooting configuration.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Mastering Camera Image Controls in .NET
+title: Camera Brightness, Contrast, and Saturation in C# .NET
 description: Control camera settings including brightness, contrast, hue, and saturation in .NET with Video Capture SDK code examples for adjustments.
 ---
 

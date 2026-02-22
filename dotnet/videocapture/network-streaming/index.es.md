@@ -1,5 +1,5 @@
 ---
-title: Transmisión de Video en Red para Desarrollo .NET
+title: Transmisión de Video en Red con RTSP, RTMP, NDI en .NET
 description: Implemente transmisión en red en .NET con protocolos RTSP, RTMP, NDI, HLS y SRT utilizando consejos de implementación y mejores prácticas.
 sidebar_label: Transmisión en Red
 order: 5

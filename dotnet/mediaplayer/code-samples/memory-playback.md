@@ -1,5 +1,5 @@
 ---
-title: Play Media from Memory in .NET SDK
+title: Memory Playback in C# - Play Video from Stream or Byte Array
 description: Play media from memory streams and byte arrays with efficient memory management for audio and video playback in C# applications.
 ---
 

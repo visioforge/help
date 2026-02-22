@@ -1,5 +1,5 @@
 ---
-title: .Net Media Video Decoder Blocks Guide
+title: Video Decoder Blocks for H.264, HEVC, VP9, and AV1 in .NET
 description: Decompress encoded video streams with hardware-accelerated decoder blocks supporting H.264, HEVC, VP9, and more codecs in Media Blocks SDK.
 sidebar_label: Video Decoders
 ---
@@ -1196,3 +1196,477 @@ Check availability using `D3D11VP9DecoderBlock.IsAvailable()`. Requires Windows 
 #### Platforms
 
 Windows (D3D11/DXVA required).
+
+---
+
+### HEVC Decoder Block
+
+Decodes H.265/HEVC video streams using the best available decoder on the system. Supports software decoding via FFmpeg and hardware-accelerated decoding through NVIDIA NVDEC, Intel Quick Sync, AMD AMF, D3D11/DXVA (Windows), and VAAPI (Linux). When instantiated without arguments, the block automatically selects the fastest available decoder in order: NVIDIA NVDEC → Intel QSV → AMD AMF → D3D11 (Windows) → VAAPI (Linux) → FFmpeg.
+
+#### Block info
+
+Name: `HEVCDecoderBlock`.
+
+| Pin direction | Media type           | Pins count |
+|---------------|---------------------|------------|
+| Input video   | HEVC encoded video  | 1          |
+| Output video  | Uncompressed video  | 1          |
+
+#### Settings
+
+The `HEVCDecoderBlock` is configured using settings that implement `IHEVCDecoderSettings`. Available settings classes include:
+
+- `FFMPEGHEVCDecoderSettings` — software decoding via FFmpeg (CPU)
+- `NVHEVCDecoderSettings` — NVIDIA NVDEC hardware decoding
+- `QSVHEVCDecoderSettings` — Intel Quick Sync hardware decoding
+- `AMFHEVCDecoderSettings` — AMD AMF hardware decoding
+- `D3D11HEVCDecoderSettings` — D3D11/DXVA hardware decoding (Windows)
+- `VAAPIHEVCDecoderSettings` — VAAPI hardware decoding (Linux)
+
+A constructor without parameters automatically selects the best available decoder.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    BasicFileSourceBlock -- Raw Data --> UniversalDemuxBlock;
+    UniversalDemuxBlock -- HEVC Video Stream --> HEVCDecoderBlock;
+    HEVCDecoderBlock -- Decoded Video --> VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Auto-select best available HEVC decoder
+var hevcDecoder = new HEVCDecoderBlock();
+
+// Or specify a decoder explicitly:
+// var hevcDecoder = new HEVCDecoderBlock(new FFMPEGHEVCDecoderSettings());
+// var hevcDecoder = new HEVCDecoderBlock(new NVHEVCDecoderSettings());
+
+var basicFileSource = new BasicFileSourceBlock("test_hevc.mp4");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_hevc.mp4");
+var mediaInfo = reader.Info;
+if (mediaInfo == null)
+{
+    Console.WriteLine("Failed to get media info.");
+    return;
+}
+var universalDemux = new UniversalDemuxBlock(mediaInfo, renderVideo: true, renderAudio: false);
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(basicFileSource.Output, universalDemux.Input);
+pipeline.Connect(universalDemux.GetVideoOutput(), hevcDecoder.Input);
+pipeline.Connect(hevcDecoder.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+Check availability for a specific decoder type using `HEVCDecoderBlock.IsAvailable(HEVCDecoderType decoder)`. Ensure the appropriate SDK redistribution package is included in your project.
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+---
+
+### AV1 Decoder Block
+
+Decodes AV1 video streams using software or hardware decoding. Supports dav1d (fast software decoder), the AOM reference decoder (av1dec), and hardware-accelerated decoders via NVIDIA NVDEC, D3D11/DXVA (Windows), and VAAPI (Linux). AV1 offers superior compression efficiency compared to H.264 and VP9, with support for up to 8K resolution, 10-bit color, and HDR content.
+
+#### Block info
+
+Name: `AV1DecoderBlock`.
+
+| Pin direction | Media type          | Pins count |
+|---------------|---------------------|------------|
+| Input video   | AV1 encoded video   | 1          |
+| Output video  | Uncompressed video  | 1          |
+
+#### Settings
+
+The `AV1DecoderBlock` is configured using `AV1DecoderSettings`, which specifies the decoder type via the `AV1DecoderType` enum:
+
+- `AV1DecoderType.Auto` — automatically selects the best available decoder (default)
+- `AV1DecoderType.dav1d` — dav1d software decoder (fast, recommended for CPU decoding)
+- `AV1DecoderType.av1dec` — AOM reference decoder
+- `AV1DecoderType.GPU_Nvidia_AV1` — NVIDIA NVDEC hardware decoding
+- `AV1DecoderType.D3D11_AV1` — D3D11/DXVA hardware decoding (Windows)
+- `AV1DecoderType.VAAPI_AV1` — VAAPI hardware decoding (Linux)
+
+A constructor without parameters automatically selects the best available decoder.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    BasicFileSourceBlock -- Raw Data --> UniversalDemuxBlock;
+    UniversalDemuxBlock -- AV1 Video Stream --> AV1DecoderBlock;
+    AV1DecoderBlock -- Decoded Video --> VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Auto-select best available AV1 decoder
+var av1Decoder = new AV1DecoderBlock();
+
+// Or specify a decoder explicitly:
+// var av1Decoder = new AV1DecoderBlock(new AV1DecoderSettings { DecoderType = AV1DecoderType.dav1d });
+
+var basicFileSource = new BasicFileSourceBlock("test_av1.mp4");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_av1.mp4");
+var mediaInfo = reader.Info;
+if (mediaInfo == null)
+{
+    Console.WriteLine("Failed to get media info.");
+    return;
+}
+var universalDemux = new UniversalDemuxBlock(mediaInfo, renderVideo: true, renderAudio: false);
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(basicFileSource.Output, universalDemux.Input);
+pipeline.Connect(universalDemux.GetVideoOutput(), av1Decoder.Input);
+pipeline.Connect(av1Decoder.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+Check availability for a specific decoder type using `AV1DecoderBlock.IsAvailable(AV1DecoderType decoderType)`. Pass `AV1DecoderType.Auto` to check whether any AV1 decoder is available. Ensure the appropriate SDK redistribution package is included in your project.
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+---
+
+### NVAV1 Decoder Block
+
+Decodes AV1 video streams using NVIDIA NVDEC hardware acceleration exclusively. Requires an NVIDIA GPU with AV1 NVDEC support (RTX 30xx series or newer). Capable of decoding 4K@120fps or 8K@60fps depending on GPU model, with support for HDR10 and HDR10+ content.
+
+#### Block info
+
+Name: `NVAV1DecoderBlock`.
+
+| Pin direction | Media type          | Pins count |
+|---------------|---------------------|------------|
+| Input video   | AV1 encoded video   | 1          |
+| Output video  | Uncompressed video  | 1          |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    BasicFileSourceBlock -- Raw Data --> UniversalDemuxBlock;
+    UniversalDemuxBlock -- AV1 Video Stream --> NVAV1DecoderBlock;
+    NVAV1DecoderBlock -- Decoded Video --> VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Create NVAV1 Decoder block (requires NVIDIA GPU with AV1 NVDEC support)
+var nvav1Decoder = new NVAV1DecoderBlock();
+
+var basicFileSource = new BasicFileSourceBlock("test_av1.mp4");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_av1.mp4");
+var mediaInfo = reader.Info;
+if (mediaInfo == null)
+{
+    Console.WriteLine("Failed to get media info.");
+    return;
+}
+var universalDemux = new UniversalDemuxBlock(mediaInfo, renderVideo: true, renderAudio: false);
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(basicFileSource.Output, universalDemux.Input);
+pipeline.Connect(universalDemux.GetVideoOutput(), nvav1Decoder.Input);
+pipeline.Connect(nvav1Decoder.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+Check availability using `NVAV1DecoderBlock.IsAvailable()`. Requires an NVIDIA GPU with AV1 NVDEC support and the NVIDIA Video Codec SDK redistribution package.
+
+#### Platforms
+
+Windows, Linux (NVIDIA GPU with AV1 NVDEC support required).
+
+---
+
+### VP8 Decoder Block
+
+Decodes VP8 video streams commonly used in WebM containers and WebRTC video communications. Supports software decoding via VPX and FFmpeg, and hardware-accelerated decoding through NVIDIA NVDEC, VAAPI (Linux), and D3D11/DXVA (Windows). When instantiated without arguments, the block automatically selects from available decoders in order: VPX → FFmpeg → NVIDIA NVDEC → VAAPI (Linux) → D3D11 (Windows).
+
+#### Block info
+
+Name: `VP8DecoderBlock`.
+
+| Pin direction | Media type          | Pins count |
+|---------------|---------------------|------------|
+| Input video   | VP8 encoded video   | 1          |
+| Output video  | Uncompressed video  | 1          |
+
+#### Settings
+
+The `VP8DecoderBlock` is configured using settings that implement `IVP8DecoderSettings`. Available settings classes include:
+
+- `VPXVP8DecoderSettings` — VPX software decoder (recommended for CPU decoding)
+- `FFMPEGVP8DecoderSettings` — FFmpeg software decoder
+- `NVVP8DecoderSettings` — NVIDIA NVDEC hardware decoding
+- `VAAPIVP8DecoderSettings` — VAAPI hardware decoding (Linux)
+- `D3D11VP8DecoderSettings` — D3D11/DXVA hardware decoding (Windows)
+
+A constructor without parameters automatically selects the best available decoder.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    BasicFileSourceBlock -- Raw Data --> UniversalDemuxBlock;
+    UniversalDemuxBlock -- VP8 Video Stream --> VP8DecoderBlock;
+    VP8DecoderBlock -- Decoded Video --> VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Auto-select best available VP8 decoder
+var vp8Decoder = new VP8DecoderBlock();
+
+// Or specify a decoder explicitly:
+// var vp8Decoder = new VP8DecoderBlock(new VPXVP8DecoderSettings());
+
+var basicFileSource = new BasicFileSourceBlock("test_vp8.webm");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_vp8.webm");
+var mediaInfo = reader.Info;
+if (mediaInfo == null)
+{
+    Console.WriteLine("Failed to get media info.");
+    return;
+}
+var universalDemux = new UniversalDemuxBlock(mediaInfo, renderVideo: true, renderAudio: false);
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(basicFileSource.Output, universalDemux.Input);
+pipeline.Connect(universalDemux.GetVideoOutput(), vp8Decoder.Input);
+pipeline.Connect(vp8Decoder.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+Check availability for a specific decoder type using `VP8DecoderBlock.IsAvailable(VP8DecoderType decoder)`. Ensure the appropriate SDK redistribution package is included in your project.
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+---
+
+### VP9 Decoder Block
+
+Decodes VP9 video streams used in YouTube 4K/8K content and WebM containers. Supports software decoding via VPX and FFmpeg, and hardware-accelerated decoding through NVIDIA NVDEC, VAAPI (Linux), and D3D11/DXVA (Windows). Supports 10-bit and 12-bit color depths. When instantiated without arguments, the block automatically selects from available decoders in order: VPX → FFmpeg → NVIDIA NVDEC → VAAPI (Linux) → D3D11 (Windows).
+
+#### Block info
+
+Name: `VP9DecoderBlock`.
+
+| Pin direction | Media type          | Pins count |
+|---------------|---------------------|------------|
+| Input video   | VP9 encoded video   | 1          |
+| Output video  | Uncompressed video  | 1          |
+
+#### Settings
+
+The `VP9DecoderBlock` is configured using settings that implement `IVP9DecoderSettings`. Available settings classes include:
+
+- `VPXVP9DecoderSettings` — VPX software decoder (recommended for CPU decoding)
+- `FFMPEGVP9DecoderSettings` — FFmpeg software decoder
+- `NVVP9DecoderSettings` — NVIDIA NVDEC hardware decoding
+- `VAAPIVP9DecoderSettings` — VAAPI hardware decoding (Linux)
+- `D3D11VP9DecoderSettings` — D3D11/DXVA hardware decoding (Windows)
+
+A constructor without parameters automatically selects the best available decoder.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    BasicFileSourceBlock -- Raw Data --> UniversalDemuxBlock;
+    UniversalDemuxBlock -- VP9 Video Stream --> VP9DecoderBlock;
+    VP9DecoderBlock -- Decoded Video --> VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Auto-select best available VP9 decoder
+var vp9Decoder = new VP9DecoderBlock();
+
+// Or specify a decoder explicitly:
+// var vp9Decoder = new VP9DecoderBlock(new VPXVP9DecoderSettings());
+
+var basicFileSource = new BasicFileSourceBlock("test_vp9.webm");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_vp9.webm");
+var mediaInfo = reader.Info;
+if (mediaInfo == null)
+{
+    Console.WriteLine("Failed to get media info.");
+    return;
+}
+var universalDemux = new UniversalDemuxBlock(mediaInfo, renderVideo: true, renderAudio: false);
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(basicFileSource.Output, universalDemux.Input);
+pipeline.Connect(universalDemux.GetVideoOutput(), vp9Decoder.Input);
+pipeline.Connect(vp9Decoder.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+Check availability for a specific decoder type using `VP9DecoderBlock.IsAvailable(VP9DecoderType decoder)`. Ensure the appropriate SDK redistribution package is included in your project.
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+---
+
+### VP8 Alpha Decode Bin Block
+
+Decodes VP8 video streams that include an alpha transparency channel, producing RGBA or YUVA output suitable for compositing and overlay effects. Handles the demultiplexing and decoding of both color and alpha channels automatically. Intended for WebM or MKV files encoded with VP8 alpha support.
+
+#### Block info
+
+Name: `VP8AlphaDecodeBinBlock`.
+
+| Pin direction | Media type                       | Pins count |
+|---------------|----------------------------------|------------|
+| Input video   | VP8 video with alpha channel     | 1          |
+| Output video  | Uncompressed video (RGBA/YUVA)   | 1          |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    BasicFileSourceBlock -- Raw Data --> UniversalDemuxBlock;
+    UniversalDemuxBlock -- VP8+Alpha Video Stream --> VP8AlphaDecodeBinBlock;
+    VP8AlphaDecodeBinBlock -- RGBA Video --> VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var vp8AlphaDecoder = new VP8AlphaDecodeBinBlock();
+
+var basicFileSource = new BasicFileSourceBlock("test_vp8_alpha.webm");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_vp8_alpha.webm");
+var mediaInfo = reader.Info;
+if (mediaInfo == null)
+{
+    Console.WriteLine("Failed to get media info.");
+    return;
+}
+var universalDemux = new UniversalDemuxBlock(mediaInfo, renderVideo: true, renderAudio: false);
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(basicFileSource.Output, universalDemux.Input);
+pipeline.Connect(universalDemux.GetVideoOutput(), vp8AlphaDecoder.Input);
+pipeline.Connect(vp8AlphaDecoder.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+Check availability using `VP8AlphaDecodeBinBlock.IsAvailable()`. Requires the GStreamer codecalpha plugin and the appropriate SDK redistribution package.
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+---
+
+### VP9 Alpha Decode Bin Block
+
+Decodes VP9 video streams that include an alpha transparency channel, producing RGBA or YUVA output. Supports up to 4K resolution. Handles the demultiplexing and decoding of both color and alpha channels automatically. Intended for WebM or MKV files encoded with VP9 alpha support.
+
+#### Block info
+
+Name: `VP9AlphaDecodeBinBlock`.
+
+| Pin direction | Media type                       | Pins count |
+|---------------|----------------------------------|------------|
+| Input video   | VP9 video with alpha channel     | 1          |
+| Output video  | Uncompressed video (RGBA/YUVA)   | 1          |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    BasicFileSourceBlock -- Raw Data --> UniversalDemuxBlock;
+    UniversalDemuxBlock -- VP9+Alpha Video Stream --> VP9AlphaDecodeBinBlock;
+    VP9AlphaDecodeBinBlock -- RGBA Video --> VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var vp9AlphaDecoder = new VP9AlphaDecodeBinBlock();
+
+var basicFileSource = new BasicFileSourceBlock("test_vp9_alpha.webm");
+var reader = new MediaInfoReaderX();
+await reader.OpenAsync("test_vp9_alpha.webm");
+var mediaInfo = reader.Info;
+if (mediaInfo == null)
+{
+    Console.WriteLine("Failed to get media info.");
+    return;
+}
+var universalDemux = new UniversalDemuxBlock(mediaInfo, renderVideo: true, renderAudio: false);
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(basicFileSource.Output, universalDemux.Input);
+pipeline.Connect(universalDemux.GetVideoOutput(), vp9AlphaDecoder.Input);
+pipeline.Connect(vp9AlphaDecoder.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+Check availability using `VP9AlphaDecodeBinBlock.IsAvailable()`. Requires the GStreamer codecalpha plugin and the appropriate SDK redistribution package.
+
+#### Platforms
+
+Windows, macOS, Linux.

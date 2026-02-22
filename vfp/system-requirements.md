@@ -1,5 +1,5 @@
 ---
-title: System Requirements for Video Fingerprinting SDK
+title: Video Fingerprinting SDK Requirements: Windows, Linux, macOS
 description: Hardware and software requirements for running VisioForge Video Fingerprinting SDK on Windows, Linux, and macOS platforms
 ---
 

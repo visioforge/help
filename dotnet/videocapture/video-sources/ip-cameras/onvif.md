@@ -1,5 +1,5 @@
 ---
-title: ONVIF IP Camera Integration - Complete Guide
+title: ONVIF IP Camera SDK: Discovery, PTZ, and Streaming in C#
 description: Comprehensive ONVIF IP camera integration in .NET covering discovery, connection, PTZ control, recording, streaming, and computer vision.
 ---
 

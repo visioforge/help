@@ -1,5 +1,5 @@
 ---
-title: .Net Media Source Blocks Guide
+title: Media Source Blocks for .NET — Video & Audio Inputs
 description: Ingest media from hardware devices, files, network streams, and virtual sources with comprehensive source blocks for Media Blocks SDK pipelines.
 sidebar_label: Sources
 ---
@@ -616,6 +616,185 @@ The `StreamSourceBlock` itself will attempt to read from the provided stream. Th
 
 Windows, macOS, Linux, iOS, Android.
 
+### Stream Source Block With Decoder
+
+The `StreamSourceBlockWithDecoder` combines stream reading and automatic decoding into a single block. It accepts a `System.IO.Stream` or a file path and automatically demuxes and decodes the content — no additional `DecodeBinBlock` is required.
+
+#### Block info
+
+Name: StreamSourceBlockWithDecoder.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 0 or 1 |
+| Output audio | Uncompressed audio | 0 or 1 |
+
+#### Constructors
+
+```csharp
+// From a .NET stream
+StreamSourceBlockWithDecoder(Stream stream)
+
+// From a file path
+StreamSourceBlockWithDecoder(string filename)
+```
+
+The block internally connects a `StreamSourceBlock` to a `DecodeBinBlock`. The `VideoOutput` and `AudioOutput` pads are `null` if the source does not contain the respective media type.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    StreamSourceBlockWithDecoder -- Video --> VideoRendererBlock;
+    StreamSourceBlockWithDecoder -- Audio --> AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// From a file path
+var source = new StreamSourceBlockWithDecoder("C:/media/video.mp4");
+
+// Or from a stream:
+// var stream = File.OpenRead("C:/media/video.mp4");
+// var source = new StreamSourceBlockWithDecoder(stream);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(source.VideoOutput, videoRenderer.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(source.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### Image Sequence Source Block
+
+The `ImageSequenceSourceBlock` generates a video stream from a sequence of still images stored in a folder. Configurable frame rate, looping, and live/seekable stream mode are supported.
+
+#### Block info
+
+Name: ImageSequenceSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 1 |
+
+#### Settings
+
+The block takes an `ImageSequenceSourceSettings` instance:
+
+Constructor: `ImageSequenceSourceSettings(string folderPath, string filePattern = null)`
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `FolderPath` | `string` | required | Folder containing image files |
+| `FilePattern` | `string` | auto-detected | Filename pattern (e.g., `image_%05d.jpg`); auto-detected if `null` |
+| `StartIndex` | `int` | `0` | Starting index of the image sequence |
+| `FrameRate` | `VideoFrameRate` | `FPS_25` | Output frame rate |
+| `Loop` | `bool` | `false` | Loop the sequence indefinitely |
+| `IsLive` | `bool` | `false` | Treat the source as live (non-seekable) |
+| `NumBuffers` | `int` | `-1` | Maximum frames to output (−1 = unlimited) |
+
+Supported image formats: `.jpg`, `.jpeg`, `.png`, `.bmp`, `.gif`, `.tiff`, `.tif`.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    ImageSequenceSourceBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new ImageSequenceSourceSettings("C:/images/sequence/")
+{
+    FrameRate = VideoFrameRate.FPS_25,
+    Loop = true
+};
+
+var imageSource = new ImageSequenceSourceBlock(settings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(imageSource.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+`ImageSequenceSourceBlock.IsAvailable(settings)` returns `true` if the GStreamer image sequence element is available.
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### Animated GIF Source Block
+
+The `AnimatedGIFSourceBlock` generates a video stream from an animated GIF file. It supports configurable frame rate, looping, and live/seekable stream mode.
+
+#### Block info
+
+Name: AnimatedGIFSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 1 |
+
+#### Settings
+
+The block takes an `ImageVideoSourceSettings` instance:
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `Filename` | `string` | required | Path to the animated GIF file |
+| `IsLive` | `bool` | `false` | Treat the source as live (non-seekable) |
+| `NumBuffers` | `int` | `-1` | Maximum frames to output (−1 = unlimited) |
+| `AnimationInfiniteLoop` | `bool` | `true` | Loop the animation indefinitely |
+| `FrameRate` | `VideoFrameRate` | `FPS_10` | Output frame rate |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    AnimatedGIFSourceBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new ImageVideoSourceSettings("C:/media/animation.gif")
+{
+    AnimationInfiniteLoop = true,
+    FrameRate = VideoFrameRate.FPS_25
+};
+
+var gifSource = new AnimatedGIFSourceBlock(settings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(gifSource.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+`AnimatedGIFSourceBlock.IsAvailable()` returns `true` if the GStreamer animated GIF element is available.
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
 
 ### CDG Source Block
 
@@ -831,6 +1010,148 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
+### RTSP RAW Source Block
+
+The `RTSPRAWSourceBlock` connects to an RTSP stream and delivers the **encoded** (undecoded) video and audio data directly. Unlike `RTSPSourceBlock`, no decoding pipeline is created, resulting in lower CPU overhead. Use this block when you need to record, re-stream, or process the raw compressed bitstream.
+
+#### Block info
+
+Name: RTSPRAWSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Encoded video (e.g. H.264) | 1 |
+| Output audio | Encoded audio (e.g. AAC) | 1 |
+
+#### Settings
+
+Use the factory method `RTSPRAWSourceSettings.CreateAsync(uri, login, password, audioEnabled)` to create settings. Key properties:
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `Uri` | `Uri` | — | RTSP stream URL |
+| `AllowedProtocols` | `RTSPSourceProtocol` | All | Transport protocols (TCP, UDP, UDP_Multicast, HTTP) |
+| `Latency` | `int` | — | Buffering in milliseconds |
+| `Login` | `string` | — | Authentication username |
+| `Password` | `string` | — | Authentication password |
+| `AudioEnabled` | `bool` | `true` | Enable audio output pad |
+| `WaitForKeyframe` | `bool` | `true` | Wait for IDR frame before forwarding video |
+| `SyncAudioWithKeyframe` | `bool` | `true` | Synchronize audio delivery to first keyframe |
+| `DoRTCP` | `bool` | — | Enable RTCP control protocol |
+| `UDPBufferSize` | `int` | — | UDP receive buffer size |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    RTSPRAWSourceBlock-->MP4SinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = await RTSPRAWSourceSettings.CreateAsync(
+    new Uri("rtsp://192.168.1.64:554/stream"),
+    login: "admin",
+    password: "password",
+    audioEnabled: true);
+
+var rtspRawSource = new RTSPRAWSourceBlock(settings);
+
+// VideoOutput carries encoded video (e.g. H.264)
+// AudioOutput carries encoded audio (e.g. AAC)
+var mp4Sink = new MP4SinkBlock(new MP4SinkSettings("output.mp4"));
+pipeline.Connect(rtspRawSource.VideoOutput, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(rtspRawSource.AudioOutput, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+`RTSPRAWSourceBlock.IsAvailable()` returns `true` if the required GStreamer RTSP elements are available.
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+### RTMP Source Block
+
+The RTMP source block connects to RTMP streams published by media servers (Nginx-RTMP, Wowza, OBS, FFmpeg, etc.). It outputs compressed video and audio pads for use with decoder or recording blocks.
+
+Supported video codecs: H.264, H.265, VP8.
+Supported audio codecs: AAC, MP3.
+
+#### Block info
+
+Name: RTMPSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Compressed video | 1 |
+| Output audio | Compressed audio | 1 |
+
+#### Settings
+
+`RTMPSourceBlock` is configured using `RTMPSourceSettings`. Use the static factory method to initialize settings with stream information read from the server:
+
+```csharp
+var rtmpSettings = await RTMPSourceSettings.CreateAsync(
+    new Uri("rtmp://example.com/live/stream"),
+    audioEnabled: true);
+```
+
+Set `readInfo: false` (which enables `CompatibilityMode`) for streams where pre-read fails:
+
+```csharp
+var rtmpSettings = await RTMPSourceSettings.CreateAsync(
+    new Uri("rtmp://example.com/live/stream"),
+    audioEnabled: true,
+    readInfo: false);
+```
+
+Key properties:
+
+- `Uri`: RTMP stream URI.
+- `AudioEnabled`: Whether to create an audio output pad (default `true`).
+- `CompatibilityMode`: Skip stream-info reading; useful for problematic streams.
+- `UseGPUDecoder`: Attempt hardware-accelerated decoding.
+- `ExtraConnectArgs`: Additional RTMP connection query parameters.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    RTMPSourceBlock-->VideoRendererBlock;
+    RTMPSourceBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var rtmpSettings = await RTMPSourceSettings.CreateAsync(
+    new Uri("rtmp://example.com/live/stream"),
+    audioEnabled: true);
+
+var rtmpSource = new RTMPSourceBlock(rtmpSettings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(rtmpSource.VideoOutput, videoRenderer.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(rtmpSource.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux.
+
 ### HTTP Source Block
 
 The HTTP source block allows data to be retrieved using HTTP/HTTPS protocols.
@@ -991,6 +1312,73 @@ await pipeline.StartAsync();
 #### Platforms
 
 Windows, macOS, Linux.
+
+### NDI Source X Block
+
+The `NDISourceXBlock` is an extended NDI source that captures video and audio from NDI network sources. It uses the same `NDISourceSettings` as `NDISourceBlock` but uses an alternative GStreamer-based NDI element (`ndisrcx`).
+
+#### Block info
+
+Name: NDISourceXBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 1 |
+| Output audio | Uncompressed audio | 1 |
+
+#### Settings
+
+The block accepts `NDISourceSettings`. Use the static async factory to create it:
+
+```csharp
+var ndiSettings = await NDISourceSettings.CreateAsync(context, ndiSourceInfo);
+```
+
+Key properties of `NDISourceSettings`:
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `SourceName` | `string` | `""` | Name of the NDI source |
+| `URL` | `string` | `""` | Source URL |
+| `ReceiverName` | `string` | `"VF NDI Receiver"` | Receiver application name |
+| `Bandwidth` | `int` | `100` | −10 metadata only, 10 audio only, 100 full quality |
+| `ColorFormat` | `NDIRecvColorFormat` | `UyvyBgra` | Pixel format for received video |
+| `Timeout` | `TimeSpan` | 5 s | Timeout for detecting disconnection |
+| `ConnectTimeout` | `TimeSpan` | 10 s | Timeout for initial connection |
+| `TimestampMode` | `NDITimestampMode` | `Auto` | Timestamp synchronization mode |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    NDISourceXBlock -- Video --> VideoRendererBlock;
+    NDISourceXBlock -- Audio --> AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var ndiSources = await DeviceEnumerator.Shared.NDISourcesAsync();
+var ndiSourceInfo = ndiSources[0];
+
+var ndiSettings = NDISourceSettings.CreateAsync(ndiSourceInfo);
+
+var ndiSource = new NDISourceXBlock(ndiSettings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(ndiSource.VideoOutput, videoRenderer.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows.
 
 ### GenICam Source Block
 
@@ -1265,6 +1653,107 @@ var screenSourceBlock = new ScreenSourceBlock(new ScreenCaptureDX9SourceSettings
 #### Platforms
 
 Windows, macOS, Linux, iOS.
+
+### Fallback Switch Source Block
+
+The `FallbackSwitchSourceBlock` wraps a primary video source and automatically switches to fallback content when the main source fails or becomes unavailable — ideal for reliable live streaming pipelines.
+
+#### Block info
+
+Name: FallbackSwitchSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 1 |
+| Output audio | Uncompressed audio | 1 |
+
+#### Supported main source types
+
+The first constructor argument is `IVideoSourceSettings`. Supported implementations:
+
+- `RTSPSourceSettings` — RTSP stream
+- `SRTSourceSettings` — SRT stream
+- `NDISourceSettings` — NDI source
+- `RTMPSourceSettings` — RTMP stream
+- `HTTPSourceSettings` — HTTP stream
+
+#### Settings
+
+**`FallbackSwitchSettings`**
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `Enabled` | `bool` | `false` | Enable fallback switching |
+| `Fallback` | `FallbackSwitchSettingsBase` | `null` | Fallback content configuration |
+| `EnableVideo` | `bool` | `true` | Apply fallback to video |
+| `EnableAudio` | `bool` | `true` | Apply fallback to audio |
+| `MinLatencyMs` | `int` | `0` | Minimum latency before switching |
+| `FallbackVideoCaps` | `string` | `null` | Video caps override (e.g., `"video/x-raw,width=1920,height=1080"`) |
+| `FallbackAudioCaps` | `string` | `null` | Audio caps override |
+
+**`FallbackSwitchSettingsBase`** properties (shared by all fallback types):
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `TimeoutMs` | `int` | `5000` | Milliseconds before switching to fallback |
+| `RestartTimeoutMs` | `int` | `5000` | Milliseconds before retrying the main source |
+| `RetryTimeoutMs` | `int` | `60000` | Milliseconds before stopping retries |
+| `ImmediateFallback` | `bool` | `false` | Switch to fallback immediately on error |
+| `RestartOnEos` | `bool` | `false` | Restart main source on end-of-stream |
+| `ManualUnblock` | `bool` | `false` | Require manual `Unblock()` call to resume main source |
+
+**Fallback content types** (set `Fallback` to one of):
+
+- `StaticTextFallbackSettings` — text overlay with configurable font, color, and position
+- `StaticImageFallbackSettings` — displays a static image (file path, scale, aspect ratio options)
+- `MediaBlockFallbackSettings` — plays a fallback URI or custom GStreamer pipeline
+
+**Diagnostic methods:**
+
+- `GetStatus()` — returns current fallback/main source state as a string
+- `GetStatistics()` — returns a dictionary of retry count and buffering statistics
+- `Unblock()` — manually unblocks when `ManualUnblock` is enabled
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    FallbackSwitchSourceBlock -- Video --> VideoRendererBlock;
+    FallbackSwitchSourceBlock -- Audio --> AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var mainSettings = new RTSPSourceSettings(new Uri("rtsp://camera.example.com/stream"));
+
+var fallbackSettings = new FallbackSwitchSettings
+{
+    Enabled = true,
+    Fallback = new StaticTextFallbackSettings
+    {
+        Text = "Stream unavailable",
+        BackgroundColor = SKColors.Black,
+        TextColor = SKColors.White
+    }
+};
+
+var source = new FallbackSwitchSourceBlock(mainSettings, fallbackSettings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(source.VideoOutput, videoRenderer.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(source.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
 
 ### Virtual Video Source Block
 
@@ -1549,6 +2038,140 @@ This block uses SkiaSharp for image decoding, so ensure necessary dependencies a
 
 Windows, macOS, Linux, iOS, Android.
 
+### Text Overlay Source Block
+
+The `TextOverlaySourceBlock` generates a video stream displaying configurable text on a solid background. It uses GStreamer's `videotestsrc` and `textoverlay` elements internally. This block is useful as a placeholder or fallback source — for example, showing "No Signal" when a primary camera is unavailable.
+
+#### Block info
+
+Name: TextOverlaySourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 1 |
+
+#### Settings
+
+The block is configured via `StaticTextFallbackSettings`:
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `Text` | `string` | `"Source Unavailable"` | Text to display |
+| `FontFamily` | `string` | `"Arial"` | Font family name |
+| `FontSize` | `float` | `24` | Font size in points |
+| `FontStyle` | `FontStyle` | `Normal` | Font style (Normal, Bold, Italic, etc.) |
+| `TextColor` | `SKColor` | White | Text color |
+| `BackgroundColor` | `SKColor` | Black | Background fill color |
+| `Position` | `SKPoint` | `(0.5, 0.5)` | Text anchor position as proportion (0–1) |
+| `CenterAlign` | `bool` | `true` | Center-align the text |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    TextOverlaySourceBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new StaticTextFallbackSettings
+{
+    Text = "No Signal",
+    FontSize = 36,
+    TextColor = SKColors.White,
+    BackgroundColor = SKColors.Black
+};
+
+var textSource = new TextOverlaySourceBlock(settings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(textSource.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### Video Mixer Source Block
+
+The `VideoMixerSourceBlock` composites multiple video sources into a single output stream. Each input is placed at a configurable rectangle on the output canvas. During playback the block supports live repositioning, opacity fading, and chroma key removal per input.
+
+The mixer backend is controlled by `VideoMixerType`: CPU (default), OpenGL, or Direct3D 11.
+
+#### Block info
+
+Name: VideoMixerSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 1 |
+
+#### Settings (`VideoMixerSourceSettings`)
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `Width` | `int` | `1920` | Output canvas width in pixels |
+| `Height` | `int` | `1080` | Output canvas height in pixels |
+| `FrameRate` | `VideoFrameRate` | `FPS_30` | Output frame rate |
+| `MixerType` | `VideoMixerType` | `CPU` | Rendering backend (CPU, OpenGL, D3D11) |
+
+Use `settings.Add(source, rect)` or `settings.Add(source, left, top, width, height)` to register each input source and its bounding rectangle on the canvas.
+
+#### Runtime control
+
+The block implements `IVideoMixerControl` for live updates:
+
+- `Input_Move(id, rect, duration, startAlpha, endAlpha)` — animate position and opacity
+- `Input_Update(stream)` — update stream properties
+- `Input_UpdateChromaKeySettings(id, settings)` — change chroma key
+- `StartFadeIn(id, duration)` / `StartFadeOut(id, duration)` — fade controls
+- `Input_List()` — enumerate all input streams
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    Source1-->VideoMixerSourceBlock;
+    Source2-->VideoMixerSourceBlock;
+    VideoMixerSourceBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new VideoMixerSourceSettings(1920, 1080, VideoFrameRate.FPS_30);
+
+// Add a file source on the left half
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("source1.mp4")));
+settings.Add(fileSource, new Rect(0, 0, 960, 1080));
+
+// Add a webcam on the right half
+var videoSource = new SystemVideoSourceBlock(videoSourceSettings);
+settings.Add(videoSource, new Rect(960, 0, 960, 1080));
+
+var mixer = new VideoMixerSourceBlock(pipeline, settings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(mixer.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+`VideoMixerSourceBlock.IsAvailable()` returns `true` if the required GStreamer compositor elements are available.
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
 ## Push Source Blocks
 
 Push Source blocks allow you to feed media data (video, audio, JPEG images, or generic data) directly into the Media Blocks pipeline from your application code. This is useful when your media originates from a custom source, such as a proprietary capture device, a network stream not supported by built-in blocks, or procedurally generated content.
@@ -1569,7 +2192,7 @@ Allows pushing raw video frames into the pipeline.
 
 #### Block info
 
-Name: `PushSourceBlock` (configured for video).
+Name: PushVideoSourceBlock.
 
 | Pin direction | Media type         | Pins count |
 |---------------|:--------------------:|:----------:|
@@ -1608,19 +2231,17 @@ var videoPushSettings = new PushVideoSourceSettings(
     format: VideoFormatX.RGB);
 // videoPushSettings.IsLive = true; // Default
 
-var videoPushSource = new PushSourceBlock(videoPushSettings);
+var videoPushSource = new PushVideoSourceBlock(videoPushSettings);
 
-// Example: Render the pushed video
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(videoPushSource.Output, videoRenderer.Input);
 
-// Start pipeline
 await pipeline.StartAsync();
 
-// In a separate thread or task, push video frames:
-// byte[] frameData = ... ; // Your raw RGB frame data (640 * 480 * 3 bytes)
-// videoPushSource.PushFrame(frameData); 
-// Call PushFrame repeatedly for each new video frame.
+// Push frames from your application:
+// var frame = new VideoFrameX(...);
+// videoPushSource.PushFrame(frame);
+// videoPushSource.ClearQueue(); // Clear buffered frames if needed
 ```
 
 #### Platforms
@@ -1633,7 +2254,7 @@ Allows pushing raw audio samples into the pipeline.
 
 #### Block info
 
-Name: `PushSourceBlock` (configured for audio).
+Name: PushAudioSourceBlock.
 
 | Pin direction | Media type         | Pins count |
 |---------------|:--------------------:|:----------:|
@@ -1670,19 +2291,17 @@ var audioPushSettings = new PushAudioSourceSettings(
     channels: 2, 
     format: AudioFormatX.S16LE);
 
-var audioPushSource = new PushSourceBlock(audioPushSettings);
+var audioPushSource = new PushAudioSourceBlock(audioPushSettings);
 
-// Example: Render the pushed audio
 var audioRenderer = new AudioRendererBlock();
 pipeline.Connect(audioPushSource.Output, audioRenderer.Input);
 
-// Start pipeline
 await pipeline.StartAsync();
 
-// In a separate thread or task, push audio samples:
-// byte[] audioData = ... ; // Your raw PCM S16LE audio data
-// audioPushSource.PushFrame(audioData); 
-// Call PushFrame repeatedly for new audio data.
+// Push audio data from your application:
+// var frame = new AudioFrame(...);
+// audioPushSource.PushData(frame);
+// Or raw bytes: audioPushSource.PushData(audioData, audioData.Length);
 ```
 
 #### Platforms
@@ -2087,3 +2706,671 @@ await pipeline.StartAsync();
 #### Platforms
 
 macOS (not available on iOS)
+
+---
+
+### Blu-Ray Source Block
+
+The `BluRaySourceBlock` reads video, audio, and optional subtitle streams from a Blu-Ray disc or Blu-Ray disc image folder using GStreamer's `bluray` element.
+
+#### Block info
+
+Name: BluRaySourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 0 or 1 |
+| Output audio | Uncompressed audio | 0 or 1 |
+| Output subtitle | Subtitle | 0 or 1 |
+
+#### Settings
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `Location` | `string` | required | Path to Blu-Ray device or disc image folder |
+| `Title` | `int` | `-1` | Title to play (−1 = main/longest title) |
+| `RenderVideo` | `bool` | `true` | Enable video output pad |
+| `RenderAudio` | `bool` | `true` | Enable audio output pad |
+| `RenderSubtitle` | `bool` | `false` | Enable subtitle output pad |
+| `AudioStream` | `int` | `-1` | Audio stream index (−1 = default) |
+| `SubtitleStream` | `int` | `-1` | Subtitle stream index (−1 = default) |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    BluRaySourceBlock -- Video --> VideoRendererBlock;
+    BluRaySourceBlock -- Audio --> AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new BluRaySourceSettings("/dev/sr0")
+{
+    Title = -1,
+    RenderVideo = true,
+    RenderAudio = true
+};
+
+var source = new BluRaySourceBlock(settings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(source.VideoOutput, videoRenderer.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(source.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+```csharp
+bool available = BluRaySourceBlock.IsAvailable();
+```
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+---
+
+### DVB Source Block
+
+The `DVBSourceBlock` captures a live digital television stream from a DVB adapter (DVB-T, DVB-C, DVB-S, DVB-S2, or ISDB-T). The block tunes to the specified channel and outputs a raw MPEG-TS stream.
+
+#### Block info
+
+Name: DVBSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | MPEG-TS stream | 1 |
+
+#### Settings
+
+`DVBSourceSettings` contains extensive tuning parameters. Core properties:
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `AdapterID` | `int` | `0` | DVB adapter device index |
+| `FrontendID` | `int` | `0` | Frontend device index |
+| `DeliverySystem` | `DVBDeliverySystem` | Undefined | DVB-T / DVB-C / DVB-S / DVB-S2 / ISDB-T |
+| `Frequency` | `uint` | `0` | Center frequency in Hz (or kHz for satellite) |
+| `Pids` | `string` | `"8192"` | PID filter list (8192 = full transport stream) |
+| `Modulation` | `DVBModulation` | QAM_16 | Modulation scheme |
+| `SymbolRate` | `uint` | `0` | Symbol rate in kBd (satellite) |
+| `BandwidthHZ` | `uint` | `0` | Channel bandwidth in Hz (DVB-T) |
+
+Additional properties cover guard interval, transmission mode, hierarchy, code rates, LNB configuration, DiSEqC, ISDB-T layer parameters, and tuning timeouts.
+
+Events fired during tuning: `TuningStart`, `TuningDone`, `TuningFail`.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    DVBSourceBlock-->DecodeBinBlock;
+    DecodeBinBlock -- Video --> VideoRendererBlock;
+    DecodeBinBlock -- Audio --> AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new DVBSourceSettings
+{
+    AdapterID = 0,
+    DeliverySystem = DVBDeliverySystem.DVBT,
+    Frequency = 506000000,
+    BandwidthHZ = 8000000
+};
+
+var dvb = new DVBSourceBlock(settings);
+dvb.TuningDone += (s, e) => Console.WriteLine("Tuning complete");
+
+// Decode the MPEG-TS stream
+var decoder = new DecodeBinBlock();
+pipeline.Connect(dvb.VideoOutput, decoder.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(decoder.VideoOutput, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+```csharp
+bool available = DVBSourceBlock.IsAvailable();
+```
+
+#### Platforms
+
+Windows, Linux.
+
+---
+
+### PulseAudio Source Block
+
+The `PulseAudioSourceBlock` captures audio from a PulseAudio device on Linux. It implements `IAudioVolumeMute` for real-time volume and mute control.
+
+#### Block info
+
+Name: PulseAudioSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output audio | Uncompressed audio | 1 |
+
+#### Settings
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `Device` | `AudioCaptureDeviceInfo` | — | Capture device (from device enumerator) |
+| `Format` | `AudioCaptureDeviceFormat` | — | Audio format (sample rate, channels, bit depth) |
+| `DeviceName` | `string` | `null` | PulseAudio device name (null = system default) |
+| `ClientName` | `string` | `"VisioForge"` | Name shown in audio control applications |
+| `ProvideClock` | `bool` | `true` | Provide clock for the pipeline |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    PulseAudioSourceBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Enumerate PulseAudio devices
+var devices = await DeviceEnumerator.Shared.AudioSourcesAsync();
+var device = devices[0];
+var format = device.Formats[0];
+
+var settings = new PulseAudioSourceSettings(device, format);
+var audioSource = new PulseAudioSourceBlock(settings);
+
+// Optional: control volume at runtime
+audioSource.SetVolume(0.8);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(audioSource.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+```csharp
+bool available = PulseAudioSourceBlock.IsAvailable();
+```
+
+#### Platforms
+
+Linux.
+
+---
+
+### Raspberry Pi Source Block
+
+The `RaspberryPiSourceBlock` captures video from the Raspberry Pi Camera Module using the `rpicamsrc` GStreamer element. It outputs H.264-encoded video and supports camera controls including rotation, flip, and image adjustments.
+
+#### Block info
+
+Name: RaspberryPiSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | H.264 video | 1 |
+
+#### Settings
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `CameraNumber` | `int` | `0` | Camera index for multi-camera setups |
+| `Width` | `uint` | `1920` | Capture width in pixels |
+| `Height` | `uint` | `1080` | Capture height in pixels |
+| `FrameRate` | `VideoFrameRate` | FPS_30 | Capture frame rate |
+| `Bitrate` | `uint` | `17000000` | H.264 bitrate in bps |
+| `Rotation` | `int` | `0` | Rotation in degrees: 0, 90, 180, 270 |
+| `HorizontalFlip` | `bool` | `false` | Flip image horizontally |
+| `VerticalFlip` | `bool` | `false` | Flip image vertically |
+| `Brightness` | `int` | `50` | Brightness: 0–100 |
+| `Contrast` | `int` | `0` | Contrast: −100 to 100 |
+| `Saturation` | `int` | `0` | Saturation: −100 to 100 |
+| `ISO` | `uint` | `0` | ISO sensitivity (0 = auto) |
+| `ExposureMode` | `string` | `"auto"` | Exposure mode (auto, night, sports, etc.) |
+| `AWBMode` | `string` | `"auto"` | Auto white balance mode |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    RaspberryPiSourceBlock-->H264DecoderBlock;
+    H264DecoderBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new RaspberryPiSourceSettings
+{
+    Width = 1920,
+    Height = 1080,
+    FrameRate = VideoFrameRate.FPS_30,
+    Rotation = 0,
+    Bitrate = 17000000
+};
+
+var camera = new RaspberryPiSourceBlock(settings);
+
+// Decode H.264 output before rendering
+var decoder = new H264DecoderBlock();
+pipeline.Connect(camera.Output, decoder.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(decoder.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+```csharp
+bool available = RaspberryPiSourceBlock.IsAvailable();
+```
+
+#### Platforms
+
+Linux (Raspberry Pi).
+
+---
+
+### GStreamer PlayBin Source Block
+
+The `PlayBinSourceBlock` plays back media using GStreamer's built-in `playbin` element. It accepts the same `UniversalSourceSettings` as `UniversalSourceBlock` but delegates the entire decoding pipeline to GStreamer's high-level playback engine.
+
+#### Block info
+
+Name: PlayBinSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 0 or 1 |
+| Output audio | Uncompressed audio | 0 or 1 |
+| Output subtitle | Subtitle | 0 or 1 |
+
+#### Settings
+
+Uses `UniversalSourceSettings`. Key properties:
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `URI` | `Uri` | required | Media source URI |
+| `RenderVideo` | `bool` | `true` | Enable video output pad |
+| `RenderAudio` | `bool` | `true` | Enable audio output pad |
+| `RenderSubtitle` | `bool` | `false` | Enable subtitle output pad |
+| `StartPosition` | `TimeSpan?` | `null` | Playback start position |
+| `StopPosition` | `TimeSpan?` | `null` | Playback stop position |
+| `VideoCustomFrameRate` | `VideoFrameRate?` | `null` | Override output frame rate |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    PlayBinSourceBlock -- Video --> VideoRendererBlock;
+    PlayBinSourceBlock -- Audio --> AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = await UniversalSourceSettings.CreateAsync(new Uri("file:///video.mp4"));
+var source = new PlayBinSourceBlock(settings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(source.VideoOutput, videoRenderer.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(source.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, Android, iOS.
+
+---
+
+### Basic File Source Block
+
+The `BasicFileSourceBlock` reads raw binary data from a file and exposes it as a single output pad. An optional type-find stage can detect the stream format automatically so it can be connected to a demuxer or decoder.
+
+#### Block info
+
+Name: BasicFileSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output | Auto (raw data) | 1 |
+
+#### Parameters
+
+| Parameter | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `filename` | `string` | — | Path to the source file |
+| `addTypeFind` | `bool` | `false` | Add a type-find element for automatic format detection |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    BasicFileSourceBlock-->DecodeBinBlock;
+    DecodeBinBlock -- Video --> VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Read file with automatic type detection
+var fileSource = new BasicFileSourceBlock("video.ts", addTypeFind: true);
+
+var decoder = new DecodeBinBlock();
+pipeline.Connect(fileSource.Output, decoder.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(decoder.VideoOutput, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+```csharp
+bool available = BasicFileSourceBlock.IsAvailable();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, Android, iOS.
+
+---
+
+### Custom Mixer Source Block
+
+The `CustomMixerSourceBlock` is a push-based source that accepts externally provided video and audio frames via managed queues, exposing them as live output pads. It is designed for custom mixing and compositing pipelines where frames originate from application code.
+
+#### Block info
+
+Name: CustomMixerSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 1 |
+| Output audio | Uncompressed audio | 1 |
+
+#### Settings
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `Width` | `int` | `1920` | Video width in pixels |
+| `Height` | `int` | `1080` | Video height in pixels |
+| `VideoFormat` | `VideoFormatX` | BGRA | Video pixel format |
+| `FrameRate` | `VideoFrameRate` | 30 fps | Output frame rate |
+| `AudioFormat` | `AudioFormatX` | S16LE | Audio sample format |
+| `AudioSampleRate` | `int` | `48000` | Audio sample rate in Hz |
+| `AudioChannels` | `int` | `2` | Number of audio channels |
+| `IsLive` | `bool` | `true` | Mark source as live |
+| `DoTimestamp` | `bool` | `true` | Automatically timestamp pushed buffers |
+| `EnableThreadedPush` | `bool` | `true` | Push frames from a dedicated thread |
+| `ManagedQueueMaxBuffers` | `int` | `4` | Maximum queued frames before dropping |
+
+#### Events
+
+- `QueueDropped` — fired when the managed queue drops a buffer due to backpressure.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    CustomMixerSourceBlock -- Video --> VideoRendererBlock;
+    CustomMixerSourceBlock -- Audio --> AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new CustomMixerSourceSettings
+{
+    Width = 1280,
+    Height = 720,
+    FrameRate = VideoFrameRate.FPS_30,
+    AudioSampleRate = 48000,
+    AudioChannels = 2
+};
+
+var mixerSource = new CustomMixerSourceBlock(settings);
+mixerSource.QueueDropped += (s, e) => Console.WriteLine("Buffer dropped");
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(mixerSource.VideoOutput, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+```csharp
+bool available = CustomMixerSourceBlock.IsAvailable();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, Android, iOS.
+
+---
+
+### Image Video Source Cairo Block
+
+The `ImageVideoSourceCairoBlock` renders a static or animated image (including animated GIFs) as a continuous video stream using the Cairo 2D graphics library. Unlike the standard image source, the output frame size is specified explicitly via a `Size` constructor parameter.
+
+#### Block info
+
+Name: ImageVideoSourceCairoBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 1 |
+
+#### Constructor parameters
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `pipeline` | `MediaBlocksPipeline` | Owning pipeline |
+| `settings` | `ImageVideoSourceSettings` | Image source settings |
+| `videoSize` | `Size` | Output frame dimensions in pixels |
+
+#### Settings (ImageVideoSourceSettings)
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `Filename` | `string` | required | Path to the image file |
+| `FrameRate` | `VideoFrameRate` | 10 fps | Output frame rate |
+| `IsLive` | `bool` | `false` | Mark source as live |
+| `NumBuffers` | `int` | `-1` | Frames to output (−1 = unlimited) |
+| `AnimationInfiniteLoop` | `bool` | `true` | Loop animated images infinitely |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    ImageVideoSourceCairoBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new ImageVideoSourceSettings("image.png")
+{
+    FrameRate = VideoFrameRate.FPS_30,
+    IsLive = true
+};
+
+var imageSource = new ImageVideoSourceCairoBlock(pipeline, settings, new Size(1920, 1080));
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(imageSource.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux.
+
+---
+
+### Universal Source Block Mini
+
+The `UniversalSourceBlockMini` is a lightweight variant of `UniversalSourceBlock` using the same `UniversalSourceSettings`. It uses a simplified internal pipeline suited for low-resource environments or scenarios where the full decoding engine overhead is undesirable.
+
+#### Block info
+
+Name: UniversalSourceBlockMini.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 0 or 1 |
+| Output audio | Uncompressed audio | 0 or 1 |
+| Output subtitle | Subtitle | 0 or 1 |
+
+#### Settings
+
+Uses `UniversalSourceSettings` — the same class as `UniversalSourceBlock`.
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `URI` | `Uri` | required | Media source URI |
+| `RenderVideo` | `bool` | `true` | Enable video output |
+| `RenderAudio` | `bool` | `true` | Enable audio output |
+| `RenderSubtitle` | `bool` | `false` | Enable subtitle output |
+| `StartPosition` | `TimeSpan?` | `null` | Playback start position |
+| `StopPosition` | `TimeSpan?` | `null` | Playback stop position |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlockMini -- Video --> VideoRendererBlock;
+    UniversalSourceBlockMini -- Audio --> AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = await UniversalSourceSettings.CreateAsync(new Uri("file:///video.mp4"));
+var source = new UniversalSourceBlockMini(settings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(source.VideoOutput, videoRenderer.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(source.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+```csharp
+bool available = UniversalSourceBlockMini.IsAvailable();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, Android, iOS.
+
+---
+
+### Universal Source Block V2
+
+The `UniversalSourceBlockV2` is an advanced multi-stream media source that exposes separate output pad lists for video, audio, subtitle, and metadata streams. It is suited for complex media files with multiple tracks and scenarios requiring per-stream decoder control.
+
+#### Block info
+
+Name: UniversalSourceBlockV2.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed video | 0…N |
+| Output audio | Uncompressed audio | 0…N |
+| Output subtitle | Subtitle | 0…N |
+| Output metadata | Metadata | 0…N |
+
+#### Settings (UniversalSourceSettingsV2)
+
+| Property | Type | Default | Description |
+| --- | --- | :---: | --- |
+| `URI` | `Uri` | required | Media source URI |
+| `RenderVideo` | `bool` | `true` | Enable video output pads |
+| `RenderAudio` | `bool` | `true` | Enable audio output pads |
+| `RenderSubtitle` | `bool` | `false` | Enable subtitle output pads |
+| `StartPosition` | `TimeSpan?` | `null` | Playback start position |
+| `StopPosition` | `TimeSpan?` | `null` | Playback stop position |
+| `VideoCustomFrameRate` | `VideoFrameRate?` | `null` | Override output frame rate |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlockV2 -- Video --> VideoRendererBlock;
+    UniversalSourceBlockV2 -- Audio --> AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var settings = new UniversalSourceSettingsV2(new Uri("file:///multi_track.mkv"))
+{
+    RenderVideo = true,
+    RenderAudio = true
+};
+
+var source = new UniversalSourceBlockV2(settings);
+
+// Access first video and audio streams
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(source.VideoOutput, videoRenderer.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(source.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, Android, iOS.

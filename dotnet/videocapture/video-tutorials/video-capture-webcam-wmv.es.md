@@ -1,5 +1,5 @@
 ---
-title: Captura de Webcam a WMV en .NET
+title: Captura de video de webcam a WMV en C# - Tutorial .NET
 description: Implementa captura de video de webcam a formato WMV en .NET con instrucciones paso a paso, ejemplos de código C# y mejores prácticas de integración.
 ---
 

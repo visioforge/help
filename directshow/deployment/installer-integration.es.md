@@ -1,5 +1,5 @@
 ---
-title: Integración con Instaladores para SDKs DirectShow
+title: Desplegar Filtros DirectShow con WiX, NSIS e Inno Setup
 description: Integre filtros DirectShow en instaladores WiX, NSIS, InstallShield con acciones personalizadas, registro y gestión de dependencias.
 ---
 

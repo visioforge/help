@@ -1,5 +1,5 @@
 ---
-title: Notas de Versión del SDK de Video Fingerprinting
+title: Video Fingerprinting SDK - Historial completo de versiones
 description: Evolución del SDK de Video Fingerprinting: historial de versiones con nuevas características, actualizaciones de rendimiento y mejoras técnicas.
 ---
 

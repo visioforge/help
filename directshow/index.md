@@ -1,5 +1,5 @@
 ---
-title: DirectShow SDKs & Filters for Video Processing
+title: DirectShow Filters for Video Playback, Encoding and More
 description: DirectShow filters and SDKs for video playback, processing, encoding, and multimedia application development with VLC and FFMPEG support.
 sidebar_label: DirectShow SDKs and filters
 order: 19

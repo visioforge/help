@@ -1,5 +1,5 @@
 ---
-title: .Net Live Video Compositor
+title: Live Video Compositor for Real-Time Mixing in C# .NET
 description: Composite multiple live video and audio sources in real-time with dynamic add/remove capabilities for streaming and recording applications.
 sidebar_label: Live Video Compositor
 ---

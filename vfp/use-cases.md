@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprinting Use Cases and Applications
+title: Video Fingerprinting Use Cases: Copyright and Monitoring
 description: Explore real-world applications of video fingerprinting technology including copyright protection, broadcast monitoring, and content management.
 ---
 

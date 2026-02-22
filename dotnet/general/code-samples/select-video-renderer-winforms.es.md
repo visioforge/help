@@ -1,5 +1,5 @@
 ---
-title: Renderizador de Video en WinForms .NET
+title: Renderizador de Video en WinForms: EVR, VMR9 y DirectShow
 description: Elige y optimiza renderizadores de video DirectShow (VideoRenderer, VMR9, EVR) para aplicaciones WinForms con técnicas de optimización de rendimiento.
 ---
 

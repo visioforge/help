@@ -1,6 +1,6 @@
 ---
-title: Referencia de Efectos de Audio
-description: Guía completa de efectos de audio en VisioForge SDKs. Incluye volumen, ecualización, eco, reverberación, compresión y más efectos para procesamiento de audio multiplataforma.
+title: Efectos de Audio en .NET: EQ, Eco, Reverb y Filtros
+description: Referencia de efectos de audio en VisioForge .NET: volumen, EQ, eco, reverb, compresión, filtros y más para procesamiento multiplataforma.
 sidebar_label: Referencia de Efectos de Audio
 ---
 

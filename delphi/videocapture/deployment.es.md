@@ -1,5 +1,5 @@
 ---
-title: Guía de Despliegue de TVFVideoCapture para Delphi
+title: Despliegue de TVFVideoCapture en Delphi - Guía Completa
 description: Desplegar TVFVideoCapture en Delphi - instalar componentes, registrar filtros DirectShow, configurar entorno para despliegue exitoso de aplicaciones.
 ---
 

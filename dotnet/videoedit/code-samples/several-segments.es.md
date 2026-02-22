@@ -1,5 +1,5 @@
 ---
-title: Múltiples Segmentos desde un Archivo de Video
+title: Extraer y combinar segmentos de video en C# con .NET
 description: Extrae y combina múltiples segmentos del mismo archivo de video o audio en C# con guía paso a paso y ejemplos de código para .NET.
 ---
 

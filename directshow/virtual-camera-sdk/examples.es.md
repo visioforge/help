@@ -1,5 +1,5 @@
 ---
-title: SDK de Cámara Virtual - Ejemplos de Código
+title: SDK de Cámara Virtual DirectShow - Ejemplos de Código
 description: Ejemplos de código del SDK de Cámara Virtual para transmitir a dispositivos de cámara virtual y leer desde cámaras virtuales con renderizado cuadro por cuadro.
 ---
 

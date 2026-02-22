@@ -1,5 +1,5 @@
 ---
-title: Captura ONVIF a MP4 con Postprocesamiento
+title: Captura de video ONVIF a MP4 con postprocesamiento
 description: Capturar video desde cámaras IP ONVIF y aplicar efectos de procesamiento de video como redimensionamiento, ajuste de brillo y filtros antes de guardar en MP4.
 ---
 

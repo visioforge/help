@@ -1,5 +1,5 @@
 ---
-title: Multiple Output Video Screens in WPF Applications
+title: WPF Multiple Video Screens - C# Multi-Display Guide
 description: Create multi-display video applications in WPF with Image controls, event handling, memory management, and performance optimization techniques.
 ---
 

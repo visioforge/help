@@ -1,5 +1,5 @@
 ---
-title: Video Processing & Effects Blocks for .Net
+title: Video Processing and Effects Blocks in Media Blocks SDK
 description: Apply color adjustments, deinterlacing, overlays, geometric transformations, and real-time visual effects in Media Blocks SDK pipelines.
 sidebar_label: Video Processing and Effects
 
@@ -32,6 +32,7 @@ sidebar_label: Video Processing and Effects
 - [Key Frame Detector](#key-frame-detector)
 - [LUT Processor](#lut-processor)
 - [Mirror](#mirror)
+- [Motion Detection](#motion-detection)
 - [Moving Blur](#moving-blur)
 - [Moving Echo](#moving-echo)
 - [Moving Zoom Echo](#moving-zoom-echo)
@@ -55,7 +56,7 @@ sidebar_label: Video Processing and Effects
 - [Video sample grabber](#video-sample-grabber)
 - [Sphere](#sphere)
 - [Square](#square)
-- [Squeezeback](#squeezeback)
+- [Pan Zoom](#pan-zoom)
 - [Stretch](#stretch)
 - [Text overlay](#text-overlay)
 - [Tunnel](#tunnel)
@@ -2099,7 +2100,7 @@ var squareBlock = new SquareBlock(new SquareVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, squareBlock.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(squareBlock.Output, videoRenderer.Input);            
+pipeline.Connect(squareBlock.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 ```
@@ -2108,27 +2109,63 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Squeezeback
+## Pan Zoom
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-The Squeezeback block creates dynamic picture-in-picture effects by scaling and positioning video content with configurable transitions and layouts. Note: For advanced use cases, see SqueezebackBlockV2.
+The `PanZoomBlock` applies pan and zoom transformations to a video stream using Cairo-based rendering via the GStreamer `cairooverlay` element. The block supports static and animated (time-interpolated) pan and zoom, as well as mapping video to an arbitrary target rectangle.
 
 ### Block info
 
-Name: SqueezebackBlock.
+Name: PanZoomBlock.
 
 Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed video | 1
 Output | Uncompressed video | 1
 
+### Settings
+
+The block accepts no constructor parameters. Transformations are configured by calling methods on the block instance:
+
+Method | Settings class | Description
+--- | --- | ---
+`SetZoom(settings)` | `VideoStreamZoomSettings` | Apply a static zoom centered at a point
+`SetDynamicZoom(settings)` | `VideoStreamDynamicZoomSettings` | Animate zoom between start and stop values over time
+`SetPan(settings)` | `VideoStreamPanSettings` | Translate the video by a pixel offset
+`SetDynamicPan(settings)` | `VideoStreamDynamicPanSettings` | Animate pan between start and stop positions over time
+`SetRect(settings)` | `VideoStreamRectSettings` | Map video to a target rectangle (takes precedence over zoom/pan)
+
+**`VideoStreamZoomSettings`**
+
+Property | Type | Default | Description
+--- | --- | :---: | ---
+`ZoomX` | `double` | `1.0` | Horizontal zoom factor
+`ZoomY` | `double` | `1.0` | Vertical zoom factor
+`CenterX` | `double` | `0.5` | Horizontal zoom center (0.0–1.0)
+`CenterY` | `double` | `0.5` | Vertical zoom center (0.0–1.0)
+`Enabled` | `bool` | `true` | Enable or disable this transformation
+
+**`VideoStreamPanSettings`**
+
+Property | Type | Default | Description
+--- | --- | :---: | ---
+`PanX` | `double` | `0.0` | Horizontal offset in pixels
+`PanY` | `double` | `0.0` | Vertical offset in pixels
+`Enabled` | `bool` | `true` | Enable or disable this transformation
+
+`VideoStreamDynamicZoomSettings` extends the static zoom with `StartTime`/`StopTime` (`TimeSpan`) and start/stop zoom and center values, linearly interpolated during playback.
+
+`VideoStreamDynamicPanSettings` extends the static pan with `StartTime`/`StopTime` and start/stop pan values, linearly interpolated during playback.
+
+`VideoStreamRectSettings` maps the video to a `TargetRect` (`Rect`). When enabled, this takes precedence over zoom and pan settings.
+
 ### The sample pipeline
 
 ```mermaid
 graph LR;
-    UniversalSourceBlock-->SqueezebackBlock;
-    SqueezebackBlock-->VideoRendererBlock;
+    UniversalSourceBlock-->PanZoomBlock;
+    PanZoomBlock-->VideoRendererBlock;
 ```
 
 ### Sample code
@@ -2136,26 +2173,23 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var mainSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("main.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
 
-// Get video info
-var videoInfo = mainSource.GetInfo().VideoStreams[0];
-var videoFrameInfo = new VideoFrameInfoX(videoInfo.Width, videoInfo.Height, VideoFormatX.NV12);
+var panZoom = new PanZoomBlock();
+panZoom.SetZoom(new VideoStreamZoomSettings(zoomX: 2.0, zoomY: 2.0, centerX: 0.5, centerY: 0.5));
+panZoom.SetPan(new VideoStreamPanSettings(panX: -100, panY: 0));
 
-// Setup image overlay for background
-var imageSettings = new ImageOverlaySettings("background.jpg");
-
-// Define video rectangle for PIP effect
-var videoRect = new Rect(10, 10, 320, 240);
-
-var squeezeback = new SqueezebackBlock(pipeline, videoFrameInfo, imageSettings, videoRect);
-pipeline.Connect(mainSource.VideoOutput, squeezeback.Input);
+pipeline.Connect(fileSource.VideoOutput, panZoom.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(squeezeback.Output, videoRenderer.Input);
+pipeline.Connect(panZoom.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 ```
+
+### Availability
+
+`PanZoomBlock.IsAvailable()` returns `true` if the GStreamer `cairooverlay` element is available.
 
 ### Platforms
 
@@ -3228,3 +3262,78 @@ await pipeline.StartAsync();
 ### Platforms
 
 Windows (Direct3D 11 required).
+
+---
+
+## Motion Detection
+
+[!button text="Learn more about the SDK" variant="info" target="blank" icon="rocket"](https://www.visioforge.com/media-blocks-sdk)
+
+`MotionDetectionBlock` analyzes consecutive video frames to detect motion using a frame-differencing algorithm. It produces a per-frame intensity level (0–100) and a spatial grid matrix via the `OnMotionDetected` event. Frames pass through the block unchanged.
+
+### Block info
+
+Name: MotionDetectionBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | Uncompressed video | 1 |
+| Output | Uncompressed video | 1 |
+
+### Settings
+
+`MotionDetectionBlockSettings` configures the detection algorithm:
+
+| Property | Type | Default | Description |
+| --- | :---: | :---: | --- |
+| `MotionThreshold` | `int` | `5` | Minimum motion level (0–100) required to fire the event |
+| `CompareGreyscale` | `bool` | `true` | Compare frames using greyscale averaging |
+| `GridWidth` | `int` | `8` | Number of horizontal cells in the motion matrix |
+| `GridHeight` | `int` | `8` | Number of vertical cells in the motion matrix |
+
+The `OnMotionDetected` event provides:
+
+- `Level` — overall motion intensity (0–100)
+- `Matrix` — `byte[]` of size `GridWidth × GridHeight`, per-cell motion intensity
+
+The event fires only when `Level >= MotionThreshold`. Event handlers run on a GStreamer background thread and must be thread-safe.
+
+### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->MotionDetectionBlock;
+    MotionDetectionBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var motionSettings = new MotionDetectionBlockSettings
+{
+    MotionThreshold = 10,
+    GridWidth = 8,
+    GridHeight = 8
+};
+var motionDetector = new MotionDetectionBlock(motionSettings);
+motionDetector.OnMotionDetected += (sender, e) =>
+{
+    Console.WriteLine($"Motion level: {e.Level}");
+};
+
+pipeline.Connect(fileSource.VideoOutput, motionDetector.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(motionDetector.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux.

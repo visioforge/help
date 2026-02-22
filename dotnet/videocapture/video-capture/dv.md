@@ -1,5 +1,5 @@
 ---
-title: Video Capture to DV Format in .NET Applications
+title: DV Video Capture and Encoding in C# .NET Applications
 description: Implement DV video capture in .NET apps with recompression and direct capture methods using code examples and best practices.
 ---
 

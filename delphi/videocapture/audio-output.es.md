@@ -1,5 +1,5 @@
 ---
-title: Dispositivo de Salida de Audio en Delphi
+title: Salida de Audio en Delphi: Dispositivos, Volumen y Balance
 description: Seleccionar dispositivos de salida de audio en Delphi - enumerar dispositivos, controlar volumen, ajustar balance con ejemplos de código para Delphi, C++ y VB6.
 ---
 

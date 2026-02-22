@@ -1,5 +1,5 @@
 ---
-title: Processing Filters Pack - Code Examples
+title: DirectShow Video Effects, Mixer, and Chroma Key Examples
 description: Code examples for Video Effects, Video Mixer, and Chroma Key filters in C++, C#, and VB.NET with DirectShow integration.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: TVFVideoCapture for Delphi Developers
+title: Video Capture ActiveX for Delphi with TVFVideoCapture
 description: Professional Delphi video capture library - capture from devices, process video, and integrate with ActiveX. API docs, tutorials, and examples.
 sidebar_label: TVFVideoCapture
 ---

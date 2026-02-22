@@ -1,5 +1,5 @@
 ---
-title: Implementing Mouse Wheel Events in .NET SDKs
+title: Mouse Wheel Event Handling in .NET Video Applications
 description: Handle mouse wheel events in .NET video apps for zooming, scrolling, and timeline navigation with best practices and optimization techniques.
 ---
 

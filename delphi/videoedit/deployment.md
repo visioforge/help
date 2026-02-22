@@ -1,5 +1,5 @@
 ---
-title: TVFVideoEdit Library Deployment Guide
+title: Deploy TVFVideoEdit in Delphi and ActiveX Applications
 description: Deploy TVFVideoEdit in Delphi and ActiveX applications with automatic installers or manual setup for required components and dependencies.
 ---
 

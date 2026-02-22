@@ -1,5 +1,5 @@
 ---
-title: Ejemplos de Código Esenciales del SDK .NET
+title: Ejemplos de Código SDK .NET Esenciales para Developers
 description: Ejemplos de código para filtros DirectShow, procesamiento audio/video, renderizado y manipulación de medios en apps .NET con C# y VB.
 sidebar_label: Ejemplos de Código
 

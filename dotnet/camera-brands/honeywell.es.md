@@ -1,5 +1,5 @@
 ---
-title: Cómo Conectar una Cámara IP Honeywell en C# .NET
+title: Honeywell - URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecta cámaras Honeywell Performance Series y equIP en C# .NET con patrones de URL RTSP y ejemplos de código para modelos HD, HDZ, HBD, HBW y PSIA.
 ---
 

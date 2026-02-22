@@ -1,5 +1,5 @@
 ---
-title: Cómo conectar una cámara IP CP Plus en C# .NET
+title: Cámaras IP CP Plus: guía de conexión RTSP en C# .NET
 description: Conecte cámaras CP Plus en C# .NET con patrones de URL RTSP y ejemplos de código para modelos de las series UNC, NC, RNP, Guard+ y Cosmic.
 ---
 

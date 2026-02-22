@@ -1,5 +1,5 @@
 ---
-title: Superposiciones de Texto Avanzadas en Video .NET
+title: Superposiciones de texto en video con VisioForge .NET SDK
 description: Cree superposiciones de texto dinámicas con control de fuente, color, posición, rotación y animación para marcas de tiempo, subtítulos y branding en video .NET.
 ---
 

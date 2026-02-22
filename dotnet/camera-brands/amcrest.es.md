@@ -1,5 +1,5 @@
 ---
-title: Cómo Conectar una Cámara IP Amcrest en C# .NET
+title: Amcrest: URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecta cámaras Amcrest en C# .NET con patrones de URL RTSP y ejemplos de código para modelos IP2M, IP4M, IP5M, IP8M y NVR.
 ---
 

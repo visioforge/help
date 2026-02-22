@@ -1,5 +1,5 @@
 ---
-title: How to Connect to Basler IP Camera in C# .NET
+title: Basler IP Camera RTSP URL Connection Guide for C# .NET
 description: Connect to Basler BIP2 IP cameras in C# .NET with RTSP URL patterns and code samples. Includes notes on machine vision vs IP security camera protocols.
 ---
 

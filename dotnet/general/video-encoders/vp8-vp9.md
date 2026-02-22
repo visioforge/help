@@ -1,5 +1,5 @@
 ---
-title: VP8 and VP9 Encoders in VisioForge .NET
+title: VP8 and VP9 Video Encoding: Configuration and Tuning
 description: Configure VP8 and VP9 video encoders for optimal streaming, recording, and processing performance in VisioForge .NET applications.
 ---
 

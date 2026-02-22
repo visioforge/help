@@ -1,5 +1,5 @@
 ---
-title: Video Edit SDK .NET Code Examples & Tutorials
+title: Video Editing Code Examples for C# and .NET Developers
 description: Practical .NET video editing code examples for developers working with VideoEditCore engine (Windows) with detailed tutorials.
 sidebar_label: Code Examples
 

@@ -1,5 +1,5 @@
 ---
-title: Grabar, Capturar y Editar Audio MP3 en C#
+title: Grabar, Capturar y Editar Audio MP3 en C# .NET SDK
 description: Grabe, capture y edite audio MP3 en C# con el SDK .NET de VisioForge usando el codificador LAME para procesamiento de audio de alta calidad.
 ---
 

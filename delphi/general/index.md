@@ -1,5 +1,5 @@
 ---
-title: Delphi Libraries for Professional Multimedia Dev
+title: Delphi ActiveX Libraries for Video Capture and Playback
 description: Professional Delphi/ActiveX multimedia libraries for video capture, playback, and editing with comprehensive documentation and examples.
 sidebar_label: General information
 ---

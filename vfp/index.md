@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprinting Technology for Developers
+title: Video Fingerprinting SDK - Detect and Match Video Content
 description: Implement video identification algorithms with SDK to detect duplicates, identify fragments, and match transformed videos on multiple platforms.
 sidebar_label: Video Fingerprinting SDK
 order: 17

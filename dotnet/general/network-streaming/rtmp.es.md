@@ -1,5 +1,5 @@
 ---
-title: Transmisión en Vivo RTMP para Aplicaciones .NET
+title: Transmisión RTMP en .NET con Aceleración GPU y YouTube Live
 description: Implemente transmisión RTMP en .NET con aceleración por hardware, soporte multiplataforma e integración con plataformas YouTube y Facebook Live.
 ---
 

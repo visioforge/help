@@ -1,5 +1,5 @@
 ---
-title: Cómo conectar una cámara IP AVTech en C# .NET
+title: AVTech: URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecte cámaras AVTech en C# .NET con patrones de URL RTSP y ejemplos de código para modelos de las series AVM, AVN, AVC y AVI.
 ---
 
