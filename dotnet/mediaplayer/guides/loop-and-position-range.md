@@ -1,6 +1,6 @@
 ---
 title: Loop Video Playback and Position Range in C# .NET SDK
-description: Implement loop playback and segment control in .NET. Learn DirectShow and GStreamer features for video loops and position range selection.
+description: Implement loop playback and position range control with VisioForge Media Player SDK .NET. DirectShow and GStreamer engine examples included.
 sidebar_label: Loop Mode & Position Range
 order: 2
 

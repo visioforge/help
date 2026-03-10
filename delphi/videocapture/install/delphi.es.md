@@ -1,6 +1,6 @@
 ---
-title: Guía de Instalación de TVFVideoCapture para Delphi
-description: Instalar paquetes TVFVideoCapture en Delphi 6/7 hasta Delphi 11+ con instrucciones completas de configuración, rutas de biblioteca y configuración.
+title: Guía de Instalación de TVFVideoCapture para Delphi 6 a 11
+description: Instale paquetes TVFVideoCapture en Delphi 6/7 hasta Delphi 11+ con instrucciones completas de configuración, rutas de biblioteca y configuración.
 ---
 
 # Guía de Instalación Completa de TVFVideoCapture para Desarrolladores Delphi

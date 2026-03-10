@@ -1,6 +1,6 @@
 ---
-title: Etiquetas de metadatos de audio ID3, Vorbis y MP4 en .NET
-description: Escribir etiquetas de audio (ID3, Vorbis, MP4, ASF) en archivos de audio con ejemplos de código prácticos para formatos MP3, OGG y M4A.
+title: Escribir Metadatos de Audio en C# .NET - ID3, Vorbis
+description: Añada metadatos ID3, Vorbis Comments y MP4 a archivos de audio con VisioForge Media Blocks SDK. Ejemplos de código para MP3, OGG, M4A y WMA.
 ---
 
 # Escribir Etiquetas de Audio con SDK de Media Blocks

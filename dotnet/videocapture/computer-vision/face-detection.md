@@ -1,6 +1,6 @@
 ---
-title: Face Detection SDK for .NET Video Capture Applications
-description: Implement face detection in .NET apps with code examples, configuration options, and optimization techniques for video streams.
+title: Real-Time Face Detection in Live Video Stream in C# .NET
+description: Detect faces in real-time webcam and IP camera streams with VisioForge Video Capture SDK. Configuration options, optimization tips, and C# code examples.
 ---
 
 # Implementing Face Detection in .NET Video Applications

@@ -1,6 +1,6 @@
 ---
-title: Convert and Save Video to MP4 in C# with H264 and AAC
-description: Implement MP4 output in .NET with H.264/HEVC hardware encoding, audio configuration, and optimized performance for video processing apps.
+title: Save Video to MP4 with H.264 and HEVC Encoding in C# .NET
+description: Encoder auto-selection with NVENC/QSV/AMF fallback. File splitting by size, duration, or timecode. Rolling buffer recording and stream muxing. VisioForge SDK.
 ---
 
 # MP4 file output

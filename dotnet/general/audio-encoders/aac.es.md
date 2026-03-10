@@ -1,6 +1,6 @@
 ---
-title: Guía de Implementación del Codificador de Audio AAC
-description: Implemente codificación de audio AAC en .NET con múltiples tipos de codificadores, configuraciones de tasa de bits y soporte de salida M4A multiplataforma.
+title: Codificación Audio AAC con Contenedor M4A en C# .NET
+description: Use backends avenc_aac, voaacenc y Media Foundation con detección en tiempo de ejecución. Bitrate 32-320 kbps, surround 5.1 y contenedores M4A/MP4.
 ---
 
 # Codificador AAC y salida M4A

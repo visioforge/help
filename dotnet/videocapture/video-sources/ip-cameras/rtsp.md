@@ -1,6 +1,6 @@
 ---
-title: Integrating RTSP Cameras in Video Capture SDK .Net
-description: Implement and configure RTSP camera streams in .NET with low-latency options, sample code, and best practices for UDP and TCP.
+title: RTSP Camera Streaming in C# .NET — UDP and TCP Modes
+description: Connect to RTSP camera streams using VisioForge Video Capture SDK. Low-latency configuration, UDP/TCP transport options, and C# code examples.
 ---
 
 # Integrating RTSP Camera Streams in .NET Applications

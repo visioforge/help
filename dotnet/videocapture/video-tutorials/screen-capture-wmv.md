@@ -1,6 +1,7 @@
 ---
-title: C# Screen Recorder to WMV - Code Sample and Tutorial
-description: Implement professional screen recording in .NET apps with C# using step-by-step guide, working code samples, and configuration options.
+title: Screen Capture to WMV with Windows Media Codec in C# .NET
+description: Record screen to WMV format with Windows Media codecs using VisioForge Video Capture SDK. Codec configuration and complete C# code examples included.
+sidebar_label: Screen Capture to WMV
 ---
 
 # Implementing Screen Recording to WMV in C# .NET Applications
@@ -29,7 +30,32 @@ Before you begin, ensure you have installed the necessary redistributable packag
   - [x86 package](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
   - [x64 package](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-## Essential C# Implementation Code
+## When to Use WMV for Screen Recording
+
+WMV (Windows Media Video) uses Microsoft's Windows Media codecs and the ASF container. It remains useful in specific Windows-centric scenarios:
+
+- **Native Windows integration** — WMV files play in Windows Media Player without additional codecs and integrate with Windows Movie Maker and other Microsoft tools
+- **ASF streaming** — The ASF container supports live streaming over Windows Media Services, useful for intranet broadcasting
+- **Smaller files than AVI** — WMV compression is more efficient than MJPEG, though less efficient than H.264 MP4
+- **Legacy enterprise environments** — Many corporate environments standardize on Windows Media formats for internal video distribution
+
+**Trade-off:** WMV is a Windows-only format with limited support on macOS and Linux. For cross-platform compatibility, [MP4 is the recommended format](screen-capture-mp4.md).
+
+## Modern API — Video Capture SDK X
+
+The modern cross-platform API uses `VideoCaptureCoreX`. For the complete console application pattern with screen capture setup, audio configuration, and recording lifecycle, see the [Screen Capture to MP4](screen-capture-mp4.md#modern-api-video-capture-sdk-x) guide. To output WMV instead of MP4, replace the output configuration:
+
+```csharp
+// WMV output (Windows Media Video + WMA audio codecs)
+var wmvOutput = new WMVOutput(outputPath);
+videoCapture.Outputs_Add(wmvOutput, autostart: true);
+```
+
+Region capture, multi-monitor recording, audio, cursor highlighting, and GPU encoding options are covered in the [MP4 guide](screen-capture-mp4.md) — all source configuration features work identically with WMV output.
+
+## Legacy API — Video Capture SDK
+
+### Code Example
 
 The following code snippet demonstrates how to create a basic screen recording application that captures your screen to a WMV file:
 
@@ -99,39 +125,17 @@ namespace screen_capture_wmv
 }
 ```
 
-## Advanced Configuration Options
+## Frequently Asked Questions
 
-### Capturing Specific Screen Regions
+### When should I use WMV instead of MP4 for screen recording?
 
-If you need to record only a portion of the screen rather than the entire display:
+Choose WMV when your target audience uses Windows exclusively and you need native playback without additional codec installation, when distributing video through Windows Media Services or SharePoint, or when working within enterprise environments that standardize on Windows Media formats. For cross-platform distribution or web publishing, MP4 with H.264 is the better choice — it offers smaller files, broader device support, and better compression.
 
-```csharp
-// Define a specific rectangular region to capture (x, y, width, height)
-videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings() { 
-    FullScreen = false,
-    Rectangle = new Rectangle(0, 0, 800, 600) 
-};
-```
+## See Also
 
-## Common Implementation Scenarios
-
-### Creating a Lightweight Recording Application
-
-For scenarios where system resources are limited:
-
-1. Lower the capture frame rate
-2. Record to a more efficient codec
-3. Capture smaller screen regions
-4. Use hardware acceleration when available
-
-### Implementing Background Recording
-
-For applications that need to record in the background:
-
-1. Initialize the capture component in a separate thread
-2. Implement minimal UI for control
-3. Consider adding system tray functionality
-4. Implement proper resource management
-
----
-Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and implementation examples.
+- [Screen Capture to MP4](screen-capture-mp4.md) — recommended format with full feature coverage (region, multi-monitor, audio, GPU encoding, cross-platform)
+- [Screen Capture to AVI](screen-capture-avi.md) — AVI format with MJPEG for frame-independent editing
+- [Screen Capture in VB.NET](../guides/screen-capture-vb-net.md) — screen recording in Visual Basic .NET
+- [Screen Source Configuration](../video-sources/screen.md) — full reference for capture settings
+- [Code Samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — additional screen capture code snippets on GitHub
+- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — product page and downloads

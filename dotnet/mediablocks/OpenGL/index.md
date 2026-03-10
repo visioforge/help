@@ -1,6 +1,6 @@
 ---
-title: OpenGL Video Effects for .NET - GPU-Accelerated Guide
-description: Apply hardware-accelerated OpenGL video effects with GLVideoEffectsBlock for real-time video manipulation in Media Blocks SDK pipelines.
+title: GPU-Accelerated OpenGL Video Effects and Shaders in C# .NET
+description: Apply GPU-accelerated OpenGL video effects like blur, color correction, and shaders in real-time using VisioForge Media Blocks SDK pipelines.
 sidebar_label: OpenGL Effects
 ---
 

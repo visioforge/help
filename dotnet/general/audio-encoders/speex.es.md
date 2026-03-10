@@ -1,6 +1,6 @@
 ---
-title: Integración del Codificador de Audio Speex para .NET
-description: Implemente compresión de voz Speex en .NET con configuraciones de codificación de voz optimizadas, controles de calidad y captura de audio multiplataforma.
+title: Integración del Codificador de Audio Speex para .NET SDK
+description: Implemente compresión de voz Speex en .NET con configuraciones de codificación optimizadas, controles de calidad y captura de audio multiplataforma.
 ---
 
 # Codificador de Audio Speex para .NET

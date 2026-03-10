@@ -1,6 +1,6 @@
 ---
-title: DirectShow Filters for Video Playback, Encoding and More
-description: DirectShow filters and SDKs for video playback, processing, encoding, and multimedia application development with VLC and FFMPEG support.
+title: DirectShow Filters for Video Playback, Encoding & Effects
+description: DirectShow filters for FFmpeg/VLC playback, H.264/H.265/NVENC encoding, 35+ video effects, chroma key, virtual camera, and AES-256 encryption.
 sidebar_label: DirectShow SDKs and filters
 order: 19
 ---

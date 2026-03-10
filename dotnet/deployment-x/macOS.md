@@ -1,6 +1,6 @@
 ---
-title: .NET SDK macOS Deployment: NuGet Setup and Configuration
-description: VisioForge .NET SDK macOS deployment with NSView integration, permissions, app store publishing, and native library configuration guide.
+title: Deploy VisioForge .NET SDK on macOS — Intel & Apple Silicon
+description: Deploy VisioForge .NET SDK apps on macOS. NuGet packages, NSView integration, App Store publishing, and native library setup for x64 and ARM64.
 ---
 
 # Apple macOS Deployment Guide

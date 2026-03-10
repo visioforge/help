@@ -1,6 +1,6 @@
 ---
 title: BrickCom IP Camera RTSP URL Setup Guide for C# .NET
-description: Connect to BrickCom cameras in C# .NET with RTSP URL patterns and code samples for CB, MB, OB, VD, WCB, WOB, and MD series models.
+description: BrickCom CB, MB, OB, VD, and WCB series RTSP URL patterns for C# .NET. Stream and record using VisioForge Video Capture SDK integration code.
 ---
 
 # How to Connect to BrickCom IP Camera in C# .NET

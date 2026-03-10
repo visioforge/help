@@ -1,6 +1,6 @@
 ---
-title: Media Player Library Deployment for Delphi & ActiveX
-description: Deploy TVFMediaPlayer in Delphi and ActiveX - automated and manual installation methods, codec setup, DirectShow filters, and dependencies.
+title: TVFMediaPlayer Deployment Guide — Delphi and ActiveX
+description: Deploy TVFMediaPlayer apps with silent installers or manual setup. Covers codec packages, DirectShow filters, VC++ redistributables, and dependencies.
 ---
 
 # Deployment Guide for TVFMediaPlayer

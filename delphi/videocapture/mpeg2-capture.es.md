@@ -1,6 +1,6 @@
 ---
-title: Captura Video MPEG-2 en Delphi con Encoder Hardware
-description: Captura MPEG-2 en Delphi usando codificadores de hardware de sintonizador de TV: enumeración de dispositivos, configuración y ejemplos optimizados.
+title: Captura de Video MPEG-2 en Delphi con Sintonizador TV
+description: Implemente captura MPEG-2 en Delphi usando codificadores de hardware de sintonizador TV - enumeración de dispositivos, configuración y ejemplos optimizados.
 ---
 
 # Captura de Video MPEG-2 en Delphi Usando Codificadores de Hardware de Sintonizador de TV

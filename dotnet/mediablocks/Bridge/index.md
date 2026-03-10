@@ -1,6 +1,6 @@
 ---
-title: Bridge Blocks to Link and Switch Media Pipelines in .NET
-description: Link and dynamically switch between media pipelines for audio, video, and subtitles without interrupting playback or streaming in .NET apps.
+title: Bridge Blocks for Dynamic Pipeline Switching in C# .NET
+description: Dynamically switch between audio, video, and subtitle pipelines without interrupting playback using VisioForge Media Blocks SDK bridge blocks.
 sidebar_label: Video and Audio Bridges
 ---
 

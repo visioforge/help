@@ -1,6 +1,6 @@
 ---
-title: Screen Capture in C#: Record Screen, Window, or Region
-description: Record screen, windows, or custom regions in .NET with DirectX 11/12 and Windows Graphics Capture. C# screen capture code examples included.
+title: Screen Capture in C# .NET — Window and Region Recording
+description: Capture full screen, specific windows, or custom regions using VisioForge Video Capture SDK with DirectX 11/12 and Windows Graphics Capture APIs.
 ---
 
 # Screen Capture Implementation Guide

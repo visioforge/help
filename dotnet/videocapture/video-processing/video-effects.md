@@ -1,6 +1,6 @@
 ---
-title: Apply Real-Time Video Effects During .NET Video Capture
-description: Enhance video capture apps with real-time video effects in .NET using step-by-step guide for professional filters during capture.
+title: Apply Brightness, Chroma Key, and Overlay Effects in C# .NET
+description: Apply brightness, contrast, chroma key, deinterlace, and image overlay effects during live capture with VisioForge Video Capture SDK. C# code examples.
 ---
 
 # Video effects

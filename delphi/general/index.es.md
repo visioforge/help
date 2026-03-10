@@ -1,6 +1,6 @@
 ---
-title: Bibliotecas Delphi/ActiveX para Captura y Edicion de Video
-description: Bibliotecas multimedia profesionales Delphi/ActiveX para captura de video, reproducción y edición con documentación completa y ejemplos.
+title: Configuración del SDK Delphi ActiveX - Instalación
+description: Instale y configure los componentes TVFMediaPlayer, TVFVideoCapture y TVFVideoEdit en Delphi. Paquetes 64-bit, errores .otares e integración IDE.
 ---
 
 # Bibliotecas Delphi/ActiveX para Desarrollo Multimedia

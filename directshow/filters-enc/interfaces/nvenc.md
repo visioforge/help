@@ -1,6 +1,6 @@
 ---
-title: NVENC DirectShow Encoder Filter Interface Reference
-description: INVEncConfig interface for NVIDIA NVENC hardware video encoding with H.264 and H.265 codecs and GPU acceleration configuration.
+title: NVIDIA NVENC Hardware Encoder Settings for DirectShow
+description: Configure NVIDIA NVENC hardware encoding in DirectShow with INVEncConfig COM interface. H.264/H.265 codec settings, presets, and GPU selection for C++/C#.
 ---
 
 # INVEncConfig Interface Reference

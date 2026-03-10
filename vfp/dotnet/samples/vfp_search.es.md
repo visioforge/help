@@ -1,6 +1,6 @@
 ---
-title: Búsqueda de Fragmentos de Video en .NET - Guía de vfp_search
-description: Usa vfp_search para buscar fragmentos de video dentro de videos más grandes con características para encontrar y administrar tu biblioteca.
+title: Buscar Fragmentos de Video por Huellas Digitales en .NET CLI
+description: Busque fragmentos de video dentro de archivos mayores usando la herramienta CLI vfp_search de VisioForge con salida de timestamps y umbrales.
 ---
 
 # vfp_search - Herramienta de Búsqueda de Fragmentos de Video

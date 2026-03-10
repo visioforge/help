@@ -1,5 +1,5 @@
 ---
-title: Transmitir Video y Audio a Almacenamiento Amazon S3
+title: Streaming de Video y Audio a Amazon S3 en .NET SDK
 description: Implemente streaming de video y audio a AWS S3 en .NET con configuración, ajustes de codificación, manejo de errores y mejores prácticas para salida de medios.
 ---
 

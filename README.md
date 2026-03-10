@@ -1,4 +1,4 @@
-﻿# VisioForge SDK Documentation
+# VisioForge SDK Documentation
 
 Source documentation for all VisioForge SDK products. This repository is automatically
 synced from the internal documentation source.

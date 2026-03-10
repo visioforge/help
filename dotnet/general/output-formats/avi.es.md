@@ -1,6 +1,6 @@
 ---
-title: Salida de archivo AVI en .NET con H.264, HEVC y MJPEG
-description: Implemente salida de archivo AVI en .NET con codificación de video y audio, aceleración de hardware y soporte de contenedor multimedia multiplataforma.
+title: Guía de Salida de Archivos AVI para Codificación .NET
+description: Implemente salida de archivos AVI en .NET con codificación de video y audio, aceleración por hardware y soporte de contenedor multimedia multiplataforma.
 ---
 
 # Salida de Archivo AVI en los SDK .NET de VisioForge

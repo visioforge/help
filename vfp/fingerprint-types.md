@@ -1,6 +1,6 @@
 ---
 title: Video Fingerprinting: Search vs Compare Types Explained
-description: "Comprehensive guide to Search vs Compare fingerprints in VisioForge Video Fingerprinting SDK with technical differences and performance."
+description: Guide to Search vs Compare fingerprints in VisioForge Video Fingerprinting SDK with technical differences and performance.
 ---
 
 # Fingerprint Types: Search vs Compare

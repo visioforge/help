@@ -1,6 +1,6 @@
 ---
-title: Configurar Imagen Personalizada para VideoView en .NET
-description: Muestra imágenes de marcador de posición personalizadas en controles VideoView para branding profesional y mejor experiencia de usuario en .NET.
+title: Imagen Placeholder Personalizada en VideoView C# .NET
+description: Muestre imágenes de marcador de posición personalizadas en controles VideoView cuando no hay video reproduciéndose para branding profesional en .NET.
 ---
 
 # Configuración de Imágenes Personalizadas para Controles VideoView en Aplicaciones .NET

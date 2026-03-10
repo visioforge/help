@@ -1,6 +1,6 @@
 ﻿---
-title: Guía de Bloques OpenCV para Media .Net
-description: Ejecuta tareas de visión por computadora con bloques OpenCV: detección de objetos, seguimiento, manipulación de imágenes y procesamiento de video.
+title: Bloques de Procesamiento de Video OpenCV en C# .NET
+description: Añada detección de objetos, seguimiento y procesamiento de imágenes a pipelines de video con bloques OpenCV en VisioForge Media Blocks SDK. Multiplataforma.
 ---
 
 # Bloques OpenCV - VisioForge Media Blocks SDK .Net

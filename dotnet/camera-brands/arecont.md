@@ -1,6 +1,6 @@
 ---
 title: How to Connect to Arecont Vision IP Camera in C# .NET
-description: Connect to Arecont Vision cameras in C# .NET with RTSP URL patterns and code samples for AV Series, MegaDome, SurroundVideo, and multi-sensor panoramic models.
+description: Arecont Vision RTSP URL patterns for C# .NET. Integrate AV Series, MegaDome, and SurroundVideo panoramic cameras using VisioForge Video Capture SDK.
 ---
 
 # How to Connect to Arecont Vision IP Camera in C# .NET

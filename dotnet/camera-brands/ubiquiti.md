@@ -1,6 +1,6 @@
 ---
 title: How to Connect to Ubiquiti (UniFi) IP Camera in C# .NET
-description: Connect to Ubiquiti UniFi Protect and AirCam cameras in C# .NET with RTSP URL patterns and code samples for G3, G4, G5, and AI series models.
+description: Ubiquiti UniFi Protect G3, G4, G5, and AI series RTSP URL patterns for C# .NET. Enable RTSP in UniFi and integrate with VisioForge SDK code.
 ---
 
 # How to Connect to Ubiquiti (UniFi) IP Camera in C# .NET

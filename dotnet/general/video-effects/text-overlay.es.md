@@ -1,6 +1,6 @@
 ---
-title: Superposiciones de texto en video con VisioForge .NET SDK
-description: Cree superposiciones de texto dinámicas con control de fuente, color, posición, rotación y animación para marcas de tiempo, subtítulos y branding en video .NET.
+title: Agregar Overlay de Texto en Video con C# y Fuentes Custom
+description: Cree overlays de texto dinámicos con control de fuente, color, posición, rotación y animación para timestamps, subtítulos y branding en video .NET.
 ---
 
 # Implementación de Superposiciones de Texto en Flujos de Video

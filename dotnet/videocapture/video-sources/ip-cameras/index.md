@@ -1,6 +1,6 @@
 ---
-title: IP Camera Integration in Video Capture SDK for .NET
-description: Implement IP cameras, RTSP/RTMP streams, ONVIF devices, and network video sources in .NET with code samples and best practices.
+title: IP Camera Capture - RTSP, ONVIF, HTTP MJPEG in C# .NET
+description: Connect to IP cameras, RTSP/RTMP streams, and ONVIF devices using VisioForge Video Capture SDK. Low-latency preview, recording, and C# code examples.
 sidebar_label: IP Cameras & Network Sources
 order: 19
 ---

@@ -1,6 +1,6 @@
 ---
-title: FFMPEG Encoder DirectShow Filter Interface Reference
-description: FFMPEG encoder DirectShow interface for FLV, MPEG-1, MPEG-2, VCD, SVCD, DVD, and Transport Stream with audio/video configuration.
+title: FFmpeg Encoder DirectShow Filter - MPEG, FLV, DVD Output
+description: IVFFFMPEGEncoder COM interface for encoding to MPEG-1, MPEG-2, FLV, VCD, SVCD, DVD, and Transport Stream in DirectShow. Audio/video codec parameters for C++/C#.
 ---
 
 # FFMPEG Encoder Interface Reference

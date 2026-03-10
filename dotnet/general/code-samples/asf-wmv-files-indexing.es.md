@@ -1,6 +1,6 @@
 ---
-title: Guía Completa de Indexación de Archivos ASF y WMV .NET
-description: Indexación robusta de archivos ASF, WMV y WMA en .NET para resolver problemas de búsqueda y optimizar el rendimiento de reproducción.
+title: Indexación de Archivos ASF y WMV para Aplicaciones .NET SDK
+description: Implemente indexación robusta de archivos ASF, WMV y WMA en .NET para resolver problemas de búsqueda y optimizar el rendimiento de reproducción.
 ---
 
 # Guía Completa de Indexación de Archivos ASF y WMV en .NET

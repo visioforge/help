@@ -1,6 +1,6 @@
 ---
-title: SDKs .NET — Información, Manuales y Guías de Uso SDK
-description: Guías completas para SDKs .NET de VisioForge que cubren captura de video, reproducción de medios, edición, codificadores, efectos y streaming de red.
+title: Guías Generales y Documentación de VisioForge .NET SDK
+description: Guías completas para VisioForge .NET SDKs que cubren captura de video, reproducción de medios, edición, codificadores, efectos y streaming de red.
 
 ---
 

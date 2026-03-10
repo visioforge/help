@@ -1,6 +1,6 @@
 ---
-title: Nvidia GPU Video Processing Blocks in .Net Pipelines
-description: Accelerate media processing with Nvidia GPU blocks for data transfer, video conversion, and resizing in Media Blocks SDK pipelines.
+title: NVIDIA CUDA GPU Video Processing Blocks in C# .NET
+description: Accelerate video conversion, resizing, and data transfer with Nvidia CUDA GPU blocks in VisioForge Media Blocks SDK pipelines for .NET.
 sidebar_label: Nvidia
 ---
 

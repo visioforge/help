@@ -1,6 +1,6 @@
 ---
-title: Video and Audio Stream Parser Blocks in Media Blocks SDK
-description: Parse elementary video and audio streams to extract metadata and prepare content for decoding and multiplexing in Media Blocks SDK.
+title: Stream Parser Blocks - H.264, HEVC, AV1 Pipelines in C#
+description: Parse elementary video and audio streams to extract metadata and prepare content for decoding and multiplexing in VisioForge Media Blocks SDK.
 sidebar_label: Parsers
 ---
 

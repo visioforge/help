@@ -1,6 +1,6 @@
 ---
-title: Video Capture SDK .Net - Recording Formats and Encoders
-description: Powerful .NET Video Capture SDK with extensive format support, hardware integration, and flexible implementation for recording apps.
+title: Video Recording Formats and Encoder Options in C# .NET
+description: Record to MP4, AVI, WMV, WebM, and MKV with VisioForge Video Capture SDK. H.264, H.265, MJPEG encoders and GPU-accelerated encoding in .NET apps.
 sidebar_label: Video Capture
 order: 11
 

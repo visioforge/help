@@ -1,6 +1,6 @@
 ---
-title: Dibujo de Video en PictureBox en Aplicaciones .NET
-description: Implementa renderizado de video en controles PictureBox en WinForms con manejo de frames, gestión de memoria y técnicas de renderizado eficientes.
+title: Renderizar Video en Vivo en PictureBox WinForms en C# .NET
+description: Actualizaciones thread-safe, liberación de bitmap y double buffering para evitar parpadeo. Frame skipping para alto FPS. Modos zoom con VisioForge SDK.
 ---
 
 # Dibujo de Video en PictureBox en Aplicaciones .NET

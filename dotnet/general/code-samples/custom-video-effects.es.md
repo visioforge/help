@@ -1,6 +1,6 @@
 ﻿---
-title: Creación de Efectos de Video Personalizados en C#
-description: Crea efectos de video personalizados en C# usando eventos OnVideoFrameBitmap y OnVideoFrameBuffer para procesamiento en tiempo real y overlays.
+title: Creación de Efectos de Video Personalizados en C# .NET
+description: Implemente efectos de video personalizados en C# con eventos OnVideoFrameBitmap y OnVideoFrameBuffer para procesamiento en tiempo real y overlays.
 ---
 
 # Creación de Efectos de Video Personalizados en Tiempo Real en Aplicaciones C#

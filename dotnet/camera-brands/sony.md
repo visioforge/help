@@ -1,6 +1,6 @@
 ---
 title: Sony SNC IP Camera RTSP URL Patterns and C# .NET Setup
-description: Connect to Sony SNC IP cameras in C# .NET with RTSP URL patterns and code samples for CH, DH, EB, CX, and legacy IPELA models.
+description: Sony SNC CH, DH, EB, CX, and IPELA camera RTSP URL patterns for C# .NET. Stream and record with VisioForge Video Capture SDK integration code.
 ---
 
 # How to Connect to Sony IP Camera in C# .NET

@@ -18,7 +18,7 @@ description: Conecta cámaras IP Sony SNC en C# .NET con patrones de URL RTSP y 
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** admin / admin (debe cambiarse durante la configuración)
 - **Soporte ONVIF:** Sí (SNC-CH/DH y modelos más nuevos)
-- **Códecs de video:** H.264, H.265 (modelos tardíos), MPEG-4 (antiguos), MJPEG
+- **Códecs de vídeo:** H.264, H.265 (modelos tardíos), MPEG-4 (antiguos), MJPEG
 - **Estado:** Sony salió del mercado de cámaras de seguridad en 2020
 
 !!! warning "Fin de vida"

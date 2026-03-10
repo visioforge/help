@@ -1,6 +1,6 @@
 ---
-title: Enlazar Pipelines de Medios - Guía de Bloques Bridge
-description: Enlace y cambie dinámicamente entre pipelines de medios para audio, video y subtítulos sin interrumpir la reproducción o el streaming en aplicaciones .NET.
+title: Bloques Bridge - Conmutación Dinámica de Pipeline en C# .NET
+description: Cambie dinámicamente entre pipelines de audio, video y subtítulos sin interrumpir la reproducción con VisioForge Media Blocks SDK.
 ---
 
 # Bloques Bridge

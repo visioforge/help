@@ -5,11 +5,11 @@ description: Cree un reproductor de video en C# con controles de reproducción, 
 
 # Crear un Reproductor de Video en C#
 
-Esta guia le muestra como crear un reproductor de video con todas las funciones en C# utilizando [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net). Implementara la reproduccion de archivos, la busqueda en la linea de tiempo, pausa/reanudacion y control de volumen. Se cubren dos enfoques: la API de alto nivel `MediaPlayerCoreX` y la API basada en pipeline `MediaBlocksPipeline`.
+Esta guía le muestra cómo crear un reproductor de video con todas las funciones en C# utilizando [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net). Implementará la reproducción de archivos, la búsqueda en la línea de tiempo, pausa/reanudación y control de volumen. Se cubren dos enfoques: la API de alto nivel `MediaPlayerCoreX` y la API basada en pipeline `MediaBlocksPipeline`.
 
 ## Enfoque MediaPlayerCoreX (Recomendado)
 
-`MediaPlayerCoreX` es la forma mas sencilla de crear un reproductor de video en C# con control total de reproduccion.
+`MediaPlayerCoreX` es la forma más sencilla de crear un reproductor de video en C# con control total de reproducción.
 
 ### Paquetes NuGet Requeridos
 
@@ -19,7 +19,7 @@ Esta guia le muestra como crear un reproductor de video con todas las funciones 
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2025.11.0" />
 ```
 
-### Implementacion Completa del Reproductor de Video en C#
+### Implementación Completa del Reproductor de Video en C#
 
 ```csharp
 using VisioForge.Core;
@@ -87,14 +87,14 @@ public partial class Form1 : Form
             new Uri(edFilename.Text));
         await _player.OpenAsync(source);
 
-        // Iniciar la reproduccion
+        // Iniciar la reproducción
         await _player.PlayAsync();
 
         _timer.Start();
     }
 ```
 
-### Pausa, Reanudacion y Detencion
+### Pausa, Reanudación y Detención
 
 ```csharp
     private async void btPause_Click(object sender, EventArgs e)
@@ -120,7 +120,7 @@ public partial class Form1 : Form
     }
 ```
 
-### Busqueda en la Linea de Tiempo
+### Búsqueda en la Línea de Tiempo
 
 ```csharp
     private async void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -240,14 +240,14 @@ private async void StartPlayback(string filePath)
         _pipeline.Connect(fileSource, audioOutput);
     }
 
-    // Iniciar la reproduccion
+    // Iniciar la reproducción
     await _pipeline.StartAsync();
 }
 ```
 
 ## Formatos Soportados
 
-| Categoria | Formatos |
+| Categoría | Formatos |
 |-----------|----------|
 | Video | MP4, AVI, MKV, WMV, WebM, MOV, TS, MTS, FLV |
 | Audio | MP3, AAC, WAV, WMA, FLAC, OGG, Vorbis |
@@ -257,36 +257,36 @@ private async void StartPlayback(string filePath)
 ## Aplicaciones de Ejemplo
 
 - [Demo de Reproductor Simple WPF (C#)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WPF/Simple%20Player%20Demo)
-- [Fragmento de Codigo de Media Player (C#)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_CodeSnippets/media-player)
+- [Fragmento de Código de Media Player (C#)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_CodeSnippets/media-player)
 - [Demo Principal WinForms (C#)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinForms/Main%20Demo)
 
 ## Preguntas Frecuentes
 
-### Que formatos de video soporta el reproductor de video .NET?
+### ¿Qué formatos de video soporta el reproductor de video .NET?
 
-El SDK soporta todos los formatos de video principales, incluyendo MP4, AVI, MKV, WMV, WebM, MOV, TS y FLV. El soporte de codecs incluye H.264, H.265/HEVC, VP8, VP9, AV1 y MPEG-2 a traves del motor basado en GStreamer incluido. Los formatos de audio como MP3, AAC, WAV, FLAC y OGG tambien son compatibles para la reproduccion.
+El SDK soporta todos los formatos de video principales, incluyendo MP4, AVI, MKV, WMV, WebM, MOV, TS y FLV. El soporte de codecs incluye H.264, H.265/HEVC, VP8, VP9, AV1 y MPEG-2 a través del motor basado en GStreamer incluido. Los formatos de audio como MP3, AAC, WAV, FLAC y OGG también son compatibles para la reproducción.
 
-### Puedo reproducir streams RTSP o video de red en mi aplicacion C#?
+### ¿Puedo reproducir streams RTSP o video de red en mi aplicación C#?
 
-Si. El metodo `UniversalSourceSettings.CreateAsync` acepta URIs para streams RTSP, HTTP, HLS y MPEG-DASH. Pase la URL del stream como un objeto `Uri` de la misma forma que una ruta de archivo local. Para fuentes RTSP que requieren autenticacion, incluya las credenciales directamente en la URI (por ejemplo, `rtsp://usuario:contraseña@host:554/stream`).
+Sí. El método `UniversalSourceSettings.CreateAsync` acepta URIs para streams RTSP, HTTP, HLS y MPEG-DASH. Pase la URL del stream como un objeto `Uri` de la misma forma que una ruta de archivo local. Para fuentes RTSP que requieren autenticación, incluya las credenciales directamente en la URI (por ejemplo, `rtsp://usuario:contraseña@host:554/stream`).
 
-### Como controlo la velocidad de reproduccion en el reproductor de video?
+### ¿Cómo controlo la velocidad de reproducción en el reproductor de video?
 
-Llame a `Rate_SetAsync(double rate)` en la instancia del reproductor. Una velocidad de 1.0 es normal, 2.0 es el doble y 0.5 es la mitad. El rango soportado depende del formato del medio, pero la mayoria de los archivos admiten velocidades entre 0.25x y 4.0x. La velocidad puede cambiarse durante la reproduccion sin detener el video.
+Llame a `Rate_SetAsync(double rate)` en la instancia del reproductor. Una velocidad de 1.0 es normal, 2.0 es el doble y 0.5 es la mitad. El rango soportado depende del formato del medio, pero la mayoría de los archivos admiten velocidades entre 0.25x y 4.0x. La velocidad puede cambiarse durante la reproducción sin detener el video.
 
-### El SDK soporta renderizado de subtitulos?
+### ¿El SDK soporta renderizado de subtítulos?
 
-Si. El SDK puede renderizar subtitulos incrustados en contenedores MKV y MP4, asi como archivos de subtitulos externos SRT y ASS. Las pistas de subtitulos se detectan automaticamente cuando se abre un archivo, y puede seleccionar cual pista mostrar a traves de la API del reproductor.
+Sí. El SDK puede renderizar subtítulos incrustados en contenedores MKV y MP4, así como archivos de subtítulos externos SRT y ASS. Las pistas de subtítulos se detectan automáticamente cuando se abre un archivo, y puede seleccionar cuál pista mostrar a través de la API del reproductor.
 
-### Puedo construir un reproductor de video multiplataforma con este SDK?
+### ¿Puedo construir un reproductor de video multiplataforma con este SDK?
 
-Si. El SDK funciona en Windows, macOS, Linux, Android e iOS. Para aplicaciones de escritorio multiplataforma, utilice el [framework Avalonia UI](avalonia-player.md) con la misma API `MediaPlayerCoreX`. El motor de reproduccion principal es identico en todas las plataformas — solo difieren la superficie de renderizado de video y los paquetes NuGet.
+Sí. El SDK funciona en Windows, macOS, Linux, Android e iOS. Para aplicaciones de escritorio multiplataforma, utilice el [framework Avalonia UI](avalonia-player.md) con la misma API `MediaPlayerCoreX`. El motor de reproducción principal es idéntico en todas las plataformas — solo difieren la superficie de renderizado de video y los paquetes NuGet.
 
-## Ver Tambien
+## Ver También
 
 - [Crear un Reproductor de Video en VB.NET](video-player-vb-net.md) — el mismo tutorial usando sintaxis VB.NET
 - [Reproductor Multiplataforma con Avalonia](avalonia-player.md) — construya un reproductor de video para Windows, macOS y Linux con Avalonia UI
-- [Reproducir Video en .NET (Guia Multiplataforma)](play-video-dotnet.md) — resumen de todos los frameworks de UI y plataformas compatibles
-- [Modo Bucle y Rango de Posicion](loop-and-position-range.md) — configure el bucle, repeticion A-B y reproduccion de segmentos
+- [Reproducir Video en .NET (Guía Multiplataforma)](play-video-dotnet.md) — resumen de todos los frameworks de UI y plataformas compatibles
+- [Modo Bucle y Rango de Posición](loop-and-position-range.md) — configure el bucle, repetición A-B y reproducción de segmentos
 - [Primeros Pasos con MediaBlocks Pipeline](../../mediablocks/GettingStarted/index.md) — aprenda el enfoque basado en pipeline para procesamiento multimedia avanzado
-- [Pagina del Producto Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net)
+- [Página del Producto Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net)

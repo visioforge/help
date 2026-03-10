@@ -1,6 +1,6 @@
 ﻿---
-title: Bloques Decodificadores de Video de VisioForge Media Blocks SDK .Net
-description: Descomprime streams de video con decodificadores hardware-acelerados: H.264, HEVC, VP9 y más códecs en pipelines de Media Blocks SDK.
+title: Decodificadores de Video en C# .NET - H.264, HEVC, AV1
+description: Decodifique H.264, HEVC, VP9, AV1 y MJPEG con aceleración por hardware usando VisioForge Media Blocks SDK. Decodificación GPU para .NET.
 sidebar_label: Decodificadores de Video
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Video Fingerprint Comparison Tool for Duplicate Detection
-description: Use vfp_compare to compare video fingerprints and determine if videos are similar or identical with features to help manage your library.
+description: Compare video fingerprints for similarity using VisioForge vfp_compare CLI tool with configurable thresholds and duplicate detection output.
 ---
 
 # vfp_compare - Video Fingerprint Comparison Tool

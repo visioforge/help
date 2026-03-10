@@ -1,63 +1,148 @@
 ---
-title: Media Blocks SDK para .NET - Desarrollo Multimedia Modular
-description: Construye aplicaciones multimedia con Media Blocks SDK para reproducción modular de video, edición no lineal y captura de cámara multi-fuente en .NET.
+title: Pipeline Multimedia Modular - Transcodificación y Captura C#
+description: Pipelines multimedia en C# con VisioForge Media Blocks SDK. Conecte bloques de fuente, procesamiento y salida para transcodificación, captura y streaming.
+sidebar_label: Media Blocks SDK .NET
 
 ---
 
-# Plataforma de Desarrollo Media Blocks SDK para .NET
+# Media Blocks SDK para C# .NET — API de Pipeline Multimedia Modular
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## ¿Qué es Media Blocks SDK?
+## Introducción
 
-Media Blocks SDK para .NET permite a los desarrolladores diseñar aplicaciones multimedia sofisticadas con precisión y flexibilidad. Este potente toolkit proporciona todo lo necesario para implementar reproducción de video de grado profesional, sistemas de edición no lineal y soluciones de captura de cámara multi-fuente.
+Media Blocks SDK para .NET es un framework multimedia basado en pipelines que te permite construir flujos de trabajo personalizados de procesamiento de video y audio en C#. En lugar de usar una API fija con comportamiento predefinido, creas un pipeline conectando bloques tipados — fuentes, codificadores, efectos, renderizadores y sinks — para construir exactamente la cadena de procesamiento que tu aplicación necesita.
 
-La arquitectura modular permite a los desarrolladores seleccionar y combinar solo los componentes específicos requeridos para cada proyecto, optimizando tanto el rendimiento como el uso de recursos en tus aplicaciones.
+El SDK se ejecuta en Windows, macOS, Linux, Android e iOS. Cubre casos de uso que los SDKs de nivel superior Video Capture SDK y Media Player SDK no pueden cubrir: composición multi-fuente, pipelines de transcodificación personalizados, codificación simultánea a múltiples formatos, cadenas de efectos de video en tiempo real e integración con hardware como Blackmagic Decklink o cámaras industriales.
 
-## ¿Por Qué Elegir Media Blocks para Tu Proyecto?
+## Cuándo Usar Media Blocks
 
-Nuestro enfoque basado en componentes te da control granular sobre tu pipeline de medios. Cada bloque especializado maneja una función distinta dentro de la cadena de procesamiento multimedia:
+Media Blocks SDK es la elección correcta cuando necesitas control total sobre el pipeline multimedia. Úsalo en lugar de (o junto con) los otros SDKs de VisioForge cuando:
 
-- Codificación de video H264/H265 de alto rendimiento
-- Inserción de logo y marca de agua de grado profesional
-- Mezcla y composición multi-stream
-- Renderizado de video acelerado por hardware
-- Compatibilidad multiplataforma
+| Escenario | SDK Recomendado |
+| --------- | --------------- |
+| Grabación simple de webcam a MP4 | [Video Capture SDK](../videocapture/index.md) |
+| Reproducir un archivo de video con controles estándar | [Media Player SDK](../mediaplayer/index.md) |
+| Pipeline personalizado: fuente → efectos → codificar → múltiples salidas | **Media Blocks SDK** |
+| Composición de video en vivo desde múltiples fuentes | **Media Blocks SDK** |
+| Transcodificación / conversión de formato con procesamiento personalizado | **Media Blocks SDK** |
+| Grabación RTSP con post-procesamiento (overlay, redimensionar, recodificar) | **Media Blocks SDK** |
+| App de medios multiplataforma Avalonia o MAUI | **Media Blocks SDK** |
+| Integración con Decklink, GenICam o hardware NVIDIA | **Media Blocks SDK** |
 
-Este diseño modular te permite construir precisamente el flujo de trabajo de procesamiento multimedia que tu aplicación requiere, sin sobrecarga innecesaria.
+## Casos de Uso Comunes
 
-[Comenzar con Media Blocks SDK](GettingStarted/index.md)
+### Transcodificación y Conversión de Formato de Video
 
-## Componentes y Capacidades Principales del SDK
+Convierte archivos de video entre formatos (por ejemplo, AVI a MP4, MKV a WebM) con control total sobre codecs, resolución, bitrate y procesamiento. Encadena bloques de redimensionado, desentrelazado o corrección de color entre la fuente y el codificador.
 
-### Componentes de Procesamiento de Audio
+### Captura de Cámara Personalizada con Pipeline de Procesamiento
 
-- [Codificadores de Audio](AudioEncoders/index.md) - Convierte streams de audio crudos a formatos comprimidos AAC, MP3 y otros con configuraciones de calidad personalizables
-- [Procesamiento de Audio](AudioProcessing/index.md) - Aplica filtros dinámicos, mejora la calidad del sonido y manipula características de audio en tiempo real
-- [Renderizado de Audio](AudioRendering/index.md) - Envía audio procesado a dispositivos físicos con temporización y sincronización precisas
+Construye flujos de trabajo de captura de cámara que van más allá de la grabación simple. Inserta efectos en tiempo real, superposiciones de texto o bloques de visión por computadora entre la fuente de cámara y el sink de archivo. Envía a múltiples destinos simultáneamente — ventana de previsualización, archivo y stream de red.
 
-### Componentes de Procesamiento de Video
+Ver: [Tutorial de Aplicación de Visor de Cámara](GettingStarted/camera.md)
 
-- [Codificadores de Video](VideoEncoders/index.md) - Genera streams de video optimizados con soporte para múltiples codecs y formatos de contenedor
-- [Procesamiento de Video](VideoProcessing/index.md) - Transforma, filtra y mejora contenido de video con efectos, corrección de color y ajustes de imagen
-- [Renderizado de Video](VideoRendering/index.md) - Muestra contenido de video a través de diferentes tecnologías de salida con aceleración de hardware
-- [Compositor de Video en Vivo](LiveVideoCompositor/index.md) - Combina múltiples fuentes de video en tiempo real con transiciones y efectos
+### Composición y Mezcla de Video en Vivo
 
-### Componentes del Sistema de Entrada/Salida
+Combina múltiples fuentes de video en una sola salida con el [Compositor de Video en Vivo](LiveVideoCompositor/index.md). Posiciona, escala y superpone feeds de video para producción multi-cámara, picture-in-picture o layouts de cuadrícula de vigilancia.
 
-- [Puentes](Bridge/index.md) - Conecta y sincroniza diferentes tipos de componentes dentro de tu pipeline de procesamiento
-- [Decklink](Decklink/index.md) - Integra con hardware profesional de captura y reproducción de video Blackmagic Design
-- [Sinks](Sinks/index.md) - Dirige medios procesados a archivos, streams, destinos de red y otros objetivos de salida
-- [Fuentes](Sources/index.md) - Ingresa medios desde cámaras, archivos, streams de red y otros dispositivos de entrada
-- [Especial](Special/index.md) - Implementa funcionalidad especializada con nuestra colección de componentes extendida
+### Grabación de Stream RTSP con Post-Procesamiento
 
-## Recursos Esenciales para Desarrolladores
+Captura streams RTSP de cámaras IP y aplica procesamiento antes de guardar — redimensiona a menor resolución, agrega superposiciones de marca de tiempo, recodifica con diferentes configuraciones de calidad o divide en segmentos.
 
+Ver: [Guía de Guardado de Stream RTSP](Guides/rtsp-save-original-stream.md) | [Captura ONVIF con Post-Procesamiento](Guides/onvif-capture-with-postprocessing.md)
+
+### Superposición de Texto e Imagen / Marca de Agua
+
+Agrega superposiciones de texto, imágenes o SVG a video en vivo o archivos grabados usando el [Bloque de Gestión de Overlay](VideoProcessing/OverlayManagerBlock.md). Útil para marcas de agua, inserción de marca de tiempo, branding y visualización en pantalla.
+
+### Lectura de Códigos de Barras y QR desde Video
+
+Procesa feeds de cámara en vivo o archivos de video para detectar y decodificar códigos de barras y códigos QR en tiempo real.
+
+Ver: [Guía de Lector de Códigos de Barras y QR](Guides/barcode-qr-reader-guide.md)
+
+### Grabación Pre-Evento
+
+Implementa grabación con buffer circular que captura video continuamente y escribe clips de eventos (incluyendo metraje anterior al disparador) en disco.
+
+Ver: [Guía de Grabación Pre-Evento](Guides/pre-event-recording.md)
+
+## Soporte de Plataformas
+
+| Plataforma | Frameworks de UI | Notas |
+| ---------- | ---------------- | ----- |
+| Windows x64 | WinForms, WPF, MAUI, Avalonia, Consola | Conjunto completo de características incluyendo puentes DirectShow |
+| macOS | MAUI, Avalonia, Consola | Acceso a cámara AVFoundation |
+| Linux x64 | Avalonia, Consola | Cámara V4L2, procesamiento basado en GStreamer |
+| Android | MAUI | Via integración MAUI |
+| iOS | MAUI | Via integración MAUI |
+
+## Componentes Principales del SDK
+
+### Fuentes
+
+Los [Bloques de Fuente](Sources/index.md) ingestan medios desde cámaras, archivos, streams de red, generadores virtuales y hardware de captura.
+
+### Procesamiento de Video
+
+- [Codificadores de Video](VideoEncoders/index.md) — H.264, H.265/HEVC, VP8, VP9, AV1 con aceleración GPU (NVENC, AMF, Quick Sync)
+- [Decodificadores de Video](VideoDecoders/index.md) — Decodificación por hardware y software para todos los codecs principales
+- [Procesamiento de Video](VideoProcessing/index.md) — Redimensionar, recortar, rotar, corrección de color, desentrelazar, efectos
+- [Renderizado de Video](VideoRendering/index.md) — Mostrar video en controles WinForms, WPF, MAUI y Avalonia
+- [Compositor de Video en Vivo](LiveVideoCompositor/index.md) — Mezcla y composición multi-fuente
+
+### Procesamiento de Audio
+
+- [Codificadores de Audio](AudioEncoders/index.md) — Codificación AAC, MP3, Vorbis, Opus, FLAC
+- [Procesamiento de Audio](AudioProcessing/index.md) — Filtros, efectos, conversión de frecuencia de muestreo, mezcla de canales
+- [Renderizado de Audio](AudioRendering/index.md) — Reproducción en dispositivos de audio del sistema
+- [Visualizadores de Audio](AudioVisualizers/index.md) — Bloques de visualización de forma de onda y espectro
+
+### Salida y Conectividad
+
+- [Sinks](Sinks/index.md) — Escribe a archivos MP4, WebM, AVI, MKV, TS y streams de red
+- [Bloques de Salida](Outputs/index.md) — Configuraciones de salida de alto nivel
+- [Puentes](Bridge/index.md) — Conecta segmentos de pipeline y sincroniza bloques
+- [Demuxers](Demuxers/index.md) y [Parsers](Parsers/index.md) — Demultiplexión y análisis de streams
+
+### Hardware y Plataformas Específicas
+
+- [NVIDIA](Nvidia/index.md) — Bloques de aceleración por hardware NVENC/NVDEC
+- [Blackmagic Decklink](Decklink/index.md) — Hardware profesional de captura y reproducción
+- [OpenCV](OpenCV/index.md) — Integración de visión por computadora
+- [OpenGL](OpenGL/index.md) — Procesamiento de video basado en GPU
+- [AWS](AWS/index.md) — Bloques de integración con la nube
+- [Servidor RTSP](RTSPServer/index.md) — Sirve video como stream RTSP
+
+## Comenzar
+
+Listo para construir tu primer pipeline? La Guía de Inicio Rápido para Desarrolladores cubre la instalación, conceptos principales, arquitectura de pipeline y ejemplos de código paso a paso:
+
+[Guía de Inicio Rápido para Desarrolladores](GettingStarted/index.md)
+
+Tutoriales adicionales de inicio:
+
+- [Implementación Completa de Pipeline](GettingStarted/pipeline.md)
+- [Desarrollo de Reproductor de Medios](GettingStarted/player.md)
+- [Aplicación de Visor de Cámara](GettingStarted/camera.md)
+- [Enumeración de Dispositivos](GettingStarted/device-enum.md)
+
+## Guías
+
+- [Guardar Stream RTSP en Archivo](Guides/rtsp-save-original-stream.md)
+- [Visor de Stream RTSP y Reproductor de Cámaras IP](Guides/rtsp-player-csharp.md)
+- [Captura ONVIF con Post-Procesamiento](Guides/onvif-capture-with-postprocessing.md)
+- [Lector de Códigos de Barras y QR](Guides/barcode-qr-reader-guide.md)
+- [Grabación Pre-Evento](Guides/pre-event-recording.md)
+- [Etiquetas de Metadatos de Audio](Guides/audio-metadata-tags.md)
+- [Efectos de Video Personalizados y Shaders OpenGL](Guides/custom-video-effects-csharp.md)
+
+## Recursos para Desarrolladores
+
+- [Ejemplos de Código en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)
 - [Guía de Despliegue](../deployment-x/index.md)
+- [Referencia de API](https://api.visioforge.org/dotnet/api/index.html)
 - [Registro de Cambios](../changelog.md)
 - [Contrato de Licencia de Usuario Final](../../eula.md)
-- [Documentación de API](https://api.visioforge.org/dotnet/api/index.html)
-
-## Soporte Técnico y Comunidad
-
-Nuestro equipo de desarrollo dedicado proporciona soporte receptivo para asegurar tu éxito con Media Blocks SDK. Únete a nuestra activa comunidad de desarrolladores para intercambiar estrategias de implementación, técnicas de optimización y soluciones personalizadas.
+- [Información de Licenciamiento](../../../licensing.md)

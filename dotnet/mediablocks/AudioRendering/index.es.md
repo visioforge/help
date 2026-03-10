@@ -1,6 +1,6 @@
 ---
-title: Renderizado de Audio Multiplataforma con Media Blocks SDK
-description: Salida de flujos de audio a dispositivos en Windows, macOS, Linux, iOS y Android con renderizado de audio multiplataforma y gestión de buffer.
+title: Bloque de Renderizado de Audio en C# .NET - Multiplataforma
+description: Reproduzca audio en altavoces en Windows, macOS, Linux, iOS y Android con VisioForge Media Blocks SDK. Selección de dispositivo, buffer y volumen.
 
 ---
 

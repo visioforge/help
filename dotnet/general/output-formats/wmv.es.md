@@ -1,6 +1,6 @@
 ---
-title: Codificación de archivos WMV en .NET con VisioForge SDK
-description: Implemente codificación Windows Media Video en .NET con configuración de audio/video, opciones de transmisión y gestión de perfiles multiplataforma.
+title: Codificación WMV en .NET: Guía de Salida Windows Media Video
+description: Implemente codificación Windows Media Video en .NET con configuración de audio/video, opciones de streaming y gestión de perfiles multiplataforma.
 ---
 
 # Codificadores Windows Media Video

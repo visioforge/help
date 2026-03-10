@@ -1,5 +1,5 @@
 ---
-title: Codificación de Animaciones GIF para Desarrollo .NET
+title: Codificación de Video a GIF Animado en Aplicaciones .NET
 description: Cree animaciones GIF desde video en .NET con control de tasa de cuadros, configuración de resolución y optimización para aplicaciones multiplataforma.
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: Codificadores de audio para .NET: AAC, MP3, FLAC, Opus
-description: Compresión de audio completa con AAC, MP3, FLAC, Opus y más códecs en Media Blocks SDK para codificación y streaming eficiente.
+title: Codificadores de Audio en C# .NET - AAC, MP3, FLAC, Opus
+description: Codifique audio a AAC, MP3, FLAC, Opus, Vorbis y WMA con VisioForge Media Blocks SDK. Bitrate, frecuencia de muestreo y canales configurables.
 ---
 
 # Bloques de codificadores de audio

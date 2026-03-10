@@ -1,6 +1,6 @@
 ---
-title: Audio Rendering and Volume Control in Video Capture SDK .Net
-description: Master audio rendering in .NET with device selection, volume control, performance optimization, and high-quality output tutorials.
+title: Audio Output Device Selection and Volume Control in C# .NET
+description: Configure audio output devices, adjust volume, and optimize playback in VisioForge Video Capture SDK. C# code examples for WinForms and WPF apps.
 sidebar_label: Audio Rendering
 order: 12
 

@@ -1,6 +1,6 @@
 ---
-title: Guardar Stream RTSP a Archivo MP4 sin Recodificación
-description: Guardar stream RTSP a archivo (MP4) desde cámara IP sin re-codificación de video usando .NET con VisioForge Media Blocks para control programático.
+title: Guardar Stream RTSP a MP4 sin Recodificar en C# .NET
+description: Grabe streams RTSP de cámaras IP directamente a archivos MP4 sin transcodificación con VisioForge Media Blocks SDK. Captura passthrough con ejemplos C#.
 ---
 
 # Cómo Guardar Stream RTSP a Archivo: Grabar Video de Cámara IP sin Re-codificación

@@ -1,6 +1,6 @@
 ---
-title: Codificación MPEG-TS en .NET con VisioForge SDK - H264/HEVC
-description: Implemente salida MPEG Transport Stream en .NET con codificación de video y audio, aceleración de hardware y soporte de streaming multiplataforma.
+title: Salida MPEG-TS con División de Archivos y GPU en C# .NET
+description: División de archivos por duración, tamaño o timecode. Buffer circular. Codificación GPU H.264/HEVC y modo Blu-ray M2TS. Ejemplos con VisioForge SDK.
 ---
 
 # Salida MPEG-TS

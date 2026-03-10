@@ -1,6 +1,6 @@
 ---
 title: Live Video Compositor for Real-Time Mixing in C# .NET
-description: Composite multiple live video and audio sources in real-time with dynamic add/remove capabilities for streaming and recording applications.
+description: Mix multiple live video and audio sources in real-time using VisioForge Media Blocks SDK. Dynamic source switching for streaming and recording in C#.
 sidebar_label: Live Video Compositor
 ---
 

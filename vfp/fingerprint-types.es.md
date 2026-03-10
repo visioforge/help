@@ -1,6 +1,6 @@
 ---
-title: Tipos de huella digital de video: búsqueda vs comparación
-description: Guía completa de huellas digitales de Búsqueda vs Comparación en SDK de Video Fingerprinting de VisioForge con diferencias técnicas y rendimiento.
+title: Video Fingerprinting - tipos de búsqueda vs comparación
+description: Guía de tipos de huellas Search vs Compare en el SDK Video Fingerprinting de VisioForge con diferencias técnicas y rendimiento.
 ---
 
 # Tipos de Huella Digital: Búsqueda vs Comparación

@@ -1,6 +1,6 @@
 ---
-title: Camera Control and PTZ Guide for Video Capture SDK .Net
-description: Implement camera control features including Pan, Tilt, Zoom (PTZ), Exposure, Iris, and Focus in .NET with C# code samples for video capture.
+title: Camera Pan, Tilt, Zoom Programmatic Control in C# .NET
+description: Control Pan, Tilt, Zoom, Exposure, Iris, and Focus programmatically using VisioForge Video Capture SDK. Async C# API with hardware camera support.
 ---
 
 # Advanced Camera Control and PTZ Implementation

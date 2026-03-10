@@ -1,6 +1,6 @@
 ---
-title: Apple Platform Media Blocks for .NET — iOS & macOS
-description: iOS and macOS optimized MediaBlocks featuring platform audio sources, sinks, ProRes encoding, and VideoToolbox hardware acceleration.
+title: Apple Platform Media Blocks in C# .NET — iOS, macOS
+description: Build iOS and macOS media apps with ProRes encoding, VideoToolbox acceleration, and native audio blocks using VisioForge Media Blocks SDK.
 sidebar_label: Apple Platform
 ---
 

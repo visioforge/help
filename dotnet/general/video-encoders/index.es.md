@@ -1,5 +1,5 @@
 ﻿---
-title: Codificadores de Video para VisioForge .NET
+title: Codificadores de Video para VisioForge .NET: H264, HEVC, AV1
 description: Descripción completa de codificadores de video con aceleración por hardware, características de códecs y optimización de rendimiento para apps de video .NET.
 sidebar_label: Codificadores de Video
 

@@ -9,7 +9,7 @@ description: Conecta cámaras Swann en C# .NET con patrones de URL RTSP y ejempl
 
 ## Descripción de la Marca
 
-**Swann** (Swann Communications) es una marca australiana de seguridad para consumidores con sede en Melbourne, Australia, ahora propiedad de **Infinova**. Swann es una de las marcas de seguridad para consumidores y prosumidores más conocidas, popular por sus sistemas de cámaras DVR/NVR vendidos a través de grandes minoristas. Swann ofrece una gama de cámaras IP independientes, sistemas de cámaras analógicas sobre coaxial (BNC) y grabadores de video en red.
+**Swann** (Swann Communications) es una marca australiana de seguridad para consumidores con sede en Melbourne, Australia, ahora propiedad de **Infinova**. Swann es una de las marcas de seguridad para consumidores y prosumidores más conocidas, popular por sus sistemas de cámaras DVR/NVR vendidos a través de grandes minoristas. Swann ofrece una gama de cámaras IP independientes, sistemas de cámaras analógicas sobre coaxial (BNC) y grabadores de vídeo en red.
 
 **Datos clave:**
 
@@ -18,7 +18,7 @@ description: Conecta cámaras Swann en C# .NET con patrones de URL RTSP y ejempl
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** admin / admin o admin / (vacío) en modelos antiguos
 - **Soporte ONVIF:** Sí (cámaras NHD-series actuales)
-- **Códecs de video:** H.264, H.265 (modelos actuales), MPEG-4 (DVRs antiguos)
+- **Códecs de vídeo:** H.264, H.265 (modelos actuales), MPEG-4 (DVRs antiguos)
 - **Base OEM:** Muchos NVRs Swann más nuevos son OEM de Hikvision y usan patrones de URL RTSP de Hikvision
 
 !!! info "NVRs Swann y Hikvision"

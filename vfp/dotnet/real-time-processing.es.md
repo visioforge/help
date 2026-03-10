@@ -1,6 +1,6 @@
 ---
-title: Huellas de Video en Tiempo Real con VisioForge .NET SDK
-description: Procesa streams de video en vivo y genera huellas en tiempo real usando procesamiento basado en fragmentos con el SDK de Huellas de Video de VisioForge.
+title: Video Fingerprinting en tiempo real desde streams en .NET
+description: Genere huellas de video en tiempo real desde streams en vivo usando el SDK VisioForge con procesamiento por fragmentos, cámaras y monitoreo IP.
 ---
 
 # Guía de Huellas de Video en Tiempo Real

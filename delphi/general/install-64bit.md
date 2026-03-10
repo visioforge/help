@@ -1,6 +1,6 @@
 ---
-title: Delphi SDK 64-bit Package Installation Step-by-Step
-description: Complete guide to installing 64-bit Delphi packages - configure library paths, manage runtime packages, and resolve common installation issues.
+title: Install VisioForge Delphi SDKs — 64-bit Package Setup
+description: Fix 64-bit BPL loading issues in Delphi IDE. Covers design-time vs runtime packages, library path configuration for x86/x64, and common error solutions.
 ---
 
 # Mastering Delphi 64-bit Package Installation

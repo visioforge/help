@@ -1,6 +1,6 @@
 ---
-title: Servidor RTSP en C# con Media Blocks SDK de VisioForge
-description: Cree servidores de streaming RTSP para entrega de audio y video de baja latencia a través de redes con soporte de codecs H.264/H.265 en Media Blocks SDK.
+title: Servidor RTSP - Streaming H.264 de Baja Latencia en C# .NET
+description: Cree servidores de streaming RTSP para entrega de audio y video de baja latencia con soporte H.264/H.265 usando VisioForge Media Blocks SDK.
 ---
 
 # Bloque Servidor RTSP - VisioForge Media Blocks SDK .Net

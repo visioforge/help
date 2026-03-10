@@ -1,6 +1,6 @@
 ---
-title: Renderizadores de Video en Delphi - EVR, VMR9 y GDI
-description: Seleccionar renderizadores de video óptimos en Delphi - Video Renderer, VMR9, EVR con ejemplos de código para rendimiento y aceleración de hardware en Windows.
+title: Selección de Video Renderer en Delphi: EVR, VMR9 y GDI
+description: Seleccione renderizadores de video óptimos en Delphi - Video Renderer, VMR9, EVR con ejemplos de código para rendimiento y aceleración de hardware en Windows.
 ---
 
 # Guía de Selección de Renderizador de Video para TVFVideoCapture

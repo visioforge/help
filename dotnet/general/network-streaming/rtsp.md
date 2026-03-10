@@ -1,6 +1,6 @@
 ---
-title: RTSP Streaming in C# and .NET - Server Setup and Examples
-description: Implement RTSP streaming with H.264 and AAC codecs for security cameras, live broadcasting, and real-time media control in .NET applications.
+title: RTSP Streaming Server in C# .NET - Build and Configure
+description: Build an RTSP server with H.264/AAC encoding, GPU acceleration (NVENC, QSV, AMF), authentication, and latency tuning. VisioForge SDK cross-platform examples.
 ---
 
 # Mastering RTSP Streaming with VisioForge SDKs

@@ -1,6 +1,7 @@
 ---
-title: Screen Capture to MP4 with .NET | C# Video Recording
-description: Implement screen recording to MP4 with C# in .NET using complete code examples for audio and silent captures with H264/AAC encoding.
+title: Screen Capture to MP4 with GPU Encoding in C# .NET
+description: Record full screen, region, or multi-monitor to MP4 using VisioForge Video Capture SDK. GPU encoding (NVENC/QSV/AMF), audio loopback, and C# examples.
+sidebar_label: Screen Capture to MP4
 ---
 
 # Screen capture to MP4 file
@@ -20,7 +21,9 @@ description: Implement screen recording to MP4 with C# in .NET using complete co
 - Video capture redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 - MP4 redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
 
-## Code Example
+## Legacy API — Video Capture SDK
+
+### Code Example
 
 ```csharp
 using System;
@@ -141,7 +144,205 @@ namespace screen_capture_mp4
 }
 ```
 
-## How It Works
+## Modern API — Video Capture SDK X
+
+The modern cross-platform API uses `VideoCaptureCoreX` with Direct3D 11 screen capture and Windows Graphics Capture (WGC). This console application records the full screen to MP4 with optional system audio.
+
+### Required NuGet Packages
+
+```bash
+dotnet add package VisioForge.DotNet.Core.TRIAL
+dotnet add package VisioForge.DotNet.VideoCapture.TRIAL
+```
+
+Add the [redist package](../../deployment-x/index.md) for your platform (e.g., `VisioForge.DotNet.Redist.Base.Windows.x64`).
+
+### Complete Example
+
+```csharp
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Initialize SDK
+        await VisioForgeX.InitSDKAsync();
+
+        var videoCapture = new VideoCaptureCoreX();
+
+        try
+        {
+            // Configure Direct3D 11 screen capture with WGC
+            var screenSource = new ScreenCaptureD3D11SourceSettings
+            {
+                FrameRate = new VideoFrameRate(25, 1),
+                CaptureCursor = true,
+                MonitorIndex = 0  // Primary monitor (-1 also selects primary)
+            };
+
+            videoCapture.Video_Source = screenSource;
+            videoCapture.Video_Play = false;
+            videoCapture.Audio_Play = false;
+            videoCapture.Audio_Record = false;
+
+            // Configure MP4 output (H.264 + AAC, auto-selected encoders)
+            string outputPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
+                $"screen_{DateTime.Now:yyyyMMdd_HHmmss}.mp4");
+
+            var mp4Output = new MP4Output(outputPath);
+            videoCapture.Outputs_Add(mp4Output, autostart: true);
+
+            // Start recording
+            await videoCapture.StartAsync();
+            Console.WriteLine($"Recording to: {outputPath}");
+            Console.WriteLine("Press ENTER to stop...");
+            Console.ReadLine();
+
+            // Stop and save
+            await videoCapture.StopAsync();
+            Console.WriteLine("Recording saved.");
+        }
+        finally
+        {
+            await videoCapture.DisposeAsync();
+            VisioForgeX.DestroySDK();
+        }
+    }
+}
+```
+
+### Adding System Audio (Loopback)
+
+To include desktop audio in the recording, add WASAPI2 loopback capture:
+
+```csharp
+// Enumerate WASAPI2 output devices for loopback capture
+var audioOutputs = await DeviceEnumerator.Shared.AudioOutputsAsync(
+    AudioOutputDeviceAPI.WASAPI2);
+
+if (audioOutputs.Length > 0)
+{
+    var loopbackSource = new LoopbackAudioCaptureDeviceSourceSettings(audioOutputs[0]);
+    videoCapture.Audio_Source = loopbackSource;
+    videoCapture.Audio_Record = true;
+}
+```
+
+For microphone audio instead, use `DeviceEnumerator.Shared.AudioSourcesAsync()` — see the [Audio Capture guide](../audio-capture/index.md) for complete examples.
+
+## GPU-Accelerated Encoding
+
+Hardware-accelerated encoding offloads H.264/HEVC compression to your GPU, significantly reducing CPU usage during high-resolution or high-FPS recording.
+
+```csharp
+// NVIDIA NVENC H.264
+var mp4Output = new MP4Output(
+    outputPath,
+    new NVENCH264EncoderSettings());
+
+// Intel Quick Sync Video H.264
+var mp4Output = new MP4Output(
+    outputPath,
+    new QSVH264EncoderSettings());
+
+// AMD AMF H.264
+var mp4Output = new MP4Output(
+    outputPath,
+    new AMFH264EncoderSettings());
+```
+
+HEVC (H.265) encoders are also available for better compression at the same quality: `NVENCHEVCEncoderSettings`, `QSVHEVCEncoderSettings`, `AMFHEVCEncoderSettings`. If hardware encoding is unavailable, the SDK falls back to the software `OpenH264EncoderSettings` encoder automatically when you use the default `new MP4Output(filename)` constructor.
+
+## Screen Capture with Media Blocks SDK
+
+The Media Blocks SDK uses a pipeline approach where you connect source, processing, and output blocks. This gives full control over the data flow and allows splitting the video stream to multiple outputs simultaneously.
+
+```csharp
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Special;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Sources;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        await VisioForgeX.InitSDKAsync();
+
+        var pipeline = new MediaBlocksPipeline();
+
+        try
+        {
+            // Screen capture source
+            var screenSettings = new ScreenCaptureD3D11SourceSettings
+            {
+                FrameRate = new VideoFrameRate(25, 1),
+                CaptureCursor = true
+            };
+            var screenSource = new ScreenSourceBlock(screenSettings);
+
+            // MP4 output
+            string outputPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
+                $"screen_mb_{DateTime.Now:yyyyMMdd_HHmmss}.mp4");
+            var mp4Sink = new MP4OutputBlock(outputPath);
+
+            // Connect source to output
+            pipeline.Connect(screenSource.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+            // Start pipeline
+            await pipeline.StartAsync();
+            Console.WriteLine($"Recording to: {outputPath}");
+            Console.WriteLine("Press ENTER to stop...");
+            Console.ReadLine();
+
+            await pipeline.StopAsync();
+            Console.WriteLine("Recording saved.");
+        }
+        finally
+        {
+            await pipeline.DisposeAsync();
+            VisioForgeX.DestroySDK();
+        }
+    }
+}
+```
+
+## Cross-Platform Screen Capture
+
+The SDK supports screen capture on Windows, macOS, and Linux with platform-specific source settings:
+
+| Platform | Capture Method | Settings Class | Requirements |
+|----------|---------------|----------------|--------------|
+| Windows | Direct3D 11 / WGC | `ScreenCaptureD3D11SourceSettings` | Windows 8+ (WGC: Windows 10 v1803+) |
+| macOS | AVFoundation | `ScreenCaptureMacOSSourceSettings` | macOS 10.15+ (screen recording permission) |
+| Linux | X11 / XDisplay | `ScreenCaptureXDisplaySourceSettings` | X11 server |
+
+On Windows, the SDK auto-selects WGC when available, falling back to DXGI Desktop Duplication on older systems. You can force a specific API:
+
+```csharp
+var screenSource = new ScreenCaptureD3D11SourceSettings
+{
+    API = D3D11ScreenCaptureAPI.DXGI  // Force Desktop Duplication instead of WGC
+};
+```
+
+## How It Works — Legacy API
 
 This Windows Forms application demonstrates screen capture functionality with and without audio using VisioForge Video Capture SDK:
 
@@ -163,11 +364,126 @@ This Windows Forms application demonstrates screen capture functionality with an
 
 The application demonstrates how to configure different capture scenarios with minimal code using the SDK's fluent interface and async patterns.
 
-## Related Resources
+### Audio Configuration
 
-- [Screen Capture in VB.NET](../guides/screen-capture-vb-net.md)
-- [Screen Source Configuration](../video-sources/screen.md)
-- [Video Capture SDK .Net Product Page](https://www.visioforge.com/video-capture-sdk-net)
+The code example above captures microphone audio by selecting the first available device. You can select a specific audio device by name, including system audio (loopback) devices for capturing desktop sound:
 
----
-Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.
+```csharp
+// Select a loopback device (e.g., "Stereo Mix") for system audio capture
+var devices = videoCapture1.Audio_CaptureDevices();
+var loopbackDevice = devices.FirstOrDefault(d => d.Name.Contains("Stereo Mix"));
+
+if (loopbackDevice != null)
+{
+    videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(loopbackDevice.Name);
+}
+else
+{
+    // Fallback: use the first available audio device
+    videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(devices[0].Name);
+}
+
+// Enable recording, disable playback to prevent feedback
+videoCapture1.Audio_RecordAudio = true;
+videoCapture1.Audio_PlayAudio = false;
+```
+
+To create a silent recording with no audio track, disable both audio properties:
+
+```csharp
+videoCapture1.Audio_PlayAudio = false;
+videoCapture1.Audio_RecordAudio = false;
+```
+
+### Region Capture
+
+Instead of recording the full screen, capture a specific rectangular area by setting `FullScreen = false` and providing pixel coordinates:
+
+```csharp
+videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
+{
+    FullScreen = false,
+    Left = 100,
+    Top = 100,
+    Right = 1380,
+    Bottom = 820
+};
+```
+
+The coordinates define the capture rectangle in screen pixels. This is useful for recording a specific application window or a portion of the desktop.
+
+### Multi-Monitor Recording
+
+Select which display to record using the `DisplayIndex` property. The primary monitor is index `0`, the secondary is `1`, and so on:
+
+```csharp
+videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
+{
+    FullScreen = true,
+    DisplayIndex = 1  // Record the secondary monitor
+};
+```
+
+### Recording Quality Settings
+
+Customize the MP4 output by configuring the H.264 encoder. The default bitrate is 3500 kbps, which produces approximately 25 MB per minute at 1080p:
+
+```csharp
+var mp4Output = new MP4Output();
+mp4Output.Video.Bitrate = 5000;                          // Higher quality (kbps)
+mp4Output.Video.Profile = H264Profile.ProfileMain;       // Better compression than Baseline
+mp4Output.Video.RateControl = H264RateControl.VBR;       // Variable bitrate
+videoCapture1.Output_Format = mp4Output;
+```
+
+For GPU-accelerated encoding, see the [GPU-Accelerated Encoding](#gpu-accelerated-encoding) section above.
+
+### Mouse Cursor Options
+
+Include the mouse cursor in the recording and optionally add a highlight effect for tutorial-style screencasts:
+
+```csharp
+videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
+{
+    FullScreen = true,
+    GrabMouseCursor = true,
+    MouseHighlight = true,
+    MouseHighlightColor = System.Drawing.Color.Yellow,
+    MouseHighlightRadius = 40,
+    MouseHighlightOpacity = 0.4
+};
+```
+
+The highlight draws a translucent circle around the cursor, making it easier for viewers to follow mouse movements.
+
+## Frequently Asked Questions
+
+### What license do I need for a C# screen capture application?
+
+Video Capture SDK .Net requires a license for development and distribution. A Developer license removes the evaluation watermark and unlocks all features during development. A Release license is required when distributing your application to end users. The SDK is available in Premium edition which includes all capture modes, MP4/AVI/WMV output, and both DirectShow and GStreamer engines. You can evaluate the SDK without a license — screen capture works fully but includes a watermark overlay. Visit the [product page](https://www.visioforge.com/video-capture-sdk-net) for pricing and license options.
+
+### How do I control recording quality and file size for MP4 screen capture?
+
+Configure the `MP4Output` video bitrate to balance quality and file size. The default is 3500 kbps, which works well for most screen recordings. Lower the bitrate to 1500–2000 kbps for smaller files, or increase to 5000–8000 kbps for high-quality captures. Use `H264Profile.ProfileMain` or `ProfileHigh` instead of `ProfileBaseline` for better compression at the same quality. Frame rate also affects file size — 15 FPS is sufficient for presentations, while 30 FPS is better for software demos. A 1080p recording at 3500 kbps produces roughly 25 MB per minute.
+
+### Can I capture system audio (desktop sound) instead of microphone input?
+
+Yes. Call `Audio_CaptureDevices()` to enumerate all available audio devices, then select a loopback or system audio device (such as "Stereo Mix" or "What U Hear") by name. Set `Audio_RecordAudio = true` and `Audio_PlayAudio = false`. The available loopback device names depend on your audio hardware and drivers. You can record both microphone and system audio simultaneously by configuring additional audio sources.
+
+### How do I record a specific monitor in a multi-monitor setup?
+
+Set the `DisplayIndex` property on `ScreenCaptureSourceSettings` — use `0` for the primary monitor, `1` for the secondary, and so on. Combine with `FullScreen = true` to capture the entire selected display. You can also set `FullScreen = false` with `Left/Top/Right/Bottom` coordinates to capture a specific region on the chosen monitor.
+
+### What frame rate should I use for screen recording?
+
+The default frame rate is 10 FPS. Use 15 FPS for presentations, slides, and mostly static content. Use 25–30 FPS for software tutorials and UI demonstrations where smooth mouse movement matters. Use 60 FPS for game recording or high-motion content. Higher frame rates increase file size and CPU usage proportionally. Set the frame rate via `ScreenCaptureSourceSettings.FrameRate`.
+
+## See Also
+
+- [Screen Capture to AVI](screen-capture-avi.md) — record screen to AVI format with uncompressed or MJPEG video
+- [Screen Capture to WMV](screen-capture-wmv.md) — record screen to Windows Media format
+- [Screen Capture in VB.NET](../guides/screen-capture-vb-net.md) — screen recording application in Visual Basic .NET
+- [Screen Source Configuration](../video-sources/screen.md) — full reference for capture region, multi-monitor, cursor, and frame rate settings
+- [Save Webcam Video](../guides/save-webcam-video.md) — webcam capture to MP4 with audio configuration
+- [Code Samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — additional screen capture code snippets on GitHub
+- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — product page and downloads

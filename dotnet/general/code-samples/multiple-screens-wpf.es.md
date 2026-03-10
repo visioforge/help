@@ -1,6 +1,6 @@
 ---
-title: Múltiples Pantallas de Salida de Video en Apps WPF
-description: Crea aplicaciones de video multi-pantalla en WPF con controles Image, manejo de eventos, gestión de memoria y técnicas de optimización de rendimiento.
+title: Múltiples Pantallas de Video en WPF - Guía C# Multi-Display
+description: Cree aplicaciones de video multi-pantalla en WPF con controles Image, manejo de eventos, gestión de memoria y técnicas de optimización de rendimiento.
 ---
 
 # Implementación de Múltiples Pantallas de Salida de Video en Aplicaciones WPF

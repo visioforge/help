@@ -1,6 +1,6 @@
 ---
-title: Facebook Live Encoder en .NET con aceleración hardware
-description: Transmite a Facebook Live en .NET con codificación hardware acelerada, broadcasting RTMP y optimizaciones para video en tiempo real.
+title: Streaming a Facebook Live y Codificación en Apps .NET
+description: Transmita a Facebook Live en .NET con codificación acelerada por hardware, broadcasting RTMP y optimizaciones de plataforma para video en tiempo real.
 ---
 
 # Transmisión Facebook Live con SDK de VisioForge

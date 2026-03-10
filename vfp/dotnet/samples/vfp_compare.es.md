@@ -1,6 +1,6 @@
 ---
-title: Comparación de huellas de video para detectar duplicados
-description: Usa vfp_compare para comparar huellas de video y determinar si los videos son similares o idénticos con características para ayudar a administrar tu biblioteca.
+title: Comparar Huellas de Video - CLI vfp_compare en .NET
+description: Compare huellas de video por similitud usando la herramienta CLI vfp_compare de VisioForge con umbrales configurables y detección de duplicados.
 ---
 
 # vfp_compare - Herramienta de Comparación de Huellas de Video

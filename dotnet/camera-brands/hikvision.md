@@ -1,6 +1,6 @@
 ---
 title: Hikvision RTSP URL Format for IP Cameras and NVR in C#
-description: Connect to Hikvision cameras in C# .NET with RTSP URL patterns, ONVIF discovery, and complete code samples for DS-2CD, DS-2DE, and NVR models.
+description: Hikvision RTSP URL format for DS-2CD, DS-2DE, and NVR models in C# .NET. ONVIF discovery, multi-channel streams, and VisioForge SDK integration guide.
 ---
 
 # How to Connect to Hikvision IP Camera in C# .NET

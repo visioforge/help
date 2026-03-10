@@ -1,6 +1,6 @@
 ---
 title: Playlist Playback Management in .NET with C# Code Examples
-description: Implement playlist functionality in WinForms, WPF, and Console applications with sequential media playback management in .NET.
+description: Implement playlist functionality in WinForms, WPF, and Console apps using VisioForge Media Player SDK .NET. Sequential and custom playback order.
 ---
 
 # Complete Guide to Playlist API Implementation in .NET

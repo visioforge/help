@@ -1,6 +1,6 @@
 ---
-title: Configure Device Input Connections with Crossbar API
-description: Select and configure multiple hardware video inputs for TV tuners and capture cards in .NET with C# crossbar implementation steps.
+title: Crossbar Video Input - Composite, S-Video, HDMI in C# .NET
+description: Switch between Composite, S-Video, and HDMI inputs on capture cards using VisioForge Video Capture SDK Crossbar API. C# implementation examples.
 ---
 
 # Configuring Multiple Hardware Video Inputs with Crossbar

@@ -18,7 +18,7 @@ description: Conecta cámaras TP-Link y cámaras Tapo en C# .NET con patrones de
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** Varía según la generación (ver abajo)
 - **Soporte ONVIF:** Serie Tapo C (requiere habilitación en la app Tapo); la serie TL-SC no tiene ONVIF
-- **Códecs de video:** H.264 (todos los modelos), H.265 (Tapo C320WS y posteriores)
+- **Códecs de vídeo:** H.264 (todos los modelos), H.265 (Tapo C320WS y posteriores)
 
 ### Credenciales por Línea de Producto
 

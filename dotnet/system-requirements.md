@@ -1,6 +1,6 @@
 ---
-title: .NET SDK Platform Requirements & Compatibility Guide
-description: .NET SDK platform support and system requirements for Windows, macOS, Linux, iOS, and Android with framework compatibility details.
+title: .NET SDKs — System Requirements & Platform Support
+description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 10+. .NET 6–9, ARM64 support, 4K memory guidelines. WPF, WinForms, MAUI, and Avalonia compatible.
 ---
 
 # System Requirements for .NET SDKs

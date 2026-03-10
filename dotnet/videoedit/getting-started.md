@@ -1,6 +1,6 @@
 ---
-title: Video Editing SDK for .NET - Getting Started Dev Guide
-description: Master video editing in .NET SDK with customizable timelines, multiple formats, transitions, effects, and real-time previews for developers.
+title: Getting Started - Timeline Video Editing API in C# .NET
+description: Set up your first project with VisioForge Video Edit SDK .NET. Customizable timelines, multi-format support, transitions, effects, and live preview.
 sidebar_position: 0
 ---
 

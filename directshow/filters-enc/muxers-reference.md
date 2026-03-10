@@ -1,6 +1,6 @@
 ---
-title: DirectShow Encoding Filters Muxers Reference Guide
-description: DirectShow container formats reference for MP4, MKV, WebM, MPEG-TS, and AVI muxers with supported codecs and streaming options.
+title: DirectShow Muxer and Container Format Reference Guide
+description: Container format reference for VisioForge DirectShow muxers: MP4, MKV, WebM, MPEG-TS, AVI with codec compatibility and streaming configuration.
 ---
 
 # Encoding Filters Pack - Muxers Reference

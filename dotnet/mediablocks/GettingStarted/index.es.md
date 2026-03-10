@@ -1,6 +1,6 @@
 ---
-title: Media Blocks SDK .NET - Instalación y Pipelines en C#
-description: Integra Media Blocks SDK en aplicaciones con guía de instalación, arquitectura de pipeline y tutoriales de bloques de procesamiento multimedia.
+title: Guía de Inicio Rápido de Pipeline Multimedia en C# .NET
+description: Comience con VisioForge Media Blocks SDK: instalación, arquitectura de pipeline, conexión de bloques y tutoriales de procesamiento multimedia.
 ---
 
 # Media Blocks SDK .Net - Guía de Inicio Rápido para Desarrolladores

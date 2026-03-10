@@ -1,5 +1,5 @@
 ---
-title: "SDKs .NET para Captura, Edición y Reproducción de Video"
+title: SDKs .NET para Captura, Edición y Reproducción de Video
 description: SDKs .NET para captura, edición, reproducción y procesamiento de video en Windows, macOS, Linux, Android e iOS con aceleración de hardware.
 ---
 

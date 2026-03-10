@@ -1,6 +1,6 @@
 ---
-title: Herramienta Generadora de Huellas de Video para .Net
-description: Usa vfp_gen para generar huellas de video y determinar si los videos son similares o idénticos con características para ayudar a administrar tu biblioteca.
+title: Generador de huellas de video - herramienta CLI vfp_gen .NET
+description: Genere huellas de video desde línea de comandos usando la herramienta CLI vfp_gen de VisioForge para .NET con modos de búsqueda y comparación.
 ---
 
 # vfp_gen - Generador de Huellas de Video

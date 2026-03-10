@@ -1,6 +1,6 @@
 ---
-title: Create New Video Files from Multiple Sources in .NET
-description: Combine multiple video and audio files into a single output without reencoding using C# with step-by-step guide for merging streams.
+title: Merge Multiple Video and Audio Sources into One in C# .NET
+description: Combine multiple video and audio files into one output without re-encoding using VisioForge Video Edit SDK .NET. Stream merging guide with C# code.
 ---
 
 # Creating New Files from Multiple Sources Without Reencoding

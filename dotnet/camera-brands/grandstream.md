@@ -1,6 +1,6 @@
 ---
 title: How to Connect to Grandstream IP Camera in C# .NET
-description: Connect to Grandstream GXV and GSC cameras in C# .NET with RTSP URL patterns and code samples for GXV3500, GXV3610, GSC3610, and other models.
+description: Integrate Grandstream GXV and GSC cameras into C# .NET apps via RTSP. URL patterns for GXV3500, GXV3610, GSC3610, plus VisioForge SDK examples.
 ---
 
 # How to Connect to Grandstream IP Camera in C# .NET

@@ -1,5 +1,5 @@
 ---
-title: Guía de Transmisión en Red para Desarrollo en .NET
+title: Streaming en Red en .NET - RTMP, RTSP, HLS, NDI, SRT
 description: Implemente protocolos RTMP, RTSP, HLS, NDI y otros en .NET con aceleración por hardware para transmisión en vivo y plataformas multimedia.
 sidebar_label: Transmisión en Red
 order: 16

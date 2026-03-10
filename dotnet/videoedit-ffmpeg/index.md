@@ -1,6 +1,6 @@
 ---
-title: FFmpeg .NET Video Editing SDK - Convert, Edit and Process
-description: Powerful cross-platform video editing, processing, and conversion toolkit for .NET with professional effects, overlays, and encoding.
+title: FFmpeg Video Editing and Format Conversion in C# .NET
+description: Edit, convert, and process video with VisioForge Video Edit SDK FFmpeg .NET. Cross-platform toolkit with effects, overlays, and hardware encoding.
 sidebar_label: Video Edit SDK FFMPEG .Net
 order: 11
 

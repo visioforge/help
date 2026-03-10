@@ -1,6 +1,6 @@
 ---
-title: Captura de video en Visual Basic 6 con TVFVideoCapture
-description: Integrar control ActiveX TVFVideoCapture en Visual Basic 6 con compatibilidad x86 y acceso completo a características de captura de video.
+title: Instalar TVFVideoCapture en VB6 para Usuarios Delphi
+description: Integre el control ActiveX TVFVideoCapture en Visual Basic 6 con compatibilidad x86 y acceso completo a funciones de captura de video.
 ---
 
 # Integrando TVFVideoCapture con Visual Basic 6

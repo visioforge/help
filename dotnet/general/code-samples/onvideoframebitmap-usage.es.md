@@ -1,6 +1,6 @@
 ---
-title: Guía de Frames en Tiempo Real con OnVideoFrameBitmap
-description: Accede y modifica frames de video en tiempo real con eventos OnVideoFrameBitmap para manipulación avanzada de video en aplicaciones C#.
+title: OnVideoFrameBitmap: Acceso a Frames de Video en .NET
+description: Acceda y modifique frames de video en tiempo real con eventos OnVideoFrameBitmap para manipulación avanzada de video en aplicaciones C#.
 ---
 
 # Guía de Frames en Tiempo Real con OnVideoFrameBitmap

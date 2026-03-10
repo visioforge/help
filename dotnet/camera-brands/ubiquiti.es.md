@@ -9,7 +9,7 @@ description: Conecta cámaras Ubiquiti UniFi Protect y AirCam en C# .NET con pat
 
 ## Descripción de la Marca
 
-**Ubiquiti Inc.** es una empresa tecnológica americana con sede en la ciudad de Nueva York, conocida por equipos de red bajo la marca **UniFi**. La línea de cámaras de Ubiquiti es parte del ecosistema **UniFi Protect**, que incluye cámaras, NVRs (grabadores de video en red), timbres y sensores. Las cámaras UniFi Protect se gestionan a través de una consola central (Dream Machine, Cloud Key o NVR) y son populares en entornos prosumer y PYME.
+**Ubiquiti Inc.** es una empresa tecnológica americana con sede en la ciudad de Nueva York, conocida por equipos de red bajo la marca **UniFi**. La línea de cámaras de Ubiquiti es parte del ecosistema **UniFi Protect**, que incluye cámaras, NVRs (grabadores de vídeo en red), timbres y sensores. Las cámaras UniFi Protect se gestionan a través de una consola central (Dream Machine, Cloud Key o NVR) y son populares en entornos prosumer y PYME.
 
 **Datos clave:**
 
@@ -18,7 +18,7 @@ description: Conecta cámaras Ubiquiti UniFi Protect y AirCam en C# .NET con pat
 - **Puerto RTSP predeterminado:** 7447 (UniFi Protect) o 554 (legacy AirCam)
 - **Credenciales predeterminadas:** Establecidas durante la configuración de UniFi Protect (RTSP usa credenciales separadas por cámara)
 - **Soporte ONVIF:** No soportado nativamente; RTSP es el método de integración con terceros
-- **Códecs de video:** H.264 (todos los modelos)
+- **Códecs de vídeo:** H.264 (todos los modelos)
 
 !!! warning "RTSP debe habilitarse"
     Las cámaras UniFi Protect **no** tienen RTSP habilitado por defecto. Debes habilitar RTSP para cada cámara individualmente a través de la interfaz web o app de UniFi Protect. Sin habilitarlo, la cámara no responderá a conexiones RTSP.

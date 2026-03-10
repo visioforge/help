@@ -1,6 +1,6 @@
 ---
-title: .NET SDK Platform Support Matrix for Video and Audio
-description: .NET SDK cross-platform support for video/audio codecs, hardware acceleration, capture devices on Windows, Linux, macOS, Android, iOS.
+title: Cross-Platform Codec and Device Support Matrix for .NET
+description: VisioForge .NET SDK cross-platform support matrix for video/audio codecs, hardware acceleration, and capture devices on Windows, Linux, macOS, Android, iOS.
 ---
 
 # .NET SDK: Supported Features and Platforms

@@ -1,6 +1,6 @@
 ---
-title: Video Fingerprinting SDK - Historial completo de versiones
-description: Evolución del SDK de Video Fingerprinting: historial de versiones con nuevas características, actualizaciones de rendimiento y mejoras técnicas.
+title: Changelog del SDK Video Fingerprinting - Versiones y API
+description: Seguimiento de actualizaciones del SDK Video Fingerprinting de VisioForge con nuevas funciones, mejoras de rendimiento y cambios de API en .NET y C++.
 ---
 
 # Historial de Versiones del SDK de Video Fingerprinting

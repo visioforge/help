@@ -1,6 +1,6 @@
 ---
-title: Renderizador de Video con DirectX, OpenGL y Metal en .NET
-description: Renderice video en Windows, macOS, Linux, iOS y Android con aceleración de hardware DirectX, OpenGL, Metal para aplicaciones multimedia.
+title: Renderizador de Video en C# .NET - DirectX, OpenGL, Metal
+description: Muestre video en aplicaciones WPF, WinForms, Avalonia y MAUI con renderizado acelerado por hardware usando VisioForge Media Blocks SDK para .NET.
 ---
 
 # Bloque Renderizador de Video

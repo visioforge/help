@@ -1,29 +1,83 @@
 ---
-title: Protocolo SRT en .NET - Streaming de Video de Baja Latencia
-description: Integre el protocolo SRT para transmisión de video segura y de baja latencia con recuperación de errores y cifrado en aplicaciones .NET para entrega confiable.
+title: Streaming SRT en C# .NET - Enviar y Recibir Video por IP
+description: Transmita y reciba video mediante el protocolo SRT en C# .NET con modos caller/listener, cifrado AES y multiplexación MPEG-TS. Incluye ejemplos de código SDK.
 ---
 
-# Guía de Implementación de Transmisión SRT para SDK de VisioForge .NET
+# Guía de Implementación de Transmisión SRT
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## ¿Qué es SRT y Por Qué Debería Usarlo?
+## ¿Qué es SRT?
 
-SRT (Secure Reliable Transport) es un protocolo de transmisión de alto rendimiento diseñado para entregar video de alta calidad y baja latencia a través de redes impredecibles. A diferencia de los protocolos de transmisión tradicionales, SRT sobresale en condiciones de red desafiantes al incorporar mecanismos únicos de recuperación de errores y características de cifrado.
+SRT (Secure Reliable Transport) es un protocolo de transmisión diseñado para entrega de video de baja latencia y alta calidad a través de redes no confiables. Proporciona recuperación de errores incorporada, cifrado AES y traversal de firewall — haciéndolo ideal para:
 
-Los SDK de VisioForge .NET proporcionan soporte completo para transmisión SRT a través de una API de configuración intuitiva, permitiendo a los desarrolladores implementar entrega de video segura y confiable en sus aplicaciones con esfuerzo mínimo.
+- Transmisión en vivo por internet
+- Feeds de contribución entre instalaciones de producción
+- Backhaul de cámara remota sobre enlaces celulares o satelitales
+- Transporte de video seguro punto a punto
+- Ingesta y distribución de video basada en la nube
 
-## Comenzando con SRT en VisioForge
+Los SDK de VisioForge .NET soportan tanto el envío como la recepción de flujos SRT en Windows, macOS y Linux. Los flujos SRT usan multiplexación MPEG-TS para transportar video y audio juntos.
 
-### Plataformas SDK Soportadas
+Puede verificar la disponibilidad de SRT en tiempo de ejecución:
+
+```csharp
+bool srtAvailable = SRTSinkBlock.IsAvailable(); // para enviar
+bool srtSourceAvailable = SRTSourceBlock.IsAvailable(); // para recibir
+```
+
+## Modos de Conexión SRT
 
 [VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
-### Configuración Básica SRT
+SRT soporta tres modos de conexión a través del enum `SRTConnectionMode`:
 
-Implementar transmisión SRT en su aplicación comienza con especificar la URL de destino de transmisión. La URL SRT sigue un formato estándar que incluye información de protocolo, host y puerto.
+| Modo | Descripción | Caso de Uso |
+| --- | --- | --- |
+| **Caller** | Se conecta a un listener remoto | Cliente conectándose a un servidor |
+| **Listener** | Espera conexiones entrantes en un puerto | Servidor aceptando conexiones |
+| **Rendezvous** | Ambos lados se conectan simultáneamente | Peer-to-peer, traversal de firewall |
 
-#### Implementación de Video Capture SDK
+### Modo Listener (Servidor)
+
+El listener espera conexiones SRT entrantes en un puerto especificado:
+
+```csharp
+var sinkSettings = new SRTSinkSettings
+{
+    Uri = "srt://:8888",
+    Mode = SRTConnectionMode.Listener
+};
+```
+
+### Modo Caller (Cliente)
+
+El caller se conecta a un listener SRT remoto:
+
+```csharp
+var sourceSettings = new SRTSourceSettings
+{
+    Uri = "srt://192.168.1.100:8888",
+    Mode = SRTConnectionMode.Caller
+};
+```
+
+### Modo Rendezvous
+
+Ambos endpoints se conectan simultáneamente — útil cuando ambos lados están detrás de firewalls:
+
+```csharp
+var settings = new SRTSinkSettings
+{
+    Uri = "srt://remote-host:8888",
+    Mode = SRTConnectionMode.Rendezvous,
+    LocalPort = 8888
+};
+```
+
+## Salida SRT Básica
+
+### Video Capture SDK
 
 ```csharp
 // Inicializar salida SRT con URL de destino
@@ -33,104 +87,187 @@ var srtOutput = new SRTOutput("srt://streaming-server:1234");
 videoCapture.Outputs_Add(srtOutput, true);  // videoCapture es una instancia de VideoCaptureCoreX
 ```
 
-#### Implementación de Media Blocks SDK
+### Media Blocks SDK
+
+El `SRTMPEGTSSinkBlock` multiplexa video y audio en un contenedor MPEG-TS y envía sobre SRT:
 
 ```csharp
-// Crear un bloque de sumidero SRT con configuraciones apropiadas
-var srtSink = new SRTMPEGTSSinkBlock(new SRTSinkSettings() { Uri = "srt://:8888" });
+// Crear un sumidero SRT MPEG-TS en modo listener
+var srtSink = new SRTMPEGTSSinkBlock(new SRTSinkSettings { Uri = "srt://:8888" });
 
-// Configurar codificadores para compatibilidad SRT
-h264Encoder.Settings.ParseStream = false; // Deshabilitar análisis para codificador H264
-
-// Conectar su codificador de video al sumidero SRT
+// Conectar salida del codificador de video al sumidero SRT
 pipeline.Connect(h264Encoder.Output, srtSink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-// Conectar su codificador de audio al sumidero SRT
+// Conectar salida del codificador de audio al sumidero SRT
 pipeline.Connect(aacEncoder.Output, srtSink.CreateNewInput(MediaBlockPadMediaType.Audio));
 ```
 
-## Opciones de Codificación de Video para Transmisión SRT
+## Transmisión de Cámara a SRT
 
-Los SDK de VisioForge ofrecen opciones de codificación flexibles para equilibrar calidad, rendimiento y utilización de hardware. Puede elegir entre codificadores basados en software o opciones aceleradas por hardware según sus requisitos específicos.
+[MediaBlocksPipeline](#){ .md-button }
 
-### Codificadores de Video Basados en Software
+Este ejemplo completo captura desde una webcam y micrófono, codifica a H.264/AAC y transmite por SRT:
 
-- **OpenH264**: El codificador multiplataforma predeterminado que proporciona excelente compatibilidad en diferentes entornos
+### Arquitectura del Pipeline
 
-### Codificadores de Video Acelerados por Hardware
-
-- **NVIDIA NVENC (H.264/HEVC)**: Aprovecha la aceleración GPU de NVIDIA para codificación de alto rendimiento
-- **Intel Quick Sync Video (H.264/HEVC)**: Utiliza el hardware dedicado de procesamiento de medios de Intel
-- **AMD AMF (H.264/H.265)**: Habilita aceleración por hardware en procesadores gráficos AMD
-- **Microsoft Media Foundation HEVC**: Codificador acelerado por hardware específico de Windows
-
-#### Ejemplo: Configurando Aceleración por Hardware NVIDIA
-
-```csharp
-// Configurar salida SRT para usar aceleración por hardware NVIDIA
-srtOutput.Video = new NVENCH264EncoderSettings();
+```text
+SystemVideoSourceBlock → H264EncoderBlock → SRTMPEGTSSinkBlock (entrada de video)
+SystemAudioSourceBlock → AACEncoderBlock  → SRTMPEGTSSinkBlock (entrada de audio)
 ```
 
-## Codificación de Audio para Flujos SRT
-
-La calidad de audio es crítica para muchas aplicaciones de transmisión. Los SDK de VisioForge proporcionan múltiples opciones de codificación de audio:
-
-- **VO-AAC**: Codificador AAC multiplataforma con rendimiento consistente
-- **AVENC AAC**: Codificador AAC basado en FFmpeg con opciones de configuración extensas
-- **MF AAC**: Codificador AAC de Microsoft Media Foundation (solo Windows)
-
-El SDK selecciona automáticamente el codificador de audio predeterminado más apropiado basado en la plataforma:
-- Los sistemas Windows predeterminan a MF AAC
-- Otras plataformas predeterminan a VO AAC
-
-## Optimizaciones Específicas de Plataforma
-
-### Características Específicas de Windows
-
-Cuando se ejecuta en sistemas Windows, el SDK puede aprovechar los marcos de Microsoft Media Foundation:
-
-- El codificador MF AAC proporciona codificación de audio eficiente
-- El codificador MF HEVC entrega compresión de video de alta calidad y eficiente
-
-### Optimizaciones macOS
-
-En plataformas macOS, el SDK selecciona automáticamente:
-
-- Codificador Apple Media H264 para codificación de video optimizada
-- Codificador VO AAC para codificación de audio confiable
-
-## Opciones de Configuración SRT Avanzadas
-
-### Pipeline de Procesamiento de Medios Personalizado
-
-Para aplicaciones con requisitos especializados, el SDK soporta procesamiento personalizado para flujos de video y audio:
+### Ejemplo de Código
 
 ```csharp
-// Agregar procesamiento de video personalizado antes de codificar
-srtOutput.CustomVideoProcessor = new SomeMediaBlock();
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.MediaBlocks.AudioEncoders;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.Types.X.VideoEncoders;
+using VisioForge.Core.Types.X.AudioEncoders;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
 
-// Agregar procesamiento de audio personalizado antes de codificar
-srtOutput.CustomAudioProcessor = new SomeMediaBlock();
+// Inicializar SDK una vez al inicio
+await VisioForgeX.InitSDKAsync();
+
+var pipeline = new MediaBlocksPipeline();
+
+// Enumerar dispositivos
+var videoDevices = await DeviceEnumerator.Shared.VideoSourcesAsync();
+var audioDevices = await DeviceEnumerator.Shared.AudioSourcesAsync();
+
+// Fuente de video (primera cámara)
+var videoSource = new SystemVideoSourceBlock(
+    new VideoCaptureDeviceSourceSettings(videoDevices[0]));
+
+// Fuente de audio (primer micrófono)
+var audioSource = new SystemAudioSourceBlock(
+    new AudioCaptureDeviceSourceSettings(audioDevices[0]));
+
+// Codificador de video — H.264 con fallback de software
+var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+
+// Codificador de audio — AAC
+var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings());
+
+// Salida SRT en modo listener en puerto 8888
+var srtSink = new SRTMPEGTSSinkBlock(new SRTSinkSettings
+{
+    Uri = "srt://:8888",
+    Mode = SRTConnectionMode.Listener,
+    Latency = TimeSpan.FromMilliseconds(125)
+});
+
+// Construir pipeline: cámara → codificador → SRT
+pipeline.Connect(videoSource.Output, h264Encoder.Input);
+pipeline.Connect(h264Encoder.Output, srtSink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+pipeline.Connect(audioSource.Output, aacEncoder.Input);
+pipeline.Connect(aacEncoder.Output, srtSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
 ```
 
-Estos procesadores le permiten implementar filtros, transformaciones o análisis antes de codificar y transmitir.
+Los receptores pueden conectarse usando `ffplay srt://tu-ip:8888` o cualquier reproductor compatible con SRT.
 
-### Configuración de Sumidero SRT
+## Recepción de un Flujo SRT
 
-Ajuste finamente su conexión SRT usando la clase SRTSinkSettings:
+[MediaBlocksPipeline](#){ .md-button }
+
+Use `SRTSourceBlock` para recibir y reproducir un flujo SRT con decodificación automática:
 
 ```csharp
-// Actualizar la URI de destino SRT
-srtOutput.Sink.Uri = "srt://new-server:5678";
+var pipeline = new MediaBlocksPipeline();
+
+// Conectar a un emisor SRT (modo caller por defecto)
+var sourceSettings = await SRTSourceSettings.CreateAsync("srt://192.168.1.100:8888");
+var srtSource = new SRTSourceBlock(sourceSettings);
+
+// Renderizador de video
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(srtSource.VideoOutput, videoRenderer.Input);
+
+// Renderizador de audio
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(srtSource.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
 ```
 
-## Mejores Prácticas para Transmisión SRT
+Para grabación passthrough sin decodificación (por ejemplo, guardar el flujo MPEG-TS sin procesar), use `SRTRAWSourceBlock` en su lugar.
 
-### Optimizando Selección de Codificador
+## Cifrado
 
-1. **Prioridad de Aceleración por Hardware**: Siempre elija codificadores acelerados por hardware cuando estén disponibles. Los beneficios de rendimiento son significativos, particularmente para transmisión de alta resolución.
+SRT soporta cifrado AES con claves de 128, 192 o 256 bits. Tanto el emisor como el receptor deben usar la misma frase de contraseña y longitud de clave.
 
-2. **Mecanismos de Fallback Inteligentes**: Implemente verificaciones de disponibilidad de codificador para retroceder automáticamente a codificación por software si la aceleración por hardware no está disponible:
+### Emisor (Cifrado)
+
+```csharp
+var sinkSettings = new SRTSinkSettings
+{
+    Uri = "srt://:8888",
+    Mode = SRTConnectionMode.Listener,
+    Passphrase = "my-secret-passphrase",  // mínimo 10 caracteres
+    PbKeyLen = SRTKeyLength.Length32       // AES de 256 bits
+};
+```
+
+### Receptor (Cifrado)
+
+```csharp
+var sourceSettings = new SRTSourceSettings
+{
+    Uri = "srt://192.168.1.100:8888",
+    Mode = SRTConnectionMode.Caller,
+    Passphrase = "my-secret-passphrase",
+    PbKeyLen = SRTKeyLength.Length32
+};
+```
+
+Longitudes de clave disponibles: `SRTKeyLength.NoKey` (deshabilitado), `Length16` (128 bits), `Length24` (192 bits), `Length32` (256 bits).
+
+## Configuración de Latencia
+
+La propiedad `Latency` controla el tamaño del buffer del receptor SRT (por defecto: 125ms). Valores más bajos reducen el retraso pero aumentan la sensibilidad al jitter de red:
+
+```csharp
+// Baja latencia para red local
+var settings = new SRTSinkSettings
+{
+    Uri = "srt://:8888",
+    Latency = TimeSpan.FromMilliseconds(50)
+};
+
+// Mayor latencia para redes no confiables (streaming por internet)
+var settings = new SRTSinkSettings
+{
+    Uri = "srt://:8888",
+    Latency = TimeSpan.FromMilliseconds(500)
+};
+```
+
+| Red | Latencia Recomendada | Notas |
+| --- | --- | --- |
+| LAN local | 20–80ms | Jitter mínimo |
+| Internet confiable | 125ms (por defecto) | Buen equilibrio |
+| No confiable/larga distancia | 250–1000ms | Previene pérdidas |
+
+## Opciones de Codificación de Video
+
+### Codificadores de Software
+
+- **OpenH264** — Codificador H.264 multiplataforma por defecto
+
+### Codificadores Acelerados por Hardware
+
+- **NVIDIA NVENC** (H.264/HEVC) — Codificación acelerada por GPU en tarjetas NVIDIA
+- **Intel Quick Sync** (H.264/HEVC) — Aceleración de GPU integrada Intel
+- **AMD AMF** (H.264/HEVC) — Aceleración de GPU AMD
+- **Microsoft Media Foundation HEVC** — Codificador por hardware solo Windows
+
+### Selección de Codificador con Fallback
 
 ```csharp
 if (NVENCH264EncoderSettings.IsAvailable())
@@ -143,66 +280,76 @@ else
 }
 ```
 
-### Optimización de Rendimiento
+## Codificación de Audio
 
-1. **Configuración de Bitrate**: Ajuste cuidadosamente los bitrates del codificador basados en su tipo de contenido y condiciones de red objetivo. Bitrates más altos aumentan la calidad pero requieren más ancho de banda.
+Los flujos SRT típicamente usan audio AAC. El SDK proporciona múltiples codificadores:
 
-2. **Monitoreo de Recursos**: Monitoree el uso de CPU y GPU durante la transmisión para identificar cuellos de botella potenciales. Si el uso de CPU es consistentemente alto, considere cambiar a aceleración por hardware.
+- **VO-AAC** — Multiplataforma, rendimiento consistente
+- **AVENC AAC** — Basado en FFmpeg con opciones extensas
+- **MF AAC** — Solo Windows, Microsoft Media Foundation
 
-3. **Gestión de Latencia**: Configure tamaños de buffer apropiados basados en sus requisitos de latencia. Buffers más pequeños reducen la latencia pero pueden aumentar la susceptibilidad a fluctuaciones de red.
+El SDK auto-selecciona el mejor codificador disponible por plataforma (MF AAC en Windows, VO AAC en otras).
 
-## Solución de Problemas de Implementaciones SRT
+## Solución de Problemas
 
-### Problemas Comunes y Soluciones
+### No se Puede Establecer Conexión SRT
 
-#### Fallos de Inicialización de Codificador
+**Síntoma:** La conexión expira o es rechazada.
 
-- **Problema**: El codificador seleccionado falla al inicializar o lanza excepciones
-- **Solución**: Verifique que el codificador sea soportado en su plataforma y que los controladores requeridos estén instalados y actualizados
+**Soluciones:**
 
-#### Problemas de Conexión de Transmisión
+- Verifique el formato de URL SRT: `srt://host:puerto` para caller, `srt://:puerto` para listener
+- Asegúrese de que el puerto esté abierto en firewalls en ambos lados
+- Confirme que ambos lados usen modos de conexión compatibles (un caller, un listener)
+- Verifique que las frases de contraseña coincidan si el cifrado está habilitado
 
-- **Problema**: Incapaz de establecer conexión SRT
-- **Solución**: Confirme que el formato de URL SRT sea correcto y que los puertos especificados estén abiertos en todos los firewalls y equipos de red
+### Alto Uso de CPU o Frames Descartados
 
-#### Cuellos de Botella de Rendimiento
+**Síntoma:** El rendimiento se degrada durante la transmisión.
 
-- **Problema**: Alto uso de CPU o frames descartados durante la transmisión
-- **Solución**: Considere cambiar a codificadores acelerados por hardware o reducir resolución/bitrate
+**Soluciones:**
 
-## Ejemplos de Integración
+- Cambie a codificadores acelerados por hardware (NVENC, QSV, AMF)
+- Reduzca resolución o bitrate
+- Aumente el valor de `Latency` para dar más espacio de buffer
 
-### Configuración Completa de Transmisión SRT
+### El Codificador Falla al Inicializar
 
-```csharp
-// Crear y configurar salida SRT
-var srtOutput = new SRTOutput("srt://streaming-server:1234");
+**Síntoma:** Excepción al iniciar el pipeline.
 
-// Configurar codificación de video - intentar aceleración por hardware con fallback
-if (NVENCH264EncoderSettings.IsAvailable())
-{
-    var nvencSettings = new NVENCH264EncoderSettings();
-    nvencSettings.Bitrate = 4000000; // 4 Mbps
-    srtOutput.Video = nvencSettings;
-}
-else
-{
-    var softwareSettings = new OpenH264EncoderSettings();
-    softwareSettings.Bitrate = 2000000; // 2 Mbps para codificación por software
-    srtOutput.Video = softwareSettings;
-}
+**Soluciones:**
 
-// Agregar al motor de captura
-videoCapture.Outputs_Add(srtOutput, true);
+- Use `IsAvailable()` para verificar soporte del codificador antes de crearlo
+- Verifique que los controladores de GPU estén actualizados para codificadores de hardware
+- Retroceda a OpenH264 como codificador de software universal
 
-// Iniciar transmisión
-videoCapture.Start();
-```
+## Preguntas Frecuentes
 
-## Conclusión
+### ¿Cuál es la diferencia entre los modos caller y listener de SRT?
 
-La transmisión SRT en SDK de VisioForge .NET proporciona una solución poderosa para entrega de video de alta calidad y baja latencia a través de condiciones de red desafiantes. Al aprovechar las opciones de codificador flexibles y capacidades de configuración, los desarrolladores pueden implementar soluciones de transmisión robustas para una amplia gama de aplicaciones.
+El **listener** se vincula a un puerto y espera conexiones entrantes — actúa como servidor. El **caller** inicia la conexión a la dirección y puerto de un listener — actúa como cliente. Para traversal de firewall donde ambos lados están detrás de NAT, use el modo **rendezvous** donde ambos endpoints se conectan simultáneamente.
 
-Ya sea que esté construyendo una plataforma de transmisión en vivo, una solución de videoconferencia o un sistema de entrega de contenido, la combinación de SRT de seguridad, confiabilidad y rendimiento lo hace una excelente opción para aplicaciones de video modernas.
+### ¿Cómo cifro un flujo SRT?
 
-Para más información sobre codificadores específicos u opciones de configuración avanzadas, consulte la documentación completa del SDK de VisioForge.
+Establezca la propiedad `Passphrase` (mínimo 10 caracteres) y `PbKeyLen` tanto en `SRTSinkSettings` como en `SRTSourceSettings`. Tanto el emisor como el receptor deben usar valores idénticos. Las longitudes de clave disponibles son 128 bits (`Length16`), 192 bits (`Length24`) y 256 bits (`Length32`). Consulte la sección [Cifrado](#cifrado) para ejemplos de código.
+
+### ¿Cómo recibo y reproduzco un flujo SRT en C#?
+
+Cree `SRTSourceSettings` con la URL del emisor, luego páselo a `SRTSourceBlock`. Conecte `VideoOutput` a un `VideoRendererBlock` y `AudioOutput` a un `AudioRendererBlock`. El bloque fuente maneja el demuxing MPEG-TS y la decodificación automáticamente. Consulte la sección [Recepción de un Flujo SRT](#recepcion-de-un-flujo-srt) para el ejemplo completo.
+
+### ¿Qué codecs de video soporta SRT?
+
+SRT en sí es agnóstico de codec — transporta cualquier dato por la red. Cuando usa `SRTMPEGTSSinkBlock`, el flujo se multiplexa como MPEG-TS, que soporta codecs de video H.264, HEVC (H.265), MPEG-2 y AV1. H.264 es la opción más ampliamente compatible para transmisión SRT.
+
+### ¿Cómo reduzco la latencia de transmisión SRT?
+
+Baje la propiedad `Latency` tanto en la configuración del emisor como del receptor (el valor por defecto es 125ms). Para redes locales, valores tan bajos como 20–50ms funcionan bien. Para streaming por internet, mantenga al menos 125ms para manejar el jitter. También asegúrese de que su codificador esté configurado para modo de baja latencia y que esté usando aceleración por hardware para minimizar el retraso de codificación.
+
+## Ver También
+
+- [Integración de Transmisión NDI](ndi.md) — transmisión de video sobre IP con NDI
+- [Visor de Streams RTSP y Reproductor de Cámaras IP](../../mediablocks/Guides/rtsp-player-csharp.md) — guía de streaming de cámaras RTSP
+- [Formato de Salida MPEG-TS](../output-formats/mpegts.md) — configuración del contenedor MPEG-TS
+- [Guía de Despliegue](../../deployment-x/index.md) — paquetes de runtime específicos de plataforma
+- [Ejemplos de Código en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — demo de fuente SRT
+- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas

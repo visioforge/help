@@ -1,6 +1,6 @@
 ---
 title: Amcrest IP Camera RTSP URL Format and C# .NET Setup
-description: Connect to Amcrest cameras in C# .NET with RTSP URL patterns and code samples for IP2M, IP4M, IP5M, IP8M, and NVR models.
+description: Amcrest IP2M, IP4M, IP5M, IP8M, and NVR RTSP URL patterns for C# .NET. Stream and record using VisioForge SDK with ONVIF auto-discovery support.
 ---
 
 # How to Connect to Amcrest IP Camera in C# .NET

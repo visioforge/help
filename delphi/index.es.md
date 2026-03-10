@@ -1,6 +1,6 @@
 ---
-title: SDK de Delphi/C++Builder para Procesamiento de Video
-description: Potentes bibliotecas Delphi/ActiveX para reproducción, captura y edición de video con soporte x64 para aplicaciones de medios profesionales.
+title: Componentes VCL y ActiveX para Video en Delphi y C++ Builder
+description: Componentes VCL y controles ActiveX para reproducción, captura, grabación de pantalla y edición de video en Delphi y C++ Builder.
 ---
 
 # All-in-One Media Framework

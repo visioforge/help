@@ -1,6 +1,6 @@
 ---
-title: Video Encoders: H264, HEVC, AV1, VP9 with GPU Acceleration
-description: Encode video with AV1, H264, HEVC, VP9, and more codecs using GPU acceleration and optimized settings in Media Blocks SDK for .NET.
+title: Video Encoder Blocks - H.264, HEVC, AV1, VP9 in C# .NET
+description: Encode video to H.264, HEVC, AV1, and VP9 with GPU acceleration using VisioForge Media Blocks SDK. Configurable bitrate, quality, and codec settings.
 sidebar_label: Video Encoders
 order: 18
 ---

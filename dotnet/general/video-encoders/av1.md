@@ -1,6 +1,6 @@
 ---
-title: AV1 Encoders in VisioForge .NET SDKs: Configuration Guide
-description: Configure AV1 encoders in cross-platform Video Capture, Video Edit, and Media Blocks SDKs for efficient next-generation video compression.
+title: AV1 Video Encoding in C# .NET - Configuration Guide
+description: Configure AV1 encoders for cross-platform video capture, editing, and media pipelines. Next-gen compression with VisioForge SDK C# code examples.
 ---
 
 # AV1 Encoders

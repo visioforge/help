@@ -1,6 +1,6 @@
 ---
-title: ONVIF IP Camera SDK: Discovery, PTZ, and Streaming in C#
-description: Comprehensive ONVIF IP camera integration in .NET covering discovery, connection, PTZ control, recording, streaming, and computer vision.
+title: ONVIF IP Camera Discovery and PTZ Control in C# .NET
+description: Auto-discover ONVIF cameras via WS-Discovery, control PTZ presets, and record streams using VisioForge Video Capture SDK. C# examples and troubleshooting.
 ---
 
 # ONVIF IP Camera Integration - Complete Guide

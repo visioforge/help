@@ -1,6 +1,6 @@
 ---
-title: Video Capture Sources: Webcam, IP Camera, Screen in .NET
-description: Master video input sources for .NET including webcams, Decklink, IP cameras, screen capture, and industrial cameras with integration.
+title: Video Sources: Webcam, IP Camera, Screen in C# .NET
+description: Configure webcam, IP camera, screen capture, Decklink, and industrial camera inputs with VisioForge Video Capture SDK. Device enumeration and C# examples.
 sidebar_label: Video Sources
 order: 16
 

@@ -1,6 +1,6 @@
 ---
 title: Compare Video Files with Video Fingerprinting in .NET
-description: Learn efficient techniques for comparing video files using fingerprinting technology with code examples to analyze frames and signatures.
+description: Compare two video files for similarity using VisioForge fingerprinting SDK in C# with frame analysis, signature matching, and code examples.
 ---
 
 # Video File Comparison Techniques and Methods

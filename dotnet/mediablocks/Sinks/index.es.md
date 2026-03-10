@@ -1,6 +1,6 @@
 ---
-title: Sinks de Medios .Net - Archivos y Transmisión en Red
-description: Guarde o transmita medios con bloques sink para archivos MP4, MKV, AVI y protocolos de red RTMP, HLS, SRT en pipelines de Media Blocks SDK.
+title: Bloques Sink - Guardar a MP4, MKV y Transmitir en C# .NET
+description: Escriba medios a MP4, MKV, AVI o transmita vía RTMP, HLS, SRT con los bloques destino de VisioForge Media Blocks SDK en C# .NET.
 ---
 
 # Sinks

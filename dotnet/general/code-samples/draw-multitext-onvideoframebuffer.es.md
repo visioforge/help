@@ -1,6 +1,6 @@
 ﻿---
-title: Overlays de Texto en Frames de Video .NET
-description: Crea múltiples superposiciones de texto en frames de video con OnVideoFrameBuffer para propiedades personalizables y actualizaciones dinámicas.
+title: Overlays de Texto Dinámicos en Frames de Video
+description: Cree múltiples superposiciones de texto en frames de video con el evento OnVideoFrameBuffer para propiedades personalizables y actualizaciones dinámicas en .NET.
 ---
 
 # Implementación de Superposiciones de Texto Dinámicas en Frames de Video en .NET

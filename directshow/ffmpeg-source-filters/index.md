@@ -1,6 +1,6 @@
 ---
-title: FFMPEG Source DirectShow Filter for Multimedia Apps
-description: FFMPEG DirectShow filter for decoding 100+ formats including MP4, MKV, H.265 with hardware acceleration in C++, C#, and Delphi apps.
+title: FFmpeg Source DirectShow Filter - 100+ Media Formats
+description: DirectShow source filter powered by FFmpeg for decoding MP4, MKV, H.265, and 100+ formats with hardware acceleration. COM interface for C++, C#, and Delphi.
 sidebar_label: FFMPEG Source DirectShow Filter
 order: 10
 ---

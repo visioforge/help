@@ -1,6 +1,6 @@
 ---
-title: Video Encryption SDK Code Examples in C#, C++, and Delphi
-description: Code examples for video encryption and decryption with DirectShow filters in C++, C#, and Delphi using password and binary keys.
+title: DirectShow Video Encryption Examples - C#, C++, Delphi
+description: Encrypt and decrypt MP4 video files using VisioForge DirectShow filters. AES-256 examples with password protection and binary key modes.
 ---
 
 # Video Encryption SDK - Code Examples

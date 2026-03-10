@@ -1,6 +1,6 @@
 ---
-title: Delphi ActiveX Libraries for Video Capture and Playback
-description: Professional Delphi/ActiveX multimedia libraries for video capture, playback, and editing with comprehensive documentation and examples.
+title: Delphi ActiveX SDK Setup - Installation and Configuration
+description: Install and configure TVFMediaPlayer, TVFVideoCapture, and TVFVideoEdit components in Delphi. Covers 64-bit package setup, .otares errors, and IDE integration.
 sidebar_label: General information
 ---
 

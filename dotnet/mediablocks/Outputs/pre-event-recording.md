@@ -1,6 +1,6 @@
 ---
 title: Pre-Event Buffering and Recording with Ring Buffer in C#
-description: PreEventRecordingBlock API for buffering and recording pre-event surveillance video from IP cameras and webcams in C# .NET.
+description: Buffer and record pre-event surveillance video from IP cameras with ring buffer in VisioForge Media Blocks SDK. Motion-triggered capture in C# .NET.
 sidebar_label: Pre-Event Recording
 ---
 

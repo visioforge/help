@@ -1,6 +1,6 @@
 ---
-title: SDKs .NET - Matriz de Plataformas y Características
-description: Soporte multiplataforma de SDK .NET para codecs de video/audio, aceleración de hardware, dispositivos de captura en Windows, Linux, macOS, Android, iOS.
+title: VisioForge SDK .NET — Matriz de Plataformas Soportadas
+description: Matriz de soporte del SDK .NET de VisioForge para codecs de video/audio, aceleración de hardware y captura en Windows, Linux, macOS, Android, iOS.
 ---
 
 # SDK .NET: Características y Plataformas Soportadas

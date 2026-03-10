@@ -1,6 +1,6 @@
 ---
-title: Linux VA-API Hardware Acceleration for .NET Video Apps
-description: Linux-optimized MediaBlocks with VA-API hardware acceleration for efficient video encoding, decoding, and processing on Ubuntu platforms.
+title: Linux VA-API Hardware Video Acceleration in C# .NET
+description: Use VA-API GPU-accelerated video encoding and decoding on Linux with VisioForge Media Blocks SDK. Ubuntu and Debian platform support for .NET apps.
 sidebar_label: Linux Platform
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: Codificador de Audio WavPack .NET - Compresión Sin Pérdida
-description: Implemente compresión de audio sin pérdida y lossy híbrida WavPack en .NET con configuraciones de calidad, modos de corrección y codificación estéreo.
+title: Configuración del Codificador de Audio WavPack en .NET
+description: Implemente compresión de audio sin pérdida e híbrida lossy WavPack en .NET con configuraciones de calidad, modos de corrección y codificación estéreo.
 ---
 
 # Codificador de Audio WavPack para Aplicaciones .NET

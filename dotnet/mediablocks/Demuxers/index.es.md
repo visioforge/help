@@ -1,6 +1,6 @@
 ---
-title: Bloques Demuxer de Video y Audio en .NET - SDK MediaBlocks
-description: Demultiplexe contenedores de medios con demuxers MPEG-TS, QT (MP4/MOV) y Universal para separar flujos de audio y video en pipelines .NET.
+title: Bloques Demuxer - Separar Audio y Video de MP4, MKV en C#
+description: Separe flujos de audio, video y subtítulos de contenedores MP4, MKV, AVI y MPEG-TS con los bloques demuxer de VisioForge Media Blocks SDK.
 
 ---
 

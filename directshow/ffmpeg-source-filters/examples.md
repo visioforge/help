@@ -1,6 +1,6 @@
 ---
-title: FFMPEG Source Filter Code Examples for DirectShow in C#
-description: Code examples for FFMPEG Source Filter in C++, C#, and VB.NET with DirectShow graphs, hardware acceleration, and network streaming.
+title: FFmpeg Source Filter DirectShow Examples - C++, C#, VB.NET
+description: Build DirectShow graphs with FFmpeg Source Filter: file playback, hardware decoding, network streaming, and custom buffering in C++, C#, and VB.NET.
 ---
 
 # Code Examples

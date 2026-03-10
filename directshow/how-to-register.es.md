@@ -1,6 +1,6 @@
 ---
-title: Registro de filtros DirectShow SDK en C++, C# y Delphi
-description: Registra filtros DirectShow y SDKs en C++, C# y Delphi con interfaz IVFRegister y ejemplos de código de registro alternativos.
+title: Registro de Filtros DirectShow - IVFRegister en C++ y C#
+description: Registre filtros DirectShow y SDKs en C++, C# y Delphi con interfaz IVFRegister y ejemplos de código de registro alternativos.
 ---
 
 # Guía de Registro del SDK

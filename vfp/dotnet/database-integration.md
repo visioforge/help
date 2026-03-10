@@ -1,6 +1,6 @@
 ---
 title: Video Fingerprint Storage in MongoDB, SQL Server, PostgreSQL
-description: Complete guide for integrating video fingerprints with MongoDB, SQL Server, PostgreSQL with schemas, indexing, and optimization.
+description: Integrate VisioForge video fingerprints with MongoDB, SQL Server, and PostgreSQL using optimized schemas, indexing, and batch operations.
 ---
 
 # Video Fingerprinting Database Guide

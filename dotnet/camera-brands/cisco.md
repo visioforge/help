@@ -1,6 +1,6 @@
 ---
 title: Cisco IP Camera RTSP URL Setup and C# .NET Integration
-description: Connect to Cisco CIVS, PVC, VC, and Linksys WVC cameras in C# .NET with RTSP URL patterns and code samples for enterprise and SMB models.
+description: Cisco CIVS and Meraki camera RTSP integration for C# .NET. URL patterns for enterprise PVC, VC models with VisioForge SDK code and ONVIF examples.
 ---
 
 # How to Connect to Cisco IP Camera in C# .NET

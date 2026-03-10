@@ -1,5 +1,5 @@
 ---
-title: Media Player SDK .Net - Ejemplos de Codigo C# con Video
+title: Media Player SDK .Net - Ejemplos de Código C# con Video
 description: Ejemplos prácticos de Media Player SDK .Net: reproducción, streaming, efectos de video, control de audio y más funciones avanzadas.
 ---
 

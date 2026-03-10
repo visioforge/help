@@ -1,6 +1,6 @@
 ---
-title: Enumeración de dispositivos de audio y video en .NET SDK
-description: Enumere cámaras de video, entradas/salidas de audio, dispositivos Decklink, fuentes NDI y cámaras GenICam en .NET con ejemplos de código prácticos.
+title: Enumeración de Dispositivos de Media en C# .NET - Guía
+description: Liste cámaras, micrófonos, altavoces, Decklink, NDI y dispositivos GenICam con VisioForge Media Blocks SDK y ejemplos de código multiplataforma.
 ---
 
 # Guía Completa para Enumeración de Dispositivos de Medios en .NET

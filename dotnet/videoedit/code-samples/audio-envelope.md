@@ -1,6 +1,6 @@
 ---
 title: Audio Volume Envelope Effects for .NET Video Editing
-description: Implement professional audio volume envelope effects in .NET applications with complete tutorial and step-by-step code samples.
+description: Implement audio volume envelope effects with VisioForge Video Edit SDK .NET. Fade in, fade out, and keyframe-based volume control in your timeline.
 ---
 
 # Implementing Audio Volume Envelope Effects in .NET

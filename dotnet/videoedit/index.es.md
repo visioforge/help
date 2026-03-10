@@ -1,129 +1,145 @@
 ---
-title: Video Edit SDK .Net - Edicion de Video Profesional en C#
-description: Construye aplicaciones de edición de video con SDK .NET con edición de línea de tiempo, transiciones, efectos, aceleración de hardware y soporte multi-formato.
+title: Edición de Video - Línea de Tiempo y Transiciones en C# .NET
+description: Edición de video en C# con Video Edit SDK — línea de tiempo, transiciones, superposiciones, conversión de formato y codificación acelerada por hardware.
+sidebar_label: Video Edit SDK .NET
+
 ---
 
-# Video Edit SDK .Net: Edición de Video Profesional para Desarrolladores
+# Video Edit SDK para C# .NET — API de Edición de Video por Línea de Tiempo
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Introducción a Video Edit SDK .Net
+## Introducción
 
-VisioForge Video Edit SDK .Net es un toolkit de desarrollo robusto y versátil que permite a los desarrolladores de software construir aplicaciones avanzadas de edición de video. Con este potente SDK, puedes integrar sin problemas capacidades de procesamiento, edición, codificación y decodificación de video de grado profesional en tus aplicaciones .NET.
+Video Edit SDK para .NET es una biblioteca de edición de video en C# que te permite construir aplicaciones de edición de video basadas en línea de tiempo. Agrega archivos de video y audio a una línea de tiempo, recorta segmentos, aplica transiciones y efectos, superpone texto e imágenes, y renderiza el resultado a MP4, AVI, MKV, WebM u otros formatos — todo desde tu código .NET.
 
-Diseñado pensando en el rendimiento y la flexibilidad, nuestro SDK acelera tu proceso de desarrollo proporcionando una suite completa de herramientas y características que de otro modo requerirían meses de tiempo de desarrollo. Ya sea que estés creando una aplicación de edición de video, implementando flujos de trabajo de procesamiento de video o construyendo una solución rica en medios, Video Edit SDK .Net ofrece la funcionalidad que necesitas.
+El SDK proporciona dos motores: **VideoEditCore** (solo Windows, basado en DirectShow) y **VideoEditCoreX** (multiplataforma, se ejecuta en Windows, macOS, Linux, Android e iOS). Ambos motores comparten el mismo modelo de línea de tiempo — agrega fuentes, configura la salida e inicia la edición.
 
-## Compatibilidad Multiplataforma
+## Inicio Rápido
 
-Una de las mayores ventajas del Video Edit SDK .Net es su extenso soporte multiplataforma, permitiéndote desarrollar aplicaciones que se ejecutan sin problemas en múltiples sistemas operativos y dispositivos:
+### 1. Instalar Paquete NuGet
 
-### Plataformas de Escritorio
+```bash
+dotnet add package VisioForge.DotNet.VideoEditX
+```
 
-- **Windows** - Soporte completo para Windows 10/11 y Windows Server
-- **macOS** - Compatible con procesadores Intel y Apple Silicon
-- **Linux** - Soporte para las principales distribuciones incluyendo Ubuntu, Debian y CentOS
+Para dependencias específicas de plataforma y configuración de frameworks de UI, consulta la [Guía de Instalación](../install/index.md).
 
-### Plataformas Móviles
+### 2. Ejemplo Mínimo de Edición de Video
 
-- **Android** - Construye capacidades de edición de video en aplicaciones Android
-- **iOS** - Integración fluida con aplicaciones iPhone e iPad
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.Types.X.VideoEdit;
+using VisioForge.Core.VideoEditX;
 
-Esta compatibilidad multiplataforma asegura que tus aplicaciones de edición de video puedan alcanzar la audiencia más amplia posible sin requerir cambios significativos de código entre plataformas.
+// Inicializar SDK
+VisioForgeX.InitSDK();
 
-## Características y Capacidades Clave
+// Crear editor con vista previa de video
+var editor = new VideoEditCoreX(videoView);
 
-### Funciones Principales de Edición de Video
+// Establecer resolución de salida y velocidad de cuadros
+editor.Output_VideoSize = new VisioForge.Core.Types.Size(1920, 1080);
+editor.Output_VideoFrameRate = new VideoFrameRate(30);
 
-- **Edición Basada en Línea de Tiempo** - Crea y manipula proyectos de video multi-pista
-- **Corte y Recorte con Precisión de Cuadro** - Edita contenido de video con precisión
-- **Ajustes de Velocidad de Video** - Implementa efectos de cámara lenta o time-lapse
-- **Conversión de Velocidad de Cuadros** - Convierte suavemente entre diferentes velocidades de cuadros
-- **Escalado de Resolución** - Aumenta o reduce la escala del contenido de video preservando la calidad
-- **Gestión de Relación de Aspecto** - Maneja diferentes relaciones de aspecto con facilidad
+// Agregar archivos de video a la línea de tiempo
+editor.Input_AddAudioVideoFile("intro.mp4", null, null, null);
+editor.Input_AddAudioVideoFile("main.mp4", null, null, null);
 
-### Procesamiento de Video Avanzado
+// Establecer formato de salida
+editor.Output_Format = new MP4Output("output.mp4");
 
-- **Corrección de Color** - Ajusta brillo, contraste, saturación y tono
-- **Filtros de Video** - Aplica filtros profesionales para efectos artísticos
-- **Reducción de Ruido** - Limpia la calidad del video con algoritmos avanzados
-- **Estabilización de Imagen** - Reduce el temblor de cámara y mejora la calidad del metraje
-- **Desentrelazado** - Convierte video entrelazado a formato progresivo
-- **Rotación y Volteo** - Ajusta la orientación del video según sea necesario
-- **Pantalla Verde/Chroma Key** - Implementa efectos de reemplazo de fondo
+// Iniciar edición
+editor.Start();
 
-### Codificación y Decodificación de Video Profesional
+// ... cuando termine:
+editor.Stop();
+editor.Dispose();
+VisioForgeX.DestroySDK();
+```
 
-- **Soporte de Múltiples Formatos** - Trabaja con MP4, AVI, MOV, WMV, MKV y más
-- **Compatibilidad de Codecs** - Soporte para H.264, H.265/HEVC, VP9, AV1
-- **Aceleración de Hardware** - Aprovecha el procesamiento GPU para codificación más rápida
-- **Control de Bitrate** - Ajusta finamente la calidad del video y el tamaño del archivo
-- **Procesamiento por Lotes** - Procesa múltiples videos simultáneamente
-- **Perfiles de Codificación Personalizados** - Crea y guarda presets de codificación
+Para la guía de implementación completa con manejo de eventos, fuentes de audio, fuentes de imagen y configuración avanzada de línea de tiempo, consulta la [Guía de Inicio Rápido](getting-started.md).
 
-### Capacidades de Audio
+## Casos de Uso Comunes
 
-- **Efectos de Audio** - Añade reverberación, eco, ecualización y normalización
-- **Control de Volumen** - Ajusta niveles de audio con precisión
-- **Cancelación de Ruido** - Elimina ruido de fondo de pistas de audio
-- **Mezcla de Audio** - Combina múltiples fuentes de audio
-- **Grabación de Voz en Off** - Añade narración a proyectos de video
-- **Sincronización de Audio** - Asegura alineación perfecta de audio-video
+### Combinar Múltiples Archivos de Video
 
-### Elementos Visuales y Efectos
+Fusiona múltiples clips de video en un solo archivo de salida. Agrega archivos a la línea de tiempo en secuencia, establece el formato de salida y renderiza. Soporta mezclar diferentes formatos de origen — combina archivos MP4, AVI y MOV en una sola salida.
 
-- **Superposiciones de Texto** - Añade títulos, subtítulos y créditos con fuentes y estilos personalizables
-- **Superposiciones de Imagen** - Inserta logos, marcas de agua y gráficos
-- **Superposiciones de Video** - Crea composiciones picture-in-picture y multi-capa
-- **Gráficos Animados** - Implementa texto en movimiento y elementos animados
-- **Formas Personalizadas** - Añade formas geométricas y gráficos vectoriales personalizados
-- **Herramientas de Máscara** - Aplica efectos de máscara creativos al contenido de video
+Ver: [Crear Videos desde Múltiples Fuentes](code-samples/output-file-from-multiple-sources.md)
 
-### Transiciones Profesionales
+### Recortar y Cortar Segmentos de Video
 
-- **Disolución Cruzada** - Transiciones suaves entre clips de video
-- **Barridos y Deslizamientos** - Transiciones direccionales para interés visual
-- **Fundido a Negro/Blanco** - Finales de escena profesionales
-- **Transiciones 3D** - Transiciones de cubo, volteo y rotación
-- **Efectos de Transición Personalizados** - Crea estilos de transición únicos
-- **Animación de Keyframes** - Controla la temporización de transiciones con precisión
+Extrae rangos de tiempo específicos de archivos de video estableciendo tiempos de inicio y fin en cada fuente. Combina múltiples segmentos del mismo archivo o diferentes archivos en una edición final.
 
-### Características Avanzadas para Desarrolladores
+Ver: [Trabajar con Segmentos de Video](code-samples/several-segments.md)
 
-- **Arquitectura Basada en Eventos** - Responde a eventos de procesamiento en tiempo real
-- **Seguimiento de Progreso** - Monitorea y reporta el progreso del procesamiento
-- **Manejo de Errores** - Sistema robusto de gestión de excepciones
-- **Gestión de Memoria** - Optimizado para manejar archivos de video grandes
-- **Procesamiento Multihilo** - Utiliza múltiples núcleos de CPU para rendimiento más rápido
-- **Flujos de Trabajo Personalizables** - Adapta el SDK a tus necesidades específicas
+### Agregar Superposiciones de Texto e Imagen
 
-Para un desglose detallado de todas las características y capacidades, visita nuestra [página del producto](https://www.visioforge.com/video-edit-sdk-net).
+Inserta títulos de texto, subtítulos, logos y marcas de agua sobre el contenido de video. Posiciona, escala y temporiza las superposiciones en la línea de tiempo.
 
-## Documentación y Recursos
+Ver: [Implementación de Superposición de Texto](code-samples/add-text-overlay.md) | [Agregar Superposiciones de Imagen](code-samples/add-image-overlay.md)
 
-Nuestra documentación completa te ayuda a comenzar rápidamente y aborda escenarios comunes de desarrollo:
+### Aplicar Transiciones entre Clips
 
-- [Guía de Inicio Rápido](getting-started.md) - Instrucciones paso a paso para nuevos usuarios
-- [Ejemplos de Código](code-samples/index.md) - Ejemplos prácticos para casos de uso comunes
-- [Guía de Despliegue](deployment.md) - Instrucciones para desplegar aplicaciones con el SDK
-- [Guía de Transiciones](transitions.md) - Información detallada sobre implementación de transiciones de video
+Agrega disoluciones cruzadas, barridos, deslizamientos, fundidos y más de 100 transiciones estándar SMPTE entre segmentos de video. Controla la duración de la transición, estilo de borde y dirección.
 
-## Recursos Técnicos
+Ver: [Efectos de Transición entre Fragmentos de Video](code-samples/transition-video.md) | [Referencia de Transiciones](transitions.md)
 
-Accede a nuestros recursos técnicos para maximizar tu eficiencia de desarrollo:
+### Crear Presentación desde Imágenes
 
-- [Documentación de API](https://api.visioforge.org/dotnet/api/index.html) - Referencia completa de API
-- [Registro de Cambios](../changelog.md) - Mantente actualizado sobre las últimas mejoras
-- [Contrato de Licencia de Usuario Final](../../eula.md) - Términos y condiciones de licencia
+Construye presentaciones de video desde imágenes JPG, PNG, BMP y GIF con duración de visualización configurable por imagen, transiciones entre diapositivas y música de fondo.
 
-## Comunidad y Soporte
+Ver: [Generar Videos desde Secuencias de Imágenes](code-samples/video-images-console.md)
 
-Únete a nuestra comunidad de desarrolladores para obtener ayuda y compartir tus experiencias:
+### Agregar Música de Fondo y Mezcla de Audio
 
-- Visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos de código adicionales
-- Contacta a nuestro [Equipo de Soporte](https://support.visioforge.com/) para asistencia técnica
+Mezcla múltiples pistas de audio con contenido de video. Controla el volumen por pista, aplica efectos de envolvente de audio para fade-in/fade-out, y sincroniza audio con video.
 
-## Conclusión
+Ver: [Efectos de Envolvente de Volumen de Audio](code-samples/audio-envelope.md) | [Control de Volumen Personalizado](code-samples/volume-for-track.md)
 
-VisioForge Video Edit SDK .Net proporciona una base poderosa para construir aplicaciones profesionales de edición de video en múltiples plataformas. Con su rico conjunto de características, API intuitiva y documentación extensa, puedes acelerar significativamente tu proceso de desarrollo mientras entregas capacidades de edición de video de alta calidad a tus usuarios.
+### Composición Picture-in-Picture
 
-Comienza a construir tu aplicación de edición de video hoy con Video Edit SDK .Net y transforma tus flujos de trabajo de procesamiento de medios.
+Superpone múltiples fuentes de video con control de posición y tamaño para layouts picture-in-picture, videos de reacción o composiciones multi-cámara.
+
+Ver: [Efectos Picture-In-Picture](code-samples/picture-in-picture.md)
+
+## Formatos Soportados
+
+| Categoría | Formatos |
+| --------- | -------- |
+| Contenedores de Video | MP4, AVI, MOV, WMV, MKV, WebM, TS, FLV |
+| Codecs de Video | H.264, H.265/HEVC, VP9, AV1, MPEG-2 |
+| Formatos de Audio | AAC, MP3, WMA, OPUS, Vorbis, FLAC, WAV |
+| Formatos de Imagen | JPG, PNG, BMP, GIF |
+
+## Soporte de Plataformas
+
+| Plataforma | Frameworks de UI | Motor | Notas |
+| ---------- | ---------------- | ----- | ----- |
+| Windows x64 | WinForms, WPF, MAUI, Avalonia, Consola | VideoEditCore, VideoEditCoreX | Conjunto completo de características incluyendo puentes DirectShow |
+| macOS | MAUI, Avalonia, Consola | VideoEditCoreX | Intel y Apple Silicon |
+| Linux x64 | Avalonia, Consola | VideoEditCoreX | Ubuntu, Debian, CentOS |
+| Android | MAUI | VideoEditCoreX | Via integración MAUI |
+| iOS | MAUI | VideoEditCoreX | Via integración MAUI |
+
+## Documentación para Desarrolladores
+
+### Guías
+
+* [Guía de Inicio Rápido](getting-started.md) — Tutorial completo de implementación con ambos motores
+* [Ejemplos de Código](code-samples/index.md) — Ejemplos listos para usar de superposiciones, transiciones, audio y composición
+* [Guía de Despliegue](deployment.md) — Paquetes NuGet, instaladores e instalación manual
+* [Referencia de Transiciones](transitions.md) — Más de 100 códigos de transición SMPTE y propiedades
+
+### iOS
+
+* [Editor de Video iOS](code-samples/ios-video-editor.md) — Construir aplicaciones de edición de video para iPhone e iPad
+
+## Recursos para Desarrolladores
+
+* [Ejemplos de Código en GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
+* [Referencia de API](https://api.visioforge.org/dotnet/api/index.html)
+* [Registro de Cambios](../changelog.md)
+* [Contrato de Licencia de Usuario Final](../../eula.md)
+* [Información de Licenciamiento](../../../licensing.md)

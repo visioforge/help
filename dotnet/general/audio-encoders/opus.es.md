@@ -1,6 +1,6 @@
 ---
-title: Optimización de Codificación de Audio OPUS en .NET
-description: Implemente codificación de audio OPUS en .NET con control de tasa de bits, configuraciones de complejidad y duraciones de trama para VoIP y streaming de música.
+title: Configuración del Codificador de Audio Opus en .NET
+description: Modos de control VBR, CBR y CVBR. Bitrate 6-510 kbps, latencia 5 ms, ajuste de complejidad y DTX para voz. Salida OGG/WebM con ejemplos en C#.
 ---
 
 # Dominando la Codificación de Audio OPUS en Aplicaciones .NET

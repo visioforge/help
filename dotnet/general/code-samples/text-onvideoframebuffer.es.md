@@ -1,6 +1,6 @@
 ---
-title: Superposición de Texto con OnVideoFrameBuffer en .NET
-description: Crea superposiciones de texto personalizadas en frames de video con OnVideoFrameBuffer para renderizado dinámico en aplicaciones .NET.
+title: Superponer Texto Dinámico con OnVideoFrameBuffer en C# .NET
+description: Cree superposiciones de texto personalizadas en frames de video con el evento OnVideoFrameBuffer para renderizado dinámico y procesamiento profesional en .NET.
 ---
 
 # Creación de Superposiciones de Texto Personalizadas con OnVideoFrameBuffer en .NET

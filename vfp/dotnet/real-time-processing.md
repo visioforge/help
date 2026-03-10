@@ -1,6 +1,6 @@
 ---
 title: Real-Time Video Fingerprinting From Live Streams in .NET
-description: Process live video streams and generate fingerprints in real-time using fragment-based processing with the VisioForge Video Fingerprinting SDK.
+description: Fingerprint live video streams in real-time using VisioForge SDK with fragment-based processing, camera capture, and IP stream monitoring in .NET.
 ---
 
 # Real-Time Video Fingerprinting Guide

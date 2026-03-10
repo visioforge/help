@@ -1,6 +1,6 @@
 ---
-title: Reproducir Múltiples Streams de Video desde un Solo Archivo
-description: Gestiona múltiples streams de video: selecciona ángulos de cámara, cambia resoluciones y gestiona pistas con ejemplos para Delphi, C++, VB6.
+title: Reproducir Múltiples Streams de Video con SDK Delphi
+description: Gestione múltiples streams de video en archivos - seleccione ángulos de cámara, cambie resoluciones y administre pistas con ejemplos para Delphi, C++ y VB6.
 ---
 
 # Reproduciendo Archivos de Video con Múltiples Streams de Video

@@ -1,6 +1,6 @@
 ---
-title: Cross-Platform Video Player - Avalonia & MAUI Guide
-description: Build cross-platform video players with Avalonia and .NET MAUI. Play video on Windows, macOS, Linux, Android, and iOS from a single C# codebase.
+title: Cross-Platform Video Player in C# .NET — MAUI Guide
+description: Build video players with Avalonia and .NET MAUI using VisioForge Media Player SDK. Play on Windows, macOS, Linux, Android, and iOS from one codebase.
 ---
 
 # Cross-Platform Video Player: Avalonia & MAUI Guide
@@ -396,10 +396,30 @@ private async void Window_Destroying(object sender, EventArgs e)
 | Avalonia Simple | [SimplePlayer](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayer) |
 | MAUI | [SimplePlayer](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/SimplePlayer) |
 
-## Related Resources
+## Frequently Asked Questions
 
-- [Build a Video Player in C#](video-player-csharp.md) (WinForms/WPF)
-- [Build a Video Player in VB.NET](video-player-vb-net.md) (WinForms)
-- [Avalonia Player Guide](avalonia-player.md) (full MVVM implementation)
-- [Android Player Guide](android-player.md)
-- [Media Blocks SDK .Net Product Page](https://www.visioforge.com/media-blocks-sdk-net)
+### Should I choose Avalonia or .NET MAUI for my cross-platform video player?
+
+Both frameworks support desktop and mobile platforms. Avalonia runs on Windows, macOS, Linux, Android, and iOS, making it the only option when Linux support is required. .NET MAUI covers Windows, macOS, Android, and iOS but does not support Linux. Both use the same `MediaBlocksPipeline` API from Media Blocks SDK, so the core playback code is identical. Choose Avalonia if you need Linux or prefer a desktop-first framework. Choose MAUI if you want tighter integration with native mobile platform APIs and do not need Linux.
+
+### What platform-specific limitations should I know about when building a .NET video player?
+
+On macOS, MAUI uses macCatalyst while Avalonia targets native macOS directly — this affects how the video view integrates with the windowing system. On Linux (Avalonia only), GStreamer must be installed on the target machine. Android and iOS both require their respective platform-specific NuGet redist packages (`VisioForge.CrossPlatform.Core.Android` and `VisioForge.CrossPlatform.Core.iOS`). Hardware-accelerated decoding availability depends on the device and operating system. Both Avalonia and MAUI support Android and iOS video playback.
+
+### How do I deploy a cross-platform .NET video player application?
+
+For Windows, macOS, Android, and iOS, include the platform-specific NuGet redist packages listed in the NuGet reference table above — these bundle the native GStreamer libraries your application needs. For Windows, use `dotnet publish` with a self-contained deployment to avoid requiring a separate runtime install. For macOS, publish as an app bundle. On Linux, there is no GStreamer redist NuGet package — install GStreamer via the distribution's package manager (e.g., `apt install libgstreamer1.0-0`) on the target system. For Android and iOS, follow the standard MAUI or Avalonia mobile publish workflow to produce APK/AAB or IPA packages.
+
+### Which video and audio formats are supported across all platforms?
+
+The SDK supports MP4, AVI, MKV, WMV, WebM, MOV, TS, and FLV containers with H.264, H.265/HEVC, VP8, VP9, AV1, and MPEG-2 video codecs. Supported audio formats include MP3, AAC, WAV, WMA, FLAC, and OGG. Network streaming protocols such as RTSP, HTTP, HLS, and MPEG-DASH work on all platforms. Format support is consistent across Windows, macOS, Linux, Android, and iOS because playback uses the GStreamer backend. On Linux, some codecs may require additional system packages depending on the distribution.
+
+## See Also
+
+- [Build a Video Player in C#](video-player-csharp.md) — WinForms and WPF player with DirectShow and GStreamer engines
+- [Build a Video Player in VB.NET](video-player-vb-net.md) — Windows Forms player in Visual Basic .NET
+- [Avalonia Player Guide](avalonia-player.md) — complete MVVM implementation with file dialogs and platform setup
+- [Android Player Guide](android-player.md) — Android-specific player configuration and deployment
+- [Loop Mode & Position Range](loop-and-position-range.md) — loop playback and segment selection for both engines
+- [Code Samples](../code-samples/index.md) — frame extraction, playlists, and reverse playback examples
+- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads

@@ -1,6 +1,6 @@
 ---
-title: SDKs y Filtros DirectShow para Desarrollo de Video
-description: Filtros DirectShow y SDKs para reproducción, procesamiento, codificación de video y desarrollo de aplicaciones multimedia con soporte VLC y FFMPEG.
+title: Filtros DirectShow para Reproducción, Codificación y Efectos
+description: Filtros DirectShow para reproducción FFmpeg/VLC, codificación H.264/H.265/NVENC, 35+ efectos de video, chroma key, cámara virtual y cifrado AES-256.
 ---
 
 # SDKs y Filtros DirectShow para Desarrollo de Video

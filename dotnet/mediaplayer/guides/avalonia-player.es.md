@@ -1,6 +1,6 @@
 ---
-title: Reproductor de Video Avalonia Multiplataforma con MVVM
-description: Construya un reproductor de video Avalonia multiplataforma con MVVM y VisioForge SDK para Windows, macOS, Linux, Android e iOS en C#.
+title: Reproductor Video Avalonia — Media Player SDK .NET
+description: Tutorial MVVM multiplataforma para Windows, macOS, Linux, Android e iOS. Estructura de solución, vistas AXAML y patrones de data binding.
 ---
 
 # Reproductor Multimedia Avalonia con VisioForge

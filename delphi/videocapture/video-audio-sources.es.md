@@ -1,6 +1,6 @@
 ---
-title: Captura de Video Delphi - Guía de Selección de Dispositivos
-description: Selecciona dispositivos de video y audio en Delphi: enumera dispositivos, configura formatos y tasas de fotogramas con ejemplos para Delphi, C++, VB6.
+title: Seleccionar Dispositivos de Video y Audio en Delphi
+description: Seleccione dispositivos de video y audio en Delphi - enumere dispositivos, configure formatos y tasas de fotogramas con ejemplos para Delphi, C++, VB6.
 ---
 
 # Ejemplo de código - ¿Cómo seleccionar dispositivos de captura de video y audio?

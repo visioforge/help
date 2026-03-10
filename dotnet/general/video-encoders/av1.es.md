@@ -1,6 +1,6 @@
 ---
-title: Codificadores AV1 en .NET - AMF, NVENC, QSV, AOM, RAV1E
-description: Configure codificadores AV1 en los SDK de Video Capture, Video Edit y Media Blocks multiplataforma para compresión de video eficiente de próxima generación.
+title: Codificación de Video AV1 en C# .NET - Guía de Configuración
+description: Configure codificadores AV1 para captura, edición y pipelines multimedia. Compresión de próxima generación con ejemplos C# de VisioForge SDK.
 ---
 
 # Codificadores AV1

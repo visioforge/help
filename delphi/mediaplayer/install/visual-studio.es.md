@@ -1,6 +1,6 @@
 ---
-title: Instalando TVFMediaPlayer ActiveX en Visual Studio
-description: Integrar TVFMediaPlayer ActiveX en Visual Studio - configuración para proyectos C++, C#, VB.NET con solución de problemas y guía de migración al SDK .NET.
+title: Agregar ActiveX Media Player a Visual Studio C++/C#/VB.NET
+description: Importe el control ActiveX TVFMediaPlayer en proyectos Visual Studio 2010+. Generación de wrapper COM, configuración de toolbox y guía de migración a SDK .NET.
 ---
 
 # Instalando TVFMediaPlayer ActiveX en Visual Studio 2010 y Posterior

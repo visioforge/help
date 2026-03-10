@@ -1,6 +1,6 @@
 ---
 title: NDI Video Capture and Source Integration in C# .NET
-description: Implement NDI video sources in .NET SDK with complete guide to enumerate, connect, and capture high-quality video from NDI cameras in C#.
+description: Discover, connect, and capture NDI video sources using VisioForge Video Capture SDK. Network device enumeration and low-latency streaming in C# .NET.
 ---
 
 # Implementing NDI Video Sources in .NET Applications

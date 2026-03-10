@@ -1,6 +1,6 @@
 ---
-title: Casos de Uso y Aplicaciones de Huellas Digitales de Video
-description: Aplicaciones de huellas digitales de video: protección de derechos de autor, monitoreo de transmisiones y gestión de contenido multimedia.
+title: Casos de uso de Video Fingerprinting: copyright y monitoreo
+description: Aplique video fingerprinting de VisioForge a protección de copyright, monitoreo de transmisiones, detección de piratería y deduplicación.
 ---
 
 # Casos de Uso y Aplicaciones de Huellas Digitales de Video

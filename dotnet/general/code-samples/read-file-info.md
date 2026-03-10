@@ -1,6 +1,6 @@
 ---
-title: Reading Media File Information in C# for Developers
-description: Extract codecs, resolution, frame rate, bitrate, duration, and metadata from video and audio files using MediaInfoReader in C# applications.
+title: Read Media File Info in C# .NET - Streams and Metadata
+description: MediaInfoReader API returns video/audio stream details, subtitle tracks, FOURCC codes, and ID3 tags. Cross-platform file analysis with VisioForge SDK.
 ---
 
 # Reading Media File Information in C#

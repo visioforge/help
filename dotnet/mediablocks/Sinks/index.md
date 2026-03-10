@@ -1,6 +1,6 @@
 ---
-title: Media Sink Blocks for File Output and Network Streaming
-description: Save or stream media with sink blocks for MP4, MKV, AVI files and RTMP, HLS, SRT network protocols in Media Blocks SDK pipelines.
+title: Media Sink Blocks for File and Network Output in .NET
+description: Write media to MP4, MKV, AVI files or stream via RTMP, HLS, SRT protocols using VisioForge Media Blocks SDK sink blocks in C# .NET.
 sidebar_label: Sinks
 ---
 

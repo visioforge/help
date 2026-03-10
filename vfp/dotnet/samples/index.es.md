@@ -1,6 +1,6 @@
 ---
-title: Muestras de Código: SDK de Huella Digital de Video
-description: Ejemplos completos de apps que demuestran huella digital de video, detección de duplicados y búsqueda de fragmentos con el SDK.
+title: Ejemplos SDK Video Fingerprinting - Apps Listas para .NET
+description: Apps de ejemplo listas para ejecutar de VisioForge para video fingerprinting en .NET: escaneo de duplicados, búsqueda y herramientas CLI.
 ---
 
 # Muestras de Código del SDK de Huella Digital de Video

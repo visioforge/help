@@ -1,6 +1,6 @@
 ﻿---
-title: Bloques Especiales en Media Blocks SDK
-description: Use bloques especiales como Null Renderer, Tee, y Super MediaBlock para pipelines personalizados con encriptación y integración avanzada GStreamer.
+title: Bloques Especiales en C# .NET — Tee, Null, Custom
+description: Use divisores Tee, renderizadores Null y Super MediaBlock personalizados para enrutamiento avanzado en VisioForge Media Blocks SDK para .NET.
 sidebar_label: Bloques Especiales
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: OverlayManagerBlock - superposiciones de video en .NET
-description: Aprenda a usar OverlayManagerBlock en .NET para agregar superposiciones de texto, imágenes, video y formas con gestión de capas y composición en tiempo real.
+title: Composición de Superposición de Video en C# .NET — Guía
+description: Añada superposiciones de texto, imágenes, formas y PiP a video en vivo con VisioForge Media Blocks SDK OverlayManagerBlock y gestión de capas.
 ---
 
 # Guía de Uso del Bloque Overlay Manager
@@ -11,7 +11,7 @@ El `OverlayManagerBlock` es un componente poderoso de MediaBlocks que proporcion
 
 ## Características Principales
 
-- **Múltiples Tipos de Superposición**: Texto, texto desplazable, imágenes, secuencias de imágenes, GIFs, SVG, formas (rectángulos, círculos, triángulos, estrellas, líneas), archivos de video/URLs, video en vivo (NDI, Decklink), controles WPF (Windows)
+- **Múltiples Tipos de Superposición**: Texto, texto desplazable, imágenes, secuencias de imágenes, GIFs, SVG, formas (rectángulos, círculos, triángulos, estrellas, líneas), archivos de video/URLs, video en vivo (NDI, Decklink), contenido web WebView2 (Windows), controles WPF (Windows)
 - **Superposiciones de Archivos de Video**: Reproduce archivos de video o URLs de streaming como superposiciones con control completo de reproducción y salida de audio opcional
 - **Superposiciones de Controles WPF**: Renderiza elementos WPF en vivo con animaciones y data binding como superposiciones de video (solo Windows)
 - **Grupos de Superposiciones**: Sincroniza múltiples superposiciones para inicio/parada coordinados con soporte de precarga
@@ -848,6 +848,113 @@ clockOverlay.InvokeOnUIThread(() =>
 clockOverlay.Dispose();
 ```
 
+### OverlayManagerWebView2Video (Solo Windows)
+
+Renderiza contenido web en vivo (HTML, CSS, JavaScript) como una superposición de video usando Microsoft WebView2. Esto permite mostrar páginas web, dashboards HTML dinámicos, contenido web animado, tickers de noticias o cualquier contenido renderizado por navegador como superposición en tu video. La página web se renderiza fuera de pantalla y se captura como cuadros de video a la tasa de refresco nativa del navegador.
+
+> **Nota**: Este tipo de superposición solo está disponible en Windows (target de compilación `NET_WINDOWS`). Requiere el Runtime de Microsoft WebView2 y el plugin GStreamer WebView2 (`webview2src`).
+
+```csharp
+public class OverlayManagerWebView2Video : IOverlayManagerElement, IDisposable
+```
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|-----------|------|----------------|-------------|
+| `Location` | `string` | `"about:blank"` | URL a mostrar en la superposición |
+| `JavaScript` | `string` | `null` | Código JavaScript a ejecutar después de cada navegación completada |
+| `Adapter` | `int` | `-1` | Índice del adaptador DXGI para selección de GPU (-1 = cualquier dispositivo disponible) |
+| `UserDataFolder` | `string` | `null` | Ruta absoluta a la carpeta de datos de usuario de WebView2 para caché y datos de perfil |
+| `X` | `int` | - | Posición X |
+| `Y` | `int` | - | Posición Y |
+| `Width` | `int` | - | Ancho de la superposición |
+| `Height` | `int` | - | Alto de la superposición |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | Cómo ajustar el contenido renderizado |
+| `VideoView` | `IVideoView` | `null` | Ventana de vista previa de video externa opcional |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Configuración del renderizador para VideoView |
+
+**Métodos:**
+
+- `Initialize(bool autoStart = true)` - Inicializa el pipeline de renderizado WebView2. Si `autoStart` es true, comienza a renderizar inmediatamente; si es false, precarga en estado PAUSADO. Retorna `true` si tiene éxito.
+- `Play()` - Inicia o reanuda el renderizado de la página web
+- `Pause()` - Pausa el renderizado de la página web
+- `Stop()` - Detiene el renderizado de la página web
+- `UpdateLocation(string location)` - Cambia la URL mostrada dinámicamente
+- `Dispose()` - Libera recursos
+
+**Ejemplo - Superposición Básica de Página Web:**
+
+```csharp
+// Mostrar una página web como superposición de video
+var webOverlay = new OverlayManagerWebView2Video(
+    location: "https://example.com/dashboard",
+    x: 50,
+    y: 50,
+    width: 640,
+    height: 480)
+{
+    Opacity = 0.9,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    ZIndex = 5
+};
+
+// Inicializar y agregar al overlay manager
+if (webOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(webOverlay);
+}
+else
+{
+    webOverlay.Dispose();
+}
+```
+
+**Ejemplo - Superposición Web con Inyección de JavaScript:**
+
+```csharp
+// Superponer una página web e inyectar JavaScript para personalizarla
+var tickerOverlay = new OverlayManagerWebView2Video(
+    location: "https://example.com/ticker",
+    x: 0,
+    y: 680,
+    width: 1920,
+    height: 40)
+{
+    // JavaScript se ejecuta después de cada navegación completada
+    JavaScript = "document.body.style.background = 'transparent';",
+    Opacity = 0.8,
+    ZIndex = 10,
+    Shadow = new OverlayManagerShadowSettings
+    {
+        Enabled = true,
+        Color = SKColors.Black,
+        Opacity = 0.5,
+        BlurRadius = 5,
+        Depth = 5,
+        Direction = 45
+    }
+};
+
+if (tickerOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(tickerOverlay);
+}
+```
+
+**Ejemplo - Actualización Dinámica de URL en Tiempo de Ejecución:**
+
+```csharp
+// Cambiar la página mostrada en tiempo de ejecución
+webOverlay.UpdateLocation("https://example.com/new-page");
+
+// Controlar el renderizado
+webOverlay.Pause();
+webOverlay.Play();
+
+// Liberar recursos cuando termine
+webOverlay.Stop();
+webOverlay.Dispose();
+```
+
 ### Superposiciones de Formas
 
 #### OverlayManagerLine
@@ -1375,12 +1482,15 @@ Para un ejemplo funcional completo que demuestra todos los tipos de superposici�
 
 7. **Superposiciones de Controles WPF**: Valores más altos de `RefreshRate` aumentan el uso de CPU. Usa la tasa de refresco mínima necesaria para actualizaciones visuales fluidas — 15 fps es suficiente para la mayoría del contenido estático o que cambia lentamente.
 
-8. **Grupos de Superposiciones**: Usa `OverlayManagerGroup` para precargar superposiciones de video. Esto evita tiempos de inicio escalonados cuando múltiples superposiciones de video necesitan comenzar simultáneamente.
+8. **Superposiciones WebView2**: Cada superposición `OverlayManagerWebView2Video` ejecuta su propio pipeline de renderizado interno con un navegador fuera de pantalla. Limita la cantidad de superposiciones WebView2 simultáneas para evitar uso excesivo de CPU, GPU y memoria.
+
+9. **Grupos de Superposiciones**: Usa `OverlayManagerGroup` para precargar superposiciones de video. Esto evita tiempos de inicio escalonados cuando múltiples superposiciones de video necesitan comenzar simultáneamente.
 
 ## Notas de Plataforma
 
 - **Windows**: Soporta System.Drawing.Bitmap además de SkiaSharp
 - **Windows (WPF)**: Soporta `OverlayManagerWPFControl` para renderizar elementos visuales WPF como superposiciones. Requiere target de compilación `NET_WINDOWS`.
+- **Windows (WebView2)**: Soporta `OverlayManagerWebView2Video` para renderizar contenido web en vivo (HTML/CSS/JS) como superposiciones. Requiere el Runtime de Microsoft WebView2 y el plugin GStreamer WebView2 (`webview2src`).
 - **iOS**: La fuente predeterminada es "System-ui"
 - **Android**: La fuente predeterminada es "System-ui"
 - **Linux/macOS**: Enumera fuentes disponibles en tiempo de ejecución
@@ -1401,7 +1511,9 @@ El overlay manager usa bloqueo interno para operaciones seguras entre hilos. Pue
 
 5. **La superposición WPF no se actualiza**: Verifica que `RefreshRate` sea apropiado para tu contenido. Usa `InvokeOnUIThread()` para todas las modificaciones de elementos WPF para evitar excepciones de hilos cruzados.
 
-6. **Las superposiciones del grupo no inician juntas**: Asegúrate de que todas las superposiciones se agreguen al grupo antes de llamar `Initialize()`. No se pueden agregar superposiciones después de la inicialización.
+6. **La superposición WebView2 no renderiza**: Asegúrate de que el Runtime de Microsoft WebView2 esté instalado en la máquina de destino. Verifica que `Initialize()` retorne `true` antes de agregar al overlay manager. El plugin GStreamer WebView2 (`webview2src`) debe estar disponible.
+
+7. **Las superposiciones del grupo no inician juntas**: Asegúrate de que todas las superposiciones se agreguen al grupo antes de llamar `Initialize()`. No se pueden agregar superposiciones después de la inicialización.
 
 ## Preguntas Frecuentes
 
@@ -1423,4 +1535,8 @@ Sí. Establece la propiedad `AudioOutput` en `OverlayManagerVideo` a un disposit
 
 ### ¿Qué tipos de superposición soporta OverlayManagerBlock?
 
-El OverlayManagerBlock soporta: texto (`OverlayManagerText`), fecha/hora (`OverlayManagerDateTime`), texto desplazable (`OverlayManagerScrollingText`), imágenes (`OverlayManagerImage`), GIFs animados (`OverlayManagerGIF`), secuencias de imágenes (`OverlayManagerImageSequence`), gráficos SVG (`OverlayManagerSVG`), formas (rectángulo, círculo, triángulo, estrella, línea), archivos de video/URLs (`OverlayManagerVideo`), tarjetas de captura Decklink (`OverlayManagerDecklinkVideo`), fuentes de red NDI (`OverlayManagerNDIVideo`), controles WPF (`OverlayManagerWPFControl`, solo Windows), grupos de superposiciones (`OverlayManagerGroup`), dibujo personalizado con Cairo (`OverlayManagerCallback`), y efectos de transformación de video (zoom, panorámica, desvanecimiento, squeezeback).
+El OverlayManagerBlock soporta: texto (`OverlayManagerText`), fecha/hora (`OverlayManagerDateTime`), texto desplazable (`OverlayManagerScrollingText`), imágenes (`OverlayManagerImage`), GIFs animados (`OverlayManagerGIF`), secuencias de imágenes (`OverlayManagerImageSequence`), gráficos SVG (`OverlayManagerSVG`), formas (rectángulo, círculo, triángulo, estrella, línea), archivos de video/URLs (`OverlayManagerVideo`), tarjetas de captura Decklink (`OverlayManagerDecklinkVideo`), fuentes de red NDI (`OverlayManagerNDIVideo`), contenido web WebView2 (`OverlayManagerWebView2Video`, solo Windows), controles WPF (`OverlayManagerWPFControl`, solo Windows), grupos de superposiciones (`OverlayManagerGroup`), dibujo personalizado con Cairo (`OverlayManagerCallback`), y efectos de transformación de video (zoom, panorámica, desvanecimiento, squeezeback).
+
+### ¿Puedo renderizar contenido web en vivo como superposición de video?
+
+Sí. `OverlayManagerWebView2Video` renderiza cualquier página web (HTML, CSS, JavaScript) como superposición de video usando Microsoft WebView2. Puedes mostrar dashboards, contenido web animado, tickers o cualquier contenido renderizado por navegador. Soporta inyección de JavaScript después de la navegación para personalizar la página mostrada. Esto es solo para Windows y requiere el Runtime de Microsoft WebView2. Consulta la sección [OverlayManagerWebView2Video](#overlaymanagerwebview2video-solo-windows).

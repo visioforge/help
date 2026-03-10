@@ -1,6 +1,6 @@
 ---
-title: Integrate Media SDKs with Uno Platform Applications
-description: Build cross-platform Uno Platform apps with multimedia capabilities for Windows, Android, iOS, macOS, and Linux using VisioForge SDKs.
+title: Set Up Video SDKs for Uno Platform Cross-Platform .NET
+description: Add video capture, playback, and editing to Uno Platform apps. NuGet setup, VideoView integration for Windows, Android, iOS, macOS, and Linux.
 ---
 
 # Integrating VisioForge SDKs with Uno Platform Applications

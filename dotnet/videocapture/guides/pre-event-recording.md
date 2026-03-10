@@ -1,6 +1,6 @@
 ---
-title: Pre-Event Recording Using C# .NET: Circular Buffer Capture
-description: Record webcam and IP camera video with pre-event circular buffer in C# .NET. Save video before and after motion detection events with Video Capture SDK .Net.
+title: Pre-Event Recording with Circular Buffer in C# .NET
+description: Buffer and save video before motion triggers using VisioForge Video Capture SDK. Circular buffer for webcam, IP camera, and RTSP streams with C# examples.
 ---
 
 # Pre-Event Recording Using C# .Net: Circular Buffer Video Capture

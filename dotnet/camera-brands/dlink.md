@@ -1,6 +1,6 @@
 ---
 title: D-Link DCS IP Camera RTSP URLs and C# .NET Code Samples
-description: Connect to D-Link DCS cameras in C# .NET with RTSP URL patterns and code samples for DCS-930, DCS-2130, DCS-5222, and other DCS models.
+description: D-Link DCS camera RTSP URL patterns for C# .NET integration. Covers DCS-930, DCS-2130, DCS-5222 with VisioForge SDK code and authentication setup.
 ---
 
 # How to Connect to D-Link IP Camera in C# .NET

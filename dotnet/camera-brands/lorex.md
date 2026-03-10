@@ -1,6 +1,6 @@
 ---
 title: Lorex IP Camera RTSP URL Connection Guide for C# .NET
-description: Connect to Lorex security cameras and NVRs in C# .NET with RTSP URL patterns and code samples for LNB, LNE, LNZ, and Lorex DVR models.
+description: Lorex LNB, LNE, LNZ, DVR, and NVR RTSP URL patterns for C# .NET. Stream and record Lorex cameras using VisioForge Video Capture SDK integration.
 ---
 
 # How to Connect to Lorex IP Camera in C# .NET

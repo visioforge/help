@@ -1,6 +1,6 @@
 ---
-title: Motion Detection in Video with .NET SDK: Simple and Advanced
-description: Implement advanced and simple motion detection in .NET with multiple detector types, customizable settings, and real-time processing.
+title: Motion Detection - Configurable Zones and Alerts in C# .NET
+description: Add simple and advanced motion detection to webcam or IP camera streams with VisioForge Video Capture SDK. Configurable zones, sensitivity, and C# examples.
 sidebar_label: Motion Detection
 order: 6
 ---

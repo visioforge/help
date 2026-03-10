@@ -1,6 +1,6 @@
 ---
-title: Video Encryption SDK Interface Reference - AES-256
-description: Video Encryption SDK API with IVFCryptoConfig, IVFPasswordProvider, and helper methods for C++, C#, and Delphi with AES-256.
+title: IVFCryptoConfig COM Interface - Video Encryption API
+description: IVFCryptoConfig and IVFPasswordProvider COM interfaces for AES-256 video encryption in DirectShow. Methods, GUIDs, and usage for C++, C#, Delphi.
 ---
 
 # Video Encryption SDK - Interface Reference

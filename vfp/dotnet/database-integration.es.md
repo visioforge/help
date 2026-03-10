@@ -1,6 +1,6 @@
 ---
-title: Guía de Base de Datos de Huellas Digitales de Video
-description: Guía completa para integrar huellas digitales de video con MongoDB, SQL Server, PostgreSQL con esquemas, indexación y optimización.
+title: Almacenamiento de huellas en MongoDB, SQL Server, PostgreSQL
+description: Integre huellas de video de VisioForge con MongoDB, SQL Server y PostgreSQL usando esquemas optimizados, indexación y operaciones por lotes.
 ---
 
 # Guía de Base de Datos de Huellas Digitales de Video

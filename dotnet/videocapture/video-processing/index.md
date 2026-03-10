@@ -1,6 +1,6 @@
 ---
-title: Video Processing and Effects in Video Capture SDK .Net
-description: Enhance video capture with resizing, cropping, rotation, text overlays, image effects, color adjustments, and filters in .NET.
+title: Real-Time Video Effects - Resize, Crop, Overlay in C# .NET
+description: Apply real-time resize, crop, rotation, text overlays, and color filters during video capture with VisioForge Video Capture SDK. C# API examples.
 sidebar_label: Video Processing And Effects
 order: 13
 

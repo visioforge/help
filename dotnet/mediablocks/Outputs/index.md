@@ -1,6 +1,6 @@
 ---
-title: Media Output Blocks for MP4, MKV, WebM, and RTMP in .NET
-description: Write media to files and network streams with comprehensive output sink blocks for MP4, MKV, RTMP, HLS, and more in Media Blocks SDK.
+title: Media Output Blocks in C# .NET - MP4, MKV, WebM, RTMP
+description: Save video to MP4, AVI, MKV, WebM files or stream via RTMP and HLS using VisioForge Media Blocks SDK output blocks with C# code examples.
 sidebar_label: Outputs
 ---
 

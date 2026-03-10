@@ -1,6 +1,6 @@
 ---
 title: Zmodo RTSP URL Guide: Connect IP Cameras in C# .NET
-description: Connect to Zmodo cameras in C# .NET with RTSP URL patterns and code samples for ZH Wi-Fi, ZP PoE, CM legacy, and DVR/NVR models.
+description: Zmodo ZH Wi-Fi, ZP PoE, and DVR/NVR RTSP URL patterns for C# .NET. Stream and record Zmodo cameras with VisioForge Video Capture SDK integration.
 ---
 
 # How to Connect to Zmodo IP Camera in C# .NET

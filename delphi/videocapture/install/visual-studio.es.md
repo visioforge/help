@@ -1,6 +1,6 @@
 ---
-title: Instalar TVFVideoCapture ActiveX en Visual Studio 2010+
-description: Instalar controles ActiveX TVFVideoCapture en Visual Studio 2010+ con integración de C++ y código administrado para proyectos de captura de video.
+title: Instalar Control ActiveX TVFVideoCapture en Visual Studio
+description: Instale controles ActiveX TVFVideoCapture en Visual Studio 2010+ con integración de C++ y código administrado para proyectos de captura de video.
 ---
 
 # Instalando TVFVideoCapture en Visual Studio 2010 y Posterior

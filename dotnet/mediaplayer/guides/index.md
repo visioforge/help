@@ -1,6 +1,6 @@
 ---
-title: Media Player SDK .Net - Advanced Guides & Tutorials
-description: Master loop playback, position range control, and platform-specific features with in-depth guides, code samples, and support resources.
+title: Advanced Video Playback Guides and Tutorials in C# .NET
+description: Master loop playback, position range, and platform-specific features with VisioForge Media Player SDK .NET guides, code samples, and tutorials.
 sidebar_label: Additional Guides
 order: 1
 

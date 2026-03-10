@@ -1,6 +1,6 @@
 ---
 title: Cloud Video Fingerprinting with Azure, AWS, and MongoDB
-description: Comprehensive guide for implementing cloud-based video fingerprinting with Azure and AWS using distributed processing and serverless.
+description: Deploy VisioForge video fingerprinting on Azure and AWS with MongoDB storage, distributed processing, and serverless architecture patterns.
 ---
 
 # Cloud Guide for Video Fingerprinting

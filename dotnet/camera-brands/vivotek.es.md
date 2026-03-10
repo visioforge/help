@@ -1,6 +1,6 @@
 ---
 title: Vivotek - URL RTSP y Conexión con Cámaras IP en C# .NET
-description: Conecta cámaras IP Vivotek en C# .NET con patrones de URL RTSP y ejemplos de código para modelos FD, IP, SD, FE ojo de pez y servidores de video.
+description: Conecta cámaras IP Vivotek en C# .NET con patrones de URL RTSP y ejemplos de código para modelos FD, IP, SD, FE ojo de pez y servidores de vídeo.
 ---
 
 # Cómo Conectar una Cámara IP Vivotek en C# .NET
@@ -13,12 +13,12 @@ description: Conecta cámaras IP Vivotek en C# .NET con patrones de URL RTSP y e
 
 **Datos clave:**
 
-- **Líneas de producto:** FD (domo fijo), IP (caja/bullet), IB (bullet), SD (domo de alta velocidad), FE (ojo de pez), MD (domo móvil), CC (compacta), VS (servidores de video/codificadores)
+- **Líneas de producto:** FD (domo fijo), IP (caja/bullet), IB (bullet), SD (domo de alta velocidad), FE (ojo de pez), MD (domo móvil), CC (compacta), VS (servidores de vídeo/codificadores)
 - **Soporte de protocolos:** RTSP, ONVIF (Perfil S/G/T), HTTP/CGI, MJPEG
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** root / (vacío o configurado durante la instalación); modelos antiguos: root / root
 - **Soporte ONVIF:** Sí (todos los modelos actuales)
-- **Códecs de video:** H.264, H.265, MJPEG
+- **Códecs de vídeo:** H.264, H.265, MJPEG
 
 ## Patrones de URL RTSP
 
@@ -67,14 +67,14 @@ Los modelos Vivotek más antiguos (series IP3xxx, IP6xxx, PT3xxx, PZ6xxx) usaban
 
 ### URLs de Servidor de Video
 
-Los servidores de video Vivotek codifican señales de cámaras analógicas para streaming IP:
+Los servidores de vídeo Vivotek codifican señales de cámaras analógicas para streaming IP:
 
 | Modelo | URL RTSP | Notas |
 |-------|----------|-------|
-| VS2403 | `rtsp://IP:554/live.sdp` | Servidor de video, multicanal |
+| VS2403 | `rtsp://IP:554/live.sdp` | Servidor de vídeo, multicanal |
 | VS3100P | `http://IP/cgi-bin/video.jpg?size=2` | Codificador antiguo |
-| VS7100 | `rtsp://IP:554/live.sdp` | Servidor de video |
-| VS8102 | `rtsp://IP:554/live.sdp` | Servidor de video |
+| VS7100 | `rtsp://IP:554/live.sdp` | Servidor de vídeo |
+| VS8102 | `rtsp://IP:554/live.sdp` | Servidor de vídeo |
 | VS8401 | `rtsp://IP:554/live.sdp` | Servidor de 4 canales |
 | VS8801 | `rtsp://IP:554/live.sdp` | Servidor de 8 canales |
 
@@ -147,9 +147,9 @@ Sí. Las cámaras Vivotek actuales soportan H.265 (HEVC). Use la misma URL `live
 
 `live.sdp` es el flujo principal (mayor calidad), `live2.sdp` es típicamente un subflujo de menor resolución para visualización con ancho de banda limitado, y `live3.sdp` es un tercer flujo frecuentemente usado para visualización móvil.
 
-**¿Los servidores de video Vivotek soportan RTSP?**
+**¿Los servidores de vídeo Vivotek soportan RTSP?**
 
-Sí. Los servidores de video Vivotek actuales (VS2403, VS7100, VS8102, VS8401, VS8801) soportan RTSP usando el mismo patrón de URL `live.sdp` que las cámaras. Los servidores antiguos (VS3100P) solo soportan HTTP JPEG.
+Sí. Los servidores de vídeo Vivotek actuales (VS2403, VS7100, VS8102, VS8401, VS8801) soportan RTSP usando el mismo patrón de URL `live.sdp` que las cámaras. Los servidores antiguos (VS3100P) solo soportan HTTP JPEG.
 
 ## Recursos Relacionados
 

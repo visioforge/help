@@ -1,6 +1,6 @@
 ---
-title: Add Image Overlay to Video in .NET with Code Examples
-description: Implement image overlays in videos with .NET SDK using step-by-step guide with code examples for positioning, transparency, and timing.
+title: Add Image Overlay with Positioning and Timing in C# .NET
+description: Implement image overlays in videos with VisioForge Video Edit SDK .NET. Step-by-step guide for positioning, transparency, and timing control.
 ---
 
 # Adding Image Overlays to Videos in .NET

@@ -1,6 +1,6 @@
 ---
-title: Centro de Documentación de SDKs VisioForge
-description: Documentación completa para los SDKs de video de VisioForge - captura, reproducción, edición y procesamiento para .NET, Delphi y DirectShow.
+title: Documentación VisioForge SDKs — Captura, Edición y Reproducción de Video
+description: Tutoriales, referencia API y ejemplos de código C#. SDKs .NET, Delphi y DirectShow para 7 plataformas incluyendo Raspberry Pi y NVIDIA Jetson. Codificación acelerada por GPU.
 hide:
   - navigation
   - toc

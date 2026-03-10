@@ -1,6 +1,6 @@
 ---
-title: Captura de audio en .NET: dispositivos, loopback y red
-description: Integre múltiples fuentes de audio en .NET incluyendo dispositivos de captura, bucle invertido del sistema, cámaras IP y Decklink con ejemplos de código.
+title: Fuentes de Audio en C# .NET — Micrófono y Loopback
+description: Configure fuentes de audio en C# .NET — micrófono, loopback del sistema, audio de cámaras IP y Decklink con ejemplos de código completos.
 sidebar_label: Fuentes de Audio
 order: 15
 
@@ -203,6 +203,8 @@ Aquí se explica cómo implementarlo:
     
 
 
+Para ejemplos completos y ejecutables de captura de altavoz (incluyendo el enfoque de pipeline con Media Blocks SDK), consulte la [guía de Captura de Audio](../audio-capture/index.md#capturar-audio-del-sistema-altavoz-loopback).
+
 ## Trabajando con Fuentes de Audio de Red
 
 Para cámaras IP y otros flujos de red, la captura de audio generalmente se maneja como parte de la conexión general del flujo. La implementación exacta depende del protocolo de red que se utilice (RTSP, HLS, etc.) y las capacidades específicas del dispositivo.
@@ -246,6 +248,8 @@ La implementación de capacidades de captura de audio en su aplicación .NET imp
 
 Siguiendo los ejemplos de código y los patrones de implementación descritos en esta guía, podrá integrar una potente funcionalidad de captura de audio en sus proyectos de manera eficiente.
 
----
+## Aplicaciones de Ejemplo
 
-Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.
+Ejemplos de trabajo completos están disponibles en GitHub:
+
+* [Todos los Ejemplos de Video Capture SDK X](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X)

@@ -1,6 +1,6 @@
 ---
-title: OpenCV .NET Blocks for Video Processing and Detection
-description: Implement computer vision tasks with OpenCV blocks for object detection, tracking, image manipulation, and video processing in .NET SDKs.
+title: OpenCV Computer Vision Blocks for Video Pipeline in C# .NET
+description: Add object detection, tracking, and image processing to video pipelines with OpenCV blocks in VisioForge Media Blocks SDK. Cross-platform computer vision.
 sidebar_label: OpenCV
 ---
 

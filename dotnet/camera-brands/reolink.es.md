@@ -18,7 +18,7 @@ description: Conecta cámaras Reolink en C# .NET con patrones de URL RTSP y ejem
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** admin / (contraseña en blanco o establecida durante configuración)
 - **Soporte ONVIF:** Sí (la mayoría de los modelos actuales, puede requerir habilitación en la configuración de la cámara)
-- **Códecs de video:** H.264 (todos los modelos), H.265 (la mayoría de los modelos actuales)
+- **Códecs de vídeo:** H.264 (todos los modelos), H.265 (la mayoría de los modelos actuales)
 
 ## Patrones de URL RTSP
 

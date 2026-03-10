@@ -1,6 +1,6 @@
 ---
-title: Delphi/C++Builder SDK for Video and Media Processing
-description: Powerful Delphi/ActiveX libraries for video playback, capture, and editing with x64 support for professional media applications.
+title: Delphi and ActiveX Video SDK - Playback, Capture, Editing
+description: VCL components and ActiveX controls for video playback, capture, screen recording, and editing in Delphi and C++ Builder.
 sidebar_label: All-in-One Media Framework (Delphi/ActiveX)
 order: 18
 ---

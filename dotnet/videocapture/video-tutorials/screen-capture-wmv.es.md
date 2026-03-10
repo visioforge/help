@@ -1,6 +1,7 @@
 ---
-title: Grabación de Pantalla C# a WMV - Implementación .NET
-description: Implementa grabación de pantalla profesional en aplicaciones .NET con C# usando guía paso a paso, ejemplos de código funcionales y opciones de configuración.
+title: Captura de Pantalla a WMV en C# .NET — Windows Media
+description: Grabe la pantalla a formato WMV en C# con codecs Windows Media. Cuándo elegir WMV, configuración de codec y ejemplos de código completos usando VisioForge SDK.
+sidebar_label: Captura de Pantalla a WMV
 ---
 
 # Implementación de Grabación de Pantalla a WMV en Aplicaciones C# .NET
@@ -21,7 +22,32 @@ Accede al código fuente completo para este tutorial en nuestro repositorio de G
 
 [Código fuente en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/screen-capture-wmv)
 
-## Dependencias Requeridas
+## Cuándo Usar WMV para Grabación de Pantalla
+
+WMV (Windows Media Video) usa los codecs Windows Media de Microsoft y el contenedor ASF. Sigue siendo útil en escenarios específicos centrados en Windows:
+
+- **Integración nativa con Windows** — Los archivos WMV se reproducen en Windows Media Player sin codecs adicionales y se integran con Windows Movie Maker y otras herramientas de Microsoft
+- **Streaming ASF** — El contenedor ASF soporta streaming en vivo a través de Windows Media Services, útil para transmisión en intranet
+- **Archivos más pequeños que AVI** — La compresión WMV es más eficiente que MJPEG, aunque menos eficiente que MP4 H.264
+- **Entornos empresariales legados** — Muchos entornos corporativos estandarizan los formatos Windows Media para distribución interna de video
+
+**Compensación:** WMV es un formato solo para Windows con soporte limitado en macOS y Linux. Para compatibilidad multiplataforma, [MP4 es el formato recomendado](screen-capture-mp4.md).
+
+## API Moderna — Video Capture SDK X
+
+La API moderna multiplataforma usa `VideoCaptureCoreX`. Para el patrón completo de aplicación de consola con configuración de captura de pantalla, audio y ciclo de vida de grabación, consulte la guía de [Captura de Pantalla a MP4](screen-capture-mp4.es.md#api-moderna-video-capture-sdk-x). Para generar WMV en lugar de MP4, reemplace la configuración de salida:
+
+```csharp
+// Salida WMV (codecs Windows Media Video + WMA audio)
+var wmvOutput = new WMVOutput(outputPath);
+videoCapture.Outputs_Add(wmvOutput, autostart: true);
+```
+
+Captura de región, grabación multi-monitor, audio, resaltado de cursor y codificación GPU se cubren en la [guía de MP4](screen-capture-mp4.es.md) — todas las funciones de configuración de fuente funcionan de forma idéntica con la salida WMV.
+
+## API Legada — Video Capture SDK
+
+### Dependencias Requeridas
 
 Antes de comenzar, asegúrate de haber instalado los paquetes redistribuibles necesarios:
 
@@ -29,7 +55,7 @@ Antes de comenzar, asegúrate de haber instalado los paquetes redistribuibles ne
   - [paquete x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
   - [paquete x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-## Código de Implementación Esencial en C#
+### Ejemplo de Código
 
 El siguiente fragmento de código demuestra cómo crear una aplicación básica de grabación de pantalla que captura tu pantalla a un archivo WMV:
 
@@ -73,19 +99,19 @@ namespace screen_capture_wmv
         {
             // Configurar captura de pantalla para grabar la pantalla completa
             videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings() { FullScreen = true };
-            
+
             // Deshabilitar grabación y reproducción de audio
             videoCapture1.Audio_RecordAudio = videoCapture1.Audio_PlayAudio = false;
-            
+
             // Establecer la ruta del archivo de salida a la carpeta Videos del usuario
             videoCapture1.Output_Filename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "output.wmv");
-            
+
             // Establecer el formato de salida a WMV con configuración predeterminada
             videoCapture1.Output_Format = new WMVOutput();
-            
+
             // Establecer el modo de captura a captura de pantalla
             videoCapture1.Mode = VideoCaptureMode.ScreenCapture;
-            
+
             // Iniciar el proceso de captura de pantalla de forma asíncrona
             await videoCapture1.StartAsync();
         }
@@ -99,39 +125,17 @@ namespace screen_capture_wmv
 }
 ```
 
-## Opciones de Configuración Avanzada
+## Preguntas Frecuentes
 
-### Capturando Regiones Específicas de Pantalla
+### ¿Cuándo debo usar WMV en lugar de MP4 para grabación de pantalla?
 
-Si necesitas grabar solo una porción de la pantalla en lugar de toda la pantalla:
+Elija WMV cuando su público objetivo usa Windows exclusivamente y necesita reproducción nativa sin instalación de codecs adicionales, cuando distribuye video a través de Windows Media Services o SharePoint, o cuando trabaja dentro de entornos empresariales que estandarizan los formatos Windows Media. Para distribución multiplataforma o publicación web, MP4 con H.264 es la mejor opción — ofrece archivos más pequeños, soporte más amplio de dispositivos y mejor compresión.
 
-```csharp
-// Definir una región rectangular específica para capturar (x, y, ancho, alto)
-videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings() { 
-    FullScreen = false,
-    Rectangle = new Rectangle(0, 0, 800, 600) 
-};
-```
+## Ver También
 
-## Escenarios de Implementación Comunes
-
-### Creando una Aplicación de Grabación Ligera
-
-Para escenarios donde los recursos del sistema son limitados:
-
-1. Reducir la tasa de frames de captura
-2. Grabar a un codec más eficiente
-3. Capturar regiones de pantalla más pequeñas
-4. Usar aceleración por hardware cuando esté disponible
-
-### Implementando Grabación en Segundo Plano
-
-Para aplicaciones que necesitan grabar en segundo plano:
-
-1. Inicializar el componente de captura en un hilo separado
-2. Implementar UI mínima para control
-3. Considerar agregar funcionalidad de bandeja del sistema
-4. Implementar gestión de recursos adecuada
-
----
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código y ejemplos de implementación.
+- [Captura de Pantalla a MP4](screen-capture-mp4.md) — formato recomendado con cobertura completa de funciones (región, multi-monitor, audio, codificación GPU, multiplataforma)
+- [Captura de Pantalla a AVI](screen-capture-avi.md) — formato AVI con MJPEG para edición independiente de fotogramas
+- [Captura de Pantalla en VB.NET](../guides/screen-capture-vb-net.md) — grabación de pantalla en Visual Basic .NET
+- [Configuración de Fuente de Pantalla](../video-sources/screen.md) — referencia completa para configuración de captura
+- [Ejemplos de Código](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — ejemplos adicionales de captura de pantalla en GitHub
+- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas

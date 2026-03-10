@@ -1,6 +1,6 @@
 ---
-title: Bloques Linux V4L2, VAAPI y PulseAudio en Media Blocks SDK
-description: Bloques específicos de plataforma Linux para captura y procesamiento de video/audio usando V4L2, PulseAudio, VAAPI y más en Media Blocks SDK para .NET.
+title: Aceleración por Hardware VA-API en Linux con C# .NET
+description: Use codificación y decodificación de video acelerada por GPU con VA-API en Linux con VisioForge Media Blocks SDK. Soporte para Ubuntu y Debian en apps .NET.
 ---
 
 # Bloques de Plataforma Linux - VisioForge Media Blocks SDK .Net

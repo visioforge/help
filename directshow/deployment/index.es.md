@@ -1,6 +1,6 @@
 ---
-title: Despliegue de filtros DirectShow con WiX, NSIS e Inno Setup
-description: Despliegue SDKs de DirectShow con registro COM, integración de instaladores WiX/NSIS, archivos redistribuibles y solución de problemas en Windows.
+title: Guía de Implementación de Filtros DirectShow para Windows
+description: Implemente filtros DirectShow con registro COM, integración de instaladores WiX/NSIS/Inno Setup, lista de archivos redistribuibles y solución de problemas.
 sidebar_label: Despliegue
 ---
 

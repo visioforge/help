@@ -1,6 +1,6 @@
 ---
-title: Bloques Windows para captura y procesamiento de medios .NET
-description: Bloques de plataforma Windows para captura y procesamiento de video/audio usando DirectShow, MediaFoundation y Direct3D en Media Blocks SDK .NET.
+title: Decodificación de Video GPU con Direct3D 11 en C# .NET
+description: Use decodificación de video acelerada por hardware con Direct3D 11, efectos e integración DirectShow en Windows con VisioForge Media Blocks SDK para .NET.
 ---
 
 # Bloques de Plataforma Windows - VisioForge Media Blocks SDK .Net

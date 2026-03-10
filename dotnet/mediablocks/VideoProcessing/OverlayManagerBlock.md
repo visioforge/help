@@ -1,6 +1,6 @@
 ---
-title: Video Overlay Composition in C# Using OverlayManagerBlock
-description: Add and manage video overlays in C# with OverlayManagerBlock — text, images, shapes, PiP, WPF controls, and real-time composition in .NET.
+title: Video Overlay Manager - Text, Image, PiP Layers in C# .NET
+description: Add text, images, shapes, and PiP overlays to live video using VisioForge Media Blocks SDK OverlayManagerBlock with real-time layer management.
 ---
 
 # Overlay Manager Block usage guide
@@ -11,7 +11,7 @@ The `OverlayManagerBlock` is a powerful MediaBlocks component that provides dyna
 
 ## Key Features
 
-- **Multiple Overlay Types**: Text, scrolling text, images, image sequences, GIFs, SVG, shapes (rectangles, circles, triangles, stars, lines), video files/URLs, live video (NDI, Decklink), WPF controls (Windows)
+- **Multiple Overlay Types**: Text, scrolling text, images, image sequences, GIFs, SVG, shapes (rectangles, circles, triangles, stars, lines), video files/URLs, live video (NDI, Decklink), WebView2 web content (Windows), WPF controls (Windows)
 - **Video File Overlays**: Play video files or stream URLs as overlays with full playback control and optional audio output
 - **WPF Control Overlays**: Render live WPF elements with animations and data binding as video overlays (Windows only)
 - **Overlay Groups**: Synchronize multiple overlays for coordinated start/stop with preloading support
@@ -855,6 +855,113 @@ clockOverlay.InvokeOnUIThread(() =>
 clockOverlay.Dispose();
 ```
 
+### OverlayManagerWebView2Video (Windows Only)
+
+Renders live web content (HTML, CSS, JavaScript) as a video overlay using Microsoft WebView2. This enables displaying web pages, dynamic HTML dashboards, animated web content, news tickers, or any browser-rendered content as an overlay on your video. The web page is rendered offscreen and captured as video frames at the browser's native refresh rate.
+
+> **Note**: This overlay type is only available on Windows (`NET_WINDOWS` build target). Requires the Microsoft WebView2 Runtime and the GStreamer WebView2 plugin (`webview2src`).
+
+```csharp
+public class OverlayManagerWebView2Video : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Location` | `string` | `"about:blank"` | URL to display in the overlay |
+| `JavaScript` | `string` | `null` | JavaScript code to execute after each navigation completes |
+| `Adapter` | `int` | `-1` | DXGI adapter index for GPU selection (-1 = any available device) |
+| `UserDataFolder` | `string` | `null` | Absolute path to WebView2 user data folder for cache and profile data |
+| `X` | `int` | - | X position |
+| `Y` | `int` | - | Y position |
+| `Width` | `int` | - | Overlay width |
+| `Height` | `int` | - | Overlay height |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | How to fit the rendered content |
+| `VideoView` | `IVideoView` | `null` | Optional external video preview window |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings for VideoView |
+
+**Methods:**
+
+- `Initialize(bool autoStart = true)` - Initialize the WebView2 rendering pipeline. If `autoStart` is true, begins rendering immediately; if false, preloads to PAUSED state. Returns `true` if successful.
+- `Play()` - Start or resume web page rendering
+- `Pause()` - Pause web page rendering
+- `Stop()` - Stop web page rendering
+- `UpdateLocation(string location)` - Change the displayed URL dynamically
+- `Dispose()` - Clean up resources
+
+**Example - Basic Web Page Overlay:**
+
+```csharp
+// Display a web page as a video overlay
+var webOverlay = new OverlayManagerWebView2Video(
+    location: "https://example.com/dashboard",
+    x: 50,
+    y: 50,
+    width: 640,
+    height: 480)
+{
+    Opacity = 0.9,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    ZIndex = 5
+};
+
+// Initialize and add to overlay manager
+if (webOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(webOverlay);
+}
+else
+{
+    webOverlay.Dispose();
+}
+```
+
+**Example - Web Overlay with JavaScript Injection:**
+
+```csharp
+// Overlay a web page and inject JavaScript to customize it
+var tickerOverlay = new OverlayManagerWebView2Video(
+    location: "https://example.com/ticker",
+    x: 0,
+    y: 680,
+    width: 1920,
+    height: 40)
+{
+    // JavaScript runs after each navigation completes
+    JavaScript = "document.body.style.background = 'transparent';",
+    Opacity = 0.8,
+    ZIndex = 10,
+    Shadow = new OverlayManagerShadowSettings
+    {
+        Enabled = true,
+        Color = SKColors.Black,
+        Opacity = 0.5,
+        BlurRadius = 5,
+        Depth = 5,
+        Direction = 45
+    }
+};
+
+if (tickerOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(tickerOverlay);
+}
+```
+
+**Example - Dynamic URL Update at Runtime:**
+
+```csharp
+// Change the displayed page at runtime
+webOverlay.UpdateLocation("https://example.com/new-page");
+
+// Control rendering
+webOverlay.Pause();
+webOverlay.Play();
+
+// Clean up when done
+webOverlay.Stop();
+webOverlay.Dispose();
+```
+
 ### Shape Overlays
 
 #### OverlayManagerLine
@@ -1414,12 +1521,15 @@ For a complete working example demonstrating all overlay types, refer to:
 
 7. **WPF Control Overlays**: Higher `RefreshRate` values increase CPU usage. Use the minimum refresh rate needed for smooth visual updates — 15 fps is sufficient for most static or slowly-changing content.
 
-8. **Overlay Groups**: Use `OverlayManagerGroup` to preload video overlays. This avoids staggered start times when multiple video overlays need to begin simultaneously.
+8. **WebView2 Overlays**: Each `OverlayManagerWebView2Video` overlay runs its own internal rendering pipeline with an offscreen browser. Limit the number of simultaneous WebView2 overlays to avoid excessive CPU, GPU, and memory usage.
+
+9. **Overlay Groups**: Use `OverlayManagerGroup` to preload video overlays. This avoids staggered start times when multiple video overlays need to begin simultaneously.
 
 ## Platform Notes
 
 - **Windows**: Supports System.Drawing.Bitmap in addition to SkiaSharp
 - **Windows (WPF)**: Supports `OverlayManagerWPFControl` for rendering WPF visual elements as overlays. Requires `NET_WINDOWS` build target.
+- **Windows (WebView2)**: Supports `OverlayManagerWebView2Video` for rendering live web content (HTML/CSS/JS) as overlays. Requires Microsoft WebView2 Runtime and the GStreamer WebView2 plugin (`webview2src`).
 - **iOS**: Font defaults to "System-ui"
 - **Android**: Font defaults to "System-ui"
 - **Linux/macOS**: Enumerates available fonts at runtime
@@ -1440,7 +1550,9 @@ The overlay manager uses internal locking for thread-safe operations. You can sa
 
 5. **WPF overlay not updating**: Verify `RefreshRate` is appropriate for your content. Use `InvokeOnUIThread()` for all WPF element modifications to avoid cross-thread exceptions.
 
-6. **Group overlays not starting together**: Ensure all overlays are added to the group before calling `Initialize()`. Overlays cannot be added after initialization.
+6. **WebView2 overlay not rendering**: Ensure the Microsoft WebView2 Runtime is installed on the target machine. Check that `Initialize()` returns `true` before adding to the overlay manager. The GStreamer WebView2 plugin (`webview2src`) must be available.
+
+7. **Group overlays not starting together**: Ensure all overlays are added to the group before calling `Initialize()`. Overlays cannot be added after initialization.
 
 ## Frequently Asked Questions
 
@@ -1462,4 +1574,8 @@ Yes. Set the `AudioOutput` property on `OverlayManagerVideo` to an audio output 
 
 ### What overlay types does OverlayManagerBlock support?
 
-The OverlayManagerBlock supports: text (`OverlayManagerText`), date/time (`OverlayManagerDateTime`), scrolling text (`OverlayManagerScrollingText`), images (`OverlayManagerImage`), animated GIFs (`OverlayManagerGIF`), image sequences (`OverlayManagerImageSequence`), SVG graphics (`OverlayManagerSVG`), shapes (rectangle, circle, triangle, star, line), video files/URLs (`OverlayManagerVideo`), Decklink capture cards (`OverlayManagerDecklinkVideo`), NDI network sources (`OverlayManagerNDIVideo`), WPF controls (`OverlayManagerWPFControl`, Windows only), overlay groups (`OverlayManagerGroup`), custom Cairo drawing (`OverlayManagerCallback`), and video transformation effects (zoom, pan, fade, squeezeback).
+The OverlayManagerBlock supports: text (`OverlayManagerText`), date/time (`OverlayManagerDateTime`), scrolling text (`OverlayManagerScrollingText`), images (`OverlayManagerImage`), animated GIFs (`OverlayManagerGIF`), image sequences (`OverlayManagerImageSequence`), SVG graphics (`OverlayManagerSVG`), shapes (rectangle, circle, triangle, star, line), video files/URLs (`OverlayManagerVideo`), Decklink capture cards (`OverlayManagerDecklinkVideo`), NDI network sources (`OverlayManagerNDIVideo`), WebView2 web content (`OverlayManagerWebView2Video`, Windows only), WPF controls (`OverlayManagerWPFControl`, Windows only), overlay groups (`OverlayManagerGroup`), custom Cairo drawing (`OverlayManagerCallback`), and video transformation effects (zoom, pan, fade, squeezeback).
+
+### Can I render live web content as a video overlay?
+
+Yes. `OverlayManagerWebView2Video` renders any web page (HTML, CSS, JavaScript) as a video overlay using Microsoft WebView2. You can display dashboards, animated web content, tickers, or any browser-rendered content. It supports JavaScript injection after navigation for customizing the displayed page. This is Windows-only and requires the Microsoft WebView2 Runtime. See the [OverlayManagerWebView2Video](#overlaymanagerwebview2video-windows-only) section.

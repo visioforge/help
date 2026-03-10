@@ -1,6 +1,6 @@
 ---
-title: MMT Live: Monitoreo de Medios en Tiempo Real (.NET)
-description: Usa MMT Live para monitorear streams en vivo y detectar fragmentos de video en tiempo real para encontrar y gestionar contenido multimedia.
+title: MMT Live - Monitoreo de medios en tiempo real para .NET
+description: Use MMT Live para monitorear streams en vivo y detectar fragmentos de video en tiempo real con funciones para gestionar su biblioteca multimedia.
 ---
 
 # MMT Live - Herramienta de Monitoreo de Medios en Tiempo Real

@@ -1,6 +1,6 @@
 ---
-title: Despliegue Biblioteca Media Player Delphi & ActiveX
-description: Desplegar TVFMediaPlayer en Delphi y ActiveX - métodos de instalación automatizados y manuales, configuración de códecs, filtros DirectShow y dependencias.
+title: Guía de Implementación de TVFMediaPlayer — Delphi y ActiveX
+description: Implemente apps TVFMediaPlayer con instaladores silenciosos o configuración manual. Paquetes de códecs, filtros DirectShow, redistribuibles VC++ y dependencias.
 ---
 
 # Guía de Despliegue para TVFMediaPlayer

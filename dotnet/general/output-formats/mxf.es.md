@@ -1,6 +1,6 @@
 ---
-title: Formato MXF en .NET - Codificación y Salida para Transmisión
-description: Genere archivos MXF de transmisión en .NET con aceleración de hardware, optimización de códecs y flujos de trabajo profesionales para producción de transmisión.
+title: Integración Profesional de MXF para Aplicaciones .NET
+description: Genere archivos MXF de broadcast en .NET con aceleración por hardware, optimización de códecs y flujos de trabajo profesionales para producción de transmisión.
 ---
 
 # Salida MXF en los SDK .NET de VisioForge

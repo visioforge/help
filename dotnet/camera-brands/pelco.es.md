@@ -18,7 +18,7 @@ description: Conecta cámaras Pelco Sarix y Spectra en C# .NET con patrones de U
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** admin / admin (debe cambiarse en el primer inicio para modelos actuales)
 - **Soporte ONVIF:** Sí (todos los modelos actuales Sarix y Spectra)
-- **Códecs de video:** H.264, H.265 (Sarix Professional), MJPEG
+- **Códecs de vídeo:** H.264, H.265 (Sarix Professional), MJPEG
 
 !!! info "Doble barra en URLs RTSP"
     Las cámaras Pelco usan consistentemente una **doble barra** antes de la ruta del flujo: `rtsp://IP:554//stream1`. Esto es intencional y necesario para la mayoría de modelos Pelco.
@@ -120,7 +120,7 @@ Las cámaras de un solo sensor deben usar `//stream1` sin número de canal.
 
 ### Protocolo Pelco D/P vs RTSP
 
-Pelco también es conocido por los protocolos de comunicación serial **Pelco D** y **Pelco P** usados para controlar cámaras PTZ. Estos son protocolos seriales para control PTZ, no para streaming de video. El streaming de video siempre usa RTSP o HTTP independientemente de qué protocolo de control PTZ se use.
+Pelco también es conocido por los protocolos de comunicación serial **Pelco D** y **Pelco P** usados para controlar cámaras PTZ. Estos son protocolos seriales para control PTZ, no para streaming de vídeo. El streaming de vídeo siempre usa RTSP o HTTP independientemente de qué protocolo de control PTZ se use.
 
 ### Cámaras PTZ Spectra
 
@@ -134,7 +134,7 @@ Para la mayoría de cámaras Pelco, use `rtsp://admin:contraseña@IP_CAMARA:554/
 
 **¿Pelco sigue siendo una empresa independiente?**
 
-No. Pelco fue adquirida por Motorola Solutions en 2020. Las cámaras Pelco actuales son fabricadas y soportadas por Motorola Solutions. La marca Pelco y las líneas de producto (Sarix, Spectra) continúan bajo el portafolio de seguridad de video de Motorola Solutions.
+No. Pelco fue adquirida por Motorola Solutions en 2020. Las cámaras Pelco actuales son fabricadas y soportadas por Motorola Solutions. La marca Pelco y las líneas de producto (Sarix, Spectra) continúan bajo el portafolio de seguridad de vídeo de Motorola Solutions.
 
 **¿Las cámaras Pelco soportan ONVIF?**
 
@@ -142,7 +142,7 @@ Sí. Todas las cámaras actuales Pelco Sarix y Spectra soportan ONVIF Profile S,
 
 **¿Cuál es la diferencia entre Pelco D y RTSP?**
 
-Pelco D (y Pelco P) son protocolos seriales para control de cámaras PTZ (comandos de giro, inclinación, zoom). RTSP es el protocolo de streaming de video. Se usa RTSP para video y Pelco D/ONVIF para control PTZ -- sirven diferentes propósitos y no son intercambiables.
+Pelco D (y Pelco P) son protocolos seriales para control de cámaras PTZ (comandos de giro, inclinación, zoom). RTSP es el protocolo de streaming de vídeo. Se usa RTSP para vídeo y Pelco D/ONVIF para control PTZ -- sirven diferentes propósitos y no son intercambiables.
 
 ## Recursos Relacionados
 

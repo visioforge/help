@@ -1,6 +1,6 @@
 ---
-title: Video Processing and Effects Blocks in Media Blocks SDK
-description: Apply color adjustments, deinterlacing, overlays, geometric transformations, and real-time visual effects in Media Blocks SDK pipelines.
+title: 50+ Video Processing and Effects Blocks for C# .NET
+description: Apply color adjustments, deinterlacing, overlays, geometric transforms, and real-time visual effects using VisioForge Media Blocks SDK pipelines.
 sidebar_label: Video Processing and Effects
 
 ---

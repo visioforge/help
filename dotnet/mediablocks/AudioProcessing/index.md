@@ -1,19 +1,18 @@
 ---
-title: Audio Processing and Effects for .NET - Mixer, EQ, Filters
-description: Create audio pipelines with converters, resamplers, mixers, equalizers, and effects for professional audio processing in .NET applications.
+title: Audio Processing Blocks for C# .NET - Mixer, EQ, Effects
+description: Build audio pipelines in C# with VisioForge Media Blocks SDK — mixer, equalizer, reverb, noise reduction, and 30+ blocks. Cross-platform support.
 sidebar_label: Audio Processing and Effects
-
 ---
 
-# Audio processing and effect blocks
+# Audio Processing and Effect Blocks for .NET
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-VisioForge Media Blocks SDK .Net includes a set of audio processing and effect blocks that allow you to create audio processing pipelines for your applications.
+VisioForge Media Blocks SDK provides a pipeline-based approach to audio processing in C# and .NET. Connect audio blocks — converters, resamplers, mixers, equalizers, effects, and analyzers — to build real-time audio processing chains for your applications. Each block has typed input/output pins that you wire together using `pipeline.Connect()`.
 
-The blocks can be connected to each other to create a processing pipeline.
+For detailed audio effect parameters and properties, see the [Audio Effects Reference](../../general/audio-effects/reference.md).
 
-Most of the blocks are available for all platforms, including Windows, Linux, MacOS, Android, and iOS.
+All blocks are cross-platform and work on Windows, macOS, Linux, iOS, and Android.
 
 ## Basic Audio Processing
 
@@ -29,6 +28,12 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+No configurable parameters. Automatically negotiates and converts audio formats between connected elements.
+
+**GStreamer Element**: `audioconvert`
 
 #### The sample pipeline
 
@@ -71,6 +76,20 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+Configure via `AudioResamplerSettings`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Format` | `AudioFormatX` | `S16LE` | Target audio sample format |
+| `SampleRate` | `int` | `44100` | Target sample rate in Hz |
+| `Channels` | `int` | `2` | Target number of audio channels |
+| `Quality` | `int` | `4` | Resample quality (0 = lowest, 10 = best) |
+| `ResampleMethod` | `AudioResamplerMethod` | `Kaiser` | Resampling algorithm: `Nearest`, `Linear`, `Cubic`, `BlackmanNuttall`, `Kaiser` |
+
+**GStreamer Element**: `audioresample`
 
 #### The sample pipeline
 
@@ -116,6 +135,18 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+Configure via `AudioTimestampCorrectorSettings`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Silent` | `bool` | `true` | Suppresses notify signals for dropped and duplicated frames |
+| `SkipToFirst` | `bool` | `false` | Does not produce buffers before the first one is received |
+| `Tolerance` | `TimeSpan` | `40 ms` | Minimum timestamp difference before samples are added or dropped |
+
+**GStreamer Element**: `audiorate`
+
 #### The sample pipeline
 
 ```mermaid
@@ -158,6 +189,15 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Level` | `double` | `1.0` | Volume level multiplier (0.0 = silence, 1.0 = original, values > 1.0 amplify) |
+| `Mute` | `bool` | `false` | Mutes the audio stream without changing the volume level |
+
+**GStreamer Element**: `volume`
 
 #### The sample pipeline
 
@@ -205,6 +245,27 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1 (dynamically created)
 Output | Uncompressed audio | 1
+
+#### Settings
+
+Configure via `AudioMixerSettings`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Format` | `AudioInfoX` | `S16LE, 48000 Hz, 2 ch` | Output audio format (sample format, sample rate, channel count) |
+
+**Runtime methods:**
+
+| Method | Description |
+|--------|-------------|
+| `CreateNewInput()` | Creates a new input pad (before pipeline start) |
+| `CreateNewInputLive()` | Creates a new input pad during playback |
+| `AddNewInput(MediaBlockPad)` | Connects an existing block output as a new mixer input during playback |
+| `RemoveInputLive(MediaBlockPad)` | Removes an input pad during playback |
+| `SetVolume(MediaBlockPad, double)` | Sets volume for a specific input (0.0–10.0) |
+| `SetMute(MediaBlockPad, bool)` | Mutes or unmutes a specific input |
+
+**GStreamer Element**: `audiomixer`
 
 #### The sample pipeline
 
@@ -287,6 +348,16 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `format` (constructor) | `AudioFormatX` | `S16LE` | Audio sample format for captured frames |
+
+| Event | Args Type | Description |
+|-------|-----------|-------------|
+| `OnAudioFrameBuffer` | `AudioFrameBufferEventArgs` | Fires for each captured audio frame with raw audio data, sample rate, channels, and timestamp |
+
 #### The sample pipeline
 
 ```mermaid
@@ -339,6 +410,24 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Level` | `double` | `1.0` | Amplification multiplier (1.0 = no change, 2.0 = double volume, 0.5 = half volume) |
+| `Method` | `AmplifyClippingMethod` | `Normal` | Clipping method when amplified audio exceeds the valid range |
+
+`AmplifyClippingMethod` values:
+
+| Value | Description |
+|-------|-------------|
+| `Normal` | Hard clip at maximum level |
+| `WrapNegative` | Push overdriven values back from the opposite side |
+| `WrapPositive` | Push overdriven values back from the same side |
+| `NoClip` | No clipping applied |
+
+**GStreamer Element**: `audioamplify`
+
 #### The sample pipeline
 
 ```mermaid
@@ -380,6 +469,17 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Delay` | `TimeSpan` | `200 ms` | Echo delay time between the original signal and its repetitions |
+| `MaxDelay` | `TimeSpan` | `500 ms` | Maximum echo delay (determines internal buffer size). Must be >= `Delay` |
+| `Intensity` | `float` | `0` | Volume of the delayed signal (0.0 = no echo, 1.0 = full volume) |
+| `Feedback` | `float` | `0` | Feedback amount for echo repetitions (0.0 = single echo, values near 1.0 = infinite feedback) |
+
+**GStreamer Element**: `audioecho`
 
 #### The sample pipeline
 
@@ -424,6 +524,19 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+Configure via `KaraokeAudioEffect`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Level` | `float` | `1.0` | Vocal suppression strength (0.0 = no effect, 1.0 = maximum suppression) |
+| `MonoLevel` | `float` | `1.0` | Suppression level for mono/center channel content (0.0–1.0) |
+| `FilterBand` | `float` | `220` | Center frequency of the filter band in Hz targeting vocal range |
+| `FilterWidth` | `float` | `100` | Width of the frequency band to process in Hz |
+
+**GStreamer Element**: `audiokaraoke`
+
 #### The sample pipeline
 
 ```mermaid
@@ -467,6 +580,19 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+Configure via `ReverberationAudioEffect`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `RoomSize` | `float` | `0.5` | Size of the simulated room (0.0 = small room, 1.0 = large hall) |
+| `Damping` | `float` | `0.2` | High frequency damping (0.0 = bright, 1.0 = dark/muffled) |
+| `Width` | `float` | `1.0` | Stereo width of the reverb (0.0 = mono, 1.0 = full stereo) |
+| `Level` | `float` | `0.5` | Wet/dry mix level (0.0 = dry only, 1.0 = wet only) |
+
+**GStreamer Element**: `freeverb`
+
 #### The sample pipeline
 
 ```mermaid
@@ -509,6 +635,16 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+Configure via `WideStereoAudioEffect`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Level` | `float` | `0.01` | Stereo widening amount (0.0 = no widening, higher values = wider stereo image). Typical: 0.01–0.03 subtle, 0.05–0.10 moderate, 0.15+ strong |
+
+**GStreamer Element**: `stereo`
 
 #### The sample pipeline
 
@@ -555,6 +691,14 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Balance` | `float` | `0.0` | Stereo balance position (-1.0 = full left, 0.0 = center, +1.0 = full right) |
+
+**GStreamer Element**: `audiopanorama`
+
 #### The sample pipeline
 
 ```mermaid
@@ -597,6 +741,27 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+The equalizer provides 10 fixed-frequency bands. Use `SetBand(int index, double gain)` to adjust individual bands. Gain range: -24 dB to +12 dB.
+
+| Band Index | Center Frequency | Bandwidth |
+|------------|-----------------|-----------|
+| 0 | 29 Hz | 19 Hz |
+| 1 | 59 Hz | 39 Hz |
+| 2 | 119 Hz | 79 Hz |
+| 3 | 237 Hz | 157 Hz |
+| 4 | 474 Hz | 314 Hz |
+| 5 | 947 Hz | 628 Hz |
+| 6 | 1889 Hz | 1257 Hz |
+| 7 | 3770 Hz | 2511 Hz |
+| 8 | 7523 Hz | 5765 Hz |
+| 9 | 15011 Hz | 11498 Hz |
+
+Constructor accepts 10 `double` values for initial band gains (in dB), or use `SetBand(int index, double gain)` at runtime.
+
+**GStreamer Element**: `equalizer-10bands`
 
 #### The sample pipeline
 
@@ -647,6 +812,28 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+Use `SetNumBands(int count)` to set the number of bands (1–64, default 3), then configure each band with `SetState(int index, ParametricEqualizerBand band)`.
+
+`ParametricEqualizerBand` properties:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Frequency` | `float` | varies | Center frequency in Hz |
+| `Gain` | `float` | `0.0` | Band gain in dB (-24 to +12) |
+| `Bandwidth` | `float` | `1.0` | Bandwidth in Hz |
+
+Default bands (when 3 bands configured):
+
+| Band | Frequency | Bandwidth |
+|------|-----------|-----------|
+| 0 | 110 Hz | 100 Hz |
+| 1 | 1100 Hz | 1000 Hz |
+| 2 | 11000 Hz | 10000 Hz |
+
+**GStreamer Element**: `equalizer-nbands`
+
 #### The sample pipeline
 
 ```mermaid
@@ -695,6 +882,21 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+Configure via `ChebyshevBandPassRejectAudioEffect`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Mode` | `ChebyshevBandMode` | `BandPass` | Filter mode: `BandPass` (pass frequencies in range) or `BandReject` (reject frequencies in range) |
+| `LowerFrequency` | `float` | `220.0` | Lower cutoff frequency in Hz |
+| `UpperFrequency` | `float` | `3000.0` | Upper cutoff frequency in Hz |
+| `Poles` | `int` | `4` | Number of filter poles (2–32, must be even). Higher values = sharper cutoff |
+| `Type` | `int` | `1` | Chebyshev filter type: 1 (ripple in passband) or 2 (ripple in stopband) |
+| `Ripple` | `float` | `0.25` | Amount of ripple in dB (Type 1: passband ripple, Type 2: stopband ripple) |
+
+**GStreamer Element**: `audiochebband`
+
 #### The sample pipeline
 
 ```mermaid
@@ -737,6 +939,20 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+Configure via `ChebyshevLimitAudioEffect`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Mode` | `ChebyshevLimitMode` | `LowPass` | Filter mode: `LowPass` (remove high frequencies) or `HighPass` (remove low frequencies) |
+| `CutOffFrequency` | `float` | `1000.0` | Cutoff frequency in Hz |
+| `Poles` | `int` | `4` | Number of filter poles (2–32, must be even). Higher values = sharper cutoff |
+| `Type` | `int` | `1` | Chebyshev filter type: 1 (ripple in passband) or 2 (ripple in stopband) |
+| `Ripple` | `float` | `0.25` | Amount of ripple in dB |
+
+**GStreamer Element**: `audiocheblimit`
 
 #### The sample pipeline
 
@@ -783,6 +999,21 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+Configure via `CompressorExpanderAudioEffect`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Mode` | `CompressorExpanderMode` | `Compressor` | Processing mode: `Compressor` (reduce dynamic range) or `Expander` (increase dynamic range) |
+| `Characteristics` | `CompressorExpanderCharacteristics` | `HardKnee` | Knee type: `HardKnee` (abrupt transition) or `SoftKnee` (gradual transition) |
+| `Ratio` | `float` | `1.0` | Compression/expansion ratio (e.g., 2.0 = 2:1 compression) |
+| `Threshold` | `float` | `0.0` | Threshold level (0.0–1.0). Signal above this level is compressed/expanded |
+
+Constructor accepts 4 parameters: `CompressorExpanderBlock(ratio, threshold, mode, characteristics)`.
+
+**GStreamer Element**: `audiodynamic`
+
 #### The sample pipeline
 
 ```mermaid
@@ -824,6 +1055,19 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Rate` | `double` | `1.0` | Playback rate multiplier (0.5 = half speed, 1.0 = normal, 2.0 = double speed). Pitch is preserved |
+| `Overlap` | `double` | `0.2` | Percentage of stride to overlap (0.0–1.0). Higher values improve quality at CPU cost |
+| `Search` | `TimeSpan` | `14 ms` | Length of search window for best overlap position |
+| `Stride` | `TimeSpan` | `30 ms` | Length of output audio stride |
+
+Constructor accepts a `double rate` parameter for initial playback rate. Use `SetRate(double rate)` to change at runtime.
+
+**GStreamer Element**: `scaletempo`
 
 #### The sample pipeline
 
@@ -870,6 +1114,19 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+Event-based block. Subscribe to the `VolumeUpdated` event to receive level data.
+
+`VUMeterXData` event properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `LeftVolume` | `double` | Left channel volume level in dB |
+| `RightVolume` | `double` | Right channel volume level in dB |
+
+**GStreamer Element**: `level`
+
 #### The sample pipeline
 
 ```mermaid
@@ -913,7 +1170,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Audio Effects
 
-The AudioEffects block provides a comprehensive collection of audio processing effects that can be applied to audio streams.
+The AudioEffects block provides a comprehensive collection of audio processing effects that can be applied to audio streams. For detailed effect parameters and properties, see the [Audio Effects Reference](../../general/audio-effects/reference.md).
 
 #### Block info
 
@@ -923,6 +1180,19 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+Collection-based effect management. Use the following methods:
+
+| Method | Description |
+|--------|-------------|
+| `AddOrUpdate(BaseAudioEffect effect)` | Adds a new effect or updates an existing one of the same type |
+| `Remove<T>()` | Removes the effect of the specified type |
+| `Clear()` | Removes all effects |
+| `Get<T>()` | Returns the effect of the specified type, or null |
+
+Supported effect types include all effects from `VisioForge.Core.Types.X.AudioEffects` namespace. See [Audio Effects Reference](../../general/audio-effects/reference.md) for detailed parameters.
 
 #### The sample pipeline
 
@@ -966,6 +1236,19 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+Configure via `AudioLoudNormAudioEffect`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `LoudnessTarget` | `double` | `-24.0` | Target integrated loudness in LUFS (-70.0 to -5.0) |
+| `LoudnessRangeTarget` | `double` | `7.0` | Target loudness range in LU (1.0 to 20.0) |
+| `MaxTruePeak` | `double` | `-2.0` | Maximum true peak in dBTP (-9.0 to 0.0) |
+| `Offset` | `double` | `0.0` | Offset gain in LU (-99.0 to 99.0) |
+
+**GStreamer Element**: `audioloudnorm`
+
 #### The sample pipeline
 
 ```mermaid
@@ -1007,6 +1290,14 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `VadThreshold` | `float` | `0.0` | Voice Activity Detection threshold (0.0–1.0). When > 0, acts as a gate: audio below this speech probability is silenced. 0.0 = noise reduction only, no gating |
+
+**GStreamer Element**: `audiornnoise`
 
 #### The sample pipeline
 
@@ -1050,6 +1341,17 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+Configure via `RemoveSilenceAudioEffect`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Threshold` | `double` | `0.05` | Silence threshold (0.0–1.0). Audio below this level is considered silence |
+| `Squash` | `bool` | `true` | When true, removes silent portions entirely. When false, passes them through |
+
+**GStreamer Element**: `removesilence`
+
 #### The sample pipeline
 
 ```mermaid
@@ -1091,6 +1393,19 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+Configure via `CsoundAudioEffect`:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `CsdText` | `string` | `null` | Inline Csound CSD script text |
+| `Location` | `string` | `null` | Path to an external .csd file (alternative to CsdText) |
+| `Loop` | `bool` | `false` | Whether to loop the Csound score |
+| `ScoreOffset` | `double` | `0.0` | Score time offset in seconds |
+
+**GStreamer Element**: `csoundfilter`
 
 #### The sample pipeline
 
@@ -1137,6 +1452,18 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Mode` | `EbuR128Mode` | `All` | Measurement mode flags: `MomentaryLoudness`, `ShortTermLoudness`, `GlobalLoudness`, `LoudnessRange`, `SamplePeak`, `TruePeak`, `All` |
+| `PostMessages` | `bool` | `true` | Whether to post GStreamer bus messages with measurement results |
+| `Interval` | `TimeSpan` | `1 s` | Interval between measurement updates |
+
+Subscribe to the `LoudnessUpdated` event to receive measurement data.
+
+**GStreamer Element**: `ebur128level`
 
 #### The sample pipeline
 
@@ -1185,6 +1512,19 @@ Pin direction | Media type | Pins count
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
 
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `HrirFile` | `string` | `""` | Path to the HRIR (Head-Related Impulse Response) file for spatial rendering |
+| `InterpolationSteps` | `ulong` | `8` | Number of interpolation steps for smooth spatial transitions |
+| `BlockLength` | `ulong` | `512` | Processing block length in samples |
+| `DistanceGain` | `float` | `1.0` | Distance-based gain attenuation factor |
+
+All properties support real-time updates during playback.
+
+**GStreamer Element**: `hrtfrender`
+
 #### The sample pipeline
 
 ```mermaid
@@ -1231,6 +1571,19 @@ Pin direction | Media type | Pins count
 --- | :---: | :---:
 Input | Uncompressed audio | 1
 Output | Uncompressed audio | 1
+
+#### Settings
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Delay` | `TimeSpan` | `500 ms` | Echo delay time |
+| `MaxDelay` | `TimeSpan` | `1000 ms` | Maximum allowed delay (must be >= Delay) |
+| `Intensity` | `double` | `0.5` | Echo intensity (0.0–1.0) |
+| `Feedback` | `double` | `0.0` | Feedback amount — controls echo repetitions (0.0–1.0) |
+
+All properties support real-time updates during playback.
+
+**GStreamer Element**: `rsaudioecho`
 
 #### The sample pipeline
 
@@ -1431,3 +1784,27 @@ await pipeline.StartAsync();
 #### Platforms
 
 Windows, macOS, Linux, iOS, Android.
+
+## Frequently Asked Questions
+
+???+ "How do I connect audio blocks in a pipeline?"
+    Create a `MediaBlocksPipeline`, instantiate the blocks you need, then connect them using `pipeline.Connect(sourceBlock.Output, destinationBlock.Input)`. Each block has typed input and output pins — the pipeline validates that connected pins have compatible media types.
+
+???+ "Can I apply multiple audio effects in a single pipeline?"
+    Yes. You can chain any number of audio blocks in sequence. For example, connect a source to an equalizer block, then to a reverb block, then to a renderer. Alternatively, use the `AudioEffectsBlock` to apply multiple effects within a single block. For effect parameters, see the [Audio Effects Reference](../../general/audio-effects/reference.md).
+
+???+ "How do I mix multiple audio sources together?"
+    Use the `AudioMixerBlock` to combine multiple audio inputs into a single output. Connect each source to a separate input pin on the mixer. The mixer supports volume control per input and automatic format negotiation.
+
+???+ "What is the difference between AudioEffectsBlock and individual effect blocks?"
+    Individual effect blocks (like `AmplifyBlock`, `EchoBlock`, `ReverbBlock`) wrap a single GStreamer element and are connected as separate pipeline nodes. The `AudioEffectsBlock` lets you apply multiple effects within one block by adding effect instances to its collection — useful when you need several effects without complex wiring.
+
+???+ "Do audio blocks support real-time parameter changes?"
+    Yes. You can modify block properties during playback. For example, change the volume level, adjust EQ bands, or update mixer weights while the pipeline is running. Changes take effect immediately without stopping the pipeline.
+
+## See Also
+
+* [Audio Effects Overview](../../general/audio-effects/index.md)
+* [Audio Effects Reference](../../general/audio-effects/reference.md)
+* [Audio Encoders](../../general/audio-encoders/index.md)
+* [Media Blocks SDK Overview](../index.md)

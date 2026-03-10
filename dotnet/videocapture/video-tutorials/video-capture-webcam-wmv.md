@@ -1,6 +1,6 @@
 ---
-title: Webcam to WMV Capture in .NET | Video SDK Tutorial
-description: Implement webcam video capture to WMV format in .NET with step-by-step instructions, C# code examples, and integration best practices.
+title: Record Webcam to WMV with Windows Media Encoder in C# .NET
+description: Capture webcam video and save to WMV format using VisioForge Video Capture SDK. Windows Media encoder setup and complete C# code walkthrough.
 ---
 
 # Webcam Video Capture to WMV Format in .NET

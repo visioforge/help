@@ -230,8 +230,30 @@ Demos completas de reproductor de video en VB.NET:
 
 - [Demo de reproductor simple VB.NET (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinForms/Simple%20Player%20Demo%20X%20VB) — reproductor de video completo con todos los controles de reproducción
 
-## Recursos relacionados
+## Preguntas Frecuentes
 
-- [Crear un reproductor de video en C#](video-player-csharp.md)
-- [Reproductor multiplataforma con Avalonia](avalonia-player.md)
-- [Página del producto Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net)
+### ¿Qué licencia necesito para una aplicación de reproductor de video en VB.NET?
+
+Media Player SDK .Net requiere una licencia para desarrollo y distribución. Una licencia de Desarrollador elimina la marca de agua de evaluación y desbloquea todas las funciones durante el desarrollo. Una licencia de Release es necesaria al distribuir su aplicación a los usuarios finales. El SDK está disponible en edición Premium que incluye todos los formatos compatibles, aceleración por hardware y los motores DirectShow y GStreamer. Puede evaluar el SDK sin licencia — la reproducción funciona completamente pero incluye una marca de agua superpuesta. Visite la [página del producto](https://www.visioforge.com/media-player-sdk-net) para conocer precios y opciones de licencia.
+
+### ¿Qué formatos de video y audio admite el reproductor VB.NET?
+
+El reproductor admite todos los formatos listados en la tabla anterior, incluyendo contenedores MP4, AVI, MKV, WMV, WebM, MOV y TS con códecs de video H.264, H.265/HEVC, VP8, VP9, AV1 y MPEG-2. Los formatos de audio incluyen MP3, AAC, WAV, WMA, FLAC y OGG. Los protocolos de streaming de red como RTSP, HTTP, HLS y MPEG-DASH también son compatibles. La compatibilidad de formatos es idéntica a la versión en C# porque ambos lenguajes utilizan el mismo motor de reproducción basado en GStreamer.
+
+### ¿Debería usar el motor DirectShow o GStreamer para mi reproductor de video en VB.NET?
+
+La API `MediaPlayerCoreX` mostrada en esta guía utiliza el motor GStreamer, que es la opción recomendada para nuevos proyectos. Admite más formatos, decodificación acelerada por hardware y se mantiene activamente. El motor DirectShow anterior (`MediaPlayerCore`) es exclusivo de Windows y existe principalmente para compatibilidad con código heredado. Ambos motores funcionan de forma idéntica desde código VB.NET. Si está comenzando un nuevo proyecto, use `MediaPlayerCoreX` con el motor GStreamer.
+
+### ¿Cómo despliego una aplicación de reproductor de video en VB.NET?
+
+Incluya los paquetes NuGet redist listados en la sección de referencia de NuGet anterior — estos empaquetan las bibliotecas nativas de GStreamer que su aplicación necesita. Use `dotnet publish` con un despliegue autocontenido para evitar requerir una instalación de runtime separada en la máquina de destino. El paquete `VisioForge.CrossPlatform.Core.Windows.x64` contiene el runtime de GStreamer, por lo que no se necesita una instalación separada de GStreamer. Para proyectos WPF, el mismo enfoque de despliegue funciona — solo referencie el control VideoView específico de WPF en lugar del de WinForms.
+
+## Ver También
+
+- [Crear un Reproductor de Video en C#](video-player-csharp.md) — reproductor WinForms y WPF con motores DirectShow y GStreamer
+- [Reproductor de Video Multiplataforma](play-video-dotnet.md) — reproductor Avalonia y MAUI usando MediaBlocksPipeline
+- [Guía del Reproductor Avalonia](avalonia-player.md) — implementación MVVM completa con diálogos de archivos y configuración de plataforma
+- [Modo Loop y Rango de Posición](loop-and-position-range.md) — reproducción en bucle y selección de segmentos para ambos motores
+- [Grabar Video de Webcam en VB.NET](../../videocapture/guides/record-webcam-vb-net.md) — aplicación de captura de webcam en Visual Basic .NET
+- [Ejemplos de Código](../code-samples/index.md) — extracción de fotogramas, listas de reproducción y ejemplos de reproducción inversa
+- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — página del producto y descargas

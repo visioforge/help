@@ -1,6 +1,6 @@
 ---
-title: Build a Video Player in .NET with Media Blocks SDK
-description: Build a video player in .NET using Media Blocks SDK. Step-by-step C# tutorial with source blocks, audio/video rendering, and playback controls.
+title: Build a Video Player in C# .NET — Step-by-Step Guide
+description: Step-by-step C# tutorial for building a video player with VisioForge Media Blocks SDK — source blocks, audio/video rendering, and playback controls.
 ---
 
 # Building a Feature-Rich Video Player with Media Blocks SDK

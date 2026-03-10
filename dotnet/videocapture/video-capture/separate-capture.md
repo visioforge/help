@@ -1,6 +1,6 @@
 ---
-title: Start and Stop Video Capture Without Stopping Preview
-description: Control video capture and preview independently in .NET with step-by-step code examples for efficient recording and streaming management.
+title: Start/Stop Recording Without Stopping Preview in .NET
+description: Control video recording independently from live preview in VisioForge Video Capture SDK. Separate capture mode for webcam, screen, and IP camera in C#.
 ---
 
 # Managing Video Capture and Preview Independently in .NET

@@ -1,6 +1,6 @@
 ---
-title: Network Video Streaming Guide for .NET Development
-description: Implement network streaming in .NET with RTSP, RTMP, NDI, HLS, and SRT protocols using implementation tips and best practices.
+title: Network Streaming in C# .NET — RTSP, RTMP, NDI, SRT
+description: Stream live video over RTSP, RTMP, NDI, HLS, and SRT from VisioForge Video Capture SDK. Protocol setup, encoder config, and C# code examples.
 sidebar_label: Network Streaming
 order: 5
 

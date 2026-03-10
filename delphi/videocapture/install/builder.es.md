@@ -1,6 +1,6 @@
 ---
-title: TVFVideoCapture en C++ Builder - guía de instalación
-description: Importar y configurar el control ActiveX TVFVideoCapture en C++ Builder 5/6, 2006 y versiones más nuevas con pasos de instalación detallados.
+title: Instalar Control ActiveX TVFVideoCapture en C++ Builder
+description: Importe y configure el control ActiveX TVFVideoCapture en C++ Builder 5/6, 2006 y versiones posteriores con pasos de instalación detallados.
 ---
 
 # Guía de Integración de TVFVideoCapture para C++ Builder

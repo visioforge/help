@@ -1,6 +1,6 @@
 ---
-title: Captura de video de webcam a MP4 en C# con Video Capture SDK
-description: Implementa captura de video de webcam a archivos MP4 en .NET con ejemplos de código C# detallados mostrando integración de grabación de video de alta calidad.
+title: Grabar Webcam a MP4 en C# — Video Capture SDK .NET
+description: Enumeración automática de dispositivos, codificación H.264/AAC, grabación async con vista previa WinForms. Selecciona webcam y micrófono, configura resolución.
 ---
 
 # Implementación de Captura de Video de Webcam a MP4 en .NET

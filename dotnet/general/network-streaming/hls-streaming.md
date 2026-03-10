@@ -1,6 +1,6 @@
 ---
-title: HLS Streaming Implementation in .NET with Code Examples
-description: Build HTTP Live Streaming applications in .NET with adaptive bitrate, video encoding, server setup, and cross-platform playback integration.
+title: HLS Live Streaming with m3u8 Playlist Server in C# .NET
+description: Generate .m3u8 playlists and .ts segments with built-in HTTP server. HLS.js, iOS AVPlayer, and Android ExoPlayer integration. VisioForge SDK examples.
 ---
 
 # Complete Guide to HLS Network Streaming Implementation in .NET

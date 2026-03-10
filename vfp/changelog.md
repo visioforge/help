@@ -1,6 +1,6 @@
 ---
 title: Video Fingerprinting SDK Changelog and Version History
-description: Track Video Fingerprinting SDK evolution through detailed version history with new features, performance updates, and technical improvements.
+description: Track VisioForge Video Fingerprinting SDK updates with new features, performance improvements, and API changes across .NET and C++ releases.
 ---
 
 # Video Fingerprinting SDK Version History

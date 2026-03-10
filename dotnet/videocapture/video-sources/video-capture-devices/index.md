@@ -1,6 +1,6 @@
 ---
-title: Video Capture Devices in .NET with Enumeration and PTZ
-description: Implement video capture device integration in .NET with device enumeration, camera control, PTZ functionality, and video adjustments.
+title: Video Capture Devices in C# .NET — Enumeration and PTZ
+description: Integrate webcams and capture cards in VisioForge Video Capture SDK. Device enumeration, PTZ camera control, and video adjustments with C# examples.
 sidebar_label: Video Capture Devices
 order: 20
 ---

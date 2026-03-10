@@ -1,5 +1,5 @@
 ---
-title: Registro de filtros DirectShow con regsvr32 en Windows
+title: Registrar Filtros DirectShow con regsvr32, C++ y C# .NET
 description: Registre filtros DirectShow de VisioForge usando regsvr32 manual, métodos programáticos y automatización de instaladores con consejos de solución de problemas.
 ---
 

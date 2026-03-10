@@ -1,6 +1,6 @@
 ---
-title: Save RTSP Stream to MP4 File Without Re-encoding in .NET
-description: Save RTSP stream to file (MP4) from IP camera without re-encoding video using .NET with VisioForge Media Blocks for programmatic control.
+title: Save RTSP Stream to MP4 Without Re-encoding in C# .NET
+description: Record IP camera RTSP streams directly to MP4 files without transcoding using VisioForge Media Blocks SDK. Passthrough capture with C# code examples.
 ---
 
 # How to Save RTSP Stream to File: Record IP Camera Video without Re-encoding

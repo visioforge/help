@@ -1,6 +1,6 @@
 ---
 title: How to Connect to Q-See IP Camera & DVR in C# .NET
-description: Connect to Q-See IP cameras and DVRs in C# .NET with RTSP URL patterns, default credentials, and code samples for QC, QCN, and QS series.
+description: Q-See QC, QCN, and QS series camera and DVR RTSP URL patterns for C# .NET. Default credentials, channel setup, and VisioForge SDK integration code.
 ---
 
 # How to Connect to Q-See IP Camera & DVR in C# .NET

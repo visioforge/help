@@ -1,6 +1,6 @@
 ﻿---
-title: Integración de Salida de Video MP4 para .NET
-description: Genera salida MP4 en .NET con codificación hardware H.264/HEVC, configuración de audio y rendimiento optimizado para apps de video.
+title: Guardar Video a MP4 en C# .NET (H.264, HEVC, AAC)
+description: Auto-selección de codificador con fallback NVENC/QSV/AMF. División por tamaño, duración o timecode. Buffer circular y muxing de streams. Ejemplos con VisioForge SDK.
 ---
 
 # Salida de archivo MP4

@@ -1,6 +1,6 @@
 ---
-title: Grabar, Capturar y Editar Audio MP3 en C# .NET SDK
-description: Grabe, capture y edite audio MP3 en C# con el SDK .NET de VisioForge usando el codificador LAME para procesamiento de audio de alta calidad.
+title: Codificación MP3 con LAME - CBR, ABR y VBR en C# .NET
+description: Codificador LAME con modos CBR, ABR y VBR basado en calidad. Joint stereo, optimización de voz, bitrate 8-320 kbps. Ejemplos C# con VisioForge SDK.
 ---
 
 # Dominando el Audio MP3: Grabar, Capturar y Editar en C# y .NET

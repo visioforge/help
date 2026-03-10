@@ -1,6 +1,6 @@
 ---
-title: Codificador de Audio FLAC para .NET — Guía Completa
-description: Implemente compresión de audio sin pérdida FLAC en .NET con configuraciones de calidad, parámetros de compresión y procesamiento de audio de alta calidad.
+title: Codificación FLAC Sin Pérdida - Grabación Audio en C# .NET
+description: Grabación sin pérdida con niveles de calidad 0-9, frecuencias hasta 655 kHz, surround de 8 canales y optimización LPC. Ejemplos de código C# con VisioForge SDK.
 ---
 
 # Codificador y salida FLAC

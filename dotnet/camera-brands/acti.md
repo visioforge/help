@@ -1,6 +1,6 @@
 ---
 title: ACTi IP Camera RTSP URL and C# .NET Connection Guide
-description: Connect to ACTi IP cameras in C# .NET with RTSP URL patterns and code samples for A, B, D, E series and legacy ACM, KCM, TCM models.
+description: ACTi A, B, D, E series and legacy ACM/KCM/TCM camera RTSP URL patterns for C# .NET. Integrate with VisioForge Video Capture SDK code samples.
 ---
 
 # How to Connect to ACTi IP Camera in C# .NET

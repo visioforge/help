@@ -1,6 +1,6 @@
 ---
-title: Preguntas Frecuentes del SDK de Video Fingerprinting
-description: Encuentra respuestas sobre el SDK de Video Fingerprinting de VisioForge incluyendo licencias, rendimiento, precisión, formatos y compatibilidad de plataformas.
+title: FAQ de Video Fingerprinting: licencias, precisión y formatos
+description: Respuestas sobre el SDK Video Fingerprinting de VisioForge incluyendo licencias, rendimiento, precisión, formatos y compatibilidad de plataformas.
 ---
 
 # Preguntas Frecuentes del SDK de Video Fingerprinting

@@ -1,6 +1,6 @@
 ---
-title: OBS, FFMPEG, and VLC Integration with Virtual Camera SDK
-description: Integrate OBS, FFMPEG, and VLC streaming tools with Video Capture SDK DirectShow for WinForms, WPF, and Console applications in .NET.
+title: Stream to OBS, FFmpeg, and Zoom via Virtual Camera in C#
+description: Stream video to OBS and FFMPEG from VisioForge Video Capture SDK. DirectShow virtual camera setup for WinForms, WPF, and Console apps with code examples.
 sidebar_label: 3rd-Party Software Usage
 order: 4
 ---

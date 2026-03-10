@@ -1,6 +1,6 @@
 ---
-title: Comparar archivos de video con huellas digitales en .NET
-description: Aprende técnicas eficientes para comparar archivos de video usando tecnología de huellas digitales con ejemplos de código para analizar fotogramas y firmas.
+title: Comparar archivos de video con Video Fingerprinting en .NET
+description: Compare dos archivos de video por similitud usando el SDK de fingerprinting de VisioForge en C# con análisis de fotogramas y ejemplos de código.
 ---
 
 # Técnicas y Métodos de Comparación de Archivos de Video

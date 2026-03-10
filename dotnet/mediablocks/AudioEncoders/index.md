@@ -1,6 +1,6 @@
 ---
-title: Audio Encoders for .NET - AAC, MP3, FLAC, Opus and More
-description: Comprehensive audio compression with AAC, MP3, FLAC, Opus, and more codecs in Media Blocks SDK for efficient encoding and streaming.
+title: Audio Encoder Blocks - AAC, MP3, FLAC, Opus in C# .NET
+description: Encode audio to AAC, MP3, FLAC, Opus, Vorbis, and WMA using VisioForge Media Blocks SDK. Configurable bitrate, sample rate, and channel settings.
 sidebar_label: Audio Encoders
 order: 19
 ---

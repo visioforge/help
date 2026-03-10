@@ -1,6 +1,6 @@
 ---
-title: Direct3D 11 GPU Video Decoding and Processing in .NET
-description: Windows-optimized MediaBlocks with Direct3D 11 hardware acceleration, video effects, DirectShow decoders, and platform-specific features.
+title: Direct3D 11 GPU Video Decoding and Effects in C# .NET
+description: Use Direct3D 11 hardware-accelerated video decoding, effects, and DirectShow integration on Windows with VisioForge Media Blocks SDK for .NET.
 sidebar_label: Windows Platform
 ---
 

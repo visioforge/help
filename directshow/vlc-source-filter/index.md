@@ -1,6 +1,6 @@
 ---
-title: VLC Source DirectShow Filter SDK for Media Playback
-description: VLC-powered DirectShow filter for playing 200+ formats, 4K/8K video, RTSP/HLS streams with hardware decoding for media applications.
+title: VLC Source DirectShow Filter - 200+ Formats & Streams
+description: DirectShow source filter powered by libVLC for playing 200+ formats, 4K/8K video, and RTSP/HLS/UDP network streams with hardware decoding. C++, C#, Delphi.
 sidebar_label: VLC Source DirectShow Filter
 order: 9
 ---

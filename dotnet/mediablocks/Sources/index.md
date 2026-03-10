@@ -1,6 +1,6 @@
 ---
-title: Media Source Blocks for .NET — Video & Audio Inputs
-description: Ingest media from hardware devices, files, network streams, and virtual sources with comprehensive source blocks for Media Blocks SDK pipelines.
+title: Video and Audio Source Blocks for C# .NET Pipelines
+description: Use VisioForge Media Blocks SDK source blocks for webcams, files, RTSP/RTMP streams, screens, and virtual sources with device enumeration.
 sidebar_label: Sources
 ---
 
@@ -676,7 +676,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Image Sequence Source Block
 
-The `ImageSequenceSourceBlock` generates a video stream from a sequence of still images stored in a folder. Configurable frame rate, looping, and live/seekable stream mode are supported.
+The `ImageSequenceSourceBlock` generates a video stream from a sequence of still images stored in a folder. Configurable frame rate and live/seekable stream mode are supported.
 
 #### Block info
 
@@ -696,9 +696,8 @@ Constructor: `ImageSequenceSourceSettings(string folderPath, string filePattern 
 | --- | --- | :---: | --- |
 | `FolderPath` | `string` | required | Folder containing image files |
 | `FilePattern` | `string` | auto-detected | Filename pattern (e.g., `image_%05d.jpg`); auto-detected if `null` |
-| `StartIndex` | `int` | `0` | Starting index of the image sequence |
+| `StartIndex` | `int` | auto-detected | Starting index of the image sequence; auto-detected from the first file name |
 | `FrameRate` | `VideoFrameRate` | `FPS_25` | Output frame rate |
-| `Loop` | `bool` | `false` | Loop the sequence indefinitely |
 | `IsLive` | `bool` | `false` | Treat the source as live (non-seekable) |
 | `NumBuffers` | `int` | `-1` | Maximum frames to output (−1 = unlimited) |
 
@@ -718,8 +717,7 @@ var pipeline = new MediaBlocksPipeline();
 
 var settings = new ImageSequenceSourceSettings("C:/images/sequence/")
 {
-    FrameRate = VideoFrameRate.FPS_25,
-    Loop = true
+    FrameRate = VideoFrameRate.FPS_25
 };
 
 var imageSource = new ImageSequenceSourceBlock(settings);

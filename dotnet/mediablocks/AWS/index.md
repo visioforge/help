@@ -1,6 +1,6 @@
 ---
-title: AWS S3 Media Source and Sink Blocks for .NET SDK Guide
-description: Read from and write to AWS S3 storage with source and sink blocks for media processing pipelines in Media Blocks SDK .NET applications.
+title: AWS S3 Cloud Media Storage - Source and Sink in C# .NET
+description: Read and write media files to Amazon S3 in your pipeline using VisioForge Media Blocks SDK. Stream, transcode, and store video directly to cloud storage.
 sidebar_label: Amazon Web Services
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: Pipeline de Media Blocks SDK .NET - Guía de Funcionalidad
-description: Cree pipelines de medios para reproducción, grabación y streaming con bloques modulares, conexiones y gestión de recursos en Media Blocks SDK.
+title: Construir Pipelines de Procesamiento de Media en C# .NET
+description: Cree pipelines de medios para reproducción, grabación y streaming con bloques modulares y gestión de recursos en VisioForge Media Blocks SDK.
 ---
 
 # Media Blocks Pipeline: Funcionalidad Principal

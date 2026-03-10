@@ -1,6 +1,6 @@
 ---
-title: MPEG-2 Video Capture from Camcorder: .NET Code Examples
-description: Implement high-quality camcorder video capture to MPEG-2 in .NET with implementation steps, code examples, and optimization techniques.
+title: MPEG-2 Camcorder Capture with Hardware Encoder in C# .NET
+description: Record camcorder video to MPEG-2 format in .NET with VisioForge Video Capture SDK. Hardware encoder configuration and C# implementation examples.
 ---
 
 # Capturing Camcorder Video to MPEG-2 Format

@@ -1,6 +1,6 @@
 ---
-title: AAC Audio Encoder for .NET - M4A Output and Bitrate Guide
-description: Implement AAC audio encoding in .NET with multiple encoder types, bitrate configurations, and cross-platform M4A output support.
+title: AAC Audio Encoding with M4A Container Output in C# .NET
+description: Use avenc_aac, voaacenc, and Media Foundation backends with runtime detection. Bitrate 32-320 kbps, 5.1 surround, and M4A/MP4 containers.
 ---
 
 # AAC encoder and M4A output

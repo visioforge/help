@@ -1,6 +1,6 @@
 ---
 title: C# Video Player: Build with Seeking and Volume Controls
-description: Build a video player in C# with playback controls, timeline seeking, and volume control. Step-by-step guide with complete code examples.
+description: Build a video player in C# with VisioForge Media Player SDK .NET. Step-by-step guide covering playback controls, seeking, and volume adjustment.
 ---
 
 # Build a Video Player in C#

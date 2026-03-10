@@ -1,6 +1,6 @@
 ---
-title: MPEG-TS Encoding and Output Configuration in .NET SDK
-description: Implement MPEG Transport Stream output in .NET with video and audio encoding, hardware acceleration, and cross-platform streaming support.
+title: MPEG-TS Video Output with File Splitting in C# .NET
+description: File splitting by duration, size, or timecode. Rolling buffer with max file limit. H.264/HEVC GPU encoding and Blu-ray M2TS mode. VisioForge SDK examples.
 ---
 
 # MPEG-TS Output

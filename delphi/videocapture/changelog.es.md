@@ -1,6 +1,6 @@
 ---
-title: Historial de Versiones de la Biblioteca TVFVideoCapture
-description: Historial de versiones de TVFVideoCapture: aceleración GPU, streaming y actualizaciones desde la versión 4.1 hasta la 11.0.
+title: Changelog del SDK Delphi Video Capture y Notas de Versión
+description: Historial de versiones de TVFVideoCapture - aceleración GPU, capacidades de streaming, actualizaciones de formatos desde la versión 4.1 hasta la 11.0.
 ---
 
 # Historial de Versiones de TVFVideoCapture

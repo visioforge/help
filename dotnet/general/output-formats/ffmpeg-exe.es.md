@@ -1,6 +1,6 @@
 ---
-title: Salida FFMPEG.exe en .NET: codificación y formatos de video
-description: Configure salida FFMPEG.exe en .NET para captura y edición de video con aceleración de hardware, códecs personalizados y opciones de codificación profesional.
+title: Configuración de Salida FFMPEG.exe en .NET Video SDKs
+description: Configure salida FFMPEG.exe en .NET para captura y edición de video con aceleración por hardware, códecs personalizados y opciones de codificación profesional.
 ---
 
 # Integración de FFMPEG.exe con los SDK .Net de VisioForge

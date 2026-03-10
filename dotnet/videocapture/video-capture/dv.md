@@ -1,6 +1,6 @@
 ---
-title: DV Video Capture and Encoding in C# .NET Applications
-description: Implement DV video capture in .NET apps with recompression and direct capture methods using code examples and best practices.
+title: DV Camcorder Video Capture via FireWire in C# .NET
+description: Capture DV camcorder video in .NET with direct and recompressed modes using VisioForge Video Capture SDK. Type-1/Type-2 DV format handling and C# examples.
 ---
 
 # Capturing Video to DV Format in .NET Applications

@@ -1,6 +1,6 @@
 ---
 title: Wisenet RTSP URL: Connect IP Camera with C# .NET SDK
-description: Connect to Wisenet cameras in C# .NET with RTSP URL patterns for Wisenet X, P, Q, L series by Hanwha Vision. Complete code samples and NVR guide.
+description: Wisenet X, P, Q, L series RTSP URL patterns for C# .NET apps. Hanwha Vision camera and NVR integration with ONVIF support and VisioForge SDK code.
 ---
 
 # How to Connect to Wisenet IP Camera in C# .NET

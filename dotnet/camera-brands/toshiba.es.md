@@ -18,7 +18,7 @@ description: Conecte cámaras Toshiba de la serie IK-W en C# .NET con patrones d
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** admin / 1234
 - **Soporte ONVIF:** Limitado (solo modelos más nuevos IK-W14/16/30/70/80)
-- **Códecs de video:** H.264 (series IK-W14/16/30/70/80), MJPEG (modelos más antiguos)
+- **Códecs de vídeo:** H.264 (series IK-W14/16/30/70/80), MJPEG (modelos más antiguos)
 
 !!! warning "Línea de Productos Descontinuada"
     Toshiba ha salido del mercado de cámaras IP y vendió su negocio de vigilancia. No hay nuevas actualizaciones de firmware ni soporte oficial disponible. Muchos modelos tempranos IK-WB (01A, 02A, 11A) solo soportan capturas HTTP y no proporcionan transmisión RTSP.
@@ -183,9 +183,9 @@ No. Toshiba vendió su negocio de vigilancia y salió del mercado de cámaras IP
 
 Solo los modelos más nuevos en el rango IK-W14/16/30/70/80 tienen soporte ONVIF limitado. Los modelos más antiguos (IK-WB01A hasta WB11A, IK-WR01A/02A) no soportan ONVIF. Para descubrimiento y configuración ONVIF, use solo los modelos compatibles.
 
-**¿Por qué mi cámara Toshiba solo proporciona capturas, no flujos de video?**
+**¿Por qué mi cámara Toshiba solo proporciona capturas, no flujos de vídeo?**
 
-Los modelos tempranos IK-W de Toshiba fueron diseñados como cámaras de captura en red y no incluyen un servidor RTSP. Estos modelos (IK-WB01A, WB02A, WB11A, WR01A, WR02A) solo soportan capturas JPEG basadas en HTTP y endpoints CGI. Para obtener video continuo, necesita un modelo más nuevo de la serie IK-W14/16/30/70/80.
+Los modelos tempranos IK-W de Toshiba fueron diseñados como cámaras de captura en red y no incluyen un servidor RTSP. Estos modelos (IK-WB01A, WB02A, WB11A, WR01A, WR02A) solo soportan capturas JPEG basadas en HTTP y endpoints CGI. Para obtener vídeo continuo, necesita un modelo más nuevo de la serie IK-W14/16/30/70/80.
 
 ## Recursos Relacionados
 

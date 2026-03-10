@@ -1,6 +1,6 @@
 ---
-title: Búsqueda de Fragmentos de Video en Contenido Mayor
-description: Implementa funcionalidad de búsqueda de fragmentos de video en aplicaciones usando tecnología de huellas digitales con guía detallada y ejemplos de código.
+title: Buscar fragmentos de video con Fingerprinting en C#
+description: Encuentre fragmentos de video dentro de archivos mayores usando el SDK de fingerprinting de VisioForge en C# .NET con implementación paso a paso.
 ---
 
 # Encontrando Fragmentos de Video en Contenido de Video Más Grande

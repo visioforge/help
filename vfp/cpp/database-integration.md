@@ -1,6 +1,6 @@
 ---
 title: Video Fingerprint Storage in C++ with SQLite and PostgreSQL
-description: Integrate Video Fingerprinting SDK C++ with databases for storing and retrieving fingerprints including SQLite and PostgreSQL examples.
+description: Store and query video fingerprints in SQLite and PostgreSQL using VisioForge C++ SDK with schema examples and indexing strategies.
 ---
 
 # C++ Fingerprinting SDK Database Guide

@@ -1,6 +1,6 @@
 ﻿---
-title: Medidores VU y Visualizadores de Onda .NET
-description: Construye medidores VU y visualizadores de forma de onda en WinForms y WPF para monitoreo de nivel de audio en tiempo real en .NET.
+title: Implementar Medidores VU y Visualizadores de Forma de Onda
+description: Construya medidores VU y visualizadores de forma de onda en WinForms y WPF para monitoreo de nivel de audio en tiempo real con soporte mono y estéreo en .NET.
 ---
 
 # Visualización de Audio: Implementación de Medidores VU y Visualizaciones de Forma de Onda en .NET

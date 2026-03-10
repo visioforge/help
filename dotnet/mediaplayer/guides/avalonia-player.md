@@ -1,6 +1,6 @@
 ---
-title: Avalonia Video Player Tutorial - MVVM Cross-Platform Guide
-description: Build a cross-platform Avalonia video player with MVVM pattern using VisioForge SDK. Full C# tutorial for Windows, macOS, Linux, Android, and iOS.
+title: Build Avalonia Video Player in C# .NET — MVVM Guide
+description: Create a cross-platform video player with Avalonia UI and VisioForge Media Player SDK .NET. Covers Windows, macOS, Linux, Android, and iOS.
 ---
 
 # Avalonia Media Player with VisioForge

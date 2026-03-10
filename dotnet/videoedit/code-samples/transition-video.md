@@ -1,6 +1,6 @@
 ---
-title: Add Video Transition Effects Between Clips in C# Apps
-description: Master video transition effects in C# with step-by-step guide and complete code examples for VideoEditCore and VideoEditCoreX APIs.
+title: Add Video Transition Effects Between Clips in C# .NET
+description: Apply transition effects between video clips with VisioForge Video Edit SDK .NET. Fades, wipes, and 100+ SMPTE transitions with C# code examples.
 ---
 
 # Creating Professional Video Transitions Between Clips in C #

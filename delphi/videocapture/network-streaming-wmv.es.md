@@ -1,6 +1,6 @@
 ---
-title: Streaming de red WMV en Delphi con Video Capture SDK
-description: Streaming WMV en Delphi: configura perfiles, gestiona conexiones, establece puertos y transmite video con ejemplos de código.
+title: Implementar Streaming de Red WMV en Delphi y ActiveX
+description: Implemente streaming de red WMV en Delphi - configure perfiles, gestione conexiones de clientes, establezca puertos y transmita video con ejemplos de código.
 ---
 
 # Guía de Implementación de Streaming de Red WMV

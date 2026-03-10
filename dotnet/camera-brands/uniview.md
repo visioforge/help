@@ -1,6 +1,6 @@
 ---
 title: How to Connect to Uniview (UNV) IP Camera in C# .NET
-description: Connect to Uniview cameras in C# .NET with RTSP URL patterns and code samples for IPC-B, IPC-T, IPC-D, IPC-E series and NVR models.
+description: Uniview IPC-B, IPC-T, IPC-D, IPC-E, and NVR RTSP URL patterns for C# .NET. ONVIF-compatible integration with VisioForge SDK code samples.
 ---
 
 # How to Connect to Uniview (UNV) IP Camera in C# .NET

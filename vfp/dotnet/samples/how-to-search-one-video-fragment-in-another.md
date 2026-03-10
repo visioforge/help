@@ -1,6 +1,6 @@
 ---
 title: Video Fragment Search Using Fingerprinting in C# .NET
-description: Implement video fragment search functionality in applications using fingerprinting technology with detailed guide and code examples.
+description: Find video fragments inside larger files using VisioForge fingerprinting SDK in C# .NET with step-by-step implementation and code examples.
 ---
 
 # Finding Video Fragments in Larger Video Content

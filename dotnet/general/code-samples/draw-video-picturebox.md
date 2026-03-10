@@ -1,6 +1,6 @@
 ---
-title: Display Video Frames on PictureBox in .NET WinForms
-description: Implement video rendering on PictureBox controls in WinForms with frame handling, memory management, and efficient rendering techniques.
+title: Render Live Video on WinForms PictureBox Control in C#
+description: Thread-safe frame updates, bitmap disposal, and double buffering to prevent flicker. Frame skipping for high-FPS sources. VisioForge SDK zoom and size modes.
 ---
 
 # Drawing Video on PictureBox in .NET Applications

@@ -1,6 +1,6 @@
 ---
-title: Instalar TVFMediaPlayer en C++ Builder paso a paso
-description: Instalar TVFMediaPlayer en C++ Builder - guía paso a paso para versiones 5, 6, 2006 y posteriores con prerrequisitos, configuración y solución de problemas.
+title: Instalar Control ActiveX TVFMediaPlayer en C++ Builder
+description: Instale TVFMediaPlayer en C++ Builder - guía paso a paso para versiones 5, 6, 2006 y posteriores con prerrequisitos, configuración y solución de problemas.
 ---
 
 # Instalando TVFMediaPlayer en C++ Builder

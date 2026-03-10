@@ -1,6 +1,6 @@
 ---
-title: VisioForge SDK Documentation Hub
-description: Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
+title: VisioForge SDKs Documentation — Video Capture, Edit & Playback
+description: Tutorials, API reference, and C# code samples. .NET, Delphi, and DirectShow SDKs for 7 platforms including Raspberry Pi and NVIDIA Jetson. GPU-accelerated encoding.
 hide:
   - navigation
   - toc

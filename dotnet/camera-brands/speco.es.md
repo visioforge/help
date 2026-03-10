@@ -18,7 +18,7 @@ description: Conecte cámaras y DVRs Speco Technologies en C# .NET con patrones 
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** admin / admin
 - **Soporte ONVIF:** Sí (todas las cámaras IP actuales)
-- **Códecs de video:** H.264 (todos los modelos actuales), MPEG-4 (modelos más antiguos)
+- **Códecs de vídeo:** H.264 (todos los modelos actuales), MPEG-4 (modelos más antiguos)
 
 !!! info "Múltiples Líneas de Productos"
     Speco Technologies tiene muchas líneas de productos distintas, cada una con diferentes formatos de URL RTSP. Identifique su serie de modelo exacta (O, VIP, LS, ZIP, SIP o tipo de DVR) antes de configurar la URL del flujo. El flujo raíz `rtsp://IP:554/` funciona en muchos dispositivos Speco como prueba rápida.

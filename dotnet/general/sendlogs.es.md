@@ -1,6 +1,6 @@
 ---
-title: Enviar registros de depuración del VisioForge SDK .NET
-description: Habilite y capture registros de depuración para solucionar problemas del SDK .NET con instrucciones paso a paso para entornos de demostración y producción.
+title: Habilitar Logs de Depuración del .NET SDK - Guía de Solución
+description: Habilite y capture logs de depuración para solucionar problemas del .NET SDK con instrucciones paso a paso para entornos de demostración y producción.
 ---
 
 # Solución de problemas con registros para productos SDK .NET

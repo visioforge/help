@@ -1,6 +1,6 @@
 ---
 title: Extract and Combine Video Segments from a File in C#
-description: Extract and combine multiple segments from the same video or audio file in C# with step-by-step guide and code examples for .NET.
+description: Extract and combine multiple segments from a single video file using VisioForge Video Edit SDK .NET. Highlight reels and clip assembly in C#.
 ---
 
 # Adding Multiple Segments from a Single Video File in C#

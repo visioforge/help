@@ -1,6 +1,6 @@
 ---
-title: Instalar SDKs .NET VisioForge en Visual Studio con NuGet
-description: Instala y configura SDKs multimedia .NET en Visual Studio con paquetes NuGet e integración de frameworks de UI para aplicaciones de video.
+title: Instalar VisioForge .NET SDKs en Visual Studio con NuGet
+description: Métodos de instalación NuGet y manual. Configura VideoView para WinForms y WPF, aceleración por hardware y paquetes de redistribución.
 ---
 
 # Guía Completa para Integrar SDKs .NET con Visual Studio

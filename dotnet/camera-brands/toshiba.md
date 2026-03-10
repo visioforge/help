@@ -1,6 +1,6 @@
 ---
 title: Toshiba IP Camera RTSP URL and Streaming in C# .NET
-description: Connect to Toshiba IK-W series cameras in C# .NET with RTSP URL patterns and code samples for IK-WB, IK-WD, IK-WR, and IK-WP models.
+description: Toshiba IK-WB, IK-WD, IK-WR, and IK-WP camera RTSP URL patterns for C# .NET. Stream and record with VisioForge Video Capture SDK integration.
 ---
 
 # How to Connect to Toshiba IP Camera in C# .NET

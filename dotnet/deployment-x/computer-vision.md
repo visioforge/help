@@ -1,6 +1,6 @@
 ---
-title: Computer Vision Deployment for .NET on Windows, Linux, macOS
-description: Implement computer vision in applications on Windows, Linux, and macOS with VisioForge CV and CVD NuGet packages for .NET development.
+title: VisioForge Computer Vision NuGet Packages for .NET
+description: Deploy VisioForge CV and CVD NuGet packages for .NET computer vision on Windows, Linux, and macOS. Face detection, object recognition, and more.
 ---
 
 # Computer Vision Implementation Guide

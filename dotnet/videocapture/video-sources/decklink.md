@@ -1,6 +1,6 @@
 ---
-title: Blackmagic Decklink Video Capture for .NET Developers
-description: Implement professional video capture in .NET with Blackmagic Decklink devices using code examples for broadcast-quality applications.
+title: Blackmagic Decklink Video Capture and Playback in C# .NET
+description: Capture video from Blackmagic Decklink cards in .NET using VisioForge Video Capture SDK. Device enumeration, format selection, and C# code examples.
 ---
 
 # Integrating Blackmagic Decklink Devices with .NET Applications

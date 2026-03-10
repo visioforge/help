@@ -1,6 +1,6 @@
 ---
-title: USB3 Vision, GigE, and GenICam Integration for .NET
-description: Integrate USB3 Vision, GigE, and GenICam industrial cameras with DirectShow drivers and cross-platform machine vision support.
+title: USB3 Vision and GigE Industrial Camera Capture in C# .NET
+description: Capture from USB3 Vision, GigE Vision, and GenICam industrial cameras with VisioForge Video Capture SDK. DirectShow and cross-platform driver support.
 sidebar_label: USB3 Vision, GigE, and GenICam devices
 order: 15
 ---

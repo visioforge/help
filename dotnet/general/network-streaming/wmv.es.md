@@ -1,6 +1,6 @@
 ﻿---
-title: Streaming en Red WMV con Desarrollo .NET
-description: Configura streaming de Windows Media Video en .NET con algoritmos de compresión, tasas de bits adaptativas y optimización de ancho de banda.
+title: Implementación de Streaming en Red WMV en Apps .NET
+description: Implemente streaming de Windows Media Video en .NET con algoritmos de compresión, bitrates adaptativos y optimización de ancho de banda para entrega en red.
 ---
 
 # Guía de Implementación de Streaming en Red Windows Media Video (WMV)

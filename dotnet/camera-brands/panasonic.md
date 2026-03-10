@@ -1,6 +1,6 @@
 ---
 title: How to Connect to Panasonic (i-PRO) IP Camera in C# .NET
-description: Connect to Panasonic i-PRO and legacy WV/BL/BB cameras in C# .NET with RTSP URL patterns and code samples for current and legacy models.
+description: Panasonic i-PRO and legacy WV/BL/BB camera RTSP URL patterns for C# .NET. ONVIF-compatible integration with VisioForge SDK for all generations.
 ---
 
 # How to Connect to Panasonic (i-PRO) IP Camera in C# .NET

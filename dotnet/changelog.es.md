@@ -1,6 +1,6 @@
 ﻿---
-title: Historial de Versiones y Cambios en SDKs .NET
-description: Registro de cambios para los SDKs de video .NET, con Video Capture, Media Player, Video Edit y Media Blocks con las últimas características y correcciones.
+title: VisioForge .NET SDKs — Registro de Cambios y Notas de Versión
+description: Historial de versiones para Video Capture, Media Player, Video Edit y Media Blocks SDKs. Nuevas funciones, correcciones, cambios de API y actualizaciones de plataforma.
 hide_table_of_contents: true
 ---
 

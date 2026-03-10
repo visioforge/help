@@ -1,6 +1,6 @@
 ﻿---
-title: Lectura de Información de Archivos de Medios en C#
-description: Extrae códecs, resolución, tasa de frames, tasa de bits, duración y metadatos de archivos de video y audio usando MediaInfoReader en aplicaciones C#.
+title: Leer Info de Archivos Media en C# .NET - Streams y Metadatos
+description: La API MediaInfoReader devuelve detalles de streams video/audio, pistas de subtítulos, códigos FOURCC y etiquetas ID3. Análisis multiplataforma con VisioForge SDK.
 ---
 
 # Lectura de Información de Archivos de Medios en C#

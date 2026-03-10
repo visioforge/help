@@ -1,6 +1,6 @@
 ---
-title: Monitoreo de Medios y Detección de Comerciales en .NET
-description: Usa MMT para encontrar fragmentos de video dentro de videos más grandes con características para gestionar tu biblioteca de medios.
+title: Detectar Fragmentos de Video en Streams en Vivo con .NET
+description: Detecte anuncios, intros y clips en grabaciones de transmisiones usando la herramienta de monitoreo de medios de VisioForge con búsqueda por huellas.
 ---
 
 # Herramienta de Monitoreo de Medios

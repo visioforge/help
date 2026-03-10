@@ -1,6 +1,6 @@
 ---
-title: Bloques Fuente de Media Blocks SDK .NET — Entradas
-description: Ingerir medios desde dispositivos hardware, archivos, streams de red y fuentes virtuales con bloques fuente completos para pipelines de Media Blocks SDK.
+title: Bloques Fuente de Video y Audio para Pipelines C# .NET
+description: Use los bloques fuente de VisioForge Media Blocks SDK para webcams, archivos, streams RTSP/RTMP, pantallas y fuentes virtuales con enumeración de dispositivos.
 sidebar_label: Fuentes
 ---
 
@@ -632,7 +632,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Image Sequence Source Block
 
-El `ImageSequenceSourceBlock` genera un flujo de video a partir de una secuencia de imágenes estáticas almacenadas en una carpeta. Admite tasa de fotogramas configurable, bucle y modos de transmisión en vivo o con capacidad de búsqueda.
+El `ImageSequenceSourceBlock` genera un flujo de video a partir de una secuencia de imágenes estáticas almacenadas en una carpeta. Admite tasa de fotogramas configurable y modos de transmisión en vivo o con capacidad de búsqueda.
 
 #### Información del bloque
 
@@ -652,9 +652,8 @@ Constructor: `ImageSequenceSourceSettings(string folderPath, string filePattern 
 | --- | --- | :---: | --- |
 | `FolderPath` | `string` | requerido | Carpeta que contiene los archivos de imagen |
 | `FilePattern` | `string` | auto-detectado | Patrón de nombre de archivo (p. ej., `image_%05d.jpg`); auto-detectado si es `null` |
-| `StartIndex` | `int` | `0` | Índice inicial de la secuencia de imágenes |
+| `StartIndex` | `int` | auto-detectado | Índice inicial de la secuencia de imágenes; auto-detectado del nombre del primer archivo |
 | `FrameRate` | `VideoFrameRate` | `FPS_25` | Tasa de fotogramas de salida |
-| `Loop` | `bool` | `false` | Reproducir la secuencia en bucle indefinidamente |
 | `IsLive` | `bool` | `false` | Tratar la fuente como en vivo (no buscable) |
 | `NumBuffers` | `int` | `-1` | Máximo de fotogramas a emitir (−1 = ilimitado) |
 
@@ -674,8 +673,7 @@ var pipeline = new MediaBlocksPipeline();
 
 var settings = new ImageSequenceSourceSettings("C:/images/sequence/")
 {
-    FrameRate = VideoFrameRate.FPS_25,
-    Loop = true
+    FrameRate = VideoFrameRate.FPS_25
 };
 
 var imageSource = new ImageSequenceSourceBlock(settings);

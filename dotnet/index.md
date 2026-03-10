@@ -1,6 +1,6 @@
 ---
-title: .NET SDKs for Video Capture, Editing, and Media Playback
-description: .NET SDKs for video capture, editing, playback, and processing on Windows, macOS, Linux, Android, and iOS with hardware acceleration.
+title: VisioForge .NET SDKs — Video Capture, Editing & Playback
+description: .NET SDKs for video capture, editing, playback, and processing. Cross-platform support for Windows, macOS, Linux, Android, and iOS.
 sidebar_label: .Net SDKs
 order: 20
 ---

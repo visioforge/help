@@ -1,6 +1,6 @@
 ---
-title: UDP Video and Audio Streaming with MPEG-TS in .NET
-description: Stream video with UDP protocol for low-latency broadcasts, surveillance, and multicast transmission with minimal overhead in .NET applications.
+title: UDP Video Streaming with MPEG-TS Container in C# .NET
+description: Unicast and multicast modes with H.264/H.265 encoding. FFmpeg pipeline, buffer tuning, keyframe intervals, and bandwidth guidelines. VisioForge SDK examples.
 ---
 
 # UDP Streaming with VisioForge SDKs

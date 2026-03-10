@@ -1,6 +1,6 @@
 ---
-title: Usar Filtros de Video DirectShow de Terceros en .NET
-description: Implementa filtros de video DirectShow de terceros en .NET con ejemplos de código, mejores prácticas y solución de problemas para plataformas Video SDK.
+title: Uso de Filtros de Video DirectShow de Terceros en .NET
+description: Implemente filtros de video DirectShow de terceros en .NET con ejemplos de código, mejores prácticas y solución de problemas para plataformas Video SDK.
 ---
 
 # Usar Filtros de Video de Terceros en .NET

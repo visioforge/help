@@ -1,6 +1,6 @@
 ---
-title: Integrating OBS Streaming in Video Capture SDK .Net
-description: Stream video and audio with OBS integration in Video Capture SDK for professional broadcast solutions in WinForms, WPF, and Console.
+title: Send Live Video and Audio to OBS Studio from C# .NET App
+description: Send live video and audio to OBS Studio from VisioForge Video Capture SDK. Virtual camera setup, codec configuration, and broadcast pipeline examples.
 ---
 
 # Integrating OBS Streaming in Video Capture SDK .Net

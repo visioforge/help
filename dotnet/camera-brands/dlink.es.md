@@ -9,7 +9,7 @@ description: Conecta cámaras D-Link DCS en C# .NET con patrones de URL RTSP y e
 
 ## Descripción de la Marca
 
-**D-Link Corporation** es un fabricante taiwanés de equipos de red con sede en Taipei. D-Link produce cámaras IP bajo la línea de productos **DCS (D-Link Cloud Security)**, dirigida a mercados de consumo y pequeñas empresas. Las cámaras D-Link están ampliamente disponibles a través de canales minoristas y son populares para seguridad del hogar y despliegues en oficinas pequeñas.
+**D-Link Corporation** es un fabricante taiwanés de equipos de red con sede en Taipéi. D-Link produce cámaras IP bajo la línea de productos **DCS (D-Link Cloud Security)**, dirigida a mercados de consumo y pequeñas empresas. Las cámaras D-Link están ampliamente disponibles a través de canales minoristas y son populares para seguridad del hogar y despliegues en oficinas pequeñas.
 
 **Datos clave:**
 

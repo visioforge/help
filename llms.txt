@@ -10,7 +10,39 @@
 - [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net): Professional video editing with timeline-based editing and effects
 - [Video Edit SDK .NET (FFmpeg)](https://www.visioforge.com/video-edit-sdk-ffmpeg-net): FFmpeg-based video editing SDK
 - [Virtual Camera SDK](https://www.visioforge.com/virtual-camera-sdk): Virtual camera driver for Windows
-- [Video Fingerprinting SDK](https://www.visioforge.com/video-fingerprinting-sdk-net): Digital signatures for video content detection
+- [Video Fingerprinting SDK](https://www.visioforge.com/video-fingerprinting-sdk): Digital signatures for video content detection
+- [All-in-One Media Framework — Video Capture, Edit & Playback](https://www.visioforge.com/all-in-one-media-framework): Complete video capture, editing, and playback for Delphi and ActiveX. Record webcams, IP cameras, add effects, export to 50+ formats. Free trial.
+- [Video Encryption SDK — Encrypt & Protect Video Files (.NET)](https://www.visioforge.com/video-encryption-sdk): Encrypt video and audio files with password or binary key protection. SDK for C# and .NET applications. Secure DRM-level content protection. Free trial.
+
+## Website
+
+- [VisioForge — Video Capture, Edit & Playback SDKs for .NET](https://www.visioforge.com/)
+- [About VisioForge — Video & Audio SDKs for .NET & Delphi](https://www.visioforge.com/about)
+- [Pricing & Licenses for .NET Video SDKs — VisioForge](https://www.visioforge.com/buy)
+- [Products](https://www.visioforge.com/products)
+- [Broadcasting & Live Streaming SDK for .NET — VisioForge](https://www.visioforge.com/solutions-broadcasting)
+- [Video Surveillance & Security SDK for .NET — VisioForge](https://www.visioforge.com/solutions-surveillance)
+- [Video Editing & Compositing SDK for .NET — VisioForge](https://www.visioforge.com/solutions-video-editing)
+- [Encoding Filters Pack - MP4 and other formats - VisioForge](https://www.visioforge.com/encoding-filters-pack)
+- [FFmpeg Source DirectShow Filter — Universal Media Decoder](https://www.visioforge.com/ffmpeg-source-directshow-filter)
+- [Processing Filters Pack — DirectShow Effects | VisioForge](https://www.visioforge.com/processing-filters-pack)
+- [VLC Source DirectShow Filter — Play 400+ Formats in Any App](https://www.visioforge.com/vlc-source-directshow-filter)
+- [Cookie Policy (EU) — Privacy & Data Controls | VisioForge](https://www.visioforge.com/cookie-policy-eu)
+- [Detect Pirated Video Content (Fingerprinting) | VisioForge](https://www.visioforge.com/detecting-pirated-video-content)
+- [GStreamer Metal Plugin — GPU Video Processing for macOS & iOS | VisioForge](https://www.visioforge.com/gstreamer-metal)
+- [Register Your VisioForge SDK License — Activation Guide](https://www.visioforge.com/how-to-register-purchased-product)
+- [Legal Information — Privacy, Terms & Refund | VisioForge](https://www.visioforge.com/legal-information)
+- [LLMs.txt API Documentation for AI Agents | VisioForge](https://www.visioforge.com/llms)
+- [Privacy Policy — Usage Statistics & Tracking | VisioForge](https://www.visioforge.com/privacy-policy)
+- [Refund Policy for Products & Services | VisioForge](https://www.visioforge.com/refund-policy)
+- [Support Service Level Agreement (SLA) - VisioForge](https://www.visioforge.com/support-service-level-agreement-sla)
+- [Terms & Conditions — Products & Services | VisioForge](https://www.visioforge.com/terms-and-conditions)
+- [Which VisioForge .NET SDK Should You Use? — Selection Guide](https://www.visioforge.com/which-dotnet-sdk)
+- [Latest news, product updates, new tutorials - VisioForge](https://www.visioforge.com/news)
+- [VisioForge SDK News & Product Updates — 2021 Archive](https://www.visioforge.com/news-2021)
+- [VisioForge SDK News & Product Updates — 2022 Archive](https://www.visioforge.com/news-2022)
+- [VisioForge SDK News & Product Updates — 2023 Archive](https://www.visioforge.com/news-2023)
+- [VisioForge SDK News & Product Updates — 2024 Releases](https://www.visioforge.com/news-2024)
 
 ## Documentation - Getting Started
 
@@ -18,9 +50,10 @@
 
 ## Documentation - General
 
-- [Delphi ActiveX Libraries for Video Capture and Playback](https://www.visioforge.com/help/docs/delphi/general/): Professional Delphi/ActiveX multimedia libraries for video capture, playback, and editing with comprehensive documentation and examples.
-- [Delphi SDK 64-bit Package Installation Step-by-Step](https://www.visioforge.com/help/docs/delphi/general/install-64bit/): Complete guide to installing 64-bit Delphi packages - configure library paths, manage runtime packages, and resolve common installation issues.
+- [Delphi ActiveX SDK Setup - Installation and Configuration](https://www.visioforge.com/help/docs/delphi/general/): Install and configure TVFMediaPlayer, TVFVideoCapture, and TVFVideoEdit components in Delphi. Covers 64-bit package setup, .otares errors, and IDE integration.
+- [Install VisioForge Delphi SDKs — 64-bit Package Setup](https://www.visioforge.com/help/docs/delphi/general/install-64bit/): Fix 64-bit BPL loading issues in Delphi IDE. Covers design-time vs runtime packages, library path configuration for x86/x64, and common error solutions.
 - [Fix .otares File Errors in Delphi SDK Packages Guide](https://www.visioforge.com/help/docs/delphi/general/install-otares/): Resolve missing .otares file errors in Delphi - troubleshoot resource issues, fix compilation errors, and restore package functionality.
+- [Audio Effects in C# and .NET - EQ, Reverb, Filters, and More](https://www.visioforge.com/help/docs/dotnet/general/audio-effects/): Apply real-time audio effects in C# and .NET with VisioForge SDKs. Equalizer, reverb, echo, noise reduction, pitch shift, and 30+ effects.
 - [Index](https://www.visioforge.com/help/docs/dotnet/general/audio-encoders/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
 - [Essential .NET SDK Code Samples for Media Developers](https://www.visioforge.com/help/docs/dotnet/general/code-samples/): Implementation examples for DirectShow filters, audio/video processing, rendering, and media manipulation in .NET SDK applications.
 - [VisioForge .NET SDK General Guides and Documentation](https://www.visioforge.com/help/docs/dotnet/general/): Comprehensive guides for VisioForge .NET SDKs covering video capture, media playback, editing, encoders, effects, and network streaming.
@@ -31,42 +64,42 @@
 - [Video Effects SDK for .NET - Overlays and Processing](https://www.visioforge.com/help/docs/dotnet/general/video-effects/): Implement professional video effects, text/image overlays, and custom video processing with powerful visual enhancement tools for .NET apps.
 - [Index](https://www.visioforge.com/help/docs/dotnet/general/video-encoders/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
 - [Install VisioForge Media SDKs in Avalonia .NET Apps](https://www.visioforge.com/help/docs/dotnet/install/avalonia/): Build cross-platform Avalonia apps with multimedia capabilities for Windows, macOS, Linux, Android, and iOS using VisioForge video SDKs.
-- [Index](https://www.visioforge.com/help/docs/dotnet/install/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [.NET MAUI Video and Media SDK Integration and Setup Guide](https://www.visioforge.com/help/docs/dotnet/install/maui/): Implement video and media capabilities in cross-platform .NET MAUI apps for Windows, Android, iOS, and macOS with VisioForge SDKs.
-- [Integrate .Net SDKs into JetBrains Rider | Tutorial](https://www.visioforge.com/help/docs/dotnet/install/rider/): Integrate VisioForge .NET SDKs with JetBrains Rider for cross-platform development with WPF, MAUI, WinUI, and Avalonia frameworks.
-- [Integrate Media SDKs with Uno Platform Applications](https://www.visioforge.com/help/docs/dotnet/install/uno/): Build cross-platform Uno Platform apps with multimedia capabilities for Windows, Android, iOS, macOS, and Linux using VisioForge SDKs.
-- [How to Install .NET SDKs in Visual Studio Using NuGet](https://www.visioforge.com/help/docs/dotnet/install/visual-studio/): Install and configure multimedia .NET SDKs in Visual Studio with NuGet packages and UI framework integration for video applications.
+- [Install VisioForge .NET SDKs — NuGet, Visual Studio, Rider](https://www.visioforge.com/help/docs/dotnet/install/): Setup files or NuGet packages. Target frameworks for Windows, macOS, iOS, Android, and Linux. SDK initialization, VideoView controls, and native dependencies.
+- [Install VisioForge .NET SDKs in MAUI Apps via NuGet](https://www.visioforge.com/help/docs/dotnet/install/maui/): Add video capture, playback, and editing to .NET MAUI apps. NuGet setup for Windows, Android, iOS, and macOS with VisioForge VideoView controls.
+- [Install VisioForge .NET SDKs in JetBrains Rider via NuGet](https://www.visioforge.com/help/docs/dotnet/install/rider/): Add VideoView control, configure XAML namespaces, and set up redistribution packages for WPF, MAUI, and Avalonia projects in Rider.
+- [Set Up Video SDKs for Uno Platform Cross-Platform .NET](https://www.visioforge.com/help/docs/dotnet/install/uno/): Add video capture, playback, and editing to Uno Platform apps. NuGet setup, VideoView integration for Windows, Android, iOS, macOS, and Linux.
+- [Install VisioForge .NET SDKs in Visual Studio via NuGet](https://www.visioforge.com/help/docs/dotnet/install/visual-studio/): NuGet and manual installation methods. Configure VideoView for WinForms and WPF, set up hardware acceleration, and manage redistribution packages.
 - [Install VisioForge .NET SDKs in Visual Studio for Mac](https://www.visioforge.com/help/docs/dotnet/install/visual-studio-mac/): Install and configure VisioForge .NET SDKs in Visual Studio for Mac for multimedia macOS and iOS application development.
 
 ## Documentation - Media Blocks SDK
 
-- [Apple Platform Media Blocks for .NET — iOS & macOS](https://www.visioforge.com/help/docs/dotnet/mediablocks/_Apple/): iOS and macOS optimized MediaBlocks featuring platform audio sources, sinks, ProRes encoding, and VideoToolbox hardware acceleration.
-- [Linux VA-API Hardware Acceleration for .NET Video Apps](https://www.visioforge.com/help/docs/dotnet/mediablocks/_Linux/): Linux-optimized MediaBlocks with VA-API hardware acceleration for efficient video encoding, decoding, and processing on Ubuntu platforms.
-- [Audio Encoders for .NET - AAC, MP3, FLAC, Opus and More](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioEncoders/): Comprehensive audio compression with AAC, MP3, FLAC, Opus, and more codecs in Media Blocks SDK for efficient encoding and streaming.
-- [Audio Processing and Effects for .NET - Mixer, EQ, Filters](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioProcessing/): Create audio pipelines with converters, resamplers, mixers, equalizers, and effects for professional audio processing in .NET applications.
-- [Audio Rendering Block for Cross-Platform .NET Applications](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioRendering/): Output audio streams to devices across Windows, macOS, Linux, iOS, and Android with cross-platform audio rendering and buffer management.
-- [Audio Visualizer Blocks for .NET - Spectrum and Waveform"](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioVisualizers/): Build audio-reactive applications with Spacescope, Spectroscope, Synaescope, and Wavescope visualizer blocks for dynamic audio rendering.
-- [AWS S3 Media Source and Sink Blocks for .NET SDK Guide](https://www.visioforge.com/help/docs/dotnet/mediablocks/AWS/): Read from and write to AWS S3 storage with source and sink blocks for media processing pipelines in Media Blocks SDK .NET applications.
-- [Bridge Blocks to Link and Switch Media Pipelines in .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/Bridge/): Link and dynamically switch between media pipelines for audio, video, and subtitles without interrupting playback or streaming in .NET apps.
-- [Blackmagic Decklink Integration for .NET Developers](https://www.visioforge.com/help/docs/dotnet/mediablocks/Decklink/): Integrate Blackmagic Decklink devices for professional SDI and HDMI capture and rendering with multi-device support in .NET applications.
-- [Demuxers](https://www.visioforge.com/help/docs/dotnet/mediablocks/Demuxers/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [Media Blocks SDK .Net - Developer Quick Start Guide](https://www.visioforge.com/help/docs/dotnet/mediablocks/GettingStarted/): Integrate Media Blocks SDK into applications with installation guide, pipeline architecture, and multimedia processing block tutorials.
-- [Index](https://www.visioforge.com/help/docs/dotnet/mediablocks/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [Live Video Compositor for Real-Time Mixing in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/LiveVideoCompositor/): Composite multiple live video and audio sources in real-time with dynamic add/remove capabilities for streaming and recording applications.
-- [Nvidia GPU Video Processing Blocks in .Net Pipelines](https://www.visioforge.com/help/docs/dotnet/mediablocks/Nvidia/): Accelerate media processing with Nvidia GPU blocks for data transfer, video conversion, and resizing in Media Blocks SDK pipelines.
-- [OpenCV .NET Blocks for Video Processing and Detection](https://www.visioforge.com/help/docs/dotnet/mediablocks/OpenCV/): Implement computer vision tasks with OpenCV blocks for object detection, tracking, image manipulation, and video processing in .NET SDKs.
-- [OpenGL Video Effects for .NET - GPU-Accelerated Guide](https://www.visioforge.com/help/docs/dotnet/mediablocks/OpenGL/): Apply hardware-accelerated OpenGL video effects with GLVideoEffectsBlock for real-time video manipulation in Media Blocks SDK pipelines.
-- [Media Output Blocks for MP4, MKV, WebM, and RTMP in .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/Outputs/): Write media to files and network streams with comprehensive output sink blocks for MP4, MKV, RTMP, HLS, and more in Media Blocks SDK.
-- [Video and Audio Stream Parser Blocks in Media Blocks SDK](https://www.visioforge.com/help/docs/dotnet/mediablocks/Parsers/): Parse elementary video and audio streams to extract metadata and prepare content for decoding and multiplexing in Media Blocks SDK.
-- [RTSP Server Streaming in C# with Media Blocks SDK .Net](https://www.visioforge.com/help/docs/dotnet/mediablocks/RTSPServer/): Create RTSP streaming servers for low-latency audio and video delivery over networks with H.264/H.265 codec support in Media Blocks SDK.
-- [Media Sink Blocks for File Output and Network Streaming](https://www.visioforge.com/help/docs/dotnet/mediablocks/Sinks/): Save or stream media with sink blocks for MP4, MKV, AVI files and RTMP, HLS, SRT network protocols in Media Blocks SDK pipelines.
-- [Media Source Blocks for .NET — Video & Audio Inputs](https://www.visioforge.com/help/docs/dotnet/mediablocks/Sources/): Ingest media from hardware devices, files, network streams, and virtual sources with comprehensive source blocks for Media Blocks SDK pipelines.
-- [Special Media Blocks for .NET — Tee, Null and Custom](https://www.visioforge.com/help/docs/dotnet/mediablocks/Special/): Use special blocks like Null Renderer, Tee, and Super MediaBlock for custom pipelines with encryption and advanced GStreamer integration.
-- [Video Decoder Blocks for H.264, HEVC, VP9, and AV1 in .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/VideoDecoders/): Decompress encoded video streams with hardware-accelerated decoder blocks supporting H.264, HEVC, VP9, and more codecs in Media Blocks SDK.
-- [Video Encoders](https://www.visioforge.com/help/docs/dotnet/mediablocks/VideoEncoders/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [Video Processing and Effects Blocks in Media Blocks SDK](https://www.visioforge.com/help/docs/dotnet/mediablocks/VideoProcessing/): Apply color adjustments, deinterlacing, overlays, geometric transformations, and real-time visual effects in Media Blocks SDK pipelines.
-- [Video Rendering](https://www.visioforge.com/help/docs/dotnet/mediablocks/VideoRendering/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [Direct3D 11 GPU Video Decoding and Processing in .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/windows/): Windows-optimized MediaBlocks with Direct3D 11 hardware acceleration, video effects, DirectShow decoders, and platform-specific features.
+- [Apple Platform Media Blocks in C# .NET — iOS, macOS](https://www.visioforge.com/help/docs/dotnet/mediablocks/_Apple/): Build iOS and macOS media apps with ProRes encoding, VideoToolbox acceleration, and native audio blocks using VisioForge Media Blocks SDK.
+- [Linux VA-API Hardware Video Acceleration in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/_Linux/): Use VA-API GPU-accelerated video encoding and decoding on Linux with VisioForge Media Blocks SDK. Ubuntu and Debian platform support for .NET apps.
+- [Audio Encoder Blocks - AAC, MP3, FLAC, Opus in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioEncoders/): Encode audio to AAC, MP3, FLAC, Opus, Vorbis, and WMA using VisioForge Media Blocks SDK. Configurable bitrate, sample rate, and channel settings.
+- [Audio Processing Blocks for C# .NET - Mixer, EQ, Effects](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioProcessing/): Build audio pipelines in C# with VisioForge Media Blocks SDK — mixer, equalizer, reverb, noise reduction, and 30+ blocks. Cross-platform support.
+- [Cross-Platform Audio Rendering and Playback in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioRendering/): Play audio to speakers on Windows, macOS, Linux, iOS, and Android using VisioForge Media Blocks SDK. Device selection, buffer control, volume management.
+- [Audio Visualizer Blocks for .NET - Spectrum and Waveform](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioVisualizers/): Build audio-reactive applications with VisioForge Media Blocks SDK visualizer blocks — Spacescope, Spectroscope, Synaescope, and Wavescope renderers.
+- [AWS S3 Cloud Media Storage - Source and Sink in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/AWS/): Read and write media files to Amazon S3 in your pipeline using VisioForge Media Blocks SDK. Stream, transcode, and store video directly to cloud storage.
+- [Bridge Blocks for Dynamic Pipeline Switching in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/Bridge/): Dynamically switch between audio, video, and subtitle pipelines without interrupting playback using VisioForge Media Blocks SDK bridge blocks.
+- [Blackmagic Decklink SDI/HDMI Capture and Output in C#](https://www.visioforge.com/help/docs/dotnet/mediablocks/Decklink/): Capture and render SDI/HDMI video with Blackmagic Decklink cards using VisioForge Media Blocks SDK. Multi-device support, format detection, keying.
+- [Media Demuxer Blocks in C# .NET - MP4, MKV, MPEG-TS](https://www.visioforge.com/help/docs/dotnet/mediablocks/Demuxers/): Separate audio, video, and subtitle streams from MP4, MKV, AVI, and MPEG-TS containers using VisioForge Media Blocks SDK demuxer blocks.
+- [Media Pipeline Quick Start - Install and Setup in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/GettingStarted/): Get started with VisioForge Media Blocks SDK — installation, pipeline architecture, block connections, and multimedia processing tutorials.
+- [Modular Multimedia Processing Pipeline API for C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/): Build custom multimedia pipelines in C# with VisioForge Media Blocks SDK. Connect source, processing, and output blocks for transcoding, capture, and streaming.
+- [Live Video Compositor for Real-Time Mixing in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/LiveVideoCompositor/): Mix multiple live video and audio sources in real-time using VisioForge Media Blocks SDK. Dynamic source switching for streaming and recording in C#.
+- [NVIDIA CUDA GPU Video Processing Blocks in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/Nvidia/): Accelerate video conversion, resizing, and data transfer with Nvidia CUDA GPU blocks in VisioForge Media Blocks SDK pipelines for .NET.
+- [OpenCV Computer Vision Blocks for Video Pipeline in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/OpenCV/): Add object detection, tracking, and image processing to video pipelines with OpenCV blocks in VisioForge Media Blocks SDK. Cross-platform computer vision.
+- [GPU-Accelerated OpenGL Video Effects and Shaders in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/OpenGL/): Apply GPU-accelerated OpenGL video effects like blur, color correction, and shaders in real-time using VisioForge Media Blocks SDK pipelines.
+- [Media Output Blocks in C# .NET - MP4, MKV, WebM, RTMP](https://www.visioforge.com/help/docs/dotnet/mediablocks/Outputs/): Save video to MP4, AVI, MKV, WebM files or stream via RTMP and HLS using VisioForge Media Blocks SDK output blocks with C# code examples.
+- [Stream Parser Blocks - H.264, HEVC, AV1 Pipelines in C#](https://www.visioforge.com/help/docs/dotnet/mediablocks/Parsers/): Parse elementary video and audio streams to extract metadata and prepare content for decoding and multiplexing in VisioForge Media Blocks SDK.
+- [RTSP Server Streaming in C# .NET — Developer Guide](https://www.visioforge.com/help/docs/dotnet/mediablocks/RTSPServer/): Create RTSP streaming servers for low-latency audio and video delivery with H.264/H.265 codec support using VisioForge Media Blocks SDK.
+- [Media Sink Blocks for File and Network Output in .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/Sinks/): Write media to MP4, MKV, AVI files or stream via RTMP, HLS, SRT protocols using VisioForge Media Blocks SDK sink blocks in C# .NET.
+- [Video and Audio Source Blocks for C# .NET Pipelines](https://www.visioforge.com/help/docs/dotnet/mediablocks/Sources/): Use VisioForge Media Blocks SDK source blocks for webcams, files, RTSP/RTMP streams, screens, and virtual sources with device enumeration.
+- [Special Media Blocks in C# .NET — Tee, Null, Custom](https://www.visioforge.com/help/docs/dotnet/mediablocks/Special/): Use Tee splitters, Null renderers, and custom Super MediaBlock for advanced pipeline routing in VisioForge Media Blocks SDK for .NET.
+- [Video Decoder Blocks in C# .NET - H.264, HEVC, AV1](https://www.visioforge.com/help/docs/dotnet/mediablocks/VideoDecoders/): Decode H.264, HEVC, VP9, AV1, and MJPEG video with hardware acceleration using VisioForge Media Blocks SDK. GPU-accelerated decoding for .NET.
+- [Video Encoder Blocks - H.264, HEVC, AV1, VP9 in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/VideoEncoders/): Encode video to H.264, HEVC, AV1, and VP9 with GPU acceleration using VisioForge Media Blocks SDK. Configurable bitrate, quality, and codec settings.
+- [50+ Video Processing and Effects Blocks for C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/VideoProcessing/): Apply color adjustments, deinterlacing, overlays, geometric transforms, and real-time visual effects using VisioForge Media Blocks SDK pipelines.
+- [Video Renderer in C# .NET - DirectX, OpenGL, Metal](https://www.visioforge.com/help/docs/dotnet/mediablocks/VideoRendering/): Display video in WPF, WinForms, Avalonia, and MAUI apps with hardware-accelerated rendering using VisioForge Media Blocks SDK for .NET.
+- [Direct3D 11 GPU Video Decoding and Effects in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/windows/): Use Direct3D 11 hardware-accelerated video decoding, effects, and DirectShow integration on Windows with VisioForge Media Blocks SDK for .NET.
 
 ## Documentation - Video Capture SDK
 
@@ -91,32 +124,32 @@
 - [Video Capture to WMV Format in Delphi, C++ MFC and VB6](https://www.visioforge.com/help/docs/delphi/videocapture/video-capture-wmv/): Capture video to WMV format - external profiles, output configuration, and implementation for Delphi, C++ MFC, and VB6 with code examples.
 - [Video Input Crossbar Selection in Delphi Applications](https://www.visioforge.com/help/docs/delphi/videocapture/video-input-crossbar/): Select video input sources in Delphi with crossbar - configure composite, S-Video, HDMI inputs with step-by-step code examples for Delphi.
 - [Video Renderer](https://www.visioforge.com/help/docs/delphi/videocapture/video-renderer/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [OBS, FFMPEG, and VLC Integration with Virtual Camera SDK](https://www.visioforge.com/help/docs/dotnet/videocapture/3rd-party-software/): Integrate OBS, FFMPEG, and VLC streaming tools with Video Capture SDK DirectShow for WinForms, WPF, and Console applications in .NET.
-- [Audio Capture in .NET - Record Microphone and System Audio](https://www.visioforge.com/help/docs/dotnet/videocapture/audio-capture/): Implement microphone, line-in, and streaming audio recording in .NET with format support, processing, and real-time monitoring.
-- [Audio Rendering and Volume Control in Video Capture SDK .Net](https://www.visioforge.com/help/docs/dotnet/videocapture/audio-rendering/): Master audio rendering in .NET with device selection, volume control, performance optimization, and high-quality output tutorials.
-- [Audio Sources](https://www.visioforge.com/help/docs/dotnet/videocapture/audio-sources/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [Advanced Computer Vision for .NET Video Processing](https://www.visioforge.com/help/docs/dotnet/videocapture/computer-vision/): Implement face detection, object recognition, vehicle counting, and pedestrian tracking in .NET with SDK integration and C# examples.
-- [Deploy Video Capture SDK .Net Apps with NuGet or Installers](https://www.visioforge.com/help/docs/dotnet/videocapture/deployment/): Deploy Video Capture SDK apps with NuGet packages, silent installers, or manual installation for x86/x64 architectures in .NET.
-- [Video Capture SDK .Net - Advanced Guides & Tutorials](https://www.visioforge.com/help/docs/dotnet/videocapture/guides/): Master synchronization, DirectShow capture, and webcam photo features with in-depth guides, code samples, and support resources.
-- [Video Capture SDK .Net - Developer Docs and Tutorials](https://www.visioforge.com/help/docs/dotnet/videocapture/): Implement advanced video capture, processing, and streaming in .NET applications with comprehensive developer tutorials and code examples.
-- [Motion Detection](https://www.visioforge.com/help/docs/dotnet/videocapture/motion-detection/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [Network Video Streaming Guide for .NET Development](https://www.visioforge.com/help/docs/dotnet/videocapture/network-streaming/): Implement network streaming in .NET with RTSP, RTMP, NDI, HLS, and SRT protocols using implementation tips and best practices.
-- [Video Capture SDK .Net - Recording Formats and Encoders](https://www.visioforge.com/help/docs/dotnet/videocapture/video-capture/): Powerful .NET Video Capture SDK with extensive format support, hardware integration, and flexible implementation for recording apps.
-- [Video Processing and Effects in Video Capture SDK .Net](https://www.visioforge.com/help/docs/dotnet/videocapture/video-processing/): Enhance video capture with resizing, cropping, rotation, text overlays, image effects, color adjustments, and filters in .NET.
+- [Stream to OBS, FFmpeg, and Zoom via Virtual Camera in C#](https://www.visioforge.com/help/docs/dotnet/videocapture/3rd-party-software/): Stream video to OBS and FFMPEG from VisioForge Video Capture SDK. DirectShow virtual camera setup for WinForms, WPF, and Console apps with code examples.
+- [Capture System Audio and Record Microphone in C# .NET](https://www.visioforge.com/help/docs/dotnet/videocapture/audio-capture/): Record microphone audio and capture system sound (speaker/loopback) in C# with VisioForge SDK. Complete code examples for audio-only recording to MP3, M4A, WAV.
+- [Audio Output Device Selection and Volume Control in C# .NET](https://www.visioforge.com/help/docs/dotnet/videocapture/audio-rendering/): Configure audio output devices, adjust volume, and optimize playback in VisioForge Video Capture SDK. C# code examples for WinForms and WPF apps.
+- [Audio Sources in C# .NET — Mic, Loopback, and IP Audio](https://www.visioforge.com/help/docs/dotnet/videocapture/audio-sources/): Configure audio capture sources in C# .NET — microphone, system audio loopback, IP camera audio, and Decklink with code examples.
+- [Computer Vision - Object and Face Detection in C# .NET](https://www.visioforge.com/help/docs/dotnet/videocapture/computer-vision/): Add face detection, object recognition, vehicle counting, and pedestrian tracking to live video with VisioForge Video Capture SDK. C# code examples included.
+- [Deploy Video Capture App in .NET — NuGet and Redists](https://www.visioforge.com/help/docs/dotnet/videocapture/deployment/): Deploy VisioForge Video Capture SDK via NuGet, silent installer, or manual DLL registration. x86/x64 redistributables and cross-platform X-engine setup guide.
+- [Index](https://www.visioforge.com/help/docs/dotnet/videocapture/guides/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
+- [Video Capture API for C# .NET — Webcam, Screen, RTSP](https://www.visioforge.com/help/docs/dotnet/videocapture/): Record webcam, screen, and IP camera (RTSP/ONVIF) to MP4 with VisioForge Video Capture SDK. Cross-platform async API with GPU encoding for WinForms, WPF, MAUI.
+- [Motion Detection - Configurable Zones and Alerts in C# .NET](https://www.visioforge.com/help/docs/dotnet/videocapture/motion-detection/): Add simple and advanced motion detection to webcam or IP camera streams with VisioForge Video Capture SDK. Configurable zones, sensitivity, and C# examples.
+- [Network Streaming in C# .NET — RTSP, RTMP, NDI, SRT](https://www.visioforge.com/help/docs/dotnet/videocapture/network-streaming/): Stream live video over RTSP, RTMP, NDI, HLS, and SRT from VisioForge Video Capture SDK. Protocol setup, encoder config, and C# code examples.
+- [Video Recording Formats and Encoder Options in C# .NET](https://www.visioforge.com/help/docs/dotnet/videocapture/video-capture/): Record to MP4, AVI, WMV, WebM, and MKV with VisioForge Video Capture SDK. H.264, H.265, MJPEG encoders and GPU-accelerated encoding in .NET apps.
+- [Real-Time Video Effects - Resize, Crop, Overlay in C# .NET](https://www.visioforge.com/help/docs/dotnet/videocapture/video-processing/): Apply real-time resize, crop, rotation, text overlays, and color filters during video capture with VisioForge Video Capture SDK. C# API examples.
 - [Index](https://www.visioforge.com/help/docs/dotnet/videocapture/video-sources/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [Video Capture C# Tutorials - Webcam, Screen, IP Camera](https://www.visioforge.com/help/docs/dotnet/videocapture/video-tutorials/): Implement video capture in .NET apps - learn to capture from IP cameras, webcams, and screens with detailed code examples and steps.
+- [Video Capture C# Tutorials — Webcam, Screen, IP Camera](https://www.visioforge.com/help/docs/dotnet/videocapture/video-tutorials/): Step-by-step C# tutorials for VisioForge Video Capture SDK. Record webcam to MP4, capture screen, preview IP cameras with complete code examples.
 
 ## Documentation - Media Player SDK
 
 - [TVFMediaPlayer Delphi Changelog - Version History v3 to v10](https://www.visioforge.com/help/docs/delphi/mediaplayer/changelog/): TVFMediaPlayer changelog - track version history from 3.0 to 10.0 with 4K support, encryption, effects, streaming, and performance updates.
-- [Media Player Library Deployment for Delphi & ActiveX](https://www.visioforge.com/help/docs/delphi/mediaplayer/deployment/): Deploy TVFMediaPlayer in Delphi and ActiveX - automated and manual installation methods, codec setup, DirectShow filters, and dependencies.
+- [TVFMediaPlayer Deployment Guide — Delphi and ActiveX](https://www.visioforge.com/help/docs/delphi/mediaplayer/deployment/): Deploy TVFMediaPlayer apps with silent installers or manual setup. Covers codec packages, DirectShow filters, VC++ redistributables, and dependencies.
 - [Play Multiple Video Streams with Delphi SDK Player](https://www.visioforge.com/help/docs/delphi/mediaplayer/file-multiple-video-streams/): Handle multiple video streams in files - select camera angles, switch resolutions, and manage tracks with code examples for Delphi, C++, and VB6.
-- [Media Player SDK for Delphi and ActiveX Development](https://www.visioforge.com/help/docs/delphi/mediaplayer/): Comprehensive media playback SDK for Delphi and ActiveX with format support, advanced controls, video processing, and network streaming.
+- [Delphi Media Player Component - 500+ Formats, Streaming](https://www.visioforge.com/help/docs/delphi/mediaplayer/): Embed video and audio playback in Delphi apps with TVFMediaPlayer. Supports 500+ formats, RTSP/RTMP streaming, subtitles, and video effects.
 - [TVFMediaPlayer Installation Guide for Delphi and ActiveX](https://www.visioforge.com/help/docs/delphi/mediaplayer/install/): Install TVFMediaPlayer in Delphi, C++ Builder, Visual Basic 6, Visual Studio, and ActiveX environments with detailed setup instructions.
-- [Video Player C# Code Examples for .NET Media Player SDK](https://www.visioforge.com/help/docs/dotnet/mediaplayer/code-samples/): Implement video playback, frame extraction, playlists, and streaming in C# and VB.NET with WinForms, WPF, and Console code examples.
-- [Deployment](https://www.visioforge.com/help/docs/dotnet/mediaplayer/deployment/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [Media Player SDK .Net - Advanced Guides & Tutorials](https://www.visioforge.com/help/docs/dotnet/mediaplayer/guides/): Master loop playback, position range control, and platform-specific features with in-depth guides, code samples, and support resources.
-- [Media Player SDK .Net - Video Playback and Streaming](https://www.visioforge.com/help/docs/dotnet/mediaplayer/): Implement video playback, streaming, and media playback capabilities in .NET applications with Media Player SDK usage tutorials.
+- [Video Player Code Examples and Tutorials in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediaplayer/code-samples/): Implement playback, frame extraction, playlists, and streaming with VisioForge Media Player SDK .NET. WinForms, WPF, and Console samples included.
+- [Deploy .NET Video Player - NuGet and Runtime Setup](https://www.visioforge.com/help/docs/dotnet/mediaplayer/deployment/): Configure NuGet packages and runtime dependencies for VisioForge Media Player SDK .NET apps on Windows and cross-platform environments.
+- [Advanced Video Playback Guides and Tutorials in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediaplayer/guides/): Master loop playback, position range, and platform-specific features with VisioForge Media Player SDK .NET guides, code samples, and tutorials.
+- [Video Player API for C# .NET — Play, Stream, Embed](https://www.visioforge.com/help/docs/dotnet/mediaplayer/): Embed video and audio playback into your app with VisioForge Media Player SDK .NET. Supports MP4, MKV, RTSP, HLS across Windows, macOS, Linux, and mobile.
 
 ## Documentation - Video Edit SDK
 
@@ -124,86 +157,98 @@
 - [Deploy TVFVideoEdit in Delphi and ActiveX Applications](https://www.visioforge.com/help/docs/delphi/videoedit/deployment/): Deploy TVFVideoEdit in Delphi and ActiveX applications with automatic installers or manual setup for required components and dependencies.
 - [TVFVideoEdit - Video Editing SDK for Delphi and ActiveX](https://www.visioforge.com/help/docs/delphi/videoedit/): Build video editing software in Delphi with TVFVideoEdit - supporting multiple formats, effects, transitions, timeline editing, and encryption.
 - [Install TVFVideoEdit in Delphi, VB6, and C++ Builder](https://www.visioforge.com/help/docs/delphi/videoedit/install/): Install TVFVideoEdit library in Delphi and ActiveX-compatible IDEs including MFC, VB6, and C++ Builder with package and control setup.
-- [Video Editing Code Examples for C# and .NET Developers](https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/): Practical .NET video editing code examples for developers working with VideoEditCore engine (Windows) with detailed tutorials.
+- [Video Editing Code Examples for C# and .NET Developers](https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/): Ready-to-use C# code examples for VisioForge Video Edit SDK .NET. Overlays, transitions, trimming, merging, and audio control with detailed tutorials.
 - [Deployment](https://www.visioforge.com/help/docs/dotnet/videoedit/deployment/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [Video Editing SDK for .NET - Getting Started Dev Guide](https://www.visioforge.com/help/docs/dotnet/videoedit/getting-started/): Master video editing in .NET SDK with customizable timelines, multiple formats, transitions, effects, and real-time previews for developers.
-- [Video Edit SDK .Net - Build Video Editing Apps with C#](https://www.visioforge.com/help/docs/dotnet/videoedit/): Build video editing apps with .NET SDK featuring timeline editing, transitions, effects, hardware acceleration, and multi-format support.
-- [SMPTE Wipe Transition Effects in Video Edit SDK .Net](https://www.visioforge.com/help/docs/dotnet/videoedit/transitions/): Explore 100+ video transition effects in Video Edit SDK for .NET with SMPTE standard wipes and customizable border, softness, and positioning.
+- [Getting Started - Timeline Video Editing API in C# .NET](https://www.visioforge.com/help/docs/dotnet/videoedit/getting-started/): Set up your first project with VisioForge Video Edit SDK .NET. Customizable timelines, multi-format support, transitions, effects, and live preview.
+- [Video Editing - Timeline, Transitions, Overlays in C# .NET](https://www.visioforge.com/help/docs/dotnet/videoedit/): Build video editing apps with VisioForge Video Edit SDK .NET. Timeline editing, transitions, overlays, format conversion, and GPU-accelerated encoding.
+- [SMPTE Wipe Transitions - 100+ Video Effects in C# .NET](https://www.visioforge.com/help/docs/dotnet/videoedit/transitions/): Apply 100+ SMPTE video transition effects with VisioForge Video Edit SDK .NET. Customize border width, softness, and positioning between clips.
 
 ## Documentation - Video Edit SDK (FFmpeg)
 
-- [Video Edit SDK FFMPEG .Net Changelog and Release Notes](https://www.visioforge.com/help/docs/dotnet/videoedit-ffmpeg/changelog/): Detailed version history and feature updates for Video Edit SDK FFMPEG .Net with performance improvements and API changes.
-- [FFmpeg .NET Video Editing SDK - Convert, Edit and Process](https://www.visioforge.com/help/docs/dotnet/videoedit-ffmpeg/): Powerful cross-platform video editing, processing, and conversion toolkit for .NET with professional effects, overlays, and encoding.
+- [FFmpeg Video Editor SDK Changelog and Release Notes .NET](https://www.visioforge.com/help/docs/dotnet/videoedit-ffmpeg/changelog/): Version history and release notes for VisioForge Video Edit SDK FFmpeg .NET. New features, performance improvements, and API changes per release.
+- [FFmpeg Video Editing and Format Conversion in C# .NET](https://www.visioforge.com/help/docs/dotnet/videoedit-ffmpeg/): Edit, convert, and process video with VisioForge Video Edit SDK FFmpeg .NET. Cross-platform toolkit with effects, overlays, and hardware encoding.
 
 ## Documentation - Delphi SDKs
 
-- [Delphi/C++Builder SDK for Video and Media Processing](https://www.visioforge.com/help/docs/delphi/): Powerful Delphi/ActiveX libraries for video playback, capture, and editing with x64 support for professional media applications.
+- [Delphi and ActiveX Video SDK - Playback, Capture, Editing](https://www.visioforge.com/help/docs/delphi/): VCL components and ActiveX controls for video playback, capture, screen recording, and editing in Delphi and C++ Builder.
 
 ## Documentation - DirectShow SDKs
 
 - [Filter Registration](https://www.visioforge.com/help/docs/directshow/deployment/filter-registration/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [DirectShow Filter Deployment Guide - VisioForge SDKs](https://www.visioforge.com/help/docs/directshow/deployment/): Deploy DirectShow SDKs with COM registration, WiX/NSIS installer integration, redistributable files, and Windows troubleshooting.
-- [Deploy DirectShow Filters with WiX, NSIS, and Inno Setup](https://www.visioforge.com/help/docs/directshow/deployment/installer-integration/): Integrate DirectShow filters into WiX, NSIS, InstallShield installers with custom actions, registration, and dependency management.
+- [Deploy and Register DirectShow COM Filters on Windows](https://www.visioforge.com/help/docs/directshow/deployment/): Deploy DirectShow filters with COM registration, WiX/NSIS/Inno Setup installer integration, redistributable files list, and troubleshooting tips.
+- [Deploy DirectShow Filters with WiX, NSIS, and Inno Setup](https://www.visioforge.com/help/docs/directshow/deployment/installer-integration/): Step-by-step installer integration for VisioForge DirectShow filters. WiX, NSIS, Inno Setup, and InstallShield examples with COM registration custom actions.
 - [DirectShow SDK Redistributable Files for Deployment](https://www.visioforge.com/help/docs/directshow/deployment/redistributable-files/): Complete list of redistributable files for VisioForge DirectShow SDKs with dependencies, architecture files, and deployment requirements.
-- [FFMPEG Source Filter Code Examples for DirectShow in C#](https://www.visioforge.com/help/docs/directshow/ffmpeg-source-filters/examples/): Code examples for FFMPEG Source Filter in C++, C#, and VB.NET with DirectShow graphs, hardware acceleration, and network streaming.
-- [FFMPEG Source DirectShow Filter for Multimedia Apps](https://www.visioforge.com/help/docs/directshow/ffmpeg-source-filters/): FFMPEG DirectShow filter for decoding 100+ formats including MP4, MKV, H.265 with hardware acceleration in C++, C#, and Delphi apps.
+- [Examples](https://www.visioforge.com/help/docs/directshow/ffmpeg-source-filters/examples/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
+- [FFmpeg Source DirectShow Filter - 100+ Media Formats](https://www.visioforge.com/help/docs/directshow/ffmpeg-source-filters/): DirectShow source filter powered by FFmpeg for decoding MP4, MKV, H.265, and 100+ formats with hardware acceleration. COM interface for C++, C#, and Delphi.
 - [FFmpeg Source DirectShow Filter Interface API Reference](https://www.visioforge.com/help/docs/directshow/ffmpeg-source-filters/interface-reference/): IFFmpegSourceSettings interface with hardware acceleration, buffering modes, custom FFmpeg options, and callbacks for DirectShow.
 - [DirectShow Encoding Codecs - H.264, H.265, AAC, and More](https://www.visioforge.com/help/docs/directshow/filters-enc/codecs-reference/): DirectShow codec reference with H.264/H.265/VP8/VP9 video, AAC/MP3/Opus audio, and hardware acceleration (NVENC, QuickSync, AMF).
-- [DirectShow NVENC and H.264 Encoding Code Examples in C#](https://www.visioforge.com/help/docs/directshow/filters-enc/examples/): Code examples for NVENC hardware encoding, H.264/H.265/VP8 software encoders, AAC/MP3 audio codecs, and MP4/MKV muxing in DirectShow.
+- [Examples](https://www.visioforge.com/help/docs/directshow/filters-enc/examples/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
 - [Index](https://www.visioforge.com/help/docs/directshow/filters-enc/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [DirectShow Encoding Filters Muxers Reference Guide](https://www.visioforge.com/help/docs/directshow/filters-enc/muxers-reference/): DirectShow container formats reference for MP4, MKV, WebM, MPEG-TS, and AVI muxers with supported codecs and streaming options.
+- [Muxers Reference](https://www.visioforge.com/help/docs/directshow/filters-enc/muxers-reference/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
 - [Register DirectShow Filters in C++, C#, and Delphi](https://www.visioforge.com/help/docs/directshow/how-to-register/): Register DirectShow filters and SDKs in C++, C#, and Delphi with IVFRegister interface and alternative registration code examples.
-- [DirectShow Filters for Video Playback, Encoding and More](https://www.visioforge.com/help/docs/directshow/): DirectShow filters and SDKs for video playback, processing, encoding, and multimedia application development with VLC and FFMPEG support.
+- [DirectShow Filters for Video Playback, Encoding & Effects](https://www.visioforge.com/help/docs/directshow/): DirectShow filters for FFmpeg/VLC playback, H.264/H.265/NVENC encoding, 35+ video effects, chroma key, virtual camera, and AES-256 encryption.
 - [DirectShow Video Effects Reference - 35+ Filters Guide](https://www.visioforge.com/help/docs/directshow/proc-filters/effects-reference/): Complete reference for 35+ DirectShow video effects including color filters, deinterlacing, denoising, and artistic effects.
 - [DirectShow Video Effects, Mixer, and Chroma Key Examples](https://www.visioforge.com/help/docs/directshow/proc-filters/examples/): Code examples for Video Effects, Video Mixer, and Chroma Key filters in C++, C#, and VB.NET with DirectShow integration.
-- [DirectShow Processing Filters for Media Applications](https://www.visioforge.com/help/docs/directshow/proc-filters/): 35+ DirectShow video effects and audio filters with video mixer, chroma key, deinterlacing, and noise reduction for Windows applications.
-- [Video Encryption SDK Code Examples in C#, C++, and Delphi](https://www.visioforge.com/help/docs/directshow/video-encryption-sdk/examples/): Code examples for video encryption and decryption with DirectShow filters in C++, C#, and Delphi using password and binary keys.
-- [DirectShow Advanced Video Encryption SDK for Developers](https://www.visioforge.com/help/docs/directshow/video-encryption-sdk/): DirectShow video encryption SDK with AES-256 for H.264/AAC MP4 files, GPU acceleration, and complete API for C++, C#, and Delphi.
-- [Video Encryption SDK Interface Reference - AES-256](https://www.visioforge.com/help/docs/directshow/video-encryption-sdk/interface-reference/): Video Encryption SDK API with IVFCryptoConfig, IVFPasswordProvider, and helper methods for C++, C#, and Delphi with AES-256.
-- [Virtual Camera SDK DirectShow Filter Code Examples](https://www.visioforge.com/help/docs/directshow/virtual-camera-sdk/examples/): Virtual Camera SDK code examples for streaming to virtual camera devices and reading from virtual cameras with frame-by-frame rendering.
-- [DirectShow Virtual Camera SDK for Windows Video Streaming](https://www.visioforge.com/help/docs/directshow/virtual-camera-sdk/): Create virtual webcams for Zoom, Teams, Skype, and OBS with DirectShow SDK for streaming any video source with audio support.
+- [Real-Time Video Processing Filters for DirectShow Apps](https://www.visioforge.com/help/docs/directshow/proc-filters/): Add 35+ real-time video effects, multi-source video mixer (2-16 inputs), chroma key, deinterlacing, and noise reduction to Windows apps. VisioForge COM filters.
+- [DirectShow Video Encryption Examples - C#, C++, Delphi](https://www.visioforge.com/help/docs/directshow/video-encryption-sdk/examples/): Encrypt and decrypt MP4 video files using VisioForge DirectShow filters. AES-256 examples with password protection and binary key modes.
+- [AES-256 Video Encryption Using DirectShow COM Filters](https://www.visioforge.com/help/docs/directshow/video-encryption-sdk/): Encrypt H.264/AAC MP4 video with AES-256 using DirectShow filters. VisioForge SDK with password and binary key modes for C++, C#, and Delphi.
+- [IVFCryptoConfig COM Interface - Video Encryption API](https://www.visioforge.com/help/docs/directshow/video-encryption-sdk/interface-reference/): IVFCryptoConfig and IVFPasswordProvider COM interfaces for AES-256 video encryption in DirectShow. Methods, GUIDs, and usage for C++, C#, Delphi.
+- [Virtual Camera DirectShow Examples - C++, C#, VB.NET](https://www.visioforge.com/help/docs/directshow/virtual-camera-sdk/examples/): Stream video to virtual camera devices and capture from them in DirectShow. Code examples for frame rendering, real-time effects, and multi-instance setup.
+- [Virtual Camera DirectShow Filter for Windows Streaming](https://www.visioforge.com/help/docs/directshow/virtual-camera-sdk/): Create virtual webcams recognized by Zoom, Teams, OBS, and browsers. VisioForge DirectShow SDK streams any video source with audio to virtual camera devices.
 - [VLC Source DirectShow Filter Integration Code Examples](https://www.visioforge.com/help/docs/directshow/vlc-source-filter/examples/): Code examples for VLC Source Filter with multi-track audio, subtitles, 360° video, and custom VLC parameters in DirectShow.
-- [VLC Source DirectShow Filter SDK for Media Playback](https://www.visioforge.com/help/docs/directshow/vlc-source-filter/): VLC-powered DirectShow filter for playing 200+ formats, 4K/8K video, RTSP/HLS streams with hardware decoding for media applications.
+- [VLC Source DirectShow Filter - 200+ Formats & Streams](https://www.visioforge.com/help/docs/directshow/vlc-source-filter/): DirectShow source filter powered by libVLC for playing 200+ formats, 4K/8K video, and RTSP/HLS/UDP network streams with hardware decoding. C++, C#, Delphi.
 - [VLC Source DirectShow Filter Full Interface Reference](https://www.visioforge.com/help/docs/directshow/vlc-source-filter/interface-reference/): IVlcSrc family interfaces for multi-track audio, subtitle support, and custom VLC command-line options in DirectShow applications.
 
 ## Documentation - Video Fingerprinting SDK
 
-- [Video Fingerprinting SDK Changelog and Version History](https://www.visioforge.com/help/docs/vfp/changelog/): Track Video Fingerprinting SDK evolution through detailed version history with new features, performance updates, and technical improvements.
+- [Video Fingerprinting SDK Changelog and Version History](https://www.visioforge.com/help/docs/vfp/changelog/): Track VisioForge Video Fingerprinting SDK updates with new features, performance improvements, and API changes across .NET and C++ releases.
 - [Video Fingerprinting C++ API for Search and Comparison](https://www.visioforge.com/help/docs/vfp/cpp/api/): Complete API documentation for VisioForge Video Fingerprinting SDK C++ to generate, compare, and search video fingerprints with examples.
-- [Video Fingerprint Storage in C++ with SQLite and PostgreSQL](https://www.visioforge.com/help/docs/vfp/cpp/database-integration/): Integrate Video Fingerprinting SDK C++ with databases for storing and retrieving fingerprints including SQLite and PostgreSQL examples.
-- [Video Fingerprinting C++ SDK - Installation and Setup Guide](https://www.visioforge.com/help/docs/vfp/cpp/getting-started/): Install and configure Video Fingerprinting SDK C++ with Visual Studio setup, project configuration, and step-by-step implementation guide.
+- [Video Fingerprint Storage in C++ with SQLite and PostgreSQL](https://www.visioforge.com/help/docs/vfp/cpp/database-integration/): Store and query video fingerprints in SQLite and PostgreSQL using VisioForge C++ SDK with schema examples and indexing strategies.
+- [Video Fingerprinting C++ SDK - Installation and Setup Guide](https://www.visioforge.com/help/docs/vfp/cpp/getting-started/): Install and configure VisioForge Video Fingerprinting SDK for C++ with Visual Studio setup, NuGet packages, and your first fingerprint app.
 - [C++ Video Fingerprinting Library and API Documentation](https://www.visioforge.com/help/docs/vfp/cpp/): Native C++ implementation of Video Fingerprinting SDK with high performance and cross-platform support for robust video fingerprints.
 - [Video Fingerprinting SDK C++ Code Samples and Examples](https://www.visioforge.com/help/docs/vfp/cpp/samples/): Native C++ code examples and command-line samples for video fingerprint generation, comparison, and search with VisioForge SDK implementation.
 - [Video Fingerprinting .NET API - Generate, Compare, Search](https://www.visioforge.com/help/docs/vfp/dotnet/api/): Complete API documentation for VisioForge Video Fingerprinting SDK to generate, compare, and search video fingerprints with code examples.
-- [Cloud Video Fingerprinting with Azure, AWS, and MongoDB](https://www.visioforge.com/help/docs/vfp/dotnet/cloud-integration/): Comprehensive guide for implementing cloud-based video fingerprinting with Azure and AWS using distributed processing and serverless.
-- [Video Fingerprint Storage in MongoDB, SQL Server, PostgreSQL](https://www.visioforge.com/help/docs/vfp/dotnet/database-integration/): Complete guide for integrating video fingerprints with MongoDB, SQL Server, PostgreSQL with schemas, indexing, and optimization.
+- [Cloud Video Fingerprinting with Azure, AWS, and MongoDB](https://www.visioforge.com/help/docs/vfp/dotnet/cloud-integration/): Deploy VisioForge video fingerprinting on Azure and AWS with MongoDB storage, distributed processing, and serverless architecture patterns.
+- [Video Fingerprint Storage in MongoDB, SQL Server, PostgreSQL](https://www.visioforge.com/help/docs/vfp/dotnet/database-integration/): Integrate VisioForge video fingerprints with MongoDB, SQL Server, and PostgreSQL using optimized schemas, indexing, and batch operations.
 - [Getting Started with Video Fingerprinting SDK .NET](https://www.visioforge.com/help/docs/vfp/dotnet/getting-started/): Complete installation and setup guide for VisioForge Video Fingerprinting SDK with configuration, licenses, and step-by-step instructions.
-- [Real-Time Video Fingerprinting From Live Streams in .NET](https://www.visioforge.com/help/docs/vfp/dotnet/real-time-processing/): Process live video streams and generate fingerprints in real-time using fragment-based processing with the VisioForge Video Fingerprinting SDK.
-- [Video Fingerprinting SDK Samples for .NET Developers](https://www.visioforge.com/help/docs/vfp/dotnet/samples/): Comprehensive code examples and sample applications demonstrating video fingerprinting, duplicate detection, and fragment search with SDK.
+- [Real-Time Video Fingerprinting From Live Streams in .NET](https://www.visioforge.com/help/docs/vfp/dotnet/real-time-processing/): Fingerprint live video streams in real-time using VisioForge SDK with fragment-based processing, camera capture, and IP stream monitoring in .NET.
+- [Video Fingerprinting SDK Samples for .NET Developers](https://www.visioforge.com/help/docs/vfp/dotnet/samples/): Ready-to-run VisioForge sample apps for video fingerprinting in .NET — duplicate scanning, fragment search, media monitoring, and CLI tools.
 - [FAQ](https://www.visioforge.com/help/docs/vfp/faq/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
 - [Fingerprint Types](https://www.visioforge.com/help/docs/vfp/fingerprint-types/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-- [Video Fingerprinting SDK - Detect and Match Video Content](https://www.visioforge.com/help/docs/vfp/): Implement video identification algorithms with SDK to detect duplicates, identify fragments, and match transformed videos on multiple platforms.
+- [Video Fingerprinting SDK - Detect and Match Video Content](https://www.visioforge.com/help/docs/vfp/): Detect pirated content, find duplicates, and match transformed videos across platforms with VisioForge Video Fingerprinting SDK for .NET and C++.
 - [System Requirements](https://www.visioforge.com/help/docs/vfp/system-requirements/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
 - [Understanding Video Fingerprinting](https://www.visioforge.com/help/docs/vfp/understanding-video-fingerprinting/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
 - [Use Cases](https://www.visioforge.com/help/docs/vfp/use-cases/): Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
 
-## Website
+## Comparisons
 
-- [VisioForge — Video Capture, Edit & Playback SDKs for .NET](https://www.visioforge.com)
-- [Pricing & Licenses for .NET Video SDKs — VisioForge](https://www.visioforge.com/buy)
-- [Video Capture SDK .NET — Webcam, Screen & IP Camera C#](https://www.visioforge.com/video-capture-sdk-net)
-- [Media Player SDK .NET — Embed Video Playback in C# Apps](https://www.visioforge.com/media-player-sdk-net)
-- [Media Blocks SDK .NET — Build Video Pipelines in C#](https://www.visioforge.com/media-blocks-sdk-net)
-- [Virtual Camera SDK — Create Virtual Webcam & Mic for Windows](https://www.visioforge.com/virtual-camera-sdk)
-- [VLC Source DirectShow Filter - Universal player - VisioForge](https://www.visioforge.com/vlc-source-directshow-filter)
-- [FFmpeg Source DirectShow Filter — Universal Media Decoder](https://www.visioforge.com/ffmpeg-source-directshow-filter)
-- [Privacy Policy — Usage Statistics & Tracking | VisioForge](https://www.visioforge.com/privacy-policy)
-- [Terms & Conditions — Products & Services | VisioForge](https://www.visioforge.com/terms-and-conditions)
-- [Refund Policy for Products & Services | VisioForge](https://www.visioforge.com/refund-policy)
-- [Cookie Policy (EU) — Privacy & Data Controls | VisioForge](https://www.visioforge.com/cookie-policy-eu)
-- [About VisioForge — Video & Audio SDKs for .NET & Delphi](https://www.visioforge.com/about)
-- [Legal Information — Privacy, Terms & Refund | VisioForge](https://www.visioforge.com/legal-information)
-- [Support Service Level Agreement (SLA) - VisioForge](https://www.visioforge.com/support-service-level-agreement-sla)
+- [Compare VisioForge SDKs — Find the Right .NET Video SDK](https://www.visioforge.com/compare/landing)
+- [Media Blocks SDK vs FFmpeg — .NET Pipeline Comparison](https://www.visioforge.com/compare/media-blocks-vs-ffmpeg)
+- [Media Blocks SDK vs LEADTOOLS — .NET Pipeline Comparison](https://www.visioforge.com/compare/media-blocks-vs-leadtools)
+- [Media Blocks SDK vs LibVLCSharp — .NET Pipeline Comparison](https://www.visioforge.com/compare/media-blocks-vs-libvlcsharp)
+- [Media Blocks SDK vs MFormats — .NET Pipeline Comparison](https://www.visioforge.com/compare/media-blocks-vs-mformats)
+- [Media Blocks vs Ozeki Camera SDK — .NET Comparison](https://www.visioforge.com/compare/media-blocks-vs-ozeki-camera-sdk)
+- [Media Blocks SDK vs TVideoGrabber — .NET Comparison](https://www.visioforge.com/compare/media-blocks-vs-tvideograbber)
+- [Media Player SDK vs FFmpeg — .NET Playback Comparison](https://www.visioforge.com/compare/media-player-vs-ffmpeg)
+- [Media Player SDK vs LEADTOOLS — .NET Playback Comparison](https://www.visioforge.com/compare/media-player-vs-leadtools)
+- [Media Player SDK vs LibVLCSharp — .NET Playback Comparison](https://www.visioforge.com/compare/media-player-vs-libvlcsharp)
+- [Media Player SDK vs MFormats — .NET Playback Comparison](https://www.visioforge.com/compare/media-player-vs-mformats)
+- [Media Player SDK vs TVideoGrabber — .NET Comparison](https://www.visioforge.com/compare/media-player-vs-tvideograbber)
+- [Media Player SDK vs Viscomsoft — .NET Playback Comparison](https://www.visioforge.com/compare/media-player-vs-viscomsoft)
+- [Accord.NET Migration Guide — Move to VisioForge SDK](https://www.visioforge.com/compare/migrate-from-accord-net)
+- [AForge.NET Migration Guide — Move to VisioForge SDK](https://www.visioforge.com/compare/migrate-from-aforge-net)
+- [DirectShow.NET Migration Guide — Move to VisioForge SDK](https://www.visioforge.com/compare/migrate-from-directshow-net)
+- [Video Capture SDK vs FFmpeg — .NET Capture Comparison](https://www.visioforge.com/compare/video-capture-vs-ffmpeg)
+- [Video Capture SDK vs LEADTOOLS — .NET Capture Comparison](https://www.visioforge.com/compare/video-capture-vs-leadtools)
+- [Video Capture SDK vs LibVLCSharp — .NET Comparison](https://www.visioforge.com/compare/video-capture-vs-libvlcsharp)
+- [Video Capture SDK vs MFormats — .NET Capture Comparison](https://www.visioforge.com/compare/video-capture-vs-mformats)
+- [Video Capture SDK vs Ozeki Camera SDK — .NET Comparison](https://www.visioforge.com/compare/video-capture-vs-ozeki-camera-sdk)
+- [Video Capture SDK vs TVideoGrabber — .NET Comparison](https://www.visioforge.com/compare/video-capture-vs-tvideograbber)
+- [Video Capture SDK vs Viscomsoft — .NET Capture Comparison](https://www.visioforge.com/compare/video-capture-vs-viscomsoft)
+- [Video Edit SDK vs FFmpeg — .NET Editing Comparison](https://www.visioforge.com/compare/video-edit-vs-ffmpeg)
+- [Video Edit SDK vs LEADTOOLS — .NET Editing Comparison](https://www.visioforge.com/compare/video-edit-vs-leadtools)
+- [Video Edit SDK vs MFormats — .NET Editing Comparison](https://www.visioforge.com/compare/video-edit-vs-mformats)
+- [Video Edit SDK vs Viscomsoft — .NET Editing Comparison](https://www.visioforge.com/compare/video-edit-vs-viscomsoft)
 
 ## Support & Resources
 

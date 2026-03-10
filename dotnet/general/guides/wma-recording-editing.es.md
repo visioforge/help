@@ -1,6 +1,6 @@
 ---
-title: Grabar y Editar Archivos WMA en C# y .NET Completo
-description: Grabe audio WMA desde el micrófono y edite archivos WMA en .NET con las clases VideoCaptureCoreX y VideoEditCoreX para captura y edición de Windows Media Audio.
+title: Grabación y Edición de Audio WMA en .NET SDK con C#
+description: Grabe audio WMA desde micrófono y edite archivos WMA en .NET con las clases VideoCaptureCoreX y VideoEditCoreX para captura y edición de Windows Media Audio.
 ---
 
 # Grabar y Editar Archivos WMA en C# y .NET: Una Guía Completa

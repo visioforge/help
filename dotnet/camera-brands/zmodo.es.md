@@ -18,7 +18,7 @@ description: Conecte cámaras Zmodo en C# .NET con patrones de URL RTSP y ejempl
 - **Puerto RTSP predeterminado:** 10554 (cámaras Wi-Fi), 554 (modelos estándar/DVR)
 - **Credenciales predeterminadas:** admin / admin o admin / (contraseña vacía)
 - **Soporte ONVIF:** Limitado (solo algunos modelos más nuevos de la serie ZP PoE)
-- **Códecs de video:** H.264, MPEG-4 (DVR legacy)
+- **Códecs de vídeo:** H.264, MPEG-4 (DVR legacy)
 
 !!! warning "Cámaras Zmodo Zink"
     Las cámaras Zmodo que usan el protocolo propietario **Zink** **no** soportan RTSP en absoluto. Estas cámaras solo pueden accederse a través de la app Zmodo. Verifique las especificaciones de su cámara antes de intentar conexiones RTSP.

@@ -1,6 +1,6 @@
 ---
-title: Creating Dynamic Picture-in-Picture Videos in .NET
-description: Implement Picture-in-Picture, side-by-side videos, and custom video layouts in C# with complete code samples for overlay positioning.
+title: Picture-in-Picture and Split-Screen Layout in C# .NET
+description: Create PiP, side-by-side, and custom video layouts with VisioForge Video Edit SDK .NET. Overlay positioning and split-screen composition in C#.
 ---
 
 # Creating Picture-in-Picture and Split-Screen Videos in .NET

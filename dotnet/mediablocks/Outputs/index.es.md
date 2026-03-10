@@ -1,6 +1,6 @@
 ---
-title: Salida a MP4, AVI, MKV, WebM y RTMP en Media Blocks SDK .Net
-description: Escriba medios a archivos y flujos de red con bloques de sumidero de salida completos para MP4, MKV, RTMP, HLS y más en Media Blocks SDK.
+title: Bloques de Salida en C# .NET - MP4, MKV, WebM, RTMP
+description: Guarde video a MP4, AVI, MKV, WebM o transmita vía RTMP y HLS con los bloques de salida de VisioForge Media Blocks SDK y ejemplos en C#.
 sidebar_label: Salidas
 ---
 

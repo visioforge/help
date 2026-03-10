@@ -1,6 +1,6 @@
 ---
-title: Build Media Processing Pipelines with Media Blocks SDK
-description: Create media pipelines for playback, recording, and streaming with modular blocks, connections, and resource management in Media Blocks SDK.
+title: Media Pipeline Architecture and Block Connections in C# .NET
+description: Create media pipelines for playback, recording, and streaming with modular blocks and resource management in VisioForge Media Blocks SDK.
 ---
 
 # Media Blocks Pipeline: Core Functionality

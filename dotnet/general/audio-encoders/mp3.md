@@ -1,6 +1,6 @@
 ---
-title: MP3 Audio Encoding: Record, Capture and Edit in C#
-description: Record, capture, and edit MP3 audio in C# with VisioForge .NET SDK using LAME encoder for high-quality audio processing.
+title: MP3 Encoding with LAME - CBR, ABR, and VBR in C# .NET
+description: LAME encoder with CBR, ABR, and quality-based VBR modes. Joint stereo, voice optimization, bitrate 8-320 kbps. VisioForge SDK capture and editing examples.
 ---
 
 # Mastering MP3 Audio: Record, Capture & Edit in C# and .NET

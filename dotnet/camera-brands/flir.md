@@ -1,6 +1,6 @@
 ---
 title: FLIR IP Camera RTSP Connection Guide in C# .NET SDK
-description: Connect to FLIR (Teledyne FLIR) cameras in C# .NET with RTSP URL patterns and code samples for Quasar, Saros, Elara thermal, and CF/CM models.
+description: FLIR Quasar, Saros, and Elara thermal camera RTSP URL patterns for C# .NET. Teledyne FLIR integration with VisioForge Video Capture SDK code.
 ---
 
 # How to Connect to FLIR IP Camera in C# .NET

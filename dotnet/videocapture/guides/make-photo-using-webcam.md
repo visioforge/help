@@ -1,6 +1,6 @@
 ---
 title: Capturing Photos Using Webcam in .NET Applications
-description: Implement webcam photo capture in .NET with step-by-step tutorials, still frame capture, and image saving techniques for integration.
+description: Take photos from a webcam in C# using VisioForge Video Capture SDK. Still frame capture, software-triggered snapshots, and image saving to JPEG/PNG/BMP.
 ---
 
 # Capturing Photos Using Webcam in .NET Applications

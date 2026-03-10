@@ -1,6 +1,6 @@
 ---
-title: Advanced Computer Vision for .NET Video Processing
-description: Implement face detection, object recognition, vehicle counting, and pedestrian tracking in .NET with SDK integration and C# examples.
+title: Computer Vision - Object and Face Detection in C# .NET
+description: Add face detection, object recognition, vehicle counting, and pedestrian tracking to live video with VisioForge Video Capture SDK. C# code examples included.
 sidebar_label: Computer Vision
 order: 3
 

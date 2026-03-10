@@ -1,6 +1,6 @@
 ---
-title: UDP Streaming de video y audio en .NET con VisioForge SDK
-description: Transmita video con el protocolo UDP para transmisiones de baja latencia, vigilancia y transmisión multicast con sobrecarga mínima en aplicaciones .NET.
+title: Streaming UDP con Contenedor MPEG-TS y H.264 en C# .NET
+description: Modos unicast y multicast con codificación H.264/H.265. Pipeline FFmpeg, ajuste de buffer e intervalos de keyframe. Ejemplos con VisioForge SDK.
 ---
 
 # Transmisión UDP con SDK de VisioForge

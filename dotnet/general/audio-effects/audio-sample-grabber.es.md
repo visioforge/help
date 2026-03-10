@@ -1,6 +1,6 @@
 ---
-title: Audio Sample Grabber .NET: capturar audio en tiempo real
-description: Captura y procesa fotogramas de audio en tiempo real usando Audio Sample Grabber con motores X y motores Clásicos en aplicaciones SDK .NET.
+title: Audio Sample Grabber para .NET - Capturar Frames de Audio
+description: Capture y procese frames de audio en tiempo real usando Audio Sample Grabber con motores X-engines y Classic en aplicaciones SDK .NET.
 ---
 
 # Trabajar con Audio Sample Grabber en SDKs .NET

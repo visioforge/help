@@ -1,6 +1,6 @@
 ---
 title: CP Plus IP Camera RTSP URL and C# .NET Connection Guide
-description: Connect to CP Plus cameras in C# .NET with RTSP URL patterns and code samples for UNC, NC, RNP, Guard+, and Cosmic series models.
+description: CP Plus UNC, NC, RNP, Guard+, and Cosmic series RTSP URL patterns for C# .NET. Integrate with VisioForge SDK for IP camera streaming and recording.
 ---
 
 # How to Connect to CP Plus IP Camera in C# .NET

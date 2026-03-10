@@ -1,6 +1,6 @@
 ---
-title: Superponer imágenes en video con OnVideoFrameBuffer .NET
-description: Superpón imágenes en frames de video con OnVideoFrameBuffer para marcas de agua, logos y elementos visuales en aplicaciones de video .NET.
+title: Superponer Imagen en Video con OnVideoFrameBuffer en .NET
+description: Superponga imágenes en frames de video con el evento OnVideoFrameBuffer para marcas de agua, logos y elementos visuales en aplicaciones de video .NET.
 ---
 
 # Dibujo de Imágenes con OnVideoFrameBuffer en .NET

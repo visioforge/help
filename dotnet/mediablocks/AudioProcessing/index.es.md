@@ -1,24 +1,24 @@
 ---
-title: Procesamiento de Audio y Efectos en .NET - Media Blocks SDK
-description: Cree pipelines de audio con conversores, resamplers, mezcladores, ecualizadores y efectos para procesamiento de audio profesional en aplicaciones .NET.
-
+title: Procesamiento de Audio en C# .NET - Mezclador, EQ, Efectos
+description: Pipelines de audio en C# con VisioForge Media Blocks SDK: mezclador, ecualizador, reverberación, reducción de ruido y más de 30 bloques.
+sidebar_label: Procesamiento y Efectos de Audio
 ---
 
-# Bloques de procesamiento y efectos de audio
+# Bloques de Procesamiento y Efectos de Audio para .NET
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-VisioForge Media Blocks SDK .Net incluye un conjunto de bloques de procesamiento y efectos de audio que le permiten crear pipelines de procesamiento de audio para sus aplicaciones.
+VisioForge Media Blocks SDK proporciona un enfoque basado en pipelines para el procesamiento de audio en C# y .NET. Conecte bloques de audio — conversores, remuestreadores, mezcladores, ecualizadores, efectos y analizadores — para construir cadenas de procesamiento de audio en tiempo real para sus aplicaciones. Cada bloque tiene pines de entrada/salida tipados que se conectan entre sí usando `pipeline.Connect()`.
 
-Los bloques pueden conectarse entre sí para crear un pipeline de procesamiento.
+Para obtener información detallada sobre los parámetros y propiedades de los efectos de audio, consulte la [Referencia de Efectos de Audio](../../general/audio-effects/reference.md).
 
-La mayoría de los bloques están disponibles para todas las plataformas, incluyendo Windows, Linux, MacOS, Android e iOS.
+Todos los bloques son multiplataforma y funcionan en Windows, macOS, Linux, iOS y Android.
 
 ## Procesamiento Básico de Audio
 
-### Conversor de Audio
+### Audio Converter
 
-El bloque conversor de audio convierte audio de un formato a otro.
+El bloque Audio Converter convierte audio de un formato a otro.
 
 #### Información del bloque
 
@@ -28,6 +28,12 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Sin parámetros configurables. Negocia y convierte automáticamente los formatos de audio entre los elementos conectados.
+
+**Elemento GStreamer**: `audioconvert`
 
 #### Pipeline de ejemplo
 
@@ -58,9 +64,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Resampler de Audio
+### Audio Resampler
 
-El bloque resampler de audio cambia la tasa de muestreo de un flujo de audio.
+El bloque Audio Resampler cambia la tasa de muestreo de un flujo de audio.
 
 #### Información del bloque
 
@@ -70,6 +76,20 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `AudioResamplerSettings`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Format` | `AudioFormatX` | `S16LE` | Formato de muestra de audio de destino |
+| `SampleRate` | `int` | `44100` | Tasa de muestreo de destino en Hz |
+| `Channels` | `int` | `2` | Número de canales de audio de destino |
+| `Quality` | `int` | `4` | Calidad de remuestreo (0 = más baja, 10 = mejor) |
+| `ResampleMethod` | `AudioResamplerMethod` | `Kaiser` | Algoritmo de remuestreo: `Nearest`, `Linear`, `Cubic`, `BlackmanNuttall`, `Kaiser` |
+
+**Elemento GStreamer**: `audioresample`
 
 #### Pipeline de ejemplo
 
@@ -87,7 +107,7 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Remuestrear a 48000 Hz, estéreo
+// Resample to 48000 Hz, stereo
 var settings = new AudioResamplerSettings(AudioFormatX.S16LE, 48000, 2);
 var audioResampler = new AudioResamplerBlock(settings);
 pipeline.Connect(fileSource.AudioOutput, audioResampler.Input);
@@ -102,9 +122,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Corrector de Marca de Tiempo de Audio
+### Audio Timestamp Corrector
 
-El bloque corrector de marca de tiempo de audio puede agregar o eliminar frames para corregir el flujo de entrada de fuentes inestables.
+El bloque Audio Timestamp Corrector puede agregar o eliminar cuadros para corregir el flujo de entrada de fuentes inestables.
 
 #### Información del bloque
 
@@ -114,6 +134,18 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `AudioTimestampCorrectorSettings`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Silent` | `bool` | `true` | Suprime las señales de notificación para cuadros descartados y duplicados |
+| `SkipToFirst` | `bool` | `false` | No produce búferes antes de que se reciba el primero |
+| `Tolerance` | `TimeSpan` | `40 ms` | Diferencia mínima de marca de tiempo antes de que se agreguen o descarten muestras |
+
+**Elemento GStreamer**: `audiorate`
 
 #### Pipeline de ejemplo
 
@@ -145,9 +177,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Volumen
+### Volume
 
-El bloque de volumen le permite controlar el volumen del flujo de audio.
+El bloque Volume le permite controlar el volumen del flujo de audio.
 
 #### Información del bloque
 
@@ -157,6 +189,15 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Level` | `double` | `1.0` | Multiplicador del nivel de volumen (0.0 = silencio, 1.0 = original, valores > 1.0 amplifican) |
+| `Mute` | `bool` | `false` | Silencia el flujo de audio sin cambiar el nivel de volumen |
+
+**Elemento GStreamer**: `volume`
 
 #### Pipeline de ejemplo
 
@@ -174,7 +215,7 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Volumen: 0.0 (silencio) a 1.0 (normal) o mayor (amplificación)
+// Volume: 0.0 (silence) to 1.0 (normal) or higher (amplification)
 var volume = new VolumeBlock(0.8);
 pipeline.Connect(fileSource.AudioOutput, volume.Input);
 
@@ -190,11 +231,11 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Mezclador de audio
 
-El bloque mezclador de audio mezcla múltiples flujos de audio en uno. El bloque mezcla los flujos independientemente de su formato, convirtiendo si es necesario.
+El bloque mezclador de audio mezcla múltiples flujos de audio en uno solo. El bloque mezcla los flujos independientemente de su formato, convirtiendo si es necesario.
 
-Todos los flujos de entrada serán sincronizados. El bloque mezclador maneja la conversión de diferentes formatos de audio de entrada a un formato común para mezclar. Por defecto, intentará coincidir con el formato de la primera entrada conectada, pero esto puede configurarse explícitamente.
+Todos los flujos de entrada serán sincronizados. El bloque mezclador maneja la conversión de diferentes formatos de audio de entrada a un formato común para la mezcla. Por defecto, intentará coincidir con el formato de la primera entrada conectada, pero esto puede configurarse explícitamente.
 
-Use la clase `AudioMixerSettings` para establecer el formato de salida personalizado. Esto es útil si necesita una tasa de muestreo, distribución de canales o formato de audio específico (como S16LE, Float32LE, etc.) para la salida mezclada.
+Use la clase `AudioMixerSettings` para establecer el formato de salida personalizado. Esto es útil si necesita una tasa de muestreo, disposición de canales o formato de audio específico (como S16LE, Float32LE, etc.) para la salida mezclada.
 
 #### Información del bloque
 
@@ -204,6 +245,27 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1 (creado dinámicamente)
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `AudioMixerSettings`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Format` | `AudioInfoX` | `S16LE, 48000 Hz, 2 ch` | Formato de audio de salida (formato de muestra, tasa de muestreo, número de canales) |
+
+**Métodos en tiempo de ejecución:**
+
+| Método | Descripción |
+|--------|-------------|
+| `CreateNewInput()` | Crea un nuevo pad de entrada (antes de iniciar el pipeline) |
+| `CreateNewInputLive()` | Crea un nuevo pad de entrada durante la reproducción |
+| `AddNewInput(MediaBlockPad)` | Conecta una salida de bloque existente como nueva entrada del mezclador durante la reproducción |
+| `RemoveInputLive(MediaBlockPad)` | Elimina un pad de entrada durante la reproducción |
+| `SetVolume(MediaBlockPad, double)` | Establece el volumen para una entrada específica (0.0–10.0) |
+| `SetMute(MediaBlockPad, bool)` | Silencia o activa una entrada específica |
+
+**Elemento GStreamer**: `audiomixer`
 
 #### Pipeline de ejemplo
 
@@ -222,50 +284,50 @@ var pipeline = new MediaBlocksPipeline();
 var audioSource1Block = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
 var audioSource2Block = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
 
-// Configurar el mezclador con configuraciones de salida específicas si es necesario
-// Por ejemplo, para salida de audio 48kHz, 2 canales, S16LE:
+// Configure the mixer with specific output settings if needed
+// For example, to output 48kHz, 2-channel, S16LE audio:
 // var mixerSettings = new AudioMixerSettings() { Format = new AudioInfoX(AudioFormatX.S16LE, 48000, 2) };
 // var audioMixerBlock = new AudioMixerBlock(mixerSettings);
 var audioMixerBlock = new AudioMixerBlock(new AudioMixerSettings());
 
-// Cada llamada a CreateNewInput() agrega una nueva entrada al mezclador
+// Each call to CreateNewInput() adds a new input to the mixer
 var inputPad1 = audioMixerBlock.CreateNewInput();
 pipeline.Connect(audioSource1Block.Output, inputPad1);
 
 var inputPad2 = audioMixerBlock.CreateNewInput();
 pipeline.Connect(audioSource2Block.Output, inputPad2);
 
-// Enviar el audio mezclado al renderizador de audio predeterminado
+// Output the mixed audio to the default audio renderer
 var audioRenderer = new AudioRendererBlock();
 pipeline.Connect(audioMixerBlock.Output, audioRenderer.Input);
 
 await pipeline.StartAsync();
 ```
 
-#### Controlando Flujos de Entrada Individuales
+#### Control de flujos de entrada individuales
 
-Puede controlar el volumen y el estado de silencio de flujos de entrada individuales conectados al `AudioMixerBlock`.
-El `streamIndex` para estos métodos corresponde al orden en que las entradas fueron agregadas vía `CreateNewInput()` o `CreateNewInputLive()` (comenzando desde 0).
+Puede controlar el volumen y el estado de silencio de los flujos de entrada individuales conectados al `AudioMixerBlock`.
+El `streamIndex` para estos métodos corresponde al orden en que se agregaron las entradas mediante `CreateNewInput()` o `CreateNewInputLive()` (comenzando desde 0).
 
-* **Establecer Volumen**: Use el método `SetVolume(int streamIndex, double value)`. El `value` va de 0.0 (silencio) a 1.0 (volumen normal), y puede ser mayor para amplificación (ej., hasta 10.0, aunque los detalles pueden depender de los límites de la implementación subyacente).
-* **Establecer Silencio**: Use el método `SetMute(int streamIndex, bool value)`. Establezca `value` en `true` para silenciar el flujo y `false` para reactivarlo.
+* **Establecer volumen**: Use el método `SetVolume(int streamIndex, double value)`. El `value` varía de 0.0 (silencio) a 1.0 (volumen normal), y puede ser mayor para amplificación (por ejemplo, hasta 10.0, aunque los detalles pueden depender de los límites de la implementación subyacente).
+* **Establecer silencio**: Use el método `SetMute(int streamIndex, bool value)`. Establezca `value` en `true` para silenciar el flujo y `false` para activarlo.
 
 ```csharp
-// Asumiendo que audioMixerBlock ya está creado y las entradas están conectadas
+// Assuming audioMixerBlock is already created and inputs are connected
 
-// Establecer volumen del primer flujo de entrada (índice 0) al 50%
+// Set volume of the first input stream (index 0) to 50%
 audioMixerBlock.SetVolume(0, 0.5);
 
-// Silenciar el segundo flujo de entrada (índice 1)
+// Mute the second input stream (index 1)
 audioMixerBlock.SetMute(1, true);
 ```
 
-#### Gestión Dinámica de Entradas (Pipeline en Vivo)
+#### Gestión dinámica de entradas (pipeline en vivo)
 
-El `AudioMixerBlock` soporta agregar y eliminar entradas dinámicamente mientras el pipeline está ejecutándose:
+El `AudioMixerBlock` soporta agregar y eliminar entradas dinámicamente mientras el pipeline está en ejecución:
 
-* **Agregar Entradas**: Use el método `CreateNewInputLive()` para obtener un nuevo pad de entrada que puede conectarse a una fuente. Los elementos GStreamer subyacentes serán configurados para manejar la nueva entrada.
-* **Eliminar Entradas**: Use el método `RemoveInputLive(MediaBlockPad blockPad)`. Esto desconectará el pad de entrada especificado y limpiará los recursos asociados.
+* **Agregar entradas**: Use el método `CreateNewInputLive()` para obtener un nuevo pad de entrada que puede conectarse a una fuente. Los elementos GStreamer subyacentes se configurarán para manejar la nueva entrada.
+* **Eliminar entradas**: Use el método `RemoveInputLive(MediaBlockPad blockPad)`. Esto desconectará el pad de entrada especificado y limpiará los recursos asociados.
 
 Esto es particularmente útil para aplicaciones donde el número de fuentes de audio puede cambiar durante la operación, como una consola de mezcla en vivo o una aplicación de conferencias.
 
@@ -286,6 +348,16 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
 
+#### Configuración
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `format` (constructor) | `AudioFormatX` | `S16LE` | Formato de muestra de audio para cuadros capturados |
+
+| Evento | Tipo de Args | Descripción |
+|-------|-----------|-------------|
+| `OnAudioFrameBuffer` | `AudioFrameBufferEventArgs` | Se dispara para cada cuadro de audio capturado con datos de audio sin procesar, tasa de muestreo, canales y marca de tiempo |
+
 #### Pipeline de ejemplo
 
 ```mermaid
@@ -305,9 +377,9 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 var audioSampleGrabber = new AudioSampleGrabberBlock();
 audioSampleGrabber.SampleGrabbed += (sender, args) =>
 {
-    // Procesar muestras de audio
-    // args.AudioData - muestras de audio
-    // args.AudioFormat - formato de audio
+    // Process audio samples
+    // args.AudioData - audio samples
+    // args.AudioFormat - audio format
 };
 pipeline.Connect(fileSource.AudioOutput, audioSampleGrabber.Input);
 
@@ -323,11 +395,11 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Efectos de Audio
 
-### Amplificar
+### Amplify
 
-El bloque amplifica un flujo de audio por un factor de amplificación. Varios modos de recorte están disponibles.
+El bloque amplifica un flujo de audio por un factor de amplificación. Hay varios modos de recorte disponibles.
 
-Use valores de método y nivel para configurar.
+Use los valores de método y nivel para configurar.
 
 #### Información del bloque
 
@@ -337,6 +409,24 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Level` | `double` | `1.0` | Multiplicador de amplificación (1.0 = sin cambio, 2.0 = doble volumen, 0.5 = mitad de volumen) |
+| `Method` | `AmplifyClippingMethod` | `Normal` | Método de recorte cuando el audio amplificado excede el rango válido |
+
+Valores de `AmplifyClippingMethod`:
+
+| Valor | Descripción |
+|-------|-------------|
+| `Normal` | Recorte duro en el nivel máximo |
+| `WrapNegative` | Empuja los valores sobreexcitados de regreso desde el lado opuesto |
+| `WrapPositive` | Empuja los valores sobreexcitados de regreso desde el mismo lado |
+| `NoClip` | Sin recorte aplicado |
+
+**Elemento GStreamer**: `audioamplify`
 
 #### Pipeline de ejemplo
 
@@ -367,9 +457,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Eco
+### Echo
 
-El bloque de eco agrega efecto de eco al flujo de audio.
+El bloque Echo agrega efecto de eco al flujo de audio.
 
 #### Información del bloque
 
@@ -379,6 +469,17 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Delay` | `TimeSpan` | `200 ms` | Tiempo de retardo del eco entre la señal original y sus repeticiones |
+| `MaxDelay` | `TimeSpan` | `500 ms` | Retardo máximo del eco (determina el tamaño del búfer interno). Debe ser >= `Delay` |
+| `Intensity` | `float` | `0` | Volumen de la señal retardada (0.0 = sin eco, 1.0 = volumen completo) |
+| `Feedback` | `float` | `0` | Cantidad de retroalimentación para repeticiones del eco (0.0 = eco único, valores cercanos a 1.0 = retroalimentación infinita) |
+
+**Elemento GStreamer**: `audioecho`
 
 #### Pipeline de ejemplo
 
@@ -396,7 +497,7 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Retardo en ms, intensidad 0.0 - 1.0
+// Delay in ms, strength 0.0 - 1.0
 var echo = new EchoBlock(500, 0.5);
 pipeline.Connect(fileSource.AudioOutput, echo.Input);
 
@@ -412,7 +513,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Karaoke
 
-El bloque de karaoke aplica un efecto de karaoke al flujo de audio, eliminando las voces centradas.
+El bloque Karaoke aplica un efecto de karaoke al flujo de audio, eliminando las voces con panorámica central.
 
 #### Información del bloque
 
@@ -422,6 +523,19 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `KaraokeAudioEffect`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Level` | `float` | `1.0` | Intensidad de supresión vocal (0.0 = sin efecto, 1.0 = supresión máxima) |
+| `MonoLevel` | `float` | `1.0` | Nivel de supresión para contenido mono/canal central (0.0–1.0) |
+| `FilterBand` | `float` | `220` | Frecuencia central de la banda de filtro en Hz dirigida al rango vocal |
+| `FilterWidth` | `float` | `100` | Ancho de la banda de frecuencia a procesar en Hz |
+
+**Elemento GStreamer**: `audiokaraoke`
 
 #### Pipeline de ejemplo
 
@@ -455,7 +569,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Reverberación
 
-El bloque de reverberación agrega efectos de reverb al flujo de audio.
+El bloque de reverberación agrega efectos de reverberación al flujo de audio.
 
 #### Información del bloque
 
@@ -465,6 +579,19 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `ReverberationAudioEffect`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `RoomSize` | `float` | `0.5` | Tamaño de la habitación simulada (0.0 = habitación pequeña, 1.0 = sala grande) |
+| `Damping` | `float` | `0.2` | Amortiguación de alta frecuencia (0.0 = brillante, 1.0 = oscuro/amortiguado) |
+| `Width` | `float` | `1.0` | Ancho estéreo de la reverberación (0.0 = mono, 1.0 = estéreo completo) |
+| `Level` | `float` | `0.5` | Nivel de mezcla húmedo/seco (0.0 = solo seco, 1.0 = solo húmedo) |
+
+**Elemento GStreamer**: `freeverb`
 
 #### Pipeline de ejemplo
 
@@ -496,9 +623,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Estéreo Amplio
+### Wide Stereo
 
-El bloque de estéreo amplio mejora la imagen estéreo del audio.
+El bloque Wide Stereo mejora la imagen estéreo del audio.
 
 #### Información del bloque
 
@@ -508,6 +635,16 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `WideStereoAudioEffect`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Level` | `float` | `0.01` | Cantidad de ampliación estéreo (0.0 = sin ampliación, valores más altos = imagen estéreo más amplia). Típico: 0.01–0.03 sutil, 0.05–0.10 moderado, 0.15+ fuerte |
+
+**Elemento GStreamer**: `stereo`
 
 #### Pipeline de ejemplo
 
@@ -554,6 +691,14 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
 
+#### Configuración
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Balance` | `float` | `0.0` | Posición del balance estéreo (-1.0 = completamente a la izquierda, 0.0 = centro, +1.0 = completamente a la derecha) |
+
+**Elemento GStreamer**: `audiopanorama`
+
 #### Pipeline de ejemplo
 
 ```mermaid
@@ -570,7 +715,7 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Balance: -1.0 (izquierda completa) a 1.0 (derecha completa), 0.0 - centro
+// Balance: -1.0 (full left) to 1.0 (full right), 0.0 - center
 var balance = new AudioBalanceBlock(0.5);
 pipeline.Connect(fileSource.AudioOutput, balance.Input);
 
@@ -586,7 +731,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Ecualizador (10 bandas)
 
-El bloque ecualizador de 10 bandas proporciona un ecualizador de 10 bandas para procesamiento de audio.
+El bloque de ecualizador de 10 bandas proporciona un ecualizador de 10 bandas para el procesamiento de audio.
 
 #### Información del bloque
 
@@ -596,6 +741,27 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+El ecualizador proporciona 10 bandas de frecuencia fija. Use `SetBand(int index, double gain)` para ajustar bandas individuales. Rango de ganancia: -24 dB a +12 dB.
+
+| Índice de Banda | Frecuencia Central | Ancho de Banda |
+|------------|-----------------|-----------|
+| 0 | 29 Hz | 19 Hz |
+| 1 | 59 Hz | 39 Hz |
+| 2 | 119 Hz | 79 Hz |
+| 3 | 237 Hz | 157 Hz |
+| 4 | 474 Hz | 314 Hz |
+| 5 | 947 Hz | 628 Hz |
+| 6 | 1889 Hz | 1257 Hz |
+| 7 | 3770 Hz | 2511 Hz |
+| 8 | 7523 Hz | 5765 Hz |
+| 9 | 15011 Hz | 11498 Hz |
+
+El constructor acepta 10 valores `double` para las ganancias iniciales de las bandas (en dB), o use `SetBand(int index, double gain)` en tiempo de ejecución.
+
+**Elemento GStreamer**: `equalizer-10bands`
 
 #### Pipeline de ejemplo
 
@@ -613,13 +779,13 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Crear ecualizador de 10 bandas con todas las bandas en 0 dB
+// Create 10-band equalizer with all bands set to 0 dB
 var equalizer = new Equalizer10Block(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-// O establecer bandas individualmente
-equalizer.SetBand(0, 3); // Banda 0 (31 Hz) a +3 dB
-equalizer.SetBand(1, 2); // Banda 1 (62 Hz) a +2 dB
-equalizer.SetBand(9, -3); // Banda 9 (16 kHz) a -3 dB
+// Or set bands individually
+equalizer.SetBand(0, 3); // Band 0 (31 Hz) to +3 dB
+equalizer.SetBand(1, 2); // Band 1 (62 Hz) to +2 dB
+equalizer.SetBand(9, -3); // Band 9 (16 kHz) to -3 dB
 
 pipeline.Connect(fileSource.AudioOutput, equalizer.Input);
 
@@ -635,7 +801,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Ecualizador (Paramétrico)
 
-El bloque ecualizador paramétrico proporciona un ecualizador paramétrico para procesamiento de audio.
+El bloque de ecualizador paramétrico proporciona un ecualizador paramétrico para el procesamiento de audio.
 
 #### Información del bloque
 
@@ -645,6 +811,28 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Use `SetNumBands(int count)` para establecer el número de bandas (1–64, predeterminado 3), luego configure cada banda con `SetState(int index, ParametricEqualizerBand band)`.
+
+Propiedades de `ParametricEqualizerBand`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Frequency` | `float` | varía | Frecuencia central en Hz |
+| `Gain` | `float` | `0.0` | Ganancia de banda en dB (-24 a +12) |
+| `Bandwidth` | `float` | `1.0` | Ancho de banda en Hz |
+
+Bandas predeterminadas (cuando se configuran 3 bandas):
+
+| Banda | Frecuencia | Ancho de Banda |
+|------|-----------|-----------|
+| 0 | 110 Hz | 100 Hz |
+| 1 | 1100 Hz | 1000 Hz |
+| 2 | 11000 Hz | 10000 Hz |
+
+**Elemento GStreamer**: `equalizer-nbands`
 
 #### Pipeline de ejemplo
 
@@ -662,12 +850,12 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Crear ecualizador paramétrico
+// Create parametric equalizer
 var equalizer = new EqualizerParametricBlock();
 
-// Configurar hasta 4 bandas
-equalizer.SetBand(0, 100, 1.0, 3); // Banda 0: frecuencia 100 Hz, Q 1.0, ganancia +3 dB
-equalizer.SetBand(1, 1000, 1.5, -2); // Banda 1: frecuencia 1000 Hz, Q 1.5, ganancia -2 dB
+// Set up to 4 bands
+equalizer.SetBand(0, 100, 1.0, 3); // Band 0: 100 Hz frequency, 1.0 Q, +3 dB gain
+equalizer.SetBand(1, 1000, 1.5, -2); // Band 1: 1000 Hz frequency, 1.5 Q, -2 dB gain
 
 pipeline.Connect(fileSource.AudioOutput, equalizer.Input);
 
@@ -681,9 +869,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Chebyshev Pasa Banda/Rechaza Banda
+### Chebyshev Band Pass/Reject
 
-El bloque Chebyshev pasa banda/rechaza banda aplica un filtro pasa banda o rechaza banda al flujo de audio usando filtros Chebyshev.
+El bloque Chebyshev Band Pass/Reject aplica un filtro pasa banda o rechaza banda al flujo de audio usando filtros de Chebyshev.
 
 #### Información del bloque
 
@@ -693,6 +881,21 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `ChebyshevBandPassRejectAudioEffect`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Mode` | `ChebyshevBandMode` | `BandPass` | Modo de filtro: `BandPass` (pasar frecuencias en rango) o `BandReject` (rechazar frecuencias en rango) |
+| `LowerFrequency` | `float` | `220.0` | Frecuencia de corte inferior en Hz |
+| `UpperFrequency` | `float` | `3000.0` | Frecuencia de corte superior en Hz |
+| `Poles` | `int` | `4` | Número de polos del filtro (2–32, debe ser par). Valores más altos = corte más abrupto |
+| `Type` | `int` | `1` | Tipo de filtro Chebyshev: 1 (rizado en banda de paso) o 2 (rizado en banda de rechazo) |
+| `Ripple` | `float` | `0.25` | Cantidad de rizado en dB (Tipo 1: rizado en banda de paso, Tipo 2: rizado en banda de rechazo) |
+
+**Elemento GStreamer**: `audiochebband`
 
 #### Pipeline de ejemplo
 
@@ -724,9 +927,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Chebyshev Límite
+### Chebyshev Limit
 
-El bloque Chebyshev límite aplica filtrado pasa bajos o pasa altos al audio usando filtros Chebyshev.
+El bloque Chebyshev Limit aplica filtrado de paso bajo o paso alto al audio usando filtros de Chebyshev.
 
 #### Información del bloque
 
@@ -736,6 +939,20 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `ChebyshevLimitAudioEffect`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Mode` | `ChebyshevLimitMode` | `LowPass` | Modo de filtro: `LowPass` (eliminar frecuencias altas) o `HighPass` (eliminar frecuencias bajas) |
+| `CutOffFrequency` | `float` | `1000.0` | Frecuencia de corte en Hz |
+| `Poles` | `int` | `4` | Número de polos del filtro (2–32, debe ser par). Valores más altos = corte más abrupto |
+| `Type` | `int` | `1` | Tipo de filtro Chebyshev: 1 (rizado en banda de paso) o 2 (rizado en banda de rechazo) |
+| `Ripple` | `float` | `0.25` | Cantidad de rizado en dB |
+
+**Elemento GStreamer**: `audiocheblimit`
 
 #### Pipeline de ejemplo
 
@@ -771,7 +988,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Compresor/Expansor
 
-El bloque compresor/expansor proporciona compresión o expansión de rango dinámico.
+El bloque compresor/expansor proporciona compresión o expansión del rango dinámico.
 
 #### Información del bloque
 
@@ -781,6 +998,21 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `CompressorExpanderAudioEffect`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Mode` | `CompressorExpanderMode` | `Compressor` | Modo de procesamiento: `Compressor` (reducir rango dinámico) o `Expander` (aumentar rango dinámico) |
+| `Characteristics` | `CompressorExpanderCharacteristics` | `HardKnee` | Tipo de rodilla: `HardKnee` (transición abrupta) o `SoftKnee` (transición gradual) |
+| `Ratio` | `float` | `1.0` | Relación de compresión/expansión (por ejemplo, 2.0 = compresión 2:1) |
+| `Threshold` | `float` | `0.0` | Nivel de umbral (0.0–1.0). La señal por encima de este nivel se comprime/expande |
+
+El constructor acepta 4 parámetros: `CompressorExpanderBlock(ratio, threshold, mode, characteristics)`.
+
+**Elemento GStreamer**: `audiodynamic`
 
 #### Pipeline de ejemplo
 
@@ -811,9 +1043,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Escala/Tempo
+### Scale/Tempo
 
-El bloque escala/tempo le permite cambiar el tempo y el tono del flujo de audio.
+El bloque Scale/Tempo le permite cambiar el tempo y el tono del flujo de audio.
 
 #### Información del bloque
 
@@ -823,6 +1055,19 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Rate` | `double` | `1.0` | Multiplicador de velocidad de reproducción (0.5 = mitad de velocidad, 1.0 = normal, 2.0 = doble velocidad). Se preserva el tono |
+| `Overlap` | `double` | `0.2` | Porcentaje de stride a superponer (0.0–1.0). Valores más altos mejoran la calidad a costa de CPU |
+| `Search` | `TimeSpan` | `14 ms` | Longitud de la ventana de búsqueda para la mejor posición de superposición |
+| `Stride` | `TimeSpan` | `30 ms` | Longitud del stride de audio de salida |
+
+El constructor acepta un parámetro `double rate` para la velocidad de reproducción inicial. Use `SetRate(double rate)` para cambiar en tiempo de ejecución.
+
+**Elemento GStreamer**: `scaletempo`
 
 #### Pipeline de ejemplo
 
@@ -840,7 +1085,7 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Escalar tempo por factor (1.0 es normal, 0.5 es mitad de velocidad, 2.0 es doble velocidad)
+// Scale tempo by factor (1.0 is normal, 0.5 is half-speed, 2.0 is double-speed)
 var scaleTempo = new ScaleTempoBlock(1.5);
 pipeline.Connect(fileSource.AudioOutput, scaleTempo.Input);
 
@@ -856,9 +1101,9 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Análisis y Medición
 
-### Medidor VU
+### VU Meter
 
-El bloque medidor VU le permite medir el nivel de volumen del flujo de audio.
+El bloque VU Meter le permite medir el nivel de volumen del flujo de audio.
 
 #### Información del bloque
 
@@ -868,6 +1113,19 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Bloque basado en eventos. Suscríbase al evento `VolumeUpdated` para recibir datos de nivel.
+
+Propiedades del evento `VUMeterXData`:
+
+| Propiedad | Tipo | Descripción |
+|----------|------|-------------|
+| `LeftVolume` | `double` | Nivel de volumen del canal izquierdo en dB |
+| `RightVolume` | `double` | Nivel de volumen del canal derecho en dB |
+
+**Elemento GStreamer**: `level`
 
 #### Pipeline de ejemplo
 
@@ -888,13 +1146,13 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 var vuMeter = new VUMeterBlock();
 vuMeter.VolumeUpdated += (sender, args) =>
 {
-    // Volumen del canal izquierdo en dB
+    // Left channel volume in dB
     var leftVolume = args.LeftVolume;
-    
-    // Volumen del canal derecho en dB
+
+    // Right channel volume in dB
     var rightVolume = args.RightVolume;
-    
-    Console.WriteLine($"Izquierdo: {leftVolume:F2} dB, Derecho: {rightVolume:F2} dB");
+
+    Console.WriteLine($"Left: {leftVolume:F2} dB, Right: {rightVolume:F2} dB");
 };
 pipeline.Connect(fileSource.AudioOutput, vuMeter.Input);
 
@@ -910,9 +1168,9 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Efectos de Audio
 
-### Efectos de Audio
+### Audio Effects
 
-El bloque AudioEffects proporciona una colección completa de efectos de procesamiento de audio que pueden aplicarse a flujos de audio.
+El bloque AudioEffects proporciona una colección completa de efectos de procesamiento de audio que pueden aplicarse a flujos de audio. Para obtener información detallada sobre los parámetros y propiedades de los efectos, consulte la [Referencia de Efectos de Audio](../../general/audio-effects/reference.md).
 
 #### Información del bloque
 
@@ -922,6 +1180,19 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Gestión de efectos basada en colección. Use los siguientes métodos:
+
+| Método | Descripción |
+|--------|-------------|
+| `AddOrUpdate(BaseAudioEffect effect)` | Agrega un nuevo efecto o actualiza uno existente del mismo tipo |
+| `Remove<T>()` | Elimina el efecto del tipo especificado |
+| `Clear()` | Elimina todos los efectos |
+| `Get<T>()` | Retorna el efecto del tipo especificado, o null |
+
+Los tipos de efectos soportados incluyen todos los efectos del espacio de nombres `VisioForge.Core.Types.X.AudioEffects`. Consulte la [Referencia de Efectos de Audio](../../general/audio-effects/reference.md) para parámetros detallados.
 
 #### Pipeline de ejemplo
 
@@ -954,7 +1225,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Normalización de Sonoridad de Audio
 
-El bloque AudioLoudNorm normaliza la sonoridad del audio según los estándares EBU R128, asegurando una sonoridad percibida consistente en diferentes contenidos de audio.
+El bloque AudioLoudNorm normaliza la sonoridad del audio según los estándares EBU R128, asegurando una sonoridad percibida consistente entre diferentes contenidos de audio.
 
 #### Información del bloque
 
@@ -964,6 +1235,19 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `AudioLoudNormAudioEffect`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `LoudnessTarget` | `double` | `-24.0` | Sonoridad integrada objetivo en LUFS (-70.0 a -5.0) |
+| `LoudnessRangeTarget` | `double` | `7.0` | Rango de sonoridad objetivo en LU (1.0 a 20.0) |
+| `MaxTruePeak` | `double` | `-2.0` | Pico verdadero máximo en dBTP (-9.0 a 0.0) |
+| `Offset` | `double` | `0.0` | Ganancia de compensación en LU (-99.0 a 99.0) |
+
+**Elemento GStreamer**: `audioloudnorm`
 
 #### Pipeline de ejemplo
 
@@ -996,7 +1280,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Reducción de Ruido RNN
 
-El bloque AudioRNNoise usa reducción de ruido basada en red neuronal recurrente (RNN) para eliminar ruido de fondo de flujos de audio mientras preserva la calidad del habla.
+El bloque AudioRNNoise utiliza reducción de ruido basada en redes neuronales recurrentes (RNN) para eliminar el ruido de fondo de los flujos de audio mientras preserva la calidad del habla.
 
 #### Información del bloque
 
@@ -1006,6 +1290,14 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `VadThreshold` | `float` | `0.0` | Umbral de Detección de Actividad de Voz (0.0–1.0). Cuando > 0, actúa como puerta: el audio por debajo de esta probabilidad de habla se silencia. 0.0 = solo reducción de ruido, sin compuerta |
+
+**Elemento GStreamer**: `audiornnoise`
 
 #### Pipeline de ejemplo
 
@@ -1038,7 +1330,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Eliminar Silencio
 
-El bloque RemoveSilence detecta y elimina automáticamente porciones silenciosas de flujos de audio, útil para podcasts, grabaciones de voz y edición de audio.
+El bloque RemoveSilence detecta y elimina automáticamente las porciones silenciosas de los flujos de audio, útil para podcasts, grabaciones de voz y edición de audio.
 
 #### Información del bloque
 
@@ -1048,6 +1340,17 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `RemoveSilenceAudioEffect`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Threshold` | `double` | `0.05` | Umbral de silencio (0.0–1.0). El audio por debajo de este nivel se considera silencio |
+| `Squash` | `bool` | `true` | Cuando es verdadero, elimina las porciones silenciosas por completo. Cuando es falso, las deja pasar |
+
+**Elemento GStreamer**: `removesilence`
 
 #### Pipeline de ejemplo
 
@@ -1080,7 +1383,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Filtro Csound
 
-El bloque CsoundFilter proporciona síntesis y procesamiento de audio avanzado usando el lenguaje de programación de audio Csound.
+El bloque CsoundFilter proporciona síntesis y procesamiento de audio avanzado utilizando el lenguaje de programación de audio Csound.
 
 #### Información del bloque
 
@@ -1090,6 +1393,19 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `CsoundAudioEffect`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `CsdText` | `string` | `null` | Texto de script CSD de Csound en línea |
+| `Location` | `string` | `null` | Ruta a un archivo .csd externo (alternativa a CsdText) |
+| `Loop` | `bool` | `false` | Si se debe repetir la partitura de Csound |
+| `ScoreOffset` | `double` | `0.0` | Desplazamiento de tiempo de la partitura en segundos |
+
+**Elemento GStreamer**: `csoundfilter`
 
 #### Pipeline de ejemplo
 
@@ -1109,7 +1425,7 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 
 var csoundSettings = new CsoundFilterSettings
 {
-    CsdPath = "filter.csd" // Archivo de script Csound
+    CsdPath = "filter.csd" // Csound script file
 };
 var csound = new CsoundFilterBlock(csoundSettings);
 pipeline.Connect(fileSource.AudioOutput, csound.Input);
@@ -1126,7 +1442,7 @@ Windows, macOS, Linux (requiere Csound).
 
 ### Nivel EBU R128
 
-El bloque EbuR128Level mide la sonoridad del audio según el estándar EBU R128, proporcionando mediciones de sonoridad precisas para cumplimiento de transmisión.
+El bloque EbuR128Level mide la sonoridad del audio según el estándar EBU R128, proporcionando mediciones precisas de sonoridad para cumplimiento de transmisión.
 
 #### Información del bloque
 
@@ -1136,6 +1452,18 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Mode` | `EbuR128Mode` | `All` | Indicadores de modo de medición: `MomentaryLoudness`, `ShortTermLoudness`, `GlobalLoudness`, `LoudnessRange`, `SamplePeak`, `TruePeak`, `All` |
+| `PostMessages` | `bool` | `true` | Si se deben publicar mensajes de bus GStreamer con los resultados de medición |
+| `Interval` | `TimeSpan` | `1 s` | Intervalo entre actualizaciones de medición |
+
+Suscríbase al evento `LoudnessUpdated` para recibir datos de medición.
+
+**Elemento GStreamer**: `ebur128level`
 
 #### Pipeline de ejemplo
 
@@ -1156,8 +1484,8 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 var ebuR128 = new EbuR128LevelBlock();
 ebuR128.LoudnessUpdated += (sender, args) =>
 {
-    Console.WriteLine($"Momentánea: {args.MomentaryLoudness:F2} LUFS");
-    Console.WriteLine($"Corto plazo: {args.ShortTermLoudness:F2} LUFS");
+    Console.WriteLine($"Momentary: {args.MomentaryLoudness:F2} LUFS");
+    Console.WriteLine($"Short-term: {args.ShortTermLoudness:F2} LUFS");
 };
 pipeline.Connect(fileSource.AudioOutput, ebuR128.Input);
 
@@ -1171,7 +1499,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Renderizado HRTF
+### HRTF Render
 
 El bloque HRTFRender aplica procesamiento de Función de Transferencia Relacionada con la Cabeza (HRTF) para crear efectos de audio espacial 3D a partir de audio estéreo o multicanal.
 
@@ -1183,6 +1511,19 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `HrirFile` | `string` | `""` | Ruta al archivo HRIR (Respuesta al Impulso Relacionada con la Cabeza) para renderizado espacial |
+| `InterpolationSteps` | `ulong` | `8` | Número de pasos de interpolación para transiciones espaciales suaves |
+| `BlockLength` | `ulong` | `512` | Longitud del bloque de procesamiento en muestras |
+| `DistanceGain` | `float` | `1.0` | Factor de atenuación de ganancia basado en distancia |
+
+Todas las propiedades soportan actualizaciones en tiempo real durante la reproducción.
+
+**Elemento GStreamer**: `hrtfrender`
 
 #### Pipeline de ejemplo
 
@@ -1202,7 +1543,7 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 
 var hrtfSettings = new HRTFRenderSettings
 {
-    Azimuth = 45.0,  // Dirección en grados
+    Azimuth = 45.0,  // Direction in degrees
     Elevation = 0.0
 };
 var hrtf = new HRTFRenderBlock(hrtfSettings);
@@ -1220,7 +1561,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### RS Audio Echo
 
-El bloque RSAudioEcho proporciona efectos de eco de alta calidad usando el plugin GStreamer rsaudiofx.
+El bloque RSAudioEcho proporciona efectos de eco de alta calidad utilizando el plugin GStreamer rsaudiofx.
 
 #### Información del bloque
 
@@ -1230,6 +1571,19 @@ Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Delay` | `TimeSpan` | `500 ms` | Tiempo de retardo del eco |
+| `MaxDelay` | `TimeSpan` | `1000 ms` | Retardo máximo permitido (debe ser >= Delay) |
+| `Intensity` | `double` | `0.5` | Intensidad del eco (0.0–1.0) |
+| `Feedback` | `double` | `0.0` | Cantidad de retroalimentación -- controla las repeticiones del eco (0.0–1.0) |
+
+Todas las propiedades soportan actualizaciones en tiempo real durante la reproducción.
+
+**Elemento GStreamer**: `rsaudioecho`
 
 #### Pipeline de ejemplo
 
@@ -1249,9 +1603,9 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 
 var echoSettings = new RSAudioEchoSettings
 {
-    Delay = 500,      // Retardo en milisegundos
-    Intensity = 0.5,  // Intensidad del eco (0-1)
-    Feedback = 0.3    // Cantidad de retroalimentación (0-1)
+    Delay = 500,      // Delay in milliseconds
+    Intensity = 0.5,  // Echo intensity (0-1)
+    Feedback = 0.3    // Feedback amount (0-1)
 };
 var rsEcho = new RSAudioEchoBlock(echoSettings);
 pipeline.Connect(fileSource.AudioOutput, rsEcho.Input);
@@ -1264,33 +1618,33 @@ await pipeline.StartAsync();
 
 #### Plataformas
 
-Windows, macOS, Linux (requiere plugin rsaudiofx).
+Windows, macOS, Linux (requiere el plugin rsaudiofx).
 
-### Cambiador de Tono
+### Pitch Shifter
 
-El `PitchBlock` cambia el tono de un flujo de audio sin afectar la velocidad de reproducción. Utiliza la biblioteca SoundTouch a través del elemento GStreamer `pitch`, con soporte para cambios de −12 a +12 semitonos (una octava abajo a una octava arriba).
+El `PitchBlock` cambia el tono de un flujo de audio sin afectar la velocidad de reproducción. Utiliza la biblioteca SoundTouch a través del elemento GStreamer `pitch`, soportando cambios de -12 a +12 semitonos (una octava abajo a una octava arriba).
 
 #### Información del bloque
 
 Nombre: PitchBlock.
 
-Dirección del pin | Tipo de medio | Número de pines
+Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
 
 #### Configuración
 
-| Propiedad | Tipo | Valor predeterminado | Descripción |
-|-----------|------|----------------------|-------------|
-| `Semitones` | `int` | `0` | Cambio de tono en semitonos (−12 a +12) |
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Semitones` | `int` | `0` | Cambio de tono en semitonos (-12 a +12) |
 | `Pitch` | `float` | `1.0` | Multiplicador directo de tono (1.0 = sin cambio, 2.0 = una octava arriba, 0.5 = una octava abajo) |
 
 #### Disponibilidad
 
-`PitchBlock.IsAvailable()` devuelve `true` si el elemento GStreamer `pitch` (plugin SoundTouch) está disponible.
+`PitchBlock.IsAvailable()` retorna `true` si el elemento GStreamer `pitch` (plugin SoundTouch) está presente.
 
-#### El pipeline de muestra
+#### Pipeline de ejemplo
 
 ```mermaid
 graph LR;
@@ -1298,7 +1652,7 @@ graph LR;
     PitchBlock-->AudioRendererBlock;
 ```
 
-#### Código de muestra
+#### Código de ejemplo
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
@@ -1321,30 +1675,30 @@ Windows, macOS, Linux.
 
 ### Detector de Silencio
 
-El `SilenceDetectorBlock` analiza los niveles de audio en tiempo real para detectar períodos de silencio basándose en un umbral de dBFS configurable. Es un bloque de paso — el audio se reenvía sin cambios mientras los eventos `OnSilenceStarted` y `OnSilenceEnded` se disparan en las transiciones de estado. Los períodos detectados pueden recuperarse como lista o exportarse como JSON.
+El `SilenceDetectorBlock` analiza los niveles de audio en tiempo real para detectar períodos de silencio basándose en un umbral configurable en dBFS. Es un bloque de paso -- el audio se reenvía sin cambios mientras los eventos `OnSilenceStarted` y `OnSilenceEnded` se disparan en las transiciones de estado. Los períodos detectados pueden recuperarse como lista o exportarse como JSON.
 
 #### Información del bloque
 
 Nombre: SilenceDetectorBlock.
 
-Dirección del pin | Tipo de medio | Número de pines
+Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio sin comprimir | 1
 Salida | Audio sin comprimir | 1
 
 #### Configuración
 
-| Propiedad | Tipo | Valor predeterminado | Descripción |
-|-----------|------|----------------------|-------------|
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
 | `ThresholdDb` | `double` | `-40.0` | Umbral de silencio en dBFS; el audio por debajo de este nivel se trata como silencio |
 
 Métodos clave:
 
-- `GetSilencePeriods()` — devuelve todos los objetos `SilencePeriod` detectados.
-- `FinalizeSilencePeriods(TimeSpan endTime)` — cierra cualquier período en curso y devuelve la lista completa.
-- `ExportSilencePeriodsJson()` — devuelve una cadena JSON con marcas de tiempo de inicio/fin para cada período detectado.
+- `GetSilencePeriods()` -- retorna todos los objetos `SilencePeriod` detectados.
+- `FinalizeSilencePeriods(TimeSpan endTime)` -- cierra cualquier período en curso y retorna la lista completa.
+- `ExportSilencePeriodsJson()` -- retorna una cadena JSON con las marcas de tiempo de inicio/fin de cada período detectado.
 
-#### El pipeline de muestra
+#### Pipeline de ejemplo
 
 ```mermaid
 graph LR;
@@ -1352,7 +1706,7 @@ graph LR;
     SilenceDetectorBlock-->AudioRendererBlock;
 ```
 
-#### Código de muestra
+#### Código de ejemplo
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
@@ -1361,8 +1715,8 @@ var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
 var silenceDetector = new SilenceDetectorBlock(thresholdDb: -35.0);
-silenceDetector.OnSilenceStarted += (s, e) => Console.WriteLine($"Silencio iniciado en {e.Timestamp}");
-silenceDetector.OnSilenceEnded += (s, e) => Console.WriteLine($"Silencio terminado en {e.Timestamp}");
+silenceDetector.OnSilenceStarted += (s, e) => Console.WriteLine($"Silence started at {e.Timestamp}");
+silenceDetector.OnSilenceEnded += (s, e) => Console.WriteLine($"Silence ended at {e.Timestamp}");
 pipeline.Connect(fileSource.AudioOutput, silenceDetector.Input);
 
 var audioRenderer = new AudioRendererBlock();
@@ -1370,7 +1724,7 @@ pipeline.Connect(silenceDetector.Output, audioRenderer.Input);
 
 await pipeline.StartAsync();
 
-// Después de que el pipeline se detenga, exportar los períodos de silencio detectados
+// After pipeline stops, export detected silence periods
 var json = silenceDetector.ExportSilencePeriodsJson();
 Console.WriteLine(json);
 ```
@@ -1379,29 +1733,29 @@ Console.WriteLine(json);
 
 Windows, macOS, Linux, iOS, Android.
 
-### Mezcla Ponderada de Canales
+### Mezcla de Canales Ponderada
 
-El `WeightedChannelMixBlock` mezcla los canales estéreo izquierdo y derecho con pesos ajustables de forma independiente, produciendo una salida mono o estéreo. Se utiliza principalmente para fuentes de audio mono dual, como archivos de karaoke, donde un canal lleva la pista instrumental y el otro la mezcla completa.
+El `WeightedChannelMixBlock` mezcla los canales estéreo izquierdo y derecho con pesos ajustables de forma independiente, produciendo una salida mono o estéreo. Se utiliza principalmente para fuentes de doble mono, como audio de karaoke donde un canal lleva una pista instrumental y el otro una mezcla completa.
 
-Los pesos pueden cambiarse en tiempo de ejecución sin reconstruir el pipeline. Valores superiores a 1.0 amplifican el canal, pero pueden causar recorte.
+Los pesos pueden cambiarse en tiempo de ejecución sin reconstruir el pipeline. Valores superiores a 1.0 amplifican el canal pero pueden causar recorte.
 
 #### Información del bloque
 
 Nombre: WeightedChannelMixBlock.
 
-Dirección del pin | Tipo de medio | Número de pines
+Dirección del pin | Tipo de medio | Cantidad de pines
 --- | :---: | :---:
 Entrada | Audio estéreo sin comprimir | 1
 Salida | Audio sin comprimir | 1
 
 #### Configuración
 
-| Propiedad | Tipo | Valor predeterminado | Descripción |
-|-----------|------|----------------------|-------------|
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
 | `LeftChannelWeight` | `float` | `0.5` | Peso de mezcla para el canal izquierdo (0.0–1.0+) |
 | `RightChannelWeight` | `float` | `0.5` | Peso de mezcla para el canal derecho (0.0–1.0+) |
 
-#### El pipeline de muestra
+#### Pipeline de ejemplo
 
 ```mermaid
 graph LR;
@@ -1409,7 +1763,7 @@ graph LR;
     WeightedChannelMixBlock-->AudioRendererBlock;
 ```
 
-#### Código de muestra
+#### Código de ejemplo
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
@@ -1417,7 +1771,7 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "karaoke.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Usar solo el canal instrumental (izquierdo)
+// Use only the instrumental (left) channel
 var mixer = new WeightedChannelMixBlock(leftWeight: 1.0f, rightWeight: 0.0f);
 pipeline.Connect(fileSource.AudioOutput, mixer.Input);
 
@@ -1430,3 +1784,27 @@ await pipeline.StartAsync();
 #### Plataformas
 
 Windows, macOS, Linux, iOS, Android.
+
+## Preguntas Frecuentes
+
+???+ "¿Cómo conecto bloques de audio en un pipeline?"
+    Cree un `MediaBlocksPipeline`, instancie los bloques que necesite, luego conéctelos usando `pipeline.Connect(sourceBlock.Output, destinationBlock.Input)`. Cada bloque tiene pines de entrada y salida tipados -- el pipeline valida que los pines conectados tengan tipos de medios compatibles.
+
+???+ "¿Puedo aplicar múltiples efectos de audio en un solo pipeline?"
+    Sí. Puede encadenar cualquier cantidad de bloques de audio en secuencia. Por ejemplo, conecte una fuente a un bloque ecualizador, luego a un bloque de reverberación, y finalmente a un renderizador. Alternativamente, use el `AudioEffectsBlock` para aplicar múltiples efectos dentro de un solo bloque. Para parámetros de efectos, consulte la [Referencia de Efectos de Audio](../../general/audio-effects/reference.md).
+
+???+ "¿Cómo mezclo múltiples fuentes de audio juntas?"
+    Use el `AudioMixerBlock` para combinar múltiples entradas de audio en una sola salida. Conecte cada fuente a un pin de entrada separado en el mezclador. El mezclador soporta control de volumen por entrada y negociación automática de formato.
+
+???+ "¿Cuál es la diferencia entre AudioEffectsBlock y los bloques de efectos individuales?"
+    Los bloques de efectos individuales (como `AmplifyBlock`, `EchoBlock`, `ReverbBlock`) envuelven un solo elemento GStreamer y se conectan como nodos separados del pipeline. El `AudioEffectsBlock` le permite aplicar múltiples efectos dentro de un bloque agregando instancias de efectos a su colección -- útil cuando necesita varios efectos sin cableado complejo.
+
+???+ "¿Los bloques de audio soportan cambios de parámetros en tiempo real?"
+    Sí. Puede modificar las propiedades de los bloques durante la reproducción. Por ejemplo, cambiar el nivel de volumen, ajustar bandas del EQ o actualizar los pesos del mezclador mientras el pipeline está en ejecución. Los cambios toman efecto inmediatamente sin detener el pipeline.
+
+## Ver También
+
+* [Descripción General de Efectos de Audio](../../general/audio-effects/index.md)
+* [Referencia de Efectos de Audio](../../general/audio-effects/reference.md)
+* [Codificadores de Audio](../../general/audio-encoders/index.md)
+* [Descripción General del SDK Media Blocks](../index.md)

@@ -1,6 +1,6 @@
 ---
-title: Memory Playback in C# - Play Video from Stream or Byte Array
-description: Play media from memory streams and byte arrays with efficient memory management for audio and video playback in C# applications.
+title: Play Video from Memory Stream or Byte Array in C# .NET
+description: Play video and audio from memory streams and byte arrays with VisioForge Media Player SDK .NET. Efficient buffering for secure, file-free playback.
 ---
 
 # Play Media from Memory in .NET SDK

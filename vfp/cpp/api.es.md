@@ -1,6 +1,6 @@
 ---
-title: Documentación de API C++ del SDK de Huellas de Video
-description: API completa del SDK de Huellas de Video C++ de VisioForge para generar, comparar y buscar huellas de video con ejemplos.
+title: API C++ de Video Fingerprinting para búsqueda y comparación
+description: Documentación completa de la API del SDK Video Fingerprinting C++ de VisioForge para generar, comparar y buscar huellas de video con ejemplos.
 ---
 
 # Documentación de API C++ del SDK de Huellas de Video

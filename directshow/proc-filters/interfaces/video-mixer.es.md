@@ -1,5 +1,5 @@
 ---
-title: "IVFVideoMixer: Mezclador de Video DirectShow con Chroma Key"
+title: IVFVideoMixer: Mezclador de Video DirectShow con Chroma Key
 description: Interfaz IVFVideoMixer para mezclar 2-16 fuentes de video con PIP, chroma keying, transparencia y configuraciones de diseño personalizables.
 ---
 

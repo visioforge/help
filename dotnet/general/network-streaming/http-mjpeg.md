@@ -1,6 +1,6 @@
 ---
-title: MJPEG Over HTTP Video Streaming in .NET with Examples
-description: Implement HTTP MJPEG streaming in .NET for real-time video feeds with client connection handling and adjustable frame rates for web streaming.
+title: MJPEG Over HTTP - Live Video Streaming Server in C# .NET
+description: Embed live video in HTML with an img tag. Frame-by-frame JPEG encoding, configurable port, and async client handling. VisioForge SDK surveillance examples.
 ---
 
 # HTTP MJPEG streaming

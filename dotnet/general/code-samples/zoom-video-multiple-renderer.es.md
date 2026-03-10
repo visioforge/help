@@ -1,6 +1,6 @@
 ﻿---
-title: Zoom para Múltiples Renderizadores de Video en .NET
-description: Configura parámetros de zoom y posición independientes para múltiples renderizadores de video en pantallas multi-monitor en aplicaciones multimedia .NET.
+title: Configurar Zoom en Múltiples Renderizadores de Video
+description: Configure parámetros de zoom y posición independientes para múltiples renderizadores de video en pantallas multi-monitor en aplicaciones multimedia .NET.
 ---
 
 # Configuración de Zoom para Múltiples Renderizadores de Video en .NET

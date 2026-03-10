@@ -1,6 +1,6 @@
 ---
-title: DirectShow Virtual Camera SDK for Windows Video Streaming
-description: Create virtual webcams for Zoom, Teams, Skype, and OBS with DirectShow SDK for streaming any video source with audio support.
+title: Virtual Camera DirectShow Filter for Windows Streaming
+description: Create virtual webcams recognized by Zoom, Teams, OBS, and browsers. VisioForge DirectShow SDK streams any video source with audio to virtual camera devices.
 sidebar_label: Virtual Camera SDK
 order: 6
 ---

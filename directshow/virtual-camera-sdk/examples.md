@@ -1,6 +1,6 @@
 ---
-title: Virtual Camera SDK DirectShow Filter Code Examples
-description: Virtual Camera SDK code examples for streaming to virtual camera devices and reading from virtual cameras with frame-by-frame rendering.
+title: Virtual Camera DirectShow Examples - C++, C#, VB.NET
+description: Stream video to virtual camera devices and capture from them in DirectShow. Code examples for frame rendering, real-time effects, and multi-instance setup.
 ---
 
 # Virtual Camera SDK - Code Examples

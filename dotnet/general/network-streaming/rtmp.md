@@ -1,6 +1,6 @@
 ---
-title: RTMP Video Streaming in .NET with Hardware Acceleration
-description: Implement RTMP streaming in .NET with hardware acceleration, cross-platform support, and integration with YouTube and Facebook Live platforms.
+title: RTMP Live Streaming to YouTube and Facebook in C# .NET
+description: Go live with hardware-accelerated H.264 encoding. Automatic encoder fallback (NVENC, QSV, AMF, OpenH264). Cross-platform C# examples with VisioForge SDK.
 ---
 
 # RTMP Streaming with VisioForge SDKs

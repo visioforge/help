@@ -1,6 +1,6 @@
 ---
-title: Implementación de Transmisión de Video RTSP en .NET
-description: Implemente transmisión RTSP con códecs H.264 y AAC para cámaras de seguridad, transmisión en vivo y control de medios en tiempo real en aplicaciones .NET.
+title: Servidor Streaming RTSP con H.264 y Aceleración GPU en C#
+description: Servidor RTSP con codificación H.264/AAC, aceleración GPU (NVENC, QSV, AMF), autenticación y ajuste de latencia. Ejemplos C# con VisioForge SDK.
 ---
 
 # Dominando la Transmisión RTSP con SDKs de VisioForge

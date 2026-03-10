@@ -1,6 +1,6 @@
 ---
-title: Transmisión HLS en .NET: guía de implementación SDK
-description: Aplicaciones HTTP Live Streaming en .NET con bitrate adaptativo, codificación de video e integración de reproducción multiplataforma.
+title: Streaming HLS en Vivo con Servidor m3u8 en C# .NET
+description: Genere listas .m3u8 y segmentos .ts con servidor HTTP integrado. Integración con HLS.js, iOS AVPlayer y Android ExoPlayer. Ejemplos con VisioForge SDK.
 ---
 
 # Guía Completa para Implementación de Transmisión de Red HLS en .NET

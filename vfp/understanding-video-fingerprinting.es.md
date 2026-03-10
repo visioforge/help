@@ -1,6 +1,6 @@
 ---
-title: Entendiendo la Tecnología de Huella Digital de Video
-description: Profundización en algoritmos e implementación técnica detrás del SDK de huella digital de video de VisioForge con hashing perceptual y análisis de escena.
+title: Video Fingerprinting - algoritmos y hashing perceptual
+description: Análisis profundo de algoritmos e implementación técnica del SDK Video Fingerprinting de VisioForge con hashing perceptual y análisis de escenas.
 ---
 
 # Entendiendo la Tecnología de Huella Digital de Video

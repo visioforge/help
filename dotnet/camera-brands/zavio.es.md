@@ -18,7 +18,7 @@ description: Conecte cámaras Zavio en C# .NET con patrones de URL RTSP y ejempl
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** admin / admin
 - **Soporte ONVIF:** Sí (mayoría de modelos)
-- **Códecs de video:** H.264, MPEG-4, MJPEG
+- **Códecs de vídeo:** H.264, MPEG-4, MJPEG
 - **Patrones de URL duales:** Algunos modelos usan `/video.mp4`, otros usan `/video.proN` (basado en perfil)
 
 !!! tip "URLs Basadas en Perfil"
@@ -152,7 +152,7 @@ Si omite la doble barra en un modelo basado en perfil, la conexión puede fallar
 Algunos modelos Zavio más antiguos tienen como predeterminado la codificación MPEG-4. Si experimenta problemas de códec:
 
 - Inicie sesión en la interfaz web de la cámara
-- Cambie el códec de video a **H.264** en la configuración del flujo
+- Cambie el códec de vídeo a **H.264** en la configuración del flujo
 - Use la URL `/video.mp4` o `//video.pro1` después de cambiar la configuración
 
 ### Conexión rechazada en puerto 554

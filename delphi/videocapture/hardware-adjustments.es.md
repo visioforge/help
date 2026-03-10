@@ -1,6 +1,6 @@
 ---
-title: Ajustes de Video de Cámara para Aplicaciones Delphi
-description: Ajustar brillo, contraste y saturación de cámara en Delphi con controles de hardware TVFVideoCapture y ejemplos de configuración de parámetros.
+title: Control de Brillo, Contraste y Saturación en Delphi
+description: Ajuste brillo, contraste y saturación de cámara en Delphi con controles de hardware TVFVideoCapture y ejemplos de configuración de parámetros.
 ---
 
 # Implementando Ajustes de Video de Hardware en Aplicaciones Delphi

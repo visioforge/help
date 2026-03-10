@@ -1,6 +1,6 @@
 ---
-title: Despliegue de aplicaciones .NET Android con VisioForge SDK
-description: Despliegue del SDK .NET de VisioForge para Android con gestión de paquetes, integración de VideoView, soporte de arquitectura y configuración de permisos.
+title: Desplegar VisioForge .NET SDK en Android — NuGet y Config
+description: Despliega apps .NET con VisioForge SDK en Android. Paquetes NuGet, integración VideoView, soporte ARM64/x86 y configuración de permisos.
 ---
 
 # Guía de Implementación y Despliegue para Android

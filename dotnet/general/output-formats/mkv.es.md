@@ -1,6 +1,6 @@
 ---
-title: Contenedor MKV Matroska - Codificaci\u00f3n de video en .NET
-description: Salida MKV en .NET con codificación acelerada por hardware, múltiples pistas de audio y soporte flexible de contenedor Matroska.
+title: Formato Contenedor MKV - Codificación y Grabación .NET
+description: Implemente salida MKV en .NET con codificación acelerada por hardware, múltiples pistas de audio y soporte flexible de contenedor Matroska para apps de video.
 ---
 
 # Salida MKV en los SDK .NET de VisioForge

@@ -1,6 +1,6 @@
 ---
-title: Integrate .Net SDKs into JetBrains Rider | Tutorial
-description: Integrate VisioForge .NET SDKs with JetBrains Rider for cross-platform development with WPF, MAUI, WinUI, and Avalonia frameworks.
+title: Install VisioForge .NET SDKs in JetBrains Rider via NuGet
+description: Add VideoView control, configure XAML namespaces, and set up redistribution packages for WPF, MAUI, and Avalonia projects in Rider.
 ---
 
 # .Net SDKs Integration with JetBrains Rider

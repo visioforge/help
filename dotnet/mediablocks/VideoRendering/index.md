@@ -1,6 +1,6 @@
 ---
-title: Video Renderer for .NET: DirectX, OpenGL, Metal Support
-description: Render video across Windows, macOS, Linux, iOS, and Android with DirectX, OpenGL, Metal hardware acceleration for multimedia applications.
+title: Video Renderer in C# .NET - DirectX, OpenGL, Metal
+description: Display video in WPF, WinForms, Avalonia, and MAUI apps with hardware-accelerated rendering using VisioForge Media Blocks SDK for .NET.
 sidebar_label: Video Renderer
 ---
 

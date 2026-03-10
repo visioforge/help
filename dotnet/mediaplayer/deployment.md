@@ -1,6 +1,6 @@
 ---
-title: Deploy Media Player SDK .Net Apps: NuGet and Runtime Setup
-description: Deploy Media Player SDK applications with NuGet packages, runtime dependencies, DirectShow filters for Windows and cross-platform environments.
+title: Deploy .NET Video Player - NuGet and Runtime Setup
+description: Configure NuGet packages and runtime dependencies for VisioForge Media Player SDK .NET apps on Windows and cross-platform environments.
 ---
 
 # Media Player SDK .Net Deployment Guide

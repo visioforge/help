@@ -1,6 +1,6 @@
 ---
-title: Android Video Player SDK: Streaming and Playback Guide
-description: Build Android player apps with video playback, streaming, hardware acceleration, and multiple format support using Media Player SDK.
+title: Android Video Player with HLS and RTSP Streaming in C# .NET
+description: Build Android video player apps with streaming, hardware acceleration, and multi-format support using VisioForge Media Player SDK .NET.
 ---
 
 # Android Media Player SDK - Professional Video Playback Solution

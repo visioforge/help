@@ -1,6 +1,6 @@
 ---
-title: Cámaras IP ONVIF en .NET: Conexión, PTZ y Streaming
-description: Integración completa de cámaras IP ONVIF en .NET cubriendo descubrimiento, conexión, control PTZ, grabación, streaming y visión por computadora.
+title: Integración Cámaras IP ONVIF en C# — VisioForge .NET SDKs
+description: Descubre cámaras vía WS-Discovery, controla presets PTZ, extrae URIs RTSP y graba streams. Vista previa baja latencia y solución de problemas.
 ---
 
 # Integración de Cámaras IP ONVIF - Guía Completa {: #integracion-de-camaras-ip-onvif---guia-completa }

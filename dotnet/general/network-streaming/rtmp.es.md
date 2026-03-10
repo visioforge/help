@@ -1,6 +1,6 @@
 ---
-title: Transmisión RTMP en .NET con Aceleración GPU y YouTube Live
-description: Implemente transmisión RTMP en .NET con aceleración por hardware, soporte multiplataforma e integración con plataformas YouTube y Facebook Live.
+title: Streaming RTMP en Vivo a YouTube y Facebook en C# .NET
+description: Transmita en vivo con codificación H.264 acelerada por hardware. Fallback automático de codificador (NVENC, QSV, AMF). Ejemplos C# con VisioForge SDK.
 ---
 
 # Transmisión RTMP con SDK de VisioForge

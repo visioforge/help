@@ -1,6 +1,6 @@
 ---
-title: Captura de Video DV en Delphi - Guía con Ejemplos de Código
-description: Implementar captura de video DV en Delphi - formatos comprimidos y sin comprimir con implementación paso a paso y ejemplos de código funcionales.
+title: Captura de Video DV en Delphi: Stream Directo y Recomprimido
+description: Implemente captura de video DV en Delphi - formatos comprimidos y sin comprimir con implementación paso a paso y ejemplos de código funcionales.
 ---
 
 # Captura de Video a Formato de Archivo DV: Guía de Implementación

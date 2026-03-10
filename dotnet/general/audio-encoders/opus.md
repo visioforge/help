@@ -1,6 +1,6 @@
 ---
-title: Optimizing OPUS Audio Encoding in .NET Applications
-description: Implement OPUS audio encoding in .NET with bitrate control, complexity settings, and frame durations for VoIP and music streaming.
+title: Opus Audio Encoder Settings and Configuration in .NET
+description: VBR, CBR, and CVBR rate control modes. Bitrate 6-510 kbps, 5 ms latency, complexity tuning, and DTX for speech. OGG/WebM output with C# examples.
 ---
 
 # Mastering OPUS Audio Encoding in .NET Applications

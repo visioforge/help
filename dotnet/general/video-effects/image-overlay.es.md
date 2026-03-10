@@ -1,6 +1,6 @@
 ---
-title: Superposicion de imagen y GIF en video con .NET SDK
-description: Superponga imágenes, GIFs animados y PNGs transparentes en flujos de video en .NET para marcas de agua, logotipos y mejoras visuales con transparencia.
+title: Overlay de Imagen en Video en .NET: PNG, GIF y Bitmap
+description: Superponga imágenes, GIFs animados y PNGs transparentes en streams de video en .NET para marcas de agua, logos y mejoras visuales con transparencia.
 ---
 
 # Superposición de imagen

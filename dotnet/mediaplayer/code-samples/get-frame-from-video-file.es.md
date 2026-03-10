@@ -1,6 +1,6 @@
 ---
-title: Extrayendo Frames de Video en .NET - Guía Completa
-description: Extrae y captura frames específicos de archivos de video con soluciones de procesamiento de video específicas de Windows y multiplataforma en .NET.
+title: Extraer Frames de Video en C# — Media Player SDK .NET
+description: Obtén frames como Bitmap, SkiaSharp SKBitmap o arrays RGB. Busca cualquier timestamp, extracción masiva y genera miniaturas de video.
 ---
 
 # Extrayendo Frames de Video de Archivos de Video en .NET

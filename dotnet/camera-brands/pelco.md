@@ -1,6 +1,6 @@
 ---
 title: Pelco IP Camera RTSP URL Patterns and C# .NET Setup
-description: Connect to Pelco Sarix and Spectra cameras in C# .NET with RTSP URL patterns and code samples for IX, IMP, IME, and Spectra PTZ models.
+description: Pelco Sarix and Spectra PTZ camera RTSP integration for C# .NET. URL patterns for IX, IMP, IME models with ONVIF support and VisioForge SDK code.
 ---
 
 # How to Connect to Pelco IP Camera in C# .NET

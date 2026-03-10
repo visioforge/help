@@ -396,10 +396,30 @@ private async void Window_Destroying(object sender, EventArgs e)
 | Avalonia Simple | [SimplePlayer](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayer) |
 | MAUI | [SimplePlayer](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/SimplePlayer) |
 
-## Recursos Relacionados
+## Preguntas Frecuentes
 
-- [Crear un Reproductor de Video en C#](video-player-csharp.md) (WinForms/WPF)
-- [Crear un Reproductor de Video en VB.NET](video-player-vb-net.md) (WinForms)
-- [Guía del Reproductor Avalonia](avalonia-player.md) (implementación MVVM completa)
-- [Guía del Reproductor Android](android-player.md)
-- [Página del Producto Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net)
+### ¿Debería elegir Avalonia o .NET MAUI para mi reproductor de video multiplataforma?
+
+Ambos frameworks admiten plataformas de escritorio y móviles. Avalonia funciona en Windows, macOS, Linux, Android e iOS, lo que lo convierte en la única opción cuando se requiere compatibilidad con Linux. .NET MAUI cubre Windows, macOS, Android e iOS, pero no es compatible con Linux. Ambos utilizan la misma API `MediaBlocksPipeline` de Media Blocks SDK, por lo que el código principal de reproducción es idéntico. Elija Avalonia si necesita Linux o prefiere un framework orientado al escritorio. Elija MAUI si desea una integración más estrecha con las APIs nativas de plataformas móviles y no necesita Linux.
+
+### ¿Qué limitaciones específicas de plataforma debo conocer al crear un reproductor de video .NET?
+
+En macOS, MAUI utiliza macCatalyst mientras que Avalonia apunta directamente a macOS nativo — esto afecta cómo la vista de video se integra con el sistema de ventanas. En Linux (solo Avalonia), GStreamer debe estar instalado en la máquina de destino. Tanto Android como iOS requieren sus respectivos paquetes NuGet redist específicos de plataforma (`VisioForge.CrossPlatform.Core.Android` y `VisioForge.CrossPlatform.Core.iOS`). La disponibilidad de decodificación acelerada por hardware depende del dispositivo y del sistema operativo. Tanto Avalonia como MAUI admiten la reproducción de video en Android e iOS.
+
+### ¿Cómo despliego una aplicación de reproductor de video .NET multiplataforma?
+
+Para Windows, macOS, Android e iOS, incluya los paquetes NuGet redist específicos de plataforma listados en la tabla de referencia de NuGet anterior — estos empaquetan las bibliotecas nativas de GStreamer que su aplicación necesita. Para Windows, use `dotnet publish` con un despliegue autocontenido para evitar requerir una instalación de runtime separada. Para macOS, publique como un app bundle. En Linux, no existe un paquete NuGet redist de GStreamer — instale GStreamer mediante el gestor de paquetes de la distribución (ej. `apt install libgstreamer1.0-0`) en el sistema de destino. Para Android e iOS, siga el flujo de trabajo estándar de publicación móvil de MAUI o Avalonia para producir paquetes APK/AAB o IPA.
+
+### ¿Qué formatos de video y audio son compatibles en todas las plataformas?
+
+El SDK admite contenedores MP4, AVI, MKV, WMV, WebM, MOV, TS y FLV con códecs de video H.264, H.265/HEVC, VP8, VP9, AV1 y MPEG-2. Los formatos de audio compatibles incluyen MP3, AAC, WAV, WMA, FLAC y OGG. Los protocolos de streaming de red como RTSP, HTTP, HLS y MPEG-DASH funcionan en todas las plataformas. La compatibilidad de formatos es consistente en Windows, macOS, Linux, Android e iOS porque la reproducción utiliza el backend de GStreamer. En Linux, algunos códecs pueden requerir paquetes de sistema adicionales dependiendo de la distribución.
+
+## Ver También
+
+- [Crear un Reproductor de Video en C#](video-player-csharp.md) — reproductor WinForms y WPF con motores DirectShow y GStreamer
+- [Crear un Reproductor de Video en VB.NET](video-player-vb-net.md) — reproductor Windows Forms en Visual Basic .NET
+- [Guía del Reproductor Avalonia](avalonia-player.md) — implementación MVVM completa con diálogos de archivos y configuración de plataforma
+- [Guía del Reproductor Android](android-player.md) — configuración y despliegue específico de Android
+- [Modo Loop y Rango de Posición](loop-and-position-range.md) — reproducción en bucle y selección de segmentos para ambos motores
+- [Ejemplos de Código](../code-samples/index.md) — extracción de fotogramas, listas de reproducción y ejemplos de reproducción inversa
+- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas

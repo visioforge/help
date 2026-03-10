@@ -1,6 +1,6 @@
 ---
 title: ONVIF IP Camera Capture to MP4 with Video Effects in C#
-description: Capture video from ONVIF IP cameras and apply video processing effects like resizing, brightness adjustment, and filters before saving to MP4.
+description: Capture ONVIF IP camera video and apply resize, brightness, and filter effects before saving to MP4 using VisioForge Media Blocks SDK for .NET.
 ---
 
 # Capture MP4 from ONVIF Camera with Postprocessing

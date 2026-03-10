@@ -1,6 +1,6 @@
 ---
-title: Media Demuxer Blocks for .NET: MPEG-TS, MP4, MKV, AVI
-description: Demux media containers with MPEG-TS, QT (MP4/MOV), and Universal demuxers for separating audio and video streams in .NET pipelines.
+title: Media Demuxer Blocks in C# .NET - MP4, MKV, MPEG-TS
+description: Separate audio, video, and subtitle streams from MP4, MKV, AVI, and MPEG-TS containers using VisioForge Media Blocks SDK demuxer blocks.
 sidebar_label: Demuxers
 
 ---

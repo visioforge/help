@@ -1,6 +1,6 @@
 ---
-title: Extract Frames from Video in .NET - C# Code Examples
-description: Extract and capture specific frames from video files with Windows-specific and cross-platform video processing solutions in .NET.
+title: Extract Video Frames as Bitmap or SKBitmap in C# .NET
+description: Get video frames as Bitmap, SKBitmap, or byte arrays using VisioForge Media Player SDK .NET. Seek to any timestamp and batch-generate thumbnails.
 ---
 
 # Extracting Video Frames from Video Files in .NET

@@ -1,6 +1,6 @@
 ---
-title: Android .NET SDK Deployment - NuGet, VideoView, Signing
-description: VisioForge .NET SDK Android deployment with package management, VideoView integration, architecture support, and permissions configuration.
+title: Deploy VisioForge .NET SDK on Android — NuGet & Setup
+description: Deploy VisioForge .NET SDK apps on Android. NuGet packages, VideoView integration, ARM64/x86 architecture support, and permissions configuration.
 ---
 
 # Android Implementation and Deployment Guide

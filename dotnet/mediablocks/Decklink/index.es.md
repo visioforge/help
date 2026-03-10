@@ -1,6 +1,6 @@
 ---
-title: Integración Blackmagic Decklink con Media Blocks SDK
-description: Integre dispositivos Blackmagic Decklink para captura y renderizado SDI y HDMI profesional con soporte multi-dispositivo en aplicaciones .NET.
+title: Blackmagic Decklink SDI/HDMI - Captura y Salida en C# .NET
+description: Capture y renderice video SDI/HDMI con tarjetas Blackmagic Decklink usando VisioForge Media Blocks SDK. Multi-dispositivo, detección de formato y keying.
 
 ---
 

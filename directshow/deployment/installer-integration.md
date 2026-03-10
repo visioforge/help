@@ -1,6 +1,6 @@
 ---
 title: Deploy DirectShow Filters with WiX, NSIS, and Inno Setup
-description: Integrate DirectShow filters into WiX, NSIS, InstallShield installers with custom actions, registration, and dependency management.
+description: Step-by-step installer integration for VisioForge DirectShow filters. WiX, NSIS, Inno Setup, and InstallShield examples with COM registration custom actions.
 ---
 
 # Installer Integration Guide

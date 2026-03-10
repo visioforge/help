@@ -1,6 +1,6 @@
 ---
-title: Requisitos del sistema y compatibilidad de VisioForge .NET
-description: Soporte de plataformas y requisitos del sistema del SDK .NET para Windows, macOS, Linux, iOS y Android con detalles de compatibilidad de frameworks.
+title: VisioForge .NET SDKs — Requisitos del Sistema y Plataformas
+description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 10+. .NET 6–9, soporte ARM64, requisitos de memoria 4K. Compatible con WPF, WinForms, MAUI y Avalonia.
 ---
 
 # Requisitos del Sistema para SDKs .NET

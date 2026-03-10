@@ -1,6 +1,6 @@
 ---
-title: SDK C++ para Huella Digital de Video Multiplataforma
-description: Implementación nativa C++ del SDK de Huella Digital de Video con alto rendimiento y soporte multiplataforma para huellas digitales de video robustas.
+title: Biblioteca C++ de Video Fingerprinting y documentación API
+description: Implementación nativa C++ del SDK Video Fingerprinting con alto rendimiento y soporte multiplataforma para huellas de video robustas.
 ---
 
 # SDK de Huella Digital de Video para C++

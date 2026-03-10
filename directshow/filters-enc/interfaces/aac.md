@@ -1,6 +1,6 @@
 ---
-title: AAC Encoder DirectShow Filter Interface Configuration
-description: AAC encoder DirectShow interfaces with bitrate control, profile configuration, sample rate, and advanced encoding for professional audio.
+title: AAC Encoder DirectShow Filter - COM Interface Reference
+description: Configure AAC encoding in DirectShow with IMonogramAACEncoder and IVFAACEncoder interfaces. Bitrate, profile, sample rate, and channel settings for C++/C#.
 ---
 
 # AAC Encoder Interface Reference

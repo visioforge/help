@@ -1,5 +1,5 @@
 ---
-title: Integración del Formato de Audio WAV en Aplicaciones .NET
+title: Codificador WAV PCM y Ejemplos de Código para .NET
 description: Implemente procesamiento de audio WAV en .NET con tasas de muestreo, configuración de canales, selección de formato PCM y soporte multiplataforma.
 ---
 

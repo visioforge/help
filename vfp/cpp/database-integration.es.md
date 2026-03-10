@@ -1,6 +1,6 @@
 ---
-title: Integrar bases de datos con el SDK de Huellas de Video C++
-description: Integra el SDK de Huellas de Video C++ con bases de datos para almacenar y recuperar huellas incluyendo ejemplos de SQLite y PostgreSQL.
+title: Huellas de Video en C++ - SQLite, PostgreSQL y Redis Cache
+description: Almacene y consulte huellas de video en SQLite y PostgreSQL usando el SDK C++ de VisioForge. Esquemas de base de datos, indexación y caché Redis.
 ---
 
 # Guía de Base de Datos del SDK de Huellas C++

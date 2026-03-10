@@ -1,6 +1,6 @@
 ---
-title: Adding Professional Text Overlays to Videos in .NET
-description: Implement dynamic text overlays with complete control over font, color, position, timing, and animations with step-by-step code examples.
+title: Add Dynamic Text Overlay with Font Styling in C# .NET
+description: Implement dynamic text overlays with VisioForge Video Edit SDK .NET. Control font, color, position, timing, and animations with C# code examples.
 ---
 
 # Implementing Text Overlays in Video Projects

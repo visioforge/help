@@ -18,7 +18,7 @@ description: Conecte cámaras y DVRs Q-See en C# .NET con patrones de URL RTSP y
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** admin / admin o admin / 123456
 - **Soporte ONVIF:** Algunos modelos de cámaras IP (serie QCN)
-- **Códecs de video:** H.264 (mayoría de modelos), MPEG-4 (DVRs más antiguos)
+- **Códecs de vídeo:** H.264 (mayoría de modelos), MPEG-4 (DVRs más antiguos)
 - **Base OEM:** Mezcla de Dahua y otros fabricantes
 
 !!! warning "Q-See Ha Dejado de Operar"

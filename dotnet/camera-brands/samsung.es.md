@@ -19,7 +19,7 @@ description: Conecta cámaras Samsung Wisenet y Hanwha Vision en C# .NET con pat
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** admin / (establecido durante configuración inicial); modelos legacy Samsung: admin / 4321
 - **Soporte ONVIF:** Sí (todos los modelos actuales y la mayoría de los legacy)
-- **Códecs de video:** H.264, H.265, MJPEG
+- **Códecs de vídeo:** H.264, H.265, MJPEG
 
 ## Patrones de URL RTSP
 

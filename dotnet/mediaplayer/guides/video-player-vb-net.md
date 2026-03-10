@@ -1,6 +1,6 @@
 ---
 title: VB.NET Video Player with Playback Controls and Seeking
-description: Build a video player in VB.NET with playback controls, seeking, and volume adjustment. Complete VB.NET code examples using Media Player SDK .Net.
+description: Build a video player in VB.NET with playback controls, seeking, and volume adjustment. Complete code examples using VisioForge Media Player SDK .NET.
 ---
 
 # Build a Video Player in VB.NET
@@ -230,8 +230,30 @@ Complete VB.NET video player demos:
 
 - [Simple Player Demo VB.NET (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinForms/Simple%20Player%20Demo%20X%20VB) — full-featured video player with all playback controls
 
-## Related Resources
+## Frequently Asked Questions
 
-- [Build a Video Player in C#](video-player-csharp.md)
-- [Avalonia Cross-Platform Player](avalonia-player.md)
-- [Media Player SDK .Net Product Page](https://www.visioforge.com/media-player-sdk-net)
+### What license do I need for a VB.NET video player application?
+
+Media Player SDK .Net requires a license for development and distribution. A Developer license removes the evaluation watermark and unlocks all features during development. A Release license is required when distributing your application to end users. The SDK is available in Premium edition which includes all supported formats, hardware acceleration, and both DirectShow and GStreamer engines. You can evaluate the SDK without a license — playback works fully but includes a watermark overlay. Visit the [product page](https://www.visioforge.com/media-player-sdk-net) for pricing and license options.
+
+### Which video and audio formats does the VB.NET player support?
+
+The player supports all formats listed in the table above, including MP4, AVI, MKV, WMV, WebM, MOV, and TS containers with H.264, H.265/HEVC, VP8, VP9, AV1, and MPEG-2 video codecs. Audio formats include MP3, AAC, WAV, WMA, FLAC, and OGG. Network streaming protocols such as RTSP, HTTP, HLS, and MPEG-DASH are also supported. Format support is identical to the C# version because both languages use the same GStreamer-based playback engine.
+
+### Should I use DirectShow or GStreamer engine for my VB.NET video player?
+
+The `MediaPlayerCoreX` API shown in this guide uses the GStreamer engine, which is the recommended choice for new projects. It supports more formats, hardware-accelerated decoding, and is actively maintained. The older DirectShow engine (`MediaPlayerCore`) is Windows-only and primarily exists for legacy compatibility. Both engines work identically from VB.NET code. If you are starting a new project, use `MediaPlayerCoreX` with the GStreamer engine.
+
+### How do I deploy a VB.NET video player application?
+
+Include the NuGet redist packages listed in the NuGet reference section above — these bundle the native GStreamer libraries your application needs. Use `dotnet publish` with a self-contained deployment to avoid requiring a separate runtime install on the target machine. The `VisioForge.CrossPlatform.Core.Windows.x64` package contains the GStreamer runtime, so no separate GStreamer installation is needed. For WPF projects, the same deployment approach works — just reference the WPF-specific VideoView control instead of the WinForms one.
+
+## See Also
+
+- [Build a Video Player in C#](video-player-csharp.md) — WinForms and WPF player with DirectShow and GStreamer engines
+- [Cross-Platform Video Player](play-video-dotnet.md) — Avalonia and MAUI player using MediaBlocksPipeline
+- [Avalonia Player Guide](avalonia-player.md) — complete MVVM implementation with file dialogs and platform setup
+- [Loop Mode & Position Range](loop-and-position-range.md) — loop playback and segment selection for both engines
+- [Record Webcam Video in VB.NET](../../videocapture/guides/record-webcam-vb-net.md) — webcam capture application in Visual Basic .NET
+- [Code Samples](../code-samples/index.md) — frame extraction, playlists, and reverse playback examples
+- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — product page and downloads

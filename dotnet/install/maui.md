@@ -1,6 +1,6 @@
 ---
-title: .NET MAUI Video and Media SDK Integration and Setup Guide
-description: Implement video and media capabilities in cross-platform .NET MAUI apps for Windows, Android, iOS, and macOS with VisioForge SDKs.
+title: Install VisioForge .NET SDKs in MAUI Apps via NuGet
+description: Add video capture, playback, and editing to .NET MAUI apps. NuGet setup for Windows, Android, iOS, and macOS with VisioForge VideoView controls.
 ---
 
 # Integrating VisioForge SDKs with .NET MAUI Applications

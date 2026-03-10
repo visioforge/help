@@ -1,6 +1,6 @@
 ---
-title: Bloques de Procesamiento y Efectos de Video (.NET)
-description: Aplicar ajustes de color, desentrelazado, superposiciones, transformaciones geométricas y efectos visuales en tiempo real en pipelines del SDK de Media Blocks.
+title: Bloques de Procesamiento y Efectos de Video en C# .NET
+description: Aplique ajustes de color, desentrelazado, superposiciones, transformaciones geométricas y efectos visuales en tiempo real con VisioForge Media Blocks SDK.
 sidebar_label: Procesamiento y Efectos de Video
 
 ---

@@ -1,6 +1,6 @@
 ---
-title: Implementación de Reproductor con Media Blocks SDK
-description: Crea aplicaciones de reproductor de video con Media Blocks SDK usando bloques source, renderizado de audio/video y controles de reproducción.
+title: Crear un Reproductor de Video en C# .NET — Paso a Paso
+description: Tutorial paso a paso en C# para crear un reproductor de video con VisioForge Media Blocks SDK: bloques fuente, renderizado audio/video y controles.
 ---
 
 # Construcción de un Reproductor de Video con Funciones Completas usando Media Blocks SDK

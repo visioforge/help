@@ -1,6 +1,6 @@
 ---
-title: Huella Digital de Video SDK para .NET y C++ multiplataforma
-description: Algoritmos de identificación de video con SDK para detectar duplicados, identificar fragmentos y hacer coincidir videos en múltiples plataformas.
+title: SDK Video Fingerprinting - Detectar y comparar contenido
+description: Detecte contenido pirata, encuentre duplicados y compare videos transformados con el SDK Video Fingerprinting de VisioForge para .NET y C++.
 ---
 
 # Video Fingerprinting SDK

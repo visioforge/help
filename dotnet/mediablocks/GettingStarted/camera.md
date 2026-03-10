@@ -1,6 +1,6 @@
 ---
-title: Creating Camera Applications with Media Blocks SDK
-description: Build camera apps with Media Blocks SDK featuring device enumeration, format selection, video rendering, and cross-platform capture support.
+title: Build Camera Capture App - Device Setup Guide in C# .NET
+description: Build camera apps with VisioForge Media Blocks SDK — device enumeration, format selection, video rendering, and cross-platform capture support.
 ---
 
 # Building Camera Applications with Media Blocks SDK

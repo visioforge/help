@@ -1,6 +1,6 @@
 ---
-title: Grabación pre-evento para cámaras IP con Media Blocks .NET
-description: Aprenda a grabar video pre-evento de cámaras IP con buffer circular y detección de movimiento en C# usando Media Blocks SDK.
+title: Buffer y Grabación Pre-Evento para Cámaras IP en C#
+description: Implemente buffer pre-evento para cámaras IP en C# .NET. Capture RTSP y webcam con grabación por detección de movimiento usando VisioForge Media Blocks SDK.
 ---
 
 # Cómo Implementar Grabación Pre-Evento para Cámaras IP en C#

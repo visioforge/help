@@ -1,6 +1,6 @@
 ---
-title: Video Decoder Blocks for H.264, HEVC, VP9, and AV1 in .NET
-description: Decompress encoded video streams with hardware-accelerated decoder blocks supporting H.264, HEVC, VP9, and more codecs in Media Blocks SDK.
+title: Video Decoder Blocks in C# .NET - H.264, HEVC, AV1
+description: Decode H.264, HEVC, VP9, AV1, and MJPEG video with hardware acceleration using VisioForge Media Blocks SDK. GPU-accelerated decoding for .NET.
 sidebar_label: Video Decoders
 ---
 

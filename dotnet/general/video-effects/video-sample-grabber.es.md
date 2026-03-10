@@ -1,6 +1,6 @@
 ---
-title: Capturador de muestras de video - cuadros RAW en C# .NET
-description: Extraiga cuadros de video RAW de Video Capture, Media Player y Video Edit SDKs con acceso a memoria administrada y conversión de bitmap en C#.
+title: Video Sample Grabber: Extraer Frames RAW en C# .NET
+description: Extraiga frames de video RAW de Video Capture, Media Player y Video Edit SDKs con acceso a memoria administrada y conversión de bitmap en C#.
 ---
 
 # Uso del capturador de muestras de video

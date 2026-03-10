@@ -1,6 +1,6 @@
 ---
-title: Media Blocks de Plataforma Apple .NET — iOS y macOS
-description: Bloques específicos de plataforma Apple para captura y procesamiento de video/audio en iOS y macOS con Media Blocks SDK para .NET.
+title: Bloques de Plataforma Apple en C# .NET — iOS, macOS
+description: Cree aplicaciones multimedia para iOS y macOS con codificación ProRes, aceleración VideoToolbox y bloques de audio nativos con VisioForge Media Blocks SDK.
 ---
 
 # Bloques de Plataforma Apple - VisioForge Media Blocks SDK .Net

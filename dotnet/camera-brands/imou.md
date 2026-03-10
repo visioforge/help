@@ -1,6 +1,6 @@
 ---
 title: Imou RTSP URL Guide: Connect to IP Cameras in C# .NET
-description: Connect to Imou cameras in C# .NET with RTSP URL patterns and code samples for Cruiser, Ranger, Bullet, Cell and Versa series models.
+description: Stream Imou Cruiser, Ranger, Bullet, and Cell cameras via RTSP in your C# .NET app. Includes URL format, ONVIF tips, and VisioForge SDK code samples.
 ---
 
 # How to Connect to Imou IP Camera in C# .NET

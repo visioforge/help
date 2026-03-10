@@ -1,6 +1,6 @@
 ---
-title: Escáner de Videos Duplicados DVS con Video Fingerprinting
-description: Usa DVS para escanear carpetas en busca de videos duplicados o similares con características para encontrar y gestionar tu biblioteca de medios.
+title: Escáner de Videos Duplicados DVS con Hashing Perceptual .NET
+description: Escanee carpetas en busca de videos duplicados usando la app DVS de VisioForge con hashing perceptual, procesamiento por lotes y detección multiformat.
 ---
 
 # DVS - Escáner de Videos Duplicados

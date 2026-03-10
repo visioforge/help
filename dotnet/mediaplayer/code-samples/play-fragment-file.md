@@ -1,6 +1,6 @@
 ---
 title: Play Video File Fragments and Segments in C# .NET Apps
-description: Play precise time-based segments of video and audio files with Media Player SDK for Windows and cross-platform .NET applications.
+description: Play precise time-based segments of video and audio files with VisioForge Media Player SDK .NET on Windows and cross-platform environments.
 ---
 
 # Playing Media File Fragments: Implementation Guide for .NET Developers

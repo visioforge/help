@@ -1,172 +1,83 @@
 ---
-title: NDI Video Streaming in .NET: Setup and C# Examples
-description: Implement high-performance NDI streaming in .NET for low-latency video and audio transmission over IP networks with professional workflows.
+title: NDI Video and Audio Streaming over IP Network in C# .NET
+description: Stream video and audio to NDI from cameras, files, and capture devices in C# .NET. Setup guide with SDK examples, audio resampling, and troubleshooting.
 ---
 
 # Network Device Interface (NDI) Streaming Integration
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## What is NDI and Why Use It?
+## What is NDI?
 
-The VisioForge SDK's integration of Network Device Interface (NDI) technology provides a transformative solution for professional video production and broadcasting workflows. NDI has emerged as a leading industry standard for live production, enabling high-quality, ultra-low-latency video streaming over conventional Ethernet networks.
-
-NDI significantly simplifies the process of sharing and managing multiple video streams across diverse devices and platforms. When implemented within the VisioForge SDK, it facilitates seamless transmission of high-definition video and audio content from servers to clients with exceptional performance characteristics. This makes the technology particularly valuable for applications including:
+Network Device Interface (NDI) is an industry standard for live video production over IP networks. It enables high-quality, low-latency video and audio streaming over standard Ethernet — replacing expensive SDI cabling with software-based workflows. Common use cases include:
 
 - Live broadcasting and streaming
 - Professional video conferencing
 - Multi-camera production setups
 - Remote production workflows
-- Educational and corporate presentation environments
+- Playout server applications
 
-The inherent flexibility and efficiency of NDI streaming technology substantially reduces dependency on specialized hardware configurations, delivering a cost-effective alternative to traditional SDI-based systems for professional-grade live video production.
+The VisioForge SDK provides full NDI output support across Windows, macOS, and Linux, letting you stream from cameras, files, or any video source to NDI receivers on your network.
 
 ## Installation Requirements
 
-### Prerequisites for NDI Implementation
+To use NDI streaming, install one of the following official NDI packages:
 
-To successfully implement NDI streaming functionality within your application, you must install one of the following official NDI software packages:
+1. **[NDI SDK](https://ndi.video/for-developers/ndi-sdk/download/)** - Recommended for developers
+2. **[NDI Tools](https://ndi.video/tools/)** - Suitable for testing
 
-1. **[NDI SDK](https://ndi.video/for-developers/ndi-sdk/download/)** - Recommended for developers who need comprehensive access to NDI functionality
-2. **[NDI Tools](https://ndi.video/tools/)** - Suitable for basic implementation and testing scenarios
+These provide the runtime components that enable NDI communication. You can verify NDI availability in code:
 
-These packages provide the necessary runtime components that enable NDI communication across your network infrastructure.
+```csharp
+bool ndiAvailable = NDISinkBlock.IsAvailable();
+```
 
-## Cross-Platform NDI Output Implementation
+## Cross-Platform NDI Output
 
 [VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
-### Understanding the NDIOutput Class Architecture
+### NDIOutput Class
 
-The `NDIOutput` class serves as the core implementation framework for NDI functionality within the VisioForge SDK ecosystem. This class encapsulates configuration properties and processing logic required for high-performance video-over-IP transmission using the NDI protocol. The architecture enables broadcast-quality video and audio transmission across standard network infrastructure without specialized hardware requirements.
-
-#### Class Definition and Interface Implementation
+The `NDIOutput` class provides NDI output for VideoCaptureCoreX and VideoEditCoreX engines:
 
 ```csharp
 public class NDIOutput : IVideoEditXBaseOutput, IVideoCaptureXBaseOutput, IOutputVideoProcessor, IOutputAudioProcessor
 ```
 
-The class implements several interfaces that provide comprehensive functionality for different output scenarios:
+#### Configuration
 
-- `IVideoEditXBaseOutput` - Provides integration with video editing workflows
-- `IVideoCaptureXBaseOutput` - Enables direct capture-to-NDI streaming capabilities
-- `IOutputVideoProcessor` - Allows for advanced video processing during output
-- `IOutputAudioProcessor` - Facilitates audio processing and manipulation in the NDI pipeline
+| Property | Type | Description |
+|----------|------|-------------|
+| `Sink` | `NDISinkSettings` | NDI output configuration (stream name, compression, network settings) |
+| `CustomVideoProcessor` | `MediaBlock` | Optional custom video processing before NDI transmission |
+| `CustomAudioProcessor` | `MediaBlock` | Optional custom audio processing before NDI transmission |
 
-### Configuration Properties
-
-#### Video Processing Pipeline
-
-```csharp
-public MediaBlock CustomVideoProcessor { get; set; }
-```
-
-This property allows developers to extend the NDI streaming pipeline with custom video processing functionality. By assigning a custom `MediaBlock` implementation, you can integrate specialized video filters, transformations, or analysis algorithms before content is transmitted via NDI.
-
-#### Audio Processing Pipeline
+#### Constructors
 
 ```csharp
-public MediaBlock CustomAudioProcessor { get; set; }
+// Create with stream name
+var output = new NDIOutput("My Stream");
+
+// Create with pre-configured settings
+var output = new NDIOutput(new NDISinkSettings("My Stream"));
 ```
-
-Similar to the video processor property, this allows for insertion of custom audio processing logic. Common applications include dynamic audio level adjustment, noise reduction, or specialized audio effects that enhance the streaming experience.
-
-#### NDI Sink Configuration
-
-```csharp
-public NDISinkSettings Sink { get; set; }
-```
-
-This property contains the comprehensive configuration parameters for the NDI output sink, including essential settings such as stream identification, compression options, and network transmission parameters.
-
-### Constructor Overloads
-
-#### Basic Constructor with Stream Name
-
-```csharp
-public NDIOutput(string name)
-```
-
-Creates a new NDI output instance with the specified stream name, which will identify this NDI source on the network.
-
-**Parameters:**
-
-- `name`: String identifier for the NDI stream visible to receivers on the network
-
-#### Advanced Constructor with Pre-configured Settings
-
-```csharp
-public NDIOutput(NDISinkSettings settings)
-```
-
-Creates a new NDI output instance with comprehensive pre-configured sink settings for advanced implementation scenarios.
-
-**Parameters:**
-
-- `settings`: A fully configured `NDISinkSettings` object containing all required NDI configuration parameters
-
-### Core Methods
-
-#### Stream Identification
-
-```csharp
-public string GetFilename()
-```
-
-Returns the configured name of the NDI stream. This method maintains compatibility with file-based output interfaces in the SDK architecture.
-
-**Returns:** The current NDI stream identifier
-
-```csharp
-public void SetFilename(string filename)
-```
-
-Updates the NDI stream identifier. This method is primarily used for compatibility with other output types that use filename-based identification.
-
-**Parameters:**
-
-- `filename`: The updated name for the NDI stream
-
-#### Encoder Management
-
-```csharp
-public Tuple<string, Type>[] GetVideoEncoders()
-```
-
-Returns an empty array as NDI handles video encoding internally through its proprietary technology.
-
-**Returns:** Empty array of encoder tuples
-
-```csharp
-public Tuple<string, Type>[] GetAudioEncoders()
-```
-
-Returns an empty array as NDI handles audio encoding internally through its proprietary technology.
-
-**Returns:** Empty array of encoder tuples
 
 ## Implementation Examples
 
-### Media Blocks SDK Implementation
-
-The following example demonstrates how to configure an NDI output using the Media Blocks SDK architecture:
+### Media Blocks SDK
 
 ```cs
 // Create an NDI output block with a descriptive stream name
 var ndiSink = new NDISinkBlock("VisioForge Production Stream");
 
 // Connect video source to the NDI output
-// CreateNewInput method establishes a video input channel for the NDI sink
 pipeline.Connect(videoSource.Output, ndiSink.CreateNewInput(MediaBlockPadMediaType.Video));
 
 // Connect audio source to the NDI output
-// CreateNewInput method establishes an audio input channel for the NDI sink
 pipeline.Connect(audioSource.Output, ndiSink.CreateNewInput(MediaBlockPadMediaType.Audio));
 ```
 
-### Video Capture SDK Implementation
-
-This example shows how to integrate NDI streaming within the Video Capture SDK framework:
+### Video Capture SDK
 
 ```cs
 // Initialize NDI output with a network-friendly stream name
@@ -174,6 +85,62 @@ var ndiOutput = new NDIOutput("VisioForge_Studio_Output");
 
 // Add the configured NDI output to the video capture pipeline
 core.Outputs_Add(ndiOutput); // core represents the VideoCaptureCoreX instance
+```
+
+## Streaming a Camera to NDI
+
+[MediaBlocksPipeline](#){ .md-button }
+
+The most common use case is streaming a local webcam and microphone to NDI. This example uses the Media Blocks SDK to capture from system devices and send to NDI with proper audio resampling.
+
+### Pipeline Architecture
+
+```text
+SystemVideoSourceBlock → NDISinkBlock (video input)
+SystemAudioSourceBlock → AudioResamplerBlock (48kHz, F32LE, stereo) → NDISinkBlock (audio input)
+```
+
+### Code Example
+
+```cs
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.AudioProcessing;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types.X.AudioEncoders;
+
+// Initialize SDK once at startup
+await VisioForgeX.InitSDKAsync();
+
+var pipeline = new MediaBlocksPipeline();
+
+// Enumerate available devices
+var videoDevices = await DeviceEnumerator.Shared.VideoSourcesAsync();
+var audioDevices = await DeviceEnumerator.Shared.AudioSourcesAsync();
+
+// Set up video source (first available camera)
+var videoSettings = new VideoCaptureDeviceSourceSettings(videoDevices[0]);
+var videoSource = new SystemVideoSourceBlock(videoSettings);
+
+// Set up audio source (first available microphone)
+var audioSettings = new AudioCaptureDeviceSourceSettings(audioDevices[0]);
+var audioSource = new SystemAudioSourceBlock(audioSettings);
+
+// Create NDI output
+var ndiSink = new NDISinkBlock("My Camera Stream");
+
+// Connect video directly to NDI
+pipeline.Connect(videoSource.Output, ndiSink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+// Resample audio to 48kHz F32LE stereo (required by NDI)
+var audioResampler = new AudioResamplerBlock(
+    new AudioResamplerSettings(AudioFormatX.F32LE, 48000, 2));
+pipeline.Connect(audioSource.Output, audioResampler.Input);
+pipeline.Connect(audioResampler.Output, ndiSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
 ```
 
 ## Windows-Specific NDI Implementation
@@ -186,15 +153,11 @@ For Windows-specific implementations, the SDK provides additional configuration 
 
 #### 1. Enable Network Streaming
 
-First, activate the network streaming functionality:
-
 ```cs
 VideoCapture1.Network_Streaming_Enabled = true;
 ```
 
 #### 2. Configure Audio Streaming
-
-Enable audio transmission alongside video content:
 
 ```cs
 VideoCapture1.Network_Streaming_Audio_Enabled = true;
@@ -202,24 +165,18 @@ VideoCapture1.Network_Streaming_Audio_Enabled = true;
 
 #### 3. Select NDI Protocol
 
-Specify NDI as the preferred streaming format:
-
 ```csharp
 VideoCapture1.Network_Streaming_Format = NetworkStreamingFormat.NDI;
 ```
 
 #### 4. Create and Configure NDI Output
 
-Initialize the NDI output with a descriptive name:
-
 ```cs
 var streamName = "VisioForge NDI Streamer";
-var ndiOutput = new NDIOutput(streamName); 
+var ndiOutput = new NDIOutput(streamName);
 ```
 
 #### 5. Assign the Output
-
-Connect the configured NDI output to the video capture pipeline:
 
 ```cs
 VideoCapture1.Network_Streaming_Output = ndiOutput;
@@ -227,28 +184,122 @@ VideoCapture1.Network_Streaming_Output = ndiOutput;
 
 #### 6. Generate the NDI URL (Optional)
 
-For debugging or sharing purposes, you can generate the standard NDI protocol URL:
-
 ```cs
 string ndiUrl = $"ndi://{System.Net.Dns.GetHostName()}/{streamName}";
 Debug.WriteLine(ndiUrl);
 ```
 
-## Advanced Integration Considerations
+## File Playback to NDI Output
 
-When implementing NDI streaming in production environments, consider the following factors:
+The Media Blocks SDK can stream local media files (MP4, MKV, AVI, etc.) directly to NDI without any local rendering — ideal for playout server applications.
 
-- **Network bandwidth requirements** - NDI streams can consume significant bandwidth depending on resolution and framerate
-- **Quality vs. latency tradeoffs** - Configure appropriate compression settings based on your specific use case
-- **Multicast vs. unicast distribution** - Determine the optimal network transmission method based on your infrastructure
-- **Hardware acceleration options** - Leverage GPU acceleration where available for improved performance
-- **Discovery mechanism** - Consider how NDI sources will be discovered across network segments
+### Recommended Pipeline
 
-## Related Components
+```text
+UniversalSourceBlock (file)
+  VideoOutput → NDISinkBlock (video input)
+  AudioOutput → AudioResamplerBlock (48kHz, F32LE, stereo) → NDISinkBlock (audio input)
+```
 
-- **NDISinkSettings** - Provides detailed configuration options for the NDI output sink
-- **NDISinkBlock** - Implements the core NDI output functionality referenced in NDISinkSettings
-- **MediaBlockPadMediaType** - Enum used to specify the type of media (video or audio) for input connections
+### Code Example
 
----
-Visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) for additional code samples and implementation examples.
+```cs
+var pipeline = new MediaBlocksPipeline();
+
+// File source with automatic format detection
+var fileSource = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(new Uri("file:///path/to/video.mp4")));
+
+// NDI output
+var ndiSink = new NDISinkBlock("My NDI Stream");
+
+// Connect video directly to NDI
+pipeline.Connect(fileSource.VideoOutput,
+    ndiSink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+// Resample audio to 48kHz F32LE stereo for NDI compatibility
+var audioResampler = new AudioResamplerBlock(
+    new AudioResamplerSettings(AudioFormatX.F32LE, 48000, 2));
+pipeline.Connect(fileSource.AudioOutput, audioResampler.Input);
+pipeline.Connect(audioResampler.Output,
+    ndiSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+// Optional: enable loop playback
+pipeline.Loop = true;
+
+await pipeline.StartAsync();
+```
+
+## Audio Format Requirements
+
+NDI requires **48kHz, 32-bit float (F32LE), interleaved** audio. When streaming from sources that may contain audio at other sample rates (e.g., 44.1kHz AAC in MP4 files, or varying microphone rates), always include an `AudioResamplerBlock` to convert to 48kHz. Without resampling, audio may stutter, glitch, or lose synchronization with video.
+
+```cs
+var audioResampler = new AudioResamplerBlock(
+    new AudioResamplerSettings(AudioFormatX.F32LE, 48000, 2));
+```
+
+## NDI Source Playback (Receiving)
+
+To receive and play an NDI stream locally with proper audio/video synchronization, use `IsSync = true` (default) on both video and audio renderers. This ensures GStreamer's pipeline clock synchronizes both streams correctly.
+
+```cs
+var ndiSource = new NDISourceBlock(ndiSettings);
+
+// Both renderers use IsSync = true (default) for proper A/V sync
+var videoRenderer = new VideoRendererBlock(pipeline, videoView);
+var audioRenderer = new AudioRendererBlock(audioOutputSettings);
+
+pipeline.Connect(ndiSource.VideoOutput, videoRenderer.Input);
+pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);
+```
+
+For complete NDI source enumeration, connection, and capture details, see the [NDI Video Source Reference](../../videocapture/video-sources/ip-cameras/ndi.md).
+
+## Troubleshooting
+
+### Audio Stuttering or Glitching on NDI Output
+
+**Symptom:** Audio is not smooth when streaming from file sources — stutters, glitches, or lip-sync issues.
+
+**Cause:** The source file contains audio at a sample rate other than 48kHz (e.g., 44.1kHz AAC in MP4 files). NDI expects 48kHz audio.
+
+**Solution:** Insert an `AudioResamplerBlock` configured for 48kHz F32LE stereo between the file source and the NDI sink, as shown in the file playback example above.
+
+### Video/Audio Out of Sync on NDI Receiver
+
+**Symptom:** Video plays ahead of or behind audio when receiving an NDI stream.
+
+**Cause:** The video renderer's `IsSync` property is set to `false`, causing it to render frames immediately without clock synchronization.
+
+**Solution:** Ensure both `VideoRendererBlock` and `AudioRendererBlock` have `IsSync = true` (the default value).
+
+## Frequently Asked Questions
+
+### How do I stream video from a camera to NDI in C#?
+
+Use the Media Blocks SDK to create a pipeline with `SystemVideoSourceBlock` for the camera, `SystemAudioSourceBlock` for the microphone, and `NDISinkBlock` as the output. Connect audio through an `AudioResamplerBlock` set to 48kHz F32LE stereo, which NDI requires. See the [Streaming a Camera to NDI](#streaming-a-camera-to-ndi) section for complete code.
+
+### What audio format does NDI require?
+
+NDI requires 48kHz, 32-bit float (F32LE), interleaved stereo audio. Always include an `AudioResamplerBlock(new AudioResamplerSettings(AudioFormatX.F32LE, 48000, 2))` in your pipeline between the audio source and the NDI sink. Without proper resampling, you may experience audio stuttering, glitches, or A/V sync issues.
+
+### Can I stream a video file to NDI for playout?
+
+Yes. Use `UniversalSourceBlock` to read the file, connect video directly to `NDISinkBlock`, and route audio through `AudioResamplerBlock` for 48kHz conversion. Enable `pipeline.Loop = true` for continuous playout. This pattern is ideal for broadcast playout servers with zero local rendering overhead.
+
+### What are the system requirements for NDI streaming in .NET?
+
+You need the [NDI SDK](https://ndi.video/for-developers/ndi-sdk/download/) or [NDI Tools](https://ndi.video/tools/) installed for runtime NDI support. The VisioForge SDK supports Windows, macOS, and Linux. Check NDI availability at runtime with `NDISinkBlock.IsAvailable()`. Network bandwidth requirements depend on resolution and framerate — a typical HD NDI stream uses approximately 100-150 Mbps.
+
+### How do I check if NDI is available on the system?
+
+Call `NDISinkBlock.IsAvailable()` before creating NDI pipeline components. This static method checks whether the NDI runtime libraries are installed and accessible. If it returns `false`, prompt the user to install the NDI SDK or NDI Tools package.
+
+## See Also
+
+- [NDI Video Source Reference](../../videocapture/video-sources/ip-cameras/ndi.md) — receiving and capturing NDI sources in .NET
+- [RTSP Stream Viewer and IP Camera Player](../../mediablocks/Guides/rtsp-player-csharp.md) — similar IP streaming guide for RTSP cameras
+- [Deployment Guide](../../deployment-x/index.md) — platform-specific runtime packages for Windows, macOS, Linux
+- [Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — NDI streamer and source demos
+- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads

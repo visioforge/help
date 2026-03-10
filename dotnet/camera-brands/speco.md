@@ -1,6 +1,6 @@
 ---
 title: How to Connect to Speco Technologies IP Camera in C# .NET
-description: Connect to Speco Technologies cameras and DVRs in C# .NET with RTSP URL patterns and code samples for O Series, VIP, LS, ZIP, SIP, and DVR models.
+description: Speco Technologies O Series, VIP, and DVR RTSP integration for C# .NET. URL patterns, channel selection, and VisioForge SDK code for IP and analog cameras.
 ---
 
 # How to Connect to Speco Technologies IP Camera in C# .NET

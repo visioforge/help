@@ -1,6 +1,6 @@
 ---
-title: Record Webcam Video to MP4 in C# .NET Applications
-description: Implement webcam video capture to MP4 files in .NET with detailed C# code examples showing high-quality video recording integration.
+title: Record Webcam to MP4 with H.264 Encoding in C# .NET
+description: Enumerate webcams, encode H.264/AAC, and record to MP4 using VisioForge Video Capture SDK. Async capture with WinForms preview and C# code examples.
 ---
 
 # Webcam to MP4 Video Capture Implementation in .NET

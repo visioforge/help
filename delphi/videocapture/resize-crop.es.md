@@ -1,6 +1,6 @@
 ---
-title: Procesar Video Delphi - Tutorial Redimensionar & Recortar
-description: Redimensionamiento y recorte de video en Delphi: procesamiento en tiempo real, manejo de relación de aspecto y ejemplos de código optimizados.
+title: Redimensionar y Recortar Video en Delphi con TVFVideoCapture
+description: Implemente redimensionamiento y recorte de video en Delphi - procesamiento en tiempo real, manejo de relación de aspecto y optimización con ejemplos de código.
 ---
 
 # Redimensionamiento y Recorte de Video en Delphi TVFVideoCapture

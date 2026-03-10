@@ -1,6 +1,6 @@
 ---
 title: Duplicate Video Scanner Sample Application for .Net
-description: Use DVS to scan folders for duplicate or similar videos with features and settings to help find and manage your media library.
+description: Scan folders for duplicate videos using VisioForge DVS sample app with perceptual hashing, batch processing, and cross-format matching.
 ---
 
 # DVS - Duplicate Video Scanner

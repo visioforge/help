@@ -1,6 +1,6 @@
 ---
-title: Selección de Entrada de Video con Crossbar en Delphi
-description: Seleccionar fuentes de entrada de video en Delphi con crossbar - configurar entradas compuesto, S-Video, HDMI con ejemplos de código paso a paso para Delphi.
+title: Selección Crossbar de Entrada - Compuesto, S-Video en Delphi
+description: Seleccione fuentes de entrada de video en Delphi con crossbar - configure entradas compuesto, S-Video, HDMI con ejemplos de código paso a paso para Delphi.
 ---
 
 # Seleccionando Fuentes de Entrada de Video con Tecnología Crossbar

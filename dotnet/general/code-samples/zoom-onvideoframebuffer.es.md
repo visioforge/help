@@ -1,6 +1,6 @@
 ﻿---
-title: Efectos de Zoom con OnVideoFrameBuffer
-description: Crea efectos de zoom personalizados con OnVideoFrameBuffer para manipulación dinámica de frames en aplicaciones de video .NET.
+title: Implementar Efectos de Zoom Personalizados en Apps Video .NET
+description: Cree efectos de zoom personalizados con el evento OnVideoFrameBuffer para manipulación dinámica de frames en aplicaciones de video .NET.
 ---
 
 # Implementación de Efectos de Zoom Personalizados con OnVideoFrameBuffer en .NET

@@ -1,6 +1,6 @@
 ---
-title: Muestras de Código C++: SDK de Huella Digital de Video
-description: Ejemplos C++ nativo y línea de comandos para generación, comparación y búsqueda de huellas de video con implementación del SDK VisioForge.
+title: Ejemplos de código C++ del SDK Video Fingerprinting
+description: Ejemplos de código C++ nativos y de línea de comandos para generación, comparación y búsqueda de huellas de video con el SDK VisioForge.
 ---
 
 # Muestras de Código C++ del SDK de Huella Digital de Video

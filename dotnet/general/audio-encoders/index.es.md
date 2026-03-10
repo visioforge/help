@@ -1,5 +1,5 @@
 ---
-title: Guía de Integración de Codificadores de Audio en .NET
+title: Codificadores de Audio para .NET: Guía AAC, FLAC, MP3, Opus
 description: Implemente codificadores de audio AAC, FLAC, MP3, Opus y otros en .NET con configuraciones óptimas, consejos de rendimiento y mejores prácticas.
 sidebar_label: Codificadores de Audio
 

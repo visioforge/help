@@ -1,6 +1,6 @@
 ---
-title: FLAC Lossless Audio Encoder for .NET SDK: Full Guide
-description: Implement FLAC lossless audio compression in .NET with quality settings, compression parameters, and high-quality audio processing.
+title: FLAC Lossless Audio Encoding and Recording in C# .NET
+description: Lossless recording with quality levels 0-9, sample rates up to 655 kHz, 8-channel surround, and LPC optimization. VisioForge SDK C# code examples.
 ---
 
 # FLAC encoder and output

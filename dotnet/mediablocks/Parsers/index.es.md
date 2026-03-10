@@ -1,6 +1,6 @@
 ---
-title: Parsers de video y audio para Media Blocks SDK .Net
-description: Analice flujos elementales de video y audio para extraer metadatos y preparar contenido para decodificación y multiplexación en Media Blocks SDK.
+title: Bloques Parser - Analizar Flujos H.264, HEVC, AV1 en C# .NET
+description: Analice flujos elementales de video y audio para extraer metadatos y preparar contenido para decodificación y multiplexación en VisioForge Media Blocks SDK.
 ---
 
 # Bloques Parser - VisioForge Media Blocks SDK .Net

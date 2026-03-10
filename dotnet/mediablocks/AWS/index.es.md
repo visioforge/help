@@ -1,6 +1,6 @@
 ---
-title: Bloques AWS S3 Source y Sink en Media Blocks SDK .Net
-description: Lea y escriba en almacenamiento AWS S3 con bloques source y sink para pipelines de procesamiento de medios en aplicaciones Media Blocks SDK .NET.
+title: Bloques AWS S3 - Almacenamiento Cloud de Medios en C# .NET
+description: Lea y escriba archivos multimedia en Amazon S3 en su pipeline con VisioForge Media Blocks SDK. Transmita, transcodifique y almacene video en la nube.
 ---
 
 # Bloques AWS S3 - VisioForge Media Blocks SDK .Net

@@ -9,7 +9,7 @@ description: Conecta cámaras IP ACTi en C# .NET con patrones de URL RTSP y ejem
 
 ## Descripción de la Marca
 
-**ACTi Corporation** es un fabricante taiwanés de cámaras de vigilancia IP y soluciones de gestión de video. Con sede en Taipei, Taiwán, ACTi se dirige a mercados profesionales y empresariales con una amplia gama de cámaras fijas, domo, bullet y PTZ. ACTi es conocida por sus cámaras actuales de las series A/B/D/E y las líneas de productos antiguas ACM, KCM y TCM.
+**ACTi Corporation** es un fabricante taiwanés de cámaras de vigilancia IP y soluciones de gestión de video. Con sede en Taipéi, Taiwán, ACTi se dirige a mercados profesionales y empresariales con una amplia gama de cámaras fijas, domo, bullet y PTZ. ACTi es conocida por sus cámaras actuales de las series A/B/D/E y las líneas de productos antiguas ACM, KCM y TCM.
 
 **Datos clave:**
 
