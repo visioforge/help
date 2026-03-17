@@ -8,6 +8,95 @@ hide_table_of_contents: true
 
 Cambios y actualizaciones para todos los SDKs .Net.
 
+## 2026.3.11
+
+* [Core] Enumeración de dispositivos: los dispositivos Blackmagic ATEM y Web Presenter ahora aparecen en las listas regulares de dispositivos de video/audio en lugar de ser filtrados como hardware Decklink. Estos dispositivos usan controladores USB/UVC estándar, no el SDK de Decklink. Se aplica a las rutas de enumeración DirectShow y GStreamer.
+
+## 2026.2.16
+
+* [Media Blocks SDK .Net] Se agregó PreEventRecordingBlock para grabación de video con búfer circular (pre-evento) con duración de búfer configurable, vaciado consciente de fotogramas clave y parada automática post-evento
+* [Video Capture SDK .Net] VideoCaptureCoreX: Se agregó API de grabación pre-evento con métodos TriggerPreEventRecording, ExtendPreEventRecording, StopPreEventRecording y consulta de estado
+* [Video Capture SDK .Net] VideoCaptureCoreX: Se agregó PreEventRecordingOutput para configurar la grabación con búfer circular con soporte de contenedores MP4, MPEG-TS y MKV
+
+## 2026.2.12
+
+* [Media Blocks SDK .Net] Se agregó el evento OnNetworkSourceDisconnect para detectar desconexiones de fuentes de red (RTSP, HTTP, SRT, NDI, RTMP, etc.) con información detallada del error y URI de origen
+
+## 2026.2.11
+
+* [Media Player SDK .Net], [Media Blocks SDK .Net] Se corrigió el enrutamiento del pipeline de efectos de audio
+
+## 2026.2.10
+
+* [Core] Se agregó soporte de rutas de red UNC (SMB/Samba) para fuentes de archivos en todos los motores X, corrigiendo fallos de File.Exists() en recursos compartidos de red
+* [Media Blocks SDK .Net], [Video Capture SDK .Net] Se agregó soporte de resaltado de clic del ratón para captura de pantalla con suscripción/desuscripción automática, entrada de clic manual y actualización de configuración en tiempo real
+
+## 2026.2.8
+
+* [Media Blocks SDK .Net] Se agregó OverlayManagerImageSequence: superposición de secuencia de imágenes con duraciones por fotograma, bucle, animación de posición/tamaño, efectos de desvanecimiento y soporte de easing
+* [Media Blocks SDK .Net] Se agregó la clase de datos ImageSequenceItem para definir fotogramas de secuencia de imágenes
+* [Media Blocks SDK .Net] OverlayManagerBlock: Se agregaron métodos de conveniencia para superposiciones de secuencia de imágenes (Video_Overlay_AddImageSequence, UpdateImageSequencePosition, AnimateImageSequence, ImageSequenceFadeIn/Out)
+* [Core] Se extrajo OverlayManagerEasingHelper: funciones de easing compartidas para todos los tipos de animación de superposición (Image, Fade, Pan, Squeezeback, ImageSequence)
+
+## 2026.2.4
+
+* [Media Blocks SDK .Net] Se agregó H264PushSourceBlock para insertar datos codificados H.264 sin procesar en un pipeline de decodificación, con conversión automática de AVC a byte-stream y rebase de PTS
+* [Core] Se agregó RtspDescribeClient: cliente RTSP DESCRIBE ligero y multiplataforma para descubrimiento rápido de streams (~100-200ms), con análisis SDP y soporte de autenticación Basic/Digest
+* [Core] RTSPSourceSettings: Se agregó ruta de descubrimiento RTSP rápido usando RtspDescribeClient
+* [Core] RTSPRAWSourceSettings: Se agregó ruta de descubrimiento RTSP rápido usando RtspDescribeClient
+* [Core] UniversalSourceSettings: Se agregó ruta de descubrimiento RTSP rápido para URIs rtsp:// y rtsps://
+
+## 2026.2.2
+
+* [Core] VideoCaptureDeviceInfo: Se extendió la población de rutas de dispositivos Windows para soportar dispositivos Media Foundation (MF) además de KS
+* [Core] VideoCaptureDeviceInfo: Se corrigió un error preexistente donde la validación de ruta de dispositivo V4L2 verificaba la variable incorrecta
+* [Core] VideoCaptureDeviceSourceSettings: Se agregaron métodos estáticos FindByDevicePath() para restaurar perfiles de cámara guardados por ruta de dispositivo
+* [Core] DeviceEnumerator: Se agregó el método FindVideoSourceByDevicePathAsync() para buscar dispositivos por ruta
+* [Media Blocks SDK .Net] Se agregó soporte de salida RIST (Reliable Internet Stream Transport) MPEG-TS sink
+* [Media Blocks SDK .Net] Se agregó soporte de salida WebRTC WHIP (WebRTC-HTTP Ingestion Protocol)
+* [Video Capture SDK .Net] Se agregó salida de streaming WebRTC WHIP
+* [Video Capture SDK .Net] Se agregó salida de streaming RIST
+
+## 2026.1.16
+
+* [Media Blocks SDK .Net] BridgeVideoSourceSettings: Se agregó la propiedad DoTimestamp para habilitar la generación de marcas de tiempo frescas en escenarios de pipelines cruzados
+
+## 2026.1.15
+
+* [Media Blocks SDK .Net] DecklinkVideoSinkSettings: Se hizo obligatorio el parámetro Mode en el constructor para prevenir problemas de desajuste de velocidad de fotogramas (antes usaba el modo Unknown por defecto causando una salida inesperada de 23.98fps)
+* [Media Blocks SDK .Net] DecklinkVideoSinkSettings: Se hicieron las propiedades DeviceNumber y Mode de solo lectura para inmutabilidad
+* [Core] DecklinkVideoOutputDialog (WPF): Se agregó selector de Modo de Video para configurar la velocidad de fotogramas de salida
+
+## 2026.1.12
+
+* [Core] WPF VideoView: Se corrigió el fallo (System.ExecutionEngineException) al minimizar la ventana durante la reproducción de video con superposición
+
+## 2026.1.11
+
+* [Media Blocks SDK .Net] RTSPSourceBlock: Se corrigió la congelación de video cuando la captura de audio está deshabilitada para cámaras con múltiples streams de audio
+* [Media Blocks SDK .Net] RTSPRAWSourceBlock: Se agregó manejo de fakesink para streams de audio deshabilitados para prevenir bloqueos del pipeline
+* [Core] MediaInfoReaderCore: Se agregó registro de streams de audio, video y RTP descubiertos
+* [Core] MediaInfoReaderCore: Se corrigió el blocksize excesivo (5MB) que se establecía para fuentes RTSP, mejorando la velocidad de descubrimiento
+
+## 2026.1.10
+
+* [Video Capture SDK .Net] DSFFMPEGEXEPipeOutput: Se corrigió el retraso de vista previa durante la captura de video con manejo optimizado de pipe y procesamiento de cola
+* [Video Capture SDK .Net] Salida FFMPEG EXE: Se agregaron optimizaciones de codificación en tiempo real para VP8/VP9, se corrigió el modo de calidad MJPEG, se mejoraron los valores predeterminados de H264MFSettings
+
+## 2026.1.6
+
+* [Video Capture SDK .Net] VideoCaptureCoreX: Se corrigió el problema de resolución de captura de video cuando se aplica ResizeVideoEffect
+
+## 2025.12.12
+
+* [Media Blocks SDK .Net] Se agregó PitchBlock para cambio de tono de audio con control de semitonos (rango de -12 a +12)
+* [Media Player SDK X .Net] CDGSource: Se agregó soporte de cambio de tono con la opción EnablePitchShifting y control PitchSemitones en tiempo real
+* [Media Player SDK X .Net / Media Blocks SDK .Net] CDGSourceSettings: Se agregó soporte de archivos ZIP para archivos de karaoke (pares MP3+CDG dentro de ZIP)
+
+## 2025.12.9
+
+* Se agregó soporte de Uno Platform para plataformas de escritorio y móviles
+
 ## 2025.11.4
 
 * Soporte de .Net 10 para todos los SDKs

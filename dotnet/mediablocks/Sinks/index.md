@@ -1775,6 +1775,285 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux.
 
+### UDP
+
+UDP (User Datagram Protocol) is a lightweight, connectionless transport protocol that provides low-latency streaming with minimal overhead. Unlike TCP-based protocols, UDP doesn't guarantee packet delivery, making it ideal for real-time applications where speed is crucial.
+
+Use the `UDPSinkSettings` class to set the parameters.
+
+#### Block info
+
+Name: UDPSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | Any stream format | 1 |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->MPEGTSMuxerBlock;
+    MPEGTSMuxerBlock-->UDPSinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+// Create an MPEG-TS muxer to combine audio and video
+var muxer = new MPEGTSMuxerBlock();
+pipeline.Connect(fileSource.AudioOutput, muxer.CreateNewInput(MediaBlockPadMediaType.Audio));
+pipeline.Connect(fileSource.VideoOutput, muxer.CreateNewInput(MediaBlockPadMediaType.Video));
+
+// Create UDP sink
+var udpSettings = new UDPSinkSettings
+{
+    Host = "192.168.1.100",
+    Port = 5004
+};
+
+var udpSink = new UDPSinkBlock(udpSettings);
+pipeline.Connect(muxer.Output, udpSink.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### UDP MPEG-TS
+
+UDP MPEG-TS combines MPEG-TS multiplexing with UDP transport. This allows low-latency delivery of multiplexed audio and video streams over UDP, which is widely used in broadcast, IPTV, and video surveillance workflows.
+
+Use the `UDPSinkSettings` class to set the parameters.
+
+#### Block info
+
+Name: UDPMPEGTSSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input audio | audio/x-raw | one or more |
+| | audio/mpeg | |
+| | audio/x-ac3 | |
+| | audio/x-alaw | |
+| | audio/x-mulaw | |
+| | audio/AAC | |
+| Input video | video/x-raw | one or more |
+| | image/jpeg | |
+| | video/x-msmpeg | |
+| | video/mpeg | |
+| | video/x-h263 | |
+| | video/x-h264 | |
+| | video/x-h265 | |
+
+#### Settings
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Host` | `string` | `"localhost"` | Destination host/IP/multicast group |
+| `Port` | `int` | `5004` | Destination port |
+| `TTL` | `int` | `64` | Unicast time-to-live |
+| `MulticastTTL` | `int` | `1` | Multicast time-to-live |
+| `AutoMulticast` | `bool` | `true` | Auto join/leave multicast groups |
+| `MulticastInterface` | `string` | `null` | Network interface for multicast |
+| `Loop` | `bool` | `true` | Multicast loopback |
+| `BufferSize` | `int` | `0` | Kernel send buffer size (0 = default) |
+| `QosDscp` | `int` | `-1` | DSCP value (-1 = default) |
+| `BindAddress` | `string` | `null` | Local address to bind |
+| `BindPort` | `int` | `0` | Local port to bind (0 = auto) |
+| `MuxerLatency` | `TimeSpan` | 1000 ms | MPEG-TS muxer aggregator latency |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->AACEncoderBlock;
+    UniversalSourceBlock-->H264EncoderBlock;
+    AACEncoderBlock-->UDPMPEGTSSinkBlock;
+    H264EncoderBlock-->UDPMPEGTSSinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
+pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
+
+var videoEncoderBlock = new H264EncoderBlock(new OpenH264EncoderSettings());
+pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
+
+// Configure UDP MPEG-TS sink
+var udpSettings = new UDPSinkSettings
+{
+    Host = "192.168.1.100",
+    Port = 5004,
+    TTL = 64
+};
+
+var sinkBlock = new UDPMPEGTSSinkBlock(udpSettings);
+pipeline.Connect(audioEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
+pipeline.Connect(videoEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+`UDPMPEGTSSinkBlock.IsAvailable()` returns `true` if the GStreamer `udp` plugin is present.
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### Multi-destination UDP
+
+The `MultiUDPSinkBlock` sends raw data over UDP to one or multiple recipients simultaneously. Destinations are specified as comma-separated host:port pairs and can be managed using helper methods on the settings class.
+
+Use the `MultiUDPSinkSettings` class to set the parameters.
+
+#### Block info
+
+Name: MultiUDPSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input | Any stream format | 1 |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->MPEGTSMuxerBlock;
+    MPEGTSMuxerBlock-->MultiUDPSinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+// Create an MPEG-TS muxer to combine audio and video
+var muxer = new MPEGTSMuxerBlock();
+pipeline.Connect(fileSource.AudioOutput, muxer.CreateNewInput(MediaBlockPadMediaType.Audio));
+pipeline.Connect(fileSource.VideoOutput, muxer.CreateNewInput(MediaBlockPadMediaType.Video));
+
+// Create multi-destination UDP sink
+var multiUdpSettings = new MultiUDPSinkSettings();
+multiUdpSettings.AddClient("192.168.1.100", 5004);
+multiUdpSettings.AddClient("192.168.1.101", 5004);
+
+var multiUdpSink = new MultiUDPSinkBlock(multiUdpSettings);
+pipeline.Connect(muxer.Output, multiUdpSink.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### Multi-destination UDP MPEG-TS
+
+The `MultiUDPMPEGTSSinkBlock` multiplexes audio and video streams into MPEG-TS and sends the result over UDP to one or more destinations simultaneously. This is useful for broadcasting the same stream to multiple receivers, recording servers, or redundant endpoints.
+
+Multiple audio and video input pads are supported. Call `CreateNewInput(MediaBlockPadMediaType.Video)` and `CreateNewInput(MediaBlockPadMediaType.Audio)` to obtain pads before connecting encoders.
+
+#### Block info
+
+Name: MultiUDPMPEGTSSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input audio | audio/x-raw | one or more |
+| | audio/mpeg | |
+| | audio/x-ac3 | |
+| | audio/x-alaw | |
+| | audio/x-mulaw | |
+| | audio/AAC | |
+| Input video | video/x-raw | one or more |
+| | image/jpeg | |
+| | video/x-msmpeg | |
+| | video/mpeg | |
+| | video/x-h263 | |
+| | video/x-h264 | |
+| | video/x-h265 | |
+
+#### Settings
+
+Use `MultiUDPSinkSettings` to configure the destinations:
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Clients` | `string` | `""` | Comma-separated `host:port` pairs |
+| `SendDuplicates` | `bool` | `true` | Send duplicates when same destination is added multiple times |
+| `TTL` | `int` | `64` | Unicast time-to-live |
+| `MulticastTTL` | `int` | `1` | Multicast time-to-live |
+| `AutoMulticast` | `bool` | `true` | Auto join/leave multicast groups |
+| `MulticastInterface` | `string` | `null` | Network interface for multicast |
+| `Loop` | `bool` | `true` | Multicast loopback |
+| `BufferSize` | `int` | `0` | Kernel send buffer size (0 = default) |
+| `QosDscp` | `int` | `-1` | DSCP value (-1 = default) |
+| `BindAddress` | `string` | `null` | Local address to bind |
+| `BindPort` | `int` | `0` | Local port to bind (0 = auto) |
+| `MuxerLatency` | `TimeSpan` | 1000 ms | MPEG-TS muxer aggregator latency |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock -- Raw Video --> H264EncoderBlock;
+    UniversalSourceBlock -- Raw Audio --> AACEncoderBlock;
+    H264EncoderBlock --> MultiUDPMPEGTSSinkBlock;
+    AACEncoderBlock --> MultiUDPMPEGTSSinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+
+var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+var aacEncoder = new AACEncoderBlock();
+
+pipeline.Connect(source.VideoOutput, h264Encoder.Input);
+pipeline.Connect(source.AudioOutput, aacEncoder.Input);
+
+var multiUdpSettings = new MultiUDPSinkSettings();
+multiUdpSettings.AddClient("192.168.1.100", 5004);
+multiUdpSettings.AddClient("192.168.1.101", 5004);
+
+var multiUdpSink = new MultiUDPMPEGTSSinkBlock(multiUdpSettings);
+pipeline.Connect(h264Encoder.Output, multiUdpSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(aacEncoder.Output, multiUdpSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+`MultiUDPMPEGTSSinkBlock.IsAvailable()` returns `true` if the GStreamer `udp` plugin is present.
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
 ## Utility Sinks
 
 ### Stream Sink

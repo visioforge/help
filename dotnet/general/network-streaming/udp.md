@@ -129,6 +129,85 @@ This code:
 3. Specifies MPEG-TS as the container format
 4. Assigns this configuration to the streaming output
 
+## Cross-platform UDP Output with Media Blocks
+
+[MediaBlocksPipeline](#){ .md-button }
+
+The Media Blocks SDK provides cross-platform UDP streaming support using GStreamer-based blocks. These blocks work on Windows, macOS, Linux, iOS, and Android.
+
+### Single-destination MPEG-TS Streaming
+
+Use `UDPMPEGTSSinkBlock` to multiplex audio and video into MPEG-TS and send over UDP to a single destination:
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+
+var videoEncoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+var audioEncoder = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
+
+pipeline.Connect(fileSource.VideoOutput, videoEncoder.Input);
+pipeline.Connect(fileSource.AudioOutput, audioEncoder.Input);
+
+var udpSettings = new UDPSinkSettings
+{
+    Host = "192.168.1.100",
+    Port = 5004,
+    TTL = 64
+};
+
+var udpSink = new UDPMPEGTSSinkBlock(udpSettings);
+pipeline.Connect(videoEncoder.Output, udpSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(audioEncoder.Output, udpSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+### Multi-destination MPEG-TS Streaming
+
+Use `MultiUDPMPEGTSSinkBlock` to send the same MPEG-TS stream to multiple receivers simultaneously:
+
+```csharp
+var multiUdpSettings = new MultiUDPSinkSettings();
+multiUdpSettings.AddClient("192.168.1.100", 5004);
+multiUdpSettings.AddClient("192.168.1.101", 5004);
+
+var multiUdpSink = new MultiUDPMPEGTSSinkBlock(multiUdpSettings);
+pipeline.Connect(videoEncoder.Output, multiUdpSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(audioEncoder.Output, multiUdpSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+### Multicast Streaming
+
+For multicast delivery, set the `Host` to a multicast address (224.0.0.0 – 239.255.255.255):
+
+```csharp
+var udpSettings = new UDPSinkSettings
+{
+    Host = "239.101.101.1",
+    Port = 5004,
+    MulticastTTL = 4,
+    AutoMulticast = true
+};
+```
+
+### Receiving UDP Streams
+
+You can verify the stream using GStreamer command-line tools:
+
+```bash
+gst-launch-1.0 udpsrc port=5004 ! tsdemux ! decodebin ! autovideosink
+```
+
+Or receive with VLC:
+
+```
+vlc udp://@:5004
+```
+
 ## Advanced Configuration Options
 
 ### Bitrate Management
