@@ -89,6 +89,7 @@ Modular building blocks for creating:
 
 ## Additional Developer Resources
 
+- [Migration Guide: v15 to v2026](migration-from-v15.md) - Step-by-step upgrade instructions
 - [Changelog](changelog.md) - Detailed version history and updates
 - [Feature and Platform Matrix](platform-matrix.md) - Compatibility overview
 - [API Reference Documentation](https://api.visioforge.org/dotnet/api/index.html) - Complete API specifications

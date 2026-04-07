@@ -420,6 +420,13 @@ if (vlcSrc2 != null)
 
 ## Version History
 
+### Version 2026.3.4
+
+- Updated to VLC v3.0.23 core
+- Upgraded build toolset to MSVC v143 (Visual Studio 2022)
+- Fixed crash on graph teardown during `libvlc_media_player_stop()`
+- Replaced Boost dependencies with C++ standard library equivalents
+
 ### Version 15.0
 
 - Enhanced playback quality across numerous formats

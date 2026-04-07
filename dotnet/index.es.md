@@ -87,6 +87,7 @@ Bloques de construcción modulares para crear:
 
 ## Recursos Adicionales para Desarrolladores
 
+- [Guía de Migración: v15 a v2026](migration-from-v15.md) - Instrucciones de actualización paso a paso
 - [Registro de Cambios](changelog.md) - Historial detallado de versiones y actualizaciones
 - [Matriz de Características y Plataformas](platform-matrix.md) - Resumen de compatibilidad
 - [Documentación de Referencia de API](https://api.visioforge.org/dotnet/api/index.html) - Especificaciones completas de API
