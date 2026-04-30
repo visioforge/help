@@ -1,6 +1,25 @@
 ---
 title: SDK Reproductor de Video Android con Streaming y .NET
 description: Crea apps de reproductor Android con reproducción de video, streaming, aceleración por hardware y soporte de múltiples formatos con el SDK de Media Player.
+tags:
+  - Media Player SDK
+  - .NET
+  - MediaPlayerCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Playback
+  - Streaming
+  - RTSP
+  - HLS
+  - MP4
+  - C#
+primary_api_classes:
+  - MediaPlayerCoreX
+
 ---
 
 # SDK de Reproductor Multimedia para Android - Solución Profesional de Reproducción de Video

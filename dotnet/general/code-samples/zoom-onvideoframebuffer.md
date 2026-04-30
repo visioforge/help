@@ -1,178 +1,123 @@
 ---
-title: Implementing Custom Zoom Effects in .NET Video Apps
-description: Create custom zoom effects with OnVideoFrameBuffer event for dynamic video frame manipulation in .NET video capture, editing, and playback apps.
+title: Zoom Effects in C# .NET Video Apps with Pan Control
+description: Apply zoom and pan effects in C# / .NET with VideoEffectZoom and VideoEffectPan — runtime-adjustable focal point for capture, playback, and editing.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - C#
+primary_api_classes:
+  - VideoEffectZoom
+  - VideoEffectPan
+
 ---
 
-# Implementing Custom Zoom Effects with OnVideoFrameBuffer in .NET
+# Implementing Zoom Effects in .NET
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
-Implementing custom zoom effects in video applications is a common requirement for developers working with video processing. This guide explains how to manually create zoom functionality in your .NET video applications using the OnVideoFrameBuffer event. This technique works across multiple SDK platforms, including Video Capture, Media Player, and Video Edit SDKs.
+Zoom and pan are a built-in video effect in the VisioForge classic (Windows / DirectShow) engines — `VideoCaptureCore`, `MediaPlayerCore`, and `VideoEditCore`. The `VideoEffectZoom` and `VideoEffectPan` classes handle scaling, centering, and runtime adjustments without touching the frame buffer directly. This is the recommended path when you want zoom.
 
-## Understanding the OnVideoFrameBuffer Event
+You only need to drop down to `OnVideoFrameBuffer` when `VideoEffectZoom` cannot express what you need — for example, a custom non-affine warp or integration with an external image library.
 
-The OnVideoFrameBuffer event is a powerful feature that gives developers direct access to video frame data during playback or processing. By handling this event, you can:
+## Applying VideoEffectZoom (recommended)
 
-- Access raw frame data in real-time
-- Apply custom modifications to individual frames
-- Implement visual effects like zooming, rotation, or color adjustments
-- Control video quality and performance
-
-## Implementation Steps
-
-The process of implementing a zoom effect involves several key steps:
-
-1. Allocating memory for temporary buffers
-2. Handling the OnVideoFrameBuffer event
-3. Applying the zoom transformation to each frame
-4. Managing memory to prevent leaks
-
-Let's break down each of these steps with detailed explanations.
-
-## Memory Management for Frame Processing
-
-When working with video frames, proper memory management is critical. You'll need to allocate sufficient memory to handle frame data and temporary processing buffers.
+`VideoEffectZoom` gets added to the pipeline once and can be tweaked while video is playing. It scales every frame automatically — no per-frame C# code.
 
 ```cs
-private IntPtr tempBuffer = IntPtr.Zero;
-IntPtr tmpZoomFrameBuffer = IntPtr.Zero;
-private int tmpZoomFrameBufferSize = 0;
+using VisioForge.Core.Types.VideoEffects;
+
+var zoomEffect = new VideoEffectZoom(
+    zoomX: 2.0,    // 2.0 = 200% horizontal zoom (1.0 = no zoom)
+    zoomY: 2.0,    // 2.0 = 200% vertical zoom — keep equal to zoomX for uniform scaling
+    shiftX: 0,     // Pixel offset from centre; positive shifts right
+    shiftY: 0,     // Pixel offset from centre; positive shifts down
+    enabled: true,
+    name: "Zoom");
+
+// VideoCapture1 is a VideoCaptureCore instance (same API on MediaPlayerCore / VideoEditCore).
+VideoCapture1.Video_Effects_Enabled = true;
+VideoCapture1.Video_Effects_Add(zoomEffect);
 ```
 
-These fields serve the following purposes:
+### Adjust zoom at runtime
 
-- `tempBuffer`: Stores the processed frame data
-- `tmpZoomFrameBuffer`: Holds the intermediary zoom calculation results
-- `tmpZoomFrameBufferSize`: Tracks the required size for the zoom buffer
-
-## Detailed Code Implementation
-
-Below is a complete implementation of the zoom effect using the OnVideoFrameBuffer event in a Media Player SDK .NET application:
+Keep a reference to the effect and modify its properties while the pipeline is running — the SDK picks up the new values on the next frame:
 
 ```cs
-private IntPtr tempBuffer = IntPtr.Zero;
-IntPtr tmpZoomFrameBuffer = IntPtr.Zero;
-private int tmpZoomFrameBufferSize = 0;
+zoomEffect.ZoomX = 3.0;
+zoomEffect.ZoomY = 3.0;
+zoomEffect.ShiftX = 200;   // Pan focus 200 px to the right of centre
+zoomEffect.ShiftY = -100;  // And 100 px up
+```
 
-private void MediaPlayer1_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
+Toggling without removing:
+
+```cs
+zoomEffect.Enabled = false;   // Bypass on the fly
+zoomEffect.Enabled = true;    // Re-enable later
+```
+
+### Interpolation quality
+
+`InterpolationMode` defaults to `VideoInterpolationMode.Bilinear`. For sharper results at higher zoom factors set it to a higher-quality mode; for lowest CPU set `NearestNeighbor`.
+
+```cs
+zoomEffect.InterpolationMode = VideoInterpolationMode.Bicubic;
+```
+
+## Pairing with VideoEffectPan
+
+If you want smooth pan animation across a source that is larger than the output (for example, "Ken Burns" slow zoom over a still image), combine `VideoEffectZoom` with `VideoEffectPan` from the same namespace. Drive both from a timer or animation curve.
+
+## Dropping down to OnVideoFrameBuffer
+
+Implement a custom zoom by hand only when `VideoEffectZoom` can't do what you need — for example, a non-affine warp, per-pixel magnification around the cursor, or integration with a third-party imaging library. You get the raw frame bytes, transform them in place (or into `e.Frame.Data`), and set `e.UpdateData = true` so the modified pixels flow downstream.
+
+```cs
+using System.Runtime.InteropServices;
+
+private void SDK_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
 {
-    // Initialize the temporary buffer if it hasn't been created yet
-    if (tempBuffer == IntPtr.Zero)
-    {
-        tempBuffer = Marshal.AllocCoTaskMem(e.Frame.DataSize);
-    }
+    // e.Frame.Data     — IntPtr to the pixel buffer
+    // e.Frame.DataSize — buffer size in bytes
+    // e.Frame.Info.Width / Info.Height / Info.Stride — frame dimensions (RAWBaseVideoInfo)
+    // e.Frame.Timestamp — per-frame TimeSpan
 
-    // Set the zoom factor (2.0 = 200% zoom)
-    const double zoom = 2.0;
-    
-    // Apply the zoom effect using the FastImageProcessing utility
-    FastImageProcessing.EffectZoom(
-        e.Frame.Data,           // Source frame data
-        e.Frame.Width,          // Frame width
-        e.Frame.Height,         // Frame height 
-        tempBuffer,             // Output buffer
-        zoom,                   // Horizontal zoom factor
-        zoom,                   // Vertical zoom factor
-        0,                      // Center X coordinate (0 = center)
-        0,                      // Center Y coordinate (0 = center)
-        tmpZoomFrameBuffer,     // Intermediate buffer
-        ref tmpZoomFrameBufferSize); // Buffer size reference
-    
-    // Allocate the zoom frame buffer if needed and return to process in next frame
-    if (tmpZoomFrameBufferSize > 0 && tmpZoomFrameBuffer == IntPtr.Zero)
-    {
-        tmpZoomFrameBuffer = Marshal.AllocCoTaskMem(tmpZoomFrameBufferSize);
-        return;
-    }
+    // 1. Read/copy bytes into your own scratch buffer:
+    byte[] scratch = new byte[e.Frame.DataSize];
+    Marshal.Copy(e.Frame.Data, scratch, 0, e.Frame.DataSize);
 
-    // Copy the processed data back to the frame buffer
-    FastImageProcessing.CopyMemory(tempBuffer, e.Frame.Data, e.Frame.DataSize);
+    // 2. Apply whatever custom transform you need on the bytes of `scratch`
+    //    (resample, warp, composite, etc.). Keep the output size == input size
+    //    because the SDK will not negotiate a new resolution mid-pipeline.
+
+    // 3. Write the result back into the original buffer:
+    Marshal.Copy(scratch, 0, e.Frame.Data, e.Frame.DataSize);
+
+    // 4. Tell the pipeline we mutated the pixels.
+    e.UpdateData = true;
 }
 ```
 
-## Customizing the Zoom Effect
+### X-engine note
 
-The code above uses a fixed zoom factor of 2.0 (200%), but you can modify this to create various zoom effects:
-
-### Dynamic Zoom Levels
-
-You can implement user-controlled zoom by replacing the constant zoom value with a variable:
-
-```cs
-// Replace this:
-const double zoom = 2.0;
-
-// With something like this:
-double zoom = this.userZoomSlider.Value; // Get zoom value from UI control
-```
-
-### Zoom with Focus Point
-
-The `EffectZoom` method accepts X and Y coordinates to set the center point of the zoom. Setting these to non-zero values allows you to focus the zoom on specific areas:
-
-```cs
-// Zoom centered on the top-right quadrant
-FastImageProcessing.EffectZoom(
-    e.Frame.Data,
-    e.Frame.Width,
-    e.Frame.Height, 
-    tempBuffer, 
-    zoom, 
-    zoom, 
-    e.Frame.Width / 4,  // X offset from center 
-    -e.Frame.Height / 4, // Y offset from center
-    tmpZoomFrameBuffer,
-    ref tmpZoomFrameBufferSize);
-```
+On the cross-platform X engines (`VideoCaptureCoreX`, `MediaPlayerCoreX`) the buffer arrives in `VideoFrameXBufferEventArgs`. Flat dimensions live directly on `e.Frame.Width` / `Height` / `Stride`, and frames are typically BGRA. For heavy pixel math, wrap the buffer in `SKPixmap` (SkiaSharp is already a transitive dependency of the X engines).
 
 ## Performance Considerations
 
-When implementing custom video effects like zooming, consider these performance tips:
-
-1. **Memory Management**: Always free allocated memory when your application closes to prevent leaks
-2. **Buffer Reuse**: Reuse buffers when possible rather than reallocating for each frame
-3. **Processing Time**: Keep processing time minimal to maintain smooth video playback
-4. **Resolution Impact**: Higher resolution videos require more processing power for real-time effects
-
-## Cleaning Up Resources
-
-To properly clean up resources when your application closes, implement a cleanup method:
-
-```cs
-private void CleanupZoomResources()
-{
-    if (tempBuffer != IntPtr.Zero)
-    {
-        Marshal.FreeCoTaskMem(tempBuffer);
-        tempBuffer = IntPtr.Zero;
-    }
-
-    if (tmpZoomFrameBuffer != IntPtr.Zero)
-    {
-        Marshal.FreeCoTaskMem(tmpZoomFrameBuffer);
-        tmpZoomFrameBuffer = IntPtr.Zero;
-    }
-}
-```
-
-Call this method when your form or application closes to prevent memory leaks.
-
-## Troubleshooting Common Issues
-
-When implementing the zoom effect, you might encounter these issues:
-
-1. **Distorted Image**: Check that your zoom factors for width and height are equal for uniform scaling
-2. **Blank Frames**: Ensure proper memory allocation and buffer sizes
-3. **Poor Performance**: Consider reducing the frame processing complexity or the video resolution
-4. **Memory Errors**: Verify that all memory is properly allocated and freed
+- Prefer `VideoEffectZoom` over the frame-buffer path — the native scaler is faster and thread-safe.
+- Reuse scratch buffers instead of allocating per frame.
+- Keep the output resolution equal to the input resolution from the handler — the pipeline does not renegotiate caps mid-stream.
+- Offload heavy CV / AI work to a worker thread; return quickly from the event handler to avoid back-pressure.
 
 ## Conclusion
 
-Implementing custom zoom effects using the OnVideoFrameBuffer event gives you precise control over video appearance in your .NET applications. By following the techniques outlined in this guide, you can create sophisticated zoom functionality that enhances the user experience in your video applications.
-
-Remember to properly manage memory resources and optimize for performance to ensure smooth playback with your custom effects.
+For virtually every application, `VideoEffectZoom` (optionally paired with `VideoEffectPan`) is the right tool — it's one line of setup, runtime-adjustable, and implemented in native code. `OnVideoFrameBuffer` remains available for the cases where you genuinely need to own the bytes.
 
 ---
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

@@ -1,6 +1,24 @@
 ---
 title: Conectar Cámara IP Wisenet Hanwha Vision en C# .NET SDK
 description: Conecte cámaras Wisenet en C# .NET con patrones de URL RTSP para las series Wisenet X, P, Q, L de Hanwha Vision. Ejemplos de código completos y guía de NVR.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Decoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Wisenet en C# .NET

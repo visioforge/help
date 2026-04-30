@@ -1,7 +1,24 @@
 ---
-title: Bloques Fuente de Video y Audio para Pipelines C# .NET
-description: Use los bloques fuente de VisioForge Media Blocks SDK para webcams, archivos, streams RTSP/RTMP, pantallas y fuentes virtuales con enumeración de dispositivos.
+title: Fuentes Media Blocks SDK — Webcam, Archivo, RTSP, Pantalla
+description: Conecta cualquier entrada a un pipeline Media Blocks: webcams, archivos, RTSP, RTMP, SRT, NDI, Decklink, pantalla, virtual. API enumeración C# / .NET.
 sidebar_label: Fuentes
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+primary_api_classes:
+  - VideoRendererBlock
+  - MediaBlocksPipeline
+  - AudioRendererBlock
+  - UniversalSourceBlock
+  - DeviceEnumerator
+
 ---
 
 # Bloques Fuente - SDK de VisioForge Media Blocks .Net
@@ -9,6 +26,17 @@ sidebar_label: Fuentes
 [SDK de Media Blocks .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Los bloques fuente proporcionan datos al pipeline y son típicamente los primeros bloques en cualquier cadena de procesamiento de medios. El SDK de VisioForge Media Blocks .Net proporciona una colección completa de bloques fuente para diversas entradas incluyendo dispositivos hardware, archivos, redes y fuentes virtuales.
+
+!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+
+    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecta al servidor MCP público de VisioForge
+    ([documentación](../../general/mcp-server-usage.md))
+    en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
+    ejemplos de código ejecutables y guías de despliegue — más preciso que
+    buscar en `llms.txt`. Sin autenticación requerida.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Bloques Fuente de Hardware
 
@@ -401,8 +429,8 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock();
-fileSource.Filename = "test.mp4";
+var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri("test.mp4"));
+var fileSource = new UniversalSourceBlock(sourceSettings);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(fileSource.VideoOutput, videoRenderer.Input);
@@ -1242,8 +1270,8 @@ var pipeline = new MediaBlocksPipeline();
 var ndiSources = await DeviceEnumerator.Shared.NDISourcesAsync();
 var ndiSourceInfo = ndiSources[0];
 
-// crear ajustes de fuente NDI  
-var ndiSettings = NDISourceSettings.CreateAsync(ndiSourceInfo);
+// CreateAsync toma (ContextX context, NDISourceInfo info) y debe ser awaited.
+var ndiSettings = await NDISourceSettings.CreateAsync(pipeline.GetContext(), ndiSourceInfo);
 
 var ndiSource = new NDISourceBlock(ndiSettings);
 
@@ -1314,7 +1342,8 @@ var pipeline = new MediaBlocksPipeline();
 var ndiSources = await DeviceEnumerator.Shared.NDISourcesAsync();
 var ndiSourceInfo = ndiSources[0];
 
-var ndiSettings = NDISourceSettings.CreateAsync(ndiSourceInfo);
+// CreateAsync toma (ContextX context, NDISourceInfo info).
+var ndiSettings = await NDISourceSettings.CreateAsync(pipeline.GetContext(), ndiSourceInfo);
 
 var ndiSource = new NDISourceXBlock(ndiSettings);
 
@@ -1440,7 +1469,9 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var source = new SRTSourceBlock(new SRTSourceSettings() { Uri = edURL.Text });
+// SRTSourceSettings tiene solo un constructor privado; use la fábrica async.
+var srtSettings = await SRTSourceSettings.CreateAsync(new Uri(edURL.Text));
+var source = new SRTSourceBlock(srtSettings);
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 var audioRenderer = new AudioRendererBlock();
 
@@ -1490,7 +1521,9 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var source = new SRTRAWSourceBlock(new SRTSourceSettings() { Uri = edURL.Text });
+// SRTSourceSettings tiene solo un constructor privado; use la fábrica async.
+var srtSettings = await SRTSourceSettings.CreateAsync(new Uri(edURL.Text));
+var source = new SRTRAWSourceBlock(srtSettings);
 var decodeBin = new DecodeBinBlock();
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 var audioRenderer = new AudioRendererBlock();
@@ -1557,7 +1590,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 // crear ajustes de fuente
-var screenSourceSettings = new ScreenCaptureDX9SourceSettings() { FrameRate = 15 }
+var screenSourceSettings = new ScreenCaptureDX9SourceSettings() { FrameRate = 15 };
 
 // crear bloque fuente
 var screenSourceBlock = new ScreenSourceBlock(screenSourceSettings);
@@ -1589,8 +1622,8 @@ source.FrameRate = new VideoFrameRate(30);
 var wih = new System.Windows.Interop.WindowInteropHelper(this);
 source.WindowHandle = wih.Handle;
 
-// crear bloque fuente
-var screenSourceBlock = new ScreenSourceBlock(new ScreenCaptureDX9SourceSettings() { FrameRate = 15 });
+// crear bloque fuente usando los settings D3D11 construidos arriba
+var screenSourceBlock = new ScreenSourceBlock(source);
 
 // otro código es el mismo que arriba
 ```
@@ -1678,7 +1711,12 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var mainSettings = new RTSPSourceSettings(new Uri("rtsp://camera.example.com/stream"));
+// RTSPSourceSettings tiene constructor privado — constrúyelo vía el factory CreateAsync.
+var mainSettings = await RTSPSourceSettings.CreateAsync(
+    uri: new Uri("rtsp://camera.example.com/stream"),
+    login: null,
+    password: null,
+    audioEnabled: true);
 
 var fallbackSettings = new FallbackSwitchSettings
 {
@@ -2290,7 +2328,7 @@ Ejemplo: Empujando stream byte Annex B H.264
 
 ```mermaid
 graph LR;
-    PushDataSourceBlock-->H264ParserBlock-->H264DecoderBlock-->VideoRendererBlock;
+    PushDataSourceBlock-->H264ParseBlock-->H264DecoderBlock-->VideoRendererBlock;
 ```
 
 #### Código de muestra
@@ -2307,8 +2345,8 @@ dataPushSettings.PadMediaType = MediaBlockPadMediaType.Video;
 var dataPushSource = new PushSourceBlock(dataPushSettings);
 
 // Ejemplo: Decodificar y renderizar stream H.264
-var h264Parser = new H264ParserBlock();
-var h264Decoder = new H264DecoderBlock(); // O OpenH264DecoderBlock, etc.
+var h264Parser = new H264ParseBlock();
+var h264Decoder = new H264DecoderBlock(); // Decodificador H.264 (auto-selecciona un IH264DecoderSettings concreto)
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 
 pipeline.Connect(dataPushSource.Output, h264Parser.Input);

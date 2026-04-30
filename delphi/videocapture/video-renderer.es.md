@@ -1,6 +1,16 @@
 ---
 title: Selección de Video Renderer en Delphi: EVR, VMR9 y GDI
 description: Seleccione renderizadores de video óptimos en Delphi - Video Renderer, VMR9, EVR con ejemplos de código para rendimiento y aceleración de hardware en Windows.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Guía de Selección de Renderizador de Video para TVFVideoCapture
@@ -69,8 +79,8 @@ for I := 0 to VideoCapture1.Video_Renderer_Deinterlace_Modes_GetCount - 1 do
 ```cpp
 // C++ MFC
 m_VideoCapture.Video_Renderer_Deinterlace_Modes_Fill();
-for (int i = 0; i < m_VideoCapture.GetVideo_Renderer_Deinterlace_Modes_GetCount(); i++) {
-    m_DeinterlaceCombo.AddString(m_VideoCapture.GetVideo_Renderer_Deinterlace_Modes_GetItem(i));
+for (int i = 0; i < m_VideoCapture.Video_Renderer_Deinterlace_Modes_GetCount(); i++) {
+    m_DeinterlaceCombo.AddString(m_VideoCapture.Video_Renderer_Deinterlace_Modes_GetItem(i));
 }
 ```
 

@@ -1,6 +1,24 @@
 ---
 title: How to Connect to Hanwha Vision IP Camera in C# .NET
 description: Hanwha Vision X, Q, P, L series and Wisenet NVR RTSP URL patterns for C# .NET. ONVIF-compatible integration with VisioForge SDK code samples.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Decoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Hanwha Vision IP Camera in C# .NET

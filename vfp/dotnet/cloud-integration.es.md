@@ -1,6 +1,27 @@
 ---
 title: Video Fingerprinting en la nube con Azure, AWS y MongoDB
 description: Despliegue video fingerprinting de VisioForge en Azure y AWS con almacenamiento MongoDB, procesamiento distribuido y arquitectura serverless.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+  - MKV
+  - AVI
+  - MOV
+  - WMV
+  - C#
+  - NuGet
+primary_api_classes:
+  - VFPAnalyzer
+  - VFPFingerprintSource
+  - FingerprintWorkflowInput
+  - BlobServiceClient
+  - SQSEvent
+
 ---
 
 # Guía en la Nube para Video Fingerprinting
@@ -40,24 +61,45 @@ El paquete de MongoDB proporciona la clase `VideoFingerprintDB` con estas capaci
 #### Uso Básico con MongoDB Atlas
 
 ```csharp
-using VisioForge.DotNet.VideoFingerPrinting.MongoDB;
+using VisioForge.VideoFingerPrinting.MongoDB; // namespace sin segmento `DotNet.`
+using VisioForge.Core.VideoFingerPrinting;
 
-// Conectar a MongoDB Atlas (implementación en la nube)
+// Conectar a MongoDB Atlas (despliegue en la nube).
+// Firma del ctor: (string dbname, string connectionString) — el dbname va primero.
 var connectionString = "mongodb+srv://username:password@cluster.mongodb.net/";
-var db = new VideoFingerprintDB(connectionString, "fingerprint-database");
+var db = new VideoFingerprintDB("fingerprint-database", connectionString);
 
-// Almacenar una huella digital
-var fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync("video.mp4");
-await db.AddFingerprintAsync("video-id-123", fingerprint);
+// Cargar las huellas previamente subidas en db.Items.
+db.LoadFromDB();
 
-// Recuperar una huella digital
-var retrieved = await db.GetFingerprintAsync("video-id-123");
+// Generar una huella (el analyzer requiere VFPFingerprintSource, no una ruta string).
+var src = new VFPFingerprintSource("video.mp4");
+var fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(src);
 
-// Buscar huellas digitales similares
-var searchResults = await db.SearchAsync(fingerprint, threshold: 0.85);
+// VFPFingerPrint.ID es un Guid, no string — elija un Guid estable por video.
+var videoId = Guid.NewGuid();
+fingerprint.ID = videoId;
 
-// Eliminar una huella digital
-await db.DeleteFingerprintAsync("video-id-123");
+// Almacenar la huella (Upload es síncrono y toma una sola VFPFingerPrint).
+db.Upload(fingerprint);
+
+// "Recuperar" — el SDK mantiene las huellas cargadas en db.Items; selecciona por ID (Guid).
+var retrieved = db.Items.FirstOrDefault(f => f.ID == videoId);
+
+// Búsqueda contra la colección en memoria via VFPSearch.SearchAsync.
+foreach (var candidate in db.Items)
+{
+    var matches = await VFPAnalyzer.SearchAsync(
+        fingerprint,
+        candidate,
+        candidate.Duration,
+        maxDifference: 20,
+        allowMultipleFragments: true);
+    // ... inspeccionar matches (List<TimeSpan>) ...
+}
+
+// Eliminar: RemoveByID(id, fromDB=true) borra tanto de Items como de la BD.
+db.RemoveByID(videoId);
 ```
 
 ### Implementación en la Nube con MongoDB Atlas
@@ -75,75 +117,75 @@ El paquete de MongoDB es particularmente adecuado para implementaciones en la nu
 #### Uso Avanzado de MongoDB Atlas
 
 ```csharp
-using VisioForge.DotNet.VideoFingerPrinting.MongoDB;
+using VisioForge.VideoFingerPrinting.MongoDB; // namespace sin segmento `DotNet.`
+using VisioForge.Core.VideoFingerPrinting;
 using MongoDB.Driver;
 
 public class CloudFingerprintService
 {
     private readonly VideoFingerprintDB _db;
-    
+
     public CloudFingerprintService(string atlasConnectionString)
     {
         // Formato de cadena de conexión para Atlas:
         // mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority
-        _db = new VideoFingerprintDB(atlasConnectionString, "production-fingerprints");
+        // Firma del ctor: (dbname, connectionString) en ese orden.
+        _db = new VideoFingerprintDB("production-fingerprints", atlasConnectionString);
+        _db.LoadFromDB(); // hidratar db.Items
     }
-    
+
     /// <summary>
-    /// Procesa y almacena la huella digital de video en MongoDB Atlas
+    /// Procesa y almacena la huella en MongoDB Atlas. El paquete MongoDB almacena
+    /// blobs VFPFingerPrint crudos — los metadatos adicionales los gestiona la
+    /// aplicación (p. ej., una colección separada indexada por VFPFingerPrint.ID).
     /// </summary>
     public async Task<string> ProcessAndStoreVideoAsync(string videoPath, string videoId)
     {
-        // Generar huella digital
-        var fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(videoPath);
-        
-        // Almacenar en MongoDB Atlas con metadatos
-        await _db.AddFingerprintAsync(videoId, fingerprint, new Dictionary<string, object>
-        {
-            ["uploadDate"] = DateTime.UtcNow,
-            ["videoPath"] = videoPath,
-            ["duration"] = fingerprint.Duration.TotalSeconds,
-            ["resolution"] = $"{fingerprint.Width}x{fingerprint.Height}"
-        });
-        
+        var src = new VFPFingerprintSource(videoPath);
+        var fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(src);
+        fingerprint.ID = videoId;
+
+        _db.Upload(fingerprint); // síncrono, un solo argumento
         return videoId;
     }
-    
+
     /// <summary>
-    /// Búsqueda por lotes de videos similares
+    /// Buscar la colección en memoria (db.Items) por huellas similares.
     /// </summary>
-    public async Task<List<SearchResult>> FindSimilarVideosAsync(string videoPath, double threshold = 0.8)
+    public async Task<List<(string Id, double Difference)>> FindSimilarVideosAsync(
+        string videoPath, int maxDiff = 20)
     {
-        var searchFingerprint = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(videoPath);
-        var results = await _db.SearchAsync(searchFingerprint, threshold);
-        
-        return results.Select(r => new SearchResult
+        var src = new VFPFingerprintSource(videoPath);
+        var searchFp = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(src);
+
+        var hits = new List<(string, double)>();
+        foreach (var candidate in _db.Items)
         {
-            VideoId = r.Id,
-            Similarity = r.Similarity,
-            Metadata = r.Metadata
-        }).ToList();
+            var pos = VFPSearch.Search(searchFp, 0, candidate, 0, out double diff, maxDiff);
+            if (pos != int.MaxValue)
+                hits.Add((candidate.ID, diff));
+        }
+        return hits;
     }
 }
 
-// MongoDB Atlas con agrupación de conexiones y lógica de reintento
+// MongoDB Atlas con MongoClientSettings personalizados (use el ctor (dbname,
+// MongoClientSettings) — no existe overload (IMongoClient, string)).
 public class ResilientMongoDBService
 {
     private readonly VideoFingerprintDB _db;
     private readonly MongoClientSettings _settings;
-    
+
     public ResilientMongoDBService(string atlasConnectionString)
     {
-        // Configurar conexión con reintento y agrupación
         _settings = MongoClientSettings.FromConnectionString(atlasConnectionString);
         _settings.MaxConnectionPoolSize = 100;
         _settings.MinConnectionPoolSize = 10;
         _settings.ServerSelectionTimeout = TimeSpan.FromSeconds(30);
         _settings.RetryReads = true;
         _settings.RetryWrites = true;
-        
-        var client = new MongoClient(_settings);
-        _db = new VideoFingerprintDB(client, "fingerprint-database");
+
+        _db = new VideoFingerprintDB("fingerprint-database", _settings);
     }
 }
 ```
@@ -464,7 +506,6 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using VisioForge.Core.VideoFingerPrinting;
-using VisioForge.Core.Types.X.Sources;
 
 public class FingerprintFunction
 {
@@ -504,7 +545,7 @@ public class FingerprintFunction
             // Configurar generación de huella digital
             var source = new VFPFingerprintSource(videoPath)
             {
-                CustomResolution = new System.Drawing.Size(640, 480),
+                CustomResolution = new VisioForge.Core.Types.Size(640, 480),
                 FrameRate = request.FrameRate ?? 10
             };
             
@@ -595,7 +636,7 @@ public class FingerprintFunction
                 {
                     var source = new VFPFingerprintSource(videoPath)
                     {
-                        CustomResolution = new System.Drawing.Size(640, 480)
+                        CustomResolution = new VisioForge.Core.Types.Size(640, 480)
                     };
                     
                     fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(source);
@@ -1679,24 +1720,24 @@ public class ProcessingCostOptimizer
     {
         // Nota: VFPFingerprintSource es para especificar fuentes de archivos de video
         // Procesar video de manera diferente según el nivel antes del fingerprinting
+        // VFPFingerprintSource no tiene propiedad FrameRate — la tasa de cuadros
+        // viene determinada por el origen/decodificador subyacente. CustomResolution
+        // debe ser VisioForge.Core.Types.Size (no System.Drawing.Size).
         return tier switch
         {
             ProcessingTier.Economy => new VFPFingerprintSource(videoPath)
             {
-                CustomResolution = new Size(320, 240),
-                FrameRate = 5,
+                CustomResolution = new VisioForge.Core.Types.Size(320, 240),
                 StopTime = TimeSpan.FromSeconds(30)
             },
             ProcessingTier.Standard => new VFPFingerprintSource(videoPath)
             {
-                CustomResolution = new Size(640, 480),
-                FrameRate = 10,
+                CustomResolution = new VisioForge.Core.Types.Size(640, 480),
                 StopTime = TimeSpan.FromSeconds(60)
             },
             ProcessingTier.Premium => new VFPFingerprintSource(videoPath)
             {
-                CustomResolution = new Size(1280, 720),
-                FrameRate = 15
+                CustomResolution = new VisioForge.Core.Types.Size(1280, 720)
             },
             _ => throw new ArgumentException("Invalid processing tier")
         };
@@ -1979,19 +2020,20 @@ public class PerformanceBenchmarks
     {
         var results = new List<BenchmarkResult>();
         // Probar diferentes configuraciones
+        // VFPFingerprintSource no tiene propiedad FrameRate; CustomResolution
+        // es VisioForge.Core.Types.Size, no System.Drawing.Size.
         var configurations = new[]
         {
-            new { Resolution = new Size(320, 240), FrameRate = 5, Label = "Economy" },
-            new { Resolution = new Size(640, 480), FrameRate = 10, Label = "Standard" },
-            new { Resolution = new Size(1280, 720), FrameRate = 15, Label = "Premium" }
+            new { Resolution = new VisioForge.Core.Types.Size(320, 240), Label = "Economy" },
+            new { Resolution = new VisioForge.Core.Types.Size(640, 480), Label = "Standard" },
+            new { Resolution = new VisioForge.Core.Types.Size(1280, 720), Label = "Premium" }
         };
         foreach (var config in configurations)
         {
             var sw = Stopwatch.StartNew();
             var source = new VFPFingerprintSource("test.mp4")
             {
-                CustomResolution = config.Resolution,
-                FrameRate = config.FrameRate
+                CustomResolution = config.Resolution
             };
             var fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(source);
             sw.Stop();

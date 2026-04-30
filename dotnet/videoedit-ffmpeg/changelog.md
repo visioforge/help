@@ -1,6 +1,13 @@
 ---
 title: FFmpeg Video Editor SDK Changelog and Release Notes .NET
 description: Version history and release notes for VisioForge Video Edit SDK FFmpeg .NET. New features, performance improvements, and API changes per release.
+tags:
+  - Video Edit SDK FFmpeg
+  - .NET
+primary_api_classes:
+  - MediaInfoReader
+  - FFMPEGEXEOutput
+
 ---
 
 # Video Edit SDK FFMPEG .Net: Complete Version History

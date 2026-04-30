@@ -1,6 +1,23 @@
 ---
 title: Enumerate Video Capture Devices in .NET with C# Code
 description: Detect, enumerate, and configure video capture devices in .NET with code examples for listing devices, formats, and frame rates.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - C#
+primary_api_classes:
+  - DeviceEnumerator
+  - VideoCaptureDeviceSourceSettings
+  - VideoCaptureSource
+
 ---
 
 # Working with Video Capture Devices in .NET

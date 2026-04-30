@@ -1,6 +1,22 @@
 ---
 title: Decodificación de Video GPU con Direct3D 11 en C# .NET
 description: Use decodificación de video acelerada por hardware con Direct3D 11, efectos e integración DirectShow en Windows con VisioForge Media Blocks SDK para .NET.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - D3D11H264DecoderBlock
+  - D3D11UploadBlock
+  - D3D11DownloadBlock
+  - UniversalSourceBlock
+  - UniversalSourceSettings
+
 ---
 
 # Bloques de Plataforma Windows - VisioForge Media Blocks SDK .Net

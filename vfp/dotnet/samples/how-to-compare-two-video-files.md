@@ -1,6 +1,20 @@
 ---
 title: Compare Video Files with Video Fingerprinting in .NET
 description: Compare two video files for similarity using VisioForge fingerprinting SDK in C# with frame analysis, signature matching, and code examples.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - C#
+primary_api_classes:
+  - VFPFingerprintSource
+  - VFSimplePlayerEngine
+  - VFPAnalyzer
+
 ---
 
 # Video File Comparison Techniques and Methods
@@ -25,12 +39,13 @@ Video fingerprinting works by extracting distinctive features from video frames 
 The first step is to generate a fingerprint for your initial video file. The following code demonstrates how to create a source using the DirectShow engine and limit analysis to the first 5 seconds:
 
 ```csharp
-// create source for a first video file using DirectShow engine
-var source1 = new VFPFingerprintSource(File1, VFSimplePlayerEngine.LAV);
+// VFPFingerprintSource has only a (string filename) ctor — there is no
+// engine-selection overload. Choose the analysis window via StartTime/StopTime.
+var source1 = new VFPFingerprintSource(File1);
 source1.StopTime = TimeSpan.FromMilliseconds(5000);
-            
-// get first fingerprint
-var fp1 = VFPAnalyzer.GetComparingFingerprintForVideoFile(source1, ErrorCallback);
+
+// VFPAnalyzer.GetComparingFingerprintForVideoFile has only an Async variant.
+var fp1 = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(source1, ErrorCallback);
 ```
 
 ### Generating Fingerprints for the Second Video
@@ -38,12 +53,11 @@ var fp1 = VFPAnalyzer.GetComparingFingerprintForVideoFile(source1, ErrorCallback
 Similarly, we need to create a fingerprint for the second video file to enable comparison:
 
 ```csharp
-// create source for a second video file using DirectShow engine
-var source2 = new VFPFingerprintSource(File2, VFSimplePlayerEngine.LAV);
+// Same single-arg ctor + async getter for the second video.
+var source2 = new VFPFingerprintSource(File2);
 source2.StopTime = TimeSpan.FromMilliseconds(5000);
-            
-// get second fingerprint
-var fp2 = VFPAnalyzer.GetComparingFingerprintForVideoFile(source2, ErrorCallback);
+
+var fp2 = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(source2, ErrorCallback);
 ```
 
 ### Comparing the Video Fingerprints

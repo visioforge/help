@@ -1,6 +1,18 @@
 ---
 title: .NET SDKs — System Requirements & Platform Support
 description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 10+. .NET 6–9, ARM64 support, 4K memory guidelines. WPF, WinForms, MAUI, and Avalonia compatible.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+
 ---
 
 # System Requirements for .NET SDKs

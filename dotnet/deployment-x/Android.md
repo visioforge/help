@@ -1,6 +1,19 @@
 ---
 title: Deploy VisioForge .NET SDK on Android — NuGet & Setup
 description: Deploy VisioForge .NET SDK apps on Android. NuGet packages, VideoView integration, ARM64/x86 architecture support, and permissions configuration.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Android
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoView
+  - VideoPlayerActivity
+
 ---
 
 # Android Implementation and Deployment Guide
@@ -66,17 +79,19 @@ Follow these steps to properly set up and deploy your VisioForge-powered Android
 
 The VisioForge SDK for Android is distributed through NuGet packages. Add the following packages to your Android project:
 
-- [VisioForge.CrossPlatform.Core.Android](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Android) - Contains the redistribution components required for Android applications, including unmanaged libraries.
+- [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core) - Main managed SDK package (core classes, VideoCaptureCoreX / MediaPlayerCoreX / MediaBlocksPipeline).
+- [VisioForge.CrossPlatform.Core.Android](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Android) - Contains the redistribution components (native libraries) required for Android applications.
 
-You can add these packages using the NuGet Package Manager in your IDE or by adding the following to your project file:
+You can add these packages using the NuGet Package Manager in your IDE or by adding the following to your project file (use the latest versions):
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="15.2.12" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.*" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.*" />
 </ItemGroup>
 ```
 
-Note: Replace version numbers with the latest available releases.
+Note: Replace version numbers with the latest available releases on NuGet.org.
 
 ## Java Bindings Library Integration
 
@@ -84,11 +99,9 @@ Android applications using VisioForge SDK require a custom Java Bindings Library
 
 Follow these detailed steps to integrate it:
 
-1. Clone the binding library repository from our [GitHub page](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency)
-2. Based on your .NET version, add one of the following projects to your solution:
-   - For .NET 9: `VisioForge.Core.Android.X9.csproj`
-   - For .NET 8: `VisioForge.Core.Android.X8.csproj`
-3. Add a reference to the helper library in your project's .csproj file:
+1. Clone the binding-library repository from [GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency).
+2. Pick the binding project that matches the .NET target you build against — the folder ships one `VisioForge.Core.Android.X{N}.csproj` per supported .NET version (e.g., `VisioForge.Core.Android.X9.csproj` for .NET 9, `VisioForge.Core.Android.X10.csproj` for .NET 10). If your .NET target isn't listed, pick the closest supported one.
+3. Add a reference to the binding project from your app's .csproj:
 
 ```xml
 <ItemGroup>

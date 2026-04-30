@@ -1,6 +1,16 @@
 ---
 title: TVFVideoCapture Installation Guide for Delphi 6 to 11
 description: Install TVFVideoCapture packages in Delphi 6/7 through Delphi 11+ with complete setup instructions, library paths, and configuration.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Comprehensive TVFVideoCapture Installation Guide for Delphi Developers

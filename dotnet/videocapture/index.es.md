@@ -1,7 +1,24 @@
 ---
-title: Captura de Video - Webcam, Pantalla, Cámaras IP en C# .NET
+title: Video Capture SDK para C# .NET - Webcam, Pantalla e IP
 description: SDK de captura de video para C# y .NET — graba webcam, pantalla, cámara IP (RTSP/ONVIF) a MP4. API multiplataforma con codificación GPU. Reemplaza DirectShow.
 sidebar_label: Video Capture SDK .NET
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+primary_api_classes:
+  - MP4Output
+  - DeviceEnumerator
+  - VideoCaptureCoreX
+  - VideoCaptureDeviceSourceSettings
+  - VideoView
 
 ---
 
@@ -118,12 +135,13 @@ Ver tutorial completo: [Guardar Video de Webcam en C#](guides/save-webcam-video.
 Conéctate a cámaras IP y guarda streams RTSP en archivos MP4. Soporta protocolos RTSP, ONVIF y HTTP:
 
 ```csharp
-capture.Video_Source = new RTSPSourceSettings(
-    new Uri("rtsp://192.168.1.100:554/stream"))
-{
-    Login = "admin",
-    Password = "password"
-};
+// RTSPSourceSettings tiene ctor privado — constrúyelo vía la factoría async
+// para que la fuente pueda descubrir códecs antes de iniciar el pipeline.
+capture.Video_Source = await RTSPSourceSettings.CreateAsync(
+    new Uri("rtsp://192.168.1.100:554/stream"),
+    login: "admin",
+    password: "password",
+    audioEnabled: true);
 capture.Outputs_Add(new MP4Output("ipcam.mp4"));
 ```
 
@@ -134,10 +152,13 @@ Ver: [Cámara IP a MP4](video-tutorials/ip-camera-capture-mp4.md) | [Guía RTSP]
 Graba el escritorio o una región específica de pantalla a MP4:
 
 ```csharp
-capture.Video_Source = new ScreenCaptureSourceSettings()
+// La captura de pantalla con X-engine en Windows usa ScreenCaptureD3D11SourceSettings
+// (otras plataformas: ScreenCaptureGDISourceSettings, ScreenCaptureMacOSSourceSettings,
+// ScreenCaptureXDisplaySourceSettings — todas implementan IVideoCaptureBaseVideoSourceSettings).
+capture.Video_Source = new ScreenCaptureD3D11SourceSettings
 {
-    FrameRate = new VideoFrameRate(30),
-    CaptureCursor = true
+    FrameRate     = new VideoFrameRate(30),
+    CaptureCursor = true,
 };
 capture.Outputs_Add(new MP4Output("screen.mp4"));
 ```
@@ -149,9 +170,9 @@ Ver: [Captura de Pantalla a MP4](video-tutorials/screen-capture-mp4.md)
 Graba desde un micrófono sin video:
 
 ```csharp
+capture.Video_Source = null; // desactivar video para captura solo de audio
 capture.Audio_Source = audioDevices[0].CreateSourceSettingsVC();
 capture.Audio_Record = true;
-capture.Video_Record = false;
 capture.Outputs_Add(new MP4Output("audio.mp4"));
 ```
 

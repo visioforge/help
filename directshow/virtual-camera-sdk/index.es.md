@@ -1,6 +1,18 @@
 ---
-title: SDK de Cámara Virtual DirectShow para Streaming Web
+title: SDK de Cámara Virtual para Zoom, Teams y OBS en Windows
 description: Cree cámaras web virtuales para Zoom, Teams, Skype y OBS con SDK DirectShow para transmitir cualquier fuente de video con soporte de audio.
+tags:
+  - Virtual Camera SDK
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Virtual Camera
+primary_api_classes:
+  - IVFVirtualCameraSink
+  - SinkFilter
+  - IBaseFilter
+
 ---
 
 # SDK de Cámara Virtual DirectShow
@@ -121,9 +133,12 @@ public interface IVFVirtualCameraSink
     /// <param name="license">Cadena de clave de licencia ("TRIAL" para versión de prueba)</param>
     /// <returns>HRESULT (0 para éxito)</returns>
     [PreserveSig]
-    int set_license([MarshalAs(UnmanagedType.LPWStr)] string license);
+    int set_license([MarshalAs(UnmanagedType.LPStr)] string license);
 }
 ```
+
+!!! note "C++/Delphi nativos esperan ANSI; el demo C# del SDK usa LPWStr"
+    El parámetro nativo de `IVFVirtualCameraSink::set_license` es `LPCSTR` (ANSI) en C++ y `PAnsiChar` en Delphi. El wrapper C# de demostración incluido en el SDK declara `[MarshalAs(UnmanagedType.LPWStr)]` — una discrepancia conocida del marshaling en el demo. Las claves de licencia en ASCII puro (p. ej. `"TRIAL"` o cadenas hex) viajan correctamente con cualquiera de las dos opciones; si necesita coincidir exactamente con la ABI nativa, use `LPStr` como se muestra arriba.
 
 **Ejemplo de Uso (C#)**:
 
@@ -159,10 +174,10 @@ DECLARE_INTERFACE_(IVFVirtualCameraSink, IUnknown)
     /// <summary>
     /// Establece la clave de licencia para el filtro sink de cámara virtual.
     /// </summary>
-    /// <param name="license">Cadena ancha de clave de licencia (L"TRIAL" para versión de prueba)</param>
+    /// <param name="license">Cadena ANSI de clave de licencia ("TRIAL" para versión de prueba)</param>
     /// <returns>HRESULT (S_OK para éxito)</returns>
     STDMETHOD(set_license) (THIS_
-        LPCWSTR license
+        LPCSTR license
         ) PURE;
 };
 ```

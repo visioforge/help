@@ -1,6 +1,20 @@
 ---
 title: Play Multiple Video Streams with Delphi SDK Player
 description: Handle multiple video streams in files - select camera angles, switch resolutions, and manage tracks with code examples for Delphi, C++, and VB6.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - C++
+  - Windows
+  - VCL
+  - Playback
+  - MKV
+primary_api_classes:
+  - TVFMediaPlayer
+  - CVFMediaPlayer
+
 ---
 
 # Playing Video Files with Multiple Video Streams
@@ -33,22 +47,28 @@ Each format has its own characteristics and limitations regarding how it handles
 
 ### Setting Up the Media Player
 
-The first step is to properly initialize the `TVFMediaPlayer` object. This involves creating the instance, configuring basic properties, and preparing it for playback:
+The first step is to properly initialize the `TVFMediaPlayer` object. This involves creating the instance, configuring basic properties, and preparing it for playback.
+
+!!! note "Snippets are fragments of one procedure"
+    The Pascal snippets in the three sub-sections below are excerpts from a single procedure (`TForm1.SetupAndPlayMultiStream`), split for narrative clarity. The full pasteable listing is at the [end of this section](#complete-pascal-listing).
 
 ```pascal
-// Define and create the MediaPlayer object
-var 
+// Excerpt — see "Complete Pascal listing" below for the full procedure.
+procedure TForm1.SetupAndPlayMultiStream;
+var
   MediaPlayer1: TVFMediaPlayer;
 begin
   MediaPlayer1 := TVFMediaPlayer.Create(Self);
-  
+
   // Set container size and position if needed
   MediaPlayer1.Parent := Panel1; // Assuming Panel1 is your container
   MediaPlayer1.Align := alClient;
-  
+
   // Configure initial state
   MediaPlayer1.DoubleBuffered := True;
   MediaPlayer1.AutoPlay := False; // We'll control playback explicitly
+  // ... continued below
+end;
 ```
 
 ### Configuring the Media Source
@@ -56,15 +76,16 @@ begin
 Next, we need to specify the media file and configure how it should be loaded:
 
 ```pascal
+// Excerpt — body of TForm1.SetupAndPlayMultiStream (continued).
   // Set the file name - use full path for reliability
   MediaPlayer1.FilenameOrURL := 'C:\Videos\multistream-video.mkv';
-  
+
   // Enable audio playback (default DirectSound audio renderer will be used)
   MediaPlayer1.Audio_Play := True;
-  
+
   // Configure audio settings if needed
   MediaPlayer1.Audio_Volume := 85; // Set volume to 85%
-  
+
   // Set the source mode to DirectShow
   // Other options include SM_File_FFMPEG or SM_File_VLC
   MediaPlayer1.Source_Mode := SM_File_DS;
@@ -75,11 +96,42 @@ Next, we need to specify the media file and configure how it should be loaded:
 The key to working with multiple video streams is the `Source_VideoStreamIndex` property. This zero-based index allows you to select which video stream should be rendered:
 
 ```pascal
+// Excerpt — body of TForm1.SetupAndPlayMultiStream (final part).
   // Set video stream index to 1 (second stream, as index is zero-based)
   MediaPlayer1.Source_VideoStreamIndex := 1;
-  
+
   // Start playback
   MediaPlayer1.Play();
+end;
+```
+
+### Complete Pascal listing
+
+The three excerpts above merged into one self-contained, copy-pasteable procedure:
+
+```pascal
+procedure TForm1.SetupAndPlayMultiStream;
+var
+  MediaPlayer1: TVFMediaPlayer;
+begin
+  MediaPlayer1 := TVFMediaPlayer.Create(Self);
+
+  // Container + initial state
+  MediaPlayer1.Parent := Panel1;
+  MediaPlayer1.Align := alClient;
+  MediaPlayer1.DoubleBuffered := True;
+  MediaPlayer1.AutoPlay := False;
+
+  // Source + audio configuration
+  MediaPlayer1.FilenameOrURL := 'C:\Videos\multistream-video.mkv';
+  MediaPlayer1.Audio_Play := True;
+  MediaPlayer1.Audio_Volume := 85;
+  MediaPlayer1.Source_Mode := SM_File_DS;
+
+  // Pick a non-default video stream and start playback
+  MediaPlayer1.Source_VideoStreamIndex := 1;
+  MediaPlayer1.Play();
+end;
 ```
 
 ## C++ MFC Implementation
@@ -106,9 +158,11 @@ BOOL CMyDlg::OnInitDialog()
     m_pMediaPlayer->Create(NULL, NULL, WS_CHILD | WS_VISIBLE, 
                           CRect(0, 0, 0, 0), pContainer, 1001);
     
-    // Configure display settings
-    m_pMediaPlayer->SetWindowPos(NULL, 0, 0, pContainer->GetClientRect().Width(),
-                                pContainer->GetClientRect().Height(), SWP_NOZORDER);
+    // Configure display settings — CWnd::GetClientRect(LPRECT) returns void
+    // and fills the rect by reference, so we must declare a CRect first.
+    CRect rc;
+    pContainer->GetClientRect(&rc);
+    m_pMediaPlayer->SetWindowPos(NULL, 0, 0, rc.Width(), rc.Height(), SWP_NOZORDER);
     m_pMediaPlayer->PutDoubleBuffered(TRUE);
     m_pMediaPlayer->PutAutoPlay(FALSE);
     

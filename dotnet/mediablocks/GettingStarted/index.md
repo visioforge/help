@@ -3,6 +3,22 @@ title: Media Pipeline Quick Start - Install and Setup in C# .NET
 description: Get started with VisioForge Media Blocks SDK — installation, pipeline architecture, block connections, and multimedia processing tutorials.
 sidebar_label: Getting Started
 order: 20
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - MediaBlocksPipeline
+  - IMediaBlock
+  - MediaBlockPad
+  - IMediaBlocksPipeline
+  - MediaBlock
+
 ---
 
 # Media Blocks SDK .Net - Developer Quick Start Guide

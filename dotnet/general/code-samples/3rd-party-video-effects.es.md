@@ -1,6 +1,15 @@
 ---
 title: Uso de Filtros de Video DirectShow de Terceros en .NET
 description: Implemente filtros de video DirectShow de terceros en .NET con ejemplos de código, mejores prácticas y solución de problemas para plataformas Video SDK.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - C#
+
 ---
 
 # Usar Filtros de Video de Terceros en .NET
@@ -65,12 +74,10 @@ Si el registro del filtro falla, verifica:
 Antes de añadir filtros a tu cadena de procesamiento, puede que quieras descubrir qué filtros están disponibles en el sistema:
 
 ```cs
-// Listar todos los filtros DirectShow disponibles
-foreach (var directShowFilter in VideoCapture1.DirectShow_Filters)
+// DirectShow_Filters() devuelve ObservableCollection<string> — cada entrada es el nombre del filtro
+foreach (var filterName in VideoCapture1.DirectShow_Filters())
 {
-    Console.WriteLine($"Nombre del Filtro: {directShowFilter.Name}");
-    Console.WriteLine($"CLSID del Filtro: {directShowFilter.CLSID}");
-    Console.WriteLine($"Ruta del Filtro: {directShowFilter.Path}");
+    Console.WriteLine($"Nombre del Filtro: {filterName}");
     Console.WriteLine("----------------------------");
 }
 ```
@@ -93,16 +100,16 @@ Esto asegura que estás comenzando con un pipeline de procesamiento limpio y pre
 Para añadir un filtro de terceros a tu pipeline de procesamiento de video:
 
 ```cs
-// Crear y añadir un filtro personalizado
-CustomProcessingFilter myFilter = new CustomProcessingFilter("Mi Filtro de Efectos");
-
-// Configurar parámetros del filtro si es necesario
-myFilter.SetParameter("intensidad", 0.75);
-myFilter.SetParameter("tono", 120);
+// Ctor: CustomProcessingFilter(string name, Guid? clsid = null, bool beforeEffects = false)
+// Usa el nombre del filtro tal como está registrado en DirectShow; el SDK resuelve el CLSID automáticamente.
+var myFilter = new CustomProcessingFilter("Mi Filtro de Efectos");
 
 // Añadir el filtro a la cadena de procesamiento
 VideoCapture1.Video_Filters_Add(myFilter);
 ```
+
+`CustomProcessingFilter` expone solo `Name`, `CLSID` y `BeforeEffects` — los parámetros específicos
+del filtro se configuran sobre el filtro COM subyacente (ver la sección Parámetros del Filtro).
 
 Puedes añadir múltiples filtros en secuencia para crear cadenas de procesamiento complejas. El orden de los filtros importa, ya que cada filtro procesa la salida del anterior.
 
@@ -110,14 +117,11 @@ Puedes añadir múltiples filtros en secuencia para crear cadenas de procesamien
 
 ### Parámetros del Filtro
 
-La mayoría de los filtros de terceros exponen parámetros configurables. Estos pueden ajustarse usando métodos específicos del filtro o a través de la interfaz DirectShow:
-
-```cs
-// Usando la interfaz IPropertyBag para configuración
-var propertyBag = (IPropertyBag)myFilter.GetPropertyBag();
-object value = 0.5f;
-propertyBag.Write("Saturacion", ref value);
-```
+La mayoría de los filtros de terceros exponen parámetros configurables mediante sus propias
+interfaces COM (p.ej. `IPropertyBag`, `ISpecifyPropertyPages`, o una interfaz específica del proveedor).
+Estas interfaces se acceden a través del `IBaseFilter` subyacente una vez construido el grafo — no
+a través de `CustomProcessingFilter`, que solo carga la identidad de registro (`Name` / `CLSID`).
+Consulta la documentación del proveedor del filtro para la interfaz concreta y los nombres de propiedades.
 
 ### Orden de Filtros
 
@@ -151,12 +155,16 @@ Cuando trabajes con filtros en aplicaciones multi-hilo, asegura la sincronizaci�
 ```cs
 private readonly object _filterLock = new object();
 
-public void UpdateFilter(CustomProcessingFilter filter)
+public void RebuildFilterChain(IEnumerable<CustomProcessingFilter> filters)
 {
     lock (_filterLock)
     {
-        // Actualizar parámetros del filtro
-        filter.UpdateParameters();
+        // VideoCaptureCore solo expone Add/Clear — reconstruye la cadena en vez de eliminar un filtro individual.
+        VideoCapture1.Video_Filters_Clear();
+        foreach (var filter in filters)
+        {
+            VideoCapture1.Video_Filters_Add(filter);
+        }
     }
 }
 ```

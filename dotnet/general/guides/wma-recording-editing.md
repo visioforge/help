@@ -1,6 +1,30 @@
 ---
 title: WMA Audio Recording and Editing in .NET SDK with C#
 description: Record WMA audio from microphone and edit WMA files in .NET with VideoCaptureCoreX and VideoEditCoreX classes for Windows Media Audio capture and editing.
+tags:
+  - Video Capture SDK
+  - Video Edit SDK
+  - .NET
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - WinForms
+  - GStreamer
+  - Capture
+  - Encoding
+  - Editing
+  - Effects
+  - MP3
+  - WMA
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoEditCoreX
+  - VideoCaptureCoreX
+  - WMAOutput
+  - WMAEncoderSettings
+  - AudioFileSource
+
 ---
 
 # Record and Edit WMA Files in C# and .NET: A Comprehensive Guide
@@ -815,12 +839,15 @@ For advanced scenarios, you may need to work directly with audio data packets. T
 // During capture, you can monitor audio levels and packets
 _videoCapture.OnAudioVUMeter += (sender, args) =>
 {
-    // Get audio levels for VU meter display
-    double leftChannel = args.Left;
-    double rightChannel = args.Right;
-    
+    // args is VUMeterXEventArgs — channel levels come from MeterData (VUMeterXData)
+    var meterData = args.MeterData;
+    if (meterData == null || meterData.ChannelsCount == 0) return;
+
+    double leftPeak  = meterData.Peak[0];
+    double rightPeak = meterData.ChannelsCount > 1 ? meterData.Peak[1] : leftPeak;
+
     // Update UI with audio levels
-    UpdateVUMeter(leftChannel, rightChannel);
+    UpdateVUMeter(leftPeak, rightPeak);
 };
 ```
 

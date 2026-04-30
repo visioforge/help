@@ -1,6 +1,19 @@
 ---
 title: Filtro Fuente VLC DirectShow - Referencia de Interfaces
 description: Interfaces de la familia IVlcSrc para audio multi-pista, soporte de subtítulos y opciones personalizadas de línea de comandos VLC en aplicaciones DirectShow.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - IP Camera
+  - RTSP
+  - HLS
+  - MP4
+  - MKV
+  - C#
+primary_api_classes:
+  - IBaseFilter
+
 ---
 
 # Referencia de Interfaces del Filtro Fuente VLC
@@ -463,16 +476,22 @@ if (vlcSrc2 != null)
 
 **Ejemplo (Delphi)**:
 
+libVLC analiza la línea de comandos como **UTF-8**, no como la codepage ANSI del sistema. Los literales `PAnsiChar` son seguros para ASCII puro pero corrompen los caracteres no ASCII; codifique cada parámetro a UTF-8 de forma explícita mediante `UTF8Encode` (o almacénelos como `AnsiString` con `CP_UTF8`). Para un conjunto de parámetros puramente ASCII, los literales `PAnsiChar` funcionan correctamente, pero el siguiente fragmento usa el patrón seguro.
+
 ```delphi
 var
   VlcSrc2: IVlcSrc2;
+  P0, P1, P2: AnsiString;
   Params: array[0..2] of PAnsiChar;
 begin
   if Succeeded(Filter.QueryInterface(IID_IVlcSrc2, VlcSrc2)) then
   begin
-    Params[0] := '--network-caching=500';
-    Params[1] := '--rtsp-tcp';
-    Params[2] := '--avcodec-hw=dxva2';
+    P0 := UTF8Encode('--network-caching=500');
+    P1 := UTF8Encode('--rtsp-tcp');
+    P2 := UTF8Encode('--avcodec-hw=dxva2');
+    Params[0] := PAnsiChar(P0);
+    Params[1] := PAnsiChar(P1);
+    Params[2] := PAnsiChar(P2);
 
     VlcSrc2.SetCustomCommandLine(@Params, 3);
     VlcSrc2.SetFile('rtsp://example.com/stream');

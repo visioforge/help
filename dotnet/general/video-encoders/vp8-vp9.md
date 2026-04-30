@@ -1,6 +1,34 @@
 ---
 title: VP8 and VP9 Video Encoding: Configuration and Tuning
 description: Configure VP8 and VP9 video encoders for optimal streaming, recording, and processing performance in VisioForge .NET applications.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - WebM
+  - VP8
+  - VP9
+  - C#
+primary_api_classes:
+  - VP9EncoderSettings
+  - VP8EncoderSettings
+  - WebMOutput
+  - QSVVP9EncoderSettings
+  - WebMVideoEncoder
+
 ---
 
 # VP8 and VP9 Encoders in VisioForge .NET

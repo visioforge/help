@@ -1,6 +1,34 @@
 ---
-title: Opus Audio Encoder Settings and Configuration in .NET
+title: Opus Audio Encoder in C# .NET — Bitrate, VBR, DTX Guide
 description: VBR, CBR, and CVBR rate control modes. Bitrate 6-510 kbps, 5 ms latency, complexity tuning, and DTX for speech. OGG/WebM output with C# examples.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - WebM
+  - OGG
+  - Opus
+  - C#
+primary_api_classes:
+  - OPUSEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - OPUSOutput
+  - OGGOpusOutputBlock
+
 ---
 
 # Mastering OPUS Audio Encoding in .NET Applications
@@ -180,11 +208,8 @@ var opusSettings = new OPUSEncoderSettings
     Complexity = 8
 };
 
-// Create a Ogg OPUS output instance
+// Create an Ogg OPUS output instance (opus + ogg container)
 var oggOpusOutput = new OGGOpusOutputBlock("output.ogg", opusSettings);
-
-// Alternatively, create a WebM OPUS output
-var webmOpusOutput = new WebMOpusOutputBlock("output.webm", opusSettings);
 ```
 
 ## Performance Optimization Tips

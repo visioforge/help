@@ -1,9 +1,43 @@
 ---
 title: API C++ de Video Fingerprinting para búsqueda y comparación
 description: Documentación completa de la API del SDK Video Fingerprinting C++ de VisioForge para generar, comparar y buscar huellas de video con ejemplos.
+tags:
+  - Video Fingerprinting SDK
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - GStreamer
+  - Fingerprinting
+  - MP4
+primary_api_classes:
+  - VFPFingerprintSource
+  - VFPFillSource
+
 ---
 
 # Documentación de API C++ del SDK de Huellas de Video
+
+!!! danger "Muchos ejemplos de código abajo referencian helpers de alto nivel que no existen — use la API plana estilo C"
+
+    Helpers como `VFPSearch_GetFingerprintForVideoFile`,
+    `VFPCompare_GetFingerprintForVideoFile`,
+    `VFPSearch_SearchOneSignatureFileInAnother`, y `VFPFillSource` **no**
+    son exports reales de `VisioForge_VFP.dll` — aparecen en headers
+    antiguos solo como prototipos comentados. La API C distribuida es una
+    interfaz plana estilo C (`extern "C"`) que consiste en:
+
+    - `VFPSearch_Init` / `VFPSearch_Process` / `VFPSearch_Build` /
+      `VFPSearch_Search`
+    - `VFPCompare_Init` / `VFPCompare_Process` / `VFPCompare_Build` /
+      `VFPCompare_Compare`
+
+    La aplicación host es responsable de decodificar cuadros de video
+    (FFmpeg / GStreamer / etc.) y alimentarlos a `*_Process` uno a la
+    vez. Vea [`index.md`](./index.md) para los snippets canónicos del flujo.
+
+    Catalogado como defectos #084-#086 en la auditoría. Una reescritura
+    completa de esta página está en cola.
 
 ## Descripción General
 

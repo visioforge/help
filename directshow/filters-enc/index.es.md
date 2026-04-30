@@ -1,6 +1,12 @@
 ---
 title: Filtros de Codificación DirectShow con H.264, H.265 y GPU
 description: Codificadores DirectShow de video/audio con H.264, H.265, VP8, VP9, AAC, MP3 y aceleración GPU (NVENC, QuickSync, AMF) para aplicaciones Windows.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+
 ---
 
 # Paquete de Filtros de Codificación DirectShow

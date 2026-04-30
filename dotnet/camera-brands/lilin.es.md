@@ -1,6 +1,24 @@
 ---
 title: LILIN - URLs RTSP para cámaras IP y conexión en C# .NET
 description: Conecte cámaras LILIN en C# .NET con patrones de URL RTSP y ejemplos de código para modelos de las series LR, IPR, Z, D, S y P.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo conectar una cámara IP LILIN en C# .NET

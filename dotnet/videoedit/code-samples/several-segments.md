@@ -1,6 +1,19 @@
 ---
 title: Extract and Combine Video Segments from a File in C#
 description: Extract and combine multiple segments from a single video file using VisioForge Video Edit SDK .NET. Highlight reels and clip assembly in C#.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCore
+  - Windows
+  - Editing
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoSource
+  - FileSegment
+  - AudioSource
+
 ---
 
 # Adding Multiple Segments from a Single Video File in C#
@@ -64,8 +77,8 @@ VideoSource videoFile = new VideoSource(
     videoFileName,   // Path to your video file
     segments,        // Array of segments defined above
     VideoEditStretchMode.Letterbox,  // How to handle aspect ratio differences
-    0,               // Rotation angle (0 = no rotation)
-    1.0);            // Speed factor (1.0 = normal speed)
+    0,               // streamNumber — which video stream to read from a multi-stream file
+    1.0);            // rate — playback rate (1.0 = normal speed; 2.0 = 2×; 0.5 = half speed)
 ```
 
 The VideoSource constructor takes several parameters:
@@ -73,42 +86,48 @@ The VideoSource constructor takes several parameters:
 - `videoFileName`: The path to your source video file
 - `segments`: The array of FileSegment objects you defined in Step 1
 - `VideoEditStretchMode`: How to handle aspect ratio differences (Letterbox, Stretch, Crop)
-- Rotation angle (in degrees): Use 0 for no rotation, or 90, 180, 270 for rotated video
-- Speed factor: Use 1.0 for normal speed, values below 1.0 for slow motion, above 1.0 for fast motion
+- `streamNumber`: Zero-based index of the video stream to use from a multi-stream file (not rotation)
+- `rate`: Playback rate multiplier — 1.0 = normal, 0.5 = slow-mo, 2.0 = fast-forward
 
 ### Step 3: Add to Timeline
 
 Finally, add the segmented video source to your editing timeline:
 
 ```cs
-// Add the segmented file to the timeline (track 0)
-VideoEdit1.Input_AddVideoFile(videoFile, 0);
+// Add the segmented file to the timeline.
+// Signature: Input_AddVideoFile(VideoSource fileSource, TimeSpan? timelineInsertTime = null,
+//   int targetVideoStream = 0, int customWidth = 0, int customHeight = 0).
+// Pass only the source to append at the current end of the timeline.
+VideoEdit1.Input_AddVideoFile(videoFile);
+
+// Or splice the source at a specific timeline position:
+// VideoEdit1.Input_AddVideoFile(videoFile, TimeSpan.FromSeconds(5));
 ```
 
-The `Input_AddVideoFile` method takes two parameters:
-
-- `videoFile`: The VideoSource object you created
-- `0`: The track number to place the video on (0 is typically the main video track)
+The `Input_AddVideoFile` method takes the `VideoSource` plus an optional timeline-insert position (`TimeSpan?`, not an `int` track number). Additional optional parameters choose which video stream to consume from a multi-stream source and override custom width/height.
 
 ## Working with Audio Segments
 
 The same approach works for audio files. Simply use AudioSource instead of VideoSource:
 
 ```cs
-// Define your audio segments
-FileSegment[] audioSegments = new[] { 
-    new FileSegment(TimeSpan.FromMilliseconds(0), TimeSpan.FromMilliseconds(8000)),
-    new FileSegment(TimeSpan.FromMilliseconds(15000), TimeSpan.FromMilliseconds(12000))
+// Define your audio segments. FileSegment(startTime, stopTime) — stop must be greater than start.
+FileSegment[] audioSegments = new[] {
+    new FileSegment(TimeSpan.FromMilliseconds(0),     TimeSpan.FromMilliseconds(8000)),   // 0 → 8s
+    new FileSegment(TimeSpan.FromMilliseconds(15000), TimeSpan.FromMilliseconds(27000))   // 15s → 27s
 };
 
-// Create audio source with segments
+// Create audio source with segments.
+// Signature: AudioSource(string filename, FileSegment[] segments, string fileToSync = null,
+//   int streamNumber = 0, double rate = 1.0).
+// Position 3 is fileToSync (a *string*), not a speed factor — use a named arg for rate.
 AudioSource audioFile = new AudioSource(
     audioFileName,
     audioSegments,
-    1.0);  // Speed factor
+    rate: 1.0);
 
-// Add to timeline (audio track 0)
-VideoEdit1.Input_AddAudioFile(audioFile, 0);
+// Append to the timeline.
+VideoEdit1.Input_AddAudioFile(audioFile);
 ```
 
 ## Advanced Usage Scenarios
@@ -118,24 +137,24 @@ VideoEdit1.Input_AddAudioFile(audioFile, 0);
 You can create interesting effects by varying the speed factor for different segments:
 
 ```cs
-// Create segments with different speeds
+// Create segments with different speeds. FileSegment(start, stop) — stop must be > start.
 VideoSource slowMotionSegment = new VideoSource(
     videoFileName,
-    new[] { new FileSegment(TimeSpan.FromMilliseconds(5000), TimeSpan.FromMilliseconds(3000)) },
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(5000), TimeSpan.FromMilliseconds(8000)) },  // 5s → 8s
     VideoEditStretchMode.Letterbox,
-    0,
-    0.5);  // Half speed (slow motion)
+    0,      // streamNumber
+    0.5);   // rate — half speed (slow motion)
 
 VideoSource fastForwardSegment = new VideoSource(
     videoFileName,
-    new[] { new FileSegment(TimeSpan.FromMilliseconds(10000), TimeSpan.FromMilliseconds(5000)) },
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(10000), TimeSpan.FromMilliseconds(15000)) }, // 10s → 15s
     VideoEditStretchMode.Letterbox,
-    0,
-    2.0);  // Double speed
+    0,      // streamNumber
+    2.0);   // rate — double speed
 
-// Add segments to different positions on the timeline
-VideoEdit1.Input_AddVideoFile(slowMotionSegment, 0);
-VideoEdit1.Input_AddVideoFile(fastForwardSegment, 0, TimeSpan.FromMilliseconds(3000));
+// Add segments to the timeline. Position arg is TimeSpan? (insert point), not an int track.
+VideoEdit1.Input_AddVideoFile(slowMotionSegment);
+VideoEdit1.Input_AddVideoFile(fastForwardSegment, TimeSpan.FromMilliseconds(3000));
 ```
 
 ### Combining Multiple Files with Segments
@@ -143,24 +162,24 @@ VideoEdit1.Input_AddVideoFile(fastForwardSegment, 0, TimeSpan.FromMilliseconds(3
 You can combine segments from different files by creating multiple VideoSource objects:
 
 ```cs
-// Create segments from different files
+// Create segments from different files. FileSegment(start, stop) — stop must be > start.
 VideoSource file1Segments = new VideoSource(
     videoFileName1,
-    new[] { new FileSegment(TimeSpan.FromMilliseconds(0), TimeSpan.FromMilliseconds(5000)) },
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(0), TimeSpan.FromMilliseconds(5000)) },  // 0 → 5s
     VideoEditStretchMode.Letterbox,
-    0,
-    1.0);
+    0,      // streamNumber
+    1.0);   // rate
 
 VideoSource file2Segments = new VideoSource(
     videoFileName2,
-    new[] { new FileSegment(TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(4000)) },
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(6000)) }, // 2s → 6s
     VideoEditStretchMode.Letterbox,
-    0,
-    1.0);
+    0,      // streamNumber
+    1.0);   // rate
 
-// Add to timeline in sequence
-VideoEdit1.Input_AddVideoFile(file1Segments, 0);
-VideoEdit1.Input_AddVideoFile(file2Segments, 0, TimeSpan.FromMilliseconds(5000));
+// Add to timeline in sequence. Position arg is TimeSpan?, not an int.
+VideoEdit1.Input_AddVideoFile(file1Segments);
+VideoEdit1.Input_AddVideoFile(file2Segments, TimeSpan.FromMilliseconds(5000));
 ```
 
 ## Required Dependencies

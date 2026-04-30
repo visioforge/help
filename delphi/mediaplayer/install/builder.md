@@ -1,6 +1,19 @@
 ---
 title: Install TVFMediaPlayer ActiveX Control in C++ Builder
 description: Install TVFMediaPlayer in C++ Builder - step-by-step guide for versions 5, 6, 2006, and later with prerequisites, setup, and troubleshooting.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Playback
+  - Streaming
+  - MP4
+primary_api_classes:
+  - TVFMediaPlayer
+
 ---
 
 # Installing TVFMediaPlayer in C++ Builder
@@ -126,7 +139,7 @@ After successful installation, you can use the component in your C++ Builder app
 
     ```cpp
     // Assuming MediaPlayer1 is the name of the TVFMediaPlayer component on your form
-    MediaPlayer1->Filename = "C:\\path\\to\\your\\video.mp4";
+    MediaPlayer1->FilenameOrURL = "C:\\path\\to\\your\\video.mp4";
     MediaPlayer1->Play();
     ```
 
@@ -151,7 +164,7 @@ The VisioForge Media Framework provides both 32-bit (x86) and 64-bit (x64) versi
 * **Control Not Found in Import List:** Ensure the VisioForge Media Framework (ActiveX version) was installed correctly with administrative privileges. Try reinstalling the framework. Manually registering the `.ocx` or `.ax` file using `regsvr32` (run from an Administrator command prompt) might be necessary in rare cases (e.g., `regsvr32 "C:\Program Files (x86)\VisioForge\Media Framework\VFMediaPlayer.ax"` - adjust path as needed).
 * **Package Installation Fails:** Check the build output for errors. Ensure the package project settings (paths, target platform) are correct. Verify you have write permissions to the C++ Builder library/package directories.
 * **Component Works in IDE but Fails at Runtime (or vice-versa):** This often points to an architecture mismatch (x86 vs. x64). Review the "Architecture Considerations" section carefully. Ensure the correct version (32-bit or 64-bit) of the VisioForge runtime files is accessible to your compiled application. Deploy the required VisioForge redistributables with your application if necessary.
-* **Errors During Playback (`CreateObject` fails, etc.):** Double-check that the `Filename` property points to a valid, accessible media file. Ensure the necessary codecs for the media format are installed on the system (though VisioForge often includes internal decoders or utilizes Media Foundation/DirectShow). Check the VisioForge `OnError` event for specific error codes or messages.
+* **Errors During Playback (`CreateObject` fails, etc.):** Double-check that the `FilenameOrURL` property points to a valid, accessible media file. Ensure the necessary codecs for the media format are installed on the system (though VisioForge often includes internal decoders or utilizes Media Foundation/DirectShow). Check the VisioForge `OnError` event for specific error codes or messages.
 
 ## Conclusion
 

@@ -3,6 +3,19 @@ title: Motion Detection - Configurable Zones and Alerts in C# .NET
 description: Add simple and advanced motion detection to webcam or IP camera streams with VisioForge Video Capture SDK. Configurable zones, sensitivity, and C# examples.
 sidebar_label: Motion Detection
 order: 6
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+primary_api_classes:
+  - MotionDetectionSettings
+  - MotionDetectionExSettings
+
 ---
 
 # Motion Detection for Video Processing
@@ -64,6 +77,9 @@ motionDetector.Highlight_Enabled = true;
 motionDetector.FrameInterval = 5;
 motionDetector.DropFrames_Enabled = false;
 
+// enable detection (default is false — required for OnMotion events to fire)
+motionDetector.Enabled = true;
+
 // apply settings to the video capture component
 VideoCapture1.Motion_Detection = motionDetector;
 VideoCapture1.MotionDetection_Update();
@@ -71,13 +87,22 @@ VideoCapture1.MotionDetection_Update();
 
 ### Retrieving Motion Data
 
-To access the motion detection data in your application, implement the `OnMotion` event handler. This event provides:
+Subscribe to the `OnMotion` event (type: `EventHandler<MotionDetectionEventArgs>`) before starting the pipeline. The handler fires once per frame when motion is detected:
 
-- Current motion level (percentage)
-- Motion matrix data
-- Frame information
+```cs
+VideoCapture1.OnMotion += (sender, e) =>
+{
+    // e.Level  — overall motion intensity (int, typically 0-100).
+    // e.Matrix — byte[] grid overlay; each cell holds the motion amount for that region.
+    if (e.Level > 25)
+    {
+        Console.WriteLine($"Motion level {e.Level}% — {e.Matrix?.Length ?? 0} grid cells");
+        // Trigger recording, push an alert, enqueue a snapshot, etc.
+    }
+};
+```
 
-This data can be used to trigger alerts, record events, or initiate application-specific actions when motion exceeds defined thresholds.
+Events are raised on a background thread — marshal to the UI thread (`Dispatcher`/`Invoke`) before touching UI controls.
 
 ## Advanced Motion Detector
 
@@ -153,11 +178,37 @@ motionDetector.DetectorType = MotionDetectorType.CustomFrameDifference;
     
 
 
-5. Implement the corresponding event handler to receive detection data:
+5. Implement the corresponding event handler to receive detection data. Both events carry `MotionDetectionExEventArgs` with `Level` (float), `LevelPercent` (0-100 int), `ObjectsCount`, `ObjectRectangles` (`Rect[]`), and `MotionGrid` (`float[,]`):
 
-- Use `OnMotionDetectionEx` or `OnMotionDetection` depending on your component
-- Access motion level, matrix data, and detected objects information
-- Process this data according to your application requirements
+    === "VideoCaptureCoreX"
+
+        ```cs
+        VideoCapture1.OnMotionDetection += (sender, e) =>
+        {
+            if (e.LevelPercent > 25)
+            {
+                Console.WriteLine($"Motion {e.LevelPercent}% — {e.ObjectsCount} moving objects");
+                foreach (var rect in e.ObjectRectangles)
+                {
+                    Console.WriteLine($"  at {rect}");
+                }
+            }
+        };
+        ```
+
+    === "VideoCaptureCore"
+
+        ```cs
+        VideoCapture1.OnMotionDetectionEx += (sender, e) =>
+        {
+            if (e.LevelPercent > 25)
+            {
+                Console.WriteLine($"Motion {e.LevelPercent}% — {e.ObjectsCount} moving objects");
+            }
+        };
+        ```
+
+    Handlers run on a worker thread — marshal to the UI thread before updating controls.
 
 ## Practical Applications
 
@@ -182,12 +233,14 @@ To optimize motion detection performance:
 
 ## Advanced Configuration
 
-For environments with complex motion patterns, consider these additional settings:
+The advanced `MotionDetectionExSettings` class (used by `VideoCaptureCoreX` via `Motion_Detection` / by classic `VideoCaptureCore` via `Motion_DetectionEx`) exposes these additional properties:
 
-- Sensitivity thresholds to filter out minor movements
-- Detection zones to focus on specific areas of the frame
-- Object size filtering to ignore movements below certain dimensions
-- Persistence settings to require sustained motion before triggering
+- `DifferenceThreshold` — per-pixel difference threshold to filter out minor movements
+- `MinObjectsWidth` / `MinObjectsHeight` — ignore detected objects below these dimensions
+- `SuppressNoise` — noise-suppression filter to reduce false positives
+- `HighlightMotionRegions` — draw bounding rectangles around detected object regions
+- `KeepObjectsEdges` — preserve sharp edges when highlighting
+- `HighlightColor` (SKColor) — color used for motion highlighting
 
 ## Event Integration
 

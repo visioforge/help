@@ -3,6 +3,11 @@ title: Video Recording Formats and Encoder Options in C# .NET
 description: Record to MP4, AVI, WMV, WebM, and MKV with VisioForge Video Capture SDK. H.264, H.265, MJPEG encoders and GPU-accelerated encoding in .NET apps.
 sidebar_label: Video Capture
 order: 11
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - Streaming
 
 ---
 
@@ -13,6 +18,37 @@ order: 11
 ## Introduction
 
 Our Video Capture SDK for .NET equips developers with a powerful, versatile solution for implementing professional-grade video recording capabilities in their applications. Designed specifically for .NET environments, this SDK provides seamless integration with your existing codebase while delivering exceptional performance and reliability.
+
+## Quick Start — Record webcam to MP4
+
+Minimum end-to-end path with `VideoCaptureCoreX` (cross-platform). Swap the `MP4Output` for `MKVOutput` / `WebMOutput` / `MOVOutput` to switch container, or for `RTSPServerOutput` / `RTMPOutput` / `HLSOutput` to stream instead of record — the surrounding wiring stays the same.
+
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+// 1. Initialise the cross-platform engine once per process.
+VisioForgeX.InitSDK();
+
+// 2. Create the engine, bound to an IVideoView for preview (or null for headless).
+var videoCapture = new VideoCaptureCoreX(videoView as IVideoView);
+
+// 3. Select first enumerated camera + microphone.
+var videoDevice = (await DeviceEnumerator.Shared.VideoSourcesAsync()).First();
+var audioDevice = (await DeviceEnumerator.Shared.AudioSourcesAsync()).First();
+videoCapture.Video_Source = new VideoCaptureDeviceSourceSettings(videoDevice);
+videoCapture.Audio_Source = new AudioCaptureDeviceSourceSettings(audioDevice);
+videoCapture.Audio_Record = true;
+
+// 4. Add an MP4 output. Defaults to H.264 + AAC.
+videoCapture.Outputs_Add(new MP4Output("output.mp4"), true);
+
+// 5. Start. OnError fires on pipeline errors.
+await videoCapture.StartAsync();
+```
 
 ## Key Capabilities
 

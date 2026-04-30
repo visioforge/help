@@ -1,6 +1,16 @@
 ---
 title: Handle Multi-Track Audio in Video Files in C# .NET
 description: Process video files with multiple audio streams using VisioForge Video Edit SDK .NET. Select, mix, and manage multi-language tracks in C#.
+tags:
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - VideoEditCore
+  - Windows
+  - Editing
+  - AVI
+  - NuGet
+
 ---
 
 # Working with Multiple Audio Streams in Video Files

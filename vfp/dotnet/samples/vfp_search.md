@@ -1,6 +1,16 @@
 ---
 title: Search for Video Fragments Using Fingerprints in .NET
 description: Search for video fragments inside larger files using VisioForge vfp_search CLI tool with timestamp output and configurable match thresholds.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+  - C#
+
 ---
 
 # vfp_search - Video Fragment Search Tool

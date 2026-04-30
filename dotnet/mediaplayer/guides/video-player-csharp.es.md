@@ -1,13 +1,66 @@
 ---
-title: Crear un Reproductor de Video en C# - Guía Completa de .NET
-description: Cree un reproductor de video en C# con controles de reproducción, búsqueda en la línea de tiempo y volumen usando Media Player SDK .Net.
+title: Reproductor de Video C# WinForms/WPF — Búsqueda y Volumen
+description: Cree un reproductor de video en C# para aplicaciones de escritorio WinForms o WPF con Media Player SDK .Net — búsqueda, volumen, velocidad y subtítulos.
+tags:
+  - Media Player SDK
+  - .NET
+  - MediaPlayerCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Playback
+  - Streaming
+  - Editing
+  - RTSP
+  - MPEG-DASH
+  - MP4
+  - MKV
+  - WebM
+  - AVI
+  - MOV
+  - WMV
+  - H.265
+  - C#
+  - NuGet
+primary_api_classes:
+  - MediaPlayerCoreX
+  - VideoView
+  - UniversalSourceSettings
+  - AudioRendererSettings
+  - ErrorsEventArgs
+
 ---
 
-# Crear un Reproductor de Video en C#
+# Crear un Reproductor de Video en C# para WinForms y WPF
 
-Esta guía le muestra cómo crear un reproductor de video con todas las funciones en C# utilizando [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net). Implementará la reproducción de archivos, la búsqueda en la línea de tiempo, pausa/reanudación y control de volumen. Se cubren dos enfoques: la API de alto nivel `MediaPlayerCoreX` y la API basada en pipeline `MediaBlocksPipeline`.
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Enfoque MediaPlayerCoreX (Recomendado)
+Esta guía le muestra cómo crear un reproductor de video **para escritorio Windows** (WinForms o WPF) en C# utilizando [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) con el motor de alto nivel `MediaPlayerCoreX`. Conectará reproducción de archivos, búsqueda en la línea de tiempo, pausa/reanudación, volumen y velocidad de reproducción contra un control `VideoView` de WinForms o WPF.
+
+!!! info "Elija su enfoque"
+    Esta página es para **aplicaciones de escritorio Windows** (WinForms o WPF) con Media Player SDK .Net.
+
+    - **Escritorio multiplataforma (incluye Linux)** → [Guía del reproductor Avalonia](avalonia-player.md)
+    - **Móvil + escritorio desde una sola base de código (iOS, Android, macOS, Windows)** → [Guía del reproductor .NET MAUI](maui-player.md)
+    - **Solo Android** → [Guía del reproductor Android](android-player.md)
+    - **Visual Basic .NET** → [Guía del reproductor de video VB.NET](video-player-vb-net.md)
+    - **Basado en pipeline (grafo de bloques con renderizadores explícitos)** → [Reproductor Media Blocks SDK](../../mediablocks/GettingStarted/player.md)
+
+!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+
+    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecta al servidor MCP público de VisioForge
+    ([documentación](../../general/mcp-server-usage.md))
+    en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
+    ejemplos de código ejecutables y guías de despliegue — más preciso que
+    buscar en `llms.txt`. Sin autenticación requerida.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
+
+## Enfoque MediaPlayerCoreX
 
 `MediaPlayerCoreX` es la forma más sencilla de crear un reproductor de video en C# con control total de reproducción.
 
@@ -198,52 +251,9 @@ public partial class Form1 : Form
 }
 ```
 
-## Enfoque MediaBlocksPipeline
+## Alternativa: Pipeline de Media Blocks SDK
 
-Para mayor flexibilidad, utilice `MediaBlocksPipeline` para construir un reproductor con bloques de procesamiento personalizados.
-
-```csharp
-using VisioForge.Core.MediaBlocks;
-using VisioForge.Core.MediaBlocks.VideoRendering;
-using VisioForge.Core.MediaBlocks.Sources;
-using VisioForge.Core.MediaBlocks.AudioRendering;
-using VisioForge.Core.Types.X.AudioRenderers;
-using VisioForge.Core.Types.X.Sources;
-
-private MediaBlocksPipeline _pipeline;
-
-private async void StartPlayback(string filePath)
-{
-    _pipeline = new MediaBlocksPipeline();
-
-    // Crear la fuente del archivo y detectar los flujos disponibles
-    var fileSourceSettings = await UniversalSourceSettings.CreateAsync(filePath);
-    var hasVideo = fileSourceSettings.GetInfo().VideoStreams.Count > 0;
-    var hasAudio = fileSourceSettings.GetInfo().AudioStreams.Count > 0;
-
-    var fileSource = new UniversalSourceBlock(fileSourceSettings);
-
-    // Conectar el renderizador de video si hay video disponible
-    if (hasVideo)
-    {
-        var videoRenderer = new VideoRendererBlock(_pipeline, VideoView1);
-        _pipeline.Connect(fileSource, videoRenderer);
-    }
-
-    // Conectar el renderizador de audio si hay audio disponible
-    if (hasAudio)
-    {
-        var audioOutputDevice = (await DeviceEnumerator.Shared
-            .AudioOutputsAsync(AudioOutputDeviceAPI.DirectSound))[0];
-        var audioOutput = new AudioRendererBlock(
-            new AudioRendererSettings(audioOutputDevice));
-        _pipeline.Connect(fileSource, audioOutput);
-    }
-
-    // Iniciar la reproducción
-    await _pipeline.StartAsync();
-}
-```
+Si necesita la flexibilidad adicional de un grafo de bloques (procesamiento personalizado, múltiples sinks, overlays), la [Guía del Reproductor de Media Blocks SDK](../../mediablocks/GettingStarted/player.md) construye un pipeline equivalente con `UniversalSourceBlock` + `VideoRendererBlock` + `AudioRendererBlock`. El código anterior usa Media Player SDK porque está diseñado específicamente para este escenario — una instancia de `MediaPlayerCoreX` reemplaza el cableado de bloques.
 
 ## Formatos Soportados
 
@@ -286,7 +296,8 @@ Sí. El SDK funciona en Windows, macOS, Linux, Android e iOS. Para aplicaciones 
 
 - [Crear un Reproductor de Video en VB.NET](video-player-vb-net.md) — el mismo tutorial usando sintaxis VB.NET
 - [Reproductor Multiplataforma con Avalonia](avalonia-player.md) — construya un reproductor de video para Windows, macOS y Linux con Avalonia UI
-- [Reproducir Video en .NET (Guía Multiplataforma)](play-video-dotnet.md) — resumen de todos los frameworks de UI y plataformas compatibles
+- [Guía del reproductor .NET MAUI](maui-player.md) — una base de código C# para iOS, Android, macOS y Windows
+- [Guía del reproductor Android](android-player.md) — configuración y despliegue específicos de Android
 - [Modo Bucle y Rango de Posición](loop-and-position-range.md) — configure el bucle, repetición A-B y reproducción de segmentos
-- [Primeros Pasos con MediaBlocks Pipeline](../../mediablocks/GettingStarted/index.md) — aprenda el enfoque basado en pipeline para procesamiento multimedia avanzado
+- [Reproductor Media Blocks SDK](../../mediablocks/GettingStarted/player.md) — alternativa basada en pipeline con renderizadores explícitos
 - [Página del Producto Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net)

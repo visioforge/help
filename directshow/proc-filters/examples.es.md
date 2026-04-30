@@ -1,9 +1,65 @@
 ---
 title: Filtros de procesamiento DirectShow: ejemplos en C# y C++
 description: Ejemplos de código para Efectos de Video, Mezclador de Video y filtros de Clave de Croma en C++, C# y VB.NET con integración DirectShow.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Effects
+  - Mixing
+  - C#
+primary_api_classes:
+  - IBaseFilter
+  - IVFChromaKey
+  - IVFVideoMixer
+
 ---
 
 # Paquete de Filtros de Procesamiento - Ejemplos de Código
+
+!!! danger "Los ejemplos de esta página no coinciden con la API pública — trate como pseudocódigo ilustrativo"
+
+    Los snippets en C# / C++ / VB.NET de abajo usan formas de método
+    fabricadas (`SetEffect(...)`, `SetEffectParam(...)`, `SetInputParam("Width", ...)`
+    con clave-string, `SetChromaSettings(...)` de 7 args, `chroma_put_color(r, g, b)`
+    de 3 args). Ninguna de estas firmas existe en el código fuente real
+    del filtro DirectShow (`Video Effects Pro/vf_eff_intf.h`,
+    `Video Mixer/yk_video_mixer_filter_define.h`).
+
+    **APIs canónicas reales (verificadas contra el código fuente del filtro):**
+
+    - **`IVFEffects45`** (Video Effects Pro): solo cuatro métodos —
+      `add_effect(CVFEffect)`, `set_effect_settings(CVFEffect)`,
+      `remove_effect(int id)`, `clear_effects()`. Los parámetros por efecto
+      viven en la estructura `CVFEffect` (y sub-estructuras como
+      `CVFTextLogoMain`, `CVFGraphicLogoMain`, `CVFZoom`, `CVFPan`).
+    - **enum `CVFEffectType`** (`_SHARED/SharedTypes.h`): los miembros reales
+      son `ef_text_logo`, `ef_graphic_logo`, `ef_blue`, `ef_blur`, `ef_color_noise`,
+      `ef_contrast`, `ef_darkness`, `ef_greyscale`, `ef_invert`, `ef_marble`,
+      `ef_mosaic`, `ef_solorize`, `ef_zoom`, `ef_pan`, `ef_fade_in`, `ef_fade_out`,
+      `ef_rotate`, etc. (41 miembros). Las constantes `VF_VIDEO_EFFECT_*` de
+      abajo no existen.
+    - **`IVideoMixer`** (nota: el nombre es `IVideoMixer`, **no** `IVFVideoMixer`;
+      IID `3318300E-F6F1-4d81-8BC3-9DB06B09F77A`): firmas reales son
+      `SetInputParam(int pin_index, VideoInputParam param)`,
+      `SetOutputParam(VideoOutputParam param)`,
+      `SetInputOrder(int pin_index, int order)` (por pin, no array masivo),
+      `SetChromaSettings(BOOL enabled, COLORREF color, int tolerance1, int tolerance2)`
+      (4 args, a nivel del mezclador). `VideoInputParam` / `VideoOutputParam`
+      son estructuras tipadas (sin prefijo `VFPIP`).
+    - **`IVFChromaKey`** (interfaz separada de `IVFEffects45`, ambas en el
+      mismo filtro `EZrgb24`; IID `AF6E8208-30E3-44f0-AAFE-787A6250BAB3`):
+      `chroma_put_color(int color)` toma un int empaquetado tipo `COLORREF` —
+      use `RGB(r, g, b)` para construirlo. `chroma_put_contrast(int low, int high)`
+      establece un rango de contraste (límites bajo/alto), no valores de
+      contraste pareados.
+
+    Catalogado como defectos #020–#027 en la auditoría. Una reescritura
+    completa de esta página está en cola; mientras tanto, no copie-pegue
+    los snippets de abajo. Para código funcional, vea las páginas canónicas:
+    [interfaces/effects-interface.md](./interfaces/effects-interface.md),
+    [interfaces/video-mixer.md](./interfaces/video-mixer.md),
+    [interfaces/chroma-key.md](./interfaces/chroma-key.md).
 
 ## Descripción General
 

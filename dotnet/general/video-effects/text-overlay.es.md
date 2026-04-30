@@ -1,6 +1,30 @@
 ---
 title: Agregar Overlay de Texto en Video con C# y Fuentes Custom
 description: Cree overlays de texto dinámicos con control de fuente, color, posición, rotación y animación para timestamps, subtítulos y branding en video .NET.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaPlayerCoreX
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Playback
+  - Editing
+  - Effects
+  - C#
+primary_api_classes:
+  - TextOverlayVideoEffect
+  - FontSettings
+  - VideoEffectTextLogo
+
 ---
 
 # Implementación de Superposiciones de Texto en Flujos de Video

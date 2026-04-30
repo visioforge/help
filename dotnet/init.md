@@ -1,6 +1,26 @@
 ---
 title: Initialize and Configure VisioForge .NET Video SDKs
 description: Initialize and deinitialize .NET SDKs for video capture, editing, and playback with DirectShow and cross-platform X-engines.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - MediaPlayerCoreX
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Playback
+  - Editing
+
 ---
 
 # Initialization

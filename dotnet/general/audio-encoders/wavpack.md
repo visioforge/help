@@ -1,6 +1,32 @@
 ---
 title: WavPack Audio Encoder Settings and Configuration in .NET
 description: Implement WavPack lossless and hybrid lossy audio compression in .NET with quality settings, correction modes, and stereo encoding.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - WavPack
+  - C#
+primary_api_classes:
+  - WavPackEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - MediaBlocksPipeline
+  - WavPackOutput
+
 ---
 
 # WavPack Audio Encoder for .NET Applications

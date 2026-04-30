@@ -1,11 +1,38 @@
 ---
-title: Screen Capture in C# .NET — Window and Region Recording
+title: Screen Capture Source in C# .NET — Full Desktop or Region
 description: Capture full screen, specific windows, or custom regions using VisioForge Video Capture SDK with DirectX 11/12 and Windows Graphics Capture APIs.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - WinForms
+  - Capture
+  - Streaming
+  - Webcam
+  - IP Camera
+  - Screen Capture
+  - C#
+primary_api_classes:
+  - ScreenCaptureD3D11SourceSettings
+  - ScreenCaptureSourceSettings
+  - ScreenCaptureDX9SourceSettings
+
 ---
 
 # Screen Capture Implementation Guide
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+
+!!! tip "AI coding agents: use the VisioForge MCP server"
+
+    Building this with **Claude Code**, **Cursor**, or another AI coding agent?
+    Connect to the public [VisioForge MCP server](../../general/mcp-server-usage.md)
+    at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable
+    code samples, and deployment guides — more accurate than grepping
+    `llms.txt`. No authentication required.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Introduction to Screen Capture
 
@@ -37,7 +64,7 @@ DirectX 11 is particularly recommended for window capture scenarios due to its i
     
     The VideoCaptureCore implementation provides straightforward configuration options to control the capture process:
     
-    - `AllowCaptureMouseCursor`: Enable or disable cursor visibility in the captured content
+    - `GrabMouseCursor`: Enable or disable cursor visibility in the captured content
     - `DisplayIndex`: Select which display to capture in multi-monitor setups (zero-indexed)
     - `ScreenPreview` / `ScreenCapture`: Set the operational mode for viewing or recording
     
@@ -72,17 +99,17 @@ Capturing either a complete screen or a defined screen region is a common requir
          // Set to true to capture the full screen
         FullScreen = false,
     
-         // Set the left position of the screen area
+         // Set the left edge of the screen area (absolute pixel X)
         Left = 0,
     
-        // Set the top position of the screen area
+        // Set the top edge of the screen area (absolute pixel Y)
         Top = 0, 
     
-        // Set the width of the screen area
-        Width = 640, 
+        // Set the right edge (absolute pixel X, not width)
+        Right = 640, 
     
-        // Set the height of the screen area
-        Height = 480, 
+        // Set the bottom edge (absolute pixel Y, not height)
+        Bottom = 480, 
     
         // Set the display index
         DisplayIndex = 0, 
@@ -91,11 +118,11 @@ Capturing either a complete screen or a defined screen region is a common requir
         FrameRate = new VideoFrameRate(25), 
     
          // Set to true to capture the mouse cursor
-        AllowCaptureMouseCursor = true
+        GrabMouseCursor = true
     };
     ```
     
-    When `FullScreen` is set to `true`, the `Left`, `Top`, `Width`, and `Height` properties are ignored, and the entire screen specified by `DisplayIndex` is captured.
+    When `FullScreen` is set to `true`, the `Left`, `Top`, `Right`, and `Bottom` properties are ignored, and the entire screen specified by `DisplayIndex` is captured. Note the rectangle is specified as absolute pixel corner coordinates — `Right` and `Bottom` are the far-corner coordinates, not the width/height of the region.
     
     For multi-monitor setups, the `DisplayIndex` property identifies which monitor to capture, with 0 representing the primary display.
     
@@ -181,11 +208,22 @@ Capturing specific application windows allows for targeted recording of individu
         FrameRate = new VideoFrameRate(25),
     
          // Set to true to capture the mouse cursor
-        AllowCaptureMouseCursor = true
+        GrabMouseCursor = true
     };
     ```
     
-    The `windowHandle` parameter should contain a valid handle to the target window. This can be obtained using Windows API functions like `FindWindow` or by using UI automation libraries.
+    The `windowHandle` parameter must be a valid HWND for the target window. Get it via `FindWindow` (P/Invoke):
+
+    ```csharp
+    using System.Runtime.InteropServices;
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+    // Pass null for lpClassName to match by title only.
+    IntPtr windowHandle = FindWindow(null, "Untitled - Notepad");
+    if (windowHandle == IntPtr.Zero) throw new InvalidOperationException("Target window not found.");
+    ```
     
 
 === "VideoCaptureCoreX"
@@ -265,16 +303,42 @@ for (int i = 0; i < screens.Length; i++)
 
 ### Application Window Selection
 
-Providing users with the ability to select a window to capture:
+Enumerate top-level windows with `EnumWindows` + `GetWindowText` and let the user pick one:
 
 ```csharp
-// Get all open windows
-var openWindows = GetOpenWindows(); // Implementation depends on your approach
+using System.Runtime.InteropServices;
+using System.Text;
 
-// Present the list to the user for selection
-// Once selected, get the window handle
+private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
-// Configure the capture with the selected window handle
+[DllImport("user32.dll")]
+private static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
+
+[DllImport("user32.dll", CharSet = CharSet.Unicode)]
+private static extern int GetWindowText(IntPtr hWnd, StringBuilder buf, int nMaxCount);
+
+[DllImport("user32.dll")]
+private static extern bool IsWindowVisible(IntPtr hWnd);
+
+public static Dictionary<IntPtr, string> GetOpenWindows()
+{
+    var result = new Dictionary<IntPtr, string>();
+    EnumWindows((hWnd, _) =>
+    {
+        if (!IsWindowVisible(hWnd)) return true;
+        var buf = new StringBuilder(256);
+        if (GetWindowText(hWnd, buf, buf.Capacity) > 0)
+        {
+            result[hWnd] = buf.ToString();
+        }
+        return true;
+    }, IntPtr.Zero);
+    return result;
+}
+
+// Present result to the user, then:
+IntPtr selectedWindowHandle = /* chosen entry.Key */;
+
 VideoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings
 {
     WindowHandle = selectedWindowHandle,
@@ -304,8 +368,8 @@ VideoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings
 {
     Left = selection.Left,
     Top = selection.Top,
-    Width = selection.Width,
-    Height = selection.Height,
+    Right = selection.Right,   // absolute pixel X, not width
+    Bottom = selection.Bottom, // absolute pixel Y, not height
     // Additional configuration...
 };
 ```
@@ -348,7 +412,7 @@ Yes. Set the `WindowHandle` property on `ScreenCaptureSourceSettings` (VideoCapt
 
 ### How do I capture the mouse cursor during screen recording?
 
-Set `AllowCaptureMouseCursor = true` in `ScreenCaptureSourceSettings` (VideoCaptureCore) or `CaptureCursor = true` in `ScreenCaptureD3D11SourceSettings` (VideoCaptureCoreX). The cursor is included in the captured frame data at its current position. Disable this property when recording tutorials where cursor rendering will be added in post-production.
+Set `GrabMouseCursor = true` in `ScreenCaptureSourceSettings` (VideoCaptureCore) or `CaptureCursor = true` in `ScreenCaptureD3D11SourceSettings` (VideoCaptureCoreX). The cursor is included in the captured frame data at its current position. Disable this property when recording tutorials where cursor rendering will be added in post-production.
 
 ### Does the screen capture SDK work on multiple monitors?
 

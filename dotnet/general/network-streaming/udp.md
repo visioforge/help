@@ -1,11 +1,55 @@
 ---
 title: UDP Video Streaming with MPEG-TS Container in C# .NET
-description: Unicast and multicast modes with H.264/H.265 encoding. FFmpeg pipeline, buffer tuning, keyframe intervals, and bandwidth guidelines. VisioForge SDK examples.
+description: Stream H.264/HEVC video over UDP in C# / .NET: multicast, point-to-point, low-latency configs. Full send/receive code samples with bitrate tuning.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCore
+  - VideoEditCore
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - UDP
+  - MP4
+  - TS
+  - H.264
+  - H.265
+  - AAC
+  - C#
+primary_api_classes:
+  - FFMPEGEXEOutput
+  - BasicVideoSettings
+  - MediaBlockPadMediaType
+  - MediaBlocksPipeline
+  - UDPMPEGTSSinkBlock
+  - UDPSinkSettings
+  - MultiUDPMPEGTSSinkBlock
+
 ---
 
 # UDP Streaming with VisioForge SDKs
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+!!! tip "AI coding agents: use the VisioForge MCP server"
+
+    Building this with **Claude Code**, **Cursor**, or another AI coding agent?
+    Connect to the public [VisioForge MCP server](../mcp-server-usage.md)
+    at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable
+    code samples, and deployment guides — more accurate than grepping
+    `llms.txt`. No authentication required.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Introduction to UDP Streaming
 
@@ -145,7 +189,7 @@ var pipeline = new MediaBlocksPipeline();
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
 
 var videoEncoder = new H264EncoderBlock(new OpenH264EncoderSettings());
-var audioEncoder = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
+var audioEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings() { Bitrate = 192 });
 
 pipeline.Connect(fileSource.VideoOutput, videoEncoder.Input);
 pipeline.Connect(fileSource.AudioOutput, audioEncoder.Input);
@@ -212,30 +256,43 @@ vlc udp://@:5004
 
 ### Bitrate Management
 
-For optimal streaming performance, consider adjusting the video and audio bitrates based on your network capacity:
+For optimal streaming performance, adjust the video and audio bitrates to match
+your network capacity. `FFMPEGEXEOutput` exposes the encoder knobs via `.Video`
+and `.Audio` (not `VideoSettings`/`AudioSettings`), and the underlying
+`BasicVideoSettings` / `BasicAudioSettings` store bitrate in **kbps**:
 
 ```cs
-ffmpegOutput.VideoSettings.Bitrate = 2500000; // 2.5 Mbps for video
-ffmpegOutput.AudioSettings.Bitrate = 128000;  // 128 kbps for audio
+ffmpegOutput.Video.Bitrate = 2500; // 2.5 Mbps for video (kbps)
+ffmpegOutput.Audio.Bitrate = 128;  // 128 kbps for audio
 ```
 
 ### Resolution and Frame Rate
 
-Lower resolutions and frame rates reduce bandwidth requirements:
+Lower resolutions reduce bandwidth. Set the target size inside
+`VideoCapture1.Video_Resize` (the classic engine exposes it as an
+`IVideoResizeSettings` object, not flat properties on the core), and enable
+the resize stage with `Video_ResizeOrCrop_Enabled`:
 
 ```cs
-VideoCapture1.Video_Resize_Enabled = true;
-VideoCapture1.Video_Resize_Width = 1280;    // 720p resolution
-VideoCapture1.Video_Resize_Height = 720;
-VideoCapture1.Video_FrameRate = 30;         // 30 fps
+VideoCapture1.Video_ResizeOrCrop_Enabled = true;
+VideoCapture1.Video_Resize = new VideoResizeSettings
+{
+    Width  = 1280,   // 720p resolution
+    Height = 720,
+    Mode   = VideoResizeMode.Letterbox,
+};
+
+// Frame rate is configured on the capture device format, not the core — pick
+// a 30 fps device format via Video_CaptureDevice_Format / _FrameRate.
 ```
 
 ### Buffer Size Configuration
 
-Adjusting buffer sizes can help manage latency vs. stability trade-offs:
+Latency vs. stability for FFMPEG-based streaming is controlled on the output
+object, not on the core. Milliseconds:
 
 ```cs
-VideoCapture1.Network_Streaming_BufferSize = 8192; // in KB
+ffmpegOutput.VideoBufferSize = 5000; // 5 s buffer for smoother streaming
 ```
 
 ## Best Practices for UDP Streaming
@@ -256,24 +313,28 @@ VideoCapture1.Network_Streaming_BufferSize = 8192; // in KB
 
 ### Performance Optimization
 
-1. **Hardware Acceleration**: When available, enable hardware acceleration for encoding:
+1. **Hardware Acceleration / Keyframes / Preset**: `FFMPEGEXEOutput` does not expose
+   first-class properties for HW accel, keyframe interval, or x264 presets — instead
+   inject them as FFMPEG CLI flags via `Custom_AdditionalVideoArgs`. FFMPEG then
+   applies them to the video encoder invocation.
 
 ```cs
-ffmpegOutput.VideoSettings.HWAcceleration = HWAcceleration.Auto;
+// NVENC hardware encoder + 2-second keyframe interval (60 frames @ 30 fps)
+// + ultrafast preset (lowest latency).
+ffmpegOutput.Custom_AdditionalVideoArgs = "-c:v h264_nvenc -g 60 -preset p1";
+
+// Intel QuickSync instead:
+// ffmpegOutput.Custom_AdditionalVideoArgs = "-c:v h264_qsv -g 60";
+
+// Software x264 with a quality/speed trade-off:
+// ffmpegOutput.Custom_AdditionalVideoArgs = "-c:v libx264 -g 60 -preset ultrafast";
 ```
 
-2. **Keyframe Intervals**: For lower latency, reduce keyframe (I-frame) intervals:
+2. **Pipe-based transport** (avoids a temp file between SDK and FFMPEG) generally
+   reduces latency:
 
 ```cs
-ffmpegOutput.VideoSettings.KeyframeInterval = 60; // One keyframe every 2 seconds at 30 fps
-```
-
-3. **Preset Selection**: Choose encoding presets based on your CPU capacity and latency requirements:
-
-```cs
-ffmpegOutput.VideoSettings.EncoderPreset = H264EncoderPreset.Ultrafast; // Lowest latency, higher bitrate
-// or
-ffmpegOutput.VideoSettings.EncoderPreset = H264EncoderPreset.Medium; // Balance between quality and CPU load
+ffmpegOutput.UsePipe = true;
 ```
 
 ## Troubleshooting Common Issues

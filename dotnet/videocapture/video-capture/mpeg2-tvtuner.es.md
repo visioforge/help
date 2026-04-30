@@ -1,6 +1,23 @@
 ---
 title: Captura de video MPEG-2 con sintonizador de TV en .NET
 description: Implemente captura de video de sintonizador de TV a archivos MPEG-2 en .NET con guía paso a paso y ejemplos de código para WPF, WinForms y Consola.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Streaming
+  - Encoding
+  - TV Tuner
+  - MPEG-2
+  - C#
+  - NuGet
+primary_api_classes:
+  - DirectCaptureMPEGOutput
+  - SpecialFilterType
+  - VideoCaptureMode
+
 ---
 
 # Captura de Video MPEG-2 Usando Codificador de Hardware de Sintonizador de TV en .NET

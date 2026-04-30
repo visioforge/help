@@ -1,6 +1,23 @@
 ---
 title: Cómo Conectar una Cámara IP Ubiquiti (UniFi) en C# .NET
 description: Conecta cámaras Ubiquiti UniFi Protect y AirCam en C# .NET con patrones de URL RTSP y ejemplos de código para modelos G3, G4, G5 y series AI.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Ubiquiti (UniFi) en C# .NET
@@ -141,7 +158,7 @@ Siempre verifica la URL RTSP actual en la interfaz de UniFi Protect si tu conexi
 
 Las cámaras UniFi Protect pueden presentar 2-5 segundos de latencia por defecto. Para reducir la latencia:
 
-- Usa `LowLatencyMode = true` en VideoCaptureCoreX
+- Establece `LowLatencyMode = true` en el `RTSPSourceSettings` pasado a VideoCaptureCoreX
 - Selecciona el flujo de baja calidad (menor resolución = menos buffering)
 - Usa transporte TCP para una entrega más confiable
 

@@ -1,6 +1,22 @@
 ---
 title: Referencia de Efectos de Video DirectShow - 35+ Filtros
 description: Referencia de 35+ efectos de video DirectShow en tiempo real: filtros de color, desentrelazado, eliminación de ruido y efectos artísticos.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Effects
+  - Mixing
+  - Webcam
+  - C#
+primary_api_classes:
+  - CVFEffectType
+  - CVFEffect
+  - CVFGraphicLogoMain
+  - CVFStretchMode
+  - CVFTextLogoMain
+
 ---
 
 # Referencia Completa de Efectos de Video
@@ -394,9 +410,9 @@ var effect = new CVFEffect
 ```
 
 ---
-### ef_solarize
+### ef_solorize
 Crea efecto de solarización (inversión parcial de color).
-**Tipo de Efecto**: `CVFEffectType.ef_solorize` (nota ortografía)
+**Tipo de Efecto**: `CVFEffectType.ef_solorize` (ortografía heredada conservada en la API — use exactamente este identificador)
 **Parámetros**:
 - `pAmountI` - Umbral de solarización (0-255)
 **Casos de Uso**:

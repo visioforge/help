@@ -1,6 +1,24 @@
 ---
 title: Reverse Video Playback in .NET with C# Code Examples
 description: Implement reverse video playback with frame-by-frame navigation using VisioForge Media Player SDK .NET on Windows and cross-platform targets.
+tags:
+  - Media Player SDK
+  - .NET
+  - MediaPlayerCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - MP4
+  - C#
+primary_api_classes:
+  - MediaPlayerCoreX
+  - MediaPlayerCore
+  - PlaybackState
+  - UniversalSourceSettings
+
 ---
 
 # Implementing Reverse Video Playback in .NET Applications
@@ -55,43 +73,44 @@ MediaPlayer1.Rate_Set(-0.5);
 MediaPlayer1.Rate_Set(-0.25);
 ```
 
-### Event Handling During Reverse Playback
+### Tracking Position During Reverse Playback
 
-When implementing reverse playback, you may need to handle events differently:
+`MediaPlayerCoreX` does not raise a position-changed event; poll the position on a timer instead:
 
 ```cs
-// Subscribe to position change events
-MediaPlayer1.PositionChanged += (sender, e) => 
+// Poll the player position every 100 ms and update the UI
+var positionTimer = new System.Threading.Timer(_ =>
 {
-    // Update UI with current position
     TimeSpan currentPosition = MediaPlayer1.Position_Get();
     UpdatePositionUI(currentPosition);
-};
 
-// Handle reaching the beginning of the video
-MediaPlayer1.ReachedStart += (sender, e) => 
-{
-    // Stop playback or switch to forward playback
-    MediaPlayer1.Rate_Set(1.0);
-    // Alternatively: await MediaPlayer1.PauseAsync();
-};
+    // Detect reaching the start while playing backwards
+    if (MediaPlayer1.Rate_Get() < 0 && currentPosition <= TimeSpan.FromMilliseconds(100))
+    {
+        // Switch to forward playback (or pause)
+        MediaPlayer1.Rate_Set(1.0);
+    }
+}, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
 ```
 
 ## Windows-Specific Frame-by-Frame Reverse Navigation
 
-The MediaPlayerCore engine (Windows-only) provides enhanced frame-by-frame control with its frame caching system, allowing precise backward navigation even with codecs that don't natively support it.
+The classic `MediaPlayerCore` engine (Windows-only) provides enhanced frame-by-frame control with its frame caching system, allowing precise backward navigation even with codecs that don't natively support it. Declare a separate classic-engine instance — the `ReversePlayback_*` API lives on `MediaPlayerCore` and is **not** available on `MediaPlayerCoreX`.
 
 ### Setting Up Frame Caching
 
 Before starting playback, configure the reverse playback cache:
 
 ```cs
+// Classic Windows engine — different type from MediaPlayerCoreX above
+MediaPlayerCore classicPlayer = new MediaPlayerCore(VideoView1);
+
 // Configure reverse playback before starting
-MediaPlayer1.ReversePlayback_CacheSize = 100; // Cache 100 frames
-MediaPlayer1.ReversePlayback_Enabled = true;  // Enable the feature
+classicPlayer.ReversePlayback_CacheSize = 100; // Cache 100 frames
+classicPlayer.ReversePlayback_Enabled = true;  // Enable the feature
 
 // Start playback
-await MediaPlayer1.PlayAsync();
+await classicPlayer.PlayAsync();
 ```
 
 ### Navigating Frame by Frame
@@ -100,12 +119,12 @@ With the cache configured, you can navigate to previous frames:
 
 ```cs
 // Navigate to the previous frame
-MediaPlayer1.ReversePlayback_PreviousFrame();
+classicPlayer.ReversePlayback_PreviousFrame();
 
 // Navigate backward multiple frames
 for(int i = 0; i < 5; i++)
 {
-    MediaPlayer1.ReversePlayback_PreviousFrame();
+    classicPlayer.ReversePlayback_PreviousFrame();
     // Optional: add delay between frames for controlled playback
     await Task.Delay(40); // ~25fps equivalent timing
 }
@@ -117,16 +136,10 @@ For applications with specific memory or performance requirements, you can fine-
 
 ```cs
 // For high-resolution videos, you might need fewer frames to manage memory
-MediaPlayer1.ReversePlayback_CacheSize = 50; // Reduce cache size
+classicPlayer.ReversePlayback_CacheSize = 50; // Reduce cache size
 
 // For applications that need extensive backward navigation
-MediaPlayer1.ReversePlayback_CacheSize = 250; // Increase cache size
-
-// Listen for cache-related events
-MediaPlayer1.ReversePlayback_CacheFull += (sender, e) => 
-{
-    Console.WriteLine("Reverse playback cache is full");
-};
+classicPlayer.ReversePlayback_CacheSize = 250; // Increase cache size
 ```
 
 ## Implementing UI Controls for Reverse Playback
@@ -137,7 +150,7 @@ A complete reverse playback implementation typically includes dedicated UI contr
 // Button click handler for reverse playback
 private async void ReversePlaybackButton_Click(object sender, EventArgs e)
 {
-    if(MediaPlayer1.State == MediaPlayerState.Playing)
+    if(MediaPlayer1.State == PlaybackState.Play)
     {
         // Toggle between forward and reverse
         if(MediaPlayer1.Rate_Get() > 0)
@@ -161,16 +174,17 @@ private async void ReversePlaybackButton_Click(object sender, EventArgs e)
 }
 
 // Button click handler for frame-by-frame backward navigation
-private void PreviousFrameButton_Click(object sender, EventArgs e)
+// (assumes the Windows-only classic engine `classicPlayer` declared above)
+private async void PreviousFrameButton_Click(object sender, EventArgs e)
 {
-    // Ensure we're paused first
-    if(MediaPlayer1.State == MediaPlayerState.Playing)
+    // Ensure we're paused first — classic MediaPlayerCore exposes State() as a method (X is a property).
+    if (classicPlayer.State() == PlaybackState.Play)
     {
-        await MediaPlayer1.PauseAsync();
+        await classicPlayer.PauseAsync();
     }
     
     // Navigate to previous frame
-    MediaPlayer1.ReversePlayback_PreviousFrame();
+    classicPlayer.ReversePlayback_PreviousFrame();
     UpdateFrameCountDisplay();
 }
 ```
@@ -185,7 +199,9 @@ Reverse playback can be resource-intensive, especially with high-resolution vide
 4. **Provide fallback options** for devices that struggle with full-speed reverse playback
 
 ```cs
-// Example of performance monitoring during reverse playback
+// Example of performance monitoring during reverse playback.
+// Rate tracking lives on MediaPlayerCoreX (`MediaPlayer1`);
+// cache adjustment targets the classic MediaPlayerCore (`classicPlayer`).
 private void MonitorPerformance()
 {
     Timer performanceTimer = new Timer(1000);
@@ -195,13 +211,13 @@ private void MonitorPerformance()
         {
             // Log or display current memory usage, frame rate, etc.
             LogPerformanceMetrics();
-            
-            // Adjust settings if needed
-            if(IsMemoryUsageHigh())
-            {
-                MediaPlayer1.ReversePlayback_CacheSize = 
-                    Math.Max(10, MediaPlayer1.ReversePlayback_CacheSize / 2);
-            }
+        }
+
+        // Adjust classic-engine frame cache if memory pressure is high
+        if(IsMemoryUsageHigh())
+        {
+            classicPlayer.ReversePlayback_CacheSize = 
+                Math.Max(10, classicPlayer.ReversePlayback_CacheSize / 2);
         }
     };
     performanceTimer.Start();

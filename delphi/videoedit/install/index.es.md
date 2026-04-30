@@ -1,6 +1,16 @@
 ---
 title: Instalar TVFVideoEdit en Delphi, VB6 y C++ Builder
 description: Instale la biblioteca TVFVideoEdit en Delphi e IDEs compatibles con ActiveX incluyendo MFC, VB6 y C++ Builder con configuración de paquetes y controles.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Editing
+primary_api_classes:
+  - TVFVideoEdit
+
 ---
 
 # Guía de instalación de la biblioteca TVFVideoEdit

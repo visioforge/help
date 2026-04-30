@@ -1,6 +1,28 @@
 ---
 title: FFmpeg Source Filter DirectShow Examples - C++, C#, VB.NET
 description: Build DirectShow graphs with FFmpeg Source Filter: file playback, hardware decoding, network streaming, and custom buffering in C++, C#, and VB.NET.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - WinForms
+  - Playback
+  - Streaming
+  - Decoding
+  - RTSP
+  - HLS
+  - MP4
+  - MKV
+  - AVI
+  - MOV
+  - C#
+  - VB.NET
+primary_api_classes:
+  - IFileSourceFilter
+  - IFFMPEGSourceSettings
+  - IBaseFilter
+  - IVFRegister
+
 ---
 
 # Code Examples
@@ -661,12 +683,12 @@ public void PlayWithStreamSelection(string filename, int videoStreamIndex, int a
         if (videoStreamIndex >= 0 && videoStreamIndex < videoStreams.Count)
         {
             streamSelect.Enable(videoStreams[videoStreamIndex],
-                               AMStreamSelectEnable.Enable);
+                               AMStreamSelectEnableFlags.Enable);
         }
         if (audioStreamIndex >= 0 && audioStreamIndex < audioStreams.Count)
         {
             streamSelect.Enable(audioStreams[audioStreamIndex],
-                               AMStreamSelectEnable.Enable);
+                               AMStreamSelectEnableFlags.Enable);
         }
     }
     // Build graph
@@ -684,29 +706,43 @@ public void PlayWithStreamSelection(string filename, int videoStreamIndex, int a
 ```
 ---
 
-## Example 7: Video/Audio Data Callback
+## Example 7: Container Data Callback (e.g., SMPTE KLV metadata)
 
-Capture raw video and audio frames.
+Receive raw out-of-band data buffers carried in the container (such as SMPTE KLV
+metadata packets in MPEG-TS streams). The callback fires once per data packet
+and surfaces the packet bytes plus its presentation/end timestamps.
 
 ### C# Data Callback Implementation
 
 ```csharp
-// Callback delegate
-public delegate void DataCallbackDelegate(
-    int streamType,  // 0 = video, 1 = audio
+// Real signature (per IFFmpegSourceSettings.h):
+//   HRESULT (BYTE* buffer, int bufferLen, int dataType, LONGLONG startTime, LONGLONG stopTime)
+// dataType is a VF_DATA_TYPE enum:
+//   0 = unknown, 1 = SMPTE_KLV
+public delegate int FFMPEGDataCallbackDelegate(
     IntPtr buffer,
-    int bufferSize,
-    long timestamp);
+    int bufferLen,
+    int dataType,
+    long startTime,
+    long stopTime);
 
 public class FFMPEGDataCallbackExample
 {
     private IFilterGraph2 filterGraph;
     private IBaseFilter sourceFilter;
-    private DataCallbackDelegate dataCallback;
+    private FFMPEGDataCallbackDelegate dataCallback;
 
-    public void PlayWithCallback(string filename, DataCallbackDelegate callback)
+    public void PlayWithCallback(string filename, Action<byte[], int, long, long> onPacket)
     {
-        this.dataCallback = callback;
+        // Keep a managed reference to the delegate so the GC doesn't collect it
+        // while native code holds a function pointer to it.
+        this.dataCallback = (buffer, bufferLen, dataType, startTime, stopTime) =>
+        {
+            byte[] managed = new byte[bufferLen];
+            Marshal.Copy(buffer, managed, 0, bufferLen);
+            onPacket(managed, dataType, startTime, stopTime);
+            return 0; // S_OK
+        };
 
         filterGraph = (IFilterGraph2)new FilterGraph();
 
@@ -718,8 +754,8 @@ public class FFMPEGDataCallbackExample
         var settings = sourceFilter as IFFMPEGSourceSettings;
         if (settings != null)
         {
-            // Set data callback
-            settings.SetDataCallback(OnDataReceived);
+            // Wire up the data callback
+            settings.SetDataCallback(this.dataCallback);
         }
 
         // Load file
@@ -730,68 +766,57 @@ public class FFMPEGDataCallbackExample
         ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
         captureGraph.SetFiltergraph(filterGraph);
 
-        // Option 1: Render normally + get callbacks
+        // Render normally; the data callback fires alongside playback.
         captureGraph.RenderStream(null, MediaType.Video, sourceFilter, null, null);
         captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, null);
-
-        // Option 2: No renderers - callback only
-        // (Don't call RenderStream)
 
         var mediaControl = (IMediaControl)filterGraph;
         mediaControl.Run();
 
         Marshal.ReleaseComObject(captureGraph);
     }
-
-    private void OnDataReceived(int streamType, IntPtr buffer, int bufferSize, long timestamp)
-    {
-        // streamType: 0 = video, 1 = audio
-
-        if (streamType == 0)
-        {
-            // Video frame received
-            // Buffer contains raw video data (format depends on codec)
-            byte[] videoData = new byte[bufferSize];
-            Marshal.Copy(buffer, videoData, 0, bufferSize);
-
-            // Process video data...
-            ProcessVideoFrame(videoData, timestamp);
-        }
-        else if (streamType == 1)
-        {
-            // Audio frame received
-            byte[] audioData = new byte[bufferSize];
-            Marshal.Copy(buffer, audioData, 0, bufferSize);
-
-            // Process audio data...
-            ProcessAudioFrame(audioData, timestamp);
-        }
-    }
-
-    private void ProcessVideoFrame(byte[] data, long timestamp)
-    {
-        // Custom video processing
-        Console.WriteLine($"Video frame: {data.Length} bytes at {timestamp}ms");
-
-        // Save to file, encode, analyze, etc.
-    }
-
-    private void ProcessAudioFrame(byte[] data, long timestamp)
-    {
-        // Custom audio processing
-        Console.WriteLine($"Audio frame: {data.Length} bytes at {timestamp}ms");
-    }
 }
+
+// Usage:
+//   example.PlayWithCallback("input.ts", (bytes, dataType, startTime, stopTime) =>
+//   {
+//       const int VF_DATA_TYPE_SMPTE_KLV = 1;
+//       if (dataType == VF_DATA_TYPE_SMPTE_KLV)
+//       {
+//           // Decode KLV metadata packet
+//           Console.WriteLine($"KLV packet: {bytes.Length} bytes, {startTime}–{stopTime}");
+//       }
+//   });
 ```
 
 ---
 ## Example 8: Timestamp Callback
-Monitor playback timing.
+Monitor demuxer/stream timing per media type.
 ### C# Timestamp Callback
 ```csharp
-public delegate void TimestampCallbackDelegate(long videoTimestamp, long audioTimestamp);
-public void PlayWithTimestampCallback(string filename, TimestampCallbackDelegate callback)
+// Real signature (per IFFmpegSourceSettings.h):
+//   HRESULT (int mediaType, __int64 demuxerStartTime,
+//            __int64 streamStartTime, __int64 timestamp)
+// mediaType selects between audio and video streams.
+public delegate int FFMPEGTimestampCallbackDelegate(
+    int mediaType,
+    long demuxerStartTime,
+    long streamStartTime,
+    long timestamp);
+
+private FFMPEGTimestampCallbackDelegate timestampCallback;
+
+public void PlayWithTimestampCallback(string filename)
 {
+    // Hold the delegate so it isn't GC'd while native code calls back.
+    this.timestampCallback = (mediaType, demuxerStart, streamStart, timestamp) =>
+    {
+        Console.WriteLine(
+            $"mediaType={mediaType} demuxerStart={demuxerStart} " +
+            $"streamStart={streamStart} timestamp={timestamp}");
+        return 0; // S_OK
+    };
+
     filterGraph = (IFilterGraph2)new FilterGraph();
     sourceFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
@@ -800,14 +825,7 @@ public void PlayWithTimestampCallback(string filename, TimestampCallbackDelegate
     var settings = sourceFilter as IFFMPEGSourceSettings;
     if (settings != null)
     {
-        // Set timestamp callback
-        settings.SetTimestampCallback((videoTs, audioTs) =>
-        {
-            // Called periodically with current timestamps
-            callback(videoTs, audioTs);
-            // Update UI, sync external systems, etc.
-            Console.WriteLine($"Video: {videoTs}ms, Audio: {audioTs}ms");
-        });
+        settings.SetTimestampCallback(this.timestampCallback);
     }
     // Load and play file...
     var fileSource = sourceFilter as IFileSourceFilter;

@@ -3,6 +3,17 @@ title: Transmisión de Video en Red con RTSP, RTMP, NDI en .NET
 description: Implemente transmisión en red en .NET con protocolos RTSP, RTMP, NDI, HLS y SRT utilizando consejos de implementación y mejores prácticas.
 sidebar_label: Transmisión en Red
 order: 5
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
 
 ---
 
@@ -15,6 +26,41 @@ order: 5
 La transmisión en red se ha convertido en un componente fundamental de la infraestructura de comunicación digital moderna, permitiendo la transmisión en tiempo real de datos de audio y video a través de diversos entornos de red. A medida que las capacidades de ancho de banda continúan expandiéndose y las expectativas de los usuarios para la entrega de contenido evolucionan, los desarrolladores necesitan herramientas robustas para implementar soluciones de transmisión que equilibren el rendimiento, la calidad y la confiabilidad.
 
 El VisioForge Video Capture SDK para .NET proporciona un soporte integral para múltiples protocolos de transmisión, ofreciendo a los desarrolladores un conjunto de herramientas versátil para integrar capacidades de transmisión sofisticadas en sus aplicaciones. Ya sea que esté construyendo plataformas de transmisión en vivo, herramientas de videoconferencia, sistemas de vigilancia o redes de entrega de contenido, este SDK proporciona la base para implementar soluciones de transmisión de grado profesional.
+
+## Inicio rápido — streaming RTMP con VideoCaptureCoreX
+
+El camino más corto de extremo a extremo: selecciona un dispositivo de captura, añade un output RTMP al motor, inicia. Reemplaza `RTMPOutput` por `YouTubeOutput`, `FacebookLiveOutput`, `RTSPServerOutput` o `HLSOutput` para otros destinos — el cableado circundante se mantiene igual.
+
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+// 1. Inicializa el motor multiplataforma una vez por proceso.
+VisioForgeX.InitSDK();
+
+// 2. Crea el motor, enlazado a un IVideoView (o null para headless).
+var videoCapture = new VideoCaptureCoreX(videoView as IVideoView);
+
+// 3. Selecciona el primer dispositivo de captura y micrófono enumerados.
+var videoDevice = (await DeviceEnumerator.Shared.VideoSourcesAsync()).First();
+var audioDevice = (await DeviceEnumerator.Shared.AudioSourcesAsync()).First();
+
+videoCapture.Video_Source = new VideoCaptureDeviceSourceSettings(videoDevice);
+videoCapture.Audio_Source = new AudioCaptureDeviceSourceSettings(audioDevice);
+videoCapture.Audio_Record = true;
+
+// 4. Añade un output RTMP. La cadena es la URL de ingest completa con stream key.
+var rtmpOutput = new RTMPOutput("rtmp://live.example.com/app/<stream-key>");
+videoCapture.Outputs_Add(rtmpOutput, true);
+
+// 5. Inicia. OnError se dispara en fallos de red / encoder.
+await videoCapture.StartAsync();
+```
+
+Para configuración por protocolo (ajuste de encoder, buffer, autenticación, bitrates adaptativos, etc.) consulta las páginas dedicadas en [Protocolos Disponibles](#protocolos-disponibles) más abajo.
 
 ## Protocolos Principales de Transmisión en Red
 

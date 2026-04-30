@@ -1,6 +1,19 @@
 ---
 title: Send Live Video and Audio to OBS Studio from C# .NET App
 description: Send live video and audio to OBS Studio from VisioForge Video Capture SDK. Virtual camera setup, codec configuration, and broadcast pipeline examples.
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Streaming
+  - Webcam
+  - C#
+primary_api_classes:
+  - VideoCaptureCore
+
 ---
 
 # Integrating OBS Streaming in Video Capture SDK .Net
@@ -78,7 +91,23 @@ This minimal implementation will send the camera feed to the virtual device that
 
 ### Audio Configuration
 
-For audio streaming, configure the "VisioForge Virtual Audio Card" in OBS:
+For audio streaming, enable the virtual camera output together with audio recording on the `VideoCaptureCore` engine — the "VisioForge Virtual Audio Card" is routed automatically when both flags are on. Then select that device in OBS:
+
+```csharp
+// Enable the virtual camera output on the VideoCaptureCore engine.
+// When combined with Audio_RecordAudio = true, audio is automatically
+// routed to the virtual audio card — no separate flag.
+VideoCapture1.Virtual_Camera_Output_Enabled = true;
+
+// Configure your audio source as usual.
+VideoCapture1.Audio_CaptureDevice  = new AudioCaptureSource("Microphone");
+VideoCapture1.Audio_PlayAudio      = false;
+VideoCapture1.Audio_RecordAudio    = true;
+
+await VideoCapture1.StartAsync();
+```
+
+Then on the OBS side:
 
 1. Add an "Audio Input Capture" source
 2. Select "VisioForge Virtual Audio Card" as the device

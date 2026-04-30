@@ -1,6 +1,22 @@
 ---
 title: Play Video File Fragments and Segments in C# .NET Apps
 description: Play precise time-based segments of video and audio files with VisioForge Media Player SDK .NET on Windows and cross-platform environments.
+tags:
+  - Media Player SDK
+  - .NET
+  - MediaPlayerCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - MKV
+  - C#
+primary_api_classes:
+  - MediaPlayerCoreX
+  - UniversalSourceSettings
+
 ---
 
 # Playing Media File Fragments: Implementation Guide for .NET Developers
@@ -112,9 +128,9 @@ private void UpdateFragmentBoundaries(int startMs, int endMs)
     MediaPlayer1.Selection_Stop = TimeSpan.FromMilliseconds(endMs);
     
     // If playback is in progress, restart it to apply the new boundaries
-    if (MediaPlayer1.State == PlaybackState.Playing)
+    if (MediaPlayer1.State() == PlaybackState.Play)
     {
-        MediaPlayer1.Position_Set(MediaPlayer1.Selection_Start);
+        MediaPlayer1.Position_Set_Time(MediaPlayer1.Selection_Start);
     }
 }
 
@@ -124,8 +140,8 @@ private async Task UpdateFragmentBoundariesAsync(int startMs, int endMs)
     MediaPlayer1.Segment_Start = TimeSpan.FromMilliseconds(startMs);
     MediaPlayer1.Segment_Stop = TimeSpan.FromMilliseconds(endMs);
     
-    // If playback is in progress, restart from the new start position
-    if (await MediaPlayer1.StateAsync() == PlaybackState.Playing)
+    // If playback is in progress, restart from the new start position (State is a sync property on MediaPlayerCoreX)
+    if (MediaPlayer1.State == PlaybackState.Play)
     {
         await MediaPlayer1.Position_SetAsync(MediaPlayer1.Segment_Start);
     }

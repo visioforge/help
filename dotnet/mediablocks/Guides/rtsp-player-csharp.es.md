@@ -1,11 +1,51 @@
 ---
 title: Visor de Streams RTSP y Reproductor de Cámaras IP en C# .NET
 description: Cree un visor RTSP y reproductor de cámaras IP en C# con VisioForge Media Blocks SDK: vista previa en vivo, ONVIF y grabación passthrough.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+  - Recording
+  - Encoding
+  - Decoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - UDP
+  - MP4
+  - TS
+  - AAC
+  - C#
+  - NuGet
+primary_api_classes:
+  - RTSPSourceSettings
+  - RTSPSourceBlock
+  - MediaBlocksPipeline
+  - VideoRendererBlock
+  - RTSPRAWSourceBlock
+
 ---
 
 # Visor de Streams RTSP y Reproductor de Cámaras IP en C#
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+
+    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecta al servidor MCP público de VisioForge
+    ([documentación](../../general/mcp-server-usage.md))
+    en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
+    ejemplos de código ejecutables y guías de despliegue — más preciso que
+    buscar en `llms.txt`. Sin autenticación requerida.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Introducción
 
@@ -300,5 +340,7 @@ Use MP4 para compatibilidad estándar de reproducción en dispositivos y reprodu
 - [Configuración del Protocolo RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md) — UDP vs TCP, configuración de buffers, ajuste de baja latencia
 - [Captura de Cámara IP a MP4](../../videocapture/video-tutorials/ip-camera-capture-mp4.md) — tutorial de grabación con recodificación
 - [Captura ONVIF con Post-procesamiento](onvif-capture-with-postprocessing.md) — redimensionar, efectos, desenfoque facial durante la grabación
+- [Grid RTSP multi-cámara (muro NVR)](multi-camera-rtsp-grid.md) — escalar de un reproductor único a un muro de vista previa 4×4 en WPF o MAUI
+- [Reconexión RTSP y fallback switch](../../general/network-sources/reconnection-and-fallback.md) — maneja caídas de cámara con eventos de reconexión y `FallbackSwitch` declarativo
 - [Ejemplos de Código en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — demos de vista previa, captura y multi-vista RTSP
 - [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas

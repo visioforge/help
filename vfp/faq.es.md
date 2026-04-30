@@ -1,6 +1,19 @@
 ---
 title: FAQ de Video Fingerprinting: licencias, precisión y formatos
 description: Respuestas sobre el SDK Video Fingerprinting de VisioForge incluyendo licencias, rendimiento, precisión, formatos y compatibilidad de plataformas.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+primary_api_classes:
+  - VFPAnalyzer
+  - VFPFingerprintSource
+  - ParallelProcessor
+
 ---
 
 # Preguntas Frecuentes del SDK de Video Fingerprinting
@@ -181,19 +194,23 @@ Concurrencia recomendada:
 
 **R:** Para procesamiento en tiempo real o casi en tiempo real:
 
-1. **Usar aceleración por hardware**:
+1. **Reducir el trabajo por fotograma** — `VFPFingerprintSource` no expone
+   propiedades `UseHardwareAcceleration` ni `HardwareDevice`. Para acelerar el
+   fingerprinting, transcodifique la fuente a una resolución menor upstream
+   (por ej., escalar a 480p) antes de pasarla a `VFPAnalyzer`:
 ```csharp
 var source = new VFPFingerprintSource(videoPath)
 {
-    UseHardwareAcceleration = true,
-    HardwareDevice = "cuda" // o "qsv", "d3d11va"
+    CustomResolution = new Size(480, 360)
 };
 ```
 
-2. **Procesar en segmentos**:
+2. **Procesar en segmentos** (el ctor de `VFPFingerprintSource` requiere una
+   ruta en disco — lanza `FileNotFoundException` para URLs / streams; segmente
+   una captura guardada, no una URL RTSP en vivo):
 ```csharp
-// Procesar segmentos de 30 segundos para streams en vivo
-var source = new VFPFingerprintSource(streamUrl)
+// Procesar segmentos de 30 segundos de un archivo local capturado
+var source = new VFPFingerprintSource(localCapturePath)
 {
     StartTime = TimeSpan.FromSeconds(segmentIndex * 30),
     StopTime = TimeSpan.FromSeconds((segmentIndex + 1) * 30),
@@ -201,13 +218,11 @@ var source = new VFPFingerprintSource(streamUrl)
 };
 ```
 
-3. **Usar salto de fotogramas**:
-```csharp
-var source = new VFPFingerprintSource(videoPath)
-{
-    FrameRate = 5 // Procesar 5 fps en lugar de tasa de fotogramas completa
-};
-```
+3. **Recortar / enmascarar regiones no esenciales** — `VFPFingerprintSource` no
+   tiene knob `FrameRate`. Para analizar menos fotogramas por segundo,
+   transcodifique la fuente previamente; o recorte el área analizada con
+   `CustomCropSize` / `IgnoredAreas` para acelerar el trabajo por fotograma sin
+   descartar fotogramas.
 
 ## Precisión y Detección
 
@@ -265,11 +280,19 @@ var mainFp = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(
     new VFPFingerprintSource("movie.mp4")
 );
 
-var results = VFPAnalyzer.Search(mainFp, searchFp, searchFp.Duration);
+// VFPAnalyzer.SearchAsync requiere la forma completa de 5 args; el resultado
+// es List<TimeSpan>, donde cada entrada es la marca de tiempo de inicio de la
+// coincidencia dentro de mainFp.
+var results = await VFPAnalyzer.SearchAsync(
+    mainFp,
+    searchFp,
+    searchFp.Duration,
+    maxDifference: 25,
+    allowMultipleFragments: true);
 
-foreach (var result in results)
+foreach (var matchStart in results)
 {
-    Console.WriteLine($"Encontrada coincidencia en {result.Position} con puntuación {result.Score}");
+    Console.WriteLine($"Encontrada coincidencia comenzando en {matchStart}");
 }
 ```
 
@@ -278,21 +301,19 @@ foreach (var result in results)
 **R:** El SDK normaliza las relaciones de aspecto automáticamente, pero puedes mejorar la precisión:
 
 ```csharp
-// Para videos con letterboxing/pillarboxing
-var source = new VFPFingerprintSource(videoPath)
-{
-    // Ignorar barras negras
-    IgnoredAreas = new List<Rectangle>
-    {
-        new Rectangle(0, 0, 1920, 140),    // Letterbox superior
-        new Rectangle(0, 940, 1920, 140)   // Letterbox inferior
-    }
-};
+// Para videos con letterboxing/pillarboxing.
+// IgnoredAreas es `{ get; private set; }` de List<Rect> — pueble vía .Add(...).
+// El ctor de Rect es (left, top, right, bottom), no (x, y, ancho, alto).
+var source = new VFPFingerprintSource(videoPath);
+source.IgnoredAreas.Add(new Rect(0, 0, 1920, 140));      // Letterbox superior
+source.IgnoredAreas.Add(new Rect(0, 940, 1920, 1080));   // Letterbox inferior
 
-// O usar recorte inteligente
-var source = new VFPFingerprintSource(videoPath)
+// O restringa el área de análisis a una ventana de recorte fija vía CustomCropSize.
+// (No existe la propiedad AutoCropBlackBars — establezca CustomCropSize manualmente
+// si desea descartar las barras de letterbox antes del fingerprinting.)
+var croppedSource = new VFPFingerprintSource(videoPath)
 {
-    AutoCropBlackBars = true
+    CustomCropSize = new Rect(0, 140, 1920, 940)         // Usar solo el cuadro central 1920x800
 };
 ```
 
@@ -314,11 +335,11 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
     int normalDiff = VFPAnalyzer.Compare(fp1, fp2);
     if (normalDiff < 30) return true;
     
-    // Verificar versión reflejada
-    var fp2Mirrored = await GenerateFingerprint(video2, mirror: true);
-    int mirroredDiff = VFPAnalyzer.Compare(fp1, fp2Mirrored);
-    
-    return mirroredDiff < 30;
+    // VFPSearch.SearchMirror compara fp1 contra la versión reflejada
+    // horizontalmente de fp2 en una sola llamada (sin necesidad de regenerar
+    // el fingerprint).
+    var mirrorResult = VFPSearch.SearchMirror(fp1, fp2);
+    return mirrorResult != null && mirrorResult.Difference < 30;
 }
 ```
 

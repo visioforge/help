@@ -1,6 +1,19 @@
 ---
 title: Video Fingerprinting FAQ: Licensing, Accuracy, and Formats
 description: Find answers about VisioForge Video Fingerprinting SDK including licensing, performance, accuracy, formats, and platform compatibility.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+primary_api_classes:
+  - VFPAnalyzer
+  - VFPFingerprintSource
+  - ParallelProcessor
+
 ---
 
 # Video Fingerprinting SDK FAQ
@@ -181,19 +194,23 @@ Recommended concurrency:
 
 **A:** For real-time or near real-time processing:
 
-1. **Use hardware acceleration**:
+1. **Lower the work per frame** — `VFPFingerprintSource` does not expose
+   `UseHardwareAcceleration` or `HardwareDevice` properties. To accelerate the
+   fingerprinting itself, transcode the source to a lower resolution upstream
+   (e.g., scale to 480p) before passing it to `VFPAnalyzer`:
 ```csharp
 var source = new VFPFingerprintSource(videoPath)
 {
-    UseHardwareAcceleration = true,
-    HardwareDevice = "cuda" // or "qsv", "d3d11va"
+    CustomResolution = new Size(480, 360)
 };
 ```
 
-2. **Process in segments**:
+2. **Process in segments** (the `VFPFingerprintSource` ctor requires a path on
+   disk — `FileNotFoundException` is thrown for URLs/streams; segment a saved
+   capture, not a live RTSP URL):
 ```csharp
-// Process 30-second segments for live streams
-var source = new VFPFingerprintSource(streamUrl)
+// Process 30-second segments of a captured local file
+var source = new VFPFingerprintSource(localCapturePath)
 {
     StartTime = TimeSpan.FromSeconds(segmentIndex * 30),
     StopTime = TimeSpan.FromSeconds((segmentIndex + 1) * 30),
@@ -201,13 +218,10 @@ var source = new VFPFingerprintSource(streamUrl)
 };
 ```
 
-3. **Use frame skipping**:
-```csharp
-var source = new VFPFingerprintSource(videoPath)
-{
-    FrameRate = 5 // Process 5 fps instead of full framerate
-};
-```
+3. **Crop / mask non-essential regions** — `VFPFingerprintSource` has no
+   `FrameRate` knob. To analyze fewer frames per second, transcode the source
+   first; or trim the analyzed area with `CustomCropSize` / `IgnoredAreas` to
+   speed up per-frame work without dropping frames.
 
 ## Accuracy and Detection
 
@@ -265,11 +279,18 @@ var mainFp = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(
     new VFPFingerprintSource("movie.mp4")
 );
 
-var results = VFPAnalyzer.Search(mainFp, searchFp, searchFp.Duration);
+// VFPAnalyzer.SearchAsync requires the full 5-arg form; the result is List<TimeSpan>,
+// each entry is the match start time within mainFp.
+var results = await VFPAnalyzer.SearchAsync(
+    mainFp,
+    searchFp,
+    searchFp.Duration,
+    maxDifference: 25,
+    allowMultipleFragments: true);
 
-foreach (var result in results)
+foreach (var matchStart in results)
 {
-    Console.WriteLine($"Found match at {result.Position} with score {result.Score}");
+    Console.WriteLine($"Found match starting at {matchStart}");
 }
 ```
 
@@ -279,20 +300,18 @@ foreach (var result in results)
 
 ```csharp
 // For videos with letterboxing/pillarboxing
-var source = new VFPFingerprintSource(videoPath)
-{
-    // Ignore black bars
-    IgnoredAreas = new List<Rectangle>
-    {
-        new Rectangle(0, 0, 1920, 140),    // Top letterbox
-        new Rectangle(0, 940, 1920, 140)   // Bottom letterbox
-    }
-};
+// IgnoredAreas is `{ get; private set; }` of List<Rect> — populate via .Add(...).
+// Rect ctor is (left, top, right, bottom), not (x, y, width, height).
+var source = new VFPFingerprintSource(videoPath);
+source.IgnoredAreas.Add(new Rect(0, 0, 1920, 140));      // Top letterbox
+source.IgnoredAreas.Add(new Rect(0, 940, 1920, 1080));   // Bottom letterbox
 
-// Or use smart cropping
-var source = new VFPFingerprintSource(videoPath)
+// Or restrict the analysis area to a fixed crop window via CustomCropSize.
+// (No AutoCropBlackBars property exists — set CustomCropSize manually if you
+// want to drop letterbox bars before fingerprinting.)
+var croppedSource = new VFPFingerprintSource(videoPath)
 {
-    AutoCropBlackBars = true
+    CustomCropSize = new Rect(0, 140, 1920, 940)         // Use only the central 1920x800 frame
 };
 ```
 
@@ -314,11 +333,10 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
     int normalDiff = VFPAnalyzer.Compare(fp1, fp2);
     if (normalDiff < 30) return true;
     
-    // Check mirrored version
-    var fp2Mirrored = await GenerateFingerprint(video2, mirror: true);
-    int mirroredDiff = VFPAnalyzer.Compare(fp1, fp2Mirrored);
-    
-    return mirroredDiff < 30;
+    // VFPSearch.SearchMirror compares fp1 against the horizontally-mirrored
+    // version of fp2 in a single call (no need to regenerate the fingerprint).
+    var mirrorResult = VFPSearch.SearchMirror(fp1, fp2);
+    return mirrorResult != null && mirrorResult.Difference < 30;
 }
 ```
 

@@ -3,6 +3,11 @@ title: Real-Time Video Processing Filters for DirectShow Apps
 description: Add 35+ real-time video effects, multi-source video mixer (2-16 inputs), chroma key, deinterlacing, and noise reduction to Windows apps. VisioForge COM filters.
 sidebar_label: Processing Filters Pack
 order: 7
+tags:
+  - DirectShow
+  - C++
+  - Windows
+
 ---
 
 # DirectShow Processing Filters for Media Applications

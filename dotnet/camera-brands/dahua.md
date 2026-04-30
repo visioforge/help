@@ -1,6 +1,23 @@
 ---
 title: Dahua IP Camera RTSP URL Patterns and C# .NET Guide
 description: Integrate Dahua IPC-HDW, IPC-HFW, NVR, and DVR cameras into C# .NET apps. RTSP URL format, ONVIF auto-discovery, and VisioForge SDK code included.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Dahua IP Camera in C# .NET

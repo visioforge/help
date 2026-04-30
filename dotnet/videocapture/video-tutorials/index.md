@@ -3,6 +3,11 @@ title: Video Capture C# Tutorials — Webcam, Screen, IP Camera
 description: Step-by-step C# tutorials for VisioForge Video Capture SDK. Record webcam to MP4, capture screen, preview IP cameras with complete code examples.
 sidebar_label: Video Tutorials With Sample Code
 order: 1
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - Capture
 
 ---
 

@@ -1,6 +1,37 @@
 ---
 title: Pre-Event Recording with Circular Buffer in C# .NET
 description: Buffer and save video before motion triggers using VisioForge Video Capture SDK. Circular buffer for webcam, IP camera, and RTSP streams with C# examples.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - Encoding
+  - Webcam
+  - IP Camera
+  - RTSP
+  - MP4
+  - MKV
+  - TS
+  - H.264
+  - H.265
+  - AAC
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCoreX
+  - PreEventRecordingOutput
+  - PreEventRecordingSettings
+  - DeviceEnumerator
+  - RTSPSourceSettings
+
 ---
 
 # Pre-Event Recording Using C# .Net: Circular Buffer Video Capture
@@ -278,9 +309,9 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 
 | Constructor / Factory | Description |
 | --- | --- |
-| `new PreEventRecordingOutput(settings, videoEnc, audioEnc)` | MP4 output with default or custom encoders |
-| `PreEventRecordingOutput.CreateMPEGTS(settings, videoEnc, audioEnc)` | MPEG-TS output (crash-safe) |
-| `PreEventRecordingOutput.CreateMKV(settings, videoEnc, audioEnc)` | MKV output |
+| `new PreEventRecordingOutput(filename, settings, videoEnc, audioEnc)` | MP4 output with default or custom encoders. All args optional; use named args to skip `filename`. |
+| `PreEventRecordingOutput.CreateMPEGTS(filename, settings, videoEnc, audioEnc)` | MPEG-TS output (crash-safe). All args optional. |
+| `PreEventRecordingOutput.CreateMKV(filename, settings, videoEnc, audioEnc)` | MKV output. All args optional. |
 
 ### VideoCaptureCoreX Methods
 

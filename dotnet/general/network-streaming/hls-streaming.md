@@ -1,11 +1,51 @@
 ---
-title: HLS Live Streaming with m3u8 Playlist Server in C# .NET
+title: HLS Live Streaming in C# .NET — m3u8 Playlist & Segments
 description: Generate .m3u8 playlists and .ts segments with built-in HTTP server. HLS.js, iOS AVPlayer, and Android ExoPlayer integration. VisioForge SDK examples.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - VideoCaptureCoreX
+  - VideoEditCore
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - Conversion
+  - HLS
+  - TS
+  - H.264
+  - AAC
+  - C#
+primary_api_classes:
+  - HLSOutput
+  - HLSSinkSettings
+  - MediaBlockPadMediaType
+  - HLSPlaylistType
+  - H264EncoderBlock
+
 ---
 
 # Complete Guide to HLS Network Streaming Implementation in .NET
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+!!! tip "AI coding agents: use the VisioForge MCP server"
+
+    Building this with **Claude Code**, **Cursor**, or another AI coding agent?
+    Connect to the public [VisioForge MCP server](../mcp-server-usage.md)
+    at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable
+    code samples, and deployment guides — more accurate than grepping
+    `llms.txt`. No authentication required.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## What is HTTP Live Streaming (HLS)?
 
@@ -38,41 +78,64 @@ The Media Blocks SDK offers a comprehensive approach to HLS streaming through it
 The following example demonstrates how to set up an HLS stream using Media Blocks SDK:
 
 ```csharp
-// Set URL
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.AudioEncoders;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.AudioEncoders;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types.X.VideoEncoders;
+
+// Initialise the cross-platform engine once per process.
+VisioForgeX.InitSDK();
+
 const string URL = "http://localhost:8088/";
 
-// Create H264 encoder
-var h264Settings = new OpenH264EncoderSettings();
-var h264Encoder = new H264EncoderBlock(h264Settings);
+// Pipeline (attach error handler before adding blocks).
+var pipeline = new MediaBlocksPipeline();
+pipeline.OnError += (s, e) => Console.WriteLine($"ERROR: {e.Message}");
 
-// Create AAC encoder
+// Video source: first enumerated capture device.
+var videoDevices = await DeviceEnumerator.Shared.VideoSourcesAsync();
+var videoSettings = new VideoCaptureDeviceSourceSettings(videoDevices[0]);
+var videoSource = new SystemVideoSourceBlock(videoSettings);
+
+// Audio source: first enumerated audio capture device.
+var audioDevices = await DeviceEnumerator.Shared.AudioSourcesAsync();
+var audioSettings = new AudioCaptureDeviceSourceSettings(audioDevices[0]);
+var audioSource = new SystemAudioSourceBlock(audioSettings);
+
+// H.264 and AAC encoders.
+var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
 var aacEncoder = new AACEncoderBlock();
 
-// Create HLS sink
+// HLS sink.
 var settings = new HLSSinkSettings
 {
-    Location = Path.Combine(AppContext.BaseDirectory, "segment_%05d.ts"),
-    MaxFiles = 10,
-    PlaylistLength = 5,
-    PlaylistLocation = Path.Combine(AppContext.BaseDirectory, "playlist.m3u8"),
-    PlaylistRoot = URL,
+    Location             = Path.Combine(AppContext.BaseDirectory, "segment_%05d.ts"),
+    MaxFiles             = 10,
+    PlaylistLength       = 5,
+    PlaylistLocation     = Path.Combine(AppContext.BaseDirectory, "playlist.m3u8"),
+    PlaylistRoot         = URL.TrimEnd('/'),
     SendKeyframeRequests = true,
-    TargetDuration = 5,
-    Custom_HTTP_Server_Enabled = true, // Use internal HTTP server
-    Custom_HTTP_Server_Port = 8088 // Port for internal HTTP server
+    TargetDuration       = TimeSpan.FromSeconds(5),  // TimeSpan, not int
+    Custom_HTTP_Server_Enabled = true,
+    Custom_HTTP_Server_Port    = 8088
 };
 
 var hlsSink = new HLSSinkBlock(settings);
 
-// Connect video and audio sources to encoders (we assume that videoSource and audioSource are already created)
+// Wire the graph: source → encoder → HLS sink (separate pads for video/audio).
 pipeline.Connect(videoSource.Output, h264Encoder.Input);
 pipeline.Connect(audioSource.Output, aacEncoder.Input);
-
-// Connect encoders to HLS sink
 pipeline.Connect(h264Encoder.Output, hlsSink.CreateNewInput(MediaBlockPadMediaType.Video));
 pipeline.Connect(aacEncoder.Output, hlsSink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
-// Start
+// Start. Open http://localhost:8088/playlist.m3u8 in a player or browser.
 await pipeline.StartAsync();
 ```
 
@@ -105,7 +168,7 @@ var settings = new HLSSinkSettings
     PlaylistLocation = Path.Combine(AppContext.BaseDirectory, "playlist.m3u8"),
     PlaylistRoot = edStreamingKey.Text,
     SendKeyframeRequests = true,
-    TargetDuration = 5,
+    TargetDuration = TimeSpan.FromSeconds(5), // TimeSpan, not int
     Custom_HTTP_Server_Enabled = true,
     Custom_HTTP_Server_Port = new Uri(edStreamingKey.Text).Port
 };

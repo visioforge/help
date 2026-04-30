@@ -1,6 +1,28 @@
 ---
 title: Captura Separada de Vista Previa en Video Capture SDK .Net
 description: Controla captura y vista previa de forma independiente en .NET con ejemplos de código para gestión eficiente de grabación.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Webcam
+  - IP Camera
+  - Screen Capture
+  - RTMP
+  - MP4
+  - C#
+primary_api_classes:
+  - VideoCaptureMode
+  - MP4Output
+  - RTMPOutput
+
 ---
 
 # Gestionando Captura de Video y Vista Previa Independientemente en .NET
@@ -145,7 +167,8 @@ Hay dos enfoques principales para implementar esta funcionalidad dependiendo de 
     Cuando quiera comenzar a grabar, inicie el proceso de captura separada:
     
     ```cs
-    await VideoCapture1.SeparateCapture_StartAsync();
+    // SeparateCapture_StartAsync toma el nombre del archivo de salida para la grabación.
+    await VideoCapture1.SeparateCapture_StartAsync("grabacion.mp4");
     ```
     
     #### Paso 6: Detener Captura Mientras Mantiene la Vista Previa

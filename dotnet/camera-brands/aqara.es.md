@@ -1,6 +1,25 @@
 ---
-title: Cómo Conectar una Cámara Aqara en C# .NET - RTSP vía HomeKit
-description: Conecte cámaras Aqara en C# .NET con patrones de URL RTSP para modelos G2H, G3, E1 y Camera Hub. Guía de acceso HomeKit Secure Video y RTSP.
+title: Conectar Cámara Aqara en C# .NET — Guía RTSP con Token
+description: Conecte cámaras Aqara en C# / .NET vía RTSP. URLs con token para G2H, G3, E1 y G4 Doorbell. Configuración con la app Aqara Home y ejemplos de código.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - C#
+primary_api_classes:
+  - RTSPSourceSettings
+
 ---
 
 # Cómo Conectar una Cámara Aqara en C# .NET

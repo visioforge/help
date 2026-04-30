@@ -1,6 +1,24 @@
 ---
 title: IP Camera RTSP URL Directory - Connect Any Camera in C# .NET
 description: Complete RTSP URL directory for 62 IP camera brands. Connect Hikvision, Dahua, Axis, Uniview, EZVIZ, Wisenet, Arlo and more using VisioForge .NET SDK.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+primary_api_classes:
+  - VideoCaptureCoreX
+  - VideoCaptureCore
+  - RTSPSourceSettings
+  - IVideoView
+  - IPCameraSourceSettings
+
 ---
 
 # IP Camera Connection Guide by Brand

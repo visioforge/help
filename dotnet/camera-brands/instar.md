@@ -1,6 +1,23 @@
 ---
 title: INSTAR IP Camera RTSP URL and C# .NET Connection Guide
 description: INSTAR IN-6xxx, IN-7xxx, IN-8xxx, IN-9xxx HD camera RTSP URL patterns for C# .NET. Stream and record with VisioForge Video Capture SDK integration.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to INSTAR IP Camera in C# .NET

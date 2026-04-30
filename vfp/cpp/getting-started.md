@@ -1,9 +1,33 @@
 ---
 title: Video Fingerprinting C++ SDK - Installation and Setup Guide
 description: Install and configure VisioForge Video Fingerprinting SDK for C++ with Visual Studio setup, NuGet packages, and your first fingerprint app.
+tags:
+  - Video Fingerprinting SDK
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - GStreamer
+  - Fingerprinting
+  - MP4
+primary_api_classes:
+  - VFPFingerprintSource
+  - VFPFillSource
+  - VFPAnalyzer
+
 ---
 
 # Getting Started with Video Fingerprinting SDK C++
+
+!!! danger "Some snippets below call high-level helpers that do not exist — use the flat C API instead"
+
+    `VFPFillSource`, `VFPSearch_GetFingerprintForVideoFile`, and
+    `VFPCompare_GetFingerprintForVideoFile` are **not** real exports of
+    `VisioForge_VFP.dll`. The shipped C API is a flat C-style interface
+    (`extern "C"`) — see [`index.md`](./index.md) for the canonical
+    `*_Init` / `*_Process` / `*_Build` / `*_Search` / `*_Compare`
+    workflow. Frame decoding is the host application's responsibility
+    (use FFmpeg / GStreamer / DirectShow). Tracked as defect #087.
 
 Welcome to the VisioForge Video Fingerprinting SDK for C++! This comprehensive guide will walk you through everything you need to get started, from installation to your first working application. By the end of this guide, you'll have a solid foundation for building high-performance video fingerprinting applications in C++.
 

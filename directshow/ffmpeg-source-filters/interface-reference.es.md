@@ -1,18 +1,33 @@
 ---
 title: IFFmpegSourceSettings - API filtro FFMPEG DirectShow
 description: Interfaz IFFmpegSourceSettings con aceleración por hardware, modos de buffering, opciones FFmpeg personalizadas y callbacks para DirectShow.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Decoding
+  - RTSP
+  - C#
+primary_api_classes:
+  - IFFmpegSourceSettings
+  - IFileSourceFilter
+  - IFFMPEGSourceSettings
+
 ---
 
-# Referencia de Interfaz IFFmpegSourceSettings
+# Referencia de Interfaz IFFMPEGSourceSettings
 
 ## Descripción General
 
-La interfaz `IFFmpegSourceSettings` proporciona opciones de configuración avanzadas para el filtro DirectShow FFMPEG Source. Esta interfaz permite a los desarrolladores controlar la aceleración por hardware, el comportamiento del buffering, opciones FFmpeg personalizadas y varios callbacks para la reproducción de medios.
+La interfaz `IFFMPEGSourceSettings` proporciona opciones de configuración avanzadas para el filtro DirectShow FFMPEG Source. Esta interfaz permite a los desarrolladores controlar la aceleración por hardware, el comportamiento del buffering, opciones FFmpeg personalizadas y varios callbacks para la reproducción de medios.
+
+> Los headers .NET / C++ / Delphi escriben esta interfaz como `IFFMPEGSourceSettings` (todo en mayúsculas `FFMPEG`). Las rutas heredadas de archivos `IFFmpegSourceSettings.h` / `.cs` mantienen el nombre histórico de archivo en mayúsculas/minúsculas mixtas — pero el símbolo expuesto por los tres lenguajes es la forma toda en mayúsculas. Los dos son identificadores equivalentes en C#; esta página usa la forma toda en mayúsculas de manera consistente con examples.md / index.md.
 
 ## Definición de Interfaz
 
-- **Nombre de Interfaz**: `IFFmpegSourceSettings`
-- **GUID**: `{1974D893-83E4-4F89-9908-795C524CC17E}`
+- **Nombre de Interfaz**: `IFFMPEGSourceSettings`
+- **CLSID del Filtro al que consulta**: `{1974D893-83E4-4F89-9908-795C524CC17E}` (el filtro FFMPEG Source — el IID de la interfaz en sí es distinto; consulte el header).
 - **Hereda De**: `IUnknown`
 
 ### Archivos de Definición de Interfaz

@@ -1,6 +1,21 @@
 ---
 title: Aceleración por Hardware VA-API en Linux con C# .NET
 description: Use codificación y decodificación de video acelerada por GPU con VA-API en Linux con VisioForge Media Blocks SDK. Soporte para Ubuntu y Debian en apps .NET.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - VAAPIH264DecoderBlock
+  - UniversalSourceBlock
+  - UniversalSourceSettings
+  - VideoRendererBlock
+  - VAAPIHEVCDecoderBlock
+
 ---
 
 # Bloques de Plataforma Linux - VisioForge Media Blocks SDK .Net

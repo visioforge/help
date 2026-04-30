@@ -1,6 +1,23 @@
 ---
 title: How to Connect to Ubiquiti (UniFi) IP Camera in C# .NET
 description: Ubiquiti UniFi Protect G3, G4, G5, and AI series RTSP URL patterns for C# .NET. Enable RTSP in UniFi and integrate with VisioForge SDK code.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - C#
+
 ---
 
 # How to Connect to Ubiquiti (UniFi) IP Camera in C# .NET
@@ -141,7 +158,7 @@ Always verify the current RTSP URL in the UniFi Protect interface if your connec
 
 UniFi Protect cameras can exhibit 2-5 second latency by default. To reduce latency:
 
-- Use `LowLatencyMode = true` in VideoCaptureCoreX
+- Set `LowLatencyMode = true` on the `RTSPSourceSettings` passed to VideoCaptureCoreX
 - Select the low-quality stream (lower resolution = less buffering)
 - Use TCP transport for more reliable delivery
 

@@ -1,6 +1,26 @@
 ---
 title: How to Connect to Panasonic (i-PRO) IP Camera in C# .NET
 description: Panasonic i-PRO and legacy WV/BL/BB camera RTSP URL patterns for C# .NET. ONVIF-compatible integration with VisioForge SDK for all generations.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Panasonic (i-PRO) IP Camera in C# .NET

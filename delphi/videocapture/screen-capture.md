@@ -1,6 +1,17 @@
 ---
 title: Delphi Screen Capture and Recording with TVFVideoCapture
 description: Implement screen recording in Delphi with TVFVideoCapture - capture regions, full screen, customize frame rates, track cursor with code examples.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - Screen Capture
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Screen Recording Implementation in Delphi
@@ -29,14 +40,22 @@ VideoCapture1.Screen_Capture_Right := StrToInt(edScreenRight.Text);
 ```
 
 ```cpp
+// CEdit::GetWindowText(CString&) returns void and fills the buffer by reference,
+// so we must declare a CString first and then convert it to int via atoi().
+CString sTop, sBottom, sLeft, sRight;
+m_edScreenTop.GetWindowText(sTop);
+m_edScreenBottom.GetWindowText(sBottom);
+m_edScreenLeft.GetWindowText(sLeft);
+m_edScreenRight.GetWindowText(sRight);
+
 // Define the top edge position of the capture rectangle (in pixels)
-m_VideoCapture.SetScreen_Capture_Top(atoi(m_edScreenTop.GetWindowText()));
+m_VideoCapture.SetScreen_Capture_Top(atoi(sTop));
 // Define the bottom edge position of the capture rectangle (in pixels)
-m_VideoCapture.SetScreen_Capture_Bottom(atoi(m_edScreenBottom.GetWindowText()));
+m_VideoCapture.SetScreen_Capture_Bottom(atoi(sBottom));
 // Define the left edge position of the capture rectangle (in pixels)
-m_VideoCapture.SetScreen_Capture_Left(atoi(m_edScreenLeft.GetWindowText()));
+m_VideoCapture.SetScreen_Capture_Left(atoi(sLeft));
 // Define the right edge position of the capture rectangle (in pixels)
-m_VideoCapture.SetScreen_Capture_Right(atoi(m_edScreenRight.GetWindowText()));
+m_VideoCapture.SetScreen_Capture_Right(atoi(sRight));
 ```
 
 ```vb

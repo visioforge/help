@@ -1,6 +1,25 @@
 ---
 title: Decklink SDK .NET: Captura de Video con Blackmagic
 description: Implementa captura de video profesional en .NET con dispositivos Blackmagic Decklink usando ejemplos de código para aplicaciones de calidad broadcast.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Decklink
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - DeviceEnumerator
+  - DecklinkVideoSourceSettings
+  - DecklinkAudioSourceSettings
+  - DecklinkSourceSettings
+
 ---
 
 # Integrar Dispositivos Blackmagic Decklink con Aplicaciones .NET
@@ -134,9 +153,14 @@ Una vez que has detectado dispositivos e identificado los formatos disponibles, 
         Name = cbDecklinkCaptureDevice.Text,
         VideoFormat = cbDecklinkCaptureVideoFormat.Text
     };
+
+    // Selecciona el modo Decklink antes de StartAsync:
+    //   DecklinkSourcePreview — monitoreo en tiempo real con procesamiento mínimo.
+    //   DecklinkSourceCapture — grabación de alta calidad con buffering mejorado.
+    VideoCapture1.Mode = VideoCaptureMode.DecklinkSourcePreview;   // o VideoCaptureMode.DecklinkSourceCapture
+
+    await VideoCapture1.StartAsync();
     ```
-    
-    Al usar VideoCaptureCore, necesitarás especificar el modo `DecklinkSourcePreview` o `DecklinkSourceCapture` dependiendo de los requisitos de tu aplicación:
     
     - `DecklinkSourcePreview`: Optimizado para monitoreo en tiempo real con procesamiento mínimo
     - `DecklinkSourceCapture`: Configurado para grabación de alta calidad con buffering mejorado

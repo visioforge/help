@@ -1,6 +1,15 @@
 ---
 title: Duplicate Video Scanner Sample Application for .Net
 description: Scan folders for duplicate videos using VisioForge DVS sample app with perceptual hashing, batch processing, and cross-format matching.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - C#
+
 ---
 
 # DVS - Duplicate Video Scanner

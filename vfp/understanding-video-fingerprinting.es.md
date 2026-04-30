@@ -1,6 +1,22 @@
 ---
 title: Video Fingerprinting - algoritmos y hashing perceptual
 description: Análisis profundo de algoritmos e implementación técnica del SDK Video Fingerprinting de VisioForge con hashing perceptual y análisis de escenas.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Streaming
+  - Editing
+  - Fingerprinting
+  - MP4
+  - C#
+primary_api_classes:
+  - VFPAnalyzer
+  - VFPFingerprintSource
+
 ---
 
 # Entendiendo la Tecnología de Huella Digital de Video
@@ -77,9 +93,10 @@ El algoritmo central emplea varias técnicas matemáticas:
 ### Paso 1: Decodificación de Video y Extracción de Frame
 
 ```csharp
-var source = new VFPFingerprintSource
+// VFPFingerprintSource no tiene ctor sin parámetros — pase el nombre de archivo al
+// constructor, y luego mute StartTime / StopTime sobre la instancia devuelta.
+var source = new VFPFingerprintSource("video.mp4")
 {
-    Filename = "video.mp4",
     StartTime = TimeSpan.Zero,
     StopTime = TimeSpan.FromMinutes(5)
 };
@@ -125,19 +142,22 @@ for (each frame in video)
 
 Los datos acumulados se comprimen en una huella compacta:
 
+En uso típico .NET no construye `VFPFingerPrint` manualmente — llame a
+`VFPAnalyzer.GetComparingFingerprintForVideoFileAsync` /
+`GetSearchFingerprintForVideoFileAsync` y deje que el analyzer dirija la
+decodificación de cuadros, alimente cuadros al bucle compare/search
+subyacente, y produzca un `VFPFingerPrint` totalmente poblado:
+
 ```csharp
-// Construir huella final
-IntPtr fingerprintPtr = VFPCompare.Build(out length, ref compareData);
-VFPFingerPrint fingerprint = new VFPFingerPrint
-{
-    Data = new byte[length],
-    Duration = videoDuration,
-    Width = videoWidth,
-    Height = videoHeight,
-    FrameRate = videoFrameRate
-};
-Marshal.Copy(fingerprintPtr, fingerprint.Data, 0, (int)length);
+var src = new VFPFingerprintSource("video.mp4");
+var fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(src);
+// fingerprint.Data, .Duration, .ID etc. son poblados por usted.
 ```
+
+Alimentar bytes crudos manualmente a `VFPCompare.Build` es una vía de
+escape de bajo nivel útil solo cuando ya maneja su propio decodificador;
+es mejor evitar el ctor sin parámetros + asignación manual de campos
+mostrado en docs anteriores.
 
 ## Robustez y Transformaciones
 
@@ -192,7 +212,9 @@ El SDK puede ignorar o trabajar alrededor de superposiciones:
 
 ```csharp
 // Definir áreas a ignorar (ej., marcas de agua, logos)
-source.IgnoredAreas.Add(new Rect(1820, 980, 100, 100)); // Marca de agua inferior derecha
+// El ctor de Rect es (left, top, right, bottom) — para una región de 100x100
+// en la esquina inferior derecha de un cuadro 1920x1080, use (1820, 980, 1920, 1080).
+source.IgnoredAreas.Add(new Rect(1820, 980, 1920, 1080)); // Marca de agua inferior derecha
 ```
 
 ## Comparación con Otras Tecnologías

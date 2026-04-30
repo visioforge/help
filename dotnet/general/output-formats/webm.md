@@ -1,6 +1,39 @@
 ---
 title: WebM Video Output with VP8, VP9, AV1 Codecs in .NET
 description: Create WebM videos in .NET with VP8, VP9, and AV1 codecs for efficient web-ready video streaming and HTML5 content delivery.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Recording
+  - Encoding
+  - Editing
+  - WebM
+  - VP8
+  - VP9
+  - AV1
+  - Opus
+  - Vorbis
+  - C#
+  - NuGet
+primary_api_classes:
+  - WebMOutput
+  - VideoCaptureCore
+  - VideoEditCore
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+
 ---
 
 # WebM Video Output in VisioForge .NET SDKs
@@ -217,12 +250,15 @@ To achieve the highest possible video quality:
 - Set higher bitrates for complex visual content
 
 ```csharp
-// Quality-focused VP9 configuration
+// Quality-focused VP9 configuration (properties live on the shared VPXEncoderSettings base).
 var vp9 = new VP9EncoderSettings
 {
-    Bitrate = 3000,      // Higher bitrate for better quality
-    Speed = 0,           // Slowest/highest quality encoding
-}
+    TargetBitrate = 3000,                    // kbps — higher bitrate for better quality
+    CPUUsed       = 0,                       // 0 = slowest/highest-quality; raise toward 5 for speed
+    Deadline      = 0,                       // 0 = best, 1 = realtime (microseconds per frame)
+    RateControl   = VPXRateControl.VBR,      // variable bitrate for quality work
+    MultipassMode = VPXMultipassMode.OnePass // switch to FirstPass/LastPass for 2-pass workflows
+};
 ```
 
 ### For Real-time Applications
@@ -239,10 +275,10 @@ When low latency is critical:
 // Low-latency VP8 configuration
 var vp8 = new VP8EncoderSettings
 {
-    EndUsage = VP8EndUsageMode.CBR,  // Constant bitrate for predictable streaming
-    Speed = 8,                        // Faster encoding
-    Deadline = VP8Deadline.Realtime,  // Prioritize speed over quality
-    ErrorResilient = true             // Better recovery from packet loss
+    RateControl    = VPXRateControl.CBR,               // constant bitrate for predictable streaming
+    CPUUsed        = 8,                                // 0..16 on VP8 — higher = faster/worse quality
+    Deadline       = 1,                                // 1 = realtime (microseconds per frame; 0 = best quality)
+    ErrorResilient = VPXErrorResilientFlags.Default    // enable resilience bitflags for packet-loss recovery
 };
 ```
 
@@ -257,13 +293,12 @@ To minimize storage requirements:
 - Avoid unnecessary keyframes
 
 ```csharp
-// Storage-optimized configuration
-var av1 = new AV1EncoderSettings
+// Storage-optimized configuration using the AOM reference AV1 encoder.
+// Other AV1 variants: SVTAV1EncoderSettings, NVENCAV1EncoderSettings, AMFAV1EncoderSettings, QSVAV1EncoderSettings.
+var av1 = new AOMAV1EncoderSettings
 {
-    EndUsage = AOMEndUsage.VBR,    // Variable bitrate for efficiency
-    TwoPass = true,                // Enable multi-pass encoding
-    CpuUsed = 2,                   // Balance between speed and compression
-    KeyframeMaxDistance = 300      // Fewer keyframes = smaller files
+    RateControl = AOMAV1EncoderEndUsageMode.VBR,  // variable bitrate for efficiency
+    CPUUsed     = 2                               // balance between speed and compression (0 = slowest/best)
 };
 ```
 

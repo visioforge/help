@@ -1,6 +1,31 @@
 ---
 title: Integrar SDKs multimedia de VisioForge en Uno Platform
 description: Desarrolle aplicaciones multiplataforma Uno Platform con capacidades multimedia para Windows, Android, iOS, macOS y Linux usando los SDKs de VisioForge.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - WPF
+  - Uno
+  - GStreamer
+  - Streaming
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoView
+  - UniversalSourceSettings
+  - MediaBlocksPipeline
+  - UniversalSourceBlock
+  - VideoRendererBlock
+
 ---
 
 # Integración de SDKs de VisioForge con Aplicaciones Uno Platform
@@ -31,8 +56,8 @@ Agregue los paquetes principales de VisioForge a su proyecto Uno Platform:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2025.12.9" />
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2025.4.10" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.*" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.*" />
 </ItemGroup>
 ```
 

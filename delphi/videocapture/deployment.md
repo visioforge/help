@@ -1,6 +1,21 @@
 ---
 title: Deploying TVFVideoCapture Library in Delphi Projects
 description: Deploy TVFVideoCapture in Delphi - install components, register DirectShow filters, configure environment for successful application deployment.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Capture
+  - Encoding
+  - IP Camera
+  - MP4
+  - MP3
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Complete TVFVideoCapture Library Deployment Guide

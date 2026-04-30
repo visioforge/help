@@ -1,6 +1,17 @@
 ---
 title: TVFVideoEdit Changelog - Delphi Video Editing SDK Updates
 description: TVFVideoEdit version history from 2.1 to 10.0 with features, bug fixes, FFMPEG integration, Windows 8 support, and video effects updates.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Streaming
+  - Editing
+primary_api_classes:
+  - TVFVideoEdit
+
 ---
 
 # TVFVideoEdit Library: Complete Version History

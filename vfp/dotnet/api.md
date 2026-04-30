@@ -1,6 +1,19 @@
 ---
 title: Video Fingerprinting .NET API - Generate, Compare, Search
 description: Complete API documentation for VisioForge Video Fingerprinting SDK to generate, compare, and search video fingerprints with code examples.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+  - C#
+primary_api_classes:
+  - VFPFingerprintSource
+  - VFPAnalyzer
+
 ---
 
 # Video Fingerprinting SDK .NET API Documentation
@@ -508,7 +521,7 @@ public VFPFingerprintSource(string filename)
 ### Properties
 
 ```csharp
-public string Filename { get; }
+public string Filename { get; set; }
 public TimeSpan StartTime { get; set; }
 public TimeSpan StopTime { get; set; }
 public Rect CustomCropSize { get; set; }
@@ -760,11 +773,11 @@ public static IntPtr Build(
 ```csharp
 public static int Search(
     VFPFingerPrint fp1,
-    int startPos1,
+    int skip1,
     VFPFingerPrint fp2,
-    int startPos2,
-    out int difference,
-    int maxDifference)
+    int skip2,
+    out double difference,
+    int maxDiff)
 ```
 
 **Description:** Searches for fragment in video.
@@ -772,11 +785,11 @@ public static int Search(
 **Parameters:**
 
 - `fp1` (VFPFingerPrint): Fragment fingerprint
-- `startPos1` (int): Start position in fragment (seconds)
+- `skip1` (int): Frames to skip at the start of `fp1`
 - `fp2` (VFPFingerPrint): Main video fingerprint
-- `startPos2` (int): Start search position (seconds)
-- `difference` (out int): Match difference score
-- `maxDifference` (int): Maximum allowed difference
+- `skip2` (int): Frames to skip at the start of `fp2`
+- `difference` (out double): Match difference score
+- `maxDiff` (int): Maximum allowed difference
 
 **Returns:** `int` - Position where found (seconds) or Int32.MaxValue if not found
 
@@ -789,11 +802,11 @@ var videoFp = VFPFingerPrint.Load(@"C:\Fingerprints\full_video.vsigx");
 
 int position = VFPSearch.Search(
     fragmentFp,
-    startPos1: 0,
+    skip1: 0,
     videoFp,
-    startPos2: 0,
-    out int matchDifference,
-    maxDifference: 20);
+    skip2: 0,
+    out double matchDifference,
+    maxDiff: 20);
 
 if (position != Int32.MaxValue)
 {

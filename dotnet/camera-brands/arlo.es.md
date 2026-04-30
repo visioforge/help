@@ -4,6 +4,28 @@ description: Limitaciones RTSP de cámaras Arlo en C# .NET. Sin soporte RTSP nat
 meta:
   - name: robots
     content: "noindex, follow"
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Webcam
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - C#
+primary_api_classes:
+  - MediaBlocksPipeline
+  - SystemVideoSourceBlock
+  - VideoRendererBlock
+
 ---
 
 # Cómo Conectar una Cámara Arlo en C# .NET

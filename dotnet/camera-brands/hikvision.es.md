@@ -1,6 +1,27 @@
 ---
-title: Conectar Cámara IP Hikvision en C# .NET - URL RTSP
+title: URL RTSP de Hikvision en C# .NET — Guía Cámara IP y NVR
 description: Conecta cámaras Hikvision en C# .NET con patrones de URL RTSP, descubrimiento ONVIF y ejemplos de código completos para modelos DS-2CD, DS-2DE y NVR.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Decoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.265
+  - MJPEG
+  - C#
+primary_api_classes:
+  - RTSPSourceProtocol
+
 ---
 
 # Cómo Conectar una Cámara IP Hikvision en C# .NET
@@ -131,9 +152,23 @@ Las URLs RTSP de Hikvision usan una ruta que comienza con `/Streaming/Channels/`
 ### Alta latencia
 
 - Usa transporte TCP: `rtspSettings.AllowedProtocols = RTSPSourceProtocol.TCP`
-- Reduce la latencia del buffer: `rtspSettings.Latency = 200` (en milisegundos)
+- Reduce la latencia del buffer: `rtspSettings.Latency = TimeSpan.FromMilliseconds(200)`
 - Cambia al subflujo (canal 102) para menores requisitos de ancho de banda
 - Desactiva el audio si no es necesario: `audioEnabled: false`
+
+Combinado en una sola instancia `RTSPSourceSettings` (construida vía factory async):
+
+```csharp
+var rtspSettings = await RTSPSourceSettings.CreateAsync(
+    uri: new Uri("rtsp://192.168.1.100:554/Streaming/Channels/102"),  // subflujo
+    login: "admin",
+    password: "password",
+    audioEnabled: false);
+
+rtspSettings.UseGPUDecoder    = true;                        // decodificación H.265 acelerada por hardware
+rtspSettings.AllowedProtocols = RTSPSourceProtocol.TCP;      // transporte TCP
+rtspSettings.Latency          = TimeSpan.FromMilliseconds(200);
+```
 
 ## Preguntas Frecuentes
 

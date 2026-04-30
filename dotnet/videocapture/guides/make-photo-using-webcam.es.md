@@ -1,9 +1,33 @@
 ---
-title: Captura de fotos con webcam en .NET con Video Capture SDK
-description: Implementa captura de fotos con webcam en .NET con tutoriales paso a paso, captura de fotogramas fijos y técnicas de guardado de imágenes para integración.
+title: Captura de Fotos con Webcam en C# .NET — API Still Frame
+description: Tome fotos desde una webcam en C# / .NET. Captura still frame por botón hardware o trigger software. Guardar en JPEG, PNG, BMP. Ejemplo de código incluido.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Webcam
+  - C#
+primary_api_classes:
+  - VideoCaptureCore
+  - VideoFrameBitmapEventArgs
+  - VideoFrameBufferEventArgs
+
 ---
 
 # Captura de Fotos con Webcam en Aplicaciones .NET
+
+!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+
+    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecta al servidor MCP público de VisioForge
+    ([documentación](../../general/mcp-server-usage.md))
+    en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
+    ejemplos de código ejecutables y guías de despliegue — más preciso que
+    buscar en `llms.txt`. Sin autenticación requerida.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Introducción a la Integración de Webcam
 
@@ -35,8 +59,12 @@ Antes de entrar en los detalles de implementación, asegúrate de que tu entorno
 3. Importa los namespaces necesarios:
 
 ```csharp
-using VisioForge.Core.VideoCapture;
 using System.Drawing;
+using System.Drawing.Imaging;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.VideoCapture;
+using VisioForge.Core.VideoCapture;
 ```
 
 ### Habilitando la Captura de Fotogramas Fijos
@@ -44,17 +72,24 @@ using System.Drawing;
 El primer paso para implementar la captura de fotogramas fijos es configurar correctamente tu aplicación para detectar y responder a las pulsaciones del botón de hardware de la webcam. Así es como:
 
 ```csharp
-// Inicializar el componente de captura de video
-var videoCapture = new VideoCaptureCore();
+// Inicializar el componente de captura de video. Pase un IVideoView para vista previa,
+// o use la sobrecarga CreateAsync() sin parámetros para operación headless.
+var videoCapture = await VideoCaptureCore.CreateAsync(VideoView1);
 
-// Habilitar la captura de fotogramas fijos antes de iniciar el stream de video
+// Habilitar la captura de fotogramas fijos antes de iniciar el stream de video.
 videoCapture.Video_Still_Frames_Grabber_Enabled = true;
 
-// Configurar el dispositivo de captura de video y otros ajustes
-// ...
+// Seleccionar dispositivo de captura por nombre. Enumera dispositivos con videoCapture.Video_CaptureDevices().
+videoCapture.Video_CaptureDevice = new VideoCaptureSource("USB Camera");
+videoCapture.Video_CaptureDevice.Format_UseBest = true;     // o establece Format + FrameRate explícitamente
+videoCapture.Audio_RecordAudio = false;
+videoCapture.Audio_PlayAudio = false;
 
-// Iniciar la captura de video
-videoCapture.Start();
+// Modo solo vista previa (sin captura a archivo).
+videoCapture.Mode = VideoCaptureMode.VideoPreview;
+
+// Iniciar el pipeline (asíncrono — OnError se dispara en errores del pipeline).
+await videoCapture.StartAsync();
 ```
 
 Configurar la propiedad `Video_Still_Frames_Grabber_Enabled` a `true` es crucial. Esta configuración le dice al SDK que monitoree las pulsaciones del botón de hardware y active los eventos apropiados cuando se capture un fotograma fijo.
@@ -71,19 +106,48 @@ videoCapture.OnStillVideoFrameBitmap += VideoCapture_OnStillVideoFrameBitmap;
 videoCapture.OnStillVideoFrameBuffer += VideoCapture_OnStillVideoFrameBuffer;
 ```
 
-Aquí hay un ejemplo de cómo implementar el manejador de eventos para fotogramas bitmap:
+Aquí un ejemplo de cómo implementar el manejador de eventos para fotogramas bitmap (el evento es `EventHandler<VideoFrameBitmapEventArgs>`; el bitmap vive en `e.Frame`):
 
 ```csharp
-private void VideoCapture_OnStillVideoFrameBitmap(object sender, BitmapEventArgs e)
+private void VideoCapture_OnStillVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
 {
-    // Procesar el bitmap capturado
-    Bitmap capturedImage = e.Bitmap;
-    
-    // Realizar cualquier procesamiento de imagen requerido
-    // ...
-    
-    // Mostrar la imagen en un control PictureBox
-    pictureBox1.Image = capturedImage;
+    // Clona el bitmap porque e.Frame pertenece al SDK y se reutiliza tras salir del callback.
+    Bitmap capturedImage = (Bitmap)e.Frame.Clone();
+
+    // Marshal al hilo UI cuando se ejecuta en WinForms / WPF.
+    if (pictureBox1.InvokeRequired)
+    {
+        pictureBox1.BeginInvoke((Action)(() =>
+        {
+            pictureBox1.Image?.Dispose();
+            pictureBox1.Image = capturedImage;
+        }));
+    }
+    else
+    {
+        pictureBox1.Image?.Dispose();
+        pictureBox1.Image = capturedImage;
+    }
+}
+```
+
+Para acceso al buffer crudo (sin asignación de Bitmap, útil en pipelines de imagen personalizados), suscríbete a `OnStillVideoFrameBuffer`. Su firma es `EventHandler<VideoFrameBufferEventArgs>`:
+
+```csharp
+private void VideoCapture_OnStillVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
+{
+    // Metadatos del frame crudo: ancho / alto / stride / formato de píxeles.
+    var width  = e.Frame.Info.Width;
+    var height = e.Frame.Info.Height;
+
+    // e.FrameArray es una copia managed byte[] (puede ser null si el SDK mantuvo los datos en memoria nativa).
+    if (e.FrameArray != null)
+    {
+        File.WriteAllBytes($"frame-{e.Frame.Timestamp.Ticks}.raw", e.FrameArray);
+    }
+
+    // Marca UpdateData = true si mutaste el buffer y quieres que el cambio se propague downstream.
+    // e.UpdateData = true;
 }
 ```
 
@@ -92,8 +156,8 @@ private void VideoCapture_OnStillVideoFrameBitmap(object sender, BitmapEventArgs
 Después de capturar y potencialmente procesar la imagen, a menudo querrás guardarla en disco. El SDK proporciona un método conveniente para este propósito:
 
 ```csharp
-// Guardar el fotograma actual en un archivo
-videoCapture.Frame_Save("imagenCapturada.jpg", ImageFormat.Jpeg);
+// Guardar el fotograma actual en un archivo (API async — funciona después de StartAsync).
+await videoCapture.Frame_SaveAsync("imagenCapturada.jpg", ImageFormat.Jpeg);
 ```
 
 Puedes especificar diferentes formatos de imagen basados en los requisitos de tu aplicación, como PNG para calidad sin pérdida o JPEG para tamaños de archivo más pequeños.

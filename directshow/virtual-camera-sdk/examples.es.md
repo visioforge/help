@@ -1,6 +1,22 @@
 ---
 title: SDK de Cámara Virtual DirectShow - Ejemplos de Código
 description: Ejemplos de código del SDK de Cámara Virtual para transmitir a dispositivos de cámara virtual y leer desde cámaras virtuales con renderizado cuadro por cuadro.
+tags:
+  - Virtual Camera SDK
+  - DirectShow
+  - C++
+  - Windows
+  - WinForms
+  - Streaming
+  - Virtual Camera
+  - Webcam
+  - C#
+primary_api_classes:
+  - IBaseFilter
+  - IVFLiveVideoSource
+  - IVFVirtualCameraSink
+  - IVFVirtualCameraSource
+
 ---
 
 # SDK de Cámara Virtual - Ejemplos de Código
@@ -504,8 +520,18 @@ public class VirtualCameraFrameByFrame
             PixelFormat.Format24bppRgb);
         try
         {
-            // Empujar cuadro a cámara virtual
-            pushSource.AddFrame(bmpData.Scan0);
+            // AddFrame toma un AVFrameData (LPStruct), NO un IntPtr puro.
+            // Constrúyalo desde el mapa de bits bloqueado antes de empujarlo.
+            int frameSize = bmpData.Stride * frame.Height;
+            long durationTicks = (long)(10_000_000.0 / frameRate); // unidades de 100 ns
+            var avFrame = new AVFrameData
+            {
+                Data = bmpData.Scan0,
+                Size = frameSize,
+                StartTime = currentFrameIndex * durationTicks,
+                StopTime = (currentFrameIndex + 1) * durationTicks
+            };
+            pushSource.AddFrame(avFrame);
         }
         finally
         {
@@ -619,9 +645,10 @@ public class VirtualCameraCapture
                 throw new Exception("No se puede crear el filtro de Fuente de Cámara Virtual");
             }
 
-            // Opcional: Establecer licencia
-            var cameraIntf = virtualCameraSource as IVFVirtualCameraSource;
-            cameraIntf?.set_license("TRIAL");
+            // NOTA: IVFVirtualCameraSource solo expone SetCustomVideoSize() y
+            // FixResolution(). La licencia se gestiona en el lado SINK
+            // (IVFVirtualCameraSink::set_license), porque ese es el filtro que publica contenido
+            // hacia la cámara virtual; el filtro source mostrado aquí solo lo consume.
 
             // Crear Renderizador de Video Mejorado (EVR)
             Guid CLSID_EVR = new Guid("FA10746C-9B63-4B6C-BC49-FC300EA5F256");

@@ -1,11 +1,40 @@
 ---
 title: Captura de cámaras RTSP en .NET: latencia y protocolos
 description: Implementa y configura flujos de cámaras RTSP en .NET con opciones de baja latencia, código de ejemplo y mejores prácticas para UDP y TCP.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - IP Camera
+  - NDI Source
+  - RTSP
+  - ONVIF
+  - NDI
+  - UDP
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - VideoCaptureCore
+  - RTSPSourceSettings
+  - IPCameraSourceSettings
+  - IPSourceEngine
+
 ---
 
 # Integrar Flujos de Cámaras RTSP en Aplicaciones .NET
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+
+!!! info "Soporte multiplataforma"
+    El motor `VideoCaptureCoreX` funciona en **Windows, macOS, Linux, Android e iOS** vía GStreamer; el motor clásico `VideoCaptureCore` es solo Windows. Consulta la [matriz de soporte de plataformas](../../../platform-matrix.md) para códecs y detalles de aceleración por hardware, y la [guía de despliegue en Linux](../../../deployment-x/Ubuntu.md) para configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.
 
 ## Configurar Fuentes de Cámaras RTSP Estándar
 
@@ -134,6 +163,17 @@ Explora estas aplicaciones de ejemplo para ver la integración de cámaras RTSP 
 5. **Considerar seguridad** - Usar autenticación y considerar RTSP sobre TLS
 
 ¿Necesitas la URL RTSP para tu cámara? Consulta nuestro [directorio de marcas de cámaras IP](../../../camera-brands/index.md) para URLs RTSP específicas por marca y ejemplos de conexión.
+
+## Documentación Relacionada
+
+- [Inmersión profunda en el protocolo RTSP](../../../general/network-streaming/rtsp.md) — cómo funciona RTSP, opciones de transporte y arquitectura de streaming
+- [Integración de cámara IP ONVIF](onvif.md) — WS-Discovery, gestión de perfiles y control PTZ
+- [Integración de fuente NDI](ndi.md) — alternativa profesional de video-sobre-IP para estudio y broadcast
+- [Tutorial de vista previa en vivo de cámara IP](../../video-tutorials/ip-camera-preview.md) — video explicativo con ejemplo mínimo en C#
+- [Grabar stream RTSP a MP4](../../video-tutorials/ip-camera-capture-mp4.md) — capturar cualquier cámara IP a archivo
+- [Reproductor RTSP de Media Blocks](../../../mediablocks/Guides/rtsp-player-csharp.md) — alternativa basada en pipeline con Media Blocks SDK
+- [Grid RTSP multi-cámara (muro NVR)](../../../mediablocks/Guides/multi-camera-rtsp-grid.md) — muro de vista previa 4×4 para WPF y MAUI
+- [Reconexión RTSP y fallback switch](../../../general/network-sources/reconnection-and-fallback.md) — eventos de desconexión y `FallbackSwitch` imagen/texto/media en todos los SDK
 
 ---
 Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para acceder a muestras de código adicionales y recursos de implementación.

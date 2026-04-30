@@ -1,6 +1,17 @@
 ---
 title: DV Camcorder Control in Delphi with TVFVideoCapture
 description: Control DV camcorders in Delphi with TVFVideoCapture - playback, navigation, transport controls with code examples for Delphi, C++, and VB6.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - DV Camera
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Complete Guide to DV Camcorder Control

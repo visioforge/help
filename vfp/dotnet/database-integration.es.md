@@ -1,6 +1,21 @@
 ---
 title: Almacenamiento de huellas en MongoDB, SQL Server, PostgreSQL
 description: Integre huellas de video de VisioForge con MongoDB, SQL Server y PostgreSQL usando esquemas optimizados, indexación y operaciones por lotes.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+  - C#
+  - JavaScript
+  - NuGet
+primary_api_classes:
+  - MongoClientSettings
+  - SqlClient
+
 ---
 
 # Guía de Base de Datos de Huellas Digitales de Video

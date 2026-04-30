@@ -1,6 +1,19 @@
 ---
 title: Set Individual Audio Track Volume Level in C# .NET Editor
 description: Control individual audio track volumes in video editing apps with VisioForge Video Edit SDK .NET. Per-track mixing with C# code examples.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCore
+  - Windows
+  - Editing
+  - Effects
+  - C#
+  - NuGet
+primary_api_classes:
+  - AudioVolumeEnvelopeEffect
+  - AudioSource
+
 ---
 
 # Setting Custom Volume Levels for Audio Tracks in C# Applications
@@ -20,15 +33,24 @@ Setting custom volume levels for audio tracks gives your users more precise cont
 The following C# example shows how to apply a volume envelope effect to an audio track:
 
 ```cs
-var volume = new AudioVolumeEnvelopeEffect(10);
-VideoEdit1.Input_AddAudioFile(audioFile, null, 0, new[] { volume });
+// AudioVolumeEnvelopeEffect(level) sets a constant volume for the track.
+// Optional StartTime / StopTime (TimeSpan) restrict the effect to a time window.
+var volume = new AudioVolumeEnvelopeEffect(level: 10);
+
+// The 5-arg Input_AddAudioFile overload takes an AudioSource (not a string),
+// so wrap the file path before passing it alongside the effect array.
+// Signature: Input_AddAudioFile(AudioSource, TimeSpan? timelineInsertTime = null,
+//   int targetStreamIndex = 0, AudioTrackEffect[] effects = null,
+//   TimelineAudioTrackCustomSettings = null)
+var audioSource = new AudioSource(audioFile);
+VideoEdit1.Input_AddAudioFile(audioSource, null, 0, new[] { volume });
 ```
 
 ## Understanding the Parameters
 
-- `AudioVolumeEnvelopeEffect(10)`: Creates a volume effect with a value of 10
-- `Input_AddAudioFile`: Adds an audio file to your project with the specified volume effect
-- The parameters allow for precise control over when and how the volume changes are applied
+- `AudioVolumeEnvelopeEffect(level: 10)`: constant-volume envelope. Level is an `int`; use `StartTime`/`StopTime` properties (both `TimeSpan`) to scope the effect to a time window.
+- `audioFile` (string) must be wrapped in a `new AudioSource(...)` — the effects-array overload of `Input_AddAudioFile` only accepts an `AudioSource`, not a raw filename.
+- `Input_AddAudioFile`: adds the audio file to the timeline with the given effects applied to the chosen audio stream.
 
 ## Required Dependencies
 

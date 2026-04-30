@@ -1,6 +1,23 @@
 ---
 title: Swann: URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecta cámaras Swann en C# .NET con patrones de URL RTSP y ejemplos de código para modelos NHD, SWNHD, DVR/NVR y ADS antiguos.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Swann en C# .NET

@@ -1,6 +1,25 @@
 ---
 title: Crear Aplicaciones de Captura de Cámara en C# .NET
 description: Cree apps de cámara con VisioForge Media Blocks SDK: enumeración de dispositivos, selección de formato, renderizado de video y captura multiplataforma.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+  - Webcam
+  - C#
+primary_api_classes:
+  - MediaBlocksPipeline
+  - SystemVideoSourceBlock
+  - VideoRendererBlock
+  - DeviceEnumerator
+  - VideoCaptureDeviceSourceSettings
+
 ---
 
 # Construcción de Aplicaciones de Cámara con Media Blocks SDK
@@ -138,20 +157,20 @@ Agregue un renderizador de video para mostrar el video capturado:
 // Crear el renderizador de video y conectarlo a su componente de UI
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 
-// Opcional: Configurar ajustes del renderizador
-videoRenderer.Settings.IsSync = true;
+// Opcional: mantener el renderizador sincronizado con el reloj del pipeline
+videoRenderer.IsSync = true;
 ```
 
 ### Configuración Avanzada del Renderizador
 
-Para más control sobre el renderizado de video, puede personalizar los ajustes del renderizador:
+`VideoRendererBlock` expone propiedades planas — no existe un objeto `Settings`:
 
 ```csharp
-// Habilitar capacidades de captura de imagen
-videoRenderer.Settings.EnableSnapshot = true;
+// Habilitar el overlay de subtítulos si el pipeline transporta un flujo de subtítulos
+videoRenderer.SubtitleEnabled = true;
 
-// Configurar overlay de subtítulos si es necesario
-videoRenderer.SubtitleEnabled = false;
+// Deshabilitar la sincronización con el reloj para recibir los cuadros tan rápido como lleguen (útil al grabar)
+videoRenderer.IsSync = false;
 ```
 
 ## Conectando el Pipeline

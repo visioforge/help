@@ -1,6 +1,39 @@
 ---
 title: Streaming SRT en C# .NET - Enviar y Recibir Video por IP
 description: Transmita y reciba video mediante el protocolo SRT en C# .NET con modos caller/listener, cifrado AES y multiplexación MPEG-TS. Incluye ejemplos de código SDK.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - Webcam
+  - IP Camera
+  - NDI
+  - SRT
+  - TS
+  - H.264
+  - H.265
+  - AAC
+  - C#
+primary_api_classes:
+  - SRTSinkSettings
+  - SRTMPEGTSSinkBlock
+  - MediaBlocksPipeline
+  - SRTSourceSettings
+  - SRTSourceBlock
+
 ---
 
 # Guía de Implementación de Transmisión SRT
@@ -55,11 +88,9 @@ var sinkSettings = new SRTSinkSettings
 El caller se conecta a un listener SRT remoto:
 
 ```csharp
-var sourceSettings = new SRTSourceSettings
-{
-    Uri = "srt://192.168.1.100:8888",
-    Mode = SRTConnectionMode.Caller
-};
+// SRTSourceSettings tiene un ctor privado — use la factoría CreateAsync. Uri es System.Uri, no string.
+var sourceSettings = await SRTSourceSettings.CreateAsync(new Uri("srt://192.168.1.100:8888"));
+sourceSettings.Mode = SRTConnectionMode.Caller;
 ```
 
 ### Modo Rendezvous
@@ -182,7 +213,7 @@ Use `SRTSourceBlock` para recibir y reproducir un flujo SRT con decodificación 
 var pipeline = new MediaBlocksPipeline();
 
 // Conectar a un emisor SRT (modo caller por defecto)
-var sourceSettings = await SRTSourceSettings.CreateAsync("srt://192.168.1.100:8888");
+var sourceSettings = await SRTSourceSettings.CreateAsync(new Uri("srt://192.168.1.100:8888"));
 var srtSource = new SRTSourceBlock(sourceSettings);
 
 // Renderizador de video
@@ -217,13 +248,11 @@ var sinkSettings = new SRTSinkSettings
 ### Receptor (Cifrado)
 
 ```csharp
-var sourceSettings = new SRTSourceSettings
-{
-    Uri = "srt://192.168.1.100:8888",
-    Mode = SRTConnectionMode.Caller,
-    Passphrase = "my-secret-passphrase",
-    PbKeyLen = SRTKeyLength.Length32
-};
+// Use la factoría async — SRTSourceSettings tiene un ctor privado; Uri es System.Uri, no string.
+var sourceSettings = await SRTSourceSettings.CreateAsync(new Uri("srt://192.168.1.100:8888"));
+sourceSettings.Mode = SRTConnectionMode.Caller;
+sourceSettings.Passphrase = "my-secret-passphrase";
+sourceSettings.PbKeyLen = SRTKeyLength.Length32;
 ```
 
 Longitudes de clave disponibles: `SRTKeyLength.NoKey` (deshabilitado), `Length16` (128 bits), `Length24` (192 bits), `Length32` (256 bits).

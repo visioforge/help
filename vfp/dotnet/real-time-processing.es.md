@@ -1,6 +1,29 @@
 ---
 title: Video Fingerprinting en tiempo real desde streams en .NET
 description: Genere huellas de video en tiempo real desde streams en vivo usando el SDK VisioForge con procesamiento por fragmentos, cámaras y monitoreo IP.
+tags:
+  - Video Capture SDK
+  - Video Fingerprinting SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Fingerprinting
+  - RTSP
+  - MP4
+  - C#
+primary_api_classes:
+  - RealTimeFingerprintProcessor
+  - VideoFrameXBufferEventArgs
+  - VideoCaptureCoreX
+  - VFPAnalyzer
+  - VFPFingerprintSource
+
 ---
 
 # Guía de Huellas de Video en Tiempo Real
@@ -116,12 +139,15 @@ public class RealTimeFingerprintProcessor
             }
             else
             {
-                // Generar y guardar huella
+                // Generar y guardar huella. La firma real es
+                // (VFPFingerprintSource, VFPErrorCallback errorDelegate = null,
+                //  VFPProgressCallback progressDelegate = null) — no hay parámetro
+                // CancellationToken.
                 var source = new VFPFingerprintSource(videoFile);
                 fp = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(
-                    source, 
-                    progressCallback: null,
-                    cancellationToken: default);
+                    source,
+                    errorDelegate: null,
+                    progressDelegate: null);
                 
                 fp.Save(fpFile);
             }
@@ -264,13 +290,17 @@ public class RealTimeFingerprintProcessor
     {
         foreach (var referenceFingerprint in _referenceFingerprints)
         {
-            // Buscar coincidencias con umbral de diferencia configurable
-            var matches = VFPAnalyzer.Search(
-                referenceFingerprint,           // Huella de referencia
-                liveFingerprint,                // Huella en vivo a buscar
-                referenceFingerprint.Duration,  // Duración a buscar
-                differenceLevel: 10,             // Umbral de similitud (0-100)
-                multipleSearch: true);           // Encontrar todas las coincidencias
+            // Buscar coincidencias con umbral de diferencia configurable.
+            // VFPSearch.Search es síncrono (devuelve List<TimeSpan>); use SearchAsync
+            // para mantener responsivo el UI thread. Nombres reales de parámetros:
+            // maxDifference, allowMultipleFragments. El método vive en VFPSearch, no
+            // en VFPAnalyzer.
+            var matches = await VFPAnalyzer.SearchAsync(
+                referenceFingerprint,            // Huella de referencia
+                liveFingerprint,                 // Huella en vivo a buscar
+                referenceFingerprint.Duration,   // Duración a buscar
+                maxDifference: 10,               // Umbral de similitud (0-100)
+                allowMultipleFragments: true);   // Encontrar todas las coincidencias
             
             if (matches.Count > 0)
             {
@@ -284,7 +314,7 @@ public class RealTimeFingerprintProcessor
                         ReferenceFile = referenceFingerprint.OriginalFilename,
                         Timestamp = matchTime,
                         Position = match,
-                        Confidence = CalculateConfidence(differenceLevel: 10)
+                        Confidence = CalculateConfidence(maxDifference: 10)
                     });
                 }
             }
@@ -356,9 +386,9 @@ public class RealTimeFingerprintProcessor
         return new List<string> { "anuncio1.mp4", "anuncio2.mp4", "contenido_protegido.mp4" };
     }
 
-    private double CalculateConfidence(int differenceLevel)
+    private double CalculateConfidence(int maxDifference)
     {
-        return (100.0 - differenceLevel) / 100.0;
+        return (100.0 - maxDifference) / 100.0;
     }
 
     private void OnMatchFound(MatchResult result)

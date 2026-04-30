@@ -1,6 +1,22 @@
 ---
 title: Bloques Sink - Guardar a MP4, MKV y Transmitir en C# .NET
 description: Escriba medios a MP4, MKV, AVI o transmita vía RTMP, HLS, SRT con los bloques destino de VisioForge Media Blocks SDK en C# .NET.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - UniversalSourceBlock
+  - MediaBlockPadMediaType
+  - H264EncoderBlock
+  - AACEncoderBlock
+  - MediaBlocksPipeline
+
 ---
 
 # Sinks
@@ -65,7 +81,7 @@ Use la clase `ASFSinkSettings` para establecer los parámetros.
 
 #### Información del bloque
 
-Nombre: AVISinkBlock.
+Nombre: ASFSinkBlock.
 
 | Dirección del pin | Tipo de medio | Cantidad de pines |
 | --- | :---: | :---: |
@@ -452,7 +468,7 @@ Windows, macOS, Linux, iOS, Android.
 
 MPEG-PS (MPEG Program Stream) es un formato contenedor para multiplexar audio, video y otros datos digitales. Está diseñado para medios razonablemente confiables, como DVDs, CD-ROMs y otros medios de disco.
 
-Use la clase `MPEGPSSinkSettings` para establecer los parámetros.
+Construya con `new MPEGPSSinkBlock(string filename)` — el bloque solo expone un constructor con nombre de archivo; no existe una clase de configuración separada.
 
 #### Información del bloque
 
@@ -495,11 +511,11 @@ var audioEncoderBlock = new MP2EncoderBlock(new MP2EncoderSettings() { Bitrate =
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
 
 // Codificador de video MPEG-2
-var videoEncoderBlock = new MPEG2EncoderBlock(new MPEG2EncoderSettings());
+var videoEncoderBlock = new MPEG2EncoderBlock(new MPEG2VideoEncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
 
 // Sink MPEG-PS
-var sinkBlock = new MPEGPSSinkBlock(new MPEGPSSinkSettings(@"output.mpg"));
+var sinkBlock = new MPEGPSSinkBlock(@"output.mpg");
 pipeline.Connect(audioEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
 pipeline.Connect(videoEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
 
@@ -705,7 +721,7 @@ Windows, macOS, Linux, iOS, Android.
 
 WAV (Waveform Audio File Format) es un estándar de formato de archivo de audio desarrollado por IBM y Microsoft para almacenar flujos de bits de audio en PCs. Es el formato principal usado en sistemas Windows para audio crudo y típicamente sin comprimir.
 
-Use la clase `WAVSinkSettings` para establecer los parámetros.
+El sink se configura a través de su argumento filename — no existe una clase `WAVSinkSettings` separada; el formato de muestras proviene de la configuración del `PCMEncoderBlock` aguas arriba.
 
 #### Información del bloque
 
@@ -738,7 +754,7 @@ var audioBlock = new PCMEncoderBlock(new PCMEncoderSettings());
 pipeline.Connect(fileSource.AudioOutput, audioBlock.Input);
 
 // Sink WAV
-var sinkBlock = new WAVSinkBlock(new WAVSinkSettings(@"output.wav"));
+var sinkBlock = new WAVSinkBlock(@"output.wav");
 pipeline.Connect(audioBlock.Output, sinkBlock.Input);
 
 await pipeline.StartAsync();
@@ -944,10 +960,8 @@ var aacEncoder = new AACEncoderBlock();
 pipeline.Connect(videoSource.Output, h264Encoder.Input);
 pipeline.Connect(audioSource.Output, aacEncoder.Input);
 
-// Sink de Facebook Live
-var sink = new FacebookLiveSinkBlock(new FacebookLiveSinkSettings(
-    "https://facebook.com/rtmp/...",
-    "tu_clave_de_stream"));
+// Sink de Facebook Live — FacebookLiveSinkSettings recibe solo la CLAVE de stream.
+var sink = new FacebookLiveSinkBlock(new FacebookLiveSinkSettings("tu_clave_de_stream"));
 pipeline.Connect(h264Encoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Video));
 pipeline.Connect(aacEncoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
@@ -1061,7 +1075,7 @@ Windows, macOS, Linux, iOS, Android.
 
 HTTP MJPEG (Motion JPEG) Live es un formato de transmisión de video donde cada fotograma de video se comprime por separado como una imagen JPEG y se transmite sobre HTTP. Es ampliamente usado en cámaras IP y webcams debido a su simplicidad, aunque es menos eficiente que los códecs modernos.
 
-Use la clase `HTTPMJPEGLiveSinkSettings` para establecer los parámetros.
+Construya con `new HTTPMJPEGLiveSinkBlock(int port)` — el bloque solo expone un constructor con puerto; la ruta de URL es fija (`http://<host>:<puerto>/`). No existe una clase de configuración separada.
 
 #### Información del bloque
 
@@ -1099,12 +1113,8 @@ var videoSource = new VirtualVideoSourceBlock(virtualVideoSource);
 var mjpegEncoder = new MJPEGEncoderBlock(new MJPEGEncoderSettings { Quality = 80 });
 pipeline.Connect(videoSource.Output, mjpegEncoder.Input);
 
-// Servidor HTTP MJPEG
-var sink = new HTTPMJPEGLiveSinkBlock(new HTTPMJPEGLiveSinkSettings
-{
-    Port = 8080,
-    Path = "/stream"
-});
+// Servidor HTTP MJPEG (solo puerto — escucha en http://<host>:8080/)
+var sink = new HTTPMJPEGLiveSinkBlock(8080);
 pipeline.Connect(mjpegEncoder.Output, sink.Input);
 
 // Iniciar
@@ -1150,8 +1160,9 @@ var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
 var sinkBlock = new NDISinkBlock(new NDISinkSettings("Mi Flujo NDI"));
-pipeline.Connect(fileSource.AudioOutput, sinkBlock.AudioInput);
-pipeline.Connect(fileSource.VideoOutput, sinkBlock.VideoInput);
+// NDISinkBlock expone pads dinámicos vía CreateNewInput — sin propiedades fijas AudioInput/VideoInput.
+pipeline.Connect(fileSource.AudioOutput, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
+pipeline.Connect(fileSource.VideoOutput, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
 
 await pipeline.StartAsync();
 ```
@@ -1178,8 +1189,7 @@ Nombre: SRTSinkBlock.
 
 ```mermaid
 graph LR;
-    UniversalSourceBlock-->MP4MuxerBlock;
-    MP4MuxerBlock-->SRTSinkBlock;
+    UniversalSourceBlock-->SRTSinkBlock;
 ```
 
 #### Código de ejemplo
@@ -1190,12 +1200,8 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Crear un bloque multiplexor para combinar audio y video
-var muxer = new MP4MuxerBlock();
-pipeline.Connect(fileSource.AudioOutput, muxer.CreateNewInput(MediaBlockPadMediaType.Audio));
-pipeline.Connect(fileSource.VideoOutput, muxer.CreateNewInput(MediaBlockPadMediaType.Video));
-
-// Crear sink SRT en modo caller (conectándose a un listener)
+// Crear sink SRT en modo caller (conectándose a un listener).
+// SRTSinkBlock lleva MPEG-TS internamente — conecta flujos elementales codificados directamente.
 var srtSettings = new SRTSinkSettings
 {
     Host = "servidor-srt.ejemplo.com",
@@ -1206,7 +1212,8 @@ var srtSettings = new SRTSinkSettings
 };
 
 var srtSink = new SRTSinkBlock(srtSettings);
-pipeline.Connect(muxer.Output, srtSink.Input);
+pipeline.Connect(fileSource.AudioOutput, srtSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+pipeline.Connect(fileSource.VideoOutput, srtSink.CreateNewInput(MediaBlockPadMediaType.Video));
 
 await pipeline.StartAsync();
 ```
@@ -1358,10 +1365,8 @@ var aacEncoder = new AACEncoderBlock(aacSettings);
 pipeline.Connect(videoSource.Output, h264Encoder.Input);
 pipeline.Connect(audioSource.Output, aacEncoder.Input);
 
-// Sink de YouTube Live
-var sink = new YouTubeSinkBlock(new YouTubeSinkSettings(
-    "rtmp://a.rtmp.youtube.com/live2/",
-    "tu_clave_de_stream_youtube"));
+// Sink de YouTube Live — YouTubeSinkSettings recibe solo la CLAVE de stream.
+var sink = new YouTubeSinkBlock(new YouTubeSinkSettings("tu_clave_de_stream_youtube"));
 pipeline.Connect(h264Encoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Video));
 pipeline.Connect(aacEncoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
@@ -1596,9 +1601,9 @@ Los pines de entrada se crean dinámicamente: llame a `whipSink.CreateNewInput(M
 ```mermaid
 graph LR;
     UniversalSourceBlock -- Video Sin Comprimir --> H264EncoderBlock;
-    UniversalSourceBlock -- Audio Sin Comprimir --> OpusEncoderBlock;
+    UniversalSourceBlock -- Audio Sin Comprimir --> OPUSEncoderBlock;
     H264EncoderBlock -- Video H.264 --> WHIPSinkBlock;
-    OpusEncoderBlock -- Audio Opus --> WHIPSinkBlock;
+    OPUSEncoderBlock -- Audio Opus --> WHIPSinkBlock;
 ```
 
 #### Código de muestra
@@ -1616,7 +1621,7 @@ var whipSink = new WHIPSinkBlock(whipSettings);
 
 var universalSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
 var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
-var opusEncoder = new OpusEncoderBlock();
+var opusEncoder = new OPUSEncoderBlock();
 
 pipeline.Connect(universalSource.VideoOutput, h264Encoder.Input);
 pipeline.Connect(universalSource.AudioOutput, opusEncoder.Input);
@@ -1806,12 +1811,13 @@ Nombre: KLVFileSinkBlock.
 #### Código de muestra
 
 ```csharp
+// El SDK no incluye un bloque fuente KLV dedicado — los flujos KLV se producen
+// desde fuentes MPEG-TS / compatibles con MISB upstream o desde la propia aplicación,
+// y luego se enrutan a KLVFileSinkBlock para el almacenamiento en archivo.
 var pipeline = new MediaBlocksPipeline();
 
-var klvSource = new KLVSourceBlock(/* ... */);
-
 var klvFileSink = new KLVFileSinkBlock("output_metadata.klv");
-pipeline.Connect(klvSource.Output, klvFileSink.Input);
+pipeline.Connect(klvProducer.Output, klvFileSink.Input); // klvProducer = su bloque emisor de KLV
 
 await pipeline.StartAsync();
 ```
@@ -1826,8 +1832,8 @@ El `BufferSinkBlock` captura datos multimedia en memoria y los entrega fotograma
 
 Tres constructores controlan el tipo de datos capturados:
 
-- `BufferSinkBlock(VideoFormatX format, bool addQueue = true)` — captura fotogramas de video en un formato específico; establezca `addQueue: false` solo cuando gestione la contrapresión usted mismo.
-- `BufferSinkBlock(AudioFormatX format, bool addQueue = true)` — captura muestras de audio en un formato específico.
+- `BufferSinkBlock(VideoFormatX videoFormat, bool allowFrameDrop = false)` — captura fotogramas de video con conversión de formato opcional; establezca `allowFrameDrop: true` para descartar fotogramas cuando los callbacks no puedan seguir el ritmo del medio.
+- `BufferSinkBlock(AudioFormatX audioFormat, bool allowFrameDrop = false)` — captura muestras de audio con remuestreo opcional.
 - `BufferSinkBlock()` — detecta automáticamente el tipo de medio entrante; genera `OnDataFrameBuffer` u `OnSample` para cualquier medio.
 
 Eventos generados por el bloque:

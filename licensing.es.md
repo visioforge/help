@@ -1,6 +1,7 @@
 ---
 title: Opciones de Licenciamiento de VisioForge SDKs
 description: Licencias de VisioForge SDK: licencias de desarrollador, opciones de equipo, despliegue libre de regalías y precios para SDKs de video.
+
 ---
 
 # Guía de Licenciamiento de VisioForge SDKs

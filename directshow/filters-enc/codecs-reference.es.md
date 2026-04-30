@@ -1,6 +1,27 @@
 ---
 title: Referencia de Códecs: Filtros de Codificación DirectShow
 description: Referencia de códecs DirectShow con video H.264/H.265/VP8/VP9, audio AAC/MP3/Opus y aceleración de hardware (NVENC, QuickSync, AMF).
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - MKV
+  - WebM
+  - TS
+  - H.264
+  - H.265
+  - VP8
+  - VP9
+  - MPEG-2
+  - AAC
+  - MP3
+  - Opus
+  - FLAC
+  - Vorbis
+  - Speex
+
 ---
 
 # Paquete de Filtros de Codificación - Referencia de Códecs

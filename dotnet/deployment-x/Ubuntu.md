@@ -1,6 +1,16 @@
 ---
 title: Deploy .NET Apps on Ubuntu with GStreamer and VisioForge SDK
 description: Deploy .NET multimedia apps on Ubuntu Linux with GStreamer setup, hardware configuration, and cross-platform performance optimization.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Linux
+  - GStreamer
+  - NuGet
+
 ---
 
 # Ubuntu Deployment Guide for VisioForge SDK Applications

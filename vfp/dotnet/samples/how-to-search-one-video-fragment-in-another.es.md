@@ -1,6 +1,19 @@
 ---
 title: Buscar fragmentos de video con Fingerprinting en C#
 description: Encuentre fragmentos de video dentro de archivos mayores usando el SDK de fingerprinting de VisioForge en C# .NET con implementación paso a paso.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - C#
+primary_api_classes:
+  - VFPFingerprintSource
+  - VFSimplePlayerEngine
+  - VFPAnalyzer
+
 ---
 
 # Encontrando Fragmentos de Video en Contenido de Video Más Grande
@@ -18,12 +31,13 @@ Los ejemplos principales en este tutorial usan la implementación de API .NET, p
 Primero, necesitamos extraer una huella del fragmento de video más pequeño que queremos localizar dentro del video más grande. Este proceso implica analizar las características únicas del video y generar una firma digital.
 
 ```csharp
-// crear fuente de archivo de video
-var fragmentSrc = new VFPFingerprintSource(ShortFile, VFSimplePlayerEngine.LAV);
+// VFPFingerprintSource solo tiene un ctor (string filename) — no existe sobrecarga
+// con selección de motor. Limite la ventana de análisis vía StartTime/StopTime.
+var fragmentSrc = new VFPFingerprintSource(ShortFile);
 fragmentSrc.StopTime = TimeSpan.FromMilliseconds(5000);
-            
-// obtener huella
-var fragment = VFPAnalyzer.GetSearchFingerprintForVideoFile(fragmentSrc, ErrorCallback);
+
+// VFPAnalyzer.GetSearchFingerprintForVideoFile solo tiene la variante Async.
+var fragment = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(fragmentSrc, ErrorCallback);
 ```
 
 En este bloque de código:
@@ -37,11 +51,10 @@ En este bloque de código:
 A continuación, necesitamos extraer una huella del video más grande donde buscaremos nuestro fragmento. El proceso es similar, pero sin limitaciones de tiempo.
 
 ```csharp
-// crear fuente de archivo de video
-var mainSrc = new VFPFingerprintSource(LongFile, VFSimplePlayerEngine.LAV);
+// El mismo ctor de un argumento + getter async para el archivo más largo.
+var mainSrc = new VFPFingerprintSource(LongFile);
 
-// obtener huella
-var main = VFPAnalyzer.GetSearchFingerprintForVideoFile(mainSrc, ErrorCallback);
+var main = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(mainSrc, ErrorCallback);
 ```
 
 ### Paso 3: Configurar el Manejo de Errores

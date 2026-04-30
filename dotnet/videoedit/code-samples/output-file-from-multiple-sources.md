@@ -1,6 +1,16 @@
 ---
 title: Merge Multiple Video and Audio Sources into One in C# .NET
 description: Combine multiple video and audio files into one output without re-encoding using VisioForge Video Edit SDK .NET. Stream merging guide with C# code.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCore
+  - Windows
+  - Editing
+  - AVI
+  - C#
+  - NuGet
+
 ---
 
 # Creating New Files from Multiple Sources Without Reencoding
@@ -26,7 +36,7 @@ When developing multimedia applications, you may need to combine content from di
 First, create a list to hold all the stream references:
 
 ```cs
-var streams = new List();
+var streams = new List<FFMPEGStream>();
 ```
 
 ### 2. Add Video Stream
@@ -70,7 +80,7 @@ streams.Add(new FFMPEGStream
 Finally, combine all streams into a single output file. Setting the second parameter to "true" ensures the output duration matches the shortest stream, preventing playback issues:
 
 ```cs
-VideoEdit1.FastEdit_MuxStreams(streams, true, outputFile);
+await VideoEdit1.FastEdit_MuxStreamsAsync(streams, true, outputFile);
 ```
 
 ## Important Technical Considerations

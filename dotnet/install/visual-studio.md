@@ -1,6 +1,23 @@
 ---
-title: Install VisioForge .NET SDKs in Visual Studio via NuGet
-description: NuGet and manual installation methods. Configure VideoView for WinForms and WPF, set up hardware acceleration, and manage redistribution packages.
+title: Install VisioForge SDK in Visual Studio — .NET NuGet Setup
+description: Add VisioForge .NET SDKs to Visual Studio 2022+ projects via NuGet. WinForms/WPF/MAUI/console templates. Native dependencies and license setup.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - WPF
+  - Avalonia
+  - NuGet
+primary_api_classes:
+  - VideoView
+
 ---
 
 # Comprehensive Guide to Integrating .NET SDKs with Visual Studio
@@ -145,7 +162,7 @@ The VideoView control will appear in your designer:
 Depending on your specific implementation, you may need additional redistribution packages:
 
 1. Return to the NuGet Package Manager
-2. Search for "VisioForge.DotNet.Redist" to see available redistribution packages
+2. Search for "VisioForge.DotNet.Core.Redist" to see available redistribution packages
 3. Install the ones relevant to your platform and SDK choice
 
 ![Installing redistribution packages](vs8.webp)

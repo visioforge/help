@@ -1,6 +1,14 @@
 ---
 title: Register DirectShow Filters in C++, C#, and Delphi
 description: Register DirectShow filters and SDKs in C++, C#, and Delphi with IVFRegister interface and alternative registration code examples.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - C#
+primary_api_classes:
+  - IVFRegister
+
 ---
 
 # SDK Registration Guide

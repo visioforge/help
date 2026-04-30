@@ -2,6 +2,21 @@
 title: Media Player SDK .NET - Reproductor de Video en C#
 description: SDK de reproductor de video para C# y .NET — reproduce MP4, AVI, MKV, transmite RTSP/HLS. API multiplataforma para Windows, macOS, Linux, Android, iOS.
 sidebar_label: Media Player SDK .NET
+tags:
+  - Media Player SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - Streaming
+primary_api_classes:
+  - UniversalSourceSettings
+  - MediaPlayerCoreX
+  - VideoView
 
 ---
 
@@ -135,13 +150,16 @@ await player.PlayAsync();
 Captura una imagen fija de la posición de reproducción actual:
 
 ```csharp
-// Obtener el fotograma actual como bitmap de SkiaSharp
+// Guarda el frame actual directamente a disco — el camino más simple.
+bool saved = await player.Snapshot_SaveAsync("screenshot.jpg", SkiaSharp.SKEncodedImageFormat.Jpeg, quality: 85);
+
+// O toma el VideoFrameX crudo para procesamiento en memoria (el caller posee el buffer de píxeles).
 var frame = await player.Snapshot_GetAsync();
 if (frame != null)
 {
-    using var data = frame.Encode(SKEncodedImageFormat.Jpeg, 85);
-    using var stream = File.OpenWrite("screenshot.jpg");
-    data.SaveTo(stream);
+    // frame.Data (IntPtr), frame.DataSize, frame.Width, frame.Height, frame.Stride, frame.Format.
+    // Libera el buffer no manejado cuando termines:
+    frame.Free();
 }
 ```
 
@@ -173,8 +191,8 @@ Reproduce un segmento específico de un archivo o repite continuamente:
 player.Loop = true;
 
 // Reproducir un rango de tiempo específico
-player.StartPosition = TimeSpan.FromSeconds(10);
-player.StopPosition = TimeSpan.FromSeconds(60);
+player.Segment_Start = TimeSpan.FromSeconds(10);
+player.Segment_Stop = TimeSpan.FromSeconds(60);
 ```
 
 Ver: [Modo Bucle y Reproducción por Rango de Posición](guides/loop-and-position-range.md)
@@ -198,16 +216,16 @@ Ver: [Modo Bucle y Reproducción por Rango de Posición](guides/loop-and-positio
 | Android | MAUI | Via integración MAUI |
 | iOS | MAUI | Via integración MAUI |
 
-Para implementaciones multiplataforma, ver: [Reproductor de Video Multiplataforma — Guía Avalonia & MAUI](guides/play-video-dotnet.md)
+Para implementaciones multiplataforma, consulte la [Guía del reproductor Avalonia](guides/avalonia-player.md) (escritorio, incluye Linux) o la [Guía del reproductor .NET MAUI](guides/maui-player.md) (móvil + escritorio).
 
 ## Documentación para Desarrolladores
 
 ### Guías
 
-* [Construir un Reproductor de Video en C#](guides/video-player-csharp.md)
+* [Construir un Reproductor de Video en C# (WinForms / WPF)](guides/video-player-csharp.md)
 * [Construir un Reproductor de Video en VB.NET](guides/video-player-vb-net.md)
-* [Reproductor de Video Multiplataforma — Avalonia & MAUI](guides/play-video-dotnet.md)
 * [Implementación de Reproductor Avalonia](guides/avalonia-player.md)
+* [Reproductor .NET MAUI](guides/maui-player.md)
 * [Implementación de Reproductor Android](guides/android-player.md)
 * [Modo Bucle y Rango de Posición](guides/loop-and-position-range.md)
 * [Todas las Guías](guides/index.md)

@@ -1,6 +1,27 @@
 ---
 title: Media Pipeline Architecture and Block Connections in C# .NET
 description: Create media pipelines for playback, recording, and streaming with modular blocks and resource management in VisioForge Media Blocks SDK.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+  - Recording
+  - Encoding
+  - MP4
+  - C#
+primary_api_classes:
+  - MediaBlocksPipeline
+  - MediaBlockPadMediaType
+  - IMediaBlock
+  - MP4SinkBlock
+  - MediaBlockType
+
 ---
 
 # Media Blocks Pipeline: Core Functionality
@@ -93,11 +114,8 @@ await pipeline.Position_SetAsync(TimeSpan.FromSeconds(10));
 // Seeking with keyframe alignment for more efficient navigation
 await pipeline.Position_SetAsync(TimeSpan.FromMinutes(2), seekToKeyframe: true);
 
-// Advanced seeking with start and stop positions for partial playback
-await pipeline.Position_SetRangeAsync(
-    TimeSpan.FromSeconds(30),  // Start position
-    TimeSpan.FromSeconds(60)   // Stop position
-);
+// Read the current position back (e.g. for a progress bar)
+var current = await pipeline.Position_GetAsync();
 ```
 
 ## Controlling Pipeline Execution Flow
@@ -204,9 +222,8 @@ Different blocks may have multiple specialized inputs and outputs:
 Some advanced sink blocks dynamically create inputs on demand:
 
 ```csharp
-// Create a specialized MP4 muxer for recording
-var mp4Muxer = new MP4SinkBlock();
-mp4Muxer.FilePath = "output_recording.mp4";
+// Create a specialized MP4 muxer for recording — ctor takes the output filename (or MP4SinkSettings)
+var mp4Muxer = new MP4SinkBlock("output_recording.mp4");
 
 // Request a new video input from the muxer
 var videoInput = mp4Muxer.CreateNewInput(MediaBlockPadMediaType.Video);

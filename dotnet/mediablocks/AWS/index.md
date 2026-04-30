@@ -2,6 +2,21 @@
 title: AWS S3 Cloud Media Storage - Source and Sink in C# .NET
 description: Read and write media files to Amazon S3 in your pipeline using VisioForge Media Blocks SDK. Stream, transcode, and store video directly to cloud storage.
 sidebar_label: Amazon Web Services
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - AWSS3SinkBlock
+  - AWSS3SinkSettings
+  - MP4SinkBlock
+  - SystemVideoSourceBlock
+  - VideoEncoderBlock
+
 ---
 
 # AWS S3 Blocks - VisioForge Media Blocks SDK .Net
@@ -26,26 +41,33 @@ Name: `AWSS3SinkBlock`.
 
 The `AWSS3SinkBlock` is configured using `AWSS3SinkSettings`. Key properties:
 
-- `Uri` (string): The S3 URI where the media file will be written (e.g., "s3://your-bucket-name/path/to/output/file.mp4").
-- `AccessKeyId` (string): Your AWS Access Key ID.
+- `Uri` (string): The S3 object URI (e.g., "s3://your-bucket-name/path/to/output/file.mp4"). Alternatively, set `Bucket` and `Key` separately.
+- `Bucket` (string): The target S3 bucket name.
+- `Key` (string): The object key (path within the bucket).
+- `AccessKey` (string): Your AWS Access Key.
 - `SecretAccessKey` (string): Your AWS Secret Access Key.
-- `Region` (string): The AWS region where the bucket is located (e.g., "us-east-1").
-- `SessionToken` (string, optional): AWS session token, if using temporary credentials.
-- `EndpointUrl` (string, optional): Custom S3-compatible endpoint URL.
+- `Region` (string): The AWS region where the bucket is located (default `"us-west-1"`).
+- `SessionToken` (string, optional): AWS temporary session token from STS, if using temporary credentials.
+- `EndpointUri` (string, optional): Custom S3-compatible endpoint URI.
 - `ContentType` (string, optional): The MIME type of the content being uploaded (e.g., "video/mp4").
-- `StorageClass` (string, optional): S3 storage class (e.g., "STANDARD", "INTELLIGENT_TIERING").
-- `ServerSideEncryption` (string, optional): Server-side encryption method (e.g., "AES256", "aws:kms").
-- `ACL` (string, optional): Access Control List for the uploaded object (e.g., "private", "public-read").
+- `ContentDisposition` (string, optional): Content-Disposition header to set for the uploaded object.
+- `Metadata` (Dictionary&lt;string, string&gt;, optional): A map of user metadata to store with the object.
+- `ForcePathStyle` (bool, optional): Force client to use path-style addressing for buckets.
+- `UseMultipartUpload` (bool, optional, default `true`): Use multipart upload for large files.
+- `PartSize` (ulong, optional, default 5 MB): Size in bytes of an individual part used for multipart upload.
+- `OnError` (S3SinkOnError, optional): How to handle errors during upload.
+- `RequestTimeout` (TimeSpan, optional, default 15s): Timeout for S3 requests (set to `TimeSpan.Zero` for infinity).
+- `RetryAttempts` (uint, optional, default 5): Number of retry attempts before abandoning a request.
 
 #### The sample pipeline
 
 ```mermaid
 graph LR;
     SystemVideoSourceBlock-->VideoEncoderBlock;
-    VideoEncoderBlock-->MuxerBlock;
+    VideoEncoderBlock-->MP4SinkBlock;
     SystemAudioSourceBlock-->AudioEncoderBlock;
-    AudioEncoderBlock-->MuxerBlock;
-    MuxerBlock-->AWSS3SinkBlock;
+    AudioEncoderBlock-->MP4SinkBlock;
+    MP4SinkBlock-->AWSS3SinkBlock;
 ```
 
 #### Sample code
@@ -68,18 +90,18 @@ var h264Settings = new OpenH264EncoderSettings(); // Example encoder settings
 var videoEncoder = new H264EncoderBlock(h264Settings);
 
 // Create audio encoder
-var opusSettings = new OpusEncoderSettings(); // Example encoder settings
-var audioEncoder = new OpusEncoderBlock(opusSettings);
+var opusSettings = new OPUSEncoderSettings(); // Example encoder settings
+var audioEncoder = new OPUSEncoderBlock(opusSettings);
 
-// Create a muxer (e.g., MP4MuxBlock)
-var mp4MuxSettings = new MP4MuxSettings();
-var mp4Muxer = new MP4MuxBlock(mp4MuxSettings);
+// Create an MP4 muxer in mux-only mode — produces a muxed output pad instead of writing a file.
+var mp4MuxSettings = new MP4SinkSettings(string.Empty) { MuxOnly = true };
+var mp4Muxer = new MP4SinkBlock(mp4MuxSettings);
 
 // Configure AWSS3SinkSettings
 var s3SinkSettings = new AWSS3SinkSettings
 {
     Uri = "s3://your-bucket-name/output/recorded-video.mp4",
-    AccessKeyId = "YOUR_AWS_ACCESS_KEY_ID",
+    AccessKey = "YOUR_AWS_ACCESS_KEY",
     SecretAccessKey = "YOUR_AWS_SECRET_ACCESS_KEY",
     Region = "your-aws-region", // e.g., "us-east-1"
     ContentType = "video/mp4"

@@ -1,6 +1,22 @@
 ---
 title: FLAC Lossless Audio Encoder DirectShow Filter Interface
 description: FLAC encoder DirectShow interface with encoding levels, LPC configuration, block sizes, and compression for lossless audio encoding.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Encoding
+  - Decoding
+  - MP3
+  - FLAC
+  - C#
+primary_api_classes:
+  - FLACEncoder
+  - IFLACEncodeSettings
+  - IBaseFilter
+  - AudioEncoder
+  - FLACArchivalEncoder
+
 ---
 
 # FLAC Encoder Interface Reference

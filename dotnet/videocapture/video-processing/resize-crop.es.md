@@ -1,6 +1,15 @@
 ---
 title: Redimensionar y recortar video en .NET con Video Capture SDK
 description: Redimensionamiento y recorte de video profesional en .NET con ejemplos optimizados para webcams, capturas de pantalla y cámaras IP.
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - NuGet
+primary_api_classes:
+  - VideoResizeSettings
+  - VideoCropSettings
+
 ---
 
 # Operaciones de Redimensionar y Recortar Video para Desarrolladores .NET
@@ -41,16 +50,15 @@ VideoCapture1.Video_Resize = new VideoResizeSettings
 Elige el algoritmo que mejor se ajuste a tus requisitos de rendimiento y calidad:
 
 ```cs
+// Video_Resize está tipado como la interfaz marcadora IVideoResizeSettings;
+// Mode vive en la clase concreta VideoResizeSettings, así que hay que hacer cast antes de asignar.
+var resize = (VideoResizeSettings)VideoCapture1.Video_Resize;
 switch (cbModoRedimensionar.SelectedIndex)
 {
-  case 0: VideoCapture1.Video_Resize.Mode = VideoResizeMode.NearestNeighbor; 
-          break;
-  case 1: VideoCapture1.Video_Resize.Mode = VideoResizeMode.Bilinear; 
-          break;
-  case 2: VideoCapture1.Video_Resize.Mode = VideoResizeMode.Bicubic; 
-          break;
-  case 3: VideoCapture1.Video_Resize.Mode = VideoResizeMode.Lancroz; 
-          break;
+  case 0: resize.Mode = VideoResizeMode.NearestNeighbor; break;
+  case 1: resize.Mode = VideoResizeMode.Bilinear; break;
+  case 2: resize.Mode = VideoResizeMode.Bicubic; break;
+  case 3: resize.Mode = VideoResizeMode.Lancroz; break;
 }
 ```
 

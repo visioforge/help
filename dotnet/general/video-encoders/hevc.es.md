@@ -1,6 +1,34 @@
 ---
 title: Codificación HEVC por Hardware con GPUs AMD, NVIDIA e Intel
 description: Implemente codificación HEVC (H.265) acelerada por hardware con GPUs AMD, NVIDIA e Intel para compresión de video eficiente en aplicaciones .NET.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - Conversion
+  - Webcam
+  - H.265
+  - C#
+primary_api_classes:
+  - AMFHEVCEncoderSettings
+  - NVENCHEVCEncoderSettings
+  - QSVHEVCEncoderSettings
+  - IHEVCEncoderSettings
+  - SVTHEVCEncoderSettings
+
 ---
 
 # Codificación HEVC por Hardware en Aplicaciones .NET
@@ -205,8 +233,17 @@ IHEVCEncoderSettings GetOptimalHEVCEncoder()
     }
     else
     {
-        // Recurrir a codificador de software si no hay hardware disponible
-        return new SoftwareHEVCEncoderSettings(VideoQuality.High);
+#if NET_LINUX
+        // Usar el codificador software SVT-HEVC en Linux (gated solo a Linux — ver SVTHEVCEncoderSettings).
+        return new SVTHEVCEncoderSettings();
+#else
+        // El motor X NO incluye una clase IHEVCEncoderSettings tipada de respaldo para Windows o Apple.
+        // (En plataformas Apple, el HEVC de VideoToolbox solo es alcanzable mediante cableado GStreamer
+        // de bajo nivel — no existe ninguna clase `AppleMedia*HEVC*Settings`; solo se expone
+        // AppleMediaH264EncoderSettings.) El llamador debe decidir: mantener H.264, instalar un driver
+        // de GPU con QSV/NVENC/AMF, o usar el pipeline FFMPEG-EXE del motor clásico.
+        throw new NotSupportedException("No hay codificador HEVC disponible en esta plataforma. Instala un driver de GPU o cambia a H.264.");
+#endif
     }
 }
 ```

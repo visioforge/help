@@ -1,6 +1,19 @@
 ---
 title: Synchronized Multi-Camera Video Recording in C# .NET
 description: Start and stop multiple webcam or IP camera recordings in perfect sync with VisioForge Video Capture SDK. C# code examples and troubleshooting tips.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Webcam
+  - IP Camera
+  - MP4
+  - C#
+primary_api_classes:
+  - VideoCaptureCore
+
 ---
 
 # Sync Multiple Video Captures in .NET

@@ -1,6 +1,26 @@
 ---
 title: Bosch IP Camera RTSP URL Patterns and C# .NET Setup
 description: Bosch Dinion, Flexidome, Autodome, and VIP encoder RTSP URL patterns for C# .NET. Integrate with VisioForge SDK for enterprise surveillance apps.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Bosch IP Camera in C# .NET

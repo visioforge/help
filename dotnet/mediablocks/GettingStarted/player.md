@@ -1,6 +1,23 @@
 ---
 title: Build a Video Player in C# .NET — Step-by-Step Guide
 description: Step-by-step C# tutorial for building a video player with VisioForge Media Blocks SDK — source blocks, audio/video rendering, and playback controls.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - C#
+primary_api_classes:
+  - MediaBlocksPipeline
+  - UniversalSourceSettings
+  - UniversalSourceBlock
+  - VideoRendererBlock
+  - DeviceEnumerator
+
 ---
 
 # Building a Feature-Rich Video Player with Media Blocks SDK
@@ -146,3 +163,9 @@ This gracefully terminates all media processing and releases associated resource
 For a complete implementation example with additional features like seeking, volume control, and full-screen support, refer to our comprehensive source code on [GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Player%20Demo%20WPF).
 
 The repository contains working demonstrations for various platforms including WPF, Windows Forms, and cross-platform .NET applications.
+
+## See Also
+
+- [C# Video Player (WinForms / WPF)](../../mediaplayer/guides/video-player-csharp.md) — the Media Player SDK alternative with one-line setup for Windows desktop apps
+- [Avalonia Cross-Platform Player](../../mediaplayer/guides/avalonia-player.md) — the same pipeline approach for Windows, macOS, and Linux desktop targets
+- [.NET MAUI Player](../../mediaplayer/guides/maui-player.md) — mobile + desktop from one codebase (iOS, Android, macOS, Windows)

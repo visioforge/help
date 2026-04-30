@@ -1,6 +1,18 @@
 ---
 title: Cross-Platform Codec and Device Support Matrix for .NET
 description: VisioForge .NET SDK cross-platform support matrix for video/audio codecs, hardware acceleration, and capture devices on Windows, Linux, macOS, Android, iOS.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+
 ---
 
 # .NET SDK: Supported Features and Platforms

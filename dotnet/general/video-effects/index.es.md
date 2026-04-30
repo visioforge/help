@@ -4,6 +4,27 @@ description: Implemente efectos de video profesionales, overlays de texto/imagen
 sidebar_label: Efectos de Video y Procesamiento
 
 order: 15
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Playback
+  - Editing
+primary_api_classes:
+  - VideoEffect
+  - GPUVideoEffect
+  - VideoBalanceVideoEffect
+  - ColorEffectsVideoEffect
+  - GrayscaleVideoEffect
+
 ---
 
 # Efectos de Video y Procesamiento para Aplicaciones .Net

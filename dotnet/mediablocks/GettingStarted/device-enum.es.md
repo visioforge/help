@@ -1,6 +1,26 @@
 ---
 title: Enumeración de Dispositivos de Media en C# .NET - Guía
 description: Liste cámaras, micrófonos, altavoces, Decklink, NDI y dispositivos GenICam con VisioForge Media Blocks SDK y ejemplos de código multiplataforma.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Decklink
+  - NDI Source
+  - USB3 Vision / GigE
+  - ONVIF
+  - NDI
+  - C#
+primary_api_classes:
+  - DeviceEnumerator
+  - VideoCaptureDeviceInfo
+  - AudioCaptureDeviceAPI
+
 ---
 
 # Guía Completa para Enumeración de Dispositivos de Medios en .NET

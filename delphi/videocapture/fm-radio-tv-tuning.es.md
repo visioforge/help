@@ -1,6 +1,16 @@
 ---
 title: Radio FM y Sintonización TV en Delphi: Escaneo de Canales
 description: Implemente sintonización de radio FM y TV en Delphi - escaneo de canales, gestión de frecuencias, detección de señal con ejemplos para Delphi, C++, VB6.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - C++
+  - Windows
+  - VCL
+  - Capture
+  - TV Tuner
+
 ---
 
 # Implementando Sintonización de Radio FM y TV en Aplicaciones Delphi
@@ -348,7 +358,7 @@ cbTVChannel.Items.Clear;
 if ( (cbTVMode.ItemIndex <> -1) and (cbTVMode.Items[cbTVMode.ItemIndex] = 'FM Radio') ) then
   begin
     // Establecer rango de frecuencia para escaneo FM (100-110MHz)
-    VideoCapture1.TVTuner_FM_Tuning_StartFrequency := 100 * Mhz;
+    VideoCapture1.TVTuner_FM_Tuning_StartFrequency := 100 * MHz;
     VideoCapture1.TVTuner_FM_Tuning_StopFrequency := 110 * MHz;
     // Establecer incrementos de 100KHz para escaneo FM
     VideoCapture1.TVTuner_FM_Tuning_Step := 100 * KHz;

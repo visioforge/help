@@ -1,6 +1,25 @@
 ---
 title: Canon IP Camera RTSP URL and C# .NET Connection Guide
 description: Canon VB-H, VB-M, VB-S, VB-R camera RTSP URL patterns for C# .NET. Integrate with VisioForge SDK for streaming and recording in WPF, WinForms, MAUI.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Canon IP Camera in C# .NET

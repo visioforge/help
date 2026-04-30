@@ -1,6 +1,22 @@
 ---
 title: EZVIZ IP Camera RTSP URL and Connection Guide for C# .NET
 description: Connect to EZVIZ cameras in C# .NET with RTSP URL patterns for C1C, C3W, C6N, BC1C and other models. Enable RTSP on cloud-first cameras.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - C#
+
 ---
 
 # How to Connect to EZVIZ IP Camera in C# .NET

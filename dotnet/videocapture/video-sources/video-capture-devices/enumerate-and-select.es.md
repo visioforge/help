@@ -1,6 +1,23 @@
 ---
 title: Gestión de Dispositivos de Captura de Video en .NET
 description: Detecta, enumera y configura dispositivos de captura de video en .NET con ejemplos de código para listar dispositivos, formatos y tasas de fotogramas.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - C#
+primary_api_classes:
+  - DeviceEnumerator
+  - VideoCaptureDeviceSourceSettings
+  - VideoCaptureSource
+
 ---
 
 # Trabajar con Dispositivos de Captura de Video en .NET

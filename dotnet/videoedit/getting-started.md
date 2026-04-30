@@ -2,6 +2,26 @@
 title: Getting Started - Timeline Video Editing API in C# .NET
 description: Set up your first project with VisioForge Video Edit SDK .NET. Customizable timelines, multi-format support, transitions, effects, and live preview.
 sidebar_position: 0
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - Editing
+  - MP4
+  - C#
+primary_api_classes:
+  - VideoEditCoreX
+  - VideoEditCore
+  - VideoSource
+  - VideoFileSource
+  - IVideoView
+
 ---
 
 # Building Professional Video Editing Applications with .NET SDK
@@ -82,7 +102,7 @@ To detect when editing operations have completed, implement the stop event handl
 ```cs
 core.OnStop += Core_OnStop;
 
-private void Core_OnStop(object sender, EventArgs e)
+private void Core_OnStop(object sender, StopEventArgs e)
 {
     Debug.WriteLine("Editing completed");
 }
@@ -344,7 +364,7 @@ The SDK supports adding still images to your timeline, including JPG, PNG, BMP, 
 
 ### Setting Output Format and Encoding Options
 
-The SDK offers flexible output options with support for numerous video and audio formats, including MP4, AVI, WMV, MKV, WebM, AAC, MP3, and many others.
+The SDK offers flexible output options with support for numerous video and audio formats, including MP4, AVI, WMV, MKV, WebM, AAC, MP3, animated GIF, and many others.
 
 Use the `Output_Format` property to configure your desired output format:
 
@@ -368,6 +388,27 @@ Use the `Output_Format` property to configure your desired output format:
 
 
 For a comprehensive list of supported output formats and detailed code examples, please refer to our [Output Formats](../general/output-formats/index.md) documentation section.
+
+### Rendering to Animated GIF
+
+`VideoEditCoreX` can render the timeline directly to an animated GIF via `GIFOutput`. GIF has no container — `gifenc` writes the final `.gif` file in one step, so the encoder profile contains only the video stream and any audio on the timeline is dropped.
+
+```cs
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.VideoEncoders;
+
+core.Output_Format = new GIFOutput("output.gif", new GIFEncoderSettings
+{
+    Speed = 10,    // 1..30 — higher value = faster encoding, lower visual quality
+    Repeat = 0     // -1 = loop forever, 0 = play once, n = play n+1 times
+});
+```
+
+Notes:
+
+- GIF output is video-only — audio tracks are ignored.
+- 256-color palette per frame is a format limitation — expect larger files than equivalent video codecs for long clips.
+- `SmartRender = true` is incompatible with GIF output (no source clip is already in `image/gif`).
 
 ## Enhancing Your Videos
 

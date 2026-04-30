@@ -1,6 +1,14 @@
 ---
 title: Ejemplos SDK Video Fingerprinting - Apps Listas para .NET
 description: Apps de ejemplo listas para ejecutar de VisioForge para video fingerprinting en .NET: escaneo de duplicados, búsqueda y herramientas CLI.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+
 ---
 
 # Muestras de Código del SDK de Huella Digital de Video

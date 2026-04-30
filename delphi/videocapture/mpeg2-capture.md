@@ -1,6 +1,18 @@
 ---
 title: Delphi MPEG-2 Video Capture with TV Tuner Hardware
 description: Implement MPEG-2 capture in Delphi using TV tuner hardware encoders - device enumeration, format configuration, and optimized code examples.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Capture
+  - Encoding
+  - TV Tuner
+  - MPEG-2
+
 ---
 
 # MPEG-2 Video Capture in Delphi Using TV Tuner Hardware Encoders

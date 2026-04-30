@@ -1,6 +1,18 @@
 ---
 title: Habilitar luz de cámara en tablets Windows 10+ con C# .NET
 description: Controla la luz de cámara en tablets Windows 10+ en aplicaciones .NET con ejemplos de código C#, paquetes requeridos e implementación de API TorchControl.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - WinForms
+  - Capture
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+
 ---
 
 # Habilitar Luz de Cámara en Tablets Windows 10+

@@ -3,6 +3,12 @@ title: DirectShow Encoding Filters: H.264, H.265, NVENC & More
 description: DirectShow video/audio encoders with H.264, H.265, VP8, VP9, AAC, MP3, and GPU acceleration (NVENC, QuickSync, AMF) for Windows apps.
 sidebar_label: DirectShow Encoding Filters Pack
 order: 8
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+
 ---
 
 # DirectShow Encoding Filters Pack

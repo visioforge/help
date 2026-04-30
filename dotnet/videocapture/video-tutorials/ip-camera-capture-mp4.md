@@ -1,6 +1,27 @@
 ---
-title: Record IP Camera RTSP Stream to MP4 in C# .NET Tutorial
-description: Implement IP camera video streaming and recording to MP4 files in .NET using C# with RTSP connection, encoding options, and code examples.
+title: Record IP Camera RTSP to MP4 in C# .NET — Code Sample
+description: Record RTSP streams from IP cameras to MP4 files in C# / .NET. Authentication, ONVIF discovery, reconnect logic, GPU encoding. Full code sample.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - WinForms
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MP4
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCoreX
+  - RTSPSourceSettings
+  - MP4Output
+  - DeviceEnumerator
+  - AudioRendererSettings
+
 ---
 
 # Capturing IP Camera Streams to MP4 Files in .NET
@@ -195,6 +216,13 @@ When implementing IP camera capture, be prepared to address these common challen
 3. **Output File Errors** - Ensure adequate disk space and appropriate write permissions
 4. **Resource Leaks** - Monitor memory usage during long recording sessions
 5. **Camera Compatibility** - Different camera models may require specific configuration adjustments
+
+## Related Guides
+
+- [IP camera live preview tutorial](ip-camera-preview.md) — start with preview before adding recording
+- [RTSP camera source configuration](../video-sources/ip-cameras/rtsp.md) — UDP/TCP transport, low-latency tuning, engine selection
+- [ONVIF IP camera integration](../video-sources/ip-cameras/onvif.md) — auto-discovery and profile selection for IP cameras
+- [Save original RTSP stream without re-encoding](../../mediablocks/Guides/rtsp-save-original-stream.md) — Media Blocks alternative preserving source bitrate
 
 ---
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples. Need the RTSP URL for your camera? Check our [IP camera brands directory](../../camera-brands/index.md).

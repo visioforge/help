@@ -1,13 +1,42 @@
 ---
-title: Integración USB3 Vision, GigE y GenICam en .NET SDK
-description: Integra cámaras USB3 Vision, GigE y GenICam con drivers DirectShow. Soporte machine vision multiplataforma con .NET SDK y alta velocidad.
+title: Cámaras USB3 Vision y GigE en C# .NET — GenICam Industrial
+description: Capture cámaras industriales USB3 Vision, GigE Vision y GenICam en C# / .NET vía GenTL. Soporte Basler, FLIR, IDS, Allied Vision. Machine vision alta FPS.
 sidebar_label: Cámaras USB3 Vision, GigE y GenICam
 order: 15
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+primary_api_classes:
+  - VideoCaptureCoreX
+  - DeviceEnumerator
+  - GenICamSourceSettings
+  - H264EncoderBlock
+  - GenICamSourceBlock
+
 ---
 
 # Integración de Cámaras USB3 Vision, GigE y GenICam
 
 [SDK de Captura de Video .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button }
+
+!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+
+    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecta al servidor MCP público de VisioForge
+    ([documentación](../../../general/mcp-server-usage.md))
+    en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
+    ejemplos de código ejecutables y guías de despliegue — más preciso que
+    buscar en `llms.txt`. Sin autenticación requerida.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Resumen
 
@@ -600,7 +629,7 @@ try
 {
     // Descubrir cámaras con lógica de reintento
     int maxDiscoveryRetries = 3;
-    var devices = new GenICamSourceInfo[0];
+    var devices = Array.Empty<GenICamCamera>();
     
     for (int attempt = 1; attempt <= maxDiscoveryRetries; attempt++)
     {

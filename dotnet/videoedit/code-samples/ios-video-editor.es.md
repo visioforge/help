@@ -1,6 +1,26 @@
 ---
 title: Editor de Video iOS | Crea Apps de Video más Rápido
 description: Integra edición de video profesional en tu app iOS con Video Edit SDK. Configuración rápida, UI personalizable y soporte para filtros y transiciones.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Editing
+  - Effects
+  - MP4
+  - C#
+primary_api_classes:
+  - VideoEditCoreX
+  - IVideoView
+  - VideoBalanceVideoEffect
+  - MP4Output
+  - ProgressEventArgs
+
 ---
 
 # Editor de Video iOS para Edición de Video Integrada
@@ -33,9 +53,11 @@ Aunque optimizado para iOS, nuestro framework soporta Android a través de .NET 
 Inicializa el motor de edición de video en tu app iOS:
 
 ```csharp
-using VisioForge.Core;
-using VisioForge.Core.UI;
-using VisioForge.Core.VideoEditX;
+using System.Drawing;                              // Size
+using VisioForge.Core;                             // VisioForgeX
+using VisioForge.Core.Types;                       // IVideoView, VideoFrameRate
+using VisioForge.Core.Types.X.VideoEdit;           // VideoTransition, VideoTransitionType
+using VisioForge.Core.VideoEditX;                  // VideoEditCoreX
 
 await VisioForgeX.InitSDKAsync();
 
@@ -125,7 +147,7 @@ Crea transiciones suaves entre clips:
 
 ```csharp
 var transition = new VideoTransition(
-    "crossfade",
+    VideoTransitionType.Crossfade,
     TimeSpan.FromMilliseconds(1000),
     TimeSpan.FromMilliseconds(2000));
 videoEdit.Video_Transitions.Add(transition);

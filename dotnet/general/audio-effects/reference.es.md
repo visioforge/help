@@ -2,6 +2,33 @@
 title: Referencia API de Efectos de Audio para .NET - Parámetros
 description: API de más de 30 efectos de audio en VisioForge .NET SDKs. Volumen, EQ, compresor, reverb, eco, filtros, cambio de tono y reducción de ruido en C#.
 sidebar_label: Referencia de Efectos de Audio
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaPlayerCoreX
+  - VideoCaptureCoreX
+  - VideoEditCore
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Playback
+  - Streaming
+  - Editing
+  - Effects
+  - C#
+primary_api_classes:
+  - VolumeAudioEffect
+  - Equalizer10AudioEffect
+  - BandPassAudioEffect
+  - BalanceAudioEffect
+  - WideStereoAudioEffect
+
 ---
 
 # Referencia API de Efectos de Audio
@@ -50,14 +77,14 @@ effect.Mute = true; // Silenciar temporalmente
     - Rango: 1.0 a 10.0
     - Predeterminado: 1.0
 - `ClippingMethod` (AmplifyClippingMethod): Cómo manejar los picos
-    - Opciones: Normal, HardClip, SoftClip
+    - Opciones: Normal, WrapNegative, WrapPositive, NoClip
     - Predeterminado: Normal
 
 **Uso**:
 
 ```csharp
 var effect = new AmplifyAudioEffect(2.0);
-effect.ClippingMethod = AmplifyClippingMethod.SoftClip;
+effect.ClippingMethod = AmplifyClippingMethod.NoClip;
 ```
 
 ---
@@ -173,7 +200,7 @@ var effect = new Equalizer10AudioEffect(levels);
 
 - `Bands` (ParametricEqualizerBand[]): Array de bandas
     - Cantidad: 1 a 64 bandas
-    - Cada banda: Frecuencia, Ganancia, Ancho de banda (Q)
+    - Cada banda: Frequency, Gain, Width (ancho de banda en Hz)
 
 **Uso**:
 
@@ -181,7 +208,7 @@ var effect = new Equalizer10AudioEffect(levels);
 var effect = new EqualizerParametricAudioEffect(3);
 effect.Bands[0].Frequency = 100;  // Hz
 effect.Bands[0].Gain = -6;        // dB
-effect.Bands[0].Bandwidth = 1.0;  // Factor Q
+effect.Bands[0].Width = 1.0f;     // ancho de banda
 // Configurar otras bandas...
 effect.Update(); // Aplicar cambios
 ```
@@ -964,9 +991,13 @@ Crea un efecto de coro con múltiples copias retardadas y moduladas.
 **Uso**:
 
 ```csharp
-videoCaptureCore.Audio_Effects_DS_Chorus(0, "chorus", true,
-    wetDryMix: 50, depth: 25, feedback: 25, frequency: 1.1f,
-    waveform: DSChorusWaveForm.Sine, delay: 16, phase: DSChorusPhase.Phase90);
+// Firma: (int streamIndex, string name, float delay, float depth,
+//         float feedback, float frequency, DSChorusPhase phase,
+//         DSChorusWaveForm waveformTriangle, float wetDryMix)
+videoCaptureCore.Audio_Effects_DS_Chorus(0, "chorus",
+    delay: 16, depth: 25, feedback: 25, frequency: 1.1f,
+    phase: DSChorusPhase.Phase90, waveformTriangle: DSChorusWaveForm.Sine,
+    wetDryMix: 50);
 ```
 
 ---
@@ -986,9 +1017,12 @@ Agrega distorsión/overdrive a la señal de audio.
 **Uso**:
 
 ```csharp
-videoCaptureCore.Audio_Effects_DS_Distortion(0, "distortion", true,
-    gain: -18, edge: 50, postEQCenterFrequency: 2400,
-    postEQBandwidth: 2400, preLowpassCutoff: 8000);
+// Firma: (int streamIndex, string name, float edge, float gain,
+//         float postEQBandwidth, float postEQCenterFrequency,
+//         float preLowpassCutOff)
+videoCaptureCore.Audio_Effects_DS_Distortion(0, "distortion",
+    edge: 50, gain: -18, postEQBandwidth: 2400,
+    postEQCenterFrequency: 2400, preLowpassCutOff: 8000);
 ```
 
 ---
@@ -999,14 +1033,15 @@ Crea un efecto de modulación de gárgara/trémolo.
 
 **Propiedades**:
 
-- **RateHz** (uint): Tasa de modulación (1-1000 Hz)
-- **WaveShape**: Onda Triangle o Square
+- **RateHz** (int): Tasa de modulación (1-1000 Hz)
+- **WaveForm**: Onda Triangle o Square
 
 **Uso**:
 
 ```csharp
-videoCaptureCore.Audio_Effects_DS_Gargle(0, "gargle", true,
-    rateHz: 20, waveShape: DSGargleWaveForm.Triangle);
+// Firma: (int streamIndex, string name, int rateHz, DSGargleWaveForm waveForm)
+videoCaptureCore.Audio_Effects_DS_Gargle(0, "gargle",
+    rateHz: 20, waveForm: DSGargleWaveForm.Triangle);
 ```
 
 ---
@@ -1046,8 +1081,10 @@ Reverberación simplificada con parámetros básicos.
 **Uso**:
 
 ```csharp
-videoCaptureCore.Audio_Effects_DS_WavesReverb(0, "reverb", true,
-    inGain: 0, reverbMix: -10, reverbTime: 1000, highFreqRTRatio: 0.001f);
+// Firma: (int streamIndex, string name, float highFreqRTRatio,
+//         float inGain, float reverbMix, float reverbTime)
+videoCaptureCore.Audio_Effects_DS_WavesReverb(0, "reverb",
+    highFreqRTRatio: 0.001f, inGain: 0, reverbMix: -10, reverbTime: 1000);
 ```
 
 ---

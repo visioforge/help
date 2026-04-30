@@ -1,6 +1,18 @@
 ---
 title: Integración de Radio FM y Sintonizador de TV en .NET
 description: Implementa sintonización de radio FM y TV en aplicaciones C# para escanear frecuencias, gestionar canales e integrar capacidades de transmisión en .NET.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - TV Tuner
+  - C#
+  - NuGet
+primary_api_classes:
+  - TVTunerTuneChannelsEventArgs
+
 ---
 
 # Integración de Radio FM y Sintonización de TV para Aplicaciones .NET
@@ -25,7 +37,7 @@ El primer paso en la implementación de funcionalidad de sintonizador es detecta
 
 ```cs
 // Poblar un combobox con todos los dispositivos de Sintonizador de TV disponibles
-foreach (var tunerDevice in VideoCapture1.TVTuner_Devices)
+foreach (var tunerDevice in VideoCapture1.TVTuner_Devices())
 {
   cbTVTuner.Items.Add(tunerDevice);
 }
@@ -41,7 +53,7 @@ Diferentes regiones usan diferentes estándares de transmisión. Tu aplicación 
 
 ```cs
 // Listar todos los formatos de TV soportados (PAL, NTSC, SECAM, etc.)
-foreach (var tunerTVFormat in VideoCapture1.TVTuner_TVFormats)
+foreach (var tunerTVFormat in VideoCapture1.TVTuner_TVFormats())
 {
   cbTVSystem.Items.Add(tunerTVFormat);
 }
@@ -53,7 +65,7 @@ Las frecuencias de transmisión varían por país. Configura tu aplicación con 
 
 ```cs
 // Poblar selección de país para frecuencias específicas de la región
-foreach (var tunerCountry in VideoCapture1.TVTuner_Countries)
+foreach (var tunerCountry in VideoCapture1.TVTuner_Countries())
 {
   cbTVCountry.Items.Add(tunerCountry);
 }
@@ -79,7 +91,7 @@ La mayoría de los sintonizadores soportan múltiples tipos de entrada. Necesita
 
 ```cs
 // Obtener todos los modos disponibles (TV, Radio FM, etc.)
-foreach (var tunerMode in VideoCapture1.TVTuner_Modes)
+foreach (var tunerMode in VideoCapture1.TVTuner_Modes())
 {
   cbTVMode.Items.Add(tunerMode);
 }
@@ -101,8 +113,8 @@ Para control detallado, puedes trabajar directamente con los valores de frecuenc
 
 ```cs
 // Mostrar configuraciones de frecuencia actuales
-edVideoFreq.Text = Convert.ToString(VideoCapture1.TVTuner_VideoFrequency);
-edAudioFreq.Text = Convert.ToString(VideoCapture1.TVTuner_AudioFrequency);
+edVideoFreq.Text = Convert.ToString(VideoCapture1.TVTuner_VideoFrequency());
+edAudioFreq.Text = Convert.ToString(VideoCapture1.TVTuner_AudioFrequency());
 ```
 
 Estos valores pueden ser útiles para depuración o crear interfaces de selección de frecuencia personalizadas.

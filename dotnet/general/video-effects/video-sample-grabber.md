@@ -1,6 +1,27 @@
 ---
 title: Video Sample Grabber: Extract RAW Frames in C# .NET
 description: Extract RAW video frames from Video Capture, Media Player, and Video Edit SDKs with managed memory access and bitmap conversion in C#.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Editing
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoSampleGrabberBlock
+  - VideoFrameXBufferEventArgs
+  - VideoFrameBitmapEventArgs
+  - VideoFrameSKBitmapEventArgs
+  - VideoFrameBufferEventArgs
+
 ---
 
 # Video sample grabber usage

@@ -1,7 +1,19 @@
 ---
-title: Delphi Media Player Component - 500+ Formats, Streaming
+title: Media Player SDK for Delphi — Developer Documentation
 description: Embed video and audio playback in Delphi apps with TVFMediaPlayer. Supports 500+ formats, RTSP/RTMP streaming, subtitles, and video effects.
 sidebar_label: TVFMediaPlayer
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Playback
+  - Streaming
+primary_api_classes:
+  - TVFMediaPlayer
+
 ---
 
 # TVFMediaPlayer: Feature-Rich Media Playback for Delphi & ActiveX

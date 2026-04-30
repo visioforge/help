@@ -2,6 +2,9 @@
 title: Video Editing Code Examples for C# and .NET Developers
 description: Ready-to-use C# code examples for VisioForge Video Edit SDK .NET. Overlays, transitions, trimming, merging, and audio control with detailed tutorials.
 sidebar_label: Code Examples
+tags:
+  - Video Edit SDK
+  - .NET
 
 ---
 

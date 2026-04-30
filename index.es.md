@@ -1,9 +1,13 @@
 ---
-title: Documentación VisioForge SDKs — Captura, Edición y Reproducción de Video
-description: Tutoriales, referencia API y ejemplos de código C#. SDKs .NET, Delphi y DirectShow para 7 plataformas incluyendo Raspberry Pi y NVIDIA Jetson. Codificación acelerada por GPU.
+title: VisioForge SDK Docs — Tutoriales, API, Ejemplos C# .NET
+description: Tutoriales, referencia API y ejemplos de código C# para SDKs VisioForge .NET, Delphi y DirectShow. 7 plataformas, Raspberry Pi + NVIDIA Jetson.
 hide:
   - navigation
   - toc
+tags:
+  - DirectShow
+  - Streaming
+
 ---
 
 <style>

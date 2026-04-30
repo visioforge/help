@@ -1,6 +1,22 @@
 ---
 title: Guía de Inicio Rápido de Pipeline Multimedia en C# .NET
 description: Comience con VisioForge Media Blocks SDK: instalación, arquitectura de pipeline, conexión de bloques y tutoriales de procesamiento multimedia.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - MediaBlocksPipeline
+  - IMediaBlock
+  - MediaBlockPad
+  - IMediaBlocksPipeline
+  - MediaBlock
+
 ---
 
 # Media Blocks SDK .Net - Guía de Inicio Rápido para Desarrolladores

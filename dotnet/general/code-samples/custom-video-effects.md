@@ -1,6 +1,17 @@
 ---
 title: Creating Custom Real-Time Video Effects in C# .NET
 description: Implement custom video effects in C# with OnVideoFrameBitmap and OnVideoFrameBuffer events for real-time video processing and overlays.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - C#
+primary_api_classes:
+  - VideoFrameBitmapEventArgs
+  - VideoFrameBufferEventArgs
+
 ---
 
 # Creating Custom Real-time Video Effects in C# Applications
@@ -136,9 +147,16 @@ For high-performance applications, processing raw buffer data offers significant
 // OnVideoFrameBuffer event example (pseudo-code)
 private void VideoCapture1_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
 {
-    // e.Buffer contains raw RGB24 data
-    // Each pixel uses 3 bytes in RGB order
-    // Process directly for maximum performance
+    // e.Frame.Data is an IntPtr to the native buffer (length = e.Frame.DataSize).
+    // Dimensions and stride live in e.Frame.Info; actual pixel layout is in
+    // e.Frame.Info.Colorspace (RGB24/RGB32/YUY2/NV12/...). Don't assume RGB24.
+    int width   = e.Frame.Info.Width;
+    int height  = e.Frame.Info.Height;
+    int stride  = e.Frame.Info.Stride;
+    var colorspace = e.Frame.Info.Colorspace;
+
+    // Process e.Frame.Data in place for maximum performance, then set
+    // e.UpdateData = true so the modified buffer flows downstream.
 }
 ```
 

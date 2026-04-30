@@ -3,6 +3,10 @@ title: Fuentes de entrada de video en .NET: webcams, IP, pantalla
 description: Domine fuentes de entrada de video para .NET incluyendo webcams, Decklink, IP cameras, captura de pantalla, y cámaras industriales con integración.
 sidebar_label: Fuentes de Video
 order: 16
+tags:
+  - Video Capture SDK
+  - .NET
+  - Streaming
 
 ---
 
@@ -15,6 +19,49 @@ order: 16
 El SDK de Captura de Video para .NET proporciona soporte robusto para prácticamente cualquier fuente de entrada de video estándar disponible en entornos de desarrollo modernos. Esta flexibilidad permite a las aplicaciones capturar, procesar y manipular contenido de video desde una amplia variedad de dispositivos hardware y streams de red.
 
 Ya sea que esté desarrollando software de edición de video profesional, creando soluciones de vigilancia personalizadas o construyendo aplicaciones de imágenes médicas, entender las opciones de fuente de video disponibles es crucial para implementar la solución correcta para sus requisitos específicos.
+
+## Inicio rápido — Elegir y asignar una fuente de video
+
+Toda fuente se conecta a `VideoCaptureCoreX.Video_Source` vía una clase de settings. El patrón es el mismo entre tipos — solo cambia la clase de settings:
+
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+VisioForgeX.InitSDK();
+var videoCapture = new VideoCaptureCoreX(videoView as IVideoView);
+
+// Elige UNA de las siguientes fuentes:
+
+// --- Webcam / cámara USB / cámara virtual
+var camera = (await DeviceEnumerator.Shared.VideoSourcesAsync()).First();
+videoCapture.Video_Source = new VideoCaptureDeviceSourceSettings(camera);
+
+// --- Captura de pantalla (Direct3D 11 en Windows)
+videoCapture.Video_Source = new ScreenCaptureD3D11SourceSettings
+{
+    FrameRate = new VideoFrameRate(30),
+    CaptureCursor = true
+};
+
+// --- Blackmagic Decklink
+var dl = (await DeviceEnumerator.Shared.DecklinkVideoSourcesAsync()).First();
+videoCapture.Video_Source = new DecklinkVideoSourceSettings(dl);
+
+// --- Cámara IP / RTSP (usa el factory async — el ctor es privado)
+videoCapture.Video_Source = await RTSPSourceSettings.CreateAsync(
+    uri: new Uri("rtsp://192.168.1.100:554/stream"),
+    login: "admin", password: "password", audioEnabled: true);
+
+// --- NDI (multiplataforma, requiere el runtime NDI)
+var ndi = (await DeviceEnumerator.Shared.NDISourcesAsync()).First();
+videoCapture.Video_Source = await NDISourceSettings.CreateAsync(videoCapture.GetContext(), ndi);
+
+// Luego añade un output e inicia como de costumbre.
+videoCapture.Outputs_Add(new MP4Output("output.mp4"), true);
+await videoCapture.StartAsync();
+```
 
 ## Webcams USB e Integradas
 

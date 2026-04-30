@@ -1,6 +1,21 @@
 ---
 title: DirectShow Video Effects and Processing Filter API Reference
 description: DirectShow Processing Filters API reference for video effects, audio enhancement, resize, chroma key, and video mixing interfaces.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Effects
+  - Mixing
+  - Screen Capture
+  - C#
+primary_api_classes:
+  - VideoEffectType
+  - IVFEffectsPro
+  - IVFResize
+  - IBaseFilter
+  - IVFAudioEnhancer
+
 ---
 
 # Processing Filters - Effects Interfaces Reference

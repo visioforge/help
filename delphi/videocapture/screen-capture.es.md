@@ -1,6 +1,17 @@
 ---
 title: Grabación de Pantalla en Delphi con TVFVideoCapture
 description: Implemente grabación de pantalla en Delphi con TVFVideoCapture - capture regiones, pantalla completa, personalice tasas de fotogramas y cursor con ejemplos.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - Screen Capture
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Implementación de Grabación de Pantalla en Delphi
@@ -29,14 +40,22 @@ VideoCapture1.Screen_Capture_Right := StrToInt(edScreenRight.Text);
 ```
 
 ```cpp
+// CEdit::GetWindowText(CString&) devuelve void y rellena el buffer por referencia,
+// así que primero hay que declarar un CString y luego convertirlo a int con atoi().
+CString sTop, sBottom, sLeft, sRight;
+m_edScreenTop.GetWindowText(sTop);
+m_edScreenBottom.GetWindowText(sBottom);
+m_edScreenLeft.GetWindowText(sLeft);
+m_edScreenRight.GetWindowText(sRight);
+
 // Definir la posición del borde superior del rectángulo de captura (en píxeles)
-m_VideoCapture.SetScreen_Capture_Top(atoi(m_edScreenTop.GetWindowText()));
+m_VideoCapture.SetScreen_Capture_Top(atoi(sTop));
 // Definir la posición del borde inferior del rectángulo de captura (en píxeles)
-m_VideoCapture.SetScreen_Capture_Bottom(atoi(m_edScreenBottom.GetWindowText()));
+m_VideoCapture.SetScreen_Capture_Bottom(atoi(sBottom));
 // Definir la posición del borde izquierdo del rectángulo de captura (en píxeles)
-m_VideoCapture.SetScreen_Capture_Left(atoi(m_edScreenLeft.GetWindowText()));
+m_VideoCapture.SetScreen_Capture_Left(atoi(sLeft));
 // Definir la posición del borde derecho del rectángulo de captura (en píxeles)
-m_VideoCapture.SetScreen_Capture_Right(atoi(m_edScreenRight.GetWindowText()));
+m_VideoCapture.SetScreen_Capture_Right(atoi(sRight));
 ```
 
 ```vb

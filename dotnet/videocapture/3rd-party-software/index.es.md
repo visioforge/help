@@ -1,6 +1,12 @@
 ---
 title: Integrar OBS, FFMPEG y VLC con Video Capture SDK .Net
 description: Integra herramientas de streaming OBS, FFMPEG y VLC con Video Capture SDK DirectShow para aplicaciones WinForms, WPF y Consola en .NET.
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - Streaming
+
 ---
 
 # Integrar Software de Terceros con Video Capture SDK

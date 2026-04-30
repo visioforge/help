@@ -1,6 +1,25 @@
 ---
 title: Android Video Player with HLS and RTSP Streaming in C# .NET
 description: Build Android video player apps with streaming, hardware acceleration, and multi-format support using VisioForge Media Player SDK .NET.
+tags:
+  - Media Player SDK
+  - .NET
+  - MediaPlayerCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Playback
+  - Streaming
+  - RTSP
+  - HLS
+  - MP4
+  - C#
+primary_api_classes:
+  - MediaPlayerCoreX
+
 ---
 
 # Android Media Player SDK - Professional Video Playback Solution

@@ -1,11 +1,40 @@
 ---
 title: RTSP Camera Streaming in C# .NET — UDP and TCP Modes
 description: Connect to RTSP camera streams using VisioForge Video Capture SDK. Low-latency configuration, UDP/TCP transport options, and C# code examples.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - IP Camera
+  - NDI Source
+  - RTSP
+  - ONVIF
+  - NDI
+  - UDP
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - VideoCaptureCore
+  - RTSPSourceSettings
+  - IPCameraSourceSettings
+  - IPSourceEngine
+
 ---
 
 # Integrating RTSP Camera Streams in .NET Applications
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+
+!!! info "Cross-platform support"
+    The `VideoCaptureCoreX` engine runs on **Windows, macOS, Linux, Android, and iOS** via GStreamer; the classic `VideoCaptureCore` engine is Windows-only. See the [platform support matrix](../../../platform-matrix.md) for codec and hardware-acceleration details, and the [Linux deployment guide](../../../deployment-x/Ubuntu.md) for Ubuntu / NVIDIA Jetson / Raspberry Pi setup.
 
 ## Setting Up Standard RTSP Camera Sources
 
@@ -133,3 +162,14 @@ When working with RTSP cameras, you may encounter connectivity issues related to
 - Test camera streams with VLC or similar tools to isolate application-specific issues
 
 Need the RTSP URL for your camera? Browse our [IP camera brands directory](../../../camera-brands/index.md) for brand-specific RTSP URLs and connection examples.
+
+## Related Documentation
+
+- [RTSP protocol deep-dive](../../../general/network-streaming/rtsp.md) — how RTSP works, transport options, and streaming architecture
+- [ONVIF IP camera integration](onvif.md) — WS-Discovery, profile management, and PTZ control
+- [NDI source integration](ndi.md) — professional video-over-IP alternative for studio and broadcast
+- [IP camera live preview tutorial](../../video-tutorials/ip-camera-preview.md) — video walkthrough with a minimal C# example
+- [Record RTSP stream to MP4](../../video-tutorials/ip-camera-capture-mp4.md) — capture any IP camera to file
+- [Media Blocks RTSP player](../../../mediablocks/Guides/rtsp-player-csharp.md) — pipeline-based alternative in the Media Blocks SDK
+- [Multi-camera RTSP grid (NVR wall)](../../../mediablocks/Guides/multi-camera-rtsp-grid.md) — 4×4 live preview wall for WPF and MAUI
+- [RTSP reconnection and fallback switch](../../../general/network-sources/reconnection-and-fallback.md) — disconnect events and `FallbackSwitch` image/text/media across all SDKs

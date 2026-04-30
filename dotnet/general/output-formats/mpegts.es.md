@@ -1,6 +1,39 @@
 ---
 title: Salida MPEG-TS con División de Archivos y GPU en C# .NET
 description: División de archivos por duración, tamaño o timecode. Buffer circular. Codificación GPU H.264/HEVC y modo Blu-ray M2TS. Ejemplos con VisioForge SDK.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Recording
+  - Encoding
+  - Editing
+  - MP4
+  - TS
+  - H.264
+  - H.265
+  - AAC
+  - MP3
+  - C#
+  - NuGet
+primary_api_classes:
+  - MPEGTSOutput
+  - NVENCH264EncoderSettings
+  - MPEGTSSplitSinkSettings
+  - MFBaseOutput
+  - QSVH264EncoderSettings
+
 ---
 
 # Salida MPEG-TS
@@ -215,7 +248,7 @@ output.CustomAudioProcessor = new SuProcesadorDeAudioPersonalizado();
 
 #### Configuración de Sink
 
-La salida usa MP4SinkSettings para configuración:
+La salida usa `MPEGTSSinkSettings` (o la derivada `MPEGTSSplitSinkSettings` para salida segmentada) para la configuración:
 
 ```csharp
 // Acceder a configuración de sink
@@ -287,9 +320,9 @@ output.CustomAudioProcessor = new SuProcesadorDeAudioPersonalizado();
 
 ## Salida MPEG-TS solo Windows
 
-[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
+[VideoCaptureCore](#){ .md-button }
 
-La clase `MPEGTSOutput` proporciona configuración para salida MPEG Transport Stream (MPEG-TS) en el framework de procesamiento de video VisioForge. Esta clase hereda de `MFBaseOutput` e implementa la interfaz `IVideoCaptureBaseOutput`, permitiendo su uso específicamente para escenarios de captura de video con formato MPEG-TS.
+La clase `MPEGTSOutput` proporciona configuración para salida MPEG Transport Stream (MPEG-TS) en el framework de procesamiento de video VisioForge. Esta clase hereda de `MFBaseOutput` e implementa la interfaz `IVideoCaptureBaseOutput`, por lo que el motor clásico de Windows la expone únicamente a través de `VideoCaptureCore` — el clásico `VideoEditCore` no tiene ruta de salida MPEG-TS (usa `VideoEditCoreX` para MPEG-TS multiplataforma).
 
 ### Jerarquía de clases
 
@@ -300,7 +333,7 @@ MFBaseOutput
 
 ### Configuración de video heredada
 
-La clase [MPEGTSOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.MPEGTSOutput.html) hereda capacidades de codificación de video de MFBaseOutput, que incluye:
+La clase [MPEGTSOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.MPEGTSOutput.html) hereda capacidades de codificación de video de MFBaseOutput, que incluye:
 
 **Configuración de codificación de video**: A través de la propiedad `Video`, soportando:
 
@@ -373,7 +406,7 @@ La clase `MPEGTSOutput` se inicializa con estos ajustes predeterminados:
 - Control de tasa: CBR
 - Calidad vs Velocidad: 85
 - Cuadros de referencia máximos: 2
-- Tamaño GOP: 50 cuadros
+- MaxKeyFrameSpacing (tamaño GOP): 125 cuadros
 - Conteo de B-Pictures: 0
 - Modo de baja latencia: Deshabilitado
 - CABAC: Deshabilitado

@@ -1,6 +1,33 @@
 ---
 title: Codificador WMA - Configuración y Bitrate en C# .NET
 description: Implemente codificación de audio WMA en .NET con enfoques multiplataforma y específicos de Windows, controles de bitrate y configuración de códec.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - MP3
+  - WMA
+  - C#
+primary_api_classes:
+  - WMAOutput
+  - WMAEncoderSettings
+  - VideoCaptureCore
+  - VideoEditCore
+  - VideoCaptureCoreX
+
 ---
 
 # Codificador Windows Media Audio
@@ -81,12 +108,12 @@ var asfOutput = new ASFSinkBlock(new ASFSinkSettings("output.wma"));
 pipeline.Connect(wmaOutput.Output, asfOutput.Input); // pipeline es MediaBlocksPipeline
 ```
 
-Verificar si la codificación MP3 está disponible.
+Verifica si la codificación WMA está disponible antes de construir el pipeline:
 
-```
-if (!MP3EncoderSettings.IsAvailable())
+```csharp
+if (!WMAEncoderSettings.IsAvailable())
 {
-   // Manejar error
+   // Manejar error — el plugin del codificador WMA no está en esta plataforma.
 }
 ```
 
@@ -106,13 +133,17 @@ La implementación específica de Windows ofrece:
 - Control avanzado de tasa de bits con configuraciones de tasa de bits pico
 - Configuración de tamaño de buffer
 
-### Control de tasa
+### Modos de configuración
 
-La implementación de Windows soporta tres modos de flujo a través de la enumeración WMVStreamMode:
+La implementación clásica de Windows selecciona la fuente del codificador mediante el enum `WMVMode` en `WMAOutput.Mode`:
 
-- CBR (Tasa de bits constante)
-- VBR (Tasa de bits variable)
-- VBR basado en calidad
+- `WMVMode.InternalProfile` — elegir un perfil predefinido de Windows Media por nombre (lo más simple).
+- `WMVMode.ExternalProfile` — cargar un archivo de perfil `.prx` desde disco.
+- `WMVMode.ExternalProfileFromText` — pasar el XML del perfil en línea como string.
+- `WMVMode.CustomSettings` — controlar manualmente todos los parámetros del codificador (calidad, pico de tasa de bits, buffer, etc.) mediante las propiedades `Custom_Audio_*`.
+- `WMVMode.V8SystemProfile` — usar un perfil de sistema Windows Media Video 8 para compatibilidad con sistemas Windows Media antiguos (menor eficiencia de compresión que WMV9; úselo solo cuando el destino sean sistemas heredados).
+
+El control de tasa (CBR / VBR / VBR basado en calidad) se expresa a través de esas propiedades `Custom_Audio_*` o viene integrado en el perfil elegido — no es un enum separado.
 
 ### Ejemplo de uso
 

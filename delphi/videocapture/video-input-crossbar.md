@@ -1,6 +1,16 @@
 ---
 title: Video Input Crossbar Selection in Delphi Applications
 description: Select video input sources in Delphi with crossbar - configure composite, S-Video, HDMI inputs with step-by-step code examples for Delphi.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - Decoding
+  - TV Tuner
+
 ---
 
 # Selecting Video Input Sources with Crossbar Technology
@@ -89,22 +99,31 @@ Once you've confirmed that the crossbar is available, the next step is to retrie
 #### Delphi Implementation
 
 ```pascal
-// Clear any existing connections and UI elements
-VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections;
-cbCrossbarVideoInput.Clear;
+// Variables declared at the procedure level so the snippet compiles on any Delphi 6+ IDE
+// (inline `var name: T := ...` requires Delphi 10.3 Rio or later).
+procedure TForm1.PopulateCrossBarInputs;
+var
+  inputCount: Integer;
+  inputName: String;
+  i: Integer;
+begin
+  // Clear any existing connections and UI elements
+  VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections;
+  cbCrossbarVideoInput.Clear;
 
-// Get count of available inputs for the "Video Decoder" output
-var inputCount: Integer := VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetCount('Video Decoder');
+  // Get count of available inputs for the "Video Decoder" output
+  inputCount := VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetCount('Video Decoder');
 
-// Populate UI with available inputs
-for i := 0 to inputCount - 1 do begin
-  var inputName: String := VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetItem('Video Decoder', i);
-  cbCrossbarVideoInput.Items.Add(inputName);
+  // Populate UI with available inputs
+  for i := 0 to inputCount - 1 do begin
+    inputName := VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetItem('Video Decoder', i);
+    cbCrossbarVideoInput.Items.Add(inputName);
+  end;
+
+  // Select the first item by default if available
+  if cbCrossbarVideoInput.Items.Count > 0 then
+    cbCrossbarVideoInput.ItemIndex := 0;
 end;
-
-// Select the first item by default if available
-if cbCrossbarVideoInput.Items.Count > 0 then
-  cbCrossbarVideoInput.ItemIndex := 0;
 ```
 
 #### C++ MFC Implementation
@@ -171,19 +190,27 @@ After the user selects their desired input source, you need to apply this select
 #### Delphi Implementation
 
 ```pascal
-// First clear any existing connections
-VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections;
+// Variables at procedure level — compatible with Delphi 6+ (avoids the inline `var`
+// shorthand introduced in Delphi 10.3 Rio).
+procedure TForm1.ApplySelectedCrossBarInput;
+var
+  selectedInput: String;
+  success: Boolean;
+begin
+  // First clear any existing connections
+  VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections;
 
-// Connect the selected input to the "Video Decoder" output
-// Parameters: input name, output name, automatic signal routing
-if cbCrossbarVideoInput.ItemIndex >= 0 then begin
-  var selectedInput: String := cbCrossbarVideoInput.Items[cbCrossbarVideoInput.ItemIndex];
-  var success: Boolean := VideoCapture1.Video_CaptureDevice_CrossBar_Connect(selectedInput, 'Video Decoder', true);
-  
-  if success then
-    ShowMessage('Successfully connected ' + selectedInput + ' to Video Decoder')
-  else
-    ShowMessage('Failed to establish connection');
+  // Connect the selected input to the "Video Decoder" output
+  // Parameters: input name, output name, automatic signal routing
+  if cbCrossbarVideoInput.ItemIndex >= 0 then begin
+    selectedInput := cbCrossbarVideoInput.Items[cbCrossbarVideoInput.ItemIndex];
+    success := VideoCapture1.Video_CaptureDevice_CrossBar_Connect(selectedInput, 'Video Decoder', true);
+
+    if success then
+      ShowMessage('Successfully connected ' + selectedInput + ' to Video Decoder')
+    else
+      ShowMessage('Failed to establish connection');
+  end;
 end;
 ```
 

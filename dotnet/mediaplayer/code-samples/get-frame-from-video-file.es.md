@@ -1,6 +1,23 @@
 ---
-title: Extraer Frames de Video en C# — Media Player SDK .NET
+title: Extraer Frames de Video en C# .NET como Bitmap o Byte[]
 description: Obtén frames como Bitmap, SkiaSharp SKBitmap o arrays RGB. Busca cualquier timestamp, extracción masiva y genera miniaturas de video.
+tags:
+  - Media Player SDK
+  - .NET
+  - MediaPlayerCore
+  - VideoEditCore
+  - Windows
+  - Playback
+  - Editing
+  - MP4
+  - C#
+primary_api_classes:
+  - MediaInfoReaderX
+  - VideoEditCore
+  - MediaPlayerCore
+  - ExtractFrameWithVideoEditCore
+  - ExtractFrameWithMediaPlayerCore
+
 ---
 
 # Extrayendo Frames de Video de Archivos de Video en .NET
@@ -8,6 +25,17 @@ description: Obtén frames como Bitmap, SkiaSharp SKBitmap o arrays RGB. Busca c
 [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 La extracción de frames de video es un requisito común en muchas aplicaciones multimedia. Ya sea que estés construyendo una herramienta de edición de video, creando miniaturas, o realizando análisis de video, extraer frames específicos de archivos de video es una capacidad esencial. Esta guía explica diferentes enfoques para capturar frames de archivos de video en aplicaciones .NET.
+
+!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+
+    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecta al servidor MCP público de VisioForge
+    ([documentación](../../general/mcp-server-usage.md))
+    en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
+    ejemplos de código ejecutables y guías de despliegue — más preciso que
+    buscar en `llms.txt`. Sin autenticación requerida.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## ¿Por Qué Extraer Frames de Video?
 
@@ -40,26 +68,36 @@ Para aplicaciones solo Windows, los componentes clásicos del SDK ofrecen métod
 ```csharp
 // Usando VideoEditCore para extracción de frames
 using VisioForge.Core.VideoEdit;
+using VisioForge.Core.Types.MediaPlayer;
 
 public void ExtractFrameWithVideoEditCore()
 {
     var videoEdit = new VideoEditCore();
-    var bitmap = videoEdit.Helpful_GetFrameFromFile("C:\\Videos\\sample.mp4", TimeSpan.FromSeconds(5));
+    var bitmap = videoEdit.Helpful_GetFrameFromFile(
+        "C:\\Videos\\sample.mp4",
+        TimeSpan.FromSeconds(5),
+        oldWay: false,
+        MediaPlayerSourceMode.LAV);
     bitmap.Save("C:\\Output\\frame.png");
 }
 
 // Usando MediaPlayerCore para extracción de frames
 using VisioForge.Core.MediaPlayer;
+using VisioForge.Core.Types.MediaPlayer;
 
 public void ExtractFrameWithMediaPlayerCore()
 {
     var mediaPlayer = new MediaPlayerCore();
-    var bitmap = mediaPlayer.Helpful_GetFrameFromFile("C:\\Videos\\sample.mp4", TimeSpan.FromSeconds(10));
+    var bitmap = mediaPlayer.Helpful_GetFrameFromFile(
+        "C:\\Videos\\sample.mp4",
+        TimeSpan.FromSeconds(10),
+        oldWay: false,
+        MediaPlayerSourceMode.LAV);
     bitmap.Save("C:\\Output\\frame.png");
 }
 ```
 
-El método `Helpful_GetFrameFromFile` simplifica el proceso manejando las operaciones de apertura de archivo, búsqueda y decodificación de frame en una sola llamada.
+El método `Helpful_GetFrameFromFile` simplifica el proceso manejando las operaciones de apertura de archivo, búsqueda y decodificación de frame en una sola llamada. Los cuatro argumentos son obligatorios: la ruta al archivo, la marca de tiempo para el seek, un flag `oldWay` (pase `false` para la ruta moderna de decodificación) y un selector de motor `MediaPlayerSourceMode` (`LAV`, `FFMPEG` o `File_DS`).
 
 ### Soluciones Multiplataforma con X-Engine
 
@@ -118,12 +156,14 @@ using VisioForge.Core.MediaInfo;
 
 public void ExtractFrameAsRGBArray()
 {
-    // Extraer el frame a los 20 segundos como array de bytes RGB
-    var rgbData = MediaInfoReaderX.GetFileSnapshotRGB("C:\\Videos\\sample.mp4", TimeSpan.FromSeconds(20));
-    
-    // Procesar los datos RGB según sea necesario
-    // El formato es típicamente un array de bytes con valores R, G, B para cada píxel
-    // También necesitarías conocer el ancho y alto del frame para interpretar correctamente los datos
+    // GetFileSnapshotRGB devuelve Tuple<byte[], int, int>: píxeles + ancho + alto.
+    var snapshot = MediaInfoReaderX.GetFileSnapshotRGB("C:\\Videos\\sample.mp4", TimeSpan.FromSeconds(20));
+    byte[] rgbData = snapshot.Item1;
+    int width = snapshot.Item2;
+    int height = snapshot.Item3;
+
+    // Procesar los datos RGB — el buffer contiene valores R, G, B por píxel; el ancho y
+    // alto vienen directamente de la tupla, por lo que no hace falta consultar metadatos aparte.
 }
 ```
 

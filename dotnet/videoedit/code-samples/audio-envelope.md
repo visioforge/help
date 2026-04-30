@@ -1,6 +1,20 @@
 ---
 title: Audio Volume Envelope Effects for .NET Video Editing
 description: Implement audio volume envelope effects with VisioForge Video Edit SDK .NET. Fade in, fade out, and keyframe-based volume control in your timeline.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCore
+  - Windows
+  - Editing
+  - Effects
+  - C#
+  - NuGet
+primary_api_classes:
+  - AudioVolumeEnvelopeEffect
+  - AudioSource
+  - AudioTrackEffect
+
 ---
 
 # Implementing Audio Volume Envelope Effects in .NET
@@ -114,11 +128,12 @@ When working with audio from different sources, normalization ensures consistent
 
 ```cs
 // Main interview audio at full volume
-var interviewAudio = new AudioSource("interview.mp3", null, null);
+// AudioSource ctor #1: (filename, startTime?, stopTime?, fileToSync?, streamNumber, rate)
+var interviewAudio = new AudioSource("interview.mp3", (TimeSpan?)null, (TimeSpan?)null);
 VideoEdit1.Input_AddAudioFile(interviewAudio, TimeSpan.Zero, 0, null);
 
 // Background music at 30% volume to avoid overpowering speech
-var backgroundMusic = new AudioSource("background.mp3", null, null);
+var backgroundMusic = new AudioSource("background.mp3", (TimeSpan?)null, (TimeSpan?)null);
 var musicEnvelope = new AudioVolumeEnvelopeEffect(30);
 VideoEdit1.Input_AddAudioFile(backgroundMusic, TimeSpan.Zero, 1, new[] { musicEnvelope });
 ```
@@ -128,10 +143,13 @@ VideoEdit1.Input_AddAudioFile(backgroundMusic, TimeSpan.Zero, 1, new[] { musicEn
 If you need to mute sections of audio in your timeline, you can create and apply different envelope effects:
 
 ```cs
-// Create audio sources for different segments
-var segment1 = new AudioSource("audio.mp3", GetSegment(0, 10000), null); // 0-10s
-var segment2 = new AudioSource("audio.mp3", GetSegment(10000, 15000), null); // 10-15s
-var segment3 = new AudioSource("audio.mp3", GetSegment(15000, 30000), null); // 15-30s
+// Create audio sources for different segments using AudioSource(filename, FileSegment[], fileToSync, streamNumber, rate)
+var segment1 = new AudioSource("audio.mp3",
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(0),     TimeSpan.FromMilliseconds(10000)) }, null); // 0-10s
+var segment2 = new AudioSource("audio.mp3",
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(10000), TimeSpan.FromMilliseconds(15000)) }, null); // 10-15s
+var segment3 = new AudioSource("audio.mp3",
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(15000), TimeSpan.FromMilliseconds(30000)) }, null); // 15-30s
 
 // Apply different volume levels
 VideoEdit1.Input_AddAudioFile(segment1, TimeSpan.Zero, 0, new[] { new AudioVolumeEnvelopeEffect(100) });

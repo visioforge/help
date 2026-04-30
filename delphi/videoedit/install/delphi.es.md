@@ -1,6 +1,16 @@
 ---
 title: Instalar TVFVideoEdit en Delphi - Configuración y Setup
 description: Instale paquetes TVFVideoEdit en Delphi 6/7, 2005+ y 11+ con rutas de biblioteca, compilación de paquetes y solución de problemas de configuración.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Editing
+primary_api_classes:
+  - TVFVideoEdit
+
 ---
 
 # Instalar TVFVideoEdit en Delphi

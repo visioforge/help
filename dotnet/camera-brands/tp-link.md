@@ -1,6 +1,26 @@
 ---
 title: TP-Link and Tapo IP Camera RTSP URL Guide for C# .NET
 description: TP-Link and Tapo C series camera RTSP URL patterns for C# .NET. Integrate TL-SC, NC, and Tapo models with VisioForge Video Capture SDK.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MP4
+  - H.264
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to TP-Link IP Camera in C# .NET

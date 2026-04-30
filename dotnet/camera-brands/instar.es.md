@@ -1,6 +1,23 @@
 ---
 title: Cámaras IP INSTAR - URLs RTSP y conexión con C# .NET
 description: Conecte cámaras IP INSTAR en C# .NET con patrones de URL RTSP y ejemplos de código para modelos HD y legacy IN-6xxx, IN-7xxx, IN-8xxx, IN-9xxx.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo conectar una cámara IP INSTAR en C# .NET

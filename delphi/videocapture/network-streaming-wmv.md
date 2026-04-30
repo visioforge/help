@@ -1,6 +1,17 @@
 ---
 title: Implement WMV Network Streaming in Delphi and ActiveX
 description: Implement WMV network streaming in Delphi - configure profiles, manage client connections, set ports, and broadcast video with code examples.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - Streaming
+  - Encoding
+  - WMV
+
 ---
 
 # WMV Network Streaming Implementation Guide
@@ -49,18 +60,25 @@ VideoCapture1.Network_Streaming_Network_Port := StrToInt(edNetworkPort.Text);
 ### C++ MFC Implementation
 
 ```cpp
-// C++ MFC implementation for WMV network streaming
+// C++ MFC implementation for WMV network streaming.
+// CEdit::GetWindowText takes a CString reference and writes into it (returns void),
+// so capture the value via a local CString and pass that to the COM setter.
+CString profile, maxClients, port;
+edNetworkStreamingWMVProfile.GetWindowText(profile);
+edMaximumClients.GetWindowText(maxClients);
+edNetworkPort.GetWindowText(port);
+
 // Enable streaming functionality
 m_VideoCapture.SetNetwork_Streaming_Enabled(true);
 
 // Set WMV profile path - contains encoding parameters
-m_VideoCapture.SetNetwork_Streaming_WMV_Profile_FileName(edNetworkStreamingWMVProfile.GetWindowText());
+m_VideoCapture.SetNetwork_Streaming_WMV_Profile_FileName(profile);
 
 // Define maximum concurrent client connections
-m_VideoCapture.SetNetwork_Streaming_Maximum_Clients(_ttoi(edMaximumClients.GetWindowText()));
+m_VideoCapture.SetNetwork_Streaming_Maximum_Clients(_ttoi(maxClients));
 
 // Set the network port for client connections
-m_VideoCapture.SetNetwork_Streaming_Network_Port(_ttoi(edNetworkPort.GetWindowText()));
+m_VideoCapture.SetNetwork_Streaming_Network_Port(_ttoi(port));
 ```
 
 ### VB6 Implementation

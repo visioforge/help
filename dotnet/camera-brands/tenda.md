@@ -1,6 +1,22 @@
 ---
 title: Tenda IP Camera RTSP URL and C# .NET Connection Guide
 description: Tenda CP, CT, IT series and pan/tilt camera RTSP URL patterns for C# .NET. Stream and record using VisioForge Video Capture SDK integration code.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - C#
+
 ---
 
 # How to Connect to Tenda IP Camera in C# .NET

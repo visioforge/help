@@ -1,6 +1,35 @@
 ---
 title: Buffer y Grabación Pre-Evento para Cámaras IP en C#
 description: Implemente buffer pre-evento para cámaras IP en C# .NET. Capture RTSP y webcam con grabación por detección de movimiento usando VisioForge Media Blocks SDK.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+  - Recording
+  - Encoding
+  - Webcam
+  - IP Camera
+  - RTSP
+  - MP4
+  - MKV
+  - TS
+  - H.264
+  - AAC
+  - C#
+  - NuGet
+primary_api_classes:
+  - PreEventRecordingBlock
+  - TeeBlock
+  - SystemVideoSourceBlock
+  - VideoRendererBlock
+  - H264EncoderBlock
+
 ---
 
 # Cómo Implementar Grabación Pre-Evento para Cámaras IP en C#
@@ -92,7 +121,7 @@ Para dependencias específicas de plataforma detalladas, vea la [Guía de Despli
 El siguiente código C# está basado en la [demo WPF de Grabación Pre-Evento](https://github.com/visioforge/.Net-SDK-s-samples). Demuestra un pipeline completo con una fuente de cámara, detección de movimiento para activación automática, vista previa de video y grabación pre-evento a archivos MP4.
 
 !!!info Muestra de Demo
-    Para un proyecto funcional completo con XAML y todas las dependencias, vea la [Demo de Grabación Pre-Evento Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/PreEventRecording).
+    Para un proyecto funcional completo con XAML y todas las dependencias, vea la [Demo de Grabación Pre-Evento Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/PreEventRecording%20Demo).
 
 ```csharp
 using System;

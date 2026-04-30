@@ -2,6 +2,17 @@
 title: Pipeline Multimedia Modular - Transcodificación y Captura C#
 description: Pipelines multimedia en C# con VisioForge Media Blocks SDK. Conecte bloques de fuente, procesamiento y salida para transcodificación, captura y streaming.
 sidebar_label: Media Blocks SDK .NET
+tags:
+  - Media Blocks SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - Streaming
 
 ---
 

@@ -1,6 +1,25 @@
 ---
 title: AAC Encoder DirectShow Filter - COM Interface Reference
 description: Configure AAC encoding in DirectShow with IMonogramAACEncoder and IVFAACEncoder interfaces. Bitrate, profile, sample rate, and channel settings for C++/C#.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - Decoding
+  - MP4
+  - TS
+  - AAC
+  - MP3
+  - C#
+primary_api_classes:
+  - IMonogramAACEncoder
+  - IVFAACEncoder
+  - AACConfig
+  - VFAACEncoder
+  - IBaseFilter
+
 ---
 
 # AAC Encoder Interface Reference

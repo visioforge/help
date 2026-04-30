@@ -1,6 +1,15 @@
 ---
 title: Resize, Crop, and Scale Live Video During Capture in C#
 description: Resize and crop live video from webcams, screens, and IP cameras with VisioForge Video Capture SDK. Aspect ratio control and region-of-interest in C#.
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - NuGet
+primary_api_classes:
+  - VideoResizeSettings
+  - VideoCropSettings
+
 ---
 
 # Video Resize and Crop Operations for .NET Developers
@@ -41,16 +50,15 @@ VideoCapture1.Video_Resize = new VideoResizeSettings
 Choose the algorithm that best fits your performance and quality requirements:
 
 ```cs
+// Video_Resize is typed as the IVideoResizeSettings marker interface;
+// Mode lives on the concrete VideoResizeSettings, so cast before assigning.
+var resize = (VideoResizeSettings)VideoCapture1.Video_Resize;
 switch (cbResizeMode.SelectedIndex)
 {
-  case 0: VideoCapture1.Video_Resize.Mode = VideoResizeMode.NearestNeighbor; 
-          break;
-  case 1: VideoCapture1.Video_Resize.Mode = VideoResizeMode.Bilinear; 
-          break;
-  case 2: VideoCapture1.Video_Resize.Mode = VideoResizeMode.Bicubic; 
-          break;
-  case 3: VideoCapture1.Video_Resize.Mode = VideoResizeMode.Lancroz; 
-          break;
+  case 0: resize.Mode = VideoResizeMode.NearestNeighbor; break;
+  case 1: resize.Mode = VideoResizeMode.Bilinear; break;
+  case 2: resize.Mode = VideoResizeMode.Bicubic; break;
+  case 3: resize.Mode = VideoResizeMode.Lancroz; break;
 }
 ```
 

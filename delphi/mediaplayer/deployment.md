@@ -1,6 +1,18 @@
 ---
 title: TVFMediaPlayer Deployment Guide — Delphi and ActiveX
 description: Deploy TVFMediaPlayer apps with silent installers or manual setup. Covers codec packages, DirectShow filters, VC++ redistributables, and dependencies.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Playback
+  - IP Camera
+primary_api_classes:
+  - TVFMediaPlayer
+
 ---
 
 # Deployment Guide for TVFMediaPlayer

@@ -4,6 +4,18 @@ description: Implemente codificadores de audio AAC, FLAC, MP3, Opus y otros en .
 sidebar_label: Codificadores de Audio
 
 order: 20
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+
 ---
 
 # Codificadores de Audio para Desarrollo en .NET
@@ -15,6 +27,38 @@ order: 20
 Al desarrollar aplicaciones multimedia en .NET, elegir el codificador de audio adecuado es crucial para garantizar un rendimiento óptimo, compatibilidad y calidad. El conjunto de SDKs .NET de VisioForge proporciona a los desarrolladores herramientas potentes para la codificación de audio en varios formatos, permitiendo la creación de aplicaciones multimedia de nivel profesional.
 
 Los codificadores de audio son componentes esenciales que convierten datos de audio sin procesar en formatos comprimidos adecuados para almacenamiento, transmisión o reproducción. Cada codificador ofrece diferentes ventajas en términos de relación de compresión, calidad de audio, requisitos de procesamiento y compatibilidad de plataforma. Esta guía le ayudará a navegar por las diversas opciones de codificación de audio disponibles en los SDKs .NET de VisioForge.
+
+## Inicio rápido — Elegir un codificador de audio
+
+Cada encoder en los motores multiplataforma es una clase de settings que asignas a la propiedad `Audio` del output (o pasas a un `*OutputBlock` en Media Blocks). El pipeline circundante es el mismo — solo cambia el tipo de settings.
+
+```csharp
+using VisioForge.Core.Types.X.AudioEncoders;
+using VisioForge.Core.Types.X.Output;
+
+// Contenedor MP4: codifica el audio con AAC.
+var mp4 = new MP4Output("output.mp4");
+mp4.Audio = new VOAACEncoderSettings { Bitrate = 192 };   // 128/192/256 kbps típicos
+
+// Contenedor MKV: intercambia a otro codec en el mismo slot Audio.
+var mkv = new MKVOutput("output.mkv");
+mkv.Audio = new OPUSEncoderSettings { Bitrate = 128 };
+
+// FLAC: salida lossless solo-audio.
+var flac = new FLACOutput("music.flac");
+flac.Audio.Quality = 5;                                  // 0 más rápido .. 8 máxima, 9 extrema
+
+// Formatos standalone (un codec = un contenedor):
+var mp3 = new MP3Output("song.mp3");       // MP3
+var wav = new WAVOutput("raw.wav");        // PCM sin comprimir
+var ogg = new OGGVorbisOutput("music.ogg"); // OGG + Vorbis
+
+// Adjunta a una instancia VideoCaptureCoreX o VideoEditCoreX:
+// core.Outputs_Add(mp4, true);   // VideoCaptureCoreX
+// core.Output_Format = mp4;      // VideoEditCoreX
+```
+
+Elige el codec según tu objetivo: **AAC** para amplia compatibilidad (MP4, M4A, streaming), **Opus** para voz/música de baja latencia o bajo bitrate, **MP3** para distribución legacy, **FLAC** para archivos lossless, **Vorbis** para pipelines WebM/OGG de formato abierto. Las páginas por codec cubren tablas de bitrate, límites de sample-rate y parámetros de tuning.
 
 ## Codificadores de Audio Disponibles
 

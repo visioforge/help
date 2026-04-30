@@ -1,6 +1,16 @@
 ---
 title: FM Radio and TV Tuning in Delphi: Channel Scanning Guide
 description: Implement FM radio and TV tuning in Delphi - channel scanning, frequency management, signal detection with code examples for Delphi, C++, VB6.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - C++
+  - Windows
+  - VCL
+  - Capture
+  - TV Tuner
+
 ---
 
 # Implementing FM Radio and TV Tuning in Delphi Applications
@@ -348,7 +358,7 @@ cbTVChannel.Items.Clear;
 if ( (cbTVMode.ItemIndex <> -1) and (cbTVMode.Items[cbTVMode.ItemIndex] = 'FM Radio') ) then
   begin
     // Set frequency range for FM scanning (100-110MHz)
-    VideoCapture1.TVTuner_FM_Tuning_StartFrequency := 100 * Mhz;
+    VideoCapture1.TVTuner_FM_Tuning_StartFrequency := 100 * MHz;
     VideoCapture1.TVTuner_FM_Tuning_StopFrequency := 110 * MHz;
     // Set 100KHz increments for FM scanning
     VideoCapture1.TVTuner_FM_Tuning_Step := 100 * KHz;

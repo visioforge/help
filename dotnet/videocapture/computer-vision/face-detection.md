@@ -1,6 +1,19 @@
 ---
 title: Real-Time Face Detection in Live Video Stream in C# .NET
 description: Detect faces in real-time webcam and IP camera streams with VisioForge Video Capture SDK. Configuration options, optimization tips, and C# code examples.
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - Computer Vision
+  - Webcam
+  - IP Camera
+  - C#
+  - NuGet
+primary_api_classes:
+  - AFFaceDetectionEventArgs
+  - FaceTrackingSettings
+
 ---
 
 # Implementing Face Detection in .NET Video Applications
@@ -48,12 +61,34 @@ Let's break down each of these steps with detailed code examples.
 
 ## Step 1: Configure Your Video Source
 
-The first step is to choose and configure your video input source. This could be:
+Face tracking runs on whatever source the `VideoCaptureCore` instance is bound to. Pick one of the following configurations:
 
-- A webcam connected to the computer
-- An IP camera on the network
-- A video file for processing
-- A video stream from another source
+=== "Webcam"
+
+    ```cs
+    VideoCapture1.Mode = VideoCaptureMode.VideoPreview;
+    VideoCapture1.Video_CaptureDevice = new VideoCaptureSource("USB Camera");
+    VideoCapture1.Video_CaptureDevice.Format_UseBest = true;
+    ```
+
+=== "IP camera (RTSP/HTTP)"
+
+    ```cs
+    VideoCapture1.Mode = VideoCaptureMode.IPPreview;
+    VideoCapture1.IP_Camera_Source = new IPCameraSourceSettings
+    {
+        URL = new Uri("rtsp://camera.local:554/stream"),
+        Type = IPSourceEngine.Auto_VLC,
+        Login = "admin",
+        Password = "password"
+    };
+    ```
+
+=== "Video file (Media Player SDK)"
+
+    For offline file-based face detection, use `MediaPlayerCore` from the Media Player SDK — the `Face_Tracking` property behaves the same across engines. The rest of this guide (Steps 2–5) still applies; replace `VideoCapture1` with your `MediaPlayer1` instance.
+
+Pick one pattern and continue with Step 2 to enable face tracking on that source.
 
 ## Step 2: Configure Face Tracking Settings
 
@@ -76,20 +111,18 @@ VideoCapture1.Face_Tracking = new FaceTrackingSettings
     
     // Single or multiple face detection
     SearchMode = ObjectDetectorSearchMode.Single,
-    
-    // Optional: set custom highlight color
-    HighlightColor = Color.YellowGreen,
-    
-    // Optional: detection confidence threshold (0-100)
-    DetectionThreshold = 85
+
+    // Scale factor used to walk the pyramid (1.0 < factor <= 2.0)
+    ScaleFactor = 1.2f
 };
 ```
 
 ### Understanding the Face Tracking Parameters
 
-- **ColorMode**: Determines how the algorithm processes colors for detection
+- **ColorMode** (`CamshiftMode`): Determines how the algorithm processes colors for detection
   - RGB: Standard RGB color processing
-  - HSV: Hue-Saturation-Value color space, can be more robust in varying lighting
+  - HSL: Hue-Saturation-Lightness color space, can be more robust in varying lighting
+  - Mixed: Combines RGB and HSL channels
   
 - **ScalingMode**: Controls how the algorithm searches through different scales
   - GreaterToSmaller: Starts with larger potential faces and works down
@@ -108,11 +141,9 @@ VideoCapture1.Face_Tracking = new FaceTrackingSettings
 To respond to detected faces, you need to create an event handler and register it with the SDK:
 
 ```cs
-// Define delegate for the face detection event
-public delegate void FaceDelegate(AFFaceDetectionEventArgs e);
-
-// Create method to handle face detection events
-public void FaceDelegateMethod(AFFaceDetectionEventArgs e)
+// OnFaceDetected is a standard EventHandler<AFFaceDetectionEventArgs>.
+// e.FaceRectangles is a Rectangle[] — use .Length, not .Count.
+private void OnFaceDetectedHandler(object sender, AFFaceDetectionEventArgs e)
 {
     // Clear previous text
     edFaceTrackingFaces.Text = string.Empty;
@@ -121,25 +152,25 @@ public void FaceDelegateMethod(AFFaceDetectionEventArgs e)
     foreach (var faceRectangle in e.FaceRectangles)
     {
         // Display face coordinates and dimensions
-        edFaceTrackingFaces.Text += 
+        edFaceTrackingFaces.Text +=
             $"Position: ({faceRectangle.Left}, {faceRectangle.Top}), " +
             $"Size: ({faceRectangle.Width}, {faceRectangle.Height}){Environment.NewLine}";
-        
+
         // You can also calculate center point
         int centerX = faceRectangle.Left + (faceRectangle.Width / 2);
         int centerY = faceRectangle.Top + (faceRectangle.Height / 2);
         edFaceTrackingFaces.Text += $"Center: ({centerX}, {centerY}){Environment.NewLine}";
-        
-        // Optional: Add timestamp for tracking
-        edFaceTrackingFaces.Text += $"Time: {DateTime.Now.ToString("HH:mm:ss.fff")}{Environment.NewLine}{Environment.NewLine}";
+
+        // Optional: add timestamp for tracking
+        edFaceTrackingFaces.Text += $"Time: {DateTime.Now:HH:mm:ss.fff}{Environment.NewLine}{Environment.NewLine}";
     }
-    
-    // Update face count
-    lblFaceCount.Text = $"Faces detected: {e.FaceRectangles.Count}";
+
+    // Update face count (Rectangle[] — Length, not Count)
+    lblFaceCount.Text = $"Faces detected: {e.FaceRectangles.Length}";
 }
 
 // Register the event handler
-VideoCapture1.OnFaceDetected += new AFFaceDetectionEventHandler(FaceDelegateMethod);
+VideoCapture1.OnFaceDetected += OnFaceDetectedHandler;
 ```
 
 This event handler provides real-time updates whenever faces are detected. The handler receives face coordinates that you can use for:
@@ -159,7 +190,7 @@ Beyond the built-in highlighting, you might want to implement custom visualizati
 
 ```cs
 // Custom visualization - draw face rectangles on an overlay
-private void DrawFacesOnOverlay(List<Rectangle> faceRectangles, PictureBox overlay)
+private void DrawFacesOnOverlay(Rectangle[] faceRectangles, PictureBox overlay)
 {
     // Create bitmap for overlay
     Bitmap overlayBitmap = new Bitmap(overlay.Width, overlay.Height);

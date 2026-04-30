@@ -2,6 +2,27 @@
 title: Screen Capture to WMV with Windows Media Codec in C# .NET
 description: Record screen to WMV format with Windows Media codecs using VisioForge Video Capture SDK. Codec configuration and complete C# code examples included.
 sidebar_label: Screen Capture to WMV
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - WinForms
+  - Capture
+  - Streaming
+  - Screen Capture
+  - MP4
+  - AVI
+  - WMV
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+  - WMVOutput
+  - VideoCaptureCoreX
+  - VideoView
+  - IVideoView
+
 ---
 
 # Implementing Screen Recording to WMV in C# .NET Applications

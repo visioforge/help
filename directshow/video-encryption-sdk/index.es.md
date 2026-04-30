@@ -1,6 +1,15 @@
 ---
 title: SDK de Encriptación de Video DirectShow con AES-256
 description: SDK DirectShow de encriptación de video con AES-256 para archivos MP4 H.264/AAC, aceleración GPU y API completa para C++, C# y Delphi.
+tags:
+  - Video Encryption SDK
+  - DirectShow
+  - C++
+  - Windows
+primary_api_classes:
+  - IVFCryptoConfig
+  - IVFPasswordProvider
+
 ---
 
 # SDK de Encriptación de Video

@@ -1,6 +1,25 @@
 ---
 title: iOS Deployment Guide for VisioForge .NET Video SDKs
 description: Deploy .NET apps to iOS with VisioForge SDK integration, permissions, architecture support, and cross-platform deployment best practices.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - VideoCaptureCoreX
+  - iOS
+  - MAUI
+  - Capture
+  - Encoding
+  - C#
+  - NuGet
+  - Entitlements
+primary_api_classes:
+  - VideoView
+  - IVideoView
+  - VideoCaptureCoreX
+
 ---
 
 # Apple iOS Deployment Guide
@@ -58,7 +77,7 @@ The VisioForge SDK for iOS is distributed through NuGet packages:
 
 ### Core Packages
 
-- [VisioForge.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core) - Core package containing core classes and UI controls, including video playback and display components. This is platform-independent and can be used in any .Net project.
+- [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core) - Core package containing core classes and UI controls, including video playback and display components. This is platform-independent and can be used in any .Net project.
 
 ### UI Packages
 
@@ -70,7 +89,7 @@ Each UI package has the same VideoView controls but different implementations fo
 
 #### .Net MAUI target platform
 
-- [VisioForge.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI) - Contains UI controls for the MAUI platform.
+- [VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI) - Contains UI controls for the MAUI platform.
 
 ### Redist Packages
 
@@ -80,8 +99,8 @@ You can add these packages using the NuGet Package Manager in your IDE or by add
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.Core" Version="2025.4.1" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="15.10.11" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.*" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.*" />
 </ItemGroup>
 ```
 
@@ -240,18 +259,15 @@ public override void WillTerminate(UIApplication application)
 
 ### Using VideoView Controls
 
-The VisioForge SDK provides a `VideoView` control for displaying video content. The VideoView is a UIView subclass, and OpenGL is used for video rendering:
+The VisioForge SDK provides a `VideoView` control for displaying video content. On iOS `VideoView` is a Metal-accelerated `MTKView` subclass that implements `IVideoView` directly (use `VideoViewGL` if you need the legacy OpenGL-backed `UIView` variant):
 
 ```csharp
-// Create a VideoView instance
+// Create a VideoView instance — VideoView implements IVideoView, so no casting/helper call is needed
 var videoView = new VisioForge.Core.UI.Apple.VideoView(new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, UIScreen.MainScreen.Bounds.Height));
 View.AddSubview(videoView);
 
-// Get the IVideoView interface for use with VisioForge components
-IVideoView vv = videoView.GetVideoView();
-
-// Use the IVideoView with a VisioForge component
-var captureCore = new VideoCaptureCoreX(vv);
+// Pass the videoView itself where an IVideoView is expected
+var captureCore = new VideoCaptureCoreX(videoView);
 ```
 
 You can add the VideoView using a storyboard or code.

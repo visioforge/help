@@ -1,6 +1,16 @@
 ---
 title: Detectar Fragmentos de Video en Streams en Vivo con .NET
 description: Detecte anuncios, intros y clips en grabaciones de transmisiones usando la herramienta de monitoreo de medios de VisioForge con búsqueda por huellas.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Editing
+  - Fingerprinting
+  - C#
+
 ---
 
 # Herramienta de Monitoreo de Medios

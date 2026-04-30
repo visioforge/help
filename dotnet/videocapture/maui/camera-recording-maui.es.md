@@ -1,6 +1,33 @@
 ---
 title: Captura y Procesamiento de Video en Apps .NET MAUI
 description: Implemente captura de video en apps .NET MAUI con soporte multiplataforma para grabación de cámara en iOS, Android, macCatalyst y Windows.
+tags:
+  - Video Capture SDK
+  - .NET
+  - C++
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Android
+  - iOS
+  - MAUI
+  - Capture
+  - Streaming
+  - Encoding
+  - Effects
+  - MP4
+  - H.264
+  - MP3
+  - C#
+  - NuGet
+  - Entitlements
+primary_api_classes:
+  - DeviceEnumerator
+  - VideoView
+  - IVideoView
+  - VideoCaptureDeviceSourceSettings
+  - VideoCaptureCoreX
+
 ---
 
 # Cómo Capturar y Procesar Video en Apps .NET MAUI Usando VisioForge SDK

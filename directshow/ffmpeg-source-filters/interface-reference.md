@@ -1,18 +1,33 @@
 ---
 title: FFmpeg Source DirectShow Filter Interface API Reference
 description: IFFmpegSourceSettings interface with hardware acceleration, buffering modes, custom FFmpeg options, and callbacks for DirectShow.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Decoding
+  - RTSP
+  - C#
+primary_api_classes:
+  - IFFmpegSourceSettings
+  - IFileSourceFilter
+  - IFFMPEGSourceSettings
+
 ---
 
-# IFFmpegSourceSettings Interface Reference
+# IFFMPEGSourceSettings Interface Reference
 
 ## Overview
 
-The `IFFmpegSourceSettings` interface provides advanced configuration options for the FFMPEG Source DirectShow filter. This interface enables developers to control hardware acceleration, buffering behavior, custom FFmpeg options, and various callbacks for media playback.
+The `IFFMPEGSourceSettings` interface provides advanced configuration options for the FFMPEG Source DirectShow filter. This interface enables developers to control hardware acceleration, buffering behavior, custom FFmpeg options, and various callbacks for media playback.
+
+> The .NET / C++ / Delphi headers spell this interface `IFFMPEGSourceSettings` (all uppercase `FFMPEG`). The legacy header file paths `IFFmpegSourceSettings.h` / `.cs` keep the historical mixed-case filename — but the symbol exposed by all three languages is the all-caps form. The two are equivalent identifiers in C#; this page uses the all-caps form consistently with examples.md / index.md.
 
 ## Interface Definition
 
-- **Interface Name**: `IFFmpegSourceSettings`
-- **GUID**: `{1974D893-83E4-4F89-9908-795C524CC17E}`
+- **Interface Name**: `IFFMPEGSourceSettings`
+- **Filter CLSID it queries through**: `{1974D893-83E4-4F89-9908-795C524CC17E}` (the FFMPEG Source filter — the interface IID itself is distinct; consult the header).
 - **Inherits From**: `IUnknown`
 
 ### Interface Definition Files

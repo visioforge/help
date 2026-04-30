@@ -1,6 +1,10 @@
 ---
 title: Ejemplos de código C# para edición de video con .NET SDK
 description: Ejemplos prácticos de Video Edit SDK .Net: superposiciones de texto/imagen, efectos de video, transiciones y manipulación avanzada.
+tags:
+  - Video Edit SDK
+  - .NET
+
 ---
 
 # Ejemplos de Código - Video Edit SDK

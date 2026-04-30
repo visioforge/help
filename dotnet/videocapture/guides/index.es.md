@@ -3,6 +3,14 @@ title: Guías de captura de webcam y video con Video Capture SDK
 description: Domina sincronización, captura DirectShow y características de fotos de webcam con guías detalladas, ejemplos de código y recursos de soporte.
 sidebar_label: Guías Adicionales
 order: 1
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - Capture
+primary_api_classes:
+  - VideoCaptureCore
 
 ---
 

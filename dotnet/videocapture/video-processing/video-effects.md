@@ -1,6 +1,13 @@
 ---
 title: Apply Brightness, Chroma Key, and Overlay Effects in C# .NET
 description: Apply brightness, contrast, chroma key, deinterlace, and image overlay effects during live capture with VisioForge Video Capture SDK. C# code examples.
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - Effects
+  - NuGet
+
 ---
 
 # Video effects

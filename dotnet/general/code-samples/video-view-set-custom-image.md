@@ -1,6 +1,18 @@
 ---
 title: Setting Custom Placeholder Images for VideoView .NET
 description: Display custom placeholder images in VideoView controls when no video is playing for professional branding and enhanced user experience in .NET.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - Playback
+  - C#
+primary_api_classes:
+  - VideoView
+  - VideoPlayerForm
+
 ---
 
 # Setting Custom Images for VideoView Controls in .NET Applications
@@ -55,16 +67,19 @@ This method call creates an internal picture box component that will host your c
 
 After creating the picture box, you can set your custom image. Note that there appears to be a duplication in the original documentation - the correct code for setting the image should use the `PictureBoxSetImage` method:
 
+`PictureBoxSetImage` takes a `System.Drawing.Bitmap`, so load the file as
+`Bitmap` (or cast) rather than `Image`:
+
 ```csharp
-// Load an image from a file
-Image customImage = Image.FromFile("path/to/your/image.jpg");
+// Load an image from a file as Bitmap
+Bitmap customImage = new Bitmap("path/to/your/image.jpg");
 VideoView1.PictureBoxSetImage(customImage);
 ```
 
 Alternatively, you can use built-in resources or dynamically generated images:
 
 ```csharp
-// Using a resource image
+// Using a Bitmap resource (the resource must be declared as Bitmap, not Image)
 VideoView1.PictureBoxSetImage(Properties.Resources.MyCustomImage);
 
 // Or creating a dynamic image
@@ -76,8 +91,8 @@ using (Bitmap dynamicImage = new Bitmap(VideoView1.Width, VideoView1.Height))
         g.Clear(Color.DarkBlue);
         g.DrawString("Ready to Play", new Font("Arial", 24), Brushes.White, new PointF(50, 50));
     }
-    
-    VideoView1.PictureBoxSetImage(dynamicImage.Clone() as Image);
+
+    VideoView1.PictureBoxSetImage((Bitmap)dynamicImage.Clone());
 }
 ```
 
@@ -133,14 +148,14 @@ private void UpdateCustomImage(string imagePath)
     if (VideoView1.PictureBoxExists())
     {
         // Update image
-        Image newImage = Image.FromFile(imagePath);
+        Bitmap newImage = new Bitmap(imagePath);
         VideoView1.PictureBoxSetImage(newImage);
     }
     else
     {
         // Create picture box first
         VideoView1.PictureBoxCreate(VideoView1.Width, VideoView1.Height);
-        Image newImage = Image.FromFile(imagePath);
+        Bitmap newImage = new Bitmap(imagePath);
         VideoView1.PictureBoxSetImage(newImage);
     }
 }
@@ -231,7 +246,8 @@ public partial class VideoPlayerForm : Form
             VideoView1.PictureBoxCreate(VideoView1.Width, VideoView1.Height);
             isPictureBoxCreated = true;
             
-            using (Image customImage = Properties.Resources.VideoPlaceholder)
+            // PictureBoxSetImage expects System.Drawing.Bitmap — declare the resource as Bitmap (or cast from Image).
+            using (Bitmap customImage = (Bitmap)Properties.Resources.VideoPlaceholder)
             {
                 VideoView1.PictureBoxSetImage(customImage);
             }

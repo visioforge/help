@@ -1,6 +1,28 @@
 ---
 title: Start/Stop Recording Without Stopping Preview in .NET
 description: Control video recording independently from live preview in VisioForge Video Capture SDK. Separate capture mode for webcam, screen, and IP camera in C#.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Webcam
+  - IP Camera
+  - Screen Capture
+  - RTMP
+  - MP4
+  - C#
+primary_api_classes:
+  - VideoCaptureMode
+  - MP4Output
+  - RTMPOutput
+
 ---
 
 # Managing Video Capture and Preview Independently in .NET
@@ -145,7 +167,8 @@ There are two main approaches to implementing this functionality depending on wh
     When you want to begin recording, start the separate capture process:
     
     ```cs
-    await VideoCapture1.SeparateCapture_StartAsync();
+    // SeparateCapture_StartAsync takes the output filename for the recording file.
+    await VideoCapture1.SeparateCapture_StartAsync("recording.mp4");
     ```
     
     #### Step 6: Stop Capture While Maintaining Preview

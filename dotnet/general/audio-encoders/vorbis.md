@@ -1,6 +1,34 @@
 ---
 title: Vorbis Audio Encoding Guide for .NET SDK Development
 description: Implement Vorbis audio encoding in .NET with quality optimization, cross-platform support, and efficient compression for streaming.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - WebM
+  - OGG
+  - Vorbis
+  - C#
+primary_api_classes:
+  - OGGVorbisOutput
+  - VorbisEncoderSettings
+  - WebMOutput
+  - VideoCaptureCore
+  - VideoEditCore
+
 ---
 
 # Vorbis Audio Encoding for .NET Developers
@@ -13,33 +41,23 @@ The VisioForge SDK suite offers powerful Vorbis audio encoding capabilities that
 
 This guide will help you navigate the various Vorbis implementation options available in the VisioForge SDK ecosystem, providing practical code examples and optimization strategies for different use cases.
 
-## Cross-Platform Vorbis Encoder
+## Vorbis Encoder Options
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
-
-VisioForge's Vorbis implementations work across multiple platforms, giving you flexibility in deployment environments. The cross-platform components are specifically designed to function consistently across different operating systems.
+The SDK exposes three distinct APIs for Vorbis encoding. Two are Windows-classic (`VideoCaptureCore` / `VideoEditCore`) and one is cross-platform (`VideoCaptureCoreX` / `VideoEditCoreX` / `MediaBlocksPipeline`).
 
 ### Implementation Options
 
-The SDK provides three distinct approaches to Vorbis encoding, each tailored to specific development scenarios:
+#### 1. WebM Container with Vorbis Audio (Windows classic)
 
-#### 1. WebM Container with Vorbis Audio
+The [`WebMOutput`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.WebMOutput.html) class in namespace `VisioForge.Core.Types.Output` encapsulates Vorbis audio within the WebM container format. Runs on Windows only (DirectShow).
 
-The [WebM output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WebMOutput.html) implementation encapsulates Vorbis audio within the WebM container format. This option is particularly well-suited for web-based applications and HTML5 video projects where broad browser compatibility is required.
+#### 2. OGG Vorbis Dedicated Output (Windows classic)
 
-**Availability:** Windows platforms only
+The [`OGGVorbisOutput`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.OGGVorbisOutput.html) class in namespace `VisioForge.Core.Types.Output` provides detailed control over VBR/bitrate modes for OGG-containerised Vorbis. Windows only.
 
-#### 2. OGG Vorbis Dedicated Output
+#### 3. Flexible VorbisEncoderSettings (cross-platform)
 
-For audio-focused applications, the [OGG Vorbis output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.OGGVorbisOutput.html) provides a specialized encoder designed specifically for the OGG container format. This implementation offers more detailed control over audio encoding parameters.
-
-**Availability:** Windows platforms only
-
-#### 3. Flexible VorbisEncoderSettings
-
-The [VorbisEncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VorbisEncoderSettings.html) implementation provides the most versatile approach, supporting multiple container formats and offering extensive configuration options. This is the recommended choice for cross-platform development projects.
-
-**Availability:** All supported platforms
+The [`VorbisEncoderSettings`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VorbisEncoderSettings.html) class in namespace `VisioForge.Core.Types.X.AudioEncoders` drives Vorbis encoding on the X engines (`VideoCaptureCoreX`, `VideoEditCoreX`) and Media Blocks (`VorbisEncoderBlock`). This is the recommended path for cross-platform projects.
 
 ### Rate Control Strategies
 
@@ -155,10 +173,10 @@ For scenarios with specific bandwidth limitations or target file sizes, bitrate-
     // Set rate control mode to bitrate-based
     vorbisEncoder.RateControl = VorbisEncoderRateControl.Bitrate;
     
-    // Configure bitrate parameters (all values in Kbps)
+    // Configure bitrate parameters (all values in Kbps; valid range 16-240)
     vorbisEncoder.Bitrate = 192;      // Target average bitrate
     vorbisEncoder.MinBitrate = 128;   // Minimum allowed bitrate
-    vorbisEncoder.MaxBitrate = 256;   // Maximum allowed bitrate
+    vorbisEncoder.MaxBitrate = 240;   // Maximum allowed bitrate
     
     // These settings are ideal for applications requiring
     // predictable file sizes or streaming bandwidth

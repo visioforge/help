@@ -1,13 +1,47 @@
 ---
-title: Integración de Cámaras IP y Fuentes de Red en .NET
-description: Implemente cámaras IP, flujos RTSP/RTMP, dispositivos ONVIF y fuentes de video de red en .NET con ejemplos de código y mejores prácticas.
+title: Integración de Cámaras IP en C# .NET — Guías RTSP/ONVIF
+description: Conecte cámaras IP vía RTSP y ONVIF en C# / .NET. Autenticación, multi-stream, descubrimiento, reconexión. Ejemplos completos para todas las marcas.
 sidebar_label: Cámaras IP y Fuentes de Red
 order: 19
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+primary_api_classes:
+  - VideoCaptureCoreX
+  - VideoCaptureCore
+  - IPCameraSourceSettings
+  - RTSPSourceSettings
+  - IPSourceEngine
+
 ---
 
 # Guía Completa para la Integración de Cámaras IP y Fuentes de Red
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+
+!!! info "Soporte multiplataforma"
+    El motor `VideoCaptureCoreX` funciona en **Windows, macOS, Linux, Android e iOS** vía GStreamer. El motor clásico `VideoCaptureCore` es solo Windows. Consulta la [matriz de soporte de plataformas](../../../platform-matrix.md) para códecs y detalles de aceleración por hardware, y la [guía de despliegue en Linux](../../../deployment-x/Ubuntu.md) para configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.
+
+## Soporte de Plataformas
+
+| Tipo de fuente | `VideoCaptureCore` (Windows) | `VideoCaptureCoreX` (multiplataforma) |
+|-------------|:---:|:---:|
+| RTSP         | ✅ | ✅ Windows · macOS · Linux · Android · iOS |
+| HTTP MJPEG   | ✅ | ✅ Windows · macOS · Linux · Android · iOS |
+| ONVIF        | ✅ | ✅ vía `RTSPSourceSettings.CreateAsync` |
+| NDI          | ✅ | ✅ requiere runtime NDI por plataforma |
+| SRT          | ✅ | ✅ Windows · macOS · Linux · Android · iOS |
+| VNC          | ⛔ | ✅ |
+| UDP          | ✅ | ✅ |
+
+Para apps MAUI multiplataforma (código único → Windows · macOS · iOS · Android) consulta la [guía de grid RTSP multi-cámara 4×4](../../../mediablocks/Guides/multi-camera-rtsp-grid.md). Para manejar caídas de cámara, lógica de reconexión y `FallbackSwitch` automático (texto / imagen / stream alternativo) en todos los SDK, consulta la [guía de reconexión RTSP y fallback](../../../general/network-sources/reconnection-and-fallback.md).
 
 ## Introducción a las Fuentes de Video de Red
 
@@ -49,11 +83,11 @@ Nuestro SDK proporciona un enfoque universal para manejar la mayoría de las fue
     // Crear y configurar la fuente de red
     VideoCapture1.IP_Camera_Source = new IPCameraSourceSettings
     {
-        URL = "rtsp://192.168.1.100:554/stream1", // La URL del flujo
+        URL = new Uri("rtsp://192.168.1.100:554/stream1"), // La URL del flujo (Uri, no string)
         Login = "admin", // Credenciales de autenticación opcionales
         Password = "password123",
         AudioCapture = true, // Establecer en true para incluir audio de la fuente
-        Type = VFIPSource.Auto_VLC // El motor de procesamiento a utilizar
+        Type = IPSourceEngine.Auto_VLC // El motor de procesamiento a utilizar
     };
     ```
     
@@ -98,8 +132,7 @@ Nuestro SDK proporciona un enfoque universal para manejar la mayoría de las fue
     // Crear la fuente universal con la configuración deseada
     var source = await UniversalSourceSettings.CreateAsync(
         uri,
-        renderAudio: true, // Incluir flujo de audio
-    );
+        renderAudio: true); // Incluir flujo de audio
     
     // Aplicar la fuente al objeto de captura
     VideoCapture1.Video_Source = source;
@@ -122,7 +155,7 @@ Para aplicaciones que requieren latencia mínima, como monitoreo de seguridad o 
     // Crear objeto de configuración
     var settings = new IPCameraSourceSettings
     {
-        URL = "http://192.168.1.100/video.mjpg",
+        URL = new Uri("http://192.168.1.100/video.mjpg"),
         Login = "admin",
         Password = "pass123",
         // Usar el motor dedicado de MJPEG de baja latencia
@@ -167,8 +200,8 @@ SRT es un protocolo moderno diseñado para la transmisión de video fiable sobre
     ### Implementación de Fuente SRT en VideoCaptureCoreX
     
     ```cs
-    // Crear configuración de fuente SRT con la URL del servidor
-    var srt = await SRTSourceSettings.CreateAsync("srt://streaming-server.example.com:7001");
+    // Crear configuración de fuente SRT con la URL del servidor — CreateAsync recibe System.Uri, no string.
+    var srt = await SRTSourceSettings.CreateAsync(new Uri("srt://streaming-server.example.com:7001"));
     
     // Aplicar la fuente SRT al objeto de captura
     VideoCapture1.Video_Source = srt;
@@ -188,10 +221,11 @@ Las implementaciones robustas de fuentes de red deben manejar las interrupciones
     ### Implementación de Manejo de Desconexión de Red en VideoCaptureCore
     
     ```cs
-    // Habilitar detección de desconexión de red
-    VideoCapture1.DisconnectEventInterval = TimeSpan.FromSeconds(5); // Comprobar cada 5 segundos
+    // DisconnectEventInterval vive en IPCameraSourceSettings (se accede vía VideoCapture1.IP_Camera_Source),
+    // no en VideoCaptureCore. Configúralo antes de iniciar la previsualización/captura.
+    VideoCapture1.IP_Camera_Source.DisconnectEventInterval = TimeSpan.FromSeconds(5); // Comprobar cada 5 segundos
     
-    // Registrar el manejador de eventos de desconexión
+    // El evento de desconexión SÍ está en VideoCaptureCore
     VideoCapture1.OnNetworkSourceDisconnect += VideoCapture1_OnNetworkSourceDisconnect;
     
     // Implementar el manejador de eventos de desconexión
@@ -236,10 +270,10 @@ Virtual Network Computing (VNC) permite capturar pantallas de escritorio remoto 
     vncSettings.Password = "secure-password";
     
     // Opcional: Configurar ajustes avanzados de VNC
-    vncSettings.EnableCursor = true; // Capturar cursor del ratón
-    vncSettings.CompressionLevel = 5; // 0-9, valores más altos = más compresión
-    vncSettings.QualityLevel = 8; // 0-9, valores más altos = mejor calidad
-    vncSettings.UpdateInterval = 100; // Intervalo de actualización en milisegundos
+    vncSettings.Shared = true;        // Compartir escritorio con otros clientes
+    vncSettings.ViewOnly = true;      // Solo visualización, sin enviar eventos de entrada
+    vncSettings.Incremental = true;   // Usar actualizaciones incrementales del framebuffer
+    vncSettings.RFBVersion = "3.8";   // Versión del protocolo RFB
     
     // Aplicar la configuración al objeto de captura
     VideoCapture1.Video_Source = vncSettings;

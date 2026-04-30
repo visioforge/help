@@ -2,9 +2,31 @@
 title: Video Fingerprinting SDK C++ Code Samples and Examples
 description: Native C++ code examples and command-line samples for video fingerprint generation, comparison, and search with VisioForge SDK implementation.
 sidebar_label: C++ Samples
+tags:
+  - Video Fingerprinting SDK
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+primary_api_classes:
+  - FingerprintProcessor
+  - VFPSearchFingerprint
+  - FingerprintDatabase
+  - StoreFingerprint
+
 ---
 
 # Video Fingerprinting SDK C++ Code Samples
+
+!!! danger "Sample function names below (`VFPSearchFingerprintGenerate`, `VFPCompareFingerprints`, `VFPSearchFingerprint`) are not real SDK exports"
+
+    These names appear nowhere among the SDK exports of
+    `VisioForge_VFP.dll`. Real samples (under `samples/cpp/` in the SDK
+    distribution) exercise the canonical flat C API:
+    `VFPSearch_Init` / `_Process` / `_Build` / `_Search` and
+    `VFPCompare_Init` / `_Process` / `_Build` / `_Compare`. See
+    [`../index.md`](../index.md) for the workflow. Tracked as defect #090.
 
 ## Available Samples
 

@@ -1,6 +1,25 @@
 ---
 title: Mobotix RTSP URL Patterns for IP Camera Access in C#
 description: Connect to MOBOTIX cameras in C# .NET with RTSP URL patterns for classic Mx and MOVE series. Includes MxPEG, MJPEG, and H.264 stream options.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - USB3 Vision / GigE
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Mobotix IP Camera in C# .NET

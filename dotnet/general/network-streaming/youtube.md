@@ -1,6 +1,35 @@
 ---
 title: YouTube Live Streaming in C# .NET with RTMP Output
 description: Stream to YouTube Live with RTMP in .NET applications using optimized video encoders, audio configuration, and cross-platform support.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - RTMP
+  - H.264
+  - H.265
+  - AAC
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - YouTubeOutput
+  - NVENCH264EncoderSettings
+  - MediaBlockPadMediaType
+
 ---
 
 # YouTube Live Streaming with VisioForge SDKs
@@ -68,8 +97,8 @@ Each encoder supports customization of various parameters to optimize streaming 
 ```csharp
 var videoSettings = new OpenH264EncoderSettings
 {
-    Bitrate = 4500000,  // 4.5 Mbps
-    KeyframeInterval = 60,  // Keyframe every 2 seconds at 30fps
+    Bitrate = 4500,  // Kbit/s — 4.5 Mbps
+    GOPSize = 60,    // Keyframe every 2 seconds at 30 fps (real property name; no KeyframeInterval)
     // Add other encoder-specific settings as needed
 };
 youtubeOutput.Video = videoSettings;
@@ -88,11 +117,11 @@ The SDK supports multiple AAC audio encoders to ensure optimal audio quality acr
 ### Audio Encoder Configuration Example
 
 ```csharp
-// Example: Configure audio encoder settings
+// Example: Configure audio encoder settings.
+// VOAACEncoderSettings exposes only Bitrate (Kbit/s); sample rate follows the upstream source.
 var audioSettings = new VOAACEncoderSettings
 {
-    Bitrate = 128000,  // 128 kbps
-    SampleRate = 48000  // 48 kHz (YouTube recommended)
+    Bitrate = 128,  // Kbit/s — 128 kbps
 };
 youtubeOutput.Audio = audioSettings;
 ```
@@ -146,25 +175,25 @@ try
 {
     var youtubeOutput = new YouTubeOutput("your-stream-key");
     
-    // Configure video encoding
+    // Configure video encoding (Bitrate in Kbit/s; GOPSize controls keyframe cadence)
     if (NVENCH264EncoderSettings.IsAvailable())
     {
         youtubeOutput.Video = new NVENCH264EncoderSettings
         {
-            Bitrate = 4500000,
-            KeyframeInterval = 60
+            Bitrate = 4500,
+            GOPSize = 60,
         };
     }
-    
-    // Configure audio encoding
+
+    // Configure audio encoding (Bitrate in Kbit/s)
     youtubeOutput.Audio = new MFAACEncoderSettings
     {
-        Bitrate = 128000,
-        SampleRate = 48000
+        Bitrate = 128,
     };
-    
-    // Additional sink settings if needed
-    youtubeOutput.Sink.CustomProperty = "value";
+
+    // Rotate the YouTube stream key or swap the sink destination by replacing the Sink object.
+    // YouTubeSinkSettings exposes only the stream Key (other properties are internal).
+    // youtubeOutput.Sink = new YouTubeSinkSettings("new-stream-key");
     
     // Add the output to the video capture instance
     core.Outputs_Add(youtubeOutput, true); // core is an instance of VideoCaptureCoreX
@@ -185,7 +214,7 @@ For developers using the Media Blocks SDK, this example shows how to connect enc
 
 ```csharp
 // Create the YouTube sink block (using RTMP)
-var youtubeSinkBlock = YouTubeSinkBlock(new YouTubeSinkSettings("streaming key"));
+var youtubeSinkBlock = new YouTubeSinkBlock(new YouTubeSinkSettings("streaming key"));
 
 // Connect the video encoder to the sink block
 pipeline.Connect(h264Encoder.Output, youtubeSinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));

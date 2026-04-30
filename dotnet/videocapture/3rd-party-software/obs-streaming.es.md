@@ -1,6 +1,19 @@
 ---
 title: Streaming con OBS Studio usando Video Capture SDK .Net
 description: Transmite video y audio con integración OBS en Video Capture SDK para soluciones de broadcast profesionales en WinForms, WPF y Consola.
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Streaming
+  - Webcam
+  - C#
+primary_api_classes:
+  - VideoCaptureCore
+
 ---
 
 # Integrar Streaming OBS en Video Capture SDK .Net
@@ -80,15 +93,16 @@ Esta implementación mínima enviará la alimentación de cámara al dispositivo
 
 Para incluir audio de tu aplicación en OBS:
 
-1. Habilita la salida de Tarjeta de Audio Virtual en tu código SDK
+1. Habilita la salida de cámara virtual junto con la grabación de audio — la "VisioForge Virtual Audio Card" se enruta automáticamente
 2. En OBS, añade una nueva fuente de "Captura de Entrada de Audio"
 3. Selecciona "VisioForge Virtual Audio Card" como el dispositivo
 4. Ajusta niveles de audio según sea necesario
 
 ```cs
-// Habilitar salida de cámara y audio virtual
+// Habilitar salida de cámara virtual. Cuando se combina con Audio_RecordAudio = true,
+// el audio se enruta automáticamente a la tarjeta de audio virtual — sin indicador aparte.
 videoCapture.Virtual_Camera_Output_Enabled = true;
-videoCapture.Virtual_Audio_Output_Enabled = true;
+videoCapture.Audio_RecordAudio = true;
 
 // Iniciar captura
 videoCapture.Start();

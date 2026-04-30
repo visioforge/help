@@ -1,6 +1,16 @@
 ---
 title: Video Fingerprint Generator - vfp_gen CLI Tool for .NET
 description: Generate video fingerprints from the command line using VisioForge vfp_gen CLI tool for .NET with search and compare signature modes.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+  - C#
+
 ---
 
 # vfp_gen - Video Fingerprint Generator

@@ -1,6 +1,25 @@
 ---
 title: Cómo Excluir Filtros DirectShow en Aplicaciones .NET
 description: Identifique y excluya filtros DirectShow problemáticos de pipelines multimedia en aplicaciones de captura, edición y reproducción de video .NET.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Playback
+  - Streaming
+  - Encoding
+  - Decoding
+  - Mixing
+  - Conversion
+  - C#
+primary_api_classes:
+  - VideoCaptureCore
+
 ---
 
 # Exclusión de Filtros DirectShow en Aplicaciones .NET

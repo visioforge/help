@@ -1,6 +1,29 @@
 ---
 title: Video Mixing and Picture-in-Picture Layout in C# .NET
 description: Implement Picture-in-Picture with multiple video sources in .NET using C# code examples for mixing streams with custom layouts.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Mixing
+  - IP Camera
+  - Screen Capture
+  - MP4
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCoreX
+  - ScreenCaptureSourceSettings
+  - VideoMixerSourceSettings
+  - IPCameraSourceSettings
+  - VideoCaptureDeviceSourceSettings
+
 ---
 
 # Mixing Multiple Video Streams in .NET Applications
@@ -76,16 +99,15 @@ The first configured source serves as the main input, while additional sources c
 To incorporate a camera or other video capture device:
 
 ```cs
+// Signature: (string deviceName, string format, bool useBestFormat, VideoFrameRate frameRate,
+//             string crossbarInput, int left, int top, int width, int height) → bool
 VideoCapture1.PIP_Sources_Add_VideoCaptureDevice(
-    deviceName,
-    format,
-    false,
-    frameRate,
-    input,
-    left,
-    top,
-    width,
-    height);
+    deviceName:     "USB Camera",                     // name from Video_CaptureDevices()
+    format:         "1280x720 30fps",                 // format string, or empty + useBestFormat=true
+    useBestFormat:  false,
+    frameRate:      new VideoFrameRate(30),
+    input:          null,                             // crossbar input name, or null
+    left: 100, top: 100, width: 320, height: 240);
 ```
 
 #### Adding an IP Camera Source
@@ -93,9 +115,9 @@ VideoCapture1.PIP_Sources_Add_VideoCaptureDevice(
 For network-based cameras:
 
 ```cs
-var ipCameraSource= new IPCameraSourceSettings
+var ipCameraSource = new IPCameraSourceSettings
 {
-    URL = "camera url"
+    URL = new Uri("camera url") // URL is Uri, not string
 };
 
 // Set additional IP camera parameters as needed
@@ -134,12 +156,10 @@ A major advantage of the SDK is the ability to adjust source parameters in real-
 You can modify the position and dimensions of any source:
 
 ```cs
+// SetSourcePositionAsync takes (int index, Rectangle rect).
 await VideoCapture1.PIP_Sources_SetSourcePositionAsync(
-    index,  // 0 is main source, 1+ are additional sources
-    left,
-    top,
-    width,
-    height);
+    index,                                 // 0 is main source, 1+ are additional sources
+    new System.Drawing.Rectangle(left, top, width, height));
 ```
 
 #### Adjusting Visual Properties
@@ -151,11 +171,11 @@ int transparency = 127; // Range: 0-255
 bool flipX = false;
 bool flipY = false;
 
+// SetSourceSettingsAsync takes (int index, int transparency, bool flipX, bool flipY, bool disabled = false).
 await VideoCapture1.PIP_Sources_SetSourceSettingsAsync(
     index,
-    transparency, 
-    transparency, 
-    flipX, 
+    transparency,
+    flipX,
     flipY);
 ```
 
@@ -197,41 +217,41 @@ captureX.Video_Source = videoMixer;
 You can add various video sources to the mixer, positioning each one exactly where needed:
 
 ```cs
-// Add a camera as the first source (full screen background)
-var cameraSource = new VideoCaptureDeviceSourceSettings(); 
+// Rect uses (left, top, right, bottom) — NOT (left, top, width, height). Width and
+// Height are computed as Right-Left / Bottom-Top, so passing width/height here yields
+// negative dimensions for any non-origin rectangle.
+
+// Add a camera as the first source (full-screen background, 1920×1080 canvas).
+var cameraSource = new VideoCaptureDeviceSourceSettings();
 
 // Configure camera settings
 // ...
 
-var rect = new Rect(0, 0, 1920, 1080);
-videoMixer.Add(cameraSource, rect);
+videoMixer.Add(cameraSource, new Rect(0, 0, 1920, 1080));
 
-// Add a screen capture source in the top-right corner
+// Add a screen capture source in the top-right corner, 640×480 region.
 var screenSource = new ScreenCaptureDX9SourceSettings();
 screenSource.CaptureCursor = true;
 screenSource.FrameRate = VideoFrameRate.FPS_30;
- 
-var rect = new Rect(1280, 0, 640, 480);
-videoMixer.Add(screenSource, rect);
+
+// left = 1280, top = 0, right = 1280+640 = 1920, bottom = 0+480 = 480.
+videoMixer.Add(screenSource, new Rect(1280, 0, 1920, 480));
 ```
 
-#### Dynamic Source Management
+#### Reconfiguring sources before Start
 
-The VideoCaptureCoreX engine allows for real-time modifications to the video mixer:
+`VideoMixerSourceSettings` is configuration — its sources are baked in at `StartAsync`. To change the layout you mutate the settings list (via `Get`/`RemoveAt`/`Add`) **before** starting the pipeline:
 
 ```cs
-// Change the position of a source (index 1, which is the screen capture)
-var mixer = _videoCapture.GetSourceMixerControl();
-if (mixer != null)
-{
-    var stream = mixer.Input_Get(1);
-    if (stream != null)
-    {
-        stream.Rectangle = new Rect(0, 0, 1280, 720);
-        mixer.Input_Update(1, stream);
-    }
-}
+// Inspect a source at index 1 (returns a Tuple<IVideoMixerSource, Rect, ChromaKeySettingsX>).
+var (source, currentRect, chromaKey) = videoMixer.Get(1);
+
+// Swap its rectangle by removing and re-adding in place.
+videoMixer.RemoveAt(1);
+videoMixer.Add(source, new Rect(0, 0, 1280, 720), chromaKey);
 ```
+
+For true **runtime** layout changes (update position while the pipeline is live), drop down to Media Blocks: build your pipeline around a `VideoMixerBlock` and use its `Input_Get(Guid)` / `Input_Update(VideoMixerStream)` methods to mutate stream position, size, alpha, or z-order without restarting. See [Media Blocks video-processing reference](../../mediablocks/VideoProcessing/index.md) for the `VideoMixerBlock` API.
 
 #### Output Configuration
 

@@ -1,6 +1,24 @@
 ---
 title: Image Overlay on Video in .NET: PNG, GIF, and Bitmap
 description: Overlay images, animated GIFs, and transparent PNGs on video streams in .NET for watermarks, logos, and visual enhancements with transparency.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaPlayerCore
+  - VideoCaptureCore
+  - VideoEditCore
+  - Windows
+  - Capture
+  - Playback
+  - Editing
+  - GIF
+  - C#
+primary_api_classes:
+  - VideoEffectImageLogo
+
 ---
 
 # Image overlay

@@ -1,6 +1,16 @@
 ---
 title: Guía de Despliegue Multiplataforma .NET para Ubuntu
 description: Despliega aplicaciones multimedia .NET en Ubuntu Linux con configuración de GStreamer, configuración de hardware y optimización de rendimiento multiplataforma.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Linux
+  - GStreamer
+  - NuGet
+
 ---
 
 # Guía de Despliegue para Ubuntu de Aplicaciones del SDK de VisioForge

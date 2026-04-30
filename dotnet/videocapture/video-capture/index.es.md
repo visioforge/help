@@ -2,6 +2,12 @@
 title: SDK de Captura de Video .Net para Grabación Avanzada
 description: SDK de Captura de Video .NET potente con amplio soporte de formatos, integración de hardware y implementación flexible para aplicaciones de grabación.
 sidebar_label: Captura de Video
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - Streaming
+
 ---
 
 # SDK de Captura de Video para Desarrolladores .NET
@@ -11,6 +17,37 @@ sidebar_label: Captura de Video
 ## Introducción
 
 El SDK de Captura de Video para .NET equipa a los desarrolladores con una solución poderosa, versátil para implementar capacidades profesionales de grabación de video en sus aplicaciones. Diseñado específicamente para entornos .NET, este SDK proporciona integración perfecta con su código base existente mientras entrega rendimiento excepcional y confiabilidad.
+
+## Inicio rápido — Grabar webcam a MP4
+
+Camino mínimo de extremo a extremo con `VideoCaptureCoreX` (multiplataforma). Reemplaza `MP4Output` por `MKVOutput` / `WebMOutput` / `MOVOutput` para cambiar contenedor, o por `RTSPServerOutput` / `RTMPOutput` / `HLSOutput` para streaming en lugar de grabación — el cableado circundante se mantiene igual.
+
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+// 1. Inicializa el motor multiplataforma una vez por proceso.
+VisioForgeX.InitSDK();
+
+// 2. Crea el motor, enlazado a un IVideoView para preview (o null para headless).
+var videoCapture = new VideoCaptureCoreX(videoView as IVideoView);
+
+// 3. Selecciona la primera cámara y micrófono enumerados.
+var videoDevice = (await DeviceEnumerator.Shared.VideoSourcesAsync()).First();
+var audioDevice = (await DeviceEnumerator.Shared.AudioSourcesAsync()).First();
+videoCapture.Video_Source = new VideoCaptureDeviceSourceSettings(videoDevice);
+videoCapture.Audio_Source = new AudioCaptureDeviceSourceSettings(audioDevice);
+videoCapture.Audio_Record = true;
+
+// 4. Añade un output MP4. Por defecto H.264 + AAC.
+videoCapture.Outputs_Add(new MP4Output("output.mp4"), true);
+
+// 5. Inicia. OnError se dispara en errores del pipeline.
+await videoCapture.StartAsync();
+```
 
 ## Características Principales
 

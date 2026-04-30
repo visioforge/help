@@ -1,6 +1,15 @@
 ---
 title: DV Video Capture in Delphi: Direct Stream and Recompressed
 description: Implement DV video capture in Delphi - compressed and uncompressed formats with step-by-step implementation and working code examples.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - Streaming
+
 ---
 
 # Video Capture to DV File Format: Implementation Guide
@@ -41,7 +50,7 @@ VideoCapture1.DV_Capture_Type2 := rbDVType2.Checked;
 #### C++ MFC
 
 ```cpp
-m_videoCapture.SetDVCaptureType2(m_rbDVType2.GetCheck() == BST_CHECKED);
+m_videoCapture.put_DV_Capture_Type2(m_rbDVType2.GetCheck() == BST_CHECKED);
 ```
 
 #### VB6
@@ -65,13 +74,13 @@ VideoCapture1.OutputFormat := Format_DirectStream_DV;
 #### C++ MFC
 
 ```cpp
-m_videoCapture.SetOutputFormat(FORMAT_DIRECTSTREAM_DV);
+m_videoCapture.SetOutputFormat(Format_DirectStream_DV);
 ```
 
 #### VB6
 
 ```vb
-VideoCapture1.OutputFormat = FORMAT_DIRECTSTREAM_DV
+VideoCapture1.OutputFormat = Format_DirectStream_DV
 ```
 
 This ensures the video data is stored without additional processing or compression.
@@ -89,13 +98,13 @@ VideoCapture1.Mode := Mode_Video_Capture;
 #### C++ MFC
 
 ```cpp
-m_videoCapture.SetMode(MODE_VIDEO_CAPTURE);
+m_videoCapture.SetMode(Mode_Video_Capture);
 ```
 
 #### VB6
 
 ```vb
-VideoCapture1.Mode = MODE_VIDEO_CAPTURE
+VideoCapture1.Mode = Mode_Video_Capture
 ```
 
 This prepares the component for continuous video acquisition rather than single-frame capture.
@@ -146,8 +155,8 @@ CString channelStr, sampleRateStr;
 m_cbDVChannels.GetLBText(m_cbDVChannels.GetCurSel(), channelStr);
 m_cbDVSampleRate.GetLBText(m_cbDVSampleRate.GetCurSel(), sampleRateStr);
 
-m_videoCapture.SetDVCaptureAudioChannels(_ttoi(channelStr));
-m_videoCapture.SetDVCaptureAudioSampleRate(_ttoi(sampleRateStr));
+m_videoCapture.put_DV_Capture_Audio_Channels(_ttoi(channelStr));
+m_videoCapture.put_DV_Capture_Audio_SampleRate(_ttoi(sampleRateStr));
 ```
 
 #### VB6
@@ -179,9 +188,9 @@ else
 
 ```cpp
 if (m_rbDVPAL.GetCheck() == BST_CHECKED)
-  m_videoCapture.SetDVCaptureVideoFormat(DVF_PAL);
+  m_videoCapture.put_DV_Capture_Video_Format(DVF_PAL);
 else
-  m_videoCapture.SetDVCaptureVideoFormat(DVF_NTSC);
+  m_videoCapture.put_DV_Capture_Video_Format(DVF_NTSC);
 ```
 
 #### VB6
@@ -212,7 +221,7 @@ VideoCapture1.DV_Capture_Type2 := rbDVType2.Checked;
 #### C++ MFC
 
 ```cpp
-m_videoCapture.SetDVCaptureType2(m_rbDVType2.GetCheck() == BST_CHECKED);
+m_videoCapture.put_DV_Capture_Type2(m_rbDVType2.GetCheck() == BST_CHECKED);
 ```
 
 #### VB6
@@ -235,15 +244,15 @@ VideoCapture1.Mode := Mode_Video_Capture;
 #### C++ MFC
 
 ```cpp
-m_videoCapture.SetOutputFormat(FORMAT_DV);
-m_videoCapture.SetMode(MODE_VIDEO_CAPTURE);
+m_videoCapture.SetOutputFormat(Format_DV);
+m_videoCapture.SetMode(Mode_Video_Capture);
 ```
 
 #### VB6
 
 ```vb
-VideoCapture1.OutputFormat = FORMAT_DV
-VideoCapture1.Mode = MODE_VIDEO_CAPTURE
+VideoCapture1.OutputFormat = Format_DV
+VideoCapture1.Mode = Mode_Video_Capture
 ```
 
 This tells the component to process the stream through the DV codec during capture.

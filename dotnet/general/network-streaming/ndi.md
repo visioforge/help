@@ -1,6 +1,35 @@
 ---
 title: NDI Video and Audio Streaming over IP Network in C# .NET
 description: Stream video and audio to NDI from cameras, files, and capture devices in C# .NET. Setup guide with SDK examples, audio resampling, and troubleshooting.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - Editing
+  - Webcam
+  - IP Camera
+  - NDI Source
+  - NDI
+  - MP4
+  - C#
+primary_api_classes:
+  - NDISinkBlock
+  - AudioResamplerBlock
+  - NDIOutput
+  - MediaBlockPadMediaType
+  - MediaBlocksPipeline
+
 ---
 
 # Network Device Interface (NDI) Streaming Integration

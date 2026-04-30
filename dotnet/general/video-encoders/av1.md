@@ -1,6 +1,33 @@
 ---
 title: AV1 Video Encoding in C# .NET - Configuration Guide
 description: Configure AV1 encoders for cross-platform video capture, editing, and media pipelines. Next-gen compression with VisioForge SDK C# code examples.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - Conversion
+  - AV1
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - AMFAV1EncoderSettings
+  - NVENCAV1EncoderSettings
+  - QSVAV1EncoderSettings
+
 ---
 
 # AV1 Encoders

@@ -1,6 +1,20 @@
 ---
 title: Bloques Visualizadores de Audio en .NET - Espectro y Onda
 description: Cree aplicaciones reactivas al audio con VisioForge Media Blocks SDK: bloques Spacescope, Spectroscope, Synaescope y Wavescope.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - VideoRendererBlock
+  - UniversalSourceBlock
+  - MediaBlocksPipeline
+  - UniversalSourceSettings
+  - SynaescopeBlock
 
 ---
 
@@ -50,7 +64,7 @@ var spacescope = new SpacescopeBlock(spacescopeSettings);
 pipeline.Connect(fileSource.AudioOutput, spacescope.Input);
 
 // Asumiendo que tiene un VideoRendererBlock o una forma de mostrar la salida de video
-var videoRenderer = new VideoRendererBlock(IntPtr.Zero); // Ejemplo para Windows
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(spacescope.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
@@ -93,7 +107,7 @@ var spectrascope = new SpectrascopeBlock();
 pipeline.Connect(fileSource.AudioOutput, spectrascope.Input);
 
 // Asumiendo que tiene un VideoRendererBlock o una forma de mostrar la salida de video
-var videoRenderer = new VideoRendererBlock(IntPtr.Zero); // Ejemplo para Windows
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(spectrascope.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
@@ -132,15 +146,12 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3"; // O cualquier fuente de audio
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Las configuraciones pueden personalizarse para Synaescope.
-// Por ejemplo, para establecer un efecto de shader específico (si está disponible en SynaescopeSettings):
-// var synaescopeSettings = new SynaescopeSettings() { Shader = SynaescopeShader.LibVisualCurrent };
-// var synaescope = new SynaescopeBlock(synaescopeSettings);
-var synaescope = new SynaescopeBlock(); // Configuraciones predeterminadas
+// SynaescopeBlock usa los valores por defecto de GStreamer — no hay clase de settings en la superficie gestionada.
+var synaescope = new SynaescopeBlock();
 pipeline.Connect(fileSource.AudioOutput, synaescope.Input);
 
 // Asumiendo que tiene un VideoRendererBlock o una forma de mostrar la salida de video
-var videoRenderer = new VideoRendererBlock(IntPtr.Zero); // Ejemplo para Windows
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(synaescope.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
@@ -186,7 +197,7 @@ var wavescope = new WavescopeBlock(wavescopeSettings);
 pipeline.Connect(fileSource.AudioOutput, wavescope.Input);
 
 // Asumiendo que tiene un VideoRendererBlock o una forma de mostrar la salida de video
-var videoRenderer = new VideoRendererBlock(IntPtr.Zero); // Ejemplo para Windows
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(wavescope.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();

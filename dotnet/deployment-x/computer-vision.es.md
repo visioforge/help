@@ -1,6 +1,13 @@
 ---
 title: Despliegue de VisioForge CV y CVD para .NET multiplataforma
 description: Implemente visión por computadora en aplicaciones en Windows, Linux y macOS con los paquetes NuGet VisioForge CV y CVD para desarrollo .NET.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+
 ---
 
 # Guía de Implementación de Visión por Computadora
@@ -9,12 +16,12 @@ description: Implemente visión por computadora en aplicaciones en Windows, Linu
 
 ## Resumen de Paquetes Disponibles
 
-Nuestro SDK proporciona dos potentes paquetes NuGet que ofrecen capacidades robustas de visión por computadora para sus aplicaciones:
+Nuestro SDK proporciona dos paquetes NuGet con capacidades de visión por computadora para sus aplicaciones:
 
-1. **Paquete VisioForge CV**: Diseñado específicamente para entornos Windows
-2. **Paquete VisioForge CVD**: Solución multiplataforma que funciona en múltiples sistemas operativos
+1. **[VisioForge.DotNet.Core.CV](https://www.nuget.org/packages/VisioForge.DotNet.Core.CV/)** — paquete CV solo para Windows.
+2. **[VisioForge.DotNet.Core.CVD](https://www.nuget.org/packages/VisioForge.DotNet.Core.CVD/)** — paquete CV multiplataforma para Windows, Linux y macOS.
 
-Estos paquetes proporcionan una API completa para integrar características de visión por computadora directamente en sus aplicaciones .NET.
+Ambos paquetes proporcionan una API consistente para integrar visión por computadora directamente en sus aplicaciones .NET.
 
 ## Requisitos de Despliegue
 
@@ -59,7 +66,7 @@ Estos paquetes proporcionan funcionalidades esenciales:
 Para entornos macOS, use Homebrew para instalar las dependencias requeridas:
 
 ```bash
-brew cask install xquartz
+brew install --cask xquartz
 brew install mono-libgdiplus
 ```
 

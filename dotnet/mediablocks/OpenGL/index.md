@@ -2,13 +2,27 @@
 title: GPU-Accelerated OpenGL Video Effects and Shaders in C# .NET
 description: Apply GPU-accelerated OpenGL video effects like blur, color correction, and shaders in real-time using VisioForge Media Blocks SDK pipelines.
 sidebar_label: OpenGL Effects
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - GLBaseVideoEffect
+  - GLShaderSettings
+  - GLVideoMixerSettings
+  - GLVirtualVideoSourceBlock
+
 ---
 
 # OpenGL Video Effects - VisioForge Media Blocks SDK .Net
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-OpenGL video effects in VisioForge Media Blocks SDK .Net allow for powerful, hardware-accelerated manipulation of video streams. These effects can be applied to video content processed within an OpenGL context, typically via blocks like `GLVideoEffectsBlock` or custom OpenGL rendering pipelines. This guide covers the available effects, their configuration settings, and other related OpenGL types.
+OpenGL video effects in VisioForge Media Blocks SDK .Net allow for powerful, hardware-accelerated manipulation of video streams. Each effect ships as its own stand-alone MediaBlock (e.g. `GLBlurBlock`, `GLFlipBlock`, `GLAlphaBlock`) and is chained between `GLUploadBlock` on the input side and `GLDownloadBlock` on the output side. This guide covers the available effects, their configuration settings, and other related OpenGL types.
 
 ## Base Effect: `GLBaseVideoEffect`
 
@@ -26,7 +40,7 @@ All OpenGL video effects inherit from the `GLBaseVideoEffect` class, which provi
 
 ## Available Video Effects
 
-This section details the various OpenGL video effects you can use. These effects are typically added to a `GLVideoEffectsBlock` or a similar OpenGL processing element.
+This section details the various OpenGL video effects you can use. Each effect is an independent MediaBlock — instantiate the block directly (e.g. `new GLBlurBlock(new GLBlurVideoEffect())`) and connect it between `GLUploadBlock` and `GLDownloadBlock` (or between other GL blocks) in your pipeline.
 
 ### Alpha Effect (`GLAlphaVideoEffect`)
 

@@ -1,6 +1,27 @@
 ---
 title: Grabar webcam en VB.NET con Video Capture SDK .Net
 description: Grabe video de webcam en VB.NET con Video Capture SDK .Net. Código completo para grabación MP4, vista previa en vivo y capturas de pantalla.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Webcam
+  - Screen Capture
+  - MP4
+  - WebM
+  - AVI
+  - C#
+  - VB.NET
+  - NuGet
+primary_api_classes:
+  - VideoView
+
 ---
 
 # Grabar video de webcam en VB.NET: Guía completa

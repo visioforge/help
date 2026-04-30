@@ -1,6 +1,20 @@
 ---
 title: Chroma Key DirectShow Filter - IVFChromaKey Interface
 description: IVFChromaKey interface for green screen and blue screen compositing with tolerance control and background replacement in DirectShow.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Effects
+  - Mixing
+  - C#
+primary_api_classes:
+  - IVFChromaKey
+  - CVFChromaColor
+  - IBaseFilter
+  - IVFVideoMixer
+  - IVFEffectsPro
+
 ---
 
 # IVFChromaKey Interface Reference

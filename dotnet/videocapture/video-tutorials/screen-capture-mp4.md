@@ -1,7 +1,33 @@
 ---
-title: Screen Capture to MP4 with GPU Encoding in C# .NET
+title: Screen Recording in C# .NET — MP4, GPU, Multi-Monitor
 description: Record full screen, region, or multi-monitor to MP4 using VisioForge Video Capture SDK. GPU encoding (NVENC/QSV/AMF), audio loopback, and C# examples.
 sidebar_label: Screen Capture to MP4
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - Windows
+  - WinForms
+  - GStreamer
+  - Capture
+  - Encoding
+  - Webcam
+  - Screen Capture
+  - MP4
+  - AVI
+  - H.264
+  - H.265
+  - C#
+  - NuGet
+primary_api_classes:
+  - MP4Output
+  - ScreenCaptureSourceSettings
+  - ScreenCaptureD3D11SourceSettings
+  - VideoCaptureCore
+  - AudioCaptureSource
+
 ---
 
 # Screen capture to MP4 file
@@ -260,7 +286,19 @@ var mp4Output = new MP4Output(
     new AMFH264EncoderSettings());
 ```
 
-HEVC (H.265) encoders are also available for better compression at the same quality: `NVENCHEVCEncoderSettings`, `QSVHEVCEncoderSettings`, `AMFHEVCEncoderSettings`. If hardware encoding is unavailable, the SDK falls back to the software `OpenH264EncoderSettings` encoder automatically when you use the default `new MP4Output(filename)` constructor.
+HEVC (H.265) encoders are also available for better compression at the same quality: `NVENCHEVCEncoderSettings`, `QSVHEVCEncoderSettings`, `AMFHEVCEncoderSettings`.
+
+!!! note "Engine note: `MP4Output` and the X-engine"
+
+    The `MP4Output` class shown in this section refers to the **X-engine**
+    `VisioForge.Core.Types.X.Output.MP4Output`, which accepts cross-platform
+    `*EncoderSettings` types (`NVENCH264EncoderSettings`,
+    `OpenH264EncoderSettings`, etc.). When hardware encoding is unavailable
+    on the X engine and you use the parameterless ctor
+    `new MP4Output(filename)`, the SDK selects an available software encoder
+    automatically. The classic Windows-only DirectShow engine has its own
+    `VisioForge.Core.Types.Output.MP4Output` with a different settings shape
+    — don't mix them.
 
 ## Screen Capture with Media Blocks SDK
 

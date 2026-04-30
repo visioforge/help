@@ -1,11 +1,56 @@
 ---
 title: Streaming UDP con Contenedor MPEG-TS y H.264 en C# .NET
-description: Modos unicast y multicast con codificación H.264/H.265. Pipeline FFmpeg, ajuste de buffer e intervalos de keyframe. Ejemplos con VisioForge SDK.
+description: Transmita video H.264/HEVC por UDP en C# / .NET: multicast, punto a punto, baja latencia. Ejemplos de envío y recepción con ajuste de bitrate.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCore
+  - VideoEditCore
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - UDP
+  - MP4
+  - TS
+  - H.264
+  - H.265
+  - AAC
+  - C#
+primary_api_classes:
+  - FFMPEGEXEOutput
+  - BasicVideoSettings
+  - MediaBlockPadMediaType
+  - MediaBlocksPipeline
+  - UDPMPEGTSSinkBlock
+  - UDPSinkSettings
+  - MultiUDPMPEGTSSinkBlock
+
 ---
 
 # Transmisión UDP con SDK de VisioForge
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+
+    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecta al servidor MCP público de VisioForge
+    ([documentación](../mcp-server-usage.md))
+    en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
+    ejemplos de código ejecutables y guías de despliegue — más preciso que
+    buscar en `llms.txt`. Sin autenticación requerida.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Introducción a la Transmisión UDP
 
@@ -135,30 +180,44 @@ Este código:
 
 ### Gestión de Bitrate
 
-Para un rendimiento óptimo de transmisión, considere ajustar los bitrates de video y audio basados en la capacidad de su red:
+Para un rendimiento óptimo de transmisión, ajuste los bitrates de video y audio
+según la capacidad de su red. `FFMPEGEXEOutput` expone las perillas del
+codificador vía `.Video` y `.Audio` (no `VideoSettings`/`AudioSettings`), y los
+`BasicVideoSettings` / `BasicAudioSettings` subyacentes almacenan el bitrate en
+**kbps**:
 
 ```cs
-ffmpegOutput.VideoSettings.Bitrate = 2500000; // 2.5 Mbps for video
-ffmpegOutput.AudioSettings.Bitrate = 128000;  // 128 kbps for audio
+ffmpegOutput.Video.Bitrate = 2500; // 2.5 Mbps para video (kbps)
+ffmpegOutput.Audio.Bitrate = 128;  // 128 kbps para audio
 ```
 
 ### Resolución y Frame Rate
 
-Resoluciones y frame rates más bajos reducen los requisitos de ancho de banda:
+Las resoluciones más bajas reducen el ancho de banda. Configure el tamaño
+objetivo dentro de `VideoCapture1.Video_Resize` (el engine clásico lo expone
+como un objeto `IVideoResizeSettings`, no como propiedades planas en el core)
+y active la etapa de resize con `Video_ResizeOrCrop_Enabled`:
 
 ```cs
-VideoCapture1.Video_Resize_Enabled = true;
-VideoCapture1.Video_Resize_Width = 1280;    // 720p resolution
-VideoCapture1.Video_Resize_Height = 720;
-VideoCapture1.Video_FrameRate = 30;         // 30 fps
+VideoCapture1.Video_ResizeOrCrop_Enabled = true;
+VideoCapture1.Video_Resize = new VideoResizeSettings
+{
+    Width  = 1280,   // resolución 720p
+    Height = 720,
+    Mode   = VideoResizeMode.Letterbox,
+};
+
+// El frame rate se configura en el formato del dispositivo de captura, no en
+// el core — elija un formato de 30 fps vía Video_CaptureDevice_Format / _FrameRate.
 ```
 
 ### Configuración de Tamaño de Buffer
 
-Ajustar los tamaños de buffer puede ayudar a gestionar el equilibrio entre latencia y estabilidad:
+El balance latencia/estabilidad para streaming basado en FFMPEG se controla en
+el objeto de salida, no en el core. Valores en milisegundos:
 
 ```cs
-VideoCapture1.Network_Streaming_BufferSize = 8192; // in KB
+ffmpegOutput.VideoBufferSize = 5000; // buffer de 5 s para transmisión más estable
 ```
 
 ## Mejores Prácticas para Transmisión UDP
@@ -179,24 +238,28 @@ VideoCapture1.Network_Streaming_BufferSize = 8192; // in KB
 
 ### Optimización de Rendimiento
 
-1. **Aceleración por Hardware**: Cuando esté disponible, habilite la aceleración por hardware para codificación:
+1. **Aceleración por hardware / Keyframes / Preset**: `FFMPEGEXEOutput` no expone
+   propiedades de primera clase para HW accel, intervalo de keyframes o presets
+   de x264 — en su lugar, inyéctelos como flags CLI de FFMPEG vía
+   `Custom_AdditionalVideoArgs`. FFMPEG los aplica a la invocación del codificador.
 
 ```cs
-ffmpegOutput.VideoSettings.HWAcceleration = HWAcceleration.Auto;
+// Codificador NVENC + intervalo de keyframes de 2 s (60 frames @ 30 fps)
+// + preset ultrafast (menor latencia).
+ffmpegOutput.Custom_AdditionalVideoArgs = "-c:v h264_nvenc -g 60 -preset p1";
+
+// Intel QuickSync en su lugar:
+// ffmpegOutput.Custom_AdditionalVideoArgs = "-c:v h264_qsv -g 60";
+
+// x264 por software con trade-off calidad/velocidad:
+// ffmpegOutput.Custom_AdditionalVideoArgs = "-c:v libx264 -g 60 -preset ultrafast";
 ```
 
-2. **Intervalos de Keyframe**: Para menor latencia, reduzca los intervalos de keyframe (I-frame):
+2. **Transporte por pipe** (evita un archivo temporal entre el SDK y FFMPEG)
+   generalmente reduce la latencia:
 
 ```cs
-ffmpegOutput.VideoSettings.KeyframeInterval = 60; // One keyframe every 2 seconds at 30 fps
-```
-
-3. **Selección de Preset**: Elija presets de codificación basados en su capacidad de CPU y requisitos de latencia:
-
-```cs
-ffmpegOutput.VideoSettings.EncoderPreset = H264EncoderPreset.Ultrafast; // Lowest latency, higher bitrate
-// or
-ffmpegOutput.VideoSettings.EncoderPreset = H264EncoderPreset.Medium; // Balance between quality and CPU load
+ffmpegOutput.UsePipe = true;
 ```
 
 ## Solución de Problemas Comunes

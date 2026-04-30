@@ -1,6 +1,25 @@
 ---
 title: AVTech IP Camera RTSP URL and C# .NET Connection Guide
 description: AVTech IP camera integration guide for C# .NET with RTSP URL patterns, DVR/NVR channel URLs, and code samples for AVM, AVN, AVC, and AVI models.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - AVI
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to AVTech IP Camera in C# .NET

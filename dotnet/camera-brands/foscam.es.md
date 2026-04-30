@@ -1,6 +1,24 @@
 ---
 title: Guía de Conexión RTSP para Cámaras Foscam en C# .NET
 description: Conecta cámaras Foscam en C# .NET con patrones de URL RTSP y HTTP, acceso API CGI y ejemplos de código para modelos FI, C1, C2, R2 y R4.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Foscam en C# .NET

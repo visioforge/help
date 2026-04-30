@@ -1,6 +1,25 @@
 ---
 title: Captura de video de webcam a AVI en aplicaciones C# .NET
 description: Implementa grabación de webcam a archivo AVI en .NET con tutorial paso a paso incluyendo ejemplo de código C# completo con async y selección de dispositivo.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - WinForms
+  - Capture
+  - Webcam
+  - Screen Capture
+  - AVI
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+  - VideoView
+  - IVideoView
+  - VideoCaptureSource
+  - AudioCaptureSource
+
 ---
 
 # Grabación de Webcam a Archivo AVI en Aplicaciones .NET C#

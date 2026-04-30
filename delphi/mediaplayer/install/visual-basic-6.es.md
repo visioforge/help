@@ -1,6 +1,19 @@
 ---
 title: Instalar Biblioteca TVFMediaPlayer en Visual Basic 6
 description: Instale e integre TVFMediaPlayer en VB6 - configuración ActiveX, consideraciones de 32 bits, implementación básica de reproducción y prácticas de despliegue.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Playback
+  - Streaming
+  - Screen Capture
+primary_api_classes:
+  - TVFMediaPlayer
+
 ---
 
 # Integrando TVFMediaPlayer con Visual Basic 6: Una Guía Completa

@@ -1,6 +1,26 @@
 ---
 title: Filtro Fuente VLC DirectShow - Ejemplos de Código C++
 description: Ejemplos de código para el Filtro de Fuente VLC con múltiples pistas de audio, subtítulos, video 360° y parámetros personalizados de VLC en DirectShow.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - WinForms
+  - Playback
+  - Streaming
+  - Decoding
+  - RTSP
+  - HLS
+  - MP4
+  - MKV
+  - AVI
+  - MOV
+  - C#
+  - VB.NET
+primary_api_classes:
+  - IBaseFilter
+  - IVFRegister
+
 ---
 
 # Ejemplos de Código
@@ -15,9 +35,7 @@ Esta página proporciona ejemplos prácticos de código para usar el Filtro de F
 ```cpp
 #include <dshow.h>
 #include <streams.h>
-#include "IVlcSrc.h"      // Del SDK
-#include "IVlcSrc2.h"     // Para parámetros personalizados
-#include "IVlcSrc3.h"     // Para anulación de velocidad de fotogramas
+#include "ivlcsrc.h"      // Header único del SDK — declara IVlcSrc, IVlcSrc2, IVlcSrc3 + GUIDs CLSID/IID
 #pragma comment(lib, "strmiids.lib")
 ```
 ### Proyectos C#
@@ -40,11 +58,11 @@ Reproducir un archivo multimedia local con el Filtro de Fuente VLC.
 
 ```cpp
 #include <dshow.h>
-#include "IVlcSrc.h"
+#include "ivlcsrc.h"
 
 // CLSID para el Filtro de Fuente VLC
 DEFINE_GUID(CLSID_VFVLCSource,
-    0x9f73dcd4, 0x2fc8, 0x4e89, 0x8f, 0xc3, 0x2d, 0xf1, 0x69, 0x3c, 0xa0, 0x3e);
+    0x3fc97748, 0x7cb6, 0x4195, 0x89, 0xde, 0x07, 0x17, 0x58, 0x2a, 0x48, 0x63);
 
 HRESULT PlayVLCFile(LPCWSTR filename, HWND hVideoWindow)
 {
@@ -707,7 +725,7 @@ public class VLCFrameRateExample
 ### Anulación de Velocidad de Fotogramas en C++
 
 ```cpp
-#include "IVlcSrc3.h"
+#include "ivlcsrc.h"
 
 void SetCustomFrameRate(IBaseFilter* pFilter, double fps)
 {

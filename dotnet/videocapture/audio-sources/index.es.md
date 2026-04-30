@@ -3,6 +3,22 @@ title: Fuentes de Audio en C# .NET — Micrófono y Loopback
 description: Configure fuentes de audio en C# .NET — micrófono, loopback del sistema, audio de cámaras IP y Decklink con ejemplos de código completos.
 sidebar_label: Fuentes de Audio
 order: 15
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+primary_api_classes:
+  - IVideoCaptureBaseAudioSourceSettings
+  - AudioCaptureSource
+  - DeviceEnumerator
+  - LoopbackAudioCaptureDeviceSourceSettings
+  - AudioCaptureDeviceFormat
 
 ---
 
@@ -110,21 +126,20 @@ Después de seleccionar un dispositivo y formato, configúrelo como su fuente de
 
     
     ```csharp
-    // find the device by name
-    var deviceItem = (await VideoCapture1.Audio_CaptureDevices()).FirstOrDefault(device => device.DisplayName == "Device name");
+    // Enumera dispositivos de captura de audio (Audio_SourcesAsync devuelve AudioCaptureDeviceInfo[]).
+    var devices = await VideoCapture1.Audio_SourcesAsync();
+    var deviceItem = devices.FirstOrDefault(d => d.Name == "Nombre del dispositivo");
     if (deviceItem == null)
     {
         return;
     }
-    
-    // set the first format
-    AudioCaptureDeviceFormat format = formats[0].ToFormat();    
-    
-    // create audio source settings
-    IVideoCaptureBaseAudioSourceSettings audioSource = deviceItem.CreateSourceSettingsVC(format);    
-    
-    // set audio source
-    VideoCapture1.Audio_Source = audioSource;                   
+
+    // Toma el primer formato reportado por el dispositivo.
+    AudioCaptureDeviceFormat format = deviceItem.Formats[0].ToFormat();
+
+    // Construye los settings de la fuente y asígnalos.
+    IVideoCaptureBaseAudioSourceSettings audioSource = deviceItem.CreateSourceSettingsVC(format);
+    VideoCapture1.Audio_Source = audioSource;
     ```
     
 
@@ -207,26 +222,37 @@ Para ejemplos completos y ejecutables de captura de altavoz (incluyendo el enfoq
 
 ## Trabajando con Fuentes de Audio de Red
 
-Para cámaras IP y otros flujos de red, la captura de audio generalmente se maneja como parte de la conexión general del flujo. La implementación exacta depende del protocolo de red que se utilice (RTSP, HLS, etc.) y las capacidades específicas del dispositivo.
+Para cámaras IP y otros flujos de red, el audio viaja sobre el mismo transporte que el video — normalmente no construyes una fuente de audio separada. Crea los settings de fuente IP con `audioEnabled: true` y el SDK demuxea audio y video desde la misma URL:
 
-Al conectarse a fuentes de red, generalmente:
+```csharp
+// Cámara RTSP — el audio viene automáticamente cuando audioEnabled es true.
+var rtsp = await RTSPSourceSettings.CreateAsync(
+    uri: new Uri("rtsp://192.168.1.100:554/Streaming/Channels/101"),
+    login: "admin",
+    password: "password",
+    audioEnabled: true);
 
-1. Establecerá una conexión a la dirección IP y puerto
-2. Se autenticará si es necesario
-3. Configurará los parámetros de audio según lo soporte el dispositivo
+VideoCapture1.Video_Source = rtsp;
+VideoCapture1.Audio_Record = true;   // incluye el audio RTSP en la salida a archivo
+```
 
-El audio de fuentes de red puede venir en varios formatos, incluyendo AAC, MP3 o datos PCM sin procesar, dependiendo del dispositivo. Nuestro SDK maneja la conversión de formato necesaria y la sincronización con flujos de video automáticamente.
+El audio de fuentes de red puede venir en varios formatos (AAC, MP3, PCM) dependiendo del dispositivo. El SDK convierte y sincroniza automáticamente.
 
 ## Implementación de Captura de Audio Decklink
 
-Los dispositivos Decklink proporcionan capacidades de captura de audio de grado profesional con características como:
+Los dispositivos Decklink entregan audio de grado profesional (hasta 192 kHz, multicanal, SDI embebido). Usa `DecklinkAudioSourceSettings` y conéctalo junto a la fuente de video Decklink:
 
-* Altas tasas de muestreo (hasta 192kHz)
-* Múltiples configuraciones de canales
-* Captura sincronizada de audio/video
-* Audio embebido en señales SDI
+```csharp
+// Enumera entradas de audio Decklink.
+var devices = await DeviceEnumerator.Shared.DecklinkAudioSourcesAsync();
+var dl = devices.First();
 
-Al trabajar con hardware Decklink, la configuración de audio generalmente se configura como parte de la configuración general del dispositivo. El SDK proporciona clases y métodos especializados para trabajar con estos dispositivos profesionales.
+// Adjunta la fuente de audio a VideoCaptureCoreX. La fuente de video correspondiente va en Video_Source.
+VideoCapture1.Audio_Source = new DecklinkAudioSourceSettings(dl);
+VideoCapture1.Audio_Record = true;
+```
+
+Los ajustes de audio están mayormente determinados por el modo actual del dispositivo (sample rate y canales los fija la señal SDI entrante) — normalmente no los sobreescribes en la clase de settings.
 
 ## Mejores Prácticas para la Captura de Audio
 

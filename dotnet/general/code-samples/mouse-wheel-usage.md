@@ -1,6 +1,15 @@
 ---
 title: Mouse Wheel Event Handling in .NET Video Applications
 description: Handle mouse wheel events in .NET video apps for zooming, scrolling, and timeline navigation with best practices and optimization techniques.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - Editing
+  - C#
+
 ---
 
 # Implementing Mouse Wheel Events in .NET SDKs
@@ -85,16 +94,23 @@ private void VideoView1_MouseWheel(object sender, MouseEventArgs e)
     }
 }
 
+private double _zoomRatio = 1.0;
+
 private void ZoomIn(double factor)
 {
-    // Implementation depends on your SDK's specific API
-    VideoView1.Zoom = Math.Min(VideoView1.Zoom + factor, 3.0); // Max zoom of 300%
+    // Zoom is exposed on the renderer (classic engine) or via a ZoomEffect on the X engine,
+    // not on VideoView. The classic engine uses `videoCapture1.Video_Renderer.Zoom_Ratio`
+    // (and Zoom_ShiftX / Zoom_ShiftY for the centre offset).
+    _zoomRatio = Math.Min(_zoomRatio + factor, 3.0); // Max zoom of 300%
+    videoCapture1.Video_Renderer.Zoom_Ratio = _zoomRatio;
+    videoCapture1.Video_Renderer_Update();
 }
 
 private void ZoomOut(double factor)
 {
-    // Implementation depends on your SDK's specific API
-    VideoView1.Zoom = Math.Max(VideoView1.Zoom - factor, 0.5); // Min zoom of 50%
+    _zoomRatio = Math.Max(_zoomRatio - factor, 0.5); // Min zoom of 50%
+    videoCapture1.Video_Renderer.Zoom_Ratio = _zoomRatio;
+    videoCapture1.Video_Renderer_Update();
 }
 ```
 
@@ -127,20 +143,20 @@ Another common use case is controlling volume in media player applications:
 ```cs
 private void VideoView1_MouseWheel(object sender, MouseEventArgs e)
 {
-    // Calculate volume change based on delta
-    float volumeChange = e.Delta / 120.0f * 0.05f; // 5% per wheel "click"
-    
-    // Apply volume change
-    float newVolume = VideoView1.Volume + volumeChange;
-    
-    // Ensure volume stays within 0-1 range
-    newVolume = Math.Max(0.0f, Math.Min(newVolume, 1.0f));
-    
-    // Set the new volume
-    VideoView1.Volume = newVolume;
-    
-    // Optional: Display volume indicator
-    ShowVolumeIndicator(newVolume);
+    // Volume is engine-level (not on VideoView). The classic engine exposes
+    // Audio_OutputDevice_Volume in 0–100 percent range; the X engine exposes
+    // Audio_OutputDevice_Volume in 0.0–1.0 range. Sample below targets the
+    // classic VideoCaptureCore / MediaPlayerCore — adjust the percent math
+    // to a 0–1 ratio if you are on the X engine.
+    int volumeChangePercent = (int)Math.Round(e.Delta / 120.0 * 5.0); // 5 percentage points per wheel "click"
+
+    int newVolume = videoCapture1.Audio_OutputDevice_Volume + volumeChangePercent;
+    newVolume = Math.Max(0, Math.Min(newVolume, 100));
+
+    videoCapture1.Audio_OutputDevice_Volume = newVolume;
+
+    // Optional: Display volume indicator (0–1 ratio for the indicator UI)
+    ShowVolumeIndicator(newVolume / 100f);
 }
 ```
 

@@ -2,6 +2,21 @@
 title: Cross-Platform Audio Rendering and Playback in C# .NET
 description: Play audio to speakers on Windows, macOS, Linux, iOS, and Android using VisioForge Media Blocks SDK. Device selection, buffer control, volume management.
 sidebar_label: Audio Rendering
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+primary_api_classes:
+  - AudioRendererBlock
+  - OSXAudioSinkBlock
+  - IOSAudioSinkBlock
+  - OSXAudioSinkSettings
+  - MediaBlocksPipeline
 
 ---
 

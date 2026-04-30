@@ -1,6 +1,22 @@
 ---
 title: Bloques Bridge - Conmutación Dinámica de Pipeline en C# .NET
 description: Cambie dinámicamente entre pipelines de audio, video y subtítulos sin interrumpir la reproducción con VisioForge Media Blocks SDK.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - MediaBlocksPipeline
+  - VideoRendererBlock
+  - MediaBlockPadMediaType
+  - BridgeAudioSourceBlock
+  - BridgeAudioSinkBlock
+
 ---
 
 # Bloques Bridge
@@ -54,8 +70,10 @@ El pipeline fuente con fuente de audio virtual y bridge audio sink.
 var sourcePipeline = new MediaBlocksPipeline();
 
 // crear fuente de audio virtual y bridge audio sink
+// BridgeAudioSinkSettings requiere (string channel, AudioInfoX audioInfo) — no hay ctor sin parámetros
+var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 48000, 2);
 var audioSourceBlock = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
-var bridgeAudioSink = new BridgeAudioSinkBlock(new BridgeAudioSinkSettings());
+var bridgeAudioSink = new BridgeAudioSinkBlock(new BridgeAudioSinkSettings("audio-bridge", audioInfo));
 
 // conectar fuente y sink
 sourcePipeline.Connect(audioSourceBlock.Output, bridgeAudioSink.Input);
@@ -71,7 +89,9 @@ El pipeline sink con bridge audio source y renderizador de audio.
 var sinkPipeline = new MediaBlocksPipeline();
 
 // crear bridge audio source y renderizador de audio
-var bridgeAudioSource = new BridgeAudioSourceBlock(new BridgeAudioSourceSettings());
+// BridgeAudioSourceSettings requiere (string channel, AudioInfoX audioInfo) — debe coincidir con el sink de arriba
+var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 48000, 2);
+var bridgeAudioSource = new BridgeAudioSourceBlock(new BridgeAudioSourceSettings("audio-bridge", audioInfo));
 var audioRenderer = new AudioRendererBlock();
 
 // conectar fuente y sink
@@ -200,15 +220,18 @@ graph LR;
 ### Código de ejemplo
 
 ```csharp
+// ProxySink y ProxySource se emparejan por pairID (string) — elige cualquier valor único por par.
+const string pairID = "video-proxy-1";
+
 // pipeline fuente con fuente de video virtual y proxy sink
 var sourcePipeline = new MediaBlocksPipeline();
 var videoSourceBlock = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
-var proxyVideoSink = new ProxySinkBlock();
+var proxyVideoSink = new ProxySinkBlock(pairID);
 sourcePipeline.Connect(videoSourceBlock.Output, proxyVideoSink.Input);
 
-// pipeline sink con proxy video source y renderizador de video
+// pipeline sink con proxy video source y renderizador de video — el pairID coincidente los enlaza
 var sinkPipeline = new MediaBlocksPipeline();
-var proxyVideoSource = new ProxySourceBlock(proxyVideoSink);
+var proxyVideoSource = new ProxySourceBlock(pairID);
 var videoRenderer = new VideoRendererBlock(sinkPipeline, VideoView1);
 sinkPipeline.Connect(proxyVideoSource.Output, videoRenderer.Input);
 
@@ -246,7 +269,7 @@ Los bloques BridgeBuffer proporcionan comunicación de alto rendimiento basada e
 var sourcePipeline = new MediaBlocksPipeline();
 var videoSource = new SystemVideoSourceBlock(videoSettings);
 
-var videoInfo = new VideoFrameInfoX(1920, 1080, VideoFormatX.NV12);
+var videoInfo = new VideoFrameInfoX(1920, 1080, VideoFormatX.NV12, new VideoFrameRate(30));
 var bufferSink = new BridgeBufferSinkBlock("buffer-channel", videoInfo);
 sourcePipeline.Connect(videoSource.Output, bufferSink.Input);
 
@@ -285,7 +308,7 @@ Los bloques InterPipe usan los elementos interpipesink/interpipesrc de GStreamer
 var sourcePipeline = new MediaBlocksPipeline();
 var videoSource = new SystemVideoSourceBlock(videoSettings);
 
-var videoInfo = new VideoFrameInfoX(1920, 1080, VideoFormatX.NV12);
+var videoInfo = new VideoFrameInfoX(1920, 1080, VideoFormatX.NV12, new VideoFrameRate(30));
 var interpipeSink = new InterPipeSinkBlock("interpipe-channel", videoInfo);
 sourcePipeline.Connect(videoSource.Output, interpipeSink.Input);
 

@@ -2,13 +2,27 @@
 title: Efectos de Video OpenGL en C# .NET - Aceleración GPU
 description: Aplique efectos OpenGL acelerados por GPU como desenfoque, corrección de color y shaders en tiempo real con pipelines de VisioForge Media Blocks SDK.
 sidebar_label: Efectos OpenGL
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - GLBaseVideoEffect
+  - GLShaderSettings
+  - GLVideoMixerSettings
+  - GLVirtualVideoSourceBlock
+
 ---
 
 # Efectos de Video OpenGL - SDK de VisioForge Media Blocks .Net
 
 [SDK de Media Blocks .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Los efectos de video OpenGL en el SDK de VisioForge Media Blocks .Net permiten manipulación poderosa y hardware-acelerada de streams de video. Estos efectos pueden aplicarse a contenido de video procesado dentro de un contexto OpenGL, típicamente vía bloques como `GLVideoEffectsBlock` o pipelines de renderizado OpenGL personalizados. Esta guía cubre los efectos disponibles, sus ajustes de configuración y otros tipos OpenGL relacionados.
+Los efectos de video OpenGL en el SDK de VisioForge Media Blocks .Net permiten manipulación poderosa y hardware-acelerada de streams de video. Cada efecto se distribuye como su propio MediaBlock independiente (p.ej. `GLBlurBlock`, `GLFlipBlock`, `GLAlphaBlock`) y se encadena entre `GLUploadBlock` en la entrada y `GLDownloadBlock` en la salida. Esta guía cubre los efectos disponibles, sus ajustes de configuración y otros tipos OpenGL relacionados.
 
 ## Efecto Base: `GLBaseVideoEffect`
 
@@ -26,7 +40,7 @@ Todos los efectos de video OpenGL heredan de la clase `GLBaseVideoEffect`, que p
 
 ## Efectos de Video Disponibles
 
-Esta sección detalla los diversos efectos de video OpenGL que puede usar. Estos efectos se agregan típicamente a un `GLVideoEffectsBlock` o un elemento de procesamiento OpenGL similar.
+Esta sección detalla los diversos efectos de video OpenGL que puede usar. Cada efecto es un MediaBlock independiente — instancia el bloque directamente (p.ej. `new GLBlurBlock(new GLBlurVideoEffect())`) y conéctalo entre `GLUploadBlock` y `GLDownloadBlock` (u otros bloques GL) en tu pipeline.
 
 ### Efecto Alfa (`GLAlphaVideoEffect`)
 

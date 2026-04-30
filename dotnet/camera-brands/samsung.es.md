@@ -1,6 +1,25 @@
 ---
 title: Cómo Conectar una Cámara IP Samsung (Hanwha) en C# .NET
 description: Conecta cámaras Samsung Wisenet y Hanwha Vision en C# .NET con patrones de URL RTSP y ejemplos de código para modelos SNO, SND, XNO, XND y PNO.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Samsung (Hanwha) en C# .NET

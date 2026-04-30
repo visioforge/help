@@ -1,6 +1,24 @@
 ---
 title: Cómo Conectar una Cámara IP Hanwha Vision en C# .NET
 description: Conecte cámaras Hanwha Vision en C# .NET con patrones de URL RTSP y ejemplos de código para las series X, Q, P, L y modelos NVR Wisenet.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Decoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Hanwha Vision en C# .NET

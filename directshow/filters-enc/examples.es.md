@@ -1,9 +1,62 @@
 ---
 title: Codificación DirectShow NVENC y H.264 con ejemplos en C#
 description: Ejemplos de NVENC hardware, codificadores H.264/H.265/VP8, códecs AAC/MP3 y multiplexación MP4/MKV en DirectShow con código.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - MP4
+  - MKV
+  - WebM
+  - TS
+  - H.264
+  - H.265
+  - VP9
+  - AAC
+  - MP3
+  - Opus
+  - FLAC
+  - Vorbis
+  - C#
+primary_api_classes:
+  - IBaseFilter
+  - IFileSinkFilter
+  - ProgressEventArgs
+
 ---
 
 # Paquete de Filtros de Codificación - Ejemplos de Código
+
+!!! danger "Los ejemplos NVENC en esta página usan tipos enum y nombres de método fabricados — trate como pseudocódigo ilustrativo"
+
+    Los bloques de código NVENC de abajo referencian tipos enum (`NVENC_CODEC.*`,
+    `NVENC_RATE_CONTROL.*`, `NVENC_PRESET.*`, `NVENC_H264_PROFILE.*`,
+    `NVENC_H264_LEVEL.*`, `NVENC_HEVC_PROFILE.*`, `NVENC_HEVC_LEVEL.*`)
+    y nombres de método (`SetMaxBitrate`, `SetVBVBufferSize`, `SetCQP`,
+    `SetHEVCProfile`, `SetHEVCLevel`) que no existen en la interfaz
+    real `INVEncConfig` (`H264EncoderNVENC/Intf.h`).
+
+    **API canónica real de NVENC (verificada contra el código fuente del filtro):**
+
+    - **`SetCodec(int)`** — `0` = H.264, `1` = H.265 (HEVC). Int simple, sin enum.
+    - **`SetRateControl(int)`** — `0` = CQP, `1` = VBR, `2` = CBR. Int simple.
+    - **`SetPreset(GUID)`** — usa los GUIDs del SDK NVIDIA NVENC directamente:
+      `NV_ENC_PRESET_DEFAULT_GUID`, `NV_ENC_PRESET_HP_GUID`,
+      `NV_ENC_PRESET_HQ_GUID`, `NV_ENC_PRESET_LOW_LATENCY_DEFAULT_GUID`, etc.
+    - **`SetProfile(GUID)`** — único setter para GUIDs de perfil de H.264 y HEVC
+      (el códec seleccionado se establece por separado vía `SetCodec`).
+    - **`SetLevel(int)`** — único setter para ambos códecs (valor de nivel como int).
+    - **Bitrate / buffer / calidad:** los nombres reales de método son
+      `SetVbvBitrate(int)`, `SetVbvSize(int)`, `SetQp(int)` — **no**
+      `SetMaxBitrate`, `SetVBVBufferSize`, `SetCQP`. No hay un
+      `SetHEVCProfile` / `SetHEVCLevel` separado — use `SetCodec(1)` y
+      luego `SetProfile(<GUID de perfil HEVC>)`.
+
+    Catalogado como defectos #028–#029 en la auditoría. Una reescritura
+    completa de estas secciones NVENC está en cola; para código funcional,
+    vea la página canónica de la interfaz: [interfaces/nvenc.md](./interfaces/nvenc.md).
 
 ## Descripción General
 
@@ -422,7 +475,7 @@ public void EncodeAACAudio(string inputFile, string outputFile)
     // Agregar codificador de audio AAC
     var audioEncoderFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
-        Consts.CLSID_VFAAEncoder,
+        Consts.CLSID_VFAACEncoder,
         "AAC Encoder");
     // Configurar AAC (si la interfaz está disponible)
     // var aacConfig = audioEncoderFilter as IAACEncoderConfig;

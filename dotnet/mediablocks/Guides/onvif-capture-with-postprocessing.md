@@ -1,16 +1,46 @@
 ---
 title: ONVIF IP Camera Capture to MP4 with Video Effects in C#
 description: Capture ONVIF IP camera video and apply resize, brightness, and filter effects before saving to MP4 using VisioForge Media Blocks SDK for .NET.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Recording
+  - Encoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MP4
+  - H.264
+  - AAC
+  - C#
+primary_api_classes:
+  - MediaBlocksPipeline
+  - RTSPSourceBlock
+  - RTSPSourceSettings
+  - H264EncoderBlock
+  - AACEncoderBlock
+  - MP4SinkBlock
+
 ---
 
 # Capture MP4 from ONVIF Camera with Postprocessing
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
+!!! info "Cross-platform support"
+    The Media Blocks SDK runs on **Windows, macOS, Linux, Android, and iOS** via GStreamer. See the [platform support matrix](../../platform-matrix.md) for codec and hardware-acceleration details, and the [Linux deployment guide](../../deployment-x/Ubuntu.md) for Ubuntu / NVIDIA Jetson / Raspberry Pi setup.
+
 !!!info Demo Samples
 For complete working examples, see:
-- [RTSP Preview Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) - Shows ONVIF camera preview with postprocessing
-- [IP Capture Demo (Video Capture SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) - Alternative using Video Capture SDK
+- [RTSP Preview Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) — Shows ONVIF camera preview with postprocessing
+- [IP Capture Demo (Video Capture SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) — Alternative using Video Capture SDK
 
 For comprehensive ONVIF documentation, see the [ONVIF IP Camera Integration Guide](../../videocapture/video-sources/ip-cameras/onvif.md).
 !!!
@@ -119,7 +149,10 @@ Console.WriteLine($"RTSP URL: {rtspUrl}");
 
 ## Example 1: Resize Video
 
-Resize video from ONVIF camera before saving to MP4:
+Resize video from ONVIF camera before saving to MP4. The Media Blocks API takes
+settings objects, not fluent properties — `RTSPSourceBlock` is constructed from
+an `RTSPSourceSettings`, the encoder from its settings object, the MP4 sink hands
+out input pads via `CreateNewInput(...)`, and links are declared on the pipeline.
 
 ```cs
 using VisioForge.Core.MediaBlocks;
@@ -128,49 +161,48 @@ using VisioForge.Core.MediaBlocks.VideoProcessing;
 using VisioForge.Core.MediaBlocks.VideoEncoders;
 using VisioForge.Core.MediaBlocks.AudioEncoders;
 using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types;
 
 // Create pipeline
 var pipeline = new MediaBlocksPipeline();
 
-// RTSP source from ONVIF camera
-var rtspSource = new RTSPSourceBlock(new Uri(rtspUrl));
-rtspSource.Username = "admin";
-rtspSource.Password = "password";
-rtspSource.Transport = RTSPTransport.TCP;
+// RTSP source from ONVIF camera. Credentials and latency live on the settings
+// object; use the async factory so the settings discover codec info up front.
+var rtspSettings = await RTSPSourceSettings.CreateAsync(
+    new Uri(rtspUrl), "admin", "password", audioEnabled: true);
+var rtspSource = new RTSPSourceBlock(rtspSettings);
 
-// Video resize block - downscale to 1280x720
+// Video resize block — downscale to 1280x720. The (width, height) ctor is a
+// shortcut for `new VideoResizeBlock(new ResizeVideoEffect(w, h))`.
 var videoResize = new VideoResizeBlock(1280, 720);
-videoResize.Mode = VideoResizeMode.Stretch; // Or Fit, Fill, Crop
 
-// H.264 encoder
-var h264Encoder = new H264EncoderBlock();
-h264Encoder.Bitrate = 2000000; // 2 Mbps
-h264Encoder.Framerate = 25;
-h264Encoder.Profile = H264Profile.High;
-h264Encoder.Level = H264Level.Level41;
+// H.264 encoder. Pick a concrete settings class — Bitrate is in Kbit/s (2000 = 2 Mbps).
+// OpenH264EncoderSettings works on every platform; swap to NVENC / QSV / AMF / MFH264 for GPU acceleration.
+var h264Settings = new OpenH264EncoderSettings { Bitrate = 2000 };
+var h264Encoder = new H264EncoderBlock(h264Settings);
 
-// AAC audio encoder
-var aacEncoder = new AACEncoderBlock();
-aacEncoder.Bitrate = 128000; // 128 kbps
+// AAC audio encoder (Bitrate is in Kbit/s — 128 = 128 kbps).
+var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
 
-// MP4 sink
+// MP4 sink — file-path ctor is the shortest path to a valid MP4 writer.
 var mp4Sink = new MP4SinkBlock("output_resized.mp4");
 
-// Connect video pipeline
-rtspSource.VideoOutput.Connect(videoResize.Input);
-videoResize.Output.Connect(h264Encoder.Input);
-h264Encoder.Output.Connect(mp4Sink.VideoInput);
+// Add every block to the pipeline before wiring links
+pipeline.AddBlock(rtspSource);
+pipeline.AddBlock(videoResize);
+pipeline.AddBlock(h264Encoder);
+pipeline.AddBlock(aacEncoder);
+pipeline.AddBlock(mp4Sink);
 
-// Connect audio pipeline
-rtspSource.AudioOutput.Connect(aacEncoder.Input);
-aacEncoder.Output.Connect(mp4Sink.AudioInput);
+// Wire the video path (RTSP video → resize → H.264 → MP4 sink video pad)
+pipeline.Connect(rtspSource.VideoOutput, videoResize.Input);
+pipeline.Connect(videoResize.Output, h264Encoder.Input);
+pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-// Add blocks to pipeline
-await pipeline.AddAsync(rtspSource);
-await pipeline.AddAsync(videoResize);
-await pipeline.AddAsync(h264Encoder);
-await pipeline.AddAsync(aacEncoder);
-await pipeline.AddAsync(mp4Sink);
+// Wire the audio path (RTSP audio → AAC → MP4 sink audio pad)
+pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 // Start recording
 await pipeline.StartAsync();
@@ -187,59 +219,65 @@ Console.WriteLine("Recording complete: output_resized.mp4");
 
 ## Example 2: Apply Video Effects
 
-Apply brightness, contrast, hue, and saturation adjustments:
+Apply brightness, contrast, hue, and saturation adjustments. Video-processing
+blocks take a settings object in the ctor; the settings carry the knobs.
 
 ```cs
 using VisioForge.Core.MediaBlocks.VideoProcessing;
+using VisioForge.Core.Types.X.VideoEffects;
 
 // Create pipeline
 var pipeline = new MediaBlocksPipeline();
 
 // RTSP source
-var rtspSource = new RTSPSourceBlock(new Uri(rtspUrl));
-rtspSource.Username = "admin";
-rtspSource.Password = "password";
+var rtspSettings = await RTSPSourceSettings.CreateAsync(
+    new Uri(rtspUrl), "admin", "password", audioEnabled: true);
+var rtspSource = new RTSPSourceBlock(rtspSettings);
 
-// Video balance block - adjust brightness, contrast, saturation, hue
-var videoBalance = new VideoBalanceBlock();
-videoBalance.Brightness = 0.2; // Range: -1.0 to 1.0 (0.2 = 20% brighter)
-videoBalance.Contrast = 1.15;   // Range: 0.0 to 2.0 (1.15 = 15% more contrast)
-videoBalance.Saturation = 1.3;  // Range: 0.0 to 2.0 (1.3 = 30% more saturation)
-videoBalance.Hue = 0.0;         // Range: -1.0 to 1.0 (0 = no hue shift)
+// Video-balance block — knobs live on the settings object.
+// Brightness: -1.0..1.0 (0.2 = slightly brighter)
+// Contrast:    0.0..2.0 (1.15 = +15% contrast)
+// Saturation:  0.0..2.0 (1.3  = +30% saturation)
+// Hue:        -1.0..1.0 (0.0  = no shift)
+var balanceSettings = new VideoBalanceVideoEffect
+{
+    Brightness = 0.2,
+    Contrast   = 1.15,
+    Saturation = 1.3,
+    Hue        = 0.0,
+};
+var videoBalance = new VideoBalanceBlock(balanceSettings);
 
-// Color effects block - apply preset color effects
-var colorEffects = new ColorEffectsBlock();
-colorEffects.Preset = ColorEffectsPreset.Sepia; // Try: None, Heat, Sepia, XRay, etc.
+// Color-effects block takes a preset directly in the ctor
+var colorEffects = new ColorEffectsBlock(ColorEffectsPreset.Sepia);
 
-// H.264 encoder
-var h264Encoder = new H264EncoderBlock();
-h264Encoder.Bitrate = 3000000; // 3 Mbps for higher quality
-h264Encoder.Framerate = 25;
+// H.264 encoder (3 Mbps)
+var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
+var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock();
-aacEncoder.Bitrate = 128000;
+var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
 
 // MP4 output
 var mp4Sink = new MP4SinkBlock("output_enhanced.mp4");
 
-// Connect video pipeline with effects
-rtspSource.VideoOutput.Connect(videoBalance.Input);
-videoBalance.Output.Connect(colorEffects.Input);
-colorEffects.Output.Connect(h264Encoder.Input);
-h264Encoder.Output.Connect(mp4Sink.VideoInput);
+// Add everything to the pipeline, then wire
+pipeline.AddBlock(rtspSource);
+pipeline.AddBlock(videoBalance);
+pipeline.AddBlock(colorEffects);
+pipeline.AddBlock(h264Encoder);
+pipeline.AddBlock(aacEncoder);
+pipeline.AddBlock(mp4Sink);
 
-// Connect audio
-rtspSource.AudioOutput.Connect(aacEncoder.Input);
-aacEncoder.Output.Connect(mp4Sink.AudioInput);
+// Video chain: RTSP → balance → color-effects → H.264 → MP4
+pipeline.Connect(rtspSource.VideoOutput, videoBalance.Input);
+pipeline.Connect(videoBalance.Output, colorEffects.Input);
+pipeline.Connect(colorEffects.Output, h264Encoder.Input);
+pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-// Add all blocks
-await pipeline.AddAsync(rtspSource);
-await pipeline.AddAsync(videoBalance);
-await pipeline.AddAsync(colorEffects);
-await pipeline.AddAsync(h264Encoder);
-await pipeline.AddAsync(aacEncoder);
-await pipeline.AddAsync(mp4Sink);
+// Audio chain
+pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 // Start
 await pipeline.StartAsync();
@@ -263,45 +301,43 @@ using VisioForge.Core.Types.X.OpenCV;
 var pipeline = new MediaBlocksPipeline();
 
 // RTSP source
-var rtspSource = new RTSPSourceBlock(new Uri(rtspUrl));
-rtspSource.Username = "admin";
-rtspSource.Password = "password";
+var rtspSettings = await RTSPSourceSettings.CreateAsync(
+    new Uri(rtspUrl), "admin", "password", audioEnabled: true);
+var rtspSource = new RTSPSourceBlock(rtspSettings);
 
-// CVFaceBlur block - automatic face detection and blurring
-var faceBlurSettings = new CVFaceBlurSettings();
-faceBlurSettings.ScaleFactor = 1.25;        // Detection scale factor
-faceBlurSettings.MinNeighbors = 3;          // Minimum neighbors for detection
-faceBlurSettings.MinSize = new Size(30, 30); // Minimum face size
-faceBlurSettings.MainCascadeFile = "haarcascade_frontalface_default.xml";
-
+// CVFaceBlurBlock — automatic face detection and blurring via OpenCV
+var faceBlurSettings = new CVFaceBlurSettings
+{
+    ScaleFactor      = 1.25,
+    MinNeighbors     = 3,
+    MinSize          = new Size(30, 30),
+    MainCascadeFile  = "haarcascade_frontalface_default.xml",
+};
 var faceBlur = new CVFaceBlurBlock(faceBlurSettings);
 
 // H.264 encoder
-var h264Encoder = new H264EncoderBlock();
-h264Encoder.Bitrate = 3000000;
-h264Encoder.Framerate = 25;
+var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
+var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock();
+var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
 
 // MP4 output
 var mp4Sink = new MP4SinkBlock("output_face_blur.mp4");
 
-// Connect video pipeline
-rtspSource.VideoOutput.Connect(faceBlur.Input);
-faceBlur.Output.Connect(h264Encoder.Input);
-h264Encoder.Output.Connect(mp4Sink.VideoInput);
+// Add + wire
+pipeline.AddBlock(rtspSource);
+pipeline.AddBlock(faceBlur);
+pipeline.AddBlock(h264Encoder);
+pipeline.AddBlock(aacEncoder);
+pipeline.AddBlock(mp4Sink);
 
-// Audio
-rtspSource.AudioOutput.Connect(aacEncoder.Input);
-aacEncoder.Output.Connect(mp4Sink.AudioInput);
+pipeline.Connect(rtspSource.VideoOutput, faceBlur.Input);
+pipeline.Connect(faceBlur.Output, h264Encoder.Input);
+pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-// Add blocks
-await pipeline.AddAsync(rtspSource);
-await pipeline.AddAsync(faceBlur);
-await pipeline.AddAsync(h264Encoder);
-await pipeline.AddAsync(aacEncoder);
-await pipeline.AddAsync(mp4Sink);
+pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 // Start
 await pipeline.StartAsync();
@@ -309,62 +345,66 @@ await pipeline.StartAsync();
 
 ## Example 4: Watermark and Logo Overlay
 
-Add a watermark or logo to the video:
+Add a watermark logo and a timestamp overlay. `ImageOverlayBlock` takes either a
+filename or an `ImageOverlaySettings`; position/opacity live on the settings.
+`TextOverlayBlock` always takes a `TextOverlaySettings`.
 
 ```cs
 using VisioForge.Core.MediaBlocks.VideoProcessing;
+using VisioForge.Core.Types.X.VideoEffects;
+using SkiaSharp;
 
 // Create pipeline
 var pipeline = new MediaBlocksPipeline();
 
 // RTSP source
-var rtspSource = new RTSPSourceBlock(new Uri(rtspUrl));
-rtspSource.Username = "admin";
-rtspSource.Password = "password";
+var rtspSettings = await RTSPSourceSettings.CreateAsync(
+    new Uri(rtspUrl), "admin", "password", audioEnabled: true);
+var rtspSource = new RTSPSourceBlock(rtspSettings);
 
-// Load logo/watermark
-var logoOverlay = new ImageOverlayBlock();
-logoOverlay.ImagePath = "watermark.png";
-logoOverlay.X = 10;            // 10 pixels from left
-logoOverlay.Y = 10;            // 10 pixels from top
-logoOverlay.Opacity = 0.7f;     // 70% opaque
+// Logo / watermark: file-path ctor loads the image. Position knobs live on the
+// settings object; transparency is Alpha (0..1, not Opacity).
+var logoOverlay = new ImageOverlayBlock(new ImageOverlaySettings("watermark.png")
+{
+    X     = 10,   // 10 px from left
+    Y     = 10,   // 10 px from top
+    Alpha = 0.7,  // 0..1
+});
 
-// Text overlay for timestamp
-var textOverlay = new TextOverlayBlock();
-textOverlay.Text = "Camera 1 - {timestamp}";
-textOverlay.FontSize = 24;
-textOverlay.FontColor = Color.White;
-textOverlay.X = 10;
-textOverlay.Y = -50;            // 50 pixels from bottom
-textOverlay.UpdateInterval = TimeSpan.FromSeconds(1); // Update every second
+// Static text overlay. TextOverlaySettings carries Text, position, Color (SKColor),
+// and font knobs — see the OverlayManagerText reference for every option.
+var textOverlay = new TextOverlayBlock(new TextOverlaySettings("Camera 1")
+{
+    Color = SKColors.White,
+});
 
 // H.264 encoder
-var h264Encoder = new H264EncoderBlock();
-h264Encoder.Bitrate = 3000000;
+var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
+var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock();
+var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
 
 // MP4 output
 var mp4Sink = new MP4SinkBlock("output_watermarked.mp4");
 
-// Connect video pipeline
-rtspSource.VideoOutput.Connect(logoOverlay.Input);
-logoOverlay.Output.Connect(textOverlay.Input);
-textOverlay.Output.Connect(h264Encoder.Input);
-h264Encoder.Output.Connect(mp4Sink.VideoInput);
+// Add + wire
+pipeline.AddBlock(rtspSource);
+pipeline.AddBlock(logoOverlay);
+pipeline.AddBlock(textOverlay);
+pipeline.AddBlock(h264Encoder);
+pipeline.AddBlock(aacEncoder);
+pipeline.AddBlock(mp4Sink);
 
-// Audio
-rtspSource.AudioOutput.Connect(aacEncoder.Input);
-aacEncoder.Output.Connect(mp4Sink.AudioInput);
+// Video chain: RTSP → logo → text → H.264 → MP4
+pipeline.Connect(rtspSource.VideoOutput, logoOverlay.Input);
+pipeline.Connect(logoOverlay.Output, textOverlay.Input);
+pipeline.Connect(textOverlay.Output, h264Encoder.Input);
+pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-// Add blocks
-await pipeline.AddAsync(rtspSource);
-await pipeline.AddAsync(logoOverlay);
-await pipeline.AddAsync(textOverlay);
-await pipeline.AddAsync(h264Encoder);
-await pipeline.AddAsync(aacEncoder);
-await pipeline.AddAsync(mp4Sink);
+// Audio chain
+pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 // Start
 await pipeline.StartAsync();
@@ -378,19 +418,22 @@ await pipeline.StartAsync();
    - Face detection: ~30-50% CPU (depends on resolution)
    - Multiple effects: Additive CPU usage
 
-2. **GPU Acceleration**: Use hardware-accelerated encoders when available:
+2. **GPU Acceleration**: Use hardware-accelerated encoders when available.
+   `H264EncoderBlock.GetDefaultSettings()` already prefers NVENC / QSV / AMF when
+   the platform supports it, but you can force a specific backend:
+
    ```cs
-   // NVIDIA GPU encoding
-   var nvencEncoder = new NVENCEncoderBlock();
-   nvencEncoder.Bitrate = 4000000;
-   nvencEncoder.Preset = NVENCPreset.P4; // Balance quality/performance
+   // NVIDIA NVENC H.264 encoder (Bitrate in Kbit/s — 4000 = 4 Mbps)
+   var nvencSettings = new NVENCH264EncoderSettings { Bitrate = 4000 };
+   var h264Encoder   = new H264EncoderBlock(nvencSettings);
    ```
 
-3. **Memory Usage**: Higher resolutions require more memory. Monitor usage:
+3. **Error handling**: Subscribe to `OnError` to learn about pipeline failures:
+
    ```cs
-   pipeline.MemoryWarning += (sender, e) =>
+   pipeline.OnError += (sender, e) =>
    {
-       Console.WriteLine($"Memory warning: {e.UsageMB} MB used");
+       Console.WriteLine($"Pipeline error: {e.Message}");
    };
    ```
 
@@ -407,21 +450,13 @@ await pipeline.StartAsync();
    - Monitor CPU/memory usage
    - Adjust settings based on hardware
 
-2. **Choose Appropriate Bitrates**:
-   - 720p: 1-2 Mbps
-   - 1080p: 2-4 Mbps
-   - 4K: 8-15 Mbps
+2. **Choose Appropriate Bitrates** (all values in Kbit/s):
+   - 720p: 1000-2000
+   - 1080p: 2000-4000
+   - 4K: 8000-15000
 
-3. **Handle Errors Gracefully**:
-   ```cs
-   pipeline.Error += (sender, e) =>
-   {
-       Console.WriteLine($"Pipeline error: {e.Message}");
-       // Attempt recovery or cleanup
-   };
-   ```
+3. **Dispose Resources**:
 
-4. **Dispose Resources**:
    ```cs
    try
    {
@@ -436,12 +471,13 @@ await pipeline.StartAsync();
    }
    ```
 
-5. **Monitor Pipeline State**:
+4. **Observe pipeline lifecycle events**:
+
    ```cs
-   pipeline.StateChanged += (sender, e) =>
-   {
-       Console.WriteLine($"Pipeline state: {e.State}");
-   };
+   pipeline.OnStart  += (s, e) => Console.WriteLine("Pipeline started");
+   pipeline.OnStop   += (s, e) => Console.WriteLine("Pipeline stopped");
+   pipeline.OnPause  += (s, e) => Console.WriteLine("Pipeline paused");
+   pipeline.OnResume += (s, e) => Console.WriteLine("Pipeline resumed");
    ```
 
 ## Troubleshooting
@@ -470,9 +506,9 @@ await pipeline.StartAsync();
 - Monitor long-running recordings
 
 **Effects Not Applied:**
-- Verify block connections
+- Verify block connections via `pipeline.Connect(outPad, inPad)`
 - Check effect parameters are valid
-- Ensure blocks are added to pipeline
+- Ensure every block is registered via `pipeline.AddBlock(...)` before `StartAsync`
 - Review pipeline order (effects chain)
 
 ---

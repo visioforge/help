@@ -1,8 +1,20 @@
 ---
-title: Virtual Camera DirectShow Filter for Windows Streaming
+title: Windows Virtual Camera SDK — DirectShow for Zoom, Teams, OBS
 description: Create virtual webcams recognized by Zoom, Teams, OBS, and browsers. VisioForge DirectShow SDK streams any video source with audio to virtual camera devices.
 sidebar_label: Virtual Camera SDK
 order: 6
+tags:
+  - Virtual Camera SDK
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Virtual Camera
+primary_api_classes:
+  - IVFVirtualCameraSink
+  - SinkFilter
+  - IBaseFilter
+
 ---
 
 # DirectShow Virtual Camera SDK
@@ -123,9 +135,12 @@ public interface IVFVirtualCameraSink
     /// <param name="license">License key string ("TRIAL" for trial version)</param>
     /// <returns>HRESULT (0 for success)</returns>
     [PreserveSig]
-    int set_license([MarshalAs(UnmanagedType.LPWStr)] string license);
+    int set_license([MarshalAs(UnmanagedType.LPStr)] string license);
 }
 ```
+
+!!! note "Native C++/Delphi take ANSI; the SDK's bundled C# demo uses LPWStr"
+    The native `IVFVirtualCameraSink::set_license` parameter is `LPCSTR` (ANSI) in C++ and `PAnsiChar` in Delphi. The C# demo wrapper bundled with the SDK declares `[MarshalAs(UnmanagedType.LPWStr)]` — a known marshaling discrepancy in the demo. Pure-ASCII license keys (e.g., `"TRIAL"`, hex-encoded license strings) round-trip cleanly either way; if you need to match the native ABI exactly, use `LPStr` as shown above.
 
 **Usage Example (C#)**:
 
@@ -161,10 +176,10 @@ DECLARE_INTERFACE_(IVFVirtualCameraSink, IUnknown)
     /// <summary>
     /// Sets the license key for the virtual camera sink filter.
     /// </summary>
-    /// <param name="license">License key wide string (L"TRIAL" for trial version)</param>
+    /// <param name="license">License key ANSI string ("TRIAL" for trial version)</param>
     /// <returns>HRESULT (S_OK for success)</returns>
     STDMETHOD(set_license) (THIS_
-        LPCWSTR license
+        LPCSTR license
         ) PURE;
 };
 ```
@@ -185,8 +200,8 @@ if (SUCCEEDED(hr))
     hr = pSinkFilter->QueryInterface(IID_IVFVirtualCameraSink, (void**)&pSinkIntf);
     if (SUCCEEDED(hr))
     {
-        // Set license
-        hr = pSinkIntf->set_license(L"YOUR-LICENSE-KEY"); // or L"TRIAL"
+        // Set license — LPCSTR (ANSI), not wide string
+        hr = pSinkIntf->set_license("YOUR-LICENSE-KEY"); // or "TRIAL"
         pSinkIntf->Release();
     }
 }
@@ -211,9 +226,9 @@ type
     /// <summary>
     /// Sets the license key for the virtual camera sink filter.
     /// </summary>
-    /// <param name="license">License key wide string ('TRIAL' for trial version)</param>
+    /// <param name="license">License key ANSI string ('TRIAL' for trial version)</param>
     /// <returns>HRESULT (S_OK for success)</returns>
-    function set_license(license: PWideChar): HRESULT; stdcall;
+    function set_license(license: PAnsiChar): HRESULT; stdcall;
   end;
 ```
 
@@ -232,8 +247,8 @@ begin
     // Query interface
     if Succeeded(SinkFilter.QueryInterface(IID_IVFVirtualCameraSink, SinkIntf)) then
     begin
-      // Set license
-      SinkIntf.set_license('YOUR-LICENSE-KEY'); // or 'TRIAL'
+      // Set license — PAnsiChar (ANSI string)
+      SinkIntf.set_license(PAnsiChar(AnsiString('YOUR-LICENSE-KEY'))); // or AnsiString('TRIAL')
       SinkIntf := nil;
     end;
   end;

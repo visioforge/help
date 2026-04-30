@@ -1,6 +1,14 @@
 ---
 title: Selección de Dispositivo de Salida de Audio en Delphi
 description: Seleccione dispositivos de salida de audio en Delphi - enumere dispositivos, controle volumen, ajuste balance con ejemplos de código para Delphi, C++ y VB6.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+
 ---
 
 # Selección de Dispositivo de Salida de Audio en Delphi
@@ -59,8 +67,9 @@ int selectedIndex = m_AudioOutputDeviceCombo.GetCurSel();
 CString selectedDevice;
 m_AudioOutputDeviceCombo.GetLBText(selectedIndex, selectedDevice);
 
-// Establecer el dispositivo seleccionado como el dispositivo de salida de audio activo
-m_VideoCapture.Audio_OutputDevice = selectedDevice;
+// Establecer el dispositivo seleccionado como el dispositivo de salida de audio activo.
+// Los setters de propiedades COM en MFC usan el wrapper put_, no asignación directa.
+m_VideoCapture.put_Audio_OutputDevice(selectedDevice);
 ```
 
 ### Implementación en VB6

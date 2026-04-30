@@ -1,9 +1,33 @@
 ---
 title: SDK Video Fingerprinting C++ - Guía de instalación y config.
 description: Instale y configure el SDK Video Fingerprinting C++ de VisioForge con Visual Studio, paquetes NuGet y su primera app de huellas.
+tags:
+  - Video Fingerprinting SDK
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - GStreamer
+  - Fingerprinting
+  - MP4
+primary_api_classes:
+  - VFPFingerprintSource
+  - VFPFillSource
+  - VFPAnalyzer
+
 ---
 
 # Empezando con SDK de Video Fingerprinting C++
+
+!!! danger "Algunos snippets abajo llaman a helpers de alto nivel que no existen — use la API plana C en su lugar"
+
+    `VFPFillSource`, `VFPSearch_GetFingerprintForVideoFile`, y
+    `VFPCompare_GetFingerprintForVideoFile` **no** son exports reales de
+    `VisioForge_VFP.dll`. La API C distribuida es una interfaz plana
+    estilo C (`extern "C"`) — vea [`index.md`](./index.md) para el flujo
+    canónico `*_Init` / `*_Process` / `*_Build` / `*_Search` / `*_Compare`.
+    La decodificación de cuadros es responsabilidad de la aplicación host
+    (use FFmpeg / GStreamer / DirectShow). Catalogado como defecto #087.
 
 ¡Bienvenido al SDK de Video Fingerprinting de VisioForge para C++! Esta guía completa lo guiará a través de todo lo que necesita para comenzar, desde instalación hasta su primera aplicación funcionando. Al final de esta guía, tendrá una base sólida para construir aplicaciones de video fingerprinting de alto rendimiento en C++.
 

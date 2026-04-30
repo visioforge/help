@@ -1,6 +1,17 @@
 ---
 title: Playlist Playback Management in .NET with C# Code Examples
 description: Implement playlist functionality in WinForms, WPF, and Console apps using VisioForge Media Player SDK .NET. Sequential and custom playback order.
+tags:
+  - Media Player SDK
+  - .NET
+  - MediaPlayerCore
+  - Windows
+  - Playback
+  - MP4
+  - C#
+primary_api_classes:
+  - NewFilePlaybackEventArgs
+
 ---
 
 # Complete Guide to Playlist API Implementation in .NET
@@ -198,38 +209,38 @@ private bool repeatEnabled = false;
 private bool shuffleEnabled = false;
 private Random random = new Random();
 
-// Handle playlist navigation when media playback stops
+// Handle playlist navigation when a track finishes. OnStop fires for both normal end-of-file
+// and explicit Stop() calls — use OnPlaylistFinished (below) to react only at the end of the
+// whole playlist. StopEventArgs exposes Successful (bool) and Position (TimeSpan); there is no
+// StopReason enum.
 private void MediaPlayer1_OnStop(object sender, StopEventArgs e)
 {
-    // Check if this is the end of media (not a manual stop)
-    if (e.Reason == StopReason.EndOfMedia)
+    if (!e.Successful)
     {
-        if (repeatEnabled)
+        return; // Error or aborted — don't auto-advance
+    }
+
+    if (repeatEnabled)
+    {
+        // Just replay the current item
+        this.mediaPlayer1.Play();
+    }
+    else if (shuffleEnabled)
+    {
+        // Play a random item
+        int totalFiles = this.mediaPlayer1.Playlist_GetCount();
+        int randomIndex = random.Next(0, totalFiles);
+        this.mediaPlayer1.Playlist_SetPosition(randomIndex);
+        this.mediaPlayer1.Play();
+    }
+    else
+    {
+        // Standard behavior: play next if available
+        if (this.mediaPlayer1.Playlist_GetPosition() < this.mediaPlayer1.Playlist_GetCount() - 1)
         {
-            // Just replay the current item
-            this.mediaPlayer1.Play();
+            this.mediaPlayer1.Playlist_PlayNext();
         }
-        else if (shuffleEnabled)
-        {
-            // Play a random item
-            int totalFiles = this.mediaPlayer1.Playlist_GetCount();
-            int randomIndex = random.Next(0, totalFiles);
-            this.mediaPlayer1.Playlist_SetPosition(randomIndex);
-            this.mediaPlayer1.Play();
-        }
-        else
-        {
-            // Standard behavior: play next if available
-            if (this.mediaPlayer1.Playlist_GetPosition() < this.mediaPlayer1.Playlist_GetCount() - 1)
-            {
-                this.mediaPlayer1.Playlist_PlayNext();
-            }
-            else
-            {
-                // We've reached the end of the playlist
-                // OnPlaylistFinished will be triggered
-            }
-        }
+        // Otherwise we've reached the end of the playlist — OnPlaylistFinished fires separately.
     }
 }
 

@@ -3,6 +3,17 @@ title: Renderizado de Audio .NET - Dispositivos y Volumen
 description: Domine el renderizado de audio en .NET con selección de dispositivos, control de volumen, optimización del rendimiento y tutoriales de salida de alta calidad.
 sidebar_label: Renderizado de Audio
 order: 12
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+primary_api_classes:
+  - AudioRendererSettings
 
 ---
 
@@ -47,10 +58,11 @@ El primer paso en la implementación del renderizado de audio es identificar y l
 
     
     ```csharp
-    foreach (var device in VideoCapture1.Audio_OutputDevices())
+    // Audio_OutputDevices() devuelve ObservableCollection<string> — el elemento ES el nombre del dispositivo.
+    foreach (var deviceName in VideoCapture1.Audio_OutputDevices())
     {
-        // add to some combobox
-        cbAudioOutputDevice.Items.Add(device.Name);
+        // agregar a algún combobox
+        cbAudioOutputDevice.Items.Add(deviceName);
     }
     ```
     
@@ -66,7 +78,9 @@ Una vez que el usuario ha seleccionado un dispositivo de salida de audio, necesi
 
     
     ```csharp
-    var audioOutputDevice = (await VideoCapture1.Audio_OutputDevices()).Where(device => device.DisplayName == cbAudioOutputDevice.Text).First();
+    // VideoCaptureCoreX usa Audio_OutputsAsync() para enumerar objetos AudioOutputDeviceInfo.
+    var audioOutputDevice = (await VideoCapture1.Audio_OutputsAsync())
+        .First(device => device.DisplayName == cbAudioOutputDevice.Text);
     VideoCapture1.Audio_OutputDevice = new AudioRendererSettings(audioOutputDevice);
     ```
     

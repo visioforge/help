@@ -4,6 +4,28 @@ description: Integre cámaras Verkada con C# .NET SDK. Conozca su arquitectura e
 meta:
   - name: robots
     content: "noindex, follow"
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Webcam
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - C#
+primary_api_classes:
+  - MediaBlocksPipeline
+  - SystemVideoSourceBlock
+  - VideoRendererBlock
+
 ---
 
 # Cómo Conectar una Cámara Verkada en C# .NET

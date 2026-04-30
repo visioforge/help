@@ -1,6 +1,21 @@
 ---
 title: MP4 Muxer DirectShow Filter - Timing and Live Streaming
 description: MP4 muxer DirectShow interfaces with threading configuration, timing correction, and live streaming options for MP4 container output.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - MP4
+  - C#
+primary_api_classes:
+  - MP4V10Flags
+  - IBaseFilter
+  - MP4MuxerStandardConfig
+  - MP4MuxerDeterministicConfig
+  - MP4V10LiveStreamingConfig
+
 ---
 
 # MP4 Muxer Interface Reference

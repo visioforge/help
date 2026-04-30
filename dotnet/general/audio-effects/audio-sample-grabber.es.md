@@ -1,6 +1,20 @@
 ---
 title: Audio Sample Grabber para .NET - Capturar Frames de Audio
 description: Capture y procese frames de audio en tiempo real usando Audio Sample Grabber con motores X-engines y Classic en aplicaciones SDK .NET.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - VideoEditCore
+  - Windows
+  - Editing
+  - C#
+primary_api_classes:
+  - AudioFrameBufferEventArgs
+  - AudioSampleGrabberBlock
+
 ---
 
 # Trabajar con Audio Sample Grabber en SDKs .NET
@@ -84,8 +98,8 @@ El proceso de configuración varía ligeramente dependiendo de si estás usando 
     Luego, como con los motores X, crea tu manejador de eventos y especifica el formato de audio:
     
     ```csharp
-    _audioSampleGrabberBlock = new AudioSampleGrabberBlock(VisioForge.Core.Types.X.AudioFormatX.S16);
-    _audioSampleGrabberBlock.OnAudioSampleGrabber += OnAudioFrameBuffer;
+    _audioSampleGrabberBlock = new AudioSampleGrabberBlock(VisioForge.Core.Types.X.AudioFormatX.S16LE);
+    _audioSampleGrabberBlock.OnAudioFrameBuffer += OnAudioFrameBuffer;
     ```
     
 
@@ -106,10 +120,12 @@ private void OnAudioFrameBuffer(object sender, AudioFrameBufferEventArgs e)
     // Acceso a datos de audio crudos a través del puntero no administrado
     IntPtr rawAudioData = e.Frame.Data;
     
-    // Obtener detalles del formato de audio
-    int channelCount = e.Frame.Info.ChannelCount;
-    int sampleRate = e.Frame.Info.SampleRate;
-    int bitsPerSample = e.Frame.Info.BitsPerSample;
+    // Obtener detalles del formato de audio. RAWBaseAudioInfo contiene cuatro campos:
+    // Channels, SampleRate, BPS (bits por muestra), Format (enum AudioFormat).
+    int channelCount  = e.Frame.Info.Channels;
+    int sampleRate    = e.Frame.Info.SampleRate;
+    int bitsPerSample = e.Frame.Info.BPS;
+    AudioFormat format = e.Frame.Info.Format;
     
     // Tu código de procesamiento de audio personalizado aquí
     // ...

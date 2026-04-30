@@ -3,6 +3,18 @@ title: Streaming en Red en .NET - RTMP, RTSP, HLS, NDI, SRT
 description: Implemente protocolos RTMP, RTSP, HLS, NDI y otros en .NET con aceleración por hardware para transmisión en vivo y plataformas multimedia.
 sidebar_label: Transmisión en Red
 order: 16
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+
 ---
 
 # Guía Completa de Transmisión en Red

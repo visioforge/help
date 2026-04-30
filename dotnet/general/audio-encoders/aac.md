@@ -1,6 +1,36 @@
 ---
 title: AAC Audio Encoding with M4A Container Output in C# .NET
 description: Use avenc_aac, voaacenc, and Media Foundation backends with runtime detection. Bitrate 32-320 kbps, 5.1 surround, and M4A/MP4 containers.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Recording
+  - Encoding
+  - Editing
+  - MP4
+  - TS
+  - MPEG-2
+  - AAC
+  - C#
+primary_api_classes:
+  - M4AOutput
+  - AACObject
+  - AVENCAACEncoderSettings
+  - VOAACEncoderSettings
+  - AACOutput
+
 ---
 
 # AAC encoder and M4A output
@@ -49,7 +79,7 @@ var aacSettings = new AVENCAACEncoderSettings
     Coder = AVENCAACEncoderCoder.Fast,
     Bitrate = 192,
     IntensityStereo = true,
-    ForceMS = true,
+    ForceMS = AVENCAACTrilian.Auto,
     TNS = true
 };
 ```
@@ -61,6 +91,9 @@ var aacSettings = new AVENCAACEncoderSettings
 - **Channels**: 1 to 6 channels
 
 ### VO-AAC Encoder
+
+!!! warning "Deprecated"
+    `VOAACEncoderSettings` is marked `[Obsolete]` in recent SDK releases — the underlying `voaacenc` element fails caps negotiation with `mpegtsmux` on iOS and is no longer recommended. Prefer `AVENCAACEncoderSettings` for new code; `MFAACEncoderSettings` remains a good choice on Windows.
 
 The VO-AAC Encoder is a more streamlined encoder with simpler configuration options.
 

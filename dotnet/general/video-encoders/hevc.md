@@ -1,6 +1,34 @@
 ---
 title: HEVC Hardware Encoding with AMD, NVIDIA, and Intel GPUs
 description: Implement hardware-accelerated HEVC (H.265) encoding with AMD, NVIDIA, and Intel GPUs for efficient video compression in .NET applications.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - Conversion
+  - Webcam
+  - H.265
+  - C#
+primary_api_classes:
+  - AMFHEVCEncoderSettings
+  - NVENCHEVCEncoderSettings
+  - QSVHEVCEncoderSettings
+  - IHEVCEncoderSettings
+  - SVTHEVCEncoderSettings
+
 ---
 
 # HEVC Hardware Encoding in .NET Applications
@@ -205,8 +233,17 @@ IHEVCEncoderSettings GetOptimalHEVCEncoder()
     }
     else
     {
-        // Fall back to software encoder if no hardware is available
-        return new SoftwareHEVCEncoderSettings(VideoQuality.High);
+#if NET_LINUX
+        // Fall back to the SVT-HEVC software encoder on Linux (Linux-only — see SVTHEVCEncoderSettings).
+        return new SVTHEVCEncoderSettings();
+#else
+        // The X engine does NOT ship a typed IHEVCEncoderSettings fallback for Windows or Apple.
+        // (On Apple platforms, VideoToolbox HEVC is reachable only via lower-level GStreamer wiring —
+        // no `AppleMedia*HEVC*Settings` class exists; only AppleMediaH264EncoderSettings is provided.)
+        // Let the caller decide: keep H.264 output, install a GPU driver enabling QSV/NVENC/AMF, or
+        // use the classic engine's FFMPEG-EXE pipeline.
+        throw new NotSupportedException("No HEVC encoder available on this platform. Install a GPU driver or switch to H.264.");
+#endif
     }
 }
 ```

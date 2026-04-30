@@ -1,6 +1,16 @@
 ---
 title: Install TVFVideoCapture ActiveX Control in Visual Studio
 description: Install TVFVideoCapture ActiveX controls in Visual Studio 2010+ with C++ and managed code integration for video capture projects.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Installing TVFVideoCapture in Visual Studio 2010 and Later

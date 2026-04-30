@@ -3,6 +3,27 @@ title: Loop Video Playback and Position Range in C# .NET SDK
 description: Implement loop playback and position range control with VisioForge Media Player SDK .NET. DirectShow and GStreamer engine examples included.
 sidebar_label: Loop Mode & Position Range
 order: 2
+tags:
+  - Media Player SDK
+  - .NET
+  - DirectShow
+  - MediaPlayerCoreX
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Playback
+  - Streaming
+  - MP4
+  - C#
+primary_api_classes:
+  - MediaPlayerCoreX
+  - MediaPlayerCore
+  - UniversalSourceSettings
+  - MediaBlocksPipeline
 
 ---
 
@@ -384,10 +405,7 @@ player.OnLoop += (sender, e) =>
 };
 
 // Set source and play
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(@"C:\Videos\sample.mp4")
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(@"C:\Videos\sample.mp4"));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -405,10 +423,7 @@ var player = new MediaPlayerCoreX();
 player.Segment_Start = TimeSpan.FromSeconds(30);
 player.Segment_Stop = TimeSpan.FromSeconds(90);
 
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(@"C:\Videos\long-video.mp4")
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(@"C:\Videos\long-video.mp4"));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -435,10 +450,7 @@ player.OnLoop += (sender, e) =>
     Console.WriteLine($"Segment loop #{loopCount}");
 };
 
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(@"C:\Videos\video.mp4")
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(@"C:\Videos\video.mp4"));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -466,10 +478,7 @@ string videoPath;
         Environment.SpecialFolder.MyVideos), "background.mp4");
 #endif
 
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(videoPath)
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(videoPath));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -497,10 +506,7 @@ async Task PreviewSegment(TimeSpan startTime)
     Console.WriteLine($"Previewing segment: {startTime} to {startTime + clipDuration}");
 }
 
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(@"C:\Videos\movie.mp4")
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(@"C:\Videos\movie.mp4"));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -536,10 +542,7 @@ player.OnLoop += (sender, e) =>
     });
 };
 
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(@"C:\Videos\video.mp4")
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(@"C:\Videos\video.mp4"));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -662,7 +665,7 @@ Yes. In MediaPlayerCore, enable `Loop` and `Selection_Active`, then set `Selecti
 ## See Also
 
 - [Build a Video Player in C#](video-player-csharp.md) — full player implementation with playback controls and seeking
-- [Play Video Cross-Platform](play-video-dotnet.md) — Avalonia and MAUI player guide using MediaBlocksPipeline
+- [.NET MAUI Player](maui-player.md) — iOS, Android, macOS, and Windows from one C# codebase
 - [Avalonia Media Player](avalonia-player.md) — cross-platform player with MVVM pattern
 - [Build a Video Player in VB.NET](video-player-vb-net.md) — VB.NET player with seeking and volume control
 - [Code Samples](../code-samples/index.md) — frame extraction, playlists, and reverse playback examples

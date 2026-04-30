@@ -1,6 +1,18 @@
 ---
 title: Guía de Implementación de TVFMediaPlayer — Delphi y ActiveX
 description: Implemente apps TVFMediaPlayer con instaladores silenciosos o configuración manual. Paquetes de códecs, filtros DirectShow, redistribuibles VC++ y dependencias.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Playback
+  - IP Camera
+primary_api_classes:
+  - TVFMediaPlayer
+
 ---
 
 # Guía de Despliegue para TVFMediaPlayer

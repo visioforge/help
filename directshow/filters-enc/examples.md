@@ -1,9 +1,61 @@
 ---
 title: DirectShow Encoding Filter Examples - C++, C#, VB.NET
 description: Code examples for DirectShow encoding: NVENC GPU, H.264/H.265 software, AAC/MP3/Opus audio, and MP4/MKV/WebM muxer configuration.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - MP4
+  - MKV
+  - WebM
+  - TS
+  - H.264
+  - H.265
+  - VP9
+  - AAC
+  - MP3
+  - Opus
+  - FLAC
+  - Vorbis
+  - C#
+primary_api_classes:
+  - IBaseFilter
+  - IFileSinkFilter
+  - ProgressEventArgs
+
 ---
 
 # Encoding Filters Pack - Code Examples
+
+!!! danger "NVENC examples on this page use fabricated enum types and method names — treat as illustrative pseudocode"
+
+    The NVENC code blocks below reference enum types (`NVENC_CODEC.*`,
+    `NVENC_RATE_CONTROL.*`, `NVENC_PRESET.*`, `NVENC_H264_PROFILE.*`,
+    `NVENC_H264_LEVEL.*`, `NVENC_HEVC_PROFILE.*`, `NVENC_HEVC_LEVEL.*`)
+    and method names (`SetMaxBitrate`, `SetVBVBufferSize`, `SetCQP`,
+    `SetHEVCProfile`, `SetHEVCLevel`) that do not exist on the real
+    `INVEncConfig` interface (`H264EncoderNVENC/Intf.h`).
+
+    **Real canonical NVENC API (verified against the filter source):**
+
+    - **`SetCodec(int)`** — `0` = H.264, `1` = H.265 (HEVC). Plain int, no enum.
+    - **`SetRateControl(int)`** — `0` = CQP, `1` = VBR, `2` = CBR. Plain int.
+    - **`SetPreset(GUID)`** — uses NVIDIA NVENC SDK GUIDs directly:
+      `NV_ENC_PRESET_DEFAULT_GUID`, `NV_ENC_PRESET_HP_GUID`,
+      `NV_ENC_PRESET_HQ_GUID`, `NV_ENC_PRESET_LOW_LATENCY_DEFAULT_GUID`, etc.
+    - **`SetProfile(GUID)`** — single setter for both H.264 and HEVC profile
+      GUIDs (selected codec is set separately via `SetCodec`).
+    - **`SetLevel(int)`** — single setter for both codecs (level value as int).
+    - **Bitrate / buffer / quality:** real method names are `SetVbvBitrate(int)`,
+      `SetVbvSize(int)`, `SetQp(int)` — **not** `SetMaxBitrate`, `SetVBVBufferSize`,
+      `SetCQP`. There is no separate `SetHEVCProfile` / `SetHEVCLevel` — use
+      `SetCodec(1)` then `SetProfile(<HEVC profile GUID>)`.
+
+    Tracked as defects #028–#029 in the help audit. A full rewrite of these
+    NVENC sections is queued; for working code, see the canonical interface
+    page: [interfaces/nvenc.md](./interfaces/nvenc.md).
 
 ## Overview
 
@@ -422,7 +474,7 @@ public void EncodeAACAudio(string inputFile, string outputFile)
     // Add AAC audio encoder
     var audioEncoderFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
-        Consts.CLSID_VFAAEncoder,
+        Consts.CLSID_VFAACEncoder,
         "AAC Encoder");
     // Configure AAC (if interface available)
     // var aacConfig = audioEncoderFilter as IAACEncoderConfig;

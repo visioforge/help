@@ -3,6 +3,27 @@ title: Modo bucle y rango de posición en video .NET con C#
 description: Implementa reproducción en bucle y control de segmentos en .NET. Aprende características de DirectShow y GStreamer para bucles de video.
 sidebar_label: Modo Bucle y Rango Posición
 order: 2
+tags:
+  - Media Player SDK
+  - .NET
+  - DirectShow
+  - MediaPlayerCoreX
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Playback
+  - Streaming
+  - MP4
+  - C#
+primary_api_classes:
+  - MediaPlayerCoreX
+  - MediaPlayerCore
+  - UniversalSourceSettings
+  - MediaBlocksPipeline
 
 ---
 
@@ -384,10 +405,7 @@ player.OnLoop += (sender, e) =>
 };
 
 // Establecer fuente y reproducir
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(@"C:\Videos\sample.mp4")
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(@"C:\Videos\sample.mp4"));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -405,10 +423,7 @@ var player = new MediaPlayerCoreX();
 player.Segment_Start = TimeSpan.FromSeconds(30);
 player.Segment_Stop = TimeSpan.FromSeconds(90);
 
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(@"C:\Videos\long-video.mp4")
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(@"C:\Videos\long-video.mp4"));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -435,10 +450,7 @@ player.OnLoop += (sender, e) =>
     Console.WriteLine($"Bucle de segmento #{loopCount}");
 };
 
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(@"C:\Videos\video.mp4")
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(@"C:\Videos\video.mp4"));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -466,10 +478,7 @@ string videoPath;
         Environment.SpecialFolder.MyVideos), "background.mp4");
 #endif
 
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(videoPath)
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(videoPath));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -497,10 +506,7 @@ async Task PreviewSegment(TimeSpan startTime)
     Console.WriteLine($"Vista previa de segmento: {startTime} a {startTime + clipDuration}");
 }
 
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(@"C:\Videos\movie.mp4")
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(@"C:\Videos\movie.mp4"));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -536,10 +542,7 @@ player.OnLoop += (sender, e) =>
     });
 };
 
-var source = new UniversalSourceSettings()
-{
-    URI = new Uri(@"C:\Videos\video.mp4")
-};
+var source = await UniversalSourceSettings.CreateAsync(new Uri(@"C:\Videos\video.mp4"));
 
 await player.OpenAsync(source);
 await player.PlayAsync();
@@ -662,7 +665,7 @@ Sí. En MediaPlayerCore, active `Loop` y `Selection_Active`, luego establezca `S
 ## Ver También
 
 - [Crear un Reproductor de Video en C#](video-player-csharp.md) — implementación completa con controles de reproducción y búsqueda
-- [Reproducir Video Multiplataforma](play-video-dotnet.md) — guía de reproductor Avalonia y MAUI usando MediaBlocksPipeline
+- [Reproductor .NET MAUI](maui-player.md) — iOS, Android, macOS y Windows desde una sola base de código C#
 - [Reproductor Multimedia Avalonia](avalonia-player.md) — reproductor multiplataforma con patrón MVVM
 - [Crear un Reproductor de Video en VB.NET](video-player-vb-net.md) — reproductor VB.NET con búsqueda y control de volumen
 - [Ejemplos de Código](../code-samples/index.md) — extracción de fotogramas, listas de reproducción y ejemplos de reproducción inversa

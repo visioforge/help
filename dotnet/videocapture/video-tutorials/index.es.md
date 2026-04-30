@@ -1,6 +1,11 @@
 ---
 title: Captura de video en C# y .NET - tutoriales con ejemplos
 description: Implementa captura de video en aplicaciones .NET - aprende a capturar desde cámaras IP, webcams y pantallas con ejemplos detallados de código y pasos.
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - Capture
 
 ---
 

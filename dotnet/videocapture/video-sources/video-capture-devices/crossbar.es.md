@@ -1,6 +1,16 @@
 ---
 title: Crossbar en .NET: Configurar Entradas de Video Hardware
 description: Configura múltiples entradas de video hardware para sintonizadores TV y tarjetas de captura en .NET con implementación crossbar C#.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Decoding
+  - C#
+  - NuGet
+
 ---
 
 # Configurar Múltiples Entradas de Video de Hardware con Crossbar
@@ -25,8 +35,11 @@ La interfaz crossbar permite que tu aplicación seleccione programáticamente en
 Primero, necesitas inicializar la interfaz crossbar para tu dispositivo de captura de video. Esto establece la conexión con las capacidades de selección de entrada del hardware.
 
 ```cs
-// Inicializar la interfaz crossbar y verificar si la funcionalidad crossbar existe
-var crossBarFound = VideoCapture1.Video_CaptureDevice_CrossBar_Init();
+// Inicializar la interfaz crossbar para el dispositivo de captura seleccionado actualmente.
+// El método recibe el nombre del dispositivo (compáralo contra Video_CaptureDevices()) y
+// devuelve true si el dispositivo expone un crossbar DirectShow.
+var deviceName = VideoCapture1.Video_CaptureDevice?.Name;
+var crossBarFound = VideoCapture1.Video_CaptureDevice_CrossBar_Init(deviceName);
 
 // Si crossBarFound es true, el dispositivo soporta múltiples entradas que pueden configurarse
 ```

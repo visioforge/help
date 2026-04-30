@@ -1,6 +1,25 @@
 ---
-title: Imou RTSP en C# .NET - Guía de Conexión de Cámaras IP
-description: Conecte cámaras Imou en C# .NET con patrones de URL RTSP y ejemplos de código para modelos de las series Cruiser, Ranger, Bullet, Cell y Versa.
+title: Cámara IP Imou en C# .NET — RTSP y ONVIF, Configuración
+description: Conecte cámaras Imou (Cruiser, Ranger, Bullet, Cell) en C# / .NET vía RTSP/ONVIF. Credenciales por defecto, URLs de stream, H.264/H.265. Código de muestra.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Imou en C# .NET

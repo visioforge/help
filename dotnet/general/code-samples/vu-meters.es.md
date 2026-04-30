@@ -1,6 +1,18 @@
-﻿---
+---
 title: Implementar Medidores VU y Visualizadores de Forma de Onda
 description: Construya medidores VU y visualizadores de forma de onda en WinForms y WPF para monitoreo de nivel de audio en tiempo real con soporte mono y estéreo en .NET.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - WinForms
+  - WPF
+  - C#
+primary_api_classes:
+  - AudioLevelEventArgs
+  - VUMeterMaxSampleEventArgs
 ---
 
 # Visualización de Audio: Implementación de Medidores VU y Visualizaciones de Forma de Onda en .NET
@@ -41,7 +53,7 @@ Implementar un medidor VU en WinForms requiere solo unos pocos pasos:
 
    ```cs
    // Habilitar medidor VU antes de iniciar reproducción/captura
-   mediaPlayer.Audio_VUMeterPro_Enabled = true;
+   mediaPlayer.Audio_VUMeter_Pro_Enabled = true;
    ```
 
 3. **Implementar el Manejador de Eventos**: Agrega un manejador de eventos para procesar los datos de nivel de audio y actualizar la visualización del medidor VU.
@@ -100,8 +112,8 @@ WPF requiere un enfoque ligeramente diferente debido a su modelo de hilos y fram
 1. **Agregar el Control de Medidor VU**: Agrega el control de medidor VU a tu diseño XAML. Para audio estéreo, agrega dos controles.
 
    ```xml
-   <VisioForge.Controls.UI.WPF.VolumeMeterPro.VolumeMeter x:Name="volumeMeter1" />
-   <VisioForge.Controls.UI.WPF.VolumeMeterPro.VolumeMeter x:Name="volumeMeter2" /> <!-- Para estéreo -->
+   <VisioForge.Core.UI.WPF.VolumeMeterPro.VolumeMeter x:Name="volumeMeter1" />
+   <VisioForge.Core.UI.WPF.VolumeMeterPro.VolumeMeter x:Name="volumeMeter2" /> <!-- Para estéreo -->
    ```
 
 2. **Habilitar el Procesamiento del Medidor VU e Iniciar los Medidores**:
@@ -190,41 +202,39 @@ Tanto el medidor VU como los controles de pintor de forma de onda ofrecen extens
 
 ### Personalización de Medidores VU
 
-Puedes personalizar varios aspectos de la apariencia del medidor VU:
+El control `VolumeMeter` expone las siguientes propiedades reales:
 
-- **Esquema de Colores**: Modificar los colores usados para diferentes niveles de audio (bajo, medio, alto)
-- **Tiempo de Respuesta**: Ajustar qué tan rápido el medidor responde a cambios de nivel
-- **Escala**: Configurar la escala y rango de decibelios
-- **Orientación**: Establecer orientación horizontal o vertical
+- **`MinDb` / `MaxDb`**: rango de decibelios mostrado por el medidor
+- **`Boost`**: multiplicador de ganancia aplicado antes del renderizado
+- **`Orientation`**: dirección horizontal o vertical de la barra
+- **`ForeColor`**: color de la barra (heredado de `Control`)
+- **`MinimalUpdateInterval`** (solo WPF): limita la frecuencia de redibujado
 
 Ejemplo de personalización de un medidor VU:
 
 ```cs
-volumeMeter1.PeakHoldTime = 500; // Mantener pico por 500ms
-volumeMeter1.ColorNormal = Color.Green;
-volumeMeter1.ColorWarning = Color.Yellow;
-volumeMeter1.ColorAlert = Color.Red;
-volumeMeter1.WarningThreshold = -12; // dB
-volumeMeter1.AlertThreshold = -6; // dB
+volumeMeter1.MinDb = -60;
+volumeMeter1.MaxDb = 6;
+volumeMeter1.Boost = 1.0f;
+volumeMeter1.ForeColor = System.Drawing.Color.Green;  // WinForms
+volumeMeter1.Orientation = System.Windows.Forms.Orientation.Vertical;
 ```
 
 ### Personalización de Pintores de Forma de Onda
 
-Los pintores de forma de onda pueden personalizarse para proporcionar diferentes representaciones visuales:
+El control `WaveformPainter` tiene una superficie real pequeña:
 
-- **Grosor de Línea**: Ajustar el grosor de la línea de forma de onda
-- **Gradiente de Color**: Aplicar gradientes de color basados en amplitud
-- **Escala de Tiempo**: Modificar cuánto tiempo se representa en el área visible
-- **Modo de Renderizado**: Elegir entre diferentes estilos de renderizado (línea, relleno, etc.)
+- **`Boost`** (WinForms): multiplicador de ganancia previo al renderizado
+- **`ForeColor` / `BackColor`**: colores de línea y fondo (heredados de `Control`)
+- **`Clear()`**: reinicia el historial pintado
+- **`AddMax(float)`** (WinForms) / **`AddValue(float, float)`** (WPF): añade una nueva muestra
 
 Ejemplo de personalización de un pintor de forma de onda:
 
 ```cs
-waveformPainter.LineColor = Color.SkyBlue;
-waveformPainter.BackColor = Color.Black;
-waveformPainter.LineThickness = 2;
-waveformPainter.ScrollingSpeed = 50;
-waveformPainter.RenderMode = WaveformRenderMode.FilledLine;
+waveformPainter.ForeColor = System.Drawing.Color.SkyBlue;
+waveformPainter.BackColor = System.Drawing.Color.Black;
+waveformPainter.Boost = 1.5f;
 ```
 
 ## Consideraciones de Rendimiento

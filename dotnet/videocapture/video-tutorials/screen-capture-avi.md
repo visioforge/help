@@ -2,6 +2,32 @@
 title: Screen Capture to AVI with MJPEG Encoding in C# .NET
 description: Record screen to AVI format in C# with MJPEG or uncompressed video. When to choose AVI over MP4, codec options, and complete code examples using VisioForge SDK.
 sidebar_label: Screen Capture to AVI
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Encoding
+  - Screen Capture
+  - MP4
+  - AVI
+  - H.264
+  - MJPEG
+  - C#
+  - NuGet
+primary_api_classes:
+  - AVIOutput
+  - VideoCaptureCore
+  - VideoCaptureCoreX
+  - MJPEGEncoderSettings
+  - VideoView
+
 ---
 
 # C# Screen Capture to AVI Implementation Guide

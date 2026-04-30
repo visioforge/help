@@ -2,6 +2,23 @@
 title: Live Video Compositor for Real-Time Mixing in C# .NET
 description: Mix multiple live video and audio sources in real-time using VisioForge Media Blocks SDK. Dynamic source switching for streaming and recording in C#.
 sidebar_label: Live Video Compositor
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+primary_api_classes:
+  - LiveVideoCompositor
+  - LVCVideoInput
+  - MediaBlock
+  - LVCAudioInput
+  - LVCAudioOutput
+
 ---
 
 # Live Video Compositor
@@ -113,7 +130,7 @@ var settings = new ScreenCaptureDX9SourceSettings();
 settings.CaptureCursor = true;
 settings.Monitor = 0;
 settings.FrameRate = new VideoFrameRate(30);
-settings.Rectangle = new Rectangle(0, 0, 1920, 1080);
+settings.Rectangle = new Rect(0, 0, 1920, 1080); // (left, top, right, bottom) — full 1920x1080
 
 var rect = new Rect(0, 0, 640, 480);
 var name = $"Screen source";
@@ -221,7 +238,7 @@ We use the `DeviceEnumerator` class to get the audio devices. The first audio de
 DSAudioCaptureDeviceSourceSettings settings = null;
 AudioCaptureDeviceFormat deviceFormat = null;
 
-var device = (await DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.DirectSound))[0]];
+var device = (await DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.DirectSound))[0];
 if (device != null)
 {
     var formatItem = device.Formats[0];
@@ -365,6 +382,50 @@ await _compositor.Output_AddAsync(videoRendererOutput);
 VideoView1 is a `VideoView` object that is used to display the video. Each platform / UI framework has its own `VideoView` implementation.
 
 You can add several `LVCVideoViewOutput` objects to the LVC pipeline to display the video on different displays.
+
+## Monitoring render frame rate
+
+When composing many inputs at once, the compositor can fall behind the configured `VideoFrameRate` if the CPU or GPU runs out of headroom. Subscribe to `OnRenderStatistics` to read the actual output frame rate and detect drops early:
+
+```csharp
+using System.Diagnostics;
+
+compositor.OnRenderStatistics += (sender, e) =>
+{
+    // Fires roughly twice a second on a threadpool thread.
+    Debug.WriteLine($"FPS: {e.ActualFps:F1} / configured {e.ConfiguredFps:F1}, total frames: {e.FramesDelivered}");
+};
+```
+
+`RenderStatisticsEventArgs` exposes:
+
+- `ActualFps` – measured output frame rate over the last sampling window.
+- `ConfiguredFps` – the frame rate requested via `LiveVideoCompositorSettings.VideoFrameRate`.
+- `FramesDelivered` – monotonic count of frames produced since the compositor started.
+- `LastFrameTimestamp` – PTS of the most recent frame (`TimeSpan.Zero` if none yet).
+
+If `ActualFps` sits noticeably below `ConfiguredFps` for several consecutive ticks, the pipeline is not keeping up — typical causes are too many inputs, oversized source resolutions, a software-only mixer on a heavily loaded CPU, or a slow downstream encoder. Switching `LVCMixerType` to `OpenGL` or `D3D11`, reducing inputs, or dropping source resolution usually restores the configured rate.
+
+Marshal to the UI thread before updating controls, since the event fires on a threadpool thread.
+
+## V1 vs V2
+
+The SDK ships two implementations under different namespaces:
+
+- `VisioForge.Core.LiveVideoCompositorV2` – current, recommended.
+- `VisioForge.Core.LiveVideoCompositor` – original implementation, **deprecated** and scheduled for removal in a future release.
+
+Both namespaces expose an identically named `LiveVideoCompositor` class plus the same `LVC*` helpers. Migrating a file is usually a single-line `using` swap:
+
+```csharp
+// Before
+using VisioForge.Core.LiveVideoCompositor;
+
+// After
+using VisioForge.Core.LiveVideoCompositorV2;
+```
+
+After switching the `using`, `new LiveVideoCompositor(...)` resolves to the V2 class and the obsolete warnings disappear. The `OnRenderStatistics` event is only available on V2.
 
 ---
 

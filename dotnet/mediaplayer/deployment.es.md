@@ -1,6 +1,27 @@
 ---
 title: Despliegue de Media Player SDK .Net con NuGet y filtros
 description: Despliega aplicaciones de Media Player SDK con paquetes NuGet, dependencias de runtime, filtros DirectShow para Windows y entornos multiplataforma.
+tags:
+  - Media Player SDK
+  - .NET
+  - DirectShow
+  - MediaPlayerCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - Streaming
+  - Decoding
+  - IP Camera
+  - MP4
+  - WebM
+  - OGG
+  - FLAC
+  - Vorbis
+  - NuGet
+
 ---
 
 # Guía de Despliegue de Media Player SDK .Net

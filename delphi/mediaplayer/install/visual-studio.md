@@ -1,6 +1,22 @@
 ---
 title: Add ActiveX Media Player to Visual Studio C++/C#/VB.NET
 description: Import TVFMediaPlayer ActiveX control into Visual Studio 2010+ projects. Step-by-step COM wrapper generation, toolbox setup, and .NET SDK migration guide.
+tags:
+  - Media Player SDK
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Playback
+  - MP4
+  - AVI
+  - MOV
+  - WMV
+  - C#
+primary_api_classes:
+  - TVFMediaPlayer
+
 ---
 
 # Installing TVFMediaPlayer ActiveX in Visual Studio 2010 and Later
@@ -94,7 +110,7 @@ private void buttonPlay_Click(object sender, EventArgs e)
         try
         {
             // Set the filename for the ActiveX control
-            axMediaPlayer1.Filename = openFileDialog.FileName;
+            axMediaPlayer1.FilenameOrURL = openFileDialog.FileName;
 
             // Start playback
             axMediaPlayer1.Play();
@@ -120,7 +136,7 @@ public Form1()
 }
 ```
 
-Similar code can be written in VB.NET, accessing the same properties (`Filename`, `Play()`) and events (`OnStop`). In C++, you would typically use COM interfaces directly or MFC wrappers if using that framework.
+Similar code can be written in VB.NET, accessing the same properties (`FilenameOrURL`, `Play()`) and events (`OnStop`). In C++, you would typically use COM interfaces directly or MFC wrappers if using that framework.
 
 ## Important: The Case for the Native .NET SDK
 
@@ -132,7 +148,7 @@ The ActiveX approach, while functional, carries several significant disadvantage
 2. **Performance:** COM Interop can introduce performance overhead compared to native .NET code.
 3. **Deployment:** Requires proper registration of the ActiveX control (x86 and potentially x64) on the end-user's machine using `regsvr32`, which can complicate deployment and require administrative privileges. Native .NET libraries are typically deployed just by copying files (XCopy deployment) or via NuGet.
 4. **Limited Integration:** ActiveX controls don't integrate as seamlessly with modern .NET UI frameworks like WPF or MAUI. While they can sometimes be hosted, it's often awkward and limited compared to native controls.
-5. **Bitnes Mismatches:** Managing x86/x64 versions and ensuring the correct one is used by the application and the VS designer can be error-prone.
+5. **Bitness Mismatches:** Managing x86/x64 versions and ensuring the correct one is used by the application and the VS designer can be error-prone.
 6. **Technology Age:** ActiveX is a legacy technology with limited ongoing evolution compared to the rapidly advancing .NET platform.
 
 **Advantages of the Native .NET SDK:**

@@ -1,6 +1,30 @@
 ---
 title: Motion JPEG (MJPEG) Encoders in VisioForge .NET SDKs
 description: Implement MJPEG video encoders in .NET with CPU and GPU acceleration for frame-by-frame compression and streaming applications.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - MJPEG
+  - C#
+primary_api_classes:
+  - QSVMJPEGEncoderSettings
+  - MJPEGEncoderSettings
+  - IMJPEGEncoderSettings
+
 ---
 
 # Motion JPEG (MJPEG) Video Encoders for .NET Applications

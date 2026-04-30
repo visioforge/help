@@ -1,6 +1,13 @@
 ---
 title: Guía para Corregir Errores de Archivos .otares en Delphi
 description: Resuelva errores de archivos .otares faltantes en Delphi - solucione problemas de recursos, corrija errores de compilación y restaure la funcionalidad.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+
 ---
 
 # Corregir Errores de Archivos .otares en Paquetes Delphi

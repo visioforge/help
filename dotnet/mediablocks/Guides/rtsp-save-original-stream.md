@@ -1,6 +1,34 @@
 ---
 title: Save RTSP Stream to MP4 Without Re-encoding in C# .NET
 description: Record IP camera RTSP streams directly to MP4 files without transcoding using VisioForge Media Blocks SDK. Passthrough capture with C# code examples.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+  - Recording
+  - Encoding
+  - Decoding
+  - Conversion
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MP4
+  - AAC
+  - C#
+  - NuGet
+primary_api_classes:
+  - RTSPRecorder
+  - MediaBlocksPipeline
+  - RTSPRAWSourceBlock
+  - RTSPRAWSourceSettings
+  - AACEncoderBlock
+
 ---
 
 # How to Save RTSP Stream to File: Record IP Camera Video without Re-encoding
@@ -171,7 +199,7 @@ namespace RTSPCaptureOriginalStream
                     
                     // Create a decoder block that only handles audio.
                     // We need to decode the original audio before re-encoding it to save the MP4 stream with compatible audio.
-                    _decodeBin = new DecodeBinBlock(videoDisabled: false, audioDisabled: true, subtitlesDisabled: false) 
+                    _decodeBin = new DecodeBinBlock(renderVideo: false, renderAudio: true, renderSubtitle: false) 
                     {
                          // We can disable the internal audio converter if we're sure about the format 
                          // or if the encoder handles conversion. For AAC, it's generally fine.
@@ -358,14 +386,11 @@ class Demo
             recorder.OnError += (s, e) => Console.WriteLine($"ERROR: {e.Message}");
             recorder.OnStatusMessage += (s, msg) => Console.WriteLine($"STATUS: {msg}");
 
-            // Configure RTSP source settings
-            var rtspSettings = new RTSPRAWSourceSettings(new Uri(rtspUrl), audioEnabled: true)
-            {
-                Login = username,
-                Password = password,
-                // Adjust other settings as needed, e.g., transport protocol
-                // RTSPTransport = VisioForge.Core.Types.RTSPTransport.TCP, 
-            };
+            // Configure RTSP source settings. The ctor is private — use the async factory.
+            var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(
+                new Uri(rtspUrl), username, password, audioEnabled: true);
+            // Adjust other settings as needed, e.g., restrict transport to TCP only:
+            // rtspSettings.AllowedProtocols = RTSPSourceProtocol.TCP;
 
             if (await recorder.StartAsync(rtspSettings))
             {
@@ -437,6 +462,7 @@ Common issues and their solutions when saving RTSP streams:
 
 - [Pre-Event Recording with IP Camera](pre-event-recording.md) — buffer RTSP video and record on motion detection trigger
 - [RTSP Video Streaming](../../general/network-streaming/rtsp.md) — RTSP streaming fundamentals and server setup
+- [RTSP reconnection and fallback switch](../../general/network-sources/reconnection-and-fallback.md) — keep recordings running through camera drops with automatic `FallbackSwitch`
 
 ---
 This guide provides a foundational understanding of how to save an RTSP stream's original video while flexibly handling the audio stream using the VisioForge Media Blocks SDK. By leveraging the `RTSPRAWSourceBlock` and direct pipeline connections, you can achieve efficient, high-quality recordings.

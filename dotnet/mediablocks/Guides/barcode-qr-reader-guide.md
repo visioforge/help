@@ -2,6 +2,31 @@
 title: C# Barcode and QR Code Scanner from Live Video in .NET
 description: Build a C# barcode scanner and QR code reader from live video using webcams, IP cameras, or RTSP streams with VisioForge Media Blocks SDK.
 sidebar_label: Barcode & QR Code Scanner
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+  - Barcode / QR
+  - Webcam
+  - IP Camera
+  - Screen Capture
+  - RTSP
+  - ONVIF
+  - MP4
+  - C#
+  - Entitlements
+primary_api_classes:
+  - BarcodeDetectorBlock
+  - MediaBlocksPipeline
+  - InputOutput
+  - BarcodeDetectorEventArgs
+  - UniversalSourceBlock
 
 ---
 
@@ -273,11 +298,14 @@ pipeline.Connect(fileSource.VideoOutput, barcodeDetector.Input);
 #### Scan Barcodes from Screen Capture
 
 ```csharp
+// ScreenSourceBlock takes an IScreenCaptureSourceSettings — on Windows
+// use ScreenCaptureD3D11SourceSettings (Windows 8+). MonitorIndex selects the monitor.
 var screenSource = new ScreenSourceBlock(
-    new ScreenCaptureSourceSettings()
+    new ScreenCaptureD3D11SourceSettings
     {
-        DisplayIndex = 0, // Primary monitor
-        FrameRate = new VideoFrameRate(10) // 10 FPS
+        MonitorIndex = 0, // Primary monitor
+        FrameRate = new VideoFrameRate(10), // 10 FPS
+        CaptureCursor = false
     });
 
 pipeline.Connect(screenSource.Output, barcodeDetector.Input);
@@ -610,9 +638,8 @@ private async void ProcessPaymentQRCode(string qrData)
 
 Complete sample projects are available in the SDK:
 
-- **MAUI Barcode Reader**: [BarcodeReaderMB MAUI Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/BarcodeReaderMB)
-- **Avalonia Barcode Reader**: [BarcodeReaderMB Avalonia Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/BarcodeReaderMB)
 - **WPF Barcode Detection**: [Barcode Detection WPF Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Barcode%20Detection%20Demo)
+- **WPF DataMatrix Detection**: [DataMatrix Detection WPF Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/DataMatrix%20Detection%20Demo)
 
 These samples demonstrate:
 

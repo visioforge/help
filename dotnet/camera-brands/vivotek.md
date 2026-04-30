@@ -1,6 +1,25 @@
 ---
 title: Vivotek IP Camera RTSP URL and C# .NET Connection Guide
 description: Vivotek FD, IP, SD, and FE fisheye camera RTSP URL patterns for C# .NET. Stream and record using VisioForge Video Capture SDK with ONVIF support.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Vivotek IP Camera in C# .NET

@@ -1,6 +1,21 @@
 ---
 title: Bloques Demuxer - Separar Audio y Video de MP4, MKV en C#
 description: Separe flujos de audio, video y subtítulos de contenedores MP4, MKV, AVI y MPEG-TS con los bloques demuxer de VisioForge Media Blocks SDK.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - UniversalDemuxBlock
+  - MPEGTSDemuxBlock
+  - QTDemuxBlock
+  - UniversalSourceBlock
+  - MediaFileInfo
 
 ---
 
@@ -250,14 +265,14 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-// 1. Obtener MediaFileInfo para su archivo de medios
-var mediaInfoReader = new MediaInfoReader(Context); // Asumiendo que Context es su contexto de logging
-MediaFileInfo mediaInfo = await mediaInfoReader.GetInfoAsync("ruta/a/su/video.mkv");
-if (mediaInfo == null)
+// 1. Obtener información del medio para su archivo (lector multiplataforma)
+var mediaInfoReader = new MediaInfoReaderX();
+if (!await mediaInfoReader.OpenAsync("ruta/a/su/video.mkv"))
 {
     Console.WriteLine("Error al obtener información del medio.");
     return;
 }
+var mediaInfo = mediaInfoReader.Info;
 
 // 2. Elegir o crear Configuraciones de Demuxer
 // Ejemplo: Auto-detectar tipo de demuxer

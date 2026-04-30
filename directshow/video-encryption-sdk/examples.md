@@ -1,6 +1,23 @@
 ---
 title: DirectShow Video Encryption Examples - C#, C++, Delphi
 description: Encrypt and decrypt MP4 video files using VisioForge DirectShow filters. AES-256 examples with password protection and binary key modes.
+tags:
+  - Video Encryption SDK
+  - DirectShow
+  - C++
+  - Windows
+  - Encoding
+  - MP4
+  - H.264
+  - AAC
+  - C#
+primary_api_classes:
+  - IBaseFilter
+  - IVFCryptoConfig
+  - IFileSinkFilter
+  - SourceFilter
+  - VideoEncoder
+
 ---
 
 # Video Encryption SDK - Code Examples
@@ -15,6 +32,9 @@ This page provides comprehensive, working code examples for encrypting and decry
 - **Error Handling** - Robust error checking and recovery
 
 All examples include complete implementations in C++, C#, and Delphi.
+
+!!! note "Interface naming across language wrappers"
+    The native C++ header (`encryptor_intf.h`) declares this interface as `ICryptoConfig` with `IID_ICryptoConfig`. The C# and Delphi wrappers expose the same interface as `IVFCryptoConfig` (and the password provider as `IVFPasswordProvider`). Both names share GUID `{BAA5BD1E-3B30-425e-AB3B-CC20764AC253}` and refer to the same COM interface — the C++ snippets below use `ICryptoConfig` while the C#/Delphi snippets use `IVFCryptoConfig`.
 
 ---
 ## Prerequisites
@@ -465,7 +485,9 @@ begin
     if Supports(EncryptMuxer, IVFCryptoConfig, CryptoConfig) then
     begin
       // Set password
-      Result := CryptoConfig.put_Password(PWideChar(Password), Length(Password) * 2);
+      // pBuffer is opaque binary data (PByte); cast through PWideChar to reuse
+      // the wide-string buffer, length in bytes = char count * 2.
+      Result := CryptoConfig.put_Password(PByte(PWideChar(Password)), Length(Password) * 2);
 
       if Succeeded(Result) then
       begin

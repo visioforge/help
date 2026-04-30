@@ -1,6 +1,24 @@
 ---
 title: Cámaras IP Cisco - URLs RTSP y Conexión con C# .NET
 description: Conecta cámaras Cisco CIVS, PVC, VC y Linksys WVC en C# .NET con patrones de URL RTSP y ejemplos de código para modelos empresariales y PYME.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Cisco en C# .NET

@@ -1,6 +1,22 @@
 ---
 title: Guía de Configuración de IIS Smooth Streaming para Apps .NET
 description: Configure Microsoft IIS Smooth Streaming en .NET con bitrate adaptativo, compatibilidad móvil y solución de problemas para entrega de video de calidad.
+tags:
+  - Video Capture SDK
+  - Video Edit SDK
+  - .NET
+  - VideoCaptureCore
+  - VideoEditCore
+  - Windows
+  - Capture
+  - Streaming
+  - Editing
+  - HLS
+  - MP4
+  - C#
+  - JavaScript
+  - NuGet
+
 ---
 
 # Guía Completa para Implementación de IIS Smooth Streaming
@@ -123,15 +139,38 @@ El punto de publicación ahora estará activo y listo para recibir contenido de 
 
 ### Configuración Básica
 
-Para implementar IIS Smooth Streaming en su aplicación SDK de VisioForge:
+Configura una instancia existente de `VideoCaptureCore` (o `VideoEditCore`) para publicar en tu punto de publicación IIS usando `NetworkStreamingFormat.SSF_H264_AAC_SW` (Smooth Streaming, H.264 + AAC, codificación por software):
 
-1. Abra su aplicación construida con Video Capture SDK .Net o Video Edit SDK .Net.
-2. Navegue a la sección de ajustes de transmisión de red.
-3. Habilite funcionalidad de transmisión de red.
-4. Seleccione "Smooth Streaming" como método de transmisión.
-5. Ingrese la URL del punto de publicación (ej., `http://localhost/mainstream.isml`).
-6. Configure parámetros de transmisión adicionales según sea necesario (bitrate, resolución, etc.).
-7. Inicie el flujo.
+```csharp
+using VisioForge.Core.Types.Output;
+using VisioForge.Core.VideoCapture;
+
+// Asume que VideoCapture1 es un VideoCaptureCore ya enlazado a un VideoView.
+VideoCapture1.Network_Streaming_Enabled       = true;
+VideoCapture1.Network_Streaming_Audio_Enabled = true;
+
+// Elige el formato Smooth Streaming. Usa SSF_FFMPEG_EXE si prefieres codificación basada en FFMPEG.
+VideoCapture1.Network_Streaming_Format = NetworkStreamingFormat.SSF_H264_AAC_SW;
+
+// URL del punto de publicación IIS creado arriba.
+VideoCapture1.Network_Streaming_URL = "http://localhost/mainstream.isml";
+
+// Parámetros H.264 + AAC vía MP4Output (Smooth Streaming muxea H.264/AAC al contenedor ISML).
+var streamOutput = new MP4Output();
+streamOutput.Video = new MP4OutputH264Settings
+{
+    Bitrate     = 2500,              // kbps — bitrate objetivo
+    Profile     = H264Profile.ProfileMain,
+    Level       = H264Level.Level4,
+    RateControl = H264RateControl.VBR
+};
+streamOutput.Audio_AAC.Bitrate = 128;
+streamOutput.Audio_AAC.Object  = AACObject.Low;
+
+VideoCapture1.Network_Streaming_Output = streamOutput;
+
+await VideoCapture1.StartAsync();
+```
 
 ![Configurando Smooth Streaming en la demo del SDK](https://www.visioforge.com/wp-content/uploads/2021/02/iis7.jpg)
 

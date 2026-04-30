@@ -1,6 +1,17 @@
 ---
-title: How to Install TVFMediaPlayer in Delphi 6, 7, and Later
-description: Install TVFMediaPlayer in Delphi 6, 7, 2005 and later - prerequisites, package installation, configuration, verification, and troubleshooting.
+title: Install Media Player SDK in Delphi — 32/64-bit Setup
+description: Install VisioForge Media Player SDK in Delphi 10.x-12.x: VCL/FMX components, package registration, library paths. Windows 32/64-bit supported.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Playback
+  - MP4
+primary_api_classes:
+  - TVFMediaPlayer
+
 ---
 
 # Installing TVFMediaPlayer in Delphi
@@ -131,7 +142,7 @@ To confirm the installation was successful:
         procedure TForm1.Button1Click(Sender: TObject);
         begin
           // Ensure VFMediaPlayer1 is the name of your component instance
-          VFMediaPlayer1.Filename := 'C:\path\to\your\test_video.mp4'; // Replace with an actual media file path
+          VFMediaPlayer1.FilenameOrURL := 'C:\path\to\your\test_video.mp4'; // Replace with an actual media file path
           VFMediaPlayer1.Play();
         end;
         ```

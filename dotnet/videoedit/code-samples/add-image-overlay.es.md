@@ -1,6 +1,21 @@
-﻿---
-title: Superposiciones de Imagen en Videos con .NET
+---
+title: Superposiciones de Imagen en Videos .NET con C# y SDK
 description: Añade superposiciones de imagen a videos con guía paso a paso. Incluye ejemplos de código para posicionamiento, transparencia y temporización.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Editing
+  - Effects
+  - C#
+primary_api_classes:
+  - ImageOverlayVideoEffect
+  - VideoEffectImageLogo
 ---
 
 # Añadir Superposiciones de Imagen a Videos en .NET
@@ -53,18 +68,21 @@ VideoEdit1.Video_Effects.Add(imageOverlay);
 Para desarrolladores que trabajan con el motor VideoEditCore, aquí está cómo lograr la misma funcionalidad:
 
 ```cs
-var effect = new VideoEffectImageLogo(true, name);
+var effect = new VideoEffectImageLogo(true, "Logo1");
 
-   // establecer posición
-   effect.Left = 50;
-   effect.Top = 50;
+// apunta al archivo de imagen (o asigna effect.MemoryBitmap para datos de imagen en memoria)
+effect.Filename = "logo.png";
 
-   // establecer alfa (0..255)
-   effect.TransparencyLevel = 127;
+// establecer posición
+effect.Left = 50;
+effect.Top = 50;
 
-   // establecer tiempo de inicio y tiempo de fin
-   effect.StartTime = TimeSpan.FromSeconds(5);
-   effect.StopTime = TimeSpan.FromSeconds(15);
+// nivel global de transparencia (0 = totalmente opaco, 255 = totalmente transparente)
+effect.TransparencyLevel = 127;
+
+// establecer tiempo de inicio y tiempo de fin
+effect.StartTime = TimeSpan.FromSeconds(5);
+effect.StopTime = TimeSpan.FromSeconds(15);
 
 VideoEdit1.Video_Effects_Add(effect);
 ```

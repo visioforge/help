@@ -1,6 +1,30 @@
 ---
 title: Codificadores Motion JPEG (MJPEG) en VisioForge .NET SDKs
 description: Implemente codificadores de video MJPEG en .NET con aceleración de CPU y GPU para compresión cuadro por cuadro y aplicaciones de streaming.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - MJPEG
+  - C#
+primary_api_classes:
+  - QSVMJPEGEncoderSettings
+  - MJPEGEncoderSettings
+  - IMJPEGEncoderSettings
+
 ---
 
 # Codificadores de Video Motion JPEG (MJPEG) para Aplicaciones .NET

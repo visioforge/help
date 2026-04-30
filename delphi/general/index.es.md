@@ -1,6 +1,13 @@
 ---
 title: Configuración del SDK Delphi ActiveX - Instalación
 description: Instale y configure los componentes TVFMediaPlayer, TVFVideoCapture y TVFVideoEdit en Delphi. Paquetes 64-bit, errores .otares e integración IDE.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+
 ---
 
 # Bibliotecas Delphi/ActiveX para Desarrollo Multimedia

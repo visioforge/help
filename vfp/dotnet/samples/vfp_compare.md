@@ -1,6 +1,16 @@
 ---
 title: Video Fingerprint Comparison Tool for Duplicate Detection
 description: Compare video fingerprints for similarity using VisioForge vfp_compare CLI tool with configurable thresholds and duplicate detection output.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+  - C#
+
 ---
 
 # vfp_compare - Video Fingerprint Comparison Tool

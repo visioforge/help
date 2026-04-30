@@ -2,6 +2,28 @@
 title: Buffer Pre-Evento y Grabación con Buffer Circular en C#
 description: Grabe video de vigilancia pre-evento de cámaras IP con buffer circular en VisioForge Media Blocks SDK. Captura por movimiento en C# .NET.
 sidebar_label: Grabación Pre-Evento
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Encoding
+  - MP4
+  - TS
+  - H.264
+  - AAC
+  - C#
+primary_api_classes:
+  - PreEventRecordingBlock
+  - PreEventRecordingEventArgs
+  - PreEventRecordingSettings
+  - MotionDetector
+  - H264Encoder
+
 ---
 
 # Bloque de Grabación Pre-Evento - VisioForge Media Blocks SDK .Net

@@ -3,6 +3,18 @@ title: Network Streaming in .NET - RTMP, RTSP, HLS, NDI, SRT
 description: Implement RTMP, RTSP, HLS, NDI, and other streaming protocols in .NET with hardware acceleration for live broadcasting and media platforms.
 sidebar_label: Network Streaming
 order: 16
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+
 ---
 
 # Comprehensive Network Streaming Guide

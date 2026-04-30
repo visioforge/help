@@ -2,6 +2,20 @@
 title: 50+ Video Processing and Effects Blocks for C# .NET
 description: Apply color adjustments, deinterlacing, overlays, geometric transforms, and real-time visual effects using VisioForge Media Blocks SDK pipelines.
 sidebar_label: Video Processing and Effects
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - VideoRendererBlock
+  - UniversalSourceBlock
+  - UniversalSourceSettings
+  - MediaBlocksPipeline
+  - VideoMixerBlock
 
 ---
 
@@ -70,7 +84,6 @@ sidebar_label: Video Processing and Effects
 - [Video mixer](#video-mixer)
 - [Video Padding Changer](#video-padding-changer)
 - [Video Rate](#video-rate)
-- [Video Scale](#video-scale)
 - [Warp](#warp)
 - [Water ripple](#water-ripple)
 - [D3D11 Video Converter](#d3d11-video-converter)
@@ -111,9 +124,10 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 
 var agingSettings = new AgingVideoEffect
 {
-    ScratchIntensity = 0.5,
-    DustIntensity = 0.3,
-    ColorShift = true
+    ColorAging   = true,   // yellowing / fading (bool, default true)
+    Dusts        = true,   // random dust particles (bool, default true)
+    Pits         = true,   // small holes / imperfections (bool, default true)
+    ScratchLines = 7       // number of vertical scratches (uint, default 7)
 };
 var aging = new AgingBlock(agingSettings);
 pipeline.Connect(fileSource.VideoOutput, aging.Input);
@@ -951,7 +965,8 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 var keyFrameDetector = new KeyFrameDetectorBlock();
 keyFrameDetector.OnKeyFrameDetected += (sender, e) =>
 {
-    Console.WriteLine($"Key frame detected at timestamp: {e.Timestamp}");
+    // OnKeyFrameDetected is EventHandler<TimeSpan>; `e` itself is the timestamp.
+    Console.WriteLine($"Key frame detected at timestamp: {e}");
 };
 pipeline.Connect(fileSource.VideoOutput, keyFrameDetector.Input);
 
@@ -998,7 +1013,7 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 
 var lutSettings = new LUTVideoEffect
 {
-    LUTFilePath = "cinematic_lut.cube"
+    Filename = "cinematic_lut.cube"   // .cube LUT file path
 };
 var lutProcessor = new LUTProcessorBlock(lutSettings);
 pipeline.Connect(fileSource.VideoOutput, lutProcessor.Input);
@@ -1272,9 +1287,15 @@ pipeline.Connect(overlayManager.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 
-// Add overlays dynamically
-await overlayManager.AddTextOverlayAsync("Hello World", 100, 100);
-await overlayManager.AddImageOverlayAsync("logo.png", 10, 10);
+// Add overlays by constructing the element type and calling Video_Overlay_Add.
+var textOverlay = new OverlayManagerText("Hello World", x: 100, y: 100);
+overlayManager.Video_Overlay_Add(textOverlay);
+
+using (var logo = new System.Drawing.Bitmap("logo.png"))
+{
+    var imageOverlay = new OverlayManagerImage(logo, x: 10, y: 10);
+    overlayManager.Video_Overlay_Add(imageOverlay);
+}
 ```
 
 ### Sample applications
@@ -1768,12 +1789,12 @@ var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync
 
 var smpteSettings = new SMPTEVideoEffect
 {
-    TransitionType = 1, // Circle wipe
-    Duration = 2.0 // 2 seconds
+    Type   = SMPTETransitionType.BarWipeLeftToRight,  // SMPTETransitionType enum — 70+ wipe styles
+    Border = 0                                        // int — border thickness (0 = no border)
 };
 var smpte = new SMPTEBlock(smpteSettings);
-pipeline.Connect(source1.VideoOutput, smpte.Input1);
-pipeline.Connect(source2.VideoOutput, smpte.Input2);
+// SMPTEBlock currently exposes a single Input pad; wire a single source.
+pipeline.Connect(source1.VideoOutput, smpte.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(smpte.Output, videoRenderer.Input);
@@ -1820,12 +1841,11 @@ var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync
 
 var smpteAlphaSettings = new SMPTEAlphaVideoEffect
 {
-    TransitionType = 2,
-    Duration = 1.5
+    Type = SMPTETransitionType.BarWipeTopToBottom     // SMPTETransitionType enum
 };
 var smpteAlpha = new SMPTEAlphaBlock(smpteAlphaSettings);
-pipeline.Connect(source1.VideoOutput, smpteAlpha.Input1);
-pipeline.Connect(source2.VideoOutput, smpteAlpha.Input2);
+// SMPTEAlphaBlock currently exposes a single Input pad; wire a single source.
+pipeline.Connect(source1.VideoOutput, smpteAlpha.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(smpteAlpha.Output, videoRenderer.Input);
@@ -1870,7 +1890,7 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 
 var svgSettings = new SVGOverlayVideoEffect
 {
-    SVGFilePath = "logo.svg"
+    Filename = "logo.svg"   // path to the SVG file; alternative: set Data to inline SVG string
 };
 var svgOverlay = new SVGOverlayBlock(svgSettings);
 pipeline.Connect(fileSource.VideoOutput, svgOverlay.Input);
@@ -1960,8 +1980,8 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "marked_video.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-var markDetect = new SimpleVideoMarkDetectBlock(42);
-markDetect.OnMarkDetected += (sender, e) =>
+var markDetect = new SimpleVideoMarkDetectBlock();
+markDetect.VideoMarkDetected += (sender, e) =>
 {
     Console.WriteLine($"Detected mark");
 };
@@ -2492,9 +2512,10 @@ var mixerSettings = new VideoMixerSettings(outputWidth, outputHeight, outputFram
 // Stream 1: Main video, occupies the full output frame, Z-order 0 (bottom layer)
 mixerSettings.AddStream(new VideoMixerStream(new Rect(0, 0, outputWidth, outputHeight), 0));
 
-// Stream 2: Overlay video, smaller rectangle, positioned at (50,50), Z-order 1 (on top)
-// Rectangle: left=50, top=50, width=320, height=180
-mixerSettings.AddStream(new VideoMixerStream(new Rect(50, 50, 320, 180), 1));
+// Stream 2: Overlay video, 320x180 box positioned at (50,50), Z-order 1 (on top)
+// IMPORTANT: Rect ctor is (left, top, right, bottom) — for a 320x180 box at (50,50),
+// pass right=50+320=370 and bottom=50+180=230, NOT width/height directly.
+mixerSettings.AddStream(new VideoMixerStream(new Rect(50, 50, 370, 230), 1));
 
 // Create the VideoMixerBlock
 var videoMixer = new VideoMixerBlock(mixerSettings);
@@ -2563,7 +2584,7 @@ var d3dMixerSettings = new D3D11VideoCompositorSettings(outputWidth, outputHeigh
 // Streams are added similarly to VideoMixerSettings
 // d3dMixerSettings.AddStream(new VideoMixerStream(new Rect(0, 0, outputWidth, outputHeight), 0));
 // For more advanced control, you can use D3D11VideoCompositorStream to specify blend states
-// d3dMixerSettings.AddStream(new D3D11VideoCompositorStream(new Rect(50, 50, 320, 180), 1) 
+// d3dMixerSettings.AddStream(new D3D11VideoCompositorStream(new Rect(50, 50, 370, 230), 1) 
 // {
 //     BlendSourceRGB = D3D11CompositorBlend.SourceAlpha,
 //     BlendDestRGB = D3D11CompositorBlend.InverseSourceAlpha
@@ -2590,7 +2611,7 @@ var glMixerSettings = new GLVideoMixerSettings(outputWidth, outputHeight, output
 // Streams are added similarly to VideoMixerSettings
 // glMixerSettings.AddStream(new VideoMixerStream(new Rect(0, 0, outputWidth, outputHeight), 0));
 // For more advanced control, you can use GLVideoMixerStream to specify blend functions and equations
-// glMixerSettings.AddStream(new GLVideoMixerStream(new Rect(50, 50, 320, 180), 1)
+// glMixerSettings.AddStream(new GLVideoMixerStream(new Rect(50, 50, 370, 230), 1)
 // {
 //     BlendFunctionSourceRGB = GLVideoMixerBlendFunction.SourceAlpha,
 //     BlendFunctionDesctinationRGB = GLVideoMixerBlendFunction.OneMinusSourceAlpha,
@@ -2978,50 +2999,6 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Video Scale
-
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-
-The VideoScale block scales video to different resolutions with various interpolation methods for quality control.
-
-### Block info
-
-Name: VideoScaleBlock.
-
-Pin direction | Media type | Pins count
---- | :---: | :---:
-Input | Uncompressed video | 1
-Output | Uncompressed video | 1
-
-### The sample pipeline
-
-```mermaid
-graph LR;
-    UniversalSourceBlock-->VideoScaleBlock;
-    VideoScaleBlock-->VideoRendererBlock;
-```
-
-### Sample code
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
-
-var videoScale = new VideoScaleBlock();
-pipeline.Connect(fileSource.VideoOutput, videoScale.Input);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(videoScale.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-### Platforms
-
-Windows, macOS, Linux, iOS, Android.
-
 ## Warp
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
@@ -3196,7 +3173,7 @@ var outputHeight = 720;
 var outputFrameRate = new VideoFrameRate(30);
 var settings = new D3D11VideoCompositorSettings(outputWidth, outputHeight, outputFrameRate);
 settings.AddStream(new D3D11VideoCompositorStream(new Rect(0, 0, outputWidth, outputHeight), 0));
-settings.AddStream(new D3D11VideoCompositorStream(new Rect(50, 50, 320, 180), 1));
+settings.AddStream(new D3D11VideoCompositorStream(new Rect(50, 50, 370, 230), 1));
 
 var d3d11Compositor = new D3D11VideoCompositorBlock(settings);
 pipeline.Connect(fileSource1.VideoOutput, d3d11Compositor.Inputs[0]);

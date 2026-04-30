@@ -2,6 +2,12 @@
 title: Guía de Implementación de Filtros DirectShow para Windows
 description: Implemente filtros DirectShow con registro COM, integración de instaladores WiX/NSIS/Inno Setup, lista de archivos redistribuibles y solución de problemas.
 sidebar_label: Despliegue
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+
 ---
 
 # SDKs de DirectShow - Guía de Despliegue
@@ -100,9 +106,9 @@ Determine qué SDKs utiliza su aplicación:
 |-----|-----------|---------------|
 | **Fuente FFMPEG** | Reproducción de medios, streaming | VisioForge_FFMPEG_Source_x64.ax |
 | **Fuente VLC** | Reproducción multipista | VisioForge_VLC_Source.ax |
-| **Filtros de Procesamiento** | Efectos, mezcla | VisioForge_VideoEffects_x64.ax |
-| **Filtros de Codificación** | Codificación de video | VisioForge_NVENC_Encoder_x64.ax |
-| **Cámara Virtual** | Dispositivos virtuales | VisioForge_VirtualCamera_x64.ax |
+| **Filtros de Procesamiento** | Efectos, mezcla | VisioForge_Video_Effects_Pro_x64.ax |
+| **Filtros de Codificación** | Codificación de video | VisioForge_NVENC_x64.ax |
+| **Cámara Virtual** | Dispositivos virtuales | VisioForge_Virtual_Camera_x64.ax |
 
 [Ver Listas Completas de Archivos →](redistributable-files.md)
 
@@ -312,7 +318,7 @@ Vea la [Guía de Integración de Instaladores](installer-integration.md) para ej
 **Archivos para Desplegar** (~100-150MB):
 
 - VisioForge_FFMPEG_Source_x64.ax + DLLs de FFmpeg
-- VisioForge_VideoEffects_x64.ax + dependencias
+- VisioForge_Video_Effects_Pro_x64.ax + dependencias
 
 [Ver Lista Completa de Archivos →](redistributable-files.md#filtro-ffmpeg-source)
 

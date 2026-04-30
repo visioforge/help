@@ -1,6 +1,35 @@
 ---
 title: Formato Contenedor MKV - Codificación y Grabación .NET
 description: Implemente salida MKV en .NET con codificación acelerada por hardware, múltiples pistas de audio y soporte flexible de contenedor Matroska para apps de video.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Recording
+  - Encoding
+  - Editing
+  - MKV
+  - H.264
+  - H.265
+  - AAC
+  - C#
+primary_api_classes:
+  - MKVOutput
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - MediaBlocksPipeline
+  - NVENCH264EncoderSettings
+
 ---
 
 # Salida MKV en los SDK .NET de VisioForge
@@ -29,8 +58,11 @@ La clase `MKVOutput` sirve como la interfaz principal para generar archivos MKV 
 ```csharp
 // Crear salida MKV con codificadores predeterminados
 var mkvOutput = new MKVOutput("output.mkv");
+```
 
-// O especificar codificadores personalizados durante la inicialización
+O especificar codificadores personalizados durante la inicialización (los parámetros segundo y tercero del constructor son `IVideoEncoder` / `IAudioEncoder`, ambos nullable):
+
+```csharp
 var videoEncoder = new NVENCH264EncoderSettings();
 var audioEncoder = new MFAACEncoderSettings();
 var mkvOutput = new MKVOutput("output.mkv", videoEncoder, audioEncoder);
@@ -100,11 +132,12 @@ La calidad de audio es igualmente importante para la mayoría de aplicaciones. L
     mkvOutput.Audio = aacSettings;
 #endif
 
-// O usar OPUS para mejor calidad a tasas de bits más bajas
+// O usar OPUS para mejor calidad a tasas de bits más bajas (Bitrate está en Kbit/s; el
+// número de canales se infiere de los caps de entrada, por lo que OPUSEncoderSettings
+// no expone una propiedad Channels)
 var opusSettings = new OPUSEncoderSettings
 {
-    Bitrate = 128,
-    Channels = 2
+    Bitrate = 128
 };
 mkvOutput.Audio = opusSettings;
 ```
@@ -183,29 +216,36 @@ await editCore.StartAsync();
 
 ### Con Media Blocks SDK
 
+`MKVOutputBlock` toma **settings** de encoder (no bloques) en su constructor y construye la cadena de codificación internamente. Conecta los pads audio/video de la fuente directamente a sus pads de entrada.
+
 ```csharp
-// Crear un pipeline
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Outputs;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.AudioEncoders;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types.X.VideoEncoders;
+using VisioForge.Core.Types;
+
+// Pipeline.
 var pipeline = new MediaBlocksPipeline();
 
-// Agregar bloque fuente
-var sourceBlock = // algún bloque
+// Fuente (cualquier archivo — se decodifica en salidas de video y audio separadas).
+var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri("input.mp4"));
+var sourceBlock = new UniversalSourceBlock(sourceSettings);
 
-## Implementación de interfaz
-
-// Configurar salida MKV
-var aacEncoder = new VOAACEncoderSettings();
-var h264Encoder = new OpenH264EncoderSettings();
+// Sink MKV — el constructor acepta settings de encoder, no bloques.
 var mkvSinkSettings = new MKVSinkSettings("procesado.mkv");
-var mkvOutput = new MKVOutputBlock(mkvSinkSettings, h264Encoder, aacEncoder);
+var mkvOutput = new MKVOutputBlock(
+    mkvSinkSettings,
+    videoSettings: new OpenH264EncoderSettings(),
+    audioSettings: new VOAACEncoderSettings());
 
-// Conectar bloques y ejecutar el pipeline
-pipeline.Connect(sourceBlock.VideoOutput, h264Encoder.Input);
-pipeline.Connect(h264Encoder.Output, mkvOutput.CreateNewInput(MediaBlockPadMediaType.Video));
-pipeline.Connect(sourceBlock.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mkvOutput.CreateNewInput(MediaBlockPadMediaType.Audio));
-pipeline.Connect(mkvOutput.Output, pipeline.Sink);
+// Conecta los pads de la fuente directamente al output MKV — gestiona la codificación internamente.
+pipeline.Connect(sourceBlock.VideoOutput, mkvOutput.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(sourceBlock.AudioOutput, mkvOutput.CreateNewInput(MediaBlockPadMediaType.Audio));
 
-// Iniciar el pipeline
 await pipeline.StartAsync();
 ```
 

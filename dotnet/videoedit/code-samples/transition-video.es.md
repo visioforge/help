@@ -1,6 +1,27 @@
 ---
 title: Transiciones de video suaves en C# con ejemplos de código
 description: Domina los efectos de transición de video en C# con guía paso a paso y ejemplos de código completos para las APIs VideoEditCore y VideoEditCoreX.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Editing
+  - MP4
+  - AVI
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoEditCoreX
+  - VideoTransition
+  - VideoSource
+  - VideoFileSource
+  - MP4Output
+
 ---
 
 # Crear Transiciones de Video Profesionales Entre Clips en C#
@@ -72,21 +93,23 @@ Vamos a añadir dos fragmentos de video de archivos separados, cada uno de 5 seg
     // Definir rutas a nuestros archivos de video fuente
     string[] files = { @"c:\samples\video1.avi", @"c:\samples\video2.avi" };
     
-    // Crear la primera fuente de video - este será el primer clip en nuestra línea de tiempo
+    // Crear la primera fuente de video - este será el primer clip en nuestra línea de tiempo.
+    // VideoFileSource(filename, startTime, stopTime, streamNumber, rate) — el argumento
+    // int es el índice de stream de audio/video, NO un ángulo de rotación. Pase 0 para
+    // usar el stream por defecto.
     var videoFile = new VideoFileSource(
             files[0],                         // Ruta al primer archivo de video
             TimeSpan.Zero,                    // Comenzar desde el inicio del archivo fuente
             TimeSpan.FromMilliseconds(5000),  // Usar 5 segundos del video
-            0,                                // Sin rotación (0 grados)
+            0,                                // streamNumber — 0 selecciona el stream de video por defecto
             1.0);                             // Velocidad de reproducción normal (1.0x)
-                                              // Nota: VideoEditCoreX no requiere StretchMode aquí
-    
+
     // Crear la segunda fuente de video - este será nuestro segundo clip con superposición
     var videoFile2 = new VideoFileSource(
             files[1],                         // Ruta al segundo archivo de video
             TimeSpan.Zero,                    // Comenzar desde el inicio del archivo fuente
             TimeSpan.FromMilliseconds(5000),  // Usar 5 segundos del video
-            0,                                // Sin rotación (0 grados)
+            0,                                // streamNumber — 0 selecciona el stream de video por defecto
             1.0);                             // Velocidad de reproducción normal (1.0x)
     
     // Añadir el primer video al inicio de la línea de tiempo (posición 0ms)
@@ -111,7 +134,7 @@ Al añadir archivos de video a la línea de tiempo, cada parámetro sirve un pro
 - **Tiempo de inicio**: Posición en el video fuente desde donde comenzar (TimeSpan.Zero significa inicio)  
 - **Duración**: Longitud del video a usar (5000ms en nuestro ejemplo)
 - **Modo de estiramiento** (solo VideoEditCore): Cómo manejar diferencias de relación de aspecto (Letterbox, Stretch, etc.)
-- **Rotación**: Grados para rotar el video (0 significa sin rotación)
+- **Número de stream**: Índice del stream de video/audio a leer del archivo fuente (0 = por defecto). Es el argumento int entre StopTime y rate — *no* un ángulo de rotación.
 - **Velocidad de reproducción**: Multiplicador de velocidad (1.0 significa velocidad normal)
 - **Tiempo de inserción**: Posición en la línea de tiempo donde debe colocarse este clip
 
@@ -127,7 +150,7 @@ Ahora que tenemos nuestros dos clips de video superpuestos, añadiremos un efect
     ```cs
     // Obtener el ID para el efecto de transición "Upper right"
     // Cada transición tiene un nombre único y un ID correspondiente
-    int id = VideoEdit.Video_Transition_GetIDFromName("Upper right");
+    int id = VideoEdit1.Video_Transition_GetIDFromName("Upper right");
     ```
     
     Luego, añadiremos la transición especificando el tiempo de inicio, tiempo de fin y el ID de transición:
@@ -144,14 +167,14 @@ Ahora que tenemos nuestros dos clips de video superpuestos, añadiremos un efect
     Para ver todos los efectos de transición disponibles, puedes usar:
     
     ```cs
-    // Obtener un array de todos los nombres de efectos de transición disponibles
-    string[] availableTransitions = VideoEdit.Video_Transition_Names();
+    // Obtener la colección de todos los nombres de efectos de transición disponibles
+    ObservableCollection<string> availableTransitions = VideoEdit1.Video_Transition_Names();
     
     // Ejemplo de iteración a través de todas las transiciones disponibles
     foreach (string transitionName in availableTransitions)
     {
         // Obtener el ID para cada transición
-        int transitionId = VideoEdit.Video_Transition_GetIDFromName(transitionName);
+        int transitionId = VideoEdit1.Video_Transition_GetIDFromName(transitionName);
         // Podrías usar esto en la UI de tu app para que los usuarios elijan transiciones
         Console.WriteLine($"Transición: {transitionName}, ID: {transitionId}");
     }
@@ -197,18 +220,25 @@ Ahora que tenemos nuestros dos clips de video superpuestos, añadiremos un efect
     También puedes especificar directamente el nombre de la transición si lo conoces:
     
     ```cs
-    // Crear una transición usando un nombre específico sin buscarlo primero
-    // Esto es útil cuando ya sabes qué transición quieres usar
+    // Crear una transición usando un nombre específico sin buscarlo primero.
+    // El ctor por string parsea via Enum.Parse(typeof(VideoTransitionType), name).
+    // Los miembros reales de VideoTransitionType son: "Crossfade", "FadeIn",
+    // "FadeOut", más 100+ wipes SMPTE (ej. "BarWipeLr", "BarWipeTb", "BoxWipeTl",
+    // "BoxWipeTr", "ClockCw12", "IrisRect", "IrisDiamond", etc.). Pase cualquier
+    // otro identificador (como "Fade", "FadeFromBlack", "Push", "Slide", "Iris",
+    // "Pixelate") y Enum.Parse lanzará ArgumentException en runtime. La lista
+    // enumerable devuelta por Video_Transitions_GetList es la fuente de verdad
+    // más segura.
     var trans = new VideoTransition(
-            "Circle",                                // Usando la transición "Circle" directamente
+            "Crossfade",                             // Usando un identificador real de VideoTransitionType
             TimeSpan.FromMilliseconds(4000),         // Tiempo de inicio de la transición
             TimeSpan.FromMilliseconds(5000));        // Tiempo de fin de la transición
-    
+
     // Añadir la transición al componente VideoEdit
     VideoEdit1.Video_Transitions.Add(trans);
-    
+
     // También puedes crear múltiples transiciones entre diferentes clips:
-    // var secondTrans = new VideoTransition("Fade", TimeSpan.FromMilliseconds(9000), TimeSpan.FromMilliseconds(10000));
+    // var secondTrans = new VideoTransition("FadeIn", TimeSpan.FromMilliseconds(9000), TimeSpan.FromMilliseconds(10000));
     // VideoEdit1.Video_Transitions.Add(secondTrans);
     ```
     
@@ -237,11 +267,9 @@ Después de configurar tus clips de video y transición, necesitarás iniciar el
     
     // PASO 2: Crear y configurar el formato de salida
     var outputFormat = new MP4Output();
-    // Puedes personalizar la salida con varias propiedades como:
-    // outputFormat.VideoBitrate = 5000000;  // Establecer bitrate de video a 5Mbps
-    // outputFormat.VideoFrameRate = 30;     // Establecer tasa de fotogramas a 30fps
-    // outputFormat.VideoWidth = 1920;       // Establecer ancho de salida a 1920px
-    // outputFormat.VideoHeight = 1080;      // Establecer altura de salida a 1080px
+    // Ajusta los parámetros del codificador mediante las subconfiguraciones Video / Audio, por ejemplo:
+    // (outputFormat.Video as MP4OutputH264Settings).Bitrate = 5000;  // kbit/s
+    // El tamaño y la velocidad de fotogramas de salida provienen de VideoEdit1.Video_FrameRate y de la resolución del timeline.
     
     // PASO 3: Asignar el formato de salida al componente VideoEdit
     VideoEdit1.Output_Format = outputFormat;
@@ -264,22 +292,17 @@ Después de configurar tus clips de video y transición, necesitarás iniciar el
     // En VideoEditCoreX, especificamos el nombre del archivo de salida directamente en el constructor
     var outputFormat = new MP4Output("output.mp4");
     
-    // Puedes personalizar la salida con varias propiedades como:
-    // outputFormat.VideoBitrate = 5000000;  // Establecer bitrate de video a 5Mbps
-    // outputFormat.AudioBitrate = 192000;   // Establecer bitrate de audio a 192kbps
-    // outputFormat.VideoFrameRate = 30;     // Establecer tasa de fotogramas a 30fps
-    // outputFormat.Width = 1920;            // Establecer ancho de salida a 1920px
-    // outputFormat.Height = 1080;           // Establecer altura de salida a 1080px
+    // Ajusta los parámetros del codificador mediante las subconfiguraciones Video / Audio de MP4Output, por ejemplo:
+    // (outputFormat.Video as H264EncoderSettings).Bitrate = 5000;  // kbit/s
+    // (outputFormat.Audio as AACEncoderSettings).Bitrate = 192;    // kbit/s
+    // El tamaño de fotograma de salida proviene de VideoEdit1.Output_VideoSize y la velocidad de Output_VideoFrameRate.
     
     // PASO 2: Asignar el formato de salida al componente VideoEdit
     VideoEdit1.Output_Format = outputFormat;
     
-    // PASO 3: Iniciar el procesamiento (no asíncrono en VideoEditCoreX)
-    // Esto renderizará el video con la transición y lo guardará en el archivo de salida
+    // PASO 3: Iniciar el procesamiento (llamada síncrona; devuelve true en caso de éxito)
+    // Esto renderizará el video con la transición y lo guardará en el archivo de salida.
     VideoEdit1.Start();
-    
-    // ALTERNATIVA: Para procesamiento en segundo plano, podrías usar:
-    // VideoEdit1.Start(true);  // true significa ejecutar en un hilo de fondo
     
     // También deberías configurar manejadores de eventos antes de llamar Start():
     // VideoEdit1.OnProgress += (s, e) => { Console.WriteLine($"Progreso: {e.Progress}%"); };

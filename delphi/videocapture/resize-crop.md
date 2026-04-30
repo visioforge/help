@@ -1,6 +1,17 @@
 ---
 title: Resize and Crop Video in Delphi with TVFVideoCapture
 description: Implement video resizing and cropping in Delphi - real-time processing, aspect ratio handling, and performance optimization with code samples.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - Streaming
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Video Resizing and Cropping in Delphi TVFVideoCapture

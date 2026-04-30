@@ -4,6 +4,27 @@ description: Implement professional video effects, text/image overlays, and cust
 sidebar_label: Video Effects And Processing
 
 order: 15
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Playback
+  - Editing
+primary_api_classes:
+  - VideoEffect
+  - GPUVideoEffect
+  - VideoBalanceVideoEffect
+  - ColorEffectsVideoEffect
+  - GrayscaleVideoEffect
+
 ---
 
 # Video Effects and Processing for .Net Applications
@@ -286,11 +307,11 @@ mediaPlayer.Video_Effects_Add(fadeOut);
 
 ```csharp
 // Apply Gaussian blur for specific time range (Cross-platform)
-var blur = new GaussianBlurVideoEffect("scene_blur")
+// Ctor: GaussianBlurVideoEffect(double sigma, string name = "gaussian_blur")
+var blur = new GaussianBlurVideoEffect(5.0, "scene_blur")
 {
     StartTime = TimeSpan.FromSeconds(10),
-    StopTime = TimeSpan.FromSeconds(15),
-    Sigma = 5.0  // Blur intensity
+    StopTime = TimeSpan.FromSeconds(15)
 };
 await mediaPlayerX.Video_Effects_AddOrUpdateAsync(blur);
 ```
@@ -298,7 +319,7 @@ await mediaPlayerX.Video_Effects_AddOrUpdateAsync(blur);
 ### Advanced Overlay Example (Cross-platform)
 
 ```csharp
-// Complex text overlay with shadows and animation (Cross-platform)
+// Complex text overlay with a drop shadow (Cross-platform)
 var textOverlay = new OverlayManagerText
 {
     Text = "Breaking News",
@@ -309,18 +330,16 @@ var textOverlay = new OverlayManagerText
         Weight = FontWeight.Bold
     },
     Color = SKColors.Yellow,
-    XPosition = 50,
-    YPosition = 100,
-    ShadowSettings = new OverlayManagerShadowSettings
+    X = 50,
+    Y = 100,
+    Shadow = new OverlayManagerShadowSettings
     {
         Enabled = true,
         Color = SKColors.Black,
-        OffsetX = 2,
-        OffsetY = 2,
-        Blur = 5
+        BlurRadius = 5
     }
 };
-await videoCaptureX.OverlayManager_AddAsync(textOverlay);
+videoCaptureX.Video_Overlay_Add(textOverlay);
 ```
 
 ## Documentation Resources

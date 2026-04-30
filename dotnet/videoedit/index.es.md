@@ -2,6 +2,19 @@
 title: Edición de Video - Línea de Tiempo y Transiciones en C# .NET
 description: Edición de video en C# con Video Edit SDK — línea de tiempo, transiciones, superposiciones, conversión de formato y codificación acelerada por hardware.
 sidebar_label: Video Edit SDK .NET
+tags:
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Editing
+primary_api_classes:
+  - VideoEditCoreX
+  - MP4Output
 
 ---
 
@@ -11,7 +24,7 @@ sidebar_label: Video Edit SDK .NET
 
 ## Introducción
 
-Video Edit SDK para .NET es una biblioteca de edición de video en C# que te permite construir aplicaciones de edición de video basadas en línea de tiempo. Agrega archivos de video y audio a una línea de tiempo, recorta segmentos, aplica transiciones y efectos, superpone texto e imágenes, y renderiza el resultado a MP4, AVI, MKV, WebM u otros formatos — todo desde tu código .NET.
+Video Edit SDK para .NET es una biblioteca de edición de video en C# que te permite construir aplicaciones de edición de video basadas en línea de tiempo. Agrega archivos de video y audio a una línea de tiempo, recorta segmentos, aplica transiciones y efectos, superpone texto e imágenes, y renderiza el resultado a MP4, AVI, MKV, WebM, GIF animado u otros formatos — todo desde tu código .NET.
 
 El SDK proporciona dos motores: **VideoEditCore** (solo Windows, basado en DirectShow) y **VideoEditCoreX** (multiplataforma, se ejecuta en Windows, macOS, Linux, Android e iOS). Ambos motores comparten el mismo modelo de línea de tiempo — agrega fuentes, configura la salida e inicia la edición.
 
@@ -20,7 +33,7 @@ El SDK proporciona dos motores: **VideoEditCore** (solo Windows, basado en Direc
 ### 1. Instalar Paquete NuGet
 
 ```bash
-dotnet add package VisioForge.DotNet.VideoEditX
+dotnet add package VisioForge.DotNet.VideoEdit
 ```
 
 Para dependencias específicas de plataforma y configuración de frameworks de UI, consulta la [Guía de Instalación](../install/index.md).
@@ -29,6 +42,8 @@ Para dependencias específicas de plataforma y configuración de frameworks de U
 
 ```csharp
 using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
 using VisioForge.Core.Types.X.VideoEdit;
 using VisioForge.Core.VideoEditX;
 
@@ -111,7 +126,7 @@ Ver: [Efectos Picture-In-Picture](code-samples/picture-in-picture.md)
 | Contenedores de Video | MP4, AVI, MOV, WMV, MKV, WebM, TS, FLV |
 | Codecs de Video | H.264, H.265/HEVC, VP9, AV1, MPEG-2 |
 | Formatos de Audio | AAC, MP3, WMA, OPUS, Vorbis, FLAC, WAV |
-| Formatos de Imagen | JPG, PNG, BMP, GIF |
+| Formatos de Imagen | JPG, PNG, BMP, GIF (entrada), GIF animado (salida) |
 
 ## Soporte de Plataformas
 

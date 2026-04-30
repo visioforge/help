@@ -1,6 +1,19 @@
 ---
 title: Componentes VCL y ActiveX para Video en Delphi y C++ Builder
 description: Componentes VCL y controles ActiveX para reproducción, captura, grabación de pantalla y edición de video en Delphi y C++ Builder.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Streaming
+  - Editing
+primary_api_classes:
+  - TVFMediaPlayer
+  - TVFVideoCapture
+  - TVFVideoEdit
+
 ---
 
 # All-in-One Media Framework

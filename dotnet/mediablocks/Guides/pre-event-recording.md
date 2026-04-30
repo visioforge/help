@@ -1,6 +1,35 @@
 ---
 title: Pre-Event Buffering and Recording for IP Cameras in C#
 description: Implement pre-event buffering for IP cameras in C# .NET. Capture RTSP and webcam footage with motion-triggered recording using VisioForge Media Blocks SDK.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+  - Recording
+  - Encoding
+  - Webcam
+  - IP Camera
+  - RTSP
+  - MP4
+  - MKV
+  - TS
+  - H.264
+  - AAC
+  - C#
+  - NuGet
+primary_api_classes:
+  - PreEventRecordingBlock
+  - TeeBlock
+  - SystemVideoSourceBlock
+  - VideoRendererBlock
+  - H264EncoderBlock
+
 ---
 
 # How to Implement Pre-Event Recording for IP Cameras in C#
@@ -92,7 +121,7 @@ For detailed platform-specific dependencies, see the [Deployment Guide](../../de
 The following C# code is based on the [Pre-Event Recording WPF demo](https://github.com/visioforge/.Net-SDK-s-samples). It demonstrates a complete pipeline with a camera source, motion detection for automatic triggering, video preview, and pre-event recording to MP4 files.
 
 !!!info Demo Sample
-    For a complete working project with XAML and all dependencies, see the [Pre-Event Recording Media Blocks Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/PreEventRecording).
+    For a complete working project with XAML and all dependencies, see the [Pre-Event Recording Media Blocks Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/PreEventRecording%20Demo).
 
 ```csharp
 using System;

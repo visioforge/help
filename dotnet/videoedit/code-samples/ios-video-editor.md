@@ -1,6 +1,26 @@
 ---
 title: iOS Video Editor in C# .NET — Trimming and Effects
 description: Integrate professional video editing into iOS apps with VisioForge Video Edit SDK .NET. Trimming, filters, transitions, and effects on iPhone and iPad.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Editing
+  - Effects
+  - MP4
+  - C#
+primary_api_classes:
+  - VideoEditCoreX
+  - IVideoView
+  - VideoBalanceVideoEffect
+  - MP4Output
+  - ProgressEventArgs
+
 ---
 
 # iOS Video Editor for Seamless In-App Video Editing
@@ -33,9 +53,11 @@ While optimized for iOS, our framework supports Android through .NET MAUI, allow
 Initialize the video editing engine in your iOS app:
 
 ```csharp
-using VisioForge.Core;
-using VisioForge.Core.UI;
-using VisioForge.Core.VideoEditX;
+using System.Drawing;                              // Size
+using VisioForge.Core;                             // VisioForgeX
+using VisioForge.Core.Types;                       // IVideoView, VideoFrameRate
+using VisioForge.Core.Types.X.VideoEdit;           // VideoTransition, VideoTransitionType
+using VisioForge.Core.VideoEditX;                  // VideoEditCoreX
 
 await VisioForgeX.InitSDKAsync();
 
@@ -125,7 +147,7 @@ Create smooth transitions between clips:
 
 ```csharp
 var transition = new VideoTransition(
-    "crossfade",
+    VideoTransitionType.Crossfade,
     TimeSpan.FromMilliseconds(1000),
     TimeSpan.FromMilliseconds(2000));
 videoEdit.Video_Transitions.Add(transition);

@@ -2,6 +2,17 @@
 title: Video Capture ActiveX for Delphi with TVFVideoCapture
 description: Professional Delphi video capture library - capture from devices, process video, and integrate with ActiveX. API docs, tutorials, and examples.
 sidebar_label: TVFVideoCapture
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - Streaming
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # TVFVideoCapture Library for Delphi and ActiveX Development

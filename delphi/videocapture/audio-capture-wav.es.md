@@ -1,6 +1,15 @@
 ---
 title: Guía de Grabación de Audio WAV con SDK Delphi VideoCapture
 description: Capture audio a archivos WAV en Delphi con selección de códec, opciones de compresión y grabación estéreo usando ejemplos de código TVFVideoCapture.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - WAV
+
 ---
 
 # Captura de Audio a Archivos WAV: Guía de Implementación para Desarrolladores

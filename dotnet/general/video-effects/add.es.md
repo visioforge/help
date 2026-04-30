@@ -1,6 +1,21 @@
 ---
 title: Video Effects SDK: Agregar y Configurar Efectos en .NET C#
 description: Agregue y configure efectos de video en entornos .NET SDK para captura, reproducción y edición con gestión de parámetros y ejemplos prácticos en C#.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - C#
+primary_api_classes:
+  - VideoEffectLightness
+
 ---
 
 # Implementación de Efectos de Video en Aplicaciones SDK .NET
@@ -66,7 +81,7 @@ else
 
 Para funcionamiento apropiado, asegúrese de habilitar el procesamiento de efectos antes de iniciar la reproducción o captura de video:
 
-* Establezca la propiedad `Video_Effects_Enable` a `true` antes de llamar a cualquier método `Play()` o `Start()`
+* Establezca la propiedad `Video_Effects_Enabled` a `true` antes de llamar a cualquier método `Play()` o `Start()`
 * Los efectos no se aplicarán si esta propiedad no está habilitada
 * Cambiar parámetros de efectos durante la reproducción actualizará la salida visual en tiempo real
 

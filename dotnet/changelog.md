@@ -2,6 +2,25 @@
 title: VisioForge .NET SDKs — Changelog and Release Notes
 description: Version history for Video Capture, Media Player, Video Edit, and Media Blocks SDKs. New features, bug fixes, API changes, and platform updates.
 hide_table_of_contents: true
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - Capture
+  - Playback
+  - Streaming
+  - Editing
+primary_api_classes:
+  - VideoCaptureCore
+  - VideoCaptureCoreX
+  - VideoView
+  - MediaPlayerCoreX
+  - DeviceEnumerator
+
 ---
 
 # Changelog

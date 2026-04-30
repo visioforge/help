@@ -1,6 +1,16 @@
 ---
-title: Renderizar Video en Vivo en PictureBox WinForms en C# .NET
+title: Renderizar Video en PictureBox WinForms — Guía C# .NET
 description: Actualizaciones thread-safe, liberación de bitmap y double buffering para evitar parpadeo. Frame skipping para alto FPS. Modos zoom con VisioForge SDK.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - C#
+primary_api_classes:
+  - VideoFrameBitmapEventArgs
+
 ---
 
 # Dibujo de Video en PictureBox en Aplicaciones .NET
@@ -72,15 +82,25 @@ private bool applyingPictureBoxImage = false;
 Al iniciar tu captura o reproducción de video, asegúrate de que la bandera esté correctamente inicializada:
 
 ```cs
-private void btnStart_Click(object sender, EventArgs e)
+private async void btnStart_Click(object sender, EventArgs e)
 {
-    // Reiniciar la bandera antes de iniciar captura/reproducción
+    // Reiniciar la bandera antes de iniciar captura/reproducción.
     applyingPictureBoxImage = false;
-    
-    // Tu código de inicialización de video aquí
-    // videoCapture1.Start(); o llamada similar del SDK
+
+    // Suscríbete a OnVideoFrameBitmap antes de arrancar para no perder el primer frame.
+    // El evento es EventHandler<VideoFrameBitmapEventArgs>, disparado desde un hilo worker.
+    videoCapture1.OnVideoFrameBitmap += VideoCapture1_OnVideoFrameBitmap;
+
+    // Ejemplo con Video Capture SDK — reemplaza por MediaPlayer1 / VideoEdit1 si usas esos motores.
+    videoCapture1.Video_CaptureDevice = new VideoCaptureSource("USB Camera");
+    videoCapture1.Mode = VideoCaptureMode.VideoPreview;
+    videoCapture1.Audio_RecordAudio = false;
+
+    await videoCapture1.StartAsync();
 }
 ```
+
+El mismo evento `OnVideoFrameBitmap` existe en los tres motores — `VideoCaptureCore`, `MediaPlayerCore` y `VideoEditCore` — así que el manejador de abajo funciona sin cambios sin importar qué SDK lo haya lanzado.
 
 ### Paso 3: Implementar el Manejador de Frames
 

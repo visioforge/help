@@ -1,6 +1,32 @@
 ---
 title: Configuración del Codificador de Audio WavPack en .NET
 description: Implemente compresión de audio sin pérdida e híbrida lossy WavPack en .NET con configuraciones de calidad, modos de corrección y codificación estéreo.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - WavPack
+  - C#
+primary_api_classes:
+  - WavPackEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - MediaBlocksPipeline
+  - WavPackOutput
+
 ---
 
 # Codificador de Audio WavPack para Aplicaciones .NET

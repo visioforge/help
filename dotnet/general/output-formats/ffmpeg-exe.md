@@ -1,6 +1,33 @@
 ---
 title: FFMPEG.exe Output Format Configuration in .NET Video SDKs
 description: Configure FFMPEG.exe output in .NET for video capture and editing with hardware acceleration, custom codecs, and professional encoding options.
+tags:
+  - Video Capture SDK
+  - Video Edit SDK
+  - .NET
+  - VideoCaptureCore
+  - VideoEditCore
+  - Windows
+  - Capture
+  - Encoding
+  - Editing
+  - MP4
+  - WebM
+  - AVI
+  - MOV
+  - TS
+  - H.264
+  - H.265
+  - ProRes
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+  - VideoEditCore
+  - FFMPEGEXEOutput
+  - H264MFSettings
+  - H264NVENCSettings
+
 ---
 
 # FFMPEG.exe Integration with VisioForge .Net SDKs
@@ -74,6 +101,8 @@ Before implementing FFMPEG output, ensure your development environment is proper
 using VisioForge.Core.Types;
 using VisioForge.Core.Types.VideoCapture;
 using VisioForge.Core.Types.VideoEdit;
+using VisioForge.Core.Types.Output;     // FFMPEGEXEOutput
+using VisioForge.Core.Types.FFMPEGEXE;  // H264MFSettings, H264NVENCSettings, H264QSVSettings, HEVCQSVSettings, OutputMuxer, BasicAudioSettings, ...
 ```
 
 ### 2. Initializing FFMPEG Output
@@ -96,7 +125,7 @@ ffmpegOutput.OutputMuxer = OutputMuxer.MP4;
 
 Other common container options include:
 
-- `OutputMuxer.MKV` - For Matroska container
+- `OutputMuxer.Matroska` - For Matroska container (.mkv)
 - `OutputMuxer.WebM` - For WebM format
 - `OutputMuxer.AVI` - For AVI format
 - `OutputMuxer.MOV` - For QuickTime container
@@ -110,8 +139,8 @@ FFMPEG provides multiple video encoder options. Select and configure the appropr
 ```csharp
 var videoEncoder = new H264MFSettings
 {
-    Bitrate = 5000000,
-    RateControlMode = RateControlMode.CBR
+    Bitrate     = 5000, // Kbit/s — 5000 = 5 Mbps
+    RateControl = H264MFRateControl.CBR,
 };
 ffmpegOutput.Video = videoEncoder;
 ```

@@ -1,6 +1,23 @@
 ---
 title: Deploy TVFVideoEdit in Delphi and ActiveX Applications
 description: Deploy TVFVideoEdit in Delphi and ActiveX applications with automatic installers or manual setup for required components and dependencies.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Encoding
+  - Editing
+  - IP Camera
+  - MP4
+  - WebM
+  - H.264
+  - AAC
+primary_api_classes:
+  - TVFVideoEdit
+
 ---
 
 # TVFVideoEdit Library Deployment Guide
@@ -44,17 +61,19 @@ For situations where you need precise control over component deployment, follow 
    * Copy all MFP DLLs from the `Redist\Filters` directory to your application folder
 
 3. **Register DirectShow Filters**
-   * Copy and COM-register these essential DirectShow filters using [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5):
+   * Copy and COM-register these essential DirectShow filters using [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5).
+   * **Bitness:** the bare filename is the **x86 (32-bit)** filter; the matching **x64 (64-bit)** filter has the `_x64` suffix (for example `VisioForge_Video_Effects_Pro_x64.ax`). Both ship in the redistributable; deploy and register the variant that matches your application's target architecture. 64-bit applications must register the `_x64` variants.
      * `VisioForge_Audio_Effects_4.ax`
      * `VisioForge_Dump.ax`
      * `VisioForge_RGB2YUV.ax`
-     * `VisioForge_Screen_Capture.ax`
      * `VisioForge_Video_Effects_Pro.ax`
      * `VisioForge_Video_Mixer.ax`
      * `VisioForge_Video_Resize.ax`
      * `VisioForge_WavDest.ax`
      * `VisioForge_YUV2RGB.ax`
      * `VisioForge_FFMPEG_Source.ax`
+
+   Screen-capture functionality (formerly delivered as `VisioForge_Screen_Capture.ax`) is now part of the base filters and does not require a separate registration step.
 
 4. **Configure Path Settings**
    * Add the folder containing these filters to the system environment variable `PATH` if your application executable resides in a different directory

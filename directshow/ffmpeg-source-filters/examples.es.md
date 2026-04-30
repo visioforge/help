@@ -1,6 +1,28 @@
 ---
 title: Filtro FFMPEG DirectShow - ejemplos en C++, C# y VB.NET
 description: Ejemplos de código para el Filtro de Fuente FFMPEG en C++, C# y VB.NET con gráficos DirectShow, aceleración de hardware y transmisión de red.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - WinForms
+  - Playback
+  - Streaming
+  - Decoding
+  - RTSP
+  - HLS
+  - MP4
+  - MKV
+  - AVI
+  - MOV
+  - C#
+  - VB.NET
+primary_api_classes:
+  - IFileSourceFilter
+  - IFFMPEGSourceSettings
+  - IBaseFilter
+  - IVFRegister
+
 ---
 
 # Ejemplos de Código
@@ -661,12 +683,12 @@ public void PlayWithStreamSelection(string filename, int videoStreamIndex, int a
         if (videoStreamIndex >= 0 && videoStreamIndex < videoStreams.Count)
         {
             streamSelect.Enable(videoStreams[videoStreamIndex],
-                               AMStreamSelectEnable.Enable);
+                               AMStreamSelectEnableFlags.Enable);
         }
         if (audioStreamIndex >= 0 && audioStreamIndex < audioStreams.Count)
         {
             streamSelect.Enable(audioStreams[audioStreamIndex],
-                               AMStreamSelectEnable.Enable);
+                               AMStreamSelectEnableFlags.Enable);
         }
     }
     // Construir gráfico
@@ -684,29 +706,44 @@ public void PlayWithStreamSelection(string filename, int videoStreamIndex, int a
 ```
 ---
 
-## Ejemplo 7: Devolución de Llamada de Datos de Video/Audio
+## Ejemplo 7: Devolución de Llamada de Datos de Contenedor (p. ej., metadatos SMPTE KLV)
 
-Capturar cuadros de video y audio sin procesar.
+Recibir búferes de datos sin procesar fuera de banda transportados en el
+contenedor (como paquetes de metadatos SMPTE KLV en flujos MPEG-TS). La
+devolución de llamada se dispara una vez por paquete de datos y expone los
+bytes del paquete junto con sus marcas de tiempo de presentación/fin.
 
 ### Implementación de Devolución de Llamada de Datos en C#
 
 ```csharp
-// Delegado de devolución de llamada
-public delegate void DataCallbackDelegate(
-    int streamType,  // 0 = video, 1 = audio
+// Firma real (per IFFmpegSourceSettings.h):
+//   HRESULT (BYTE* buffer, int bufferLen, int dataType, LONGLONG startTime, LONGLONG stopTime)
+// dataType es un enum VF_DATA_TYPE:
+//   0 = unknown, 1 = SMPTE_KLV
+public delegate int FFMPEGDataCallbackDelegate(
     IntPtr buffer,
-    int bufferSize,
-    long timestamp);
+    int bufferLen,
+    int dataType,
+    long startTime,
+    long stopTime);
 
 public class FFMPEGDataCallbackExample
 {
     private IFilterGraph2 filterGraph;
     private IBaseFilter sourceFilter;
-    private DataCallbackDelegate dataCallback;
+    private FFMPEGDataCallbackDelegate dataCallback;
 
-    public void PlayWithCallback(string filename, DataCallbackDelegate callback)
+    public void PlayWithCallback(string filename, Action<byte[], int, long, long> onPacket)
     {
-        this.dataCallback = callback;
+        // Mantener una referencia administrada al delegado para que el GC no
+        // lo recolecte mientras el código nativo retiene un puntero a función.
+        this.dataCallback = (buffer, bufferLen, dataType, startTime, stopTime) =>
+        {
+            byte[] managed = new byte[bufferLen];
+            Marshal.Copy(buffer, managed, 0, bufferLen);
+            onPacket(managed, dataType, startTime, stopTime);
+            return 0; // S_OK
+        };
 
         filterGraph = (IFilterGraph2)new FilterGraph();
 
@@ -718,8 +755,8 @@ public class FFMPEGDataCallbackExample
         var settings = sourceFilter as IFFMPEGSourceSettings;
         if (settings != null)
         {
-            // Establecer devolución de llamada de datos
-            settings.SetDataCallback(OnDataReceived);
+            // Conectar la devolución de llamada de datos
+            settings.SetDataCallback(this.dataCallback);
         }
 
         // Cargar archivo
@@ -730,68 +767,59 @@ public class FFMPEGDataCallbackExample
         ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
         captureGraph.SetFiltergraph(filterGraph);
 
-        // Opción 1: Renderizar normalmente + obtener devoluciones de llamada
+        // Renderizar normalmente; la devolución de llamada de datos se dispara
+        // junto con la reproducción.
         captureGraph.RenderStream(null, MediaType.Video, sourceFilter, null, null);
         captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, null);
-
-        // Opción 2: Sin renderizadores - solo devolución de llamada
-        // (No llamar a RenderStream)
 
         var mediaControl = (IMediaControl)filterGraph;
         mediaControl.Run();
 
         Marshal.ReleaseComObject(captureGraph);
     }
-
-    private void OnDataReceived(int streamType, IntPtr buffer, int bufferSize, long timestamp)
-    {
-        // streamType: 0 = video, 1 = audio
-
-        if (streamType == 0)
-        {
-            // Cuadro de video recibido
-            // El búfer contiene datos de video sin procesar (el formato depende del códec)
-            byte[] videoData = new byte[bufferSize];
-            Marshal.Copy(buffer, videoData, 0, bufferSize);
-
-            // Procesar datos de video...
-            ProcessVideoFrame(videoData, timestamp);
-        }
-        else if (streamType == 1)
-        {
-            // Cuadro de audio recibido
-            byte[] audioData = new byte[bufferSize];
-            Marshal.Copy(buffer, audioData, 0, bufferSize);
-
-            // Procesar datos de audio...
-            ProcessAudioFrame(audioData, timestamp);
-        }
-    }
-
-    private void ProcessVideoFrame(byte[] data, long timestamp)
-    {
-        // Procesamiento de video personalizado
-        Console.WriteLine($"Video frame: {data.Length} bytes at {timestamp}ms");
-
-        // Guardar en archivo, codificar, analizar, etc.
-    }
-
-    private void ProcessAudioFrame(byte[] data, long timestamp)
-    {
-        // Procesamiento de audio personalizado
-        Console.WriteLine($"Audio frame: {data.Length} bytes at {timestamp}ms");
-    }
 }
+
+// Uso:
+//   example.PlayWithCallback("input.ts", (bytes, dataType, startTime, stopTime) =>
+//   {
+//       const int VF_DATA_TYPE_SMPTE_KLV = 1;
+//       if (dataType == VF_DATA_TYPE_SMPTE_KLV)
+//       {
+//           // Decodificar paquete de metadatos KLV
+//           Console.WriteLine($"Paquete KLV: {bytes.Length} bytes, {startTime}–{stopTime}");
+//       }
+//   });
 ```
 
 ---
 ## Ejemplo 8: Devolución de Llamada de Marca de Tiempo
-Monitorear el tiempo de reproducción.
+Monitorear el tiempo del demuxer/stream por tipo de medio.
 ### Devolución de Llamada de Marca de Tiempo en C#
 ```csharp
-public delegate void TimestampCallbackDelegate(long videoTimestamp, long audioTimestamp);
-public void PlayWithTimestampCallback(string filename, TimestampCallbackDelegate callback)
+// Firma real (per IFFmpegSourceSettings.h):
+//   HRESULT (int mediaType, __int64 demuxerStartTime,
+//            __int64 streamStartTime, __int64 timestamp)
+// mediaType selecciona entre flujos de audio y video.
+public delegate int FFMPEGTimestampCallbackDelegate(
+    int mediaType,
+    long demuxerStartTime,
+    long streamStartTime,
+    long timestamp);
+
+private FFMPEGTimestampCallbackDelegate timestampCallback;
+
+public void PlayWithTimestampCallback(string filename)
 {
+    // Mantener el delegado para que no sea recolectado por el GC mientras
+    // el código nativo lo invoca.
+    this.timestampCallback = (mediaType, demuxerStart, streamStart, timestamp) =>
+    {
+        Console.WriteLine(
+            $"mediaType={mediaType} demuxerStart={demuxerStart} " +
+            $"streamStart={streamStart} timestamp={timestamp}");
+        return 0; // S_OK
+    };
+
     filterGraph = (IFilterGraph2)new FilterGraph();
     sourceFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
@@ -800,14 +828,7 @@ public void PlayWithTimestampCallback(string filename, TimestampCallbackDelegate
     var settings = sourceFilter as IFFMPEGSourceSettings;
     if (settings != null)
     {
-        // Establecer devolución de llamada de marca de tiempo
-        settings.SetTimestampCallback((videoTs, audioTs) =>
-        {
-            // Llamado periódicamente con marcas de tiempo actuales
-            callback(videoTs, audioTs);
-            // Actualizar UI, sincronizar sistemas externos, etc.
-            Console.WriteLine($"Video: {videoTs}ms, Audio: {audioTs}ms");
-        });
+        settings.SetTimestampCallback(this.timestampCallback);
     }
     // Cargar y reproducir archivo...
     var fileSource = sourceFilter as IFileSourceFilter;

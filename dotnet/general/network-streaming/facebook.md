@@ -1,6 +1,36 @@
 ---
 title: Facebook Live Streaming and Encoding in .NET Applications
 description: Stream to Facebook Live in .NET with hardware-accelerated encoding, RTMP broadcasting, and platform-specific optimizations for real-time video.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - Screen Capture
+  - RTMP
+  - H.264
+  - H.265
+  - AAC
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - FacebookLiveOutput
+  - NVENCH264EncoderSettings
+  - QSVH264EncoderSettings
+
 ---
 
 # Facebook Live Streaming with VisioForge SDKs
@@ -133,14 +163,12 @@ IAudioEncoderSettings GetOptimalAudioEncoder()
     #if NET_WINDOWS
         // Use Media Foundation on Windows
         audioEncoder = new MFAACEncoderSettings();
-        // Configure for stereo, 44.1kHz sample rate
-        ((MFAACEncoderSettings)audioEncoder).Channels = 2;
+        // MFAACEncoderSettings exposes Bitrate + SampleRate only; channel count follows the upstream source
         ((MFAACEncoderSettings)audioEncoder).SampleRate = 44100;
     #else
         // Use VisioForge optimized AAC on other platforms
         audioEncoder = new VOAACEncoderSettings();
-        // Configure for stereo, 44.1kHz sample rate
-        ((VOAACEncoderSettings)audioEncoder).Channels = 2;
+        // VOAACEncoderSettings exposes Bitrate + SampleRate only; channel count follows the upstream source
         ((VOAACEncoderSettings)audioEncoder).SampleRate = 44100;
     #endif
     
@@ -197,20 +225,20 @@ public FacebookLiveOutput ConfigureFacebookLiveStream(string streamKey, int vide
         if (NVENCH264EncoderSettings.IsAvailable())
         {
             var nvencSettings = new NVENCH264EncoderSettings();
-            nvencSettings.BitRate = videoBitrate;
+            nvencSettings.Bitrate = videoBitrate;
             facebookOutput.Video = nvencSettings;
         }
         else if (QSVH264EncoderSettings.IsAvailable())
         {
             var qsvSettings = new QSVH264EncoderSettings();
-            qsvSettings.BitRate = videoBitrate;
+            qsvSettings.Bitrate = videoBitrate;
             facebookOutput.Video = qsvSettings;
         }
         else
         {
             // Software fallback
             var openH264 = new OpenH264EncoderSettings();
-            openH264.BitRate = videoBitrate;
+            openH264.Bitrate = videoBitrate;
             facebookOutput.Video = openH264;
         }
         

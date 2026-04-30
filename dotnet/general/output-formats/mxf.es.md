@@ -1,6 +1,35 @@
 ---
 title: Integración Profesional de MXF para Aplicaciones .NET
 description: Genere archivos MXF de broadcast en .NET con aceleración por hardware, optimización de códecs y flujos de trabajo profesionales para producción de transmisión.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Encoding
+  - Editing
+  - MXF
+  - H.264
+  - H.265
+  - AAC
+  - MP3
+  - C#
+primary_api_classes:
+  - QSVH264EncoderSettings
+  - MXFOutput
+  - NVENCH264EncoderSettings
+  - AMFH264EncoderSettings
+  - MFAACEncoderSettings
+
 ---
 
 # Salida MXF en los SDK .NET de VisioForge
@@ -9,29 +38,27 @@ description: Genere archivos MXF de broadcast en .NET con aceleración por hardw
 
 [VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
-Material Exchange Format (MXF) es un formato de contenedor estándar de la industria diseñado para aplicaciones de video profesional. Es ampliamente adoptado en entornos de transmisión, flujos de trabajo de postproducción y sistemas de archivo. Los SDK de VisioForge proporcionan capacidades robustas de salida MXF multiplataforma que permiten a los desarrolladores integrar este formato profesional en sus aplicaciones.
+Material Exchange Format (MXF) es un formato contenedor estándar de la industria diseñado para aplicaciones profesionales de video. Es ampliamente adoptado en entornos de broadcast, flujos de trabajo de post-producción y sistemas de archivo. Los SDK de VisioForge proporcionan capacidades robustas y multiplataforma de salida MXF que permiten a los desarrolladores integrar este formato profesional en sus aplicaciones.
 
 ## Entendiendo el formato MXF
 
-MXF sirve como un contenedor que puede contener varios tipos de datos de video y audio junto con metadatos. El formato fue diseñado para abordar problemas de interoperabilidad en flujos de trabajo de video profesional:
+MXF sirve como un envoltorio que puede contener varios tipos de datos de video y audio junto con metadatos. El formato fue diseñado para abordar problemas de interoperabilidad en flujos de trabajo profesionales de video:
 
 - **Estándar de la industria**: Adoptado por las principales emisoras del mundo
-- **Metadatos profesionales**: Soporta metadatos técnicos y descriptivos extensos
+- **Metadatos profesionales**: Admite amplios metadatos técnicos y descriptivos
 - **Contenedor versátil**: Compatible con numerosos códecs de audio y video
-- **Multiplataforma**: Soportado en Windows, macOS y Linux
+- **Multiplataforma**: Compatible con Windows, macOS y Linux
 
-## Comenzando con salida MXF
+## Comenzando con la salida MXF
 
-Implementar salida MXF en los SDK de VisioForge requiere solo unos pocos pasos. La configuración básica involucra:
+Dos rutas de código cubren el 99% de los casos:
 
-1. Crear un objeto de salida MXF
-2. Especificar tipos de flujo de video y audio
-3. Configurar ajustes del codificador
-4. Agregar la salida a su pipeline
+- **`MXFOutput`** (clase en `VisioForge.Core.Types.X.Output`) es un objeto de configuración consumido por `VideoCaptureCoreX.Outputs_Add(...)` o establecido como `VideoEditCoreX.Output_Format`.
+- **`MXFSinkBlock`** + **`MXFSinkSettings`** es la ruta de Media Blocks cuando manejas el pipeline a mano.
 
 ### Implementación básica
 
-Aquí está el código fundamental para crear una salida MXF:
+Aquí está el código básico para crear una salida MXF:
 
 ```csharp
 var mxfOutput = new MXFOutput(
@@ -41,27 +68,29 @@ var mxfOutput = new MXFOutput(
 );
 ```
 
-Esta implementación mínima crea un archivo MXF válido con configuración de codificación predeterminada. Para aplicaciones profesionales, típicamente querrá personalizar los parámetros de codificación aún más.
+Esto crea una salida MXF válida con configuraciones de codificación predeterminadas. Para aplicaciones profesionales, normalmente querrás personalizar los parámetros de codificación.
 
 ## Opciones de codificación de video para MXF
 
-La calidad y compatibilidad de su salida MXF depende en gran medida de su elección de codificador de video. Los SDK de VisioForge soportan múltiples opciones de codificador para equilibrar rendimiento, calidad y compatibilidad. Para opciones de configuración detalladas, consulte la [documentación del codificador H.264](../video-encoders/h264.md) y la [documentación del codificador HEVC](../video-encoders/hevc.md).
+La calidad y compatibilidad de tu salida MXF depende en gran medida de tu elección del codificador de video. Los SDK de VisioForge admiten múltiples opciones de codificador para equilibrar rendimiento, calidad y compatibilidad. Para opciones detalladas de configuración, consulta la [documentación del codificador H.264](../video-encoders/h264.md) y la [documentación del codificador HEVC](../video-encoders/hevc.md).
+
+> Las propiedades `Bitrate` de los codificadores de video del espacio X están en **Kbps** (así 8000 = 8 Mbps). No pases bits por segundo directos.
 
 ### Codificadores acelerados por hardware
 
-Para rendimiento óptimo en aplicaciones de tiempo real, se recomiendan los codificadores acelerados por hardware:
+Para un rendimiento óptimo en aplicaciones en tiempo real, se recomiendan los codificadores acelerados por hardware:
 
 #### Codificadores NVIDIA NVENC
 
 ```csharp
-// Verificar disponibilidad primero
+// Verifica la disponibilidad primero
 if (NVENCH264EncoderSettings.IsAvailable())
 {
     var nvencSettings = new NVENCH264EncoderSettings
     {
-        Bitrate = 8000000, // 8 Mbps
+        Bitrate = 8000, // 8 Mbps (Kbps)
     };
-    
+
     mxfOutput.Video = nvencSettings;
 }
 ```
@@ -73,9 +102,9 @@ if (QSVH264EncoderSettings.IsAvailable())
 {
     var qsvSettings = new QSVH264EncoderSettings
     {
-        Bitrate = 8000000,
+        Bitrate = 8000,
     };
-    
+
     mxfOutput.Video = qsvSettings;
 }
 ```
@@ -87,48 +116,50 @@ if (AMFH264EncoderSettings.IsAvailable())
 {
     var amfSettings = new AMFH264EncoderSettings
     {
-        Bitrate = 8000000,
+        Bitrate = 8000,
     };
-    
+
     mxfOutput.Video = amfSettings;
 }
 ```
 
-### Codificadores basados en software
+### Codificadores por software
 
-Cuando la aceleración de hardware no está disponible, los codificadores de software proporcionan alternativas confiables:
+Cuando la aceleración por hardware no está disponible, los codificadores por software proporcionan alternativas confiables:
 
 #### Codificador OpenH264
 
 ```csharp
 var openH264Settings = new OpenH264EncoderSettings
 {
-    Bitrate = 8000000,
+    Bitrate = 8000,
 };
 
 mxfOutput.Video = openH264Settings;
 ```
 
-### Codificación de video de alta eficiencia (HEVC/H.265)
+### Codificación de Video de Alta Eficiencia (HEVC/H.265)
 
 Para aplicaciones que requieren mayor eficiencia de compresión:
 
 ```csharp
-// Codificador NVIDIA HEVC
+// Codificador HEVC NVIDIA
 if (NVENCHEVCEncoderSettings.IsAvailable())
 {
     var nvencHevcSettings = new NVENCHEVCEncoderSettings
     {
-        Bitrate = 5000000, // Menor tasa de bits posible con HEVC
+        Bitrate = 5000, // Bitrate más bajo posible con HEVC
     };
-    
+
     mxfOutput.Video = nvencHevcSettings;
 }
 ```
 
 ## Codificación de audio para archivos MXF
 
-Aunque el video a menudo recibe más atención, la codificación de audio apropiada es crucial para salidas MXF profesionales. Los SDK de VisioForge ofrecen múltiples opciones de codificador de audio. Para opciones de configuración detalladas, consulte la [documentación del codificador AAC](../audio-encoders/aac.md) y la [documentación del codificador MP3](../audio-encoders/mp3.md).
+Mientras que el video a menudo recibe la mayor atención, la codificación adecuada de audio es crucial para salidas MXF profesionales. Los SDK de VisioForge ofrecen múltiples opciones de codificador de audio. Para opciones detalladas de configuración, consulta la [documentación del codificador AAC](../audio-encoders/aac.md) y la [documentación del codificador MP3](../audio-encoders/mp3.md).
+
+> El `Bitrate` de codificadores de audio del espacio X también está en **Kbps** (así 192 = 192 kbps). `MFAACEncoderSettings` y `VOAACEncoderSettings` sí exponen una propiedad `SampleRate` (por defecto 48000); solo `MP3EncoderSettings` carece de setter de tasa de muestreo y sigue el formato de audio de la fuente upstream. La disposición de canales en los tres sigue el audio upstream salvo que se reconfigure antes (p. ej., con `AudioResamplerBlock`).
 
 ### Codificadores AAC
 
@@ -139,19 +170,17 @@ AAC es el códec preferido para la mayoría de aplicaciones profesionales:
 #if NET_WINDOWS
     var mfAacSettings = new MFAACEncoderSettings
     {
-        Bitrate = 192000, // 192 kbps
-        SampleRate = 48000 // Estándar profesional
+        Bitrate = 192, // kbps
     };
-    
+
     mxfOutput.Audio = mfAacSettings;
 #else
     // Alternativa AAC multiplataforma
     var voAacSettings = new VOAACEncoderSettings
     {
-        Bitrate = 192000,
-        SampleRate = 48000
+        Bitrate = 192,
     };
-    
+
     mxfOutput.Audio = voAacSettings;
 #endif
 ```
@@ -163,9 +192,8 @@ Para máxima compatibilidad:
 ```csharp
 var mp3Settings = new MP3EncoderSettings
 {
-    Bitrate = 320000, // 320 kbps
-    SampleRate = 48000,
-    ChannelMode = MP3ChannelMode.Stereo
+    Bitrate = 320,         // Kbps — debe ser uno de 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320
+    ForceMono = false      // Por defecto; establece true para mezclar a mono
 };
 
 mxfOutput.Audio = mp3Settings;
@@ -173,25 +201,25 @@ mxfOutput.Audio = mp3Settings;
 
 ## Configuración avanzada de MXF
 
-### Pipelines de procesamiento personalizado
+### Pipelines de procesamiento personalizados
 
-Una de las características poderosas de los SDK de VisioForge es la capacidad de agregar procesamiento personalizado a su cadena de salida MXF:
+Una de las características poderosas de los SDK de VisioForge es la capacidad de agregar procesamiento personalizado a tu cadena de salida MXF:
 
 ```csharp
 // Agregar procesamiento de video personalizado
-mxfOutput.CustomVideoProcessor = suBloqueDeProcesamientoDeVideo;
+mxfOutput.CustomVideoProcessor = yourVideoProcessingBlock;
 
 // Agregar procesamiento de audio personalizado
-mxfOutput.CustomAudioProcessor = suBloqueDeProcesamientoDeAudio;
+mxfOutput.CustomAudioProcessor = yourAudioProcessingBlock;
 ```
 
-### Configuración de Sink
+### Configuración del sink
 
-Ajuste fino de su salida MXF con configuración de sink:
+Afina tu salida MXF con configuraciones de sink:
 
 ```csharp
-// Acceder a configuración de sink
-mxfOutput.Sink.Filename = "nueva_salida.mxf";
+// Acceder a las configuraciones del sink (MXFSinkSettings)
+mxfOutput.Sink.Filename = "new_output.mxf";
 ```
 
 ## Consideraciones multiplataforma
@@ -207,26 +235,23 @@ var mxfOutput = new MXFOutput(
 );
 
 #if NET_WINDOWS
-    // Configuración específica de Windows
     if (QSVH264EncoderSettings.IsAvailable())
     {
-        mxfOutput.Video = new QSVH264EncoderSettings();
-        mxfOutput.Audio = new MFAACEncoderSettings();
+        mxfOutput.Video = new QSVH264EncoderSettings { Bitrate = 8000 };
+        mxfOutput.Audio = new MFAACEncoderSettings { Bitrate = 192 };
     }
 #elif NET_MACOS
-    // Configuración específica de macOS
-    mxfOutput.Video = new OpenH264EncoderSettings();
-    mxfOutput.Audio = new VOAACEncoderSettings();
+    mxfOutput.Video = new OpenH264EncoderSettings { Bitrate = 8000 };
+    mxfOutput.Audio = new VOAACEncoderSettings { Bitrate = 192 };
 #else
-    // Respaldo para Linux
-    mxfOutput.Video = new OpenH264EncoderSettings();
-    mxfOutput.Audio = new MP3EncoderSettings();
+    mxfOutput.Video = new OpenH264EncoderSettings { Bitrate = 8000 };
+    mxfOutput.Audio = new MP3EncoderSettings { Bitrate = 320 };
 #endif
 ```
 
 ## Manejo de errores y validación
 
-Las implementaciones robustas de MXF requieren manejo de errores apropiado:
+Las implementaciones robustas de MXF requieren manejo adecuado de errores:
 
 ```csharp
 try
@@ -237,111 +262,101 @@ try
         videoStreamType: MXFVideoStreamType.H264,
         audioStreamType: MXFAudioStreamType.MPEG
     );
-    
+
     // Validar disponibilidad del codificador
     if (!OpenH264EncoderSettings.IsAvailable())
     {
         throw new ApplicationException("No se encontró un codificador H.264 compatible");
     }
-    
-    // Validar directorio de salida
+
+    // Validar el directorio de salida
     var directoryInfo = new DirectoryInfo(Path.GetDirectoryName(mxfOutput.Sink.Filename));
     if (!directoryInfo.Exists)
     {
         Directory.CreateDirectory(directoryInfo.FullName);
     }
-    
-    pipeline.AddBlock(mxfOutput);
 
-    // Conectar bloques
-    // ...
+    // Adjuntar MXFOutput como salida de VideoCaptureCoreX
+    videoCapture.Outputs_Add(mxfOutput, autostart: true);
+    await videoCapture.StartAsync();
 }
 catch (Exception ex)
 {
     logger.LogError($"Error de salida MXF: {ex.Message}");
-    // Implementar estrategia de respaldo
+    // Implementar estrategia de fallback
 }
 ```
 
 ## Optimización de rendimiento
 
-Para rendimiento óptimo de salida MXF:
+Para un rendimiento óptimo de salida MXF:
 
-1. **Priorizar aceleración de hardware**: Siempre verifique y use primero los codificadores de hardware
-2. **Gestión de buffer**: Ajuste los tamaños de buffer según las capacidades del sistema
-3. **Procesamiento paralelo**: Utilice multi-threading donde sea apropiado
-4. **Selección de preset**: Elija presets de codificador según requisitos de calidad vs. velocidad
+1. **Prioriza la aceleración por hardware**: Siempre verifica y usa codificadores de hardware primero
+2. **Gestión de búfer**: Ajusta tamaños de búfer basado en las capacidades del sistema
+3. **Procesamiento paralelo**: Utiliza multi-threading donde sea apropiado
+4. **Selección de preset**: Elige presets de codificador basados en requisitos de calidad vs. velocidad
 
-## Ejemplo de implementación completa
+## Ejemplo completo de implementación — VideoCaptureCoreX
 
-Aquí hay un ejemplo completo que demuestra implementación MXF con opciones de respaldo:
+Aquí tienes un ejemplo completo que demuestra la implementación MXF con opciones de fallback:
 
 ```csharp
-// Crear salida MXF con tipos de flujo específicos
+// Crear salida MXF con tipos de stream específicos
 var mxfOutput = new MXFOutput(
     filename: "output.mxf",
     videoStreamType: MXFVideoStreamType.H264,
     audioStreamType: MXFAudioStreamType.MPEG
 );
 
-// Configurar codificador de video con cadena de respaldo priorizada
+// Configurar codificador de video con cadena de fallback priorizada (bitrate en Kbps)
 if (NVENCH264EncoderSettings.IsAvailable())
 {
-    var nvencSettings = new NVENCH264EncoderSettings
-    {
-        Bitrate = 8000000,
-    };
-    mxfOutput.Video = nvencSettings;
+    mxfOutput.Video = new NVENCH264EncoderSettings { Bitrate = 8000 };
 }
 else if (QSVH264EncoderSettings.IsAvailable())
 {
-    var qsvSettings = new QSVH264EncoderSettings
-    {
-        Bitrate = 8000000,
-    };
-    mxfOutput.Video = qsvSettings;
+    mxfOutput.Video = new QSVH264EncoderSettings { Bitrate = 8000 };
 }
 else if (AMFH264EncoderSettings.IsAvailable())
 {
-    var amfSettings = new AMFH264EncoderSettings
-    {
-        Bitrate = 8000000,
-    };
-    mxfOutput.Video = amfSettings;
+    mxfOutput.Video = new AMFH264EncoderSettings { Bitrate = 8000 };
 }
 else
 {
-    // Respaldo de software
-    var openH264Settings = new OpenH264EncoderSettings
-    {
-        Bitrate = 8000000,
-    };
-    mxfOutput.Video = openH264Settings;
+    mxfOutput.Video = new OpenH264EncoderSettings { Bitrate = 8000 };
 }
 
-// Configurar audio optimizado para plataforma
+// Configurar audio optimizado por plataforma (Kbps)
 #if NET_WINDOWS
-    mxfOutput.Audio = new MFAACEncoderSettings
-    {
-        Bitrate = 192000,
-        SampleRate = 48000
-    };
+    mxfOutput.Audio = new MFAACEncoderSettings { Bitrate = 192 };
 #else
-    mxfOutput.Audio = new VOAACEncoderSettings
-    {
-        Bitrate = 192000,
-        SampleRate = 48000
-    };
+    mxfOutput.Audio = new VOAACEncoderSettings { Bitrate = 192 };
 #endif
 
-// Agregar al pipeline e iniciar
-pipeline.AddBlock(mxfOutput);
+// Adjuntar a VideoCaptureCoreX (o VideoEditCoreX: videoEdit.Output_Format = mxfOutput;)
+videoCapture.Outputs_Add(mxfOutput, autostart: true);
 
-// Conectar bloques
-// ...
+await videoCapture.StartAsync();
+```
 
-// Iniciar el pipeline
+## Ejemplo completo de implementación — MediaBlocksPipeline
+
+Cuando manejes el pipeline a mano, usa `MXFSinkBlock` + `MXFSinkSettings` en lugar de `MXFOutput`:
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var mxfSettings = new MXFSinkSettings("output.mxf",
+    videoStreamType: MXFVideoStreamType.H264,
+    audioStreamType: MXFAudioStreamType.MPEG);
+
+var mxfSink = new MXFSinkBlock(mxfSettings);
+
+// videoEncoder / audioEncoder son instancias existentes de H264EncoderBlock / AACEncoderBlock
+pipeline.Connect(videoEncoder.Output, mxfSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(audioEncoder.Output, mxfSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
 await pipeline.StartAsync();
 ```
 
-Siguiendo esta guía, puede implementar salida MXF de grado profesional en sus aplicaciones usando los SDK .NET de VisioForge, asegurando compatibilidad con flujos de trabajo de transmisión y sistemas de postproducción.
+Siguiendo esta guía, puedes implementar salida MXF de calidad profesional en tus aplicaciones usando los SDK .NET de VisioForge, garantizando compatibilidad con flujos de trabajo de broadcast y sistemas de post-producción.

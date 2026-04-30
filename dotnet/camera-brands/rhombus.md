@@ -4,6 +4,22 @@ description: Rhombus camera integration options in C# .NET. Cloud-managed archit
 meta:
   - name: robots
     content: "noindex, follow"
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - C#
+
 ---
 
 # How to Connect to Rhombus Camera in C# .NET

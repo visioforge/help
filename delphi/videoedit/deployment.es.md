@@ -1,6 +1,23 @@
 ---
 title: Implementar TVFVideoEdit en Aplicaciones Delphi y ActiveX
 description: Implemente TVFVideoEdit en aplicaciones Delphi y ActiveX con instaladores automáticos o configuración manual para componentes y dependencias requeridos.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Encoding
+  - Editing
+  - IP Camera
+  - MP4
+  - WebM
+  - H.264
+  - AAC
+primary_api_classes:
+  - TVFVideoEdit
+
 ---
 
 # Guía de Despliegue de la Biblioteca TVFVideoEdit
@@ -44,17 +61,19 @@ Para situaciones donde necesita control preciso sobre el despliegue de component
    * Copie todos los DLLs MFP del directorio `Redist\Filters` a la carpeta de su aplicación
 
 3. **Registrar Filtros DirectShow**
-   * Copie y registre COM estos filtros DirectShow esenciales usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5):
+   * Copie y registre COM estos filtros DirectShow esenciales usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5).
+   * **Bitness:** el nombre de archivo simple es el filtro **x86 (32 bits)**; el filtro **x64 (64 bits)** correspondiente lleva el sufijo `_x64` (por ejemplo `VisioForge_Video_Effects_Pro_x64.ax`). Ambos se incluyen en el paquete redistribuible; despliegue y registre la variante que coincida con la arquitectura objetivo de su aplicación. Las aplicaciones de 64 bits deben registrar las variantes `_x64`.
      * `VisioForge_Audio_Effects_4.ax`
      * `VisioForge_Dump.ax`
      * `VisioForge_RGB2YUV.ax`
-     * `VisioForge_Screen_Capture.ax`
      * `VisioForge_Video_Effects_Pro.ax`
      * `VisioForge_Video_Mixer.ax`
      * `VisioForge_Video_Resize.ax`
      * `VisioForge_WavDest.ax`
      * `VisioForge_YUV2RGB.ax`
      * `VisioForge_FFMPEG_Source.ax`
+
+   La funcionalidad de captura de pantalla (anteriormente entregada como `VisioForge_Screen_Capture.ax`) ahora forma parte de los filtros base y no requiere un paso de registro separado.
 
 4. **Configurar Ajustes de Ruta**
    * Agregue la carpeta que contiene estos filtros a la variable de entorno del sistema `PATH` si el ejecutable de su aplicación reside en un directorio diferente

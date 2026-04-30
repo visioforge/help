@@ -1,6 +1,22 @@
 ---
 title: Mercusys IP Camera RTSP URL and C# .NET Integration
 description: Mercusys MC and MB series indoor/outdoor camera RTSP URL patterns for C# .NET. Stream and record using VisioForge Video Capture SDK integration code.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - C#
+
 ---
 
 # How to Connect to Mercusys IP Camera in C# .NET

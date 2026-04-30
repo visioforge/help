@@ -3,6 +3,15 @@ title: AES-256 Video Encryption Using DirectShow COM Filters
 description: Encrypt H.264/AAC MP4 video with AES-256 using DirectShow filters. VisioForge SDK with password and binary key modes for C++, C#, and Delphi.
 sidebar_label: Video Encryption SDK
 order: 5
+tags:
+  - Video Encryption SDK
+  - DirectShow
+  - C++
+  - Windows
+primary_api_classes:
+  - IVFCryptoConfig
+  - IVFPasswordProvider
+
 ---
 
 # Video Encryption SDK

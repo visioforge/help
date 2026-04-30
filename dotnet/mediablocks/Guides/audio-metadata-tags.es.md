@@ -1,6 +1,35 @@
 ---
 title: Escribir Metadatos de Audio en C# .NET - ID3, Vorbis
 description: Añada metadatos ID3, Vorbis Comments y MP4 a archivos de audio con VisioForge Media Blocks SDK. Ejemplos de código para MP3, OGG, M4A y WMA.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Encoding
+  - Metadata
+  - MP4
+  - WMV
+  - OGG
+  - AAC
+  - MP3
+  - Vorbis
+  - WMA
+  - C#
+primary_api_classes:
+  - MediaFileTags
+  - MP3OutputBlock
+  - OGGVorbisOutputBlock
+  - M4AOutputBlock
+  - WMVOutputBlock
+  - MediaBlocksPipeline
+  - SystemAudioSourceBlock
+
 ---
 
 # Escribir Etiquetas de Audio con SDK de Media Blocks
@@ -21,66 +50,52 @@ description: Añada metadatos ID3, Vorbis Comments y MP4 a archivos de audio con
     - [Salida OGG Vorbis con Comentarios Vorbis](#salida-ogg-vorbis-con-comentarios-vorbis)
     - [Salida M4A con Metadatos MP4](#salida-m4a-con-metadatos-mp4)
     - [Salida WMV/WMA con Metadatos ASF](#salida-wmvwma-con-metadatos-asf)
-  - [Ejemplo Completo de Grabación de Audio](#ejemplo-completo-de-grabacion-de-audio)
-  - [Escenarios Avanzados de Etiquetas](#escenarios-avanzados-de-etiquetas)
-    - [Soporte de Carátula de Álbum](#soporte-de-caratula-de-album)
-    - [Modificación de Etiquetas en Tiempo de Ejecución](#modificacion-de-etiquetas-en-tiempo-de-ejecucion)
-    - [Álbumes Multi-Pista](#albumes-multi-pista)
-  - [Mejores Prácticas](#mejores-practicas)
-    - [Calidad de Datos de Etiquetas](#calidad-de-datos-de-etiquetas)
-    - [Consideraciones de Rendimiento](#consideraciones-de-rendimiento)
-    - [Directrices Específicas de Formato](#directrices-especificas-de-formato)
-  - [Solución de Problemas](#solucion-de-problemas)
-    - [Problemas y Soluciones Comunes](#problemas-y-soluciones-comunes)
-    - [Depuración de Escritura de Etiquetas](#depuracion-de-escritura-de-etiquetas)
-  - [Especificaciones de Formato de Etiquetas](#especificaciones-de-formato-de-etiquetas)
-    - [Etiquetas ID3 (MP3)](#etiquetas-id3-mp3)
-    - [Comentarios Vorbis (OGG)](#comentarios-vorbis-ogg)
-    - [Metadatos MP4 (M4A)](#metadatos-mp4-m4a)
-    - [Atributos ASF (WMV/WMA)](#atributos-asf-wmvwma)
 
 ## Resumen
 
-El SDK de VisioForge Media Blocks proporciona soporte completo para escribir etiquetas de metadatos de audio en archivos de salida en todos los formatos de audio principales. Ya sea que esté creando una aplicación de producción musical, un grabador de podcasts o un sistema de gestión de contenido de audio, puede incrustar fácilmente metadatos ricos en sus archivos de audio utilizando una interfaz de programación unificada.
+El VisioForge Media Blocks SDK admite la escritura de metadatos de audio en archivos de salida para todos los formatos de audio principales. Tanto si construye una aplicación de producción musical, una grabadora de podcast o un sistema de gestión de contenido, puede incrustar metadatos en sus archivos de audio a través de una interfaz de programación unificada.
 
-Esta guía demuestra cómo agregar etiquetas de metadatos como artista, álbum, título, año, género y más a archivos MP3, OGG Vorbis, M4A y WMV/WMA utilizando mecanismos de etiquetado apropiados para el formato mientras se mantiene el cumplimiento de estándares de la industria.
+Esta guía muestra cómo añadir etiquetas (artista, álbum, título, año, género, etc.) a archivos MP3, OGG Vorbis, M4A y WMV/WMA usando los mecanismos de etiquetado apropiados para cada formato y manteniendo el cumplimiento de los estándares del sector.
 
 ## Características Principales
 
-- **Soporte Universal de Etiquetas**: Escribir metadatos en MP3 (ID3), OGG (Comentarios Vorbis), M4A (átomos MP4) y WMV (atributos ASF)
-- **Metadatos Completos**: Soporte para 20+ campos de etiquetas incluyendo título, artista, álbum, año, números de pista, letras, y carátula de álbum
-- **Cumplimiento de Estándares**: Utiliza mecanismos de etiquetas nativos de contenedor para compatibilidad óptima
-- **API Unificada**: Una sola interfaz `MediaFileTags` funciona en todos los formatos de salida
-- **Calidad Profesional**: Escritura de etiquetas de estándares de la industria con codificación y estructura apropiadas
-- **Flexibilidad en Tiempo de Ejecución**: Modificar etiquetas antes y durante la ejecución del pipeline
+- **Soporte universal de etiquetas**: escribe metadatos en MP3 (ID3), OGG (Vorbis Comments), M4A (átomos MP4) y WMV (atributos ASF)
+- **Metadatos completos**: más de 20 campos, incluidos título, artista, álbum, año, números de pista, letras y carátulas
+- **Compatible con estándares**: usa los mecanismos nativos de etiquetado de cada contenedor
+- **API unificada**: una sola instancia de `MediaFileTags` vale para todos los formatos
+- **Flexible en tiempo de ejecución**: modifique etiquetas antes de iniciar el pipeline
 
 ## Formatos de Audio Soportados
 
-| Formato | Contenedor | Sistema de Etiquetas | Estándares |
-|---------|------------|----------------------|------------|
+| Formato | Contenedor | Sistema de etiquetas | Estándares |
+|--------|-----------|------------|-----------|
 | **MP3** | MPEG-1 Layer 3 | ID3v1/ID3v2 | ISO/IEC 11172-3, ID3v2.4 |
-| **OGG Vorbis** | OGG | Comentarios Vorbis | Especificación Xiph.Org |
-| **M4A** | MP4/MPEG-4 | átomos de metadatos MP4 | Formato de Archivo de Medios Base ISO |
-| **WMV/WMA** | ASF | atributos de metadatos ASF | Especificación Microsoft ASF |
+| **OGG Vorbis** | OGG | Vorbis Comments | especificación Xiph.Org |
+| **M4A** | MP4/MPEG-4 | átomos de metadatos MP4 | ISO Base Media File Format |
+| **WMV/WMA** | ASF | atributos de metadatos ASF | especificación ASF de Microsoft |
 
 ## Prerrequisitos
 
-- SDK de VisioForge Media Blocks .NET
+- VisioForge Media Blocks SDK .NET
 - .NET Framework 4.7.2+ o .NET Core 3.1+ o .NET 5+
 - Comprensión básica de pipelines de procesamiento de audio
 
 ```csharp
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Outputs;
 using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
 using VisioForge.Core.Types;
 using VisioForge.Core.Types.X.AudioEncoders;
+using VisioForge.Core.Types.X.Sources;
 ```
 
 ## MediaFileTags: La Interfaz Unificada
 
-La clase `MediaFileTags` proporciona una interfaz unificada para metadatos de audio en todos los formatos soportados. Esta clase contiene todos los campos comunes de metadatos de audio y mapea automáticamente a los formatos de etiquetas apropiados para cada contenedor de salida.
+La clase `MediaFileTags` proporciona una interfaz unificada para metadatos de audio en todos los formatos soportados. Contiene los campos comunes y es mapeada al formato de etiquetas adecuado por cada bloque de salida.
 
 ```csharp
-// Crear metadatos de audio completos
+// Crear metadatos de audio
 var audioTags = new MediaFileTags
 {
     // Metadatos básicos
@@ -101,38 +116,37 @@ var audioTags = new MediaFileTags
     // Metadatos extendidos
     Composers = new[] { "Freddie Mercury" },
     Conductor = "Roy Thomas Baker",
-    Comment = "Épico de 6 minutos obra maestra",
+    Comment = "Obra maestra épica de 6 minutos",
     Copyright = "© 1975 Queen Productions Ltd.",
     
     // Metadatos técnicos
     BeatsPerMinute = 72,
-    Grouping = "Canciones Épicas",
+    Grouping = "Epic Songs",
     
-    // Letras (para formatos soportados)
-    Lyrics = @"¿Es esto la vida real?
-¿Es esto solo fantasía?
-Atrapado en un deslizamiento de tierra
-Sin escape de la realidad..."
+    // Letras (para formatos compatibles)
+    Lyrics = @"Is this the real life?
+Is this just fantasy?
+Caught in a landslide
+No escape from reality..."
 };
 ```
+
+Todos los campos de tipo `string[]` (`Performers`, `Composers`, `Genres`, `AlbumArtists`) aceptan múltiples valores y se escriben como frames repetidos en formatos que lo admiten (Vorbis Comments, ID3v2). Los campos numéricos (`Year`, `Track`, `TrackCount`, `Disc`, `DiscCount`, `BeatsPerMinute`) son `uint`.
 
 ## Ejemplos de Código por Formato
 
 ### Salida MP3 con Etiquetas ID3
 
-Los archivos MP3 usan etiquetas ID3 (tanto v1 como v2) para metadatos. El SDK utiliza el elemento `id3mux` de GStreamer para escribir etiquetas ID3 compatibles con estándares.
+Los archivos MP3 usan etiquetas ID3 (v1 y v2) para almacenar metadatos. `MP3OutputBlock` escribe etiquetas ID3 conformes con los estándares mediante el elemento GStreamer `id3mux`.
 
 ```csharp
-using VisioForge.Core.MediaBlocks.Sinks;
-using VisioForge.Core.Types.X.AudioEncoders;
-
 public async Task CreateMP3WithTags()
 {
-    // Configurar ajustes del codificador MP3
+    // Configurar los ajustes del codificador MP3
     var mp3Settings = new MP3EncoderSettings
     {
-        Bitrate = 320, // Calidad alta 320 kbps
-        BitrateMode = MP3BitrateMode.CBR
+        Bitrate = 320,                              // Kbit/s
+        RateControl = MP3EncoderRateControl.CBR    // CBR / ABR / VBR
     };
     
     // Crear etiquetas de metadatos
@@ -152,24 +166,24 @@ public async Task CreateMP3WithTags()
     // Crear bloque de salida MP3 con etiquetas
     var mp3Output = new MP3OutputBlock("output.mp3", mp3Settings, tags);
     
-    // Alternativa: Establecer etiquetas después de la creación
+    // Alternativa: asignar etiquetas tras la creación vía la propiedad Tags
     // var mp3Output = new MP3OutputBlock("output.mp3", mp3Settings);
     // mp3Output.Tags = tags;
     
-    // Construir su pipeline completo
+    // Construir el pipeline
     var pipeline = new MediaBlocksPipeline();
     
-    // Agregar fuente de audio (micrófono, archivo, etc.)
-    var audioSource = new AudioCaptureSourceBlock();
+    // Añadir una fuente de audio (micrófono, archivo, etc.)
+    var audioSource = new SystemAudioSourceBlock();
     
-    // Conectar y construir pipeline
+    // Conectar la fuente directamente a la salida MP3
     pipeline.Connect(audioSource.Output, mp3Output.Input);
     
-    // Iniciar grabación con metadatos
-    await pipeline.StartAsync().ConfigureAwait(false);
+    // Iniciar la grabación con metadatos
+    await pipeline.StartAsync();
     
-    // La grabación incluirá etiquetas ID3 en el archivo MP3
-    await Task.Delay(30000); // Grabar por 30 segundos
+    // La grabación escribe las etiquetas ID3 en el archivo MP3
+    await Task.Delay(TimeSpan.FromSeconds(30));
     
     await pipeline.StopAsync();
 }
@@ -177,22 +191,20 @@ public async Task CreateMP3WithTags()
 
 ### Salida OGG Vorbis con Comentarios Vorbis
 
-Los archivos OGG Vorbis usan Comentarios Vorbis para metadatos, que están incrustados directamente en el stream de audio por el codificador Vorbis.
+Los archivos OGG Vorbis usan Vorbis Comments para los metadatos, que se incrustan directamente en el flujo de audio por el codificador Vorbis.
 
 ```csharp
-using VisioForge.Core.MediaBlocks.Sinks;
-using VisioForge.Core.Types.X.AudioEncoders;
-
 public async Task CreateOGGWithTags()
 {
-    // Configurar ajustes del codificador Vorbis
+    // Configurar los ajustes del codificador Vorbis.
+    // Quality es un int en el rango [-1..10] (por defecto 4). Se usa cuando RateControl = Quality.
     var vorbisSettings = new VorbisEncoderSettings
     {
-        Quality = 0.8f, // Calidad alta (escala 0.0 a 1.0)
-        BitrateMode = VorbisBitrateMode.VBR
+        Quality = 8,
+        RateControl = VorbisEncoderRateControl.Quality
     };
     
-    // Crear metadatos completos
+    // Crear metadatos
     var tags = new MediaFileTags
     {
         Title = "Acoustic Session",
@@ -203,80 +215,66 @@ public async Task CreateOGGWithTags()
         Track = 1,
         Genres = new[] { "Folk", "Acoustic" },
         Composers = new[] { "Folk Artist", "Traditional" },
-        Comment = "Grabado en vivo en Studio A",
-        
-        // Comentarios Vorbis soportan metadatos extensos
+        Comment = "Grabado en directo en el Estudio A",
         Conductor = "Sound Engineer",
         Grouping = "Live Recordings",
-        Lyrics = @"En la tranquilidad de la mañana
-Cuando el mundo comienza a despertar
-Hay una canción en el silencio..."
+        Lyrics = @"In the quiet of the morning
+When the world begins to wake
+There's a song within the silence..."
     };
     
     // Crear bloque de salida OGG con comentarios Vorbis
     var oggOutput = new OGGVorbisOutputBlock("output.ogg", vorbisSettings, tags);
     
-    // Construir y ejecutar pipeline
+    // Construir y ejecutar el pipeline
     var pipeline = new MediaBlocksPipeline();
-    var audioSource = new AudioFileSourceBlock("input.wav");
     
-    pipeline.Connect(audioSource.Output, oggOutput.Input);
+    // Usar UniversalSourceBlock para decodificar cualquier archivo a audio crudo
+    var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri("input.wav"));
+    var fileSource = new UniversalSourceBlock(sourceSettings);
+    
+    pipeline.Connect(fileSource.AudioOutput, oggOutput.Input);
     
     await pipeline.StartAsync();
-    await pipeline.WaitForCompletionAsync();
+    await pipeline.WaitForStopAsync();   // Esperar EOS
 }
 ```
 
 ### Salida M4A con Metadatos MP4
 
-Los archivos M4A usan átomos de metadatos MP4 para almacenar información, compatibles con iTunes y la mayoría de reproductores de medios.
+Los archivos M4A usan átomos de metadatos MP4, compatibles con iTunes y la mayoría de reproductores. El ctor por defecto de `M4AOutputBlock` elige un codificador AAC predeterminado internamente; use la sobrecarga de 3 argumentos para elegir una implementación AAC específica (`AVENCAACEncoderSettings`, `VOAACEncoderSettings` o `MFAACEncoderSettings` en Windows).
 
 ```csharp
-using VisioForge.Core.MediaBlocks.Sinks;
-using VisioForge.Core.Types.X.AudioEncoders;
-
 public async Task CreateM4AWithTags()
 {
-    // Configurar AAC para M4A
-    var aacSettings = new AACEncoderSettings
-    {
-        Bitrate = 256,
-        Profile = AACProfile.LC, // Low Complexity para compatibilidad amplia
-        Channels = 2
-    };
-    
-    // Crear metadatos de podcast
+    // Crear metadatos de un podcast
     var tags = new MediaFileTags
     {
-        Title = "Episode 42: The Future of AI",
+        Title = "Episodio 42: El Futuro de la IA",
         Performers = new[] { "Tech Podcast Host" },
         Album = "Weekly Tech Talk",
         Year = 2025,
         Track = 42,
         Genres = new[] { "Technology", "Podcast" },
-        Comment = "Entrevista especial con investigador de IA",
+        Comment = "Entrevista especial con un investigador de IA",
         Copyright = "© 2025 Tech Media Network",
-        
-        // Metadatos específicos de podcast
         Subtitle = "Explorando tendencias de inteligencia artificial",
         Grouping = "Season 3"
     };
     
-    // Crear salida M4A con metadatos MP4
+    // Opción A: más simple — codificador AAC por defecto elegido internamente
     var m4aOutput = new M4AOutputBlock("podcast_episode_42.m4a", tags);
     
-    // Configuración de pipeline para grabación de podcast
+    // Opción B: elegir un codificador AAC específico y ajustes de sink
+    // var sinkSettings = new MP4SinkSettings("podcast_episode_42.m4a");
+    // var aacSettings = new AVENCAACEncoderSettings { Bitrate = 256 }; // 256 Kbit/s
+    // var m4aOutput = new M4AOutputBlock(sinkSettings, aacSettings, tags);
+    
+    // Configurar el pipeline para grabación de podcast
     var pipeline = new MediaBlocksPipeline();
-    var micSource = new AudioCaptureSourceBlock();
+    var micSource = new SystemAudioSourceBlock();
     
-    // Opcional: Agregar procesamiento de audio
-    var volumeFilter = new VolumeFilterBlock { Volume = 1.2f };
-    var noiseGate = new NoiseGateBlock { Threshold = -40.0f };
-    
-    // Conectar cadena de procesamiento
-    pipeline.Connect(micSource.Output, volumeFilter.Input);
-    pipeline.Connect(volumeFilter.Output, noiseGate.Input);
-    pipeline.Connect(noiseGate.Output, m4aOutput.Input);
+    pipeline.Connect(micSource.Output, m4aOutput.Input);
     
     await pipeline.StartAsync();
 }
@@ -284,65 +282,49 @@ public async Task CreateM4AWithTags()
 
 ### Salida WMV/WMA con Metadatos ASF
 
-Los formatos Windows Media usan atributos de metadatos ASF (Advanced Systems Format) para almacenar información.
+Los formatos de Windows Media usan atributos de metadatos ASF (Advanced Systems Format). `WMVOutputBlock` admite un parámetro `MediaFileTags` y funciona tanto para salidas solo-audio como audio+vídeo.
 
 ```csharp
-using VisioForge.Core.MediaBlocks.Sinks;
-using VisioForge.Core.Types.X.AudioEncoders;
-using VisioForge.Core.Types.X.VideoEncoders;
-using VisioForge.Core.Types.X.Sinks;
-
 public async Task CreateWMVWithTags()
 {
-    // Configurar codificadores Windows Media
-    var wmaSettings = new WMAEncoderSettings
-    {
-        Bitrate = 192,
-        SampleRate = 44100,
-        Channels = 2
-    };
-    
-    var wmvSettings = new WMVEncoderSettings
-    {
-        Bitrate = 2000000, // 2 Mbps
-        Width = 1920,
-        Height = 1080,
-        FrameRate = 30
-    };
-    
-    var asfSettings = new ASFSinkSettings("presentation.wmv");
-    
     // Crear metadatos de presentación
     var tags = new MediaFileTags
     {
-        Title = "Q4 Business Review",
+        Title = "Revisión de Negocio Q4",
         Performers = new[] { "CEO", "CFO", "VP Sales" },
         Album = "Corporate Presentations 2025",
         Year = 2025,
         Genres = new[] { "Business", "Corporate" },
         Comment = "Revisión financiera trimestral y perspectivas",
         Copyright = "© 2025 Business Corp. Confidential",
-        
-        // Metadatos corporativos
         Conductor = "Meeting Organizer",
         Grouping = "Executive Presentations"
     };
     
-    // Crear salida WMV con metadatos ASF
-    var wmvOutput = new WMVOutputBlock(asfSettings, wmvSettings, wmaSettings, tags);
+    // Forma más simple — codificadores por defecto, sólo filename + tags.
+    // WMVOutputBlock usa internamente los ajustes por defecto de WMV/WMA.
+    var wmvOutput = new WMVOutputBlock("presentation.wmv", tags);
     
-    // Configuración para video + audio grabación
+    // Alternativa: pasar objetos explícitos de sink/video/audio
+    // var asfSettings = new ASFSinkSettings("presentation.wmv");
+    // var wmvSettings = WMVEncoderBlock.GetDefaultSettings();
+    // var wmaSettings = WMAEncoderBlock.GetDefaultSettings();
+    // var wmvOutput = new WMVOutputBlock(asfSettings, wmvSettings, wmaSettings, tags);
+    
+    // Configurar grabación de vídeo + audio
     var pipeline = new MediaBlocksPipeline();
     
-    // Agregar fuentes de video y audio
-    var videoSource = new VideoCaptureSourceBlock();
-    var audioSource = new AudioCaptureSourceBlock();
+    // Fuente de vídeo — elegir el primer dispositivo disponible
+    var videoDevice = (await DeviceEnumerator.Shared.VideoSourcesAsync())[0];
+    var videoSource = new SystemVideoSourceBlock(new VideoCaptureDeviceSourceSettings(videoDevice));
     
-    // Crear pads de entrada para la salida WMV
+    // Fuente de audio
+    var audioSource = new SystemAudioSourceBlock();
+    
+    // Crear pads de entrada dinámicos en la salida WMV
     var videoPad = wmvOutput.CreateNewInput(MediaBlockPadMediaType.Video);
     var audioPad = wmvOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
     
-    // Conectar fuentes a salida WMV
     pipeline.Connect(videoSource.Output, videoPad);
     pipeline.Connect(audioSource.Output, audioPad);
     
@@ -352,19 +334,14 @@ public async Task CreateWMVWithTags()
 
 ## Ejemplo Completo de Grabación de Audio
 
-Aquí hay un ejemplo completo que demuestra grabación de audio con diferentes formatos de salida y metadatos:
+Grabe la misma fuente de audio en varios formatos de salida con etiquetas simultáneamente:
 
 ```csharp
-using VisioForge.Core.MediaBlocks;
-using VisioForge.Core.MediaBlocks.Sources;
-using VisioForge.Core.MediaBlocks.Sinks;
-using VisioForge.Core.Types;
-
 public class AudioRecorderWithTags
 {
     public async Task RecordAudioWithMetadata()
     {
-        // Crear metadatos ricos para la sesión
+        // Metadatos compartidos entre todos los archivos de salida
         var sessionTags = new MediaFileTags
         {
             Title = "Studio Session #1",
@@ -380,64 +357,51 @@ public class AudioRecorderWithTags
             Grouping = "Demo Sessions"
         };
         
-        // Crear múltiples formatos de salida con los mismos metadatos
-        var outputs = new IMediaBlockSink[]
-        {
-            // MP3 de alta calidad
-            new MP3OutputBlock("session1.mp3", new MP3EncoderSettings 
-            { 
-                Bitrate = 320, 
-                BitrateMode = MP3BitrateMode.CBR 
-            }, sessionTags),
-            
-            // OGG Vorbis de calidad sin pérdidas
-            new OGGVorbisOutputBlock("session1.ogg", new VorbisEncoderSettings 
-            { 
-                Quality = 1.0f 
-            }, sessionTags),
-            
-            // M4A profesional
-            new M4AOutputBlock("session1.m4a", sessionTags),
-            
-            // Formato Windows Media
-            new WMVOutputBlock("session1.wma", sessionTags)
-        };
+        // Salida MP3 (CBR 320 Kbit/s + etiquetas ID3)
+        var mp3Output = new MP3OutputBlock(
+            "session1.mp3",
+            new MP3EncoderSettings { Bitrate = 320, RateControl = MP3EncoderRateControl.CBR },
+            sessionTags);
         
-        // Configurar pipeline de grabación
+        // Salida OGG Vorbis (máxima calidad + Vorbis Comments)
+        var oggOutput = new OGGVorbisOutputBlock(
+            "session1.ogg",
+            new VorbisEncoderSettings { Quality = 10, RateControl = VorbisEncoderRateControl.Quality },
+            sessionTags);
+        
+        // Salida M4A (AAC por defecto + átomos MP4)
+        var m4aOutput = new M4AOutputBlock("session1.m4a", sessionTags);
+        
+        // Pipeline con una única fuente de audio distribuida a los tres archivos
         var pipeline = new MediaBlocksPipeline();
-        var audioSource = new AudioCaptureSourceBlock();
+        var audioSource = new SystemAudioSourceBlock();
         
-        // Conectar fuente a todas las salidas (splitter se creará automáticamente)
-        foreach (var output in outputs)
-        {
-            pipeline.Connect(audioSource.Output, output.Input);
-        }
+        // Conectar la misma salida de fuente a varios sinks inserta un tee automáticamente
+        pipeline.Connect(audioSource.Output, mp3Output.Input);
+        pipeline.Connect(audioSource.Output, oggOutput.Input);
+        pipeline.Connect(audioSource.Output, m4aOutput.Input);
         
-        // Iniciar grabación
         Console.WriteLine("Iniciando grabación con metadatos...");
         await pipeline.StartAsync();
         
-        // Grabar por duración especificada
         await Task.Delay(TimeSpan.FromMinutes(3));
         
-        // Detener grabación
         Console.WriteLine("Deteniendo grabación...");
         await pipeline.StopAsync();
         
-        Console.WriteLine("Grabación completa! Archivos creados con metadatos:");
+        Console.WriteLine("Grabación completada — archivos escritos con metadatos:");
         Console.WriteLine("- session1.mp3 (etiquetas ID3)");
-        Console.WriteLine("- session1.ogg (comentarios Vorbis)");
+        Console.WriteLine("- session1.ogg (Vorbis comments)");
         Console.WriteLine("- session1.m4a (metadatos MP4)");
-        Console.WriteLine("- session1.wma (metadatos ASF)");
     }
 }
 ```
 
 ## Escenarios Avanzados de Etiquetas
 
-### Soporte de Carátula de Álbum
+### Soporte de Carátulas de Álbum
 
-Agregar carátula de álbum a sus archivos de audio (soportado por formatos MP3, M4A y WMV):
+Adjunte carátulas a los formatos compatibles (MP3, M4A, WMV). En Windows, `MediaFileTags.Pictures` acepta `System.Drawing.Bitmap[]`; las compilaciones multiplataforma usan `IBitmap[]`.
 
 ```csharp
 var tags = new MediaFileTags
@@ -447,7 +411,7 @@ var tags = new MediaFileTags
     Album = "Album Name"
 };
 
-// Agregar carátula de álbum (plataformas Windows)
+// Adjuntar carátula (Windows — System.Drawing)
 #if NET_WINDOWS
 if (File.Exists("album_cover.jpg"))
 {
@@ -457,24 +421,28 @@ if (File.Exists("album_cover.jpg"))
 }
 #endif
 
-var mp3Output = new MP3OutputBlock("track.mp3", mp3Settings, tags);
+var mp3Output = new MP3OutputBlock(
+    "track.mp3",
+    new MP3EncoderSettings { Bitrate = 320, RateControl = MP3EncoderRateControl.CBR },
+    tags);
 ```
 
 ### Modificación de Etiquetas en Tiempo de Ejecución
 
-Modificar etiquetas durante la ejecución del pipeline:
+Establezca o modifique las etiquetas antes de iniciar el pipeline — una vez iniciado, la carga útil de etiquetas de esa salida ya se está emitiendo.
 
 ```csharp
+var mp3Settings = new MP3EncoderSettings { Bitrate = 320, RateControl = MP3EncoderRateControl.CBR };
 var mp3Output = new MP3OutputBlock("output.mp3", mp3Settings);
 
-// Etiquetas iniciales
+// Asignar etiquetas a través de la propiedad Tags antes de StartAsync
 mp3Output.Tags = new MediaFileTags
 {
     Title = "Live Recording",
     Performers = new[] { "Artist" }
 };
 
-// Actualizar etiquetas antes de iniciar (por ejemplo, basado en entrada de usuario)
+// Ajustar campos hasta el momento del inicio
 mp3Output.Tags.Comment = $"Grabado el {DateTime.Now:yyyy-MM-dd}";
 mp3Output.Tags.Year = (uint)DateTime.Now.Year;
 
@@ -483,13 +451,15 @@ await pipeline.StartAsync();
 
 ### Álbumes Multi-Pista
 
-Crear metadatos consistentes en pistas de álbum:
+Cree metadatos consistentes entre pistas de un álbum usando un objeto base compartido:
 
 ```csharp
 public class AlbumRecorder
 {
     private readonly MediaFileTags _baseAlbumTags;
-    
+    private readonly MP3EncoderSettings _mp3Settings =
+        new MP3EncoderSettings { Bitrate = 320, RateControl = MP3EncoderRateControl.CBR };
+
     public AlbumRecorder()
     {
         _baseAlbumTags = new MediaFileTags
@@ -502,144 +472,138 @@ public class AlbumRecorder
             Copyright = "© 2025 Record Label"
         };
     }
-    
-    public void RecordTrack(int trackNumber, string title, string[] performers)
+
+    public MP3OutputBlock CreateTrackOutput(int trackNumber, string title, string[] performers)
     {
         var trackTags = new MediaFileTags
         {
-            // Copiar información base del álbum
+            // Heredar metadatos de nivel álbum
             Album = _baseAlbumTags.Album,
             AlbumArtists = _baseAlbumTags.AlbumArtists,
             Year = _baseAlbumTags.Year,
             Genres = _baseAlbumTags.Genres,
             TrackCount = _baseAlbumTags.TrackCount,
             Copyright = _baseAlbumTags.Copyright,
-            
-            // Información específica de pista
+
+            // Metadatos específicos de pista
             Track = (uint)trackNumber,
             Title = title,
             Performers = performers
         };
-        
-        var output = new MP3OutputBlock($"track_{trackNumber:D2}.mp3", mp3Settings, trackTags);
-        
-        // Continuar con configuración de pipeline...
+
+        return new MP3OutputBlock($"track_{trackNumber:D2}.mp3", _mp3Settings, trackTags);
     }
 }
 ```
 
 ## Mejores Prácticas
 
-### Calidad de Datos de Etiquetas
+### Calidad de los Datos de Etiquetas
 
-- **Codificación Consistente**: Usar codificación UTF-8 para caracteres internacionales
-- **Información Completa**: Llenar tantos campos de etiquetas relevantes como sea posible
-- **Géneros Estandarizados**: Usar nombres de género reconocidos para mejor compatibilidad
-- **Copyright Apropiado**: Incluir avisos de copyright apropiados
+- **Codificación consistente**: use UTF-8 para caracteres internacionales
+- **Información completa**: rellene tantos campos relevantes como sea posible
+- **Géneros estandarizados**: use nombres de género reconocidos para mayor compatibilidad
+- **Copyright adecuado**: incluya avisos de copyright apropiados
 
 ### Consideraciones de Rendimiento
 
-- **Tamaño de Etiquetas**: Mantener campos de texto de longitud razonable para evitar inflar archivos
-- **Compresión de Imágenes**: Comprimir carátulas de álbum apropiadamente (JPEG recomendado)
-- **Procesamiento por Lotes**: Reutilizar objetos de etiquetas cuando sea posible
+- **Tamaño de etiquetas**: mantenga los campos de texto con una longitud razonable para no inflar los archivos
+- **Compresión de imágenes**: comprima las carátulas adecuadamente (JPEG recomendado)
+- **Reutilizar instancias**: al crear varios archivos, comparta objetos base de etiquetas y sólo cambie los campos específicos por pista
 
-### Directrices Específicas de Formato
+### Pautas Específicas por Formato
 
 ```csharp
-// MP3: ID3v2 soporta metadatos extensos
+// MP3: ID3v2 admite metadatos extensos
 var mp3Tags = new MediaFileTags
 {
-    // Metadatos ricos totalmente soportados
     Title = "Song Title",
-    Subtitle = "Song Subtitle", // Frame TIT3 de ID3v2.4
-    Lyrics = "Texto completo de letras", // Frame USLT
-    BeatsPerMinute = 128 // Frame TBPM
+    Subtitle = "Song Subtitle",     // frame TIT3 de ID3v2
+    Lyrics = "Full lyrics text",    // frame USLT
+    BeatsPerMinute = 128            // frame TBPM
 };
 
-// OGG: Comentarios Vorbis son muy flexibles
+// OGG: los comentarios Vorbis son flexibles y admiten campos multi-valor nativamente
 var oggTags = new MediaFileTags
 {
-    // Todos los campos mapean bien a campos de comentario Vorbis
-    Composers = new[] { "Composer 1", "Composer 2" }, // Valores múltiples soportados
+    Composers = new[] { "Composer 1", "Composer 2" },
     Performers = new[] { "Artist 1", "Artist 2" }
 };
 
-// M4A: Metadatos compatibles con iTunes
+// M4A: metadatos compatibles con iTunes
 var m4aTagsForPodcast = new MediaFileTags
 {
     Title = "Episode Title",
-    Album = "Podcast Series Name", // Se muestra como "Album" en iTunes
-    Performers = new[] { "Host Name" }, // Se muestra como "Artist"
-    Genres = new[] { "Podcast" }, // Usar género "Podcast" para podcasts
-    Comment = "Descripción del episodio"
+    Album = "Podcast Series Name",  // Aparece como "Album" en iTunes
+    Performers = new[] { "Host Name" }, // Aparece como "Artist"
+    Genres = new[] { "Podcast" },
+    Comment = "Episode description"
 };
 ```
 
 ## Solución de Problemas
 
-### Problemas y Soluciones Comunes
+### Problemas Comunes y Soluciones
 
-**Etiquetas no aparecen en reproductores de medios:**
+**Las etiquetas no aparecen en los reproductores multimedia:**
 
-- Asegurar que el formato de salida soporte los campos de etiquetas específicos que está usando
-- Verificar que el reproductor de medios soporte el formato de etiquetas (algunos reproductores prefieren ID3v2.3 sobre ID3v2.4)
-- Verificar que la codificación de texto sea correcta (UTF-8 recomendado)
+- Asegúrese de que el formato de salida soporta los campos que está usando
+- Verifique que el reproductor soporta el formato de etiquetas (algunos prefieren ID3v2.3 sobre ID3v2.4)
+- Compruebe que la codificación de texto es correcta (UTF-8 recomendado)
 
 **Tamaño de archivo inesperadamente grande:**
 
-- Reducir resolución de carátula de álbum (recomendado: máximo 600x600 píxeles)
-- Evitar campos de texto extremadamente largos en comentarios o letras
-- Usar compresión de imagen apropiada para carátulas
+- Reduzca la resolución de la carátula (600×600 suele ser suficiente)
+- Evite campos de texto extremadamente largos en comentarios o letras
+- Use compresión adecuada para las imágenes
 
 **Errores de codificación:**
 
-- Validar que caracteres especiales estén codificados apropiadamente
-- Asegurar que rutas de archivos sean accesibles y escribibles
-- Verificar que ajustes del codificador sean compatibles con su sistema
+- Valide que los caracteres especiales estén correctamente codificados
+- Asegúrese de que las rutas de archivo son accesibles y escribibles
+- Compruebe que los ajustes del codificador son compatibles con su sistema
 
-### Depuración de Escritura de Etiquetas
+### Depurar la Escritura de Etiquetas
+
+Suscríbase al evento `OnError` del pipeline para ver fallos de codificador/muxer durante la escritura de etiquetas. No hay un flujo específico de "mensajes de tag" — inspeccione el archivo producido con un lector de etiquetas (TagLib, MediaInfo o el propio `MediaInfoReader` del SDK) para confirmar qué se escribió.
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-// Habilitar registro detallado para ver procesamiento de etiquetas
-pipeline.OnMessage += (sender, e) => 
+pipeline.OnError += (sender, e) =>
 {
-    if (e.Message.Contains("tag") || e.Message.Contains("metadata"))
-    {
-        Console.WriteLine($"Depuración de Etiquetas: {e.Message}");
-    }
+    Console.WriteLine($"Error del pipeline: {e.Message}");
 };
 
-// Continuar con configuración de pipeline...
+// Continuar con la configuración del pipeline...
 ```
 
 ## Especificaciones de Formato de Etiquetas
 
 ### Etiquetas ID3 (MP3)
 
-- **ID3v1**: Estructura básica de 128 bytes con campos limitados
-- **ID3v2**: Formato extensible soportando Unicode, valores múltiples y frames personalizados
-- **Frames Comunes**: TIT2 (Título), TPE1 (Artista), TALB (Álbum), TDRC (Año), TCON (Género)
+- **ID3v1**: estructura básica de 128 bytes con campos limitados
+- **ID3v2**: formato extensible compatible con Unicode, múltiples valores y frames personalizados
+- **Frames comunes**: TIT2 (Título), TPE1 (Artista), TALB (Álbum), TDRC (Año), TCON (Género)
 
 ### Comentarios Vorbis (OGG)
 
-- **Formato**: Texto UTF-8 en formato NAME=VALUE
-- **Campos Estándar**: TITLE, ARTIST, ALBUM, DATE, GENRE, TRACKNUMBER
-- **Flexible**: Soporta nombres de campo arbitrarios y valores múltiples
+- **Formato**: texto UTF-8 en formato NAME=VALUE
+- **Campos estándar**: TITLE, ARTIST, ALBUM, DATE, GENRE, TRACKNUMBER
+- **Flexible**: se permiten nombres de campo arbitrarios y múltiples valores
 
 ### Metadatos MP4 (M4A)
 
-- **Átomos**: Metadatos estilo iTunes almacenados en átomos MP4
-- **Átomos Comunes**: ©nam (Título), ©ART (Artista), ©alb (Álbum), ©day (Año)
-- **Datos Binarios**: Soporta carátulas incrustadas en átomo covr
+- **Átomos**: metadatos estilo iTunes almacenados en átomos MP4
+- **Átomos comunes**: ©nam (Título), ©ART (Artista), ©alb (Álbum), ©day (Año)
+- **Datos binarios**: la carátula incrustada va en el átomo `covr`
 
 ### Atributos ASF (WMV/WMA)
 
-- **Estructura**: Pares clave-valor en encabezado ASF
-- **Estándar**: Title, Author, Copyright, Description
-- **Extendido**: Atributos personalizados soportados
+- **Estructura**: pares clave-valor en la cabecera ASF
+- **Atributos estándar**: Title, Author, Copyright, Description
+- **Extendido**: se admiten atributos personalizados
 
 ---
-Esta guía completa demuestra cómo el SDK de VisioForge Media Blocks proporciona capacidades profesionales de escritura de metadatos de audio en todos los formatos de audio principales. La interfaz unificada `MediaFileTags` simplifica el proceso de desarrollo mientras asegura cumplimiento de estándares y compatibilidad óptima con reproductores de medios.
-Para más escenarios avanzados de procesamiento de audio y características adicionales del SDK, explore la documentación completa del [SDK de VisioForge Media Blocks](../index.md).
+
+Esta guía cubre la escritura de metadatos de audio con el VisioForge Media Blocks SDK. La clase unificada `MediaFileTags` simplifica el código manteniendo intacto el formato nativo de cada contenedor (ID3, Vorbis Comments, átomos MP4, ASF). Para escenarios de procesamiento de audio más avanzados, consulte la [documentación completa del VisioForge Media Blocks SDK](../index.md).

@@ -1,6 +1,22 @@
 ---
 title: Codificador FLAC DirectShow: interfaz y configuración
 description: Interfaz DirectShow del codificador FLAC con niveles de codificación, configuración LPC, tamaños de bloque y compresión para codificación de audio sin pérdida.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Encoding
+  - Decoding
+  - MP3
+  - FLAC
+  - C#
+primary_api_classes:
+  - FLACEncoder
+  - IFLACEncodeSettings
+  - IBaseFilter
+  - AudioEncoder
+  - FLACArchivalEncoder
+
 ---
 
 # Referencia de la Interfaz del Codificador FLAC

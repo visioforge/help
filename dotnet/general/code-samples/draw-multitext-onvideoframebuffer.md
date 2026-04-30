@@ -1,6 +1,16 @@
 ---
 title: Implementing Dynamic Text Overlays on Video Frames
 description: Create multiple text overlays on video frames with OnVideoFrameBuffer event for customizable text properties and dynamic updates in .NET.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - C#
+primary_api_classes:
+  - VideoFrameBufferEventArgs
+
 ---
 
 # Implementing Dynamic Text Overlays on Video Frames in .NET
@@ -59,7 +69,7 @@ The following code sample shows a straightforward implementation for drawing mul
             // draw text to image
             if (logoImage == null)
             {
-                logoImage = new Bitmap(e.Frame.Width, e.Frame.Height, PixelFormat.Format32bppArgb);
+                logoImage = new Bitmap(e.Frame.Info.Width, e.Frame.Info.Height, PixelFormat.Format32bppArgb);
 
                 using (var grf = Graphics.FromImage(logoImage))
                 {
@@ -80,7 +90,7 @@ The following code sample shows a straightforward implementation for drawing mul
                     // text 2
                     var brush2 = new SolidBrush(Color.Red);
                     var font2 = new Font("Times New Roman", 35, FontStyle.Strikeout);
-                    grf.DrawString(text2, font2, brush2, e.Frame.Width / 2, e.Frame.Height / 2);
+                    grf.DrawString(text2, font2, brush2, e.Frame.Info.Width / 2, e.Frame.Info.Height / 2);
 
                     // text 3
                     var brush3 = new SolidBrush(Color.Green);
@@ -105,12 +115,12 @@ The following code sample shows a straightforward implementation for drawing mul
                         logoImageBuffer = Marshal.AllocCoTaskMem(logoImageBufferSize);
                 }
 
-                ImageHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
+                BitmapHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
                         PixelFormat.Format32bppArgb);
             }
 
             // Draw image
-            FastImageProcessing.Draw_RGB32OnRGB24(logoImageBuffer, logoImage.Width, logoImage.Height, e.Frame.Data, e.Frame.Width, e.Frame.Height, 0, 0);
+            FastImageProcessing.Draw_RGB32OnRGB24(logoImageBuffer, logoImage.Width, logoImage.Height, e.Frame.Data, e.Frame.Info.Width, e.Frame.Info.Height, 0, 0);
 
             e.UpdateData = true;
         }
@@ -122,7 +132,7 @@ The following code sample shows a straightforward implementation for drawing mul
 2. **Graphics Settings**: We configure anti-aliasing, interpolation, and smoothing for high-quality text rendering
 3. **Text Configuration**: Each text element gets its own font, color, and position
 4. **Memory Management**: We allocate unmanaged memory for the bitmap buffer
-5. **Bitmap to Buffer Conversion**: We convert the bitmap to a memory buffer using `ImageHelper.BitmapToIntPtr`
+5. **Bitmap to Buffer Conversion**: We convert the bitmap to a memory buffer using `BitmapHelper.BitmapToIntPtr`
 6. **Buffer Overlay**: We draw the RGBA buffer onto the video frame using `FastImageProcessing.Draw_RGB32OnRGB24`
 7. **Frame Update Flag**: We set `e.UpdateData = true` to inform the SDK that the frame data has been modified
 
@@ -198,7 +208,7 @@ For more interactive applications, you might need to update text overlays dynami
                 // draw text to image
                 if (logoImage == null)
                 {
-                    logoImage = new Bitmap(e.Frame.Width, e.Frame.Height, PixelFormat.Format32bppArgb);
+                    logoImage = new Bitmap(e.Frame.Info.Width, e.Frame.Info.Height, PixelFormat.Format32bppArgb);
 
                     using (var grf = Graphics.FromImage(logoImage))
                     {
@@ -215,7 +225,7 @@ For more interactive applications, you might need to update text overlays dynami
                         grf.DrawString(text1, font1, brush1, 100, 100);
 
                         // text 2
-                        grf.DrawString(text2, font2, brush2, e.Frame.Width / 2, e.Frame.Height / 2);
+                        grf.DrawString(text2, font2, brush2, e.Frame.Info.Width / 2, e.Frame.Info.Height / 2);
 
                         // text 3
                         grf.DrawString(text3, font3, brush3, 200, 200);
@@ -227,31 +237,31 @@ For more interactive applications, you might need to update text overlays dynami
                 {
                     if (logoImageBuffer == IntPtr.Zero)
                     {
-                        logoImageBufferSize = ImageHelper.GetStrideRGB32(e.Frame.Width) * e.Frame.Height;
+                        logoImageBufferSize = ImageHelper.GetStrideRGB32(e.Frame.Info.Width) * e.Frame.Info.Height;
                         logoImageBuffer = Marshal.AllocCoTaskMem(logoImageBufferSize);
                     }
                     else
                     {
-                        logoImageBufferSize = ImageHelper.GetStrideRGB32(e.Frame.Width) * e.Frame.Height;
+                        logoImageBufferSize = ImageHelper.GetStrideRGB32(e.Frame.Info.Width) * e.Frame.Info.Height;
 
                         Marshal.FreeCoTaskMem(logoImageBuffer);
                         logoImageBuffer = Marshal.AllocCoTaskMem(logoImageBufferSize);
                     }
 
-                    ImageHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
+                    BitmapHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
                         PixelFormat.Format32bppArgb);
                 }
 
                 if (textUpdate)
                 {
                     textUpdate = false;
-                    ImageHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
+                    BitmapHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
                         PixelFormat.Format32bppArgb);
                 }
 
                 // Draw image
-                FastImageProcessing.Draw_RGB32OnRGB24(logoImageBuffer, logoImage.Width, logoImage.Height, e.Frame.Data, e.Frame.Width,
-                e.Frame.Height, 0, 0);
+                FastImageProcessing.Draw_RGB32OnRGB24(logoImageBuffer, logoImage.Width, logoImage.Height, e.Frame.Data, e.Frame.Info.Width,
+                e.Frame.Info.Height, 0, 0);
 
                 e.UpdateData = true;
             }

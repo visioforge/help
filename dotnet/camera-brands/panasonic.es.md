@@ -1,6 +1,26 @@
 ---
 title: Cómo Conectar una Cámara IP Panasonic (i-PRO) en C# .NET
 description: Conecta cámaras Panasonic i-PRO y cámaras antiguas WV/BL/BB en C# .NET con patrones de URL RTSP y ejemplos de código para modelos actuales y anteriores.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Panasonic (i-PRO) en C# .NET

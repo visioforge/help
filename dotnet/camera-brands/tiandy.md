@@ -1,6 +1,25 @@
 ---
-title: Tiandy RTSP URL: Connect to IP Camera in C# .NET App
-description: Connect to Tiandy cameras in C# .NET with RTSP URL patterns and code samples for TC-C, TC-NC, and TC-A series IP camera and NVR models.
+title: Tiandy IP Camera in C# .NET — RTSP, ONVIF Setup Guide
+description: Connect Tiandy IP cameras (TC-C, TC-NC, TC-A, TC-R NVR) to C# / .NET apps via RTSP and ONVIF. Default stream URLs, credentials, H.265 configs. Code sample.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Decoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Tiandy IP Camera in C# .NET

@@ -1,9 +1,32 @@
 ---
-title: Capturing Photos Using Webcam in .NET Applications
-description: Take photos from a webcam in C# using VisioForge Video Capture SDK. Still frame capture, software-triggered snapshots, and image saving to JPEG/PNG/BMP.
+title: Webcam Photo Capture in C# .NET — Still Frame Grabber API
+description: Take photos from a webcam in C# / .NET. Still frame capture via hardware button or software trigger. Save to JPEG, PNG, BMP. Code sample included.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Webcam
+  - C#
+primary_api_classes:
+  - VideoCaptureCore
+  - VideoFrameBitmapEventArgs
+  - VideoFrameBufferEventArgs
+
 ---
 
 # Capturing Photos Using Webcam in .NET Applications
+
+!!! tip "AI coding agents: use the VisioForge MCP server"
+
+    Building this with **Claude Code**, **Cursor**, or another AI coding agent?
+    Connect to the public [VisioForge MCP server](../../general/mcp-server-usage.md)
+    at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable
+    code samples, and deployment guides — more accurate than grepping
+    `llms.txt`. No authentication required.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Introduction to Webcam Integration
 
@@ -35,8 +58,12 @@ Before diving into the implementation details, ensure your development environme
 3. Import the necessary namespaces:
 
 ```csharp
-using VisioForge.Core.VideoCapture;
 using System.Drawing;
+using System.Drawing.Imaging;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.VideoCapture;
+using VisioForge.Core.VideoCapture;
 ```
 
 ### Enabling Still Frame Capture
@@ -44,17 +71,24 @@ using System.Drawing;
 The first step in implementing still frame capture is to properly configure your application to detect and respond to the webcam's hardware button presses. Here's how:
 
 ```csharp
-// Initialize the video capture component
-var videoCapture = new VideoCaptureCore();
+// Initialize the video capture component. Pass an IVideoView for preview,
+// or use the parameterless CreateAsync() overload for headless operation.
+var videoCapture = await VideoCaptureCore.CreateAsync(VideoView1);
 
-// Enable still frame capture before starting the video stream
+// Enable still frame capture before starting the video stream.
 videoCapture.Video_Still_Frames_Grabber_Enabled = true;
 
-// Set the video capture device and other settings
-// ...
+// Select a capture device by name. Enumerate devices via videoCapture.Video_CaptureDevices().
+videoCapture.Video_CaptureDevice = new VideoCaptureSource("USB Camera");
+videoCapture.Video_CaptureDevice.Format_UseBest = true;     // or set Format + FrameRate explicitly
+videoCapture.Audio_RecordAudio = false;
+videoCapture.Audio_PlayAudio = false;
 
-// Start the video capture
-videoCapture.Start();
+// Preview-only mode (no file capture).
+videoCapture.Mode = VideoCaptureMode.VideoPreview;
+
+// Start the pipeline (async — OnError fires on pipeline errors).
+await videoCapture.StartAsync();
 ```
 
 Setting the `Video_Still_Frames_Grabber_Enabled` property to `true` is crucial. This configuration tells the SDK to monitor for hardware button presses and trigger the appropriate events when a still frame is captured.
@@ -71,19 +105,48 @@ videoCapture.OnStillVideoFrameBitmap += VideoCapture_OnStillVideoFrameBitmap;
 videoCapture.OnStillVideoFrameBuffer += VideoCapture_OnStillVideoFrameBuffer;
 ```
 
-Here's an example of how to implement the event handler for bitmap frames:
+Here's an example of how to implement the event handler for bitmap frames (the event is `EventHandler<VideoFrameBitmapEventArgs>`; the bitmap lives on `e.Frame`):
 
 ```csharp
-private void VideoCapture_OnStillVideoFrameBitmap(object sender, BitmapEventArgs e)
+private void VideoCapture_OnStillVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
 {
-    // Process the captured bitmap
-    Bitmap capturedImage = e.Bitmap;
-    
-    // Perform any required image processing
-    // ...
-    
-    // Display the image in a PictureBox control
-    pictureBox1.Image = capturedImage;
+    // Clone the bitmap because e.Frame is owned by the SDK and reused after this callback returns.
+    Bitmap capturedImage = (Bitmap)e.Frame.Clone();
+
+    // Marshal to the UI thread when running in WinForms / WPF.
+    if (pictureBox1.InvokeRequired)
+    {
+        pictureBox1.BeginInvoke((Action)(() =>
+        {
+            pictureBox1.Image?.Dispose();
+            pictureBox1.Image = capturedImage;
+        }));
+    }
+    else
+    {
+        pictureBox1.Image?.Dispose();
+        pictureBox1.Image = capturedImage;
+    }
+}
+```
+
+For raw buffer access (no Bitmap allocation, useful for custom image pipelines), subscribe to `OnStillVideoFrameBuffer`. Its signature is `EventHandler<VideoFrameBufferEventArgs>`:
+
+```csharp
+private void VideoCapture_OnStillVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
+{
+    // Raw frame metadata: width / height / stride / pixel format.
+    var width  = e.Frame.Info.Width;
+    var height = e.Frame.Info.Height;
+
+    // e.FrameArray is a managed byte[] copy (may be null if the SDK kept data in native memory).
+    if (e.FrameArray != null)
+    {
+        File.WriteAllBytes($"frame-{e.Frame.Timestamp.Ticks}.raw", e.FrameArray);
+    }
+
+    // Mark UpdateData = true if you mutated the buffer and want the change to propagate downstream.
+    // e.UpdateData = true;
 }
 ```
 
@@ -92,8 +155,8 @@ private void VideoCapture_OnStillVideoFrameBitmap(object sender, BitmapEventArgs
 After capturing and potentially processing the image, you'll often want to save it to disk. The SDK provides a convenient method for this purpose:
 
 ```csharp
-// Save the current frame to a file
-videoCapture.Frame_Save("capturedImage.jpg", ImageFormat.Jpeg);
+// Save the current frame to a file (async API — works after StartAsync).
+await videoCapture.Frame_SaveAsync("capturedImage.jpg", ImageFormat.Jpeg);
 ```
 
 You can specify different image formats based on your application's requirements, such as PNG for lossless quality or JPEG for smaller file sizes.

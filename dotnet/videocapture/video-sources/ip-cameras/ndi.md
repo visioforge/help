@@ -1,11 +1,39 @@
 ---
 title: NDI Video Capture and Source Integration in C# .NET
 description: Discover, connect, and capture NDI video sources using VisioForge Video Capture SDK. Network device enumeration and low-latency streaming in C# .NET.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - IP Camera
+  - NDI Source
+  - RTSP
+  - ONVIF
+  - NDI
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - VideoCaptureCore
+  - NDISourceSettings
+  - DeviceEnumerator
+  - IPCameraSourceSettings
+
 ---
 
 # Implementing NDI Video Sources in .NET Applications
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+
+!!! info "Cross-platform support"
+    The `VideoCaptureCoreX` engine with NDI runs on **Windows, macOS, Linux, Android, and iOS** via GStreamer; install the NDI runtime for each target platform. The classic `VideoCaptureCore` NDI source is Windows-only. See the [platform support matrix](../../../platform-matrix.md) and the [Linux deployment guide](../../../deployment-x/Ubuntu.md).
 
 ## Introduction to NDI Technology
 
@@ -83,9 +111,14 @@ Once you've identified the NDI sources on your network, the next step is to esta
     
     // Set the source to the VideoCaptureCore object
     VideoCapture1.IP_Camera_Source = settings;
+
+    // Select the operating mode before StartAsync:
+    //   IPPreview — live preview only (no file output).
+    //   IPCapture — preview + record to the configured Output_Format target.
+    VideoCapture1.Mode = VideoCaptureMode.IPPreview;   // or VideoCaptureMode.IPCapture
+
+    await VideoCapture1.StartAsync();
     ```
-    
-    After setting up the source, you'll need to use the `IPPreview` or `IPCapture` mode to preview or capture video from the device.
     
 
 === "VideoCaptureCoreX"
@@ -150,23 +183,26 @@ When implementing NDI functionality, it's important to handle potential issues g
 ### Implementing Robust Error Handling
 
 ```cs
-try 
+// The SDK does not expose NDI-specific exception types — the underlying GStreamer elements
+// surface failures as generic Exception. Branch on the discovery result (null / empty) for
+// "source not found", and on CreateAsync failure for connection issues.
+try
 {
-    // Attempt to connect to NDI source
-    var ndiSettings = await NDISourceSettings.CreateAsync(VideoCapture1.GetContext(), null, ndiUrl);
+    var discovered = await DeviceEnumerator.Shared.NDISourcesAsync();
+    var match = discovered.FirstOrDefault(s => s.URL == ndiUrl);
+    if (match == null)
+    {
+        Log.Error($"NDI source not found on the network: {ndiUrl}");
+        return;
+    }
+
+    var ndiSettings = await NDISourceSettings.CreateAsync(VideoCapture1.GetContext(), match);
     VideoCapture1.Video_Source = ndiSettings;
 }
-catch (NDISourceNotFoundException ex)
+catch (Exception ex)
 {
-    // Handle source not found
-    Log.Error($"NDI source not found: {ex.Message}");
-    // Implement retry logic or user notification
-}
-catch (NDIConnectionException ex)
-{
-    // Handle connection issues
+    // All failures (discovery, settings creation, GStreamer element init, etc.)
     Log.Error($"Failed to connect to NDI source: {ex.Message}");
-    // Implement fallback strategy
 }
 ```
 
@@ -219,6 +255,14 @@ To ensure optimal performance and reliability when working with NDI sources:
 NDI technology offers powerful capabilities for network video integration in .NET applications. With our SDK, you can easily incorporate high-quality, low-latency video from NDI sources into your software projects. Whether you're building a live production system, a video conferencing application, or any solution requiring network video, our NDI implementation provides the tools you need for success.
 
 The code samples provided demonstrate the essential patterns for working with NDI sources, from enumeration and connection to capture and processing. By following these patterns and best practices, you can create robust NDI-enabled applications that deliver exceptional performance and reliability.
+
+## Related Documentation
+
+- [IP cameras overview](index.md) — RTSP, ONVIF, and NDI source types at a glance
+- [RTSP camera source configuration](rtsp.md) — most common IP camera protocol
+- [ONVIF IP camera integration](onvif.md) — standards-based IP camera discovery and PTZ control
+- [IP camera live preview tutorial](../../video-tutorials/ip-camera-preview.md) — minimal working preview example
+- [RTSP protocol deep-dive](../../../general/network-streaming/rtsp.md) — streaming protocol internals
 
 ---
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

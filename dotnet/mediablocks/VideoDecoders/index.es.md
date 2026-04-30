@@ -1,7 +1,22 @@
-﻿---
+---
 title: Decodificadores de Video en C# .NET - H.264, HEVC, AV1
 description: Decodifique H.264, HEVC, VP9, AV1 y MJPEG con aceleración por hardware usando VisioForge Media Blocks SDK. Decodificación GPU para .NET.
 sidebar_label: Decodificadores de Video
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - UniversalDemuxBlock
+  - VideoRendererBlock
+  - BasicFileSourceBlock
+  - MediaBlocksPipeline
+  - MediaInfoReaderX
 ---
 
 # Bloques Decodificadores de Video - SDK de VisioForge Media Blocks .Net
@@ -79,7 +94,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Puede verificar implementaciones de decodificador específicas usando `H264Decoder.IsAvailable(H264DecoderType decoderType)`.
+Puede verificar implementaciones de decodificador específicas usando `H264DecoderBlock.IsAvailable(H264DecoderType decoderType)`.
 `H264DecoderType` incluye `FFMPEG`, `OpenH264`, `GPU_Nvidia_H264`, `VAAPI_H264`, etc.
 
 #### Plataformas
@@ -130,7 +145,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Puede verificar si el decodificador NVIDIA JPEG subyacente (si aplica) está disponible usando `NVJPEGDecoder.IsAvailable()`. La funcionalidad genérica de decodificador JPEG generalmente está disponible.
+Puede verificar si el decodificador NVIDIA JPEG subyacente (si aplica) está disponible usando `NVJPEGDecoderBlock.IsAvailable()`. La funcionalidad genérica de decodificador JPEG generalmente está disponible.
 
 #### Plataformas
 
@@ -192,7 +207,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `NVH264Decoder.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC y drivers apropiados.
+Verificar disponibilidad usando `NVH264DecoderBlock.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC y drivers apropiados.
 
 #### Plataformas
 
@@ -254,7 +269,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `NVH265Decoder.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para H.265 y drivers apropiados.
+Verificar disponibilidad usando `NVH265DecoderBlock.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para H.265 y drivers apropiados.
 
 #### Plataformas
 
@@ -319,7 +334,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `NVJPEGDecoder.IsAvailable()`. Requiere GPU NVIDIA y drivers apropiados.
+Verificar disponibilidad usando `NVJPEGDecoderBlock.IsAvailable()`. Requiere GPU NVIDIA y drivers apropiados.
 
 #### Plataformas
 
@@ -381,7 +396,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `NVMPEG1Decoder.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para MPEG-1 y drivers apropiados.
+Verificar disponibilidad usando `NVMPEG1DecoderBlock.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para MPEG-1 y drivers apropiados.
 
 #### Plataformas
 
@@ -443,7 +458,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `NVMPEG2Decoder.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para MPEG-2 y drivers apropiados.
+Verificar disponibilidad usando `NVMPEG2DecoderBlock.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para MPEG-2 y drivers apropiados.
 
 #### Plataformas
 
@@ -505,7 +520,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `NVMPEG4Decoder.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para MPEG-4 Part 2 y drivers apropiados.
+Verificar disponibilidad usando `NVMPEG4DecoderBlock.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para MPEG-4 Part 2 y drivers apropiados.
 
 #### Plataformas
 
@@ -567,7 +582,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `NVVP8Decoder.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para VP8 y drivers apropiados.
+Verificar disponibilidad usando `NVVP8DecoderBlock.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para VP8 y drivers apropiados.
 
 #### Plataformas
 
@@ -629,7 +644,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `NVVP9Decoder.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para VP9 y drivers apropiados.
+Verificar disponibilidad usando `NVVP9DecoderBlock.IsAvailable()`. Requiere GPU NVIDIA que soporte NVDEC para VP9 y drivers apropiados.
 
 #### Plataformas
 
@@ -1073,7 +1088,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `D3D11MPEG2Decoder.IsAvailable()`. Requiere Windows con soporte D3D11/DXVA y redist SDK correcto.
+Verificar disponibilidad usando `D3D11MPEG2DecoderBlock.IsAvailable()`. Requiere Windows con soporte D3D11/DXVA y redist SDK correcto.
 
 #### Plataformas
 
@@ -1132,7 +1147,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `D3D11VP8Decoder.IsAvailable()`. Requiere Windows con soporte D3D11/DXVA y redist SDK correcto.
+Verificar disponibilidad usando `D3D11VP8DecoderBlock.IsAvailable()`. Requiere Windows con soporte D3D11/DXVA y redist SDK correcto.
 
 #### Plataformas
 
@@ -1191,7 +1206,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `D3D11VP9Decoder.IsAvailable()`. Requiere Windows con soporte D3D11/DXVA y redist SDK correcto.
+Verificar disponibilidad usando `D3D11VP9DecoderBlock.IsAvailable()`. Requiere Windows con soporte D3D11/DXVA y redist SDK correcto.
 
 #### Plataformas
 
@@ -1306,9 +1321,10 @@ La clase `AV1DecoderSettings` acepta un valor de la enumeración `AV1DecoderType
 | Valor de AV1DecoderType | Descripción |
 |--------------------------|-------------|
 | `Auto`                  | Selección automática del mejor backend disponible |
-| `dav1d`                 | Decodificador dav1d de alto rendimiento (software) |
-| `av1dec`                | Decodificador av1dec (software) |
+| `Dav1d`                 | Decodificador dav1d de alto rendimiento (software) |
+| `AOM`                   | Decodificador de referencia AOM (software) |
 | `NVIDIA`                | NVIDIA NVDEC (hardware, GPU RTX 30xx o más reciente recomendado) |
+| `Intel_QSV`             | Intel Quick Sync Video (hardware, Arc o más reciente) |
 | `D3D11`                 | Aceleración D3D11/DXVA (solo Windows) |
 | `VAAPI`                 | Aceleración VAAPI (solo Linux) |
 
@@ -1317,10 +1333,10 @@ La clase `AV1DecoderSettings` acepta un valor de la enumeración `AV1DecoderType
 var av1Decoder = new AV1DecoderBlock();
 
 // Explícito: dav1d
-var av1Decoder = new AV1DecoderBlock(new AV1DecoderSettings(AV1DecoderType.dav1d));
+var av1Decoder = new AV1DecoderBlock(new AV1DecoderSettings { DecoderType = AV1DecoderType.Dav1d });
 
 // Explícito: NVIDIA NVDEC
-var av1Decoder = new AV1DecoderBlock(new AV1DecoderSettings(AV1DecoderType.NVIDIA));
+var av1Decoder = new AV1DecoderBlock(new AV1DecoderSettings { DecoderType = AV1DecoderType.NVIDIA });
 ```
 
 #### El pipeline de muestra

@@ -1,6 +1,25 @@
 ---
 title: Avigilon IP Camera RTSP URL Patterns and C# .NET Setup
 description: Avigilon H5A, H5M, H5 Pro, H5SL, and Unity NVR RTSP URL patterns for C# .NET. Enterprise camera integration with VisioForge SDK code samples.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Decoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Avigilon IP Camera in C# .NET

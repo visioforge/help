@@ -1,6 +1,18 @@
 ---
 title: LAME MP3 Encoder Settings via DirectShow COM Interface
 description: IAudioEncoderProperties interface for LAME MP3 encoding with variable and constant bitrate modes and quality configuration.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - MP3
+  - C#
+primary_api_classes:
+  - IBaseFilter
+  - AudioEncoder
+
 ---
 
 # LAME MP3 Encoder Interface Reference
@@ -178,11 +190,17 @@ namespace VisioForge.DirectShowAPI
         int set_ModeFixed([In] int dwFlag);
 
         // Configuration Management
+        // pcBlock is a BYTE[] buffer in C++; use LPArray with SizeParamIndex=1
+        // so the marshaler reads pdwSize bytes back from native code.
         [PreserveSig]
-        int get_ParameterBlockSize(out byte pcBlock, out int pdwSize);
+        int get_ParameterBlockSize(
+            [Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] pcBlock,
+            out int pdwSize);
 
         [PreserveSig]
-        int set_ParameterBlockSize([In] byte pcBlock, [In] int dwSize);
+        int set_ParameterBlockSize(
+            [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] pcBlock,
+            [In] int dwSize);
 
         [PreserveSig]
         int DefaultAudioEncoderProperties();

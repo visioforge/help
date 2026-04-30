@@ -1,6 +1,32 @@
 ---
-title: MP3 Encoding with LAME - CBR, ABR, and VBR in C# .NET
+title: MP3 Audio Encoder in C# .NET — LAME Bitrate Settings
 description: LAME encoder with CBR, ABR, and quality-based VBR modes. Joint stereo, voice optimization, bitrate 8-320 kbps. VisioForge SDK capture and editing examples.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - MP3
+  - C#
+primary_api_classes:
+  - MP3Output
+  - MP3EncoderSettings
+  - MP3EncoderRateControl
+  - MP3ChannelsMode
+  - MP3EncodingQuality
+
 ---
 
 # Mastering MP3 Audio: Record, Capture & Edit in C# and .NET
@@ -244,7 +270,7 @@ var streamingSettings = new MP3EncoderSettings
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-The [MP3 file output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.MP3Output.html) class provides advanced configuration options for MP3 encoding in C# audio video capture and editing scenarios.
+The [MP3 file output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.MP3Output.html) class provides advanced configuration options for MP3 encoding in C# audio video capture and editing scenarios.
 
 ### Key Features
 

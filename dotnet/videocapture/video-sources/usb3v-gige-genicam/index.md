@@ -1,13 +1,41 @@
 ---
-title: USB3 Vision and GigE Industrial Camera Capture in C# .NET
-description: Capture from USB3 Vision, GigE Vision, and GenICam industrial cameras with VisioForge Video Capture SDK. DirectShow and cross-platform driver support.
+title: USB3 Vision & GigE Cameras in C# .NET — GenICam Industrial
+description: Capture from USB3 Vision, GigE Vision, and GenICam industrial cameras in C# / .NET via GenTL. Basler, FLIR, IDS, Allied Vision support. High-FPS machine vision.
 sidebar_label: USB3 Vision, GigE, and GenICam devices
 order: 15
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+primary_api_classes:
+  - VideoCaptureCoreX
+  - DeviceEnumerator
+  - GenICamSourceSettings
+  - H264EncoderBlock
+  - GenICamSourceBlock
+
 ---
 
 # USB3 Vision, GigE, and GenICam Camera Integration
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button }
+
+!!! tip "AI coding agents: use the VisioForge MCP server"
+
+    Building this with **Claude Code**, **Cursor**, or another AI coding agent?
+    Connect to the public [VisioForge MCP server](../../../general/mcp-server-usage.md)
+    at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable
+    code samples, and deployment guides — more accurate than grepping
+    `llms.txt`. No authentication required.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Overview
 
@@ -601,7 +629,7 @@ try
 {
     // Discover cameras with retry logic
     int maxDiscoveryRetries = 3;
-    var devices = new GenICamSourceInfo[0];
+    var devices = Array.Empty<GenICamCamera>();
     
     for (int attempt = 1; attempt <= maxDiscoveryRetries; attempt++)
     {

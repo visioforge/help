@@ -1,6 +1,24 @@
 ---
 title: Milesight IP Camera RTSP URL and C# .NET Connection Guide
 description: Milesight MS-C, MS-A, MS-V series RTSP URL patterns for C# .NET. ONVIF-compliant integration with VisioForge Video Capture SDK code samples.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Milesight IP Camera in C# .NET

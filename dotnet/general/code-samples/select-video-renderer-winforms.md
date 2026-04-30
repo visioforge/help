@@ -1,21 +1,66 @@
 ---
-title: Video Renderer Selection Guide for .NET Applications
-description: Choose and optimize DirectShow video renderers (VideoRenderer, VMR9, EVR) for WinForms applications with performance optimization techniques.
+title: Video Renderer in C# .NET — EVR, Direct2D, WPF, MadVR
+description: Configure video rendering in C# / .NET across WinForms, WPF, and WinUI 3. EVR, Direct2D, madVR, native HWND, callback modes — setup and hardware acceleration.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - MediaPlayerCoreX
+  - VideoCaptureCoreX
+  - VideoEditCore
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Playback
+  - Streaming
+  - Encoding
+  - Editing
+  - Conversion
+  - C#
+primary_api_classes:
+  - VideoRenderer
+  - VideoRendererMode
+  - VideoView
+  - VideoRendererStretchMode
+  - VideoCaptureCoreX
+
 ---
 
-# Video Renderer Selection Guide for WinForms Applications
+# Video Renderer Options in C# .NET
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Introduction to Video Rendering in .NET
+## Introduction
 
-When developing multimedia applications in .NET, selecting the appropriate video renderer is crucial for optimal performance and compatibility. This guide focuses on DirectShow-based SDK engines: VideoCaptureCore, VideoEditCore, and MediaPlayerCore, which share the same API across all SDKs.
+The classic engines (`VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore`) expose **10 video renderer modes** through the `VideoRendererMode` enum. Choosing the right one controls how frames reach the screen: raw DirectShow filters, Direct2D GPU surfaces, native HWND embedded in WPF, frame callbacks for custom rendering, WinUI 3 controls, or the third-party madVR renderer. This guide walks through each mode with minimal enable code, platform availability, and a decision guide at the top so you can skip straight to the mode your app needs.
 
-Video renderers serve as the bridge between your application and the display hardware, determining how video content is processed and presented to the user. The right choice can significantly impact performance, visual quality, and hardware resource utilization.
+!!! note "Classic engines only"
+    This page covers the DirectShow-based classic engines. The cross-platform `VideoCaptureCoreX` / `MediaPlayerCoreX` engines use a `VideoView` control with GStreamer sinks and do not expose a `VideoRendererMode` enum — rendering there is handled automatically by the UI control binding.
+
+## Quick pick — which renderer for which app?
+
+| Mode | UI framework | Best for |
+|---|---|---|
+| `VideoRenderer` (legacy GDI) | WinForms | Maximum compatibility on very old hardware |
+| `VMR9` | WinForms | Windows XP / Vista, software + light HW accel |
+| `EVR` | WinForms | Default pick on modern Windows (Vista+) |
+| `Direct2D` | WinForms, WPF | GPU-accelerated 2D, 4K+ content, modern apps |
+| `Direct2DManaged` | WPF | Managed Direct2D with WPF-aware pause on minimize |
+| `WPF_NativeHWND` | WPF | Native HWND embedded in WPF for higher perf than pure WPF |
+| `WPF_WinUI_Callback` (`FrameCallback`) | WPF, WinUI, custom | Per-frame callbacks for CV, AI, custom rendering |
+| `WinUI` | WinUI 3 | Native WinUI 3 apps (Windows 10/11) |
+| `MadVR` | WinForms | Reference-grade scaling + color, needs external madVR install |
+| `None` | any | Headless / audio-only / file conversion without preview |
 
 ## Understanding Available Video Renderer Options
 
-DirectShow in Windows offers three primary renderer options, each with distinct characteristics and use cases. Let's explore each renderer in detail to help you make an informed decision for your application.
+The detailed sections below describe each mode, starting with the three classic DirectShow renderers.
 
 ### Legacy Video Renderer (GDI-based)
 
@@ -93,6 +138,157 @@ VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.EVR;
 - When advanced synchronization is important
 - Multiple display environments
 
+### Direct2D Renderer
+
+Direct2D provides high-performance 2D rendering with GPU acceleration. It is available on both WinForms and WPF hosts and is the recommended modern choice when you need hardware-accelerated rendering with simple rotation, flip, and stretch controls.
+
+**Key characteristics:**
+
+- Hardware-accelerated via Direct2D / Direct3D 11
+- Works on both WinForms and WPF
+- Supports rotation (0 / 90 / 180 / 270), horizontal and vertical flip
+- Clean stretch mode integration (`Stretch` / `Letterbox`)
+- Low CPU overhead, scales well to 4K / 8K content
+
+**Implementation example:**
+
+```cs
+VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.Direct2D;
+VideoCapture1.Video_Renderer.RotationAngle = 0;
+VideoCapture1.Video_Renderer.StretchMode = VideoRendererStretchMode.Letterbox;
+VideoCapture1.Video_Renderer.Flip_Horizontal = false;
+VideoCapture1.Video_Renderer.Flip_Vertical = false;
+await VideoCapture1.Video_Renderer_UpdateAsync();
+```
+
+**When to use:**
+
+- Modern WinForms or WPF apps that want GPU-accelerated rendering
+- 4K / 8K sources where CPU-based paths would bottleneck
+- Apps that need run-time rotation or flip controls
+
+### Direct2DManaged Renderer (WPF)
+
+A WPF-specific managed variant of Direct2D. Integrates more cleanly with the WPF object model and automatically pauses rendering when the window is minimized — useful for long-running playback apps where you don't want GPU work on hidden windows.
+
+**Implementation example:**
+
+```cs
+VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.Direct2DManaged;
+VideoCapture1.Video_Renderer.StretchMode = VideoRendererStretchMode.Letterbox;
+await VideoCapture1.Video_Renderer_UpdateAsync();
+```
+
+Rotation, flip, and stretch options are shared with the regular `Direct2D` mode. Pause-on-minimize is handled automatically by the WPF `VideoView` control.
+
+**When to use:**
+
+- WPF apps where you want Direct2D performance with WPF-friendly lifecycle
+- Multi-window dashboards where inactive windows should not consume GPU cycles
+
+### WPF Native HWND Renderer
+
+Hosts a native Win32 HWND inside the WPF `VideoView` control. Gives you raw DirectShow renderer performance in a WPF layout at the cost of standard WPF-render-chain quirks (airspace issues with overlapping controls).
+
+**Implementation example:**
+
+```cs
+VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.WPF_NativeHWND;
+await VideoCapture1.Video_Renderer_UpdateAsync();
+```
+
+**When to use:**
+
+- WPF apps that need maximum DirectShow rendering performance
+- Apps embedding legacy filters that expect a HWND target
+- You don't need to overlay WPF controls on top of the video surface
+
+### FrameCallback Renderer (WPF_WinUI_Callback)
+
+A callback-based rendering mode. Instead of drawing frames directly, the engine delivers each frame to your code via events, letting you render with any library (SkiaSharp, `System.Drawing`, custom OpenGL/DirectX, WriteableBitmap) or feed a non-visual pipeline (computer vision, AI inference, streaming to a remote endpoint).
+
+`FrameCallback` is an alias for `WPF_WinUI_Callback` — the same mode with a more self-descriptive name.
+
+**Implementation example:**
+
+```cs
+VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.FrameCallback;
+await VideoCapture1.Video_Renderer_UpdateAsync();
+
+// Subscribe to frame events
+VideoCapture1.OnVideoFrameBitmap += (sender, e) =>
+{
+    // e.Frame is a System.Drawing.Bitmap — render to a PictureBox, WriteableBitmap, etc.
+};
+
+VideoCapture1.OnVideoFrameBuffer += (sender, e) =>
+{
+    // e.Frame.Data is IntPtr — wrap with SkiaSharp / Marshal.Copy for pixel-level work
+};
+```
+
+See [Image drawing via OnVideoFrameBuffer](image-onvideoframebuffer.md) and [Text drawing via OnVideoFrameBuffer](text-onvideoframebuffer.md) for detailed per-frame processing examples.
+
+**When to use:**
+
+- Computer-vision / ML pipelines that consume raw frames
+- Custom rendering with SkiaSharp, DirectX, or OpenGL
+- WPF / WinUI / MAUI apps that render into a `WriteableBitmap` manually
+- Apps with no preview surface at all (frames shipped to a server, encoder, etc.)
+
+### WinUI 3 Renderer
+
+Native rendering for WinUI 3 apps on Windows 10/11. Use this mode when your shell is `Microsoft.UI.Xaml` and you host a `VisioForge.Core.UI.WinUI.VideoView` control.
+
+**Implementation example:**
+
+```cs
+VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.WinUI;
+await VideoCapture1.Video_Renderer_UpdateAsync();
+```
+
+**When to use:**
+
+- WinUI 3 apps (Windows App SDK, not the old WinUI 2 / UWP)
+- You want native look-and-feel consistency with other WinUI content
+
+### madVR Renderer (third-party)
+
+[madVR](https://www.madvr.com/) is a reference-quality external video renderer popular with home-theatre PCs and high-end video software. It delivers superior scaling algorithms, color management, and deinterlacing at the cost of higher GPU load. Supported only on WinForms hosts; requires a separate madVR installation on the target machine (the CLSID-registered DirectShow filter must be present).
+
+**Implementation example:**
+
+```cs
+VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.MadVR;
+await VideoCapture1.Video_Renderer_UpdateAsync();
+```
+
+**Runtime requirement:** ensure madVR is installed on the target system. If the filter is missing, `Video_Renderer_UpdateAsync` will fail — use the fallback pattern shown in [Renderer Compatibility Problems](#renderer-compatibility-problems) below to degrade gracefully to EVR.
+
+**When to use:**
+
+- Reference-grade video quality for mastering, HTPC, or media server UIs
+- Audiences with GPUs that can absorb the extra rendering cost
+- You can ship / document a separate madVR install step
+
+### None (headless)
+
+Disables rendering entirely. The capture / edit / playback graph still runs — frames flow to encoders, file outputs, streaming endpoints, or callbacks — but no preview surface is allocated.
+
+**Implementation example:**
+
+```cs
+VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.None;
+await VideoCapture1.Video_Renderer_UpdateAsync();
+```
+
+**When to use:**
+
+- Audio-only capture (microphone-to-file) when the SDK has both audio and video branches
+- File conversion / transcoding without a preview window
+- Server-side rendering pipelines
+- Unit tests and headless CI runs
+
 ## Advanced Configuration Options
 
 Beyond just selecting a renderer, the SDK provides various configuration options to fine-tune video presentation.
@@ -101,24 +297,26 @@ Beyond just selecting a renderer, the SDK provides various configuration options
 
 When displaying interlaced video content (common in broadcast sources), proper deinterlacing improves visual quality significantly. The SDK supports various deinterlacing algorithms depending on the renderer chosen.
 
-First, retrieve the available deinterlacing modes:
+First, retrieve the available deinterlacing modes. `Video_Renderer_Deinterlace_Modes()` returns the VMR-9 mode names auto-discovered from the current driver:
 
 ```cs
-VideoCapture1.Video_Renderer_Deinterlace_Modes_Fill();
-
-// Populate a dropdown with available modes
+// Populate a dropdown with the available VMR-9 modes
 foreach (string deinterlaceMode in VideoCapture1.Video_Renderer_Deinterlace_Modes())
 {
   cbDeinterlaceModes.Items.Add(deinterlaceMode);
 }
 ```
 
-Then apply a selected deinterlacing mode:
+Deinterlacing is configured on the two renderers separately. VMR-9 takes a mode-name string; EVR takes a `VideoRendererEVRDeinterlaceMode` enum value:
 
 ```cs
-// Assuming the user selected a mode from cbDeinterlaceModes
-string selectedMode = cbDeinterlaceModes.SelectedItem.ToString();
-VideoCapture1.Video_Renderer.DeinterlaceMode = selectedMode;
+// VMR-9 — set the mode string selected by the user
+VideoCapture1.Video_Renderer.Deinterlace_VMR9_Mode = cbDeinterlaceModes.SelectedItem.ToString();
+VideoCapture1.Video_Renderer.Deinterlace_VMR9_UseDefault = false;
+
+// EVR — use the enum instead
+// VideoCapture1.Video_Renderer.Deinterlace_EVR_Mode = VideoRendererEVRDeinterlaceMode.Auto;
+
 VideoCapture1.Video_Renderer_Update();
 ```
 
@@ -167,12 +365,12 @@ VideoCapture1.Video_Renderer_Update();
 - Content where distortion would be noticeable or problematic
 - Cinema or broadcast content viewing
 
-#### Crop Mode
+#### LetterboxToFill Mode
 
-This mode fills the display area while preserving aspect ratio, potentially cropping some content:
+This mode fills the display area while preserving aspect ratio, cropping any overflow on one axis:
 
 ```cs
-VideoCapture1.Video_Renderer.StretchMode = VideoRendererStretchMode.Crop;
+VideoCapture1.Video_Renderer.StretchMode = VideoRendererStretchMode.LetterboxToFill;
 VideoCapture1.Video_Renderer_Update();
 ```
 
@@ -183,29 +381,35 @@ VideoCapture1.Video_Renderer_Update();
 - Social media-style video display
 - When trying to eliminate letterboxing in already letterboxed content
 
-### Performance Optimization Techniques
+### Aspect-Ratio Override
 
-#### Adjusting Buffer Count
-
-For smoother playback, especially with high-resolution content, adjusting the buffer count can help:
+To force a specific display aspect ratio (e.g. show 4:3 content letterboxed inside a 16:9 container), enable the override and set the ratio components:
 
 ```cs
-// Increase buffer count for smoother playback
-VideoCapture1.Video_Renderer.BuffersCount = 3;
+VideoCapture1.Video_Renderer.Aspect_Ratio_Override = true;
+VideoCapture1.Video_Renderer.Aspect_Ratio_X = 4;
+VideoCapture1.Video_Renderer.Aspect_Ratio_Y = 3;
 VideoCapture1.Video_Renderer_Update();
 ```
 
-#### Enabling Hardware Acceleration
+### Zoom and Pan
 
-Ensure hardware acceleration is enabled for maximum performance:
+`VideoRendererSettings` exposes zoom/shift properties useful for digital PTZ on a preview:
 
 ```cs
-// For VMR9
-VideoCapture1.Video_Renderer.VMR9.UseOverlays = true;
-VideoCapture1.Video_Renderer.VMR9.UseDynamicTextures = true;
+VideoCapture1.Video_Renderer.Zoom_Ratio  = 150; // 150%
+VideoCapture1.Video_Renderer.Zoom_ShiftX = 0;
+VideoCapture1.Video_Renderer.Zoom_ShiftY = 0;
+VideoCapture1.Video_Renderer_Update();
+```
 
-// For EVR
-VideoCapture1.Video_Renderer.EVR.EnableHardwareTransforms = true;
+### Flip and Rotation
+
+```cs
+VideoCapture1.Video_Renderer.Flip_Horizontal = true;
+VideoCapture1.Video_Renderer.Flip_Vertical   = false;
+// RotationAngle is only respected by the Direct2D renderer and accepts 0, 90, 180, or 270.
+VideoCapture1.Video_Renderer.RotationAngle   = 90;
 VideoCapture1.Video_Renderer_Update();
 ```
 
@@ -239,16 +443,6 @@ catch
 }
 ```
 
-### Display Issues on Multi-Monitor Systems
-
-For applications that might run on multi-monitor setups, additional configuration might be necessary:
-
-```cs
-// Specify which monitor to use for full-screen mode
-VideoCapture1.Video_Renderer.MonitorIndex = 0; // Primary monitor
-VideoCapture1.Video_Renderer_Update();
-```
-
 ## Best Practices and Recommendations
 
 1. **Choose the right renderer for your target environment**:
@@ -274,9 +468,16 @@ To ensure proper functionality of these renderers, make sure to include:
 
 ## Conclusion
 
-Selecting and configuring the right video renderer is an important decision in developing high-quality multimedia applications. By understanding the strengths and limitations of each renderer option, you can significantly improve the user experience of your WinForms applications.
+The classic engines offer 10 renderer modes covering WinForms, WPF, and WinUI 3. **EVR** is the safe default for WinForms, **Direct2D** for modern GPU-accelerated rendering on either WinForms or WPF, **FrameCallback** for custom pipelines (CV / AI / bespoke rendering), **WinUI** for WinUI 3 shells, and **madVR** for reference-quality scenarios that can accommodate the external install. `None` is the right mode when there is no preview at all.
 
-The optimal choice depends on your specific requirements, target audience, and the nature of your video content. In most modern applications, EVR should be your first choice, with VMR9 as a reliable fallback option.
+For applications built on the cross-platform `VideoCaptureCoreX` / `MediaPlayerCoreX` engines, renderer choice is handled by the `VideoView` control and does not use this enum.
+
+## Related documentation
+
+- [Image drawing via OnVideoFrameBuffer](image-onvideoframebuffer.md) — pixel-level frame processing, the canonical use case for `FrameCallback`.
+- [Text drawing via OnVideoFrameBuffer](text-onvideoframebuffer.md) — text overlays with `FrameCallback`.
+- [Rendering video in a PictureBox](draw-video-picturebox.md) — WinForms rendering pattern that pairs well with `FrameCallback`.
 
 ---
+
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

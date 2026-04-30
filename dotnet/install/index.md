@@ -3,6 +3,24 @@ title: Install VisioForge .NET SDKs — NuGet, Visual Studio, Rider
 description: Setup files or NuGet packages. Target frameworks for Windows, macOS, iOS, Android, and Linux. SDK initialization, VideoView controls, and native dependencies.
 sidebar_label: Installation
 order: 21
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+primary_api_classes:
+  - VideoView
+  - VideoCaptureCore
+  - VideoCaptureCoreX
 
 ---
 
@@ -210,11 +228,8 @@ await VisioForge.Core.VisioForgeX.InitSDKAsync();
 When your application exits, properly release resources:
 
 ```csharp
-// Clean up at application exit
+// Clean up at application exit (sync — DestroySDK has no async variant)
 VisioForge.Core.VisioForgeX.DestroySDK();
-
-// Or use the async version
-await VisioForge.Core.VisioForgeX.DestroySDKAsync();
 ```
 
 Failing to initialize or clean up properly may result in memory leaks or unstable behavior.

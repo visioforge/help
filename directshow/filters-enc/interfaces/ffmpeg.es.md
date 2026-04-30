@@ -1,6 +1,26 @@
 ---
 title: Codificador FFMPEG DirectShow para MPEG-2, DVD, FLV, VCD
 description: Interfaz DirectShow del codificador FFMPEG para FLV, MPEG-1, MPEG-2, VCD, SVCD, DVD y Transport Stream con configuración de audio/video.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - MP4
+  - FLV
+  - TS
+  - H.264
+  - MPEG-2
+  - AC-3
+  - C#
+primary_api_classes:
+  - IVFFFMPEGEncoder
+  - FFMPEGOutputSettings
+  - IBaseFilter
+  - CVFOutputSettings
+  - TFFMPEGOutputSettings
+
 ---
 
 # Referencia de la Interfaz del Codificador FFMPEG
@@ -356,7 +376,10 @@ type
   );
 
   /// <summary>
-  /// Enumeración del sistema de TV.
+  /// Enumeración del sistema de TV. Nota: el miembro `None` puede colisionar con
+  /// el identificador `None` expuesto por otras unidades Delphi (p. ej., `Variants`
+  /// de RTL). Referencie los valores mediante el nombre calificado del enum —
+  /// `TVFFFMPEGDLLTVSystem.None` — para evitar ambigüedades en código real.
   /// </summary>
   TVFFFMPEGDLLTVSystem = (
     None,

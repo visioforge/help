@@ -1,6 +1,16 @@
 ---
 title: Mostrar primer fotograma de video con Media Player SDK .NET
 description: Muestra el primer fotograma de video en aplicaciones WinForms, WPF y Consola con ejemplos de implementación en C# usando el SDK de Media Player.
+tags:
+  - Media Player SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Playback
+  - Streaming
+  - C#
+
 ---
 
 # Mostrando el Primer Fotograma de Archivos de Video en Aplicaciones .NET

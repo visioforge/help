@@ -1,6 +1,22 @@
 ---
 title: Guía de Interfaces de Filtros DirectShow Personalizados .NET
 description: Implemente interfaces de filtros DirectShow personalizados en .NET con acceso y manipulación de IBaseFilter para aplicaciones multimedia.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - C#
+  - NuGet
+primary_api_classes:
+  - IBaseFilter
+  - FilterEventArgs
+  - VideoCaptureCore
+
 ---
 
 # Uso de Interfaces de Filtros DirectShow Personalizados
@@ -54,7 +70,7 @@ El Video Capture SDK ofrece el evento `OnFilterAdded` que se dispara cada vez qu
 videoCaptureCore.OnFilterAdded += VideoCaptureCore_OnFilterAdded;
 
 // Implementación del manejador de eventos
-private void VideoCaptureCore_OnFilterAdded(object sender, FilterAddedEventArgs eventArgs)
+private void VideoCaptureCore_OnFilterAdded(object sender, FilterEventArgs eventArgs)
 {
     // Acceder a la interfaz del filtro DirectShow
     IBaseFilter baseFilter = eventArgs.Filter as IBaseFilter;
@@ -129,7 +145,7 @@ private void EnumerarPinesFiltro(IBaseFilter filter)
 Al trabajar con el evento `OnFilterAdded`, recuerda que puede ser llamado múltiples veces a medida que varios filtros se agregan al grafo. Para trabajar con un filtro específico, necesitarás identificarlo correctamente:
 
 ```cs
-private void VideoCaptureCore_OnFilterAdded(object sender, FilterAddedEventArgs eventArgs)
+private void VideoCaptureCore_OnFilterAdded(object sender, FilterEventArgs eventArgs)
 {
     IBaseFilter baseFilter = eventArgs.Filter as IBaseFilter;
     
@@ -288,7 +304,7 @@ Aquí hay un ejemplo más completo que demuestra encontrar y configurar un filtr
 ```cs
 using System;
 using System.Runtime.InteropServices;
-using VisioForge.Core.DirectShow;
+using VisioForge.Libs.DirectShowLib;  // Namespace público — IBaseFilter, FilterInfo, IPin, etc.
 
 public class EjemploFiltroPersonalizado
 {
@@ -306,7 +322,7 @@ public class EjemploFiltroPersonalizado
         captureCore.Start();
     }
     
-    private void CaptureCore_OnFilterAdded(object sender, FilterAddedEventArgs eventArgs)
+    private void CaptureCore_OnFilterAdded(object sender, FilterEventArgs eventArgs)
     {
         IBaseFilter baseFilter = eventArgs.Filter as IBaseFilter;
         

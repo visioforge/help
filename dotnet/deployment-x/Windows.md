@@ -1,6 +1,21 @@
 ---
 title: Windows Deployment Guide for VisioForge Cross-Platform SDK
 description: VisioForge SDK .NET deployment for Windows with NuGet packages, dependencies, and x86/x64 architecture configuration for multimedia apps.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - USB3 Vision / GigE
+  - NuGet
+primary_api_classes:
+  - AWSS3SinkBlock
+  - CVDewarpBlock
+  - CVDilateBlock
+  - CVErodeBlock
+
 ---
 
 # Windows Installation and Deployment Guide for VisioForge Cross-Platform SDK
@@ -64,9 +79,8 @@ For applications requiring cloud storage integration with AWS S3:
 - [VisioForge.CrossPlatform.AWS.Windows.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.AWS.Windows.x86) - 32-bit AWS support
 - [VisioForge.CrossPlatform.AWS.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.AWS.Windows.x64) - 64-bit AWS support
 
-When using these packages, the following Media Blocks become available:
+When using these packages, the following Media Block becomes available:
 
-- `AWSS3SourceBlock` - For retrieving media from S3 buckets
 - `AWSS3SinkBlock` - For storing media in S3 buckets
 
 ### Computer Vision with OpenCV

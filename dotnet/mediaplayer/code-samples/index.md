@@ -2,6 +2,12 @@
 title: Video Player Code Examples and Tutorials in C# .NET
 description: Implement playback, frame extraction, playlists, and streaming with VisioForge Media Player SDK .NET. WinForms, WPF, and Console samples included.
 sidebar_label: Code Examples
+tags:
+  - Media Player SDK
+  - .NET
+  - Windows
+  - Playback
+  - Streaming
 
 ---
 

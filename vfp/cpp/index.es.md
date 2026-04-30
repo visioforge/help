@@ -1,9 +1,73 @@
 ---
 title: Biblioteca C++ de Video Fingerprinting y documentación API
 description: Implementación nativa C++ del SDK Video Fingerprinting con alto rendimiento y soporte multiplataforma para huellas de video robustas.
+tags:
+  - Video Fingerprinting SDK
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+primary_api_classes:
+  - VFPAnalyzer
+  - VFPAnalyzerSettings
+  - VideoProcessor
+  - StoreFingerprint
+  - StreamAnalyzer
+
 ---
 
 # SDK de Huella Digital de Video para C++
+
+!!! danger "Los ejemplos de código en esta página no coinciden con la API C pública — trate como pseudocódigo ilustrativo"
+
+    La API de clase C++ documentada abajo (clase `VFPAnalyzer` con
+    `Initialize` / `ProcessVideo`, `VFPAnalyzerSettings`, enum `VFPAnalyzerMode`,
+    clase `VFPCompare` con `CompareVideos`, etc.) **no** existe en el SDK
+    distribuido. El SDK real de Video Fingerprinting expone una **API plana
+    estilo C** (`extern "C"`), no una jerarquía de clases.
+
+    **API canónica real C (per `VisioForge_VFP.h`):**
+
+    Flujo de fingerprint de búsqueda (por cuadro):
+
+    ```c
+    VFPSearchData searchData;
+    VFPSearch_Init(&searchData);
+    // Para cada cuadro decodificado:
+    VFPSearch_Process(&searchData, frameData, width, height, stride, timestamp);
+    // Después de todos los cuadros:
+    VFPSearch_Build(&searchData, &resultFingerprint);
+    // Buscar un fingerprint dentro de otro:
+    VFPSearch_Search(&fpA, &fpB, duration, maxDifference, allowMultipleFragments,
+                     &outResults, &outCount);
+    ```
+
+    Flujo de fingerprint de comparación (por cuadro):
+
+    ```c
+    VFPCompareData compareData;
+    VFPCompare_Init(&compareData);
+    // Para cada cuadro decodificado:
+    VFPCompare_Process(&compareData, frameData, width, height, stride, timestamp);
+    // Después de todos los cuadros:
+    VFPCompare_Build(&compareData, &resultFingerprint);
+    // Comparar dos fingerprints (devuelve diferencia; 0 = idénticos):
+    int diff = VFPCompare_Compare(&fpA, &fpB, durationMs);
+    ```
+
+    Helpers convenientes de alto nivel como
+    `VFPSearch_GetFingerprintForVideoFile`,
+    `VFPCompare_GetFingerprintForVideoFile`, y `VFPFillSource` mostrados
+    en otras partes de las páginas C++ **no** son exports reales — solo
+    los primitivos de bajo nivel `_Init` / `_Process` / `_Build` /
+    `_Search` / `_Compare` son distribuidos en `VisioForge_VFP.dll`. La
+    aplicación host es responsable de decodificar cuadros de video (ej.
+    vía FFmpeg o GStreamer) y alimentarlos cuadro-a-cuadro a `*_Process`.
+
+    Catalogado como defectos #084-#090 en la auditoría. Una reescritura
+    completa del conjunto de docs C++ está en cola. Para muestras
+    funcionales de bajo nivel, vea `samples/` en la distribución del SDK.
 
 ## Descripción General
 

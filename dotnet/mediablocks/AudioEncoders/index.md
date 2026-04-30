@@ -3,6 +3,22 @@ title: Audio Encoder Blocks - AAC, MP3, FLAC, Opus in C# .NET
 description: Encode audio to AAC, MP3, FLAC, Opus, Vorbis, and WMA using VisioForge Media Blocks SDK. Configurable bitrate, sample rate, and channel settings.
 sidebar_label: Audio Encoders
 order: 19
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - UniversalSourceBlock
+  - MediaBlocksPipeline
+  - UniversalSourceSettings
+  - FileSinkBlock
+  - AACEncoderBlock
+
 ---
 
 # Audio encoders blocks
@@ -140,7 +156,8 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-var adpcmEncoderBlock = new ADPCMEncoderBlock(new ADPCMEncoderSettings());
+// ADPCMEncoderBlock takes an optional block-align int (default 1024) — no Settings class.
+var adpcmEncoderBlock = new ADPCMEncoderBlock(blockAlign: 1024);
 pipeline.Connect(fileSource.AudioOutput, adpcmEncoderBlock.Input);
 
 var wavSinkBlock = new WAVSinkBlock(@"output.wav");
@@ -297,7 +314,8 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-var alawEncoderBlock = new ALAWEncoderBlock(new ALAWEncoderSettings());
+// ALAWEncoderBlock has a parameterless constructor.
+var alawEncoderBlock = new ALAWEncoderBlock();
 pipeline.Connect(fileSource.AudioOutput, alawEncoderBlock.Input);
 
 var wavSinkBlock = new WAVSinkBlock(@"output.wav");
@@ -471,8 +489,8 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 var mp3EncoderBlock = new MP3EncoderBlock(new MP3EncoderSettings() { Bitrate = 192 }, addParser: true);
 pipeline.Connect(fileSource.AudioOutput, mp3EncoderBlock.Input);
 
-// Connect to RTMP sink
-var rtmpSink = new RTMPSinkBlock(new RTMPSinkSettings("rtmp://streaming-server/live/stream"));
+// Connect to RTMP sink — RTMPSinkSettings has no string ctor; URL goes into the Location property.
+var rtmpSink = new RTMPSinkBlock(new RTMPSinkSettings { Location = "rtmp://streaming-server/live/stream" });
 pipeline.Connect(mp3EncoderBlock.Output, rtmpSink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 await pipeline.StartAsync();
@@ -559,7 +577,7 @@ public SpeexEncoderBlock(SpeexEncoderSettings settings)
 
 The `SpeexEncoderSettings` class allows you to configure parameters such as:
 
-- Mode (SpeexMode): NarrowBand, WideBand, UltraWideBand
+- Mode (SpeexEncoderMode): NarrowBand, WideBand, UltraWideBand
 - Quality
 - Complexity
 - VAD (Voice Activity Detection)
@@ -581,11 +599,12 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-var speexEncoderBlock = new SpeexEncoderBlock(new SpeexEncoderSettings() { Mode = SpeexMode.NarrowBand });
+var speexEncoderBlock = new SpeexEncoderBlock(new SpeexEncoderSettings() { Mode = SpeexEncoderMode.NarrowBand });
 pipeline.Connect(fileSource.AudioOutput, speexEncoderBlock.Input);
 
-var oggSinkBlock = new OGGSinkBlock(@"output.ogg");
-pipeline.Connect(speexEncoderBlock.Output, oggSinkBlock.Input);
+// OGGSinkBlock has dynamic inputs — call CreateNewInput(...) to get a typed audio pad.
+var oggSinkBlock = new OGGSinkBlock(new OGGSinkSettings(@"output.ogg"));
+pipeline.Connect(speexEncoderBlock.Output, oggSinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 await pipeline.StartAsync();
 ```
@@ -616,8 +635,9 @@ public VorbisEncoderBlock(VorbisEncoderSettings settings)
 
 The `VorbisEncoderSettings` class allows you to configure parameters such as:
 
-- BaseQuality: A float value between 0.0 and 1.0 that determines the quality of the encoded audio
-- Bitrate: Alternative bitrate-based configuration
+- Quality: Integer value between -1 and 10 (default 4). Used when `RateControl = VorbisEncoderRateControl.Quality`.
+- Bitrate: Target bitrate in Kbit/s. Used when `RateControl = VorbisEncoderRateControl.Bitrate`.
+- RateControl: `VorbisEncoderRateControl.Quality` (VBR quality mode) or `VorbisEncoderRateControl.Bitrate` (bitrate-based).
 
 ### The sample pipeline
 
@@ -635,11 +655,12 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-var vorbisEncoderBlock = new VorbisEncoderBlock(new VorbisEncoderSettings() { BaseQuality = 0.5f });
+var vorbisEncoderBlock = new VorbisEncoderBlock(new VorbisEncoderSettings { Quality = 5 });
 pipeline.Connect(fileSource.AudioOutput, vorbisEncoderBlock.Input);
 
-var oggSinkBlock = new OGGSinkBlock(@"output.ogg");
-pipeline.Connect(vorbisEncoderBlock.Output, oggSinkBlock.Input);
+// OGGSinkBlock has dynamic inputs — call CreateNewInput(...) to get a typed audio pad.
+var oggSinkBlock = new OGGSinkBlock(new OGGSinkSettings(@"output.ogg"));
+pipeline.Connect(vorbisEncoderBlock.Output, oggSinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 await pipeline.StartAsync();
 ```
@@ -801,7 +822,7 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 var wmaEncoderBlock = new WMAEncoderBlock(new WMAEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, wmaEncoderBlock.Input);
 
-var asfSinkBlock = new ASFSinkBlock(@"output.wma");
+var asfSinkBlock = new ASFSinkBlock(new ASFSinkSettings(@"output.wma"));
 pipeline.Connect(wmaEncoderBlock.Output, asfSinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 await pipeline.StartAsync();

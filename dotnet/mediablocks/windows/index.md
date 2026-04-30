@@ -2,6 +2,22 @@
 title: Direct3D 11 GPU Video Decoding and Effects in C# .NET
 description: Use Direct3D 11 hardware-accelerated video decoding, effects, and DirectShow integration on Windows with VisioForge Media Blocks SDK for .NET.
 sidebar_label: Windows Platform
+tags:
+  - Media Blocks SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - D3D11H264DecoderBlock
+  - D3D11UploadBlock
+  - D3D11DownloadBlock
+  - UniversalSourceBlock
+  - UniversalSourceSettings
+
 ---
 
 # Windows Platform Blocks - VisioForge Media Blocks SDK .Net
@@ -122,10 +138,15 @@ var upload2 = new D3D11UploadBlock();
 pipeline.Connect(source1.VideoOutput, upload1.Input);
 pipeline.Connect(source2.VideoOutput, upload2.Input);
 
-// Composite on GPU
+// Configure the compositor — two streams on a 1920x1080 @ 30 fps canvas
+var compositorSettings = new D3D11VideoCompositorSettings(1920, 1080, VideoFrameRate.FPS_30);
+compositorSettings.Streams.Add(new VideoMixerStream(new Rect(0, 0, 960, 1080), zorder: 0));
+compositorSettings.Streams.Add(new VideoMixerStream(new Rect(960, 0, 1920, 1080), zorder: 1));
+
+// Composite on GPU — each added stream creates one input pad; access them via Inputs[].
 var compositor = new D3D11VideoCompositorBlock(compositorSettings);
-pipeline.Connect(upload1.Output, compositor.Input1);
-pipeline.Connect(upload2.Output, compositor.Input2);
+pipeline.Connect(upload1.Output, compositor.Inputs[0]);
+pipeline.Connect(upload2.Output, compositor.Inputs[1]);
 
 // Download result
 var download = new D3D11DownloadBlock();
@@ -157,7 +178,7 @@ if (D3D11H264DecoderBlock.IsAvailable())
 else
 {
     // Fall back to software decoder
-    var decoder = new UniversalDecoderBlock();
+    var decoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
 }
 ```
 

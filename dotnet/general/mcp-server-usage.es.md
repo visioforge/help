@@ -1,6 +1,29 @@
 ---
 title: Uso del Servidor MCP de VisioForge para Desarrollo con IA
 description: Conecte su asistente IA al Servidor MCP de VisioForge para acceso a documentación API, guías de despliegue, ejemplos de código y conocimiento del SDK.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+  - Conversion
+  - IP Camera
+  - RTSP
+  - C#
+  - NuGet
+primary_api_classes:
+  - MediaBlocksPipeline
+  - VideoRendererBlock
+  - RTSPSourceBlock
+
 ---
 
 # Uso del Servidor MCP de VisioForge para Desarrollo Asistido por IA
@@ -226,7 +249,16 @@ Obtener targets de MSBuild o código de configuración específico de plataforma
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
-var rtspSource = new RTSPSourceBlock(new Uri("rtsp://camera.example.com:554/stream"));
+
+// RTSPSourceBlock toma RTSPSourceSettings (no un Uri directamente).
+// Construya los settings con la factory async — el ctor es privado.
+var rtspSettings = await RTSPSourceSettings.CreateAsync(
+    new Uri("rtsp://camera.example.com:554/stream"),
+    login: null,
+    password: null,
+    audioEnabled: false);
+
+var rtspSource = new RTSPSourceBlock(rtspSettings);
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 
 pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);

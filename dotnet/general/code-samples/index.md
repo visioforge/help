@@ -4,6 +4,11 @@ description: Implementation examples for DirectShow filters, audio/video process
 sidebar_label: Code Samples
 
 order: -4
+tags:
+  - .NET
+  - DirectShow
+  - Editing
+
 ---
 
 # .NET SDK Code Samples: Practical Implementation Guide

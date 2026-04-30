@@ -1,6 +1,19 @@
 ---
 title: Extraer y combinar segmentos de video en C# con .NET
 description: Extrae y combina múltiples segmentos del mismo archivo de video o audio en C# con guía paso a paso y ejemplos de código para .NET.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCore
+  - Windows
+  - Editing
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoSource
+  - FileSegment
+  - AudioSource
+
 ---
 
 # Añadir Múltiples Segmentos desde un Único Archivo de Video en C#
@@ -64,8 +77,8 @@ VideoSource videoFile = new VideoSource(
     videoFileName,   // Ruta a tu archivo de video
     segments,        // Array de segmentos definidos arriba
     VideoEditStretchMode.Letterbox,  // Cómo manejar diferencias de relación de aspecto
-    0,               // Ángulo de rotación (0 = sin rotación)
-    1.0);            // Factor de velocidad (1.0 = velocidad normal)
+    0,               // streamNumber — qué stream de video leer de un archivo multi-stream
+    1.0);            // rate — tasa de reproducción (1.0 = normal; 2.0 = 2×; 0.5 = media velocidad)
 ```
 
 El constructor de VideoSource toma varios parámetros:
@@ -73,42 +86,48 @@ El constructor de VideoSource toma varios parámetros:
 - `videoFileName`: La ruta a tu archivo de video fuente
 - `segments`: El array de objetos FileSegment que definiste en el Paso 1
 - `VideoEditStretchMode`: Cómo manejar diferencias de relación de aspecto (Letterbox, Stretch, Crop)
-- Ángulo de rotación (en grados): Usa 0 para sin rotación, o 90, 180, 270 para video rotado
-- Factor de velocidad: Usa 1.0 para velocidad normal, valores menores a 1.0 para cámara lenta, mayores a 1.0 para cámara rápida
+- `streamNumber`: Índice base-cero del stream de video a usar en un archivo multi-stream (no rotación)
+- `rate`: Multiplicador de tasa de reproducción — 1.0 = normal, 0.5 = cámara lenta, 2.0 = avance rápido
 
 ### Paso 3: Añadir a la Línea de Tiempo
 
 Finalmente, añade la fuente de video segmentada a tu línea de tiempo de edición:
 
 ```cs
-// Añadir el archivo segmentado a la línea de tiempo (pista 0)
-VideoEdit1.Input_AddVideoFile(videoFile, 0);
+// Añadir el archivo segmentado a la línea de tiempo.
+// Firma: Input_AddVideoFile(VideoSource fileSource, TimeSpan? timelineInsertTime = null,
+//   int targetVideoStream = 0, int customWidth = 0, int customHeight = 0).
+// Pasa solo la fuente para agregar al final de la línea de tiempo.
+VideoEdit1.Input_AddVideoFile(videoFile);
+
+// O insértalo en una posición específica de la línea de tiempo:
+// VideoEdit1.Input_AddVideoFile(videoFile, TimeSpan.FromSeconds(5));
 ```
 
-El método `Input_AddVideoFile` toma dos parámetros:
-
-- `videoFile`: El objeto VideoSource que creaste
-- `0`: El número de pista donde colocar el video (0 es típicamente la pista de video principal)
+El método `Input_AddVideoFile` toma el `VideoSource` más una posición opcional de inserción en la línea de tiempo (`TimeSpan?`, no un `int` de número de pista). Parámetros opcionales adicionales eligen qué stream de video consumir de una fuente multi-stream y anulan el ancho/alto personalizado.
 
 ## Trabajar con Segmentos de Audio
 
 El mismo enfoque funciona para archivos de audio. Simplemente usa AudioSource en lugar de VideoSource:
 
 ```cs
-// Definir tus segmentos de audio
-FileSegment[] audioSegments = new[] { 
-    new FileSegment(TimeSpan.FromMilliseconds(0), TimeSpan.FromMilliseconds(8000)),
-    new FileSegment(TimeSpan.FromMilliseconds(15000), TimeSpan.FromMilliseconds(12000))
+// Definir tus segmentos de audio. FileSegment(startTime, stopTime) — stop debe ser mayor que start.
+FileSegment[] audioSegments = new[] {
+    new FileSegment(TimeSpan.FromMilliseconds(0),     TimeSpan.FromMilliseconds(8000)),   // 0 → 8s
+    new FileSegment(TimeSpan.FromMilliseconds(15000), TimeSpan.FromMilliseconds(27000))   // 15s → 27s
 };
 
-// Crear fuente de audio con segmentos
+// Crear fuente de audio con segmentos.
+// Firma: AudioSource(string filename, FileSegment[] segments, string fileToSync = null,
+//   int streamNumber = 0, double rate = 1.0).
+// La posición 3 es fileToSync (un *string*), no un factor de velocidad — usa un arg nombrado para rate.
 AudioSource audioFile = new AudioSource(
     audioFileName,
     audioSegments,
-    1.0);  // Factor de velocidad
+    rate: 1.0);
 
-// Añadir a la línea de tiempo (pista de audio 0)
-VideoEdit1.Input_AddAudioFile(audioFile, 0);
+// Agregar al final de la línea de tiempo.
+VideoEdit1.Input_AddAudioFile(audioFile);
 ```
 
 ## Escenarios de Uso Avanzado
@@ -118,24 +137,24 @@ VideoEdit1.Input_AddAudioFile(audioFile, 0);
 Puedes crear efectos interesantes variando el factor de velocidad para diferentes segmentos:
 
 ```cs
-// Crear segmentos con diferentes velocidades
+// Crear segmentos con diferentes velocidades. FileSegment(start, stop) — stop debe ser > start.
 VideoSource slowMotionSegment = new VideoSource(
     videoFileName,
-    new[] { new FileSegment(TimeSpan.FromMilliseconds(5000), TimeSpan.FromMilliseconds(3000)) },
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(5000), TimeSpan.FromMilliseconds(8000)) },  // 5s → 8s
     VideoEditStretchMode.Letterbox,
-    0,
-    0.5);  // Mitad de velocidad (cámara lenta)
+    0,      // streamNumber
+    0.5);   // rate — media velocidad (cámara lenta)
 
 VideoSource fastForwardSegment = new VideoSource(
     videoFileName,
-    new[] { new FileSegment(TimeSpan.FromMilliseconds(10000), TimeSpan.FromMilliseconds(5000)) },
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(10000), TimeSpan.FromMilliseconds(15000)) }, // 10s → 15s
     VideoEditStretchMode.Letterbox,
-    0,
-    2.0);  // Doble velocidad
+    0,      // streamNumber
+    2.0);   // rate — doble velocidad
 
-// Añadir segmentos a diferentes posiciones en la línea de tiempo
-VideoEdit1.Input_AddVideoFile(slowMotionSegment, 0);
-VideoEdit1.Input_AddVideoFile(fastForwardSegment, 0, TimeSpan.FromMilliseconds(3000));
+// Añadir segmentos a la línea de tiempo. El arg de posición es TimeSpan? (punto de inserción), no un int.
+VideoEdit1.Input_AddVideoFile(slowMotionSegment);
+VideoEdit1.Input_AddVideoFile(fastForwardSegment, TimeSpan.FromMilliseconds(3000));
 ```
 
 ### Combinar Múltiples Archivos con Segmentos
@@ -143,24 +162,24 @@ VideoEdit1.Input_AddVideoFile(fastForwardSegment, 0, TimeSpan.FromMilliseconds(3
 Puedes combinar segmentos de diferentes archivos creando múltiples objetos VideoSource:
 
 ```cs
-// Crear segmentos de diferentes archivos
+// Crear segmentos de diferentes archivos. FileSegment(start, stop) — stop debe ser > start.
 VideoSource file1Segments = new VideoSource(
     videoFileName1,
-    new[] { new FileSegment(TimeSpan.FromMilliseconds(0), TimeSpan.FromMilliseconds(5000)) },
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(0), TimeSpan.FromMilliseconds(5000)) },  // 0 → 5s
     VideoEditStretchMode.Letterbox,
-    0,
-    1.0);
+    0,      // streamNumber
+    1.0);   // rate
 
 VideoSource file2Segments = new VideoSource(
     videoFileName2,
-    new[] { new FileSegment(TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(4000)) },
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(6000)) }, // 2s → 6s
     VideoEditStretchMode.Letterbox,
-    0,
-    1.0);
+    0,      // streamNumber
+    1.0);   // rate
 
-// Añadir a la línea de tiempo en secuencia
-VideoEdit1.Input_AddVideoFile(file1Segments, 0);
-VideoEdit1.Input_AddVideoFile(file2Segments, 0, TimeSpan.FromMilliseconds(5000));
+// Añadir a la línea de tiempo en secuencia. El arg de posición es TimeSpan?, no un int.
+VideoEdit1.Input_AddVideoFile(file1Segments);
+VideoEdit1.Input_AddVideoFile(file2Segments, TimeSpan.FromMilliseconds(5000));
 ```
 
 ## Dependencias Requeridas

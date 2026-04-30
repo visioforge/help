@@ -1,6 +1,15 @@
 ---
 title: Using Third-Party DirectShow Video Filters in .NET
 description: Implement third-party DirectShow video filters in .NET with code examples, best practices, and troubleshooting for Video SDK platforms.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - C#
+
 ---
 
 # Use Third-Party Video Filters in .NET
@@ -65,12 +74,10 @@ If filter registration fails, verify:
 Before adding filters to your processing chain, you may want to discover what filters are available on the system:
 
 ```cs
-// List all available DirectShow filters
-foreach (var directShowFilter in VideoCapture1.DirectShow_Filters)
+// DirectShow_Filters() returns ObservableCollection<string> — each entry is the filter name
+foreach (var filterName in VideoCapture1.DirectShow_Filters())
 {
-    Console.WriteLine($"Filter Name: {directShowFilter.Name}");
-    Console.WriteLine($"Filter CLSID: {directShowFilter.CLSID}");
-    Console.WriteLine($"Filter Path: {directShowFilter.Path}");
+    Console.WriteLine($"Filter Name: {filterName}");
     Console.WriteLine("----------------------------");
 }
 ```
@@ -93,16 +100,16 @@ This ensures you're starting with a clean processing pipeline and prevents unexp
 To add a third-party filter to your video processing pipeline:
 
 ```cs
-// Create and add a custom filter
-CustomProcessingFilter myFilter = new CustomProcessingFilter("My Effect Filter");
-
-// Configure filter parameters if needed
-myFilter.SetParameter("intensity", 0.75);
-myFilter.SetParameter("hue", 120);
+// Ctor: CustomProcessingFilter(string name, Guid? clsid = null, bool beforeEffects = false)
+// Use the filter name as registered in DirectShow; the SDK resolves the CLSID automatically.
+var myFilter = new CustomProcessingFilter("My Effect Filter");
 
 // Add the filter to the processing chain
 VideoCapture1.Video_Filters_Add(myFilter);
 ```
+
+`CustomProcessingFilter` only exposes `Name`, `CLSID`, and `BeforeEffects` — filter-specific
+parameters are configured on the underlying COM filter (see the Filter Parameters section below).
 
 You can add multiple filters in sequence to create complex processing chains. The order of filters matters, as each filter processes the output of the previous one.
 
@@ -110,14 +117,12 @@ You can add multiple filters in sequence to create complex processing chains. Th
 
 ### Filter Parameters
 
-Most third-party filters expose configurable parameters. These can be adjusted using filter-specific methods or through the DirectShow interface:
-
-```cs
-// Using the IPropertyBag interface for configuration
-var propertyBag = (IPropertyBag)myFilter.GetPropertyBag();
-object value = 0.5f;
-propertyBag.Write("Saturation", ref value);
-```
+Most third-party filters expose configurable parameters via their own COM interfaces
+(e.g. `IPropertyBag`, `ISpecifyPropertyPages`, or a vendor-specific `ISomethingFilter`).
+These interfaces are reached through the underlying `IBaseFilter` instance once the
+graph is built — not through `CustomProcessingFilter`, which only carries the
+registration identity (`Name` / `CLSID`). Consult the filter vendor's documentation
+for the concrete interface and property names.
 
 ### Filter Ordering
 
@@ -151,12 +156,16 @@ When working with filters in multi-threaded applications, ensure proper synchron
 ```cs
 private readonly object _filterLock = new object();
 
-public void UpdateFilter(CustomProcessingFilter filter)
+public void RebuildFilterChain(IEnumerable<CustomProcessingFilter> filters)
 {
     lock (_filterLock)
     {
-        // Update filter parameters
-        filter.UpdateParameters();
+        // VideoCaptureCore only exposes Add/Clear — rebuild the chain instead of removing a single filter.
+        VideoCapture1.Video_Filters_Clear();
+        foreach (var filter in filters)
+        {
+            VideoCapture1.Video_Filters_Add(filter);
+        }
     }
 }
 ```

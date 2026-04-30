@@ -2,6 +2,21 @@
 title: Linux VA-API Hardware Video Acceleration in C# .NET
 description: Use VA-API GPU-accelerated video encoding and decoding on Linux with VisioForge Media Blocks SDK. Ubuntu and Debian platform support for .NET apps.
 sidebar_label: Linux Platform
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - VAAPIH264DecoderBlock
+  - UniversalSourceBlock
+  - UniversalSourceSettings
+  - VideoRendererBlock
+  - VAAPIHEVCDecoderBlock
+
 ---
 
 # Linux Platform Blocks - VisioForge Media Blocks SDK .Net
@@ -17,9 +32,9 @@ This section covers MediaBlocks specifically optimized for Linux platforms.
 Linux provides hardware-accelerated video decoding through VA-API (Video Acceleration API):
 
 - **VAAPIH264DecoderBlock**: Hardware H.264/AVC decoding
-- **VAAPIH265DecoderBlock**: Hardware H.265/HEVC decoding
-- **VAAPIMPEG2DecoderBlock**: Hardware MPEG-2 decoding
-- **VAAPIVP8DecoderBlock**: Hardware VP8 decoding
+- **VAAPIHEVCDecoderBlock**: Hardware H.265/HEVC decoding
+- **VAAPIJPEGDecoderBlock**: Hardware JPEG decoding
+- **VAAPIVC1DecoderBlock**: Hardware VC-1 decoding
 
 See [Video Decoders Documentation](../VideoDecoders/index.md)
 
@@ -58,7 +73,7 @@ if (VAAPIH264DecoderBlock.IsAvailable())
 else
 {
     // Fallback to software decoder
-    var decoder = new UniversalDecoderBlock();
+    var decoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
     pipeline.Connect(fileSource.VideoOutput, decoder.Input);
     
     var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
@@ -80,13 +95,13 @@ pipeline.Connect(h264Source.VideoOutput, h264Decoder.Input);
 
 // Decode H.265 stream
 var h265Source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("h265.mp4")));
-var h265Decoder = new VAAPIH265DecoderBlock();
+var h265Decoder = new VAAPIHEVCDecoderBlock();
 pipeline.Connect(h265Source.VideoOutput, h265Decoder.Input);
 
 // Mix both streams (example)
 var mixer = new VideoMixerBlock(mixerSettings);
-pipeline.Connect(h264Decoder.Output, mixer.Input1);
-pipeline.Connect(h265Decoder.Output, mixer.Input2);
+pipeline.Connect(h264Decoder.Output, mixer.Inputs[0]);
+pipeline.Connect(h265Decoder.Output, mixer.Inputs[1]);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(mixer.Output, videoRenderer.Input);
@@ -148,7 +163,7 @@ if (VAAPIH264DecoderBlock.IsAvailable())
 else
 {
     Console.WriteLine("VA-API not available, using software decoder");
-    var decoder = new UniversalDecoderBlock();
+    var decoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
 }
 ```
 

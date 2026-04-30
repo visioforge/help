@@ -1,6 +1,21 @@
 ---
 title: Add Dynamic Text Overlay with Font Styling in C# .NET
 description: Implement dynamic text overlays with VisioForge Video Edit SDK .NET. Control font, color, position, timing, and animations with C# code examples.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Editing
+  - C#
+primary_api_classes:
+  - VideoEditCoreX
+  - TextOverlay
+
 ---
 
 # Implementing Text Overlays in Video Projects

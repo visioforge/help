@@ -1,6 +1,25 @@
 ---
 title: Zavio IP Camera RTSP URL Guide for C# .NET Integration
 description: Zavio bullet, dome, and PTZ camera RTSP URL patterns for C# .NET. ONVIF-compatible integration with VisioForge SDK code for all Zavio models.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MP4
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Zavio IP Camera in C# .NET

@@ -1,6 +1,27 @@
 ---
 title: Desplegar Apps de Captura .NET - NuGet y Redistribuibles
 description: Tres métodos de despliegue: NuGet (sin admin), instalador silencioso o registro manual de DLLs. Redistribuibles x86/x64 y motor X multiplataforma.
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - IP Camera
+  - Screen Capture
+  - MP4
+  - WebM
+  - OGG
+  - FLAC
+  - NuGet
+
 ---
 
 # Guía Completa de Despliegue para Video Capture SDK .Net

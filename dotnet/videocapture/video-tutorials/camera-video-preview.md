@@ -1,6 +1,23 @@
 ---
-title: Webcam Video Preview with Frame Capture in C# .NET
+title: Webcam Preview & Frame Capture in C# .NET — WinForms/WPF
 description: Display live webcam feed and capture individual frames using VisioForge Video Capture SDK. Working C# code for WinForms, WPF, and Console apps.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - WinForms
+  - Capture
+  - Webcam
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+  - VideoView
+  - IVideoView
+  - VideoCaptureSource
+  - AudioCaptureSource
+
 ---
 
 # Implementing Webcam Video Preview with Frame Capture in C#

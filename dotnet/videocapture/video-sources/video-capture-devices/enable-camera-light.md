@@ -1,6 +1,18 @@
 ---
 title: Camera Light Control on Windows 10+ Tablets Using C# .NET
 description: Control camera light on Windows 10+ tablets in .NET apps with C# code examples, required packages, and TorchControl API implementation.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - WinForms
+  - Capture
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+
 ---
 
 # Enabling Camera Light on Windows 10+ Tablets

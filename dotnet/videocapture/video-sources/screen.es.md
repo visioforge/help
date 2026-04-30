@@ -1,11 +1,38 @@
-﻿---
-title: Fuente de Captura de Pantalla para SDK de Video .NET
-description: SDK de captura de pantalla para .NET — graba pantalla completa, ventanas o regiones personalizadas con DirectX 11/12 y Windows Graphics Capture. Ejemplos de código en C# para grabación de escritorio.
+---
+title: Captura de Pantalla en C# .NET para Escritorio o Región
+description: Capture pantalla completa, ventanas específicas o regiones personalizadas con VisioForge Video Capture SDK usando DirectX 11/12 y Windows Graphics Capture.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - WinForms
+  - Capture
+  - Streaming
+  - Webcam
+  - IP Camera
+  - Screen Capture
+  - C#
+primary_api_classes:
+  - ScreenCaptureD3D11SourceSettings
+  - ScreenCaptureSourceSettings
+  - ScreenCaptureDX9SourceSettings
 ---
 
 # Guía de Implementación de Captura de Pantalla
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+
+!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+
+    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecta al servidor MCP público de VisioForge
+    ([documentación](../../general/mcp-server-usage.md))
+    en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
+    ejemplos de código ejecutables y guías de despliegue — más preciso que
+    buscar en `llms.txt`. Sin autenticación requerida.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Introducción a la Captura de Pantalla
 
@@ -37,7 +64,7 @@ DirectX 11 es particularmente recomendado para escenarios de captura de ventanas
     
     La implementación de VideoCaptureCore proporciona opciones de configuración sencillas para controlar el proceso de captura:
     
-    - `AllowCaptureMouseCursor`: Habilitar o deshabilitar la visibilidad del cursor en el contenido capturado
+    - `GrabMouseCursor`: Habilitar o deshabilitar la visibilidad del cursor en el contenido capturado
     - `DisplayIndex`: Seleccionar qué pantalla capturar en configuraciones de múltiples monitores (indexado desde cero)
     - `ScreenPreview` / `ScreenCapture`: Establecer el modo operacional para visualización o grabación
     
@@ -72,17 +99,17 @@ Capturar ya sea una pantalla completa o una región de pantalla definida es un r
          // Establecer a true para capturar la pantalla completa
         FullScreen = false,
     
-         // Establecer la posición izquierda del área de pantalla
+         // Establecer el borde izquierdo del área de pantalla (coordenada X absoluta en píxeles)
         Left = 0,
     
-        // Establecer la posición superior del área de pantalla
+        // Establecer el borde superior del área de pantalla (coordenada Y absoluta en píxeles)
         Top = 0, 
     
-        // Establecer el ancho del área de pantalla
-        Width = 640, 
+        // Establecer el borde derecho (coordenada X absoluta en píxeles, no ancho)
+        Right = 640, 
     
-        // Establecer la altura del área de pantalla
-        Height = 480, 
+        // Establecer el borde inferior (coordenada Y absoluta en píxeles, no altura)
+        Bottom = 480, 
     
         // Establecer el índice de pantalla
         DisplayIndex = 0, 
@@ -91,11 +118,11 @@ Capturar ya sea una pantalla completa o una región de pantalla definida es un r
         FrameRate = new VideoFrameRate(25), 
     
          // Establecer a true para capturar el cursor del ratón
-        AllowCaptureMouseCursor = true
+        GrabMouseCursor = true
     };
     ```
     
-    Cuando `FullScreen` está establecido a `true`, las propiedades `Left`, `Top`, `Width` y `Height` son ignoradas, y se captura la pantalla completa especificada por `DisplayIndex`.
+    Cuando `FullScreen` está establecido a `true`, las propiedades `Left`, `Top`, `Right` y `Bottom` son ignoradas, y se captura la pantalla completa especificada por `DisplayIndex`. El rectángulo se especifica con coordenadas absolutas de las esquinas — `Right` y `Bottom` son las coordenadas de la esquina más lejana, no el ancho/altura de la región.
     
     Para configuraciones de múltiples monitores, la propiedad `DisplayIndex` identifica qué monitor capturar, con 0 representando la pantalla principal.
     
@@ -181,11 +208,22 @@ Capturar ventanas de aplicación específicas permite la grabación dirigida de 
         FrameRate = new VideoFrameRate(25),
     
          // Establecer a true para capturar el cursor del ratón
-        AllowCaptureMouseCursor = true
+        GrabMouseCursor = true
     };
     ```
     
-    El parámetro `windowHandle` debe contener un handle válido a la ventana objetivo. Esto puede obtenerse usando funciones de la API de Windows como `FindWindow` o usando bibliotecas de automatización de UI.
+    El parámetro `windowHandle` debe ser un HWND válido a la ventana objetivo. Obténlo vía `FindWindow` (P/Invoke):
+
+    ```csharp
+    using System.Runtime.InteropServices;
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+    // Pasa null para lpClassName para buscar solo por título.
+    IntPtr windowHandle = FindWindow(null, "Untitled - Notepad");
+    if (windowHandle == IntPtr.Zero) throw new InvalidOperationException("Ventana objetivo no encontrada.");
+    ```
     
 
 === "VideoCaptureCoreX"
@@ -265,16 +303,42 @@ for (int i = 0; i < screens.Length; i++)
 
 ### Selección de Ventana de Aplicación
 
-Proporcionar a los usuarios la capacidad de seleccionar una ventana para capturar:
+Enumera las ventanas top-level con `EnumWindows` + `GetWindowText` y deja que el usuario elija una:
 
 ```csharp
-// Obtener todas las ventanas abiertas
-var openWindows = GetOpenWindows(); // La implementación depende de tu enfoque
+using System.Runtime.InteropServices;
+using System.Text;
 
-// Presentar la lista al usuario para selección
-// Una vez seleccionada, obtener el handle de la ventana
+private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
-// Configurar la captura con el handle de ventana seleccionado
+[DllImport("user32.dll")]
+private static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
+
+[DllImport("user32.dll", CharSet = CharSet.Unicode)]
+private static extern int GetWindowText(IntPtr hWnd, StringBuilder buf, int nMaxCount);
+
+[DllImport("user32.dll")]
+private static extern bool IsWindowVisible(IntPtr hWnd);
+
+public static Dictionary<IntPtr, string> GetOpenWindows()
+{
+    var result = new Dictionary<IntPtr, string>();
+    EnumWindows((hWnd, _) =>
+    {
+        if (!IsWindowVisible(hWnd)) return true;
+        var buf = new StringBuilder(256);
+        if (GetWindowText(hWnd, buf, buf.Capacity) > 0)
+        {
+            result[hWnd] = buf.ToString();
+        }
+        return true;
+    }, IntPtr.Zero);
+    return result;
+}
+
+// Muestra el resultado al usuario, luego:
+IntPtr selectedWindowHandle = /* entrada elegida .Key */;
+
 VideoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings
 {
     WindowHandle = selectedWindowHandle,
@@ -304,8 +368,8 @@ VideoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings
 {
     Left = selection.Left,
     Top = selection.Top,
-    Width = selection.Width,
-    Height = selection.Height,
+    Right = selection.Right,   // coordenada X absoluta, no ancho
+    Bottom = selection.Bottom, // coordenada Y absoluta, no altura
     // Configuración adicional...
 };
 ```
@@ -348,7 +412,7 @@ Sí. Establezca la propiedad `WindowHandle` en `ScreenCaptureSourceSettings` (Vi
 
 ### ¿Cómo capturo el cursor del ratón durante la grabación de pantalla?
 
-Establezca `AllowCaptureMouseCursor = true` en `ScreenCaptureSourceSettings` (VideoCaptureCore) o `CaptureCursor = true` en `ScreenCaptureD3D11SourceSettings` (VideoCaptureCoreX). El cursor se incluye en los datos del fotograma capturado en su posición actual. Desactive esta propiedad cuando grabe tutoriales donde el cursor se añadirá en postproducción.
+Establezca `GrabMouseCursor = true` en `ScreenCaptureSourceSettings` (VideoCaptureCore) o `CaptureCursor = true` en `ScreenCaptureD3D11SourceSettings` (VideoCaptureCoreX). El cursor se incluye en los datos del fotograma capturado en su posición actual. Desactive esta propiedad cuando grabe tutoriales donde el cursor se añadirá en postproducción.
 
 ### ¿Funciona el SDK de captura de pantalla con múltiples monitores?
 

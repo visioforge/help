@@ -1,6 +1,16 @@
 ---
 title: OnVideoFrameBitmap: Real-Time Video Frame Access in .NET
 description: Access and modify video frames in real-time with OnVideoFrameBitmap events for advanced video manipulation in C# applications.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - C#
+primary_api_classes:
+  - VideoFrameBitmapEventArgs
+
 ---
 
 # OnVideoFrameBitmap Real-Time Frame Guide
@@ -23,17 +33,19 @@ When the event fires, it delivers a bitmap representation of the current video f
 
 ## Basic Implementation
 
-To begin working with the `OnVideoFrameBitmap` event, you'll need to subscribe to it in your code:
+`OnVideoFrameBitmap` exists on the Windows-only engines: `VideoCaptureCore`, `MediaPlayerCore`, and `VideoEditCore`. In the snippets below, `VideoCapture1` is a `VideoCaptureCore` instance — swap in `MediaPlayer1` or `VideoEdit1` if you are using a different engine.
+
+Subscribe before starting the pipeline so the first frame is not missed:
 
 ```csharp
-// Subscribe to the OnVideoFrameBitmap event
-videoProcessor.OnVideoFrameBitmap += VideoProcessor_OnVideoFrameBitmap;
+// Event type: EventHandler<VideoFrameBitmapEventArgs>. Fires on a worker thread.
+VideoCapture1.OnVideoFrameBitmap += VideoCapture1_OnVideoFrameBitmap;
 
 // Implement the event handler
-private void VideoProcessor_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
+private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
 {
-    // Frame manipulation code will go here
-    // e.Frame contains the current frame as a Bitmap
+    // e.Frame — the current frame as a System.Drawing.Bitmap (owned by the SDK; do not dispose).
+    // Set e.UpdateData = true if you mutate the bitmap in place.
 }
 ```
 
@@ -98,7 +110,7 @@ Proper resource management is essential:
 
 ```csharp
 // Poor performance approach
-private void VideoProcessor_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
+private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
 {
     Bitmap overlay = new Bitmap(@"c:\logo.png");
     Graphics g = Graphics.FromImage(e.Frame);
@@ -115,7 +127,7 @@ private void InitializeResources()
     _cachedOverlay = new Bitmap(@"c:\logo.png");
 }
 
-private void VideoProcessor_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
+private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
 {
     using (Graphics g = Graphics.FromImage(e.Frame))
     {
@@ -140,7 +152,7 @@ To maintain smooth video playback:
 4. **Use efficient drawing operations**: Choose appropriate GDI+ methods based on your needs
 
 ```csharp
-private void VideoProcessor_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
+private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
 {
     // Only process every second frame
     if (_frameCounter % 2 == 0)
@@ -193,7 +205,7 @@ The `OnVideoFrameBitmap` event can be combined with popular computer vision libr
 
 ```csharp
 // Example using a hypothetical computer vision library
-private void VideoProcessor_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
+private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
 {
     // Convert bitmap to format needed by CV library
     byte[] imageData = ConvertBitmapToByteArray(e.Frame);

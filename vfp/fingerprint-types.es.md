@@ -1,6 +1,22 @@
 ---
 title: Video Fingerprinting - tipos de búsqueda vs comparación
 description: Guía de tipos de huellas Search vs Compare en el SDK Video Fingerprinting de VisioForge con diferencias técnicas y rendimiento.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - C#
+primary_api_classes:
+  - VFPAnalyzer
+  - VFPFingerprintSource
+  - VideoFragmentSearcher
+  - StoreSearchFingerprint
+  - FingerprintDatabase
+
 ---
 
 # Tipos de Huella Digital: Búsqueda vs Comparación
@@ -106,11 +122,13 @@ public async Task<VFPFingerPrint> GenerateCompareFingerprint(string videoFile)
         StartTime = TimeSpan.Zero,
         StopTime = TimeSpan.FromMinutes(5), // Analizar primeros 5 minutos
         CustomResolution = new Size(640, 480), // Normalizar resolución
-        CustomCropSize = new Rect(0, 60, 0, 60) // Recortar barras letterbox
+        // Ctor de Rect: (left, top, right, bottom) — para frame 1920x1080,
+        // recortar barras letterbox de 60px arriba+abajo deja el área (0, 60)..(1920, 1020).
+        CustomCropSize = new Rect(0, 60, 1920, 1020) // Recortar barras letterbox
     };
-    
-    // Agregar áreas ignoradas (ej. marcas de agua, logos)
-    source.IgnoredAreas.Add(new Rect(10, 10, 100, 50)); // Logo superior izquierda
+
+    // Agregar áreas ignoradas (left, top, right, bottom) — logo 100x50 en superior izquierda.
+    source.IgnoredAreas.Add(new Rect(10, 10, 110, 60)); // Logo superior izquierda
     
     // Generar huella digital
     var fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(
@@ -398,7 +416,8 @@ public class VideoComparisonService
         
         if (options.CropLetterbox)
         {
-            source.CustomCropSize = new Rect(0, 60, 0, 60);
+            // (left, top, right, bottom) — barras 60px arriba+abajo en fuente 1920x1080.
+            source.CustomCropSize = new Rect(0, 60, 1920, 1020);
         }
         
         // Agregar áreas comunes de marca de agua para ignorar
@@ -826,8 +845,8 @@ Rendimiento de búsqueda de fragmento (fragmento de 5 minutos en varios largos d
        // Normalizar resolución para resultados consistentes
        source.CustomResolution = new Size(640, 360);
        
-       // Remover interferencia común
-       source.CustomCropSize = new Rect(0, 60, 0, 60); // Remover letterbox
+       // (left, top, right, bottom) — barras letterbox 60px arriba+abajo en 1920x1080.
+       source.CustomCropSize = new Rect(0, 60, 1920, 1020); // Remover letterbox
        
        // Ignorar overlays dinámicos
        source.IgnoredAreas.Add(new Rect(10, 10, 200, 50)); // Logo de canal
@@ -887,15 +906,15 @@ public class CustomFingerprintConfig
         switch (purpose)
         {
             case FingerprintPurpose.BroadcastMonitoring:
-                // Optimizar para contenido broadcast
+                // Optimizar para contenido broadcast. Rect = (left, top, right, bottom).
                 source.CustomResolution = new Size(720, 576);
-                source.IgnoredAreas.Add(new Rect(0, 0, 720, 50)); // Banner superior
-                source.IgnoredAreas.Add(new Rect(0, 526, 720, 50)); // Ticker inferior
+                source.IgnoredAreas.Add(new Rect(0, 0, 720, 50));    // Banner superior (50px)
+                source.IgnoredAreas.Add(new Rect(0, 526, 720, 576)); // Ticker inferior (50px)
                 break;
-                
+
             case FingerprintPurpose.MovieComparison:
-                // Optimizar para contenido cinematográfico
-                source.CustomCropSize = new Rect(0, 138, 0, 138); // 21:9 a 16:9
+                // Optimizar para contenido cinematográfico — banda 138px (21:9 → 16:9 en 1920x1080).
+                source.CustomCropSize = new Rect(0, 138, 1920, 942);
                 source.CustomResolution = new Size(1280, 720);
                 break;
                 

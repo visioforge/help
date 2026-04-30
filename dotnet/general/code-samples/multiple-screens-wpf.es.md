@@ -1,6 +1,21 @@
 ---
-title: Múltiples Pantallas de Video en WPF - Guía C# Multi-Display
+title: Múltiples Pantallas de Video en WPF para Apps C# .NET
 description: Cree aplicaciones de video multi-pantalla en WPF con controles Image, manejo de eventos, gestión de memoria y técnicas de optimización de rendimiento.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - WPF
+  - C#
+primary_api_classes:
+  - VideoCaptureCore
+  - VideoCaptureSource
+  - VideoFrameBufferEventArgs
+  - MultiscreenVideoView
+  - VideoView
+
 ---
 
 # Implementación de Múltiples Pantallas de Salida de Video en Aplicaciones WPF
@@ -19,91 +34,70 @@ Para comenzar a implementar múltiples salidas de video en tu aplicación WPF, n
 2. Configurar el manejo de eventos para procesamiento de frames de video
 3. Configurar tu pipeline de renderizado para rendimiento óptimo
 
-### Configurando Tu Proyecto WPF
+### Dos patrones soportados
 
-Primero, coloca el control `VisioForge.Core.UI.WPF.VideoView` en tu ventana WPF. Se recomienda dar a este control un nombre descriptivo, como `videoView`, para claridad en tu código. Este control servirá como tu elemento de visualización de video principal.
+Para mostrar el mismo feed de video en varias vistas en WPF, elige uno de estos dos patrones reales:
+
+1. **`MultiscreenVideoView` + `OnVideoFrameBuffer`** — un motor SDK empuja cada frame a tantos controles `MultiscreenVideoView` como quieras. Úsalo cuando un único motor de captura/reproducción alimente varias copias en pantalla.
+2. **Un motor por `VideoView`** — cada pantalla recibe su propia instancia de `VideoCaptureCore` / `MediaPlayerCore` / `VideoEditCore` enlazada a su propio `VideoView` regular. Úsalo cuando las pantallas muestren fuentes **diferentes** (p. ej., una cuadrícula de seguridad de cuatro cámaras). Ver el ejemplo [Sistema de Seguridad de Cuatro Cámaras](#ejemplo-practico-sistema-de-seguridad-de-cuatro-camaras) a continuación.
+
+El `VisioForge.Core.UI.WPF.VideoView` regular no expone un método `RenderFrame` — es controlado automáticamente por el motor al que está enlazado mediante `CreateAsync(IVideoView)`. El reparto de frames requiere `MultiscreenVideoView`.
+
+### Configurando Tu Proyecto WPF para Reparto de Frames
+
+Coloca uno o más controles `VisioForge.Core.UI.WPF.MultiscreenVideoView` en tu ventana WPF. Dales nombres descriptivos (p. ej. `multiView1`, `multiView2`). Estos son los controles que aceptan frames empujados.
 
 ### Manejando Frames de Video
 
-La clave para crear múltiples pantallas de salida es el manejo adecuado de eventos. Necesitarás suscribirte al evento "OnVideoFrameBuffer" para tu control SDK. Este evento proporciona acceso a los datos crudos del frame de video que luego puedes distribuir a múltiples elementos de visualización.
+Suscríbete al evento `OnVideoFrameBuffer` del motor SDK. El argumento del evento transporta un `VideoFrameBufferEventArgs` que cada `MultiscreenVideoView` puede renderizar.
 
 ## Implementando el Manejador de Frames de Video
-
-A continuación se muestra una implementación de ejemplo del manejador de frames de video que captura frames entrantes y los renderiza en una vista de video:
 
 ```cs
 private void VideoCapture1_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
 {
-    videoView.RenderFrame(e);
+    multiView1.RenderFrame(e);
 }
 ```
 
-Este simple manejador recibe frames de video a través del parámetro `VideoFrameBufferEventArgs` y los pasa al método `RenderFrame` de tu control de vista de video.
+`MultiscreenVideoView.RenderFrame(VideoFrameBufferEventArgs)` copia el frame a su propia superficie interna, por lo que el buffer del motor puede liberarse cuando retorna el manejador.
 
 ## Técnicas de Implementación Avanzada
 
-### Creando Vistas de Video Dinámicas
+### Creando MultiscreenVideoViews Dinámicos
 
-Para aplicaciones que requieren un número variable de salidas de video, puedes crear controles de vista de video dinámicamente:
+Para aplicaciones que requieren un número variable de salidas de video, crea controles `MultiscreenVideoView` dinámicamente:
 
 ```cs
-private List<VisioForge.Core.UI.WPF.VideoView> videoViews = new List<VisioForge.Core.UI.WPF.VideoView>();
+private List<VisioForge.Core.UI.WPF.MultiscreenVideoView> multiViews = 
+    new List<VisioForge.Core.UI.WPF.MultiscreenVideoView>();
 
-private void CreateVideoView(Grid container, int row, int column)
+private void CreateMultiView(Grid container, int row, int column)
 {
-    var videoView = new VisioForge.Core.UI.WPF.VideoView();
-    Grid.SetRow(videoView, row);
-    Grid.SetColumn(videoView, column);
+    var view = new VisioForge.Core.UI.WPF.MultiscreenVideoView();
+    Grid.SetRow(view, row);
+    Grid.SetColumn(view, column);
     
-    container.Children.Add(videoView);
-    videoViews.Add(videoView);
+    container.Children.Add(view);
+    multiViews.Add(view);
 }
 
 // Ejemplo de uso:
-// CreateVideoView(mainGrid, 0, 0);
-// CreateVideoView(mainGrid, 0, 1);
+// CreateMultiView(mainGrid, 0, 0);
+// CreateMultiView(mainGrid, 0, 1);
 ```
 
 ### Distribuyendo Frames de Video a Múltiples Vistas
 
-Al trabajar con múltiples vistas de video, necesitas distribuir los frames entrantes a todas las vistas activas:
+Reparte los frames entrantes a cada `MultiscreenVideoView` registrado:
 
 ```cs
 private void VideoCapture1_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
 {
-    // Renderizar a todas las vistas de video
-    foreach (var view in videoViews)
+    // Renderizar a todas las instancias MultiscreenVideoView
+    foreach (var view in multiViews)
     {
         view.RenderFrame(e);
-    }
-}
-```
-
-### Consideraciones de Gestión de Memoria
-
-Al trabajar con múltiples salidas de video, la gestión de memoria se convierte en una preocupación crítica. Los frames de video pueden consumir memoria significativa, especialmente en resoluciones más altas. Considera implementar un mecanismo de pooling de frames:
-
-```cs
-private ConcurrentQueue<VideoFrame> framePool = new ConcurrentQueue<VideoFrame>();
-private const int MaxPoolSize = 10;
-
-private VideoFrame GetFrameFromPool()
-{
-    if (framePool.TryDequeue(out var frame))
-    {
-        return frame;
-    }
-    
-    return new VideoFrame();
-}
-
-private void ReturnFrameToPool(VideoFrame frame)
-{
-    frame.Clear();
-    
-    if (framePool.Count < MaxPoolSize)
-    {
-        framePool.Enqueue(frame);
     }
 }
 ```
@@ -114,22 +108,23 @@ private void ReturnFrameToPool(VideoFrame frame)
 
 Para múltiples vistas de video, considera estas técnicas de optimización:
 
-1. **Resolución adaptativa**: Reduce la resolución para pantallas secundarias
-2. **Omisión de frames**: No todas las vistas necesitan actualizarse a la tasa de frames completa
-3. **Renderizado asíncrono**: Descarga el renderizado a hilos de fondo
+1. **Omisión de frames**: No todas las vistas necesitan actualizarse a la tasa de frames completa
+2. **Ocultar vistas fuera de pantalla**: WPF omite el renderizado para controles colapsados — usa `Visibility.Collapsed` en vistas no visibles
 
 ```cs
+private int frameCounter;
+
 private void VideoCapture1_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
 {
-    // La vista principal obtiene resolución completa, tasa de frames completa
-    primaryVideoView.RenderFrame(e);
+    // La vista principal obtiene cada frame
+    primaryMultiView.RenderFrame(e);
     
     // Las vistas secundarias obtienen cada segundo frame
     if (frameCounter % 2 == 0)
     {
-        foreach (var view in secondaryVideoViews)
+        foreach (var view in secondaryMultiViews)
         {
-            Task.Run(() => view.RenderFrameScaled(e, 0.5)); // Escalado al 50%
+            view.RenderFrame(e);
         }
     }
     
@@ -139,48 +134,87 @@ private void VideoCapture1_OnVideoFrameBuffer(object sender, VideoFrameBufferEve
 
 ## Ejemplo Práctico: Sistema de Seguridad de Cuatro Cámaras
 
-Aquí hay un ejemplo más completo de implementación de un sistema de seguridad de cuatro cámaras:
+Aquí hay un ejemplo más completo de implementación de un sistema de seguridad de cuatro cámaras usando el motor `VideoCaptureCore` del Video Capture SDK. Cada cámara obtiene su propia instancia del motor enlazada a un `VideoView` dedicado.
 
 ```cs
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.VideoCapture;
+using VisioForge.Core.UI.WPF;
+using VisioForge.Core.VideoCapture;
+
 public partial class SecurityMonitorWindow : Window
 {
-    private List<VisioForge.Core.UI.WPF.VideoView> cameraViews = new List<VisioForge.Core.UI.WPF.VideoView>();
-    private List<VideoCapture> cameras = new List<VideoCapture>();
-    
+    private readonly List<VideoView> _cameraViews = new List<VideoView>();
+    private readonly List<VideoCaptureCore> _cameras = new List<VideoCaptureCore>();
+
     public SecurityMonitorWindow()
     {
         InitializeComponent();
-        
-        // Configurar cuadrícula 2x2 de vistas de cámara
+    }
+
+    public async Task InitializeCamerasAsync(IEnumerable<string> deviceNames)
+    {
+        // Toma los primeros cuatro dispositivos si no se pasan nombres.
+        var names = deviceNames?.Take(4).ToList();
+
+        // Construye una cuadrícula 2x2 de controles VideoView emparejados con motores VideoCaptureCore.
+        int i = 0;
         for (int row = 0; row < 2; row++)
         {
-            for (int col = 0; col < 2; col++)
+            for (int col = 0; col < 2; col++, i++)
             {
-                var view = new VisioForge.Core.UI.WPF.VideoView();
+                var view = new VideoView();
                 Grid.SetRow(view, row);
                 Grid.SetColumn(view, col);
                 mainGrid.Children.Add(view);
-                cameraViews.Add(view);
-                
-                // Crear y configurar cámara
-                var camera = new VideoCapture();
-                camera.OnVideoFrameBuffer += (s, e) => view.RenderFrame(e);
-                cameras.Add(camera);
+                _cameraViews.Add(view);
+
+                // El motor clásico usa un constructor; CreateAsync es el patrón del motor X.
+                // Para VideoCaptureCoreX use `await VideoCaptureCoreX.CreateAsync(view)` en su lugar.
+                var camera = new VideoCaptureCore(view);
+                _cameras.Add(camera);
+
+                if (names != null && i < names.Count)
+                {
+                    camera.Video_CaptureDevice = new VideoCaptureSource(names[i]);
+                    camera.Video_CaptureDevice.Format_UseBest = true;
+                    camera.Mode = VideoCaptureMode.VideoPreview;
+                    camera.Audio_PlayAudio = false;
+                    camera.Audio_RecordAudio = false;
+                }
             }
         }
     }
-    
+
     public async Task StartCamerasAsync()
     {
-        for (int i = 0; i < cameras.Count; i++)
+        foreach (var camera in _cameras)
         {
-            cameras[i].VideoSource = VideoSource.CameraSource;
-            cameras[i].CameraDevice = new CameraDevice(i); // Asumiendo que las cámaras están indexadas 0-3
-            await cameras[i].StartAsync();
+            await camera.StartAsync();
+        }
+    }
+
+    public async Task StopCamerasAsync()
+    {
+        foreach (var camera in _cameras)
+        {
+            await camera.StopAsync();
+        }
+
+        foreach (var camera in _cameras)
+        {
+            camera.Dispose();
         }
     }
 }
 ```
+
+Enumera los dispositivos disponibles con `camera.Video_CaptureDevices()` (o su variante asíncrona) para poblar el argumento `deviceNames` en tiempo de ejecución — consulta [la guía de enumeración de dispositivos](../../videocapture/video-sources/video-capture-devices/enumerate-and-select.md).
 
 ## Solución de Problemas Comunes
 
@@ -195,7 +229,7 @@ private void VideoCapture1_OnVideoFrameBuffer(object sender, VideoFrameBufferEve
 {
     lock (syncLock)
     {
-        foreach (var view in videoViews)
+        foreach (var view in multiViews)
         {
             view.RenderFrame(e);
         }

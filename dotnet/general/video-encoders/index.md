@@ -4,6 +4,27 @@ description: Comprehensive overview of video encoders with hardware acceleration
 sidebar_label: Video Encoders
 
 order: 19
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - NVENCH264EncoderSettings
+  - NVENCHEVCEncoderSettings
+  - AMFH264EncoderSettings
+  - AMFHEVCEncoderSettings
+  - QSVH264EncoderSettings
+  - QSVHEVCEncoderSettings
+  - OpenH264EncoderSettings
+  - AOMAV1EncoderSettings
+
 ---
 
 # Video Encoders for VisioForge .NET
@@ -132,23 +153,29 @@ Selecting the optimal encoder depends on various factors:
 
 When using hardware-accelerated encoders, verify system compatibility:
 
+Hardware-encoder availability checks live on the codec-specific settings classes (there is no shared `NVENCEncoderSettings` / `AMFEncoderSettings` / `QSVEncoderSettings` base type — instantiate `NVENCH264EncoderSettings`, `AMFHEVCEncoderSettings`, `QSVH264EncoderSettings`, etc., depending on the codec you need):
+
 ```csharp
-// Check availability of hardware encoders
-if (NVENCEncoderSettings.IsAvailable())
+// Probe H.264 hardware encoders in priority order.
+if (NVENCH264EncoderSettings.IsAvailable())
 {
-    // Use NVIDIA encoder
+    // NVIDIA GPU available — use NVENC H.264.
+    var settings = new NVENCH264EncoderSettings();
 }
-else if (AMFEncoderSettings.IsAvailable())
+else if (QSVH264EncoderSettings.IsAvailable())
 {
-    // Use AMD encoder
+    // Intel CPU with Quick Sync available.
+    var settings = new QSVH264EncoderSettings();
 }
-else if (QSVEncoderSettings.IsAvailable())
+else if (AMFH264EncoderSettings.IsAvailable())
 {
-    // Use Intel encoder
+    // AMD GPU available — use AMF H.264.
+    var settings = new AMFH264EncoderSettings();
 }
 else
 {
-    // Fallback to software encoder
+    // Fallback to software encoder (cross-platform).
+    var settings = new OpenH264EncoderSettings();
 }
 ```
 

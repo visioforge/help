@@ -1,6 +1,13 @@
 ---
-title: Instalar Paquetes Delphi SDKs 64-bit - Guía de Resolución
+title: Instalar VisioForge SDK en Delphi 64 bits — Configuración
 description: Solucione problemas de carga de BPL 64-bit en Delphi IDE. Paquetes design-time vs runtime, configuración de rutas x86/x64 y soluciones a errores comunes.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+
 ---
 
 # Dominar la Instalación de Paquetes Delphi de 64 bits

@@ -1,6 +1,22 @@
 ---
 title: DV Camcorder Video Capture via FireWire in C# .NET
 description: Capture DV camcorder video in .NET with direct and recompressed modes using VisioForge Video Capture SDK. Type-1/Type-2 DV format handling and C# examples.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Webcam
+  - DV Camera
+  - AVI
+  - C#
+  - NuGet
+primary_api_classes:
+  - DVOutput
+  - VideoCaptureMode
+  - DirectCaptureDVOutput
+
 ---
 
 # Capturing Video to DV Format in .NET Applications
@@ -170,7 +186,8 @@ While DV typically uses 48 kHz audio, you can configure alternative settings:
 ```cs
 dvOutput.Audio_SampleRate = 48000; // Professional standard
 dvOutput.Audio_Channels = 2;       // Stereo
-dvOutput.Audio_BitsPerSample = 16; // 16-bit audio
+// Note: DVOutput exposes only Audio_SampleRate + Audio_Channels;
+// bit depth is fixed by the DV format itself and is not a configurable property.
 ```
 
 ## Error Handling and Troubleshooting

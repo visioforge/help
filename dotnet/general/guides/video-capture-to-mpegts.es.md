@@ -1,6 +1,33 @@
 ---
 title: Capturar Video a MPEG-TS con Aceleración Hardware en C# .NET
 description: Capture video y audio a archivos MPEG-TS en C# con aceleración por hardware, selección de formato y soporte multiplataforma para aplicaciones .NET.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Webcam
+  - HLS
+  - TS
+  - H.264
+  - AAC
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - MediaBlocksPipeline
+  - DeviceEnumerator
+  - MediaBlockPadMediaType
+  - VideoView
+
 ---
 
 # Captura de Video a MPEG-TS en C# y .NET: Guía Completa

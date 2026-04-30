@@ -1,6 +1,18 @@
 ---
 title: AVI Video Capture in Delphi Using TVFVideoCapture SDK
 description: Record video to AVI format in Delphi with TVFVideoCapture using codec selection, audio configuration, and complete implementation examples.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - C++
+  - Windows
+  - VCL
+  - Capture
+  - AVI
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Complete Guide to Video Capture to AVI Files in Delphi
@@ -250,7 +262,7 @@ procedure TMyForm.StartCapture;
 begin
   try
     // Set output filename
-    VideoCapture1.Output := ExtractFilePath(Application.ExeName) + 'CapturedVideo.avi';
+    VideoCapture1.Output_Filename := ExtractFilePath(Application.ExeName) + 'CapturedVideo.avi';
     
     // Begin capture process
     VideoCapture1.Start;
@@ -281,7 +293,7 @@ void CMyDialog::StartCapture()
         }
         
         // Set output filename
-        m_VideoCapture.Output = appDir + _T("CapturedVideo.avi");
+        m_VideoCapture.Output_Filename = appDir + _T("CapturedVideo.avi");
         
         // Begin capture process
         m_VideoCapture.Start();
@@ -307,7 +319,7 @@ Private Sub StartCapture()
     On Error GoTo ErrorHandler
     
     ' Set output filename
-    VideoCapture1.Output = App.Path & "\CapturedVideo.avi"
+    VideoCapture1.Output_Filename = App.Path & "\CapturedVideo.avi"
     
     ' Begin capture process
     VideoCapture1.Start
@@ -341,9 +353,9 @@ begin
     lblStatus.Caption := 'Capture completed';
     
     // Optionally open the captured file
-    if FileExists(VideoCapture1.Output) and (MessageDlg('Open captured video?', 
+    if FileExists(VideoCapture1.Output_Filename) and (MessageDlg('Open captured video?', 
                                                        mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
-      ShellExecute(0, 'open', PChar(VideoCapture1.Output), nil, nil, SW_SHOW);
+      ShellExecute(0, 'open', PChar(VideoCapture1.Output_Filename), nil, nil, SW_SHOW);
   except
     on E: Exception do
       ShowMessage('Error stopping capture: ' + E.Message);
@@ -366,7 +378,7 @@ void CMyDialog::StopCapture()
         SetDlgItemText(IDC_STATUS_STATIC, _T("Capture completed"));
         
         // Optionally open the captured file
-        CString outputFile = m_VideoCapture.Output;
+        CString outputFile = m_VideoCapture.Output_Filename;
         if (PathFileExists(outputFile) && 
             MessageBox(_T("Open captured video?"), _T("Confirmation"), 
                       MB_YESNO | MB_ICONQUESTION) == IDYES) {
@@ -397,9 +409,9 @@ Private Sub StopCapture()
     lblStatus.Caption = "Capture completed"
     
     ' Optionally open the captured file
-    If Dir(VideoCapture1.Output) <> "" Then
+    If Dir(VideoCapture1.Output_Filename) <> "" Then
         If MsgBox("Open captured video?", vbQuestion + vbYesNo) = vbYes Then
-            Shell "explorer.exe """ & VideoCapture1.Output & """", vbNormalFocus
+            Shell "explorer.exe """ & VideoCapture1.Output_Filename & """", vbNormalFocus
         End If
     End If
     

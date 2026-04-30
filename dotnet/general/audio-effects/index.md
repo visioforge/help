@@ -2,6 +2,27 @@
 title: Audio Effects in C# and .NET - EQ, Reverb, Filters, and More
 description: Apply real-time audio effects in C# and .NET with VisioForge SDKs. Equalizer, reverb, echo, noise reduction, pitch shift, and 30+ effects.
 sidebar_label: Audio Effects
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Playback
+  - Streaming
+  - Editing
+primary_api_classes:
+  - VolumeAudioEffect
+  - Equalizer10AudioEffect
+  - VideoCaptureCoreX
+  - MediaPlayerCoreX
+  - CompressorExpanderAudioEffect
+
 ---
 
 # Real-Time Audio Effects for .NET Applications

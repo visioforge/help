@@ -1,6 +1,25 @@
 ---
 title: Blackmagic Decklink Video Capture and Playback in C# .NET
 description: Capture video from Blackmagic Decklink cards in .NET using VisioForge Video Capture SDK. Device enumeration, format selection, and C# code examples.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Decklink
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - DeviceEnumerator
+  - DecklinkVideoSourceSettings
+  - DecklinkAudioSourceSettings
+  - DecklinkSourceSettings
+
 ---
 
 # Integrating Blackmagic Decklink Devices with .NET Applications
@@ -134,9 +153,14 @@ Once you've detected devices and identified available formats, you need to confi
         Name = cbDecklinkCaptureDevice.Text,
         VideoFormat = cbDecklinkCaptureVideoFormat.Text
     };
+
+    // Select the Decklink mode before StartAsync:
+    //   DecklinkSourcePreview — real-time monitoring with minimal processing.
+    //   DecklinkSourceCapture — high-quality recording with enhanced buffering.
+    VideoCapture1.Mode = VideoCaptureMode.DecklinkSourcePreview;   // or VideoCaptureMode.DecklinkSourceCapture
+
+    await VideoCapture1.StartAsync();
     ```
-    
-    When using VideoCaptureCore, you'll need to specify either `DecklinkSourcePreview` or `DecklinkSourceCapture` mode depending on your application's requirements:
     
     - `DecklinkSourcePreview`: Optimized for real-time monitoring with minimal processing
     - `DecklinkSourceCapture`: Configured for high-quality recording with enhanced buffering

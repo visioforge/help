@@ -1,11 +1,36 @@
 ---
-title: Streaming de video con FFMPEG en Video Capture SDK .Net
-description: Transmite video con integración FFMPEG en Video Capture SDK para aplicaciones WinForms, WPF y Consola con ejemplos de configuración.
+title: Enviar Video en Vivo a FFmpeg desde C# .NET por Stdin
+description: Canaliza video en vivo desde VisioForge Video Capture SDK a FFmpeg CLI en C# / .NET. Configura códecs, muxers, protocolos (RTMP, SRT, HLS). Ejemplos.
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - Capture
+  - Streaming
+  - Encoding
+  - HLS
+  - RTMP
+  - SRT
+  - MP4
+  - WebM
+
 ---
 
 # Integración de Streaming FFMPEG con .NET
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+
+    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecta al servidor MCP público de VisioForge
+    ([documentación](../../general/mcp-server-usage.md))
+    en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
+    ejemplos de código ejecutables y guías de despliegue — más preciso que
+    buscar en `llms.txt`. Sin autenticación requerida.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Introducción al Streaming FFMPEG
 

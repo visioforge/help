@@ -1,6 +1,16 @@
 ---
 title: Video Fragment Detection in Broadcasts Using .NET SDK
 description: Detect ads, intros, and clips inside broadcast recordings using VisioForge Media Monitoring Tool with fingerprint-based fragment search.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Editing
+  - Fingerprinting
+  - C#
+
 ---
 
 # Media Monitoring Tool

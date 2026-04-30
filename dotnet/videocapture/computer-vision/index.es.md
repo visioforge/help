@@ -1,6 +1,10 @@
 ---
 title: Visión por Computadora y OpenCV en Video Capture SDK .Net
 description: Integración de OpenCV y detección de objetos con Video Capture SDK .Net. Construye apps de visión artificial y machine learning avanzadas.
+tags:
+  - Video Capture SDK
+  - .NET
+
 ---
 
 # Visión por Computadora - Video Capture SDK .Net

@@ -1,6 +1,17 @@
 ---
 title: Instalar Control ActiveX TVFVideoEdit en Visual Studio
 description: Instale controles ActiveX TVFVideoEdit en Visual Studio 2010+ para proyectos C++, C# y VB.NET con configuración de ensamblado wrapper.
+tags:
+  - Video Edit SDK
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Editing
+primary_api_classes:
+  - TVFVideoEdit
+
 ---
 
 # Instalar TVFVideoEdit en Visual Studio

@@ -1,6 +1,23 @@
 ---
-title: Vista Previa de Video de Webcam y Captura de Frames C#
+title: Vista Previa de Webcam en C# .NET con Captura de Frames
 description: Implementa vista previa de video de webcam en tiempo real con captura de frames en C# .NET con ejemplos de código funcionales para WinForms, WPF y Console.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - WinForms
+  - Capture
+  - Webcam
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+  - VideoView
+  - IVideoView
+  - VideoCaptureSource
+  - AudioCaptureSource
+
 ---
 
 # Implementación de Vista Previa de Video de Webcam con Captura de Frames en C#

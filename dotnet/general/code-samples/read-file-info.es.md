@@ -1,6 +1,17 @@
-﻿---
-title: Leer Info de Archivos Media en C# .NET - Streams y Metadatos
-description: La API MediaInfoReader devuelve detalles de streams video/audio, pistas de subtítulos, códigos FOURCC y etiquetas ID3. Análisis multiplataforma con VisioForge SDK.
+---
+title: Leer Info de Video en C# .NET — Duración, Codec, Streams
+description: La API MediaInfoReader devuelve datos de video, audio, subtítulos, códigos FOURCC y etiquetas ID3 para analizar archivos en VisioForge.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - Metadata
+  - MP4
+  - C#
+primary_api_classes:
+  - MediaInfoReader
 ---
 
 # Lectura de Información de Archivos de Medios en C#
@@ -103,7 +114,8 @@ try
              mmInfo.Text += $"  Relación de Aspecto: {stream.AspectRatio.Item1}:{stream.AspectRatio.Item2}" + Environment.NewLine;
         }
         
-        mmInfo.Text += $"  Tasa de Frames: {stream.FrameRate:F2} fps" + Environment.NewLine;
+        // VideoFrameRate es un struct (numerador/denominador) y no implementa IFormattable — formatear mediante .Value (double).
+        mmInfo.Text += $"  Tasa de Frames: {stream.FrameRate.Value:F2} fps" + Environment.NewLine;
         mmInfo.Text += $"  Tasa de Bits: {stream.Bitrate / 1000.0:F0} kbps" + Environment.NewLine;
         mmInfo.Text += $"  Conteo de Frames: {stream.FramesCount}" + Environment.NewLine;
     }

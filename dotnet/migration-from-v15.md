@@ -3,6 +3,28 @@ title: Migration Guide — Upgrade VisioForge .NET SDK v15 to v2026
 description: Step-by-step guide for upgrading from VisioForge .NET SDK v15 to v2026, covering both DirectShow and cross-platform X-engine migration paths.
 sidebar_label: Migration from v15
 order: 25
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Playback
+  - Streaming
+  - Editing
+primary_api_classes:
+  - MP4Output
+  - DeviceEnumerator
+  - VideoCaptureCore
+  - VideoEditCore
+  - MediaPlayerCore
+
 ---
 
 # Migration Guide: v15 to v2026
@@ -381,7 +403,7 @@ VideoCapture1.Audio_OutputDevice_Volume_Set(70);
 VideoCapture1.Audio_OutputDevice_Balance_Set(0);
 
 // v2026 (X-Engine)
-VideoCapture1.Audio_OutputDevice_Volume = 0.7f;  // 0.0 to 1.0
+VideoCapture1.Audio_OutputDevice_Volume = 0.7;  // 0.0 to 1.0 (double)
 ```
 
 #### Cleanup
@@ -433,10 +455,10 @@ await _player.PlayAsync();
 | Feature | v15 (DirectShow) | v2026 (X-Engine) |
 |---------|-------------------|-------------------|
 | Source setup | `Playlist_Add("file.mp4")` | `OpenAsync(UniversalSourceSettingsV2)` |
-| Position | `_player.Position` (property) | `await _player.Position_GetAsync()` |
-| Duration | `_player.Duration` (property) | `await _player.DurationAsync()` |
+| Position | `_player.Position_Get_Time()` (method, ms) | `await _player.Position_GetAsync()` |
+| Duration | `_player.Duration_Time()` (method, ms) | `await _player.DurationAsync()` |
 | Version | `_player.SDK_Version()` (instance) | `MediaPlayerCoreX.SDK_Version` (static) |
-| Loop | `_player.Looping` | `_player.Loop` |
+| Loop | `_player.Loop` | `_player.Loop` (same name) |
 
 ---
 

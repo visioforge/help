@@ -2,6 +2,21 @@
 title: Video Renderer in C# .NET - DirectX, OpenGL, Metal
 description: Display video in WPF, WinForms, Avalonia, and MAUI apps with hardware-accelerated rendering using VisioForge Media Blocks SDK for .NET.
 sidebar_label: Video Renderer
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - VideoRendererBlock
+  - UniversalSourceBlock
+  - VideoView
+  - MediaBlocksPipeline
+  - UniversalSourceSettings
+
 ---
 
 # Video Renderer Block

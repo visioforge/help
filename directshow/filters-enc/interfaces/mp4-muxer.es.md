@@ -1,6 +1,21 @@
 ---
 title: Interfaz DirectShow MP4 Muxer: hilos, tiempo y streaming
 description: Interfaces DirectShow de MP4 muxer con configuración de hilos, corrección de tiempo y opciones de streaming en vivo para salida de contenedor MP4.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - MP4
+  - C#
+primary_api_classes:
+  - MP4V10Flags
+  - IBaseFilter
+  - MP4MuxerStandardConfig
+  - MP4MuxerDeterministicConfig
+  - MP4V10LiveStreamingConfig
+
 ---
 
 # Referencia de Interfaz MP4 Muxer

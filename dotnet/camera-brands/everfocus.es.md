@@ -1,6 +1,23 @@
 ---
 title: EverFocus: URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecte cámaras EverFocus en C# .NET con patrones de URL RTSP y ejemplos de código para modelos de las series EAN, EHN, EMN, EPN, EZN y EQN.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo conectar una cámara IP EverFocus en C# .NET

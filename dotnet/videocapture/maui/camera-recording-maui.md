@@ -1,6 +1,33 @@
 ---
 title: Camera Recording in .NET MAUI — iOS, Android, Windows
 description: Record video from device cameras in .NET MAUI using VisioForge Video Capture SDK. Cross-platform capture for iOS, Android, macCatalyst, and Windows.
+tags:
+  - Video Capture SDK
+  - .NET
+  - C++
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Android
+  - iOS
+  - MAUI
+  - Capture
+  - Streaming
+  - Encoding
+  - Effects
+  - MP4
+  - H.264
+  - MP3
+  - C#
+  - NuGet
+  - Entitlements
+primary_api_classes:
+  - DeviceEnumerator
+  - VideoView
+  - IVideoView
+  - VideoCaptureDeviceSourceSettings
+  - VideoCaptureCoreX
+
 ---
 
 # How to Capture and Process Video in .NET MAUI Apps Using VisioForge SDK

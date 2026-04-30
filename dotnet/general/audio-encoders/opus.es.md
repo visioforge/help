@@ -1,6 +1,34 @@
 ---
-title: Configuración del Codificador de Audio Opus en .NET
+title: Codificador de Audio Opus en C# .NET — Bitrate, VBR, DTX
 description: Modos de control VBR, CBR y CVBR. Bitrate 6-510 kbps, latencia 5 ms, ajuste de complejidad y DTX para voz. Salida OGG/WebM con ejemplos en C#.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - WebM
+  - OGG
+  - Opus
+  - C#
+primary_api_classes:
+  - OPUSEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - OPUSOutput
+  - OGGOpusOutputBlock
+
 ---
 
 # Dominando la Codificación de Audio OPUS en Aplicaciones .NET
@@ -180,11 +208,8 @@ var opusSettings = new OPUSEncoderSettings
     Complexity = 8
 };
 
-// Crear una instancia de salida Ogg OPUS
+// Crear una instancia de salida Ogg OPUS (opus + contenedor ogg)
 var oggOpusOutput = new OGGOpusOutputBlock("output.ogg", opusSettings);
-
-// Alternativamente, crear una salida WebM OPUS
-var webmOpusOutput = new WebMOpusOutputBlock("output.webm", opusSettings);
 ```
 
 ## Consejos de optimización de rendimiento

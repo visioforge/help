@@ -3,6 +3,14 @@ title: Video Fingerprinting SDK Samples for .NET Developers
 description: Ready-to-run VisioForge sample apps for video fingerprinting in .NET — duplicate scanning, fragment search, media monitoring, and CLI tools.
 sidebar_label: Samples
 order: 91
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+
 ---
 
 # Video Fingerprinting SDK Code Samples

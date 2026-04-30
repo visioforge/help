@@ -1,9 +1,36 @@
 ---
 title: Video Fingerprint Storage in C++ with SQLite and PostgreSQL
 description: Store and query video fingerprints in SQLite and PostgreSQL using VisioForge C++ SDK with schema examples and indexing strategies.
+tags:
+  - Video Fingerprinting SDK
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+primary_api_classes:
+  - StoreFingerprint
+  - VFPFingerprintSource
+  - VFPFillSource
+  - BatchFingerprintProcessor
+  - CacheFingerprint
+
 ---
 
 # C++ Fingerprinting SDK Database Guide
+
+!!! danger "Some helpers referenced below do not exist — use the flat C API for fingerprint generation"
+
+    `VFPFillSource` and `VFPSearch_GetFingerprintForVideoFile` are
+    **not** real exports of `VisioForge_VFP.dll`. To generate a
+    fingerprint before storing it, decode video frames in the host
+    application and feed them to the canonical low-level loop:
+    `VFPSearch_Init` → `VFPSearch_Process` (per frame) → `VFPSearch_Build`
+    (or the `VFPCompare_*` equivalent). See [`index.md`](./index.md) for
+    the full workflow. Database storage and retrieval semantics described
+    on this page are independent of the fingerprint-generation API.
+    Tracked as defect #088.
 
 This guide demonstrates how to integrate the Video Fingerprinting SDK for C++ with various database systems for efficient fingerprint storage and retrieval.
 

@@ -1,6 +1,16 @@
 ---
 title: Comparar Huellas de Video - CLI vfp_compare en .NET
 description: Compare huellas de video por similitud usando la herramienta CLI vfp_compare de VisioForge con umbrales configurables y detección de duplicados.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+  - C#
+
 ---
 
 # vfp_compare - Herramienta de Comparación de Huellas de Video

@@ -1,6 +1,18 @@
 ---
 title: Codificador LAME MP3 - Configurar bitrate, VBR y calidad
 description: Interfaz IAudioEncoderProperties para codificación LAME MP3 con modos de tasa de bits variable y constante y configuración de calidad.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - MP3
+  - C#
+primary_api_classes:
+  - IBaseFilter
+  - AudioEncoder
+
 ---
 
 # Referencia de la Interfaz del Codificador LAME MP3
@@ -179,11 +191,17 @@ namespace VisioForge.DirectShowAPI
         int set_ModeFixed([In] int dwFlag);
 
         // Gestión de Configuración
+        // pcBlock es un búfer BYTE[] en C++; use LPArray con SizeParamIndex=1
+        // para que el marshaler lea pdwSize bytes desde el código nativo.
         [PreserveSig]
-        int get_ParameterBlockSize(out byte pcBlock, out int pdwSize);
+        int get_ParameterBlockSize(
+            [Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] pcBlock,
+            out int pdwSize);
 
         [PreserveSig]
-        int set_ParameterBlockSize([In] byte pcBlock, [In] int dwSize);
+        int set_ParameterBlockSize(
+            [In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] byte[] pcBlock,
+            [In] int dwSize);
 
         [PreserveSig]
         int DefaultAudioEncoderProperties();

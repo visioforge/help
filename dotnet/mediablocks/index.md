@@ -3,6 +3,17 @@ title: Modular Multimedia Processing Pipeline API for C# .NET
 description: Build custom multimedia pipelines in C# with VisioForge Media Blocks SDK. Connect source, processing, and output blocks for transcoding, capture, and streaming.
 sidebar_label: Media Blocks SDK .NET
 order: 14
+tags:
+  - Media Blocks SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - Streaming
 
 ---
 

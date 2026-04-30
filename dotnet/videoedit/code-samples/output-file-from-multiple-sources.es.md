@@ -1,6 +1,16 @@
 ---
 title: Mezclar pistas de video y audio de múltiples fuentes .NET
 description: Combina múltiples archivos de video y audio en una única salida sin recodificación usando C# con guía paso a paso para mezclar pistas.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCore
+  - Windows
+  - Editing
+  - AVI
+  - C#
+  - NuGet
+
 ---
 
 # Crear Nuevos Archivos desde Múltiples Fuentes Sin Recodificación
@@ -26,7 +36,7 @@ Al desarrollar aplicaciones multimedia, puede que necesites combinar contenido d
 Primero, crea una lista para contener todas las referencias de pistas:
 
 ```cs
-var streams = new List();
+var streams = new List<FFMPEGStream>();
 ```
 
 ### 2. Añadir Pista de Video
@@ -70,7 +80,7 @@ streams.Add(new FFMPEGStream
 Finalmente, combina todas las pistas en un único archivo de salida. Establecer el segundo parámetro en "true" asegura que la duración de salida coincida con la pista más corta, previniendo problemas de reproducción:
 
 ```cs
-VideoEdit1.FastEdit_MuxStreams(streams, true, outputFile);
+await VideoEdit1.FastEdit_MuxStreamsAsync(streams, true, outputFile);
 ```
 
 ## Consideraciones Técnicas Importantes

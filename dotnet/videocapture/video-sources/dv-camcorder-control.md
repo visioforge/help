@@ -1,6 +1,15 @@
 ---
 title: DV Camcorder Control in C# - Video Capture SDK .NET
 description: Implement DV/HDV camcorder control in C# apps with essential commands, implementation patterns, and practical code examples for .NET.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - DV Camera
+  - C#
+
 ---
 
 # DV Camcorder Control for .NET Applications
@@ -363,25 +372,31 @@ private async void PlayButton_Click(object sender, EventArgs e) {
 Some operations require specific command sequences. For example, to capture a specific segment:
 
 ```cs
-private async Task CaptureSegmentAsync() {
+private async Task CaptureSegmentAsync()
+{
     // Rewind to beginning
     await VideoCapture1.DV_SendCommandAsync(DVCommand.Rew);
-    
-    // Wait for rewind to complete
-    await WaitForDeviceStatusAsync(DVDeviceStatus.Stopped);
-    
+
+    // Poll DV_GetModeAsync until the deck reports Stop (no dedicated DVDeviceStatus enum —
+    // DVCommand values are reused for both issuing commands and reading current mode).
+    while (await VideoCapture1.DV_GetModeAsync() != DVCommand.Stop)
+    {
+        await Task.Delay(100);
+    }
+
     // Begin playback
     await VideoCapture1.DV_SendCommandAsync(DVCommand.Play);
-    
-    // Start capture
-    await VideoCapture1.StartCaptureAsync();
-    
+
+    // Start capture — VideoCaptureCore lifecycle methods are StartAsync / StopAsync (no
+    // separate StartCaptureAsync). Configure Mode / Output_Filename before calling StartAsync.
+    await VideoCapture1.StartAsync();
+
     // Wait for desired duration
     await Task.Delay(captureTimeMs);
-    
+
     // Stop capture
-    await VideoCapture1.StopCaptureAsync();
-    
+    await VideoCapture1.StopAsync();
+
     // Stop playback
     await VideoCapture1.DV_SendCommandAsync(DVCommand.Stop);
 }

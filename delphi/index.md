@@ -3,6 +3,19 @@ title: Delphi and ActiveX Video SDK - Playback, Capture, Editing
 description: VCL components and ActiveX controls for video playback, capture, screen recording, and editing in Delphi and C++ Builder.
 sidebar_label: All-in-One Media Framework (Delphi/ActiveX)
 order: 18
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Streaming
+  - Editing
+primary_api_classes:
+  - TVFMediaPlayer
+  - TVFVideoCapture
+  - TVFVideoEdit
+
 ---
 
 # All-in-One Media Framework

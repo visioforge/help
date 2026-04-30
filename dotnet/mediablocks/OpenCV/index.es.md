@@ -1,6 +1,20 @@
-﻿---
+---
 title: Bloques de Procesamiento de Video OpenCV en C# .NET
 description: Añada detección de objetos, seguimiento y procesamiento de imágenes a pipelines de video con bloques OpenCV en VisioForge Media Blocks SDK. Multiplataforma.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - SystemVideoSourceBlock
+  - VideoRendererBlock
+  - MediaBlocksPipeline
+  - CVHandDetectBlock
+  - CVDewarpBlock
 ---
 
 # Bloques OpenCV - VisioForge Media Blocks SDK .Net
@@ -70,7 +84,7 @@ var dewarpBlock = new CVDewarpBlock(dewarpSettings);
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, dewarpBlock.Input0);
+pipeline.Connect(videoSource.Output, dewarpBlock.Input);
 pipeline.Connect(dewarpBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -122,7 +136,7 @@ var dilateBlock = new CVDilateBlock();
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, dilateBlock.Input0);
+pipeline.Connect(videoSource.Output, dilateBlock.Input);
 pipeline.Connect(dilateBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -187,7 +201,7 @@ var edgeDetectBlock = new CVEdgeDetectBlock(edgeDetectSettings);
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, edgeDetectBlock.Input0);
+pipeline.Connect(videoSource.Output, edgeDetectBlock.Input);
 pipeline.Connect(edgeDetectBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -239,7 +253,7 @@ var equalizeHistBlock = new CVEqualizeHistogramBlock();
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, equalizeHistBlock.Input0);
+pipeline.Connect(videoSource.Output, equalizeHistBlock.Input);
 pipeline.Connect(equalizeHistBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -291,7 +305,7 @@ var erodeBlock = new CVErodeBlock();
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, erodeBlock.Input0);
+pipeline.Connect(videoSource.Output, erodeBlock.Input);
 pipeline.Connect(erodeBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -354,14 +368,14 @@ var faceBlurSettings = new CVFaceBlurSettings
 };
 // Es importante llamar a ProcessPaths si no está proporcionando una ruta absoluta
 // y confía en los mecanismos internos del SDK para localizar el archivo, especialmente cuando se despliega.
-// faceBlurSettings.ProcessPaths(pipeline.Context); // o pasar el contexto apropiado
+// faceBlurSettings.ProcessPaths(pipeline.GetContext()); // o pasar el contexto apropiado
 
 var faceBlurBlock = new CVFaceBlurBlock(faceBlurSettings);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, faceBlurBlock.Input0);
+pipeline.Connect(videoSource.Output, faceBlurBlock.Input);
 pipeline.Connect(faceBlurBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -438,7 +452,7 @@ var faceDetectSettings = new CVFaceDetectSettings
     ScaleFactor = 1.2, // Valor de ejemplo, el predeterminado es 1.25
     // MinSize = new VisioForge.Core.Types.Size(30,30) // Predeterminado
 };
-// faceDetectSettings.ProcessPaths(pipeline.Context); // o contexto apropiado
+// faceDetectSettings.ProcessPaths(pipeline.GetContext()); // o contexto apropiado
 
 var faceDetectBlock = new CVFaceDetectBlock(faceDetectSettings);
 
@@ -458,7 +472,7 @@ faceDetectBlock.FaceDetected += (s, e) =>
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, faceDetectBlock.Input0);
+pipeline.Connect(videoSource.Output, faceDetectBlock.Input);
 pipeline.Connect(faceDetectBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -526,7 +540,7 @@ var handDetectSettings = new CVHandDetectSettings
     Display = true, // Predeterminado
     ROI = new VisioForge.Core.Types.Rect(0, 0, 320, 240) // Ejemplo: fotograma completo de imagen escalada, predeterminado es new Rect()
 };
-// handDetectSettings.ProcessPaths(pipeline.Context); // o contexto apropiado
+// handDetectSettings.ProcessPaths(pipeline.GetContext()); // o contexto apropiado
 
 var handDetectBlock = new CVHandDetectBlock(handDetectSettings);
 
@@ -542,7 +556,7 @@ handDetectBlock.HandDetected += (s, e) =>
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, handDetectBlock.Input0);
+pipeline.Connect(videoSource.Output, handDetectBlock.Input);
 pipeline.Connect(handDetectBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -607,7 +621,7 @@ var laplaceBlock = new CVLaplaceBlock(laplaceSettings);
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, laplaceBlock.Input0);
+pipeline.Connect(videoSource.Output, laplaceBlock.Input);
 pipeline.Connect(laplaceBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -708,7 +722,7 @@ motionCellsBlock.MotionDetected += (s, e) =>
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, motionCellsBlock.Input0);
+pipeline.Connect(videoSource.Output, motionCellsBlock.Input);
 pipeline.Connect(motionCellsBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -778,7 +792,7 @@ var smoothBlock = new CVSmoothBlock(smoothSettings);
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, smoothBlock.Input0);
+pipeline.Connect(videoSource.Output, smoothBlock.Input);
 pipeline.Connect(smoothBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -843,7 +857,7 @@ var sobelBlock = new CVSobelBlock(sobelSettings);
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, sobelBlock.Input0);
+pipeline.Connect(videoSource.Output, sobelBlock.Input);
 pipeline.Connect(sobelBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -882,7 +896,7 @@ El `CVTemplateMatchBlock` se configura usando `CVTemplateMatchSettings`. Propied
 ### Eventos
 
 - `TemplateMatch`: Ocurre cuando se encuentra una coincidencia de plantilla. Proporciona `CVTemplateMatchEventArgs`:
-  - `Rect`: Un objeto `Types.Rect` representando la ubicación (x, y, ancho, alto) de la mejor coincidencia.
+  - `Rect`: Un objeto `Types.Rect` representando la ubicación (`Left`, `Top`, `Right`, `Bottom`) de la mejor coincidencia. `Width` y `Height` son propiedades calculadas (`Right - Left`, `Bottom - Top`).
   - `Result`: Un valor double representando la calidad o resultado de la coincidencia, dependiendo del método usado.
 
 ### Pipeline de ejemplo
@@ -922,7 +936,7 @@ templateMatchBlock.TemplateMatch += (s, e) =>
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, templateMatchBlock.Input0);
+pipeline.Connect(videoSource.Output, templateMatchBlock.Input);
 pipeline.Connect(templateMatchBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -993,7 +1007,7 @@ var textOverlayBlock = new CVTextOverlayBlock(textOverlaySettings);
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, textOverlayBlock.Input0);
+pipeline.Connect(videoSource.Output, textOverlayBlock.Input);
 pipeline.Connect(textOverlayBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline
@@ -1026,7 +1040,7 @@ Nombre: `CVTrackerBlock` (elemento GStreamer: `cvtracker`).
 El `CVTrackerBlock` se configura usando `CVTrackerSettings`. Propiedades clave:
 
 - `Algorithm` (enum `CVTrackerAlgorithm`): Especifica el algoritmo de seguimiento (`Boosting`, `CSRT`, `KCF`, `MedianFlow`, `MIL`, `MOSSE`, `TLD`). Predeterminado: `CVTrackerAlgorithm.MedianFlow`.
-- `InitialRect` (`Rect`): El cuadro delimitador inicial (Left, Top, Width, Height) del objeto a seguir. Predeterminado: `new Rect(50, 50, 100, 100)`.
+- `InitialRect` (`Rect`): El cuadro delimitador inicial del objeto a seguir. El constructor `Rect` es `(left, top, right, bottom)` — p. ej., `new Rect(50, 50, 150, 150)` es una caja de 100×100 en (50, 50). Predeterminado: `new Rect()` (tamaño cero).
 - `DrawRect` (bool): Si es `true`, dibuja un rectángulo alrededor del objeto seguido en el video de salida. Predeterminado: `true`.
 
 ### Pipeline de ejemplo
@@ -1047,7 +1061,7 @@ var pipeline = new MediaBlocksPipeline();
 var trackerSettings = new CVTrackerSettings
 {
     Algorithm = CVTrackerAlgorithm.CSRT, // CSRT es frecuentemente un buen rastreador de propósito general. Predeterminado: CVTrackerAlgorithm.MedianFlow
-    InitialRect = new VisioForge.Core.Types.Rect(150, 120, 80, 80), // Defina su ROI inicial del objeto. Predeterminado: new Rect(50, 50, 100, 100)
+    InitialRect = new VisioForge.Core.Types.Rect(150, 120, 230, 200), // (left, top, right, bottom) — caja 80x80 en (150,120). Predeterminado: new Rect()
     DrawRect = true // Predeterminado: true
 };
 
@@ -1066,7 +1080,7 @@ var trackerBlock = new CVTrackerBlock(trackerSettings);
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
 
 // Conectar bloques
-pipeline.Connect(videoSource.Output, trackerBlock.Input0);
+pipeline.Connect(videoSource.Output, trackerBlock.Input);
 pipeline.Connect(trackerBlock.Output, videoRenderer.Input);
 
 // Iniciar pipeline

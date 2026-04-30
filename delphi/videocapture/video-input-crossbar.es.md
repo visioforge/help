@@ -1,6 +1,16 @@
 ---
 title: Selección Crossbar de Entrada - Compuesto, S-Video en Delphi
 description: Seleccione fuentes de entrada de video en Delphi con crossbar - configure entradas compuesto, S-Video, HDMI con ejemplos de código paso a paso para Delphi.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - Decoding
+  - TV Tuner
+
 ---
 
 # Seleccionando Fuentes de Entrada de Video con Tecnología Crossbar
@@ -89,22 +99,32 @@ Una vez que haya confirmado que el crossbar está disponible, el siguiente paso 
 #### Implementación en Delphi
 
 ```pascal
-// Limpiar cualquier conexión existente y elementos de UI
-VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections;
-cbCrossbarVideoInput.Clear;
+// Variables declaradas a nivel de procedimiento para que el snippet compile en cualquier
+// IDE Delphi 6+ (la sintaxis inline `var nombre: T := ...` requiere Delphi 10.3 Rio o
+// posterior).
+procedure TForm1.PopulateCrossBarInputs;
+var
+  inputCount: Integer;
+  inputName: String;
+  i: Integer;
+begin
+  // Limpiar cualquier conexión existente y elementos de UI
+  VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections;
+  cbCrossbarVideoInput.Clear;
 
-// Obtener conteo de entradas disponibles para la salida "Video Decoder"
-var inputCount: Integer := VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetCount('Video Decoder');
+  // Obtener conteo de entradas disponibles para la salida "Video Decoder"
+  inputCount := VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetCount('Video Decoder');
 
-// Poblar UI con entradas disponibles
-for i := 0 to inputCount - 1 do begin
-  var inputName: String := VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetItem('Video Decoder', i);
-  cbCrossbarVideoInput.Items.Add(inputName);
+  // Poblar UI con entradas disponibles
+  for i := 0 to inputCount - 1 do begin
+    inputName := VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetItem('Video Decoder', i);
+    cbCrossbarVideoInput.Items.Add(inputName);
+  end;
+
+  // Seleccionar el primer elemento por defecto si está disponible
+  if cbCrossbarVideoInput.Items.Count > 0 then
+    cbCrossbarVideoInput.ItemIndex := 0;
 end;
-
-// Seleccionar el primer elemento por defecto si está disponible
-if cbCrossbarVideoInput.Items.Count > 0 then
-  cbCrossbarVideoInput.ItemIndex := 0;
 ```
 
 #### Implementación en C++ MFC
@@ -171,19 +191,27 @@ Después de que el usuario seleccione su fuente de entrada deseada, necesita apl
 #### Implementación en Delphi
 
 ```pascal
-// Primero limpiar cualquier conexión existente
-VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections;
+// Variables a nivel de procedimiento — compatible con Delphi 6+ (evita el `var` inline
+// introducido en Delphi 10.3 Rio).
+procedure TForm1.ApplySelectedCrossBarInput;
+var
+  selectedInput: String;
+  success: Boolean;
+begin
+  // Primero limpiar cualquier conexión existente
+  VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections;
 
-// Conectar la entrada seleccionada a la salida "Video Decoder"
-// Parámetros: nombre de entrada, nombre de salida, enrutamiento automático de señal
-if cbCrossbarVideoInput.ItemIndex >= 0 then begin
-  var selectedInput: String := cbCrossbarVideoInput.Items[cbCrossbarVideoInput.ItemIndex];
-  var success: Boolean := VideoCapture1.Video_CaptureDevice_CrossBar_Connect(selectedInput, 'Video Decoder', true);
-  
-  if success then
-    ShowMessage('Conectado exitosamente ' + selectedInput + ' a Video Decoder')
-  else
-    ShowMessage('Error al establecer conexión');
+  // Conectar la entrada seleccionada a la salida "Video Decoder"
+  // Parámetros: nombre de entrada, nombre de salida, enrutamiento automático de señal
+  if cbCrossbarVideoInput.ItemIndex >= 0 then begin
+    selectedInput := cbCrossbarVideoInput.Items[cbCrossbarVideoInput.ItemIndex];
+    success := VideoCapture1.Video_CaptureDevice_CrossBar_Connect(selectedInput, 'Video Decoder', true);
+
+    if success then
+      ShowMessage('Conectado exitosamente ' + selectedInput + ' a Video Decoder')
+    else
+      ShowMessage('Error al establecer conexión');
+  end;
 end;
 ```
 

@@ -2,6 +2,27 @@
 title: Captura de Pantalla a WMV en C# .NET — Windows Media
 description: Grabe la pantalla a formato WMV en C# con codecs Windows Media. Cuándo elegir WMV, configuración de codec y ejemplos de código completos usando VisioForge SDK.
 sidebar_label: Captura de Pantalla a WMV
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - WinForms
+  - Capture
+  - Streaming
+  - Screen Capture
+  - MP4
+  - AVI
+  - WMV
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+  - WMVOutput
+  - VideoCaptureCoreX
+  - VideoView
+  - IVideoView
+
 ---
 
 # Implementación de Grabación de Pantalla a WMV en Aplicaciones C# .NET

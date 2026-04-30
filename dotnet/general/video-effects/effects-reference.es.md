@@ -2,6 +2,35 @@
 title: Referencia de Efectos de Video SDK: Filtros, Overlays y Más
 description: Guía de referencia completa de todos los efectos de video en VisioForge .NET SDKs incluyendo efectos Classic (solo Windows) y multiplataforma.
 sidebar_label: Referencia de Efectos
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaPlayerCoreX
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Playback
+  - Editing
+  - Effects
+  - Decklink
+  - NDI
+  - GIF
+  - C#
+primary_api_classes:
+  - VideoEffect
+  - VideoEffectGrayscale
+  - GPUVideoEffect
+  - GrayscaleVideoEffect
+  - GaussianBlurVideoEffect
+
 ---
 
 # Referencia Completa de Efectos de Video
@@ -178,22 +207,19 @@ Los siguientes efectos artísticos están disponibles exclusivamente en la imple
 | Efecto | Descripción |
 |--------|-------------|
 | FishEyeVideoEffect | Efecto de distorsión de lente ojo de pez. |
-| TwirlVideoEffect | Efecto de distorsión de remolino/espiral. |
-| BulgeVideoEffect | Distorsión de abombamiento/magnificación. |
+| GLTwirlVideoEffect | Efecto de distorsión de remolino/espiral (OpenGL). |
+| GLBulgeVideoEffect | Distorsión de abombamiento/magnificación (OpenGL). |
 | StretchVideoEffect | Efecto de distorsión de estiramiento. |
-| TunnelVideoEffect | Efecto de perspectiva de túnel. |
-| SphereVideoEffect | Efecto de deformación esférica. |
+| GLLightTunnelVideoEffect | Efecto de perspectiva de túnel (OpenGL). |
 | SquareVideoEffect | Efecto de deformación cuadrada. |
 | CircleVideoEffect | Efecto de deformación circular. |
 | KaleidoscopeVideoEffect | Efecto de espejo caleidoscópico. |
 | MarbleVideoEffect | Efecto de textura de mármol. |
-| PinchVideoEffect | Efecto de distorsión de pellizco. |
 | Pseudo3DVideoEffect | Efecto estéreo pseudo 3D. |
 | QuarkVideoEffect | Efecto de partículas quark. |
 | RippleVideoEffect | Efecto de ondulación de agua. |
 | WaterRippleVideoEffect | Ondulación de agua mejorada con múltiples modos. |
 | WarpVideoEffect | Efecto de distorsión de deformación general. |
-| DiffuseVideoEffect | Efecto de difusión/propagación de desenfoque. |
 | MovingBlurVideoEffect | Desenfoque de movimiento con control direccional. |
 | MovingEchoVideoEffect | Efecto de eco/estela de movimiento. |
 | MovingZoomEchoVideoEffect | Efecto combinado de zoom y eco. |
@@ -253,7 +279,6 @@ Ver: [Guía de Superposición de Texto](text-overlay.md)
 | OverlayManagerImage | 🌍 Multiplataforma | Superposición de imagen profesional con animaciones, transiciones y efectos. |
 | OverlayManagerGIF | 🌍 Multiplataforma | Soporte de superposición de GIF animado. |
 | SVGOverlayVideoEffect | 🌍 Multiplataforma | Superposición de gráficos vectoriales SVG. |
-| QRCodeOverlayFilter | 🌍 Multiplataforma | Generación y superposición de código QR. |
 
 Ver: [Guía de Superposición de Imagen](image-overlay.md)
 
@@ -280,12 +305,11 @@ Ver: [Guía de Superposición de Imagen](image-overlay.md)
 | OverlayManagerStar | Superposición de forma de estrella. |
 | OverlayManagerTriangle | Superposición de forma triangular. |
 
-### Croma Key y Detección de Movimiento (Solo multiplataforma)
+### Croma Key (Multiplataforma)
 
 | Efecto | Descripción |
 |--------|-------------|
-| ChromaKeySettings | Croma key de pantalla verde / pantalla azul para eliminación de fondo. |
-| MotionDetectionProcessor | Detección de movimiento en tiempo real con sensibilidad configurable. |
+| ChromaKeySettingsX | Croma key de pantalla verde / pantalla azul para eliminación de fondo (se integra con `MediaBlocksPipeline` + bloque de filtro croma). |
 
 ### Video 360° y VR (Solo Classic)
 
@@ -305,14 +329,14 @@ Requiere GPU NVIDIA RTX con soporte del SDK Maxine.
 |--------|-------------|
 | MaxineDenoiseVideoEffect | Reducción de ruido impulsada por IA que preserva inteligentemente los detalles. |
 | MaxineArtifactReductionVideoEffect | Reduce artefactos de compresión y degradación de video usando IA. |
-| MaxineSuperResolutionEffect | Escalado IA para mejora de resolución (la implementación varía según la versión). |
+| MaxineSuperResSettings | POCO de configuración para super-resolución IA (se conecta al pipeline de efectos Maxine). |
 
 #### Efectos de Contenido
 
 | Efecto | Descripción |
 |--------|-------------|
 | MaxineAIGSVideoEffect | Pantalla verde/eliminación de fondo impulsada por IA sin requerir pantalla verde real. |
-| MaxineUpscaleVideoEffect | Escalado avanzado usando IA para calidad mejorada. |
+| MaxineUpscaleSettings | POCO de configuración para escalado IA (se conecta al pipeline de efectos Maxine). |
 
 #### Efectos Especiales
 
@@ -363,12 +387,12 @@ Requiere GPU NVIDIA RTX con soporte del SDK Maxine.
 
 - **MaxineDenoiseVideoEffect** - Reducción de ruido impulsada por IA que preserva inteligentemente los detalles.
 - **MaxineArtifactReductionVideoEffect** - Reduce artefactos de compresión y degradación de video usando IA.
-- **MaxineSuperResolutionEffect** - Escalado IA para mejora de resolución (la implementación varía según la versión).
+- **MaxineSuperResSettings** - POCO de configuración para super-resolución IA.
 
 #### Efectos de Contenido
 
 - **MaxineAIGSVideoEffect** - Pantalla verde/eliminación de fondo impulsada por IA sin requerir pantalla verde real.
-- **MaxineUpscaleVideoEffect** - Escalado avanzado usando IA para calidad mejorada.
+- **MaxineUpscaleSettings** - POCO de configuración para escalado IA.
 
 ## Parámetros de Efectos
 
@@ -493,11 +517,11 @@ var flashback = new VideoEffectGrayscale(
 player.Video_Effects_Add(flashback);
 
 // Multiplataforma: Efecto con tiempo limitado
-var blur = new GaussianBlurVideoEffect("blur")
+// Ctor: GaussianBlurVideoEffect(double sigma, string name = "gaussian_blur")
+var blur = new GaussianBlurVideoEffect(5.0, "blur")
 {
     StartTime = TimeSpan.FromSeconds(10),
-    StopTime = TimeSpan.FromSeconds(15),
-    Sigma = 5.0
+    StopTime = TimeSpan.FromSeconds(15)
 };
 await player.Video_Effects_AddOrUpdateAsync(blur);
 ```

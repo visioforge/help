@@ -1,6 +1,11 @@
 ---
 title: Filtros DirectShow para Procesamiento de Video y Audio
 description: 35+ efectos de video DirectShow y filtros de audio con mezclador de video, clave de croma, desentrelazado y reducción de ruido para aplicaciones Windows.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+
 ---
 
 # Filtros de Procesamiento DirectShow para Aplicaciones de Medios

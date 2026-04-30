@@ -1,6 +1,16 @@
 ---
-title: Render Live Video on WinForms PictureBox Control in C#
+title: Render Live Video in WinForms PictureBox — C# .NET Guide
 description: Thread-safe frame updates, bitmap disposal, and double buffering to prevent flicker. Frame skipping for high-FPS sources. VisioForge SDK zoom and size modes.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - C#
+primary_api_classes:
+  - VideoFrameBitmapEventArgs
+
 ---
 
 # Drawing Video on PictureBox in .NET Applications
@@ -72,15 +82,25 @@ private bool applyingPictureBoxImage = false;
 When starting your video capture or playback, ensure the flag is properly initialized:
 
 ```cs
-private void btnStart_Click(object sender, EventArgs e)
+private async void btnStart_Click(object sender, EventArgs e)
 {
-    // Reset the flag before starting capture/playback
+    // Reset the flag before starting capture/playback.
     applyingPictureBoxImage = false;
-    
-    // Your video initialization code here
-    // videoCapture1.Start(); or similar SDK call
+
+    // Subscribe to OnVideoFrameBitmap before starting so the first frame is not missed.
+    // The event is EventHandler<VideoFrameBitmapEventArgs>, fired from a worker thread.
+    videoCapture1.OnVideoFrameBitmap += VideoCapture1_OnVideoFrameBitmap;
+
+    // Video Capture SDK example — swap for MediaPlayer1 / VideoEdit1 if you are using those engines.
+    videoCapture1.Video_CaptureDevice = new VideoCaptureSource("USB Camera");
+    videoCapture1.Mode = VideoCaptureMode.VideoPreview;
+    videoCapture1.Audio_RecordAudio = false;
+
+    await videoCapture1.StartAsync();
 }
 ```
+
+The same `OnVideoFrameBitmap` event exists on all three engines — `VideoCaptureCore`, `MediaPlayerCore`, and `VideoEditCore` — so the handler below works unchanged no matter which SDK raised it.
 
 ### Step 3: Implement the Frame Handler
 

@@ -2,6 +2,21 @@
 title: NVIDIA CUDA GPU Video Processing Blocks in C# .NET
 description: Accelerate video conversion, resizing, and data transfer with Nvidia CUDA GPU blocks in VisioForge Media Blocks SDK pipelines for .NET.
 sidebar_label: Nvidia
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - NVDataUploadBlock
+  - NVDataDownloadBlock
+  - NVVideoResizeBlock
+  - NVVideoConverterBlock
+  - NVDSDewarpBlock
+
 ---
 
 # Nvidia Blocks - VisioForge Media Blocks SDK .Net
@@ -90,9 +105,10 @@ graph LR;
 // create pipeline
 var pipeline = new MediaBlocksPipeline();
 
-// create a video source (e.g., SystemVideoSourceBlock or UniversalSourceBlock)
-var videoSource = new UniversalSourceBlock(); // Conceptual: assume this block is properly configured
-// videoSource.Filename = "input.mp4";
+// create a video source (e.g., SystemVideoSourceBlock or UniversalSourceBlock).
+// UniversalSourceBlock requires UniversalSourceSettings via the async factory:
+var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri("input.mp4"));
+var videoSource = new UniversalSourceBlock(sourceSettings);
 
 // create Nvidia data upload block
 var nvDataUpload = new NVDataUploadBlock();
@@ -267,13 +283,16 @@ var pipeline = new MediaBlocksPipeline();
 // Upload video to GPU memory
 var nvUpload = new NVDataUploadBlock();
 
-// Configure dewarp settings for fisheye correction
+// Configure dewarp settings for fisheye correction. Camera calibration and projection
+// parameters live in the DeepStream-format ConfigFile; the .NET settings object only
+// holds the top-level knobs (GPU id, memory type, source id, config-file path).
 var dewarpSettings = new NVDSDewarpSettings
 {
-    SourceType = DewarpSourceType.FisheyeCamera,
-    ProjectionType = DewarpProjectionType.PushBroom,
-    TopAngle = 180,
-    BottomAngle = 180
+    Enabled = true,
+    NumSourcePlanes = 1,
+    ConfigFile = "config_dewarper.txt",
+    GpuId = 0,
+    SourceId = 0
 };
 
 // Create dewarp block

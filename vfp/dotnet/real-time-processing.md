@@ -1,6 +1,29 @@
 ---
 title: Real-Time Video Fingerprinting From Live Streams in .NET
 description: Fingerprint live video streams in real-time using VisioForge SDK with fragment-based processing, camera capture, and IP stream monitoring in .NET.
+tags:
+  - Video Capture SDK
+  - Video Fingerprinting SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Fingerprinting
+  - RTSP
+  - MP4
+  - C#
+primary_api_classes:
+  - RealTimeFingerprintProcessor
+  - VideoFrameXBufferEventArgs
+  - VideoCaptureCoreX
+  - VFPAnalyzer
+  - VFPFingerprintSource
+
 ---
 
 # Real-Time Video Fingerprinting Guide
@@ -116,12 +139,15 @@ public class RealTimeFingerprintProcessor
             }
             else
             {
-                // Generate and save fingerprint
+                // Generate and save fingerprint. The real signature is
+                // (VFPFingerprintSource, VFPErrorCallback errorDelegate = null,
+                //  VFPProgressCallback progressDelegate = null) — there is no
+                // CancellationToken parameter.
                 var source = new VFPFingerprintSource(videoFile);
                 fp = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(
-                    source, 
-                    progressCallback: null,
-                    cancellationToken: default);
+                    source,
+                    errorDelegate: null,
+                    progressDelegate: null);
                 
                 fp.Save(fpFile);
             }
@@ -264,13 +290,17 @@ public class RealTimeFingerprintProcessor
     {
         foreach (var referenceFingerprint in _referenceFingerprints)
         {
-            // Search for matches with configurable difference threshold
-            var matches = VFPAnalyzer.Search(
-                referenceFingerprint,           // Reference fingerprint
-                liveFingerprint,                // Live fingerprint to search
-                referenceFingerprint.Duration,  // Duration to search
-                differenceLevel: 10,             // Similarity threshold (0-100)
-                multipleSearch: true);           // Find all matches
+            // Search for matches with configurable difference threshold.
+            // VFPAnalyzer.SearchAsync returns Task<List<TimeSpan>>. The sync
+            // counterpart is VFPSearch.Search (note: VFPSearch.SearchAsync does
+            // NOT exist — async lives on VFPAnalyzer). Real param names:
+            // maxDifference, allowMultipleFragments.
+            var matches = await VFPAnalyzer.SearchAsync(
+                referenceFingerprint,            // Reference fingerprint
+                liveFingerprint,                 // Live fingerprint to search
+                referenceFingerprint.Duration,   // Duration to search
+                maxDifference: 10,               // Similarity threshold (0-100)
+                allowMultipleFragments: true);   // Find all matches
             
             if (matches.Count > 0)
             {
@@ -284,7 +314,7 @@ public class RealTimeFingerprintProcessor
                         ReferenceFile = referenceFingerprint.OriginalFilename,
                         Timestamp = matchTime,
                         Position = match,
-                        Confidence = CalculateConfidence(differenceLevel: 10)
+                        Confidence = CalculateConfidence(maxDifference: 10)
                     });
                 }
             }
@@ -356,9 +386,9 @@ public class RealTimeFingerprintProcessor
         return new List<string> { "ad1.mp4", "ad2.mp4", "copyrighted_content.mp4" };
     }
 
-    private double CalculateConfidence(int differenceLevel)
+    private double CalculateConfidence(int maxDifference)
     {
-        return (100.0 - differenceLevel) / 100.0;
+        return (100.0 - maxDifference) / 100.0;
     }
 
     private void OnMatchFound(MatchResult result)

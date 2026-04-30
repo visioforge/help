@@ -1,6 +1,23 @@
 ---
 title: Primeros pasos con el SDK Video Fingerprinting .NET
 description: Guía completa de instalación y configuración del SDK Video Fingerprinting de VisioForge con configuración, licencias e instrucciones paso a paso.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - GStreamer
+  - Fingerprinting
+  - MP4
+  - MKV
+  - AVI
+  - C#
+  - NuGet
+primary_api_classes:
+  - VFPAnalyzer
+  - VFPFingerprintSource
+
 ---
 
 # Primeros Pasos con Video Fingerprinting SDK
@@ -263,7 +280,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using VisioForge.Core.VideoFingerPrinting;
-using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types; // para Size / Rect
 
 namespace VideoFingerprintingDemo
 {
@@ -376,7 +393,7 @@ Ahora vamos a comparar dos videos para determinar su similitud:
 using System;
 using System.Threading.Tasks;
 using VisioForge.Core.VideoFingerPrinting;
-using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types; // para Size / Rect
 
 class VideoComparisonDemo
 {
@@ -492,11 +509,13 @@ Agrega el paquete NuGet `VisioForge.DotNet.Core.Redist.VideoFingerprinting` a tu
   <LargeAddressAware>true</LargeAddressAware>
 </PropertyGroup>
 
-// Solución 2: Reduce resolución de video
+// Solución 2: Reduce resolución de video. VFPFingerprintSource no expone una
+// propiedad FrameRate — para reducir los FPS analizados, transcodifique la fuente
+// previamente o re-muestree upstream. Knobs disponibles: CustomResolution,
+// CustomCropSize, IgnoredAreas, StartTime / StopTime.
 var source = new VFPFingerprintSource(videoPath)
 {
-    CustomResolution = new VisioForge.Core.Types.Size(320, 240), // Resolución muy baja
-    FrameRate = 5 // Procesa menos cuadros por segundo
+    CustomResolution = new VisioForge.Core.Types.Size(320, 240) // Resolución muy baja
 };
 ```
 
@@ -588,14 +607,15 @@ static int CompareWithTolerance(VFPFingerPrint fp1, VFPFingerPrint fp2)
     return minDifference;
 }
 
-// Solución 2: Maneja videos con diferentes relaciones de aspecto
+// Solución 2: Maneja videos con diferentes relaciones de aspecto.
+// El constructor de Rect es (left, top, right, bottom) — NO width/height.
 var source = new VFPFingerprintSource(videoFilePath);
 {
-    // Ignora áreas de letterbox/pillarbox
+    // Ignora áreas letterbox/pillarbox (banda 1920x140 arriba + abajo en frame 1920x1080)
     source.IgnoredAreas.AddRange(new[]
     {
-        new Rect(0, 0, 1920, 140),      // Letterbox superior
-        new Rect(0, 940, 1920, 140)     // Letterbox inferior
+        new Rect(0, 0,    1920, 140),    // Letterbox superior: y en [0, 140)
+        new Rect(0, 940,  1920, 1080)    // Letterbox inferior: y en [940, 1080)
     });
 };
 ```
@@ -661,7 +681,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using VisioForge.Core.VideoFingerPrinting;
-using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types; // para Size / Rect
 
 namespace VideoFingerprintingDemo
 {

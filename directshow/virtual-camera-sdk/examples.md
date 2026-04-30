@@ -1,6 +1,22 @@
 ---
 title: Virtual Camera DirectShow Examples - C++, C#, VB.NET
 description: Stream video to virtual camera devices and capture from them in DirectShow. Code examples for frame rendering, real-time effects, and multi-instance setup.
+tags:
+  - Virtual Camera SDK
+  - DirectShow
+  - C++
+  - Windows
+  - WinForms
+  - Streaming
+  - Virtual Camera
+  - Webcam
+  - C#
+primary_api_classes:
+  - IBaseFilter
+  - IVFLiveVideoSource
+  - IVFVirtualCameraSink
+  - IVFVirtualCameraSource
+
 ---
 
 # Virtual Camera SDK - Code Examples
@@ -504,8 +520,18 @@ public class VirtualCameraFrameByFrame
             PixelFormat.Format24bppRgb);
         try
         {
-            // Push frame to virtual camera
-            pushSource.AddFrame(bmpData.Scan0);
+            // AddFrame takes an AVFrameData (LPStruct), NOT a raw IntPtr.
+            // Build it from the locked bitmap before pushing.
+            int frameSize = bmpData.Stride * frame.Height;
+            long durationTicks = (long)(10_000_000.0 / frameRate); // 100ns units
+            var avFrame = new AVFrameData
+            {
+                Data = bmpData.Scan0,
+                Size = frameSize,
+                StartTime = currentFrameIndex * durationTicks,
+                StopTime = (currentFrameIndex + 1) * durationTicks
+            };
+            pushSource.AddFrame(avFrame);
         }
         finally
         {
@@ -619,9 +645,10 @@ public class VirtualCameraCapture
                 throw new Exception("Unable to create Virtual Camera Source filter");
             }
 
-            // Optional: Set license
-            var cameraIntf = virtualCameraSource as IVFVirtualCameraSource;
-            cameraIntf?.set_license("TRIAL");
+            // NOTE: IVFVirtualCameraSource exposes only SetCustomVideoSize() and
+            // FixResolution(). Licensing lives on the SINK side (IVFVirtualCameraSink::set_license)
+            // because that is the filter that publishes content to the virtual camera; the source
+            // filter shown here only consumes it.
 
             // Create Enhanced Video Renderer (EVR)
             Guid CLSID_EVR = new Guid("FA10746C-9B63-4B6C-BC49-FC300EA5F256");

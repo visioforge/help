@@ -1,6 +1,25 @@
 ---
 title: ABUS IP Camera RTSP URLs and C# .NET Connection Guide
 description: ABUS TVIP, CASA, and Digi-Lan camera RTSP URL patterns for C# .NET. Stream and record with VisioForge Video Capture SDK cross-platform integration.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MP4
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to ABUS IP Camera in C# .NET

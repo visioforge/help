@@ -1,6 +1,35 @@
 ---
 title: Streaming RTMP en Vivo a YouTube y Facebook en C# .NET
 description: Transmita en vivo con codificación H.264 acelerada por hardware. Fallback automático de codificador (NVENC, QSV, AMF). Ejemplos C# con VisioForge SDK.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - RTMP
+  - H.264
+  - H.265
+  - AAC
+  - C#
+primary_api_classes:
+  - RTMPOutput
+  - NVENCH264EncoderSettings
+  - RTMPSinkSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+
 ---
 
 # Transmisión RTMP con SDK de VisioForge
@@ -183,12 +212,11 @@ catch (Exception ex)
 Asegure la disposición apropiada de recursos cuando la transmisión esté completa:
 
 ```csharp
-// En su rutina de limpieza
-if (rtmpOutput != null)
-{
-    rtmpOutput.Dispose();
-    rtmpOutput = null;
-}
+// RTMPOutput es un simple objeto de configuración y no implementa IDisposable.
+// En su lugar, detenga y libere el pipeline/core propietario.
+await core.StopAsync();
+await core.DisposeAsync();  // VideoCaptureCoreX / MediaBlocksPipeline exponen DisposeAsync
+rtmpOutput = null;
 ```
 
 ## Configuración RTMP Avanzada

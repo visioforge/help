@@ -1,6 +1,38 @@
 ---
 title: Guía de Salida de Archivos AVI para Codificación .NET
 description: Implemente salida de archivos AVI en .NET con codificación de video y audio, aceleración por hardware y soporte de contenedor multimedia multiplataforma.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Recording
+  - Encoding
+  - Editing
+  - AVI
+  - H.264
+  - H.265
+  - MJPEG
+  - AAC
+  - MP3
+  - C#
+  - NuGet
+primary_api_classes:
+  - AVIOutput
+  - VideoCaptureCoreX
+  - VOAACEncoderSettings
+  - VideoEditCoreX
+  - NVENCH264EncoderSettings
+
 ---
 
 # Salida de Archivo AVI en los SDK .NET de VisioForge
@@ -288,28 +320,14 @@ catch (UnauthorizedAccessException)
 }
 ```
 
-### Problemas de memoria con archivos grandes
+### Límite de 4 GB del contenedor AVI
 
-Para manejar grabación de archivos grandes:
+El contenedor AVI tiene un límite duro de 4 GB, y `AVIOutput` no expone una API integrada de división. Para grabaciones largas, o bien:
 
-```csharp
-// Dividir grabación en múltiples archivos cuando se alcanza el límite de tamaño
-void ConfigurarGrabacionArchivoGrande()
-{
-    var aviOutput = new AVIOutput("grabacion_parte1.avi");
-    
-    // Establecer límite de tamaño de archivo (3.5GB para mantenerse bajo el límite de 4GB de AVI)
-    aviOutput.MaxFileSize = 3.5 * 1024 * 1024 * 1024;
-    
-    // Habilitar funcionalidad de división automática
-    aviOutput.AutoSplit = true;
-    aviOutput.SplitNamingPattern = "grabacion_parte{0}.avi";
-    
-    // Aplicar a Video Capture
-    var core = new VideoCaptureCoreX();
-    core.Outputs_Add(aviOutput, true);
-}
-```
+- Detén el pipeline antes de acercarte a 4 GB e inicia uno nuevo con un `AVIOutput(siguienteNombre)` fresco, o
+- Cambia de contenedor: [MP4](mp4.md) o [MKV](mkv.md) ambos manejan grabaciones de varias horas sin este límite.
+
+Monitorea el espacio libre en disco y rota a nivel de aplicación cuando necesites captura multi-archivo.
 
 ## Dependencias requeridas
 

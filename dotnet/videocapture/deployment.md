@@ -1,6 +1,27 @@
 ---
 title: Deploy Video Capture App in .NET — NuGet and Redists
 description: Deploy VisioForge Video Capture SDK via NuGet, silent installer, or manual DLL registration. x86/x64 redistributables and cross-platform X-engine setup guide.
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - IP Camera
+  - Screen Capture
+  - MP4
+  - WebM
+  - OGG
+  - FLAC
+  - NuGet
+
 ---
 
 # Comprehensive Deployment Guide for Video Capture SDK .Net

@@ -1,6 +1,16 @@
 ---
 title: TVFVideoEdit - SDK de Edición de Video para Delphi y ActiveX
 description: Cree software de edición de video en Delphi con TVFVideoEdit - múltiples formatos, efectos, transiciones, edición de línea de tiempo y cifrado.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Editing
+primary_api_classes:
+  - TVFVideoEdit
+
 ---
 
 # TVFVideoEdit para Desarrollo en Delphi / ActiveX

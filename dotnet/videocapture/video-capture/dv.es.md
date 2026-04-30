@@ -1,6 +1,22 @@
 ---
 title: Captura de Video a Formato DV en Aplicaciones .NET
 description: Implemente captura de video DV en aplicaciones .NET con métodos de recompresión y captura directa usando ejemplos de código y mejores prácticas.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Webcam
+  - DV Camera
+  - AVI
+  - C#
+  - NuGet
+primary_api_classes:
+  - DVOutput
+  - VideoCaptureMode
+  - DirectCaptureDVOutput
+
 ---
 
 # Capturando Video a Formato DV en Aplicaciones .NET
@@ -170,7 +186,8 @@ Mientras que DV típicamente usa audio de 48 kHz, puede configurar ajustes alter
 ```cs
 dvOutput.Audio_SampleRate = 48000; // Estándar profesional
 dvOutput.Audio_Channels = 2;       // Estéreo
-dvOutput.Audio_BitsPerSample = 16; // Audio de 16-bit
+// Nota: DVOutput expone solo Audio_SampleRate + Audio_Channels;
+// la profundidad de bits está fija por el formato DV y no es configurable.
 ```
 
 ## Manejo de Errores y Solución de Problemas

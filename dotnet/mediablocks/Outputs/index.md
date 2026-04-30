@@ -2,6 +2,22 @@
 title: Media Output Blocks in C# .NET - MP4, MKV, WebM, RTMP
 description: Save video to MP4, AVI, MKV, WebM files or stream via RTMP and HLS using VisioForge Media Blocks SDK output blocks with C# code examples.
 sidebar_label: Outputs
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - MP4OutputBlock
+  - IAACEncoderSettings
+  - MediaBlocksPipeline
+  - AudioSource
+  - MediaBlockPadMediaType
+
 ---
 
 # Output Blocks - VisioForge Media Blocks SDK .Net
@@ -146,8 +162,8 @@ var videoSource = new SystemVideoSourceBlock(videoSourceSettings); // Assuming v
 // create audio source (e.g., SystemAudioSourceBlock)
 var audioSource = new SystemAudioSourceBlock(audioSourceSettings); // Assuming audioSourceSettings are configured
 
-// configure Facebook Live sink settings
-var fbSinkSettings = new FacebookLiveSinkSettings("rtmp://your-facebook-live-url/your-stream-key");
+// configure Facebook Live sink settings (ctor takes the stream key only — the SDK builds the RTMP URL)
+var fbSinkSettings = new FacebookLiveSinkSettings("your-facebook-stream-key");
 
 // configure H.264 encoder settings (use defaults or customize)
 var h264Settings = H264EncoderBlock.GetDefaultSettings();
@@ -471,8 +487,10 @@ var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
 
 // configure MP3 encoder settings
 var mp3Settings = new MP3EncoderSettings();
-// mp3Settings.Bitrate = 192; // Example: Set bitrate to 192 kbps
-// mp3Settings.Quality = MP3Quality.Best; // Example: Set quality
+// mp3Settings.Bitrate = 192;                               // bitrate in kbps
+// mp3Settings.Quality = 2.0f;                              // 0.0 (best) … 10.0 (worst)
+// mp3Settings.EncodingEngineQuality = MP3EncodingQuality.High; // Fast / Standard / High
+// mp3Settings.RateControl = MP3EncoderRateControl.CBR;     // CBR / VBR / ABR
 
 // create MP3 output block
 var mp3Output = new MP3OutputBlock("output.mp3", mp3Settings);
@@ -855,10 +873,14 @@ var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
 // configure WebM sink settings
 var webmSinkSettings = new WebMSinkSettings("output.webm");
 
-// configure VPX encoder settings (example: VP9)
-var vp9Settings = new VPXEncoderSettings(VPXEncoderMode.VP9);
-// vp9Settings.Bitrate = 2000000; // Example: 2 Mbps
-// vp9Settings.Speed = VP9Speed.Fast; // Example
+// configure VP9 encoder settings. VPXEncoderSettings is an abstract base — instantiate
+// the concrete VP9EncoderSettings (or VP8EncoderSettings). Encoder type is implicit per subclass.
+var vp9Settings = new VP9EncoderSettings
+{
+    RateControl = VPXRateControl.CBR,      // CBR / VBR / CQ / ...
+    TargetBitrate = 2000,                  // kbit/s
+    Deadline = 1,                          // 1 = realtime; higher values = slower/better quality
+};
 
 // configure Vorbis encoder settings
 var vorbisSettings = new VorbisEncoderSettings();
@@ -947,17 +969,21 @@ graph LR;
 // Assuming 'mainVideoSourceOutputPad' and 'mainAudioSourceOutputPad' are outputs from your main sources
 
 // 1. Configure Bridge Sinks in your main pipeline
-var bridgeVideoSinkSettings = new BridgeVideoSinkSettings("sep_video_bridge");
+// BridgeVideoSinkSettings/BridgeAudioSinkSettings require a channel name + format info (VideoFrameInfoX / AudioInfoX).
+var videoInfo = new VideoFrameInfoX(1920, 1080, new VideoFrameRate(30));
+var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 48000, 2);
+
+var bridgeVideoSinkSettings = new BridgeVideoSinkSettings("sep_video_bridge", videoInfo);
 var bridgeVideoSink = new BridgeVideoSinkBlock(bridgeVideoSinkSettings);
 pipeline.Connect(mainVideoSourceOutputPad, bridgeVideoSink.Input);
 
-var bridgeAudioSinkSettings = new BridgeAudioSinkSettings("sep_audio_bridge");
+var bridgeAudioSinkSettings = new BridgeAudioSinkSettings("sep_audio_bridge", audioInfo);
 var bridgeAudioSink = new BridgeAudioSinkBlock(bridgeAudioSinkSettings);
 pipeline.Connect(mainAudioSourceOutputPad, bridgeAudioSink.Input);
 
-// 2. Configure Bridge Sources for the SeparateOutputBlock's sub-pipeline
-var bridgeVideoSourceSettings = new BridgeVideoSourceSettings("sep_video_bridge");
-var bridgeAudioSourceSettings = new BridgeAudioSourceSettings("sep_audio_bridge");
+// 2. Configure Bridge Sources for the SeparateOutputBlock's sub-pipeline (must use the same channel name + matching format info as the sink)
+var bridgeVideoSourceSettings = new BridgeVideoSourceSettings("sep_video_bridge", videoInfo);
+var bridgeAudioSourceSettings = new BridgeAudioSourceSettings("sep_audio_bridge", audioInfo);
 
 // 3. Configure encoders and sink for the SeparateOutput
 var h264Settings = H264EncoderBlock.GetDefaultSettings();
@@ -970,19 +996,14 @@ var mp4SinkSettings = new MP4SinkSettings("separate_output.mp4");
 var mp4Sink = new MP4OutputBlock(mp4SinkSettings, h264Settings, aacSettings); // Using MP4OutputBlock which handles muxing.
                                                                             // Alternatively, use a raw MP4Sink and connect encoders to it.
 
-// 4. Configure SeparateOutput settings
-var separateOutputSettings = new SeparateOutput(
-    sink: mp4Sink, // mp4Sink will act as the final writer here
-    videoEncoder: videoEncoder, // This is somewhat redundant if mp4Sink is MP4OutputBlock with encoders
-    audioEncoder: audioEncoder  // Same as above. Better to use a raw sink if providing encoders separately
-);
-
-// A more typical setup if mp4Sink is just a muxer (e.g., new MP4Sink(mp4SinkRawSettings)):
-// var separateOutputSettings = new SeparateOutput(
-//     sink: rawMp4Muxer, 
-//     videoEncoder: videoEncoder, 
-//     audioEncoder: audioEncoder 
-// );
+// 4. Configure SeparateOutput settings. SeparateOutput has a parameterless ctor — populate
+// the Sink / VideoEncoder / AudioEncoder properties rather than passing them to the constructor.
+var separateOutputSettings = new SeparateOutput
+{
+    Sink = mp4Sink,
+    VideoEncoder = videoEncoder,
+    AudioEncoder = audioEncoder,
+};
 
 // 5. Create the SeparateOutputBlock (this will internally connect its components)
 var separateOutput = new SeparateOutputBlock(pipeline, separateOutputSettings, bridgeVideoSourceSettings, bridgeAudioSourceSettings);
@@ -1151,8 +1172,8 @@ var videoSource = new SystemVideoSourceBlock(videoSourceSettings); // Assuming v
 // create audio source (e.g., SystemAudioSourceBlock)
 var audioSource = new SystemAudioSourceBlock(audioSourceSettings); // Assuming audioSourceSettings are configured
 
-// configure YouTube sink settings
-var ytSinkSettings = new YouTubeSinkSettings("rtmp://a.rtmp.youtube.com/live2/YOUR-STREAM-KEY");
+// configure YouTube sink settings (ctor takes the stream key only — the SDK builds the RTMP URL)
+var ytSinkSettings = new YouTubeSinkSettings("YOUR-STREAM-KEY");
 
 // configure H.264 encoder settings (use defaults or customize per YouTube recommendations)
 var h264Settings = H264EncoderBlock.GetDefaultSettings();

@@ -1,6 +1,22 @@
 ---
 title: Eufy Security Camera RTSP Connection Guide for C# .NET
 description: Eufy camera RTSP integration for C# .NET developers. Which eufyCam, SoloCam, and Indoor Cam models support RTSP/ONVIF, plus VisioForge SDK code samples.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - C#
+
 ---
 
 # How to Connect to Eufy Security Camera in C# .NET

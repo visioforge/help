@@ -1,6 +1,16 @@
 ---
 title: Manejo de Múltiples Pistas de Audio en Video (.NET)
 description: Maneja archivos de video con múltiples pistas de audio en .NET usando técnicas de implementación, soluciones alternativas y ejemplos de código completos.
+tags:
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - VideoEditCore
+  - Windows
+  - Editing
+  - AVI
+  - NuGet
+
 ---
 
 # Trabajar con Múltiples Pistas de Audio en Archivos de Video

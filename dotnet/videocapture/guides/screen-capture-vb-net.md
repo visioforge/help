@@ -1,6 +1,31 @@
 ---
 title: Screen Capture in VB.NET - Record Desktop Video to MP4
 description: Learn how to record your desktop screen in VB.NET. Complete guide for full screen and region capture to MP4 with system audio using Video Capture SDK .Net.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Webcam
+  - Screen Capture
+  - MP4
+  - WebM
+  - AVI
+  - C#
+  - VB.NET
+  - NuGet
+primary_api_classes:
+  - ScreenCaptureD3D11SourceSettings
+  - VideoCaptureCoreX
+  - MP4Output
+  - VideoView
+  - LoopbackAudioCaptureDeviceSourceSettings
+
 ---
 
 # Screen Capture in VB.NET: Complete Guide to Record Desktop Video
@@ -275,7 +300,7 @@ Complete VB.NET sample applications are available:
 
 ### How do I record both microphone and system audio simultaneously in VB.NET screen capture?
 
-Create both sources and combine them. Set `Audio_Source` to the loopback device using `LoopbackAudioCaptureDeviceSourceSettings`, then add a microphone as a secondary audio source with `Audio_AdditionalSource`. Set `Audio_Record = True` to capture both tracks mixed into the output file. See the microphone and loopback audio sections above for the individual VB.NET code patterns.
+`VideoCaptureCoreX` exposes a single `Audio_Source`, so to mix a microphone with system-loopback audio you build a Media Blocks pipeline: one `SystemAudioSourceBlock` for the microphone, one loopback source, and an `AudioMixerBlock` that combines them before the encoder/sink. The [Media Blocks audio processing reference](../../mediablocks/AudioProcessing/index.md) covers `AudioMixerBlock` setup. Alternatively, on Windows switch to `VideoCaptureCore` (non-X) where `Additional_Audio_CaptureDevice_MixChannels` + the internal additional-devices list handle mixing directly.
 
 ### What frame rate should I use for VB.NET screen recording?
 

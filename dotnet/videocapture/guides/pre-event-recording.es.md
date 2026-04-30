@@ -1,6 +1,37 @@
 ---
 title: Grabación Pre-Evento en C# .NET con Buffer Circular
 description: Grabación pre-evento con buffer circular en C# .NET para webcam y cámaras IP. Guía completa con detección de movimiento y Video Capture SDK.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - Encoding
+  - Webcam
+  - IP Camera
+  - RTSP
+  - MP4
+  - MKV
+  - TS
+  - H.264
+  - H.265
+  - AAC
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCoreX
+  - PreEventRecordingOutput
+  - PreEventRecordingSettings
+  - DeviceEnumerator
+  - RTSPSourceSettings
+
 ---
 
 # Grabación Pre-Evento Usando C# .Net: Captura de Video con Buffer Circular
@@ -278,9 +309,9 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 
 | Constructor / Método de Fábrica | Descripción |
 | --- | --- |
-| `new PreEventRecordingOutput(settings, videoEnc, audioEnc)` | Salida MP4 con codificadores predeterminados o personalizados |
-| `PreEventRecordingOutput.CreateMPEGTS(settings, videoEnc, audioEnc)` | Salida MPEG-TS (segura ante fallos) |
-| `PreEventRecordingOutput.CreateMKV(settings, videoEnc, audioEnc)` | Salida MKV |
+| `new PreEventRecordingOutput(filename, settings, videoEnc, audioEnc)` | Salida MP4 con codificadores predeterminados o personalizados. Todos los argumentos son opcionales; use argumentos con nombre para omitir `filename`. |
+| `PreEventRecordingOutput.CreateMPEGTS(filename, settings, videoEnc, audioEnc)` | Salida MPEG-TS (segura ante fallos). Todos los argumentos son opcionales. |
+| `PreEventRecordingOutput.CreateMKV(filename, settings, videoEnc, audioEnc)` | Salida MKV. Todos los argumentos son opcionales. |
 
 ### Métodos de VideoCaptureCoreX
 

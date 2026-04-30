@@ -1,6 +1,15 @@
 ---
 title: Uninstall DirectShow Filters in Windows Using regsvr32
 description: Properly uninstall DirectShow filters with manual techniques, troubleshooting steps, and best practices for .NET multimedia applications.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - Playback
+
 ---
 
 # Remove DirectShow Filters in Windows

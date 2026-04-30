@@ -1,6 +1,31 @@
 ---
 title: Set Up Video SDKs for Uno Platform Cross-Platform .NET
 description: Add video capture, playback, and editing to Uno Platform apps. NuGet setup, VideoView integration for Windows, Android, iOS, macOS, and Linux.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - WPF
+  - Uno
+  - GStreamer
+  - Streaming
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoView
+  - UniversalSourceSettings
+  - MediaBlocksPipeline
+  - UniversalSourceBlock
+  - VideoRendererBlock
+
 ---
 
 # Integrating VisioForge SDKs with Uno Platform Applications
@@ -31,8 +56,8 @@ Add the core VisioForge packages to your Uno Platform project:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2025.12.9" />
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2025.4.10" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.*" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.*" />
 </ItemGroup>
 ```
 

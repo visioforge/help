@@ -3,6 +3,17 @@ title: VLC Source DirectShow Filter - 200+ Formats & Streams
 description: DirectShow source filter powered by libVLC for playing 200+ formats, 4K/8K video, and RTSP/HLS/UDP network streams with hardware decoding. C++, C#, Delphi.
 sidebar_label: VLC Source DirectShow Filter
 order: 9
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Editing
+primary_api_classes:
+  - IFileSourceFilter
+  - IBaseFilter
+  - IVFRegister
+
 ---
 
 # VLC Source DirectShow Filter
@@ -66,7 +77,7 @@ The filter implements these standard DirectShow interfaces for maximum compatibi
 
 // VLC Source Filter CLSID
 DEFINE_GUID(CLSID_VlcSource,
-    0x9f73dcd4, 0x2fc8, 0x4e89, 0x8f, 0xc3, 0x2d, 0xf1, 0x69, 0x3c, 0xa0, 0x3e);
+    0x3fc97748, 0x7cb6, 0x4195, 0x89, 0xde, 0x07, 0x17, 0x58, 0x2a, 0x48, 0x63);
 
 HRESULT InitializeVLCSource(HWND hVideoWindow)
 {
@@ -341,7 +352,7 @@ public class VLCSourcePlayer
 
 ```csharp
 // VLC Source Filter CLSID
-public static readonly Guid CLSID_VFVLCSource = new Guid("9F73DCD4-2FC8-4E89-8FC3-2DF1693CA03E");
+public static readonly Guid CLSID_VFVLCSource = new Guid("3FC97748-7CB6-4195-89DE-0717582A4863");
 
 // IVlcSrc Interface IID
 [Guid("77493EB7-6D00-41C5-9535-7C593824E892")]
@@ -397,12 +408,14 @@ if (vlcSrc != null)
 
 **Custom VLC Options Example:**
 
+`IVlcSrc2::SetCustomCommandLine` takes an array of UTF-8 native strings (`char* params[]` in `ivlcsrc.h`), not a managed `string[]`. The C# wrapper marshals the parameters as `IntPtr[]` of unmanaged UTF-8 buffers — allocate with `StringHelper.NativeUtf8FromString()` and free with `Marshal.FreeHGlobal()` after the call. Passing a raw `string[]` would marshal as ANSI and corrupt non-ASCII flags.
+
 ```csharp
 // Configure VLC for low-latency RTSP streaming
 var vlcSrc2 = sourceFilter as IVlcSrc2;
 if (vlcSrc2 != null)
 {
-    string[] parameters = new string[]
+    var parameters = new[]
     {
         "--network-caching=300",     // Low network buffer
         "--rtsp-tcp",                // Force TCP for RTSP
@@ -410,13 +423,34 @@ if (vlcSrc2 != null)
         "--live-caching=300"         // Low live stream buffer
     };
 
-    vlcSrc2.SetCustomCommandLine(parameters, parameters.Length);
+    // Convert managed strings to native UTF-8 IntPtr array
+    var array = new IntPtr[parameters.Length];
+    for (int i = 0; i < parameters.Length; i++)
+    {
+        array[i] = StringHelper.NativeUtf8FromString(parameters[i]);
+    }
+
+    try
+    {
+        int hr = vlcSrc2.SetCustomCommandLine(array, parameters.Length);
+        DsError.ThrowExceptionForHR(hr);
+    }
+    finally
+    {
+        // Free unmanaged UTF-8 buffers
+        for (int i = 0; i < array.Length; i++)
+        {
+            Marshal.FreeHGlobal(array[i]);
+        }
+    }
 
     // Then load the stream
     var vlcSrc = vlcSrc2 as IVlcSrc;
     vlcSrc?.SetFile("rtsp://192.168.1.100/stream");
 }
 ```
+
+See [examples.md](examples.md) for the canonical helper pattern reused across multiple scenarios (Example 4 binary key with custom flags, low-latency variants, etc.).
 
 ## Version History
 

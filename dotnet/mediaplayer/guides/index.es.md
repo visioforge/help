@@ -3,6 +3,20 @@ title: Guías de Media Player SDK .Net para reproducción de video
 description: Guías y tutoriales de Media Player SDK .Net para reproducción en bucle, rango de posición e implementación en Avalonia, MAUI y Android.
 sidebar_label: Guías Adicionales
 order: 1
+tags:
+  - Media Player SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - Editing
+primary_api_classes:
+  - MediaPlayerCoreX
+  - VideoView
 
 ---
 
@@ -20,9 +34,11 @@ Esta colección curada de guías aborda funcionalidades avanzadas específicas d
 
 ### Guías de Inicio
 
-* [**Reproductor de Video Multiplataforma — Guía Avalonia y MAUI**](play-video-dotnet.md) - Construya reproductores de video multiplataforma con Avalonia y .NET MAUI usando MediaBlocksPipeline. Cubre configuración específica de plataforma, paquetes NuGet, patrones MVVM y ejemplos de código completos para Windows, macOS, Linux, Android e iOS.
+* [**Crear un Reproductor de Video en C# (WinForms / WPF)**](video-player-csharp.md) - Guía paso a paso para construir un reproductor de video de escritorio Windows en C# con reproducción de archivos, búsqueda, pausa/reanudación, control de volumen y velocidad usando MediaPlayerCoreX.
 
-* [**Construir un Reproductor de Video en C#**](video-player-csharp.md) - Guía paso a paso para construir un reproductor de video con funciones completas en C# con reproducción de archivos, búsqueda en línea de tiempo, pausa/reanudación, control de volumen y ajuste de velocidad de reproducción usando las APIs MediaPlayerCoreX y MediaBlocksPipeline.
+* [**Reproductor Multiplataforma Avalonia**](avalonia-player.md) - Reproductor de video MVVM completo para Windows, macOS y Linux desde una sola base de código Avalonia.
+
+* [**Reproductor de Video .NET MAUI**](maui-player.md) - Distribuya una sola base de código C# a iOS, Android, macOS y Windows con el control `VideoView` de MAUI y `MediaPlayerCoreX`.
 
 * [**Construir un Reproductor de Video en VB.NET**](video-player-vb-net.md) - Guía completa de VB.NET para construir una aplicación de reproductor de video con controles de reproducción, búsqueda en línea de tiempo, ajuste de volumen y control de velocidad con ejemplos completos de código Visual Basic.
 

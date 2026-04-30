@@ -1,6 +1,22 @@
 ---
 title: Add Image Overlay with Positioning and Timing in C# .NET
 description: Implement image overlays in videos with VisioForge Video Edit SDK .NET. Step-by-step guide for positioning, transparency, and timing control.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Editing
+  - Effects
+  - C#
+primary_api_classes:
+  - ImageOverlayVideoEffect
+  - VideoEffectImageLogo
+
 ---
 
 # Adding Image Overlays to Videos in .NET
@@ -53,18 +69,21 @@ VideoEdit1.Video_Effects.Add(imageOverlay);
 For developers working with the VideoEditCore engine, here's how to achieve the same functionality:
 
 ```cs
-var effect = new VideoEffectImageLogo(true, name);
+var effect = new VideoEffectImageLogo(true, "Logo1");
 
-   // set position
-   effect.Left = 50;
-   effect.Top = 50;
+// point to the image file (or assign effect.MemoryBitmap for in-memory image data)
+effect.Filename = "logo.png";
 
-   // set alpha (0..255)
-   effect.TransparencyLevel = 127;
+// set position
+effect.Left = 50;
+effect.Top = 50;
 
-   // set start time and stop time
-   effect.StartTime = TimeSpan.FromSeconds(5);
-   effect.StopTime = TimeSpan.FromSeconds(15);
+// set global transparency level (0 = fully opaque, 255 = fully transparent)
+effect.TransparencyLevel = 127;
+
+// set start time and stop time
+effect.StartTime = TimeSpan.FromSeconds(5);
+effect.StopTime = TimeSpan.FromSeconds(15);
 
 VideoEdit1.Video_Effects_Add(effect);
 ```

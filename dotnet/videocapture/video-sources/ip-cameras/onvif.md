@@ -1,11 +1,55 @@
 ---
-title: ONVIF IP Camera Discovery and PTZ Control in C# .NET
+title: ONVIF IP Camera in C# .NET — Discovery & PTZ Control
 description: Auto-discover ONVIF cameras via WS-Discovery, control PTZ presets, and record streams using VisioForge Video Capture SDK. C# examples and troubleshooting.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - DirectShow
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - Decoding
+  - Webcam
+  - IP Camera
+  - NDI Source
+  - RTSP
+  - ONVIF
+  - NDI
+  - H.264
+  - C#
+primary_api_classes:
+  - RTSPSourceSettings
+  - ONVIFClientX
+  - VideoCaptureCoreX
+  - MediaBlocksPipeline
+  - RTSPSourceBlock
+
 ---
 
 # ONVIF IP Camera Integration - Complete Guide
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+!!! info "Cross-platform support"
+    ONVIF discovery and PTZ control work on both `VideoCaptureCore` (Windows-only, classic DirectShow) and `VideoCaptureCoreX` / Media Blocks SDK (cross-platform: **Windows, macOS, Linux, Android, and iOS** via GStreamer). See the [platform support matrix](../../../platform-matrix.md) and the [Linux deployment guide](../../../deployment-x/Ubuntu.md).
+
+!!! tip "AI coding agents: use the VisioForge MCP server"
+
+    Building this with **Claude Code**, **Cursor**, or another AI coding agent?
+    Connect to the public [VisioForge MCP server](../../../general/mcp-server-usage.md)
+    at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable
+    code samples, and deployment guides — more accurate than grepping
+    `llms.txt`. No authentication required.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Table of Contents
 
@@ -341,44 +385,29 @@ await onvifClient.ConnectAsync(cameraUrl, username, password);
 var profiles = await onvifClient.GetProfilesAsync();
 var profileToken = profiles[0].token;
 
+// The lightweight scalar overload of ContinuousMoveAsync takes pan/tilt/zoom
+// speed floats directly (range -1.0..1.0; 0 = no motion on that axis).
+
 // Pan right
-await onvifClient.ContinuousMoveAsync(
-    profileToken, 
-    new Vector2D { x = 0.5f, y = 0 }, 
-    null);
+await onvifClient.ContinuousMoveAsync(profileToken, pan: 0.5f, tilt: 0f, zoom: 0f);
 
 // Pan left
-await onvifClient.ContinuousMoveAsync(
-    profileToken, 
-    new Vector2D { x = -0.5f, y = 0 }, 
-    null);
+await onvifClient.ContinuousMoveAsync(profileToken, pan: -0.5f, tilt: 0f, zoom: 0f);
 
 // Tilt up
-await onvifClient.ContinuousMoveAsync(
-    profileToken, 
-    new Vector2D { x = 0, y = 0.5f }, 
-    null);
+await onvifClient.ContinuousMoveAsync(profileToken, pan: 0f, tilt: 0.5f, zoom: 0f);
 
 // Tilt down
-await onvifClient.ContinuousMoveAsync(
-    profileToken, 
-    new Vector2D { x = 0, y = -0.5f }, 
-    null);
+await onvifClient.ContinuousMoveAsync(profileToken, pan: 0f, tilt: -0.5f, zoom: 0f);
 
 // Zoom in
-await onvifClient.ContinuousMoveAsync(
-    profileToken, 
-    null, 
-    new Vector1D { x = 0.5f });
+await onvifClient.ContinuousMoveAsync(profileToken, pan: 0f, tilt: 0f, zoom: 0.5f);
 
 // Zoom out
-await onvifClient.ContinuousMoveAsync(
-    profileToken, 
-    null, 
-    new Vector1D { x = -0.5f });
+await onvifClient.ContinuousMoveAsync(profileToken, pan: 0f, tilt: 0f, zoom: -0.5f);
 
-// Stop movement
-await onvifClient.StopAsync(profileToken, true, true);
+// Stop movement on both axes
+await onvifClient.StopMoveAsync(profileToken, panTilt: true, zoom: true);
 ```
 
 ### PTZ Presets
@@ -396,11 +425,11 @@ foreach (var preset in presets)
 if (presets != null && presets.Length > 0)
 {
     await onvifClient.GoToPresetAsync(
-        profileToken, 
-        presets[0].token, 
-        1.0f,  // pan/tilt speed
-        1.0f,  // zoom speed
-        1.0f); // time
+        profileToken,
+        presets[0].token,
+        panSpeed:  1.0f,
+        tiltSpeed: 1.0f,
+        zoomSpeed: 1.0f);
 }
 
 // Set current position as preset
@@ -410,15 +439,15 @@ await onvifClient.SetPresetAsync(profileToken, "MyPreset");
 ### Absolute Positioning
 
 ```cs
-// Move to absolute position
+// Move to absolute pan + tilt + zoom position with per-axis speeds
 await onvifClient.AbsoluteMoveAsync(
     profileToken,
-    new PTZVector
-    {
-        PanTilt = new Vector2D { x = 0.5f, y = 0.3f },
-        Zoom = new Vector1D { x = 0.7f }
-    },
-    1.0f); // speed
+    pan:       0.5f,
+    tilt:      0.3f,
+    zoom:      0.7f,
+    panSpeed:  1.0f,
+    tiltSpeed: 1.0f,
+    zoomSpeed: 1.0f);
 ```
 
 ## Camera Actions and Capabilities
@@ -624,14 +653,14 @@ Convert your local USB/webcam into an IP stream that ONVIF clients can consume. 
 
 ### Network Considerations
 
-1. **Use TCP for reliable connections:**
+1. **Use TCP for reliable connections** (`AllowedProtocols` is a `RTSPSourceProtocol` flag-enum — set it to force a specific transport):
    ```cs
-   rtspSettings.Transport = RTSPTransport.TCP;
+   rtspSettings.AllowedProtocols = RTSPSourceProtocol.TCP;
    ```
 
-2. **Configure appropriate timeouts:**
+2. **Tune jitter-buffer latency** (there is no standalone `Timeout` property; `Latency` controls the RTSP jitter-buffer — higher values trade latency for stability over lossy networks):
    ```cs
-   rtspSettings.Timeout = TimeSpan.FromSeconds(30);
+   rtspSettings.Latency = TimeSpan.FromMilliseconds(1000);
    ```
 
 3. **Monitor for disconnections:**
@@ -741,15 +770,16 @@ foreach (var url in urls)
 
 **Solutions:**
 ```cs
-// Get stream info before playing
-var info = rtspSettings.GetInfo();
+// Read and cache stream info before starting the pipeline. ReadInfoAsync
+// probes the camera; GetInfo() returns the cached MediaFileInfo afterwards.
+var info = await rtspSettings.ReadInfoAsync();
 if (info == null)
 {
     Console.WriteLine("Cannot get stream info - check URL");
     return;
 }
 
-Console.WriteLine($"Video codec: {info.VideoStreams[0].CodecName}");
+Console.WriteLine($"Video codec: {info.VideoStreams[0].Codec}");
 Console.WriteLine($"Resolution: {info.VideoStreams[0].Width}x{info.VideoStreams[0].Height}");
 Console.WriteLine($"Bitrate: {info.VideoStreams[0].Bitrate}");
 ```
@@ -837,16 +867,16 @@ var rtspSettings = await RTSPSourceSettings.CreateAsync(
     password, 
     true);
 
-var info = rtspSettings.GetInfo();
+var info = await rtspSettings.ReadInfoAsync();
 if (info != null)
 {
     Console.WriteLine("✓ RTSP connection successful");
     Console.WriteLine($"  Video streams: {info.VideoStreams.Count}");
     Console.WriteLine($"  Audio streams: {info.AudioStreams.Count}");
-    
+
     foreach (var stream in info.VideoStreams)
     {
-        Console.WriteLine($"  Video: {stream.CodecName} {stream.Width}x{stream.Height}");
+        Console.WriteLine($"  Video: {stream.Codec} {stream.Width}x{stream.Height}");
     }
 }
 else
@@ -867,3 +897,14 @@ else
 - [RTSP Preview Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) - Preview and recording with postprocessing
 - [IP Capture Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) - Comprehensive IP camera integration with PTZ control
 - [IP Camera Brands Directory](../../../camera-brands/index.md) - RTSP URLs and connection guides for 60+ camera manufacturers
+
+### Related Documentation
+
+- [RTSP camera source configuration](rtsp.md) — `IPCameraSourceSettings` and `RTSPSourceSettings` reference with UDP/TCP tuning
+- [RTSP protocol deep-dive](../../../general/network-streaming/rtsp.md) — protocol internals and streaming architecture
+- [NDI source integration](ndi.md) — professional video-over-IP alternative to ONVIF/RTSP
+- [IP camera live preview tutorial](../../video-tutorials/ip-camera-preview.md) — video walkthrough with a minimal C# example
+- [Record RTSP to MP4 tutorial](../../video-tutorials/ip-camera-capture-mp4.md) — capture ONVIF-discovered cameras to file
+- [Media Blocks RTSP player](../../../mediablocks/Guides/rtsp-player-csharp.md) — pipeline-based RTSP playback
+- [Multi-camera RTSP grid (NVR wall)](../../../mediablocks/Guides/multi-camera-rtsp-grid.md) — 4×4 live preview wall for WPF and MAUI, with ONVIF-discovered cameras
+- [RTSP reconnection and fallback switch](../../../general/network-sources/reconnection-and-fallback.md) — handle camera drops with disconnect events and automatic `FallbackSwitch`

@@ -3,6 +3,22 @@ title: Codificadores de Video en C# .NET - H264, HEVC, AV1, VP9
 description: Codifique video a H.264, HEVC, AV1 y VP9 con aceleración GPU usando VisioForge Media Blocks SDK. Bitrate, calidad y códecs configurables.
 sidebar_label: Codificadores de Video
 order: 18
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - UniversalSourceBlock
+  - MediaBlocksPipeline
+  - UniversalSourceSettings
+  - MediaBlockPadMediaType
+  - MP4SinkBlock
+
 ---
 
 # Codificación de video
@@ -172,13 +188,17 @@ Salida | Video comprimido | 1
 #### CustomVideoEncoderSettings
 
 ```csharp
-public class CustomVideoEncoderSettings
+public class CustomVideoEncoderSettings : IVideoEncoder
 {
-    // Nombre del elemento codificador GStreamer (ej. "x264enc", "nvh264enc")
-    public string EncoderName { get; set; }
-    
-    // Diccionario de propiedades específicas del codificador
-    public Dictionary<string, object> Properties { get; set; }
+    // Nombre del elemento codificador GStreamer (ej. "x264enc", "nvh264enc").
+    // Se establece mediante el constructor; el setter es privado.
+    public string Name { get; private set; }
+
+    // Diccionario de propiedades específicas del codificador (setter privado —
+    // utilice el indexador / Add para poblarlo).
+    public Dictionary<string, object> Properties { get; private set; }
+
+    public CustomVideoEncoderSettings(string name);
 }
 ```
 
@@ -198,16 +218,12 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Configurar codificador personalizado (ejemplo con x264enc)
-var customSettings = new CustomVideoEncoderSettings
-{
-    EncoderName = "x264enc",
-    Properties = new Dictionary<string, object>
-    {
-        { "bitrate", 2000 },
-        { "speed-preset", "medium" }
-    }
-};
+// Configurar codificador personalizado (ejemplo con x264enc — Name se establece a través
+// del constructor; pueble el diccionario Properties mediante su indexador, ya que la
+// propiedad tiene un setter privado).
+var customSettings = new CustomVideoEncoderSettings("x264enc");
+customSettings.Properties["bitrate"] = 2000;
+customSettings.Properties["speed-preset"] = "medium";
 var customEncoder = new CustomVideoEncoderBlock(customSettings);
 pipeline.Connect(fileSource.VideoOutput, customEncoder.Input);
 
@@ -241,13 +257,15 @@ Salida | GIF | 1
 ```csharp
 public class GIFEncoderSettings
 {
-    // Tasa de fotogramas para el GIF de salida
-    public VideoFrameRate FrameRate { get; set; }
-    
-    // Habilitar tramado para mejor representación de color
-    public bool Dither { get; set; }
+    // Repeticiones adicionales: -1 = bucle infinito, 0..n = repeticiones finitas. Default 0.
+    public uint Repeat { get; set; }
+
+    // Velocidad de codificación [1..30]. Mayor = más rápido (menor calidad). Default 10.
+    public int Speed { get; set; }
 }
 ```
+
+> La tasa de fotogramas de salida de un `GIFEncoderBlock` sigue las caps upstream — establezca la tasa de fotogramas deseada en la fuente (o inserte un filtro de tasa / `VideoFrameRateBlock` upstream) en lugar de en `GIFEncoderSettings`.
 
 ### El pipeline de muestra
 
@@ -267,8 +285,8 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 
 var gifSettings = new GIFEncoderSettings
 {
-    FrameRate = new VideoFrameRate(10, 1), // 10 fps para tamaño de archivo más pequeño
-    Dither = true
+    Repeat = 0,    // 0 = sin bucles extra; -1 = bucle infinito
+    Speed  = 10    // [1..30] — mayor = codificación más rápida (menor calidad)
 };
 var gifEncoder = new GIFEncoderBlock(gifSettings, "output.gif");
 pipeline.Connect(fileSource.VideoOutput, gifEncoder.Input);
@@ -294,7 +312,7 @@ Codificador de video H264 GPUs Nvidia.
 
 **Plataformas:** Windows, Linux, macOS.
 
-#### AMFHEVCEncoderSettings
+#### AMFH264EncoderSettings
 
 Codificador de video H264 GPUs AMD/ATI.
 
@@ -732,9 +750,9 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 var mpeg2EncoderBlock = new MPEG2EncoderBlock(new MPEG2VideoEncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, mpeg2EncoderBlock.Input);
 
-// Ejemplo: Usando un MPGSinkBlock para archivos .mpg o .ts
-var mpgSinkBlock = new MPGSinkBlock(new MPGSinkSettings(@"output.mpg"));
-pipeline.Connect(mpeg2EncoderBlock.Output, mpgSinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+// Ejemplo: Usando un MPEGTSSinkBlock para archivos .ts
+var mpegtsSinkBlock = new MPEGTSSinkBlock(new MPEGTSSinkSettings(@"output.ts"));
+pipeline.Connect(mpeg2EncoderBlock.Output, mpegtsSinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
 
 await pipeline.StartAsync();
 ```
@@ -806,11 +824,15 @@ Salida | PNG | 1
 ```csharp
 public class PNGEncoderSettings
 {
-    // Nivel de compresión (0-9, mayor = mejor compresión pero más lento)
-    public int CompressionLevel { get; set; }
-    
-    // Tipo de filtro PNG para compresión óptima
-    public PNGFilterType FilterType { get; set; }
+    // Enum de nivel de compresión (None / Minimal / Low / Light / Medium / MediumHigh /
+    // High / VeryHigh / Maximum). Default MediumHigh.
+    public PNGEncoderCompressionLevel CompressionLevel { get; set; }
+
+    // Filtro de pre-compresión (None / Sub / Up / Average / Paeth / All). Default None.
+    public PNGEncoderFilterType Filter { get; set; }
+
+    // Si se escriben chunks info. Default true.
+    public bool WriteInfo { get; set; }
 }
 ```
 
@@ -832,7 +854,8 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 
 var pngSettings = new PNGEncoderSettings
 {
-    CompressionLevel = 6 // Compresión equilibrada
+    CompressionLevel = PNGEncoderCompressionLevel.MediumHigh, // equilibrado
+    Filter           = PNGEncoderFilterType.None
 };
 var pngEncoder = new PNGEncoderBlock(pngSettings, "frame.png");
 pipeline.Connect(fileSource.VideoOutput, pngEncoder.Input);
@@ -938,6 +961,3 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux.
 
-## Consideraciones Generales de Configuraciones de Video
-
-Mientras que las clases de configuraciones de codificador específicas proporcionan control detallado, algunos conceptos generales o enumeraciones podrían ser relevantes a través de diferentes codificadores o para entender opciones de calidad de video.

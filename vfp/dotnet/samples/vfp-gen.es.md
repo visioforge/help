@@ -1,6 +1,16 @@
 ---
 title: Generador de huellas de video - herramienta CLI vfp_gen .NET
 description: Genere huellas de video desde línea de comandos usando la herramienta CLI vfp_gen de VisioForge para .NET con modos de búsqueda y comparación.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+  - C#
+
 ---
 
 # vfp_gen - Generador de Huellas de Video

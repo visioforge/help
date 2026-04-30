@@ -1,6 +1,15 @@
-﻿---
-title: Overlays de Texto Dinámicos en Frames de Video
-description: Cree múltiples superposiciones de texto en frames de video con el evento OnVideoFrameBuffer para propiedades personalizables y actualizaciones dinámicas en .NET.
+---
+title: Superposiciones de Texto Dinámico en Video con .NET y C#
+description: Cree múltiples superposiciones de texto en video con OnVideoFrameBuffer, propiedades personalizables y actualizaciones dinámicas en .NET.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - C#
+primary_api_classes:
+  - VideoFrameBufferEventArgs
 ---
 
 # Implementación de Superposiciones de Texto Dinámicas en Frames de Video en .NET
@@ -59,7 +68,7 @@ El siguiente ejemplo de código muestra una implementación directa para dibujar
             // dibujar texto en imagen
             if (logoImage == null)
             {
-                logoImage = new Bitmap(e.Frame.Width, e.Frame.Height, PixelFormat.Format32bppArgb);
+                logoImage = new Bitmap(e.Frame.Info.Width, e.Frame.Info.Height, PixelFormat.Format32bppArgb);
 
                 using (var grf = Graphics.FromImage(logoImage))
                 {
@@ -80,7 +89,7 @@ El siguiente ejemplo de código muestra una implementación directa para dibujar
                     // texto 2
                     var brush2 = new SolidBrush(Color.Red);
                     var font2 = new Font("Times New Roman", 35, FontStyle.Strikeout);
-                    grf.DrawString(text2, font2, brush2, e.Frame.Width / 2, e.Frame.Height / 2);
+                    grf.DrawString(text2, font2, brush2, e.Frame.Info.Width / 2, e.Frame.Info.Height / 2);
 
                     // texto 3
                     var brush3 = new SolidBrush(Color.Green);
@@ -105,12 +114,12 @@ El siguiente ejemplo de código muestra una implementación directa para dibujar
                         logoImageBuffer = Marshal.AllocCoTaskMem(logoImageBufferSize);
                 }
 
-                ImageHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
+                BitmapHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
                         PixelFormat.Format32bppArgb);
             }
 
             // Dibujar imagen
-            FastImageProcessing.Draw_RGB32OnRGB24(logoImageBuffer, logoImage.Width, logoImage.Height, e.Frame.Data, e.Frame.Width, e.Frame.Height, 0, 0);
+            FastImageProcessing.Draw_RGB32OnRGB24(logoImageBuffer, logoImage.Width, logoImage.Height, e.Frame.Data, e.Frame.Info.Width, e.Frame.Info.Height, 0, 0);
 
             e.UpdateData = true;
         }
@@ -122,7 +131,7 @@ El siguiente ejemplo de código muestra una implementación directa para dibujar
 2. **Configuración de Gráficos**: Configuramos anti-aliasing, interpolación y suavizado para renderizado de texto de alta calidad
 3. **Configuración de Texto**: Cada elemento de texto obtiene su propia fuente, color y posición
 4. **Gestión de Memoria**: Asignamos memoria no administrada para el búfer de bitmap
-5. **Conversión de Bitmap a Búfer**: Convertimos el bitmap a un búfer de memoria usando `ImageHelper.BitmapToIntPtr`
+5. **Conversión de Bitmap a Búfer**: Convertimos el bitmap a un búfer de memoria usando `BitmapHelper.BitmapToIntPtr`
 6. **Superposición de Búfer**: Dibujamos el búfer RGBA en el frame de video usando `FastImageProcessing.Draw_RGB32OnRGB24`
 7. **Bandera de Actualización de Frame**: Establecemos `e.UpdateData = true` para informar al SDK que los datos del frame han sido modificados
 
@@ -198,7 +207,7 @@ Para aplicaciones más interactivas, podrías necesitar actualizar las superposi
                 // dibujar texto en imagen
                 if (logoImage == null)
                 {
-                    logoImage = new Bitmap(e.Frame.Width, e.Frame.Height, PixelFormat.Format32bppArgb);
+                    logoImage = new Bitmap(e.Frame.Info.Width, e.Frame.Info.Height, PixelFormat.Format32bppArgb);
 
                     using (var grf = Graphics.FromImage(logoImage))
                     {
@@ -215,7 +224,7 @@ Para aplicaciones más interactivas, podrías necesitar actualizar las superposi
                         grf.DrawString(text1, font1, brush1, 100, 100);
 
                         // texto 2
-                        grf.DrawString(text2, font2, brush2, e.Frame.Width / 2, e.Frame.Height / 2);
+                        grf.DrawString(text2, font2, brush2, e.Frame.Info.Width / 2, e.Frame.Info.Height / 2);
 
                         // texto 3
                         grf.DrawString(text3, font3, brush3, 200, 200);
@@ -227,31 +236,31 @@ Para aplicaciones más interactivas, podrías necesitar actualizar las superposi
                 {
                     if (logoImageBuffer == IntPtr.Zero)
                     {
-                        logoImageBufferSize = ImageHelper.GetStrideRGB32(e.Frame.Width) * e.Frame.Height;
+                        logoImageBufferSize = ImageHelper.GetStrideRGB32(e.Frame.Info.Width) * e.Frame.Info.Height;
                         logoImageBuffer = Marshal.AllocCoTaskMem(logoImageBufferSize);
                     }
                     else
                     {
-                        logoImageBufferSize = ImageHelper.GetStrideRGB32(e.Frame.Width) * e.Frame.Height;
+                        logoImageBufferSize = ImageHelper.GetStrideRGB32(e.Frame.Info.Width) * e.Frame.Info.Height;
 
                         Marshal.FreeCoTaskMem(logoImageBuffer);
                         logoImageBuffer = Marshal.AllocCoTaskMem(logoImageBufferSize);
                     }
 
-                    ImageHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
+                    BitmapHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
                         PixelFormat.Format32bppArgb);
                 }
 
                 if (textUpdate)
                 {
                     textUpdate = false;
-                    ImageHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
+                    BitmapHelper.BitmapToIntPtr(logoImage, logoImageBuffer, logoImage.Width, logoImage.Height,
                         PixelFormat.Format32bppArgb);
                 }
 
                 // Dibujar imagen
-                FastImageProcessing.Draw_RGB32OnRGB24(logoImageBuffer, logoImage.Width, logoImage.Height, e.Frame.Data, e.Frame.Width,
-                e.Frame.Height, 0, 0);
+                FastImageProcessing.Draw_RGB32OnRGB24(logoImageBuffer, logoImage.Width, logoImage.Height, e.Frame.Data, e.Frame.Info.Width,
+                e.Frame.Info.Height, 0, 0);
 
                 e.UpdateData = true;
             }

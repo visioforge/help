@@ -1,6 +1,32 @@
 ---
 title: FLAC Lossless Audio Encoding and Recording in C# .NET
 description: Lossless recording with quality levels 0-9, sample rates up to 655 kHz, 8-channel surround, and LPC optimization. VisioForge SDK C# code examples.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - FLAC
+  - C#
+primary_api_classes:
+  - FLACOutput
+  - FLACEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - CustomAudioProcessor
+
 ---
 
 # FLAC encoder and output
@@ -134,23 +160,25 @@ The `FLACOutput` class provides functionality for configuring FLAC (Free Lossles
 // Create a new FLAC output instance
 var flacOutput = new FLACOutput("output.flac");
 
-// Configure FLAC encoder settings
-flacOutput.Audio.CompressionLevel = 5; // Example setting
+// Configure FLAC encoder settings (Quality: 0 fastest .. 8 highest, 9 insane)
+flacOutput.Audio.Quality = 5;
 ```
 
 #### Filename
 
-- Set the output filename during initialization or using the property
-- Can also be accessed/modified using `GetFilename()` and `SetFilename()` methods
+- Set the output filename during initialization or via the `Filename` property
+- Or call `GetFilename()` / `SetFilename(string)` methods (equivalent — they back the `Filename` property)
 
 ```csharp
 // Set during initialization
 var flacOutput = new FLACOutput("audio_output.flac");
-```
 
-```csharp
-// Or using the property
+// Or via the property
 flacOutput.Filename = "new_output.flac";
+
+// Or via the method accessors
+flacOutput.SetFilename("final.flac");
+string currentPath = flacOutput.GetFilename();  // "final.flac"
 ```
 
 #### Audio Settings
@@ -224,7 +252,7 @@ if (!FLACEncoderSettings.IsAvailable())
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-The [FLACOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.FLACOutput.html) class provides Windows-only settings for the FLAC encoder. This class implements both `IVideoEditBaseOutput` and `IVideoCaptureBaseOutput` interfaces, making it suitable for both video editing and capture scenarios.
+The [FLACOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.FLACOutput.html) class provides Windows-only settings for the FLAC encoder. This class implements both `IVideoEditBaseOutput` and `IVideoCaptureBaseOutput` interfaces, making it suitable for both video editing and capture scenarios.
 
 ### Properties
 

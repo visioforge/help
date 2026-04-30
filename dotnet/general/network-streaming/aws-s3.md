@@ -1,6 +1,31 @@
 ---
 title: Streaming Video and Audio to Amazon S3 in .NET SDK
 description: Implement AWS S3 video and audio streaming in .NET with configuration, encoding settings, error handling, and best practices for media output.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - C#
+primary_api_classes:
+  - AWSS3Output
+  - AWSS3SinkSettings
+  - IVideoEncoder
+  - IAudioEncoder
+  - IMediaBlockSettings
+
 ---
 
 # AWS S3 Output

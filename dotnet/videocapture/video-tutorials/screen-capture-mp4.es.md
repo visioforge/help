@@ -1,7 +1,33 @@
 ---
-title: Captura de Pantalla a MP4 en C# — Video Capture SDK .NET
+title: Grabación de Pantalla en C# .NET — MP4, GPU, Multi-Monitor
 description: Grabación pantalla completa, región y multi-monitor. Codificación GPU (NVENC/QSV/AMF), audio loopback, resaltado de cursor. Ejemplos API legacy y moderna.
 sidebar_label: Captura de Pantalla a MP4
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - Windows
+  - WinForms
+  - GStreamer
+  - Capture
+  - Encoding
+  - Webcam
+  - Screen Capture
+  - MP4
+  - AVI
+  - H.264
+  - H.265
+  - C#
+  - NuGet
+primary_api_classes:
+  - MP4Output
+  - ScreenCaptureSourceSettings
+  - ScreenCaptureD3D11SourceSettings
+  - VideoCaptureCore
+  - AudioCaptureSource
+
 ---
 
 # Captura de pantalla a archivo MP4
@@ -137,7 +163,20 @@ var mp4Output = new MP4Output(
     new AMFH264EncoderSettings());
 ```
 
-Los codificadores HEVC (H.265) también están disponibles para mejor compresión a la misma calidad: `NVENCHEVCEncoderSettings`, `QSVHEVCEncoderSettings`, `AMFHEVCEncoderSettings`. Si la codificación por hardware no está disponible, el SDK recurre automáticamente al codificador de software `OpenH264EncoderSettings` cuando usa el constructor predeterminado `new MP4Output(filename)`.
+Los codificadores HEVC (H.265) también están disponibles para mejor compresión a la misma calidad: `NVENCHEVCEncoderSettings`, `QSVHEVCEncoderSettings`, `AMFHEVCEncoderSettings`.
+
+!!! note "Nota de motor: `MP4Output` y el motor X"
+
+    La clase `MP4Output` mostrada en esta sección refiere al `MP4Output`
+    del **motor X** (`VisioForge.Core.Types.X.Output.MP4Output`), que
+    acepta tipos `*EncoderSettings` multiplataforma
+    (`NVENCH264EncoderSettings`, `OpenH264EncoderSettings`, etc.).
+    Cuando la codificación por hardware no está disponible en el motor X
+    y usa el ctor sin parámetros `new MP4Output(filename)`, el SDK
+    selecciona automáticamente un codificador de software disponible. El
+    motor clásico DirectShow solo-Windows tiene su propio
+    `VisioForge.Core.Types.Output.MP4Output` con una forma de settings
+    diferente — no los mezcle.
 
 ## Captura de Pantalla con Media Blocks SDK
 

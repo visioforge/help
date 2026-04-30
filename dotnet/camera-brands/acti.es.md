@@ -1,6 +1,26 @@
 ---
 title: Cámara IP ACTi - URL RTSP y Guía de Conexión C# .NET
 description: Conecta cámaras IP ACTi en C# .NET con patrones de URL RTSP y ejemplos de código para series A, B, D, E y modelos antiguos ACM, KCM, TCM.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP ACTi en C# .NET

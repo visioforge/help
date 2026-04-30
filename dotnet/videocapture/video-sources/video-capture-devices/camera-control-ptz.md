@@ -1,6 +1,15 @@
 ---
 title: Camera Pan, Tilt, Zoom Programmatic Control in C# .NET
 description: Control Pan, Tilt, Zoom, Exposure, Iris, and Focus programmatically using VisioForge Video Capture SDK. Async C# API with hardware camera support.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - C#
+  - NuGet
+
 ---
 
 # Advanced Camera Control and PTZ Implementation
@@ -40,32 +49,28 @@ You can reference the Main Demo source code for a complete implementation exampl
 First, query the camera to determine the supported ranges and default values for each control parameter:
 
 ```cs
-// Initialize variables to store camera parameter information
-int max;
-int defaultValue;
-int min;
-int step;
-CameraControlFlags flags;
-
-// Query the camera for the supported range of the Zoom parameter
-if (await VideoCapture1.Video_CaptureDevice_CameraControl_GetRangeAsync(
-    CameraControlProperty.Zoom, out min, out max, out step, out defaultValue, out flags))
+// Query the camera for the supported range of the Zoom parameter.
+// GetRangeAsync returns a VideoCaptureDeviceCameraControlRanges object
+// (or null if the device doesn't support this property).
+var ranges = await VideoCapture1.Video_CaptureDevice_CameraControl_GetRangeAsync(
+    CameraControlProperty.Zoom);
+if (ranges != null)
 {
     // Configure slider control with the camera's supported range
-    tbCCZoom.Minimum = min;
-    tbCCZoom.Maximum = max;
-    tbCCZoom.SmallChange = step;
-    tbCCZoom.Value = defaultValue;
+    tbCCZoom.Minimum = ranges.Min;
+    tbCCZoom.Maximum = ranges.Max;
+    tbCCZoom.SmallChange = ranges.Step;
+    tbCCZoom.Value = ranges.Default;
 
     // Update UI labels with range information
-    lbCCZoomMin.Text = "Min: " + Convert.ToString(min);
-    lbCCZoomMax.Text = "Max: " + Convert.ToString(max);
-    lbCCZoomCurrent.Text = "Current: " + Convert.ToString(defaultValue);
+    lbCCZoomMin.Text = "Min: " + ranges.Min;
+    lbCCZoomMax.Text = "Max: " + ranges.Max;
+    lbCCZoomCurrent.Text = "Current: " + ranges.Default;
 
     // Set control mode checkboxes based on camera capabilities
-    cbCCZoomManual.Checked = (flags & CameraControlFlags.Manual) == CameraControlFlags.Manual;
-    cbCCZoomAuto.Checked = (flags & CameraControlFlags.Auto) == CameraControlFlags.Auto;
-    cbCCZoomRelative.Checked = (flags & CameraControlFlags.Relative) == CameraControlFlags.Relative;
+    cbCCZoomManual.Checked = (ranges.Flags & CameraControlFlags.Manual) == CameraControlFlags.Manual;
+    cbCCZoomAuto.Checked = (ranges.Flags & CameraControlFlags.Auto) == CameraControlFlags.Auto;
+    cbCCZoomRelative.Checked = (ranges.Flags & CameraControlFlags.Relative) == CameraControlFlags.Relative;
 }
 ```
 
@@ -98,8 +103,11 @@ if (cbCCZoomRelative.Checked)
     flags = flags | CameraControlFlags.Relative;
 }
 
-// Apply the new zoom value with the specified control flags
-await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(CameraControlProperty.Zoom, tbCCZoom.Value, flags);
+// Apply the new zoom value with the specified control flags.
+// SetAsync takes a VideoCaptureDeviceCameraControlValue that bundles value + flags.
+await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
+    CameraControlProperty.Zoom,
+    new VideoCaptureDeviceCameraControlValue(tbCCZoom.Value, flags));
 ```
 
 ## Error Handling and Best Practices

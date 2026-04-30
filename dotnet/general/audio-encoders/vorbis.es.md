@@ -1,6 +1,34 @@
 ---
 title: Guía de Codificación de Audio Vorbis para Desarrollo .NET
 description: Implemente codificación de audio Vorbis en .NET con optimización de calidad, soporte multiplataforma y compresión eficiente para streaming.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - WebM
+  - OGG
+  - Vorbis
+  - C#
+primary_api_classes:
+  - OGGVorbisOutput
+  - VorbisEncoderSettings
+  - WebMOutput
+  - VideoCaptureCore
+  - VideoEditCore
+
 ---
 
 # Codificación de Audio Vorbis para Desarrolladores .NET
@@ -13,33 +41,23 @@ La suite de SDK de VisioForge ofrece poderosas capacidades de codificación de a
 
 Esta guía le ayudará a navegar las varias opciones de implementación de Vorbis disponibles en el ecosistema del SDK de VisioForge, proporcionando ejemplos de código prácticos y estrategias de optimización para diferentes casos de uso.
 
-## Codificador Vorbis multiplataforma
+## Opciones del codificador Vorbis
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
-
-Las implementaciones de Vorbis de VisioForge funcionan en múltiples plataformas, dándole flexibilidad en entornos de implementación. Los componentes multiplataforma están específicamente diseñados para funcionar de manera consistente a través de diferentes sistemas operativos.
+El SDK expone tres APIs distintas para codificación Vorbis. Dos son Windows-clásicas (`VideoCaptureCore` / `VideoEditCore`) y una es multiplataforma (`VideoCaptureCoreX` / `VideoEditCoreX` / `MediaBlocksPipeline`).
 
 ### Opciones de implementación
 
-El SDK proporciona tres enfoques distintos para codificación Vorbis, cada uno adaptado a escenarios de desarrollo específicos:
+#### 1. Contenedor WebM con audio Vorbis (Windows clásico)
 
-#### 1. Contenedor WebM con audio Vorbis
+La clase [`WebMOutput`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.WebMOutput.html) en el espacio de nombres `VisioForge.Core.Types.Output` encapsula audio Vorbis dentro del formato WebM. Corre solo en Windows (DirectShow).
 
-La implementación de [salida WebM](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WebMOutput.html) encapsula audio Vorbis dentro del formato de contenedor WebM. Esta opción es particularmente adecuada para aplicaciones basadas en web y proyectos de video HTML5 donde se requiere amplia compatibilidad con navegadores.
+#### 2. Salida OGG Vorbis dedicada (Windows clásico)
 
-**Disponibilidad:** Solo plataformas Windows
+La clase [`OGGVorbisOutput`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.OGGVorbisOutput.html) en el espacio de nombres `VisioForge.Core.Types.Output` proporciona control detallado sobre modos VBR/bitrate para Vorbis en contenedor OGG. Solo Windows.
 
-#### 2. Salida OGG Vorbis dedicada
+#### 3. VorbisEncoderSettings flexible (multiplataforma)
 
-Para aplicaciones centradas en audio, la [salida OGG Vorbis](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.OGGVorbisOutput.html) proporciona un codificador especializado diseñado específicamente para el formato de contenedor OGG. Esta implementación ofrece control más detallado sobre los parámetros de codificación de audio.
-
-**Disponibilidad:** Solo plataformas Windows
-
-#### 3. VorbisEncoderSettings flexible
-
-La implementación [VorbisEncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VorbisEncoderSettings.html) proporciona el enfoque más versátil, soportando múltiples formatos de contenedor y ofreciendo extensas opciones de configuración. Esta es la opción recomendada para proyectos de desarrollo multiplataforma.
-
-**Disponibilidad:** Todas las plataformas soportadas
+La clase [`VorbisEncoderSettings`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VorbisEncoderSettings.html) en el espacio de nombres `VisioForge.Core.Types.X.AudioEncoders` maneja la codificación Vorbis en los motores X (`VideoCaptureCoreX`, `VideoEditCoreX`) y Media Blocks (`VorbisEncoderBlock`). Es la ruta recomendada para proyectos multiplataforma.
 
 ### Estrategias de control de tasa
 
@@ -155,10 +173,10 @@ Para escenarios con limitaciones específicas de ancho de banda o tamaños de ar
     // Establecer modo de control de tasa a basado en tasa de bits
     vorbisEncoder.RateControl = VorbisEncoderRateControl.Bitrate;
     
-    // Configurar parámetros de tasa de bits (todos los valores en Kbps)
+    // Configurar parámetros de tasa de bits (todos los valores en Kbps; rango válido 16-240)
     vorbisEncoder.Bitrate = 192;      // Tasa de bits promedio objetivo
     vorbisEncoder.MinBitrate = 128;   // Tasa de bits mínima permitida
-    vorbisEncoder.MaxBitrate = 256;   // Tasa de bits máxima permitida
+    vorbisEncoder.MaxBitrate = 240;   // Tasa de bits máxima permitida
     
     // Estas configuraciones son ideales para aplicaciones que requieren
     // tamaños de archivo predecibles o ancho de banda de streaming

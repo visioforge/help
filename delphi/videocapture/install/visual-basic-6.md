@@ -1,6 +1,16 @@
 ---
 title: Installing TVFVideoCapture in VB6 for Delphi Users
 description: Integrate TVFVideoCapture ActiveX control in Visual Basic 6 with x86 compatibility and full video capture feature access.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Integrating TVFVideoCapture with Visual Basic 6

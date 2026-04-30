@@ -1,6 +1,20 @@
 ---
 title: Register DirectShow Filters: regsvr32, C++, and C# Methods
 description: Register VisioForge DirectShow filters using manual regsvr32, programmatic methods, and installer automation with troubleshooting tips.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Encoding
+  - Mixing
+  - MP4
+  - H.264
+  - AAC
+  - C#
+primary_api_classes:
+  - FFMPEGSource
+  - IBaseFilter
+
 ---
 
 # DirectShow Filter Registration Guide

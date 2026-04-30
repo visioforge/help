@@ -1,6 +1,24 @@
 ---
 title: LILIN IP Camera RTSP URL Patterns and C# .NET Setup
 description: LILIN LR, Z, D, S, and P series camera RTSP URL patterns for C# .NET. Includes snapshot endpoints and VisioForge SDK streaming integration code.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to LILIN IP Camera in C# .NET

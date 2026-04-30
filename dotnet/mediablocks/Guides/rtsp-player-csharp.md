@@ -1,11 +1,50 @@
 ---
 title: RTSP Stream Viewer and IP Camera Player in C# .NET
 description: Build an RTSP stream viewer and IP camera player in C# with VisioForge Media Blocks SDK — live preview, ONVIF discovery, and passthrough recording.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+  - Recording
+  - Encoding
+  - Decoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - UDP
+  - MP4
+  - TS
+  - AAC
+  - C#
+  - NuGet
+primary_api_classes:
+  - RTSPSourceSettings
+  - RTSPSourceBlock
+  - MediaBlocksPipeline
+  - VideoRendererBlock
+  - RTSPRAWSourceBlock
+
 ---
 
 # RTSP Stream Viewer and IP Camera Player in C#
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+!!! tip "AI coding agents: use the VisioForge MCP server"
+
+    Building this with **Claude Code**, **Cursor**, or another AI coding agent?
+    Connect to the public [VisioForge MCP server](../../general/mcp-server-usage.md)
+    at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable
+    code samples, and deployment guides — more accurate than grepping
+    `llms.txt`. No authentication required.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Introduction
 
@@ -300,5 +339,7 @@ Use MP4 for standard playback compatibility across devices and players. Use MPEG
 - [RTSP Protocol Configuration](../../videocapture/video-sources/ip-cameras/rtsp.md) — UDP vs TCP, buffer settings, low-latency tuning
 - [IP Camera Capture to MP4](../../videocapture/video-tutorials/ip-camera-capture-mp4.md) — recording with re-encoding tutorial
 - [ONVIF Capture with Postprocessing](onvif-capture-with-postprocessing.md) — resize, effects, face blur during recording
+- [Multi-camera RTSP grid (NVR wall)](multi-camera-rtsp-grid.md) — scale from a single player to a 4×4 live preview wall on WPF or MAUI
+- [RTSP reconnection and fallback switch](../../general/network-sources/reconnection-and-fallback.md) — handle camera drops with reconnect events and declarative `FallbackSwitch`
 - [Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — RTSP preview, capture, and multi-view demos
 - [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads

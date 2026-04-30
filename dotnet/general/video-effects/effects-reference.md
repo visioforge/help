@@ -2,6 +2,35 @@
 title: Video Effects SDK Reference: Filters, Overlays, and More
 description: Comprehensive reference guide for all video effects available in VisioForge .NET SDKs including Classic (Windows-only) and Cross-platform effects.
 sidebar_label: Effects Reference
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaPlayerCoreX
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Playback
+  - Editing
+  - Effects
+  - Decklink
+  - NDI
+  - GIF
+  - C#
+primary_api_classes:
+  - VideoEffect
+  - VideoEffectGrayscale
+  - GPUVideoEffect
+  - GrayscaleVideoEffect
+  - GaussianBlurVideoEffect
+
 ---
 
 # Complete Video Effects Reference
@@ -178,22 +207,19 @@ The following artistic effects are available exclusively in the cross-platform i
 | Effect | Description |
 |--------|-------------|
 | FishEyeVideoEffect | Fish-eye lens distortion effect. |
-| TwirlVideoEffect | Twirl/swirl distortion effect. |
-| BulgeVideoEffect | Bulge/magnification distortion. |
+| GLTwirlVideoEffect | Twirl/swirl distortion effect (OpenGL). |
+| GLBulgeVideoEffect | Bulge/magnification distortion (OpenGL). |
 | StretchVideoEffect | Stretch distortion effect. |
-| TunnelVideoEffect | Tunnel perspective effect. |
-| SphereVideoEffect | Spherical warping effect. |
+| GLLightTunnelVideoEffect | Tunnel perspective effect (OpenGL). |
 | SquareVideoEffect | Square warping effect. |
 | CircleVideoEffect | Circular warping effect. |
 | KaleidoscopeVideoEffect | Kaleidoscope mirror effect. |
 | MarbleVideoEffect | Marble texture effect. |
-| PinchVideoEffect | Pinch distortion effect. |
 | Pseudo3DVideoEffect | Pseudo 3D stereo effect. |
 | QuarkVideoEffect | Quark particle effect. |
 | RippleVideoEffect | Water ripple effect. |
 | WaterRippleVideoEffect | Enhanced water ripple with multiple modes. |
 | WarpVideoEffect | General warp distortion effect. |
-| DiffuseVideoEffect | Diffuse/blur spreading effect. |
 | MovingBlurVideoEffect | Motion blur with directional control. |
 | MovingEchoVideoEffect | Motion echo/trail effect. |
 | MovingZoomEchoVideoEffect | Combined zoom and echo effect. |
@@ -253,7 +279,6 @@ See: [Text Overlay Guide](text-overlay.md)
 | OverlayManagerImage | 🌍 Cross-platform | Professional image overlay with animations, transitions, and effects. |
 | OverlayManagerGIF | 🌍 Cross-platform | Animated GIF overlay support. |
 | SVGOverlayVideoEffect | 🌍 Cross-platform | SVG vector graphics overlay. |
-| QRCodeOverlayFilter | 🌍 Cross-platform | QR code generation and overlay. |
 
 See: [Image Overlay Guide](image-overlay.md)
 
@@ -280,12 +305,11 @@ See: [Image Overlay Guide](image-overlay.md)
 | OverlayManagerStar | Star shape overlay. |
 | OverlayManagerTriangle | Triangle shape overlay. |
 
-### Chroma Key and Motion Detection (Cross-platform only)
+### Chroma Key (Cross-platform)
 
 | Effect | Description |
 |--------|-------------|
-| ChromaKeySettings | Green screen / blue screen keying for background removal. |
-| MotionDetectionProcessor | Real-time motion detection with configurable sensitivity. |
+| ChromaKeySettingsX | Green screen / blue screen keying for background removal (use with `MediaBlocksPipeline` + chroma-key filter block). |
 
 ### 360° Video and VR (Classic only)
 
@@ -305,14 +329,14 @@ Requires NVIDIA RTX GPU with Maxine SDK support.
 |--------|-------------|
 | MaxineDenoiseVideoEffect | AI-powered noise reduction that intelligently preserves details. |
 | MaxineArtifactReductionVideoEffect | Reduces compression artifacts and video degradation using AI. |
-| MaxineSuperResolutionEffect | AI upscaling for resolution enhancement (implementation varies by version). |
+| MaxineSuperResSettings | Settings POCO for AI super-resolution upscaling (wire into the Maxine effect pipeline). |
 
 #### Content Effects
 
 | Effect | Description |
 |--------|-------------|
 | MaxineAIGSVideoEffect | AI-powered green screen/background removal without requiring actual green screen. |
-| MaxineUpscaleVideoEffect | Advanced upscaling using AI for improved quality. |
+| MaxineUpscaleSettings | Settings POCO for AI upscaling (wire into the Maxine effect pipeline). |
 
 #### Special Effects
 
@@ -363,12 +387,12 @@ Requires NVIDIA RTX GPU with Maxine SDK support.
 
 - **MaxineDenoiseVideoEffect** - AI-powered noise reduction that intelligently preserves details.
 - **MaxineArtifactReductionVideoEffect** - Reduces compression artifacts and video degradation using AI.
-- **MaxineSuperResolutionEffect** - AI upscaling for resolution enhancement (implementation varies by version).
+- **MaxineSuperResSettings** - Settings POCO for AI super-resolution upscaling.
 
 #### Content Effects
 
 - **MaxineAIGSVideoEffect** - AI-powered green screen/background removal without requiring actual green screen.
-- **MaxineUpscaleVideoEffect** - Advanced upscaling using AI for improved quality.
+- **MaxineUpscaleSettings** - Settings POCO for AI upscaling.
 
 ## Effect Parameters
 
@@ -493,11 +517,11 @@ var flashback = new VideoEffectGrayscale(
 player.Video_Effects_Add(flashback);
 
 // Cross-platform: Time-limited effect
-var blur = new GaussianBlurVideoEffect("blur")
+// Ctor: GaussianBlurVideoEffect(double sigma, string name = "gaussian_blur")
+var blur = new GaussianBlurVideoEffect(5.0, "blur")
 {
     StartTime = TimeSpan.FromSeconds(10),
-    StopTime = TimeSpan.FromSeconds(15),
-    Sigma = 5.0
+    StopTime = TimeSpan.FromSeconds(15)
 };
 await player.Video_Effects_AddOrUpdateAsync(blur);
 ```

@@ -3,6 +3,9 @@ title: Real-Time Video Effects - Resize, Crop, Overlay in C# .NET
 description: Apply real-time resize, crop, rotation, text overlays, and color filters during video capture with VisioForge Video Capture SDK. C# API examples.
 sidebar_label: Video Processing And Effects
 order: 13
+tags:
+  - Video Capture SDK
+  - .NET
 
 ---
 

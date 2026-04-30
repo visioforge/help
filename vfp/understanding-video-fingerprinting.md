@@ -1,6 +1,22 @@
 ---
 title: Video Fingerprinting: Algorithms and Perceptual Hashing
 description: Deep dive into algorithms and technical implementation behind VisioForge's video fingerprinting SDK with perceptual hashing and scene analysis.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Streaming
+  - Editing
+  - Fingerprinting
+  - MP4
+  - C#
+primary_api_classes:
+  - VFPAnalyzer
+  - VFPFingerprintSource
+
 ---
 
 # Understanding Video Fingerprinting Technology
@@ -77,9 +93,10 @@ The core algorithm employs several mathematical techniques:
 ### Step 1: Video Decoding and Frame Extraction
 
 ```csharp
-var source = new VFPFingerprintSource
+// VFPFingerprintSource has no parameterless ctor — pass the filename to its constructor,
+// then mutate StartTime / StopTime on the returned instance.
+var source = new VFPFingerprintSource("video.mp4")
 {
-    Filename = "video.mp4",
     StartTime = TimeSpan.Zero,
     StopTime = TimeSpan.FromMinutes(5)
 };
@@ -125,19 +142,21 @@ for (each frame in video)
 
 The accumulated data is compressed into a compact fingerprint:
 
+In typical .NET use you do not construct `VFPFingerPrint` by hand — call
+`VFPAnalyzer.GetComparingFingerprintForVideoFileAsync` /
+`GetSearchFingerprintForVideoFileAsync` and let the analyzer drive frame
+decoding, pump frames into the underlying compare/search loop, and produce a
+fully-populated `VFPFingerPrint`:
+
 ```csharp
-// Build final fingerprint
-IntPtr fingerprintPtr = VFPCompare.Build(out length, ref compareData);
-VFPFingerPrint fingerprint = new VFPFingerPrint
-{
-    Data = new byte[length],
-    Duration = videoDuration,
-    Width = videoWidth,
-    Height = videoHeight,
-    FrameRate = videoFrameRate
-};
-Marshal.Copy(fingerprintPtr, fingerprint.Data, 0, (int)length);
+var src = new VFPFingerprintSource("video.mp4");
+var fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(src);
+// fingerprint.Data, .Duration, .ID etc. are populated for you.
 ```
+
+Hand-feeding raw bytes into `VFPCompare.Build` is a low-level escape hatch
+useful only when you already drive your own decoder; the parameterless
+ctor + manual field assignment shown in earlier docs is best avoided.
 
 ## Robustness and Transformations
 
@@ -192,7 +211,9 @@ The SDK can ignore or work around overlays:
 
 ```csharp
 // Define areas to ignore (e.g., watermarks, logos)
-source.IgnoredAreas.Add(new Rect(1820, 980, 100, 100)); // Bottom-right watermark
+// Rect ctor is (left, top, right, bottom) — for a 100x100 region in the
+// bottom-right of a 1920x1080 frame, use (1820, 980, 1920, 1080).
+source.IgnoredAreas.Add(new Rect(1820, 980, 1920, 1080)); // Bottom-right watermark
 ```
 
 ## Comparison with Other Technologies

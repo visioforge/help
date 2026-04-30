@@ -1,6 +1,28 @@
 ---
 title: Guía de Despliegue de Video Edit SDK .Net | Windows
 description: Despliega Video Edit SDK .Net en Windows con paquetes NuGet, instaladores silenciosos y configuraciones manuales para arquitecturas x86 y x64.
+tags:
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+  - Decoding
+  - Editing
+  - IP Camera
+  - RTSP
+  - MP4
+  - WebM
+  - OGG
+  - FLAC
+  - Vorbis
+  - NuGet
+
 ---
 
 # Guía Completa de Despliegue para Video Edit SDK .Net

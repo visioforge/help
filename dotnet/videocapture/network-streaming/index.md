@@ -3,6 +3,17 @@ title: Network Streaming in C# .NET — RTSP, RTMP, NDI, SRT
 description: Stream live video over RTSP, RTMP, NDI, HLS, and SRT from VisioForge Video Capture SDK. Protocol setup, encoder config, and C# code examples.
 sidebar_label: Network Streaming
 order: 5
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
 
 ---
 
@@ -15,6 +26,41 @@ order: 5
 Network streaming has become a fundamental component of modern digital communication infrastructure, enabling real-time transmission of audio and video data across diverse network environments. As bandwidth capabilities continue to expand and user expectations for content delivery evolve, developers need robust tools to implement streaming solutions that balance performance, quality, and reliability.
 
 The VisioForge Video Capture SDK for .NET provides comprehensive support for multiple streaming protocols, offering developers a versatile toolkit for integrating sophisticated streaming capabilities into their applications. Whether you're building live broadcasting platforms, video conferencing tools, surveillance systems, or content delivery networks, this SDK provides the foundation for implementing professional-grade streaming solutions.
+
+## Quick Start — RTMP streaming with VideoCaptureCoreX
+
+The shortest end-to-end path: pick a capture device, add an RTMP output block to the engine, start. Swap `RTMPOutput` for `YouTubeOutput`, `FacebookLiveOutput`, `RTSPServerOutput`, or `HLSOutput` to target other destinations — the surrounding wiring stays the same.
+
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+// 1. Initialise the cross-platform engine once per process.
+VisioForgeX.InitSDK();
+
+// 2. Create the engine, bound to an IVideoView (or null for headless).
+var videoCapture = new VideoCaptureCoreX(videoView as IVideoView);
+
+// 3. Select the first enumerated capture device + mic.
+var videoDevice = (await DeviceEnumerator.Shared.VideoSourcesAsync()).First();
+var audioDevice = (await DeviceEnumerator.Shared.AudioSourcesAsync()).First();
+
+videoCapture.Video_Source = new VideoCaptureDeviceSourceSettings(videoDevice);
+videoCapture.Audio_Source = new AudioCaptureDeviceSourceSettings(audioDevice);
+videoCapture.Audio_Record = true;
+
+// 4. Add an RTMP output. The string is the full ingest URL including stream key.
+var rtmpOutput = new RTMPOutput("rtmp://live.example.com/app/<stream-key>");
+videoCapture.Outputs_Add(rtmpOutput, true);
+
+// 5. Start. OnError fires on network / encoder failures.
+await videoCapture.StartAsync();
+```
+
+For per-protocol configuration (encoder tuning, buffer sizes, authentication, adaptive bitrates, etc.) see the dedicated pages under [Available Protocols](#available-protocols) below.
 
 ## Core Network Streaming Protocols
 

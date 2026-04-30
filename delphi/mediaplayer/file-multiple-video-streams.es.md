@@ -1,6 +1,20 @@
 ---
 title: Reproducir Múltiples Streams de Video con SDK Delphi
 description: Gestione múltiples streams de video en archivos - seleccione ángulos de cámara, cambie resoluciones y administre pistas con ejemplos para Delphi, C++ y VB6.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - C++
+  - Windows
+  - VCL
+  - Playback
+  - MKV
+primary_api_classes:
+  - TVFMediaPlayer
+  - CVFMediaPlayer
+
 ---
 
 # Reproduciendo Archivos de Video con Múltiples Streams de Video
@@ -33,22 +47,28 @@ Cada formato tiene sus propias características y limitaciones respecto a cómo 
 
 ### Configurando el Media Player
 
-El primer paso es inicializar correctamente el objeto `TVFMediaPlayer`. Esto involucra crear la instancia, configurar propiedades básicas y prepararlo para la reproducción:
+El primer paso es inicializar correctamente el objeto `TVFMediaPlayer`. Esto involucra crear la instancia, configurar propiedades básicas y prepararlo para la reproducción.
+
+!!! note "Los fragmentos pertenecen a un único procedimiento"
+    Los fragmentos en Pascal de las tres subsecciones siguientes son extractos de un único procedimiento (`TForm1.SetupAndPlayMultiStream`), divididos para mayor claridad narrativa. El listado completo y pegable está al [final de esta sección](#listado-completo-de-pascal).
 
 ```pascal
-// Definir y crear el objeto MediaPlayer
-var 
+// Extracto — vea "Listado completo de Pascal" más abajo para el procedimiento completo.
+procedure TForm1.SetupAndPlayMultiStream;
+var
   MediaPlayer1: TVFMediaPlayer;
 begin
   MediaPlayer1 := TVFMediaPlayer.Create(Self);
-  
+
   // Establecer tamaño y posición del contenedor si es necesario
   MediaPlayer1.Parent := Panel1; // Asumiendo que Panel1 es su contenedor
   MediaPlayer1.Align := alClient;
-  
+
   // Configurar estado inicial
   MediaPlayer1.DoubleBuffered := True;
   MediaPlayer1.AutoPlay := False; // Controlaremos la reproducción explícitamente
+  // ... continúa más abajo
+end;
 ```
 
 ### Configurando la Fuente Multimedia
@@ -56,15 +76,16 @@ begin
 A continuación, necesitamos especificar el archivo multimedia y configurar cómo debe cargarse:
 
 ```pascal
+// Extracto — cuerpo de TForm1.SetupAndPlayMultiStream (continuación).
   // Establecer el nombre del archivo - usar ruta completa para confiabilidad
   MediaPlayer1.FilenameOrURL := 'C:\Videos\multistream-video.mkv';
-  
+
   // Habilitar reproducción de audio (se usará el renderizador de audio DirectSound por defecto)
   MediaPlayer1.Audio_Play := True;
-  
+
   // Configurar ajustes de audio si es necesario
   MediaPlayer1.Audio_Volume := 85; // Establecer volumen al 85%
-  
+
   // Establecer el modo de fuente a DirectShow
   // Otras opciones incluyen SM_File_FFMPEG o SM_File_VLC
   MediaPlayer1.Source_Mode := SM_File_DS;
@@ -75,11 +96,42 @@ A continuación, necesitamos especificar el archivo multimedia y configurar cóm
 La clave para trabajar con múltiples streams de video es la propiedad `Source_VideoStreamIndex`. Este índice basado en cero le permite seleccionar qué stream de video debe renderizarse:
 
 ```pascal
+// Extracto — cuerpo de TForm1.SetupAndPlayMultiStream (parte final).
   // Establecer índice de stream de video a 1 (segundo stream, ya que el índice es basado en cero)
   MediaPlayer1.Source_VideoStreamIndex := 1;
-  
+
   // Iniciar reproducción
   MediaPlayer1.Play();
+end;
+```
+
+### Listado completo de Pascal
+
+Los tres extractos anteriores fusionados en un único procedimiento autocontenido y pegable:
+
+```pascal
+procedure TForm1.SetupAndPlayMultiStream;
+var
+  MediaPlayer1: TVFMediaPlayer;
+begin
+  MediaPlayer1 := TVFMediaPlayer.Create(Self);
+
+  // Contenedor + estado inicial
+  MediaPlayer1.Parent := Panel1;
+  MediaPlayer1.Align := alClient;
+  MediaPlayer1.DoubleBuffered := True;
+  MediaPlayer1.AutoPlay := False;
+
+  // Configuración de fuente y audio
+  MediaPlayer1.FilenameOrURL := 'C:\Videos\multistream-video.mkv';
+  MediaPlayer1.Audio_Play := True;
+  MediaPlayer1.Audio_Volume := 85;
+  MediaPlayer1.Source_Mode := SM_File_DS;
+
+  // Seleccionar un stream de video no predeterminado e iniciar reproducción
+  MediaPlayer1.Source_VideoStreamIndex := 1;
+  MediaPlayer1.Play();
+end;
 ```
 
 ## Implementación en C++ MFC
@@ -106,9 +158,11 @@ BOOL CMyDlg::OnInitDialog()
     m_pMediaPlayer->Create(NULL, NULL, WS_CHILD | WS_VISIBLE, 
                           CRect(0, 0, 0, 0), pContainer, 1001);
     
-    // Configurar ajustes de visualización
-    m_pMediaPlayer->SetWindowPos(NULL, 0, 0, pContainer->GetClientRect().Width(),
-                                pContainer->GetClientRect().Height(), SWP_NOZORDER);
+    // Configurar ajustes de visualización — CWnd::GetClientRect(LPRECT) devuelve void
+    // y rellena el rect por referencia, así que debemos declarar un CRect primero.
+    CRect rc;
+    pContainer->GetClientRect(&rc);
+    m_pMediaPlayer->SetWindowPos(NULL, 0, 0, rc.Width(), rc.Height(), SWP_NOZORDER);
     m_pMediaPlayer->PutDoubleBuffered(TRUE);
     m_pMediaPlayer->PutAutoPlay(FALSE);
     

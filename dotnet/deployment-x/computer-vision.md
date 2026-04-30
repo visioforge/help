@@ -1,6 +1,13 @@
 ---
 title: VisioForge Computer Vision NuGet Packages for .NET
 description: Deploy VisioForge CV and CVD NuGet packages for .NET computer vision on Windows, Linux, and macOS. Face detection, object recognition, and more.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+
 ---
 
 # Computer Vision Implementation Guide
@@ -9,12 +16,12 @@ description: Deploy VisioForge CV and CVD NuGet packages for .NET computer visio
 
 ## Overview of Available Packages
 
-Our SDK provides two powerful NuGet packages that deliver robust computer vision capabilities for your applications:
+Our SDK provides two NuGet packages that deliver computer-vision capabilities for your applications:
 
-1. **VisioForge CV Package**: Designed specifically for Windows environments
-2. **VisioForge CVD Package**: Cross-platform solution that works across multiple operating systems
+1. **[VisioForge.DotNet.Core.CV](https://www.nuget.org/packages/VisioForge.DotNet.Core.CV/)** — Windows-only CV package.
+2. **[VisioForge.DotNet.Core.CVD](https://www.nuget.org/packages/VisioForge.DotNet.Core.CVD/)** — Cross-platform CV package for Windows, Linux, and macOS.
 
-These packages provide a comprehensive API for integrating computer vision features directly into your .NET applications.
+Both packages provide a consistent API for integrating computer-vision features directly into your .NET applications.
 
 ## Deployment Requirements
 
@@ -59,7 +66,7 @@ These packages provide essential functionalities:
 For macOS environments, use Homebrew to install the required dependencies:
 
 ```bash
-brew cask install xquartz
+brew install --cask xquartz
 brew install mono-libgdiplus
 ```
 

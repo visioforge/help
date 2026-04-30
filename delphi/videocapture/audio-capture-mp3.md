@@ -1,6 +1,16 @@
 ---
 title: Audio Capture to MP3 Files in Delphi, C++ MFC & VB6
 description: Implement MP3 audio capture in Delphi, C++, and VB6 - configure LAME encoder, manage bitrates, and create high-quality audio recordings.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - Encoding
+  - MP3
+
 ---
 
 # Audio Capture to MP3 Files in Delphi, C++ MFC & VB6

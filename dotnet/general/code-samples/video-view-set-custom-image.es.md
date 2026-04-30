@@ -1,6 +1,18 @@
 ---
 title: Imagen Placeholder Personalizada en VideoView C# .NET
 description: Muestre imágenes de marcador de posición personalizadas en controles VideoView cuando no hay video reproduciéndose para branding profesional en .NET.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - Playback
+  - C#
+primary_api_classes:
+  - VideoView
+  - VideoPlayerForm
+
 ---
 
 # Configuración de Imágenes Personalizadas para Controles VideoView en Aplicaciones .NET
@@ -55,16 +67,19 @@ Esta llamada de método crea un componente de caja de imagen interno que alojar�
 
 Después de crear la caja de imagen, puedes establecer tu imagen personalizada. Nota que parece haber una duplicación en la documentación original - el código correcto para establecer la imagen debe usar el método `PictureBoxSetImage`:
 
+`PictureBoxSetImage` recibe un `System.Drawing.Bitmap`, por lo que debes cargar
+el archivo como `Bitmap` (o convertirlo) en lugar de `Image`:
+
 ```csharp
-// Cargar una imagen desde archivo
-Image customImage = Image.FromFile("ruta/a/tu/imagen.jpg");
+// Cargar una imagen desde archivo como Bitmap
+Bitmap customImage = new Bitmap("ruta/a/tu/imagen.jpg");
 VideoView1.PictureBoxSetImage(customImage);
 ```
 
 Alternativamente, puedes usar recursos incorporados o imágenes generadas dinámicamente:
 
 ```csharp
-// Usando una imagen de recursos
+// Usando una imagen de recursos (el recurso debe declararse como Bitmap, no Image)
 VideoView1.PictureBoxSetImage(Properties.Resources.MiImagenPersonalizada);
 
 // O creando una imagen dinámica
@@ -76,8 +91,8 @@ using (Bitmap dynamicImage = new Bitmap(VideoView1.Width, VideoView1.Height))
         g.Clear(Color.DarkBlue);
         g.DrawString("Listo para Reproducir", new Font("Arial", 24), Brushes.White, new PointF(50, 50));
     }
-    
-    VideoView1.PictureBoxSetImage(dynamicImage.Clone() as Image);
+
+    VideoView1.PictureBoxSetImage((Bitmap)dynamicImage.Clone());
 }
 ```
 
@@ -133,14 +148,14 @@ private void UpdateCustomImage(string imagePath)
     if (VideoView1.PictureBoxExists())
     {
         // Actualizar imagen
-        Image newImage = Image.FromFile(imagePath);
+        Bitmap newImage = new Bitmap(imagePath);
         VideoView1.PictureBoxSetImage(newImage);
     }
     else
     {
         // Crear caja de imagen primero
         VideoView1.PictureBoxCreate(VideoView1.Width, VideoView1.Height);
-        Image newImage = Image.FromFile(imagePath);
+        Bitmap newImage = new Bitmap(imagePath);
         VideoView1.PictureBoxSetImage(newImage);
     }
 }
@@ -231,7 +246,8 @@ public partial class VideoPlayerForm : Form
             VideoView1.PictureBoxCreate(VideoView1.Width, VideoView1.Height);
             isPictureBoxCreated = true;
             
-            using (Image customImage = Properties.Resources.VideoPlaceholder)
+            // PictureBoxSetImage espera System.Drawing.Bitmap — declare el recurso como Bitmap (o haga cast desde Image).
+            using (Bitmap customImage = (Bitmap)Properties.Resources.VideoPlaceholder)
             {
                 VideoView1.PictureBoxSetImage(customImage);
             }

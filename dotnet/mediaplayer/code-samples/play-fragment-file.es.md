@@ -1,6 +1,22 @@
 ---
 title: Reproducir Segmentos Video & Audio en Apps C# .NET
 description: Reproduce segmentos precisos basados en tiempo de archivos de video y audio con Media Player SDK para Windows y aplicaciones .NET multiplataforma.
+tags:
+  - Media Player SDK
+  - .NET
+  - MediaPlayerCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - MKV
+  - C#
+primary_api_classes:
+  - MediaPlayerCoreX
+  - UniversalSourceSettings
+
 ---
 
 # Reproduciendo Fragmentos de Archivos de Medios: Guía de Implementación para Desarrolladores .NET
@@ -112,9 +128,9 @@ private void UpdateFragmentBoundaries(int startMs, int endMs)
     MediaPlayer1.Selection_Stop = TimeSpan.FromMilliseconds(endMs);
     
     // Si la reproducción está en progreso, reiniciarla para aplicar los nuevos límites
-    if (MediaPlayer1.State == PlaybackState.Playing)
+    if (MediaPlayer1.State() == PlaybackState.Play)
     {
-        MediaPlayer1.Position_Set(MediaPlayer1.Selection_Start);
+        MediaPlayer1.Position_Set_Time(MediaPlayer1.Selection_Start);
     }
 }
 
@@ -124,8 +140,8 @@ private async Task UpdateFragmentBoundariesAsync(int startMs, int endMs)
     MediaPlayer1.Segment_Start = TimeSpan.FromMilliseconds(startMs);
     MediaPlayer1.Segment_Stop = TimeSpan.FromMilliseconds(endMs);
     
-    // Si la reproducción está en progreso, reiniciar desde la nueva posición de inicio
-    if (await MediaPlayer1.StateAsync() == PlaybackState.Playing)
+    // Si la reproducción está en progreso, reiniciar desde la nueva posición (State es propiedad sync en MediaPlayerCoreX)
+    if (MediaPlayer1.State == PlaybackState.Play)
     {
         await MediaPlayer1.Position_SetAsync(MediaPlayer1.Segment_Start);
     }

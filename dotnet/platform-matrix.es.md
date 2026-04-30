@@ -1,6 +1,18 @@
 ---
 title: VisioForge SDK .NET — Matriz de Plataformas Soportadas
 description: Matriz de soporte del SDK .NET de VisioForge para codecs de video/audio, aceleración de hardware y captura en Windows, Linux, macOS, Android, iOS.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+
 ---
 
 # SDK .NET: Características y Plataformas Soportadas

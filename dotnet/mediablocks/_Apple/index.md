@@ -2,6 +2,21 @@
 title: Apple Platform Media Blocks in C# .NET — iOS, macOS
 description: Build iOS and macOS media apps with ProRes encoding, VideoToolbox acceleration, and native audio blocks using VisioForge Media Blocks SDK.
 sidebar_label: Apple Platform
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - MetalVideoCompositorBlock
+  - MediaBlocksPipeline
+  - VideoRendererBlock
+  - OSXAudioSourceBlock
+  - OSXAudioSinkBlock
+
 ---
 
 # Apple Platform Blocks - VisioForge Media Blocks SDK .Net
@@ -102,8 +117,11 @@ settings.AddStream(new MetalVideoMixerStream(
     zorder: 0));
 
 // Second stream: right half of screen
+// Rect ctor is (left, top, right, bottom). For the right half of a 1920x1080
+// canvas use right=1920 and bottom=1080 — the previous form (960, 0, 960, 1080)
+// has left==right and produces a zero-width box.
 settings.AddStream(new MetalVideoMixerStream(
-    rectangle: new Rect(960, 0, 960, 1080),
+    rectangle: new Rect(960, 0, 1920, 1080),
     zorder: 1));
 
 var compositor = new MetalVideoCompositorBlock(settings);
@@ -114,8 +132,8 @@ pipeline.Connect(compositor.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 
-// Real-time: fade out stream 0 over time
-compositor.StartFadeOut(settings.Streams[0].ID);
+// Real-time: fade out stream 0 over 2 seconds
+compositor.StartFadeOut(settings.Streams[0].ID, TimeSpan.FromSeconds(2));
 ```
 
 #### Availability
@@ -184,9 +202,11 @@ var pipeline = new MediaBlocksPipeline();
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
 
 // Apple ProRes encoder
+// AppleProResEncoderSettings exposes Quality (double 0.0-1.0), Bitrate, MaxKeyframeInterval,
+// MaxKeyFrameIntervalDuration, AllowFrameReordering, PreserveAlpha, Realtime — not a named profile enum.
 var proresSettings = new AppleProResEncoderSettings
 {
-    Profile = ProResProfile.HQ
+    Quality = 0.8
 };
 var proresEncoder = new AppleProResEncoderBlock(proresSettings);
 pipeline.Connect(fileSource.VideoOutput, proresEncoder.Input);

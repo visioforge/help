@@ -1,11 +1,61 @@
 ---
-title: Servidor Streaming RTSP con H.264 y Aceleración GPU en C#
+title: Servidor RTSP en C# .NET — H.264/HEVC + Codificación GPU
 description: Servidor RTSP con codificación H.264/AAC, aceleración GPU (NVENC, QSV, AMF), autenticación y ajuste de latencia. Ejemplos C# con VisioForge SDK.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - UDP
+  - WebRTC
+  - MP4
+  - H.264
+  - H.265
+  - AAC
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - RTSPServerOutput
+  - RTSPServerSettings
+  - RTSPServerBlock
+
 ---
 
 # Dominando la Transmisión RTSP con SDKs de VisioForge
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+!!! info "Soporte multiplataforma"
+    El motor `VideoCaptureCoreX` y el Media Blocks SDK funcionan en **Windows, macOS, Linux, Android e iOS** vía GStreamer. Consulta la [matriz de soporte de plataformas](../../platform-matrix.md) para códecs y detalles de aceleración por hardware, y la [guía de despliegue en Linux](../../deployment-x/Ubuntu.md) para configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.
+
+!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+
+    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecta al servidor MCP público de VisioForge
+    ([documentación](../mcp-server-usage.md))
+    en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
+    ejemplos de código ejecutables y guías de despliegue — más preciso que
+    buscar en `llms.txt`. Sin autenticación requerida.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Introducción a RTSP
 
@@ -73,8 +123,8 @@ Esta clase encapsula todos los parámetros necesarios para definir el comportami
         *   IP Específica (ej., `"192.168.1.100"`): Se vincula solo a esa interfaz de red específica.
     *   `Point` (string): El componente de ruta de la URL RTSP (ej., `/live`, `/stream1`). Los clientes se conectarán a `rtsp://<Address>:<Port><Point>`. El predeterminado es `"/live"`.
 *   **Configuración de Transmisión:**
-    *   `VideoEncoder` (IVideoEncoderSettings): Una instancia de una clase de configuración de codificador de video (ej., `OpenH264EncoderSettings`, `NVEncoderSettings`). Esto define el códec, tasa de bits, calidad, etc.
-    *   `AudioEncoder` (IAudioEncoderSettings): Una instancia de una clase de configuración de codificador de audio (ej., `VOAACEncoderSettings`). Define parámetros del códec de audio.
+    *   `VideoEncoder` (IVideoEncoder): Una instancia de `IVideoEncoder` — típicamente un objeto de configuración de codificador (ej., `OpenH264EncoderSettings`) o el resultado de `H264EncoderBlock.GetDefaultSettings()`. Define el códec, tasa de bits (Kbit/s), calidad, etc.
+    *   `AudioEncoder` (IAudioEncoder): Una instancia de `IAudioEncoder` (ej., `VOAACEncoderSettings`). Define parámetros del códec de audio.
     *   `Latency` (TimeSpan): Controla el retardo de búfer introducido por el servidor para suavizar la fluctuación de la red. El predeterminado es 250 milisegundos. Valores más altos aumentan la estabilidad pero también el retardo.
 *   **Autenticación:**
     *   `Username` (string): Si se establece, los clientes deben proporcionar este nombre de usuario para autenticación básica.
@@ -83,7 +133,7 @@ Esta clase encapsula todos los parámetros necesarios para definir el comportami
     *   `Name` (string): Un nombre amigable para el servidor, a veces mostrado por aplicaciones cliente.
     *   `Description` (string): Una descripción más detallada del contenido de la transmisión o propósito del servidor.
 *   **Propiedad de Conveniencia:**
-    *   `URL` (Uri): Construye automáticamente la URL de conexión RTSP completa basada en las propiedades `Address`, `Port` y `Point`.
+    *   `URL` (string, solo-lectura): Compone automáticamente la URL RTSP completa a partir de `Address`, `Port` y `Point`. Con los valores por defecto de `RTSPServerSettings` (`Port = 8554`), la URL compuesta es `rtsp://127.0.0.1:8554/live`.
 
 ### El Motor: `RTSPServerBlock` (Media Blocks SDK)
 
@@ -231,48 +281,64 @@ Este método aprovecha componentes integrados de Windows o filtros específicos 
 ### Código de Configuración de Muestra
 
 ```csharp
-// Asumiendo que VideoCapture1 es una instancia de VisioForge.Core.VideoCapture.VideoCaptureCore
+using VisioForge.Core.Types.Output;           // MP4Output, NetworkStreamingFormat, H264Profile
+using VisioForge.Core.Types.VideoCapture;
+using VisioForge.Core.VideoCapture;           // VideoCaptureCore
+
+// Asumiendo que VideoCapture1 es una instancia de VideoCaptureCore enlazada a un VideoView.
 
 // 1. Habilitar transmisión en red globalmente para el componente
 VideoCapture1.Network_Streaming_Enabled = true;
 
-// 2. Habilitar específicamente transmisión de audio (opcional, predeterminado podría ser verdadero)
+// 2. Habilitar transmisión de audio (opcional)
 VideoCapture1.Network_Streaming_Audio_Enabled = true;
 
-// 3. Seleccionar el formato RTSP deseado. 
-//    RTSP_H264_AAC_SW indica codificación por software tanto para H.264 como para AAC.
-//    Otras opciones podrían existir dependiendo de filtros/componentes instalados.
-VideoCapture1.Network_Streaming_Format = VisioForge.Types.VFNetworkStreamingFormat.RTSP_H264_AAC_SW;
+// 3. Seleccionar el formato RTSP.
+//    RTSP_H264_AAC_SW = H.264 + AAC por software (RTSP Windows basado en DirectShow).
+VideoCapture1.Network_Streaming_Format = NetworkStreamingFormat.RTSP_H264_AAC_SW;
 
-// 4. Configurar Ajustes del Codificador (usando MP4Output como contenedor)
-//    Aunque no estamos creando un archivo MP4, la clase MP4Output
-//    se usa aquí para mantener configuraciones de codificador H.264 y AAC.
-var mp4OutputSettings = new VisioForge.Types.Output.MP4Output();
+// 4. Configurar ajustes del codificador. MP4Output contiene los parámetros H.264 y AAC
+//    aunque la transmisión se envíe por RTSP en lugar de escribirse en un archivo.
+var mp4Output = new MP4Output();
 
-//    Configurar ajustes H.264 dentro de mp4OutputSettings
-//    (Propiedades específicas dependen de la versión del SDK, ej., tasa de bits, perfil)
-//    mp4OutputSettings.Video_H264... = ...; 
+//    Los ajustes H.264 viven en MP4Output.Video (MP4OutputH264Settings).
+mp4Output.Video = new MP4OutputH264Settings
+{
+    Bitrate = 2000,                // kbps
+    Profile = H264Profile.ProfileMain,
+    Level = H264Level.Level4,
+    RateControl = H264RateControl.VBR
+};
 
-//    Configurar ajustes AAC dentro de mp4OutputSettings
-//    (ej., tasa de bits, frecuencia de muestreo)
-//    mp4OutputSettings.Audio_AAC... = ...;
+//    Los ajustes AAC viven en MP4Output.Audio_AAC (M4AOutput — ya inicializado en el constructor).
+mp4Output.Audio_AAC.Bitrate = 128;      // kbps
+mp4Output.Audio_AAC.Object = AACObject.Low;
+mp4Output.Audio_AAC.Version = AACVersion.MPEG4;
 
 // 5. Asignar el contenedor de configuraciones a la salida de transmisión en red
-VideoCapture1.Network_Streaming_Output = mp4OutputSettings;
+VideoCapture1.Network_Streaming_Output = mp4Output;
 
-// 6. Definir la URL RTSP que usarán los clientes
-//    El servidor escuchará automáticamente en el puerto especificado (5554 aquí).
-VideoCapture1.Network_Streaming_URL = "rtsp://localhost:5554/vfstream"; 
-// Usar IP real de la máquina en lugar de localhost para acceso externo.
+// 6. Definir la URL RTSP que usarán los clientes.
+//    El servidor escucha en el puerto especificado en la URL (5554 aquí).
+VideoCapture1.Network_Streaming_URL = "rtsp://localhost:5554/vfstream";
+//    Usar la IP real de la máquina en lugar de localhost para acceso externo.
 
-// Después de la configuración, iniciar la captura/reproducción como de costumbre
-// VideoCapture1.Start(); 
+// 7. Iniciar como de costumbre (OnError se dispara si el puerto está ocupado o faltan codificadores).
+await VideoCapture1.StartAsync();
 ```
 
 **Nota:** Este método heredado a menudo depende de filtros DirectShow o transformaciones de Media Foundation disponibles en el sistema Windows específico, haciéndolo menos predecible y portátil que la solución multiplataforma basada en GStreamer.
 
 ## Ver también
 
+* [Reconexión RTSP y fallback switch](../network-sources/reconnection-and-fallback.md) — maneja desconexiones de cámara con eventos de reconexión, `DisconnectEventInterval` y el `FallbackSwitch` declarativo (fallback de imagen / texto / media) en todos los SDK VisioForge
+* [Configuración de fuente de cámara RTSP en C#](../../videocapture/video-sources/ip-cameras/rtsp.md) — referencia de `IPCameraSourceSettings` y `RTSPSourceSettings` con ajuste de transporte UDP/TCP y buffers
+* [Integración de cámara IP ONVIF](../../videocapture/video-sources/ip-cameras/onvif.md) — WS-Discovery, selección de perfiles y control PTZ para cámaras estándar
+* [Tutorial de vista previa en vivo de cámara IP](../../videocapture/video-tutorials/ip-camera-preview.md) — video explicativo con ejemplo mínimo de vista previa
+* [Grabar stream RTSP a MP4](../../videocapture/video-tutorials/ip-camera-capture-mp4.md) — capturar cualquier cámara IP a archivo MP4 en .NET
+* [Reproductor RTSP de Media Blocks](../../mediablocks/Guides/rtsp-player-csharp.md) — reproducción RTSP basada en pipeline con Media Blocks SDK
+* [Bloque de salida de servidor RTSP](../../mediablocks/RTSPServer/index.md) — transmitir tu propio stream de video y audio por RTSP
+* [Grid RTSP multi-cámara (muro NVR)](../../mediablocks/Guides/multi-camera-rtsp-grid.md) — construir un muro de vista previa 4×4 con WPF o MAUI, con inicio sincronizado
 * [Grabación Pre-Evento con Cámara IP](../../mediablocks/Guides/pre-event-recording.md) — grabar streams RTSP con buffer circular y disparadores de detección de movimiento
 * [Guardar Stream RTSP Original](../../mediablocks/Guides/rtsp-save-original-stream.md) — guardar video RTSP sin re-codificación
 * [Escáner de Códigos de Barras y QR](../../mediablocks/Guides/barcode-qr-reader-guide.md) — escanear códigos de barras desde streams RTSP de cámaras IP en tiempo real

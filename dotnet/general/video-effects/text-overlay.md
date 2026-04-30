@@ -1,6 +1,30 @@
 ---
 title: Add Text Overlay to Video in C# with Custom Fonts and Fade
 description: Create dynamic text overlays with font, color, position, rotation, and animation control for timestamps, captions, and branding in .NET video.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaPlayerCoreX
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Playback
+  - Editing
+  - Effects
+  - C#
+primary_api_classes:
+  - TextOverlayVideoEffect
+  - FontSettings
+  - VideoEffectTextLogo
+
 ---
 
 # Implementing Text Overlays in Video Streams

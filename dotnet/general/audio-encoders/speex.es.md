@@ -1,6 +1,32 @@
 ---
 title: Integración del Codificador de Audio Speex para .NET SDK
 description: Implemente compresión de voz Speex en .NET con configuraciones de codificación optimizadas, controles de calidad y captura de audio multiplataforma.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - Speex
+  - C#
+primary_api_classes:
+  - SpeexEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - MediaBlocksPipeline
+  - SpeexOutput
+
 ---
 
 # Codificador de Audio Speex para .NET
@@ -290,7 +316,7 @@ var core = new VideoEditCoreX();
 
 // Agregar el archivo de audio fuente
 var audioFile = new AudioFileSource(@"c:\samples\!audio.mp3");
-VideoEdit1.Input_AddAudioFile(audioFile, null);
+core.Input_AddAudioFile(audioFile, null);
 
 // Configurar ajustes Speex
 var speexSettings = new SpeexEncoderSettings

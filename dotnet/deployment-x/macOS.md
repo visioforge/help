@@ -1,6 +1,22 @@
 ---
 title: Deploy VisioForge .NET SDK on macOS — Intel & Apple Silicon
 description: Deploy VisioForge .NET SDK apps on macOS. NuGet packages, NSView integration, App Store publishing, and native library setup for x64 and ARM64.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - macOS
+  - MAUI
+  - GStreamer
+  - C#
+  - NuGet
+  - Entitlements
+primary_api_classes:
+  - VideoView
+  - VideoViewGL
+
 ---
 
 # Apple macOS Deployment Guide

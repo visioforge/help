@@ -1,6 +1,22 @@
 ---
 title: Generate Video from Image Sequence in C# .NET Console App
 description: Generate video files from image sequences using VisioForge Video Edit SDK .NET. Frame rate, resolution, and encoding settings with C# examples.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCore
+  - Windows
+  - Editing
+  - AVI
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoEditCore
+  - VideoRendererSettings
+  - VideoRenderer
+  - AVIOutput
+  - ProgressEventArgs
+
 ---
 
 # Creating Videos from Images in C# Console Applications
@@ -39,11 +55,9 @@ First, create a new console application project and add the necessary references
 ```cs
 using System;
 using System.IO;
-using VisioForge.Types;
-using VisioForge.Types.Output;
-using VisioForge.VideoEdit;
-using VisioForge.Controls;
-using VisioForge.Controls.VideoEdit;
+using VisioForge.Core.Types;        // current namespaces (v15→v2026 migration)
+using VisioForge.Core.Types.Output;
+using VisioForge.Core.VideoEdit;
 ```
 
 ### Core Implementation
@@ -93,7 +107,7 @@ namespace ve_console
             ve.Video_Resize_Width = 640;
             ve.Video_Resize_Height = 480;
 
-            ve.Video_FrameRate = 25;
+            ve.Video_FrameRate = new VideoFrameRate(25);
             ve.Video_Renderer = new VideoRendererSettings
             {
                 VideoRenderer = VideoRendererMode.None,
@@ -138,14 +152,27 @@ namespace ve_console
 
 ### Image Input Configuration
 
-The code above uses `Input_AddImageFile()` to add each image to the timeline with specific parameters:
+The code above uses the seven-argument `Input_AddImageFile` overload on `VideoEditCore`:
 
-- **File path**: Path to the image file
-- **Duration**: How long the image appears (2000ms in this example)
-- **Start time**: When the image appears in the timeline
-- **Stretch mode**: How the image fits the video frame (Letterbox preserves aspect ratio)
-- **Rotation**: Image rotation in degrees
-- **Width/Height**: Dimensions for the image in the video
+```csharp
+public bool Input_AddImageFile(
+    string filename,                           // image file path
+    TimeSpan duration,                         // how long the image is on screen
+    TimeSpan? timelineInsertTime,              // insert position on the timeline
+    VideoEditStretchMode stretchMode,          // how the image fits the frame
+    int targetVideoStream,                     // video stream index (0 = main)
+    int customWidth,                           // output width in pixels
+    int customHeight);                         // output height in pixels
+```
+
+Parameter notes:
+
+- **filename** — path to the image file (JPG/PNG/BMP/TIF)
+- **duration** — how long the image appears (2000 ms in this example)
+- **timelineInsertTime** — when the image appears in the final timeline
+- **stretchMode** — fitting behaviour (`Letterbox` preserves aspect ratio with black bars; `Stretch` fills the frame; `Crop` centre-crops to fill)
+- **targetVideoStream** — video stream index (pass `0` unless you are building a multi-track edit)
+- **customWidth / customHeight** — target dimensions, typically matching `Video_Resize_Width` / `Video_Resize_Height` set on the core
 
 ### Video Output Settings
 
@@ -173,13 +200,20 @@ These handlers provide feedback during video creation, which is essential for lo
 
 ### Transition Effects
 
-To add transitions between images, you can use the `Video_Transition_Add` method:
+To add transitions between images, you can use the `Video_Transition_Add` method.
+The classic `VideoEditCore` engine ships DXTransform names — common values include
+`"Fade"`, `"Horizontal"`, `"Upper right"`, `"Radial, top"`, `"Wheel, 4 spoke"`,
+`"Pixelate"`, `"Page peel"`, etc. (call `Video_Transitions_GetList()` to enumerate
+the full list at runtime). Names like `"FadeIn"` / `"FadeOut"` are X-engine values
+and would return 0 (not found) on the classic engine.
+
+For fade-in / fade-out specifically, the classic engine also exposes dedicated
+`Video_Transition_Add_FadeIn` / `Video_Transition_Add_FadeOut` helpers that take
+start/stop times and a fade colour directly (no name lookup needed).
 
 ```cs
-// Example of adding a fade transition between images
-
-// Get the ID for the "FadeIn" transition effect
-int transitionId = ve.Video_Transition_GetIDFromName("FadeIn");
+// Example A — name-based lookup (DXTransform name)
+int transitionId = ve.Video_Transition_GetIDFromName("Fade");
 
 // Add the transition - parameters are start time, end time, and transition ID
 ve.Video_Transition_Add(
@@ -187,6 +221,12 @@ ve.Video_Transition_Add(
     TimeSpan.FromMilliseconds(2100),  // End time of transition
     transitionId                      // Transition ID
 );
+
+// Example B — dedicated FadeIn helper (no name lookup)
+// ve.Video_Transition_Add_FadeIn(
+//     TimeSpan.FromMilliseconds(1900),
+//     TimeSpan.FromMilliseconds(2100),
+//     System.Drawing.Color.Black);
 
 // For more advanced transition options with border and other properties:
 // ve.Video_Transition_Add(

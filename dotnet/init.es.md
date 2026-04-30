@@ -1,6 +1,26 @@
 ---
 title: Inicialización del SDK .NET para video multiplataforma
 description: Inicializar y desinicializar SDKs .NET para captura, edición y reproducción de video con DirectShow y motores X multiplataforma.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - MediaPlayerCoreX
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Playback
+  - Editing
+
 ---
 
 # Inicialización

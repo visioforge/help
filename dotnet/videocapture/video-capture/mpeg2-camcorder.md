@@ -1,6 +1,22 @@
 ---
 title: MPEG-2 Camcorder Capture with Hardware Encoder in C# .NET
 description: Record camcorder video to MPEG-2 format in .NET with VisioForge Video Capture SDK. Hardware encoder configuration and C# implementation examples.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Encoding
+  - MPEG-2
+  - C#
+  - NuGet
+primary_api_classes:
+  - DirectCaptureMPEGOutput
+  - VideoCaptureCore
+  - VideoCaptureMode
+  - PlaybackState
+
 ---
 
 # Capturing Camcorder Video to MPEG-2 Format
@@ -45,8 +61,9 @@ Install-Package VisioForge.DotNet.Core.Redist.VideoCapture.x64
 The following code demonstrates how to set up and execute a basic camcorder-to-MPEG-2 capture:
 
 ```cs
-// Initialize video capture component
-using var videoCapture = new VideoCapture();
+// Initialize video capture component. VideoCaptureCore requires an IVideoView
+// (WinForms VideoView control, WPF VideoView, etc.) to host the preview window.
+using var videoCapture = new VideoCaptureCore(VideoView1 as IVideoView);
 
 // Configure MPEG-2 output format
 videoCapture.Output_Format = new DirectCaptureMPEGOutput();
@@ -71,8 +88,8 @@ await videoCapture.StopAsync();
 To ensure your application captures from the correct camcorder:
 
 ```cs
-// List available video input devices
-foreach (var device in videoCapture.Video_CaptureDevices)
+// List available video input devices (Video_CaptureDevices is a method, not a property)
+foreach (var device in videoCapture.Video_CaptureDevices())
 {
     Console.WriteLine($"Device: {device.Name}");
 }
@@ -88,8 +105,8 @@ videoCapture.Video_CaptureDevice = ...
 Configure audio settings for optimal results:
 
 ```cs
-// List available audio devices
-foreach (var device in videoCapture.Audio_CaptureDevices)
+// List available audio devices (Audio_CaptureDevices is a method, not a property)
+foreach (var device in videoCapture.Audio_CaptureDevices())
 {
     Console.WriteLine($"Audio device: {device.Name}");
 }
@@ -115,16 +132,17 @@ videoCapture.OnError += (sender, args) =>
 Ensure proper resource cleanup:
 
 ```cs
-// Implement proper disposal
+// Implement proper disposal. State() is a method that returns PlaybackState
+// (Free | Play | Pause) — there is no VideoCaptureState enum.
 public async Task StopAndDisposeCapture()
 {
     if (videoCapture != null)
     {
-        if (videoCapture.State == VideoCaptureState.Running)
+        if (videoCapture.State() == PlaybackState.Play)
         {
             await videoCapture.StopAsync();
         }
-        
+
         videoCapture.Dispose();
     }
 }

@@ -1,6 +1,24 @@
 ---
 title: Reolink: URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecta cámaras Reolink en C# .NET con patrones de URL RTSP y ejemplos de código para modelos de las series RLC, E1, Argus, CX y Duo.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - H.265
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Reolink en C# .NET

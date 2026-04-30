@@ -1,6 +1,22 @@
 ---
 title: Tenda: URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecte cámaras Tenda en C# .NET con URLs RTSP, ejemplos de código y solución de problemas para modelos de las series CP, CT e IT.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Tenda en C# .NET

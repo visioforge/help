@@ -1,6 +1,38 @@
 ---
 title: AVI File Output Guide for .NET Video and Audio Encoding
 description: Implement AVI file output in .NET with video and audio encoding, hardware acceleration, and cross-platform multimedia container support.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Recording
+  - Encoding
+  - Editing
+  - AVI
+  - H.264
+  - H.265
+  - MJPEG
+  - AAC
+  - MP3
+  - C#
+  - NuGet
+primary_api_classes:
+  - AVIOutput
+  - VideoCaptureCoreX
+  - VOAACEncoderSettings
+  - VideoEditCoreX
+  - NVENCH264EncoderSettings
+
 ---
 
 # AVI File Output in VisioForge .NET SDKs
@@ -288,28 +320,14 @@ catch (UnauthorizedAccessException)
 }
 ```
 
-### Memory Issues with Large Files
+### 4 GB AVI container limit
 
-For handling large file recording:
+The AVI container has a hard 4 GB cap, and `AVIOutput` exposes no built-in split API. For long recordings, either:
 
-```csharp
-// Split recording into multiple files when size limit is reached
-void SetupLargeFileRecording()
-{
-    var aviOutput = new AVIOutput("recording_part1.avi");
-    
-    // Set file size limit (3.5GB to stay under 4GB AVI limit)
-    aviOutput.MaxFileSize = 3.5 * 1024 * 1024 * 1024;
-    
-    // Enable auto-split functionality
-    aviOutput.AutoSplit = true;
-    aviOutput.SplitNamingPattern = "recording_part{0}.avi";
-    
-    // Apply to Video Capture
-    var core = new VideoCaptureCoreX();
-    core.Outputs_Add(aviOutput, true);
-}
-```
+- Stop the pipeline before you approach 4 GB and start a new one with a fresh `AVIOutput(nextFilename)`, or
+- Switch container: [MP4](mp4.md) or [MKV](mkv.md) both handle multi-hour recordings without this limit.
+
+Watch free disk space and rotate at the application layer when you need multi-file capture.
 
 ## Required Dependencies
 

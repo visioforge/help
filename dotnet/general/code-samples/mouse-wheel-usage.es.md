@@ -1,6 +1,15 @@
 ---
 title: Manejo de Eventos de Rueda del Ratón en Apps de Video .NET
 description: Maneje eventos de rueda del ratón en aplicaciones de video .NET para zoom, desplazamiento y navegación de línea de tiempo con mejores prácticas y optimización.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - Editing
+  - C#
+
 ---
 
 # Implementación de Eventos de Rueda del Ratón en SDKs .NET
@@ -85,16 +94,24 @@ private void VideoView1_MouseWheel(object sender, MouseEventArgs e)
     }
 }
 
+private double _zoomRatio = 1.0;
+
 private void ZoomIn(double factor)
 {
-    // La implementación depende de la API específica de tu SDK
-    VideoView1.Zoom = Math.Min(VideoView1.Zoom + factor, 3.0); // Zoom máximo de 300%
+    // El zoom está expuesto en el renderer (motor clásico) o vía un ZoomEffect en
+    // el motor X — no en VideoView. El motor clásico usa
+    // `videoCapture1.Video_Renderer.Zoom_Ratio` (y Zoom_ShiftX / Zoom_ShiftY
+    // para el desplazamiento del centro).
+    _zoomRatio = Math.Min(_zoomRatio + factor, 3.0); // Zoom máximo de 300%
+    videoCapture1.Video_Renderer.Zoom_Ratio = _zoomRatio;
+    videoCapture1.Video_Renderer_Update();
 }
 
 private void ZoomOut(double factor)
 {
-    // La implementación depende de la API específica de tu SDK
-    VideoView1.Zoom = Math.Max(VideoView1.Zoom - factor, 0.5); // Zoom mínimo de 50%
+    _zoomRatio = Math.Max(_zoomRatio - factor, 0.5); // Zoom mínimo de 50%
+    videoCapture1.Video_Renderer.Zoom_Ratio = _zoomRatio;
+    videoCapture1.Video_Renderer_Update();
 }
 ```
 
@@ -127,20 +144,20 @@ Otro caso de uso común es controlar el volumen en aplicaciones de reproductor d
 ```cs
 private void VideoView1_MouseWheel(object sender, MouseEventArgs e)
 {
-    // Calcular cambio de volumen basándose en delta
-    float volumeChange = e.Delta / 120.0f * 0.05f; // 5% por "clic" de rueda
-    
-    // Aplicar cambio de volumen
-    float newVolume = VideoView1.Volume + volumeChange;
-    
-    // Asegurar que el volumen se mantiene en el rango 0-1
-    newVolume = Math.Max(0.0f, Math.Min(newVolume, 1.0f));
-    
-    // Establecer el nuevo volumen
-    VideoView1.Volume = newVolume;
-    
-    // Opcional: Mostrar indicador de volumen
-    ShowVolumeIndicator(newVolume);
+    // El volumen es a nivel del motor (no en VideoView). El motor clásico expone
+    // Audio_OutputDevice_Volume en rango 0–100 (porcentaje); el motor X lo expone
+    // en rango 0.0–1.0. El ejemplo siguiente apunta al motor clásico
+    // VideoCaptureCore / MediaPlayerCore — ajusta la aritmética a una proporción
+    // 0–1 si estás en el motor X.
+    int volumeChangePercent = (int)Math.Round(e.Delta / 120.0 * 5.0); // 5 puntos porcentuales por "clic" de rueda
+
+    int newVolume = videoCapture1.Audio_OutputDevice_Volume + volumeChangePercent;
+    newVolume = Math.Max(0, Math.Min(newVolume, 100));
+
+    videoCapture1.Audio_OutputDevice_Volume = newVolume;
+
+    // Opcional: Mostrar indicador de volumen (proporción 0–1 para la UI del indicador)
+    ShowVolumeIndicator(newVolume / 100f);
 }
 ```
 

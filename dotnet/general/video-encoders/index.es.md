@@ -1,9 +1,29 @@
-﻿---
+---
 title: Codificadores de Video para VisioForge .NET: H264, HEVC, AV1
 description: Descripción completa de codificadores de video con aceleración por hardware, características de códecs y optimización de rendimiento para apps de video .NET.
 sidebar_label: Codificadores de Video
 
 order: 19
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - NVENCH264EncoderSettings
+  - NVENCHEVCEncoderSettings
+  - AMFH264EncoderSettings
+  - AMFHEVCEncoderSettings
+  - QSVH264EncoderSettings
+  - QSVHEVCEncoderSettings
+  - OpenH264EncoderSettings
+  - AOMAV1EncoderSettings
 ---
 
 # Codificadores de Video para VisioForge .NET
@@ -132,23 +152,29 @@ Seleccionar el codificador óptimo depende de varios factores:
 
 Al usar codificadores acelerados por hardware, verifique la compatibilidad del sistema:
 
+Las comprobaciones de disponibilidad de encoders de hardware viven en las clases de settings específicas del códec (no hay tipo base compartido `NVENCEncoderSettings` / `AMFEncoderSettings` / `QSVEncoderSettings` — instancia `NVENCH264EncoderSettings`, `AMFHEVCEncoderSettings`, `QSVH264EncoderSettings`, etc., según el códec que necesites):
+
 ```csharp
-// Verificar disponibilidad de codificadores por hardware
-if (NVENCEncoderSettings.IsAvailable())
+// Sondea encoders H.264 de hardware en orden de prioridad.
+if (NVENCH264EncoderSettings.IsAvailable())
 {
-    // Usar codificador NVIDIA
+    // GPU NVIDIA disponible — usa NVENC H.264.
+    var settings = new NVENCH264EncoderSettings();
 }
-else if (AMFEncoderSettings.IsAvailable())
+else if (QSVH264EncoderSettings.IsAvailable())
 {
-    // Usar codificador AMD
+    // CPU Intel con Quick Sync disponible.
+    var settings = new QSVH264EncoderSettings();
 }
-else if (QSVEncoderSettings.IsAvailable())
+else if (AMFH264EncoderSettings.IsAvailable())
 {
-    // Usar codificador Intel
+    // GPU AMD disponible — usa AMF H.264.
+    var settings = new AMFH264EncoderSettings();
 }
 else
 {
-    // Recurrir a codificador por software
+    // Fallback al encoder por software (multiplataforma).
+    var settings = new OpenH264EncoderSettings();
 }
 ```
 

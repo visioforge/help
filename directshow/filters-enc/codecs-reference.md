@@ -1,6 +1,27 @@
 ---
 title: DirectShow Encoding Codecs - H.264, H.265, AAC, and More
 description: DirectShow codec reference with H.264/H.265/VP8/VP9 video, AAC/MP3/Opus audio, and hardware acceleration (NVENC, QuickSync, AMF).
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - MKV
+  - WebM
+  - TS
+  - H.264
+  - H.265
+  - VP8
+  - VP9
+  - MPEG-2
+  - AAC
+  - MP3
+  - Opus
+  - FLAC
+  - Vorbis
+  - Speex
+
 ---
 
 # Encoding Filters Pack - Codecs Reference

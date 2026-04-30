@@ -1,6 +1,40 @@
 ---
 title: VB.NET Video Player with Playback Controls and Seeking
 description: Build a video player in VB.NET with playback controls, seeking, and volume adjustment. Complete code examples using VisioForge Media Player SDK .NET.
+tags:
+  - Media Player SDK
+  - .NET
+  - DirectShow
+  - MediaPlayerCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Playback
+  - Streaming
+  - Editing
+  - Webcam
+  - MPEG-DASH
+  - MP4
+  - MKV
+  - WebM
+  - AVI
+  - MOV
+  - WMV
+  - H.265
+  - AAC
+  - MP3
+  - FLAC
+  - WAV
+  - WMA
+  - VB.NET
+  - NuGet
+primary_api_classes:
+  - MediaPlayerCoreX
+  - MediaPlayerCore
+
 ---
 
 # Build a Video Player in VB.NET
@@ -242,7 +276,7 @@ The player supports all formats listed in the table above, including MP4, AVI, M
 
 ### Should I use DirectShow or GStreamer engine for my VB.NET video player?
 
-The `MediaPlayerCoreX` API shown in this guide uses the GStreamer engine, which is the recommended choice for new projects. It supports more formats, hardware-accelerated decoding, and is actively maintained. The older DirectShow engine (`MediaPlayerCore`) is Windows-only and primarily exists for legacy compatibility. Both engines work identically from VB.NET code. If you are starting a new project, use `MediaPlayerCoreX` with the GStreamer engine.
+The `MediaPlayerCoreX` API shown in this guide uses the GStreamer engine and is the recommended choice for new cross-platform projects (Windows, macOS, Linux, iOS, Android), with the broadest format coverage and hardware-accelerated decoding. The DirectShow engine (`MediaPlayerCore`) is Windows-only but is a fully supported, first-class engine — pick it when your application is Windows-only and you want the lower per-frame overhead and the mature DirectShow filter ecosystem. Both engines work identically from VB.NET code; for new cross-platform work start with `MediaPlayerCoreX`, and for Windows-only deployments either engine is a good fit.
 
 ### How do I deploy a VB.NET video player application?
 
@@ -251,7 +285,7 @@ Include the NuGet redist packages listed in the NuGet reference section above �
 ## See Also
 
 - [Build a Video Player in C#](video-player-csharp.md) — WinForms and WPF player with DirectShow and GStreamer engines
-- [Cross-Platform Video Player](play-video-dotnet.md) — Avalonia and MAUI player using MediaBlocksPipeline
+- [.NET MAUI Video Player](maui-player.md) — iOS, Android, macOS, and Windows from one C# codebase
 - [Avalonia Player Guide](avalonia-player.md) — complete MVVM implementation with file dialogs and platform setup
 - [Loop Mode & Position Range](loop-and-position-range.md) — loop playback and segment selection for both engines
 - [Record Webcam Video in VB.NET](../../videocapture/guides/record-webcam-vb-net.md) — webcam capture application in Visual Basic .NET

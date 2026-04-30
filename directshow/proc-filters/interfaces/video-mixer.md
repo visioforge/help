@@ -1,6 +1,19 @@
 ---
 title: DirectShow Video Mixer Filter - PIP and Chroma Key API
 description: IVFVideoMixer interface for mixing 2-16 video sources with PIP, chroma keying, transparency, and customizable layout configurations.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Effects
+  - Mixing
+  - Webcam
+  - C#
+primary_api_classes:
+  - IVFVideoMixer
+  - IBaseFilter
+  - IVFChromaKey
+
 ---
 
 # IVFVideoMixer Interface Reference

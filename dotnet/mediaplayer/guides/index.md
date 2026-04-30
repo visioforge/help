@@ -3,6 +3,20 @@ title: Advanced Video Playback Guides and Tutorials in C# .NET
 description: Master loop playback, position range, and platform-specific features with VisioForge Media Player SDK .NET guides, code samples, and tutorials.
 sidebar_label: Additional Guides
 order: 1
+tags:
+  - Media Player SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - Editing
+primary_api_classes:
+  - MediaPlayerCoreX
+  - VideoView
 
 ---
 
@@ -20,9 +34,11 @@ This curated collection of guides addresses specific advanced functionalities wi
 
 ### Getting Started Guides
 
-* [**Cross-Platform Video Player — Avalonia & MAUI Guide**](play-video-dotnet.md) - Build cross-platform video players with Avalonia and .NET MAUI using MediaBlocksPipeline. Covers platform-specific setup, NuGet packages, MVVM patterns, and complete code examples for Windows, macOS, Linux, Android, and iOS.
+* [**Build a Video Player in C# (WinForms / WPF)**](video-player-csharp.md) - Step-by-step guide to building a Windows desktop video player in C# with file playback, timeline seeking, pause/resume, volume control, and playback speed adjustment using MediaPlayerCoreX.
 
-* [**Build a Video Player in C#**](video-player-csharp.md) - Step-by-step guide to building a full-featured video player in C# with file playback, timeline seeking, pause/resume, volume control, and playback speed adjustment using both MediaPlayerCoreX and MediaBlocksPipeline APIs.
+* [**Avalonia Cross-Platform Player**](avalonia-player.md) - Full MVVM video player for Windows, macOS, and Linux from one Avalonia codebase.
+
+* [**.NET MAUI Video Player**](maui-player.md) - Ship one C# codebase to iOS, Android, macOS, and Windows using the MAUI `VideoView` control and `MediaPlayerCoreX`.
 
 * [**Build a Video Player in VB.NET**](video-player-vb-net.md) - Complete VB.NET guide for building a video player application with playback controls, timeline seeking, volume adjustment, and speed control with full Visual Basic code examples.
 

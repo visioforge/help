@@ -1,6 +1,33 @@
 ---
 title: Video Overlay Manager - Text, Image, PiP Layers in C# .NET
 description: Add text, images, shapes, and PiP overlays to live video using VisioForge Media Blocks SDK OverlayManagerBlock with real-time layer management.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Playback
+  - Streaming
+  - Effects
+  - Decklink
+  - NDI Source
+  - RTSP
+  - NDI
+  - MP4
+  - GIF
+  - C#
+primary_api_classes:
+  - OverlayManagerBlock
+  - OverlayManagerShadowSettings
+  - VideoView
+  - FontSettings
+  - IVideoView
+
 ---
 
 # Overlay Manager Block usage guide
@@ -1307,10 +1334,12 @@ overlayManager.Video_Overlay_Add(squeezeback);
 // Get current playback position
 var position = await pipeline.Position_GetAsync();
 
-// Animate video from full-screen to corner over 2 seconds
+// Animate video from its current VideoRect to a corner over 2 seconds.
+// AnimateVideo has no startRect — the start position is implicit (the element's
+// current VideoRect), so configure it beforehand if you need a specific starting point.
 var squeezeback = overlayManager.Video_Overlay_GetByName("Squeezeback") as OverlayManagerSqueezeback;
+squeezeback.VideoRect = new Rect(0, 0, 1920, 1080); // Full screen starting point
 squeezeback.AnimateVideo(
-    startRect: new Rect(0, 0, 1920, 1080),      // Full screen
     targetRect: new Rect(1280, 720, 1920, 1080), // Lower-right corner
     startTime: position,
     duration: TimeSpan.FromSeconds(2),
@@ -1347,9 +1376,9 @@ var element = overlayManager.Video_Overlay_AddSqueezeback(
 // Update video position
 overlayManager.Video_Overlay_Squeezeback_UpdateVideoPosition("Squeezeback", newRect);
 
-// Animate video
+// Animate video (no startRect — start is the element's current VideoRect).
 overlayManager.Video_Overlay_Squeezeback_AnimateVideo(
-    "Squeezeback", startRect, targetRect, startTime, duration, easing);
+    "Squeezeback", targetRect, startTime, duration, easing);
 
 // Fade controls
 overlayManager.Video_Overlay_Squeezeback_VideoFadeIn("Squeezeback", startTime, duration);
@@ -1419,7 +1448,7 @@ var text = new OverlayManagerText("Info", 100, 100);
 text.Background = new OverlayManagerBackgroundRectangle {
     Color = SKColors.Black.WithAlpha(128),
     Fill = true,
-    Margin = new Thickness(5, 3, 5, 3)
+    Margin = new Rect(5, 3, 5, 3)   // Margin is a VisioForge.Core.Types.Rect (Left/Top/Right/Bottom)
 };
 ```
 
@@ -1469,10 +1498,11 @@ logo.Opacity = 0.5;
 logo.ZIndex = 10; // On top
 overlayManager.Video_Overlay_Add(logo);
 
-// Add timestamp
+// Add timestamp — position against the known output height (set up when the overlay manager block is configured)
+const int frameHeight = 720;
 var timestamp = new OverlayManagerDateTime();
 timestamp.X = 10;
-timestamp.Y = pipeline.Height - 30;
+timestamp.Y = frameHeight - 30;
 timestamp.Font.Size = 16;
 timestamp.Color = SKColors.White;
 timestamp.Shadow = new OverlayManagerShadowSettings(true);

@@ -1,6 +1,24 @@
 ---
 title: LTS IP Camera RTSP URL and C# .NET Connection Guide
 description: Connect to LTS (LT Security) cameras in C# .NET with RTSP URL patterns and code samples for CMIP, CMHR series and NVR models. LTS uses Hikvision firmware.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to LTS IP Camera in C# .NET

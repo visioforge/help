@@ -2,6 +2,20 @@
 title: Audio Visualizer Blocks for .NET - Spectrum and Waveform
 description: Build audio-reactive applications with VisioForge Media Blocks SDK visualizer blocks — Spacescope, Spectroscope, Synaescope, and Wavescope renderers.
 sidebar_label: Audio Visualizers
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - VideoRendererBlock
+  - UniversalSourceBlock
+  - MediaBlocksPipeline
+  - UniversalSourceSettings
+  - SynaescopeBlock
 
 ---
 
@@ -51,7 +65,7 @@ var spacescope = new SpacescopeBlock(spacescopeSettings);
 pipeline.Connect(fileSource.AudioOutput, spacescope.Input);
 
 // Assuming you have a VideoRendererBlock or a way to display video output
-var videoRenderer = new VideoRendererBlock(IntPtr.Zero); // Example for Windows
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(spacescope.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
@@ -94,7 +108,7 @@ var spectrascope = new SpectrascopeBlock();
 pipeline.Connect(fileSource.AudioOutput, spectrascope.Input);
 
 // Assuming you have a VideoRendererBlock or a way to display video output
-var videoRenderer = new VideoRendererBlock(IntPtr.Zero); // Example for Windows
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(spectrascope.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
@@ -133,15 +147,12 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3"; // Or any audio source
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Settings can be customized for Synaescope.
-// For example, to set a specific shader effect (if available in SynaescopeSettings):
-// var synaescopeSettings = new SynaescopeSettings() { Shader = SynaescopeShader.LibVisualCurrent };
-// var synaescope = new SynaescopeBlock(synaescopeSettings);
-var synaescope = new SynaescopeBlock(); // Default settings
+// SynaescopeBlock uses GStreamer defaults — there is no settings class on the managed surface.
+var synaescope = new SynaescopeBlock();
 pipeline.Connect(fileSource.AudioOutput, synaescope.Input);
 
 // Assuming you have a VideoRendererBlock or a way to display video output
-var videoRenderer = new VideoRendererBlock(IntPtr.Zero); // Example for Windows
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(synaescope.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
@@ -187,7 +198,7 @@ var wavescope = new WavescopeBlock(wavescopeSettings);
 pipeline.Connect(fileSource.AudioOutput, wavescope.Input);
 
 // Assuming you have a VideoRendererBlock or a way to display video output
-var videoRenderer = new VideoRendererBlock(IntPtr.Zero); // Example for Windows
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(wavescope.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();

@@ -1,6 +1,31 @@
 ---
 title: Video to Animated GIF Encoding in .NET Applications
 description: Create GIF animations from video in .NET with frame rate control, resolution settings, and optimization for cross-platform applications.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Encoding
+  - Editing
+  - GIF
+  - C#
+primary_api_classes:
+  - AnimatedGIFOutput
+  - GIFEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - VideoCaptureCore
+
 ---
 
 # GIF Encoder
@@ -78,8 +103,8 @@ var qualitySettings = new GIFEncoderSettings
    - Higher speed values consume more memory during encoding
    - For large videos, consider using lower speed values to manage memory usage
 
-3. **Loop Configuration**
-   - Use `Repeat = -1` for infinite loops
+3. **Loop Configuration** (`Repeat` is a `uint`)
+   - Use `Repeat = uint.MaxValue` for infinite loops (the docstring reads "-1 = loop forever" but the property type is `uint`, so `-1` won't compile)
    - Set specific repeat counts for presentation-style GIFs
    - Use `Repeat = 0` for single-play GIFs
 
@@ -105,27 +130,50 @@ var qualityOptimizedSettings = new GIFEncoderSettings
 
 ### Example Implementation
 
-Here's a complete example showing how to set up M4A output:
+Here's a complete example showing how to set up GIF output:
 
-Add the M4A output to the Video Capture SDK core instance:
+First build the `GIFOutput` (X engines) with the encoder settings:
+
+```csharp
+var gifOutput = new GIFOutput("output.gif");
+gifOutput.Settings = new GIFEncoderSettings
+{
+    Repeat = uint.MaxValue,  // Infinite loop
+    Speed = 4,
+};
+```
+
+Add the GIF output to the Video Capture SDK core instance:
 
 ```csharp
 var core = new VideoCaptureCoreX();
 core.Outputs_Add(gifOutput, true);
 ```
 
-Set the output format for the Video Edit SDK core instance:
+Or assign it as the `Output_Format` of a `VideoEditCoreX` timeline:
 
 ```csharp
-var core = new VideoEditCoreX();
-core.Output_Format = gifOutput;
+var editor = new VideoEditCoreX();
+editor.Input_AddVideoFile("input.mp4");
+editor.Output_Format = gifOutput;
+editor.Start();
 ```
+
+!!! note "GIF output is video-only"
+
+    `GIFOutput` implements both `IVideoCaptureXBaseOutput` and
+    `IVideoEditXBaseOutput`, so it works with `VideoCaptureCoreX` and
+    `VideoEditCoreX`. There is no muxer — `gifenc` writes the final `.gif`
+    directly. Audio tracks on the timeline are dropped, and `SmartRender = true`
+    is incompatible with GIF output (no source clip is already in `image/gif`).
+    For pipelines that need finer control over the encoder placement, the
+    Media Blocks `GIFEncoderBlock` snippet below remains available.
 
 Create a Media Blocks GIF output instance:
 
 ```csharp
 var gifSettings = new GIFEncoderSettings();
-var gifOutput = new GIFEncoderBlock(gifSettings, "output.gif");
+var gifEncoderBlock = new GIFEncoderBlock(gifSettings, "output.gif");
 ```
 
 ## Windows-only GIF output

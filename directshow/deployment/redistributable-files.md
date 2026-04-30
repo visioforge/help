@@ -1,6 +1,19 @@
 ---
 title: DirectShow SDK Redistributable Files for Deployment
 description: Complete list of redistributable files for VisioForge DirectShow SDKs with dependencies, architecture files, and deployment requirements.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - Decoding
+  - Mixing
+  - Screen Capture
+  - WebM
+  - H.264
+  - MP3
+
 ---
 
 # DirectShow SDKs - Redistributable Files Reference

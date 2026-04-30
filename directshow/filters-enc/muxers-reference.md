@@ -1,6 +1,38 @@
 ---
 title: DirectShow Muxer and Container Format Reference Guide
 description: Container format reference for VisioForge DirectShow muxers: MP4, MKV, WebM, MPEG-TS, AVI with codec compatibility and streaming configuration.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - Decoding
+  - Metadata
+  - HLS
+  - MPEG-DASH
+  - WebRTC
+  - MP4
+  - MKV
+  - WebM
+  - AVI
+  - FLV
+  - TS
+  - OGG
+  - H.264
+  - H.265
+  - VP8
+  - VP9
+  - MPEG-2
+  - AAC
+  - MP3
+  - Opus
+  - FLAC
+  - Vorbis
+  - WAV
+  - AC-3
+  - Speex
+
 ---
 
 # Encoding Filters Pack - Muxers Reference

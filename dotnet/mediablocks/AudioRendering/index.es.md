@@ -1,6 +1,21 @@
 ---
 title: Bloque de Renderizado de Audio en C# .NET - Multiplataforma
 description: Reproduzca audio en altavoces en Windows, macOS, Linux, iOS y Android con VisioForge Media Blocks SDK. Selección de dispositivo, buffer y volumen.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+primary_api_classes:
+  - AudioRendererBlock
+  - OSXAudioSinkBlock
+  - IOSAudioSinkBlock
+  - OSXAudioSinkSettings
+  - MediaBlocksPipeline
 
 ---
 

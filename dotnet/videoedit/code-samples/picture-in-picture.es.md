@@ -1,6 +1,22 @@
 ---
-title: Video Imagen en Imagen y Pantalla Dividida en C# .NET
-description: Implementa Imagen-en-Imagen, videos lado a lado y diseños de video personalizados en C# con muestras de código completas para posicionamiento de superposición.
+title: Combinar Videos en C# .NET — PiP y Pantalla Dividida
+description: Crea videos PiP y pantalla dividida en C# / .NET con VisioForge Video Edit SDK. Posiciones personalizadas, overlay en esquina, split horizontal/vertical, MP4.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCore
+  - Windows
+  - Streaming
+  - Editing
+  - MP4
+  - AVI
+  - WMV
+  - C#
+  - NuGet
+primary_api_classes:
+  - FileSegment
+  - VideoSource
+
 ---
 
 # Crear Videos Imagen-en-Imagen y Pantalla Dividida en .NET
@@ -61,8 +77,8 @@ Los parámetros incluyen:
 - Ruta del archivo
 - Segmentos de tiempo a incluir
 - Modo de estiramiento (cómo manejar diferencias de relación de aspecto)
-- Ángulo de rotación
-- Multiplicador de volumen
+- Número de stream (índice base-cero dentro de un archivo multi-stream)
+- Tasa de reproducción (1.0 = velocidad normal; 2.0 = 2× avance rápido; 0.5 = media velocidad)
 
 ### Paso 4: Configurar la Fuente de Video PIP
 
@@ -98,17 +114,21 @@ Puedes ajustar la posición y tamaño del segundo rectángulo para colocar el vi
 Finalmente, añade ambas fuentes de video a tu proyecto usando el modo PIP:
 
 ```cs
+// Firma: Input_AddVideoFile_PIP(fileSource1, fileSource2, timelineInsertTime, duration,
+//   mode, letterbox, customWidth=0, customHeight=0, targetVideoStream=0,
+//   rectangle1=null, rectangle2=null)
+// rectangle1 posiciona fileSource1 (el video principal); rectangle2 posiciona fileSource2 (el overlay PIP).
 VideoEdit1.Input_AddVideoFile_PIP(
-    videoFile,          // Video principal
-    videoFile2,         // Video PIP
-    TimeSpan.FromMilliseconds(0),         // Tiempo de inicio
-    TimeSpan.FromMilliseconds(10000),     // Duración
-    VideoEditPIPMode.Custom,              // Modo PIP
-    true,                                // Mostrar ambos videos
-    1280, 720,                           // Resolución de salida
-    0,                                   // Tipo de transición
-    rect2,                               // Rectángulo del video PIP
-    rect1                                // Rectángulo del video principal
+    videoFile,                            // fileSource1 — video principal
+    videoFile2,                           // fileSource2 — video overlay PIP
+    TimeSpan.FromMilliseconds(0),         // timelineInsertTime
+    TimeSpan.FromMilliseconds(10000),     // duration
+    VideoEditPIPMode.Custom,              // Modo PIP — Custom permite pasar rectángulos
+    true,                                 // letterbox
+    1280, 720,                            // customWidth / customHeight
+    0,                                    // targetVideoStream
+    rect1,                                // rectangle1 — posición del video principal (fotograma completo)
+    rect2                                 // rectangle2 — posición del overlay PIP
 );
 ```
 

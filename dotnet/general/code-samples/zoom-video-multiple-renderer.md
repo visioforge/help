@@ -1,6 +1,16 @@
 ---
 title: Setting Zoom Parameters for Multiple Video Renderers
 description: Configure independent zoom and position parameters for multiple video renderers across multi-screen displays in .NET multimedia applications.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - C#
+primary_api_classes:
+  - VideoRendererType
+
 ---
 
 # Configuring Zoom Settings for Multiple Video Renderers in .NET
@@ -92,17 +102,21 @@ VideoCapture1.MultiScreen_SetZoom(2, 30, 0, 30);
 
 ### 2. Handle Resolution Changes Appropriately
 
-When the input source resolution changes, you may need to recalculate zoom values:
+If the source format changes mid-session, read the current resolution from the
+`OnVideoFrameBuffer` callback (`e.Frame.Info.Width` / `e.Frame.Info.Height`) and
+re-apply zoom. Track the screen count yourself — `VideoCaptureCore` doesn't expose
+a `MultiScreen_Count` property; you know how many screens you added because you
+called `MultiScreen_AddScreen` yourself.
 
 ```cs
-private void VideoCapture1_OnVideoSourceResolutionChanged(object sender, EventArgs e)
+private int _multiScreenCount = 0; // incremented after each MultiScreen_AddScreen call
+
+private void VideoCapture1_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
 {
-    // Recalculate and apply zoom settings based on new resolution
-    int newZoom = CalculateOptimalZoom(VideoCapture1.VideoSource_ResolutionX, 
-                                       VideoCapture1.VideoSource_ResolutionY);
-    
-    // Apply to all renderers
-    for (int i = 0; i < VideoCapture1.MultiScreen_Count; i++)
+    int newZoom = CalculateOptimalZoom(e.Frame.Info.Width, e.Frame.Info.Height);
+
+    // Apply to all renderers you registered
+    for (int i = 0; i < _multiScreenCount; i++)
     {
         VideoCapture1.MultiScreen_SetZoom(i, newZoom, 0, 0);
     }
@@ -164,9 +178,10 @@ When working with multiple renderers, be mindful of performance implications:
 3. **Monitor Memory Usage**: Multiple high-resolution renderers can consume significant memory
 
 ```cs
-// Enable hardware acceleration for better performance
-VideoCapture1.Video_Renderer = VideoRendererType.EVR;
-VideoCapture1.Video_Renderer_EVR_Mode = EVRMode.Optimal;
+// Use EVR renderer for hardware-accelerated composition on Windows. Renderer settings
+// live inside Video_Renderer (a VideoRendererSettings bag), not on the core directly.
+VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.EVR;
+VideoCapture1.Video_Renderer.Deinterlace_EVR_Mode = VideoRendererEVRDeinterlaceMode.Auto;
 ```
 
 ## Troubleshooting Common Issues
@@ -176,10 +191,10 @@ VideoCapture1.Video_Renderer_EVR_Mode = EVRMode.Optimal;
 This can occur when zoom values exceed valid ranges or when renderers aren't properly initialized:
 
 ```cs
-// Reset zoom settings to default for all renderers
+// Reset zoom settings to default for all renderers you registered
 public void ResetZoomSettings()
 {
-    for (int i = 0; i < VideoCapture1.MultiScreen_Count; i++)
+    for (int i = 0; i < _multiScreenCount; i++)
     {
         VideoCapture1.MultiScreen_SetZoom(i, 100, 0, 0); // 100% zoom, no shift
     }

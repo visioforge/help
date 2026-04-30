@@ -1,6 +1,23 @@
 ---
 title: TV Tuner MPEG-2 Hardware Capture and Recording in C# .NET
 description: Capture TV tuner video to MPEG-2 using hardware encoders in VisioForge Video Capture SDK. Step-by-step C# guide for WPF, WinForms, and Console apps.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Streaming
+  - Encoding
+  - TV Tuner
+  - MPEG-2
+  - C#
+  - NuGet
+primary_api_classes:
+  - DirectCaptureMPEGOutput
+  - SpecialFilterType
+  - VideoCaptureMode
+
 ---
 
 # MPEG-2 Video Capture Using TV Tuner Hardware Encoder in .NET

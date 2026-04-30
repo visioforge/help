@@ -1,6 +1,17 @@
 ---
 title: API de Playlist en .NET - Media Player SDK con C# y WPF
 description: Implementa funcionalidad de playlist en aplicaciones WinForms, WPF y Console con gestión de reproducción secuencial de medios en .NET.
+tags:
+  - Media Player SDK
+  - .NET
+  - MediaPlayerCore
+  - Windows
+  - Playback
+  - MP4
+  - C#
+primary_api_classes:
+  - NewFilePlaybackEventArgs
+
 ---
 
 # Guía Completa para Implementación de API de Playlist en .NET
@@ -198,38 +209,38 @@ private bool repeatEnabled = false;
 private bool shuffleEnabled = false;
 private Random random = new Random();
 
-// Manejar navegación de playlist cuando la reproducción de medios se detiene
+// Manejar la navegación de la playlist cuando una pista termina. OnStop se dispara tanto para el
+// fin normal del archivo como para llamadas explícitas a Stop() — usa OnPlaylistFinished (abajo)
+// para reaccionar solo al final de toda la playlist. StopEventArgs expone Successful (bool) y
+// Position (TimeSpan); NO existe el enum StopReason.
 private void MediaPlayer1_OnStop(object sender, StopEventArgs e)
 {
-    // Verificar si este es el fin del medio (no una detención manual)
-    if (e.Reason == StopReason.EndOfMedia)
+    if (!e.Successful)
     {
-        if (repeatEnabled)
+        return; // Error o abortado — no auto-avanzar
+    }
+
+    if (repeatEnabled)
+    {
+        // Solo reproducir el elemento actual de nuevo
+        this.mediaPlayer1.Play();
+    }
+    else if (shuffleEnabled)
+    {
+        // Reproducir un elemento aleatorio
+        int totalFiles = this.mediaPlayer1.Playlist_GetCount();
+        int randomIndex = random.Next(0, totalFiles);
+        this.mediaPlayer1.Playlist_SetPosition(randomIndex);
+        this.mediaPlayer1.Play();
+    }
+    else
+    {
+        // Comportamiento estándar: reproducir siguiente si está disponible
+        if (this.mediaPlayer1.Playlist_GetPosition() < this.mediaPlayer1.Playlist_GetCount() - 1)
         {
-            // Solo reproducir el elemento actual de nuevo
-            this.mediaPlayer1.Play();
+            this.mediaPlayer1.Playlist_PlayNext();
         }
-        else if (shuffleEnabled)
-        {
-            // Reproducir un elemento aleatorio
-            int totalFiles = this.mediaPlayer1.Playlist_GetCount();
-            int randomIndex = random.Next(0, totalFiles);
-            this.mediaPlayer1.Playlist_SetPosition(randomIndex);
-            this.mediaPlayer1.Play();
-        }
-        else
-        {
-            // Comportamiento estándar: reproducir siguiente si está disponible
-            if (this.mediaPlayer1.Playlist_GetPosition() < this.mediaPlayer1.Playlist_GetCount() - 1)
-            {
-                this.mediaPlayer1.Playlist_PlayNext();
-            }
-            else
-            {
-                // Hemos llegado al final de la playlist
-                // OnPlaylistFinished será disparado
-            }
-        }
+        // Si no, hemos llegado al final de la playlist — OnPlaylistFinished se dispara aparte.
     }
 }
 

@@ -1,6 +1,24 @@
 ---
 title: Instalar SDK de Video VisioForge en Aplicaciones Avalonia
 description: Construye aplicaciones Avalonia multiplataforma con capacidades multimedia para Windows, macOS, Linux, Android e iOS usando SDKs de video de VisioForge.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Avalonia
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoView
+
 ---
 
 # Construyendo Aplicaciones Avalonia Ricas en Medios con VisioForge
@@ -27,8 +45,8 @@ Agrega estos a tu manifiesto de proyecto (`.csproj`):
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2025.4.10" />
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2025.4.10" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.*" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.*" />
   <!-- Los paquetes específicos de plataforma se agregarán en ItemGroups condicionales -->
 </ItemGroup>
 ```
@@ -93,7 +111,7 @@ Agrega los siguientes paquetes específicos de Windows a tu proyecto de escritor
 
 ```xml
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.4.9" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.*" />
 </ItemGroup>
 ```
 
@@ -103,7 +121,7 @@ Para compatibilidad extendida de codecs, incluye la variante UPX optimizada en t
 
 ```xml
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2025.4.9" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.*" />
 </ItemGroup>
 ```
 
@@ -119,7 +137,7 @@ Incluye los componentes nativos específicos de macOS:
 
 ```xml
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.2.15" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.*" />
 </ItemGroup>
 ```
 
@@ -180,7 +198,7 @@ Agrega el paquete redistributable de Android:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="15.10.33" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.*" />
 </ItemGroup>
 ```
 
@@ -204,7 +222,7 @@ Agrega el redistributable específico de iOS a tu proyecto principal de iOS:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.0.16" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.*" />
 </ItemGroup>
 ```
 
@@ -277,8 +295,8 @@ La integración de VisioForge con Avalonia sobresale con una estructura de proye
         <!-- Referencias adicionales de Avalonia -->
       </ItemGroup>
       <ItemGroup>
-        <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2025.4.10" />
-        <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2025.4.10" />
+        <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.*" />
+        <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.*" />
       </ItemGroup>
     </Project>
     ```

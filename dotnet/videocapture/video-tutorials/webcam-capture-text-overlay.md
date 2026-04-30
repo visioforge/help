@@ -1,6 +1,25 @@
 ---
 title: Webcam Capture with Text Overlay in C# .NET Tutorial
 description: Capture webcam video and add custom text overlays in C# .NET with step-by-step instructions, complete code samples, and techniques.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - WinForms
+  - Capture
+  - Playback
+  - Webcam
+  - MP4
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+  - IVideoView
+  - VideoCaptureSource
+  - AudioCaptureSource
+  - MP4Output
+
 ---
 
 # Adding Text Overlays to Webcam Video Capture in C# .NET

@@ -3,6 +3,9 @@ title: VisioForge .NET SDK General Guides and Documentation
 description: Comprehensive guides for VisioForge .NET SDKs covering video capture, media playback, editing, encoders, effects, and network streaming.
 sidebar_label: General Information
 order: 18
+tags:
+  - .NET
+  - Streaming
 
 ---
 

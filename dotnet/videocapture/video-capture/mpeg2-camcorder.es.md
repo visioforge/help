@@ -1,6 +1,22 @@
 ---
 title: Captura de videocámara a MPEG-2 en .NET con ejemplos C#
 description: Implemente captura de video de videocámara de alta calidad a MPEG-2 en .NET con pasos de implementación, ejemplos de código y técnicas de optimización.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Encoding
+  - MPEG-2
+  - C#
+  - NuGet
+primary_api_classes:
+  - DirectCaptureMPEGOutput
+  - VideoCaptureCore
+  - VideoCaptureMode
+  - PlaybackState
+
 ---
 
 # Capturando Video de Videocámara a Formato MPEG-2
@@ -45,8 +61,9 @@ Install-Package VisioForge.DotNet.Core.Redist.VideoCapture.x64
 El siguiente código demuestra cómo configurar y ejecutar una captura básica de videocámara a MPEG-2:
 
 ```cs
-// Inicializar componente de captura de video
-using var videoCapture = new VideoCapture();
+// Inicializar componente de captura de video. VideoCaptureCore requiere un IVideoView
+// (VideoView de WinForms, WPF, etc.) para alojar la ventana de vista previa.
+using var videoCapture = new VideoCaptureCore(VideoView1 as IVideoView);
 
 // Configurar formato de salida MPEG-2
 videoCapture.Output_Format = new DirectCaptureMPEGOutput();
@@ -71,8 +88,8 @@ await videoCapture.StopAsync();
 Para asegurar que su aplicación capture desde la videocámara correcta:
 
 ```cs
-// Listar dispositivos de entrada de video disponibles
-foreach (var device in videoCapture.Video_CaptureDevices)
+// Listar dispositivos de entrada de video disponibles (Video_CaptureDevices es un método, no una propiedad)
+foreach (var device in videoCapture.Video_CaptureDevices())
 {
     Console.WriteLine($"Dispositivo: {device.Name}");
 }
@@ -88,8 +105,8 @@ videoCapture.Video_CaptureDevice = ...
 Configure los ajustes de audio para resultados óptimos:
 
 ```cs
-// Listar dispositivos de audio disponibles
-foreach (var device in videoCapture.Audio_CaptureDevices)
+// Listar dispositivos de audio disponibles (Audio_CaptureDevices es un método, no una propiedad)
+foreach (var device in videoCapture.Audio_CaptureDevices())
 {
     Console.WriteLine($"Dispositivo de audio: {device.Name}");
 }
@@ -115,16 +132,17 @@ videoCapture.OnError += (sender, args) =>
 Asegure la limpieza apropiada de recursos:
 
 ```cs
-// Implementar disposición apropiada
+// Implementar disposición apropiada. State() es un método que devuelve PlaybackState
+// (Free | Play | Pause) — no existe un enum VideoCaptureState.
 public async Task StopAndDisposeCapture()
 {
     if (videoCapture != null)
     {
-        if (videoCapture.State == VideoCaptureState.Running)
+        if (videoCapture.State() == PlaybackState.Play)
         {
             await videoCapture.StopAsync();
         }
-        
+
         videoCapture.Dispose();
     }
 }

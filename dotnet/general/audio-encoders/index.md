@@ -4,6 +4,18 @@ description: Implement AAC, FLAC, MP3, Opus, and other audio encoders in .NET wi
 sidebar_label: Audio Encoders
 
 order: 20
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+
 ---
 
 # Audio Encoders for .NET Development
@@ -15,6 +27,38 @@ order: 20
 When developing media applications in .NET, choosing the right audio encoder is crucial for ensuring optimal performance, compatibility, and quality. VisioForge's suite of .NET SDKs provides developers with powerful tools for audio encoding across various formats, enabling the creation of professional-grade media applications.
 
 Audio encoders are essential components that convert raw audio data into compressed formats suitable for storage, streaming, or playback. Each encoder offers different advantages in terms of compression ratio, audio quality, processing requirements, and platform compatibility. This guide will help you navigate the various audio encoding options available in VisioForge's .NET SDKs.
+
+## Quick Start — Pick an audio encoder
+
+Every encoder on the cross-platform engines is a settings class that you assign to the output's `Audio` property (or pass to a `*OutputBlock` in Media Blocks). The surrounding pipeline is the same — only the settings type changes.
+
+```csharp
+using VisioForge.Core.Types.X.AudioEncoders;
+using VisioForge.Core.Types.X.Output;
+
+// MP4 container: encode audio with AAC.
+var mp4 = new MP4Output("output.mp4");
+mp4.Audio = new VOAACEncoderSettings { Bitrate = 192 };   // 128/192/256 kbps typical
+
+// MKV container: swap in a different codec on the same Audio slot.
+var mkv = new MKVOutput("output.mkv");
+mkv.Audio = new OPUSEncoderSettings { Bitrate = 128 };
+
+// FLAC: lossless audio-only output.
+var flac = new FLACOutput("music.flac");
+flac.Audio.Quality = 5;                                  // 0 fastest .. 8 highest, 9 insane
+
+// Standalone formats (one encoder = one container):
+var mp3 = new MP3Output("song.mp3");       // MP3
+var wav = new WAVOutput("raw.wav");        // uncompressed PCM
+var ogg = new OGGVorbisOutput("music.ogg"); // OGG + Vorbis
+
+// Attach to a VideoCaptureCoreX or VideoEditCoreX instance:
+// core.Outputs_Add(mp4, true);   // VideoCaptureCoreX
+// core.Output_Format = mp4;      // VideoEditCoreX
+```
+
+Pick the encoder that matches your target: **AAC** for broad compatibility (MP4, M4A, streaming), **Opus** for low-latency / low-bitrate voice or music, **MP3** for legacy distribution, **FLAC** for lossless archives, **Vorbis** for open-format WebM/OGG pipelines. Detailed per-encoder pages cover bitrate tables, sample-rate limits, and tuning parameters.
 
 ## Available Audio Encoders
 

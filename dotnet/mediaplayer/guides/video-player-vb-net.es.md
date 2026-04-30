@@ -1,6 +1,40 @@
 ---
 title: Crear un reproductor de video en VB.NET - Guía completa
 description: Aprenda a crear un reproductor de video en VB.NET con controles de reproducción, búsqueda en línea de tiempo y volumen usando Media Player SDK .Net.
+tags:
+  - Media Player SDK
+  - .NET
+  - DirectShow
+  - MediaPlayerCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Playback
+  - Streaming
+  - Editing
+  - Webcam
+  - MPEG-DASH
+  - MP4
+  - MKV
+  - WebM
+  - AVI
+  - MOV
+  - WMV
+  - H.265
+  - AAC
+  - MP3
+  - FLAC
+  - WAV
+  - WMA
+  - VB.NET
+  - NuGet
+primary_api_classes:
+  - MediaPlayerCoreX
+  - MediaPlayerCore
+
 ---
 
 # Crear un reproductor de video en VB.NET
@@ -242,7 +276,7 @@ El reproductor admite todos los formatos listados en la tabla anterior, incluyen
 
 ### ¿Debería usar el motor DirectShow o GStreamer para mi reproductor de video en VB.NET?
 
-La API `MediaPlayerCoreX` mostrada en esta guía utiliza el motor GStreamer, que es la opción recomendada para nuevos proyectos. Admite más formatos, decodificación acelerada por hardware y se mantiene activamente. El motor DirectShow anterior (`MediaPlayerCore`) es exclusivo de Windows y existe principalmente para compatibilidad con código heredado. Ambos motores funcionan de forma idéntica desde código VB.NET. Si está comenzando un nuevo proyecto, use `MediaPlayerCoreX` con el motor GStreamer.
+La API `MediaPlayerCoreX` mostrada en esta guía utiliza el motor GStreamer y es la opción recomendada para nuevos proyectos multiplataforma (Windows, macOS, Linux, iOS, Android), con la cobertura de formatos más amplia y decodificación acelerada por hardware. El motor DirectShow (`MediaPlayerCore`) es exclusivo de Windows pero es un motor de primera clase totalmente soportado — elíjalo cuando su aplicación sea solo Windows y desee menor sobrecarga por cuadro y el ecosistema maduro de filtros DirectShow. Ambos motores funcionan de forma idéntica desde código VB.NET; para nuevo trabajo multiplataforma comience con `MediaPlayerCoreX`, y para despliegues solo Windows cualquiera de los dos motores es una buena opción.
 
 ### ¿Cómo despliego una aplicación de reproductor de video en VB.NET?
 
@@ -251,7 +285,7 @@ Incluya los paquetes NuGet redist listados en la sección de referencia de NuGet
 ## Ver También
 
 - [Crear un Reproductor de Video en C#](video-player-csharp.md) — reproductor WinForms y WPF con motores DirectShow y GStreamer
-- [Reproductor de Video Multiplataforma](play-video-dotnet.md) — reproductor Avalonia y MAUI usando MediaBlocksPipeline
+- [Reproductor de Video .NET MAUI](maui-player.md) — iOS, Android, macOS y Windows desde una sola base de código C#
 - [Guía del Reproductor Avalonia](avalonia-player.md) — implementación MVVM completa con diálogos de archivos y configuración de plataforma
 - [Modo Loop y Rango de Posición](loop-and-position-range.md) — reproducción en bucle y selección de segmentos para ambos motores
 - [Grabar Video de Webcam en VB.NET](../../videocapture/guides/record-webcam-vb-net.md) — aplicación de captura de webcam en Visual Basic .NET

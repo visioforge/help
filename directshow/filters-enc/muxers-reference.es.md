@@ -1,6 +1,38 @@
 ---
 title: Referencia de Multiplexores y Contenedores DirectShow
 description: Referencia de formatos de contenedor DirectShow para multiplexores MP4, MKV, WebM, MPEG-TS y AVI con códecs compatibles y opciones de transmisión.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - Decoding
+  - Metadata
+  - HLS
+  - MPEG-DASH
+  - WebRTC
+  - MP4
+  - MKV
+  - WebM
+  - AVI
+  - FLV
+  - TS
+  - OGG
+  - H.264
+  - H.265
+  - VP8
+  - VP9
+  - MPEG-2
+  - AAC
+  - MP3
+  - Opus
+  - FLAC
+  - Vorbis
+  - WAV
+  - AC-3
+  - Speex
+
 ---
 
 # Paquete de Filtros de Codificación - Referencia de Multiplexores

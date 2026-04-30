@@ -1,6 +1,19 @@
 ---
 title: Detección de Rostros en Aplicaciones de Video .NET
 description: Implemente la detección de rostros en aplicaciones .NET con ejemplos de código, opciones de configuración y técnicas de optimización para flujos de video.
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - Computer Vision
+  - Webcam
+  - IP Camera
+  - C#
+  - NuGet
+primary_api_classes:
+  - AFFaceDetectionEventArgs
+  - FaceTrackingSettings
+
 ---
 
 # Implementación de Detección de Rostros en Aplicaciones de Video .NET
@@ -48,12 +61,34 @@ Desglosemos cada uno de estos pasos con ejemplos de código detallados.
 
 ## Paso 1: Configurar Su Fuente de Video
 
-El primer paso es elegir y configurar su fuente de entrada de video. Esto podría ser:
+El seguimiento de rostros corre sobre la fuente a la que esté enlazada la instancia `VideoCaptureCore`. Elige una de las siguientes configuraciones:
 
-- Una cámara web conectada a la computadora
-- Una cámara IP en la red
-- Un archivo de video para procesamiento
-- Un flujo de video de otra fuente
+=== "Cámara web"
+
+    ```cs
+    VideoCapture1.Mode = VideoCaptureMode.VideoPreview;
+    VideoCapture1.Video_CaptureDevice = new VideoCaptureSource("USB Camera");
+    VideoCapture1.Video_CaptureDevice.Format_UseBest = true;
+    ```
+
+=== "Cámara IP (RTSP/HTTP)"
+
+    ```cs
+    VideoCapture1.Mode = VideoCaptureMode.IPPreview;
+    VideoCapture1.IP_Camera_Source = new IPCameraSourceSettings
+    {
+        URL = new Uri("rtsp://camera.local:554/stream"),
+        Type = IPSourceEngine.Auto_VLC,
+        Login = "admin",
+        Password = "password"
+    };
+    ```
+
+=== "Archivo de video (Media Player SDK)"
+
+    Para detección de rostros offline en archivos, usa `MediaPlayerCore` del Media Player SDK — la propiedad `Face_Tracking` se comporta igual en todos los motores. El resto de esta guía (Pasos 2–5) sigue aplicando; reemplaza `VideoCapture1` por tu instancia `MediaPlayer1`.
+
+Elige un patrón y continúa con el Paso 2 para habilitar el seguimiento de rostros en esa fuente.
 
 ## Paso 2: Configurar Ajustes de Seguimiento de Rostros
 
@@ -76,20 +111,18 @@ VideoCapture1.Face_Tracking = new FaceTrackingSettings
     
     // Single or multiple face detection
     SearchMode = ObjectDetectorSearchMode.Single,
-    
-    // Optional: set custom highlight color
-    HighlightColor = Color.YellowGreen,
-    
-    // Optional: detection confidence threshold (0-100)
-    DetectionThreshold = 85
+
+    // Factor de escala para recorrer la pirámide (1.0 < factor <= 2.0)
+    ScaleFactor = 1.2f
 };
 ```
 
 ### Entendiendo los Parámetros de Seguimiento de Rostros
 
-- **ColorMode**: Determina cómo el algoritmo procesa los colores para la detección
+- **ColorMode** (`CamshiftMode`): Determina cómo el algoritmo procesa los colores para la detección
   - RGB: Procesamiento de color RGB estándar
-  - HSV: Espacio de color Matiz-Saturación-Valor, puede ser más robusto en iluminación variable
+  - HSL: Espacio de color Matiz-Saturación-Luminosidad, puede ser más robusto en iluminación variable
+  - Mixed: Combina canales RGB y HSL
   
 - **ScalingMode**: Controla cómo el algoritmo busca a través de diferentes escalas
   - GreaterToSmaller: Comienza con rostros potenciales más grandes y trabaja hacia abajo
@@ -108,38 +141,36 @@ VideoCapture1.Face_Tracking = new FaceTrackingSettings
 Para responder a los rostros detectados, necesita crear un manejador de eventos y registrarlo con el SDK:
 
 ```cs
-// Define delegate for the face detection event
-public delegate void FaceDelegate(AFFaceDetectionEventArgs e);
-
-// Create method to handle face detection events
-public void FaceDelegateMethod(AFFaceDetectionEventArgs e)
+// OnFaceDetected es un EventHandler<AFFaceDetectionEventArgs> estándar.
+// e.FaceRectangles es un Rectangle[] — use .Length, no .Count.
+private void OnFaceDetectedHandler(object sender, AFFaceDetectionEventArgs e)
 {
-    // Clear previous text
+    // Limpiar texto previo
     edFaceTrackingFaces.Text = string.Empty;
 
-    // Process each detected face
+    // Procesar cada rostro detectado
     foreach (var faceRectangle in e.FaceRectangles)
     {
-        // Display face coordinates and dimensions
-        edFaceTrackingFaces.Text += 
+        // Mostrar coordenadas y dimensiones del rostro
+        edFaceTrackingFaces.Text +=
             $"Position: ({faceRectangle.Left}, {faceRectangle.Top}), " +
             $"Size: ({faceRectangle.Width}, {faceRectangle.Height}){Environment.NewLine}";
-        
-        // You can also calculate center point
+
+        // También puede calcular el punto central
         int centerX = faceRectangle.Left + (faceRectangle.Width / 2);
         int centerY = faceRectangle.Top + (faceRectangle.Height / 2);
         edFaceTrackingFaces.Text += $"Center: ({centerX}, {centerY}){Environment.NewLine}";
-        
-        // Optional: Add timestamp for tracking
-        edFaceTrackingFaces.Text += $"Time: {DateTime.Now.ToString("HH:mm:ss.fff")}{Environment.NewLine}{Environment.NewLine}";
+
+        // Opcional: añadir marca de tiempo para seguimiento
+        edFaceTrackingFaces.Text += $"Time: {DateTime.Now:HH:mm:ss.fff}{Environment.NewLine}{Environment.NewLine}";
     }
-    
-    // Update face count
-    lblFaceCount.Text = $"Faces detected: {e.FaceRectangles.Count}";
+
+    // Actualizar conteo de rostros (Rectangle[] — Length, no Count)
+    lblFaceCount.Text = $"Faces detected: {e.FaceRectangles.Length}";
 }
 
-// Register the event handler
-VideoCapture1.OnFaceDetected += new AFFaceDetectionEventHandler(FaceDelegateMethod);
+// Registrar el manejador de eventos
+VideoCapture1.OnFaceDetected += OnFaceDetectedHandler;
 ```
 
 Este manejador de eventos proporciona actualizaciones en tiempo real cada vez que se detectan rostros. El manejador recibe coordenadas de rostros que puede usar para:
@@ -159,7 +190,7 @@ Más allá del resaltado incorporado, es posible que desee implementar visualiza
 
 ```cs
 // Custom visualization - draw face rectangles on an overlay
-private void DrawFacesOnOverlay(List<Rectangle> faceRectangles, PictureBox overlay)
+private void DrawFacesOnOverlay(Rectangle[] faceRectangles, PictureBox overlay)
 {
     // Create bitmap for overlay
     Bitmap overlayBitmap = new Bitmap(overlay.Width, overlay.Height);

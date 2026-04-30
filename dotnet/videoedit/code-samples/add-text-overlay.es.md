@@ -1,6 +1,20 @@
-﻿---
-title: Superposiciones de Texto en Videos con .NET
+---
+title: Superposiciones de Texto en Videos .NET con C# y SDK
 description: Crea superposiciones de texto dinámicas con control completo sobre fuente, color, posición y temporización. Incluye ejemplos de código y animaciones.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Editing
+  - C#
+primary_api_classes:
+  - VideoEditCoreX
+  - TextOverlay
 ---
 
 # Implementar Superposiciones de Texto en Proyectos de Video

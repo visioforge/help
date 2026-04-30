@@ -1,6 +1,33 @@
 ---
 title: Configuración de Salida FFMPEG.exe en .NET Video SDKs
 description: Configure salida FFMPEG.exe en .NET para captura y edición de video con aceleración por hardware, códecs personalizados y opciones de codificación profesional.
+tags:
+  - Video Capture SDK
+  - Video Edit SDK
+  - .NET
+  - VideoCaptureCore
+  - VideoEditCore
+  - Windows
+  - Capture
+  - Encoding
+  - Editing
+  - MP4
+  - WebM
+  - AVI
+  - MOV
+  - TS
+  - H.264
+  - H.265
+  - ProRes
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+  - VideoEditCore
+  - FFMPEGEXEOutput
+  - H264MFSettings
+  - H264NVENCSettings
+
 ---
 
 # Integración de FFMPEG.exe con los SDK .Net de VisioForge
@@ -74,6 +101,8 @@ Antes de implementar salida FFMPEG, asegúrese de que su entorno de desarrollo e
 using VisioForge.Core.Types;
 using VisioForge.Core.Types.VideoCapture;
 using VisioForge.Core.Types.VideoEdit;
+using VisioForge.Core.Types.Output;     // FFMPEGEXEOutput
+using VisioForge.Core.Types.FFMPEGEXE;  // H264MFSettings, H264NVENCSettings, H264QSVSettings, HEVCQSVSettings, OutputMuxer, BasicAudioSettings, ...
 ```
 
 ### 2. Inicialización de salida FFMPEG
@@ -96,7 +125,7 @@ ffmpegOutput.OutputMuxer = OutputMuxer.MP4;
 
 Otras opciones comunes de contenedor incluyen:
 
-- `OutputMuxer.MKV` - Para contenedor Matroska
+- `OutputMuxer.Matroska` - Para contenedor Matroska (.mkv)
 - `OutputMuxer.WebM` - Para formato WebM
 - `OutputMuxer.AVI` - Para formato AVI
 - `OutputMuxer.MOV` - Para contenedor QuickTime
@@ -110,8 +139,8 @@ FFMPEG proporciona múltiples opciones de codificador de video. Seleccione y con
 ```csharp
 var videoEncoder = new H264MFSettings
 {
-    Bitrate = 5000000,
-    RateControlMode = RateControlMode.CBR
+    Bitrate     = 5000, // Kbit/s — 5000 = 5 Mbps
+    RateControl = H264MFRateControl.CBR,
 };
 ffmpegOutput.Video = videoEncoder;
 ```

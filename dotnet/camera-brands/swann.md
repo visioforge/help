@@ -1,6 +1,23 @@
 ---
 title: Swann IP Camera RTSP URL and C# .NET Connection Guide
 description: Swann NHD, SWNHD, DVR/NVR, and ADS camera RTSP URL patterns for C# .NET. Stream and record using VisioForge Video Capture SDK integration code.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Swann IP Camera in C# .NET

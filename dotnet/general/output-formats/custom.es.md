@@ -1,6 +1,27 @@
 ---
 title: Formatos de Video Personalizados DirectShow en .NET
 description: Implemente formatos de salida de video personalizados con filtros DirectShow para pipelines especializados y configuración de códecs en aplicaciones .NET.
+tags:
+  - Video Capture SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - VideoCaptureCore
+  - VideoEditCore
+  - Windows
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - MP4
+  - C#
+  - NuGet
+primary_api_classes:
+  - CustomOutput
+  - VideoCaptureCore
+  - VideoEditCore
+  - VideoCaptureMode
+
 ---
 
 # Creación de Formatos de Salida de Video Personalizados con Filtros DirectShow

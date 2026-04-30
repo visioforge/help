@@ -1,6 +1,14 @@
 ---
 title: Control de Brillo, Contraste y Saturación en Delphi
 description: Ajuste brillo, contraste y saturación de cámara en Delphi con controles de hardware TVFVideoCapture y ejemplos de configuración de parámetros.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+
 ---
 
 # Implementando Ajustes de Video de Hardware en Aplicaciones Delphi
@@ -42,7 +50,7 @@ VideoCapture1.Video_CaptureDevice_VideoAdjust_GetRanges(adj_Brightness, min, max
 int min, max, step, default_value;
 BOOL auto_value;
 m_VideoCapture.Video_CaptureDevice_VideoAdjust_GetRanges(
-  VF_VIDEOCAP_ADJ_BRIGHTNESS,
+  TxVFVideoCapAdjust::adj_Brightness,
   &min,
   &max,
   &step,
@@ -82,7 +90,7 @@ VideoCapture1.Video_CaptureDevice_VideoAdjust_SetValue(
 // Usa posición del control deslizante para valor de ajuste manual
 // Estado de casilla de verificación determina si el auto-ajuste está habilitado
 m_VideoCapture.Video_CaptureDevice_VideoAdjust_SetValue(
-  VF_VIDEOCAP_ADJ_BRIGHTNESS,
+  TxVFVideoCapAdjust::adj_Brightness,
   m_sliderBrightness.GetPos(),
   m_checkBrightnessAuto.GetCheck() == BST_CHECKED);
 ```

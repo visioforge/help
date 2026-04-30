@@ -1,6 +1,16 @@
 ---
 title: Camera Brightness, Contrast, and Saturation in C# .NET
 description: Control camera settings including brightness, contrast, hue, and saturation in .NET with Video Capture SDK code examples for adjustments.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - C#
+primary_api_classes:
+  - VideoCaptureDeviceAdjustValue
+
 ---
 
 # Mastering Camera Image Controls in .NET Applications
@@ -9,11 +19,11 @@ description: Control camera settings including brightness, contrast, hue, and sa
 
 ## Introduction to Camera Hardware Adjustments
 
-When developing applications that utilize webcams or other video capture devices, having precise control over image quality parameters is essential for creating professional-grade software. The `VideoHardwareAdjustment` class provides developers with powerful tools to programmatically adjust camera settings such as brightness, contrast, hue, saturation, sharpness, gamma, and more.
+When developing applications that utilize webcams or other video capture devices, having precise control over image quality parameters is essential for creating professional-grade software. The `VideoHardwareAdjustment` enum selects which hardware adjustment you are reading or writing, and the SDK exposes programmatic control over camera settings such as brightness, contrast, hue, saturation, sharpness, gamma, and more.
 
 ## Supported Hardware Adjustment Properties
 
-The SDK supports numerous adjustment properties including:
+The `VideoHardwareAdjustment` enum covers:
 
 - Brightness
 - Contrast
@@ -21,10 +31,13 @@ The SDK supports numerous adjustment properties including:
 - Saturation
 - Sharpness
 - Gamma
-- White Balance
-- Backlight Compensation
+- ColorEnable
+- WhiteBalance
+- BacklightCompensation
 - Gain
-- Exposure
+- PowerLineFrequency
+
+Exposure, focus, zoom, and other lens-level controls live on a separate API family (`Video_CaptureDevice_CameraControl_*` + the `CameraControlProperty` enum) — this page covers hardware *image* adjustments only.
 
 Note that not all cameras support every property. The SDK will gracefully ignore any property not supported by the specific camera hardware you're using.
 
@@ -43,7 +56,7 @@ var brightnessRange = await VideoCapture1.Video_CaptureDevice_VideoAdjust_GetRan
 int minValue = brightnessRange.Min;
 int maxValue = brightnessRange.Max;
 int defaultValue = brightnessRange.Default;
-int step = brightnessRange.SteppingDelta;
+int step = brightnessRange.Step;
 ```
 
 ### Setting Adjustment Values

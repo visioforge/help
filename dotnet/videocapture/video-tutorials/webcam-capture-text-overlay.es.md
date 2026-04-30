@@ -1,6 +1,25 @@
 ---
 title: Superposición de Texto en Video de Webcam (C# .NET)
 description: Captura video de webcam y agrega superposiciones de texto personalizadas en C# .NET con instrucciones paso a paso, ejemplos de código completos y técnicas.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - WinForms
+  - Capture
+  - Playback
+  - Webcam
+  - MP4
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+  - IVideoView
+  - VideoCaptureSource
+  - AudioCaptureSource
+  - MP4Output
+
 ---
 
 # Agregando Superposiciones de Texto a Captura de Video de Webcam en C# .NET

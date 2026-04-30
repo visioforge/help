@@ -1,6 +1,36 @@
 ---
 title: Codificación y Salida de Archivos MOV en Apps de Video .NET
 description: Genere archivos MOV en .NET con codificación acelerada por hardware, soporte multiplataforma y opciones de configuración profesional de audio/video.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Encoding
+  - Editing
+  - MP4
+  - MOV
+  - H.264
+  - H.265
+  - AAC
+  - MP3
+  - C#
+primary_api_classes:
+  - MOVOutput
+  - NVENCH264EncoderSettings
+  - VOAACEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+
 ---
 
 # Salida de Archivo MOV para Aplicaciones de Video .NET
@@ -72,15 +102,15 @@ La salida MOV soporta estos codificadores de video. Para opciones de configuraci
 Establezca un codificador de video específico con código como este:
 
 ```csharp
-// Para codificación acelerada por hardware NVIDIA
+// Para codificación acelerada por hardware NVIDIA. Bitrate es Kbit/s en codificadores del espacio X.
 movOutput.Video = new NVENCH264EncoderSettings() {
-    Bitrate = 5000000,  // 5 Mbps
+    Bitrate = 5000,  // Kbit/s — 5 Mbps
 };
 
-// Para codificación basada en software con OpenH264
+// Para codificación basada en software con OpenH264. RateControl es OpenH264RCMode (no RateControlMode).
 movOutput.Video = new OpenH264EncoderSettings() {
-    RateControl = RateControlMode.VBR,
-    Bitrate = 2500000  // 2.5 Mbps
+    RateControl = OpenH264RCMode.Bitrate,
+    Bitrate = 2500,  // Kbit/s — 2.5 Mbps
 };
 ```
 
@@ -131,21 +161,21 @@ Para detalles de configuración de códecs de audio, consulte la [documentación
 Implementar codificación de audio requiere código mínimo:
 
 ```csharp
-// Configuración MP3
+// Configuración MP3. Bitrate es Kbit/s (uno de 8/16/.../320). MP3EncoderSettings expone solo
+// Bitrate y ForceMono — el número de canales sigue la fuente upstream.
 movOutput.Audio = new MP3EncoderSettings() {
-    Bitrate = 320000,  // 320 kbps alta calidad
-    Channels = 2       // Estéreo
+    Bitrate = 320,        // Kbit/s — 320 kbps alta calidad
+    ForceMono = false,    // Dejar en false (default) para mantener estéreo de la fuente
 };
 
 // O AAC para mejor calidad (Windows)
 movOutput.Audio = new MFAACEncoderSettings() {
-    Bitrate = 192000   // 192 kbps
+    Bitrate = 192,        // Kbit/s — 192 kbps
 };
 
-// Implementación AAC multiplataforma
+// Implementación AAC multiplataforma. La tasa de muestreo sigue la fuente.
 movOutput.Audio = new VOAACEncoderSettings() {
-    Bitrate = 192000,
-    SampleRate = 48000
+    Bitrate = 192,
 };
 ```
 
@@ -249,19 +279,17 @@ await core.StartAsync();
 Para control directo del pipeline de medios:
 
 ```csharp
-// Crear instancias de codificador
-var aac = new VOAACEncoderSettings();
-var h264 = new OpenH264EncoderSettings();
+// Crear bloques de codificador (no settings crudos — el pipeline consume bloques).
+var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 192 });
+var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings { Bitrate = 5000 });
 
-// Configurar MOV sink
+// Configurar el sink MOV — MOV y MP4 son muxers diferentes (qtmux vs mp4mux), así que usa MOVSinkBlock.
 var movSinkSettings = new MOVSinkSettings("output.mov");
+var movSink = new MOVSinkBlock(movSinkSettings);
 
-// Crear bloque de salida
-// Nota: MP4OutputBlock maneja salida MOV (MOV es un subconjunto de MP4)
-var movOutput = new MP4OutputBlock(movSinkSettings, h264, aac);
-
-// Agregar al pipeline
-pipeline.AddBlock(movOutput);
+// Conectar los codificadores al sink vía inputs dinámicos.
+pipeline.Connect(h264Encoder.Output, movSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(aacEncoder.Output, movSink.CreateNewInput(MediaBlockPadMediaType.Audio));
 ```
 
 ## Notas de compatibilidad de plataforma

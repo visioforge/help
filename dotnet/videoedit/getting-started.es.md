@@ -2,6 +2,26 @@
 title: Video Edit SDK .NET - Crea aplicaciones de edición de video
 description: Edición de video en SDK .NET con líneas de tiempo personalizables, múltiples formatos, transiciones, efectos y vistas previas en tiempo real.
 sidebar_position: 0
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - Editing
+  - MP4
+  - C#
+primary_api_classes:
+  - VideoEditCoreX
+  - VideoEditCore
+  - VideoSource
+  - VideoFileSource
+  - IVideoView
+
 ---
 
 # Construyendo Aplicaciones Profesionales de Edición de Video con SDK .NET
@@ -82,7 +102,7 @@ Para detectar cuando las operaciones de edición han completado, implementa el m
 ```cs
 core.OnStop += Core_OnStop;
 
-private void Core_OnStop(object sender, EventArgs e)
+private void Core_OnStop(object sender, StopEventArgs e)
 {
     Debug.WriteLine("Edición completada");
 }
@@ -344,7 +364,7 @@ El SDK soporta agregar imágenes fijas a tu línea de tiempo, incluyendo formato
 
 ### Estableciendo Formato de Salida y Opciones de Codificación
 
-El SDK ofrece opciones de salida flexibles con soporte para numerosos formatos de video y audio, incluyendo MP4, AVI, WMV, MKV, WebM, AAC, MP3 y muchos otros.
+El SDK ofrece opciones de salida flexibles con soporte para numerosos formatos de video y audio, incluyendo MP4, AVI, WMV, MKV, WebM, AAC, MP3, GIF animado y muchos otros.
 
 Usa la propiedad `Output_Format` para configurar tu formato de salida deseado:
 
@@ -368,6 +388,27 @@ Usa la propiedad `Output_Format` para configurar tu formato de salida deseado:
 
 
 Para una lista completa de formatos de salida soportados y ejemplos de código detallados, por favor consulta nuestra sección de documentación de [Formatos de Salida](../general/output-formats/index.md).
+
+### Renderizando a GIF animado
+
+`VideoEditCoreX` puede renderizar la línea de tiempo directamente a un GIF animado mediante `GIFOutput`. GIF no tiene contenedor — `gifenc` escribe el archivo `.gif` final en un solo paso, por lo que el perfil de codificación contiene solo el flujo de video y cualquier audio en la línea de tiempo se descarta.
+
+```cs
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.VideoEncoders;
+
+core.Output_Format = new GIFOutput("output.gif", new GIFEncoderSettings
+{
+    Speed = 10,    // 1..30 — un valor mayor = codificacion mas rapida, menor calidad visual
+    Repeat = 0     // -1 = bucle infinito, 0 = reproducir una vez, n = reproducir n+1 veces
+});
+```
+
+Notas:
+
+- La salida GIF es solo de video — las pistas de audio se ignoran.
+- La paleta de 256 colores por fotograma es una limitacion del formato — los archivos seran mas grandes que con codecs de video equivalentes para clips largos.
+- `SmartRender = true` es incompatible con la salida GIF (ningun clip de origen estara ya en `image/gif`).
 
 ## Mejorando Tus Videos
 

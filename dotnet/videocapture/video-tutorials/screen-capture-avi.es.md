@@ -2,6 +2,32 @@
 title: Captura de Pantalla a AVI con Codificación MJPEG en C# .NET
 description: Grabe la pantalla a formato AVI en C# con video MJPEG o sin comprimir. Cuándo elegir AVI sobre MP4, opciones de codec y ejemplos con VisioForge SDK.
 sidebar_label: Captura de Pantalla a AVI
+tags:
+  - Video Capture SDK
+  - .NET
+  - DirectShow
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Encoding
+  - Screen Capture
+  - MP4
+  - AVI
+  - H.264
+  - MJPEG
+  - C#
+  - NuGet
+primary_api_classes:
+  - AVIOutput
+  - VideoCaptureCore
+  - VideoCaptureCoreX
+  - MJPEGEncoderSettings
+  - VideoView
+
 ---
 
 # Guía de Implementación de Captura de Pantalla a AVI en C#

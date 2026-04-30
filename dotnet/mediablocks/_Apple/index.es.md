@@ -1,6 +1,21 @@
 ---
 title: Bloques de Plataforma Apple en C# .NET — iOS, macOS
 description: Cree aplicaciones multimedia para iOS y macOS con codificación ProRes, aceleración VideoToolbox y bloques de audio nativos con VisioForge Media Blocks SDK.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - MetalVideoCompositorBlock
+  - MediaBlocksPipeline
+  - VideoRendererBlock
+  - OSXAudioSourceBlock
+  - OSXAudioSinkBlock
+
 ---
 
 # Bloques de Plataforma Apple - VisioForge Media Blocks SDK .Net
@@ -274,13 +289,12 @@ Nombre: AppleProResEncoderBlock.
 `AppleProResEncoderBlock` se configura usando `AppleProResEncoderSettings`.
 
 Propiedades clave:
-- `Profile` (`AppleProResProfile`): El perfil ProRes a usar. Opciones incluyen:
-  - `ProRes422Proxy`: Menor bitrate, proxy de edición.
-  - `ProRes422LT`: Bitrate ligero.
-  - `ProRes422`: Estándar.
-  - `ProRes422HQ`: Alta calidad.
-  - `ProRes4444`: Con canal alfa.
-  - `ProRes4444XQ`: Máxima calidad con alfa.
+- `Quality` (`double`): Valor 0.0–1.0 que controla el compromiso calidad/bitrate (mayor = mejor calidad).
+- `Bitrate` (`int`): Bitrate objetivo en bits por segundo (si prefieres control por bitrate en lugar de calidad).
+- `MaxKeyframeInterval` / `MaxKeyFrameIntervalDuration`: Controlan la frecuencia de keyframes.
+- `AllowFrameReordering` (`bool`): Habilita reordenamiento de frames.
+- `PreserveAlpha` (`bool`): Conserva el canal alfa cuando la fuente lo tiene (ProRes 4444).
+- `Realtime` (`bool`): Optimiza para codificación en tiempo real.
 
 #### Pipeline de ejemplo
 
@@ -298,10 +312,10 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Configurar codificador ProRes con perfil de alta calidad
+// Configurar codificador ProRes para alta calidad (Quality es un double 0.0-1.0)
 var proResSettings = new AppleProResEncoderSettings
 {
-    Profile = AppleProResProfile.ProRes422HQ
+    Quality = 0.8
 };
 
 var proResEncoder = new AppleProResEncoderBlock(proResSettings);
@@ -388,8 +402,11 @@ settings.AddStream(new MetalVideoMixerStream(
     zorder: 0));
 
 // Segundo flujo: mitad derecha de la pantalla
+// El ctor de Rect es (left, top, right, bottom). Para la mitad derecha de un
+// canvas 1920x1080 use right=1920 y bottom=1080 — la forma anterior
+// (960, 0, 960, 1080) tiene left==right y produce un cuadro de ancho cero.
 settings.AddStream(new MetalVideoMixerStream(
-    rectangle: new Rect(960, 0, 960, 1080),
+    rectangle: new Rect(960, 0, 1920, 1080),
     zorder: 1));
 
 var compositor = new MetalVideoCompositorBlock(settings);
@@ -401,7 +418,7 @@ pipeline.Connect(compositor.Output, videoRenderer.Input);
 await pipeline.StartAsync();
 
 // Tiempo real: desvanecer el flujo 0
-compositor.StartFadeOut(settings.Streams[0].ID);
+compositor.StartFadeOut(settings.Streams[0].ID, TimeSpan.FromSeconds(2));
 ```
 
 #### Disponibilidad

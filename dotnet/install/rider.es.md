@@ -1,6 +1,23 @@
 ---
-title: Instalar VisioForge .NET SDKs en JetBrains Rider con NuGet
-description: Agrega el control VideoView, configura espacios de nombres XAML y paquetes de redistribución para proyectos WPF, MAUI y Avalonia en Rider.
+title: Instalar VisioForge SDK en JetBrains Rider — NuGet
+description: Agregue VisioForge .NET SDKs a proyectos Rider con NuGet, dependencias nativas, referencias de paquetes y pasos de solución de problemas.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - WPF
+  - Avalonia
+  - NuGet
+primary_api_classes:
+  - VideoView
+
 ---
 
 # Integración de SDKs .Net con JetBrains Rider

@@ -1,6 +1,26 @@
 ---
 title: Efectos de Video y Shaders OpenGL Personalizados en C# .NET
 description: Aplique efectos de video en tiempo real, shaders GLSL, gradación de color LUT y animaciones pan/zoom en C# .NET con VisioForge Media Blocks SDK y GPU.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Encoding
+  - Effects
+  - Webcam
+  - C#
+primary_api_classes:
+  - LUTProcessorBlock
+  - MediaBlocksPipeline
+  - GLUploadBlock
+  - GLDownloadBlock
+  - GLShaderBlock
+
 ---
 
 # Efectos de Video Personalizados y Shaders OpenGL en C# .NET
@@ -75,10 +95,7 @@ pipeline.Connect(balance.Output, videoRenderer.Input);
 Aplique presets artísticos de color (sepia, mapa de calor, procesamiento cruzado, etc.):
 
 ```csharp
-var colorFx = new ColorEffectsBlock(new ColorEffectsVideoEffect
-{
-    Preset = ColorEffectsPreset.Sepia
-});
+var colorFx = new ColorEffectsBlock(ColorEffectsPreset.Sepia);
 
 pipeline.Connect(videoSource.Output, colorFx.Input);
 pipeline.Connect(colorFx.Output, videoRenderer.Input);
@@ -407,8 +424,8 @@ Animar un movimiento de pan suave:
 
 ```csharp
 panZoom.SetDynamicPan(new VideoStreamDynamicPanSettings(
-    startX: 0, startY: 0,       // posición inicial
-    stopX: 200, stopY: 100,     // posición final
+    startPanX: 0, startPanY: 0,       // posición inicial
+    stopPanX: 200, stopPanY: 100,     // posición final
     startTime: startTime,
     stopTime: endTime
 ));

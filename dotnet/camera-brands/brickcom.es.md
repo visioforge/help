@@ -1,6 +1,24 @@
 ---
 title: BrickCom: URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecte cámaras BrickCom en C# .NET con patrones de URL RTSP y ejemplos de código para modelos de las series CB, MB, OB, VD, WCB, WOB y MD.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP BrickCom en C# .NET

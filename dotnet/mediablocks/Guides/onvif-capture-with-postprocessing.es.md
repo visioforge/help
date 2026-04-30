@@ -1,31 +1,61 @@
 ---
 title: Captura de Cámara IP ONVIF a MP4 con Efectos en C#
 description: Capture video de cámaras IP ONVIF y aplique redimensionamiento, brillo y filtros antes de guardar a MP4 con VisioForge Media Blocks SDK para .NET.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Recording
+  - Encoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MP4
+  - H.264
+  - AAC
+  - C#
+primary_api_classes:
+  - MediaBlocksPipeline
+  - RTSPSourceBlock
+  - RTSPSourceSettings
+  - H264EncoderBlock
+  - AACEncoderBlock
+  - MP4SinkBlock
+
 ---
 
-# Capturar MP4 desde Cámara ONVIF con Postprocesamiento
+# Captura MP4 de Cámara ONVIF con Postprocesamiento
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-!!!info Muestras de Demo
-Para ejemplos completos de trabajo, vea:
-- [Demo de Vista Previa RTSP](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) - Muestra vista previa de cámara ONVIF con postprocesamiento
-- [Demo de Captura IP (Video Capture SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) - Alternativa usando Video Capture SDK
+!!! info "Soporte multiplataforma"
+    El Media Blocks SDK funciona en **Windows, macOS, Linux, Android e iOS** a través de GStreamer. Consulte la [matriz de soporte de plataformas](../../platform-matrix.md) para detalles de códecs y aceleración por hardware, y la [guía de despliegue para Linux](../../deployment-x/Ubuntu.md) para Ubuntu / NVIDIA Jetson / Raspberry Pi.
 
-Para documentación completa de ONVIF, vea la [Guía de Integración de Cámaras IP ONVIF](../../videocapture/video-sources/ip-cameras/onvif.md).
+!!!info Ejemplos de demostración
+Para ejemplos de trabajo completos, consulte:
+- [RTSP Preview Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) — muestra vista previa de cámara ONVIF con postprocesamiento
+- [IP Capture Demo (Video Capture SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) — alternativa usando Video Capture SDK
+
+Para documentación completa de ONVIF, consulte la [Guía de Integración de Cámaras IP ONVIF](../../videocapture/video-sources/ip-cameras/onvif.md).
 !!!
 
 ## Tabla de Contenidos
 
-- [Capturar MP4 desde Cámara ONVIF con Postprocesamiento](#capturar-mp4-desde-camara-onvif-con-postprocesamiento)
+- [Captura MP4 de Cámara ONVIF con Postprocesamiento](#captura-mp4-de-camara-onvif-con-postprocesamiento)
   - [Tabla de Contenidos](#tabla-de-contenidos)
   - [Resumen](#resumen)
   - [Cuándo Usar Postprocesamiento](#cuando-usar-postprocesamiento)
-  - [Prerrequisitos](#prerrequisitos)
+  - [Requisitos Previos](#requisitos-previos)
   - [Configuración Básica: Descubrimiento y Conexión ONVIF](#configuracion-basica-descubrimiento-y-conexion-onvif)
   - [Ejemplo 1: Redimensionar Video](#ejemplo-1-redimensionar-video)
   - [Ejemplo 2: Aplicar Efectos de Video](#ejemplo-2-aplicar-efectos-de-video)
-  - [Ejemplo 3: Desenfoque de Rostro en Tiempo Real](#ejemplo-3-desenfoque-de-rostro-en-tiempo-real)
+  - [Ejemplo 3: Desenfoque de Rostros en Tiempo Real](#ejemplo-3-desenfoque-de-rostros-en-tiempo-real)
   - [Ejemplo 4: Marca de Agua y Superposición de Logo](#ejemplo-4-marca-de-agua-y-superposicion-de-logo)
   - [Consideraciones de Rendimiento](#consideraciones-de-rendimiento)
   - [Mejores Prácticas](#mejores-practicas)
@@ -33,13 +63,13 @@ Para documentación completa de ONVIF, vea la [Guía de Integración de Cámaras
 
 ## Resumen
 
-Esta guía demuestra cómo capturar video desde cámaras IP ONVIF mientras se aplican varios efectos de postprocesamiento antes de codificar a MP4. A diferencia de la grabación pass-through que preserva el flujo original, el postprocesamiento requiere decodificar el video, aplicar transformaciones y recodificar.
+Esta guía demuestra cómo capturar video de cámaras IP ONVIF aplicando varios efectos de postprocesamiento antes de codificar a MP4. A diferencia de la grabación pass-through que preserva el stream original, el postprocesamiento requiere decodificar el video, aplicar transformaciones y volver a codificar.
 
 Este enfoque es útil cuando necesita:
 - Redimensionar o recortar video
 - Aplicar correcciones de brillo, contraste o color
 - Agregar marcas de agua o logos
-- Desenfocar rostros para privacidad
+- Desenfocar rostros por privacidad
 - Aplicar efectos artísticos o filtros
 - Combinar múltiples pasos de procesamiento
 
@@ -49,31 +79,31 @@ Este enfoque es útil cuando necesita:
 - Necesita redimensionar video (ej. de 4K a 1080p)
 - Quiere aplicar efectos de video (brillo, contraste, etc.)
 - Necesita agregar superposiciones o marcas de agua
-- Los requisitos de privacidad exigen desenfoque de rostros
-- Está combinando múltiples flujos de cámara
-- Necesita aplicar algoritmos de IA/CV
+- Los requisitos de privacidad demandan desenfoque de rostros
+- Está combinando múltiples feeds de cámaras
+- Necesita aplicar algoritmos IA/CV
 
 **Use pass-through (sin postprocesamiento) cuando:**
-- Quiere preservar la calidad de video original
+- Quiere preservar la calidad original del video
 - Necesita minimizar el uso de CPU
 - El espacio de almacenamiento no es una preocupación
 - La duración de grabación es larga (horas/días)
 
-Para grabación pass-through, vea [Guardar Flujo RTSP sin Recodificación](./rtsp-save-original-stream.md).
+Para grabación pass-through, consulte [Guardar Stream RTSP sin Re-codificar](./rtsp-save-original-stream.md).
 
-## Prerrequisitos
+## Requisitos Previos
 
 1. **VisioForge Media Blocks SDK .NET** instalado
 2. **Cámara ONVIF** accesible en su red
 3. **Credenciales válidas de cámara** (usuario y contraseña)
-4. **Comprensión básica de**:
+4. **Conocimiento básico de**:
    - C# async/await
-   - Conceptos básicos del protocolo ONVIF
+   - Protocolo ONVIF
    - Parámetros de codificación de video
 
 ## Configuración Básica: Descubrimiento y Conexión ONVIF
 
-Primero, descubra y conéctese a su cámara ONVIF:
+Primero, descubra y conecte con su cámara ONVIF:
 
 ```cs
 using VisioForge.Core.ONVIFDiscovery;
@@ -99,17 +129,17 @@ if (string.IsNullOrEmpty(cameraUrl))
     return;
 }
 
-// Conectar a cámara
+// Conectar a la cámara
 var onvifClient = new ONVIFClientX();
 bool connected = await onvifClient.ConnectAsync(cameraUrl, "admin", "password");
 
 if (!connected)
 {
-    Console.WriteLine("Error al conectar a la cámara");
+    Console.WriteLine("Error al conectar con la cámara");
     return;
 }
 
-// Obtener URL de flujo RTSP
+// Obtener URL del stream RTSP
 var profiles = await onvifClient.GetProfilesAsync();
 var streamUri = await onvifClient.GetStreamUriAsync(profiles[0]);
 string rtspUrl = streamUri.Uri;
@@ -119,7 +149,11 @@ Console.WriteLine($"URL RTSP: {rtspUrl}");
 
 ## Ejemplo 1: Redimensionar Video
 
-Redimensionar video desde cámara ONVIF antes de guardar en MP4:
+Redimensione el video de una cámara ONVIF antes de guardarlo a MP4. La API de
+Media Blocks recibe objetos de configuración — `RTSPSourceBlock` se construye
+desde un `RTSPSourceSettings`, el codificador desde su objeto de settings, el
+sink MP4 entrega pads de entrada mediante `CreateNewInput(...)`, y los enlaces
+se declaran sobre el pipeline.
 
 ```cs
 using VisioForge.Core.MediaBlocks;
@@ -128,49 +162,48 @@ using VisioForge.Core.MediaBlocks.VideoProcessing;
 using VisioForge.Core.MediaBlocks.VideoEncoders;
 using VisioForge.Core.MediaBlocks.AudioEncoders;
 using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types;
 
 // Crear pipeline
 var pipeline = new MediaBlocksPipeline();
 
-// Fuente RTSP desde cámara ONVIF
-var rtspSource = new RTSPSourceBlock(new Uri(rtspUrl));
-rtspSource.Username = "admin";
-rtspSource.Password = "password";
-rtspSource.Transport = RTSPTransport.TCP;
+// Fuente RTSP de la cámara ONVIF. Credenciales y latencia viven en el objeto
+// settings; use la factoría async para que el settings descubra la info de códecs.
+var rtspSettings = await RTSPSourceSettings.CreateAsync(
+    new Uri(rtspUrl), "admin", "password", audioEnabled: true);
+var rtspSource = new RTSPSourceBlock(rtspSettings);
 
-// Bloque de redimensionamiento de video - reducir a 1280x720
+// Bloque de redimensionamiento — reducir a 1280x720. El ctor (ancho, alto) es un
+// atajo para `new VideoResizeBlock(new ResizeVideoEffect(w, h))`.
 var videoResize = new VideoResizeBlock(1280, 720);
-videoResize.Mode = VideoResizeMode.Stretch; // O Fit, Fill, Crop
 
-// Codificador H.264
-var h264Encoder = new H264EncoderBlock();
-h264Encoder.Bitrate = 2000000; // 2 Mbps
-h264Encoder.Framerate = 25;
-h264Encoder.Profile = H264Profile.High;
-h264Encoder.Level = H264Level.Level41;
+// Codificador H.264. Elige una clase concreta de settings — Bitrate está en Kbit/s (2000 = 2 Mbps).
+// OpenH264EncoderSettings funciona en todas las plataformas; cámbialo por NVENC / QSV / AMF / MFH264 para aceleración GPU.
+var h264Settings = new OpenH264EncoderSettings { Bitrate = 2000 };
+var h264Encoder = new H264EncoderBlock(h264Settings);
 
-// Codificador de audio AAC
-var aacEncoder = new AACEncoderBlock();
-aacEncoder.Bitrate = 128000; // 128 kbps
+// Codificador de audio AAC (Bitrate en Kbit/s — 128 = 128 kbps).
+var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
 
-// Sumidero MP4
+// Sink MP4 — el ctor por nombre de archivo es la ruta más corta a un escritor MP4 válido.
 var mp4Sink = new MP4SinkBlock("output_resized.mp4");
 
-// Conectar pipeline de video
-rtspSource.VideoOutput.Connect(videoResize.Input);
-videoResize.Output.Connect(h264Encoder.Input);
-h264Encoder.Output.Connect(mp4Sink.VideoInput);
+// Agregar cada bloque al pipeline antes de cablear los enlaces
+pipeline.AddBlock(rtspSource);
+pipeline.AddBlock(videoResize);
+pipeline.AddBlock(h264Encoder);
+pipeline.AddBlock(aacEncoder);
+pipeline.AddBlock(mp4Sink);
 
-// Conectar pipeline de audio
-rtspSource.AudioOutput.Connect(aacEncoder.Input);
-aacEncoder.Output.Connect(mp4Sink.AudioInput);
+// Cablear el camino de video (RTSP video → resize → H.264 → pad de video del MP4)
+pipeline.Connect(rtspSource.VideoOutput, videoResize.Input);
+pipeline.Connect(videoResize.Output, h264Encoder.Input);
+pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-// Agregar bloques al pipeline
-await pipeline.AddAsync(rtspSource);
-await pipeline.AddAsync(videoResize);
-await pipeline.AddAsync(h264Encoder);
-await pipeline.AddAsync(aacEncoder);
-await pipeline.AddAsync(mp4Sink);
+// Cablear el camino de audio (RTSP audio → AAC → pad de audio del MP4)
+pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 // Iniciar grabación
 await pipeline.StartAsync();
@@ -187,59 +220,66 @@ Console.WriteLine("Grabación completa: output_resized.mp4");
 
 ## Ejemplo 2: Aplicar Efectos de Video
 
-Aplicar ajustes de brillo, contraste, tono y saturación:
+Aplique ajustes de brillo, contraste, tono y saturación. Los bloques de
+procesamiento reciben un objeto settings en el ctor; los settings llevan las
+perillas.
 
 ```cs
 using VisioForge.Core.MediaBlocks.VideoProcessing;
+using VisioForge.Core.Types.X.VideoEffects;
 
 // Crear pipeline
 var pipeline = new MediaBlocksPipeline();
 
 // Fuente RTSP
-var rtspSource = new RTSPSourceBlock(new Uri(rtspUrl));
-rtspSource.Username = "admin";
-rtspSource.Password = "password";
+var rtspSettings = await RTSPSourceSettings.CreateAsync(
+    new Uri(rtspUrl), "admin", "password", audioEnabled: true);
+var rtspSource = new RTSPSourceBlock(rtspSettings);
 
-// Bloque de balance de video - ajustar brillo, contraste, saturación, tono
-var videoBalance = new VideoBalanceBlock();
-videoBalance.Brightness = 0.2; // Rango: -1.0 a 1.0 (0.2 = 20% más brillante)
-videoBalance.Contrast = 1.15;   // Rango: 0.0 a 2.0 (1.15 = 15% más contraste)
-videoBalance.Saturation = 1.3;  // Rango: 0.0 a 2.0 (1.3 = 30% más saturación)
-videoBalance.Hue = 0.0;         // Rango: -1.0 a 1.0 (0 = sin cambio de tono)
+// Bloque de balance de video — las perillas viven en el objeto settings.
+// Brightness: -1.0..1.0 (0.2 = ligeramente más brillante)
+// Contrast:    0.0..2.0 (1.15 = +15% contraste)
+// Saturation:  0.0..2.0 (1.3  = +30% saturación)
+// Hue:        -1.0..1.0 (0.0  = sin cambio)
+var balanceSettings = new VideoBalanceVideoEffect
+{
+    Brightness = 0.2,
+    Contrast   = 1.15,
+    Saturation = 1.3,
+    Hue        = 0.0,
+};
+var videoBalance = new VideoBalanceBlock(balanceSettings);
 
-// Bloque de efectos de color - aplicar efectos de color preestablecidos
-var colorEffects = new ColorEffectsBlock();
-colorEffects.Preset = ColorEffectsPreset.Sepia; // Probar: None, Heat, Sepia, XRay, etc.
+// El bloque de efectos de color recibe un preset directamente en el ctor
+var colorEffects = new ColorEffectsBlock(ColorEffectsPreset.Sepia);
 
-// Codificador H.264
-var h264Encoder = new H264EncoderBlock();
-h264Encoder.Bitrate = 3000000; // 3 Mbps para mayor calidad
-h264Encoder.Framerate = 25;
+// Codificador H.264 (3 Mbps)
+var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
+var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock();
-aacEncoder.Bitrate = 128000;
+var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
 
 // Salida MP4
 var mp4Sink = new MP4SinkBlock("output_enhanced.mp4");
 
-// Conectar pipeline de video con efectos
-rtspSource.VideoOutput.Connect(videoBalance.Input);
-videoBalance.Output.Connect(colorEffects.Input);
-colorEffects.Output.Connect(h264Encoder.Input);
-h264Encoder.Output.Connect(mp4Sink.VideoInput);
+// Agregar todo al pipeline, luego cablear
+pipeline.AddBlock(rtspSource);
+pipeline.AddBlock(videoBalance);
+pipeline.AddBlock(colorEffects);
+pipeline.AddBlock(h264Encoder);
+pipeline.AddBlock(aacEncoder);
+pipeline.AddBlock(mp4Sink);
 
-// Conectar audio
-rtspSource.AudioOutput.Connect(aacEncoder.Input);
-aacEncoder.Output.Connect(mp4Sink.AudioInput);
+// Cadena de video: RTSP → balance → color-effects → H.264 → MP4
+pipeline.Connect(rtspSource.VideoOutput, videoBalance.Input);
+pipeline.Connect(videoBalance.Output, colorEffects.Input);
+pipeline.Connect(colorEffects.Output, h264Encoder.Input);
+pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-// Agregar todos los bloques
-await pipeline.AddAsync(rtspSource);
-await pipeline.AddAsync(videoBalance);
-await pipeline.AddAsync(colorEffects);
-await pipeline.AddAsync(h264Encoder);
-await pipeline.AddAsync(aacEncoder);
-await pipeline.AddAsync(mp4Sink);
+// Cadena de audio
+pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 // Iniciar
 await pipeline.StartAsync();
@@ -251,9 +291,9 @@ await pipeline.StopAsync();
 await pipeline.DisposeAsync();
 ```
 
-## Ejemplo 3: Desenfoque de Rostro en Tiempo Real
+## Ejemplo 3: Desenfoque de Rostros en Tiempo Real
 
-Aplicar detección y desenfoque de rostros para protección de privacidad:
+Aplique detección y desenfoque de rostros para proteger la privacidad:
 
 ```cs
 using VisioForge.Core.MediaBlocks.OpenCV;
@@ -263,45 +303,43 @@ using VisioForge.Core.Types.X.OpenCV;
 var pipeline = new MediaBlocksPipeline();
 
 // Fuente RTSP
-var rtspSource = new RTSPSourceBlock(new Uri(rtspUrl));
-rtspSource.Username = "admin";
-rtspSource.Password = "password";
+var rtspSettings = await RTSPSourceSettings.CreateAsync(
+    new Uri(rtspUrl), "admin", "password", audioEnabled: true);
+var rtspSource = new RTSPSourceBlock(rtspSettings);
 
-// Bloque CVFaceBlur - detección automática de rostros y desenfoque
-var faceBlurSettings = new CVFaceBlurSettings();
-faceBlurSettings.ScaleFactor = 1.25;        // Factor de escala de detección
-faceBlurSettings.MinNeighbors = 3;          // Vecinos mínimos para detección
-faceBlurSettings.MinSize = new Size(30, 30); // Tamaño mínimo de rostro
-faceBlurSettings.MainCascadeFile = "haarcascade_frontalface_default.xml";
-
+// CVFaceBlurBlock — detección y desenfoque automático de rostros vía OpenCV
+var faceBlurSettings = new CVFaceBlurSettings
+{
+    ScaleFactor      = 1.25,
+    MinNeighbors     = 3,
+    MinSize          = new Size(30, 30),
+    MainCascadeFile  = "haarcascade_frontalface_default.xml",
+};
 var faceBlur = new CVFaceBlurBlock(faceBlurSettings);
 
 // Codificador H.264
-var h264Encoder = new H264EncoderBlock();
-h264Encoder.Bitrate = 3000000;
-h264Encoder.Framerate = 25;
+var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
+var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock();
+var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
 
 // Salida MP4
 var mp4Sink = new MP4SinkBlock("output_face_blur.mp4");
 
-// Conectar pipeline de video
-rtspSource.VideoOutput.Connect(faceBlur.Input);
-faceBlur.Output.Connect(h264Encoder.Input);
-h264Encoder.Output.Connect(mp4Sink.VideoInput);
+// Agregar + cablear
+pipeline.AddBlock(rtspSource);
+pipeline.AddBlock(faceBlur);
+pipeline.AddBlock(h264Encoder);
+pipeline.AddBlock(aacEncoder);
+pipeline.AddBlock(mp4Sink);
 
-// Audio
-rtspSource.AudioOutput.Connect(aacEncoder.Input);
-aacEncoder.Output.Connect(mp4Sink.AudioInput);
+pipeline.Connect(rtspSource.VideoOutput, faceBlur.Input);
+pipeline.Connect(faceBlur.Output, h264Encoder.Input);
+pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-// Agregar bloques
-await pipeline.AddAsync(rtspSource);
-await pipeline.AddAsync(faceBlur);
-await pipeline.AddAsync(h264Encoder);
-await pipeline.AddAsync(aacEncoder);
-await pipeline.AddAsync(mp4Sink);
+pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 // Iniciar
 await pipeline.StartAsync();
@@ -309,62 +347,66 @@ await pipeline.StartAsync();
 
 ## Ejemplo 4: Marca de Agua y Superposición de Logo
 
-Agregar una marca de agua o logo al video:
+Añada una marca de agua y una superposición de texto. `ImageOverlayBlock` recibe
+un nombre de archivo o un `ImageOverlaySettings`; la posición/transparencia
+viven en el settings. `TextOverlayBlock` siempre recibe un `TextOverlaySettings`.
 
 ```cs
 using VisioForge.Core.MediaBlocks.VideoProcessing;
+using VisioForge.Core.Types.X.VideoEffects;
+using SkiaSharp;
 
 // Crear pipeline
 var pipeline = new MediaBlocksPipeline();
 
 // Fuente RTSP
-var rtspSource = new RTSPSourceBlock(new Uri(rtspUrl));
-rtspSource.Username = "admin";
-rtspSource.Password = "password";
+var rtspSettings = await RTSPSourceSettings.CreateAsync(
+    new Uri(rtspUrl), "admin", "password", audioEnabled: true);
+var rtspSource = new RTSPSourceBlock(rtspSettings);
 
-// Cargar logo/marca de agua
-var logoOverlay = new ImageOverlayBlock();
-logoOverlay.ImagePath = "watermark.png";
-logoOverlay.X = 10;            // 10 píxeles desde la izquierda
-logoOverlay.Y = 10;            // 10 píxeles desde arriba
-logoOverlay.Opacity = 0.7f;     // 70% opaco
+// Logo / marca de agua: el ctor por nombre de archivo carga la imagen. Las
+// perillas de posición viven en el settings; la transparencia es Alpha (0..1).
+var logoOverlay = new ImageOverlayBlock(new ImageOverlaySettings("watermark.png")
+{
+    X     = 10,   // 10 px desde la izquierda
+    Y     = 10,   // 10 px desde arriba
+    Alpha = 0.7,  // 0..1
+});
 
-// Superposición de texto para timestamp
-var textOverlay = new TextOverlayBlock();
-textOverlay.Text = "Cámara 1 - {timestamp}";
-textOverlay.FontSize = 24;
-textOverlay.FontColor = Color.White;
-textOverlay.X = 10;
-textOverlay.Y = -50;            // 50 píxeles desde abajo
-textOverlay.UpdateInterval = TimeSpan.FromSeconds(1); // Actualizar cada segundo
+// Texto estático. TextOverlaySettings lleva Text, posición, Color (SKColor) y
+// perillas de fuente — consulte la referencia de OverlayManagerText para todas.
+var textOverlay = new TextOverlayBlock(new TextOverlaySettings("Camera 1")
+{
+    Color = SKColors.White,
+});
 
 // Codificador H.264
-var h264Encoder = new H264EncoderBlock();
-h264Encoder.Bitrate = 3000000;
+var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
+var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock();
+var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
 
 // Salida MP4
 var mp4Sink = new MP4SinkBlock("output_watermarked.mp4");
 
-// Conectar pipeline de video
-rtspSource.VideoOutput.Connect(logoOverlay.Input);
-logoOverlay.Output.Connect(textOverlay.Input);
-textOverlay.Output.Connect(h264Encoder.Input);
-h264Encoder.Output.Connect(mp4Sink.VideoInput);
+// Agregar + cablear
+pipeline.AddBlock(rtspSource);
+pipeline.AddBlock(logoOverlay);
+pipeline.AddBlock(textOverlay);
+pipeline.AddBlock(h264Encoder);
+pipeline.AddBlock(aacEncoder);
+pipeline.AddBlock(mp4Sink);
 
-// Audio
-rtspSource.AudioOutput.Connect(aacEncoder.Input);
-aacEncoder.Output.Connect(mp4Sink.AudioInput);
+// Cadena de video: RTSP → logo → texto → H.264 → MP4
+pipeline.Connect(rtspSource.VideoOutput, logoOverlay.Input);
+pipeline.Connect(logoOverlay.Output, textOverlay.Input);
+pipeline.Connect(textOverlay.Output, h264Encoder.Input);
+pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-// Agregar bloques
-await pipeline.AddAsync(rtspSource);
-await pipeline.AddAsync(logoOverlay);
-await pipeline.AddAsync(textOverlay);
-await pipeline.AddAsync(h264Encoder);
-await pipeline.AddAsync(aacEncoder);
-await pipeline.AddAsync(mp4Sink);
+// Cadena de audio
+pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 // Iniciar
 await pipeline.StartAsync();
@@ -372,56 +414,51 @@ await pipeline.StartAsync();
 
 ## Consideraciones de Rendimiento
 
-1. **Uso de CPU**: El procesamiento de video es intensivo en CPU. Cada efecto agrega sobrecarga:
-   - Redimensionamiento simple: ~10-20% CPU por flujo
+1. **Uso de CPU**: El procesamiento de video consume CPU. Cada efecto añade sobrecarga:
+   - Redimensionamiento simple: ~10-20% CPU por stream
    - Corrección de color: ~5-15% CPU
-   - Detección de rostros: ~30-50% CPU (depende de resolución)
-   - Múltiples efectos: Uso de CPU aditivo
+   - Detección de rostros: ~30-50% CPU (depende de la resolución)
+   - Múltiples efectos: uso aditivo de CPU
 
-2. **Aceleración GPU**: Use codificadores acelerados por hardware cuando estén disponibles:
+2. **Aceleración por GPU**: Use codificadores acelerados por hardware cuando estén
+   disponibles. `H264EncoderBlock.GetDefaultSettings()` ya prefiere NVENC / QSV /
+   AMF cuando la plataforma los soporta, pero puede forzar un backend específico:
+
    ```cs
-   // Codificación GPU NVIDIA
-   var nvencEncoder = new NVENCEncoderBlock();
-   nvencEncoder.Bitrate = 4000000;
-   nvencEncoder.Preset = NVENCPreset.P4; // Equilibrar calidad/rendimiento
+   // Codificador H.264 NVIDIA NVENC (Bitrate en Kbit/s — 4000 = 4 Mbps)
+   var nvencSettings = new NVENCH264EncoderSettings { Bitrate = 4000 };
+   var h264Encoder   = new H264EncoderBlock(nvencSettings);
    ```
 
-3. **Uso de Memoria**: Las resoluciones más altas requieren más memoria. Monitoree el uso:
+3. **Manejo de errores**: Suscríbase a `OnError` para conocer los fallos del pipeline:
+
    ```cs
-   pipeline.MemoryWarning += (sender, e) =>
+   pipeline.OnError += (sender, e) =>
    {
-       Console.WriteLine($"Advertencia de memoria: {e.UsageMB} MB usados");
+       Console.WriteLine($"Error del pipeline: {e.Message}");
    };
    ```
 
-4. **Equilibrio de Configuración de Codificación**:
-   - **Calidad**: Bitrate más alto, preset más lento = mejor calidad, más CPU
-   - **Rendimiento**: Bitrate más bajo, preset más rápido = calidad más baja, menos CPU
-   - **Tamaño de Archivo**: El bitrate afecta directamente el tamaño del archivo
+4. **Balance de ajustes de codificación**:
+   - **Calidad**: mayor bitrate, preset más lento = mejor calidad, más CPU
+   - **Rendimiento**: menor bitrate, preset más rápido = menor calidad, menos CPU
+   - **Tamaño del archivo**: el bitrate afecta directamente al tamaño
 
 ## Mejores Prácticas
 
-1. **Probar Rendimiento Primero**:
-   - Comenzar con pipeline simple
-   - Agregar efectos uno a la vez
-   - Monitorear uso de CPU/memoria
-   - Ajustar configuraciones basadas en hardware
+1. **Pruebe el rendimiento primero**:
+   - Comience con un pipeline simple
+   - Añada efectos uno a la vez
+   - Monitoree uso de CPU/memoria
+   - Ajuste según el hardware
 
-2. **Elegir Bitrates Apropiados**:
-   - 720p: 1-2 Mbps
-   - 1080p: 2-4 Mbps
-   - 4K: 8-15 Mbps
+2. **Elija bitrates apropiados** (todos los valores en Kbit/s):
+   - 720p: 1000-2000
+   - 1080p: 2000-4000
+   - 4K: 8000-15000
 
-3. **Manejar Errores con Elegancia**:
-   ```cs
-   pipeline.Error += (sender, e) =>
-   {
-       Console.WriteLine($"Error de pipeline: {e.Message}");
-       // Intentar recuperación o limpieza
-   };
-   ```
+3. **Libere recursos**:
 
-4. **Disponer Recursos**:
    ```cs
    try
    {
@@ -436,45 +473,46 @@ await pipeline.StartAsync();
    }
    ```
 
-5. **Monitorear Estado de Pipeline**:
+4. **Observe los eventos de ciclo de vida del pipeline**:
+
    ```cs
-   pipeline.StateChanged += (sender, e) =>
-   {
-       Console.WriteLine($"Estado de pipeline: {e.State}");
-   };
+   pipeline.OnStart  += (s, e) => Console.WriteLine("Pipeline iniciado");
+   pipeline.OnStop   += (s, e) => Console.WriteLine("Pipeline detenido");
+   pipeline.OnPause  += (s, e) => Console.WriteLine("Pipeline pausado");
+   pipeline.OnResume += (s, e) => Console.WriteLine("Pipeline reanudado");
    ```
 
 ## Solución de Problemas
 
-**Uso Alto de CPU:**
-- Reducir resolución de video
-- Bajar preset del codificador (codificación más rápida)
-- Remover efectos innecesarios
-- Usar aceleración GPU si está disponible
+**Alto uso de CPU:**
+- Reducir la resolución de video
+- Preset de codificación más rápido
+- Eliminar efectos innecesarios
+- Usar aceleración por GPU si está disponible
 
-**Frames Perdidos:**
-- Verificar si CPU está saturado
-- Reducir frame rate
-- Bajar bitrate
-- Simplificar pipeline de procesamiento
+**Cuadros perdidos:**
+- Verificar si la CPU está saturada
+- Reducir la tasa de cuadros
+- Reducir el bitrate
+- Simplificar el pipeline de procesamiento
 
-**Calidad de Video Deficiente:**
+**Mala calidad de video:**
 - Aumentar bitrate
-- Usar preset de codificador más lento
-- Verificar calidad de video fuente
-- Verificar ancho de banda de red para RTSP
+- Usar preset de codificación más lento
+- Verificar la calidad del video fuente
+- Verificar el ancho de banda de red para RTSP
 
-**Fugas de Memoria:**
-- Asegurar disposición apropiada de bloques
+**Fugas de memoria:**
+- Asegurar la liberación adecuada de bloques
 - Verificar referencias circulares
-- Monitorear grabaciones de larga duración
+- Monitorear grabaciones largas
 
-**Efectos No Aplicados:**
-- Verificar conexiones de bloques
-- Verificar que parámetros de efecto sean válidos
-- Asegurar que bloques estén agregados al pipeline
-- Revisar orden del pipeline (cadena de efectos)
+**Los efectos no se aplican:**
+- Verificar las conexiones de bloques con `pipeline.Connect(outPad, inPad)`
+- Comprobar que los parámetros del efecto son válidos
+- Asegurar que cada bloque se registra vía `pipeline.AddBlock(...)` antes de `StartAsync`
+- Revisar el orden del pipeline (cadena de efectos)
 
 ---
-Para grabación más simple sin postprocesamiento, vea [Guardar Flujo RTSP sin Recodificación](./rtsp-save-original-stream.md).
-Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos completos de trabajo.
+Para grabación más simple sin postprocesamiento, consulte [Guardar Stream RTSP sin Re-codificar](./rtsp-save-original-stream.md).
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos completos.

@@ -3,6 +3,18 @@ title: Formatos de Salida de Video y Audio para Desarrollo .NET
 description: Guía completa de formatos de video y audio para .NET incluyendo MP4, WebM, AVI, MKV con comparaciones de códecs y matrices de compatibilidad.
 sidebar_label: Formatos de Salida
 order: 17
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
 
 ---
 

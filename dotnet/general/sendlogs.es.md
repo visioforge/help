@@ -1,6 +1,12 @@
 ---
 title: Habilitar Logs de Depuración del .NET SDK - Guía de Solución
 description: Habilite y capture logs de depuración para solucionar problemas del .NET SDK con instrucciones paso a paso para entornos de demostración y producción.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+
 ---
 
 # Solución de problemas con registros para productos SDK .NET

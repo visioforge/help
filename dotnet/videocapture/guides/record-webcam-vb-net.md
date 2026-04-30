@@ -1,6 +1,27 @@
 ---
 title: Record Webcam Video in VB.NET - Capture & Save Guide
 description: Learn to record webcam video in VB.NET with device enumeration, MP4 output, live preview, and screenshot capture using async/await.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Webcam
+  - Screen Capture
+  - MP4
+  - WebM
+  - AVI
+  - C#
+  - VB.NET
+  - NuGet
+primary_api_classes:
+  - VideoView
+
 ---
 
 # Record Webcam Video in VB.NET: Complete Guide

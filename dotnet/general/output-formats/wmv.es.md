@@ -1,6 +1,35 @@
 ---
 title: Codificación WMV en .NET: Guía de Salida Windows Media Video
 description: Implemente codificación Windows Media Video en .NET con configuración de audio/video, opciones de streaming y gestión de perfiles multiplataforma.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - Screen Capture
+  - MP4
+  - WMV
+  - WMA
+  - C#
+primary_api_classes:
+  - WMVOutput
+  - WMVMode
+  - WMVStreamMode
+  - VideoCaptureCore
+
 ---
 
 # Codificadores Windows Media Video
@@ -13,7 +42,7 @@ Esta documentación cubre las capacidades de codificación Windows Media Video (
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-La clase [WMVOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WMVOutput.html) proporciona capacidades completas de codificación Windows Media tanto para audio como para video en plataformas Windows.
+La clase [WMVOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.WMVOutput.html) proporciona capacidades completas de codificación Windows Media tanto para audio como para video en plataformas Windows.
 
 ### Guía de Inicio Rápido
 
@@ -509,37 +538,6 @@ Cadenas de formato comunes para la propiedad `Custom_Audio_Format`:
 - "96kHz 24bit Stereo" - Audio de alta resolución
 - "22kHz 16bit Mono" - Calidad de grabación de voz
 
-#### Enumerando Códecs Disponibles
-
-Puede enumerar los códecs disponibles programáticamente:
-
-```csharp
-// Para VideoCaptureCore
-var captureCore = new VideoCaptureCore();
-
-// Obtener códecs de video disponibles
-string[] videoCodecs = captureCore.WMV_VideoCodecs_Available();
-foreach (var codec in videoCodecs)
-{
-    Console.WriteLine($"Video Codec: {codec}");
-}
-
-// Obtener códecs de audio disponibles
-string[] audioCodecs = captureCore.WMV_AudioCodecs_Available();
-foreach (var codec in audioCodecs)
-{
-    Console.WriteLine($"Audio Codec: {codec}");
-}
-
-// Obtener formatos de audio disponibles para un códec específico
-string selectedCodec = audioCodecs[0];
-string[] audioFormats = captureCore.WMV_AudioFormats_Available(selectedCodec);
-foreach (var format in audioFormats)
-{
-    Console.WriteLine($"Audio Format: {format}");
-}
-```
-
 Perfil de calidad de transmisión estándar:
 
 ```csharp
@@ -583,27 +581,6 @@ var liveStreamingProfile = new WMVOutput
 var captureCore = new VideoCaptureCore();
 captureCore.Output_Format = liveStreamingProfile;
 captureCore.Output_Filename = "live_stream.wmv";
-```
-
-#### Enumerando Perfiles Internos Disponibles
-
-Puede obtener una lista de todos los perfiles internos disponibles:
-
-```csharp
-var captureCore = new VideoCaptureCore();
-string[] profiles = captureCore.WMV_InternalProfiles_Available();
-
-foreach (var profile in profiles)
-{
-    Console.WriteLine($"Available Profile: {profile}");
-}
-
-// Perfiles internos comunes incluyen:
-// - "Windows Media Video 9 for Local Network (768 kbps)"
-// - "Windows Media Video 9 for Broadband (2 Mbps)"
-// - "Windows Media Video 9 Advanced Profile"
-// - "Windows Media Video 9 Screen (Low Rate)"
-// - "Windows Media Video 9 Screen (Medium Rate)"
 ```
 
 ### Configuración de Perfil Externo
@@ -726,7 +703,7 @@ namespace WMVCaptureExample
         static async Task Main(string[] args)
         {
             // Inicializar SDK de VisioForge
-            VisioForge.Core.VisioForge.InitSDK();
+            VisioForgeX.InitSDK();
             
             // Crear instancia de VideoCaptureCore
             var captureCore = new VideoCaptureCore();
@@ -800,7 +777,7 @@ namespace WMVCaptureExample
             {
                 // Limpieza
                 captureCore?.Dispose();
-                VisioForge.Core.VisioForge.DestroySDK();
+                VisioForgeX.DestroySDK();
             }
             
             Console.WriteLine("Presione cualquier tecla para salir...");
@@ -829,7 +806,7 @@ namespace WMVEditExample
         static async Task Main(string[] args)
         {
             // Inicializar SDK de VisioForge
-            VisioForge.Core.VisioForge.InitSDK();
+            VisioForgeX.InitSDK();
             
             var editCore = new VideoEditCore();
             
@@ -898,7 +875,7 @@ namespace WMVEditExample
             {
                 // Limpieza
                 editCore?.Dispose();
-                VisioForge.Core.VisioForge.DestroySDK();
+                VisioForgeX.DestroySDK();
             }
             
             Console.WriteLine("Presione cualquier tecla para salir...");
@@ -1235,16 +1212,6 @@ try
     if (captureCore.Output_Filename == null || captureCore.Output_Filename.Length == 0)
     {
         throw new InvalidOperationException("Se requiere nombre de archivo de salida");
-    }
-    
-    // Verificar si los códecs personalizados están disponibles
-    if (wmvOutput.Mode == WMVMode.CustomSettings)
-    {
-        var videoCodecs = captureCore.WMV_VideoCodecs_Available();
-        if (!videoCodecs.Contains(wmvOutput.Custom_Video_Codec))
-        {
-            Console.WriteLine($"Advertencia: El códec de video '{wmvOutput.Custom_Video_Codec}' puede no estar disponible");
-        }
     }
     
     await captureCore.StartAsync();

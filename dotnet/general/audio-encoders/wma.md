@@ -1,6 +1,33 @@
 ---
 title: Windows Media Audio (WMA) Encoder Integration Guide
 description: Implement WMA audio encoding in .NET with cross-platform and Windows-specific approaches, bitrate controls, and codec configuration.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - MP3
+  - WMA
+  - C#
+primary_api_classes:
+  - WMAOutput
+  - WMAEncoderSettings
+  - VideoCaptureCore
+  - VideoEditCore
+  - VideoCaptureCoreX
+
 ---
 
 # Windows Media Audio encoder
@@ -81,12 +108,12 @@ var asfOutput = new ASFSinkBlock(new ASFSinkSettings("output.wma"));
 pipeline.Connect(wmaOutput.Output, asfOutput.Input); // pipeline is MediaBlocksPipeline
 ```
 
-Check if MP3 encoding is available.
+Check if WMA encoding is available before you build the pipeline:
 
-```
-if (!MP3EncoderSettings.IsAvailable())
+```csharp
+if (!WMAEncoderSettings.IsAvailable())
 {
-   // Handle error
+   // Handle error — the WMA encoder plugin is missing on this platform.
 }
 ```
 
@@ -106,13 +133,17 @@ The Windows-specific implementation offers:
 - Advanced bitrate control with peak bitrate settings
 - Buffer size configuration
 
-### Rate Control
+### Configuration Modes
 
-The Windows implementation supports three stream modes through the WMVStreamMode enumeration:
+The classic Windows implementation selects its encoder source via the `WMVMode` enum on `WMAOutput.Mode`:
 
-- CBR (Constant Bitrate)
-- VBR (Variable Bitrate)
-- Quality-based VBR
+- `WMVMode.InternalProfile` — pick a predefined Windows Media profile by name (simplest).
+- `WMVMode.ExternalProfile` — load a `.prx` profile file from disk.
+- `WMVMode.ExternalProfileFromText` — pass profile XML inline as a string.
+- `WMVMode.CustomSettings` — drive all encoder parameters manually (quality, peak bitrate, buffer, etc.) through the `Custom_Audio_*` properties.
+- `WMVMode.V8SystemProfile` — use a Windows Media Video 8 system profile for compatibility with older Windows Media systems (lower compression efficiency than WMV9; only when targeting legacy systems).
+
+Rate control (CBR / VBR / quality-based VBR) is expressed through those `Custom_Audio_*` properties or baked into the chosen profile — it is not a separate enum.
 
 ### Usage Example
 

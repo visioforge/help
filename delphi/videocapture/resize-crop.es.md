@@ -1,6 +1,17 @@
 ---
 title: Redimensionar y Recortar Video en Delphi con TVFVideoCapture
 description: Implemente redimensionamiento y recorte de video en Delphi - procesamiento en tiempo real, manejo de relación de aspecto y optimización con ejemplos de código.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - Streaming
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Redimensionamiento y Recorte de Video en Delphi TVFVideoCapture

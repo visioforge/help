@@ -1,6 +1,22 @@
 ---
-title: Picture-in-Picture and Split-Screen Layout in C# .NET
-description: Create PiP, side-by-side, and custom video layouts with VisioForge Video Edit SDK .NET. Overlay positioning and split-screen composition in C#.
+title: Picture-in-Picture and Split Screen Videos in C# .NET
+description: Build picture-in-picture and split-screen videos in C# .NET with custom layouts, corner overlays, and MP4 export using Video Edit SDK.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCore
+  - Windows
+  - Streaming
+  - Editing
+  - MP4
+  - AVI
+  - WMV
+  - C#
+  - NuGet
+primary_api_classes:
+  - FileSegment
+  - VideoSource
+
 ---
 
 # Creating Picture-in-Picture and Split-Screen Videos in .NET
@@ -61,8 +77,8 @@ The parameters include:
 - File path
 - Time segments to include
 - Stretch mode (how to handle aspect ratio differences)
-- Rotation angle
-- Volume multiplier
+- Stream number (zero-based index into a multi-stream file)
+- Playback rate (1.0 = normal speed; 2.0 = 2× fast-forward; 0.5 = half speed)
 
 ### Step 4: Configure the PIP Video Source
 
@@ -98,17 +114,21 @@ You can adjust the second rectangle's position and size to place the PIP video w
 Finally, add both video sources to your project using the PIP mode:
 
 ```cs
+// Signature: Input_AddVideoFile_PIP(fileSource1, fileSource2, timelineInsertTime, duration,
+//   mode, letterbox, customWidth=0, customHeight=0, targetVideoStream=0,
+//   rectangle1=null, rectangle2=null)
+// rectangle1 positions fileSource1 (the main video); rectangle2 positions fileSource2 (the PIP overlay).
 VideoEdit1.Input_AddVideoFile_PIP(
-    videoFile,          // Main video
-    videoFile2,         // PIP video
-    TimeSpan.FromMilliseconds(0),         // Start time
-    TimeSpan.FromMilliseconds(10000),     // Duration
-    VideoEditPIPMode.Custom,              // PIP mode
-    true,                                // Show both videos
-    1280, 720,                           // Output resolution
-    0,                                   // Transition type
-    rect2,                               // PIP video rectangle
-    rect1                                // Main video rectangle
+    videoFile,                            // fileSource1 — main video
+    videoFile2,                           // fileSource2 — PIP overlay video
+    TimeSpan.FromMilliseconds(0),         // timelineInsertTime
+    TimeSpan.FromMilliseconds(10000),     // duration
+    VideoEditPIPMode.Custom,              // PIP mode — Custom lets you pass rectangles
+    true,                                 // letterbox
+    1280, 720,                            // customWidth / customHeight
+    0,                                    // targetVideoStream
+    rect1,                                // rectangle1 — main video position (full frame)
+    rect2                                 // rectangle2 — PIP overlay position
 );
 ```
 

@@ -1,6 +1,27 @@
 ---
-title: Captura RTSP de cámara IP y grabación a MP4 en .NET C#
-description: Implementa streaming de video de cámara IP y grabación a archivos MP4 en .NET usando C# con conexión RTSP, opciones de codificación y ejemplos de código.
+title: Grabar Cámara IP RTSP a MP4 en C# .NET con Código Guía
+description: Graba streams RTSP de cámaras IP a archivos MP4 en C# / .NET. Autenticación, descubrimiento ONVIF, reconexión, codificación GPU. Ejemplo de código completo.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - WinForms
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MP4
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCoreX
+  - RTSPSourceSettings
+  - MP4Output
+  - DeviceEnumerator
+  - AudioRendererSettings
+
 ---
 
 # Capturando Streams de Cámara IP a Archivos MP4 en .NET
@@ -195,6 +216,13 @@ Al implementar captura de cámara IP, prepárate para abordar estos desafíos co
 3. **Errores de Archivo de Salida** - Asegura espacio de disco adecuado y permisos de escritura apropiados
 4. **Fugas de Recursos** - Monitorea uso de memoria durante sesiones de grabación largas
 5. **Compatibilidad de Cámara** - Diferentes modelos de cámara pueden requerir ajustes de configuración específicos
+
+## Guías Relacionadas
+
+- [Tutorial de vista previa en vivo de cámara IP](ip-camera-preview.md) — comienza con la vista previa antes de añadir grabación
+- [Configuración de fuente de cámara RTSP](../video-sources/ip-cameras/rtsp.md) — transporte UDP/TCP, ajuste de baja latencia, selección de motor
+- [Integración de cámara IP ONVIF](../video-sources/ip-cameras/onvif.md) — auto-descubrimiento y selección de perfiles
+- [Guardar stream RTSP original sin re-codificación](../../mediablocks/Guides/rtsp-save-original-stream.md) — alternativa con Media Blocks preservando bitrate de origen
 
 ---
 Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código. ¿Necesitas la URL RTSP para tu cámara? Consulta nuestro [directorio de marcas de cámaras IP](../../camera-brands/index.md).

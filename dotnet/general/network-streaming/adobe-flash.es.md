@@ -1,6 +1,14 @@
 ---
 title: Streaming de Video a Adobe Flash Media Server en .NET SDK
 description: Transmita video a Adobe Flash Media Server en .NET con efectos en tiempo real, ajustes de calidad y cambio de dispositivos para streaming profesional.
+tags:
+  - Video Capture SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - Streaming
+  - Encoding
+
 ---
 
 # Streaming a Adobe Flash Media Server: Guía de Implementación Avanzada

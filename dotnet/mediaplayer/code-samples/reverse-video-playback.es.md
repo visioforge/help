@@ -1,6 +1,24 @@
 ---
 title: Reproducción de Video en Reversa con Media Player SDK .NET
 description: Implementa reproducción en reversa con navegación fotograma a fotograma y optimización de rendimiento para aplicaciones de video Windows y multiplataforma.
+tags:
+  - Media Player SDK
+  - .NET
+  - MediaPlayerCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - MP4
+  - C#
+primary_api_classes:
+  - MediaPlayerCoreX
+  - MediaPlayerCore
+  - PlaybackState
+  - UniversalSourceSettings
+
 ---
 
 # Implementando Reproducción de Video en Reversa en Aplicaciones .NET
@@ -55,43 +73,44 @@ MediaPlayer1.Rate_Set(-0.5);
 MediaPlayer1.Rate_Set(-0.25);
 ```
 
-### Manejo de Eventos Durante la Reproducción en Reversa
+### Seguimiento de Posición Durante la Reproducción en Reversa
 
-Cuando implementes reproducción en reversa, puede que necesites manejar eventos de manera diferente:
+`MediaPlayerCoreX` no emite un evento de cambio de posición; sondea la posición en un temporizador:
 
 ```cs
-// Suscribirse a eventos de cambio de posición
-MediaPlayer1.PositionChanged += (sender, e) => 
+// Sondea la posición del reproductor cada 100 ms y actualiza la UI
+var positionTimer = new System.Threading.Timer(_ =>
 {
-    // Actualizar UI con la posición actual
     TimeSpan currentPosition = MediaPlayer1.Position_Get();
     UpdatePositionUI(currentPosition);
-};
 
-// Manejar llegada al inicio del video
-MediaPlayer1.ReachedStart += (sender, e) => 
-{
-    // Detener reproducción o cambiar a reproducción hacia adelante
-    MediaPlayer1.Rate_Set(1.0);
-    // Alternativamente: await MediaPlayer1.PauseAsync();
-};
+    // Detectar llegada al inicio durante reproducción en reversa
+    if (MediaPlayer1.Rate_Get() < 0 && currentPosition <= TimeSpan.FromMilliseconds(100))
+    {
+        // Cambiar a reproducción hacia adelante (o pausar)
+        MediaPlayer1.Rate_Set(1.0);
+    }
+}, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
 ```
 
 ## Navegación en Reversa Fotograma a Fotograma Específica de Windows
 
-El motor MediaPlayerCore (solo Windows) proporciona control mejorado fotograma a fotograma con su sistema de caché de fotogramas, permitiendo navegación hacia atrás precisa incluso con códecs que no lo soportan nativamente.
+El motor clásico `MediaPlayerCore` (solo Windows) proporciona control mejorado fotograma a fotograma con su sistema de caché de fotogramas, permitiendo navegación hacia atrás precisa incluso con códecs que no lo soportan nativamente. Declara una instancia separada del motor clásico — la API `ReversePlayback_*` vive en `MediaPlayerCore` y **no** está disponible en `MediaPlayerCoreX`.
 
 ### Configurando el Caché de Fotogramas
 
 Antes de iniciar la reproducción, configura el caché de reproducción en reversa:
 
 ```cs
+// Motor Windows clásico — tipo distinto al MediaPlayerCoreX usado arriba
+MediaPlayerCore classicPlayer = new MediaPlayerCore(VideoView1);
+
 // Configurar reproducción en reversa antes de iniciar
-MediaPlayer1.ReversePlayback_CacheSize = 100; // Almacenar 100 fotogramas en caché
-MediaPlayer1.ReversePlayback_Enabled = true;  // Habilitar la característica
+classicPlayer.ReversePlayback_CacheSize = 100; // Almacenar 100 fotogramas en caché
+classicPlayer.ReversePlayback_Enabled = true;  // Habilitar la característica
 
 // Iniciar reproducción
-await MediaPlayer1.PlayAsync();
+await classicPlayer.PlayAsync();
 ```
 
 ### Navegando Fotograma a Fotograma
@@ -100,12 +119,12 @@ Con el caché configurado, puedes navegar a fotogramas anteriores:
 
 ```cs
 // Navegar al fotograma anterior
-MediaPlayer1.ReversePlayback_PreviousFrame();
+classicPlayer.ReversePlayback_PreviousFrame();
 
 // Navegar hacia atrás múltiples fotogramas
 for(int i = 0; i < 5; i++)
 {
-    MediaPlayer1.ReversePlayback_PreviousFrame();
+    classicPlayer.ReversePlayback_PreviousFrame();
     // Opcional: añadir retraso entre fotogramas para reproducción controlada
     await Task.Delay(40); // Tiempo equivalente a ~25fps
 }
@@ -117,16 +136,10 @@ Para aplicaciones con requisitos específicos de memoria o rendimiento, puedes a
 
 ```cs
 // Para videos de alta resolución, podrías necesitar menos fotogramas para manejar la memoria
-MediaPlayer1.ReversePlayback_CacheSize = 50; // Reducir tamaño del caché
+classicPlayer.ReversePlayback_CacheSize = 50; // Reducir tamaño del caché
 
 // Para aplicaciones que necesitan navegación hacia atrás extensiva
-MediaPlayer1.ReversePlayback_CacheSize = 250; // Aumentar tamaño del caché
-
-// Escuchar eventos relacionados con el caché
-MediaPlayer1.ReversePlayback_CacheFull += (sender, e) => 
-{
-    Console.WriteLine("El caché de reproducción en reversa está lleno");
-};
+classicPlayer.ReversePlayback_CacheSize = 250; // Aumentar tamaño del caché
 ```
 
 ## Implementando Controles de UI para Reproducción en Reversa
@@ -137,7 +150,7 @@ Una implementación completa de reproducción en reversa típicamente incluye co
 // Manejador de clic del botón para reproducción en reversa
 private async void ReversePlaybackButton_Click(object sender, EventArgs e)
 {
-    if(MediaPlayer1.State == MediaPlayerState.Playing)
+    if(MediaPlayer1.State == PlaybackState.Play)
     {
         // Alternar entre adelante y reversa
         if(MediaPlayer1.Rate_Get() > 0)
@@ -161,16 +174,17 @@ private async void ReversePlaybackButton_Click(object sender, EventArgs e)
 }
 
 // Manejador de clic del botón para navegación fotograma a fotograma hacia atrás
-private void PreviousFrameButton_Click(object sender, EventArgs e)
+// (asume el motor clásico solo-Windows `classicPlayer` declarado arriba)
+private async void PreviousFrameButton_Click(object sender, EventArgs e)
 {
-    // Asegurar que estamos en pausa primero
-    if(MediaPlayer1.State == MediaPlayerState.Playing)
+    // Asegurar que estamos en pausa primero — en el motor clásico MediaPlayerCore, State() es un método (en X es una propiedad).
+    if (classicPlayer.State() == PlaybackState.Play)
     {
-        await MediaPlayer1.PauseAsync();
+        await classicPlayer.PauseAsync();
     }
     
     // Navegar al fotograma anterior
-    MediaPlayer1.ReversePlayback_PreviousFrame();
+    classicPlayer.ReversePlayback_PreviousFrame();
     UpdateFrameCountDisplay();
 }
 ```
@@ -185,7 +199,9 @@ La reproducción en reversa puede ser intensiva en recursos, especialmente con v
 4. **Proporciona opciones alternativas** para dispositivos que tienen dificultades con la reproducción en reversa a velocidad completa
 
 ```cs
-// Ejemplo de monitoreo de rendimiento durante reproducción en reversa
+// Ejemplo de monitoreo de rendimiento durante reproducción en reversa.
+// El seguimiento de velocidad vive en MediaPlayerCoreX (`MediaPlayer1`);
+// el ajuste de caché apunta al clásico MediaPlayerCore (`classicPlayer`).
 private void MonitorPerformance()
 {
     Timer performanceTimer = new Timer(1000);
@@ -195,13 +211,13 @@ private void MonitorPerformance()
         {
             // Registrar o mostrar uso actual de memoria, tasa de fotogramas, etc.
             LogPerformanceMetrics();
-            
-            // Ajustar configuración si es necesario
-            if(IsMemoryUsageHigh())
-            {
-                MediaPlayer1.ReversePlayback_CacheSize = 
-                    Math.Max(10, MediaPlayer1.ReversePlayback_CacheSize / 2);
-            }
+        }
+
+        // Ajustar el caché de fotogramas del motor clásico si la presión de memoria es alta
+        if(IsMemoryUsageHigh())
+        {
+            classicPlayer.ReversePlayback_CacheSize = 
+                Math.Max(10, classicPlayer.ReversePlayback_CacheSize / 2);
         }
     };
     performanceTimer.Start();

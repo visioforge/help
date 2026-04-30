@@ -1,6 +1,20 @@
 ---
 title: Comparar archivos de video con Video Fingerprinting en .NET
 description: Compare dos archivos de video por similitud usando el SDK de fingerprinting de VisioForge en C# con análisis de fotogramas y ejemplos de código.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - C#
+primary_api_classes:
+  - VFPFingerprintSource
+  - VFSimplePlayerEngine
+  - VFPAnalyzer
+
 ---
 
 # Técnicas y Métodos de Comparación de Archivos de Video
@@ -25,12 +39,13 @@ Las huellas de video funcionan extrayendo características distintivas de los fo
 El primer paso es generar una huella para tu archivo de video inicial. El siguiente código demuestra cómo crear una fuente usando el motor DirectShow y limitar el análisis a los primeros 5 segundos:
 
 ```csharp
-// crear fuente para el primer archivo de video usando motor DirectShow
-var source1 = new VFPFingerprintSource(File1, VFSimplePlayerEngine.LAV);
+// VFPFingerprintSource solo tiene un ctor (string filename) — no existe sobrecarga
+// con selección de motor. Elija la ventana de análisis vía StartTime/StopTime.
+var source1 = new VFPFingerprintSource(File1);
 source1.StopTime = TimeSpan.FromMilliseconds(5000);
-            
-// obtener primera huella
-var fp1 = VFPAnalyzer.GetComparingFingerprintForVideoFile(source1, ErrorCallback);
+
+// VFPAnalyzer.GetComparingFingerprintForVideoFile solo tiene la variante Async.
+var fp1 = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(source1, ErrorCallback);
 ```
 
 ### Generando Huellas para el Segundo Video
@@ -38,12 +53,11 @@ var fp1 = VFPAnalyzer.GetComparingFingerprintForVideoFile(source1, ErrorCallback
 De manera similar, necesitamos crear una huella para el segundo archivo de video para habilitar la comparación:
 
 ```csharp
-// crear fuente para el segundo archivo de video usando motor DirectShow
-var source2 = new VFPFingerprintSource(File2, VFSimplePlayerEngine.LAV);
+// El mismo ctor de un argumento + getter async para el segundo video.
+var source2 = new VFPFingerprintSource(File2);
 source2.StopTime = TimeSpan.FromMilliseconds(5000);
-            
-// obtener segunda huella
-var fp2 = VFPAnalyzer.GetComparingFingerprintForVideoFile(source2, ErrorCallback);
+
+var fp2 = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(source2, ErrorCallback);
 ```
 
 ### Comparando las Huellas de Video

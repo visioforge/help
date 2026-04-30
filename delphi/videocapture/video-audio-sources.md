@@ -1,6 +1,14 @@
 ---
 title: Select Video and Audio Capture Devices in Delphi and VB6
 description: Select video and audio devices in Delphi - enumerate devices, configure formats, set frame rates with code examples for Delphi, C++, and VB6.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+
 ---
 
 # Code sample - How to select video and audio capture devices?

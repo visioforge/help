@@ -3,6 +3,19 @@ title: Detección de Movimiento en Video SDK .NET - Guía Completa
 description: Implemente detección de movimiento avanzada y simple en .NET con múltiples tipos de detectores, configuraciones personalizables y procesamiento en tiempo real.
 sidebar_label: Detección de Movimiento
 order: 6
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+primary_api_classes:
+  - MotionDetectionSettings
+  - MotionDetectionExSettings
+
 ---
 
 # Detección de Movimiento para Procesamiento de Video
@@ -64,6 +77,9 @@ motionDetector.Highlight_Enabled = true;
 motionDetector.FrameInterval = 5;
 motionDetector.DropFrames_Enabled = false;
 
+// enable detection (default is false — required for OnMotion events to fire)
+motionDetector.Enabled = true;
+
 // apply settings to the video capture component
 VideoCapture1.Motion_Detection = motionDetector;
 VideoCapture1.MotionDetection_Update();
@@ -71,13 +87,22 @@ VideoCapture1.MotionDetection_Update();
 
 ### Recuperación de Datos de Movimiento
 
-Para acceder a los datos de detección de movimiento en su aplicación, implemente el manejador de eventos `OnMotion`. Este evento proporciona:
+Suscríbete al evento `OnMotion` (tipo: `EventHandler<MotionDetectionEventArgs>`) antes de iniciar el pipeline. El handler se dispara una vez por frame cuando se detecta movimiento:
 
-- Nivel de movimiento actual (porcentaje)
-- Datos de la matriz de movimiento
-- Información del cuadro
+```cs
+VideoCapture1.OnMotion += (sender, e) =>
+{
+    // e.Level  — intensidad global de movimiento (int, típicamente 0-100).
+    // e.Matrix — byte[] grid overlay; cada celda contiene la cantidad de movimiento para esa región.
+    if (e.Level > 25)
+    {
+        Console.WriteLine($"Nivel de movimiento {e.Level}% — {e.Matrix?.Length ?? 0} celdas");
+        // Activa grabación, envía alerta, encola un snapshot, etc.
+    }
+};
+```
 
-Estos datos se pueden utilizar para activar alertas, registrar eventos o iniciar acciones específicas de la aplicación cuando el movimiento excede los umbrales definidos.
+Los eventos se disparan en un hilo worker — haz marshal al hilo UI (`Dispatcher`/`Invoke`) antes de tocar controles UI.
 
 ## Detector de Movimiento Avanzado
 
@@ -153,11 +178,37 @@ motionDetector.DetectorType = MotionDetectorType.CustomFrameDifference;
     
 
 
-5. Implemente el manejador de eventos correspondiente para recibir datos de detección:
+5. Implementa el manejador de eventos correspondiente. Ambos eventos llevan `MotionDetectionExEventArgs` con `Level` (float), `LevelPercent` (0-100 int), `ObjectsCount`, `ObjectRectangles` (`Rect[]`) y `MotionGrid` (`float[,]`):
 
-- Use `OnMotionDetectionEx` o `OnMotionDetection` dependiendo de su componente
-- Acceda al nivel de movimiento, datos de la matriz e información de objetos detectados
-- Procese estos datos de acuerdo con los requisitos de su aplicación
+    === "VideoCaptureCoreX"
+
+        ```cs
+        VideoCapture1.OnMotionDetection += (sender, e) =>
+        {
+            if (e.LevelPercent > 25)
+            {
+                Console.WriteLine($"Movimiento {e.LevelPercent}% — {e.ObjectsCount} objetos móviles");
+                foreach (var rect in e.ObjectRectangles)
+                {
+                    Console.WriteLine($"  en {rect}");
+                }
+            }
+        };
+        ```
+
+    === "VideoCaptureCore"
+
+        ```cs
+        VideoCapture1.OnMotionDetectionEx += (sender, e) =>
+        {
+            if (e.LevelPercent > 25)
+            {
+                Console.WriteLine($"Movimiento {e.LevelPercent}% — {e.ObjectsCount} objetos móviles");
+            }
+        };
+        ```
+
+    Los handlers corren en un hilo worker — marshal al hilo UI antes de actualizar controles.
 
 ## Aplicaciones Prácticas
 
@@ -182,12 +233,14 @@ Para optimizar el rendimiento de la detección de movimiento:
 
 ## Configuración Avanzada
 
-Para entornos con patrones de movimiento complejos, considere estas configuraciones adicionales:
+La clase avanzada `MotionDetectionExSettings` (usada por `VideoCaptureCoreX` vía `Motion_Detection` / por el clásico `VideoCaptureCore` vía `Motion_DetectionEx`) expone estas propiedades adicionales:
 
-- Umbrales de sensibilidad para filtrar movimientos menores
-- Zonas de detección para enfocarse en áreas específicas del cuadro
-- Filtrado de tamaño de objeto para ignorar movimientos por debajo de ciertas dimensiones
-- Configuraciones de persistencia para requerir movimiento sostenido antes de activar
+- `DifferenceThreshold` — umbral de diferencia por píxel para filtrar movimientos menores
+- `MinObjectsWidth` / `MinObjectsHeight` — ignorar objetos detectados por debajo de estas dimensiones
+- `SuppressNoise` — filtro de supresión de ruido para reducir falsos positivos
+- `HighlightMotionRegions` — dibujar rectángulos delimitadores alrededor de las regiones de objetos detectados
+- `KeepObjectsEdges` — preservar bordes nítidos al resaltar
+- `HighlightColor` (SKColor) — color usado para resaltar el movimiento
 
 ## Integración de Eventos
 

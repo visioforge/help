@@ -1,6 +1,32 @@
 ---
 title: WAV PCM Audio Encoder Settings and Code Examples for .NET
 description: Implement WAV audio processing in .NET with sample rates, channel configuration, PCM format selection, and cross-platform support.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - WAV
+  - C#
+primary_api_classes:
+  - WAVEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - MediaBlocksPipeline
+  - WAVOutput
+
 ---
 
 # Implementing WAV Audio in .NET Applications

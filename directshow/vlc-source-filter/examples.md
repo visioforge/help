@@ -1,6 +1,26 @@
 ---
 title: VLC Source DirectShow Filter Integration Code Examples
 description: Code examples for VLC Source Filter with multi-track audio, subtitles, 360° video, and custom VLC parameters in DirectShow.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - WinForms
+  - Playback
+  - Streaming
+  - Decoding
+  - RTSP
+  - HLS
+  - MP4
+  - MKV
+  - AVI
+  - MOV
+  - C#
+  - VB.NET
+primary_api_classes:
+  - IBaseFilter
+  - IVFRegister
+
 ---
 
 # Code Examples
@@ -15,9 +35,7 @@ This page provides practical code examples for using the VLC Source Filter in Di
 ```cpp
 #include <dshow.h>
 #include <streams.h>
-#include "IVlcSrc.h"      // From SDK
-#include "IVlcSrc2.h"     // For custom parameters
-#include "IVlcSrc3.h"     // For frame rate override
+#include "ivlcsrc.h"      // Single header from SDK — declares IVlcSrc, IVlcSrc2, IVlcSrc3 + CLSID/IID GUIDs
 #pragma comment(lib, "strmiids.lib")
 ```
 ### C# Projects
@@ -40,11 +58,11 @@ Play a local media file with VLC Source Filter.
 
 ```cpp
 #include <dshow.h>
-#include "IVlcSrc.h"
+#include "ivlcsrc.h"
 
 // CLSID for VLC Source Filter
 DEFINE_GUID(CLSID_VFVLCSource,
-    0x9f73dcd4, 0x2fc8, 0x4e89, 0x8f, 0xc3, 0x2d, 0xf1, 0x69, 0x3c, 0xa0, 0x3e);
+    0x3fc97748, 0x7cb6, 0x4195, 0x89, 0xde, 0x07, 0x17, 0x58, 0x2a, 0x48, 0x63);
 
 HRESULT PlayVLCFile(LPCWSTR filename, HWND hVideoWindow)
 {
@@ -707,7 +725,7 @@ public class VLCFrameRateExample
 ### C++ Frame Rate Override
 
 ```cpp
-#include "IVlcSrc3.h"
+#include "ivlcsrc.h"
 
 void SetCustomFrameRate(IBaseFilter* pFilter, double fps)
 {

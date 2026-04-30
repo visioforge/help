@@ -1,6 +1,20 @@
 ---
 title: Chroma Key en DirectShow - Interfaz IVFChromaKey C++/C#
 description: Interfaz IVFChromaKey para composición de pantalla verde y azul con control de tolerancia y reemplazo de fondo en DirectShow.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Effects
+  - Mixing
+  - C#
+primary_api_classes:
+  - IVFChromaKey
+  - CVFChromaColor
+  - IBaseFilter
+  - IVFVideoMixer
+  - IVFEffectsPro
+
 ---
 
 # Referencia de la Interfaz IVFChromaKey

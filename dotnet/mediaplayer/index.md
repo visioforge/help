@@ -3,6 +3,21 @@ title: Video Player API for C# .NET — Play, Stream, Embed
 description: Embed video and audio playback into your app with VisioForge Media Player SDK .NET. Supports MP4, MKV, RTSP, HLS across Windows, macOS, Linux, and mobile.
 sidebar_label: Media Player SDK .NET
 order: 13
+tags:
+  - Media Player SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Playback
+  - Streaming
+primary_api_classes:
+  - UniversalSourceSettings
+  - MediaPlayerCoreX
+  - VideoView
 
 ---
 
@@ -136,13 +151,16 @@ await player.PlayAsync();
 Grab a still image from the current playback position:
 
 ```csharp
-// Get the current frame as a SkiaSharp bitmap
+// Save the current frame directly to disk — the simplest path.
+bool saved = await player.Snapshot_SaveAsync("screenshot.jpg", SkiaSharp.SKEncodedImageFormat.Jpeg, quality: 85);
+
+// Or grab the raw VideoFrameX for in-memory processing (caller owns the pixel buffer).
 var frame = await player.Snapshot_GetAsync();
 if (frame != null)
 {
-    using var data = frame.Encode(SKEncodedImageFormat.Jpeg, 85);
-    using var stream = File.OpenWrite("screenshot.jpg");
-    data.SaveTo(stream);
+    // frame.Data (IntPtr), frame.DataSize, frame.Width, frame.Height, frame.Stride, frame.Format.
+    // Free the unmanaged buffer when done:
+    frame.Free();
 }
 ```
 
@@ -174,8 +192,8 @@ Play a specific segment of a file or loop continuously:
 player.Loop = true;
 
 // Play a specific time range
-player.StartPosition = TimeSpan.FromSeconds(10);
-player.StopPosition = TimeSpan.FromSeconds(60);
+player.Segment_Start = TimeSpan.FromSeconds(10);
+player.Segment_Stop = TimeSpan.FromSeconds(60);
 ```
 
 See: [Loop Mode and Position Range Playback](guides/loop-and-position-range.md)
@@ -199,16 +217,16 @@ See: [Loop Mode and Position Range Playback](guides/loop-and-position-range.md)
 | Android | MAUI | Via MAUI integration |
 | iOS | MAUI | Via MAUI integration |
 
-For cross-platform implementations, see: [Cross-Platform Video Player — Avalonia & MAUI Guide](guides/play-video-dotnet.md)
+For cross-platform implementations, see the [Avalonia Player Guide](guides/avalonia-player.md) (desktop, includes Linux) or the [.NET MAUI Player Guide](guides/maui-player.md) (mobile + desktop).
 
 ## Developer Documentation
 
 ### Guides
 
-* [Build a Video Player in C#](guides/video-player-csharp.md)
+* [Build a Video Player in C# (WinForms / WPF)](guides/video-player-csharp.md)
 * [Build a Video Player in VB.NET](guides/video-player-vb-net.md)
-* [Cross-Platform Video Player — Avalonia & MAUI](guides/play-video-dotnet.md)
 * [Avalonia Player Implementation](guides/avalonia-player.md)
+* [.NET MAUI Player](guides/maui-player.md)
 * [Android Player Implementation](guides/android-player.md)
 * [Loop Mode and Position Range](guides/loop-and-position-range.md)
 * [All Guides](guides/index.md)

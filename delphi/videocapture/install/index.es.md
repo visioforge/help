@@ -1,6 +1,16 @@
 ---
 title: Instalar TVFVideoCapture en Delphi, VB6 y C++ Builder
 description: Instale la biblioteca TVFVideoCapture en Delphi, Visual Studio, C++ Builder y VB6 con configuración de IDE paso a paso e integración ActiveX.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Guía de Instalación de TVFVideoCapture

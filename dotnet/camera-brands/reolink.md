@@ -1,6 +1,24 @@
 ---
 title: Reolink IP Camera RTSP Connection Guide for C# .NET
 description: Reolink RLC, E1, Argus, CX, and Duo series RTSP URL patterns for C# .NET. Stream and record using VisioForge SDK with ONVIF discovery support.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - H.265
+  - C#
+
 ---
 
 # How to Connect to Reolink IP Camera in C# .NET

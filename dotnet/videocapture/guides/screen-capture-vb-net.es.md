@@ -1,6 +1,31 @@
 ---
 title: Captura de pantalla en VB.NET - Grabar escritorio a MP4
 description: Capture la pantalla del escritorio en VB.NET. Grabación completa o por región a MP4 con audio del sistema usando Video Capture SDK .Net.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Webcam
+  - Screen Capture
+  - MP4
+  - WebM
+  - AVI
+  - C#
+  - VB.NET
+  - NuGet
+primary_api_classes:
+  - ScreenCaptureD3D11SourceSettings
+  - VideoCaptureCoreX
+  - MP4Output
+  - VideoView
+  - LoopbackAudioCaptureDeviceSourceSettings
+
 ---
 
 # Captura de pantalla en VB.NET: Guía completa para grabar video del escritorio
@@ -275,7 +300,7 @@ Hay aplicaciones de ejemplo completas en VB.NET disponibles:
 
 ### ¿Cómo grabo audio de micrófono y del sistema simultáneamente en la captura de pantalla con VB.NET?
 
-Cree ambas fuentes y combínelas. Establezca `Audio_Source` con el dispositivo loopback usando `LoopbackAudioCaptureDeviceSourceSettings`, luego agregue un micrófono como fuente de audio secundaria con `Audio_AdditionalSource`. Establezca `Audio_Record = True` para capturar ambas pistas mezcladas en el archivo de salida. Consulte las secciones de audio de micrófono y loopback anteriores para los patrones de código VB.NET individuales.
+`VideoCaptureCoreX` expone un único `Audio_Source`, así que para mezclar micrófono con audio loopback del sistema construyes un pipeline de Media Blocks: un `SystemAudioSourceBlock` para el micrófono, uno loopback, y un `AudioMixerBlock` que los combina antes del encoder/sink. La [referencia de procesamiento de audio de Media Blocks](../../mediablocks/AudioProcessing/index.md) cubre el setup de `AudioMixerBlock`. Alternativamente, en Windows usa `VideoCaptureCore` (non-X) donde `Additional_Audio_CaptureDevice_MixChannels` y la lista interna de dispositivos adicionales gestionan la mezcla directamente.
 
 ### ¿Qué tasa de fotogramas debo usar para la grabación de pantalla en VB.NET?
 

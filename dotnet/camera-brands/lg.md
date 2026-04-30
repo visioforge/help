@@ -1,6 +1,25 @@
 ---
 title: LG IP Camera RTSP URL Setup and Streaming in C# .NET
 description: LG SmartIP, LW, and LV series camera RTSP URL patterns for C# .NET. Stream wireless and wired models using VisioForge Video Capture SDK integration.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Webcam
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to LG IP Camera in C# .NET

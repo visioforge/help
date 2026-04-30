@@ -1,6 +1,16 @@
 ---
 title: Crossbar Video Input - Composite, S-Video, HDMI in C# .NET
 description: Switch between Composite, S-Video, and HDMI inputs on capture cards using VisioForge Video Capture SDK Crossbar API. C# implementation examples.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - Decoding
+  - C#
+  - NuGet
+
 ---
 
 # Configuring Multiple Hardware Video Inputs with Crossbar
@@ -25,8 +35,11 @@ The crossbar interface allows your application to programmatically select betwee
 First, you need to initialize the crossbar interface for your video capture device. This establishes the connection to the hardware's input selection capabilities.
 
 ```cs
-// Initialize the crossbar interface and check if crossbar functionality exists
-var crossBarFound = VideoCapture1.Video_CaptureDevice_CrossBar_Init();
+// Initialize the crossbar interface for the currently-selected capture device.
+// The method takes the target device name (match against Video_CaptureDevices()),
+// and returns true if the device exposes a DirectShow crossbar.
+var deviceName = VideoCapture1.Video_CaptureDevice?.Name;
+var crossBarFound = VideoCapture1.Video_CaptureDevice_CrossBar_Init(deviceName);
 
 // If crossBarFound is true, the device supports multiple inputs that can be configured
 ```

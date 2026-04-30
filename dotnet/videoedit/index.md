@@ -3,6 +3,19 @@ title: Video Editing - Timeline, Transitions, Overlays in C# .NET
 description: Build video editing apps with VisioForge Video Edit SDK .NET. Timeline editing, transitions, overlays, format conversion, and GPU-accelerated encoding.
 sidebar_label: Video Edit SDK .NET
 order: 12
+tags:
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Editing
+primary_api_classes:
+  - VideoEditCoreX
+  - MP4Output
 
 ---
 
@@ -12,7 +25,7 @@ order: 12
 
 ## Introduction
 
-Video Edit SDK for .NET is a C# video editing library that lets you build timeline-based video editing applications. Add video and audio files to a timeline, trim segments, apply transitions and effects, overlay text and images, and render the result to MP4, AVI, MKV, WebM, or other formats — all from your .NET code.
+Video Edit SDK for .NET is a C# video editing library that lets you build timeline-based video editing applications. Add video and audio files to a timeline, trim segments, apply transitions and effects, overlay text and images, and render the result to MP4, AVI, MKV, WebM, animated GIF, or other formats — all from your .NET code.
 
 The SDK provides two engines: **VideoEditCore** (Windows-only, DirectShow-based) and **VideoEditCoreX** (cross-platform, runs on Windows, macOS, Linux, Android, and iOS). Both engines share the same timeline model — add sources, configure output, and start editing.
 
@@ -21,7 +34,7 @@ The SDK provides two engines: **VideoEditCore** (Windows-only, DirectShow-based)
 ### 1. Install NuGet Package
 
 ```bash
-dotnet add package VisioForge.DotNet.VideoEditX
+dotnet add package VisioForge.DotNet.VideoEdit
 ```
 
 For platform-specific dependencies and UI framework setup, see the [Installation Guide](../install/index.md).
@@ -30,6 +43,8 @@ For platform-specific dependencies and UI framework setup, see the [Installation
 
 ```csharp
 using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
 using VisioForge.Core.Types.X.VideoEdit;
 using VisioForge.Core.VideoEditX;
 
@@ -112,7 +127,7 @@ See: [Picture-In-Picture Effects](code-samples/picture-in-picture.md)
 | Video Containers | MP4, AVI, MOV, WMV, MKV, WebM, TS, FLV |
 | Video Codecs | H.264, H.265/HEVC, VP9, AV1, MPEG-2 |
 | Audio Formats | AAC, MP3, WMA, OPUS, Vorbis, FLAC, WAV |
-| Image Formats | JPG, PNG, BMP, GIF |
+| Image Formats | JPG, PNG, BMP, GIF (input), animated GIF (output) |
 
 ## Platform Support
 

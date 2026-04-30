@@ -1,6 +1,39 @@
 ---
 title: MPEG-TS Video Output with File Splitting in C# .NET
 description: File splitting by duration, size, or timecode. Rolling buffer with max file limit. H.264/HEVC GPU encoding and Blu-ray M2TS mode. VisioForge SDK examples.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Recording
+  - Encoding
+  - Editing
+  - MP4
+  - TS
+  - H.264
+  - H.265
+  - AAC
+  - MP3
+  - C#
+  - NuGet
+primary_api_classes:
+  - MPEGTSOutput
+  - NVENCH264EncoderSettings
+  - MPEGTSSplitSinkSettings
+  - MFBaseOutput
+  - QSVH264EncoderSettings
+
 ---
 
 # MPEG-TS Output
@@ -215,7 +248,7 @@ output.CustomAudioProcessor = new YourCustomAudioProcessor();
 
 #### Sink Settings
 
-The output uses MP4SinkSettings for configuration:
+The output uses `MPEGTSSinkSettings` (or the derived `MPEGTSSplitSinkSettings` for segmented output) for configuration:
 
 ```csharp
 // Access sink settings
@@ -287,9 +320,9 @@ output.CustomAudioProcessor = new YourCustomAudioProcessor();
 
 ## Windows-only MPEG-TS output
 
-[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
+[VideoCaptureCore](#){ .md-button }
 
-The `MPEGTSOutput` class provides configuration settings for MPEG Transport Stream (MPEG-TS) output in the VisioForge video processing framework. This class inherits from `MFBaseOutput` and implements the `IVideoCaptureBaseOutput` interface, enabling it to be used specifically for video capture scenarios with MPEG-TS formatting.
+The `MPEGTSOutput` class provides configuration settings for MPEG Transport Stream (MPEG-TS) output in the VisioForge video processing framework. This class inherits from `MFBaseOutput` and implements the `IVideoCaptureBaseOutput` interface, so the classic Windows engine exposes it through `VideoCaptureCore` only — classic `VideoEditCore` has no MPEG-TS output path (use `VideoEditCoreX` for cross-platform MPEG-TS instead).
 
 ### Class Hierarchy
 
@@ -300,7 +333,7 @@ MFBaseOutput
 
 ### Inherited Video Settings
 
-The [MPEGTSOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.MPEGTSOutput.html) class inherits video encoding capabilities from MFBaseOutput, which includes:
+The [MPEGTSOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.MPEGTSOutput.html) class inherits video encoding capabilities from MFBaseOutput, which includes:
 
 **Video Encoding Configuration**: Through the `Video` property, supporting:
 
@@ -373,7 +406,7 @@ The `MPEGTSOutput` class initializes with these default settings:
 - Rate Control: CBR
 - Quality vs Speed: 85
 - Maximum Reference Frames: 2
-- GOP Size: 50 frames
+- MaxKeyFrameSpacing (GOP size): 125 frames
 - B-Picture Count: 0
 - Low Latency Mode: Disabled
 - CABAC: Disabled

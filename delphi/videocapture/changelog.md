@@ -1,6 +1,18 @@
 ---
 title: Delphi Video Capture SDK Version Changelog and Notes
 description: TVFVideoCapture version history - GPU acceleration, streaming capabilities, format updates from version 4.1 to 11.0 with detailed release notes.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+  - Streaming
+primary_api_classes:
+  - TVFVideoCapture
+  - TVFMediaPlayer
+
 ---
 
 # TVFVideoCapture Version History

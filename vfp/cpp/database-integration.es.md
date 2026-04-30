@@ -1,9 +1,36 @@
 ---
 title: Huellas de Video en C++ - SQLite, PostgreSQL y Redis Cache
 description: Almacene y consulte huellas de video en SQLite y PostgreSQL usando el SDK C++ de VisioForge. Esquemas de base de datos, indexación y caché Redis.
+tags:
+  - Video Fingerprinting SDK
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+primary_api_classes:
+  - StoreFingerprint
+  - VFPFingerprintSource
+  - VFPFillSource
+  - BatchFingerprintProcessor
+  - CacheFingerprint
+
 ---
 
 # Guía de Base de Datos del SDK de Huellas C++
+
+!!! danger "Algunos helpers referenciados abajo no existen — use la API plana C para generación de huellas"
+
+    `VFPFillSource` y `VFPSearch_GetFingerprintForVideoFile` **no** son
+    exports reales de `VisioForge_VFP.dll`. Para generar una huella antes
+    de almacenarla, decodifique cuadros de video en la aplicación host y
+    aliméntelos al bucle canónico de bajo nivel:
+    `VFPSearch_Init` → `VFPSearch_Process` (por cuadro) → `VFPSearch_Build`
+    (o el equivalente `VFPCompare_*`). Vea [`index.md`](./index.md) para
+    el flujo completo. La semántica de almacenamiento y recuperación de
+    base de datos descrita en esta página es independiente de la API de
+    generación de huellas. Catalogado como defecto #088.
 
 Esta guía demuestra cómo integrar el SDK de Huellas de Video para C++ con varios sistemas de bases de datos para almacenamiento y recuperación eficiente de huellas.
 

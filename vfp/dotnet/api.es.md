@@ -1,6 +1,19 @@
 ---
 title: API .NET de Video Fingerprinting - Generar, comparar, buscar
 description: Documentación completa de la API del SDK Video Fingerprinting de VisioForge para generar, comparar y buscar huellas de video con ejemplos.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+  - C#
+primary_api_classes:
+  - VFPFingerprintSource
+  - VFPAnalyzer
+
 ---
 
 # Documentación de la API .NET del SDK de Video Fingerprinting
@@ -508,7 +521,7 @@ public VFPFingerprintSource(string filename)
 ### Propiedades
 
 ```csharp
-public string Filename { get; }
+public string Filename { get; set; }
 public TimeSpan StartTime { get; set; }
 public TimeSpan StopTime { get; set; }
 public Rect CustomCropSize { get; set; }
@@ -760,11 +773,11 @@ public static IntPtr Build(
 ```csharp
 public static int Search(
     VFPFingerPrint fp1,
-    int startPos1,
+    int skip1,
     VFPFingerPrint fp2,
-    int startPos2,
-    out int difference,
-    int maxDifference)
+    int skip2,
+    out double difference,
+    int maxDiff)
 ```
 
 **Descripción:** Busca fragmento en video.
@@ -772,11 +785,11 @@ public static int Search(
 **Parámetros:**
 
 - `fp1` (VFPFingerPrint): Huella digital del fragmento
-- `startPos1` (int): Posición de inicio en el fragmento (segundos)
+- `skip1` (int): Frames a omitir al inicio de `fp1`
 - `fp2` (VFPFingerPrint): Huella digital del video principal
-- `startPos2` (int): Posición de inicio de búsqueda (segundos)
-- `difference` (out int): Puntuación de diferencia de coincidencia
-- `maxDifference` (int): Diferencia máxima permitida
+- `skip2` (int): Frames a omitir al inicio de `fp2`
+- `difference` (out double): Puntuación de diferencia de coincidencia
+- `maxDiff` (int): Diferencia máxima permitida
 
 **Devuelve:** `int` - Posición donde se encontró (segundos) o Int32.MaxValue si no se encontró
 
@@ -789,11 +802,11 @@ var videoFp = VFPFingerPrint.Load(@"C:\Fingerprints\full_video.vsigx");
 
 int position = VFPSearch.Search(
     fragmentFp,
-    startPos1: 0,
+    skip1: 0,
     videoFp,
-    startPos2: 0,
-    out int matchDifference,
-    maxDifference: 20);
+    skip2: 0,
+    out double matchDifference,
+    maxDiff: 20);
 
 if (position != Int32.MaxValue)
 {

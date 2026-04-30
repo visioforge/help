@@ -1,6 +1,35 @@
 ---
 title: MKV Container Format - .NET Video Encoding and Recording
 description: Implement MKV output in .NET with hardware-accelerated encoding, multiple audio tracks, and flexible Matroska container support for video apps.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Recording
+  - Encoding
+  - Editing
+  - MKV
+  - H.264
+  - H.265
+  - AAC
+  - C#
+primary_api_classes:
+  - MKVOutput
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - MediaBlocksPipeline
+  - NVENCH264EncoderSettings
+
 ---
 
 # MKV Output in VisioForge .NET SDKs
@@ -29,8 +58,11 @@ The `MKVOutput` class serves as the primary interface for generating MKV files i
 ```csharp
 // Create MKV output with default encoders
 var mkvOutput = new MKVOutput("output.mkv");
+```
 
-// Or specify custom encoders during initialization
+Or specify custom encoders during initialization (the second and third constructor parameters are `IVideoEncoder` / `IAudioEncoder`, both nullable):
+
+```csharp
 var videoEncoder = new NVENCH264EncoderSettings();
 var audioEncoder = new MFAACEncoderSettings();
 var mkvOutput = new MKVOutput("output.mkv", videoEncoder, audioEncoder);
@@ -100,11 +132,11 @@ Audio quality is equally important for most applications. VisioForge SDKs provid
     mkvOutput.Audio = aacSettings;
 #endif
 
-// Or use OPUS for better quality at lower bitrates
+// Or use OPUS for better quality at lower bitrates (Bitrate is in Kbit/s; channel count
+// is inferred from the input caps, so there is no Channels property on OPUSEncoderSettings)
 var opusSettings = new OPUSEncoderSettings
 {
-    Bitrate = 128,
-    Channels = 2
+    Bitrate = 128
 };
 mkvOutput.Audio = opusSettings;
 ```
@@ -183,29 +215,36 @@ await editCore.StartAsync();
 
 ### With Media Blocks SDK
 
+`MKVOutputBlock` takes encoder **settings** (not encoder blocks) in its constructor and builds the encoder chain internally. Connect source audio/video directly to its input pads.
+
 ```csharp
-// Create a pipeline
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Outputs;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.AudioEncoders;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types.X.VideoEncoders;
+using VisioForge.Core.Types;
+
+// Pipeline.
 var pipeline = new MediaBlocksPipeline();
 
-// Add source block
-var sourceBlock = // some block
+// Source (any file — will be decoded into separate video and audio outputs).
+var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri("input.mp4"));
+var sourceBlock = new UniversalSourceBlock(sourceSettings);
 
-## Interface Implementation
-
-// Configure MKV output
-var aacEncoder = new VOAACEncoderSettings();
-var h264Encoder = new OpenH264EncoderSettings();
+// MKV sink — the constructor accepts encoder settings, not encoder blocks.
 var mkvSinkSettings = new MKVSinkSettings("processed.mkv");
-var mkvOutput = new MKVOutputBlock(mkvSinkSettings, h264Encoder, aacEncoder);
+var mkvOutput = new MKVOutputBlock(
+    mkvSinkSettings,
+    videoSettings: new OpenH264EncoderSettings(),
+    audioSettings: new VOAACEncoderSettings());
 
-// Connect blocks and run the pipeline
-pipeline.Connect(sourceBlock.VideoOutput, h264Encoder.Input);
-pipeline.Connect(h264Encoder.Output, mkvOutput.CreateNewInput(MediaBlockPadMediaType.Video));
-pipeline.Connect(sourceBlock.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mkvOutput.CreateNewInput(MediaBlockPadMediaType.Audio));
-pipeline.Connect(mkvOutput.Output, pipeline.Sink);
+// Wire source pads directly to the MKV output — it handles encoding internally.
+pipeline.Connect(sourceBlock.VideoOutput, mkvOutput.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(sourceBlock.AudioOutput, mkvOutput.CreateNewInput(MediaBlockPadMediaType.Audio));
 
-// Start the pipeline
 await pipeline.StartAsync();
 ```
 

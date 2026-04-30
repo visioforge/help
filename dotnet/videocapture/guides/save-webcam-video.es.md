@@ -1,6 +1,33 @@
 ---
 title: Capturar y Grabar Video de Webcam en C# .NET - Tutorial
 description: Guía completa para capturar y guardar video de webcam usando .NET y C#. Implemente funcionalidad con formatos MP4/WebM y aceleración GPU.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - WinForms
+  - Capture
+  - Encoding
+  - Webcam
+  - IP Camera
+  - Screen Capture
+  - MP4
+  - WebM
+  - H.264
+  - H.265
+  - VP8
+  - VP9
+  - AV1
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCoreX
+  - DeviceEnumerator
+  - VideoCaptureDeviceSourceSettings
+  - MP4Output
+  - WebMOutput
+
 ---
 
 # Guardar Video de Webcam Usando .Net: Una Guía Completa para Grabar y Capturar Webcam

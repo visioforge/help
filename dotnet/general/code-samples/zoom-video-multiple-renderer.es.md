@@ -1,6 +1,15 @@
-﻿---
+---
 title: Configurar Zoom en Múltiples Renderizadores de Video
 description: Configure parámetros de zoom y posición independientes para múltiples renderizadores de video en pantallas multi-monitor en aplicaciones multimedia .NET.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - C#
+primary_api_classes:
+  - VideoRendererType
 ---
 
 # Configuración de Zoom para Múltiples Renderizadores de Video en .NET
@@ -92,17 +101,21 @@ VideoCapture1.MultiScreen_SetZoom(2, 30, 0, 30);
 
 ### 2. Manejar Cambios de Resolución Apropiadamente
 
-Cuando la resolución de la fuente de entrada cambia, puede que necesites recalcular los valores de zoom:
+Si el formato de la fuente cambia durante la sesión, lee la resolución actual dentro
+del callback `OnVideoFrameBuffer` (`e.Frame.Info.Width` / `e.Frame.Info.Height`) y
+vuelve a aplicar el zoom. Lleva tú mismo el conteo de pantallas — `VideoCaptureCore`
+no expone una propiedad `MultiScreen_Count`; ya sabes cuántas añadiste porque tú
+llamaste a `MultiScreen_AddScreen`.
 
 ```cs
-private void VideoCapture1_OnVideoSourceResolutionChanged(object sender, EventArgs e)
+private int _multiScreenCount = 0; // incrementado tras cada llamada a MultiScreen_AddScreen
+
+private void VideoCapture1_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
 {
-    // Recalcular y aplicar configuraciones de zoom basadas en nueva resolución
-    int newZoom = CalculateOptimalZoom(VideoCapture1.VideoSource_ResolutionX, 
-                                       VideoCapture1.VideoSource_ResolutionY);
-    
-    // Aplicar a todos los renderizadores
-    for (int i = 0; i < VideoCapture1.MultiScreen_Count; i++)
+    int newZoom = CalculateOptimalZoom(e.Frame.Info.Width, e.Frame.Info.Height);
+
+    // Aplicar a todos los renderizadores registrados
+    for (int i = 0; i < _multiScreenCount; i++)
     {
         VideoCapture1.MultiScreen_SetZoom(i, newZoom, 0, 0);
     }
@@ -164,9 +177,11 @@ Al trabajar con múltiples renderizadores, ten en cuenta las implicaciones de re
 3. **Monitorear Uso de Memoria**: Múltiples renderizadores de alta resolución pueden consumir memoria significativa
 
 ```cs
-// Habilitar aceleración por hardware para mejor rendimiento
-VideoCapture1.Video_Renderer = VideoRendererType.EVR;
-VideoCapture1.Video_Renderer_EVR_Mode = EVRMode.Optimal;
+// Usa el renderizador EVR para composición acelerada por hardware en Windows. Los
+// ajustes del renderizador viven dentro de Video_Renderer (un VideoRendererSettings),
+// no directamente sobre el core.
+VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.EVR;
+VideoCapture1.Video_Renderer.Deinterlace_EVR_Mode = VideoRendererEVRDeinterlaceMode.Auto;
 ```
 
 ## Solución de Problemas Comunes
@@ -179,7 +194,7 @@ Esto puede ocurrir cuando los valores de zoom exceden rangos válidos o cuando l
 // Restablecer configuraciones de zoom a valores predeterminados para todos los renderizadores
 public void ResetZoomSettings()
 {
-    for (int i = 0; i < VideoCapture1.MultiScreen_Count; i++)
+    for (int i = 0; i < _multiScreenCount; i++)
     {
         VideoCapture1.MultiScreen_SetZoom(i, 100, 0, 0); // 100% zoom, sin desplazamiento
     }

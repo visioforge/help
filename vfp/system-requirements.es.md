@@ -1,6 +1,16 @@
 ---
 title: Requisitos del SDK Video Fingerprinting por Plataforma
 description: Requisitos de hardware y software para ejecutar el SDK Video Fingerprinting de VisioForge en plataformas Windows, Linux y macOS.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - DirectShow
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+
 ---
 
 # Requisitos del Sistema

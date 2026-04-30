@@ -1,6 +1,25 @@
 ---
 title: Annke Camera RTSP URL Patterns with C# .NET Examples
 description: Annke C500, C800, CZ400, NC400 and NVR RTSP URL patterns for C# .NET. Integrate with VisioForge Video Capture SDK for streaming and recording.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Decoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Annke IP Camera in C# .NET

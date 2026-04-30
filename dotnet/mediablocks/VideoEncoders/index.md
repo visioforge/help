@@ -3,6 +3,22 @@ title: Video Encoder Blocks - H.264, HEVC, AV1, VP9 in C# .NET
 description: Encode video to H.264, HEVC, AV1, and VP9 with GPU acceleration using VisioForge Media Blocks SDK. Configurable bitrate, quality, and codec settings.
 sidebar_label: Video Encoders
 order: 18
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - UniversalSourceBlock
+  - MediaBlocksPipeline
+  - UniversalSourceSettings
+  - MediaBlockPadMediaType
+  - MP4SinkBlock
+
 ---
 
 # Video encoding
@@ -172,13 +188,16 @@ Output | Compressed video | 1
 #### CustomVideoEncoderSettings
 
 ```csharp
-public class CustomVideoEncoderSettings
+public class CustomVideoEncoderSettings : IVideoEncoder
 {
-    // GStreamer encoder element name (e.g., "x264enc", "nvh264enc")
-    public string EncoderName { get; set; }
-    
-    // Dictionary of encoder-specific properties
-    public Dictionary<string, object> Properties { get; set; }
+    // GStreamer encoder element name (e.g., "x264enc", "nvh264enc").
+    // Set via the constructor; the setter is private.
+    public string Name { get; private set; }
+
+    // Dictionary of encoder-specific properties (private setter — populate via indexer / Add).
+    public Dictionary<string, object> Properties { get; private set; }
+
+    public CustomVideoEncoderSettings(string name);
 }
 ```
 
@@ -198,16 +217,11 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Configure custom encoder (example with x264enc)
-var customSettings = new CustomVideoEncoderSettings
-{
-    EncoderName = "x264enc",
-    Properties = new Dictionary<string, object>
-    {
-        { "bitrate", 2000 },
-        { "speed-preset", "medium" }
-    }
-};
+// Configure custom encoder (example with x264enc — Name is set via the ctor; populate
+// Properties dictionary via its indexer since the property has a private setter).
+var customSettings = new CustomVideoEncoderSettings("x264enc");
+customSettings.Properties["bitrate"] = 2000;
+customSettings.Properties["speed-preset"] = "medium";
 var customEncoder = new CustomVideoEncoderBlock(customSettings);
 pipeline.Connect(fileSource.VideoOutput, customEncoder.Input);
 
@@ -241,13 +255,15 @@ Output | GIF | 1
 ```csharp
 public class GIFEncoderSettings
 {
-    // Frame rate for the output GIF
-    public VideoFrameRate FrameRate { get; set; }
-    
-    // Enable dithering for better color representation
-    public bool Dither { get; set; }
+    // Number of additional repetitions: -1 = loop forever, 0..n = finite repeats. Default 0.
+    public uint Repeat { get; set; }
+
+    // Encoding speed [1..30]. Higher = faster (lower quality). Default 10.
+    public int Speed { get; set; }
 }
 ```
+
+> The output frame rate of a `GIFEncoderBlock` follows the upstream caps — set the desired frame rate on the source (or insert a rate filter / `VideoFrameRateBlock` upstream) rather than on `GIFEncoderSettings`.
 
 ### The sample pipeline
 
@@ -267,8 +283,8 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 
 var gifSettings = new GIFEncoderSettings
 {
-    FrameRate = new VideoFrameRate(10, 1), // 10 fps for smaller file size
-    Dither = true
+    Repeat = 0,    // 0 = no extra loops; -1 = loop forever
+    Speed  = 10    // [1..30] — higher = faster encoding (lower quality)
 };
 var gifEncoder = new GIFEncoderBlock(gifSettings, "output.gif");
 pipeline.Connect(fileSource.VideoOutput, gifEncoder.Input);
@@ -294,7 +310,7 @@ Nvidia GPUs H264 video encoder.
 
 **Platforms:** Windows, Linux, macOS.
 
-#### AMFHEVCEncoderSettings
+#### AMFH264EncoderSettings
 
 AMD/ATI GPUs H264 video encoder.
 
@@ -732,9 +748,9 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 var mpeg2EncoderBlock = new MPEG2EncoderBlock(new MPEG2VideoEncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, mpeg2EncoderBlock.Input);
 
-// Example: Using an MPGSinkBlock for .mpg or .ts files
-var mpgSinkBlock = new MPGSinkBlock(new MPGSinkSettings(@"output.mpg"));
-pipeline.Connect(mpeg2EncoderBlock.Output, mpgSinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+// Example: Using an MPEGTSSinkBlock for .ts files
+var mpegtsSinkBlock = new MPEGTSSinkBlock(new MPEGTSSinkSettings(@"output.ts"));
+pipeline.Connect(mpeg2EncoderBlock.Output, mpegtsSinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
 
 await pipeline.StartAsync();
 ```
@@ -806,11 +822,15 @@ Output | PNG | 1
 ```csharp
 public class PNGEncoderSettings
 {
-    // Compression level (0-9, higher = better compression but slower)
-    public int CompressionLevel { get; set; }
-    
-    // PNG filter type for optimal compression
-    public PNGFilterType FilterType { get; set; }
+    // Compression level enum (None / Minimal / Low / Light / Medium / MediumHigh /
+    // High / VeryHigh / Maximum). Default MediumHigh.
+    public PNGEncoderCompressionLevel CompressionLevel { get; set; }
+
+    // Pre-compression filter (None / Sub / Up / Average / Paeth / All). Default None.
+    public PNGEncoderFilterType Filter { get; set; }
+
+    // Whether to write info chunks. Default true.
+    public bool WriteInfo { get; set; }
 }
 ```
 
@@ -832,7 +852,8 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 
 var pngSettings = new PNGEncoderSettings
 {
-    CompressionLevel = 6 // Balanced compression
+    CompressionLevel = PNGEncoderCompressionLevel.MediumHigh, // balanced
+    Filter           = PNGEncoderFilterType.None
 };
 var pngEncoder = new PNGEncoderBlock(pngSettings, "frame.png");
 pipeline.Connect(fileSource.VideoOutput, pngEncoder.Input);
@@ -938,6 +959,3 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux.
 
-## General Video Settings Considerations
-
-While specific encoder settings classes provide detailed control, some general concepts or enumerations might be relevant across different encoders or for understanding video quality options.

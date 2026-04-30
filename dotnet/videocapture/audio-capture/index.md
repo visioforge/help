@@ -3,6 +3,22 @@ title: Capture System Audio and Record Microphone in C# .NET
 description: Record microphone audio and capture system sound (speaker/loopback) in C# with VisioForge SDK. Complete code examples for audio-only recording to MP3, M4A, WAV.
 sidebar_label: Audio Capture
 order: 10
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+primary_api_classes:
+  - DeviceEnumerator
+  - VideoCaptureCoreX
+  - LoopbackAudioCaptureDeviceSourceSettings
+  - SystemAudioSourceBlock
+  - MediaBlocksPipeline
 
 ---
 

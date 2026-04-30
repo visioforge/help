@@ -1,6 +1,13 @@
 ---
 title: Historial de Versiones de Video Edit SDK FFMPEG .Net
 description: Historial de versiones detallado y actualizaciones de características para Video Edit SDK FFMPEG .Net con mejoras de rendimiento y cambios de API.
+tags:
+  - Video Edit SDK FFmpeg
+  - .NET
+primary_api_classes:
+  - MediaInfoReader
+  - FFMPEGEXEOutput
+
 ---
 
 # Video Edit SDK FFMPEG .Net: Historial Completo de Versiones

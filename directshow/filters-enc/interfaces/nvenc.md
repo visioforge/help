@@ -1,6 +1,18 @@
 ---
 title: NVIDIA NVENC Hardware Encoder Settings for DirectShow
 description: Configure NVIDIA NVENC hardware encoding in DirectShow with INVEncConfig COM interface. H.264/H.265 codec settings, presets, and GPU selection for C++/C#.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - H.264
+  - H.265
+  - C#
+primary_api_classes:
+  - IBaseFilter
+
 ---
 
 # INVEncConfig Interface Reference
@@ -14,7 +26,7 @@ NVENC is NVIDIA's dedicated hardware encoder available on GeForce, Quadro, and T
 ## Filter and Interface GUIDs
 
 - **Filter CLSID**: `CLSID_NVEncoder`
-  `{6EEC9161-7276-430B-A1197-0D4C3BCC87E5}`
+  `{6EEC9161-7276-430B-A197-0D4C3BCC87E5}`
 
 - **Interface**: `INVEncConfig`
   **GUID**: `{9A2AC42C-3E3D-4E6A-84E5-D097292D496B}`
@@ -37,7 +49,7 @@ NVENC is NVIDIA's dedicated hardware encoder available on GeForce, Quadro, and T
 static const GUID IID_INVEncConfig =
 { 0x9a2ac42c, 0x3e3d, 0x4e6a, { 0x84, 0xe5, 0xd0, 0x97, 0x29, 0x2d, 0x49, 0x6b } };
 
-// {6EEC9161-7276-430B-A1197-0D4C3BCC87E5}
+// {6EEC9161-7276-430B-A197-0D4C3BCC87E5}
 static const GUID CLSID_NVEncoder =
 { 0x6eec9161, 0x7276, 0x430b, { 0xa1, 0x97, 0xd, 0x4c, 0x3b, 0xcc, 0x87, 0xe5 } };
 
@@ -265,7 +277,7 @@ uses
 const
   IID_INVEncConfig: TGUID = '{9A2AC42C-3E3D-4E6A-84E5-D097292D496B}';
   IID_INVEncConfig2: TGUID = '{2A741FB6-6DE1-460B-8FCA-76DB478C9357}';
-  CLSID_NVEncoder: TGUID = '{6EEC9161-7276-430B-A1197-0D4C3BCC87E5}';
+  CLSID_NVEncoder: TGUID = '{6EEC9161-7276-430B-A197-0D4C3BCC87E5}';
 
 type
   /// <summary>

@@ -1,6 +1,24 @@
 ---
 title: Cómo conectar una cámara IP y DVR Q-See en C# .NET
 description: Conecte cámaras y DVRs Q-See en C# .NET con patrones de URL RTSP y ejemplos de código para modelos de las series QC, QCN y QS.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo conectar una cámara IP y DVR Q-See en C# .NET

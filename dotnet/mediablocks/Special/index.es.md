@@ -1,7 +1,22 @@
-﻿---
-title: Bloques Especiales en C# .NET — Tee, Null, Custom
+---
+title: Bloques Especiales en C# .NET para Pipelines de Medios
 description: Use divisores Tee, renderizadores Null y Super MediaBlock personalizados para enrutamiento avanzado en VisioForge Media Blocks SDK para .NET.
 sidebar_label: Bloques Especiales
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - MediaBlocksPipeline
+  - VideoRendererBlock
+  - UniversalSourceBlock
+  - UniversalSourceSettings
+  - MediaBlockPadMediaType
 ---
 
 # Bloques especiales
@@ -51,7 +66,7 @@ private void Start()
   sampleGrabber.OnVideoFrameBuffer += sampleGrabber_OnVideoFrameBuffer;
 
   // crear bloque null renderer
-  var nullRenderer = new NullRendererBlock();
+  var nullRenderer = new NullRendererBlock(MediaBlockPadMediaType.Video);
 
   // conectar bloques
   pipeline.Connect(fileSource.VideoOutput, sampleGrabber.Input);        
@@ -751,12 +766,11 @@ var pipeline = new MediaBlocksPipeline();
 
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
 
-var multiqueue = new MultiQueueBlock();
-var videoInput = multiqueue.CreateNewInput(MediaBlockPadMediaType.Video);
-var audioInput = multiqueue.CreateNewInput(MediaBlockPadMediaType.Audio);
+// El ctor de MultiQueueBlock pre-asigna pares de pads de entrada/salida (por defecto 2).
+var multiqueue = new MultiQueueBlock(inputOutputCount: 2);
 
-pipeline.Connect(fileSource.VideoOutput, videoInput);
-pipeline.Connect(fileSource.AudioOutput, audioInput);
+pipeline.Connect(fileSource.VideoOutput, multiqueue.Inputs[0]);
+pipeline.Connect(fileSource.AudioOutput, multiqueue.Inputs[1]);
 
 // Conectar salidas a codificadores/renderizadores
 await pipeline.StartAsync();
@@ -787,11 +801,13 @@ var pipeline = new MediaBlocksPipeline();
 var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video1.mp4")));
 var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video2.mp4")));
 
+// SourceSwitchSettings(padsCount) pre-asigna los pads de entrada.
 var switchSettings = new SourceSwitchSettings(2) { DefaultActivePad = 0 };
 var sourceSwitch = new SourceSwitchBlock(switchSettings);
 
-pipeline.Connect(source1.VideoOutput, sourceSwitch.Input);
-pipeline.Connect(source2.VideoOutput, sourceSwitch.CreateNewInput(MediaBlockPadMediaType.Video));
+// Conectar las fuentes a los pads de entrada pre-asignados
+pipeline.Connect(source1.VideoOutput, sourceSwitch.Inputs[0]);
+pipeline.Connect(source2.VideoOutput, sourceSwitch.Inputs[1]);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(sourceSwitch.Output, videoRenderer.Input);
@@ -799,7 +815,7 @@ pipeline.Connect(sourceSwitch.Output, videoRenderer.Input);
 await pipeline.StartAsync();
 
 // Cambiar a segunda fuente
-sourceSwitch.SetActivePad(1);
+sourceSwitch.Switch(1);
 ```
 
 ### Plataformas
@@ -858,7 +874,8 @@ Nombre: UniversalDemuxDecoderBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var demuxDecoder = new UniversalDemuxDecoderBlock("test.mp4");
+var demuxDecoder = new UniversalDemuxDecoderBlock(
+    await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(demuxDecoder.VideoOutput, videoRenderer.Input);
@@ -982,44 +999,6 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Video Enhancement
-
-El bloque VideoEnhancement aplica mejora y upscaling de video basado en IA.
-
-### Información del bloque
-
-Nombre: VideoEnhancementBlock.
-
-| Dirección del pin | Tipo de medio | Conteo de pines |
-| --- | :---: | :---: |
-| Entrada | video sin comprimir | 1 |
-| Salida | video sin comprimir | 1 |
-
-### Código de muestra
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
-
-var enhancementSettings = new VideoEnhancementSettings
-{
-    UpscaleFactor = 2,
-    DenoiseStrength = 0.5
-};
-var enhancement = new VideoEnhancementBlock(enhancementSettings);
-pipeline.Connect(fileSource.VideoOutput, enhancement.Input);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(enhancement.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-### Plataformas
-
-Windows, macOS, Linux (requiere modelos IA apropiados).
-
 ## Decode Bin
 
 El bloque DecodeBin selecciona y gestiona automáticamente decodificadores apropiados para streams de medios.
@@ -1097,27 +1076,27 @@ Nombre: CustomTransformBlock.
 
 ### Código de muestra
 
+Envuelve cualquier elemento (o bin) GStreamer en un pipeline de Media Blocks vía `CustomMediaBlock` + `CustomMediaBlockSettings`. `ElementName` se establece por el constructor; los parámetros específicos del elemento van en el diccionario `ElementParams`.
+
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
 
-var customSettings = new CustomTransformSettings
-{
-    ElementName = "videoscale", // Nombre de elemento GStreamer
-    Properties = new Dictionary<string, object>
-    {
-        { "method", 0 }
-    }
-};
-var customTransform = new CustomTransformBlock(customSettings);
-pipeline.Connect(fileSource.VideoOutput, customTransform.Input);
+// Envuelve el elemento GStreamer "videoscale".
+var customSettings = new CustomMediaBlockSettings("videoscale");
+customSettings.ElementParams.Add("method", 0);
+var customBlock = new CustomMediaBlock(customSettings);
+
+pipeline.Connect(fileSource.VideoOutput, customBlock.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(customTransform.Output, videoRenderer.Input);
+pipeline.Connect(customBlock.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 ```
+
+> **Nota:** `CustomTransformBlock` es un bloque diferente de bajo nivel diseñado para empujar samples programáticamente desde código C# (vía `PushSample`/`PushBuffer`) — no envuelve elementos GStreamer por nombre.
 
 ### Plataformas
 
@@ -1144,49 +1123,15 @@ var pipeline = new MediaBlocksPipeline();
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
 
 var dataSG = new DataSampleGrabberBlock();
-dataSG.OnDataBuffer += (sender, args) =>
+dataSG.OnDataFrame += (sender, args) =>
 {
-    // Procesar datos del buffer
-    var bufferSize = args.BufferSize;
-    var bufferData = args.BufferData;
+    // Tipo de evento real: EventHandler<DataFrameEventArgs> con un DataFrame en .Frame
+    var dataFrame = args.Frame;
 };
 pipeline.Connect(fileSource.VideoOutput, dataSG.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(dataSG.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-### Plataformas
-
-Windows, macOS, Linux, iOS, Android.
-
-## Debug Timestamp
-
-El bloque DebugTimestamp registra información detallada de timestamp para depuración de problemas de sincronización.
-
-### Información del bloque
-
-Nombre: DebugTimestampBlock.
-
-| Dirección del pin | Tipo de medio | Conteo de pines |
-| --- | :---: | :---: |
-| Entrada | cualquiera | 1 |
-| Salida | cualquiera | 1 |
-
-### Código de muestra
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
-
-var debugTimestamp = new DebugTimestampBlock();
-pipeline.Connect(fileSource.VideoOutput, debugTimestamp.Input);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(debugTimestamp.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 ```

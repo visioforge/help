@@ -2,6 +2,12 @@
 title: Deploy and Register DirectShow COM Filters on Windows
 description: Deploy DirectShow filters with COM registration, WiX/NSIS/Inno Setup installer integration, redistributable files list, and troubleshooting tips.
 sidebar_label: Deployment
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+
 ---
 
 # DirectShow SDKs - Deployment Guide
@@ -100,9 +106,9 @@ Determine which SDKs your application uses:
 |-----|---------|----------|
 | **FFMPEG Source** | Media playback, streaming | VisioForge_FFMPEG_Source_x64.ax |
 | **VLC Source** | Multi-track playback | VisioForge_VLC_Source.ax |
-| **Processing Filters** | Effects, mixing | VisioForge_VideoEffects_x64.ax |
-| **Encoding Filters** | Video encoding | VisioForge_NVENC_Encoder_x64.ax |
-| **Virtual Camera** | Virtual devices | VisioForge_VirtualCamera_x64.ax |
+| **Processing Filters** | Effects, mixing | VisioForge_Video_Effects_Pro_x64.ax |
+| **Encoding Filters** | Video encoding | VisioForge_NVENC_x64.ax |
+| **Virtual Camera** | Virtual devices | VisioForge_Virtual_Camera_x64.ax |
 
 [View Complete File Lists →](redistributable-files.md)
 
@@ -312,7 +318,7 @@ See [Installer Integration Guide](installer-integration.md) for WiX, NSIS, and o
 **Files to Deploy** (~100-150MB):
 
 - VisioForge_FFMPEG_Source_x64.ax + FFmpeg DLLs
-- VisioForge_VideoEffects_x64.ax + dependencies
+- VisioForge_Video_Effects_Pro_x64.ax + dependencies
 
 [View Complete File List →](redistributable-files.md#ffmpeg-source-filter)
 

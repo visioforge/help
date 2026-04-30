@@ -2,6 +2,22 @@
 title: Video Decoder Blocks in C# .NET - H.264, HEVC, AV1
 description: Decode H.264, HEVC, VP9, AV1, and MJPEG video with hardware acceleration using VisioForge Media Blocks SDK. GPU-accelerated decoding for .NET.
 sidebar_label: Video Decoders
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+primary_api_classes:
+  - UniversalDemuxBlock
+  - VideoRendererBlock
+  - BasicFileSourceBlock
+  - MediaBlocksPipeline
+  - MediaInfoReaderX
+
 ---
 
 # Video Decoder Blocks - VisioForge Media Blocks SDK .Net
@@ -79,7 +95,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-You can check for specific decoder implementations using `H264Decoder.IsAvailable(H264DecoderType decoderType)`.
+You can check for specific decoder implementations using `H264DecoderBlock.IsAvailable(H264DecoderType decoderType)`.
 `H264DecoderType` includes `FFMPEG`, `OpenH264`, `GPU_Nvidia_H264`, `VAAPI_H264`, etc.
 
 #### Platforms
@@ -130,7 +146,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-You can check if the underlying NVIDIA JPEG decoder (if applicable) is available using `NVJPEGDecoder.IsAvailable()`. The generic JPEG decoder functionality is generally available.
+You can check if the underlying NVIDIA JPEG decoder (if applicable) is available using `NVJPEGDecoderBlock.IsAvailable()`. The generic JPEG decoder functionality is generally available.
 
 #### Platforms
 
@@ -192,7 +208,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `NVH264Decoder.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC and appropriate drivers.
+Check availability using `NVH264DecoderBlock.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC and appropriate drivers.
 
 #### Platforms
 
@@ -254,7 +270,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `NVH265Decoder.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for H.265 and appropriate drivers.
+Check availability using `NVH265DecoderBlock.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for H.265 and appropriate drivers.
 
 #### Platforms
 
@@ -319,7 +335,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `NVJPEGDecoder.IsAvailable()`. Requires an NVIDIA GPU and appropriate drivers.
+Check availability using `NVJPEGDecoderBlock.IsAvailable()`. Requires an NVIDIA GPU and appropriate drivers.
 
 #### Platforms
 
@@ -381,7 +397,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `NVMPEG1Decoder.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for MPEG-1 and appropriate drivers.
+Check availability using `NVMPEG1DecoderBlock.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for MPEG-1 and appropriate drivers.
 
 #### Platforms
 
@@ -443,7 +459,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `NVMPEG2Decoder.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for MPEG-2 and appropriate drivers.
+Check availability using `NVMPEG2DecoderBlock.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for MPEG-2 and appropriate drivers.
 
 #### Platforms
 
@@ -505,7 +521,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `NVMPEG4Decoder.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for MPEG-4 Part 2 and appropriate drivers.
+Check availability using `NVMPEG4DecoderBlock.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for MPEG-4 Part 2 and appropriate drivers.
 
 #### Platforms
 
@@ -567,7 +583,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `NVVP8Decoder.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for VP8 and appropriate drivers.
+Check availability using `NVVP8DecoderBlock.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for VP8 and appropriate drivers.
 
 #### Platforms
 
@@ -629,7 +645,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `NVVP9Decoder.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for VP9 and appropriate drivers.
+Check availability using `NVVP9DecoderBlock.IsAvailable()`. Requires an NVIDIA GPU that supports NVDEC for VP9 and appropriate drivers.
 
 #### Platforms
 
@@ -1293,11 +1309,12 @@ Name: `AV1DecoderBlock`.
 The `AV1DecoderBlock` is configured using `AV1DecoderSettings`, which specifies the decoder type via the `AV1DecoderType` enum:
 
 - `AV1DecoderType.Auto` — automatically selects the best available decoder (default)
-- `AV1DecoderType.dav1d` — dav1d software decoder (fast, recommended for CPU decoding)
-- `AV1DecoderType.av1dec` — AOM reference decoder
-- `AV1DecoderType.GPU_Nvidia_AV1` — NVIDIA NVDEC hardware decoding
-- `AV1DecoderType.D3D11_AV1` — D3D11/DXVA hardware decoding (Windows)
-- `AV1DecoderType.VAAPI_AV1` — VAAPI hardware decoding (Linux)
+- `AV1DecoderType.Dav1d` — dav1d software decoder (fast, recommended for CPU decoding)
+- `AV1DecoderType.AOM` — AOM (Alliance for Open Media) reference decoder (software)
+- `AV1DecoderType.NVIDIA` — NVIDIA NVDEC hardware decoding (RTX 30 series or newer)
+- `AV1DecoderType.Intel_QSV` — Intel Quick Sync Video hardware decoding (Arc series or newer)
+- `AV1DecoderType.D3D11` — D3D11/DXVA hardware decoding (Windows)
+- `AV1DecoderType.VAAPI` — VAAPI hardware decoding (Linux)
 
 A constructor without parameters automatically selects the best available decoder.
 
@@ -1319,7 +1336,7 @@ var pipeline = new MediaBlocksPipeline();
 var av1Decoder = new AV1DecoderBlock();
 
 // Or specify a decoder explicitly:
-// var av1Decoder = new AV1DecoderBlock(new AV1DecoderSettings { DecoderType = AV1DecoderType.dav1d });
+// var av1Decoder = new AV1DecoderBlock(new AV1DecoderSettings { DecoderType = AV1DecoderType.Dav1d });
 
 var basicFileSource = new BasicFileSourceBlock("test_av1.mp4");
 var reader = new MediaInfoReaderX();

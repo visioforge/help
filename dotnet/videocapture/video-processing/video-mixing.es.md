@@ -1,6 +1,29 @@
 ---
 title: Mezcla de Video en .NET con Picture-in-Picture y Multicámara
 description: Implementa Picture-in-Picture con múltiples fuentes de video en .NET usando ejemplos de código C# para mezclar flujos con layouts personalizados.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Mixing
+  - IP Camera
+  - Screen Capture
+  - MP4
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCoreX
+  - ScreenCaptureSourceSettings
+  - VideoMixerSourceSettings
+  - IPCameraSourceSettings
+  - VideoCaptureDeviceSourceSettings
+
 ---
 
 # Mezclar Múltiples Flujos de Video en Aplicaciones .NET
@@ -76,16 +99,15 @@ La primera fuente configurada sirve como entrada principal, mientras que fuentes
 Para incorporar una cámara u otro dispositivo de captura de video:
 
 ```cs
+// Firma: (string deviceName, string format, bool useBestFormat, VideoFrameRate frameRate,
+//         string crossbarInput, int left, int top, int width, int height) → bool
 VideoCapture1.PIP_Sources_Add_VideoCaptureDevice(
-    nombreDispositivo,
-    formato,
-    false,
-    tasaFotogramas,
-    entrada,
-    izquierda,
-    arriba,
-    ancho,
-    alto);
+    deviceName:     "USB Camera",                     // nombre obtenido de Video_CaptureDevices()
+    format:         "1280x720 30fps",                 // string de formato, o vacío + useBestFormat=true
+    useBestFormat:  false,
+    frameRate:      new VideoFrameRate(30),
+    input:          null,                             // nombre del crossbar input, o null
+    left: 100, top: 100, width: 320, height: 240);
 ```
 
 #### Añadir una Fuente de Cámara IP
@@ -95,7 +117,7 @@ Para cámaras basadas en red:
 ```cs
 var fuenteCamaraIP = new IPCameraSourceSettings
 {
-    URL = "url de cámara"
+    URL = new Uri("url de cámara") // URL es Uri, no string
 };
 
 // Establecer parámetros adicionales de cámara IP según sea necesario
@@ -134,12 +156,10 @@ Una ventaja principal del SDK es la capacidad de ajustar parámetros de fuentes 
 Puedes modificar la posición y dimensiones de cualquier fuente:
 
 ```cs
+// SetSourcePositionAsync recibe (int index, Rectangle rect).
 await VideoCapture1.PIP_Sources_SetSourcePositionAsync(
-    indice,  // 0 es fuente principal, 1+ son fuentes adicionales
-    izquierda,
-    arriba,
-    ancho,
-    alto);
+    indice,                                            // 0 es fuente principal, 1+ son fuentes adicionales
+    new System.Drawing.Rectangle(izquierda, arriba, ancho, alto));
 ```
 
 #### Ajustar Propiedades Visuales
@@ -151,11 +171,11 @@ int transparencia = 127; // Rango: 0-255
 bool voltearX = false;
 bool voltearY = false;
 
+// SetSourceSettingsAsync recibe (int index, int transparency, bool flipX, bool flipY, bool disabled = false).
 await VideoCapture1.PIP_Sources_SetSourceSettingsAsync(
     indice,
-    transparencia, 
-    transparencia, 
-    voltearX, 
+    transparencia,
+    voltearX,
     voltearY);
 ```
 
@@ -189,41 +209,41 @@ captureX.Video_Source = mezcladorVideo;
 Puedes añadir varias fuentes de video al mezclador, posicionando cada una exactamente donde se necesite:
 
 ```cs
-// Añadir una cámara como primera fuente (fondo de pantalla completa)
-var fuenteCamara = new VideoCaptureDeviceSourceSettings(); 
+// Rect usa (left, top, right, bottom) — NO (left, top, width, height). Width y
+// Height se calculan como Right-Left / Bottom-Top, así que pasar width/height aquí
+// da dimensiones negativas en cualquier rectángulo que no comience en el origen.
+
+// Añadir una cámara como primera fuente (fondo de pantalla completa, canvas 1920×1080).
+var fuenteCamara = new VideoCaptureDeviceSourceSettings();
 
 // Configurar ajustes de cámara
 // ...
 
-var rect = new Rect(0, 0, 1920, 1080);
-mezcladorVideo.Add(fuenteCamara, rect);
+mezcladorVideo.Add(fuenteCamara, new Rect(0, 0, 1920, 1080));
 
-// Añadir una fuente de captura de pantalla en la esquina superior derecha
+// Añadir una fuente de captura de pantalla en la esquina superior derecha, región 640×480.
 var fuentePantalla = new ScreenCaptureDX9SourceSettings();
 fuentePantalla.CaptureCursor = true;
 fuentePantalla.FrameRate = VideoFrameRate.FPS_30;
- 
-var rect2 = new Rect(1280, 0, 640, 480);
-mezcladorVideo.Add(fuentePantalla, rect2);
+
+// left = 1280, top = 0, right = 1280+640 = 1920, bottom = 0+480 = 480.
+mezcladorVideo.Add(fuentePantalla, new Rect(1280, 0, 1920, 480));
 ```
 
-#### Gestión Dinámica de Fuentes
+#### Reconfigurar fuentes antes de Start
 
-El motor VideoCaptureCoreX permite modificaciones en tiempo real al mezclador de video:
+`VideoMixerSourceSettings` es configuración — sus fuentes quedan fijadas en `StartAsync`. Para cambiar el layout mutas la lista de settings (vía `Get`/`RemoveAt`/`Add`) **antes** de iniciar el pipeline:
 
 ```cs
-// Cambiar la posición de una fuente (índice 1, que es la captura de pantalla)
-var mezclador = _videoCapture.GetSourceMixerControl();
-if (mezclador != null)
-{
-    var stream = mezclador.Input_Get(1);
-    if (stream != null)
-    {
-        stream.Rectangle = new Rect(0, 0, 1280, 720);
-        mezclador.Input_Update(1, stream);
-    }
-}
+// Inspecciona una fuente en el índice 1 (devuelve Tuple<IVideoMixerSource, Rect, ChromaKeySettingsX>).
+var (source, currentRect, chromaKey) = mezcladorVideo.Get(1);
+
+// Intercambia su rectángulo removiendo y re-añadiendo en su lugar.
+mezcladorVideo.RemoveAt(1);
+mezcladorVideo.Add(source, new Rect(0, 0, 1280, 720), chromaKey);
 ```
+
+Para cambios de layout **en runtime** (actualizar posición mientras el pipeline corre), baja a Media Blocks: construye tu pipeline con un `VideoMixerBlock` y usa sus métodos `Input_Get(Guid)` / `Input_Update(VideoMixerStream)` para mutar posición, tamaño, alpha o z-order sin reiniciar. Ver [referencia video-processing de Media Blocks](../../mediablocks/VideoProcessing/index.md) para la API de `VideoMixerBlock`.
 
 ### Comparación con Motor VideoCaptureCore
 

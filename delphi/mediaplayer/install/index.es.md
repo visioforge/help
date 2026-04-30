@@ -1,6 +1,17 @@
 ---
 title: Guía de Instalación de TVFMediaPlayer para Delphi y ActiveX
 description: Instale TVFMediaPlayer en Delphi, C++ Builder, Visual Basic 6, Visual Studio y entornos ActiveX con instrucciones detalladas de configuración.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Playback
+  - Streaming
+primary_api_classes:
+  - TVFMediaPlayer
+
 ---
 
 # Instalar la Biblioteca TVFMediaPlayer

@@ -1,6 +1,26 @@
 ---
 title: Axis IP Camera RTSP URL Format and C# .NET Integration
 description: Connect to Axis Communications cameras in C# .NET with RTSP URL patterns, VAPIX API, and code samples for M, P, Q, and F series models.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - H.265
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Axis IP Camera in C# .NET

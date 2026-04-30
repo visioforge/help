@@ -1,6 +1,19 @@
 ---
 title: Implementing Audio VU Meters & Waveform Visualizers
 description: Build VU meters and waveform visualizers in WinForms and WPF for real-time audio level monitoring with mono and stereo channel support in .NET.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - WinForms
+  - WPF
+  - C#
+primary_api_classes:
+  - AudioLevelEventArgs
+  - VUMeterMaxSampleEventArgs
+
 ---
 
 # Audio Visualization: Implementing VU Meters and Waveform Displays in .NET
@@ -41,7 +54,7 @@ Implementing a VU meter in WinForms requires just a few steps:
 
    ```cs
    // Enable VU meter before starting playback/capture
-   mediaPlayer.Audio_VUMeterPro_Enabled = true;
+   mediaPlayer.Audio_VUMeter_Pro_Enabled = true;
    ```
 
 3. **Implement the Event Handler**: Add an event handler to process the audio level data and update the VU meter display.
@@ -100,8 +113,8 @@ WPF requires a slightly different approach due to its threading model and UI fra
 1. **Add the VU Meter Control**: Add the VU meter control to your XAML layout. For stereo audio, add two controls.
 
    ```xml
-   <VisioForge.Controls.UI.WPF.VolumeMeterPro.VolumeMeter x:Name="volumeMeter1" />
-   <VisioForge.Controls.UI.WPF.VolumeMeterPro.VolumeMeter x:Name="volumeMeter2" /> <!-- For stereo -->
+   <VisioForge.Core.UI.WPF.VolumeMeterPro.VolumeMeter x:Name="volumeMeter1" />
+   <VisioForge.Core.UI.WPF.VolumeMeterPro.VolumeMeter x:Name="volumeMeter2" /> <!-- For stereo -->
    ```
 
 2. **Enable VU Meter Processing and Start the Meters**:
@@ -190,41 +203,39 @@ Both the VU meter and waveform painter controls offer extensive customization op
 
 ### Customizing VU Meters
 
-You can customize various aspects of the VU meter appearance:
+The `VolumeMeter` control exposes the following real properties:
 
-- **Color Scheme**: Modify the colors used for different audio levels (low, medium, high)
-- **Response Time**: Adjust how quickly the meter responds to level changes
-- **Scale**: Configure the decibel scale and range
-- **Orientation**: Set horizontal or vertical orientation
+- **`MinDb` / `MaxDb`**: decibel range displayed by the meter
+- **`Boost`**: gain multiplier applied before rendering
+- **`Orientation`**: horizontal or vertical bar direction
+- **`ForeColor`**: bar color (inherited from `Control`)
+- **`MinimalUpdateInterval`** (WPF only): throttles redraws
 
 Example of customizing a VU meter:
 
 ```cs
-volumeMeter1.PeakHoldTime = 500; // Hold peak for 500ms
-volumeMeter1.ColorNormal = Color.Green;
-volumeMeter1.ColorWarning = Color.Yellow;
-volumeMeter1.ColorAlert = Color.Red;
-volumeMeter1.WarningThreshold = -12; // dB
-volumeMeter1.AlertThreshold = -6; // dB
+volumeMeter1.MinDb = -60;
+volumeMeter1.MaxDb = 6;
+volumeMeter1.Boost = 1.0f;
+volumeMeter1.ForeColor = System.Drawing.Color.Green;  // WinForms
+volumeMeter1.Orientation = System.Windows.Forms.Orientation.Vertical;
 ```
 
 ### Customizing Waveform Painters
 
-Waveform painters can be customized to provide different visual representations:
+The `WaveformPainter` control has a small real surface:
 
-- **Line Thickness**: Adjust the thickness of the waveform line
-- **Color Gradient**: Apply color gradients based on amplitude
-- **Time Scale**: Modify how much time is represented in the visible area
-- **Rendering Mode**: Choose between different rendering styles (line, filled, etc.)
+- **`Boost`** (WinForms): pre-render gain multiplier
+- **`ForeColor` / `BackColor`**: line and background colors (inherited from `Control`)
+- **`Clear()`**: resets the painted history
+- **`AddMax(float)`** (WinForms) / **`AddValue(float, float)`** (WPF): append a new sample
 
 Example of customizing a waveform painter:
 
 ```cs
-waveformPainter.LineColor = Color.SkyBlue;
-waveformPainter.BackColor = Color.Black;
-waveformPainter.LineThickness = 2;
-waveformPainter.ScrollingSpeed = 50;
-waveformPainter.RenderMode = WaveformRenderMode.FilledLine;
+waveformPainter.ForeColor = System.Drawing.Color.SkyBlue;
+waveformPainter.BackColor = System.Drawing.Color.Black;
+waveformPainter.Boost = 1.5f;
 ```
 
 ## Performance Considerations

@@ -1,6 +1,23 @@
 ---
 title: Compositor de Video en Vivo en Tiempo Real en C# .NET
 description: Mezcle múltiples fuentes de video y audio en vivo en tiempo real con VisioForge Media Blocks SDK. Cambio dinámico de fuentes para streaming y grabación.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+primary_api_classes:
+  - LiveVideoCompositor
+  - LVCVideoInput
+  - MediaBlock
+  - LVCAudioInput
+  - LVCAudioOutput
+
 ---
 
 # Compositor de Video en Vivo
@@ -112,7 +129,7 @@ var settings = new ScreenCaptureDX9SourceSettings();
 settings.CaptureCursor = true;
 settings.Monitor = 0;
 settings.FrameRate = new VideoFrameRate(30);
-settings.Rectangle = new Rectangle(0, 0, 1920, 1080);
+settings.Rectangle = new Rect(0, 0, 1920, 1080); // (left, top, right, bottom) — pantalla completa 1920x1080
 
 var rect = new Rect(0, 0, 640, 480);
 var name = $"Fuente de pantalla";
@@ -364,6 +381,48 @@ await _compositor.Output_AddAsync(videoRendererOutput);
 VideoView1 es un objeto `VideoView` que se usa para mostrar el video. Cada plataforma / framework de UI tiene su propia implementación de `VideoView`.
 
 Puede agregar varios objetos `LVCVideoViewOutput` al pipeline LVC para mostrar el video en diferentes pantallas.
+
+## Monitorear la velocidad real de renderizado
+
+Cuando se componen muchas entradas a la vez, el compositor puede quedarse por debajo de `VideoFrameRate` si la CPU o la GPU se quedan sin capacidad. Suscríbase a `OnRenderStatistics` para leer la velocidad real de salida y detectar caídas de cuadros a tiempo:
+
+```csharp
+compositor.OnRenderStatistics += (sender, e) =>
+{
+    // Se dispara aproximadamente dos veces por segundo desde un hilo del threadpool.
+    Debug.WriteLine($"FPS: {e.ActualFps:F1} / configurado {e.ConfiguredFps:F1}, cuadros totales: {e.FramesDelivered}");
+};
+```
+
+`RenderStatisticsEventArgs` expone:
+
+- `ActualFps` – velocidad de salida medida durante la última ventana de muestreo.
+- `ConfiguredFps` – velocidad de cuadros solicitada en `LiveVideoCompositorSettings.VideoFrameRate`.
+- `FramesDelivered` – conteo monotónico de cuadros producidos desde el inicio del compositor.
+- `LastFrameTimestamp` – PTS del cuadro más reciente (`TimeSpan.Zero` si aún no hay ninguno).
+
+Si `ActualFps` se mantiene por debajo de `ConfiguredFps` durante varios ticks consecutivos, el pipeline no alcanza la velocidad configurada — causas típicas son demasiadas entradas, resoluciones de origen excesivas, un mixer por software sobrecargado o un codificador lento aguas abajo. Cambiar `LVCMixerType` a `OpenGL` o `D3D11`, reducir entradas o bajar la resolución de origen normalmente restaura la velocidad configurada.
+
+Serialice al hilo de UI antes de actualizar controles: el evento se dispara en un hilo del threadpool.
+
+## V1 vs V2
+
+El SDK incluye dos implementaciones bajo namespaces diferentes:
+
+- `VisioForge.Core.LiveVideoCompositorV2` – actual, recomendado.
+- `VisioForge.Core.LiveVideoCompositor` – implementación original, **en desuso** y marcada para eliminación en una versión futura.
+
+Ambos namespaces exponen una clase `LiveVideoCompositor` con nombre idéntico y los mismos ayudantes `LVC*`. Migrar un archivo suele consistir en cambiar una única línea `using`:
+
+```csharp
+// Antes
+using VisioForge.Core.LiveVideoCompositor;
+
+// Después
+using VisioForge.Core.LiveVideoCompositorV2;
+```
+
+Tras cambiar el `using`, `new LiveVideoCompositor(...)` resuelve a la clase V2 y desaparecen las advertencias de obsolescencia. El evento `OnRenderStatistics` solo está disponible en V2.
 
 ---
 

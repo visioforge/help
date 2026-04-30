@@ -1,11 +1,32 @@
 ---
 title: Install VisioForge .NET SDKs in Visual Studio for Mac
 description: Install and configure VisioForge .NET SDKs in Visual Studio for Mac for multimedia macOS and iOS application development.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
+  - Webcam
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoView
+
 ---
 
 # Complete Guide to Integrating VisioForge .NET SDKs with Visual Studio for Mac
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+!!! warning "Visual Studio for Mac is retired"
+    Microsoft [retired Visual Studio for Mac](https://learn.microsoft.com/en-us/visualstudio/releases/2022/what-happened-to-vs-for-mac) on August 31, 2024. No new installs are possible and the IDE no longer receives updates. For macOS .NET development with VisioForge SDKs, use **[JetBrains Rider](./rider.md)** or **Visual Studio Code with the C# Dev Kit** instead. The NuGet package names, UI controls and C# snippets on this page apply identically to those IDEs.
 
 ## Introduction to VisioForge SDKs on macOS
 
@@ -75,17 +96,15 @@ The installation process will automatically resolve dependencies and add referen
 
 ![Installing the main SDK package via NuGet](vsmac2.webp)
 
-### Adding the Apple UI Package
+### Apple UI Controls
 
-For macOS and iOS applications, you'll need the Apple-specific UI components that allow VisioForge SDKs to integrate with native UI elements.
+For macOS and iOS applications, the Apple-specific UI controls (`VideoView`, `GLView`) are **shipped inside the main `VisioForge.DotNet.Core` package** — there is no separate `UI.Apple` NuGet. Once you've added `VisioForge.DotNet.Core` above, reference the controls via the `VisioForge.Core.UI.Apple` namespace:
 
-1. In the NuGet Package Manager, search for "VisioForge.DotNet.UI.Apple".
-2. Select the package from the results list.
-3. Click **Add Package** to install.
+```csharp
+using VisioForge.Core.UI.Apple;
+```
 
-This package includes specialized controls designed specifically for Apple platforms, ensuring proper visual integration and performance optimization.
-
-![Installing the Apple UI package via NuGet](vsmac3.webp)
+![Adding the main package — Apple UI ships inside it](vsmac3.webp)
 
 ## Integrating Video Preview Capabilities
 
@@ -124,7 +143,7 @@ using CoreGraphics;
 3. Add a private field to your ViewController class to hold the VideoView reference:
 
 ```csharp
-private VideoViewGL _videoView;
+private VideoView _videoView;
 ```
 
 4. Modify the ViewDidLoad method to initialize and add the VideoView:
@@ -135,28 +154,32 @@ public override void ViewDidLoad()
     base.ViewDidLoad();
 
     // Create and add VideoView
-    _videoView = new VideoViewGL(new CGRect(0, 0, videoViewHost.Bounds.Width, videoViewHost.Bounds.Height));
+    _videoView = new VideoView(new CGRect(0, 0, videoViewHost.Bounds.Width, videoViewHost.Bounds.Height));
     this.videoViewHost.AddSubview(_videoView);
-    
+
     // Configure VideoView properties
     _videoView.AutoresizingMask = Foundation.NSViewResizingMask.WidthSizable | Foundation.NSViewResizingMask.HeightSizable;
-    _videoView.BackgroundColor = NSColor.Black;
-    
+
     // Additional initialization code
     InitializeMediaComponents();
 }
 
-private void InitializeMediaComponents()
+private async void InitializeMediaComponents()
 {
-    // Initialize your VisioForge SDK components here
-    // For example, for MediaPlayer:
-    // var player = new MediaPlayer();
-    // player.VideoView = _videoView;
-    // Additional configuration...
+    // Initialize your VisioForge SDK components here. On macOS, always use the
+    // cross-platform X engines — classic VideoCaptureCore / MediaPlayerCore /
+    // VideoEditCore are Windows-only.
+    await VisioForgeX.InitSDKAsync();
+
+    // For example, for playback:
+    // var player = new MediaPlayerCoreX(_videoView);
+    // var settings = await UniversalSourceSettings.CreateAsync(new Uri("https://example.com/video.mp4"));
+    // await player.OpenAsync(settings);
+    // await player.PlayAsync();
 }
 ```
 
-This code creates a new VideoViewGL instance (optimized for hardware acceleration), sizes it to match your container view, and adds it as a subview. The AutoresizingMask property ensures that the video view resizes properly when the window size changes.
+This code creates a `VideoView` instance, sizes it to match your container view, and adds it as a subview. The `AutoresizingMask` property ensures that the video view resizes properly when the window size changes.
 
 ## Adding Required Redistribution Packages
 

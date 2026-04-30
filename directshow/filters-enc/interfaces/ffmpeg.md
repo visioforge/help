@@ -1,6 +1,26 @@
 ---
 title: FFmpeg Encoder DirectShow Filter - MPEG, FLV, DVD Output
 description: IVFFFMPEGEncoder COM interface for encoding to MPEG-1, MPEG-2, FLV, VCD, SVCD, DVD, and Transport Stream in DirectShow. Audio/video codec parameters for C++/C#.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - MP4
+  - FLV
+  - TS
+  - H.264
+  - MPEG-2
+  - AC-3
+  - C#
+primary_api_classes:
+  - IVFFFMPEGEncoder
+  - FFMPEGOutputSettings
+  - IBaseFilter
+  - CVFOutputSettings
+  - TFFMPEGOutputSettings
+
 ---
 
 # FFMPEG Encoder Interface Reference
@@ -356,7 +376,10 @@ type
   );
 
   /// <summary>
-  /// TV system enumeration.
+  /// TV system enumeration. Note: the `None` member can collide with the bare
+  /// `None` identifier exposed by other Delphi units (e.g., RTL's `Variants`).
+  /// Reference values via the enum's qualified name —
+  /// `TVFFFMPEGDLLTVSystem.None` — to avoid ambiguity in real code.
   /// </summary>
   TVFFFMPEGDLLTVSystem = (
     None,

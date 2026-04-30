@@ -1,6 +1,17 @@
 ---
 title: Filtro Fuente VLC DirectShow para Aplicaciones Medios
 description: Filtro DirectShow con VLC para reproducir 200+ formatos, video 4K/8K, streams RTSP/HLS con decodificación por hardware para aplicaciones de medios.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Editing
+primary_api_classes:
+  - IFileSourceFilter
+  - IBaseFilter
+  - IVFRegister
+
 ---
 
 # Filtro DirectShow VLC Source
@@ -64,7 +75,7 @@ El filtro implementa estas interfaces DirectShow estándar para máxima compatib
 
 // CLSID del Filtro VLC Source
 DEFINE_GUID(CLSID_VlcSource,
-    0x9f73dcd4, 0x2fc8, 0x4e89, 0x8f, 0xc3, 0x2d, 0xf1, 0x69, 0x3c, 0xa0, 0x3e);
+    0x3fc97748, 0x7cb6, 0x4195, 0x89, 0xde, 0x07, 0x17, 0x58, 0x2a, 0x48, 0x63);
 
 HRESULT InitializeVLCSource(HWND hVideoWindow)
 {
@@ -339,7 +350,7 @@ public class VLCSourcePlayer
 
 ```csharp
 // CLSID del Filtro VLC Source
-public static readonly Guid CLSID_VFVLCSource = new Guid("9F73DCD4-2FC8-4E89-8FC3-2DF1693CA03E");
+public static readonly Guid CLSID_VFVLCSource = new Guid("3FC97748-7CB6-4195-89DE-0717582A4863");
 
 // IID de Interfaz IVlcSrc
 [Guid("77493EB7-6D00-41C5-9535-7C593824E892")]
@@ -395,12 +406,14 @@ if (vlcSrc != null)
 
 **Ejemplo de Opciones VLC Personalizadas:**
 
+`IVlcSrc2::SetCustomCommandLine` toma un array de cadenas nativas UTF-8 (`char* params[]` en `ivlcsrc.h`), no un `string[]` administrado. El wrapper de C# realiza marshaling de los parámetros como `IntPtr[]` de buffers UTF-8 no administrados — asígnelos con `StringHelper.NativeUtf8FromString()` y libérelos con `Marshal.FreeHGlobal()` tras la llamada. Pasar un `string[]` sin transformar haría marshaling como ANSI y corrompería los flags no-ASCII.
+
 ```csharp
 // Configurar VLC para streaming RTSP de baja latencia
 var vlcSrc2 = sourceFilter as IVlcSrc2;
 if (vlcSrc2 != null)
 {
-    string[] parameters = new string[]
+    var parameters = new[]
     {
         "--network-caching=300",     // Buffer de red bajo
         "--rtsp-tcp",                // Forzar TCP para RTSP
@@ -408,13 +421,34 @@ if (vlcSrc2 != null)
         "--live-caching=300"         // Buffer de stream en vivo bajo
     };
 
-    vlcSrc2.SetCustomCommandLine(parameters, parameters.Length);
+    // Convertir las cadenas administradas a un array IntPtr UTF-8 nativo
+    var array = new IntPtr[parameters.Length];
+    for (int i = 0; i < parameters.Length; i++)
+    {
+        array[i] = StringHelper.NativeUtf8FromString(parameters[i]);
+    }
+
+    try
+    {
+        int hr = vlcSrc2.SetCustomCommandLine(array, parameters.Length);
+        DsError.ThrowExceptionForHR(hr);
+    }
+    finally
+    {
+        // Liberar los buffers UTF-8 no administrados
+        for (int i = 0; i < array.Length; i++)
+        {
+            Marshal.FreeHGlobal(array[i]);
+        }
+    }
 
     // Luego cargar el stream
     var vlcSrc = vlcSrc2 as IVlcSrc;
     vlcSrc?.SetFile("rtsp://192.168.1.100/stream");
 }
 ```
+
+Vea [examples.md](examples.md) para el patrón canónico reutilizado en múltiples escenarios (Ejemplo 4 con clave binaria + flags personalizados, variantes de baja latencia, etc.).
 
 ## Historial de Versiones
 

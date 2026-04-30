@@ -1,6 +1,19 @@
 ---
 title: Ajustar volumen por pista de audio en Video Edit SDK .Net
 description: Controles de volumen personalizados para pistas de audio individuales en edición de video con guía detallada y ejemplos de código C# para .NET.
+tags:
+  - Video Edit SDK
+  - .NET
+  - VideoEditCore
+  - Windows
+  - Editing
+  - Effects
+  - C#
+  - NuGet
+primary_api_classes:
+  - AudioVolumeEnvelopeEffect
+  - AudioSource
+
 ---
 
 # Establecer Niveles de Volumen Personalizados para Pistas de Audio en Aplicaciones C#
@@ -20,15 +33,26 @@ Establecer niveles de volumen personalizados para pistas de audio da a tus usuar
 El siguiente ejemplo en C# muestra cómo aplicar un efecto de envolvente de volumen a una pista de audio:
 
 ```cs
-var volume = new AudioVolumeEnvelopeEffect(10);
-VideoEdit1.Input_AddAudioFile(audioFile, null, 0, new[] { volume });
+// AudioVolumeEnvelopeEffect(level) fija un volumen constante para la pista.
+// Las propiedades opcionales StartTime / StopTime (TimeSpan) restringen el
+// efecto a una ventana temporal.
+var volume = new AudioVolumeEnvelopeEffect(level: 10);
+
+// La sobrecarga de 5 argumentos de Input_AddAudioFile toma un AudioSource
+// (no un string), así que envuelve la ruta del archivo antes de pasarla con
+// el arreglo de efectos.
+// Firma: Input_AddAudioFile(AudioSource, TimeSpan? timelineInsertTime = null,
+//   int targetStreamIndex = 0, AudioTrackEffect[] effects = null,
+//   TimelineAudioTrackCustomSettings = null)
+var audioSource = new AudioSource(audioFile);
+VideoEdit1.Input_AddAudioFile(audioSource, null, 0, new[] { volume });
 ```
 
 ## Entender los Parámetros
 
-- `AudioVolumeEnvelopeEffect(10)`: Crea un efecto de volumen con un valor de 10
-- `Input_AddAudioFile`: Añade un archivo de audio a tu proyecto con el efecto de volumen especificado
-- Los parámetros permiten un control preciso sobre cuándo y cómo se aplican los cambios de volumen
+- `AudioVolumeEnvelopeEffect(level: 10)`: envolvente de volumen constante. `level` es un `int`; usa las propiedades `StartTime`/`StopTime` (ambas `TimeSpan`) para limitar el efecto a una ventana temporal.
+- `audioFile` (string) debe envolverse en un `new AudioSource(...)` — la sobrecarga con arreglo de efectos de `Input_AddAudioFile` solo acepta un `AudioSource`, no un nombre de archivo en crudo.
+- `Input_AddAudioFile`: añade el archivo de audio a la línea de tiempo aplicando los efectos al stream de audio elegido.
 
 ## Dependencias Requeridas
 

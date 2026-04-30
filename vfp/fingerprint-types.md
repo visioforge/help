@@ -1,6 +1,22 @@
 ---
 title: Video Fingerprinting: Search vs Compare Types Explained
 description: Guide to Search vs Compare fingerprints in VisioForge Video Fingerprinting SDK with technical differences and performance.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - C#
+primary_api_classes:
+  - VFPAnalyzer
+  - VFPFingerprintSource
+  - VideoFragmentSearcher
+  - StoreSearchFingerprint
+  - FingerprintDatabase
+
 ---
 
 # Fingerprint Types: Search vs Compare
@@ -106,11 +122,13 @@ public async Task<VFPFingerPrint> GenerateCompareFingerprint(string videoFile)
         StartTime = TimeSpan.Zero,
         StopTime = TimeSpan.FromMinutes(5), // Analyze first 5 minutes
         CustomResolution = new Size(640, 480), // Normalize resolution
-        CustomCropSize = new Rect(0, 60, 0, 60) // Crop letterbox bars
+        // Rect ctor is (left, top, right, bottom) — for a 1920x1080 frame, cropping
+        // 60px letterbox bars top + bottom yields the visible region (0, 60)..(1920, 1020).
+        CustomCropSize = new Rect(0, 60, 1920, 1020) // Crop letterbox bars
     };
-    
-    // Add ignored areas (e.g., watermarks, logos)
-    source.IgnoredAreas.Add(new Rect(10, 10, 100, 50)); // Top-left logo
+
+    // Add ignored areas (left, top, right, bottom) — 100x50 logo at the top-left.
+    source.IgnoredAreas.Add(new Rect(10, 10, 110, 60)); // Top-left logo
     
     // Generate fingerprint
     var fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(
@@ -398,7 +416,8 @@ public class VideoComparisonService
         
         if (options.CropLetterbox)
         {
-            source.CustomCropSize = new Rect(0, 60, 0, 60);
+            // (left, top, right, bottom) — 60px bars top + bottom on a 1920x1080 source.
+            source.CustomCropSize = new Rect(0, 60, 1920, 1020);
         }
         
         // Add common watermark areas to ignore
@@ -827,9 +846,10 @@ Fragment search performance (5-minute fragment in various video lengths):
        source.CustomResolution = new Size(640, 360);
        
        // Remove common interference
-       source.CustomCropSize = new Rect(0, 60, 0, 60); // Remove letterbox
-       
-       // Ignore dynamic overlays
+       // (left, top, right, bottom) — strip 60px letterbox top + bottom on 1920x1080.
+       source.CustomCropSize = new Rect(0, 60, 1920, 1020); // Remove letterbox
+
+       // Ignore dynamic overlays — 190x40 channel logo at top-left.
        source.IgnoredAreas.Add(new Rect(10, 10, 200, 50)); // Channel logo
        source.IgnoredAreas.Add(new Rect(500, 400, 140, 40)); // Timestamp
        
@@ -912,15 +932,15 @@ public class CustomFingerprintConfig
         switch (purpose)
         {
             case FingerprintPurpose.BroadcastMonitoring:
-                // Optimize for broadcast content
+                // Optimize for broadcast content. Rect = (left, top, right, bottom).
                 source.CustomResolution = new Size(720, 576);
-                source.IgnoredAreas.Add(new Rect(0, 0, 720, 50)); // Top banner
-                source.IgnoredAreas.Add(new Rect(0, 526, 720, 50)); // Bottom ticker
+                source.IgnoredAreas.Add(new Rect(0, 0, 720, 50));   // Top banner (50px)
+                source.IgnoredAreas.Add(new Rect(0, 526, 720, 576)); // Bottom ticker (50px)
                 break;
-                
+
             case FingerprintPurpose.MovieComparison:
-                // Optimize for cinema content
-                source.CustomCropSize = new Rect(0, 138, 0, 138); // 21:9 to 16:9
+                // Optimize for cinema content — strip 138px letterbox bars (21:9 → 16:9 on 1920x1080).
+                source.CustomCropSize = new Rect(0, 138, 1920, 942);
                 source.CustomResolution = new Size(1280, 720);
                 break;
                 

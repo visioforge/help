@@ -1,6 +1,20 @@
 ---
 title: Registrar Filtros DirectShow con regsvr32, C++ y C# .NET
 description: Registre filtros DirectShow de VisioForge usando regsvr32 manual, métodos programáticos y automatización de instaladores con consejos de solución de problemas.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Encoding
+  - Mixing
+  - MP4
+  - H.264
+  - AAC
+  - C#
+primary_api_classes:
+  - FFMPEGSource
+  - IBaseFilter
+
 ---
 
 # Guía de Registro de Filtros DirectShow

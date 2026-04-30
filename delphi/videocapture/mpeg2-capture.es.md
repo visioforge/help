@@ -1,6 +1,18 @@
 ---
 title: Captura de Video MPEG-2 en Delphi con Sintonizador TV
 description: Implemente captura MPEG-2 en Delphi usando codificadores de hardware de sintonizador TV - enumeración de dispositivos, configuración y ejemplos optimizados.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Capture
+  - Encoding
+  - TV Tuner
+  - MPEG-2
+
 ---
 
 # Captura de Video MPEG-2 en Delphi Usando Codificadores de Hardware de Sintonizador de TV

@@ -1,11 +1,39 @@
 ---
 title: Captura de video NDI en .NET - guía de integración C#
 description: Implementa fuentes de video NDI en el SDK .NET con guía completa para enumerar, conectar y capturar video de alta calidad desde cámaras NDI en C#.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - IP Camera
+  - NDI Source
+  - RTSP
+  - ONVIF
+  - NDI
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - VideoCaptureCore
+  - NDISourceSettings
+  - DeviceEnumerator
+  - IPCameraSourceSettings
+
 ---
 
 # Implementar Fuentes de Video NDI en Aplicaciones .NET
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+
+!!! info "Soporte multiplataforma"
+    El motor `VideoCaptureCoreX` con NDI funciona en **Windows, macOS, Linux, Android e iOS** vía GStreamer; instala el runtime NDI para cada plataforma objetivo. La fuente NDI del `VideoCaptureCore` clásico es solo Windows. Consulta la [matriz de soporte de plataformas](../../../platform-matrix.md) y la [guía de despliegue en Linux](../../../deployment-x/Ubuntu.md).
 
 ## Introducción a la Tecnología NDI
 
@@ -83,6 +111,13 @@ Una vez que has identificado las fuentes NDI en tu red, el siguiente paso es est
     
     // Establecer la fuente de cámara IP
     VideoCapture1.IP_Camera_Source = settings;
+
+    // Selecciona el modo operativo antes de StartAsync:
+    //   IPPreview — solo vista previa en vivo (sin salida a archivo).
+    //   IPCapture — vista previa + grabación al destino Output_Format configurado.
+    VideoCapture1.Mode = VideoCaptureMode.IPPreview;   // o VideoCaptureMode.IPCapture
+
+    await VideoCapture1.StartAsync();
     ```
     
 
@@ -175,6 +210,14 @@ Explora estas aplicaciones de ejemplo para ver integración NDI en acción:
 
 - [Demo Fuente NDI (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/NDI%20Source%20Demo)
 - [Demo Principal de Video Capture (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/Main%20Demo)
+
+## Documentación Relacionada
+
+- [Visión general de cámaras IP](index.md) — tipos de fuentes RTSP, ONVIF y NDI de un vistazo
+- [Configuración de fuente de cámara RTSP](rtsp.md) — protocolo de cámara IP más común
+- [Integración de cámara IP ONVIF](onvif.md) — descubrimiento y control PTZ estándar
+- [Tutorial de vista previa en vivo de cámara IP](../../video-tutorials/ip-camera-preview.md) — ejemplo mínimo de vista previa
+- [Inmersión profunda en el protocolo RTSP](../../../general/network-streaming/rtsp.md) — internos del protocolo de streaming
 
 ---
 Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para acceder a muestras de código adicionales y recursos de implementación.

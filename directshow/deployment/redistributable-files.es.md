@@ -1,6 +1,19 @@
 ---
 title: Archivos redistribuibles de filtros DirectShow de VisioForge
 description: Lista completa de archivos redistribuibles para SDKs DirectShow de VisioForge con dependencias, archivos de arquitectura y requisitos de despliegue.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+  - Encoding
+  - Decoding
+  - Mixing
+  - Screen Capture
+  - WebM
+  - H.264
+  - MP3
+
 ---
 
 # SDKs DirectShow - Referencia de Archivos Redistribuibles

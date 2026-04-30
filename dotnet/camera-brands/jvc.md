@@ -1,6 +1,24 @@
 ---
 title: JVC IP Camera RTSP URL and C# .NET Integration Guide
 description: JVC VN-H, VN-T, VN-C, and VN-X network camera RTSP URL patterns for C# .NET. Stream and record with VisioForge Video Capture SDK integration code.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to JVC IP Camera in C# .NET

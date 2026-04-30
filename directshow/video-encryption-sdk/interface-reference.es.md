@@ -1,6 +1,18 @@
 ---
 title: Encriptación de Video AES-256: API e Interfaces del SDK
 description: API del SDK de Encriptación de Video con IVFCryptoConfig, IVFPasswordProvider y métodos auxiliares para C++, C# y Delphi con AES-256.
+tags:
+  - Video Encryption SDK
+  - DirectShow
+  - C++
+  - Windows
+  - C#
+primary_api_classes:
+  - IVFCryptoConfig
+  - IVFPasswordProvider
+  - IBaseFilter
+  - MuxerFilter
+
 ---
 
 # SDK de Encriptación de Video - Referencia de Interfaces
@@ -52,6 +64,10 @@ using System.Runtime.InteropServices;
 public interface IVFCryptoConfig
 {
     [PreserveSig]
+    // NOTA: put_Provider / get_Provider son stubs en el wrapper administrado —
+    // el parámetro se llama literalmente `passwordProviderNotUsed` porque el
+    // marshaling .NET para IVFPasswordProvider no está implementado. Desde C#
+    // llame directamente a put_Password con los bytes de la clave binaria.
     int put_Provider([In] IVFPasswordProvider passwordProviderNotUsed);
 
     [PreserveSig]
@@ -65,18 +81,24 @@ public interface IVFCryptoConfig
 }
 ```
 
+!!! warning "Proveedor de contraseña no compatible desde C#"
+    Los wrappers administrados `put_Provider` / `get_Provider` son **stubs no funcionales** (observe el nombre del parámetro `passwordProviderNotUsed`). Para establecer contraseñas desde C#, llame a `put_Password` con los bytes brutos de la clave mediante `IntPtr` (o use el helper `ApplyString`). Los callbacks personalizados de `IVFPasswordProvider` deben implementarse desde C++ o Delphi.
+
 #### Definición en Delphi
 
 ```delphi
 type
   IVFCryptoConfig = interface(IUnknown)
     ['{BAA5BD1E-3B30-425e-AB3B-CC20764AC253}']
-    function put_Provider(passwordProviderNotUsed: TObject): HRESULT; stdcall;
-    function get_Provider(out passwordProviderNotUsed: TObject): HRESULT; stdcall;
-    function put_Password(buffer: PWideChar; size: integer): HRESULT; stdcall;
+    function put_Provider(pProvider: IUnknown): HRESULT; stdcall;
+    function get_Provider(out pProvider: IUnknown): HRESULT; stdcall;
+    function put_Password(pBuffer: PByte; lSize: Integer): HRESULT; stdcall;
     function HavePassword(): HRESULT; stdcall;
   end;
 ```
+
+!!! note "Nombres entre wrappers de lenguaje"
+    El header nativo de C++ (`encryptor_intf.h`) usa `ICryptoConfig` / `IPasswordProvider`. Los wrappers de C# y Delphi exponen la misma interfaz como `IVFCryptoConfig` / `IVFPasswordProvider`. Ambos nombres se refieren al **mismo** GUID `{BAA5BD1E-3B30-425e-AB3B-CC20764AC253}`.
 
 ---
 ### Métodos
@@ -148,7 +170,7 @@ int put_Password(IntPtr buffer, int size);
 ```
 **Sintaxis en Delphi**:
 ```delphi
-function put_Password(buffer: PWideChar; size: integer): HRESULT; stdcall;
+function put_Password(pBuffer: PByte; lSize: Integer): HRESULT; stdcall;
 ```
 **Parámetros**:
 - `pBuffer` / `buffer` - Puntero a la contraseña o datos de clave binaria
@@ -207,7 +229,9 @@ begin
   if Supports(MuxerFilter, IVFCryptoConfig, CryptoConfig) then
   begin
     Password := 'MySecurePassword123';
-    CryptoConfig.put_Password(PWideChar(Password), Length(Password) * 2);
+    // pBuffer es un buffer binario opaco (LPBYTE); convierta el puntero
+    // de cadena ancha a PByte y pase la longitud en bytes (chars UTF-16 * 2).
+    CryptoConfig.put_Password(PByte(PWideChar(Password)), Length(Password) * 2);
   end;
 end;
 ```

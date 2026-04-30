@@ -1,6 +1,25 @@
 ---
-title: IP Camera Preview in C# .NET with RTSP Code Example
+title: IP Camera Live Preview in C# .NET with RTSP Tutorial
 description: Implement real-time IP camera preview in .NET apps with step-by-step tutorial and complete C# code examples for WinForms, WPF, Console.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - WinForms
+  - Capture
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+  - IPCameraSourceSettings
+  - IPSourceEngine
+  - VideoCaptureMode
+  - IVideoView
+
 ---
 
 # IP Camera Preview Implementation Guide
@@ -121,6 +140,12 @@ For production applications, consider implementing:
 - UI feedback during connection attempts
 - Camera authentication handling
 - Frame rate and resolution control
+
+## Related Guides
+
+- [RTSP camera source configuration](../video-sources/ip-cameras/rtsp.md) — UDP/TCP transport, low-latency tuning, engine selection
+- [ONVIF IP camera integration](../video-sources/ip-cameras/onvif.md) — auto-discovery, profile selection, PTZ control
+- [Record RTSP stream to MP4](ip-camera-capture-mp4.md) — capture the previewed stream to a file
 
 ---
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to explore more code samples. Need the RTSP URL for your camera? Check our [IP camera brands directory](../../camera-brands/index.md).

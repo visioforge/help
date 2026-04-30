@@ -1,6 +1,22 @@
 ---
 title: Agregar ActiveX Media Player a Visual Studio C++/C#/VB.NET
 description: Importe el control ActiveX TVFMediaPlayer en proyectos Visual Studio 2010+. Generación de wrapper COM, configuración de toolbox y guía de migración a SDK .NET.
+tags:
+  - Media Player SDK
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Playback
+  - MP4
+  - AVI
+  - MOV
+  - WMV
+  - C#
+primary_api_classes:
+  - TVFMediaPlayer
+
 ---
 
 # Instalando TVFMediaPlayer ActiveX en Visual Studio 2010 y Posterior
@@ -94,7 +110,7 @@ private void buttonPlay_Click(object sender, EventArgs e)
         try
         {
             // Establecer el nombre de archivo para el control ActiveX
-            axMediaPlayer1.Filename = openFileDialog.FileName;
+            axMediaPlayer1.FilenameOrURL = openFileDialog.FileName;
 
             // Iniciar reproducción
             axMediaPlayer1.Play();
@@ -120,7 +136,7 @@ public Form1()
 }
 ```
 
-Código similar puede escribirse en VB.NET, accediendo a las mismas propiedades (`Filename`, `Play()`) y eventos (`OnStop`). En C++, típicamente usaría interfaces COM directamente o wrappers MFC si usa ese framework.
+Código similar puede escribirse en VB.NET, accediendo a las mismas propiedades (`FilenameOrURL`, `Play()`) y eventos (`OnStop`). En C++, típicamente usaría interfaces COM directamente o wrappers MFC si usa ese framework.
 
 ## Importante: El Caso para el SDK Nativo .NET
 

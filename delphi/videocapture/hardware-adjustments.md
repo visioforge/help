@@ -1,6 +1,14 @@
 ---
 title: Camera Brightness, Contrast and Saturation Control in Delphi
 description: Adjust camera brightness, contrast, and saturation in Delphi with TVFVideoCapture hardware controls and parameter configuration examples.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Capture
+
 ---
 
 # Implementing Hardware Video Adjustments in Delphi Applications
@@ -42,7 +50,7 @@ VideoCapture1.Video_CaptureDevice_VideoAdjust_GetRanges(adj_Brightness, min, max
 int min, max, step, default_value;
 BOOL auto_value;
 m_VideoCapture.Video_CaptureDevice_VideoAdjust_GetRanges(
-  VF_VIDEOCAP_ADJ_BRIGHTNESS,
+  TxVFVideoCapAdjust::adj_Brightness,
   &min,
   &max,
   &step,
@@ -82,7 +90,7 @@ VideoCapture1.Video_CaptureDevice_VideoAdjust_SetValue(
 // Uses slider position for manual adjustment value
 // Checkbox state determines if auto-adjustment is enabled
 m_VideoCapture.Video_CaptureDevice_VideoAdjust_SetValue(
-  VF_VIDEOCAP_ADJ_BRIGHTNESS,
+  TxVFVideoCapAdjust::adj_Brightness,
   m_sliderBrightness.GetPos(),
   m_checkBrightnessAuto.GetCheck() == BST_CHECKED);
 ```

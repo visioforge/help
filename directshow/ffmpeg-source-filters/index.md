@@ -3,6 +3,18 @@ title: FFmpeg Source DirectShow Filter - 100+ Media Formats
 description: DirectShow source filter powered by FFmpeg for decoding MP4, MKV, H.265, and 100+ formats with hardware acceleration. COM interface for C++, C#, and Delphi.
 sidebar_label: FFMPEG Source DirectShow Filter
 order: 10
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Streaming
+primary_api_classes:
+  - IBaseFilter
+  - IFileSourceFilter
+  - FFMPEGFilter
+  - FileSource
+  - IFFMPEGSourceSettings
+
 ---
 
 # FFMPEG Source DirectShow Filter
@@ -237,11 +249,14 @@ public class FFMPEGSourcePlayer
 **Key CLSIDs and GUIDs:**
 
 ```csharp
-// FFMPEG Source Filter CLSID
-public static readonly Guid CLSID_VFFFMPEGSource = new Guid("C5255DE3-50A7-4714-B763-D99E96E4CD52");
+// FFMPEG Source Filter CLSID — same value used across the C# / C++ samples and
+// the registry registration in ../deployment/filter-registration.md.
+public static readonly Guid CLSID_VFFFMPEGSource = new Guid("1974D893-83E4-4F89-9908-795C524CC17E");
 
-// IFFMPEGSourceSettings Interface IID
-[Guid("1974D893-83E4-4F89-9908-795C524CC17E")]
+// IFFMPEGSourceSettings interface — for the canonical IID see the interface header
+// (`IFFmpegSourceSettings.h` / `IFFmpegSourceSettings.cs`) linked from
+// [interface-reference.md](./interface-reference.md). The interface IID is distinct
+// from the filter CLSID above (a single GUID cannot serve as both).
 public interface IFFMPEGSourceSettings { /* ... */ }
 
 // IVFRegister Interface IID (for licensing)

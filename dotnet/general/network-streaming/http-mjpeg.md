@@ -1,13 +1,52 @@
 ---
-title: MJPEG Over HTTP - Live Video Streaming Server in C# .NET
-description: Embed live video in HTML with an img tag. Frame-by-frame JPEG encoding, configurable port, and async client handling. VisioForge SDK surveillance examples.
+title: HTTP MJPEG Streaming Server in C# .NET — Send Live Video
+description: Stream live video as HTTP MJPEG from webcams, IP cameras, or files in C# / .NET. Browser-viewable endpoints, concurrent clients, GPU JPEG encoding.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - GStreamer
+  - Capture
+  - Streaming
+  - Editing
+  - MJPEG
+  - C#
+primary_api_classes:
+  - VideoCaptureCoreX
+  - HTTPMJPEGLiveOutput
+  - HTTPMJPEGLiveSinkBlock
+  - IVideoCaptureXBaseOutput
+  - IMediaBlockSink
+
 ---
 
 # HTTP MJPEG streaming
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
+!!! info "Cross-platform support"
+    The `VideoCaptureCoreX` engine and the Media Blocks SDK run on **Windows, macOS, Linux, Android, and iOS** via GStreamer. See the [platform support matrix](../../platform-matrix.md) for codec and hardware-acceleration details, and the [Linux deployment guide](../../deployment-x/Ubuntu.md) for Ubuntu / NVIDIA Jetson / Raspberry Pi setup.
+
 The SDK's feature of streaming video encoded as Motion JPEG (MJPEG) over HTTP is advantageous for its simplicity and broad compatibility. MJPEG encodes each video frame individually as a JPEG image, which simplifies decoding and is ideal for applications like web streaming and surveillance. The use of HTTP ensures easy integration and high compatibility across different platforms and devices and is effective even in networks with strict configurations. This method is particularly suitable for real-time video feeds and applications requiring straightforward frame-by-frame analysis. With adjustable frame rates and resolutions, the SDK offers flexibility for various network conditions and quality requirements, making it a versatile choice for developers implementing video streaming in their applications.
+
+!!! tip "AI coding agents: use the VisioForge MCP server"
+
+    Building this with **Claude Code**, **Cursor**, or another AI coding agent?
+    Connect to the public [VisioForge MCP server](../mcp-server-usage.md)
+    at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable
+    code samples, and deployment guides — more accurate than grepping
+    `llms.txt`. No authentication required.
+
+    Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
 ## Cross-platform MJPEG output
 

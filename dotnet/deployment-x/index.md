@@ -3,6 +3,18 @@ title: VisioForge .NET SDK Cross-Platform Deployment Guide
 description: Deploy .NET applications on Windows, macOS, iOS, Android, and Linux with native libraries, platform dependencies, and UI framework integration.
 sidebar_label: Deployment
 order: 17
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+
 ---
 
 # Cross-Platform Deployment Guide for VisioForge .NET SDK

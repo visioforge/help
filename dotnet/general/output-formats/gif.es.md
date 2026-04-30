@@ -1,6 +1,31 @@
 ---
 title: Codificación de Video a GIF Animado en Aplicaciones .NET
 description: Cree animaciones GIF desde video en .NET con control de tasa de cuadros, configuración de resolución y optimización para aplicaciones multiplataforma.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Encoding
+  - Editing
+  - GIF
+  - C#
+primary_api_classes:
+  - AnimatedGIFOutput
+  - GIFEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - VideoCaptureCore
+
 ---
 
 # Codificador GIF
@@ -78,8 +103,8 @@ var qualitySettings = new GIFEncoderSettings
    - Valores de velocidad más altos consumen más memoria durante la codificación
    - Para videos grandes, considere usar valores de velocidad más bajos para gestionar el uso de memoria
 
-3. **Configuración de bucle**
-   - Use `Repeat = -1` para bucles infinitos
+3. **Configuración de bucle** (`Repeat` es un `uint`)
+   - Use `Repeat = uint.MaxValue` para bucles infinitos (el docstring dice "-1 = bucle infinito" pero el tipo de la propiedad es `uint`, así que `-1` no compila)
    - Establezca conteos de repetición específicos para GIFs estilo presentación
    - Use `Repeat = 0` para GIFs de reproducción única
 
@@ -107,6 +132,17 @@ var qualityOptimizedSettings = new GIFEncoderSettings
 
 Aquí hay un ejemplo completo que muestra cómo configurar la salida GIF:
 
+Primero construye el `GIFOutput` (motores X) con la configuración del codificador:
+
+```csharp
+var gifOutput = new GIFOutput("output.gif");
+gifOutput.Settings = new GIFEncoderSettings
+{
+    Repeat = uint.MaxValue,  // Bucle infinito
+    Speed = 4,
+};
+```
+
 Agregar la salida GIF a la instancia del núcleo Video Capture SDK:
 
 ```csharp
@@ -114,18 +150,31 @@ var core = new VideoCaptureCoreX();
 core.Outputs_Add(gifOutput, true);
 ```
 
-Establecer el formato de salida para la instancia del núcleo Video Edit SDK:
+O asignarla como `Output_Format` de una línea de tiempo de `VideoEditCoreX`:
 
 ```csharp
-var core = new VideoEditCoreX();
-core.Output_Format = gifOutput;
+var editor = new VideoEditCoreX();
+editor.Input_AddVideoFile("input.mp4");
+editor.Output_Format = gifOutput;
+editor.Start();
 ```
+
+!!! note "La salida GIF es solo de video"
+
+    `GIFOutput` implementa tanto `IVideoCaptureXBaseOutput` como
+    `IVideoEditXBaseOutput`, por lo que funciona con `VideoCaptureCoreX` y
+    `VideoEditCoreX`. No hay muxer — `gifenc` escribe directamente el archivo
+    `.gif` final. Las pistas de audio en la línea de tiempo se descartan, y
+    `SmartRender = true` es incompatible con la salida GIF (ningún clip de
+    origen estará ya en `image/gif`). Para pipelines que necesiten un control
+    más fino sobre la colocación del codificador, el snippet de Media Blocks
+    `GIFEncoderBlock` de abajo sigue disponible.
 
 Crear una instancia de salida GIF de Media Blocks:
 
 ```csharp
 var gifSettings = new GIFEncoderSettings();
-var gifOutput = new GIFEncoderBlock(gifSettings, "output.gif");
+var gifEncoderBlock = new GIFEncoderBlock(gifSettings, "output.gif");
 ```
 
 ## Salida GIF solo Windows

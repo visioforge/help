@@ -1,6 +1,16 @@
 ---
 title: Install TVFVideoEdit ActiveX Control in C++ Builder
 description: Import and configure TVFVideoEdit ActiveX components in C++ Builder 5/6, 2006, and newer versions with package and control setup.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - Windows
+  - VCL
+  - Editing
+primary_api_classes:
+  - TVFVideoEdit
+
 ---
 
 # Complete Guide to TVFVideoEdit Installation in C++ Builder
@@ -85,7 +95,7 @@ In the import wizard:
 
 From the available ActiveX controls:
 
-1. Find and select the **"VisioForge Video Edit 5 Control"** from the list
+1. Find and select the **"VisioForge Video Edit Control"** from the list
 2. Click **Next** to continue with the import process
 
 ![Screenshot showing ActiveX control selection in newer Builder versions](bcb2006_4-1.webp)

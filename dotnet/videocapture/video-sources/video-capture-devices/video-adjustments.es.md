@@ -1,6 +1,16 @@
 ---
 title: Ajuste de brillo, contraste y saturación de cámara .NET
 description: Controla configuraciones de cámara incluyendo brillo, contraste, tono y saturación en .NET con ejemplos de código del Video Capture SDK.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - C#
+primary_api_classes:
+  - VideoCaptureDeviceAdjustValue
+
 ---
 
 # Dominar Controles de Imagen de Cámara en Aplicaciones .NET
@@ -9,22 +19,25 @@ description: Controla configuraciones de cámara incluyendo brillo, contraste, t
 
 ## Introducción a los Ajustes de Hardware de Cámara
 
-Al desarrollar aplicaciones que utilizan webcams u otros dispositivos de captura de video, tener control preciso sobre los parámetros de calidad de imagen es esencial para crear software de grado profesional. La clase `VideoHardwareAdjustment` proporciona a los desarrolladores herramientas poderosas para ajustar programáticamente configuraciones de cámara como brillo, contraste, tono, saturación, nitidez, gamma y más.
+Al desarrollar aplicaciones que utilizan webcams u otros dispositivos de captura de video, tener control preciso sobre los parámetros de calidad de imagen es esencial para crear software de grado profesional. El enum `VideoHardwareAdjustment` selecciona qué ajuste de hardware vas a leer o escribir, y el SDK expone control programático sobre configuraciones de cámara como brillo, contraste, tono, saturación, nitidez, gamma y más.
 
 ## Propiedades de Ajuste de Hardware Soportadas
 
-El SDK soporta numerosas propiedades de ajuste incluyendo:
+El enum `VideoHardwareAdjustment` cubre:
 
-- Brillo (Brightness)
-- Contraste (Contrast)
-- Tono (Hue)
-- Saturación (Saturation)
-- Nitidez (Sharpness)
+- Brightness
+- Contrast
+- Hue
+- Saturation
+- Sharpness
 - Gamma
-- Balance de Blancos (White Balance)
-- Compensación de Contraluz (Backlight Compensation)
-- Ganancia (Gain)
-- Exposición (Exposure)
+- ColorEnable
+- WhiteBalance
+- BacklightCompensation
+- Gain
+- PowerLineFrequency
+
+Exposición, enfoque, zoom y otros controles a nivel de lente viven en una familia de API separada (`Video_CaptureDevice_CameraControl_*` + el enum `CameraControlProperty`) — esta página cubre solo ajustes de *imagen* por hardware.
 
 Nota que no todas las cámaras soportan cada propiedad. El SDK ignorará elegantemente cualquier propiedad no soportada por el hardware de cámara específico que estés usando.
 
@@ -43,7 +56,7 @@ var brightnessRange = await VideoCapture1.Video_CaptureDevice_VideoAdjust_GetRan
 int minValue = brightnessRange.Min;
 int maxValue = brightnessRange.Max;
 int defaultValue = brightnessRange.Default;
-int step = brightnessRange.SteppingDelta;
+int step = brightnessRange.Step;
 ```
 
 ### Establecer Valores de Ajuste
@@ -90,13 +103,13 @@ await VideoCapture1.Video_CaptureDevice_VideoAdjust_SetValueAsync(VideoHardwareA
 ### Usar Ajuste Automático
 
 ```cs
-// Habilitar exposición automática
-var autoExposure = new VideoCaptureDeviceAdjustValue(0, true); // Valor ignorado cuando auto = true
-await VideoCapture1.Video_CaptureDevice_VideoAdjust_SetValueAsync(VideoHardwareAdjustment.Exposure, autoExposure);
-
 // Habilitar balance de blancos automático
 var autoWhiteBalance = new VideoCaptureDeviceAdjustValue(0, true);
 await VideoCapture1.Video_CaptureDevice_VideoAdjust_SetValueAsync(VideoHardwareAdjustment.WhiteBalance, autoWhiteBalance);
+
+// Habilitar ganancia automática
+var autoGain = new VideoCaptureDeviceAdjustValue(0, true); // Valor ignorado cuando auto = true
+await VideoCapture1.Video_CaptureDevice_VideoAdjust_SetValueAsync(VideoHardwareAdjustment.Gain, autoGain);
 ```
 
 ### Crear Control Deslizante de UI

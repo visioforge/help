@@ -1,6 +1,18 @@
 ---
 title: Changelog de TVFMediaPlayer Delphi - Versiones v3 a v10
 description: Changelog de TVFMediaPlayer - historial de versiones de 3.0 a 10.0 con soporte 4K, cifrado, efectos, streaming y mejoras de rendimiento.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Playback
+  - Streaming
+primary_api_classes:
+  - TVFMediaPlayer
+
 ---
 
 # Registro de Cambios de la Biblioteca TVFMediaPlayer

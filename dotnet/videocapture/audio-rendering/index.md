@@ -3,6 +3,17 @@ title: Audio Output Device Selection and Volume Control in C# .NET
 description: Configure audio output devices, adjust volume, and optimize playback in VisioForge Video Capture SDK. C# code examples for WinForms and WPF apps.
 sidebar_label: Audio Rendering
 order: 12
+tags:
+  - Video Capture SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+primary_api_classes:
+  - AudioRendererSettings
 
 ---
 
@@ -47,10 +58,11 @@ The first step in implementing audio rendering is to identify and list all avail
 
     
     ```csharp
-    foreach (var device in VideoCapture1.Audio_OutputDevices())
+    // Audio_OutputDevices() returns ObservableCollection<string> — the element IS the device name.
+    foreach (var deviceName in VideoCapture1.Audio_OutputDevices())
     {
         // add to some combobox
-        cbAudioOutputDevice.Items.Add(device.Name);
+        cbAudioOutputDevice.Items.Add(deviceName);
     }
     ```
     
@@ -66,7 +78,9 @@ Once the user has selected an audio output device, you need to configure the SDK
 
     
     ```csharp
-    var audioOutputDevice = (await VideoCapture1.Audio_OutputDevices()).Where(device => device.DisplayName == cbAudioOutputDevice.Text).First();
+    // VideoCaptureCoreX uses Audio_OutputsAsync() to enumerate AudioOutputDeviceInfo objects.
+    var audioOutputDevice = (await VideoCapture1.Audio_OutputsAsync())
+        .First(device => device.DisplayName == cbAudioOutputDevice.Text);
     VideoCapture1.Audio_OutputDevice = new AudioRendererSettings(audioOutputDevice);
     ```
     

@@ -1,6 +1,16 @@
 ---
 title: DirectShow Output Formats in Delphi - Complete Guide
 description: Implement DirectShow custom output formats in Delphi, C++, VB6 - integrate third-party filters, codecs, and multiplexers with code examples.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Capture
+  - Encoding
+
 ---
 
 # Code sample - Custom output formats
@@ -108,7 +118,7 @@ else
     VideoCapture1.Custom_Output_Audio_Codec := cbCustomDSFilterA.Items[cbCustomDSFilterA.ItemIndex];
     VideoCapture1.Custom_Output_Audio_Codec_Use_Filters_Category := true;
   end;
-VideoCapture1. Custom_Output_Mux_Filter_Name := cbCustomMuxer.Items[cbCustomMuxer.ItemIndex];
+VideoCapture1.Custom_Output_Mux_Filter_Name := cbCustomMuxer.Items[cbCustomMuxer.ItemIndex];
 ```
 
 ```cpp

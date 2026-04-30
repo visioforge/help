@@ -1,6 +1,19 @@
 ---
 title: IVFVideoMixer: Mezclador de Video DirectShow con Chroma Key
 description: Interfaz IVFVideoMixer para mezclar 2-16 fuentes de video con PIP, chroma keying, transparencia y configuraciones de diseño personalizables.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+  - Effects
+  - Mixing
+  - Webcam
+  - C#
+primary_api_classes:
+  - IVFVideoMixer
+  - IBaseFilter
+  - IVFChromaKey
+
 ---
 
 # Referencia de la Interfaz IVFVideoMixer

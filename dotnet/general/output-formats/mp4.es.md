@@ -1,6 +1,39 @@
-﻿---
-title: Guardar Video a MP4 en C# .NET (H.264, HEVC, AAC)
-description: Auto-selección de codificador con fallback NVENC/QSV/AMF. División por tamaño, duración o timecode. Buffer circular y muxing de streams. Ejemplos con VisioForge SDK.
+---
+title: Salida MP4 en C# .NET con H.264, HEVC, AAC y Muxing
+description: Selecciona NVENC, QSV o AMF con fallback automático. Divide por tamaño, duración o timecode, y hace muxing de streams en apps .NET.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Recording
+  - Encoding
+  - Editing
+  - Webcam
+  - MP4
+  - H.264
+  - H.265
+  - MPEG-2
+  - AAC
+  - MP3
+  - C#
+  - NuGet
+primary_api_classes:
+  - MP4Output
+  - MP4SplitSinkSettings
+  - NVENCH264EncoderSettings
+  - VOAACEncoderSettings
+  - MP4OutputBlock
 ---
 
 # Salida de archivo MP4
@@ -51,7 +84,7 @@ La clase MP4Output soporta múltiples codificadores de video a través de su pro
 **[Codificadores HEVC (H.265)](../video-encoders/hevc.md)**
 
 - MFHEVCEncoderSettings (Solo Windows)
-- AMFH265EncoderSettings (AMD)
+- AMFHEVCEncoderSettings (AMD)
 - NVENCHEVCEncoderSettings (NVIDIA)
 - QSVHEVCEncoderSettings (Intel Quick Sync)
 

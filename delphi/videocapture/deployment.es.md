@@ -1,6 +1,21 @@
 ---
 title: Guía de Implementación de TVFVideoCapture en Delphi
 description: Implemente TVFVideoCapture en Delphi - instale componentes, registre filtros DirectShow, configure el entorno para la implementación exitosa de aplicaciones.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - DirectShow
+  - Windows
+  - VCL
+  - Capture
+  - Encoding
+  - IP Camera
+  - MP4
+  - MP3
+primary_api_classes:
+  - TVFVideoCapture
+
 ---
 
 # Guía Completa de Despliegue de la Biblioteca TVFVideoCapture

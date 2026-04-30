@@ -1,6 +1,25 @@
 ---
 title: Edimax IP Camera RTSP URL and C# .NET Connection Guide
 description: Learn how to connect to Edimax IP cameras using C# .NET with RTSP URL patterns, authentication tips, and code samples for IC, IR, PT, and VS series models.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to Edimax IP Camera in C# .NET

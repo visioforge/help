@@ -1,6 +1,18 @@
 ---
 title: Captura y Grabación de Video a WMV en Delphi, C++ y VB6
 description: Capture video a formato WMV - perfiles externos, configuración de salida e implementación para Delphi, C++ MFC y VB6 con ejemplos de código.
+tags:
+  - All-in-One Media Framework
+  - Delphi
+  - ActiveX
+  - C++
+  - Windows
+  - VCL
+  - Capture
+  - Streaming
+  - Encoding
+  - WMV
+
 ---
 
 # Captura de Video a Windows Media Video (WMV) Usando Perfiles Externos
@@ -40,22 +52,25 @@ Antes de implementar funcionalidad de captura de video, asegúrese de que su ent
 
 El primer paso en la implementación es especificar qué perfil WMV usar para la codificación. Este perfil contiene todos los parámetros de codificación que se aplicarán al video capturado.
 
+> `WMV_Profile_Filename` espera la ruta a un perfil Windows Media `.prx` (la plantilla de parámetros de codificación) — NO la ruta del archivo `.wmv` capturado. Establezca el nombre del archivo capturado mediante `Output_Filename` (o la propiedad de nombre de archivo estándar del proyecto).
+
 #### Delphi
 
 ```pascal
-VideoCapture1.WMV_Profile_Filename := "salida.wmv";
+// Los literales de cadena Pascal usan comillas simples.
+VideoCapture1.WMV_Profile_Filename := 'C:\Profiles\HighQuality.prx';
 ```
 
 #### C++ MFC
 
 ```cpp
-m_videoCapture.SetWMVProfileFilename(_T("salida.wmv"));
+m_videoCapture.SetWMVProfileFilename(_T("C:\\Profiles\\HighQuality.prx"));
 ```
 
 #### VB6
 
 ```vb
-VideoCapture1.WMV_Profile_Filename = "salida.wmv"
+VideoCapture1.WMV_Profile_Filename = "C:\Profiles\HighQuality.prx"
 ```
 
 ### Paso 3: Configurando el Formato de Salida

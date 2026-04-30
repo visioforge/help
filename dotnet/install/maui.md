@@ -1,17 +1,40 @@
 ---
 title: Install VisioForge .NET SDKs in MAUI Apps via NuGet
 description: Add video capture, playback, and editing to .NET MAUI apps. NuGet setup for Windows, Android, iOS, and macOS with VisioForge VideoView controls.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - C++
+  - MediaPlayerCoreX
+  - Windows
+  - macOS
+  - Android
+  - iOS
+  - MAUI
+  - Playback
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoView
+  - MediaPlayerCoreX
+
 ---
 
 # Integrating VisioForge SDKs with .NET MAUI Applications
 
 ## Overview
 
-.NET Multi-platform App UI (MAUI) enables developers to build cross-platform applications for mobile and desktop from a single codebase. VisioForge provides comprehensive support for MAUI applications through the `VisioForge.Core.UI.MAUI` package, which contains specialized UI controls designed specifically for the .NET MAUI platform.
+.NET Multi-platform App UI (MAUI) enables developers to build cross-platform applications for mobile and desktop from a single codebase. VisioForge provides comprehensive support for MAUI applications through the `VisioForge.DotNet.Core.UI.MAUI` NuGet package (namespace: `VisioForge.Core.UI.MAUI`), which contains specialized UI controls designed specifically for the .NET MAUI platform.
 
 Our SDKs enable powerful multimedia capabilities across all MAUI-supported platforms:
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+!!! tip "Looking for a working tutorial?"
+    Once the packages are installed, walk through the [.NET MAUI Video Player Guide](../mediaplayer/guides/maui-player.md) — a full `VideoView` + `MediaPlayerCoreX` implementation with file picker, seek, and volume that runs on iOS, Android, macOS, and Windows from one codebase.
 
 ## Getting Started
 
@@ -19,7 +42,7 @@ Our SDKs enable powerful multimedia capabilities across all MAUI-supported platf
 
 To begin using VisioForge with your MAUI project, install the required NuGet packages:
 
-1. The core UI package: `VisioForge.Core.UI.MAUI`
+1. The core UI package: `VisioForge.DotNet.Core.UI.MAUI`
 2. Platform-specific redistributable (detailed in platform sections below)
 
 ### SDK Initialization
@@ -104,7 +127,7 @@ Include the Android-specific redistributable package:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="1.22.5.10" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.*" />
 </ItemGroup>
 ```
 
@@ -127,7 +150,7 @@ Add the iOS-specific package to your project:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="1.23.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.*" />
 </ItemGroup>
 ```
 
@@ -175,8 +198,7 @@ Include the core Windows packages:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Codecs.Windows.x64" Version="15.7.0" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="15.7.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.*" />
 </ItemGroup>
 ```
 
@@ -186,7 +208,7 @@ For enhanced media format support, include the libAV (FFMPEG) package:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="15.7.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.*" />
 </ItemGroup>
 ```
 
@@ -210,3 +232,9 @@ For optimal performance across platforms:
 The VisioForge SDK provides a comprehensive solution for adding powerful multimedia capabilities to your .NET MAUI applications. By following the platform-specific setup instructions and best practices outlined in this guide, you can create rich cross-platform applications with advanced video and audio features.
 
 For additional examples and sample code, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
+
+## Next Steps
+
+- [.NET MAUI Video Player Guide](../mediaplayer/guides/maui-player.md) — complete `VideoView` tutorial with seek, volume, and file picker
+- [Avalonia Player Guide](../mediaplayer/guides/avalonia-player.md) — desktop-first cross-platform alternative (includes Linux)
+- [Android Player Guide](../mediaplayer/guides/android-player.md) — Android-only deployment details

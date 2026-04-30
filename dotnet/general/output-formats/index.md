@@ -3,6 +3,18 @@ title: Video and Audio Output Formats for .NET Development
 description: Comprehensive guide to video and audio formats for .NET including MP4, WebM, AVI, MKV with codec comparisons and compatibility matrices.
 sidebar_label: Output Formats
 order: 17
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - DirectShow
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Streaming
 
 ---
 

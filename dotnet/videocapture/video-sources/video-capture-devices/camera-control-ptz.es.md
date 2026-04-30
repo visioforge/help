@@ -1,6 +1,15 @@
 ---
 title: Control de cámara PTZ en .NET: exposición, zoom y enfoque
 description: Implementa características de control de cámara incluyendo Pan, Tilt, Zoom (PTZ), Exposición, Iris y Enfoque en .NET con ejemplos de código C#.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - Capture
+  - C#
+  - NuGet
+
 ---
 
 # Implementación Avanzada de Control de Cámara y PTZ
@@ -40,32 +49,28 @@ Puedes referenciar el código fuente del Demo Principal para un ejemplo de imple
 Primero, consulta la cámara para determinar los rangos soportados y valores predeterminados para cada parámetro de control:
 
 ```cs
-// Inicializar variables para almacenar información de parámetros de cámara
-int max;
-int defaultValue;
-int min;
-int step;
-CameraControlFlags flags;
-
-// Consultar la cámara por el rango soportado del parámetro Zoom
-if (await VideoCapture1.Video_CaptureDevice_CameraControl_GetRangeAsync(
-    CameraControlProperty.Zoom, out min, out max, out step, out defaultValue, out flags))
+// Consultar la cámara por el rango soportado del parámetro Zoom.
+// GetRangeAsync devuelve un objeto VideoCaptureDeviceCameraControlRanges
+// (o null si el dispositivo no soporta esta propiedad).
+var ranges = await VideoCapture1.Video_CaptureDevice_CameraControl_GetRangeAsync(
+    CameraControlProperty.Zoom);
+if (ranges != null)
 {
     // Configurar control deslizante con el rango soportado de la cámara
-    tbCCZoom.Minimum = min;
-    tbCCZoom.Maximum = max;
-    tbCCZoom.SmallChange = step;
-    tbCCZoom.Value = defaultValue;
+    tbCCZoom.Minimum = ranges.Min;
+    tbCCZoom.Maximum = ranges.Max;
+    tbCCZoom.SmallChange = ranges.Step;
+    tbCCZoom.Value = ranges.Default;
 
     // Actualizar etiquetas de UI con información de rango
-    lbCCZoomMin.Text = "Min: " + Convert.ToString(min);
-    lbCCZoomMax.Text = "Max: " + Convert.ToString(max);
-    lbCCZoomCurrent.Text = "Actual: " + Convert.ToString(defaultValue);
+    lbCCZoomMin.Text = "Min: " + ranges.Min;
+    lbCCZoomMax.Text = "Max: " + ranges.Max;
+    lbCCZoomCurrent.Text = "Actual: " + ranges.Default;
 
     // Establecer casillas de modo de control basadas en capacidades de cámara
-    cbCCZoomManual.Checked = (flags & CameraControlFlags.Manual) == CameraControlFlags.Manual;
-    cbCCZoomAuto.Checked = (flags & CameraControlFlags.Auto) == CameraControlFlags.Auto;
-    cbCCZoomRelative.Checked = (flags & CameraControlFlags.Relative) == CameraControlFlags.Relative;
+    cbCCZoomManual.Checked = (ranges.Flags & CameraControlFlags.Manual) == CameraControlFlags.Manual;
+    cbCCZoomAuto.Checked = (ranges.Flags & CameraControlFlags.Auto) == CameraControlFlags.Auto;
+    cbCCZoomRelative.Checked = (ranges.Flags & CameraControlFlags.Relative) == CameraControlFlags.Relative;
 }
 ```
 
@@ -91,12 +96,11 @@ if (cbCCZoomAuto.Checked)
     flags = flags | CameraControlFlags.Auto;
 }
 
-// Aplicar el valor de zoom con las banderas seleccionadas
+// Aplicar el valor de zoom con las banderas seleccionadas.
+// SetAsync recibe un VideoCaptureDeviceCameraControlValue que agrupa valor + banderas.
 await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
     CameraControlProperty.Zoom,
-    tbCCZoom.Value,
-    flags
-);
+    new VideoCaptureDeviceCameraControlValue(tbCCZoom.Value, flags));
 ```
 
 ## Propiedades de Control Disponibles
@@ -107,23 +111,17 @@ await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
 // Controlar Pan (movimiento horizontal)
 await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
     CameraControlProperty.Pan,
-    panValue,
-    CameraControlFlags.Manual
-);
+    new VideoCaptureDeviceCameraControlValue(panValue, CameraControlFlags.Manual));
 
 // Controlar Tilt (movimiento vertical)
 await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
     CameraControlProperty.Tilt,
-    tiltValue,
-    CameraControlFlags.Manual
-);
+    new VideoCaptureDeviceCameraControlValue(tiltValue, CameraControlFlags.Manual));
 
 // Controlar Zoom
 await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
     CameraControlProperty.Zoom,
-    zoomValue,
-    CameraControlFlags.Manual
-);
+    new VideoCaptureDeviceCameraControlValue(zoomValue, CameraControlFlags.Manual));
 ```
 
 ### Control de Exposición
@@ -132,16 +130,12 @@ await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
 // Establecer exposición manual
 await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
     CameraControlProperty.Exposure,
-    exposureValue,
-    CameraControlFlags.Manual
-);
+    new VideoCaptureDeviceCameraControlValue(exposureValue, CameraControlFlags.Manual));
 
 // Habilitar exposición automática
 await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
     CameraControlProperty.Exposure,
-    0, // Valor ignorado en modo auto
-    CameraControlFlags.Auto
-);
+    new VideoCaptureDeviceCameraControlValue(0, CameraControlFlags.Auto)); // Valor ignorado en modo auto
 ```
 
 ### Control de Enfoque
@@ -150,16 +144,12 @@ await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
 // Establecer enfoque manual
 await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
     CameraControlProperty.Focus,
-    focusValue,
-    CameraControlFlags.Manual
-);
+    new VideoCaptureDeviceCameraControlValue(focusValue, CameraControlFlags.Manual));
 
 // Habilitar auto-enfoque
 await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
     CameraControlProperty.Focus,
-    0,
-    CameraControlFlags.Auto
-);
+    new VideoCaptureDeviceCameraControlValue(0, CameraControlFlags.Auto));
 ```
 
 ## Mejores Prácticas

@@ -1,6 +1,23 @@
 ---
 title: Video Fingerprinting Use Cases: Copyright and Monitoring
 description: Apply VisioForge video fingerprinting to copyright protection, broadcast monitoring, piracy detection, and content deduplication in production workflows.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - C++
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+  - C#
+primary_api_classes:
+  - VFPAnalyzer
+  - VFPFingerprintSource
+  - DetectCommercialsInSegment
+  - CaptureStreamSegment
+  - TrustedSource
+
 ---
 
 # Video Fingerprinting Use Cases and Applications
@@ -42,7 +59,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using VisioForge.Core.VideoFingerPrinting;
-using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types; // for Size / Rect
 
 public class CopyrightProtectionSystem
 {
@@ -526,10 +543,15 @@ public class MediaArchiveDeduplicator
             
             var source = new VFPFingerprintSource(file)
             {
-                // For deduplication, sample the video
-                StopTime = deepScan ? TimeSpan.Zero : TimeSpan.FromMinutes(2),
-                CustomResolution = new System.Drawing.Size(480, 360)
+                // For deduplication, sample the video. The source's parameterless
+                // ctor auto-populates StopTime with the full duration via MediaInfo,
+                // so we only override StopTime for the partial-sample (non-deep) branch.
+                CustomResolution = new VisioForge.Core.Types.Size(480, 360)
             };
+            if (!deepScan)
+            {
+                source.StopTime = TimeSpan.FromMinutes(2);
+            }
             
             var fp = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(source);
             if (fp != null)

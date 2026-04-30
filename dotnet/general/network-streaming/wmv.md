@@ -1,6 +1,23 @@
 ---
 title: WMV Network Streaming Implementation in .NET Applications
 description: Implement Windows Media Video streaming in .NET with compression algorithms, adaptive bitrates, and bandwidth optimization for network delivery.
+tags:
+  - Video Capture SDK
+  - .NET
+  - VideoCaptureCore
+  - Windows
+  - WinForms
+  - Capture
+  - Streaming
+  - WMV
+  - C#
+  - NuGet
+primary_api_classes:
+  - VideoCaptureCore
+  - WMVOutput
+  - WMVMode
+  - NetworkStreamingFormat
+
 ---
 
 # Windows Media Video (WMV) Network Streaming Implementation Guide
@@ -58,10 +75,14 @@ Before implementing WMV streaming in your application, ensure the following requ
 Begin by setting up the core video capture component in your application:
 
 ```cs
-// Initialize the VideoCapture component
-var VideoCapture1 = new VisioForge.Core.VideoCapture();
+using VisioForge.Core.VideoCapture;
+using VisioForge.Core.Types.Output;
+using VisioForge.Core.Types.VideoCapture;
 
-// Configure basic capture settings (adjust as needed)
+// Initialize VideoCaptureCore with the VideoView that hosts the preview
+var VideoCapture1 = new VideoCaptureCore(VideoView1 as IVideoView);
+
+// Configure basic capture settings (device selection, mode, etc.)
 // ...
 ```
 
@@ -82,22 +103,34 @@ VideoCapture1.Network_Streaming_Format = NetworkStreamingFormat.WMV;
 Create and configure a WMV output object with appropriate settings:
 
 ```cs
-// Create WMV output configuration
+// Create WMV output. Default ctor picks the "Windows Media Video 9 for Local Network
+// (768 kbps)" internal profile with Mode = WMVMode.InternalProfile.
 var wmvOutput = new WMVOutput();
 
-// Optional: Configure WMV-specific settings
-wmvOutput.Bitrate = 2000000; // 2 Mbps
-wmvOutput.KeyFrameInterval = 3; // seconds between keyframes
-wmvOutput.Quality = 85; // Quality setting (0-100)
+// Option A: pick a different built-in profile
+wmvOutput.Mode = WMVMode.InternalProfile;
+wmvOutput.Internal_Profile_Name = "Windows Media Video 9 for Broadband (NTSC, 1400 Kbps)";
 
-// Apply WMV output configuration
+// Option B: drive the encoder from custom settings instead of a profile.
+// Note the flat "Custom_*" naming — WMVOutput has no nested Profile object.
+// Bitrate is bits/sec; KeyFrameInterval is seconds between keyframes;
+// Quality is a 0..100 byte.
+wmvOutput.Mode = WMVMode.CustomSettings;
+wmvOutput.Custom_Video_StreamPresent = true;
+wmvOutput.Custom_Video_Bitrate = 2_000_000;      // 2 Mbps
+wmvOutput.Custom_Video_KeyFrameInterval = 3;     // seconds
+wmvOutput.Custom_Video_Quality = 85;             // 0..100
+wmvOutput.Custom_Video_SizeSameAsInput = true;
+wmvOutput.Custom_Audio_StreamPresent = true;
+
+// Cap the number of simultaneous clients (lives on WMVOutput, not on VideoCaptureCore)
+wmvOutput.Network_Streaming_WMV_Maximum_Clients = 25;
+
+// Wire the WMV output into the network-streaming pipeline
 VideoCapture1.Network_Streaming_Output = wmvOutput;
 
-// Set network port for client connections
+// The port that the Windows Media server binds to
 VideoCapture1.Network_Streaming_Network_Port = 12345;
-
-// Optional: Set maximum number of concurrent clients (default is 10)
-VideoCapture1.Network_Streaming_Max_Clients = 25;
 ```
 
 #### 4. Start the Streaming Process
@@ -106,16 +139,18 @@ Once everything is configured, you can start the streaming process:
 
 ```cs
 // Start the streaming process
-try {
-    VideoCapture1.Start();
-    
+try
+{
+    await VideoCapture1.StartAsync();
+
     // The streaming URL is now available for clients
     string streamingUrl = VideoCapture1.Network_Streaming_URL;
-    
+
     // Display or log the streaming URL for client connections
     Console.WriteLine($"Streaming available at: {streamingUrl}");
 }
-catch (Exception ex) {
+catch (Exception ex)
+{
     // Handle any exceptions during streaming initialization
     Console.WriteLine($"Streaming error: {ex.Message}");
 }
@@ -123,21 +158,19 @@ catch (Exception ex) {
 
 ### Advanced Configuration Options
 
-#### Custom WMV Profiles
+#### External .prx Profile Files
 
-For more precise control over your WMV stream, you can implement custom encoding profiles:
+For fine control beyond the built-in profiles, point WMVOutput at a profile file
+authored with Windows Media Profile Editor:
 
 ```cs
-// Create custom WMV profile
-var customProfile = new WMVProfile();
-customProfile.VideoCodec = WMVVideoCodec.WMV9;
-customProfile.AudioCodec = WMVAudioCodec.WMAudioV9;
-customProfile.VideoBitrate = 1500000; // 1.5 Mbps
-customProfile.AudioBitrate = 128000; // 128 Kbps
-customProfile.BufferWindow = 5000; // Buffer window in milliseconds
+wmvOutput.Mode = WMVMode.ExternalProfile;
+wmvOutput.External_Profile_FileName = @"C:\profiles\my-stream.prx";
 
-// Apply custom profile
-wmvOutput.Profile = customProfile;
+// Or paste the profile XML inline:
+// wmvOutput.Mode = WMVMode.ExternalProfileFromText;
+// wmvOutput.External_Profile_Text = "<profile ...>...</profile>";
+
 VideoCapture1.Network_Streaming_Output = wmvOutput;
 ```
 

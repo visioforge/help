@@ -1,6 +1,10 @@
 ---
 title: Efectos y procesamiento de video en Video Capture SDK .Net
 description: Guía de procesamiento de video incluyendo redimensionado, recorte, efectos y transformaciones con Video Capture SDK .Net.
+tags:
+  - Video Capture SDK
+  - .NET
+
 ---
 
 # Procesamiento de Video - Video Capture SDK .Net

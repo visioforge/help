@@ -1,6 +1,11 @@
 ---
 title: Deploy DirectShow Filters with WiX, NSIS, and Inno Setup
 description: Step-by-step installer integration for VisioForge DirectShow filters. WiX, NSIS, Inno Setup, and InstallShield examples with COM registration custom actions.
+tags:
+  - DirectShow
+  - C++
+  - Windows
+
 ---
 
 # Installer Integration Guide
@@ -1073,7 +1078,7 @@ PrivilegesRequired=admin
 ${If} ${RunningX64}
   File "Filters\VisioForge_FFMPEG_Source_x64.ax"
 ${Else}
-  File "Filters\VisioForge_FFMPEG_Source_x86.ax"
+  File "Filters\VisioForge_FFMPEG_Source.ax"
 ${EndIf}
 ```
 

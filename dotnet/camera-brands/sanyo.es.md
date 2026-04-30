@@ -1,6 +1,24 @@
 ---
 title: Sanyo: URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecte cámaras Sanyo en C# .NET con patrones de URL RTSP y ejemplos de código para modelos de las series VCC, VDC y VCC-HD.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - H.264
+  - MJPEG
+  - C#
+
 ---
 
 # Cómo Conectar una Cámara IP Sanyo en C# .NET

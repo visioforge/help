@@ -1,6 +1,40 @@
 ---
-title: Save Video to MP4 with H.264 and HEVC Encoding in C# .NET
+title: MP4 Video Output in C# .NET — H.264, HEVC, AAC Muxing
 description: Encoder auto-selection with NVENC/QSV/AMF fallback. File splitting by size, duration, or timecode. Rolling buffer recording and stream muxing. VisioForge SDK.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Recording
+  - Encoding
+  - Editing
+  - Webcam
+  - MP4
+  - H.264
+  - H.265
+  - MPEG-2
+  - AAC
+  - MP3
+  - C#
+  - NuGet
+primary_api_classes:
+  - MP4Output
+  - MP4SplitSinkSettings
+  - NVENCH264EncoderSettings
+  - VOAACEncoderSettings
+  - MP4OutputBlock
+
 ---
 
 # MP4 file output
@@ -51,7 +85,7 @@ The MP4Output class supports multiple video encoders through its `Video` propert
 **[HEVC (H.265) Encoders](../video-encoders/hevc.md)**
 
 - MFHEVCEncoderSettings (Windows only)
-- AMFH265EncoderSettings (AMD)
+- AMFHEVCEncoderSettings (AMD)
 - NVENCHEVCEncoderSettings (NVIDIA)
 - QSVHEVCEncoderSettings (Intel Quick Sync)
 
@@ -446,7 +480,12 @@ Start video capture (convert) to a file.
 await VideoCapture1.StartAsync();
 ```
 
-Finally, when we're done capturing the video, we need to stop the video capture and release the resources. We can do this by calling the `StopAsync` method of the `VideoCaptureCore` class.
+Finally, when we're done capturing the video, stop the pipeline and release the resources. `StopAsync()` flushes the muxer and finalises the output file — don't skip it or the MP4 will be unplayable:
+
+```cs
+await VideoCapture1.StopAsync();
+VideoCapture1.Dispose();
+```
 
 ### Required redists  
 

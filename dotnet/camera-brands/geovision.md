@@ -1,6 +1,23 @@
 ---
 title: GeoVision IP Camera RTSP URL Setup and C# .NET Guide
 description: GeoVision GV-BL, GV-FD, GV-VD, GV-FE, and GV-DVR RTSP URL patterns for C# .NET. Integrate with VisioForge SDK for multi-channel surveillance apps.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - IP Camera
+  - RTSP
+  - ONVIF
+  - MJPEG
+  - C#
+
 ---
 
 # How to Connect to GeoVision IP Camera in C# .NET

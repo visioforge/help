@@ -1,6 +1,23 @@
 ---
 title: Encriptar video con DirectShow - Ejemplos C#, C++ y Delphi
 description: Ejemplos de código para encriptación y desencriptación de video con filtros DirectShow en C++, C# y Delphi usando contraseñas y claves binarias.
+tags:
+  - Video Encryption SDK
+  - DirectShow
+  - C++
+  - Windows
+  - Encoding
+  - MP4
+  - H.264
+  - AAC
+  - C#
+primary_api_classes:
+  - IBaseFilter
+  - IVFCryptoConfig
+  - IFileSinkFilter
+  - SourceFilter
+  - VideoEncoder
+
 ---
 
 # SDK de Encriptación de Video - Ejemplos de Código
@@ -15,6 +32,9 @@ Esta página proporciona ejemplos de código completos y funcionales para encrip
 - **Manejo de Errores** - Comprobación de errores robusta y recuperación
 
 Todos los ejemplos incluyen implementaciones completas en C++, C# y Delphi.
+
+!!! note "Nombres de la interfaz entre wrappers de lenguaje"
+    El header nativo de C++ (`encryptor_intf.h`) declara esta interfaz como `ICryptoConfig` con `IID_ICryptoConfig`. Los wrappers de C# y Delphi exponen la misma interfaz como `IVFCryptoConfig` (y el proveedor de contraseña como `IVFPasswordProvider`). Ambos nombres comparten el GUID `{BAA5BD1E-3B30-425e-AB3B-CC20764AC253}` y se refieren a la misma interfaz COM — los fragmentos en C++ usan `ICryptoConfig` mientras que los de C#/Delphi usan `IVFCryptoConfig`.
 
 ---
 ## Requisitos Previos
@@ -465,7 +485,10 @@ begin
     if Supports(EncryptMuxer, IVFCryptoConfig, CryptoConfig) then
     begin
       // Establecer contraseña
-      Result := CryptoConfig.put_Password(PWideChar(Password), Length(Password) * 2);
+      // pBuffer es un buffer binario opaco (PByte); convierta el puntero
+      // a través de PWideChar para reutilizar el buffer de cadena ancha;
+      // la longitud en bytes = cantidad de caracteres * 2.
+      Result := CryptoConfig.put_Password(PByte(PWideChar(Password)), Length(Password) * 2);
 
       if Succeeded(Result) then
       begin

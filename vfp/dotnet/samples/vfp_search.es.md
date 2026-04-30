@@ -1,6 +1,16 @@
 ---
 title: Buscar Fragmentos de Video por Huellas Digitales en .NET CLI
 description: Busque fragmentos de video dentro de archivos mayores usando la herramienta CLI vfp_search de VisioForge con salida de timestamps y umbrales.
+tags:
+  - Video Fingerprinting SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Fingerprinting
+  - MP4
+  - C#
+
 ---
 
 # vfp_search - Herramienta de Búsqueda de Fragmentos de Video

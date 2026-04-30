@@ -1,6 +1,32 @@
 ---
 title: Codificador WAV PCM y Ejemplos de Código para .NET
 description: Implemente procesamiento de audio WAV en .NET con tasas de muestreo, configuración de canales, selección de formato PCM y soporte multiplataforma.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - WAV
+  - C#
+primary_api_classes:
+  - WAVEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - MediaBlocksPipeline
+  - WAVOutput
+
 ---
 
 # Implementando Audio WAV en Aplicaciones .NET

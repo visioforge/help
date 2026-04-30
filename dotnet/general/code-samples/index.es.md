@@ -4,6 +4,11 @@ description: Ejemplos de implementación para filtros DirectShow, procesamiento 
 sidebar_label: Ejemplos de Código
 
 order: -4
+tags:
+  - .NET
+  - DirectShow
+  - Editing
+
 ---
 
 # Ejemplos de Código del SDK .NET: Guía Práctica de Implementación

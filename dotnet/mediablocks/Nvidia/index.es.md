@@ -1,6 +1,21 @@
 ---
 title: Bloques de Procesamiento de Video Nvidia GPU en C# .NET
 description: Acelere la conversión, redimensionamiento y transferencia de video con bloques GPU Nvidia CUDA en pipelines de VisioForge Media Blocks SDK para .NET.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - NVDataUploadBlock
+  - NVDataDownloadBlock
+  - NVVideoResizeBlock
+  - NVVideoConverterBlock
+  - NVDSDewarpBlock
+
 ---
 
 # Bloques Nvidia - VisioForge Media Blocks SDK .Net
@@ -89,9 +104,10 @@ graph LR;
 // crear pipeline
 var pipeline = new MediaBlocksPipeline();
 
-// crear una fuente de video (ej., SystemVideoSourceBlock o UniversalSourceBlock)
-var videoSource = new UniversalSourceBlock(); // Conceptual: asuma que este bloque está correctamente configurado
-// videoSource.Filename = "input.mp4";
+// crear una fuente de video (ej., SystemVideoSourceBlock o UniversalSourceBlock).
+// UniversalSourceBlock requiere UniversalSourceSettings vía la fábrica async:
+var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri("input.mp4"));
+var videoSource = new UniversalSourceBlock(sourceSettings);
 
 // crear bloque de carga de datos Nvidia
 var nvDataUpload = new NVDataUploadBlock();
@@ -266,13 +282,17 @@ var pipeline = new MediaBlocksPipeline();
 // Cargar video a memoria GPU
 var nvUpload = new NVDataUploadBlock();
 
-// Configurar ajustes de dewarp para corrección de ojo de pez
+// Configurar ajustes de dewarp para corrección de ojo de pez. Los parámetros de
+// calibración y proyección viven en el ConfigFile formato DeepStream; el objeto
+// de configuración .NET solo contiene los ajustes de alto nivel (id de GPU, tipo
+// de memoria, id de fuente, ruta al config file).
 var dewarpSettings = new NVDSDewarpSettings
 {
-    SourceType = DewarpSourceType.FisheyeCamera,
-    ProjectionType = DewarpProjectionType.PushBroom,
-    TopAngle = 180,
-    BottomAngle = 180
+    Enabled = true,
+    NumSourcePlanes = 1,
+    ConfigFile = "config_dewarper.txt",
+    GpuId = 0,
+    SourceId = 0
 };
 
 // Crear bloque dewarp

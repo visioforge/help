@@ -1,6 +1,32 @@
 ---
 title: Codificación FLAC Sin Pérdida - Grabación Audio en C# .NET
 description: Grabación sin pérdida con niveles de calidad 0-9, frecuencias hasta 655 kHz, surround de 8 canales y optimización LPC. Ejemplos de código C# con VisioForge SDK.
+tags:
+  - Video Capture SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
+  - MediaBlocksPipeline
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - Capture
+  - Streaming
+  - Encoding
+  - Editing
+  - FLAC
+  - C#
+primary_api_classes:
+  - FLACOutput
+  - FLACEncoderSettings
+  - VideoCaptureCoreX
+  - VideoEditCoreX
+  - CustomAudioProcessor
+
 ---
 
 # Codificador y salida FLAC
@@ -134,23 +160,25 @@ La clase `FLACOutput` proporciona funcionalidad para configurar la salida FLAC (
 // Crear una nueva instancia de salida FLAC
 var flacOutput = new FLACOutput("output.flac");
 
-// Configurar ajustes del codificador FLAC
-flacOutput.Audio.CompressionLevel = 5; // Ejemplo de configuración
+// Configurar ajustes del codificador FLAC (Quality: 0 más rápido .. 8 máxima, 9 extrema)
+flacOutput.Audio.Quality = 5;
 ```
 
 #### Filename
 
-- Establecer el nombre de archivo de salida durante la inicialización o usando la propiedad
-- También se puede acceder/modificar usando los métodos `GetFilename()` y `SetFilename()`
+- Establecer el nombre de archivo de salida durante la inicialización o vía la propiedad `Filename`
+- O llamar a los métodos `GetFilename()` / `SetFilename(string)` (equivalentes — respaldan la propiedad `Filename`)
 
 ```csharp
 // Establecer durante la inicialización
 var flacOutput = new FLACOutput("audio_output.flac");
-```
 
-```csharp
-// O usando la propiedad
+// O vía la propiedad
 flacOutput.Filename = "new_output.flac";
+
+// O vía los métodos de acceso
+flacOutput.SetFilename("final.flac");
+string currentPath = flacOutput.GetFilename();  // "final.flac"
 ```
 
 #### Configuración de audio
@@ -224,7 +252,7 @@ if (!FLACEncoderSettings.IsAvailable())
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-La clase [FLACOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.FLACOutput.html) proporciona configuraciones solo para Windows para el codificador FLAC. Esta clase implementa tanto las interfaces `IVideoEditBaseOutput` como `IVideoCaptureBaseOutput`, haciéndola adecuada tanto para escenarios de edición como de captura de video.
+La clase [FLACOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.FLACOutput.html) proporciona configuraciones solo para Windows para el codificador FLAC. Esta clase implementa tanto las interfaces `IVideoEditBaseOutput` como `IVideoCaptureBaseOutput`, haciéndola adecuada tanto para escenarios de edición como de captura de video.
 
 ### Propiedades
 

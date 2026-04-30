@@ -2,6 +2,21 @@
 title: Procesamiento de Audio en C# .NET - Mezclador, EQ, Efectos
 description: Pipelines de audio en C# con VisioForge Media Blocks SDK: mezclador, ecualizador, reverberación, reducción de ruido y más de 30 bloques.
 sidebar_label: Procesamiento y Efectos de Audio
+tags:
+  - Media Blocks SDK
+  - .NET
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+primary_api_classes:
+  - AudioRendererBlock
+  - UniversalSourceBlock
+  - MediaBlocksPipeline
+  - UniversalSourceSettings
+  - AudioMixerBlock
+
 ---
 
 # Bloques de Procesamiento y Efectos de Audio para .NET
@@ -215,8 +230,8 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Volume: 0.0 (silence) to 1.0 (normal) or higher (amplification)
-var volume = new VolumeBlock(0.8);
+// VolumeBlock tiene constructor sin parámetros; establece Level vía propiedad (0.0 silencio, 1.0 normal, >1.0 amplificado).
+var volume = new VolumeBlock { Level = 0.8 };
 pipeline.Connect(fileSource.AudioOutput, volume.Input);
 
 var audioRenderer = new AudioRendererBlock();
@@ -260,10 +275,9 @@ Configure mediante `AudioMixerSettings`:
 |--------|-------------|
 | `CreateNewInput()` | Crea un nuevo pad de entrada (antes de iniciar el pipeline) |
 | `CreateNewInputLive()` | Crea un nuevo pad de entrada durante la reproducción |
-| `AddNewInput(MediaBlockPad)` | Conecta una salida de bloque existente como nueva entrada del mezclador durante la reproducción |
 | `RemoveInputLive(MediaBlockPad)` | Elimina un pad de entrada durante la reproducción |
-| `SetVolume(MediaBlockPad, double)` | Establece el volumen para una entrada específica (0.0–10.0) |
-| `SetMute(MediaBlockPad, bool)` | Silencia o activa una entrada específica |
+| `SetVolume(int streamIndex, double value)` | Establece volumen para una entrada por índice 0-based (0.0–10.0) |
+| `SetMute(int streamIndex, bool value)` | Silencia o activa una entrada por índice 0-based |
 
 **Elemento GStreamer**: `audiomixer`
 
@@ -375,11 +389,13 @@ var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
 var audioSampleGrabber = new AudioSampleGrabberBlock();
-audioSampleGrabber.SampleGrabbed += (sender, args) =>
+audioSampleGrabber.OnAudioFrameBuffer += (sender, args) =>
 {
-    // Process audio samples
-    // args.AudioData - audio samples
-    // args.AudioFormat - audio format
+    // args.Frame.Data        — IntPtr al buffer PCM crudo
+    // args.Frame.DataSize    — tamaño en bytes del buffer
+    // args.Frame.Info.Format — AudioFormat (ej. S16LE, F32LE)
+    // args.Frame.Info.SampleRate / Channels / BPS
+    // Establece args.UpdateData = true si mutas el buffer y quieres que se propague downstream.
 };
 pipeline.Connect(fileSource.AudioOutput, audioSampleGrabber.Input);
 
@@ -497,8 +513,14 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Delay in ms, strength 0.0 - 1.0
-var echo = new EchoBlock(500, 0.5);
+// EchoBlock tiene constructor sin parámetros; establece las propiedades directamente.
+var echo = new EchoBlock
+{
+    Delay     = TimeSpan.FromMilliseconds(200),   // retardo del eco
+    MaxDelay  = TimeSpan.FromMilliseconds(500),   // tamaño de buffer interno (debe ser >= Delay)
+    Intensity = 0.5f,                             // volumen del signal retardado (0.0-1.0)
+    Feedback  = 0.3f                              // cantidad de feedback (0.0-cerca de 1.0)
+};
 pipeline.Connect(fileSource.AudioOutput, echo.Input);
 
 var audioRenderer = new AudioRendererBlock();
@@ -716,7 +738,7 @@ var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
 // Balance: -1.0 (full left) to 1.0 (full right), 0.0 - center
-var balance = new AudioBalanceBlock(0.5);
+var balance = new AudioBalanceBlock(0.5f);  // el constructor toma float, no double
 pipeline.Connect(fileSource.AudioOutput, balance.Input);
 
 var audioRenderer = new AudioRendererBlock();
@@ -759,7 +781,7 @@ El ecualizador proporciona 10 bandas de frecuencia fija. Use `SetBand(int index,
 | 8 | 7523 Hz | 5765 Hz |
 | 9 | 15011 Hz | 11498 Hz |
 
-El constructor acepta 10 valores `double` para las ganancias iniciales de las bandas (en dB), o use `SetBand(int index, double gain)` en tiempo de ejecución.
+El constructor no tiene parámetros. Usa `SetBand(int index, double gain)` para ajustar cada una de las 10 bandas después de la construcción.
 
 **Elemento GStreamer**: `equalizer-10bands`
 
@@ -779,10 +801,10 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-// Create 10-band equalizer with all bands set to 0 dB
-var equalizer = new Equalizer10Block(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+// Crear ecualizador de 10 bandas (ctor sin parámetros; bandas por defecto en 0 dB)
+var equalizer = new Equalizer10Block();
 
-// Or set bands individually
+// Configurar bandas individualmente
 equalizer.SetBand(0, 3); // Band 0 (31 Hz) to +3 dB
 equalizer.SetBand(1, 2); // Band 1 (62 Hz) to +2 dB
 equalizer.SetBand(9, -3); // Band 9 (16 kHz) to -3 dB
@@ -822,7 +844,7 @@ Propiedades de `ParametricEqualizerBand`:
 |----------|------|---------|-------------|
 | `Frequency` | `float` | varía | Frecuencia central en Hz |
 | `Gain` | `float` | `0.0` | Ganancia de banda en dB (-24 a +12) |
-| `Bandwidth` | `float` | `1.0` | Ancho de banda en Hz |
+| `Width` | `float` | `1.0` | Ancho de banda en Hz |
 
 Bandas predeterminadas (cuando se configuran 3 bandas):
 
@@ -854,8 +876,10 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 var equalizer = new EqualizerParametricBlock();
 
 // Set up to 4 bands
-equalizer.SetBand(0, 100, 1.0, 3); // Band 0: 100 Hz frequency, 1.0 Q, +3 dB gain
-equalizer.SetBand(1, 1000, 1.5, -2); // Band 1: 1000 Hz frequency, 1.5 Q, -2 dB gain
+// ParametricEqualizerBand(freq: Hz, width: Hz bandwidth, gain: dB). Propiedades: Frequency, Width, Gain.
+equalizer.SetNumBands(4);
+equalizer.SetState(0, new ParametricEqualizerBand(freq: 100f,  width: 50f,  gain: 3f));
+equalizer.SetState(1, new ParametricEqualizerBand(freq: 1000f, width: 500f, gain: -2f));
 
 pipeline.Connect(fileSource.AudioOutput, equalizer.Input);
 
@@ -1005,12 +1029,12 @@ Configure mediante `CompressorExpanderAudioEffect`:
 
 | Propiedad | Tipo | Predeterminado | Descripción |
 |----------|------|---------|-------------|
-| `Mode` | `CompressorExpanderMode` | `Compressor` | Modo de procesamiento: `Compressor` (reducir rango dinámico) o `Expander` (aumentar rango dinámico) |
-| `Characteristics` | `CompressorExpanderCharacteristics` | `HardKnee` | Tipo de rodilla: `HardKnee` (transición abrupta) o `SoftKnee` (transición gradual) |
+| `Mode` | `AudioCompressorMode` | `Compressor` | Modo de procesamiento: `Compressor` (reducir rango dinámico) o `Expander` (aumentar rango dinámico) |
+| `Characteristics` | `AudioDynamicCharacteristics` | `HardKnee` | Tipo de rodilla: `HardKnee` (transición abrupta) o `SoftKnee` (transición gradual) |
 | `Ratio` | `float` | `1.0` | Relación de compresión/expansión (por ejemplo, 2.0 = compresión 2:1) |
 | `Threshold` | `float` | `0.0` | Nivel de umbral (0.0–1.0). La señal por encima de este nivel se comprime/expande |
 
-El constructor acepta 4 parámetros: `CompressorExpanderBlock(ratio, threshold, mode, characteristics)`.
+El constructor no tiene parámetros. Configura vía `Ratio`, `Threshold`, `Mode` y `Characteristics` después de construir.
 
 **Elemento GStreamer**: `audiodynamic`
 
@@ -1030,7 +1054,14 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-var compressor = new CompressorExpanderBlock(0.5, 0.9, 0.1, 0.5);
+// CompressorExpanderBlock tiene constructor sin parámetros; establece las propiedades directamente.
+var compressor = new CompressorExpanderBlock
+{
+    Mode            = AudioCompressorMode.Compressor,
+    Characteristics = AudioDynamicCharacteristics.HardKnee,
+    Ratio           = 4f,    // compresión 4:1
+    Threshold       = 0.5f   // 0.0-1.0 (amplitud lineal, no dB en este bloque)
+};
 pipeline.Connect(fileSource.AudioOutput, compressor.Input);
 
 var audioRenderer = new AudioRendererBlock();
@@ -1065,7 +1096,7 @@ Salida | Audio sin comprimir | 1
 | `Search` | `TimeSpan` | `14 ms` | Longitud de la ventana de búsqueda para la mejor posición de superposición |
 | `Stride` | `TimeSpan` | `30 ms` | Longitud del stride de audio de salida |
 
-El constructor acepta un parámetro `double rate` para la velocidad de reproducción inicial. Use `SetRate(double rate)` para cambiar en tiempo de ejecución.
+El constructor no tiene parámetros; establece `Rate` vía propiedad (el `SetRate` subyacente se invoca internamente al asignar `Rate`).
 
 **Elemento GStreamer**: `scaletempo`
 
@@ -1086,7 +1117,9 @@ var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
 // Scale tempo by factor (1.0 is normal, 0.5 is half-speed, 2.0 is double-speed)
-var scaleTempo = new ScaleTempoBlock(1.5);
+// ScaleTempoBlock tiene constructor sin parámetros; establece Rate vía propiedad.
+// 1.0 = normal, 0.5 = mitad de velocidad, 2.0 = doble velocidad; el pitch se preserva.
+var scaleTempo = new ScaleTempoBlock { Rate = 1.5 };
 pipeline.Connect(fileSource.AudioOutput, scaleTempo.Input);
 
 var audioRenderer = new AudioRendererBlock();
@@ -1116,14 +1149,16 @@ Salida | Audio sin comprimir | 1
 
 #### Configuración
 
-Bloque basado en eventos. Suscríbase al evento `VolumeUpdated` para recibir datos de nivel.
+Bloque basado en eventos. Suscríbase al evento `OnAudioVUMeter` (tipo: `EventHandler<VUMeterXEventArgs>`) para recibir datos de nivel.
 
-Propiedades del evento `VUMeterXData`:
+`VUMeterXEventArgs.MeterData` contiene una instancia `VUMeterXData` con arrays por canal:
 
-| Propiedad | Tipo | Descripción |
+| Propiedad en `VUMeterXData` | Tipo | Descripción |
 |----------|------|-------------|
-| `LeftVolume` | `double` | Nivel de volumen del canal izquierdo en dB |
-| `RightVolume` | `double` | Nivel de volumen del canal derecho en dB |
+| `ChannelsCount` | `int` | Número de canales de audio reportados |
+| `Peak` | `double[]` | Niveles de pico por canal (dB) |
+| `RMS` | `double[]` | Niveles RMS por canal (dB) |
+| `Decay` | `double[]` | Niveles de decay por canal (dB) |
 
 **Elemento GStreamer**: `level`
 
@@ -1144,15 +1179,13 @@ var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
 var vuMeter = new VUMeterBlock();
-vuMeter.VolumeUpdated += (sender, args) =>
+vuMeter.OnAudioVUMeter += (sender, args) =>
 {
-    // Left channel volume in dB
-    var leftVolume = args.LeftVolume;
-
-    // Right channel volume in dB
-    var rightVolume = args.RightVolume;
-
-    Console.WriteLine($"Left: {leftVolume:F2} dB, Right: {rightVolume:F2} dB");
+    var data = args.MeterData;
+    for (int i = 0; i < data.ChannelsCount; i++)
+    {
+        Console.WriteLine($"Ch{i}: Peak={data.Peak[i]:F2} dB, RMS={data.RMS[i]:F2} dB");
+    }
 };
 pipeline.Connect(fileSource.AudioOutput, vuMeter.Input);
 
@@ -1423,11 +1456,10 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-var csoundSettings = new CsoundFilterSettings
-{
-    CsdPath = "filter.csd" // Csound script file
-};
-var csound = new CsoundFilterBlock(csoundSettings);
+// CsoundFilterBlock toma el contenido del script Csound (.csd) directamente, no un objeto settings.
+// Carga el script desde disco y pasa el texto al constructor — opcionalmente establece Loop/ScoreOffset.
+var csdText = File.ReadAllText("filter.csd");
+var csound = new CsoundFilterBlock(csdText, loop: false, scoreOffset: 0.0);
 pipeline.Connect(fileSource.AudioOutput, csound.Input);
 
 var audioRenderer = new AudioRendererBlock();
@@ -1461,7 +1493,7 @@ Salida | Audio sin comprimir | 1
 | `PostMessages` | `bool` | `true` | Si se deben publicar mensajes de bus GStreamer con los resultados de medición |
 | `Interval` | `TimeSpan` | `1 s` | Intervalo entre actualizaciones de medición |
 
-Suscríbase al evento `LoudnessUpdated` para recibir datos de medición.
+`EbuR128LevelBlock` mide la sonoridad internamente y publica los resultados en el bus GStreamer cuando `PostMessages = true`. **No** expone un evento managed — lee la propiedad `level` o maneja el mensaje del bus tú mismo si necesitas los valores desde .NET.
 
 **Elemento GStreamer**: `ebur128level`
 
@@ -1481,11 +1513,11 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-var ebuR128 = new EbuR128LevelBlock();
-ebuR128.LoudnessUpdated += (sender, args) =>
+var ebuR128 = new EbuR128LevelBlock
 {
-    Console.WriteLine($"Momentary: {args.MomentaryLoudness:F2} LUFS");
-    Console.WriteLine($"Short-term: {args.ShortTermLoudness:F2} LUFS");
+    Mode         = EbuR128Mode.All,
+    PostMessages = true,                      // habilita mensajes del bus GStreamer con resultados de medición
+    Interval     = TimeSpan.FromSeconds(1)    // cadencia de medición
 };
 pipeline.Connect(fileSource.AudioOutput, ebuR128.Input);
 
@@ -1541,12 +1573,15 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-var hrtfSettings = new HRTFRenderSettings
+// HRTFRenderBlock tiene constructor sin parámetros; configura vía propiedades.
+// Debes proporcionar un archivo HRIR (Head-Related Impulse Response) — requerido para renderizado espacial.
+var hrtf = new HRTFRenderBlock
 {
-    Azimuth = 45.0,  // Direction in degrees
-    Elevation = 0.0
+    HrirFile           = "hrir.sofa",    // ruta al archivo HRIR
+    InterpolationSteps = 8,              // ulong — transiciones más suaves = más CPU
+    BlockLength        = 512,            // ulong — tamaño del bloque de procesamiento
+    DistanceGain       = 1.0f            // float — cuánto atenúa la distancia
 };
-var hrtf = new HRTFRenderBlock(hrtfSettings);
 pipeline.Connect(fileSource.AudioOutput, hrtf.Input);
 
 var audioRenderer = new AudioRendererBlock();
@@ -1601,13 +1636,14 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
 
-var echoSettings = new RSAudioEchoSettings
+// RSAudioEchoBlock tiene constructor sin parámetros; configura vía propiedades (Delay/MaxDelay son TimeSpan).
+var rsEcho = new RSAudioEchoBlock
 {
-    Delay = 500,      // Delay in milliseconds
-    Intensity = 0.5,  // Echo intensity (0-1)
-    Feedback = 0.3    // Feedback amount (0-1)
+    Delay     = TimeSpan.FromMilliseconds(500),
+    MaxDelay  = TimeSpan.FromMilliseconds(1000),
+    Intensity = 0.5,   // 0.0-1.0 — volumen del eco
+    Feedback  = 0.3    // 0.0-0.9 — cuántas repeticiones antes del decay
 };
-var rsEcho = new RSAudioEchoBlock(echoSettings);
 pipeline.Connect(fileSource.AudioOutput, rsEcho.Input);
 
 var audioRenderer = new AudioRendererBlock();

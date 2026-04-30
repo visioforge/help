@@ -1,6 +1,23 @@
 ---
 title: Crear un Reproductor de Video en C# .NET — Paso a Paso
 description: Tutorial paso a paso en C# para crear un reproductor de video con VisioForge Media Blocks SDK: bloques fuente, renderizado audio/video y controles.
+tags:
+  - Media Blocks SDK
+  - .NET
+  - MediaBlocksPipeline
+  - Windows
+  - macOS
+  - Linux
+  - Android
+  - iOS
+  - C#
+primary_api_classes:
+  - MediaBlocksPipeline
+  - UniversalSourceSettings
+  - UniversalSourceBlock
+  - VideoRendererBlock
+  - DeviceEnumerator
+
 ---
 
 # Construcción de un Reproductor de Video con Funciones Completas usando Media Blocks SDK
@@ -146,3 +163,9 @@ Esto termina elegantemente todo el procesamiento de medios y libera los recursos
 Para un ejemplo de implementación completo con características adicionales como búsqueda, control de volumen y soporte de pantalla completa, consulte nuestro código fuente completo en [GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Player%20Demo%20WPF).
 
 El repositorio contiene demostraciones funcionales para varias plataformas incluyendo WPF, Windows Forms y aplicaciones .NET multiplataforma.
+
+## Ver También
+
+- [Reproductor de video C# (WinForms / WPF)](../../mediaplayer/guides/video-player-csharp.md) — la alternativa de Media Player SDK con configuración en una línea para apps de escritorio Windows
+- [Reproductor Multiplataforma Avalonia](../../mediaplayer/guides/avalonia-player.md) — el mismo enfoque de pipeline para targets de escritorio Windows, macOS y Linux
+- [Reproductor .NET MAUI](../../mediaplayer/guides/maui-player.md) — móvil + escritorio desde una sola base de código (iOS, Android, macOS, Windows)
