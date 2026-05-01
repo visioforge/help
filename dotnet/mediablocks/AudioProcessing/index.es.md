@@ -16,6 +16,7 @@ primary_api_classes:
   - MediaBlocksPipeline
   - UniversalSourceSettings
   - AudioMixerBlock
+  - AudioDelayBlock
 
 ---
 
@@ -186,6 +187,81 @@ var audioRenderer = new AudioRendererBlock();
 pipeline.Connect(corrector.Output, audioRenderer.Input);
 
 await pipeline.StartAsync();
+```
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+### Audio Delay
+
+El bloque Audio Delay desplaza las marcas de tiempo de los búferes de audio para retrasar todo el flujo de audio. Úselo cuando el audio capturado o decodificado llega antes que el video y necesita corregir la sincronización A/V, o cuando solo una rama del pipeline de audio debe retrasarse antes de grabar o transmitir.
+
+`AudioDelayBlock` es diferente de efectos de eco como `EchoBlock` o `RSAudioEchoBlock`: no mezcla una copia retrasada de vuelta en la señal. Retrasa el flujo aplicando un desplazamiento de marca de tiempo.
+
+#### Información del bloque
+
+Nombre: AudioDelayBlock.
+
+Dirección del pin | Tipo de medio | Cantidad de pines
+--- | :---: | :---:
+Entrada | Audio sin comprimir | 1
+Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+Configure mediante `AudioDelaySettings` o pase un `TimeSpan` directamente al constructor:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+|----------|------|---------|-------------|
+| `Delay` | `TimeSpan` | `TimeSpan.Zero` | Retardo de audio no negativo que se aplica al flujo |
+| `Sync` | `bool` | `true` | Sincroniza el elemento subyacente con el reloj del pipeline |
+| `Silent` | `bool` | `true` | Suprime mensajes handoff del elemento subyacente |
+
+**Elemento GStreamer**: `identity` con `ts-offset`.
+
+#### Pipeline de ejemplo
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->AudioDelayBlock;
+    AudioDelayBlock-->AudioRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+// Retrasa el audio 500 ms.
+var audioDelay = new AudioDelayBlock(TimeSpan.FromMilliseconds(500));
+pipeline.Connect(fileSource.AudioOutput, audioDelay.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(audioDelay.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Retrasar solo la rama de grabación
+
+Cuando previsualiza y graba al mismo tiempo, coloque `AudioDelayBlock` solo en la rama que necesita el desplazamiento.
+
+```csharp
+var audioTee = new TeeBlock(2, MediaBlockPadMediaType.Audio);
+pipeline.Connect(audioSource.Output, audioTee.Input);
+
+// Rama de previsualización sin retardo adicional.
+pipeline.Connect(audioTee.Outputs[0], audioRenderer.Input);
+
+// Rama de grabación con audio retrasado.
+var audioDelay = new AudioDelayBlock(TimeSpan.FromMilliseconds(250));
+pipeline.Connect(audioTee.Outputs[1], audioDelay.Input);
+pipeline.Connect(audioDelay.Output, aacEncoder.Input);
+pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 ```
 
 #### Plataformas

@@ -16,6 +16,7 @@ primary_api_classes:
   - MediaBlocksPipeline
   - UniversalSourceSettings
   - AudioMixerBlock
+  - AudioDelayBlock
 
 ---
 
@@ -186,6 +187,81 @@ var audioRenderer = new AudioRendererBlock();
 pipeline.Connect(corrector.Output, audioRenderer.Input);
 
 await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### Audio Delay
+
+The audio delay block shifts audio buffer timestamps to delay the entire audio stream. Use it when the captured or decoded audio arrives earlier than video and you need to correct A/V sync, or when only one branch of an audio pipeline should be delayed before recording or streaming.
+
+`AudioDelayBlock` is different from echo effects such as `EchoBlock` or `RSAudioEchoBlock`: it does not mix a delayed copy back into the signal. It delays the stream itself by applying a timestamp offset.
+
+#### Block info
+
+Name: AudioDelayBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed audio | 1
+Output | Uncompressed audio | 1
+
+#### Settings
+
+Configure via `AudioDelaySettings` or pass a `TimeSpan` directly to the constructor:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `Delay` | `TimeSpan` | `TimeSpan.Zero` | Non-negative audio delay to apply to the stream |
+| `Sync` | `bool` | `true` | Synchronizes the underlying element to the pipeline clock |
+| `Silent` | `bool` | `true` | Suppresses handoff messages from the underlying element |
+
+**GStreamer Element**: `identity` with `ts-offset`.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->AudioDelayBlock;
+    AudioDelayBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+// Delay audio by 500 ms.
+var audioDelay = new AudioDelayBlock(TimeSpan.FromMilliseconds(500));
+pipeline.Connect(fileSource.AudioOutput, audioDelay.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(audioDelay.Output, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Delaying only the recording branch
+
+When you preview and record at the same time, place `AudioDelayBlock` only on the branch that needs the offset.
+
+```csharp
+var audioTee = new TeeBlock(2, MediaBlockPadMediaType.Audio);
+pipeline.Connect(audioSource.Output, audioTee.Input);
+
+// Preview branch without additional delay.
+pipeline.Connect(audioTee.Outputs[0], audioRenderer.Input);
+
+// Recording branch with delayed audio.
+var audioDelay = new AudioDelayBlock(TimeSpan.FromMilliseconds(250));
+pipeline.Connect(audioTee.Outputs[1], audioDelay.Input);
+pipeline.Connect(audioDelay.Output, aacEncoder.Input);
+pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
 ```
 
 #### Platforms
