@@ -10,23 +10,14 @@ tags:
   - Linux
   - Fingerprinting
 primary_api_classes:
-  - FingerprintProcessor
-  - VFPSearchFingerprint
-  - FingerprintDatabase
-  - StoreFingerprint
+  - VFPFingerprintSource
+  - VFPFingerPrint
+  - VFPSearch
+  - VFPCompare
 
 ---
 
 # Video Fingerprinting SDK C++ Code Samples
-
-!!! danger "Sample function names below (`VFPSearchFingerprintGenerate`, `VFPCompareFingerprints`, `VFPSearchFingerprint`) are not real SDK exports"
-
-    These names appear nowhere among the SDK exports of
-    `VisioForge_VFP.dll`. Real samples (under `samples/cpp/` in the SDK
-    distribution) exercise the canonical flat C API:
-    `VFPSearch_Init` / `_Process` / `_Build` / `_Search` and
-    `VFPCompare_Init` / `_Process` / `_Build` / `_Compare`. See
-    [`../index.md`](../index.md) for the workflow. Tracked as defect #090.
 
 ## Available Samples
 
@@ -37,101 +28,76 @@ The C++ SDK includes command-line samples demonstrating core functionality. Thes
 #### Generate Fingerprints
 
 ```cpp
-// vfp_generate.cpp - Generate fingerprints from video files
+// vfp_gen.cpp - Generate fingerprint from video file
 #include <VisioForge_VFP.h>
 
-int main(int argc, char* argv[]) {
-    if (argc < 3) {
-        std::cerr << "Usage: vfp_generate <input_video> <output_fingerprint>" << std::endl;
-        return 1;
-    }
-    
-    // Set license
+int main()
+{
     VFPSetLicenseKey(L"TRIAL");
-    
-    // Generate fingerprint
-    VFP_SearchFingerprintGenerateSettings settings;
-    settings.Mode = VFP_Mode::Search;
-    settings.FrameStep = 10;
-    
-    auto result = VFPSearchFingerprintGenerate(
-        argv[1],  // Input video
-        argv[2],  // Output fingerprint
-        &settings,
-        nullptr   // Progress callback
-    );
-    
-    return result == VFP_ErrorCode::Ok ? 0 : 1;
+
+    VFPFingerprintSource src{};
+    VFPFillSource(L"input.mp4", &src);
+
+    VFPFingerPrint fp{};
+    VFPSearch_GetFingerprintForVideoFile(src, &fp);
+
+    VFPFingerprintSave(&fp, L"output.vfpsig");
+    printf("Fingerprint saved: %d bytes\n", fp.DataSize);
+    return 0;
 }
 ```
 
 #### Compare Videos
 
 ```cpp
-// vfp_compare.cpp - Compare two video fingerprints
+// vfp_compare.cpp - Compare two fingerprints
 #include <VisioForge_VFP.h>
 
-int main(int argc, char* argv[]) {
-    if (argc < 3) {
-        std::cerr << "Usage: vfp_compare <fingerprint1> <fingerprint2>" << std::endl;
-        return 1;
-    }
-    
+int main()
+{
     VFPSetLicenseKey(L"TRIAL");
-    
-    VFP_CompareResult result;
-    auto status = VFPCompareFingerprints(
-        argv[1],
-        argv[2],
-        &result
-    );
-    
-    if (status == VFP_ErrorCode::Ok) {
-        std::cout << "Similarity: " << result.Similarity << "%" << std::endl;
-        std::cout << "Match: " << (result.IsMatch ? "Yes" : "No") << std::endl;
-    }
-    
-    return status == VFP_ErrorCode::Ok ? 0 : 1;
+
+    VFPFingerPrint fp1{}, fp2{};
+    VFPFingerprintLoad(&fp1, L"video1.vfpsig");
+    VFPFingerprintLoad(&fp2, L"video2.vfpsig");
+
+    double diff = VFPCompare_Compare(fp1.Data, fp1.DataSize,
+                                     fp2.Data, fp2.DataSize, 10);
+
+    printf("Difference: %.2f\n", diff);
+    if (diff < 100)       printf("Very similar\n");
+    else if (diff < 500)  printf("Some similarity\n");
+    else                  printf("Different\n");
+
+    return 0;
 }
 ```
 
 #### Search for Fragments
 
 ```cpp
-// vfp_search.cpp - Search for video fragments
+// vfp_search.cpp - Search for fragment in longer video
 #include <VisioForge_VFP.h>
 
-int main(int argc, char* argv[]) {
-    if (argc < 3) {
-        std::cerr << "Usage: vfp_search <source_fingerprint> <target_fingerprint>" << std::endl;
-        return 1;
-    }
-    
+int main()
+{
     VFPSetLicenseKey(L"TRIAL");
-    
-    VFP_SearchResult* results = nullptr;
-    int count = 0;
-    
-    auto status = VFPSearchFingerprint(
-        argv[1],  // Source (fragment)
-        argv[2],  // Target (full video)
-        &results,
-        &count
-    );
-    
-    if (status == VFP_ErrorCode::Ok) {
-        std::cout << "Found " << count << " matches" << std::endl;
-        for (int i = 0; i < count; i++) {
-            std::cout << "Match " << i << ": Position " 
-                     << results[i].Position << "ms, Similarity " 
-                     << results[i].Similarity << "%" << std::endl;
-        }
-        VFPFreeSearchResults(results);
-    }
-    
-    return status == VFP_ErrorCode::Ok ? 0 : 1;
+
+    VFPFingerPrint needle{}, haystack{};
+    VFPFingerprintLoad(&needle, L"fragment.vfpsig");
+    VFPFingerprintLoad(&haystack, L"full_video.vfpsig");
+
+    double diff = 0;
+    int pos = VFPSearch_Search2(&needle, 0, &haystack, 0, &diff, 300);
+    if (pos != INT_MAX)
+        printf("Found at %d seconds (diff: %.2f)\n", pos, diff);
+
+    return 0;
 }
-```
+               results[i].startMs, results[i].endMs, results[i].difference);
+
+    return 0;
+}
 
 ### Building the Samples
 
@@ -205,17 +171,15 @@ private:
         }
     }
     
-    void ProcessVideo(const std::string& video) {
-        VFP_SearchFingerprintGenerateSettings settings;
-        settings.Mode = VFP_Mode::Search;
-        
-        std::string output = video + ".vfp";
-        VFPSearchFingerprintGenerate(
-            video.c_str(),
-            output.c_str(),
-            &settings,
-            nullptr
-        );
+    void ProcessVideo(const std::string& video)
+    {
+        VFPFingerprintSource src{};
+        std::wstring wpath(video.begin(), video.end());
+        VFPFillSource(wpath.c_str(), &src);
+
+        VFPFingerPrint fp{};
+        VFPSearch_GetFingerprintForVideoFile(src, &fp);
+        // Store fp.Data / fp.DataSize
     }
 };
 ```

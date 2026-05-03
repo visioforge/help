@@ -17,49 +17,6 @@ primary_api_classes:
 
 # Processing Filters Pack - Code Examples
 
-!!! danger "Examples on this page do not match the public API — treat as illustrative pseudocode"
-
-    The C# / C++ / VB.NET snippets below were written against fabricated
-    method shapes (`SetEffect(...)`, `SetEffectParam(...)`, string-keyed
-    `SetInputParam("Width", ...)`, 7-arg `SetChromaSettings(...)`, 3-arg
-    `chroma_put_color(r, g, b)`). None of these signatures exist in the
-    real DirectShow filter source (`Video Effects Pro/vf_eff_intf.h`,
-    `Video Mixer/yk_video_mixer_filter_define.h`).
-
-    **Real canonical APIs (verified against the filter source):**
-
-    - **`IVFEffects45`** (Video Effects Pro): only four methods —
-      `add_effect(CVFEffect)`, `set_effect_settings(CVFEffect)`,
-      `remove_effect(int id)`, `clear_effects()`. Per-effect parameters
-      live on the `CVFEffect` struct (and sub-structs like
-      `CVFTextLogoMain`, `CVFGraphicLogoMain`, `CVFZoom`, `CVFPan`).
-    - **`CVFEffectType` enum** (`_SHARED/SharedTypes.h`): real members are
-      `ef_text_logo`, `ef_graphic_logo`, `ef_blue`, `ef_blur`, `ef_color_noise`,
-      `ef_contrast`, `ef_darkness`, `ef_greyscale`, `ef_invert`, `ef_marble`,
-      `ef_mosaic`, `ef_solorize`, `ef_zoom`, `ef_pan`, `ef_fade_in`, `ef_fade_out`,
-      `ef_rotate`, etc. (41 members). The `VF_VIDEO_EFFECT_*` constants seen
-      below do not exist.
-    - **`IVideoMixer`** (note: name is `IVideoMixer`, **not** `IVFVideoMixer`;
-      IID `3318300E-F6F1-4d81-8BC3-9DB06B09F77A`): real signatures are
-      `SetInputParam(int pin_index, VideoInputParam param)`,
-      `SetOutputParam(VideoOutputParam param)`,
-      `SetInputOrder(int pin_index, int order)` (per-pin, not bulk array),
-      `SetChromaSettings(BOOL enabled, COLORREF color, int tolerance1, int tolerance2)`
-      (4 args, mixer-wide). `VideoInputParam` / `VideoOutputParam` are typed
-      structs (no `VFPIP` prefix).
-    - **`IVFChromaKey`** (separate interface from `IVFEffects45`, both on
-      the same `EZrgb24` filter; IID `AF6E8208-30E3-44f0-AAFE-787A6250BAB3`):
-      `chroma_put_color(int color)` takes a packed `COLORREF`-style int —
-      use `RGB(r, g, b)` to build it. `chroma_put_contrast(int low, int high)`
-      sets a contrast range (low/high bounds), not paired contrast values.
-
-    Tracked as defects #020–#027 in the help audit. A full rewrite of this
-    page is queued; in the interim, do not copy-paste the snippets below.
-    For working code, see the canonical interface pages:
-    [interfaces/effects-interface.md](./interfaces/effects-interface.md),
-    [interfaces/video-mixer.md](./interfaces/video-mixer.md),
-    [interfaces/chroma-key.md](./interfaces/chroma-key.md).
-
 ## Overview
 
 This page provides practical code examples for using the Processing Filters Pack, which includes:
@@ -130,15 +87,14 @@ public class VideoEffectsBasicExample
         var effects = effectFilter as IVFEffects45;
         if (effects != null)
         {
-            // Enable Greyscale effect
-            effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GREYSCALE, 1);
-
-            // Set effect parameters (some effects require parameters)
-            // effects.SetEffectParam(effectType, paramName, paramValue);
+            // Enable Greyscale effect via VideoEffectSimple struct
+            var eff = new VideoEffectSimple
+            {
+                Type = (int)VideoEffectType.Greyscale,
+                Enabled = true
+            };
+            effects.add_effect(eff);
         }
-
-        // Connect filters: Source → Effect → Renderer
-        ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
         captureGraph.SetFiltergraph(filterGraph);
 
         // Render through effect filter
@@ -201,8 +157,12 @@ HRESULT ApplyVideoEffect(LPCWSTR filename)
     hr = pEffect->QueryInterface(IID_IVFEffects45, (void**)&pEffects);
     if (SUCCEEDED(hr))
     {
-        // Enable greyscale
-        pEffects->SetEffect(VF_VIDEO_EFFECT_GREYSCALE, 1);
+        // Enable greyscale via VideoEffectSimple struct
+        VideoEffectSimple effect;
+        ZeroMemory(&effect, sizeof(effect));
+        effect.Type = ef_greyscale;
+        effect.Enabled = TRUE;
+        pEffects->add_effect(&effect);
         pEffects->Release();
     }
 
@@ -230,23 +190,29 @@ public class MultipleEffectsExample
         var effects = effectFilter as IVFEffects45;
         if (effects != null)
         {
-            // Enable multiple effects
-            effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_BRIGHTNESS, 1);
-            effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_CONTRAST, 1);
-            effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_SATURATION, 1);
-            // Set parameters for each effect
-            effects.SetEffectParam(
-                VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_BRIGHTNESS,
-                "Value",
-                50);  // Brightness value (0-100)
-            effects.SetEffectParam(
-                VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_CONTRAST,
-                "Value",
-                75);  // Contrast value (0-100)
-            effects.SetEffectParam(
-                VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_SATURATION,
-                "Value",
-                120);  // Saturation value (0-200)
+            // Add darkness/brightness effect (VideoEffectType.Darkness, AmountI controls level)
+            effects.add_effect(new VideoEffectSimple
+            {
+                Type = (int)VideoEffectType.Darkness,
+                Enabled = true,
+                AmountI = 50        // 0 = darkest, 100 = brightest
+            });
+
+            // Add contrast effect (AmountI controls intensity)
+            effects.add_effect(new VideoEffectSimple
+            {
+                Type = (int)VideoEffectType.Contrast,
+                Enabled = true,
+                AmountI = 75        // Contrast intensity
+            });
+
+            // Add saturation effect (AmountI controls saturation level)
+            effects.add_effect(new VideoEffectSimple
+            {
+                Type = (int)VideoEffectType.Saturation,
+                Enabled = true,
+                AmountI = 120       // Saturation level
+            });
         }
     }
 }
@@ -265,52 +231,33 @@ public void ApplyTextOverlay(IBaseFilter effectFilter)
     var effects = effectFilter as IVFEffects45;
     if (effects != null)
     {
-        // Enable text logo effect
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO, 1);
-
-        // Configure text parameters
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO,
-            "Text",
-            "My Video Title");
-
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO,
-            "FontName",
-            "Arial");
-
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO,
-            "FontSize",
-            36);
-
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO,
-            "Color",
-            ColorTranslator.ToWin32(Color.White));
-
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO,
-            "X",
-            50);  // X position
-
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO,
-            "Y",
-            50);  // Y position
-
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO,
-            "Transparent",
-            0);  // Opaque
-
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO,
-            "Alpha",
-            255);  // Fully opaque
+        var eff = new VideoEffectSimple
+        {
+            Type = (int)VideoEffectType.TextLogo,
+            Enabled = true,
+            TextLogo = new MFPTextLogo
+            {
+                X = 50,
+                Y = 50,
+                Text = "My Video Title",
+                FontName = "Arial",
+                FontSize = 36,
+                FontColor = 0xFFFFFF,        // White
+                FontBold = true,
+                TransparentBg = true,
+                Transp = 255,                // Fully opaque
+                BorderMode = 4,              // bm_outline
+                OuterBorderColor = 0x000000, // Black outline
+                OuterBorderSize = 2
+            }
+        };
+        effects.add_effect(eff);
     }
 }
 ```
+
+See [effects-reference.md](./effects-reference.md) for the full `MFPTextLogo` structure
+(text alignment, gradient, date/time display, anti-aliasing, etc.).
 
 ---
 ### Example 4: Image Overlay
@@ -322,39 +269,25 @@ public void ApplyImageOverlay(IBaseFilter effectFilter, string imagePath)
     var effects = effectFilter as IVFEffects45;
     if (effects != null)
     {
-        // Enable graphic logo effect
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GRAPHICLOGO, 1);
-        // Set image file path
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GRAPHICLOGO,
-            "ImageFile",
-            imagePath);
-        // Set position (0-100% of screen)
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GRAPHICLOGO,
-            "X",
-            10);  // 10% from left
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GRAPHICLOGO,
-            "Y",
-            10);  // 10% from top
-        // Set size (0-100% of original)
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GRAPHICLOGO,
-            "Width",
-            25);  // 25% of screen width
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GRAPHICLOGO,
-            "Height",
-            25);  // 25% of screen height
-        // Set transparency (0-255)
-        effects.SetEffectParam(
-            VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GRAPHICLOGO,
-            "Alpha",
-            200);  // Semi-transparent
+        var eff = new VideoEffectSimple
+        {
+            Type = (int)VideoEffectType.ImageLogo,
+            Enabled = true,
+            GraphicalLogo = new MFPGraphicalLogo
+            {
+                X = 10,              // X position in pixels
+                Y = 10,              // Y position in pixels
+                Filename = imagePath,
+                TranspLevel = 200,   // Semi-transparent (0-255)
+                StretchMode = 2      // 0=None, 1=Stretch, 2=Proportional fit
+            }
+        };
+        effects.add_effect(eff);
     }
 }
 ```
+
+See [effects-reference.md](./effects-reference.md) for the full `MFPGraphicalLogo` structure.
 ---
 
 ### Example 5: Denoise Filters
@@ -364,50 +297,48 @@ Apply noise reduction for cleaner video.
 #### C# Denoise Examples
 
 ```csharp
-public enum DenoiseType
-{
-    CAST,
-    Adaptive,
-    Mosquito
-}
-
-public void ApplyDenoise(IBaseFilter effectFilter, DenoiseType type)
+public void ApplyDenoise(IBaseFilter effectFilter, VideoEffectType denoiseType)
 {
     var effects = effectFilter as IVFEffects45;
     if (effects != null)
     {
-        switch (type)
+        var eff = new VideoEffectSimple
         {
-            case DenoiseType.CAST:
-                // CAST denoise - good for general noise
-                effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_DENOISE_CAST, 1);
+            Type = (int)denoiseType,
+            Enabled = true
+        };
+
+        switch (denoiseType)
+        {
+            case VideoEffectType.DenoiseCAST:
+                // CAST denoise — configure via DenoiseCAST sub-struct
+                eff.DenoiseCAST = new MFPDenoiseCAST
+                {
+                    TemporalDifferenceThreshold = 16,
+                    StrongEdgeThreshold = 8
+                };
                 break;
 
-            case DenoiseType.Adaptive:
-                // Adaptive denoise - adjusts based on content
-                effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_DENOISE_ADAPTIVE, 1);
-                effects.SetEffectParam(
-                    VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_DENOISE_ADAPTIVE,
-                    "Strength",
-                    5);  // Strength 1-10
+            case VideoEffectType.DenoiseAdaptive:
+                // Adaptive denoise — threshold controls sensitivity
+                eff.DenoiseAdaptiveThreshold = 20;   // 0-255
+                eff.DenoiseAdaptiveBlurMode = 0;     // 0-3
                 break;
 
-            case DenoiseType.Mosquito:
-                // Mosquito denoise - reduces compression artifacts
-                effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_DENOISE_MOSQUITO, 1);
-                effects.SetEffectParam(
-                    VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_DENOISE_MOSQUITO,
-                    "Threshold",
-                    30);  // Threshold value
+            case VideoEffectType.DenoiseMosquito:
+                // Mosquito denoise — AmountI controls reduction strength
+                eff.AmountI = 30;
                 break;
         }
+
+        effects.add_effect(eff);
     }
 }
 ```
 
 ---
 ### Example 6: All Available Effects
-Complete list of all 35+ effects with basic configuration.
+Complete list of effects with basic configuration.
 #### C# All Effects Reference
 ```csharp
 public class AllEffectsExample
@@ -416,59 +347,53 @@ public class AllEffectsExample
     {
         var effects = effectFilter as IVFEffects45;
         if (effects == null) return;
+
         // Color Filters
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GREYSCALE, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_INVERT, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_RED_FILTER, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GREEN_FILTER, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_BLUE_FILTER, 1);
-        // Image Adjustment
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_BRIGHTNESS, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_BRIGHTNESS, "Value", 50);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_CONTRAST, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_CONTRAST, "Value", 75);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_SATURATION, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_SATURATION, "Value", 120);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_HUE, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_HUE, "Value", 45);
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Greyscale, Enabled = true });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Invert, Enabled = true });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.FilterRed, Enabled = true });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.FilterGreen, Enabled = true });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.FilterBlue, Enabled = true });
+
+        // Image Adjustment (AmountI controls intensity)
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Darkness, Enabled = true, AmountI = 50 });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Contrast, Enabled = true, AmountI = 75 });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Saturation, Enabled = true, AmountI = 120 });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Lightness, Enabled = true, AmountI = 45 });
+
         // Spatial Transforms
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_FLIP_HORIZONTAL, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_FLIP_VERTICAL, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_MIRROR, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_ROTATE, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_ROTATE, "Angle", 90);
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.FlipRight, Enabled = true });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.FlipDown, Enabled = true });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.MirrorHorizontal, Enabled = true });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Rotate, Enabled = true, AmountI = 90 });
+
         // Artistic Effects
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_BLUR, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_BLUR, "Radius", 5);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_SHARPEN, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_SHARPEN, "Amount", 2);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_EMBOSS, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_EDGE_DETECT, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_POSTERIZE, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_POSTERIZE, "Levels", 8);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_SOLARIZE, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_SOLARIZE, "Threshold", 128);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_MOSAIC, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_MOSAIC, "BlockSize", 10);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_MARBLE, 1);
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Blur, Enabled = true, AmountI = 5 });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Sharpen, Enabled = true, AmountI = 2 });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Posterize, Enabled = true, AmountI = 8 });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Solorize, Enabled = true, AmountI = 128 });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Mosaic, Enabled = true, SizeI = 10 });
+
         // Noise Reduction
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_DENOISE_CAST, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_DENOISE_ADAPTIVE, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_DENOISE_MOSQUITO, 1);
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.DenoiseCAST, Enabled = true });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.DenoiseAdaptive, Enabled = true, DenoiseAdaptiveThreshold = 20 });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.DenoiseMosquito, Enabled = true, AmountI = 30 });
+
         // Deinterlacing
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_DEINTERLACE_BLEND, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_DEINTERLACE_TRIANGLE, 1);
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_DEINTERLACE_CAVT, 1);
-        // Overlays
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO, "Text", "Sample");
-        effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GRAPHICLOGO, 1);
-        effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GRAPHICLOGO, "ImageFile", "logo.png");
-        // To disable an effect:
-        // effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_GREYSCALE, 0);
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.DeinterlaceBlend, Enabled = true });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.DeinterlaceTriangle, Enabled = true });
+        effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.DeinterlaceCAVT, Enabled = true });
+
+        // Overlays (TextLogo/ImageLogo need sub-struct — see Examples 3 & 4)
+        // To disable/remove an effect:
+        // effects.remove_effect(effectId);
+        // effects.clear_effects();
     }
 }
 ```
+
+> **Note:** For the full list of `VideoEffectType` members and sub-struct parameters,
+> see [effects-reference.md](./effects-reference.md).
 ---
 
 ## Video Mixer Examples
@@ -501,31 +426,39 @@ public class VideoMixerPIPExample
             Consts.CLSID_VFVideoMixer,
             "Video Mixer");
 
-        // Configure mixer
+        // Configure mixer — real IVFVideoMixer interface
         var mixer = mixerFilter as IVFVideoMixer;
         if (mixer != null)
         {
             // Set output size
-            mixer.SetOutputParam("Width", 1920);
-            mixer.SetOutputParam("Height", 1080);
-            mixer.SetOutputParam("FrameRate", 30.0);
+            mixer.SetOutputParam(new VFPIPVideoOutputParam
+            {
+                Width = 1920,
+                Height = 1080,
+                FrameRateTime = 30
+            });
 
             // Configure main video (input 0) - fullscreen
-            mixer.SetInputParam(0, "X", 0);
-            mixer.SetInputParam(0, "Y", 0);
-            mixer.SetInputParam(0, "Width", 1920);
-            mixer.SetInputParam(0, "Height", 1080);
-            mixer.SetInputParam(0, "Alpha", 255);  // Fully opaque
+            mixer.SetInputParam(0, new VFPIPVideoInputParam
+            {
+                X = 0, Y = 0,
+                Width = 1920, Height = 1080,
+                Alpha = 255
+            });
 
             // Configure PIP video (input 1) - bottom-right corner
-            mixer.SetInputParam(1, "X", 1440);    // 1920 - 480 = 1440
-            mixer.SetInputParam(1, "Y", 810);     // 1080 - 270 = 810
-            mixer.SetInputParam(1, "Width", 480); // 25% width
-            mixer.SetInputParam(1, "Height", 270); // 25% height
-            mixer.SetInputParam(1, "Alpha", 255);
+            mixer.SetInputParam(1, new VFPIPVideoInputParam
+            {
+                X = 1440,    // 1920 - 480
+                Y = 810,     // 1080 - 270
+                Width = 480,
+                Height = 270,
+                Alpha = 255
+            });
 
-            // Set Z-order (layering)
-            mixer.SetInputOrder(new int[] { 0, 1 }); // Main behind, PIP on top
+            // Set Z-order (layering) — per-pin, not bulk array
+            mixer.SetInputOrder(0, 0);  // Main behind
+            mixer.SetInputOrder(1, 1);  // PIP on top
         }
 
         // Connect filters
@@ -587,39 +520,27 @@ public class VideoMixerGridExample
         if (mixer != null)
         {
             // Set output size
-            mixer.SetOutputParam("Width", 1920);
-            mixer.SetOutputParam("Height", 1080);
-            mixer.SetOutputParam("FrameRate", 30.0);
-            // Configure 2x2 grid layout
+            mixer.SetOutputParam(new VFPIPVideoOutputParam
+            {
+                Width = 1920,
+                Height = 1080,
+                FrameRateTime = 30
+            });
             int halfWidth = 960;   // 1920 / 2
             int halfHeight = 540;  // 1080 / 2
             // Top-left (Input 0)
-            mixer.SetInputParam(0, "X", 0);
-            mixer.SetInputParam(0, "Y", 0);
-            mixer.SetInputParam(0, "Width", halfWidth);
-            mixer.SetInputParam(0, "Height", halfHeight);
+            mixer.SetInputParam(0, new VFPIPVideoInputParam { X = 0, Y = 0, Width = halfWidth, Height = halfHeight, Alpha = 255 });
             // Top-right (Input 1)
-            mixer.SetInputParam(1, "X", halfWidth);
-            mixer.SetInputParam(1, "Y", 0);
-            mixer.SetInputParam(1, "Width", halfWidth);
-            mixer.SetInputParam(1, "Height", halfHeight);
+            mixer.SetInputParam(1, new VFPIPVideoInputParam { X = halfWidth, Y = 0, Width = halfWidth, Height = halfHeight, Alpha = 255 });
             // Bottom-left (Input 2)
-            mixer.SetInputParam(2, "X", 0);
-            mixer.SetInputParam(2, "Y", halfHeight);
-            mixer.SetInputParam(2, "Width", halfWidth);
-            mixer.SetInputParam(2, "Height", halfHeight);
+            mixer.SetInputParam(2, new VFPIPVideoInputParam { X = 0, Y = halfHeight, Width = halfWidth, Height = halfHeight, Alpha = 255 });
             // Bottom-right (Input 3)
-            mixer.SetInputParam(3, "X", halfWidth);
-            mixer.SetInputParam(3, "Y", halfHeight);
-            mixer.SetInputParam(3, "Width", halfWidth);
-            mixer.SetInputParam(3, "Height", halfHeight);
-            // All inputs fully opaque
+            mixer.SetInputParam(3, new VFPIPVideoInputParam { X = halfWidth, Y = halfHeight, Width = halfWidth, Height = halfHeight, Alpha = 255 });
+            // Set Z-order (per-pin)
             for (int i = 0; i < 4; i++)
             {
-                mixer.SetInputParam(i, "Alpha", 255);
+                mixer.SetInputOrder(i, i);
             }
-            // Set Z-order (all on same level)
-            mixer.SetInputOrder(new int[] { 0, 1, 2, 3 });
         }
         // Connect sources to mixer and render...
         // (Similar to PIP example)
@@ -655,30 +576,30 @@ public void CreateMixerWithChromaKey(string backgroundPath, string foregroundPat
     if (mixer != null)
     {
         // Configure output
-        mixer.SetOutputParam("Width", 1920);
-        mixer.SetOutputParam("Height", 1080);
+        mixer.SetOutputParam(new VFPIPVideoOutputParam
+        {
+            Width = 1920,
+            Height = 1080
+        });
 
         // Background (fullscreen)
-        mixer.SetInputParam(0, "X", 0);
-        mixer.SetInputParam(0, "Y", 0);
-        mixer.SetInputParam(0, "Width", 1920);
-        mixer.SetInputParam(0, "Height", 1080);
+        mixer.SetInputParam(0, new VFPIPVideoInputParam
+        {
+            X = 0, Y = 0, Width = 1920, Height = 1080
+        });
 
         // Foreground (centered, smaller)
-        mixer.SetInputParam(1, "X", 480);
-        mixer.SetInputParam(1, "Y", 270);
-        mixer.SetInputParam(1, "Width", 960);
-        mixer.SetInputParam(1, "Height", 540);
+        mixer.SetInputParam(1, new VFPIPVideoInputParam
+        {
+            X = 480, Y = 270, Width = 960, Height = 540
+        });
 
-        // Enable chroma key for foreground input
+        // Enable chroma key — mixer-wide, 4 args
         mixer.SetChromaSettings(
-            inputIndex: 1,
             enabled: true,
-            colorR: 0,      // Green screen
-            colorG: 255,
-            colorB: 0,
-            threshold: 50,  // Tolerance
-            blend: 10);     // Edge smoothing
+            color: ColorTranslator.ToWin32(Color.FromArgb(0, 255, 0)),  // Green
+            tolerance1: 50,
+            tolerance2: 10);
     }
 
     // Connect and run...
@@ -703,23 +624,20 @@ public class ChromaKeyExample
             filterGraph,
             Consts.CLSID_VFChromaKey,
             "Chroma Key");
-        // Configure chroma key
+        // Configure chroma key — real IVFChromaKey API
         var chromaKey = chromaFilter as IVFChromaKey;
         if (chromaKey != null)
         {
-            // Set key color (green)
-            chromaKey.chroma_put_color(
-                red: 0,
-                green: 255,
-                blue: 0);
-            // Set contrast/threshold
-            chromaKey.chroma_put_contrast(
-                contrast1: 50,  // Lower threshold
-                contrast2: 100); // Upper threshold
+            // Set key color (green) — single int using RGB macro
+            chromaKey.put_color(ColorTranslator.ToWin32(Color.FromArgb(0, 255, 0)));
+
+            // Set contrast range (low, high bounds)
+            chromaKey.put_contrast(50, 100);
+
             // Set background image (optional)
             if (!string.IsNullOrEmpty(backgroundImagePath))
             {
-                chromaKey.chroma_put_image(backgroundImagePath);
+                chromaKey.put_image(backgroundImagePath);
             }
         }
         // Connect filters: Source → Chroma Key → Renderer
@@ -745,14 +663,18 @@ HRESULT ApplyChromaKey(IBaseFilter* pChromaFilter)
     IVFChromaKey* pChromaKey = NULL;
     HRESULT hr = pChromaFilter->QueryInterface(IID_IVFChromaKey, (void**)&pChromaKey);
     if (FAILED(hr)) return hr;
-    // Set green color (RGB)
-    hr = pChromaKey->chroma_put_color(0, 255, 0);
+
+    // Set green color — single COLORREF argument: RGB(0, 255, 0)
+    hr = pChromaKey->put_color(RGB(0, 255, 0));
     if (FAILED(hr)) goto cleanup;
-    // Set thresholds
-    hr = pChromaKey->chroma_put_contrast(40, 90);
+
+    // Set contrast range (low, high)
+    hr = pChromaKey->put_contrast(40, 90);
     if (FAILED(hr)) goto cleanup;
+
     // Optional: Set background image
-    hr = pChromaKey->chroma_put_image(L"C:\\backgrounds\\studio.jpg");
+    hr = pChromaKey->put_image(L"C:\\backgrounds\\studio.jpg");
+
 cleanup:
     pChromaKey->Release();
     return hr;
@@ -772,18 +694,13 @@ public void ApplyBlueScreen(IBaseFilter chromaFilter)
     var chromaKey = chromaFilter as IVFChromaKey;
     if (chromaKey != null)
     {
-        // Set blue color
-        chromaKey.chroma_put_color(
-            red: 0,
-            green: 0,
-            blue: 255);
+        // Set blue color — single int via RGB
+        chromaKey.put_color(ColorTranslator.ToWin32(Color.FromArgb(0, 0, 255)));
 
-        // Fine-tuned thresholds for blue screen
-        // Lower values = more strict (less tolerance)
-        // Higher values = more loose (more tolerance)
-        chromaKey.chroma_put_contrast(
-            contrast1: 30,   // Tighter lower threshold
-            contrast2: 80);  // Moderate upper threshold
+        // Fine-tuned contrast range for blue screen
+        // Lower low = more strict (less tolerance)
+        // Higher high = more loose (more tolerance)
+        chromaKey.put_contrast(30, 80);
     }
 }
 ```
@@ -798,13 +715,11 @@ public void ApplyCustomColorKey(IBaseFilter chromaFilter, Color keyColor)
     var chromaKey = chromaFilter as IVFChromaKey;
     if (chromaKey != null)
     {
-        // Use any custom color
-        chromaKey.chroma_put_color(
-            red: keyColor.R,
-            green: keyColor.G,
-            blue: keyColor.B);
-        // Standard thresholds
-        chromaKey.chroma_put_contrast(50, 100);
+        // Use any custom color — single int via RGB
+        chromaKey.put_color(ColorTranslator.ToWin32(keyColor));
+
+        // Standard contrast range
+        chromaKey.put_contrast(50, 100);
     }
 }
 // Example usage:
@@ -847,8 +762,8 @@ public class CompleteProcessingPipeline
         var chromaKey = chromaFilter as IVFChromaKey;
         if (chromaKey != null)
         {
-            chromaKey.chroma_put_color(0, 255, 0);  // Green
-            chromaKey.chroma_put_contrast(40, 90);
+            chromaKey.put_color(ColorTranslator.ToWin32(Color.FromArgb(0, 255, 0)));  // Green
+            chromaKey.put_contrast(40, 90);
         }
 
         // 4. Add Video Effects filter
@@ -860,19 +775,25 @@ public class CompleteProcessingPipeline
         var effects = effectsFilter as IVFEffects45;
         if (effects != null)
         {
-            // Apply some effects
-            effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_BRIGHTNESS, 1);
-            effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_BRIGHTNESS, "Value", 60);
-
-            effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_CONTRAST, 1);
-            effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_CONTRAST, "Value", 80);
+            // Apply effects via VideoEffectSimple structs
+            effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Darkness, Enabled = true, AmountI = 60 });
+            effects.add_effect(new VideoEffectSimple { Type = (int)VideoEffectType.Contrast, Enabled = true, AmountI = 80 });
 
             // Add text overlay
-            effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO, 1);
-            effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO, "Text", "LIVE");
-            effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO, "FontSize", 48);
-            effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO, "X", 50);
-            effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_TEXTLOGO, "Y", 50);
+            effects.add_effect(new VideoEffectSimple
+            {
+                Type = (int)VideoEffectType.TextLogo,
+                Enabled = true,
+                TextLogo = new MFPTextLogo
+                {
+                    Text = "LIVE",
+                    FontSize = 48,
+                    X = 50,
+                    Y = 50,
+                    FontColor = 0xFFFFFF,
+                    FontBold = true
+                }
+            });
         }
 
         // 5. Add Video Mixer
@@ -884,23 +805,17 @@ public class CompleteProcessingPipeline
         var mixer = mixerFilter as IVFVideoMixer;
         if (mixer != null)
         {
-            mixer.SetOutputParam("Width", 1920);
-            mixer.SetOutputParam("Height", 1080);
-            mixer.SetOutputParam("FrameRate", 30.0);
+            mixer.SetOutputParam(new VFPIPVideoOutputParam { Width = 1920, Height = 1080, FrameRateTime = 30 });
 
             // Main video (fullscreen background)
-            mixer.SetInputParam(0, "X", 0);
-            mixer.SetInputParam(0, "Y", 0);
-            mixer.SetInputParam(0, "Width", 1920);
-            mixer.SetInputParam(0, "Height", 1080);
+            mixer.SetInputParam(0, new VFPIPVideoInputParam { X = 0, Y = 0, Width = 1920, Height = 1080 });
 
             // Chroma-keyed video (PIP)
-            mixer.SetInputParam(1, "X", 1200);
-            mixer.SetInputParam(1, "Y", 700);
-            mixer.SetInputParam(1, "Width", 640);
-            mixer.SetInputParam(1, "Height", 360);
+            mixer.SetInputParam(1, new VFPIPVideoInputParam { X = 1200, Y = 700, Width = 640, Height = 360 });
 
-            mixer.SetInputOrder(new int[] { 0, 1 });
+            // Set Z-order (per-pin)
+            mixer.SetInputOrder(0, 0);
+            mixer.SetInputOrder(1, 1);
         }
 
         // Connect the pipeline:
@@ -940,29 +855,32 @@ public class CompleteProcessingPipeline
 ---
 ## Troubleshooting
 ### Issue: Effect Not Visible
-**Solution**: Ensure effect is enabled and parameters are set:
+**Solution**: Ensure effect is enabled and parameters are set on the VideoEffectSimple struct:
 ```csharp
-effects.SetEffect(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_BRIGHTNESS, 1);  // 1 = enabled
-effects.SetEffectParam(VF_VIDEO_EFFECT.VF_VIDEO_EFFECT_BRIGHTNESS, "Value", 75);
+var eff = new VideoEffectSimple
+{
+    Type = (int)VideoEffectType.Darkness,
+    Enabled = true,
+    AmountI = 75
+};
+effects.add_effect(eff);
 ```
 ### Issue: Chroma Key Not Working Well
 **Solution**: Adjust contrast thresholds:
 ```csharp
 // For difficult green screens:
-chromaKey.chroma_put_contrast(30, 70);  // Tighter range
+chromaKey.put_contrast(30, 70);  // Tighter range
 // For well-lit green screens:
-chromaKey.chroma_put_contrast(50, 110);  // Wider range
+chromaKey.put_contrast(50, 110);  // Wider range
 ```
 ### Issue: Video Mixer Inputs Not Showing
 **Solution**: Verify input parameters and Z-order:
 ```csharp
-// Ensure inputs are on-screen
-mixer.SetInputParam(index, "X", 0);     // Must be >= 0
-mixer.SetInputParam(index, "Y", 0);     // Must be >= 0
-mixer.SetInputParam(index, "Width", 640);  // Must be > 0
-mixer.SetInputParam(index, "Height", 480); // Must be > 0
-// Check Z-order
-mixer.SetInputOrder(new int[] { 0, 1, 2 });  // 0 = back, 2 = front
+// Ensure inputs are on-screen via VFPIPVideoInputParam struct
+mixer.SetInputParam(0, new VFPIPVideoInputParam { X = 0, Y = 0, Width = 640, Height = 480 });
+// Set Z-order per-pin
+mixer.SetInputOrder(0, 0);  // Input 0 at layer 0
+mixer.SetInputOrder(1, 1);  // Input 1 at layer 1
 ```
 ---
 

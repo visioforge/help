@@ -32,28 +32,6 @@ primary_api_classes:
 
 ---
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "TechArticle",
-  "headline": "Build a Cross-Platform Video Player in C# with Avalonia UI",
-  "description": "Step-by-step C# guide to building a video player in Avalonia UI that runs on Windows, macOS, Linux, Android, and iOS using the MVVM pattern and VisioForge MediaPlayerCoreX.",
-  "author": { "@type": "Organization", "name": "VisioForge" },
-  "publisher": {
-    "@type": "Organization",
-    "name": "VisioForge",
-    "logo": { "@type": "ImageObject", "url": "https://www.visioforge.com/help/static/logo.webp" }
-  },
-  "about": [
-    { "@type": "SoftwareApplication", "name": "Avalonia UI", "applicationCategory": "DeveloperApplication" },
-    { "@type": "SoftwareApplication", "name": "VisioForge Media Player SDK .Net", "applicationCategory": "MultimediaApplication" }
-  ],
-  "proficiencyLevel": "Intermediate",
-  "programmingLanguage": "C#",
-  "operatingSystem": ["Windows", "macOS", "Linux", "Android", "iOS"]
-}
-</script>
-
 # Build a Cross-Platform Video Player in C# with Avalonia UI
 
 Build a video player in C# that runs on **Windows, macOS, Linux, Android, and iOS** from a single Avalonia UI codebase. This guide uses the MVVM pattern with [VisioForge Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net)'s `MediaPlayerCoreX` engine and the `VideoView` control, and references the [SimplePlayerMVVM demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayerMVVM) on GitHub for every snippet shown.
@@ -1205,56 +1183,6 @@ Key takeaways:
 * Proper initialization (`VisioForgeX.InitSDK()`) and cleanup (`VisioForgeX.DestroySDK()`) of the VisioForge SDK are essential.
 
 You can extend this example by adding more features like playlist support, network streaming, video effects, or more advanced UI controls.
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Which platforms does the Avalonia video player support?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The Avalonia player runs on Windows, macOS, Linux, Android, and iOS from a single shared codebase. Each platform uses a dedicated head project (SimplePlayerMVVM.Desktop, .Android, .iOS) with platform-specific NuGet packages for the native GStreamer runtime. The core playback API (MediaPlayerCoreX) and VideoView control are identical across all targets."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is the MVVM pattern required to use the VisioForge SDK with Avalonia?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. The SDK works with any architecture pattern including code-behind. This guide uses ReactiveUI for MVVM because it pairs well with Avalonia's binding system and improves testability. The core classes — MediaPlayerCoreX for playback and VideoView for rendering — have no dependency on ReactiveUI or any MVVM framework. You can also use CommunityToolkit.Mvvm or Prism instead."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I deploy the Avalonia video player to Linux?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Publish with dotnet publish -r linux-x64 (or linux-arm64 for ARM). On the target machine, install the GStreamer runtime (libgstreamer1.0-0 and plugin packages on Ubuntu/Debian, or the equivalent on your distribution). The VisioForge NuGet packages include the native bindings, but GStreamer itself must be present on the system. No X11 or Wayland-specific configuration is needed — Avalonia handles display server selection automatically."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does the Avalonia player support GPU-accelerated video rendering?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. VideoView uses platform-native GPU rendering: Direct3D on Windows, OpenGL or Vulkan on Linux, and Metal on macOS and iOS. The GStreamer engine also supports hardware-accelerated video decoding through VA-API on Linux, DXVA/D3D11 on Windows, and VideoToolbox on macOS/iOS. Hardware acceleration is enabled by default when a compatible GPU is available."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I handle file access and storage permissions on Android and iOS?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Implement a platform-specific IFilePickerService interface as shown in section 6 of this guide. On Android, use Intent with ActionOpenDocument and declare READ_EXTERNAL_STORAGE permission in AndroidManifest.xml. On iOS, use UIDocumentPickerViewController to present the system file picker. On desktop, use Avalonia's built-in StorageProvider.OpenFilePickerAsync(). The SDK accepts any readable file path or stream regardless of how the file was selected."
-      }
-    }
-  ]
-}
-</script>
-
 ## Frequently Asked Questions
 
 ### Which platforms does the Avalonia video player support?

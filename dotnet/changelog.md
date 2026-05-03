@@ -27,6 +27,10 @@ primary_api_classes:
 
 Changes and updates for all .Net SDKs.
 
+## 2026.5.1
+
+* [Core] Breaking change: licensing APIs now accept only raw certificate bytes. Removed file-path and stream-based certificate setters across shared licensing, public SDK wrappers, legacy Windows wrappers, tests, and licensing docs. Applications must load `.vflicense` files into memory and call `SetLicenseCertificateAsync(byte[])`.
+
 ## 2026.3.11
 
 * [Core] Device enumeration: Blackmagic ATEM and Web Presenter devices now appear in regular video/audio device lists instead of being filtered as Decklink hardware. These devices use standard USB/UVC drivers, not the Decklink SDK. Applies to both DirectShow and GStreamer enumeration paths.

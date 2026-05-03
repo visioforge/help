@@ -1,6 +1,6 @@
 ---
-title: Codificación DirectShow NVENC y H.264 con ejemplos en C#
-description: Ejemplos de NVENC hardware, codificadores H.264/H.265/VP8, códecs AAC/MP3 y multiplexación MP4/MKV en DirectShow con código.
+title: Codificación DirectShow: NVENC, H.264/H.265 y Muxers MP4/MKV
+description: Ejemplos de codificación DirectShow: NVENC GPU, H.264/H.265 software, AAC/MP3/Opus audio y multiplexación MP4/MKV/WebM con código C# y C++.
 tags:
   - DirectShow
   - C++
@@ -27,251 +27,104 @@ primary_api_classes:
 
 ---
 
-# Paquete de Filtros de Codificación - Ejemplos de Código
-
-!!! danger "Los ejemplos NVENC en esta página usan tipos enum y nombres de método fabricados — trate como pseudocódigo ilustrativo"
-
-    Los bloques de código NVENC de abajo referencian tipos enum (`NVENC_CODEC.*`,
-    `NVENC_RATE_CONTROL.*`, `NVENC_PRESET.*`, `NVENC_H264_PROFILE.*`,
-    `NVENC_H264_LEVEL.*`, `NVENC_HEVC_PROFILE.*`, `NVENC_HEVC_LEVEL.*`)
-    y nombres de método (`SetMaxBitrate`, `SetVBVBufferSize`, `SetCQP`,
-    `SetHEVCProfile`, `SetHEVCLevel`) que no existen en la interfaz
-    real `INVEncConfig` (`H264EncoderNVENC/Intf.h`).
-
-    **API canónica real de NVENC (verificada contra el código fuente del filtro):**
-
-    - **`SetCodec(int)`** — `0` = H.264, `1` = H.265 (HEVC). Int simple, sin enum.
-    - **`SetRateControl(int)`** — `0` = CQP, `1` = VBR, `2` = CBR. Int simple.
-    - **`SetPreset(GUID)`** — usa los GUIDs del SDK NVIDIA NVENC directamente:
-      `NV_ENC_PRESET_DEFAULT_GUID`, `NV_ENC_PRESET_HP_GUID`,
-      `NV_ENC_PRESET_HQ_GUID`, `NV_ENC_PRESET_LOW_LATENCY_DEFAULT_GUID`, etc.
-    - **`SetProfile(GUID)`** — único setter para GUIDs de perfil de H.264 y HEVC
-      (el códec seleccionado se establece por separado vía `SetCodec`).
-    - **`SetLevel(int)`** — único setter para ambos códecs (valor de nivel como int).
-    - **Bitrate / buffer / calidad:** los nombres reales de método son
-      `SetVbvBitrate(int)`, `SetVbvSize(int)`, `SetQp(int)` — **no**
-      `SetMaxBitrate`, `SetVBVBufferSize`, `SetCQP`. No hay un
-      `SetHEVCProfile` / `SetHEVCLevel` separado — use `SetCodec(1)` y
-      luego `SetProfile(<GUID de perfil HEVC>)`.
-
-    Catalogado como defectos #028–#029 en la auditoría. Una reescritura
-    completa de estas secciones NVENC está en cola; para código funcional,
-    vea la página canónica de la interfaz: [interfaces/nvenc.md](./interfaces/nvenc.md).
+# Encoding Filters Pack - Ejemplos de Código
 
 ## Descripción General
 
-Esta página proporciona ejemplos prácticos de código para codificar video y audio utilizando el Paquete de Filtros de Codificación. Cubre:
+Esta página proporciona ejemplos prácticos para codificar video y audio usando el Encoding Filters Pack. Cubre:
 
-- **Codificador NVENC** - Codificación de hardware NVIDIA (H.264/H.265)
-- **Codificadores de Software** - H.264, H.265, VP8, VP9, MPEG-2
+- **NVENC Encoder** - Codificación hardware NVIDIA (H.264/H.265)
+- **Codificadores Software** - H.264, H.265, VP8, VP9, MPEG-2
 - **Codificadores de Audio** - AAC, MP3, Opus, Vorbis, FLAC
-- **Multiplexores** - MP4, MKV, WebM, MPEG-TS, AVI
+- **Muxers** - MP4, MKV, WebM, MPEG-TS, AVI
 
 ---
-## Prerrequisitos
-### Proyectos C++
+## Requisitos Previos
+### C++ Projects
 ```cpp
 #include <dshow.h>
 #include <streams.h>
-#include "INVEncConfig.h"  // Interfaz NVENC
+#include "INVEncConfig.h"  // NVENC interface
 #pragma comment(lib, "strmiids.lib")
 ```
-### Proyectos C#
+### C# Projects
 ```csharp
 using VisioForge.DirectShowAPI;
 using VisioForge.DirectShowLib;
 using System.Runtime.InteropServices;
 ```
-**Paquetes NuGet**:
+**NuGet Packages**:
 - VisioForge.DirectShowAPI
 - MediaFoundationCore
 ---
 
-## Ejemplos de Codificación de Hardware NVENC
+## Ejemplos de Codificación Hardware NVENC
+
+> **GUIDs de Preset y Perfil NVENC** — Los métodos `SetPreset(Guid)` y `SetProfile(Guid)` aceptan
+> constantes GUID del SDK NVIDIA NVENC. Presets reales: `NV_ENC_PRESET_DEFAULT_GUID`,
+> `NV_ENC_PRESET_HP_GUID` (alto rendimiento), `NV_ENC_PRESET_HQ_GUID` (alta calidad),
+> `NV_ENC_PRESET_LOW_LATENCY_DEFAULT_GUID`, `NV_ENC_PRESET_LOW_LATENCY_HQ_GUID`,
+> `NV_ENC_PRESET_LOW_LATENCY_HP_GUID`, `NV_ENC_PRESET_LOSSLESS_DEFAULT_GUID`,
+> `NV_ENC_PRESET_BD_GUID`. H.264 profiles: `NV_ENC_H264_PROFILE_BASELINE_GUID`,
+> `NV_ENC_H264_PROFILE_MAIN_GUID`, `NV_ENC_H264_PROFILE_HIGH_GUID`.
+> HEVC: `NV_ENC_HEVC_PROFILE_MAIN_GUID`.
+> Estos GUIDs están definidos en el SDK NVIDIA NVENC (`nvEncodeAPI.h`).
 
 ### Ejemplo 1: Codificación Básica NVENC H.264
 
-Codificar video con aceleración de hardware NVIDIA.
+Codifique video con aceleración hardware NVIDIA.
 
-#### Codificación NVENC H.264 en C#
+#### C# NVENC H.264
 
 ```csharp
-using System;
-using System.Runtime.InteropServices;
-using VisioForge.DirectShowAPI;
-using VisioForge.DirectShowLib;
+using VisioForge.Core.Types.Output;
 
-public class NVENCBasicExample
+// ...
+
+var nvenc = encoderFilter as INVEncConfig;
+if (nvenc != null)
 {
-    private IFilterGraph2 filterGraph;
-    private IMediaControl mediaControl;
-
-    public void EncodeWithNVENC(string inputFile, string outputFile)
-    {
-        filterGraph = (IFilterGraph2)new FilterGraph();
-        mediaControl = (IMediaControl)filterGraph;
-
-        // Agregar filtro de fuente
-        filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter);
-
-        // Agregar Codificador NVENC
-        var encoderFilter = FilterGraphTools.AddFilterFromClsid(
-            filterGraph,
-            Consts.CLSID_VFNVENCEncoder,
-            "NVENC Encoder");
-
-        // Configurar NVENC
-        var nvenc = encoderFilter as INVEncConfig;
-        if (nvenc != null)
-        {
-            // Establecer códec (H.264)
-            nvenc.SetCodec(NVENC_CODEC.NVENC_CODEC_H264);
-
-            // Establecer modo de control de tasa
-            nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CBR);
-
-            // Establecer tasa de bits (5 Mbps)
-            nvenc.SetBitrate(5000000);
-
-            // Establecer preajuste de calidad
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P4);  // Equilibrado
-
-            // Establecer tamaño GOP (intervalo de fotogramas clave)
-            nvenc.SetGOP(60);  // Cada 2 segundos a 30fps
-
-            // Establecer B-frames (GPUs Turing+)
-            nvenc.SetBFrames(2);
-
-            // Establecer perfil
-            nvenc.SetProfile(NVENC_H264_PROFILE.NVENC_H264_PROFILE_HIGH);
-
-            // Establecer nivel
-            nvenc.SetLevel(NVENC_H264_LEVEL.NVENC_H264_LEVEL_41);
-        }
-
-        // Agregar multiplexor MP4
-        var muxerFilter = FilterGraphTools.AddFilterFromClsid(
-            filterGraph,
-            Consts.CLSID_VFMP4Muxer,
-            "MP4 Muxer");
-
-        // Establecer archivo de salida
-        var fileSink = muxerFilter as IFileSinkFilter;
-        fileSink?.SetFileName(outputFile, null);
-
-        // Conectar filtros: Fuente → NVENC → Multiplexor
-        ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
-        captureGraph.SetFiltergraph(filterGraph);
-
-        // Conectar ruta de video
-        captureGraph.RenderStream(null, MediaType.Video, sourceFilter, encoderFilter, muxerFilter);
-
-        // Conectar ruta de audio (paso directo o codificar)
-        // captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, muxerFilter);
-
-        // Ejecutar codificación
-        mediaControl.Run();
-
-        // Esperar finalización...
-        // (Monitorear IMediaEventEx para EC_COMPLETE)
-
-        Marshal.ReleaseComObject(captureGraph);
-    }
-
-    public void Stop()
-    {
-        mediaControl?.Stop();
-
-        FilterGraphTools.RemoveAllFilters(filterGraph);
-
-        if (mediaControl != null) Marshal.ReleaseComObject(mediaControl);
-        if (filterGraph != null) Marshal.ReleaseComObject(filterGraph);
-    }
+    nvenc.SetCodec(NVENCEncoder.H264);
+    nvenc.SetRateControl(NVENCRateControlMode.CBR);
+    nvenc.SetBitrate(5000000);                    // 5 Mbps
+    nvenc.SetPreset(NV_ENC_PRESET_DEFAULT_GUID);   // Equilibrio entre calidad y velocidad
+    nvenc.SetGOP(60);                              // Fotograma clave cada 60 cuadros
+    nvenc.SetBFrames(2);                           // B-frames
+    nvenc.SetProfile(NV_ENC_H264_PROFILE_HIGH_GUID);
+    nvenc.SetLevel(NVENCEncoderLevel.H264_41);     // Nivel 4.1
 }
 ```
 
-#### Codificación NVENC H.264 en C++
+#### C++ NVENC H.264
 
 ```cpp
-HRESULT EncodeWithNVENC(LPCWSTR inputFile, LPCWSTR outputFile)
+hr = pEncoder->QueryInterface(IID_INVEncConfig, (void**)&pNVEnc);
+if (SUCCEEDED(hr))
 {
-    IGraphBuilder* pGraph = NULL;
-    IBaseFilter* pSource = NULL;
-    IBaseFilter* pEncoder = NULL;
-    IBaseFilter* pMuxer = NULL;
-    INVEncConfig* pNVEnc = NULL;
+    pNVEnc->SetCodec(0);                              // H264
+    pNVEnc->SetRateControl(2);                        // CBR
+    pNVEnc->SetBitrate(5000000);                      // 5 Mbps
+    pNVEnc->SetPreset(NV_ENC_PRESET_DEFAULT_GUID);    // Equilibrado
+    pNVEnc->SetGOP(60);                               // Intervalo de fotogramas clave
+    pNVEnc->SetBFrames(2);                            // B-frames
+    pNVEnc->SetProfile(NV_ENC_H264_PROFILE_HIGH_GUID);
+    pNVEnc->SetLevel(41);                             // Nivel 4.1
 
-    // Crear gráfico
-    HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
-                                  IID_IGraphBuilder, (void**)&pGraph);
-    if (FAILED(hr)) return hr;
-
-    // Agregar fuente
-    hr = pGraph->AddSourceFilter(inputFile, L"Source", &pSource);
-    if (FAILED(hr)) goto cleanup;
-
-    // Agregar codificador NVENC
-    hr = CoCreateInstance(CLSID_VFNVENCEncoder, NULL, CLSCTX_INPROC_SERVER,
-                         IID_IBaseFilter, (void**)&pEncoder);
-    if (FAILED(hr)) goto cleanup;
-
-    hr = pGraph->AddFilter(pEncoder, L"NVENC Encoder");
-    if (FAILED(hr)) goto cleanup;
-
-    // Configurar NVENC
-    hr = pEncoder->QueryInterface(IID_INVEncConfig, (void**)&pNVEnc);
-    if (SUCCEEDED(hr))
-    {
-        pNVEnc->SetCodec(NVENC_CODEC_H264);
-        pNVEnc->SetRateControl(NVENC_RC_CBR);
-        pNVEnc->SetBitrate(5000000);  // 5 Mbps
-        pNVEnc->SetPreset(NVENC_PRESET_P4);
-        pNVEnc->SetGOP(60);
-
-        pNVEnc->Release();
-    }
-
-    // Agregar multiplexor
-    hr = CoCreateInstance(CLSID_VFMP4Muxer, NULL, CLSCTX_INPROC_SERVER,
-                         IID_IBaseFilter, (void**)&pMuxer);
-    if (FAILED(hr)) goto cleanup;
-
-    hr = pGraph->AddFilter(pMuxer, L"MP4 Muxer");
-    if (FAILED(hr)) goto cleanup;
-
-    // Establecer archivo de salida
-    IFileSinkFilter* pFileSink = NULL;
-    hr = pMuxer->QueryInterface(IID_IFileSinkFilter, (void**)&pFileSink);
-    if (SUCCEEDED(hr))
-    {
-        pFileSink->SetFileName(outputFile, NULL);
-        pFileSink->Release();
-    }
-
-    // Conectar filtros y ejecutar...
-    // (Usar ICaptureGraphBuilder2::RenderStream)
-
-cleanup:
-    if (pMuxer) pMuxer->Release();
-    if (pEncoder) pEncoder->Release();
-    if (pSource) pSource->Release();
-    if (pGraph) pGraph->Release();
-
-    return hr;
+    pNVEnc->Release();
 }
 ```
 
 ---
 ### Ejemplo 2: Codificación NVENC H.265 (HEVC)
-Codificar con H.265 para una mejor compresión.
-#### NVENC H.265 en C#
+Codifique con H.265 para mejor compresión.
+#### C# NVENC H.265
 ```csharp
 public void EncodeH265(string inputFile, string outputFile)
 {
     var filterGraph = (IFilterGraph2)new FilterGraph();
-    // Agregar fuente
+    // Añadir fuente
     filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter);
-    // Agregar codificador NVENC
+    // Añadir codificador NVENC
     var encoderFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFNVENCEncoder,
@@ -279,22 +132,16 @@ public void EncodeH265(string inputFile, string outputFile)
     var nvenc = encoderFilter as INVEncConfig;
     if (nvenc != null)
     {
-        // Códec H.265/HEVC
-        nvenc.SetCodec(NVENC_CODEC.NVENC_CODEC_HEVC);
-        // Control de tasa: CQP (Calidad Constante)
-        nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CQP);
-        nvenc.SetCQP(23);  // Calidad: 0=sin pérdida, 51=peor
-        // Preajuste de calidad
-        nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P5);  // Mayor calidad
-        // Perfil H.265
-        nvenc.SetHEVCProfile(NVENC_HEVC_PROFILE.NVENC_HEVC_PROFILE_MAIN);
-        // Nivel H.265
-        nvenc.SetHEVCLevel(NVENC_HEVC_LEVEL.NVENC_HEVC_LEVEL_41);
-        // GOP y B-frames
-        nvenc.SetGOP(120);  // 4 segundos a 30fps
+        nvenc.SetCodec(NVENCEncoder.HEVC);
+        nvenc.SetRateControl(NVENCRateControlMode.CONST_QP);
+        nvenc.SetQp(23);                            // QP 23: buen equilibrio
+        nvenc.SetPreset(NV_ENC_PRESET_HQ_GUID);      // Alta calidad
+        nvenc.SetProfile(NV_ENC_HEVC_PROFILE_MAIN_GUID);
+        nvenc.SetLevel(NVENCEncoderLevel.H264_41);   // Nivel 4.1
+        nvenc.SetGOP(120);                           // 4 segundos a 30 fps
         nvenc.SetBFrames(3);
     }
-    // Agregar multiplexor
+    // Añadir muxer
     var muxerFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFMP4Muxer,
@@ -316,83 +163,64 @@ public void EncodeH265(string inputFile, string outputFile)
 
 Diferentes estrategias de control de tasa para varios casos de uso.
 
-#### Ejemplos de Control de Tasa en C#
+#### C# Control de Tasa
 
 ```csharp
-public enum RateControlMode
-{
-    CBR,     // Tasa de Bits Constante
-    VBR,     // Tasa de Bits Variable
-    CQP      // Calidad Constante
-}
+using VisioForge.Core.Types.Output;
 
-public void ConfigureRateControl(INVEncConfig nvenc, RateControlMode mode)
+public void ConfigureRateControl(INVEncConfig nvenc, NVENCRateControlMode mode)
 {
     switch (mode)
     {
-        case RateControlMode.CBR:
-            // Mejor para transmisión (tasa de bits predecible)
-            nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CBR);
-            nvenc.SetBitrate(5000000);      // 5 Mbps
-            nvenc.SetMaxBitrate(5000000);   // Igual que la tasa de bits para CBR
-            nvenc.SetVBVBufferSize(10000000); // Búfer de 10 Mb
+        case NVENCRateControlMode.CBR:
+            nvenc.SetRateControl(NVENCRateControlMode.CBR);
+            nvenc.SetBitrate(5000000);       // 5 Mbps target
+            nvenc.SetVbvBitrate(5000000);    // Same as target for CBR
+            nvenc.SetVbvSize(10000000);      // 10 Mb buffer
             break;
 
-        case RateControlMode.VBR:
-            // Mejor para grabación (mejor calidad)
-            nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_VBR);
-            nvenc.SetBitrate(5000000);      // Promedio 5 Mbps
-            nvenc.SetMaxBitrate(8000000);   // Pico 8 Mbps
-            nvenc.SetVBVBufferSize(10000000);
+        case NVENCRateControlMode.VBR:
+            nvenc.SetRateControl(NVENCRateControlMode.VBR);
+            nvenc.SetBitrate(5000000);       // Average 5 Mbps
+            nvenc.SetVbvBitrate(8000000);    // Peak 8 Mbps
+            nvenc.SetVbvSize(10000000);
             break;
 
-        case RateControlMode.CQP:
-            // Mejor para archivo (calidad consistente)
-            nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CQP);
-            nvenc.SetCQP(23);  // Valor QP: menor = mejor calidad
-            // No se necesitan configuraciones de tasa de bits para CQP
+        case NVENCRateControlMode.CONST_QP:
+            nvenc.SetRateControl(NVENCRateControlMode.CONST_QP);
+            nvenc.SetQp(23);                 // QP: lower = better quality
             break;
     }
 }
 ```
 
 ---
-### Ejemplo 4: Preajustes de Calidad NVENC
+### Ejemplo 4: Presets de Calidad NVENC
 Equilibrio entre velocidad y calidad.
-#### Preajustes de Calidad en C#
+#### C# Presets de Calidad
 ```csharp
 public void SetQualityPreset(INVEncConfig nvenc, string useCase)
 {
     switch (useCase.ToLower())
     {
         case "realtime":
-            // Codificación más rápida (transmisión en vivo)
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P1);
-            nvenc.SetBFrames(0);  // Sin B-frames para baja latencia
+            nvenc.SetPreset(NV_ENC_PRESET_LOW_LATENCY_HP_GUID);
+            nvenc.SetBFrames(0);
             break;
         case "fast":
-            // Codificación rápida
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P2);
+            nvenc.SetPreset(NV_ENC_PRESET_LOW_LATENCY_DEFAULT_GUID);
             nvenc.SetBFrames(1);
             break;
         case "balanced":
-            // Velocidad/calidad equilibrada (recomendado)
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P4);
+            nvenc.SetPreset(NV_ENC_PRESET_DEFAULT_GUID);
             nvenc.SetBFrames(2);
             break;
         case "quality":
-            // Mayor calidad
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P6);
+            nvenc.SetPreset(NV_ENC_PRESET_HQ_GUID);
             nvenc.SetBFrames(3);
             break;
-        case "maximum":
-            // Mejor calidad (más lento)
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P7);
-            nvenc.SetBFrames(4);
-            break;
         default:
-            // Por defecto a equilibrado
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P4);
+            nvenc.SetPreset(NV_ENC_PRESET_DEFAULT_GUID);
             nvenc.SetBFrames(2);
             break;
     }
@@ -400,33 +228,33 @@ public void SetQualityPreset(INVEncConfig nvenc, string useCase)
 ```
 ---
 
-## Ejemplos de Codificación por Software
+## Ejemplos de Codificación Software
 
 ### Ejemplo 5: Codificador H.264 por Software
 
-Usar codificación H.264 basada en CPU.
+Utilice codificación H.264 basada en CPU.
 
-#### H.264 por Software en C#
+#### C# H.264 por Software
 
 ```csharp
 public void EncodeSoftwareH264(string inputFile, string outputFile)
 {
     var filterGraph = (IFilterGraph2)new FilterGraph();
 
-    // Agregar fuente
+    // Añadir fuente
     filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter);
 
-    // Agregar codificador H.264 por software
+    // Añadir codificador H.264 por software
     var encoderFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFH264Encoder,  // Codificador por software
         "H.264 Encoder");
 
-    // Configurar codificador (si la interfaz está disponible)
+    // Configurar el codificador (si la interfaz está disponible)
     // var h264Config = encoderFilter as IH264EncoderConfig;
-    // Configurar tasa de bits, calidad, etc.
+    // Configurar bitrate, calidad, etc.
 
-    // Agregar multiplexor
+    // Añadir muxer
     var muxerFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFMP4Muxer,
@@ -451,15 +279,15 @@ public void EncodeSoftwareH264(string inputFile, string outputFile)
 ---
 ## Ejemplos de Codificación de Audio
 ### Ejemplo 6: Codificación de Audio AAC
-Codificar audio a formato AAC.
-#### Codificación AAC en C#
+Codifique el audio en formato AAC.
+#### C# Audio AAC
 ```csharp
 public void EncodeAACAudio(string inputFile, string outputFile)
 {
     var filterGraph = (IFilterGraph2)new FilterGraph();
-    // Agregar fuente
+    // Añadir fuente
     filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter);
-    // Agregar codificador de video (ej. NVENC)
+    // Añadir codificador de video (por ejemplo, NVENC)
     var videoEncoderFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFNVENCEncoder,
@@ -467,12 +295,12 @@ public void EncodeAACAudio(string inputFile, string outputFile)
     var nvenc = videoEncoderFilter as INVEncConfig;
     if (nvenc != null)
     {
-        nvenc.SetCodec(NVENC_CODEC.NVENC_CODEC_H264);
-        nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CBR);
+        nvenc.SetCodec(NVENCEncoder.H264);
+        nvenc.SetRateControl(NVENCRateControlMode.CBR);
         nvenc.SetBitrate(5000000);
-        nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P4);
+        nvenc.SetPreset(NV_ENC_PRESET_DEFAULT_GUID);
     }
-    // Agregar codificador de audio AAC
+    // Añadir codificador de audio AAC
     var audioEncoderFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFAACEncoder,
@@ -481,7 +309,7 @@ public void EncodeAACAudio(string inputFile, string outputFile)
     // var aacConfig = audioEncoderFilter as IAACEncoderConfig;
     // aacConfig?.SetBitrate(192000);  // 192 kbps
     // aacConfig?.SetProfile(AAC_PROFILE_LC);
-    // Agregar multiplexor
+    // Añadir muxer
     var muxerFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFMP4Muxer,
@@ -495,7 +323,7 @@ public void EncodeAACAudio(string inputFile, string outputFile)
     captureGraph.RenderStream(null, MediaType.Video, sourceFilter, videoEncoderFilter, muxerFilter);
     // Ruta de audio
     captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, audioEncoderFilter, muxerFilter);
-    // Ejecutar codificación
+    // Iniciar la codificación
     var mediaControl = (IMediaControl)filterGraph;
     mediaControl.Run();
     Marshal.ReleaseComObject(captureGraph);
@@ -503,11 +331,11 @@ public void EncodeAACAudio(string inputFile, string outputFile)
 ```
 ---
 
-### Ejemplo 7: Soporte para Múltiples Códecs de Audio
+### Ejemplo 7: Selección de Códec de Audio
 
 Soporte para diferentes códecs de audio.
 
-#### Selección de Códec de Audio en C#
+#### C# Selección de Códec
 
 ```csharp
 public enum AudioCodec
@@ -552,7 +380,7 @@ public IBaseFilter CreateAudioEncoder(IFilterGraph2 filterGraph, AudioCodec code
             break;
 
         default:
-            throw new ArgumentException("Unsupported audio codec");
+            throw new ArgumentException("Códec de audio no compatible");
     }
 
     return FilterGraphTools.AddFilterFromClsid(filterGraph, encoderCLSID, encoderName);
@@ -560,27 +388,27 @@ public IBaseFilter CreateAudioEncoder(IFilterGraph2 filterGraph, AudioCodec code
 ```
 
 ---
-## Ejemplos de Multiplexación de Contenedores
+## Ejemplos de Contenedores (Muxing)
 ### Ejemplo 8: Contenedor MP4
-Multiplexar video y audio a formato MP4.
-#### Multiplexación MP4 en C#
+Multiplexe video y audio a formato MP4.
+#### C# MP4 Muxing
 ```csharp
 public void CreateMP4(string inputFile, string outputFile)
 {
     var filterGraph = (IFilterGraph2)new FilterGraph();
-    // Agregar fuente
+    // Añadir fuente
     filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter);
-    // Agregar codificador de video
+    // Añadir codificador de video
     var videoEncoder = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFNVENCEncoder,
         "NVENC Encoder");
-    // Agregar codificador de audio
+    // Añadir codificador de audio
     var audioEncoder = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFAACEncoder,
         "AAC Encoder");
-    // Agregar multiplexor MP4
+    // Añadir muxer MP4
     var muxerFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFMP4Muxer,
@@ -588,9 +416,9 @@ public void CreateMP4(string inputFile, string outputFile)
     // Establecer archivo de salida
     var fileSink = muxerFilter as IFileSinkFilter;
     fileSink?.SetFileName(outputFile, null);
-    // Configurar multiplexor (si es necesario)
+    // Configurar el muxer (si es necesario)
     // var mp4Config = muxerFilter as IMP4MuxerConfig;
-    // mp4Config?.SetFastStart(true);  // Habilitar inicio rápido para web
+    // mp4Config?.SetFastStart(true);  // Activar inicio rápido para web
     // Conectar filtros
     ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
     captureGraph.SetFiltergraph(filterGraph);
@@ -605,19 +433,19 @@ public void CreateMP4(string inputFile, string outputFile)
 
 ### Ejemplo 9: Contenedor MKV
 
-Crear archivos Matroska (MKV).
+Cree archivos Matroska (MKV).
 
-#### Multiplexación MKV en C#
+#### C# MKV Muxing
 
 ```csharp
 public void CreateMKV(string inputFile, string outputFile)
 {
     var filterGraph = (IFilterGraph2)new FilterGraph();
 
-    // Agregar fuente
+    // Añadir fuente
     filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter);
 
-    // Agregar codificadores
+    // Añadir codificadores
     var videoEncoder = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFNVENCEncoder,
@@ -628,7 +456,7 @@ public void CreateMKV(string inputFile, string outputFile)
         Consts.CLSID_VFAACEncoder,
         "AAC Encoder");
 
-    // Agregar multiplexor MKV
+    // Añadir muxer MKV
     var muxerFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFMKVMuxer,
@@ -653,25 +481,25 @@ public void CreateMKV(string inputFile, string outputFile)
 
 ---
 ### Ejemplo 10: Contenedor WebM
-Crear archivos WebM para entrega web.
-#### Multiplexación WebM en C#
+Cree archivos WebM para entrega web.
+#### C# WebM Muxing
 ```csharp
 public void CreateWebM(string inputFile, string outputFile)
 {
     var filterGraph = (IFilterGraph2)new FilterGraph();
-    // Agregar fuente
+    // Añadir fuente
     filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter);
-    // Agregar codificador de video VP9 (estándar WebM)
+    // Añadir codificador de video VP9 (estándar WebM)
     var videoEncoder = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFVP9Encoder,
         "VP9 Encoder");
-    // Agregar codificador de audio Opus (estándar WebM)
+    // Añadir codificador de audio Opus (estándar WebM)
     var audioEncoder = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFOpusEncoder,
         "Opus Encoder");
-    // Agregar multiplexor WebM
+    // Añadir muxer WebM
     var muxerFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFWebMMuxer,
@@ -690,13 +518,13 @@ public void CreateWebM(string inputFile, string outputFile)
 ```
 ---
 
-## Tubería de Codificación Completa
+## Pipeline de Codificación Completo
 
-### Ejemplo 11: Codificador con Todas las Funciones
+### Ejemplo 11: Codificador Completo
 
-Aplicación de codificación completa con todas las características.
+Aplicación de codificación completa con todas las funciones.
 
-#### Codificador Completo en C#
+#### C# Codificador Completo
 
 ```csharp
 using System;
@@ -748,7 +576,7 @@ public class CompleteEncoder : IDisposable
         int videoBitrate = 5000000,
         int audioBitrate = 192000)
     {
-        // Agregar fuente
+        // Añadir fuente
         filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter);
 
         // Crear codificador de video
@@ -759,14 +587,14 @@ public class CompleteEncoder : IDisposable
         IBaseFilter audioEncoder = CreateAudioEncoder(audioCodec);
         ConfigureAudioEncoder(audioEncoder, audioCodec, audioBitrate);
 
-        // Crear multiplexor
+        // Crear muxer
         IBaseFilter muxer = CreateMuxer(container);
 
         // Establecer archivo de salida
         var fileSink = muxer as IFileSinkFilter;
         fileSink?.SetFileName(outputFile, null);
 
-        // Conectar tubería
+        // Conectar la canalización
         int hr = captureGraph.RenderStream(null, MediaType.Video, sourceFilter, videoEncoder, muxer);
         hr = captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, audioEncoder, muxer);
     }
@@ -807,13 +635,10 @@ public class CompleteEncoder : IDisposable
             var nvenc = encoder as INVEncConfig;
             if (nvenc != null)
             {
-                nvenc.SetCodec(codec == VideoCodec.H264_NVENC ?
-                              NVENC_CODEC.NVENC_CODEC_H264 :
-                              NVENC_CODEC.NVENC_CODEC_HEVC);
-
-                nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CBR);
+                nvenc.SetCodec(codec == VideoCodec.H264_NVENC ? NVENCEncoder.H264 : NVENCEncoder.HEVC);
+                nvenc.SetRateControl(NVENCRateControlMode.CBR);
                 nvenc.SetBitrate(bitrate);
-                nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P4);
+                nvenc.SetPreset(NV_ENC_PRESET_DEFAULT_GUID);
                 nvenc.SetGOP(60);
                 nvenc.SetBFrames(2);
             }
@@ -839,7 +664,7 @@ public class CompleteEncoder : IDisposable
                 break;
 
             default:
-                throw new ArgumentException("Unsupported audio codec");
+                throw new ArgumentException("Códec de audio no compatible");
         }
 
         return FilterGraphTools.AddFilterFromClsid(filterGraph, clsid, name);
@@ -847,7 +672,7 @@ public class CompleteEncoder : IDisposable
 
     private void ConfigureAudioEncoder(IBaseFilter encoder, AudioCodec codec, int bitrate)
     {
-        // Configurar codificador de audio basado en el tipo de códec
+        // Configurar el codificador de audio según el tipo de códec
         // (Configuración específica de la interfaz)
     }
 
@@ -969,32 +794,31 @@ public enum ContainerFormat
 ### Problema: NVENC No Disponible
 **Solución**: Verifique la compatibilidad de la GPU:
 ```csharp
-var nvenc = encoder as INVEncConfig;
-if (nvenc != null)
+var nvenc2 = encoder as INVEncConfig2;
+if (nvenc2 != null)
 {
-    // Intentar establecer códec
-    int hr = nvenc.SetCodec(NVENC_CODEC.NVENC_CODEC_H264);
-    if (hr != 0)
+    int hr = nvenc2.CheckNVENCAvailable(out bool available, out int status);
+    if (hr != 0 || !available)
     {
         Console.WriteLine("NVENC not available - GPU may not support it");
-        // Recurrir al codificador por software
+        // Fall back to software encoder
     }
 }
 ```
 ### Problema: Codificación Demasiado Lenta
-**Solución**: Ajuste el preajuste de calidad:
+**Solución**: Ajuste el preset de calidad:
 ```csharp
-// Usar preajuste más rápido
-nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P1);  // Más rápido
-nvenc.SetBFrames(0);  // Deshabilitar B-frames
+// Use un preset más rápido
+nvenc.SetPreset(NV_ENC_PRESET_LOW_LATENCY_HP_GUID);
+nvenc.SetBFrames(0);  // Desactivar B-frames
 ```
-### Problema: Tamaño de Archivo de Salida Demasiado Grande
-**Solución**: Ajuste la tasa de bits o use un mejor códec:
+### Problema: Tamaño de Archivo Demasiado Grande
+**Solución**: Ajuste el bitrate o use un códec mejor:
 ```csharp
-// Bajar tasa de bits
-nvenc.SetBitrate(2000000);  // 2 Mbps en lugar de 5
+// Reducir bitrate
+nvenc.SetBitrate(2000000);  // 2 Mbps en vez de 5
 // O usar H.265 para mejor compresión
-nvenc.SetCodec(NVENC_CODEC.NVENC_CODEC_HEVC);
+nvenc.SetCodec(NVENCEncoder.HEVC);
 ```
 ---
 
@@ -1002,11 +826,11 @@ nvenc.SetCodec(NVENC_CODEC.NVENC_CODEC_HEVC);
 
 ### Documentación
 
-- [Interfaz NVENC](interfaces/nvenc.md) - API completa de NVENC
+- [Interfaz NVENC](interfaces/nvenc.md) - API NVENC completa
 - [Referencia de Códecs](codecs-reference.md) - Todos los códecs de video/audio
-- [Referencia de Multiplexores](muxers-reference.md) - Formatos de contenedor
+- [Referencia de Muxers](muxers-reference.md) - Formatos de contenedor
 
 ### Recursos Externos
 
-- [Documentación de NVIDIA NVENC](https://developer.nvidia.com/video-codec-sdk)
+- [Documentación NVIDIA NVENC](https://developer.nvidia.com/video-codec-sdk)
 - [Especificación H.264](https://www.itu.int/rec/T-REC-H.264)

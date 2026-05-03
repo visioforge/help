@@ -1,6 +1,6 @@
 ---
 title: Streaming NDI de Video y Audio por Red IP en C# .NET
-description: Transmita video y audio a NDI desde cámaras, archivos y dispositivos de captura en C# .NET. Guía con ejemplos SDK, remuestreo de audio y solución de problemas.
+description: Transmita video y audio a NDI desde cámaras y archivos en C# .NET. Guía con ejemplos de salida SDK, remuestreo de audio y solución de problemas.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -11,15 +11,11 @@ tags:
   - Windows
   - macOS
   - Linux
-  - Android
-  - iOS
   - GStreamer
   - Capture
   - Streaming
   - Editing
   - Webcam
-  - IP Camera
-  - NDI Source
   - NDI
   - MP4
   - C#
@@ -46,7 +42,7 @@ Network Device Interface (NDI) es un estándar de la industria para producción 
 - Flujos de trabajo de producción remota
 - Aplicaciones de servidor de playout
 
-El SDK de VisioForge proporciona soporte completo de salida NDI en Windows, macOS y Linux, permitiéndole transmitir desde cámaras, archivos o cualquier fuente de video a receptores NDI en su red.
+El SDK de VisioForge proporciona soporte de salida NDI para flujos de trabajo de escritorio y servidor, permitiéndole transmitir cámaras, dispositivos de captura o archivos multimedia a receptores NDI en su red.
 
 ## Requisitos de Instalación
 
@@ -268,22 +264,9 @@ var audioResampler = new AudioResamplerBlock(
     new AudioResamplerSettings(AudioFormatX.F32LE, 48000, 2));
 ```
 
-## Reproducción de Fuente NDI (Recepción)
+## Recepción de Fuentes NDI
 
-Para recibir y reproducir un flujo NDI localmente con sincronización adecuada de audio/video, use `IsSync = true` (por defecto) en los renderizadores de video y audio. Esto asegura que el reloj del pipeline de GStreamer sincronice ambos flujos correctamente.
-
-```cs
-var ndiSource = new NDISourceBlock(ndiSettings);
-
-// Ambos renderizadores usan IsSync = true (por defecto) para sincronización A/V correcta
-var videoRenderer = new VideoRendererBlock(pipeline, videoView);
-var audioRenderer = new AudioRendererBlock(audioOutputSettings);
-
-pipeline.Connect(ndiSource.VideoOutput, videoRenderer.Input);
-pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);
-```
-
-Para detalles completos sobre enumeración, conexión y captura de fuentes NDI, consulte la [Referencia de Fuentes de Video NDI](../../videocapture/video-sources/ip-cameras/ndi.md).
+Esta guía se centra en enviar video y audio a NDI. Para descubrir, conectar, previsualizar o capturar fuentes NDI, incluidas aplicaciones Android y MAUI de reproducción NDI, consulte la [Referencia de Fuentes de Video NDI](../../videocapture/video-sources/ip-cameras/ndi.md).
 
 ## Solución de Problemas
 
@@ -294,14 +277,6 @@ Para detalles completos sobre enumeración, conexión y captura de fuentes NDI, 
 **Causa:** El archivo fuente contiene audio a una frecuencia de muestreo diferente de 48kHz (por ejemplo, AAC a 44.1kHz en archivos MP4). NDI espera audio a 48kHz.
 
 **Solución:** Inserte un `AudioResamplerBlock` configurado para 48kHz F32LE estéreo entre la fuente de archivo y el sumidero NDI, como se muestra en el ejemplo de reproducción de archivos anterior.
-
-### Video/Audio Fuera de Sincronización en Receptor NDI
-
-**Síntoma:** El video se reproduce adelante o detrás del audio al recibir un flujo NDI.
-
-**Causa:** La propiedad `IsSync` del renderizador de video está establecida en `false`, causando que renderice los fotogramas inmediatamente sin sincronización de reloj.
-
-**Solución:** Asegúrese de que tanto `VideoRendererBlock` como `AudioRendererBlock` tengan `IsSync = true` (el valor por defecto).
 
 ## Preguntas Frecuentes
 

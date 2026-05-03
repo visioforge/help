@@ -1,6 +1,8 @@
 ---
-title: Biblioteca C++ de Video Fingerprinting y documentación API
+title: Biblioteca C++ de Video Fingerprinting y Documentación API
 description: Implementación nativa C++ del SDK Video Fingerprinting con alto rendimiento y soporte multiplataforma para huellas de video robustas.
+sidebar_label: Documentación SDK C++
+order: 50
 tags:
   - Video Fingerprinting SDK
   - C++
@@ -9,71 +11,20 @@ tags:
   - Linux
   - Fingerprinting
 primary_api_classes:
-  - VFPAnalyzer
-  - VFPAnalyzerSettings
-  - VideoProcessor
-  - StoreFingerprint
-  - StreamAnalyzer
+  - VFPFingerprintSource
+  - VFPFingerPrint
+  - VFPSearch
+  - VFPCompare
 
 ---
 
-# SDK de Huella Digital de Video para C++
-
-!!! danger "Los ejemplos de código en esta página no coinciden con la API C pública — trate como pseudocódigo ilustrativo"
-
-    La API de clase C++ documentada abajo (clase `VFPAnalyzer` con
-    `Initialize` / `ProcessVideo`, `VFPAnalyzerSettings`, enum `VFPAnalyzerMode`,
-    clase `VFPCompare` con `CompareVideos`, etc.) **no** existe en el SDK
-    distribuido. El SDK real de Video Fingerprinting expone una **API plana
-    estilo C** (`extern "C"`), no una jerarquía de clases.
-
-    **API canónica real C (per `VisioForge_VFP.h`):**
-
-    Flujo de fingerprint de búsqueda (por cuadro):
-
-    ```c
-    VFPSearchData searchData;
-    VFPSearch_Init(&searchData);
-    // Para cada cuadro decodificado:
-    VFPSearch_Process(&searchData, frameData, width, height, stride, timestamp);
-    // Después de todos los cuadros:
-    VFPSearch_Build(&searchData, &resultFingerprint);
-    // Buscar un fingerprint dentro de otro:
-    VFPSearch_Search(&fpA, &fpB, duration, maxDifference, allowMultipleFragments,
-                     &outResults, &outCount);
-    ```
-
-    Flujo de fingerprint de comparación (por cuadro):
-
-    ```c
-    VFPCompareData compareData;
-    VFPCompare_Init(&compareData);
-    // Para cada cuadro decodificado:
-    VFPCompare_Process(&compareData, frameData, width, height, stride, timestamp);
-    // Después de todos los cuadros:
-    VFPCompare_Build(&compareData, &resultFingerprint);
-    // Comparar dos fingerprints (devuelve diferencia; 0 = idénticos):
-    int diff = VFPCompare_Compare(&fpA, &fpB, durationMs);
-    ```
-
-    Helpers convenientes de alto nivel como
-    `VFPSearch_GetFingerprintForVideoFile`,
-    `VFPCompare_GetFingerprintForVideoFile`, y `VFPFillSource` mostrados
-    en otras partes de las páginas C++ **no** son exports reales — solo
-    los primitivos de bajo nivel `_Init` / `_Process` / `_Build` /
-    `_Search` / `_Compare` son distribuidos en `VisioForge_VFP.dll`. La
-    aplicación host es responsable de decodificar cuadros de video (ej.
-    vía FFmpeg o GStreamer) y alimentarlos cuadro-a-cuadro a `*_Process`.
-
-    Catalogado como defectos #084-#090 en la auditoría. Una reescritura
-    completa del conjunto de docs C++ está en cola. Para muestras
-    funcionales de bajo nivel, vea `samples/` en la distribución del SDK.
+# Video Fingerprinting SDK para C++
 
 ## Descripción General
 
-El SDK de Huella Digital de Video para C++ proporciona una implementación nativa con acceso directo a capacidades de alto rendimiento de análisis y huella digital de video. Este SDK es ideal para aplicaciones que requieren:
+El SDK Video Fingerprinting para C++ proporciona una implementación nativa con acceso directo a capacidades de análisis de video y generación de huellas digitales de alto rendimiento. Este SDK es ideal para aplicaciones que requieren:
 
-- Máximo rendimiento y mínima sobrecarga
+- Máximo rendimiento y sobrecarga mínima
 - Integración directa con aplicaciones nativas
 - Gestión de memoria personalizada
 - Pipelines de procesamiento en tiempo real
@@ -84,9 +35,9 @@ El SDK de Huella Digital de Video para C++ proporciona una implementación nativ
 ### Ventajas de Rendimiento
 
 - **Rendimiento Nativo** - Acceso directo a memoria y algoritmos optimizados
-- **Cero Sobrecarga** - Sin runtime administrado ni recolección de basura
+- **Sobrecarga Cero** - Sin runtime gestionado ni recolección de basura
 - **Optimización SIMD** - Aprovecha capacidades de vectorización de CPU
-- **Procesamiento Paralelo** - Generación de huella digital multi-hilo
+- **Procesamiento Paralelo** - Generación de huellas multi-hilo
 - **Gestión de Memoria Personalizada** - Control detallado sobre asignación de memoria
 
 ### Soporte de Plataformas
@@ -99,141 +50,152 @@ El SDK de Huella Digital de Video para C++ proporciona una implementación nativ
 
 ### Primeros Pasos
 
-- [Instalación y Configuración](getting-started.md) - Guía de configuración completa para todas las plataformas
-- [Referencia de API](api.md) - Documentación completa de API C++
+- [Instalación y Configuración](getting-started.md) - Guía completa para todas las plataformas
+- [Referencia API](api.md) - Documentación completa de la API C++
 
-### Conceptos Principales
+### Conceptos Básicos
 
-- [Entendiendo las Huellas Digitales de Video](../understanding-video-fingerprinting.md) - Cómo funciona la tecnología
-- [Tipos de Huella Digital](../fingerprint-types.md) - Huellas de Comparación vs Búsqueda
+- [Entendiendo Video Fingerprinting](../understanding-video-fingerprinting.md) - Cómo funciona la tecnología
+- [Tipos de Huellas](../fingerprint-types.md) - Huellas de comparación vs búsqueda
 
 ### Ejemplos de Código
 
-#### Generación Básica de Huella Digital
+#### Generar Huella de Búsqueda (API de alto nivel)
 
 ```cpp
-#include <VFPAnalyzer.h>
+#include <VisioForge_VFP.h>
+#include <VisioForge_VFP_Types.h>
 
-// Crear instancia del analizador
-auto analyzer = std::make_unique<VFPAnalyzer>();
+VFPSetLicenseKey(L"su-clave-de-licencia");
 
-// Configurar parámetros de análisis
-VFPAnalyzerSettings settings;
-settings.Mode = VFPAnalyzerMode::Search;
-settings.FrameStep = 10;
+// Configurar origen
+VFPFingerprintSource src{};
+VFPFillSource(L"C:\\video.mp4", &src);
+src.StartTime = 10000;   // empezar a los 10s
+src.StopTime = 60000;    // parar a los 60s
 
-// Establecer clave de licencia
-analyzer->SetLicenseKey("su-clave-de-licencia");
-
-// Procesar archivo de video
-analyzer->StartAsync("video_entrada.mp4", "salida.vfp", settings);
+// Generar huella de búsqueda
+VFPFingerPrint fp{};
+wchar_t* error = VFPSearch_GetFingerprintForVideoFile(src, &fp);
+if (error == nullptr)
+{
+    printf("Huella: %dx%d, %.1fs, %d bytes\n",
+           fp.Width, fp.Height, fp.Duration / 1000.0, fp.DataSize);
+    VFPFingerprintSave(&fp, L"salida.vfpsig");
+}
 ```
 
-#### Comparando Dos Videos
+#### Comparar Dos Huellas
 
 ```cpp
-#include <VFPCompare.h>
+VFPFingerPrint fp1{}, fp2{};
+VFPFingerprintLoad(&fp1, L"video1.vfpsig");
+VFPFingerprintLoad(&fp2, L"video2.vfpsig");
 
-// Crear instancia de comparación
-auto compare = std::make_unique<VFPCompare>();
+double diff = VFPCompare_Compare(fp1.Data, fp1.DataSize,
+                                 fp2.Data, fp2.DataSize, 10);
+printf("Diferencia: %.2f\n", diff);
+```
 
-// Establecer licencia
-compare->SetLicenseKey("su-clave-de-licencia");
+#### Buscar Fragmento en Video Más Largo
 
-// Cargar huellas digitales
-compare->LoadFingerprint("video1.vfp");
-compare->LoadFingerprint("video2.vfp");
+```cpp
+VFPFingerPrint needle{}, haystack{};
+VFPFingerprintLoad(&needle, L"fragmento.vfpsig");
+VFPFingerprintLoad(&haystack, L"completo.vfpsig");
 
-// Realizar comparación
-auto result = compare->Compare();
+double diff = 0;
+int pos = VFPSearch_Search2(&needle, 0, &haystack, 0, &diff, 300);
+if (pos != INT_MAX)
+    printf("Encontrado en %d segundos (diff: %.2f)\n", pos, diff);
+```
 
-// Verificar similitud
-std::cout << "Similitud: " << result.Similarity << "%" << std::endl;
-if (result.IsMatch) {
-    std::cout << "¡Los videos coinciden!" << std::endl;
+#### API de Bajo Nivel por Fotograma (para streams en vivo / decodificadores personalizados)
+
+```cpp
+// Asignar acumulador para ~60s de video a 30fps
+void* pData = VFPSearch_Init2(30 * 60);
+
+while (hayMasFotogramas)
+{
+    // Decodificar fotograma a buffer RGB...
+    VFPSearch_Process(datosRGB, ancho, alto, stride, timestampSeg, pData);
 }
+
+int len = 0;
+char* data = VFPSearch_Build(&len, pData);
+
+// Usar data/len como VFPFingerPrint.Data / .DataSize
+VFPFingerPrint fp{};
+fp.Data = data;
+fp.DataSize = len;
+// ... establecer Duration, Width, Height, FrameRate manualmente ...
+
+VFPSearch_Clear(pData);
 ```
 
 ## Patrones de Integración
 
-### Procesamiento con Eficiencia de Memoria
+### Procesamiento por Lotes
 
 ```cpp
-// Procesar grandes colecciones de video con memoria mínima
-class VideoProcessor {
-public:
-    void ProcessBatch(const std::vector<std::string>& videos) {
-        VFPAnalyzer analyzer;
-        analyzer.SetLicenseKey(m_licenseKey);
-        
-        for (const auto& video : videos) {
-            // Procesar y almacenar/transmitir huella digital inmediatamente
-            analyzer.StartAsync(video, 
-                [this](const std::string& fingerprint) {
-                    // Almacenar en base de datos o enviar a servidor
-                    StoreFingerprint(fingerprint);
-                });
-        }
+void ProcessBatch(const std::vector<std::wstring>& videos)
+{
+    for (const auto& path : videos)
+    {
+        VFPFingerprintSource src{};
+        VFPFillSource(path.c_str(), &src);
+
+        VFPFingerPrint fp{};
+        VFPSearch_GetFingerprintForVideoFile(src, &fp);
+        // Almacenar fp en base de datos...
     }
-};
+}
 ```
 
-### Análisis de Stream en Tiempo Real
+### Análisis de Stream en Tiempo Real (API de bajo nivel)
 
 ```cpp
-// Analizar streams de video en vivo
-class StreamAnalyzer {
-public:
-    void AnalyzeStream(const std::string& streamUrl) {
-        VFPAnalyzer analyzer;
-        VFPAnalyzerSettings settings;
-        settings.Mode = VFPAnalyzerMode::RealTime;
-        settings.BufferSize = 30; // buffer de 30 segundos
-        
-        analyzer.SetLicenseKey(m_licenseKey);
-        analyzer.StartStreamAnalysis(streamUrl, settings,
-            [](const VFPSegment& segment) {
-                // Procesar segmentos detectados en tiempo real
-                ProcessSegment(segment);
-            });
-    }
-};
+void* pData = VFPSearch_Init2(30 * 60); // 30fps, búfer de 60s
+
+void OnFrame(unsigned char* rgb, int w, int h, int stride, double timestampSec)
+{
+    VFPSearch_Process(rgb, w, h, stride, timestampSec, pData);
+}
+
+void OnStreamEnd()
+{
+    int len;
+    char* data = VFPSearch_Build(&len, pData);
+    // Comparar con huellas conocidas...
+    VFPSearch_Clear(pData);
+}
 ```
 
 ## Soporte y Recursos
 
 ### Documentación
 
-- [Referencia de API C++](api.md)
-- [Guía de Primeros Pasos](getting-started.md)
-- [Muestras de Código C++](samples/index.md)
+- [Referencia API C++](api.md)
+- [Guía de Inicio](getting-started.md)
+- [Ejemplos de Código C++](samples/index.md)
 - [Casos de Uso Comunes](../use-cases.md)
 
 ### Código de Ejemplo
 
-- [Ejemplos Completos](samples/index.md) - Muestras de código funcionales
+- [Ejemplos Completos](samples/index.md) - Ejemplos de código funcionales
 - Herramientas de línea de comandos en el paquete SDK `/samples/cpp/`
 
 ### Comunidad y Soporte
 
-- [Issues de GitHub](https://github.com/visioforge/.Net-SDK-s-samples/issues)
+- [GitHub Issues](https://github.com/visioforge/.Net-SDK-s-samples/issues)
 - [Portal de Soporte](https://support.visioforge.com)
 
 ## Registro de Licencia
 
-Registre el SDK en su aplicación C++:
-
 ```cpp
-// En su código de inicialización
-VFPAnalyzer analyzer;
-analyzer.SetLicenseKey("su-clave-de-licencia");
+#include <VisioForge_VFP.h>
 
-// O globalmente para todas las instancias
-VFPLicense::SetGlobalKey("su-clave-de-licencia");
+VFPSetLicenseKey(L"su-clave-de-licencia");
+// o para char estrecho: VFPSetLicenseKeyA("su-clave-de-licencia");
 ```
-
-## Próximos Pasos
-
-1. [Instalar y Configurar](getting-started.md) - Comenzar con el SDK C++
-2. [Revisar la API](api.md) - Entender clases y métodos disponibles
-3. [Explorar Ejemplos](getting-started.md#resumen-de-inicio-rapido) - Ver código funcional

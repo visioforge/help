@@ -12,22 +12,11 @@ tags:
   - MP4
 primary_api_classes:
   - VFPFingerprintSource
-  - VFPFillSource
-  - VFPAnalyzer
+  - VFPFingerPrint
 
 ---
 
 # Getting Started with Video Fingerprinting SDK C++
-
-!!! danger "Some snippets below call high-level helpers that do not exist — use the flat C API instead"
-
-    `VFPFillSource`, `VFPSearch_GetFingerprintForVideoFile`, and
-    `VFPCompare_GetFingerprintForVideoFile` are **not** real exports of
-    `VisioForge_VFP.dll`. The shipped C API is a flat C-style interface
-    (`extern "C"`) — see [`index.md`](./index.md) for the canonical
-    `*_Init` / `*_Process` / `*_Build` / `*_Search` / `*_Compare`
-    workflow. Frame decoding is the host application's responsibility
-    (use FFmpeg / GStreamer / DirectShow). Tracked as defect #087.
 
 Welcome to the VisioForge Video Fingerprinting SDK for C++! This comprehensive guide will walk you through everything you need to get started, from installation to your first working application. By the end of this guide, you'll have a solid foundation for building high-performance video fingerprinting applications in C++.
 
@@ -329,25 +318,16 @@ int main(int argc, char* argv[])
     VFPSetLicenseKey(L"TRIAL");  // Use "TRIAL" for evaluation
     
     // Step 2: Configure the source
-    std::cout << "Configuring source for: " << argv[1] << "\n";
-    VFPFingerprintSource source{};
-    VFPFillSource(videoFile, &source);
-    
-    // Optional: Configure processing parameters
-    // source.StartTime = 0;      // Start from beginning
-    // source.StopTime = 60000;   // Process first 60 seconds
-    
+    VFPFingerprintSource src{};
+    VFPFillSource(videoFile, &src);
+    src.StartTime = 0;       // start from beginning
+    src.StopTime = 0;        // 0 = until end of file
+
     // Step 3: Generate fingerprint
     std::cout << "Generating fingerprint...\n";
     VFPFingerPrint fingerprint{};
-    
-    wchar_t* error = VFPSearch_GetFingerprintForVideoFile(source, &fingerprint);
-    
-    if (error != nullptr) {
-        std::wcerr << L"Error: " << error << L"\n";
-        return 1;
-    }
-    
+    VFPSearch_GetFingerprintForVideoFile(src, &fingerprint);
+
     // Step 4: Display results
     std::cout << "\nFingerprint generated successfully!\n";
     std::cout << "=====================================\n";
@@ -427,8 +407,8 @@ export DYLD_LIBRARY_PATH=./lib:$DYLD_LIBRARY_PATH
 The SDK provides two types of fingerprints optimized for different use cases. For a comprehensive explanation including technical details, performance characteristics, and decision guidance, see our [Fingerprint Types Guide](../fingerprint-types.md).
 
 **Quick Reference:**
-- **Search Fingerprints** (`VFPSearch_GetFingerprintForVideoFile()`): For finding video fragments within larger videos (commercial detection, content monitoring)
-- **Compare Fingerprints** (`VFPCompare_GetFingerprintForVideoFile()`): For comparing entire videos for similarity (duplicate detection, version comparison)
+- **Search Fingerprints** (`VFPSearch_Init` / `_Process` / `_Build`): For finding video fragments within larger videos (commercial detection, content monitoring)
+- **Compare Fingerprints** (`VFPCompare_Init` / `_Process` / `_Build`): For comparing entire videos for similarity (duplicate detection, version comparison)
 
 ## Common Use Cases
 
@@ -472,19 +452,25 @@ if (position != INT_MAX) {
 }
 ```
 
-### Use Case 3: Content Verification
+### Use Case 3: Content Verification with Ignored Areas
 
 ```cpp
-// Generate fingerprint with ignored areas for logos
-VFPFingerprintSource source{};
-VFPFillSource(L"video.mp4", &source);
+VFPFingerprintSource src{};
+VFPFillSource(L"video.mp4", &src);
 
-// Ignore logo areas
-source.IgnoredAreas[0] = {0, 0, 200, 100};        // Top-left logo
-source.IgnoredAreas[1] = {1720, 980, 1920, 1080}; // Bottom-right watermark
+// Ignore logo/watermark areas (up to 10 rectangles)
+src.IgnoredAreas[0].left   = 0;
+src.IgnoredAreas[0].top    = 0;
+src.IgnoredAreas[0].right  = 200;
+src.IgnoredAreas[0].bottom = 100;    // Top-left logo
 
-VFPFingerPrint fingerprint{};
-VFPSearch_GetFingerprintForVideoFile(source, &fingerprint);
+src.IgnoredAreas[1].left   = 1720;
+src.IgnoredAreas[1].top    = 980;
+src.IgnoredAreas[1].right  = 1920;
+src.IgnoredAreas[1].bottom = 1080;   // Bottom-right watermark
+
+VFPFingerPrint fp{};
+VFPSearch_GetFingerprintForVideoFile(src, &fp);
 ```
 
 ## Licensing
@@ -577,7 +563,7 @@ License types:
 
 ### Debug Tips
 
-1. **Enable debug output**: Set `VFPAnalyzer.DebugDir` to save intermediate results
+1. **Enable debug output**: Save intermediate frame data to disk for inspection
 2. **Check return values**: Always check for NULL/error returns
 3. **Use debug builds**: Initially develop with debug symbols
 4. **Log operations**: Add logging to track processing flow

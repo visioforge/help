@@ -1,6 +1,6 @@
 ---
-title: Huellas de Video en C++ - SQLite, PostgreSQL y Redis Cache
-description: Almacene y consulte huellas de video en SQLite y PostgreSQL usando el SDK C++ de VisioForge. Esquemas de base de datos, indexación y caché Redis.
+title: Almacenar Huellas de Video en SQLite y PostgreSQL con C++
+description: Almacene y consulte huellas de video en SQLite y PostgreSQL usando el SDK C++ de VisioForge con ejemplos de esquemas y estrategias de indexación.
 tags:
   - Video Fingerprinting SDK
   - C++
@@ -10,42 +10,27 @@ tags:
   - Fingerprinting
   - MP4
 primary_api_classes:
-  - StoreFingerprint
   - VFPFingerprintSource
-  - VFPFillSource
-  - BatchFingerprintProcessor
-  - CacheFingerprint
+  - VFPFingerPrint
 
 ---
 
-# Guía de Base de Datos del SDK de Huellas C++
+# Guía de Base de Datos del SDK Fingerprinting para C++
 
-!!! danger "Algunos helpers referenciados abajo no existen — use la API plana C para generación de huellas"
-
-    `VFPFillSource` y `VFPSearch_GetFingerprintForVideoFile` **no** son
-    exports reales de `VisioForge_VFP.dll`. Para generar una huella antes
-    de almacenarla, decodifique cuadros de video en la aplicación host y
-    aliméntelos al bucle canónico de bajo nivel:
-    `VFPSearch_Init` → `VFPSearch_Process` (por cuadro) → `VFPSearch_Build`
-    (o el equivalente `VFPCompare_*`). Vea [`index.md`](./index.md) para
-    el flujo completo. La semántica de almacenamiento y recuperación de
-    base de datos descrita en esta página es independiente de la API de
-    generación de huellas. Catalogado como defecto #088.
-
-Esta guía demuestra cómo integrar el SDK de Huellas de Video para C++ con varios sistemas de bases de datos para almacenamiento y recuperación eficiente de huellas.
+Esta guía demuestra cómo integrar el SDK Video Fingerprinting para C++ con varios sistemas de bases de datos para almacenamiento y recuperación eficiente de huellas.
 
 ## Descripción General
 
-A diferencia del SDK .NET que proporciona integración incorporada con MongoDB, el SDK C++ ofrece flexibilidad para integrarse con cualquier sistema de base de datos. Esta guía proporciona patrones de implementación y ejemplos para bases de datos comunes.
+A diferencia del SDK .NET que proporciona integración integrada con MongoDB, el SDK C++ ofrece flexibilidad para integrarse con cualquier sistema de base de datos. Esta guía proporciona patrones de implementación y ejemplos para bases de datos comunes.
 
 ## Consideraciones de Diseño de Base de Datos
 
 ### Requisitos de Almacenamiento de Huellas
 
 - **Datos Binarios**: Las huellas son datos binarios (típicamente 10-100KB por video)
-- **Indexación**: Los metadatos del video deben indexarse para consultas rápidas
+- **Indexación**: Los metadatos de video deben indexarse para consultas rápidas
 - **Escalabilidad**: El diseño debe soportar millones de huellas
-- **Rendimiento**: Optimizar para operaciones de escritura y lectura
+- **Rendimiento**: Optimizar tanto para operaciones de escritura como de lectura
 
 ### Esquema Recomendado
 
@@ -54,7 +39,7 @@ CREATE TABLE video_fingerprints (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     video_path TEXT NOT NULL,
     video_hash VARCHAR(64),
-    fingerprint_type VARCHAR(10), -- 'search' o 'compare'
+    fingerprint_type VARCHAR(10), -- 'search' or 'compare'
     fingerprint_data BLOB NOT NULL,
     duration_ms INTEGER,
     frame_count INTEGER,
@@ -68,9 +53,9 @@ CREATE TABLE video_fingerprints (
 
 ## Implementación SQLite
 
-SQLite es ideal para aplicaciones embebidas y despliegues de una sola máquina.
+SQLite es ideal para aplicaciones embebidas y despliegues en una sola máquina.
 
-### Integración Básica SQLite
+### Integración Básica con SQLite
 
 ```cpp
 #include <sqlite3.h>
@@ -87,7 +72,7 @@ public:
     SQLiteFingerprintDB(const std::string& dbPath) {
         int rc = sqlite3_open(dbPath.c_str(), &db);
         if (rc != SQLITE_OK) {
-            throw std::runtime_error("No se puede abrir la base de datos");
+            throw std::runtime_error("Cannot open database");
         }
         InitializeSchema();
     }
@@ -116,7 +101,7 @@ public:
         if (rc != SQLITE_OK) {
             std::string error = errMsg;
             sqlite3_free(errMsg);
-            throw std::runtime_error("Error SQL: " + error);
+            throw std::runtime_error("SQL error: " + error);
         }
     }
     
@@ -135,7 +120,7 @@ public:
         sqlite3_bind_text(stmt, 1, videoPath.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 2, type.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_blob(stmt, 3, fingerprint.Data, fingerprint.DataSize, SQLITE_STATIC);
-        sqlite3_bind_int64(stmt, 4, fingerprint.Duration);  // Duration es INT64
+        sqlite3_bind_int64(stmt, 4, fingerprint.Duration);  // Duration is INT64
         
         rc = sqlite3_step(stmt);
         sqlite3_finalize(stmt);
@@ -159,10 +144,10 @@ public:
             const void* data = sqlite3_column_blob(stmt, 0);
             int dataSize = sqlite3_column_bytes(stmt, 0);
             
-            result->Data = new char[dataSize];  // VFPFingerPrint usa char*
+            result->Data = new char[dataSize];  // VFPFingerPrint uses char*
             memcpy(result->Data, data, dataSize);
             result->DataSize = dataSize;
-            result->Duration = sqlite3_column_int64(stmt, 1);  // Duration es INT64
+            result->Duration = sqlite3_column_int64(stmt, 1);  // Duration is INT64
         }
         
         sqlite3_finalize(stmt);
@@ -187,25 +172,25 @@ public:
             const void* data = sqlite3_column_blob(stmt, 1);
             int dataSize = sqlite3_column_bytes(stmt, 1);
             
-            // Comparar huellas usando la función real del SDK
+            // Compare fingerprints using actual SDK function
             double difference = VFPCompare_Compare(
                 queryFp.Data, queryFp.DataSize,
                 static_cast<const char*>(data), dataSize,
                 1000  // maxDifference
             );
             
-            if (difference < 1000) {  // Menor diferencia = más similar
+            if (difference < 1000) {  // Lower difference = more similar
                 similarities.push_back({path, static_cast<int>(difference)});
             }
         }
         
         sqlite3_finalize(stmt);
         
-        // Ordenar por diferencia (menor es mejor)
+        // Sort by difference (lower is better)
         std::sort(similarities.begin(), similarities.end(),
                  [](const auto& a, const auto& b) { return a.second < b.second; });
         
-        // Retornar mejores resultados
+        // Return top results
         for (int i = 0; i < std::min(maxResults, (int)similarities.size()); i++) {
             results.push_back(similarities[i].first);
         }
@@ -219,45 +204,39 @@ public:
 
 ```cpp
 int main() {
-    // Inicializar base de datos
+    // Inicializar la base de datos
     SQLiteFingerprintDB db("fingerprints.db");
     
-    // Establecer licencia
-    VFPSetLicenseKey(L"TU-CLAVE-DE-LICENCIA");
+    // Establecer la licencia
+    VFPSetLicenseKey(L"SU-CLAVE-DE-LICENCIA");
     
-    // Generar y almacenar huella
-    VFPFingerprintSource source{};
-    VFPFillSource(L"video.mp4", &source);
-    source.StartTime = 0;
-    source.StopTime = 60000;  // Primeros 60 segundos
-    
+    // Generar y almacenar la huella
+    // Generar la huella mediante la API de alto nivel
+    VFPFingerprintSource src{};
+    VFPFillSource(L"video.mp4", &src);
+
     VFPFingerPrint fingerprint{};
-    wchar_t* error = VFPSearch_GetFingerprintForVideoFile(source, &fingerprint);
-    
-    if (error == nullptr) {
-        db.StoreFingerprint("video.mp4", fingerprint);
-        std::cout << "Huella almacenada exitosamente" << std::endl;
-        
-        // Guardar huella en archivo también
-        VFPFingerprintSave(&fingerprint, L"video.vfp");
-        
-        // Encontrar videos similares
-        auto similar = db.FindSimilarVideos(fingerprint, 5);
-        for (const auto& path : similar) {
-            std::cout << "Video similar: " << path << std::endl;
-        }
-        
-        // Nota: No hay función VFPFingerPrint_Free - gestionar memoria manualmente
-        delete[] fingerprint.Data;
+    VFPSearch_GetFingerprintForVideoFile(src, &fingerprint);
+
+    db.StoreFingerprint("video.mp4", fingerprint);
+    std::cout << "Huella almacenada correctamente" << std::endl;
+
+    // Guardar también la huella en un archivo
+    VFPFingerprintSave(&fingerprint, L"video.vfp");
+
+    // Buscar videos similares
+    auto similar = db.FindSimilarVideos(fingerprint, 5);
+    for (const auto& path : similar) {
+        std::cout << "Video similar: " << path << std::endl;
     }
-    
+
     return 0;
 }
 ```
 
 ## Implementación PostgreSQL
 
-Para despliegues más grandes que requieren acceso concurrente y características avanzadas.
+Para despliegues más grandes que requieran acceso concurrente y características avanzadas.
 
 ### Integración PostgreSQL con libpq
 
@@ -277,7 +256,7 @@ public:
         if (PQstatus(conn) != CONNECTION_OK) {
             std::string error = PQerrorMessage(conn);
             PQfinish(conn);
-            throw std::runtime_error("Conexión fallida: " + error);
+            throw std::runtime_error("Connection failed: " + error);
         }
         
         InitializeSchema();
@@ -309,7 +288,7 @@ public:
         if (PQresultStatus(res) != PGRES_COMMAND_OK) {
             std::string error = PQresultErrorMessage(res);
             PQclear(res);
-            throw std::runtime_error("Creación de esquema fallida: " + error);
+            throw std::runtime_error("Schema creation failed: " + error);
         }
         PQclear(res);
     }
@@ -317,7 +296,7 @@ public:
     bool StoreFingerprint(const std::string& videoPath,
                          const VFPFingerPrint& fingerprint,
                          const std::string& metadata = "{}") {
-        // Escapar datos binarios para PostgreSQL
+        // Escape binary data for PostgreSQL
         size_t escapedLen;
         unsigned char* escapedData = PQescapeByteaConn(
             conn, 
@@ -347,7 +326,7 @@ public:
         return success;
     }
     
-    // Inserción por lotes para mejor rendimiento
+    // Batch insert for better performance
     bool StoreFingerprintsBatch(const std::vector<std::pair<std::string, VFPFingerPrint>>& batch) {
         PQexec(conn, "BEGIN");
         
@@ -384,7 +363,7 @@ public:
     RedisFingerprintCache(const std::string& host = "127.0.0.1", int port = 6379) {
         redis = redisConnect(host.c_str(), port);
         if (redis == nullptr || redis->err) {
-            throw std::runtime_error("Conexión Redis fallida");
+            throw std::runtime_error("Redis connection failed");
         }
     }
     
@@ -418,7 +397,7 @@ public:
         if (reply && reply->type == REDIS_REPLY_STRING) {
             VFPFingerPrint* fp = new VFPFingerPrint();
             fp->DataSize = reply->len;
-            fp->Data = new char[reply->len];  // VFPFingerPrint usa char*
+            fp->Data = new char[reply->len];  // VFPFingerPrint uses char*
             memcpy(fp->Data, reply->str, reply->len);
             
             freeReplyObject(reply);
@@ -433,7 +412,7 @@ public:
 
 ## Optimización de Rendimiento
 
-### Pool de Conexiones
+### Pool de conexiones
 
 ```cpp
 class DatabaseConnectionPool {
@@ -447,7 +426,7 @@ private:
 public:
     DatabaseConnectionPool(const std::string& path, size_t maxConn = 10)
         : dbPath(path), maxConnections(maxConn) {
-        // Pre-crear conexiones
+        // Crear previamente las conexiones
         for (size_t i = 0; i < maxConnections; i++) {
             connections.push(std::make_unique<SQLiteFingerprintDB>(dbPath));
         }
@@ -470,7 +449,7 @@ public:
 };
 ```
 
-### Procesamiento por Lotes
+### Batch Processing
 
 ```cpp
 class BatchFingerprintProcessor {
@@ -498,7 +477,7 @@ public:
         
         auto conn = pool.GetConnection();
         
-        // Iniciar transacción para inserción por lotes
+        // Iniciar la transacción para la inserción por lotes
         for (const auto& [path, fp] : batch) {
             conn->StoreFingerprint(path, fp);
         }
@@ -511,40 +490,37 @@ public:
 
 ## Mejores Prácticas
 
-### 1. Optimización de Índices
+### 1. Optimización de índices
 
-- Crear índices en campos consultados frecuentemente (video_path, hash)
-- Usar índices parciales para consultas filtradas
-- Considerar índices compuestos para consultas complejas
+- Cree índices en los campos consultados con frecuencia (`video_path`, `hash`)
+- Use índices parciales para consultas filtradas
+- Considere índices compuestos para consultas complejas
 
-### 2. Compresión de Datos
+### 2. Compresión de datos
 
 ```cpp
-// Ejemplo: Guardar y cargar huellas usando funciones del SDK
+// Ejemplo: guardar y cargar huellas usando funciones del SDK
 void SaveFingerprintToDB(const std::string& path) {
-    VFPFingerprintSource source{};
-    VFPFillSource(std::wstring(path.begin(), path.end()).c_str(), &source);
-    
+    // Generar la huella mediante la API de alto nivel
+    VFPFingerprintSource src{};
+    VFPFillSource(std::wstring(path.begin(), path.end()).c_str(), &src);
+
     VFPFingerPrint fp{};
-    // Generar huella de búsqueda para detección de fragmentos
-    wchar_t* error = VFPSearch_GetFingerprintForVideoFile(source, &fp);
-    
-    if (error == nullptr) {
-        // Guardar en formato de archivo
-        VFPFingerprintSave(&fp, L"temp.vfp");
-        
-        // O guardar formato legado para compatibilidad
-        VFPFingerprintSaveLegacy(&fp, L"temp_legacy.vfp");
-        
-        // Almacenar en base de datos...
-        delete[] fp.Data;
-    }
+    VFPSearch_GetFingerprintForVideoFile(src, &fp);
+
+    // Guardar en formato de archivo
+    VFPFingerprintSave(&fp, L"temp.vfp");
+
+    // O guardar en formato heredado para compatibilidad
+    VFPFingerprintSaveLegacy(&fp, L"temp_legacy.vfp");
+
+    // Almacenar en la base de datos...
 }
 ```
 
-### 3. Estrategia de Fragmentación
+### 3. Estrategia de sharding
 
-Para bases de datos muy grandes, implementar fragmentación:
+Para bases de datos muy grandes, implemente sharding:
 
 ```cpp
 class ShardedFingerprintDB {
@@ -564,24 +540,24 @@ public:
 };
 ```
 
-## Comparación con Integración MongoDB .NET
+## Comparación con la Integración MongoDB de .NET
 
-| Característica | Implementación Personalizada C++ | Integración MongoDB .NET |
-|----------------|----------------------------------|--------------------------|
-| **Complejidad de Configuración** | Mayor (esquema manual) | Menor (automático) |
-| **Flexibilidad** | Control completo | Específico de MongoDB |
-| **Rendimiento** | Puede optimizarse | Bueno por defecto |
-| **Opciones de BD** | Cualquier base de datos | Solo MongoDB |
-| **Código Requerido** | Más repetitivo | Mínimo |
+| Característica | Implementación personalizada en C++ | Integración MongoDB en .NET |
+|----------------|-------------------------------------|----------------------------|
+| **Complejidad de configuración** | Mayor (esquema manual) | Menor (automática) |
+| **Flexibilidad** | Control total | Específica de MongoDB |
+| **Rendimiento** | Se puede optimizar | Bueno desde el inicio |
+| **Opciones de base de datos** | Cualquier base de datos | Solo MongoDB |
+| **Código requerido** | Más código repetitivo | Mínimo |
 | **Mantenimiento** | Actualizaciones manuales | Actualizaciones del SDK |
 
 ## Próximos Pasos
 
-- [Referencia de API C++](api.md) - Documentación completa de la API
-- [Aplicaciones de Ejemplo](samples/index.md) - Ejemplos funcionales
+- [Referencia de la API C++](api.md) - Documentación completa de la API
+- [Aplicaciones de ejemplo](samples/index.md) - Ejemplos funcionales
 
 ## Recursos Adicionales
 
-- [Documentación SQLite](https://www.sqlite.org/doclist.html)
-- [Documentación libpq PostgreSQL](https://www.postgresql.org/docs/current/libpq.html)
-- [Cliente Redis C++](https://github.com/redis/hiredis)
+- [Documentación de SQLite](https://www.sqlite.org/doclist.html)
+- [Documentación de libpq para PostgreSQL](https://www.postgresql.org/docs/current/libpq.html)
+- [Cliente C++ de Redis](https://github.com/redis/hiredis)

@@ -32,29 +32,6 @@ primary_api_classes:
 
 ---
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "TechArticle",
-  "headline": "Cree un Reproductor de Video Multiplataforma en C# con Avalonia UI",
-  "description": "Guía paso a paso en C# para construir un reproductor de video en Avalonia UI que funciona en Windows, macOS, Linux, Android e iOS utilizando el patrón MVVM y VisioForge MediaPlayerCoreX.",
-  "inLanguage": "es",
-  "author": { "@type": "Organization", "name": "VisioForge" },
-  "publisher": {
-    "@type": "Organization",
-    "name": "VisioForge",
-    "logo": { "@type": "ImageObject", "url": "https://www.visioforge.com/help/static/logo.webp" }
-  },
-  "about": [
-    { "@type": "SoftwareApplication", "name": "Avalonia UI", "applicationCategory": "DeveloperApplication" },
-    { "@type": "SoftwareApplication", "name": "VisioForge Media Player SDK .Net", "applicationCategory": "MultimediaApplication" }
-  ],
-  "proficiencyLevel": "Intermediate",
-  "programmingLanguage": "C#",
-  "operatingSystem": ["Windows", "macOS", "Linux", "Android", "iOS"]
-}
-</script>
-
 # Cree un Reproductor de Video Multiplataforma en C# con Avalonia UI
 
 Cree un reproductor de video en C# que funciona en **Windows, macOS, Linux, Android e iOS** desde una sola base de código Avalonia UI. Esta guía utiliza el patrón MVVM con el motor `MediaPlayerCoreX` del [VisioForge Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) y el control `VideoView`, y hace referencia al [demo SimplePlayerMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayerMVVM) en GitHub para cada fragmento mostrado.
@@ -1207,57 +1184,6 @@ Puntos clave:
 * La inicialización adecuada (`VisioForgeX.InitSDK()`) y limpieza (`VisioForgeX.DestroySDK()`) del SDK de VisioForge son esenciales.
 
 Puede extender este ejemplo agregando más características como soporte de listas de reproducción, transmisión en red, efectos de video o controles de UI más avanzados.
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "inLanguage": "es",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "¿Qué plataformas soporta el reproductor de video Avalonia?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "El reproductor Avalonia se ejecuta en Windows, macOS, Linux, Android e iOS desde una única base de código compartida. Cada plataforma utiliza un proyecto principal dedicado (SimplePlayerMVVM.Desktop, .Android, .iOS) con paquetes NuGet específicos de plataforma para el runtime nativo de GStreamer. La API principal de reproducción (MediaPlayerCoreX) y el control VideoView son idénticos en todos los destinos."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "¿Es obligatorio el patrón MVVM para usar el SDK de VisioForge con Avalonia?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. El SDK funciona con cualquier patrón de arquitectura incluyendo code-behind. Esta guía utiliza ReactiveUI para MVVM porque se integra bien con el sistema de binding de Avalonia y mejora la capacidad de prueba. Las clases principales — MediaPlayerCoreX para reproducción y VideoView para renderizado — no tienen dependencia de ReactiveUI ni de ningún framework MVVM. También puede usar CommunityToolkit.Mvvm o Prism en su lugar."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "¿Cómo despliego el reproductor de video Avalonia en Linux?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Publique con dotnet publish -r linux-x64 (o linux-arm64 para ARM). En la máquina destino, instale el runtime de GStreamer (libgstreamer1.0-0 y paquetes de plugins en Ubuntu/Debian, o el equivalente en su distribución). Los paquetes NuGet de VisioForge incluyen los bindings nativos, pero GStreamer debe estar presente en el sistema. No se necesita configuración específica de X11 o Wayland — Avalonia maneja la selección del servidor de pantalla automáticamente."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "¿El reproductor Avalonia soporta renderizado de video acelerado por GPU?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Sí. VideoView utiliza renderizado GPU nativo de la plataforma: Direct3D en Windows, OpenGL o Vulkan en Linux, y Metal en macOS e iOS. El motor GStreamer también soporta decodificación de video acelerada por hardware a través de VA-API en Linux, DXVA/D3D11 en Windows, y VideoToolbox en macOS/iOS. La aceleración por hardware está habilitada por defecto cuando hay una GPU compatible disponible."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "¿Cómo manejo el acceso a archivos y permisos de almacenamiento en Android e iOS?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Implemente una interfaz IFilePickerService específica de plataforma como se muestra en la sección 6 de esta guía. En Android, use Intent con ActionOpenDocument y declare el permiso READ_EXTERNAL_STORAGE en AndroidManifest.xml. En iOS, use UIDocumentPickerViewController para presentar el selector de archivos del sistema. En escritorio, use el StorageProvider.OpenFilePickerAsync() integrado de Avalonia. El SDK acepta cualquier ruta de archivo o stream legible independientemente de cómo se seleccionó el archivo."
-      }
-    }
-  ]
-}
-</script>
-
 ## Preguntas Frecuentes
 
 ### ¿Qué plataformas soporta el reproductor de video Avalonia?

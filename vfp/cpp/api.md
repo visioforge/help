@@ -12,32 +12,11 @@ tags:
   - MP4
 primary_api_classes:
   - VFPFingerprintSource
-  - VFPFillSource
+  - VFPFingerPrint
 
 ---
 
 # Video Fingerprinting SDK C++ API Documentation
-
-!!! danger "Many code samples below reference high-level helpers that do not exist — use the C-style flat API"
-
-    Helpers like `VFPSearch_GetFingerprintForVideoFile`,
-    `VFPCompare_GetFingerprintForVideoFile`,
-    `VFPSearch_SearchOneSignatureFileInAnother`, and `VFPFillSource` are
-    **not** real exports of `VisioForge_VFP.dll` — they appear in older
-    headers as commented-out prototypes only. The shipped C API is a
-    flat C-style interface (`extern "C"`) consisting of:
-
-    - `VFPSearch_Init` / `VFPSearch_Process` / `VFPSearch_Build` /
-      `VFPSearch_Search`
-    - `VFPCompare_Init` / `VFPCompare_Process` / `VFPCompare_Build` /
-      `VFPCompare_Compare`
-
-    The host application is responsible for decoding video frames
-    (FFmpeg / GStreamer / etc.) and feeding them to `*_Process` one at a
-    time. See [`index.md`](./index.md) for the canonical workflow snippets.
-
-    Tracked as defects #084-#086 in the help audit. A full rewrite of
-    this page is queued.
 
 ## Overview
 
@@ -208,125 +187,170 @@ struct VFPFingerPrint
 
 ## Search Functions
 
-### VFPSearch_GetFingerprintForVideoFile
+The Search API provides both a high-level convenience API (generate fingerprint from video file) and a low-level per-frame API (for live streams / custom decoders).
+
+### High-Level API
+
+#### VFPSearch_GetFingerprintForVideoFile
 
 ```cpp
 extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPSearch_GetFingerprintForVideoFile(
-    VFPFingerprintSource source, 
+    VFPFingerprintSource source,
     VFPFingerPrint* vfp);
 ```
 
-**Description:** Generates a search-optimized fingerprint from a video file.
+Generates a search fingerprint directly from a video file. Returns `NULL` on success, or an error message string.
 
-**Parameters:**
-
-- `source`: Source video configuration
-- `vfp`: Pointer to fingerprint structure to receive the result
-
-**Returns:** Error message if failed, NULL if successful
-
-**Example:**
+#### VFPSearch_GetFingerprintForVideoFileAndSave
 
 ```cpp
-VFPFingerprintSource source{};
-VFPFillSource(L"C:\\Videos\\commercial.mp4", &source);
-
-VFPFingerPrint fingerprint{};
-wchar_t* error = VFPSearch_GetFingerprintForVideoFile(source, &fingerprint);
-
-if (error == nullptr) {
-    printf("Fingerprint generated successfully\n");
-    printf("Duration: %lld ms\n", fingerprint.Duration);
-    printf("Size: %d bytes\n", fingerprint.DataSize);
-} else {
-    wprintf(L"Error: %s\n", error);
-}
+extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPSearch_GetFingerprintForVideoFileAndSave(
+    wchar_t* sourceFilename,
+    wchar_t* destFilename);
 ```
 
-### VFPSearch_Search2
+Generates and saves a fingerprint in one call.
 
-```cpp
-extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search2(
-    VFPFingerPrint* vfp1, 
-    int iSkip1,
-    VFPFingerPrint* vfp2, 
-    int iSkip2, 
-    double* pDiff,
-    int maxDiff);
-```
-
-**Description:** Searches for one fingerprint within another, returning the position where found.
-
-**Parameters:**
-
-- `vfp1`: Fingerprint to search for (needle)
-- `iSkip1`: Starting position in vfp1 (in seconds)
-- `vfp2`: Fingerprint to search within (haystack)
-- `iSkip2`: Starting position in vfp2 (in seconds)
-- `pDiff`: Pointer to receive the difference value
-- `maxDiff`: Maximum allowed difference threshold
-
-**Returns:** Position in seconds where match was found, or INT_MAX if not found
-
-**Example:**
-
-```cpp
-// Search for commercial in broadcast
-VFPFingerPrint commercial{};
-VFPFingerPrint broadcast{};
-
-// Load fingerprints
-VFPFingerprintLoad(&commercial, L"commercial.vfpsig");
-VFPFingerprintLoad(&broadcast, L"broadcast.vfpsig");
-
-double diff = 0;
-int position = VFPSearch_Search2(&commercial, 0, &broadcast, 0, &diff, 300);
-
-if (position != INT_MAX) {
-    printf("Commercial found at position: %d seconds\n", position);
-    printf("Difference score: %.2f\n", diff);
-} else {
-    printf("Commercial not found in broadcast\n");
-}
-```
-
-### VFPSearch_SearchOneSignatureFileInAnother
+#### VFPSearch_SearchOneSignatureFileInAnother
 
 ```cpp
 extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPSearch_SearchOneSignatureFileInAnother(
-    wchar_t* file1, 
-    wchar_t* file2, 
-    LONG threshold,
-    LONG* position);
+    wchar_t* file1, wchar_t* file2,
+    LONG threshold, LONG* position);
 ```
 
-**Description:** Searches for one signature file within another directly from disk.
+Searches for one signature file inside another directly from disk.
 
-**Parameters:**
-
-- `file1`: Path to fingerprint file to search for
-- `file2`: Path to fingerprint file to search within
-- `threshold`: Maximum allowed difference threshold
-- `position`: Pointer to receive the position where found
-
-**Example:**
+#### VFPSearch_Search2
 
 ```cpp
-LONG position = 0;
-VFPSearch_SearchOneSignatureFileInAnother(
-    L"needle.vfpsig", 
-    L"haystack.vfpsig", 
-    300,  // threshold
-    &position);
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search2(
+    VFPFingerPrint* vfp1, int iSkip1,
+    VFPFingerPrint* vfp2, int iSkip2,
+    double* pDiff, int maxDiff);
+```
 
-if (position != INT_MAX) {
-    printf("Match found at: %ld seconds\n", position);
-}
+Searches `vfp1` inside `vfp2`. Returns position in seconds, or `INT_MAX` if not found.
+
+### Low-Level Per-Frame API
+
+#### VFPSearch_Init
+
+```cpp
+extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPSearch_Init(int count, void* pDataTmp);
+```
+
+Initializes a per-frame accumulator. `count` is the expected number of frames.
+
+#### VFPSearch_Init2
+
+```cpp
+extern "C" VFP_EXPORT void* VFP_EXPORT_CALL VFPSearch_Init2(int count);
+```
+
+Allocates and returns a new accumulator. Use `VFPSearch_Clear` to free it.
+
+#### VFPSearch_Process
+
+```cpp
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Process(
+    unsigned char* p, int w, int h, int s,
+    double dTime, void* pDataTmp);
+```
+
+Feeds one decoded RGB frame. `dTime` is the timestamp in seconds. Returns 0 on success.
+
+#### VFPSearch_Build
+
+```cpp
+extern "C" VFP_EXPORT char* VFP_EXPORT_CALL VFPSearch_Build(int* pLen, void* pDataTmp);
+```
+
+Finalizes the fingerprint. Returns a `char*` buffer; `*pLen` receives its size in bytes.
+
+#### VFPSearch_Search
+
+```cpp
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search(
+    const char* pData1, int iLen1, int iSkip1,
+    const char* pData2, int iLen2, int iSkip2,
+    double* pDiff, int maxDiff);
+```
+
+Low-level search using raw fingerprint data. Returns position in seconds.
+
+#### VFPSearch_Clear
+
+```cpp
+extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPSearch_Clear(void* pDataTmp);
+```
+
+Frees resources allocated by `VFPSearch_Init` or `VFPSearch_Init2`.
+
+```cpp
+extern "C" VFP_EXPORT char* VFP_EXPORT_CALL VFPSearch_Build(
+    int* pLen,
+    void* pDataTmp);
+```
+
+Finalizes the fingerprint. Returns a `char*` buffer with the fingerprint data;
+`*pLen` receives its size in bytes. The caller owns the returned buffer.
+
+### VFPSearch_Search
+
+Low-level search using raw fingerprint data:
+
+```cpp
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search(
+    const char* pData1, int iLen1, int iSkip1,
+    const char* pData2, int iLen2, int iSkip2,
+    double* pDiff, int maxDiff);
+```
+
+Returns the position in seconds where `pData1` was found inside `pData2`,
+or `INT_MAX` if not found.
+
+### VFPSearch_Search2
+
+Higher-level variant using `VFPFingerPrint` structs:
+
+```cpp
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search2(
+    VFPFingerPrint* vfp1, int iSkip1,
+    VFPFingerPrint* vfp2, int iSkip2,
+    double* pDiff, int maxDiff);
+```
+
+### VFPSearch_GetFingerprintForVideoFile
+
+High-level convenience: generates a search fingerprint directly from a video file.
+
+```cpp
+extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPSearch_GetFingerprintForVideoFile(
+    VFPFingerprintSource source,
+    VFPFingerPrint* vfp);
+```
+
+Returns `NULL` on success, or an error message string on failure.
+
+**Example — high-level search workflow:**
+
+```cpp
+VFPFingerprintSource src{};
+VFPFillSource(L"video.mp4", &src);
+
+VFPFingerPrint fp{};
+VFPSearch_GetFingerprintForVideoFile(src, &fp);
+// fp.Data / fp.DataSize now contain the fingerprint
 ```
 
 ## Compare Functions
 
-### VFPCompare_GetFingerprintForVideoFile
+The Compare API provides both high-level convenience and low-level per-frame access.
+
+### High-Level API
+
+#### VFPCompare_GetFingerprintForVideoFile
 
 ```cpp
 extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPCompare_GetFingerprintForVideoFile(
@@ -334,103 +358,101 @@ extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPCompare_GetFingerprintForVideo
     VFPFingerPrint* vfp);
 ```
 
-**Description:** Generates a comparison-optimized fingerprint from a video file.
+Generates a comparison fingerprint directly from a video file.
 
-**Parameters:**
-
-- `source`: Source video configuration
-- `vfp`: Pointer to fingerprint structure to receive the result
-
-**Returns:** Error message if failed, NULL if successful
-
-**Example:**
+#### VFPCompare_Compare
 
 ```cpp
-VFPFingerprintSource source{};
-VFPFillSource(L"C:\\Videos\\video1.mp4", &source);
-
-VFPFingerPrint fingerprint{};
-wchar_t* error = VFPCompare_GetFingerprintForVideoFile(source, &fingerprint);
-
-if (error == nullptr) {
-    // Save fingerprint for later comparison
-    VFPFingerprintSave(&fingerprint, L"video1.vfpsig");
-}
+extern "C" VFP_EXPORT double VFP_EXPORT_CALL VFPCompare_Compare(
+    const char* pData1, int iLen1,
+    const char* pData2, int iLen2,
+    int MaxS);
 ```
+
+Compares two raw fingerprint buffers. `MaxS` is maximum time shift in seconds. Returns a difference score (lower = more similar).
+
+### Low-Level Per-Frame API
+
+#### VFPCompare_Init
+
+```cpp
+extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPCompare_Init(int count, void* pDataTmp);
+```
+
+#### VFPCompare_Process
+
+```cpp
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPCompare_Process(
+    unsigned char* p, int w, int h, int s,
+    double dTime, void* pDataTmp);
+```
+
+Feeds one decoded RGB frame. `dTime` is timestamp in seconds.
+
+#### VFPCompare_Build
+
+```cpp
+extern "C" VFP_EXPORT char* VFP_EXPORT_CALL VFPCompare_Build(int* pLen, void* pDataTmp);
+```
+
+Finalizes the fingerprint. Returns a `char*` buffer; `*pLen` receives its size.
+
+#### VFPCompare_Clear
+
+```cpp
+extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPCompare_Clear(void* pDataTmp);
+```
+
+Frees accumulator resources.
+
+Feeds one decoded video frame into the accumulator.
+
+### VFPCompare_Build
+
+```cpp
+extern "C" VFP_EXPORT char* VFP_EXPORT_CALL VFPCompare_Build(
+    int* pLen,
+    void* pDataTmp);
+```
+
+Finalizes the fingerprint. Returns a `char*` buffer; `*pLen` receives its size.
 
 ### VFPCompare_Compare
 
 ```cpp
 extern "C" VFP_EXPORT double VFP_EXPORT_CALL VFPCompare_Compare(
-    const char* pData1,
-    int iLen1,
-    const char* pData2,
-    int iLen2,
+    const char* pData1, int iLen1,
+    const char* pData2, int iLen2,
     int MaxS);
 ```
 
-**Description:** Compares two fingerprints and returns a difference score.
+Returns a difference score (lower = more similar). `MaxS` is the maximum time shift in seconds.
 
-**Parameters:**
+### VFPCompare_GetFingerprintForVideoFile
 
-- `pData1`: First fingerprint data
-- `iLen1`: Size of first fingerprint
-- `pData2`: Second fingerprint data
-- `iLen2`: Size of second fingerprint
-- `MaxS`: Maximum time shift in seconds to check
-
-**Returns:** Difference score (lower values indicate more similarity)
-
-**Example:**
+High-level convenience for comparison fingerprints:
 
 ```cpp
-VFPFingerPrint fp1{}, fp2{};
-VFPFingerprintLoad(&fp1, L"video1.vfpsig");
-VFPFingerprintLoad(&fp2, L"video2.vfpsig");
+extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPCompare_GetFingerprintForVideoFile(
+    VFPFingerprintSource source,
+    VFPFingerPrint* vfp);
+```
 
-double difference = VFPCompare_Compare(
-    fp1.Data, fp1.DataSize,
-    fp2.Data, fp2.DataSize,
-    10  // Check up to 10 seconds shift
-);
+**Example — high-level compare workflow:**
 
-printf("Difference score: %.2f\n", difference);
-if (difference < 100) {
-    printf("Videos are very similar (likely duplicates)\n");
-} else if (difference < 500) {
-    printf("Videos have significant similarities\n");
-} else {
-    printf("Videos are different\n");
-}
+```cpp
+VFPFingerprintSource src{};
+VFPFillSource(L"video.mp4", &src);
+
+VFPFingerPrint fp{};
+VFPCompare_GetFingerprintForVideoFile(src, &fp);
+
+// Compare with another fingerprint:
+double diff = VFPCompare_Compare(fp1.Data, fp1.DataSize,
+                                 fp2.Data, fp2.DataSize, 10);
 ```
 
 ## Utility Functions
-
-### VFPFillSource
-
-```cpp
-extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPFillSource(
-    wchar_t* filename,
-    VFPFingerprintSource* source);
-```
-
-**Description:** Initializes a VFPFingerprintSource structure with default values for a video file.
-
-**Parameters:**
-
-- `filename`: Path to the video file
-- `source`: Pointer to source structure to initialize
-
-**Example:**
-
-```cpp
-VFPFingerprintSource source{};
-VFPFillSource(L"C:\\Videos\\sample.mp4", &source);
-
-// Optionally modify settings after initialization
-source.StartTime = 5000;  // Start at 5 seconds
-source.StopTime = 30000;  // Stop at 30 seconds
-```
 
 ### VFPFingerprintSave
 
@@ -540,47 +562,26 @@ printf("Image similarity: %.2f%%\n", similarity);
 
 ## Complete Working Examples
 
-### Example 1: Generate Fingerprint
+### Example 1: Generate Search Fingerprint (high-level API)
 
 ```cpp
-#include <iostream>
-#include <Windows.h>
 #include <VisioForge_VFP.h>
-#include <VisioForge_VFP_Types.h>
 
 int main()
 {
-    // Set license key
     VFPSetLicenseKey(L"YOUR-LICENSE-KEY");
-    
-    // Configure source
-    VFPFingerprintSource source{};
-    VFPFillSource(L"C:\\Videos\\sample.mp4", &source);
-    
-    // Optional: Process only a segment
-    source.StartTime = 10000;  // Start at 10 seconds
-    source.StopTime = 60000;   // Stop at 60 seconds
-    
-    // Optional: Ignore logo area
-    source.IgnoredAreas[0] = {1800, 0, 1920, 100};
-    
-    // Generate search fingerprint
-    VFPFingerPrint fingerprint{};
-    wchar_t* error = VFPSearch_GetFingerprintForVideoFile(source, &fingerprint);
-    
-    if (error == nullptr) {
-        printf("Fingerprint generated successfully\n");
-        printf("Duration: %lld ms\n", fingerprint.Duration);
-        printf("Data size: %d bytes\n", fingerprint.DataSize);
-        
-        // Save to file
-        VFPFingerprintSave(&fingerprint, L"sample.vfpsig");
-        printf("Fingerprint saved to sample.vfpsig\n");
-    } else {
-        wprintf(L"Error: %s\n", error);
-        return 1;
-    }
-    
+
+    VFPFingerprintSource src{};
+    VFPFillSource(L"sample.mp4", &src);
+    src.StartTime = 10000;   // start at 10s
+    src.StopTime = 60000;    // stop at 60s
+
+    VFPFingerPrint fp{};
+    VFPSearch_GetFingerprintForVideoFile(src, &fp);
+
+    printf("Fingerprint: %dx%d, %.1fs, %d bytes\n",
+           fp.Width, fp.Height, fp.Duration / 1000.0, fp.DataSize);
+    VFPFingerprintSave(&fp, L"sample.vfpsig");
     return 0;
 }
 ```
@@ -588,158 +589,70 @@ int main()
 ### Example 2: Compare Two Videos
 
 ```cpp
-#include <iostream>
-#include <Windows.h>
 #include <VisioForge_VFP.h>
-#include <VisioForge_VFP_Types.h>
 
-int main(int argc, char* argv[])
+int main()
 {
-    if (argc != 3) {
-        printf("Usage: compare video1.mp4 video2.mp4\n");
-        return 1;
-    }
-    
-    // Set license key
     VFPSetLicenseKey(L"YOUR-LICENSE-KEY");
-    
-    // Generate fingerprints for both videos
-    VFPFingerprintSource source1{}, source2{};
-    VFPFingerPrint fp1{}, fp2{};
-    
-    // Convert filenames to wide char
-    wchar_t file1[256], file2[256];
-    mbstowcs(file1, argv[1], 256);
-    mbstowcs(file2, argv[2], 256);
-    
-    // Generate first fingerprint
-    VFPFillSource(file1, &source1);
-    wchar_t* error = VFPCompare_GetFingerprintForVideoFile(source1, &fp1);
-    if (error != nullptr) {
-        wprintf(L"Error processing first video: %s\n", error);
-        return 1;
-    }
-    
-    // Generate second fingerprint
-    VFPFillSource(file2, &source2);
-    error = VFPCompare_GetFingerprintForVideoFile(source2, &fp2);
-    if (error != nullptr) {
-        wprintf(L"Error processing second video: %s\n", error);
-        return 1;
-    }
-    
-    // Compare fingerprints
-    double difference = VFPCompare_Compare(
-        fp1.Data, fp1.DataSize,
-        fp2.Data, fp2.DataSize,
-        10  // Check up to 10 seconds shift
-    );
-    
-    printf("Comparison Results:\n");
-    printf("  Video 1: %ls (%.2f seconds)\n", file1, fp1.Duration / 1000.0);
-    printf("  Video 2: %ls (%.2f seconds)\n", file2, fp2.Duration / 1000.0);
-    printf("  Difference score: %.2f\n", difference);
-    
-    if (difference < 100) {
-        printf("  Result: Videos are very similar (likely duplicates)\n");
-    } else if (difference < 500) {
-        printf("  Result: Videos have significant similarities\n");
-    } else {
-        printf("  Result: Videos are different\n");
-    }
-    
+
+    // Generate fingerprint for video 1
+    VFPFingerprintSource src1{};
+    VFPFillSource(L"video1.mp4", &src1);
+    VFPFingerPrint fp1{};
+    VFPCompare_GetFingerprintForVideoFile(src1, &fp1);
+
+    // Generate fingerprint for video 2
+    VFPFingerprintSource src2{};
+    VFPFillSource(L"video2.mp4", &src2);
+    VFPFingerPrint fp2{};
+    VFPCompare_GetFingerprintForVideoFile(src2, &fp2);
+
+    double diff = VFPCompare_Compare(fp1.Data, fp1.DataSize,
+                                     fp2.Data, fp2.DataSize, 10);
+    printf("Difference: %.2f\n", diff);
+    if (diff < 100)       printf("Very similar\n");
+    else if (diff < 500)  printf("Some similarity\n");
+    else                  printf("Different\n");
+
     return 0;
 }
 ```
 
-### Example 3: Search for Commercial in Broadcast
+### Example 3: Search Fragment in Longer Video
 
 ```cpp
-#include <iostream>
-#include <Windows.h>
 #include <VisioForge_VFP.h>
-#include <VisioForge_VFP_Types.h>
-#include <ctime>
 
-std::string timeToString(time_t tm)
+int main()
 {
-    char buff[20];
-    strftime(buff, 20, "%H:%M:%S", gmtime(&tm));
-    return std::string(buff);
-}
-
-int main(int argc, char* argv[])
-{
-    if (argc != 3) {
-        printf("Usage: search commercial.mp4 broadcast.mp4\n");
-        return 1;
-    }
-    
-    // Set license key
     VFPSetLicenseKey(L"YOUR-LICENSE-KEY");
-    
-    wchar_t commercial[256], broadcast[256];
-    mbstowcs(commercial, argv[1], 256);
-    mbstowcs(broadcast, argv[2], 256);
-    
-    // Generate fingerprints
-    VFPFingerprintSource src1{}, src2{};
-    VFPFingerPrint fp_commercial{}, fp_broadcast{};
-    
-    printf("Generating fingerprint for commercial...\n");
-    VFPFillSource(commercial, &src1);
-    wchar_t* error = VFPSearch_GetFingerprintForVideoFile(src1, &fp_commercial);
-    if (error != nullptr) {
-        wprintf(L"Error: %s\n", error);
-        return 1;
-    }
-    
-    printf("Generating fingerprint for broadcast...\n");
-    VFPFillSource(broadcast, &src2);
-    error = VFPSearch_GetFingerprintForVideoFile(src2, &fp_broadcast);
-    if (error != nullptr) {
-        wprintf(L"Error: %s\n", error);
-        return 1;
-    }
-    
+
+    // Build needle fingerprint (short fragment)
+    VFPFingerprintSource needleSrc{};
+    VFPFillSource(L"fragment.mp4", &needleSrc);
+    VFPFingerPrint needle{};
+    VFPSearch_GetFingerprintForVideoFile(needleSrc, &needle);
+
+    // Build haystack fingerprint (long video)
+    VFPFingerprintSource haystackSrc{};
+    VFPFillSource(L"broadcast.mp4", &haystackSrc);
+    VFPFingerPrint haystack{};
+    VFPSearch_GetFingerprintForVideoFile(haystackSrc, &haystack);
+
     // Search for all occurrences
-    printf("\nSearching for commercial in broadcast...\n");
-    printf("Commercial duration: %.2f seconds\n", fp_commercial.Duration / 1000.0);
-    printf("Broadcast duration: %.2f seconds\n\n", fp_broadcast.Duration / 1000.0);
-    
-    const int threshold = 300;
     double diff = 0;
-    int position = 0;
-    int occurrences = 0;
-    
-    const int commercial_duration = (int)(fp_commercial.Duration / 1000);
-    const int broadcast_duration = (int)(fp_broadcast.Duration / 1000);
-    
-    while (position < broadcast_duration) {
-        position = VFPSearch_Search2(
-            &fp_commercial, 0,
-            &fp_broadcast, position,
-            &diff, threshold
-        );
-        
-        if (position == INT_MAX) {
-            break;
-        }
-        
-        occurrences++;
-        printf("Match #%d found at %s (difference: %.2f)\n",
-               occurrences, timeToString(position).c_str(), diff);
-        
-        // Skip past this occurrence
-        position += commercial_duration;
+    int pos = 0;
+    const int needleSec = (int)(needle.Duration / 1000);
+
+    while (pos < (int)(haystack.Duration / 1000))
+    {
+        pos = VFPSearch_Search2(&needle, 0, &haystack, pos, &diff, 300);
+        if (pos == INT_MAX) break;
+
+        printf("Match at %d seconds (diff: %.2f)\n", pos, diff);
+        pos += needleSec;
     }
-    
-    if (occurrences == 0) {
-        printf("Commercial not found in broadcast.\n");
-    } else {
-        printf("\nTotal occurrences found: %d\n", occurrences);
-    }
-    
+
     return 0;
 }
 ```

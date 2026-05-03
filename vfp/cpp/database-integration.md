@@ -10,27 +10,12 @@ tags:
   - Fingerprinting
   - MP4
 primary_api_classes:
-  - StoreFingerprint
   - VFPFingerprintSource
-  - VFPFillSource
-  - BatchFingerprintProcessor
-  - CacheFingerprint
+  - VFPFingerPrint
 
 ---
 
 # C++ Fingerprinting SDK Database Guide
-
-!!! danger "Some helpers referenced below do not exist — use the flat C API for fingerprint generation"
-
-    `VFPFillSource` and `VFPSearch_GetFingerprintForVideoFile` are
-    **not** real exports of `VisioForge_VFP.dll`. To generate a
-    fingerprint before storing it, decode video frames in the host
-    application and feed them to the canonical low-level loop:
-    `VFPSearch_Init` → `VFPSearch_Process` (per frame) → `VFPSearch_Build`
-    (or the `VFPCompare_*` equivalent). See [`index.md`](./index.md) for
-    the full workflow. Database storage and retrieval semantics described
-    on this page are independent of the fingerprint-generation API.
-    Tracked as defect #088.
 
 This guide demonstrates how to integrate the Video Fingerprinting SDK for C++ with various database systems for efficient fingerprint storage and retrieval.
 
@@ -226,31 +211,25 @@ int main() {
     VFPSetLicenseKey(L"YOUR-LICENSE-KEY");
     
     // Generate and store fingerprint
-    VFPFingerprintSource source{};
-    VFPFillSource(L"video.mp4", &source);
-    source.StartTime = 0;
-    source.StopTime = 60000;  // First 60 seconds
-    
+    // Generate fingerprint via high-level API
+    VFPFingerprintSource src{};
+    VFPFillSource(L"video.mp4", &src);
+
     VFPFingerPrint fingerprint{};
-    wchar_t* error = VFPSearch_GetFingerprintForVideoFile(source, &fingerprint);
-    
-    if (error == nullptr) {
-        db.StoreFingerprint("video.mp4", fingerprint);
-        std::cout << "Fingerprint stored successfully" << std::endl;
-        
-        // Save fingerprint to file as well
-        VFPFingerprintSave(&fingerprint, L"video.vfp");
-        
-        // Find similar videos
-        auto similar = db.FindSimilarVideos(fingerprint, 5);
-        for (const auto& path : similar) {
-            std::cout << "Similar video: " << path << std::endl;
-        }
-        
-        // Note: No VFPFingerPrint_Free function - manage memory manually
-        delete[] fingerprint.Data;
+    VFPSearch_GetFingerprintForVideoFile(src, &fingerprint);
+
+    db.StoreFingerprint("video.mp4", fingerprint);
+    std::cout << "Fingerprint stored successfully" << std::endl;
+
+    // Save fingerprint to file as well
+    VFPFingerprintSave(&fingerprint, L"video.vfp");
+
+    // Find similar videos
+    auto similar = db.FindSimilarVideos(fingerprint, 5);
+    for (const auto& path : similar) {
+        std::cout << "Similar video: " << path << std::endl;
     }
-    
+
     return 0;
 }
 ```
@@ -522,23 +501,20 @@ public:
 ```cpp
 // Example: Save and load fingerprints using SDK functions
 void SaveFingerprintToDB(const std::string& path) {
-    VFPFingerprintSource source{};
-    VFPFillSource(std::wstring(path.begin(), path.end()).c_str(), &source);
-    
+    // Generate fingerprint via high-level API
+    VFPFingerprintSource src{};
+    VFPFillSource(std::wstring(path.begin(), path.end()).c_str(), &src);
+
     VFPFingerPrint fp{};
-    // Generate search fingerprint for fragment detection
-    wchar_t* error = VFPSearch_GetFingerprintForVideoFile(source, &fp);
-    
-    if (error == nullptr) {
-        // Save to file format
-        VFPFingerprintSave(&fp, L"temp.vfp");
-        
-        // Or save legacy format for compatibility
-        VFPFingerprintSaveLegacy(&fp, L"temp_legacy.vfp");
-        
-        // Store in database...
-        delete[] fp.Data;
-    }
+    VFPSearch_GetFingerprintForVideoFile(src, &fp);
+
+    // Save to file format
+    VFPFingerprintSave(&fp, L"temp.vfp");
+
+    // Or save legacy format for compatibility
+    VFPFingerprintSaveLegacy(&fp, L"temp_legacy.vfp");
+
+    // Store in database...
 }
 ```
 

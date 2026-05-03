@@ -1,6 +1,6 @@
 ---
-title: SDK Video Fingerprinting C++ - Guía de instalación y config.
-description: Instale y configure el SDK Video Fingerprinting C++ de VisioForge con Visual Studio, paquetes NuGet y su primera app de huellas.
+title: SDK C++ de Video Fingerprinting - Instalación y Setup
+description: Instale y configure el SDK Video Fingerprinting de VisioForge para C++ con configuración de Visual Studio, paquetes NuGet y su primera aplicación de huellas.
 tags:
   - Video Fingerprinting SDK
   - C++
@@ -12,42 +12,31 @@ tags:
   - MP4
 primary_api_classes:
   - VFPFingerprintSource
-  - VFPFillSource
-  - VFPAnalyzer
+  - VFPFingerPrint
 
 ---
 
-# Empezando con SDK de Video Fingerprinting C++
+# Primeros Pasos con el SDK Video Fingerprinting para C++
 
-!!! danger "Algunos snippets abajo llaman a helpers de alto nivel que no existen — use la API plana C en su lugar"
+¡Bienvenido al SDK Video Fingerprinting de VisioForge para C++! Esta guía completa le guiará por todo lo necesario para empezar, desde la instalación hasta su primera aplicación funcional. Al finalizar, tendrá una base sólida para crear aplicaciones de video fingerprinting de alto rendimiento en C++.
 
-    `VFPFillSource`, `VFPSearch_GetFingerprintForVideoFile`, y
-    `VFPCompare_GetFingerprintForVideoFile` **no** son exports reales de
-    `VisioForge_VFP.dll`. La API C distribuida es una interfaz plana
-    estilo C (`extern "C"`) — vea [`index.md`](./index.md) para el flujo
-    canónico `*_Init` / `*_Process` / `*_Build` / `*_Search` / `*_Compare`.
-    La decodificación de cuadros es responsabilidad de la aplicación host
-    (use FFmpeg / GStreamer / DirectShow). Catalogado como defecto #087.
-
-¡Bienvenido al SDK de Video Fingerprinting de VisioForge para C++! Esta guía completa lo guiará a través de todo lo que necesita para comenzar, desde instalación hasta su primera aplicación funcionando. Al final de esta guía, tendrá una base sólida para construir aplicaciones de video fingerprinting de alto rendimiento en C++.
-
-> **Nota:** Si ya está familiarizado con el SDK .NET, encontrará que el SDK C++ sigue conceptos similares con beneficios de rendimiento nativo. Vea nuestra [Comparación de SDK](../index.es.md#soporte-de-plataformas-e-integracion) para detalles.
+> **Nota:** Si ya está familiarizado con el SDK .NET, el SDK C++ sigue conceptos similares con beneficios de rendimiento nativo. Consulte nuestra [Comparación de SDKs](../index.md) para más detalles.
 
 ## Resumen de Inicio Rápido
 
-Si está buscando ponerse en marcha rápidamente:
+Para empezar rápidamente:
 
-1. Descargar el paquete SDK desde VisioForge
-2. Extraer los archivos a su directorio de proyecto
-3. Incluir los headers: `#include <VisioForge_VFP.h>` y `#include <VisioForge_VFP_Types.h>`
-4. Vincular la biblioteca apropiada: `VisioForge_VideoFingerprinting.lib` (x86) o `VisioForge_VideoFingerprinting_x64.lib` (x64)
-5. Copiar DLLs de runtime a su directorio de salida
-6. Establecer su clave de licencia (si comprada): `VFPSetLicenseKey(L"clave-licencia");`
-7. Generar su primera huella digital usando los ejemplos a continuación
+1. Descargue el paquete SDK de VisioForge
+2. Extraiga los archivos al directorio de su proyecto
+3. Incluya las cabeceras: `#include <VisioForge_VFP.h>` y `#include <VisioForge_VFP_Types.h>`
+4. Enlace la librería apropiada: `VisioForge_VideoFingerprinting.lib` (x86) o `VisioForge_VideoFingerprinting_x64.lib` (x64)
+5. Copie las DLLs runtime a su directorio de salida
+6. Establezca su clave de licencia: `VFPSetLicenseKey(L"clave-de-licencia");`
+7. Genere su primera huella usando los ejemplos a continuación
 
-## Prerrequisitos y Requisitos del Sistema
+## Requisitos Previos y del Sistema
 
-Para requisitos detallados del sistema incluyendo plataformas soportadas, especificaciones de hardware y consideraciones de rendimiento, por favor vea nuestra guía completa de [Requisitos del Sistema](../system-requirements.es.md).
+Para requisitos detallados del sistema, incluyendo plataformas soportadas, especificaciones de hardware y consideraciones de rendimiento, consulte nuestra guía de [Requisitos del Sistema](../system-requirements.md).
 
 ### Requisitos Específicos de C++
 
@@ -63,77 +52,77 @@ Después de descargar el SDK, encontrará la siguiente estructura:
 ```
 VideoFingerprinting_CPP_SDK/
 ├── include/
-│   ├── VisioForge_VFP.h           # Header API principal
+│   ├── VisioForge_VFP.h           # Cabecera principal de la API
 │   └── VisioForge_VFP_Types.h     # Definiciones de tipos
 ├── lib/
-│   ├── VisioForge_VideoFingerprinting.lib      # Biblioteca import x86
-│   └── VisioForge_VideoFingerprinting_x64.lib  # Biblioteca import x64
+│   ├── VisioForge_VideoFingerprinting.lib      # x86 import library
+│   └── VisioForge_VideoFingerprinting_x64.lib  # x64 import library
 ├── redist/
-│   ├── VisioForge_VideoFingerprinting.dll      # DLL runtime x86
-│   ├── VisioForge_VideoFingerprinting_x64.dll  # DLL runtime x64
-│   ├── VisioForge_FFMPEG_Source.dll           # Soporte de medios x86
-│   └── VisioForge_FFMPEG_Source_x64.dll       # Soporte de medios x64
+│   ├── VisioForge_VideoFingerprinting.dll      # x86 runtime DLL
+│   ├── VisioForge_VideoFingerprinting_x64.dll  # x64 runtime DLL
+│   ├── VisioForge_FFMPEG_Source.dll           # x86 media support
+│   └── VisioForge_FFMPEG_Source_x64.dll       # x64 media support
 ├── demos/
-│   ├── vfp_gen/        # Demo de generación de huella digital
-│   ├── vfp_compare/    # Demo de comparación de video
-│   └── vfp_search/     # Demo de búsqueda de fragmento
+│   ├── vfp_gen/        # Fingerprint generation demo
+│   ├── vfp_compare/    # Video comparison demo
+│   └── vfp_search/     # Fragment search demo
 └── README.txt
 ```
 
-## Configurando Su Entorno de Desarrollo
+## Configuración del Entorno de Desarrollo
 
-### Configuración de Visual Studio (Windows)
+### Configuración Visual Studio (Windows)
 
 #### Paso 1: Crear un Nuevo Proyecto
 
-1. Abrir Visual Studio 2019 o posterior
-2. Hacer clic en "Crear un nuevo proyecto"
-3. Seleccionar "App de Consola" (C++)
-4. Nombrar su proyecto (ej. "VFPExample")
-5. Elegir una ubicación y hacer clic en "Crear"
+1. Abra Visual Studio 2019 o superior
+2. Haga clic en "Crear un nuevo proyecto"
+3. Seleccione "Aplicación de consola" (C++)
+4. Nombre su proyecto (ej., "VFPExample")
+5. Elija una ubicación y haga clic en "Crear"
 
-#### Paso 2: Configurar Propiedades del Proyecto
+#### Paso 2: Configurar las Propiedades del Proyecto
 
-1. Hacer clic derecho en su proyecto en el Explorador de Soluciones
-2. Seleccionar "Propiedades"
-3. Configurar las siguientes configuraciones:
+1. Haga clic derecho en su proyecto en el Explorador de soluciones
+2. Seleccione "Propiedades"
+3. Configure los siguientes ajustes:
 
-**Propiedades de Configuración → C/C++ → General:**
-
-```
-Directorios de Inclusión Adicionales: $(ProjectDir)include
-```
-
-**Propiedades de Configuración → Vinculador → General:**
+**Propiedades de configuración → C/C++ → General:**
 
 ```
-Directorios de Biblioteca Adicionales: $(ProjectDir)lib
+Additional Include Directories: $(ProjectDir)include
 ```
 
-**Propiedades de Configuración → Vinculador → Entrada:**
+**Propiedades de configuración → Vinculador → General:**
 
 ```
-Dependencias Adicionales (x86): VisioForge_VideoFingerprinting.lib
-Dependencias Adicionales (x64): VisioForge_VideoFingerprinting_x64.lib
+Additional Library Directories: $(ProjectDir)lib
 ```
 
-#### Paso 3: Agregar Archivos SDK
+**Propiedades de configuración → Vinculador → Entrada:**
 
-1. Copiar la carpeta `include` a su directorio de proyecto
-2. Copiar la carpeta `lib` a su directorio de proyecto
-3. Copiar archivos DLL desde `redist` a su directorio de salida (ej. `Debug` o `Release`)
+```
+Additional Dependencies (x86): VisioForge_VideoFingerprinting.lib
+Additional Dependencies (x64): VisioForge_VideoFingerprinting_x64.lib
+```
+
+#### Paso 3: Añadir Archivos del SDK
+
+1. Copie la carpeta `include` al directorio de su proyecto
+2. Copie la carpeta `lib` al directorio de su proyecto
+3. Copie los archivos DLL de `redist` a su directorio de salida (ej., `Debug` o `Release`)
 
 #### Paso 4: Configurar Eventos Post-Build
 
-Agregar un evento post-build para copiar DLLs automáticamente:
+Añada un evento post-build para copiar las DLLs automáticamente:
 
 ```batch
 xcopy /y "$(ProjectDir)redist\*.dll" "$(OutDir)"
 ```
 
-### Configuración de CMake (Cross-Platform)
+### Configuración CMake (Multiplataforma)
 
-Crear un archivo `CMakeLists.txt`:
+Cree un archivo `CMakeLists.txt`:
 
 ```cmake
 cmake_minimum_required(VERSION 3.10)
@@ -142,15 +131,15 @@ project(VFPExample)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Encontrar archivos SDK
+# Find SDK files
 set(VFP_SDK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/sdk")
 
-# Directorios de inclusión
+# Include directories
 include_directories(${VFP_SDK_PATH}/include)
 
-# Configuración específica de plataforma
+# Platform-specific configuration
 if(WIN32)
-    # Configuración Windows
+    # Windows configuration
     link_directories(${VFP_SDK_PATH}/lib)
     
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -165,22 +154,22 @@ if(WIN32)
             ${VFP_SDK_PATH}/redist/VisioForge_FFMPEG_Source.dll)
     endif()
 elseif(APPLE)
-    # Configuración macOS
+    # Configuración de macOS
     link_directories(${VFP_SDK_PATH}/lib)
     set(VFP_LIBRARIES VisioForge_VideoFingerprinting)
 elseif(UNIX)
-    # Configuración Linux
+    # Configuración de Linux
     link_directories(${VFP_SDK_PATH}/lib)
     set(VFP_LIBRARIES VisioForge_VideoFingerprinting)
 endif()
 
-# Agregar ejecutable
+# Añadir ejecutable
 add_executable(vfp_example main.cpp)
 
-# Vincular bibliotecas
+# Enlazar librerías
 target_link_libraries(vfp_example ${VFP_LIBRARIES})
 
-# Copiar bibliotecas runtime en Windows
+# Copiar librerías de ejecución en Windows
 if(WIN32)
     foreach(DLL ${VFP_RUNTIME_LIBS})
         add_custom_command(TARGET vfp_example POST_BUILD
@@ -190,7 +179,7 @@ if(WIN32)
 endif()
 ```
 
-Build el proyecto:
+Compile el proyecto:
 
 ```bash
 mkdir build
@@ -222,9 +211,9 @@ sudo dnf install gstreamer1-plugins-good gstreamer1-plugins-bad-free
 sudo dnf install gstreamer1-libav
 ```
 
-#### Configuración de Build
+#### Configuración de Build (Linux)
 
-Crear un Makefile simple:
+Cree un Makefile simple:
 
 ```makefile
 CXX = g++
@@ -251,34 +240,34 @@ clean:
 
 ### Configuración macOS
 
-#### Instalar Command Line Tools de Xcode
+#### Instalar Xcode Command Line Tools
 
 ```bash
 xcode-select --install
 ```
 
-#### Configuración de Build
+#### Configuración de Build (macOS)
 
-Crear un script de build `build.sh`:
+Cree un script de build `build.sh`:
 
 ```bash
 #!/bin/bash
 
-# Configuración del compilador
+# Compiler settings
 CXX=clang++
 CXXFLAGS="-std=c++11 -Wall -I./include"
 LDFLAGS="-L./lib -lVisioForge_VideoFingerprinting"
 
-# Establecer ruta de biblioteca
+# Establecer la ruta de librerías
 export DYLD_LIBRARY_PATH=./lib:$DYLD_LIBRARY_PATH
 
-# Build
+# Compilar
 $CXX $CXXFLAGS main.cpp $LDFLAGS -o vfp_example
 
-echo "Build completado. Ejecutar con: ./vfp_example"
+echo "Compilación completada. Ejecute con: ./vfp_example"
 ```
 
-Hacerlo ejecutable y ejecutar:
+Hágalo ejecutable y ejecútelo:
 
 ```bash
 chmod +x build.sh
@@ -287,7 +276,7 @@ chmod +x build.sh
 
 ## Su Primera Aplicación
 
-Vamos a crear una aplicación simple que genera una huella digital desde un archivo de video.
+Vamos a crear una aplicación simple que genera una huella desde un archivo de video.
 
 ### Paso 1: Crear main.cpp
 
@@ -305,17 +294,17 @@ Vamos a crear una aplicación simple que genera una huella digital desde un arch
 
 int main(int argc, char* argv[])
 {
-    std::cout << "SDK de Video Fingerprinting de VisioForge - Primera Aplicación\n";
+    std::cout << "SDK VisioForge Video Fingerprinting - Primera Aplicación\n";
     std::cout << "========================================================\n\n";
     
-    // Verificar argumentos de línea de comandos
+    // Comprobar argumentos de la línea de comandos
     if (argc != 2) {
-        std::cout << "Uso: " << argv[0] << " <archivo_video>\n";
+        std::cout << "Uso: " << argv[0] << " <archivo_de_video>\n";
         std::cout << "Ejemplo: " << argv[0] << " sample.mp4\n";
         return 1;
     }
     
-    // Convertir nombre de archivo a carácter ancho (para compatibilidad Windows)
+    // Convertir el nombre de archivo a caracteres anchos (para compatibilidad con Windows)
     wchar_t videoFile[256];
 #ifdef _WIN32
     size_t converted;
@@ -324,40 +313,31 @@ int main(int argc, char* argv[])
     mbstowcs(videoFile, argv[1], 256);
 #endif
     
-    // Paso 1: Establecer clave de licencia
+    // Paso 1: Establecer la clave de licencia
     std::cout << "Estableciendo clave de licencia...\n";
-    VFPSetLicenseKey(L"TRIAL");  // Usar "TRIAL" para evaluación
+    VFPSetLicenseKey(L"TRIAL");  // Use "TRIAL" para evaluación
     
     // Paso 2: Configurar la fuente
-    std::cout << "Configurando fuente para: " << argv[1] << "\n";
-    VFPFingerprintSource source{};
-    VFPFillSource(videoFile, &source);
-    
-    // Opcional: Configurar parámetros de procesamiento
-    // source.StartTime = 0;      // Iniciar desde el principio
-    // source.StopTime = 60000;   // Procesar primeros 60 segundos
-    
-    // Paso 3: Generar huella digital
-    std::cout << "Generando huella digital...\n";
+    VFPFingerprintSource src{};
+    VFPFillSource(videoFile, &src);
+    src.StartTime = 0;       // comenzar desde el inicio
+    src.StopTime = 0;        // 0 = hasta el final del archivo
+
+    // Paso 3: Generar la huella
+    std::cout << "Generando huella...\n";
     VFPFingerPrint fingerprint{};
-    
-    wchar_t* error = VFPSearch_GetFingerprintForVideoFile(source, &fingerprint);
-    
-    if (error != nullptr) {
-        std::wcerr << L"Error: " << error << L"\n";
-        return 1;
-    }
-    
+    VFPSearch_GetFingerprintForVideoFile(src, &fingerprint);
+
     // Paso 4: Mostrar resultados
-    std::cout << "\nHuella digital generada exitosamente!\n";
+    std::cout << "\n¡Huella generada correctamente!\n";
     std::cout << "=====================================\n";
-    std::cout << "Información de Video:\n";
+    std::cout << "Información del video:\n";
     std::cout << "  Duración: " << (fingerprint.Duration / 1000.0) << " segundos\n";
     std::cout << "  Resolución: " << fingerprint.Width << "x" << fingerprint.Height << "\n";
-    std::cout << "  Tasa de Frames: " << fingerprint.FrameRate << " fps\n";
-    std::cout << "  Tamaño de Datos: " << fingerprint.DataSize << " bytes\n";
+    std::cout << "  Frecuencia de cuadros: " << fingerprint.FrameRate << " fps\n";
+    std::cout << "  Tamaño de datos: " << fingerprint.DataSize << " bytes\n";
     
-    // Paso 5: Guardar huella digital a archivo
+    // Paso 5: Guardar la huella en un archivo
     wchar_t outputFile[256];
 #ifdef _WIN32
     wcscpy_s(outputFile, videoFile);
@@ -367,7 +347,7 @@ int main(int argc, char* argv[])
     wcscat(outputFile, L".vfpsig");
 #endif
     
-    std::cout << "\nGuardando huella digital...\n";
+    std::cout << "\nGuardando huella...\n";
     VFPFingerprintSave(&fingerprint, outputFile);
     
     char outputFileAnsi[256];
@@ -378,27 +358,27 @@ int main(int argc, char* argv[])
     wcstombs(outputFileAnsi, outputFile, 256);
 #endif
     
-    std::cout << "Huella digital guardada en: " << outputFileAnsi << "\n";
+    std::cout << "Huella guardada en: " << outputFileAnsi << "\n";
     
-    std::cout << "\n¡Éxito! Ahora puede usar esta huella digital para:\n";
-    std::cout << "  - Comparar con otros videos para similitud\n";
-    std::cout << "  - Buscar este video en broadcasts más largos\n";
-    std::cout << "  - Construir una base de datos de huellas digitales de video\n";
+    std::cout << "\n¡Éxito! Ahora puede usar esta huella para:\n";
+    std::cout << "  - Compararla con otros videos para medir similitud\n";
+    std::cout << "  - Buscar este video dentro de emisiones más largas\n";
+    std::cout << "  - Crear una base de datos de huellas de video\n";
     
     return 0;
 }
 ```
 
-### Paso 2: Build y Ejecutar
+### Paso 2: Compilar y Ejecutar
 
 #### Windows (Visual Studio)
 
-1. Presionar F7 para build la solución
-2. Copiar un archivo de video de prueba a su directorio de salida
-3. Abrir Command Prompt en el directorio de salida
-4. Ejecutar: `VFPExample.exe testvideo.mp4`
+1. Presione F7 para compilar la solución
+2. Copie un archivo de video de prueba a su directorio de salida
+3. Abra Command Prompt en el directorio de salida
+4. Ejecute: `VFPExample.exe testvideo.mp4`
 
-#### Windows (Línea de Comandos)
+#### Windows (Command Line)
 
 ```batch
 cl /EHsc /I.\include main.cpp /link /LIBPATH:.\lib VisioForge_VideoFingerprinting_x64.lib
@@ -422,190 +402,196 @@ export DYLD_LIBRARY_PATH=./lib:$DYLD_LIBRARY_PATH
 ./vfp_example testvideo.mp4
 ```
 
-## Entendiendo Tipos de Huella Digital
+## Entendiendo los Tipos de Huellas
 
-El SDK proporciona dos tipos de huella digital optimizados para diferentes casos de uso. Para una explicación completa incluyendo detalles técnicos, características de rendimiento y guía de decisión, vea nuestra [Guía de Tipos de Huella Digital](../fingerprint-types.es.md).
+El SDK proporciona dos tipos de huellas optimizadas para diferentes casos de uso. Para una explicación completa incluyendo detalles técnicos, características de rendimiento y orientación para decidir, consulte nuestra [Guía de Tipos de Huellas](../fingerprint-types.md).
 
 **Referencia Rápida:**
-- **Huellas Digitales de Búsqueda** (`VFPSearch_GetFingerprintForVideoFile()`): Para encontrar fragmentos de video dentro de videos más largos (detección de comerciales, monitoreo de contenido)
-- **Huellas Digitales de Comparación** (`VFPCompare_GetFingerprintForVideoFile()`): Para comparar videos enteros para similitud (detección de duplicados, comparación de versiones)
+- **Huellas de Búsqueda** (`VFPSearch_Init` / `_Process` / `_Build`): Para encontrar fragmentos de video dentro de videos más largos (detección de anuncios, monitoreo de contenido)
+- **Huellas de Comparación** (`VFPCompare_Init` / `_Process` / `_Build`): Para comparar videos completos por similitud (detección de duplicados, comparación de versiones)
 
 ## Casos de Uso Comunes
 
-### Caso de Uso 1: Detección de Duplicados
+### Caso 1: Detección de Duplicados
 
 ```cpp
-// Generar huellas digitales para dos videos
+// Generate fingerprints for two videos
 VFPFingerPrint fp1{}, fp2{};
-// ... generar huellas digitales ...
+// ... generate fingerprints ...
 
-// Compararlas
+// Compare them
 double difference = VFPCompare_Compare(
     fp1.Data, fp1.DataSize,
     fp2.Data, fp2.DataSize,
-    10  // Permitir hasta 10 segundos de shift
+    10  // Allow up to 10 seconds shift
 );
 
 if (difference < 100) {
-    std::cout << "Los videos son duplicados\n";
+    std::cout << "Videos are duplicates\n";
 }
 ```
 
-### Caso de Uso 2: Detección de Comerciales
+### Caso 2: Detección de Anuncios
 
 ```cpp
-// Cargar huellas digitales de comercial y broadcast
+// Load commercial and broadcast fingerprints
 VFPFingerPrint commercial{}, broadcast{};
 VFPFingerprintLoad(&commercial, L"commercial.vfpsig");
 VFPFingerprintLoad(&broadcast, L"broadcast.vfpsig");
 
-// Buscar comercial
+// Search for commercial
 double diff;
 int position = VFPSearch_Search2(
     &commercial, 0,
     &broadcast, 0,
-    &diff, 300  // umbral
+    &diff, 300  // threshold
 );
 
 if (position != INT_MAX) {
-    std::cout << "Comercial encontrado en: " << position << " segundos\n";
+    std::cout << "Commercial found at: " << position << " seconds\n";
 }
 ```
 
-### Caso de Uso 3: Verificación de Contenido
+### Caso 3: Verificación de Contenido con Áreas Ignoradas
 
 ```cpp
-// Generar huella digital con áreas ignoradas para logos
-VFPFingerprintSource source{};
-VFPFillSource(L"video.mp4", &source);
+VFPFingerprintSource src{};
+VFPFillSource(L"video.mp4", &src);
 
-// Ignorar áreas de logo
-source.IgnoredAreas[0] = {0, 0, 200, 100};        // Logo superior izquierda
-source.IgnoredAreas[1] = {1720, 980, 1920, 1080}; // Marca de agua inferior derecha
+// Ignorar áreas de logotipos/marcas de agua (hasta 10 rectángulos)
+src.IgnoredAreas[0].left   = 0;
+src.IgnoredAreas[0].top    = 0;
+src.IgnoredAreas[0].right  = 200;
+src.IgnoredAreas[0].bottom = 100;    // Logotipo superior izquierdo
 
-VFPFingerPrint fingerprint{};
-VFPSearch_GetFingerprintForVideoFile(source, &fingerprint);
+src.IgnoredAreas[1].left   = 1720;
+src.IgnoredAreas[1].top    = 980;
+src.IgnoredAreas[1].right  = 1920;
+src.IgnoredAreas[1].bottom = 1080;   // Marca de agua inferior derecha
+
+VFPFingerPrint fp{};
+VFPSearch_GetFingerprintForVideoFile(src, &fp);
 ```
 
-## Licenciamiento
+## Licencias
 
-### Modo de Prueba
+### Modo Trial
 
-Para evaluación, use la licencia de prueba:
+Para evaluación, use la licencia trial:
 
 ```cpp
 VFPSetLicenseKey(L"TRIAL");
 ```
 
-Limitaciones del modo de prueba:
+Limitaciones del modo trial:
 
-- Agrega marca de agua a frames procesados
+- Añade marca de agua a los fotogramas procesados
 - Limitado a 60 segundos de procesamiento por sesión
-- Funcionalidad completa disponible de lo contrario
+- Funcionalidad completa disponible por lo demás
 
 ### Licencia Comercial
 
-Para uso en producción, compre una licencia desde VisioForge:
+Para uso en producción, adquiera una licencia de VisioForge:
 
 ```cpp
-VFPSetLicenseKey(L"SU-CLAVE-DE-LICENCIA-AQUI");
+VFPSetLicenseKey(L"SU-CLAVE-DE-LICENCIA");
 ```
 
 Tipos de licencia:
 
 - **Licencia de Desarrollador**: Para desarrollo y pruebas
-- **Licencia de Deployment**: Para distribución con su aplicación
-- **Licencia de Servidor**: Para deployments basados en servidor
+- **Licencia de Despliegue**: Para distribución con su aplicación
+- **Licencia de Servidor**: Para despliegues basados en servidor
 
 ## Solución de Problemas
 
-### Problemas y Soluciones Comunes
+### Problemas Comunes y Soluciones
 
 #### Problema: DLL No Encontrada
 
-**Error**: "El programa no puede iniciar porque VisioForge_VideoFingerprinting.dll no se encuentra"
+**Error**: "El programa no puede iniciarse porque falta VisioForge_VideoFingerprinting.dll"
 
 **Solución**:
 
-- Asegurar que DLLs estén en el mismo directorio que su ejecutable
-- O agregar el directorio DLL a su variable de entorno PATH
-- Verificar que esté usando la arquitectura correcta (x86 vs x64)
+- Asegúrese de que las DLLs estén en el mismo directorio que su ejecutable
+- O añada el directorio DLL a su variable de entorno PATH
+- Verifique que usa la arquitectura correcta (x86 vs x64)
 
 #### Problema: Formato de Video No Soportado
 
-**Error**: "No se puede procesar archivo de video"
+**Error**: "No se puede procesar el archivo de video"
 
 **Solución**:
 
-- Asegurar que el códec de video esté soportado (H.264, H.265, VP8, VP9, AV1)
-- Instalar paquetes de códec adicionales si es necesario
-- Intentar convertir el video a un formato estándar
+- Asegúrese de que el códec de video sea soportado (H.264, H.265, VP8, VP9, AV1)
+- Instale paquetes de códec adicionales si es necesario
+- Intente convertir el video a un formato estándar
 
 #### Problema: Clave de Licencia No Funciona
 
-**Error**: "Clave de licencia inválida"
+**Error**: "Clave de licencia no válida"
 
 **Solución**:
 
-- Verificar que la clave de licencia esté escrita correctamente
-- Asegurar que VFPSetLicenseKey() sea llamado antes de cualquier otra función SDK
-- Verificar que la licencia no haya expirado
-- Verificar que esté usando la licencia correcta para su plataforma
+- Verifique que la clave esté ingresada correctamente
+- Asegúrese de que VFPSetLicenseKey() se llame antes de cualquier otra función
+- Compruebe que la licencia no haya expirado
+- Verifique que usa la licencia correcta para su plataforma
 
 #### Problema: Violación de Acceso a Memoria
 
-**Error**: Violación de acceso leyendo ubicación
+**Error**: Violación de acceso al leer la ubicación
 
 **Solución**:
 
-- Inicializar todas las estructuras con {} antes de usar
-- Verificar que los punteros sean válidos antes de usar
-- Asegurar tamaños apropiados de buffer de string
-- No liberar memoria asignada por SDK manualmente
+- Inicialice todas las estructuras con {} antes de usar
+- Verifique que los punteros sean válidos antes de usar
+- Asegure tamaños de búfer de cadena adecuados
+- No libere manualmente la memoria asignada por el SDK
 
-#### Problema: Rendimiento Pobre
+#### Problema: Bajo Rendimiento
 
-**Síntoma**: Procesamiento más lento de lo esperado
+**Síntoma**: El procesamiento es más lento de lo esperado
 
 **Solución**:
 
-- Usar configuración de build Release, no Debug
-- Habilitar optimizaciones del compilador (/O2 o -O2)
-- Procesar videos desde SSD local, no unidad de red
-- Considerar usar múltiples hilos para procesamiento por lotes
-- Reducir resolución de video si calidad permite
+- Use configuración Release, no Debug
+- Active optimizaciones del compilador (/O2 o -O2)
+- Procese videos desde SSD local, no unidades de red
+- Considere usar múltiples hilos para procesamiento por lotes
+- Reduzca la resolución de video si la calidad lo permite
 
-### Consejos de Debug
+### Consejos de Depuración
 
-1. **Habilitar salida de debug**: Establecer `VFPAnalyzer.DebugDir` para guardar resultados intermedios
-2. **Verificar valores de retorno**: Siempre verificar retornos de error/null
-3. **Usar builds de debug**: Desarrollar inicialmente con símbolos de debug
-4. **Registrar operaciones**: Agregar logging para rastrear flujo de procesamiento
-5. **Probar con archivos conocidos**: Usar videos de referencia para verificar configuración
+1. **Active la salida de depuración**: Guarde datos de fotogramas intermedios para inspección
+2. **Verifique valores de retorno**: Siempre compruebe retornos NULL/error
+3. **Use builds de depuración**: Desarrolle inicialmente con símbolos de depuración
+4. **Registre operaciones**: Añada logging para seguir el flujo de procesamiento
+5. **Pruebe con archivos conocidos**: Use videos de referencia para verificar la configuración
 
 ## Próximos Pasos
 
-Ahora que tiene una configuración funcionando, explore estos temas avanzados:
+Ahora que tiene una configuración funcional, explore estos temas avanzados:
 
-1. **Procesamiento por Lotes**: Procesar múltiples archivos eficientemente
-2. **Integración de Base de Datos**: Almacenar huellas digitales en una base de datos
-3. **Procesamiento en Tiempo Real**: Generar huellas digitales desde streams en vivo
-4. **UI Personalizada**: Construir interfaces gráficas para sus aplicaciones
-5. **Optimización de Rendimiento**: Ajustar para su caso de uso específico
+1. **Procesamiento por Lotes**: Procese múltiples archivos eficientemente
+2. **Integración con Base de Datos**: Almacene huellas en una base de datos
+3. **Procesamiento en Tiempo Real**: Genere huellas desde streams en vivo
+4. **Interfaz Personalizada**: Construya interfaces gráficas para sus aplicaciones
+5. **Optimización de Rendimiento**: Ajuste para su caso de uso específico
 
 ### Lectura Recomendada
 
-- [Documentación API C++](api.md) - Referencia API completa
-- [Entendiendo Video Fingerprinting](../understanding-video-fingerprinting.es.md) - Antecedentes técnicos
-- [Casos de Uso](../use-cases.es.md) - Aplicaciones del mundo real
+- [Documentación de la API C++](api.md) - Referencia completa de la API
+- [Entendiendo Video Fingerprinting](../understanding-video-fingerprinting.md) - Fundamentos técnicos
+- [Casos de Uso](../use-cases.md) - Aplicaciones del mundo real
 
-## Proyectos de Muestra
+## Proyectos de Ejemplo
 
-El SDK incluye tres proyectos de muestra completos:
+El SDK incluye tres proyectos de ejemplo completos:
 
-### vfp_gen - Generación de Huella Digital
+### vfp_gen - Generación de Huellas
 
-Demuestra cómo generar huellas digitales con varias opciones:
+Demuestra cómo generar huellas con varias opciones:
 
 ```bash
 vfp_gen source.mp4 output.sig 0 0 0
@@ -613,51 +599,49 @@ vfp_gen source.mp4 output.sig 0 0 0
 
 ### vfp_compare - Comparación de Video
 
-Muestra cómo comparar dos videos para similitud:
+Muestra cómo comparar dos videos por similitud:
 
 ```bash
 vfp_compare video1.sig video2.sig 100 10
 ```
 
-### vfp_search - Búsqueda de Fragmento
+### vfp_search - Búsqueda de Fragmentos
 
-Ilustra búsqueda de fragmentos de video:
+Ilustra la búsqueda de fragmentos de video:
 
 ```bash
 vfp_search needle.sig haystack.sig 300
 ```
 
-Estudie estos ejemplos para entender mejores prácticas y patrones comunes.
+Estudie estos ejemplos para entender las mejores prácticas y patrones comunes.
 
 ## Soporte y Recursos
 
 ### Obtener Ayuda
 
 - **Email de Soporte**: <support@visioforge.com>
-- **Comunidad Discord**: Únase para ayuda en tiempo real y discusiones
-- **Muestras GitHub**: Muestras de código adicionales e integraciones
+- **Comunidad Discord**: Únase para ayuda y discusiones en tiempo real
+- **Ejemplos en GitHub**: Muestras de código adicionales e integraciones
 
 ### Reportar Problemas
 
-Cuando reporte problemas, por favor proporcione:
+Al reportar problemas, por favor proporcione:
 
-1. Versión SDK y plataforma
-2. Ejemplo de código mínimo reproduciendo el problema
+1. Versión del SDK y plataforma
+2. Ejemplo de código mínimo que reproduzca el problema
 3. Mensajes de error y stack traces
-4. Archivos de video de muestra (si aplicable)
+4. Archivos de video de muestra (si aplica)
 5. Especificaciones del sistema
 
 ## Conclusión
 
-Ahora tiene todo lo necesario para comenzar a construir aplicaciones de video fingerprinting con el SDK C++. El SDK proporciona funcionalidad poderosa con excelente rendimiento, adecuada tanto para aplicaciones de escritorio como deployments de servidor.
+Ahora tiene todo lo necesario para empezar a construir aplicaciones de video fingerprinting con el SDK C++. El SDK proporciona funcionalidad potente con excelente rendimiento, adecuado tanto para aplicaciones de escritorio como para despliegues en servidor.
 
 Recuerde:
 
-- Comenzar con las muestras proporcionadas
+- Comenzar con los ejemplos proporcionados
 - Probar exhaustivamente con su contenido objetivo
 - Optimizar parámetros para su caso de uso
-- Contactar soporte cuando sea necesario
+- Solicitar soporte cuando lo necesite
 
-¡Feliz codificación con SDK de Video Fingerprinting de VisioForge!
-
-````
+¡Feliz codificación con VisioForge Video Fingerprinting SDK!

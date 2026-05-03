@@ -1,6 +1,7 @@
 ---
-title: Ejemplos de código C++ del SDK Video Fingerprinting
-description: Ejemplos de código C++ nativos y de línea de comandos para generación, comparación y búsqueda de huellas de video con el SDK VisioForge.
+title: Ejemplos de Código C++ del SDK Video Fingerprinting
+description: Ejemplos de código C++ para generar, comparar y buscar huellas de video con el SDK VisioForge. Incluye muestras de línea de comandos.
+sidebar_label: Ejemplos C++
 tags:
   - Video Fingerprinting SDK
   - C++
@@ -9,130 +10,91 @@ tags:
   - Linux
   - Fingerprinting
 primary_api_classes:
-  - FingerprintProcessor
-  - VFPSearchFingerprint
-  - FingerprintDatabase
-  - StoreFingerprint
+  - VFPFingerprintSource
+  - VFPFingerPrint
 
 ---
 
-# Muestras de Código C++ del SDK de Huella Digital de Video
+# Ejemplos de Código C++ del SDK Video Fingerprinting
 
-!!! danger "Los nombres de funciones de muestra abajo (`VFPSearchFingerprintGenerate`, `VFPCompareFingerprints`, `VFPSearchFingerprint`) no son exports reales del SDK"
+## Ejemplos Disponibles
 
-    Estos nombres no aparecen en ninguno de los exports del SDK de
-    `VisioForge_VFP.dll`. Las muestras reales (bajo `samples/cpp/` en la
-    distribución del SDK) ejercitan la API plana C canónica:
-    `VFPSearch_Init` / `_Process` / `_Build` / `_Search` y
-    `VFPCompare_Init` / `_Process` / `_Build` / `_Compare`. Vea
-    [`../index.md`](../index.md) para el flujo. Catalogado como defecto #090.
-
-## Muestras Disponibles
-
-El SDK C++ incluye muestras de línea de comandos que demuestran funcionalidad principal. Estas muestras están incluidas en el paquete SDK bajo el directorio `/samples/cpp/`.
+El SDK C++ incluye ejemplos de línea de comandos. Estos se encuentran en el paquete SDK en `/samples/cpp/`.
 
 ### Ejemplos de Funcionalidad Principal
 
-#### Generar Huellas Digitales
+#### Generar Huellas
 
 ```cpp
-// vfp_generate.cpp - Generar huellas digitales de archivos de video
+// vfp_gen.cpp - Generar huella desde archivo de video
 #include <VisioForge_VFP.h>
 
-int main(int argc, char* argv[]) {
-    if (argc < 3) {
-        std::cerr << "Uso: vfp_generate <video_entrada> <huella_salida>" << std::endl;
-        return 1;
-    }
-    
-    // Establecer licencia
+int main()
+{
     VFPSetLicenseKey(L"TRIAL");
-    
-    // Generar huella digital
-    VFP_SearchFingerprintGenerateSettings settings;
-    settings.Mode = VFP_Mode::Search;
-    settings.FrameStep = 10;
-    
-    auto result = VFPSearchFingerprintGenerate(
-        argv[1],  // Video de entrada
-        argv[2],  // Huella de salida
-        &settings,
-        nullptr   // Callback de progreso
-    );
-    
-    return result == VFP_ErrorCode::Ok ? 0 : 1;
+
+    VFPFingerprintSource src{};
+    VFPFillSource(L"input.mp4", &src);
+
+    VFPFingerPrint fp{};
+    VFPSearch_GetFingerprintForVideoFile(src, &fp);
+
+    VFPFingerprintSave(&fp, L"output.vfpsig");
+    printf("Huella guardada: %d bytes\n", fp.DataSize);
+    return 0;
 }
 ```
 
 #### Comparar Videos
 
 ```cpp
-// vfp_compare.cpp - Comparar dos huellas digitales de video
+// vfp_compare.cpp - Comparar dos huellas
 #include <VisioForge_VFP.h>
 
-int main(int argc, char* argv[]) {
-    if (argc < 3) {
-        std::cerr << "Uso: vfp_compare <huella1> <huella2>" << std::endl;
-        return 1;
-    }
-    
+int main()
+{
     VFPSetLicenseKey(L"TRIAL");
-    
-    VFP_CompareResult result;
-    auto status = VFPCompareFingerprints(
-        argv[1],
-        argv[2],
-        &result
-    );
-    
-    if (status == VFP_ErrorCode::Ok) {
-        std::cout << "Similitud: " << result.Similarity << "%" << std::endl;
-        std::cout << "Coincidencia: " << (result.IsMatch ? "Sí" : "No") << std::endl;
-    }
-    
-    return status == VFP_ErrorCode::Ok ? 0 : 1;
+
+    VFPFingerPrint fp1{}, fp2{};
+    VFPFingerprintLoad(&fp1, L"video1.vfpsig");
+    VFPFingerprintLoad(&fp2, L"video2.vfpsig");
+
+    double diff = VFPCompare_Compare(fp1.Data, fp1.DataSize,
+                                     fp2.Data, fp2.DataSize, 10);
+
+    printf("Diferencia: %.2f\n", diff);
+    if (diff < 100)       printf("Muy similar\n");
+    else if (diff < 500)  printf("Alguna similitud\n");
+    else                  printf("Diferente\n");
+
+    return 0;
 }
 ```
 
 #### Buscar Fragmentos
 
 ```cpp
-// vfp_search.cpp - Buscar fragmentos de video
+// vfp_search.cpp - Buscar fragmento en video más largo
 #include <VisioForge_VFP.h>
 
-int main(int argc, char* argv[]) {
-    if (argc < 3) {
-        std::cerr << "Uso: vfp_search <huella_fuente> <huella_destino>" << std::endl;
-        return 1;
-    }
-    
+int main()
+{
     VFPSetLicenseKey(L"TRIAL");
-    
-    VFP_SearchResult* results = nullptr;
-    int count = 0;
-    
-    auto status = VFPSearchFingerprint(
-        argv[1],  // Fuente (fragmento)
-        argv[2],  // Destino (video completo)
-        &results,
-        &count
-    );
-    
-    if (status == VFP_ErrorCode::Ok) {
-        std::cout << "Encontradas " << count << " coincidencias" << std::endl;
-        for (int i = 0; i < count; i++) {
-            std::cout << "Coincidencia " << i << ": Posición " 
-                     << results[i].Position << "ms, Similitud " 
-                     << results[i].Similarity << "%" << std::endl;
-        }
-        VFPFreeSearchResults(results);
-    }
-    
-    return status == VFP_ErrorCode::Ok ? 0 : 1;
+
+    VFPFingerPrint needle{}, haystack{};
+    VFPFingerprintLoad(&needle, L"fragmento.vfpsig");
+    VFPFingerprintLoad(&haystack, L"video_completo.vfpsig");
+
+    double diff = 0;
+    int pos = VFPSearch_Search2(&needle, 0, &haystack, 0, &diff, 300);
+    if (pos != INT_MAX)
+        printf("Encontrado en %d segundos (diff: %.2f)\n", pos, diff);
+
+    return 0;
 }
 ```
 
-### Compilando las Muestras
+### Compilar los Ejemplos
 
 #### Windows (Visual Studio)
 
@@ -204,25 +166,23 @@ private:
         }
     }
     
-    void ProcessVideo(const std::string& video) {
-        VFP_SearchFingerprintGenerateSettings settings;
-        settings.Mode = VFP_Mode::Search;
-        
-        std::string output = video + ".vfp";
-        VFPSearchFingerprintGenerate(
-            video.c_str(),
-            output.c_str(),
-            &settings,
-            nullptr
-        );
+    void ProcessVideo(const std::string& video)
+    {
+        VFPFingerprintSource src{};
+        std::wstring wpath(video.begin(), video.end());
+        VFPFillSource(wpath.c_str(), &src);
+
+        VFPFingerPrint fp{};
+        VFPSearch_GetFingerprintForVideoFile(src, &fp);
+        // Almacenar fp.Data / fp.DataSize
     }
 };
 ```
 
-### Integración de Base de Datos
+### Integración con Base de Datos
 
 ```cpp
-// Ejemplo usando SQLite para almacenamiento de huellas digitales
+// Ejemplo usando SQLite para almacenamiento de huellas
 #include <sqlite3.h>
 
 class FingerprintDatabase {
@@ -266,34 +226,34 @@ public:
 };
 ```
 
-## Comparación con Muestras .NET
+## Comparación con Ejemplos .NET
 
 | Característica | Implementación C++ | Implementación .NET |
-|----------------|-------------------|---------------------|
-| **Aplicaciones GUI** | Ejemplos Qt/MFC disponibles por separado | Muestras WPF/WinForms disponibles |
-| **Herramientas CLI** | Incluidas en SDK | [Herramientas completas](../../dotnet/samples/index.md) |
-| **Integración de DB** | Implementación manual | Soporte MongoDB incorporado |
+|---------|-------------------|---------------------|
+| **Aplicaciones GUI** | Ejemplos Qt/MFC disponibles por separado | Ejemplos WPF/WinForms disponibles |
+| **Herramientas CLI** | Incluidas en el SDK | [Herramientas completas](../../dotnet/samples/index.md) |
+| **Integración BD** | Implementación manual | Soporte integrado MongoDB |
 | **Callbacks de Progreso** | Punteros a función | Eventos y delegados |
 | **Manejo de Errores** | Códigos de retorno | Excepciones |
 
-## Consejos de Optimización de Rendimiento
+## Consejos de Optimización
 
-1. **Use pasos de frame apropiados** - Valores más altos procesan más rápido pero pueden perder segmentos cortos
-2. **Habilite multi-threading** - Procese múltiples videos en paralelo
+1. **Use pasos de fotograma apropiados** - Valores más altos procesan más rápido pero pueden omitir segmentos cortos
+2. **Active multi-hilado** - Procese múltiples videos en paralelo
 3. **Reutilice instancias del analizador** - Evite sobrecarga de inicialización
 4. **Operaciones por lotes** - Procese múltiples archivos antes de limpiar
-5. **Use rutas nativas** - Evite conversiones de cadenas
+5. **Use rutas nativas** - Evite conversiones de cadena
 
 ## Recursos Adicionales
 
-- [Referencia de API C++](../api.md) - Documentación completa de API
-- [Guía de Primeros Pasos](../getting-started.md) - Configuración y setup
-- [Muestras .NET](../../dotnet/samples/index.md) - Para comparación con código administrado
+- [Referencia API C++](../api.md) - Documentación completa de la API
+- [Guía de Inicio](../getting-started.md) - Configuración e instalación
+- [Ejemplos .NET](../../dotnet/samples/index.md) - Para comparación con código gestionado
 
 ## Soporte
 
-Para preguntas sobre estas muestras:
+Para preguntas sobre estos ejemplos:
 
-- Consulte las [Preguntas Frecuentes](../../faq.md) para problemas comunes
+- Consulte el [FAQ](../../faq.md) para problemas comunes
 - Visite nuestro [Portal de Soporte](https://support.visioforge.com)
 - Únase a nuestra [Comunidad Discord](https://discord.com/invite/yvXUG56WCH)

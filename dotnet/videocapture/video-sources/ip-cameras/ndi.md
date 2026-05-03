@@ -1,6 +1,6 @@
 ---
 title: NDI Video Capture and Source Integration in C# .NET
-description: Discover, connect, and capture NDI video sources using VisioForge Video Capture SDK. Network device enumeration and low-latency streaming in C# .NET.
+description: Discover, connect, preview, and capture NDI video sources using VisioForge Video Capture SDK. Includes Android and MAUI NDI player guidance for C# .NET.
 tags:
   - Video Capture SDK
   - .NET
@@ -23,6 +23,7 @@ primary_api_classes:
   - VideoCaptureCoreX
   - VideoCaptureCore
   - NDISourceSettings
+  - NDISourceInfo
   - DeviceEnumerator
   - IPCameraSourceSettings
 
@@ -49,6 +50,17 @@ Before implementing NDI functionality in your application, you'll need to instal
 - NDI Tools - Sufficient for basic testing and development
 
 These tools provide the necessary runtime components required for NDI communication. After installation, your system will be able to discover and connect to NDI sources on your network.
+
+For Android playback, install the **NDI Advanced SDK for Android** and package the ABI-specific `libndi.so` files with your APK. The Android and MAUI NDI Player samples look for the SDK `Lib` directory using the `NdiAndroidSdkLib` MSBuild property, then the `NDI_ANDROID_SDK_LIB` environment variable, then `C:\Program Files\NDI\NDI 6 SDK (Android)\Lib`.
+
+Android applications that discover NDI sources should request these permissions:
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+```
 
 ## Discovering NDI Sources on Your Network
 
@@ -82,6 +94,15 @@ The first step in working with NDI is to enumerate available sources. Our SDK ma
 
 
 The asynchronous enumeration methods scan your network and return a list of available NDI sources. Each source has a unique identifier that you'll use to establish a connection. The enumeration process typically takes a few seconds, depending on network conditions and the number of available sources.
+
+For player UI, subscribe to `NDISourcesChanged` and start the watcher so the source list reflects senders that appear or disappear after the initial scan:
+
+```cs
+DeviceEnumerator.Shared.NDISourcesChanged += OnNDISourcesChanged;
+DeviceEnumerator.Shared.StartNDISourceWatch();
+```
+
+Stop the watcher and unsubscribe during shutdown.
 
 ## Connecting to NDI Sources
 
@@ -144,6 +165,64 @@ Once you've identified the NDI sources on your network, the next step is to esta
     VideoCapture1.Video_Source = ndiSettings;
     ```  
     
+
+
+## Android and MAUI NDI Player Pattern
+
+The `Video Capture SDK X` Android and MAUI NDI Player demos use `VideoCaptureCoreX` as a simple NDI receiver/player. The same flow works for full-screen players, monitoring tools, and preview panels:
+
+1. Initialize the SDK.
+2. Enumerate NDI sources with `DeviceEnumerator.Shared.NDISourcesAsync()`.
+3. Keep the list fresh with `NDISourcesChanged` and `StartNDISourceWatch()`.
+4. Create `NDISourceSettings` from the selected `NDISourceInfo`.
+5. Assign the settings to `VideoCaptureCoreX.Video_Source`.
+6. Enable audio playback only when the selected source exposes audio streams.
+7. Stop and dispose the core when playback stops or the view closes.
+
+```cs
+var sources = await DeviceEnumerator.Shared.NDISourcesAsync();
+var info = sources[0];
+
+var settings = await NDISourceSettings.CreateAsync(null, info);
+if (settings == null || !settings.IsValid())
+{
+    throw new InvalidOperationException("Failed to create NDI source settings.");
+}
+
+var core = new VideoCaptureCoreX(videoView);
+core.Video_Source = settings;
+core.Audio_Play = settings.GetInfo()?.AudioStreams?.Count > 0;
+
+await core.StartAsync();
+```
+
+### Android Native UI
+
+The Android sample uses `VisioForge.Core.UI.Android.VideoViewGL` as the renderer surface:
+
+```cs
+var core = new VideoCaptureCoreX(videoView);
+```
+
+On Android, request the network and multicast permissions before discovery. If the app builds without `libndi.so` for the current ABI, playback fails at runtime with `DllNotFoundException`, so verify the NDI Advanced SDK `Lib` path before packaging.
+
+### .NET MAUI UI
+
+The MAUI sample registers VisioForge handlers in `MauiProgram`:
+
+```cs
+builder
+    .UseMauiApp<App>()
+    .ConfigureMauiHandlers(handlers => handlers.AddVisioForgeHandlers());
+```
+
+Create `VideoCaptureCoreX` with the platform view from the MAUI `VideoView`:
+
+```cs
+var core = new VideoCaptureCoreX(videoView.GetVideoView());
+```
+
+During shutdown, cancel pending source refreshes, unsubscribe from `NDISourcesChanged`, call `StopNDISourceWatch()`, stop/dispose `VideoCaptureCoreX`, and destroy the SDK if your app owns SDK lifetime.
 
 
 ## Advanced NDI Configuration Options
@@ -233,6 +312,8 @@ To help you get started with NDI implementation, we provide several sample appli
     
     - [NDI source preview (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/NDI%20Source%20Demo)
     - [NDI (and other sources) preview and capture (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture)
+    - [NDI Player (Android)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Android/NDIPlayer)
+    - [NDI Player (MAUI)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/MAUI/NDIPlayer)
     
 
 
@@ -250,6 +331,10 @@ To ensure optimal performance and reliability when working with NDI sources:
 
 5. **Test With Various NDI Sources**: Different NDI implementations may have slight variations; test with various sources.
 
+6. **Package Android Native Libraries Per ABI**: For Android receivers, include `libndi.so` for every ABI you ship. Missing ABI libraries produce runtime failures even if the APK builds.
+
+7. **Respect Mobile Lifecycle**: Stop playback when Android activities stop or MAUI pages/windows close, dispose the core, cancel source enumeration, and remove watcher event handlers.
+
 ## Conclusion
 
 NDI technology offers powerful capabilities for network video integration in .NET applications. With our SDK, you can easily incorporate high-quality, low-latency video from NDI sources into your software projects. Whether you're building a live production system, a video conferencing application, or any solution requiring network video, our NDI implementation provides the tools you need for success.
@@ -263,6 +348,7 @@ The code samples provided demonstrate the essential patterns for working with ND
 - [ONVIF IP camera integration](onvif.md) — standards-based IP camera discovery and PTZ control
 - [IP camera live preview tutorial](../../video-tutorials/ip-camera-preview.md) — minimal working preview example
 - [RTSP protocol deep-dive](../../../general/network-streaming/rtsp.md) — streaming protocol internals
+- [NDI streaming output guide](../../../general/network-streaming/ndi.md) — sending cameras, capture devices, and files to NDI
 
 ---
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

@@ -1,6 +1,6 @@
 ---
-title: API C++ de Video Fingerprinting para búsqueda y comparación
-description: Documentación completa de la API del SDK Video Fingerprinting C++ de VisioForge para generar, comparar y buscar huellas de video con ejemplos.
+title: API C++ de Video Fingerprinting para Búsqueda y Comparación
+description: Documentación completa de la API del SDK Video Fingerprinting de VisioForge para C++: generar, comparar y buscar huellas de video con ejemplos.
 tags:
   - Video Fingerprinting SDK
   - C++
@@ -12,63 +12,42 @@ tags:
   - MP4
 primary_api_classes:
   - VFPFingerprintSource
-  - VFPFillSource
+  - VFPFingerPrint
 
 ---
 
-# Documentación de API C++ del SDK de Huellas de Video
-
-!!! danger "Muchos ejemplos de código abajo referencian helpers de alto nivel que no existen — use la API plana estilo C"
-
-    Helpers como `VFPSearch_GetFingerprintForVideoFile`,
-    `VFPCompare_GetFingerprintForVideoFile`,
-    `VFPSearch_SearchOneSignatureFileInAnother`, y `VFPFillSource` **no**
-    son exports reales de `VisioForge_VFP.dll` — aparecen en headers
-    antiguos solo como prototipos comentados. La API C distribuida es una
-    interfaz plana estilo C (`extern "C"`) que consiste en:
-
-    - `VFPSearch_Init` / `VFPSearch_Process` / `VFPSearch_Build` /
-      `VFPSearch_Search`
-    - `VFPCompare_Init` / `VFPCompare_Process` / `VFPCompare_Build` /
-      `VFPCompare_Compare`
-
-    La aplicación host es responsable de decodificar cuadros de video
-    (FFmpeg / GStreamer / etc.) y alimentarlos a `*_Process` uno a la
-    vez. Vea [`index.md`](./index.md) para los snippets canónicos del flujo.
-
-    Catalogado como defectos #084-#086 en la auditoría. Una reescritura
-    completa de esta página está en cola.
+# Documentación de la API C++ del SDK Video Fingerprinting
 
 ## Descripción General
 
-El SDK C++ de Huellas de Video de VisioForge proporciona una biblioteca nativa de alto rendimiento para identificación, comparación y operaciones de búsqueda de contenido de video. Permite a las aplicaciones:
+El SDK Video Fingerprinting para C++ de VisioForge proporciona una librería nativa de alto rendimiento para identificación, comparación y búsqueda de contenido de video. Permite a las aplicaciones:
 
-- Generar huellas únicas de archivos de video para identificación de contenido
+- Generar huellas únicas desde archivos de video para identificación de contenido
 - Comparar videos para determinar similitud y detectar duplicados
-- Buscar fragmentos de video dentro de videos más grandes (ej., encontrar comerciales, intros o escenas específicas)
+- Buscar fragmentos de video dentro de videos más largos (ej. encontrar anuncios, introducciones o escenas específicas)
 - Comparar imágenes individuales para detección de similitud
-- Procesar fotogramas de video directamente para generar huellas de streams o contenido generado
+- Procesar fotogramas de video directamente para generar huellas desde streams o contenido generado
 
-El SDK C++ ofrece rendimiento óptimo para aplicaciones de alto rendimiento y puede integrarse en aplicaciones C++ existentes o usarse a través de P/Invoke desde otros lenguajes.
+El SDK C++ ofrece un rendimiento óptimo para aplicaciones de alto rendimiento y puede integrarse en aplicaciones C++ existentes o usarse mediante P/Invoke desde otros lenguajes.
 
 > **Documentación Relacionada:**
 >
-> - [Referencia de API .NET](../dotnet/api.md) - Para desarrolladores de código administrado
-> - [Entendiendo las Huellas de Video](../understanding-video-fingerprinting.md) - Conceptos básicos
-> - [Tipos de Huellas](../fingerprint-types.md) - Modos Compare vs Search
+> - [Referencia API .NET](../dotnet/api.md) - Para desarrolladores de código gestionado
+> - [Entendiendo Video Fingerprinting](../understanding-video-fingerprinting.md) - Conceptos básicos
+> - [Tipos de Huellas](../fingerprint-types.md) - Modos Comparar vs Buscar
 
 ## Tabla de Contenidos
 
 - [Archivos de Cabecera](#archivos-de-cabecera)
-- [Gestión de Licencias](#gestion-de-licencias)
+- [Gestión de Licencia](#gestion-de-licencia)
 - [Tipos y Estructuras Principales](#tipos-y-estructuras-principales)
 - [Funciones de Búsqueda](#funciones-de-busqueda)
 - [Funciones de Comparación](#funciones-de-comparacion)
 - [Funciones de Utilidad](#funciones-de-utilidad)
 - [Comparación de Imágenes](#comparacion-de-imagenes)
-- [Ejemplos de Trabajo Completos](#ejemplos-de-trabajo-completos)
+- [Ejemplos Completos](#ejemplos-completos-funcionales)
 - [Soporte de Plataformas](#soporte-de-plataformas)
-- [Compilación y Enlace](#compilacion-y-enlace)
+- [Compilación y Enlazado](#compilacion-y-enlazado)
 - [Consideraciones de Rendimiento](#consideraciones-de-rendimiento)
 - [Manejo de Errores](#manejo-de-errores)
 
@@ -78,7 +57,7 @@ El SDK proporciona dos archivos de cabecera principales:
 
 ### VisioForge_VFP.h
 
-Cabecera principal de la API que contiene todas las declaraciones de funciones y exportaciones.
+Cabecera principal de la API con todas las declaraciones de funciones y exports.
 
 ### VisioForge_VFP_Types.h
 
@@ -89,7 +68,7 @@ Definiciones de tipos y estructuras de datos usadas por el SDK.
 #include <VisioForge_VFP_Types.h>
 ```
 
-## Gestión de Licencias
+## Gestión de Licencia
 
 ### VFPSetLicenseKey
 
@@ -97,19 +76,19 @@ Definiciones de tipos y estructuras de datos usadas por el SDK.
 extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPSetLicenseKey(wchar_t* licenseKey);
 ```
 
-**Descripción:** Establece la clave de licencia para el SDK de Huellas de Video. Debe llamarse antes de usar cualquier característica de huellas.
+**Descripción:** Establece la clave de licencia para el SDK. Debe llamarse antes de usar cualquier función de fingerprinting.
 
 **Parámetros:**
 
-- `licenseKey` (wchar_t*): Tu clave de licencia VisioForge como cadena de caracteres anchos
+- `licenseKey` (wchar_t*): Su clave de licencia VisioForge como cadena de caracteres anchos
 
 **Ejemplo:**
 
 ```cpp
-// Establecer clave de licencia al inicio de la aplicación
-VFPSetLicenseKey(L"TU-CLAVE-DE-LICENCIA-AQUI");
+// Establecer clave de licencia al iniciar la aplicación
+VFPSetLicenseKey(L"SU-CLAVE-DE-LICENCIA");
 
-// Para modo de prueba
+// Para modo trial
 VFPSetLicenseKey(L"TRIAL");
 ```
 
@@ -123,13 +102,13 @@ extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPSetLicenseKeyA(char* licenseKey);
 
 **Parámetros:**
 
-- `licenseKey` (char*): Tu clave de licencia VisioForge como cadena ANSI
+- `licenseKey` (char*): Su clave de licencia VisioForge como cadena ANSI
 
 **Ejemplo:**
 
 ```cpp
-// Establecer clave de licencia usando cadena ANSI
-VFPSetLicenseKeyA("TU-CLAVE-DE-LICENCIA-AQUI");
+// Establecer clave usando cadena ANSI
+VFPSetLicenseKeyA("SU-CLAVE-DE-LICENCIA");
 ```
 
 ## Tipos y Estructuras Principales
@@ -139,13 +118,13 @@ VFPSetLicenseKeyA("TU-CLAVE-DE-LICENCIA-AQUI");
 ```cpp
 struct VFPFingerprintSource
 {
-    wchar_t Filename[256];     // Ruta del archivo de video
-    INT64 StartTime;            // Tiempo de inicio en milisegundos
-    INT64 StopTime;             // Tiempo de fin en milisegundos
-    RECT CustomCropSize;        // Área de recorte personalizada
-    SIZE CustomResolution;      // Resolución personalizada para procesamiento
-    RECT IgnoredAreas[10];      // Áreas a ignorar (ej., logos, tickers)
-    INT64 OriginalDuration;     // Duración original del archivo
+    wchar_t Filename[256];     // Video file path
+    INT64 StartTime;            // Start time in milliseconds
+    INT64 StopTime;             // Stop time in milliseconds
+    RECT CustomCropSize;        // Custom crop area
+    SIZE CustomResolution;      // Custom resolution for processing
+    RECT IgnoredAreas[10];      // Areas to ignore (e.g., logos, tickers)
+    INT64 OriginalDuration;     // Original file duration
 };
 ```
 
@@ -154,20 +133,20 @@ struct VFPFingerprintSource
 **Campos:**
 
 - `Filename`: Ruta al archivo de video (máximo 256 caracteres)
-- `StartTime`: Posición de inicio en milisegundos (0 para el comienzo)
-- `StopTime`: Posición de fin en milisegundos (0 para fin del archivo)
+- `StartTime`: Posición inicial en milisegundos (0 para el inicio)
+- `StopTime`: Posición final en milisegundos (0 para final del archivo)
 - `CustomCropSize`: Rectángulo de recorte opcional (izquierda, arriba, derecha, abajo)
 - `CustomResolution`: Resolución personalizada opcional para procesamiento
-- `IgnoredAreas`: Hasta 10 áreas rectangulares a ignorar durante la generación de huellas
+- `IgnoredAreas`: Hasta 10 áreas rectangulares a ignorar durante la generación
 - `OriginalDuration`: Duración del archivo original en milisegundos
 
 **Ejemplo:**
 
 ```cpp
 VFPFingerprintSource source{};
-wcscpy_s(source.Filename, L"C:\\Videos\\muestra.mp4");
-source.StartTime = 10000;  // Iniciar en 10 segundos
-source.StopTime = 60000;   // Detener en 60 segundos
+wcscpy_s(source.Filename, L"C:\\Videos\\sample.mp4");
+source.StartTime = 10000;  // Empezar a los 10 segundos
+source.StopTime = 60000;   // Parar a los 60 segundos
 
 // Ignorar logo en esquina superior derecha
 source.IgnoredAreas[0] = {1800, 0, 1920, 100};
@@ -178,155 +157,143 @@ source.IgnoredAreas[0] = {1800, 0, 1920, 100};
 ```cpp
 struct VFPFingerPrint
 {
-    char* Data;                    // Datos de la huella
-    INT32 DataSize;                // Tamaño de los datos de la huella
-    INT64 Duration;                // Duración en milisegundos
-    GUID ID;                       // Identificador único
-    wchar_t OriginalFilename[256]; // Nombre del archivo original
-    INT64 OriginalDuration;        // Duración del archivo original
-    wchar_t Tag[100];              // Etiqueta opcional
-    INT32 Width;                   // Ancho del video fuente
-    INT32 Height;                  // Alto del video fuente
-    double FrameRate;              // Tasa de fotogramas
+    char* Data;                    // Fingerprint data
+    INT32 DataSize;                // Size of fingerprint data
+    INT64 Duration;                // Duration in milliseconds
+    GUID ID;                       // Unique identifier
+    wchar_t OriginalFilename[256]; // Original file name
+    INT64 OriginalDuration;        // Original file duration
+    wchar_t Tag[100];              // Optional tag
+    INT32 Width;                   // Source video width
+    INT32 Height;                  // Source video height
+    double FrameRate;              // Frame rate
 };
 ```
 
-**Descripción:** Estructura que contiene datos de huella generados y metadatos.
+**Descripción:** Estructura que contiene los datos de la huella generada y sus metadatos.
 
 **Campos:**
 
 - `Data`: Datos binarios de la huella
 - `DataSize`: Tamaño de los datos de la huella en bytes
-- `Duration`: Duración del contenido con huella en milisegundos
+- `Duration`: Duración del contenido analizado en milisegundos
 - `ID`: Identificador GUID único para la huella
 - `OriginalFilename`: Ruta al archivo de video original
 - `OriginalDuration`: Duración del archivo original
 - `Tag`: Etiqueta opcional definida por el usuario (hasta 100 caracteres)
 - `Width`: Ancho del video fuente
 - `Height`: Alto del video fuente
-- `FrameRate`: Tasa de fotogramas del video fuente
+- `FrameRate`: Velocidad de fotogramas del video fuente
 
 ## Funciones de Búsqueda
 
-### VFPSearch_GetFingerprintForVideoFile
+La API de búsqueda proporciona tanto una API de alto nivel (generar huella desde archivo de video) como una API de bajo nivel por fotograma (para streams en vivo / decodificadores personalizados).
+
+### API de Alto Nivel
+
+#### VFPSearch_GetFingerprintForVideoFile
 
 ```cpp
 extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPSearch_GetFingerprintForVideoFile(
-    VFPFingerprintSource source, 
+    VFPFingerprintSource source,
     VFPFingerPrint* vfp);
 ```
 
-**Descripción:** Genera una huella optimizada para búsqueda desde un archivo de video.
+Genera una huella de búsqueda directamente desde un archivo de video. Retorna `NULL` en caso de éxito, o un mensaje de error.
 
-**Parámetros:**
-
-- `source`: Configuración del video fuente
-- `vfp`: Puntero a estructura de huella para recibir el resultado
-
-**Retorna:** Mensaje de error si falla, NULL si es exitoso
-
-**Ejemplo:**
+#### VFPSearch_GetFingerprintForVideoFileAndSave
 
 ```cpp
-VFPFingerprintSource source{};
-VFPFillSource(L"C:\\Videos\\comercial.mp4", &source);
-
-VFPFingerPrint fingerprint{};
-wchar_t* error = VFPSearch_GetFingerprintForVideoFile(source, &fingerprint);
-
-if (error == nullptr) {
-    printf("Huella generada exitosamente\n");
-    printf("Duración: %lld ms\n", fingerprint.Duration);
-    printf("Tamaño: %d bytes\n", fingerprint.DataSize);
-} else {
-    wprintf(L"Error: %s\n", error);
-}
+extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPSearch_GetFingerprintForVideoFileAndSave(
+    wchar_t* sourceFilename,
+    wchar_t* destFilename);
 ```
 
-### VFPSearch_Search2
+Genera y guarda una huella en una sola llamada.
 
-```cpp
-extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search2(
-    VFPFingerPrint* vfp1, 
-    int iSkip1,
-    VFPFingerPrint* vfp2, 
-    int iSkip2, 
-    double* pDiff,
-    int maxDiff);
-```
-
-**Descripción:** Busca una huella dentro de otra, retornando la posición donde se encontró.
-
-**Parámetros:**
-
-- `vfp1`: Huella a buscar (aguja)
-- `iSkip1`: Posición de inicio en vfp1 (en segundos)
-- `vfp2`: Huella donde buscar (pajar)
-- `iSkip2`: Posición de inicio en vfp2 (en segundos)
-- `pDiff`: Puntero para recibir el valor de diferencia
-- `maxDiff`: Umbral máximo de diferencia permitido
-
-**Retorna:** Posición en segundos donde se encontró la coincidencia, o INT_MAX si no se encontró
-
-**Ejemplo:**
-
-```cpp
-// Buscar comercial en transmisión
-VFPFingerPrint commercial{};
-VFPFingerPrint broadcast{};
-
-// Cargar huellas
-VFPFingerprintLoad(&commercial, L"comercial.vfpsig");
-VFPFingerprintLoad(&broadcast, L"transmision.vfpsig");
-
-double diff = 0;
-int position = VFPSearch_Search2(&commercial, 0, &broadcast, 0, &diff, 300);
-
-if (position != INT_MAX) {
-    printf("Comercial encontrado en posición: %d segundos\n", position);
-    printf("Puntuación de diferencia: %.2f\n", diff);
-} else {
-    printf("Comercial no encontrado en la transmisión\n");
-}
-```
-
-### VFPSearch_SearchOneSignatureFileInAnother
+#### VFPSearch_SearchOneSignatureFileInAnother
 
 ```cpp
 extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPSearch_SearchOneSignatureFileInAnother(
-    wchar_t* file1, 
-    wchar_t* file2, 
-    LONG threshold,
-    LONG* position);
+    wchar_t* file1, wchar_t* file2,
+    LONG threshold, LONG* position);
 ```
 
-**Descripción:** Busca un archivo de firma dentro de otro directamente desde disco.
+Busca un archivo de firma dentro de otro directamente desde disco.
 
-**Parámetros:**
-
-- `file1`: Ruta al archivo de huella a buscar
-- `file2`: Ruta al archivo de huella donde buscar
-- `threshold`: Umbral máximo de diferencia permitido
-- `position`: Puntero para recibir la posición donde se encontró
-
-**Ejemplo:**
+#### VFPSearch_Search2
 
 ```cpp
-LONG position = 0;
-VFPSearch_SearchOneSignatureFileInAnother(
-    L"aguja.vfpsig", 
-    L"pajar.vfpsig", 
-    300,  // umbral
-    &position);
-
-if (position != INT_MAX) {
-    printf("Coincidencia encontrada en: %ld segundos\n", position);
-}
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search2(
+    VFPFingerPrint* vfp1, int iSkip1,
+    VFPFingerPrint* vfp2, int iSkip2,
+    double* pDiff, int maxDiff);
 ```
+
+Busca `vfp1` dentro de `vfp2`. Retorna la posición en segundos, o `INT_MAX` si no se encuentra.
+
+### API de Bajo Nivel por Fotograma
+
+#### VFPSearch_Init
+
+```cpp
+extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPSearch_Init(int count, void* pDataTmp);
+```
+
+Inicializa un acumulador por fotograma. `count` es el número esperado de fotogramas.
+
+#### VFPSearch_Init2
+
+```cpp
+extern "C" VFP_EXPORT void* VFP_EXPORT_CALL VFPSearch_Init2(int count);
+```
+
+Asigna y retorna un nuevo acumulador. Use `VFPSearch_Clear` para liberarlo.
+
+#### VFPSearch_Process
+
+```cpp
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Process(
+    unsigned char* p, int w, int h, int s,
+    double dTime, void* pDataTmp);
+```
+
+Alimenta un fotograma RGB decodificado. `dTime` es la marca de tiempo en segundos. Retorna 0 en caso de éxito.
+
+#### VFPSearch_Build
+
+```cpp
+extern "C" VFP_EXPORT char* VFP_EXPORT_CALL VFPSearch_Build(int* pLen, void* pDataTmp);
+```
+
+Finaliza la huella. Retorna un búfer `char*`; `*pLen` recibe su tamaño en bytes.
+
+#### VFPSearch_Search
+
+```cpp
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search(
+    const char* pData1, int iLen1, int iSkip1,
+    const char* pData2, int iLen2, int iSkip2,
+    double* pDiff, int maxDiff);
+```
+
+Búsqueda de bajo nivel usando datos de huella sin procesar. Retorna la posición en segundos.
+
+#### VFPSearch_Clear
+
+```cpp
+extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPSearch_Clear(void* pDataTmp);
+```
+
+Libera los recursos asignados por `VFPSearch_Init` o `VFPSearch_Init2`.
 
 ## Funciones de Comparación
 
-### VFPCompare_GetFingerprintForVideoFile
+La API de comparación proporciona tanto acceso de alto nivel como de bajo nivel por fotograma.
+
+### API de Alto Nivel
+
+#### VFPCompare_GetFingerprintForVideoFile
 
 ```cpp
 extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPCompare_GetFingerprintForVideoFile(
@@ -334,103 +301,54 @@ extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPCompare_GetFingerprintForVideo
     VFPFingerPrint* vfp);
 ```
 
-**Descripción:** Genera una huella optimizada para comparación desde un archivo de video.
+Genera una huella de comparación directamente desde un archivo de video.
 
-**Parámetros:**
-
-- `source`: Configuración del video fuente
-- `vfp`: Puntero a estructura de huella para recibir el resultado
-
-**Retorna:** Mensaje de error si falla, NULL si es exitoso
-
-**Ejemplo:**
-
-```cpp
-VFPFingerprintSource source{};
-VFPFillSource(L"C:\\Videos\\video1.mp4", &source);
-
-VFPFingerPrint fingerprint{};
-wchar_t* error = VFPCompare_GetFingerprintForVideoFile(source, &fingerprint);
-
-if (error == nullptr) {
-    // Guardar huella para comparación posterior
-    VFPFingerprintSave(&fingerprint, L"video1.vfpsig");
-}
-```
-
-### VFPCompare_Compare
+#### VFPCompare_Compare
 
 ```cpp
 extern "C" VFP_EXPORT double VFP_EXPORT_CALL VFPCompare_Compare(
-    const char* pData1,
-    int iLen1,
-    const char* pData2,
-    int iLen2,
+    const char* pData1, int iLen1,
+    const char* pData2, int iLen2,
     int MaxS);
 ```
 
-**Descripción:** Compara dos huellas y retorna una puntuación de diferencia.
+Compara dos búferes de huella sin procesar. `MaxS` es el desplazamiento máximo en segundos. Retorna una puntuación de diferencia (menor = más similar).
 
-**Parámetros:**
+### API de Bajo Nivel por Fotograma
 
-- `pData1`: Datos de la primera huella
-- `iLen1`: Tamaño de la primera huella
-- `pData2`: Datos de la segunda huella
-- `iLen2`: Tamaño de la segunda huella
-- `MaxS`: Máximo desplazamiento temporal en segundos a verificar
-
-**Retorna:** Puntuación de diferencia (valores más bajos indican más similitud)
-
-**Ejemplo:**
+#### VFPCompare_Init
 
 ```cpp
-VFPFingerPrint fp1{}, fp2{};
-VFPFingerprintLoad(&fp1, L"video1.vfpsig");
-VFPFingerprintLoad(&fp2, L"video2.vfpsig");
-
-double difference = VFPCompare_Compare(
-    fp1.Data, fp1.DataSize,
-    fp2.Data, fp2.DataSize,
-    10  // Verificar hasta 10 segundos de desplazamiento
-);
-
-printf("Puntuación de diferencia: %.2f\n", difference);
-if (difference < 100) {
-    printf("Los videos son muy similares (probablemente duplicados)\n");
-} else if (difference < 500) {
-    printf("Los videos tienen similitudes significativas\n");
-} else {
-    printf("Los videos son diferentes\n");
-}
+extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPCompare_Init(int count, void* pDataTmp);
 ```
+
+#### VFPCompare_Process
+
+```cpp
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPCompare_Process(
+    unsigned char* p, int w, int h, int s,
+    double dTime, void* pDataTmp);
+```
+
+Alimenta un fotograma RGB decodificado. `dTime` es la marca de tiempo en segundos.
+
+#### VFPCompare_Build
+
+```cpp
+extern "C" VFP_EXPORT char* VFP_EXPORT_CALL VFPCompare_Build(int* pLen, void* pDataTmp);
+```
+
+Finaliza la huella. Retorna un búfer `char*`; `*pLen` recibe su tamaño.
+
+#### VFPCompare_Clear
+
+```cpp
+extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPCompare_Clear(void* pDataTmp);
+```
+
+Libera los recursos del acumulador.
 
 ## Funciones de Utilidad
-
-### VFPFillSource
-
-```cpp
-extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPFillSource(
-    wchar_t* filename,
-    VFPFingerprintSource* source);
-```
-
-**Descripción:** Inicializa una estructura VFPFingerprintSource con valores predeterminados para un archivo de video.
-
-**Parámetros:**
-
-- `filename`: Ruta al archivo de video
-- `source`: Puntero a estructura fuente a inicializar
-
-**Ejemplo:**
-
-```cpp
-VFPFingerprintSource source{};
-VFPFillSource(L"C:\\Videos\\muestra.mp4", &source);
-
-// Opcionalmente modificar configuraciones después de la inicialización
-source.StartTime = 5000;  // Iniciar en 5 segundos
-source.StopTime = 30000;  // Detener en 30 segundos
-```
 
 ### VFPFingerprintSave
 
@@ -444,7 +362,7 @@ extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPFingerprintSave(
 
 **Parámetros:**
 
-- `vfp`: Puntero a huella a guardar
+- `vfp`: Puntero a la huella a guardar
 - `filename`: Ruta al archivo de salida
 
 **Ejemplo:**
@@ -467,7 +385,7 @@ extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPFingerprintLoad(
 
 **Parámetros:**
 
-- `vfp`: Puntero a estructura de huella para recibir los datos
+- `vfp`: Puntero a la estructura que recibirá los datos
 - `filename`: Ruta al archivo de huella
 
 **Ejemplo:**
@@ -494,7 +412,7 @@ extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPFingerprintLoadLegacy(
     wchar_t* filename);
 ```
 
-**Descripción:** Guarda y carga huellas en formato legado para compatibilidad hacia atrás.
+**Descripción:** Guarda y carga huellas en formato legacy para compatibilidad con versiones anteriores.
 
 ## Comparación de Imágenes
 
@@ -521,7 +439,7 @@ extern "C" VFP_EXPORT double VFP_EXPORT_CALL VFPImageCompare_Compare(
 - `image2width`: Ancho de la segunda imagen
 - `image2height`: Alto de la segunda imagen
 
-**Retorna:** Puntuación de similitud (0-100, valores más altos indican más similitud)
+**Retorna:** Puntuación de similitud (0-100, valores más altos indican mayor similitud)
 
 **Ejemplo:**
 
@@ -538,49 +456,28 @@ double similarity = VFPImageCompare_Compare(
 printf("Similitud de imagen: %.2f%%\n", similarity);
 ```
 
-## Ejemplos de Trabajo Completos
+## Ejemplos Completos Funcionales
 
-### Ejemplo 1: Generar Huella
+### Ejemplo 1: Generar Huella de Búsqueda (API de alto nivel)
 
 ```cpp
-#include <iostream>
-#include <Windows.h>
 #include <VisioForge_VFP.h>
-#include <VisioForge_VFP_Types.h>
 
 int main()
 {
-    // Establecer clave de licencia
-    VFPSetLicenseKey(L"TU-CLAVE-DE-LICENCIA");
-    
-    // Configurar fuente
-    VFPFingerprintSource source{};
-    VFPFillSource(L"C:\\Videos\\muestra.mp4", &source);
-    
-    // Opcional: Procesar solo un segmento
-    source.StartTime = 10000;  // Iniciar en 10 segundos
-    source.StopTime = 60000;   // Detener en 60 segundos
-    
-    // Opcional: Ignorar área de logo
-    source.IgnoredAreas[0] = {1800, 0, 1920, 100};
-    
-    // Generar huella de búsqueda
-    VFPFingerPrint fingerprint{};
-    wchar_t* error = VFPSearch_GetFingerprintForVideoFile(source, &fingerprint);
-    
-    if (error == nullptr) {
-        printf("Huella generada exitosamente\n");
-        printf("Duración: %lld ms\n", fingerprint.Duration);
-        printf("Tamaño de datos: %d bytes\n", fingerprint.DataSize);
-        
-        // Guardar en archivo
-        VFPFingerprintSave(&fingerprint, L"muestra.vfpsig");
-        printf("Huella guardada en muestra.vfpsig\n");
-    } else {
-        wprintf(L"Error: %s\n", error);
-        return 1;
-    }
-    
+    VFPSetLicenseKey(L"SU-CLAVE-DE-LICENCIA");
+
+    VFPFingerprintSource src{};
+    VFPFillSource(L"sample.mp4", &src);
+    src.StartTime = 10000;   // comenzar en 10 s
+    src.StopTime = 60000;    // detener en 60 s
+
+    VFPFingerPrint fp{};
+    VFPSearch_GetFingerprintForVideoFile(src, &fp);
+
+    printf("Huella: %dx%d, %.1fs, %d bytes\n",
+           fp.Width, fp.Height, fp.Duration / 1000.0, fp.DataSize);
+    VFPFingerprintSave(&fp, L"sample.vfpsig");
     return 0;
 }
 ```
@@ -588,158 +485,70 @@ int main()
 ### Ejemplo 2: Comparar Dos Videos
 
 ```cpp
-#include <iostream>
-#include <Windows.h>
 #include <VisioForge_VFP.h>
-#include <VisioForge_VFP_Types.h>
 
-int main(int argc, char* argv[])
+int main()
 {
-    if (argc != 3) {
-        printf("Uso: compare video1.mp4 video2.mp4\n");
-        return 1;
-    }
-    
-    // Establecer clave de licencia
-    VFPSetLicenseKey(L"TU-CLAVE-DE-LICENCIA");
-    
-    // Generar huellas para ambos videos
-    VFPFingerprintSource source1{}, source2{};
-    VFPFingerPrint fp1{}, fp2{};
-    
-    // Convertir nombres de archivo a char ancho
-    wchar_t file1[256], file2[256];
-    mbstowcs(file1, argv[1], 256);
-    mbstowcs(file2, argv[2], 256);
-    
-    // Generar primera huella
-    VFPFillSource(file1, &source1);
-    wchar_t* error = VFPCompare_GetFingerprintForVideoFile(source1, &fp1);
-    if (error != nullptr) {
-        wprintf(L"Error procesando primer video: %s\n", error);
-        return 1;
-    }
-    
-    // Generar segunda huella
-    VFPFillSource(file2, &source2);
-    error = VFPCompare_GetFingerprintForVideoFile(source2, &fp2);
-    if (error != nullptr) {
-        wprintf(L"Error procesando segundo video: %s\n", error);
-        return 1;
-    }
-    
-    // Comparar huellas
-    double difference = VFPCompare_Compare(
-        fp1.Data, fp1.DataSize,
-        fp2.Data, fp2.DataSize,
-        10  // Verificar hasta 10 segundos de desplazamiento
-    );
-    
-    printf("Resultados de Comparación:\n");
-    printf("  Video 1: %ls (%.2f segundos)\n", file1, fp1.Duration / 1000.0);
-    printf("  Video 2: %ls (%.2f segundos)\n", file2, fp2.Duration / 1000.0);
-    printf("  Puntuación de diferencia: %.2f\n", difference);
-    
-    if (difference < 100) {
-        printf("  Resultado: Los videos son muy similares (probablemente duplicados)\n");
-    } else if (difference < 500) {
-        printf("  Resultado: Los videos tienen similitudes significativas\n");
-    } else {
-        printf("  Resultado: Los videos son diferentes\n");
-    }
-    
+    VFPSetLicenseKey(L"SU-CLAVE-DE-LICENCIA");
+
+    // Generar huella para video 1
+    VFPFingerprintSource src1{};
+    VFPFillSource(L"video1.mp4", &src1);
+    VFPFingerPrint fp1{};
+    VFPCompare_GetFingerprintForVideoFile(src1, &fp1);
+
+    // Generar huella para video 2
+    VFPFingerprintSource src2{};
+    VFPFillSource(L"video2.mp4", &src2);
+    VFPFingerPrint fp2{};
+    VFPCompare_GetFingerprintForVideoFile(src2, &fp2);
+
+    double diff = VFPCompare_Compare(fp1.Data, fp1.DataSize,
+                                     fp2.Data, fp2.DataSize, 10);
+    printf("Diferencia: %.2f\n", diff);
+    if (diff < 100)       printf("Muy similar\n");
+    else if (diff < 500)  printf("Alguna similitud\n");
+    else                  printf("Diferente\n");
+
     return 0;
 }
 ```
 
-### Ejemplo 3: Buscar Comercial en Transmisión
+### Ejemplo 3: Buscar Fragmento en Video Más Largo
 
 ```cpp
-#include <iostream>
-#include <Windows.h>
 #include <VisioForge_VFP.h>
-#include <VisioForge_VFP_Types.h>
-#include <ctime>
 
-std::string timeToString(time_t tm)
+int main()
 {
-    char buff[20];
-    strftime(buff, 20, "%H:%M:%S", gmtime(&tm));
-    return std::string(buff);
-}
+    VFPSetLicenseKey(L"SU-CLAVE-DE-LICENCIA");
 
-int main(int argc, char* argv[])
-{
-    if (argc != 3) {
-        printf("Uso: search comercial.mp4 transmision.mp4\n");
-        return 1;
-    }
-    
-    // Establecer clave de licencia
-    VFPSetLicenseKey(L"TU-CLAVE-DE-LICENCIA");
-    
-    wchar_t commercial[256], broadcast[256];
-    mbstowcs(commercial, argv[1], 256);
-    mbstowcs(broadcast, argv[2], 256);
-    
-    // Generar huellas
-    VFPFingerprintSource src1{}, src2{};
-    VFPFingerPrint fp_commercial{}, fp_broadcast{};
-    
-    printf("Generando huella para comercial...\n");
-    VFPFillSource(commercial, &src1);
-    wchar_t* error = VFPSearch_GetFingerprintForVideoFile(src1, &fp_commercial);
-    if (error != nullptr) {
-        wprintf(L"Error: %s\n", error);
-        return 1;
-    }
-    
-    printf("Generando huella para transmisión...\n");
-    VFPFillSource(broadcast, &src2);
-    error = VFPSearch_GetFingerprintForVideoFile(src2, &fp_broadcast);
-    if (error != nullptr) {
-        wprintf(L"Error: %s\n", error);
-        return 1;
-    }
-    
+    // Construir huella del fragmento
+    VFPFingerprintSource needleSrc{};
+    VFPFillSource(L"fragmento.mp4", &needleSrc);
+    VFPFingerPrint needle{};
+    VFPSearch_GetFingerprintForVideoFile(needleSrc, &needle);
+
+    // Construir huella del video completo
+    VFPFingerprintSource haystackSrc{};
+    VFPFillSource(L"emision.mp4", &haystackSrc);
+    VFPFingerPrint haystack{};
+    VFPSearch_GetFingerprintForVideoFile(haystackSrc, &haystack);
+
     // Buscar todas las ocurrencias
-    printf("\nBuscando comercial en transmisión...\n");
-    printf("Duración del comercial: %.2f segundos\n", fp_commercial.Duration / 1000.0);
-    printf("Duración de la transmisión: %.2f segundos\n\n", fp_broadcast.Duration / 1000.0);
-    
-    const int threshold = 300;
     double diff = 0;
-    int position = 0;
-    int occurrences = 0;
-    
-    const int commercial_duration = (int)(fp_commercial.Duration / 1000);
-    const int broadcast_duration = (int)(fp_broadcast.Duration / 1000);
-    
-    while (position < broadcast_duration) {
-        position = VFPSearch_Search2(
-            &fp_commercial, 0,
-            &fp_broadcast, position,
-            &diff, threshold
-        );
-        
-        if (position == INT_MAX) {
-            break;
-        }
-        
-        occurrences++;
-        printf("Coincidencia #%d encontrada en %s (diferencia: %.2f)\n",
-               occurrences, timeToString(position).c_str(), diff);
-        
-        // Saltar más allá de esta ocurrencia
-        position += commercial_duration;
+    int pos = 0;
+    const int needleSec = (int)(needle.Duration / 1000);
+
+    while (pos < (int)(haystack.Duration / 1000))
+    {
+        pos = VFPSearch_Search2(&needle, 0, &haystack, pos, &diff, 300);
+        if (pos == INT_MAX) break;
+
+        printf("Encontrado en %d segundos (diff: %.2f)\n", pos, diff);
+        pos += needleSec;
     }
-    
-    if (occurrences == 0) {
-        printf("Comercial no encontrado en la transmisión.\n");
-    } else {
-        printf("\nTotal de ocurrencias encontradas: %d\n", occurrences);
-    }
-    
+
     return 0;
 }
 ```
@@ -749,8 +558,8 @@ int main(int argc, char* argv[])
 ### Windows
 
 - **Arquitecturas**: x86, x64
-- **Compiladores**: Visual Studio 2019 o posterior, MinGW-w64
-- **Bibliotecas**: VisioForge_VideoFingerprinting.dll (x86/x64)
+- **Compiladores**: Visual Studio 2019 o superior, MinGW-w64
+- **Librerías**: VisioForge_VideoFingerprinting.dll (x86/x64)
 
 ### Linux
 
@@ -764,27 +573,27 @@ int main(int argc, char* argv[])
 - **Compiladores**: Xcode 12+, Clang
 - **Frameworks**: Sin dependencias adicionales
 
-## Compilación y Enlace
+## Compilación y Enlazado
 
 ### Visual Studio (Windows)
 
-1. Agregar directorio de inclusión:
+1. Añadir directorio de inclusión:
 
    ```
    $(SolutionDir)include
    ```
 
-2. Agregar directorio de biblioteca:
+2. Añadir directorio de librerías:
 
    ```
    $(SolutionDir)lib
    ```
 
-3. Enlazar bibliotecas:
+3. Enlazar librerías:
    - Para x86: `VisioForge_VideoFingerprinting.lib`
    - Para x64: `VisioForge_VideoFingerprinting_x64.lib`
 
-4. Copiar DLLs de tiempo de ejecución al directorio de salida:
+4. Copiar DLLs runtime al directorio de salida:
    - `VisioForge_VideoFingerprinting.dll` o `VisioForge_VideoFingerprinting_x64.dll`
    - `VisioForge_FFMPEG_Source.dll` o `VisioForge_FFMPEG_Source_x64.dll`
 
@@ -802,10 +611,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 # Directorios de enlace
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-# Agregar ejecutable
+# Añadir ejecutable
 add_executable(vfp_example main.cpp)
 
-# Enlazar bibliotecas
+# Enlazar librerías
 if(WIN32)
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
         target_link_libraries(vfp_example VisioForge_VideoFingerprinting_x64)
@@ -829,10 +638,10 @@ endif()
 # Compilar
 g++ -std=c++11 -I./include main.cpp -L./lib -lVisioForge_VideoFingerprinting -o vfp_example
 
-# Establecer ruta de biblioteca (Linux)
+# Configurar ruta de librerías (Linux)
 export LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH
 
-# Establecer ruta de biblioteca (macOS)
+# Configurar ruta de librerías (macOS)
 export DYLD_LIBRARY_PATH=./lib:$DYLD_LIBRARY_PATH
 
 # Ejecutar
@@ -843,33 +652,32 @@ export DYLD_LIBRARY_PATH=./lib:$DYLD_LIBRARY_PATH
 
 ### Gestión de Memoria
 
-- Los datos de huella son asignados internamente por el SDK
-- Siempre verifica los valores de retorno para errores
-- Libera recursos apropiadamente cuando termines
+- Los datos de la huella son asignados internamente por el SDK
+- Siempre verifique los valores de retorno para errores
+- Libere los recursos correctamente al terminar
 
 ### Velocidad de Procesamiento
 
-- Las huellas de búsqueda procesan aproximadamente 30x tiempo real en CPUs modernos
+- Las huellas de búsqueda procesan aproximadamente 30x tiempo real en CPUs modernas
 - Las huellas de comparación procesan aproximadamente 100x tiempo real
-- El rendimiento escala con núcleos de CPU para procesamiento por lotes
+- El rendimiento escala con los núcleos de CPU para procesamiento por lotes
 
 ### Consejos de Optimización
 
-1. **Usa el tipo de huella apropiado**: Search para detección de fragmentos, Compare para comparación de videos completos
-2. **Establece rangos de tiempo**: Procesa solo segmentos requeridos para reducir tiempo de procesamiento
-3. **Configura áreas ignoradas**: Excluye logos y tickers para mejorar precisión
-4. **Ajusta umbrales**: Equilibra entre falsos positivos y falsos negativos
-5. **Cachea huellas**: Guarda huellas generadas para evitar reprocesamiento
+1. **Use el tipo de huella apropiado**: Búsqueda para detección de fragmentos, Comparación para video completo
+2. **Establezca rangos de tiempo**: Procese solo los segmentos necesarios para reducir tiempo
+3. **Configure áreas ignoradas**: Excluya logos y tickers para mejorar precisión
+4. **Ajuste umbrales**: Equilibre entre falsos positivos y falsos negativos
+5. **Cachee huellas**: Guarde huellas generadas para evitar reprocesamiento
 
 ## Manejo de Errores
 
-Todas las funciones que retornan `wchar_t*` retornan NULL en éxito y un mensaje de error en caso de falla:
+Todas las funciones que retornan `wchar_t*` devuelven NULL en caso de éxito y un mensaje de error en caso de fallo:
 
 ```cpp
 wchar_t* error = VFPSearch_GetFingerprintForVideoFile(source, &fingerprint);
 if (error != nullptr) {
-    wprintf(L"Ocurrió un error: %s\n", error);
-    // Manejar error apropiadamente
+    wprintf(L"Error: %s\n", error);
     return -1;
 }
 ```
@@ -882,70 +690,70 @@ Escenarios de error comunes:
 - Clave de licencia inválida
 - Archivo de huella corrupto
 
-## Guías de Umbrales
+## Guía de Umbrales
 
 ### Operaciones de Búsqueda
 
 - **100-200**: Coincidencia muy estricta (copias exactas o casi exactas)
-- **200-400**: Coincidencia normal (diferencias menores de codificación permitidas)
-- **400-600**: Coincidencia flexible (diferencias significativas de calidad permitidas)
+- **200-400**: Coincidencia normal (diferencias menores de codificación)
+- **400-600**: Coincidencia flexible (diferencias significativas de calidad)
 - **600+**: Coincidencia muy flexible (puede producir falsos positivos)
 
 ### Operaciones de Comparación
 
 - **< 100**: Los videos son casi idénticos
-- **100-300**: Los videos son muy similares (probablemente mismo contenido)
+- **100-300**: Los videos son muy similares (probablemente el mismo contenido)
 - **300-500**: Los videos tienen similitudes significativas
 - **500-1000**: Los videos tienen algunas similitudes
 - **> 1000**: Los videos son diferentes
 
 ## Mejores Prácticas
 
-1. **Siempre establece una clave de licencia** antes de llamar cualquier función del SDK
-2. **Verifica los valores de retorno** para todas las operaciones
-3. **Usa tipos de huella apropiados** para tu caso de uso
-4. **Guarda huellas** para evitar reprocesar archivos de video grandes
-5. **Configura áreas ignoradas** para contenido con superposiciones o logos
-6. **Prueba valores de umbral** con tu tipo de contenido específico
-7. **Maneja errores graciosamente** y proporciona retroalimentación significativa
-8. **Libera recursos** cuando ya no se necesiten
-9. **Usa procesamiento por lotes** para múltiples archivos
-10. **Monitorea el uso de memoria** cuando proceses muchos archivos
+1. **Siempre establezca una clave de licencia** antes de llamar a cualquier función del SDK
+2. **Verifique los valores de retorno** en todas las operaciones
+3. **Use tipos de huella apropiados** para su caso de uso
+4. **Guarde huellas** para evitar reprocesar archivos de video grandes
+5. **Configure áreas ignoradas** para contenido con superposiciones o logos
+6. **Pruebe valores de umbral** con su tipo de contenido específico
+7. **Maneje errores con elegancia** y proporcione retroalimentación significativa
+8. **Libere recursos** cuando ya no sean necesarios
+9. **Use procesamiento por lotes** para múltiples archivos
+10. **Monitoree el uso de memoria** al procesar muchos archivos
 
-## Comparación con SDK .NET
+## Comparación con el SDK .NET
 
-El SDK C++ proporciona la misma funcionalidad central que el SDK .NET con estas diferencias:
+El SDK C++ proporciona la misma funcionalidad principal que el SDK .NET con estas diferencias:
 
 ### Ventajas
 
-- Rendimiento nativo directo sin sobrecarga administrada
-- Menor huella de memoria
+- Rendimiento nativo directo sin sobrecarga gestionada
+- Menor consumo de memoria
 - Integración más fácil con aplicaciones C++ existentes
 - Sin requisito de runtime .NET
 
 ### Diferencias
 
-- Se requiere gestión de memoria manual
+- Se requiere gestión manual de memoria
 - Usa cadenas de caracteres anchos para compatibilidad con Windows
 - API basada en funciones en lugar de orientada a objetos
 - Acceso directo a funciones de procesamiento de bajo nivel
 
-### Paridad de Características
+### Paridad de Funcionalidades
 
 Ambos SDKs soportan:
 
-- Generación de huellas Search y Compare
-- Detección de fragmentos dentro de videos más grandes
+- Generación de huellas de Búsqueda y Comparación
+- Detección de fragmentos dentro de videos más largos
 - Comparación de similitud entre videos
 - Comparación de imágenes (solo Windows para C++)
 - Recorte personalizado y áreas ignoradas
 - Especificación de rango de tiempo
-- Operaciones de guardado/carga de huellas
+- Operaciones de guardar/cargar huellas
 
 ## Soporte y Recursos
 
 Para soporte y recursos adicionales:
 
-- **Ejemplos**: Disponibles en el paquete del SDK bajo el directorio `Demos/`
+- **Ejemplos**: Disponibles en el paquete SDK en el directorio `Demos/`
 - **Soporte**: <support@visioforge.com>
 - **Licencia**: <https://www.visioforge.com/>

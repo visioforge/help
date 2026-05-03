@@ -29,34 +29,6 @@ primary_api_classes:
 
 # Encoding Filters Pack - Code Examples
 
-!!! danger "NVENC examples on this page use fabricated enum types and method names — treat as illustrative pseudocode"
-
-    The NVENC code blocks below reference enum types (`NVENC_CODEC.*`,
-    `NVENC_RATE_CONTROL.*`, `NVENC_PRESET.*`, `NVENC_H264_PROFILE.*`,
-    `NVENC_H264_LEVEL.*`, `NVENC_HEVC_PROFILE.*`, `NVENC_HEVC_LEVEL.*`)
-    and method names (`SetMaxBitrate`, `SetVBVBufferSize`, `SetCQP`,
-    `SetHEVCProfile`, `SetHEVCLevel`) that do not exist on the real
-    `INVEncConfig` interface (`H264EncoderNVENC/Intf.h`).
-
-    **Real canonical NVENC API (verified against the filter source):**
-
-    - **`SetCodec(int)`** — `0` = H.264, `1` = H.265 (HEVC). Plain int, no enum.
-    - **`SetRateControl(int)`** — `0` = CQP, `1` = VBR, `2` = CBR. Plain int.
-    - **`SetPreset(GUID)`** — uses NVIDIA NVENC SDK GUIDs directly:
-      `NV_ENC_PRESET_DEFAULT_GUID`, `NV_ENC_PRESET_HP_GUID`,
-      `NV_ENC_PRESET_HQ_GUID`, `NV_ENC_PRESET_LOW_LATENCY_DEFAULT_GUID`, etc.
-    - **`SetProfile(GUID)`** — single setter for both H.264 and HEVC profile
-      GUIDs (selected codec is set separately via `SetCodec`).
-    - **`SetLevel(int)`** — single setter for both codecs (level value as int).
-    - **Bitrate / buffer / quality:** real method names are `SetVbvBitrate(int)`,
-      `SetVbvSize(int)`, `SetQp(int)` — **not** `SetMaxBitrate`, `SetVBVBufferSize`,
-      `SetCQP`. There is no separate `SetHEVCProfile` / `SetHEVCLevel` — use
-      `SetCodec(1)` then `SetProfile(<HEVC profile GUID>)`.
-
-    Tracked as defects #028–#029 in the help audit. A full rewrite of these
-    NVENC sections is queued; for working code, see the canonical interface
-    page: [interfaces/nvenc.md](./interfaces/nvenc.md).
-
 ## Overview
 
 This page provides practical code examples for encoding video and audio using the Encoding Filters Pack. Covers:
@@ -88,6 +60,16 @@ using System.Runtime.InteropServices;
 
 ## NVENC Hardware Encoding Examples
 
+> **NVENC Preset and Profile GUIDs** — The `SetPreset(Guid)` and `SetProfile(Guid)` methods accept
+> NVIDIA NVENC SDK GUID constants. Real presets: `NV_ENC_PRESET_DEFAULT_GUID`,
+> `NV_ENC_PRESET_HP_GUID` (high performance), `NV_ENC_PRESET_HQ_GUID` (high quality),
+> `NV_ENC_PRESET_LOW_LATENCY_DEFAULT_GUID`, `NV_ENC_PRESET_LOW_LATENCY_HQ_GUID`,
+> `NV_ENC_PRESET_LOW_LATENCY_HP_GUID`, `NV_ENC_PRESET_LOSSLESS_DEFAULT_GUID`,
+> `NV_ENC_PRESET_BD_GUID`. H.264 profiles: `NV_ENC_H264_PROFILE_BASELINE_GUID`,
+> `NV_ENC_H264_PROFILE_MAIN_GUID`, `NV_ENC_H264_PROFILE_HIGH_GUID`.
+> HEVC: `NV_ENC_HEVC_PROFILE_MAIN_GUID`.
+> These GUIDs are defined in the NVIDIA NVENC SDK (`nvEncodeAPI.h`).
+
 ### Example 1: Basic NVENC H.264 Encoding
 
 Encode video with NVIDIA hardware acceleration.
@@ -95,168 +77,40 @@ Encode video with NVIDIA hardware acceleration.
 #### C# NVENC H.264 Encoding
 
 ```csharp
-using System;
-using System.Runtime.InteropServices;
-using VisioForge.DirectShowAPI;
-using VisioForge.DirectShowLib;
+using VisioForge.Core.Types.Output;
 
-public class NVENCBasicExample
+// ...
+
+var nvenc = encoderFilter as INVEncConfig;
+if (nvenc != null)
 {
-    private IFilterGraph2 filterGraph;
-    private IMediaControl mediaControl;
-
-    public void EncodeWithNVENC(string inputFile, string outputFile)
-    {
-        filterGraph = (IFilterGraph2)new FilterGraph();
-        mediaControl = (IMediaControl)filterGraph;
-
-        // Add source filter
-        filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter);
-
-        // Add NVENC Encoder
-        var encoderFilter = FilterGraphTools.AddFilterFromClsid(
-            filterGraph,
-            Consts.CLSID_VFNVENCEncoder,
-            "NVENC Encoder");
-
-        // Configure NVENC
-        var nvenc = encoderFilter as INVEncConfig;
-        if (nvenc != null)
-        {
-            // Set codec (H.264)
-            nvenc.SetCodec(NVENC_CODEC.NVENC_CODEC_H264);
-
-            // Set rate control mode
-            nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CBR);
-
-            // Set bitrate (5 Mbps)
-            nvenc.SetBitrate(5000000);
-
-            // Set quality preset
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P4);  // Balanced
-
-            // Set GOP size (keyframe interval)
-            nvenc.SetGOP(60);  // Every 2 seconds at 30fps
-
-            // Set B-frames (Turing+ GPUs)
-            nvenc.SetBFrames(2);
-
-            // Set profile
-            nvenc.SetProfile(NVENC_H264_PROFILE.NVENC_H264_PROFILE_HIGH);
-
-            // Set level
-            nvenc.SetLevel(NVENC_H264_LEVEL.NVENC_H264_LEVEL_41);
-        }
-
-        // Add MP4 muxer
-        var muxerFilter = FilterGraphTools.AddFilterFromClsid(
-            filterGraph,
-            Consts.CLSID_VFMP4Muxer,
-            "MP4 Muxer");
-
-        // Set output file
-        var fileSink = muxerFilter as IFileSinkFilter;
-        fileSink?.SetFileName(outputFile, null);
-
-        // Connect filters: Source → NVENC → Muxer
-        ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
-        captureGraph.SetFiltergraph(filterGraph);
-
-        // Connect video path
-        captureGraph.RenderStream(null, MediaType.Video, sourceFilter, encoderFilter, muxerFilter);
-
-        // Connect audio path (passthrough or encode)
-        // captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, muxerFilter);
-
-        // Run encoding
-        mediaControl.Run();
-
-        // Wait for completion...
-        // (Monitor IMediaEventEx for EC_COMPLETE)
-
-        Marshal.ReleaseComObject(captureGraph);
-    }
-
-    public void Stop()
-    {
-        mediaControl?.Stop();
-
-        FilterGraphTools.RemoveAllFilters(filterGraph);
-
-        if (mediaControl != null) Marshal.ReleaseComObject(mediaControl);
-        if (filterGraph != null) Marshal.ReleaseComObject(filterGraph);
-    }
+    nvenc.SetCodec(NVENCEncoder.H264);
+    nvenc.SetRateControl(NVENCRateControlMode.CBR);
+    nvenc.SetBitrate(5000000);                    // 5 Mbps
+    nvenc.SetPreset(NV_ENC_PRESET_DEFAULT_GUID);   // Balanced quality/speed
+    nvenc.SetGOP(60);                              // Keyframe every 60 frames
+    nvenc.SetBFrames(2);                           // B-frames
+    nvenc.SetProfile(NV_ENC_H264_PROFILE_HIGH_GUID);
+    nvenc.SetLevel(NVENCEncoderLevel.H264_41);     // Level 4.1
 }
 ```
 
 #### C++ NVENC H.264 Encoding
 
 ```cpp
-HRESULT EncodeWithNVENC(LPCWSTR inputFile, LPCWSTR outputFile)
+hr = pEncoder->QueryInterface(IID_INVEncConfig, (void**)&pNVEnc);
+if (SUCCEEDED(hr))
 {
-    IGraphBuilder* pGraph = NULL;
-    IBaseFilter* pSource = NULL;
-    IBaseFilter* pEncoder = NULL;
-    IBaseFilter* pMuxer = NULL;
-    INVEncConfig* pNVEnc = NULL;
+    pNVEnc->SetCodec(0);                              // H264
+    pNVEnc->SetRateControl(2);                        // CBR
+    pNVEnc->SetBitrate(5000000);                      // 5 Mbps
+    pNVEnc->SetPreset(NV_ENC_PRESET_DEFAULT_GUID);    // Balanced
+    pNVEnc->SetGOP(60);                               // Keyframe interval
+    pNVEnc->SetBFrames(2);                            // B-frames
+    pNVEnc->SetProfile(NV_ENC_H264_PROFILE_HIGH_GUID);
+    pNVEnc->SetLevel(41);                             // Level 4.1
 
-    // Create graph
-    HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
-                                  IID_IGraphBuilder, (void**)&pGraph);
-    if (FAILED(hr)) return hr;
-
-    // Add source
-    hr = pGraph->AddSourceFilter(inputFile, L"Source", &pSource);
-    if (FAILED(hr)) goto cleanup;
-
-    // Add NVENC encoder
-    hr = CoCreateInstance(CLSID_VFNVENCEncoder, NULL, CLSCTX_INPROC_SERVER,
-                         IID_IBaseFilter, (void**)&pEncoder);
-    if (FAILED(hr)) goto cleanup;
-
-    hr = pGraph->AddFilter(pEncoder, L"NVENC Encoder");
-    if (FAILED(hr)) goto cleanup;
-
-    // Configure NVENC
-    hr = pEncoder->QueryInterface(IID_INVEncConfig, (void**)&pNVEnc);
-    if (SUCCEEDED(hr))
-    {
-        pNVEnc->SetCodec(NVENC_CODEC_H264);
-        pNVEnc->SetRateControl(NVENC_RC_CBR);
-        pNVEnc->SetBitrate(5000000);  // 5 Mbps
-        pNVEnc->SetPreset(NVENC_PRESET_P4);
-        pNVEnc->SetGOP(60);
-
-        pNVEnc->Release();
-    }
-
-    // Add muxer
-    hr = CoCreateInstance(CLSID_VFMP4Muxer, NULL, CLSCTX_INPROC_SERVER,
-                         IID_IBaseFilter, (void**)&pMuxer);
-    if (FAILED(hr)) goto cleanup;
-
-    hr = pGraph->AddFilter(pMuxer, L"MP4 Muxer");
-    if (FAILED(hr)) goto cleanup;
-
-    // Set output file
-    IFileSinkFilter* pFileSink = NULL;
-    hr = pMuxer->QueryInterface(IID_IFileSinkFilter, (void**)&pFileSink);
-    if (SUCCEEDED(hr))
-    {
-        pFileSink->SetFileName(outputFile, NULL);
-        pFileSink->Release();
-    }
-
-    // Connect filters and run...
-    // (Use ICaptureGraphBuilder2::RenderStream)
-
-cleanup:
-    if (pMuxer) pMuxer->Release();
-    if (pEncoder) pEncoder->Release();
-    if (pSource) pSource->Release();
-    if (pGraph) pGraph->Release();
-
-    return hr;
+    pNVEnc->Release();
 }
 ```
 
@@ -278,19 +132,13 @@ public void EncodeH265(string inputFile, string outputFile)
     var nvenc = encoderFilter as INVEncConfig;
     if (nvenc != null)
     {
-        // H.265/HEVC codec
-        nvenc.SetCodec(NVENC_CODEC.NVENC_CODEC_HEVC);
-        // Rate control: CQP (Constant Quality)
-        nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CQP);
-        nvenc.SetCQP(23);  // Quality: 0=lossless, 51=worst
-        // Quality preset
-        nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P5);  // Higher quality
-        // H.265 profile
-        nvenc.SetHEVCProfile(NVENC_HEVC_PROFILE.NVENC_HEVC_PROFILE_MAIN);
-        // H.265 level
-        nvenc.SetHEVCLevel(NVENC_HEVC_LEVEL.NVENC_HEVC_LEVEL_41);
-        // GOP and B-frames
-        nvenc.SetGOP(120);  // 4 seconds at 30fps
+        nvenc.SetCodec(NVENCEncoder.HEVC);
+        nvenc.SetRateControl(NVENCRateControlMode.CONST_QP);
+        nvenc.SetQp(23);                            // QP 23: good balance
+        nvenc.SetPreset(NV_ENC_PRESET_HQ_GUID);      // High quality
+        nvenc.SetProfile(NV_ENC_HEVC_PROFILE_MAIN_GUID);
+        nvenc.SetLevel(NVENCEncoderLevel.H264_41);   // Level 4.1
+        nvenc.SetGOP(120);                           // 4 seconds at 30fps
         nvenc.SetBFrames(3);
     }
     // Add muxer
@@ -318,38 +166,29 @@ Different rate control strategies for various use cases.
 #### C# Rate Control Examples
 
 ```csharp
-public enum RateControlMode
-{
-    CBR,     // Constant Bitrate
-    VBR,     // Variable Bitrate
-    CQP      // Constant Quality
-}
+using VisioForge.Core.Types.Output;
 
-public void ConfigureRateControl(INVEncConfig nvenc, RateControlMode mode)
+public void ConfigureRateControl(INVEncConfig nvenc, NVENCRateControlMode mode)
 {
     switch (mode)
     {
-        case RateControlMode.CBR:
-            // Best for streaming (predictable bitrate)
-            nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CBR);
-            nvenc.SetBitrate(5000000);      // 5 Mbps
-            nvenc.SetMaxBitrate(5000000);   // Same as bitrate for CBR
-            nvenc.SetVBVBufferSize(10000000); // 10 Mb buffer
+        case NVENCRateControlMode.CBR:
+            nvenc.SetRateControl(NVENCRateControlMode.CBR);
+            nvenc.SetBitrate(5000000);       // 5 Mbps target
+            nvenc.SetVbvBitrate(5000000);    // Same as target for CBR
+            nvenc.SetVbvSize(10000000);      // 10 Mb buffer
             break;
 
-        case RateControlMode.VBR:
-            // Best for recording (better quality)
-            nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_VBR);
-            nvenc.SetBitrate(5000000);      // Average 5 Mbps
-            nvenc.SetMaxBitrate(8000000);   // Peak 8 Mbps
-            nvenc.SetVBVBufferSize(10000000);
+        case NVENCRateControlMode.VBR:
+            nvenc.SetRateControl(NVENCRateControlMode.VBR);
+            nvenc.SetBitrate(5000000);       // Average 5 Mbps
+            nvenc.SetVbvBitrate(8000000);    // Peak 8 Mbps
+            nvenc.SetVbvSize(10000000);
             break;
 
-        case RateControlMode.CQP:
-            // Best for archival (consistent quality)
-            nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CQP);
-            nvenc.SetCQP(23);  // QP value: lower = better quality
-            // No bitrate settings needed for CQP
+        case NVENCRateControlMode.CONST_QP:
+            nvenc.SetRateControl(NVENCRateControlMode.CONST_QP);
+            nvenc.SetQp(23);                 // QP: lower = better quality
             break;
     }
 }
@@ -365,33 +204,23 @@ public void SetQualityPreset(INVEncConfig nvenc, string useCase)
     switch (useCase.ToLower())
     {
         case "realtime":
-            // Fastest encoding (live streaming)
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P1);
-            nvenc.SetBFrames(0);  // No B-frames for low latency
+            nvenc.SetPreset(NV_ENC_PRESET_LOW_LATENCY_HP_GUID);
+            nvenc.SetBFrames(0);
             break;
         case "fast":
-            // Fast encoding
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P2);
+            nvenc.SetPreset(NV_ENC_PRESET_LOW_LATENCY_DEFAULT_GUID);
             nvenc.SetBFrames(1);
             break;
         case "balanced":
-            // Balanced speed/quality (recommended)
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P4);
+            nvenc.SetPreset(NV_ENC_PRESET_DEFAULT_GUID);
             nvenc.SetBFrames(2);
             break;
         case "quality":
-            // Higher quality
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P6);
+            nvenc.SetPreset(NV_ENC_PRESET_HQ_GUID);
             nvenc.SetBFrames(3);
             break;
-        case "maximum":
-            // Best quality (slowest)
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P7);
-            nvenc.SetBFrames(4);
-            break;
         default:
-            // Default to balanced
-            nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P4);
+            nvenc.SetPreset(NV_ENC_PRESET_DEFAULT_GUID);
             nvenc.SetBFrames(2);
             break;
     }
@@ -466,10 +295,10 @@ public void EncodeAACAudio(string inputFile, string outputFile)
     var nvenc = videoEncoderFilter as INVEncConfig;
     if (nvenc != null)
     {
-        nvenc.SetCodec(NVENC_CODEC.NVENC_CODEC_H264);
-        nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CBR);
+        nvenc.SetCodec(NVENCEncoder.H264);
+        nvenc.SetRateControl(NVENCRateControlMode.CBR);
         nvenc.SetBitrate(5000000);
-        nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P4);
+        nvenc.SetPreset(NV_ENC_PRESET_DEFAULT_GUID);
     }
     // Add AAC audio encoder
     var audioEncoderFilter = FilterGraphTools.AddFilterFromClsid(
@@ -806,13 +635,10 @@ public class CompleteEncoder : IDisposable
             var nvenc = encoder as INVEncConfig;
             if (nvenc != null)
             {
-                nvenc.SetCodec(codec == VideoCodec.H264_NVENC ?
-                              NVENC_CODEC.NVENC_CODEC_H264 :
-                              NVENC_CODEC.NVENC_CODEC_HEVC);
-
-                nvenc.SetRateControl(NVENC_RATE_CONTROL.NVENC_RC_CBR);
+                nvenc.SetCodec(codec == VideoCodec.H264_NVENC ? NVENCEncoder.H264 : NVENCEncoder.HEVC);
+                nvenc.SetRateControl(NVENCRateControlMode.CBR);
                 nvenc.SetBitrate(bitrate);
-                nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P4);
+                nvenc.SetPreset(NV_ENC_PRESET_DEFAULT_GUID);
                 nvenc.SetGOP(60);
                 nvenc.SetBFrames(2);
             }
@@ -968,12 +794,11 @@ public enum ContainerFormat
 ### Issue: NVENC Not Available
 **Solution**: Check GPU compatibility:
 ```csharp
-var nvenc = encoder as INVEncConfig;
-if (nvenc != null)
+var nvenc2 = encoder as INVEncConfig2;
+if (nvenc2 != null)
 {
-    // Try to set codec
-    int hr = nvenc.SetCodec(NVENC_CODEC.NVENC_CODEC_H264);
-    if (hr != 0)
+    int hr = nvenc2.CheckNVENCAvailable(out bool available, out int status);
+    if (hr != 0 || !available)
     {
         Console.WriteLine("NVENC not available - GPU may not support it");
         // Fall back to software encoder
@@ -984,7 +809,7 @@ if (nvenc != null)
 **Solution**: Adjust quality preset:
 ```csharp
 // Use faster preset
-nvenc.SetPreset(NVENC_PRESET.NVENC_PRESET_P1);  // Fastest
+nvenc.SetPreset(NV_ENC_PRESET_LOW_LATENCY_HP_GUID);
 nvenc.SetBFrames(0);  // Disable B-frames
 ```
 ### Issue: Output File Size Too Large
@@ -993,7 +818,7 @@ nvenc.SetBFrames(0);  // Disable B-frames
 // Lower bitrate
 nvenc.SetBitrate(2000000);  // 2 Mbps instead of 5
 // Or use H.265 for better compression
-nvenc.SetCodec(NVENC_CODEC.NVENC_CODEC_HEVC);
+nvenc.SetCodec(NVENCEncoder.HEVC);
 ```
 ---
 

@@ -11,65 +11,14 @@ tags:
   - Linux
   - Fingerprinting
 primary_api_classes:
-  - VFPAnalyzer
-  - VFPAnalyzerSettings
-  - VideoProcessor
-  - StoreFingerprint
-  - StreamAnalyzer
+  - VFPFingerprintSource
+  - VFPFingerPrint
+  - VFPSearch
+  - VFPCompare
 
 ---
 
 # Video Fingerprinting SDK for C++
-
-!!! danger "Code samples on this page do not match the public C API — treat as illustrative pseudocode"
-
-    The C++ class API documented below (`VFPAnalyzer` class with
-    `Initialize` / `ProcessVideo`, `VFPAnalyzerSettings`, `VFPAnalyzerMode`
-    enum, `VFPCompare` class with `CompareVideos`, etc.) does **not** exist
-    in the shipped SDK. The real Video Fingerprinting SDK exposes a
-    **C-style flat API** (`extern "C"`), not a class hierarchy.
-
-    **Real canonical C API (per `VisioForge_VFP.h`):**
-
-    Search-fingerprint workflow (per-frame):
-
-    ```c
-    VFPSearchData searchData;
-    VFPSearch_Init(&searchData);
-    // For each decoded frame:
-    VFPSearch_Process(&searchData, frameData, width, height, stride, timestamp);
-    // After all frames:
-    VFPSearch_Build(&searchData, &resultFingerprint);
-    // Search one fingerprint inside another:
-    VFPSearch_Search(&fpA, &fpB, duration, maxDifference, allowMultipleFragments,
-                     &outResults, &outCount);
-    ```
-
-    Compare-fingerprint workflow (per-frame):
-
-    ```c
-    VFPCompareData compareData;
-    VFPCompare_Init(&compareData);
-    // For each decoded frame:
-    VFPCompare_Process(&compareData, frameData, width, height, stride, timestamp);
-    // After all frames:
-    VFPCompare_Build(&compareData, &resultFingerprint);
-    // Compare two fingerprints (returns difference; 0 = identical):
-    int diff = VFPCompare_Compare(&fpA, &fpB, durationMs);
-    ```
-
-    Convenience higher-level helpers like
-    `VFPSearch_GetFingerprintForVideoFile`,
-    `VFPCompare_GetFingerprintForVideoFile`, and `VFPFillSource` shown
-    elsewhere on the C++ pages are **not** real exports — only the
-    low-level `_Init` / `_Process` / `_Build` / `_Search` / `_Compare`
-    primitives ship in `VisioForge_VFP.dll`. The host application is
-    responsible for decoding video frames (e.g., via FFmpeg or GStreamer)
-    and feeding them frame-by-frame to `*_Process`.
-
-    Tracked as defects #084-#090 in the help audit. A full rewrite of
-    the C++ doc set is queued. For working low-level samples, see
-    `samples/` in the SDK distribution.
 
 ## Overview
 
@@ -111,95 +60,118 @@ The Video Fingerprinting SDK for C++ provides a native implementation with direc
 
 ### Code Examples
 
-#### Basic Fingerprint Generation
+#### Generate Search Fingerprint (high-level API)
 
 ```cpp
-#include <VFPAnalyzer.h>
+#include <VisioForge_VFP.h>
+#include <VisioForge_VFP_Types.h>
 
-// Create analyzer instance
-auto analyzer = std::make_unique<VFPAnalyzer>();
+VFPSetLicenseKey(L"your-license-key");
 
-// Configure analysis parameters
-VFPAnalyzerSettings settings;
-settings.Mode = VFPAnalyzerMode::Search;
-settings.FrameStep = 10;
+// Fill source info
+VFPFingerprintSource src{};
+VFPFillSource(L"C:\\video.mp4", &src);
+src.StartTime = 10000;   // start at 10s
+src.StopTime = 60000;    // stop at 60s
 
-// Set license key
-analyzer->SetLicenseKey("your-license-key");
-
-// Process video file
-analyzer->StartAsync("input_video.mp4", "output.vfp", settings);
-```
-
-#### Comparing Two Videos
-
-```cpp
-#include <VFPCompare.h>
-
-// Create comparison instance
-auto compare = std::make_unique<VFPCompare>();
-
-// Set license
-compare->SetLicenseKey("your-license-key");
-
-// Load fingerprints
-compare->LoadFingerprint("video1.vfp");
-compare->LoadFingerprint("video2.vfp");
-
-// Perform comparison
-auto result = compare->Compare();
-
-// Check similarity
-std::cout << "Similarity: " << result.Similarity << "%" << std::endl;
-if (result.IsMatch) {
-    std::cout << "Videos match!" << std::endl;
+// Generate search fingerprint
+VFPFingerPrint fp{};
+wchar_t* error = VFPSearch_GetFingerprintForVideoFile(src, &fp);
+if (error == nullptr)
+{
+    printf("Fingerprint: %dx%d, %.1fs, %d bytes\n",
+           fp.Width, fp.Height, fp.Duration / 1000.0, fp.DataSize);
+    VFPFingerprintSave(&fp, L"output.vfpsig");
 }
 ```
 
-## Integration Patterns
-
-### Memory-Efficient Processing
+#### Compare Two Fingerprints
 
 ```cpp
-// Process large video collections with minimal memory
-class VideoProcessor {
-public:
-    void ProcessBatch(const std::vector<std::string>& videos) {
-        VFPAnalyzer analyzer;
-        analyzer.SetLicenseKey(m_licenseKey);
-        
-        for (const auto& video : videos) {
-            // Process and immediately store/transmit fingerprint
-            analyzer.StartAsync(video, 
-                [this](const std::string& fingerprint) {
-                    // Store in database or send to server
-                    StoreFingerprint(fingerprint);
-                });
-        }
-    }
-};
+VFPFingerPrint fp1{}, fp2{};
+VFPFingerprintLoad(&fp1, L"video1.vfpsig");
+VFPFingerprintLoad(&fp2, L"video2.vfpsig");
+
+double diff = VFPCompare_Compare(fp1.Data, fp1.DataSize,
+                                 fp2.Data, fp2.DataSize, 10);
+printf("Difference: %.2f\n", diff);
 ```
 
-### Real-Time Stream Analysis
+#### Search Fragment in Longer Video
 
 ```cpp
-// Analyze live video streams
-class StreamAnalyzer {
-public:
-    void AnalyzeStream(const std::string& streamUrl) {
-        VFPAnalyzer analyzer;
-        VFPAnalyzerSettings settings;
-        settings.Mode = VFPAnalyzerMode::RealTime;
-        settings.BufferSize = 30; // 30 second buffer
-        
-        analyzer.SetLicenseKey(m_licenseKey);
-        analyzer.StartStreamAnalysis(streamUrl, settings,
-            [](const VFPSegment& segment) {
-                // Process detected segments in real-time
-                ProcessSegment(segment);
-            });
+VFPFingerPrint needle{}, haystack{};
+VFPFingerprintLoad(&needle, L"fragment.vfpsig");
+VFPFingerprintLoad(&haystack, L"full.vfpsig");
+
+double diff = 0;
+int pos = VFPSearch_Search2(&needle, 0, &haystack, 0, &diff, 300);
+if (pos != INT_MAX)
+    printf("Found at %d seconds (diff: %.2f)\n", pos, diff);
+```
+
+#### Low-Level Per-Frame API (for live streams / custom decoders)
+
+```cpp
+// Allocate accumulator for ~60s of video at 30fps
+void* pData = VFPSearch_Init2(30 * 60);
+
+while (hasMoreFrames)
+{
+    // Decode frame into RGB buffer...
+    VFPSearch_Process(rgbData, width, height, stride, timestampSec, pData);
+}
+
+int len = 0;
+char* data = VFPSearch_Build(&len, pData);
+
+// Use data/len as VFPFingerPrint.Data / .DataSize
+VFPFingerPrint fp{};
+fp.Data = data;
+fp.DataSize = len;
+// ... set Duration, Width, Height, FrameRate manually ...
+
+VFPSearch_Clear(pData);
+```
+
+**Important:** The SDK provides only the low-level `_Init` / `_Process` / `_Build` / `_Search` / `_Compare` primitives. The host application is responsible for decoding video frames (FFmpeg, GStreamer, DirectShow, etc.) and feeding them frame-by-frame to `*_Process`.
+
+## Integration Patterns
+
+### Batch Processing
+
+```cpp
+void ProcessBatch(const std::vector<std::wstring>& videos)
+{
+    for (const auto& path : videos)
+    {
+        VFPFingerprintSource src{};
+        VFPFillSource(path.c_str(), &src);
+
+        VFPFingerPrint fp{};
+        VFPSearch_GetFingerprintForVideoFile(src, &fp);
+        // Store fp in database...
     }
-};
+}
+```
+
+### Real-Time Stream Analysis (low-level API)
+
+```cpp
+void* pData = VFPSearch_Init2(30 * 60); // 30fps, 60s buffer
+
+void OnFrame(unsigned char* rgb, int w, int h, int stride, double timestampSec)
+{
+    VFPSearch_Process(rgb, w, h, stride, timestampSec, pData);
+}
+
+void OnStreamEnd()
+{
+    int len;
+    char* data = VFPSearch_Build(&len, pData);
+    // Compare with known fingerprints...
+    VFPSearch_Clear(pData);
+}
 ```
 
 ## Support and Resources
@@ -223,15 +195,11 @@ public:
 
 ## License Registration
 
-Register the SDK in your C++ application:
-
 ```cpp
-// In your initialization code
-VFPAnalyzer analyzer;
-analyzer.SetLicenseKey("your-license-key");
+#include <VisioForge_VFP.h>
 
-// Or globally for all instances
-VFPLicense::SetGlobalKey("your-license-key");
+VFPSetLicenseKey(L"your-license-key");
+// or for narrow-char: VFPSetLicenseKeyA("your-license-key");
 ```
 
 ## Next Steps
