@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <RootNamespace>SimpleVideoCaptureAMB</RootNamespace>
+    <AssemblyName>SimpleVideoCaptureAMB</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <!-- Windows: net10.0-windows + WinExe + per-OS native redists (Core + libav). -->
+  <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+  </PropertyGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+  </ItemGroup>
+
+  <!-- macOS: net10.0-macos + Exe + macOS Core redist (libav is bundled inside Core on macOS). -->
+  <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
+    <TargetFramework>net10.0-macos</TargetFramework>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.9.1" />
+  </ItemGroup>
+
+  <!-- Linux: plain net10.0 + Exe; native runtime comes from system-installed GStreamer (no NuGet redist). -->
+  <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <!-- Avalonia base packages — managed-only, resolve per-OS native bits at runtime. Unconditional. -->
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.0.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.1" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.1" />
+    <!-- Diagnostics tools only in Debug — keeps Release output clean. -->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.1" />
+  </ItemGroup>
+
+  <!-- VisioForge wrapper packages — unconditional, managed-only. The .Avalonia package is what carries the Avalonia VideoView control. -->
+  <ItemGroup>
+    <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.5.4" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.5.4" />
+  </ItemGroup>
+</Project>

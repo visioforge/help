@@ -2,11 +2,11 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-05-03 20:30:49 UTC (ebda53bf932)
+**Generated:** 2026-05-11 14:16:05 UTC (2b9a27c685c)
 
 ## MCP Server (for AI coding agents)
 
-> Before grepping this dump, call the VisioForge MCP server at **https://mcp.visioforge.com/mcp** for structured API lookups, code examples, and deployment guides. Public endpoint, no authentication required. 8 tools: `search_api`, `get_api_item`, `get_code_examples`, `list_deployment_guides`, `get_deployment_guide`, `get_nuget_packages_snippet`, `get_platform_specific_config`, `get_changelog`.
+> Before grepping this dump, call the VisioForge MCP server at **https://mcp.visioforge.com/mcp** for structured API lookups, code examples, and deployment guides. Public endpoint, no authentication required. 14 tools: `list_media_blocks`, `get_media_block_info`, `list_sdk_classes`, `get_class_info`, `get_method_signature`, `search_api`, `get_enum_values`, `get_code_example`, `get_pipeline_template`, `list_namespaces`, `list_deployment_guides`, `get_deployment_guide`, `get_nuget_packages_snippet`, `get_platform_specific_config`.
 
 - **Endpoint**: `https://mcp.visioforge.com/mcp`
 - **Documentation**: [MCP server usage guide](https://www.visioforge.com/help/docs/dotnet/general/mcp-server-usage/)
@@ -310,6 +310,7 @@ The MCP server returns surgical answers (single API class, single code example) 
 
 ## Documentation - Other
 
+- [Agent Skills for VisioForge .NET SDKs — AI coding agents](https://www.visioforge.com/help/docs/dotnet/agent-skills/): Per-platform skills for AI coding agents (Claude Code, Cursor, Copilot, Codex, Gemini CLI) covering NuGet, licence setup, and deployment caveats.
 - [VisioForge .NET SDKs — Changelog and Release Notes](https://www.visioforge.com/help/docs/dotnet/changelog/): Version history for Video Capture, Media Player, Video Edit, and Media Blocks SDKs. New features, bug fixes, API changes, and platform updates.
 - [VisioForge .NET SDKs — Video Capture, Editing & Playback](https://www.visioforge.com/help/docs/dotnet/): .NET SDKs for video capture, editing, playback, and processing. Cross-platform support for Windows, macOS, Linux, Android, and iOS.
 - [Migration Guide — Upgrade VisioForge .NET SDK v15 to v2026](https://www.visioforge.com/help/docs/dotnet/migration-from-v15/): Step-by-step guide for upgrading from VisioForge .NET SDK v15 to v2026, covering both DirectShow and cross-platform X-engine migration paths.

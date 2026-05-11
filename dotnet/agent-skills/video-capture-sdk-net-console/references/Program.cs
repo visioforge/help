@@ -1,0 +1,255 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Program.cs" company="VisioForge">
+//   Video Capture Console Demo.
+// </copyright>
+// <summary>
+//   Defines the Program type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Video_Capture_Demo
+{
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using System.Threading;
+    using VisioForge.Core.Types;
+    using VisioForge.Core.Types.Events;
+    using VisioForge.Core.Types.Output;
+    using VisioForge.Core.Types.VideoCapture;
+    using VisioForge.Core.VideoCapture;
+
+    static class Program
+    {
+        /// <summary>
+        /// Main.
+        /// </summary>
+        /// <param name="args">Arguments.</param>
+        static void Main(string[] args)
+        {
+            var videoCapture = new VideoCaptureCore();
+            videoCapture.OnError += VideoCapture_OnError;
+
+            videoCapture.Video_Renderer.VideoRenderer = VideoRendererMode.None;
+
+            // get video capture devices
+            var videoCaptureDevices = videoCapture.Video_CaptureDevices();
+
+            Console.WriteLine(@"Video capture devices: ");
+            for (int i = 0; i < videoCaptureDevices.Count; i++)
+            {
+                Console.WriteLine(i + @": " + videoCaptureDevices[i].Name);
+            }
+
+            Console.Write(@"Select video capture device index: ");
+            if (!int.TryParse(Console.ReadLine(), out int videoCaptureDeviceIndex) ||
+                videoCaptureDeviceIndex < 0 || videoCaptureDeviceIndex >= videoCaptureDevices.Count)
+            {
+                Console.Write(@"Wrong video capture device index has been specified.");
+                return;
+            }
+
+            // video formats
+            VideoCaptureDeviceFormat videoFormat = new VideoCaptureDeviceFormat(string.Empty);
+            if (videoCaptureDevices[videoCaptureDeviceIndex].VideoFormats.Count > 0)
+            {
+                Console.WriteLine(@"Video capture device formats: ");
+                for (int i = 0; i < videoCaptureDevices[videoCaptureDeviceIndex].VideoFormats.Count; i++)
+                {
+                    Console.WriteLine(i + @": " + videoCaptureDevices[videoCaptureDeviceIndex].VideoFormats[i]);
+                }
+
+                Console.Write(@"Select video format index: ");
+                if (!int.TryParse(Console.ReadLine(), out int videoFormatIndex) ||
+                    videoFormatIndex < 0 || videoFormatIndex >= videoCaptureDevices[videoCaptureDeviceIndex].VideoFormats.Count)
+                {
+                    Console.Write(@"Wrong video format index has been specified.");
+                    return;
+                }
+
+                videoFormat = videoCaptureDevices[videoCaptureDeviceIndex].VideoFormats[videoFormatIndex];
+            }
+
+            // video frame rates
+            VideoFrameRate videoFrameRate = VideoFrameRate.Empty;
+            if (videoFormat.FrameRates.Count > 0)
+            {
+                Console.WriteLine(@"Video capture device frame rates: ");
+                for (int i = 0; i < videoFormat.FrameRates.Count; i++)
+                {
+                    Console.WriteLine(i + @": " + videoFormat.FrameRates[i]);
+                }
+
+                Console.Write(@"Select video frame rate index: ");
+                if (!int.TryParse(Console.ReadLine(), out int videoFrameRateIndex) ||
+                    videoFrameRateIndex < 0 || videoFrameRateIndex >= videoFormat.FrameRates.Count)
+                {
+                    Console.Write(@"Wrong video frame rate index has been specified.");
+                    return;
+                }
+
+                videoFrameRate = videoFormat.FrameRates[videoFrameRateIndex];
+            }
+
+            // get audio capture devices
+            var audioCaptureDevices = videoCapture.Audio_CaptureDevices();
+
+            Console.WriteLine(@"Audio capture devices: ");
+            Console.WriteLine(@"0: Use video capture device if possible.");
+            for (int i = 0; i < audioCaptureDevices.Count; i++)
+            {
+                Console.WriteLine((i + 1).ToString() + @": " + audioCaptureDevices[i].Name);
+            }
+
+            Console.Write(@"Select audio capture device index: ");
+            if (!int.TryParse(Console.ReadLine(), out int audioCaptureDeviceIndex) ||
+                audioCaptureDeviceIndex < 0 || audioCaptureDeviceIndex > audioCaptureDevices.Count)
+            {
+                Console.Write(@"Wrong audio capture device index has been specified.");
+                return;
+            }
+
+            // audio formats
+            string audioFormat = string.Empty;
+
+            if (audioCaptureDeviceIndex == 0)
+            {
+                if (videoCaptureDevices[videoCaptureDeviceIndex].AudioFormats.Count > 0)
+                {
+                    Console.WriteLine(@"Audio capture device formats: ");
+                    for (int i = 0; i < videoCaptureDevices[videoCaptureDeviceIndex].AudioFormats.Count; i++)
+                    {
+                        Console.WriteLine(i + @": " + videoCaptureDevices[videoCaptureDeviceIndex].AudioFormats[i]);
+                    }
+
+                    Console.Write(@"Select audio format index: ");
+                    if (!int.TryParse(Console.ReadLine(), out int audioFormatIndex) ||
+                        audioFormatIndex < 0 || audioFormatIndex >= videoCaptureDevices[videoCaptureDeviceIndex].AudioFormats.Count)
+                    {
+                        Console.Write(@"Wrong audio format index has been specified.");
+                        return;
+                    }
+
+                    audioFormat = videoCaptureDevices[videoCaptureDeviceIndex].AudioFormats[audioFormatIndex];
+                }
+            }
+            else
+            {
+                if (audioCaptureDevices[audioCaptureDeviceIndex - 1].Formats.Count > 0)
+                {
+                    Console.WriteLine(@"Audio capture device formats: ");
+                    for (int i = 0; i < audioCaptureDevices[audioCaptureDeviceIndex - 1].Formats.Count; i++)
+                    {
+                        Console.WriteLine(i + @": " + audioCaptureDevices[audioCaptureDeviceIndex - 1].Formats[i]);
+                    }
+
+                    Console.Write(@"Select audio format index: ");
+                    if (!int.TryParse(Console.ReadLine(), out int audioFormatIndex) ||
+                        audioFormatIndex < 0 || audioFormatIndex >= audioCaptureDevices[audioCaptureDeviceIndex - 1].Formats.Count)
+                    {
+                        Console.Write(@"Wrong audio format index has been specified.");
+                        return;
+                    }
+
+                    audioFormat = audioCaptureDevices[audioCaptureDeviceIndex - 1].Formats[audioFormatIndex];
+                }
+            }
+
+            // mode
+            Console.Write(@"Select mode. 0 - Capture to AVI, 1 - Capture to MP4: ");
+            if (!int.TryParse(Console.ReadLine(), out int mode))
+            {
+                Console.WriteLine(@"Wrong mode. Press ESC to exit.");
+                Console.ReadKey();
+                return;
+            }
+
+            // set properties
+            videoCapture.Video_CaptureDevice = new VideoCaptureSource(videoCaptureDevices[videoCaptureDeviceIndex].Name);
+
+            if (string.IsNullOrEmpty(videoFormat.Name))
+            {
+                videoCapture.Video_CaptureDevice.Format_UseBest = true;
+            }
+            else
+            {
+                videoCapture.Video_CaptureDevice.Format_UseBest = false;
+                videoCapture.Video_CaptureDevice.Format = videoFormat.Name;
+            }
+
+            videoCapture.Video_CaptureDevice.FrameRate = new VideoFrameRate(Convert.ToDouble(videoFrameRate, CultureInfo.InvariantCulture));
+
+            if (audioCaptureDeviceIndex == 0)
+            {
+                videoCapture.Video_CaptureDevice.IsAudioSource = true;
+            }
+            else
+            {
+                videoCapture.Video_CaptureDevice.IsAudioSource = false;
+                videoCapture.Audio_CaptureDevice = new AudioCaptureSource(audioCaptureDevices[audioCaptureDeviceIndex - 1].Name);
+                videoCapture.Audio_CaptureDevice.Format_UseBest = false;
+                videoCapture.Audio_CaptureDevice.Format = audioFormat;
+            }
+
+            switch (mode)
+            {
+                case 0:
+                    {
+                        string outputFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "output.avi");
+                        videoCapture.Output_Filename = outputFile;
+                        Console.WriteLine(@"Output file: " + outputFile);
+
+                        videoCapture.Output_Format = new AVIOutput();
+                    }
+
+                    break;
+                case 1:
+                    {
+                        string outputFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "output.mp4");
+                        videoCapture.Output_Filename = outputFile;
+                        Console.WriteLine(@"Output file: " + outputFile);
+
+                        videoCapture.Output_Format = new MP4HWOutput();
+                    }
+
+                    break;
+                default:
+                    Console.WriteLine(@"Wrong mode. Press ESC to exit.");
+                    Console.ReadKey();
+                    return;
+            }
+
+            videoCapture.Mode = VideoCaptureMode.VideoCapture;
+            videoCapture.Start();
+
+            Console.WriteLine(@"Press ESC to stop");
+            do
+            {
+                while (!Console.KeyAvailable)
+                {
+                    Thread.Sleep(100);
+                }
+            }
+            while (Console.ReadKey(true).Key != ConsoleKey.Escape);
+
+            videoCapture.Stop();
+
+            videoCapture.Dispose();
+        }
+
+        /// <summary>
+        /// Video capture on error.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">Event args.</param>
+        private static void VideoCapture_OnError(object sender, ErrorsEventArgs e)
+        {
+            if (e.Message.Contains("FULL SDK"))
+            {
+                return;
+            }
+
+            Console.WriteLine(@"Error: " + e.Message);
+        }
+    }
+}

@@ -154,38 +154,92 @@ Para configuración MCP específica del proyecto, cree `.mcp.json` en la raíz d
 
 ## Herramientas MCP Disponibles
 
-El Servidor MCP de VisioForge proporciona varias herramientas especializadas que su asistente IA puede usar:
+El Servidor MCP de VisioForge expone 14 herramientas especializadas que su asistente IA puede usar. Los nombres y descripciones coinciden exactamente con la respuesta `tools/list` en vivo de `https://mcp.visioforge.com/mcp`.
 
-### 1. **Herramientas de Documentación API**
+### 1. **Herramientas de Media Blocks**
+
+#### `list_media_blocks`
+Listar los media blocks disponibles de VisioForge, opcionalmente filtrados por categoría. Los media blocks son los bloques de construcción de los pipelines de procesamiento multimedia. Las categorías incluyen: Sources, Sinks, VideoEncoders, AudioEncoders, VideoDecoders, VideoProcessing, AudioProcessing, AudioRendering, VideoRendering, Demuxers, Parsers, OpenGL, OpenCV, Nvidia, Decklink, AWS, RTSPServer, Bridge, Special, Outputs.
+
+**Consultas de ejemplo:**
+- "Listar todos los bloques codificadores de video"
+- "Mostrar las fuentes de MediaBlocks"
+- "¿Qué bloques hay en la categoría OpenCV?"
+
+#### `get_media_block_info`
+Obtener información detallada sobre un media block específico incluyendo sus propiedades, métodos, eventos, pads de entrada/salida, parámetros del constructor y documentación. Use esto para entender cómo configurar y usar un media block específico en un pipeline.
+
+**Consultas de ejemplo:**
+- "Obtener información sobre RTSPSourceBlock"
+- "Mostrar pads y propiedades de H264EncoderBlock"
+- "¿Qué parámetros del constructor toma VideoRendererBlock?"
+
+#### `get_pipeline_template`
+Obtener una plantilla de pipeline de media blocks para un caso de uso específico. Devuelve la lista de bloques requeridos y cómo conectarlos, junto con código C# para construir el pipeline.
+
+**Consultas de ejemplo:**
+- "Plantilla de pipeline para grabación RTSP a MP4"
+- "Plantilla para captura de pantalla con audio"
+- "Pipeline para streaming HLS"
+
+### 2. **Herramientas de Clases SDK y API**
+
+#### `list_sdk_classes`
+Listar las clases principales del SDK de VisioForge. Estas son las clases principales de punto de entrada para construir aplicaciones multimedia: VideoCaptureCoreX (captura/grabación de video), VideoEditCoreX (edición de video), MediaPlayerCoreX (reproducción multimedia), MediaInfoReaderCoreX (análisis multimedia), SimplePlayerCoreX (reproducción simple) y más.
+
+**Consultas de ejemplo:**
+- "Listar todas las clases principales del SDK"
+- "Mostrar clases de punto de entrada de nivel superior"
+
+#### `get_class_info`
+Obtener información detallada sobre cualquier clase del SDK de VisioForge, incluyendo su lista completa de propiedades, métodos, eventos, constructores, clase base, interfaces y documentación. Funciona tanto para las clases principales del SDK como para los media blocks.
+
+**Consultas de ejemplo:**
+- "Mostrar documentación de la clase MediaBlocksPipeline"
+- "Obtener detalles sobre VideoCaptureCoreX"
+- "¿Qué eventos expone MediaPlayerCoreX?"
+
+#### `get_method_signature`
+Obtener la firma detallada y la documentación de un método específico de una clase. Útil cuando necesita entender los parámetros, tipo de retorno y comportamiento de un método.
+
+**Consultas de ejemplo:**
+- "Firma de StartAsync en MediaBlocksPipeline"
+- "¿Qué parámetros toma Connect?"
 
 #### `search_api`
-Buscar en la API del SDK de VisioForge por palabras clave, tipos o categorías.
+Buscar en toda la API del SDK de VisioForge — nombres de clases, nombres de métodos, nombres de propiedades, nombres de eventos y su texto de documentación. Devuelve resultados clasificados. Use esto cuando no conoce el nombre exacto de la clase, o para encontrar todas las clases relacionadas con un concepto (por ejemplo, "streaming RTSP", "superposición de video", "captura de audio").
 
-**Consultas de ejemplo que su asistente IA puede hacer:**
+**Consultas de ejemplo:**
 - "Buscar clases de captura de video"
 - "Encontrar métodos relacionados con streaming RTSP"
 - "Mostrar todos los codificadores de audio de MediaBlocks"
 
-#### `get_api_item`
-Recuperar documentación detallada para una clase, método, propiedad o evento específico.
+#### `get_enum_values`
+Obtener todos los valores de un tipo enum del SDK de VisioForge con descripciones. Útil para entender las opciones disponibles para las propiedades de configuración (por ejemplo, MediaBlockType, códecs de video, formatos de audio, formatos de píxeles).
 
 **Consultas de ejemplo:**
-- "Mostrar documentación de la clase MediaBlocksPipeline"
-- "Obtener detalles sobre VideoRendererBlock"
-- "Explicar el método StartAsync"
+- "Listar valores del enum VideoCodec"
+- "Mostrar valores del enum MediaBlockType"
 
-#### `get_code_examples`
-Obtener ejemplos de código funcionales para escenarios específicos.
+#### `list_namespaces`
+Explorar los namespaces del SDK de VisioForge jerárquicamente. Muestra los namespaces hijos y las clases dentro de un namespace dado. Comience con `VisioForge.Core` o déjelo vacío para ver los namespaces de nivel superior.
 
 **Consultas de ejemplo:**
-- "Mostrar código de ejemplo para captura de cámara RTSP"
-- "Obtener fragmento de código para grabación MP4"
+- "Listar los namespaces de nivel superior"
+- "Mostrar clases en VisioForge.Core.MediaBlocks"
+
+#### `get_code_example`
+Obtener un ejemplo de código para un escenario común del SDK de VisioForge. Devuelve fragmentos de código C# completos y funcionales que demuestran cómo usar el SDK para tareas como captura de video, streaming RTSP, reproducción multimedia y más.
+
+**Consultas de ejemplo:**
+- "Ejemplo de código para captura de cámara RTSP"
+- "Mostrar fragmento de grabación MP4"
 - "Ejemplo de aplicación de efectos de video"
 
-### 2. **Herramientas de Guías de Implementación**
+### 3. **Herramientas de Guías de Implementación**
 
 #### `list_deployment_guides`
-Explorar guías de implementación disponibles filtradas por plataforma, tipo de proyecto o SDK.
+Listar las guías de implementación disponibles para el SDK de VisioForge. Filtrar por plataforma, tipo de proyecto, tipo de SDK o escenario. Devuelve una lista de guías con títulos, resúmenes y etiquetas.
 
 **Consultas de ejemplo:**
 - "Listar guías de implementación de Android"
@@ -193,7 +247,7 @@ Explorar guías de implementación disponibles filtradas por plataforma, tipo de
 - "Encontrar guías de implementación para Linux"
 
 #### `get_deployment_guide`
-Recuperar la guía de implementación completa para una plataforma o escenario específico.
+Obtener la guía de implementación completa para un escenario específico. Devuelve instrucciones detalladas, fragmentos de código, paquetes NuGet y notas específicas de la plataforma.
 
 **Consultas de ejemplo:**
 - "Obtener la guía de implementación de Android"
@@ -201,7 +255,7 @@ Recuperar la guía de implementación completa para una plataforma o escenario e
 - "Cómo implementar en macOS"
 
 #### `get_nuget_packages_snippet`
-Generar código `.csproj` listo para pegar con paquetes NuGet correctos para su plataforma.
+Obtener un fragmento .csproj con los paquetes NuGet requeridos para un escenario de implementación específico. Devuelve un fragmento XML listo para copiar y pegar en su archivo de proyecto.
 
 **Consultas de ejemplo:**
 - "Generar paquetes NuGet para proyecto MAUI Android"
@@ -209,7 +263,7 @@ Generar código `.csproj` listo para pegar con paquetes NuGet correctos para su 
 - "Mostrar paquetes requeridos para iOS"
 
 #### `get_platform_specific_config`
-Obtener targets de MSBuild o código de configuración específico de plataforma.
+Obtener código de configuración específico de plataforma para copia de archivos/compilación. Devuelve targets de MSBuild o scripts post-compilación para requisitos especiales de implementación.
 
 **Consultas de ejemplo:**
 - "Mostrar target de copia de archivos de Mac Catalyst"
@@ -244,7 +298,7 @@ Obtener targets de MSBuild o código de configuración específico de plataforma
 **Su asistente IA usa el servidor MCP para:**
 1. Llamar a `search_api` con consulta "captura de cámara RTSP"
 2. Identificar la clase `RTSPSourceBlock`
-3. Llamar a `get_code_examples` para escenarios RTSP
+3. Llamar a `get_code_example` para escenarios RTSP
 4. Proporcionarle código funcional:
 
 ```csharp
@@ -287,7 +341,7 @@ await pipeline.StartAsync();
 **Su asistente IA usa el servidor MCP para:**
 1. Llamar a `search_api` con consulta "UniversalSourceBlock"
 2. Encontrar la clase en los resultados
-3. Llamar a `get_api_item` con el ID de la clase
+3. Llamar a `get_class_info` con el nombre de la clase
 4. Analizar la documentación y explicar:
    - Parámetros del constructor
    - Formatos de archivo soportados
@@ -381,7 +435,7 @@ https://mcp.visioforge.com/mcp
 
 - **Protocolo**: MCP (Protocolo de Contexto de Modelo)
 - **Transporte**: HTTP/HTTPS
-- **Herramientas**: 8 herramientas especializadas de documentación e implementación
+- **Herramientas**: 14 herramientas especializadas de documentación e implementación
 - **Cobertura API**: API completa del SDK .NET de VisioForge (todas las clases, métodos, propiedades)
 - **Guías de Implementación**: Más de 15 guías de plataforma y tipo de proyecto
 - **Ejemplos de Código**: Cientos de fragmentos de código funcionales

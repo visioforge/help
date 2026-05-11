@@ -154,38 +154,92 @@ For project-specific MCP configuration, create `.mcp.json` at your repository ro
 
 ## Available MCP Tools
 
-The VisioForge MCP Server provides several specialized tools your AI assistant can use:
+The VisioForge MCP Server exposes 14 specialized tools your AI assistant can use. Names and descriptions match the live `tools/list` response from `https://mcp.visioforge.com/mcp` exactly.
 
-### 1. **API Documentation Tools**
+### 1. **Media Blocks Tools**
+
+#### `list_media_blocks`
+List available VisioForge media blocks, optionally filtered by category. Media blocks are the building blocks of media processing pipelines. Categories include: Sources, Sinks, VideoEncoders, AudioEncoders, VideoDecoders, VideoProcessing, AudioProcessing, AudioRendering, VideoRendering, Demuxers, Parsers, OpenGL, OpenCV, Nvidia, Decklink, AWS, RTSPServer, Bridge, Special, Outputs.
+
+**Example queries:**
+- "List all video encoder blocks"
+- "Show MediaBlocks sources"
+- "What blocks are in the OpenCV category?"
+
+#### `get_media_block_info`
+Get detailed information about a specific media block including its properties, methods, events, input/output pads, constructor parameters, and documentation. Use this to understand how to configure and use a specific media block in a pipeline.
+
+**Example queries:**
+- "Get info on RTSPSourceBlock"
+- "Show pads and properties of H264EncoderBlock"
+- "What constructor parameters does VideoRendererBlock take?"
+
+#### `get_pipeline_template`
+Get a media block pipeline template for a specific use case. Returns the list of required blocks and how to connect them, along with C# code to build the pipeline.
+
+**Example queries:**
+- "Pipeline template for RTSP-to-MP4 recording"
+- "Template for screen capture with audio"
+- "Pipeline for HLS streaming"
+
+### 2. **SDK Class & API Tools**
+
+#### `list_sdk_classes`
+List core VisioForge SDK classes. These are the main entry-point classes for building media applications: VideoCaptureCoreX (video capture/recording), VideoEditCoreX (video editing), MediaPlayerCoreX (media playback), MediaInfoReaderCoreX (media analysis), SimplePlayerCoreX (simple playback), and more.
+
+**Example queries:**
+- "List all core SDK classes"
+- "Show top-level entry-point classes"
+
+#### `get_class_info`
+Get detailed information about any VisioForge SDK class, including its full list of properties, methods, events, constructors, base class, interfaces, and documentation. Works for both core SDK classes and media blocks.
+
+**Example queries:**
+- "Show documentation for MediaBlocksPipeline class"
+- "Get details about VideoCaptureCoreX"
+- "What events does MediaPlayerCoreX expose?"
+
+#### `get_method_signature`
+Get the detailed signature and documentation for a specific method on a class. Useful when you need to understand a method's parameters, return type, and behavior.
+
+**Example queries:**
+- "Signature of StartAsync on MediaBlocksPipeline"
+- "What parameters does Connect take?"
 
 #### `search_api`
-Search the VisioForge SDK API by keywords, types, or categories.
+Search across the entire VisioForge SDK API — class names, method names, property names, event names, and their documentation text. Returns ranked results. Use this when you don't know the exact class name, or to find all classes related to a concept (e.g., "RTSP streaming", "video overlay", "audio capture").
 
-**Example queries your AI assistant can make:**
+**Example queries:**
 - "Search for video capture classes"
 - "Find methods related to RTSP streaming"
 - "Show all MediaBlocks audio encoders"
 
-#### `get_api_item`
-Retrieve detailed documentation for a specific class, method, property, or event.
+#### `get_enum_values`
+Get all values of a VisioForge SDK enum type with descriptions. Useful for understanding available options for configuration properties (e.g., MediaBlockType, video codecs, audio formats, pixel formats).
 
 **Example queries:**
-- "Show documentation for MediaBlocksPipeline class"
-- "Get details about VideoRendererBlock"
-- "Explain the StartAsync method"
+- "List values of VideoCodec enum"
+- "Show MediaBlockType enum values"
 
-#### `get_code_examples`
-Fetch working code examples for specific scenarios.
+#### `list_namespaces`
+Browse VisioForge SDK namespaces hierarchically. Shows child namespaces and classes within a given namespace. Start with `VisioForge.Core` or leave empty to see top-level namespaces.
 
 **Example queries:**
-- "Show example code for RTSP camera capture"
-- "Get code snippet for MP4 recording"
+- "List top-level namespaces"
+- "Show classes in VisioForge.Core.MediaBlocks"
+
+#### `get_code_example`
+Get a code example for a common VisioForge SDK scenario. Returns complete, working C# code snippets that demonstrate how to use the SDK for tasks like video capture, RTSP streaming, media playback, and more.
+
+**Example queries:**
+- "Code example for RTSP camera capture"
+- "Show MP4 recording snippet"
 - "Example of applying video effects"
 
-### 2. **Deployment Guide Tools**
+### 3. **Deployment Guide Tools**
 
 #### `list_deployment_guides`
-Browse available deployment guides filtered by platform, project type, or SDK.
+List available deployment guides for VisioForge SDK. Filter by platform, project type, SDK type, or scenario. Returns a list of guides with titles, summaries, and tags.
 
 **Example queries:**
 - "List Android deployment guides"
@@ -193,7 +247,7 @@ Browse available deployment guides filtered by platform, project type, or SDK.
 - "Find deployment guides for Linux"
 
 #### `get_deployment_guide`
-Retrieve the complete deployment guide for a specific platform or scenario.
+Get the complete deployment guide for a specific scenario. Returns detailed instructions, code snippets, NuGet packages, and platform-specific notes.
 
 **Example queries:**
 - "Get the Android deployment guide"
@@ -201,7 +255,7 @@ Retrieve the complete deployment guide for a specific platform or scenario.
 - "How to deploy on macOS"
 
 #### `get_nuget_packages_snippet`
-Generate ready-to-paste `.csproj` code with correct NuGet packages for your platform.
+Get .csproj snippet with required NuGet packages for a specific deployment scenario. Returns XML snippet ready to copy-paste into your project file.
 
 **Example queries:**
 - "Generate NuGet packages for Android MAUI project"
@@ -209,7 +263,7 @@ Generate ready-to-paste `.csproj` code with correct NuGet packages for your plat
 - "Show required packages for iOS"
 
 #### `get_platform_specific_config`
-Get platform-specific MSBuild targets or configuration code.
+Get platform-specific file copying/build configuration code. Returns MSBuild targets or post-build scripts for special deployment requirements.
 
 **Example queries:**
 - "Show Mac Catalyst file copying target"
@@ -244,7 +298,7 @@ Get platform-specific MSBuild targets or configuration code.
 **Your AI assistant uses the MCP server to:**
 1. Call `search_api` with query "RTSP camera capture"
 2. Identify `RTSPSourceBlock` class
-3. Call `get_code_examples` for RTSP scenarios
+3. Call `get_code_example` for RTSP scenarios
 4. Provide you with working code:
 
 ```csharp
@@ -287,7 +341,7 @@ await pipeline.StartAsync();
 **Your AI assistant uses the MCP server to:**
 1. Call `search_api` with query "UniversalSourceBlock"
 2. Find the class in the results
-3. Call `get_api_item` with the class ID
+3. Call `get_class_info` with the class name
 4. Parse the documentation and explain:
    - Constructor parameters
    - Supported file formats
@@ -381,7 +435,7 @@ https://mcp.visioforge.com/mcp
 
 - **Protocol**: MCP (Model Context Protocol)
 - **Transport**: HTTP/HTTPS
-- **Tools**: 8 specialized documentation and deployment tools
+- **Tools**: 14 specialized documentation and deployment tools
 - **API Coverage**: Complete VisioForge .NET SDK API (all classes, methods, properties)
 - **Deployment Guides**: 15+ platform and project type guides
 - **Code Examples**: Hundreds of working code snippets

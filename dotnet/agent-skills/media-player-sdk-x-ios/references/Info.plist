@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDisplayName</key>
+    <string>MediaPlayerX</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.visioforge.mediaplayerx</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UIDeviceFamily</key>
+    <array>
+        <integer>1</integer>
+        <integer>2</integer>
+    </array>
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>XSAppIconAssets</key>
+    <string>Assets.xcassets/AppIcon.appiconset</string>
+
+    <!--
+        Required if the user picks a media file from the Photos library
+        (PHPickerViewController / PHPhotoLibrary.RequestAuthorization).
+        Pure UIDocumentPickerViewController flows that read only Files-app
+        URLs do NOT need this key, but the bundled AppDelegate.cs requests
+        photo-library access at launch, so keep it set.
+    -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to play media files.</string>
+
+    <!--
+        Required ONLY if you need to play plain-HTTP streams (no TLS).
+        HTTPS / HLS-over-HTTPS / RTSP / SRT do NOT need ATS exceptions.
+        Leave commented unless your app actually plays http:// URLs.
+
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    -->
+</dict>
+</plist>

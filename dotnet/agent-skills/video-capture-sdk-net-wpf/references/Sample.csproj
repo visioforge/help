@@ -1,0 +1,36 @@
+<!--
+  Manually maintained for the agent-skill bundle. Do NOT regenerate from the
+  upstream demo csproj (_SOURCE/_DEMOS/Video Capture SDK/WPF/CSharp/Simple
+  Video Capture/Simple Video Capture Demo WPF.csproj). The bundle deliberately
+  diverges: PackageReference instead of ProjectReference; legacy fields
+  (<ProductVersion>, <ProjectTypeGuids>, dead net472 conditional ItemGroup)
+  removed; analyzer block dropped; Copyright bumped to 2026; AssemblyName
+  shortened; SDK icon (visioforge_main_icon.ico) deliberately NOT included.
+  See SKILL.md "Full minimal csproj" for the full diff rationale.
+-->
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Simple_Video_Capture</RootNamespace>
+    <AssemblyName>WPF Simple Video Capture</AssemblyName>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <AssemblyTitle>Simple Video Capture Demo</AssemblyTitle>
+    <Company>VisioForge</Company>
+    <Product>Simple Video Capture Demo</Product>
+    <Copyright>Copyright (c) 2026</Copyright>
+    <AssemblyVersion>2026.5.4.0</AssemblyVersion>
+    <FileVersion>2026.5.4.0</FileVersion>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.5.4" />
+  </ItemGroup>
+</Project>

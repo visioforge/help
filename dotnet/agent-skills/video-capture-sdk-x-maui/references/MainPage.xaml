@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SimpleCapture.MainPage"
+             xmlns:my="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI">
+
+    <Grid RowSpacing="0" RowDefinitions="*,Auto">
+
+        <!-- Cross-platform preview surface. Hosts the X-engine renderer on every TFM. -->
+        <my:VideoView Grid.Row="0"
+                      x:Name="videoView"
+                      HorizontalOptions="FillAndExpand"
+                      VerticalOptions="FillAndExpand"
+                      Background="Black" />
+
+        <VerticalStackLayout Grid.Row="1" Spacing="4" Background="#1e1e1e" Padding="12,8,12,12">
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                <Button Grid.Column="0" x:Name="btCamera" Text="CAMERA" Clicked="btCamera_Clicked" FontSize="11" />
+                <Button Grid.Column="1" x:Name="btMic" Text="MIC" Clicked="btMic_Clicked" FontSize="11" />
+                <Button Grid.Column="2" x:Name="btSpeakers" Text="SPEAKERS" Clicked="btSpeakers_Clicked" FontSize="11" />
+            </Grid>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="8" Margin="0,4,0,0">
+                <Button Grid.Column="0" x:Name="btStartPreview" Text="PREVIEW" Clicked="btStartPreview_Clicked" />
+                <Button Grid.Column="1" x:Name="btStartCapture" Text="CAPTURE" IsEnabled="False" Clicked="btStartCapture_Clicked" />
+            </Grid>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

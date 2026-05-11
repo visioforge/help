@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-ios</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <SupportedOSPlatformVersion>14.0</SupportedOSPlatformVersion>
+    <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <!-- Debug: linker stays SDK-only and the Mono interpreter handles every
+       managed assembly. Media Blocks SDK relies on dynamic codegen paths
+       the iOS AOT compiler refuses (DynamicMethod, late-bound generic
+       instantiations in the GStreamer glue), so MtouchInterpreter=all is
+       required to avoid ExecutionEngineException at the first SDK call. -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchInterpreter>all</MtouchInterpreter>
+    <CodesignKey>iPhone Developer</CodesignKey>
+  </PropertyGroup>
+
+  <!-- Release: the interpreter requirement still applies. Pure-AOT Release
+       builds JIT-fail at the first VisioForgeX.InitSDK() call. -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchInterpreter>all</MtouchInterpreter>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.5.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.0.16" />
+  </ItemGroup>
+</Project>
