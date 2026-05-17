@@ -39,7 +39,7 @@ La versión 10.0 representa un avance significativo, enfocándose en introspecci
 ### Correcciones de Fuente y Compatibilidad
 
 * **Divisor MP3 para Problemas de Reproducción:** Se ha integrado un divisor MP3 para abordar y resolver específicamente inconsistencias de reproducción encontradas con ciertos archivos MP3 no estándar o problemáticos, asegurando mayor compatibilidad.
-* **Filtro de Fuente VLC Actualizado:** El filtro de fuente VLC subyacente ha sido actualizado a libVLC versión 2.2.2.0. Esta actualización trae mejoras notables, particularmente en el manejo de streams RTMP y HTTPS, y resuelve fugas de memoria previamente identificadas, contribuyendo a mayor estabilidad y soporte más amplio de protocolos de streaming.
+* **VLC Source Filter Actualizado:** El VLC Source Filter subyacente ha sido actualizado a libVLC versión 2.2.2.0. Esta actualización trae mejoras notables, particularmente en el manejo de streams RTMP y HTTPS, y resuelve fugas de memoria previamente identificadas, contribuyendo a mayor estabilidad y soporte más amplio de protocolos de streaming.
 * **Correcciones de Efectos Pan y Blur:** Se han abordado y resuelto problemas específicos relacionados con el efecto Pan en compilaciones x64 y el efecto Blur, asegurando un comportamiento consistente de efectos visuales en diferentes arquitecturas.
 * **Fuga de Memoria de Fuente FFMPEG Resuelta:** Se ha identificado y corregido una fuga de memoria asociada con el componente de fuente FFMPEG, mejorando la estabilidad a largo plazo y la gestión de recursos durante la reproducción.
 
@@ -53,9 +53,9 @@ Esta versión intermedia se enfocó en actualizar componentes centrales y refina
 
 ## Versión 9.1: Integración de Seguridad Avanzada
 
-La versión 9.1 introdujo funcionalidades de seguridad robustas a través de la integración con el SDK de Cifrado de Video.
+La versión 9.1 introdujo funcionalidades de seguridad robustas a través de la integración con el Video Encryption SDK.
 
-* **Soporte de SDK de Cifrado de Video v9:** Esta versión añadió compatibilidad con el SDK de Cifrado de Video v9. Esto permite a los desarrolladores implementar cifrado AES-256 fuerte para su contenido de video, usando archivos de clave separados o datos binarios incrustados como claves, mejorando significativamente las capacidades de protección de contenido.
+* **Soporte de Video Encryption SDK v9:** Esta versión añadió compatibilidad con el Video Encryption SDK v9. Esto permite a los desarrolladores implementar cifrado AES-256 fuerte para su contenido de video, usando archivos de clave separados o datos binarios incrustados como claves, mejorando significativamente las capacidades de protección de contenido.
 
 ## Versión 9.0: Mejoras de Audio y Flexibilidad de Logo
 

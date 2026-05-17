@@ -18,6 +18,7 @@ primary_api_classes:
   - MediaPlayerCoreX
   - VideoView
 
+order: 13
 ---
 
 # Media Player SDK para C# .NET — Reproductor de Video, Reproductor de Audio y API de Streaming

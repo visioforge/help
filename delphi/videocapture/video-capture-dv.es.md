@@ -1,5 +1,5 @@
 ---
-title: Captura de Video DV en Delphi: Stream Directo y Recomprimido
+title: Captura de video DV en Delphi — directo y recomprimido
 description: Implemente captura de video DV en Delphi - formatos comprimidos y sin comprimir con implementación paso a paso y ejemplos de código funcionales.
 tags:
   - All-in-One Media Framework

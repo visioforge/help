@@ -1,5 +1,5 @@
 ---
-title: Video Effects SDK: Add and Configure Effects in .NET C#
+title: Video Effects SDK — Add and Configure Effects in .NET C#
 description: Add and configure video effects in .NET SDK environments for capture, playback, and editing with parameter management and practical C# examples.
 tags:
   - Video Capture SDK

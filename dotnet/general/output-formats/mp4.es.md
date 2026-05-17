@@ -323,125 +323,174 @@ if (!NVENCH264EncoderSettings.IsAvailable())
 }
 ```
 
+3. **Compatibilidad entre plataformas**: Algunos codificadores son específicos de una plataforma. Use compilación condicional o comprobaciones en tiempo de ejecución cuando apunte a varias plataformas:
+
+```csharp
+#if NET_WINDOWS
+    output.Audio = new MFAACEncoderSettings();
+#else
+    output.Audio = new MP3EncoderSettings();
+#endif
+```
+
 ## Salida MP4 solo Windows
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-### Clase MP4Output
+`El mismo ejemplo de código puede usarse con Video Edit SDK .Net. Utilice la clase VideoEditCore en lugar de VideoCaptureCore.`
 
-La clase [MP4Output](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.MP4Output.html) es la clase principal para configurar la salida MP4.
+### Codificador de CPU o codificador GPU Intel QuickSync
 
-### Propiedades
+Cree un objeto `MP4Output` para la salida MP4.
 
-#### Video
+```cs
+var mp4Output = new MP4Output();
+```
 
-Establezca el codificador de video a usar para el archivo MP4 de salida.
+Establezca el modo MP4 a `CPU_QSV`.
 
-Codificadores de video disponibles:
+```cs
+mp4Output.MP4Mode = MP4Mode.CPU_QSV;
+```
 
-- H264 MF
-- H264 SW Nvidia
-- H264 SW AMD/ATI
-- H264 QSV
-- H264 NVENC
-- H264 AMF
-- H265 SW
-- H265 QSV
-- H265 NVENC
-- H265 AMF
-- Apple ProRes (solo macOS)
+Establezca los parámetros de video.
 
-#### Audio
+```cs
+mp4Output.Video.Profile = H264Profile.ProfileMain; // perfil H264
+mp4Output.Video.Level = H264Level.Level4; // nivel H264
+mp4Output.Video.Bitrate = 2000; // tasa de bits
 
-Establezca el codificador de audio a usar para el archivo MP4 de salida. AAC es el formato recomendado.
+// parámetros opcionales
+mp4Output.Video.MBEncoding = H264MBEncoding.CABAC; //CABAC / CAVLC
+mp4Output.Video.BitrateAuto = false; // true para usar tasa de bits automática
+mp4Output.Video.RateControl = H264RateControl.VBR; // control de tasa - CBR o VBR
+```
 
-Codificadores de audio disponibles:
+Establezca los parámetros de audio AAC.
 
-- MF AAC
-- voaacenc
-- fdkaac enc
+```cs
+mp4Output.Audio_AAC.Bitrate = 192;
+mp4Output.Audio_AAC.Version = AACVersion.MPEG4; // MPEG-4 / MPEG-2
+mp4Output.Audio_AAC.Output = AACOutput.RAW; // RAW o ADTS
+mp4Output.Audio_AAC.Object = AACObject.Low; // tipo de AAC
+```
 
-### Código de ejemplo
+### Codificador Nvidia NVENC
 
-Usando Video Capture SDK para capturar video en formato MP4:
+Cree el objeto `MP4Output` para la salida MP4.
 
-```csharp
-// Crear una instancia del núcleo Video Capture SDK
-var core = new VideoCaptureCore();
+```cs
+var mp4Output = new MP4Output();
+```
+
+Establezca el modo MP4 a `NVENC`.
+
+```cs
+mp4Output.MP4Mode = MP4Mode.NVENC;
+```
+
+Establezca los parámetros de video.
+
+```cs
+mp4Output.Video_NVENC.Profile = NVENCVideoEncoderProfile.H264_Main; // perfil H264
+mp4Output.Video_NVENC.Level = NVENCEncoderLevel.H264_4; // nivel H264
+mp4Output.Video_NVENC.Bitrate = 2000; // tasa de bits
+
+// parámetros opcionales
+mp4Output.Video_NVENC.RateControl = NVENCRateControlMode.VBR; // control de tasa - CBR o VBR
+```
+
+Establezca los parámetros de audio.
+
+```cs
+mp4Output.Audio_AAC.Bitrate = 192;
+mp4Output.Audio_AAC.Version = AACVersion.MPEG4; // MPEG-4 / MPEG-2
+mp4Output.Audio_AAC.Output = AACOutput.RAW; // RAW o ADTS
+mp4Output.Audio_AAC.Object = AACObject.Low; // tipo de AAC
+```
+
+### Codificadores CPU/GPU
+
+Usando la salida MP4 HW, puede usar codificadores acelerados por hardware de Intel (QuickSync), Nvidia (NVENC) y AMD/ATI.
+
+Cree el objeto `MP4HWOutput` para la salida MP4 HW.
+
+```cs
+var mp4Output = new MP4HWOutput();
+```
+
+Obtenga los codificadores disponibles.
+
+```cs
+var availableEncoders = VideoCaptureCore.HWEncodersAvailable();
+// o
+var availableEncoders = VideoEditCore.HWEncodersAvailable();
+```
+
+Según los codificadores disponibles, seleccione el códec de video.
+
+```cs
+mp4Output.Video.Codec = MFVideoEncoder.MS_H264; // Microsoft H264
+mp4Output.Video.Profile = MFH264Profile.Main; // perfil H264
+mp4Output.Video.Level = MFH264Level.Level4; // nivel H264
+mp4Output.Video.AvgBitrate = 2000; // tasa de bits
+
+// parámetros opcionales
+mp4Output.Video.CABAC = true; // CABAC / CAVLC
+mp4Output.Video.RateControl = MFCommonRateControlMode.CBR; // control de tasa
+
+// hay muchos otros parámetros disponibles
+```
+
+Establezca los parámetros de audio.
+
+```cs
+mp4Output.Audio.Bitrate = 192;
+mp4Output.Audio.Version = AACVersion.MPEG4; // MPEG-4 / MPEG-2
+mp4Output.Audio.Output = AACOutput.RAW; // RAW o ADTS
+mp4Output.Audio.Object = AACObject.Low; // tipo de AAC
+```
+
+Ahora podemos aplicar la configuración de salida MP4 a la clase principal (VideoCaptureCore o VideoEditCore) e iniciar la captura o edición de video.
+
+### Aplicar la configuración de captura de video
+
+Establezca la configuración del formato MP4 para la salida.
+
+```cs
+core.Output_Format = mp4Output;
+```
+
+Establezca un modo de captura de video (o modo de conversión de video si usa Video Edit SDK).
+
+```cs
 core.Mode = VideoCaptureMode.VideoCapture;
-core.Output_Filename = "output.mp4";
-
-// Crear una salida MP4
-var mp4Output = new MP4Output();
-
-// Seleccionar codificador H264
-mp4Output.Video.Encoder = MP4VideoEncoder.H264_QSV; // Usar codificador Intel QSV
-
-// Establecer tasa de bits de video
-mp4Output.Video.Bitrate = 4000; // 4 Mbps
-
-// Establecer codificador de audio
-mp4Output.Audio.Encoder = MP4AudioEncoder.AAC_MF;
-mp4Output.Audio.Bitrate = 192; // 192 Kbps
-
-// Establecer el formato de salida
-core.Output_Format = mp4Output;
-
-// Iniciar la captura
-await core.StartAsync();
-
-// Detener después de 10 segundos
-await Task.Delay(10000);
-
-// Detener la captura
-await core.StopAsync();
 ```
 
-Usando Video Edit SDK para convertir video a formato MP4:
+Establezca un nombre de archivo (asegúrese de tener permisos de escritura).
 
-```csharp
-// Crear una instancia del núcleo Video Edit SDK
-var core = new VideoEditCore();
-
-// Agregar el archivo de video fuente
-var videoFile = new MediaFileSource(@"c:\samples\video.avi");
-core.Input_AddVideoFile(videoFile, null, null);
-
-// Establecer nombre de archivo de salida
+```cs
 core.Output_Filename = "output.mp4";
-
-// Crear salida MP4
-var mp4Output = new MP4Output();
-
-// Seleccionar codificador H264
-mp4Output.Video.Encoder = MP4VideoEncoder.H264_NVENC; // Usar codificador NVIDIA
-
-// Establecer tasa de bits de video
-mp4Output.Video.Bitrate = 5000; // 5 Mbps
-
-// Establecer codificador de audio
-mp4Output.Audio.Encoder = MP4AudioEncoder.AAC_MF;
-mp4Output.Audio.Bitrate = 256; // 256 Kbps
-
-// Establecer el formato de salida
-core.Output_Format = mp4Output;
-
-// Iniciar la edición
-await core.StartAsync();
 ```
 
-### Selección de la tasa de bits correcta
+Inicie la captura (conversión) de video a un archivo.
 
-La tasa de bits óptima depende de su resolución y tipo de contenido:
+```cs
+await VideoCapture1.StartAsync();
+```
 
-- **720p (1280x720)**: 2-4 Mbps para contenido estándar, 4-6 Mbps para contenido de movimiento alto
-- **1080p (1920x1080)**: 4-8 Mbps para contenido estándar, 8-12 Mbps para contenido de movimiento alto
-- **4K (3840x2160)**: 15-25 Mbps para contenido estándar, 25-40 Mbps para contenido de movimiento alto
+Finalmente, cuando hayamos terminado de capturar el video, detenga el pipeline y libere los recursos. `StopAsync()` vacía el multiplexor y finaliza el archivo de salida — no se la salte o el MP4 quedará ilegible:
 
-### Consideraciones de rendimiento
+```cs
+await VideoCapture1.StopAsync();
+VideoCapture1.Dispose();
+```
 
-1. **Codificadores de hardware**: Los codificadores de hardware (NVENC, QSV, AMF) son significativamente más rápidos y usan menos recursos de CPU que los codificadores de software.
+### Redistribuibles requeridos
 
-2. **HEVC vs H.264**: HEVC (H.265) proporciona mejor compresión pero requiere más potencia de procesamiento. Use H.264 para compatibilidad más amplia y codificación más rápida.
+- Video Capture SDK redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
+- Video Edit SDK redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
+- MP4 redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
 
-3. **Tasa de bits variable**: Use modos VBR para mejor relación calidad-tamaño, CBR para requisitos de tamaño de archivo predecibles o streaming.
+---
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.

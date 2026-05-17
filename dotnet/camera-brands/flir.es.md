@@ -1,5 +1,5 @@
 ---
-title: FLIR: URLs RTSP y conexión de cámaras IP en C# .NET
+title: FLIR — URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecta cámaras FLIR (Teledyne FLIR) en C# .NET con patrones de URL RTSP y ejemplos de código para modelos Quasar, Saros, Elara térmicos y CF/CM.
 tags:
   - Video Capture SDK

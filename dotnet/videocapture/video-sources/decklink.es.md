@@ -1,5 +1,5 @@
 ---
-title: Decklink SDK .NET: Captura de Video con Blackmagic
+title: Decklink SDK .NET — Captura de Video con Blackmagic
 description: Implementa captura de video profesional en .NET con dispositivos Blackmagic Decklink usando ejemplos de código para aplicaciones de calidad broadcast.
 tags:
   - Video Capture SDK

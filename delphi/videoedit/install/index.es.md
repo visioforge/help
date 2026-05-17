@@ -11,6 +11,7 @@ tags:
 primary_api_classes:
   - TVFVideoEdit
 
+sidebar_label: Instalación
 ---
 
 # Guía de instalación de la biblioteca TVFVideoEdit

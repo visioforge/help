@@ -1,6 +1,6 @@
 ---
 title: Video Fingerprinting - algoritmos y hashing perceptual
-description: Análisis profundo de algoritmos e implementación técnica del SDK Video Fingerprinting de VisioForge con hashing perceptual y análisis de escenas.
+description: Análisis profundo de algoritmos e implementación técnica del Video Fingerprinting SDK de VisioForge con hashing perceptual y análisis de escenas.
 tags:
   - Video Fingerprinting SDK
   - .NET

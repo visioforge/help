@@ -381,7 +381,7 @@ namespace screen_capture_mp4
 }
 ```
 
-### Cómo Funciona
+## Cómo Funciona — API Legada
 
 Esta aplicación de Windows Forms demuestra la funcionalidad de captura de pantalla con y sin audio usando VisioForge Video Capture SDK:
 

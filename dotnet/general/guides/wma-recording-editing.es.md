@@ -59,7 +59,7 @@ Install-Package VisioForge.DotNet.VideoCapture
 Install-Package VisioForge.DotNet.VideoEdit
 ```
 
-Para instrucciones detalladas de instalación, por favor consulte la [guía de instalación](../../install/index.es.md).
+Para instrucciones detalladas de instalación, por favor consulte la [guía de instalación](../../install/index.md).
 
 ## Grabación de Archivos WMA desde Micrófono Usando VideoCaptureCoreX
 
@@ -965,9 +965,9 @@ Explore aplicaciones de muestra completas que demuestran la grabación y edició
 
 ### Documentación Adicional
 
-- [Guía del Codificador Windows Media Audio](../audio-encoders/wma.es.md)
-- [Guía de Salida de Video Windows Media](../output-formats/wmv.es.md)
-- [Capturador de Muestras de Audio](../audio-effects/audio-sample-grabber.es.md)
+- [Guía del Codificador Windows Media Audio](../audio-encoders/wma.md)
+- [Guía de Salida de Video Windows Media](../output-formats/wmv.md)
+- [Capturador de Muestras de Audio](../audio-effects/audio-sample-grabber.md)
 - [Documentación de API](https://api.visioforge.org/dotnet/api/index.html)
 
 ## Conclusión

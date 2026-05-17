@@ -118,7 +118,7 @@ namespace RTSPCaptureOriginalStream
 {
     /// <summary>
     /// RTSPRecorder class encapsulates the RTSP recording functionality to save RTSP stream to file.
-    /// It uses the MediaBlocks SDK to create a pipeline that connects an 
+    /// It uses the Media Blocks SDK to create a pipeline that connects an 
     /// RTSP source (like an IP camera) to an MP4 sink (file).
     /// </summary>
     public class RTSPRecorder : IAsyncDisposable

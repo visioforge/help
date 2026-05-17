@@ -71,7 +71,7 @@ VideoCapture1.Virtual_Camera_Output_Enabled = true;
 
 Esta única línea de código activa la característica de salida de Cámara Virtual, haciendo el flujo de video disponible para FFMPEG.
 
-![Demo Principal streaming FFMPEG](/help/docs/dotnet/videocapture/3rd-party-software/virtcam.webp)
+![Demo Principal streaming FFMPEG](virtcam.webp)
 
 ### Paso 2: Iniciar Streaming de Video
 
@@ -210,7 +210,7 @@ Para desplegar exitosamente aplicaciones usando este enfoque de streaming, aseg�
 
 - Redistribuibles base del SDK
 - Redistribuibles específicos del SDK
-- Redistribuibles del SDK de Cámara Virtual
+- Redistribuibles del Virtual Camera SDK
 
 Para información detallada sobre requisitos de despliegue, consulta la página de [Despliegue](../deployment.md) en la documentación.
 

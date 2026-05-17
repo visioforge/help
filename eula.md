@@ -1,5 +1,5 @@
 ---
-title: SDK License Agreement: Usage Rights and Distribution Terms
+title: SDK License Agreement — Usage Rights and Distribution Terms
 description: End User License Agreement for VisioForge SDKs covering usage rights, distribution terms, and legal conditions for developers.
 tags:
   - DirectShow
@@ -20,11 +20,11 @@ This End User License Agreement ("Agreement" or "EULA") constitutes a legally bi
 
 This Agreement applies to all software development kits and related products developed and distributed by VisioForge, including but not limited to:
 
-- Video Capture SDK .Net
-- Media Player SDK .Net
-- Video Edit SDK .Net
-- Video Edit SDK FFMPEG .Net
-- Media Blocks SDK .Net
+- Video Capture SDK .NET
+- Media Player SDK .NET
+- Video Edit SDK .NET
+- Video Edit SDK FFmpeg .NET
+- Media Blocks SDK .NET
 - All-in-One Media Framework (Delphi/ActiveX)
 - Virtual Camera SDK
 - FFMPEG Source DirectShow filter

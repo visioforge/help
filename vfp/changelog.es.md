@@ -1,6 +1,6 @@
 ---
-title: Changelog del SDK Video Fingerprinting - Versiones y API
-description: Seguimiento de actualizaciones del SDK Video Fingerprinting de VisioForge con nuevas funciones, mejoras de rendimiento y cambios de API en .NET y C++.
+title: Changelog del Video Fingerprinting SDK - Versiones y API
+description: Seguimiento de actualizaciones del Video Fingerprinting SDK de VisioForge con nuevas funciones, mejoras de rendimiento y cambios de API en .NET y C++.
 tags:
   - Video Fingerprinting SDK
   - .NET
@@ -13,7 +13,7 @@ tags:
 
 ---
 
-# Historial de Versiones del SDK de Video Fingerprinting
+# Historial de Versiones del Video Fingerprinting SDK
 
 ## Versión 12.1 - Mejoras de Rendimiento y Características
 
@@ -73,6 +73,6 @@ tags:
 
 ### Características Clave
 
-* Primer lanzamiento público del SDK de Video Fingerprinting
+* Primer lanzamiento público del Video Fingerprinting SDK
 * Se introdujeron capacidades principales de fingerprinting para identificación de contenido de video
 * Se estableció la base para desarrollo multiplataforma

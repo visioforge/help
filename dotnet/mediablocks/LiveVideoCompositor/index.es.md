@@ -18,6 +18,7 @@ primary_api_classes:
   - LVCAudioInput
   - LVCAudioOutput
 
+sidebar_label: Live Video Compositor
 ---
 
 # Compositor de Video en Vivo

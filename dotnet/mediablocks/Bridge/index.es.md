@@ -17,6 +17,7 @@ primary_api_classes:
   - BridgeAudioSourceBlock
   - BridgeAudioSinkBlock
 
+sidebar_label: Video and Audio Bridges
 ---
 
 # Bloques Bridge

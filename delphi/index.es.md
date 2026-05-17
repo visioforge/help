@@ -14,6 +14,8 @@ primary_api_classes:
   - TVFVideoCapture
   - TVFVideoEdit
 
+order: 18
+sidebar_label: All-in-One Media Framework (Delphi/ActiveX)
 ---
 
 # All-in-One Media Framework

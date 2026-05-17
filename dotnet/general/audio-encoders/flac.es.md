@@ -208,7 +208,7 @@ flacOutput.CustomAudioProcessor = new CustomMediaBlock();
 - Solo se soporta codificación de audio FLAC (sin capacidades de codificación de video)
 - La configuración predeterminada del codificador FLAC se crea automáticamente durante la inicialización
 
-El SDK Media Blocks contiene un [bloque de codificador FLAC](../../mediablocks/AudioEncoders/index.md) dedicado.
+El Media Blocks SDK contiene un [bloque de codificador FLAC](../../mediablocks/AudioEncoders/index.md) dedicado.
 
 ### Consideraciones de rendimiento
 
@@ -252,7 +252,7 @@ if (!FLACEncoderSettings.IsAvailable())
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-La clase [FLACOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.FLACOutput.html) proporciona configuraciones solo para Windows para el codificador FLAC. Esta clase implementa tanto las interfaces `IVideoEditBaseOutput` como `IVideoCaptureBaseOutput`, haciéndola adecuada tanto para escenarios de edición como de captura de video.
+La clase [FLACOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.FLACOutput.html) proporciona configuraciones solo para Windows para el codificador FLAC. Esta clase implementa tanto las interfaces `IVideoEditBaseOutput` como `IVideoCaptureBaseOutput`, haciéndola adecuada tanto para escenarios de edición como de captura de video.
 
 ### Propiedades
 

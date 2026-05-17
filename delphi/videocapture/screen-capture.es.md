@@ -41,7 +41,8 @@ VideoCapture1.Screen_Capture_Right := StrToInt(edScreenRight.Text);
 
 ```cpp
 // CEdit::GetWindowText(CString&) devuelve void y rellena el buffer por referencia,
-// así que primero hay que declarar un CString y luego convertirlo a int con atoi().
+// así que primero hay que declarar un CString y luego convertirlo a int con _ttoi
+// (la variante compatible con TCHAR — necesaria porque CString es wide en builds MFC Unicode).
 CString sTop, sBottom, sLeft, sRight;
 m_edScreenTop.GetWindowText(sTop);
 m_edScreenBottom.GetWindowText(sBottom);
@@ -49,13 +50,13 @@ m_edScreenLeft.GetWindowText(sLeft);
 m_edScreenRight.GetWindowText(sRight);
 
 // Definir la posición del borde superior del rectángulo de captura (en píxeles)
-m_VideoCapture.SetScreen_Capture_Top(atoi(sTop));
+m_VideoCapture.SetScreen_Capture_Top(_ttoi(sTop));
 // Definir la posición del borde inferior del rectángulo de captura (en píxeles)
-m_VideoCapture.SetScreen_Capture_Bottom(atoi(sBottom));
+m_VideoCapture.SetScreen_Capture_Bottom(_ttoi(sBottom));
 // Definir la posición del borde izquierdo del rectángulo de captura (en píxeles)
-m_VideoCapture.SetScreen_Capture_Left(atoi(sLeft));
+m_VideoCapture.SetScreen_Capture_Left(_ttoi(sLeft));
 // Definir la posición del borde derecho del rectángulo de captura (en píxeles)
-m_VideoCapture.SetScreen_Capture_Right(atoi(sRight));
+m_VideoCapture.SetScreen_Capture_Right(_ttoi(sRight));
 ```
 
 ```vb

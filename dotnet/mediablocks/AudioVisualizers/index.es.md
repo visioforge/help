@@ -1,6 +1,6 @@
 ---
 title: Bloques Visualizadores de Audio en .NET - Espectro y Onda
-description: Cree aplicaciones reactivas al audio con VisioForge Media Blocks SDK: bloques Spacescope, Spectroscope, Synaescope y Wavescope.
+description: Cree aplicaciones reactivas al audio con VisioForge Media Blocks SDK — bloques Spacescope, Spectroscope, Synaescope y Wavescope.
 tags:
   - Media Blocks SDK
   - .NET
@@ -16,6 +16,7 @@ primary_api_classes:
   - UniversalSourceSettings
   - SynaescopeBlock
 
+sidebar_label: Audio Visualizers
 ---
 
 # Bloques de visualizador de audio

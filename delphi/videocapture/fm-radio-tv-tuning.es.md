@@ -1,5 +1,5 @@
 ---
-title: Radio FM y Sintonización TV en Delphi: Escaneo de Canales
+title: Radio FM y Sintonización TV en Delphi — Escaneo de Canales
 description: Implemente sintonización de radio FM y TV en Delphi - escaneo de canales, gestión de frecuencias, detección de señal con ejemplos para Delphi, C++, VB6.
 tags:
   - All-in-One Media Framework

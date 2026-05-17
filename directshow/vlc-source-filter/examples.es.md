@@ -1,6 +1,6 @@
 ---
 title: Filtro Fuente VLC DirectShow - Ejemplos de Código C++
-description: Ejemplos de código para el Filtro de Fuente VLC con múltiples pistas de audio, subtítulos, video 360° y parámetros personalizados de VLC en DirectShow.
+description: Ejemplos de código para el VLC Source DirectShow Filter con múltiples pistas de audio, subtítulos, video 360° y parámetros personalizados de VLC en DirectShow.
 tags:
   - DirectShow
   - C++
@@ -27,7 +27,7 @@ primary_api_classes:
 
 ## Descripción General
 
-Esta página proporciona ejemplos prácticos de código para usar el Filtro de Fuente VLC en aplicaciones DirectShow. El Filtro de Fuente VLC admite múltiples pistas de audio, subtítulos, video 360° y opciones de línea de comandos personalizadas de VLC.
+Esta página proporciona ejemplos prácticos de código para usar el VLC Source DirectShow Filter en aplicaciones DirectShow. El VLC Source DirectShow Filter admite múltiples pistas de audio, subtítulos, video 360° y opciones de línea de comandos personalizadas de VLC.
 
 ---
 ## Requisitos Previos
@@ -52,7 +52,7 @@ using System.Text;
 
 ## Ejemplo 1: Reproducción Básica de Archivos
 
-Reproducir un archivo multimedia local con el Filtro de Fuente VLC.
+Reproducir un archivo multimedia local con el VLC Source DirectShow Filter.
 
 ### Implementación en C++
 

@@ -30,7 +30,7 @@ primary_api_classes:
 
 ### Paquete de Integración con MongoDB (Solución Preconstruida)
 
-El SDK de Video Fingerprinting proporciona un paquete NuGet listo para usar para la integración con MongoDB:
+El Video Fingerprinting SDK proporciona un paquete NuGet listo para usar para la integración con MongoDB:
 
 **Paquete:** `VisioForge.DotNet.VideoFingerPrinting.MongoDB`  
 **Versión:** 2025.8.7  
@@ -230,7 +230,7 @@ Install-Package AWSSDK.SQS
 
 ## APIs Principales del SDK para Integración en la Nube
 
-El SDK de Video Fingerprinting proporciona estas clases esenciales para todas las implementaciones en la nube:
+El Video Fingerprinting SDK proporciona estas clases esenciales para todas las implementaciones en la nube:
 
 - **VFPAnalyzer** (estático) - Genera huellas digitales a partir de archivos de video:
   - `GetComparingFingerprintForVideoFileAsync(filename, progressCallback)`
@@ -2082,7 +2082,7 @@ El video fingerprinting basado en la nube ofrece una escalabilidad y rentabilida
 - **Monitoree el rendimiento**: Rastree costos, configure alertas y optimice continuamente
 - **Planifique para la escala**: Diseñe para procesamiento distribuido desde el inicio
 ## Próximos Pasos
-- Explore [Integración de Base de Datos](database-integration.es.md) para almacenar huellas digitales
+- Explore [Integración de Base de Datos](database-integration.md) para almacenar huellas digitales
 ## Recursos Adicionales
 - [Documentación de Azure Functions](https://learn.microsoft.com/en-us/azure/azure-functions/)
 - [Documentación de AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)

@@ -13,6 +13,8 @@ tags:
   - Android
   - iOS
 
+order: 17
+sidebar_label: Deployment
 ---
 
 # Guía de Despliegue Multiplataforma para SDK .NET de VisioForge

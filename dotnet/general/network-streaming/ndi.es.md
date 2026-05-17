@@ -116,7 +116,7 @@ core.Outputs_Add(ndiOutput); // core representa la instancia VideoCaptureCoreX
 
 [MediaBlocksPipeline](#){ .md-button }
 
-El caso de uso más común es transmitir una webcam local y micrófono a NDI. Este ejemplo usa el SDK Media Blocks para capturar desde dispositivos del sistema y enviar a NDI con el remuestreo de audio adecuado.
+El caso de uso más común es transmitir una webcam local y micrófono a NDI. Este ejemplo usa el Media Blocks SDK para capturar desde dispositivos del sistema y enviar a NDI con el remuestreo de audio adecuado.
 
 ### Arquitectura del Pipeline
 
@@ -216,7 +216,7 @@ Debug.WriteLine(ndiUrl);
 
 ## Reproducción de Archivos a Salida NDI
 
-El SDK Media Blocks puede transmitir archivos multimedia locales (MP4, MKV, AVI, etc.) directamente a NDI sin ninguna renderización local — ideal para aplicaciones de servidor de playout.
+El Media Blocks SDK puede transmitir archivos multimedia locales (MP4, MKV, AVI, etc.) directamente a NDI sin ninguna renderización local — ideal para aplicaciones de servidor de playout.
 
 ### Pipeline Recomendado
 
@@ -282,7 +282,7 @@ Esta guía se centra en enviar video y audio a NDI. Para descubrir, conectar, pr
 
 ### ¿Cómo transmito video desde una cámara a NDI en C#?
 
-Use el SDK Media Blocks para crear un pipeline con `SystemVideoSourceBlock` para la cámara, `SystemAudioSourceBlock` para el micrófono y `NDISinkBlock` como salida. Conecte el audio a través de un `AudioResamplerBlock` configurado a 48kHz F32LE estéreo, que NDI requiere. Consulte la sección [Transmisión de Cámara a NDI](#transmision-de-camara-a-ndi) para el código completo.
+Use el Media Blocks SDK para crear un pipeline con `SystemVideoSourceBlock` para la cámara, `SystemAudioSourceBlock` para el micrófono y `NDISinkBlock` como salida. Conecte el audio a través de un `AudioResamplerBlock` configurado a 48kHz F32LE estéreo, que NDI requiere. Consulte la sección [Transmisión de Cámara a NDI](#transmision-de-camara-a-ndi) para el código completo.
 
 ### ¿Qué formato de audio requiere NDI?
 

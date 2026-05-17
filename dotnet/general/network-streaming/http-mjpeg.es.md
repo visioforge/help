@@ -99,6 +99,12 @@ Esta clase maneja la implementación real de la funcionalidad de streaming MJPEG
   - `IMediaBlockSink`: Para funcionalidad de sink
   - `IDisposable`: Para limpieza apropiada de recursos
 
+#### Configuración de entrada/salida
+
+- Acepta una única entrada de video a través del pad `Input`
+- Sin pads de salida (ya que es un bloque sink)
+- Pad de entrada configurado solo para tipo de medio video
+
 ### Notas de implementación
 
 #### Inicialización
@@ -110,6 +116,47 @@ pipeline.Connect(videoSource.Output, mjpegSink.Input);
 
 // "URL de etiqueta IMG es http://127.0.0.1:8090";
 ```
+
+#### Gestión de recursos
+
+- La clase implementa una limpieza adecuada de recursos a través del patrón `IDisposable`
+- El método `CleanUp` asegura que todos los recursos sean liberados correctamente
+- Los manejadores de eventos se conectan y desconectan apropiadamente durante el ciclo de vida del pipeline
+
+#### Integración con pipeline
+
+El método `Build` maneja el proceso de configuración crítico:
+
+1. Crea el elemento sink HTTP MJPEG subyacente
+2. Inicializa el sink con el puerto especificado
+3. Configura las conexiones de pad de GStreamer necesarias
+4. Conecta los manejadores de eventos del pipeline
+
+### Manejo de errores
+
+- La implementación incluye verificación de errores exhaustiva durante el proceso de construcción
+- La inicialización fallida se reporta apropiadamente a través del sistema de errores del contexto
+- La limpieza de recursos se maneja incluso en casos de error
+
+### Consideraciones técnicas
+
+#### Rendimiento
+
+- La implementación usa elementos nativos de GStreamer para rendimiento óptimo
+- Las conexiones directas de pads minimizan la copia y la sobrecarga
+- El bloque sink está diseñado para manejar múltiples conexiones de cliente eficientemente
+
+#### Gestión de memoria
+
+- Los patrones de disposición apropiados garantizan que no haya fugas de memoria
+- Los recursos se limpian cuando el pipeline se detiene o el bloque se libera
+- La implementación maneja correctamente el ciclo de vida del elemento GStreamer
+
+#### Subprocesamiento
+
+- La implementación es segura para hilos en operaciones de pipeline
+- Los manejadores de eventos están correctamente sincronizados con los cambios de estado del pipeline
+- Las conexiones de clientes se manejan de forma asíncrona
 
 #### Uso del cliente
 
@@ -165,6 +212,10 @@ Para consumir el stream MJPEG:
 2. Control de acceso
    - Sin mecanismo de autenticación integrado
    - Considere implementar control de acceso a nivel de aplicación si es necesario
+
+3. Seguridad del puerto
+   - Asegúrese de que las reglas de firewall apropiadas estén en su lugar
+   - Considere el aislamiento de red para streams internos
 
 ## Salida MJPEG solo Windows
 

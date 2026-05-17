@@ -51,9 +51,9 @@ Lance Visual Studio y cree un nuevo proyecto o abra uno existente. Las capturas 
 * Para VB.NET WinForms: `Archivo -> Nuevo -> Proyecto -> Visual Basic -> Windows Forms App (.NET Framework)`
 * Para C++ MFC: `Archivo -> Nuevo -> Proyecto -> Visual C++ -> MFC/ATL -> MFC App`
 
-![Crear Nuevo Proyecto C# WinForms](/help/docs/delphi/mediaplayer/install/mpvs2003_1.webp)
+![Crear Nuevo Proyecto C# WinForms](mpvs2003_1.webp)
 
-![Diseñador WinForms Vacío](/help/docs/delphi/mediaplayer/install/mpvs2003_11.webp)
+![Diseñador WinForms Vacío](mpvs2003_11.webp)
 
 ### **Paso 2: Abrir el Toolbox**
 
@@ -66,7 +66,7 @@ Para hacer que el control `TVFMediaPlayer` esté disponible, necesita agregarlo 
 1. Haga clic derecho dentro de un área vacía del Toolbox (ej., bajo la pestaña "General" o cree una nueva pestaña).
 2. Seleccione "Choose Items..." del menú contextual.
 
-![Menú Choose Items en Toolbox](/help/docs/delphi/mediaplayer/install/mpvs2003_2.webp)
+![Menú Choose Items en Toolbox](mpvs2003_2.webp)
 
 ### **Paso 4: Seleccionar el Control TVFMediaPlayer**
 
@@ -75,7 +75,7 @@ Para hacer que el control `TVFMediaPlayer` esté disponible, necesita agregarlo 
 3. Marque la casilla junto al nombre del control.
 4. Haga clic en "OK".
 
-![Seleccionando VisioForge Media Player en COM Components](/help/docs/delphi/mediaplayer/install/mpvs2003_3.webp)
+![Seleccionando VisioForge Media Player en COM Components](mpvs2003_3.webp)
 
 Visual Studio ahora agregará el control a su Toolbox y, si está en un proyecto C# o VB.Net, generará los ensamblados RCW necesarios (a menudo nombrados `AxInterop.VisioForgeMediaPlayerLib.dll` e `Interop.VisioForgeMediaPlayerLib.dll`) y agregará referencias a ellos en su proyecto.
 
@@ -84,11 +84,11 @@ Visual Studio ahora agregará el control a su Toolbox y, si está en un proyecto
 1. Localice el icono "VisioForge Media Player" recién agregado en el Toolbox.
 2. Haga clic y arrastre el icono a la superficie de diseño o formulario de su aplicación.
 
-![Arrastrando Control del Toolbox al Formulario](/help/docs/delphi/mediaplayer/install/mpvs2003_40.webp)
+![Arrastrando Control del Toolbox al Formulario](mpvs2003_40.webp)
 
 Una instancia del control `TVFMediaPlayer` aparecerá en su formulario. Puede redimensionarlo y posicionarlo según sea necesario usando el diseñador.
 
-![Control Media Player Agregado al Formulario](/help/docs/delphi/mediaplayer/install/mpvs2003_41.webp)
+![Control Media Player Agregado al Formulario](mpvs2003_41.webp)
 
 ### **Paso 6: Interactuando con el Control (Código)**
 

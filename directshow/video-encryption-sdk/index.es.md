@@ -1,5 +1,5 @@
 ---
-title: SDK de Encriptación de Video DirectShow con AES-256
+title: Video Encryption SDK con AES-256 vía filtros DirectShow
 description: SDK DirectShow de encriptación de video con AES-256 para archivos MP4 H.264/AAC, aceleración GPU y API completa para C++, C# y Delphi.
 tags:
   - Video Encryption SDK
@@ -10,13 +10,15 @@ primary_api_classes:
   - IVFCryptoConfig
   - IVFPasswordProvider
 
+order: 5
+sidebar_label: Video Encryption SDK
 ---
 
-# SDK de Encriptación de Video
+# Video Encryption SDK
 
 ## Introducción a la Encriptación de Video
 
-El [SDK de Encriptación de Video](https://www.visioforge.com/video-encryption-sdk) proporciona herramientas robustas para codificar archivos de video en formato MP4 H264/AAC con capacidades avanzadas de encriptación. Los desarrolladores pueden asegurar su contenido multimedia usando contraseñas personalizadas o métodos de encriptación con datos binarios.
+El [Video Encryption SDK](https://www.visioforge.com/video-encryption-sdk) proporciona herramientas robustas para codificar archivos de video en formato MP4 H264/AAC con capacidades avanzadas de encriptación. Los desarrolladores pueden asegurar su contenido multimedia usando contraseñas personalizadas o métodos de encriptación con datos binarios.
 
 El SDK se integra perfectamente con cualquier aplicación DirectShow a través de un conjunto completo de filtros. Estos filtros vienen con extensas interfaces que permiten a los desarrolladores ajustar la configuración según requisitos de seguridad específicos y necesidades de implementación.
 
@@ -24,7 +26,7 @@ El SDK se integra perfectamente con cualquier aplicación DirectShow a través d
 
 ## Instalación
 
-Antes de usar los ejemplos de código e integrar el SDK en su aplicación, primero debe instalar el SDK de Encriptación de Video desde la [página del producto](https://www.visioforge.com/video-encryption-sdk).
+Antes de usar los ejemplos de código e integrar el SDK en su aplicación, primero debe instalar el Video Encryption SDK desde la [página del producto](https://www.visioforge.com/video-encryption-sdk).
 
 **Pasos de Instalación**:
 
@@ -207,7 +209,7 @@ El SDK incluye aplicaciones de ejemplo funcionales que demuestran flujos de trab
 ### Repositorio de GitHub
 
 Código fuente completo para todos los ejemplos está disponible:
-- [Ejemplos del SDK de Encriptación de Video](https://github.com/visioforge/directshow-samples/tree/main/Video%20Encryption%20SDK) - Ejemplos en C#, C++ y Delphi
+- [Ejemplos del Video Encryption SDK](https://github.com/visioforge/directshow-samples/tree/main/Video%20Encryption%20SDK) - Ejemplos en C#, C++ y Delphi
 
 Estos ejemplos incluyen:
 - Construcción completa de grafo de filtros
@@ -277,4 +279,4 @@ Estos ejemplos incluyen:
 
 - [Referencia de Interfaz](interface-reference.md) - Documentación completa de API
 - [Ejemplos](examples.md) - Ejemplos de código completos para encriptación y desencriptación
-- [Paquete de Filtros de Codificación DirectShow](../filters-enc/index.md) - Codificadores de video compatibles (H.264, H.265, AAC)
+- [DirectShow Encoding Filters Pack](../filters-enc/index.md) - Codificadores de video compatibles (H.264, H.265, AAC)

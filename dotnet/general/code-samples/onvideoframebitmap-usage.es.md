@@ -1,5 +1,5 @@
 ---
-title: OnVideoFrameBitmap: Acceso a Frames de Video en .NET
+title: OnVideoFrameBitmap — Acceso a Frames de Video en .NET
 description: Acceda y modifique frames de video en tiempo real con eventos OnVideoFrameBitmap para manipulación avanzada de video en aplicaciones C#.
 tags:
   - Video Capture SDK

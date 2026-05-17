@@ -50,6 +50,23 @@ primary_api_classes:
     - [Salida OGG Vorbis con Comentarios Vorbis](#salida-ogg-vorbis-con-comentarios-vorbis)
     - [Salida M4A con Metadatos MP4](#salida-m4a-con-metadatos-mp4)
     - [Salida WMV/WMA con Metadatos ASF](#salida-wmvwma-con-metadatos-asf)
+  - [Ejemplo Completo de Grabación de Audio](#ejemplo-completo-de-grabacion-de-audio)
+  - [Escenarios Avanzados de Etiquetas](#escenarios-avanzados-de-etiquetas)
+    - [Soporte de Carátulas de Álbum](#soporte-de-caratulas-de-album)
+    - [Modificación de Etiquetas en Tiempo de Ejecución](#modificacion-de-etiquetas-en-tiempo-de-ejecucion)
+    - [Álbumes Multi-Pista](#albumes-multi-pista)
+  - [Mejores Prácticas](#mejores-practicas)
+    - [Calidad de los Datos de Etiquetas](#calidad-de-los-datos-de-etiquetas)
+    - [Consideraciones de Rendimiento](#consideraciones-de-rendimiento)
+    - [Pautas Específicas por Formato](#pautas-especificas-por-formato)
+  - [Solución de Problemas](#solucion-de-problemas)
+    - [Problemas Comunes y Soluciones](#problemas-comunes-y-soluciones)
+    - [Depurar la Escritura de Etiquetas](#depurar-la-escritura-de-etiquetas)
+  - [Especificaciones de Formato de Etiquetas](#especificaciones-de-formato-de-etiquetas)
+    - [Etiquetas ID3 (MP3)](#etiquetas-id3-mp3)
+    - [Comentarios Vorbis (OGG)](#comentarios-vorbis-ogg)
+    - [Metadatos MP4 (M4A)](#metadatos-mp4-m4a)
+    - [Atributos ASF (WMV/WMA)](#atributos-asf-wmvwma)
 
 ## Resumen
 

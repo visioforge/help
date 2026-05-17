@@ -62,7 +62,7 @@ Indexing is a Windows-only workflow because the ASF container itself is Windows 
 ## See also
 
 - [WMV encoding reference](../output-formats/wmv.md) — configure VisioForge's WMV output to produce indexed files on capture.
-- [Windows Media Format SDK — IWMIndexer](https://learn.microsoft.com/en-us/windows/win32/wmformat/iwmindexer)
+- [Windows Media Format SDK — IWMIndexer](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/api/wmsdkidl/nn-wmsdkidl-iwmindexer)
 - [MP4 output](../output-formats/mp4.md) — a seek-friendly alternative for new projects.
 
 ---

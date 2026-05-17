@@ -1,5 +1,5 @@
 ---
-title: Interfaz DirectShow MP4 Muxer: hilos, tiempo y streaming
+title: Interfaz DirectShow MP4 Muxer — hilos, tiempo y streaming
 description: Interfaces DirectShow de MP4 muxer con configuración de hilos, corrección de tiempo y opciones de streaming en vivo para salida de contenedor MP4.
 tags:
   - DirectShow
@@ -743,7 +743,7 @@ mp4V10Muxer.SetFlags((uint)MP4V10Flags.TimeAdjust); // Ajuste automático de tie
 
 ## Ver También
 
-- [Interfaz de Codificador H.264](h264.es.md)
-- [Interfaces de Codificador AAC](aac.es.md)
-- [Referencia de Muxers](../muxers-reference.es.md)
-- [Resumen del Paquete de Filtros de Codificación](../index.es.md)
+- [Interfaz de Codificador H.264](h264.md)
+- [Interfaces de Codificador AAC](aac.md)
+- [Referencia de Muxers](../muxers-reference.md)
+- [Resumen del DirectShow Encoding Filters Pack](../index.md)

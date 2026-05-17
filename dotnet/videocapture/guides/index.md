@@ -1,6 +1,6 @@
 ---
 title: Video Capture Guides - Multi-Camera and Recording in C# .NET
-description: Step-by-step guides for VisioForge Video Capture SDK: multi-camera sync, webcam photos, pre-event recording, and screen capture with C# code samples.
+description: Step-by-step guides for VisioForge Video Capture SDK — multi-camera sync, webcam photos, pre-event recording, and screen capture with C# code samples.
 sidebar_label: Additional Guides
 order: 1
 tags:

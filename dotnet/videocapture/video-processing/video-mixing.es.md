@@ -179,6 +179,14 @@ await VideoCapture1.PIP_Sources_SetSourceSettingsAsync(
     voltearY);
 ```
 
+### Dependencias Requeridas
+
+Para usar la funcionalidad de mezcla de video, asegúrate de incluir los paquetes redistribuibles apropiados:
+
+- Video capture redistributables:
+  - [Paquete x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
+  - [Paquete x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
+
 ## Motor VideoCaptureCoreX
 
 El motor VideoCaptureCoreX es una versión más nueva del motor VideoCaptureCore que proporciona características adicionales y mejoras.
@@ -245,6 +253,22 @@ mezcladorVideo.Add(source, new Rect(0, 0, 1280, 720), chromaKey);
 
 Para cambios de layout **en runtime** (actualizar posición mientras el pipeline corre), baja a Media Blocks: construye tu pipeline con un `VideoMixerBlock` y usa sus métodos `Input_Get(Guid)` / `Input_Update(VideoMixerStream)` para mutar posición, tamaño, alpha o z-order sin reiniciar. Ver [referencia video-processing de Media Blocks](../../mediablocks/VideoProcessing/index.md) para la API de `VideoMixerBlock`.
 
+#### Configuración de salida
+
+Configura el destino de salida para tu video mezclado:
+
+```cs
+// Configurar grabación MP4
+captureX.Outputs_Add(new MP4Output("output.mp4"));
+
+// Iniciar captura
+await captureX.StartAsync();
+
+// Detener después de un tiempo
+await Task.Delay(TimeSpan.FromMinutes(5));
+await captureX.StopAsync();
+```
+
 ### Comparación con Motor VideoCaptureCore
 
 | Característica | VideoCaptureCore | VideoCaptureCoreX |
@@ -254,6 +278,10 @@ Para cambios de layout **en runtime** (actualizar posición mientras el pipeline
 | Gestión de Fuentes | API fija para añadir fuentes | Añadir cualquier fuente que implemente IVideoMixerSource |
 | Rendimiento | Bueno | Mejorado con pipeline de renderizado optimizado |
 | Cambios en Tiempo Real | Limitado | Manipulación completa de fuentes |
+
+### Dependencias Requeridas
+
+Consulta la página principal de [Despliegue](../deployment.md) para las dependencias más recientes.
 
 ## Escenarios de Uso Avanzado
 

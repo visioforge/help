@@ -1,6 +1,6 @@
 ---
 title: API .NET de Video Fingerprinting - Generar, comparar, buscar
-description: Documentación completa de la API del SDK Video Fingerprinting de VisioForge para generar, comparar y buscar huellas de video con ejemplos.
+description: Documentación completa de la API del Video Fingerprinting SDK de VisioForge para generar, comparar y buscar huellas de video con ejemplos.
 tags:
   - Video Fingerprinting SDK
   - .NET
@@ -16,7 +16,7 @@ primary_api_classes:
 
 ---
 
-# Documentación de la API .NET del SDK de Video Fingerprinting
+# Documentación de la API .NET del Video Fingerprinting SDK
 
 ## Descripción General
 
@@ -74,7 +74,7 @@ VFPAnalyzer.DebugDir = null;
 public static void SetLicenseKey(string vfpLicense)
 ```
 
-**Descripción:** Establece la clave de licencia para el SDK de Video Fingerprinting. Debe llamarse antes de usar cualquier función de huellas digitales.
+**Descripción:** Establece la clave de licencia para el Video Fingerprinting SDK. Debe llamarse antes de usar cualquier función de huellas digitales.
 
 **Parámetros:**
 

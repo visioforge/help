@@ -1,5 +1,5 @@
 ---
-title: Deploy Video Edit SDK .Net on Windows: NuGet and Installers
+title: Deploy Video Edit SDK .Net on Windows — NuGet and Installers
 description: Configure NuGet packages, silent installers, and runtime dependencies for VisioForge Video Edit SDK .NET on x86 and x64 Windows targets.
 tags:
   - Video Edit SDK

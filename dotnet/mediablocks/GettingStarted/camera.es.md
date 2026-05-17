@@ -1,6 +1,6 @@
 ---
 title: Crear Aplicaciones de Captura de Cámara en C# .NET
-description: Cree apps de cámara con VisioForge Media Blocks SDK: enumeración de dispositivos, selección de formato, renderizado de video y captura multiplataforma.
+description: Cree apps de cámara con VisioForge Media Blocks SDK — enumeración de dispositivos, selección de formato, renderizado de video y captura multiplataforma.
 tags:
   - Media Blocks SDK
   - .NET

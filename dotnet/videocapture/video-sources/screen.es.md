@@ -414,7 +414,7 @@ Sí. Establezca la propiedad `WindowHandle` en `ScreenCaptureSourceSettings` (Vi
 
 Establezca `GrabMouseCursor = true` en `ScreenCaptureSourceSettings` (VideoCaptureCore) o `CaptureCursor = true` en `ScreenCaptureD3D11SourceSettings` (VideoCaptureCoreX). El cursor se incluye en los datos del fotograma capturado en su posición actual. Desactive esta propiedad cuando grabe tutoriales donde el cursor se añadirá en postproducción.
 
-### ¿Funciona el SDK de captura de pantalla con múltiples monitores?
+### ¿Funciona el Video Capture SDK con múltiples monitores?
 
 Sí. Use `DisplayIndex` (VideoCaptureCore) o `MonitorIndex` (VideoCaptureCoreX) para seleccionar qué monitor capturar. Enumere los monitores disponibles con `System.Windows.Forms.Screen.AllScreens` y presente la lista al usuario. Cada monitor se captura de forma independiente — para grabar todos los monitores simultáneamente, cree instancias de captura separadas para cada pantalla.
 

@@ -8,6 +8,7 @@ tags:
   - Windows
   - VCL
 
+sidebar_label: Información general
 ---
 
 # Bibliotecas Delphi/ActiveX para Desarrollo Multimedia

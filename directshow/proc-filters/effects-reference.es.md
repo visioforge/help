@@ -1,6 +1,6 @@
 ---
 title: Referencia de Efectos de Video DirectShow - 35+ Filtros
-description: Referencia de 35+ efectos de video DirectShow en tiempo real: filtros de color, desentrelazado, eliminación de ruido y efectos artísticos.
+description: Referencia de 35+ efectos de video DirectShow en tiempo real — filtros de color, desentrelazado, eliminación de ruido y efectos artísticos.
 tags:
   - DirectShow
   - C++
@@ -23,7 +23,7 @@ primary_api_classes:
 
 ## Descripción General
 
-El Paquete de Filtros de Procesamiento DirectShow proporciona más de 35 efectos de video en tiempo real que se pueden aplicar individualmente o encadenar juntos. Esta referencia documenta todos los efectos disponibles, sus parámetros y uso.
+El DirectShow Processing Filters Pack proporciona más de 35 efectos de video en tiempo real que se pueden aplicar individualmente o encadenar juntos. Esta referencia documenta todos los efectos disponibles, sus parámetros y uso.
 
 ## Categorías de Efectos
 
@@ -673,7 +673,7 @@ pEffects->add_effect(timestamp);
 
 ---
 ## Ver También
-- [Descripción General del Paquete de Filtros de Procesamiento](index.md)
+- [Descripción General del DirectShow Processing Filters Pack](index.md)
 - [Referencia de Interfaz de Efectos de Video](interfaces/effects-interface.md)
 - [Interfaz de Clave de Croma](interfaces/chroma-key.md)
 - [Interfaz de Mezclador de Video](interfaces/video-mixer.md)

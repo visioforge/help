@@ -3042,6 +3042,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
+<a id="d3d11-video-converter"></a>
 ## Convertidor de Video D3D11
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]

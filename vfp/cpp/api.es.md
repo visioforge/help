@@ -1,6 +1,6 @@
 ---
 title: API C++ de Video Fingerprinting para Búsqueda y Comparación
-description: Documentación completa de la API del SDK Video Fingerprinting de VisioForge para C++: generar, comparar y buscar huellas de video con ejemplos.
+description: Documentación completa de la API del Video Fingerprinting SDK de VisioForge para C++ — generar, comparar y buscar huellas de video con ejemplos.
 tags:
   - Video Fingerprinting SDK
   - C++
@@ -16,11 +16,11 @@ primary_api_classes:
 
 ---
 
-# Documentación de la API C++ del SDK Video Fingerprinting
+# Documentación de la API C++ del Video Fingerprinting SDK
 
 ## Descripción General
 
-El SDK Video Fingerprinting para C++ de VisioForge proporciona una librería nativa de alto rendimiento para identificación, comparación y búsqueda de contenido de video. Permite a las aplicaciones:
+El Video Fingerprinting SDK para C++ de VisioForge proporciona una librería nativa de alto rendimiento para identificación, comparación y búsqueda de contenido de video. Permite a las aplicaciones:
 
 - Generar huellas únicas desde archivos de video para identificación de contenido
 - Comparar videos para determinar similitud y detectar duplicados

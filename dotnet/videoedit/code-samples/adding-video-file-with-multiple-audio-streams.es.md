@@ -53,7 +53,7 @@ El divisor AVI proporciona excelente soporte para múltiples pistas de audio. Al
 
 Esto se demuestra en la visualización del grafo de filtros a continuación:
 
-![Grafo de filtros para AVI](/help/docs/dotnet/videoedit/code-samples/adding-video-1.webp)
+![Grafo de filtros para AVI](adding-video-1.webp)
 
 Como es visible en el diagrama, el divisor AVI crea rutas separadas para cada pista de audio, haciéndolas accesibles independientemente a través de la API del SDK.
 
@@ -63,7 +63,7 @@ Los formatos de contenedor modernos como MP4, MKV y MOV a menudo usan divisores 
 
 El grafo de filtros para LAV Splitter demuestra esta limitación:
 
-![Grafo de filtros para LAV](/help/docs/dotnet/videoedit/code-samples/adding-video-2.webp)
+![Grafo de filtros para LAV](adding-video-2.webp)
 
 LAV Splitter, aunque excelente para soporte de formatos, no expone múltiples pistas de audio de una manera que permita acceso directo a pistas secundarias a través del motor DES. Esta limitación requiere enfoques alternativos.
 

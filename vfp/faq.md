@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprinting FAQ: Licensing, Accuracy, and Formats
+title: Video Fingerprinting FAQ — Licensing, Accuracy, and Formats
 description: Find answers about VisioForge Video Fingerprinting SDK including licensing, performance, accuracy, formats, and platform compatibility.
 tags:
   - Video Fingerprinting SDK
@@ -373,7 +373,6 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
 2. **Rare codecs**: May require additional GStreamer plugins
 3. **Corrupted files**: Partial processing possible with error handling
 4. **Live streams**: Supported but requires segmented processing
-```
 
 ### Q: What about audio-only files?
 

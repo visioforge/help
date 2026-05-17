@@ -71,21 +71,21 @@ Estas versiones clásicas tienen un mecanismo de importación directo:
 2. **Abrir o Crear un Proyecto:** Puede importar el control a un proyecto existente o uno nuevo. El proceso de importación agrega el componente a la paleta del IDE, haciéndolo disponible para todos los proyectos.
 3. **Importar Control ActiveX:** Navegue al menú principal y seleccione `Component` → `Import ActiveX Controls...`.
 
-    ![C++ Builder 5/6 - Menú Component](/help/docs/delphi/mediaplayer/install/mpbcb5_1.webp)
+    ![C++ Builder 5/6 - Menú Component](mpbcb5_1.webp)
 
 4. **Seleccionar el Control:** Aparecerá un cuadro de diálogo listando todos los controles ActiveX registrados en su sistema. Desplácese por la lista y encuentre `VisioForge Media Player` (también podría estar listado como `VFMediaPlayer Class` o similar, dependiendo de los detalles del registro). Marque la casilla junto a él.
 
-    ![C++ Builder 5/6 - Seleccionar Control](/help/docs/delphi/mediaplayer/install/mpbcb5_2.webp)
+    ![C++ Builder 5/6 - Seleccionar Control](mpbcb5_2.webp)
 
 5. **Instalar:** Haga clic en el botón `Install...`.
 6. **Creación/Selección de Paquete:** C++ Builder le solicitará instalar el componente en un paquete. Puede elegir un paquete existente (como `dclusr.dpk`) o crear uno nuevo. Para simplicidad, agregarlo al paquete de usuario predeterminado es a menudo suficiente. Haga clic en `OK`.
 7. **Confirmación:** Un diálogo de confirmación preguntará si desea reconstruir el paquete. Haga clic en `Sí`.
 
-    ![C++ Builder 5/6 - Confirmación de Reconstrucción de Paquete](/help/docs/delphi/mediaplayer/install/mpbcb5_3.webp)
+    ![C++ Builder 5/6 - Confirmación de Reconstrucción de Paquete](mpbcb5_3.webp)
 
 8. **Compilación e Instalación:** C++ Builder compilará el paquete que contiene el código wrapper para el control ActiveX. Tras una compilación exitosa, un mensaje confirmará la instalación. Haga clic en `OK`.
 
-    ![C++ Builder 5/6 - Instalación Exitosa](/help/docs/delphi/mediaplayer/install/mpbcb5_4.webp)
+    ![C++ Builder 5/6 - Instalación Exitosa](mpbcb5_4.webp)
 
 9. **Paleta de Componentes:** El componente TVFMediaPlayer debería ahora aparecer en la Paleta de Componentes de C++ Builder, probablemente bajo una pestaña llamada `ActiveX` o `VisioForge`. Ahora puede arrastrarlo y soltarlo en sus formularios como cualquier otro componente VCL estándar.
 
@@ -98,28 +98,28 @@ Las versiones modernas de C++ Builder usan un proceso de importación de compone
     * Vaya a `File` → `New` → `Other...`.
     * En el diálogo `New Items`, navegue a `C++Builder Projects` (o categoría similar) y seleccione `Package`. Haga clic en `OK`.
 
-    ![C++ Builder 2006+ - Nuevo Paquete](/help/docs/delphi/mediaplayer/install/mpbcb2006_1.webp)
+    ![C++ Builder 2006+ - Nuevo Paquete](mpbcb2006_1.webp)
 
 3. **Importar Componente:** Con el proyecto de nuevo paquete activo (ej., `Package1.cbproj`), vaya al menú principal y seleccione `Component` → `Import Component...`.
 
-    ![C++ Builder 2006+ - Menú Component](/help/docs/delphi/mediaplayer/install/mpbcb2006_2.webp)
+    ![C++ Builder 2006+ - Menú Component](mpbcb2006_2.webp)
 
 4. **Seleccionar Tipo de Importación:** En el asistente `Import Component`, elija la opción `Import ActiveX Control` y haga clic en `Siguiente >`.
 
-    ![C++ Builder 2006+ - Seleccionar Tipo de Importación](/help/docs/delphi/mediaplayer/install/mpbcb2006_3.webp)
+    ![C++ Builder 2006+ - Seleccionar Tipo de Importación](mpbcb2006_3.webp)
 
 5. **Seleccionar el Control:** Similar a las versiones anteriores, encuentre `VisioForge Media Player` en la lista de controles registrados, selecciónelo, y haga clic en `Siguiente >`.
 
-    ![C++ Builder 2006+ - Seleccionar Control](/help/docs/delphi/mediaplayer/install/mpbcb2006_4.webp)
+    ![C++ Builder 2006+ - Seleccionar Control](mpbcb2006_4.webp)
 
 6. **Detalles del Componente:** El asistente mostrará detalles sobre el control. Típicamente puede aceptar los valores predeterminados para `Palette Page` (ej., `ActiveX`), `Unit Dir Name`, y `Search Path`. Haga clic en `Siguiente >`. *Nota: Algunos desarrolladores prefieren crear una página de paleta dedicada "VisioForge".*
 7. **Selección de Paquete:** Elija la acción `Add unit to <NombrePaquete>.cbproj` (donde `<NombrePaquete>` es el nombre del paquete que creó en el paso 2). Haga clic en `Finalizar`.
 
-    ![C++ Builder 2006+ - Elegir Acción de Paquete](/help/docs/delphi/mediaplayer/install/mpbcb2006_6.webp)
+    ![C++ Builder 2006+ - Elegir Acción de Paquete](mpbcb2006_6.webp)
 
 8. **Guardar el Paquete:** C++ Builder generará la unidad wrapper necesaria (ej., `VFMediaPlayerLib_TLB.cpp` / `.h`). Guarde el proyecto del paquete (`.cbproj`) y los archivos asociados cuando se le solicite. Elija un nombre y ubicación significativos para su paquete (ej., `VisioForgeMediaPlayerPkg`).
 
-    ![C++ Builder 2006+ - Guardar Paquete](/help/docs/delphi/mediaplayer/install/mpbcb2006_7.webp)
+    ![C++ Builder 2006+ - Guardar Paquete](mpbcb2006_7.webp)
 
 9. **Compilar e Instalar el Paquete:**
     * En el panel `Project Manager`, haga clic derecho en el archivo `.bpl` del proyecto del paquete (ej., `VisioForgeMediaPlayerPkg.bpl`).

@@ -7,6 +7,8 @@ tags:
   - DirectShow
   - Streaming
 
+order: 4
+sidebar_label: 3rd-Party Software Usage
 ---
 
 # Integrar Software de Terceros con Video Capture SDK

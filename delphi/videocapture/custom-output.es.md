@@ -123,39 +123,62 @@ VideoCapture1.Custom_Output_Mux_Filter_Name := cbCustomMuxer.Items[cbCustomMuxer
 
 ```cpp
 // C++ MFC
+// CComboBox::GetCurSel devuelve CB_ERR (-1) si no hay selección; se valida el
+// índice antes de cada llamada a GetLBText.
+int nIndex;
 if (m_CustomUseVideoCodecsCat.GetCheck())
 {
-  CString videoCodec;
-  m_CustomVideoCodecCombo.GetLBText(m_CustomVideoCodecCombo.GetCurSel(), videoCodec);
-  m_VideoCapture.Custom_Output_Video_Codec = videoCodec;
-  m_VideoCapture.Custom_Output_Video_Codec_Use_Filters_Category = false;
+  nIndex = m_CustomVideoCodecCombo.GetCurSel();
+  if (nIndex != CB_ERR)
+  {
+    CString videoCodec;
+    m_CustomVideoCodecCombo.GetLBText(nIndex, videoCodec);
+    m_VideoCapture.Custom_Output_Video_Codec = videoCodec;
+    m_VideoCapture.Custom_Output_Video_Codec_Use_Filters_Category = false;
+  }
 }
 else
 {
-  CString videoCodec;
-  m_CustomDSFilterVCombo.GetLBText(m_CustomDSFilterVCombo.GetCurSel(), videoCodec);
-  m_VideoCapture.Custom_Output_Video_Codec = videoCodec;
-  m_VideoCapture.Custom_Output_Video_Codec_Use_Filters_Category = true;
+  nIndex = m_CustomDSFilterVCombo.GetCurSel();
+  if (nIndex != CB_ERR)
+  {
+    CString videoCodec;
+    m_CustomDSFilterVCombo.GetLBText(nIndex, videoCodec);
+    m_VideoCapture.Custom_Output_Video_Codec = videoCodec;
+    m_VideoCapture.Custom_Output_Video_Codec_Use_Filters_Category = true;
+  }
 }
 
 if (m_CustomUseAudioCodecsCat.GetCheck())
 {
-  CString audioCodec;
-  m_CustomAudioCodecCombo.GetLBText(m_CustomAudioCodecCombo.GetCurSel(), audioCodec);
-  m_VideoCapture.Custom_Output_Audio_Codec = audioCodec;
-  m_VideoCapture.Custom_Output_Audio_Codec_Use_Filters_Category = false;
+  nIndex = m_CustomAudioCodecCombo.GetCurSel();
+  if (nIndex != CB_ERR)
+  {
+    CString audioCodec;
+    m_CustomAudioCodecCombo.GetLBText(nIndex, audioCodec);
+    m_VideoCapture.Custom_Output_Audio_Codec = audioCodec;
+    m_VideoCapture.Custom_Output_Audio_Codec_Use_Filters_Category = false;
+  }
 }
 else
 {
-  CString audioCodec;
-  m_CustomDSFilterACombo.GetLBText(m_CustomDSFilterACombo.GetCurSel(), audioCodec);
-  m_VideoCapture.Custom_Output_Audio_Codec = audioCodec;
-  m_VideoCapture.Custom_Output_Audio_Codec_Use_Filters_Category = true;
+  nIndex = m_CustomDSFilterACombo.GetCurSel();
+  if (nIndex != CB_ERR)
+  {
+    CString audioCodec;
+    m_CustomDSFilterACombo.GetLBText(nIndex, audioCodec);
+    m_VideoCapture.Custom_Output_Audio_Codec = audioCodec;
+    m_VideoCapture.Custom_Output_Audio_Codec_Use_Filters_Category = true;
+  }
 }
 
-CString muxerName;
-m_CustomMuxerCombo.GetLBText(m_CustomMuxerCombo.GetCurSel(), muxerName);
-m_VideoCapture.Custom_Output_Mux_Filter_Name = muxerName;
+nIndex = m_CustomMuxerCombo.GetCurSel();
+if (nIndex != CB_ERR)
+{
+  CString muxerName;
+  m_CustomMuxerCombo.GetLBText(nIndex, muxerName);
+  m_VideoCapture.Custom_Output_Mux_Filter_Name = muxerName;
+}
 ```
 
 ```vb

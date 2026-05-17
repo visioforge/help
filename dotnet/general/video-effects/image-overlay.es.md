@@ -1,5 +1,5 @@
 ---
-title: Overlay de Imagen en Video en .NET: PNG, GIF y Bitmap
+title: Overlay de Imagen en Video en .NET — PNG, GIF y Bitmap
 description: Superponga imágenes, GIFs animados y PNGs transparentes en streams de video en .NET para marcas de agua, logos y mejoras visuales con transparencia.
 tags:
   - Video Capture SDK

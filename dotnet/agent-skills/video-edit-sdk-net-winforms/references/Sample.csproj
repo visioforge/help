@@ -8,14 +8,12 @@
     <AssemblyTitle>Video Join Demo</AssemblyTitle>
     <Company>VisioForge</Company>
     <Product>Video Join Demo</Product>
-    <Copyright>Copyright (c) 2026</Copyright>
+    <Copyright>Copyright (c) 2025</Copyright>
   </PropertyGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="System.Deployment" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
@@ -28,8 +26,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.5.4" />
+    <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.5.17" />
   </ItemGroup>
 </Project>

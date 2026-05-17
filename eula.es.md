@@ -20,11 +20,11 @@ Este Contrato de Licencia de Usuario Final ("Contrato" o "EULA") constituye un c
 
 Este Contrato aplica a todos los kits de desarrollo de software y productos relacionados desarrollados y distribuidos por VisioForge, incluyendo pero no limitado a:
 
-- Video Capture SDK .Net
-- Media Player SDK .Net
-- Video Edit SDK .Net
-- Video Edit SDK FFMPEG .Net
-- Media Blocks SDK .Net
+- Video Capture SDK .NET
+- Media Player SDK .NET
+- Video Edit SDK .NET
+- Video Edit SDK FFmpeg .NET
+- Media Blocks SDK .NET
 - All-in-One Media Framework (Delphi/ActiveX)
 - Virtual Camera SDK
 - FFMPEG Source DirectShow filter

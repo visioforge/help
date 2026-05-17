@@ -28,7 +28,7 @@ primary_api_classes:
 
 # Guía de Huellas de Video en Tiempo Real
 
-Esta guía demuestra cómo procesar streams de video en vivo y generar huellas en tiempo real usando el SDK de Huellas de Video de VisioForge. El enfoque usa procesamiento basado en fragmentos para construir huellas de streams de video continuos.
+Esta guía demuestra cómo procesar streams de video en vivo y generar huellas en tiempo real usando el Video Fingerprinting SDK de VisioForge. El enfoque usa procesamiento basado en fragmentos para construir huellas de streams de video continuos.
 
 ## Descripción General
 

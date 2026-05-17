@@ -16,6 +16,7 @@ primary_api_classes:
   - SystemVideoSourceBlock
   - VideoEncoderBlock
 
+sidebar_label: Amazon Web Services
 ---
 
 # Bloques AWS S3 - VisioForge Media Blocks SDK .Net

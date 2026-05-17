@@ -20,11 +20,11 @@ primary_api_classes:
 
 ---
 
-# SDK de Encriptación de Video - Ejemplos de Código
+# Video Encryption SDK - Ejemplos de Código
 
 ## Descripción General
 
-Esta página proporciona ejemplos de código completos y funcionales para encriptar y desencriptar archivos de video utilizando el SDK de Encriptación de Video. Los ejemplos cubren:
+Esta página proporciona ejemplos de código completos y funcionales para encriptar y desencriptar archivos de video utilizando el Video Encryption SDK. Los ejemplos cubren:
 
 - **Encriptación Básica** - Encriptar archivos de video con protección por contraseña
 - **Desencriptación de Archivos** - Desencriptar y reproducir archivos de video encriptados
@@ -1396,7 +1396,7 @@ regsvr32 "C:\Ruta\A\DecryptDemuxer.ax"
 
 ---
 ## Ver También
-- [Descripción General del SDK de Encriptación de Video](index.md) - Características del producto
+- [Descripción General del Video Encryption SDK](index.md) - Características del producto
 - [Referencia de Interfaz](interface-reference.md) - Documentación completa de la API
-- [Paquete de Filtros de Codificación DirectShow](../filters-enc/index.md) - Codificadores compatibles
+- [DirectShow Encoding Filters Pack](../filters-enc/index.md) - Codificadores compatibles
 - [Ejemplos en GitHub](https://github.com/visioforge/directshow-samples/tree/main/Video%20Encryption%20SDK) - Código fuente completo

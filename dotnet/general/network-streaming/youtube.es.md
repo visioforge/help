@@ -113,6 +113,8 @@ El SDK soporta múltiples codificadores de audio AAC:
 - **AVENC AAC**: Opción alternativa multiplataforma
 - **MF AAC**: Codificador específico de Windows usando Media Foundation
 
+### Ejemplo de configuración del codificador de audio
+
 ```csharp
 // Ejemplo: Configurar ajustes del codificador de audio.
 // VOAACEncoderSettings expone solo Bitrate (Kbit/s); la tasa de muestreo sigue la fuente upstream.
@@ -122,6 +124,24 @@ var audioSettings = new VOAACEncoderSettings
 };
 youtubeOutput.Audio = audioSettings;
 ```
+
+## Estrategias de optimización específicas de plataforma
+
+### Características específicas de Windows
+
+- Aprovecha los codificadores Media Foundation (MF) para un rendimiento óptimo en Windows
+- Proporciona capacidades extendidas de codificación HEVC/H265
+- Predetermina MF AAC para la codificación de audio, optimizado para la plataforma Windows
+
+### Consideraciones de implementación en macOS
+
+- Utiliza automáticamente el codificador Apple Media H264 para rendimiento nativo
+- Implementa VO-AAC para la codificación de audio con optimización para macOS
+
+### Capa de compatibilidad multiplataforma
+
+- Cae a OpenH264 para video en plataformas sin optimizaciones específicas
+- Utiliza VO-AAC para una codificación de audio consistente en diversos entornos
 
 ## Mejores prácticas para streaming óptimo
 
@@ -135,6 +155,12 @@ youtubeOutput.Audio = audioSettings;
 - Siga las tasas de bits recomendadas por YouTube para su resolución objetivo
 - Implemente el intervalo estándar de keyframe de 2 segundos (60 cuadros a 30fps)
 - Configure tasa de muestreo de audio de 48 kHz para cumplir con las especificaciones de audio de YouTube
+
+### Gestión robusta de errores
+
+- Desarrolle un manejo exhaustivo de errores para problemas de conexión
+- Implemente monitorización continua del rendimiento del codificador
+- Cree herramientas de diagnóstico para evaluar la salud del stream durante la operación
 
 ## Ejemplos de implementación completa
 
@@ -200,6 +226,12 @@ pipeline.Connect(aacEncoder.Output, youtubeSinkBlock.CreateNewInput(MediaBlockPa
 - Valide el formato y estado de expiración de la clave de stream
 - Pruebe la conectividad de red a los servidores de streaming de YouTube
 - Verifique el estado del servicio de YouTube a través de canales oficiales
+
+### Optimización de rendimiento
+
+- Monitoree la utilización de recursos del sistema durante las sesiones de streaming
+- Ajuste las tasas de bits y configuraciones de codificación según los recursos disponibles
+- Considere cambiar a aceleración por hardware cuando el uso de CPU sea excesivo
 
 ## Recursos adicionales
 

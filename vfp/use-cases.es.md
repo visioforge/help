@@ -1,5 +1,5 @@
 ---
-title: Casos de uso de Video Fingerprinting: copyright y monitoreo
+title: Casos de uso de Video Fingerprinting — copyright y monitoreo
 description: Aplique video fingerprinting de VisioForge a protección de copyright, monitoreo de transmisiones, detección de piratería y deduplicación.
 tags:
   - Video Fingerprinting SDK
@@ -896,4 +896,4 @@ La tecnología de huellas digitales de video proporciona soluciones poderosas en
 4. **Implementar una gestión de datos adecuada** - Almacenamiento y recuperación eficientes de huellas digitales
 5. **Mantenerse en cumplimiento** - Respetar las leyes de privacidad y regulaciones de derechos de autor
 
-El SDK de Huellas Digitales de Video de VisioForge proporciona la flexibilidad y el rendimiento necesarios para todas estas aplicaciones, desde la verificación de contenido a pequeña escala hasta sistemas de gestión de medios a nivel empresarial.
+El Video Fingerprinting SDK de VisioForge proporciona la flexibilidad y el rendimiento necesarios para todas estas aplicaciones, desde la verificación de contenido a pequeña escala hasta sistemas de gestión de medios a nivel empresarial.

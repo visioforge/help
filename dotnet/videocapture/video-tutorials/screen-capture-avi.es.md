@@ -63,7 +63,7 @@ Para la mayoría de los casos de uso de grabación de pantalla, [MP4 es el forma
 
 ## API Moderna — Video Capture SDK X
 
-La API moderna multiplataforma usa `VideoCaptureCoreX`. Para el patrón completo de aplicación de consola con configuración de captura de pantalla, audio y ciclo de vida de grabación, consulte la guía de [Captura de Pantalla a MP4](screen-capture-mp4.es.md#api-moderna-video-capture-sdk-x). Para generar AVI en lugar de MP4, reemplace la configuración de salida:
+La API moderna multiplataforma usa `VideoCaptureCoreX`. Para el patrón completo de aplicación de consola con configuración de captura de pantalla, audio y ciclo de vida de grabación, consulte la guía de [Captura de Pantalla a MP4](screen-capture-mp4.md#api-moderna-video-capture-sdk-x). Para generar AVI en lugar de MP4, reemplace la configuración de salida:
 
 ```csharp
 // AVI con codecs predeterminados (OpenH264 video + MP3 audio)
@@ -85,7 +85,7 @@ var aviOutput = new AVIOutput(outputPath);
 aviOutput.Video = new OpenH264EncoderSettings();
 ```
 
-Captura de región, grabación multi-monitor, audio, resaltado de cursor y codificación GPU se cubren en la [guía de MP4](screen-capture-mp4.es.md) — todas las funciones de configuración de fuente funcionan de forma idéntica con la salida AVI.
+Captura de región, grabación multi-monitor, audio, resaltado de cursor y codificación GPU se cubren en la [guía de MP4](screen-capture-mp4.md) — todas las funciones de configuración de fuente funcionan de forma idéntica con la salida AVI.
 
 ## API Legada — Video Capture SDK
 
@@ -163,7 +163,7 @@ Instale los siguientes paquetes NuGet:
 
 ### ¿Por qué mi archivo de grabación de pantalla AVI es tan grande?
 
-MJPEG comprime cada fotograma independientemente, sacrificando tamaño de archivo por conveniencia de edición (vea la comparación de tamaño arriba). Para reducir el tamaño del archivo: reduzca la tasa de fotogramas (10–15 FPS es suficiente para presentaciones), capture una región más pequeña en lugar de pantalla completa, o cambie a [salida MP4](screen-capture-mp4.es.md) que usa compresión H.264 inter-fotograma y produce archivos aproximadamente 6–8x más pequeños.
+MJPEG comprime cada fotograma independientemente, sacrificando tamaño de archivo por conveniencia de edición (vea la comparación de tamaño arriba). Para reducir el tamaño del archivo: reduzca la tasa de fotogramas (10–15 FPS es suficiente para presentaciones), capture una región más pequeña en lugar de pantalla completa, o cambie a [salida MP4](screen-capture-mp4.md) que usa compresión H.264 inter-fotograma y produce archivos aproximadamente 6–8x más pequeños.
 
 ### ¿Cuándo debo usar AVI en lugar de MP4 para grabación de pantalla?
 

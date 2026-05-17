@@ -535,7 +535,7 @@ IVFVideoMixer* pMixer = /* ... */;
 // Entrada 0: Video de fondo
 // Entrada 1: Sujeto con chroma key (fondo transparente)
 ```
-Vea [Interfaz Video Mixer](video-mixer.es.md) para detalles.
+Vea [Interfaz Video Mixer](video-mixer.md) para detalles.
 ---
 
 ## Interfaces Relacionadas
@@ -546,7 +546,7 @@ Vea [Interfaz Video Mixer](video-mixer.es.md) para detalles.
 
 ## Vea También
 
-- [Descripción General del Pack de Filtros de Procesamiento](../index.es.md)
-- [Interfaz Video Mixer](video-mixer.es.md)
-- [Referencia de Efectos](../effects-reference.es.md)
-- [Ejemplos de Código](../examples.es.md)
+- [Descripción General del Pack de Filtros de Procesamiento](../index.md)
+- [Interfaz Video Mixer](video-mixer.md)
+- [Referencia de Efectos](../effects-reference.md)
+- [Ejemplos de Código](../examples.md)

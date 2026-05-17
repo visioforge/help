@@ -31,25 +31,25 @@ La siguiente guía paso a paso lo llevará a través del proceso completo de ins
 
 Comience iniciando Visual Basic 6 y creando un nuevo proyecto estándar que servirá como base para su implementación de captura de video.
 
-![Creando un nuevo proyecto VB6](/help/docs/delphi/videocapture/install/vcvb6_1.webp)
+![Creando un nuevo proyecto VB6](vcvb6_1.webp)
 
 ### Paso 2: Acceder al Diálogo de Componentes
 
 Navegue al menú Proyecto y seleccione la opción "Componentes" para abrir el diálogo de selección de componentes. Esta interfaz le permite navegar y seleccionar de los controles ActiveX disponibles.
 
-![Abriendo el diálogo de Componentes](/help/docs/delphi/videocapture/install/vcvb6_2.webp)
+![Abriendo el diálogo de Componentes](vcvb6_2.webp)
 
 ### Paso 3: Seleccionar el Componente TVFVideoCapture
 
 En el diálogo de Componentes, desplácese a través de los controles disponibles y localice el elemento "VisioForge Video Capture". Marque la casilla junto a él para incluir este componente en su caja de herramientas.
 
-![Seleccionando el componente VisioForge Video Capture](/help/docs/delphi/videocapture/install/vcvb6_3.webp)
+![Seleccionando el componente VisioForge Video Capture](vcvb6_3.webp)
 
 ### Paso 4: Verificar la Integración Exitosa
 
 Después de agregar el componente, debería notar el nuevo control TVFVideoCapture apareciendo en su caja de herramientas VB6. Esto confirma que el control ActiveX se ha integrado exitosamente en su entorno de desarrollo.
 
-![Verificación del control agregado](/help/docs/delphi/videocapture/install/vcvb6_4.webp)
+![Verificación del control agregado](vcvb6_4.webp)
 
 ## Consideraciones de Implementación
 

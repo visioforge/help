@@ -1,6 +1,6 @@
 ---
-title: SDK Video Fingerprinting - Detectar y comparar contenido
-description: Detecte contenido pirata, encuentre duplicados y compare videos transformados con el SDK Video Fingerprinting de VisioForge para .NET y C++.
+title: Video Fingerprinting SDK - Detectar y comparar contenido
+description: Detecte contenido pirata, encuentre duplicados y compare videos transformados con el Video Fingerprinting SDK de VisioForge para .NET y C++.
 tags:
   - Video Fingerprinting SDK
   - .NET
@@ -10,6 +10,8 @@ tags:
   - Linux
   - Fingerprinting
 
+order: 17
+sidebar_label: Video Fingerprinting SDK
 ---
 
 # Video Fingerprinting SDK

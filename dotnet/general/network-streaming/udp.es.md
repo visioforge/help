@@ -1,6 +1,6 @@
 ---
 title: Streaming UDP con Contenedor MPEG-TS y H.264 en C# .NET
-description: Transmita video H.264/HEVC por UDP en C# / .NET: multicast, punto a punto, baja latencia. Ejemplos de envío y recepción con ajuste de bitrate.
+description: Transmita video H.264/HEVC por UDP en C# / .NET — multicast, punto a punto, baja latencia. Ejemplos de envío y recepción con ajuste de bitrate.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -175,6 +175,85 @@ Este código:
 2. Aplica configuraciones predeterminadas para video H.264 y audio AAC
 3. Especifica MPEG-TS como formato de contenedor
 4. Asigna esta configuración a la salida de transmisión
+
+## Salida UDP multiplataforma con Media Blocks
+
+[MediaBlocksPipeline](#){ .md-button }
+
+El Media Blocks SDK proporciona soporte multiplataforma para streaming UDP usando bloques basados en GStreamer. Estos bloques funcionan en Windows, macOS, Linux, iOS y Android.
+
+### Streaming MPEG-TS de destino único
+
+Use `UDPMPEGTSSinkBlock` para multiplexar audio y video en MPEG-TS y enviar por UDP a un único destino:
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+
+var videoEncoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+var audioEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings() { Bitrate = 192 });
+
+pipeline.Connect(fileSource.VideoOutput, videoEncoder.Input);
+pipeline.Connect(fileSource.AudioOutput, audioEncoder.Input);
+
+var udpSettings = new UDPSinkSettings
+{
+    Host = "192.168.1.100",
+    Port = 5004,
+    TTL = 64
+};
+
+var udpSink = new UDPMPEGTSSinkBlock(udpSettings);
+pipeline.Connect(videoEncoder.Output, udpSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(audioEncoder.Output, udpSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+### Streaming MPEG-TS a múltiples destinos
+
+Use `MultiUDPMPEGTSSinkBlock` para enviar el mismo stream MPEG-TS a varios receptores simultáneamente:
+
+```csharp
+var multiUdpSettings = new MultiUDPSinkSettings();
+multiUdpSettings.AddClient("192.168.1.100", 5004);
+multiUdpSettings.AddClient("192.168.1.101", 5004);
+
+var multiUdpSink = new MultiUDPMPEGTSSinkBlock(multiUdpSettings);
+pipeline.Connect(videoEncoder.Output, multiUdpSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(audioEncoder.Output, multiUdpSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+### Streaming multicast
+
+Para entrega multicast, establezca `Host` a una dirección multicast (224.0.0.0 – 239.255.255.255):
+
+```csharp
+var udpSettings = new UDPSinkSettings
+{
+    Host = "239.101.101.1",
+    Port = 5004,
+    MulticastTTL = 4,
+    AutoMulticast = true
+};
+```
+
+### Recepción de streams UDP
+
+Puede verificar el stream usando herramientas de línea de comandos de GStreamer:
+
+```bash
+gst-launch-1.0 udpsrc port=5004 ! tsdemux ! decodebin ! autovideosink
+```
+
+O recibirlo con VLC:
+
+```
+vlc udp://@:5004
+```
 
 ## Opciones de Configuración Avanzada
 

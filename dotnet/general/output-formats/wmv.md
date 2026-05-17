@@ -1,5 +1,5 @@
 ---
-title: WMV Encoding in .NET: Windows Media Video Output Guide
+title: WMV Encoding in .NET — Windows Media Video Output Guide
 description: Implement Windows Media Video encoding in .NET with audio/video configuration, streaming options, and cross-platform profile management.
 tags:
   - Video Capture SDK
@@ -42,7 +42,7 @@ This documentation covers the Windows Media Video (WMV) encoding capabilities av
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-The [WMVOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.WMVOutput.html) class provides comprehensive Windows Media encoding capabilities for both audio and video on Windows platforms.
+The [WMVOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WMVOutput.html) class provides comprehensive Windows Media encoding capabilities for both audio and video on Windows platforms.
 
 ### Quick Start Guide
 

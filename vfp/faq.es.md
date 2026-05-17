@@ -1,6 +1,6 @@
 ---
-title: FAQ de Video Fingerprinting: licencias, precisión y formatos
-description: Respuestas sobre el SDK Video Fingerprinting de VisioForge incluyendo licencias, rendimiento, precisión, formatos y compatibilidad de plataformas.
+title: FAQ Video Fingerprinting — licencias, precisión y formatos
+description: Respuestas sobre el Video Fingerprinting SDK de VisioForge incluyendo licencias, rendimiento, precisión, formatos y compatibilidad de plataformas.
 tags:
   - Video Fingerprinting SDK
   - .NET
@@ -16,9 +16,9 @@ primary_api_classes:
 
 ---
 
-# Preguntas Frecuentes del SDK de Video Fingerprinting
+# Preguntas Frecuentes del Video Fingerprinting SDK
 
-Esta FAQ completa aborda las preguntas más comunes sobre el SDK de Video Fingerprinting de VisioForge. Si no puedes encontrar tu respuesta aquí, por favor visita nuestro [foro de soporte](https://support.visioforge.com/) o [comunidad de Discord](https://discord.com/invite/yvXUG56WCH).
+Esta FAQ completa aborda las preguntas más comunes sobre el Video Fingerprinting SDK de VisioForge. Si no puedes encontrar tu respuesta aquí, por favor visita nuestro [foro de soporte](https://support.visioforge.com/) o [comunidad de Discord](https://discord.com/invite/yvXUG56WCH).
 
 ## Tabla de Contenidos
 
@@ -379,7 +379,7 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
 
 ### P: ¿Qué pasa con archivos solo de audio?
 
-**R:** El SDK de Video Fingerprinting requiere contenido de video.
+**R:** El Video Fingerprinting SDK requiere contenido de video.
 
 ## Compatibilidad de Plataformas
 

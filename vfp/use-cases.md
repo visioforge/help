@@ -1,5 +1,5 @@
 ---
-title: Video Fingerprinting Use Cases: Copyright and Monitoring
+title: Video Fingerprinting Use Cases — Copyright and Monitoring
 description: Apply VisioForge video fingerprinting to copyright protection, broadcast monitoring, piracy detection, and content deduplication in production workflows.
 tags:
   - Video Fingerprinting SDK

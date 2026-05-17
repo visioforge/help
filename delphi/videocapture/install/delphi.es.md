@@ -25,27 +25,27 @@ El proceso de instalación para entornos heredados de Delphi 6/7 requiere varios
 
 Comience creando un nuevo paquete en su entorno de desarrollo Delphi 6/7.
 
-![Creando un nuevo paquete en Delphi 6/7](/help/docs/delphi/videocapture/install/vcd6_1.webp)
+![Creando un nuevo paquete en Delphi 6/7](vcd6_1.webp)
 
 ### Paso 2: Configurar Rutas de Biblioteca
 
 Agregue el directorio fuente de TVFVideoCapture a los ajustes de ruta de biblioteca y navegador. Esto permite a Delphi localizar los archivos de componente necesarios.
 
-![Agregando directorio fuente a rutas de biblioteca](/help/docs/delphi/videocapture/install/vcd6_2.webp)
+![Agregando directorio fuente a rutas de biblioteca](vcd6_2.webp)
 
 ### Paso 3: Abrir el Paquete de Biblioteca
 
 Navegue y abra el archivo de paquete de biblioteca para preparar la instalación.
 
-![Abriendo el paquete de biblioteca](/help/docs/delphi/videocapture/install/vcd6_3.webp)
+![Abriendo el paquete de biblioteca](vcd6_3.webp)
 
 ### Paso 4: Instalar el Paquete de Componente
 
 Complete la instalación seleccionando la opción de instalar dentro de la interfaz del paquete.
 
-![Instalando el paquete](/help/docs/delphi/videocapture/install/vcd6_4.webp)
+![Instalando el paquete](vcd6_4.webp)
 
-![Confirmación de instalación exitosa](/help/docs/delphi/videocapture/install/vcd6_5.webp)
+![Confirmación de instalación exitosa](vcd6_5.webp)
 
 ### Limitaciones de Arquitectura
 
@@ -59,33 +59,33 @@ Las versiones modernas de Delphi ofrecen un flujo de trabajo de instalación mej
 
 Asegúrese de ejecutar su IDE Delphi con derechos administrativos para prevenir problemas de instalación relacionados con permisos.
 
-![Abriendo Delphi con derechos de admin](/help/docs/delphi/videocapture/install/vcd2005_1.webp)
+![Abriendo Delphi con derechos de admin](vcd2005_1.webp)
 
 ### Paso 2: Acceder al Diálogo de Opciones
 
 Navegue al menú Opciones para configurar ajustes esenciales de biblioteca.
 
-![Accediendo a la ventana de Opciones](/help/docs/delphi/videocapture/install/vcd2005_11.webp)
+![Accediendo a la ventana de Opciones](vcd2005_11.webp)
 
 ### Paso 3: Configurar Rutas del Directorio Fuente
 
 Agregue el directorio fuente de TVFVideoCapture a los ajustes de ruta de biblioteca y navegador para asegurar el descubrimiento apropiado de componentes.
 
-![Configurando rutas del directorio fuente](/help/docs/delphi/videocapture/install/vcd2005_2.webp)
+![Configurando rutas del directorio fuente](vcd2005_2.webp)
 
 ### Paso 4: Abrir el Paquete de Biblioteca de Componentes
 
 Localice y abra el archivo de paquete de biblioteca incluido con TVFVideoCapture.
 
-![Abriendo el paquete de biblioteca de componentes](/help/docs/delphi/videocapture/install/vcd2005_3.webp)
+![Abriendo el paquete de biblioteca de componentes](vcd2005_3.webp)
 
 ### Paso 5: Completar la Instalación del Paquete
 
 Instale el paquete a través de la interfaz de instalación de paquetes del IDE.
 
-![Instalando el paquete de componentes](/help/docs/delphi/videocapture/install/vcd2005_4.webp)
+![Instalando el paquete de componentes](vcd2005_4.webp)
 
-![Verificación de instalación exitosa](/help/docs/delphi/videocapture/install/vcd2005_41.webp)
+![Verificación de instalación exitosa](vcd2005_41.webp)
 
 ## Instalación Avanzada para Delphi 11 y Versiones Más Nuevas
 
@@ -99,19 +99,19 @@ Después de instalar el framework, navegue a la carpeta de instalación y abra e
 
 Elija la configuración de compilación Release para asegurar el rendimiento óptimo del componente.
 
-![Seleccionando configuración de compilación Release](/help/docs/delphi/videocapture/install/delphi11-1.webp)
+![Seleccionando configuración de compilación Release](delphi11-1.webp)
 
 ### Paso 3: Instalar el Paquete de Componentes
 
 Complete el proceso de instalación a través de la interfaz de instalación de paquetes del IDE.
 
-![Instalando el paquete de componentes](/help/docs/delphi/videocapture/install/delphi11-2.webp)
+![Instalando el paquete de componentes](delphi11-2.webp)
 
 ### Paso 4: Verificar el Éxito de la Instalación
 
 Confirme que la instalación se completó exitosamente antes de proceder con el desarrollo.
 
-![Verificación de instalación exitosa](/help/docs/delphi/videocapture/install/delphi11-3.webp)
+![Verificación de instalación exitosa](delphi11-3.webp)
 
 ## Requisitos de Configuración del Proyecto y Mejores Prácticas
 

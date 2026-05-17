@@ -62,7 +62,7 @@ El SDK de VisioForge proporciona un framework robusto para implementar streaming
 
 Antes de implementar streaming WMV en su aplicación, asegúrese de que se cumplan los siguientes requisitos:
 
-1. Su entorno de desarrollo incluye el SDK Video Capture de VisioForge
+1. Su entorno de desarrollo incluye el VisioForge Video Capture SDK
 2. Los redistribuibles requeridos están instalados
 3. Su aplicación apunta a sistemas operativos Windows
 4. Los puertos de red están configurados apropiadamente y accesibles
@@ -147,6 +147,23 @@ catch (Exception ex)
 }
 ```
 
+### Opciones de configuración avanzada
+
+#### Archivos de perfil .prx externos
+
+Para un control fino más allá de los perfiles integrados, apunte `WMVOutput` a un archivo de perfil creado con Windows Media Profile Editor:
+
+```cs
+wmvOutput.Mode = WMVMode.ExternalProfile;
+wmvOutput.External_Profile_FileName = @"C:\profiles\my-stream.prx";
+
+// O pegar el XML del perfil en línea:
+// wmvOutput.Mode = WMVMode.ExternalProfileFromText;
+// wmvOutput.External_Profile_Text = "<profile ...>...</profile>";
+
+VideoCapture1.Network_Streaming_Output = wmvOutput;
+```
+
 ## Implementación de conexión del lado del cliente
 
 Los clientes pueden conectarse al stream WMV usando Windows Media Player o cualquier aplicación que soporte el protocolo de streaming de Windows Media. La URL de conexión sigue este formato:
@@ -158,6 +175,27 @@ http://[ip_servidor]:[puerto]/
 Por ejemplo:
 ```
 http://192.168.1.100:12345/
+```
+
+### Código de ejemplo para conexión de cliente
+
+Para conexiones programáticas al stream WMV en aplicaciones cliente:
+
+```cs
+// Conexión a stream WMV en el lado del cliente usando el control de Windows Media Player
+using System.Windows.Forms;
+
+public partial class StreamViewerForm : Form
+{
+    public StreamViewerForm(string streamUrl)
+    {
+        InitializeComponent();
+
+        // Suponiendo que tienes un control de Windows Media Player llamado 'wmPlayer' en el formulario
+        wmPlayer.URL = streamUrl;
+        wmPlayer.Ctlcontrols.play();
+    }
+}
 ```
 
 ## Optimización de rendimiento

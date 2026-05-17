@@ -355,7 +355,7 @@ await pipeline.StartAsync();
 Instead of generic questions, provide context:
 
 - ❌ "How do I capture video?"
-- ✅ "How do I capture video from an RTSP camera using MediaBlocks SDK on Android?"
+- ✅ "How do I capture video from an RTSP camera using Media Blocks SDK on Android?"
 
 ### 2. **Specify Your Platform and Framework**
 

@@ -1,5 +1,5 @@
 ---
-title: Codificadores de Audio para .NET: Guía AAC, FLAC, MP3, Opus
+title: Codificadores de Audio para .NET — Guía AAC, FLAC, MP3, Opus
 description: Implemente codificadores de audio AAC, FLAC, MP3, Opus y otros en .NET con configuraciones óptimas, consejos de rendimiento y mejores prácticas.
 sidebar_label: Codificadores de Audio
 
@@ -64,7 +64,7 @@ Elige el codec según tu objetivo: **AAC** para amplia compatibilidad (MP4, M4A,
 
 Los SDKs .NET de VisioForge incluyen soporte para los siguientes codificadores de audio, cada uno diseñado para casos de uso específicos:
 
-### [Codificador AAC](aac.es.md)
+### [Codificador AAC](aac.md)
 
 Advanced Audio Coding (AAC) representa el estándar de la industria para la compresión de audio de alta calidad. Ofrece una excelente calidad de sonido a tasas de bits más bajas en comparación con formatos más antiguos como MP3.
 
@@ -78,7 +78,7 @@ Advanced Audio Coding (AAC) representa el estándar de la industria para la comp
 
 AAC es particularmente adecuado para aplicaciones donde la calidad de audio es primordial, como servicios de transmisión de música, herramientas de producción de video y aplicaciones multimedia profesionales.
 
-### [Codificador FLAC](flac.es.md)
+### [Codificador FLAC](flac.md)
 
 Free Lossless Audio Codec (FLAC) proporciona compresión sin pérdida de datos de audio, preservando la calidad de audio original mientras reduce el tamaño del archivo.
 
@@ -92,7 +92,7 @@ Free Lossless Audio Codec (FLAC) proporciona compresión sin pérdida de datos d
 
 FLAC es ideal para archivar audio, aplicaciones de edición de audio profesional y sistemas de reproducción de música de grado audiófilo donde mantener una fidelidad de audio perfecta es esencial.
 
-### [Codificador MP3](mp3.es.md)
+### [Codificador MP3](mp3.md)
 
 MPEG Audio Layer III (MP3) sigue siendo uno de los formatos de audio más utilizados debido a su compatibilidad universal y relación calidad-tamaño aceptable.
 
@@ -106,7 +106,7 @@ MPEG Audio Layer III (MP3) sigue siendo uno de los formatos de audio más utiliz
 
 MP3 es mejor para aplicaciones donde la amplia compatibilidad es más importante que lograr la calidad de audio más alta absoluta, como podcasts, aplicaciones de música básicas e integración de sistemas heredados.
 
-### [Codificador Opus](opus.es.md)
+### [Codificador Opus](opus.md)
 
 Opus es un códec de audio altamente versátil diseñado para manejar tanto voz como música con excelente calidad a bajas tasas de bits.
 
@@ -120,7 +120,7 @@ Opus es un códec de audio altamente versátil diseñado para manejar tanto voz 
 
 Opus sobresale en aplicaciones de comunicación en tiempo real, sistemas VoIP, transmisión en vivo y escenarios donde la eficiencia del ancho de banda es crítica.
 
-### [Codificador Speex](speex.es.md)
+### [Codificador Speex](speex.md)
 
 Speex es un formato de compresión de audio específicamente optimizado para la codificación de voz, lo que lo hace ideal para aplicaciones centradas en la voz.
 
@@ -134,7 +134,7 @@ Speex es un formato de compresión de audio específicamente optimizado para la 
 
 Speex es particularmente efectivo para aplicaciones de chat de voz, herramientas de grabación de voz y sistemas de telefonía donde la claridad del habla es la prioridad.
 
-### [Codificador Vorbis](vorbis.es.md)
+### [Codificador Vorbis](vorbis.md)
 
 Vorbis es un formato de compresión de audio de código abierto y libre de patentes que ofrece una calidad comparable a AAC a tasas de bits similares.
 
@@ -148,7 +148,7 @@ Vorbis es un formato de compresión de audio de código abierto y libre de paten
 
 Vorbis es adecuado para aplicaciones donde los costos de licencia son una preocupación, como proyectos de código abierto, desarrollo de juegos independientes y aplicaciones web.
 
-### [Codificador WavPack](wavpack.es.md)
+### [Codificador WavPack](wavpack.md)
 
 WavPack ofrece un enfoque híbrido único para la compresión de audio, proporcionando opciones de compresión tanto sin pérdida como con pérdida de alta calidad.
 
@@ -162,7 +162,7 @@ WavPack ofrece un enfoque híbrido único para la compresión de audio, proporci
 
 WavPack es excelente para aplicaciones que requieren opciones de calidad flexibles, propósitos de archivo y sistemas donde el rendimiento de decodificación es más crítico que la velocidad de codificación.
 
-### [Codificador Windows Media Audio](wma.es.md)
+### [Codificador Windows Media Audio](wma.md)
 
 Windows Media Audio (WMA) proporciona un conjunto de códecs de audio desarrollados por Microsoft, ofreciendo una buena integración con plataformas Windows.
 

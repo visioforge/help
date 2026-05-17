@@ -333,7 +333,7 @@ MFBaseOutput
 
 ### Configuración de video heredada
 
-La clase [MPEGTSOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.MPEGTSOutput.html) hereda capacidades de codificación de video de MFBaseOutput, que incluye:
+La clase [MPEGTSOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.MPEGTSOutput.html) hereda capacidades de codificación de video de MFBaseOutput, que incluye:
 
 **Configuración de codificación de video**: A través de la propiedad `Video`, soportando:
 

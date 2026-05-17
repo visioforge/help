@@ -232,6 +232,30 @@ Para aplicaciones MAUI multiplataforma, usa el paquete [VisioForge.DotNet.Core.U
 
 Para aplicaciones Avalonia UI, el paquete [VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia) ofrece controles de video compatibles con Avalonia.
 
+## Configuración del Entorno de Desarrollo
+
+### Integración con JetBrains Rider
+
+JetBrains Rider proporciona una excelente experiencia de desarrollo para aplicaciones macOS e iOS usando los SDKs de VisioForge:
+
+1. Crea un nuevo proyecto en Rider apuntando a macOS o iOS
+2. Agrega los paquetes NuGet requeridos a través del Package Manager
+3. Configura los ajustes del proyecto para tu plataforma objetivo
+4. Agrega controles de UI e implementa la funcionalidad del SDK
+
+Para instrucciones detalladas de configuración de Rider, consulta nuestra [guía de integración de Rider](../install/rider.md).
+
+### Configuración de Visual Studio para Mac
+
+A pesar de su deprecación, Visual Studio para Mac aún funciona para desarrollar aplicaciones macOS e iOS con los SDKs de VisioForge:
+
+1. Crea un nuevo proyecto en Visual Studio para Mac
+2. Agrega paquetes NuGet a través del NuGet Package Manager
+3. Configura los ajustes de build necesarios
+4. Agrega controles de UI a la interfaz de tu aplicación
+
+Para instrucciones detalladas de Visual Studio para Mac, consulta nuestra [guía de Visual Studio para Mac](../install/visual-studio-mac.md).
+
 ## Inicialización y Limpieza del SDK
 
 Los motores X en el SDK de VisioForge requieren inicialización y limpieza explícitas para gestionar recursos correctamente:

@@ -1,6 +1,6 @@
 ---
-title: Encriptación de Video AES-256: API e Interfaces del SDK
-description: API del SDK de Encriptación de Video con IVFCryptoConfig, IVFPasswordProvider y métodos auxiliares para C++, C# y Delphi con AES-256.
+title: Encriptación de Video AES-256 — API e Interfaces del SDK
+description: API del Video Encryption SDK con IVFCryptoConfig, IVFPasswordProvider y métodos auxiliares para C++, C# y Delphi con AES-256.
 tags:
   - Video Encryption SDK
   - DirectShow
@@ -15,11 +15,11 @@ primary_api_classes:
 
 ---
 
-# SDK de Encriptación de Video - Referencia de Interfaces
+# Video Encryption SDK - Referencia de Interfaces
 
 ## Descripción General
 
-El SDK de Encriptación de Video proporciona interfaces COM para encriptar y desencriptar archivos de video MP4 con encriptación AES-256. Esta referencia cubre todas las interfaces, métodos y clases auxiliares para desarrolladores de C++, C# y Delphi.
+El Video Encryption SDK proporciona interfaces COM para encriptar y desencriptar archivos de video MP4 con encriptación AES-256. Esta referencia cubre todas las interfaces, métodos y clases auxiliares para desarrolladores de C++, C# y Delphi.
 
 ---
 ## Interfaz IVFCryptoConfig
@@ -591,6 +591,6 @@ var demuxerFilter = (IBaseFilter)Activator.CreateInstance(
 
 ---
 ## Vea También
-- [Descripción General del SDK de Encriptación de Video](index.es.md) - Características y capacidades del producto
-- [Ejemplos](examples.es.md) - Ejemplos de código completos
-- [Pack de Filtros de Codificación DirectShow](../filters-enc/index.es.md) - Codificadores compatibles
+- [Descripción General del Video Encryption SDK](index.md) - Características y capacidades del producto
+- [Ejemplos](examples.md) - Ejemplos de código completos
+- [DirectShow Encoding Filters Pack](../filters-enc/index.md) - Codificadores compatibles

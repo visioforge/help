@@ -1,6 +1,6 @@
 ---
 title: Video Fingerprinting - tipos de búsqueda vs comparación
-description: Guía de tipos de huellas Search vs Compare en el SDK Video Fingerprinting de VisioForge con diferencias técnicas y rendimiento.
+description: Guía de tipos de huellas Search vs Compare en el Video Fingerprinting SDK de VisioForge con diferencias técnicas y rendimiento.
 tags:
   - Video Fingerprinting SDK
   - .NET
@@ -23,7 +23,7 @@ primary_api_classes:
 
 ## Introducción
 
-El SDK de Video Fingerprinting de VisioForge (disponible para .NET y C++) proporciona dos tipos de huella digital distintos, cada uno optimizado para casos de uso específicos. Entender las diferencias fundamentales entre **Búsqueda** y **Comparación** de huellas digitales es crucial para lograr rendimiento y precisión óptimos en sus aplicaciones de análisis de video.
+El Video Fingerprinting SDK de VisioForge (disponible para .NET y C++) proporciona dos tipos de huella digital distintos, cada uno optimizado para casos de uso específicos. Entender las diferencias fundamentales entre **Búsqueda** y **Comparación** de huellas digitales es crucial para lograr rendimiento y precisión óptimos en sus aplicaciones de análisis de video.
 
 Esta decisión arquitectónica surge de los requisitos inherentemente diferentes de buscar fragmentos de video versus comparar videos enteros. Mientras que ambos tipos analizan contenido de video para crear firmas únicas, emplean algoritmos diferentes, estructuras de datos y estrategias de optimización adaptadas a sus propósitos específicos.
 
@@ -892,6 +892,31 @@ Rendimiento de búsqueda de fragmento (fragmento de 5 minutos en varios largos d
    }
    ```
 
+## Temas Avanzados
+
+### Conversión Entre Tipos
+
+Aunque las huellas digitales están optimizadas para sus casos de uso específicos, no se pueden convertir directamente entre tipos. Cada una debe regenerarse:
+
+```csharp
+public class FingerprintConverter
+{
+    public async Task<(VFPFingerPrint compare, VFPFingerPrint search)> 
+        GenerateBothTypes(string videoFile)
+    {
+        var source = new VFPFingerprintSource(videoFile);
+        
+        // Generar ambos tipos en paralelo
+        var compareTask = VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(source);
+        var searchTask = VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(source);
+        
+        await Task.WhenAll(compareTask, searchTask);
+        
+        return (await compareTask, await searchTask);
+    }
+}
+```
+
 ### Configuraciones Personalizadas de Huella Digital
 
 ```csharp
@@ -1099,7 +1124,7 @@ public class MigrationHelper
 
 ## Conclusión
 
-La distinción entre tipos de huella digital de búsqueda y comparación en el SDK de Video Fingerprinting de VisioForge refleja una estrategia de optimización fundamental: cada tipo está construido específicamente para su caso de uso. Las huellas digitales de comparación sobresalen en similitud de video completo con alta precisión, mientras que las huellas digitales de búsqueda proporcionan rendimiento superior para detección de fragmentos y operaciones de base de datos.
+La distinción entre tipos de huella digital de búsqueda y comparación en el Video Fingerprinting SDK de VisioForge refleja una estrategia de optimización fundamental: cada tipo está construido específicamente para su caso de uso. Las huellas digitales de comparación sobresalen en similitud de video completo con alta precisión, mientras que las huellas digitales de búsqueda proporcionan rendimiento superior para detección de fragmentos y operaciones de base de datos.
 
 Puntos clave a recordar:
 
@@ -1114,8 +1139,6 @@ Al entender estas diferencias y seguir las mejores prácticas descritas en esta 
 
 ## Recursos Adicionales
 
-- [Página de Producto SDK de Video Fingerprinting](https://www.visioforge.com/video-fingerprinting-sdk)
+- [Página de Producto Video Fingerprinting SDK](https://www.visioforge.com/video-fingerprinting-sdk)
 - [Repositorio de Muestras GitHub](https://github.com/visioforge/.Net-SDK-s-samples/)
 - [Canal de Soporte Discord](https://discord.com/invite/yvXUG56WCH)
-
-````

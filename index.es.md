@@ -414,7 +414,7 @@ tags:
             <span class="link">Explorar Documentación →</span>
         </a>
         <a href="docs/vfp/" class="vf-sdk-card">
-            <h3>SDK de Huellas de Video</h3>
+            <h3>Video Fingerprinting SDK</h3>
             <p>Crea firmas digitales únicas de contenido de video para detectar duplicados, identificar fragmentos y coincidir videos transformados.</p>
             <span class="link">Explorar Documentación →</span>
         </a>

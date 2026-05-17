@@ -270,7 +270,7 @@ var streamingSettings = new MP3EncoderSettings
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-La clase [salida de archivo MP3](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.MP3Output.html) proporciona opciones de configuración avanzadas para codificación MP3 en escenarios de captura y edición de audio video en C#.
+La clase [salida de archivo MP3](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.MP3Output.html) proporciona opciones de configuración avanzadas para codificación MP3 en escenarios de captura y edición de audio video en C#.
 
 ### Características principales
 

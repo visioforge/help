@@ -7,6 +7,8 @@ tags:
   - DirectShow
   - Capture
 
+order: 1
+sidebar_label: Video Tutorials With Sample Code
 ---
 
 # Tutoriales de Captura de Video .NET con Ejemplos de Código Fuente

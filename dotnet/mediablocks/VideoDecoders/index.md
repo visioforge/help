@@ -1230,16 +1230,31 @@ Name: `HEVCDecoderBlock`.
 
 #### Settings
 
-The `HEVCDecoderBlock` is configured using settings that implement `IHEVCDecoderSettings`. Available settings classes include:
+`HEVCDecoderBlock` can auto-select the best backend or use an explicit one. All configuration classes implement the `IHEVCDecoderSettings` interface.
 
-- `FFMPEGHEVCDecoderSettings` — software decoding via FFmpeg (CPU)
-- `NVHEVCDecoderSettings` — NVIDIA NVDEC hardware decoding
-- `QSVHEVCDecoderSettings` — Intel Quick Sync hardware decoding
-- `AMFHEVCDecoderSettings` — AMD AMF hardware decoding
-- `D3D11HEVCDecoderSettings` — D3D11/DXVA hardware decoding (Windows)
-- `VAAPIHEVCDecoderSettings` — VAAPI hardware decoding (Linux)
+```csharp
+// Auto-selection (recommended)
+var hevcDecoder = new HEVCDecoderBlock();
 
-A constructor without parameters automatically selects the best available decoder.
+// Explicit backend selection:
+// FFmpeg (CPU, software)
+var hevcDecoder = new HEVCDecoderBlock(new FFMPEGHEVCDecoderSettings());
+
+// NVIDIA NVDEC (GPU)
+var hevcDecoder = new HEVCDecoderBlock(new NVHEVCDecoderSettings());
+
+// Intel Quick Sync
+var hevcDecoder = new HEVCDecoderBlock(new QSVHEVCDecoderSettings());
+
+// AMD AMF
+var hevcDecoder = new HEVCDecoderBlock(new AMFHEVCDecoderSettings());
+
+// D3D11/DXVA (Windows only)
+var hevcDecoder = new HEVCDecoderBlock(new D3D11HEVCDecoderSettings());
+
+// VAAPI (Linux only)
+var hevcDecoder = new HEVCDecoderBlock(new VAAPIHEVCDecoderSettings());
+```
 
 #### The sample pipeline
 
@@ -1257,10 +1272,6 @@ var pipeline = new MediaBlocksPipeline();
 
 // Auto-select best available HEVC decoder
 var hevcDecoder = new HEVCDecoderBlock();
-
-// Or specify a decoder explicitly:
-// var hevcDecoder = new HEVCDecoderBlock(new FFMPEGHEVCDecoderSettings());
-// var hevcDecoder = new HEVCDecoderBlock(new NVHEVCDecoderSettings());
 
 var basicFileSource = new BasicFileSourceBlock("test_hevc.mp4");
 var reader = new MediaInfoReaderX();
@@ -1441,15 +1452,28 @@ Name: `VP8DecoderBlock`.
 
 #### Settings
 
-The `VP8DecoderBlock` is configured using settings that implement `IVP8DecoderSettings`. Available settings classes include:
+`VP8DecoderBlock` can auto-select the best backend or use an explicit one. All configuration classes implement the `IVP8DecoderSettings` interface.
 
-- `VPXVP8DecoderSettings` — VPX software decoder (recommended for CPU decoding)
-- `FFMPEGVP8DecoderSettings` — FFmpeg software decoder
-- `NVVP8DecoderSettings` — NVIDIA NVDEC hardware decoding
-- `VAAPIVP8DecoderSettings` — VAAPI hardware decoding (Linux)
-- `D3D11VP8DecoderSettings` — D3D11/DXVA hardware decoding (Windows)
+```csharp
+// Auto-selection (recommended)
+var vp8Decoder = new VP8DecoderBlock();
 
-A constructor without parameters automatically selects the best available decoder.
+// Explicit backend selection:
+// VPX (software, broad compatibility)
+var vp8Decoder = new VP8DecoderBlock(new VPXVP8DecoderSettings());
+
+// FFmpeg (software)
+var vp8Decoder = new VP8DecoderBlock(new FFMPEGVP8DecoderSettings());
+
+// NVIDIA NVDEC (hardware)
+var vp8Decoder = new VP8DecoderBlock(new NVVP8DecoderSettings());
+
+// VAAPI (Linux only, hardware)
+var vp8Decoder = new VP8DecoderBlock(new VAAPIVP8DecoderSettings());
+
+// D3D11/DXVA (Windows only, hardware)
+var vp8Decoder = new VP8DecoderBlock(new D3D11VP8DecoderSettings());
+```
 
 #### The sample pipeline
 
@@ -1467,9 +1491,6 @@ var pipeline = new MediaBlocksPipeline();
 
 // Auto-select best available VP8 decoder
 var vp8Decoder = new VP8DecoderBlock();
-
-// Or specify a decoder explicitly:
-// var vp8Decoder = new VP8DecoderBlock(new VPXVP8DecoderSettings());
 
 var basicFileSource = new BasicFileSourceBlock("test_vp8.webm");
 var reader = new MediaInfoReaderX();
@@ -1515,15 +1536,28 @@ Name: `VP9DecoderBlock`.
 
 #### Settings
 
-The `VP9DecoderBlock` is configured using settings that implement `IVP9DecoderSettings`. Available settings classes include:
+`VP9DecoderBlock` can auto-select the best backend or use an explicit one. All configuration classes implement the `IVP9DecoderSettings` interface.
 
-- `VPXVP9DecoderSettings` — VPX software decoder (recommended for CPU decoding)
-- `FFMPEGVP9DecoderSettings` — FFmpeg software decoder
-- `NVVP9DecoderSettings` — NVIDIA NVDEC hardware decoding
-- `VAAPIVP9DecoderSettings` — VAAPI hardware decoding (Linux)
-- `D3D11VP9DecoderSettings` — D3D11/DXVA hardware decoding (Windows)
+```csharp
+// Auto-selection (recommended)
+var vp9Decoder = new VP9DecoderBlock();
 
-A constructor without parameters automatically selects the best available decoder.
+// Explicit backend selection:
+// VPX (software, broad compatibility)
+var vp9Decoder = new VP9DecoderBlock(new VPXVP9DecoderSettings());
+
+// FFmpeg (software)
+var vp9Decoder = new VP9DecoderBlock(new FFMPEGVP9DecoderSettings());
+
+// NVIDIA NVDEC (hardware)
+var vp9Decoder = new VP9DecoderBlock(new NVVP9DecoderSettings());
+
+// VAAPI (Linux only, hardware)
+var vp9Decoder = new VP9DecoderBlock(new VAAPIVP9DecoderSettings());
+
+// D3D11/DXVA (Windows only, hardware)
+var vp9Decoder = new VP9DecoderBlock(new D3D11VP9DecoderSettings());
+```
 
 #### The sample pipeline
 
@@ -1541,9 +1575,6 @@ var pipeline = new MediaBlocksPipeline();
 
 // Auto-select best available VP9 decoder
 var vp9Decoder = new VP9DecoderBlock();
-
-// Or specify a decoder explicitly:
-// var vp9Decoder = new VP9DecoderBlock(new VPXVP9DecoderSettings());
 
 var basicFileSource = new BasicFileSourceBlock("test_vp9.webm");
 var reader = new MediaInfoReaderX();

@@ -55,7 +55,7 @@ Primero, necesitarás un proyecto WinForms, WPF u otro proyecto .NET. Recomendam
 4. Elige "WPF Application" o "Windows Forms Application" con el framework .NET Core/5/6+
 5. Asegúrate de seleccionar el formato de proyecto moderno estilo SDK (este es el predeterminado en versiones más recientes de Visual Studio)
 
-![Creando un nuevo proyecto WPF con formato de proyecto SDK moderno](/help/docs/dotnet/install/vs1.webp)
+![Creando un nuevo proyecto WPF con formato de proyecto SDK moderno](vs1.webp)
 
 #### Configurando el Proyecto
 
@@ -66,7 +66,7 @@ Después de crear un nuevo proyecto, necesitarás configurar los ajustes básico
 3. Selecciona tu framework objetivo (.NET 6 o más reciente recomendado para mejor rendimiento y características)
 4. Haz clic en "Create" para generar la estructura del proyecto
 
-![Seleccionando nombre del proyecto y opciones de configuración](/help/docs/dotnet/install/vs2.webp)
+![Seleccionando nombre del proyecto y opciones de configuración](vs2.webp)
 
 ### Paso 2: Acceder al Gestor de Paquetes NuGet
 
@@ -78,7 +78,7 @@ Una vez que tu proyecto esté abierto en Visual Studio:
 
 Esta interfaz proporciona funcionalidad de búsqueda y navegación de paquetes para encontrar e instalar fácilmente los componentes de VisioForge que necesitas.
 
-![Accediendo al NuGet Package Manager](/help/docs/dotnet/install/vs3.webp)
+![Accediendo al NuGet Package Manager](vs3.webp)
 
 ### Paso 3: Instalar el Paquete de UI para Tu Framework
 
@@ -88,7 +88,7 @@ Los SDKs de VisioForge ofrecen componentes de UI especializados para diferentes 
 2. Busca "VisioForge.DotNet.Core.UI"
 3. Selecciona el paquete de UI apropiado para tu tipo de proyecto de los resultados de búsqueda
 
-![Agregando el paquete de UI WPF a través de NuGet](/help/docs/dotnet/install/vs4.webp)
+![Agregando el paquete de UI WPF a través de NuGet](vs4.webp)
 
 #### Paquetes de UI Disponibles
 
@@ -108,7 +108,7 @@ Después de instalar el paquete de UI, necesitarás agregar el paquete principal
 2. Busca el SDK específico de VisioForge que necesitas (por ejemplo, "VisioForge.DotNet.VideoCapture")
 3. Haz clic en "Install" en el paquete apropiado
 
-![Instalando el paquete principal del SDK](/help/docs/dotnet/install/vs5.webp)
+![Instalando el paquete principal del SDK](vs5.webp)
 
 #### Paquetes Principales del SDK Disponibles
 
@@ -144,11 +144,11 @@ Luego agrega el control VideoView a tu diseño:
     VerticalAlignment="Top"/>
 ```
 
-![Código XAML para agregar VideoView](/help/docs/dotnet/install/vs6.webp)
+![Código XAML para agregar VideoView](vs6.webp)
 
 El control VideoView aparecerá en tu diseñador:
 
-![Control VideoView en la ventana de la aplicación](/help/docs/dotnet/install/vs7.webp)
+![Control VideoView en la ventana de la aplicación](vs7.webp)
 
 #### Para Aplicaciones WinForms
 
@@ -165,7 +165,7 @@ Dependiendo de tu implementación específica, puedes necesitar paquetes de redi
 2. Busca "VisioForge.DotNet.Core.Redist" para ver los paquetes de redistribución disponibles
 3. Instala los relevantes para tu plataforma y elección de SDK
 
-![Instalando paquetes de redistribución](/help/docs/dotnet/install/vs8.webp)
+![Instalando paquetes de redistribución](vs8.webp)
 
 Los paquetes de redistribución requeridos varían según:
 

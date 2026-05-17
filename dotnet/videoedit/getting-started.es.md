@@ -36,7 +36,7 @@ El Video Edit SDK ofrece funcionalidad potente para desarrolladores .NET que des
 
 El SDK está diseñado para funcionar sin problemas con varios entornos de desarrollo. Puedes utilizar tanto Visual Studio como JetBrains Rider para crear tu proyecto, seleccionando tu plataforma y framework de UI preferidos según tus requisitos.
 
-Para un proceso de configuración fluido, por favor consulta nuestra [guía de instalación](index.md) detallada que proporciona instrucciones para agregar los paquetes NuGet necesarios y configurar las dependencias nativas correctamente.
+Para un proceso de configuración fluido, por favor consulta nuestra [guía de instalación](../install/index.md) detallada que proporciona instrucciones para agregar los paquetes NuGet necesarios y configurar las dependencias nativas correctamente.
 
 ## Implementando la Funcionalidad Principal de Edición de Video
 
@@ -416,11 +416,11 @@ Notas:
 
 El SDK proporciona una rica colección de efectos de video que puedes aplicar para mejorar tu contenido de video. Para información detallada sobre implementación de efectos, consulta nuestra guía de [Efectos de Video](../general/video-effects/index.md).
 
-El motor `VideoEditCoreX` incluye métodos de API dedicados para agregar superposiciones de texto. Para detalles de implementación, consulta nuestra guía de [Superposiciones de Texto](code-samples/add-text-overlay.md).
+El motor `VideoEditCoreX` incluye métodos de API dedicados para agregar superposiciones de texto. Para detalles de implementación, consulta nuestra guía de [Superposiciones de Texto](./code-samples/add-text-overlay.md).
 
 ### Agregando Transiciones Suaves
 
-Para crear transiciones de aspecto profesional entre clips de video, consulta nuestro [ejemplo de código de uso de transiciones](code-samples/transition-video.md) detallado.
+Para crear transiciones de aspecto profesional entre clips de video, consulta nuestro [ejemplo de código de uso de transiciones](./code-samples/transition-video.md) detallado.
 
 ## Procesando Tu Proyecto de Video
 

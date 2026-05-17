@@ -1,6 +1,6 @@
 ---
 title: Crear un Reproductor de Video en C# .NET — Paso a Paso
-description: Tutorial paso a paso en C# para crear un reproductor de video con VisioForge Media Blocks SDK: bloques fuente, renderizado audio/video y controles.
+description: Tutorial paso a paso en C# para crear un reproductor de video con VisioForge Media Blocks SDK — bloques fuente, renderizado audio/video y controles.
 tags:
   - Media Blocks SDK
   - .NET

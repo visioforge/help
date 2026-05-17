@@ -1,6 +1,6 @@
 ---
 title: Codificador AAC DirectShow - Interfaces y Configuración
-description: Interfaces DirectShow del codificador AAC: control de tasa de bits, configuración de perfil, frecuencia de muestreo y codificación para audio profesional.
+description: Interfaces DirectShow del codificador AAC — control de tasa de bits, configuración de perfil, frecuencia de muestreo y codificación para audio profesional.
 tags:
   - DirectShow
   - C++
@@ -908,4 +908,4 @@ end;
 - [Referencia de la Interfaz del Codificador FLAC](flac.md)
 - [Referencia de Códecs de Audio](../codecs-reference.md)
 - [Interfaz del Multiplexor MP4](mp4-muxer.md)
-- [Descripción General del Paquete de Filtros de Codificación](../index.md)
+- [Descripción General del DirectShow Encoding Filters Pack](../index.md)

@@ -1,133 +1,44 @@
 ---
-title: Visión por Computadora y OpenCV en Video Capture SDK .Net
-description: Integración de OpenCV y detección de objetos con Video Capture SDK .Net. Construye apps de visión artificial y machine learning avanzadas.
+title: Visión por computadora en C# — rostros, objetos, conteo
+description: Detección de rostros, reconocimiento de objetos, conteo de vehículos y seguimiento de peatones en video en vivo con Video Capture SDK en C#.
+sidebar_label: Visión por computadora
+order: 3
 tags:
   - Video Capture SDK
   - .NET
 
 ---
 
-# Visión por Computadora - Video Capture SDK .Net
+# Integración de visión por computadora para aplicaciones .NET
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Esta sección cubre las capacidades de visión por computadora disponibles en Video Capture SDK .Net, incluyendo integración con OpenCV y detección de objetos.
+## Resumen
 
-## Características
+Nuestro SDK proporciona potentes capacidades integradas de visión por computadora que permiten a los desarrolladores enriquecer sus aplicaciones con funciones inteligentes de análisis de video. Estas funcionalidades permiten que tu software detecte y siga automáticamente diversos elementos en flujos de video, incluyendo rostros humanos, objetos generales, vehículos y peatones en tiempo real.
 
-- Integración con OpenCV
-- Detección de códigos de barras y QR
-- Detección de rostros
-- Detección de movimiento
-- Procesamiento de imágenes en tiempo real
+## Módulos clave de visión por computadora
 
-## Detección de Códigos de Barras
+El SDK ofrece múltiples módulos de detección especializados para abordar distintos casos de uso:
 
-El SDK puede detectar y decodificar varios tipos de códigos:
+* **PedestrianDetector** — Sigue y cuenta personas que se mueven en los fotogramas de video
+* **ObjectDetector** — Identifica y clasifica objetos comunes dentro del contenido de video
+* **FaceDetector** — Localiza y analiza rostros humanos, soportando aplicaciones de seguridad y UX
+* **CarCounter** — Monitorea y cuantifica el tráfico de vehículos en escenarios de transporte
 
-- Códigos QR
-- Códigos de barras 1D (UPC, EAN, Code 128, etc.)
-- Data Matrix
-- PDF417
+Cada módulo está optimizado para rendimiento y precisión, permitiendo un procesamiento fiable en tiempo real incluso en configuraciones de hardware estándar.
 
-```csharp
-var pipeline = new MediaBlocksPipeline();
+## Recursos de implementación
 
-var videoSource = new SystemVideoSourceBlock(videoSettings);
+Los desarrolladores pueden acceder a ejemplos completos y funcionales en nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/Computer%20Vision). Estos ejemplos demuestran patrones de implementación prácticos y mejores prácticas para integrar capacidades de visión por computadora en aplicaciones .NET.
 
-// Bloque detector de códigos de barras
-var barcodeDetector = new BarcodeDetectorBlock(new BarcodeDetectorSettings
-{
-    DetectionInterval = TimeSpan.FromMilliseconds(500)
-});
+## Funcionalidades avanzadas
 
-barcodeDetector.OnBarcodeDetected += (sender, e) =>
-{
-    Console.WriteLine($"Código detectado: {e.Type} - {e.Value}");
-};
+* [Detección de rostros](face-detection.md) — Conoce el reconocimiento facial, la detección de puntos de referencia y el análisis de emociones
+* Integración con aprendizaje automático
+* Soporte para modelos de detección personalizados
+* Técnicas de optimización multihilo
 
-pipeline.Connect(videoSource.Output, barcodeDetector.Input);
+---
 
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(barcodeDetector.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-## Detección de Rostros
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var videoSource = new SystemVideoSourceBlock(videoSettings);
-
-// Bloque detector de rostros
-var faceDetector = new FaceDetectorBlock(new FaceDetectorSettings
-{
-    DetectionInterval = TimeSpan.FromMilliseconds(100),
-    MinFaceSize = 50
-});
-
-faceDetector.OnFaceDetected += (sender, e) =>
-{
-    foreach (var face in e.Faces)
-    {
-        Console.WriteLine($"Rostro en: ({face.X}, {face.Y}) - {face.Width}x{face.Height}");
-    }
-};
-
-pipeline.Connect(videoSource.Output, faceDetector.Input);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(faceDetector.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-## Integración con OpenCV
-
-Para procesamiento personalizado, puede integrar OpenCV directamente:
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var videoSource = new SystemVideoSourceBlock(videoSettings);
-
-// Capturador de muestras para acceder a los fotogramas
-var sampleGrabber = new VideoSampleGrabberBlock();
-
-sampleGrabber.OnVideoFrameBuffer += (sender, e) =>
-{
-    // Convertir a Mat de OpenCV
-    using var mat = new Mat(e.Height, e.Width, MatType.CV_8UC3);
-    Marshal.Copy(e.Data, 0, mat.Data, e.Data.Length);
-    
-    // Procesar con OpenCV
-    Cv2.CvtColor(mat, mat, ColorConversionCodes.BGR2GRAY);
-    Cv2.GaussianBlur(mat, mat, new Size(5, 5), 0);
-    
-    // Detectar bordes
-    using var edges = new Mat();
-    Cv2.Canny(mat, edges, 100, 200);
-    
-    // Usar resultado...
-};
-
-pipeline.Connect(videoSource.Output, sampleGrabber.Input);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(sampleGrabber.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-## Detección de Movimiento
-
-Ver la sección dedicada de [Detección de Movimiento](../motion-detection/index.md) para más detalles.
-
-## Consideraciones de Rendimiento
-
-1. **Frecuencia de detección**: No procese cada fotograma
-2. **Resolución**: Considere reducir resolución para detección
-3. **GPU**: Use aceleración por hardware cuando esté disponible
-4. **Multi-threading**: Procese en hilos separados para no bloquear el pipeline
+Para más ejemplos de código y guía de implementación, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

@@ -1,6 +1,6 @@
 ---
 title: UDP Video Streaming with MPEG-TS Container in C# .NET
-description: Stream H.264/HEVC video over UDP in C# / .NET: multicast, point-to-point, low-latency configs. Full send/receive code samples with bitrate tuning.
+description: Stream H.264/HEVC video over UDP in C# / .NET — multicast, point-to-point, low-latency configs. Full send/receive code samples with bitrate tuning.
 tags:
   - Video Capture SDK
   - Media Blocks SDK

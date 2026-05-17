@@ -1,5 +1,5 @@
 ---
-title: Sony SNC: URLs RTSP y conexión de cámaras IP en C# .NET
+title: Sony SNC — URLs RTSP y conexión de cámaras IP en C# .NET
 description: Conecta cámaras IP Sony SNC en C# .NET con patrones de URL RTSP y ejemplos de código para modelos CH, DH, EB, CX e IPELA antiguos.
 tags:
   - Video Capture SDK

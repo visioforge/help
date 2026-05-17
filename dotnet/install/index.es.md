@@ -20,6 +20,8 @@ primary_api_classes:
   - VideoCaptureCore
   - VideoCaptureCoreX
 
+order: 21
+sidebar_label: Instalación
 ---
 
 # Guía de Instalación de SDKs .NET de VisioForge

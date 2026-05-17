@@ -40,7 +40,7 @@ Comienza lanzando JetBrains Rider y creando un nuevo proyecto. Para este tutoria
 4. Configura los ajustes de tu proyecto, asegurándote de seleccionar el formato de proyecto moderno
 5. Haz clic en "Create" para generar la estructura de tu proyecto
 
-![Pantalla de creación de proyecto en Rider](/help/docs/dotnet/install/rider1.webp)
+![Pantalla de creación de proyecto en Rider](rider1.webp)
 
 ## Agregando Paquetes NuGet Requeridos
 
@@ -53,7 +53,7 @@ Cada SDK de VisioForge tiene un paquete principal correspondiente que proporcion
 3. En el NuGet Package Manager, busca el paquete de VisioForge que corresponda a tu SDK deseado
 4. Selecciona la última versión estable y haz clic en "Install"
 
-![Agregando el paquete principal del SDK a través de NuGet](/help/docs/dotnet/install/rider2.webp)
+![Agregando el paquete principal del SDK a través de NuGet](rider2.webp)
 
 ### Paquetes Principales del SDK Disponibles
 

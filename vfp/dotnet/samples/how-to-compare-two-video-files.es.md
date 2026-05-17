@@ -21,7 +21,7 @@ primary_api_classes:
 
 ## Introducción a las Huellas de Video
 
-El SDK de Huellas de Video proporciona herramientas potentes para comparar archivos de video con precisión usando tecnología avanzada de huellas digitales. Este enfoque analiza fotogramas de video y muestras de audio para generar firmas únicas que representan el contenido. Estas firmas pueden luego compararse para determinar la similitud entre diferentes archivos de video.
+El Video Fingerprinting SDK proporciona herramientas potentes para comparar archivos de video con precisión usando tecnología avanzada de huellas digitales. Este enfoque analiza fotogramas de video y muestras de audio para generar firmas únicas que representan el contenido. Estas firmas pueden luego compararse para determinar la similitud entre diferentes archivos de video.
 
 ## Entendiendo el Proceso de Comparación
 

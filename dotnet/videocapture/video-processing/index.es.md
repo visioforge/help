@@ -1,170 +1,67 @@
 ---
-title: Efectos y procesamiento de video en Video Capture SDK .Net
-description: Guía de procesamiento de video incluyendo redimensionado, recorte, efectos y transformaciones con Video Capture SDK .Net.
+title: Efectos de video en tiempo real — recorte y overlay en C#
+description: Redimensionado, recorte, rotación, overlays de texto y filtros de color en tiempo real durante la captura con Video Capture SDK en C#.
+sidebar_label: Procesamiento y efectos de video
+order: 13
 tags:
   - Video Capture SDK
   - .NET
 
 ---
 
-# Procesamiento de Video - Video Capture SDK .Net
+# Procesamiento y efectos de video para desarrolladores .NET
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Esta sección cubre las capacidades de procesamiento de video disponibles en Video Capture SDK .Net, incluyendo transformaciones, efectos y filtros.
+## Transforma tu contenido de video con potentes herramientas de procesamiento
 
-## Capacidades de Procesamiento
+Nuestro SDK .NET ofrece a los desarrolladores un completo kit de herramientas para modificar y mejorar los flujos de video durante el proceso de captura. Con nuestra robusta API, puedes implementar manipulaciones de video de calidad profesional con un mínimo de código.
 
-### Transformaciones Básicas
+## Características y capacidades clave
 
-- **Redimensionar** - Cambiar resolución de video
-- **Recortar** - Eliminar bordes del video
-- **Rotar** - Rotar 90°, 180° o 270°
-- **Voltear** - Voltear horizontal o verticalmente
+### Redimensionado y recorte dinámicos
 
-### Ajustes de Color
+Controla con precisión las dimensiones de tu video para cumplir cualquier requisito. Nuestro SDK te permite:
 
-- Brillo
-- Contraste
-- Saturación
-- Tono
-- Gamma
+- Ajustar la resolución sobre la marcha para optimizar para distintas plataformas
+- Recortar áreas no deseadas del fotograma de video
+- Mantener las relaciones de aspecto o crear dimensiones personalizadas
+- Escalar el contenido proporcionalmente para diferentes tamaños de pantalla
 
-### Efectos
+### Sistema de overlays profesional
 
-- Superposición de texto
-- Superposición de imagen/logo
-- Marca de tiempo
-- Efectos de desenfoque
+Mejora tus videos con overlays de contenido enriquecido:
 
-## Guías Disponibles
+- **Overlays de texto**: añade subtítulos, títulos, marcas de tiempo o cualquier elemento textual personalizable con control preciso de fuentes, colores, posicionamiento y animaciones
+- **Overlays de imagen**: incorpora logos, marcas de agua o gráficos informativos con soporte de transparencia
+- **Integración de GIF animados**: incrusta elementos animados que aportan movimiento e interés visual a las escenas estáticas
 
-### Redimensionar y Recortar
+### Manipulación avanzada de color
 
-Aprenda cómo cambiar el tamaño y recortar el video.
+Ajusta con precisión las características visuales de tu video con nuestras herramientas de ajuste de color:
 
-[Ver guía →](resize-crop.md)
+- Modifica brillo, contraste y gamma para una exposición perfecta
+- Ajusta tono y saturación para crear ambientes específicos o corregir problemas de color
+- Aplica ajustes de balance de color para resultados de aspecto profesional
+- Crea perfiles de gradación de color personalizados para un estilo visual coherente
 
-### Efectos de Video
+### Biblioteca de efectos creativos
 
-Aplicar efectos visuales al video.
+Transforma metraje ordinario con nuestra colección de efectos en tiempo real:
 
-[Ver guía →](video-effects.md)
+- Aplica filtros sepia, escala de grises o noir para expresión artística
+- Usa efectos ojo de pez, distorsión de barril u otros efectos de perspectiva
+- Implementa modificaciones de desenfoque, enfoque u otras basadas en el foco
+- Crea efectos de imagen en imagen y composición personalizada
 
-### Mezcla de Video
+## Documentación detallada
 
-Combinar múltiples fuentes de video.
+Explora nuestras guías completas para implementar funcionalidades específicas:
 
-[Ver guía →](video-mixing.md)
+- [Guía de implementación de efectos de video](video-effects.md)
+- [Técnicas de redimensionado y recorte](resize-crop.md)
+- [Mezcla de video multi-flujo](video-mixing.md)
 
-## Ejemplo: Redimensionar Video
+## Recursos para desarrolladores
 
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var videoSource = new SystemVideoSourceBlock(videoSettings);
-
-// Redimensionar a 1280x720
-var resizeBlock = new VideoResizeBlock(new VideoResizeSettings 
-{ 
-    Width = 1280, 
-    Height = 720 
-});
-
-pipeline.Connect(videoSource.Output, resizeBlock.Input);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(resizeBlock.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-## Ejemplo: Ajustes de Color
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var videoSource = new SystemVideoSourceBlock(videoSettings);
-
-// Ajustar brillo y contraste
-var balanceBlock = new VideoBalanceBlock(new VideoBalanceSettings 
-{ 
-    Brightness = 0.1,   // +10% brillo
-    Contrast = 1.2,     // +20% contraste
-    Saturation = 1.1    // +10% saturación
-});
-
-pipeline.Connect(videoSource.Output, balanceBlock.Input);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(balanceBlock.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-## Ejemplo: Superposición de Texto
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var videoSource = new SystemVideoSourceBlock(videoSettings);
-
-// Añadir texto sobre el video
-var textOverlay = new TextOverlayBlock(new TextOverlaySettings 
-{ 
-    Text = "Mi Video",
-    FontFamily = "Arial",
-    FontSize = 32,
-    FontColor = SKColors.White,
-    X = 10,
-    Y = 10
-});
-
-pipeline.Connect(videoSource.Output, textOverlay.Input);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(textOverlay.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-## Cadena de Procesamiento
-
-Puede encadenar múltiples bloques de procesamiento:
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var videoSource = new SystemVideoSourceBlock(videoSettings);
-
-// 1. Redimensionar
-var resize = new VideoResizeBlock(new VideoResizeSettings { Width = 1280, Height = 720 });
-
-// 2. Ajustar colores
-var balance = new VideoBalanceBlock(new VideoBalanceSettings { Brightness = 0.1 });
-
-// 3. Añadir logo
-var imageOverlay = new ImageOverlayBlock(new ImageOverlaySettings 
-{ 
-    ImagePath = "logo.png",
-    X = 10,
-    Y = 10,
-    Alpha = 0.8
-});
-
-// Conectar en cadena
-pipeline.Connect(videoSource.Output, resize.Input);
-pipeline.Connect(resize.Output, balance.Input);
-pipeline.Connect(balance.Output, imageOverlay.Input);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(imageOverlay.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-## Consideraciones de Rendimiento
-
-1. **Orden de operaciones**: Redimensione antes de aplicar efectos costosos
-2. **Aceleración GPU**: Use bloques acelerados por GPU cuando estén disponibles
-3. **Resolución**: Procesar video de menor resolución es más rápido
+Para ejemplos prácticos de implementación y fragmentos de código, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) con numerosas aplicaciones y proyectos de ejemplo.

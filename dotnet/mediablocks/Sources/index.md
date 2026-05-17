@@ -1,6 +1,6 @@
 ---
 title: Media Blocks SDK Sources — Webcam, File, RTSP, Screen in C#
-description: Connect any input to a Media Blocks pipeline: webcams, video files, RTSP, RTMP, SRT, NDI, Decklink, screen, virtual. C# / .NET device enumeration API.
+description: Connect any input to a Media Blocks pipeline — webcams, video files, RTSP, RTMP, SRT, NDI, Decklink, screen, virtual. C# / .NET device enumeration API.
 sidebar_label: Sources
 tags:
   - Media Blocks SDK

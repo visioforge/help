@@ -15,6 +15,7 @@ primary_api_classes:
   - MediaBlocksPipeline
   - CVHandDetectBlock
   - CVDewarpBlock
+sidebar_label: OpenCV
 ---
 
 # Bloques OpenCV - VisioForge Media Blocks SDK .Net

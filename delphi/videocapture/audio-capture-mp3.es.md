@@ -50,10 +50,17 @@ VideoCapture1.Audio_LAME_Encoding_Quality := tbLameEncodingQuality.Position;
 
 ```cpp
 // C++ MFC
-m_VideoCapture.Audio_LAME_CBR_Bitrate = _ttoi(m_cbLameCBRBitrate.GetItemData(m_cbLameCBRBitrate.GetCurSel()));
-m_VideoCapture.Audio_LAME_VBR_Min_Bitrate = _ttoi(m_cbLameVBRMin.GetItemData(m_cbLameVBRMin.GetCurSel()));
-m_VideoCapture.Audio_LAME_VBR_Max_Bitrate = _ttoi(m_cbLameVBRMax.GetItemData(m_cbLameVBRMax.GetCurSel()));
-m_VideoCapture.Audio_LAME_Sample_Rate = _ttoi(m_cbLameSampleRate.GetItemData(m_cbLameSampleRate.GetCurSel()));
+// CComboBox::GetCurSel devuelve CB_ERR (-1) si no hay selección — se omite la
+// asignación en ese caso para mantener el valor configurado previamente.
+int nIndex;
+nIndex = m_cbLameCBRBitrate.GetCurSel();
+if (nIndex != CB_ERR) m_VideoCapture.Audio_LAME_CBR_Bitrate = (int)m_cbLameCBRBitrate.GetItemData(nIndex);
+nIndex = m_cbLameVBRMin.GetCurSel();
+if (nIndex != CB_ERR) m_VideoCapture.Audio_LAME_VBR_Min_Bitrate = (int)m_cbLameVBRMin.GetItemData(nIndex);
+nIndex = m_cbLameVBRMax.GetCurSel();
+if (nIndex != CB_ERR) m_VideoCapture.Audio_LAME_VBR_Max_Bitrate = (int)m_cbLameVBRMax.GetItemData(nIndex);
+nIndex = m_cbLameSampleRate.GetCurSel();
+if (nIndex != CB_ERR) m_VideoCapture.Audio_LAME_Sample_Rate = (int)m_cbLameSampleRate.GetItemData(nIndex);
 m_VideoCapture.Audio_LAME_VBR_Quality = m_tbLameVBRQuality.GetPos();
 m_VideoCapture.Audio_LAME_Encoding_Quality = m_tbLameEncodingQuality.GetPos();
 ```

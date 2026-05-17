@@ -1,5 +1,5 @@
 ---
-title: Codificador FLAC DirectShow: interfaz y configuración
+title: Codificador FLAC DirectShow — interfaz y configuración
 description: Interfaz DirectShow del codificador FLAC con niveles de codificación, configuración LPC, tamaños de bloque y compresión para codificación de audio sin pérdida.
 tags:
   - DirectShow
@@ -1014,3 +1014,48 @@ end;
 1. El codificador no puede procesar lo suficientemente rápido (desbordamiento de búfer)
 2. Tamaño de bloque incompatible con la frecuencia de muestreo
 3. Problemas de rendimiento del hardware
+
+### Problemas de Codificación Estéreo
+
+**Síntoma**: El audio estéreo suena incorrecto o mono
+
+**Comprobar**:
+- Verifique que la entrada sea realmente estéreo (2 canales)
+- La codificación mid-side solo funciona con entrada estéreo
+- Compruebe si la opción mid-side adaptativa está habilitada para obtener mejores resultados
+- Verifique el formato de audio del grafo de filtros (use GraphEdit para inspeccionarlo)
+
+---
+## Notas Técnicas
+
+### Proceso de Codificación FLAC
+
+La codificación FLAC implica varias etapas:
+1. **Particionado**: el audio se divide en bloques
+2. **Predicción**: el análisis LPC predice los valores de las muestras
+3. **Codificación Mid-Side**: descorrelación estéreo opcional (para audio de 2 canales)
+4. **Codificación de Residuos**: la codificación Rice comprime los errores de predicción
+5. **Ensamblaje de Tramas**: los bloques se ensamblan en tramas FLAC
+
+### Características de Rendimiento
+
+**Uso de CPU por Configuración**:
+- Nivel de codificación: ~10% de incremento por nivel
+- Orden LPC: ~5% de incremento por cada 4 órdenes
+- Búsqueda exhaustiva: 200-400% de incremento
+- Codificación Mid-Side: ~2-5% de incremento
+
+**Requisitos de Memoria**:
+- Mínimo: ~512 KB de memoria de trabajo
+- Los bloques más grandes requieren más memoria
+- Sin dependencia significativa de la duración del audio
+
+### Compatibilidad
+
+Los archivos FLAC codificados con cualquier combinación de ajustes son compatibles con todos los decodificadores FLAC. Las configuraciones de mayor compresión solo afectan al tiempo de codificación y al tamaño del archivo, no a la compatibilidad del decodificador ni a la calidad de reproducción.
+
+---
+## Ver también
+- [Interfaz del codificador LAME MP3](lame.md)
+- [Referencia de códecs de audio](../codecs-reference.md)
+- [Resumen del Encoding Filters Pack](../index.md)

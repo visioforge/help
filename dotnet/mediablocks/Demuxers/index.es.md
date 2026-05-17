@@ -17,6 +17,7 @@ primary_api_classes:
   - UniversalSourceBlock
   - MediaFileInfo
 
+sidebar_label: Demuxers
 ---
 
 # Bloques Demuxer - VisioForge Media Blocks SDK .Net

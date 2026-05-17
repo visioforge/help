@@ -66,7 +66,7 @@ Comencemos creando un nuevo proyecto macOS en Visual Studio para Mac. Esto servi
 
 Esto crea una aplicación macOS básica con la estructura de proyecto estándar requerida para la integración del SDK de VisioForge.
 
-![Creando un nuevo proyecto macOS en Visual Studio para Mac](/help/docs/dotnet/install/vsmac1.webp)
+![Creando un nuevo proyecto macOS en Visual Studio para Mac](vsmac1.webp)
 
 ## Instalando Paquetes del SDK de VisioForge
 
@@ -94,7 +94,7 @@ Paquetes NuGet disponibles:
 
 El proceso de instalación resolverá automáticamente las dependencias y agregará referencias a tu proyecto.
 
-![Instalando el paquete principal del SDK vía NuGet](/help/docs/dotnet/install/vsmac2.webp)
+![Instalando el paquete principal del SDK vía NuGet](vsmac2.webp)
 
 ### Controles de UI para Apple
 
@@ -104,7 +104,7 @@ Para aplicaciones macOS e iOS, los controles específicos de Apple (`VideoView`,
 using VisioForge.Core.UI.Apple;
 ```
 
-![Agregando el paquete principal — la UI de Apple viaja dentro de él](/help/docs/dotnet/install/vsmac3.webp)
+![Agregando el paquete principal — la UI de Apple viaja dentro de él](vsmac3.webp)
 
 ## Integrando Capacidades de Vista Previa de Video
 
@@ -124,9 +124,9 @@ El control VideoView es el componente principal para mostrar contenido de video 
 
 Este Custom View servirá como contenedor para el control VideoView de VisioForge, que se agregará programáticamente.
 
-![Agregando un Custom View en XCode Interface Builder](/help/docs/dotnet/install/vsmac4.webp)
+![Agregando un Custom View en XCode Interface Builder](vsmac4.webp)
 
-![Estableciendo propiedades para el Custom View](/help/docs/dotnet/install/vsmac5.webp)
+![Estableciendo propiedades para el Custom View](vsmac5.webp)
 
 ### Inicializando el VideoView en Código
 

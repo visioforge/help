@@ -1,6 +1,6 @@
 ---
 title: Fuentes Media Blocks SDK — Webcam, Archivo, RTSP, Pantalla
-description: Conecta cualquier entrada a un pipeline Media Blocks: webcams, archivos, RTSP, RTMP, SRT, NDI, Decklink, pantalla, virtual. API enumeración C# / .NET.
+description: Conecta cualquier entrada a un pipeline Media Blocks — webcams, archivos, RTSP, RTMP, SRT, NDI, Decklink, pantalla, virtual. API enumeración C# / .NET.
 sidebar_label: Fuentes
 tags:
   - Media Blocks SDK
@@ -40,6 +40,7 @@ Los bloques fuente proporcionan datos al pipeline y son típicamente los primero
 
 ## Bloques Fuente de Hardware
 
+<a id="system-video-source"></a>
 ### Fuente de Video del Sistema
 
 SystemVideoSourceBlock se usa para acceder a webcams y otros dispositivos de captura de video.
@@ -116,6 +117,7 @@ Puede especificar una API para usar durante la enumeración de dispositivos (con
 
 Windows, macOS, Linux, iOS, Android.
 
+<a id="system-audio-source"></a>
 ### Fuente de Audio del Sistema
 
 SystemAudioSourceBlock se usa para acceder a mics y otros dispositivos de captura de audio.
@@ -270,7 +272,42 @@ Windows, Linux.
 
 ### Bloque Fuente Spinnaker/FLIR
 
-La fuente Spinnaker/FLIR soporta conexión a cámaras FLIR usando SDK Spinnaker.
+La fuente Spinnaker/FLIR soporta conexión a cámaras FLIR usando el SDK Spinnaker.
+
+Para usar el `SpinnakerSourceBlock`, primero debe enumerar las cámaras Spinnaker disponibles y a continuación configurar la fuente mediante `SpinnakerSourceSettings`.
+
+#### Enumerar dispositivos y `SpinnakerCameraInfo`
+
+Use `DeviceEnumerator.Shared.SpinnakerSourcesAsync()` para obtener una lista de objetos `SpinnakerCameraInfo`. Cada `SpinnakerCameraInfo` proporciona detalles sobre una cámara detectada:
+
+- `Name` (string): identificador único o nombre de la cámara. A menudo es un número de serie o una combinación modelo-serie.
+- `NetworkInterfaceName` (string): nombre de la interfaz de red si es una cámara GigE.
+- `Vendor` (string): nombre del fabricante.
+- `Model` (string): modelo de cámara.
+- `SerialNumber` (string): número de serie de la cámara.
+- `FirmwareVersion` (string): versión de firmware de la cámara.
+- `SensorSize` (`Size`): dimensiones del sensor (Width, Height). Es posible que deba llamar a un método como `ReadInfo()` sobre `SpinnakerCameraInfo` (si está disponible o lo implica la enumeración) para rellenar este valor.
+- `WidthMax` (int): ancho máximo del sensor.
+- `HeightMax` (int): alto máximo del sensor.
+
+Seleccione un `SpinnakerCameraInfo` de la lista para inicializar `SpinnakerSourceSettings`.
+
+#### Configuración
+
+`SpinnakerSourceBlock` se configura mediante `SpinnakerSourceSettings`. Propiedades clave:
+
+- `Name` (string): nombre de la cámara (de `SpinnakerCameraInfo.Name`) que se usará.
+- `Region` (`Rect`): define la región de interés (ROI) a capturar del sensor. Establezca X, Y, Width, Height.
+- `FrameRate` (`VideoFrameRate`): tasa de fotogramas deseada.
+- `PixelFormat` (`SpinnakerPixelFormat` enum): formato de píxel deseado (p. ej., `RGB`, `Mono8`, `BayerRG8`). Predeterminado `RGB`.
+- `OffsetX` (int): desplazamiento X del ROI en el sensor (predeterminado 0). A menudo forma parte implícita de `Region.X`.
+- `OffsetY` (int): desplazamiento Y del ROI en el sensor (predeterminado 0). A menudo forma parte implícita de `Region.Y`.
+- `ExposureMinimum` (int): tiempo mínimo de exposición para el algoritmo de exposición automática (microsegundos, p. ej., 10-29999999). Predeterminado 0 (auto/valor por defecto de la cámara).
+- `ExposureMaximum` (int): tiempo máximo de exposición para el algoritmo de exposición automática (microsegundos). Predeterminado 0 (auto/valor por defecto de la cámara).
+- `ShutterType` (`SpinnakerSourceShutterType` enum): tipo de obturador (p. ej., `Rolling`, `Global`). Predeterminado `Rolling`.
+
+Constructor:
+`SpinnakerSourceSettings(string deviceName, Rect region, VideoFrameRate frameRate, SpinnakerPixelFormat pixelFormat = SpinnakerPixelFormat.RGB)`
 
 #### Información del bloque
 
@@ -282,10 +319,7 @@ Nombre: SpinnakerSourceBlock.
 
 #### El pipeline de muestra
 
-```mermaid
-graph LR;
-    SpinnakerSourceBlock-->VideoRendererBlock;
-```
+`SpinnakerSourceBlock:Output` &#8594;  `VideoRendererBlock`
 
 #### Código de muestra
 
@@ -302,6 +336,10 @@ pipeline.Connect(source.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 ```
+
+#### Requisitos
+
+- SDK Spinnaker instalado.
 
 #### Plataformas
 
@@ -367,6 +405,14 @@ pipeline.Connect(alliedVisionSource.Output, videoRenderer.Input);
 // Iniciar pipeline
 await pipeline.StartAsync();
 ```
+
+#### Requisitos
+
+- El SDK Vimba de Allied Vision debe estar instalado.
+
+#### Aplicaciones de muestra
+
+- Consulte las muestras que demuestran integración con cámaras industriales si están disponibles.
 
 #### Plataformas
 
@@ -2425,6 +2471,151 @@ await pipeline.StartAsync();
 #### Plataformas
 
 Windows, macOS, Linux, iOS, Android.
+
+### Bloque Fuente Push H264
+
+El bloque Fuente Push H264 permite enviar datos H.264 codificados sin procesar directamente a un pipeline de Media Blocks para decodificación y renderizado. Envuelve un elemento `appsrc` de GStreamer configurado para entrada en byte-stream H.264.
+
+Este bloque está diseñado para escenarios en los que recibe datos H.264 codificados sin procesar desde una fuente externa (como un callback RTSP, un transporte de red personalizado o un lector de archivos) y necesita decodificarlos y mostrarlos. Gestiona automáticamente:
+
+- **Conversión AVC a byte-stream**: RTSP y muchas otras fuentes entregan H.264 en formato AVC (unidades NAL con prefijo de longitud de 4 bytes). El bloque convierte automáticamente a formato Annex B byte-stream (start codes) que espera el parser H.264 de GStreamer.
+- **Rebase de PTS**: las marcas de tiempo de presentación de fuentes externas (p. ej., cámaras RTSP) están en la base de tiempo de la fuente, que puede estar lejos de cero. El bloque rebasa todas las marcas de tiempo respecto al primer cuadro para que el reloj del pipeline empiece cerca de cero, evitando retrasos en la visualización.
+
+#### Información del bloque
+
+Nombre: H264PushSourceBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Salida de video | H.264 codificado (byte-stream) | 1 |
+
+#### Propiedades
+
+- `DoTimestamp` (bool): cuando es `true`, el appsrc autogenera marcas de tiempo usando el reloj del pipeline (latencia mínima, pero rompe la sincronía A/V). Cuando es `false` (predeterminado), se usa el PTS proporcionado a `PushData()` tras el rebase. Debe configurarse antes de iniciar el pipeline.
+
+#### Métodos
+
+- `PushData(byte[] data, int length, TimeSpan timestamp)`: envía datos H.264 codificados con una marca de tiempo de presentación. Gestiona la conversión AVC a byte-stream y el rebase de PTS automáticamente. Devuelve el estado `FlowReturn`.
+- `PushData(byte[] data, int length)`: envía datos H.264 sin marca de tiempo (usa `TimeSpan.Zero`).
+- `SendEOS()`: señala el fin del stream al pipeline.
+
+#### El pipeline de muestra
+
+El pipeline típico conecta H264PushSourceBlock a través de un parser y un decodificador a un renderizador de video:
+
+```mermaid
+graph LR;
+    H264PushSourceBlock-->H264ParseBlock;
+    H264ParseBlock-->H264DecoderBlock;
+    H264DecoderBlock-->VideoRendererBlock;
+```
+
+#### Arquitectura de dos pipelines con callback RTSP
+
+Un caso de uso habitual es el patrón de dos pipelines: un pipeline captura H.264 sin procesar de una cámara RTSP y un segundo pipeline lo decodifica y lo muestra. Esto da acceso a los bytes codificados sin procesar entre la captura y la decodificación.
+
+```mermaid
+graph LR;
+    subgraph "Pipeline 1 - Grabber"
+        RTSPRAWSourceBlock-->BufferSinkBlock;
+    end
+    subgraph "Pipeline 2 - Player"
+        H264PushSourceBlock-->H264ParseBlock;
+        H264ParseBlock-->H264DecoderBlock;
+        H264DecoderBlock-->VideoRendererBlock;
+    end
+    BufferSinkBlock-.PushData callback.->H264PushSourceBlock;
+```
+
+#### Código de muestra
+
+```csharp
+// === Pipeline 2: Player (decodificar y renderizar) ===
+var playerPipeline = new MediaBlocksPipeline();
+
+// Crear la fuente push H264 — aquí se inyectarán los datos H.264 sin procesar
+var h264Source = new H264PushSourceBlock();
+
+// Crear parser, decodificador y renderizador
+var h264Parser = new H264ParseBlock();
+var h264Decoder = new H264DecoderBlock(new FFMPEGH264DecoderSettings());
+var videoRenderer = new VideoRendererBlock(playerPipeline, VideoView1);
+
+// Conectar: push source -> parser -> decoder -> renderer
+playerPipeline.Connect(h264Source.Output, h264Parser.Input);
+playerPipeline.Connect(h264Parser.Output, h264Decoder.Input);
+playerPipeline.Connect(h264Decoder.Output, videoRenderer.Input);
+
+// Preload del pipeline player (crea elementos pero queda en estado PAUSED)
+await playerPipeline.StartAsync(onlyPreload: true);
+
+// === Pipeline 1: Grabber (captura RTSP) ===
+var grabberPipeline = new MediaBlocksPipeline();
+
+var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(
+    new Uri("rtsp://admin:password@192.168.1.64:554/stream"),
+    "admin", "password");
+rtspSettings.Latency = 50;
+
+var rtspSource = new RTSPRAWSourceBlock(rtspSettings);
+var bufferSink = new BufferSinkBlock();
+
+// Cablear el callback para enviar datos H.264 sin procesar al pipeline player
+bufferSink.OnDataFrameBuffer += (sender, args) =>
+{
+    // Copiar datos H.264 sin procesar desde memoria no administrada
+    var data = new byte[args.Size];
+    System.Runtime.InteropServices.Marshal.Copy(args.Data, data, 0, args.Size);
+
+    // Enviar al pipeline player (la conversión AVC a byte-stream es automática)
+    h264Source.PushData(data, args.Size, args.Timestamp);
+};
+
+grabberPipeline.Connect(rtspSource.Output, bufferSink.Input);
+
+// Iniciar el grabber (inicia la conexión RTSP y la entrega de cuadros H.264)
+await grabberPipeline.StartAsync();
+
+// Esperar a que lleguen datos iniciales y luego reanudar el player
+await Task.Delay(1000);
+await playerPipeline.ResumeAsync();
+```
+
+#### Secuencia de inicio del pipeline
+
+El orden de arranque es crítico para streaming en vivo con dos pipelines:
+
+1. **Crear y conectar** los bloques del pipeline player.
+2. **Preload** del pipeline player (`StartAsync(onlyPreload: true)`) — transiciona a PAUSED, crea los elementos GStreamer y enlaza los pads.
+3. **Crear e iniciar** el pipeline grabber — se establece la conexión RTSP, llegan los cuadros H.264 por el callback.
+4. **Enviar datos** al pipeline player pausado — `h264parse` acumula los sets de parámetros SPS/PPS.
+5. **Reanudar** el pipeline player (`ResumeAsync()`) — transiciona a PLAYING, el decodificador empieza a producir cuadros.
+
+#### Formato AVC frente a byte-stream
+
+Las fuentes RTSP suelen entregar H.264 en formato AVC, donde cada unidad NAL lleva un prefijo de longitud big-endian de 4 bytes:
+
+```text
+AVC:         [00 00 00 17][datos NAL...][00 00 1C CC][datos NAL...]
+              length=23                  length=7372
+```
+
+`h264parse` de GStreamer espera el formato Annex B byte-stream con start codes:
+
+```text
+Byte-stream: [00 00 00 01][datos NAL...][00 00 00 01][datos NAL...]
+              start code                 start code
+```
+
+El método `PushData()` convierte AVC a byte-stream automáticamente y en el sitio (ambos usan prefijos de 4 bytes, así que no se necesita reasignar el búfer). Los datos ya en formato byte-stream se detectan y se pasan sin cambios.
+
+#### Aplicaciones de muestra
+
+- [RTSP RAW Camera H264 Callback Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20RAW%20Camera%20H264%20Callback%20Demo)
+
+#### Plataformas
+
+Windows, macOS, Linux.
 
 ## Bloques Fuente de Plataforma Apple
 

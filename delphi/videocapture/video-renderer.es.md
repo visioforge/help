@@ -1,5 +1,5 @@
 ---
-title: Selección de Video Renderer en Delphi: EVR, VMR9 y GDI
+title: Selección de Video Renderer en Delphi — EVR, VMR9 y GDI
 description: Seleccione renderizadores de video óptimos en Delphi - Video Renderer, VMR9, EVR con ejemplos de código para rendimiento y aceleración de hardware en Windows.
 tags:
   - All-in-One Media Framework

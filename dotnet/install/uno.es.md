@@ -217,11 +217,11 @@ Para instrucciones completas de despliegue incluyendo:
 - Archivo de proyecto de ejemplo completo
 - Solución de problemas
 
-Consulte la [Guía de Despliegue de Uno Platform](../deployment-x/uno.es.md).
+Consulte la [Guía de Despliegue de Uno Platform](../deployment-x/uno.md).
 
 ## Recursos Adicionales
 
-- [Despliegue en Windows](../deployment-x/Windows.es.md)
-- [Despliegue en Android](../deployment-x/Android.es.md)
-- [Despliegue en iOS](../deployment-x/iOS.es.md)
-- [Despliegue en macOS](../deployment-x/macOS.es.md)
+- [Despliegue en Windows](../deployment-x/Windows.md)
+- [Despliegue en Android](../deployment-x/Android.md)
+- [Despliegue en iOS](../deployment-x/iOS.md)
+- [Despliegue en macOS](../deployment-x/macOS.md)

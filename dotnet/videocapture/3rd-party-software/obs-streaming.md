@@ -82,7 +82,7 @@ This minimal implementation will send the camera feed to the virtual device that
 1. Launch OBS Studio
 2. In your scene, click the "+" button under Sources
 3. Select "Video Capture Device" from the list
-4. Name your source (e.g., "SDK Virtual Camera")
+4. Name your source (e.g., "Virtual Camera SDK")
 5. In the Properties dialog, select "VisioForge Virtual Camera" from the Device dropdown
 6. Configure resolution and FPS to match your SDK settings
 7. Click "OK" to add the source

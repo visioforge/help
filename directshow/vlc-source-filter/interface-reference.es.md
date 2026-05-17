@@ -16,7 +16,7 @@ primary_api_classes:
 
 ---
 
-# Referencia de Interfaces del Filtro Fuente VLC
+# Referencia de Interfaces del VLC Source DirectShow Filter
 
 ## Descripción General
 
@@ -788,6 +788,6 @@ end.
 
 ## Vea También
 
-- [Descripción General del Filtro Fuente VLC](index.es.md)
+- [Descripción General del VLC Source DirectShow Filter](index.md)
 - [Documentación de Línea de Comandos VLC](https://www.videolan.org/doc/)
-- [Ejemplos de Código](examples.es.md)
+- [Ejemplos de Código](examples.md)

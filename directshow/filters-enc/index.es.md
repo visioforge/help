@@ -7,23 +7,25 @@ tags:
   - Windows
   - Streaming
 
+order: 8
+sidebar_label: DirectShow Encoding Filters Pack
 ---
 
-# Paquete de Filtros de Codificación DirectShow
+# DirectShow Encoding Filters Pack
 
 ## Introducción
 
-El Paquete de Filtros de Codificación DirectShow proporciona un potente conjunto de componentes de codificación de medios diseñados específicamente para desarrolladores de software que construyen aplicaciones multimedia profesionales. Este kit de herramientas permite la integración fluida de capacidades de codificación de alto rendimiento para streams de audio y video en una amplia variedad de formatos populares.
+El DirectShow Encoding Filters Pack proporciona un potente conjunto de componentes de codificación de medios diseñados específicamente para desarrolladores de software que construyen aplicaciones multimedia profesionales. Este kit de herramientas permite la integración fluida de capacidades de codificación de alto rendimiento para streams de audio y video en una amplia variedad de formatos populares.
 
 ---
 
 ## Instalación
 
-Antes de usar los ejemplos de código e integrar los filtros en su aplicación, primero debe instalar el Paquete de Filtros de Codificación DirectShow desde la [página del producto](https://www.visioforge.com/encoding-filters-pack).
+Antes de usar los ejemplos de código e integrar los filtros en su aplicación, primero debe instalar el DirectShow Encoding Filters Pack desde la [página del producto](https://www.visioforge.com/encoding-filters-pack).
 
 **Pasos de Instalación**:
 
-1. Descargue el instalador del Paquete de Filtros de Codificación desde la página del producto
+1. Descargue el instalador del Encoding Filters Pack desde la página del producto
 2. Ejecute el instalador con privilegios administrativos
 3. El instalador registrará todos los filtros de codificación y muxing
 4. Las aplicaciones de ejemplo y código fuente estarán disponibles en el directorio de instalación

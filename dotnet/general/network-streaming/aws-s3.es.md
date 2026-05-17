@@ -123,6 +123,27 @@ Crea una nueva instancia de la clase `AWSS3Output` con la configuración especif
 - `audioEnc`: Configuración del codificador de audio
 - `sink`: Configuración de sink de medios
 
+## Métodos
+
+### Gestión de archivos
+
+```csharp
+public string GetFilename()
+```
+
+```csharp
+public void SetFilename(string filename)
+```
+
+Estos métodos gestionan el URI del objeto S3:
+
+- `GetFilename()`: Devuelve el URI S3 actual
+- `SetFilename(string filename)`: Establece el URI S3 para la salida
+
+### Soporte de codificadores
+
+Todos los codificadores son soportados. Asegúrese de que la configuración del codificador sea compatible con la configuración del sink.
+
 ## Ejemplo de uso
 
 ```csharp

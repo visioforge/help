@@ -1,6 +1,6 @@
 ---
 title: Biblioteca C++ de Video Fingerprinting y Documentación API
-description: Implementación nativa C++ del SDK Video Fingerprinting con alto rendimiento y soporte multiplataforma para huellas de video robustas.
+description: Implementación nativa C++ del Video Fingerprinting SDK con alto rendimiento y soporte multiplataforma para huellas de video robustas.
 sidebar_label: Documentación SDK C++
 order: 50
 tags:
@@ -22,7 +22,7 @@ primary_api_classes:
 
 ## Descripción General
 
-El SDK Video Fingerprinting para C++ proporciona una implementación nativa con acceso directo a capacidades de análisis de video y generación de huellas digitales de alto rendimiento. Este SDK es ideal para aplicaciones que requieren:
+El Video Fingerprinting SDK para C++ proporciona una implementación nativa con acceso directo a capacidades de análisis de video y generación de huellas digitales de alto rendimiento. Este SDK es ideal para aplicaciones que requieren:
 
 - Máximo rendimiento y sobrecarga mínima
 - Integración directa con aplicaciones nativas
@@ -134,6 +134,8 @@ fp.DataSize = len;
 VFPSearch_Clear(pData);
 ```
 
+**Importante:** El SDK proporciona únicamente las primitivas de bajo nivel `_Init` / `_Process` / `_Build` / `_Search` / `_Compare`. La aplicación host es responsable de decodificar los fotogramas de video (FFmpeg, GStreamer, DirectShow, etc.) y alimentarlos fotograma a fotograma a `*_Process`.
+
 ## Patrones de Integración
 
 ### Procesamiento por Lotes
@@ -199,3 +201,9 @@ void OnStreamEnd()
 VFPSetLicenseKey(L"su-clave-de-licencia");
 // o para char estrecho: VFPSetLicenseKeyA("su-clave-de-licencia");
 ```
+
+## Siguientes Pasos
+
+1. [Instalación y configuración](getting-started.md) - Comienza con el SDK C++
+2. [Revisa la API](api.md) - Comprende las clases y métodos disponibles
+3. [Explora ejemplos](getting-started.md#su-primera-aplicacion) - Ver código funcional

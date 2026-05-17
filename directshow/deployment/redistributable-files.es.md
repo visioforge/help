@@ -142,7 +142,7 @@ SuApp\
 - **Sin versión x64** - El Filtro VLC Source es solo 32-bit
 
 ---
-## Paquete de Filtros de Procesamiento
+## Processing Filters Pack
 ### Filtros Principales
 #### x86 (32-bit)
 **Procesamiento de Video**:
@@ -174,7 +174,7 @@ SuApp\
 - `VisioForge_MFP64.dll`
 - `VisioForge_MFPX64.dll`
 ### Filtros LAV (Opcional pero Recomendado)
-Los Filtros LAV proporcionan soporte adicional de códecs y se incluyen con el Paquete de Filtros de Procesamiento.
+Los Filtros LAV proporcionan soporte adicional de códecs y se incluyen con el Processing Filters Pack.
 #### x86
 **Filtros LAV**:
 - `LAVSplitter.ax` - Splitter de fuente
@@ -196,12 +196,45 @@ Los Filtros LAV proporcionan soporte adicional de códecs y se incluyen con el P
 - `COPYING` - Licencia de Filtros LAV (LGPL)
 #### x64
 Mismos archivos que x86 pero versiones de 64-bit.
+### Estructura del Directorio de Instalación
+```
+YourApp\
+├── Filters\
+│   ├── VisioForge_Video_Effects_Pro.ax
+│   ├── VisioForge_Video_Effects_Pro_x64.ax
+│   ├── VisioForge_Video_Mixer.ax
+│   ├── VisioForge_Video_Mixer_x64.ax
+│   ├── VisioForge_Audio_Enhancer.ax
+│   ├── VisioForge_Audio_Enhancer_x64.ax
+│   ├── VisioForge_BaseFilters.ax
+│   ├── VisioForge_BaseFilters_x64.ax
+│   ├── VisioForge_MFP.dll
+│   ├── VisioForge_MFP64.dll
+│   ├── VisioForge_MFPX.dll
+│   └── VisioForge_MFPX64.dll
+└── LAV\
+    ├── x86\
+    │   ├── LAVSplitter.ax
+    │   ├── LAVVideo.ax
+    │   ├── LAVAudio.ax
+    │   ├── avcodec-lav-58.dll
+    │   └── ... (otros archivos LAV)
+    └── x64\
+        ├── LAVSplitter.ax
+        ├── LAVVideo.ax
+        └── ... (otros archivos LAV)
+```
+### Archivos de Licencia
+- `license.rtf` - Licencia del SDK VisioForge
+- `VisioForge_AsyncEx_license.htm` - Licencia del filtro Async
+- `VisioForge_Audio_Effects_4_note.txt` - Notas de efectos de audio
+- `COPYING` - Licencia de Filtros LAV (en el directorio LAV)
 ### Tamaño Total
 - **Solo Filtros Principales**: ~20-30 MB
 - **Con Filtros LAV**: ~80-100 MB
 ---
 
-## Paquete de Filtros de Codificación
+## Encoding Filters Pack
 
 ### Filtros Principales
 
@@ -298,6 +331,72 @@ Mismos archivos que x86 pero versiones de 64-bit.
 - `libmfxsw64.dll`
 - `libmfxxp64.dll`
 
+### Codificador FFMPEG
+
+El Codificador FFMPEG tiene su propio conjunto de bibliotecas FFmpeg:
+
+#### x86
+
+**Filtro**:
+- `VisioForge_FFMPEG_Encoder.ax`
+
+**Bibliotecas FFmpeg**:
+- `avcodec-58.dll`
+- `avdevice-58.dll`
+- `avfilter-7.dll`
+- `avformat-58.dll`
+- `avutil-56.dll`
+- `swresample-3.dll`
+- `swscale-5.dll`
+- `ffmedia.dll` - Wrapper FFmpeg de VisioForge
+
+**Información**:
+- `vfffmpeg_info.txt` - Información de compilación de FFmpeg
+
+#### x64
+
+Mismos archivos que x86 pero versiones de 64-bit.
+
+### Estructura del Directorio de Instalación
+
+```
+YourApp\
+├── Filters\
+│   ├── VisioForge_NVENC.ax
+│   ├── VisioForge_NVENC_x64.ax
+│   ├── VisioForge_H264_Encoder.ax
+│   ├── VisioForge_H264_Encoder_x64.ax
+│   ├── VisioForge_AAC_Encoder.ax
+│   ├── VisioForge_AAC_Encoder_x64.ax
+│   ├── VisioForge_MP4_Muxer.ax
+│   ├── VisioForge_MP4_Muxer_x64.ax
+│   ├── VisioForge_BaseFilters.ax
+│   ├── VisioForge_BaseFilters_x64.ax
+│   ├── VisioForge_MFP.dll
+│   ├── VisioForge_MFP64.dll
+│   ├── VisioForge_MFPX.dll
+│   ├── VisioForge_MFPX64.dll
+│   ├── VisioForge_MFT.dll
+│   ├── VisioForge_MFT64.dll
+│   ├── libmfxsw32.dll        (QuickSync)
+│   ├── libmfxsw64.dll        (QuickSync)
+│   └── ... (otros filtros)
+└── FFMPEG\
+    ├── x86\
+    │   ├── VisioForge_FFMPEG_Encoder.ax
+    │   ├── avcodec-58.dll
+    │   ├── avformat-58.dll
+    │   ├── ffmedia.dll
+    │   └── ... (otros DLL de FFmpeg)
+    └── x64\
+        ├── VisioForge_FFMPEG_Encoder_x64.ax
+        └── ... (DLL de FFmpeg)
+```
+
+### Archivos de Licencia
+
+- `license.rtf` - Licencia del SDK
+
 ### Tamaño Total
 
 - **Solo Filtros Principales**: ~40-60 MB
@@ -310,7 +409,7 @@ Mismos archivos que x86 pero versiones de 64-bit.
 - **QuickSync**: Requiere CPU Intel con gráficos integrados (4ta gen+)
 
 ---
-## SDK de Cámara Virtual
+## Virtual Camera SDK
 ### Archivos Principales
 #### x86 (32-bit)
 **Drivers de Cámara Virtual**:
@@ -342,6 +441,29 @@ Mismos archivos que x86 pero versiones de 64-bit.
 **Bibliotecas Auxiliares** (requeridas):
 - `VisioForge_MFP64.dll`
 - `VisioForge_MFPX64.dll`
+### Estructura del Directorio de Instalación
+```
+YourApp\
+├── VisioForge_Virtual_Camera.ax
+├── VisioForge_Virtual_Camera_x64.ax
+├── VisioForge_Virtual_Audio_Card.ax
+├── VisioForge_Virtual_Audio_Card_x64.ax
+├── VisioForge_Push_Video_Source.ax
+├── VisioForge_Push_Video_Source_x64.ax
+├── VisioForge_Screen_Capture_DD.ax
+├── VisioForge_Screen_Capture_DD_x64.ax
+├── VisioForge_Video_Effects_Pro.ax
+├── VisioForge_Video_Effects_Pro_x64.ax
+├── VisioForge_BaseFilters.ax
+├── VisioForge_BaseFilters_x64.ax
+├── VisioForge_MFP.dll
+├── VisioForge_MFP64.dll
+├── VisioForge_MFPX.dll
+├── VisioForge_MFPX64.dll
+└── vcomp140.dll
+```
+### Archivos de Licencia
+- `license.rtf` - Licencia del SDK
 ### Tamaño Total
 ~15-20 MB
 ### Notas Importantes
@@ -397,8 +519,8 @@ Para cada SDK, debe incluir:
 5. ✅ **Archivo de Licencia** - license.rtf (mostrar en instalador)
 6. ✅ **VC++ Redistributable** - Incluir o descargar en instalador
 ### Archivos Opcionales
-- 📄 **Filtros LAV** - Soporte de códecs mejorado (Paquete de Filtros de Procesamiento)
-- 📄 **DLLs QuickSync** - Codificación hardware Intel (Paquete de Filtros de Codificación)
+- 📄 **Filtros LAV** - Soporte de códecs mejorado (Processing Filters Pack)
+- 📄 **DLLs QuickSync** - Codificación hardware Intel (Encoding Filters Pack)
 - 📄 **Locale VLC** - Soporte multi-idioma (VLC Source)
 - 📄 **Utilidad de Registro** - reg_special.exe (alternativa a regsvr32)
 ### Consideraciones de Arquitectura

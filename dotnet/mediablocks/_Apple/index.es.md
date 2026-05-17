@@ -1,6 +1,7 @@
 ---
-title: Bloques de Plataforma Apple en C# .NET — iOS, macOS
+title: Bloques de plataforma Apple en C# .NET — iOS, macOS
 description: Cree aplicaciones multimedia para iOS y macOS con codificación ProRes, aceleración VideoToolbox y bloques de audio nativos con VisioForge Media Blocks SDK.
+sidebar_label: Apple Platform
 tags:
   - Media Blocks SDK
   - .NET
@@ -18,335 +19,49 @@ primary_api_classes:
 
 ---
 
-# Bloques de Plataforma Apple - VisioForge Media Blocks SDK .Net
+# Bloques de plataforma Apple - VisioForge Media Blocks SDK .Net
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Los bloques de plataforma Apple proporcionan funcionalidad específica para dispositivos iOS y macOS. Estos bloques aprovechan los frameworks nativos de Apple como AVFoundation y VideoToolbox para proporcionar captura y procesamiento de medios optimizados.
+Esta sección cubre los MediaBlocks específicamente optimizados para plataformas Apple (iOS, macOS, tvOS).
 
-## Bloques de Fuente iOS
+## Bloques disponibles
 
-### Bloque de Fuente de Video iOS
+### Fuentes de audio
 
-El `IOSVideoSourceBlock` proporciona captura de video desde la cámara del dispositivo en plataformas iOS.
+- **OSXAudioSourceBlock**: captura de audio en macOS mediante Core Audio
+  - Consulte la [documentación de fuentes de audio](../Sources/index.md#system-audio-source)
+  
+- **IOSAudioSourceBlock**: captura de audio en iOS
+  - Consulte la [documentación de fuentes de audio](../Sources/index.md#system-audio-source)
 
-#### Información del bloque
+### Salidas de audio
 
-Nombre: IOSVideoSourceBlock.
+- **OSXAudioSinkBlock**: reproducción de audio en macOS
+  - Consulte la [documentación de renderizado de audio](../AudioRendering/index.md)
+  
+- **IOSAudioSinkBlock**: reproducción de audio en iOS
+  - Consulte la [documentación de renderizado de audio](../AudioRendering/index.md)
 
-| Dirección del pin | Tipo de medio | Cantidad de pines |
-|---------------|:------------------:|:----------:|
-| Salida video | Video sin comprimir | 1 |
+### Fuentes de video
 
-#### Configuración
+- **IOSVideoSourceBlock**: captura desde la cámara de iOS
+  - Consulte la [documentación de fuentes de video](../Sources/index.md#system-video-source)
 
-`IOSVideoSourceBlock` se configura usando `VideoCaptureDeviceSourceSettings` que hereda de configuraciones genéricas de captura de video.
+### Codificadores de video
 
-Propiedades clave:
-- `Device` (`VideoCaptureDeviceInfo`): El dispositivo de cámara a usar.
-- `Format` (`VideoCaptureDeviceFormat`): El formato de video seleccionado incluyendo resolución y tasa de fotogramas.
+- **AppleProResEncoderBlock**: códec profesional de video Apple ProRes
+  - Consulte la [documentación del codificador ProRes](../VideoEncoders/index.md#apple-prores-encoder)
 
-#### Enumerar dispositivos disponibles
+### Procesamiento de video
 
-```csharp
-var devices = await DeviceEnumerator.Shared.VideoSourcesAsync();
-foreach (var device in devices)
-{
-    Console.WriteLine($"Dispositivo: {device.Name}");
-    foreach (var format in device.VideoFormats)
-    {
-        Console.WriteLine($"  Formato: {format.Width}x{format.Height}");
-    }
-}
-```
+- **MetalVideoCompositorBlock**: compositor de video multi-entrada acelerado por GPU mediante Apple Metal
 
-#### Código de ejemplo
-
-```csharp
-// crear pipeline
-var pipeline = new MediaBlocksPipeline();
-
-// seleccionar el primer dispositivo de video disponible
-var device = (await DeviceEnumerator.Shared.VideoSourcesAsync())[0];
-VideoCaptureDeviceSourceSettings videoSourceSettings = null;
-if (device != null)
-{
-    var formatItem = device.VideoFormats[0];
-    if (formatItem != null)
-    {
-        videoSourceSettings = new VideoCaptureDeviceSourceSettings(device)
-        {
-            Format = formatItem.ToFormat()
-        };
-        videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
-    }
-}
-
-// crear bloque de fuente de video iOS
-var videoSource = new IOSVideoSourceBlock(videoSourceSettings);
-
-// crear bloque de renderizado de video
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-
-// conectar bloques
-pipeline.Connect(videoSource.Output, videoRenderer.Input);
-
-// iniciar pipeline
-await pipeline.StartAsync();
-```
-
-#### Plataformas
-
-iOS (no disponible en macOS Catalyst)
-
----
-
-### Bloque de Fuente de Pantalla iOS
-
-El `IOSScreenSourceBlock` permite capturar la pantalla del dispositivo iOS. Esto es útil para aplicaciones de grabación de pantalla.
-
-#### Información del bloque
-
-Nombre: IOSScreenSourceBlock.
-
-| Dirección del pin | Tipo de medio | Cantidad de pines |
-|---------------|:------------------:|:----------:|
-| Salida video | Video sin comprimir | 1 |
-
-#### Configuración
-
-`IOSScreenSourceBlock` se configura usando `IOSScreenSourceSettings`.
-
-Propiedades clave:
-- `FrameRate` (`VideoFrameRate`): La tasa de fotogramas de captura deseada.
-
-#### Código de ejemplo
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-// Configurar fuente de pantalla iOS
-var screenSettings = new IOSScreenSourceSettings
-{
-    FrameRate = new VideoFrameRate(30)
-};
-
-var screenSource = new IOSScreenSourceBlock(screenSettings);
-
-// Codificador H264
-var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
-pipeline.Connect(screenSource.Output, h264Encoder.Input);
-
-// Sink MP4
-var mp4Sink = new MP4SinkBlock(new MP4SinkSettings("screen_recording.mp4"));
-pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
-
-await pipeline.StartAsync();
-```
-
-#### Plataformas
-
-iOS
-
----
-
-## Bloques de Fuente macOS
-
-### Bloque de Fuente de Audio macOS
-
-El `OSXAudioSourceBlock` proporciona captura de audio desde dispositivos de entrada en plataformas macOS.
-
-#### Información del bloque
-
-Nombre: OSXAudioSourceBlock.
-
-| Dirección del pin | Tipo de medio | Cantidad de pines |
-|---------------|:------------------:|:----------:|
-| Salida audio | Audio sin comprimir | 1 |
-
-#### Configuración
-
-`OSXAudioSourceBlock` se configura usando `OSXAudioSourceSettings`.
-
-Propiedades clave:
-- `DeviceID` (int): ID del dispositivo de audio.
-- `Format` (`AudioCaptureDeviceFormat`): Formato de audio (tasa de muestreo, canales, etc.).
-
-#### Enumerar dispositivos disponibles
-
-```csharp
-var devices = await DeviceEnumerator.Shared.AudioSourcesAsync();
-foreach (var device in devices)
-{
-    Console.WriteLine($"Dispositivo de Audio: {device.Name}, ID: {device.DeviceID}");
-    foreach (var format in device.Formats)
-    {
-        Console.WriteLine($"  Formato: {format.SampleRate}Hz, {format.Channels} canales");
-    }
-}
-```
-
-#### Código de ejemplo
-
-```csharp
-// crear pipeline
-var pipeline = new MediaBlocksPipeline();
-
-// seleccionar el primer dispositivo de audio disponible
-var devices = await DeviceEnumerator.Shared.AudioSourcesAsync();
-var device = devices.Length > 0 ? devices[0] : null;
-OSXAudioSourceSettings audioSourceSettings = null;
-if (device != null)
-{
-    var formatItem = device.Formats[0];
-    if (formatItem != null)
-    {
-        audioSourceSettings = new OSXAudioSourceSettings(device.DeviceID, formatItem);
-    }
-}
-
-// crear bloque de fuente de audio macOS
-var audioSource = new OSXAudioSourceBlock(audioSourceSettings);
-
-// crear bloque de renderizado de audio
-var audioRenderer = new AudioRendererBlock();
-
-// conectar bloques
-pipeline.Connect(audioSource.Output, audioRenderer.Input);
-
-// iniciar pipeline
-await pipeline.StartAsync();
-```
-
-#### Plataformas
-
-macOS (no disponible en iOS)
-
----
-
-### Bloque de Fuente de Video macOS
-
-El `OSXVideoSourceBlock` proporciona captura de video desde cámaras y otros dispositivos de captura de video en plataformas macOS.
-
-#### Información del bloque
-
-Nombre: OSXVideoSourceBlock.
-
-| Dirección del pin | Tipo de medio | Cantidad de pines |
-|---------------|:------------------:|:----------:|
-| Salida video | Video sin comprimir | 1 |
-
-#### Configuración
-
-`OSXVideoSourceBlock` utiliza las configuraciones estándar de `VideoCaptureDeviceSourceSettings`.
-
-#### Código de ejemplo
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-// Enumerar y seleccionar dispositivo de video
-var devices = await DeviceEnumerator.Shared.VideoSourcesAsync();
-var device = devices[0];
-
-var videoSettings = new VideoCaptureDeviceSourceSettings(device)
-{
-    Format = device.VideoFormats[0].ToFormat()
-};
-videoSettings.Format.FrameRate = device.VideoFormats[0].FrameRateList[0];
-
-var videoSource = new OSXVideoSourceBlock(videoSettings);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(videoSource.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-#### Plataformas
-
-macOS
-
----
-
-## Codificadores Específicos de Apple
-
-### Bloque Codificador Apple ProRes
-
-El `AppleProResEncoderBlock` codifica video usando el códec Apple ProRes, que es ampliamente usado en flujos de trabajo de producción de video profesional.
-
-#### Información del bloque
-
-Nombre: AppleProResEncoderBlock.
-
-| Dirección del pin | Tipo de medio | Cantidad de pines |
-| --- | :---: | :---: |
-| Entrada | Video sin comprimir | 1 |
-| Salida | ProRes | 1 |
-
-#### Configuración
-
-`AppleProResEncoderBlock` se configura usando `AppleProResEncoderSettings`.
-
-Propiedades clave:
-- `Quality` (`double`): Valor 0.0–1.0 que controla el compromiso calidad/bitrate (mayor = mejor calidad).
-- `Bitrate` (`int`): Bitrate objetivo en bits por segundo (si prefieres control por bitrate en lugar de calidad).
-- `MaxKeyframeInterval` / `MaxKeyFrameIntervalDuration`: Controlan la frecuencia de keyframes.
-- `AllowFrameReordering` (`bool`): Habilita reordenamiento de frames.
-- `PreserveAlpha` (`bool`): Conserva el canal alfa cuando la fuente lo tiene (ProRes 4444).
-- `Realtime` (`bool`): Optimiza para codificación en tiempo real.
-
-#### Pipeline de ejemplo
-
-```mermaid
-graph LR;
-    UniversalSourceBlock-->AppleProResEncoderBlock;
-    AppleProResEncoderBlock-->MOVSinkBlock;
-```
-
-#### Código de ejemplo
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
-
-// Configurar codificador ProRes para alta calidad (Quality es un double 0.0-1.0)
-var proResSettings = new AppleProResEncoderSettings
-{
-    Quality = 0.8
-};
-
-var proResEncoder = new AppleProResEncoderBlock(proResSettings);
-pipeline.Connect(fileSource.VideoOutput, proResEncoder.Input);
-
-// Guardar a archivo MOV
-var movSink = new MOVSinkBlock(new MOVSinkSettings(@"output.mov"));
-pipeline.Connect(proResEncoder.Output, movSink.CreateNewInput(MediaBlockPadMediaType.Video));
-
-await pipeline.StartAsync();
-```
-
-#### Disponibilidad
-
-Puede verificar si el codificador Apple ProRes está disponible usando:
-
-```csharp
-bool available = AppleProResEncoderBlock.IsAvailable();
-```
-
-#### Plataformas
-
-macOS, iOS.
-
----
-
-## Procesamiento de Video de Plataforma Apple
+## Metal Video Compositor
 
 ### Metal Video Compositor Block
 
-El `MetalVideoCompositorBlock` combina múltiples flujos de video en tiempo real usando el framework Metal de Apple con aceleración GPU. Cada flujo de entrada tiene posición, tamaño, z-order, alfa y operador de mezcla configurables. El bloque produce una única salida de video BGRA.
+El `MetalVideoCompositorBlock` compone varios flujos de video en tiempo real usando el framework de GPU Apple Metal. Cada flujo de entrada tiene posición, tamaño, z-order, alfa y operador de mezcla configurables. El bloque produce una única salida de video BGRA.
 
 #### Información del bloque
 
@@ -354,8 +69,8 @@ Nombre: MetalVideoCompositorBlock.
 
 | Dirección del pin | Tipo de medio | Cantidad de pines |
 | --- | :---: | :---: |
-| Entrada video | Video sin comprimir | N (uno por flujo) |
-| Salida video | Video sin comprimir | 1 |
+| Entrada de video | Video sin comprimir | N (uno por flujo) |
+| Salida de video | Video sin comprimir | 1 |
 
 #### Configuración
 
@@ -367,9 +82,9 @@ El bloque acepta una instancia de `MetalVideoCompositorSettings`:
 | `Height` | `int` | 1080 | Alto de salida en píxeles |
 | `FrameRate` | `VideoFrameRate` | FPS_30 | Tasa de fotogramas de salida |
 | `Background` | `VideoMixerBackground` | Transparent | Modo de fondo |
-| `Streams` | `List<VideoMixerStream>` | Vacío | Configuraciones de flujos de entrada |
+| `Streams` | `List<VideoMixerStream>` | Vacío | Configuraciones de los flujos de entrada |
 
-Cada flujo de entrada se configura con un `MetalVideoMixerStream`:
+Cada flujo de entrada es un `MetalVideoMixerStream`:
 
 | Propiedad | Tipo | Predeterminado | Descripción |
 | --- | --- | :---: | --- |
@@ -377,9 +92,9 @@ Cada flujo de entrada se configura con un `MetalVideoMixerStream`:
 | `ZOrder` | `uint` | requerido | Orden de apilamiento (mayor = al frente) |
 | `Alpha` | `double` | 1.0 | Opacidad (0.0 transparente – 1.0 opaco) |
 | `BlendOperator` | `MetalVideoMixerBlendOperator` | Over | Modo de mezcla: Source, Over o Add |
-| `KeepAspectRatio` | `bool` | false | Preservar relación de aspecto de la fuente |
+| `KeepAspectRatio` | `bool` | false | Preservar la relación de aspecto de la fuente durante el escalado |
 
-#### El pipeline de muestra
+#### El pipeline de ejemplo
 
 ```mermaid
 graph LR;
@@ -393,7 +108,7 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-// Configurar compositor: 1920x1080 @ 30fps
+// Configurar el compositor: 1920x1080 @ 30 fps
 var settings = new MetalVideoCompositorSettings(1920, 1080, VideoFrameRate.FPS_30);
 
 // Primer flujo: mitad izquierda de la pantalla
@@ -402,22 +117,22 @@ settings.AddStream(new MetalVideoMixerStream(
     zorder: 0));
 
 // Segundo flujo: mitad derecha de la pantalla
-// El ctor de Rect es (left, top, right, bottom). Para la mitad derecha de un
-// canvas 1920x1080 use right=1920 y bottom=1080 — la forma anterior
-// (960, 0, 960, 1080) tiene left==right y produce un cuadro de ancho cero.
+// El constructor de Rect es (left, top, right, bottom). Para la mitad derecha de
+// un canvas 1920x1080 use right=1920 y bottom=1080 — la forma anterior
+// (960, 0, 960, 1080) tiene left==right y produce una caja de ancho cero.
 settings.AddStream(new MetalVideoMixerStream(
     rectangle: new Rect(960, 0, 1920, 1080),
     zorder: 1));
 
 var compositor = new MetalVideoCompositorBlock(settings);
 
-// Renderizar salida compuesta
+// Renderizar la salida compuesta
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(compositor.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 
-// Tiempo real: desvanecer el flujo 0
+// En tiempo real: desvanecer el flujo 0 durante 2 segundos
 compositor.StartFadeOut(settings.Streams[0].ID, TimeSpan.FromSeconds(2));
 ```
 
@@ -433,117 +148,82 @@ Devuelve `true` si el plugin GStreamer `vfmetalcompositor` está disponible en e
 
 macOS, iOS.
 
----
+## Requisitos de plataforma
 
-## Decodificadores Específicos de Apple
+- **iOS**: iOS 12.0 o superior
+- **macOS**: macOS 10.13 o superior
+- **tvOS**: tvOS 12.0 o superior
 
-### Bloque Decodificador VideoToolbox H.264
+## Características
 
-El decodificador VideoToolbox H.264 utiliza la aceleración por hardware de Apple para decodificación de video de alto rendimiento.
+- Integración nativa con los frameworks de Apple (AVFoundation, Core Audio, Core Video)
+- Procesamiento acelerado por hardware en Apple Silicon y Macs Intel
+- Optimizado para bajo consumo en dispositivos móviles
+- Soporte para codificación ProRes de alta calidad
+- Integración con los permisos de cámara y micrófono de iOS
 
-#### Información del bloque
+## Código de ejemplo
 
-| Dirección del pin | Tipo de medio | Cantidad de pines |
-| --- | :---: | :---: |
-| Entrada video | Video codificado H.264 | 1 |
-| Salida video | Video sin comprimir | 1 |
-
-#### Código de ejemplo
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video_h264.mp4")));
-
-// El SDK selecciona automáticamente VideoToolbox cuando está disponible en plataformas Apple
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(fileSource.VideoOutput, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-#### Plataformas
-
-macOS, iOS.
-
----
-
-### Bloque Decodificador VideoToolbox HEVC
-
-El decodificador VideoToolbox HEVC proporciona decodificación acelerada por hardware para contenido H.265/HEVC.
-
-#### Información del bloque
-
-| Dirección del pin | Tipo de medio | Cantidad de pines |
-| --- | :---: | :---: |
-| Entrada video | Video codificado H.265/HEVC | 1 |
-| Salida video | Video sin comprimir | 1 |
-
-#### Plataformas
-
-macOS, iOS (en dispositivos con soporte de hardware HEVC).
-
----
-
-## Renderizadores Específicos de Apple
-
-### Renderizador de Video Metal
-
-En plataformas Apple, el SDK puede usar Metal para renderizado de video de alto rendimiento. Esto se configura automáticamente cuando está disponible.
-
-#### Características
-
-- Renderizado acelerado por GPU usando el framework Metal de Apple
-- Soporte para HDR y amplia gama de colores
-- Escalado y transformación eficientes
-- Bajo consumo de batería en dispositivos móviles
-
-#### Uso
-
-El renderizador Metal se selecciona automáticamente cuando usa `VideoRendererBlock` en plataformas Apple compatibles.
+### Captura desde la cámara de iOS
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
+// Fuente de video iOS
 var videoSource = new IOSVideoSourceBlock(videoSettings);
 
-// El renderizador usará Metal automáticamente cuando esté disponible
+// Procesar y mostrar
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(videoSource.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 ```
 
-#### Plataformas
+### Captura y reproducción de audio en macOS
 
-macOS 10.11+, iOS 8+.
+```csharp
+var pipeline = new MediaBlocksPipeline();
 
----
+// Fuente de audio macOS
+var audioSource = new OSXAudioSourceBlock(audioSettings);
 
-## Consideraciones para Plataformas Apple
+// Salida de audio macOS
+var audioSink = new OSXAudioSinkBlock();
+pipeline.Connect(audioSource.Output, audioSink.Input);
 
-### Permisos de Cámara y Micrófono
-
-En iOS y macOS, debe declarar el uso de cámara y micrófono en el archivo Info.plist:
-
-```xml
-<key>NSCameraUsageDescription</key>
-<string>Esta app necesita acceso a la cámara para captura de video.</string>
-<key>NSMicrophoneUsageDescription</key>
-<string>Esta app necesita acceso al micrófono para captura de audio.</string>
+await pipeline.StartAsync();
 ```
 
-### Grabación de Pantalla en iOS
+### Codificación ProRes
 
-Para captura de pantalla en iOS, debe configurar las capacidades apropiadas de Broadcast Extension en su proyecto Xcode.
+```csharp
+var pipeline = new MediaBlocksPipeline();
 
-### Rendimiento en Batería
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
 
-El SDK utiliza automáticamente codificadores/decodificadores de hardware cuando están disponibles para minimizar el consumo de batería en dispositivos móviles Apple.
+// Codificador Apple ProRes
+// AppleProResEncoderSettings expone Quality (double 0.0-1.0), Bitrate, MaxKeyframeInterval,
+// MaxKeyFrameIntervalDuration, AllowFrameReordering, PreserveAlpha, Realtime — no es un enum de perfiles.
+var proresSettings = new AppleProResEncoderSettings
+{
+    Quality = 0.8
+};
+var proresEncoder = new AppleProResEncoderBlock(proresSettings);
+pipeline.Connect(fileSource.VideoOutput, proresEncoder.Input);
 
-### Formatos Soportados
+// Salida a archivo MOV
+var movSink = new MOVSinkBlock(new MOVSinkSettings("output.mov"));
+pipeline.Connect(proresEncoder.Output, movSink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-Los dispositivos Apple soportan eficientemente los siguientes formatos:
-- **Video**: H.264, HEVC (H.265), ProRes
-- **Audio**: AAC, ALAC, MP3
-- **Contenedores**: MOV, MP4, M4A
+await pipeline.StartAsync();
+```
+
+## Plataformas
+
+iOS, macOS, tvOS.
+
+## Documentación relacionada
+
+- [Sources](../Sources/index.md) — todos los bloques de fuente, incluidos los específicos de Apple
+- [VideoEncoders](../VideoEncoders/index.md) — codificación de video, incluida ProRes
+- [AudioRendering](../AudioRendering/index.md) — reproducción de audio

@@ -30,7 +30,7 @@ Comience el proceso de instalación navegando al menú Componente en su IDE:
 1. Inicie su entorno Borland C++ Builder 5/6
 2. Desde el menú principal, seleccione **Componente -> Importar Controles ActiveX**
 
-![Captura de pantalla mostrando el menú Componente y la opción Importar Controles ActiveX](/help/docs/delphi/videoedit/install/bcb6_1.webp)
+![Captura de pantalla mostrando el menú Componente y la opción Importar Controles ActiveX](bcb6_1.webp)
 
 ### Seleccionando el Control de Edición de Video
 
@@ -39,7 +39,7 @@ En el diálogo Importar Control ActiveX:
 1. Localice y seleccione el **"VisioForge Video Edit Control"** de la lista de controles disponibles
 2. Haga clic en el botón **Instalar** para comenzar el proceso de importación
 
-![Captura de pantalla mostrando el diálogo de selección de control ActiveX](/help/docs/delphi/videoedit/install/bcb6_2.webp)
+![Captura de pantalla mostrando el diálogo de selección de control ActiveX](bcb6_2.webp)
 
 ### Confirmando la Instalación
 
@@ -48,7 +48,7 @@ El sistema le pedirá confirmar la instalación:
 1. Aparecerá un diálogo de confirmación
 2. Haga clic en el botón **Sí** para proceder con la instalación
 
-![Captura de pantalla mostrando el diálogo de confirmación de instalación](/help/docs/delphi/videoedit/install/bcb6_3.webp)
+![Captura de pantalla mostrando el diálogo de confirmación de instalación](bcb6_3.webp)
 
 ### Verificando la Instalación Exitosa
 
@@ -57,7 +57,7 @@ Después de que la instalación complete:
 1. El control será agregado a su paleta de componentes
 2. Ahora puede usarlo en sus proyectos C++ Builder
 
-![Captura de pantalla mostrando instalación exitosa con componente en la paleta](/help/docs/delphi/videoedit/install/bcb6_4.webp)
+![Captura de pantalla mostrando instalación exitosa con componente en la paleta](bcb6_4.webp)
 
 ## Guía de Instalación para C++ Builder 2006 y Versiones Posteriores
 
@@ -71,7 +71,7 @@ Primero, necesitará crear un paquete para el componente:
 2. Seleccione **Archivo -> Nuevo -> Paquete**
 3. Esto creará la base para agregar el control ActiveX
 
-![Captura de pantalla mostrando el diálogo de creación de nuevo paquete](/help/docs/delphi/videoedit/install/bcb2006_1-1.webp)
+![Captura de pantalla mostrando el diálogo de creación de nuevo paquete](bcb2006_1-1.webp)
 
 ### Importando el Componente ActiveX
 
@@ -80,7 +80,7 @@ A continuación, importe el control ActiveX en su entorno:
 1. Navegue a **Componente → Importar Componente** en el menú principal
 2. Esto abre el asistente de importación para agregar nuevos componentes
 
-![Captura de pantalla mostrando la opción del menú Importar Componente](/help/docs/delphi/videoedit/install/vcbcb2006_2.webp)
+![Captura de pantalla mostrando la opción del menú Importar Componente](vcbcb2006_2.webp)
 
 ### Seleccionando el Tipo de Importación
 
@@ -89,7 +89,7 @@ En el asistente de importación:
 1. Seleccione la opción del botón de radio **Importar Control ActiveX**
 2. Haga clic en el botón **Siguiente** para proceder a la selección de componentes
 
-![Captura de pantalla mostrando el diálogo de selección de tipo de importación](/help/docs/delphi/videoedit/install/bcb2006_3-1.webp)
+![Captura de pantalla mostrando el diálogo de selección de tipo de importación](bcb2006_3-1.webp)
 
 ### Eligiendo el Control de Edición de Video
 
@@ -98,7 +98,7 @@ De los controles ActiveX disponibles:
 1. Encuentre y seleccione el **"VisioForge Video Edit Control"** de la lista
 2. Haga clic en **Siguiente** para continuar con el proceso de importación
 
-![Captura de pantalla mostrando la selección de control ActiveX en versiones más nuevas de Builder](/help/docs/delphi/videoedit/install/bcb2006_4-1.webp)
+![Captura de pantalla mostrando la selección de control ActiveX en versiones más nuevas de Builder](bcb2006_4-1.webp)
 
 ### Configurando la Ubicación de Salida
 
@@ -107,7 +107,7 @@ Especifique dónde deben almacenarse los archivos del componente:
 1. Elija una carpeta de salida de paquete apropiada para su entorno de desarrollo
 2. Haga clic en **Siguiente** para proceder con la configuración
 
-![Captura de pantalla mostrando el diálogo de selección de carpeta de salida](/help/docs/delphi/videoedit/install/bcb2006_5-1.webp)
+![Captura de pantalla mostrando el diálogo de selección de carpeta de salida](bcb2006_5-1.webp)
 
 ### Finalizando la Importación del Componente
 
@@ -116,7 +116,7 @@ Complete el proceso de importación:
 1. Seleccione la opción del botón de radio **Agregar unidad a…**
 2. Haga clic en el botón **Finalizar** para crear el envoltorio del componente
 
-![Captura de pantalla mostrando el diálogo de finalización de importación](/help/docs/delphi/videoedit/install/bcb2006_6-1.webp)
+![Captura de pantalla mostrando el diálogo de finalización de importación](bcb2006_6-1.webp)
 
 ### Guardando el Proyecto del Paquete
 
@@ -125,7 +125,7 @@ Después de completar la importación:
 1. El sistema le pedirá guardar su proyecto de paquete
 2. Elija una ubicación y nombre apropiados para sus archivos de paquete
 
-![Captura de pantalla mostrando el diálogo de guardar paquete](/help/docs/delphi/videoedit/install/bcb2006_7-1.webp)
+![Captura de pantalla mostrando el diálogo de guardar paquete](bcb2006_7-1.webp)
 
 ### Instalando el Paquete del Componente
 
@@ -135,7 +135,7 @@ Para hacer el componente disponible en el IDE:
 2. Seleccione **Instalar** del menú contextual
 3. Esto compila y registra el paquete con el IDE
 
-![Captura de pantalla mostrando la opción de instalación del paquete](/help/docs/delphi/videoedit/install/bcb2006_8-1.webp)
+![Captura de pantalla mostrando la opción de instalación del paquete](bcb2006_8-1.webp)
 
 ### Verificación y Uso
 
@@ -145,7 +145,7 @@ Una vez instalado:
 2. Ahora está listo para usar en sus aplicaciones C++ Builder
 3. Puede arrastrarlo y soltarlo en formularios igual que los componentes nativos
 
-![Captura de pantalla mostrando el componente instalado exitosamente en la paleta](/help/docs/delphi/videoedit/install/bcb2006_9-1.webp)
+![Captura de pantalla mostrando el componente instalado exitosamente en la paleta](bcb2006_9-1.webp)
 
 ## Recursos Adicionales y Soporte
 

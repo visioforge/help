@@ -867,6 +867,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
+<a id="apple-prores-encoder"></a>
 ## Codificador Apple ProRes
 
 `Apple ProRes`: Un formato de compresión de video de alta calidad con pérdida desarrollado por Apple Inc., ampliamente usado en producción y post-producción de video profesional por su excelente equilibrio de calidad de imagen y rendimiento.

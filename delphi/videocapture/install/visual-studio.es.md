@@ -46,19 +46,19 @@ Siga estos pasos detallados para instalar el control TVFVideoCapture en su entor
 1. Cree un nuevo proyecto en su lenguaje preferido (C++, C# o Visual Basic .NET)
 2. Acceda al panel de caja de herramientas en su interfaz de Visual Studio
 
-![Abriendo la caja de herramientas](/help/docs/delphi/videocapture/install/vcvs_1.webp)
+![Abriendo la caja de herramientas](vcvs_1.webp)
 
 3. Haga clic derecho en la caja de herramientas y seleccione "Elegir elementos de caja de herramientas" del menú contextual
 
-![Accediendo al diálogo de elementos de caja de herramientas](/help/docs/delphi/videocapture/install/vcvs_2.webp)
+![Accediendo al diálogo de elementos de caja de herramientas](vcvs_2.webp)
 
 4. En el cuadro de diálogo que aparece, localice y seleccione el componente "VisioForge Video Capture"
 
-![Seleccionando el componente de captura de video](/help/docs/delphi/videocapture/install/vcvs_3.webp)
+![Seleccionando el componente de captura de video](vcvs_3.webp)
 
 5. Después de la selección, el control será agregado a su caja de herramientas para fácil acceso
 
-![Control agregado a la caja de herramientas](/help/docs/delphi/videocapture/install/vcvs_4.webp)
+![Control agregado a la caja de herramientas](vcvs_4.webp)
 
 6. Agregue el control a su formulario arrastrándolo desde la caja de herramientas
 7. Para proyectos .NET, Visual Studio generará automáticamente el ensamblado wrapper necesario

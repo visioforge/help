@@ -343,6 +343,13 @@ sequence.StartFadeIn(
     easing: OverlayManagerPanEasing.EaseOut);
 ```
 
+**Ejemplo - Agregar cuadros dinámicamente:**
+
+```csharp
+// Agregar un nuevo cuadro a una secuencia en ejecución
+sequence.AddFrame("slide4.png", TimeSpan.FromSeconds(2.5));
+```
+
 **Métodos de Conveniencia en OverlayManagerBlock:**
 
 ```csharp
@@ -1251,6 +1258,20 @@ public class OverlayManagerFade : IOverlayManagerElement
 | `MinOpacity` | `double` | `0.0` | Opacidad mínima (totalmente desvanecido) |
 | `MaxOpacity` | `double` | `1.0` | Opacidad máxima (totalmente visible) |
 
+**Ejemplo:**
+
+```csharp
+// Fade in del video durante 2 segundos a partir de la posición de reproducción
+var fade = new OverlayManagerFade
+{
+    FadeMode = OverlayManagerFadeMode.FadeIn,
+    StartTime = TimeSpan.Zero,
+    Duration = TimeSpan.FromSeconds(2),
+    Name = "VideoFade"
+};
+overlayManager.Video_Overlay_Add(fade);
+```
+
 ### OverlayManagerSqueezeback
 
 Crea un efecto "squeezeback" estilo broadcast donde el video se escala a un rectángulo personalizado y una imagen superpuesta (típicamente PNG con transparencia alfa) se dibuja encima. Se usa comúnmente para tercios inferiores, marcos y gráficos de transmisión.
@@ -1321,6 +1342,21 @@ squeezeback.AnimateVideo(
     duration: TimeSpan.FromSeconds(2),
     easing: OverlayManagerPanEasing.EaseInOut
 );
+```
+
+**Ejemplo - Efectos de fade:**
+
+```csharp
+var position = await pipeline.Position_GetAsync();
+
+// Fade out del video durante 1.5 segundos
+squeezeback.StartVideoFadeOut(position, TimeSpan.FromSeconds(1.5));
+
+// Más tarde, fade in de vuelta
+squeezeback.StartVideoFadeIn(position, TimeSpan.FromSeconds(1.5));
+
+// Fade de la imagen de fondo de forma independiente
+squeezeback.StartBackgroundFadeOut(position, TimeSpan.FromSeconds(1));
 ```
 
 **Métodos de Conveniencia en OverlayManagerBlock:**

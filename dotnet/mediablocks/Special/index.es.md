@@ -662,7 +662,7 @@ La clase `CustomMediaBlockSettings` proporciona ajustes para configurar un bloqu
 
 ### Propiedades
 
-- `ElementName` (`string`): Obtiene el nombre del elemento GStreamer o elemento SDK Media Blocks. Para crear un Bin GStreamer personalizado, incluir corchetes, ej. `"[ videotestsrc ! videoconvert ]"`.
+- `ElementName` (`string`): Obtiene el nombre del elemento GStreamer o elemento Media Blocks SDK. Para crear un Bin GStreamer personalizado, incluir corchetes, ej. `"[ videotestsrc ! videoconvert ]"`.
 - `UsePadAddedEvent` (`bool`): Obtiene o establece un valor indicando si usar el evento `pad-added` para pads GStreamer creados dinámicamente.
 - `ElementParams` (`Dictionary<string, object>`): Obtiene los parámetros para el elemento.
 - `Pads` (`List<CustomMediaBlockPad>`): Obtiene la lista de definiciones `CustomMediaBlockPad` para el bloque.
@@ -1183,10 +1183,10 @@ Las propiedades opcionales `Width`, `Height` y `FrameRate` restringen la negocia
 
 Nombre: CustomColorspaceXBlock.
 
-| Dirección del pin | Tipo de medio | Conteo de pines |
-| --- | :---: | :---: |
-| Entrada | video/x-raw (RGB) | 1 |
-| Salida | video/x-raw (YV12) | 1 |
+Dirección del pin | Tipo de medio | Conteo de pines
+--- | :---: | :---:
+Entrada | video/x-raw (RGB) | 1
+Salida | video/x-raw (YV12) | 1
 
 ### Código de muestra
 
@@ -1219,10 +1219,10 @@ Use este bloque en pipelines de transmisión en vivo o captura para absorber el 
 
 Nombre: LiveSyncBlock.
 
-| Dirección del pin | Tipo de medio | Conteo de pines |
-| --- | :---: | :---: |
-| Entrada | Cualquiera | 1 |
-| Salida | Cualquiera | 1 |
+Dirección del pin | Tipo de medio | Conteo de pines
+--- | :---: | :---:
+Entrada | Cualquiera | 1
+Salida | Cualquiera | 1
 
 ### Disponibilidad
 

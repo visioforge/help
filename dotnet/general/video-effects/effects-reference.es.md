@@ -1,5 +1,5 @@
 ---
-title: Referencia de Efectos de Video SDK: Filtros, Overlays y Más
+title: Referencia de Efectos de Video SDK — Filtros, Overlays y Más
 description: Guía de referencia completa de todos los efectos de video en VisioForge .NET SDKs incluyendo efectos Classic (solo Windows) y multiplataforma.
 sidebar_label: Referencia de Efectos
 tags:

@@ -1,6 +1,6 @@
 ---
 title: Video Capture SDK para C# .NET - Webcam, Pantalla e IP
-description: SDK de captura de video para C# y .NET — graba webcam, pantalla, cámara IP (RTSP/ONVIF) a MP4. API multiplataforma con codificación GPU. Reemplaza DirectShow.
+description: Video Capture SDK para C# y .NET — graba webcam, pantalla, cámara IP (RTSP/ONVIF) a MP4. API multiplataforma con codificación GPU. Reemplaza DirectShow.
 sidebar_label: Video Capture SDK .NET
 tags:
   - Video Capture SDK
@@ -20,6 +20,7 @@ primary_api_classes:
   - VideoCaptureDeviceSourceSettings
   - VideoView
 
+order: 15
 ---
 
 # Video Capture SDK para C# .NET — API de Captura de Webcam, Pantalla y Cámara IP

@@ -1,6 +1,6 @@
 ---
 title: Filtro FFMPEG DirectShow - ejemplos en C++, C# y VB.NET
-description: Ejemplos de código para el Filtro de Fuente FFMPEG en C++, C# y VB.NET con gráficos DirectShow, aceleración de hardware y transmisión de red.
+description: Ejemplos de código para el FFMPEG Source DirectShow Filter en C++, C# y VB.NET con gráficos DirectShow, aceleración de hardware y transmisión de red.
 tags:
   - DirectShow
   - C++
@@ -29,7 +29,7 @@ primary_api_classes:
 
 ## Descripción General
 
-Esta página proporciona ejemplos prácticos de código para usar el Filtro de Fuente FFMPEG en aplicaciones DirectShow. Se proporcionan ejemplos en C++, C# y VB.NET.
+Esta página proporciona ejemplos prácticos de código para usar el FFMPEG Source DirectShow Filter en aplicaciones DirectShow. Se proporcionan ejemplos en C++, C# y VB.NET.
 
 ## Muestras de Trabajo Completas
 
@@ -37,7 +37,7 @@ Esta página proporciona ejemplos prácticos de código para usar el Filtro de F
 
 🔗 **[Repositorio de Muestras de DirectShow](https://github.com/visioforge/directshow-samples)**
 
-### Muestras del Filtro de Fuente FFMPEG
+### Muestras del FFMPEG Source DirectShow Filter
 
 - **[Muestra en C#](https://github.com/visioforge/directshow-samples/tree/master/FFMPEG%20Source%20Filter/dotnet/cs)** - Reproductor multimedia con todas las funciones y capacidades del filtro
 - **[Muestra en VB.NET](https://github.com/visioforge/directshow-samples/tree/master/FFMPEG%20Source%20Filter/dotnet/vbnet)** - Implementación en VB.NET

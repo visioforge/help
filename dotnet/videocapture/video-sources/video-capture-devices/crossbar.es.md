@@ -1,5 +1,5 @@
 ---
-title: Crossbar en .NET: Configurar Entradas de Video Hardware
+title: Crossbar en .NET — Configurar Entradas de Video Hardware
 description: Configura múltiples entradas de video hardware para sintonizadores TV y tarjetas de captura en .NET con implementación crossbar C#.
 tags:
   - Video Capture SDK

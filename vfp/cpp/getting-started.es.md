@@ -1,6 +1,6 @@
 ---
 title: SDK C++ de Video Fingerprinting - Instalación y Setup
-description: Instale y configure el SDK Video Fingerprinting de VisioForge para C++ con configuración de Visual Studio, paquetes NuGet y su primera aplicación de huellas.
+description: Instale y configure el Video Fingerprinting SDK de VisioForge para C++ con configuración de Visual Studio, paquetes NuGet y su primera aplicación de huellas.
 tags:
   - Video Fingerprinting SDK
   - C++
@@ -16,9 +16,9 @@ primary_api_classes:
 
 ---
 
-# Primeros Pasos con el SDK Video Fingerprinting para C++
+# Primeros Pasos con el Video Fingerprinting SDK para C++
 
-¡Bienvenido al SDK Video Fingerprinting de VisioForge para C++! Esta guía completa le guiará por todo lo necesario para empezar, desde la instalación hasta su primera aplicación funcional. Al finalizar, tendrá una base sólida para crear aplicaciones de video fingerprinting de alto rendimiento en C++.
+¡Bienvenido al Video Fingerprinting SDK de VisioForge para C++! Esta guía completa le guiará por todo lo necesario para empezar, desde la instalación hasta su primera aplicación funcional. Al finalizar, tendrá una base sólida para crear aplicaciones de video fingerprinting de alto rendimiento en C++.
 
 > **Nota:** Si ya está familiarizado con el SDK .NET, el SDK C++ sigue conceptos similares con beneficios de rendimiento nativo. Consulte nuestra [Comparación de SDKs](../index.md) para más detalles.
 

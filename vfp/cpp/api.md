@@ -287,63 +287,6 @@ extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPSearch_Clear(void* pDataTmp);
 
 Frees resources allocated by `VFPSearch_Init` or `VFPSearch_Init2`.
 
-```cpp
-extern "C" VFP_EXPORT char* VFP_EXPORT_CALL VFPSearch_Build(
-    int* pLen,
-    void* pDataTmp);
-```
-
-Finalizes the fingerprint. Returns a `char*` buffer with the fingerprint data;
-`*pLen` receives its size in bytes. The caller owns the returned buffer.
-
-### VFPSearch_Search
-
-Low-level search using raw fingerprint data:
-
-```cpp
-extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search(
-    const char* pData1, int iLen1, int iSkip1,
-    const char* pData2, int iLen2, int iSkip2,
-    double* pDiff, int maxDiff);
-```
-
-Returns the position in seconds where `pData1` was found inside `pData2`,
-or `INT_MAX` if not found.
-
-### VFPSearch_Search2
-
-Higher-level variant using `VFPFingerPrint` structs:
-
-```cpp
-extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search2(
-    VFPFingerPrint* vfp1, int iSkip1,
-    VFPFingerPrint* vfp2, int iSkip2,
-    double* pDiff, int maxDiff);
-```
-
-### VFPSearch_GetFingerprintForVideoFile
-
-High-level convenience: generates a search fingerprint directly from a video file.
-
-```cpp
-extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPSearch_GetFingerprintForVideoFile(
-    VFPFingerprintSource source,
-    VFPFingerPrint* vfp);
-```
-
-Returns `NULL` on success, or an error message string on failure.
-
-**Example — high-level search workflow:**
-
-```cpp
-VFPFingerprintSource src{};
-VFPFillSource(L"video.mp4", &src);
-
-VFPFingerPrint fp{};
-VFPSearch_GetFingerprintForVideoFile(src, &fp);
-// fp.Data / fp.DataSize now contain the fingerprint
-```
-
 ## Compare Functions
 
 The Compare API provides both high-level convenience and low-level per-frame access.
@@ -404,53 +347,6 @@ extern "C" VFP_EXPORT void VFP_EXPORT_CALL VFPCompare_Clear(void* pDataTmp);
 ```
 
 Frees accumulator resources.
-
-Feeds one decoded video frame into the accumulator.
-
-### VFPCompare_Build
-
-```cpp
-extern "C" VFP_EXPORT char* VFP_EXPORT_CALL VFPCompare_Build(
-    int* pLen,
-    void* pDataTmp);
-```
-
-Finalizes the fingerprint. Returns a `char*` buffer; `*pLen` receives its size.
-
-### VFPCompare_Compare
-
-```cpp
-extern "C" VFP_EXPORT double VFP_EXPORT_CALL VFPCompare_Compare(
-    const char* pData1, int iLen1,
-    const char* pData2, int iLen2,
-    int MaxS);
-```
-
-Returns a difference score (lower = more similar). `MaxS` is the maximum time shift in seconds.
-
-### VFPCompare_GetFingerprintForVideoFile
-
-High-level convenience for comparison fingerprints:
-
-```cpp
-extern "C" VFP_EXPORT wchar_t* VFP_EXPORT_CALL VFPCompare_GetFingerprintForVideoFile(
-    VFPFingerprintSource source,
-    VFPFingerPrint* vfp);
-```
-
-**Example — high-level compare workflow:**
-
-```cpp
-VFPFingerprintSource src{};
-VFPFillSource(L"video.mp4", &src);
-
-VFPFingerPrint fp{};
-VFPCompare_GetFingerprintForVideoFile(src, &fp);
-
-// Compare with another fingerprint:
-double diff = VFPCompare_Compare(fp1.Data, fp1.DataSize,
-                                 fp2.Data, fp2.DataSize, 10);
-```
 
 ## Utility Functions
 

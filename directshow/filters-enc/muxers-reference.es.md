@@ -35,11 +35,11 @@ tags:
 
 ---
 
-# Paquete de Filtros de Codificación - Referencia de Multiplexores
+# DirectShow Encoding Filters Pack - Referencia de Multiplexores
 
 ## Descripción General
 
-Este documento proporciona información completa sobre todos los formatos de contenedor (multiplexores) compatibles con el Paquete de Filtros de Codificación DirectShow. Los multiplexores combinan flujos de video y audio en archivos contenedores para almacenamiento y transmisión.
+Este documento proporciona información completa sobre todos los formatos de contenedor (multiplexores) compatibles con el DirectShow Encoding Filters Pack. Los multiplexores combinan flujos de video y audio en archivos contenedores para almacenamiento y transmisión.
 
 ---
 ## Contenedor MP4
@@ -555,7 +555,7 @@ Segmento
 
 ## Ver También
 
-- [Descripción General del Paquete de Filtros de Codificación](index.md)
+- [Descripción General del DirectShow Encoding Filters Pack](index.md)
 - [Referencia de Códecs](codecs-reference.md)
 - [Ejemplos de Código](examples.md)
 - [Referencia de Interfaz NVENC](interfaces/nvenc.md)

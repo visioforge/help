@@ -1,5 +1,5 @@
 ---
-title: IVFVideoMixer: Mezclador de Video DirectShow con Chroma Key
+title: IVFVideoMixer — Mezclador de Video DirectShow con Chroma Key
 description: Interfaz IVFVideoMixer para mezclar 2-16 fuentes de video con PIP, chroma keying, transparencia y configuraciones de diseño personalizables.
 tags:
   - DirectShow
@@ -740,7 +740,7 @@ pMixer->SetChromaSettings(true, 0, 80, 60);
 
 ## Vea También
 
-- [Descripción General del Pack de Filtros de Procesamiento](../index.es.md)
-- [Referencia de Efectos](../effects-reference.es.md)
-- [Interfaz Chroma Key](chroma-key.es.md)
-- [Ejemplos de Código](../examples.es.md)
+- [Descripción General del Pack de Filtros de Procesamiento](../index.md)
+- [Referencia de Efectos](../effects-reference.md)
+- [Interfaz Chroma Key](chroma-key.md)
+- [Ejemplos de Código](../examples.md)

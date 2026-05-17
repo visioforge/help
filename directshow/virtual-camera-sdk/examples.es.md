@@ -1,6 +1,6 @@
 ---
-title: SDK de Cámara Virtual DirectShow - Ejemplos de Código
-description: Ejemplos de código del SDK de Cámara Virtual para transmitir a dispositivos de cámara virtual y leer desde cámaras virtuales con renderizado cuadro por cuadro.
+title: Virtual Camera SDK DirectShow - Ejemplos de Código
+description: Ejemplos de código del Virtual Camera SDK para transmitir a dispositivos de cámara virtual y leer desde cámaras virtuales con renderizado cuadro por cuadro.
 tags:
   - Virtual Camera SDK
   - DirectShow
@@ -19,11 +19,11 @@ primary_api_classes:
 
 ---
 
-# SDK de Cámara Virtual - Ejemplos de Código
+# Virtual Camera SDK - Ejemplos de Código
 
 ## Descripción General
 
-Esta página proporciona ejemplos prácticos de código para usar el SDK de Cámara Virtual. El SDK le permite:
+Esta página proporciona ejemplos prácticos de código para usar el Virtual Camera SDK. El SDK le permite:
 
 - **Escribir A cámara virtual**: Transmitir video desde archivos, cámaras reales o cuadros individuales a dispositivos de cámara virtual
 - **Leer DESDE cámara virtual**: Capturar video desde dispositivos de cámara virtual (aparece como cámara web regular para las aplicaciones)
@@ -34,7 +34,7 @@ La cámara virtual aparece como una cámara web estándar para aplicaciones como
 
 ---
 ## Descripción General de Arquitectura
-El SDK de Cámara Virtual proporciona tres tipos principales de filtros:
+El Virtual Camera SDK proporciona tres tipos principales de filtros:
 1. **CLSID_VFVirtualCameraSource**: Lee DESDE dispositivo de cámara virtual (actúa como una fuente de captura de video)
 2. **CLSID_VFVirtualCameraSink**: Escribe A dispositivo de cámara virtual (actúa como un renderizador)
 3. **CLSID_VFVideoPushSource**: Fuente de empuje para renderizado cuadro por cuadro (secuencias de imágenes, renderizado personalizado)
@@ -739,7 +739,7 @@ public class VirtualCameraCapture
 ---
 ## Recursos Adicionales
 Para información más detallada, vea:
-- [Página de Producto del SDK de Cámara Virtual](https://www.visioforge.com/virtual-camera-sdk)
+- [Página de Producto del Virtual Camera SDK](https://www.visioforge.com/virtual-camera-sdk)
 - [Acuerdo de Licencia de Usuario Final](../../eula.md)
 - [Repositorio de Código de Muestra](https://github.com/visioforge/directshow-samples/tree/main/Virtual%20Camera%20SDK)
 ## Soporte

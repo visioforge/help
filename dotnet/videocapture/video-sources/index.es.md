@@ -1,5 +1,5 @@
 ---
-title: Fuentes de entrada de video en .NET: webcams, IP, pantalla
+title: Fuentes de entrada de video en .NET — webcams, IP, pantalla
 description: Domine fuentes de entrada de video para .NET incluyendo webcams, Decklink, IP cameras, captura de pantalla, y cámaras industriales con integración.
 sidebar_label: Fuentes de Video
 order: 16
@@ -12,11 +12,11 @@ tags:
 
 # Fuentes de Video para Desarrolladores .NET
 
-[SDK de Captura de Video .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción a Fuentes de Entrada de Video
 
-El SDK de Captura de Video para .NET proporciona soporte robusto para prácticamente cualquier fuente de entrada de video estándar disponible en entornos de desarrollo modernos. Esta flexibilidad permite a las aplicaciones capturar, procesar y manipular contenido de video desde una amplia variedad de dispositivos hardware y streams de red.
+El Video Capture SDK para .NET proporciona soporte robusto para prácticamente cualquier fuente de entrada de video estándar disponible en entornos de desarrollo modernos. Esta flexibilidad permite a las aplicaciones capturar, procesar y manipular contenido de video desde una amplia variedad de dispositivos hardware y streams de red.
 
 Ya sea que esté desarrollando software de edición de video profesional, creando soluciones de vigilancia personalizadas o construyendo aplicaciones de imágenes médicas, entender las opciones de fuente de video disponibles es crucial para implementar la solución correcta para sus requisitos específicos.
 
@@ -225,7 +225,7 @@ Cuando se trabaja con fuentes de video, las consideraciones de rendimiento son c
 
 ## Conclusión
 
-El amplio soporte de fuente de video en SDK de Captura de Video .NET empodera a los desarrolladores para crear aplicaciones de video versátiles con restricciones mínimas en hardware de entrada. Al entender las capacidades y limitaciones de cada tipo de fuente, puede diseñar sistemas de procesamiento de video más efectivos y eficientes.
+El amplio soporte de fuente de video en Video Capture SDK .NET empodera a los desarrolladores para crear aplicaciones de video versátiles con restricciones mínimas en hardware de entrada. Al entender las capacidades y limitaciones de cada tipo de fuente, puede diseñar sistemas de procesamiento de video más efectivos y eficientes.
 
 Para referencias detalladas de API y ejemplos de implementación para tipos específicos de fuente de video, refiérase a la documentación de clase y guías de método en los materiales de referencia del SDK.
 

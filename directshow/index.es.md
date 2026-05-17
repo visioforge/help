@@ -6,6 +6,8 @@ tags:
   - C++
   - Windows
 
+order: 19
+sidebar_label: DirectShow SDKs and filters
 ---
 
 # SDKs y Filtros DirectShow para Desarrollo de Video

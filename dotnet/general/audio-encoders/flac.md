@@ -252,7 +252,7 @@ if (!FLACEncoderSettings.IsAvailable())
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-The [FLACOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.FLACOutput.html) class provides Windows-only settings for the FLAC encoder. This class implements both `IVideoEditBaseOutput` and `IVideoCaptureBaseOutput` interfaces, making it suitable for both video editing and capture scenarios.
+The [FLACOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.FLACOutput.html) class provides Windows-only settings for the FLAC encoder. This class implements both `IVideoEditBaseOutput` and `IVideoCaptureBaseOutput` interfaces, making it suitable for both video editing and capture scenarios.
 
 ### Properties
 

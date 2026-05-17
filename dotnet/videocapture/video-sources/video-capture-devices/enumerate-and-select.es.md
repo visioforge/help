@@ -1,5 +1,5 @@
 ---
-title: Gestión de Dispositivos de Captura de Video en .NET
+title: Enumerar dispositivos de captura de video en C# .NET
 description: Detecta, enumera y configura dispositivos de captura de video en .NET con ejemplos de código para listar dispositivos, formatos y tasas de fotogramas.
 tags:
   - Video Capture SDK
@@ -20,17 +20,17 @@ primary_api_classes:
 
 ---
 
-# Trabajar con Dispositivos de Captura de Video en .NET
+# Trabajar con dispositivos de captura de video en .NET
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
-## Introducción a la Gestión de Dispositivos de Video
+## Introducción a la gestión de dispositivos de video
 
-El Video Capture SDK .Net proporciona soporte robusto para cualquier dispositivo de captura de video reconocido por tu sistema operativo. Esta guía demuestra cómo descubrir dispositivos disponibles, inspeccionar sus capacidades e integrarlos en tus aplicaciones.
+Video Capture SDK .Net proporciona un soporte robusto para cualquier dispositivo de captura de video reconocido por tu sistema operativo. Esta guía demuestra cómo descubrir los dispositivos disponibles, inspeccionar sus capacidades e integrarlos en tus aplicaciones.
 
-## Enumerar Dispositivos de Captura de Video Disponibles
+## Enumerar los dispositivos de captura de video disponibles
 
-Antes de poder usar un dispositivo de captura, necesitas identificar cuáles están conectados al sistema. Los siguientes ejemplos de código muestran cómo recuperar una lista de dispositivos disponibles y mostrarlos en un componente de interfaz de usuario:
+Antes de poder usar un dispositivo de captura, necesitas identificar cuáles están conectados al sistema. Los siguientes ejemplos de código muestran cómo obtener una lista de los dispositivos disponibles y mostrarlos en un componente de la interfaz de usuario:
 
 === "VideoCaptureCore"
 
@@ -39,7 +39,7 @@ Antes de poder usar un dispositivo de captura, necesitas identificar cuáles est
     // Iterar a través de todos los dispositivos de captura de video disponibles conectados al sistema
     foreach (var device in VideoCapture1.Video_CaptureDevices())
     {
-        // Añadir cada nombre de dispositivo a un control de selección desplegable
+        // Añadir cada nombre de dispositivo a un control desplegable de selección
         cbVideoInputDevice.Items.Add(device.Name);
     }
     ```
@@ -49,29 +49,29 @@ Antes de poder usar un dispositivo de captura, necesitas identificar cuáles est
 
     
     ```cs
-    // Recuperar asincrónicamente todas las fuentes de video usando el DeviceEnumerator compartido
+    // Obtener asíncronamente todas las fuentes de video usando el DeviceEnumerator compartido
     var devices = DeviceEnumerator.Shared.VideoSourcesAsync();
     
     // Iterar a través de cada dispositivo disponible
     foreach (var device in await devices)
     {
-        // Añadir el nombre amigable del dispositivo al control de selección desplegable
+        // Añadir el nombre amigable del dispositivo al control desplegable de selección
         cbVideoInputDevice.Items.Add(device.DisplayName);
     }
     ```
     
 
 
-## Descubrir Capacidades de Formato de Video
+## Descubrir las capacidades de formato de video
 
-Después de identificar un dispositivo de captura, puedes examinar sus formatos de video y tasas de fotogramas soportados. Esto te permite ofrecer a los usuarios opciones de configuración apropiadas:
+Después de identificar un dispositivo de captura, puedes examinar sus formatos de video y tasas de fotogramas soportados. Esto te permite ofrecer a los usuarios las opciones de configuración adecuadas:
 
 === "VideoCaptureCore"
 
     
     ```csharp
     // Localizar un dispositivo específico por su nombre de visualización
-    var deviceItem = VideoCapture1.Video_CaptureDevices().FirstOrDefault(device => device.Name == "Algún nombre de dispositivo");
+    var deviceItem = VideoCapture1.Video_CaptureDevices().FirstOrDefault(device => device.Name == "Some device name");
     
     // Iterar a través de todos los formatos de video soportados por este dispositivo
     foreach (var format in deviceItem.VideoFormats)
@@ -94,37 +94,46 @@ Después de identificar un dispositivo de captura, puedes examinar sus formatos 
     
     ```cs
     // Localizar un dispositivo específico por su nombre de visualización
-    var deviceItem = (await DeviceEnumerator.Shared.VideoSourcesAsync()).FirstOrDefault(device => device.DisplayName == "Algún nombre de dispositivo");
+    var deviceItem = (await DeviceEnumerator.Shared.VideoSourcesAsync()).FirstOrDefault(device => device.DisplayName == "Some device name");
     
     // Iterar a través de todos los formatos de video soportados por este dispositivo
     foreach (var format in deviceItem.VideoFormats)
     {
-        // Añadir cada formato al desplegable de selección de formato
-        cbVideoInputFormat.Items.Add(format);
+        // Añadir el nombre de visualización del formato al desplegable de selección
+        cbVideoInputFormat.Items.Add(format.Name);
     
-        // Añadir la tasa de fotogramas de este formato
-        cbVideoInputFrameRate.Items.Add(format.FrameRate.ToString());
+        // Para cada formato, obtener y mostrar las tasas de fotogramas disponibles
+        foreach (var frameRate in format.FrameRateList)
+        {
+            // Añadir cada valor de tasa de fotogramas al desplegable de selección
+            cbVideoInputFrameRate.Items.Add(frameRate.ToString());
+        }
     }
     ```
     
 
 
-## Seleccionar y Configurar un Dispositivo
+## Configurar y activar un dispositivo de captura de video
 
-Una vez que has identificado un dispositivo y sus capacidades, puedes configurarlo para uso:
+Una vez que has seleccionado un dispositivo e identificado tus ajustes de formato preferidos, puedes inicializar la fuente de captura con estos parámetros:
 
 === "VideoCaptureCore"
 
     
     ```csharp
-    // Establecer el dispositivo de captura de video
-    VideoCapture1.Video_CaptureDevice = new VideoCaptureDevice(cbVideoInputDevice.Text);
+    // Encontrar el dispositivo seleccionado en la lista de dispositivos
+    var deviceItem = VideoCapture1.Video_CaptureDevices().FirstOrDefault(device => device.Name == "Some device name");
     
-    // Establecer el formato de video seleccionado
-    VideoCapture1.Video_CaptureDevice.Format = cbVideoInputFormat.Text;
+    // Crear una nueva fuente de captura de video usando el dispositivo seleccionado
+    VideoCapture1.Video_CaptureDevice = new VideoCaptureSource(deviceItem.Name);
     
-    // Establecer la tasa de fotogramas seleccionada
-    VideoCapture1.Video_CaptureDevice.FrameRate = double.Parse(cbVideoInputFrameRate.Text);
+    // Configurar el formato de video por defecto desde la primera opción disponible
+    VideoCapture1.Video_CaptureDevice.Format = deviceItem.VideoFormats[0].ToString();
+    
+    // Establecer la tasa de fotogramas por defecto desde la primera opción disponible para el formato seleccionado
+    VideoCapture1.Video_CaptureDevice.FrameRate = deviceItem.VideoFormats[0].FrameRates[0];
+    
+    // Nota: después de esta configuración, usa el modo VideoPreview o VideoCapture para iniciar la transmisión
     ```
     
 
@@ -132,74 +141,44 @@ Una vez que has identificado un dispositivo y sus capacidades, puedes configurar
 
     
     ```cs
-    // Obtener el dispositivo seleccionado
-    var device = (await DeviceEnumerator.Shared.VideoSourcesAsync())
-        .FirstOrDefault(d => d.DisplayName == cbVideoInputDevice.Text);
+    // Inicializar la variable de ajustes de fuente de video
+    VideoCaptureDeviceSourceSettings videoSourceSettings = null;
     
-    // Crear configuración de fuente
-    var sourceSettings = new VideoCaptureDeviceSourceSettings(device)
+    // Encontrar el dispositivo seleccionado por su nombre de visualización
+    var device = (await DeviceEnumerator.Shared.VideoSourcesAsync()).FirstOrDefault(x => x.DisplayName == deviceName);
+    if (device != null)
     {
-        Format = device.VideoFormats.First(f => f.ToString() == cbVideoInputFormat.Text)
-    };
+        // Localizar el formato seleccionado por su nombre
+        var formatItem = device.VideoFormats.FirstOrDefault(x => x.Name == format);
+        if (formatItem != null)
+        {
+            // Crear los ajustes de configuración usando el dispositivo seleccionado
+            videoSourceSettings = new VideoCaptureDeviceSourceSettings(device)
+            {
+                // Convertir la representación del formato al objeto Format requerido
+                Format = formatItem.ToFormat()
+            };
     
-    // Establecer fuente de video
-    VideoCapture1.Video_Source = sourceSettings;
+            // Establecer la tasa de fotogramas deseada desde la selección del desplegable
+            videoSourceSettings.Format.FrameRate = new VideoFrameRate(Convert.ToDouble(cbVideoInputFrameRate.Text));
+        }
+    }
+    
+    // Aplicar los ajustes configurados al componente de captura de video
+    VideoCapture1.Video_Source = videoSourceSettings;
     ```
     
 
 
-## Obtener Resolución del Dispositivo
+## Recursos adicionales y ejemplos de código
 
-Puedes obtener información detallada sobre las resoluciones soportadas:
+Para escenarios de uso más avanzados y ejemplos completos de implementación, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) con proyectos de demostración exhaustivos.
 
-```csharp
-// Obtener todas las resoluciones disponibles
-foreach (var format in deviceItem.VideoFormats)
-{
-    int width = format.Width;
-    int height = format.Height;
-    Console.WriteLine($"Resolución: {width}x{height}");
-}
-```
+## Solución de problemas en la detección de dispositivos
 
-## Verificar Estado del Dispositivo
+Si tu aplicación no puede detectar los dispositivos esperados, considera estos problemas comunes:
 
-Antes de usar un dispositivo, es buena práctica verificar que esté disponible:
-
-```csharp
-// Verificar si hay dispositivos disponibles
-var devices = await DeviceEnumerator.Shared.VideoSourcesAsync();
-if (devices.Length == 0)
-{
-    MessageBox.Show("No se encontraron dispositivos de captura de video.");
-    return;
-}
-```
-
-## Mejores Prácticas
-
-1. **Enumeración Asíncrona**: Siempre usa métodos asíncronos para enumerar dispositivos para evitar bloquear la UI
-2. **Manejo de Errores**: Implementa manejo de errores para cuando los dispositivos no estén disponibles
-3. **Actualizar Lista de Dispositivos**: Proporciona forma de actualizar la lista cuando se conectan nuevos dispositivos
-4. **Recordar Selecciones**: Guarda las preferencias del usuario para selección automática
-
-## Aplicaciones de Ejemplo
-
-Explora estas aplicaciones de ejemplo para ver la gestión de dispositivos de video en acción:
-
-=== "VideoCaptureCore"
-
-    
-    - [Demo Principal de Video Capture (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/Main_Demo)
-    - [Demo de Webcam (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/Simple%20VideoCapture)
-    
-
-=== "VideoCaptureCoreX"
-
-    
-    - [Demo de Captura de Video X (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/Simple%20Video%20Capture)
-    
-
-
----
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para acceder a muestras de código adicionales y recursos de implementación.
+1. Asegúrate de que el dispositivo esté correctamente conectado y encendido
+2. Verifica que los controladores del dispositivo estén correctamente instalados
+3. Comprueba que ninguna otra aplicación esté usando el dispositivo en este momento
+4. Reinicia la aplicación después de conectar nuevos dispositivos

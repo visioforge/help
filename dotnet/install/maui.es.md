@@ -1,5 +1,5 @@
 ---
-title: SDK de Captura de Video para .NET MAUI - Instalación
+title: Video Capture SDK .NET para MAUI - Guía de Instalación
 description: Implementa capacidades de video y medios en aplicaciones multiplataforma .NET MAUI para Windows, Android, iOS y macOS con SDKs de VisioForge.
 tags:
   - Video Capture SDK

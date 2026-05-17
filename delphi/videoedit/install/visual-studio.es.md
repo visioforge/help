@@ -41,14 +41,14 @@ Antes de comenzar el proceso de instalación, asegúrese de tener:
 1. Inicie Visual Studio y cree un nuevo proyecto usando C++, C# o Visual Basic.
 2. Para esta demostración, usaremos una aplicación Windows Forms de C#, pero el proceso aplica similarmente a proyectos VB.Net y C++ MFC.
 
-![Pantalla de creación de nuevo proyecto](/help/docs/delphi/videoedit/install/vevs2003_1.webp)
+![Pantalla de creación de nuevo proyecto](vevs2003_1.webp)
 
 ### Agregando el Control ActiveX a Su Caja de Herramientas
 
 1. Haga clic derecho en el panel de Caja de Herramientas en Visual Studio
 2. Seleccione la opción "Elegir elementos" del menú contextual que aparece
 
-![Abriendo el diálogo Elegir Elementos](/help/docs/delphi/videoedit/install/vevs2003_2.webp)
+![Abriendo el diálogo Elegir Elementos](vevs2003_2.webp)
 
 ### Seleccionando el Control de Edición de Video
 
@@ -57,7 +57,7 @@ Antes de comenzar el proceso de instalación, asegúrese de tener:
 3. Encuentre y seleccione el elemento "VisioForge Video Edit Control"
 4. Haga clic en Aceptar para agregar el control a su caja de herramientas
 
-![Seleccionando el Control de Edición de Video](/help/docs/delphi/videoedit/install/vevs2003_3.webp)
+![Seleccionando el Control de Edición de Video](vevs2003_3.webp)
 
 ### Implementando el Control en Su Formulario
 
@@ -65,7 +65,7 @@ Antes de comenzar el proceso de instalación, asegúrese de tener:
 2. Haga clic y arrástrelo a la superficie de diseño de su formulario
 3. El control ahora está listo para implementación en su aplicación
 
-![Agregando control al formulario](/help/docs/delphi/videoedit/install/vevs2003_4.webp)
+![Agregando control al formulario](vevs2003_4.webp)
 
 ## Opciones de Integración Avanzada
 

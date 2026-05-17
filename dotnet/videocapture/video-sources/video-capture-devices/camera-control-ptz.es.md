@@ -1,6 +1,6 @@
 ---
-title: Control de cámara PTZ en .NET: exposición, zoom y enfoque
-description: Implementa características de control de cámara incluyendo Pan, Tilt, Zoom (PTZ), Exposición, Iris y Enfoque en .NET con ejemplos de código C#.
+title: Control programático de Pan, Tilt, Zoom de cámara en C# .NET
+description: Controla Pan, Tilt, Zoom, Exposición, Iris y Enfoque programáticamente con VisioForge Video Capture SDK. API C# asíncrona con soporte de cámaras hardware.
 tags:
   - Video Capture SDK
   - .NET
@@ -12,41 +12,41 @@ tags:
 
 ---
 
-# Implementación Avanzada de Control de Cámara y PTZ
+# Implementación avanzada de control de cámara y PTZ
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
-## Descripción General de Capacidades de Control de Cámara
+## Resumen de las capacidades de control de cámara
 
-La API de Control de Cámara proporciona a los desarrolladores acceso directo para manipular varios parámetros de cámara cuando trabajan con dispositivos compatibles. Dependiendo de las especificaciones de tu hardware de cámara, puedes controlar programáticamente las siguientes características:
+La API de control de cámara proporciona a los desarrolladores acceso directo para manipular diversos parámetros de cámara al trabajar con dispositivos compatibles. Dependiendo de las especificaciones de tu hardware de cámara, puedes controlar programáticamente las siguientes características:
 
-- **Pan** - Control de movimiento horizontal
-- **Tilt** - Control de movimiento vertical
-- **Roll** - Movimiento rotacional a lo largo del eje del lente
-- **Zoom** - Ajuste de nivel de magnificación
-- **Exposición** - Configuraciones de sensibilidad a la luz
-- **Iris** - Control de apertura para admisión de luz
-- **Enfoque** - Ajuste de claridad y nitidez de imagen
+- **Pan** — control de movimiento horizontal
+- **Tilt** — control de movimiento vertical
+- **Roll** — movimiento rotacional a lo largo del eje del objetivo
+- **Zoom** — ajuste del nivel de magnificación
+- **Exposición** — ajustes de sensibilidad a la luz
+- **Iris** — control de apertura para la admisión de luz
+- **Enfoque** — ajuste de claridad y nitidez de la imagen
 
-**Nota Importante:** La API de Control de Cámara requiere una sesión activa de vista previa o captura para funcionar apropiadamente. Debes iniciar la vista previa o captura antes de intentar acceder a las características de control.
+**Nota importante:** la API de control de cámara requiere una sesión activa de vista previa o captura para funcionar correctamente. Debes iniciar la vista previa o captura antes de intentar acceder a las funciones de control.
 
-## Guía de Implementación con Ejemplos
+## Guía de implementación con ejemplos
 
-A continuación encontrarás patrones de implementación prácticos que demuestran cómo integrar características de control de cámara en tus aplicaciones .NET.
+A continuación encontrarás patrones de implementación prácticos que demuestran cómo integrar las funciones de control de cámara en tus aplicaciones .NET.
 
-### Componentes de Interfaz
+### Componentes de la interfaz
 
-Para interacción óptima del usuario, considera implementar los siguientes elementos de UI:
+Para una interacción óptima con el usuario, considera implementar los siguientes elementos de UI:
 
-- Controles deslizantes para ajuste de parámetros
-- Casillas de verificación para alternar modos auto/manual
-- Etiquetas para mostrar valores actuales, mínimos y máximos
+- Controles deslizantes para el ajuste de parámetros
+- Casillas de verificación para alternar entre modos auto/manual
+- Etiquetas para mostrar los valores actuales, mínimos y máximos
 
-Puedes referenciar el código fuente del Demo Principal para un ejemplo de implementación completo.
+Puedes consultar el código fuente del Demo Principal para un ejemplo de implementación completo.
 
-### Paso 1: Leer Capacidades de Parámetros de Cámara
+### Paso 1: leer las capacidades de los parámetros de cámara
 
-Primero, consulta la cámara para determinar los rangos soportados y valores predeterminados para cada parámetro de control:
+Primero, consulta la cámara para determinar los rangos soportados y los valores predeterminados de cada parámetro de control:
 
 ```cs
 // Consultar la cámara por el rango soportado del parámetro Zoom.
@@ -56,116 +56,77 @@ var ranges = await VideoCapture1.Video_CaptureDevice_CameraControl_GetRangeAsync
     CameraControlProperty.Zoom);
 if (ranges != null)
 {
-    // Configurar control deslizante con el rango soportado de la cámara
+    // Configurar el control deslizante con el rango soportado por la cámara
     tbCCZoom.Minimum = ranges.Min;
     tbCCZoom.Maximum = ranges.Max;
     tbCCZoom.SmallChange = ranges.Step;
     tbCCZoom.Value = ranges.Default;
 
-    // Actualizar etiquetas de UI con información de rango
+    // Actualizar las etiquetas de la UI con la información del rango
     lbCCZoomMin.Text = "Min: " + ranges.Min;
     lbCCZoomMax.Text = "Max: " + ranges.Max;
-    lbCCZoomCurrent.Text = "Actual: " + ranges.Default;
+    lbCCZoomCurrent.Text = "Current: " + ranges.Default;
 
-    // Establecer casillas de modo de control basadas en capacidades de cámara
+    // Establecer las casillas del modo de control según las capacidades de la cámara
     cbCCZoomManual.Checked = (ranges.Flags & CameraControlFlags.Manual) == CameraControlFlags.Manual;
     cbCCZoomAuto.Checked = (ranges.Flags & CameraControlFlags.Auto) == CameraControlFlags.Auto;
     cbCCZoomRelative.Checked = (ranges.Flags & CameraControlFlags.Relative) == CameraControlFlags.Relative;
 }
 ```
 
-**Nota Técnica:** Cuando la bandera Auto está habilitada, la cámara ignorará todas las demás banderas y configuraciones de valor manual. Esto sigue los protocolos estándar de control de cámara de la industria.
+**Nota técnica:** cuando el indicador Auto está habilitado, la cámara ignorará el resto de los indicadores y los valores manuales. Esto sigue los protocolos estándar de la industria de control de cámara.
 
-### Paso 2: Aplicar Cambios de Parámetros
+### Paso 2: aplicar cambios de parámetros
 
-Cuando los usuarios ajustan configuraciones a través de tu interfaz, aplica los cambios a la cámara con este patrón:
+Cuando los usuarios ajustan la configuración a través de tu interfaz, aplica los cambios a la cámara con este patrón:
 
 ```cs
-// Determinar qué banderas de control deben estar activas basadas en selecciones de UI
+// Inicializar los indicadores de control
 CameraControlFlags flags = CameraControlFlags.None;
 
-// Verificar si el modo manual está seleccionado
+// Construir los indicadores según el estado de las casillas de la UI
 if (cbCCZoomManual.Checked)
 {
+    // Habilitar el modo de control manual
     flags = flags | CameraControlFlags.Manual;
 }
 
-// Verificar si el modo automático está seleccionado
 if (cbCCZoomAuto.Checked)
 {
+    // Habilitar el modo de control automático (anulará la configuración manual)
     flags = flags | CameraControlFlags.Auto;
 }
 
-// Aplicar el valor de zoom con las banderas seleccionadas.
-// SetAsync recibe un VideoCaptureDeviceCameraControlValue que agrupa valor + banderas.
+if (cbCCZoomRelative.Checked)
+{
+    // Habilitar el modo de valor relativo (los cambios son relativos a la posición actual)
+    flags = flags | CameraControlFlags.Relative;
+}
+
+// Aplicar el nuevo valor de zoom con los indicadores de control especificados.
+// SetAsync recibe un VideoCaptureDeviceCameraControlValue que agrupa valor + indicadores.
 await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
     CameraControlProperty.Zoom,
     new VideoCaptureDeviceCameraControlValue(tbCCZoom.Value, flags));
 ```
 
-## Propiedades de Control Disponibles
+## Manejo de errores y mejores prácticas
 
-### Control PTZ (Pan-Tilt-Zoom)
+Al implementar funciones de control de cámara, ten en cuenta estas mejores prácticas:
 
-```cs
-// Controlar Pan (movimiento horizontal)
-await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
-    CameraControlProperty.Pan,
-    new VideoCaptureDeviceCameraControlValue(panValue, CameraControlFlags.Manual));
+- Comprueba siempre si un parámetro está soportado antes de intentar establecerlo
+- Implementa un manejo de errores adecuado para las funciones no soportadas
+- Proporciona retroalimentación al usuario cuando un comando falla
+- Recuerda que las capacidades de las cámaras varían ampliamente entre fabricantes y modelos
 
-// Controlar Tilt (movimiento vertical)
-await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
-    CameraControlProperty.Tilt,
-    new VideoCaptureDeviceCameraControlValue(tiltValue, CameraControlFlags.Manual));
+## Dependencias requeridas
 
-// Controlar Zoom
-await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
-    CameraControlProperty.Zoom,
-    new VideoCaptureDeviceCameraControlValue(zoomValue, CameraControlFlags.Manual));
-```
+Para un funcionamiento correcto, asegúrate de que tu aplicación incluya estos paquetes redistribuibles:
 
-### Control de Exposición
+- Redistribuibles de Video Capture:
+  - [Arquitectura x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
+  - [Arquitectura x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-```cs
-// Establecer exposición manual
-await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
-    CameraControlProperty.Exposure,
-    new VideoCaptureDeviceCameraControlValue(exposureValue, CameraControlFlags.Manual));
+## Recursos adicionales
 
-// Habilitar exposición automática
-await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
-    CameraControlProperty.Exposure,
-    new VideoCaptureDeviceCameraControlValue(0, CameraControlFlags.Auto)); // Valor ignorado en modo auto
-```
-
-### Control de Enfoque
-
-```cs
-// Establecer enfoque manual
-await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
-    CameraControlProperty.Focus,
-    new VideoCaptureDeviceCameraControlValue(focusValue, CameraControlFlags.Manual));
-
-// Habilitar auto-enfoque
-await VideoCapture1.Video_CaptureDevice_CameraControl_SetAsync(
-    CameraControlProperty.Focus,
-    new VideoCaptureDeviceCameraControlValue(0, CameraControlFlags.Auto));
-```
-
-## Mejores Prácticas
-
-1. **Verificar disponibilidad**: Siempre verifica si la cámara soporta un control específico antes de usarlo
-2. **Respetar rangos**: Usa solo valores dentro de los rangos mínimo y máximo reportados
-3. **Iniciar vista previa primero**: El control de cámara requiere una sesión activa
-4. **Manejar errores**: Algunas cámaras pueden no soportar todas las propiedades
-5. **Considerar modos automáticos**: Muchas cámaras proporcionan excelentes resultados con configuraciones automáticas
-
-## Aplicaciones de Ejemplo
-
-Explora estas aplicaciones de ejemplo para ver control de cámara en acción:
-
-- [Demo Principal de Video Capture (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/Main_Demo)
-- [Demo de Control de Cámara (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/Main%20Demo)
-
----
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para acceder a muestras de código adicionales y recursos de implementación.
+Para más ejemplos y detalles completos de implementación, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) con numerosos ejemplos de código y aplicaciones demo.

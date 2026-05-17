@@ -25,23 +25,23 @@ Siga estos pasos detallados para instalar correctamente el control TVFVideoCaptu
 
 1. Navegue al menú principal y seleccione **Component → Import ActiveX Controls**
 
-![Captura de pantalla mostrando el menú Component con opción Import ActiveX Controls](/help/docs/delphi/videocapture/install/vcbcb5_1.webp)
+![Captura de pantalla mostrando el menú Component con opción Import ActiveX Controls](vcbcb5_1.webp)
 
 2. De la lista de controles disponibles, localice y seleccione el elemento **VisioForge Video Capture**
 
 3. Haga clic en el botón **Install** para comenzar a importar el control ActiveX
 
-![Captura de pantalla mostrando el diálogo de selección de control ActiveX](/help/docs/delphi/videocapture/install/vcbcb5_2.webp)
+![Captura de pantalla mostrando el diálogo de selección de control ActiveX](vcbcb5_2.webp)
 
 4. Cuando se le pida confirmación, haga clic en el botón **Yes** para continuar
 
-![Captura de pantalla mostrando el diálogo de confirmación](/help/docs/delphi/videocapture/install/vcbcb5_3.webp)
+![Captura de pantalla mostrando el diálogo de confirmación](vcbcb5_3.webp)
 
 5. Una vez que el proceso de instalación se complete exitosamente, verá un mensaje de confirmación
 
 6. Haga clic en el botón **OK** para finalizar la instalación
 
-![Captura de pantalla mostrando el mensaje de instalación exitosa](/help/docs/delphi/videocapture/install/vcbcb5_4.webp)
+![Captura de pantalla mostrando el mensaje de instalación exitosa](vcbcb5_4.webp)
 
 ## Instalación en C++ Builder 2006 y Versiones Posteriores
 
@@ -51,19 +51,19 @@ Para versiones más recientes de C++ Builder (2006 y más nuevas), siga este pro
 
 Comience creando un nuevo paquete que contendrá el control TVFVideoCapture
 
-![Captura de pantalla mostrando el diálogo de creación de nuevo paquete](/help/docs/delphi/videocapture/install/vcbcb2006_4.webp)
+![Captura de pantalla mostrando el diálogo de creación de nuevo paquete](vcbcb2006_4.webp)
 
 ### Paso 2: Importar el Componente ActiveX
 
 1. Del menú principal, seleccione **Component → Import Component**
 
-![Captura de pantalla mostrando el menú Component con opción Import Component](/help/docs/delphi/videocapture/install/vcbcb2006_2.webp)
+![Captura de pantalla mostrando el menú Component con opción Import Component](vcbcb2006_2.webp)
 
 2. En el diálogo que aparece, seleccione el botón de radio **Import ActiveX Control**
 
 3. Haga clic en el botón **Next** para continuar
 
-![Captura de pantalla mostrando el diálogo de selección de tipo de importación](/help/docs/delphi/videocapture/install/vcbcb2006_3.webp)
+![Captura de pantalla mostrando el diálogo de selección de tipo de importación](vcbcb2006_3.webp)
 
 ### Paso 3: Seleccionar el Control TVFVideoCapture
 
@@ -73,7 +73,7 @@ Comience creando un nuevo paquete que contendrá el control TVFVideoCapture
 
 3. Haga clic en el botón **Next** para continuar
 
-![Captura de pantalla mostrando el diálogo de selección de control ActiveX](/help/docs/delphi/videocapture/install/vcbcb2006_5.webp)
+![Captura de pantalla mostrando el diálogo de selección de control ActiveX](vcbcb2006_5.webp)
 
 ### Paso 4: Configurar Ajustes de Salida
 
@@ -81,7 +81,7 @@ Comience creando un nuevo paquete que contendrá el control TVFVideoCapture
 
 2. Haga clic en el botón **Next** después de seleccionar una ubicación apropiada
 
-![Captura de pantalla mostrando el diálogo de selección de carpeta de salida](/help/docs/delphi/videocapture/install/vcbcb2006_5-1.webp)
+![Captura de pantalla mostrando el diálogo de selección de carpeta de salida](vcbcb2006_5-1.webp)
 
 ### Paso 5: Agregar Componente al Paquete
 
@@ -89,21 +89,21 @@ Comience creando un nuevo paquete que contendrá el control TVFVideoCapture
 
 2. Haga clic en el botón **Finish** para completar el proceso de importación
 
-![Captura de pantalla mostrando el diálogo de configuración final de importación](/help/docs/delphi/videocapture/install/vcbcb2006_6.webp)
+![Captura de pantalla mostrando el diálogo de configuración final de importación](vcbcb2006_6.webp)
 
 ### Paso 6: Guardar e Instalar el Paquete
 
 1. Guarde su proyecto cuando se le solicite
 
-![Captura de pantalla mostrando el diálogo de guardar proyecto](/help/docs/delphi/videocapture/install/vcbcb2006_7.webp)
+![Captura de pantalla mostrando el diálogo de guardar proyecto](vcbcb2006_7.webp)
 
 2. Instale el paquete para hacer el componente disponible en su entorno de desarrollo
 
-![Captura de pantalla mostrando el diálogo de instalación de paquete](/help/docs/delphi/videocapture/install/vcbcb2006_8.webp)
+![Captura de pantalla mostrando el diálogo de instalación de paquete](vcbcb2006_8.webp)
 
 3. Verifique que el control ActiveX TVFVideoCapture se haya instalado exitosamente
 
-![Captura de pantalla mostrando la confirmación de instalación exitosa](/help/docs/delphi/videocapture/install/vcbcb2006_9.webp)
+![Captura de pantalla mostrando la confirmación de instalación exitosa](vcbcb2006_9.webp)
 
 ## Recursos Adicionales y Soporte
 

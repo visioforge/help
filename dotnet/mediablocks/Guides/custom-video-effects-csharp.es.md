@@ -27,7 +27,7 @@ primary_api_classes:
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-El SDK Media Blocks de VisioForge proporciona más de 70 bloques de procesamiento de video para efectos en tiempo real, shaders OpenGL acelerados por GPU, gradación de color LUT profesional y transformaciones animadas de pan/zoom. Los efectos se aplican insertando bloques de procesamiento en el pipeline entre una fuente de video y un renderizador o codificador.
+El Media Blocks SDK de VisioForge proporciona más de 70 bloques de procesamiento de video para efectos en tiempo real, shaders OpenGL acelerados por GPU, gradación de color LUT profesional y transformaciones animadas de pan/zoom. Los efectos se aplican insertando bloques de procesamiento en el pipeline entre una fuente de video y un renderizador o codificador.
 
 ## Efectos de Video Integrados
 

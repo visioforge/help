@@ -1,6 +1,6 @@
 ---
-title: SDK de Captura de Video .Net para Grabación Avanzada
-description: SDK de Captura de Video .NET potente con amplio soporte de formatos, integración de hardware y implementación flexible para aplicaciones de grabación.
+title: Video Capture SDK .Net para Grabación de Video Avanzada
+description: Video Capture SDK .NET potente con amplio soporte de formatos, integración de hardware y implementación flexible para aplicaciones de grabación.
 sidebar_label: Captura de Video
 tags:
   - Video Capture SDK
@@ -8,15 +8,16 @@ tags:
   - DirectShow
   - Streaming
 
+order: 11
 ---
 
-# SDK de Captura de Video para Desarrolladores .NET
+# Video Capture SDK para Desarrolladores .NET
 
-[SDK de Captura de Video .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción
 
-El SDK de Captura de Video para .NET equipa a los desarrolladores con una solución poderosa, versátil para implementar capacidades profesionales de grabación de video en sus aplicaciones. Diseñado específicamente para entornos .NET, este SDK proporciona integración perfecta con su código base existente mientras entrega rendimiento excepcional y confiabilidad.
+El Video Capture SDK para .NET equipa a los desarrolladores con una solución poderosa, versátil para implementar capacidades profesionales de grabación de video en sus aplicaciones. Diseñado específicamente para entornos .NET, este SDK proporciona integración perfecta con su código base existente mientras entrega rendimiento excepcional y confiabilidad.
 
 ## Inicio rápido — Grabar webcam a MP4
 

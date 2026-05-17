@@ -16,6 +16,7 @@ primary_api_classes:
   - MediaBlocksPipeline
   - UniversalSourceSettings
 
+sidebar_label: Video Renderer
 ---
 
 # Bloque Renderizador de Video

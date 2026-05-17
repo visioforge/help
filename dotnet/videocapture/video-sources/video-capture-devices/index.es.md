@@ -1,107 +1,48 @@
 ---
-title: Dispositivos de captura de video en Video Capture SDK .Net
-description: Usa webcams, tarjetas de captura y dispositivos de video en Video Capture SDK .Net. Configuración, enumeración y control completo de hardware.
+title: Captura de video en C# .NET — dispositivos, PTZ y ajustes
+description: Integra webcams y tarjetas de captura en Video Capture SDK — enumeración, control PTZ y ajustes de video con ejemplos en C#.
+sidebar_label: Dispositivos de captura de video
+order: 20
 tags:
   - Video Capture SDK
   - .NET
 
 ---
 
-# Dispositivos de Captura de Video - Video Capture SDK .Net
+# Integración de dispositivos de captura de video en aplicaciones .NET
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Esta sección cubre el uso de dispositivos de captura de video físicos como webcams USB, cámaras integradas y tarjetas de captura.
+## Primeros pasos con dispositivos de captura de video
 
-## Tipos de Dispositivos
+Integrar funcionalidad de captura de video en tus aplicaciones .NET requiere comprender varios conceptos clave y técnicas de implementación. Esta guía te acompaña a través de los componentes esenciales necesarios para una integración de dispositivos exitosa.
 
-### Webcams USB
+## Funcionalidades principales de gestión de dispositivos
 
-Las webcams USB son los dispositivos de captura más comunes. El SDK soporta la mayoría de las webcams compatibles con UVC.
+### Descubrimiento y selección de dispositivos
 
-### Cámaras Integradas
+* [**Enumerar y seleccionar dispositivos**](enumerate-and-select.md) — Aprende técnicas para escanear el hardware disponible, listar los dispositivos compatibles e implementar la lógica de selección en tu aplicación.
 
-Cámaras integradas en laptops y dispositivos móviles.
+### Controles avanzados de cámara
 
-### Tarjetas de Captura
+* [**Control de cámara y PTZ**](camera-control-ptz.md) — Implementa la funcionalidad pan-tilt-zoom y otros controles avanzados de movimiento de cámara para una captura de video de precisión.
 
-Dispositivos que capturan video desde fuentes HDMI, SDI u otras interfaces de video.
+### Gestión de la calidad de video
 
-## Guías Disponibles
+* [**Ajustes de video**](video-adjustments.md) — Ajusta brillo, contraste, saturación y otros parámetros visuales para optimizar la calidad del video por programación.
 
-### Enumeración y Selección
+### Control de iluminación de hardware
 
-Aprenda cómo enumerar y seleccionar dispositivos de captura.
+* [**Habilitar la luz de la cámara**](enable-camera-light.md) — Controla los sistemas de iluminación integrados en hardware de cámara compatible desde el código de tu aplicación.
 
-[Enumerar y seleccionar dispositivos →](enumerate-and-select.md)
+### Configuración de entradas
 
-### Control de Cámara (PTZ)
+* [**Seleccionar la entrada del dispositivo (configurar el crossbar)**](crossbar.md) — Configura las fuentes de entrada y gestiona el enrutamiento de señales para dispositivos con múltiples capacidades de entrada.
 
-Control Pan-Tilt-Zoom para cámaras compatibles.
+## Recursos de implementación
 
-[Control de cámara PTZ →](camera-control-ptz.md)
+Nuestra documentación proporciona ejemplos de código prácticos que puedes implementar directamente en tus proyectos. Para más ejemplos de implementación:
 
-### Crossbar de Video
+---
 
-Configuración de crossbar para tarjetas de captura.
-
-[Crossbar de video →](crossbar.md)
-
-### Ajustes de Video
-
-Configuración de brillo, contraste, saturación y otros ajustes.
-
-[Ajustes de video →](video-adjustments.md)
-
-### Luz de Cámara
-
-Control de la luz LED de la cámara.
-
-[Habilitar luz de cámara →](enable-camera-light.md)
-
-## Ejemplo Básico
-
-```csharp
-// Enumerar dispositivos de video
-var devices = await DeviceEnumerator.Shared.VideoSourcesAsync();
-
-if (devices.Length > 0)
-{
-    var device = devices[0];
-    var format = device.VideoFormats[0];
-    
-    var settings = new VideoCaptureDeviceSourceSettings(device)
-    {
-        Format = format.ToFormat()
-    };
-    settings.Format.FrameRate = format.FrameRateList[0];
-    
-    var videoSource = new SystemVideoSourceBlock(settings);
-    
-    // Usar la fuente de video...
-}
-```
-
-## Formatos de Video
-
-Los dispositivos de captura soportan varios formatos de píxel:
-
-| Formato | Descripción | Uso de CPU |
-|---------|-------------|------------|
-| YUY2 | Video sin comprimir | Alto |
-| NV12 | Video sin comprimir | Alto |
-| MJPEG | Video comprimido JPEG | Bajo |
-| H.264 | Video comprimido H.264 | Bajo |
-
-## Resoluciones Comunes
-
-- 640x480 (VGA)
-- 1280x720 (HD)
-- 1920x1080 (Full HD)
-- 3840x2160 (4K)
-
-## Consideraciones de Rendimiento
-
-1. **MJPEG vs YUY2**: MJPEG usa menos ancho de banda USB pero requiere decodificación
-2. **Resolución vs fps**: Mayor resolución puede limitar la tasa de fotogramas máxima
-3. **Múltiples cámaras**: Considere el ancho de banda USB al usar múltiples dispositivos
+Visita nuestro repositorio de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos de código adicionales y patrones de implementación.

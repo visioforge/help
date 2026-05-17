@@ -225,81 +225,123 @@ var core = new VideoCaptureCoreX(videoView.GetVideoView());
 Durante el cierre, cancele enumeraciones pendientes, cancele la suscripción a `NDISourcesChanged`, llame a `StopNDISourceWatch()`, detenga y libere `VideoCaptureCoreX`, y destruya el SDK si su aplicación controla el ciclo de vida del SDK.
 
 
-## Capturar Video desde Fuentes NDI
+## Opciones avanzadas de configuración NDI
 
-Después de configurar la fuente NDI, puedes iniciar la captura y vista previa de video.
+### Optimización del rendimiento
 
-### Vista Previa de Video en Vivo
+Al trabajar con fuentes NDI, las consideraciones de rendimiento son importantes, especialmente en entornos profesionales. Aquí algunos consejos para optimizar tu implementación NDI:
+
+1. **Ancho de banda de red**: asegúrate de que tu red disponga de ancho de banda suficiente para los flujos NDI. Un flujo NDI HD típico requiere aproximadamente 100-150 Mbps.
+
+2. **Aceleración por hardware**: habilita la aceleración por hardware cuando esté disponible para reducir el uso de CPU y mejorar el rendimiento.
+
+3. **Control de tasa de fotogramas**: considera limitar la tasa de fotogramas si no necesitas la máxima calidad, lo que puede reducir la carga de red.
+
+4. **Configuración de resolución**: elige ajustes de resolución apropiados según las necesidades de tu aplicación y el ancho de banda disponible.
+
+### Gestión de múltiples fuentes NDI
+
+Para aplicaciones que necesitan manejar múltiples fuentes NDI simultáneamente:
+
+1. Crea instancias de captura separadas para cada fuente NDI
+2. Implementa un pool de recursos para gestionar eficientemente los recursos del sistema
+3. Considera usar un patrón productor/consumidor para procesar múltiples flujos
+4. Supervisa el rendimiento del sistema y ajusta la configuración según sea necesario
+
+## Manejo de errores y solución de problemas
+
+Al implementar la funcionalidad NDI, es importante manejar los posibles problemas con elegancia:
+
+### Problemas comunes de conexión NDI
+
+1. **Fuente no encontrada**: verifica que la fuente NDI esté activa y en la misma red
+2. **Timeout de conexión**: revisa la configuración de red y los ajustes del firewall
+3. **Fallo de autenticación**: asegúrate de que las credenciales sean correctas si se requiere autenticación
+4. **Problemas de rendimiento**: supervisa el uso de CPU y red durante la captura
+
+### Implementación de manejo de errores robusto
 
 ```cs
-// Iniciar vista previa
-await VideoCapture1.StartAsync();
+// El SDK no expone tipos de excepción específicos de NDI — los elementos GStreamer subyacentes
+// reportan fallos como Exception genérica. Bifurca según el resultado del descubrimiento
+// (null / vacío) para "fuente no encontrada", y en el fallo de CreateAsync para problemas de conexión.
+try
+{
+    var discovered = await DeviceEnumerator.Shared.NDISourcesAsync();
+    var match = discovered.FirstOrDefault(s => s.URL == ndiUrl);
+    if (match == null)
+    {
+        Log.Error($"NDI source not found on the network: {ndiUrl}");
+        return;
+    }
+
+    var ndiSettings = await NDISourceSettings.CreateAsync(VideoCapture1.GetContext(), match);
+    VideoCapture1.Video_Source = ndiSettings;
+}
+catch (Exception ex)
+{
+    // Todos los fallos (descubrimiento, creación de configuración, inicialización de elementos GStreamer, etc.)
+    Log.Error($"Failed to connect to NDI source: {ex.Message}");
+}
 ```
 
-### Grabar a Archivo
+## Integración con flujos de procesamiento de video
 
-```cs
-// Configurar salida de archivo
-var mp4Output = new MP4Output("output.mp4");
-VideoCapture1.Outputs_Add(mp4Output);
+Las fuentes NDI pueden integrarse de forma transparente con otros componentes de tu pipeline de procesamiento de video:
 
-// Iniciar grabación
-await VideoCapture1.StartAsync();
-```
+1. **Grabación**: captura flujos NDI a diversos formatos de archivo
+2. **Streaming en vivo**: reenvía contenido NDI a servicios de streaming
+3. **Procesamiento de video**: aplica filtros y efectos a fuentes NDI en tiempo real
+4. **Composición multi-vista**: combina múltiples fuentes NDI en una única salida
 
-## Características Avanzadas de NDI
+## Aplicaciones de ejemplo y referencias de código
 
-### Baja Latencia
+Para ayudarte a empezar con la implementación NDI, proporcionamos varias aplicaciones de ejemplo que demuestran distintos aspectos de la funcionalidad NDI.
 
-NDI está diseñado para transmisión de video de baja latencia. Para entornos de producción en vivo, puedes optimizar ajustes para latencia mínima:
+=== "VideoCaptureCore"
 
-```cs
-// Habilitar modo de baja latencia si está disponible
-ndiSource.LowLatencyMode = true;
-```
+    
+    - [Captura de fuente NDI a formato MP4 (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/NDI%20Source)
+    - [Demo principal del SDK (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/Main%20Demo)
+    - [Ejemplo NDI y otras fuentes (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/IP_Capture)
+    - [Demo principal del SDK (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/Main_Demo)
+    
 
-### Tally y Comunicación Bidireccional
+=== "VideoCaptureCoreX"
 
-NDI soporta señales de tally para indicar cuando una fuente está al aire. Esto es útil para entornos de producción en vivo:
+    
+    - [Vista previa de fuente NDI (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/NDI%20Source%20Demo)
+    - [Vista previa y captura NDI (y otras fuentes) (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture)
+    - [Reproductor NDI (Android)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Android/NDIPlayer)
+    - [Reproductor NDI (MAUI)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/MAUI/NDIPlayer)
+    
 
-```cs
-// Las señales de tally se manejan automáticamente cuando corresponde
-```
 
-## Mejores Prácticas
+## Mejores prácticas para la implementación NDI
 
-1. **Configuración de Red**: Asegúrate de que tu red soporte tráfico multicast para descubrimiento NDI óptimo
-2. **Ancho de Banda**: Los flujos NDI pueden consumir ancho de banda significativo; planifica tu capacidad de red apropiadamente
-3. **Latencia**: Usa conexiones por cable cuando sea posible para la menor latencia
-4. **Firewall**: Asegúrate de que los puertos NDI estén abiertos en tu firewall
-5. **Bibliotecas nativas Android por ABI**: Para receptores Android, incluya `libndi.so` para cada ABI que distribuya. Las bibliotecas faltantes producen fallos en tiempo de ejecución aunque el APK compile.
-6. **Ciclo de vida móvil**: Detenga la reproducción cuando se detengan actividades Android o se cierren páginas/ventanas MAUI, libere el core, cancele la enumeración de fuentes y quite los manejadores de eventos del watcher.
+Para garantizar un rendimiento y fiabilidad óptimos al trabajar con fuentes NDI:
 
-## Solución de Problemas
+1. **Realiza enumeración regular de fuentes**: las condiciones de red y las fuentes disponibles pueden cambiar; vuelve a enumerar las fuentes periódicamente.
 
-### No se Descubren Fuentes
-- Verificar que NDI SDK o Tools estén instalados
-- Asegurar que los dispositivos estén en la misma red
-- Comprobar configuración del firewall
+2. **Implementa lógica de reintento de conexión**: pueden ocurrir interrupciones de red; implementa intentos de reconexión automática.
 
-### Problemas de Calidad de Video
-- Verificar capacidad de ancho de banda de red
-- Revisar configuración de calidad del encoder en la fuente
+3. **Supervisa la salud del flujo**: rastrea la tasa de fotogramas, latencia y estabilidad de conexión para detectar problemas potenciales.
 
-### Problemas de Latencia
-- Usar conexiones por cable en lugar de WiFi
-- Optimizar configuración del buffer
+4. **Maneja desconexiones de fuente con elegancia**: implementa controladores de eventos para desconexiones inesperadas.
 
-## Aplicaciones de Ejemplo
+5. **Prueba con diversas fuentes NDI**: diferentes implementaciones de NDI pueden tener ligeras variaciones; prueba con varias fuentes.
 
-Explora estas aplicaciones de ejemplo para ver integración NDI en acción:
+6. **Empaqueta bibliotecas nativas Android por ABI**: para receptores Android, incluye `libndi.so` para cada ABI que distribuyas. Las bibliotecas ABI faltantes producen fallos en tiempo de ejecución aunque el APK se compile.
 
-- [Demo Fuente NDI (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/NDI%20Source%20Demo)
-- [NDI Player (Android)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Android/NDIPlayer)
-- [NDI Player (MAUI)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/MAUI/NDIPlayer)
-- [Demo Principal de Video Capture (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/Main%20Demo)
+7. **Respeta el ciclo de vida móvil**: detén la reproducción cuando se detengan actividades Android o se cierren páginas/ventanas MAUI, libera el core, cancela la enumeración de fuentes y quita los controladores de eventos del watcher.
 
-## Documentación Relacionada
+## Conclusión
+
+La tecnología NDI ofrece capacidades potentes para la integración de video por red en aplicaciones .NET. Con nuestro SDK, puedes incorporar fácilmente video de alta calidad y baja latencia desde fuentes NDI en tus proyectos de software. Ya sea que estés construyendo un sistema de producción en vivo, una aplicación de videoconferencia o cualquier solución que requiera video por red, nuestra implementación NDI proporciona las herramientas que necesitas para tener éxito.
+
+Los ejemplos de código proporcionados demuestran los patrones esenciales para trabajar con fuentes NDI, desde la enumeración y conexión hasta la captura y procesamiento. Siguiendo estos patrones y mejores prácticas, puedes crear aplicaciones habilitadas para NDI robustas que ofrecen rendimiento y fiabilidad excepcionales.
+
+## Documentación relacionada
 
 - [Visión general de cámaras IP](index.md) — tipos de fuentes RTSP, ONVIF y NDI de un vistazo
 - [Configuración de fuente de cámara RTSP](rtsp.md) — protocolo de cámara IP más común

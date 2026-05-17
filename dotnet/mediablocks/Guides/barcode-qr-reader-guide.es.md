@@ -677,7 +677,7 @@ Para la mayoría de los casos de uso, 10–15 FPS proporciona detección confiab
 - [Captura de Video de Webcam en C#](../../videocapture/guides/save-webcam-video.md) — capturar y grabar video de webcam usando el mismo SDK
 - [Streaming RTSP y Captura de Cámara IP](../../general/network-streaming/rtsp.md) — conectar a cámaras IP para escaneo de códigos de barras desde streams de red
 - [Fuentes de Cámaras IP](../../videocapture/video-sources/ip-cameras/index.md) — configurar fuentes de cámaras ONVIF y RTSP
-- [Grabación Pre-Evento](pre-event-recording.es.md) — combinar detección de códigos de barras con grabación activada por movimiento
-- [Referencia de Bloques Especiales](../Special/index.es.md) — referencia API de BarcodeDetectorBlock
+- [Grabación Pre-Evento](pre-event-recording.md) — combinar detección de códigos de barras con grabación activada por movimiento
+- [Referencia de Bloques Especiales](../Special/index.md) — referencia API de BarcodeDetectorBlock
 - [Primeros Pasos con Media Blocks](../GettingStarted/index.md) — fundamentos del pipeline
 - [Despliegue Específico por Plataforma](../../deployment-x/index.md) — paquetes de dependencias nativas para todas las plataformas

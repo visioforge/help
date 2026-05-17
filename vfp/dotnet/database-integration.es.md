@@ -22,7 +22,7 @@ primary_api_classes:
 
 ## APIs del SDK para Almacenamiento
 
-**El SDK de Huellas Digitales de Video proporciona estas clases para el almacenamiento de huellas digitales:**
+**El Video Fingerprinting SDK proporciona estas clases para el almacenamiento de huellas digitales:**
 
 - **VFPFingerPrint** - Huella digital individual con serialización integrada:
   - `Save(string filename)` o `Save(Stream stream)` - Guarda en archivo/stream
@@ -76,7 +76,7 @@ Esta guía cubre la integración de huellas digitales de video con varios sistem
 
 ### Usando las Clases de Almacenamiento Integradas del SDK
 
-> **IMPORTANTE**: El SDK de Huellas Digitales de Video incluye clases integradas para almacenamiento de huellas digitales:
+> **IMPORTANTE**: El Video Fingerprinting SDK incluye clases integradas para almacenamiento de huellas digitales:
 >
 > - `VFPFingerPrint` - Huella digital individual con métodos Save/Load para persistencia de archivos
 > - `VFPFingerPrintDB` - Base de datos de huellas digitales con lista Items y métodos Save/Load
@@ -84,7 +84,7 @@ Esta guía cubre la integración de huellas digitales de video con varios sistem
 
 ### Paquete NuGet Oficial de MongoDB
 
-VisioForge proporciona un paquete NuGet oficial para integración MongoDB con el SDK de Huellas Digitales de Video. Este paquete ofrece una implementación lista para usar para almacenar y gestionar huellas digitales de video en MongoDB con soporte GridFS para almacenamiento eficiente de datos binarios.
+VisioForge proporciona un paquete NuGet oficial para integración MongoDB con el Video Fingerprinting SDK. Este paquete ofrece una implementación lista para usar para almacenar y gestionar huellas digitales de video en MongoDB con soporte GridFS para almacenamiento eficiente de datos binarios.
 
 #### Información del Paquete
 

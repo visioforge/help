@@ -22,7 +22,7 @@ primary_api_classes:
 
 ---
 
-# SDK de Reproductor Multimedia para Android - Solución Profesional de Reproducción de Video
+# Media Player SDK .NET para Android - Solución Profesional de Reproducción de Video
 
 [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -162,6 +162,6 @@ Para más información, visita nuestra [página de producto](https://www.visiofo
 
 - [Guía de Implementación Android](../../deployment-x/Android.md) - Instrucciones detalladas de despliegue para Android
 - [Ejemplos de Código](../code-samples/index.md) - Ejemplos funcionales y fragmentos
-- [Guía de Reproductor Avalonia Multiplataforma](avalonia-player.md) - Construyendo apps de video multiplataforma
+- [Guía de Reproductor Avalonia Multiplataforma](../guides/avalonia-player.md) - Construyendo apps de video multiplataforma
 - [Registro de Cambios](../../changelog.md) - Últimas actualizaciones y versiones
 - [Acuerdo de Licencia de Usuario Final](../../../eula.md) - Información de licenciamiento

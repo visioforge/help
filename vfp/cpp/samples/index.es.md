@@ -1,5 +1,5 @@
 ---
-title: Ejemplos de Código C++ del SDK Video Fingerprinting
+title: Ejemplos de Código C++ del Video Fingerprinting SDK
 description: Ejemplos de código C++ para generar, comparar y buscar huellas de video con el SDK VisioForge. Incluye muestras de línea de comandos.
 sidebar_label: Ejemplos C++
 tags:
@@ -12,10 +12,12 @@ tags:
 primary_api_classes:
   - VFPFingerprintSource
   - VFPFingerPrint
+  - VFPSearch
+  - VFPCompare
 
 ---
 
-# Ejemplos de Código C++ del SDK Video Fingerprinting
+# Ejemplos de Código C++ del Video Fingerprinting SDK
 
 ## Ejemplos Disponibles
 

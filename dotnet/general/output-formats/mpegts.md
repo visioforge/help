@@ -333,7 +333,7 @@ MFBaseOutput
 
 ### Inherited Video Settings
 
-The [MPEGTSOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.MPEGTSOutput.html) class inherits video encoding capabilities from MFBaseOutput, which includes:
+The [MPEGTSOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.MPEGTSOutput.html) class inherits video encoding capabilities from MFBaseOutput, which includes:
 
 **Video Encoding Configuration**: Through the `Video` property, supporting:
 

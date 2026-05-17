@@ -17,6 +17,7 @@ primary_api_classes:
   - OSXAudioSinkSettings
   - MediaBlocksPipeline
 
+sidebar_label: Audio Rendering
 ---
 
 # Bloque de Renderizado de Audio: Procesamiento de Salida de Audio Multiplataforma

@@ -17,6 +17,8 @@ primary_api_classes:
   - FileSinkBlock
   - AACEncoderBlock
 
+order: 19
+sidebar_label: Audio Encoders
 ---
 
 # Bloques de codificadores de audio

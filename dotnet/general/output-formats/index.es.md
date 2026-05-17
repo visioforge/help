@@ -40,7 +40,7 @@ Al seleccionar un formato de salida, considere estos factores clave:
 
 ### AVI (Audio Video Interleave)
 
-[AVI](avi.es.md) es un formato de contenedor clásico desarrollado por Microsoft que soporta varios códecs de video y audio.
+[AVI](avi.md) es un formato de contenedor clásico desarrollado por Microsoft que soporta varios códecs de video y audio.
 
 **Características clave:**
 
@@ -51,7 +51,7 @@ Al seleccionar un formato de salida, considere estos factores clave:
 
 ### MP4 (MPEG-4 Part 14)
 
-[MP4](mp4.es.md) es uno de los formatos de contenedor más versátiles y ampliamente utilizados en aplicaciones modernas.
+[MP4](mp4.md) es uno de los formatos de contenedor más versátiles y ampliamente utilizados en aplicaciones modernas.
 
 **Características clave:**
 
@@ -73,7 +73,7 @@ Al seleccionar un formato de salida, considere estos factores clave:
 
 ### WebM
 
-[WebM](webm.es.md) es un formato de contenedor de código abierto diseñado específicamente para uso web.
+[WebM](webm.md) es un formato de contenedor de código abierto diseñado específicamente para uso web.
 
 **Características clave:**
 
@@ -90,7 +90,7 @@ Al seleccionar un formato de salida, considere estos factores clave:
 
 ### MKV (Matroska)
 
-[MKV](mkv.es.md) es un formato de contenedor flexible que puede contener prácticamente cualquier tipo de audio o video.
+[MKV](mkv.md) es un formato de contenedor flexible que puede contener prácticamente cualquier tipo de audio o video.
 
 **Características clave:**
 
@@ -107,16 +107,16 @@ Al seleccionar un formato de salida, considere estos factores clave:
 
 ### Formatos de Contenedor Adicionales
 
-- [MOV](mov.es.md) - Formato de contenedor QuickTime de Apple
-- [MPEG-TS](mpegts.es.md) - Formato de Flujo de Transporte optimizado para radiodifusión
-- [MXF](mxf.es.md) - Formato de Intercambio de Material utilizado en producción de video profesional
-- [Windows Media Video](wmv.es.md) - Formato propietario de Microsoft
+- [MOV](mov.md) - Formato de contenedor QuickTime de Apple
+- [MPEG-TS](mpegts.md) - Formato de Flujo de Transporte optimizado para radiodifusión
+- [MXF](mxf.md) - Formato de Intercambio de Material utilizado en producción de video profesional
+- [Windows Media Video](wmv.md) - Formato propietario de Microsoft
 
 ## Formatos Solo de Audio
 
 ### MP3 (MPEG-1 Audio Layer III)
 
-[MP3](../audio-encoders/mp3.es.md) sigue siendo uno de los formatos de audio más ampliamente soportados.
+[MP3](../audio-encoders/mp3.md) sigue siendo uno de los formatos de audio más ampliamente soportados.
 
 **Características clave:**
 
@@ -126,7 +126,7 @@ Al seleccionar un formato de salida, considere estos factores clave:
 
 ### AAC en Contenedor M4A
 
-[M4A](../audio-encoders/aac.es.md) proporciona mejor calidad de audio que MP3 a la misma tasa de bits.
+[M4A](../audio-encoders/aac.md) proporciona mejor calidad de audio que MP3 a la misma tasa de bits.
 
 **Características clave:**
 
@@ -136,14 +136,14 @@ Al seleccionar un formato de salida, considere estos factores clave:
 
 ### Otros Formatos de Audio
 
-- [FLAC](../audio-encoders/flac.es.md) - Formato de audio sin pérdida para archivo de alta calidad
-- [OGG Vorbis](../audio-encoders/vorbis.es.md) - Alternativa de código abierto a MP3 con mejor calidad a tasas de bits más bajas
+- [FLAC](../audio-encoders/flac.md) - Formato de audio sin pérdida para archivo de alta calidad
+- [OGG Vorbis](../audio-encoders/vorbis.md) - Alternativa de código abierto a MP3 con mejor calidad a tasas de bits más bajas
 
 ## Formatos Especializados
 
 ### GIF (Graphics Interchange Format)
 
-[GIF](gif.es.md) es útil para crear animaciones cortas y silenciosas.
+[GIF](gif.md) es útil para crear animaciones cortas y silenciosas.
 
 **Características clave:**
 
@@ -154,7 +154,7 @@ Al seleccionar un formato de salida, considere estos factores clave:
 
 ### Formato de Salida Personalizado
 
-[Formato de salida personalizado](custom.es.md) permite la integración con filtros DirectShow de terceros.
+[Formato de salida personalizado](custom.md) permite la integración con filtros DirectShow de terceros.
 
 **Características clave:**
 
@@ -166,7 +166,7 @@ Al seleccionar un formato de salida, considere estos factores clave:
 
 ### Integración FFMPEG
 
-La integración [FFMPEG EXE](ffmpeg-exe.es.md) proporciona acceso a la extensa biblioteca de códecs de FFMPEG.
+La integración [FFMPEG EXE](ffmpeg-exe.md) proporciona acceso a la extensa biblioteca de códecs de FFMPEG.
 
 **Características clave:**
 

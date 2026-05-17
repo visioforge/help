@@ -1,5 +1,5 @@
 ---
-title: Save Webcam Video in C# .NET: Record and Capture Guide
+title: Save Webcam Video in C# .NET — Record and Capture Guide
 description: Save webcam video to MP4 and WebM in C# with VisioForge Video Capture SDK. GPU-accelerated encoding, device enumeration, and cross-platform support.
 tags:
   - Video Capture SDK

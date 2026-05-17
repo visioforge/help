@@ -1,5 +1,5 @@
 ---
-title: SDK de Cámara Virtual para Zoom, Teams y OBS en Windows
+title: Virtual Camera SDK para Zoom, Teams y OBS en Windows
 description: Cree cámaras web virtuales para Zoom, Teams, Skype y OBS con SDK DirectShow para transmitir cualquier fuente de video con soporte de audio.
 tags:
   - Virtual Camera SDK
@@ -13,13 +13,15 @@ primary_api_classes:
   - SinkFilter
   - IBaseFilter
 
+order: 6
+sidebar_label: Virtual Camera SDK
 ---
 
-# SDK de Cámara Virtual DirectShow
+# DirectShow Virtual Camera SDK
 
 ## Descripción General
 
-Nuestro robusto SDK de Cámara Virtual basado en DirectShow permite a los desarrolladores implementar potente funcionalidad de cámara virtual en sus aplicaciones. El SDK proporciona filtros sink que pueden utilizarse como salida en entornos de Video Capture SDK o Video Edit SDK, mientras que los filtros source pueden emplearse como fuentes de video para varias aplicaciones de captura.
+Nuestro robusto Virtual Camera SDK basado en DirectShow permite a los desarrolladores implementar potente funcionalidad de cámara virtual en sus aplicaciones. El SDK proporciona filtros sink que pueden utilizarse como salida en entornos de Video Capture SDK o Video Edit SDK, mientras que los filtros source pueden emplearse como fuentes de video para varias aplicaciones de captura.
 
 Con este versátil kit de herramientas, puede transmitir contenido de video desde prácticamente cualquier fuente directamente a un dispositivo de cámara virtual. Estos dispositivos virtuales son completamente compatibles con plataformas de comunicación populares como `Skype`, `Zoom`, `Microsoft Teams`, navegadores web y numerosas otras aplicaciones que soportan cámaras virtuales DirectShow. El SDK también incluye capacidades completas de streaming de audio para soluciones multimedia completas.
 
@@ -31,7 +33,7 @@ Descargue el SDK desde nuestra [página del producto](https://www.visioforge.com
 
 ## Instalación
 
-Antes de usar los ejemplos de código e integrar el SDK en su aplicación, primero debe instalar el SDK de Cámara Virtual desde la [página del producto](https://www.visioforge.com/virtual-camera-sdk).
+Antes de usar los ejemplos de código e integrar el SDK en su aplicación, primero debe instalar el Virtual Camera SDK desde la [página del producto](https://www.visioforge.com/virtual-camera-sdk).
 
 **Pasos de Instalación**:
 
@@ -58,9 +60,9 @@ Antes de usar los ejemplos de código e integrar el SDK en su aplicación, prime
 
 ### Arquitectura de Grafo DirectShow de Ejemplo
 
-El diagrama a continuación ilustra la implementación estándar de grafo DirectShow al usar el SDK de Cámara Virtual:
+El diagrama a continuación ilustra la implementación estándar de grafo DirectShow al usar el Virtual Camera SDK:
 
-![Grafo DirectShow de ejemplo](/help/docs/directshow/virtual-camera-sdk/demo.webp)
+![Grafo DirectShow de ejemplo](demo.webp)
 
 ### Registro de Licencia vía Registro
 
@@ -182,11 +184,82 @@ DECLARE_INTERFACE_(IVFVirtualCameraSink, IUnknown)
 };
 ```
 
+**Ejemplo de Uso (C++)**:
+
+```cpp
+IBaseFilter* pSinkFilter = nullptr;
+IVFVirtualCameraSink* pSinkIntf = nullptr;
+
+// Crear filtro Virtual Camera Sink
+hr = CoCreateInstance(CLSID_VFVirtualCameraSink, NULL, CLSCTX_INPROC_SERVER,
+                     IID_IBaseFilter, (void**)&pSinkFilter);
+
+if (SUCCEEDED(hr))
+{
+    // Consultar interfaz
+    hr = pSinkFilter->QueryInterface(IID_IVFVirtualCameraSink, (void**)&pSinkIntf);
+    if (SUCCEEDED(hr))
+    {
+        // Establecer licencia — LPCSTR (ANSI), no cadena ancha
+        hr = pSinkIntf->set_license("SU-CLAVE-DE-LICENCIA"); // o "TRIAL"
+        pSinkIntf->Release();
+    }
+}
+```
+
+#### Definición Delphi
+
+```delphi
+uses
+  ActiveX, ComObj;
+
+const
+  IID_IVFVirtualCameraSink: TGUID = '{A96631D2-4AC9-4F09-9F34-FF8229087DEB}';
+
+type
+  /// <summary>
+  /// Interfaz sink de cámara virtual para configuración de licencia.
+  /// </summary>
+  IVFVirtualCameraSink = interface(IUnknown)
+    ['{A96631D2-4AC9-4F09-9F34-FF8229087DEB}']
+
+    /// <summary>
+    /// Establece la clave de licencia para el filtro sink de cámara virtual.
+    /// </summary>
+    /// <param name="license">Cadena ANSI de clave de licencia ('TRIAL' para versión de prueba)</param>
+    /// <returns>HRESULT (S_OK para éxito)</returns>
+    function set_license(license: PAnsiChar): HRESULT; stdcall;
+  end;
+```
+
+**Ejemplo de Uso (Delphi)**:
+
+```delphi
+var
+  SinkFilter: IBaseFilter;
+  SinkIntf: IVFVirtualCameraSink;
+begin
+  // Crear filtro Virtual Camera Sink
+  if Succeeded(CoCreateInstance(CLSID_VFVirtualCameraSink, nil,
+                                CLSCTX_INPROC_SERVER,
+                                IID_IBaseFilter, SinkFilter)) then
+  begin
+    // Consultar interfaz
+    if Succeeded(SinkFilter.QueryInterface(IID_IVFVirtualCameraSink, SinkIntf)) then
+    begin
+      // Establecer licencia — PAnsiChar (cadena ANSI)
+      SinkIntf.set_license(PAnsiChar(AnsiString('SU-CLAVE-DE-LICENCIA'))); // o AnsiString('TRIAL')
+      SinkIntf := nil;
+    end;
+  end;
+end;
+```
+
 ---
 
 ## Bibliotecas de Terceros e Integración
 
-El SDK de Cámara Virtual contiene componentes de terceros que se usan en las aplicaciones de demostración. Estos componentes no son requeridos para la funcionalidad principal del SDK.
+El Virtual Camera SDK contiene componentes de terceros que se usan en las aplicaciones de demostración. Estos componentes no son requeridos para la funcionalidad principal del SDK.
 
 Las aplicaciones de demostración de Delphi y .NET utilizan bibliotecas de terceros para simplificar el desarrollo DirectShow. Las aplicaciones de demostración C++ están construidas sin dependencias externas.
 

@@ -20,7 +20,7 @@ primary_api_classes:
 
 ## Introducción
 
-La tecnología de huellas de video permite a los desarrolladores identificar y localizar segmentos específicos de video dentro de archivos de video más grandes. Esta guía demuestra el proceso de implementación usando un poderoso SDK de Huellas de Video que funciona con varios formatos de video y niveles de calidad.
+La tecnología de huellas de video permite a los desarrolladores identificar y localizar segmentos específicos de video dentro de archivos de video más grandes. Esta guía demuestra el proceso de implementación usando un poderoso Video Fingerprinting SDK que funciona con varios formatos de video y niveles de calidad.
 
 Los ejemplos principales en este tutorial usan la implementación de API .NET, pero funcionalidad equivalente está disponible a través de la API C++ para desarrolladores que prefieren soluciones de código nativo.
 

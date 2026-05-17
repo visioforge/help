@@ -1,17 +1,19 @@
 ---
-title: SDK de Edición de Video FFmpeg para .NET Multiplataforma
+title: Video Edit SDK FFmpeg .NET — Edición de vídeo en C#
 description: Potente toolkit de edición, procesamiento y conversión de video multiplataforma para .NET con efectos profesionales, superposiciones y codificación.
+sidebar_label: Video Edit SDK FFmpeg .NET
 tags:
   - Video Edit SDK FFmpeg
   - .NET
 
+order: 11
 ---
 
-# Video Edit FFMPEG SDK para Desarrollo .NET
+# Video Edit SDK FFmpeg para Desarrollo .NET
 
 ## Introducción al SDK
 
-El Video Edit FFMPEG SDK para .NET permite a los desarrolladores integrar sin problemas capacidades de edición de video, conversión y procesamiento avanzado en sus aplicaciones .NET. Este potente toolkit te permite construir videos de calidad profesional desde varias fuentes de audio y video con mínimo esfuerzo. Construido sobre el robusto y ampliamente adoptado framework FFMPEG, nuestro SDK proporciona soporte para virtualmente todos los formatos de video y audio estándar de la industria, entregando una solución completa de edición y producción multimedia para tus aplicaciones.
+El Video Edit SDK FFmpeg para .NET permite a los desarrolladores integrar sin problemas capacidades de edición de video, conversión y procesamiento avanzado en sus aplicaciones .NET. Este potente toolkit te permite construir videos de calidad profesional desde varias fuentes de audio y video con mínimo esfuerzo. Construido sobre el robusto y ampliamente adoptado framework FFMPEG, nuestro SDK proporciona soporte para virtualmente todos los formatos de video y audio estándar de la industria, entregando una solución completa de edición y producción multimedia para tus aplicaciones.
 
 Ya sea que estés construyendo software de edición de video, añadiendo procesamiento de medios a tu aplicación o desarrollando herramientas especializadas de conversión de video, este SDK ofrece los bloques de construcción esenciales para implementar características sofisticadas de edición de video de manera rápida y eficiente.
 

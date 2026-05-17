@@ -49,11 +49,11 @@ El SDK expone tres APIs distintas para codificación Vorbis. Dos son Windows-cl�
 
 #### 1. Contenedor WebM con audio Vorbis (Windows clásico)
 
-La clase [`WebMOutput`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.WebMOutput.html) en el espacio de nombres `VisioForge.Core.Types.Output` encapsula audio Vorbis dentro del formato WebM. Corre solo en Windows (DirectShow).
+La clase [`WebMOutput`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WebMOutput.html) en el espacio de nombres `VisioForge.Core.Types.X.Output` encapsula audio Vorbis dentro del formato WebM. Corre solo en Windows (DirectShow).
 
 #### 2. Salida OGG Vorbis dedicada (Windows clásico)
 
-La clase [`OGGVorbisOutput`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.OGGVorbisOutput.html) en el espacio de nombres `VisioForge.Core.Types.Output` proporciona control detallado sobre modos VBR/bitrate para Vorbis en contenedor OGG. Solo Windows.
+La clase [`OGGVorbisOutput`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.OGGVorbisOutput.html) en el espacio de nombres `VisioForge.Core.Types.X.Output` proporciona control detallado sobre modos VBR/bitrate para Vorbis en contenedor OGG. Solo Windows.
 
 #### 3. VorbisEncoderSettings flexible (multiplataforma)
 

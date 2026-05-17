@@ -6,7 +6,6 @@
     <ImplicitUsings>true</ImplicitUsings>
     <SupportedOSPlatformVersion>14.0</SupportedOSPlatformVersion>
   </PropertyGroup>
-
   <!-- Debug: linker stays SDK-only and the Mono interpreter handles every
        managed assembly. The X SDK relies on dynamic codegen paths the iOS
        AOT compiler refuses (DynamicMethod, late-bound generic instantiations
@@ -18,16 +17,14 @@
     <MtouchInterpreter>all</MtouchInterpreter>
     <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
-
   <!-- Release: same interpreter requirement still applies. AOT-only Release
        builds will JIT-fail at the first VisioForgeX.InitSDK() call. -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchInterpreter>all</MtouchInterpreter>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.5.4" />
+    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.5.17" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.0.16" />

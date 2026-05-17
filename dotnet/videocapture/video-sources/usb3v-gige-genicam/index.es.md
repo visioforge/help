@@ -25,7 +25,7 @@ primary_api_classes:
 
 # Integración de Cámaras USB3 Vision, GigE y GenICam
 
-[SDK de Captura de Video .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button }
 
 !!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
 
@@ -220,7 +220,7 @@ Los siguientes SDKs de fabricante se conocen por trabajar bien con nuestra integ
 
 ## Ejemplos de Código
 
-Los siguientes ejemplos demuestran implementación práctica de GenICam, USB3 Vision y cámaras GigE usando el SDK de Captura de Video de VisioForge con integración GenICam.
+Los siguientes ejemplos demuestran implementación práctica de GenICam, USB3 Vision y cámaras GigE usando el Video Capture SDK de VisioForge con integración GenICam.
 
 ### Descubrimiento Básico de Cámara e Información
 

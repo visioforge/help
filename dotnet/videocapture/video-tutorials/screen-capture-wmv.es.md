@@ -43,6 +43,14 @@ Accede al código fuente completo para este tutorial en nuestro repositorio de G
 
 [Código fuente en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/screen-capture-wmv)
 
+## Dependencias Requeridas
+
+Antes de comenzar, asegúrate de haber instalado los paquetes redistribuibles necesarios:
+
+- Redistribuibles de captura de video:
+  - [Paquete x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
+  - [Paquete x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
+
 ## Cuándo Usar WMV para Grabación de Pantalla
 
 WMV (Windows Media Video) usa los codecs Windows Media de Microsoft y el contenedor ASF. Sigue siendo útil en escenarios específicos centrados en Windows:
@@ -56,7 +64,7 @@ WMV (Windows Media Video) usa los codecs Windows Media de Microsoft y el contene
 
 ## API Moderna — Video Capture SDK X
 
-La API moderna multiplataforma usa `VideoCaptureCoreX`. Para el patrón completo de aplicación de consola con configuración de captura de pantalla, audio y ciclo de vida de grabación, consulte la guía de [Captura de Pantalla a MP4](screen-capture-mp4.es.md#api-moderna-video-capture-sdk-x). Para generar WMV en lugar de MP4, reemplace la configuración de salida:
+La API moderna multiplataforma usa `VideoCaptureCoreX`. Para el patrón completo de aplicación de consola con configuración de captura de pantalla, audio y ciclo de vida de grabación, consulte la guía de [Captura de Pantalla a MP4](screen-capture-mp4.md#api-moderna-video-capture-sdk-x). Para generar WMV en lugar de MP4, reemplace la configuración de salida:
 
 ```csharp
 // Salida WMV (codecs Windows Media Video + WMA audio)
@@ -64,17 +72,9 @@ var wmvOutput = new WMVOutput(outputPath);
 videoCapture.Outputs_Add(wmvOutput, autostart: true);
 ```
 
-Captura de región, grabación multi-monitor, audio, resaltado de cursor y codificación GPU se cubren en la [guía de MP4](screen-capture-mp4.es.md) — todas las funciones de configuración de fuente funcionan de forma idéntica con la salida WMV.
+Captura de región, grabación multi-monitor, audio, resaltado de cursor y codificación GPU se cubren en la [guía de MP4](screen-capture-mp4.md) — todas las funciones de configuración de fuente funcionan de forma idéntica con la salida WMV.
 
 ## API Legada — Video Capture SDK
-
-### Dependencias Requeridas
-
-Antes de comenzar, asegúrate de haber instalado los paquetes redistribuibles necesarios:
-
-- Redistribuibles de captura de video:
-  - [paquete x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
-  - [paquete x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
 ### Ejemplo de Código
 

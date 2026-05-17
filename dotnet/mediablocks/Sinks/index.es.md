@@ -17,6 +17,7 @@ primary_api_classes:
   - AACEncoderBlock
   - MediaBlocksPipeline
 
+sidebar_label: Sinks
 ---
 
 # Sinks
@@ -1067,6 +1068,102 @@ pipeline.Connect(videoEncoderBlock3.Output, sinkBlock.CreateNewInput(MediaBlockP
 await pipeline.StartAsync();
 ```
 
+##### Streaming CMAF/fMP4 (mejor compatibilidad)
+
+```csharp
+// Configurar el sink HLS con segmentos CMAF/fMP4
+var hlsSettings = new HLSSinkSettings()
+{
+    SinkType = HLSSinkType.HlsCmafSink,
+    Location = @"c:\inetpub\wwwroot\hls\segment_%05d.m4s",
+    InitLocation = @"c:\inetpub\wwwroot\hls\init_%03d.mp4",
+    PlaylistLocation = @"c:\inetpub\wwwroot\hls\playlist.m3u8",
+    TargetDuration = TimeSpan.FromSeconds(6),
+    PlaylistType = HLSPlaylistType.Event,
+    EnableProgramDateTime = true,
+    Sync = true  // Necesario para streaming en vivo con CMAF
+};
+
+var sinkBlock = new HLSSinkBlock(hlsSettings);
+// Conecte los streams como en el ejemplo básico
+```
+
+##### Streaming VOD (vídeo bajo demanda)
+
+```csharp
+// Configurar el sink HLS para VOD
+var hlsSettings = new HLSSinkSettings()
+{
+    SinkType = HLSSinkType.HlsSink3,
+    Location = @"c:\videos\hls\segment_%05d.ts",
+    PlaylistLocation = @"c:\videos\hls\playlist.m3u8",
+    TargetDuration = TimeSpan.FromSeconds(10),
+    PlaylistType = HLSPlaylistType.Vod,  // Modo VOD
+    EnableEndlist = true,  // Añade la etiqueta #EXT-X-ENDLIST
+    PlaylistLength = 0  // Mantener todos los segmentos para VOD
+};
+
+var sinkBlock = new HLSSinkBlock(hlsSettings);
+// Conecte los streams como en el ejemplo básico
+```
+
+##### Streaming adaptativo multi-variante (playlist maestra)
+
+```csharp
+// Configurar el sink HLS con soporte multivariante para streaming adaptativo real
+var hlsSettings = new HLSSinkSettings()
+{
+    SinkType = HLSSinkType.HlsMultivariantSink,
+    PlaylistLocation = @"c:\inetpub\wwwroot\hls\master.m3u8",
+    TargetDuration = TimeSpan.FromSeconds(6)
+};
+
+var sinkBlock = new HLSSinkBlock(hlsSettings);
+
+// Conectar varias variantes de video con distintas calidades
+// hlsmultivariantsink crea automáticamente las playlists de variantes y la playlist maestra
+pipeline.Connect(videoEncoderBlock1.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(videoEncoderBlock2.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(videoEncoderBlock3.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(audioEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
+```
+
+#### Características del sink HLS
+
+##### Tipos de sink
+
+- **Auto** (predeterminado): selecciona automáticamente la mejor implementación disponible (prefiere hlssink3 → hlsmultivariantsink → hlscmafsink → hlssink2)
+- **HlsSink3**: implementación más reciente con segmentos MPEG-TS, soporta tipos de playlist, program date time y funciones mejoradas
+- **HlsMultivariantSink**: streaming adaptativo multi-bitrate con generación automática de playlist maestra para múltiples variantes de calidad
+- **HlsCmafSink**: segmentos CMAF/fMP4 para mejor compatibilidad con navegadores y reproductores modernos
+- **HlsSink2**: implementación heredada para compatibilidad hacia atrás
+
+##### Tipos de playlist
+
+- **Unspecified**: streaming en vivo sin etiqueta explícita de tipo de playlist
+- **Event**: playlist tipo evento en la que los segmentos no se eliminan. Se añade #EXT-X-ENDLIST al final
+- **Vod**: playlist Video on Demand. Se comporta como Event pero establece #EXT-X-PLAYLIST-TYPE:VOD al finalizar
+
+##### Propiedades clave
+
+| Propiedad | Descripción | Soporte por sink |
+|----------|-------------|------------------|
+| `SinkType` | Implementación de sink (Auto, HlsSink2, HlsSink3, HlsCmafSink, HlsMultivariantSink) | Todos |
+| `Location` | Patrón del archivo de segmento (p. ej., segment_%05d.ts o .m4s) | Todos excepto HlsMultivariantSink |
+| `InitLocation` | Patrón del segmento de init para CMAF (p. ej., init_%03d.mp4) | HlsCmafSink |
+| `PlaylistLocation` | Ruta del archivo de playlist de salida (.m3u8, master.m3u8 para multivariante) | Todos |
+| `PlaylistRoot` | URL base para los segmentos en la playlist | Todos excepto HlsMultivariantSink |
+| `TargetDuration` | Duración objetivo del segmento (TimeSpan) | Todos |
+| `PlaylistLength` | Número de segmentos en la playlist (0 = sin límite) | Todos excepto HlsMultivariantSink |
+| `MaxFiles` | Máximo de archivos conservados en disco | Todos excepto HlsMultivariantSink |
+| `PlaylistType` | Tipo de playlist (Unspecified, Event, Vod) | HlsSink3, HlsCmafSink |
+| `EnableProgramDateTime` | Añade etiquetas #EXT-X-PROGRAM-DATE-TIME | HlsSink3, HlsCmafSink |
+| `EnableEndlist` | Añade #EXT-X-ENDLIST al final | HlsSink3, HlsCmafSink |
+| `IFramesOnly` | Crea playlist de solo I-frames | HlsSink3 |
+| `Sync` | Sincroniza con el reloj (necesario para CMAF en vivo) | HlsCmafSink |
+| `Latency` | Latencia (TimeSpan) | HlsCmafSink |
+| `SendKeyframeRequests` | Solicita keyframes al codificador | HlsSink2, HlsSink3 |
+
 #### Plataformas
 
 Windows, macOS, Linux, iOS, Android.
@@ -1716,6 +1813,276 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux.
 
+### UDP
+
+UDP (User Datagram Protocol) es un protocolo de transporte ligero y sin conexión que proporciona streaming de baja latencia con sobrecarga mínima. A diferencia de los protocolos basados en TCP, UDP no garantiza la entrega de paquetes, lo que lo hace ideal para aplicaciones en tiempo real en las que la velocidad es crítica.
+
+Use la clase `UDPSinkSettings` para configurar los parámetros.
+
+#### Información del bloque
+
+Nombre: UDPSinkBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada | Cualquier formato de stream | 1 |
+
+#### El pipeline de muestra
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->UDPMPEGTSSinkBlock;
+```
+
+#### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+// UDPMPEGTSSinkBlock envuelve el muxer MPEG-TS internamente —
+// conecte los streams elementales codificados directamente mediante CreateNewInput.
+var udpSettings = new UDPSinkSettings
+{
+    Host = "192.168.1.100",
+    Port = 5004
+};
+var udpSink = new UDPMPEGTSSinkBlock(udpSettings);
+pipeline.Connect(fileSource.AudioOutput, udpSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+pipeline.Connect(fileSource.VideoOutput, udpSink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+### UDP MPEG-TS
+
+UDP MPEG-TS combina el multiplexado MPEG-TS con el transporte UDP. Esto permite la entrega de baja latencia de streams de audio y video multiplexados sobre UDP, ampliamente utilizado en broadcast, IPTV y flujos de videovigilancia.
+
+Use la clase `UDPSinkSettings` para configurar los parámetros.
+
+#### Información del bloque
+
+Nombre: UDPMPEGTSSinkBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada de audio | audio/x-raw | uno o más |
+| | audio/mpeg | |
+| | audio/x-ac3 | |
+| | audio/x-alaw | |
+| | audio/x-mulaw | |
+| | audio/AAC | |
+| Entrada de video | video/x-raw | uno o más |
+| | image/jpeg | |
+| | video/x-msmpeg | |
+| | video/mpeg | |
+| | video/x-h263 | |
+| | video/x-h264 | |
+| | video/x-h265 | |
+
+#### Configuración
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | --- | --- |
+| `Host` | `string` | `"localhost"` | Host/IP/grupo multicast de destino |
+| `Port` | `int` | `5004` | Puerto de destino |
+| `TTL` | `int` | `64` | Time-to-live para unicast |
+| `MulticastTTL` | `int` | `1` | Time-to-live para multicast |
+| `AutoMulticast` | `bool` | `true` | Unirse/abandonar grupos multicast automáticamente |
+| `MulticastInterface` | `string` | `null` | Interfaz de red para multicast |
+| `Loop` | `bool` | `true` | Loopback multicast |
+| `BufferSize` | `int` | `0` | Tamaño del buffer de envío del kernel (0 = predeterminado) |
+| `QosDscp` | `int` | `-1` | Valor DSCP (-1 = predeterminado) |
+| `BindAddress` | `string` | `null` | Dirección local a la que enlazar |
+| `BindPort` | `int` | `0` | Puerto local al que enlazar (0 = auto) |
+| `MuxerLatency` | `TimeSpan` | 1000 ms | Latencia del agregador del muxer MPEG-TS |
+
+#### El pipeline de muestra
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->AACEncoderBlock;
+    UniversalSourceBlock-->H264EncoderBlock;
+    AACEncoderBlock-->UDPMPEGTSSinkBlock;
+    H264EncoderBlock-->UDPMPEGTSSinkBlock;
+```
+
+#### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
+pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
+
+var videoEncoderBlock = new H264EncoderBlock(new OpenH264EncoderSettings());
+pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
+
+// Configurar el sink UDP MPEG-TS
+var udpSettings = new UDPSinkSettings
+{
+    Host = "192.168.1.100",
+    Port = 5004,
+    TTL = 64
+};
+
+var sinkBlock = new UDPMPEGTSSinkBlock(udpSettings);
+pipeline.Connect(audioEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
+pipeline.Connect(videoEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+#### Disponibilidad
+
+`UDPMPEGTSSinkBlock.IsAvailable()` devuelve `true` si el plugin GStreamer `udp` está presente.
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+### UDP multidestino
+
+El `MultiUDPSinkBlock` envía datos sin procesar por UDP a uno o varios destinatarios simultáneamente. Los destinos se especifican como pares host:port separados por comas y pueden gestionarse mediante métodos auxiliares en la clase de configuración.
+
+Use la clase `MultiUDPSinkSettings` para configurar los parámetros.
+
+#### Información del bloque
+
+Nombre: MultiUDPSinkBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada | Cualquier formato de stream | 1 |
+
+#### El pipeline de muestra
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->MultiUDPMPEGTSSinkBlock;
+```
+
+#### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+
+// MultiUDPMPEGTSSinkBlock envuelve el muxer MPEG-TS internamente —
+// registre destinos mediante AddClient y conecte los streams elementales mediante CreateNewInput.
+var multiUdpSettings = new MultiUDPSinkSettings();
+multiUdpSettings.AddClient("192.168.1.100", 5004);
+multiUdpSettings.AddClient("192.168.1.101", 5004);
+
+var multiUdpSink = new MultiUDPMPEGTSSinkBlock(multiUdpSettings);
+pipeline.Connect(fileSource.AudioOutput, multiUdpSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+pipeline.Connect(fileSource.VideoOutput, multiUdpSink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+### UDP MPEG-TS multidestino
+
+El `MultiUDPMPEGTSSinkBlock` multiplexa streams de audio y video en MPEG-TS y envía el resultado por UDP a uno o varios destinos simultáneamente. Resulta útil para distribuir el mismo stream a múltiples receptores, servidores de grabación o endpoints redundantes.
+
+Se admiten varios pads de entrada de audio y video. Llame a `CreateNewInput(MediaBlockPadMediaType.Video)` y `CreateNewInput(MediaBlockPadMediaType.Audio)` para obtener pads antes de conectar los codificadores.
+
+#### Información del bloque
+
+Nombre: MultiUDPMPEGTSSinkBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada de audio | audio/x-raw | uno o más |
+| | audio/mpeg | |
+| | audio/x-ac3 | |
+| | audio/x-alaw | |
+| | audio/x-mulaw | |
+| | audio/AAC | |
+| Entrada de video | video/x-raw | uno o más |
+| | image/jpeg | |
+| | video/x-msmpeg | |
+| | video/mpeg | |
+| | video/x-h263 | |
+| | video/x-h264 | |
+| | video/x-h265 | |
+
+#### Configuración
+
+Use `MultiUDPSinkSettings` para configurar los destinos:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | --- | --- |
+| `Clients` | `string` | `""` | Pares `host:port` separados por comas |
+| `SendDuplicates` | `bool` | `true` | Enviar duplicados cuando se añade el mismo destino varias veces |
+| `TTL` | `int` | `64` | Time-to-live para unicast |
+| `MulticastTTL` | `int` | `1` | Time-to-live para multicast |
+| `AutoMulticast` | `bool` | `true` | Unirse/abandonar grupos multicast automáticamente |
+| `MulticastInterface` | `string` | `null` | Interfaz de red para multicast |
+| `Loop` | `bool` | `true` | Loopback multicast |
+| `BufferSize` | `int` | `0` | Tamaño del buffer de envío del kernel (0 = predeterminado) |
+| `QosDscp` | `int` | `-1` | Valor DSCP (-1 = predeterminado) |
+| `BindAddress` | `string` | `null` | Dirección local a la que enlazar |
+| `BindPort` | `int` | `0` | Puerto local al que enlazar (0 = auto) |
+| `MuxerLatency` | `TimeSpan` | 1000 ms | Latencia del agregador del muxer MPEG-TS |
+
+#### El pipeline de muestra
+
+```mermaid
+graph LR;
+    UniversalSourceBlock -- Video sin procesar --> H264EncoderBlock;
+    UniversalSourceBlock -- Audio sin procesar --> AACEncoderBlock;
+    H264EncoderBlock --> MultiUDPMPEGTSSinkBlock;
+    AACEncoderBlock --> MultiUDPMPEGTSSinkBlock;
+```
+
+#### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+
+var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+var aacEncoder = new AACEncoderBlock();
+
+pipeline.Connect(source.VideoOutput, h264Encoder.Input);
+pipeline.Connect(source.AudioOutput, aacEncoder.Input);
+
+var multiUdpSettings = new MultiUDPSinkSettings();
+multiUdpSettings.AddClient("192.168.1.100", 5004);
+multiUdpSettings.AddClient("192.168.1.101", 5004);
+
+var multiUdpSink = new MultiUDPMPEGTSSinkBlock(multiUdpSettings);
+pipeline.Connect(h264Encoder.Output, multiUdpSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(aacEncoder.Output, multiUdpSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+#### Disponibilidad
+
+`MultiUDPMPEGTSSinkBlock.IsAvailable()` devuelve `true` si el plugin GStreamer `udp` está presente.
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
 ## Sinks de Utilidad
 
 ### Sink de Stream
@@ -1836,14 +2203,12 @@ Tres constructores controlan el tipo de datos capturados:
 - `BufferSinkBlock(AudioFormatX audioFormat, bool allowFrameDrop = false)` — captura muestras de audio con remuestreo opcional.
 - `BufferSinkBlock()` — detecta automáticamente el tipo de medio entrante; genera `OnDataFrameBuffer` u `OnSample` para cualquier medio.
 
-Eventos generados por el bloque:
+Eventos clave:
 
-| Evento | Payload | Descripción |
-| --- | --- | --- |
-| `OnVideoFrameBuffer` | `VideoFrameBuffer` | Se genera para cada fotograma de video decodificado |
-| `OnAudioFrameBuffer` | `AudioFrameBuffer` | Se genera para cada muestra de audio |
-| `OnDataFrameBuffer` | `DataFrameBuffer` | Se genera para medios que no son audio/video (p. ej., subtítulos) |
-| `OnSample` | `Gst.Sample` | Muestra GStreamer en crudo — uso avanzado |
+- `OnVideoFrameBuffer` — se genera para cada fotograma de video decodificado
+- `OnAudioFrameBuffer` — se genera para cada muestra de audio decodificada
+- `OnDataFrameBuffer` — se genera para streams de datos que no son audio/video
+- `OnSample` — acceso de bajo nivel a la muestra GStreamer; cuando hay suscriptores suprime los tres eventos anteriores. **Siempre libere la muestra después de usarla** para evitar fugas de memoria.
 
 #### Información del bloque
 
@@ -1862,8 +2227,9 @@ Nombre: BufferSinkBlock.
 
 #### El pipeline de muestra
 
-```
-fuente → codificador → BufferSinkBlock
+```mermaid
+graph LR;
+    UniversalSourceBlock-->BufferSinkBlock;
 ```
 
 #### Código de muestra

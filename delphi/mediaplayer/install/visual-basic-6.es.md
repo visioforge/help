@@ -56,7 +56,7 @@ Ejecute el instalador del SDK de VisioForge descargado. Siga las indicaciones en
 
 Lance el IDE de Visual Basic 6. Puede comenzar un nuevo proyecto Standard EXE o abrir uno existente donde desee agregar capacidades multimedia.
 
-![captura de pantalla 1](/help/docs/delphi/mediaplayer/install/mpvb6_1.webp)
+![captura de pantalla 1](mpvb6_1.webp)
 *Leyenda: Creando un nuevo proyecto Standard EXE en Visual Basic 6.*
 
 ### **Paso 3: Agregar el Componente TVFMediaPlayer**
@@ -65,13 +65,13 @@ Para hacer que el control ActiveX esté disponible en el Toolbox de su proyecto,
 
 * Vaya al menú `Project` y seleccione `Components...`. Alternativamente, haga clic derecho en el Toolbox y elija `Components...`.
 
-![captura de pantalla 2](/help/docs/delphi/mediaplayer/install/mpvb6_2.webp)
+![captura de pantalla 2](mpvb6_2.webp)
 *Leyenda: Accediendo al diálogo de Componentes desde el menú Proyecto.*
 
 * El diálogo "Componentes" lista todos los controles ActiveX registrados en su sistema. Desplácese hacia abajo en la lista bajo la pestaña "Controls".
 * Localice y marque la casilla junto a "VisioForge Media Player" (el nombre exacto puede variar ligeramente dependiendo de la versión instalada).
 
-![captura de pantalla 3](/help/docs/delphi/mediaplayer/install/mpvb6_3.webp)
+![captura de pantalla 3](mpvb6_3.webp)
 *Leyenda: Seleccionando el control 'VisioForge Media Player' en el diálogo de Componentes.*
 
 * Haga clic en `OK` o `Aplicar`.
@@ -80,7 +80,7 @@ Para hacer que el control ActiveX esté disponible en el Toolbox de su proyecto,
 
 Después de agregar el componente, su icono aparecerá en el Toolbox de VB6.
 
-![captura de pantalla 4](/help/docs/delphi/mediaplayer/install/mpvb6_4.webp)
+![captura de pantalla 4](mpvb6_4.webp)
 *Leyenda: El control TVFMediaPlayer agregado al Toolbox de Visual Basic 6.*
 
 Ahora puede seleccionar el icono TVFMediaPlayer del Toolbox y dibujarlo en cualquier formulario de su proyecto, igual que cualquier control estándar de VB6 (ej., Button, TextBox). Esto crea una instancia del objeto reproductor multimedia en su formulario. Puede redimensionarlo y posicionarlo según sea necesario usando el diseñador de formularios.

@@ -11,6 +11,7 @@ tags:
 primary_api_classes:
   - TVFVideoCapture
 
+sidebar_label: Instalación
 ---
 
 # Guía de Instalación de TVFVideoCapture

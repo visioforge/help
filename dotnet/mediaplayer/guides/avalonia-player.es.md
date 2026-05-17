@@ -1138,7 +1138,7 @@ Estos proyectos y configuraciones específicos de plataforma aseguran que la ló
 
 ## 7. Componentes Clave del SDK de VisioForge Usados
 
-Esta aplicación aprovecha varios componentes clave del SDK de Reproductor Multimedia X de VisioForge:
+Esta aplicación aprovecha varios componentes clave del VisioForge Media Player SDK .NET:
 
 * **`VisioForge.Core.MediaPlayerX.MediaPlayerCoreX`:**
   * El motor central para reproducción de medios. Maneja la apertura de fuentes de medios, control de reproducción (reproducir, pausar, detener, buscar, tasa), gestión de audio y video, y proporciona información de estado (posición, duración).
@@ -1173,13 +1173,13 @@ Entender estos componentes es crucial para trabajar con el SDK de VisioForge y e
 
 ## 9. Conclusión
 
-Esta guía ha demostrado cómo construir un reproductor multimedia multiplataforma usando Avalonia UI con el patrón MVVM y el SDK de Reproductor Multimedia X de VisioForge. Al aprovechar un proyecto central compartido para ViewModels y Vistas, y manejar los aspectos específicos de plataforma en proyectos principales dedicados, podemos crear una aplicación mantenible que se ejecuta en una amplia gama de dispositivos.
+Esta guía ha demostrado cómo construir un reproductor multimedia multiplataforma usando Avalonia UI con el patrón MVVM y el VisioForge Media Player SDK .NET. Al aprovechar un proyecto central compartido para ViewModels y Vistas, y manejar los aspectos específicos de plataforma en proyectos principales dedicados, podemos crear una aplicación mantenible que se ejecuta en una amplia gama de dispositivos.
 
 Puntos clave:
 
 * El patrón MVVM ayuda a separar preocupaciones y mejora la capacidad de prueba.
 * ReactiveUI simplifica la implementación de MVVM con Avalonia.
-* El SDK de Reproductor Multimedia X de VisioForge proporciona potentes capacidades de reproducción de medios, con `MediaPlayerCoreX` como el motor central y `VideoView` para integración con Avalonia UI.
+* El VisioForge Media Player SDK .NET proporciona potentes capacidades de reproducción de medios, con `MediaPlayerCoreX` como el motor central y `VideoView` para integración con Avalonia UI.
 * Las consideraciones específicas de plataforma, especialmente para acceso a archivos y permisos, se manejan a través de interfaces e implementaciones específicas de plataforma.
 * La inicialización adecuada (`VisioForgeX.InitSDK()`) y limpieza (`VisioForgeX.DestroySDK()`) del SDK de VisioForge son esenciales.
 

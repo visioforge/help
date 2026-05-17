@@ -1,6 +1,6 @@
 ---
 title: DirectShow Encoding Filter Examples - C++, C#, VB.NET
-description: Code examples for DirectShow encoding: NVENC GPU, H.264/H.265 software, AAC/MP3/Opus audio, and MP4/MKV/WebM muxer configuration.
+description: Code examples for DirectShow encoding — NVENC GPU, H.264/H.265 software, AAC/MP3/Opus audio, and MP4/MKV/WebM muxer configuration.
 tags:
   - DirectShow
   - C++

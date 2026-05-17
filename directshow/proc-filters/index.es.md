@@ -6,13 +6,15 @@ tags:
   - C++
   - Windows
 
+order: 7
+sidebar_label: Processing Filters Pack
 ---
 
 # Filtros de Procesamiento DirectShow para Aplicaciones de Medios
 
 ## Introducción a los Filtros de Procesamiento DirectShow
 
-El Paquete de Filtros de Procesamiento DirectShow ofrece una poderosa colección de filtros especializados construidos para la manipulación sofisticada de audio y video en aplicaciones Windows. Estos filtros permiten a los desarrolladores implementar capacidades de procesamiento de medios de nivel profesional sin desarrollar algoritmos complejos desde cero.
+El DirectShow Processing Filters Pack ofrece una poderosa colección de filtros especializados construidos para la manipulación sofisticada de audio y video en aplicaciones Windows. Estos filtros permiten a los desarrolladores implementar capacidades de procesamiento de medios de nivel profesional sin desarrollar algoritmos complejos desde cero.
 
 Diseñado para desarrolladores que buscan mejorar sus aplicaciones con funcionalidad avanzada de medios, este kit de herramientas ofrece un enfoque simplificado para implementar características audio-visuales robustas con mínima sobrecarga de código.
 
@@ -20,11 +22,11 @@ Diseñado para desarrolladores que buscan mejorar sus aplicaciones con funcional
 
 ## Instalación
 
-Antes de usar los ejemplos de código e integrar los filtros en su aplicación, primero debe instalar el Paquete de Filtros de Procesamiento DirectShow desde la [página del producto](https://www.visioforge.com/processing-filters-pack).
+Antes de usar los ejemplos de código e integrar los filtros en su aplicación, primero debe instalar el DirectShow Processing Filters Pack desde la [página del producto](https://www.visioforge.com/processing-filters-pack).
 
 **Pasos de Instalación**:
 
-1. Descargue el instalador del Paquete de Filtros de Procesamiento desde la página del producto
+1. Descargue el instalador del Processing Filters Pack desde la página del producto
 2. Ejecute el instalador con privilegios administrativos
 3. El instalador registrará todos los filtros de procesamiento
 4. Las aplicaciones de ejemplo y el código fuente estarán disponibles en el directorio de instalación

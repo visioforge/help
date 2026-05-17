@@ -1227,15 +1227,13 @@ El `HEVCDecoderBlock` decodifica streams de video H.265/HEVC con selección auto
 
 #### Configuración
 
-**Selección automática (recomendado):**
+`HEVCDecoderBlock` puede seleccionar automáticamente el mejor backend o usar uno explícito. Todas las clases de configuración implementan la interfaz `IHEVCDecoderSettings`.
 
 ```csharp
+// Selección automática (recomendado)
 var hevcDecoder = new HEVCDecoderBlock();
-```
 
-**Selección explícita de backend:**
-
-```csharp
+// Selección explícita de backend:
 // FFmpeg (CPU, software)
 var hevcDecoder = new HEVCDecoderBlock(new FFMPEGHEVCDecoderSettings());
 
@@ -1254,8 +1252,6 @@ var hevcDecoder = new HEVCDecoderBlock(new D3D11HEVCDecoderSettings());
 // VAAPI (solo Linux)
 var hevcDecoder = new HEVCDecoderBlock(new VAAPIHEVCDecoderSettings());
 ```
-
-Todas las clases de configuración implementan la interfaz `IHEVCDecoderSettings`.
 
 #### El pipeline de muestra
 
@@ -1316,28 +1312,17 @@ El `AV1DecoderBlock` decodifica streams de video AV1 con soporte para backends d
 
 #### Configuración
 
-La clase `AV1DecoderSettings` acepta un valor de la enumeración `AV1DecoderType` para seleccionar el backend:
+`AV1DecoderBlock` se configura mediante `AV1DecoderSettings`, que especifica el tipo de decodificador con la enumeración `AV1DecoderType`:
 
-| Valor de AV1DecoderType | Descripción |
-|--------------------------|-------------|
-| `Auto`                  | Selección automática del mejor backend disponible |
-| `Dav1d`                 | Decodificador dav1d de alto rendimiento (software) |
-| `AOM`                   | Decodificador de referencia AOM (software) |
-| `NVIDIA`                | NVIDIA NVDEC (hardware, GPU RTX 30xx o más reciente recomendado) |
-| `Intel_QSV`             | Intel Quick Sync Video (hardware, Arc o más reciente) |
-| `D3D11`                 | Aceleración D3D11/DXVA (solo Windows) |
-| `VAAPI`                 | Aceleración VAAPI (solo Linux) |
+- `AV1DecoderType.Auto` — selecciona automáticamente el mejor decodificador disponible (predeterminado)
+- `AV1DecoderType.Dav1d` — decodificador por software dav1d (rápido, recomendado para CPU)
+- `AV1DecoderType.AOM` — decodificador de referencia AOM (Alliance for Open Media) (software)
+- `AV1DecoderType.NVIDIA` — decodificación por hardware NVIDIA NVDEC (serie RTX 30 o más reciente)
+- `AV1DecoderType.Intel_QSV` — decodificación por hardware Intel Quick Sync Video (serie Arc o más reciente)
+- `AV1DecoderType.D3D11` — decodificación por hardware D3D11/DXVA (Windows)
+- `AV1DecoderType.VAAPI` — decodificación por hardware VAAPI (Linux)
 
-```csharp
-// Selección automática (recomendado)
-var av1Decoder = new AV1DecoderBlock();
-
-// Explícito: dav1d
-var av1Decoder = new AV1DecoderBlock(new AV1DecoderSettings { DecoderType = AV1DecoderType.Dav1d });
-
-// Explícito: NVIDIA NVDEC
-var av1Decoder = new AV1DecoderBlock(new AV1DecoderSettings { DecoderType = AV1DecoderType.NVIDIA });
-```
+El constructor sin parámetros selecciona automáticamente el mejor decodificador disponible.
 
 #### El pipeline de muestra
 
@@ -1395,14 +1380,6 @@ El `NVAV1DecoderBlock` decodifica streams de video AV1 exclusivamente usando el 
 |-------------------|-------------------------|-----------------|
 | Entrada de video  | video AV1 codificado    | 1               |
 | Salida de video   | video sin comprimir     | 1               |
-
-#### Configuración
-
-Este bloque no requiere parámetros de configuración:
-
-```csharp
-var nvAv1Decoder = new NVAV1DecoderBlock();
-```
 
 #### El pipeline de muestra
 
@@ -1463,15 +1440,13 @@ El `VP8DecoderBlock` decodifica streams de video VP8 usados en WebM y WebRTC. Se
 
 #### Configuración
 
-**Selección automática (recomendado):**
+`VP8DecoderBlock` puede seleccionar automáticamente el mejor backend o usar uno explícito. Todas las clases de configuración implementan la interfaz `IVP8DecoderSettings`.
 
 ```csharp
+// Selección automática (recomendado)
 var vp8Decoder = new VP8DecoderBlock();
-```
 
-**Selección explícita de backend:**
-
-```csharp
+// Selección explícita de backend:
 // VPX (software, alta compatibilidad)
 var vp8Decoder = new VP8DecoderBlock(new VPXVP8DecoderSettings());
 
@@ -1487,8 +1462,6 @@ var vp8Decoder = new VP8DecoderBlock(new VAAPIVP8DecoderSettings());
 // D3D11/DXVA (solo Windows, hardware)
 var vp8Decoder = new VP8DecoderBlock(new D3D11VP8DecoderSettings());
 ```
-
-Todas las clases de configuración implementan la interfaz `IVP8DecoderSettings`.
 
 #### El pipeline de muestra
 
@@ -1549,15 +1522,13 @@ El `VP9DecoderBlock` decodifica streams de video VP9 usados en YouTube 4K/8K, We
 
 #### Configuración
 
-**Selección automática (recomendado):**
+`VP9DecoderBlock` puede seleccionar automáticamente el mejor backend o usar uno explícito. Todas las clases de configuración implementan la interfaz `IVP9DecoderSettings`.
 
 ```csharp
+// Selección automática (recomendado)
 var vp9Decoder = new VP9DecoderBlock();
-```
 
-**Selección explícita de backend:**
-
-```csharp
+// Selección explícita de backend:
 // VPX (software, alta compatibilidad)
 var vp9Decoder = new VP9DecoderBlock(new VPXVP9DecoderSettings());
 
@@ -1573,8 +1544,6 @@ var vp9Decoder = new VP9DecoderBlock(new VAAPIVP9DecoderSettings());
 // D3D11/DXVA (solo Windows, hardware)
 var vp9Decoder = new VP9DecoderBlock(new D3D11VP9DecoderSettings());
 ```
-
-Todas las clases de configuración implementan la interfaz `IVP9DecoderSettings`.
 
 #### El pipeline de muestra
 
@@ -1633,14 +1602,6 @@ El `VP8AlphaDecodeBinBlock` decodifica streams de video VP8 que incluyen un cana
 | Entrada de video  | video VP8 con alpha codificado              | 1               |
 | Salida de video   | video sin comprimir con alpha (RGBA/YUVA)   | 1               |
 
-#### Configuración
-
-Este bloque no requiere parámetros de configuración:
-
-```csharp
-var vp8AlphaDecoder = new VP8AlphaDecodeBinBlock();
-```
-
 #### El pipeline de muestra
 
 ```mermaid
@@ -1697,14 +1658,6 @@ El `VP9AlphaDecodeBinBlock` decodifica streams de video VP9 que incluyen un cana
 |-------------------|---------------------------------------------|-----------------|
 | Entrada de video  | video VP9 con alpha codificado              | 1               |
 | Salida de video   | video sin comprimir con alpha (RGBA/YUVA)   | 1               |
-
-#### Configuración
-
-Este bloque no requiere parámetros de configuración:
-
-```csharp
-var vp9AlphaDecoder = new VP9AlphaDecodeBinBlock();
-```
 
 #### El pipeline de muestra
 

@@ -1,6 +1,6 @@
 ---
-title: Media Player SDK for Delphi — Developer Documentation
-description: Embed video and audio playback in Delphi apps with TVFMediaPlayer. Supports 500+ formats, RTSP/RTMP streaming, subtitles, and video effects.
+title: Media Player SDK for Delphi - TVFMediaPlayer Guide
+description: Embed video and audio playback in Delphi apps with TVFMediaPlayer, including playback controls, seeking, volume, frame capture, audio tracks, and fullscreen.
 sidebar_label: TVFMediaPlayer
 tags:
   - All-in-One Media Framework
@@ -16,104 +16,318 @@ primary_api_classes:
 
 ---
 
-# TVFMediaPlayer: Feature-Rich Media Playback for Delphi & ActiveX
+# Media Player SDK for Delphi
 
-## Introduction to TVFMediaPlayer
+[Media Player SDK Delphi](https://www.visioforge.com/all-in-one-media-framework){ .md-button .md-button--primary target="_blank" }
 
-The VisioForge TVFMediaPlayer library stands as a powerful and versatile solution designed for developers working with Delphi (VCL) and ActiveX-compatible environments (like .NET WinForms/WPF, VB6). It provides a robust framework for integrating sophisticated multimedia playback capabilities directly into custom applications. Whether you're building a simple video viewer, a complex media center application, a surveillance system interface, or interactive training software, TVFMediaPlayer offers the tools needed to handle a diverse range of audio and video requirements.
+This page covers using Media Player SDK with Delphi to build multimedia playback applications around the `TVFMediaPlayer` VCL component.
 
-At its core, the library abstracts the complexities of various media codecs and streaming protocols, presenting a unified and relatively straightforward API. This allows developers to focus on application logic rather than low-level multimedia handling. The library emphasizes performance, stability, and extensive format support, making it a reliable choice for demanding playback scenarios.
+## Main Component
 
-## Core Features and Capabilities
+### TVFMediaPlayer
 
-TVFMediaPlayer is packed with features designed to address common and advanced media playback needs.
+`TVFMediaPlayer` is a `TCustomPanel` descendant that exposes the full playback API. Drop it on a form at design time, or create it programmatically and attach it to a host panel.
 
-### Extensive Format and Codec Support
+```pascal
+var
+  MediaPlayer1: TVFMediaPlayer;
+begin
+  MediaPlayer1 := TVFMediaPlayer.Create(Self);
+  MediaPlayer1.Parent := Panel1;
+  MediaPlayer1.Align := alClient;
+end;
+```
 
-One of the library's most significant strengths is its ability to play back a vast array of media formats. This is achieved through flexible backend support:
+## Basic Playback
 
-* **System Codecs:** Leverages codecs already installed on the Windows operating system (DirectShow/Media Foundation). Ideal for common formats like AVI, WMV, and MP3 when appropriate decoders are present.
-* **FFmpeg:** Integrates the renowned FFmpeg libraries, providing built-in support for a huge number of video and audio codecs and container formats without requiring external installations. This ensures broad compatibility out-of-the-box.
-* **VLC Engine (libVLC):** Option to utilize the VLC engine, known for its excellent handling of various stream types and potentially problematic files.
+### Play a File
 
-This multi-pronged approach ensures that your application can handle almost any media file or stream thrown at it, minimizing compatibility issues for end-users.
+Set `FilenameOrURL` to the input path (or network URL), pick a source engine via `Source_Mode`, then call `Play`.
 
-### Advanced Playback Control
+```pascal
+procedure TForm1.PlayFile(const Filename: WideString);
+begin
+  MediaPlayer1.FilenameOrURL := Filename;
+  MediaPlayer1.Source_Mode := SM_File_FFMPEG; // SM_File_DS, SM_File_VLC, SM_File_LAV
+  MediaPlayer1.Audio_Play := True;
+  MediaPlayer1.Play;
+end;
+```
 
-Beyond basic Play, Pause, Stop, and Seek operations, TVFMediaPlayer offers fine-grained control:
+### Playback Controls
 
-* **Variable Playback Rate:** Adjust playback speed (faster or slower) while optionally maintaining audio pitch.
-* **Frame-Stepping:** Navigate video content frame by frame, essential for analysis or precise editing tasks.
-* **Volume and Audio Control:** Adjust volume, mute audio, and potentially select specific audio tracks if multiple are available.
-* **Seamless Looping:** Configure specific segments or the entire media file to loop continuously.
+`Play` returns `True` on success. `Pause`, `Resume`, and `Stop` are procedures.
 
-### Video Processing and Enhancement
+```pascal
+procedure TForm1.btnPlayClick(Sender: TObject);
+begin
+  MediaPlayer1.Play;
+end;
 
-Enhance the visual experience and extract information from video streams:
+procedure TForm1.btnPauseClick(Sender: TObject);
+begin
+  MediaPlayer1.Pause;
+end;
 
-* **Overlays:** Easily add text, images (with transparency), or even graphical elements on top of the video playback. Useful for watermarking, displaying information, or custom controls.
-* **Video Effects:** Apply real-time video effects such as brightness, contrast, saturation, hue adjustments, grayscale, inversion, and potentially more complex filters.
-* **Frame Capture:** Capture snapshots of the currently playing video frame and save them to various image formats (BMP, JPG, PNG). This is useful for thumbnail generation, analysis, or documentation.
-* **Zoom and Pan:** Allow users to digitally zoom into specific areas of the video and pan the view.
+procedure TForm1.btnResumeClick(Sender: TObject);
+begin
+  MediaPlayer1.Resume;
+end;
 
-### Audio Processing and Enhancements
+procedure TForm1.btnStopClick(Sender: TObject);
+begin
+  MediaPlayer1.Stop;
+end;
+```
 
-Refine the audio output:
+The current state is exposed by the read-only `Status` property (`ST_PLAY`, `ST_PAUSE`, `ST_FREE`).
 
-* **Audio Equalizer:** Provide users with a multi-band equalizer to tailor the audio output to their preferences or environment.
-* **Audio Enhancements:** Features like volume boosting beyond standard levels might be available.
-* **Track Selection:** Explicitly select from multiple available audio tracks within a media file.
+```pascal
+if MediaPlayer1.Status = ST_PLAY then
+  StatusBar1.SimpleText := 'Playing';
+```
 
-### Network Stream Playback
+## Seeking
 
-Effortlessly play streams from network sources:
+Position is expressed in milliseconds. `Position_Get_Time` returns the current position, `Position_Set_Time` seeks to an absolute position, and `Info_Video_DurationMSec(0)` returns the total duration of the first video stream.
 
-* **Supported Protocols:** Handles common streaming protocols like HTTP, HTTPS, HLS (HTTP Live Streaming), RTSP, RTMP, and MMS.
-* **Buffering Control:** Manage buffering settings to balance startup latency and playback smoothness, crucial for varying network conditions.
+```pascal
+procedure TForm1.SeekTo(PositionMs: Integer);
+begin
+  MediaPlayer1.Position_Set_Time(PositionMs);
+end;
 
-### Specialized Playback Features
+function TForm1.GetDurationMs: Integer;
+begin
+  Result := MediaPlayer1.Info_Video_DurationMSec(0);
+end;
 
-* **Multi-Stream Files:** Uniquely handles video files containing multiple video streams (e.g., different camera angles), allowing seamless switching between them during playback.
-* **DVD and Blu-ray:** Supports playback from DVD and Blu-ray discs, including menu navigation and chapter selection (requires appropriate system support and potentially decryption libraries for commercial discs).
-* **Subtitle Integration:** Load and display subtitles from external files (like SRT, ASS, SSA, VobSub) or embedded subtitle tracks. Customize font, size, color, and position.
+function TForm1.GetPositionMs: Integer;
+begin
+  Result := MediaPlayer1.Position_Get_Time;
+end;
+```
 
-## Integration and Development
+Frame-accurate seeking is also available via `Position_Get_Frame` and `Position_Set_Frame`.
 
-TVFMediaPlayer is designed for ease of integration into Delphi (VCL) and ActiveX host applications.
+## Audio Control
 
-### Delphi Integration (VCL)
+`TVFMediaPlayer` supports up to eight independent audio output streams. Volume and balance are addressed by zero-based stream index.
 
-For Delphi developers, the library typically provides native VCL components. These components can be dropped onto a form in the IDE, and their properties and events can be configured visually and programmatically. This component-based approach significantly speeds up development compared to using raw APIs. 
+```pascal
+procedure TForm1.SetVolume(StreamIndex, Volume: Integer);
+begin
+  // Volume range: 0..100 (SDK scales internally)
+  MediaPlayer1.Audio_Volume_Set(StreamIndex, Volume);
+end;
 
-### ActiveX Integration
+function TForm1.GetVolume(StreamIndex: Integer): Integer;
+begin
+  Result := MediaPlayer1.Audio_Volume_Get(StreamIndex);
+end;
 
-The ActiveX control allows the media player to be embedded in any environment supporting ActiveX technology. This includes older platforms like Visual Basic 6, as well as .NET applications (Windows Forms, WPF) and even some web pages (though ActiveX in browsers is largely deprecated for security reasons). The ActiveX control exposes properties, methods, and events similar to the native Delphi components.
+procedure TForm1.SetBalance(StreamIndex, Balance: Integer);
+begin
+  // Balance range: -100 (left) to +100 (right)
+  MediaPlayer1.Audio_Balance_Set(StreamIndex, Balance);
+end;
+```
 
-## Licensing Model
+To mute audio, set the volume to zero and restore the previous value on unmute, or toggle `Audio_Play` before starting playback.
 
-VisioForge typically offers flexible licensing:
+```pascal
+procedure TForm1.Mute;
+begin
+  FSavedVolume := MediaPlayer1.Audio_Volume_Get(0);
+  MediaPlayer1.Audio_Volume_Set(0, 0);
+end;
 
-* **Trial Version:** A fully functional trial version is usually available, allowing developers to evaluate the library thoroughly. Trial versions often overlay a watermark or display a nag screen.
-* **Full License:** Purchasing a full license removes trial limitations. Full licenses offer free updates and priority support for one year. This ensures that developers have ongoing access to improvements and technical assistance.
+procedure TForm1.Unmute;
+begin
+  MediaPlayer1.Audio_Volume_Set(0, FSavedVolume);
+end;
+```
 
-It's crucial to consult the official VisioForge website or licensing documentation for precise terms and conditions.
+## Playback Speed
+
+`SetSpeed` accepts a multiplier between 0.01 and 100.0.
+
+```pascal
+procedure TForm1.SetPlaybackSpeed(Rate: Double);
+begin
+  // Rate: 0.5 (half speed) to 2.0 (double speed)
+  MediaPlayer1.SetSpeed(Rate);
+end;
+```
+
+## Network URL Playback
+
+The same `FilenameOrURL` property accepts network URLs. Pick the engine that best supports the protocol — `SM_File_VLC` and `SM_File_FFMPEG` cover the broadest set of streaming sources; `SM_MMS_WMV_DS` is dedicated to MMS/WMV streams.
+
+```pascal
+procedure TForm1.PlayURL(const URL: WideString);
+begin
+  MediaPlayer1.FilenameOrURL := URL;
+  MediaPlayer1.Source_Mode := SM_File_FFMPEG;
+  MediaPlayer1.Play;
+end;
+
+procedure TForm1.PlayRTSP;
+begin
+  MediaPlayer1.FilenameOrURL := 'rtsp://192.168.1.100:554/stream';
+  MediaPlayer1.Source_Mode := SM_File_FFMPEG;
+  MediaPlayer1.Play;
+end;
+
+procedure TForm1.PlayHLS;
+begin
+  MediaPlayer1.FilenameOrURL := 'https://server.example.com/playlist.m3u8';
+  MediaPlayer1.Source_Mode := SM_File_FFMPEG;
+  MediaPlayer1.Play;
+end;
+```
+
+## Frame Capture
+
+`Frame_Save` writes the current frame to disk in the chosen image format. `Frame_GetCurrent` fills a `TBitmap` you supply.
+
+```pascal
+procedure TForm1.CaptureFrame;
+begin
+  // Frame_Save(Filename, Format, Quality)
+  MediaPlayer1.Frame_Save('C:\Snapshots\frame.jpg', IM_JPEG, 85);
+end;
+
+procedure TForm1.CaptureFrameToBitmap;
+var
+  Bitmap: TBitmap;
+begin
+  Bitmap := TBitmap.Create;
+  try
+    MediaPlayer1.Frame_GetCurrent(Bitmap);
+    Image1.Picture.Assign(Bitmap);
+  finally
+    Bitmap.Free;
+  end;
+end;
+```
+
+Optionally resize the saved frame by configuring `Frame_Save_Resize`, `Frame_Save_Resize_Width`, and `Frame_Save_Resize_Height` before the call.
+
+## Audio and Subtitle Tracks
+
+The `Info_Audio_*` and `Info_Text_*` helpers enumerate streams discovered inside the source file. Audio streams are enabled or disabled individually with `Audio_SetStream`.
+
+```pascal
+procedure TForm1.PopulateAudioTracks;
+var
+  i: Integer;
+begin
+  cbAudioTracks.Items.Clear;
+  for i := 0 to MediaPlayer1.Info_Audio_Streams_Count - 1 do
+    cbAudioTracks.Items.Add(MediaPlayer1.Info_Audio_Codec(i));
+end;
+
+procedure TForm1.SelectAudioTrack(Index: Integer);
+var
+  i: Integer;
+begin
+  // Enable the chosen track and disable the others
+  for i := 0 to MediaPlayer1.Info_Audio_Streams_Count - 1 do
+    MediaPlayer1.Audio_SetStream(i, i = Index);
+end;
+
+procedure TForm1.PopulateSubtitles;
+var
+  i: Integer;
+begin
+  cbSubtitles.Items.Clear;
+  for i := 0 to MediaPlayer1.Info_Text_Streams_Count - 1 do
+    cbSubtitles.Items.Add(MediaPlayer1.Info_Text_Name(i));
+end;
+```
+
+`Info_Text_Language(i)` and `Info_Text_Codec(i)` are also available for richer subtitle metadata.
+
+## Fullscreen Mode
+
+Toggle fullscreen via the `Screen_VR_FullScreen` property. This works with the configured video renderer.
+
+```pascal
+procedure TForm1.ToggleFullscreen;
+begin
+  MediaPlayer1.Screen_VR_FullScreen := not MediaPlayer1.Screen_VR_FullScreen;
+end;
+```
+
+## Events
+
+`TVFMediaPlayer` exposes three core playback events. `OnStart` and `OnStop` take no parameters; `OnError` receives the error text.
+
+```pascal
+procedure TForm1.MediaPlayer1Start;
+begin
+  StatusBar1.SimpleText := 'Playing';
+end;
+
+procedure TForm1.MediaPlayer1Stop;
+begin
+  StatusBar1.SimpleText := 'Stopped';
+end;
+
+procedure TForm1.MediaPlayer1Error(ErrorText: WideString);
+begin
+  ShowMessage('Error: ' + ErrorText);
+end;
+```
+
+To track position updates, poll `Position_Get_Time` from a `TTimer` while `Status = ST_PLAY`:
+
+```pascal
+procedure TForm1.PositionTimerTick(Sender: TObject);
+var
+  Position, Duration: Integer;
+begin
+  if MediaPlayer1.Status <> ST_PLAY then
+    Exit;
+
+  Position := MediaPlayer1.Position_Get_Time;
+  Duration := MediaPlayer1.Info_Video_DurationMSec(0);
+  if Duration > 0 then
+  begin
+    TrackBar1.Max := Duration;
+    TrackBar1.Position := Position;
+  end;
+  LabelPosition.Caption := Format('%d:%.2d / %d:%.2d',
+    [Position div 60000, (Position div 1000) mod 60,
+     Duration div 60000, (Duration div 1000) mod 60]);
+end;
+```
+
+## Supported Formats
+
+| Type | Formats |
+|------|---------|
+| Video | MP4, AVI, MKV, MOV, WMV, FLV, WebM |
+| Audio | MP3, AAC, FLAC, WAV, OGG, WMA |
+| Streaming | RTSP, RTMP, HTTP, HLS, DASH |
+
+Format coverage depends on the selected `Source_Mode` — the FFmpeg and VLC engines cover the broadest range out of the box; DirectShow (`SM_File_DS`) relies on the codecs installed on the system.
 
 ## Resources and Further Information
 
-To delve deeper into the capabilities and usage of the TVFMediaPlayer library, explore the following official resources:
+To explore the capabilities and usage of the `TVFMediaPlayer` library in more depth, see the following official resources:
 
-* **Product Page:** [VisioForge Media Player SDK](https://www.visioforge.com/all-in-one-media-framework)
-* **API Documentation:** [Delphi Media Player API Reference](https://api.visioforge.org/delphi/media_player_sdk/index.html)
-* **Changelog:** [View recent updates and fixes](changelog.md)
-* **Installation Guide:** [Steps for setting up the library](install/index.md)
-* **Deployment:** [Information on distributing your application](deployment.md)
-* **License Agreement:** [End User License Agreement](../../eula.md)
+* **Product page:** [VisioForge Media Player SDK](https://www.visioforge.com/all-in-one-media-framework)
+* **API reference:** [Delphi Media Player API Reference](https://api.visioforge.org/delphi/media_player_sdk/index.html)
+* **Changelog:** [Recent updates and fixes](changelog.md)
+* **Installation guide:** [Setting up the library](install/index.md)
+* **Deployment:** [Distributing your application](deployment.md)
+* **License agreement:** [End User License Agreement](../../eula.md)
 
 ## Tutorials and Code Samples
 
-Practical examples demonstrate how to implement specific features:
+Practical examples demonstrating how to implement specific features:
 
-* [How to play a video file with several video streams?](file-multiple-video-streams.md)
-* *(More tutorials can be added here as they become available)*
-
-By leveraging the extensive features and flexible integration options of TVFMediaPlayer, developers can create compelling multimedia applications with rich playback experiences across various Windows platforms.
+* [How to play a video file with multiple video streams?](file-multiple-video-streams.md)
+* *(More tutorials will be added here as they become available)*

@@ -1137,7 +1137,7 @@ pNVEnc->SetVbvSize(bitrate * 2);
 
 ## Ver También
 
-- [Visión General del Paquete de Filtros de Codificación](../index.md)
+- [Visión General del DirectShow Encoding Filters Pack](../index.md)
 - [Referencia de Códecs](../codecs-reference.md)
 - [Ejemplos de Código](../examples.md)
 - [Documentación NVENC de NVIDIA](https://developer.nvidia.com/video-codec-sdk)

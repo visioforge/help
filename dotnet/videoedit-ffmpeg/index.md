@@ -1,7 +1,7 @@
 ---
 title: FFmpeg Video Editing and Format Conversion in C# .NET
 description: Edit, convert, and process video with VisioForge Video Edit SDK FFmpeg .NET. Cross-platform toolkit with effects, overlays, and hardware encoding.
-sidebar_label: Video Edit SDK FFMPEG .Net
+sidebar_label: Video Edit SDK FFmpeg .NET
 order: 11
 tags:
   - Video Edit SDK FFmpeg
@@ -9,11 +9,11 @@ tags:
 
 ---
 
-# Video Edit FFMPEG SDK for .NET Development
+# Video Edit SDK FFmpeg for .NET Development
 
 ## Introduction to the SDK
 
-The Video Edit FFMPEG SDK for .NET empowers developers to seamlessly integrate video editing, conversion, and advanced processing capabilities into their .NET applications. This powerful toolkit allows you to construct professional-quality videos from various audio and video sources with minimal effort. Built on the robust and widely-adopted FFMPEG framework, our SDK provides support for virtually all industry-standard video and audio formats, delivering a complete multimedia editing and production solution for your applications.
+The Video Edit SDK FFmpeg for .NET empowers developers to seamlessly integrate video editing, conversion, and advanced processing capabilities into their .NET applications. This powerful toolkit allows you to construct professional-quality videos from various audio and video sources with minimal effort. Built on the robust and widely-adopted FFMPEG framework, our SDK provides support for virtually all industry-standard video and audio formats, delivering a complete multimedia editing and production solution for your applications.
 
 Whether you're building video editing software, adding media processing to your application, or developing specialized video conversion tools, this SDK offers the essential building blocks to implement sophisticated video editing features quickly and efficiently.
 

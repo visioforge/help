@@ -17,6 +17,7 @@ primary_api_classes:
   - AACEncoderBlock
   - SystemVideoSourceBlock
 
+sidebar_label: RTSP Server
 ---
 
 # Bloque Servidor RTSP - VisioForge Media Blocks SDK .Net

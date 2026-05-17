@@ -36,7 +36,7 @@ Comience iniciando Visual Basic 6 y creando un nuevo proyecto:
 3. Elija "EXE Estándar" como el tipo de proyecto
 4. Haga clic en "Aceptar" para crear el proyecto base
 
-![Creando un nuevo proyecto VB6](/help/docs/delphi/videoedit/install/vevb6_1.webp)
+![Creando un nuevo proyecto VB6](vevb6_1.webp)
 
 ### Paso 2: Acceder al Diálogo de Componentes
 
@@ -45,7 +45,7 @@ A continuación, necesita registrar el control ActiveX dentro de su entorno de d
 1. En el menú, navegue a "Proyecto"
 2. Seleccione "Componentes" para abrir el diálogo de componentes
 
-![Abriendo el diálogo de Componentes](/help/docs/delphi/videoedit/install/vevb6_2.webp)
+![Abriendo el diálogo de Componentes](vevb6_2.webp)
 
 ### Paso 3: Seleccionar el Control TVFVideoEdit
 
@@ -55,7 +55,7 @@ Desde el diálogo de Componentes:
 2. Localice y marque la casilla para "VisioForge Video Edit Control"
 3. Haga clic en "Aceptar" para confirmar su selección
 
-![Seleccionando el componente Control de Edición de Video](/help/docs/delphi/videoedit/install/vevb6_3.webp)
+![Seleccionando el componente Control de Edición de Video](vevb6_3.webp)
 
 ### Paso 4: Verificar el Registro del Control
 
@@ -64,9 +64,9 @@ Después del registro exitoso:
 1. El icono del control TVFVideoEdit aparece en su caja de herramientas
 2. Esto confirma que el control está listo para usar en su aplicación
 
-![Control agregado a la caja de herramientas](/help/docs/delphi/videoedit/install/vevb6_4.webp)
+![Control agregado a la caja de herramientas](vevb6_4.webp)
 
-![Icono del control en la caja de herramientas](/help/docs/delphi/videoedit/install/vevb6_41.webp)
+![Icono del control en la caja de herramientas](vevb6_41.webp)
 
 ### Paso 5: Implementar el Control
 

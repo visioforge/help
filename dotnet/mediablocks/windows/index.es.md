@@ -1,6 +1,7 @@
 ---
-title: Decodificación de Video GPU con Direct3D 11 en C# .NET
-description: Use decodificación de video acelerada por hardware con Direct3D 11, efectos e integración DirectShow en Windows con VisioForge Media Blocks SDK para .NET.
+title: Decodificación de video por GPU con Direct3D 11 en C# .NET
+description: Use decodificación de video acelerada por hardware con Direct3D 11, efectos e integración con DirectShow en Windows con VisioForge Media Blocks SDK para .NET.
+sidebar_label: Windows Platform
 tags:
   - Media Blocks SDK
   - .NET
@@ -19,593 +20,174 @@ primary_api_classes:
 
 ---
 
-# Bloques de Plataforma Windows - VisioForge Media Blocks SDK .Net
+# Bloques de plataforma Windows - VisioForge Media Blocks SDK .Net
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Los bloques de plataforma Windows proporcionan funcionalidad específica para sistemas Windows. Estos bloques aprovechan las APIs nativas de Windows como DirectShow, Media Foundation, WASAPI, Direct3D 11 y DXVA para proporcionar captura y procesamiento de medios optimizados.
+Esta sección cubre los MediaBlocks específicamente optimizados para plataformas Windows.
 
-## Bloques de Fuente de Video Windows
+## Bloques disponibles
 
-### Fuente de Video DirectShow
+### Decodificadores de hardware Direct3D 11
 
-DirectShow proporciona acceso a una amplia variedad de dispositivos de captura de video en Windows, incluyendo webcams USB, tarjetas de captura y sintonizadores de TV.
+Windows proporciona decodificación de video acelerada por hardware mediante Direct3D 11:
 
-#### Configuración
+- **D3D11H264DecoderBlock**: decodificación H.264/AVC por hardware
+- **D3D11H265DecoderBlock**: decodificación H.265/HEVC por hardware
+- **D3D11VP8DecoderBlock**: decodificación VP8 por hardware
+- **D3D11VP9DecoderBlock**: decodificación VP9 por hardware
+- **D3D11AV1DecoderBlock**: decodificación AV1 por hardware
+- **D3D11MPEG2DecoderBlock**: decodificación MPEG-2 por hardware
 
-Use `VideoCaptureDeviceSourceSettings` con la API `DirectShow` para acceder a dispositivos DirectShow.
+Consulte la [documentación de decodificadores de video](../VideoDecoders/index.md)
 
-#### Enumerar dispositivos
+### Procesamiento Direct3D 11
 
-```csharp
-// Enumerar dispositivos DirectShow
-var devices = await DeviceEnumerator.Shared.VideoSourcesAsync(VideoCaptureDeviceAPI.DirectShow);
-foreach (var device in devices)
-{
-    Console.WriteLine($"Dispositivo: {device.Name}");
-    foreach (var format in device.VideoFormats)
-    {
-        Console.WriteLine($"  Formato: {format.Width}x{format.Height} @ {format.FrameRateList[0]}fps");
-    }
-}
-```
+- **D3D11UploadBlock**: sube video desde la memoria del sistema a la GPU
+- **D3D11DownloadBlock**: descarga video desde la GPU a la memoria del sistema
+- **D3D11VideoConverterBlock**: conversión de espacio de color acelerada por GPU
 
-#### Código de ejemplo
+Consulte la [documentación de procesamiento de video](../VideoProcessing/index.md#d3d11-video-converter)
 
-```csharp
-var pipeline = new MediaBlocksPipeline();
+### Composición Direct3D 11
 
-// Seleccionar dispositivo DirectShow
-var devices = await DeviceEnumerator.Shared.VideoSourcesAsync(VideoCaptureDeviceAPI.DirectShow);
-var device = devices[0];
+- **D3D11VideoCompositorBlock**: composición y mezcla de video acelerada por GPU
 
-var videoSettings = new VideoCaptureDeviceSourceSettings(device)
-{
-    Format = device.VideoFormats[0].ToFormat()
-};
-videoSettings.Format.FrameRate = device.VideoFormats[0].FrameRateList[0];
+### Efectos de video de Windows
 
-var videoSource = new SystemVideoSourceBlock(videoSettings);
+- **VideoEffectsWinBlock**: efectos de video específicos de Windows
+- **VR360ProcessorBlock**: procesamiento de video VR 360 grados
 
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(videoSource.Output, videoRenderer.Input);
+### Bloques especiales
 
-await pipeline.StartAsync();
-```
+Consulte la [documentación de bloques especiales](../Special/index.md)
 
----
+## Requisitos de plataforma
 
-### Fuente de Video Media Foundation
+- **Windows**: Windows 7 SP1 o superior
+- **Direct3D 11**: GPU compatible con D3D11
+- **Decodificación por hardware**: GPU con soporte de decodificación de video por hardware
 
-Media Foundation es la API de medios moderna de Microsoft, disponible en Windows Vista y versiones posteriores.
+## Características
 
-#### Configuración
+- **Aceleración por hardware**: aproveche la GPU para codificación, decodificación y procesamiento
+- **Integración con Direct3D 11**: procesamiento de video eficiente en la GPU
+- **Bajo uso de CPU**: descarga el procesamiento al hardware dedicado
+- **Alto rendimiento**: gestiona simultáneamente varios flujos HD/4K
+- **Eficiencia energética**: reduce el consumo de energía con aceleración por hardware
 
-Use `VideoCaptureDeviceSourceSettings` con la API `MediaFoundation` para acceder a dispositivos MF.
+## Código de ejemplo
 
-#### Código de ejemplo
+### Decodificación H.264 por hardware
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-// Seleccionar dispositivo Media Foundation
-var devices = await DeviceEnumerator.Shared.VideoSourcesAsync(VideoCaptureDeviceAPI.MediaFoundation);
-var device = devices[0];
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video.mp4")));
 
-var videoSettings = new VideoCaptureDeviceSourceSettings(device)
-{
-    Format = device.VideoFormats[0].ToFormat()
-};
-
-var videoSource = new SystemVideoSourceBlock(videoSettings);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(videoSource.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
----
-
-## Bloques de Captura de Pantalla Windows
-
-### Captura de Pantalla DirectX 9
-
-El `ScreenCaptureDX9SourceBlock` usa DirectX 9 para captura de pantalla.
-
-#### Configuración
-
-`ScreenCaptureDX9SourceSettings` propiedades clave:
-- `Monitor` (int): Índice del monitor a capturar.
-- `FrameRate` (`VideoFrameRate`): Tasa de fotogramas de captura.
-- `CaptureMouseCursor` (bool): Si capturar el cursor del ratón.
-
-#### Código de ejemplo
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var screenSettings = new ScreenCaptureDX9SourceSettings
-{
-    Monitor = 0,
-    FrameRate = new VideoFrameRate(30),
-    CaptureMouseCursor = true
-};
-
-var screenSource = new ScreenSourceBlock(screenSettings);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(screenSource.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
----
-
-### Captura de Pantalla Direct3D 11 (Desktop Duplication)
-
-El `ScreenCaptureD3D11SourceBlock` usa la API Desktop Duplication de Windows 8+ para captura de pantalla de alto rendimiento.
-
-#### Configuración
-
-`ScreenCaptureD3D11SourceSettings` propiedades clave:
-- `Monitor` (int): Índice del monitor a capturar.
-- `FrameRate` (`VideoFrameRate`): Tasa de fotogramas de captura.
-- `CaptureMouseCursor` (bool): Si capturar el cursor del ratón.
-- `WindowHandle` (IntPtr): Handle de ventana específica a capturar (opcional).
-
-#### Características
-
-- Mejor rendimiento que DirectX 9
-- Soporte para captura de ventana específica
-- Menor uso de CPU
-
-#### Código de ejemplo
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var screenSettings = new ScreenCaptureD3D11SourceSettings
-{
-    Monitor = 0,
-    FrameRate = new VideoFrameRate(60),
-    CaptureMouseCursor = true
-};
-
-var screenSource = new ScreenSourceBlock(screenSettings);
-
-// Codificar y guardar
-var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
-pipeline.Connect(screenSource.Output, h264Encoder.Input);
-
-var mp4Sink = new MP4SinkBlock(new MP4SinkSettings("screen_capture.mp4"));
-pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
-
-await pipeline.StartAsync();
-```
-
----
-
-### Captura de Pantalla GDI
-
-El `ScreenCaptureGDISourceBlock` usa GDI para captura de pantalla. Es compatible con versiones antiguas de Windows pero tiene menor rendimiento.
-
-#### Configuración
-
-`ScreenCaptureGDISourceSettings` propiedades clave:
-- `Monitor` (int): Índice del monitor a capturar.
-- `FrameRate` (`VideoFrameRate`): Tasa de fotogramas de captura.
-- `CaptureMouseCursor` (bool): Si capturar el cursor del ratón.
-
-#### Código de ejemplo
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var screenSettings = new ScreenCaptureGDISourceSettings
-{
-    Monitor = 0,
-    FrameRate = new VideoFrameRate(15),
-    CaptureMouseCursor = true
-};
-
-var screenSource = new ScreenSourceBlock(screenSettings);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(screenSource.Output, videoRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
----
-
-## Bloques de Fuente de Audio Windows
-
-### Fuente de Audio WASAPI
-
-WASAPI (Windows Audio Session API) proporciona acceso de baja latencia a dispositivos de audio.
-
-#### Captura de Audio
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-// Enumerar dispositivos de audio WASAPI
-var devices = await DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2);
-var device = devices[0];
-
-if (device != null)
-{
-    var format = device.Formats[0];
-    var audioSettings = device.CreateSourceSettings(format.ToFormat());
-    
-    var audioSource = new SystemAudioSourceBlock(audioSettings);
-    
-    var audioRenderer = new AudioRendererBlock();
-    pipeline.Connect(audioSource.Output, audioRenderer.Input);
-    
-    await pipeline.StartAsync();
-}
-```
-
-#### Captura Loopback (Audio de Altavoces)
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-// Obtener dispositivo de salida de audio para loopback
-var outputDevices = await DeviceEnumerator.Shared.AudioOutputsAsync(AudioOutputDeviceAPI.WASAPI2);
-var outputDevice = outputDevices[0];
-
-if (outputDevice != null)
-{
-    // Crear configuración de loopback
-    var loopbackSettings = new LoopbackAudioCaptureDeviceSourceSettings(outputDevice);
-    
-    var audioSource = new SystemAudioSourceBlock(loopbackSettings);
-    
-    // Guardar a archivo o procesar
-    var mp3Encoder = new MP3EncoderBlock(new MP3EncoderSettings { Bitrate = 192 });
-    pipeline.Connect(audioSource.Output, mp3Encoder.Input);
-    
-    var fileSink = new FileSinkBlock("loopback_audio.mp3");
-    pipeline.Connect(mp3Encoder.Output, fileSink.Input);
-    
-    await pipeline.StartAsync();
-}
-```
-
----
-
-### Fuente de Audio DirectSound
-
-DirectSound proporciona compatibilidad con dispositivos de audio más antiguos.
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-// Enumerar dispositivos DirectSound
-var devices = await DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.DirectSound);
-var device = devices[0];
-
-if (device != null)
-{
-    var format = device.Formats[0];
-    var audioSettings = device.CreateSourceSettings(format.ToFormat());
-    
-    var audioSource = new SystemAudioSourceBlock(audioSettings);
-    
-    var audioRenderer = new AudioRendererBlock();
-    pipeline.Connect(audioSource.Output, audioRenderer.Input);
-    
-    await pipeline.StartAsync();
-}
-```
-
----
-
-## Decodificadores Acelerados por Hardware D3D11/DXVA
-
-### Bloque Decodificador D3D11 H.264
-
-El `D3D11H264DecoderBlock` proporciona decodificación acelerada por hardware usando DirectX Video Acceleration (DXVA).
-
-#### Información del bloque
-
-| Dirección del pin | Tipo de medio | Cantidad de pines |
-|-----------------|---------------------|------------|
-| Entrada video | Video codificado H.264 | 1 |
-| Salida video | Video sin comprimir | 1 |
-
-#### Código de ejemplo
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var fileSource = new BasicFileSourceBlock("video.mp4");
-
-var reader = new MediaInfoReaderX();
-await reader.OpenAsync("video.mp4");
-var mediaInfo = reader.Info;
-
-var demux = new UniversalDemuxBlock(mediaInfo, renderVideo: true, renderAudio: false);
-
-// Usar decodificador D3D11
+// Decodificador D3D11 por hardware
 var d3d11Decoder = new D3D11H264DecoderBlock();
+pipeline.Connect(fileSource.VideoOutput, d3d11Decoder.Input);
+
+// Procesar en GPU o descargar a la memoria del sistema
+var d3d11Download = new D3D11DownloadBlock();
+pipeline.Connect(d3d11Decoder.Output, d3d11Download.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-
-pipeline.Connect(fileSource.Output, demux.Input);
-pipeline.Connect(demux.GetVideoOutput(), d3d11Decoder.Input);
-pipeline.Connect(d3d11Decoder.Output, videoRenderer.Input);
+pipeline.Connect(d3d11Download.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 ```
 
-#### Disponibilidad
-
-```csharp
-bool available = D3D11H264DecoderBlock.IsAvailable();
-```
-
----
-
-### Bloque Decodificador D3D11 HEVC
-
-El `D3D11H265DecoderBlock` proporciona decodificación HEVC acelerada por hardware.
-
-#### Disponibilidad
-
-```csharp
-bool available = D3D11H265DecoderBlock.IsAvailable();
-```
-
----
-
-### Bloque Decodificador D3D11 VP9
-
-El `D3D11VP9DecoderBlock` proporciona decodificación VP9 acelerada por hardware.
-
-#### Disponibilidad
-
-```csharp
-bool available = D3D11VP9DecoderBlock.IsAvailable();
-```
-
----
-
-### Bloque Decodificador D3D11 AV1
-
-El `D3D11AV1DecoderBlock` proporciona decodificación AV1 acelerada por hardware.
-
-#### Disponibilidad
-
-```csharp
-bool available = D3D11AV1DecoderBlock.IsAvailable();
-```
-
----
-
-## Codificadores Media Foundation
-
-### Codificador HEVC Media Foundation
-
-El `MFHEVCEncoderBlock` usa el codificador HEVC incorporado de Windows.
-
-#### Configuración
-
-`MFHEVCEncoderSettings` propiedades clave:
-- `Bitrate` (int): Bitrate objetivo en bps.
-- `Quality` (int): Nivel de calidad (para modo de calidad).
-- `Profile` (`HEVCProfile`): Perfil HEVC a usar.
-
-#### Código de ejemplo
+### Pipeline de procesamiento de video en GPU
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var videoSource = new SystemVideoSourceBlock(videoSettings);
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video.mp4")));
 
-// Usar codificador HEVC de Media Foundation
-var hevcEncoder = new HEVCEncoderBlock(new MFHEVCEncoderSettings
-{
-    Bitrate = 5000000 // 5 Mbps
-});
+// Subir a la GPU
+var d3d11Upload = new D3D11UploadBlock();
+pipeline.Connect(fileSource.VideoOutput, d3d11Upload.Input);
 
-pipeline.Connect(videoSource.Output, hevcEncoder.Input);
+// Conversión de color en GPU
+var d3d11Converter = new D3D11VideoConverterBlock();
+pipeline.Connect(d3d11Upload.Output, d3d11Converter.Input);
 
-var mp4Sink = new MP4SinkBlock(new MP4SinkSettings("output.mp4"));
-pipeline.Connect(hevcEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
+// Descargar desde la GPU
+var d3d11Download = new D3D11DownloadBlock();
+pipeline.Connect(d3d11Converter.Output, d3d11Download.Input);
 
-await pipeline.StartAsync();
-```
-
----
-
-## Codificadores NVIDIA NVENC
-
-### Codificador NVENC H.264
-
-El `NVENCH264EncoderBlock` proporciona codificación H.264 acelerada por GPU NVIDIA.
-
-#### Configuración
-
-`NVENCH264EncoderSettings` propiedades clave:
-- `Bitrate` (int): Bitrate objetivo.
-- `RateControl` (enum): Modo de control de tasa.
-- `Preset` (enum): Preset de codificación (calidad vs velocidad).
-- `Profile` (enum): Perfil H.264.
-- `Level` (enum): Nivel H.264.
-
-#### Código de ejemplo
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var videoSource = new SystemVideoSourceBlock(videoSettings);
-
-// Usar codificador NVIDIA NVENC
-var nvencEncoder = new H264EncoderBlock(new NVENCH264EncoderSettings
-{
-    Bitrate = 8000000, // 8 Mbps
-    Preset = NVENCPreset.Default
-});
-
-pipeline.Connect(videoSource.Output, nvencEncoder.Input);
-
-var mp4Sink = new MP4SinkBlock(new MP4SinkSettings("output.mp4"));
-pipeline.Connect(nvencEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
-
-await pipeline.StartAsync();
-```
-
-#### Disponibilidad
-
-```csharp
-bool available = NVENCH264EncoderSettings.IsAvailable();
-```
-
----
-
-## Codificadores Intel QuickSync
-
-### Codificador QSV H.264
-
-El `QSVH264EncoderBlock` proporciona codificación H.264 acelerada por GPU Intel.
-
-#### Código de ejemplo
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var videoSource = new SystemVideoSourceBlock(videoSettings);
-
-// Usar codificador Intel QuickSync
-var qsvEncoder = new H264EncoderBlock(new QSVH264EncoderSettings
-{
-    Bitrate = 5000000 // 5 Mbps
-});
-
-pipeline.Connect(videoSource.Output, qsvEncoder.Input);
-
-var mp4Sink = new MP4SinkBlock(new MP4SinkSettings("output.mp4"));
-pipeline.Connect(qsvEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
-
-await pipeline.StartAsync();
-```
-
----
-
-## Codificadores AMD AMF
-
-### Codificador AMF H.264
-
-El `AMFH264EncoderBlock` proporciona codificación H.264 acelerada por GPU AMD.
-
-#### Código de ejemplo
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var videoSource = new SystemVideoSourceBlock(videoSettings);
-
-// Usar codificador AMD AMF
-var amfEncoder = new H264EncoderBlock(new AMFH264EncoderSettings
-{
-    Bitrate = 5000000 // 5 Mbps
-});
-
-pipeline.Connect(videoSource.Output, amfEncoder.Input);
-
-var mp4Sink = new MP4SinkBlock(new MP4SinkSettings("output.mp4"));
-pipeline.Connect(amfEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
-
-await pipeline.StartAsync();
-```
-
----
-
-## Renderizadores de Video Windows
-
-### Renderizador Direct3D 11
-
-El renderizador D3D11 proporciona renderizado de video de alto rendimiento con aceleración por GPU.
-
-#### Características
-
-- Renderizado acelerado por GPU
-- Soporte para HDR
-- Escalado y transformación eficientes
-- Sincronización vertical
-
-### Renderizador D3D9
-
-El renderizador D3D9 proporciona compatibilidad con hardware más antiguo.
-
-### Renderizador EVR (Enhanced Video Renderer)
-
-El EVR es el renderizador recomendado para aplicaciones WPF.
-
-#### Selección automática
-
-El SDK selecciona automáticamente el mejor renderizador disponible:
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var videoSource = new SystemVideoSourceBlock(videoSettings);
-
-// El renderizador se selecciona automáticamente
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(videoSource.Output, videoRenderer.Input);
+pipeline.Connect(d3d11Download.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 ```
 
----
-
-## Consideraciones para Plataforma Windows
-
-### Versiones de Windows Soportadas
-
-- Windows 10 versión 1809 o posterior (recomendado)
-- Windows 11
-- Windows Server 2019, 2022
-
-### Redistribuibles Requeridos
-
-- Visual C++ Redistributable 2015-2022
-- GStreamer Runtime
-
-### Aceleración por Hardware
-
-| GPU | API | Códecs Soportados |
-|-----|-----|-------------------|
-| NVIDIA | NVENC/NVDEC | H.264, HEVC, VP9, AV1 |
-| Intel | QuickSync | H.264, HEVC, VP9, AV1 |
-| AMD | AMF | H.264, HEVC, AV1 |
-| Cualquiera | D3D11/DXVA | H.264, HEVC, VP9, AV1 |
-
-### Verificar soporte de hardware
+### Composición de video
 
 ```csharp
-// Verificar NVIDIA
-bool nvencAvailable = NVENCH264EncoderSettings.IsAvailable();
+var pipeline = new MediaBlocksPipeline();
 
-// Verificar Intel QuickSync
-bool qsvAvailable = QSVH264EncoderSettings.IsAvailable();
+var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video1.mp4")));
+var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video2.mp4")));
 
-// Verificar AMD AMF
-bool amfAvailable = AMFH264EncoderSettings.IsAvailable();
+// Subir ambos a la GPU
+var upload1 = new D3D11UploadBlock();
+var upload2 = new D3D11UploadBlock();
+pipeline.Connect(source1.VideoOutput, upload1.Input);
+pipeline.Connect(source2.VideoOutput, upload2.Input);
 
-// Verificar D3D11
-bool d3d11Available = D3D11H264DecoderBlock.IsAvailable();
+// Configurar el compositor — dos flujos en un canvas 1920x1080 @ 30 fps
+var compositorSettings = new D3D11VideoCompositorSettings(1920, 1080, VideoFrameRate.FPS_30);
+compositorSettings.Streams.Add(new VideoMixerStream(new Rect(0, 0, 960, 1080), zorder: 0));
+compositorSettings.Streams.Add(new VideoMixerStream(new Rect(960, 0, 1920, 1080), zorder: 1));
+
+// Componer en GPU — cada flujo añadido crea un pad de entrada; acceda mediante Inputs[].
+var compositor = new D3D11VideoCompositorBlock(compositorSettings);
+pipeline.Connect(upload1.Output, compositor.Inputs[0]);
+pipeline.Connect(upload2.Output, compositor.Inputs[1]);
+
+// Descargar resultado
+var download = new D3D11DownloadBlock();
+pipeline.Connect(compositor.Output, download.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(download.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
 ```
 
-### Frameworks de UI Soportados
+## Consejos de rendimiento
 
-- WPF
-- WinForms
-- WinUI 3
-- UWP (limitado)
-- Console Applications
+- Mantenga el video en memoria GPU entre operaciones para evitar el coste de upload/download
+- Use decodificadores por hardware cuando estén disponibles para mejor rendimiento
+- Encadene operaciones en GPU antes de descargar a la memoria del sistema
+- Monitorice el uso de memoria GPU al procesar varios flujos
+- Compruebe el soporte de hardware antes de usar bloques D3D11
+
+## Comprobar el soporte de hardware
+
+```csharp
+// Comprobar si el decodificador D3D11 H.264 está disponible
+if (D3D11H264DecoderBlock.IsAvailable())
+{
+    // Usar decodificador por hardware
+    var decoder = new D3D11H264DecoderBlock();
+}
+else
+{
+    // Recurrir a decodificador por software
+    var decoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+}
+```
+
+## Plataformas
+
+Windows 7 SP1 o superior (Windows 10/11 recomendado para mejor soporte de hardware).
+
+## Documentación relacionada
+
+- [VideoDecoders](../VideoDecoders/index.md) — bloques de decodificación por hardware
+- [VideoProcessing](../VideoProcessing/index.md) — bloques de procesamiento por GPU
+- [Special](../Special/index.md) — utilidades específicas de plataforma

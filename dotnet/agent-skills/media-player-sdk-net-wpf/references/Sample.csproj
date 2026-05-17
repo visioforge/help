@@ -19,9 +19,9 @@
     <AssemblyTitle>Simple Player Demo</AssemblyTitle>
     <Company>VisioForge</Company>
     <Product>Simple Player Demo</Product>
-    <Copyright>Copyright (c) 2026</Copyright>
-    <AssemblyVersion>2026.5.4.0</AssemblyVersion>
-    <FileVersion>2026.5.4.0</FileVersion>
+    <Copyright>Copyright (c) 2025</Copyright>
+    <AssemblyVersion>2026.5.17.0</AssemblyVersion>
+    <FileVersion>2026.5.17.0</FileVersion>
     <UseWPF>true</UseWPF>
     <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
@@ -32,6 +32,6 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.5.4" />
+    <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.5.17" />
   </ItemGroup>
 </Project>

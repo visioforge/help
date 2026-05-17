@@ -31,7 +31,7 @@ primary_api_classes:
 
 Construir una aplicación de edición de video profesional para iPhone y iPad requiere un SDK robusto que entregue rendimiento nativo con características personalizables. El VisioForge Video Edit SDK proporciona herramientas para crear impresionantes aplicaciones de edición que rivalizan con Adobe Premiere o DaVinci Resolve en dispositivos Apple.
 
-Nuestro SDK de edición de video iOS integra capacidades avanzadas de edición de video en tu app iOS de manera eficiente. Construye una aplicación de foto y video, herramientas de creación de contenido o una aplicación de editor de video profesional con las características que los usuarios esperan de las aplicaciones de edición modernas.
+Nuestro Video Edit SDK para iOS integra capacidades avanzadas de edición de video en tu app iOS de manera eficiente. Construye una aplicación de foto y video, herramientas de creación de contenido o una aplicación de editor de video profesional con las características que los usuarios esperan de las aplicaciones de edición modernas.
 
 ## Características Principales
 

@@ -62,7 +62,7 @@ La indexación es un flujo solo-Windows porque el contenedor ASF es tecnología 
 ## Véase también
 
 - [Referencia de codificación WMV](../output-formats/wmv.md) — configura la salida WMV de VisioForge para producir archivos indexados al capturar.
-- [Windows Media Format SDK — IWMIndexer](https://learn.microsoft.com/en-us/windows/win32/wmformat/iwmindexer)
+- [Windows Media Format SDK — IWMIndexer](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/api/wmsdkidl/nn-wmsdkidl-iwmindexer)
 - [Salida MP4](../output-formats/mp4.md) — una alternativa amigable a la búsqueda para nuevos proyectos.
 
 ---

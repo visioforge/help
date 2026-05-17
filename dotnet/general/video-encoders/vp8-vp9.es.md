@@ -1,5 +1,5 @@
 ---
-title: Codificación de Video VP8 y VP9: Configuración y Ajuste
+title: Codificación de Video VP8 y VP9 — Configuración y Ajuste
 description: Configure codificadores de video VP8 y VP9 para rendimiento óptimo de streaming, grabación y procesamiento en aplicaciones VisioForge .NET.
 tags:
   - Video Capture SDK

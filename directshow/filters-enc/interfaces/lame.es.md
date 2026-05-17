@@ -695,7 +695,7 @@ pLame->set_VariableMax(192);    // Limitar tasa de bits máxima
 
 ## Vea También
 
-- [Descripción General del Pack de Filtros de Codificación](../index.es.md)
-- [Referencia de Códecs de Audio](../codecs-reference.es.md)
-- [Codificador AAC](aac.es.md)
-- [Codificador FLAC](flac.es.md)
+- [Descripción General del Pack de Filtros de Codificación](../index.md)
+- [Referencia de Códecs de Audio](../codecs-reference.md)
+- [Codificador AAC](aac.md)
+- [Codificador FLAC](flac.md)

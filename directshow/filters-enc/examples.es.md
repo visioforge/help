@@ -1,6 +1,6 @@
 ---
-title: Codificación DirectShow: NVENC, H.264/H.265 y Muxers MP4/MKV
-description: Ejemplos de codificación DirectShow: NVENC GPU, H.264/H.265 software, AAC/MP3/Opus audio y multiplexación MP4/MKV/WebM con código C# y C++.
+title: Codificación DirectShow — NVENC, H.264/H.265 y MP4/MKV
+description: Ejemplos de codificación DirectShow — NVENC GPU, H.264/H.265 software, AAC/MP3/Opus audio y multiplexación MP4/MKV/WebM con código C# y C++.
 tags:
   - DirectShow
   - C++

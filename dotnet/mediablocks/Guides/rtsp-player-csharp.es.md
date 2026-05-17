@@ -1,6 +1,6 @@
 ---
 title: Visor de Streams RTSP y Reproductor de Cámaras IP en C# .NET
-description: Cree un visor RTSP y reproductor de cámaras IP en C# con VisioForge Media Blocks SDK: vista previa en vivo, ONVIF y grabación passthrough.
+description: Cree un visor RTSP y reproductor de cámaras IP en C# con VisioForge Media Blocks SDK — vista previa en vivo, ONVIF y grabación passthrough.
 tags:
   - Media Blocks SDK
   - .NET
@@ -49,7 +49,7 @@ primary_api_classes:
 
 ## Introducción
 
-Esta guía le muestra cómo construir una aplicación de visor de streams RTSP y reproductor de cámaras IP en C# usando el SDK VisioForge Media Blocks. Aprenderá a conectarse a cámaras IP vía RTSP, mostrar video en vivo con audio, descubrir cámaras usando ONVIF y grabar streams a archivo — con o sin recodificación. El SDK Media Blocks funciona en Windows, macOS y Linux, por lo que el mismo código funciona en todas las plataformas.
+Esta guía le muestra cómo construir una aplicación de visor de streams RTSP y reproductor de cámaras IP en C# usando el VisioForge Media Blocks SDK. Aprenderá a conectarse a cámaras IP vía RTSP, mostrar video en vivo con audio, descubrir cámaras usando ONVIF y grabar streams a archivo — con o sin recodificación. El Media Blocks SDK funciona en Windows, macOS y Linux, por lo que el mismo código funciona en todas las plataformas.
 
 Los casos de uso comunes incluyen paneles de vigilancia, aplicaciones NVR (grabador de video en red), herramientas de gestión de cámaras y cualquier proyecto que necesite mostrar o grabar feeds de cámaras IP programáticamente.
 
@@ -59,7 +59,7 @@ Los casos de uso comunes incluyen paneles de vigilancia, aplicaciones NVR (graba
 
 ## Requisitos Previos
 
-Agregue el paquete NuGet del SDK Media Blocks a su proyecto:
+Agregue el paquete NuGet del Media Blocks SDK a su proyecto:
 
 ```xml
 <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2025.5.2" />

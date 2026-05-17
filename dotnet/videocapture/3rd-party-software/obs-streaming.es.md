@@ -1,6 +1,6 @@
 ---
-title: Streaming con OBS Studio usando Video Capture SDK .Net
-description: Transmite video y audio con integración OBS en Video Capture SDK para soluciones de broadcast profesionales en WinForms, WPF y Consola.
+title: Enviar video y audio en vivo a OBS Studio desde app C# .NET
+description: Envía video y audio en vivo a OBS Studio desde VisioForge Video Capture SDK. Configuración de cámara virtual, codecs y ejemplos de pipeline de broadcasting.
 tags:
   - Video Capture SDK
   - .NET
@@ -16,48 +16,48 @@ primary_api_classes:
 
 ---
 
-# Integrar Streaming OBS en Video Capture SDK .Net
+# Integrar streaming OBS en Video Capture SDK .Net
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Introducción a la Integración OBS
+## Introducción a la integración OBS
 
-Open Broadcaster Software (OBS) se ha convertido en el estándar de la industria para streaming en vivo y grabación de video. El Video Capture SDK .Net proporciona capacidades robustas para transmitir video y audio desde múltiples fuentes directamente a OBS, creando un pipeline poderoso para creación de contenido de calidad broadcast.
+Open Broadcaster Software (OBS) se ha convertido en el estándar de la industria para el streaming en vivo y la grabación de video. Video Capture SDK .Net proporciona capacidades robustas para transmitir video y audio desde múltiples fuentes directamente a OBS, creando un pipeline poderoso para la creación de contenido de calidad broadcast.
 
-Esta integración permite a los desarrolladores construir aplicaciones que pueden:
+Esta integración permite a los desarrolladores crear aplicaciones que pueden:
 
 - Capturar desde múltiples dispositivos de cámara simultáneamente
 - Procesar y mejorar flujos de video en tiempo real
 - Mezclar varias fuentes de contenido antes de enviar a OBS
 - Crear soluciones de broadcasting profesionales con configuración mínima
 
-Ya sea que estés desarrollando aplicaciones para WinForms, WPF o entornos de consola, el SDK proporciona una API consistente para integración con OBS.
+Ya sea que desarrolles aplicaciones para WinForms, WPF o entornos de consola, el SDK proporciona una API coherente para la integración con OBS.
 
-## Cómo Funciona la Integración OBS
+## Cómo funciona la integración OBS
 
 El SDK aprovecha la tecnología DirectShow Virtual Camera para crear un puente entre tu aplicación y OBS. Este enfoque ofrece varias ventajas:
 
-1. **Streaming sin latencia**: La transferencia directa de memoria minimiza el retraso
-2. **Flexibilidad de formato**: Soporte para varias resoluciones y tasas de fotogramas
+1. **Streaming sin latencia**: la transferencia directa en memoria minimiza el retraso
+2. **Flexibilidad de formato**: soporte para varias resoluciones y tasas de fotogramas
 3. **Configuración mínima**: OBS reconoce el dispositivo virtual automáticamente
-4. **Sincronización de audio**: Capacidades combinadas de streaming audio-video
+4. **Sincronización de audio**: capacidades combinadas de streaming audio-video
 
-La cámara virtual aparece para OBS como un dispositivo de webcam estándar, haciéndola inmediatamente utilizable dentro de cualquier escena OBS.
+La cámara virtual aparece a OBS como un dispositivo de webcam estándar, lo que la hace inmediatamente utilizable dentro de cualquier escena OBS.
 
-## Guía de Implementación
+## Guía de implementación
 
-### Componentes Requeridos
+### Componentes requeridos
 
-Antes de implementar streaming OBS, asegúrate de tener los siguientes componentes instalados:
+Antes de implementar el streaming OBS, asegúrate de tener instalados los siguientes componentes:
 
-- Video Capture SDK .Net (se recomienda última versión)
+- Video Capture SDK .Net (se recomienda la última versión)
 - Componentes DirectShow Virtual Camera
 - OBS Studio (se recomienda versión 27.0 o superior)
 - .NET Framework 4.6.2 o superior (para compatibilidad completa)
 
-### Implementación Básica
+### Implementación básica
 
-El siguiente código demuestra cómo habilitar salida de cámara virtual en tu aplicación:
+El siguiente código demuestra cómo habilitar la salida de cámara virtual en tu aplicación:
 
 ```cs
 // Inicializar el componente de captura de video
@@ -66,120 +66,92 @@ var videoCapture = new VideoCaptureCore();
 // Configurar ajustes básicos de captura
 // ...
 
-// Habilitar salida de cámara virtual
+// Habilitar la salida de cámara virtual
 videoCapture.Virtual_Camera_Output_Enabled = true;
 
-// Iniciar captura
+// Iniciar la captura
 videoCapture.Start();
 ```
 
-Esta implementación mínima enviará la alimentación de cámara al dispositivo virtual que OBS puede usar como fuente de entrada.
+Esta implementación mínima enviará la señal de la cámara al dispositivo virtual que OBS puede usar como fuente de entrada.
 
-## Configurar OBS para Integración con SDK
+## Configurar OBS para la integración con el SDK
 
-### Añadir la Fuente de Cámara Virtual
+### Añadir la fuente de cámara virtual
 
-1. Lanza OBS Studio
-2. En tu escena, haz clic en el botón "+" bajo Fuentes
-3. Selecciona "Dispositivo de Captura de Video" de la lista
-4. Nombra tu fuente (ej. "Cámara Virtual SDK")
-5. En el diálogo de Propiedades, selecciona "VisioForge Virtual Camera" del desplegable Dispositivo
-6. Configura resolución y FPS para coincidir con tus ajustes del SDK
-7. Haz clic en "OK" para añadir la fuente
+1. Inicia OBS Studio
+2. En tu escena, haz clic en el botón « + » bajo Fuentes
+3. Selecciona « Dispositivo de captura de video » de la lista
+4. Nombra tu fuente (por ejemplo, « Virtual Camera SDK »)
+5. En el cuadro de diálogo Propiedades, selecciona « VisioForge Virtual Camera » del desplegable Dispositivo
+6. Configura la resolución y los FPS para que coincidan con tus ajustes del SDK
+7. Haz clic en « Aceptar » para añadir la fuente
 
-![Fuente de captura de video OBS](/help/docs/dotnet/videocapture/3rd-party-software/obs2.webp)
+![Fuente de captura de video OBS](obs2.webp)
 
-### Configurar Audio
+### Configuración de audio
 
-Para incluir audio de tu aplicación en OBS:
+Para el streaming de audio, habilita la salida de cámara virtual junto con la grabación de audio en el motor `VideoCaptureCore` — la « VisioForge Virtual Audio Card » se enruta automáticamente cuando ambos indicadores están activados. Luego selecciona ese dispositivo en OBS:
 
-1. Habilita la salida de cámara virtual junto con la grabación de audio — la "VisioForge Virtual Audio Card" se enruta automáticamente
-2. En OBS, añade una nueva fuente de "Captura de Entrada de Audio"
-3. Selecciona "VisioForge Virtual Audio Card" como el dispositivo
-4. Ajusta niveles de audio según sea necesario
+```csharp
+// Habilitar la salida de cámara virtual en el motor VideoCaptureCore.
+// Combinado con Audio_RecordAudio = true, el audio se enruta automáticamente
+// a la tarjeta de audio virtual — sin indicador separado.
+VideoCapture1.Virtual_Camera_Output_Enabled = true;
 
-```cs
-// Habilitar salida de cámara virtual. Cuando se combina con Audio_RecordAudio = true,
-// el audio se enruta automáticamente a la tarjeta de audio virtual — sin indicador aparte.
-videoCapture.Virtual_Camera_Output_Enabled = true;
-videoCapture.Audio_RecordAudio = true;
+// Configura tu fuente de audio como de costumbre.
+VideoCapture1.Audio_CaptureDevice  = new AudioCaptureSource("Microphone");
+VideoCapture1.Audio_PlayAudio      = false;
+VideoCapture1.Audio_RecordAudio    = true;
 
-// Iniciar captura
-videoCapture.Start();
+await VideoCapture1.StartAsync();
 ```
 
-## Características Avanzadas
+Luego, en el lado de OBS:
 
-### Transmitir Múltiples Fuentes
+1. Añade una fuente « Captura de entrada de audio »
+2. Selecciona « VisioForge Virtual Audio Card » como dispositivo
+3. Ajusta los niveles de audio y los filtros según sea necesario
 
-Puedes combinar múltiples fuentes de video en tu aplicación antes de enviar a OBS:
+Esto crea un pipeline audiovisual completo desde tu aplicación hasta OBS.
 
-```cs
-// Configurar fuente de video primaria
-videoCapture.Video_CaptureDevice = new VideoCaptureDevice("Cámara Principal");
+## Consideraciones de rendimiento
 
-// Añadir superposición de video secundario
-// ...
+Al transmitir a OBS, considera estos consejos de rendimiento:
 
-// Habilitar salida virtual
-videoCapture.Virtual_Camera_Output_Enabled = true;
-videoCapture.Start();
-```
+1. **Coincidencia de resolución**: define la misma resolución en el SDK y en OBS
+2. **Coherencia de tasa de fotogramas**: mantén un FPS coherente en todo el pipeline
+3. **Uso de CPU**: supervisa la carga del procesador, especialmente al usar procesamiento de fotogramas
+4. **Gestión de memoria**: libera los recursos innecesarios rápidamente
+5. **Tamaño de búfer**: ajusta el tamaño del búfer según la memoria disponible en el sistema
 
-### Configuración de Resolución y Tasa de Fotogramas
+Para un rendimiento óptimo, recomendamos usar una GPU dedicada para las tareas de procesamiento de video.
 
-Asegúrate de que tu configuración del SDK coincida con tus ajustes de OBS para rendimiento óptimo:
+## Redistribuibles requeridos
 
-```cs
-// Establecer resolución de captura
-videoCapture.Video_CaptureDevice.FrameSize = new Size(1920, 1080);
-videoCapture.Video_CaptureDevice.FrameRate = 30;
+Asegúrate de incluir los siguientes componentes en el despliegue de tu aplicación:
 
-// Habilitar salida virtual
-videoCapture.Virtual_Camera_Output_Enabled = true;
-videoCapture.Start();
-```
+- Paquete redistribuible base
+- Componentes redistribuibles del SDK
+- Archivos redistribuibles del Virtual Camera SDK
 
-## Requisitos de Despliegue
+Consulta la documentación completa de [Despliegue](../deployment.md) para instrucciones detalladas.
 
-Al desplegar tu aplicación que usa integración OBS, incluye:
+## Solución de problemas comunes
 
-- Redistribuibles base del SDK
-- Redistribuibles específicos del SDK
-- Redistribuibles del SDK de Cámara Virtual
+Si encuentras problemas con la integración OBS:
 
-Para información detallada sobre requisitos de despliegue, consulta la página de [Despliegue](../deployment.md).
-
-## Solución de Problemas
-
-### La Cámara Virtual No Aparece en OBS
-
-Si OBS no muestra la cámara virtual:
-
-- Verifica que el controlador de Cámara Virtual esté instalado
-- Reinicia OBS después de instalar los controladores
-- Comprueba que la salida de cámara virtual esté habilitada en tu código
-- Asegúrate de que la captura de video haya iniciado
-
-### Problemas de Sincronización de Audio
-
-Si el audio no está sincronizado con el video:
-
-- Ajusta la compensación de sincronización de audio en OBS
-- Verifica que ambas salidas de audio y video virtuales estén habilitadas
-- Comprueba tus tasas de muestreo de audio
-
-### Rendimiento y Latencia
-
-Para minimizar latencia:
-
-- Usa resoluciones y tasas de fotogramas que coincidan
-- Habilita "Modo de Ultra Baja Latencia" si está disponible
-- Reduce la codificación innecesaria de pipeline
+1. **La cámara virtual no aparece en OBS**: verifica que el controlador de cámara virtual esté correctamente instalado
+2. **Bajo rendimiento**: revisa los ajustes de resolución y tasa de fotogramas tanto en el SDK como en OBS
+3. **Problemas de sincronización de audio**: asegúrate de que los flujos de audio y video usen el mismo mecanismo de timing
+4. **Problemas de calidad de video**: verifica los ajustes de codificación y las configuraciones de búfer
+5. **Bloqueos de aplicación**: verifica la correcta inicialización y cierre de los componentes del SDK
 
 ## Conclusión
 
-Integrar el Video Capture SDK con OBS proporciona una solución poderosa para aplicaciones de streaming profesionales. El enfoque de cámara virtual ofrece flexibilidad mientras mantiene compatibilidad con el ecosistema existente de OBS.
+Integrar capacidades de streaming OBS en tus aplicaciones .NET usando Video Capture SDK proporciona una base poderosa para construir soluciones de broadcasting profesionales. El enfoque DirectShow Virtual Camera garantiza la compatibilidad con OBS manteniendo un alto rendimiento y calidad.
+
+Siguiendo la guía de implementación y las mejores prácticas descritas en este documento, los desarrolladores pueden crear aplicaciones de streaming sofisticadas que aprovechan las fuerzas combinadas del SDK y OBS.
 
 ---
-Para más muestras de código y ejemplos, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.

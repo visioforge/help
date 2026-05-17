@@ -72,7 +72,7 @@ Asegure que los siguientes componentes estén incluidos con su aplicación:
 
 ## Conclusión
 
-El streaming a Adobe Flash Media Server usando los SDK Video Capture o Edit de VisioForge ofrece una solución flexible y potente para implementar streaming de video de alta calidad en aplicaciones .NET. La implementación soporta efectos en tiempo real, ajustes de calidad y cambio fluido de dispositivos, haciéndola adecuada para una amplia gama de aplicaciones de streaming.
+El streaming a Adobe Flash Media Server usando los VisioForge Video Capture o Edit SDK ofrece una solución flexible y potente para implementar streaming de video de alta calidad en aplicaciones .NET. La implementación soporta efectos en tiempo real, ajustes de calidad y cambio fluido de dispositivos, haciéndola adecuada para una amplia gama de aplicaciones de streaming.
 
 Siguiendo esta guía, los desarrolladores pueden implementar soluciones de streaming robustas que aprovechan las potentes características tanto de los SDK de VisioForge como de la plataforma de streaming de Adobe.
 

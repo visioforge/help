@@ -10,7 +10,7 @@ primary_api_classes:
 
 ---
 
-# Video Edit SDK FFMPEG .Net: Complete Version History
+# Video Edit SDK FFmpeg .NET: Complete Version History
 
 ## What's New in Version 12.1
 

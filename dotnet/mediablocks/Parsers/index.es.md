@@ -16,6 +16,7 @@ primary_api_classes:
   - H263ParseBlock
   - H264ParseBlock
 
+sidebar_label: Parsers
 ---
 
 # Bloques Parser - VisioForge Media Blocks SDK .Net

@@ -1,6 +1,6 @@
 ---
 title: Efectos de Video DirectShow - Referencia de Interfaces C#
-description: API de Filtros DirectShow: efectos de video, mejora de audio, redimensionamiento, chroma key e interfaces de mezcla con documentación.
+description: API de Filtros DirectShow — efectos de video, mejora de audio, redimensionamiento, chroma key e interfaces de mezcla con documentación.
 tags:
   - DirectShow
   - C++
@@ -22,7 +22,7 @@ primary_api_classes:
 
 ## Descripción General
 
-Este documento proporciona una referencia completa de la API para todas las interfaces en el Paquete de Filtros de Procesamiento de DirectShow. Estas interfaces permiten efectos de video, mejora de audio, chroma keying, mezcla de video, captura de pantalla y capacidades de procesamiento avanzadas.
+Este documento proporciona una referencia completa de la API para todas las interfaces en el DirectShow Processing Filters Pack. Estas interfaces permiten efectos de video, mejora de audio, chroma keying, mezcla de video, captura de pantalla y capacidades de procesamiento avanzadas.
 
 ---
 ## Referencia Rápida de Interfaces
@@ -811,8 +811,8 @@ public class EffectsWithFrameCapture
 
 ## Ver También
 
-- [Interfaz de Mezclador de Video](video-mixer.es.md) - Mezcla de video de múltiples fuentes
-- [Interfaz de Chroma Key](chroma-key.es.md) - Composición de pantalla verde
-- [Referencia de Efectos](../effects-reference.es.md) - Catálogo completo de efectos
-- [Descripción General del Paquete de Filtros de Procesamiento](../index.es.md)
-- [Ejemplos de Código](../examples.es.md)
+- [Interfaz de Mezclador de Video](video-mixer.md) - Mezcla de video de múltiples fuentes
+- [Interfaz de Chroma Key](chroma-key.md) - Composición de pantalla verde
+- [Referencia de Efectos](../effects-reference.md) - Catálogo completo de efectos
+- [Descripción General del DirectShow Processing Filters Pack](../index.md)
+- [Ejemplos de Código](../examples.md)

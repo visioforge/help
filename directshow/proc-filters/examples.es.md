@@ -1,5 +1,5 @@
 ---
-title: Filtros DirectShow: Efectos, Video Mixer y Chroma Key
+title: Filtros DirectShow — Efectos, Video Mixer y Chroma Key
 description: Ejemplos de código para Video Effects, Video Mixer y Chroma Key en C++, C# y VB.NET con DirectShow. Incluye PIP, pantalla verde y denoise.
 tags:
   - DirectShow

@@ -28,11 +28,11 @@ Los filtros DirectShow deben estar registrados con Windows antes de poder usarse
 ### Método 1: Registro Automático (Instalador)
 El método recomendado para usuarios finales es usar el instalador oficial.
 **Instaladores Disponibles**:
-- `visioforge_ffmpeg_source_filter_setup.exe` - Filtro Fuente FFMPEG
-- `visioforge_vlc_source_filter_setup.exe` - Filtro Fuente VLC
-- `visioforge_processing_filters_pack_setup.exe` - Paquete de Filtros de Procesamiento
-- `visioforge_encoding_filters_pack_setup.exe` - Paquete de Filtros de Codificación
-- `visioforge_virtual_camera_sdk_setup.exe` - SDK de Cámara Virtual
+- `visioforge_ffmpeg_source_filter_setup.exe` - FFMPEG Source DirectShow Filter
+- `visioforge_vlc_source_filter_setup.exe` - VLC Source DirectShow Filter
+- `visioforge_processing_filters_pack_setup.exe` - Processing Filters Pack
+- `visioforge_encoding_filters_pack_setup.exe` - Encoding Filters Pack
+- `visioforge_virtual_camera_sdk_setup.exe` - Virtual Camera SDK
 **Pasos de Instalación**:
 1. Ejecute el instalador como Administrador
 2. Siga el asistente de instalación
@@ -62,7 +62,7 @@ regsvr32 /u "C:\Ruta\Al\Filtro.ax"
 
 #### Ejemplos Específicos por SDK
 
-**Filtro Fuente FFMPEG**:
+**FFMPEG Source DirectShow Filter**:
 ```batch
 # x86
 regsvr32 "C:\Program Files (x86)\VisioForge\FFMPEG Source\VisioForge_FFMPEG_Source.ax"
@@ -71,13 +71,13 @@ regsvr32 "C:\Program Files (x86)\VisioForge\FFMPEG Source\VisioForge_FFMPEG_Sour
 regsvr32 "C:\Program Files\VisioForge\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
 ```
 
-**Filtro Fuente VLC**:
+**VLC Source DirectShow Filter**:
 ```batch
 # Solo x86
 regsvr32 "C:\Program Files (x86)\VisioForge\VLC Source\VisioForge_VLC_Source.ax"
 ```
 
-**Paquete de Filtros de Procesamiento** (múltiples filtros):
+**Processing Filters Pack** (múltiples filtros):
 ```batch
 # Efectos de Video
 regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Video_Effects_Pro.ax"
@@ -92,7 +92,7 @@ regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Audio_Enhanc
 regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Audio_Enhancer_x64.ax"
 ```
 
-**Paquete de Filtros de Codificación** (múltiples filtros):
+**Encoding Filters Pack** (múltiples filtros):
 ```batch
 # Codificador NVENC
 regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_NVENC.ax"
@@ -111,7 +111,7 @@ regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_MP4_Muxer.ax"
 regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_MP4_Muxer_x64.ax"
 ```
 
-**SDK de Cámara Virtual**:
+**Virtual Camera SDK**:
 ```batch
 # Controlador de Cámara Virtual
 regsvr32 "C:\Program Files\VisioForge\Virtual Camera\VisioForge_Virtual_Camera.ax"

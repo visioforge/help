@@ -31,23 +31,23 @@ Antes de comenzar el proceso de instalación, asegúrese de tener:
 
 Comience abriendo la ventana "Opciones" en su IDE de Delphi.
 
-![Captura de pantalla mostrando cómo abrir la ventana de Opciones](/help/docs/delphi/videoedit/install/ved6_1.webp)
+![Captura de pantalla mostrando cómo abrir la ventana de Opciones](ved6_1.webp)
 
 Navegue a la sección de Biblioteca y agregue el directorio fuente tanto a las rutas de biblioteca como de navegador. Esto asegura que Delphi pueda localizar los archivos necesarios.
 
-![Captura de pantalla mostrando la configuración de ruta de biblioteca](/help/docs/delphi/videoedit/install/ved6_2.webp)
+![Captura de pantalla mostrando la configuración de ruta de biblioteca](ved6_2.webp)
 
 ### Paso 2: Abrir e Instalar el Paquete
 
 Localice y abra el archivo principal del paquete desde la biblioteca.
 
-![Captura de pantalla mostrando cómo abrir el paquete](/help/docs/delphi/videoedit/install/ved6_3.webp)
+![Captura de pantalla mostrando cómo abrir el paquete](ved6_3.webp)
 
 Instale el paquete haciendo clic en el botón Instalar en el IDE. Esto registra los componentes con la paleta de componentes de Delphi.
 
-![Captura de pantalla mostrando la ubicación del botón de instalación](/help/docs/delphi/videoedit/install/ved6_4.webp)
+![Captura de pantalla mostrando la ubicación del botón de instalación](ved6_4.webp)
 
-![Captura de pantalla mostrando instalación exitosa](/help/docs/delphi/videoedit/install/ved6_5.webp)
+![Captura de pantalla mostrando instalación exitosa](ved6_5.webp)
 
 ### Consideraciones de Arquitectura
 
@@ -59,27 +59,27 @@ La biblioteca incluye versiones para arquitectura x86 y x64. Sin embargo, para D
 
 Para Delphi 2005 y versiones posteriores, inicie el IDE con derechos administrativos para asegurar permisos de instalación apropiados.
 
-![Captura de pantalla mostrando inicio de Delphi 2005](/help/docs/delphi/videoedit/install/ved2005_1.webp)
+![Captura de pantalla mostrando inicio de Delphi 2005](ved2005_1.webp)
 
-![Captura de pantalla mostrando IDE de Delphi 2005](/help/docs/delphi/videoedit/install/ved2005_2.webp)
+![Captura de pantalla mostrando IDE de Delphi 2005](ved2005_2.webp)
 
 ### Paso 2: Configurar Rutas de Biblioteca
 
 Abra la ventana de Opciones y navegue a la sección de Biblioteca. Agregue el directorio fuente tanto a las rutas de biblioteca como de navegador.
 
-![Captura de pantalla mostrando configuración de ruta de biblioteca en Delphi 2005](/help/docs/delphi/videoedit/install/ved2005_3.webp)
+![Captura de pantalla mostrando configuración de ruta de biblioteca en Delphi 2005](ved2005_3.webp)
 
 ### Paso 3: Instalar el Paquete
 
 Abra el archivo principal del paquete desde el directorio fuente de la biblioteca.
 
-![Captura de pantalla mostrando apertura del paquete en Delphi 2005](/help/docs/delphi/videoedit/install/ved2005_4.webp)
+![Captura de pantalla mostrando apertura del paquete en Delphi 2005](ved2005_4.webp)
 
 Haga clic en el botón Instalar para registrar los componentes con la paleta de componentes de Delphi.
 
-![Captura de pantalla mostrando ubicación del botón de instalación en Delphi 2005](/help/docs/delphi/videoedit/install/ved2005_5.webp)
+![Captura de pantalla mostrando ubicación del botón de instalación en Delphi 2005](ved2005_5.webp)
 
-![Captura de pantalla mostrando instalación exitosa en Delphi 2005](/help/docs/delphi/videoedit/install/ved2005_6.webp)
+![Captura de pantalla mostrando instalación exitosa en Delphi 2005](ved2005_6.webp)
 
 ### Soporte de Arquitectura
 

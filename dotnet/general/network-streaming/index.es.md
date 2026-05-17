@@ -33,27 +33,27 @@ Los SDKs de VisioForge soportan una amplia gama de protocolos de transmisión, c
 
 ### Protocolos en Tiempo Real
 
-- **[RTMP (Real-Time Messaging Protocol)](rtmp.es.md)**: Protocolo estándar de la industria para transmisión en vivo de baja latencia, ampliamente utilizado para transmisión en vivo a CDNs y plataformas de transmisión
-- **[RTSP (Real-Time Streaming Protocol)](rtsp.es.md)**: Ideal para integración de cámaras IP y aplicaciones de vigilancia, ofreciendo control preciso sobre sesiones multimedia
-- **[SRT (Secure Reliable Transport)](srt.es.md)**: Protocolo avanzado diseñado para entrega de video de alta calidad y baja latencia sobre redes impredecibles
-- **[NDI (Network Device Interface)](ndi.es.md)**: Protocolo de grado profesional para transmisión de video de alta calidad y baja latencia sobre redes locales
+- **[RTMP (Real-Time Messaging Protocol)](rtmp.md)**: Protocolo estándar de la industria para transmisión en vivo de baja latencia, ampliamente utilizado para transmisión en vivo a CDNs y plataformas de transmisión
+- **[RTSP (Real-Time Streaming Protocol)](rtsp.md)**: Ideal para integración de cámaras IP y aplicaciones de vigilancia, ofreciendo control preciso sobre sesiones multimedia
+- **[SRT (Secure Reliable Transport)](srt.md)**: Protocolo avanzado diseñado para entrega de video de alta calidad y baja latencia sobre redes impredecibles
+- **[NDI (Network Device Interface)](ndi.md)**: Protocolo de grado profesional para transmisión de video de alta calidad y baja latencia sobre redes locales
 
 ### Transmisión Basada en HTTP
 
-- **[HLS (HTTP Live Streaming)](hls-streaming.es.md)**: Protocolo desarrollado por Apple que divide las transmisiones en segmentos descargables, ofreciendo excelente compatibilidad con navegadores y dispositivos móviles
-- **[Transmisión HTTP MJPEG](http-mjpeg.es.md)**: Implementación simple para transmitir Motion JPEG sobre conexiones HTTP
-- **[IIS Smooth Streaming](iis-smooth-streaming.es.md)**: Tecnología de transmisión adaptativa de Microsoft para entregar medios a través de servidores IIS
+- **[HLS (HTTP Live Streaming)](hls-streaming.md)**: Protocolo desarrollado por Apple que divide las transmisiones en segmentos descargables, ofreciendo excelente compatibilidad con navegadores y dispositivos móviles
+- **[Transmisión HTTP MJPEG](http-mjpeg.md)**: Implementación simple para transmitir Motion JPEG sobre conexiones HTTP
+- **[IIS Smooth Streaming](iis-smooth-streaming.md)**: Tecnología de transmisión adaptativa de Microsoft para entregar medios a través de servidores IIS
 
 ### Soluciones Específicas de Plataforma
 
-- **[Transmisión Windows Media (WMV)](wmv.es.md)**: Formato de transmisión nativo de Microsoft, ideal para implementaciones centradas en Windows
-- **[Adobe Flash Media Server](adobe-flash.es.md)**: Solución de transmisión heredada para aplicaciones basadas en Flash
+- **[Transmisión Windows Media (WMV)](wmv.md)**: Formato de transmisión nativo de Microsoft, ideal para implementaciones centradas en Windows
+- **[Adobe Flash Media Server](adobe-flash.md)**: Solución de transmisión heredada para aplicaciones basadas en Flash
 
 ### Integración con Nube y Redes Sociales
 
-- **[AWS S3](aws-s3.es.md)**: Transmisión directa al almacenamiento Amazon Web Services S3
-- **[YouTube Live](youtube.es.md)**: Integración simplificada con la plataforma de transmisión en vivo de YouTube
-- **[Facebook Live](facebook.es.md)**: Transmisión directa al servicio de transmisión de Facebook
+- **[AWS S3](aws-s3.md)**: Transmisión directa al almacenamiento Amazon Web Services S3
+- **[YouTube Live](youtube.md)**: Integración simplificada con la plataforma de transmisión en vivo de YouTube
+- **[Facebook Live](facebook.md)**: Transmisión directa al servicio de transmisión de Facebook
 
 ## Componentes Clave de la Transmisión en Red
 

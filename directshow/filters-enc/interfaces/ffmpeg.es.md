@@ -1020,3 +1020,25 @@ end;
 - Haga coincidir el sistema de TV con la región del reproductor
 - Habilite el entrelazado para DVD
 - Pruebe primero con un reproductor de DVD/VCD por software
+
+### Tamaños de Archivo Grandes
+
+**Síntomas**: Archivos de salida más grandes de lo esperado
+
+**Causas Posibles**:
+1. Tasa de bits demasiado alta
+2. CBR en lugar de VBR
+3. Tamaño de GOP pequeño
+
+**Soluciones**:
+- Reduzca la tasa de bits de video
+- Use VBR con un rango mín/máx apropiado
+- Aumente el tamaño de GOP (para formatos que no sean DVD/VCD)
+- Considere formatos más eficientes (H.264/MP4 en lugar de MPEG-2)
+
+---
+## Ver también
+- [Interfaz del codificador H.264](h264.md)
+- [Referencia de códecs de video](../codecs-reference.md)
+- [Interfaz del muxer MP4](mp4-muxer.md)
+- [Resumen del Encoding Filters Pack](../index.md)

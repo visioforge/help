@@ -152,6 +152,15 @@ int SetLoadTimeOut(uint milliseconds);
 - Particularmente importante para streams de red que pueden tener tiempos de conexión lentos
 - Establezca valores más altos para conexiones de red lentas o archivos grandes
 - Establezca valores más bajos para fallar rápidamente en fuentes inalcanzables
+**Ejemplo (C++)**:
+```cpp
+// Establecer timeout de 30 segundos para streams de red
+pSettings->SetLoadTimeOut(30000);
+// Cargar stream RTSP
+IFileSourceFilter* pFileSource = nullptr;
+pFilter->QueryInterface(IID_IFileSourceFilter, (void**)&pFileSource);
+pFileSource->Load(L"rtsp://example.com/stream", nullptr);
+```
 ---
 
 ### Configuración de Buffering
@@ -201,6 +210,17 @@ int SetBufferingMode(FFMPEG_SOURCE_BUFFERING_MODE mode);
 | `FFMPEG_SOURCE_BUFFERING_MODE_AUTO` | 0 | Detectar automáticamente si se necesita buffering | Predeterminado - recomendado para la mayoría de escenarios |
 | `FFMPEG_SOURCE_BUFFERING_MODE_ON` | 1 | Forzar buffering habilitado | Usar para streams de red inestables |
 | `FFMPEG_SOURCE_BUFFERING_MODE_OFF` | 2 | Forzar buffering deshabilitado | Usar para streams en vivo de baja latencia |
+**Ejemplo (C++)**:
+```cpp
+// Deshabilitar buffering para stream RTSP de baja latencia
+pSettings->SetBufferingMode(FFMPEG_SOURCE_BUFFERING_MODE_OFF);
+pSettings->SetLoadTimeOut(5000); // timeout de 5 segundos
+```
+**Ejemplo (C#)**:
+```csharp
+// Habilitar buffering para red inestable
+settings.SetBufferingMode(FFMPEG_SOURCE_BUFFERING_MODE.ON);
+```
 ---
 
 ### Opciones FFmpeg Personalizadas
@@ -249,6 +269,28 @@ int SetCustomOption([MarshalAs(UnmanagedType.LPStr)] string name,
 | `fflags` | `nobuffer` | Deshabilitar buffering |
 | `threads` | Número | Cantidad de hilos del decodificador |
 
+**Ejemplo (C++)**:
+
+```cpp
+// Configurar RTSP para usar transporte TCP
+pSettings->SetCustomOption("rtsp_transport", "tcp");
+
+// Establecer timeout de red a 5 segundos
+pSettings->SetCustomOption("timeout", "5000000"); // 5 segundos en microsegundos
+
+// Aumentar tamaño de sondeo para mejor detección de formato
+pSettings->SetCustomOption("probesize", "10000000"); // 10MB
+```
+
+**Ejemplo (C#)**:
+
+```csharp
+// Configuración de baja latencia
+settings.SetCustomOption("fflags", "nobuffer");
+settings.SetCustomOption("flags", "low_delay");
+settings.SetCustomOption("probesize", "32");
+```
+
 ---
 #### ClearCustomOptions
 Limpia todas las opciones personalizadas establecidas previamente.
@@ -265,6 +307,10 @@ int ClearCustomOptions();
 **Notas de Uso**:
 - Debe llamarse **antes** de cargar la fuente
 - Restablece todas las opciones personalizadas a los valores predeterminados de FFmpeg
+**Ejemplo (C++)**:
+```cpp
+pSettings->ClearCustomOptions();
+```
 ---
 
 ### Configuración de Callbacks
@@ -311,7 +357,58 @@ typedef HRESULT(_stdcall* FFMPEGDataCallbackDelegate) (
 - Los datos del buffer son válidos solo durante la ejecución del callback
 - Retornar `S_OK` del callback para continuar el procesamiento
 
+**Ejemplo (C++)**:
+
+```cpp
+HRESULT __stdcall DataCallback(BYTE* buffer, int bufferLen, int dataType,
+                                LONGLONG startTime, LONGLONG stopTime)
+{
+    if (dataType == 0) // Video
+    {
+        // Procesar frame de video
+        ProcessVideoFrame(buffer, bufferLen, startTime);
+    }
+    else // Audio
+    {
+        // Procesar datos de audio
+        ProcessAudioData(buffer, bufferLen);
+    }
+    return S_OK;
+}
+
+// Establecer callback
+pSettings->SetDataCallback(&DataCallback);
+```
+
 ---
+#### SetTimestampCallback
+Establece una función de callback para recibir información de marcas de tiempo.
+**Sintaxis (C++)**:
+```cpp
+HRESULT SetTimestampCallback(FFMPEGTimestampCallbackDelegate callback);
+```
+**Sintaxis (C#)**:
+```csharp
+[PreserveSig]
+int SetTimestampCallback([MarshalAs(UnmanagedType.FunctionPtr)] FFMPEGTimestampCallbackDelegate callback);
+```
+**Parámetros**:
+- `callback`: Puntero a función de callback.
+**Retorna**: `S_OK` (0) en éxito.
+**Firma del Callback (C++)**:
+```cpp
+typedef HRESULT(_stdcall* FFMPEGTimestampCallbackDelegate) (
+    int mediaType,              // 0 = video, 1 = audio
+    __int64 demuxerStartTime,   // Tiempo de inicio del demuxer
+    __int64 streamStartTime,    // Tiempo de inicio del stream
+    __int64 timestamp           // Marca de tiempo actual
+);
+```
+**Notas de Uso**:
+- Útil para análisis de marcas de tiempo y depuración de sincronización
+- Se llama para cada frame/muestra decodificada
+---
+
 ### Control de Audio
 #### SetAudioEnabled
 Habilita o deshabilita el procesamiento de stream de audio.
@@ -331,6 +428,14 @@ int SetAudioEnabled([MarshalAs(UnmanagedType.Bool)] bool enabled);
 - Debe llamarse **antes** de cargar la fuente
 - Cuando está deshabilitado, los streams de audio no se decodifican (ahorra CPU/memoria)
 - Útil para aplicaciones solo video
+
+**Ejemplo (C++)**:
+
+```cpp
+// Deshabilitar audio para procesamiento solo de video
+pSettings->SetAudioEnabled(FALSE);
+```
+
 ## Interfaces Relacionadas
 - **IFileSourceFilter** - Interfaz DirectShow estándar para cargar archivos/URLs
 - **IAMStreamSelect** - Seleccionar entre múltiples streams de audio/video

@@ -12,6 +12,7 @@ tags:
 primary_api_classes:
   - TVFMediaPlayer
 
+sidebar_label: Installation Guide
 ---
 
 # Instalar la Biblioteca TVFMediaPlayer

@@ -1,5 +1,5 @@
 ---
-title: Referencia de Códecs: Filtros de Codificación DirectShow
+title: Referencia de Códecs — Filtros de Codificación DirectShow
 description: Referencia de códecs DirectShow con video H.264/H.265/VP8/VP9, audio AAC/MP3/Opus y aceleración de hardware (NVENC, QuickSync, AMF).
 tags:
   - DirectShow
@@ -24,11 +24,11 @@ tags:
 
 ---
 
-# Paquete de Filtros de Codificación - Referencia de Códecs
+# DirectShow Encoding Filters Pack - Referencia de Códecs
 
 ## Resumen
 
-Este documento proporciona una referencia completa para todos los códecs de video y audio admitidos por el Paquete de Filtros de Codificación DirectShow. El paquete incluye codificadores tanto de software como acelerados por hardware para codificación de medios profesionales.
+Este documento proporciona una referencia completa para todos los códecs de video y audio admitidos por el DirectShow Encoding Filters Pack. El paquete incluye codificadores tanto de software como acelerados por hardware para codificación de medios profesionales.
 
 ---
 ## Códecs de Video
@@ -470,7 +470,7 @@ Códec especializado para compresión de voz.
 
 ---
 ## Véase También
-- [Resumen del Paquete de Filtros de Codificación](index.md)
+- [Resumen del DirectShow Encoding Filters Pack](index.md)
 - [Referencia de Muxers](muxers-reference.md)
 - [Referencia de Interfaz NVENC](interfaces/nvenc.md)
 - [Ejemplos de Código](examples.md)

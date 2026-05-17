@@ -16,6 +16,7 @@ primary_api_classes:
   - NVVideoConverterBlock
   - NVDSDewarpBlock
 
+sidebar_label: Nvidia
 ---
 
 # Bloques Nvidia - VisioForge Media Blocks SDK .Net

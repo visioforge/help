@@ -1,6 +1,6 @@
 ---
 title: Procesamiento de Audio en C# .NET - Mezclador, EQ, Efectos
-description: Pipelines de audio en C# con VisioForge Media Blocks SDK: mezclador, ecualizador, reverberación, reducción de ruido y más de 30 bloques.
+description: Pipelines de audio en C# con VisioForge Media Blocks SDK — mezclador, ecualizador, reverberación, reducción de ruido y más de 30 bloques.
 sidebar_label: Procesamiento y Efectos de Audio
 tags:
   - Media Blocks SDK
@@ -1919,4 +1919,4 @@ Windows, macOS, Linux, iOS, Android.
 * [Descripción General de Efectos de Audio](../../general/audio-effects/index.md)
 * [Referencia de Efectos de Audio](../../general/audio-effects/reference.md)
 * [Codificadores de Audio](../../general/audio-encoders/index.md)
-* [Descripción General del SDK Media Blocks](../index.md)
+* [Descripción General del Media Blocks SDK](../index.md)

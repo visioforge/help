@@ -109,7 +109,11 @@ VideoCapture1.Audio_Channels := StrToInt(cbChannels2.Items[cbChannels2.ItemIndex
 
 ```cpp
 // Establecer canales de audio (1 para mono, 2 para estéreo)
-int channels = _ttoi(m_ChannelsCombo.GetSelectedItem());
+int nIndex = m_ChannelsCombo.GetCurSel();
+if (nIndex == CB_ERR) return; // Sin selección — mantener el valor actual
+CString strChannels;
+m_ChannelsCombo.GetLBText(nIndex, strChannels);
+int channels = _ttoi(strChannels);
 m_VideoCapture.SetAudio_Channels(channels);
 ```
 
@@ -135,7 +139,11 @@ VideoCapture1.Audio_BPS := StrToInt(cbBPS2.Items[cbBPS2.ItemIndex]);
 
 ```cpp
 // Establecer bits por muestra
-int bps = _ttoi(m_BPSCombo.GetSelectedItem());
+int nIndex = m_BPSCombo.GetCurSel();
+if (nIndex == CB_ERR) return; // Sin selección — mantener el valor actual
+CString strBPS;
+m_BPSCombo.GetLBText(nIndex, strBPS);
+int bps = _ttoi(strBPS);
 m_VideoCapture.SetAudio_BPS(bps);
 ```
 
@@ -161,7 +169,11 @@ VideoCapture1.Audio_SampleRate := StrToInt(cbSamplerate.Items[cbSamplerate.ItemI
 
 ```cpp
 // Establecer tasa de muestreo
-int sampleRate = _ttoi(m_SampleRateCombo.GetSelectedItem());
+int nIndex = m_SampleRateCombo.GetCurSel();
+if (nIndex == CB_ERR) return; // Sin selección — mantener el valor actual
+CString strSampleRate;
+m_SampleRateCombo.GetLBText(nIndex, strSampleRate);
+int sampleRate = _ttoi(strSampleRate);
 m_VideoCapture.SetAudio_SampleRate(sampleRate);
 ```
 

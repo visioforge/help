@@ -17,6 +17,7 @@ primary_api_classes:
   - DecklinkVideoSinkSettings
   - DecklinkVideoSourceSettings
 
+sidebar_label: Blackmagic Decklink
 ---
 
 # Integración Blackmagic Decklink con Media Blocks SDK

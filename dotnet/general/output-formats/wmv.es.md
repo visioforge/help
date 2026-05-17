@@ -1,5 +1,5 @@
 ---
-title: Codificación WMV en .NET: Guía de Salida Windows Media Video
+title: Codificación WMV en .NET — Windows Media Video y WMA
 description: Implemente codificación Windows Media Video en .NET con configuración de audio/video, opciones de streaming y gestión de perfiles multiplataforma.
 tags:
   - Video Capture SDK
@@ -42,7 +42,7 @@ Esta documentación cubre las capacidades de codificación Windows Media Video (
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-La clase [WMVOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.Output.WMVOutput.html) proporciona capacidades completas de codificación Windows Media tanto para audio como para video en plataformas Windows.
+La clase [WMVOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WMVOutput.html) proporciona capacidades completas de codificación Windows Media tanto para audio como para video en plataformas Windows.
 
 ### Guía de Inicio Rápido
 
@@ -902,7 +902,7 @@ La clase `WMVEncoderSettings` proporciona una solución multiplataforma para cod
 
 #### Configuración VideoCaptureCoreX
 
-Agregar la salida WMV a la instancia principal del SDK de Captura de Video:
+Agregar la salida WMV a la instancia principal del Video Capture SDK:
 
 ```csharp
 // Configuración básica con ajustes predeterminados
@@ -926,7 +926,7 @@ core2.Outputs_Add(wmvOutput2, true);
 
 #### Configuración VideoEditCoreX
 
-Establecer el formato de salida para la instancia principal del SDK de Edición de Video:
+Establecer el formato de salida para la instancia principal del Video Edit SDK:
 
 ```csharp
 // Configuración básica

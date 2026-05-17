@@ -45,11 +45,11 @@ Referencia completa de archivos para incluir en su despliegue.
 
 **Temas**:
 
-- Archivos del Filtro de Fuente FFMPEG (~80-100MB)
-- Archivos del Filtro de Fuente VLC (~150-200MB)
-- Archivos del Paquete de Filtros de Procesamiento (~20-180MB)
-- Archivos del Paquete de Filtros de Codificación (~40-300MB)
-- Archivos del SDK de Cámara Virtual (~15-35MB)
+- Archivos del FFMPEG Source DirectShow Filter (~80-100MB)
+- Archivos del VLC Source DirectShow Filter (~150-200MB)
+- Archivos del Processing Filters Pack (~20-180MB)
+- Archivos del Encoding Filters Pack (~40-300MB)
+- Archivos del Virtual Camera SDK (~15-35MB)
 - Dependencias y estructuras de directorios
 
 **Cuándo Leer**: Antes de crear instaladores o paquetes de despliegue
@@ -303,7 +303,7 @@ Vea la [Guía de Integración de Instaladores](installer-integration.md) para ej
 
 **Requisitos**:
 
-- Filtro de Fuente FFMPEG
+- FFMPEG Source DirectShow Filter
 - Filtros de Procesamiento (efectos de video)
 - Instalador amigable para el usuario
 
@@ -355,7 +355,7 @@ msiexec /i EnterpriseVideoApp.msi /quiet /norestart /l*v install.log
 
 **Requisitos**:
 
-- SDK de Cámara Virtual
+- Virtual Camera SDK
 - Instalación de controladores
 - Acceso a nivel de sistema
 
@@ -373,7 +373,7 @@ msiexec /i EnterpriseVideoApp.msi /quiet /norestart /l*v install.log
 - Puede necesitar reinicio del sistema
 - Advertencias de seguridad mejoradas
 
-[Ver Archivos de Cámara Virtual →](redistributable-files.md#sdk-de-camara-virtual)
+[Ver Archivos de Virtual Camera SDK →](redistributable-files.md#virtual-camera-sdk)
 
 ---
 

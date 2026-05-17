@@ -13,6 +13,8 @@ primary_api_classes:
   - FileSource
   - IFFMPEGSourceSettings
 
+order: 10
+sidebar_label: FFMPEG Source DirectShow Filter
 ---
 
 # Filtro DirectShow FFMPEG Source
