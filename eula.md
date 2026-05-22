@@ -49,7 +49,7 @@ Subject to the terms and conditions of this Agreement and upon payment of the ap
 - License may be renewed at any time
 - License is not transferable to another company but may be reassigned to another developer within the same company
 
-**3.1.2. Lifetime/Team License**
+**3.1.2. Lifetime·Team License**
 
 - Permits installation and use of the Software on unlimited developer workstations at a single physical location
 - Valid in perpetuity without renewal requirements
@@ -61,7 +61,7 @@ Subject to the terms and conditions of this Agreement and upon payment of the ap
 
 - You may incorporate the Software into your own commercial applications and distribute such applications without royalty payments
 - End users of your applications are not required to purchase separate licenses
-- Distribution rights apply to both the One-Year Developer License and the Lifetime/Team License
+- Distribution rights apply to both the One-Year Developer License and the Lifetime·Team License
 
 ### 3.3. Evaluation License
 

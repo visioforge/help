@@ -4,9 +4,6 @@ description: Tutorials, API reference, and C# code samples for VisioForge .NET, 
 hide:
   - navigation
   - toc
-tags:
-  - DirectShow
-  - Streaming
 
 ---
 

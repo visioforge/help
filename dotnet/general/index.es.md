@@ -14,6 +14,7 @@ sidebar_label: General Information
 Esta sección proporciona información esencial, manuales de software detallados y guías de uso prácticas para la suite de SDKs .Net de VisioForge. Ya sea que estés trabajando con captura de video, reproducción de medios o edición de video, encuentra los recursos que necesitas a continuación.
 
 - **[Guía de Uso del Servidor MCP](mcp-server-usage.md)** - Conecta tu asistente de programación con IA al Servidor MCP de VisioForge para acceso instantáneo a documentación de API, guías de despliegue y ejemplos de código
+- **[Usar VisioForge en Unity](unity/index.md)** - Importa el paquete autónomo de Unity para reproducción de video y streaming de cámara RTSP en Unity 6 en Windows
 - [Ejemplos de código](code-samples/index.md)
 - [¿Cómo enviar registros?](sendlogs.md)
 

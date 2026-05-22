@@ -20,20 +20,128 @@ primary_api_classes:
   - VideoView
   - MediaPlayerCoreX
   - DeviceEnumerator
-
 ---
 
 # Changelog
 
 Changes and updates for all .Net SDKs.
 
-## 2026.5.1
+## 2026.5.22
+
+* [Demos] **Unity `.unitypackage` distribution:** the Unity 6 (net48) integration now ships as a single self-contained `.unitypackage`
+* [Demos] **New Unity 6 (net48) samples:** `SimplePlayer` (file playback) and `RTSPViewer` (live RTSP camera) render a `MediaBlocksPipeline` into a Unity `RawImage` via a reusable `VisioForgeVideoView` component (Stretch / Letterbox / Crop). The bundled native + managed runtime is set up automatically; a step-by-step setup guide is included.
+
+## 2026.5.20
+
+* [Media Blocks SDK .Net] **Fix:** native memory leak in `OverlayManagerFilter` and `PanZoomFilter` on iOS/AOT builds.
+
+## 2026.5.19
+
+* [Media Blocks SDK .Net] **Fix:** `CVMotionCellsBlock`, `CVFaceDetectBlock`, `CVHandDetectBlock`, `CVTemplateMatchBlock` — event subscriptions added after `StartAsync` sometimes were silently dropped.
+* [Media Blocks SDK .Net] **Fix:** `CVMotionCellsSettings.Gap` and `PostNoMotion` are now rounded and clamped to the ranges accepted by the underlying `motioncells` element (`Gap` → `[1, 60]` s, `PostNoMotion` → `[0, 180]` s). Previously sub-second values truncated to `0` and were silently rejected.
+* [Media Blocks SDK .Net] **Docs:** `CVMotionCellsSettings.GridSize` XML-doc clarified that the minimum is 8x8 (constraint of the underlying `motioncells` element); smaller values are silently rejected.
+
+## 2026.5.18
+
+* [Media Blocks SDK .Net] **New API:** `SRTSinkSettings.PreResolveHostname` and `SRTSourceSettings.PreResolveHostname` (`bool`, default `false`). When set to `true`, the SDK resolves any DNS hostname in the SRT URI to a literal IPv4 on the managed side (via `System.Net.Dns`) before handing the URI to the native code.
+
+## 2026.5.16
+
+* [Core] Public-API XML documentation is now validated for correct syntax across the shipped NuGet packages.
+
+## 2026.5.15
+
+* [Core] Added `D3D11Composable` WPF renderer mode: a pure FrameworkElement video panel built on a D3D11 shared texture + `D3DImage` bridge that composes natively with the WPF visual tree (transforms, opacity, z-order, rounded clips) and keeps frames GPU-resident end-to-end. New type: `D3D11ComposablePanel`.
+* [Core] Added true-peak (dBTP) metering per ITU-R BS.1770-4: new `TruePeakComputer` (4× polyphase FIR oversampling, per-channel running peak, NaN/Inf-safe) and `VUMeterXData.TruePeak[]` channel array fired alongside the existing sample-peak/RMS data.
+* [Core] Added `VolumeMeterLED` WPF control: segmented LED-bar VU meter with broadcast-style green/yellow/red zones, optional peak-hold marker (configurable fall time), optional dB scale labels, optional RMS overlay bar, horizontal/vertical orientation.
+* [Core] NuGet packages now ship XML documentation generated from real summaries for the full public API surface (previously the doc files were empty).
+
+## 2026.5.14
+
+* [Avalonia] Updated Avalonia, Avalonia.Desktop, Avalonia.Fonts.Inter, Avalonia.Themes.Fluent from 12.0.1 to 12.0.3.
+* [WinForms] Resolve issue with WinForms designer when using `VideoView` in .Net Framework 4.x projects
+* [Dependencies] Closed two transitive security advisories: pinned `System.Drawing.Common` per-TFM on bare/cross-platform `netN.0` (was 5.0.1 via DlibDotNet — GHSA-rxg9-xrhp-64gj, critical) and added explicit `SharpCompress 0.48.1` CPM pin to lift the transitive floor from MongoDB.Driver (was 0.30.1 — GHSA-6c8g-7p36-r338, moderate); bumped MongoDB.Driver 3.8.0 → 3.8.1.
+* [Breaking] `VisioForge.Core.CVD` and `VisioForge.Core.FaceAI` assemblies are no longer strong-named. The underlying `DlibDotNet` dependency is unsigned, so the strong-name chain was already broken at runtime; the `<SignAssembly>` flag was dropped to silence CS8002. Consumers that referenced these assemblies by fully-qualified strong name (`PublicKeyToken=...`) or used `[InternalsVisibleTo("VisioForge.Core.CVD, PublicKey=...")]` must remove the strong-name assertion when upgrading.
+
+## 2026.5.10
+
+* [Core] `CustomMixerSourceBlock`: reliability and throughput improvements under heavy load.
+
+## 2026.5.8
+
+* [Dependencies] Upgraded MongoDB.Driver.GridFS 2.30.0 to MongoDB.Driver 3.8.0; pinned Snappier 1.3.1 to resolve NU1903 high-severity vulnerability (GHSA-pggp-6c3x-2xmx)
+
+## 2026.5.2
 
 * [Core] Breaking change: licensing APIs now accept only raw certificate bytes. Removed file-path and stream-based certificate setters across shared licensing, public SDK wrappers, legacy Windows wrappers, tests, and licensing docs. Applications must load `.vflicense` files into memory and call `SetLicenseCertificateAsync(byte[])`.
+* [Core] `AudioMixerBlock`: `AudioMixerSettings.IgnoreInactivePads` is now opt-in (default `false`). The 2026.4.30 release briefly forced it `true`, which broke single-input mixers — silent live audio and corrupted MP4 output. Multi-stream consumers (`MediaPlayerCoreX` additional audio streams, `LiveVideoCompositor`, and `AudioMixerSourceSettings`-based multi-source capture) now opt in explicitly. If you wired a multi-stream `AudioMixerBlock` on 2026.4.30–2026.5.1 and relied on the implicit `true`, set `AudioMixerSettings.IgnoreInactivePads = true` explicitly.
+
+## 2026.4.25
+
+* [Core] Fixed WinForms designer exception on `VideoView` in net472 demos — SkiaSharp 3 migration regression
+* [Core] Added transitive `SkiaSharp.NativeAssets.Linux` dependency for bare cross-platform TFMs (`netcoreapp3.1`, `net5.0`–`net10.0`) so consumers publishing to `linux-x64`/`arm64` no longer need to add the package manually; main `SkiaSharp` already covers Win32/macOS/iOS/Android/MacCatalyst/tvOS via per-TFM nuspec groups
+* [Avalonia] Migrated SDK and all 28 demos from Avalonia 11.3.8 to **12.0.1**: replaced `Avalonia.Diagnostics` with `AvaloniaUI.DiagnosticsSupport 2.2.1`, switched to `ReactiveUI.Avalonia 12.0.1`, updated `RxApp.MainThreadScheduler` → `RxSchedulers.MainThreadScheduler` (ReactiveUI 23.x), new `UseReactiveUI(_ => { })` signature, moved Android `CustomizeAppBuilder` from `MainActivity` to new `MainApplication : AvaloniaAndroidApplication<App>`, migrated `SaveFileDialog`/`OpenFileDialog`/`FileDialogFilter` to `IStorageProvider.SaveFilePickerAsync`/`OpenFilePickerAsync` in 4 demos. SkiaSharp pinned to 3.119.3-preview.1.1 (required by Avalonia.Skia 12).
+
+## 2026.4.23
+
+* [NuGet] Extracted Intel Quick Sync Video (QSV) plugin (`gstqsv.dll`) from `VisioForge.CrossPlatform.Core.Windows.x64/x86` into new optional packages `VisioForge.CrossPlatform.Core.Windows.Intel.x64` and `VisioForge.CrossPlatform.Core.Windows.Intel.x86`; each depends on the corresponding base Core package
+* [Video Capture SDK .Net] Fixed FFMPEG.exe pipe output argument ordering so resize/aspect options are emitted after all inputs, including KLV metadata pipe input
+
+## 2026.4.21
+
+* [Core] Added `AutoAV1EncoderSettings`: auto-selecting AV1 encoder that walks AMF → NVENC → QSV → SVT-AV1 via `EncoderRuntimeTracker`, mirroring `AutoH264EncoderSettings` / `AutoHEVCEncoderSettings`; AV1 sessions now participate in per-runtime slot accounting
+* [Core] Added typed `AV1Encoder.CanCreateSession(IAV1EncoderSettings, out string)` probe so AV1 runtime selection can detect driver rejections before wiring a pipeline
+* [Core] Added `MFH264EncoderSettings`, `D3D12H264EncoderSettings`, `D3D12HEVCEncoderSettings` — alternative Windows runtimes (`mfh264enc`, `d3d12h264enc`, `d3d12h265enc`) with independent per-adapter session counters for bypassing per-runtime caps (e.g., AMD iGPU 2-session ceiling)
+* [Core] Added `AutoH264EncoderSettings` / `AutoHEVCEncoderSettings`: auto-selecting encoder that probes runtimes in order (AMF → NVENC → QSV → MF → D3D12 → software), tracks in-flight sessions via `EncoderRuntimeTracker`, and falls back when a runtime's cap is reached
+* [Demo] Added `Encoder Concurrency Test` WPF demo (Media Blocks SDK): spawn multiple source→encoder→decoder→renderer pipelines with configurable resolution, frame rate, encoder runtime, and adapter to exercise concurrent-session limits end-to-end
+
+## 2026.4.18
+
+* [Media Blocks SDK] UniversalSourceBlock: added `VideoFlipRotate` option for automatic video orientation correction using image-orientation metadata
+* [Core] VOAACEncoderSettings deprecated in favor of `AVENCAACEncoderSettings`
+* [Core] RTSPXOutput: now accepts any `IAACEncoderSettings`, not just VOAAC
+* [Core] MediaInfoReaderCore: preserves image-orientation flip metadata during media info reading
+* [Core] H264Encoder: fixed thread-safety issue in KeyFrameDetected callback
+* [iOS] PhotoGalleryHelper: requests `PHAccessLevel.AddOnly` for iOS 26 compatibility
+* [Android] GStreamer Android NuGet rebuilt with zbar barcode plugin, bumped to 2026.4.18
+* [Platform] macOS demos migrated from net9.0-macos to net10.0-macos
+* [Dependencies] Uno.Sdk bumped 6.4.24 → 6.5.31
+* [Media Blocks SDK] LiveVideoCompositor V2: added `OnRenderStatistics` event with `ActualFps`, `ConfiguredFps`, `FramesDelivered`, and `LastFrameTimestamp` payload for detecting when the compositor falls behind the configured frame rate under heavy load
+* [Media Blocks SDK] LiveVideoCompositor V1 (`VisioForge.Core.LiveVideoCompositor`) marked `[Obsolete]` — migrate to `VisioForge.Core.LiveVideoCompositorV2` (identical class names, single-line `using` swap); V1 will be removed in a future release
+* [Demos] WPF LVC Demo and MAUI LVC Demo show the real vs configured output FPS in the UI; WinForms Video Mixer Player migrated from V1 to V2
+
+## 2026.4.11
+
+* [Media Player SDK X] Added `Play_PauseAtFirstFrame` property to MediaPlayerCoreX — pauses at the first rendered frame for preview/thumbnail scenarios, matching the existing MediaPlayerCore API
+* [Core] Migrated SkiaSharp from 2.88.9 to 3.119.2 — updated text rendering to SKFont API, replaced SKFilterQuality with SKSamplingOptions, switched SVG library from SkiaSharp.Svg to Svg.Skia
+* [UI] Updated SkiaSharp.Views.WPF and SkiaSharp.Views.Maui.Controls to 3.119.2; WPF skins now use DrawImage with high-quality Mitchell resampling
+
+## 2026.4.8
+
+* [Android] Added live camera switching (SwitchCamera) to SystemVideoSourceBlock — switches between front/back cameras without recreating the GStreamer pipeline, preserving resolution and frame rate
+* [Video Capture SDK X] Added Video_Source_SwitchCamera for live camera switching on Android without pipeline restart
+* [Video Capture SDK X] Added Video_Renderer_IsSync and Audio_Renderer_IsSync properties (default false) for lower-latency live preview
+* [Android] New NuGet native version v2026.4.1
+
+## 2026.3.27
+
+* [Core] Fixed UNC path media info reading failure: `MediaInfoReaderAlt` now correctly handles SDK initialization guard, null caps in `OnPadAdded`, and falls through to `MediaInfoReaderX` on failure. `IsSambaURL()` extended to detect `file://host/path` UNC URIs. `OpenAsync` uses `uri.LocalPath` for correct Windows UNC path.
+
+## 2026.3.18
+
+* [Media Blocks SDK .Net] Fixed missed context menu issue in WPF VideoView
+
+## 2026.3.17
+
+* [Media Blocks SDK .Net] Added UDPSinkBlock and MultiUDPSinkBlock for raw UDP streaming output with single and multi-destination support
+* [Media Blocks SDK .Net] Added UDPMPEGTSSinkBlock and MultiUDPMPEGTSSinkBlock for MPEG-TS multiplexed UDP streaming with single and multi-destination support
+* [Media Blocks SDK .Net] Added UDPSinkSettings, MultiUDPSinkSettings, and UDPSinkSettingsBase for UDP sink configuration with IPv6 support and URL parsing
+* [Media Blocks SDK .Net] Added UDP MPEG-TS streamer demo (screen capture to UDP output)
 
 ## 2026.3.11
 
 * [Core] Device enumeration: Blackmagic ATEM and Web Presenter devices now appear in regular video/audio device lists instead of being filtered as Decklink hardware. These devices use standard USB/UVC drivers, not the Decklink SDK. Applies to both DirectShow and GStreamer enumeration paths.
+* [Core] RTSP info reader: Added audio channel count and sample rate parsing from SDP rtpmap and GStreamer pad caps.
 
 ## 2026.2.16
 
@@ -99,7 +207,7 @@ Changes and updates for all .Net SDKs.
 * [Media Blocks SDK .Net] RTSPSourceBlock: Fixed video freeze when audio capture is disabled for cameras with multiple audio streams
 * [Media Blocks SDK .Net] RTSPRAWSourceBlock: Added fakesink handling for disabled audio streams to prevent pipeline stalls
 * [Core] MediaInfoReaderCore: Added logging for discovered audio, video, and RTP streams
-* [Core] MediaInfoReaderCore: Fixed excessive blocksize (5MB) being set for RTSP sources, improving discovery speed
+* [Core] MediaInfoReaderCore: Fixed excessive block size (5MB) being set for RTSP sources, improving discovery speed
 
 ## 2026.1.10
 
@@ -116,9 +224,9 @@ Changes and updates for all .Net SDKs.
 * [Media Player SDK X .Net] CDGSource: Added pitch shifting support with EnablePitchShifting option and real-time PitchSemitones control
 * [Media Player SDK X .Net / Media Blocks SDK .Net] CDGSourceSettings: Added ZIP archive support for karaoke files (MP3+CDG pairs inside ZIP)
 
-## 2025.12.9
+## 2025.11.8
 
-* Added Uno Platform support for desktop and mobile platforms
+* [Media Blocks SDK .Net] OverlayManagerVideo and OverlayManagerDecklinkVideo: Changed AudioOutput property type from MediaBlock to AudioOutputDeviceInfo for direct audio device selection. Audio is now handled internally via AudioRenderer with automatic channel conversion support.
 
 ## 2025.11.4
 
@@ -169,17 +277,9 @@ Changes and updates for all .Net SDKs.
   * Video Capture SDK X: IP Capture (WPF), RTSP MultiView Demo (WinForms)
   * All demos include easy-to-use checkboxes or default-enabled low latency for optimal user experience
 
-* **[Documentation]** Comprehensive guides and resources:
-  * `RTSP_LOW_LATENCY.md` - Complete Media Blocks SDK usage guide with code examples
-  * `PIPELINE_LOW_LATENCY.md` - In-depth pipeline component analysis and latency optimization techniques
-  * `GSTREAMER_RTSP_EXAMPLES.md` - 7 command-line GStreamer pipeline examples for testing
-  * Official HELP documentation updated with low latency section and best practices
-  * GStreamer test scripts: Bash (Linux/macOS), Batch (Windows), PowerShell (Windows, recommended)
+* **[Documentation]** Official help documentation updated with a low-latency section and best practices.
 
-* **[Testing]** Comprehensive test coverage and validation:
-  * 12 new unit tests for RTSPSourceSettings low latency configuration
-  * Validated on real IP cameras across all platforms
-  * Performance benchmarks: Windows (85ms), macOS (95ms), Linux (80ms), Android (110ms), iOS (100ms)
+* **[Testing]** Validated on real IP cameras across all platforms. Performance benchmarks: Windows (85ms), macOS (95ms), Linux (80ms), Android (110ms), iOS (100ms).
 
 * **[Backward Compatibility]** 100% backward compatible implementation:
   * Default behavior unchanged - existing code works without modification
@@ -191,6 +291,7 @@ Changes and updates for all .Net SDKs.
 
 * [Media Blocks SDK .Net] Added DASH (Dynamic Adaptive Streaming over HTTP) sink support with DASHSinkBlock and DASHOutput classes
 * [Media Blocks SDK .Net] Added UniversalSourceBlockV2 with improved memory usage and performance
+* [X-engines] Fixed uvch264src not starting on Linux by properly selecting the appropriate source pad based on video format (vidsrc for H264, vfsrc for raw/MJPEG)
 
 ## 2025.9.5
 

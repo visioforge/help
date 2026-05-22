@@ -31,7 +31,7 @@ Each developer actively working with the SDK requires their own license when usi
 - A team of three developers working with the SDK would require three One-Year licenses
 - If developers work in shifts (never concurrently), you may be able to share licenses
 - Temporary or contract developers must also be covered by appropriate licensing
-- For unlimited team usage, consider the Lifetime/Team license option
+- For unlimited team usage, consider the Lifetime·Team license option
 
 ### Contractor and Agency Arrangements
 
@@ -57,9 +57,9 @@ The one-year license provides a lower entry cost with comprehensive benefits:
 
 When your one-year license expires, you may continue using the last version released during your active license period indefinitely. However, to access new features, bug fixes, and technical support, you'll need to renew your license.
 
-### Lifetime/Team License
+### Lifetime·Team License
 
-The Lifetime/Team license offers long-term value with perpetual usage rights for your entire development team:
+The Lifetime·Team license offers long-term value with perpetual usage rights for your entire development team:
 
 - One-time payment with no renewal requirements
 - Perpetual access to the product version purchased
@@ -68,7 +68,7 @@ The Lifetime/Team license offers long-term value with perpetual usage rights for
 - Optional update and support subscription available after the first year
 - Coverage for your entire development team without per-developer restrictions
 
-The Lifetime/Team license is ideal for projects with longer development cycles, larger development teams, or when you want to eliminate recurring license costs from your budget.
+The Lifetime·Team license is ideal for projects with longer development cycles, larger development teams, or when you want to eliminate recurring license costs from your budget.
 
 ## Support and Updates Policy
 

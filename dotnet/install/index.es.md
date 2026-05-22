@@ -207,6 +207,16 @@ Los [proyectos de Uno Platform](uno.md) permiten construir aplicaciones para Win
 
 Consulta nuestra [guía de Uno Platform](uno.md) para instrucciones de configuración completas.
 
+### Unity
+
+La integración con [Unity](unity.md) usa un `.unitypackage` listo para importar en lugar de NuGet:
+
+- Autónomo para Unity 6 en Windows x64 — SDK gestionado, runtime nativo y escenas de ejemplo
+- Sin compilación desde el código fuente, sin NuGet y sin dependencias externas
+- El video se renderiza en un `RawImage` de Unity mediante los scripts incluidos
+
+Consulta nuestra [guía de instalación de Unity](unity.md) para la configuración paso a paso.
+
 ## Inicialización del SDK para Motores Multiplataforma
 
 Nuestros SDKs incluyen tanto motores DirectShow específicos de Windows (como `VideoCaptureCore`) como motores X multiplataforma (como `VideoCaptureCoreX`). Los motores X requieren inicialización y limpieza explícitas.

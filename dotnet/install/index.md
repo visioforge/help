@@ -207,6 +207,16 @@ Our [Avalonia integration guide](avalonia.md) provides complete setup instructio
 
 See our [Uno Platform guide](uno.md) for complete setup instructions.
 
+### Unity
+
+[Unity](unity.md) integration uses a ready-to-import `.unitypackage` instead of NuGet:
+
+- Self-contained for Unity 6 on Windows x64 — managed SDK, native runtime, and sample scenes
+- No source build, no NuGet, and no external dependencies
+- Video renders into a Unity `RawImage` via the bundled scripts
+
+See our [Unity installation guide](unity.md) for the step-by-step setup.
+
 ## SDK Initialization for Cross-Platform Engines
 
 Our SDKs include both Windows-specific DirectShow engines (like `VideoCaptureCore`) and cross-platform X-engines (like `VideoCaptureCoreX`). The X-engines require explicit initialization and cleanup.

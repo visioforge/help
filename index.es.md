@@ -4,9 +4,6 @@ description: Tutoriales, referencia API y ejemplos de código C# para SDKs Visio
 hide:
   - navigation
   - toc
-tags:
-  - DirectShow
-  - Streaming
 
 ---
 
