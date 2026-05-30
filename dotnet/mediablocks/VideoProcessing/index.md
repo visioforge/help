@@ -3244,7 +3244,7 @@ Windows (Direct3D 11 required).
 
 ## Motion Detection
 
-[!button text="Learn more about the SDK" variant="info" target="blank" icon="rocket"](https://www.visioforge.com/media-blocks-sdk)
+[!button text="Learn more about the SDK" variant="info" target="blank" icon="rocket"](https://www.visioforge.com/media-blocks-sdk-net)
 
 `MotionDetectionBlock` analyzes consecutive video frames to detect motion using a frame-differencing algorithm. It produces a per-frame intensity level (0–100) and a spatial grid matrix via the `OnMotionDetected` event. Frames pass through the block unchanged.
 

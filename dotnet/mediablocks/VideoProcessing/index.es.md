@@ -3244,7 +3244,7 @@ Windows (Direct3D 11 requerido).
 
 ## Detección de Movimiento
 
-[!button text="Más información sobre el SDK" variant="info" target="blank" icon="rocket"](https://www.visioforge.com/media-blocks-sdk)
+[!button text="Más información sobre el SDK" variant="info" target="blank" icon="rocket"](https://www.visioforge.com/media-blocks-sdk-net)
 
 `MotionDetectionBlock` analiza fotogramas consecutivos para detectar movimiento mediante un algoritmo de diferencia de fotogramas. Produce un nivel de intensidad por fotograma (0–100) y una matriz espacial a través del evento `OnMotionDetected`. Los fotogramas pasan a través del bloque sin modificaciones.
 

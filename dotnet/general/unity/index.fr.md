@@ -1,6 +1,6 @@
 ---
-title: Lecture vidéo et RTSP dans Unity avec Media Blocks SDK .NET
-description: Ajoutez la lecture vidéo et le streaming de caméras RTSP à Unity 6 avec le VisioForge Media Blocks SDK .NET — un .unitypackage autonome et prêt à importer.
+title: Lecture vidéo et RTSP dans Unity avec Media Blocks SDK
+description: Ajoutez la lecture vidéo et le RTSP à Unity 6 avec VisioForge Media Blocks SDK .NET — .unitypackage pour Windows, Android, macOS et iOS.
 sidebar_label: Unity
 order: 50
 tags:
@@ -8,6 +8,9 @@ tags:
   - .NET
   - Unity
   - Windows
+  - Android
+  - macOS
+  - iOS
   - RTSP
   - C#
 primary_api_classes:
@@ -16,96 +19,152 @@ primary_api_classes:
   - UniversalSourceBlock
   - RTSPSourceBlock
   - AudioRendererBlock
+  - VisioForgeEnvironment
 ---
 
 # Lecture vidéo et streaming RTSP dans Unity
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Le **Media Blocks SDK .NET** est livré avec un **`.unitypackage`** prêt à importer qui apporte la
-lecture de fichiers vidéo et le streaming en direct de caméras RTSP / IP dans **Unity 6** sur
-**Windows x64**. Importez-le, appuyez sur **Play**, et la vidéo s'affiche dans un `RawImage` Unity.
+Le **Media Blocks SDK .NET** est livré avec un **`.unitypackage`** multiplateforme prêt à
+importer qui apporte la lecture de fichiers vidéo, le streaming RTSP / IP en direct et le
+reste du pipeline Media Blocks dans **Unity 6**. Le même paquet cible quatre
+plateformes — **Windows x64**, **Android (IL2CPP arm64)**, **macOS Standalone
+(Universel arm64+x86_64)** et **iOS Standalone (appareil arm64)**. Importez une fois, basculez
+Build Target, compilez.
 
-Pour installer le paquet, consultez **[Installer Media Blocks SDK dans Unity](../../install/unity.md)**.
-Ce guide se concentre sur le fonctionnement de l'intégration et sur l'utilisation des deux exemples fournis.
+Pour installer le paquet, consultez
+**[Installer Media Blocks SDK dans Unity](../../install/unity.md)**. Pour le raccourci en cinq
+étapes, consultez le **[Guide rapide](getting-started.md)**.
 
-!!! tip "Assistants de codage IA : utilisez le serveur MCP VisioForge"
-    Vous construisez cela avec **Claude Code**, **Cursor** ou un autre assistant de codage IA ?
-    Connectez-vous au [serveur MCP VisioForge](../mcp-server-usage.md) public à l'adresse
-    `https://mcp.visioforge.com/mcp` pour des recherches d'API structurées et des exemples de code
-    vérifiés.
+!!! tip "Agents de programmation IA : utilisez le serveur MCP VisioForge"
+    Vous le construisez avec **Claude Code**, **Cursor** ou un autre agent de programmation
+    IA ? Connectez-vous au
+    [serveur MCP public VisioForge](../mcp-server-usage.md) à `https://mcp.visioforge.com/mcp`
+    pour des recherches structurées d'API et des exemples de code vérifiés.
 
 !!! info "Le SDK complet est disponible — les exemples ne sont qu'un point de départ"
-    Le paquet embarque le **Media Blocks SDK .NET complet**. Les deux scènes incluses
-    (`SimplePlayer` et `RTSPViewer`) sont des exemples pour vous lancer rapidement — vos scripts ont
-    accès à l'**intégralité de l'API Media Blocks** : capture et types de sources multiples,
-    décodeurs et encodeurs, traitement et effets audio/vidéo, mixage et compositing, enregistrement
-    vers fichier et sortie en streaming réseau. Construisez le pipeline dont votre application a
-    besoin. Consultez la [documentation du Media Blocks SDK .NET](../../mediablocks/index.md) pour le
-    catalogue complet des blocs.
+    Le paquet contient le **Media Blocks SDK .NET complet**. Les deux scènes incluses
+    (`SimplePlayer` et `RTSPViewer`) sont des exemples pour démarrer rapidement — vos scripts
+    ont accès à l'**API Media Blocks complète** : capture et types de sources multiples,
+    décodeurs et encodeurs, traitement et effets audio/vidéo, mixage et composition,
+    enregistrement vers fichier et sortie de streaming réseau. Construisez n'importe quel
+    pipeline dont votre app a besoin. Voir la
+    [documentation Media Blocks SDK .NET](../../mediablocks/index.md) pour le catalogue complet
+    de blocs.
+
+## Packaging cumulatif par plateforme
+
+Le `.unitypackage` livré est **cumulatif** — un fichier porte les assemblies managés plus
+chaque runtime natif, et les métadonnées `PluginImporter` par fichier d'Unity choisissent la
+bonne copie quand vous basculez Build Target. Il n'y a pas de téléchargement par plateforme.
+
+| Plateforme | Runtime natif | Architecture | Profil de build |
+|---|---|---|---|
+| Windows | installation GStreamer à plat dans `StreamingAssets/VisioForge/x64/` | x86_64 | [Compilation pour Windows](windows.md) |
+| Android | `libgstreamer_android.so` monolithique + AAR Java | arm64-v8a | [Compilation pour Android](android.md) |
+| macOS | ~300 dylibs séparés dans `Plugins/macOS/` | Universel arm64 + x86_64 | [Compilation pour macOS](macos.md) |
+| iOS | `GStreamerX.framework` embarqué (plugins enregistrés statiquement) | appareil arm64 | [Compilation pour iOS](ios.md) |
+
+Les quatre déclinaisons partagent la même surface managée — `MediaBlocksPipeline`,
+`BufferSinkBlock`, `RTSPSourceBlock`, `UniversalSourceBlock`, chaque effet, chaque encoder,
+chaque sink. La seule chose spécifique à la plateforme que votre script voit est la valeur
+`Application.platform` à l'exécution.
 
 ## Exemples
 
-Le paquet est livré avec deux scènes prêtes à l'emploi dans `Assets/Scenes/`. Ouvrez-en une dans la
-fenêtre **Project** (double-cliquez dessus — ne restez pas sur la scène par défaut vide) et appuyez
-sur **▶ Play** :
+Le paquet livre deux scènes prêtes sous `Assets/Scenes/`. Ouvrez-en une dans la fenêtre
+**Project** (double-clic — ne restez pas sur la scène par défaut vide) et appuyez sur
+**▶ Play** :
 
-- **[Lire un fichier multimédia](simple-player.md)** — la scène `SimplePlayer`, lecture d'un fichier vidéo local.
-- **[Afficher une caméra RTSP](rtsp-viewer.md)** — la scène `RTSPViewer`, flux RTSP / caméra IP en direct.
+- **[Lire un fichier multimédia](simple-player.md)** — la scène `SimplePlayer`, lecture de
+  fichier vidéo local.
+- **[Voir une caméra RTSP](rtsp-viewer.md)** — la scène `RTSPViewer`, flux RTSP / caméra IP
+  en direct.
 
-!!! tip "Le RawImage semble vide tant que vous n'avez pas appuyé sur Play"
-    La texture vidéo est créée à l'exécution, le `RawImage` est donc vierge (blanc) en mode édition.
-    C'est normal — rien n'est dessiné tant que le pipeline n'a pas démarré.
+!!! tip "Le RawImage paraît vide jusqu'à ce que vous appuyiez sur Play"
+    La texture vidéo est créée à l'exécution, donc le `RawImage` est vide (blanc) en mode
+    édition. C'est attendu — rien n'est dessiné jusqu'à ce que le pipeline démarre.
 
-## Fonctionnement du rendu
+## Comment fonctionne le rendu
 
-Deux assistants partagés gèrent la configuration et le rendu à votre place, de sorte que chaque
-script de lecteur se résume au pipeline Media Blocks :
+Deux helpers partagés gèrent la configuration et le rendu pour vous, donc chaque script
+player n'est que le pipeline Media Blocks :
 
-1. **`VisioForgeEnvironment.Configure()`** s'exécute automatiquement avant le chargement de la
-   première scène et prépare le runtime natif fourni — vous ne gérez aucune dépendance ni aucun
-   chemin natif.
-2. **`VisioForgeEnvironment.InitializeSdk()`** initialise le SDK une seule fois. Appelez-le avant de
-   construire un pipeline (les lecteurs d'exemple l'appellent dans `Start()`).
-3. Chaque lecteur construit un pipeline se terminant par un **`BufferSinkBlock(VideoFormatX.RGBA)`** ;
-   son événement `OnVideoFrameBuffer` transmet les images vidéo à **`VisioForgeVideoView`**.
-4. **`VisioForgeVideoView`** charge chaque image dans un `Texture2D` Unity sur le thread principal et
-   applique le mode d'aspect, de sorte que la vidéo apparaît dans votre `RawImage`. Vous n'écrivez
-   aucun code de texture — il suffit de l'attacher (les lecteurs d'exemple le font pour vous).
+1. **`VisioForgeEnvironment.Configure()`** s'exécute automatiquement avant le chargement de
+   la première scène et prépare le runtime natif fourni pour la plateforme courante — chemin
+   de recherche DLL Windows, hints du chargeur dylib macOS, bootstrap Java Android ou
+   démarrage du framework iOS. Vous ne gérez aucune dépendance native ni chemin. L'histoire
+   complète est dans [Démarrage et cycle de vie](bootstrap.md).
+2. **`VisioForgeEnvironment.InitializeSdk()`** initialise le SDK une fois. Appelez-le avant
+   de construire un pipeline (les players d'exemple l'appellent dans `Start()`).
+3. Chaque player construit un pipeline qui se termine par un
+   **`BufferSinkBlock(VideoFormatX.RGBA)`** ; son événement `OnVideoFrameBuffer` remet les
+   frames vidéo à **`VisioForgeVideoView`**.
+4. **`VisioForgeVideoView`** uploade chaque frame dans un `Texture2D` Unity sur le thread
+   principal et applique le mode d'aspect, donc la vidéo apparaît dans votre `RawImage`. Vous
+   n'écrivez aucun code de texture — attachez-le simplement (les players d'exemple le font
+   pour vous).
 
-### Cycle de vie dans l'Éditeur
+### Cycle de vie Éditeur
 
-Le SDK s'initialise une fois par processus et est réutilisé d'une session Play/Stop à l'autre dans
-l'Éditeur. Deux conséquences en découlent :
+Le SDK s'initialise une fois par processus et est réutilisé entre les sessions Play/Stop
+dans l'Éditeur. Deux points en découlent :
 
-- **Conservez Disable Domain Reload activé** pour que le retour en mode Play réutilise le SDK
-  initialisé. S'il est désactivé, l'Éditeur peut se figer en quittant le mode Play.
-- Les lecteurs d'exemple ne libèrent que le pipeline propre à chaque lecture au Stop (`StopAsync`)
-  et **n'arrêtent** volontairement **pas** tout le SDK — conservez ce modèle dans vos propres
+- **Gardez Disable Domain Reload activé** pour que ré-entrer dans le mode Play réutilise le
+  SDK initialisé. Avec lui désactivé, l'Éditeur peut se bloquer en sortant du mode Play.
+- Les players d'exemple ne libèrent que le pipeline par-Play sur Stop (`StopAsync`) et
+  **intentionnellement** ne coupent pas tout le SDK — gardez ce motif dans vos propres
   scripts.
 
 Si vous rencontrez de l'instabilité après une recompilation de script, redémarrez l'Éditeur.
+Voir [Démarrage et cycle de vie](bootstrap.md#cycle-de-vie-editeur) pour la justification.
 
 ## Foire aux questions
 
-### Ai-je accès au Media Blocks SDK complet, ou seulement à la lecture ?
+### Ai-je le Media Blocks SDK complet ou seulement la lecture ?
 
-Au SDK complet. Les deux scènes d'exemple sont des points de départ ; vos scripts ont accès à
-l'intégralité de l'API du Media Blocks SDK .NET — capture, types de sources multiples, décodeurs et
-encodeurs, traitement et effets audio/vidéo, mixage et compositing, enregistrement vers fichier et
-streaming réseau.
+Le SDK complet. Les deux scènes d'exemple sont des points de départ ; vos scripts ont accès
+à toute l'API Media Blocks SDK .NET — capture, types de sources multiples, décodeurs et
+encodeurs, traitement et effets audio/vidéo, mixage et composition, enregistrement vers
+fichier et sortie de streaming réseau.
 
-### Puis-je afficher la vidéo dans ma propre interface plutôt que dans les scènes d'exemple ?
+### Puis-je rendre la vidéo dans ma propre UI au lieu des scènes d'exemple ?
 
-Oui. Ajoutez un `RawImage`, attachez `MediaBlocksPlayer` (fichier) ou `RTSPViewerPlayer` (RTSP), ou
-construisez votre propre pipeline et alimentez un `BufferSinkBlock` vers `VisioForgeVideoView`. Le
-chargement de la texture, la gestion de l'aspect et le retournement sont pris en charge pour vous.
+Oui. Ajoutez un `RawImage`, attachez `MediaBlocksPlayer` (fichier) ou `RTSPViewerPlayer`
+(RTSP), ou construisez votre propre pipeline et alimentez un `BufferSinkBlock` à
+`VisioForgeVideoView`. L'upload de texture, la gestion du ratio et le flip sont gérés pour
+vous.
+
+### Le même paquet est-il utilisé pour chaque plateforme ?
+
+Oui — un `.unitypackage` cumulatif contient les runtimes natifs Windows, Android, macOS et
+iOS plus un seul jeu d'assemblies managés `netstandard2.1`. Unity choisit le bon slot au
+moment du build à partir des métadonnées `PluginImporter` par fichier ; vous n'importez pas
+un paquet séparé par plateforme.
+
+### Puis-je voir quel chemin de plateforme s'exécute ?
+
+Oui. `VisioForgeEnvironment.Configure()` journalise l'une de
+`[VisioForge] Environment configured. Natives: <path>` (Windows / macOS),
+`[VisioForge] Android GStreamer bootstrap complete.` ou
+`[VisioForge] iOS environment configured (GStreamerX.framework via @rpath).` dans la Console.
+Utilisez cette ligne pour confirmer quelle branche a tourné.
 
 ## Voir aussi
 
-- [Installer Media Blocks SDK dans Unity](../../install/unity.md) — configuration complète, pas à pas
-- [Lire un fichier multimédia dans Unity](simple-player.md) — l'exemple de lecture de fichier
-- [Afficher une caméra RTSP dans Unity](rtsp-viewer.md) — l'exemple de flux RTSP / caméra IP en direct
-- [Présentation du Media Blocks SDK .NET](../../mediablocks/index.md) — le catalogue complet des blocs et le guide des pipelines
-- [Guide du streaming RTSP](../network-streaming/rtsp.md) — le RTSP à travers les SDK VisioForge .NET
-- [Répertoire des marques de caméras IP](../../camera-brands/index.md) — URLs et réglages de caméras testés
+- [Installer Media Blocks SDK dans Unity](../../install/unity.md) — configuration complète,
+  étape par étape
+- [Guide rapide](getting-started.md) — le chemin en cinq étapes jusqu'à une vidéo qui joue
+- [Démarrage et cycle de vie](bootstrap.md) — ce que font `Configure()` et `InitializeSdk()`
+- [Lire un fichier multimédia dans Unity](simple-player.md) — l'exemple de lecture de
+  fichiers
+- [Voir une caméra RTSP dans Unity](rtsp-viewer.md) — l'exemple RTSP / caméra IP en direct
+- [Compilation pour Windows](windows.md) · [Android](android.md) · [macOS](macos.md) · [iOS](ios.md)
+- [Matrice des plateformes](platform-matrix.md) — prise en charge des fonctionnalités par
+  plateforme Unity
+- [Dépannage](troubleshooting.md) — erreurs courantes et solutions
+- [Aperçu du Media Blocks SDK .NET](../../mediablocks/index.md) — le catalogue complet de
+  blocs
+- [Répertoire des marques de caméras IP](../../camera-brands/index.md) — URLs testées et
+  réglages

@@ -456,7 +456,7 @@ The MCP server features:
 ### Documentation
 
 - [VisioForge SDK Documentation](https://www.visioforge.com/help/)
-- [MCP Protocol Specification](https://modelcontextprotocol.io/specification)
+- [MCP Protocol Specification](https://modelcontextprotocol.io/specification/2025-11-25)
 - [Claude Code Documentation](https://claude.ai/code)
 
 ### Support & Community

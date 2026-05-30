@@ -1,13 +1,16 @@
 ---
 title: Streaming de cámara RTSP en Unity con Media Blocks SDK
-description: Muestra un stream en vivo de cámara RTSP en Unity 6 con VisioForge Media Blocks SDK .NET — RTSPSourceBlock y BufferSinkBlock renderizados en un RawImage.
+description: Muestra streams en vivo de cámara RTSP en Unity 6 con VisioForge Media Blocks SDK .NET en Windows, Android, macOS e iOS.
 sidebar_label: Ver una cámara RTSP
-order: 52
+order: 58
 tags:
   - Media Blocks SDK
   - .NET
   - Unity
   - Windows
+  - Android
+  - macOS
+  - iOS
   - RTSP
   - IP Camera
   - Streaming
@@ -23,10 +26,12 @@ primary_api_classes:
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-La escena **`RTSPViewer`** muestra un stream en vivo de cámara RTSP / IP con el **Media Blocks SDK
-.NET**, renderizado en un `RawImage` de Unity. Este artículo asume que ya has importado el paquete de
-Unity y aplicado los dos ajustes de proyecto requeridos — consulta primero
-[Usar VisioForge en Unity](index.md).
+La escena **`RTSPViewer`** muestra un stream en vivo de cámara RTSP / IP con el **Media Blocks
+SDK .NET**, renderizado en un `RawImage` de Unity. La misma escena se ejecuta en cada
+plataforma soportada por el paquete — **Windows**, **Android**, **macOS Standalone** e
+**iOS** — con los ajustes de build y los requisitos de permisos de red por plataforma
+indicados abajo. Este artículo asume que ya has importado el paquete de Unity y aplicado los
+dos ajustes de proyecto requeridos — consulta primero [Usar VisioForge en Unity](index.md).
 
 ## Ejecutar el ejemplo
 
@@ -96,6 +101,96 @@ Añade un **Canvas → Raw Image** (*GameObject → UI → Raw Image*), selecci�
 del aspecto y el volteo vertical los gestiona el `VisioForgeVideoView` incluido. Para reproducción
 de archivos locales en lugar de RTSP, usa `MediaBlocksPlayer` (consulta
 [Reproducir un archivo multimedia](simple-player.md)).
+
+## Ajustes de build y permisos de red por plataforma
+
+`RTSPViewer` se ejecuta sin cambios en cada plataforma soportada — pero cada target tiene sus
+propios requisitos de permisos de red y de Build Profile.
+
+=== "Windows"
+
+    | Ajuste | Valor |
+    |---|---|
+    | Architecture | x86_64 |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | Mono *(predeterminado)* o IL2CPP |
+
+    El TCP / UDP saliente al puerto RTSP de la cámara funciona sin declaración especial.
+    Windows Defender Firewall puede preguntar la primera vez que el player vincule un socket
+    UDP — acepta el prompt de red privada. Consulta [Compilar para Windows](windows.md) para
+    la lista completa.
+
+=== "Android"
+
+    | Ajuste | Valor |
+    |---|---|
+    | Architecture | arm64-v8a (**desmarca ARMv7**) |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | **IL2CPP** (obligatorio) |
+    | Internet Access | **Require** |
+
+    `AndroidManifest.xml` debe declarar:
+
+    ```xml
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    ```
+
+    Para RTSP sobre UDP en una red pública, Android 9+ (API 28+) también requiere
+    `android:usesCleartextTraffic="true"` en el elemento `<application>` si la cámara solo es
+    alcanzable vía RTSP / RTP plano sin TLS. Consulta [Compilar para Android](android.md) para
+    la lista completa.
+
+=== "macOS"
+
+    | Ajuste | Valor |
+    |---|---|
+    | Architecture | Universal arm64 + x86_64 |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | Mono *(predeterminado)* o IL2CPP |
+
+    No hay entradas de manifiesto adicionales — las conexiones salientes son irrestrictas por
+    defecto. Para distribución por Mac App Store, añade el entitlement
+    **com.apple.security.network.client** al bundle firmado para que el App Sandbox permita
+    acceso de red saliente. Consulta [Compilar para macOS](macos.md) para notas de firma de
+    código y notarización.
+
+=== "iOS"
+
+    | Ajuste | Valor |
+    |---|---|
+    | Architecture | dispositivo arm64 (Simulator no soportado) |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | **IL2CPP** (obligatorio) |
+
+    iOS 14+ bloquea el primer intento de conexión a cualquier dirección de red local hasta que
+    tu app declare por qué. Añade a `Info.plist`:
+
+    ```xml
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>Esta app reproduce video de cámaras IP locales en tu red.</string>
+    ```
+
+    Para URLs `rtsp://` planas (sin TLS) o `http://`, añade una excepción de App Transport
+    Security:
+
+    ```xml
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    ```
+
+    Las URLs públicas `https://` / `rtsps://` con certificados firmados por CA no necesitan
+    excepción ATS. Consulta [Compilar para iOS](ios.md) para el flujo Xcode completo.
+
+## Auto-reconexión
+
+`RTSPSourceBlock` se reconecta automáticamente cuando el stream cae, con backoff entre
+intentos. El comportamiento es el mismo en cada plataforma — sin máquina de estado manual en
+tu script. Si el stream permanece desconectado más tiempo que tu timeout, súbelo en los
+ajustes de la fuente subyacente antes de pasarlos a `RTSPSourceBlock`.
 
 ## Preguntas frecuentes
 

@@ -2,12 +2,15 @@
 title: Play Video in Unity with the Media Blocks SDK .NET
 description: Play local video files in Unity 6 with the VisioForge Media Blocks SDK .NET — the SimplePlayer sample, MediaBlocksPipeline, and BufferSinkBlock into a RawImage.
 sidebar_label: Play a media file
-order: 51
+order: 57
 tags:
   - Media Blocks SDK
   - .NET
   - Unity
   - Windows
+  - Android
+  - macOS
+  - iOS
   - Playback
   - C#
 primary_api_classes:
@@ -22,8 +25,10 @@ primary_api_classes:
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The **`SimplePlayer`** scene plays a local video file with the **Media Blocks SDK .NET** and
-renders it into a Unity `RawImage`. This article assumes you have imported the Unity package and
-applied the two required project settings — see [Using VisioForge in Unity](index.md) first.
+renders it into a Unity `RawImage`. The same scene runs on every platform the package supports —
+**Windows**, **Android**, **macOS Standalone**, and **iOS** — with the per-platform build
+settings noted below. This article assumes you have imported the Unity package and applied the
+two required project settings; see [Using VisioForge in Unity](index.md) first.
 
 ## Run the sample
 
@@ -102,6 +107,60 @@ The aspect handling (`Stretch` / `Letterbox` / `Crop`), the `RawImage` layout, a
 flip are handled for you by the bundled `VisioForgeVideoView` — you do not write any texture code.
 To switch the same GameObject to RTSP playback, swap `MediaBlocksPlayer` for `RTSPViewerPlayer`
 (see [View an RTSP camera](rtsp-viewer.md)).
+
+## Per-platform Build Settings
+
+`SimplePlayer` runs unchanged on every supported platform. Switch Build Target and apply the
+matching settings:
+
+=== "Windows"
+
+    | Setting | Value |
+    |---|---|
+    | Architecture | x86_64 |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | Mono *(default)* or IL2CPP |
+
+    Local file paths use the standard Windows form (`C:\Samples\video.mp4`). See
+    [Build for Windows](windows.md) for the full checklist.
+
+=== "Android"
+
+    | Setting | Value |
+    |---|---|
+    | Architecture | arm64-v8a (**uncheck ARMv7**) |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | **IL2CPP** (mandatory) |
+    | Internet Access | Require |
+
+    Local files live under `Application.persistentDataPath` or
+    `Application.streamingAssetsPath` — absolute Windows paths are not portable. To read media
+    from external storage, declare `READ_MEDIA_VIDEO` / `READ_MEDIA_AUDIO` in
+    `AndroidManifest.xml`. See [Build for Android](android.md) for the full checklist.
+
+=== "macOS"
+
+    | Setting | Value |
+    |---|---|
+    | Architecture | Universal arm64 + x86_64 |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | Mono *(default)* or IL2CPP |
+
+    Local file paths use Unix form (`/Users/<you>/Movies/video.mp4`). See
+    [Build for macOS](macos.md) for code-signing and notarization notes.
+
+=== "iOS"
+
+    | Setting | Value |
+    |---|---|
+    | Architecture | device arm64 (Simulator not supported) |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | **IL2CPP** (mandatory) |
+    | Info.plist | Add `NSCameraUsageDescription` / `NSMicrophoneUsageDescription` only if you also capture from device hardware |
+
+    Local files must live inside the app sandbox — typically
+    `Application.persistentDataPath` (the Documents folder) or `Application.streamingAssetsPath`
+    (read-only inside the `.app` bundle). See [Build for iOS](ios.md) for the Xcode workflow.
 
 ## Frequently Asked Questions
 

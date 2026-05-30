@@ -2086,5 +2086,5 @@ El video fingerprinting basado en la nube ofrece una escalabilidad y rentabilida
 ## Recursos Adicionales
 - [Documentación de Azure Functions](https://learn.microsoft.com/en-us/azure/azure-functions/)
 - [Documentación de AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
-- [Mejores Prácticas de Almacenamiento en la Nube](https://cloud.google.com/storage/docs/best-practices)
+- [Mejores Prácticas de Almacenamiento en la Nube](https://docs.cloud.google.com/storage/docs/best-practices)
 - [Patrones de Arquitectura Serverless](https://serverlessland.com/patterns)

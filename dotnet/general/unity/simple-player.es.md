@@ -2,12 +2,15 @@
 title: Reproducir video en Unity con Media Blocks SDK .NET
 description: Reproduce archivos de video locales en Unity 6 con VisioForge Media Blocks SDK .NET — SimplePlayer, MediaBlocksPipeline y BufferSinkBlock en un RawImage.
 sidebar_label: Reproducir un archivo multimedia
-order: 51
+order: 57
 tags:
   - Media Blocks SDK
   - .NET
   - Unity
   - Windows
+  - Android
+  - macOS
+  - iOS
   - Playback
   - C#
 primary_api_classes:
@@ -21,9 +24,11 @@ primary_api_classes:
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-La escena **`SimplePlayer`** reproduce un archivo de video local con el **Media Blocks SDK .NET** y
-lo renderiza en un `RawImage` de Unity. Este artículo asume que ya has importado el paquete de Unity
-y aplicado los dos ajustes de proyecto requeridos — consulta primero
+La escena **`SimplePlayer`** reproduce un archivo de video local con el **Media Blocks SDK .NET**
+y lo renderiza en un `RawImage` de Unity. La misma escena se ejecuta en cada plataforma
+soportada por el paquete — **Windows**, **Android**, **macOS Standalone** e **iOS** — con los
+ajustes de build por plataforma indicados abajo. Este artículo asume que ya has importado el
+paquete de Unity y aplicado los dos ajustes de proyecto requeridos; consulta primero
 [Usar VisioForge en Unity](index.md).
 
 ## Ejecutar el ejemplo
@@ -104,6 +109,63 @@ El manejo del aspecto (`Stretch` / `Letterbox` / `Crop`), el diseño del `RawIma
 vertical los gestiona por ti el `VisioForgeVideoView` incluido — no escribes ningún código de
 textura. Para cambiar el mismo GameObject a reproducción RTSP, sustituye `MediaBlocksPlayer` por
 `RTSPViewerPlayer` (consulta [Ver una cámara RTSP](rtsp-viewer.md)).
+
+## Ajustes de build por plataforma
+
+`SimplePlayer` se ejecuta sin cambios en cada plataforma soportada. Cambia Build Target y
+aplica los ajustes correspondientes:
+
+=== "Windows"
+
+    | Ajuste | Valor |
+    |---|---|
+    | Architecture | x86_64 |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | Mono *(predeterminado)* o IL2CPP |
+
+    Las rutas de archivos locales usan la forma estándar de Windows
+    (`C:\Samples\video.mp4`). Consulta [Compilar para Windows](windows.md) para la lista
+    completa.
+
+=== "Android"
+
+    | Ajuste | Valor |
+    |---|---|
+    | Architecture | arm64-v8a (**desmarca ARMv7**) |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | **IL2CPP** (obligatorio) |
+    | Internet Access | Require |
+
+    Los archivos locales viven en `Application.persistentDataPath` o
+    `Application.streamingAssetsPath` — las rutas absolutas de Windows no son portables. Para
+    leer medios desde almacenamiento externo, declara `READ_MEDIA_VIDEO` / `READ_MEDIA_AUDIO`
+    en `AndroidManifest.xml`. Consulta [Compilar para Android](android.md) para la lista
+    completa.
+
+=== "macOS"
+
+    | Ajuste | Valor |
+    |---|---|
+    | Architecture | Universal arm64 + x86_64 |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | Mono *(predeterminado)* o IL2CPP |
+
+    Las rutas de archivos locales usan la forma Unix (`/Users/<tu>/Movies/video.mp4`). Consulta
+    [Compilar para macOS](macos.md) para notas de firma de código y notarización.
+
+=== "iOS"
+
+    | Ajuste | Valor |
+    |---|---|
+    | Architecture | dispositivo arm64 (Simulator no soportado) |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | **IL2CPP** (obligatorio) |
+    | Info.plist | Añade `NSCameraUsageDescription` / `NSMicrophoneUsageDescription` solo si también capturas desde hardware del dispositivo |
+
+    Los archivos locales deben vivir dentro del sandbox de la app — típicamente
+    `Application.persistentDataPath` (la carpeta Documents) o `Application.streamingAssetsPath`
+    (solo lectura dentro del bundle `.app`). Consulta [Compilar para iOS](ios.md) para el
+    flujo Xcode.
 
 ## Preguntas frecuentes
 

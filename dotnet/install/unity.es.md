@@ -1,12 +1,15 @@
 ---
-title: Instalar Media Blocks SDK .NET en Unity 6 — Windows
-description: Configuración paso a paso de VisioForge Media Blocks SDK .NET en Unity 6 en Windows — importa el .unitypackage autónomo, aplica los ajustes y ejecuta.
+title: Instalar Media Blocks SDK .NET en Unity 6 — Multiplataforma
+description: Configura VisioForge Media Blocks SDK .NET en Unity 6 — importa el .unitypackage acumulativo para Windows, Android, macOS, iOS y ejecuta.
 sidebar_label: Unity
 tags:
   - Media Blocks SDK
   - .NET
   - Unity
   - Windows
+  - Android
+  - macOS
+  - iOS
   - C#
 primary_api_classes:
   - VisioForgeEnvironment
@@ -17,33 +20,43 @@ primary_api_classes:
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Esta guía explica cómo instalar el **Media Blocks SDK .NET** en **Unity 6** en **Windows
-x64**. El SDK se distribuye como un **`.unitypackage`** listo para importar y totalmente autónomo:
-no compilas nada desde el código fuente, no necesitas NuGet y no hay dependencias externas que
-instalar. Tras importarlo, abre una escena de ejemplo y pulsa **Play**.
+Esta guía explica cómo instalar el **Media Blocks SDK .NET** en **Unity 6**. El SDK se
+distribuye como un único **`.unitypackage`** autónomo que agrupa cada runtime nativo soportado
+en un solo archivo — Windows x64, Android, macOS Standalone e iOS Standalone — y deja que Unity
+elija el correcto por Build Target en tiempo de build. No compilas nada desde el código fuente,
+no necesitas NuGet y no hay dependencias externas que instalar.
 
-Una vez instalado, consulta las guías de uso: [Reproducir un archivo multimedia en Unity](../general/unity/simple-player.md)
-y [Ver una cámara RTSP en Unity](../general/unity/rtsp-viewer.md).
+El paquete apunta a ensamblados gestionados **`netstandard2.1`**. Para proyectos fijados al
+Mono Unity LTS más antiguo, todavía se publica un flavor legacy `net48` solo-Windows — consulta
+el spoiler al final de esta página.
+
+Una vez instalado el paquete, consulta las guías de uso:
+[Reproducir un archivo multimedia en Unity](../general/unity/simple-player.md),
+[Ver una cámara RTSP en Unity](../general/unity/rtsp-viewer.md) y la
+[Guía rápida](../general/unity/getting-started.md).
 
 ## Requisitos
 
 | | |
 |---|---|
 | Unity | **6 (6000.x)** — verificado en `6000.4.6f1` |
-| Plataforma | **Windows x64** (Editor y reproductor independiente) |
+| Targets de build distribuidos | **Windows x64**, **Android arm64**, **macOS Universal arm64+x86_64**, **iOS dispositivo arm64** |
+| TFM gestionado | **`netstandard2.1`** |
+| Ajustes obligatorios del Editor | `Api Compatibility Level = .NET Standard 2.1` y Disable Domain Reload |
 
 !!! warning "Usa una ruta corta en NTFS — no un volumen Dev Drive / ReFS"
-    Importar el paquete escribe miles de pequeños archivos nativos, y la importación/compilación de
-    Unity implica una intensa E/S de archivos pequeños. En un Dev Drive (ReFS) eso es
-    **drásticamente más lento** (una importación en frío puede tardar varios minutos en lugar de
-    segundos) y es más propenso a la condición de carrera `EPERM rename`. Mantén el proyecto en una
-    unidad **NTFS** simple con una ruta raíz corta, p. ej. `C:\unity\MyApp`. La caché de paquetes de
-    Unity también genera rutas profundas que pueden superar el límite de 260 caracteres `MAX_PATH`
-    de Windows.
+    Importar el paquete escribe miles de pequeños archivos nativos, y la importación/compilación
+    de Unity implica una intensa E/S de archivos pequeños. En un Dev Drive (ReFS) eso es
+    **drásticamente más lento** (una importación en frío puede tardar varios minutos en lugar
+    de segundos) y es más propenso a la condición de carrera `EPERM rename`. Mantén el
+    proyecto en una unidad **NTFS** simple con una ruta raíz corta, p. ej. `C:\unity\MyApp`. La
+    caché de paquetes de Unity también genera rutas profundas que pueden superar el límite de
+    260 caracteres `MAX_PATH` de Windows.
 
 ## Descarga
 
-Descarga el paquete más reciente:
+Descarga el paquete acumulativo más reciente — Windows + Android + macOS + iOS en un solo
+archivo:
 
 [**VisioForge.MediaBlocks.Unity.unitypackage**](https://files.visioforge.com/unity/VisioForge.MediaBlocks.Unity.unitypackage)
 
@@ -69,69 +82,90 @@ El paquete agrega:
 
 | Contenido | Ubicación | Propósito |
 |---|---|---|
-| SDK gestionado (`net48`) + dependencias | `Assets/Plugins/` | los ensamblados del Media Blocks SDK .NET |
-| Bibliotecas nativas del SDK en tiempo de ejecución, incl. FFmpeg/libav | `Assets/StreamingAssets/VisioForge/x64/` | el motor multimedia; se copia textualmente en las compilaciones independientes |
+| SDK gestionado (`netstandard2.1`) + dependencias | `Assets/Plugins/` (+ subcarpetas `Android/`, `macOS/`, `iOS/Managed/`) | los ensamblados del Media Blocks SDK .NET, por plataforma |
+| Runtime nativo de Windows | `Assets/StreamingAssets/VisioForge/x64/` | libs y plugins de GStreamer para Windows |
+| Runtime nativo de Android | `Assets/Plugins/Android/libs/arm64-v8a/` | `libgstreamer_android.so` monolítico + AAR Java |
+| Runtime nativo de macOS | `Assets/Plugins/macOS/` | dylibs universales (arm64+x86_64) |
+| Runtime nativo de iOS | `Assets/Plugins/iOS/GStreamerX.framework/` | framework embebido (dispositivo arm64) |
+| Preservación IL2CPP | `Assets/VisioForge/link.xml` | preservación de tipos / miembros para Android e iOS |
 | Scripts reutilizables | `Assets/Scripts/` | `VisioForgeEnvironment`, `VisioForgeVideoView` y los dos reproductores |
 | Dos escenas listas | `Assets/Scenes/` | `SimplePlayer` (archivo) y `RTSPViewer` (RTSP) |
 | Asistente de configuración inicial | `Assets/VisioForge/Editor/` | aplica los dos ajustes de proyecto requeridos |
 
+Los metadatos `PluginImporter` por flavor en cada archivo nativo le dicen a Unity a qué Build
+Target pertenece cada binario — cambiar el Build Target en Build Profiles elige
+automáticamente el slot correcto en tiempo de build.
+
 ## Paso 3 — Aplicar los ajustes de proyecto requeridos
 
 En la primera importación, el asistente de configuración muestra un cuadro de diálogo que pide
-aplicar dos ajustes de proyecto requeridos. Haz clic en **Apply** — ambos ajustes se configuran por
-ti.
+aplicar dos ajustes de proyecto requeridos. Haz clic en **Apply** — ambos ajustes se configuran
+por ti.
 
 ![Cuadro de diálogo de configuración del Media Blocks SDK de VisioForge con los botones Apply y Skip](unity-apply-dialog.webp)
 
 Estos dos ajustes son **obligatorios** — el SDK no funcionará sin ellos:
 
-- **Api Compatibility Level = .NET Framework** — Unity 6 usa de forma predeterminada
-  `.NET Standard 2.1`, que no puede cargar esta compilación `net48` del SDK (síntoma:
-  `TypeLoadException` al ejecutar).
-- **Disable Domain Reload** — el SDK se inicializa una vez por proceso y se reutiliza entre sesiones
-  de Play/Stop; con Domain Reload activado, el Editor puede colgarse al salir del modo Play.
+- **Api Compatibility Level = .NET Standard 2.1** — el SDK se distribuye como ensamblados
+  `netstandard2.1`; el ajuste legacy `.NET Framework` no puede cargarlos.
+- **Disable Domain Reload** — el SDK se inicializa una vez por proceso y se reutiliza entre
+  sesiones de Play/Stop; con Domain Reload activado, el Editor puede colgarse al salir del
+  modo Play.
+
+Para targets móviles, también cambia **Scripting Backend** a **IL2CPP** — Mono no está
+soportado en Android o iOS por el propio Unity. Consulta
+[Compilar para Android](../general/unity/android.md) y
+[Compilar para iOS](../general/unity/ios.md) para las listas de comprobación por target.
 
 ## Paso 4 — Configurar los ajustes manualmente (solo si hiciste clic en Skip)
 
 Si hiciste clic en **Skip**, configura ambos a mano:
 
-1. **Api Compatibility Level = .NET Framework**
+1. **Api Compatibility Level = .NET Standard 2.1**
    *Edit → Project Settings → Player → Other Settings → Configuration → Api Compatibility Level*.
 
-   ![Ajustes del Player con Api Compatibility Level establecido en .NET Framework](unity-apicompat.webp)
+   ![Ajustes del Player con Api Compatibility Level establecido en .NET Standard 2.1](unity-apicompat.webp)
 
 2. **Disable Domain Reload**
-   *Edit → Project Settings → Editor → Enter Play Mode Settings* → establece **When entering Play Mode**
-   en una opción que **no** recargue el dominio — ya sea **Reload Scene only** (coincide con lo que
-   hace **Apply**) o **Do not reload Domain or Scene**.
+   *Edit → Project Settings → Editor → Enter Play Mode Settings* → establece
+   **When entering Play Mode** en una opción que **no** recargue el dominio — ya sea
+   **Reload Scene only** (coincide con lo que hace **Apply**) o
+   **Do not reload Domain or Scene**.
 
    ![Enter Play Mode Settings del Editor con la recarga de dominio desactivada](unity-domain-reload.webp)
 
 ## Paso 5 — Ejecutar una escena de ejemplo
 
-En la ventana **Project** abre `Assets/Scenes/SimplePlayer.unity` (haz doble clic en ella — no te
-quedes en la escena predeterminada vacía), selecciona el GameObject **RawImage**, establece su
-**File Path** en el Inspector y pulsa **▶ Play**. El video se renderiza en la vista Game y el audio
-se reproduce a través del dispositivo predeterminado del sistema.
+En la ventana **Project** abre `Assets/Scenes/SimplePlayer.unity` (haz doble clic en ella — no
+te quedes en la escena predeterminada vacía), selecciona el GameObject **RawImage**, establece
+su **File Path** en el Inspector y pulsa **▶ Play**. El video se renderiza en la vista Game y
+el audio se reproduce a través del dispositivo predeterminado del sistema.
 
 ![La escena SimplePlayer reproduciendo video en la vista Game de Unity](unity-sample-play.webp)
 
 !!! tip "El RawImage se ve vacío hasta que pulsas Play"
-    La textura de video se crea en tiempo de ejecución, por lo que el `RawImage` está en blanco
-    (blanco) en el modo de edición.
+    La textura de video se crea en tiempo de ejecución, por lo que el `RawImage` está en
+    blanco (blanco) en el modo de edición.
 
 A continuación, lee las guías de uso:
 
-- [Reproducir un archivo multimedia en Unity](../general/unity/simple-player.md) — el ejemplo `SimplePlayer`.
+- [Guía rápida](../general/unity/getting-started.md) — el camino en cinco pasos desde la
+  importación hasta la reproducción.
+- [Reproducir un archivo multimedia en Unity](../general/unity/simple-player.md) — el ejemplo
+  `SimplePlayer`.
 - [Ver una cámara RTSP en Unity](../general/unity/rtsp-viewer.md) — el ejemplo `RTSPViewer`.
 
-## Compilaciones independientes
+## Compila para una plataforma destino
 
-*File → Build Settings → Windows x64 → Build* produce un reproductor independiente que funciona sin
-ningún paso adicional: Unity copia textualmente el runtime nativo de
-`Assets/StreamingAssets/VisioForge/x64` en `<game>_Data/StreamingAssets/VisioForge/x64`, y los
-ensamblados gestionados de `Assets/Plugins` se preparan automáticamente. La misma ruta de carga se
-resuelve tanto en el Editor como en la compilación independiente.
+El `.unitypackage` acumulativo contiene cada plataforma soportada, pero cada Build Target
+tiene sus propios ajustes y trampas. Lee la página correspondiente:
+
+- [Compilar para Windows](../general/unity/windows.md) — x86_64 Editor + Standalone Player.
+- [Compilar para Android](../general/unity/android.md) — IL2CPP arm64, permisos
+  AndroidManifest.
+- [Compilar para macOS](../general/unity/macos.md) — Universal arm64+x86_64, firma de código.
+- [Compilar para iOS](../general/unity/ios.md) — flujo de exportación a Xcode, permisos
+  Info.plist.
 
 ## Desinstalar o actualizar el paquete
 
@@ -139,61 +173,105 @@ Un `.unitypackage` no tiene desinstalador: elimina los archivos manualmente.
 
 1. **Cierra primero el Editor de Unity** — bloquea las DLL nativas y la caché `Library/`.
 2. Elimina el contenido de VisioForge de `Assets/`:
-   - `Assets/StreamingAssets/VisioForge/` — el runtime nativo (~300 archivos).
-   - `Assets/VisioForge/` — el asistente de configuración inicial.
+   - `Assets/StreamingAssets/VisioForge/` — el runtime nativo de Windows.
+   - `Assets/Plugins/Android/libs/arm64-v8a/libgstreamer_android.so`, `libVisioForge_Core.so`
+     y `Assets/Plugins/Android/visioforge-gstreamer.aar` — el runtime de Android.
+   - `Assets/Plugins/macOS/*.dylib` y `Assets/Plugins/macOS/ca-certificates.crt` — el runtime
+     de macOS.
+   - `Assets/Plugins/iOS/GStreamerX.framework/` y `Assets/Plugins/iOS/libVisioForge_Core.a` —
+     el runtime de iOS.
+   - `Assets/Plugins/` (con subcarpetas `Android/`, `macOS/`, `iOS/Managed/`) — los ensamblados gestionados, por plataforma.
+   - `Assets/VisioForge/` — el asistente de configuración inicial y `link.xml`.
    - Los cuatro scripts reutilizables de `Assets/Scripts/`: `VisioForgeEnvironment.cs`,
-     `VisioForgeVideoView.cs`, `MediaBlocksPlayer.cs`, `RTSPViewerPlayer.cs` (junto con sus `.meta`)
-     — conserva cualquier script propio que esté en la misma carpeta.
-   - Las escenas de ejemplo `Assets/Scenes/SimplePlayer.unity` y `Assets/Scenes/RTSPViewer.unity`.
-   - Los ensamblados de VisioForge en `Assets/Plugins/` (`VisioForge.*.dll`, `GstSharp.dll`,
-     `GLibSharp.dll` y sus dependencias, cada uno con su `.meta`). Elimina toda la carpeta
-     `Assets/Plugins/` solo si no contiene nada más que ensamblados de VisioForge.
+     `VisioForgeVideoView.cs`, `MediaBlocksPlayer.cs`, `RTSPViewerPlayer.cs` (junto con sus
+     `.meta`) — conserva cualquier script propio que esté en la misma carpeta.
+   - Las escenas de ejemplo `Assets/Scenes/SimplePlayer.unity` y
+     `Assets/Scenes/RTSPViewer.unity`.
 3. Elimina la carpeta `Library/` del proyecto (junto a `Assets/`) para limpiar el estado de
-   importación en caché. Unity la regenera en la siguiente apertura (el primer arranque es más lento).
+   importación en caché. Unity la regenera en la siguiente apertura (el primer arranque es
+   más lento).
 
-**Actualización:** importa el nuevo `.unitypackage` sobre el anterior — los GUID de los plugins
-gestionados son deterministas, por lo que Unity sobrescribe los activos existentes en su sitio y se
-conservan las referencias. Si vienes de un paquete mucho más antiguo o ves DLL duplicadas en
-`Assets/Plugins/`, haz primero una eliminación limpia (pasos anteriores) y luego importa el paquete nuevo.
+**Actualización:** importa el nuevo `.unitypackage` sobre el anterior — los GUID de los
+plugins gestionados son deterministas, por lo que Unity sobrescribe los activos existentes en
+su sitio y se conservan las referencias. Si vienes de un paquete mucho más antiguo o ves DLL
+duplicadas en `Assets/Plugins/`, haz primero una eliminación limpia (pasos anteriores) y luego
+importa el paquete nuevo.
 
 ## Solución de problemas
 
 | Síntoma | Causa | Solución |
 |---|---|---|
-| `TypeLoadException` al ejecutar | Api Compatibility Level es `.NET Standard 2.1` | Establécelo en `.NET Framework`, o reimporta y haz clic en **Apply** |
+| `TypeLoadException` al ejecutar | Api Compatibility Level es `.NET Framework`, no `.NET Standard 2.1` | Establécelo en `.NET Standard 2.1`, o reimporta y haz clic en **Apply** |
 | El Editor se cuelga en "Reloading domain" al hacer Play/Stop | Domain Reload está activado | Mantén Disable Domain Reload activado |
 | El Editor se bloquea en el 2.º Play | El SDK se cerró en Stop y se reinicializó | No cierres el SDK en Stop; mantén Disable Domain Reload activado |
-| No se encuentra el runtime nativo | El paquete se importó parcialmente | Reimporta el paquete con todos los elementos marcados |
-| Sin video, errores en la Console tras importar | El Editor necesita una recarga limpia después de preparar el runtime | Reinicia el Editor |
-| El Editor se vuelve inestable tras una sesión de edición larga | Recompilaciones repetidas de scripts | Reinicia el Editor |
+| No se encuentra el runtime nativo | Paquete importado parcialmente o el flavor del Build Target correcto falta del paquete | Reimporta el paquete con todos los elementos marcados; confirma que el paquete contiene la plataforma a la que apuntaste |
+| Sin video, errores en la Consola tras importar | El Editor necesita una recarga limpia después de preparar el runtime | Reinicia el Editor |
+| `DllNotFoundException` en Android | El Scripting Backend es Mono | Cambia a IL2CPP |
 
-## Limitaciones conocidas
+Para la referencia completa por síntoma, consulta
+[Solución de problemas](../general/unity/troubleshooting.md).
 
-- **Solo Windows x64** — el runtime nativo incluido es Windows x64. El paquete aún no admite otras
-  plataformas.
+## Flavor legacy `net48` solo-Windows
+
+??? note "Tengo un Unity LTS más antiguo fijado a Mono — ¿qué pasa con el build net48?"
+
+    El build original solo-Windows del paquete apunta a ensamblados gestionados
+    **`.NET Framework 4.8`** y se sigue produciendo para proyectos que no pueden migrar a
+    `.NET Standard 2.1` (por ejemplo, Unity 2019.4 LTS sin la opción moderna de Api
+    Compatibility). Se distribuye como un `.unitypackage` separado con `NET48` en el nombre del
+    archivo, contiene solo el runtime nativo Windows-x64 y usa `.NET Framework` como Api
+    Compatibility Level. Los proyectos nuevos deben usar el paquete `netstandard2.1` descrito
+    arriba — cubre el mismo caso Windows-x64 más todas las demás plataformas, y Unity 6 lo usa
+    por defecto. Si tienes un requisito estricto del build `net48`, contacta con soporte para
+    el enlace de descarga más reciente.
 
 ## Preguntas frecuentes
 
 ### ¿Puedo instalar el SDK en Unity mediante NuGet?
 
-No. Unity no ejecuta la restauración de NuGet, y el SDK incluye ~300 archivos nativos que NuGet no
-dispondría para Unity. El `.unitypackage` agrupa todo — ensamblados gestionados, runtime nativo,
-scripts y escenas — por lo que importas un único archivo en su lugar.
+No. Unity no ejecuta la restauración de NuGet, y el SDK incluye cientos de archivos nativos
+que NuGet no dispondría para Unity. El `.unitypackage` agrupa todo — ensamblados gestionados,
+runtime nativo de cada plataforma, scripts y escenas — por lo que importas un único archivo
+en su lugar.
 
 ### ¿Necesito instalar GStreamer o alguna otra dependencia del sistema?
 
-No. El paquete es totalmente autónomo; todo lo que el SDK necesita está dentro de él. No se requiere
-una instalación de GStreamer en tu máquina y el runtime incluido no la utiliza.
+No. El paquete es totalmente autónomo; todo lo que el SDK necesita está dentro de él. No se
+requiere una instalación de GStreamer en tu máquina y el runtime incluido no la utiliza — al
+contrario, `VisioForgeEnvironment.Configure()` elimina activamente cualquier GStreamer del
+sistema de la ruta de búsqueda del proceso para evitar una doble inicialización.
 
 ### ¿Funcionan otros SDKs de VisioForge en Unity?
 
 Hoy en día el paquete de Unity incluye el runtime del **Media Blocks SDK .NET**, que cubre
 reproducción, captura, procesamiento y streaming. Otros SDKs de VisioForge llegarán después.
 
+### ¿Funciona el mismo paquete en Windows ARM64?
+
+El runtime nativo Windows del paquete es solo x86_64 — no hay un build nativo ARM64 hoy.
+Ejecutarlo vía emulación x64 solo bajo tu propio riesgo; el uso en producción en Windows 11
+ARM64 no está ejercitado.
+
+### ¿Puedo abrir el mismo paquete en el Editor host Mac?
+
+Sí — si el paquete se construyó con `-IncludeMacOS`. La variante acumulativa publicada en
+`files.visioforge.com/unity/` siempre contiene el flavor macOS. Un paquete solo-Windows
+abierto en un Editor Mac muestra un mensaje claro
+`[VisioForge] Native runtime folder not found at '…' for runtime platform OSXEditor`; consulta
+[Bootstrap y ciclo de vida](../general/unity/bootstrap.md).
+
 ## Véase también
 
-- [Usar VisioForge en Unity](../general/unity/index.md) — visión general de cómo funciona la integración
-- [Reproducir un archivo multimedia en Unity](../general/unity/simple-player.md) — el ejemplo de reproducción de archivos
+- [Usar VisioForge en Unity](../general/unity/index.md) — visión general de cómo funciona la
+  integración
+- [Guía rápida](../general/unity/getting-started.md) — camino en cinco pasos hasta un video
+  reproduciéndose
+- [Bootstrap y ciclo de vida](../general/unity/bootstrap.md) — qué hacen `Configure()` e
+  `InitializeSdk()`
+- [Reproducir un archivo multimedia en Unity](../general/unity/simple-player.md) — el ejemplo
+  de reproducción de archivos
 - [Ver una cámara RTSP en Unity](../general/unity/rtsp-viewer.md) — el ejemplo RTSP
+- [Matriz de plataformas](../general/unity/platform-matrix.md) — soporte de funciones por
+  plataforma Unity
 - [Visión general del Media Blocks SDK .NET](../mediablocks/index.md) — el catálogo completo de bloques
 - [Guía de instalación](index.md) — instala el SDK en otros tipos de proyecto .NET

@@ -2093,5 +2093,5 @@ L'empreinte vidéo basée sur le cloud offre une évolutivité et une rentabilit
 ## Ressources supplémentaires
 - [Documentation Azure Functions](https://learn.microsoft.com/en-us/azure/azure-functions/)
 - [Documentation AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
-- [Bonnes pratiques de stockage cloud](https://cloud.google.com/storage/docs/best-practices)
+- [Bonnes pratiques de stockage cloud](https://docs.cloud.google.com/storage/docs/best-practices)
 - [Schémas d'architecture serverless](https://serverlessland.com/patterns)

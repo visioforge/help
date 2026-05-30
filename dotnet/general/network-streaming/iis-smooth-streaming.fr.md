@@ -27,7 +27,10 @@ IIS Smooth Streaming est l'implémentation Microsoft de la technologie de stream
 
 [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button } 
+[VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
+
+!!! warning "IIS Media Services et IIS Smooth Streaming ne sont plus maintenus"
+    Microsoft a retiré le flux **Web Platform Installer** le 31 décembre 2022 (voir l'[annonce officielle](https://blogs.iis.net/iisteam/web-platform-installer-end-of-support-feed)) et a supprimé **IIS Media Services 4.1** — le composant qui fournit Smooth Streaming — du portail de téléchargement IIS. Le client Silverlight utilisé par le lecteur Smooth Streaming a été retiré par Microsoft le 12 octobre 2021. Pour les nouveaux projets, utilisez plutôt **[HLS](hls-streaming.md)** : c'est le format adaptatif moderne pris en charge nativement par les navigateurs et les appareils mobiles, et `MP4Output` / `HLSOutput` de VisioForge produisent des flux HLS sans configuration supplémentaire. Les instructions ci-dessous restent disponibles uniquement pour les clients qui maintiennent des déploiements IIS Media Services 4.1 existants.
 
 ## Présentation d'IIS Smooth Streaming
 
@@ -53,7 +56,7 @@ Avant d'implémenter IIS Smooth Streaming avec les SDK VisioForge, assurez-vous 
 
 ### Installation des composants requis
 
-1. Installez [Web Platform Installer](https://www.microsoft.com/web/downloads/platform.aspx) sur votre serveur.
+1. Installez [Web Platform Installer](https://blogs.iis.net/iisteam/web-platform-installer-end-of-support-feed/) sur votre serveur.
 2. Via Web Platform Installer, recherchez et installez IIS Media Services.
 
 ![Installation d'IIS Media Services](https://www.visioforge.com/wp-content/uploads/2021/02/iis1.jpg)

@@ -2,12 +2,15 @@
 title: Lire une vidéo dans Unity avec le Media Blocks SDK .NET
 description: Lisez des fichiers vidéo locaux dans Unity 6 avec VisioForge Media Blocks SDK .NET — SimplePlayer, MediaBlocksPipeline et BufferSinkBlock dans un RawImage.
 sidebar_label: Lire un fichier multimédia
-order: 51
+order: 57
 tags:
   - Media Blocks SDK
   - .NET
   - Unity
   - Windows
+  - Android
+  - macOS
+  - iOS
   - Playback
   - C#
 primary_api_classes:
@@ -21,9 +24,12 @@ primary_api_classes:
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-La scène **`SimplePlayer`** lit un fichier vidéo local avec le **Media Blocks SDK .NET** et le rend
-dans un `RawImage` Unity. Cet article suppose que vous avez importé le paquet Unity et appliqué les
-deux réglages de projet requis — consultez d'abord [Utiliser VisioForge dans Unity](index.md).
+La scène **`SimplePlayer`** lit un fichier vidéo local avec le **Media Blocks SDK .NET** et
+le rend dans un `RawImage` Unity. La même scène s'exécute sur chaque plateforme prise en
+charge par le paquet — **Windows**, **Android**, **macOS Standalone** et **iOS** — avec les
+réglages de build par plateforme indiqués ci-dessous. Cet article suppose que vous avez
+importé le paquet Unity et appliqué les deux réglages de projet requis — consultez d'abord
+[Utiliser VisioForge dans Unity](index.md).
 
 ## Lancer l'exemple
 
@@ -103,6 +109,64 @@ La gestion de l'aspect (`Stretch` / `Letterbox` / `Crop`), la disposition du `Ra
 retournement vertical sont pris en charge pour vous par le `VisioForgeVideoView` fourni — vous
 n'écrivez aucun code de texture. Pour basculer le même GameObject vers la lecture RTSP, remplacez
 `MediaBlocksPlayer` par `RTSPViewerPlayer` (voir [Afficher une caméra RTSP](rtsp-viewer.md)).
+
+## Réglages de build par plateforme
+
+`SimplePlayer` s'exécute sans modification sur chaque plateforme prise en charge. Basculez
+Build Target et appliquez les réglages correspondants :
+
+=== "Windows"
+
+    | Réglage | Valeur |
+    |---|---|
+    | Architecture | x86_64 |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | Mono *(par défaut)* ou IL2CPP |
+
+    Les chemins de fichiers locaux utilisent la forme Windows standard
+    (`C:\Samples\video.mp4`). Voir [Compilation pour Windows](windows.md) pour la checklist
+    complète.
+
+=== "Android"
+
+    | Réglage | Valeur |
+    |---|---|
+    | Architecture | arm64-v8a (**décochez ARMv7**) |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | **IL2CPP** (obligatoire) |
+    | Internet Access | Require |
+
+    Les fichiers locaux vivent sous `Application.persistentDataPath` ou
+    `Application.streamingAssetsPath` — les chemins absolus Windows ne sont pas portables.
+    Pour lire des médias depuis le stockage externe, déclarez `READ_MEDIA_VIDEO` /
+    `READ_MEDIA_AUDIO` dans `AndroidManifest.xml`. Voir
+    [Compilation pour Android](android.md) pour la checklist complète.
+
+=== "macOS"
+
+    | Réglage | Valeur |
+    |---|---|
+    | Architecture | Universel arm64 + x86_64 |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | Mono *(par défaut)* ou IL2CPP |
+
+    Les chemins de fichiers locaux utilisent la forme Unix
+    (`/Users/<vous>/Movies/video.mp4`). Voir [Compilation pour macOS](macos.md) pour les
+    notes de signature de code et notarisation.
+
+=== "iOS"
+
+    | Réglage | Valeur |
+    |---|---|
+    | Architecture | appareil arm64 (Simulator non pris en charge) |
+    | Api Compatibility Level | `.NET Standard 2.1` |
+    | Scripting Backend | **IL2CPP** (obligatoire) |
+    | Info.plist | Ajoutez `NSCameraUsageDescription` / `NSMicrophoneUsageDescription` seulement si vous capturez aussi depuis le matériel de l'appareil |
+
+    Les fichiers locaux doivent vivre dans le sandbox de l'app — typiquement
+    `Application.persistentDataPath` (le dossier Documents) ou
+    `Application.streamingAssetsPath` (lecture seule dans le bundle `.app`). Voir
+    [Compilation pour iOS](ios.md) pour le flux Xcode.
 
 ## Foire aux questions
 

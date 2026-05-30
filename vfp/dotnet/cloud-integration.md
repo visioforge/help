@@ -2093,5 +2093,5 @@ Cloud-based video fingerprinting offers unprecedented scalability and cost-effec
 ## Additional Resources
 - [Azure Functions Documentation](https://learn.microsoft.com/en-us/azure/azure-functions/)
 - [AWS Lambda Documentation](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
-- [Cloud Storage Best Practices](https://cloud.google.com/storage/docs/best-practices)
+- [Cloud Storage Best Practices](https://docs.cloud.google.com/storage/docs/best-practices)
 - [Serverless Architecture Patterns](https://serverlessland.com/patterns)

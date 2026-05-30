@@ -1,12 +1,15 @@
 ---
-title: Install Media Blocks SDK in Unity 6 — Windows Setup
-description: Step-by-step setup for the VisioForge Media Blocks SDK .NET in Unity 6 on Windows — import the self-contained .unitypackage, apply project settings, and run.
+title: Install Media Blocks SDK .NET in Unity 6 — Setup Guide
+description: Set up the VisioForge Media Blocks SDK .NET in Unity 6 — import the cumulative .unitypackage for Windows, Android, macOS, iOS and run.
 sidebar_label: Unity
 tags:
   - Media Blocks SDK
   - .NET
   - Unity
   - Windows
+  - Android
+  - macOS
+  - iOS
   - C#
 primary_api_classes:
   - VisioForgeEnvironment
@@ -17,20 +20,29 @@ primary_api_classes:
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-This guide walks through installing the **Media Blocks SDK .NET** in **Unity 6** on **Windows
-x64**. The SDK ships as a ready-to-import **`.unitypackage`** that is fully self-contained — you do
-not build anything from source, you do not need NuGet, and there are no external dependencies to
-install. After importing, open a sample scene and press **Play**.
+This guide walks through installing the **Media Blocks SDK .NET** in **Unity 6**. The SDK ships
+as a single, fully self-contained **`.unitypackage`** that bundles every supported native
+runtime in one file — Windows x64, Android, macOS Standalone, and iOS Standalone — and lets
+Unity pick the right one per Build Target at build time. You do not build anything from source,
+you do not need NuGet, and there are no external dependencies to install.
 
-Once it's installed, see the usage guides: [Play a media file in Unity](../general/unity/simple-player.md)
-and [View an RTSP camera in Unity](../general/unity/rtsp-viewer.md).
+The package targets **`netstandard2.1`** managed assemblies. For projects pinned to the older
+Mono Unity LTS, a legacy `net48` Windows-only flavor is still published — see the spoiler at the
+bottom of this page.
+
+Once the package is installed, see the usage guides:
+[Play a media file in Unity](../general/unity/simple-player.md),
+[View an RTSP camera in Unity](../general/unity/rtsp-viewer.md), and the
+[Quickstart](../general/unity/getting-started.md).
 
 ## Requirements
 
 | | |
 |---|---|
 | Unity | **6 (6000.x)** — verified on `6000.4.6f1` |
-| Platform | **Windows x64** (Editor and standalone player) |
+| Build targets shipped | **Windows x64**, **Android arm64**, **macOS Universal arm64+x86_64**, **iOS device arm64** |
+| Managed TFM | **`netstandard2.1`** |
+| Mandatory Editor settings | `Api Compatibility Level = .NET Standard 2.1` and Disable Domain Reload |
 
 !!! warning "Use a short path on NTFS — not a Dev Drive / ReFS volume"
     Importing the package writes thousands of small native files, and Unity's import/compile is
@@ -41,7 +53,7 @@ and [View an RTSP camera in Unity](../general/unity/rtsp-viewer.md).
 
 ## Download
 
-Download the latest package:
+Download the latest cumulative package — Windows + Android + macOS + iOS in one file:
 
 [**VisioForge.MediaBlocks.Unity.unitypackage**](https://files.visioforge.com/unity/VisioForge.MediaBlocks.Unity.unitypackage)
 
@@ -67,11 +79,19 @@ The package adds:
 
 | Content | Location | Purpose |
 |---|---|---|
-| Managed SDK (`net48`) + dependencies | `Assets/Plugins/` | the Media Blocks SDK .NET assemblies |
-| Native SDK libraries runtime incl. FFmpeg/libav | `Assets/StreamingAssets/VisioForge/x64/` | the media engine; copied verbatim into standalone builds |
+| Managed SDK (`netstandard2.1`) + dependencies | `Assets/Plugins/` (+ `Android/`, `macOS/`, `iOS/Managed/` subfolders) | the Media Blocks SDK .NET assemblies, per platform |
+| Windows native runtime | `Assets/StreamingAssets/VisioForge/x64/` | Windows GStreamer libs and plugins |
+| Android native runtime | `Assets/Plugins/Android/libs/arm64-v8a/` | monolithic `libgstreamer_android.so` + Java AAR |
+| macOS native runtime | `Assets/Plugins/macOS/` | universal dylibs (arm64+x86_64) |
+| iOS native runtime | `Assets/Plugins/iOS/GStreamerX.framework/` | embedded framework (device arm64) |
+| IL2CPP preservation | `Assets/VisioForge/link.xml` | type / member preservation for Android & iOS |
 | Reusable scripts | `Assets/Scripts/` | `VisioForgeEnvironment`, `VisioForgeVideoView`, and the two players |
 | Two ready scenes | `Assets/Scenes/` | `SimplePlayer` (file) and `RTSPViewer` (RTSP) |
 | One-time setup helper | `Assets/VisioForge/Editor/` | applies the two required project settings |
+
+Per-flavor `PluginImporter` metadata on every native file tells Unity which Build Target each
+binary belongs to — switching the Build Target in Build Profiles automatically picks the right
+slot at build time.
 
 ## Step 3 — Apply the required project settings
 
@@ -82,19 +102,23 @@ Click **Apply** — both settings are configured for you.
 
 These two settings are **mandatory** — the SDK will not work without them:
 
-- **Api Compatibility Level = .NET Framework** — Unity 6 defaults to `.NET Standard 2.1`, which
-  cannot load this `net48` SDK build (symptom: `TypeLoadException` on play).
-- **Disable Domain Reload** — the SDK initializes once per process and is reused across Play/Stop
-  sessions; with Domain Reload enabled the Editor can hang when leaving Play mode.
+- **Api Compatibility Level = .NET Standard 2.1** — the SDK ships as `netstandard2.1`
+  assemblies; the legacy `.NET Framework` setting cannot load them.
+- **Disable Domain Reload** — the SDK initializes once per process and is reused across
+  Play/Stop sessions; with Domain Reload enabled the Editor can hang when leaving Play mode.
+
+For mobile targets, also switch **Scripting Backend** to **IL2CPP** — Mono is not supported on
+Android or iOS by Unity itself. See [Build for Android](../general/unity/android.md) and
+[Build for iOS](../general/unity/ios.md) for the per-target Build Profile checklists.
 
 ## Step 4 — Set the settings manually (only if you clicked Skip)
 
 If you clicked **Skip**, set both by hand:
 
-1. **Api Compatibility Level = .NET Framework**
+1. **Api Compatibility Level = .NET Standard 2.1**
    *Edit → Project Settings → Player → Other Settings → Configuration → Api Compatibility Level*.
 
-   ![Player settings with Api Compatibility Level set to .NET Framework](unity-apicompat.webp)
+   ![Player settings with Api Compatibility Level set to .NET Standard 2.1](unity-apicompat.webp)
 
 2. **Disable Domain Reload**
    *Edit → Project Settings → Editor → Enter Play Mode Settings* → set **When entering Play Mode**
@@ -117,16 +141,19 @@ default device.
 
 Next, read the usage guides:
 
+- [Quickstart](../general/unity/getting-started.md) — the five-step path from import to playback.
 - [Play a media file in Unity](../general/unity/simple-player.md) — the `SimplePlayer` sample.
 - [View an RTSP camera in Unity](../general/unity/rtsp-viewer.md) — the `RTSPViewer` sample.
 
-## Standalone builds
+## Build for a target platform
 
-*File → Build Settings → Windows x64 → Build* produces a standalone player that works without any
-extra steps: the native runtime in `Assets/StreamingAssets/VisioForge/x64` is copied verbatim by
-Unity into `<game>_Data/StreamingAssets/VisioForge/x64`, and the managed assemblies in
-`Assets/Plugins` are staged automatically. The same load path resolves in both the Editor and the
-standalone build.
+The cumulative `.unitypackage` contains every supported platform, but each Build Target has its
+own settings and gotchas. Read the matching page:
+
+- [Build for Windows](../general/unity/windows.md) — x86_64 Editor + Standalone Player.
+- [Build for Android](../general/unity/android.md) — IL2CPP arm64, AndroidManifest permissions.
+- [Build for macOS](../general/unity/macos.md) — Universal arm64+x86_64, code-signing.
+- [Build for iOS](../general/unity/ios.md) — Xcode export workflow, Info.plist permissions.
 
 ## Uninstalling or upgrading the package
 
@@ -134,15 +161,19 @@ A `.unitypackage` has no uninstaller — remove the files manually.
 
 1. **Close the Unity Editor** first — it locks the native DLLs and the `Library/` cache.
 2. Delete the VisioForge content from `Assets/`:
-   - `Assets/StreamingAssets/VisioForge/` — the native runtime (~300 files).
-   - `Assets/VisioForge/` — the one-time setup helper.
+   - `Assets/StreamingAssets/VisioForge/` — the Windows native runtime.
+   - `Assets/Plugins/Android/libs/arm64-v8a/libgstreamer_android.so`, `libVisioForge_Core.so`,
+     and `Assets/Plugins/Android/visioforge-gstreamer.aar` — the Android runtime.
+   - `Assets/Plugins/macOS/*.dylib` and `Assets/Plugins/macOS/ca-certificates.crt` — the macOS
+     runtime.
+   - `Assets/Plugins/iOS/GStreamerX.framework/` and `Assets/Plugins/iOS/libVisioForge_Core.a` —
+     the iOS runtime.
+   - `Assets/Plugins/` (with `Android/`, `macOS/`, `iOS/Managed/` subfolders) — the managed assemblies, per platform.
+   - `Assets/VisioForge/` — the one-time setup helper and `link.xml`.
    - The four reusable scripts in `Assets/Scripts/`: `VisioForgeEnvironment.cs`,
      `VisioForgeVideoView.cs`, `MediaBlocksPlayer.cs`, `RTSPViewerPlayer.cs` (plus their `.meta`)
      — keep any scripts of your own that live in the same folder.
    - The sample scenes `Assets/Scenes/SimplePlayer.unity` and `Assets/Scenes/RTSPViewer.unity`.
-   - The VisioForge assemblies in `Assets/Plugins/` (`VisioForge.*.dll`, `GstSharp.dll`,
-     `GLibSharp.dll`, and their dependencies, each with its `.meta`). Delete the whole
-     `Assets/Plugins/` folder only if it contains nothing but VisioForge assemblies.
 3. Delete the project's `Library/` folder (next to `Assets/`) to clear the cached import state.
    Unity regenerates it on the next open (the first launch is slower).
 
@@ -155,40 +186,69 @@ removal (steps above) first, then import the new package.
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `TypeLoadException` on play | Api Compatibility Level is `.NET Standard 2.1` | Set it to `.NET Framework`, or re-import and click **Apply** |
+| `TypeLoadException` on play | Api Compatibility Level is `.NET Framework`, not `.NET Standard 2.1` | Set it to `.NET Standard 2.1`, or re-import and click **Apply** |
 | Editor hangs on "Reloading domain" on Play/Stop | Domain Reload is enabled | Keep Disable Domain Reload on |
 | Editor crashes on the 2nd Play | The SDK was shut down on Stop and re-initialized | Don't shut the SDK down on Stop; keep Disable Domain Reload on |
-| Native runtime not found | Package imported partially | Re-import the package with all items checked |
+| Native runtime not found | Package imported partially, or wrong Build Target's flavor missing from the package | Re-import the package with all items checked; confirm the package contains the platform you targeted |
 | No video, errors in the Console after import | The Editor needs a clean reload after the runtime is staged | Restart the Editor |
-| Editor becomes unstable after a long editing session | Repeated script recompiles | Restart the Editor |
+| `DllNotFoundException` on Android | Scripting Backend is Mono | Switch to IL2CPP |
 
-## Known limitations
+For the full per-symptom reference, see [Troubleshooting](../general/unity/troubleshooting.md).
 
-- **Windows x64 only** — the bundled native runtime is Windows x64. Other platforms are not yet
-  supported by the package.
+## Legacy `net48` Windows-only flavor
+
+??? note "I have an older Unity LTS pinned to Mono — what about the net48 build?"
+
+    The original Windows-only build of the package targets **`.NET Framework 4.8`** managed
+    assemblies and is still produced for projects that cannot move to `.NET Standard 2.1` (for
+    example, Unity 2019.4 LTS without the modern Api Compatibility option). It ships as a
+    separate `.unitypackage` with `NET48` in the filename, contains only the Windows-x64 native
+    runtime, and uses `.NET Framework` as the Api Compatibility Level. New projects should use
+    the `netstandard2.1` package described above — it covers the same Windows-x64 use case plus
+    every other platform, and Unity 6 defaults to it. If you have a hard requirement for the
+    `net48` build, contact support for the latest download link.
 
 ## Frequently Asked Questions
 
 ### Can I install the SDK in Unity via NuGet?
 
-No. Unity does not run NuGet restore, and the SDK ships ~300 native files that NuGet would not lay
-out for Unity. The `.unitypackage` bundles everything — managed assemblies, native runtime, scripts,
-and scenes — so you import a single file instead.
+No. Unity does not run NuGet restore, and the SDK ships hundreds of native files that NuGet
+would not lay out for Unity. The `.unitypackage` bundles everything — managed assemblies, every
+platform's native runtime, scripts, and scenes — so you import a single file instead.
 
 ### Do I need to install GStreamer or any other system dependency?
 
-No. The package is fully self-contained; everything the SDK needs is inside it. A system GStreamer
-install on your machine is not required and is not used by the bundled runtime.
+No. The package is fully self-contained; everything the SDK needs is inside it. A system
+GStreamer install on your machine is not required and is not used by the bundled runtime — on
+the contrary, `VisioForgeEnvironment.Configure()` actively prunes any system GStreamer from the
+process search path to avoid a double-init.
 
 ### Do other VisioForge SDKs work in Unity?
 
-Today the Unity package ships the **Media Blocks SDK .NET** runtime, which covers playback, capture,
-processing, and streaming. Other VisioForge SDKs will follow.
+Today the Unity package ships the **Media Blocks SDK .NET** runtime, which covers playback,
+capture, processing, and streaming. Other VisioForge SDKs will follow.
+
+### Does the same package work on Windows ARM64?
+
+The package's Windows native runtime is x86_64 only — there is no ARM64 native build today.
+Run it via x64 emulation only at your own risk; production use on Windows 11 ARM64 is not
+exercised.
+
+### Can I open the same package in the Mac-host Editor?
+
+Yes — if the package was built with `-IncludeMacOS`. The cumulative variant published at
+`files.visioforge.com/unity/` always contains the macOS flavor. A Windows-only variant opened in
+a Mac Editor surfaces a clear `[VisioForge] Native runtime folder not found at '…' for runtime
+platform OSXEditor` message; see [Bootstrap and lifecycle](../general/unity/bootstrap.md).
 
 ## See Also
 
 - [Using VisioForge in Unity](../general/unity/index.md) — overview of how the integration works
+- [Quickstart](../general/unity/getting-started.md) — five-step path to a playing video
+- [Bootstrap and lifecycle](../general/unity/bootstrap.md) — what `Configure()` and
+  `InitializeSdk()` do
 - [Play a media file in Unity](../general/unity/simple-player.md) — the file-playback sample
 - [View an RTSP camera in Unity](../general/unity/rtsp-viewer.md) — the RTSP sample
+- [Platform matrix](../general/unity/platform-matrix.md) — feature support by Unity platform
 - [Media Blocks SDK .NET overview](../mediablocks/index.md) — the full block catalog
 - [Installation guide](index.md) — install the SDK in other .NET project types
