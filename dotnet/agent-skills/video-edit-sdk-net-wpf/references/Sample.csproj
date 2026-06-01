@@ -7,6 +7,6 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.5.30" />
+    <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.5.31" />
   </ItemGroup>
 </Project>

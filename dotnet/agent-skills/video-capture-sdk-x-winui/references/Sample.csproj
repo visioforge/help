@@ -37,8 +37,8 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.5.30" />
-    <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.5.30" />
+    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.5.31" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.5.31" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />

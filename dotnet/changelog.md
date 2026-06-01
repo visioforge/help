@@ -26,6 +26,11 @@ primary_api_classes:
 
 Changes and updates for all .Net SDKs.
 
+## 2026.5.31
+
+* [Media Blocks SDK .Net] **New `UDPRAWSourceBlock`:** receives a live UDP stream (MPEG-TS, RTP, or raw elementary) and exposes the parsed, still-encoded media without decoding — ideal for recording or remuxing without re-encoding. MPEG-TS feeds are auto-detected; RTP and raw modes let you set the codec, RTP payload type, and a multicast address. It exposes all common video and audio codecs (video: H264, H265, VP8, VP9, AV1, MPEG-2, MJPEG; audio: AAC, MP3/MPEG audio, AC-3, Opus, FLAC); RTP can also carry audio on a separate port (`AudioPort` / `AudioCodec`). A codec without a dedicated parser is passed through unchanged rather than dropped, so a connected recorder/muxer is never starved.
+* [Demos] **New WPF "UDP RAW Capture Demo" (Media Blocks SDK .Net):** records a live UDP H264/H265 feed to MP4 files **without re-encoding**, with selectable transport (Auto / MPEG-TS / RTP / raw), starting a new file on a configurable interval and splitting on key-frames so no data is lost between files, while previewing the stream.
+
 ## 2026.5.30
 
 * [Demos] **Unity RTSP sample — auto-reconnect:** the RTSP viewer sample now reconnects automatically after a connection error instead of giving up. On iOS this means the stream comes up on its own once the user grants the Local Network permission, with no app relaunch; it also recovers transparently from camera reboots / Wi-Fi drops.
