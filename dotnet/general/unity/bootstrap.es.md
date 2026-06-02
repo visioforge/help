@@ -5,6 +5,9 @@ sidebar_label: Bootstrap y ciclo de vida
 order: 52
 tags:
   - Media Blocks SDK
+  - Media Player SDK
+  - Video Capture SDK
+  - Video Edit SDK
   - .NET
   - Unity
   - Bootstrap
@@ -21,11 +24,20 @@ primary_api_classes:
 # Bootstrap y ciclo de vida
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 El paquete de Unity incluye un asistente estático, `VisioForgeEnvironment`, que pone en marcha el
 runtime nativo incluido antes de que cargue la primera escena. No lo invocas desde tus scripts:
 Unity lo llama automáticamente mediante `RuntimeInitializeOnLoadMethod`. Esta página explica qué
 hace en cada plataforma y las reglas de ciclo de vida que tus scripts deben respetar.
+
+El mismo arranque en dos pasos se aplica a **todos** los motores del paquete: el de bajo nivel
+`MediaBlocksPipeline` y los de alto nivel `MediaPlayerCoreX`, `VideoCaptureCoreX` y `VideoEditCoreX`
+se ejecutan sobre el único runtime GStreamer incluido que arrancan `Configure()` e
+`InitializeSdk()`. El bootstrap es independiente del motor — nada en esta página es específico de un
+solo motor.
 
 Si solo necesitas distribuir el SDK, puedes saltar esta página: arrastra `MediaBlocksPlayer` o
 `RTSPViewerPlayer` a una escena y pulsa **Play**. Vuelve aquí cuando escribas tus propios
@@ -159,9 +171,10 @@ Tras que `Configure()` haya preparado el runtime, `InitializeSdk()` termina la p
    en el framework — ambos omiten el escaneo.
 6. Establece el flag de éxito.
 
-Los players de ejemplo (`MediaBlocksPlayer`, `RTSPViewerPlayer`) llaman a `InitializeSdk()`
-desde su método `Start()`, antes de construir un pipeline. Tus scripts deben seguir el mismo
-patrón.
+Todos los scripts de ejemplo — los de bajo nivel `MediaBlocksPlayer` / `RTSPViewerPlayer` y los de
+alto nivel `MediaPlayerXPlayer` / `VideoCaptureXRecorder` / `IPCameraXViewer` / `VideoEditXRenderer`
+— llaman a `InitializeSdk()` desde su método `Start()`, antes de construir un pipeline o crear un
+motor. Tus scripts deben seguir el mismo patrón.
 
 ## El ciclo de vida del Editor
 
@@ -213,9 +226,10 @@ otro modo crashearía dentro del código nativo con un error mucho menos acciona
 ### ¿Puedo ejecutar dos pipelines en paralelo?
 
 Sí. `InitializeSdk()` arranca el SDK una vez por proceso; después puedes construir tantas
-instancias de `MediaBlocksPipeline` como quieras. Cada una es independiente — el patrón de
-muestra multi-cámara RTSP consiste en adjuntar un `RTSPViewerPlayer` por `RawImage`, y cada uno
-construye y destruye su propio pipeline.
+instancias de `MediaBlocksPipeline` — o motores `MediaPlayerCoreX` / `VideoCaptureCoreX` /
+`VideoEditCoreX` — como quieras. Cada una es independiente — el patrón de muestra multi-cámara RTSP
+consiste en adjuntar un `RTSPViewerPlayer` por `RawImage`, y cada uno construye y destruye su
+propio pipeline.
 
 ## Véase también
 

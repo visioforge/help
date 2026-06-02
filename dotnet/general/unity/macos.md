@@ -20,6 +20,9 @@ primary_api_classes:
 # Build for macOS
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 The macOS flavor ships a Universal (arm64 + x86_64) GStreamer runtime plus the package's managed
 assemblies built against `netstandard2.1`. The native runtime is a set of ~300 separate dylibs —

@@ -21,6 +21,9 @@ primary_api_classes:
 # Solución de problemas
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 Esta página recoge los síntomas que tienes más probabilidades de encontrar y la causa raíz de
 cada uno. Los errores están agrupados por categoría. Las páginas por plataforma

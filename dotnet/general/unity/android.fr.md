@@ -20,6 +20,9 @@ primary_api_classes:
 # Compilation pour Android
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 La déclinaison Android est livrée sous forme d'un `libgstreamer_android.so` monolithique avec chaque
 plugin GStreamer lié statiquement, plus les assemblies managés du paquet compilés contre

@@ -20,6 +20,9 @@ primary_api_classes:
 # Build for Android
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 The Android flavor ships as a monolithic `libgstreamer_android.so` with every GStreamer plugin
 statically linked in, plus the package's managed assemblies built against `netstandard2.1`. This

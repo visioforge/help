@@ -18,6 +18,9 @@ primary_api_classes:
 # Compilation pour Windows
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 Windows x64 est la cible de base du paquet Unity — il est livré dans chaque variante
 `.unitypackage` que produit le pipeline de build. Cette page couvre les Player Settings,

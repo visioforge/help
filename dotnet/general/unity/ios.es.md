@@ -21,6 +21,9 @@ primary_api_classes:
 # Compilar para iOS
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 El flavor iOS se distribuye como un único `GStreamerX.framework` (~68 MB en disco, dispositivo arm64
 solamente) con cada plugin de GStreamer registrado estáticamente dentro del framework, más los

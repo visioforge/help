@@ -30,6 +30,12 @@ Changes and updates for all .Net SDKs.
 
 * [Media Blocks SDK .Net] **New `UDPRAWSourceBlock`:** receives a live UDP stream (MPEG-TS, RTP, or raw elementary) and exposes the parsed, still-encoded media without decoding — ideal for recording or remuxing without re-encoding. MPEG-TS feeds are auto-detected; RTP and raw modes let you set the codec, RTP payload type, and a multicast address. It exposes all common video and audio codecs (video: H264, H265, VP8, VP9, AV1, MPEG-2, MJPEG; audio: AAC, MP3/MPEG audio, AC-3, Opus, FLAC); RTP can also carry audio on a separate port (`AudioPort` / `AudioCodec`). A codec without a dedicated parser is passed through unchanged rather than dropped, so a connected recorder/muxer is never starved.
 * [Demos] **New WPF "UDP RAW Capture Demo" (Media Blocks SDK .Net):** records a live UDP H264/H265 feed to MP4 files **without re-encoding**, with selectable transport (Auto / MPEG-TS / RTP / raw), starting a new file on a configurable interval and splitting on key-frames so no data is lost between files, while previewing the stream.
+* [Media Player SDK .Net] Unity: new MediaPlayerCoreX sample — play files and network URLs with seek, pause and volume, rendered into a Unity `Texture2D`.
+* [Video Capture SDK .Net] Unity: new VideoCaptureCoreX samples — local webcam preview + MP4 recording (Windows, macOS) and IP/RTSP camera viewing (Windows, Android, macOS, iOS).
+* [Video Edit SDK .Net] Unity: new VideoEditCoreX sample — combine clips, apply effects, preview the timeline in Unity, and render to MP4.
+* [Core] Added a Unity-only `OnVideoFrameUnity` event to `MediaPlayerCoreX`, `VideoCaptureCoreX` and `VideoEditCoreX` that delivers each frame as Texture2D-ready RGBA32 for zero-conversion rendering in Unity.
+* [Core] Fixed a Unity Editor crash on the second Play after a script recompile (or any domain reload): the SDK no longer re-registers GStreamer types that survived the reload, so initialization is safe on every Play.
+* [Core] Unity (Windows, IL2CPP): fixed GStreamer debug logging — the log callback now uses an IL2CPP-safe static trampoline and is detached cleanly across domain reloads, so a Windows IL2CPP player no longer fails to attach the log handler.
 
 ## 2026.5.30
 

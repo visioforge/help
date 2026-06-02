@@ -25,6 +25,9 @@ primary_api_classes:
 # Video playback and RTSP streaming in Unity
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 The **Media Blocks SDK .NET** ships a cross-platform, ready-to-import **`.unitypackage`** that
 brings video-file playback, live RTSP / IP-camera streaming, and the rest of the Media Blocks
@@ -67,11 +70,21 @@ per-platform thing your script ever sees is the `Application.platform` value at 
 
 ## Samples
 
-The package ships two ready scenes under `Assets/Scenes/`. Open one in the **Project** window
+The package ships ready scenes under `Assets/Scenes/`. Open one in the **Project** window
 (double-click it — do not stay on the empty default scene) and press **▶ Play**:
 
-- **[Play a media file](simple-player.md)** — the `SimplePlayer` scene, local video file playback.
-- **[View an RTSP camera](rtsp-viewer.md)** — the `RTSPViewer` scene, live RTSP / IP camera stream.
+- **[Play a media file](simple-player.md)** — two scenes: the low-level `SimplePlayer`
+  (`MediaBlocksPipeline`) and the high-level `MediaPlayerX` (`MediaPlayerCoreX`, with seek/pause/volume).
+- **[View an RTSP camera](rtsp-viewer.md)** — two scenes: the low-level `RTSPViewer`
+  (`MediaBlocksPipeline`) and the high-level `IPCameraX` (`VideoCaptureCoreX`, with optional recording).
+- **[Capture a webcam](video-capture-x.md)** — the `VideoCaptureX` scene: local webcam + microphone
+  with MP4 recording (`VideoCaptureCoreX`, Windows / macOS).
+- **[Edit and render](video-edit-x.md)** — the `VideoEditX` scene: a multi-clip timeline previewed
+  live, then rendered to MP4 (`VideoEditCoreX`).
+
+The low-level scenes use the `MediaBlocksPipeline` API; the high-level CoreX scenes render into a
+`RawImage` through the Unity-only `OnVideoFrameUnity` event (tightly packed RGBA32,
+`Texture2D`-ready).
 
 !!! tip "The RawImage looks empty until you press Play"
     The video texture is created at runtime, so the `RawImage` is blank (white) in edit mode.
@@ -143,6 +156,7 @@ Use that line to confirm which branch ran.
 - [Bootstrap and lifecycle](bootstrap.md) — what `Configure()` and `InitializeSdk()` do
 - [Play a media file in Unity](simple-player.md) — the file-playback sample
 - [View an RTSP camera in Unity](rtsp-viewer.md) — the live RTSP / IP camera sample
+- [Capture a webcam with VideoCaptureCoreX](video-capture-x.md) · [Edit and render with VideoEditCoreX](video-edit-x.md) — the standalone CoreX engine samples
 - [Build for Windows](windows.md) · [Android](android.md) · [macOS](macos.md) · [iOS](ios.md)
 - [Platform matrix](platform-matrix.md) — feature support by Unity platform
 - [Troubleshooting](troubleshooting.md) — common errors and fixes

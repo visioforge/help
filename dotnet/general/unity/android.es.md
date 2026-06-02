@@ -20,6 +20,9 @@ primary_api_classes:
 # Compilar para Android
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 El flavor Android se distribuye como un `libgstreamer_android.so` monolítico con cada plugin de
 GStreamer enlazado estáticamente, más los ensamblados gestionados del paquete compilados contra

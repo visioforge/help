@@ -21,6 +21,9 @@ primary_api_classes:
 # Build for iOS
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 The iOS flavor ships as a single `GStreamerX.framework` (~68 MB on disk, arm64 device only) with every
 GStreamer plugin statically registered inside the framework, plus the package's managed

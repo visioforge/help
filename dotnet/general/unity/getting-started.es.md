@@ -19,6 +19,9 @@ primary_api_classes:
 # Primeros pasos
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 Esta página es el camino en cinco pasos desde un proyecto Unity 6 nuevo hasta un video
 reproduciéndose. Para detalles de instalación, notas profundas por plataforma y la explicación

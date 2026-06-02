@@ -23,6 +23,9 @@ primary_api_classes:
 # Matriz de plataformas
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 Esta página enumera qué funciona en qué target de build Unity — la matriz está filtrada al
 runtime que se distribuye en el `.unitypackage` acumulativo. Para la matriz de funciones del
@@ -131,11 +134,12 @@ adjuntas a un `RawImage` (o cualquier material).
 | SRT (caller / listener) | ✅ | ✅ | ✅ | ✅ |
 | HLS (lectura / escritura) | ✅ | ✅ | ✅ | ✅ |
 | HTTP / HTTPS | ✅ | ✅ | ✅ | ✅ |
-| WebRTC | ⚠️ contacta con soporte | ⚠️ contacta con soporte | ⚠️ contacta con soporte | ⚠️ contacta con soporte |
+| WebRTC | ✅ | ✅ | ✅ | ✅ |
 | NDI | ✅ | ❌ | ✅ | ❌ |
 
-WebRTC requiere configuración por despliegue (servidor de signalling, ICE / STUN / TURN).
-Contacta con soporte para discutir el cableado de producción.
+WebRTC es compatible en todos los targets. Como cualquier despliegue WebRTC, necesita un servidor de
+signalling y configuración ICE / STUN / TURN para tu red — ese cableado es específico de la
+aplicación, no una limitación de plataforma.
 
 ## Distribución del paquete acumulativo
 
