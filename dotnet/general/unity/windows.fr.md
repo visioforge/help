@@ -49,8 +49,8 @@ comme suit :
 |---|---|
 | `Assets/StreamingAssets/VisioForge/x64/` | Layout plat : libs core GStreamer, chaque DLL de plugin, modules GIO, `ca-certificates.crt`. ~300 fichiers. |
 | `Assets/Plugins/` | Assemblies managés (`VisioForge.Core.dll`, `VisioForge.Libs.dll`, `GstSharp.dll`, `GLibSharp.dll`, etc.) avec leurs `.meta`. |
-| `Assets/Scripts/` | Les helpers partagés : `VisioForgeEnvironment.cs`, `VisioForgeVideoView.cs`, `MediaBlocksPlayer.cs`, `RTSPViewerPlayer.cs`. |
-| `Assets/Scenes/` | Les deux scènes d'exemple : `SimplePlayer.unity` et `RTSPViewer.unity`. |
+| `Assets/Scripts/` | Les helpers partagés (`VisioForgeEnvironment.cs`, `VisioForgeVideoView.cs`) plus les six scripts d'exemple (`MediaBlocksPlayer.cs`, `RTSPViewerPlayer.cs`, `MediaPlayerXPlayer.cs`, `IPCameraXViewer.cs`, `VideoCaptureXRecorder.cs`, `VideoEditXRenderer.cs`). |
+| `Assets/Scenes/` | Les six scènes d'exemple : `SimplePlayer.unity`, `RTSPViewer.unity`, `MediaPlayerX.unity`, `IPCameraX.unity`, `VideoCaptureX.unity`, `VideoEditX.unity`. |
 
 `StreamingAssets` (et non `Plugins/x64`) est utilisé parce qu'Unity copie le dossier
 littéralement dans un build Standalone, ce qui est exactement où `VisioForgeEnvironment.Configure()`

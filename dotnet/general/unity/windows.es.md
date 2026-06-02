@@ -48,8 +48,8 @@ El paso de build `deploy-unity-natives.ps1` despliega el runtime de Windows en t
 |---|---|
 | `Assets/StreamingAssets/VisioForge/x64/` | Layout plano: libs core de GStreamer, todos los DLL de plugins, módulos GIO, `ca-certificates.crt`. ~300 archivos. |
 | `Assets/Plugins/` | Ensamblados gestionados (`VisioForge.Core.dll`, `VisioForge.Libs.dll`, `GstSharp.dll`, `GLibSharp.dll`, etc.) con sus `.meta`. |
-| `Assets/Scripts/` | Los helpers compartidos: `VisioForgeEnvironment.cs`, `VisioForgeVideoView.cs`, `MediaBlocksPlayer.cs`, `RTSPViewerPlayer.cs`. |
-| `Assets/Scenes/` | Las dos escenas de ejemplo: `SimplePlayer.unity` y `RTSPViewer.unity`. |
+| `Assets/Scripts/` | Los helpers compartidos (`VisioForgeEnvironment.cs`, `VisioForgeVideoView.cs`) más los seis scripts de ejemplo (`MediaBlocksPlayer.cs`, `RTSPViewerPlayer.cs`, `MediaPlayerXPlayer.cs`, `IPCameraXViewer.cs`, `VideoCaptureXRecorder.cs`, `VideoEditXRenderer.cs`). |
+| `Assets/Scenes/` | Las seis escenas de ejemplo: `SimplePlayer.unity`, `RTSPViewer.unity`, `MediaPlayerX.unity`, `IPCameraX.unity`, `VideoCaptureX.unity`, `VideoEditX.unity`. |
 
 Se usa `StreamingAssets` (no `Plugins/x64`) porque Unity copia esa carpeta literalmente a un
 build Standalone, que es exactamente a donde `VisioForgeEnvironment.Configure()` apunta el

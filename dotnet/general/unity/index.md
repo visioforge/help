@@ -44,8 +44,8 @@ For the five-step shortcut, see **[Quickstart](getting-started.md)**.
     structured API lookups and verified code examples.
 
 !!! info "The full SDK is available — the samples are just a starting point"
-    The package bundles the **complete Media Blocks SDK .NET**. The two included scenes
-    (`SimplePlayer` and `RTSPViewer`) are examples to get you running quickly — your scripts have
+    The package bundles the **complete Media Blocks SDK .NET**. The included sample scenes
+    are examples to get you running quickly — your scripts have
     access to the **entire Media Blocks API**: capture and multiple source types, decoders and
     encoders, audio/video processing and effects, mixing and compositing, recording to file, and
     network streaming output. Build whatever pipeline your app needs. See the
@@ -125,7 +125,7 @@ If you hit instability after a script recompile, restart the Editor. See
 
 ### Do I get the full Media Blocks SDK, or only playback?
 
-The full SDK. The two sample scenes are starting points; your scripts have access to the entire
+The full SDK. The sample scenes are starting points; your scripts have access to the entire
 Media Blocks SDK .NET API — capture, multiple source types, decoders and encoders, audio/video
 processing and effects, mixing and compositing, recording to file, and network streaming.
 

@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-06-02 05:13:21 UTC (2d3c16cc4eb)
+**Generated:** 2026-06-02 10:23:18 UTC (9ac68130f97)
 
 ## MCP Server (for AI coding agents)
 
@@ -153,7 +153,7 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [Install VisioForge .NET SDKs — NuGet, Visual Studio, Rider](https://www.visioforge.com/help/docs/dotnet/install/): Setup files or NuGet packages. Target frameworks for Windows, macOS, iOS, Android, and Linux. SDK initialization, VideoView controls, and native dependencies.
 - [Install VisioForge .NET SDKs in MAUI Apps via NuGet](https://www.visioforge.com/help/docs/dotnet/install/maui/): Add video capture, playback, and editing to .NET MAUI apps. NuGet setup for Windows, Android, iOS, and macOS with VisioForge VideoView controls.
 - [Install VisioForge SDK in JetBrains Rider — NuGet Setup](https://www.visioforge.com/help/docs/dotnet/install/rider/): Add VisioForge .NET SDKs to Rider projects via NuGet. .NET 6/7/8/9, macOS/Windows/Linux. Package references, native dependencies, troubleshooting.
-- [Install Media Blocks SDK .NET in Unity 6 — Setup Guide](https://www.visioforge.com/help/docs/dotnet/install/unity/): Set up the VisioForge Media Blocks SDK .NET in Unity 6 — import the cumulative .unitypackage for Windows, Android, macOS, iOS and run.
+- [Install VisioForge media SDKs in Unity 6 — Setup Guide](https://www.visioforge.com/help/docs/dotnet/install/unity/): Set up VisioForge media SDKs in Unity 6 — one cumulative .unitypackage for video playback, capture and editing on Windows, Android, macOS, iOS.
 - [Set Up Video SDKs for Uno Platform Cross-Platform .NET](https://www.visioforge.com/help/docs/dotnet/install/uno/): Add video capture, playback, and editing to Uno Platform apps. NuGet setup, VideoView integration for Windows, Android, iOS, macOS, and Linux.
 - [Install VisioForge SDK in Visual Studio — .NET NuGet Setup](https://www.visioforge.com/help/docs/dotnet/install/visual-studio/): Add VisioForge .NET SDKs to Visual Studio 2022+ projects via NuGet. WinForms/WPF/MAUI/console templates. Native dependencies and license setup.
 - [Install VisioForge .NET SDKs in Visual Studio for Mac](https://www.visioforge.com/help/docs/dotnet/install/visual-studio-mac/): Install and configure VisioForge .NET SDKs in Visual Studio for Mac for multimedia macOS and iOS application development.

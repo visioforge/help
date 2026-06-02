@@ -47,8 +47,8 @@ Pour installer le paquet, consultez
     pour des recherches structurées d'API et des exemples de code vérifiés.
 
 !!! info "Le SDK complet est disponible — les exemples ne sont qu'un point de départ"
-    Le paquet contient le **Media Blocks SDK .NET complet**. Les deux scènes incluses
-    (`SimplePlayer` et `RTSPViewer`) sont des exemples pour démarrer rapidement — vos scripts
+    Le paquet contient le **Media Blocks SDK .NET complet**. Les scènes incluses
+    sont des exemples pour démarrer rapidement — vos scripts
     ont accès à l'**API Media Blocks complète** : capture et types de sources multiples,
     décodeurs et encodeurs, traitement et effets audio/vidéo, mixage et composition,
     enregistrement vers fichier et sortie de streaming réseau. Construisez n'importe quel
@@ -137,7 +137,7 @@ Voir [Démarrage et cycle de vie](bootstrap.md#cycle-de-vie-editeur) pour la jus
 
 ### Ai-je le Media Blocks SDK complet ou seulement la lecture ?
 
-Le SDK complet. Les deux scènes d'exemple sont des points de départ ; vos scripts ont accès
+Le SDK complet. Les scènes d'exemple sont des points de départ ; vos scripts ont accès
 à toute l'API Media Blocks SDK .NET — capture, types de sources multiples, décodeurs et
 encodeurs, traitement et effets audio/vidéo, mixage et composition, enregistrement vers
 fichier et sortie de streaming réseau.

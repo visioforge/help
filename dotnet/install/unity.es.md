@@ -1,39 +1,52 @@
 ---
-title: Instalar Media Blocks SDK .NET en Unity 6 — Multiplataforma
-description: Configura VisioForge Media Blocks SDK .NET en Unity 6 — importa el .unitypackage acumulativo para Windows, Android, macOS, iOS y ejecuta.
+title: Instalar SDKs multimedia de VisioForge en Unity 6 — Guía
+description: Configura los SDKs multimedia de VisioForge en Unity 6 — un .unitypackage para reproducción, captura y edición de video en Windows, Android, macOS, iOS.
 sidebar_label: Unity
 tags:
   - Media Blocks SDK
+  - Media Player SDK
+  - Video Capture SDK
+  - Video Edit SDK
   - .NET
   - Unity
   - Windows
   - Android
   - macOS
   - iOS
+  - RTSP
   - C#
 primary_api_classes:
   - VisioForgeEnvironment
   - MediaBlocksPipeline
+  - MediaPlayerCoreX
+  - VideoCaptureCoreX
+  - VideoEditCoreX
 ---
 
-# Instalar el Media Blocks SDK en Unity
+# Instalar los SDKs multimedia de VisioForge en Unity
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
-Esta guía explica cómo instalar el **Media Blocks SDK .NET** en **Unity 6**. El SDK se
-distribuye como un único **`.unitypackage`** autónomo que agrupa cada runtime nativo soportado
-en un solo archivo — Windows x64, Android, macOS Standalone e iOS Standalone — y deja que Unity
-elija el correcto por Build Target en tiempo de build. No compilas nada desde el código fuente,
-no necesitas NuGet y no hay dependencias externas que instalar.
+Esta guía explica cómo instalar los **SDKs multimedia** de VisioForge en **Unity 6**. Un único
+**`.unitypackage`** autónomo integra cuatro productos en Unity a la vez — el pipeline del
+**Media Blocks SDK .NET** así como los motores de alto nivel **Media Player SDK .NET**
+(`MediaPlayerCoreX`), **Video Capture SDK .NET** (`VideoCaptureCoreX`) y **Video Edit SDK .NET**
+(`VideoEditCoreX`). El paquete agrupa cada runtime nativo soportado en un solo archivo —
+Windows x64, Android, macOS Standalone e iOS Standalone — permitiendo que Unity seleccione el
+adecuado según la plataforma de destino (Build Target) al compilar. No compilas nada desde el
+código fuente, no necesitas NuGet y no hay dependencias externas que instalar.
 
-El paquete apunta a ensamblados gestionados **`netstandard2.1`**. Para proyectos fijados al
-Mono Unity LTS más antiguo, todavía se publica un flavor legacy `net48` solo-Windows — consulta
-el spoiler al final de esta página.
+El paquete apunta a ensamblados gestionados **`netstandard2.1`**. Para proyectos limitados a la
+versión más antigua de Mono en Unity LTS, todavía se publica una versión heredada (legacy)
+`net48` exclusiva para Windows — consulta el spoiler al final de esta página.
 
-Una vez instalado el paquete, consulta las guías de uso:
-[Reproducir un archivo multimedia en Unity](../general/unity/simple-player.md),
-[Ver una cámara RTSP en Unity](../general/unity/rtsp-viewer.md) y la
-[Guía rápida](../general/unity/getting-started.md).
+Para ver qué incluye y cómo usarlo, consulta
+**[Usar VisioForge en Unity](../general/unity/index.md)** — la visión general con el catálogo
+completo de productos y ejemplos. Para el atajo de cinco pasos, consulta la
+**[Guía rápida](../general/unity/getting-started.md)**.
 
 ## Requisitos
 
@@ -88,8 +101,8 @@ El paquete agrega:
 | Runtime nativo de macOS | `Assets/Plugins/macOS/` | dylibs universales (arm64+x86_64) |
 | Runtime nativo de iOS | `Assets/Plugins/iOS/GStreamerX.framework/` | framework embebido (dispositivo arm64) |
 | Preservación IL2CPP | `Assets/VisioForge/link.xml` | preservación de tipos / miembros para Android e iOS |
-| Scripts reutilizables | `Assets/Scripts/` | `VisioForgeEnvironment`, `VisioForgeVideoView` y los dos reproductores |
-| Dos escenas listas | `Assets/Scenes/` | `SimplePlayer` (archivo) y `RTSPViewer` (RTSP) |
+| Scripts reutilizables | `Assets/Scripts/` | los asistentes `VisioForgeEnvironment` y `VisioForgeVideoView` más los seis scripts de ejemplo |
+| Seis escenas de ejemplo | `Assets/Scenes/` | `SimplePlayer`, `RTSPViewer`, `MediaPlayerX`, `IPCameraX`, `VideoCaptureX`, `VideoEditX` — consulta la [visión general de ejemplos](../general/unity/index.md#ejemplos) |
 | Asistente de configuración inicial | `Assets/VisioForge/Editor/` | aplica los dos ajustes de proyecto requeridos |
 
 Los metadatos `PluginImporter` por flavor en cada archivo nativo le dicen a Unity a qué Build
@@ -151,9 +164,9 @@ A continuación, lee las guías de uso:
 
 - [Guía rápida](../general/unity/getting-started.md) — el camino en cinco pasos desde la
   importación hasta la reproducción.
-- [Reproducir un archivo multimedia en Unity](../general/unity/simple-player.md) — el ejemplo
-  `SimplePlayer`.
-- [Ver una cámara RTSP en Unity](../general/unity/rtsp-viewer.md) — el ejemplo `RTSPViewer`.
+- [Usar VisioForge en Unity](../general/unity/index.md) — la visión general con el catálogo
+  completo de productos y ejemplos: reproducción de archivos, RTSP / cámara IP, captura de
+  webcam y edición de línea de tiempo.
 
 ## Compila para una plataforma destino
 
@@ -182,11 +195,13 @@ Un `.unitypackage` no tiene desinstalador: elimina los archivos manualmente.
      el runtime de iOS.
    - `Assets/Plugins/` (con subcarpetas `Android/`, `macOS/`, `iOS/Managed/`) — los ensamblados gestionados, por plataforma.
    - `Assets/VisioForge/` — el asistente de configuración inicial y `link.xml`.
-   - Los cuatro scripts reutilizables de `Assets/Scripts/`: `VisioForgeEnvironment.cs`,
-     `VisioForgeVideoView.cs`, `MediaBlocksPlayer.cs`, `RTSPViewerPlayer.cs` (junto con sus
-     `.meta`) — conserva cualquier script propio que esté en la misma carpeta.
-   - Las escenas de ejemplo `Assets/Scenes/SimplePlayer.unity` y
-     `Assets/Scenes/RTSPViewer.unity`.
+   - Los scripts de `Assets/Scripts/`: los asistentes `VisioForgeEnvironment.cs` y
+     `VisioForgeVideoView.cs` más los seis scripts de ejemplo — `MediaBlocksPlayer.cs`,
+     `RTSPViewerPlayer.cs`, `MediaPlayerXPlayer.cs`, `IPCameraXViewer.cs`,
+     `VideoCaptureXRecorder.cs`, `VideoEditXRenderer.cs` (junto con sus `.meta`) — conserva
+     cualquier script propio que esté en la misma carpeta.
+   - Las escenas de ejemplo de `Assets/Scenes/`: `SimplePlayer.unity`, `RTSPViewer.unity`,
+     `MediaPlayerX.unity`, `IPCameraX.unity`, `VideoCaptureX.unity`, `VideoEditX.unity`.
 3. Elimina la carpeta `Library/` del proyecto (junto a `Assets/`) para limpiar el estado de
    importación en caché. Unity la regenera en la siguiente apertura (el primer arranque es
    más lento).
@@ -241,10 +256,13 @@ requiere una instalación de GStreamer en tu máquina y el runtime incluido no l
 contrario, `VisioForgeEnvironment.Configure()` elimina activamente cualquier GStreamer del
 sistema de la ruta de búsqueda del proceso para evitar una doble inicialización.
 
-### ¿Funcionan otros SDKs de VisioForge en Unity?
+### ¿Qué SDKs de VisioForge están incluidos?
 
-Hoy en día el paquete de Unity incluye el runtime del **Media Blocks SDK .NET**, que cubre
-reproducción, captura, procesamiento y streaming. Otros SDKs de VisioForge llegarán después.
+El paquete incluye cuatro productos desde una única superficie gestionada `netstandard2.1`: el
+pipeline del **Media Blocks SDK .NET** y los motores de alto nivel **Media Player SDK .NET**
+(`MediaPlayerCoreX`), **Video Capture SDK .NET** (`VideoCaptureCoreX`) y **Video Edit SDK .NET**
+(`VideoEditCoreX`). Cada uno incluye una o más escenas de ejemplo listas — consulta la
+[visión general de ejemplos](../general/unity/index.md#ejemplos).
 
 ### ¿Funciona el mismo paquete en Windows ARM64?
 
@@ -271,6 +289,7 @@ abierto en un Editor Mac muestra un mensaje claro
 - [Reproducir un archivo multimedia en Unity](../general/unity/simple-player.md) — el ejemplo
   de reproducción de archivos
 - [Ver una cámara RTSP en Unity](../general/unity/rtsp-viewer.md) — el ejemplo RTSP
+- [Capturar una webcam](../general/unity/video-capture-x.md) · [Editar y renderizar](../general/unity/video-edit-x.md) — los ejemplos de los motores CoreX
 - [Matriz de plataformas](../general/unity/platform-matrix.md) — soporte de funciones por
   plataforma Unity
 - [Visión general del Media Blocks SDK .NET](../mediablocks/index.md) — el catálogo completo de bloques
