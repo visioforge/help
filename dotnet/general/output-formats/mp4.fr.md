@@ -290,6 +290,63 @@ var mp4Sink = new MP4SinkBlock(splitSettings);
 - Lors de la combinaison de critères, la découpe se produit dès qu'UN critère est satisfait
 - La propriété `StartIndex` contrôle le numéro de fichier initial (par défaut 0)
 
+### Événements de segment
+
+Lors de l'enregistrement avec `MP4SplitSinkSettings`, `MP4OutputBlock` et `MP4SinkBlock` déclenchent des événements autour de chaque fichier de segment, ce qui vous permet de nommer les fichiers vous-même et d'être averti lorsqu'un segment est terminé :
+
+- `OnSegmentFileNameRequested` — déclenché juste avant la création d'un nouveau fichier de segment. Définissez la propriété `FileName` de l'événement sur un chemin personnalisé (par exemple, un chemin qui inclut l'heure de début du segment). Laissez-la non définie pour conserver le nom par défaut généré à partir du modèle d'emplacement.
+- `OnSegmentCreated` — déclenché lorsqu'un nouveau fichier de segment a été ouvert.
+- `OnSegmentClosed` — déclenché lorsqu'un fichier de segment a été terminé et fermé. C'est le moment de renommer le fichier (par exemple, pour y ajouter son heure de fin).
+
+Les mêmes événements sont disponibles sur `MPEGTSSinkBlock` — consultez la page [sortie MPEG-TS](mpegts.md).
+
+Propriétés de [`SegmentSinkFileEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileEventArgs.html) (transmis à `OnSegmentCreated` / `OnSegmentClosed`) :
+
+| Propriété | Type | Description |
+| --- | :---: | --- |
+| `FileName` | string | Chemin complet du fichier de segment. |
+| `FragmentIndex` | uint | Index de base zéro du segment. |
+| `RunningTime` | TimeSpan | Temps d'exécution du pipeline au moment de l'événement (relatif au début du pipeline, et non à l'heure de l'horloge). |
+| `FragmentOffset` | TimeSpan? | Temps d'exécution du début du segment. Rapporté uniquement sur `OnSegmentClosed` ; sinon `null`. |
+| `FragmentDuration` | TimeSpan? | Durée du segment. Rapportée uniquement sur `OnSegmentClosed` ; sinon `null`. |
+
+Propriétés de [`SegmentSinkFileNameEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileNameEventArgs.html) (transmis à `OnSegmentFileNameRequested`) :
+
+| Propriété | Type | Description |
+| --- | :---: | --- |
+| `FragmentIndex` | uint | Index de base zéro du segment sur le point d'être créé. |
+| `FileName` | string | Chemin complet à utiliser pour le nouveau segment. Définissez-le pour remplacer le nom par défaut ; laissez-le `null`/vide pour utiliser le modèle d'emplacement. |
+
+L'exemple suivant nomme chaque segment à partir de son heure de début et ajoute l'heure de fin lorsque le segment se ferme :
+
+```csharp
+var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4")
+{
+    SplitDuration = TimeSpan.FromMinutes(5)
+};
+
+var mp4Sink = new MP4SinkBlock(splitSettings);
+
+// Construire un nom personnalisé à partir de l'heure de début du segment.
+mp4Sink.OnSegmentFileNameRequested += (sender, e) =>
+{
+    e.FileName = Path.Combine(@"c:\recordings", $"rec_{DateTime.Now:yyyyMMdd_HHmmss}_{e.FragmentIndex:D5}.mp4");
+};
+
+// Renommer le fichier terminé pour y ajouter l'heure de fin.
+mp4Sink.OnSegmentClosed += (sender, e) =>
+{
+    var dir = Path.GetDirectoryName(e.FileName);
+    var name = Path.GetFileNameWithoutExtension(e.FileName);
+    var ext = Path.GetExtension(e.FileName);
+    File.Move(e.FileName, Path.Combine(dir, $"{name}__end_{DateTime.Now:HHmmss}{ext}"));
+};
+```
+
+!!! note "Threads"
+
+    Ces événements sont déclenchés sur un thread de streaming GStreamer ; un gestionnaire ne doit donc pas accéder directement aux contrôles de l'interface utilisateur — effectuez le marshaling vers le thread de l'interface (par exemple, `Dispatcher.Invoke` dans WPF). Le renommage du fichier dans `OnSegmentClosed` est une simple opération d'E/S de fichier et peut être effectué à cet endroit en toute sécurité.
+
 ### Bonnes pratiques
 
 **Accélération matérielle** : Lorsque c'est possible, utilisez des encodeurs accélérés matériellement (NVENC, AMF, QSV) pour de meilleures performances :

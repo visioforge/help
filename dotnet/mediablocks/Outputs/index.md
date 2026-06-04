@@ -545,6 +545,10 @@ Constructors:
 - `MP4OutputBlock(MP4SinkSettings sinkSettings, IHEVCEncoderSettings hevcSettings, IAACEncoderSettings aacSettings)`
 - `MP4OutputBlock(MP4SinkSettings sinkSettings, IHEVCEncoderSettings hevcSettings, MP3EncoderSettings mp3Settings)`
 
+### Segment events
+
+When `MP4OutputBlock` is configured with `MP4SplitSinkSettings`, it raises segment-lifecycle events: `OnSegmentCreated` and `OnSegmentClosed` (notified when a segment file is opened and finished/closed), and `OnSegmentFileNameRequested` (supply a custom per-segment file name). The same events are available on `MP4SinkBlock` and `MPEGTSSinkBlock`. See [MP4 output](../../general/output-formats/mp4.md) for details and a custom-naming / rename-on-close example.
+
 ### The sample pipeline
 
 ```mermaid

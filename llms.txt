@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-06-02 10:23:18 UTC (9ac68130f97)
+**Generated:** 2026-06-04 16:37:56 UTC (d07677352ef)
 
 ## MCP Server (for AI coding agents)
 
@@ -50,6 +50,7 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [Refund Policy for Products & Services | VisioForge](https://www.visioforge.com/refund-policy)
 - [Support Service Level Agreement (SLA) - VisioForge](https://www.visioforge.com/support-service-level-agreement-sla)
 - [Terms & Conditions — Products & Services | VisioForge](https://www.visioforge.com/terms-and-conditions)
+- [Play, Capture & Stream Video in Unity — VisioForge .NET](https://www.visioforge.com/unity-video-sdk)
 - [Which VisioForge .NET SDK Should You Use? — Selection Guide](https://www.visioforge.com/which-dotnet-sdk)
 - [Latest news, product updates, new tutorials - VisioForge](https://www.visioforge.com/news)
 - [VisioForge SDK News & Product Updates — 2021 Archive](https://www.visioforge.com/news-2021)

@@ -26,8 +26,15 @@ primary_api_classes:
 
 Changes and updates for all .Net SDKs.
 
+## 2026.6.3
+
+* [Media Blocks SDK .Net] **Split-recording segment events:** `MP4SinkBlock`, `MPEGTSSinkBlock`, and `MP4OutputBlock` now raise `OnSegmentCreated` and `OnSegmentClosed` when configured for split recording (`MP4SplitSinkSettings` / `MPEGTSSplitSinkSettings`). The arguments carry the segment file path, fragment index, and timing (running time, plus start offset and duration on close) — so you can be notified when a segment file is finished and, for example, rename it to include its start/end time.
+* [Media Blocks SDK .Net] **Custom split-segment file names:** the same blocks add an `OnSegmentFileNameRequested` event, raised just before each new segment file is created, letting you supply a custom file name (for example one that embeds the segment start date/time). Leave it unset to keep the default name from the location pattern.
+* [Media Blocks SDK .Net] **New AI inference blocks:** `OnnxInferenceBlock` runs any ONNX Runtime model over the live video frames and raises an event with the raw model outputs, while `YOLOObjectDetectorBlock` performs YOLOv8/v11 object detection, draws bounding boxes and labels directly on the video (label text auto-scales to the frame resolution so it stays readable on 720p/1080p/4K, or pin a fixed size via `YoloDetectorSettings.LabelFontSize`), and raises a detections event (with class, confidence, and box for each object). Both support frame skipping to tune throughput. On Windows the package uses the DirectML ONNX Runtime build, so inference runs on any DirectX 12 GPU (NVIDIA, AMD, or Intel) out of the box; the execution provider defaults to `Auto`, which picks the fastest available backend (DirectML/CUDA/CoreML) and transparently falls back to the CPU. Use `OnnxInferenceEngine.GetAvailableProviders()` to detect what is available and the new `ActiveProvider` property on either block to see which provider engaged. The `VisioForge.DotNet.Core.ONNX` package targets the full SDK framework matrix (.NET Framework 4.6.1 through .NET 10); inference requires a 64-bit (x64 or ARM64) ONNX Runtime native build.
+
 ## 2026.6.2
 
+* [Video Capture SDK .Net] Fixed KLV metadata progressively drifting out of sync with the video (about 2 seconds per source loop) on the receiving side when restreaming a looping KLV-bearing MPEG-TS via `UDP_FFMPEG_EXE`. KLV and video now stay aligned across source loop boundaries.
 * [Video Capture SDK .Net] Unity: new VideoCaptureCoreX samples — local webcam preview + MP4 recording (Windows, macOS) and IP/RTSP camera viewing (Windows, Android, macOS, iOS).
 * [Video Edit SDK .Net] Unity: new VideoEditCoreX sample — combine clips, apply effects, preview the timeline in Unity, and render to MP4.
 

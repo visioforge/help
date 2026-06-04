@@ -232,6 +232,35 @@ if (NVENCH264EncoderSettings.IsAvailable())
 // Le modèle de nom de fichier sera utilisé automatiquement
 ```
 
+### Événements de segment
+
+Lors de l'enregistrement avec `MPEGTSSplitSinkSettings`, le bloc `MPEGTSSinkBlock` de Media Blocks déclenche des événements autour de chaque fichier de segment, ce qui vous permet de nommer les fichiers vous-même et d'être averti lorsqu'un segment est terminé :
+
+- `OnSegmentFileNameRequested` — déclenché juste avant la création d'un nouveau fichier de segment. Définissez la propriété `FileName` de l'événement sur un chemin personnalisé (par exemple, un chemin qui inclut l'heure de début du segment). Laissez-la non définie pour conserver le nom par défaut généré à partir du modèle d'emplacement.
+- `OnSegmentCreated` — déclenché lorsqu'un nouveau fichier de segment a été ouvert.
+- `OnSegmentClosed` — déclenché lorsqu'un fichier de segment a été terminé et fermé, le moment de renommer le fichier (par exemple, pour y ajouter son heure de fin).
+
+```csharp
+var splitSettings = new MPEGTSSplitSinkSettings("video_%05d.ts")
+{
+    SplitDuration = TimeSpan.FromMinutes(5)
+};
+
+var tsSink = new MPEGTSSinkBlock(splitSettings);
+
+tsSink.OnSegmentClosed += (sender, e) =>
+{
+    // e.FileName, e.FragmentIndex et e.FragmentDuration sont disponibles ici.
+    Console.WriteLine($"Segment {e.FragmentIndex} finished: {e.FileName}");
+};
+```
+
+`OnSegmentCreated` / `OnSegmentClosed` reçoivent un [`SegmentSinkFileEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileEventArgs.html) contenant `FileName` (string), `FragmentIndex` (uint), `RunningTime` (TimeSpan) et, uniquement sur `OnSegmentClosed`, `FragmentOffset` et `FragmentDuration` (TimeSpan?). `OnSegmentFileNameRequested` reçoit un [`SegmentSinkFileNameEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileNameEventArgs.html) dont la propriété `FileName`, qui peut être définie, remplace le nom du segment. Les mêmes événements sont disponibles sur `MP4SinkBlock` / `MP4OutputBlock` — consultez la page [sortie MP4](mp4.md) pour un exemple complet de nommage personnalisé et de renommage à la fermeture.
+
+!!! note "Threads"
+
+    Ces événements sont déclenchés sur un thread de streaming GStreamer ; un gestionnaire ne doit donc pas accéder directement aux contrôles de l'interface utilisateur — effectuez le marshaling vers le thread de l'interface. Le renommage du fichier dans `OnSegmentClosed` est une simple opération d'E/S de fichier et peut être effectué à cet endroit en toute sécurité.
+
 ### Fonctionnalités avancées
 
 #### Traitement personnalisé

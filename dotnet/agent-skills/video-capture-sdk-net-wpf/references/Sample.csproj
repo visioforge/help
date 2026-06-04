@@ -18,8 +18,8 @@
     <Company>VisioForge</Company>
     <Product>Simple Video Capture Demo</Product>
     <Copyright>Copyright (c) 2025</Copyright>
-    <AssemblyVersion>2026.5.31.0</AssemblyVersion>
-    <FileVersion>2026.5.31.0</FileVersion>
+    <AssemblyVersion>2026.6.4.0</AssemblyVersion>
+    <FileVersion>2026.6.4.0</FileVersion>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -31,6 +31,6 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.5.31" />
+    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.6.4" />
   </ItemGroup>
 </Project>

@@ -290,6 +290,63 @@ var mp4Sink = new MP4SinkBlock(splitSettings);
 - When combining criteria, splitting occurs when ANY criterion is met
 - The `StartIndex` property controls the initial file number (default is 0)
 
+### Segment events
+
+When recording with `MP4SplitSinkSettings`, both `MP4OutputBlock` and `MP4SinkBlock` raise events around each segment file, so you can name the files yourself and be notified when a segment is finished:
+
+- `OnSegmentFileNameRequested` — raised just before a new segment file is created. Set the event's `FileName` to a custom path (for example, one that embeds the segment start time). Leave it unset to keep the default name built from the location pattern.
+- `OnSegmentCreated` — raised when a new segment file has been opened.
+- `OnSegmentClosed` — raised when a segment file has been finished and closed. This is the moment to rename the file (for example, to append its end time).
+
+The same events are available on `MPEGTSSinkBlock` — see the [MPEG-TS output](mpegts.md) page.
+
+[`SegmentSinkFileEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileEventArgs.html) (passed to `OnSegmentCreated` / `OnSegmentClosed`) properties:
+
+| Property | Type | Description |
+| --- | :---: | --- |
+| `FileName` | string | Full path of the segment file. |
+| `FragmentIndex` | uint | Zero-based index of the segment. |
+| `RunningTime` | TimeSpan | Pipeline running time at the event (relative to the pipeline start, not wall-clock time). |
+| `FragmentOffset` | TimeSpan? | Running time of the segment start. Reported on `OnSegmentClosed` only; otherwise `null`. |
+| `FragmentDuration` | TimeSpan? | Duration of the segment. Reported on `OnSegmentClosed` only; otherwise `null`. |
+
+[`SegmentSinkFileNameEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileNameEventArgs.html) (passed to `OnSegmentFileNameRequested`) properties:
+
+| Property | Type | Description |
+| --- | :---: | --- |
+| `FragmentIndex` | uint | Zero-based index of the segment about to be created. |
+| `FileName` | string | Full path to use for the new segment. Set it to override the default name; leave `null`/empty to use the location pattern. |
+
+The following example names each segment from its start time and appends the end time when the segment closes:
+
+```csharp
+var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4")
+{
+    SplitDuration = TimeSpan.FromMinutes(5)
+};
+
+var mp4Sink = new MP4SinkBlock(splitSettings);
+
+// Build a custom name from the segment start time.
+mp4Sink.OnSegmentFileNameRequested += (sender, e) =>
+{
+    e.FileName = Path.Combine(@"c:\recordings", $"rec_{DateTime.Now:yyyyMMdd_HHmmss}_{e.FragmentIndex:D5}.mp4");
+};
+
+// Rename the finished file to append the end time.
+mp4Sink.OnSegmentClosed += (sender, e) =>
+{
+    var dir = Path.GetDirectoryName(e.FileName);
+    var name = Path.GetFileNameWithoutExtension(e.FileName);
+    var ext = Path.GetExtension(e.FileName);
+    File.Move(e.FileName, Path.Combine(dir, $"{name}__end_{DateTime.Now:HHmmss}{ext}"));
+};
+```
+
+!!! note "Threading"
+
+    These events fire on a GStreamer streaming thread, so a handler must not touch UI controls directly — marshal to the UI thread (for example, `Dispatcher.Invoke` in WPF). The file rename inside `OnSegmentClosed` is plain file I/O and is safe to do there.
+
 ### Best Practices
 
 **Hardware Acceleration**: When possible, use hardware-accelerated encoders (NVENC, AMF, QSV) for better performance:

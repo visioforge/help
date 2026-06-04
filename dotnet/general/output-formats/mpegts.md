@@ -232,6 +232,35 @@ if (NVENCH264EncoderSettings.IsAvailable())
 // The filename pattern will be used automatically
 ```
 
+### Segment events
+
+When recording with `MPEGTSSplitSinkSettings`, the Media Blocks `MPEGTSSinkBlock` raises events around each segment file, so you can name the files yourself and be notified when a segment is finished:
+
+- `OnSegmentFileNameRequested` — raised just before a new segment file is created. Set the event's `FileName` to a custom path (for example, one that embeds the segment start time). Leave it unset to keep the default name built from the location pattern.
+- `OnSegmentCreated` — raised when a new segment file has been opened.
+- `OnSegmentClosed` — raised when a segment file has been finished and closed — the moment to rename the file (for example, to append its end time).
+
+```csharp
+var splitSettings = new MPEGTSSplitSinkSettings("video_%05d.ts")
+{
+    SplitDuration = TimeSpan.FromMinutes(5)
+};
+
+var tsSink = new MPEGTSSinkBlock(splitSettings);
+
+tsSink.OnSegmentClosed += (sender, e) =>
+{
+    // e.FileName, e.FragmentIndex and e.FragmentDuration are available here.
+    Console.WriteLine($"Segment {e.FragmentIndex} finished: {e.FileName}");
+};
+```
+
+`OnSegmentCreated` / `OnSegmentClosed` receive a [`SegmentSinkFileEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileEventArgs.html) carrying `FileName` (string), `FragmentIndex` (uint), `RunningTime` (TimeSpan), and — on `OnSegmentClosed` only — `FragmentOffset` and `FragmentDuration` (TimeSpan?). `OnSegmentFileNameRequested` receives a [`SegmentSinkFileNameEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileNameEventArgs.html) whose settable `FileName` overrides the segment name. The same events are available on `MP4SinkBlock` / `MP4OutputBlock` — see the [MP4 output](mp4.md) page for a full custom-naming and rename-on-close example.
+
+!!! note "Threading"
+
+    These events fire on a GStreamer streaming thread, so a handler must not touch UI controls directly — marshal to the UI thread. The file rename inside `OnSegmentClosed` is plain file I/O and is safe to do there.
+
 ### Advanced Features
 
 #### Custom Processing

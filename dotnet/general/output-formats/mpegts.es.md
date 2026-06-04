@@ -232,6 +232,35 @@ if (NVENCH264EncoderSettings.IsAvailable())
 // El patrón de nombre de archivo se usará automáticamente
 ```
 
+### Eventos de segmento
+
+Al grabar con `MPEGTSSplitSinkSettings`, el bloque `MPEGTSSinkBlock` de Media Blocks genera eventos alrededor de cada archivo de segmento, de modo que puede nombrar los archivos usted mismo y recibir una notificación cuando un segmento finaliza:
+
+- `OnSegmentFileNameRequested`: se genera justo antes de crear un nuevo archivo de segmento. Establezca la propiedad `FileName` del evento en una ruta personalizada (por ejemplo, una que incluya la hora de inicio del segmento). Déjela sin establecer para conservar el nombre predeterminado generado a partir del patrón de ubicación.
+- `OnSegmentCreated`: se genera cuando se ha abierto un nuevo archivo de segmento.
+- `OnSegmentClosed`: se genera cuando un archivo de segmento se ha finalizado y cerrado, el momento de renombrar el archivo (por ejemplo, para añadir su hora de fin).
+
+```csharp
+var splitSettings = new MPEGTSSplitSinkSettings("video_%05d.ts")
+{
+    SplitDuration = TimeSpan.FromMinutes(5)
+};
+
+var tsSink = new MPEGTSSinkBlock(splitSettings);
+
+tsSink.OnSegmentClosed += (sender, e) =>
+{
+    // e.FileName, e.FragmentIndex y e.FragmentDuration están disponibles aquí.
+    Console.WriteLine($"Segment {e.FragmentIndex} finished: {e.FileName}");
+};
+```
+
+`OnSegmentCreated` / `OnSegmentClosed` reciben un [`SegmentSinkFileEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileEventArgs.html) que contiene `FileName` (string), `FragmentIndex` (uint), `RunningTime` (TimeSpan) y, solo en `OnSegmentClosed`, `FragmentOffset` y `FragmentDuration` (TimeSpan?). `OnSegmentFileNameRequested` recibe un [`SegmentSinkFileNameEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileNameEventArgs.html) cuya propiedad `FileName`, que puede establecerse, anula el nombre del segmento. Los mismos eventos están disponibles en `MP4SinkBlock` / `MP4OutputBlock`: consulte la página de [salida MP4](mp4.md) para ver un ejemplo completo de nombrado personalizado y cambio de nombre al cerrar.
+
+!!! note "Subprocesos"
+
+    Estos eventos se generan en un subproceso de streaming de GStreamer, por lo que un controlador no debe acceder directamente a los controles de la interfaz de usuario: redirija la llamada al subproceso de la interfaz. El cambio de nombre del archivo dentro de `OnSegmentClosed` es E/S de archivo simple y es seguro hacerlo ahí.
+
 ### Características avanzadas
 
 #### Procesamiento personalizado

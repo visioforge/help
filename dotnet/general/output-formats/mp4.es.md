@@ -289,6 +289,63 @@ var mp4Sink = new MP4SinkBlock(splitSettings);
 - Al combinar criterios, la división ocurre cuando se cumple CUALQUIER criterio
 - La propiedad `StartIndex` controla el número de archivo inicial (predeterminado es 0)
 
+### Eventos de segmento
+
+Al grabar con `MP4SplitSinkSettings`, tanto `MP4OutputBlock` como `MP4SinkBlock` generan eventos alrededor de cada archivo de segmento, de modo que puede nombrar los archivos usted mismo y recibir una notificación cuando un segmento finaliza:
+
+- `OnSegmentFileNameRequested`: se genera justo antes de crear un nuevo archivo de segmento. Establezca la propiedad `FileName` del evento en una ruta personalizada (por ejemplo, una que incluya la hora de inicio del segmento). Déjela sin establecer para conservar el nombre predeterminado generado a partir del patrón de ubicación.
+- `OnSegmentCreated`: se genera cuando se ha abierto un nuevo archivo de segmento.
+- `OnSegmentClosed`: se genera cuando un archivo de segmento se ha finalizado y cerrado. Este es el momento de renombrar el archivo (por ejemplo, para añadir su hora de fin).
+
+Los mismos eventos están disponibles en `MPEGTSSinkBlock`: consulte la página de [salida MPEG-TS](mpegts.md).
+
+Propiedades de [`SegmentSinkFileEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileEventArgs.html) (que se pasa a `OnSegmentCreated` / `OnSegmentClosed`):
+
+| Propiedad | Tipo | Descripción |
+| --- | :---: | --- |
+| `FileName` | string | Ruta completa del archivo de segmento. |
+| `FragmentIndex` | uint | Índice de base cero del segmento. |
+| `RunningTime` | TimeSpan | Tiempo de ejecución del pipeline en el evento (relativo al inicio del pipeline, no a la hora del reloj). |
+| `FragmentOffset` | TimeSpan? | Tiempo de ejecución del inicio del segmento. Se informa solo en `OnSegmentClosed`; de lo contrario, `null`. |
+| `FragmentDuration` | TimeSpan? | Duración del segmento. Se informa solo en `OnSegmentClosed`; de lo contrario, `null`. |
+
+Propiedades de [`SegmentSinkFileNameEventArgs`](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.SegmentSinkFileNameEventArgs.html) (que se pasa a `OnSegmentFileNameRequested`):
+
+| Propiedad | Tipo | Descripción |
+| --- | :---: | --- |
+| `FragmentIndex` | uint | Índice de base cero del segmento que está a punto de crearse. |
+| `FileName` | string | Ruta completa que se usará para el nuevo segmento. Establézcala para anular el nombre predeterminado; déjela `null`/vacía para usar el patrón de ubicación. |
+
+El siguiente ejemplo nombra cada segmento a partir de su hora de inicio y añade la hora de fin cuando el segmento se cierra:
+
+```csharp
+var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4")
+{
+    SplitDuration = TimeSpan.FromMinutes(5)
+};
+
+var mp4Sink = new MP4SinkBlock(splitSettings);
+
+// Construir un nombre personalizado a partir de la hora de inicio del segmento.
+mp4Sink.OnSegmentFileNameRequested += (sender, e) =>
+{
+    e.FileName = Path.Combine(@"c:\recordings", $"rec_{DateTime.Now:yyyyMMdd_HHmmss}_{e.FragmentIndex:D5}.mp4");
+};
+
+// Renombrar el archivo finalizado para añadir la hora de fin.
+mp4Sink.OnSegmentClosed += (sender, e) =>
+{
+    var dir = Path.GetDirectoryName(e.FileName);
+    var name = Path.GetFileNameWithoutExtension(e.FileName);
+    var ext = Path.GetExtension(e.FileName);
+    File.Move(e.FileName, Path.Combine(dir, $"{name}__end_{DateTime.Now:HHmmss}{ext}"));
+};
+```
+
+!!! note "Subprocesos"
+
+    Estos eventos se generan en un subproceso de streaming de GStreamer, por lo que un controlador no debe acceder directamente a los controles de la interfaz de usuario: redirija la llamada al subproceso de la interfaz (por ejemplo, `Dispatcher.Invoke` en WPF). El cambio de nombre del archivo dentro de `OnSegmentClosed` es E/S de archivo simple y es seguro hacerlo ahí.
+
 ### Mejores prácticas
 
 **Aceleración de hardware**: Cuando sea posible, use codificadores acelerados por hardware (NVENC, AMF, QSV) para mejor rendimiento:
