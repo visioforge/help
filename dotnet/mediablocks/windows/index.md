@@ -83,7 +83,7 @@ See [Special Blocks Documentation](../Special/index.md)
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
 
 // D3D11 hardware decoder
 var d3d11Decoder = new D3D11H264DecoderBlock();
@@ -104,7 +104,7 @@ await pipeline.StartAsync();
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
 
 // Upload to GPU
 var d3d11Upload = new D3D11UploadBlock();
@@ -129,8 +129,8 @@ await pipeline.StartAsync();
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video1.mp4")));
-var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video2.mp4")));
+var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video1.mp4"));
+var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video2.mp4"));
 
 // Upload both to GPU
 var upload1 = new D3D11UploadBlock();

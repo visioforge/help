@@ -48,7 +48,7 @@ El método más simple para reproducción en reversa implica establecer un valor
 MediaPlayerCoreX MediaPlayer1 = new MediaPlayerCoreX(VideoView1);
 
 // Establecer el archivo fuente
-var fileSource = await UniversalSourceSettings.CreateAsync(new Uri("video.mp4"));
+var fileSource = await UniversalSourceSettings.CreateAsync("video.mp4");
 await MediaPlayer1.OpenAsync(fileSource);
 
 // Iniciar reproducción normal primero

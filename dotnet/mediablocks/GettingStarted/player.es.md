@@ -83,7 +83,7 @@ pipeline.OnStop += (sender, args) =>
 El Bloque Universal Source sirve como punto de entrada para contenido de medios. Configúrelo con la ruta a su archivo de medios:
 
 ```csharp
-var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri(filePath));
+var sourceSettings = await UniversalSourceSettings.CreateAsync(filePath);
 var fileSource = new UniversalSourceBlock(sourceSettings);
 ```
 

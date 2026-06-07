@@ -99,7 +99,7 @@ The following example demonstrates how to implement fragment playback in a cross
 MediaPlayerCoreX MediaPlayer1 = new MediaPlayerCoreX(VideoView1);
 
 // Step 2: Set the source media file
-var fileSource = await UniversalSourceSettings.CreateAsync(new Uri("video.mkv"));
+var fileSource = await UniversalSourceSettings.CreateAsync("video.mkv");
 await MediaPlayer1.OpenAsync(fileSource);
 
 // Step 3: Define the segment start time (2 seconds from beginning)

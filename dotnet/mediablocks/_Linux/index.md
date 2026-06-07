@@ -59,7 +59,7 @@ See [Video Decoders Documentation](../VideoDecoders/index.md)
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
 
 // VA-API hardware decoder
 if (VAAPIH264DecoderBlock.IsAvailable())
@@ -89,12 +89,12 @@ await pipeline.StartAsync();
 var pipeline = new MediaBlocksPipeline();
 
 // Decode H.264 stream
-var h264Source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("h264.mp4")));
+var h264Source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("h264.mp4"));
 var h264Decoder = new VAAPIH264DecoderBlock();
 pipeline.Connect(h264Source.VideoOutput, h264Decoder.Input);
 
 // Decode H.265 stream
-var h265Source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("h265.mp4")));
+var h265Source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("h265.mp4"));
 var h265Decoder = new VAAPIHEVCDecoderBlock();
 pipeline.Connect(h265Source.VideoOutput, h265Decoder.Input);
 

@@ -231,7 +231,7 @@ using VisioForge.Core.Types;
 var pipeline = new MediaBlocksPipeline();
 
 // Source (n'importe quel fichier — il sera décodé en sorties vidéo et audio séparées).
-var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri("input.mp4"));
+var sourceSettings = await UniversalSourceSettings.CreateAsync("input.mp4");
 var sourceBlock = new UniversalSourceBlock(sourceSettings);
 
 // Puits MKV — le constructeur accepte des paramètres d'encodeur, pas des blocs d'encodeur.

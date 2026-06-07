@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-06-04 16:37:56 UTC (d07677352ef)
+**Generated:** 2026-06-07 20:43:57 UTC (5e0e6963985)
 
 ## MCP Server (for AI coding agents)
 
@@ -177,6 +177,7 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [VisioForge Media Blocks SDK in C# .NET — Cheat Sheet](https://www.visioforge.com/help/docs/dotnet/mediablocks/cheat-sheet/): One-page Media Blocks SDK reference with NuGet packages, pipeline APIs, a canonical example, platform support, and common pitfalls.
 - [Blackmagic Decklink SDI/HDMI Capture and Output in C#](https://www.visioforge.com/help/docs/dotnet/mediablocks/Decklink/): Capture and render SDI/HDMI video with Blackmagic Decklink cards using VisioForge Media Blocks SDK. Multi-device support, format detection, keying.
 - [Media Demuxer Blocks in C# .NET - MP4, MKV, MPEG-TS](https://www.visioforge.com/help/docs/dotnet/mediablocks/Demuxers/): Separate audio, video, and subtitle streams from MP4, MKV, AVI, and MPEG-TS containers using VisioForge Media Blocks SDK demuxer blocks.
+- [ElevenLabs Text-to-Speech and Voice Cloning Blocks for .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/ElevenLabs/): Add ElevenLabs cloud text-to-speech and real-time voice cloning to your C# .NET audio pipelines with the cross-platform Media Blocks SDK .NET.
 - [Media Pipeline Quick Start - Install and Setup in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/GettingStarted/): Get started with VisioForge Media Blocks SDK — installation, pipeline architecture, block connections, and multimedia processing tutorials.
 - [Modular Multimedia Processing Pipeline API for C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/): Build custom multimedia pipelines in C# with VisioForge Media Blocks SDK. Connect source, processing, and output blocks for transcoding, capture, and streaming.
 - [Live Video Compositor for Real-Time Mixing in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/LiveVideoCompositor/): Mix multiple live video and audio sources in real-time using VisioForge Media Blocks SDK. Dynamic source switching for streaming and recording in C#.

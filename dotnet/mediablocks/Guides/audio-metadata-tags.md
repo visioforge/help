@@ -247,7 +247,7 @@ There's a song within the silence..."
     var pipeline = new MediaBlocksPipeline();
     
     // Use UniversalSourceBlock to decode any file format into raw audio
-    var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri("input.wav"));
+    var sourceSettings = await UniversalSourceSettings.CreateAsync("input.wav");
     var fileSource = new UniversalSourceBlock(sourceSettings);
     
     pipeline.Connect(fileSource.AudioOutput, oggOutput.Input);

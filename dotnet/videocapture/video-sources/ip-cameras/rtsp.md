@@ -49,7 +49,7 @@ Implementing RTSP camera streams in your .NET applications provides flexible acc
     
     ```cs
     // Create RTSP source settings object
-    var rtsp = await RTSPSourceSettings.CreateAsync(new Uri("url"), "login", "password", true /*capture audio?*/);
+    var rtsp = await RTSPSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.1:554/live"), "login", "password", true /*capture audio?*/);
     
     // Set source to the VideoCaptureCoreX object
     VideoCapture1.Video_Source = rtsp;

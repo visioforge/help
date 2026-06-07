@@ -83,7 +83,7 @@ pipeline.OnStop += (sender, args) =>
 Le bloc Universal Source sert de point d'entrée pour le contenu multimédia. Configurez-le avec le chemin de votre fichier multimédia :
 
 ```csharp
-var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri(filePath));
+var sourceSettings = await UniversalSourceSettings.CreateAsync(filePath);
 var fileSource = new UniversalSourceBlock(sourceSettings);
 ```
 

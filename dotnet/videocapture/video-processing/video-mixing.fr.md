@@ -117,7 +117,7 @@ Pour les caméras basées sur le réseau :
 ```cs
 var ipCameraSource = new IPCameraSourceSettings
 {
-    URL = new Uri("camera url") // URL est Uri, pas string
+    URL = new Uri("rtsp://192.168.1.1:554/live") // URL est Uri, pas string
 };
 
 // Définir des paramètres supplémentaires de caméra IP si nécessaire

@@ -1218,11 +1218,184 @@ It's crucial to configure encoder settings (bitrate, resolution, frame rate) acc
 
 Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer RTMP support and H.264/AAC encoder availability).
 
+## Enhanced FLV Output Block
+
+The `EFLVOutputBlock` creates Enhanced FLV (Flash Video) files with Enhanced RTMP (V2) support. Unlike the classic FLV container, the Enhanced FLV muxer signals codecs through FOURCC values, so it can carry modern video codecs such as H.265/HEVC alongside H.264, and supports multiple video and audio tracks. It combines per-track video and audio encoders with an Enhanced FLV sink to produce `.flv` files.
+
+### Block info
+
+Name: `EFLVOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | :---: | :---: |
+| Input Video | various | H.264 (`IH264EncoderSettings`), HEVC (`IHEVCEncoderSettings`) |
+| Input Audio | various | AAC (`IAACEncoderSettings`), MP3 (`MP3EncoderSettings`) |
+
+Input pads are dynamic. Call `CreateNewInput(MediaBlockPadMediaType.Video)` and `CreateNewInput(MediaBlockPadMediaType.Audio)` to add tracks; each input pad gets its own encoder instance built from the supplied encoder settings.
+
+### Settings
+
+The `EFLVOutputBlock` is configured using `EFLVSinkSettings` along with settings for the chosen video and audio encoders.
+
+Key `EFLVSinkSettings` properties:
+
+- `Filename` (string): The path to the output Enhanced FLV file. Defaults to `output.flv`.
+
+`EFLVSinkSettings` constructors:
+
+- `EFLVSinkSettings()`: Uses the default filename.
+- `EFLVSinkSettings(string filename)`: Sets the output filename.
+
+`EFLVOutputBlock` constructor:
+
+- `EFLVOutputBlock(EFLVSinkSettings sinkSettings, IVideoEncoder videoSettings, IAudioEncoder audioSettings)`
+
+### The sample pipeline
+
+```mermaid
+graph LR;
+    VideoSource-->VideoEncoder;
+    AudioSource-->AudioEncoder;
+    VideoEncoder-->EFLVOutputBlock;
+    AudioEncoder-->EFLVOutputBlock;
+```
+
+### Sample code
+
+```csharp
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create sources
+var videoSource = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configure encoders (HEVC video + AAC audio for Enhanced FLV)
+var videoSettings = HEVCEncoderBlock.GetDefaultSettings();
+var audioSettings = new VOAACEncoderSettings();
+
+// create Enhanced FLV output block
+var sinkSettings = new EFLVSinkSettings("output.flv");
+var eflvOutput = new EFLVOutputBlock(sinkSettings, videoSettings, audioSettings);
+
+// create dynamic inputs for the Enhanced FLV output block
+var videoInputPad = eflvOutput.CreateNewInput(MediaBlockPadMediaType.Video);
+var audioInputPad = eflvOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// connect
+pipeline.Connect(videoSource.Output, videoInputPad);
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+The `EFLVOutputBlock` manages its own encoder instances internally based on the provided `IVideoEncoder` / `IAudioEncoder` settings (H.264 or HEVC for video; AAC or MP3 for audio). The output destination can be changed at runtime with `SetFilenameOrURL(string)` and queried with `GetFilenameOrURL()`.
+
+To check availability:
+`EFLVOutputBlock.IsAvailable(IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)`
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (depends on the availability of the Enhanced FLV muxer and the chosen encoder plugins).
+
 ## Pre-Event Recording Block
 
 The `PreEventRecordingBlock` implements circular buffer (pre-event) recording. It continuously buffers encoded video and audio in memory and writes event clips to disk on trigger, including footage from before the event occurred.
 
 For full documentation, settings, state machine, and code samples, see the dedicated [Pre-Event Recording Block](pre-event-recording.md) page.
+
+## Pre-Event Separate Output Block
+
+The `PreEventSeparateOutputBlock` combines the independent sub-pipeline pattern of the [Separate Output Block](#separate-output-block) with [pre-event (circular buffer) recording](pre-event-recording.md). Instead of routing the encoded streams into a muxer + file sink, it routes them into a `PreEventRecordingBlock`, so the pre-event branch records event clips (including pre-trigger footage) independently from the main preview/processing chain. It taps the main pipeline through bridge sources (`BridgeVideoSourceBlock`, `BridgeAudioSourceBlock`).
+
+### Block info
+
+Name: `PreEventSeparateOutputBlock`.
+
+This block is a sink that orchestrates a sub-pipeline; it has no direct input pads. Video and audio enter through the bridge sources and leave through the supplied `PreEventRecordingBlock`.
+
+### Settings
+
+The block reuses the `SeparateOutput` settings object to describe the encoding branch.
+
+Key `SeparateOutput` properties used by this block:
+
+- `VideoEncoder` (`MediaBlock`): An optional video encoder block. When set, a video branch is wired from the bridge video source into the pre-event block.
+- `AudioEncoder` (`MediaBlock`): An optional audio encoder block. When set, an audio branch is wired from the bridge audio source into the pre-event block.
+- `VideoProcessor` (`MediaBlock`): An optional video processing block inserted before the video encoder.
+- `AudioProcessor` (`MediaBlock`): An optional audio processing block inserted before the audio encoder.
+
+Constructor:
+
+- `PreEventSeparateOutputBlock(MediaBlocksPipeline pipeline, SeparateOutput settings, BridgeVideoSourceSettings bridgeVideoSourceSettings, BridgeAudioSourceSettings bridgeAudioSourceSettings, PreEventRecordingBlock preEventBlock)`
+
+### The conceptual pipeline
+
+```mermaid
+graph LR;
+    MainVideoPath --> BridgeVideoSink;
+    BridgeVideoSourceBlock --> OptionalVideoProcessor --> VideoEncoder --> PreEventRecordingBlock;
+    MainAudioPath --> BridgeAudioSink;
+    BridgeAudioSourceBlock --> OptionalAudioProcessor --> AudioEncoder --> PreEventRecordingBlock;
+```
+
+### Sample code
+
+```csharp
+// Assuming 'pipeline' is your main MediaBlocksPipeline
+// Assuming bridge sinks for the main video/audio paths are already configured
+// with the channel names "pe_video_bridge" / "pe_audio_bridge".
+
+// 1. Configure bridge sources for the separate sub-pipeline (match the sink channel names + format info)
+var videoInfo = new VideoFrameInfoX(1920, 1080, new VideoFrameRate(30));
+var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 48000, 2);
+
+var bridgeVideoSourceSettings = new BridgeVideoSourceSettings("pe_video_bridge", videoInfo);
+var bridgeAudioSourceSettings = new BridgeAudioSourceSettings("pe_audio_bridge", audioInfo);
+
+// 2. Configure encoders for the recording branch
+var h264Settings = H264EncoderBlock.GetDefaultSettings();
+var videoEncoder = new H264EncoderBlock(h264Settings);
+
+var aacSettings = AACEncoderBlock.GetDefaultSettings();
+var audioEncoder = new AACEncoderBlock(aacSettings);
+
+var separateOutputSettings = new SeparateOutput
+{
+    VideoEncoder = videoEncoder,
+    AudioEncoder = audioEncoder,
+};
+
+// 3. Create the pre-event recording block (see the Pre-Event Recording Block page for its settings)
+var preEventBlock = new PreEventRecordingBlock(new PreEventRecordingSettings());
+
+// 4. Create the PreEventSeparateOutputBlock (wires bridge sources -> encoders -> pre-event block)
+var preEventOutput = new PreEventSeparateOutputBlock(
+    pipeline,
+    separateOutputSettings,
+    bridgeVideoSourceSettings,
+    bridgeAudioSourceSettings,
+    preEventBlock);
+
+// start main pipeline (the sub-pipeline runs through the bridges)
+await pipeline.StartAsync();
+
+// ... trigger an event clip on the pre-event block when needed ...
+```
+
+### Remarks
+
+The `PreEventSeparateOutputBlock` writes pre-event and main segments to separate output files through the `PreEventRecordingBlock`; the filename is set per recording when the event is triggered, not on the output block. `GetFilenameOrURL()` returns the pre-event block's current filename. Building the block builds the supplied encoders, the pre-event block, and the bridge sources.
+
+### Platforms
+
+Depends on the components used within the `SeparateOutput` configuration and the `PreEventRecordingBlock` (encoders, processors). Generally cross-platform if the required GStreamer elements are available.
 
 ## See Also
 

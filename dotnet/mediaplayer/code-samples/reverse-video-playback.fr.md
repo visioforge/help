@@ -48,7 +48,7 @@ La méthode la plus simple pour la lecture inversée consiste à définir une va
 MediaPlayerCoreX MediaPlayer1 = new MediaPlayerCoreX(VideoView1);
 
 // Définir le fichier source
-var fileSource = await UniversalSourceSettings.CreateAsync(new Uri("video.mp4"));
+var fileSource = await UniversalSourceSettings.CreateAsync("video.mp4");
 await MediaPlayer1.OpenAsync(fileSource);
 
 // Démarrer d'abord la lecture normale

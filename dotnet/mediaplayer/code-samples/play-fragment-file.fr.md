@@ -99,7 +99,7 @@ L'exemple suivant montre comment implémenter la lecture par fragments dans une 
 MediaPlayerCoreX MediaPlayer1 = new MediaPlayerCoreX(VideoView1);
 
 // Étape 2 : définir le fichier multimédia source
-var fileSource = await UniversalSourceSettings.CreateAsync(new Uri("video.mkv"));
+var fileSource = await UniversalSourceSettings.CreateAsync("video.mkv");
 await MediaPlayer1.OpenAsync(fileSource);
 
 // Étape 3 : définir le temps de début du segment (2 secondes depuis le début)

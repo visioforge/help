@@ -1218,11 +1218,184 @@ Il est crucial de configurer les paramètres d'encodeur (débit binaire, résolu
 
 Windows, macOS, Linux, iOS, Android (la disponibilité par plateforme dépend de la prise en charge RTMP de GStreamer et de la disponibilité des encodeurs H.264/AAC).
 
+## Bloc de sortie FLV amélioré
+
+L'`EFLVOutputBlock` crée des fichiers Enhanced FLV (Flash Video) avec la prise en charge de l'Enhanced RTMP (V2). Contrairement au conteneur FLV classique, le multiplexeur Enhanced FLV signale les codecs via des valeurs FOURCC, ce qui lui permet de transporter des codecs vidéo modernes tels que H.265/HEVC aux côtés de H.264, et prend en charge plusieurs pistes vidéo et audio. Il combine des encodeurs vidéo et audio par piste avec un puits Enhanced FLV pour produire des fichiers `.flv`.
+
+### Informations sur le bloc
+
+Nom : `EFLVOutputBlock`.
+
+| Direction du pad | Type de média | Encodeurs attendus |
+| --- | :---: | :---: |
+| Entrée vidéo | divers | H.264 (`IH264EncoderSettings`), HEVC (`IHEVCEncoderSettings`) |
+| Entrée audio | divers | AAC (`IAACEncoderSettings`), MP3 (`MP3EncoderSettings`) |
+
+Les pads d'entrée sont dynamiques. Appelez `CreateNewInput(MediaBlockPadMediaType.Video)` et `CreateNewInput(MediaBlockPadMediaType.Audio)` pour ajouter des pistes ; chaque pad d'entrée obtient sa propre instance d'encodeur construite à partir des paramètres d'encodeur fournis.
+
+### Paramètres
+
+L'`EFLVOutputBlock` est configuré à l'aide de `EFLVSinkSettings` ainsi que des paramètres des encodeurs vidéo et audio choisis.
+
+Propriétés clés de `EFLVSinkSettings` :
+
+- `Filename` (string) : le chemin vers le fichier de sortie Enhanced FLV. La valeur par défaut est `output.flv`.
+
+Constructeurs de `EFLVSinkSettings` :
+
+- `EFLVSinkSettings()` : utilise le nom de fichier par défaut.
+- `EFLVSinkSettings(string filename)` : définit le nom de fichier de sortie.
+
+Constructeur d'`EFLVOutputBlock` :
+
+- `EFLVOutputBlock(EFLVSinkSettings sinkSettings, IVideoEncoder videoSettings, IAudioEncoder audioSettings)`
+
+### Exemple de pipeline
+
+```mermaid
+graph LR;
+    VideoSource-->VideoEncoder;
+    AudioSource-->AudioEncoder;
+    VideoEncoder-->EFLVOutputBlock;
+    AudioEncoder-->EFLVOutputBlock;
+```
+
+### Exemple de code
+
+```csharp
+// créer le pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// créer les sources
+var videoSource = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configurer les encodeurs (vidéo HEVC + audio AAC pour Enhanced FLV)
+var videoSettings = HEVCEncoderBlock.GetDefaultSettings();
+var audioSettings = new VOAACEncoderSettings();
+
+// créer le bloc de sortie Enhanced FLV
+var sinkSettings = new EFLVSinkSettings("output.flv");
+var eflvOutput = new EFLVOutputBlock(sinkSettings, videoSettings, audioSettings);
+
+// créer des entrées dynamiques pour le bloc de sortie Enhanced FLV
+var videoInputPad = eflvOutput.CreateNewInput(MediaBlockPadMediaType.Video);
+var audioInputPad = eflvOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// connecter
+pipeline.Connect(videoSource.Output, videoInputPad);
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// démarrer le pipeline
+await pipeline.StartAsync();
+
+// ... plus tard, pour arrêter ...
+// await pipeline.StopAsync();
+```
+
+### Remarques
+
+L'`EFLVOutputBlock` gère ses propres instances d'encodeur en interne en fonction des paramètres `IVideoEncoder` / `IAudioEncoder` fournis (H.264 ou HEVC pour la vidéo ; AAC ou MP3 pour l'audio). La destination de sortie peut être modifiée à l'exécution avec `SetFilenameOrURL(string)` et interrogée avec `GetFilenameOrURL()`.
+
+Pour vérifier la disponibilité :
+`EFLVOutputBlock.IsAvailable(IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)`
+
+### Plateformes
+
+Windows, macOS, Linux, iOS, Android (dépend de la disponibilité du multiplexeur Enhanced FLV et des plugins d'encodeur choisis).
+
 ## Bloc d'enregistrement pré-événement
 
 Le `PreEventRecordingBlock` implémente l'enregistrement à tampon circulaire (pré-événement). Il met en tampon en continu en mémoire les vidéo et audio encodés et écrit les clips d'événement sur le disque sur déclencheur, incluant les images antérieures à l'événement.
 
 Pour la documentation complète, les paramètres, la machine à états et les exemples de code, consultez la page dédiée [Bloc d'enregistrement pré-événement](pre-event-recording.md).
+
+## Bloc de sortie séparé pré-événement
+
+Le `PreEventSeparateOutputBlock` combine le modèle de sous-pipeline indépendant du [Bloc de sortie séparé](#bloc-de-sortie-separe) avec l'[enregistrement pré-événement (tampon circulaire)](pre-event-recording.md). Au lieu de router les flux encodés vers un multiplexeur + puits de fichier, il les route vers un `PreEventRecordingBlock`, de sorte que la branche pré-événement enregistre les clips d'événement (y compris les images antérieures au déclencheur) indépendamment de la chaîne principale d'aperçu/traitement. Il se branche sur le pipeline principal via des sources de pont (`BridgeVideoSourceBlock`, `BridgeAudioSourceBlock`).
+
+### Informations sur le bloc
+
+Nom : `PreEventSeparateOutputBlock`.
+
+Ce bloc est un puits qui orchestre un sous-pipeline ; il n'a pas de pads d'entrée directs. La vidéo et l'audio entrent par les sources de pont et ressortent par le `PreEventRecordingBlock` fourni.
+
+### Paramètres
+
+Le bloc réutilise l'objet de paramètres `SeparateOutput` pour décrire la branche d'encodage.
+
+Propriétés clés de `SeparateOutput` utilisées par ce bloc :
+
+- `VideoEncoder` (`MediaBlock`) : un bloc encodeur vidéo optionnel. Lorsqu'il est défini, une branche vidéo est câblée depuis la source vidéo de pont vers le bloc pré-événement.
+- `AudioEncoder` (`MediaBlock`) : un bloc encodeur audio optionnel. Lorsqu'il est défini, une branche audio est câblée depuis la source audio de pont vers le bloc pré-événement.
+- `VideoProcessor` (`MediaBlock`) : un bloc de traitement vidéo optionnel inséré avant l'encodeur vidéo.
+- `AudioProcessor` (`MediaBlock`) : un bloc de traitement audio optionnel inséré avant l'encodeur audio.
+
+Constructeur :
+
+- `PreEventSeparateOutputBlock(MediaBlocksPipeline pipeline, SeparateOutput settings, BridgeVideoSourceSettings bridgeVideoSourceSettings, BridgeAudioSourceSettings bridgeAudioSourceSettings, PreEventRecordingBlock preEventBlock)`
+
+### Pipeline conceptuel
+
+```mermaid
+graph LR;
+    MainVideoPath --> BridgeVideoSink;
+    BridgeVideoSourceBlock --> OptionalVideoProcessor --> VideoEncoder --> PreEventRecordingBlock;
+    MainAudioPath --> BridgeAudioSink;
+    BridgeAudioSourceBlock --> OptionalAudioProcessor --> AudioEncoder --> PreEventRecordingBlock;
+```
+
+### Exemple de code
+
+```csharp
+// En supposant que 'pipeline' est votre MediaBlocksPipeline principal
+// En supposant que les puits de pont pour les chemins vidéo/audio principaux sont déjà configurés
+// avec les noms de canal "pe_video_bridge" / "pe_audio_bridge".
+
+// 1. Configurer les sources de pont pour le sous-pipeline séparé (faire correspondre les noms de canal du puits + infos de format)
+var videoInfo = new VideoFrameInfoX(1920, 1080, new VideoFrameRate(30));
+var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 48000, 2);
+
+var bridgeVideoSourceSettings = new BridgeVideoSourceSettings("pe_video_bridge", videoInfo);
+var bridgeAudioSourceSettings = new BridgeAudioSourceSettings("pe_audio_bridge", audioInfo);
+
+// 2. Configurer les encodeurs pour la branche d'enregistrement
+var h264Settings = H264EncoderBlock.GetDefaultSettings();
+var videoEncoder = new H264EncoderBlock(h264Settings);
+
+var aacSettings = AACEncoderBlock.GetDefaultSettings();
+var audioEncoder = new AACEncoderBlock(aacSettings);
+
+var separateOutputSettings = new SeparateOutput
+{
+    VideoEncoder = videoEncoder,
+    AudioEncoder = audioEncoder,
+};
+
+// 3. Créer le bloc d'enregistrement pré-événement (voir la page Bloc d'enregistrement pré-événement pour ses paramètres)
+var preEventBlock = new PreEventRecordingBlock(new PreEventRecordingSettings());
+
+// 4. Créer le PreEventSeparateOutputBlock (câble sources de pont -> encodeurs -> bloc pré-événement)
+var preEventOutput = new PreEventSeparateOutputBlock(
+    pipeline,
+    separateOutputSettings,
+    bridgeVideoSourceSettings,
+    bridgeAudioSourceSettings,
+    preEventBlock);
+
+// démarrer le pipeline principal (le sous-pipeline s'exécute à travers les ponts)
+await pipeline.StartAsync();
+
+// ... déclencher un clip d'événement sur le bloc pré-événement au besoin ...
+```
+
+### Remarques
+
+Le `PreEventSeparateOutputBlock` écrit les segments pré-événement et principaux dans des fichiers de sortie distincts via le `PreEventRecordingBlock` ; le nom de fichier est défini par enregistrement lorsque l'événement est déclenché, et non sur le bloc de sortie. `GetFilenameOrURL()` renvoie le nom de fichier actuel du bloc pré-événement. La construction du bloc construit les encodeurs fournis, le bloc pré-événement et les sources de pont.
+
+### Plateformes
+
+Dépend des composants utilisés dans la configuration `SeparateOutput` et du `PreEventRecordingBlock` (encodeurs, processeurs). Généralement multiplateforme si les éléments GStreamer requis sont disponibles.
 
 ## Voir aussi
 

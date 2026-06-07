@@ -117,7 +117,7 @@ Une fois les sources NDI de votre réseau identifiées, l'étape suivante consis
     // Créer un objet de paramètres de source de caméra IP
     settings = new IPCameraSourceSettings
     {
-        URL = new Uri("NDI source URL")
+        URL = new Uri("ndi://HOSTNAME/SourceName")
     };
     
     // Définir le type de source sur NDI

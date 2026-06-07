@@ -13,6 +13,7 @@ tags:
   - Streaming
 primary_api_classes:
   - UniversalDemuxBlock
+  - UniversalAutoDemuxerBlock
   - MPEGTSDemuxBlock
   - QTDemuxBlock
   - UniversalSourceBlock
@@ -347,6 +348,91 @@ if (metadataOutputs.Length > 0 && metadataOutputs[0] != null)
 - The `renderVideo`, `renderAudio`, and `renderSubtitle` flags in the constructor determine if outputs for these stream types will be created and processed. If set to `false`, respective streams will be ignored (or sent to internal null renderers if present in the file but not rendered).
 - The `UniversalDemuxBlock` is powerful for scenarios where you need to explicitly manage the demuxing process for various formats or select specific streams from files with multiple tracks.
 - For simple playback of common file formats, `UniversalSourceBlock` often provides a more straightforward solution as it integrates demuxing and decoding. `UniversalDemuxBlock` offers more granular control.
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android. (Platform support for specific formats may depend on underlying GStreamer plugins.)
+
+## Universal Auto Demux Block
+
+The `UniversalAutoDemuxerBlock` automatically detects the container format of the incoming stream and creates the appropriate demuxer on the fly. It uses GStreamer's `typefind` element to identify the media type and then instantiates the matching demuxer element dynamically, exposing the elementary streams (video, audio, subtitle, metadata) on its output pads.
+
+Unlike `UniversalDemuxBlock`, this block does **not** require `MediaFileInfo` or an explicit settings object. The output pads are pre-created from the constructor flags, and the demuxer is selected at runtime once the format is detected. This makes it convenient for sources where the container type is unknown in advance. It supports all common container formats (MP4/MOV, MKV, WebM, AVI, MPEG-TS, MPEG-PS, FLV, OGG, ASF/WMV, WAV, FLAC, DV, and more).
+
+### Block info
+
+Name: `UniversalAutoDemuxerBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input         | Various Container Data | 1     |
+| Output video  | Depends on stream content and `renderVideo` flag | 0 or 1 |
+| Output audio  | Depends on stream content and `renderAudio` flag | 0 or 1 |
+| Output subtitle | Depends on stream content and `renderSubtitle` flag | 0 or 1 |
+| Output metadata | Depends on stream content and `renderMetadata` flag | 0 or 1 |
+
+### Constructor
+
+`UniversalAutoDemuxerBlock(bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false, bool renderMetadata = false)`
+
+The constructor flags determine which output pads are pre-created. There is no settings class - the demuxer is chosen automatically from the detected container format.
+
+### The sample pipeline
+
+This example shows how to connect a source block that provides raw container data to `UniversalAutoDemuxerBlock`, and then connect its outputs to renderer blocks. The container format does not need to be known beforehand.
+
+```mermaid
+graph LR;
+    DataSourceBlock -- Container Data --> UniversalAutoDemuxerBlock;
+    UniversalAutoDemuxerBlock -- Video Stream --> VideoRendererBlock;
+    UniversalAutoDemuxerBlock -- Audio Stream --> AudioRendererBlock;
+```
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Assume 'dataSourceBlock' is a source block providing raw container data
+// (e.g. a StreamSourceBlock or another block that outputs the container stream).
+// The container format is detected automatically - no MediaFileInfo required.
+
+// Create the auto demuxer block.
+// Constructor flags control which output pads are created.
+var autoDemuxBlock = new UniversalAutoDemuxerBlock(
+    renderVideo: true,
+    renderAudio: true,
+    renderSubtitle: false,
+    renderMetadata: false);
+
+// Connect the data source to the demuxer's input.
+// pipeline.Connect(dataSourceBlock.Output, autoDemuxBlock.Input);
+
+// Create renderers.
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+var audioRenderer = new AudioRendererBlock();
+
+// Connect demuxer outputs (pads become linked once the format is detected).
+if (autoDemuxBlock.VideoOutput != null)
+{
+    pipeline.Connect(autoDemuxBlock.VideoOutput, videoRenderer.Input);
+}
+
+if (autoDemuxBlock.AudioOutput != null)
+{
+    pipeline.Connect(autoDemuxBlock.AudioOutput, audioRenderer.Input);
+}
+
+// Start pipeline once the data source is connected.
+// await pipeline.StartAsync();
+```
+
+### Remarks
+
+- No `MediaFileInfo` and no settings object are required - the container format is detected at runtime via `typefind`, and the matching demuxer is created dynamically.
+- Output pads are pre-created from the constructor flags. Use the convenience pads `VideoOutput`, `AudioOutput`, and `SubtitleOutput`, or the `VideoOutputs`, `AudioOutputs`, `SubtitleOutputs`, and `MetadataOutputs` arrays.
+- When a flag is `false`, the corresponding stream present in the container is discarded internally.
+- Prefer `UniversalDemuxBlock` when you have already analyzed the file and need precise control over multiple streams of the same type. Prefer `UniversalAutoDemuxerBlock` when the container type is unknown in advance and one stream per type is sufficient. For simple playback of common file formats, `UniversalSourceBlock` integrates both demuxing and decoding.
 
 ### Platforms
 

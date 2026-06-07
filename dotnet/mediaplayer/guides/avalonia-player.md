@@ -73,7 +73,7 @@ public partial class MainView : UserControl
         Loaded += async (_, _) =>
         {
             _player = new MediaPlayerCoreX(videoView);
-            var src = await UniversalSourceSettings.CreateAsync(new Uri("video.mp4"));
+            var src = await UniversalSourceSettings.CreateAsync("video.mp4");
             await _player.OpenAsync(src);
             await _player.PlayAsync();
         };

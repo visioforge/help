@@ -56,7 +56,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3"; // Or any audio source
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Settings can be customized, e.g., for shader, line thickness, etc.
 // The style (dots, lines, color-dots, color-lines) can be set in SpacescopeSettings.
@@ -102,7 +102,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3"; // Or any audio source
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var spectrascope = new SpectrascopeBlock();
 pipeline.Connect(fileSource.AudioOutput, spectrascope.Input);
@@ -145,7 +145,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3"; // Or any audio source
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // SynaescopeBlock uses GStreamer defaults — there is no settings class on the managed surface.
 var synaescope = new SynaescopeBlock();
@@ -189,7 +189,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3"; // Or any audio source
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Settings can be customized, e.g., for style, mono/stereo mode, etc.
 // The style (dots, lines, color-dots, color-lines) can be set in WavescopeSettings.
@@ -226,7 +226,7 @@ Name: LibVisualBumpscopeBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp3"));
 
 var bumpscope = new LibVisualBumpscopeBlock();
 pipeline.Connect(audioSource.AudioOutput, bumpscope.Input);
@@ -259,7 +259,7 @@ Name: LibVisualCoronaBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp3"));
 
 var corona = new LibVisualCoronaBlock();
 pipeline.Connect(audioSource.AudioOutput, corona.Input);
@@ -292,7 +292,7 @@ Name: LibVisualInfiniteBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp3"));
 
 var infinite = new LibVisualInfiniteBlock();
 pipeline.Connect(audioSource.AudioOutput, infinite.Input);
@@ -325,7 +325,7 @@ Name: LibVisualJakdawBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp3"));
 
 var jakdaw = new LibVisualJakdawBlock();
 pipeline.Connect(audioSource.AudioOutput, jakdaw.Input);
@@ -358,7 +358,7 @@ Name: LibVisualJessBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp3"));
 
 var jess = new LibVisualJessBlock();
 pipeline.Connect(audioSource.AudioOutput, jess.Input);
@@ -391,7 +391,7 @@ Name: LibVisualLVAnalyzerBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp3"));
 
 var analyzer = new LibVisualLVAnalyzerBlock();
 pipeline.Connect(audioSource.AudioOutput, analyzer.Input);
@@ -424,7 +424,7 @@ Name: LibVisualLVScopeBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp3"));
 
 var scope = new LibVisualLVScopeBlock();
 pipeline.Connect(audioSource.AudioOutput, scope.Input);
@@ -457,7 +457,7 @@ Name: LibVisualOinksieBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp3")));
+var audioSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp3"));
 
 var oinksie = new LibVisualOinksieBlock();
 pipeline.Connect(audioSource.AudioOutput, oinksie.Input);

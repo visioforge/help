@@ -49,7 +49,7 @@ L'implémentation de flux de caméras RTSP dans vos applications .NET offre un a
     
     ```cs
     // Créer l'objet de paramètres de source RTSP
-    var rtsp = await RTSPSourceSettings.CreateAsync(new Uri("url"), "login", "password", true /*capturer l'audio ?*/);
+    var rtsp = await RTSPSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.1:554/live"), "login", "password", true /*capturer l'audio ?*/);
     
     // Affecter la source à l'objet VideoCaptureCoreX
     VideoCapture1.Video_Source = rtsp;

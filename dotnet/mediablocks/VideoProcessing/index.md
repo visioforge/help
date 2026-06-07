@@ -63,6 +63,8 @@ primary_api_classes:
 - [Rounded Corners](#rounded-corners)
 - [SMPTE](#smpte)
 - [SMPTE Alpha](#smpte-alpha)
+- [Squeezeback](#squeezeback)
+- [Squeezeback V2](#squeezeback-v2)
 - [SVG Overlay](#svg-overlay)
 - [Simple Video Mark](#simple-video-mark)
 - [Simple Video Mark Detect](#simple-video-mark-detect)
@@ -120,7 +122,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var agingSettings = new AgingVideoEffect
 {
@@ -172,8 +174,8 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var primarySource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video.mp4")));
-var alphaSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("alpha.mp4")));
+var primarySource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
+var alphaSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("alpha.mp4"));
 
 var alphaCombine = new AlphaCombineBlock();
 pipeline.Connect(primarySource.VideoOutput, alphaCombine.Input);
@@ -218,7 +220,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "interlaced_video.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var autoDeinterlace = new AutoDeinterlaceBlock(new AutoDeinterlaceSettings());
 pipeline.Connect(fileSource.VideoOutput, autoDeinterlace.Input);
@@ -382,7 +384,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "video_with_alpha.webm"; // VP8/VP9 with alpha
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var alphaDemux = new CodecAlphaDemuxBlock();
 pipeline.Connect(fileSource.VideoOutput, alphaDemux.Input);
@@ -426,7 +428,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Sepia
 var colorEffects = new ColorEffectsBlock(ColorEffectsPreset.Sepia);
@@ -471,7 +473,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var dice = new DiceBlock(new DiceVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, dice.Input);
@@ -515,7 +517,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var edge = new EdgeBlock();
 pipeline.Connect(fileSource.VideoOutput, edge.Input);
@@ -560,7 +562,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var deinterlace = new DeinterlaceBlock(new DeinterlaceSettings());
 pipeline.Connect(fileSource.VideoOutput, deinterlace.Input);
@@ -604,7 +606,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var fishEye = new FishEyeBlock();
 pipeline.Connect(fileSource.VideoOutput, fishEye.Input);
@@ -649,7 +651,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // 90 degree rotation
 var flipRotate = new FlipRotateBlock(VideoFlipRotateMethod.Method90R);
@@ -694,7 +696,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var gamma = new GammaBlock(2.0);
 pipeline.Connect(fileSource.VideoOutput, gamma.Input);
@@ -738,7 +740,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var gaussianBlur = new GaussianBlurBlock();
 pipeline.Connect(fileSource.VideoOutput, gaussianBlur.Input);
@@ -782,7 +784,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var grayscale = new GrayscaleBlock();
 pipeline.Connect(fileSource.VideoOutput, grayscale.Input);
@@ -828,7 +830,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var imageOverlay = new ImageOverlayBlock(@"logo.png");
 pipeline.Connect(fileSource.VideoOutput, imageOverlay.Input);
@@ -872,7 +874,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var imageOverlayCairo = new ImageOverlayCairoBlock("logo.png");
 pipeline.Connect(fileSource.VideoOutput, imageOverlayCairo.Input);
@@ -916,7 +918,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var interlace = new InterlaceBlock(new InterlaceSettings());
 pipeline.Connect(fileSource.VideoOutput, interlace.Input);
@@ -960,7 +962,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var keyFrameDetector = new KeyFrameDetectorBlock();
 keyFrameDetector.OnKeyFrameDetected += (sender, e) =>
@@ -1009,7 +1011,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var lutSettings = new LUTVideoEffect
 {
@@ -1057,7 +1059,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var mirrorBlock = new MirrorBlock(MirrorMode.Top);
 pipeline.Connect(fileSource.VideoOutput, mirrorBlock.Input);
@@ -1101,7 +1103,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var movingBlur = new MovingBlurBlock(new MovingBlurVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, movingBlur.Input);
@@ -1145,7 +1147,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var movingEcho = new MovingEchoBlock(new MovingEchoVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, movingEcho.Input);
@@ -1189,7 +1191,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var movingZoomEcho = new MovingZoomEchoBlock(new MovingZoomEchoVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, movingZoomEcho.Input);
@@ -1233,7 +1235,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var opticalAnimBW = new OpticalAnimationBWBlock(new OpticalAnimationBWVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, opticalAnimBW.Input);
@@ -1277,7 +1279,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var overlayManager = new OverlayManagerBlock();
 pipeline.Connect(fileSource.VideoOutput, overlayManager.Input);
@@ -1335,7 +1337,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var persBlock = new PerspectiveBlock(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
 pipeline.Connect(fileSource.VideoOutput, persBlock.Input);
@@ -1379,7 +1381,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var pinchBlock = new PinchBlock();
 pipeline.Connect(fileSource.VideoOutput, pinchBlock.Input);
@@ -1423,7 +1425,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var pseudo3D = new Pseudo3DBlock(new Pseudo3DVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, pseudo3D.Input);
@@ -1467,7 +1469,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var qrCodeOverlay = new QRCodeOverlayBlock("https://www.visioforge.com");
 pipeline.Connect(fileSource.VideoOutput, qrCodeOverlay.Input);
@@ -1511,7 +1513,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var quark = new QuarkBlock(new QuarkVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, quark.Input);
@@ -1555,7 +1557,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var ripple = new RippleBlock(new RippleVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, ripple.Input);
@@ -1599,7 +1601,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var rotateBlock = new RotateBlock(0.7);
 pipeline.Connect(fileSource.VideoOutput, rotateBlock.Input);
@@ -1643,7 +1645,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var roundedCorners = new RoundedCornersBlock(20); // Radius of 20 pixels
 pipeline.Connect(fileSource.VideoOutput, roundedCorners.Input);
@@ -1689,7 +1691,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoResize = new VideoResizeBlock(new ResizeVideoEffect(1280, 720) { Letterbox = false });
 pipeline.Connect(fileSource.VideoOutput, videoResize.Input);
@@ -1733,7 +1735,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoSG = new VideoSampleGrabberBlock();
 videoSG.OnVideoFrameBuffer += VideoSG_OnVideoFrameBuffer;
@@ -1784,8 +1786,8 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video1.mp4")));
-var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video2.mp4")));
+var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video1.mp4"));
+var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video2.mp4"));
 
 var smpteSettings = new SMPTEVideoEffect
 {
@@ -1836,8 +1838,8 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video1.mp4")));
-var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video2.mp4")));
+var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video1.mp4"));
+var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video2.mp4"));
 
 var smpteAlphaSettings = new SMPTEAlphaVideoEffect
 {
@@ -1886,7 +1888,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var svgSettings = new SVGOverlayVideoEffect
 {
@@ -1934,7 +1936,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoMark = new SimpleVideoMarkBlock(42); // Unique identifier
 pipeline.Connect(fileSource.VideoOutput, videoMark.Input);
@@ -1978,7 +1980,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "marked_video.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var markDetect = new SimpleVideoMarkDetectBlock();
 markDetect.VideoMarkDetected += (sender, e) =>
@@ -2026,7 +2028,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var smooth = new SmoothBlock(new SmoothVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, smooth.Input);
@@ -2070,7 +2072,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var sphereBlock = new SphereBlock();
 pipeline.Connect(fileSource.VideoOutput, sphereBlock.Input);
@@ -2114,7 +2116,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var squareBlock = new SquareBlock(new SquareVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, squareBlock.Input);
@@ -2193,7 +2195,7 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
 
 var panZoom = new PanZoomBlock();
 panZoom.SetZoom(new VideoStreamZoomSettings(zoomX: 2.0, zoomY: 2.0, centerX: 0.5, centerY: 0.5));
@@ -2244,7 +2246,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var stretchBlock = new StretchBlock();
 pipeline.Connect(fileSource.VideoOutput, stretchBlock.Input);
@@ -2305,7 +2307,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var textOverlay = new TextOverlayBlock(new TextOverlaySettings("Hello world!")
 {
@@ -2361,7 +2363,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var tunnelBlock = new TunnelBlock();
 pipeline.Connect(fileSource.VideoOutput, tunnelBlock.Input);
@@ -2405,7 +2407,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var twirlBlock = new TwirlBlock();
 pipeline.Connect(fileSource.VideoOutput, twirlBlock.Input);
@@ -2450,7 +2452,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoBalance = new VideoBalanceBlock(new VideoBalanceVideoEffect() { Brightness = 0.25 });
 pipeline.Connect(fileSource.VideoOutput, videoBalance.Input);
@@ -2496,10 +2498,10 @@ var pipeline = new MediaBlocksPipeline();
 
 // Define source files
 var filename1 = "test.mp4"; // Replace with your first video file
-var fileSource1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename1)));
+var fileSource1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename1));
 
 var filename2 = "test2.mp4"; // Replace with your second video file
-var fileSource2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename2)));
+var fileSource2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename2));
 
 // Configure VideoMixerSettings with output resolution and frame rate
 // For example, 1280x720 resolution at 30 frames per second
@@ -2656,7 +2658,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var wrBlock = new WaterRippleBlock(new WaterRippleVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, wrBlock.Input);
@@ -2700,7 +2702,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var aspectCrop = new VideoAspectRatioCropBlock(new AspectRatioCropVideoEffect { AspectRatio = "16:9" });
 pipeline.Connect(fileSource.VideoOutput, aspectCrop.Input);
@@ -2744,7 +2746,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoBox = new VideoBoxBlock(new BoxVideoEffect
 {
@@ -2794,7 +2796,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoConverter = new VideoConverterBlock();
 pipeline.Connect(fileSource.VideoOutput, videoConverter.Input);
@@ -2838,7 +2840,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var cropSettings = new CropVideoEffect
 {
@@ -2889,7 +2891,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoEffects = new VideoEffectsBlock();
 pipeline.Connect(fileSource.VideoOutput, videoEffects.Input);
@@ -2933,7 +2935,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var paddingSettings = new VideoPaddingChangerSettings
 {
@@ -2984,7 +2986,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoRate = new VideoRateBlock(new VideoFrameRate(60.0)); // Convert to 60fps
 pipeline.Connect(fileSource.VideoOutput, videoRate.Input);
@@ -3028,7 +3030,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var warp = new WarpBlock(new WarpVideoEffect());
 pipeline.Connect(fileSource.VideoOutput, warp.Input);
@@ -3072,7 +3074,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var d3d11Converter = new D3D11VideoConverterBlock();
 pipeline.Connect(fileSource.VideoOutput, d3d11Converter.Input);
@@ -3116,7 +3118,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoEffects = new VideoEffectsWinBlock();
 // Example: add a brightness effect
@@ -3163,10 +3165,10 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename1 = "test.mp4";
-var fileSource1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename1)));
+var fileSource1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename1));
 
 var filename2 = "test2.mp4";
-var fileSource2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename2)));
+var fileSource2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename2));
 
 var outputWidth = 1280;
 var outputHeight = 720;
@@ -3218,7 +3220,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var vr360Settings = new D3D11VR360RendererSettings
 {
@@ -3289,7 +3291,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var motionSettings = new MotionDetectionBlockSettings
 {
@@ -3314,3 +3316,123 @@ await pipeline.StartAsync();
 ### Platforms
 
 Windows, macOS, Linux.
+
+---
+
+## Squeezeback
+
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+The Squeezeback block reproduces the broadcast "squeezeback" (DVE) effect: the main video is shrunk into a rectangle while a background image fills the rest of the frame — a layout commonly used to roll end credits or promos next to live content. Internally it punches an alpha-transparent hole into the background image at the video rectangle and composites the video through it. The video position and opacity can be animated at runtime, and the background image can be faded in and out.
+
+> Note: `SqueezebackBlockV2` supersedes this block — see [Squeezeback V2](#squeezeback-v2) for the recommended API.
+
+### Block info
+
+Name: SqueezebackBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed video | 1
+Output | Uncompressed video | 1
+
+### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->SqueezebackBlock;
+    SqueezebackBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
+
+// output frame geometry
+var videoInfo = new VideoFrameInfoX(1920, 1080, new VideoFrameRate(30));
+
+// background image and the rectangle the main video is squeezed into
+var imageSettings = new ImageOverlaySettings("background.png");
+var videoRect = new Rect(960, 540, 1920, 1080); // left, top, right, bottom
+
+var squeezeback = new SqueezebackBlock(pipeline, videoInfo, imageSettings, videoRect);
+pipeline.Connect(fileSource.VideoOutput, squeezeback.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(squeezeback.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+
+// animate the video into the corner over 1 second
+squeezeback.Input_Move(new Rect(1280, 720, 1920, 1080), TimeSpan.FromSeconds(1), null, null);
+
+// fade the background image in
+squeezeback.StartFadeIn(TimeSpan.FromSeconds(1));
+```
+
+### Platforms
+
+Windows.
+
+---
+
+## Squeezeback V2
+
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+`SqueezebackBlockV2` is the recommended squeezeback implementation. It builds the effect on top of a `VideoMixerBlock` instead of an alpha-punched overlay, so the background image and the main video are independent mixer layers. This adds a separate background-image rectangle, a `videoOnTop` flag to control z-order, runtime layer swapping, and independent position/opacity/fade animation for both the video and the image.
+
+### Block info
+
+Name: SqueezebackBlockV2.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed video | 1
+Output | Uncompressed video | 1
+
+### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->SqueezebackBlockV2;
+    SqueezebackBlockV2-->VideoRendererBlock;
+```
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
+
+// output frame geometry
+var videoInfo = new VideoFrameInfoX(1920, 1080, new VideoFrameRate(30));
+
+// background image fills the full frame; the video is squeezed into the corner
+var imageRect = new Rect(0, 0, 1920, 1080);     // left, top, right, bottom
+var videoRect = new Rect(1280, 720, 1920, 1080);
+
+var squeezeback = new SqueezebackBlockV2(pipeline, videoInfo, "background.png", imageRect, videoRect, videoOnTop: true);
+pipeline.Connect(fileSource.VideoOutput, squeezeback.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(squeezeback.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+
+// animate the video layer to a new position over 1 second
+squeezeback.AnimateVideo(new Rect(960, 540, 1920, 1080), TimeSpan.FromSeconds(1));
+
+// fade the video layer in and out
+squeezeback.StartVideoFadeIn(TimeSpan.FromSeconds(1));
+```
+
+### Platforms
+
+Windows.

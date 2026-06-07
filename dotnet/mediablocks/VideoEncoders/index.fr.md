@@ -113,7 +113,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoEncoderBlock = new AV1EncoderBlock(new QSVAV1EncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
@@ -155,7 +155,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoEncoderBlock = new DVEncoderBlock(new DVVideoEncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
@@ -215,7 +215,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Configurer l'encodeur personnalisé (exemple avec x264enc — Name est défini via le ctor ; remplir
 // le dictionnaire Properties via son indexeur car la propriété a un setter privé).
@@ -279,7 +279,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var gifSettings = new GIFEncoderSettings
 {
@@ -357,7 +357,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var h264EncoderBlock = new H264EncoderBlock(new NVENCH264EncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, h264EncoderBlock.Input);
@@ -438,7 +438,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var hevcEncoderBlock = new HEVCEncoderBlock(new NVENCHEVCEncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, hevcEncoderBlock.Input);
@@ -510,7 +510,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoEncoderBlock = new MJPEGEncoderBlock(new MJPEGEncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
@@ -573,7 +573,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var theoraEncoderBlock = new TheoraEncoderBlock(new TheoraEncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, theoraEncoderBlock.Input);
@@ -701,7 +701,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var vp8EncoderBlock = new VPXEncoderBlock(new VP8EncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, vp8EncoderBlock.Input);
@@ -743,7 +743,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var mpeg2EncoderBlock = new MPEG2EncoderBlock(new MPEG2VideoEncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, mpeg2EncoderBlock.Input);
@@ -786,7 +786,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4"; // Fichier d'entrée
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var mpeg4EncoderBlock = new MPEG4EncoderBlock(new MPEG4VideoEncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, mpeg4EncoderBlock.Input);
@@ -848,7 +848,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4"; // Fichier d'entrée
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var pngSettings = new PNGEncoderSettings
 {
@@ -892,7 +892,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var proResEncoderBlock = new AppleProResEncoderBlock(new AppleProResEncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, proResEncoderBlock.Input);
@@ -944,7 +944,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline(false);
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var wmvEncoderBlock = new WMVEncoderBlock(new WMVEncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, wmvEncoderBlock.Input);

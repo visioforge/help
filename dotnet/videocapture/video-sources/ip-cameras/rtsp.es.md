@@ -49,7 +49,7 @@ Implementar flujos de cámaras RTSP en tus aplicaciones .NET proporciona acceso 
     
     ```cs
     // Crear el objeto de configuración de fuente RTSP
-    var rtsp = await RTSPSourceSettings.CreateAsync(new Uri("url"), "login", "password", true /*¿capturar audio?*/);
+    var rtsp = await RTSPSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.1:554/live"), "login", "password", true /*¿capturar audio?*/);
     
     // Asignar la fuente al objeto VideoCaptureCoreX
     VideoCapture1.Video_Source = rtsp;

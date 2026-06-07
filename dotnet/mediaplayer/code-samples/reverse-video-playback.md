@@ -48,7 +48,7 @@ The simplest method for reverse playback involves setting a negative rate value:
 MediaPlayerCoreX MediaPlayer1 = new MediaPlayerCoreX(VideoView1);
 
 // Set the source file
-var fileSource = await UniversalSourceSettings.CreateAsync(new Uri("video.mp4"));
+var fileSource = await UniversalSourceSettings.CreateAsync("video.mp4");
 await MediaPlayer1.OpenAsync(fileSource);
 
 // Start normal playback first

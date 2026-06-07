@@ -99,7 +99,7 @@ El siguiente ejemplo demuestra cómo implementar reproducción de fragmentos en 
 MediaPlayerCoreX MediaPlayer1 = new MediaPlayerCoreX(VideoView1);
 
 // Paso 2: Establecer el archivo de medios fuente
-var fileSource = await UniversalSourceSettings.CreateAsync(new Uri("video.mkv"));
+var fileSource = await UniversalSourceSettings.CreateAsync("video.mkv");
 await MediaPlayer1.OpenAsync(fileSource);
 
 // Paso 3: Definir el tiempo de inicio del segmento (2 segundos desde el inicio)

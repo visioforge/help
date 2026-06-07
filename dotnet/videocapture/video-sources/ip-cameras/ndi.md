@@ -117,7 +117,7 @@ Once you've identified the NDI sources on your network, the next step is to esta
     // Create an IP camera source settings object
     settings = new IPCameraSourceSettings
     {
-        URL = new Uri("NDI source URL")
+        URL = new Uri("ndi://HOSTNAME/SourceName")
     };
     
     // Set the source type to NDI

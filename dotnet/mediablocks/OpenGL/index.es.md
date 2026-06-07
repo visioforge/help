@@ -40,7 +40,7 @@ Todos los efectos de video OpenGL heredan de la clase `GLBaseVideoEffect`, que p
 
 ## Efectos de Video Disponibles
 
-Esta sección detalla los diversos efectos de video OpenGL que puede usar. Cada efecto es un MediaBlock independiente — instancia el bloque directamente (p.ej. `new GLBlurBlock(new GLBlurVideoEffect())`) y conéctalo entre `GLUploadBlock` y `GLDownloadBlock` (u otros bloques GL) en tu pipeline.
+Esta sección detalla los diversos efectos de video OpenGL que puede usar. Cada efecto es un MediaBlock independiente — instancia el bloque directamente (p.ej. `new GLBlurBlock()`) y conéctalo entre `GLUploadBlock` y `GLDownloadBlock` (u otros bloques GL) en tu pipeline.
 
 ### Efecto Alfa (`GLAlphaVideoEffect`)
 
@@ -364,13 +364,13 @@ Configura shaders GLSL personalizados para usar en el pipeline.
 - `GLShaderSettings(string vertex, string fragment)`
 - `GLShaderSettings(GLShader shader)`
 
-## Sobrepasos de Imagen en OpenGL
+## Superposiciones de Imagen en OpenGL
 
-Proporciona ajustes para sobrepasar imágenes estáticas en un stream de video dentro de un contexto OpenGL.
+Proporciona ajustes para superponer imágenes estáticas en un stream de video dentro de un contexto OpenGL.
 
-### Ajustes de Sobrepaso (`GLOverlaySettings`)
+### Ajustes de Superposición (`GLOverlaySettings`)
 
-Define las propiedades de un sobrepaso de imagen.
+Define las propiedades de una superposición de imagen.
 
 **Propiedades:**
 
@@ -378,11 +378,11 @@ Define las propiedades de un sobrepaso de imagen.
 |------------|----------|---------------------|---------------------------------------------------|
 | `Filename` | `string` | (N/A)               | Ruta al archivo de imagen (solo lectura después de init). |
 | `Data`     | `byte[]` | (N/A)               | Datos de imagen como arreglo de bytes (solo lectura después de init).|
-| `X`        | `int`    |                     | Coordenada X de la esquina superior izquierda del sobrepaso. |
-| `Y`        | `int`    |                     | Coordenada Y de la esquina superior izquierda del sobrepaso. |
-| `Width`    | `int`    |                     | Ancho del sobrepaso.                            |
-| `Height`   | `int`    |                     | Altura del sobrepaso.                           |
-| `Alpha`    | `double` | `1.0`               | Opacidad del sobrepaso (0.0 transparente a 1.0 opaco). |
+| `X`        | `int`    |                     | Coordenada X de la esquina superior izquierda de la superposición. |
+| `Y`        | `int`    |                     | Coordenada Y de la esquina superior izquierda de la superposición. |
+| `Width`    | `int`    |                     | Ancho de la superposición.                            |
+| `Height`   | `int`    |                     | Altura de la superposición.                           |
+| `Alpha`    | `double` | `1.0`               | Opacidad de la superposición (0.0 transparente a 1.0 opaco). |
 
 **Constructor:**
 - `GLOverlaySettings(string filename)`
@@ -501,3 +501,311 @@ Define el patrón de prueba generado por `GLVirtualVideoSourceBlock`.
 **Métodos:**
 - `Task<MediaFileInfo> ReadInfoAsync()`: Lee asincrónicamente información de medios (devuelve información sintética basada en ajustes).
 - `MediaBlock CreateBlock()`: Crea una instancia `GLVirtualVideoSourceBlock` configurada con estos ajustes.
+
+## Bloques de Procesamiento OpenGL
+
+Además de los bloques por efecto listados arriba, el SDK incluye varios bloques de procesamiento OpenGL independientes para composición de superposiciones, redimensionamiento por GPU, conversión de formato, mezcla de múltiples streams y renderizado acelerado por hardware. Como los bloques de efectos, estos operan sobre memoria de GPU y normalmente se encadenan entre `GLUploadBlock` (memoria CPU a GL) y `GLDownloadBlock` (GL a memoria CPU), o se alimentan directamente desde otros bloques OpenGL. Cada bloque expone un método estático `IsAvailable()` que puede llamar para verificar el soporte de OpenGL en el sistema actual antes de construir el pipeline.
+
+### GL Overlay
+
+El `GLOverlayBlock` compone una imagen estática (logo, marca de agua, gráfico) sobre el stream de video en la GPU, con posicionamiento, escalado y mezcla alfa.
+
+#### Información del bloque
+
+Nombre: GLOverlayBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada | Video (memoria GL) | 1 |
+| Salida | Video (memoria GL) | 1 |
+
+La superposición se configura con `GLOverlaySettings` (ver [Ajustes de Superposición](#ajustes-de-superposicion-gloverlaysettings) arriba). Llame a `UpdateSettings()` después de cambiar las propiedades de `Settings` para aplicar los cambios a un pipeline en ejecución.
+
+#### El pipeline de ejemplo
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->GLUploadBlock;
+    GLUploadBlock-->GLOverlayBlock;
+    GLOverlayBlock-->GLDownloadBlock;
+    GLDownloadBlock-->VideoRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+
+var glUpload = new GLUploadBlock();
+
+// configurar la superposición de imagen
+var overlaySettings = new GLOverlaySettings("logo.png")
+{
+    X = 20,
+    Y = 20,
+    Width = 160,
+    Height = 80,
+    Alpha = 0.8
+};
+var glOverlay = new GLOverlayBlock(overlaySettings);
+
+var glDownload = new GLDownloadBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, glUpload.Input);
+pipeline.Connect(glUpload.Output, glOverlay.Input);
+pipeline.Connect(glOverlay.Output, glDownload.Input);
+pipeline.Connect(glDownload.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+### GL Resize
+
+El `GLResizeBlock` realiza escalado de video acelerado por GPU a una resolución objetivo usando `GLResizeVideoEffect`.
+
+#### Información del bloque
+
+Nombre: GLResizeBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada | Video (memoria GL) | 1 |
+| Salida | Video (memoria GL) | 1 |
+
+#### El pipeline de ejemplo
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->GLUploadBlock;
+    GLUploadBlock-->GLResizeBlock;
+    GLResizeBlock-->GLDownloadBlock;
+    GLDownloadBlock-->VideoRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+
+var glUpload = new GLUploadBlock();
+
+// redimensionar a 1280x720 en la GPU
+var glResize = new GLResizeBlock(new GLResizeVideoEffect(1280, 720));
+
+var glDownload = new GLDownloadBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, glUpload.Input);
+pipeline.Connect(glUpload.Output, glResize.Input);
+pipeline.Connect(glResize.Output, glDownload.Input);
+pipeline.Connect(glDownload.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+### GL Square
+
+El `GLSquareBlock` aplica un efecto de distorsión geométrica "cuadrado" en la GPU. No tiene configuración adicional.
+
+#### Información del bloque
+
+Nombre: GLSquareBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada | Video (memoria GL) | 1 |
+| Salida | Video (memoria GL) | 1 |
+
+#### El pipeline de ejemplo
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->GLUploadBlock;
+    GLUploadBlock-->GLSquareBlock;
+    GLSquareBlock-->GLDownloadBlock;
+    GLDownloadBlock-->VideoRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+
+var glUpload = new GLUploadBlock();
+var glSquare = new GLSquareBlock();
+var glDownload = new GLDownloadBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, glUpload.Input);
+pipeline.Connect(glUpload.Output, glSquare.Input);
+pipeline.Connect(glSquare.Output, glDownload.Input);
+pipeline.Connect(glDownload.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+### GL Video Converter
+
+El `GLVideoConverterBlock` realiza conversión de formato de píxel y espacio de color acelerada por GPU. No tiene configuración adicional.
+
+#### Información del bloque
+
+Nombre: GLVideoConverterBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada | Video (memoria GL) | 1 |
+| Salida | Video (memoria GL) | 1 |
+
+#### El pipeline de ejemplo
+
+```mermaid
+graph LR;
+    GLUploadBlock-->GLVideoConverterBlock;
+    GLVideoConverterBlock-->GLSepiaBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+
+var glUpload = new GLUploadBlock();
+var glConverter = new GLVideoConverterBlock();
+var glSepia = new GLSepiaBlock();
+var glDownload = new GLDownloadBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, glUpload.Input);
+pipeline.Connect(glUpload.Output, glConverter.Input);
+pipeline.Connect(glConverter.Output, glSepia.Input);
+pipeline.Connect(glSepia.Output, glDownload.Input);
+pipeline.Connect(glDownload.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+### GL Video Mixer
+
+El `GLVideoMixerBlock` compone múltiples streams de video de entrada en una sola salida en la GPU, con posicionamiento, escalado, orden Z, mezcla alfa y chroma key por stream. Se configura con `GLVideoMixerSettings` (ver [Ajustes de Mezclador](#ajustes-de-mezclador-glvideomixersettings) arriba) y expone un pad de entrada por cada stream configurado. El bloque implementa `IVideoMixerControl`, por lo que los streams de entrada pueden consultarse, actualizarse, animarse (`Input_Move`, `StartFadeIn`, `StartFadeOut`) y aplicárseles chroma key en tiempo de ejecución.
+
+#### Información del bloque
+
+Nombre: GLVideoMixerBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada | Video (memoria GL) | 1 por stream |
+| Salida | Video (memoria GL) | 1 |
+
+#### El pipeline de ejemplo
+
+```mermaid
+graph LR;
+    Source1Block-->GLUpload1Block;
+    Source2Block-->GLUpload2Block;
+    GLUpload1Block-->GLVideoMixerBlock;
+    GLUpload2Block-->GLVideoMixerBlock;
+    GLVideoMixerBlock-->GLDownloadBlock;
+    GLDownloadBlock-->VideoRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// configurar la salida del mezclador y dos streams
+var mixerSettings = new GLVideoMixerSettings(1280, 720, new VideoFrameRate(30));
+mixerSettings.AddStream(new GLVideoMixerStream(new Rect(0, 0, 1280, 720), 0));
+mixerSettings.AddStream(new GLVideoMixerStream(new Rect(960, 480, 1280, 720), 1)); // izquierda, arriba, derecha, abajo
+var glMixer = new GLVideoMixerBlock(mixerSettings);
+
+// primera fuente
+var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("background.mp4"));
+var glUpload1 = new GLUploadBlock();
+pipeline.Connect(source1.VideoOutput, glUpload1.Input);
+pipeline.Connect(glUpload1.Output, glMixer.Inputs[0]);
+
+// segunda fuente (imagen en imagen)
+var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("overlay.mp4"));
+var glUpload2 = new GLUploadBlock();
+pipeline.Connect(source2.VideoOutput, glUpload2.Input);
+pipeline.Connect(glUpload2.Output, glMixer.Inputs[1]);
+
+var glDownload = new GLDownloadBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(glMixer.Output, glDownload.Input);
+pipeline.Connect(glDownload.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
+### GL Video Renderer
+
+El `GLVideoRendererBlock` muestra el stream de video en una superficie `IVideoView` usando renderizado OpenGL acelerado por hardware. Es un bloque terminal (solo entrada) y acepta entrada tanto de memoria CPU como GL. El renderizador se configura con `GLVideoRendererSettings` (ver [Ajustes de Renderizador de Video](#ajustes-de-renderizador-de-video-glvideorenderersettings) arriba).
+
+#### Información del bloque
+
+Nombre: GLVideoRendererBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada | Video | 1 |
+
+#### El pipeline de ejemplo
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->GLVideoRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+
+// VideoView1 es su control IVideoView en el formulario/página
+var glRenderer = new GLVideoRendererBlock(VideoView1);
+
+pipeline.Connect(source.VideoOutput, glRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+En Android, use la sobrecarga del constructor que también recibe el pipeline: `new GLVideoRendererBlock(pipeline, VideoView1)`.
+
+#### Plataformas
+
+Windows, macOS, Linux, iOS, Android.

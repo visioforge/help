@@ -12,6 +12,7 @@ tags:
   - Streaming
 primary_api_classes:
   - UniversalDemuxBlock
+  - UniversalAutoDemuxerBlock
   - MPEGTSDemuxBlock
   - QTDemuxBlock
   - UniversalSourceBlock
@@ -347,6 +348,91 @@ if (metadataOutputs.Length > 0 && metadataOutputs[0] != null)
 - Las banderas `renderVideo`, `renderAudio` y `renderSubtitle` en el constructor determinan si se crearán y procesarán salidas para estos tipos de flujos. Si se establece en `false`, los flujos respectivos serán ignorados (o enviados a renderizadores nulos internos si están presentes en el archivo pero no renderizados).
 - El `UniversalDemuxBlock` es potente para escenarios donde necesita gestionar explícitamente el proceso de demultiplexación para varios formatos o seleccionar flujos específicos de archivos con múltiples pistas.
 - Para reproducción simple de formatos de archivo comunes, `UniversalSourceBlock` frecuentemente proporciona una solución más directa ya que integra demultiplexación y decodificación. `UniversalDemuxBlock` ofrece control más granular.
+
+### Plataformas
+
+Windows, macOS, Linux, iOS, Android. (El soporte de plataforma para formatos específicos puede depender de los plugins GStreamer subyacentes.)
+
+## Bloque Universal Auto Demux
+
+El `UniversalAutoDemuxerBlock` detecta automáticamente el formato de contenedor del flujo entrante y crea el demuxer apropiado sobre la marcha. Usa el elemento `typefind` de GStreamer para identificar el tipo de medio y luego instancia el elemento demuxer correspondiente dinámicamente, exponiendo los flujos elementales (video, audio, subtítulos, metadatos) en sus pads de salida.
+
+A diferencia de `UniversalDemuxBlock`, este bloque **no** requiere `MediaFileInfo` ni un objeto de configuraciones explícito. Los pads de salida se crean previamente a partir de las banderas del constructor, y el demuxer se selecciona en tiempo de ejecución una vez que se detecta el formato. Esto lo hace conveniente para fuentes donde el tipo de contenedor es desconocido de antemano. Soporta todos los formatos de contenedor comunes (MP4/MOV, MKV, WebM, AVI, MPEG-TS, MPEG-PS, FLV, OGG, ASF/WMV, WAV, FLAC, DV y más).
+
+### Información del bloque
+
+Nombre: `UniversalAutoDemuxerBlock`.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada         | Varios Datos de Contenedor | 1     |
+| Salida de video  | Depende del contenido del flujo y bandera `renderVideo` | 0 o 1 |
+| Salida de audio  | Depende del contenido del flujo y bandera `renderAudio` | 0 o 1 |
+| Salida de subtítulos | Depende del contenido del flujo y bandera `renderSubtitle` | 0 o 1 |
+| Salida de metadatos | Depende del contenido del flujo y bandera `renderMetadata` | 0 o 1 |
+
+### Constructor
+
+`UniversalAutoDemuxerBlock(bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false, bool renderMetadata = false)`
+
+Las banderas del constructor determinan qué pads de salida se crean previamente. No hay una clase de configuraciones: el demuxer se elige automáticamente a partir del formato de contenedor detectado.
+
+### Pipeline de ejemplo
+
+Este ejemplo muestra cómo conectar un bloque fuente que proporciona datos de contenedor sin procesar a `UniversalAutoDemuxerBlock`, y luego conectar sus salidas a los bloques renderizadores. El formato de contenedor no necesita conocerse de antemano.
+
+```mermaid
+graph LR;
+    DataSourceBlock -- Datos de Contenedor --> UniversalAutoDemuxerBlock;
+    UniversalAutoDemuxerBlock -- Flujo de Video --> VideoRendererBlock;
+    UniversalAutoDemuxerBlock -- Flujo de Audio --> AudioRendererBlock;
+```
+
+### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Asuma que 'dataSourceBlock' es un bloque fuente que proporciona datos de contenedor sin procesar
+// (ej., un StreamSourceBlock u otro bloque que emite el flujo del contenedor).
+// El formato de contenedor se detecta automáticamente - no se requiere MediaFileInfo.
+
+// Crear el bloque auto demuxer.
+// Las banderas del constructor controlan qué pads de salida se crean.
+var autoDemuxBlock = new UniversalAutoDemuxerBlock(
+    renderVideo: true,
+    renderAudio: true,
+    renderSubtitle: false,
+    renderMetadata: false);
+
+// Conectar la fuente de datos a la entrada del demuxer.
+// pipeline.Connect(dataSourceBlock.Output, autoDemuxBlock.Input);
+
+// Crear renderizadores.
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
+var audioRenderer = new AudioRendererBlock();
+
+// Conectar salidas del demuxer (los pads quedan vinculados una vez que se detecta el formato).
+if (autoDemuxBlock.VideoOutput != null)
+{
+    pipeline.Connect(autoDemuxBlock.VideoOutput, videoRenderer.Input);
+}
+
+if (autoDemuxBlock.AudioOutput != null)
+{
+    pipeline.Connect(autoDemuxBlock.AudioOutput, audioRenderer.Input);
+}
+
+// Iniciar pipeline una vez que la fuente de datos esté conectada.
+// await pipeline.StartAsync();
+```
+
+### Observaciones
+
+- No se requiere `MediaFileInfo` ni un objeto de configuraciones: el formato de contenedor se detecta en tiempo de ejecución vía `typefind`, y el demuxer correspondiente se crea dinámicamente.
+- Los pads de salida se crean previamente a partir de las banderas del constructor. Use los pads de conveniencia `VideoOutput`, `AudioOutput` y `SubtitleOutput`, o los arreglos `VideoOutputs`, `AudioOutputs`, `SubtitleOutputs` y `MetadataOutputs`.
+- Cuando una bandera es `false`, el flujo correspondiente presente en el contenedor se descarta internamente.
+- Prefiera `UniversalDemuxBlock` cuando ya ha analizado el archivo y necesita control preciso sobre múltiples flujos del mismo tipo. Prefiera `UniversalAutoDemuxerBlock` cuando el tipo de contenedor es desconocido de antemano y un flujo por tipo es suficiente. Para reproducción simple de formatos de archivo comunes, `UniversalSourceBlock` integra tanto demultiplexación como decodificación.
 
 ### Plataformas
 

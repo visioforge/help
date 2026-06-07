@@ -1219,11 +1219,184 @@ Es crucial configurar configuraciones de codificador (bitrate, resolución, fram
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte RTMP GStreamer y disponibilidad de codificadores H.264/AAC).
 
+## Bloque de Salida Enhanced FLV
+
+El `EFLVOutputBlock` crea archivos Enhanced FLV (Flash Video) con soporte para Enhanced RTMP (V2). A diferencia del contenedor FLV clásico, el muxer Enhanced FLV señaliza los códecs mediante valores FOURCC, por lo que puede transportar códecs de video modernos como H.265/HEVC junto a H.264, y admite múltiples pistas de video y audio. Combina codificadores de video y audio por pista con un sumidero Enhanced FLV para producir archivos `.flv`.
+
+### Información del bloque
+
+Nombre: `EFLVOutputBlock`.
+
+| Dirección del pin | Tipo de medio | Codificadores esperados |
+| --- | :---: | :---: |
+| Entrada Video | varios | H.264 (`IH264EncoderSettings`), HEVC (`IHEVCEncoderSettings`) |
+| Entrada Audio | varios | AAC (`IAACEncoderSettings`), MP3 (`MP3EncoderSettings`) |
+
+Los pads de entrada son dinámicos. Llame a `CreateNewInput(MediaBlockPadMediaType.Video)` y `CreateNewInput(MediaBlockPadMediaType.Audio)` para agregar pistas; cada pad de entrada obtiene su propia instancia de codificador construida a partir de las configuraciones de codificador proporcionadas.
+
+### Configuraciones
+
+El `EFLVOutputBlock` se configura usando `EFLVSinkSettings` junto con las configuraciones para los codificadores de video y audio elegidos.
+
+Propiedades clave de `EFLVSinkSettings`:
+
+- `Filename` (string): La ruta al archivo Enhanced FLV de salida. Por defecto es `output.flv`.
+
+Constructores de `EFLVSinkSettings`:
+
+- `EFLVSinkSettings()`: Usa el nombre de archivo por defecto.
+- `EFLVSinkSettings(string filename)`: Establece el nombre de archivo de salida.
+
+Constructor de `EFLVOutputBlock`:
+
+- `EFLVOutputBlock(EFLVSinkSettings sinkSettings, IVideoEncoder videoSettings, IAudioEncoder audioSettings)`
+
+### El pipeline de muestra
+
+```mermaid
+graph LR;
+    VideoSource-->VideoEncoder;
+    AudioSource-->AudioEncoder;
+    VideoEncoder-->EFLVOutputBlock;
+    AudioEncoder-->EFLVOutputBlock;
+```
+
+### Código de muestra
+
+```csharp
+// crear pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// crear fuentes
+var videoSource = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configurar codificadores (video HEVC + audio AAC para Enhanced FLV)
+var videoSettings = HEVCEncoderBlock.GetDefaultSettings();
+var audioSettings = new VOAACEncoderSettings();
+
+// crear bloque de salida Enhanced FLV
+var sinkSettings = new EFLVSinkSettings("output.flv");
+var eflvOutput = new EFLVOutputBlock(sinkSettings, videoSettings, audioSettings);
+
+// crear entradas dinámicas para el bloque de salida Enhanced FLV
+var videoInputPad = eflvOutput.CreateNewInput(MediaBlockPadMediaType.Video);
+var audioInputPad = eflvOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// conectar
+pipeline.Connect(videoSource.Output, videoInputPad);
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// iniciar pipeline
+await pipeline.StartAsync();
+
+// ... más tarde, para detener ...
+// await pipeline.StopAsync();
+```
+
+### Comentarios
+
+El `EFLVOutputBlock` gestiona sus propias instancias de codificador internamente según las configuraciones `IVideoEncoder` / `IAudioEncoder` proporcionadas (H.264 o HEVC para video; AAC o MP3 para audio). El destino de salida puede cambiarse en tiempo de ejecución con `SetFilenameOrURL(string)` y consultarse con `GetFilenameOrURL()`.
+
+Para verificar disponibilidad:
+`EFLVOutputBlock.IsAvailable(IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)`
+
+### Plataformas
+
+Windows, macOS, Linux, iOS, Android (depende de la disponibilidad del muxer Enhanced FLV y de los plugins de codificador elegidos).
+
 ## Bloque de Grabación Pre-Evento
 
 El `PreEventRecordingBlock` implementa grabación de búfer circular (pre-evento). Almacena continuamente video y audio codificados en memoria y escribe clips de eventos a disco al activarse, incluyendo material de antes de que ocurriera el evento.
 
 Para documentación completa, configuraciones, máquina de estados y ejemplos de código, consulte la página dedicada de [Bloque de Grabación Pre-Evento](pre-event-recording.md).
+
+## Bloque de Salida Separado Pre-Evento
+
+El `PreEventSeparateOutputBlock` combina el patrón de sub-pipeline independiente del [Bloque de Salida Separado](#bloque-de-salida-separado) con la [grabación pre-evento (búfer circular)](pre-event-recording.md). En lugar de enrutar los streams codificados hacia un muxer + sumidero de archivo, los enruta hacia un `PreEventRecordingBlock`, de modo que la rama pre-evento graba clips de eventos (incluyendo material previo al disparo) de forma independiente de la cadena principal de vista previa/procesamiento. Deriva del pipeline principal mediante fuentes puente (`BridgeVideoSourceBlock`, `BridgeAudioSourceBlock`).
+
+### Información del bloque
+
+Nombre: `PreEventSeparateOutputBlock`.
+
+Este bloque es un sumidero que orquesta un sub-pipeline; no tiene pads de entrada directos. El video y el audio entran a través de las fuentes puente y salen a través del `PreEventRecordingBlock` proporcionado.
+
+### Configuraciones
+
+El bloque reutiliza el objeto de configuraciones `SeparateOutput` para describir la rama de codificación.
+
+Propiedades clave de `SeparateOutput` usadas por este bloque:
+
+- `VideoEncoder` (`MediaBlock`): Un bloque de codificador de video opcional. Cuando se establece, se conecta una rama de video desde la fuente puente de video hacia el bloque pre-evento.
+- `AudioEncoder` (`MediaBlock`): Un bloque de codificador de audio opcional. Cuando se establece, se conecta una rama de audio desde la fuente puente de audio hacia el bloque pre-evento.
+- `VideoProcessor` (`MediaBlock`): Un bloque de procesamiento de video opcional insertado antes del codificador de video.
+- `AudioProcessor` (`MediaBlock`): Un bloque de procesamiento de audio opcional insertado antes del codificador de audio.
+
+Constructor:
+
+- `PreEventSeparateOutputBlock(MediaBlocksPipeline pipeline, SeparateOutput settings, BridgeVideoSourceSettings bridgeVideoSourceSettings, BridgeAudioSourceSettings bridgeAudioSourceSettings, PreEventRecordingBlock preEventBlock)`
+
+### El pipeline conceptual
+
+```mermaid
+graph LR;
+    MainVideoPath --> BridgeVideoSink;
+    BridgeVideoSourceBlock --> OptionalVideoProcessor --> VideoEncoder --> PreEventRecordingBlock;
+    MainAudioPath --> BridgeAudioSink;
+    BridgeAudioSourceBlock --> OptionalAudioProcessor --> AudioEncoder --> PreEventRecordingBlock;
+```
+
+### Código de muestra
+
+```csharp
+// Asumiendo 'pipeline' es tu MediaBlocksPipeline principal
+// Asumiendo que los sumideros puente para las rutas principales de video/audio ya están configurados
+// con los nombres de canal "pe_video_bridge" / "pe_audio_bridge".
+
+// 1. Configurar fuentes puente para el sub-pipeline separado (coincidir con los nombres de canal del sumidero + información de formato)
+var videoInfo = new VideoFrameInfoX(1920, 1080, new VideoFrameRate(30));
+var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 48000, 2);
+
+var bridgeVideoSourceSettings = new BridgeVideoSourceSettings("pe_video_bridge", videoInfo);
+var bridgeAudioSourceSettings = new BridgeAudioSourceSettings("pe_audio_bridge", audioInfo);
+
+// 2. Configurar codificadores para la rama de grabación
+var h264Settings = H264EncoderBlock.GetDefaultSettings();
+var videoEncoder = new H264EncoderBlock(h264Settings);
+
+var aacSettings = AACEncoderBlock.GetDefaultSettings();
+var audioEncoder = new AACEncoderBlock(aacSettings);
+
+var separateOutputSettings = new SeparateOutput
+{
+    VideoEncoder = videoEncoder,
+    AudioEncoder = audioEncoder,
+};
+
+// 3. Crear el bloque de grabación pre-evento (consulte la página del Bloque de Grabación Pre-Evento para sus configuraciones)
+var preEventBlock = new PreEventRecordingBlock(new PreEventRecordingSettings());
+
+// 4. Crear el PreEventSeparateOutputBlock (conecta fuentes puente -> codificadores -> bloque pre-evento)
+var preEventOutput = new PreEventSeparateOutputBlock(
+    pipeline,
+    separateOutputSettings,
+    bridgeVideoSourceSettings,
+    bridgeAudioSourceSettings,
+    preEventBlock);
+
+// iniciar pipeline principal (el sub-pipeline corre a través de los puentes)
+await pipeline.StartAsync();
+
+// ... disparar un clip de evento en el bloque pre-evento cuando sea necesario ...
+```
+
+### Comentarios
+
+El `PreEventSeparateOutputBlock` escribe los segmentos pre-evento y principal en archivos de salida separados a través del `PreEventRecordingBlock`; el nombre de archivo se establece por grabación cuando se dispara el evento, no en el bloque de salida. `GetFilenameOrURL()` devuelve el nombre de archivo actual del bloque pre-evento. Construir el bloque construye los codificadores proporcionados, el bloque pre-evento y las fuentes puente.
+
+### Plataformas
+
+Depende de los componentes usados dentro de la configuración `SeparateOutput` y del `PreEventRecordingBlock` (codificadores, procesadores). Generalmente multiplataforma si los elementos GStreamer requeridos están disponibles.
 
 ## Ver También
 

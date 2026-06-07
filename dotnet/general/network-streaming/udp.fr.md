@@ -186,7 +186,7 @@ Utilisez `UDPMPEGTSSinkBlock` pour multiplexer audio et vidéo en MPEG-TS et env
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("input.mp4"));
 
 var videoEncoder = new H264EncoderBlock(new OpenH264EncoderSettings());
 var audioEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings() { Bitrate = 192 });

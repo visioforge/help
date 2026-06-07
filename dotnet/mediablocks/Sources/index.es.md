@@ -475,7 +475,7 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri("test.mp4"));
+var sourceSettings = await UniversalSourceSettings.CreateAsync("test.mp4");
 var fileSource = new UniversalSourceBlock(sourceSettings);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
@@ -2184,7 +2184,7 @@ var pipeline = new MediaBlocksPipeline();
 var settings = new VideoMixerSourceSettings(1920, 1080, VideoFrameRate.FPS_30);
 
 // Agregar una fuente de archivo en la mitad izquierda
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("source1.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("source1.mp4"));
 settings.Add(fileSource, new Rect(0, 0, 960, 1080));
 
 // Agregar una cámara web en la mitad derecha
@@ -2206,6 +2206,63 @@ await pipeline.StartAsync();
 #### Plataformas
 
 Windows, macOS, Linux, iOS, Android.
+
+### Bloque Fuente WebView2
+
+El `WebView2SourceBlock` renderiza una superficie del navegador Microsoft Edge WebView2 como una fuente de video en vivo. Es útil para capturar páginas web, superposiciones HTML, paneles de control o contenido interactivo como un stream de video. Solo para Windows — requiere el runtime de Microsoft Edge WebView2 y el plugin `webview2` de GStreamer.
+
+#### Información del bloque
+
+Nombre: WebView2SourceBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Salida de video | Video sin comprimir | 1 |
+
+#### Configuración (WebView2SourceSettings)
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | :---: | --- |
+| `Location` | `string` | `"about:blank"` | URL a mostrar. |
+| `JavaScript` | `string` | `null` | JavaScript a ejecutar cuando se completa la navegación. |
+| `Adapter` | `int` | `-1` | Índice del adaptador DXGI (`-1` para cualquier dispositivo). |
+| `ProcessingDeadline` | `ulong` | `20000000` | Tiempo máximo de procesamiento para un búfer, en nanosegundos. |
+| `UserDataFolder` | `string` | `null` | Ruta absoluta a la carpeta de datos de usuario de WebView2. |
+
+#### El pipeline de muestra
+
+```mermaid
+graph LR;
+    WebView2SourceBlock-->VideoRendererBlock;
+```
+
+#### Código de muestra
+
+```csharp
+// crear pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// crear ajustes de la fuente (pasar la URL a través del constructor)
+var settings = new WebView2SourceSettings("https://www.visioforge.com/");
+
+// crear bloque fuente
+var webViewSource = new WebView2SourceBlock(settings);
+
+// crear bloque renderizador de video y conectarlo al bloque fuente
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(webViewSource.Output, videoRenderer.Input);
+
+// ejecutar pipeline
+await pipeline.StartAsync();
+```
+
+#### Disponibilidad
+
+`WebView2SourceBlock.IsAvailable()` devuelve `true` si el plugin `webview2` de GStreamer está instalado.
+
+#### Plataformas
+
+Windows.
 
 ## Bloques Fuente Push
 

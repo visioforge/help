@@ -65,7 +65,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioConverter = new AudioConverterBlock();
 pipeline.Connect(fileSource.AudioOutput, audioConverter.Input);
@@ -121,7 +121,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Rééchantillonner à 48000 Hz, stéréo
 var settings = new AudioResamplerSettings(AudioFormatX.S16LE, 48000, 2);
@@ -177,7 +177,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var settings = new AudioTimestampCorrectorSettings();
 var corrector = new AudioTimestampCorrectorBlock(settings);
@@ -234,7 +234,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Retarder l'audio de 500 ms.
 var audioDelay = new AudioDelayBlock(TimeSpan.FromMilliseconds(500));
@@ -304,7 +304,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // VolumeBlock a un constructeur sans paramètre ; définissez Level sur la propriété (0.0 silence, 1.0 normal, >1.0 amplifié).
 var volume = new VolumeBlock { Level = 0.8 };
@@ -462,7 +462,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioSampleGrabber = new AudioSampleGrabberBlock();
 audioSampleGrabber.OnAudioFrameBuffer += (sender, args) =>
@@ -534,7 +534,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var amplify = new AmplifyBlock(AmplifyClippingMethod.Normal, 2.0);
 pipeline.Connect(fileSource.AudioOutput, amplify.Input);
@@ -587,7 +587,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // EchoBlock a un constructeur sans paramètre ; définissez les propriétés directement.
 var echo = new EchoBlock
@@ -649,7 +649,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var settings = new KaraokeAudioEffect();
 var karaoke = new KaraokeBlock(settings);
@@ -705,7 +705,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var settings = new ReverberationAudioEffect();
 var reverb = new ReverberationBlock(settings);
@@ -758,7 +758,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var settings = new WideStereoAudioEffect();
 var wideStereo = new WideStereoBlock(settings);
@@ -811,7 +811,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Balance : -1.0 (gauche complet) à 1.0 (droite complet), 0.0 = centre. Le ctor prend un float, pas un double.
 var balance = new AudioBalanceBlock(0.5f);
@@ -875,7 +875,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Créer l'égaliseur 10 bandes (ctor sans paramètre ; les bandes sont à 0 dB par défaut)
 var equalizer = new Equalizer10Block();
@@ -946,7 +946,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Créer l'égaliseur paramétrique
 var equalizer = new EqualizerParametricBlock();
@@ -1011,7 +1011,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var settings = new ChebyshevBandPassRejectAudioEffect();
 var filter = new ChebyshevBandPassRejectBlock(settings);
@@ -1068,7 +1068,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var settings = new ChebyshevLimitAudioEffect();
 var filter = new ChebyshevLimitBlock(settings);
@@ -1128,7 +1128,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // CompressorExpanderBlock a un constructeur sans paramètre ; définissez les propriétés directement.
 var compressor = new CompressorExpanderBlock
@@ -1190,7 +1190,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // ScaleTempoBlock a un constructeur sans paramètre ; définissez Rate via la propriété.
 // 1.0 = normal, 0.5 = demi-vitesse, 2.0 = vitesse double ; la hauteur est préservée.
@@ -1251,7 +1251,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var vuMeter = new VUMeterBlock();
 vuMeter.OnAudioVUMeter += (sender, args) =>
@@ -1316,7 +1316,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEffects = new AudioEffectsBlock();
 pipeline.Connect(fileSource.AudioOutput, audioEffects.Input);
@@ -1371,7 +1371,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var loudNorm = new AudioLoudNormBlock();
 pipeline.Connect(fileSource.AudioOutput, loudNorm.Input);
@@ -1421,7 +1421,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "noisy_audio.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var rnnoise = new AudioRNNoiseBlock();
 pipeline.Connect(fileSource.AudioOutput, rnnoise.Input);
@@ -1474,7 +1474,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "podcast.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var removeSilence = new RemoveSilenceBlock();
 pipeline.Connect(fileSource.AudioOutput, removeSilence.Input);
@@ -1529,7 +1529,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // CsoundFilterBlock prend directement le contenu du script Csound (.csd), pas un objet de paramètres.
 // Chargez le script depuis le disque et passez le texte au constructeur — définissez optionnellement Loop/ScoreOffset.
@@ -1586,7 +1586,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var ebuR128 = new EbuR128LevelBlock
 {
@@ -1646,7 +1646,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // HRTFRenderBlock a un ctor sans paramètre ; configurez via les propriétés.
 // Fournissez un fichier HRIR (Head-Related Impulse Response) — requis pour le rendu spatial.
@@ -1709,7 +1709,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // RSAudioEchoBlock a un ctor sans paramètre ; configurez via les propriétés (Delay/MaxDelay sont des TimeSpan).
 var rsEcho = new RSAudioEchoBlock
@@ -1769,7 +1769,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var pitchBlock = new PitchBlock(semitones: 5);
 pipeline.Connect(fileSource.AudioOutput, pitchBlock.Input);
@@ -1823,7 +1823,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var silenceDetector = new SilenceDetectorBlock(thresholdDb: -35.0);
 silenceDetector.OnSilenceStarted += (s, e) => Console.WriteLine($"Silence commencé à {e.Timestamp}");
@@ -1880,7 +1880,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "karaoke.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Utiliser uniquement le canal instrumental (gauche)
 var mixer = new WeightedChannelMixBlock(leftWeight: 1.0f, rightWeight: 0.0f);

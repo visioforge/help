@@ -102,7 +102,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var aacEncoderBlock = new AACEncoderBlock(new MFAACEncoderSettings() { Bitrate = 192 });
 
@@ -154,7 +154,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // ADPCMEncoderBlock prend un int optionnel block-align (par défaut 1024) — pas de classe Settings.
 var adpcmEncoderBlock = new ADPCMEncoderBlock(blockAlign: 1024);
@@ -204,7 +204,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.wav";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var aptxSettings = new AptXEncoderSettings();
 var aptxEncoder = new AptXEncoderBlock(aptxSettings);
@@ -258,7 +258,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 // Supposons que nous disposons d'une source AptX (par ex. un récepteur Bluetooth)
-var aptxSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("aptx_stream")));
+var aptxSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("aptx_stream"));
 
 var aptxSettings = new AptXDecoderSettings();
 var aptxDecoder = new AptXDecoderBlock(aptxSettings);
@@ -312,7 +312,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // ALAWEncoderBlock possède un constructeur sans paramètres.
 var alawEncoderBlock = new ALAWEncoderBlock();
@@ -362,7 +362,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var flacEncoderBlock = new FLACEncoderBlock(new FLACEncoderSettings());
 pipeline.Connect(fileSource.AudioOutput, flacEncoderBlock.Input);
@@ -415,7 +415,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var mp2EncoderBlock = new MP2EncoderBlock(new MP2EncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, mp2EncoderBlock.Input);
@@ -466,7 +466,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var mp3EncoderBlock = new MP3EncoderBlock(new MP3EncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, mp3EncoderBlock.Input);
@@ -483,7 +483,7 @@ await pipeline.StartAsync();
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // addParser est défini à true pour le streaming RTMP
 var mp3EncoderBlock = new MP3EncoderBlock(new MP3EncoderSettings() { Bitrate = 192 }, addParser: true);
@@ -540,7 +540,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var opusEncoderBlock = new OPUSEncoderBlock(new OPUSEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, opusEncoderBlock.Input);
@@ -597,7 +597,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var speexEncoderBlock = new SpeexEncoderBlock(new SpeexEncoderSettings() { Mode = SpeexEncoderMode.NarrowBand });
 pipeline.Connect(fileSource.AudioOutput, speexEncoderBlock.Input);
@@ -653,7 +653,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var vorbisEncoderBlock = new VorbisEncoderBlock(new VorbisEncoderSettings { Quality = 5 });
 pipeline.Connect(fileSource.AudioOutput, vorbisEncoderBlock.Input);
@@ -705,7 +705,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var wavEncoderBlock = new WAVEncoderBlock(new WAVEncoderSettings());
 pipeline.Connect(fileSource.AudioOutput, wavEncoderBlock.Input);
@@ -754,7 +754,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var wavpackEncoderBlock = new WavPackEncoderBlock(new WavPackEncoderSettings());
 pipeline.Connect(fileSource.AudioOutput, wavpackEncoderBlock.Input);
@@ -817,7 +817,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var wmaEncoderBlock = new WMAEncoderBlock(new WMAEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, wmaEncoderBlock.Input);

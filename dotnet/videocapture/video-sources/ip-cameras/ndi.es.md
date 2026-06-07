@@ -117,7 +117,7 @@ Una vez que has identificado las fuentes NDI en tu red, el siguiente paso es est
     // Crear un objeto de configuración de fuente de cámara IP
     settings = new IPCameraSourceSettings
     {
-        URL = new Uri("URL de fuente NDI")
+        URL = new Uri("ndi://HOSTNAME/SourceName")
     };
 
     // Establecer el tipo de fuente a NDI

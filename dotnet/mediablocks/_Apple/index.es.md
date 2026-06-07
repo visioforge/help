@@ -56,6 +56,10 @@ Esta sección cubre los MediaBlocks específicamente optimizados para plataforma
 ### Procesamiento de video
 
 - **MetalVideoCompositorBlock**: compositor de video multi-entrada acelerado por GPU mediante Apple Metal
+- **MetalConvertScaleBlock**: conversión de formato de píxel y escalado en una sola pasada de GPU mediante Apple Metal
+- **MetalDeinterlaceBlock**: desentrelazado acelerado por GPU mediante Apple Metal
+- **MetalOverlayBlock**: composición de imágenes superpuestas en GPU mediante Apple Metal
+- **MetalTransformBlock**: operaciones de volteo, rotación y recorte en GPU mediante Apple Metal
 
 ## Metal Video Compositor
 
@@ -148,6 +152,286 @@ Devuelve `true` si el plugin GStreamer `vfmetalcompositor` está disponible en e
 
 macOS, iOS.
 
+## Metal Convert/Scale
+
+### Metal Convert/Scale Block
+
+El `MetalConvertScaleBlock` realiza la conversión de formato de píxel y el escalado en una sola pasada de GPU usando el framework Apple Metal. Opcionalmente puede añadir bordes de letterbox/pillarbox para preservar la relación de aspecto de la fuente.
+
+#### Información del bloque
+
+Nombre: MetalConvertScaleBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada de video | Video sin comprimir | 1 |
+| Salida de video | Video sin comprimir | 1 |
+
+#### Configuración
+
+El bloque acepta una instancia de `MetalConvertScaleSettings`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | :---: | --- |
+| `Method` | `MetalScalingMethod` | Bilinear | Interpolación de escalado: `Bilinear` o `Nearest` |
+| `AddBorders` | `bool` | false | Añadir bordes de letterbox/pillarbox para preservar la relación de aspecto |
+| `BorderColor` | `uint` | 0xFF000000 | Color del borde en formato ARGB (negro opaco) |
+
+#### El pipeline de ejemplo
+
+```mermaid
+graph LR;
+    VideoSource-->MetalConvertScaleBlock;
+    MetalConvertScaleBlock-->VideoRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var videoSource = new IOSVideoSourceBlock(videoSettings);
+
+// Escalado bilineal con bordes de letterbox
+var settings = new MetalConvertScaleSettings
+{
+    Method = MetalScalingMethod.Bilinear,
+    AddBorders = true,
+    BorderColor = 0xFF000000
+};
+var convertScale = new MetalConvertScaleBlock(settings);
+pipeline.Connect(videoSource.Output, convertScale.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(convertScale.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Disponibilidad
+
+```csharp
+bool available = MetalConvertScaleBlock.IsAvailable();
+```
+
+Devuelve `true` si el plugin GStreamer `vfmetalconvertscale` está disponible en el sistema actual.
+
+#### Plataformas
+
+macOS, iOS.
+
+## Metal Deinterlace
+
+### Metal Deinterlace Block
+
+El `MetalDeinterlaceBlock` elimina los artefactos de entrelazado en la GPU usando el framework Apple Metal. Admite los algoritmos bob, weave, lineal y greedy-H (adaptativo al movimiento).
+
+#### Información del bloque
+
+Nombre: MetalDeinterlaceBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada de video | Video sin comprimir | 1 |
+| Salida de video | Video sin comprimir | 1 |
+
+#### Configuración
+
+El bloque acepta una instancia de `MetalDeinterlaceSettings`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | :---: | --- |
+| `Method` | `MetalDeinterlaceMethod` | Bob | Algoritmo: `Bob`, `Weave`, `Linear` o `GreedyH` |
+| `FieldLayout` | `MetalDeinterlaceFieldLayout` | Auto | Orden de campos: `Auto`, `TopFieldFirst` o `BottomFieldFirst` |
+| `MotionThreshold` | `double` | 0.1 | Umbral de detección de movimiento para el algoritmo greedy-H (0.0–1.0) |
+
+#### El pipeline de ejemplo
+
+```mermaid
+graph LR;
+    VideoSource-->MetalDeinterlaceBlock;
+    MetalDeinterlaceBlock-->VideoRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var videoSource = new IOSVideoSourceBlock(videoSettings);
+
+// Desentrelazado greedy-H adaptativo al movimiento
+var settings = new MetalDeinterlaceSettings
+{
+    Method = MetalDeinterlaceMethod.GreedyH,
+    FieldLayout = MetalDeinterlaceFieldLayout.Auto,
+    MotionThreshold = 0.1
+};
+var deinterlace = new MetalDeinterlaceBlock(settings);
+pipeline.Connect(videoSource.Output, deinterlace.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(deinterlace.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Disponibilidad
+
+```csharp
+bool available = MetalDeinterlaceBlock.IsAvailable();
+```
+
+Devuelve `true` si el plugin GStreamer `vfmetaldeinterlace` está disponible en el sistema actual.
+
+#### Plataformas
+
+macOS, iOS.
+
+## Metal Overlay
+
+### Metal Overlay Block
+
+El `MetalOverlayBlock` compone una imagen PNG o JPEG sobre los fotogramas de video en la GPU usando el framework Apple Metal. La superposición puede posicionarse en píxeles absolutos o como una fracción del tamaño del fotograma, con opacidad ajustable.
+
+#### Información del bloque
+
+Nombre: MetalOverlayBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada de video | Video sin comprimir | 1 |
+| Salida de video | Video sin comprimir | 1 |
+
+#### Configuración
+
+El bloque acepta una instancia de `MetalOverlaySettings`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | :---: | --- |
+| `Location` | `string` | null | Ruta a la imagen de superposición (PNG o JPEG); null deshabilita la superposición |
+| `X` | `int` | 0 | Posición X en píxeles (ignorada cuando `RelativeX` no es -1) |
+| `Y` | `int` | 0 | Posición Y en píxeles (ignorada cuando `RelativeY` no es -1) |
+| `Width` | `int` | 0 | Ancho de la superposición en píxeles (0 = ancho de la imagen original) |
+| `Height` | `int` | 0 | Alto de la superposición en píxeles (0 = alto de la imagen original) |
+| `Alpha` | `double` | 1.0 | Opacidad (0.0 transparente – 1.0 opaco) |
+| `RelativeX` | `double` | -1.0 | X relativa como fracción del ancho del video; -1.0 usa el `X` en píxeles |
+| `RelativeY` | `double` | -1.0 | Y relativa como fracción del alto del video; -1.0 usa el `Y` en píxeles |
+
+#### El pipeline de ejemplo
+
+```mermaid
+graph LR;
+    VideoSource-->MetalOverlayBlock;
+    MetalOverlayBlock-->VideoRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var videoSource = new IOSVideoSourceBlock(videoSettings);
+
+// Logo en la esquina superior izquierda con 80% de opacidad
+var settings = new MetalOverlaySettings
+{
+    Location = "logo.png",
+    X = 20,
+    Y = 20,
+    Alpha = 0.8
+};
+var overlay = new MetalOverlayBlock(settings);
+pipeline.Connect(videoSource.Output, overlay.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(overlay.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Disponibilidad
+
+```csharp
+bool available = MetalOverlayBlock.IsAvailable();
+```
+
+Devuelve `true` si el plugin GStreamer `vfmetaloverlay` está disponible en el sistema actual.
+
+#### Plataformas
+
+macOS, iOS.
+
+## Metal Transform
+
+### Metal Transform Block
+
+El `MetalTransformBlock` aplica operaciones de volteo, rotación y recorte en la GPU usando el framework Apple Metal.
+
+#### Información del bloque
+
+Nombre: MetalTransformBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada de video | Video sin comprimir | 1 |
+| Salida de video | Video sin comprimir | 1 |
+
+#### Configuración
+
+El bloque acepta una instancia de `MetalTransformSettings`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | :---: | --- |
+| `Method` | `MetalTransformMethod` | None | Rotación/volteo: `None`, `Clockwise`, `Rotate180`, `CounterClockwise`, `HorizontalFlip`, `VerticalFlip`, `UpperLeftDiagonal` o `UpperRightDiagonal` |
+| `CropTop` | `int` | 0 | Píxeles a recortar desde arriba |
+| `CropBottom` | `int` | 0 | Píxeles a recortar desde abajo |
+| `CropLeft` | `int` | 0 | Píxeles a recortar desde la izquierda |
+| `CropRight` | `int` | 0 | Píxeles a recortar desde la derecha |
+
+#### El pipeline de ejemplo
+
+```mermaid
+graph LR;
+    VideoSource-->MetalTransformBlock;
+    MetalTransformBlock-->VideoRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var videoSource = new IOSVideoSourceBlock(videoSettings);
+
+// Rotar 90 grados en sentido horario y recortar 10px de cada lado
+var settings = new MetalTransformSettings
+{
+    Method = MetalTransformMethod.Clockwise,
+    CropLeft = 10,
+    CropRight = 10
+};
+var transform = new MetalTransformBlock(settings);
+pipeline.Connect(videoSource.Output, transform.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(transform.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Disponibilidad
+
+```csharp
+bool available = MetalTransformBlock.IsAvailable();
+```
+
+Devuelve `true` si el plugin GStreamer `vfmetaltransform` está disponible en el sistema actual.
+
+#### Plataformas
+
+macOS, iOS.
+
 ## Requisitos de plataforma
 
 - **iOS**: iOS 12.0 o superior
@@ -199,7 +483,7 @@ await pipeline.StartAsync();
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("input.mp4"));
 
 // Codificador Apple ProRes
 // AppleProResEncoderSettings expone Quality (double 0.0-1.0), Bitrate, MaxKeyframeInterval,

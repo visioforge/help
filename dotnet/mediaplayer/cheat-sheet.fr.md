@@ -149,7 +149,7 @@ public partial class MainForm : Form
 
         // 4. Construire une source à partir d'un chemin de fichier ou d'une URL de flux
         var source = await UniversalSourceSettings.CreateAsync(
-            new Uri("C:\\Videos\\sample.mp4"));
+            "C:\\Videos\\sample.mp4");
 
         // 5. Ouvrir et lire
         await _player.OpenAsync(source);

@@ -445,7 +445,7 @@ await VisioForgeX.InitSDKAsync();  // Une seule fois au démarrage de l'applicat
 MediaPlayerCoreX _player;
 _player = new MediaPlayerCoreX(VideoView1);
 
-var source = await UniversalSourceSettingsV2.CreateAsync(new Uri("video.mp4"));
+var source = await UniversalSourceSettingsV2.CreateAsync("video.mp4");
 await _player.OpenAsync(source);
 await _player.PlayAsync();
 ```

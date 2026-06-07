@@ -107,7 +107,7 @@ var pipeline = new MediaBlocksPipeline();
 
 // créer une source vidéo (par ex. SystemVideoSourceBlock ou UniversalSourceBlock).
 // UniversalSourceBlock requiert UniversalSourceSettings via la fabrique asynchrone :
-var sourceSettings = await UniversalSourceSettings.CreateAsync(new Uri("input.mp4"));
+var sourceSettings = await UniversalSourceSettings.CreateAsync("input.mp4");
 var videoSource = new UniversalSourceBlock(sourceSettings);
 
 // créer le bloc de téléversement de données Nvidia

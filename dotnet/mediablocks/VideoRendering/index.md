@@ -106,7 +106,7 @@ var pipeline = new MediaBlocksPipeline();
 
 // create a source block
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // create a video renderer block
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);

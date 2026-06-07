@@ -13,6 +13,7 @@ tags:
   - Streaming
 primary_api_classes:
   - UniversalDemuxBlock
+  - UniversalAutoDemuxerBlock
   - MPEGTSDemuxBlock
   - QTDemuxBlock
   - UniversalSourceBlock
@@ -57,10 +58,10 @@ Cet exemple montre comment connecter une source (telle que `HTTPSourceBlock` pou
 
 ```mermaid
 graph LR;
-    DataSourceBlock -- MPEG-TS Data --> MPEGTSDemuxBlock;
-    MPEGTSDemuxBlock -- Video Stream --> VideoRendererBlock;
-    MPEGTSDemuxBlock -- Audio Stream --> AudioRendererBlock;
-    MPEGTSDemuxBlock -- Subtitle Stream --> SubtitleOverlayOrRendererBlock;
+    DataSourceBlock -- Données MPEG-TS --> MPEGTSDemuxBlock;
+    MPEGTSDemuxBlock -- Flux vidéo --> VideoRendererBlock;
+    MPEGTSDemuxBlock -- Flux audio --> AudioRendererBlock;
+    MPEGTSDemuxBlock -- Flux de sous-titres --> SubtitleOverlayOrRendererBlock;
 ```
 
 ### Exemple de code
@@ -147,9 +148,9 @@ Cet exemple montre comment connecter un bloc source émettant des données MP4/M
 
 ```mermaid
 graph LR;
-    DataSourceBlock -- MP4/MOV Data --> QTDemuxBlock;
-    QTDemuxBlock -- Video Stream --> VideoRendererBlock;
-    QTDemuxBlock -- Audio Stream --> AudioRendererBlock;
+    DataSourceBlock -- Données MP4/MOV --> QTDemuxBlock;
+    QTDemuxBlock -- Flux vidéo --> VideoRendererBlock;
+    QTDemuxBlock -- Flux audio --> AudioRendererBlock;
 ```
 
 ### Exemple de code
@@ -255,10 +256,10 @@ Cet exemple illustre l'utilisation de `UniversalDemuxBlock` pour démultiplexer 
 
 ```mermaid
 graph LR;
-    DataSourceBlock -- Container Data --> UniversalDemuxBlock;
-    UniversalDemuxBlock -- Video Stream 1 --> VideoRendererBlock1;
-    UniversalDemuxBlock -- Audio Stream 1 --> AudioRendererBlock1;
-    UniversalDemuxBlock -- Subtitle Stream 1 --> SubtitleHandler1;
+    DataSourceBlock -- Données conteneur --> UniversalDemuxBlock;
+    UniversalDemuxBlock -- Flux vidéo 1 --> VideoRendererBlock1;
+    UniversalDemuxBlock -- Flux audio 1 --> AudioRendererBlock1;
+    UniversalDemuxBlock -- Flux de sous-titres 1 --> SubtitleHandler1;
 ```
 
 ### Exemple de code
@@ -347,6 +348,91 @@ if (metadataOutputs.Length > 0 && metadataOutputs[0] != null)
 - Les indicateurs `renderVideo`, `renderAudio` et `renderSubtitle` du constructeur déterminent si des sorties pour ces types de flux seront créées et traitées. Lorsqu'ils sont définis à `false`, les flux concernés seront ignorés (ou envoyés vers des moteurs de rendu null internes s'ils sont présents dans le fichier sans être restitués).
 - Le `UniversalDemuxBlock` est puissant dans les scénarios où vous devez gérer explicitement le démultiplexage pour divers formats ou sélectionner des flux spécifiques dans des fichiers à pistes multiples.
 - Pour la lecture simple de formats de fichier courants, `UniversalSourceBlock` est souvent une solution plus directe car il intègre démultiplexage et décodage. `UniversalDemuxBlock` offre un contrôle plus fin.
+
+### Plateformes
+
+Windows, macOS, Linux, iOS, Android. (La prise en charge des formats spécifiques selon la plateforme peut dépendre des plugins GStreamer sous-jacents.)
+
+## Bloc Universal Auto Demux
+
+L'`UniversalAutoDemuxerBlock` détecte automatiquement le format de conteneur du flux entrant et crée le démultiplexeur approprié à la volée. Il utilise l'élément `typefind` de GStreamer pour identifier le type de média, puis instancie dynamiquement l'élément démultiplexeur correspondant, exposant les flux élémentaires (vidéo, audio, sous-titres, métadonnées) sur ses pads de sortie.
+
+Contrairement à `UniversalDemuxBlock`, ce bloc ne nécessite **pas** de `MediaFileInfo` ni d'objet de paramètres explicite. Les pads de sortie sont créés au préalable à partir des indicateurs du constructeur, et le démultiplexeur est sélectionné à l'exécution une fois le format détecté. Cela le rend pratique pour les sources dont le type de conteneur est inconnu à l'avance. Il prend en charge tous les formats de conteneur courants (MP4/MOV, MKV, WebM, AVI, MPEG-TS, MPEG-PS, FLV, OGG, ASF/WMV, WAV, FLAC, DV, et plus encore).
+
+### Informations sur le bloc
+
+Nom : `UniversalAutoDemuxerBlock`.
+
+| Direction du pin | Type de média | Nombre de pins |
+| --- | :---: | :---: |
+| Entrée         | Données conteneur diverses | 1     |
+| Sortie vidéo  | Dépend du contenu du flux et de l'indicateur `renderVideo` | 0 ou 1 |
+| Sortie audio  | Dépend du contenu du flux et de l'indicateur `renderAudio` | 0 ou 1 |
+| Sortie sous-titres | Dépend du contenu du flux et de l'indicateur `renderSubtitle` | 0 ou 1 |
+| Sortie métadonnées | Dépend du contenu du flux et de l'indicateur `renderMetadata` | 0 ou 1 |
+
+### Constructeur
+
+`UniversalAutoDemuxerBlock(bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false, bool renderMetadata = false)`
+
+Les indicateurs du constructeur déterminent quels pads de sortie sont créés au préalable. Il n'existe pas de classe de paramètres - le démultiplexeur est choisi automatiquement à partir du format de conteneur détecté.
+
+### Pipeline d'exemple
+
+Cet exemple montre comment connecter un bloc source qui fournit des données conteneur brutes à `UniversalAutoDemuxerBlock`, puis connecter ses sorties aux blocs moteurs de rendu. Le format de conteneur n'a pas besoin d'être connu au préalable.
+
+```mermaid
+graph LR;
+    DataSourceBlock -- Données conteneur --> UniversalAutoDemuxerBlock;
+    UniversalAutoDemuxerBlock -- Flux vidéo --> VideoRendererBlock;
+    UniversalAutoDemuxerBlock -- Flux audio --> AudioRendererBlock;
+```
+
+### Exemple de code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// On suppose que « dataSourceBlock » est un bloc source fournissant des données conteneur brutes
+// (par ex. un StreamSourceBlock ou un autre bloc qui émet le flux conteneur).
+// Le format de conteneur est détecté automatiquement - aucun MediaFileInfo requis.
+
+// Créer le bloc démultiplexeur automatique.
+// Les indicateurs du constructeur contrôlent quels pads de sortie sont créés.
+var autoDemuxBlock = new UniversalAutoDemuxerBlock(
+    renderVideo: true,
+    renderAudio: true,
+    renderSubtitle: false,
+    renderMetadata: false);
+
+// Connecter la source de données à l'entrée du démultiplexeur.
+// pipeline.Connect(dataSourceBlock.Output, autoDemuxBlock.Input);
+
+// Créer les moteurs de rendu.
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // En supposant VideoView1
+var audioRenderer = new AudioRendererBlock();
+
+// Connecter les sorties du démultiplexeur (les pads sont liés une fois le format détecté).
+if (autoDemuxBlock.VideoOutput != null)
+{
+    pipeline.Connect(autoDemuxBlock.VideoOutput, videoRenderer.Input);
+}
+
+if (autoDemuxBlock.AudioOutput != null)
+{
+    pipeline.Connect(autoDemuxBlock.AudioOutput, audioRenderer.Input);
+}
+
+// Démarrer le pipeline une fois la source de données connectée.
+// await pipeline.StartAsync();
+```
+
+### Remarques
+
+- Aucun `MediaFileInfo` ni objet de paramètres n'est requis - le format de conteneur est détecté à l'exécution via `typefind`, et le démultiplexeur correspondant est créé dynamiquement.
+- Les pads de sortie sont créés au préalable à partir des indicateurs du constructeur. Utilisez les pads pratiques `VideoOutput`, `AudioOutput` et `SubtitleOutput`, ou les tableaux `VideoOutputs`, `AudioOutputs`, `SubtitleOutputs` et `MetadataOutputs`.
+- Lorsqu'un indicateur vaut `false`, le flux correspondant présent dans le conteneur est ignoré en interne.
+- Préférez `UniversalDemuxBlock` lorsque vous avez déjà analysé le fichier et que vous avez besoin d'un contrôle précis sur plusieurs flux du même type. Préférez `UniversalAutoDemuxerBlock` lorsque le type de conteneur est inconnu à l'avance et qu'un seul flux par type suffit. Pour la lecture simple des formats de fichier courants, `UniversalSourceBlock` intègre à la fois le démultiplexage et le décodage.
 
 ### Plateformes
 

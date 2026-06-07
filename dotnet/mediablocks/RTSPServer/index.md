@@ -195,7 +195,7 @@ Console.WriteLine($"Secure RTSP server started at {rtspSettings.URL}");
 var pipeline = new MediaBlocksPipeline();
 
 // Use file as source
-var fileSettings = await UniversalSourceSettings.CreateAsync(new Uri("video.mp4"));
+var fileSettings = await UniversalSourceSettings.CreateAsync("video.mp4");
 var fileSource = new UniversalSourceBlock(fileSettings);
 
 // Create RTSP server — let it encode both streams internally

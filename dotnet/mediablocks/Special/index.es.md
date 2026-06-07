@@ -27,6 +27,25 @@ primary_api_classes:
 
 Los bloques especiales son bloques que no encajan en ninguna otra categoría.
 
+## Analizador MPEG-TS
+
+El `TSAnalyzerBlock` es un monitor MPEG-TS de calidad de difusión: informa la lista de programas (PAT/PMT/PSI), la tasa de bits por PID y total, la temporización PCR, el scrambling, la información de servicio DVB, los detalles de códec y el cumplimiento completo de ETSI TR 101 290 Prioridad 1/2/3 — desde un archivo o un flujo UDP/SRT en vivo, ya sea como sumidero terminal o como passthrough en línea.
+
+Para la referencia completa — modos, ajustes, el modelo de informe y ejemplos de código — consulte la página dedicada [Bloque analizador de flujo MPEG-TS](TSAnalyzerBlock.md).
+
+### Información del bloque
+
+Nombre: TSAnalyzerBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada | Flujo de bytes MPEG-TS | 1 |
+| Salida | Flujo de bytes MPEG-TS (passthrough) | 1 en modo `InputOutput`, 0 en modo `Input` |
+
+### Plataformas
+
+Windows, macOS, Linux, iOS, Android.
+
 ## Null Renderer
 
 El bloque null renderer envía los datos a null. Este bloque puede ser requerido si su bloque tiene salidas que no quiere usar.
@@ -59,7 +78,7 @@ private void Start()
 
   // crear bloque fuente universal
   var filename = "test.mp4";
-  var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+  var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
   // crear bloque grabber de muestras de video y agregar el manejador de eventos
   var sampleGrabber = new VideoSampleGrabberBlock();
@@ -158,7 +177,7 @@ La clase `TeeQueueSettings` (namespace `VisioForge.Core.Types.X.Special`) contro
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoTee = new TeeBlock(2, MediaBlockPadMediaType.Video);
 var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
@@ -731,7 +750,7 @@ Nombre: QueueBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
 
 var queue = new QueueBlock();
 pipeline.Connect(fileSource.VideoOutput, queue.Input);
@@ -764,7 +783,7 @@ Nombre: MultiQueueBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
 
 // El ctor de MultiQueueBlock pre-asigna pares de pads de entrada/salida (por defecto 2).
 var multiqueue = new MultiQueueBlock(inputOutputCount: 2);
@@ -798,8 +817,8 @@ Nombre: SourceSwitchBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video1.mp4")));
-var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("video2.mp4")));
+var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video1.mp4"));
+var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video2.mp4"));
 
 // SourceSwitchSettings(padsCount) pre-asigna los pads de entrada.
 var switchSettings = new SourceSwitchSettings(2) { DefaultActivePad = 0 };
@@ -840,7 +859,7 @@ Nombre: UniversalDecoderBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
 
 var decoder = new UniversalDecoderBlock();
 pipeline.Connect(fileSource.VideoOutput, decoder.Input);
@@ -875,7 +894,7 @@ Nombre: UniversalDemuxDecoderBlock.
 var pipeline = new MediaBlocksPipeline();
 
 var demuxDecoder = new UniversalDemuxDecoderBlock(
-    await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+    await UniversalSourceSettings.CreateAsync("test.mp4"));
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(demuxDecoder.VideoOutput, videoRenderer.Input);
@@ -984,7 +1003,7 @@ Nombre: FrameDoublerBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
 
 var frameDoubler = new FrameDoublerBlock();
 pipeline.Connect(fileSource.VideoOutput, frameDoubler.Input);
@@ -1017,7 +1036,7 @@ Nombre: DecodeBinBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
 
 var decodeBin = new DecodeBinBlock();
 pipeline.Connect(fileSource.VideoOutput, decodeBin.Input);
@@ -1048,7 +1067,7 @@ Nombre: ParseBinBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
 
 var parseBin = new ParseBinBlock();
 pipeline.Connect(fileSource.VideoOutput, parseBin.Input);
@@ -1081,7 +1100,7 @@ Envuelve cualquier elemento (o bin) GStreamer en un pipeline de Media Blocks ví
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
 
 // Envuelve el elemento GStreamer "videoscale".
 var customSettings = new CustomMediaBlockSettings("videoscale");
@@ -1120,7 +1139,7 @@ Nombre: DataSampleGrabberBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
 
 var dataSG = new DataSampleGrabberBlock();
 dataSG.OnDataFrame += (sender, args) =>
@@ -1194,7 +1213,7 @@ Salida | video/x-raw (YV12) | 1
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var colorspace = new CustomColorspaceXBlock(width: 1280, height: 720);
 pipeline.Connect(fileSource.VideoOutput, colorspace.Input);
@@ -1289,7 +1308,7 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
 
 // Envolver el elemento GStreamer videoscale con una propiedad
 var settings = new CustomMediaBlockSettings("videoscale");
@@ -1414,7 +1433,7 @@ public class InvertTransformBlock : UniversalTransformBlock
 // Usar en un pipeline
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("test.mp4")));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
 var transform = new InvertTransformBlock();
 
 pipeline.Connect(fileSource.VideoOutput, transform.Input);

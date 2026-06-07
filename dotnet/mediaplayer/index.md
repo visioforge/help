@@ -78,7 +78,7 @@ var player = new MediaPlayerCoreX(videoView);
 
 // Open a video file
 var source = await UniversalSourceSettings.CreateAsync(
-    new Uri("C:\\Videos\\sample.mp4"));
+    "C:\\Videos\\sample.mp4");
 await player.OpenAsync(source);
 
 // Start playback
@@ -116,7 +116,7 @@ Open and play any supported video file with automatic codec detection:
 
 ```csharp
 var source = await UniversalSourceSettings.CreateAsync(
-    new Uri("movie.mp4"));
+    "movie.mp4");
 await player.OpenAsync(source);
 await player.PlayAsync();
 ```
@@ -141,7 +141,7 @@ Play audio files (MP3, AAC, FLAC, WAV) without a video view:
 ```csharp
 var player = new MediaPlayerCoreX(); // no VideoView needed
 var source = await UniversalSourceSettings.CreateAsync(
-    new Uri("music.mp3"));
+    "music.mp3");
 await player.OpenAsync(source);
 await player.PlayAsync();
 ```

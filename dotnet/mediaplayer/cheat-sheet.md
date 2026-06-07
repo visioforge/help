@@ -149,7 +149,7 @@ public partial class MainForm : Form
 
         // 4. Build a source from a file path or stream URL
         var source = await UniversalSourceSettings.CreateAsync(
-            new Uri("C:\\Videos\\sample.mp4"));
+            "C:\\Videos\\sample.mp4");
 
         // 5. Open and play
         await _player.OpenAsync(source);

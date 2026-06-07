@@ -289,7 +289,7 @@ El SDK soporta varias fuentes de entrada además de cámaras locales:
 
 ```csharp
 var fileSettings = await UniversalSourceSettings.CreateAsync(
-    new Uri(@"C:\Videos\barcode-video.mp4"));
+    @"C:\Videos\barcode-video.mp4");
 var fileSource = new UniversalSourceBlock(fileSettings);
 
 pipeline.Connect(fileSource.VideoOutput, barcodeDetector.Input);
@@ -315,7 +315,7 @@ pipeline.Connect(screenSource.Output, barcodeDetector.Input);
 
 ```csharp
 var streamSettings = await UniversalSourceSettings.CreateAsync(
-    new Uri("rtsp://camera-ip:554/stream"));
+    "rtsp://camera-ip:554/stream");
 var streamSource = new UniversalSourceBlock(streamSettings);
 
 pipeline.Connect(streamSource.VideoOutput, barcodeDetector.Input);

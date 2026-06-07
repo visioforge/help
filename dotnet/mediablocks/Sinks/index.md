@@ -71,6 +71,7 @@ The following utility sinks are available:
 - [File Descriptor Sink](#file-descriptor-sink)
 - [KLV File Sink](#klv-file-sink)
 - [Buffer Sink](#buffer-sink)
+- [Virtual Camera Sink](#virtual-camera-sink)
 
 ## File Sinks
 
@@ -122,7 +123,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new WMAEncoderBlock(new WMAEncoderSettings());
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -185,7 +186,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new MP3EncoderBlock(new MP3EncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -230,7 +231,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var mp3EncoderBlock = new MP3EncoderBlock(new MP3EncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, mp3EncoderBlock.Input);
@@ -299,7 +300,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new VorbisEncoderBlock(new VorbisEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -364,7 +365,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -429,7 +430,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -488,7 +489,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new MP2EncoderBlock(new MP2EncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -549,7 +550,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -613,7 +614,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioBlock = new PCMEncoderBlock(new PCMEncoderSettings());
 pipeline.Connect(fileSource.AudioOutput, audioBlock.Input);
@@ -670,7 +671,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new VorbisEncoderBlock(new VorbisEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -719,7 +720,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp3";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioBlock = new PCMEncoderBlock(new PCMEncoderSettings());
 pipeline.Connect(fileSource.AudioOutput, audioBlock.Input);
@@ -769,7 +770,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new VorbisEncoderBlock(new VorbisEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -993,7 +994,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -1220,7 +1221,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var sinkBlock = new NDISinkBlock(new NDISinkSettings("My NDI Stream"));
 // NDISinkBlock exposes dynamic pads via CreateNewInput — no fixed AudioInput/VideoInput properties.
@@ -1261,7 +1262,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Create SRT sink in caller mode (connecting to a listener).
 // SRTSinkBlock carries MPEG-TS internally — connect encoded elementary streams directly.
@@ -1327,7 +1328,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -1479,7 +1480,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 // Audio source (e.g., from a file with MP3/AAC or raw audio)
-var universalSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp3")));
+var universalSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("input.mp3"));
 // Or use VirtualAudioSourceBlock for live raw audio input:
 // var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings { Channels = 2, SampleRate = 44100 });
 
@@ -1609,7 +1610,7 @@ var dashSettings = new DASHSinkSettings
 dashSettings.CheckAndCreateFolders();
 var dashSink = new DASHSinkBlock(dashSettings);
 
-var universalSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+var universalSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("input.mp4"));
 var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
 var aacEncoder = new AACEncoderBlock();
 
@@ -1683,7 +1684,7 @@ var whipSettings = new WHIPSinkSettings
 };
 var whipSink = new WHIPSinkBlock(whipSettings);
 
-var universalSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+var universalSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("input.mp4"));
 var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
 var opusEncoder = new OPUSEncoderBlock();
 
@@ -1750,7 +1751,7 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("input.mp4"));
 
 var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
 var aacEncoder = new AACEncoderBlock();
@@ -1807,7 +1808,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // UDPMPEGTSSinkBlock wraps the MPEG-TS muxer internally —
 // connect encoded elementary streams directly via CreateNewInput.
@@ -1886,7 +1887,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
@@ -1944,7 +1945,7 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // MultiUDPMPEGTSSinkBlock wraps the MPEG-TS muxer internally —
 // register destinations via AddClient, connect elementary streams via CreateNewInput.
@@ -2023,7 +2024,7 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("input.mp4"));
 
 var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
 var aacEncoder = new AACEncoderBlock();
@@ -2072,7 +2073,7 @@ Name: StreamSinkBlock.
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 using var outputStream = new FileStream("output.raw", FileMode.Create, FileAccess.Write);
 var streamSink = new StreamSinkBlock(outputStream);
@@ -2111,7 +2112,7 @@ Name: FDSinkBlock.
 var pipeline = new MediaBlocksPipeline();
 
 var filename = "test.mp4";
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri(filename)));
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Write to stdout (fd 1)
 var fdSink = new FDSinkBlock(descriptor: 1);
@@ -2206,7 +2207,7 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(new Uri("input.mp4")));
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("input.mp4"));
 
 // VideoFormatX is an enum (one of BGRA / RGBA / NV12 / I420 / ...). Frame size and
 // rate are inherited from the upstream caps; pass allowFrameDrop=true if your callback
@@ -2230,3 +2231,75 @@ await pipeline.StartAsync();
 #### Platforms
 
 Windows, macOS, Linux, iOS, Android.
+
+### Virtual Camera Sink
+
+The `VirtualCameraSinkBlock` exposes the pipeline output as a system virtual camera (and virtual microphone), so any other Windows application — Zoom, Teams, OBS, a browser — can pick up your processed video and audio as if it were a real capture device. Frames are delivered to the VisioForge Virtual Camera and Virtual Audio Card DirectShow source filters through shared memory.
+
+Both inputs are optional: create a video input, an audio input, or both. Use `CreateNewInput(MediaBlockPadMediaType.Video)` and `CreateNewInput(MediaBlockPadMediaType.Audio)` to add the pads you need.
+
+This block is **Windows-only**. The Virtual Camera and Virtual Audio Card source filters must be COM-registered on the machine before the virtual devices appear. Use `VirtualCameraSinkBlock.IsCOMRegistered()` to check, and `VirtualCameraSinkBlock.COMRegisterAsAdmin()` to register them with an elevation (UAC) prompt.
+
+Configure the output with `VirtualCameraSinkSettings`.
+
+#### Block info
+
+Name: VirtualCameraSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input video | video/x-raw | zero or one |
+| Input audio | audio/x-raw | zero or one |
+
+#### Settings
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Width` | `int` | `1280` | Video frame width in pixels (must be even) |
+| `Height` | `int` | `720` | Video frame height in pixels |
+| `FrameRate` | `double` | `30.0` | Target frame rate |
+| `VideoStreamName` | `string` | `"VideoStream1"` | Shared-memory stream name; must match the virtual camera source filter |
+| `AudioSampleRate` | `int` | `48000` | Audio sample rate in Hz |
+| `AudioChannels` | `int` | `2` | Audio channel count (1 = mono, 2 = stereo) |
+| `AudioBitsPerSample` | `int` | `16` | Audio bits per sample |
+| `AudioStreamName` | `string` | `"AudioStream1"` | Shared-memory stream name; must match the virtual audio card source filter |
+| `CustomVideoProcessor` | `MediaBlock` | `null` | Optional custom video processor block |
+| `CustomAudioProcessor` | `MediaBlock` | `null` | Optional custom audio processor block |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->VirtualCameraSinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("input.mp4"));
+
+var settings = new VirtualCameraSinkSettings
+{
+    Width = 1280,
+    Height = 720,
+    FrameRate = 30.0
+};
+
+var virtualCameraSink = new VirtualCameraSinkBlock(settings);
+
+// connect video and audio (both inputs are optional)
+pipeline.Connect(source.VideoOutput, virtualCameraSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(source.AudioOutput, virtualCameraSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+`VirtualCameraSinkBlock.IsAvailable()` returns `true` if the underlying virtual camera sink is available on this system. `VirtualCameraSinkBlock.IsCOMRegistered()` returns `true` when both the Virtual Camera and Virtual Audio Card source filters are registered.
+
+#### Platforms
+
+Windows.
