@@ -103,14 +103,16 @@ Except as expressly permitted in this Agreement, you may not:
 
 ## 7. TERMINATION
 
-**7.1.** Without prejudice to any other rights, Licensor may terminate this Agreement if you fail to comply with the terms and conditions of this Agreement.
+**7.1.** Without prejudice to any other rights, Licensor may terminate this Agreement if you commit a material breach of its terms and conditions and, where such breach is capable of remedy, fail to cure it within thirty (30) days after receiving written notice describing the breach.
 
 **7.2.** Upon termination:
 
 - Your license rights under this Agreement will terminate
 - You must cease all use of the Software
-- You must destroy all copies, full or partial, of the Software
+- You must destroy all copies, full or partial, of the Software, except that you may retain one (1) archival copy solely for legal, regulatory, or compliance purposes
 - You must, upon request, provide Licensor with written certification of such destruction
+
+**7.3.** Termination of this Agreement shall not affect applications you developed and distributed in compliance with this Agreement prior to the effective date of termination, nor the rights of your end users to continue using those applications.
 
 ## 8. WARRANTIES AND DISCLAIMER
 
@@ -132,7 +134,7 @@ The Software may be subject to export or import regulations. You agree to comply
 
 ## 11. GOVERNING LAW AND JURISDICTION
 
-This Agreement shall be governed by and construed in accordance with the laws of Spain and the European Union, without giving effect to any principles of conflicts of law. You agree that any legal action arising out of or relating to this Agreement shall be filed exclusively in the competent courts of Bilbao, Spain. For customers outside of Spain, additional consumer protection laws of your jurisdiction may apply where required by applicable law.
+This Agreement shall be governed by and construed in accordance with the laws of Spain and the European Union, without giving effect to any principles of conflicts of law. The competent courts of Bilbao, Spain, shall have non-exclusive jurisdiction over any legal action arising out of or relating to this Agreement, and nothing in this Agreement shall prevent either party from bringing proceedings before any other court of competent jurisdiction. For customers outside of Spain, additional consumer protection laws of your jurisdiction may apply where required by applicable law.
 
 ## 12. SEVERABILITY
 
@@ -156,4 +158,4 @@ Website: www.visioforge.com
 
 ---
 © VisioForge. All rights reserved.
-Last Updated: 2025-11-26
+Last Updated: 2026-06-20

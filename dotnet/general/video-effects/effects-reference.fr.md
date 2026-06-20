@@ -321,7 +321,7 @@ Voir : [Guide de superposition d'image](image-overlay.md)
 
 ### Effets boostés par IA (NVIDIA Maxine — Classique uniquement)
 
-Nécessite un GPU NVIDIA RTX avec prise en charge du SDK Maxine.
+Nécessite un GPU NVIDIA RTX avec prise en charge du SDK Maxine. Pour la configuration, les exemples de code et les modes d'effet, voir le guide [Amélioration vidéo par IA NVIDIA Maxine](nvidia-maxine.md).
 
 #### Amélioration vidéo
 

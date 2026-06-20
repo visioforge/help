@@ -103,14 +103,16 @@ Excepto como se permite expresamente en este Contrato, no puede:
 
 ## 7. TERMINACIÓN
 
-**7.1.** Sin perjuicio de cualquier otro derecho, el Licenciante puede terminar este Contrato si usted no cumple con los términos y condiciones de este Contrato.
+**7.1.** Sin perjuicio de cualquier otro derecho, el Licenciante puede terminar este Contrato si usted incurre en un incumplimiento sustancial de sus términos y condiciones y, en caso de ser subsanable, no lo subsana dentro de los treinta (30) días siguientes a la recepción de una notificación escrita que describa el incumplimiento.
 
 **7.2.** Tras la terminación:
 
 - Sus derechos de licencia bajo este Contrato terminarán
 - Debe cesar todo uso del Software
-- Debe destruir todas las copias, completas o parciales, del Software
+- Debe destruir todas las copias, completas o parciales, del Software, a excepción de una (1) copia de archivo que podrá conservar únicamente con fines legales, regulatorios o de cumplimiento normativo
 - Debe, a solicitud, proporcionar al Licenciante certificación escrita de dicha destrucción
+
+**7.3.** La terminación de este Contrato no afectará a las aplicaciones que usted haya desarrollado y distribuido de conformidad con este Contrato antes de la fecha efectiva de terminación, ni a los derechos de sus usuarios finales a seguir utilizando dichas aplicaciones.
 
 ## 8. GARANTÍAS Y EXENCIÓN DE RESPONSABILIDAD
 
@@ -132,7 +134,7 @@ El Software puede estar sujeto a regulaciones de exportación o importación. Us
 
 ## 11. LEY APLICABLE Y JURISDICCIÓN
 
-Este Contrato se regirá e interpretará de acuerdo con las leyes de España y la Unión Europea, sin dar efecto a ningún principio de conflictos de leyes. Usted acepta que cualquier acción legal que surja de o esté relacionada con este Contrato se presentará exclusivamente en los tribunales competentes de Bilbao, España. Para clientes fuera de España, las leyes adicionales de protección al consumidor de su jurisdicción pueden aplicar cuando lo requiera la ley aplicable.
+Este Contrato se regirá e interpretará de acuerdo con las leyes de España y la Unión Europea, sin dar efecto a ningún principio de conflictos de leyes. Los tribunales competentes de Bilbao (España) tendrán jurisdicción no exclusiva sobre cualquier acción legal que surja de o esté relacionada con este Contrato, y nada en este Contrato impedirá que cualquiera de las partes inicie acciones ante cualquier otro tribunal competente. Para clientes fuera de España, las leyes adicionales de protección al consumidor de su jurisdicción pueden aplicarse cuando lo requiera la ley aplicable.
 
 ## 12. DIVISIBILIDAD
 
@@ -156,4 +158,4 @@ Sitio web: www.visioforge.com
 
 ---
 © VisioForge. Todos los derechos reservados.
-Última actualización: 2025-11-26
+Última actualización: 2026-06-20

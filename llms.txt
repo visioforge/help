@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-06-07 20:43:57 UTC (5e0e6963985)
+**Generated:** 2026-06-20 19:06:57 UTC (c8ab3c825f2)
 
 ## MCP Server (for AI coding agents)
 
@@ -168,6 +168,7 @@ The MCP server returns surgical answers (single API class, single code example) 
 
 - [Apple Platform Media Blocks in C# .NET — iOS, macOS](https://www.visioforge.com/help/docs/dotnet/mediablocks/_Apple/): Build iOS and macOS media apps with ProRes encoding, VideoToolbox acceleration, and native audio blocks using VisioForge Media Blocks SDK.
 - [Linux VA-API Hardware Video Acceleration in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/_Linux/): Use VA-API GPU-accelerated video encoding and decoding on Linux with VisioForge Media Blocks SDK. Ubuntu and Debian platform support for .NET apps.
+- [AI Blocks — OCR and License Plate Recognition (ANPR)](https://www.visioforge.com/help/docs/dotnet/mediablocks/AI/): Recognize text and vehicle license plates in video with the Media Blocks SDK .Net using cross-platform PaddleOCR ONNX models on CPU or GPU.
 - [Audio Encoder Blocks - AAC, MP3, FLAC, Opus in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioEncoders/): Encode audio to AAC, MP3, FLAC, Opus, Vorbis, and WMA using VisioForge Media Blocks SDK. Configurable bitrate, sample rate, and channel settings.
 - [Audio Processing Blocks for C# .NET - Mixer, EQ, Effects](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioProcessing/): Build audio pipelines in C# with VisioForge Media Blocks SDK — mixer, equalizer, reverb, noise reduction, and 30+ blocks. Cross-platform support.
 - [Cross-Platform Audio Rendering and Playback in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioRendering/): Play audio to speakers on Windows, macOS, Linux, iOS, and Android using VisioForge Media Blocks SDK. Device selection, buffer control, volume management.
@@ -403,6 +404,13 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [Discord Community](https://discord.gg/yvXUG56WCH): Developer community support
 - [Email Support](mailto:support@visioforge.com): Professional support
 - [Pricing](https://www.visioforge.com/buy): Licensing options and pricing
+
+## Contact
+
+- [Technical Support](mailto:support@visioforge.com): Product and integration support (<24hr response)
+- [Legal](mailto:legal@visioforge.com): Licensing and legal inquiries
+- [Privacy](mailto:privacy@visioforge.com): Data protection and privacy requests
+- [Website](https://www.visioforge.com): VisioForge official site
 
 ## Key Technologies
 

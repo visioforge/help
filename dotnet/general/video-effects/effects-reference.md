@@ -321,7 +321,7 @@ See: [Image Overlay Guide](image-overlay.md)
 
 ### AI-Powered Effects (NVIDIA Maxine - Classic only)
 
-Requires NVIDIA RTX GPU with Maxine SDK support.
+Requires NVIDIA RTX GPU with Maxine SDK support. For setup, code samples, and effect modes, see the [NVIDIA Maxine AI Video Enhancement](nvidia-maxine.md) guide.
 
 #### Video Enhancement
 

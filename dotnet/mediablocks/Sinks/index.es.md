@@ -2190,6 +2190,8 @@ pipeline.Connect(klvProducer.Output, klvFileSink.Input); // klvProducer = su blo
 await pipeline.StartAsync();
 ```
 
+Para un flujo de trabajo completo — extraer KLV de un archivo MPEG-TS, decodificar elementos MISB ST 0601 y multiplexar KLV de nuevo en MPEG-TS — consulte la guía [Metadatos KLV / MISB en MPEG-TS](../Guides/klv-metadata-mpegts-csharp.md).
+
 #### Plataformas
 
 Windows, macOS, Linux.
