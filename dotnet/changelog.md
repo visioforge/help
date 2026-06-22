@@ -26,12 +26,20 @@ primary_api_classes:
 
 Changes and updates for all .Net SDKs.
 
+## 2026.6.21
+
+* [Video Capture SDK X .Net] Added **Android audio playback capture** support to `VideoCaptureCoreX` — assign `AndroidAudioPlaybackCaptureSourceSettings` to `Audio_Source` to record the audio played by **other apps** (system AudioPlaybackCapture API, Android 10 / API 29+, on top of a `MediaProjection` token) straight to a file. Includes a new native Android "Audio Playback Capture" demo built on `VideoCaptureCoreX` that records another app's audio to an `.m4a` file. Only apps that allow playback capture (usage MEDIA/GAME/UNKNOWN and not opted out) can be captured.
+
 ## 2026.6.20
 
+* [Media Blocks SDK .Net] `VideoSampleGrabberBlock` now works as a terminal block: if you leave its output unconnected (e.g. you only poll `GetLastFrameAsSKBitmap()` or handle `OnVideoFrameBuffer`), the block self-terminates so frames keep flowing. Previously a grabber with an unconnected output stalled after the first frame, so every snapshot returned the same initial image.
+* [Media Blocks SDK .Net] `VideoSampleGrabberBlock.GetLastFrameAsSKBitmap()` and `GetLastFrameAsBitmap()` now return `null` when no frame has been captured yet, instead of throwing a `NullReferenceException`.
+* [Media Blocks SDK .Net] Setting `VideoSampleGrabberBlock.SaveLastFrame = false` now discards the cached frame, so toggling it back on later never hands back a stale frame captured during an earlier session.
 * [Media Blocks SDK .Net] `KLVParser` now reads MISB KLV packets larger than 127 bytes. Standard MISB ST 0601 metadata uses BER long-form lengths, and the parser previously threw on the common 1- and 2-byte long-form lengths — so real-world packets failed to parse. All BER length forms are now decoded correctly.
 
 ## 2026.6.19
 
+* [Media Blocks SDK .Net] Added **Android audio playback capture** — the new `AndroidAudioPlaybackCaptureSourceBlock` records the audio played by **other apps** using the system AudioPlaybackCapture API (Android 10 / API 29+) on top of a `MediaProjection` token, with a configurable format and usage filter (`AndroidAudioPlaybackCaptureSourceSettings`). Includes a new native Android "Audio Playback Capture" demo that records another app's audio to an `.m4a` file. Only apps that allow playback capture (usage MEDIA/GAME/UNKNOWN and not opted out) can be captured.
 * [Video Edit SDK .Net] Fixed a long-standing intermittent hang on stop in `VideoEditCore` (DirectShow engine): when a conversion started with `StartAsync` finished, the graph teardown could deadlock, so `OnStop` never fired and the operation appeared to hang until the process was killed — most visible with Matroska (`.mkv`) output, but possible for any async conversion. Async conversions now stop reliably and `OnStop` is always raised.
 * [Media Blocks SDK .Net] Speech-to-text (`SpeechToTextBlock`) gains a lossless file-transcription mode: set `SpeechToTextSettings.BackpressureWhenBusy = true` to pace a file source to the transcription engine so no audio is dropped and the pipeline position tracks the transcription frontier — ideal for transcribing a file as fast as the engine allows without losing speech. The new `SpeechToTextBlock.RequestStop()` lets you stop promptly mid-file, and an `OnEndOfStream` event fires when transcription finishes.
 * [Media Blocks SDK .Net] NDI source enumeration on the desktop is now time-bounded: if NDI network discovery stalls, the enumeration call returns within a few seconds instead of blocking the caller indefinitely.
