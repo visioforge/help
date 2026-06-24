@@ -13,9 +13,11 @@ primary_api_classes:
   - OcrBlock
   - LicensePlateRecognizerBlock
   - ObjectAnalyticsBlock
+  - FaceRecognitionBlock
   - OcrSettings
   - LicensePlateRecognizerSettings
   - ObjectAnalyticsSettings
+  - FaceRecognitionSettings
 ---
 
 # AI Blocks: OCR, License Plate Recognition, and Object Analytics
@@ -210,8 +212,70 @@ boxes or traces.
 The pure C# analytics API (`ByteTracker`, `LineZone`, `PolygonZone`, `DetectionFilter`) is also
 available directly for use without a MediaBlocks pipeline.
 
+## FaceRecognitionBlock — face identity
+
+`FaceRecognitionBlock` recognizes **who** is in the frame. It runs a two-stage pipeline: a YuNet
+detector finds faces and their five landmarks, each face is aligned to a canonical 112×112 crop and
+turned into an embedding (SFace or ArcFace), and the embedding is matched 1:N against an enrolled
+`FaceGallery` by cosine similarity. Recognition runs on a background thread, so live video never
+stalls; the streaming thread only draws the most recent results.
+
+```mermaid
+graph LR;
+    Source-->FaceRecognitionBlock;
+    FaceRecognitionBlock-->VideoRendererBlock;
+    FaceRecognitionBlock-. OnFacesIdentified .->App[Your app];
+```
+
+### Enroll and recognize
+
+```csharp
+using VisioForge.Core.MediaBlocks.AI;
+using VisioForge.Core.Types.X.AI;
+
+var settings = new FaceRecognitionSettings("face_detection_yunet_2023mar.onnx",
+                                           "face_recognition_sface_2021dec.onnx")
+{
+    EmbeddingModel = FaceEmbeddingModel.SFace, // or ArcFace for a 512-D recognizer
+    RecognitionThreshold = 0.36f,              // cosine similarity for a match
+    DrawResults = true,
+};
+
+var face = new FaceRecognitionBlock(settings);
+
+// Enroll identities from photos (several photos per person are allowed).
+face.Enroll("Alice", "alice.jpg");
+face.Enroll("Bob", "bob.jpg");
+face.Gallery.Save("faces.vfg"); // reload later with face.Gallery.Load("faces.vfg")
+
+face.OnFacesIdentified += (sender, e) =>
+{
+    foreach (var f in e.Faces)
+    {
+        var who = string.IsNullOrEmpty(f.Identity) ? "Unknown" : f.Identity;
+        Console.WriteLine($"{who} ({f.Similarity:P0}) at {f.BoundingBox}");
+    }
+};
+
+pipeline.Connect(source.Output, face.Input);
+pipeline.Connect(face.Output, videoRenderer.Input);
+```
+
+The default models — [YuNet](https://github.com/opencv/opencv_zoo) (MIT) and
+[SFace](https://github.com/opencv/opencv_zoo) (Apache-2.0) — are commercially licensed and designed
+to work together. The embedding length is read from the model, so an ArcFace-style recognizer (for
+example [AuraFace](https://huggingface.co/fal/AuraFace-v1), Apache-2.0, 512-D) drops in by switching
+`EmbeddingModel` to `FaceEmbeddingModel.ArcFace`. Keep one gallery per embedding model — embeddings
+from different models are not comparable. Model weights are not shipped in the NuGet package.
+
+!!! warning "Privacy"
+    Face recognition processes biometric data. Ensure your use complies with the applicable privacy
+    and data-protection laws (GDPR, BIPA, CCPA, and similar) in your jurisdiction.
+
 ## Demos
 
 - **YOLO Object Detection Demo** (`_DEMOS/Media Blocks SDK/WPF/CSharp/YOLO Object Detection Demo`) — includes both ordinary object detection and object analytics modes
 - **OCR Text Recognition Demo** (`_DEMOS/Media Blocks SDK/WPF/CSharp/OCR Text Recognition Demo`)
 - **License Plate Recognition Demo** (`_DEMOS/Media Blocks SDK/WPF/CSharp/License Plate Recognition Demo`)
+- **Face Recognition Demo** (`_DEMOS/Media Blocks SDK/WPF/CSharp/Face Recognition Demo`) — enrollment and live 1:N face identity
+- **Face Recognition MB** (`_DEMOS/Media Blocks SDK/MAUI/Face Recognition MB`) — the same face identity demo for MAUI (Android, iOS, Windows, macOS)

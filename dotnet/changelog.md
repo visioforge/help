@@ -26,6 +26,23 @@ primary_api_classes:
 
 Changes and updates for all .Net SDKs.
 
+## 2026.6.23
+
+* [Demos] Uno SimplePlayer demos (Media Blocks and Media Player X): replaced the default sample video URL — the old Google-hosted Big Buck Bunny link now returns HTTP 403, so the demo failed to play out of the box; it now points at a working source.
+* [Media Blocks SDK .Net] Fixed a crash on **Android** when opening an RTSP camera: probing the stream could abort the app natively if the camera was slow to report its stream layout. RTSP sources now shut the probe down cleanly instead of crashing.
+* [Video Capture SDK .Net / Media Blocks SDK .Net] Fixed the **front camera** preview and recording coming out **upside down** on **Android** phones (the back camera was unaffected). The front camera is now shown upright and **mirrored** like a standard selfie/phone camera, across all device orientations and sensor mountings.
+* [Media Blocks SDK .Net] Fixed all ONNX-based AI features (face recognition, object detection, OCR, live subtitles) failing on **Android**: ONNX Runtime could not initialize because the desktop-Linux native library was being packaged into the APK instead of the Android build, so every model load failed. AI models now load and run on Android.
+* [Media Blocks SDK .Net] `FaceRecognitionBlock` — enrolling a face from a photo that carries an EXIF orientation tag (typical of phone camera shots) now works; the image is rotated upright before detection instead of reporting "no face found".
+* [Demos] Added a **Face Recognition Uno** demo (Uno Platform): live camera 1:N face recognition with on-frame name/box overlay, photo enrollment, and switchable SFace / AuraFace embedding models. Android-focused.
+* [Demos] The Face Recognition demos (WPF and CLI) now let you pick the embedding model: **SFace (128-D)** or **AuraFace (512-D, ArcFace family, Apache-2.0)** — a higher-accuracy, commercially licensed 512-D embedder downloaded on demand. The CLI adds an `--embedding sface|auraface` switch.
+* [Demos] Face Recognition WPF demo: switching the embedding model now automatically rebuilds the gallery from the enrolled photos, so changing models no longer makes every face read as **Unknown** (embeddings from different models are not comparable).
+* [Demos] Face Recognition MAUI demo: added the same SFace/AuraFace embedder selection and automatic gallery rebuild, plus a **video-file source** with a seek bar and a real-time / max-speed playback toggle (in addition to the live camera).
+
+## 2026.6.22
+
+* [Media Blocks SDK .Net] Added **face recognition (face identity)** via the new `FaceRecognitionBlock`. It runs a two-stage on-device pipeline — a YuNet face detector finds faces and their five landmarks, each face is aligned and turned into an embedding (SFace or ArcFace), and the embedding is matched 1:N against an enrolled gallery. Includes a `FaceGallery` for enrolling people from photos and saving/loading the gallery to disk, an `OnFacesIdentified` event reporting each face's identity, similarity, box, landmarks, and embedding, and on-frame drawing of names and boxes. Runs on CPU/CUDA/DirectML/CoreML through ONNX Runtime. The default YuNet (MIT) and SFace (Apache-2.0) models are commercially licensed and downloaded on first use — weights are not shipped in the NuGet package. A new "Face Recognition" WPF demo shows enrollment and live 1:N recognition.
+* [Demos] Added a "Face Recognition CLI" console demo (Media Blocks SDK) that auto-discovers the most frequent faces in a video, enrolls them, and writes an annotated video with each recognized person labelled.
+
 ## 2026.6.21
 
 * [Video Capture SDK X .Net] Added **Android audio playback capture** support to `VideoCaptureCoreX` — assign `AndroidAudioPlaybackCaptureSourceSettings` to `Audio_Source` to record the audio played by **other apps** (system AudioPlaybackCapture API, Android 10 / API 29+, on top of a `MediaProjection` token) straight to a file. Includes a new native Android "Audio Playback Capture" demo built on `VideoCaptureCoreX` that records another app's audio to an `.m4a` file. Only apps that allow playback capture (usage MEDIA/GAME/UNKNOWN and not opted out) can be captured.

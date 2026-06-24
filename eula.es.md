@@ -14,7 +14,7 @@ tags:
 
 ## 1. PREÁMBULO
 
-Este Contrato de Licencia de Usuario Final ("Contrato" o "EULA") constituye un contrato legalmente vinculante entre usted (ya sea un individuo o una sola entidad) y VisioForge ("Licenciante"), con respecto a su uso de los kits de desarrollo de software propietarios de VisioForge y la documentación relacionada (colectivamente, el "Software"). Al instalar, copiar, descargar, acceder o usar de otra manera el Software, usted acepta estar sujeto a los términos de este Contrato. Si no está de acuerdo con los términos de este Contrato, no instale, acceda ni use el Software.
+Este Contrato de Licencia de Usuario Final ("Contrato" o "EULA") constituye un contrato legalmente vinculante entre usted (ya sea un individuo o una sola entidad) y Roman Miniailov, un trabajador autónomo registrado en España (NIF ESZ0362544T), que opera bajo el nombre comercial VisioForge ("Licenciante"), con respecto a su uso de los kits de desarrollo de software propietarios de VisioForge y la documentación relacionada (colectivamente, el "Software"). Al instalar, copiar, descargar, acceder o usar de otra manera el Software, usted acepta estar sujeto a los términos de este Contrato. Si no está de acuerdo con los términos de este Contrato, no instale, acceda ni use el Software.
 
 ## 2. PRODUCTOS LICENCIADOS
 
@@ -134,7 +134,7 @@ El Software puede estar sujeto a regulaciones de exportación o importación. Us
 
 ## 11. LEY APLICABLE Y JURISDICCIÓN
 
-Este Contrato se regirá e interpretará de acuerdo con las leyes de España y la Unión Europea, sin dar efecto a ningún principio de conflictos de leyes. Los tribunales competentes de Bilbao (España) tendrán jurisdicción no exclusiva sobre cualquier acción legal que surja de o esté relacionada con este Contrato, y nada en este Contrato impedirá que cualquiera de las partes inicie acciones ante cualquier otro tribunal competente. Para clientes fuera de España, las leyes adicionales de protección al consumidor de su jurisdicción pueden aplicarse cuando lo requiera la ley aplicable.
+Este Contrato se regirá e interpretará de acuerdo con las leyes de una jurisdicción neutral acordada mutuamente por ambas partes. Independientemente de la ley aplicable, las leyes adicionales de protección al consumidor de su jurisdicción pueden aplicarse cuando lo requiera la ley aplicable.
 
 ## 12. DIVISIBILIDAD
 
@@ -158,4 +158,4 @@ Sitio web: www.visioforge.com
 
 ---
 © VisioForge. Todos los derechos reservados.
-Última actualización: 2026-06-20
+Última actualización: 2026-06-24

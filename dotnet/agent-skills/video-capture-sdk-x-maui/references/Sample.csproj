@@ -69,8 +69,8 @@
        Both ship in 'VisioForge.DotNet.VideoCapture' (VideoCaptureCoreX is the
        cross-platform engine class inside it) plus the MAUI VideoView control. -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.6.21" />
-    <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.6.21" />
+    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.6.22" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.6.22" />
   </ItemGroup>
   <!-- VisioForge: per-OS native runtime redists. NOT transitive; reference each platform explicitly. -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">

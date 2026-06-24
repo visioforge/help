@@ -14,7 +14,7 @@ tags:
 
 ## 1. PREAMBLE
 
-This End User License Agreement ("Agreement" or "EULA") constitutes a legally binding contract between you (either an individual or a single entity) and VisioForge ("Licensor"), regarding your use of VisioForge's proprietary software development kits and related documentation (collectively, the "Software"). By installing, copying, downloading, accessing, or otherwise using the Software, you agree to be bound by the terms of this Agreement. If you do not agree to the terms of this Agreement, do not install, access, or use the Software.
+This End User License Agreement ("Agreement" or "EULA") constitutes a legally binding contract between you (either an individual or a single entity) and Roman Miniailov, a sole proprietor (autónomo) registered in Spain (VAT ID ESZ0362544T), doing business as VisioForge ("Licensor"), regarding your use of VisioForge's proprietary software development kits and related documentation (collectively, the "Software"). By installing, copying, downloading, accessing, or otherwise using the Software, you agree to be bound by the terms of this Agreement. If you do not agree to the terms of this Agreement, do not install, access, or use the Software.
 
 ## 2. LICENSED PRODUCTS
 
@@ -134,7 +134,7 @@ The Software may be subject to export or import regulations. You agree to comply
 
 ## 11. GOVERNING LAW AND JURISDICTION
 
-This Agreement shall be governed by and construed in accordance with the laws of Spain and the European Union, without giving effect to any principles of conflicts of law. The competent courts of Bilbao, Spain, shall have non-exclusive jurisdiction over any legal action arising out of or relating to this Agreement, and nothing in this Agreement shall prevent either party from bringing proceedings before any other court of competent jurisdiction. For customers outside of Spain, additional consumer protection laws of your jurisdiction may apply where required by applicable law.
+This Agreement shall be governed by and construed in accordance with the laws of a neutral jurisdiction mutually agreed by both parties. Regardless of the governing law, additional consumer protection laws of your jurisdiction may apply where required by applicable law.
 
 ## 12. SEVERABILITY
 
@@ -158,4 +158,4 @@ Website: www.visioforge.com
 
 ---
 © VisioForge. All rights reserved.
-Last Updated: 2026-06-20
+Last Updated: 2026-06-24
