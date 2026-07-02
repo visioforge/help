@@ -26,22 +26,35 @@ primary_api_classes:
 
 Changes and updates for all .Net SDKs.
 
-## 2026.6.23
+## 2026.6.30
 
-* [Demos] Uno SimplePlayer demos (Media Blocks and Media Player X): replaced the default sample video URL — the old Google-hosted Big Buck Bunny link now returns HTTP 403, so the demo failed to play out of the box; it now points at a working source.
-* [Media Blocks SDK .Net] Fixed a crash on **Android** when opening an RTSP camera: probing the stream could abort the app natively if the camera was slow to report its stream layout. RTSP sources now shut the probe down cleanly instead of crashing.
-* [Video Capture SDK .Net / Media Blocks SDK .Net] Fixed the **front camera** preview and recording coming out **upside down** on **Android** phones (the back camera was unaffected). The front camera is now shown upright and **mirrored** like a standard selfie/phone camera, across all device orientations and sensor mountings.
-* [Media Blocks SDK .Net] Fixed all ONNX-based AI features (face recognition, object detection, OCR, live subtitles) failing on **Android**: ONNX Runtime could not initialize because the desktop-Linux native library was being packaged into the APK instead of the Android build, so every model load failed. AI models now load and run on Android.
+* [Demos] Added **Face Recognition** and **OCR** demos for the X engines, in both WPF and MAUI: **Player Face Recognition X** and **Player OCR X** (`MediaPlayerCoreX`), plus **Capture Face Recognition X** and **Capture OCR X** (`VideoCaptureCoreX`). Each inserts the AI block through the `Video_Processing_AddBlock` API — the face demos enroll people from photos and label them on the video; the OCR demos draw and log recognized text.
+* [Demos] Added a **Capture Live Subtitles X** WPF sample (`VideoCaptureCoreX` with on-device Whisper speech-to-text subtitles).
+
+## 2026.6.29
+
+* [Media Blocks SDK .Net] Speech-to-text (`SpeechToTextBlock`) now always transcribes the full input losslessly — the source is paced to Whisper so no audio is ever dropped. The previous live drop-buffer mode and the `SpeechToTextSettings.BackpressureWhenBusy` option were removed (the lossless behavior is now the only mode).
+
+## 2026.6.27
+
+* [Video Capture SDK .Net] `VideoCaptureCoreX` can now insert AI processing blocks — object detection, OCR, face recognition, license-plate recognition, object analytics, background removal, generic ONNX inference, and Whisper speech-to-text — directly into the capture pipeline through `Video_Processing_AddBlock` / `Audio_Processing_AddBlock`, with on-frame overlays and detection events.
+* [Media Player SDK .Net] `MediaPlayerCoreX` gains the same `Video_Processing_AddBlock` / `Audio_Processing_AddBlock` API to run AI processing (object detection, OCR, speech-to-text, and more) on played files and streams.
+* [Demos] Added a **Player AI Processing** demo (WPF): plays a file in `MediaPlayerCoreX` with a YOLO object detector or a Whisper speech-to-text block inserted through the new processing-block API.
+* [Demos] Added four **MAUI** AI demos (Android/iOS/Mac Catalyst/Windows) for the new X-engine processing-block API: **Player Object Detection X** and **Player Live Subtitles X** (`MediaPlayerCoreX`), plus **Capture Object Detection X** and **Capture Live Subtitles X** (`VideoCaptureCoreX`).
+* [Media Blocks SDK .Net] Fixed an `AccessViolationException` ("Attempted to read or write protected memory") that could crash the application when using text overlays (`OverlayManagerBlock` / `OverlayManagerText`) — most reliably reproduced by adding a text overlay right after `StartAsync` and then stopping. The font-enumeration path freed Pango-owned font objects it did not own, corrupting memory during a later garbage collection or pipeline shutdown.
+* [Media Blocks SDK .Net] Fixed a related intermittent fatal crash ("Attempt to execute managed code after the .NET runtime thread state has been destroyed") that could abort the process during text overlay or font enumeration when a background media thread was recycled, or at application exit. The available-fonts / monospace-detection path no longer attaches a managed callback to Pango's internal font map.
+
+## 2026.6.24
+* [Media Blocks SDK .Net] Fixed a rare crash during pipeline shutdown or garbage collection in applications with many active GStreamer objects, such as multi-camera RTSP capture with sample grabbers, bridges, and file outputs.
 * [Media Blocks SDK .Net] `FaceRecognitionBlock` — enrolling a face from a photo that carries an EXIF orientation tag (typical of phone camera shots) now works; the image is rotated upright before detection instead of reporting "no face found".
 * [Demos] Added a **Face Recognition Uno** demo (Uno Platform): live camera 1:N face recognition with on-frame name/box overlay, photo enrollment, and switchable SFace / AuraFace embedding models. Android-focused.
 * [Demos] The Face Recognition demos (WPF and CLI) now let you pick the embedding model: **SFace (128-D)** or **AuraFace (512-D, ArcFace family, Apache-2.0)** — a higher-accuracy, commercially licensed 512-D embedder downloaded on demand. The CLI adds an `--embedding sface|auraface` switch.
 * [Demos] Face Recognition WPF demo: switching the embedding model now automatically rebuilds the gallery from the enrolled photos, so changing models no longer makes every face read as **Unknown** (embeddings from different models are not comparable).
 * [Demos] Face Recognition MAUI demo: added the same SFace/AuraFace embedder selection and automatic gallery rebuild, plus a **video-file source** with a seek bar and a real-time / max-speed playback toggle (in addition to the live camera).
 
-## 2026.6.22
+## 2026.6.23
 
-* [Media Blocks SDK .Net] Added **face recognition (face identity)** via the new `FaceRecognitionBlock`. It runs a two-stage on-device pipeline — a YuNet face detector finds faces and their five landmarks, each face is aligned and turned into an embedding (SFace or ArcFace), and the embedding is matched 1:N against an enrolled gallery. Includes a `FaceGallery` for enrolling people from photos and saving/loading the gallery to disk, an `OnFacesIdentified` event reporting each face's identity, similarity, box, landmarks, and embedding, and on-frame drawing of names and boxes. Runs on CPU/CUDA/DirectML/CoreML through ONNX Runtime. The default YuNet (MIT) and SFace (Apache-2.0) models are commercially licensed and downloaded on first use — weights are not shipped in the NuGet package. A new "Face Recognition" WPF demo shows enrollment and live 1:N recognition.
-* [Demos] Added a "Face Recognition CLI" console demo (Media Blocks SDK) that auto-discovers the most frequent faces in a video, enrolls them, and writes an annotated video with each recognized person labelled.
+* [Media Blocks SDK .Net] Unity samples now use Unity's default Enter Play Mode behavior (Domain + Scene Reload); disabling Domain Reload is no longer required. The SDK survives the Editor's Play/Stop and script-recompile domain reloads via a built-in reload guard.
 
 ## 2026.6.21
 
@@ -57,14 +70,11 @@ Changes and updates for all .Net SDKs.
 ## 2026.6.19
 
 * [Media Blocks SDK .Net] Added **Android audio playback capture** — the new `AndroidAudioPlaybackCaptureSourceBlock` records the audio played by **other apps** using the system AudioPlaybackCapture API (Android 10 / API 29+) on top of a `MediaProjection` token, with a configurable format and usage filter (`AndroidAudioPlaybackCaptureSourceSettings`). Includes a new native Android "Audio Playback Capture" demo that records another app's audio to an `.m4a` file. Only apps that allow playback capture (usage MEDIA/GAME/UNKNOWN and not opted out) can be captured.
-* [Video Edit SDK .Net] Fixed a long-standing intermittent hang on stop in `VideoEditCore` (DirectShow engine): when a conversion started with `StartAsync` finished, the graph teardown could deadlock, so `OnStop` never fired and the operation appeared to hang until the process was killed — most visible with Matroska (`.mkv`) output, but possible for any async conversion. Async conversions now stop reliably and `OnStop` is always raised.
 * [Media Blocks SDK .Net] Speech-to-text (`SpeechToTextBlock`) gains a lossless file-transcription mode: set `SpeechToTextSettings.BackpressureWhenBusy = true` to pace a file source to the transcription engine so no audio is dropped and the pipeline position tracks the transcription frontier — ideal for transcribing a file as fast as the engine allows without losing speech. The new `SpeechToTextBlock.RequestStop()` lets you stop promptly mid-file, and an `OnEndOfStream` event fires when transcription finishes.
-* [Media Blocks SDK .Net] NDI source enumeration on the desktop is now time-bounded: if NDI network discovery stalls, the enumeration call returns within a few seconds instead of blocking the caller indefinitely.
 
 ## 2026.6.18
 
 * [Media Blocks SDK .Net] Fixed WMV/ASF output where the video stream was written with a roughly 1000-hour timestamp offset while audio started at zero — players saw a broken duration and the video and audio never shared a timeline. WMV/ASF files now have correctly aligned, overlapping video and audio timestamps.
-* [Media Blocks SDK .Net] Graceful stop now waits for end-of-stream to actually finalize the output file before tearing the pipeline down. Recordings made with slow software encoders or GPU-based pipelines (and any pipeline that needs a moment to drain) are now written completely instead of being left unreadable with a missing `moov` atom/index. Normal pipelines also stop a little faster.
 * [Media Blocks SDK .Net] Fixed MP4 recordings produced from a still/image source (`ImageVideoSourceBlock`, live mode) ending up unreadable ("moov atom not found") — a live image source now finalizes its file correctly on stop.
 * [Media Blocks SDK .Net] VP9 WebM output now uses a real-time-capable speed/quality default: `VP9EncoderSettings.CPUUsed` defaults to `4` instead of `0`. The previous slowest/highest-quality default could not keep up with a live source, so the recorded video track could be truncated to about a second while audio ran the full length. Set `CPUUsed = 0` to restore maximum quality for offline encoding.
 * [Media Blocks SDK .Net] The rav1e AV1 encoder (`RAV1EEncoderSettings`) now defaults to the fastest speed preset (`SpeedPreset = 10`) instead of `6`. rav1e is a quality-oriented, very slow software encoder; the previous default could encode well under real time (~1 fps at 720p), stalling live and short captures. Lower `SpeedPreset` for higher quality in offline encoding where throughput does not matter.

@@ -15,7 +15,7 @@ tags:
 
 [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Esta página recopila recetas en C# listas para usar para los escenarios de reproducción más comunes con Media Player SDK .Net. Cada fragmento está verificado contra el código fuente del SDK y las demos bajo `_SOURCE/_DEMOS/Media Player SDK/`. En los ejemplos siguientes se utiliza el motor `MediaPlayerCore` (solo Windows); el código multiplataforma basado en `MediaPlayerCoreX` sigue la misma estructura general con ajustes de fuente específicos del motor.
+Esta página recopila recetas en C# listas para usar para los escenarios de reproducción más comunes con Media Player SDK .Net. Cada fragmento está verificado contra el código fuente del SDK y las demos bajo [`Media Player SDK`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK). En los ejemplos siguientes se utiliza el motor `MediaPlayerCore` (solo Windows); el código multiplataforma basado en `MediaPlayerCoreX` sigue la misma estructura general con ajustes de fuente específicos del motor.
 
 ## Recetas disponibles
 

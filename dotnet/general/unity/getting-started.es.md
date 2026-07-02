@@ -70,19 +70,19 @@ El paquete acumulativo publicado añade los cuatro runtimes de plataforma (un bu
 
 ## Paso 3 — Aplica los ajustes del proyecto
 
-En la primera importación, el asistente de configuración ofrece aplicar los ajustes obligatorios.
-Pulsa **Apply** y ambos se configuran por ti:
+En la primera importación, el asistente de configuración ofrece aplicar el ajuste obligatorio.
+Pulsa **Apply** y se configura por ti:
 
 | Ajuste | Valor | Por qué |
 |---|---|---|
 | Api Compatibility Level | `.NET Standard 2.1` | El SDK se distribuye como ensamblados `netstandard2.1`. El ajuste legacy `.NET Framework` no puede cargarlos. |
-| Enter Play Mode → Reload Domain | **Deshabilitado** | El SDK se inicializa una vez por proceso; una recarga de dominio entre sesiones Play puede colgar el Editor mientras el bucle principal GLib está en medio de una llamada. |
 
-Si pulsas **Skip**, configúralos manualmente en **Edit → Project Settings**:
+Si pulsas **Skip**, configúralo manualmente en **Edit → Project Settings → Player → Other
+Settings → Configuration → Api Compatibility Level**.
 
-- Player → Other Settings → Configuration → Api Compatibility Level
-- Editor → Enter Play Mode Settings → When entering Play Mode (cualquier opción que **no**
-  recargue el dominio — `Reload Scene only` coincide con lo que hace **Apply**)
+El comportamiento predeterminado de Enter Play Mode de Unity (Domain + Scene Reload) está
+totalmente soportado — no necesitas desactivar Domain Reload. El SDK sobrevive a las recargas
+de Play/Stop del Editor.
 
 Para targets móviles (Android, iOS), también establece **Scripting Backend = IL2CPP** en la
 misma sección Configuration. Mono no está soportado en Android o iOS por el propio Unity.

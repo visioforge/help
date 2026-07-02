@@ -1,5 +1,5 @@
 ---
-title: VisioForge SDK Docs — Tutoriales, API, Ejemplos C# .NET
+title: VisioForge SDK Documentación y Referencia API
 description: Tutoriales, referencia API y ejemplos de código C# para SDKs VisioForge .NET, Delphi y DirectShow. 7 plataformas, Raspberry Pi + NVIDIA Jetson.
 hide:
   - navigation

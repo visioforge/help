@@ -120,11 +120,13 @@ player es solo el pipeline de Media Blocks:
 
 ### Ciclo de vida del Editor
 
-El SDK se inicializa una vez por proceso y se reutiliza entre sesiones Play/Stop en el Editor.
-Dos puntos derivan de eso:
+El SDK ejecuta su bucle principal GLib de GStreamer en un hilo de fondo que Unity no puede
+abortar. Dos puntos derivan de eso:
 
-- **Mantén Disable Domain Reload activado** para que volver a entrar en modo Play reutilice el
-  SDK inicializado. Con él desactivado, el Editor puede colgarse al salir del modo Play.
+- **No necesitas desactivar Domain Reload.** El comportamiento predeterminado de Enter Play
+  Mode de Unity (Domain + Scene Reload) está totalmente soportado — el guard de recarga del
+  paquete detiene el hilo del bucle principal antes de cada recarga, de modo que Play/Stop se
+  completa sin colgarse.
 - Los players de ejemplo solo eliminan el pipeline por-Play en Stop (`StopAsync`) y
   **intencionadamente no** cierran todo el SDK — sigue ese patrón en tus propios scripts.
 

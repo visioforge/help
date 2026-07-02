@@ -170,11 +170,11 @@ Your scripts should follow the same pattern.
 The SDK initializes once per Editor process and is reused across **Play → Stop → Play**
 sessions. Two consequences:
 
-- **Disable Domain Reload is mandatory.** With it enabled, leaving Play mode triggers a domain
-  reload while the SDK's background GLib main-loop thread is still running, which can hang the
-  Editor. The Editor settings dialog the package shows on first import configures this for you;
-  set it manually under **Edit → Project Settings → Editor → Enter Play Mode Settings** if you
-  skipped that dialog.
+- **You do not need to disable Domain Reload.** Unity's default Enter Play Mode behavior
+  (Domain + Scene Reload) is fully supported. The SDK runs its GLib main-loop on a background
+  thread Unity cannot abort, but the package installs a reload guard (below) that stops that
+  thread before each domain reload, so entering/leaving Play mode and script recompiles all
+  complete cleanly.
 - **Do not call `VisioForgeX.DestroySDK()` on Stop or in `OnDestroy`.** GStreamer's `gst_deinit`
   cannot be re-initialized in the same process — destroying the SDK on Stop and trying to use it
   again on the next Play crashes inside the native registry. The sample players follow this
@@ -185,7 +185,7 @@ There is one Editor-only guard the package installs automatically: a
 `VisioForgeEditorReloadGuard` that calls `VisioForgeX.StopMainLoop()` on `beforeAssemblyReload`
 and `EditorApplication.quitting`. The GLib main-loop runs on a dedicated background thread,
 blocked inside a native call Unity cannot abort — without this guard, the domain reload that
-follows a script recompile would hang. The guard does **not** call `DestroySDK` (see above); it
+follows a script recompile or entering Play mode would hang. The guard does **not** call `DestroySDK` (see above); it
 stops only the loop thread, and the next Play rebuilds the loop. This guard is internal — your
 scripts should ignore it.
 

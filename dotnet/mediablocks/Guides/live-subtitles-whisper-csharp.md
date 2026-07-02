@@ -14,6 +14,10 @@ primary_api_classes:
   - SpeechToTextBlock
   - SpeechToTextSettings
   - SileroVadSettings
+  - SubtitleRenderer
+  - SubtitleStyle
+  - SubtitleWriter
+  - SubtitleFormat
   - SpeechRecognizedEventArgs
 ---
 
@@ -90,9 +94,9 @@ informational (it lets your app label or choose a download); the file actually l
 
 ## Transcribe a media file
 
-For file transcription, enable **backpressure** so nothing is dropped: the block paces the source to exactly
-the transcription throughput (lossless), and the pipeline runs as fast as Whisper can keep up. Pair it with a
-non-synced sink so no real-time clock caps the speed.
+Transcription is lossless: the block paces the source to exactly the transcription throughput, so nothing is
+dropped and the pipeline runs as fast as Whisper can keep up. Pair it with a non-synced sink so no real-time
+clock caps the speed.
 
 ```csharp
 using VisioForge.Core;
@@ -114,7 +118,6 @@ var settings = new SpeechToTextSettings(whisperModelPath)
     Language = "auto",                          // ISO 639-1 code ("en", "es", "fr") or "auto"
     Provider = OnnxExecutionProvider.Auto,      // CUDA when available, else CPU
     EnableVad = true,                           // segment speech with Silero VAD
-    BackpressureWhenBusy = true,                // lossless: pace the source to Whisper
     OutputSrtPath = "subtitles.srt",            // optional side-car SRT (VTT via OutputVttPath)
 };
 settings.Vad.ModelPath = sileroModelPath;       // path to silero_vad.onnx
@@ -149,9 +152,10 @@ are recognized — no extra code needed.
 
 ## Caption a live source
 
-For a live capture device, keep `BackpressureWhenBusy = false` (the default). A live device cannot slow down,
-so the block's internal audio ring overwrites the oldest samples on overload instead of stalling the source —
-captions stay close to real time at the cost of dropping audio when the transcriber falls behind.
+The same block captions a live capture device — connect a microphone source instead of a file. The block
+transcribes inline and never drops audio: it paces the source to Whisper. Whisper Base runs well above real
+time, so a typical microphone is not throttled; if the model is slower than real time the source is held back
+to transcription speed rather than losing samples.
 
 ```csharp
 using VisioForge.Core.MediaBlocks.AudioRendering;
@@ -166,14 +170,13 @@ var settings = new SpeechToTextSettings(whisperModelPath)
     Language = "en",
     Provider = OnnxExecutionProvider.Auto,
     EnableVad = true,
-    BackpressureWhenBusy = false, // live: never stall the device; drop oldest audio on overload
 };
 settings.Vad.ModelPath = sileroModelPath;
 
 var stt = new SpeechToTextBlock(settings);
 stt.OnSpeechRecognized += (s, e) =>
 {
-    // Raised on a background worker thread — marshal to the UI thread before touching UI.
+    // Raised on the GStreamer streaming thread — marshal to the UI thread before touching UI.
     foreach (var seg in e.Segments)
     {
         Console.WriteLine(seg.Text);
@@ -188,14 +191,56 @@ pipeline.Connect(stt.Output, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
-!!! warning "Backpressure and live sources"
-    Never set `BackpressureWhenBusy = true` on a live capture source — a microphone or camera cannot slow down
-    to absorb the backpressure. Use backpressure only for file/seekable sources, and pair it with a non-synced
-    sink (`NullRendererBlock { IsSync = false }`).
+## Render live subtitles on video
+
+`SpeechToTextBlock` is audio-only, so it does not draw captions itself. For on-screen subtitles, add
+an `OverlayManagerBlock` to the video branch and connect `SpeechToTextBlock.OnSpeechRecognized` to
+`SubtitleRenderer.OnSpeechRecognized`.
+
+```csharp
+using SkiaSharp;
+using VisioForge.Core.AI.Whisper.Subtitles;
+using VisioForge.Core.MediaBlocks.VideoProcessing;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+
+var overlay = new OverlayManagerBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, videoView) { IsSync = false };
+
+var subtitleRenderer = new SubtitleRenderer(
+    overlay,
+    new SubtitleStyle
+    {
+        X = 40,
+        Y = 380,
+        FontName = "Arial",
+        FontSize = 30,
+        Color = SKColors.White,
+        MinDisplay = TimeSpan.FromSeconds(1.5),
+        MaxDisplay = TimeSpan.FromSeconds(6),
+    });
+
+stt.OnSpeechRecognized += subtitleRenderer.OnSpeechRecognized;
+
+pipeline.Connect(source.VideoOutput, overlay.Input);
+pipeline.Connect(overlay.Output, videoRenderer.Input);
+```
+
+`SubtitleRenderer` drives a single text overlay, shows the latest recognized caption, and hides it
+automatically after the segment duration clamped to `MinDisplay..MaxDisplay`. `OnSpeechRecognized`
+is raised on the GStreamer streaming thread; marshal to the UI thread before touching UI-only objects
+if your platform requires it. Dispose the renderer when stopping the pipeline so the overlay and timer
+are removed.
+
+| `SubtitleStyle` property | Default | Description |
+| --- | --- | --- |
+| `FontName` / `FontSize` | `Arial` / `32` | Text font. |
+| `Color` | `White` | Text color. |
+| `X` / `Y` | `50` / `50` | Overlay position in pixels. |
+| `MinDisplay` / `MaxDisplay` | `1.5 s` / `6 s` | Minimum and maximum on-screen time for each caption. |
 
 ## Recognition results
 
-`OnSpeechRecognized` is raised on a **background worker thread** and carries a `SpeechRecognizedEventArgs`:
+`OnSpeechRecognized` is raised on the **GStreamer streaming thread** and carries a `SpeechRecognizedEventArgs`:
 
 - `Segments` — a `SpeechSegment[]` (one event may carry several segments).
 - `Timestamp` — the media time the segments belong to.
@@ -223,7 +268,6 @@ Each `SpeechSegment` has:
 | `EnableVad` | `true` | Use Silero VAD to segment speech. Disable for fixed-window chunking. |
 | `Vad` | (defaults) | `SileroVadSettings` — set `Vad.ModelPath` to `silero_vad.onnx`. |
 | `FixedWindowSeconds` | `5` | Window length when `EnableVad = false` (clamped to 1–30 s). |
-| `BackpressureWhenBusy` | `false` | `false` = live (drop oldest); `true` = file (lossless, paced). |
 | `OutputSrtPath` | `null` | Optional side-car `.srt` written as segments finalize. |
 | `OutputVttPath` | `null` | Optional side-car `.vtt` (WebVTT). |
 
@@ -233,13 +277,41 @@ Each `SpeechSegment` has:
 Call the static `SpeechToTextBlock.IsAvailable()` to verify the AI Whisper redistributable is present before
 building a pipeline.
 
+## Subtitle files
+
+The easiest way to create side-car subtitles is to set `OutputSrtPath` or `OutputVttPath` in
+`SpeechToTextSettings`. The block creates a `SubtitleWriter` internally and writes final segments as
+they are recognized.
+
+Use `SubtitleWriter` directly when you want to route recognized text yourself:
+
+```csharp
+using VisioForge.Core.AI.Whisper.Subtitles;
+
+// Keep the writer alive for the whole pipeline run; dispose it when you stop the pipeline.
+var writer = new SubtitleWriter("captions.vtt", SubtitleFormat.Vtt);
+
+stt.OnSpeechRecognized += (sender, e) =>
+{
+    foreach (var segment in e.Segments)
+    {
+        writer.Add(segment);
+    }
+};
+```
+
+`SubtitleFormat.Srt` writes numbered SubRip cues with `HH:MM:SS,mmm` timestamps. `SubtitleFormat.Vtt`
+writes a `WEBVTT` header and `HH:MM:SS.mmm` timestamps. `SubtitleWriter.Add()` ignores empty and
+non-final segments. `FormatSrtTimestamp()` and `FormatVttTimestamp()` are public helpers for custom
+writers.
+
 ## Demos
 
-- **Live Subtitles** (Console) — `_DEMOS/Media Blocks SDK/Console/Live Subtitles` — file transcription with backpressure and progress reporting.
-- **Live Subtitles Demo** (WPF) — `_DEMOS/Media Blocks SDK/WPF/CSharp/Live Subtitles Demo` — live microphone/camera captioning with an on-screen overlay.
-- **Live Subtitles MB** (MAUI) — `_DEMOS/Media Blocks SDK/MAUI/Live Subtitles MB`.
+- **Live Subtitles** (Console) — [Live Subtitles](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/Live%20Subtitles) — lossless file transcription with progress reporting.
+- **Live Subtitles Demo** (WPF) — [Live Subtitles Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Live%20Subtitles%20Demo) — live microphone/camera captioning with an on-screen overlay.
+- **Live Subtitles MB** (MAUI) — [Live Subtitles MB](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/Live%20Subtitles%20MB).
 
 ## See also
 
-- [AI Blocks: OCR, License Plate Recognition, and Object Analytics](../AI/index.md)
+- [AI in VisioForge .NET SDK](../../general/ai/index.md)
 - [ElevenLabs Text-to-Speech and Voice Cloning](../ElevenLabs/index.md)

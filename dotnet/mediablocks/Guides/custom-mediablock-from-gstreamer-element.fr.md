@@ -513,7 +513,7 @@ d'autres cas d'usage :
 
 L'exemple compagnon `CustomGrayscaleBlock` se trouve dans l'arborescence
 des exemples du SDK sous
-`_DEMOS/Media Blocks SDK/Console/CustomGrayscaleBlock/`. Il exécute les
+[`Media Blocks SDK/Console/CustomGrayscaleBlock`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/CustomGrayscaleBlock). Il exécute les
 deux approches dos à dos et écrit un MP4 par approche pour que vous
 puissiez les comparer.
 

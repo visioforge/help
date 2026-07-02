@@ -55,7 +55,7 @@ completo de productos y ejemplos. Para el atajo de cinco pasos, consulta la
 | Unity | **6 (6000.x)** — verificado en `6000.4.6f1` |
 | Targets de build distribuidos | **Windows x64**, **Android arm64**, **macOS Universal arm64+x86_64**, **iOS dispositivo arm64** |
 | TFM gestionado | **`netstandard2.1`** |
-| Ajustes obligatorios del Editor | `Api Compatibility Level = .NET Standard 2.1` y Disable Domain Reload |
+| Ajustes obligatorios del Editor | `Api Compatibility Level = .NET Standard 2.1` |
 
 !!! warning "Usa una ruta corta en NTFS — no un volumen Dev Drive / ReFS"
     Importar el paquete escribe miles de pequeños archivos nativos, y la importación/compilación
@@ -103,7 +103,7 @@ El paquete agrega:
 | Preservación IL2CPP | `Assets/VisioForge/link.xml` | preservación de tipos / miembros para Android e iOS |
 | Scripts reutilizables | `Assets/Scripts/` | los asistentes `VisioForgeEnvironment` y `VisioForgeVideoView` más los seis scripts de ejemplo |
 | Seis escenas de ejemplo | `Assets/Scenes/` | `SimplePlayer`, `RTSPViewer`, `MediaPlayerX`, `IPCameraX`, `VideoCaptureX`, `VideoEditX` — consulta la [visión general de ejemplos](../general/unity/index.md#ejemplos) |
-| Asistente de configuración inicial | `Assets/VisioForge/Editor/` | aplica los dos ajustes de proyecto requeridos |
+| Asistente de configuración inicial | `Assets/VisioForge/Editor/` | aplica el ajuste de proyecto requerido |
 
 Los metadatos `PluginImporter` por flavor en cada archivo nativo le dicen a Unity a qué Build
 Target pertenece cada binario — cambiar el Build Target en Build Profiles elige
@@ -112,40 +112,33 @@ automáticamente el slot correcto en tiempo de build.
 ## Paso 3 — Aplicar los ajustes de proyecto requeridos
 
 En la primera importación, el asistente de configuración muestra un cuadro de diálogo que pide
-aplicar dos ajustes de proyecto requeridos. Haz clic en **Apply** — ambos ajustes se configuran
+aplicar un ajuste de proyecto requerido. Haz clic en **Apply** — el ajuste se configura
 por ti.
 
 ![Cuadro de diálogo de configuración del Media Blocks SDK de VisioForge con los botones Apply y Skip](unity-apply-dialog.webp)
 
-Estos dos ajustes son **obligatorios** — el SDK no funcionará sin ellos:
+Este ajuste es **obligatorio** — el SDK no funcionará sin él:
 
 - **Api Compatibility Level = .NET Standard 2.1** — el SDK se distribuye como ensamblados
   `netstandard2.1`; el ajuste legacy `.NET Framework` no puede cargarlos.
-- **Disable Domain Reload** — el SDK se inicializa una vez por proceso y se reutiliza entre
-  sesiones de Play/Stop; con Domain Reload activado, el Editor puede colgarse al salir del
-  modo Play.
+
+El comportamiento predeterminado de Enter Play Mode de Unity (Domain + Scene Reload) está
+totalmente soportado — no necesitas desactivar Domain Reload. El SDK sobrevive a las recargas
+de Play/Stop del Editor.
 
 Para targets móviles, también cambia **Scripting Backend** a **IL2CPP** — Mono no está
 soportado en Android o iOS por el propio Unity. Consulta
 [Compilar para Android](../general/unity/android.md) y
 [Compilar para iOS](../general/unity/ios.md) para las listas de comprobación por target.
 
-## Paso 4 — Configurar los ajustes manualmente (solo si hiciste clic en Skip)
+## Paso 4 — Configurar el ajuste manualmente (solo si hiciste clic en Skip)
 
-Si hiciste clic en **Skip**, configura ambos a mano:
+Si hiciste clic en **Skip**, configúralo a mano:
 
 1. **Api Compatibility Level = .NET Standard 2.1**
    *Edit → Project Settings → Player → Other Settings → Configuration → Api Compatibility Level*.
 
    ![Ajustes del Player con Api Compatibility Level establecido en .NET Standard 2.1](unity-apicompat.webp)
-
-2. **Disable Domain Reload**
-   *Edit → Project Settings → Editor → Enter Play Mode Settings* → establece
-   **When entering Play Mode** en una opción que **no** recargue el dominio — ya sea
-   **Reload Scene only** (coincide con lo que hace **Apply**) o
-   **Do not reload Domain or Scene**.
-
-   ![Enter Play Mode Settings del Editor con la recarga de dominio desactivada](unity-domain-reload.webp)
 
 ## Paso 5 — Ejecutar una escena de ejemplo
 
@@ -217,8 +210,8 @@ importa el paquete nuevo.
 | Síntoma | Causa | Solución |
 |---|---|---|
 | `TypeLoadException` al ejecutar | Api Compatibility Level es `.NET Framework`, no `.NET Standard 2.1` | Establécelo en `.NET Standard 2.1`, o reimporta y haz clic en **Apply** |
-| El Editor se cuelga en "Reloading domain" al hacer Play/Stop | Domain Reload está activado | Mantén Disable Domain Reload activado |
-| El Editor se bloquea en el 2.º Play | El SDK se cerró en Stop y se reinicializó | No cierres el SDK en Stop; mantén Disable Domain Reload activado |
+| El Editor se cuelga en "Reloading domain" al hacer Play/Stop | Una versión del SDK anterior a esta release, previa a la incorporación del guard de recarga del Editor | Actualiza a la versión más reciente del SDK — su guard de recarga detiene automáticamente el hilo del bucle principal de GStreamer, por lo que Domain Reload es seguro |
+| El Editor se bloquea en el 2.º Play | Se llamó a `VisioForgeX.DestroySDK()` en Stop y luego se reinicializó | No cierres el SDK en Stop — es global al proceso y se reutiliza; libera solo el pipeline por-Play |
 | No se encuentra el runtime nativo | Paquete importado parcialmente o el flavor del Build Target correcto falta del paquete | Reimporta el paquete con todos los elementos marcados; confirma que el paquete contiene la plataforma a la que apuntaste |
 | Sin video, errores en la Consola tras importar | El Editor necesita una recarga limpia después de preparar el runtime | Reinicia el Editor |
 | `DllNotFoundException` en Android | El Scripting Backend es Mono | Cambia a IL2CPP |

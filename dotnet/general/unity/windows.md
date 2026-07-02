@@ -35,10 +35,10 @@ on-disk layout, and the issues you might hit on Windows specifically. For the re
 | Target Platform | **Windows** | File → Build Profiles → Windows |
 | Api Compatibility Level | **.NET Standard 2.1** | Project Settings → Player → Other Settings → Configuration |
 | Scripting Backend | **Mono** *(IL2CPP also works; Mono is the default on Windows)* | Project Settings → Player → Other Settings → Configuration |
-| Enter Play Mode → Reload Domain | **Off** | Project Settings → Editor → Enter Play Mode Settings |
 
-If you imported the package with the **Apply** dialog, the two mandatory project settings
-(`.NET Standard 2.1` plus Disable Domain Reload) are already in place.
+If you imported the package with the **Apply** dialog, the mandatory project setting
+(`.NET Standard 2.1`) is already in place. Unity's default Enter Play Mode behavior (Domain +
+Scene Reload) is fully supported — no need to disable Domain Reload.
 
 ## On-disk layout
 
@@ -84,7 +84,7 @@ another ~5 MB.
 | Pipeline hangs at startup, log shows two `gst_init` calls | A system GStreamer install on `PATH` is loading a second copy of `gstreamer-1.0-0.dll`. | `Configure()` already prunes `PATH` — confirm by inspecting the Console: stripped-count is logged. If the count is 0 but you still see the symptom, an external launcher is re-injecting GStreamer after `Configure()`. |
 | `TypeLoadException` at first SDK call | Api Compatibility Level is `.NET Framework` instead of `.NET Standard 2.1`. | Set it to `.NET Standard 2.1` (Project Settings → Player → Other Settings → Configuration → Api Compatibility Level). |
 | RTSPS / HTTPS streams fail to connect with TLS error | `SSL_CERT_FILE` not pointing at the bundled CA bundle. | `Configure()` sets it when `ca-certificates.crt` is present in the natives folder. A missing CA bundle is logged as a warning — re-stage the runtime via `deploy-unity-natives.ps1`. |
-| Editor hangs on "Reloading domain" after Play/Stop | Disable Domain Reload was turned back on. | Re-enable it under Project Settings → Editor → Enter Play Mode Settings (set **When entering Play Mode** to a non-reloading option). |
+| Editor hangs on "Reloading domain" after Play/Stop | An SDK build older than this release, before the Editor reload guard was added. | Update to the latest SDK — its reload guard stops the GStreamer main-loop thread before each domain reload, so Domain Reload is safe. You do not need to disable it. |
 
 ## Frequently Asked Questions
 

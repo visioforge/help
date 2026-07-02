@@ -56,7 +56,7 @@ catalogue complet de produits et d'exemples. Pour le raccourci en cinq étapes, 
 | Unity | **6 (6000.x)** — vérifié sur `6000.4.6f1` |
 | Targets de build livrés | **Windows x64**, **Android arm64**, **macOS Universel arm64+x86_64**, **iOS appareil arm64** |
 | TFM managé | **`netstandard2.1`** |
-| Réglages Éditeur obligatoires | `Api Compatibility Level = .NET Standard 2.1` et Disable Domain Reload |
+| Réglages Éditeur obligatoires | `Api Compatibility Level = .NET Standard 2.1` |
 
 !!! warning "Utilisez un chemin court sur NTFS — pas un volume Dev Drive / ReFS"
     Importer le paquet écrit des milliers de petits fichiers natifs, et l'import/compilation
@@ -112,18 +112,19 @@ automatiquement le bon slot au moment du build.
 ## Étape 3 — Appliquer les réglages de projet requis
 
 Au premier import, l'assistant de configuration affiche une boîte de dialogue qui demande
-d'appliquer deux réglages de projet requis. Cliquez sur **Apply** — les deux sont configurés
+d'appliquer un réglage de projet requis. Cliquez sur **Apply** — le réglage est configuré
 pour vous.
 
 ![Boîte de dialogue de configuration du Media Blocks SDK VisioForge avec les boutons Apply et Skip](unity-apply-dialog.webp)
 
-Ces deux réglages sont **obligatoires** — le SDK ne fonctionnera pas sans eux :
+Ce réglage est **obligatoire** — le SDK ne fonctionnera pas sans lui :
 
 - **Api Compatibility Level = .NET Standard 2.1** — le SDK est livré sous forme d'assemblies
   `netstandard2.1` ; le réglage legacy `.NET Framework` ne peut pas les charger.
-- **Disable Domain Reload** — le SDK s'initialise une fois par processus et est réutilisé
-  entre les sessions Play/Stop ; avec Domain Reload activé, l'Éditeur peut se bloquer en
-  sortant du mode Play.
+
+Le comportement par défaut d'Unity à l'entrée du mode Play (Domain + Scene Reload) est
+entièrement pris en charge — vous n'avez pas besoin de désactiver le Domain Reload. Le SDK
+survit aux rechargements Play/Stop de l'Éditeur.
 
 Pour les targets mobiles, basculez aussi **Scripting Backend** sur **IL2CPP** — Mono n'est
 pas pris en charge sur Android ou iOS par Unity lui-même. Voir
@@ -132,21 +133,13 @@ pas pris en charge sur Android ou iOS par Unity lui-même. Voir
 
 ## Étape 4 — Régler les réglages manuellement (seulement si vous avez cliqué sur Skip)
 
-Si vous avez cliqué sur **Skip**, réglez les deux à la main :
+Si vous avez cliqué sur **Skip**, réglez-le à la main :
 
 1. **Api Compatibility Level = .NET Standard 2.1**
    *Edit → Project Settings → Player → Other Settings → Configuration → Api Compatibility
    Level*.
 
    ![Réglages Player avec Api Compatibility Level défini sur .NET Standard 2.1](unity-apicompat.webp)
-
-2. **Disable Domain Reload**
-   *Edit → Project Settings → Editor → Enter Play Mode Settings* → réglez
-   **When entering Play Mode** sur une option qui **ne recharge pas** le domaine — soit
-   **Reload Scene only** (correspond à ce que fait **Apply**) soit
-   **Do not reload Domain or Scene**.
-
-   ![Enter Play Mode Settings de l'Éditeur avec le rechargement de domaine désactivé](unity-domain-reload.webp)
 
 ## Étape 5 — Exécuter une scène d'exemple
 
@@ -220,8 +213,8 @@ puis importez le nouveau paquet.
 | Symptôme | Cause | Solution |
 |---|---|---|
 | `TypeLoadException` au lancement | Api Compatibility Level est `.NET Framework`, pas `.NET Standard 2.1` | Réglez-le sur `.NET Standard 2.1`, ou réimportez et cliquez sur **Apply** |
-| L'Éditeur se bloque sur "Reloading domain" sur Play/Stop | Domain Reload est activé | Gardez Disable Domain Reload activé |
-| L'Éditeur plante au 2e Play | Le SDK a été arrêté sur Stop et réinitialisé | Ne coupez pas le SDK sur Stop ; gardez Disable Domain Reload activé |
+| L'Éditeur se bloque sur "Reloading domain" sur Play/Stop | Un build du SDK antérieur à cette version, avant l'ajout du guard de rechargement de l'Éditeur | Mettez à jour vers le dernier SDK — son guard de rechargement arrête automatiquement le thread de la boucle principale GStreamer, donc le Domain Reload est sûr |
+| L'Éditeur plante au 2e Play | `VisioForgeX.DestroySDK()` a été appelé sur Stop, puis réinitialisé | Ne coupez pas le SDK sur Stop — il est global au processus et réutilisé ; ne libérez que le pipeline par-Play |
 | Runtime natif introuvable | Paquet importé partiellement, ou déclinaison du bon Build Target absente du paquet | Réimportez le paquet avec tous les éléments cochés ; confirmez que le paquet contient la plateforme que vous ciblez |
 | Pas de vidéo, erreurs dans la Console après l'import | L'Éditeur a besoin d'un rechargement propre après que le runtime a été stagé | Redémarrez l'Éditeur |
 | `DllNotFoundException` sur Android | Le Scripting Backend est Mono | Passez à IL2CPP |

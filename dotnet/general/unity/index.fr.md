@@ -121,11 +121,13 @@ player n'est que le pipeline Media Blocks :
 
 ### Cycle de vie Éditeur
 
-Le SDK s'initialise une fois par processus et est réutilisé entre les sessions Play/Stop
-dans l'Éditeur. Deux points en découlent :
+Le SDK exécute sa boucle principale GLib de GStreamer sur un thread d'arrière-plan qu'Unity
+ne peut pas abandonner. Deux points en découlent :
 
-- **Gardez Disable Domain Reload activé** pour que ré-entrer dans le mode Play réutilise le
-  SDK initialisé. Avec lui désactivé, l'Éditeur peut se bloquer en sortant du mode Play.
+- **Vous n'avez pas besoin de désactiver le Domain Reload.** Le comportement par défaut
+  d'Unity à l'entrée du mode Play (Domain + Scene Reload) est entièrement pris en charge — le
+  guard de rechargement du paquet arrête le thread de la boucle principale avant chaque
+  rechargement, donc Play/Stop se termine sans blocage.
 - Les players d'exemple ne libèrent que le pipeline par-Play sur Stop (`StopAsync`) et
   **intentionnellement** ne coupent pas tout le SDK — gardez ce motif dans vos propres
   scripts.

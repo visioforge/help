@@ -68,19 +68,18 @@ The published cumulative package adds all four platform runtimes (a custom priva
 
 ## Step 3 — Apply the project settings
 
-On first import the setup helper offers to apply the mandatory settings. Click **Apply** and
-both are configured for you:
+On first import the setup helper offers to apply the mandatory setting. Click **Apply** and it
+is configured for you:
 
 | Setting | Value | Why |
 |---|---|---|
 | Api Compatibility Level | `.NET Standard 2.1` | The SDK ships as `netstandard2.1` assemblies. The legacy `.NET Framework` setting cannot load them. |
-| Enter Play Mode → Reload Domain | **Disabled** | The SDK initializes once per process; a domain reload between Play sessions can hang the Editor while the GLib main loop is mid-call. |
 
-If you click **Skip**, set both manually under **Edit → Project Settings**:
+Unity's default **Enter Play Mode** behavior (Domain + Scene Reload) is fully supported — you do
+**not** need to disable Domain Reload. The SDK survives the Editor's Play/Stop reloads.
 
-- Player → Other Settings → Configuration → Api Compatibility Level
-- Editor → Enter Play Mode Settings → When entering Play Mode (any option that does **not**
-  reload the domain — `Reload Scene only` matches what **Apply** does)
+If you click **Skip**, set the Api Compatibility Level manually under **Edit → Project Settings
+→ Player → Other Settings → Configuration → Api Compatibility Level**.
 
 For mobile targets (Android, iOS), set **Scripting Backend = IL2CPP** in the same Configuration
 section. Mono is not supported on Android or iOS by Unity itself.

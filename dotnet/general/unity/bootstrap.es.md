@@ -181,11 +181,11 @@ motor. Tus scripts deben seguir el mismo patrón.
 El SDK se inicializa una vez por proceso del Editor y se reusa a través de las sesiones
 **Play → Stop → Play**. Dos consecuencias:
 
-- **Disable Domain Reload es obligatorio.** Con él habilitado, salir de modo Play dispara una
-  recarga de dominio mientras el hilo del bucle principal GLib del SDK aún corre, lo que puede
-  colgar el Editor. El diálogo de ajustes del Editor que el paquete muestra al primer import lo
-  configura por ti; ajústalo manualmente en **Edit → Project Settings → Editor → Enter Play
-  Mode Settings** si saltaste ese diálogo.
+- **No necesitas desactivar Domain Reload.** El comportamiento predeterminado de Enter Play
+  Mode de Unity (Domain + Scene Reload) está totalmente soportado. El SDK ejecuta su bucle
+  principal GLib en un hilo de fondo que Unity no puede abortar, pero el paquete instala un
+  guard de recarga (abajo) que detiene ese hilo antes de cada recarga de dominio, de modo que
+  entrar/salir del modo Play y las recompilaciones de script se completan limpiamente.
 - **No llames a `VisioForgeX.DestroySDK()` en Stop ni en `OnDestroy`.** `gst_deinit` de
   GStreamer no puede reinicializarse en el mismo proceso — destruir el SDK en Stop e intentar
   usarlo de nuevo en el siguiente Play crashea dentro del registro nativo. Los players de
@@ -196,7 +196,7 @@ Hay un guard Editor-only que el paquete instala automáticamente: un
 `VisioForgeEditorReloadGuard` que llama a `VisioForgeX.StopMainLoop()` en
 `beforeAssemblyReload` y `EditorApplication.quitting`. El bucle principal GLib corre en un hilo
 de fondo dedicado, bloqueado dentro de una llamada nativa que Unity no puede abortar — sin este
-guard, la recarga de dominio que sigue a una recompilación de script se colgaría. El guard
+guard, la recarga de dominio que sigue a una recompilación de script o a entrar en modo Play se colgaría. El guard
 **no** llama a `DestroySDK` (ver arriba); solo para el hilo del bucle, y el siguiente Play
 reconstruye el bucle. Este guard es interno — tus scripts deben ignorarlo.
 

@@ -45,7 +45,6 @@ macOS ensemble — Unity choisit les bons fichiers par Build Target via les mét
 | Api Compatibility Level | **.NET Standard 2.1** | Project Settings → Player → Other Settings → Configuration |
 | Scripting Backend | **Mono** *ou* **IL2CPP** *(les deux sont testés)* | Project Settings → Player → Other Settings → Configuration |
 | Mac App Store Validation | **Off** *(ou signez d'abord les dylibs GStreamer, voir plus bas)* | Project Settings → Player → Other Settings |
-| Enter Play Mode → Reload Domain | **Off** | Project Settings → Editor → Enter Play Mode Settings |
 
 Les deux scripting backends sont testés. Mono est par défaut et plus rapide à itérer ; passez
 à IL2CPP seulement si vous avez une raison à l'échelle du projet. Le même `link.xml` que le

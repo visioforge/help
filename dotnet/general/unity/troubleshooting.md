@@ -161,10 +161,10 @@ must keep `http://`, add `NSAppTransportSecurity → NSAllowsArbitraryLoads = YE
 
 ### Editor hangs on "Reloading domain" after Play / Stop
 
-Disable Domain Reload is off. Re-enable it under Project Settings → Editor → Enter Play Mode
-Settings → set **When entering Play Mode** to **Reload Scene only** or **Do not reload Domain
-or Scene**. The package's one-time setup dialog configures this for you; if you clicked **Skip**,
-set it manually.
+Unity's default Domain Reload is fully supported and should **not** hang the Editor: the package
+installs a reload guard that stops the GStreamer GLib main-loop thread before each domain reload.
+If you still see a hang, you are on an SDK build older than this release (before the guard was
+added) — update to the latest SDK. You do not need to disable Domain Reload.
 
 ### Editor crashes on the second Play
 

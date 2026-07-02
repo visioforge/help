@@ -110,11 +110,12 @@ Blocks pipeline:
 
 ### Editor lifecycle
 
-The SDK initializes once per process and is reused across Play/Stop sessions in the Editor. Two
-points follow from that:
+The SDK runs its GStreamer GLib main-loop on a background thread Unity cannot abort. Two points
+follow from that:
 
-- **Keep Disable Domain Reload on** so re-entering Play mode reuses the initialized SDK. With it
-  off, the Editor can hang when leaving Play mode.
+- **You do not need to disable Domain Reload.** Unity's default Enter Play Mode behavior
+  (Domain + Scene Reload) is fully supported — the package's reload guard stops the main-loop
+  thread before each reload, so Play/Stop completes without hanging.
 - The sample players dispose only the per-play pipeline on Stop (`StopAsync`) and intentionally
   **do not** shut the whole SDK down — keep that pattern in your own scripts.
 

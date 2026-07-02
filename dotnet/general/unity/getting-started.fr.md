@@ -70,19 +70,20 @@ Le paquet cumulatif publié ajoute les quatre runtimes de plateforme (un build p
 
 ## Étape 3 — Appliquez les réglages du projet
 
-Au premier import, l'assistant de configuration propose d'appliquer les réglages obligatoires.
-Cliquez sur **Apply** et les deux sont configurés pour vous :
+Au premier import, l'assistant de configuration propose d'appliquer le réglage obligatoire.
+Cliquez sur **Apply** et il est configuré pour vous :
 
 | Réglage | Valeur | Pourquoi |
 |---|---|---|
 | Api Compatibility Level | `.NET Standard 2.1` | Le SDK est distribué en assemblies `netstandard2.1`. Le réglage legacy `.NET Framework` ne peut pas les charger. |
-| Enter Play Mode → Reload Domain | **Désactivé** | Le SDK s'initialise une fois par processus ; un rechargement de domaine entre les sessions Play peut bloquer l'Éditeur pendant que la boucle principale GLib est en plein appel. |
 
-Si vous cliquez sur **Skip**, réglez les deux manuellement dans **Edit → Project Settings** :
+Si vous cliquez sur **Skip**, réglez l'Api Compatibility Level manuellement dans
+**Edit → Project Settings → Player → Other Settings → Configuration → Api Compatibility
+Level**.
 
-- Player → Other Settings → Configuration → Api Compatibility Level
-- Editor → Enter Play Mode Settings → When entering Play Mode (toute option qui **ne
-  recharge pas** le domaine — `Reload Scene only` correspond à ce que fait **Apply**)
+Le comportement par défaut d'Unity à l'entrée du mode Play (Domain + Scene Reload) est
+entièrement pris en charge — vous n'avez pas besoin de désactiver le Domain Reload. Le SDK
+survit aux rechargements Play/Stop de l'Éditeur.
 
 Pour les targets mobiles (Android, iOS), réglez aussi **Scripting Backend = IL2CPP** dans la
 même section Configuration. Mono n'est pas pris en charge sur Android ou iOS par Unity

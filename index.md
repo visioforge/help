@@ -1,5 +1,5 @@
 ---
-title: VisioForge SDK Docs — Tutorials, API Reference, C# Samples
+title: VisioForge SDK Documentation & API Reference
 description: Tutorials, API reference, and C# code samples for VisioForge .NET, Delphi, and DirectShow SDKs. 7 platforms, Raspberry Pi + NVIDIA Jetson supported.
 hide:
   - navigation

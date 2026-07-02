@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-06-24 15:22:58 UTC (b5864a14fed)
+**Generated:** 2026-07-02 08:03:54 UTC (aace71e325a)
 
 ## MCP Server (for AI coding agents)
 
@@ -37,7 +37,7 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [Video Surveillance SDK — NVR, VMS, ONVIF, RTSP in .NET](https://www.visioforge.com/solutions-surveillance)
 - [Video Editing SDK — Build Editors in C# .NET, Cross-Platform](https://www.visioforge.com/solutions-video-editing)
 - [Encoding Filters Pack — MP4, H.264, HEVC, AV1 for DirectShow](https://www.visioforge.com/encoding-filters-pack)
-- [FFmpeg Source DirectShow Filter — MP4, HEVC, AV1 + GPU Decode](https://www.visioforge.com/ffmpeg-source-directshow-filter)
+- [FFmpeg Source DirectShow Filter — MP4, HEVC, AV1, GPU Decode](https://www.visioforge.com/ffmpeg-source-directshow-filter)
 - [Processing Filters Pack — Video Effects, Chroma Key, Motion](https://www.visioforge.com/processing-filters-pack)
 - [VLC Source DirectShow Filter — Play 400+ Formats in Any App](https://www.visioforge.com/vlc-source-directshow-filter)
 - [Cookie Policy (EU) — Privacy & Data Controls | VisioForge](https://www.visioforge.com/cookie-policy-eu)
@@ -139,6 +139,7 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [Deploy .NET Apps on Ubuntu with GStreamer and VisioForge SDK](https://www.visioforge.com/help/docs/dotnet/deployment-x/Ubuntu/): Deploy .NET multimedia apps on Ubuntu Linux with GStreamer setup, hardware configuration, and cross-platform performance optimization.
 - [Uno Platform Deployment Guide for VisioForge .NET SDKs](https://www.visioforge.com/help/docs/dotnet/deployment-x/uno/): VisioForge .NET SDK Uno Platform deployment with VideoView integration, multi-platform support for Windows, Android, iOS, macOS, and Linux.
 - [Windows Deployment Guide for VisioForge Cross-Platform SDK](https://www.visioforge.com/help/docs/dotnet/deployment-x/Windows/): VisioForge SDK .NET deployment for Windows with NuGet packages, dependencies, and x86/x64 architecture configuration for multimedia apps.
+- [AI SDK for .NET — On-Device Video AI and Speech-to-Text](https://www.visioforge.com/help/docs/dotnet/general/ai/): On-device AI SDK for .NET — OCR, object detection, face recognition, ANPR, background removal, and Whisper speech-to-text. Cross-platform, no cloud.
 - [Audio Effects in C# and .NET - EQ, Reverb, Filters, and More](https://www.visioforge.com/help/docs/dotnet/general/audio-effects/): Apply real-time audio effects in C# and .NET with VisioForge SDKs. Equalizer, reverb, echo, noise reduction, pitch shift, and 30+ effects.
 - [Audio Encoders for .NET — AAC, FLAC, MP3, Opus Guide](https://www.visioforge.com/help/docs/dotnet/general/audio-encoders/): Implement AAC, FLAC, MP3, Opus, and other audio encoders in .NET with optimal settings, performance tips, and best practices.
 - [Essential .NET SDK Code Samples for Media Developers](https://www.visioforge.com/help/docs/dotnet/general/code-samples/): Implementation examples for DirectShow filters, audio/video processing, rendering, and media manipulation in .NET SDK applications.
@@ -168,7 +169,6 @@ The MCP server returns surgical answers (single API class, single code example) 
 
 - [Apple Platform Media Blocks in C# .NET — iOS, macOS](https://www.visioforge.com/help/docs/dotnet/mediablocks/_Apple/): Build iOS and macOS media apps with ProRes encoding, VideoToolbox acceleration, and native audio blocks using VisioForge Media Blocks SDK.
 - [Linux VA-API Hardware Video Acceleration in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/_Linux/): Use VA-API GPU-accelerated video encoding and decoding on Linux with VisioForge Media Blocks SDK. Ubuntu and Debian platform support for .NET apps.
-- [AI Blocks — OCR and License Plate Recognition (ANPR)](https://www.visioforge.com/help/docs/dotnet/mediablocks/AI/): Recognize text and vehicle license plates in video with the Media Blocks SDK .Net using cross-platform PaddleOCR ONNX models on CPU or GPU.
 - [Audio Encoder Blocks - AAC, MP3, FLAC, Opus in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioEncoders/): Encode audio to AAC, MP3, FLAC, Opus, Vorbis, and WMA using VisioForge Media Blocks SDK. Configurable bitrate, sample rate, and channel settings.
 - [Audio Processing Blocks for C# .NET - Mixer, EQ, Effects](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioProcessing/): Build audio pipelines in C# with VisioForge Media Blocks SDK — mixer, equalizer, reverb, noise reduction, and 30+ blocks. Cross-platform support.
 - [Cross-Platform Audio Rendering and Playback in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/AudioRendering/): Play audio to speakers on Windows, macOS, Linux, iOS, and Android using VisioForge Media Blocks SDK. Device selection, buffer control, volume management.
@@ -354,7 +354,7 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [Cross-Platform Codec and Device Support Matrix for .NET](https://www.visioforge.com/help/docs/dotnet/platform-matrix/): VisioForge .NET SDK cross-platform support matrix for video/audio codecs, hardware acceleration, and capture devices on Windows, Linux, macOS, Android, iOS.
 - [.NET SDKs — System Requirements & Platform Support](https://www.visioforge.com/help/docs/dotnet/system-requirements/): Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 10+. .NET 6–9, ARM64 support, 4K memory guidelines. WPF, WinForms, MAUI, and Avalonia compatible.
 - [SDK License Agreement — Usage Rights and Distribution Terms](https://www.visioforge.com/help/docs/eula/): End User License Agreement for VisioForge SDKs covering usage rights, distribution terms, and legal conditions for developers.
-- [VisioForge SDK Docs — Tutoriales, API, Ejemplos C# .NET](https://www.visioforge.com/help/es/): Tutoriales, referencia API y ejemplos de código C# para SDKs VisioForge .NET, Delphi y DirectShow. 7 plataformas, Raspberry Pi + NVIDIA Jetson.
+- [VisioForge SDK Documentación y Referencia API](https://www.visioforge.com/help/es/): Tutoriales, referencia API y ejemplos de código C# para SDKs VisioForge .NET, Delphi y DirectShow. 7 plataformas, Raspberry Pi + NVIDIA Jetson.
 - [Agent Skills pour les SDK .NET VisioForge — agents IA et LLM](https://www.visioforge.com/help/fr/docs/dotnet/agent-skills/): Skills par plateforme pour les agents IA de codage (Claude Code, Cursor, Copilot, Codex, Gemini CLI) couvrant NuGet, licence et pièges de déploiement.
 - [VisioForge .NET SDKs — Changelog and Release Notes](https://www.visioforge.com/help/fr/docs/dotnet/changelog/): Version history for Video Capture, Media Player, Video Edit, and Media Blocks SDKs. New features, bug fixes, API changes, and platform updates.
 - [SDK .NET VisioForge — Capture, édition et lecture vidéo](https://www.visioforge.com/help/fr/docs/dotnet/): SDK .NET pour la capture, l'édition, la lecture et le traitement vidéo. Prise en charge multiplateforme pour Windows, macOS, Linux, Android et iOS.
@@ -362,9 +362,9 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [Matrice multiplateforme des codecs et périphériques .NET](https://www.visioforge.com/help/fr/docs/dotnet/platform-matrix/): Matrice multiplateforme du SDK .NET VisioForge pour codecs vidéo/audio, accélération matérielle et périphériques sur Windows, Linux, macOS, Android et iOS.
 - [SDK .NET VisioForge — configuration requise et plateformes](https://www.visioforge.com/help/fr/docs/dotnet/system-requirements/): Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 10+. .NET 6 à 9, ARM64, conseils mémoire 4K. WPF, WinForms, MAUI, Avalonia compatibles.
 - [Contrat de licence SDK — Droits d'usage et distribution](https://www.visioforge.com/help/fr/docs/eula/): Contrat de licence utilisateur final pour les SDK VisioForge, couvrant les droits d'utilisation, les conditions de distribution et les conditions légales.
-- [VisioForge SDK Docs — Tutoriels, référence API, C# .NET](https://www.visioforge.com/help/fr/): Tutoriels, référence API et exemples de code C# pour les SDK VisioForge .NET, Delphi et DirectShow. 7 plateformes, Raspberry Pi + NVIDIA Jetson.
+- [VisioForge SDK Documentation et Référence API](https://www.visioforge.com/help/fr/): Tutoriels, référence API et exemples de code C# pour les SDK VisioForge .NET, Delphi et DirectShow. 7 plateformes, Raspberry Pi + NVIDIA Jetson.
 - [Options de licence des SDK VisioForge](https://www.visioforge.com/help/fr/licensing/): Découvrez les licences des SDK VisioForge — licences développeur, options d'équipe, déploiement sans redevances et tarifs pour les SDK vidéo.
-- [VisioForge SDK Docs — Tutorials, API Reference, C# Samples](https://www.visioforge.com/help/): Tutorials, API reference, and C# code samples for VisioForge .NET, Delphi, and DirectShow SDKs. 7 platforms, Raspberry Pi + NVIDIA Jetson supported.
+- [VisioForge SDK Documentation & API Reference](https://www.visioforge.com/help/): Tutorials, API reference, and C# code samples for VisioForge .NET, Delphi, and DirectShow SDKs. 7 platforms, Raspberry Pi + NVIDIA Jetson supported.
 - [VisioForge SDKs Licensing Options](https://www.visioforge.com/help/licensing/): Explore VisioForge SDK licensing - developer licenses, team options, royalty-free deployment, and pricing for video processing SDKs.
 
 ## Comparisons

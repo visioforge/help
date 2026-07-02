@@ -54,7 +54,7 @@ the overview with the full product and sample catalog. For the five-step shortcu
 | Unity | **6 (6000.x)** — verified on `6000.4.6f1` |
 | Build targets shipped | **Windows x64**, **Android arm64**, **macOS Universal arm64+x86_64**, **iOS device arm64** |
 | Managed TFM | **`netstandard2.1`** |
-| Mandatory Editor settings | `Api Compatibility Level = .NET Standard 2.1` and Disable Domain Reload |
+| Mandatory Editor settings | `Api Compatibility Level = .NET Standard 2.1` |
 
 !!! warning "Use a short path on NTFS — not a Dev Drive / ReFS volume"
     Importing the package writes thousands of small native files, and Unity's import/compile is
@@ -107,37 +107,31 @@ slot at build time.
 
 ## Step 3 — Apply the required project settings
 
-On first import the setup helper shows a dialog asking to apply two required project settings.
-Click **Apply** — both settings are configured for you.
+On first import the setup helper shows a dialog asking to apply the required project setting.
+Click **Apply** — the setting is configured for you.
 
 ![VisioForge Media Blocks SDK setup dialog with Apply and Skip buttons](unity-apply-dialog.webp)
 
-These two settings are **mandatory** — the SDK will not work without them:
+This setting is **mandatory** — the SDK will not work without it:
 
 - **Api Compatibility Level = .NET Standard 2.1** — the SDK ships as `netstandard2.1`
   assemblies; the legacy `.NET Framework` setting cannot load them.
-- **Disable Domain Reload** — the SDK initializes once per process and is reused across
-  Play/Stop sessions; with Domain Reload enabled the Editor can hang when leaving Play mode.
+
+Unity's default **Enter Play Mode** behavior (Domain + Scene Reload) is fully supported — you
+do **not** need to disable Domain Reload. The SDK survives the Editor's Play/Stop reloads.
 
 For mobile targets, also switch **Scripting Backend** to **IL2CPP** — Mono is not supported on
 Android or iOS by Unity itself. See [Build for Android](../general/unity/android.md) and
 [Build for iOS](../general/unity/ios.md) for the per-target Build Profile checklists.
 
-## Step 4 — Set the settings manually (only if you clicked Skip)
+## Step 4 — Set the setting manually (only if you clicked Skip)
 
-If you clicked **Skip**, set both by hand:
+If you clicked **Skip**, set it by hand:
 
 1. **Api Compatibility Level = .NET Standard 2.1**
    *Edit → Project Settings → Player → Other Settings → Configuration → Api Compatibility Level*.
 
    ![Player settings with Api Compatibility Level set to .NET Standard 2.1](unity-apicompat.webp)
-
-2. **Disable Domain Reload**
-   *Edit → Project Settings → Editor → Enter Play Mode Settings* → set **When entering Play Mode**
-   to an option that does **not** reload the domain — either **Reload Scene only** (matches what
-   **Apply** does) or **Do not reload Domain or Scene**.
-
-   ![Editor Enter Play Mode Settings with domain reload disabled](unity-domain-reload.webp)
 
 ## Step 5 — Run a sample scene
 
@@ -202,8 +196,8 @@ removal (steps above) first, then import the new package.
 | Symptom | Cause | Fix |
 |---|---|---|
 | `TypeLoadException` on play | Api Compatibility Level is `.NET Framework`, not `.NET Standard 2.1` | Set it to `.NET Standard 2.1`, or re-import and click **Apply** |
-| Editor hangs on "Reloading domain" on Play/Stop | Domain Reload is enabled | Keep Disable Domain Reload on |
-| Editor crashes on the 2nd Play | The SDK was shut down on Stop and re-initialized | Don't shut the SDK down on Stop; keep Disable Domain Reload on |
+| Editor hangs on "Reloading domain" on Play/Stop | An SDK build older than this release, before the Editor reload guard was added | Update to the latest SDK — its reload guard stops the GStreamer main-loop thread automatically, so Domain Reload is safe |
+| Editor crashes on the 2nd Play | `VisioForgeX.DestroySDK()` was called on Stop, then re-initialized | Don't shut the SDK down on Stop — it is process-global and reused; dispose only the per-play pipeline |
 | Native runtime not found | Package imported partially, or wrong Build Target's flavor missing from the package | Re-import the package with all items checked; confirm the package contains the platform you targeted |
 | No video, errors in the Console after import | The Editor needs a clean reload after the runtime is staged | Restart the Editor |
 | `DllNotFoundException` on Android | Scripting Backend is Mono | Switch to IL2CPP |

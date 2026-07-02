@@ -185,12 +185,12 @@ créer un moteur. Vos scripts devraient suivre le même schéma.
 Le SDK s'initialise une fois par processus Éditeur et est réutilisé entre les sessions
 **Play → Stop → Play**. Deux conséquences :
 
-- **Disable Domain Reload est obligatoire.** Avec lui activé, sortir du mode Play déclenche un
-  rechargement de domaine alors que le thread de la boucle principale GLib du SDK tourne
-  encore, ce qui peut bloquer l'Éditeur. La boîte de dialogue de configuration que le paquet
-  affiche au premier import le configure pour vous ; réglez-le manuellement dans
-  **Edit → Project Settings → Editor → Enter Play Mode Settings** si vous avez sauté ce
-  dialogue.
+- **Vous n'avez pas besoin de désactiver le Domain Reload.** Le comportement par défaut
+  d'Unity à l'entrée du mode Play (Domain + Scene Reload) est entièrement pris en charge. Le
+  SDK exécute sa boucle principale GLib sur un thread d'arrière-plan qu'Unity ne peut pas
+  abandonner, mais le paquet installe un guard de rechargement (ci-dessous) qui arrête ce
+  thread avant chaque rechargement de domaine, donc entrer/sortir du mode Play et les
+  recompilations de scripts se terminent tous proprement.
 - **N'appelez pas `VisioForgeX.DestroySDK()` sur Stop ou dans `OnDestroy`.** Le `gst_deinit`
   de GStreamer ne peut pas être réinitialisé dans le même processus — détruire le SDK sur Stop
   et tenter de l'utiliser au prochain Play plante au sein du registre natif. Les players
@@ -201,7 +201,8 @@ Il y a un guard Éditeur-seul que le paquet installe automatiquement : un
 `VisioForgeEditorReloadGuard` qui appelle `VisioForgeX.StopMainLoop()` sur
 `beforeAssemblyReload` et `EditorApplication.quitting`. La boucle principale GLib tourne sur
 un thread d'arrière-plan dédié, bloqué dans un appel natif qu'Unity ne peut pas abandonner —
-sans ce guard, le rechargement de domaine suivant une recompilation de script se bloquerait.
+sans ce guard, le rechargement de domaine suivant une recompilation de script ou l'entrée
+dans le mode Play se bloquerait.
 Le guard **n'appelle pas** `DestroySDK` (voir ci-dessus) ; il arrête seulement le thread de
 la boucle, et le prochain Play reconstruit la boucle. Ce guard est interne — vos scripts
 doivent l'ignorer.

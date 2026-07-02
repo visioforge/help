@@ -44,7 +44,6 @@ metadata.
 | Api Compatibility Level | **.NET Standard 2.1** | Project Settings → Player → Other Settings → Configuration |
 | Scripting Backend | **Mono** *or* **IL2CPP** *(both are tested)* | Project Settings → Player → Other Settings → Configuration |
 | Mac App Store Validation | **Off** *(or sign the GStreamer dylibs first, see below)* | Project Settings → Player → Other Settings |
-| Enter Play Mode → Reload Domain | **Off** | Project Settings → Editor → Enter Play Mode Settings |
 
 Both scripting backends are tested. Mono is the default and is faster to iterate on; switch to
 IL2CPP only if you have a project-wide reason. The same `link.xml` that the package ships

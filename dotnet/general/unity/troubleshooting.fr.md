@@ -169,10 +169,12 @@ avez besoin.
 
 ### L'Éditeur se bloque sur "Reloading domain" après Play / Stop
 
-Disable Domain Reload est désactivé. Réactivez-le dans Project Settings → Editor → Enter
-Play Mode Settings → réglez **When entering Play Mode** sur **Reload Scene only** ou
-**Do not reload Domain or Scene**. La boîte de dialogue de configuration unique du paquet le
-configure pour vous ; si vous avez cliqué sur **Skip**, réglez-le manuellement.
+Le Domain Reload par défaut d'Unity est entièrement pris en charge et ne devrait pas bloquer
+l'Éditeur : le paquet installe un guard de rechargement qui arrête le thread de la boucle
+principale GLib de GStreamer avant chaque rechargement de domaine. Si vous constatez encore un
+blocage, c'est que vous utilisez un build du SDK antérieur à cette version (avant l'ajout du
+guard) — mettez à jour vers le dernier SDK. Vous n'avez pas besoin de désactiver le Domain
+Reload.
 
 ### L'Éditeur plante au second Play
 

@@ -12,7 +12,7 @@ tags:
 
 [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Esta página recopila recetas en C# listas para usar para los escenarios de edición más comunes con Video Edit SDK .Net. Cada fragmento está verificado contra el código fuente del SDK y las demos bajo `_SOURCE/_DEMOS/Video Edit SDK/`. Las recetas siguientes utilizan el motor `VideoEditCore` (solo Windows). El código multiplataforma basado en `VideoEditCoreX` sigue una forma similar con tipos de fuente y de efecto específicos del motor.
+Esta página recopila recetas en C# listas para usar para los escenarios de edición más comunes con Video Edit SDK .Net. Cada fragmento está verificado contra el código fuente del SDK y las demos bajo [`Video Edit SDK`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK). Las recetas siguientes utilizan el motor `VideoEditCore` (solo Windows). El código multiplataforma basado en `VideoEditCoreX` sigue una forma similar con tipos de fuente y de efecto específicos del motor.
 
 ## Recetas disponibles
 

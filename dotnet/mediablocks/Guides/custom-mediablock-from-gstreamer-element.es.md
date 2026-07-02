@@ -503,7 +503,7 @@ distintos casos de uso:
 
 El ejemplo `CustomGrayscaleBlock` que acompaña esta guía vive en el árbol
 de ejemplos del SDK en
-`_DEMOS/Media Blocks SDK/Console/CustomGrayscaleBlock/`. Ejecuta ambos
+[`Media Blocks SDK/Console/CustomGrayscaleBlock`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/CustomGrayscaleBlock). Ejecuta ambos
 enfoques uno tras otro y escribe un MP4 por enfoque para que pueda
 compararlos.
 

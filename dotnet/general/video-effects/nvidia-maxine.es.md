@@ -118,8 +118,8 @@ cuando se construye el grafo de reproducción (cambiarlo durante la reproducció
 
 ## Demos
 
-- **Nvidia Maxine Demo** (Video Capture, WPF) — `_DEMOS/Video Capture SDK/WPF/CSharp/Nvidia Maxine Demo`.
-- **Nvidia Maxine Player** (Media Player, WPF) — `_DEMOS/Media Player SDK/WPF/CSharp/Nvidia Maxine Player`.
+- **Nvidia Maxine Demo** (Video Capture, WPF) — [Nvidia Maxine Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/Nvidia%20Maxine%20Demo).
+- **Nvidia Maxine Player** (Media Player, WPF) — [Nvidia Maxine Player](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WPF/CSharp/Nvidia%20Maxine%20Player).
 
 ## Véase también
 

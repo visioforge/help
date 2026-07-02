@@ -13,15 +13,14 @@
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationPublisher>SimpleCaptureUno</ApplicationPublisher>
     <Description>SimpleCaptureUno powered by Uno Platform.</Description>
-    <UnoFeatures>
-    </UnoFeatures>
+    <UnoFeatures></UnoFeatures>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CodesignKey>Apple Development</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.6.22" />
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.6.22" />
+    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.6.25" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.6.25" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />

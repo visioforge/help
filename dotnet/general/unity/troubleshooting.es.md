@@ -167,10 +167,11 @@ necesitas.
 
 ### El Editor se cuelga en "Reloading domain" tras Play / Stop
 
-Disable Domain Reload está desactivado. Reactívalo en Project Settings → Editor → Enter Play
-Mode Settings → ajusta **When entering Play Mode** a **Reload Scene only** o **Do not reload
-Domain or Scene**. El diálogo de configuración de un único uso del paquete lo configura por
-ti; si hiciste clic en **Skip**, ajústalo manualmente.
+El Domain Reload predeterminado de Unity está totalmente soportado y no debería colgar el
+Editor: el paquete instala un guard de recarga que detiene el hilo del bucle principal GLib de
+GStreamer antes de cada recarga de dominio. Si aun así ves un cuelgue, estás en una versión del
+SDK anterior a esta release (previa a la incorporación del guard) — actualiza a la versión más
+reciente del SDK. No necesitas desactivar Domain Reload.
 
 ### El Editor crashea en el segundo Play
 

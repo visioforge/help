@@ -483,7 +483,7 @@ element**. The SDK has two related public blocks for different use cases:
 ## Sample app
 
 The companion sample `CustomGrayscaleBlock` lives in the SDK samples tree
-under `_DEMOS/Media Blocks SDK/Console/CustomGrayscaleBlock/`. It runs
+under [`Media Blocks SDK/Console/CustomGrayscaleBlock`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/CustomGrayscaleBlock). It runs
 both approaches back-to-back and writes one MP4 per approach so you can
 compare them.
 

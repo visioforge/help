@@ -35,10 +35,11 @@ l'organisation sur disque et les problèmes propres à Windows. Pour le reste, c
 | Target Platform | **Windows** | File → Build Profiles → Windows |
 | Api Compatibility Level | **.NET Standard 2.1** | Project Settings → Player → Other Settings → Configuration |
 | Scripting Backend | **Mono** *(IL2CPP fonctionne aussi ; Mono est par défaut sur Windows)* | Project Settings → Player → Other Settings → Configuration |
-| Enter Play Mode → Reload Domain | **Off** | Project Settings → Editor → Enter Play Mode Settings |
 
-Si vous avez importé le paquet via le dialogue **Apply**, les deux réglages de projet
-obligatoires (`.NET Standard 2.1` et Disable Domain Reload) sont déjà en place.
+Si vous avez importé le paquet via le dialogue **Apply**, le réglage de projet obligatoire
+(`.NET Standard 2.1`) est déjà en place. Le comportement par défaut d'Unity à l'entrée du mode
+Play (Domain + Scene Reload) est entièrement pris en charge — pas besoin de désactiver le
+Domain Reload.
 
 ## Organisation sur disque
 
@@ -85,7 +86,7 @@ assemblies managés ajoutent ~5 Mo supplémentaires.
 | Le pipeline se bloque au démarrage, le log montre deux appels `gst_init` | Une installation GStreamer dans le `PATH` système charge une deuxième copie de `gstreamer-1.0-0.dll`. | `Configure()` nettoie déjà le `PATH` — confirmez en inspectant la Console : le nombre d'entrées supprimées est journalisé. Si le compteur est 0 mais le symptôme persiste, un lanceur externe réinjecte GStreamer après `Configure()`. |
 | `TypeLoadException` au premier appel SDK | Api Compatibility Level est `.NET Framework` au lieu de `.NET Standard 2.1`. | Réglez-le sur `.NET Standard 2.1` (Project Settings → Player → Other Settings → Configuration → Api Compatibility Level). |
 | Les streams RTSPS / HTTPS échouent à la connexion avec erreur TLS | `SSL_CERT_FILE` ne pointe pas vers le bundle CA fourni. | `Configure()` le règle quand `ca-certificates.crt` est présent dans le dossier des natifs. Un bundle CA absent est journalisé en avertissement — restagez le runtime via `deploy-unity-natives.ps1`. |
-| L'Éditeur se bloque sur "Reloading domain" après Play/Stop | Disable Domain Reload a été remis sur off. | Réactivez-le dans Project Settings → Editor → Enter Play Mode Settings (réglez **When entering Play Mode** sur une option qui ne recharge pas). |
+| L'Éditeur se bloque sur "Reloading domain" après Play/Stop | Un build du SDK antérieur à cette version, avant l'ajout du guard de rechargement de l'Éditeur. | Mettez à jour vers le dernier SDK — son guard de rechargement arrête le thread de la boucle principale GStreamer avant chaque rechargement de domaine, donc le Domain Reload est sûr. Vous n'avez pas besoin de le désactiver. |
 
 ## Foire aux questions
 

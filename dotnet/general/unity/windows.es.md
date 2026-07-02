@@ -35,10 +35,10 @@ consulta [Bootstrap y ciclo de vida](bootstrap.md).
 | Target Platform | **Windows** | File → Build Profiles → Windows |
 | Api Compatibility Level | **.NET Standard 2.1** | Project Settings → Player → Other Settings → Configuration |
 | Scripting Backend | **Mono** *(IL2CPP también funciona; Mono es el predeterminado en Windows)* | Project Settings → Player → Other Settings → Configuration |
-| Enter Play Mode → Reload Domain | **Off** | Project Settings → Editor → Enter Play Mode Settings |
 
-Si importaste el paquete con el diálogo **Apply**, los dos ajustes de proyecto obligatorios
-(`.NET Standard 2.1` y Disable Domain Reload) ya están en su sitio.
+Si importaste el paquete con el diálogo **Apply**, el ajuste de proyecto obligatorio
+(`.NET Standard 2.1`) ya está en su sitio. El comportamiento predeterminado de Enter Play Mode
+de Unity (Domain + Scene Reload) está totalmente soportado — no necesitas desactivar Domain Reload.
 
 ## Organización en disco
 
@@ -84,7 +84,7 @@ gestionados añaden otros ~5 MB.
 | El pipeline se cuelga al arrancar, el log muestra dos llamadas `gst_init` | Una instalación de GStreamer en el `PATH` del sistema carga una segunda copia de `gstreamer-1.0-0.dll`. | `Configure()` ya limpia el `PATH` — confirma inspeccionando la Consola: se registra el conteo de entradas eliminadas. Si el conteo es 0 pero sigues viendo el síntoma, un lanzador externo está reinyectando GStreamer tras `Configure()`. |
 | `TypeLoadException` en la primera llamada al SDK | Api Compatibility Level es `.NET Framework` en lugar de `.NET Standard 2.1`. | Ajústalo a `.NET Standard 2.1` (Project Settings → Player → Other Settings → Configuration → Api Compatibility Level). |
 | Streams RTSPS / HTTPS fallan al conectar con error TLS | `SSL_CERT_FILE` no apunta al paquete CA incluido. | `Configure()` lo establece cuando `ca-certificates.crt` está presente en la carpeta de nativos. Un paquete CA ausente se registra como advertencia — vuelve a preparar el runtime mediante `deploy-unity-natives.ps1`. |
-| El Editor se cuelga en "Reloading domain" tras Play/Stop | Disable Domain Reload se volvió a activar. | Reactívalo en Project Settings → Editor → Enter Play Mode Settings (ajusta **When entering Play Mode** a una opción que no recargue). |
+| El Editor se cuelga en "Reloading domain" tras Play/Stop | Una versión del SDK anterior a esta release, previa a la incorporación del guard de recarga del Editor. | Actualiza a la versión más reciente del SDK — su guard de recarga detiene el hilo del bucle principal de GStreamer antes de cada recarga de dominio, por lo que Domain Reload es seguro. No necesitas desactivarlo. |
 
 ## Preguntas Frecuentes
 

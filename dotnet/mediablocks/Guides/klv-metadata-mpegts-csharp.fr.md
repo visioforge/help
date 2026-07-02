@@ -161,12 +161,12 @@ videoCapture.Network_Streaming_Output = new FFMPEGEXEOutput
 
 Abonnez-vous à `VideoCaptureCore.OnDataFrameBuffer` et filtrez sur `DataFrameType.KLV` pour lire les paquets KLV
 en direct à mesure qu'ils arrivent. Voir le code snippet `ip-camera-klv-mpegts-recorder` sous
-`_DEMOS/Video Capture SDK/_CodeSnippets/`.
+[`Video Capture SDK/_CodeSnippets`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets).
 
 ## Démos
 
-- **KLV Demo** (WPF) — `_DEMOS/Media Blocks SDK/WPF/CSharp/KLV Demo` — extraire le KLV d'un fichier MPEG-TS et analyser les éléments MISB 0601 dans une visionneuse.
-- **ip-camera-klv-mpegts-recorder** (code snippet) — `_DEMOS/Video Capture SDK/_CodeSnippets/ip-camera-klv-mpegts-recorder` — capturer une caméra IP MISB et enregistrer/rediffuser le KLV en MPEG-TS.
+- **KLV Demo** (WPF) — [KLV Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/KLV%20Demo) — extraire le KLV d'un fichier MPEG-TS et analyser les éléments MISB 0601 dans une visionneuse.
+- **ip-camera-klv-mpegts-recorder** (code snippet) — [ip-camera-klv-mpegts-recorder](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-klv-mpegts-recorder) — capturer une caméra IP MISB et enregistrer/rediffuser le KLV en MPEG-TS.
 
 ## Voir aussi
 

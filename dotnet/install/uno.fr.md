@@ -195,9 +195,9 @@ public sealed partial class MainPage : Page
 
 Pour des exemples complets et du code d'exemple, consultez :
 
-- Les applications d'exemple dans le dossier `_DEMOS/Media Blocks SDK/Uno/`
-- Les applications d'exemple dans le dossier `_DEMOS/Media Player SDK X/Uno/`
-- Les applications d'exemple dans le dossier `_DEMOS/Video Capture SDK X/Uno/`
+- Les applications d'exemple dans le dossier [Media Blocks SDK/Uno](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Uno)
+- Les applications d'exemple dans le dossier [Media Player SDK X/Uno](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Uno)
+- Les applications d'exemple dans le dossier [Video Capture SDK X/Uno](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Uno)
 - Notre [dépôt GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
 Les exemples disponibles incluent :
