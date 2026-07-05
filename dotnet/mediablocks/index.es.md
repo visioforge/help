@@ -104,6 +104,23 @@ Los [Bloques de Fuente](Sources/index.md) ingestan medios desde cámaras, archiv
 - [Renderizado de Video](VideoRendering/index.md) — Mostrar video en controles WinForms, WPF, MAUI y Avalonia
 - [Compositor de Video en Vivo](LiveVideoCompositor/index.md) — Mezcla y composición multi-fuente
 
+### IA y Visión por Computador
+
+Bloques de IA en el dispositivo (ONNX / Whisper) que se insertan directamente en un pipeline de Media Blocks: sin nube, sin facturación por llamada. Consulte la [descripción general de IA](../general/ai/index.md) para ver la lista completa y las rutas de integración.
+
+- [Detección de objetos](../general/ai/object-detection.md) — detectar objetos por fotograma con YOLOv8/YOLOX/RT-DETR
+- [Analítica de objetos](../general/ai/object-analytics.md) — seguimiento, líneas de disparo y conteo por zonas poligonales
+- [Detección de vocabulario abierto](../general/ai/open-vocabulary-detection.md) — detectar objetos mediante indicaciones de texto libre (OWLv2 / Grounding DINO)
+- [Subtitulado con VLM](../general/ai/vlm-captioning.md) — subtitular, describir, anclar frases y aplicar OCR a los fotogramas con Florence-2
+- [Búsqueda semántica de vídeo](../general/ai/semantic-video-search.md) — indexar fotogramas como embeddings CLIP y buscar por texto
+- [OCR](../general/ai/ocr.md) — reconocer regiones de texto con modelos PaddleOCR
+- [Reconocimiento facial](../general/ai/face-recognition.md) — detectar e identificar rostros con una galería registrada
+- [Reconocimiento de matrículas](../general/ai/license-plate-recognition.md) — detectar y leer matrículas (ANPR)
+- [Ocultación de PII](../general/ai/pii-redaction.md) — difuminar o pixelar rostros, matrículas y texto en pantalla
+- [Eliminación de fondo](../general/ai/background-removal.md) — sustituir, difuminar o hacer transparente el fondo
+- [Voz a texto](../general/ai/speech-to-text.md) — transcribir audio y generar subtítulos en vivo con Whisper
+- [Inferencia ONNX genérica](../general/ai/onnx-inference.md) — ejecutar un modelo ONNX personalizado y recibir los tensores en bruto
+
 ### Procesamiento de Audio
 
 - [Codificadores de Audio](AudioEncoders/index.md) — Codificación AAC, MP3, Vorbis, Opus, FLAC

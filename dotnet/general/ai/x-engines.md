@@ -46,9 +46,14 @@ Both engines expose the same processing-block API:
 | `Audio_OutputBlock` | Replace the default audio sink with a custom `MediaBlock`, commonly a non-synced `NullRendererBlock` for speech-to-text. |
 
 Every video AI block (`OcrBlock`, `YOLOObjectDetectorBlock`, `ObjectAnalyticsBlock`,
-`FaceRecognitionBlock`, `LicensePlateRecognizerBlock`, `BackgroundRemovalBlock`,
-`OnnxInferenceBlock`) implements `IVideoProcessingBlock`. `SpeechToTextBlock` implements
-`IAudioProcessingBlock`.
+`FaceRecognitionBlock`, `LicensePlateRecognizerBlock`, `OpenVocabularyDetectorBlock`, `VLMBlock`,
+`VideoEmbeddingBlock`, `BackgroundRemovalBlock`, `OnnxInferenceBlock`) implements
+`IVideoProcessingBlock`. `SpeechToTextBlock` implements `IAudioProcessingBlock`.
+
+`VideoEmbeddingBlock` (semantic video search) is designed to index a **file** — use it with
+`MediaPlayerCoreX` (or a manual Media Blocks pipeline), typically with `Video_Renderer_IsSync = false`
+for full-speed offline indexing. There is no `VideoCaptureCoreX` capture demo for it; see
+[Semantic video search](semantic-video-search.md).
 
 ## Lifecycle rules
 
@@ -102,8 +107,9 @@ await core.StartAsync();
 ```
 
 The same pattern applies to `OcrBlock`, `ObjectAnalyticsBlock`, `FaceRecognitionBlock`,
-`LicensePlateRecognizerBlock`, `BackgroundRemovalBlock`, and `OnnxInferenceBlock` — see each block's
-own page for its settings and event payload.
+`LicensePlateRecognizerBlock`, `OpenVocabularyDetectorBlock`, `VLMBlock`, `VideoEmbeddingBlock`,
+`BackgroundRemovalBlock`, and `OnnxInferenceBlock` — see each block's own page for its settings and
+event payload.
 
 ## VideoCaptureCoreX speech-to-text
 

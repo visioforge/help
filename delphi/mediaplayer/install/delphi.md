@@ -44,12 +44,12 @@ Once the download is complete, you need to run the installer to place the necess
 2. **Run as Administrator:** Right-click the installer file and select "Run as administrator". This is crucial because the installer needs to register components and potentially write to system directories, requiring elevated privileges.
 3. **Follow On-Screen Instructions:** The installer wizard will guide you through the process. Typically, this involves:
     * Accepting the license agreement.
-    * Choosing the installation directory (the default location is usually appropriate, e.g., within `C:\Program Files (x86)\VisioForge\` or similar). Note this path, as you'll need it later.
+    * Choosing the installation directory (the default location is usually appropriate, e.g., `C:\Program Files\VisioForge\All-in-One Media Framework Delphi\`). Note this path, as you'll need it later.
     * Selecting components to install (ensure the Media Player SDK is selected).
     * Confirming the installation.
 4. **Complete Installation:** Allow the installer to finish copying files and performing necessary setup tasks.
 
-This process unpacks the SDK, including source files (`.pas`), pre-compiled units (`.dcu`), package files (`.dpk`, `.bpl`), and potentially required DLLs.
+This process unpacks the SDK, including the pre-compiled units (`.dcu`), the component package (`.dpk` / `.dproj`), and the required runtime DLLs. The Delphi component ships as precompiled units — the package `.pas` source is not distributed.
 
 ## Step 3: Integrating with the Delphi IDE
 
@@ -66,23 +66,19 @@ These older versions require manual configuration of paths and package installat
 3. **Configure Library Path:**
     * Navigate to the `Library` tab.
     * In the `Library path` field, click the ellipsis (`...`) button.
-    * Click the `Add` or `New` button (icon might vary) and browse to the `Source` directory within the VisioForge installation path you noted earlier (e.g., `C:\Program Files (x86)\VisioForge\Media Player SDK\Source`). Add this path. This tells Delphi where to find the `.pas` source files if needed during compilation or debugging.
+    * Click the `Add` or `New` button (icon might vary) and browse to the package folder for your Delphi version — this is where the precompiled `.dcu` units live, e.g. `C:\Program Files\VisioForge\All-in-One Media Framework Delphi\Media Player\Packages\Delphi 7`. Add this path. This tells Delphi where to find the compiled units during compilation.
     * Click `OK` to close the path editor.
 4. **Configure Browsing Path:**
     * While still in the `Library` tab, locate the `Browsing path` field (it might be combined or separate depending on the exact Delphi version/update).
-    * Add the same `Source` directory path here as well. This helps the IDE locate files for features like code completion and navigation.
+    * Add the same package folder path here as well. This helps the IDE locate files for features like code completion and navigation.
     * Click `OK` to save the Environment Options.
 5. **Open the Package File:**
     * Go to the `File` menu and select `Open...`.
-    * Navigate to the `Packages\Delphi7` (or `Delphi6`) subfolder within the VisioForge installation directory (e.g., `C:\Program Files (x86)\VisioForge\Media Player SDK\Packages\Delphi7`).
-    * Locate the runtime package file, often named something like `VFMediaPlayerD7_R.dpk` (the 'R' usually denotes runtime). Open it.
-    * Repeat the process to open the design-time package, often named `VFMediaPlayerD7_D.dpk` (the 'D' denotes design-time).
-6. **Compile the Runtime Package:**
-    * Ensure the runtime package (`*_R.dpk`) is the active project in the Project Manager.
-    * Click the `Compile` button in the Project Manager window (or use the corresponding menu option, e.g., `Project -> Compile`). Resolve any compilation errors if they occur (though typically unnecessary with official packages).
-7. **Compile and Install the Design-Time Package:**
-    * Make the design-time package (`*_D.dpk`) the active project.
-    * Click the `Compile` button.
+    * Navigate to the `Media Player\Packages\Delphi 7` (or `Delphi 6`) subfolder within the VisioForge installation directory (e.g., `C:\Program Files\VisioForge\All-in-One Media Framework Delphi\Media Player\Packages\Delphi 7`).
+    * Open the package file `VisioForge_Media_Player.dpk`. This is a single package — there are no separate runtime and design-time packages.
+6. **Compile the Package:**
+    * With `VisioForge_Media_Player.dpk` open as the active project in the Project Manager, click the `Compile` button (or use `Project -> Compile`). Resolve any compilation errors if they occur (though typically unnecessary with official packages).
+7. **Install the Package:**
     * Once compiled successfully, click the `Install` button in the Project Manager.
 8. **Confirmation:** You should see a confirmation message indicating that the package(s) were installed. The `TVFMediaPlayer` component (and potentially others from the SDK) should now appear on the Delphi component palette, likely under a "VisioForge" or similar category tab.
 
@@ -98,15 +94,15 @@ Modern Delphi versions offer a more streamlined process and robust support for m
     * In the Options dialog, navigate to `Language -> Delphi -> Library` (the exact path might slightly vary between versions).
     * Select the target platform for which you want to configure the path (e.g., `Windows 32-bit`, `Windows 64-bit`). It's recommended to configure both if you plan to build for both architectures.
     * Click the ellipsis (`...`) button next to the `Library path` field.
-    * Add the path to the appropriate `Source` directory within the VisioForge installation (e.g., `C:\Program Files (x86)\VisioForge\Media Player SDK\Source`).
+    * Add the path to the package folder that matches your Delphi version and platform, e.g. `C:\Program Files\VisioForge\All-in-One Media Framework Delphi\Media Player\Packages\Delphi 13` (Win32) or `C:\Program Files\VisioForge\All-in-One Media Framework Delphi\Media Player\Packages\Delphi 13 x64` (Win64). This folder holds the precompiled `.dcu` units.
     * Click `Add` and then `OK`. Repeat for the other platform if desired.
 4. **Configure Browsing Path (Optional but Recommended):**
-    * Under the same `Library` section, add the `Source` path to the `Browsing path` field as well.
+    * Under the same `Library` section, add that package folder path to the `Browsing path` field as well.
     * Click `OK` to save the Options.
 5. **Open the Package File:**
     * Go to `File -> Open Project...`.
-    * Navigate to the `Packages` directory within the VisioForge installation. Find the subfolder corresponding to your Delphi version (e.g., `Delphi11`, `Delphi12`).
-    * Open the appropriate design-time package file (e.g., `VFMediaPlayerD11_D.dpk`). Modern Delphi often manages runtime/design-time dependencies more automatically, so you might only need to explicitly open the design-time package.
+    * Navigate to the `Media Player\Packages` directory within the VisioForge installation. Find the subfolder corresponding to your Delphi version and platform (e.g., `Delphi XE11`, `Delphi XE12`, `Delphi 13`, or the matching `Delphi <version> x64` folder for 64-bit).
+    * Open the package project `VisioForge_Media_Player.dproj` (or `VisioForge_Media_Player.dpk`). There is a single package that provides both runtime and design-time functionality.
 6. **Compile and Install:**
     * In the Project Manager, right-click on the package project (`.dpk` file).
     * Select `Compile` from the context menu.
@@ -122,10 +118,10 @@ After installing the component package into the IDE, you need to ensure your ind
 1. **Project Options:** Open your Delphi project (`.dpr` file). Go to `Project -> Options`.
 2. **Library Path:** Navigate to `Delphi Compiler -> Search path` (or similar depending on version).
 3. **Add SDK Path:** For each target platform (`Windows 32-bit`, `Windows 64-bit`) you intend to use:
-    * Add the path to the VisioForge `Source` directory (e.g., `C:\Program Files (x86)\VisioForge\Media Player SDK\Source`). This ensures the compiler can find the `.pas` files or required `.dcu` files. Sometimes, pre-compiled `.dcu` files are provided in platform-specific subdirectories (e.g., `DCU\Win32`, `DCU\Win64`); if so, add those specific paths instead of or in addition to the main `Source` path. Check the VisioForge documentation or installation structure for specifics.
+    * Add the path to the package folder that matches the target platform, e.g. `C:\Program Files\VisioForge\All-in-One Media Framework Delphi\Media Player\Packages\Delphi 13` for Win32 and `C:\Program Files\VisioForge\All-in-One Media Framework Delphi\Media Player\Packages\Delphi 13 x64` for Win64. This ensures the compiler can find the precompiled `.dcu` units. Each Delphi version and platform has its own `Packages\Delphi <version>` (and `Delphi <version> x64`) folder.
 4. **Save Changes:** Click `OK` or `Save` to apply the project options.
 
-Setting the project search path correctly is crucial. If the compiler complains about not finding units like `VisioForge_MediaPlayer_Engine` or similar, incorrect or missing search paths are the most common cause.
+Setting the project search path correctly is crucial. If the compiler complains about not finding units like `MediaPlayerMain` or `MediaPlayerTypes`, incorrect or missing search paths are the most common cause.
 
 ## Step 5: Verification
 
@@ -155,7 +151,7 @@ To confirm the installation was successful:
 While the process is generally straightforward, occasional issues can arise:
 
 * **IDE Permissions:** Forgetting to run the Delphi IDE as administrator during package installation can lead to errors writing to registry or system folders, preventing component registration. **Solution:** Close Delphi, restart it as administrator, and try the package installation steps again.
-* **Path Configuration Errors:** Incorrect paths in either the IDE `Library Path` or the project's `Search Path` are common. **Solution:** Double-check that the paths point *exactly* to the VisioForge SDK's `Source` (or relevant `DCU`) directory. Ensure paths are correct for the specific target platform (Win32/Win64).
+* **Path Configuration Errors:** Incorrect paths in either the IDE `Library Path` or the project's `Search Path` are common. **Solution:** Double-check that the paths point *exactly* to the VisioForge SDK's `Packages\Delphi <version>` (or `Delphi <version> x64`) directory containing the `.dcu` units. Ensure paths are correct for the specific target platform (Win32/Win64).
 * **Package Compilation Errors:** Sometimes, conflicts with other installed packages or issues within the package source itself can cause compilation failures. **Solution:** Ensure you are using the correct package version for your specific Delphi version. Consult VisioForge support or forums if errors persist.
 * **64-bit Specific Issues:** Installing packages for the 64-bit platform can sometimes present unique challenges, especially in older Delphi versions that first introduced Win64 support. Refer to the linked article [Delphi 64-bit package installation problem](../../general/install-64bit.md) for specific known issues and workarounds.
 * **`.otares` File Issues:** Some Delphi versions utilize `.otares` files for resources. Problems during package installation related to these files can occur. See the linked article [Delphi package installation problem with .otares](../../general/install-otares.md).

@@ -104,6 +104,23 @@ Les [Blocs de source](Sources/index.md) ingèrent les médias depuis des caméra
 - [Rendu vidéo](VideoRendering/index.md) — Afficher la vidéo dans des contrôles WinForms, WPF, MAUI et Avalonia
 - [Compositeur de vidéo en direct](LiveVideoCompositor/index.md) — Mixage et composition multi-source
 
+### IA et vision par ordinateur
+
+Des blocs d'IA sur l'appareil (ONNX / Whisper) qui s'insèrent directement dans un pipeline Media Blocks : sans cloud, sans facturation à l'appel. Voir la [présentation de l'IA](../general/ai/index.md) pour la liste complète et les voies d'intégration.
+
+- [Détection d'objets](../general/ai/object-detection.md) — détecter des objets par image avec YOLOv8/YOLOX/RT-DETR
+- [Analytique d'objets](../general/ai/object-analytics.md) — suivi, lignes de déclenchement et comptage par zones polygonales
+- [Détection à vocabulaire ouvert](../general/ai/open-vocabulary-detection.md) — détecter des objets par invite textuelle libre (OWLv2 / Grounding DINO)
+- [Sous-titrage VLM](../general/ai/vlm-captioning.md) — légender, décrire, ancrer des phrases et appliquer l'OCR aux images avec Florence-2
+- [Recherche vidéo sémantique](../general/ai/semantic-video-search.md) — indexer les images sous forme d'embeddings CLIP et rechercher par texte
+- [OCR](../general/ai/ocr.md) — reconnaître des régions de texte avec des modèles PaddleOCR
+- [Reconnaissance faciale](../general/ai/face-recognition.md) — détecter et identifier des visages avec une galerie enregistrée
+- [Reconnaissance de plaques](../general/ai/license-plate-recognition.md) — détecter et lire les plaques d'immatriculation (ANPR)
+- [Masquage des PII](../general/ai/pii-redaction.md) — flouter ou pixelliser les visages, les plaques et le texte à l'écran
+- [Suppression d'arrière-plan](../general/ai/background-removal.md) — remplacer, flouter ou rendre transparent l'arrière-plan
+- [Reconnaissance vocale](../general/ai/speech-to-text.md) — transcrire l'audio et générer des sous-titres en direct avec Whisper
+- [Inférence ONNX générique](../general/ai/onnx-inference.md) — exécuter un modèle ONNX personnalisé et recevoir des tenseurs bruts
+
 ### Traitement audio
 
 - [Encodeurs audio](AudioEncoders/index.md) — Encodage AAC, MP3, Vorbis, Opus, FLAC

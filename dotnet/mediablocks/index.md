@@ -104,6 +104,23 @@ See: [Pre-Event Recording Guide](Guides/pre-event-recording.md)
 - [Video Rendering](VideoRendering/index.md) — Display video in WinForms, WPF, MAUI, and Avalonia controls
 - [Live Video Compositor](LiveVideoCompositor/index.md) — Multi-source mixing and compositing
 
+### AI and Computer Vision
+
+On-device AI blocks (ONNX / Whisper) that drop straight into a Media Blocks pipeline — no cloud, no per-call billing. See the [AI overview](../general/ai/index.md) for the full list and integration paths.
+
+- [Object Detection](../general/ai/object-detection.md) — detect objects per frame with YOLOv8/YOLOX/RT-DETR
+- [Object Analytics](../general/ai/object-analytics.md) — tracking, tripwires, and polygon-zone counting
+- [Open Vocabulary Detection](../general/ai/open-vocabulary-detection.md) — detect objects by free-text prompt (OWLv2 / Grounding DINO)
+- [VLM Captioning](../general/ai/vlm-captioning.md) — caption, describe, ground, and OCR frames with Florence-2
+- [Semantic Video Search](../general/ai/semantic-video-search.md) — index frames as CLIP embeddings and search by text
+- [OCR](../general/ai/ocr.md) — recognize text regions with PaddleOCR models
+- [Face Recognition](../general/ai/face-recognition.md) — detect and identify faces against an enrolled gallery
+- [License Plate Recognition](../general/ai/license-plate-recognition.md) — detect and read license plates (ANPR)
+- [PII Redaction](../general/ai/pii-redaction.md) — blur or pixelate faces, license plates, and on-screen text
+- [Background Removal](../general/ai/background-removal.md) — replace, blur, or make the background transparent
+- [Speech-to-Text](../general/ai/speech-to-text.md) — transcribe audio and generate live subtitles with Whisper
+- [Generic ONNX Inference](../general/ai/onnx-inference.md) — run a custom ONNX model and receive raw tensors
+
 ### Audio Processing
 
 - [Audio Encoders](AudioEncoders/index.md) — AAC, MP3, Vorbis, Opus, FLAC encoding

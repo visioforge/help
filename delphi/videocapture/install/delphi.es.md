@@ -29,7 +29,7 @@ Comience creando un nuevo paquete en su entorno de desarrollo Delphi 6/7.
 
 ### Paso 2: Configurar Rutas de Biblioteca
 
-Agregue el directorio fuente de TVFVideoCapture a los ajustes de ruta de biblioteca y navegador. Esto permite a Delphi localizar los archivos de componente necesarios.
+Agregue la carpeta del paquete de TVFVideoCapture (`Video Capture\Packages\Delphi <versión>`, que contiene las unidades precompiladas `.dcu`) a los ajustes de ruta de biblioteca y de navegación. Esto permite a Delphi localizar los archivos de componente necesarios.
 
 ![Agregando directorio fuente a rutas de biblioteca](vcd6_2.webp)
 
@@ -69,7 +69,7 @@ Navegue al menú Opciones para configurar ajustes esenciales de biblioteca.
 
 ### Paso 3: Configurar Rutas del Directorio Fuente
 
-Agregue el directorio fuente de TVFVideoCapture a los ajustes de ruta de biblioteca y navegador para asegurar el descubrimiento apropiado de componentes.
+Agregue la carpeta del paquete de TVFVideoCapture (`Video Capture\Packages\Delphi <versión>`, que contiene las unidades precompiladas `.dcu`) a los ajustes de ruta de biblioteca y de navegación para asegurar el descubrimiento apropiado de componentes.
 
 ![Configurando rutas del directorio fuente](vcd2005_2.webp)
 
@@ -93,7 +93,7 @@ Las últimas versiones de Delphi requieren un enfoque ligeramente diferente que 
 
 ### Paso 1: Localizar y Abrir el Proyecto de Paquete
 
-Después de instalar el framework, navegue a la carpeta de instalación y abra el archivo de paquete `.dproj`.
+Después de instalar el framework, navegue a la carpeta `Video Capture\Packages\Delphi <versión>` del directorio de instalación y abra el proyecto de paquete `VisioForge_VideoCapture_Package.dproj`.
 
 ### Paso 2: Seleccionar la Configuración de Compilación Apropiada
 

@@ -33,7 +33,7 @@ Comience abriendo la ventana "Opciones" en su IDE de Delphi.
 
 ![Captura de pantalla mostrando cómo abrir la ventana de Opciones](ved6_1.webp)
 
-Navegue a la sección de Biblioteca y agregue el directorio fuente tanto a las rutas de biblioteca como de navegador. Esto asegura que Delphi pueda localizar los archivos necesarios.
+Navegue a la sección de Biblioteca y agregue la carpeta del paquete (`Video Edit\Packages\Delphi <versión>`, que contiene las unidades precompiladas `.dcu`) tanto a las rutas de biblioteca como de navegación. Esto asegura que Delphi pueda localizar los archivos necesarios.
 
 ![Captura de pantalla mostrando la configuración de ruta de biblioteca](ved6_2.webp)
 
@@ -65,13 +65,13 @@ Para Delphi 2005 y versiones posteriores, inicie el IDE con derechos administrat
 
 ### Paso 2: Configurar Rutas de Biblioteca
 
-Abra la ventana de Opciones y navegue a la sección de Biblioteca. Agregue el directorio fuente tanto a las rutas de biblioteca como de navegador.
+Abra la ventana de Opciones y navegue a la sección de Biblioteca. Agregue la carpeta del paquete (`Video Edit\Packages\Delphi <versión>`, que contiene las unidades precompiladas `.dcu`) tanto a las rutas de biblioteca como de navegación.
 
 ![Captura de pantalla mostrando configuración de ruta de biblioteca en Delphi 2005](ved2005_3.webp)
 
 ### Paso 3: Instalar el Paquete
 
-Abra el archivo principal del paquete desde el directorio fuente de la biblioteca.
+Abra el archivo de paquete principal `VisioForge_Video_Edit_Package.dpk` desde la carpeta `Video Edit\Packages\Delphi <versión>`.
 
 ![Captura de pantalla mostrando apertura del paquete en Delphi 2005](ved2005_4.webp)
 
@@ -89,7 +89,7 @@ Para Delphi 2005 y versiones posteriores, están disponibles versiones x86 y x64
 
 Las versiones modernas de Delphi presentan un proceso de instalación simplificado:
 
-1. Abra el archivo de paquete `.dproj` de la biblioteca ubicado en la carpeta de la biblioteca después de la instalación
+1. Abra el proyecto de paquete `VisioForge_Video_Edit_Package.dproj` ubicado en la carpeta `Video Edit\Packages\Delphi <versión>` después de la instalación
 2. Seleccione la configuración de construcción Release del menú desplegable
 3. Construya e instale el paquete usando los comandos de construcción del IDE
 4. Los componentes serán registrados y estarán listos para usar

@@ -47,9 +47,14 @@ Ambos motores exponen la misma API de bloques de procesamiento:
 | `Audio_OutputBlock` | Reemplaza el sink de audio predeterminado por un `MediaBlock` personalizado, comúnmente un `NullRendererBlock` sin sincronización para voz a texto. |
 
 Cada bloque de IA de vídeo (`OcrBlock`, `YOLOObjectDetectorBlock`, `ObjectAnalyticsBlock`,
-`FaceRecognitionBlock`, `LicensePlateRecognizerBlock`, `BackgroundRemovalBlock`,
-`OnnxInferenceBlock`) implementa `IVideoProcessingBlock`. `SpeechToTextBlock` implementa
-`IAudioProcessingBlock`.
+`FaceRecognitionBlock`, `LicensePlateRecognizerBlock`, `OpenVocabularyDetectorBlock`, `VLMBlock`,
+`VideoEmbeddingBlock`, `BackgroundRemovalBlock`, `OnnxInferenceBlock`) implementa
+`IVideoProcessingBlock`. `SpeechToTextBlock` implementa `IAudioProcessingBlock`.
+
+`VideoEmbeddingBlock` (búsqueda semántica de vídeo) está diseñado para indexar un **archivo**: úselo
+con `MediaPlayerCoreX` (o un pipeline de Media Blocks manual), normalmente con
+`Video_Renderer_IsSync = false` para una indexación offline a máxima velocidad. No existe una demo de
+captura con `VideoCaptureCoreX` para él; consulte [Búsqueda semántica de vídeo](semantic-video-search.md).
 
 ## Reglas del ciclo de vida
 
@@ -107,7 +112,8 @@ await core.StartAsync();
 ```
 
 El mismo patrón se aplica a `OcrBlock`, `ObjectAnalyticsBlock`, `FaceRecognitionBlock`,
-`LicensePlateRecognizerBlock`, `BackgroundRemovalBlock` y `OnnxInferenceBlock` — consulte la página
+`LicensePlateRecognizerBlock`, `OpenVocabularyDetectorBlock`, `VLMBlock`, `VideoEmbeddingBlock`,
+`BackgroundRemovalBlock` y `OnnxInferenceBlock` — consulte la página
 propia de cada bloque para conocer su configuración y el payload de sus eventos.
 
 ## Voz a texto en VideoCaptureCoreX

@@ -23,6 +23,10 @@ primary_api_classes:
   - ObjectAnalyticsBlock
   - FaceRecognitionBlock
   - LicensePlateRecognizerBlock
+  - PIIRedactionBlock
+  - OpenVocabularyDetectorBlock
+  - VLMBlock
+  - VideoEmbeddingBlock
   - BackgroundRemovalBlock
   - OnnxInferenceBlock
   - SpeechToTextBlock
@@ -80,9 +84,30 @@ Media Player X.
 | `ObjectAnalyticsBlock` | Video | `OnAnalyticsUpdated` | Track objects over time, count line crossings, and monitor polygon zones. | [Object analytics](object-analytics.md) |
 | `FaceRecognitionBlock` | Video | `OnFacesIdentified` | Detect faces and match them against an enrolled gallery. | [Face recognition](face-recognition.md) |
 | `LicensePlateRecognizerBlock` | Video | `OnPlateRecognized` | Detect and read license plates. | [License plate recognition](license-plate-recognition.md) |
+| `PIIRedactionBlock` | Video | `OnRegionsRedacted` | Blur, pixelate, or fill faces, license plates, and on-screen text. | [PII redaction](pii-redaction.md) |
+| `OpenVocabularyDetectorBlock` | Video | `OnObjectsDetected` | Detect objects by free-text prompt (zero-shot). | [Open vocabulary detection](open-vocabulary-detection.md) |
+| `VLMBlock` | Video | `OnResultGenerated` | Caption, describe, ground, or OCR frames with a vision-language model. | [VLM captioning](vlm-captioning.md) |
+| `VideoEmbeddingBlock` | Video | `OnFrameEmbedding` | Embed frames with CLIP for semantic video search. | [Semantic video search](semantic-video-search.md) |
 | `BackgroundRemovalBlock` | Video | none | Replace, blur, or make the background transparent. | [Background removal](background-removal.md) |
 | `OnnxInferenceBlock` | Video | `OnInference` | Run a custom ONNX model and receive raw output tensors. | [ONNX inference](onnx-inference.md) |
 | `SpeechToTextBlock` | Audio | `OnSpeechRecognized` | Transcribe live or file audio with Whisper. | [Speech-to-text](speech-to-text.md) |
+
+## Video understanding and search
+
+Three of the AI blocks turn raw footage into something you can search and act on — the difference is
+whether you want to *detect*, *describe*, or *find* content:
+
+- **Detect** specific things, even ones no model was trained on, with
+  [open-vocabulary detection](open-vocabulary-detection.md) — or
+  [object detection](object-detection.md) for known classes at high frame rate.
+- **Describe** what's on screen — captions, descriptions, and in-frame text — with
+  [VLM captioning](vlm-captioning.md).
+- **Search** recorded video by meaning, jumping straight to a moment you describe in plain text, with
+  [semantic video search](semantic-video-search.md).
+
+They compose: index a library for [semantic search](semantic-video-search.md), then run a
+[detector](open-vocabulary-detection.md) or a [VLM](vlm-captioning.md) on the moments it surfaces to
+confirm or label them.
 
 ## Choosing the right AI block
 
@@ -92,8 +117,21 @@ Media Player X.
   [`LicensePlateRecognizerBlock`](license-plate-recognition.md) — it runs a
   dedicated plate detector plus a plate-specific OCR head, which is both more
   accurate and faster than pointing generic OCR at a whole scene.
+- **Need to anonymize video for privacy or compliance** (blur faces, plates, or
+  on-screen text)? Use [`PIIRedactionBlock`](pii-redaction.md) — it detects and
+  obscures all three PII categories in-place, on-device, and never identifies or
+  exports the content.
 - **Need boxes and labels for objects, one frame at a time**? Use
   [`YOLOObjectDetectorBlock`](object-detection.md).
+- **Need to detect objects you can only describe in words** (not a fixed trained class
+  list)? Use [`OpenVocabularyDetectorBlock`](open-vocabulary-detection.md) — it detects
+  anything you name in a text prompt, at a higher per-frame cost than YOLO.
+- **Need a natural-language description, caption, or in-frame reading** of the scene? Use
+  [`VLMBlock`](vlm-captioning.md) — a Florence-2 vision-language model that captions,
+  detects, grounds phrases, and reads text.
+- **Need to search recorded video by meaning** ("find where someone rides a bicycle")?
+  Use [`VideoEmbeddingBlock`](semantic-video-search.md) — it indexes frames as CLIP
+  embeddings you can query with plain text.
 - **Need to count people/vehicles crossing a line, or track dwell time in a
   zone**, not just per-frame boxes? Use
   [`ObjectAnalyticsBlock`](object-analytics.md) — it adds ByteTrack tracking,
@@ -150,6 +188,10 @@ Video AI blocks (`VisioForge.DotNet.Core.AI`):
 - [Object analytics — tracking, tripwires, and polygon zones](object-analytics.md)
 - [Face recognition](face-recognition.md)
 - [License plate recognition (ANPR)](license-plate-recognition.md)
+- [PII redaction — blur faces, plates, and on-screen text](pii-redaction.md)
+- [Open vocabulary detection](open-vocabulary-detection.md)
+- [VLM captioning](vlm-captioning.md)
+- [Semantic video search](semantic-video-search.md)
 - [Background removal (matting)](background-removal.md)
 - [Generic ONNX inference](onnx-inference.md)
 

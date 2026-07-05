@@ -251,5 +251,12 @@ Extracting frames from video files is a powerful capability for .NET developers 
 
 By understanding the different approaches and following best practices, you can implement robust frame extraction functionality in your .NET applications.
 
+## See also
+
+Once you can pull a frame at any timestamp, you can index and search the whole file by content:
+
+- [Semantic video search](../../general/ai/semantic-video-search.md) — find a moment by describing it in plain text, then seek to that timestamp to extract the frame.
+- [Open-vocabulary detection](../../general/ai/open-vocabulary-detection.md) — detect any object you can name in a text prompt, with no training data.
+
 ---
 For more code samples and examples, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).

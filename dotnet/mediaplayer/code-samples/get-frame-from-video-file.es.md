@@ -252,5 +252,12 @@ Extraer frames de archivos de video es una capacidad poderosa para desarrollador
 
 Al entender los diferentes enfoques y seguir las mejores prácticas, puedes implementar funcionalidad robusta de extracción de frames en tus aplicaciones .NET.
 
+## Véase también
+
+Una vez extraído un fotograma en cualquier marca de tiempo, se puede indexar y buscar en todo el archivo por su contenido:
+
+- [Búsqueda semántica de vídeo](../../general/ai/semantic-video-search.md) — permite localizar un momento describiéndolo en texto simple y luego hacer seek a esa marca de tiempo para extraer el fotograma.
+- [Detección de vocabulario abierto](../../general/ai/open-vocabulary-detection.md) — permite detectar cualquier objeto que se pueda nombrar en una indicación de texto, sin datos de entrenamiento.
+
 ---
 Para más ejemplos de código y muestras, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

@@ -251,5 +251,12 @@ L'extraction d'images depuis des fichiers vidéo est une capacité puissante pou
 
 En comprenant les différentes approches et en suivant les bonnes pratiques, vous pouvez implémenter une fonctionnalité robuste d'extraction d'images dans vos applications .NET.
 
+## Voir aussi
+
+Une fois que vous savez extraire une image à n'importe quel horodatage, vous pouvez indexer et rechercher tout le fichier par son contenu :
+
+- [Recherche vidéo sémantique](../../general/ai/semantic-video-search.md) — retrouvez un moment en le décrivant en texte simple, puis positionnez-vous à cet horodatage pour extraire l'image.
+- [Détection à vocabulaire ouvert](../../general/ai/open-vocabulary-detection.md) — détectez tout objet que vous pouvez nommer dans une invite textuelle, sans données d'entraînement.
+
 ---
 Pour plus d'exemples de code, visitez notre [dépôt GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

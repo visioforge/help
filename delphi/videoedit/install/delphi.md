@@ -33,7 +33,7 @@ Begin by opening the "Options" window in your Delphi IDE.
 
 ![Screenshot showing how to open Options window](ved6_1.webp)
 
-Navigate to the Library section and add the source directory to both the library and browser paths. This ensures that Delphi can locate the necessary files.
+Navigate to the Library section and add the package folder (`Video Edit\Packages\Delphi <version>`, which holds the precompiled `.dcu` units) to both the library and browsing paths. This ensures that Delphi can locate the necessary files.
 
 ![Screenshot showing library path configuration](ved6_2.webp)
 
@@ -65,13 +65,13 @@ For Delphi 2005 and later versions, launch the IDE with administrative rights to
 
 ### Step 2: Configure Library Paths
 
-Open the Options window and navigate to the Library section. Add the source directory to both the library and browser paths.
+Open the Options window and navigate to the Library section. Add the package folder (`Video Edit\Packages\Delphi <version>`, which holds the precompiled `.dcu` units) to both the library and browsing paths.
 
 ![Screenshot showing library path configuration in Delphi 2005](ved2005_3.webp)
 
 ### Step 3: Install the Package
 
-Open the main package file from the library source directory.
+Open the main package file `VisioForge_Video_Edit_Package.dpk` from the `Video Edit\Packages\Delphi <version>` folder.
 
 ![Screenshot showing package opening in Delphi 2005](ved2005_4.webp)
 
@@ -89,7 +89,7 @@ For Delphi 2005 and later versions, both x86 and x64 versions are available. You
 
 Modern Delphi versions feature a streamlined installation process:
 
-1. Open the library `.dproj` package file located in the library folder after installation
+1. Open the `VisioForge_Video_Edit_Package.dproj` package project located in the `Video Edit\Packages\Delphi <version>` folder after installation
 2. Select the Release build configuration from the dropdown menu
 3. Build and install the package using the IDE's build commands
 4. The components will be registered and ready to use

@@ -33,7 +33,7 @@ Commencez par ouvrir la fenêtre « Options » dans votre IDE Delphi.
 
 ![Capture d'écran montrant comment ouvrir la fenêtre Options](ved6_1.webp)
 
-Naviguez vers la section Library et ajoutez le répertoire source à la fois aux chemins de bibliothèque et aux chemins du navigateur. Cela garantit que Delphi peut localiser les fichiers nécessaires.
+Naviguez vers la section Library et ajoutez le dossier du paquet (`Video Edit\Packages\Delphi <version>`, qui contient les unités précompilées `.dcu`) à la fois aux chemins de bibliothèque et aux chemins de navigation. Cela garantit que Delphi peut localiser les fichiers nécessaires.
 
 ![Capture d'écran montrant la configuration des chemins de bibliothèque](ved6_2.webp)
 
@@ -65,13 +65,13 @@ Pour Delphi 2005 et les versions ultérieures, lancez l'IDE avec des droits d'ad
 
 ### Étape 2 : configurer les chemins de bibliothèques
 
-Ouvrez la fenêtre Options et naviguez vers la section Library. Ajoutez le répertoire source à la fois aux chemins de bibliothèque et aux chemins du navigateur.
+Ouvrez la fenêtre Options et naviguez vers la section Library. Ajoutez le dossier du paquet (`Video Edit\Packages\Delphi <version>`, qui contient les unités précompilées `.dcu`) à la fois aux chemins de bibliothèque et aux chemins de navigation.
 
 ![Capture d'écran montrant la configuration des chemins de bibliothèque dans Delphi 2005](ved2005_3.webp)
 
 ### Étape 3 : installer le paquet
 
-Ouvrez le fichier principal du paquet depuis le répertoire source de la bibliothèque.
+Ouvrez le fichier de paquet principal `VisioForge_Video_Edit_Package.dpk` depuis le dossier `Video Edit\Packages\Delphi <version>`.
 
 ![Capture d'écran montrant l'ouverture du paquet dans Delphi 2005](ved2005_4.webp)
 
@@ -89,7 +89,7 @@ Pour Delphi 2005 et les versions ultérieures, les versions x86 et x64 sont disp
 
 Les versions modernes de Delphi proposent un processus d'installation rationalisé :
 
-1. Ouvrez le fichier de paquet `.dproj` de la bibliothèque situé dans le dossier de la bibliothèque après installation
+1. Ouvrez le projet de paquet `VisioForge_Video_Edit_Package.dproj` situé dans le dossier `Video Edit\Packages\Delphi <version>` après installation
 2. Sélectionnez la configuration de compilation Release dans le menu déroulant
 3. Compilez et installez le paquet à l'aide des commandes de compilation de l'IDE
 4. Les composants seront enregistrés et prêts à l'emploi

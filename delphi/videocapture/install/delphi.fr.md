@@ -29,7 +29,7 @@ Commencez par créer un nouveau paquet dans votre environnement de développemen
 
 ### Étape 2 : configurer les chemins de bibliothèque
 
-Ajoutez le répertoire source TVFVideoCapture aux paramètres de chemin de bibliothèque et de navigateur. Cela permet à Delphi de localiser les fichiers de composants nécessaires.
+Ajoutez le dossier du paquet TVFVideoCapture (`Video Capture\Packages\Delphi <version>`, qui contient les unités précompilées `.dcu`) aux paramètres de chemin de bibliothèque et de navigation. Cela permet à Delphi de localiser les fichiers de composants nécessaires.
 
 ![Ajout du répertoire source aux chemins de bibliothèque](vcd6_2.webp)
 
@@ -69,7 +69,7 @@ Naviguez vers le menu Options pour configurer les paramètres essentiels de la b
 
 ### Étape 3 : configurer les chemins du répertoire source
 
-Ajoutez le répertoire source TVFVideoCapture aux paramètres de chemin de bibliothèque et de navigateur pour garantir la découverte correcte des composants.
+Ajoutez le dossier du paquet TVFVideoCapture (`Video Capture\Packages\Delphi <version>`, qui contient les unités précompilées `.dcu`) aux paramètres de chemin de bibliothèque et de navigation pour garantir la découverte correcte des composants.
 
 ![Configuration des chemins du répertoire source](vcd2005_2.webp)
 
@@ -93,7 +93,7 @@ Les dernières versions de Delphi nécessitent une approche légèrement différ
 
 ### Étape 1 : localiser et ouvrir le projet de paquet
 
-Après avoir installé le framework, naviguez vers le dossier d'installation et ouvrez le fichier de paquet `.dproj`.
+Après avoir installé le framework, naviguez vers le dossier `Video Capture\Packages\Delphi <version>` du répertoire d'installation et ouvrez le projet de paquet `VisioForge_VideoCapture_Package.dproj`.
 
 ### Étape 2 : sélectionner la configuration de compilation appropriée
 

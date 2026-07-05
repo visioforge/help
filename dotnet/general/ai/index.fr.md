@@ -23,6 +23,10 @@ primary_api_classes:
   - ObjectAnalyticsBlock
   - FaceRecognitionBlock
   - LicensePlateRecognizerBlock
+  - PIIRedactionBlock
+  - OpenVocabularyDetectorBlock
+  - VLMBlock
+  - VideoEmbeddingBlock
   - BackgroundRemovalBlock
   - OnnxInferenceBlock
   - SpeechToTextBlock
@@ -86,9 +90,35 @@ pour Media Blocks, Video Capture X ou Media Player X.
 | `ObjectAnalyticsBlock` | Vidéo | `OnAnalyticsUpdated` | Suivre les objets dans le temps, compter les franchissements de ligne et surveiller les zones polygonales. | [Analytique d'objets](object-analytics.md) |
 | `FaceRecognitionBlock` | Vidéo | `OnFacesIdentified` | Détecter les visages et les comparer à une galerie enregistrée. | [Reconnaissance faciale](face-recognition.md) |
 | `LicensePlateRecognizerBlock` | Vidéo | `OnPlateRecognized` | Détecter et lire les plaques d'immatriculation. | [Reconnaissance de plaques d'immatriculation](license-plate-recognition.md) |
+| `PIIRedactionBlock` | Vidéo | `OnRegionsRedacted` | Flouter, pixelliser ou remplir les visages, les plaques et le texte à l'écran. | [Masquage des PII](pii-redaction.md) |
+| `OpenVocabularyDetectorBlock` | Vidéo | `OnObjectsDetected` | Détecter des objets par invite textuelle libre (zero-shot). | [Détection à vocabulaire ouvert](open-vocabulary-detection.md) |
+| `VLMBlock` | Vidéo | `OnResultGenerated` | Légender, décrire, ancrer des phrases et appliquer l'OCR aux images avec un modèle vision-langage. | [Sous-titrage VLM](vlm-captioning.md) |
+| `VideoEmbeddingBlock` | Vidéo | `OnFrameEmbedding` | Générer des embeddings d'images avec CLIP pour la recherche vidéo sémantique. | [Recherche vidéo sémantique](semantic-video-search.md) |
 | `BackgroundRemovalBlock` | Vidéo | aucun | Remplacer, flouter ou rendre transparent l'arrière-plan. | [Suppression d'arrière-plan](background-removal.md) |
 | `OnnxInferenceBlock` | Vidéo | `OnInference` | Exécuter un modèle ONNX personnalisé et recevoir les tenseurs de sortie bruts. | [Inférence ONNX](onnx-inference.md) |
 | `SpeechToTextBlock` | Audio | `OnSpeechRecognized` | Transcrire l'audio en direct ou depuis un fichier avec Whisper. | [Speech-to-text](speech-to-text.md) |
+
+## Compréhension et recherche vidéo
+
+Trois des blocs IA transforment des séquences brutes en contenu que vous pouvez
+rechercher et exploiter — la différence tient à ce que vous voulez faire :
+*détecter*, *décrire* ou *retrouver* du contenu :
+
+- **Détecter** des éléments précis, même ceux sur lesquels aucun modèle n'a été
+  entraîné, avec la
+  [détection à vocabulaire ouvert](open-vocabulary-detection.md) — ou la
+  [détection d'objets](object-detection.md) pour des classes connues à haute
+  cadence d'images.
+- **Décrire** ce qui apparaît à l'écran — légendes, descriptions et texte
+  présent dans l'image — avec le [sous-titrage VLM](vlm-captioning.md).
+- **Rechercher** dans une vidéo enregistrée par le sens, en accédant directement
+  à un moment que vous décrivez en texte simple, avec la
+  [recherche vidéo sémantique](semantic-video-search.md).
+
+Ils se combinent : indexez une bibliothèque pour la
+[recherche sémantique](semantic-video-search.md), puis exécutez un
+[détecteur](open-vocabulary-detection.md) ou un [VLM](vlm-captioning.md) sur les
+moments qu'elle fait ressortir pour les confirmer ou les étiqueter.
 
 ## Choisir le bon bloc IA
 
@@ -100,8 +130,26 @@ pour Media Blocks, Video Capture X ou Media Player X.
   un détecteur de plaques dédié plus une tête OCR spécifique aux plaques, ce
   qui est à la fois plus précis et plus rapide que d'appliquer un OCR
   générique sur une scène entière.
+- **Besoin d'anonymiser une vidéo pour la confidentialité ou la conformité**
+  (flouter les visages, les plaques ou le texte à l'écran) ? Utilisez
+  [`PIIRedactionBlock`](pii-redaction.md) — il détecte et masque les trois
+  catégories de PII directement dans l'image, sur l'appareil, sans jamais
+  identifier ni exporter le contenu.
 - **Besoin de boîtes et d'étiquettes pour des objets, image par image** ?
   Utilisez [`YOLOObjectDetectorBlock`](object-detection.md).
+- **Besoin de détecter des objets que vous ne pouvez décrire qu'avec des
+  mots** (pas une liste fixe de classes entraînées) ? Utilisez
+  [`OpenVocabularyDetectorBlock`](open-vocabulary-detection.md) — il détecte
+  tout ce que vous nommez dans une invite textuelle, pour un coût par image
+  supérieur à YOLO.
+- **Besoin d'une description, d'une légende ou de la lecture de texte en
+  langage naturel** de la scène ? Utilisez [`VLMBlock`](vlm-captioning.md) —
+  un modèle vision-langage Florence-2 qui légende, détecte, ancre des
+  phrases et lit du texte.
+- **Besoin de rechercher dans une vidéo enregistrée par le sens**
+  (« trouver où quelqu'un fait du vélo ») ? Utilisez
+  [`VideoEmbeddingBlock`](semantic-video-search.md) — il indexe les images
+  sous forme d'embeddings CLIP que vous interrogez en texte simple.
 - **Besoin de compter les personnes/véhicules franchissant une ligne, ou de
   suivre le temps de présence dans une zone**, pas seulement des boîtes par
   image ? Utilisez [`ObjectAnalyticsBlock`](object-analytics.md) — il ajoute
@@ -169,6 +217,10 @@ Blocs IA vidéo (`VisioForge.DotNet.Core.AI`) :
 - [Analytique d'objets — suivi, lignes de déclenchement et zones polygonales](object-analytics.md)
 - [Reconnaissance faciale](face-recognition.md)
 - [Reconnaissance de plaques d'immatriculation (ANPR)](license-plate-recognition.md)
+- [Masquage des PII — flouter les visages, les plaques et le texte à l'écran](pii-redaction.md)
+- [Détection à vocabulaire ouvert](open-vocabulary-detection.md)
+- [Sous-titrage VLM](vlm-captioning.md)
+- [Recherche vidéo sémantique](semantic-video-search.md)
 - [Suppression d'arrière-plan (matting)](background-removal.md)
 - [Inférence ONNX générique](onnx-inference.md)
 

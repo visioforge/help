@@ -97,7 +97,7 @@ When you distribute your VB6 application that uses the TVFMediaPlayer control, y
 2. **Registration:** The ActiveX control (`.ocx` file) must be registered in the Windows Registry on the target machine. Standard installer tools (like Inno Setup, InstallShield, or even older VB6 packaging tools) usually provide mechanisms to register ActiveX controls during installation. Alternatively, the `regsvr32.exe` command-line utility can be used manually or via a script:
 
     ```bash
-    regsvr32.exe "C:\\Program Files (x86)\\YourApp\\VFMediaPlayer.ocx"
+    regsvr32.exe "C:\\Program Files (x86)\\YourApp\\VisioForge_Media_Player_VB6.ocx"
     ```
 
     Remember to use the correct path and run the command with administrator privileges. Since it's a 32-bit control, even on a 64-bit system, you typically use the `regsvr32.exe` found in the `C:\Windows\SysWOW64` directory, although the system often handles this redirection automatically.

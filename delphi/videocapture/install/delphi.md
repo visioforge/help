@@ -29,7 +29,7 @@ Begin by creating a new package in your Delphi 6/7 development environment.
 
 ### Step 2: Configure Library Paths
 
-Add the TVFVideoCapture source directory to both the library and browser path settings. This allows Delphi to locate the necessary component files.
+Add the TVFVideoCapture package folder (`Video Capture\Packages\Delphi <version>`, which holds the precompiled `.dcu` units) to both the library and browsing path settings. This allows Delphi to locate the necessary component files.
 
 ![Adding source directory to library paths](vcd6_2.webp)
 
@@ -69,7 +69,7 @@ Navigate to the Options menu to configure essential library settings.
 
 ### Step 3: Configure Source Directory Paths
 
-Add the TVFVideoCapture source directory to both the library and browser path settings to ensure proper component discovery.
+Add the TVFVideoCapture package folder (`Video Capture\Packages\Delphi <version>`, which holds the precompiled `.dcu` units) to both the library and browsing path settings to ensure proper component discovery.
 
 ![Configuring source directory paths](vcd2005_2.webp)
 
@@ -93,7 +93,7 @@ The latest Delphi versions require a slightly different approach that leverages 
 
 ### Step 1: Locate and Open the Package Project
 
-After installing the framework, navigate to the installation folder and open the `.dproj` package file.
+After installing the framework, navigate to the `Video Capture\Packages\Delphi <version>` folder in the installation directory and open the `VisioForge_VideoCapture_Package.dproj` package project.
 
 ### Step 2: Select the Appropriate Build Configuration
 

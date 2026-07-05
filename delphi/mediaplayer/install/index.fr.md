@@ -52,14 +52,14 @@ Le processus d'installation central consiste à télécharger le programme d'ins
     *   Enregistrez le fichier exécutable d'installation (`.exe`) à un emplacement pratique sur votre ordinateur.
 
 2.  **Exécutez le programme d'installation :**
-    *   Localisez le fichier d'installation téléchargé (par exemple `visioforge_media_framework_setup.exe`).
+    *   Localisez le fichier d'installation téléchargé (par exemple `visioforge_media_framework_activex_full.exe`, ou l'installateur de l'édition Delphi).
     *   Cliquez avec le bouton droit sur le fichier et sélectionnez « Exécuter en tant qu'administrateur » pour garantir les permissions nécessaires.
     *   Si le Contrôle de compte d'utilisateur (UAC) vous y invite, confirmez que vous souhaitez autoriser le programme d'installation à apporter des modifications à votre appareil.
 
 3.  **Suivez l'assistant d'installation :**
     *   **Écran de bienvenue :** le programme d'installation se lance, commençant généralement par un message d'accueil. Cliquez sur « Suivant » pour continuer.
     *   **Contrat de licence :** lisez attentivement le contrat de licence utilisateur final (EULA). Vous devez accepter les termes pour continuer l'installation. Sélectionnez l'option appropriée et cliquez sur « Suivant ».
-    *   **Sélectionner l'emplacement de destination :** choisissez le répertoire où seront installés les fichiers du framework, les exemples et la documentation. L'emplacement par défaut est généralement dans `C:\Program Files (x86)\VisioForge\` ou similaire. Vous pouvez parcourir pour un autre chemin si nécessaire. Cliquez sur « Suivant ».
+    *   **Sélectionner l'emplacement de destination :** choisissez le répertoire où seront installés les fichiers du framework, les exemples et la documentation. L'emplacement par défaut est généralement `C:\Program Files\VisioForge\All-in-One Media Framework ActiveX\` (ou `C:\Program Files\VisioForge\All-in-One Media Framework Delphi\` pour l'édition Delphi). Vous pouvez parcourir pour un autre chemin si nécessaire. Cliquez sur « Suivant ».
     *   **Sélectionner les composants (le cas échéant) :** certains programmes d'installation peuvent vous permettre de choisir quels composants installer (par exemple, fonctionnalités spécifiques du framework, documentation, exemples pour différents langages). Assurez-vous que les composants centraux de Media Player et tous les exemples pertinents (Delphi, C#, VB.NET, C++, VB6) sont sélectionnés. Cliquez sur « Suivant ».
     *   **Sélectionner le dossier du menu Démarrer :** choisissez le nom du dossier du menu Démarrer où seront créés les raccourcis. Cliquez sur « Suivant ».
     *   **Prêt à installer :** vérifiez vos options sélectionnées. Si tout est correct, cliquez sur « Installer » pour démarrer le processus de copie des fichiers et d'enregistrement système.
@@ -67,7 +67,7 @@ Le processus d'installation central consiste à télécharger le programme d'ins
     *   **Achèvement :** une fois l'installation terminée, un écran de fin s'affiche. Il peut offrir des options pour consulter la documentation ou lancer un projet d'exemple. Cliquez sur « Terminer » pour quitter l'assistant.
 
 4.  **Vérification post-installation :**
-    *   Naviguez vers le répertoire d'installation que vous avez choisi (par exemple, `C:\Program Files (x86)\VisioForge\Media Framework\`).
+    *   Naviguez vers le répertoire d'installation que vous avez choisi (par exemple, `C:\Program Files\VisioForge\All-in-One Media Framework ActiveX\`).
     *   Vérifiez que les fichiers de bibliothèque centraux (`.dll`, `.ocx`), la documentation (`.chm` ou dossier `Docs`) et les projets d'exemple (dossier `Examples`) sont présents.
     *   Consultez le dossier du menu Démarrer pour les raccourcis vers la documentation et les exemples.
     *   Il est fortement recommandé d'essayer de compiler et d'exécuter l'un des projets d'exemple fournis pour votre IDE spécifique afin de confirmer que l'installation a réussi et que les composants sont correctement enregistrés et accessibles.
@@ -80,12 +80,12 @@ Après l'installation générale, vous devez intégrer la bibliothèque TVFMedia
 
 L'utilisation des paquets Delphi natifs offre la meilleure expérience aux développeurs Delphi, incluant l'intégration des composants à la conception.
 
-*   **Guide détaillé :** pour des instructions complètes spécifiques à Delphi, y compris l'ajout du chemin de bibliothèque et l'installation des paquets de conception et d'exécution (fichiers `.dpk`), consultez le **[Guide d'installation Delphi](delphi.md)** dédié.
+*   **Guide détaillé :** pour des instructions complètes spécifiques à Delphi, y compris l'ajout du chemin de bibliothèque et l'installation du paquet du composant (`VisioForge_Media_Player.dpk`), consultez le **[Guide d'installation Delphi](delphi.md)** dédié.
 *   **Avantages clés :** accès direct à la palette de composants, inspecteurs de propriétés, gestionnaires d'événements intégrés à l'IDE, et performances optimisées pour les applications VCL.
 
 ### Intégration ActiveX (C++ Builder, VB6, Visual Studio, etc.)
 
-Si vous n'utilisez pas Delphi ou si vous préférez l'approche ActiveX, vous devrez ajouter le contrôle `TVFMediaPlayer.ocx` à votre projet.
+Si vous n'utilisez pas Delphi ou si vous préférez l'approche ActiveX, vous devrez ajouter le contrôle `VisioForge_Media_Player.ocx` à votre projet.
 
 #### C++ Builder
 
@@ -101,7 +101,7 @@ VB6 repose largement sur la technologie ActiveX, ce qui simplifie l'intégration
 1.  **Ouvrez le projet :** lancez Visual Basic 6 et ouvrez votre projet existant ou créez-en un nouveau.
 2.  **Accédez à la boîte de dialogue Composants :** allez dans le menu principal et sélectionnez `Project -> Components...`. Cela ouvre la boîte de dialogue Composants listant les contrôles enregistrés.
 3.  **Localisez et sélectionnez le contrôle :** parcourez la liste sous l'onglet « Controls ». Cherchez une entrée comme « VisioForge Media Player SDK Control » ou similaire (le nom exact peut varier légèrement selon la version). Cochez la case en regard.
-4.  **Ajout via Parcourir (si non répertorié) :** si le contrôle n'est pas listé (peut-être en raison d'un problème d'enregistrement), cliquez sur le bouton « Browse... ». Naviguez vers le répertoire d'installation VisioForge (en particulier le sous-dossier `Redist\AnyCPU` ou similaire contenant `TVFMediaPlayer.ocx`) et sélectionnez le fichier `.ocx`. Cliquez sur « Open ». Cela devrait enregistrer et ajouter le contrôle à la liste. Assurez-vous que sa case est cochée.
+4.  **Ajout via Parcourir (si non répertorié) :** si le contrôle n'est pas listé (peut-être en raison d'un problème d'enregistrement), cliquez sur le bouton « Browse... ». Naviguez vers le répertoire d'installation VisioForge (le sous-dossier `Redist` contenant `VisioForge_Media_Player_VB6.ocx`) et sélectionnez le fichier `.ocx`. Cliquez sur « Open ». Cela devrait enregistrer et ajouter le contrôle à la liste. Assurez-vous que sa case est cochée.
 5.  **Confirmez :** cliquez sur « OK » ou « Apply » dans la boîte de dialogue Composants.
 6.  **Utilisez le contrôle :** l'icône TVFMediaPlayer devrait maintenant apparaître dans votre boîte à outils VB6. Vous pouvez la faire glisser sur vos formulaires pour l'utiliser visuellement, puis interagir avec ses propriétés et méthodes par code.
 
@@ -117,7 +117,7 @@ Visual Studio gère les contrôles ActiveX via la couche d'interopérabilité CO
     *   Attendez le chargement de la boîte de dialogue « Choose Toolbox Items ». Cela peut prendre un moment pendant l'analyse des composants enregistrés.
     *   Naviguez vers l'onglet « COM Components ».
     *   Parcourez la liste et cherchez « VisioForge Media Player SDK Control » ou un nom similaire. Cochez la case en regard.
-    *   **Ajout via Parcourir (si non répertorié) :** si vous ne le trouvez pas, cliquez sur le bouton « Browse... ». Naviguez vers le répertoire d'installation VisioForge (généralement le sous-dossier `Redist\AnyCPU`) et sélectionnez le fichier `TVFMediaPlayer.ocx`. Cliquez sur « Open ». Cela devrait l'ajouter à la liste ; assurez-vous que sa case est désormais cochée.
+    *   **Ajout via Parcourir (si non répertorié) :** si vous ne le trouvez pas, cliquez sur le bouton « Browse... ». Naviguez vers le répertoire d'installation VisioForge (le sous-dossier `Redist` pour le 32 bits, ou `Redist\x64` pour le 64 bits) et sélectionnez le fichier `VisioForge_Media_Player.ocx`. Cliquez sur « Open ». Cela devrait l'ajouter à la liste ; assurez-vous que sa case est désormais cochée.
     *   Cliquez sur « OK ».
 4.  **Utilisez le contrôle :** l'icône du contrôle TVFMediaPlayer sera désormais disponible dans votre boîte à outils Visual Studio. Faites-la glisser sur votre formulaire (Windows Forms) ou utilisez-la par programmation (WPF, MFC). Visual Studio générera automatiquement les assemblys d'interopérabilité (wrappers) nécessaires pour permettre au code managé (.NET) ou C++ d'interagir avec le contrôle ActiveX basé sur COM.
 
@@ -127,7 +127,7 @@ Vous rencontrez des problèmes lors de l'installation ? Voici quelques problème
 
 *   **Contrôle non enregistré / n'apparaît pas dans l'IDE :**
     *   Assurez-vous que le programme d'installation a été exécuté avec les privilèges d'administrateur.
-    *   Essayez d'enregistrer manuellement le fichier OCX. Ouvrez une **invite de commandes en tant qu'administrateur**, naviguez vers le répertoire contenant `TVFMediaPlayer.ocx` (par exemple `cd "C:\Program Files (x86)\VisioForge\Media Framework\Redist\AnyCPU"`), et exécutez `regsvr32 TVFMediaPlayer.ocx`. Un message de réussite doit apparaître.
+    *   Le programme d'installation enregistre le contrôle automatiquement, mais vous pouvez le réenregistrer manuellement. Ouvrez une **invite de commandes en tant qu'administrateur**, naviguez vers le répertoire contenant l'OCX (par exemple `cd "C:\Program Files\VisioForge\All-in-One Media Framework ActiveX\Redist"` pour le 32 bits, ou `cd "C:\Program Files\VisioForge\All-in-One Media Framework ActiveX\Redist\x64"` pour le 64 bits), et exécutez `regsvr32 VisioForge_Media_Player.ocx`. Un message de réussite doit apparaître.
     *   Vérifiez les conflits avec d'autres bibliothèques multimédias ou des versions plus anciennes de VisioForge. Envisagez de désinstaller d'abord les versions précédentes.
 *   **L'installation échoue ou est annulée :**
     *   Assurez-vous de répondre à toutes les exigences système, y compris les versions de DirectX et .NET.
@@ -160,7 +160,7 @@ Pour supprimer la bibliothèque TVFMediaPlayer et le All-in-One Media Framework 
     *   Sélectionnez-le et cliquez sur « Désinstaller ».
     *   Suivez les invites de l'assistant de désinstallation. Ce processus doit supprimer les fichiers installés et tenter de désenregistrer le contrôle ActiveX.
 3.  **Nettoyage manuel (facultatif) :** dans certains cas rares, ou si vous voulez vous assurer d'une suppression complète, vous pouvez vérifier et supprimer manuellement :
-    *   Le répertoire d'installation principal (par exemple, `C:\Program Files (x86)\VisioForge\`).
+    *   Le répertoire d'installation principal (par exemple, `C:\Program Files\VisioForge\`).
     *   Tous les fichiers de configuration ou entrées de registre restants (utilisateurs avancés uniquement, à faire avec prudence).
     *   Les assemblys d'interopérabilité générés dans les dossiers de votre projet (`obj`, `bin`).
 

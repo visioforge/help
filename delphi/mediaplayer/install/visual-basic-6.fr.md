@@ -97,7 +97,7 @@ Lorsque vous distribuez votre application VB6 qui utilise le contrôle TVFMediaP
 2. **Enregistrement :** le contrôle ActiveX (fichier `.ocx`) doit être enregistré dans le registre Windows sur la machine cible. Les outils d'installation standard (comme Inno Setup, InstallShield, ou même les outils d'empaquetage VB6 plus anciens) fournissent généralement des mécanismes pour enregistrer les contrôles ActiveX lors de l'installation. À défaut, l'utilitaire en ligne de commande `regsvr32.exe` peut être utilisé manuellement ou via un script :
 
     ```bash
-    regsvr32.exe "C:\\Program Files (x86)\\YourApp\\VFMediaPlayer.ocx"
+    regsvr32.exe "C:\\Program Files (x86)\\YourApp\\VisioForge_Media_Player_VB6.ocx"
     ```
 
     N'oubliez pas d'utiliser le chemin correct et d'exécuter la commande avec des privilèges d'administrateur. Comme il s'agit d'un contrôle 32 bits, même sur un système 64 bits, vous utilisez généralement le `regsvr32.exe` situé dans le répertoire `C:\Windows\SysWOW64`, bien que le système gère souvent cette redirection automatiquement.

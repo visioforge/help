@@ -35,11 +35,11 @@ Para [C++ Builder](builder.md), el proceso de instalación implica importar el c
 
 #### Visual Basic 6
 
-En [Visual Basic 6](visual-basic-6.md), abra su proyecto y vaya al menú "Proyecto". Seleccione "Componentes" y haga clic en "Examinar". Encuentre el archivo ActiveX .ocx en la carpeta de instalación y agréguelo a su proyecto. Los componentes ahora estarán disponibles en la caja de herramientas para sus aplicaciones VB6.
+En [Visual Basic 6](visual-basic-6.md), abra su proyecto y vaya al menú "Proyecto". Seleccione "Componentes" y haga clic en "Examinar". Encuentre `VisioForge_Video_Capture.ocx` en la carpeta `Redist` de la instalación y agréguelo a su proyecto. Los componentes ahora estarán disponibles en la caja de herramientas para sus aplicaciones VB6.
 
 ### Visual Studio 2010 y posterior
 
-Para [Visual Studio 2010 y versiones más nuevas](visual-studio.md), abra su proyecto en el IDE, haga clic derecho en la caja de herramientas y seleccione "Elegir elementos". Navegue a la pestaña de componentes COM, haga clic en "Examinar" y seleccione el archivo ActiveX .ocx del directorio de instalación del framework. Esto agregará los componentes a su caja de herramientas, permitiéndole usarlos en sus proyectos de Visual Studio.
+Para [Visual Studio 2010 y versiones más nuevas](visual-studio.md), abra su proyecto en el IDE, haga clic derecho en la caja de herramientas y seleccione "Elegir elementos". Navegue a la pestaña de componentes COM, haga clic en "Examinar" y seleccione `VisioForge_Video_Capture.ocx` de la carpeta `Redist` (o `Redist\x64` para 64 bits) del directorio de instalación del framework. Esto agregará los componentes a su caja de herramientas, permitiéndole usarlos en sus proyectos de Visual Studio.
 
 ## Conclusión
 
