@@ -118,6 +118,7 @@ Bloques de IA en el dispositivo (ONNX / Whisper) que se insertan directamente en
 - [Reconocimiento de matrículas](../general/ai/license-plate-recognition.md) — detectar y leer matrículas (ANPR)
 - [Ocultación de PII](../general/ai/pii-redaction.md) — difuminar o pixelar rostros, matrículas y texto en pantalla
 - [Eliminación de fondo](../general/ai/background-removal.md) — sustituir, difuminar o hacer transparente el fondo
+- [Auto-reencuadre](../general/ai/auto-reframe.md) — reencuadrar metraje horizontal en vídeo vertical 9:16 que sigue al sujeto
 - [Voz a texto](../general/ai/speech-to-text.md) — transcribir audio y generar subtítulos en vivo con Whisper
 - [Inferencia ONNX genérica](../general/ai/onnx-inference.md) — ejecutar un modelo ONNX personalizado y recibir los tensores en bruto
 

@@ -17,6 +17,9 @@ primary_api_classes:
   - BasicFileSourceBlock
   - MediaBlocksPipeline
   - MediaInfoReaderX
+  - AMAH264DecoderSettings
+  - AMAHEVCDecoderSettings
+  - AMAAV1DecoderSettings
 
 ---
 
@@ -48,6 +51,7 @@ The `H264DecoderBlock` is configured using settings that implement `IH264Decoder
 - `OpenH264DecoderSettings`
 - `NVH264DecoderSettings` (for NVIDIA GPU acceleration)
 - `VAAPIH264DecoderSettings` (for VA-API acceleration on Linux)
+- `AMAH264DecoderSettings` (for AMD AMA / Alveo hardware acceleration on Linux — see [AMD AMA Blocks](../AMA/index.md))
 
 A constructor without parameters will attempt to select an available decoder automatically.
 
@@ -1254,6 +1258,9 @@ var hevcDecoder = new HEVCDecoderBlock(new D3D11HEVCDecoderSettings());
 
 // VAAPI (Linux only)
 var hevcDecoder = new HEVCDecoderBlock(new VAAPIHEVCDecoderSettings());
+
+// AMD AMA / Alveo hardware acceleration (Linux only) — see the AMD AMA Blocks page
+var hevcDecoder = new HEVCDecoderBlock(new AMAHEVCDecoderSettings());
 ```
 
 #### The sample pipeline
@@ -1326,6 +1333,7 @@ The `AV1DecoderBlock` is configured using `AV1DecoderSettings`, which specifies 
 - `AV1DecoderType.Intel_QSV` — Intel Quick Sync Video hardware decoding (Arc series or newer)
 - `AV1DecoderType.D3D11` — D3D11/DXVA hardware decoding (Windows)
 - `AV1DecoderType.VAAPI` — VAAPI hardware decoding (Linux)
+- `AV1DecoderType.AMA_AV1` — AMD AMA (Alveo) hardware decoding (Linux); configure with `AMAAV1DecoderSettings`. See [AMD AMA Blocks](../AMA/index.md)
 
 A constructor without parameters automatically selects the best available decoder.
 

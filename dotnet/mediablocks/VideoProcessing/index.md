@@ -86,6 +86,7 @@ primary_api_classes:
 - [Video mixer](#video-mixer)
 - [Video Padding Changer](#video-padding-changer)
 - [Video Rate](#video-rate)
+- [Video Stabilization](#video-stabilization)
 - [Warp](#warp)
 - [Water ripple](#water-ripple)
 - [D3D11 Video Converter](#d3d11-video-converter)
@@ -3432,6 +3433,59 @@ squeezeback.AnimateVideo(new Rect(960, 540, 1920, 1080), TimeSpan.FromSeconds(1)
 // fade the video layer in and out
 squeezeback.StartVideoFadeIn(TimeSpan.FromSeconds(1));
 ```
+
+### Platforms
+
+Windows.
+
+## Video Stabilization
+
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+The VideoStabilization block removes camera shake from a live or recorded video stream in real time. It estimates the global inter-frame motion with sparse optical flow, smooths the camera trajectory with a causal moving-average window, and warps every frame back onto the smoothed path. Backed by the OpenCV `vfdeshake` element, so it requires the OpenCV redistributable.
+
+### Block info
+
+Name: VideoStabilizationBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Uncompressed video | 1
+Output | Uncompressed video | 1
+
+### The sample pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->VideoStabilizationBlock;
+    VideoStabilizationBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(@"C:\Videos\shaky.mp4", renderVideo: true, renderAudio: false));
+
+var stabilizer = new VideoStabilizationBlock(new VideoStabilizationSettings
+{
+    SmoothingRadius = 20,
+    CropRatio = 0.9,
+});
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, stabilizer.Input);
+pipeline.Connect(stabilizer.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Sample applications
+
+- [Video Stabilization Block documentation page](video-stabilization.md)
 
 ### Platforms
 

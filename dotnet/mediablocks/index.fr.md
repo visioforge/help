@@ -118,6 +118,7 @@ Des blocs d'IA sur l'appareil (ONNX / Whisper) qui s'insèrent directement dans 
 - [Reconnaissance de plaques](../general/ai/license-plate-recognition.md) — détecter et lire les plaques d'immatriculation (ANPR)
 - [Masquage des PII](../general/ai/pii-redaction.md) — flouter ou pixelliser les visages, les plaques et le texte à l'écran
 - [Suppression d'arrière-plan](../general/ai/background-removal.md) — remplacer, flouter ou rendre transparent l'arrière-plan
+- [Recadrage automatique](../general/ai/auto-reframe.md) — recadrer des séquences horizontales en vidéo verticale 9:16 qui suit le sujet
 - [Reconnaissance vocale](../general/ai/speech-to-text.md) — transcrire l'audio et générer des sous-titres en direct avec Whisper
 - [Inférence ONNX générique](../general/ai/onnx-inference.md) — exécuter un modèle ONNX personnalisé et recevoir des tenseurs bruts
 

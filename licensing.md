@@ -62,10 +62,9 @@ When your one-year license expires, you may continue using the last version rele
 The Lifetime·Team license offers long-term value with perpetual usage rights for your entire development team:
 
 - One-time payment with no renewal requirements
-- Perpetual access to the product version purchased
-- All updates released within the first 12 months included at no additional cost
-- Technical support for the first 12 months
-- Optional update and support subscription available after the first year
+- Perpetual usage rights, not limited to the version purchased
+- Unlimited updates forever, included at no additional cost
+- Unlimited technical support forever, with no time limit
 - Coverage for your entire development team without per-developer restrictions
 
 The Lifetime·Team license is ideal for projects with longer development cycles, larger development teams, or when you want to eliminate recurring license costs from your budget.

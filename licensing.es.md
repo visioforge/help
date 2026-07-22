@@ -62,10 +62,9 @@ Cuando tu licencia de un año expire, puedes continuar usando la última versió
 La Licencia Vitalicia/Equipo ofrece valor a largo plazo con derechos de uso perpetuo para todo tu equipo de desarrollo:
 
 - Pago único sin requisitos de renovación
-- Acceso perpetuo a la versión del producto comprada
-- Todas las actualizaciones lanzadas dentro de los primeros 12 meses incluidas sin costo adicional
-- Soporte técnico durante los primeros 12 meses
-- Suscripción opcional de actualización y soporte disponible después del primer año
+- Derechos de uso perpetuo, sin limitarse a la versión del producto comprada
+- Actualizaciones ilimitadas para siempre, incluidas sin costo adicional
+- Soporte técnico ilimitado para siempre, sin límite de tiempo
 - Cobertura para todo tu equipo de desarrollo sin restricciones por desarrollador
 
 La Licencia Vitalicia/Equipo es ideal para proyectos con ciclos de desarrollo más largos, equipos de desarrollo más grandes, o cuando quieres eliminar costos de licencia recurrentes de tu presupuesto.

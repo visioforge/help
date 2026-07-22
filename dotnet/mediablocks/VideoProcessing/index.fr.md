@@ -86,6 +86,7 @@ primary_api_classes:
 - [Video mixer](#video-mixer)
 - [Video Padding Changer](#video-padding-changer)
 - [Video Rate](#video-rate)
+- [Stabilisation vidéo](#stabilisation-video)
 - [Warp](#warp)
 - [Water ripple](#water-ripple)
 - [D3D11 Video Converter](#d3d11-video-converter)
@@ -3432,6 +3433,59 @@ squeezeback.AnimateVideo(new Rect(960, 540, 1920, 1080), TimeSpan.FromSeconds(1)
 // fait apparaître et disparaître la couche vidéo en fondu
 squeezeback.StartVideoFadeIn(TimeSpan.FromSeconds(1));
 ```
+
+### Plateformes
+
+Windows.
+
+## Stabilisation vidéo
+
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+Le bloc VideoStabilization supprime en temps réel les tremblements de caméra d'un flux vidéo en direct ou enregistré. Il estime le mouvement global entre les images par flux optique épars, lisse la trajectoire de la caméra avec une fenêtre de moyenne mobile causale, puis déforme chaque image pour la ramener sur la trajectoire lissée. Il s'appuie sur l'élément OpenCV `vfdeshake` et nécessite donc le redistribuable OpenCV.
+
+### Informations sur le bloc
+
+Nom : VideoStabilizationBlock.
+
+Direction du pin | Type de média | Nombre de pins
+--- | :---: | :---:
+Entrée | Vidéo non compressée | 1
+Sortie | Vidéo non compressée | 1
+
+### Le pipeline d'exemple
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->VideoStabilizationBlock;
+    VideoStabilizationBlock-->VideoRendererBlock;
+```
+
+### Exemple de code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(@"C:\Videos\shaky.mp4", renderVideo: true, renderAudio: false));
+
+var stabilizer = new VideoStabilizationBlock(new VideoStabilizationSettings
+{
+    SmoothingRadius = 20,
+    CropRatio = 0.9,
+});
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, stabilizer.Input);
+pipeline.Connect(stabilizer.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Exemples d'applications
+
+- [Page de documentation du bloc de stabilisation vidéo](video-stabilization.md)
 
 ### Plateformes
 

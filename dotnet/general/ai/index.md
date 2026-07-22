@@ -28,6 +28,7 @@ primary_api_classes:
   - VLMBlock
   - VideoEmbeddingBlock
   - BackgroundRemovalBlock
+  - AutoReframeBlock
   - OnnxInferenceBlock
   - SpeechToTextBlock
 ---
@@ -89,6 +90,7 @@ Media Player X.
 | `VLMBlock` | Video | `OnResultGenerated` | Caption, describe, ground, or OCR frames with a vision-language model. | [VLM captioning](vlm-captioning.md) |
 | `VideoEmbeddingBlock` | Video | `OnFrameEmbedding` | Embed frames with CLIP for semantic video search. | [Semantic video search](semantic-video-search.md) |
 | `BackgroundRemovalBlock` | Video | none | Replace, blur, or make the background transparent. | [Background removal](background-removal.md) |
+| `AutoReframeBlock` | Video | `OnReframeUpdated` | Reframe landscape footage into subject-following vertical 9:16 video. | [Auto reframe](auto-reframe.md) |
 | `OnnxInferenceBlock` | Video | `OnInference` | Run a custom ONNX model and receive raw output tensors. | [ONNX inference](onnx-inference.md) |
 | `SpeechToTextBlock` | Audio | `OnSpeechRecognized` | Transcribe live or file audio with Whisper. | [Speech-to-text](speech-to-text.md) |
 
@@ -193,6 +195,7 @@ Video AI blocks (`VisioForge.DotNet.Core.AI`):
 - [VLM captioning](vlm-captioning.md)
 - [Semantic video search](semantic-video-search.md)
 - [Background removal (matting)](background-removal.md)
+- [Auto reframe — subject-following vertical video](auto-reframe.md)
 - [Generic ONNX inference](onnx-inference.md)
 
 Speech-to-text (`VisioForge.DotNet.Core.AI.Whisper`):

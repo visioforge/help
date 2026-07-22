@@ -28,6 +28,7 @@ primary_api_classes:
   - VLMBlock
   - VideoEmbeddingBlock
   - BackgroundRemovalBlock
+  - AutoReframeBlock
   - OnnxInferenceBlock
   - SpeechToTextBlock
 ---
@@ -95,6 +96,7 @@ pour Media Blocks, Video Capture X ou Media Player X.
 | `VLMBlock` | Vidéo | `OnResultGenerated` | Légender, décrire, ancrer des phrases et appliquer l'OCR aux images avec un modèle vision-langage. | [Sous-titrage VLM](vlm-captioning.md) |
 | `VideoEmbeddingBlock` | Vidéo | `OnFrameEmbedding` | Générer des embeddings d'images avec CLIP pour la recherche vidéo sémantique. | [Recherche vidéo sémantique](semantic-video-search.md) |
 | `BackgroundRemovalBlock` | Vidéo | aucun | Remplacer, flouter ou rendre transparent l'arrière-plan. | [Suppression d'arrière-plan](background-removal.md) |
+| `AutoReframeBlock` | Vidéo | `OnReframeUpdated` | Recadrer des séquences horizontales en vidéo verticale 9:16 qui suit le sujet. | [Recadrage automatique](auto-reframe.md) |
 | `OnnxInferenceBlock` | Vidéo | `OnInference` | Exécuter un modèle ONNX personnalisé et recevoir les tenseurs de sortie bruts. | [Inférence ONNX](onnx-inference.md) |
 | `SpeechToTextBlock` | Audio | `OnSpeechRecognized` | Transcrire l'audio en direct ou depuis un fichier avec Whisper. | [Speech-to-text](speech-to-text.md) |
 
@@ -222,6 +224,7 @@ Blocs IA vidéo (`VisioForge.DotNet.Core.AI`) :
 - [Sous-titrage VLM](vlm-captioning.md)
 - [Recherche vidéo sémantique](semantic-video-search.md)
 - [Suppression d'arrière-plan (matting)](background-removal.md)
+- [Recadrage automatique — vidéo verticale qui suit le sujet](auto-reframe.md)
 - [Inférence ONNX générique](onnx-inference.md)
 
 Speech-to-text (`VisioForge.DotNet.Core.AI.Whisper`) :

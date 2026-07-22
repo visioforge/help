@@ -254,7 +254,7 @@ await VideoCapture1.Video_Renderer_UpdateAsync();
 
 ### madVR Renderer (third-party)
 
-[madVR](https://www.madvr.com/) is a reference-quality external video renderer popular with home-theatre PCs and high-end video software. It delivers superior scaling algorithms, color management, and deinterlacing at the cost of higher GPU load. Supported only on WinForms hosts; requires a separate madVR installation on the target machine (the CLSID-registered DirectShow filter must be present).
+[madVR](https://madvr.com/) is a reference-quality external video renderer popular with home-theatre PCs and high-end video software. It delivers superior scaling algorithms, color management, and deinterlacing at the cost of higher GPU load. Supported only on WinForms hosts; requires a separate madVR installation on the target machine (the CLSID-registered DirectShow filter must be present).
 
 **Implementation example:**
 

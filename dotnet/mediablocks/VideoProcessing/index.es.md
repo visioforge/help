@@ -86,6 +86,7 @@ primary_api_classes:
 - [Mezclador de Video](#mezclador-de-video)
 - [Cambia Relleno de Video](#cambia-relleno-de-video)
 - [Tasa de Video](#tasa-de-video)
+- [Estabilización de Video](#estabilizacion-de-video)
 - [Deformar](#deformar)
 - [Ondulación de Agua](#ondulacion-de-agua)
 - [Convertidor de Video D3D11](#convertidor-de-video-d3d11)
@@ -3432,6 +3433,59 @@ squeezeback.AnimateVideo(new Rect(960, 540, 1920, 1080), TimeSpan.FromSeconds(1)
 // haz aparecer y desvanecer la capa de video gradualmente
 squeezeback.StartVideoFadeIn(TimeSpan.FromSeconds(1));
 ```
+
+### Plataformas
+
+Windows.
+
+## Estabilización de Video
+
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+El bloque VideoStabilization elimina el temblor de la cámara de un flujo de vídeo en directo o grabado en tiempo real. Estima el movimiento global entre fotogramas mediante flujo óptico disperso, suaviza la trayectoria de la cámara con una ventana de media móvil causal y deforma cada fotograma para devolverlo a la trayectoria suavizada. Se apoya en el elemento `vfdeshake` de OpenCV, por lo que requiere el redistribuible de OpenCV.
+
+### Información del bloque
+
+Nombre: VideoStabilizationBlock.
+
+Dirección del pin | Tipo de medio | Cantidad de pines
+--- | :---: | :---:
+Entrada | Vídeo sin comprimir | 1
+Salida | Vídeo sin comprimir | 1
+
+### La canalización de ejemplo
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->VideoStabilizationBlock;
+    VideoStabilizationBlock-->VideoRendererBlock;
+```
+
+### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(@"C:\Videos\shaky.mp4", renderVideo: true, renderAudio: false));
+
+var stabilizer = new VideoStabilizationBlock(new VideoStabilizationSettings
+{
+    SmoothingRadius = 20,
+    CropRatio = 0.9,
+});
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, stabilizer.Input);
+pipeline.Connect(stabilizer.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Aplicaciones de ejemplo
+
+- [Página de documentación del bloque de estabilización de vídeo](video-stabilization.md)
 
 ### Plataformas
 

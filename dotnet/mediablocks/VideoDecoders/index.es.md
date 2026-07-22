@@ -17,6 +17,9 @@ primary_api_classes:
   - BasicFileSourceBlock
   - MediaBlocksPipeline
   - MediaInfoReaderX
+  - AMAH264DecoderSettings
+  - AMAHEVCDecoderSettings
+  - AMAAV1DecoderSettings
 ---
 
 # Bloques Decodificadores de Video - SDK de VisioForge Media Blocks .Net
@@ -47,6 +50,7 @@ El `H264DecoderBlock` está configurado usando ajustes que implementan `IH264Dec
 - `OpenH264DecoderSettings`
 - `NVH264DecoderSettings` (para aceleración GPU NVIDIA)
 - `VAAPIH264DecoderSettings` (para aceleración VA-API en Linux)
+- `AMAH264DecoderSettings` (para aceleración por hardware AMD AMA / Alveo en Linux — consulte [Bloques AMD AMA](../AMA/index.md))
 
 Un constructor sin parámetros intentará seleccionar un decodificador disponible automáticamente.
 
@@ -1251,6 +1255,9 @@ var hevcDecoder = new HEVCDecoderBlock(new D3D11HEVCDecoderSettings());
 
 // VAAPI (solo Linux)
 var hevcDecoder = new HEVCDecoderBlock(new VAAPIHEVCDecoderSettings());
+
+// Aceleración por hardware AMD AMA / Alveo (solo Linux) — consulte la página de bloques AMD AMA
+var hevcDecoder = new HEVCDecoderBlock(new AMAHEVCDecoderSettings());
 ```
 
 #### El pipeline de muestra
@@ -1321,6 +1328,7 @@ El `AV1DecoderBlock` decodifica streams de video AV1 con soporte para backends d
 - `AV1DecoderType.Intel_QSV` — decodificación por hardware Intel Quick Sync Video (serie Arc o más reciente)
 - `AV1DecoderType.D3D11` — decodificación por hardware D3D11/DXVA (Windows)
 - `AV1DecoderType.VAAPI` — decodificación por hardware VAAPI (Linux)
+- `AV1DecoderType.AMA_AV1` — decodificación por hardware AMD AMA (Alveo) (Linux); configúrelo con `AMAAV1DecoderSettings`. Consulte [Bloques AMD AMA](../AMA/index.md)
 
 El constructor sin parámetros selecciona automáticamente el mejor decodificador disponible.
 

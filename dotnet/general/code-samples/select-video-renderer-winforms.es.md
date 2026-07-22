@@ -254,7 +254,7 @@ await VideoCapture1.Video_Renderer_UpdateAsync();
 
 ### Renderizador madVR (externo)
 
-[madVR](https://www.madvr.com/) es un renderizador de video externo de calidad de referencia, popular en home-theatre PCs y software de video de gama alta. Ofrece algoritmos superiores de escalado, gestión de color y deinterlacing a costa de mayor carga de GPU. Solo soportado en hosts WinForms; requiere una instalación separada de madVR en la máquina objetivo (el filtro DirectShow registrado por CLSID debe estar presente).
+[madVR](https://madvr.com/) es un renderizador de video externo de calidad de referencia, popular en home-theatre PCs y software de video de gama alta. Ofrece algoritmos superiores de escalado, gestión de color y deinterlacing a costa de mayor carga de GPU. Solo soportado en hosts WinForms; requiere una instalación separada de madVR en la máquina objetivo (el filtro DirectShow registrado por CLSID debe estar presente).
 
 **Ejemplo de implementación:**
 

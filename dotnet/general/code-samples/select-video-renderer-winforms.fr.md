@@ -254,7 +254,7 @@ await VideoCapture1.Video_Renderer_UpdateAsync();
 
 ### Moteur de rendu madVR (tiers)
 
-[madVR](https://www.madvr.com/) est un moteur de rendu vidéo externe de qualité de référence, populaire auprès des PC home-cinéma et des logiciels vidéo haut de gamme. Il offre des algorithmes de mise à l'échelle, une gestion des couleurs et un désentrelacement supérieurs, au prix d'une charge GPU plus élevée. Pris en charge uniquement sur les hôtes WinForms ; nécessite une installation madVR séparée sur la machine cible (le filtre DirectShow enregistré par CLSID doit être présent).
+[madVR](https://madvr.com/) est un moteur de rendu vidéo externe de qualité de référence, populaire auprès des PC home-cinéma et des logiciels vidéo haut de gamme. Il offre des algorithmes de mise à l'échelle, une gestion des couleurs et un désentrelacement supérieurs, au prix d'une charge GPU plus élevée. Pris en charge uniquement sur les hôtes WinForms ; nécessite une installation madVR séparée sur la machine cible (le filtre DirectShow enregistré par CLSID doit être présent).
 
 **Exemple d'implémentation :**
 

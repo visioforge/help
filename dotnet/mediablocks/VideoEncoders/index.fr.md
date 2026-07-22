@@ -18,6 +18,9 @@ primary_api_classes:
   - UniversalSourceSettings
   - MediaBlockPadMediaType
   - MP4SinkBlock
+  - AMAH264EncoderSettings
+  - AMAHEVCEncoderSettings
+  - AMAAV1EncoderSettings
 
 ---
 
@@ -75,6 +78,12 @@ Spécifie l'option de tune pour l'encodeur RAV1E.
 Encodeur vidéo AV1 GPU AMD.
 
 **Plateformes :** Windows, Linux, macOS.
+
+##### AMAAV1EncoderSettings
+
+Encodeur AV1 matériel AMD AMA (Alveo) pour les accélérateurs multimédias AMD Alveo (par ex. MA35D). Voir [Blocs AMD AMA](../AMA/index.md).
+
+**Plateformes :** Linux.
 
 ##### NVENCAV1EncoderSettings
 
@@ -316,6 +325,12 @@ Encodeur vidéo H264 GPU AMD/ATI.
 
 **Plateformes :** Windows, Linux, macOS.
 
+#### AMAH264EncoderSettings
+
+Encodeur H264 matériel AMD AMA (Alveo) pour les accélérateurs multimédias AMD Alveo (par ex. MA35D). Voir [Blocs AMD AMA](../AMA/index.md).
+
+**Plateformes :** Linux.
+
 #### QSVH264EncoderSettings
 
 Encodeur vidéo H264 GPU Intel.
@@ -402,6 +417,12 @@ Encodeur vidéo HEVC GPU Nvidia.
 Encodeur vidéo HEVC GPU AMD/ATI.
 
 **Plateformes :** Windows, Linux, macOS.
+
+#### AMAHEVCEncoderSettings
+
+Encodeur HEVC matériel AMD AMA (Alveo) pour les accélérateurs multimédias AMD Alveo (par ex. MA35D). Voir [Blocs AMD AMA](../AMA/index.md).
+
+**Plateformes :** Linux.
 
 #### QSVHEVCEncoderSettings
 

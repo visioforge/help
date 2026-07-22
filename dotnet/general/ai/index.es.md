@@ -28,6 +28,7 @@ primary_api_classes:
   - VLMBlock
   - VideoEmbeddingBlock
   - BackgroundRemovalBlock
+  - AutoReframeBlock
   - OnnxInferenceBlock
   - SpeechToTextBlock
 ---
@@ -94,6 +95,7 @@ anfitriona para Media Blocks, Video Capture X o Media Player X.
 | `VLMBlock` | Vídeo | `OnResultGenerated` | Subtitular, describir, anclar frases y aplicar OCR a los fotogramas con un modelo de lenguaje visual. | [Subtitulado con VLM](vlm-captioning.md) |
 | `VideoEmbeddingBlock` | Vídeo | `OnFrameEmbedding` | Generar embeddings de fotogramas con CLIP para la búsqueda semántica de vídeo. | [Búsqueda semántica de vídeo](semantic-video-search.md) |
 | `BackgroundRemovalBlock` | Vídeo | ninguno | Sustituir, difuminar o hacer transparente el fondo. | [Eliminación de fondo](background-removal.md) |
+| `AutoReframeBlock` | Vídeo | `OnReframeUpdated` | Reencuadrar metraje horizontal en vídeo vertical 9:16 que sigue al sujeto. | [Auto-reencuadre](auto-reframe.md) |
 | `OnnxInferenceBlock` | Vídeo | `OnInference` | Ejecutar un modelo ONNX personalizado y recibir los tensores de salida en bruto. | [Inferencia ONNX](onnx-inference.md) |
 | `SpeechToTextBlock` | Audio | `OnSpeechRecognized` | Transcribir audio en vivo o de archivo con Whisper. | [Voz a texto](speech-to-text.md) |
 
@@ -222,6 +224,7 @@ Bloques de IA de vídeo (`VisioForge.DotNet.Core.AI`):
 - [Subtitulado con VLM](vlm-captioning.md)
 - [Búsqueda semántica de vídeo](semantic-video-search.md)
 - [Eliminación de fondo (matting)](background-removal.md)
+- [Auto-reencuadre — vídeo vertical que sigue al sujeto](auto-reframe.md)
 - [Inferencia ONNX genérica](onnx-inference.md)
 
 Voz a texto (`VisioForge.DotNet.Core.AI.Whisper`):
