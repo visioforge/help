@@ -1,6 +1,6 @@
 ---
 title: Detectar objetos sin entrenar — vocabulario abierto .NET
-description: Detecte cualquier objeto en vídeo nombrándolo en texto: zero-shot, sin entrenamiento. Vocabulario abierto en dispositivo para .NET (OWLv2, Grounding DINO).
+description: "Detecte cualquier objeto en vídeo nombrándolo en texto: zero-shot, sin entrenamiento. Vocabulario abierto en dispositivo para .NET (OWLv2, Grounding DINO)."
 sidebar_label: Detección de vocabulario abierto
 tags:
   - .NET

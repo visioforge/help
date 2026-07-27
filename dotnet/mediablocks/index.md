@@ -144,6 +144,7 @@ On-device AI blocks (ONNX / Whisper) that drop straight into a Media Blocks pipe
 - [OpenGL](OpenGL/index.md) — GPU-based video processing
 - [AWS](AWS/index.md) — Cloud integration blocks
 - [RTSP Server](RTSPServer/index.md) — Serve video as an RTSP stream
+- [USB (UVC) cameras on Android](../general/guides/android-usb-camera.md) — Capture from a webcam attached over OTG, which Camera2 cannot see
 
 ## Getting Started
 

@@ -117,6 +117,7 @@ Full install walkthrough: [install/index.md](../install/index.md).
 | `UniversalSourceBlock` | Opens a file, URL, or stream as input. Analyzes streams automatically and exposes `VideoOutput` / `AudioOutput` pads. | [GettingStarted/player.md](./GettingStarted/player.md) |
 | `VideoRendererBlock` | Binds pipeline video output to an `IVideoView` control (WinForms / WPF / MAUI / Avalonia). Supports snapshots. | [GettingStarted/player.md](./GettingStarted/player.md) |
 | `SystemVideoSourceBlock` | Webcam / USB / built-in camera input. Configured via `VideoCaptureDeviceSourceSettings`. | [GettingStarted/camera.md](./GettingStarted/camera.md) |
+| `AndroidUVCSourceBlock` | USB (UVC) camera attached to an Android device over OTG, which Camera2 cannot see. Configured via `AndroidUVCSourceSettings`. | [../general/guides/android-usb-camera.md](../general/guides/android-usb-camera.md) |
 | `H264EncoderBlock` | H.264 encoder with software and hardware (NVENC / AMF / Quick Sync) backends. | [GettingStarted/pipeline.md](./GettingStarted/pipeline.md) |
 | `MP4SinkBlock` | Writes encoded video + audio to an `.mp4` file. Add inputs via `IMediaBlockDynamicInputs.CreateNewInput`. | [Guides/rtsp-save-original-stream.md](./Guides/rtsp-save-original-stream.md) |
 | `DeviceEnumerator` | Lists cameras, microphones, and audio outputs asynchronously via `DeviceEnumerator.Shared.VideoSourcesAsync()` etc. | [GettingStarted/device-enum.md](./GettingStarted/device-enum.md) |
@@ -198,6 +199,7 @@ Swap `UniversalSourceBlock` for `SystemVideoSourceBlock` (camera) or `RTSPSource
     - RTSP / IP camera player — [Guides/rtsp-player-csharp.md](./Guides/rtsp-player-csharp.md)
     - Save RTSP stream (passthrough) — [Guides/rtsp-save-original-stream.md](./Guides/rtsp-save-original-stream.md)
     - Multi-camera grid — [Guides/multi-camera-rtsp-grid.md](./Guides/multi-camera-rtsp-grid.md)
+    - USB (UVC) camera on Android — [../general/guides/android-usb-camera.md](../general/guides/android-usb-camera.md)
 - **Deployment**
     - Windows — [../deployment-x/Windows.md](../deployment-x/Windows.md)
     - macOS — [../deployment-x/macOS.md](../deployment-x/macOS.md)

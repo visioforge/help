@@ -34,7 +34,7 @@ Antes de comenzar tu proceso de implementación y despliegue en Android, asegúr
 
 ### Requisitos del Dispositivo
 
-- Dispositivo Android con Android 10.0 o posterior
+- Dispositivo Android con Android 9.0 (nivel de API 28) o posterior
 - Arquitectura de procesador ARM o ARM64
 - Espacio de almacenamiento suficiente para activos de aplicación y procesamiento de medios
 - Hardware de cámara y micrófono (si se usan características de captura de video/audio)
@@ -92,6 +92,28 @@ Puedes agregar estos paquetes usando el NuGet Package Manager en tu IDE o agrega
 ```
 
 Nota: Reemplaza los números de versión con las últimas versiones disponibles en NuGet.org.
+
+El paquete `VisioForge.CrossPlatform.Core.Android` incluye las bibliotecas nativas para las cuatro ABI de Android (`armeabi-v7a`, `arm64-v8a`, `x86`, `x86_64`) y las integra automáticamente en la compilación: no se requiere ningún paso de copia manual. Dos de ellas solo se usan para la captura desde cámara USB:
+
+- `libVisioForge_UVC.so` - el puente USB Video Class, con libuvc (BSD 3-Clause) compilado dentro.
+- `libusb1.0.so` - libusb 1.0.30, enlazado dinámicamente y con licencia LGPL v2.1 o posterior.
+
+Los avisos completos, incluidos ambos textos de licencia, se distribuyen con el paquete en `THIRD-PARTY-NOTICES.txt`.
+
+### Permisos para la cámara USB
+
+La captura desde una cámara USB (UVC) conectada por OTG necesita sus propias entradas en el manifiesto, además de los paquetes anteriores:
+
+```xml
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-feature android:name="android.hardware.camera" android:required="false" />
+<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+<uses-feature android:name="android.hardware.usb.host" android:required="true" />
+```
+
+Android se niega a entregar un dispositivo de video USB a una aplicación que no posea `android.permission.CAMERA`, incluso cuando nunca se usa la API de cámara de Android. Declarar ese permiso también convierte la cámara integrada en un *requisito* implícito, lo que ocultaría la aplicación en Google Play a los dispositivos cuya única cámara llega por USB; de ahí el `required="false"` explícito.
+
+La captura desde cámara USB requiere **Android 9 (nivel de API 28) o posterior**. Para el recorrido completo, consulte [Captura desde cámara USB en Android](../general/guides/android-usb-camera.md).
 
 ## Integración de Biblioteca de Bindings Java
 

@@ -41,6 +41,13 @@ primary_api_classes:
 
 Industrial cameras using USB3 Vision, GigE Vision, and GenICam standards provide superior image quality and performance for machine vision applications. Our SDK enables seamless integration with these professional camera types through various connectivity options.
 
+!!! note "USB3 Vision is not the same as UVC"
+
+    USB3 Vision is a machine vision standard accessed through GenTL, and it is unrelated to
+    USB Video Class (UVC) - the standard that ordinary webcams and capture dongles implement.
+    For an everyday USB webcam, use `SystemVideoSourceBlock` on desktop platforms, or, on
+    Android, see [USB camera capture on Android](../../../general/guides/android-usb-camera.md).
+
 ## GigE Vision Protocol
 
 GigE Vision is an industrial camera interface standard based on Gigabit Ethernet technology. It offers several advantages for machine vision applications:

@@ -1,6 +1,6 @@
 ---
 title: FAQ Video Fingerprinting — licences, précision, formats
-description: Trouvez des réponses sur le VisioForge Video Fingerprinting SDK : licences, performance, précision, formats et compatibilité de plateformes.
+description: "Trouvez des réponses sur le VisioForge Video Fingerprinting SDK : licences, performance, précision, formats et compatibilité de plateformes."
 tags:
   - Video Fingerprinting SDK
   - .NET

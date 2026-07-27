@@ -34,7 +34,7 @@ Before beginning your Android implementation and deployment process, ensure your
 
 ### Device Requirements
 
-- Android device running Android 10.0 or later
+- Android device running Android 9.0 (API level 28) or later
 - ARM or ARM64 processor architecture
 - Sufficient storage space for application assets and media processing
 - Camera and microphone hardware (if using video/audio capture features)
@@ -92,6 +92,28 @@ You can add these packages using the NuGet Package Manager in your IDE or by add
 ```
 
 Note: Replace version numbers with the latest available releases on NuGet.org.
+
+The `VisioForge.CrossPlatform.Core.Android` package carries the native libraries for all four Android ABIs (`armeabi-v7a`, `arm64-v8a`, `x86`, `x86_64`) and wires them into the build automatically - no manual copy step is required. Two of them are only used by USB camera capture:
+
+- `libVisioForge_UVC.so` - the USB Video Class bridge, with libuvc (BSD 3-Clause) compiled in.
+- `libusb1.0.so` - libusb 1.0.30, dynamically linked and licensed under the LGPL v2.1 or later.
+
+The full notices, including both licence texts, ship with the package as `THIRD-PARTY-NOTICES.txt`.
+
+### USB camera permissions
+
+Capturing from a USB (UVC) camera attached over OTG needs its own manifest entries in addition to the packages above:
+
+```xml
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-feature android:name="android.hardware.camera" android:required="false" />
+<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+<uses-feature android:name="android.hardware.usb.host" android:required="true" />
+```
+
+Android refuses to hand a USB video device to an app that does not hold `android.permission.CAMERA`, even when the Android camera API is never used. Declaring that permission also makes a built-in camera an implied *requirement*, which would hide the app on Google Play from devices whose only camera arrives over USB - hence the explicit `required="false"`.
+
+USB camera capture requires **Android 9 (API level 28) or newer**. For the full walkthrough see [USB camera capture on Android](../general/guides/android-usb-camera.md).
 
 ## Java Bindings Library Integration
 

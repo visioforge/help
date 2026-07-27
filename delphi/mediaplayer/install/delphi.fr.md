@@ -1,6 +1,6 @@
 ---
 title: Installer Media Player SDK dans Delphi — config 32/64 bits
-description: Installez le VisioForge Media Player SDK dans Delphi 10.x-12.x : composants VCL/FMX, enregistrement des paquets, chemins de bibliothèques. Windows 32/64 bits.
+description: "Installez le VisioForge Media Player SDK dans Delphi 10.x-12.x : composants VCL/FMX, enregistrement des paquets, chemins de bibliothèques. Windows 32/64 bits."
 tags:
   - All-in-One Media Framework
   - Delphi

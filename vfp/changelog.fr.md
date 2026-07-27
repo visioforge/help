@@ -1,6 +1,6 @@
 ---
 title: Journal des modifications du Video Fingerprinting SDK
-description: Suivez les mises à jour du VisioForge Video Fingerprinting SDK : nouvelles fonctionnalités, améliorations de performance et changements d'API .NET et C++.
+description: "Suivez les mises à jour du VisioForge Video Fingerprinting SDK : nouvelles fonctionnalités, améliorations de performance et changements d'API .NET et C++."
 tags:
   - Video Fingerprinting SDK
   - .NET

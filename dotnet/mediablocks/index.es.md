@@ -144,6 +144,7 @@ Bloques de IA en el dispositivo (ONNX / Whisper) que se insertan directamente en
 - [OpenGL](OpenGL/index.md) — Procesamiento de video basado en GPU
 - [AWS](AWS/index.md) — Bloques de integración con la nube
 - [Servidor RTSP](RTSPServer/index.md) — Sirve video como stream RTSP
+- [Cámaras USB (UVC) en Android](../general/guides/android-usb-camera.md) — Capture desde una webcam conectada por OTG, que Camera2 no puede ver
 
 ## Comenzar
 

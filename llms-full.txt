@@ -2,9 +2,9 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-07-22 10:44:47 UTC (e08543c69d3)
+**Generated:** 2026-07-27 14:53:29 UTC (1c2e6c93f02)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
-**Content Sources:** 1353 help documentation pages + 64 website pages
+**Content Sources:** 1356 help documentation pages + 64 website pages
 
 ---
 
@@ -39723,8 +39723,27 @@ In the Zmodo RTSP URL, `av0_0` is the main (highest quality) stream and `av0_1` 
 
 Changes and updates for all .Net SDKs.
 
+## 2026.7.26
+
+- [Media Blocks SDK .Net] Added **`AndroidUVCSourceBlock`** — capture from a **USB (UVC) camera connected to an Android device over OTG**, such as a webcam or a capture dongle. These cameras are invisible to the regular `SystemVideoSourceBlock`, because Android only exposes them through Camera2 on devices whose vendor ships the External Camera HAL (Samsung, among others, does not). Connected cameras are listed with `AndroidUVCDevices.FindCameras()`, access is requested with `AndroidUVCDevices.RequestPermissionAsync()`, and the requested resolution and frame rate are matched against the modes the camera advertises. Your app must declare **and be granted `android.permission.CAMERA`** — Android refuses to hand a USB video device to an app without it, even though the Android camera API is not used. Unplugging the camera ends the stream, so the pipeline reports end-of-stream rather than stalling silently. Requires **Android 9 (API 28) or later**. Note that a camera enumerating at USB 2.0 speed offers markedly lower frame rates than on a desktop: a Logitech BRIO, for example, tops out at 1080p30 (MJPEG) with no 4K modes available at all.
+- [Video Capture SDK .Net] **USB (UVC) cameras on Android can now be used with `VideoCaptureCoreX`** — assign an `AndroidUVCSourceSettings` to `Video_Source` and the camera works like any other source, so recording to MP4, network streaming, video effects and snapshots are all available. New `AndroidUVCDevices.GetModes()` lists the resolutions, frame rates and formats you can actually pick from — formats the SDK cannot stream are left out — so you can offer the real choices instead of requesting a mode and silently getting the nearest one, and `AndroidUVCSourceSettings.Format` asks for one of them. Two things to know: an unplugged camera is reported through `OnError`, not `OnStop` - and only once the stream has been silent for a few seconds, so handle Android's `ACTION_USB_DEVICE_DETACHED` broadcast as well if your app needs to react the moment the cable comes out; and a camera with a built-in microphone also registers as a USB audio input that Android prefers for recording but that cannot be captured while the camera is streaming, so such a recording is video-only. Live capture should also set the new `VideoCaptureCoreX.Video_Output_IsSync = false`, which stops the bridge feeding an output pipeline from waiting on the clock - left synced it can fill its queue and stall the preview along with it. `Audio_Output_IsSync` is the matching switch for the audio branch, so a capture with audio can hand both branches over on the same terms.
+- [Demos] Added a **USB Camera** Android sample showing live preview from a UVC camera attached over OTG, including the device and permission handling, in both a Media Blocks SDK and a Video Capture SDK version — the latter also records to MP4.
+
+## 2026.7.24
+
+- [Video Capture SDK .Net] Fixed **Picture-in-Picture crashing on .NET 9 and .NET 10** — `VideoCaptureCore` terminated with an unrecoverable `ExecutionEngineException` at `Start`/`StartAsync` as soon as a PiP source was added (the same code worked on .NET 8). Adding a PiP overlay now works on all supported .NET versions.
+- [Video Edit SDK .Net] Fixed the legacy FFMPEG output crashing at start on .NET 9 and .NET 10 with the same `ExecutionEngineException`; it now works as it did on .NET 8.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] Fixed **video missing or corrupted when streaming MPEG-TS over SRT** (`SRTMPEGTSSinkBlock`, `SRTOutput`). The MPEG-TS muxer now emits a full 1316-byte payload per buffer instead of one transport packet at a time, so SRT sends whole datagrams rather than seven times as many undersized ones. Receivers such as MediaMTX, ffmpeg or OBS no longer see an audio-only or truncated stream. The UDP, multi-UDP and RIST MPEG-TS outputs get the same alignment.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] Fixed **corrupted video from the Apple (iOS / macOS / Mac Catalyst) H.264 hardware encoder**. `AppleMediaH264EncoderSettings.AllowFrameReordering` was enabled by default; the resulting B-frames left a large share of the encoded frames with a presentation timestamp earlier than their own decode timestamp, so MPEG-TS outputs (SRT, UDP, RIST) and MP4/MOV recordings played back torn or undecodable in MediaMTX, ffmpeg and VLC. RTMP/FLV happened to tolerate it, which is why streaming from iOS looked broken over SRT but fine over RTMP. The property now defaults to `false`; set it back to `true` only for offline encoding where you can verify the resulting timestamps.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] Fixed **SRT and RIST output failing to start on macOS and Mac Catalyst** when the Apple hardware H.264 encoder was used: the stream parser those outputs need to feed the MPEG-TS muxer was omitted on those platforms.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] [Video Edit SDK .Net] Fixed **MPEG-TS output producing an empty file** when AAC audio was encoded with a software encoder (`voaacenc`, used on macOS, Linux and iOS). The MPEG-TS muxer only accepts framed AAC, which those encoders do not advertise, so the audio never linked and the muxer waited on it instead of writing - the recording ended as a 0-byte `.ts`. Affects `MPEGTSSinkBlock`/`MPEGTSOutput` and the SRT, UDP and RIST outputs built on them.
+- [Media Blocks SDK .Net] Fixed **RTSP playback failing with "Failed to link RTSP pad: WasLinked"** in `UniversalSourceBlockV2`. When the source announced a pad it had already handed over - on reconnect, or when a server re-announced a stream - the block tried to link it a second time and reported the result as an error, ending the session.
+- [Media Blocks SDK .Net] Fixed **DASH output never starting** (`DASHSinkBlock`): the sink requested its input pads without a name, which `dashsink` rejects because it takes the stream index from the pad name. No manifest or segments were written and the pipeline hung on start instead of reporting the failure.
+- [Media Blocks SDK .Net] Fixed **text overlays rendering as empty boxes (▯▯▯) on iOS, Android and macOS** — the SDK now sets up font resolution at startup, so `TextOverlayBlock`, subtitle overlays and the trial watermark draw real glyphs instead of tofu. Fonts your app bundles are picked up automatically, and on iOS the SDK carries a fallback font so text renders even in an app that bundles none.
+
 ## 2026.7.22
 
+- [Video Capture SDK .Net] Fixed RTSP / IP camera **login and password being URL-encoded**, which broke authentication for credentials containing special characters such as `&`, `@`, `%`, `?` or spaces (e.g. a password `password&@%!?End` was sent to the camera as `password%26%40%25!%3fEnd`). Credentials are now used verbatim. Applies to both the `RTSPSourceSettings` (X engine) and `IPCameraSourceSettings` (VideoCaptureCore) sources. If you previously worked around this by storing the pre-encoded value on the device, revert it to the real password after upgrading.
 - [Core] MAUI apps now build cleanly for Android 16: the bundled HarfBuzzSharp native library is updated to a 16 KB page-size-aligned build, removing the `XA0141` ("Android 16 will require 16 KB page sizes") warning on Android app builds.
 
 ## 2026.7.21
@@ -40940,7 +40959,7 @@ Before beginning your Android implementation and deployment process, ensure your
 
 ### Device Requirements
 
-- Android device running Android 10.0 or later
+- Android device running Android 9.0 (API level 28) or later
 - ARM or ARM64 processor architecture
 - Sufficient storage space for application assets and media processing
 - Camera and microphone hardware (if using video/audio capture features)
@@ -40998,6 +41017,28 @@ You can add these packages using the NuGet Package Manager in your IDE or by add
 ```
 
 Note: Replace version numbers with the latest available releases on NuGet.org.
+
+The `VisioForge.CrossPlatform.Core.Android` package carries the native libraries for all four Android ABIs (`armeabi-v7a`, `arm64-v8a`, `x86`, `x86_64`) and wires them into the build automatically - no manual copy step is required. Two of them are only used by USB camera capture:
+
+- `libVisioForge_UVC.so` - the USB Video Class bridge, with libuvc (BSD 3-Clause) compiled in.
+- `libusb1.0.so` - libusb 1.0.30, dynamically linked and licensed under the LGPL v2.1 or later.
+
+The full notices, including both licence texts, ship with the package as `THIRD-PARTY-NOTICES.txt`.
+
+### USB camera permissions
+
+Capturing from a USB (UVC) camera attached over OTG needs its own manifest entries in addition to the packages above:
+
+```
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-feature android:name="android.hardware.camera" android:required="false" />
+<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+<uses-feature android:name="android.hardware.usb.host" android:required="true" />
+```
+
+Android refuses to hand a USB video device to an app that does not hold `android.permission.CAMERA`, even when the Android camera API is never used. Declaring that permission also makes a built-in camera an implied *requirement*, which would hide the app on Google Play from devices whose only camera arrives over USB - hence the explicit `required="false"`.
+
+USB camera capture requires **Android 9 (API level 28) or newer**. For the full walkthrough see [USB camera capture on Android](../../general/guides/android-usb-camera/).
 
 ## Java Bindings Library Integration
 
@@ -45007,17 +45048,11 @@ No. Redaction overwrites the pixels in each region directly in the frame, so the
 ---END OF PAGE---
 
 
-## PTZ Auto-Tracking
+## PTZ Auto-Tracking SDK for .NET — ONVIF Camera Control
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/ptz-auto-tracking/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
+**Description:** PTZ auto-tracking for .NET: make an ONVIF PTZ camera follow a detected object with proportional pan/tilt/zoom, a dead zone, and sticky tracking.
 **Tags:** .NET, AI, ONVIF, PTZ, Auto-Tracking, Object Tracking, ObjectAnalyticsBlock, VideoCaptureCoreX, MediaBlocksPipeline
 **API:** PTZAutoTrackingController, PTZAutoTrackingSettings, PTZTargetSelection, IPTZMoveTransport, OnvifPTZMoveTransport, PTZMoveCommandEventArgs
-
----
-
-title: PTZ Auto-Tracking SDK for .NET — ONVIF Camera Control description: PTZ auto-tracking for .NET: make an ONVIF PTZ camera follow a detected object with proportional pan/tilt/zoom, a dead zone, and sticky tracking. sidebar\_label: PTZ Auto-Tracking tags: - .NET - AI - ONVIF - PTZ - Auto-Tracking - Object Tracking - ObjectAnalyticsBlock - VideoCaptureCoreX - MediaBlocksPipeline primary\_api\_classes: - PTZAutoTrackingController - PTZAutoTrackingSettings - PTZTargetSelection - IPTZMoveTransport - OnvifPTZMoveTransport - PTZMoveCommandEventArgs
-
----
 
 # PTZ Auto-Tracking — Follow a Detected Object with an ONVIF Camera
 
@@ -56580,6 +56615,388 @@ The two common causes are: the source app opted out of playback capture (protect
 - [Audio encoder blocks](../../../mediablocks/AudioEncoders/) — AAC, MP3, FLAC, and Opus encoders for the Media Blocks pipeline
 - [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — the high-level `VideoCaptureCoreX` engine
 - [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — the low-level `MediaBlocksPipeline` engine
+
+---END OF PAGE---
+
+
+## Capture USB (UVC) Cameras on Android in C# and .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/general/guides/android-usb-camera/
+**Description:** Stream a USB webcam attached to an Android phone over OTG in C#. Covers permissions, MJPEG mode selection, USB 2.0 limits, and disconnect handling.
+**Tags:** Media Blocks SDK, Video Capture SDK, .NET, MediaBlocksPipeline, VideoCaptureCoreX, Android, USB, UVC, OTG, Capture, Webcam, MJPEG, C#, NuGet
+**API:** MediaBlocksPipeline, VideoCaptureCoreX, AndroidUVCSourceBlock, AndroidUVCSourceSettings, AndroidUVCDevices, VideoRendererBlock
+
+# Capture USB (UVC) Cameras on Android in C# and .NET
+
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net)
+
+## Introduction
+
+A USB Video Class (UVC) camera plugged into an Android phone over OTG is invisible to the standard Android camera API on most devices. `AndroidUVCSourceBlock` reaches it anyway: it talks to the camera through a bundled native libusb/libuvc bridge and pushes the frames into a `MediaBlocksPipeline`. It needs Android 9 (API level 28) or newer, the `android.permission.CAMERA` permission, and roughly 40 lines of C#.
+
+This guide covers the whole path: why the normal API fails, the manifest and permission setup, the capture code, how a requested format is matched against what the camera offers, what USB 2.0 realistically delivers, and how to handle the camera being unplugged mid-stream.
+
+## Why can't Camera2 see a USB camera on Android?
+
+Android exposes USB cameras to the Camera2 API only through the **External Camera HAL**, an optional component that the device vendor has to build into the firmware. Many popular phones ship without it - on a Samsung Galaxy M55, for example, `pm list features` reports no `android.hardware.camera.external`, and the camera service lists only the built-in front and rear sensors. A UVC camera attached to such a phone is enumerated by the kernel, but no camera API will ever return it.
+
+Two obvious workarounds also fail. The `/dev/video*` nodes the kernel creates belong to the `camera` group, which an ordinary app process is not a member of. And the Java `UsbDeviceConnection` API supports control, bulk, and interrupt transfers but **not isochronous** transfers - the transfer type UVC webcams use in practice.
+
+That leaves one viable route, and it is the one this block takes: obtain the USB file descriptor from `UsbManager`, then drive the device from native code that can submit isochronous transfers.
+
+```
+graph LR;
+    cam["USB camera (UVC)"] --> usb["UsbManager file descriptor"];
+    usb --> bridge["libusb + libuvc bridge"];
+    bridge --> src["AndroidUVCSourceBlock"];
+    src --> renderer["VideoRendererBlock"];
+```
+
+## What you need
+
+- **Android 9 (API level 28) or newer.** Set `<SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>` in the `.csproj`.
+- **A phone with USB host (OTG) support** and an OTG adapter or cable.
+- **The `VisioForge.CrossPlatform.Core.Android` package**, which carries the native payload, plus `VisioForge.DotNet.MediaBlocks` and the `VisioForge.Core.Android.X10` project reference that every Android sample uses. See the [Android deployment guide](../../../deployment-x/Android/).
+
+### Manifest entries
+
+```
+<!-- Android denies access to USB video class devices unless the app holds the camera
+     permission, even though the Camera2 API is never used here. -->
+<uses-permission android:name="android.permission.CAMERA" />
+<!-- That permission otherwise makes a built-in camera an implied REQUIREMENT, which would
+     hide the app from exactly the devices it targets: ones whose camera arrives over USB. -->
+<uses-feature android:name="android.hardware.camera" android:required="false" />
+<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+<uses-feature android:name="android.hardware.usb.host" android:required="true" />
+```
+
+Keep `android.hardware.usb.host` at `required="true"` only if your whole app is useless without a USB camera - it is a Play Store filter too, and on `true` it hides the app from every device without USB host support.
+
+The `required="false"` line is not optional
+
+Declaring `android.permission.CAMERA` makes Google Play treat a built-in camera as a device requirement. Left implicit, that filters your app out of the store listing on devices that have no built-in camera - which includes much of the hardware most likely to need a USB camera in the first place.
+
+## Requesting the two permissions
+
+USB camera capture needs two separate grants, in this order.
+
+**1. The runtime `CAMERA` permission.** Request it as usual:
+
+```
+private const int CameraPermissionRequest = 1004;
+
+protected override void OnCreate(Bundle savedInstanceState)
+{
+    base.OnCreate(savedInstanceState);
+
+    RequestPermissions(new[] { Manifest.Permission.Camera }, CameraPermissionRequest);
+}
+
+public override void OnRequestPermissionsResult(
+    int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
+{
+    base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    if (requestCode != CameraPermissionRequest)
+    {
+        return;
+    }
+
+    if (AndroidUVCDevices.HasCameraPermission())
+    {
+        _ = StartPreviewAsync();
+    }
+}
+```
+
+**2. Permission for the specific USB device**, which shows the system dialog:
+
+```
+if (!await AndroidUVCDevices.RequestPermissionAsync(camera))
+{
+    // denied, dismissed, or unanswered for two minutes
+    return;
+}
+```
+
+`RequestPermissionAsync` returns `false` on denial, on a dismissed dialog, and after a two-minute timeout; it throws `OperationCanceledException` only when you cancel it through your own `CancellationToken`.
+
+Missing CAMERA permission fails silently
+
+Without `android.permission.CAMERA` granted, the USB permission request returns `false` **instantly and no dialog is ever shown**. The only clue is in logcat: `UsbUserPermissionManager: Camera permission required for USB video class devices`. Check `AndroidUVCDevices.HasCameraPermission()` first and you will never chase this.
+
+## Capturing from the camera
+
+With both permissions in hand, the capture itself is ordinary Media Blocks code. Note that these types are compiled only for the Android target framework, so in a MAUI or other multi-targeted project this code belongs in an Android-only file or inside `#if ANDROID`:
+
+```
+using VisioForge.Core;
+using VisioForge.Core.GStreamer.Android.UVC;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.X.Sources.AndroidUVC;
+
+// list the attached USB cameras
+var cameras = AndroidUVCDevices.FindCameras();
+if (cameras.Count == 0)
+{
+    SetStatus("No USB camera found. Connect one over OTG.");
+    return;
+}
+
+var camera = cameras[0];
+
+if (!await AndroidUVCDevices.RequestPermissionAsync(camera))
+{
+    SetStatus("Access to the USB camera was denied.");
+    return;
+}
+
+_pipeline = new MediaBlocksPipeline();
+_pipeline.OnError += Pipeline_OnError;
+_pipeline.OnStop += Pipeline_OnStop;
+
+var settings = new AndroidUVCSourceSettings
+{
+    Device = camera,
+    Width = 1280,
+    Height = 720,
+    FrameRate = new VideoFrameRate(30),
+};
+
+_videoSource = new AndroidUVCSourceBlock(settings);
+_videoRenderer = new VideoRendererBlock(_pipeline, _videoView) { IsSync = false };
+
+_pipeline.Connect(_videoSource.Output, _videoRenderer.Input);
+
+if (!await _pipeline.StartAsync())
+{
+    SetStatus("Unable to start. Another app may be using the camera.");
+
+    // the camera was already claimed while building, so hand it back
+    await DisposePipelineAsync();
+    return;
+}
+
+SetStatus($"Streaming from {camera.ProductName}");
+```
+
+Note that `StartAsync` returns a `bool`. Ignoring it leaves you looking at a black preview with no idea why, so check it and dispose the pipeline when it fails - that is what releases the camera for the next attempt.
+
+To find out whether capture is possible before you build anything, call `AndroidUVCSourceBlock.IsAvailable()`. It confirms the Android release is new enough, the elements every mode needs are present, and the native bridge loads. It deliberately does not probe `jpegdec`, which only an MJPEG mode needs, nor whether a camera is attached - `AndroidUVCSourceBlock.GetDevices()` answers the latter.
+
+## Capturing with VideoCaptureCoreX
+
+The same camera also works as a `VideoCaptureCoreX` video source, which is the shorter route when you want recording, network streaming, video effects or snapshots rather than a pipeline you assemble yourself. Assign the settings to `Video_Source` and the engine builds everything downstream:
+
+```
+using VisioForge.Core.GStreamer.Android.UVC;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources.AndroidUVC;
+using VisioForge.Core.VideoCaptureX;
+
+var cameras = AndroidUVCDevices.FindCameras();
+if (cameras.Count == 0 || !await AndroidUVCDevices.RequestPermissionAsync(cameras[0]))
+{
+    return;
+}
+
+_core = new VideoCaptureCoreX(_videoView);
+_core.OnError += Core_OnError;
+
+// a live camera has nothing to sync the recording branch to, and leaving it
+// synced makes that branch wait on the clock until its queue fills and stalls
+// the preview with it; a capture with audio sets Audio_Output_IsSync the same
+// way, but this one is video-only
+_core.Video_Output_IsSync = false;
+
+_core.Video_Source = new AndroidUVCSourceSettings
+{
+    Device = cameras[0],
+    Width = 1280,
+    Height = 720,
+    FrameRate = new VideoFrameRate(30),
+};
+
+_core.Video_Play = true;
+
+// registered before StartAsync so the recording branch exists; autoStart false
+// means nothing is written until StartCaptureAsync is called
+_core.Outputs_Add(new MP4Output(placeholderPath), false);
+
+await _core.StartAsync();
+
+// later, when the user presses record
+await _core.StartCaptureAsync(0, targetPath);
+```
+
+One recording per engine instance, today
+
+`StartCaptureAsync` starts the output's own pipeline, and restarting a stopped one is a known open defect: the **second** call on the same output index returns `true` and writes no file at all - no exception, no `OnError`, nothing in the log. Check the return value *and* verify the file exists after `StopCaptureAsync`, and recreate the engine between recordings if your app needs to record more than once. Preview is unaffected.
+
+Two differences from the Media Blocks route are worth knowing. `Video_Source_SwitchCamera` handles system cameras only, so switching to or from a USB camera means stopping and restarting the engine rather than a live swap. And `VideoCaptureCoreX` does not report an unplugged camera - see [Handling a disconnected camera](#handling-a-disconnected-camera).
+
+The recording is video-only, and the phone microphone is not a workaround
+
+A UVC video interface carries no audio, so nothing in this pipeline produces sound. Reaching for the phone microphone does not fix it on a typical webcam: a camera with a built-in mic also registers as a USB **audio** input, Android then prefers that input for recording, and it cannot be opened while the bridge is streaming from the same physical device. Adding the audio source fails the whole pipeline with `Internal data stream error` from `openslessrc`. Verified on a Galaxy M55 with a Logitech BRIO. A camera with no microphone leaves the phone mic as the default input, and then audio works normally.
+
+## Which format should you request?
+
+Request MJPEG resolutions, and treat your `Width`, `Height`, and `FrameRate` values as a preference rather than a command. The block matches them against the modes the camera actually advertises: nearest resolution by pixel count first, then MJPEG in preference to uncompressed formats, then the nearest frame rate. A mismatch produces a warning in logcat, not an error, so the pipeline starts on a format you did not ask for. The SDK logs the one it settled on as `USB camera ready: WxH@fps FORMAT` - check that line in logcat if the exact format matters. To decide from the camera's real capabilities rather than a guess, call `AndroidUVCDevices.GetModes(device)` after the USB permission is granted: it returns the resolutions, frame rates and formats you can actually pick from. Formats the SDK cannot stream - a camera's H.264 or NV12 modes - are left out, so the list is what is usable rather than everything the camera advertises. Set `Format` on the settings to ask for the format of the mode you picked; leaving it at `Unknown` favours MJPEG, which is normally what you want. It opens the camera to read them, so call it before starting capture.
+
+The preference for MJPEG is deliberate and it matters more than the frame rate does. Over a USB 2.0 link, an uncompressed stream burns roughly 20 times the bandwidth of the same picture in MJPEG. A camera that advertises 1080p30 in MJPEG typically manages about **5 fps** uncompressed at that resolution - which looks like a broken pipeline rather than a bandwidth limit. If a camera offers only uncompressed formats it still works, just slowly.
+
+## What USB 2.0 actually delivers
+
+Most phones enumerate a USB camera at High Speed - 480 Mbps - rather than at the 5 Gbps a desktop USB 3 port provides, even when the port itself is USB 3 capable. Cameras report their capabilities per link speed, so the high-bandwidth modes are simply absent from the descriptors. A Logitech BRIO, which does 4K on a desktop, exposes no 4K mode at all on a phone; its practical ceiling there is **1080p30 or 720p60 in MJPEG**.
+
+Plan for that when you pick a resolution. 720p30 is a safe default on any UVC camera, and it is what `AndroidUVCSourceSettings` uses if you leave the defaults alone.
+
+## Handling a disconnected camera
+
+Someone will unplug the camera while your app is streaming. When that happens the block ends the stream, so a `MediaBlocksPipeline` raises `OnStop`:
+
+```
+private void Pipeline_OnError(object sender, ErrorsEventArgs e)
+{
+    SetStatus(e.Message);
+}
+
+private void Pipeline_OnStop(object sender, StopEventArgs e)
+{
+    SetStatus("The camera was disconnected.");
+}
+```
+
+Two details are worth knowing. The renderer keeps displaying the last frame it received, so the preview does not go blank on its own - clear or hide your video view in this handler. And a camera pulled out mid-frame delivers a partial frame, which decodes into visible noise, so that frozen last frame may look corrupted. Hiding the view avoids showing it at all.
+
+Do not dispose the pipeline from inside this handler if your handler runs on the device callback thread; tear down from your own thread - for example from the activity's `OnDestroy`:
+
+```
+private async Task DisposePipelineAsync()
+{
+    if (_pipeline == null)
+    {
+        return;
+    }
+
+    _pipeline.OnError -= Pipeline_OnError;
+    _pipeline.OnStop -= Pipeline_OnStop;
+
+    await _pipeline.DisposeAsync();
+    _pipeline = null;
+}
+
+protected override async void OnDestroy()
+{
+    // first, before anything that can await - see the note below
+    base.OnDestroy();
+
+    try
+    {
+        await DisposePipelineAsync();
+    }
+    catch (Exception ex)
+    {
+        Log.Error(TAG, ex.ToString());
+    }
+
+    VisioForgeX.DestroySDK();
+}
+```
+
+`base.OnDestroy()` has to come first
+
+Android checks that the base implementation ran by the time `OnDestroy` returns, and an `await` returns to the runtime long before the method finishes. Calling it last - after awaiting the teardown - throws `android.util.SuperNotCalledException: Activity did not call through to super.onDestroy()` and kills the process. Call it first; the continuation still runs and disposes the pipeline afterwards.
+
+With `VideoCaptureCoreX` there is no such event. The engine raises `OnStop` from its own stop path and does not observe a stream that ends on its own, so an unplugged camera never reaches `OnStop`. The source does report it through `OnError`, but only once the frames have stopped arriving for a few seconds - the preview is already frozen by then, and a recording in progress is still open. Subscribe to Android's `ACTION_USB_DEVICE_DETACHED` broadcast as well, which arrives the moment the cable comes out: confirm that your camera is the device that went away, then stop the capture and the engine:
+
+```
+// once the pipeline is running
+RegisterReceiver(
+    new UsbDetachReceiver(OnUsbDetached),
+    new IntentFilter(UsbManager.ActionUsbDeviceDetached),
+    ReceiverFlags.NotExported);
+```
+
+Both members belong to your activity - the handler, and the receiver that forwards the broadcast to it:
+
+```
+private async void OnUsbDetached()
+{
+    // the broadcast carries no usable device on current Android levels, but an
+    // unplugged camera stops being enumerated - so ignore every other device
+    if (AndroidUVCDevices.FindCameras().Any(c => c.DeviceName == _camera.DeviceName))
+    {
+        return;
+    }
+
+    await _core.StopCaptureAsync(0);
+    await _core.StopAsync();
+}
+
+private class UsbDetachReceiver : BroadcastReceiver
+{
+    private readonly Action _onDetached;
+
+    public UsbDetachReceiver(Action onDetached)
+    {
+        _onDetached = onDetached;
+    }
+
+    public override void OnReceive(Context context, Intent intent)
+    {
+        _onDetached();
+    }
+}
+```
+
+Stopping the capture first is what closes the recording properly. The frames already written are flushed either way, so the file stays playable, but the engine keeps thinking it is running until you stop it.
+
+## Troubleshooting
+
+| What you see | What it means |
+| --- | --- |
+| USB permission denied instantly, no dialog | `android.permission.CAMERA` is not granted. Logcat: `Camera permission required for USB video class devices`. |
+| `USB camera capture requires Android 9 (API 28) or later.` | The device is older than API 28. Check `AndroidUVCDevices.IsSupportedPlatform()` before offering the feature. |
+| `No permission for the USB camera. Call AndroidUVCDevices.RequestPermissionAsync first.` | The device grant is missing; `StartAsync` was called too early. |
+| `The camera advertises no usable video modes.` | The camera exposes neither MJPEG nor YUY2 on this link. |
+| `StartAsync` returns `false`, logcat mentions an invalid mode | Another process holds the camera. Only one application can stream from a UVC device at a time. |
+| `Requested 1920x1080@30 is not offered; using 1280x720@30.` | Informational: the nearest advertised mode was selected instead. |
+| No frames arrive after a re-plug, pipeline stays paused | A transient USB condition after re-plugging. Restart the capture. |
+| `Unable to create the jpegdec element.` | The GStreamer payload has no JPEG decoder, so an MJPEG mode cannot be built. `IsAvailable()` does not cover this - it returns `true` because uncompressed modes would still work. |
+
+## Frequently Asked Questions
+
+### Does this work on any Android phone?
+
+It works on any device running Android 9 (API level 28) or newer that supports USB host mode, which is most phones and tablets sold since 2018. Unlike the Camera2 route, it does not depend on the vendor shipping the External Camera HAL, so it works on hardware where the built-in camera API cannot see a USB camera at all. Two things are still required from the device: OTG support in the hardware, and enough USB bus power for the camera - a camera drawing more than the port supplies will fail to enumerate. Call `AndroidUVCDevices.IsSupportedPlatform()` to check the Android version and `AndroidUVCSourceBlock.IsAvailable()` to confirm the native bridge loaded before you offer the feature in your UI.
+
+### Do I need root access?
+
+No. The whole point of this design is that it runs as an ordinary app. Root would be one way to open the `/dev/video*` nodes the kernel creates for a UVC camera, since those belong to the `camera` group that app processes are not in - but that is not the route taken here. Instead the app asks `UsbManager` for permission, receives a file descriptor for the device, and hands that descriptor to the native bridge, which submits the isochronous USB transfers the camera needs. Everything happens through documented Android APIs and the user's own consent, so the app installs and runs normally, and can ship on Google Play.
+
+### Can I record to a file instead of previewing?
+
+Yes. `AndroidUVCSourceBlock` is a normal Media Blocks source with a single video output pad, so it connects to anything the SDK provides: an [MP4 output](../../../mediablocks/Outputs/), an [RTMP or SRT sink](../../../mediablocks/Sinks/) for streaming, or a video processing chain. Connect its `Output` pad to an encoder or output block instead of - or in addition to - the renderer. Frames arrive decoded, so no extra decoding step is needed. The block has no audio pad, so an MP4 recorded from it alone is video-only and an RTMP push without audio is rejected by many services. Adding a separate audio source is the answer, but read the warning above first: on a camera that has its own microphone, Android prefers that USB audio input and it cannot be captured while the camera is being streamed. Bear in mind the bandwidth ceiling when choosing a recording resolution: 720p30 is comfortable, 1080p30 is the practical maximum on most phones.
+
+### Why is MJPEG preferred over uncompressed video?
+
+Because uncompressed video does not fit through a High Speed USB link at any useful frame rate. A 1280x720 frame in YUY2 is about 1.8 MB, so 30 fps needs roughly 440 Mbps. The bus itself runs at 480 Mbps, but the real limit is lower: a high-bandwidth isochronous endpoint carries at most 3072 bytes per microframe, or about 24.5 MB/s - roughly 196 Mbps. Cameras solve this by advertising uncompressed formats only at very low rates: a camera offering 1080p30 in MJPEG typically caps uncompressed 1080p at about 5 fps. Selecting the uncompressed mode therefore looks like a broken or stalled pipeline rather than a deliberate trade-off. Within a resolution the mode selector prefers MJPEG even when its frame rate is further from what you requested, and the pipeline decodes the JPEG frames for you. Resolution is matched first, though, so a camera that offers 1080p only as uncompressed video will still hand you that slow mode if you ask for 1080p - request a resolution the camera offers in MJPEG.
+
+### Which native libraries are included, and under what licence?
+
+Two, both shipped inside the `VisioForge.CrossPlatform.Core.Android` package for all four Android ABIs. **libusb 1.0.30** provides the USB transport and is licensed under the **LGPL v2.1 or later**; it ships as a separate shared object, `libusb1.0.so`, dynamically linked and therefore replaceable, as that licence requires. **libuvc** provides the UVC protocol layer and is licensed under the permissive **BSD 3-Clause** licence; it is compiled into `libVisioForge_UVC.so`. Neither library is patched. The complete notices, including both full licence texts and the exact versions, ship with the package as `THIRD-PARTY-NOTICES.txt`.
+
+## Related documentation
+
+- [USB (UVC) Camera Source Block](../../../mediablocks/Sources/#usb-uvc-camera-source-block) - the block reference
+- [Android deployment guide](../../../deployment-x/Android/) - packages, permissions, and native payload
+- [Record another app's audio on Android](../android-audio-playback-capture/) - another Android-specific capture flow
 
 ---END OF PAGE---
 
@@ -71038,7 +71455,7 @@ Hardware-accelerated encoder for Apple platforms.
 
 - Hardware acceleration on Apple devices
 - Real-time encoding support
-- Frame reordering options
+- Frame reordering options (off by default: B-frames make the encoder emit timestamps that MPEG-TS outputs and MP4 recordings cannot use)
 - Quality-based encoding
 
 ### Sample Usage
@@ -71047,7 +71464,7 @@ Hardware-accelerated encoder for Apple platforms.
 var settings = new AppleMediaH264EncoderSettings
 {
     Bitrate = 5000,
-    AllowFrameReordering = true,
+    AllowFrameReordering = false,
     Quality = 0.8,
     Realtime = true
 };
@@ -79407,6 +79824,7 @@ Full install walkthrough: [install/index.md](../../install/).
 | `UniversalSourceBlock` | Opens a file, URL, or stream as input. Analyzes streams automatically and exposes `VideoOutput` / `AudioOutput` pads. | [GettingStarted/player.md](../GettingStarted/player/) |
 | `VideoRendererBlock` | Binds pipeline video output to an `IVideoView` control (WinForms / WPF / MAUI / Avalonia). Supports snapshots. | [GettingStarted/player.md](../GettingStarted/player/) |
 | `SystemVideoSourceBlock` | Webcam / USB / built-in camera input. Configured via `VideoCaptureDeviceSourceSettings`. | [GettingStarted/camera.md](../GettingStarted/camera/) |
+| `AndroidUVCSourceBlock` | USB (UVC) camera attached to an Android device over OTG, which Camera2 cannot see. Configured via `AndroidUVCSourceSettings`. | [../general/guides/android-usb-camera.md](../../general/guides/android-usb-camera/) |
 | `H264EncoderBlock` | H.264 encoder with software and hardware (NVENC / AMF / Quick Sync) backends. | [GettingStarted/pipeline.md](../GettingStarted/pipeline/) |
 | `MP4SinkBlock` | Writes encoded video + audio to an `.mp4` file. Add inputs via `IMediaBlockDynamicInputs.CreateNewInput`. | [Guides/rtsp-save-original-stream.md](../Guides/rtsp-save-original-stream/) |
 | `DeviceEnumerator` | Lists cameras, microphones, and audio outputs asynchronously via `DeviceEnumerator.Shared.VideoSourcesAsync()` etc. | [GettingStarted/device-enum.md](../GettingStarted/device-enum/) |
@@ -79488,6 +79906,7 @@ Swap `UniversalSourceBlock` for `SystemVideoSourceBlock` (camera) or `RTSPSource
   - RTSP / IP camera player — [Guides/rtsp-player-csharp.md](../Guides/rtsp-player-csharp/)
   - Save RTSP stream (passthrough) — [Guides/rtsp-save-original-stream.md](../Guides/rtsp-save-original-stream/)
   - Multi-camera grid — [Guides/multi-camera-rtsp-grid.md](../Guides/multi-camera-rtsp-grid/)
+  - USB (UVC) camera on Android — [../general/guides/android-usb-camera.md](../../general/guides/android-usb-camera/)
 - **Deployment**
   - Windows — [../deployment-x/Windows.md](../../deployment-x/Windows/)
   - macOS — [../deployment-x/macOS.md](../../deployment-x/macOS/)
@@ -87433,6 +87852,7 @@ On-device AI blocks (ONNX / Whisper) that drop straight into a Media Blocks pipe
 - [OpenGL](OpenGL/) — GPU-based video processing
 - [AWS](AWS/) — Cloud integration blocks
 - [RTSP Server](RTSPServer/) — Serve video as an RTSP stream
+- [USB (UVC) cameras on Android](../general/guides/android-usb-camera/) — Capture from a webcam attached over OTG, which Camera2 cannot see
 
 ## Getting Started
 
@@ -94690,8 +95110,8 @@ Windows.
 ## Media Blocks SDK Sources — Webcam, File, RTSP, Screen in C#
 **URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Sources/
 **Description:** Connect any input to a Media Blocks pipeline — webcams, video files, RTSP, RTMP, SRT, NDI, Decklink, screen, virtual. C# / .NET device enumeration API.
-**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS, Capture, Streaming
-**API:** VideoRendererBlock, MediaBlocksPipeline, AudioRendererBlock, UniversalSourceBlock, DeviceEnumerator
+**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS, Capture, Streaming, USB, UVC
+**API:** VideoRendererBlock, MediaBlocksPipeline, AudioRendererBlock, UniversalSourceBlock, DeviceEnumerator, AndroidUVCSourceBlock
 
 # Source Blocks - VisioForge Media Blocks SDK .Net
 
@@ -94777,6 +95197,8 @@ await pipeline.StartAsync();
 #### Remarks
 
 You can specify an API to use during the device enumeration (refer to the `VideoCaptureDeviceAPI` enum description under `SystemVideoSourceBlock` for typical values). Android and iOS platforms have only one API, while Windows and Linux have multiple APIs.
+
+On Android this block enumerates cameras through Camera2, which sees a USB camera attached over OTG only on devices whose vendor ships the External Camera HAL - and many phones do not. To capture from a USB camera on Android, use the [USB (UVC) Camera Source Block](#usb-uvc-camera-source-block) instead.
 
 #### Platforms
 
@@ -98124,6 +98546,124 @@ await pipeline.StartAsync();
 #### Platforms
 
 Windows, macOS, Linux, Android, iOS.
+
+## Android Platform Source Blocks
+
+### USB (UVC) Camera Source Block
+
+AndroidUVCSourceBlock captures video from a USB (UVC) camera attached to an Android device over OTG - a webcam, a capture dongle, or a borescope. [System Video Source](#system-video-source) cannot reach such a camera: Android exposes USB cameras through Camera2 only on devices whose vendor ships the External Camera HAL, and many popular phones do not. This block reads frames through a bundled native libusb/libuvc bridge instead, so it works regardless of the vendor's HAL.
+
+`AndroidUVCSourceSettings` can also be assigned to `VideoCaptureCoreX.Video_Source`, which gives the camera the engine's outputs, effects and snapshots without building a pipeline by hand. `AndroidUVCDevices.GetModes()` lists the resolutions, frame rates and formats a camera advertises in a format this block can stream.
+
+For a full walkthrough with permissions, mode selection, and disconnect handling, see [USB camera capture on Android](../../general/guides/android-usb-camera/).
+
+#### Block info
+
+Name: AndroidUVCSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Output video | Uncompressed video | 1 |
+
+#### Settings
+
+`AndroidUVCSourceSettings` selects the device and the requested format.
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Device` | `UsbDevice` | - | The USB camera to stream from. Required. |
+| `Width` | `int` | 1280 | Requested frame width, in pixels. |
+| `Height` | `int` | 720 | Requested frame height, in pixels. |
+| `FrameRate` | `VideoFrameRate` | 30 | Requested frame rate. Fractional rates such as 29.97 are matched exactly. |
+| `Format` | `AndroidUVCFrameFormat` | `Unknown` | Preferred frame format. `Unknown` lets the SDK choose, which favours MJPEG. Set it to stream an uncompressed mode the default would pass over. |
+
+#### Requirements
+
+- **Android 9 (API level 28) or newer.** Check at run time with `AndroidUVCDevices.IsSupportedPlatform()`.
+- **`android.permission.CAMERA`, declared and granted at run time** - Android refuses to hand a USB video device to an app without it, even though the Camera2 API is never used.
+- **Permission for the USB device itself**, obtained through `AndroidUVCDevices.RequestPermissionAsync`.
+- `android.hardware.usb.host` declared in `AndroidManifest.xml`.
+
+#### Enumerate available devices
+
+Use `AndroidUVCDevices.FindCameras()` to list the attached USB cameras. It returns the `UsbDevice` objects that expose a UVC video interface; `AndroidUVCSourceBlock.GetDevices()` is an equivalent shortcut. `AndroidUVCDevices.IsCamera(UsbDevice)` tests a single device, and `AndroidUVCDevices.HasPermission(UsbDevice)` reports whether access was already granted.
+
+#### The sample pipeline
+
+```
+graph LR;
+    AndroidUVCSourceBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+These types are compiled only for the Android target framework, so in a multi-targeted project this code belongs in an Android-only file or inside `#if ANDROID`.
+
+```
+using VisioForge.Core.GStreamer.Android.UVC;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Sources.AndroidUVC;
+
+// list the attached USB cameras
+var cameras = AndroidUVCDevices.FindCameras();
+if (cameras.Count == 0)
+{
+    return;
+}
+
+var camera = cameras[0];
+
+// ask the user for access to this device
+if (!await AndroidUVCDevices.RequestPermissionAsync(camera))
+{
+    return;
+}
+
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// the stream ends when the camera is unplugged
+pipeline.OnStop += Pipeline_OnStop;
+
+var settings = new AndroidUVCSourceSettings
+{
+    Device = camera,
+    Width = 1280,
+    Height = 720,
+    FrameRate = new VideoFrameRate(30),
+};
+
+// create USB camera source block
+var videoSource = new AndroidUVCSourceBlock(settings);
+
+// create video renderer block
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1) { IsSync = false };
+
+// connect blocks
+pipeline.Connect(videoSource.Output, videoRenderer.Input);
+
+// start pipeline
+await pipeline.StartAsync();
+```
+
+#### Remarks
+
+`AndroidUVCSourceBlock.IsAvailable()` reports whether USB capture is possible at all on the current device - the Android release is new enough, the elements every mode needs are present, and the native bridge loads. It does not probe `jpegdec`, which only an MJPEG mode needs, and it does not check whether a camera is attached; use `GetDevices()` for that.
+
+The requested resolution and frame rate are matched against the modes the camera advertises rather than imposed on it. The nearest resolution by pixel count wins, MJPEG is preferred over uncompressed formats, and the nearest frame rate is chosen last. A mismatch is a warning, not an error. The SDK logs the mode it settled on as `USB camera ready: WxH@fps FORMAT`, so check that line in logcat if the exact format matters.
+
+Over the High Speed USB link most phones provide, MJPEG is the only practical choice. A camera advertising 1080p30 in MJPEG typically manages about 5 fps uncompressed at the same resolution, and 4K modes are usually absent from the descriptors entirely.
+
+Unplugging the camera ends the stream: the pipeline raises `OnStop` instead of stalling silently. The renderer keeps displaying the last frame it received, and a camera pulled out mid-frame delivers a damaged one, so clear or hide your preview when the stream ends.
+
+Only one process can stream from a UVC camera at a time. If another application holds the device, `StartAsync` fails.
+
+#### Platforms
+
+Android.
 
 ---END OF PAGE---
 
@@ -113897,7 +114437,7 @@ The table below shows the support for network protocols for each platform.
 
 ## .NET SDKs — System Requirements & Platform Support
 **URL:** https://www.visioforge.com/help/docs/dotnet/system-requirements/
-**Description:** Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 10+. .NET 6–9, ARM64 support, 4K memory guidelines. WPF, WinForms, MAUI, and Avalonia compatible.
+**Description:** Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 9+. .NET 6–9, ARM64 support, 4K memory guidelines. WPF, WinForms, MAUI, and Avalonia compatible.
 **Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Linux, Android, iOS
 
 # System Requirements for .NET SDKs
@@ -113975,7 +114515,7 @@ Our SDKs can be deployed to a variety of platforms, enabling wide-reaching distr
 
 #### Android
 
-- Android 10 (API level 29) or newer
+- Android 9 (API level 28) or newer
 - ARM, ARM64, and x86 architectures supported
 - Google Play Store compatible
 - Hardware-accelerated rendering recommended
@@ -123828,6 +124368,10 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 ## Overview
 
 Industrial cameras using USB3 Vision, GigE Vision, and GenICam standards provide superior image quality and performance for machine vision applications. Our SDK enables seamless integration with these professional camera types through various connectivity options.
+
+USB3 Vision is not the same as UVC
+
+USB3 Vision is a machine vision standard accessed through GenTL, and it is unrelated to USB Video Class (UVC) - the standard that ordinary webcams and capture dongles implement. For an everyday USB webcam, use `SystemVideoSourceBlock` on desktop platforms, or, on Android, see [USB camera capture on Android](../../../general/guides/android-usb-camera/).
 
 ## GigE Vision Protocol
 
@@ -184182,8 +184726,27 @@ En la URL RTSP de Zmodo, `av0_0` es el flujo principal (mayor calidad) y `av0_1`
 
 Changes and updates for all .Net SDKs.
 
+## 2026.7.26
+
+- [Media Blocks SDK .Net] Added **`AndroidUVCSourceBlock`** — capture from a **USB (UVC) camera connected to an Android device over OTG**, such as a webcam or a capture dongle. These cameras are invisible to the regular `SystemVideoSourceBlock`, because Android only exposes them through Camera2 on devices whose vendor ships the External Camera HAL (Samsung, among others, does not). Connected cameras are listed with `AndroidUVCDevices.FindCameras()`, access is requested with `AndroidUVCDevices.RequestPermissionAsync()`, and the requested resolution and frame rate are matched against the modes the camera advertises. Your app must declare **and be granted `android.permission.CAMERA`** — Android refuses to hand a USB video device to an app without it, even though the Android camera API is not used. Unplugging the camera ends the stream, so the pipeline reports end-of-stream rather than stalling silently. Requires **Android 9 (API 28) or later**. Note that a camera enumerating at USB 2.0 speed offers markedly lower frame rates than on a desktop: a Logitech BRIO, for example, tops out at 1080p30 (MJPEG) with no 4K modes available at all.
+- [Video Capture SDK .Net] **USB (UVC) cameras on Android can now be used with `VideoCaptureCoreX`** — assign an `AndroidUVCSourceSettings` to `Video_Source` and the camera works like any other source, so recording to MP4, network streaming, video effects and snapshots are all available. New `AndroidUVCDevices.GetModes()` lists the resolutions, frame rates and formats you can actually pick from — formats the SDK cannot stream are left out — so you can offer the real choices instead of requesting a mode and silently getting the nearest one, and `AndroidUVCSourceSettings.Format` asks for one of them. Two things to know: an unplugged camera is reported through `OnError`, not `OnStop` - and only once the stream has been silent for a few seconds, so handle Android's `ACTION_USB_DEVICE_DETACHED` broadcast as well if your app needs to react the moment the cable comes out; and a camera with a built-in microphone also registers as a USB audio input that Android prefers for recording but that cannot be captured while the camera is streaming, so such a recording is video-only. Live capture should also set the new `VideoCaptureCoreX.Video_Output_IsSync = false`, which stops the bridge feeding an output pipeline from waiting on the clock - left synced it can fill its queue and stall the preview along with it. `Audio_Output_IsSync` is the matching switch for the audio branch, so a capture with audio can hand both branches over on the same terms.
+- [Demos] Added a **USB Camera** Android sample showing live preview from a UVC camera attached over OTG, including the device and permission handling, in both a Media Blocks SDK and a Video Capture SDK version — the latter also records to MP4.
+
+## 2026.7.24
+
+- [Video Capture SDK .Net] Fixed **Picture-in-Picture crashing on .NET 9 and .NET 10** — `VideoCaptureCore` terminated with an unrecoverable `ExecutionEngineException` at `Start`/`StartAsync` as soon as a PiP source was added (the same code worked on .NET 8). Adding a PiP overlay now works on all supported .NET versions.
+- [Video Edit SDK .Net] Fixed the legacy FFMPEG output crashing at start on .NET 9 and .NET 10 with the same `ExecutionEngineException`; it now works as it did on .NET 8.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] Fixed **video missing or corrupted when streaming MPEG-TS over SRT** (`SRTMPEGTSSinkBlock`, `SRTOutput`). The MPEG-TS muxer now emits a full 1316-byte payload per buffer instead of one transport packet at a time, so SRT sends whole datagrams rather than seven times as many undersized ones. Receivers such as MediaMTX, ffmpeg or OBS no longer see an audio-only or truncated stream. The UDP, multi-UDP and RIST MPEG-TS outputs get the same alignment.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] Fixed **corrupted video from the Apple (iOS / macOS / Mac Catalyst) H.264 hardware encoder**. `AppleMediaH264EncoderSettings.AllowFrameReordering` was enabled by default; the resulting B-frames left a large share of the encoded frames with a presentation timestamp earlier than their own decode timestamp, so MPEG-TS outputs (SRT, UDP, RIST) and MP4/MOV recordings played back torn or undecodable in MediaMTX, ffmpeg and VLC. RTMP/FLV happened to tolerate it, which is why streaming from iOS looked broken over SRT but fine over RTMP. The property now defaults to `false`; set it back to `true` only for offline encoding where you can verify the resulting timestamps.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] Fixed **SRT and RIST output failing to start on macOS and Mac Catalyst** when the Apple hardware H.264 encoder was used: the stream parser those outputs need to feed the MPEG-TS muxer was omitted on those platforms.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] [Video Edit SDK .Net] Fixed **MPEG-TS output producing an empty file** when AAC audio was encoded with a software encoder (`voaacenc`, used on macOS, Linux and iOS). The MPEG-TS muxer only accepts framed AAC, which those encoders do not advertise, so the audio never linked and the muxer waited on it instead of writing - the recording ended as a 0-byte `.ts`. Affects `MPEGTSSinkBlock`/`MPEGTSOutput` and the SRT, UDP and RIST outputs built on them.
+- [Media Blocks SDK .Net] Fixed **RTSP playback failing with "Failed to link RTSP pad: WasLinked"** in `UniversalSourceBlockV2`. When the source announced a pad it had already handed over - on reconnect, or when a server re-announced a stream - the block tried to link it a second time and reported the result as an error, ending the session.
+- [Media Blocks SDK .Net] Fixed **DASH output never starting** (`DASHSinkBlock`): the sink requested its input pads without a name, which `dashsink` rejects because it takes the stream index from the pad name. No manifest or segments were written and the pipeline hung on start instead of reporting the failure.
+- [Media Blocks SDK .Net] Fixed **text overlays rendering as empty boxes (▯▯▯) on iOS, Android and macOS** — the SDK now sets up font resolution at startup, so `TextOverlayBlock`, subtitle overlays and the trial watermark draw real glyphs instead of tofu. Fonts your app bundles are picked up automatically, and on iOS the SDK carries a fallback font so text renders even in an app that bundles none.
+
 ## 2026.7.22
 
+- [Video Capture SDK .Net] Fixed RTSP / IP camera **login and password being URL-encoded**, which broke authentication for credentials containing special characters such as `&`, `@`, `%`, `?` or spaces (e.g. a password `password&@%!?End` was sent to the camera as `password%26%40%25!%3fEnd`). Credentials are now used verbatim. Applies to both the `RTSPSourceSettings` (X engine) and `IPCameraSourceSettings` (VideoCaptureCore) sources. If you previously worked around this by storing the pre-encoded value on the device, revert it to the real password after upgrading.
 - [Core] MAUI apps now build cleanly for Android 16: the bundled HarfBuzzSharp native library is updated to a 16 KB page-size-aligned build, removing the `XA0141` ("Android 16 will require 16 KB page sizes") warning on Android app builds.
 
 ## 2026.7.21
@@ -185399,7 +185962,7 @@ Antes de comenzar tu proceso de implementación y despliegue en Android, asegúr
 
 ### Requisitos del Dispositivo
 
-- Dispositivo Android con Android 10.0 o posterior
+- Dispositivo Android con Android 9.0 (nivel de API 28) o posterior
 - Arquitectura de procesador ARM o ARM64
 - Espacio de almacenamiento suficiente para activos de aplicación y procesamiento de medios
 - Hardware de cámara y micrófono (si se usan características de captura de video/audio)
@@ -185457,6 +186020,28 @@ Puedes agregar estos paquetes usando el NuGet Package Manager en tu IDE o agrega
 ```
 
 Nota: Reemplaza los números de versión con las últimas versiones disponibles en NuGet.org.
+
+El paquete `VisioForge.CrossPlatform.Core.Android` incluye las bibliotecas nativas para las cuatro ABI de Android (`armeabi-v7a`, `arm64-v8a`, `x86`, `x86_64`) y las integra automáticamente en la compilación: no se requiere ningún paso de copia manual. Dos de ellas solo se usan para la captura desde cámara USB:
+
+- `libVisioForge_UVC.so` - el puente USB Video Class, con libuvc (BSD 3-Clause) compilado dentro.
+- `libusb1.0.so` - libusb 1.0.30, enlazado dinámicamente y con licencia LGPL v2.1 o posterior.
+
+Los avisos completos, incluidos ambos textos de licencia, se distribuyen con el paquete en `THIRD-PARTY-NOTICES.txt`.
+
+### Permisos para la cámara USB
+
+La captura desde una cámara USB (UVC) conectada por OTG necesita sus propias entradas en el manifiesto, además de los paquetes anteriores:
+
+```
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-feature android:name="android.hardware.camera" android:required="false" />
+<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+<uses-feature android:name="android.hardware.usb.host" android:required="true" />
+```
+
+Android se niega a entregar un dispositivo de video USB a una aplicación que no posea `android.permission.CAMERA`, incluso cuando nunca se usa la API de cámara de Android. Declarar ese permiso también convierte la cámara integrada en un *requisito* implícito, lo que ocultaría la aplicación en Google Play a los dispositivos cuya única cámara llega por USB; de ahí el `required="false"` explícito.
+
+La captura desde cámara USB requiere **Android 9 (nivel de API 28) o posterior**. Para el recorrido completo, consulte [Captura desde cámara USB en Android](../../general/guides/android-usb-camera/).
 
 ## Integración de Biblioteca de Bindings Java
 
@@ -188921,17 +189506,11 @@ Llame al método estático `OnnxInferenceEngine.GetAvailableProviders()` antes d
 ---END OF PAGE---
 
 
-## Detección de Vocabulario Abierto
+## Detectar objetos sin entrenar — vocabulario abierto .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/open-vocabulary-detection/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
+**Description:** Detecte cualquier objeto en vídeo nombrándolo en texto: zero-shot, sin entrenamiento. Vocabulario abierto en dispositivo para .NET (OWLv2, Grounding DINO).
 **Tags:** .NET, AI, ONNX, Open Vocabulary Detection, Zero-Shot Detection, OWLv2, Grounding DINO, Computer Vision, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** OpenVocabularyDetectorBlock, OpenVocabularyDetectorSettings, OpenVocabularyModel, OnnxDetection
-
----
-
-title: Detectar objetos sin entrenar — vocabulario abierto .NET description: Detecte cualquier objeto en vídeo nombrándolo en texto: zero-shot, sin entrenamiento. Vocabulario abierto en dispositivo para .NET (OWLv2, Grounding DINO). sidebar\_label: Detección de vocabulario abierto tags: - .NET - AI - ONNX - Open Vocabulary Detection - Zero-Shot Detection - OWLv2 - Grounding DINO - Computer Vision - VideoCaptureCoreX - MediaPlayerCoreX primary\_api\_classes: - OpenVocabularyDetectorBlock - OpenVocabularyDetectorSettings - OpenVocabularyModel - OnnxDetection
-
----
 
 # Detección de vocabulario abierto — OpenVocabularyDetectorBlock
 
@@ -189190,17 +189769,11 @@ Las demos dedicadas construidas sobre Media Blocks, `VideoCaptureCoreX` y `Media
 ---END OF PAGE---
 
 
-## Ocultación de PII
+## SDK de Redacción de PII para .NET — PIIRedactionBlock
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/pii-redaction/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
+**Description:** Redacte PII en vídeo en el dispositivo con PIIRedactionBlock: difumine o pixele rostros, matrículas y texto. Compatible con RGPD/CCPA/BIPA, sin nube.
 **Tags:** .NET, AI, ONNX, PII Redaction, Video Anonymization, Face Blur, License Plate Redaction, GDPR, Privacy, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** PIIRedactionBlock, PIIRedactionSettings, PIIFaceRedactionSettings, PIIPlateRedactionSettings, PIITextRedactionSettings, PIIRedactionStyle, PIIRegionsRedactedEventArgs, PIIRegion
-
----
-
-title: SDK de Redacción de PII para .NET — PIIRedactionBlock description: Redacte PII en vídeo en el dispositivo con PIIRedactionBlock: difumine o pixele rostros, matrículas y texto. Compatible con RGPD/CCPA/BIPA, sin nube. sidebar\_label: Redacción de PII tags: - .NET - AI - ONNX - PII Redaction - Video Anonymization - Face Blur - License Plate Redaction - GDPR - Privacy - VideoCaptureCoreX - MediaPlayerCoreX primary\_api\_classes: - PIIRedactionBlock - PIIRedactionSettings - PIIFaceRedactionSettings - PIIPlateRedactionSettings - PIITextRedactionSettings - PIIRedactionStyle - PIIRegionsRedactedEventArgs - PIIRegion
-
----
 
 # Redacción de PII — Difuminar rostros, matrículas y texto en pantalla
 
@@ -189472,17 +190045,11 @@ No. La redacción sobrescribe los píxeles de cada región directamente en el fo
 ---END OF PAGE---
 
 
-## Auto-seguimiento PTZ
+## SDK de auto-seguimiento PTZ para .NET — cámara ONVIF
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/ptz-auto-tracking/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
+**Description:** Auto-seguimiento PTZ para .NET: una cámara PTZ ONVIF sigue un objeto detectado. Control proporcional paneo/inclinación/zoom con zona muerta y seguimiento fijo.
 **Tags:** .NET, AI, ONVIF, PTZ, Auto-Tracking, Object Tracking, ObjectAnalyticsBlock, VideoCaptureCoreX, MediaBlocksPipeline
 **API:** PTZAutoTrackingController, PTZAutoTrackingSettings, PTZTargetSelection, IPTZMoveTransport, OnvifPTZMoveTransport, PTZMoveCommandEventArgs
-
----
-
-title: SDK de auto-seguimiento PTZ para .NET — cámara ONVIF description: Auto-seguimiento PTZ para .NET: una cámara PTZ ONVIF sigue un objeto detectado. Control proporcional paneo/inclinación/zoom con zona muerta y seguimiento fijo. sidebar\_label: Auto-seguimiento PTZ tags: - .NET - AI - ONVIF - PTZ - Auto-Tracking - Object Tracking - ObjectAnalyticsBlock - VideoCaptureCoreX - MediaBlocksPipeline primary\_api\_classes: - PTZAutoTrackingController - PTZAutoTrackingSettings - PTZTargetSelection - IPTZMoveTransport - OnvifPTZMoveTransport - PTZMoveCommandEventArgs
-
----
 
 # Auto-seguimiento PTZ — sigue un objeto detectado con una cámara ONVIF
 
@@ -201047,6 +201614,389 @@ Las dos causas habituales son: la aplicación de origen se excluyó de la captur
 - [Bloques codificadores de audio](../../../mediablocks/AudioEncoders/): codificadores AAC, MP3, FLAC y Opus para la canalización de Media Blocks
 - [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net): el motor de alto nivel `VideoCaptureCoreX`
 - [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net): el motor de bajo nivel `MediaBlocksPipeline`
+
+---END OF PAGE---
+
+
+## Capturar cámaras USB (UVC) en Android con C# y .NET
+**URL:** https://www.visioforge.com/help/es/docs/dotnet/general/guides/android-usb-camera/
+**Description:** Transmita una webcam USB conectada por OTG a un teléfono Android con C#. Permisos, selección de modo MJPEG, límites de USB 2.0 y desconexiones.
+**Tags:** Media Blocks SDK, Video Capture SDK, .NET, MediaBlocksPipeline, VideoCaptureCoreX, Android, USB, UVC, OTG, Capture, Webcam, MJPEG, C#, NuGet
+**API:** MediaBlocksPipeline, VideoCaptureCoreX, AndroidUVCSourceBlock, AndroidUVCSourceSettings, AndroidUVCDevices, VideoRendererBlock
+
+# Capturar cámaras USB (UVC) en Android con C# y .NET
+
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net)
+
+## Introducción
+
+Una cámara USB Video Class (UVC) conectada a un teléfono Android por OTG resulta invisible para la API de cámara estándar de Android en la mayoría de los dispositivos. `AndroidUVCSourceBlock` la alcanza de todos modos: se comunica con la cámara mediante un puente nativo libusb/libuvc incorporado y envía los fotogramas a un `MediaBlocksPipeline`. Necesita Android 9 (nivel de API 28) o posterior, el permiso `android.permission.CAMERA` y unas 40 líneas de C#.
+
+Esta guía cubre todo el recorrido: por qué falla la API habitual, la configuración del manifiesto y de los permisos, el código de captura, cómo se compara el formato solicitado con lo que ofrece la cámara, qué entrega USB 2.0 de forma realista y cómo gestionar la desconexión de la cámara a mitad de la transmisión.
+
+## ¿Por qué Camera2 no puede ver una cámara USB en Android?
+
+Android expone las cámaras USB a la API Camera2 únicamente a través del **External Camera HAL**, un componente opcional que el fabricante del dispositivo debe incorporar al firmware. Muchos teléfonos populares se distribuyen sin él: en un Samsung Galaxy M55, por ejemplo, `pm list features` no informa de ningún `android.hardware.camera.external`, y el servicio de cámara solo lista los sensores frontal y posterior integrados. El kernel enumera una cámara UVC conectada a un teléfono así, pero ninguna API de cámara la devolverá jamás.
+
+Dos soluciones aparentemente obvias también fallan. Los nodos `/dev/video*` que crea el kernel pertenecen al grupo `camera`, del que un proceso de aplicación corriente no es miembro. Y la API Java `UsbDeviceConnection` admite transferencias de control, masivas y de interrupción, pero **no isócronas**, el tipo de transferencia que usan en la práctica las webcams UVC.
+
+Queda una sola vía viable, y es la que toma este bloque: obtener el descriptor de archivo USB de `UsbManager` y después controlar el dispositivo desde código nativo capaz de enviar transferencias isócronas.
+
+```
+graph LR;
+    cam["Cámara USB (UVC)"] --> usb["Descriptor de archivo de UsbManager"];
+    usb --> bridge["Puente libusb + libuvc"];
+    bridge --> src["AndroidUVCSourceBlock"];
+    src --> renderer["VideoRendererBlock"];
+```
+
+## Qué necesita
+
+- **Android 9 (nivel de API 28) o posterior.** Establezca `<SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>` en el `.csproj`.
+- **Un teléfono con soporte de host USB (OTG)** y un adaptador o cable OTG.
+- **El paquete `VisioForge.CrossPlatform.Core.Android`**, que incluye el contenido nativo, además de `VisioForge.DotNet.MediaBlocks` y la referencia al proyecto `VisioForge.Core.Android.X10` que usan todos los ejemplos de Android. Consulte la [guía de implementación en Android](../../../deployment-x/Android/).
+
+### Entradas del manifiesto
+
+```
+<!-- Android deniega el acceso a los dispositivos USB video class si la aplicación no posee el
+     permiso de cámara, aunque aquí nunca se use la API Camera2. -->
+<uses-permission android:name="android.permission.CAMERA" />
+<!-- Por lo demás, ese permiso convierte la cámara integrada en un REQUISITO implícito, lo que
+     ocultaría la aplicación justo a los dispositivos a los que se dirige: aquellos cuya cámara
+     llega por USB. -->
+<uses-feature android:name="android.hardware.camera" android:required="false" />
+<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+<uses-feature android:name="android.hardware.usb.host" android:required="true" />
+```
+
+Mantenga `android.hardware.usb.host` en `required="true"` solo si su aplicación completa no sirve sin una cámara USB: también es un filtro de Google Play y, en `true`, oculta la aplicación en todos los dispositivos sin soporte de host USB.
+
+La línea `required="false"` no es opcional
+
+Declarar `android.permission.CAMERA` hace que Google Play trate la cámara integrada como un requisito del dispositivo. Si se deja implícito, eso filtra su aplicación de la ficha de la tienda en los dispositivos sin cámara integrada, que incluyen buena parte del hardware con más probabilidad de necesitar una cámara USB en primer lugar.
+
+## Solicitar los dos permisos
+
+La captura desde cámara USB necesita dos concesiones distintas, en este orden.
+
+**1. El permiso `CAMERA` en tiempo de ejecución.** Solicítelo como de costumbre:
+
+```
+private const int CameraPermissionRequest = 1004;
+
+protected override void OnCreate(Bundle savedInstanceState)
+{
+    base.OnCreate(savedInstanceState);
+
+    RequestPermissions(new[] { Manifest.Permission.Camera }, CameraPermissionRequest);
+}
+
+public override void OnRequestPermissionsResult(
+    int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
+{
+    base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    if (requestCode != CameraPermissionRequest)
+    {
+        return;
+    }
+
+    if (AndroidUVCDevices.HasCameraPermission())
+    {
+        _ = StartPreviewAsync();
+    }
+}
+```
+
+**2. El permiso para el dispositivo USB concreto**, que muestra el diálogo del sistema:
+
+```
+if (!await AndroidUVCDevices.RequestPermissionAsync(camera))
+{
+    // denegado, descartado o sin respuesta durante dos minutos
+    return;
+}
+```
+
+`RequestPermissionAsync` devuelve `false` si se deniega, si se descarta el diálogo y tras un tiempo de espera de dos minutos; lanza `OperationCanceledException` solo cuando usted la cancela mediante su propio `CancellationToken`.
+
+La falta del permiso CAMERA falla en silencio
+
+Sin `android.permission.CAMERA` concedido, la solicitud de permiso USB devuelve `false` **al instante y no se muestra ningún diálogo**. La única pista está en logcat: `UsbUserPermissionManager: Camera permission required for USB video class devices`. Compruebe primero `AndroidUVCDevices.HasCameraPermission()` y nunca perseguirá este problema.
+
+## Capturar desde la cámara
+
+Con ambos permisos en su poder, la captura en sí es código Media Blocks corriente. Tenga en cuenta que estos tipos se compilan solo para el marco de destino de Android, así que en un proyecto MAUI o con varios destinos este código va en un archivo exclusivo de Android o dentro de `#if ANDROID`:
+
+```
+using VisioForge.Core;
+using VisioForge.Core.GStreamer.Android.UVC;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.X.Sources.AndroidUVC;
+
+// listar las cámaras USB conectadas
+var cameras = AndroidUVCDevices.FindCameras();
+if (cameras.Count == 0)
+{
+    SetStatus("No USB camera found. Connect one over OTG.");
+    return;
+}
+
+var camera = cameras[0];
+
+if (!await AndroidUVCDevices.RequestPermissionAsync(camera))
+{
+    SetStatus("Access to the USB camera was denied.");
+    return;
+}
+
+_pipeline = new MediaBlocksPipeline();
+_pipeline.OnError += Pipeline_OnError;
+_pipeline.OnStop += Pipeline_OnStop;
+
+var settings = new AndroidUVCSourceSettings
+{
+    Device = camera,
+    Width = 1280,
+    Height = 720,
+    FrameRate = new VideoFrameRate(30),
+};
+
+_videoSource = new AndroidUVCSourceBlock(settings);
+_videoRenderer = new VideoRendererBlock(_pipeline, _videoView) { IsSync = false };
+
+_pipeline.Connect(_videoSource.Output, _videoRenderer.Input);
+
+if (!await _pipeline.StartAsync())
+{
+    SetStatus("Unable to start. Another app may be using the camera.");
+
+    // la cámara ya estaba ocupada durante la construcción, así que devuélvala
+    await DisposePipelineAsync();
+    return;
+}
+
+SetStatus($"Streaming from {camera.ProductName}");
+```
+
+Observe que `StartAsync` devuelve un `bool`. Ignorarlo le deja mirando una vista previa en negro sin saber por qué, así que compruébelo y libere el pipeline cuando falle: eso es lo que devuelve la cámara para el siguiente intento.
+
+Para averiguar si la captura es posible antes de construir nada, llame a `AndroidUVCSourceBlock.IsAvailable()`. Confirma que la versión de Android es suficientemente reciente, que están presentes los elementos que necesita cualquier modo y que el puente nativo se carga. Deliberadamente no comprueba `jpegdec`, que solo necesita un modo MJPEG, ni si hay una cámara conectada: esto último lo responde `AndroidUVCSourceBlock.GetDevices()`.
+
+## Capturar con VideoCaptureCoreX
+
+La misma cámara funciona también como fuente de video de `VideoCaptureCoreX`, que es el camino más corto cuando desea grabación, streaming de red, efectos de video o instantáneas en lugar de un pipeline que usted mismo monta. Asigne los ajustes a `Video_Source` y el motor construye todo lo que va después:
+
+```
+using VisioForge.Core.GStreamer.Android.UVC;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources.AndroidUVC;
+using VisioForge.Core.VideoCaptureX;
+
+var cameras = AndroidUVCDevices.FindCameras();
+if (cameras.Count == 0 || !await AndroidUVCDevices.RequestPermissionAsync(cameras[0]))
+{
+    return;
+}
+
+_core = new VideoCaptureCoreX(_videoView);
+_core.OnError += Core_OnError;
+
+// una cámara en vivo no tiene con qué sincronizar la rama de grabación, y dejarla
+// sincronizada hace que esa rama espere al reloj hasta que su cola se llene y
+// detenga la previsualización con ella; una captura con audio ajusta
+// Audio_Output_IsSync igual, pero esta es solo de vídeo
+_core.Video_Output_IsSync = false;
+
+_core.Video_Source = new AndroidUVCSourceSettings
+{
+    Device = cameras[0],
+    Width = 1280,
+    Height = 720,
+    FrameRate = new VideoFrameRate(30),
+};
+
+_core.Video_Play = true;
+
+// registrado antes de StartAsync para que exista la rama de grabación; con autoStart
+// en false no se escribe nada hasta llamar a StartCaptureAsync
+_core.Outputs_Add(new MP4Output(placeholderPath), false);
+
+await _core.StartAsync();
+
+// más tarde, cuando el usuario pulsa grabar
+await _core.StartCaptureAsync(0, targetPath);
+```
+
+Hoy, una grabación por instancia del motor
+
+`StartCaptureAsync` arranca el pipeline propio de la salida, y reiniciar uno detenido es un defecto abierto conocido: la **segunda** llamada con el mismo índice de salida devuelve `true` y no escribe ningún archivo, sin excepción, sin `OnError` y sin nada en el registro. Compruebe el valor devuelto *y* verifique que el archivo existe después de `StopCaptureAsync`, y vuelva a crear el motor entre grabaciones si su aplicación necesita grabar más de una vez. La vista previa no se ve afectada.
+
+Merece la pena conocer dos diferencias respecto a la vía de Media Blocks. `Video_Source_SwitchCamera` solo gestiona cámaras del sistema, así que cambiar a una cámara USB o desde ella implica detener y reiniciar el motor en lugar de un intercambio en vivo. Y `VideoCaptureCoreX` no informa de una cámara desconectada: consulte [Gestionar una cámara desconectada](#handling-a-disconnected-camera).
+
+La grabación es solo de video, y el micrófono del teléfono no es una solución
+
+Una interfaz de video UVC no transporta audio, así que nada en este pipeline produce sonido. Recurrir al micrófono del teléfono no lo resuelve en una webcam típica: una cámara con micrófono incorporado también se registra como entrada de **audio** USB, Android prefiere entonces esa entrada para grabar y no puede abrirse mientras el puente transmite desde el mismo dispositivo físico. Añadir la fuente de audio hace fallar todo el pipeline con `Internal data stream error` de `openslessrc`. Verificado en un Galaxy M55 con una Logitech BRIO. Con una cámara sin micrófono, el micrófono del teléfono sigue siendo la entrada predeterminada y el audio funciona con normalidad.
+
+## ¿Qué formato debería solicitar?
+
+Solicite resoluciones MJPEG y trate sus valores de `Width`, `Height` y `FrameRate` como una preferencia más que como una orden. El bloque los compara con los modos que la cámara anuncia realmente: primero la resolución más cercana por número de píxeles, después MJPEG con preferencia sobre los formatos sin comprimir y, por último, la velocidad de fotogramas más cercana. Una discrepancia produce una advertencia en logcat, no un error, así que el pipeline arranca con un formato que usted no pidió. El SDK registra el que eligió como `USB camera ready: WxH@fps FORMAT`; consulte esa línea en logcat si el formato exacto le importa. Para decidir a partir de las capacidades reales de la cámara en lugar de una suposición, llame a `AndroidUVCDevices.GetModes(device)` una vez concedido el permiso USB: devuelve las resoluciones, velocidades de fotogramas y formatos entre los que puede elegir realmente. Los formatos que el SDK no puede transmitir (los modos H.264 o NV12 de una cámara) quedan fuera, así que la lista es lo utilizable y no todo lo que anuncia la cámara. Asigne `Format` en los ajustes para pedir el formato del modo que eligió; dejarlo en `Unknown` favorece MJPEG, que suele ser lo deseado. Abre la cámara para leerlos, así que llámelo antes de iniciar la captura.
+
+La preferencia por MJPEG es deliberada e importa más que la velocidad de fotogramas. Sobre un enlace USB 2.0, un flujo sin comprimir consume aproximadamente 20 veces el ancho de banda de la misma imagen en MJPEG. Una cámara que anuncia 1080p30 en MJPEG normalmente alcanza unos **5 fps** sin comprimir a esa resolución, lo que parece un pipeline roto más que un límite de ancho de banda. Si una cámara solo ofrece formatos sin comprimir, sigue funcionando, solo que despacio.
+
+## Qué ofrece realmente USB 2.0
+
+La mayoría de los teléfonos enumeran una cámara USB a High Speed (480 Mbps) y no a los 5 Gbps que ofrece un puerto USB 3 de escritorio, incluso cuando el puerto admite USB 3. Las cámaras informan de sus capacidades por velocidad de enlace, así que los modos de ancho de banda alto simplemente están ausentes de los descriptores. Una Logitech BRIO, que hace 4K en un equipo de escritorio, no expone ningún modo 4K en un teléfono; su techo práctico allí es **1080p30 o 720p60 en MJPEG**.
+
+Téngalo en cuenta al elegir una resolución. 720p30 es un valor predeterminado seguro en cualquier cámara UVC, y es lo que usa `AndroidUVCSourceSettings` si deja los valores predeterminados sin tocar.
+
+## Gestionar una cámara desconectada
+
+Alguien desconectará la cámara mientras su aplicación transmite. Cuando eso ocurre, el bloque termina el flujo, por lo que un `MediaBlocksPipeline` emite `OnStop`:
+
+```
+private void Pipeline_OnError(object sender, ErrorsEventArgs e)
+{
+    SetStatus(e.Message);
+}
+
+private void Pipeline_OnStop(object sender, StopEventArgs e)
+{
+    SetStatus("The camera was disconnected.");
+}
+```
+
+Merece la pena conocer dos detalles. El renderizador sigue mostrando el último fotograma recibido, así que la vista previa no se queda en blanco por sí sola: borre u oculte su vista de video en este controlador. Y una cámara retirada a mitad de un fotograma entrega un fotograma parcial, que se decodifica como ruido visible, así que ese último fotograma congelado puede parecer dañado. Ocultar la vista evita mostrarlo en absoluto.
+
+No libere el pipeline dentro de este controlador si se ejecuta en el hilo de callback del dispositivo; desmonte desde su propio hilo, por ejemplo desde el `OnDestroy` de la actividad:
+
+```
+private async Task DisposePipelineAsync()
+{
+    if (_pipeline == null)
+    {
+        return;
+    }
+
+    _pipeline.OnError -= Pipeline_OnError;
+    _pipeline.OnStop -= Pipeline_OnStop;
+
+    await _pipeline.DisposeAsync();
+    _pipeline = null;
+}
+
+protected override async void OnDestroy()
+{
+    // primero, antes de cualquier cosa que pueda esperar: vea la nota siguiente
+    base.OnDestroy();
+
+    try
+    {
+        await DisposePipelineAsync();
+    }
+    catch (Exception ex)
+    {
+        Log.Error(TAG, ex.ToString());
+    }
+
+    VisioForgeX.DestroySDK();
+}
+```
+
+`base.OnDestroy()` debe ir primero
+
+Android comprueba que la implementación base se ejecutó cuando `OnDestroy` retorna, y un `await` devuelve el control al sistema mucho antes de que el método termine. Llamarla al final, después de esperar el desmontaje, lanza `android.util.SuperNotCalledException: Activity did not call through to super.onDestroy()` y mata el proceso. Llámela primero: la continuación se ejecuta igualmente y libera el pipeline después.
+
+Con `VideoCaptureCoreX` no existe tal evento. El motor emite `OnStop` desde su propia ruta de parada y no observa un flujo que termina por sí solo, así que una cámara desconectada nunca llega a `OnStop`. La fuente sí lo informa mediante `OnError`, pero solo cuando los fotogramas llevan varios segundos sin llegar: para entonces la vista previa ya está congelada y una grabación en curso sigue abierta. Suscríbase también a la difusión `ACTION_USB_DEVICE_DETACHED` de Android, que llega en el momento en que se desconecta el cable: confirme que su cámara es el dispositivo que desapareció y detenga después la captura y el motor:
+
+```
+// once the pipeline is running
+RegisterReceiver(
+    new UsbDetachReceiver(OnUsbDetached),
+    new IntentFilter(UsbManager.ActionUsbDeviceDetached),
+    ReceiverFlags.NotExported);
+```
+
+Ambos miembros pertenecen a su actividad: el manejador y el receptor que le reenvía la difusión:
+
+```
+private async void OnUsbDetached()
+{
+    // la difusión no incluye un dispositivo utilizable en los niveles actuales de
+    // Android, pero una cámara desconectada deja de enumerarse: ignore las demás
+    if (AndroidUVCDevices.FindCameras().Any(c => c.DeviceName == _camera.DeviceName))
+    {
+        return;
+    }
+
+    await _core.StopCaptureAsync(0);
+    await _core.StopAsync();
+}
+
+private class UsbDetachReceiver : BroadcastReceiver
+{
+    private readonly Action _onDetached;
+
+    public UsbDetachReceiver(Action onDetached)
+    {
+        _onDetached = onDetached;
+    }
+
+    public override void OnReceive(Context context, Intent intent)
+    {
+        _onDetached();
+    }
+}
+```
+
+Detener primero la captura es lo que cierra la grabación correctamente. Los fotogramas ya escritos se vuelcan en cualquier caso, así que el archivo sigue siendo reproducible, pero el motor sigue creyendo que está en marcha hasta que usted lo detiene.
+
+## Solución de problemas
+
+| Qué observa | Qué significa |
+| --- | --- |
+| Permiso USB denegado al instante, sin diálogo | `android.permission.CAMERA` no está concedido. En logcat: `Camera permission required for USB video class devices`. |
+| `USB camera capture requires Android 9 (API 28) or later.` | El dispositivo es anterior a la API 28. Compruebe `AndroidUVCDevices.IsSupportedPlatform()` antes de ofrecer la función. |
+| `No permission for the USB camera. Call AndroidUVCDevices.RequestPermissionAsync first.` | Falta la concesión del dispositivo; se llamó a `StartAsync` demasiado pronto. |
+| `The camera advertises no usable video modes.` | La cámara no expone ni MJPEG ni YUY2 en este enlace. |
+| `StartAsync` devuelve `false` y logcat menciona un modo no válido | Otro proceso tiene la cámara. Solo una aplicación puede transmitir desde un dispositivo UVC a la vez. |
+| `Requested 1920x1080@30 is not offered; using 1280x720@30.` | Informativo: se seleccionó en su lugar el modo anunciado más cercano. |
+| No llegan fotogramas tras volver a conectar y el pipeline sigue en pausa | Una condición USB transitoria tras la reconexión. Reinicie la captura. |
+| `Unable to create the jpegdec element.` | El contenido de GStreamer no incluye decodificador JPEG, así que no puede construirse un modo MJPEG. `IsAvailable()` no cubre esto: devuelve `true` porque los modos sin comprimir seguirían funcionando. |
+
+## Preguntas frecuentes
+
+### ¿Funciona en cualquier teléfono Android?
+
+Funciona en cualquier dispositivo con Android 9 (nivel de API 28) o posterior que admita el modo host USB, lo que abarca la mayoría de los teléfonos y tabletas vendidos desde 2018. A diferencia de la vía Camera2, no depende de que el fabricante incluya el External Camera HAL, así que funciona en hardware donde la API de cámara integrada no puede ver en absoluto una cámara USB. El dispositivo debe cumplir dos condiciones más: soporte de OTG en el hardware y suficiente alimentación en el bus USB para la cámara, ya que una cámara que consuma más de lo que suministra el puerto no logrará enumerarse. Llame a `AndroidUVCDevices.IsSupportedPlatform()` para comprobar la versión de Android y a `AndroidUVCSourceBlock.IsAvailable()` para confirmar que el puente nativo se cargó antes de ofrecer la función en su interfaz.
+
+### ¿Necesito acceso root?
+
+No. Todo el sentido de este diseño es que funcione como una aplicación corriente. Root sería una forma de abrir los nodos `/dev/video*` que el kernel crea para una cámara UVC, ya que pertenecen al grupo `camera` del que los procesos de aplicación no forman parte, pero no es la vía adoptada aquí. En su lugar, la aplicación pide permiso a `UsbManager`, recibe un descriptor de archivo del dispositivo y lo entrega al puente nativo, que envía las transferencias USB isócronas que la cámara necesita. Todo sucede mediante API documentadas de Android y el consentimiento del propio usuario, así que la aplicación se instala y se ejecuta con normalidad, y puede publicarse en Google Play.
+
+### ¿Puedo grabar en un archivo en lugar de mostrar una vista previa?
+
+Sí. `AndroidUVCSourceBlock` es una fuente Media Blocks normal con un único pad de salida de video, así que se conecta a cualquier cosa que ofrezca el SDK: una [salida MP4](../../../mediablocks/Outputs/), un [sumidero RTMP o SRT](../../../mediablocks/Sinks/) para streaming, o una cadena de procesamiento de video. Conecte su pad `Output` a un codificador o a un bloque de salida en lugar del renderizador, o además de él. Los fotogramas llegan decodificados, así que no se necesita ningún paso de decodificación adicional. El bloque no tiene pad de audio, así que un MP4 grabado solo con él queda sin sonido y muchos servicios rechazan un envío RTMP sin audio. Añadir una fuente de audio aparte es la respuesta, pero lea primero la advertencia anterior: en una cámara con micrófono propio, Android prefiere esa entrada de audio USB y no puede capturarse mientras se transmite desde la cámara. Tenga en cuenta el techo de ancho de banda al elegir una resolución de grabación: 720p30 es cómodo, 1080p30 es el máximo práctico en la mayoría de los teléfonos.
+
+### ¿Por qué se prefiere MJPEG frente al video sin comprimir?
+
+Porque el video sin comprimir no cabe por un enlace USB High Speed a ninguna velocidad de fotogramas útil. Un fotograma de 1280x720 en YUY2 ocupa unos 1.8 MB, así que 30 fps necesitan aproximadamente 440 Mbps. El bus funciona a 480 Mbps, pero el límite real es más bajo: un extremo isócrono de ancho de banda alto transporta como máximo 3072 bytes por microtrama, unos 24.5 MB/s, es decir, alrededor de 196 Mbps. Las cámaras resuelven esto anunciando los formatos sin comprimir solo a velocidades muy bajas: una cámara que ofrece 1080p30 en MJPEG normalmente limita 1080p sin comprimir a unos 5 fps. Por tanto, seleccionar el modo sin comprimir parece un pipeline roto o atascado más que un compromiso deliberado. Dentro de una resolución, el selector de modo prefiere MJPEG incluso cuando su velocidad de fotogramas queda más lejos de la solicitada, y el pipeline decodifica los fotogramas JPEG por usted. Sin embargo, la resolución se compara primero, así que una cámara que solo ofrece 1080p sin comprimir le entregará ese modo lento si usted pide 1080p: solicite una resolución que la cámara ofrezca en MJPEG.
+
+### ¿Qué bibliotecas nativas se incluyen y bajo qué licencia?
+
+Dos, ambas distribuidas dentro del paquete `VisioForge.CrossPlatform.Core.Android` para las cuatro ABI de Android. **libusb 1.0.30** proporciona el transporte USB y tiene licencia **LGPL v2.1 o posterior**; se distribuye como un objeto compartido aparte, `libusb1.0.so`, enlazado dinámicamente y por tanto reemplazable, como exige esa licencia. **libuvc** proporciona la capa del protocolo UVC y tiene la licencia permisiva **BSD 3-Clause**; está compilada dentro de `libVisioForge_UVC.so`. Ninguna de las dos bibliotecas está parcheada. Los avisos completos, incluidos ambos textos de licencia íntegros y las versiones exactas, se distribuyen con el paquete en `THIRD-PARTY-NOTICES.txt`.
+
+## Documentación relacionada
+
+- [Bloque fuente de cámara USB (UVC)](../../../mediablocks/Sources/#usb-uvc-camera-source-block) - la referencia del bloque
+- [Guía de implementación en Android](../../../deployment-x/Android/) - paquetes, permisos y contenido nativo
+- [Grabar el audio de otra aplicación en Android](../android-audio-playback-capture/) - otro flujo de captura específico de Android
 
 ---END OF PAGE---
 
@@ -215494,7 +216444,7 @@ Codificador acelerado por hardware para plataformas Apple.
 
 - Aceleración de hardware en dispositivos Apple
 - Soporte de codificación en tiempo real
-- Opciones de reordenamiento de cuadros
+- Opciones de reordenamiento de cuadros (desactivado de forma predeterminada: los fotogramas B hacen que el codificador emita marcas de tiempo que las salidas MPEG-TS y las grabaciones MP4 no pueden usar)
 - Codificación basada en calidad
 
 ### Ejemplo de uso
@@ -215503,7 +216453,7 @@ Codificador acelerado por hardware para plataformas Apple.
 var settings = new AppleMediaH264EncoderSettings
 {
     Bitrate = 5000,
-    AllowFrameReordering = true,
+    AllowFrameReordering = false,
     Quality = 0.8,
     Realtime = true
 };
@@ -215894,19 +216844,11 @@ Comience detectando los codificadores de hardware disponibles, implementando con
 ---END OF PAGE---
 
 
-## Index
+## Codificadores de Video VisioForge .NET: H264, HEVC y AV1
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/video-encoders/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
+**Description:** Descripción completa de codificadores de video con aceleración por hardware, características de códecs y optimización de rendimiento para apps de video .NET.
 **Tags:** Video Capture SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Linux, Android, iOS, Streaming
 **API:** NVENCH264EncoderSettings, NVENCHEVCEncoderSettings, AMFH264EncoderSettings, AMFHEVCEncoderSettings, QSVH264EncoderSettings, QSVHEVCEncoderSettings, OpenH264EncoderSettings, AOMAV1EncoderSettings
-
----
-
-title: Codificadores de Video VisioForge .NET: H264, HEVC y AV1 description: Descripción completa de codificadores de video con aceleración por hardware, características de códecs y optimización de rendimiento para apps de video .NET. sidebar\_label: Codificadores de Video
-
-order: 19 tags: - Video Capture SDK - Media Blocks SDK - Video Edit SDK - .NET - Windows - macOS - Linux - Android - iOS - Streaming primary\_api\_classes: - NVENCH264EncoderSettings - NVENCHEVCEncoderSettings - AMFH264EncoderSettings - AMFHEVCEncoderSettings - QSVH264EncoderSettings - QSVHEVCEncoderSettings - OpenH264EncoderSettings - AOMAV1EncoderSettings
-
----
 
 # Codificadores de Video para VisioForge .NET
 
@@ -223872,6 +224814,7 @@ Guía completa de instalación: [install/index.md](../../install/).
 | `UniversalSourceBlock` | Abre un archivo, URL o stream como entrada. Analiza los flujos automáticamente y expone los pads `VideoOutput` / `AudioOutput`. | [GettingStarted/player.md](../GettingStarted/player/) |
 | `VideoRendererBlock` | Enlaza la salida de video del pipeline a un control `IVideoView` (WinForms / WPF / MAUI / Avalonia). Admite capturas de pantalla. | [GettingStarted/player.md](../GettingStarted/player/) |
 | `SystemVideoSourceBlock` | Entrada de webcam / USB / cámara integrada. Se configura mediante `VideoCaptureDeviceSourceSettings`. | [GettingStarted/camera.md](../GettingStarted/camera/) |
+| `AndroidUVCSourceBlock` | Cámara USB (UVC) conectada a un dispositivo Android por OTG, que Camera2 no puede ver. Se configura mediante `AndroidUVCSourceSettings`. | [../general/guides/android-usb-camera.md](../../general/guides/android-usb-camera/) |
 | `H264EncoderBlock` | Codificador H.264 con backends por software y hardware (NVENC / AMF / Quick Sync). | [GettingStarted/pipeline.md](../GettingStarted/pipeline/) |
 | `MP4SinkBlock` | Escribe video + audio codificados en un archivo `.mp4`. Añada entradas mediante `IMediaBlockDynamicInputs.CreateNewInput`. | [Guides/rtsp-save-original-stream.md](../Guides/rtsp-save-original-stream/) |
 | `DeviceEnumerator` | Enumera cámaras, micrófonos y salidas de audio de forma asíncrona mediante `DeviceEnumerator.Shared.VideoSourcesAsync()`, etc. | [GettingStarted/device-enum.md](../GettingStarted/device-enum/) |
@@ -223953,6 +224896,7 @@ Sustituya `UniversalSourceBlock` por `SystemVideoSourceBlock` (cámara) o `RTSPS
   - Reproductor RTSP / cámara IP — [Guides/rtsp-player-csharp.md](../Guides/rtsp-player-csharp/)
   - Guardar flujo RTSP (passthrough) — [Guides/rtsp-save-original-stream.md](../Guides/rtsp-save-original-stream/)
   - Cuadrícula multicámara — [Guides/multi-camera-rtsp-grid.md](../Guides/multi-camera-rtsp-grid/)
+  - Cámara USB (UVC) en Android — [../general/guides/android-usb-camera.md](../../general/guides/android-usb-camera/)
 - **Despliegue**
   - Windows — [../deployment-x/Windows.md](../../deployment-x/Windows/)
   - macOS — [../deployment-x/macOS.md](../../deployment-x/macOS/)
@@ -231897,6 +232841,7 @@ Bloques de IA en el dispositivo (ONNX / Whisper) que se insertan directamente en
 - [OpenGL](OpenGL/) — Procesamiento de video basado en GPU
 - [AWS](AWS/) — Bloques de integración con la nube
 - [Servidor RTSP](RTSPServer/) — Sirve video como stream RTSP
+- [Cámaras USB (UVC) en Android](../general/guides/android-usb-camera/) — Capture desde una webcam conectada por OTG, que Camera2 no puede ver
 
 ## Comenzar
 
@@ -239182,8 +240127,8 @@ Windows.
 ## Fuentes Media Blocks SDK — Webcam, Archivo, RTSP, Pantalla
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/mediablocks/Sources/
 **Description:** Conecta cualquier entrada a un pipeline Media Blocks — webcams, archivos, RTSP, RTMP, SRT, NDI, Decklink, pantalla, virtual. API enumeración C# / .NET.
-**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS, Capture, Streaming
-**API:** VideoRendererBlock, MediaBlocksPipeline, AudioRendererBlock, UniversalSourceBlock, DeviceEnumerator
+**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS, Capture, Streaming, USB, UVC
+**API:** VideoRendererBlock, MediaBlocksPipeline, AudioRendererBlock, UniversalSourceBlock, DeviceEnumerator, AndroidUVCSourceBlock
 
 # Bloques Fuente - SDK de VisioForge Media Blocks .Net
 
@@ -239269,6 +240214,8 @@ await pipeline.StartAsync();
 #### Comentarios
 
 Puede especificar una API para usar durante la enumeración de dispositivos (consulte la descripción del enum `VideoCaptureDeviceAPI` bajo `SystemVideoSourceBlock` para valores típicos). Las plataformas Android e iOS tienen solo una API, mientras que Windows y Linux tienen múltiples APIs.
+
+En Android este bloque enumera las cámaras a través de Camera2, que solo ve una cámara USB conectada por OTG en los dispositivos cuyo fabricante incluye el External Camera HAL, y muchos teléfonos no lo hacen. Para capturar desde una cámara USB en Android, use en su lugar el [Bloque fuente de cámara USB (UVC)](#usb-uvc-camera-source-block).
 
 #### Plataformas
 
@@ -242610,6 +243557,124 @@ await pipeline.StartAsync();
 Windows, macOS, Linux, Android, iOS.
 
 macOS (no disponible en iOS)
+
+## Bloques fuente específicos de Android
+
+### Bloque fuente de cámara USB (UVC)
+
+AndroidUVCSourceBlock captura video desde una cámara USB (UVC) conectada a un dispositivo Android por OTG: una webcam, un adaptador de captura o un boroscopio. [Fuente de Video del Sistema](#system-video-source) no puede alcanzar una cámara así: Android expone las cámaras USB a través de Camera2 solo en los dispositivos cuyo fabricante incluye el External Camera HAL, y muchos teléfonos populares no lo hacen. Este bloque lee los fotogramas mediante un puente nativo libusb/libuvc incorporado, por lo que funciona con independencia del HAL del fabricante.
+
+`AndroidUVCSourceSettings` también puede asignarse a `VideoCaptureCoreX.Video_Source`, lo que da a la cámara las salidas, los efectos y las instantáneas del motor sin montar un pipeline a mano. `AndroidUVCDevices.GetModes()` enumera las resoluciones, velocidades de fotogramas y formatos que anuncia una cámara en un formato que este bloque puede transmitir.
+
+Para un recorrido completo con permisos, selección de modo y gestión de la desconexión, consulte [Captura desde cámara USB en Android](../../general/guides/android-usb-camera/).
+
+#### Información del bloque
+
+Nombre: AndroidUVCSourceBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | --- | --- |
+| Salida de video | Video sin comprimir | 1 |
+
+#### Configuración
+
+`AndroidUVCSourceSettings` selecciona el dispositivo y el formato solicitado.
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | --- | --- |
+| `Device` | `UsbDevice` | - | La cámara USB desde la que transmitir. Obligatorio. |
+| `Width` | `int` | 1280 | Ancho de fotograma solicitado, en píxeles. |
+| `Height` | `int` | 720 | Alto de fotograma solicitado, en píxeles. |
+| `FrameRate` | `VideoFrameRate` | 30 | Velocidad de fotogramas solicitada. Las velocidades fraccionarias como 29.97 se emparejan exactamente. |
+| `Format` | `AndroidUVCFrameFormat` | `Unknown` | Formato de fotograma preferido. `Unknown` deja elegir al SDK, que favorece MJPEG. Póngalo para transmitir un modo sin comprimir que el valor predeterminado pasaría por alto. |
+
+#### Requisitos
+
+- **Android 9 (nivel de API 28) o posterior.** Compruébelo en tiempo de ejecución con `AndroidUVCDevices.IsSupportedPlatform()`.
+- **`android.permission.CAMERA`, declarado y concedido en tiempo de ejecución**: Android se niega a entregar un dispositivo de video USB a una aplicación que no lo posea, aunque nunca se use la API Camera2.
+- **Permiso para el propio dispositivo USB**, obtenido mediante `AndroidUVCDevices.RequestPermissionAsync`.
+- `android.hardware.usb.host` declarado en `AndroidManifest.xml`.
+
+#### Enumerar dispositivos disponibles
+
+Use `AndroidUVCDevices.FindCameras()` para listar las cámaras USB conectadas. Devuelve los objetos `UsbDevice` que exponen una interfaz de video UVC; `AndroidUVCSourceBlock.GetDevices()` es un atajo equivalente. `AndroidUVCDevices.IsCamera(UsbDevice)` comprueba un único dispositivo y `AndroidUVCDevices.HasPermission(UsbDevice)` indica si el acceso ya se había concedido.
+
+#### El pipeline de muestra
+
+```
+graph LR;
+    AndroidUVCSourceBlock-->VideoRendererBlock;
+```
+
+#### Código de muestra
+
+Estos tipos se compilan solo para el marco de destino de Android, así que en un proyecto con varios destinos este código va en un archivo exclusivo de Android o dentro de `#if ANDROID`.
+
+```
+using VisioForge.Core.GStreamer.Android.UVC;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Sources.AndroidUVC;
+
+// listar las cámaras USB conectadas
+var cameras = AndroidUVCDevices.FindCameras();
+if (cameras.Count == 0)
+{
+    return;
+}
+
+var camera = cameras[0];
+
+// solicitar al usuario el acceso a este dispositivo
+if (!await AndroidUVCDevices.RequestPermissionAsync(camera))
+{
+    return;
+}
+
+// crear pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// el flujo termina cuando se desconecta la cámara
+pipeline.OnStop += Pipeline_OnStop;
+
+var settings = new AndroidUVCSourceSettings
+{
+    Device = camera,
+    Width = 1280,
+    Height = 720,
+    FrameRate = new VideoFrameRate(30),
+};
+
+// crear bloque fuente de cámara USB
+var videoSource = new AndroidUVCSourceBlock(settings);
+
+// crear bloque renderizador de video
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1) { IsSync = false };
+
+// conectar bloques
+pipeline.Connect(videoSource.Output, videoRenderer.Input);
+
+// iniciar pipeline
+await pipeline.StartAsync();
+```
+
+#### Comentarios
+
+`AndroidUVCSourceBlock.IsAvailable()` indica si la captura USB es posible en el dispositivo actual: si la versión de Android es suficientemente reciente, si están presentes los elementos que necesita cualquier modo y si el puente nativo se carga. No comprueba `jpegdec`, que solo necesita un modo MJPEG, ni si hay una cámara conectada; para eso use `GetDevices()`.
+
+La resolución y la velocidad de fotogramas solicitadas se comparan con los modos que anuncia la cámara en lugar de imponérsele. Gana la resolución más cercana por número de píxeles, se prefiere MJPEG frente a los formatos sin comprimir y, por último, se elige la velocidad de fotogramas más cercana. Una discrepancia genera una advertencia, no un error. El SDK registra el modo que eligió como `USB camera ready: WxH@fps FORMAT`, así que consulte esa línea en logcat si el formato exacto le importa.
+
+Sobre el enlace USB High Speed que ofrecen la mayoría de los teléfonos, MJPEG es la única opción práctica. Una cámara que anuncia 1080p30 en MJPEG normalmente alcanza unos 5 fps sin comprimir a la misma resolución, y los modos 4K suelen estar ausentes por completo de los descriptores.
+
+Desconectar la cámara termina el flujo: el pipeline emite `OnStop` en lugar de quedarse bloqueado en silencio. El renderizador sigue mostrando el último fotograma recibido, y una cámara retirada a mitad de un fotograma entrega uno dañado, así que borre u oculte su vista previa cuando el flujo termine.
+
+Solo un proceso puede transmitir desde una cámara UVC a la vez. Si otra aplicación tiene el dispositivo, `StartAsync` falla.
+
+#### Plataformas
+
+Android.
 
 ---END OF PAGE---
 
@@ -258365,7 +259430,7 @@ La tabla a continuación muestra el soporte para protocolos de red en cada plata
 
 ## VisioForge .NET SDKs — Requisitos del Sistema y Plataformas
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/system-requirements/
-**Description:** Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 10+. .NET 6–9, soporte ARM64, requisitos de memoria 4K. Compatible con WPF, WinForms, MAUI y Avalonia.
+**Description:** Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 9+. .NET 6–9, soporte ARM64, requisitos de memoria 4K. Compatible con WPF, WinForms, MAUI y Avalonia.
 **Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Linux, Android, iOS
 
 # Requisitos del Sistema para SDKs .NET
@@ -258443,7 +259508,7 @@ Nuestros SDKs pueden desplegarse en una variedad de plataformas, permitiendo una
 
 #### Android
 
-- Android 10 (nivel de API 29) o más reciente
+- Android 9 (nivel de API 28) o más reciente
 - Arquitecturas ARM, ARM64 y x86 soportadas
 - Compatible con Google Play Store
 - Renderizado acelerado por hardware recomendado
@@ -268289,6 +269354,10 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 ## Resumen
 
 Las cámaras industriales usando estándares USB3 Vision, GigE Vision y GenICam proporcionan calidad de imagen superior y rendimiento para aplicaciones de machine vision. Nuestro SDK permite integración perfecta con estos tipos de cámara profesionales a través de varias opciones de conectividad.
+
+USB3 Vision no es lo mismo que UVC
+
+USB3 Vision es un estándar de machine vision al que se accede mediante GenTL, y no tiene relación con USB Video Class (UVC), el estándar que implementan las webcams y los adaptadores de captura corrientes. Para una webcam USB común, use `SystemVideoSourceBlock` en las plataformas de escritorio o, en Android, consulte [Captura desde cámara USB en Android](../../../general/guides/android-usb-camera/).
 
 ## Protocolo GigE Vision
 
@@ -290734,15 +291803,9 @@ Pour toute assistance supplémentaire ou pour des problèmes spécifiques non tr
 ---END OF PAGE---
 
 
-## Delphi
+## Installer Media Player SDK dans Delphi — config 32/64 bits
 **URL:** https://www.visioforge.com/help/fr/docs/delphi/mediaplayer/install/delphi/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-
----
-
-title: Installer Media Player SDK dans Delphi — config 32/64 bits description: Installez le VisioForge Media Player SDK dans Delphi 10.x-12.x : composants VCL/FMX, enregistrement des paquets, chemins de bibliothèques. Windows 32/64 bits. tags: - All-in-One Media Framework - Delphi - ActiveX - Windows - VCL - Playback - MP4 primary\_api\_classes: - TVFMediaPlayer
-
----
+**Description:** Installez le VisioForge Media Player SDK dans Delphi 10.x-12.x : composants VCL/FMX, enregistrement des paquets, chemins de bibliothèques. Windows 32/64 bits.
 
 # Installation de TVFMediaPlayer dans Delphi
 
@@ -328461,8 +329524,27 @@ Dans l'URL RTSP Zmodo, `av0_0` est le flux principal (de la plus haute qualité)
 
 Changes and updates for all .Net SDKs.
 
+## 2026.7.26
+
+- [Media Blocks SDK .Net] Added **`AndroidUVCSourceBlock`** — capture from a **USB (UVC) camera connected to an Android device over OTG**, such as a webcam or a capture dongle. These cameras are invisible to the regular `SystemVideoSourceBlock`, because Android only exposes them through Camera2 on devices whose vendor ships the External Camera HAL (Samsung, among others, does not). Connected cameras are listed with `AndroidUVCDevices.FindCameras()`, access is requested with `AndroidUVCDevices.RequestPermissionAsync()`, and the requested resolution and frame rate are matched against the modes the camera advertises. Your app must declare **and be granted `android.permission.CAMERA`** — Android refuses to hand a USB video device to an app without it, even though the Android camera API is not used. Unplugging the camera ends the stream, so the pipeline reports end-of-stream rather than stalling silently. Requires **Android 9 (API 28) or later**. Note that a camera enumerating at USB 2.0 speed offers markedly lower frame rates than on a desktop: a Logitech BRIO, for example, tops out at 1080p30 (MJPEG) with no 4K modes available at all.
+- [Video Capture SDK .Net] **USB (UVC) cameras on Android can now be used with `VideoCaptureCoreX`** — assign an `AndroidUVCSourceSettings` to `Video_Source` and the camera works like any other source, so recording to MP4, network streaming, video effects and snapshots are all available. New `AndroidUVCDevices.GetModes()` lists the resolutions, frame rates and formats you can actually pick from — formats the SDK cannot stream are left out — so you can offer the real choices instead of requesting a mode and silently getting the nearest one, and `AndroidUVCSourceSettings.Format` asks for one of them. Two things to know: an unplugged camera is reported through `OnError`, not `OnStop` - and only once the stream has been silent for a few seconds, so handle Android's `ACTION_USB_DEVICE_DETACHED` broadcast as well if your app needs to react the moment the cable comes out; and a camera with a built-in microphone also registers as a USB audio input that Android prefers for recording but that cannot be captured while the camera is streaming, so such a recording is video-only. Live capture should also set the new `VideoCaptureCoreX.Video_Output_IsSync = false`, which stops the bridge feeding an output pipeline from waiting on the clock - left synced it can fill its queue and stall the preview along with it. `Audio_Output_IsSync` is the matching switch for the audio branch, so a capture with audio can hand both branches over on the same terms.
+- [Demos] Added a **USB Camera** Android sample showing live preview from a UVC camera attached over OTG, including the device and permission handling, in both a Media Blocks SDK and a Video Capture SDK version — the latter also records to MP4.
+
+## 2026.7.24
+
+- [Video Capture SDK .Net] Fixed **Picture-in-Picture crashing on .NET 9 and .NET 10** — `VideoCaptureCore` terminated with an unrecoverable `ExecutionEngineException` at `Start`/`StartAsync` as soon as a PiP source was added (the same code worked on .NET 8). Adding a PiP overlay now works on all supported .NET versions.
+- [Video Edit SDK .Net] Fixed the legacy FFMPEG output crashing at start on .NET 9 and .NET 10 with the same `ExecutionEngineException`; it now works as it did on .NET 8.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] Fixed **video missing or corrupted when streaming MPEG-TS over SRT** (`SRTMPEGTSSinkBlock`, `SRTOutput`). The MPEG-TS muxer now emits a full 1316-byte payload per buffer instead of one transport packet at a time, so SRT sends whole datagrams rather than seven times as many undersized ones. Receivers such as MediaMTX, ffmpeg or OBS no longer see an audio-only or truncated stream. The UDP, multi-UDP and RIST MPEG-TS outputs get the same alignment.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] Fixed **corrupted video from the Apple (iOS / macOS / Mac Catalyst) H.264 hardware encoder**. `AppleMediaH264EncoderSettings.AllowFrameReordering` was enabled by default; the resulting B-frames left a large share of the encoded frames with a presentation timestamp earlier than their own decode timestamp, so MPEG-TS outputs (SRT, UDP, RIST) and MP4/MOV recordings played back torn or undecodable in MediaMTX, ffmpeg and VLC. RTMP/FLV happened to tolerate it, which is why streaming from iOS looked broken over SRT but fine over RTMP. The property now defaults to `false`; set it back to `true` only for offline encoding where you can verify the resulting timestamps.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] Fixed **SRT and RIST output failing to start on macOS and Mac Catalyst** when the Apple hardware H.264 encoder was used: the stream parser those outputs need to feed the MPEG-TS muxer was omitted on those platforms.
+- [Media Blocks SDK .Net] [Video Capture SDK .Net] [Video Edit SDK .Net] Fixed **MPEG-TS output producing an empty file** when AAC audio was encoded with a software encoder (`voaacenc`, used on macOS, Linux and iOS). The MPEG-TS muxer only accepts framed AAC, which those encoders do not advertise, so the audio never linked and the muxer waited on it instead of writing - the recording ended as a 0-byte `.ts`. Affects `MPEGTSSinkBlock`/`MPEGTSOutput` and the SRT, UDP and RIST outputs built on them.
+- [Media Blocks SDK .Net] Fixed **RTSP playback failing with "Failed to link RTSP pad: WasLinked"** in `UniversalSourceBlockV2`. When the source announced a pad it had already handed over - on reconnect, or when a server re-announced a stream - the block tried to link it a second time and reported the result as an error, ending the session.
+- [Media Blocks SDK .Net] Fixed **DASH output never starting** (`DASHSinkBlock`): the sink requested its input pads without a name, which `dashsink` rejects because it takes the stream index from the pad name. No manifest or segments were written and the pipeline hung on start instead of reporting the failure.
+- [Media Blocks SDK .Net] Fixed **text overlays rendering as empty boxes (▯▯▯) on iOS, Android and macOS** — the SDK now sets up font resolution at startup, so `TextOverlayBlock`, subtitle overlays and the trial watermark draw real glyphs instead of tofu. Fonts your app bundles are picked up automatically, and on iOS the SDK carries a fallback font so text renders even in an app that bundles none.
+
 ## 2026.7.22
 
+- [Video Capture SDK .Net] Fixed RTSP / IP camera **login and password being URL-encoded**, which broke authentication for credentials containing special characters such as `&`, `@`, `%`, `?` or spaces (e.g. a password `password&@%!?End` was sent to the camera as `password%26%40%25!%3fEnd`). Credentials are now used verbatim. Applies to both the `RTSPSourceSettings` (X engine) and `IPCameraSourceSettings` (VideoCaptureCore) sources. If you previously worked around this by storing the pre-encoded value on the device, revert it to the real password after upgrading.
 - [Core] MAUI apps now build cleanly for Android 16: the bundled HarfBuzzSharp native library is updated to a 16 KB page-size-aligned build, removing the `XA0141` ("Android 16 will require 16 KB page sizes") warning on Android app builds.
 
 ## 2026.7.21
@@ -329676,7 +330758,7 @@ Avant de commencer le processus d'implémentation et de déploiement Android, as
 
 ### Exigences relatives aux appareils
 
-- Appareil Android sous Android 10.0 ou ultérieur
+- Appareil Android sous Android 9.0 (niveau d'API 28) ou ultérieur
 - Architecture de processeur ARM ou ARM64
 - Espace de stockage suffisant pour les ressources de l'application et le traitement multimédia
 - Matériel caméra et microphone (si vous utilisez les fonctionnalités de capture vidéo/audio)
@@ -329734,6 +330816,28 @@ Vous pouvez ajouter ces paquets via le gestionnaire de paquets NuGet de votre ID
 ```
 
 Note : remplacez les numéros de version par les dernières versions disponibles sur NuGet.org.
+
+Le paquet `VisioForge.CrossPlatform.Core.Android` embarque les bibliothèques natives pour les quatre ABI Android (`armeabi-v7a`, `arm64-v8a`, `x86`, `x86_64`) et les intègre automatiquement à la compilation — aucune copie manuelle n'est nécessaire. Deux d'entre elles ne servent qu'à la capture depuis une caméra USB :
+
+- `libVisioForge_UVC.so` — le pont USB Video Class, avec libuvc (BSD 3-Clause) compilé à l'intérieur.
+- `libusb1.0.so` — libusb 1.0.30, lié dynamiquement et distribué sous licence LGPL v2.1 ou ultérieure.
+
+Les mentions légales complètes, y compris les deux textes de licence, sont fournies avec le paquet dans `THIRD-PARTY-NOTICES.txt`.
+
+### Autorisations pour les caméras USB
+
+La capture depuis une caméra USB (UVC) branchée en OTG exige ses propres entrées de manifeste, en plus des paquets ci-dessus :
+
+```
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-feature android:name="android.hardware.camera" android:required="false" />
+<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+<uses-feature android:name="android.hardware.usb.host" android:required="true" />
+```
+
+Android refuse de confier un périphérique vidéo USB à une application qui ne détient pas `android.permission.CAMERA`, même lorsque l'API caméra d'Android n'est jamais utilisée. Déclarer cette autorisation fait aussi d'une caméra intégrée une *exigence* implicite, ce qui masquerait l'application sur Google Play pour les appareils dont la seule caméra arrive par USB — d'où le `required="false"` explicite.
+
+La capture depuis une caméra USB requiert **Android 9 (niveau d'API 28) ou une version ultérieure**. Pour la procédure complète, consultez [Capture depuis une caméra USB sur Android](../../general/guides/android-usb-camera/).
 
 ## Intégration de la bibliothèque de bindings Java
 
@@ -333436,15 +334540,9 @@ Des démos dédiées construites sur Media Blocks, `VideoCaptureCoreX` et `Media
 ---END OF PAGE---
 
 
-## Masquage des PII
+## SDK de masquage PII .NET — flouter visages et plaques
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/pii-redaction/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-
----
-
-title: SDK de masquage PII .NET — flouter visages et plaques description: Masquez les données personnelles dans la vidéo en local avec PIIRedactionBlock : floutez visages, plaques et texte à l'écran. RGPD/CCPA/BIPA, sans cloud. sidebar\_label: Masquage des données personnelles tags: - .NET - AI - ONNX - PII Redaction - Video Anonymization - Face Blur - License Plate Redaction - GDPR - Privacy - VideoCaptureCoreX - MediaPlayerCoreX primary\_api\_classes: - PIIRedactionBlock - PIIRedactionSettings - PIIFaceRedactionSettings - PIIPlateRedactionSettings - PIITextRedactionSettings - PIIRedactionStyle - PIIRegionsRedactedEventArgs - PIIRegion
-
----
+**Description:** Masquez les données personnelles dans la vidéo en local avec PIIRedactionBlock : floutez visages, plaques et texte à l'écran. RGPD/CCPA/BIPA, sans cloud.
 
 # Masquage des données personnelles — flouter les visages, les plaques et le texte à l'écran
 
@@ -333715,15 +334813,9 @@ Non. Le masquage écrase les pixels de chaque région directement dans l'image, 
 ---END OF PAGE---
 
 
-## Suivi automatique PTZ
+## SDK de suivi automatique PTZ pour .NET — caméra ONVIF
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/ptz-auto-tracking/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-
----
-
-title: SDK de suivi automatique PTZ pour .NET — caméra ONVIF description: Suivi automatique PTZ pour .NET : une caméra PTZ ONVIF suit un objet détecté. Contrôle proportionnel panoramique/inclinaison/zoom et zone morte. sidebar\_label: Suivi automatique PTZ tags: - .NET - AI - ONVIF - PTZ - Auto-Tracking - Object Tracking - ObjectAnalyticsBlock - VideoCaptureCoreX - MediaBlocksPipeline primary\_api\_classes: - PTZAutoTrackingController - PTZAutoTrackingSettings - PTZTargetSelection - IPTZMoveTransport - OnvifPTZMoveTransport - PTZMoveCommandEventArgs
-
----
+**Description:** Suivi automatique PTZ pour .NET : une caméra PTZ ONVIF suit un objet détecté. Contrôle proportionnel panoramique/inclinaison/zoom et zone morte.
 
 # Suivi automatique PTZ — suivez un objet détecté avec une caméra ONVIF
 
@@ -345216,6 +346308,386 @@ Les deux causes courantes sont : l'application source s'est exclue de la capture
 - [Blocs encodeurs audio](../../../mediablocks/AudioEncoders/) : encodeurs AAC, MP3, FLAC et Opus pour le pipeline Media Blocks
 - [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) : le moteur de haut niveau `VideoCaptureCoreX`
 - [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) : le moteur de bas niveau `MediaBlocksPipeline`
+
+---END OF PAGE---
+
+
+## Capturer une caméra USB (UVC) sur Android en C# et .NET
+**URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/guides/android-usb-camera/
+**Description:** Diffusez en C# une webcam USB branchée en OTG sur un téléphone Android : autorisations, choix du mode MJPEG, limites de l'USB 2.0 et déconnexions.
+
+# Capturer une caméra USB (UVC) sur Android en C# et .NET
+
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net)
+
+## Introduction
+
+Sur la plupart des appareils, une caméra USB Video Class (UVC) branchée en OTG sur un téléphone Android est invisible pour l'API caméra standard d'Android. `AndroidUVCSourceBlock` l'atteint malgré tout : il dialogue avec la caméra via un pont natif libusb/libuvc intégré et pousse les images dans un `MediaBlocksPipeline`. Il exige Android 9 (niveau d'API 28) ou une version ultérieure, l'autorisation `android.permission.CAMERA` et une quarantaine de lignes de C#.
+
+Ce guide couvre l'ensemble du parcours : pourquoi l'API normale échoue, la configuration du manifeste et des autorisations, le code de capture, la manière dont un format demandé est confronté à ce que propose la caméra, ce que l'USB 2.0 délivre réellement, et comment gérer le débranchement de la caméra en pleine diffusion.
+
+## Pourquoi Camera2 ne voit-il pas une caméra USB sur Android ?
+
+Android n'expose les caméras USB à l'API Camera2 qu'au travers de l'**External Camera HAL**, un composant optionnel que le fabricant de l'appareil doit intégrer au micrologiciel. De nombreux téléphones populaires en sont dépourvus : sur un Samsung Galaxy M55, par exemple, `pm list features` ne signale aucun `android.hardware.camera.external`, et le service caméra ne liste que les capteurs avant et arrière intégrés. Une caméra UVC branchée sur un tel téléphone est bien énumérée par le noyau, mais aucune API caméra ne la renverra jamais.
+
+Deux contournements évidents échouent également. Les nœuds `/dev/video*` créés par le noyau appartiennent au groupe `camera`, dont un processus applicatif ordinaire n'est pas membre. Et l'API Java `UsbDeviceConnection` prend en charge les transferts de contrôle, bulk et interruption, mais **pas les transferts isochrones** — le type de transfert que les webcams UVC utilisent en pratique.
+
+Il ne reste donc qu'une voie viable, et c'est celle que suit ce bloc : obtenir le descripteur de fichier USB auprès de `UsbManager`, puis piloter l'appareil depuis du code natif capable de soumettre des transferts isochrones.
+
+```
+graph LR;
+    cam["Caméra USB (UVC)"] --> usb["Descripteur de fichier UsbManager"];
+    usb --> bridge["Pont libusb + libuvc"];
+    bridge --> src["AndroidUVCSourceBlock"];
+    src --> renderer["VideoRendererBlock"];
+```
+
+## Ce dont vous avez besoin
+
+- **Android 9 (niveau d'API 28) ou une version ultérieure.** Définissez `<SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>` dans le `.csproj`.
+- **Un téléphone prenant en charge le mode hôte USB (OTG)** et un adaptateur ou un câble OTG.
+- **Le paquet `VisioForge.CrossPlatform.Core.Android`**, qui embarque la charge native, plus `VisioForge.DotNet.MediaBlocks` et la référence de projet `VisioForge.Core.Android.X10` utilisée par tous les exemples Android. Consultez le [guide de déploiement Android](../../../deployment-x/Android/).
+
+### Entrées de manifeste
+
+```
+<!-- Android refuse l'accès aux périphériques USB video class si l'application ne détient pas
+     l'autorisation caméra, même si l'API Camera2 n'est jamais utilisée ici. -->
+<uses-permission android:name="android.permission.CAMERA" />
+<!-- Sinon, cette autorisation fait d'une caméra intégrée une EXIGENCE implicite, ce qui masquerait
+     l'application précisément sur les appareils qu'elle cible : ceux dont la caméra arrive par USB. -->
+<uses-feature android:name="android.hardware.camera" android:required="false" />
+<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+<uses-feature android:name="android.hardware.usb.host" android:required="true" />
+```
+
+Ne conservez `android.hardware.usb.host` à `required="true"` que si votre application entière est inutile sans caméra USB : c'est aussi un filtre Google Play et, à `true`, il masque l'application sur tous les appareils dépourvus du mode hôte USB.
+
+La ligne `required="false"` n'est pas facultative
+
+Déclarer `android.permission.CAMERA` amène Google Play à considérer une caméra intégrée comme une exigence de l'appareil. Laissée implicite, elle exclut votre application de la fiche du store sur les appareils sans caméra intégrée — ce qui inclut une bonne part du matériel le plus susceptible d'avoir besoin d'une caméra USB.
+
+## Demander les deux autorisations
+
+La capture depuis une caméra USB nécessite deux accords distincts, dans cet ordre.
+
+**1. L'autorisation `CAMERA` à l'exécution.** Demandez-la comme d'habitude :
+
+```
+private const int CameraPermissionRequest = 1004;
+
+protected override void OnCreate(Bundle savedInstanceState)
+{
+    base.OnCreate(savedInstanceState);
+
+    RequestPermissions(new[] { Manifest.Permission.Camera }, CameraPermissionRequest);
+}
+
+public override void OnRequestPermissionsResult(
+    int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
+{
+    base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    if (requestCode != CameraPermissionRequest)
+    {
+        return;
+    }
+
+    if (AndroidUVCDevices.HasCameraPermission())
+    {
+        _ = StartPreviewAsync();
+    }
+}
+```
+
+**2. L'autorisation pour le périphérique USB précis**, qui affiche la boîte de dialogue système :
+
+```
+if (!await AndroidUVCDevices.RequestPermissionAsync(camera))
+{
+    // refusée, boîte de dialogue fermée, ou sans réponse pendant deux minutes
+    return;
+}
+```
+
+`RequestPermissionAsync` renvoie `false` en cas de refus, lorsque la boîte de dialogue est fermée, et après un délai d'attente de deux minutes ; elle ne lève `OperationCanceledException` que si vous l'annulez via votre propre `CancellationToken`.
+
+L'absence de l'autorisation CAMERA échoue silencieusement
+
+Sans `android.permission.CAMERA` accordée, la demande d'autorisation USB renvoie `false` **instantanément et aucune boîte de dialogue n'est jamais affichée**. Le seul indice se trouve dans logcat : `UsbUserPermissionManager: Camera permission required for USB video class devices`. Vérifiez d'abord `AndroidUVCDevices.HasCameraPermission()` et vous ne chercherez jamais cette panne.
+
+## Capturer depuis la caméra
+
+Les deux autorisations en main, la capture elle-même est du code Media Blocks ordinaire. Notez que ces types ne sont compilés que pour le framework cible Android : dans un projet MAUI ou multicible, ce code doit donc figurer dans un fichier propre à Android ou dans un bloc `#if ANDROID` :
+
+```
+using VisioForge.Core;
+using VisioForge.Core.GStreamer.Android.UVC;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.X.Sources.AndroidUVC;
+
+// lister les caméras USB branchées
+var cameras = AndroidUVCDevices.FindCameras();
+if (cameras.Count == 0)
+{
+    SetStatus("No USB camera found. Connect one over OTG.");
+    return;
+}
+
+var camera = cameras[0];
+
+if (!await AndroidUVCDevices.RequestPermissionAsync(camera))
+{
+    SetStatus("Access to the USB camera was denied.");
+    return;
+}
+
+_pipeline = new MediaBlocksPipeline();
+_pipeline.OnError += Pipeline_OnError;
+_pipeline.OnStop += Pipeline_OnStop;
+
+var settings = new AndroidUVCSourceSettings
+{
+    Device = camera,
+    Width = 1280,
+    Height = 720,
+    FrameRate = new VideoFrameRate(30),
+};
+
+_videoSource = new AndroidUVCSourceBlock(settings);
+_videoRenderer = new VideoRendererBlock(_pipeline, _videoView) { IsSync = false };
+
+_pipeline.Connect(_videoSource.Output, _videoRenderer.Input);
+
+if (!await _pipeline.StartAsync())
+{
+    SetStatus("Unable to start. Another app may be using the camera.");
+
+    // la caméra a déjà été réservée pendant la construction : il faut donc la rendre
+    await DisposePipelineAsync();
+    return;
+}
+
+SetStatus($"Streaming from {camera.ProductName}");
+```
+
+Notez que `StartAsync` renvoie un `bool`. L'ignorer vous laisse devant un aperçu noir sans savoir pourquoi : vérifiez-le donc et libérez le pipeline en cas d'échec — c'est ce qui rend la caméra disponible pour la tentative suivante.
+
+Pour savoir si la capture est possible avant de construire quoi que ce soit, appelez `AndroidUVCSourceBlock.IsAvailable()`. La méthode confirme que la version d'Android est suffisamment récente, que les éléments dont tout mode a besoin sont présents et que le pont natif se charge. Elle ne teste délibérément pas `jpegdec`, dont seul un mode MJPEG a besoin, ni la présence d'une caméra — `AndroidUVCSourceBlock.GetDevices()` répond à cette dernière question.
+
+## Capturer avec VideoCaptureCoreX
+
+La même caméra fonctionne aussi comme source vidéo de `VideoCaptureCoreX`, ce qui est la voie la plus courte lorsque vous voulez de l'enregistrement, de la diffusion réseau, des effets vidéo ou des captures d'image plutôt qu'un pipeline que vous assemblez vous-même. Affectez les paramètres à `Video_Source` et le moteur construit tout ce qui suit :
+
+```
+using VisioForge.Core.GStreamer.Android.UVC;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources.AndroidUVC;
+using VisioForge.Core.VideoCaptureX;
+
+var cameras = AndroidUVCDevices.FindCameras();
+if (cameras.Count == 0 || !await AndroidUVCDevices.RequestPermissionAsync(cameras[0]))
+{
+    return;
+}
+
+_core = new VideoCaptureCoreX(_videoView);
+_core.OnError += Core_OnError;
+
+// une caméra en direct n'a rien sur quoi synchroniser la branche d'enregistrement,
+// et la laisser synchronisée fait attendre cette branche sur l'horloge jusqu'à ce
+// que sa file se remplisse et bloque l'aperçu avec elle ; une capture avec audio
+// règle Audio_Output_IsSync de la même façon, mais celle-ci est sans audio
+_core.Video_Output_IsSync = false;
+
+_core.Video_Source = new AndroidUVCSourceSettings
+{
+    Device = cameras[0],
+    Width = 1280,
+    Height = 720,
+    FrameRate = new VideoFrameRate(30),
+};
+
+_core.Video_Play = true;
+
+// enregistré avant StartAsync pour que la branche d'enregistrement existe ; avec autoStart
+// à false, rien n'est écrit avant l'appel à StartCaptureAsync
+_core.Outputs_Add(new MP4Output(placeholderPath), false);
+
+await _core.StartAsync();
+
+// plus tard, lorsque l'utilisateur appuie sur enregistrer
+await _core.StartCaptureAsync(0, targetPath);
+```
+
+Aujourd'hui, un seul enregistrement par instance du moteur
+
+`StartCaptureAsync` démarre le pipeline propre à la sortie, et relancer un pipeline arrêté est un défaut ouvert connu : le **second** appel sur le même index de sortie renvoie `true` et n'écrit aucun fichier — sans exception, sans `OnError`, sans rien dans le journal. Vérifiez la valeur de retour *et* l'existence du fichier après `StopCaptureAsync`, et recréez le moteur entre deux enregistrements si votre application doit enregistrer plusieurs fois. L'aperçu n'est pas affecté.
+
+Deux différences avec la voie Media Blocks méritent d'être connues. `Video_Source_SwitchCamera` ne gère que les caméras système : passer à une caméra USB ou en sortir implique donc d'arrêter puis de relancer le moteur, et non un échange à chaud. Et `VideoCaptureCoreX` ne signale pas une caméra débranchée — consultez [Gérer une caméra déconnectée](#handling-a-disconnected-camera).
+
+L'enregistrement est sans audio, et le microphone du téléphone n'est pas un contournement
+
+Une interface vidéo UVC ne transporte pas d'audio : rien dans ce pipeline ne produit de son. Recourir au microphone du téléphone ne règle pas le problème sur une webcam classique : une caméra dotée d'un micro intégré s'enregistre aussi comme entrée **audio** USB, Android privilégie alors cette entrée pour l'enregistrement, et elle ne peut pas être ouverte pendant que le pont diffuse depuis le même appareil physique. Ajouter la source audio fait échouer tout le pipeline avec `Internal data stream error` venant d'`openslessrc`. Vérifié sur un Galaxy M55 avec une Logitech BRIO. Avec une caméra sans microphone, le micro du téléphone reste l'entrée par défaut et l'audio fonctionne normalement.
+
+## Quel format faut-il demander ?
+
+Demandez des résolutions MJPEG, et traitez vos valeurs `Width`, `Height` et `FrameRate` comme une préférence plutôt que comme un ordre. Le bloc les confronte aux modes que la caméra annonce réellement : d'abord la résolution la plus proche en nombre de pixels, puis le MJPEG de préférence aux formats non compressés, puis la fréquence d'images la plus proche. Un écart produit un avertissement dans logcat, pas une erreur : le pipeline démarre donc sur un format que vous n'avez pas demandé. Le SDK journalise celui qu'il a retenu sous la forme `USB camera ready: WxH@fps FORMAT` : consultez cette ligne dans logcat si le format exact importe. Pour décider d'après les capacités réelles de la caméra plutôt qu'au hasard, appelez `AndroidUVCDevices.GetModes(device)` une fois l'autorisation USB accordée : la méthode renvoie les résolutions, fréquences d'images et formats parmi lesquels vous pouvez réellement choisir. Les formats que le SDK ne sait pas diffuser — les modes H.264 ou NV12 d'une caméra — sont écartés : la liste est donc ce qui est utilisable, et non tout ce que la caméra annonce. Renseignez `Format` dans les paramètres pour demander le format du mode retenu ; le laisser à `Unknown` privilégie le MJPEG, ce qui convient généralement. Elle ouvre la caméra pour les lire : appelez-la donc avant de démarrer la capture.
+
+La préférence pour le MJPEG est délibérée et elle importe plus que la fréquence d'images. Sur un lien USB 2.0, un flux non compressé consomme environ vingt fois la bande passante de la même image en MJPEG. Une caméra qui annonce du 1080p30 en MJPEG atteint généralement environ **5 images par seconde** en non compressé à cette résolution — ce qui ressemble à un pipeline cassé plutôt qu'à une limite de bande passante. Si une caméra ne propose que des formats non compressés, elle fonctionne quand même, mais lentement.
+
+## Ce que l'USB 2.0 délivre réellement
+
+La plupart des téléphones énumèrent une caméra USB en High Speed — 480 Mbps — et non aux 5 Gbps que fournit un port USB 3 de bureau, même lorsque le port gère l'USB 3. Les caméras déclarent leurs capacités par vitesse de lien : les modes à haute bande passante sont donc tout simplement absents des descripteurs. Une Logitech BRIO, capable de 4K sur un ordinateur de bureau, n'expose aucun mode 4K sur un téléphone ; son plafond pratique y est de **1080p30 ou 720p60 en MJPEG**.
+
+Prévoyez-le lorsque vous choisissez une résolution. Le 720p30 est une valeur sûre sur n'importe quelle caméra UVC, et c'est ce qu'utilise `AndroidUVCSourceSettings` si vous laissez les valeurs par défaut.
+
+## Gérer une caméra déconnectée
+
+Quelqu'un débranchera la caméra pendant que votre application diffuse. Dans ce cas, le bloc met fin au flux et un `MediaBlocksPipeline` déclenche `OnStop` :
+
+```
+private void Pipeline_OnError(object sender, ErrorsEventArgs e)
+{
+    SetStatus(e.Message);
+}
+
+private void Pipeline_OnStop(object sender, StopEventArgs e)
+{
+    SetStatus("The camera was disconnected.");
+}
+```
+
+Deux détails méritent d'être connus. Le moteur de rendu continue d'afficher la dernière image reçue : l'aperçu ne se vide donc pas de lui-même — effacez ou masquez votre vue vidéo dans ce gestionnaire. Et une caméra retirée en pleine image livre une image partielle, qui se décode en bruit visible : cette dernière image figée peut donc paraître corrompue. Masquer la vue évite de l'afficher du tout.
+
+Ne libérez pas le pipeline depuis ce gestionnaire si celui-ci s'exécute sur le thread de rappel du périphérique ; démontez-le depuis votre propre thread — par exemple depuis le `OnDestroy` de l'activité :
+
+```
+private async Task DisposePipelineAsync()
+{
+    if (_pipeline == null)
+    {
+        return;
+    }
+
+    _pipeline.OnError -= Pipeline_OnError;
+    _pipeline.OnStop -= Pipeline_OnStop;
+
+    await _pipeline.DisposeAsync();
+    _pipeline = null;
+}
+
+protected override async void OnDestroy()
+{
+    // d'abord, avant tout ce qui peut faire await — voyez la note ci-dessous
+    base.OnDestroy();
+
+    try
+    {
+        await DisposePipelineAsync();
+    }
+    catch (Exception ex)
+    {
+        Log.Error(TAG, ex.ToString());
+    }
+
+    VisioForgeX.DestroySDK();
+}
+```
+
+`base.OnDestroy()` doit venir en premier
+
+Android vérifie que l'implémentation de base s'est exécutée au moment où `OnDestroy` retourne, et un `await` rend la main au runtime bien avant la fin de la méthode. L'appeler en dernier, après avoir attendu la libération, lève `android.util.SuperNotCalledException: Activity did not call through to super.onDestroy()` et tue le processus. Appelez-la en premier : la continuation s'exécute quand même et libère le pipeline ensuite.
+
+Avec `VideoCaptureCoreX`, cet événement n'existe pas. Le moteur déclenche `OnStop` depuis son propre chemin d'arrêt et n'observe pas un flux qui se termine de lui-même : une caméra débranchée n'atteint donc jamais `OnStop`. La source le signale bien via `OnError`, mais seulement après plusieurs secondes sans image — l'aperçu est alors déjà figé et un enregistrement en cours toujours ouvert. Abonnez-vous également à la diffusion `ACTION_USB_DEVICE_DETACHED` d'Android, qui arrive dès que le câble est retiré : vérifiez que votre caméra est bien l'appareil disparu, puis arrêtez la capture et le moteur :
+
+```
+// once the pipeline is running
+RegisterReceiver(
+    new UsbDetachReceiver(OnUsbDetached),
+    new IntentFilter(UsbManager.ActionUsbDeviceDetached),
+    ReceiverFlags.NotExported);
+```
+
+Les deux membres appartiennent à votre activité — le gestionnaire, et le receveur qui lui transmet la diffusion :
+
+```
+private async void OnUsbDetached()
+{
+    // la diffusion ne transporte pas d'appareil utilisable sur les niveaux Android
+    // actuels, mais une caméra débranchée cesse d'être énumérée : ignorez les autres
+    if (AndroidUVCDevices.FindCameras().Any(c => c.DeviceName == _camera.DeviceName))
+    {
+        return;
+    }
+
+    await _core.StopCaptureAsync(0);
+    await _core.StopAsync();
+}
+
+private class UsbDetachReceiver : BroadcastReceiver
+{
+    private readonly Action _onDetached;
+
+    public UsbDetachReceiver(Action onDetached)
+    {
+        _onDetached = onDetached;
+    }
+
+    public override void OnReceive(Context context, Intent intent)
+    {
+        _onDetached();
+    }
+}
+```
+
+Arrêter d'abord la capture est ce qui referme correctement l'enregistrement. Les images déjà écrites sont vidées dans tous les cas, le fichier reste donc lisible, mais le moteur continue de se croire en marche jusqu'à ce que vous l'arrêtiez.
+
+## Dépannage
+
+| Ce que vous observez | Ce que cela signifie |
+| --- | --- |
+| Autorisation USB refusée instantanément, sans boîte de dialogue | `android.permission.CAMERA` n'est pas accordée. Dans logcat : `Camera permission required for USB video class devices`. |
+| `USB camera capture requires Android 9 (API 28) or later.` | L'appareil est antérieur à l'API 28. Vérifiez `AndroidUVCDevices.IsSupportedPlatform()` avant de proposer la fonctionnalité. |
+| `No permission for the USB camera. Call AndroidUVCDevices.RequestPermissionAsync first.` | L'accord pour le périphérique manque ; `StartAsync` a été appelé trop tôt. |
+| `The camera advertises no usable video modes.` | La caméra n'expose ni MJPEG ni YUY2 sur ce lien. |
+| `StartAsync` renvoie `false`, logcat mentionne un mode invalide | Un autre processus détient la caméra. Une seule application peut diffuser depuis un périphérique UVC à la fois. |
+| `Requested 1920x1080@30 is not offered; using 1280x720@30.` | Information : le mode annoncé le plus proche a été sélectionné à la place. |
+| Aucune image n'arrive après un rebranchement, le pipeline reste en pause | Un état USB transitoire après le rebranchement. Relancez la capture. |
+| `Unable to create the jpegdec element.` | La charge GStreamer ne contient pas de décodeur JPEG : un mode MJPEG ne peut donc pas être construit. `IsAvailable()` ne couvre pas ce cas — la méthode renvoie `true` car les modes non compressés fonctionneraient encore. |
+
+## Foire aux questions
+
+### Cela fonctionne-t-il sur n'importe quel téléphone Android ?
+
+Cela fonctionne sur tout appareil exécutant Android 9 (niveau d'API 28) ou une version ultérieure et prenant en charge le mode hôte USB, soit la plupart des téléphones et tablettes vendus depuis 2018. Contrairement à la voie Camera2, cela ne dépend pas de la fourniture de l'External Camera HAL par le fabricant : le procédé fonctionne donc sur du matériel où l'API caméra intégrée ne voit absolument pas une caméra USB. Deux choses restent exigées de l'appareil : la prise en charge matérielle de l'OTG, et une alimentation du bus USB suffisante pour la caméra — une caméra tirant plus que ce que le port fournit n'arrivera pas à s'énumérer. Appelez `AndroidUVCDevices.IsSupportedPlatform()` pour vérifier la version d'Android et `AndroidUVCSourceBlock.IsAvailable()` pour confirmer que le pont natif s'est chargé avant de proposer la fonctionnalité dans votre interface.
+
+### Les droits root sont-ils nécessaires ?
+
+Non. Tout l'intérêt de cette conception est qu'elle s'exécute comme une application ordinaire. Le root serait une manière d'ouvrir les nœuds `/dev/video*` que le noyau crée pour une caméra UVC, puisqu'ils appartiennent au groupe `camera` dont les processus applicatifs ne font pas partie — mais ce n'est pas la voie retenue ici. À la place, l'application demande l'autorisation à `UsbManager`, reçoit un descripteur de fichier pour le périphérique et transmet ce descripteur au pont natif, qui soumet les transferts USB isochrones dont la caméra a besoin. Tout passe par des API Android documentées et par le consentement de l'utilisateur : l'application s'installe et s'exécute normalement, et peut être publiée sur Google Play.
+
+### Puis-je enregistrer dans un fichier au lieu d'afficher un aperçu ?
+
+Oui. `AndroidUVCSourceBlock` est une source Media Blocks normale, avec un unique pad de sortie vidéo : elle se connecte donc à tout ce que fournit le SDK — une [sortie MP4](../../../mediablocks/Outputs/), un [puits RTMP ou SRT](../../../mediablocks/Sinks/) pour la diffusion, ou une chaîne de traitement vidéo. Connectez son pad `Output` à un encodeur ou à un bloc de sortie au lieu du moteur de rendu — ou en plus de celui-ci. Les images arrivent décodées : aucune étape de décodage supplémentaire n'est nécessaire. Le bloc n'a pas de pad audio : un MP4 enregistré à partir de lui seul est donc muet, et de nombreux services refusent une diffusion RTMP sans audio. Ajouter une source audio distincte est la réponse, mais lisez d'abord l'avertissement ci-dessus : sur une caméra dotée de son propre microphone, Android privilégie cette entrée audio USB, qui ne peut pas être capturée pendant que la caméra est diffusée. Gardez à l'esprit le plafond de bande passante lors du choix d'une résolution d'enregistrement : le 720p30 est confortable, le 1080p30 est le maximum pratique sur la plupart des téléphones.
+
+### Pourquoi le MJPEG est-il préféré à la vidéo non compressée ?
+
+Parce que la vidéo non compressée ne passe pas par un lien USB High Speed à une fréquence d'images utile. Une image 1280x720 en YUY2 pèse environ 1,8 Mo : 30 images par seconde exigent donc à peu près 440 Mbps. Le bus fonctionne à 480 Mbps, mais la limite réelle est plus basse : un point de terminaison isochrone à haute bande passante transporte au plus 3072 octets par micro-trame, soit environ 24,5 Mo/s, c'est-à-dire quelque 196 Mbps. Les caméras résolvent cela en n'annonçant les formats non compressés qu'à des cadences très basses : une caméra proposant du 1080p30 en MJPEG plafonne généralement le 1080p non compressé autour de 5 images par seconde. Sélectionner le mode non compressé ressemble donc à un pipeline cassé ou bloqué plutôt qu'à un compromis délibéré. À résolution donnée, le sélecteur de mode privilégie le MJPEG même quand sa fréquence d'images est plus éloignée de celle que vous avez demandée, et le pipeline décode les images JPEG pour vous. La résolution est toutefois comparée en premier : une caméra qui ne propose le 1080p qu'en non compressé vous livrera donc ce mode lent si vous demandez du 1080p — demandez une résolution que la caméra propose en MJPEG.
+
+### Quelles bibliothèques natives sont incluses, et sous quelle licence ?
+
+Deux, toutes deux livrées à l'intérieur du paquet `VisioForge.CrossPlatform.Core.Android` pour les quatre ABI Android. **libusb 1.0.30** assure le transport USB et est distribuée sous **LGPL v2.1 ou ultérieure** ; elle est livrée comme objet partagé distinct, `libusb1.0.so`, lié dynamiquement et donc remplaçable, comme cette licence l'exige. **libuvc** fournit la couche protocolaire UVC et est distribuée sous la licence permissive **BSD 3-Clause** ; elle est compilée à l'intérieur de `libVisioForge_UVC.so`. Aucune des deux bibliothèques n'est modifiée. Les mentions légales complètes, y compris les deux textes de licence intégraux et les versions exactes, sont fournies avec le paquet dans `THIRD-PARTY-NOTICES.txt`.
+
+## Documentation associée
+
+- [Bloc source de caméra USB (UVC)](../../../mediablocks/Sources/#usb-uvc-camera-source-block) — la référence du bloc
+- [Guide de déploiement Android](../../../deployment-x/Android/) — paquets, autorisations et charge native
+- [Enregistrer l'audio d'une autre application sur Android](../android-audio-playback-capture/) — un autre flux de capture spécifique à Android
 
 ---END OF PAGE---
 
@@ -359572,7 +361044,7 @@ Encodeur accéléré par le matériel pour les plateformes Apple.
 
 - Accélération matérielle sur les appareils Apple
 - Prise en charge de l'encodage en temps réel
-- Options de réordonnancement d'images
+- Options de réordonnancement d'images (désactivé par défaut : les images B amènent l'encodeur à produire des horodatages inutilisables par les sorties MPEG-TS et les enregistrements MP4)
 - Encodage basé sur la qualité
 
 ### Exemple d'utilisation
@@ -359581,7 +361053,7 @@ Encodeur accéléré par le matériel pour les plateformes Apple.
 var settings = new AppleMediaH264EncoderSettings
 {
     Bitrate = 5000,
-    AllowFrameReordering = true,
+    AllowFrameReordering = false,
     Quality = 0.8,
     Realtime = true
 };
@@ -367895,6 +369367,7 @@ Procédure d'installation complète : [install/index.md](../../install/).
 | `UniversalSourceBlock` | Ouvre un fichier, une URL ou un flux en entrée. Analyse les flux automatiquement et expose les pads `VideoOutput` / `AudioOutput`. | [GettingStarted/player.md](../GettingStarted/player/) |
 | `VideoRendererBlock` | Lie la sortie vidéo du pipeline à un contrôle `IVideoView` (WinForms / WPF / MAUI / Avalonia). Prend en charge les captures d'écran. | [GettingStarted/player.md](../GettingStarted/player/) |
 | `SystemVideoSourceBlock` | Entrée webcam / USB / caméra intégrée. Se configure via `VideoCaptureDeviceSourceSettings`. | [GettingStarted/camera.md](../GettingStarted/camera/) |
+| `AndroidUVCSourceBlock` | Caméra USB (UVC) connectée en OTG à un appareil Android, que Camera2 ne peut pas voir. Se configure via `AndroidUVCSourceSettings`. | [../general/guides/android-usb-camera.md](../../general/guides/android-usb-camera/) |
 | `H264EncoderBlock` | Encodeur H.264 avec backends logiciels et matériels (NVENC / AMF / Quick Sync). | [GettingStarted/pipeline.md](../GettingStarted/pipeline/) |
 | `MP4SinkBlock` | Écrit la vidéo + l'audio encodés dans un fichier `.mp4`. Ajoutez des entrées via `IMediaBlockDynamicInputs.CreateNewInput`. | [Guides/rtsp-save-original-stream.md](../Guides/rtsp-save-original-stream/) |
 | `DeviceEnumerator` | Liste les caméras, micros et sorties audio de façon asynchrone via `DeviceEnumerator.Shared.VideoSourcesAsync()`, etc. | [GettingStarted/device-enum.md](../GettingStarted/device-enum/) |
@@ -367976,6 +369449,7 @@ Remplacez `UniversalSourceBlock` par `SystemVideoSourceBlock` (caméra) ou `RTSP
   - Lecteur RTSP / caméra IP — [Guides/rtsp-player-csharp.md](../Guides/rtsp-player-csharp/)
   - Enregistrer un flux RTSP (passthrough) — [Guides/rtsp-save-original-stream.md](../Guides/rtsp-save-original-stream/)
   - Grille multicaméra — [Guides/multi-camera-rtsp-grid.md](../Guides/multi-camera-rtsp-grid/)
+  - Caméra USB (UVC) sur Android — [../general/guides/android-usb-camera.md](../../general/guides/android-usb-camera/)
 - **Déploiement**
   - Windows — [../deployment-x/Windows.md](../../deployment-x/Windows/)
   - macOS — [../deployment-x/macOS.md](../../deployment-x/macOS/)
@@ -371611,15 +373085,9 @@ Pour la plupart des cas d'usage, 10 à 15 i/s offrent une détection fiable avec
 ---END OF PAGE---
 
 
-## Créer un MediaBlock personnalisé à partir d'un élément GStreamer
+## Créer un MediaBlock depuis un élément GStreamer en C# .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/mediablocks/Guides/custom-mediablock-from-gstreamer-element/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-
----
-
-title: Créer un MediaBlock depuis un élément GStreamer en C# .NET description: Encapsulez tout élément GStreamer en MediaBlock : deux approches (CustomMediaBlock sans sous-classe ou sous-classe MediaBlock typée). Exemple videobalance. tags: - Media Blocks SDK - .NET - MediaBlocksPipeline - Windows - macOS - Linux - Android - iOS - GStreamer - Effects - Custom Block - C# primary\_api\_classes: - MediaBlock - IMediaBlockInternals - CustomMediaBlock - CustomMediaBlockSettings - MediaBlockPad
-
----
+**Description:** Encapsulez tout élément GStreamer en MediaBlock : deux approches (CustomMediaBlock sans sous-classe ou sous-classe MediaBlock typée). Exemple videobalance.
 
 # Créer son propre MediaBlock à partir d'un élément GStreamer en C# .NET
 
@@ -375882,6 +377350,7 @@ Des blocs d'IA sur l'appareil (ONNX / Whisper) qui s'insèrent directement dans 
 - [OpenGL](OpenGL/) — Traitement vidéo basé sur le GPU
 - [AWS](AWS/) — Blocs d'intégration cloud
 - [Serveur RTSP](RTSPServer/) — Diffuser la vidéo sous forme de flux RTSP
+- [Caméras USB (UVC) sur Android](../general/guides/android-usb-camera/) — Capturer depuis une webcam connectée en OTG, que Camera2 ne peut pas voir
 
 ## Prise en main
 
@@ -383118,15 +384587,9 @@ Windows.
 ---END OF PAGE---
 
 
-## Sources
+## Sources Media Blocks SDK — webcam, fichier, RTSP, écran
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/mediablocks/Sources/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-
----
-
-title: Sources Media Blocks SDK — webcam, fichier, RTSP, écran description: Connectez toute entrée à un pipeline Media Blocks : webcams, fichiers vidéo, RTSP, RTMP, SRT, NDI, Decklink, écran, virtuelle. API d'énumération C# / .NET. sidebar\_label: Sources tags: - Media Blocks SDK - .NET - Windows - macOS - Linux - Android - iOS - Capture - Streaming primary\_api\_classes: - VideoRendererBlock - MediaBlocksPipeline - AudioRendererBlock - UniversalSourceBlock - DeviceEnumerator
-
----
+**Description:** Connectez toute entrée à un pipeline Media Blocks : webcams, fichiers vidéo, RTSP, RTMP, SRT, NDI, Decklink, écran, virtuelle. API d'énumération C# / .NET.
 
 # Blocs de sources — VisioForge Media Blocks SDK .Net
 
@@ -383212,6 +384675,8 @@ await pipeline.StartAsync();
 #### Remarques
 
 Vous pouvez spécifier une API à utiliser lors de l'énumération des périphériques (consultez la description de l'enum `VideoCaptureDeviceAPI` sous `SystemVideoSourceBlock` pour les valeurs typiques). Les plateformes Android et iOS n'ont qu'une seule API, tandis que Windows et Linux en proposent plusieurs.
+
+Sur Android, ce bloc énumère les caméras via Camera2, qui ne voit une caméra USB branchée en OTG que sur les appareils dont le fabricant fournit l'External Camera HAL — et de nombreux téléphones n'en disposent pas. Pour capturer depuis une caméra USB sur Android, utilisez plutôt le [bloc source de caméra USB (UVC)](#usb-uvc-camera-source-block).
 
 #### Plateformes
 
@@ -386559,6 +388024,124 @@ await pipeline.StartAsync();
 #### Plateformes
 
 Windows, macOS, Linux, Android, iOS.
+
+## Blocs de sources spécifiques à Android
+
+### Bloc source de caméra USB (UVC)
+
+AndroidUVCSourceBlock capture la vidéo d'une caméra USB (UVC) branchée en OTG sur un appareil Android — une webcam, un dongle de capture ou un endoscope. La [source vidéo système](#system-video-source) ne peut pas atteindre une telle caméra : Android n'expose les caméras USB via Camera2 que sur les appareils dont le fabricant fournit l'External Camera HAL, et de nombreux téléphones populaires n'en disposent pas. Ce bloc lit les images via un pont natif libusb/libuvc intégré, il fonctionne donc indépendamment du HAL du fabricant.
+
+`AndroidUVCSourceSettings` peut aussi être affecté à `VideoCaptureCoreX.Video_Source`, ce qui donne à la caméra les sorties, les effets et les captures d'image du moteur sans assembler de pipeline à la main. `AndroidUVCDevices.GetModes()` énumère les résolutions, fréquences d'images et formats qu'une caméra annonce dans un format que ce bloc sait diffuser.
+
+Pour une procédure complète couvrant les autorisations, la sélection du mode et la gestion des déconnexions, consultez [Capture depuis une caméra USB sur Android](../../general/guides/android-usb-camera/).
+
+#### Informations sur le bloc
+
+Nom : AndroidUVCSourceBlock.
+
+| Direction du pin | Type de média | Nombre de pins |
+| --- | --- | --- |
+| Sortie vidéo | Vidéo non compressée | 1 |
+
+#### Paramètres
+
+`AndroidUVCSourceSettings` sélectionne l'appareil et le format demandé.
+
+| Propriété | Type | Défaut | Description |
+| --- | --- | --- | --- |
+| `Device` | `UsbDevice` | - | La caméra USB à utiliser. Obligatoire. |
+| `Width` | `int` | 1280 | Largeur d'image demandée, en pixels. |
+| `Height` | `int` | 720 | Hauteur d'image demandée, en pixels. |
+| `FrameRate` | `VideoFrameRate` | 30 | Fréquence d'images demandée. Les fréquences fractionnaires comme 29,97 sont appariées exactement. |
+| `Format` | `AndroidUVCFrameFormat` | `Unknown` | Format d'image préféré. `Unknown` laisse le SDK choisir, ce qui privilégie le MJPEG. Renseignez-le pour diffuser un mode non compressé que le choix par défaut écarterait. |
+
+#### Prérequis
+
+- **Android 9 (niveau d'API 28) ou une version ultérieure.** Vérifiez à l'exécution avec `AndroidUVCDevices.IsSupportedPlatform()`.
+- **`android.permission.CAMERA`, déclarée et accordée à l'exécution** — Android refuse de confier un périphérique vidéo USB à une application qui ne la détient pas, même si l'API Camera2 n'est jamais utilisée.
+- **L'autorisation pour le périphérique USB lui-même**, obtenue via `AndroidUVCDevices.RequestPermissionAsync`.
+- `android.hardware.usb.host` déclaré dans `AndroidManifest.xml`.
+
+#### Énumérer les appareils disponibles
+
+Utilisez `AndroidUVCDevices.FindCameras()` pour lister les caméras USB branchées. La méthode renvoie les objets `UsbDevice` qui exposent une interface vidéo UVC ; `AndroidUVCSourceBlock.GetDevices()` est un raccourci équivalent. `AndroidUVCDevices.IsCamera(UsbDevice)` teste un appareil unique, et `AndroidUVCDevices.HasPermission(UsbDevice)` indique si l'accès a déjà été accordé.
+
+#### Exemple de pipeline
+
+```
+graph LR;
+    AndroidUVCSourceBlock-->VideoRendererBlock;
+```
+
+#### Exemple de code
+
+Ces types ne sont compilés que pour le framework cible Android : dans un projet multicible, ce code doit figurer dans un fichier propre à Android ou dans un bloc `#if ANDROID`.
+
+```
+using VisioForge.Core.GStreamer.Android.UVC;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Sources.AndroidUVC;
+
+// lister les caméras USB branchées
+var cameras = AndroidUVCDevices.FindCameras();
+if (cameras.Count == 0)
+{
+    return;
+}
+
+var camera = cameras[0];
+
+// demander à l'utilisateur l'accès à cet appareil
+if (!await AndroidUVCDevices.RequestPermissionAsync(camera))
+{
+    return;
+}
+
+// créer le pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// le flux se termine lorsque la caméra est débranchée
+pipeline.OnStop += Pipeline_OnStop;
+
+var settings = new AndroidUVCSourceSettings
+{
+    Device = camera,
+    Width = 1280,
+    Height = 720,
+    FrameRate = new VideoFrameRate(30),
+};
+
+// créer le bloc source de caméra USB
+var videoSource = new AndroidUVCSourceBlock(settings);
+
+// créer le bloc de rendu vidéo
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1) { IsSync = false };
+
+// connecter les blocs
+pipeline.Connect(videoSource.Output, videoRenderer.Input);
+
+// démarrer le pipeline
+await pipeline.StartAsync();
+```
+
+#### Remarques
+
+`AndroidUVCSourceBlock.IsAvailable()` indique si la capture USB est possible du tout sur l'appareil courant — la version d'Android est suffisamment récente, les éléments dont tout mode a besoin sont présents et le pont natif se charge. La méthode ne teste pas `jpegdec`, dont seul un mode MJPEG a besoin, et ne vérifie pas si une caméra est branchée ; utilisez `GetDevices()` pour cela.
+
+La résolution et la fréquence d'images demandées sont mises en correspondance avec les modes annoncés par la caméra plutôt qu'imposées à celle-ci. La résolution la plus proche en nombre de pixels l'emporte, le MJPEG est préféré aux formats non compressés, et la fréquence d'images la plus proche est choisie en dernier. Un écart produit un avertissement, pas une erreur. Le SDK journalise le mode retenu sous la forme `USB camera ready: WxH@fps FORMAT` : consultez cette ligne dans logcat si le format exact importe.
+
+Sur le lien USB High Speed que fournissent la plupart des téléphones, le MJPEG est le seul choix réaliste. Une caméra qui annonce du 1080p30 en MJPEG atteint généralement environ 5 images par seconde en non compressé à la même résolution, et les modes 4K sont le plus souvent totalement absents des descripteurs.
+
+Débrancher la caméra met fin au flux : le pipeline déclenche `OnStop` au lieu de se figer silencieusement. Le moteur de rendu continue d'afficher la dernière image reçue, et une caméra retirée en pleine image en livre une endommagée : effacez ou masquez donc votre aperçu à la fin du flux.
+
+Un seul processus peut diffuser depuis une caméra UVC à la fois. Si une autre application détient l'appareil, `StartAsync` échoue.
+
+#### Plateformes
+
+Android.
 
 ---END OF PAGE---
 
@@ -402280,7 +403863,7 @@ Le tableau ci-dessous présente la prise en charge des protocoles réseau pour c
 
 ## SDK .NET VisioForge — configuration requise et plateformes
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/system-requirements/
-**Description:** Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 10+. .NET 6 à 9, ARM64, conseils mémoire 4K. WPF, WinForms, MAUI, Avalonia compatibles.
+**Description:** Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 9+. .NET 6 à 9, ARM64, conseils mémoire 4K. WPF, WinForms, MAUI, Avalonia compatibles.
 
 # Configuration requise pour les SDK .NET
 
@@ -402357,7 +403940,7 @@ Nos SDK peuvent être déployés sur une variété de plateformes, permettant un
 
 #### Android
 
-- Android 10 (niveau d'API 29) ou plus récent
+- Android 9 (niveau d'API 28) ou plus récent
 - Architectures ARM, ARM64 et x86 prises en charge
 - Compatible avec le Google Play Store
 - Rendu accéléré matériellement recommandé
@@ -404369,15 +405952,9 @@ Pour l'enregistrement COM de tous les filtres DirectShow dans un dossier spécif
 ---END OF PAGE---
 
 
-## Index
+## Guides Video Capture — multi-caméras et enregistrement C#
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/videocapture/guides/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-
----
-
-title: Guides Video Capture — multi-caméras et enregistrement C# description: Guides étape par étape pour le VisioForge Video Capture SDK : sync multi-caméras, photos webcam, pré-enregistrement et capture d'écran en C#. sidebar\_label: Guides supplémentaires order: 1 tags: - Video Capture SDK - .NET - DirectShow - Windows - Capture primary\_api\_classes: - VideoCaptureCore
-
----
+**Description:** Guides étape par étape pour le VisioForge Video Capture SDK : sync multi-caméras, photos webcam, pré-enregistrement et capture d'écran en C#.
 
 # Guides et tutoriels avancés Video Capture SDK .Net
 
@@ -412147,6 +413724,10 @@ Claude Code : `claude mcp add --transport http visioforge-sdk https://mcp.visiof
 
 Les caméras industrielles utilisant les standards USB3 Vision, GigE Vision et GenICam offrent une qualité d'image et des performances supérieures pour les applications de vision industrielle. Notre SDK permet une intégration fluide avec ces types de caméras professionnelles via différentes options de connectivité.
 
+USB3 Vision n'est pas la même chose que l'UVC
+
+USB3 Vision est un standard de vision industrielle auquel on accède via GenTL, et il n'a aucun rapport avec l'USB Video Class (UVC) — le standard que mettent en œuvre les webcams et les dongles de capture ordinaires. Pour une webcam USB courante, utilisez `SystemVideoSourceBlock` sur les plateformes de bureau ou, sur Android, consultez [Capture depuis une caméra USB sur Android](../../../general/guides/android-usb-camera/).
+
 ## Protocole GigE Vision
 
 GigE Vision est un standard d'interface pour caméras industrielles basé sur la technologie Gigabit Ethernet. Il offre plusieurs avantages pour les applications de vision industrielle :
@@ -418921,15 +420502,9 @@ Si vous avez des questions sur le présent Contrat, veuillez contacter le Concé
 ---END OF PAGE---
 
 
-## Journal des modifications
+## Journal des modifications du Video Fingerprinting SDK
 **URL:** https://www.visioforge.com/help/fr/docs/vfp/changelog/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-
----
-
-title: Journal des modifications du Video Fingerprinting SDK description: Suivez les mises à jour du VisioForge Video Fingerprinting SDK : nouvelles fonctionnalités, améliorations de performance et changements d'API .NET et C++. tags: - Video Fingerprinting SDK - .NET - C++ - Windows - macOS - Linux - Capture - Fingerprinting
-
----
+**Description:** Suivez les mises à jour du VisioForge Video Fingerprinting SDK : nouvelles fonctionnalités, améliorations de performance et changements d'API .NET et C++.
 
 # Historique des versions du Video Fingerprinting SDK
 
@@ -429505,15 +431080,9 @@ L'outil quittera avec une erreur si : - L'un des fichiers d'empreinte n'existe p
 ---END OF PAGE---
 
 
-## FAQ
+## FAQ Video Fingerprinting — licences, précision, formats
 **URL:** https://www.visioforge.com/help/fr/docs/vfp/faq/
-**Description:** Comprehensive documentation for VisioForge video SDKs - capture, playback, editing, and processing for .NET, Delphi, and DirectShow.
-
----
-
-title: FAQ Video Fingerprinting — licences, précision, formats description: Trouvez des réponses sur le VisioForge Video Fingerprinting SDK : licences, performance, précision, formats et compatibilité de plateformes. tags: - Video Fingerprinting SDK - .NET - C++ - Windows - macOS - Linux - Fingerprinting primary\_api\_classes: - VFPAnalyzer - VFPFingerprintSource - ParallelProcessor
-
----
+**Description:** Trouvez des réponses sur le VisioForge Video Fingerprinting SDK : licences, performance, précision, formats et compatibilité de plateformes.
 
 # FAQ du Video Fingerprinting SDK
 

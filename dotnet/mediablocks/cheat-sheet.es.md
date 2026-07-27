@@ -117,6 +117,7 @@ Guía completa de instalación: [install/index.md](../install/index.md).
 | `UniversalSourceBlock` | Abre un archivo, URL o stream como entrada. Analiza los flujos automáticamente y expone los pads `VideoOutput` / `AudioOutput`. | [GettingStarted/player.md](./GettingStarted/player.md) |
 | `VideoRendererBlock` | Enlaza la salida de video del pipeline a un control `IVideoView` (WinForms / WPF / MAUI / Avalonia). Admite capturas de pantalla. | [GettingStarted/player.md](./GettingStarted/player.md) |
 | `SystemVideoSourceBlock` | Entrada de webcam / USB / cámara integrada. Se configura mediante `VideoCaptureDeviceSourceSettings`. | [GettingStarted/camera.md](./GettingStarted/camera.md) |
+| `AndroidUVCSourceBlock` | Cámara USB (UVC) conectada a un dispositivo Android por OTG, que Camera2 no puede ver. Se configura mediante `AndroidUVCSourceSettings`. | [../general/guides/android-usb-camera.md](../general/guides/android-usb-camera.md) |
 | `H264EncoderBlock` | Codificador H.264 con backends por software y hardware (NVENC / AMF / Quick Sync). | [GettingStarted/pipeline.md](./GettingStarted/pipeline.md) |
 | `MP4SinkBlock` | Escribe video + audio codificados en un archivo `.mp4`. Añada entradas mediante `IMediaBlockDynamicInputs.CreateNewInput`. | [Guides/rtsp-save-original-stream.md](./Guides/rtsp-save-original-stream.md) |
 | `DeviceEnumerator` | Enumera cámaras, micrófonos y salidas de audio de forma asíncrona mediante `DeviceEnumerator.Shared.VideoSourcesAsync()`, etc. | [GettingStarted/device-enum.md](./GettingStarted/device-enum.md) |
@@ -198,6 +199,7 @@ Sustituya `UniversalSourceBlock` por `SystemVideoSourceBlock` (cámara) o `RTSPS
     - Reproductor RTSP / cámara IP — [Guides/rtsp-player-csharp.md](./Guides/rtsp-player-csharp.md)
     - Guardar flujo RTSP (passthrough) — [Guides/rtsp-save-original-stream.md](./Guides/rtsp-save-original-stream.md)
     - Cuadrícula multicámara — [Guides/multi-camera-rtsp-grid.md](./Guides/multi-camera-rtsp-grid.md)
+    - Cámara USB (UVC) en Android — [../general/guides/android-usb-camera.md](../general/guides/android-usb-camera.md)
 - **Despliegue**
     - Windows — [../deployment-x/Windows.md](../deployment-x/Windows.md)
     - macOS — [../deployment-x/macOS.md](../deployment-x/macOS.md)

@@ -1,6 +1,6 @@
 ---
 title: Créer un MediaBlock depuis un élément GStreamer en C# .NET
-description: Encapsulez tout élément GStreamer en MediaBlock : deux approches (CustomMediaBlock sans sous-classe ou sous-classe MediaBlock typée). Exemple videobalance.
+description: "Encapsulez tout élément GStreamer en MediaBlock : deux approches (CustomMediaBlock sans sous-classe ou sous-classe MediaBlock typée). Exemple videobalance."
 tags:
   - Media Blocks SDK
   - .NET

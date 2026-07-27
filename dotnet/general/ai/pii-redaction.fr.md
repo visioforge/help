@@ -1,6 +1,6 @@
 ---
 title: SDK de masquage PII .NET — flouter visages et plaques
-description: Masquez les données personnelles dans la vidéo en local avec PIIRedactionBlock : floutez visages, plaques et texte à l'écran. RGPD/CCPA/BIPA, sans cloud.
+description: "Masquez les données personnelles dans la vidéo en local avec PIIRedactionBlock : floutez visages, plaques et texte à l'écran. RGPD/CCPA/BIPA, sans cloud."
 sidebar_label: Masquage des données personnelles
 tags:
   - .NET

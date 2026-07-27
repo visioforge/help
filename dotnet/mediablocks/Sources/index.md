@@ -12,12 +12,15 @@ tags:
   - iOS
   - Capture
   - Streaming
+  - USB
+  - UVC
 primary_api_classes:
   - VideoRendererBlock
   - MediaBlocksPipeline
   - AudioRendererBlock
   - UniversalSourceBlock
   - DeviceEnumerator
+  - AndroidUVCSourceBlock
 
 ---
 
@@ -110,6 +113,8 @@ await pipeline.StartAsync();
 #### Remarks
 
 You can specify an API to use during the device enumeration (refer to the `VideoCaptureDeviceAPI` enum description under `SystemVideoSourceBlock` for typical values). Android and iOS platforms have only one API, while Windows and Linux have multiple APIs.
+
+On Android this block enumerates cameras through Camera2, which sees a USB camera attached over OTG only on devices whose vendor ships the External Camera HAL - and many phones do not. To capture from a USB camera on Android, use the [USB (UVC) Camera Source Block](#usb-uvc-camera-source-block) instead.
 
 #### Platforms
 
@@ -3466,3 +3471,121 @@ await pipeline.StartAsync();
 #### Platforms
 
 Windows, macOS, Linux, Android, iOS.
+
+## Android Platform Source Blocks
+
+### USB (UVC) Camera Source Block { #usb-uvc-camera-source-block }
+
+AndroidUVCSourceBlock captures video from a USB (UVC) camera attached to an Android device over OTG - a webcam, a capture dongle, or a borescope. [System Video Source](#system-video-source) cannot reach such a camera: Android exposes USB cameras through Camera2 only on devices whose vendor ships the External Camera HAL, and many popular phones do not. This block reads frames through a bundled native libusb/libuvc bridge instead, so it works regardless of the vendor's HAL.
+
+`AndroidUVCSourceSettings` can also be assigned to `VideoCaptureCoreX.Video_Source`, which gives the camera the engine's outputs, effects and snapshots without building a pipeline by hand. `AndroidUVCDevices.GetModes()` lists the resolutions, frame rates and formats a camera advertises in a format this block can stream.
+
+For a full walkthrough with permissions, mode selection, and disconnect handling, see [USB camera capture on Android](../../general/guides/android-usb-camera.md).
+
+#### Block info
+
+Name: AndroidUVCSourceBlock.
+
+| Pin direction | Media type         | Pins count |
+|---------------|:------------------:|:----------:|
+| Output video  | Uncompressed video | 1          |
+
+#### Settings
+
+`AndroidUVCSourceSettings` selects the device and the requested format.
+
+| Property    | Type        | Default | Description                                 |
+|-------------|-------------|---------|---------------------------------------------|
+| `Device`    | `UsbDevice` | -       | The USB camera to stream from. Required.    |
+| `Width`     | `int`       | 1280    | Requested frame width, in pixels.           |
+| `Height`    | `int`       | 720     | Requested frame height, in pixels.          |
+| `FrameRate` | `VideoFrameRate` | 30 | Requested frame rate. Fractional rates such as 29.97 are matched exactly. |
+| `Format` | `AndroidUVCFrameFormat` | `Unknown` | Preferred frame format. `Unknown` lets the SDK choose, which favours MJPEG. Set it to stream an uncompressed mode the default would pass over. |
+
+#### Requirements
+
+- **Android 9 (API level 28) or newer.** Check at run time with `AndroidUVCDevices.IsSupportedPlatform()`.
+- **`android.permission.CAMERA`, declared and granted at run time** - Android refuses to hand a USB video device to an app without it, even though the Camera2 API is never used.
+- **Permission for the USB device itself**, obtained through `AndroidUVCDevices.RequestPermissionAsync`.
+- `android.hardware.usb.host` declared in `AndroidManifest.xml`.
+
+#### Enumerate available devices
+
+Use `AndroidUVCDevices.FindCameras()` to list the attached USB cameras. It returns the `UsbDevice` objects that expose a UVC video interface; `AndroidUVCSourceBlock.GetDevices()` is an equivalent shortcut. `AndroidUVCDevices.IsCamera(UsbDevice)` tests a single device, and `AndroidUVCDevices.HasPermission(UsbDevice)` reports whether access was already granted.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    AndroidUVCSourceBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+These types are compiled only for the Android target framework, so in a multi-targeted project this code belongs in an Android-only file or inside `#if ANDROID`.
+
+```csharp
+using VisioForge.Core.GStreamer.Android.UVC;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Sources.AndroidUVC;
+
+// list the attached USB cameras
+var cameras = AndroidUVCDevices.FindCameras();
+if (cameras.Count == 0)
+{
+    return;
+}
+
+var camera = cameras[0];
+
+// ask the user for access to this device
+if (!await AndroidUVCDevices.RequestPermissionAsync(camera))
+{
+    return;
+}
+
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// the stream ends when the camera is unplugged
+pipeline.OnStop += Pipeline_OnStop;
+
+var settings = new AndroidUVCSourceSettings
+{
+    Device = camera,
+    Width = 1280,
+    Height = 720,
+    FrameRate = new VideoFrameRate(30),
+};
+
+// create USB camera source block
+var videoSource = new AndroidUVCSourceBlock(settings);
+
+// create video renderer block
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1) { IsSync = false };
+
+// connect blocks
+pipeline.Connect(videoSource.Output, videoRenderer.Input);
+
+// start pipeline
+await pipeline.StartAsync();
+```
+
+#### Remarks
+
+`AndroidUVCSourceBlock.IsAvailable()` reports whether USB capture is possible at all on the current device - the Android release is new enough, the elements every mode needs are present, and the native bridge loads. It does not probe `jpegdec`, which only an MJPEG mode needs, and it does not check whether a camera is attached; use `GetDevices()` for that.
+
+The requested resolution and frame rate are matched against the modes the camera advertises rather than imposed on it. The nearest resolution by pixel count wins, MJPEG is preferred over uncompressed formats, and the nearest frame rate is chosen last. A mismatch is a warning, not an error. The SDK logs the mode it settled on as `USB camera ready: WxH@fps FORMAT`, so check that line in logcat if the exact format matters.
+
+Over the High Speed USB link most phones provide, MJPEG is the only practical choice. A camera advertising 1080p30 in MJPEG typically manages about 5 fps uncompressed at the same resolution, and 4K modes are usually absent from the descriptors entirely.
+
+Unplugging the camera ends the stream: the pipeline raises `OnStop` instead of stalling silently. The renderer keeps displaying the last frame it received, and a camera pulled out mid-frame delivers a damaged one, so clear or hide your preview when the stream ends.
+
+Only one process can stream from a UVC camera at a time. If another application holds the device, `StartAsync` fails.
+
+#### Platforms
+
+Android.

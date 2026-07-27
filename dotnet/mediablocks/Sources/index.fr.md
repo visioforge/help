@@ -1,6 +1,6 @@
 ---
 title: Sources Media Blocks SDK — webcam, fichier, RTSP, écran
-description: Connectez toute entrée à un pipeline Media Blocks : webcams, fichiers vidéo, RTSP, RTMP, SRT, NDI, Decklink, écran, virtuelle. API d'énumération C# / .NET.
+description: "Connectez toute entrée à un pipeline Media Blocks : webcams, fichiers vidéo, RTSP, RTMP, SRT, NDI, Decklink, écran, virtuelle. API d'énumération C# / .NET."
 sidebar_label: Sources
 tags:
   - Media Blocks SDK
@@ -12,12 +12,15 @@ tags:
   - iOS
   - Capture
   - Streaming
+  - USB
+  - UVC
 primary_api_classes:
   - VideoRendererBlock
   - MediaBlocksPipeline
   - AudioRendererBlock
   - UniversalSourceBlock
   - DeviceEnumerator
+  - AndroidUVCSourceBlock
 
 ---
 
@@ -110,6 +113,8 @@ await pipeline.StartAsync();
 #### Remarques
 
 Vous pouvez spécifier une API à utiliser lors de l'énumération des périphériques (consultez la description de l'enum `VideoCaptureDeviceAPI` sous `SystemVideoSourceBlock` pour les valeurs typiques). Les plateformes Android et iOS n'ont qu'une seule API, tandis que Windows et Linux en proposent plusieurs.
+
+Sur Android, ce bloc énumère les caméras via Camera2, qui ne voit une caméra USB branchée en OTG que sur les appareils dont le fabricant fournit l'External Camera HAL — et de nombreux téléphones n'en disposent pas. Pour capturer depuis une caméra USB sur Android, utilisez plutôt le [bloc source de caméra USB (UVC)](#usb-uvc-camera-source-block).
 
 #### Plateformes
 
@@ -3466,3 +3471,121 @@ await pipeline.StartAsync();
 #### Plateformes
 
 Windows, macOS, Linux, Android, iOS.
+
+## Blocs de sources spécifiques à Android
+
+### Bloc source de caméra USB (UVC) { #usb-uvc-camera-source-block }
+
+AndroidUVCSourceBlock capture la vidéo d'une caméra USB (UVC) branchée en OTG sur un appareil Android — une webcam, un dongle de capture ou un endoscope. La [source vidéo système](#system-video-source) ne peut pas atteindre une telle caméra : Android n'expose les caméras USB via Camera2 que sur les appareils dont le fabricant fournit l'External Camera HAL, et de nombreux téléphones populaires n'en disposent pas. Ce bloc lit les images via un pont natif libusb/libuvc intégré, il fonctionne donc indépendamment du HAL du fabricant.
+
+`AndroidUVCSourceSettings` peut aussi être affecté à `VideoCaptureCoreX.Video_Source`, ce qui donne à la caméra les sorties, les effets et les captures d'image du moteur sans assembler de pipeline à la main. `AndroidUVCDevices.GetModes()` énumère les résolutions, fréquences d'images et formats qu'une caméra annonce dans un format que ce bloc sait diffuser.
+
+Pour une procédure complète couvrant les autorisations, la sélection du mode et la gestion des déconnexions, consultez [Capture depuis une caméra USB sur Android](../../general/guides/android-usb-camera.md).
+
+#### Informations sur le bloc
+
+Nom : AndroidUVCSourceBlock.
+
+| Direction du pin | Type de média        | Nombre de pins |
+|------------------|:--------------------:|:--------------:|
+| Sortie vidéo     | Vidéo non compressée | 1              |
+
+#### Paramètres
+
+`AndroidUVCSourceSettings` sélectionne l'appareil et le format demandé.
+
+| Propriété   | Type        | Défaut  | Description                                         |
+|-------------|-------------|---------|-----------------------------------------------------|
+| `Device`    | `UsbDevice` | -       | La caméra USB à utiliser. Obligatoire.              |
+| `Width`     | `int`       | 1280    | Largeur d'image demandée, en pixels.                |
+| `Height`    | `int`       | 720     | Hauteur d'image demandée, en pixels.                |
+| `FrameRate` | `VideoFrameRate` | 30 | Fréquence d'images demandée. Les fréquences fractionnaires comme 29,97 sont appariées exactement. |
+| `Format` | `AndroidUVCFrameFormat` | `Unknown` | Format d'image préféré. `Unknown` laisse le SDK choisir, ce qui privilégie le MJPEG. Renseignez-le pour diffuser un mode non compressé que le choix par défaut écarterait. |
+
+#### Prérequis
+
+- **Android 9 (niveau d'API 28) ou une version ultérieure.** Vérifiez à l'exécution avec `AndroidUVCDevices.IsSupportedPlatform()`.
+- **`android.permission.CAMERA`, déclarée et accordée à l'exécution** — Android refuse de confier un périphérique vidéo USB à une application qui ne la détient pas, même si l'API Camera2 n'est jamais utilisée.
+- **L'autorisation pour le périphérique USB lui-même**, obtenue via `AndroidUVCDevices.RequestPermissionAsync`.
+- `android.hardware.usb.host` déclaré dans `AndroidManifest.xml`.
+
+#### Énumérer les appareils disponibles
+
+Utilisez `AndroidUVCDevices.FindCameras()` pour lister les caméras USB branchées. La méthode renvoie les objets `UsbDevice` qui exposent une interface vidéo UVC ; `AndroidUVCSourceBlock.GetDevices()` est un raccourci équivalent. `AndroidUVCDevices.IsCamera(UsbDevice)` teste un appareil unique, et `AndroidUVCDevices.HasPermission(UsbDevice)` indique si l'accès a déjà été accordé.
+
+#### Exemple de pipeline
+
+```mermaid
+graph LR;
+    AndroidUVCSourceBlock-->VideoRendererBlock;
+```
+
+#### Exemple de code
+
+Ces types ne sont compilés que pour le framework cible Android : dans un projet multicible, ce code doit figurer dans un fichier propre à Android ou dans un bloc `#if ANDROID`.
+
+```csharp
+using VisioForge.Core.GStreamer.Android.UVC;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Sources.AndroidUVC;
+
+// lister les caméras USB branchées
+var cameras = AndroidUVCDevices.FindCameras();
+if (cameras.Count == 0)
+{
+    return;
+}
+
+var camera = cameras[0];
+
+// demander à l'utilisateur l'accès à cet appareil
+if (!await AndroidUVCDevices.RequestPermissionAsync(camera))
+{
+    return;
+}
+
+// créer le pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// le flux se termine lorsque la caméra est débranchée
+pipeline.OnStop += Pipeline_OnStop;
+
+var settings = new AndroidUVCSourceSettings
+{
+    Device = camera,
+    Width = 1280,
+    Height = 720,
+    FrameRate = new VideoFrameRate(30),
+};
+
+// créer le bloc source de caméra USB
+var videoSource = new AndroidUVCSourceBlock(settings);
+
+// créer le bloc de rendu vidéo
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1) { IsSync = false };
+
+// connecter les blocs
+pipeline.Connect(videoSource.Output, videoRenderer.Input);
+
+// démarrer le pipeline
+await pipeline.StartAsync();
+```
+
+#### Remarques
+
+`AndroidUVCSourceBlock.IsAvailable()` indique si la capture USB est possible du tout sur l'appareil courant — la version d'Android est suffisamment récente, les éléments dont tout mode a besoin sont présents et le pont natif se charge. La méthode ne teste pas `jpegdec`, dont seul un mode MJPEG a besoin, et ne vérifie pas si une caméra est branchée ; utilisez `GetDevices()` pour cela.
+
+La résolution et la fréquence d'images demandées sont mises en correspondance avec les modes annoncés par la caméra plutôt qu'imposées à celle-ci. La résolution la plus proche en nombre de pixels l'emporte, le MJPEG est préféré aux formats non compressés, et la fréquence d'images la plus proche est choisie en dernier. Un écart produit un avertissement, pas une erreur. Le SDK journalise le mode retenu sous la forme `USB camera ready: WxH@fps FORMAT` : consultez cette ligne dans logcat si le format exact importe.
+
+Sur le lien USB High Speed que fournissent la plupart des téléphones, le MJPEG est le seul choix réaliste. Une caméra qui annonce du 1080p30 en MJPEG atteint généralement environ 5 images par seconde en non compressé à la même résolution, et les modes 4K sont le plus souvent totalement absents des descripteurs.
+
+Débrancher la caméra met fin au flux : le pipeline déclenche `OnStop` au lieu de se figer silencieusement. Le moteur de rendu continue d'afficher la dernière image reçue, et une caméra retirée en pleine image en livre une endommagée : effacez ou masquez donc votre aperçu à la fin du flux.
+
+Un seul processus peut diffuser depuis une caméra UVC à la fois. Si une autre application détient l'appareil, `StartAsync` échoue.
+
+#### Plateformes
+
+Android.

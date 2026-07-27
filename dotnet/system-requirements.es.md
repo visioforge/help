@@ -1,6 +1,6 @@
 ---
 title: VisioForge .NET SDKs — Requisitos del Sistema y Plataformas
-description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 10+. .NET 6–9, soporte ARM64, requisitos de memoria 4K. Compatible con WPF, WinForms, MAUI y Avalonia.
+description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 12+, Android 9+. .NET 6–9, soporte ARM64, requisitos de memoria 4K. Compatible con WPF, WinForms, MAUI y Avalonia.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -90,7 +90,7 @@ Nuestros SDKs pueden desplegarse en una variedad de plataformas, permitiendo una
 
 #### Android
 
-* Android 10 (nivel de API 29) o más reciente
+* Android 9 (nivel de API 28) o más reciente
 * Arquitecturas ARM, ARM64 y x86 soportadas
 * Compatible con Google Play Store
 * Renderizado acelerado por hardware recomendado

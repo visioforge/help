@@ -69,8 +69,8 @@
        Both ship in 'VisioForge.DotNet.VideoCapture' (VideoCaptureCoreX is the
        cross-platform engine class inside it) plus the MAUI VideoView control. -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.7.23" />
-    <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.7.23" />
+    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.7.27" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.7.27" />
   </ItemGroup>
   <!-- VisioForge: per-OS native runtime redists. NOT transitive; reference each platform explicitly. -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
@@ -78,14 +78,14 @@
     <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.4.18.0" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
     <!-- Companion csproj that binds the Android .aar. Copy AndroidDependency/ from
          the official samples repo (Video Capture SDK X/MAUI/AndroidDependency/) into
          your repo and adjust the relative path. There is no NuGet equivalent today. -->
     <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.0.16" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
     <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2025.9.1" />
