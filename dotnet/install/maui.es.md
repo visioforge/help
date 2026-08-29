@@ -42,8 +42,25 @@ Nuestros SDKs habilitan potentes capacidades multimedia en todas las plataformas
 
 Para comenzar a usar VisioForge con tu proyecto MAUI, instala los paquetes NuGet requeridos:
 
-1. El paquete de UI principal: `VisioForge.DotNet.Core.UI.MAUI`
-2. Redistributable específico de plataforma (detallado en las secciones de plataforma a continuación)
+1. El paquete SDK para el producto que estés usando - uno de:
+   - `VisioForge.DotNet.VideoCapture` - captura de cámara, pantalla y cámara IP (`VideoCaptureCoreX`)
+   - `VisioForge.DotNet.MediaPlayer` - reproducción de archivos y de red (`MediaPlayerCoreX`)
+   - `VisioForge.DotNet.VideoEdit` - edición de línea de tiempo y renderizado (`VideoEditCoreX`)
+   - `VisioForge.DotNet.MediaBlocks` - pipelines personalizados (`MediaBlocksPipeline`)
+2. El paquete de UI principal: `VisioForge.DotNet.Core.UI.MAUI` - el control `VideoView`
+3. Redistributable específico de plataforma (detallado en las secciones de plataforma a continuación)
+
+```xml
+<ItemGroup>
+  <!-- Sustituye por el paquete SDK que use tu aplicación. -->
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.*" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.*" />
+</ItemGroup>
+```
+
+`VisioForge.DotNet.Core.UI.MAUI` solo proporciona el control `VideoView`. Por sí solo no puede
+compilar `VideoCaptureCoreX`, `MediaPlayerCoreX` ni `VideoEditCoreX` - el paquete SDK anterior es
+lo que los incorpora.
 
 ### Inicialización del SDK
 
@@ -75,6 +92,28 @@ public static class MauiProgram
         return builder.Build();
     }
 }
+```
+
+`AddVisioForgeHandlers` registra el handler de `VideoView`. No carga el stack nativo - eso es una
+llamada aparte, y debe ejecutarse antes de construir el primer `VideoCaptureCoreX`,
+`MediaPlayerCoreX`, `VideoEditCoreX` o `MediaBlocksPipeline`. Sin ella, el constructor lanza
+`DllNotFoundException` en una máquina limpia:
+
+```csharp
+using VisioForge.Core;
+
+// Inicialización asíncrona (recomendada - la primera llamada construye el registro de
+// GStreamer y puede tardar cientos de milisegundos, lo que bloquearía el hilo de la UI).
+await VisioForgeX.InitSDKAsync();
+
+// O inicialización síncrona.
+VisioForgeX.InitSDK();
+```
+
+Libera el SDK cuando la página o la aplicación se cierren:
+
+```csharp
+VisioForgeX.DestroySDK();
 ```
 
 ## Usando Controles de VisioForge en XAML
@@ -110,14 +149,12 @@ Android requiere pasos de configuración adicionales para asegurar el funcionami
 El SDK de VisioForge depende de funcionalidad nativa de Android que requiere una biblioteca de bindings Java personalizada:
 
 1. Clona la biblioteca de binding de nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency)
-2. Agrega el proyecto apropiado a tu solución:
-   - Usa `VisioForge.Core.Android.X8.csproj` para .NET 8
-   - Usa `VisioForge.Core.Android.X9.csproj` para .NET 9
+2. Elige el proyecto de binding que coincida con la versión de .NET con la que compilas - la carpeta incluye un `VisioForge.Core.Android.X{N}.csproj` por cada versión de .NET soportada (por ejemplo, `VisioForge.Core.Android.X9.csproj` para .NET 9, `VisioForge.Core.Android.X10.csproj` para .NET 10). Si tu versión de .NET no aparece en la lista, elige la más cercana disponible.
 3. Agrega la referencia a tu archivo de proyecto:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X9.csproj" />
+  <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
 
@@ -150,7 +187,10 @@ Agrega el paquete específico de iOS a tu proyecto:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.*" />
+  <!-- La versión del redistribuable de iOS va por detrás de la versión del SDK a propósito - sigue
+       el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. No la subas para
+       igualar VisioForge.DotNet.*; no existe una versión 2026.x en nuget.org. -->
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
 </ItemGroup>
 ```
 

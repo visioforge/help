@@ -79,7 +79,7 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.4.18.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
@@ -160,6 +160,8 @@ await Permissions.RequestAsync<Permissions.Microphone>();
 No extra permission paperwork for desktop Windows MAUI — the system camera privacy switch in Settings is enforced by Windows itself, not declared in the project.
 
 ## License registration
+
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
 
 Same `SetLicenseCertificateAsync(byte[])` API as the Desktop SDK — the contract is identical across all VisioForge .NET SDKs as of `2026.5.2`. It is a per-instance method on `MediaBlocksPipeline`; call it on every pipeline instance after construction and before `StartAsync`. The cross-platform wrinkle is **where the bytes come from**: `File.ReadAllBytes("path/to/your.vflicense")` works on Windows, but on iOS / Android / Mac Catalyst the working directory is the app bundle, not your dev machine. The portable approach is to ship the licence as a `MauiAsset` and load it via `FileSystem.OpenAppPackageFileAsync`:
 

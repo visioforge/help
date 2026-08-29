@@ -427,6 +427,25 @@ using VisioForge.Core.LiveVideoCompositorV2;
 
 Après le changement du `using`, `new LiveVideoCompositor(...)` se résout vers la classe V2 et les avertissements d'obsolescence disparaissent. L'événement `OnRenderStatistics` n'est disponible que sur V2.
 
+### Les effets vidéo ne se migrent pas à l'identique
+
+Deux différences survivent au changement de `using`, et toutes deux concernent `Video_Effects_*` :
+
+- **Portée.** V1 conserve un bloc d'effets par canal, dimensionné par `LiveVideoCompositorSettings.VideoChannelCount`, et l'argument `channel` choisit parmi eux. V2 n'a pas de `VideoChannelCount` et utilise un seul bloc d'effets sur la sortie composée, après le mélangeur : son argument `channel` n'a donc jamais eu quoi que ce soit à sélectionner. Les surcharges qui l'acceptent sont obsolètes et délèguent aux méthodes sans canal : utilisez `Video_Effects_AddOrUpdateAsync(effect)`, `Video_Effects_Get(name)`, `Video_Effects_RemoveAsync(...)` et `Video_Effects_Clear()`.
+- **Type d'effet.** V1 attend `IBaseVideoEffect`, V2 attend `BaseVideoEffect`. Celle-ci est une erreur de compilation, pas une différence silencieuse.
+
+Pour traiter une seule entrée plutôt que toute la composition — ce que faisaient les effets par canal de V1 — ajoutez un `VideoEffectsBlock` à la liste `ProcessingVideoBlocks` de cette entrée. Ces blocs s'exécutent entre la source et le mélangeur :
+
+```csharp
+var input = new LVCVideoInput("camera", compositor, sourceBlock, videoInfo, rect, autostart: true);
+
+var effects = new VideoEffectsBlock();
+await effects.AddOrUpdateAsync(new GrayscaleVideoEffect("gray"));
+input.ProcessingVideoBlocks.Add(effects);
+
+await compositor.Input_AddAsync(input);
+```
+
 ---
 
 [Application d'exemple sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Live%20Video%20Compositor%20Demo)

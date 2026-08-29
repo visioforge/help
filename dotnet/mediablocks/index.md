@@ -176,4 +176,4 @@ Additional getting started tutorials:
 - [API Reference](https://api.visioforge.org/dotnet/api/index.html)
 - [Changelog](../changelog.md)
 - [End User License Agreement](../../eula.md)
-- [Licensing Information](../../../licensing.md)
+- [Licensing Information](https://www.visioforge.com/licensing)

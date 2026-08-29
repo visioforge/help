@@ -1,6 +1,6 @@
 ---
-title: Codificación HEVC por Hardware con GPUs AMD, NVIDIA e Intel
-description: Implemente codificación HEVC (H.265) acelerada por hardware con GPUs AMD, NVIDIA e Intel para compresión de video eficiente en aplicaciones .NET.
+title: Codificación HEVC: AMD, NVIDIA, Intel y Apple VideoToolbox
+description: Codifique HEVC (H.265) con GPU AMD, NVIDIA, Intel y Apple VideoToolbox, incluido 10 bits y alfa, en sus aplicaciones .NET.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -26,6 +26,7 @@ primary_api_classes:
   - AMFHEVCEncoderSettings
   - NVENCHEVCEncoderSettings
   - QSVHEVCEncoderSettings
+  - AppleMediaHEVCEncoderSettings
   - IHEVCEncoderSettings
   - SVTHEVCEncoderSettings
 
@@ -43,11 +44,12 @@ Para formatos de salida específicos de Windows, consulte nuestra [documentació
 
 ## Descripción general de codificadores HEVC por hardware
 
-Las GPUs modernas ofrecen potentes capacidades de codificación por hardware que superan significativamente las soluciones basadas en software. Los SDK de VisioForge soportan tres codificadores HEVC de hardware principales:
+Las GPUs modernas ofrecen potentes capacidades de codificación por hardware que superan significativamente las soluciones basadas en software. Los SDK de VisioForge soportan cuatro codificadores HEVC de hardware:
 
 - **AMD AMF** - Para GPUs AMD Radeon
 - **NVIDIA NVENC** - Para GPUs NVIDIA GeForce y profesionales
 - **Intel QuickSync** - Para CPUs Intel con gráficos integrados
+- **Apple VideoToolbox** - Para macOS, Mac Catalyst e iOS
 
 Cada codificador proporciona características únicas y opciones de optimización. Exploremos sus capacidades y detalles de implementación.
 
@@ -189,15 +191,90 @@ var encoder = new QSVHEVCEncoderSettings
 };
 ```
 
+## Codificador HEVC de Apple VideoToolbox
+
+VideoToolbox es el codificador por hardware en macOS, Mac Catalyst e iOS. Está disponible en
+Apple Silicon y en Macs Intel con gráficos compatibles con QuickSync.
+
+### Características principales
+
+- **Control de tasa**:
+  - `ABR` (tasa de bits media, el valor por defecto)
+  - `CBR` (tasa de bits constante)
+  - Límites de tasa de datos: un techo de bitrate promediado sobre una ventana deslizante, en modo `ABR`
+
+- **Perfiles soportados**:
+  - Main (8 bits)
+  - Main10 (10 bits)
+
+- **Canal alfa**: `PreserveAlpha` cambia al codificador con soporte de alfa
+
+### Ejemplo de implementación
+
+```csharp
+// Tasa de bits constante, para un endpoint de ancho de banda fijo.
+var cbr = new AppleMediaHEVCEncoderSettings
+{
+    Bitrate = 3000,                              // 3 Mbps
+    RateControl = AppleMediaRateControl.CBR,
+    Profile = AppleMediaHEVCProfile.Main,
+    Realtime = true,
+    Quality = 0.5
+};
+
+// Tasa media con un techo duro: objetivo de 3 Mbps, nunca más de 4,5 Mbps
+// promediados sobre cualquier segundo.
+var cappedAbr = new AppleMediaHEVCEncoderSettings
+{
+    Bitrate = 3000,
+    RateControl = AppleMediaRateControl.ABR,     // el valor por defecto
+    DataRateLimitBitrate = 4500,
+    DataRateLimitDuration = 1.0,
+    Profile = AppleMediaHEVCProfile.Main
+};
+```
+
+### CBR y los límites de tasa de datos son alternativas
+
+No configures ambos. Con `CBR` seleccionado el codificador ignora por completo los límites de
+tasa de datos y lo indica en su registro (`Ignoring data-rate-limits property, CBR mode is
+enabled`): la tasa constante ya es un techo. Los límites se aplican en modo `ABR`, donde
+convierten «apunta a esta tasa» en «apunta a esta tasa y nunca superes aquella otra en ninguna
+ventana de esta duración».
+
+### CBR no es constante en todas partes
+
+La tasa de bits verdaderamente constante es una capacidad de VideoToolbox, no del SDK: requiere
+macOS 13+ o iOS 16+ sobre Apple Silicon. En sistemas anteriores y en Macs Intel, VideoToolbox
+emula CBR mediante límites de tasa de datos propios, derivados de `Bitrate`, y lo indica en su
+propio registro (`CBR is unsupported on your system, emulating with custom data rate limits`).
+La salida codificada resulta entonces casi constante en lugar de constante, lo que importa si se
+dimensiona un presupuesto de transporte fijo a partir de ella.
+
+### Notas de plataforma
+
+- **10 bits** (`AppleMediaHEVCProfile.Main10`), el codificador con **alfa** y el control de tasa
+  requieren el runtime de GStreamer 1.28.6, que se incluye en los paquetes de macOS y Mac Catalyst.
+  El paquete de iOS todavía incluye 1.24.9, que no tiene ninguno de ellos: allí el control de tasa
+  se descarta con una advertencia en lugar de aplicarse en silencio, y los 10 bits no negocian.
+- `ForceHWUsage` fija el codificador al elemento exclusivo de hardware, fallando en lugar de caer
+  a una implementación por software. No está disponible en iOS.
+- En la ruta del pipeline de MediaBlocks el SDK siempre inserta `h265parse` después de este
+  codificador: VideoToolbox emite solo `hvc1`, mientras que el multiplexor MPEG-TS detrás de la
+  salida SRT/UDP/RIST acepta solo byte-stream. La ruta RTSP no necesita parser: `rtph265pay` acepta
+  `hvc1` directamente.
+
 ## Preajustes de calidad para configuración simplificada
 
-Todos los codificadores soportan preajustes de calidad estandarizados a través de la enumeración `VideoQuality`, proporcionando un enfoque de configuración simplificado:
+Los codificadores de AMD, NVIDIA e Intel soportan preajustes de calidad estandarizados a través de la enumeración `VideoQuality`, proporcionando un enfoque de configuración simplificado:
 
 - **Low**: Objetivo de 1 Mbps, máximo de 2 Mbps (para streaming básico)
 - **Normal**: Objetivo de 3 Mbps, máximo de 5 Mbps (para contenido estándar)
 - **High**: Objetivo de 6 Mbps, máximo de 10 Mbps (para contenido detallado)
 - **Very High**: Objetivo de 15 Mbps, máximo de 25 Mbps (para calidad premium)
 
+
+`AppleMediaHEVCEncoderSettings` no tiene constructor con `VideoQuality`: configura `Bitrate` y `Quality` directamente, como en el ejemplo de VideoToolbox de arriba.
 ### Uso de preajustes de calidad
 
 ```csharp
@@ -233,14 +310,15 @@ IHEVCEncoderSettings GetOptimalHEVCEncoder()
     }
     else
     {
-#if NET_LINUX
+#if __MACOS__ || __MACCATALYST__ || __IOS__
+        // Apple VideoToolbox.
+        return new AppleMediaHEVCEncoderSettings { Bitrate = 6000 };
+#elif NET_LINUX
         // Usar el codificador software SVT-HEVC en Linux (gated solo a Linux — ver SVTHEVCEncoderSettings).
         return new SVTHEVCEncoderSettings();
 #else
-        // El motor X NO incluye una clase IHEVCEncoderSettings tipada de respaldo para Windows o Apple.
-        // (En plataformas Apple, el HEVC de VideoToolbox solo es alcanzable mediante cableado GStreamer
-        // de bajo nivel — no existe ninguna clase `AppleMedia*HEVC*Settings`; solo se expone
-        // AppleMediaH264EncoderSettings.) El llamador debe decidir: mantener H.264, instalar un driver
+        // El motor X NO incluye una clase IHEVCEncoderSettings tipada de respaldo por software para Windows.
+        // El llamador debe decidir: mantener H.264, instalar un driver
         // de GPU con QSV/NVENC/AMF, o usar el pipeline FFMPEG-EXE del motor clásico.
         throw new NotSupportedException("No hay codificador HEVC disponible en esta plataforma. Instala un driver de GPU o cambia a H.264.");
 #endif
@@ -255,6 +333,7 @@ IHEVCEncoderSettings GetOptimalHEVCEncoder()
 - **GPUs AMD**: Mejor para aplicaciones donde sabe que los usuarios tienen hardware AMD
 - **GPUs NVIDIA**: Proporciona calidad consistente a través de generaciones, ideal para aplicaciones profesionales
 - **Intel QuickSync**: Gran opción universal cuando una GPU dedicada no está garantizada
+- **Apple VideoToolbox**: El único codificador HEVC por hardware en macOS, Mac Catalyst e iOS
 
 ### 2. Selección de control de tasa
 

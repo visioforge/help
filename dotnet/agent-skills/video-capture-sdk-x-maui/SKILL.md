@@ -85,7 +85,7 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.4.18.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
@@ -114,12 +114,12 @@ builder
 
 Forgetting `AddVisioForgeHandlers()` is the most common silent failure — `<my:VideoView />` renders as a blank `Grid`-shaped void, no errors logged.
 
-## Engine boot model — different from WPF
+## Engine boot model
 
-Unlike the WPF host (which requires an explicit `await VisioForgeX.InitSDKAsync()` before constructing `VideoCaptureCoreX`), the MAUI handler chain initializes the native runtime when `AddVisioForgeHandlers()` is registered — so you do **not** call `InitSDKAsync` yourself in MAUI. Construction order is just:
+MAUI is no different from WPF here: `AddVisioForgeHandlers()` only registers the `VideoView` handlers — `VisioForge.Core.UI.MAUI` never touches the native runtime. You must call `await VisioForgeX.InitSDKAsync()` yourself before the first `VideoCaptureCoreX` is constructed, or the constructor throws `DllNotFoundException` on a clean machine. Construction order:
 
-1. MAUI app starts; `MauiProgram.CreateMauiApp()` runs (`AddVisioForgeHandlers` triggers native init).
-2. `MainPage_Loaded` requests permissions, then `_core = new VideoCaptureCoreX(videoView.GetVideoView())`.
+1. MAUI app starts; `MauiProgram.CreateMauiApp()` runs (`AddVisioForgeHandlers` registers the view handlers).
+2. `MainPage_Loaded` requests permissions, calls `await VisioForgeX.InitSDKAsync()`, then `_core = new VideoCaptureCoreX(videoView.GetVideoView())`.
 3. Configure sources / outputs, then `await _core.StartAsync()`.
 
 On shutdown, mirror with `VisioForgeX.DestroySDK()` (in `Window.Destroying` and `Page.Unloaded`):
@@ -191,6 +191,8 @@ For Photos-library save (used by `StopCaptureAsync` in the bundled sample), call
 No extra permission paperwork — the system camera privacy switch in Settings is enforced by Windows itself, not declared in the project. If the user has denied access globally, `DeviceEnumerator.Shared.VideoSourcesAsync()` returns an empty list.
 
 ## License registration
+
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
 
 The SDK ships with a 30-day trial. To register a purchased licence, call `await _core.SetLicenseCertificateAsync(certBytes)` on every `VideoCaptureCoreX` instance, after the constructor and before `StartAsync`. The cross-platform wrinkle is **where the bytes come from**: `File.ReadAllBytes("path/to/your.vflicense")` works on Windows, but on iOS / Android / Mac Catalyst the working directory is the app bundle, not your dev machine. The portable approach is to ship the licence as a `MauiAsset` and load via `FileSystem.OpenAppPackageFileAsync`:
 

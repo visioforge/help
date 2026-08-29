@@ -215,7 +215,7 @@ For Windows developers, we offer a dedicated installer package that includes:
 
 ## Licensing and Deployment
 
-Check out our [Licensing](../../licensing.md) page for more information on the different licensing options available for our SDKs.
+Check out our [Licensing](https://www.visioforge.com/licensing) page for more information on the different licensing options available for our SDKs.
 
 ## Technical Support Resources
 

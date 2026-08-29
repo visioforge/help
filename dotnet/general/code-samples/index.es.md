@@ -79,6 +79,8 @@ Mostrar contenido de video con flexibilidad y rendimiento requiere comprender va
 
 - [Selección de Renderizador de Video (WinForms)](select-video-renderer-winforms.md) - Este tutorial explica cómo elegir y configurar el renderizador de video más apropiado para su aplicación de Windows Forms. Entenderá las ventajas y desventajas entre EVR, VMR9 y otros tipos de renderizadores.
 
+- [Superponer controles WPF sobre el video](wpf-controls-over-video.md) - Aprenda a colocar botones, banners y controles de reproducción WPF sobre la vista previa del video. Esta guía cubre el renderizador componible D3D11, el modo por software `WriteableBitmap`, la limitación de airspace de WPF y la migración desde `WPF_WinUI_Callback` a los motores X.
+
 ### Interacción del Usuario
 
 - [Integración de Eventos de Rueda del Ratón](mouse-wheel-usage.md) - Aprenda cómo manejar eventos de rueda del ratón para pantallas de video interactivas. Este ejemplo demuestra el control de zoom, el desplazamiento en la línea de tiempo y otras interacciones basadas en la rueda.

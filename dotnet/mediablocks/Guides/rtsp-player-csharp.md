@@ -145,7 +145,7 @@ For ONVIF cameras, authenticate through `ONVIFClientX` to retrieve the stream UR
 
 ## Low-Latency Mode
 
-For real-time monitoring or PTZ control, enable low-latency mode to reduce stream delay from the default ~250ms down to 60–120ms:
+For real-time monitoring or PTZ control, enable low-latency mode to cut the jitter buffer from the default 500ms to 150ms. Set `Latency` to 150ms or less to go lower:
 
 ```csharp
 var rtspSettings = await RTSPSourceSettings.CreateAsync(
@@ -322,7 +322,16 @@ Use passthrough for surveillance archival and NVR applications — it requires z
 
 ### How do I reduce RTSP stream latency below 100ms?
 
-Enable `LowLatencyMode = true` on `RTSPSourceSettings` and disable video renderer sync with `IsSync = false`. Use UDP transport when your network supports it. Expected latency: 60–120ms vs the default 250ms. See the [RTSP protocol guide](../../videocapture/video-sources/ip-cameras/rtsp.md) for advanced buffer tuning options.
+Enable `LowLatencyMode = true` on `RTSPSourceSettings` (150ms jitter buffer vs the default 500ms). For even lower delay, set `Latency` to 150ms or less and disable video renderer sync with `IsSync = false`. Use UDP transport when your network supports it. See the [RTSP protocol guide](../../videocapture/video-sources/ip-cameras/rtsp.md) for advanced buffer tuning options.
+
+### Preview works in VLC but freezes or ends after about a minute?
+
+The default protocol list tries UDP first. Force TCP, and if the camera still drops the session, enable `ForceCustomKeepAlive` so the source sends GET_PARAMETER every 30 seconds:
+
+```cs
+rtspSettings.AllowedProtocols = RTSPSourceProtocol.TCP;
+rtspSettings.ForceCustomKeepAlive = true;
+```
 
 ### Can I view and record from multiple IP cameras simultaneously?
 

@@ -1456,10 +1456,22 @@ Configure mediante `RemoveSilenceAudioEffect`:
 
 | Propiedad | Tipo | Predeterminado | Descripción |
 |----------|------|---------|-------------|
-| `Threshold` | `double` | `0.05` | Umbral de silencio (0.0–1.0). El audio por debajo de este nivel se considera silencio |
-| `Squash` | `bool` | `true` | Cuando es verdadero, elimina las porciones silenciosas por completo. Cuando es falso, las deja pasar |
+| `Threshold` | `double` | `0.001` | Umbral de silencio como amplitud lineal (0.0–1.0), convertido a decibelios para el elemento. El audio por debajo de este nivel se considera silencio; 1.0 es escala completa y trata todo como silencio |
+| `Squash` | `bool` | `false` | El silencio siempre se elimina. Cuando es verdadero, los búferes restantes se adelantan para cerrar el hueco; cuando es falso, conservan sus marcas de tiempo originales |
 
 **Elemento GStreamer**: `removesilence`
+
+!!! warning "Dos límites del elemento"
+
+    Sus pads son **solo S16LE mono**, y el bloque no inserta ningún conversor: una señal estéreo se
+    mezcla a mono para todo lo que va después (medido: un MP3 estéreo de 44,1 kHz sale del bloque como
+    mono PCM16). El grafo enlaza solo porque `UniversalSourceBlock` coloca su propio conversor tras el
+    decodificador; una fuente sin él no tiene con qué negociar el estéreo. Coloque un
+    `AudioConverterBlock` detrás del bloque si el resto del grafo necesita estéreo.
+
+    Su detector combina la prueba de nivel con una de cruces por cero: un búfer cuenta como voz solo
+    si es a la vez lo bastante fuerte *y* lo bastante grave. El contenido ruidoso o agudo se trata como
+    silencio con cualquier umbral, incluido el suelo de -70 dB.
 
 #### Pipeline de ejemplo
 
@@ -1624,7 +1636,7 @@ Salida | Audio sin comprimir | 1
 
 | Propiedad | Tipo | Predeterminado | Descripción |
 |----------|------|---------|-------------|
-| `HrirFile` | `string` | `""` | Ruta al archivo HRIR (Respuesta al Impulso Relacionada con la Cabeza) para renderizado espacial |
+| `HrirFile` | `string` | `""` | Ruta a un binario HRIR para hrtfrender destinado al audio espacial (no es un archivo SOFA) |
 | `InterpolationSteps` | `ulong` | `8` | Número de pasos de interpolación para transiciones espaciales suaves |
 | `BlockLength` | `ulong` | `512` | Longitud del bloque de procesamiento en muestras |
 | `DistanceGain` | `float` | `1.0` | Factor de atenuación de ganancia basado en distancia |
@@ -1650,10 +1662,10 @@ var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // HRTFRenderBlock tiene constructor sin parámetros; configura vía propiedades.
-// Debes proporcionar un archivo HRIR (Head-Related Impulse Response) — requerido para renderizado espacial.
+// Descargue un binario HRIR compatible desde https://github.com/mrDIMAS/hrir_sphere_builder/tree/master/hrtf_base/IRCAM.
 var hrtf = new HRTFRenderBlock
 {
-    HrirFile           = "hrir.sofa",    // ruta al archivo HRIR
+    HrirFile           = "IRC_1002_C.bin", // ruta al binario HRIR
     InterpolationSteps = 8,              // ulong — transiciones más suaves = más CPU
     BlockLength        = 512,            // ulong — tamaño del bloque de procesamiento
     DistanceGain       = 1.0f            // float — cuánto atenúa la distancia

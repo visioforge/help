@@ -127,7 +127,7 @@ Sigue estos pasos detallados para integrarla:
 
 ```xml
 <ItemGroup>
-  <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X9.csproj" />
+  <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
 

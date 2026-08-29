@@ -145,6 +145,7 @@ The cross-platform implementation includes extensive artistic distortion effects
 * [**Text overlay**](text-overlay.md) - Add customizable text with control over font, size, color, rotation, and animation
   - Classic: `VideoEffectTextLogo`, `VideoEffectScrollingTextLogo`
   - Cross-platform: `TextOverlayVideoEffect`, `OverlayManagerText`, `OverlayManagerScrollingText`, `OverlayManagerDateTime`
+  * `OverlayManagerText.TextProvider` rebuilds the text once per frame, for live readouts such as a sensor value, the frame number or the clock
 * [**Image overlay**](image-overlay.md) - Incorporate logos, watermarks, and graphic elements with transparency support
   - Classic: `VideoEffectImageLogo`
   - Cross-platform: `ImageOverlayVideoEffect`, `ImageOverlayCairoVideoEffect`, `OverlayManagerImage`, `OverlayManagerGIF`

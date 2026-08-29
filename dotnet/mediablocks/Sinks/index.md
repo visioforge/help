@@ -694,7 +694,7 @@ Windows, macOS, Linux, iOS, Android.
 
 WAV (Waveform Audio File Format) is an audio file format standard developed by IBM and Microsoft for storing audio bitstreams on PCs. It is the main format used on Windows systems for raw and typically uncompressed audio.
 
-The sink is configured through its filename argument — there is no separate `WAVSinkSettings` class; sample format comes from the upstream `PCMEncoderBlock` settings.
+The sink takes its destination either as a filename argument or as a `WAVSinkSettings` object, which is also the form a saved pipeline document carries. Sample format comes from the upstream `PCMEncoderBlock` settings.
 
 #### Block info
 

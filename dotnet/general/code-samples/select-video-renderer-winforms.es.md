@@ -41,7 +41,7 @@ primary_api_classes:
 Los motores clásicos (`VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore`) exponen **10 modos de renderizador** a través del enum `VideoRendererMode`. Elegir el correcto controla cómo los frames llegan a la pantalla: filtros DirectShow crudos, superficies GPU Direct2D, HWND nativo embebido en WPF, callbacks de frame para renderizado personalizado, controles WinUI 3, o el renderizador externo madVR. Esta guía recorre cada modo con código mínimo de activación, disponibilidad por plataforma, y una tabla de decisión arriba para saltar directo al modo que tu app necesita.
 
 !!! note "Solo motores clásicos"
-    Esta página cubre los motores clásicos basados en DirectShow. Los motores multiplataforma `VideoCaptureCoreX` / `MediaPlayerCoreX` usan un control `VideoView` con sinks de GStreamer y no exponen un enum `VideoRendererMode` — el renderizado ahí se maneja automáticamente por el binding del control UI.
+    Esta página cubre los motores clásicos basados en DirectShow. Los motores multiplataforma `VideoCaptureCoreX` / `MediaPlayerCoreX` usan un control `VideoView` con sinks de GStreamer y no exponen un enum `VideoRendererMode` en el motor — el modo de renderizado se selecciona en el propio control `VideoView`. Consulte [Superponer controles WPF sobre el video](wpf-controls-over-video.md) para conocer los modos de renderizado WPF de ambas familias de motores.
 
 ## Elección rápida — ¿qué renderizador para qué app?
 

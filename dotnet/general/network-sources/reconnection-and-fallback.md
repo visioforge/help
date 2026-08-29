@@ -257,7 +257,9 @@ var fallback = new FallbackSwitchSettings
 
 ## Using FallbackSwitch — high-level (`RTSPSourceSettings.FallbackSwitch`)
 
-The simplest path: attach the settings object directly to `RTSPSourceSettings` and pass it to `VideoCaptureCoreX` / `MediaPlayerCoreX` as usual. No extra pipeline plumbing.
+The simplest path: attach the settings object directly to `RTSPSourceSettings` and pass it to `VideoCaptureCoreX` as usual — the engine wraps the source with a fallback switch automatically. No extra pipeline plumbing.
+
+> In `MediaPlayerCoreX` and the Media Blocks SDK this property is **not** applied by a bare source block (`RTSPSourceBlock` logs a warning if you enable it there) — use the low-level `FallbackSwitchSourceBlock` shown in the next section instead.
 
 ```csharp
 var rtsp = await RTSPSourceSettings.CreateAsync(
@@ -317,7 +319,7 @@ var stats = fallbackSwitch.GetStatistics();
 
 **Declarative UX + reactive telemetry** — let `FallbackSwitch` keep the screen alive, and use `pipeline.OnNetworkSourceDisconnect` to feed your monitoring dashboard / Slack alert / NVR log. Neither approach precludes the other.
 
-**Multi-camera wall** — never tear down the whole grid on one fault. See the [multi-camera RTSP grid guide](../../mediablocks/Guides/multi-camera-rtsp-grid.md) for the one-pipeline-per-camera pattern; attach a `FallbackSwitch` to each engine independently.
+**Multi-camera wall** — never tear down the whole grid on one fault. See the [multi-camera RTSP grid guide](../../mediablocks/Guides/multi-camera-rtsp-grid.md) for the one-pipeline-per-camera pattern; wrap each camera's source with a `FallbackSwitchSourceBlock` (in `VideoCaptureCoreX`, setting `FallbackSwitch` on the source settings is enough).
 
 **Cross-platform note** — `FallbackSwitch` depends on the GStreamer `fallbackswitch` element, which ships with the X redist. Classic Windows-only `VideoCaptureCore` / `MediaPlayerCore` don't have it — use the reactive approach there.
 

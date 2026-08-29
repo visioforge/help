@@ -145,6 +145,7 @@ L'implémentation multiplateforme inclut de nombreux effets de distorsion artist
 * [**Superposition de texte**](text-overlay.md) — ajoutez du texte personnalisable avec contrôle de la police, taille, couleur, rotation et animation
   - Classique : `VideoEffectTextLogo`, `VideoEffectScrollingTextLogo`
   - Multiplateforme : `TextOverlayVideoEffect`, `OverlayManagerText`, `OverlayManagerScrollingText`, `OverlayManagerDateTime`
+  * `OverlayManagerText.TextProvider` reconstruit le texte à chaque image, pour un affichage en direct : valeur de capteur, numéro d'image ou horloge
 * [**Superposition d'image**](image-overlay.md) — intégrez logos, filigranes et éléments graphiques avec prise en charge de la transparence
   - Classique : `VideoEffectImageLogo`
   - Multiplateforme : `ImageOverlayVideoEffect`, `ImageOverlayCairoVideoEffect`, `OverlayManagerImage`, `OverlayManagerGIF`

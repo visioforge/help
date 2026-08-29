@@ -139,6 +139,8 @@ private async void MainWindow_Closing(object sender, System.ComponentModel.Cance
 
 ## License registration
 
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
+
 The SDK ships with a 30-day trial. To register a purchased licence, call `await Player.SetLicenseCertificateAsync(certBytes)` on every `MediaPlayerCoreX` instance, after the constructor and before `OpenAsync` / `PlayAsync`:
 
 ```csharp

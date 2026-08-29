@@ -41,7 +41,7 @@ primary_api_classes:
 The classic engines (`VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore`) expose **10 video renderer modes** through the `VideoRendererMode` enum. Choosing the right one controls how frames reach the screen: raw DirectShow filters, Direct2D GPU surfaces, native HWND embedded in WPF, frame callbacks for custom rendering, WinUI 3 controls, or the third-party madVR renderer. This guide walks through each mode with minimal enable code, platform availability, and a decision guide at the top so you can skip straight to the mode your app needs.
 
 !!! note "Classic engines only"
-    This page covers the DirectShow-based classic engines. The cross-platform `VideoCaptureCoreX` / `MediaPlayerCoreX` engines use a `VideoView` control with GStreamer sinks and do not expose a `VideoRendererMode` enum — rendering there is handled automatically by the UI control binding.
+    This page covers the DirectShow-based classic engines. The cross-platform `VideoCaptureCoreX` / `MediaPlayerCoreX` engines use a `VideoView` control with GStreamer sinks and do not expose a `VideoRendererMode` enum on the engine — the render mode is selected on the `VideoView` control itself. See [Overlaying WPF Controls on Video](wpf-controls-over-video.md) for the WPF render modes of both engine families.
 
 ## Quick pick — which renderer for which app?
 

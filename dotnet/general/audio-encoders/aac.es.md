@@ -1,6 +1,6 @@
 ---
 title: Codificación Audio AAC con Contenedor M4A en C# .NET
-description: Use backends avenc_aac, voaacenc y Media Foundation con detección en tiempo de ejecución. Bitrate 32-320 kbps, surround 5.1 y contenedores M4A/MP4.
+description: Use backends avenc_aac, voaacenc, atenc y Media Foundation con detección en tiempo de ejecución. Bitrate 32-320 kbps, surround 5.1 y contenedores M4A/MP4.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -29,6 +29,7 @@ primary_api_classes:
   - AACObject
   - AVENCAACEncoderSettings
   - VOAACEncoderSettings
+  - AppleAACEncoderSettings
   - AACOutput
 
 ---
@@ -52,6 +53,7 @@ Los SDK con capacidad multiplataforma (VideoCaptureCoreX, VideoEditCoreX, MediaB
 1. [Codificador AVENC AAC](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.AVENCAACEncoderSettings.html) - Un codificador multiplataforma con muchas características.
 2. [Codificador VO-AAC](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VOAACEncoderSettings.html) - Un codificador multiplataforma simplificado.
 3. Codificador AAC de Media Foundation - Un codificador de sistema específico de Windows, accesible en plataformas Windows a través de `MFAACEncoderSettings`.
+4. Codificador Apple AAC - El codificador de AudioToolbox integrado en macOS, accesible en macOS y Mac Catalyst a través de `AppleAACEncoderSettings`.
 
 ### Codificador AVENC AAC
 
@@ -118,6 +120,55 @@ var aacSettings = new VOAACEncoderSettings
 - **Tasas de muestreo**: 8000 a 96000 Hz
 - **Canales**: 1-2 canales
 
+### Codificador Apple AAC (macOS y Mac Catalyst)
+
+`AppleAACEncoderSettings` envuelve `atenc`, el codificador AAC integrado en el sistema operativo a
+través de AudioToolbox — el mismo con el que el resto de macOS codifica AAC. Está disponible en
+macOS y Mac Catalyst; el runtime de iOS que se distribuye con el SDK todavía no lo incluye, por lo
+que conviene comprobar siempre `IsAvailable()` en lugar de la plataforma.
+
+#### Características principales
+
+- Producido por el propio codificador del sistema operativo
+- Hasta 8 canales, más que cualquier otro backend AAC del SDK
+- Cuatro modos de control de tasa, incluido VBR real
+
+#### Control de tasa
+
+`RateControl` decide cómo reparte los bits el codificador, y también si `Bitrate` se lee siquiera:
+
+- `Constant` (predeterminado): tasa de bits constante, gobernada por `Bitrate`.
+- `LongTermAverage`: la tasa instantánea varía, el promedio a largo plazo sigue a `Bitrate`.
+- `VariableConstrained`: VBR restringido. **`Bitrate` se ignora.**
+- `Variable`: VBR real gobernado por `VBRQuality` (0-127, predeterminado 65). **`Bitrate` se ignora.**
+
+En los dos modos variables el tamaño resultante depende del contenido y, para `Variable`, únicamente
+de `VBRQuality` — fijar `Bitrate` allí no tiene ningún efecto.
+
+#### Configuración de ejemplo
+
+```csharp
+var aacSettings = new AppleAACEncoderSettings
+{
+    Bitrate = 192,
+    RateControl = AppleAACRateControl.Constant
+};
+```
+
+#### Parámetros soportados
+
+- **Tasas de bits**: 0 (Automático), 32, 64, 96, 128, 160, 192, 224, 256, 320 kbps
+- **Tasas de muestreo**: 8000 a 48000 Hz
+- **Canales**: 1 a 8 canales
+
+!!! note "No es el predeterminado"
+    `AVENCAACEncoderSettings` sigue siendo el codificador AAC predeterminado en macOS. Medido en
+    Apple Silicon contra una fuente sin pérdidas, ambos codificadores se alternan según la tasa de
+    bits - `atenc` queda por detrás a 96 kbps, empata a 128 kbps y va por delante a 192 kbps - y su
+    coste de CPU es indistinguible, ya que la codificación AAC corre a más de cien veces el tiempo
+    real en ambos casos. Elija `AppleAACEncoderSettings` explícitamente cuando quiera el codificador
+    de la plataforma, más de seis canales o VBR real.
+
 ### Codificador AAC de Media Foundation (solo Windows)
 
 Este codificador es específico para plataformas Windows y ofrece una solución de codificación limitada pero optimizada para rendimiento.
@@ -139,6 +190,13 @@ Este codificador es específico para plataformas Windows y ofrece una solución 
 Cada codificador proporciona un método estático `IsAvailable()` para verificar si el codificador puede usarse en el entorno actual. Esto es útil para verificaciones de compatibilidad en tiempo de ejecución.
 
 ```csharp
+#if __MACOS__ || __MACCATALYST__
+if (AppleAACEncoderSettings.IsAvailable())
+{
+    // Usar el codificador AAC propio del sistema operativo
+}
+#endif
+
 if (AVENCAACEncoderSettings.IsAvailable())
 {
     // Usar codificador AVENC AAC
@@ -176,6 +234,11 @@ output.Audio = new AVENCAACEncoderSettings();
 // Para codificador MF AAC (solo Windows)
 #if NET_WINDOWS
 output.Audio = new MFAACEncoderSettings();
+#endif
+
+// Para el codificador Apple AAC (macOS y Mac Catalyst)
+#if __MACOS__ || __MACCATALYST__
+output.Audio = new AppleAACEncoderSettings();
 #endif
 ```
 

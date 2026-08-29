@@ -86,7 +86,10 @@ The block uses `OnnxInferenceEngine` internally:
 
 - The model file is loaded into an ONNX Runtime `InferenceSession`.
 - `Provider = Auto` chooses CUDA, then DirectML, then CoreML, then CPU, from whichever providers are
-  present in the loaded ONNX Runtime native build.
+  present in the loaded ONNX Runtime native build. One documented exception: open-vocabulary detection
+  skips CoreML under `Auto`, because ONNX Runtime cannot map those graphs to it in fewer than a
+  hundred partitions — see
+  [Open-vocabulary detection](open-vocabulary-detection.md#why-does-auto-not-use-coreml-for-this-block).
 - If the model declares a fixed input tensor size, that size overrides `InputWidth` and `InputHeight`.
 - RGBA source frames are resized with a centered letterbox into the model input size.
 - Pixels are converted to an RGB `NCHW` float tensor.

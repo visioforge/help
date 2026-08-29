@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Video Capture SDK X** — the cross-platfo
 
 `VideoCaptureCoreX` is the high-level capture-and-record god-object — same API as on the WPF/MAUI/WinUI hosts, just bound to Uno's `VideoView`. Under the hood it shares the GStreamer-backed engine with Media Blocks.
 
-Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Capture sample): wrapper **`2026.5.4`**, Uno UI **`2026.5.4`**, Windows redists **`2026.4.29`**, Android redist **`2026.4.18.0`**, iOS redist **`2025.0.16`**, Mac Catalyst redist **`2025.9.1`**. Newer 2026.x.x patch versions are usually drop-in compatible — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin the per-OS redists to the values from the upstream csproj for your wrapper version.
+Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Capture sample): wrapper **`2026.5.4`**, Uno UI **`2026.5.4`**, Windows redists **`2026.4.29`**, Android redist **`2026.7.27`**, iOS redist **`2025.0.16`**, Mac Catalyst redist **`2025.9.1`**. Newer 2026.x.x patch versions are usually drop-in compatible — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin the per-OS redists to the values from the upstream csproj for your wrapper version.
 
 ## When to use this skill
 
@@ -177,6 +177,8 @@ private async void MainPage_Unloaded(object sender, RoutedEventArgs e)
 Skipping `InitSDKAsync` is the #1 source of "DLL not found" / "no element X" failures on first run. Calling it **before** the platform permission check on iOS / mac doesn't crash, but you can hit a spurious "no devices" result on a cold first launch — request permissions first.
 
 ## License registration
+
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
 
 The SDK ships with a 30-day trial. To register a purchased licence, call `await _core.SetLicenseCertificateAsync(certBytes)` on every `VideoCaptureCoreX` instance, after the constructor and before `StartAsync`:
 

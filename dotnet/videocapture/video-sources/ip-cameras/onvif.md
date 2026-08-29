@@ -332,7 +332,7 @@ For real-time surveillance and monitoring applications, enable low-latency mode:
         password, 
         true);
     
-    // Enable low latency mode (60-120ms total latency)
+    // Enable low latency mode (150ms jitter buffer vs the default 500ms)
     rtspSettings.LowLatencyMode = true;
     
     var rtspSource = new RTSPSourceBlock(rtspSettings);

@@ -333,7 +333,7 @@ Para aplicaciones de vigilancia y monitoreo en tiempo real, habilita el modo de 
         password, 
         true);
     
-    // Habilitar modo de baja latencia (60-120ms latencia total)
+    // Habilitar modo de baja latencia (búfer de jitter de 150 ms frente a 500 ms por defecto)
     rtspSettings.LowLatencyMode = true;
     
     var rtspSource = new RTSPSourceBlock(rtspSettings);

@@ -79,6 +79,8 @@ Afficher du contenu vidéo avec flexibilité et performance nécessite de compre
 
 - [Sélection du moteur de rendu vidéo (WinForms)](select-video-renderer-winforms.md) — Ce tutoriel explique comment choisir et configurer le moteur de rendu vidéo le plus adapté à votre application Windows Forms. Vous comprendrez les compromis entre EVR, VMR9 et d'autres types de moteurs de rendu.
 
+- [Superposer des contrôles WPF sur la vidéo](wpf-controls-over-video.md) — Apprenez à placer boutons, bandeaux et commandes de lecture WPF au-dessus de l'aperçu vidéo. Ce guide couvre le moteur de rendu composable D3D11, le mode logiciel `WriteableBitmap`, la limitation d'airspace de WPF et la migration de `WPF_WinUI_Callback` vers les moteurs X.
+
 ### Interaction utilisateur
 
 - [Intégration des événements de molette de la souris](mouse-wheel-usage.md) — Apprenez à gérer les événements de la molette de la souris pour des affichages vidéo interactifs. Cet exemple présente le contrôle du zoom, le défilement temporel et d'autres interactions basées sur la molette.

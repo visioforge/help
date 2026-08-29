@@ -67,36 +67,15 @@ VFPAnalyzer.SetLicenseKey(Environment.GetEnvironmentVariable("VFP_LICENSE_KEY"))
 ### Q: Can I use one license on multiple machines?
 
 **A:** License terms depend on your purchase:
-- **Single Developer License**: One developer, unlimited development machines
-- **Site License**: Unlimited developers at one physical location
-- **Enterprise License**: Unlimited developers across multiple locations
+- **One Developer Annual**: One named developer; licenses are counted by developer, not by workstation
+- **Lifetime·Team**: All developers in the purchasing organization at one location within one city
+- **Custom and volume licensing**: Available through sales for organizations that need different terms
 
-For deployment, you need a runtime license for each production server or distributed application.
+Both paid license types include royalty-free distribution of applications built with the SDK. End users do not need separate runtime licenses. See the [canonical licensing policy](https://www.visioforge.com/licensing) for current terms.
 
 ### Q: How do I handle licensing in a distributed application?
 
-**A:** For distributed applications (installed on customer machines), you need:
-
-```csharp
-public class LicenseManager
-{
-    private const string EncryptedLicense = "YOUR_ENCRYPTED_LICENSE";
-    
-    public static void Initialize()
-    {
-        // Decrypt license at runtime
-        string licenseKey = DecryptLicense(EncryptedLicense);
-        VFPAnalyzer.SetLicenseKey(licenseKey);
-    }
-    
-    private static string DecryptLicense(string encrypted)
-    {
-        // Implement your decryption logic
-        // Never store plain text licenses in distributed apps
-        return Decrypt(encrypted);
-    }
-}
-```
+**A:** Commercial licenses include royalty-free distribution, so customers running your application do not need separate runtime licenses. Keep purchased registration material private and apply it using the product's documented registration API. See the [canonical licensing policy](https://www.visioforge.com/licensing) for current commercial terms.
 
 ## Performance and Optimization
 

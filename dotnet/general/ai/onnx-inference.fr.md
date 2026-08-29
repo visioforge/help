@@ -88,7 +88,10 @@ Le bloc utilise `OnnxInferenceEngine` en interne :
 
 - Le fichier du modèle est chargé dans une `InferenceSession` ONNX Runtime.
 - `Provider = Auto` choisit CUDA, puis DirectML, puis CoreML, puis CPU, parmi les fournisseurs
-  présents dans la build native ONNX Runtime chargée.
+  présents dans la build native ONNX Runtime chargée. Une exception documentée : la détection à
+  vocabulaire ouvert ignore CoreML sous `Auto`, car ONNX Runtime ne peut pas mapper ces graphes en
+  moins d'une centaine de partitions — voir
+  [Détection à vocabulaire ouvert](open-vocabulary-detection.md#pourquoi-auto-nutilise-t-il-pas-coreml-pour-ce-bloc).
 - Si le modèle déclare une taille de tenseur d'entrée fixe, cette taille remplace `InputWidth` et
   `InputHeight`.
 - Les images source RGBA sont redimensionnées avec un letterbox centré à la taille d'entrée du

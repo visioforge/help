@@ -499,7 +499,7 @@ var effect = new PhaseInvertAudioEffect();
 
 **Paramètres** :
 
-- `HrirFile` (string) : chemin vers le fichier de données HRIR
+- `HrirFile` (string) : Chemin vers un binaire HRIR pour hrtfrender (et non un fichier SOFA)
 - `InterpolationSteps` (ulong) : qualité d'interpolation
     - Par défaut : 8
 - `BlockLength` (ulong) : taille du bloc de traitement
@@ -509,8 +509,10 @@ var effect = new PhaseInvertAudioEffect();
 
 **Utilisation** :
 
+Téléchargez un binaire HRIR compatible depuis [hrir_sphere_builder](https://github.com/mrDIMAS/hrir_sphere_builder/tree/master/hrtf_base/IRCAM).
+
 ```csharp
-var effect = new HRTFRenderAudioEffect("/path/to/hrir.dat");
+var effect = new HRTFRenderAudioEffect("IRC_1002_C.bin");
 effect.InterpolationSteps = 16; // Qualité supérieure
 ```
 
@@ -794,21 +796,21 @@ effect.Level = 1.0f;
 
 **Paramètres** :
 
-- `Threshold` (double) : seuil de détection du silence
-    - Plage : 0.0 à 1.0
-    - Par défaut : 0.05
-    - Plus bas = plus sensible
-- `Squash` (bool) : supprimer vs réduire le silence
-    - true = supprimer complètement
-    - false = réduire le niveau
-    - Par défaut : true
+- `Threshold` (double) : seuil de détection du silence, une amplitude linéaire
+    - Plage : 0.0 à 1.0, convertie en décibels pour l'élément (`20 * log10(valeur)`, bornée à -70..70 dB)
+    - Par défaut : 0.001 (-60 dB, la valeur par défaut de l'élément)
+    - Plus bas = moins d'audio est considéré comme du silence. 1.0 correspond à la pleine échelle et classe tout comme silence
+- `Squash` (bool) : ce qui arrive à la chronologie après la suppression du silence
+    - true = ramener les tampons restants pour combler le vide
+    - false = conserver leurs horodatages d'origine
+    - Par défaut : false (conserve la chronologie d'origine, donc l'audio reste synchronisé avec la vidéo)
 
 **Utilisation** :
 
 ```csharp
 var effect = new RemoveSilenceAudioEffect("silence-remover");
-effect.Threshold = 0.02;
-effect.Squash = true;
+effect.Threshold = 0.001;
+effect.Squash = false;
 ```
 
 ---

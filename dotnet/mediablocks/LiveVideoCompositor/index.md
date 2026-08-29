@@ -427,6 +427,25 @@ using VisioForge.Core.LiveVideoCompositorV2;
 
 After switching the `using`, `new LiveVideoCompositor(...)` resolves to the V2 class and the obsolete warnings disappear. The `OnRenderStatistics` event is only available on V2.
 
+### Video effects do not migrate one-to-one
+
+Two differences survive the `using` swap, and both concern `Video_Effects_*`:
+
+- **Scope.** V1 keeps one effects block per channel, sized by `LiveVideoCompositorSettings.VideoChannelCount`, and the `channel` argument selects among them. V2 has no `VideoChannelCount` and a single effects block on the composed output, after the mixer — so its `channel` argument never had anything to select. The overloads that take one are obsolete and forward to the channel-free methods: use `Video_Effects_AddOrUpdateAsync(effect)`, `Video_Effects_Get(name)`, `Video_Effects_RemoveAsync(...)` and `Video_Effects_Clear()`.
+- **Effect type.** V1 takes `IBaseVideoEffect`, V2 takes `BaseVideoEffect`. This one is a compile error rather than a silent difference.
+
+To process a single input instead of the whole composition — what V1's per-channel effects did — add a `VideoEffectsBlock` to that input's `ProcessingVideoBlocks`. Those blocks run between the source and the mixer:
+
+```csharp
+var input = new LVCVideoInput("camera", compositor, sourceBlock, videoInfo, rect, autostart: true);
+
+var effects = new VideoEffectsBlock();
+await effects.AddOrUpdateAsync(new GrayscaleVideoEffect("gray"));
+input.ProcessingVideoBlocks.Add(effects);
+
+await compositor.Input_AddAsync(input);
+```
+
 ---
 
 [Sample application on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Live%20Video%20Compositor%20Demo)

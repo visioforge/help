@@ -87,9 +87,9 @@ Low latency is critical for many real-time applications including security monit
 === "VideoCaptureCoreX"
 
     
-    **NEW: Ultra-Low Latency Mode (60-120ms)**
+    **Low latency mode (~150ms)**
     
-    VideoCaptureCoreX now includes a dedicated low latency mode that achieves 60-120ms total latency - up to 10x faster than standard mode. Perfect for real-time surveillance, interactive monitoring, and security applications.
+    VideoCaptureCoreX includes a low-latency mode that cuts the RTSP jitter buffer from the default 500ms to 150ms. Set `Latency` to 150ms or less for an even smaller buffer. Use it for real-time surveillance, interactive monitoring, and security applications.
     
     ```cs
     // Create RTSP source settings
@@ -99,7 +99,7 @@ Low latency is critical for many real-time applications including security monit
         "password", 
         true); // enable audio
     
-    // Enable low latency mode - optimizes for minimal delay (60-120ms)
+    // Enable low latency mode - 150ms jitter buffer (default is 500ms)
     rtsp.LowLatencyMode = true;
     
     // Set source to VideoCaptureCoreX
@@ -107,7 +107,7 @@ Low latency is critical for many real-time applications including security monit
     ```
     
     **How It Works:**
-    - Sets RTSP jitter buffer to 80ms (vs. default 1000ms)
+    - Sets RTSP jitter buffer to 150ms (vs. default 500ms)
     - Optimizes internal queue buffering (2 frames max)
     - Disables packet reordering for minimal delay
     - Trade-off: Optimizes speed over stability
@@ -160,6 +160,14 @@ When working with RTSP cameras, you may encounter connectivity issues related to
 - Check if firewalls are blocking required ports (typically 554 for RTSP)
 - Consider using TCP instead of UDP if experiencing packet loss
 - Test camera streams with VLC or similar tools to isolate application-specific issues
+- If VLC plays the stream but preview freezes or ends after about a minute, force TCP and, if that is not enough, send GET_PARAMETER keep-alives:
+
+    ```cs
+    rtsp.AllowedProtocols = RTSPSourceProtocol.TCP;
+    rtsp.ForceCustomKeepAlive = true;
+    ```
+
+    `ForceCustomKeepAlive` is off by default. The RTSP Preview demo exposes both knobs (Auto / TCP / UDP, plus a Force custom keep-alive checkbox).
 
 Need the RTSP URL for your camera? Browse our [IP camera brands directory](../../../camera-brands/index.md) for brand-specific RTSP URLs and connection examples.
 

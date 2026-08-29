@@ -136,8 +136,8 @@ Ver: [Efectos Picture-In-Picture](code-samples/picture-in-picture.md)
 | Windows x64 | WinForms, WPF, MAUI, Avalonia, Consola | VideoEditCore, VideoEditCoreX | Conjunto completo de características incluyendo puentes DirectShow |
 | macOS | MAUI, Avalonia, Consola | VideoEditCoreX | Intel y Apple Silicon |
 | Linux x64 | Avalonia, Consola | VideoEditCoreX | Ubuntu, Debian, CentOS |
-| Android | MAUI | VideoEditCoreX | Via integración MAUI |
-| iOS | MAUI | VideoEditCoreX | Via integración MAUI |
+| Android | MAUI | VideoEditCoreX | Ver [Edición de video en .NET MAUI](maui/video-editing-maui.md) |
+| iOS | MAUI | VideoEditCoreX | Ver [Edición de video en .NET MAUI](maui/video-editing-maui.md) |
 
 ## Documentación para Desarrolladores
 
@@ -158,4 +158,4 @@ Ver: [Efectos Picture-In-Picture](code-samples/picture-in-picture.md)
 * [Referencia de API](https://api.visioforge.org/dotnet/api/index.html)
 * [Registro de Cambios](../changelog.md)
 * [Contrato de Licencia de Usuario Final](../../eula.md)
-* [Información de Licenciamiento](../../../licensing.md)
+* [Información de Licenciamiento](https://www.visioforge.com/es/licensing)

@@ -82,6 +82,11 @@ https://files.visioforge.com/unity/VisioForge.MediaBlocks.Unity.unitypackage
 Utilisez un projet Unity 6 existant ou créez-en un nouveau (n'importe quel modèle). Gardez la
 racine du projet sur un chemin NTFS court (voir l'avertissement plus haut).
 
+Les scènes d'exemple affichent la vidéo dans un `RawImage` uGUI : le projet a donc besoin du
+paquet **uGUI** (`com.unity.ugui`). Tous les modèles d'Unity Hub le fournissent, mais un projet
+allégé à la main peut en manquer. Aucun pipeline de rendu n'est requis : les scènes fonctionnent
+aussi bien en Built-in qu'en URP ou HDRP.
+
 ![Création d'un projet Unity 6 sur un chemin NTFS court dans Unity Hub](unity-new-project.webp)
 
 ## Étape 2 — Importer le paquet

@@ -87,9 +87,9 @@ La faible latence est critique pour de nombreuses applications temps réel, nota
 === "VideoCaptureCoreX"
 
     
-    **NOUVEAU : mode à latence ultra-faible (60-120 ms)**
+    **Mode à faible latence (~150 ms)**
     
-    VideoCaptureCoreX inclut désormais un mode dédié à faible latence qui atteint une latence totale de 60-120 ms — jusqu'à 10 fois plus rapide que le mode standard. Parfait pour la vidéosurveillance en temps réel, le monitoring interactif et les applications de sécurité.
+    VideoCaptureCoreX inclut un mode à faible latence qui réduit le tampon anti-gigue RTSP de 500 ms par défaut à 150 ms. Définissez `Latency` à 150 ms ou moins pour un tampon encore plus petit. Utilisez-le pour la vidéosurveillance en temps réel, le monitoring interactif et les applications de sécurité.
     
     ```cs
     // Créer les paramètres de source RTSP
@@ -99,7 +99,7 @@ La faible latence est critique pour de nombreuses applications temps réel, nota
         "password", 
         true); // activer l'audio
     
-    // Activer le mode faible latence — optimise pour un délai minimal (60-120 ms)
+    // Activer le mode faible latence — tampon anti-gigue de 150 ms (500 ms par défaut)
     rtsp.LowLatencyMode = true;
     
     // Affecter la source à VideoCaptureCoreX
@@ -107,7 +107,7 @@ La faible latence est critique pour de nombreuses applications temps réel, nota
     ```
     
     **Fonctionnement :**
-    - Définit le tampon anti-gigue RTSP à 80 ms (au lieu de 1000 ms par défaut)
+    - Définit le tampon anti-gigue RTSP à 150 ms (au lieu de 500 ms par défaut)
     - Optimise la mise en tampon de la file d'attente interne (max 2 images)
     - Désactive le réordonnancement de paquets pour un délai minimal
     - Compromis : optimise la vitesse au détriment de la stabilité
@@ -160,6 +160,14 @@ Lorsque vous travaillez avec des caméras RTSP, vous pouvez rencontrer des probl
 - Vérifiez si des pare-feu bloquent les ports requis (généralement 554 pour RTSP)
 - Envisagez d'utiliser TCP plutôt qu'UDP si vous rencontrez des pertes de paquets
 - Testez les flux de la caméra avec VLC ou un outil similaire pour isoler les problèmes propres à l'application
+- Si VLC lit le flux mais que l'aperçu se fige ou s'arrête au bout d'environ une minute, forcez TCP et, si besoin, envoyez des keep-alive GET_PARAMETER :
+
+    ```cs
+    rtsp.AllowedProtocols = RTSPSourceProtocol.TCP;
+    rtsp.ForceCustomKeepAlive = true;
+    ```
+
+    `ForceCustomKeepAlive` est désactivé par défaut. La démo RTSP Preview expose les deux réglages (Auto / TCP / UDP, plus une case Force custom keep-alive).
 
 Besoin de l'URL RTSP de votre caméra ? Parcourez notre [répertoire des marques de caméras IP](../../../camera-brands/index.md) pour des URL RTSP et des exemples de connexion par marque.
 

@@ -80,6 +80,8 @@ Engine boot is required before any pipeline construction or device enumeration: 
 
 ## License registration
 
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
+
 Call `await pipeline.SetLicenseCertificateAsync(certBytes)` on every `MediaBlocksPipeline` instance, after the constructor and before `StartAsync`:
 
 ```csharp
@@ -191,23 +193,19 @@ namespace YourApp
 
         private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Stop → block-Dispose → pipeline-Dispose → DestroySDK is the correct
-            // shutdown order. ClearBlocks/DisposeAsync on the pipeline does NOT
-            // dispose blocks wired only via Connect — those remain owned by the
-            // caller and leak native GStreamer resources unless we dispose them
-            // explicitly. Skipping StopAsync before DisposeAsync leaks the
+            // Stop → pipeline-Dispose → DestroySDK is the correct shutdown order.
+            // The pipeline owns every block you connected to it and disposes them
+            // when it is disposed, so do not dispose the blocks yourself — just drop
+            // the references. Skipping StopAsync before DisposeAsync leaks the
             // GStreamer worker threads; skipping DestroySDK leaks the plugin registry.
             if (_pipeline != null)
             {
                 await _pipeline.StopAsync();
-
-                _videoSource?.Dispose();
-                _videoSource = null;
-                _videoRenderer?.Dispose();
-                _videoRenderer = null;
-
                 await _pipeline.DisposeAsync();
                 _pipeline = null;
+
+                _videoSource = null;
+                _videoRenderer = null;
             }
 
             VisioForgeX.DestroySDK();
@@ -255,7 +253,7 @@ Run through these after first integration:
 - [ ] `dotnet build` succeeds with the bundled `references/` files copied into a fresh project folder (no missing-DLL warnings during build).
 - [ ] First run on a fresh machine takes 2-5 s during `VisioForgeX.InitSDKAsync()` (registry build); second run is instant.
 - [ ] Webcam preview appears within ~1 s after clicking Start on a machine with a real or virtual webcam.
-- [ ] Stopping and restarting the pipeline does not leak — always `await _pipeline.StopAsync()` then `_pipeline.ClearBlocks()` or `await _pipeline.DisposeAsync()` before reuse.
+- [ ] Restarting works without recreating anything: `await _pipeline.StopAsync()` then `await _pipeline.StartAsync()` on the same pipeline and the same blocks resumes playback. Dispose only when you are finished with the pipeline — `DisposeAsync()` (or `ClearBlocks()`) disposes the blocks it owns, so do not dispose them again yourself.
 - [ ] On clean shutdown, `Window_Closing` runs `StopAsync → DisposeAsync → VisioForgeX.DestroySDK()` in that order.
 - [ ] If recording to a file sink: output file is finalised correctly when the app exits cleanly (`StopAsync` runs to completion before `DisposeAsync`).
 - [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called on every `MediaBlocksPipeline` instance before its `StartAsync` (otherwise the app runs in 30-day trial mode).

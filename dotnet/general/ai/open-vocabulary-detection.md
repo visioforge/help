@@ -208,8 +208,8 @@ rather than fighting it:
   playing; boxes reflect the most recent completed inference.
 - **Lower the inference rate** with `FramesToSkip` when you don't need a result on every frame — the
   block still passes every frame through.
-- **Use a GPU provider** (`CUDA`, `DirectML`, or `CoreML`) via `Provider`/`DeviceId` for a large
-  latency drop over CPU.
+- **Use a GPU provider** (`CUDA` or `DirectML`) via `Provider`/`DeviceId` for a large latency drop
+  over CPU. **Do not set `CoreML` for these models on Apple hardware** — see the note below.
 - **Input size is fixed per family** (OWLv2 960x960; Grounding DINO its baked-in size) and cannot be
   lowered to trade accuracy for speed — pick the lighter model instead if you need more headroom.
 - **Watch live cost** with `LastInferenceTimeMs` and `DroppedFrameCount`, and read the engaged provider
@@ -314,8 +314,21 @@ tripwires, or zone counting, see [Object analytics](object-analytics.md).
 
 ### Is a GPU required?
 
-No. `Provider` defaults to `Auto`, which runs on the CPU when no GPU provider is present. A `CUDA`,
-`DirectML`, or `CoreML` provider lowers per-frame latency, which matters most for these heavier models.
+No. `Provider` defaults to `Auto`, which runs on the CPU when no GPU provider is present. A `CUDA` or
+`DirectML` provider lowers per-frame latency, which matters most for these heavier models.
+
+### Why does `Auto` not use CoreML for this block?
+
+On Apple hardware `Auto` picks CPU for open-vocabulary detection even though CoreML is available, and
+that is deliberate. ONNX Runtime cannot map these graphs to CoreML in one piece: it splits OWLv2 into
+126 partitions and Grounding DINO into 255, each compiled and held as a separate CoreML model. The
+result is not slow, it is unusable — measured on a 24 GB Mac, the session grew past 5.8 GB resident
+plus several GB of swap and never settled, while the same model on CPU peaks at about 4 GB and
+returns a frame in roughly 1.3 s.
+
+Only the `Auto` default is redirected. Setting `Provider = OnnxExecutionProvider.CoreML` explicitly
+still does exactly what you ask, and it is not recommended for these two model families. Other AI
+blocks are unaffected — models that CoreML maps in a handful of partitions still use it.
 
 ### Is open-vocabulary detection the same as zero-shot object detection?
 

@@ -1455,10 +1455,22 @@ Configure via `RemoveSilenceAudioEffect`:
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `Threshold` | `double` | `0.05` | Silence threshold (0.0–1.0). Audio below this level is considered silence |
-| `Squash` | `bool` | `true` | When true, removes silent portions entirely. When false, passes them through |
+| `Threshold` | `double` | `0.001` | Silence threshold as a linear amplitude (0.0–1.0), converted to decibels for the element. Audio below this level is considered silence; 1.0 is full scale and treats everything as silence |
+| `Squash` | `bool` | `false` | Silence is always dropped. When true, the surviving buffers are pulled back to close the gap; when false, they keep their original timestamps |
 
 **GStreamer Element**: `removesilence`
+
+!!! warning "Two limits of the element"
+
+    Its pads are **S16LE mono only**, and the block inserts no converter — a stereo stream is
+    downmixed for everything downstream of it (measured: a 44.1 kHz stereo MP3 arrives past the block
+    as mono PCM16). The graph links at all only because `UniversalSourceBlock` puts its own converter
+    after the decoder; a source without one has nothing to negotiate the stereo down. Put an
+    `AudioConverterBlock` after the block if the rest of the graph needs stereo back.
+
+    Its detector ANDs the level test with a zero-crossing test: a buffer counts as speech only when it
+    is both loud enough *and* low-frequency enough. Noise-like or high-frequency content is treated as
+    silence at every threshold, including the -70 dB floor.
 
 #### The sample pipeline
 
@@ -1623,7 +1635,7 @@ Output | Uncompressed audio | 1
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `HrirFile` | `string` | `""` | Path to the HRIR (Head-Related Impulse Response) file for spatial rendering |
+| `HrirFile` | `string` | `""` | Path to an hrtfrender HRIR binary for spatial rendering (not a SOFA file) |
 | `InterpolationSteps` | `ulong` | `8` | Number of interpolation steps for smooth spatial transitions |
 | `BlockLength` | `ulong` | `512` | Processing block length in samples |
 | `DistanceGain` | `float` | `1.0` | Distance-based gain attenuation factor |
@@ -1649,10 +1661,10 @@ var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // HRTFRenderBlock has a parameterless ctor; configure via properties.
-// Supply a HRIR (Head-Related Impulse Response) file — required for spatial rendering.
+// Download a compatible HRIR binary from https://github.com/mrDIMAS/hrir_sphere_builder/tree/master/hrtf_base/IRCAM.
 var hrtf = new HRTFRenderBlock
 {
-    HrirFile           = "hrir.sofa",    // path to HRIR file
+    HrirFile           = "IRC_1002_C.bin", // path to HRIR binary
     InterpolationSteps = 8,              // ulong — smoother transitions = more CPU
     BlockLength        = 512,            // ulong — processing block size
     DistanceGain       = 1.0f            // float — how strongly distance attenuates

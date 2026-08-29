@@ -499,7 +499,7 @@ var effect = new PhaseInvertAudioEffect();
 
 **Parámetros**:
 
-- `HrirFile` (string): Ruta al archivo de datos HRIR
+- `HrirFile` (string): Ruta a un binario HRIR para hrtfrender (no es un archivo SOFA)
 - `InterpolationSteps` (ulong): Calidad de interpolación
     - Predeterminado: 8
 - `BlockLength` (ulong): Tamaño del bloque de procesamiento
@@ -509,8 +509,10 @@ var effect = new PhaseInvertAudioEffect();
 
 **Uso**:
 
+Descargue un binario HRIR compatible desde [hrir_sphere_builder](https://github.com/mrDIMAS/hrir_sphere_builder/tree/master/hrtf_base/IRCAM).
+
 ```csharp
-var effect = new HRTFRenderAudioEffect("/path/to/hrir.dat");
+var effect = new HRTFRenderAudioEffect("IRC_1002_C.bin");
 effect.InterpolationSteps = 16; // Mayor calidad
 ```
 
@@ -794,21 +796,21 @@ effect.Level = 1.0f;
 
 **Parámetros**:
 
-- `Threshold` (double): Umbral de detección de silencio
-    - Rango: 0.0 a 1.0
-    - Predeterminado: 0.05
-    - Menor = más sensible
-- `Squash` (bool): Eliminar vs. reducir silencio
-    - true = eliminar completamente
-    - false = reducir nivel
-    - Predeterminado: true
+- `Threshold` (double): Umbral de detección de silencio, una amplitud lineal
+    - Rango: 0.0 a 1.0, convertido a los decibelios que usa el elemento (`20 * log10(valor)`, limitado a -70..70 dB)
+    - Predeterminado: 0.001 (-60 dB, el valor predeterminado del propio elemento)
+    - Menor = menos audio se considera silencio. 1.0 es escala completa y clasifica todo como silencio
+- `Squash` (bool): qué ocurre con la línea de tiempo después de eliminar el silencio
+    - true = adelantar los búferes restantes para cerrar el hueco
+    - false = conservar sus marcas de tiempo originales
+    - Predeterminado: false (conserva la línea de tiempo original, por lo que el audio permanece sincronizado con el vídeo)
 
 **Uso**:
 
 ```csharp
 var effect = new RemoveSilenceAudioEffect("silence-remover");
-effect.Threshold = 0.02;
-effect.Squash = true;
+effect.Threshold = 0.001;
+effect.Squash = false;
 ```
 
 ---

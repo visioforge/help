@@ -67,36 +67,15 @@ VFPAnalyzer.SetLicenseKey(Environment.GetEnvironmentVariable("VFP_LICENSE_KEY"))
 ### Q : puis-je utiliser une licence sur plusieurs machines ?
 
 **R :** les conditions de licence dépendent de votre achat :
-- **Licence développeur unique** : un développeur, machines de développement illimitées
-- **Licence de site** : développeurs illimités sur un seul emplacement physique
-- **Licence entreprise** : développeurs illimités sur plusieurs emplacements
+- **One Developer Annual** : un développeur désigné ; les licences sont comptées par développeur, et non par poste de travail
+- **Lifetime·Team** : tous les développeurs de l'organisation acheteuse sur un même site dans une seule ville
+- **Licences personnalisées et en volume** : disponibles auprès du service commercial pour les organisations qui ont besoin de conditions différentes
 
-Pour le déploiement, vous avez besoin d'une licence runtime pour chaque serveur de production ou application distribuée.
+Les deux types de licence payante incluent la distribution sans redevances des applications créées avec le SDK. Les utilisateurs finaux n'ont pas besoin de licences runtime distinctes. Consultez la [politique de licence de référence](https://www.visioforge.com/fr/licensing) pour connaître les conditions actuelles.
 
 ### Q : comment gérer la licence dans une application distribuée ?
 
-**R :** pour les applications distribuées (installées sur les machines des clients), vous avez besoin de :
-
-```csharp
-public class LicenseManager
-{
-    private const string EncryptedLicense = "YOUR_ENCRYPTED_LICENSE";
-    
-    public static void Initialize()
-    {
-        // Déchiffrer la licence à l'exécution
-        string licenseKey = DecryptLicense(EncryptedLicense);
-        VFPAnalyzer.SetLicenseKey(licenseKey);
-    }
-    
-    private static string DecryptLicense(string encrypted)
-    {
-        // Implémenter votre logique de déchiffrement
-        // Ne jamais stocker de licences en clair dans des applis distribuées
-        return Decrypt(encrypted);
-    }
-}
-```
+**R :** les licences commerciales incluent la distribution sans redevances, de sorte que les clients qui exécutent votre application n'ont pas besoin de licences runtime distinctes. Gardez confidentiel le matériel d'enregistrement acheté et appliquez-le au moyen de l'API d'enregistrement documentée du produit. Consultez la [politique de licence de référence](https://www.visioforge.com/fr/licensing) pour connaître les conditions commerciales actuelles.
 
 ## Performance et optimisation { #performance-and-optimization }
 

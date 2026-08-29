@@ -22,6 +22,7 @@ tags:
   - C#
 primary_api_classes:
   - TextOverlayVideoEffect
+  - OverlayManagerText
   - FontSettings
   - VideoEffectTextLogo
 
@@ -186,6 +187,64 @@ textOverlay.Mode = TextOverlayMode.SystemTime;
 
 // add the effect
 await videoCapture1.Video_Effects_AddOrUpdateAsync(textOverlay);
+```
+
+### Text That Changes on Every Frame
+
+`TextOverlayVideoEffect` is built for text that rarely changes, and it has no time window. For a live
+readout - a sensor value, the frame number, the clock - use `OverlayManagerText` through
+`Video_Overlay_Add` and give it a `TextProvider`. It is asked for the text once per frame:
+
+```csharp
+// The overlay manager is only inserted into the pipeline when this is true,
+// and it must be set before Start/StartAsync.
+videoCapture1.Video_Overlay_Enabled = true;
+
+var text = new OverlayManagerText(string.Empty, x: 40, y: 40);
+text.Color = SKColors.Yellow;
+text.Font.Size = 28;
+
+// Called once per frame on the streaming thread. The argument is the frame
+// timestamp, counted from the start of the pipeline.
+text.TextProvider = ts => "Camera 1\nOperator: demo\nREC\n"
+    + $"Sensor {_sensorValue:F1}   {DateTime.Now:HH:mm:ss}   {ts:hh\\:mm\\:ss}";
+
+videoCapture1.Video_Overlay_Add(text);
+```
+
+Static and dynamic lines live in one string, so a caption block with a single live line still costs
+one callback per frame. Returning the same string as last time is cheap: the text layout is only
+re-measured when the string actually differs.
+
+The callback runs on the streaming thread, under the same lock `Video_Overlay_Add` and
+`Video_Overlay_Remove` take. Keep it short and do not block in it - calling `Dispatcher.Invoke` from
+inside it to read a UI value can deadlock, not merely drop a frame. Read a field the UI thread has
+already written instead. A callback that throws is logged once and then not called again, and the
+element falls back to its `Text`; assigning `TextProvider` again re-enables it.
+
+`OverlayManagerText` also honours `StartTime` and `EndTime`. Either bound works on its own - a zero
+`StartTime` means "from the beginning" and a zero `EndTime` means "no end" - and both are compared
+against the frame timestamp, not the wall clock.
+
+See the [OverlayManagerBlock page](../../mediablocks/VideoProcessing/OverlayManagerBlock.md) for the
+full list of overlay elements.
+
+`X` and `Y` are the top-left corner of the text, in pixels. `(0, 0)` is the top-left of the frame
+and the first line of a multiline string is fully visible there.
+
+### Preview-only overlays in MediaPlayerCoreX
+
+The same `Video_Overlay_*` API is available on `MediaPlayerCoreX`. Set `Video_Overlay_Enabled`
+before `OpenAsync` / `PlayAsync`. The overlay is inserted on the renderer branch only, after the
+sample grabber and after any custom video outputs, so the file on disk, snapshots and exports are
+not modified. Elements added with `Video_Overlay_Add` survive `Stop` and opening another file:
+
+```csharp
+mediaPlayer1.Video_Overlay_Enabled = true;
+
+var text = new OverlayManagerText(string.Empty, x: 0, y: 0);
+text.TextProvider = ts => $"T {ts:hh\\:mm\\:ss}";
+mediaPlayer1.Video_Overlay_Add(text);
 ```
 
 ## Best Practices for Text Overlays

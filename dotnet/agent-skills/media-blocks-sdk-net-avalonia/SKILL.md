@@ -116,6 +116,8 @@ The upstream sample places `InitSDK()` in the `MainWindow` constructor; heavy wo
 
 ## License registration
 
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
+
 The SDK ships with a 30-day trial. To register a purchased licence, call `await pipeline.SetLicenseCertificateAsync(certBytes)` on every `MediaBlocksPipeline` instance, after the constructor and before any `Connect()` / `StartAsync()`:
 
 ```csharp

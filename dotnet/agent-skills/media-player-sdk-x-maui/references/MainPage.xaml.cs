@@ -62,6 +62,10 @@ namespace Simple_Player_MAUI
         {
             try
             {
+                // Loads the native GStreamer stack. Without it the constructor below
+                // throws DllNotFoundException on a clean machine.
+                await VisioForgeX.InitSDKAsync();
+
                 IVideoView vv = videoView.GetVideoView();
 
                 _player = new MediaPlayerCoreX(vv);

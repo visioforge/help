@@ -48,25 +48,37 @@ X-engines require additional initialization and de-initialization steps.
 
 ## SDK initialization and de-initialization for X-engines
 
-You need to initialize SDK before any SDK class usage and de-initialize SDK before the application exits.
+All X-engines (`VideoCaptureCoreX`, `VideoEditCoreX`, `MediaPlayerCoreX`, `MediaBlocksPipeline`) use one shared initialization step. You must initialize the SDK before any SDK class usage and de-initialize the SDK before the application exits. The Windows-only DirectShow cores (`VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore`) need no initialization step.
 
-To initialize SDK, use the following code:
+### Calling InitSDKAsync
+
+The recommended way is asynchronous, so a cold GStreamer startup (native library resolution, plugin registry scan) does not freeze the calling thread:
+
+```csharp
+await VisioForge.Core.VisioForgeX.InitSDKAsync();
+```
+
+The blocking form is equivalent and may be called from any thread. Use it directly when initialization must run on a specific thread (see the note below):
 
 ```csharp
 VisioForge.Core.VisioForgeX.InitSDK();
 ```
 
-To de-initialize SDK, use the following code:
+`InitSDKAsync` offloads `InitSDK` to a thread-pool thread via `Task.Run`. GStreamer / GLib unhandled-exception handlers are bound to whichever thread first triggered initialization, so if your application relies on init running on a particular thread (for thread-static GLib state), call `InitSDK()` on that thread directly.
+
+### De-initialization
 
 ```csharp
 VisioForge.Core.VisioForgeX.DestroySDK();
 ```
 
+`DestroySDK` has no asynchronous variant and may be called from any thread.
+
 If the SDK is not properly deinitialized, the application may experience a hang-on exit due to the inability to finalize one of its threads. This issue arises because the SDK continues to operate, preventing the application from closing smoothly. To ensure a clean exit, it is crucial to deinitialize the SDK appropriately based on the UI framework you are using.
 
 For applications developed using different UI frameworks, you can deinitialize the SDK in the `FormClosing` event or another relevant event handler. This approach ensures that the SDK is properly destroyed before the application closes, allowing for all threads to terminate correctly.
 
-Moreover, the SDK can be destroyed from any thread, providing flexibility in how you manage the deinitialization process. To enhance the user experience and prevent the UI from freezing during this process, you can utilize asynchronous API calls. By using async methods, you allow the deinitialization to occur in the background, keeping the user interface responsive and avoiding any potential lag or freezing issues.
+Moreover, the SDK can be destroyed from any thread, providing flexibility in how you manage the deinitialization process. Because `DestroySDK` is synchronous, if you want to keep the user interface responsive call it on a background thread (for example via `Task.Run`) — there is no asynchronous `DestroySDK` overload.
 
 Implementing these practices ensures that your application exits smoothly without hanging, providing a seamless experience for the users. Properly managing the SDK deinitialization is crucial for maintaining the stability and performance of your application.
 

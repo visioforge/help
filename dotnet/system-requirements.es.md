@@ -215,7 +215,7 @@ Para desarrolladores de Windows, ofrecemos un paquete instalador dedicado que in
 
 ## Licenciamiento y Despliegue
 
-Consulta nuestra página de [Licenciamiento](../../licensing.md) para más información sobre las diferentes opciones de licenciamiento disponibles para nuestros SDKs.
+Consulta nuestra página de [Licenciamiento](https://www.visioforge.com/es/licensing) para más información sobre las diferentes opciones de licenciamiento disponibles para nuestros SDKs.
 
 ## Recursos de Soporte Técnico
 

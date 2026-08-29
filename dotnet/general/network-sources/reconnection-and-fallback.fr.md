@@ -257,7 +257,9 @@ var fallback = new FallbackSwitchSettings
 
 ## Utilisation du FallbackSwitch — haut niveau (`RTSPSourceSettings.FallbackSwitch`)
 
-Le chemin le plus simple : attachez directement l'objet de paramètres à `RTSPSourceSettings` et passez-le à `VideoCaptureCoreX` / `MediaPlayerCoreX` comme d'habitude. Aucune plomberie de pipeline supplémentaire.
+Le chemin le plus simple : attachez directement l'objet de paramètres à `RTSPSourceSettings` et passez-le à `VideoCaptureCoreX` comme d'habitude — le moteur enveloppe la source avec un fallback switch automatiquement. Aucune plomberie de pipeline supplémentaire.
+
+> Dans `MediaPlayerCoreX` et le Media Blocks SDK, cette propriété n'est **pas** appliquée par un bloc source nu (`RTSPSourceBlock` journalise un avertissement si vous l'activez là) — utilisez plutôt le `FallbackSwitchSourceBlock` de bas niveau présenté dans la section suivante.
 
 ```csharp
 var rtsp = await RTSPSourceSettings.CreateAsync(
@@ -317,7 +319,7 @@ var stats = fallbackSwitch.GetStatistics();
 
 **UX déclarative + télémétrie réactive** — laissez `FallbackSwitch` maintenir l'écran vivant, et utilisez `pipeline.OnNetworkSourceDisconnect` pour alimenter votre tableau de bord de monitoring / alerte Slack / journal NVR. Les deux approches ne s'excluent pas l'une l'autre.
 
-**Mur multi-caméras** — ne démantelez jamais toute la grille sur une seule panne. Consultez le [guide de la grille RTSP multi-caméras](../../mediablocks/Guides/multi-camera-rtsp-grid.md) pour le modèle un-pipeline-par-caméra ; attachez un `FallbackSwitch` à chaque moteur indépendamment.
+**Mur multi-caméras** — ne démantelez jamais toute la grille sur une seule panne. Consultez le [guide de la grille RTSP multi-caméras](../../mediablocks/Guides/multi-camera-rtsp-grid.md) pour le modèle un-pipeline-par-caméra ; enveloppez la source de chaque caméra avec un `FallbackSwitchSourceBlock` (dans `VideoCaptureCoreX`, il suffit de définir `FallbackSwitch` sur les paramètres de la source).
 
 **Note multiplateforme** — `FallbackSwitch` dépend de l'élément GStreamer `fallbackswitch`, qui est livré avec le redist X. Les `VideoCaptureCore` / `MediaPlayerCore` classiques uniquement Windows ne l'ont pas — utilisez l'approche réactive là-bas.
 

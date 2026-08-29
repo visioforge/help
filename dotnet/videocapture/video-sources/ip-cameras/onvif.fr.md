@@ -332,7 +332,7 @@ Pour les applications de vidéosurveillance et de monitoring en temps réel, act
         password, 
         true);
     
-    // Activer le mode faible latence (60-120 ms de latence totale)
+    // Activer le mode faible latence (tampon anti-gigue de 150 ms au lieu de 500 ms par défaut)
     rtspSettings.LowLatencyMode = true;
     
     var rtspSource = new RTSPSourceBlock(rtspSettings);

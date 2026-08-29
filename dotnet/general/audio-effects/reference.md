@@ -499,7 +499,7 @@ var effect = new PhaseInvertAudioEffect();
 
 **Parameters**:
 
-- `HrirFile` (string): Path to HRIR data file
+- `HrirFile` (string): Path to an hrtfrender HRIR binary (not a SOFA file)
 - `InterpolationSteps` (ulong): Interpolation quality
     - Default: 8
 - `BlockLength` (ulong): Processing block size
@@ -509,8 +509,10 @@ var effect = new PhaseInvertAudioEffect();
 
 **Usage**:
 
+Download a compatible HRIR binary from [hrir_sphere_builder](https://github.com/mrDIMAS/hrir_sphere_builder/tree/master/hrtf_base/IRCAM).
+
 ```csharp
-var effect = new HRTFRenderAudioEffect("/path/to/hrir.dat");
+var effect = new HRTFRenderAudioEffect("IRC_1002_C.bin");
 effect.InterpolationSteps = 16; // Higher quality
 ```
 
@@ -794,21 +796,21 @@ effect.Level = 1.0f;
 
 **Parameters**:
 
-- `Threshold` (double): Silence detection threshold
-    - Range: 0.0 to 1.0
-    - Default: 0.05
-    - Lower = more sensitive
-- `Squash` (bool): Remove vs. reduce silence
-    - true = remove completely
-    - false = reduce level
-    - Default: true
+- `Threshold` (double): Silence detection threshold, a linear amplitude
+    - Range: 0.0 to 1.0, converted to the decibels the element uses (`20 * log10(value)`, clamped to -70..70 dB)
+    - Default: 0.001 (-60 dB, the element's own default)
+    - Lower = less audio is treated as silence. 1.0 is full scale and classifies everything as silence
+- `Squash` (bool): what happens to the timeline after silence is dropped
+    - true = pull the surviving buffers back to close the gap
+    - false = keep their original timestamps
+    - Default: false (keeps the original timeline, so audio stays in sync with video)
 
 **Usage**:
 
 ```csharp
 var effect = new RemoveSilenceAudioEffect("silence-remover");
-effect.Threshold = 0.02;
-effect.Squash = true;
+effect.Threshold = 0.001;
+effect.Squash = false;
 ```
 
 ---

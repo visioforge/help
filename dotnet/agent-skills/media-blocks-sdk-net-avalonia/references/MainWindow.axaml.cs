@@ -446,18 +446,21 @@ namespace SimpleVideoCaptureAMB
             catch (Exception ex) { Debug.WriteLine(ex); }
         }
 
-        // Dispose the individual MediaBlock instances created in btStart_Click.
-        // DisposeAsync on the pipeline does NOT dispose blocks wired only via Connect —
-        // sources/renderers/tees/sinks remain owned by the caller.
+        // Drop the references to the blocks created in btStart_Click. The pipeline owns
+        // every block you connected to it and disposes them when it is disposed, so they
+        // must NOT be disposed here as well.
+        //
+        // Stopping alone disposes nothing: a stopped pipeline keeps its blocks and
+        // connections and can be started again as-is.
         private void DisposeBlocks()
         {
-            _videoSource?.Dispose(); _videoSource = null;
-            _audioSource?.Dispose(); _audioSource = null;
-            _videoRenderer?.Dispose(); _videoRenderer = null;
-            _audioRenderer?.Dispose(); _audioRenderer = null;
-            _videoTee?.Dispose(); _videoTee = null;
-            _audioTee?.Dispose(); _audioTee = null;
-            _mp4Output?.Dispose(); _mp4Output = null;
+            _videoSource = null;
+            _audioSource = null;
+            _videoRenderer = null;
+            _audioRenderer = null;
+            _videoTee = null;
+            _audioTee = null;
+            _mp4Output = null;
         }
 
         private async void cbVideoInputFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)

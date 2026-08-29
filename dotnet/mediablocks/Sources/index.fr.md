@@ -979,14 +979,15 @@ Le `RTSPSourceBlock` se configure via `RTSPSourceSettings`. Propriétés clés :
 - `Login` : nom d'utilisateur pour l'authentification RTSP, si requis.
 - `Password` : mot de passe pour l'authentification RTSP, si requis.
 - `AudioEnabled` : booléen indiquant s'il faut tenter de traiter le flux audio.
-- `Latency` : spécifie la durée de mise en tampon du flux entrant (par défaut 1000 ms).
+- `Latency` : spécifie la durée de mise en tampon du flux entrant (par défaut 500 ms). `LowLatencyMode` utilise 150 ms, ou la valeur explicite de `Latency` si vous la définissez à 150 ms ou moins.
 - `AllowedProtocols` : définit les protocoles de transport utilisés pour recevoir le flux. C'est un enum de flags `RTSPSourceProtocol` avec les valeurs :
   - `UDP` : transport des données sur UDP.
   - `UDP_Multicast` : transport des données sur UDP multicast.
   - `TCP` (recommandé) : transport des données sur TCP.
   - `HTTP` : transport des données via un tunnel HTTP.
   - `EnableTLS` : chiffrement TCP et HTTP avec TLS (utilisez `rtsps://` ou `httpsps://` dans l'URI).
-- `DoRTCP` : active RTCP (RTP Control Protocol) pour les statistiques et le contrôle du flux (généralement true par défaut).
+- `DoRTCP` : active RTCP (RTP Control Protocol) pour les statistiques et le contrôle du flux. La valeur par défaut est `true`. De nombreuses caméras utilisent les rapports de réception RTCP pour savoir qu'un client est toujours connecté et ferment la session sans eux : ne le désactivez que pour un ancien serveur incapable de gérer RTCP.
+- `ForceCustomKeepAlive` : si `true`, désactive le keep-alive RTSP intégré et envoie GET_PARAMETER toutes les 30 secondes. La valeur par défaut est `false`. À utiliser si la caméra ferme la session avec le keep-alive par défaut.
 - `RTPBlockSize` : spécifie la taille des blocs RTP.
 - `UDPBufferSize` : taille du tampon pour le transport UDP.
 - `CustomVideoDecoder` : permet de spécifier un nom d'élément décodeur vidéo GStreamer personnalisé si le décodeur par défaut ne convient pas.
@@ -1068,6 +1069,7 @@ Utilisez la méthode de fabrique `RTSPRAWSourceSettings.CreateAsync(uri, login, 
 | `WaitForKeyframe` | `bool` | `true` | Attendre une image IDR avant de transmettre la vidéo |
 | `SyncAudioWithKeyframe` | `bool` | `true` | Synchroniser la livraison audio sur la première image clé |
 | `DoRTCP` | `bool` | — | Activer le protocole de contrôle RTCP |
+| `ForceCustomKeepAlive` | `bool` | `false` | Envoyer GET_PARAMETER toutes les 30 s à la place du keep-alive par défaut |
 | `UDPBufferSize` | `int` | — | Taille du tampon de réception UDP |
 
 #### Exemple de pipeline

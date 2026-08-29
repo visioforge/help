@@ -38,36 +38,37 @@ Este Contrato aplica a todos los kits de desarrollo de software y productos rela
 
 Sujeto a los términos y condiciones de este Contrato y al pago de las tarifas de licencia aplicables, el Licenciante le otorga una licencia limitada, no exclusiva e intransferible para usar el Software de la siguiente manera:
 
+Los tipos y términos actuales de las licencias comerciales se resumen en la [página canónica de licencias de VisioForge](https://www.visioforge.com/es/licensing).
+
 ### 3.1. Derechos de Licencia de Desarrollador
 
-**3.1.1. Licencia de Desarrollador de Un Año**
+**3.1.1. Licencia Anual de Desarrollador**
 
-- Permite la instalación y uso del Software en hasta tres (3) estaciones de trabajo de desarrollador por un solo desarrollador
+- Permite la instalación y el uso del Software por un desarrollador designado; la licencia se cuenta por desarrollador, no por estación de trabajo
 - Válida por un año calendario desde la fecha de compra
-- Incluye acceso a todas las actualizaciones y soporte técnico durante el período de licencia
+- Incluye todas las actualizaciones menores y mayores y soporte por correo electrónico durante doce (12) meses desde la fecha de compra
 - Después de la expiración, puede continuar usando la última versión disponible durante su período de licencia, pero sin actualizaciones ni soporte
 - La licencia puede renovarse en cualquier momento
 - La licencia no es transferible a otra empresa pero puede reasignarse a otro desarrollador dentro de la misma empresa
 
 **3.1.2. Licencia Vitalicia/Equipo**
 
-- Permite la instalación y uso del Software en estaciones de trabajo de desarrollador ilimitadas en una sola ubicación física
+- Permite que todos los desarrolladores de la organización compradora en una ubicación dentro de una misma ciudad instalen y usen el Software
 - Válida a perpetuidad sin requisitos de renovación
-- Incluye actualizaciones y soporte técnico durante el primer año después de la compra
-- Suscripción opcional de soporte y actualización disponible después del primer año
+- Incluye todas las actualizaciones menores y mayores y soporte por correo electrónico durante la vida útil del producto
 - La licencia no es transferible a otra empresa
 
 ### 3.2. Derechos de Distribución
 
 - Puede incorporar el Software en sus propias aplicaciones comerciales y distribuir dichas aplicaciones sin pagos de regalías
 - Los usuarios finales de sus aplicaciones no están obligados a comprar licencias separadas
-- Los derechos de distribución aplican tanto a la Licencia de Desarrollador de Un Año como a la Licencia Vitalicia/Equipo
+- Los derechos de distribución aplican tanto a la Licencia Anual de Desarrollador como a la Licencia Vitalicia/Equipo
 
 ### 3.3. Licencia de Evaluación
 
-- Puede evaluar el Software por un período de treinta (30) días calendario
-- Durante el período de evaluación, puede usar el Software únicamente para fines de evaluación y pruebas
-- No puede usar la versión de evaluación del Software para desarrollar aplicaciones o productos comerciales
+- Puede usar todas las funciones del Software durante un período de treinta (30) días calendario
+- Durante el período de evaluación, puede evaluar, probar y desarrollar internamente aplicaciones o productos comerciales
+- No puede usar la versión de evaluación en producción ni distribuir aplicaciones o productos desarrollados con ella
 - Después del período de evaluación, debe comprar una licencia o discontinuar el uso del Software
 
 ## 4. RESTRICCIONES DE LICENCIA
@@ -95,9 +96,9 @@ Excepto como se permite expresamente en este Contrato, no puede:
 
 **6.1.** El soporte técnico se proporciona a usuarios licenciados según lo especificado en el tipo de licencia comprada.
 
-**6.2.** Las actualizaciones de versión menor (por ejemplo, de la versión 1.1 a la 1.2) se proporcionan sin cargo a todos los usuarios licenciados durante su período de licencia.
+**6.2.** La Licencia Anual de Desarrollador incluye actualizaciones menores y mayores y soporte por correo electrónico durante doce (12) meses desde la fecha de compra. Después de ese período, el licenciatario puede continuar usando la última versión publicada durante el período de licencia sin actualizaciones ni soporte.
 
-**6.3.** Las actualizaciones de versión mayor (por ejemplo, de la versión 1.x a la 2.0) pueden requerir pago adicional, aunque a un precio reducido para clientes existentes.
+**6.3.** La Licencia Vitalicia/Equipo incluye actualizaciones menores y mayores y soporte por correo electrónico durante la vida útil del producto.
 
 **6.4.** El Licenciante no tiene obligación de proporcionar soporte para versiones de evaluación del Software.
 
@@ -158,4 +159,4 @@ Sitio web: www.visioforge.com
 
 ---
 © VisioForge. Todos los derechos reservados.
-Última actualización: 2026-06-24
+Última actualización: 2026-08-27

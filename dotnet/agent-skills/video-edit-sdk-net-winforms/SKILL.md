@@ -101,6 +101,8 @@ Key types: `VideoSource(file, start, stop, stretch)`, `AudioSource(file, start, 
 
 ## License registration
 
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
+
 The SDK ships with a 30-day trial — the bundled `references/Form1.cs` runs in trial mode by design (the upstream demo never sets a licence anywhere). To register a purchased licence, load the `.vflicense` bytes and call `SetLicenseCertificateAsync` once per `VideoEditCore` instance after construction and before the first `StartAsync` / `FastEdit_*Async` call. Add two lines to the existing `CreateEngine()` method right after the constructor call, and make the method async:
 
 ```csharp

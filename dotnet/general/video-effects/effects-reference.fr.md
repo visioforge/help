@@ -263,7 +263,7 @@ Les effets artistiques suivants sont disponibles exclusivement dans l'implément
 | VideoEffectTextLogo | 🪟 Classique | Superposition de texte flexible avec personnalisation poussée — polices, couleurs, rotation, effets et texte animé. |
 | VideoEffectScrollingTextLogo | 🪟 Classique | Bannière de texte défilant avec contrôle de direction et de vitesse. |
 | TextOverlayVideoEffect | 🌍 Multiplateforme | Superposition de texte multiplateforme avec contrôle typographique avancé. Prend en charge horodatages, heure système et texte dynamique. |
-| OverlayManagerText | 🌍 Multiplateforme | Superposition de texte avancée avec ombres, dégradés et animations. |
+| OverlayManagerText | 🌍 Multiplateforme | Superposition de texte avancée avec ombres, dégradés et animations. Un callback `TextProvider` peut reconstruire le texte à chaque image, et `StartTime`/`EndTime` délimitent son affichage. |
 | OverlayManagerScrollingText | 🌍 Multiplateforme | Texte défilant avec contrôle complet de la vitesse, direction et apparence. |
 | OverlayManagerDateTime | 🌍 Multiplateforme | Superposition date/heure avec formatage personnalisable. |
 

@@ -145,7 +145,7 @@ Pour les caméras ONVIF, authentifiez-vous via `ONVIFClientX` pour récupérer a
 
 ## Mode faible latence
 
-Pour la surveillance en temps réel ou le contrôle PTZ, activez le mode faible latence pour réduire le délai du flux du défaut ~250 ms à 60-120 ms :
+Pour la surveillance en temps réel ou le contrôle PTZ, activez le mode faible latence pour réduire le tampon anti-gigue de 500 ms par défaut à 150 ms. Définissez `Latency` à 150 ms ou moins pour aller plus bas :
 
 ```csharp
 var rtspSettings = await RTSPSourceSettings.CreateAsync(
@@ -322,7 +322,16 @@ Utilisez le passthrough pour l'archivage vidéosurveillance et les applications 
 
 ### Comment réduire la latence du flux RTSP en dessous de 100 ms ?
 
-Activez `LowLatencyMode = true` sur `RTSPSourceSettings` et désactivez la synchro du moteur de rendu vidéo avec `IsSync = false`. Utilisez le transport UDP lorsque votre réseau le permet. Latence attendue : 60-120 ms contre 250 ms par défaut. Consultez le [guide du protocole RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md) pour les options avancées de réglage du tampon.
+Activez `LowLatencyMode = true` sur `RTSPSourceSettings` (tampon anti-gigue de 150 ms au lieu de 500 ms par défaut). Pour un délai encore plus faible, définissez `Latency` à 150 ms ou moins et désactivez la synchro du moteur de rendu vidéo avec `IsSync = false`. Utilisez le transport UDP lorsque votre réseau le permet. Consultez le [guide du protocole RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md) pour les options avancées de réglage du tampon.
+
+### L'aperçu fonctionne dans VLC mais se fige ou s'arrête au bout d'une minute ?
+
+La liste de protocoles par défaut essaie UDP en premier. Forcez TCP et, si la caméra coupe encore la session, activez `ForceCustomKeepAlive` pour envoyer GET_PARAMETER toutes les 30 secondes :
+
+```cs
+rtspSettings.AllowedProtocols = RTSPSourceProtocol.TCP;
+rtspSettings.ForceCustomKeepAlive = true;
+```
 
 ### Puis-je visualiser et enregistrer depuis plusieurs caméras IP simultanément ?
 

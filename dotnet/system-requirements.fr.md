@@ -215,7 +215,7 @@ Pour les développeurs Windows, nous proposons un programme d'installation dédi
 
 ## Licences et déploiement
 
-Consultez notre page [Licences](../../licensing.md) pour plus d'informations sur les différentes options de licence disponibles pour nos SDK.
+Consultez notre page [Licences](https://www.visioforge.com/fr/licensing) pour plus d'informations sur les différentes options de licence disponibles pour nos SDK.
 
 ## Ressources de support technique
 

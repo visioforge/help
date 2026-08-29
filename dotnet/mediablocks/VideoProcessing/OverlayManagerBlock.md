@@ -27,6 +27,7 @@ primary_api_classes:
   - VideoView
   - FontSettings
   - IVideoView
+  - IOverlayManagerDrawable
 
 ---
 
@@ -50,7 +51,7 @@ The `OverlayManagerBlock` is a powerful MediaBlocks component that provides dyna
 - **Advanced Effects**: Shadows, rotation, opacity, custom positioning
 - **Real-time Updates**: Dynamic overlay modification during playback
 - **Time-based Display**: Show/hide overlays at specific timestamps
-- **Custom Drawing**: Callback support for custom Cairo drawing operations
+- **Custom Drawing**: Callback support for custom Cairo drawing operations, plus a `IOverlayManagerDrawable` contract for user-defined element types
 - **Live Video Sources**: Support for NDI network sources and Decklink capture cards
 - **Cross-platform**: Works on Windows, Linux, macOS, iOS, and Android
 
@@ -125,11 +126,16 @@ All overlay elements implement the `IOverlayManagerElement` interface with these
 | `Name` | `string` | - | Optional name for identification |
 | `Enabled` | `bool` | `true` | Enable/disable the overlay |
 | `StartTime` | `TimeSpan` | `Zero` | When to start showing (optional) |
-| `EndTime` | `TimeSpan` | `Zero` | When to stop showing (optional) |
+| `EndTime` | `TimeSpan` | `Zero` | When to stop showing (optional); `Zero` means no end |
 | `Opacity` | `double` | `1.0` | Transparency (0.0-1.0) |
 | `Rotation` | `double` | `0.0` | Rotation angle in degrees (0-360) |
 | `ZIndex` | `int` | `0` | Layer order (higher = on top) |
 | `Shadow` | `OverlayManagerShadowSettings` | - | Shadow configuration |
+
+Either time bound on its own defines a window. `StartTime = TimeSpan.Zero` with a non-zero
+`EndTime` shows the element from the beginning until that moment; a zero `EndTime` means the element
+has no end. Both values are compared against the frame timestamp, which counts from the pipeline
+start - not the wall clock.
 
 ### OverlayManagerText
 
@@ -142,8 +148,9 @@ public class OverlayManagerText : IOverlayManagerElement
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `Text` | `string` | "Hello!!!" | Text to display |
-| `X` | `int` | `100` | X position |
-| `Y` | `int` | `100` | Y position |
+| `TextProvider` | `Func<TimeSpan, string>` | `null` | Optional per-frame text callback; overrides `Text` |
+| `X` | `int` | `100` | X of the top-left corner, in pixels. `0` is the left edge of the frame. |
+| `Y` | `int` | `100` | Y of the top-left corner, in pixels. `0` is the top edge; the first line is fully visible there. |
 | `Font` | `FontSettings` | System default | Font configuration |
 | `Color` | `SKColor` | `Red` | Text color |
 | `Background` | `IOverlayManagerBackground` | `null` | Optional background |
@@ -160,6 +167,55 @@ text.Font.Name = "Arial";
 text.Shadow = new OverlayManagerShadowSettings(true, depth: 5, direction: 45);
 overlayManager.Video_Overlay_Add(text);
 ```
+
+#### Text that changes on every frame
+
+Text is redrawn on every frame, so there is no "apply" step and no need to remove and re-add the
+element. There are two ways to keep it current, and neither touches the pipeline:
+
+**Assign `Text` whenever the value changes.** Safe from any thread; the new value appears on the next
+frame. Use this when the updates are driven by your own events.
+
+```csharp
+// From a sensor callback, a UI event, a background thread - anywhere.
+text.Text = $"Sensor: {reading:F1}";
+```
+
+**Set `TextProvider` when the text must be rebuilt for each frame** - a clock, a frame counter, or a
+template mixing several live values. The callback receives the frame timestamp, counted from the
+pipeline start.
+
+```csharp
+var text = new OverlayManagerText(string.Empty, 40, 40);
+text.Color = SKColors.Yellow;
+text.Font.Size = 28;
+
+text.TextProvider = ts => "Camera 1\nOperator: demo\nREC\n"
+    + $"Sensor {_sensorValue:F1}   {DateTime.Now:HH:mm:ss}   {ts:hh\\:mm\\:ss}";
+
+overlayManager.Video_Overlay_Add(text);
+```
+
+Both paths are cheap: the text layout (line splitting and measurement) is cached on the element and
+recomputed only when the string, font or geometry actually changes, so a value that stays the same
+costs nothing extra.
+
+Three rules for `TextProvider`:
+
+- It runs on the GStreamer streaming thread, **while the overlay list is locked** — the same lock
+  `Video_Overlay_Add` and `Video_Overlay_Remove` take. Blocking on another thread from inside it
+  risks a deadlock, not merely a dropped frame: calling `Dispatcher.Invoke` to read a UI value
+  deadlocks outright if the UI thread happens to be adding or removing an overlay at that moment.
+  Read a field the UI thread has already written, as the example above does.
+- Returning `null` falls back to `Text`. A callback that throws is logged once and is then **not
+  called again** — the element falls back to `Text`, because retrying it every frame would unwind an
+  exception at the frame rate while the overlay lock is held. Assigning to `TextProvider` again re-enables it,
+  including assigning the very same delegate.
+- `OverlayManagerDateTime` inherits the property, and its `[DATETIME]` token is substituted into
+  whatever the provider returned.
+
+For anything beyond text - custom shapes, gauges, composited bitmaps - use
+[OverlayManagerCallback](#overlaymanagercallback), which hands you the Cairo context for the frame.
 
 ### OverlayManagerImage
 
@@ -1097,6 +1153,59 @@ callback.OnDraw += (sender, e) => {
 };
 overlayManager.Video_Overlay_Add(callback);
 ```
+
+### IOverlayManagerDrawable
+
+The extension point for a user-defined overlay element. `Video_Overlay_Add` accepts any
+`IOverlayManagerElement`, but only the built-in element types are drawn automatically. A custom type
+that implements `IOverlayManagerDrawable` is handed the live Cairo context of the frame — the same
+way `OverlayManagerCallback` is — instead of being silently skipped.
+
+```csharp
+public interface IOverlayManagerDrawable
+{
+    void Draw(OverlayManagerCallbackEventArgs e);
+}
+```
+
+An element that implements `IOverlayManagerElement` but neither this interface nor a built-in type is
+not drawn and is reported once in the log.
+
+`Draw` runs on the GStreamer streaming thread **while the overlay list is locked** — the same lock
+`Video_Overlay_Add` and `Video_Overlay_Remove` take. Keep it short and do not block: calling back
+into a UI dispatcher from it can deadlock rather than merely drop a frame. An exception thrown from
+`Draw` is reported once, and the element is still drawn on later frames.
+
+**Example:**
+
+```csharp
+public class MyOverlay : IOverlayManagerElement, IOverlayManagerDrawable
+{
+    public string Name { get; set; } = "MyOverlay";
+    public object Cache { get; set; }
+    public TimeSpan StartTime { get; set; }
+    public TimeSpan EndTime { get; set; }
+    public bool Enabled { get; set; } = true;
+    public OverlayManagerShadowSettings Shadow { get; set; } = new OverlayManagerShadowSettings();
+    public double Opacity { get; set; } = 1.0;
+    public double Rotation { get; set; }
+    public int ZIndex { get; set; }
+
+    public void Draw(OverlayManagerCallbackEventArgs e)
+    {
+        var ctx = e.Context;
+        ctx.SetSourceRGB(1, 0, 0);
+        ctx.Arc(200, 200, 50, 0, 2 * Math.PI);
+        ctx.Fill();
+    }
+}
+
+overlayManager.Video_Overlay_Add(new MyOverlay());
+```
+
+`OverlayManagerCallbackEventArgs` exposes the `Context` (`Cairo.Context`) for the frame plus its
+`Timestamp` and `Duration`, and a `DrawImage` helper that reuses the element's `Rotation`, `Shadow`
+and `Opacity`.
 
 ### OverlayManagerGroup
 

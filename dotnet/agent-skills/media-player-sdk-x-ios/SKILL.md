@@ -144,6 +144,8 @@ App Store reviewers flag `NSAllowsArbitraryLoads=true` and request a justificati
 
 ## License registration
 
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
+
 The SDK ships with a 30-day trial. To register a purchased licence, call `await _player.SetLicenseCertificateAsync(certBytes)` on every `MediaPlayerCoreX` instance, after the constructor and before `OpenAsync` / `PlayAsync`:
 
 ```csharp

@@ -41,7 +41,7 @@ primary_api_classes:
 Les moteurs classiques (`VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore`) exposent **10 modes de moteur de rendu vidéo** via l'enum `VideoRendererMode`. Choisir le bon mode contrôle comment les images atteignent l'écran : filtres DirectShow bruts, surfaces GPU Direct2D, HWND natif intégré dans WPF, rappels d'image pour un rendu personnalisé, contrôles WinUI 3, ou le moteur de rendu tiers madVR. Ce guide parcourt chaque mode avec le code minimal d'activation, la disponibilité par plateforme et un guide de décision en haut pour passer directement au mode dont votre application a besoin.
 
 !!! note "Moteurs classiques uniquement"
-    Cette page couvre les moteurs classiques basés sur DirectShow. Les moteurs multiplateformes `VideoCaptureCoreX` / `MediaPlayerCoreX` utilisent un contrôle `VideoView` avec des puits GStreamer et n'exposent pas d'enum `VideoRendererMode` — le rendu y est géré automatiquement par la liaison du contrôle d'UI.
+    Cette page couvre les moteurs classiques basés sur DirectShow. Les moteurs multiplateformes `VideoCaptureCoreX` / `MediaPlayerCoreX` utilisent un contrôle `VideoView` avec des puits GStreamer et n'exposent pas d'enum `VideoRendererMode` sur le moteur — le mode de rendu se choisit sur le contrôle `VideoView` lui-même. Consultez [Superposer des contrôles WPF sur la vidéo](wpf-controls-over-video.md) pour les modes de rendu WPF des deux familles de moteurs.
 
 ## Choix rapide — quel moteur de rendu pour quelle application ?
 

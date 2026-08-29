@@ -51,7 +51,7 @@ Video Edit SDK assembles timelines, applies transitions/effects/overlays, and ex
 
 ## Platform support
 
-- `VideoEditCoreX` (cross-platform, GStreamer): Windows, macOS (Intel + Apple Silicon), Linux (Ubuntu/Debian/CentOS), Android (via MAUI), iOS (via MAUI).
+- `VideoEditCoreX` (cross-platform, GStreamer): Windows, macOS (Intel + Apple Silicon), Linux (Ubuntu/Debian/CentOS), Android (via [MAUI](./maui/video-editing-maui.md)), iOS (via [MAUI](./maui/video-editing-maui.md)).
 - `VideoEditCore` (legacy, DirectShow): Windows x64 only.
 - UI frameworks: WinForms, WPF, MAUI, Avalonia, Uno, Console.
 - Full engine × platform × UI matrix: [platform-matrix.md](../platform-matrix.md).
@@ -170,6 +170,7 @@ For trimming, use `Input_AddVideoFile` with a `VideoFileSource(filename, startTi
     - Slideshow from images → [video-images-console.md](./code-samples/video-images-console.md)
     - Audio mixing / volume envelope → [audio-envelope.md](./code-samples/audio-envelope.md), [volume-for-track.md](./code-samples/volume-for-track.md)
     - iOS editor app → [ios-video-editor.md](./code-samples/ios-video-editor.md)
+    - MAUI editor app (Android / iOS / macCatalyst / Windows) → [video-editing-maui.md](./maui/video-editing-maui.md)
 - **Deployment** — [Windows / macOS / Ubuntu / Android / iOS](../deployment-x/index.md)
 - **Install & matrix** — [Installation guide](../install/index.md) · [Platform matrix](../platform-matrix.md)
 

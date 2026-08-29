@@ -55,19 +55,19 @@ primary_api_classes:
 ## Paquets NuGet
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.2.19" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.2.19" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.8.16" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.8.16" />
 
 <!-- Redists de plateforme — incluez uniquement les cibles que vous construisez -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.11.0"
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29"
                   Condition="$(TargetFramework.Contains('windows'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2025.11.0"
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29"
                   Condition="$(TargetFramework.Contains('windows'))" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2025.9.1"
                   Condition="$(TargetFramework.Contains('maccatalyst'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="15.10.33"
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27"
                   Condition="$(TargetFramework.Contains('android'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.0.16"
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0"
                   Condition="$(TargetFramework.Contains('ios'))" />
 ```
 
@@ -154,6 +154,10 @@ public partial class MainPage : ContentPage
 
     private async void MainPage_Loaded(object sender, EventArgs e)
     {
+        // Charge le stack GStreamer natif. Doit s'exécuter avant la construction du premier
+        // MediaPlayerCoreX, sinon le constructeur lève une DllNotFoundException.
+        await VisioForgeX.InitSDKAsync();
+
         IVideoView vv = videoView.GetVideoView();
         _player = new MediaPlayerCoreX(vv);
 

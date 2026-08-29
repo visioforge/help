@@ -42,8 +42,25 @@ Our SDKs enable powerful multimedia capabilities across all MAUI-supported platf
 
 To begin using VisioForge with your MAUI project, install the required NuGet packages:
 
-1. The core UI package: `VisioForge.DotNet.Core.UI.MAUI`
-2. Platform-specific redistributable (detailed in platform sections below)
+1. The SDK package for the product you are using - one of:
+   - `VisioForge.DotNet.VideoCapture` - camera, screen and IP camera capture (`VideoCaptureCoreX`)
+   - `VisioForge.DotNet.MediaPlayer` - file and network playback (`MediaPlayerCoreX`)
+   - `VisioForge.DotNet.VideoEdit` - timeline editing and rendering (`VideoEditCoreX`)
+   - `VisioForge.DotNet.MediaBlocks` - custom pipelines (`MediaBlocksPipeline`)
+2. The core UI package: `VisioForge.DotNet.Core.UI.MAUI` - the `VideoView` control
+3. Platform-specific redistributable (detailed in platform sections below)
+
+```xml
+<ItemGroup>
+  <!-- Replace with the SDK package your app uses. -->
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.*" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.*" />
+</ItemGroup>
+```
+
+`VisioForge.DotNet.Core.UI.MAUI` only supplies the `VideoView` control. On its own it cannot
+compile `VideoCaptureCoreX`, `MediaPlayerCoreX` or `VideoEditCoreX` - the SDK package above is
+what brings those in.
 
 ### SDK Initialization
 
@@ -75,6 +92,28 @@ public static class MauiProgram
         return builder.Build();
     }
 }
+```
+
+`AddVisioForgeHandlers` registers the `VideoView` handler. It does not load the native stack -
+that is a separate call, and it must run before the first `VideoCaptureCoreX`,
+`MediaPlayerCoreX`, `VideoEditCoreX` or `MediaBlocksPipeline` is constructed. Without it the
+constructor throws `DllNotFoundException` on a clean machine:
+
+```csharp
+using VisioForge.Core;
+
+// Async initialization (recommended - the first call builds the GStreamer registry
+// and can take hundreds of milliseconds, which would freeze the UI thread).
+await VisioForgeX.InitSDKAsync();
+
+// Or synchronous initialization.
+VisioForgeX.InitSDK();
+```
+
+Release the SDK when the page or the application shuts down:
+
+```csharp
+VisioForgeX.DestroySDK();
 ```
 
 ## Using VisioForge Controls in XAML
@@ -110,14 +149,12 @@ Android requires additional configuration steps to ensure proper operation:
 The VisioForge SDK relies on native Android functionality that requires a custom Java bindings library:
 
 1. Clone the binding library from our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency)
-2. Add the appropriate project to your solution:
-   - Use `VisioForge.Core.Android.X8.csproj` for .NET 8
-   - Use `VisioForge.Core.Android.X9.csproj` for .NET 9
+2. Pick the binding project that matches the .NET target you build against - the folder ships one `VisioForge.Core.Android.X{N}.csproj` per supported .NET version (e.g., `VisioForge.Core.Android.X9.csproj` for .NET 9, `VisioForge.Core.Android.X10.csproj` for .NET 10). If your .NET target isn't listed, pick the closest supported one.
 3. Add the reference to your project file:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X9.csproj" />
+  <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
 
@@ -150,7 +187,10 @@ Add the iOS-specific package to your project:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.*" />
+  <!-- The iOS redist version trails the SDK version on purpose - it tracks the
+       GStreamer-iOS rebuild cadence, not the wrapper release. Do not bump it to
+       match VisioForge.DotNet.*; there is no 2026.x on nuget.org. -->
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
 </ItemGroup>
 ```
 

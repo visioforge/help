@@ -285,8 +285,8 @@ Obtient le code de configuration de copie de fichiers / de build propre à la pl
 ```xml
 <ItemGroup>
   <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.2.4" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="15.10.33" />
-  <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X9.csproj" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
 

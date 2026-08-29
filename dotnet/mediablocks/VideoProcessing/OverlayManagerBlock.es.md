@@ -27,6 +27,7 @@ primary_api_classes:
   - VideoView
   - FontSettings
   - IVideoView
+  - IOverlayManagerDrawable
 
 ---
 
@@ -50,7 +51,7 @@ El `OverlayManagerBlock` es un componente poderoso de MediaBlocks que proporcion
 - **Efectos Avanzados**: Sombras, rotación, opacidad, posicionamiento personalizado
 - **Actualizaciones en Tiempo Real**: Modificación dinámica de superposiciones durante la reproducción
 - **Visualización Basada en Tiempo**: Mostrar/ocultar superposiciones en marcas de tiempo específicas
-- **Dibujo Personalizado**: Soporte de callback para operaciones de dibujo Cairo personalizadas
+- **Dibujo Personalizado**: Soporte de callback para operaciones de dibujo Cairo personalizadas, más un contrato `IOverlayManagerDrawable` para tipos de elementos definidos por el usuario
 - **Fuentes de Video en Vivo**: Soporte para fuentes de red NDI y tarjetas de captura Decklink
 - **Multiplataforma**: Funciona en Windows, Linux, macOS, iOS y Android
 
@@ -125,11 +126,16 @@ Todos los elementos de superposición implementan la interfaz `IOverlayManagerEl
 | `Name` | `string` | - | Nombre opcional para identificación |
 | `Enabled` | `bool` | `true` | Habilitar/deshabilitar la superposición |
 | `StartTime` | `TimeSpan` | `Zero` | Cuándo comenzar a mostrar (opcional) |
-| `EndTime` | `TimeSpan` | `Zero` | Cuándo dejar de mostrar (opcional) |
+| `EndTime` | `TimeSpan` | `Zero` | Cuándo dejar de mostrar (opcional); `Zero` significa sin fin |
 | `Opacity` | `double` | `1.0` | Transparencia (0.0-1.0) |
 | `Rotation` | `double` | `0.0` | Ángulo de rotación en grados (0-360) |
 | `ZIndex` | `int` | `0` | Orden de capa (mayor = encima) |
 | `Shadow` | `OverlayManagerShadowSettings` | - | Configuración de sombra |
+
+Cualquiera de los dos límites temporales define por sí solo una ventana. `StartTime = TimeSpan.Zero`
+con un `EndTime` distinto de cero muestra el elemento desde el principio hasta ese momento; un
+`EndTime` igual a cero significa que el elemento no tiene fin. Ambos valores se comparan con la marca
+de tiempo del fotograma, contada desde el arranque del pipeline, no con el reloj del sistema.
 
 ### OverlayManagerText
 
@@ -142,8 +148,9 @@ public class OverlayManagerText : IOverlayManagerElement
 | Propiedad | Tipo | Predeterminado | Descripción |
 |-----------|------|----------------|-------------|
 | `Text` | `string` | "Hello!!!" | Texto a mostrar |
-| `X` | `int` | `100` | Posición X |
-| `Y` | `int` | `100` | Posición Y |
+| `TextProvider` | `Func<TimeSpan, string>` | `null` | Devolución de llamada opcional por fotograma; tiene prioridad sobre `Text` |
+| `X` | `int` | `100` | X de la esquina superior izquierda, en píxeles. `0` es el borde izquierdo del fotograma. |
+| `Y` | `int` | `100` | Y de la esquina superior izquierda, en píxeles. `0` es el borde superior; la primera línea queda visible. |
 | `Font` | `FontSettings` | Predeterminado del sistema | Configuración de fuente |
 | `Color` | `SKColor` | `Red` | Color del texto |
 | `Background` | `IOverlayManagerBackground` | `null` | Fondo opcional |
@@ -160,6 +167,58 @@ text.Font.Name = "Arial";
 text.Shadow = new OverlayManagerShadowSettings(true, depth: 5, direction: 45);
 overlayManager.Video_Overlay_Add(text);
 ```
+
+#### Texto que cambia en cada fotograma
+
+El texto se redibuja en cada fotograma, por lo que no hay paso de «aplicar» ni hace falta quitar y
+volver a añadir el elemento. Hay dos formas de mantenerlo al día, y ninguna toca el pipeline:
+
+**Asignar `Text` cada vez que cambie el valor.** Seguro desde cualquier hilo; el nuevo valor aparece
+en el siguiente fotograma. Úsalo cuando las actualizaciones las provocan tus propios eventos.
+
+```csharp
+// Desde una devolución de llamada de sensor, un evento de interfaz, un hilo de fondo: donde sea.
+text.Text = $"Sensor: {reading:F1}";
+```
+
+**Definir `TextProvider` cuando el texto deba reconstruirse en cada fotograma**: un reloj, un contador
+de fotogramas o una plantilla que mezcle varios valores en vivo. La devolución de llamada recibe la
+marca de tiempo del fotograma, contada desde el arranque del pipeline.
+
+```csharp
+var text = new OverlayManagerText(string.Empty, 40, 40);
+text.Color = SKColors.Yellow;
+text.Font.Size = 28;
+
+text.TextProvider = ts => "Cámara 1\nOperador: demo\nREC\n"
+    + $"Sensor {_sensorValue:F1}   {DateTime.Now:HH:mm:ss}   {ts:hh\\:mm\\:ss}";
+
+overlayManager.Video_Overlay_Add(text);
+```
+
+Ambas vías son baratas: la maquetación del texto (división en líneas y medidas) se cachea en el
+elemento y solo se recalcula cuando la cadena, la fuente o la geometría cambian de verdad, así que un
+valor que no varía no cuesta nada adicional.
+
+Tres reglas para `TextProvider`:
+
+- Se ejecuta en el hilo de streaming de GStreamer, **mientras la lista de superposiciones está
+  bloqueada**, con el mismo bloqueo que toman `Video_Overlay_Add` y `Video_Overlay_Remove`. Por eso
+  bloquearse ahí sobre otro hilo arriesga un interbloqueo, no solo un fotograma perdido: llamar a
+  `Dispatcher.Invoke` para leer un valor de la interfaz se bloquea del todo si el hilo de interfaz
+  está justo añadiendo o quitando una superposición. Lea en su lugar un campo que el hilo de
+  interfaz ya haya escrito, como en el ejemplo anterior.
+- Devolver `null` recae en `Text`. Una devolución de llamada que lance una excepción se registra una
+  sola vez y después **ya no se vuelve a llamar**: el elemento recae en `Text`, porque reintentarla
+  en cada fotograma desenrollaría una excepción al ritmo de los fotogramas mientras se mantiene el
+  bloqueo de las superposiciones. Volver a asignar `TextProvider` la reactiva, incluida
+  la misma instancia del delegado.
+- `OverlayManagerDateTime` hereda la propiedad, y su token `[DATETIME]` se sustituye dentro de lo que
+  haya devuelto la devolución de llamada.
+
+Para todo lo que vaya más allá del texto -formas personalizadas, indicadores, mapas de bits
+compuestos- usa [OverlayManagerCallback](#overlaymanagercallback), que te entrega el contexto Cairo
+del fotograma.
 
 ### OverlayManagerImage
 
@@ -1097,6 +1156,60 @@ callback.OnDraw += (sender, e) => {
 };
 overlayManager.Video_Overlay_Add(callback);
 ```
+
+### IOverlayManagerDrawable
+
+El punto de extensión para un elemento de superposición definido por el usuario. `Video_Overlay_Add`
+acepta cualquier `IOverlayManagerElement`, pero solo los tipos de elementos integrados se dibujan
+automáticamente. Un tipo personalizado que implementa `IOverlayManagerDrawable` recibe el contexto
+Cairo activo de la trama — igual que `OverlayManagerCallback` — en lugar de omitirse silenciosamente.
+
+```csharp
+public interface IOverlayManagerDrawable
+{
+    void Draw(OverlayManagerCallbackEventArgs e);
+}
+```
+
+Un elemento que implementa `IOverlayManagerElement` pero ni esta interfaz ni un tipo integrado no se
+dibuja y se notifica una vez en el registro.
+
+`Draw` se ejecuta en el hilo de streaming de GStreamer **mientras la lista de superposiciones está
+bloqueada** — el mismo bloqueo que toman `Video_Overlay_Add` y `Video_Overlay_Remove`. Manténgalo corto
+y no bloquee: llamar de vuelta a un despachador de UI desde él puede provocar un bloqueo mutuo en vez
+de simplemente descartar una trama. Una excepción lanzada desde `Draw` se notifica una vez, y el
+elemento se sigue dibujando en tramas posteriores.
+
+**Ejemplo:**
+
+```csharp
+public class MyOverlay : IOverlayManagerElement, IOverlayManagerDrawable
+{
+    public string Name { get; set; } = "MyOverlay";
+    public object Cache { get; set; }
+    public TimeSpan StartTime { get; set; }
+    public TimeSpan EndTime { get; set; }
+    public bool Enabled { get; set; } = true;
+    public OverlayManagerShadowSettings Shadow { get; set; } = new OverlayManagerShadowSettings();
+    public double Opacity { get; set; } = 1.0;
+    public double Rotation { get; set; }
+    public int ZIndex { get; set; }
+
+    public void Draw(OverlayManagerCallbackEventArgs e)
+    {
+        var ctx = e.Context;
+        ctx.SetSourceRGB(1, 0, 0);
+        ctx.Arc(200, 200, 50, 0, 2 * Math.PI);
+        ctx.Fill();
+    }
+}
+
+overlayManager.Video_Overlay_Add(new MyOverlay());
+```
+
+`OverlayManagerCallbackEventArgs` expone el `Context` (`Cairo.Context`) de la trama junto con su
+`Timestamp` y `Duration`, y un ayudante `DrawImage` que reutiliza `Rotation`, `Shadow` y `Opacity`
+del elemento.
 
 ### OverlayManagerGroup
 

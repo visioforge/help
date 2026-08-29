@@ -1,6 +1,6 @@
 ---
-title: Encodage HEVC matériel avec GPU AMD, NVIDIA et Intel
-description: Implémentez l'encodage HEVC (H.265) accéléré par matériel avec GPU AMD, NVIDIA et Intel pour une compression vidéo efficace en .NET.
+title: Encodage HEVC GPU : AMD, NVIDIA, Intel, Apple VideoToolbox
+description: Encodez en HEVC (H.265) avec les GPU AMD, NVIDIA, Intel et Apple VideoToolbox, y compris en 10 bits et avec alpha, dans vos applications .NET.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -26,6 +26,7 @@ primary_api_classes:
   - AMFHEVCEncoderSettings
   - NVENCHEVCEncoderSettings
   - QSVHEVCEncoderSettings
+  - AppleMediaHEVCEncoderSettings
   - IHEVCEncoderSettings
   - SVTHEVCEncoderSettings
 
@@ -43,11 +44,12 @@ Pour les formats de sortie spécifiques à Windows, consultez notre [documentati
 
 ## Vue d'ensemble des encodeurs HEVC matériels
 
-Les GPU modernes offrent des capacités d'encodage matériel puissantes qui surpassent significativement les solutions logicielles. Les SDK VisioForge prennent en charge trois grands encodeurs HEVC matériels :
+Les GPU modernes offrent des capacités d'encodage matériel puissantes qui surpassent significativement les solutions logicielles. Les SDK VisioForge prennent en charge quatre encodeurs HEVC matériels :
 
 - **AMD AMF** — pour les GPU AMD Radeon
 - **NVIDIA NVENC** — pour les GPU NVIDIA GeForce et professionnels
 - **Intel QuickSync** — pour les CPU Intel avec graphiques intégrés
+- **Apple VideoToolbox** — pour macOS, Mac Catalyst et iOS
 
 Chaque encodeur fournit des fonctionnalités et des options d'optimisation uniques. Explorons leurs capacités et leurs détails d'implémentation.
 
@@ -189,15 +191,90 @@ var encoder = new QSVHEVCEncoderSettings
 };
 ```
 
+## Encodeur HEVC Apple VideoToolbox
+
+VideoToolbox est l'encodeur matériel sur macOS, Mac Catalyst et iOS. Il est disponible sur
+Apple Silicon et sur les Mac Intel dotés d'une puce graphique compatible QuickSync.
+
+### Caractéristiques principales
+
+- **Contrôle de débit** :
+  - `ABR` (débit moyen, valeur par défaut)
+  - `CBR` (débit constant)
+  - Limites de débit de données : un plafond de débit moyenné sur une fenêtre glissante, en mode `ABR`
+
+- **Profils pris en charge** :
+  - Main (8 bits)
+  - Main10 (10 bits)
+
+- **Canal alpha** : `PreserveAlpha` bascule vers l'encodeur gérant l'alpha
+
+### Exemple d'implémentation
+
+```csharp
+// Débit constant, pour un point de terminaison à bande passante fixe.
+var cbr = new AppleMediaHEVCEncoderSettings
+{
+    Bitrate = 3000,                              // 3 Mbps
+    RateControl = AppleMediaRateControl.CBR,
+    Profile = AppleMediaHEVCProfile.Main,
+    Realtime = true,
+    Quality = 0.5
+};
+
+// Débit moyen avec un plafond strict : cible de 3 Mbps, jamais plus de 4,5 Mbps
+// moyennés sur une seconde quelconque.
+var cappedAbr = new AppleMediaHEVCEncoderSettings
+{
+    Bitrate = 3000,
+    RateControl = AppleMediaRateControl.ABR,     // la valeur par défaut
+    DataRateLimitBitrate = 4500,
+    DataRateLimitDuration = 1.0,
+    Profile = AppleMediaHEVCProfile.Main
+};
+```
+
+### Le CBR et les limites de débit sont des alternatives
+
+Ne réglez pas les deux. Avec `CBR` sélectionné, l'encodeur ignore purement et simplement les
+limites de débit de données et le signale dans son journal (`Ignoring data-rate-limits property,
+CBR mode is enabled`) : le débit constant est déjà un plafond. Les limites s'appliquent en mode
+`ABR`, où elles transforment « vise ce débit » en « vise ce débit et ne dépasse jamais celui-là
+sur une fenêtre de cette durée ».
+
+### Le CBR n'est pas constant partout
+
+Le débit réellement constant est une capacité de VideoToolbox, pas du SDK : il exige macOS 13+
+ou iOS 16+ sur Apple Silicon. Sur les systèmes antérieurs et sur les Mac Intel, VideoToolbox
+émule le CBR au moyen de limites de débit qui lui sont propres, dérivées de `Bitrate`, et le
+signale dans son propre journal (`CBR is unsupported on your system, emulating with custom data
+rate limits`). La sortie encodée est alors quasi constante plutôt que constante, ce qui compte
+si vous dimensionnez un budget de transport fixe à partir de celle-ci.
+
+### Notes de plateforme
+
+- Le **10 bits** (`AppleMediaHEVCProfile.Main10`), l'encodeur **alpha** et le contrôle de débit
+  exigent le runtime GStreamer 1.28.6, livré avec les paquets macOS et Mac Catalyst. Le paquet iOS
+  embarque encore 1.24.9, qui n'a aucun des trois : le contrôle de débit y est ignoré avec un
+  avertissement plutôt qu'appliqué en silence, et le 10 bits ne négocie pas.
+- `ForceHWUsage` épingle l'encodeur sur l'élément exclusivement matériel : il échoue au lieu de
+  se replier sur une implémentation logicielle. Non disponible sur iOS.
+- Sur le chemin du pipeline MediaBlocks, le SDK insère toujours `h265parse` après cet encodeur :
+  VideoToolbox n'émet que du `hvc1`, alors que le multiplexeur MPEG-TS derrière la sortie
+  SRT/UDP/RIST n'accepte que du byte-stream. Le chemin RTSP n'a pas besoin de parseur —
+  `rtph265pay` accepte `hvc1` directement.
+
 ## Préréglages de qualité pour configuration simplifiée
 
-Tous les encodeurs prennent en charge des préréglages de qualité standardisés via l'énumération `VideoQuality`, offrant une approche de configuration simplifiée :
+Les encodeurs AMD, NVIDIA et Intel prennent en charge des préréglages de qualité standardisés via l'énumération `VideoQuality`, offrant une approche de configuration simplifiée :
 
 - **Low** : cible 1 Mbps, max 2 Mbps (pour streaming basique)
 - **Normal** : cible 3 Mbps, max 5 Mbps (pour contenu standard)
 - **High** : cible 6 Mbps, max 10 Mbps (pour contenu détaillé)
 - **Very High** : cible 15 Mbps, max 25 Mbps (pour qualité premium)
 
+
+`AppleMediaHEVCEncoderSettings` n'a pas de constructeur `VideoQuality` — réglez `Bitrate` et `Quality` directement, comme dans l'exemple VideoToolbox ci-dessus.
 ### Utilisation des préréglages de qualité
 
 ```csharp
@@ -233,13 +310,14 @@ IHEVCEncoderSettings GetOptimalHEVCEncoder()
     }
     else
     {
-#if NET_LINUX
+#if __MACOS__ || __MACCATALYST__ || __IOS__
+        // Apple VideoToolbox.
+        return new AppleMediaHEVCEncoderSettings { Bitrate = 6000 };
+#elif NET_LINUX
         // Solution de repli vers l'encodeur logiciel SVT-HEVC sur Linux (Linux uniquement — voir SVTHEVCEncoderSettings).
         return new SVTHEVCEncoderSettings();
 #else
-        // Le moteur X NE livre PAS de solution de repli IHEVCEncoderSettings typée pour Windows ou Apple.
-        // (Sur les plateformes Apple, VideoToolbox HEVC n'est accessible que via un câblage GStreamer de bas niveau —
-        // aucune classe `AppleMedia*HEVC*Settings` n'existe ; seul AppleMediaH264EncoderSettings est fourni.)
+        // Le moteur X NE livre PAS de solution de repli logicielle IHEVCEncoderSettings typée pour Windows.
         // Laissez l'appelant décider : conserver une sortie H.264, installer un pilote GPU activant QSV/NVENC/AMF, ou
         // utiliser le pipeline FFMPEG-EXE du moteur classique.
         throw new NotSupportedException("No HEVC encoder available on this platform. Install a GPU driver or switch to H.264.");
@@ -255,6 +333,7 @@ IHEVCEncoderSettings GetOptimalHEVCEncoder()
 - **GPU AMD** : meilleur pour les applications où vous savez que les utilisateurs disposent de matériel AMD
 - **GPU NVIDIA** : fournit une qualité constante à travers les générations, idéal pour les applications professionnelles
 - **Intel QuickSync** : excellente option universelle lorsqu'un GPU dédié n'est pas garanti
+- **Apple VideoToolbox** : le seul encodeur HEVC matériel sur macOS, Mac Catalyst et iOS
 
 ### 2. Sélection du contrôle de débit
 

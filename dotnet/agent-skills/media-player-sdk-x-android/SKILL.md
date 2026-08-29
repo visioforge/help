@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to a **native .NET for Android** application (TFM `net10.0-android`, Activity-based, NOT MAUI and NOT classic Xamarin.Android). The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level playback god-object (`MediaPlayerCoreX`) that mirrors the legacy `MediaPlayerCore` API. The same C# code works unchanged on WPF / MAUI / Avalonia / Uno / iOS / macOS — only the UI host swaps (`VideoViewTX` here, `<my:VideoView />` on MAUI, etc.) and the per-OS native redist NuGet.
 
-Pinned NuGet versions: wrapper **`2026.5.4`**, Android redist **`2026.4.18.0`** (matches the [official MediaPlayer Android sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Android/MediaPlayer)). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.5.4`**, Android redist **`2026.7.27`** (matches the [official MediaPlayer Android sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Android/MediaPlayer)). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
 
 ## When to use this skill
 
@@ -37,7 +37,7 @@ A native Android playback project needs **two NuGet packages plus one ProjectRef
 ```xml
 <ItemGroup>
   <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.5.4" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.4.18.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
   <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
 </ItemGroup>
 <ItemGroup>
@@ -97,6 +97,8 @@ The Android-specific renderer for the player is `VisioForge.Core.UI.Android.Vide
 Resolve it in code with `FindViewById<VisioForge.Core.UI.Android.VideoViewTX>(Resource.Id.videoView)`. There is **no** Android-specific XML namespace declaration — the fully-qualified type name in the element is enough; the Mono/.NET-for-Android resource compiler binds it automatically. Note: `VideoViewTX` (TextureView-backed) is the correct host for **playback**; `VideoViewGL` (SurfaceView-backed OpenGL renderer) is for **capture** — they are not interchangeable across the two SDKs.
 
 ## License registration
+
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
 
 The SDK ships with a 30-day trial. To register a purchased licence, call `await _player.SetLicenseCertificateAsync(certBytes)` on every `MediaPlayerCoreX` instance, after the constructor and before `OpenAsync` / `PlayAsync`:
 

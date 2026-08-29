@@ -75,8 +75,8 @@ Use the latest NuGet package versions of the SDK for .NET in your project.
 Add the following NuGet packages to your project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2025.3.27" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2025.3.27" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.8.16" />
 ```
 
 The `VideoCapture` package contains the main video capture functionality, while the `Core.UI.MAUI` package contains the `VideoView` control for video preview in .NET MAUI apps.
@@ -89,8 +89,8 @@ Add the following NuGet packages to your project based on target platform:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.3.14" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2025.3.14" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
 </ItemGroup>
 ```
 
@@ -98,8 +98,8 @@ Add the following NuGet packages to your project based on target platform:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="15.10.24" />
-  <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X8.csproj" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
 
@@ -107,7 +107,9 @@ Add the following NuGet packages to your project based on target platform:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.0.16" />
+  <!-- The iOS redist version trails the SDK version on purpose - it tracks the
+       GStreamer-iOS rebuild cadence, not the wrapper release. -->
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
 </ItemGroup>
 ```
 
@@ -116,7 +118,7 @@ Add the following NuGet packages to your project based on target platform:
 ```xml
 <!-- Custom NuGet package and target code for maccatalyst to copy NuGet redist files to app file -->
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2025.2.15" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2025.9.1" />
 </ItemGroup>
 
 <Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">
@@ -534,6 +536,11 @@ private async void MainPage_Loaded(object sender, EventArgs e)
 #if __IOS__ && !__MACCATALYST__
     RequestPhotoPermission();
 #endif
+
+    // Loads the native GStreamer stack. It has to run before the first
+    // VideoCaptureCoreX is constructed, otherwise the constructor throws
+    // DllNotFoundException.
+    await VisioForgeX.InitSDKAsync();
 
     // Get IVideoView interface
     IVideoView vv = videoView.GetVideoView();

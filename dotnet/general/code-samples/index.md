@@ -79,6 +79,8 @@ Displaying video content with flexibility and performance requires understanding
 
 - [Video Renderer Selection (WinForms)](select-video-renderer-winforms.md) - This tutorial explains how to choose and configure the most appropriate video renderer for your Windows Forms application. You'll understand the tradeoffs between EVR, VMR9, and other renderer types.
 
+- [Overlaying WPF Controls on Video](wpf-controls-over-video.md) - Learn how to place WPF buttons, banners and transport controls on top of the video preview. This guide covers the D3D11 composable renderer, the software `WriteableBitmap` mode, the WPF airspace limitation, and migrating from `WPF_WinUI_Callback` to the X engines.
+
 ### User Interaction 
 
 - [Mouse Wheel Event Integration](mouse-wheel-usage.md) - Learn how to handle mouse wheel events for interactive video displays. This sample demonstrates zoom control, timeline scrubbing, and other wheel-based interactions.

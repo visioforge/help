@@ -251,4 +251,4 @@ Pour les implémentations multiplateformes, consultez le [Guide du lecteur Avalo
 * [Référence de l'API](https://api.visioforge.org/dotnet/api/index.html)
 * [Journal des modifications](../changelog.md)
 * [Contrat de licence utilisateur final](../../eula.md)
-* [Informations de licence](../../../licensing.md)
+* [Informations de licence](https://www.visioforge.com/fr/licensing)

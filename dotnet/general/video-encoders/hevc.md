@@ -1,6 +1,6 @@
 ---
-title: HEVC Hardware Encoding with AMD, NVIDIA, and Intel GPUs
-description: Implement hardware-accelerated HEVC (H.265) encoding with AMD, NVIDIA, and Intel GPUs for efficient video compression in .NET applications.
+title: HEVC Hardware Encoding on AMD, NVIDIA, Intel and Apple
+description: Hardware-accelerated HEVC (H.265) encoding with AMD, NVIDIA and Intel GPUs and Apple VideoToolbox, including 10-bit and alpha, in .NET.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -26,6 +26,7 @@ primary_api_classes:
   - AMFHEVCEncoderSettings
   - NVENCHEVCEncoderSettings
   - QSVHEVCEncoderSettings
+  - AppleMediaHEVCEncoderSettings
   - IHEVCEncoderSettings
   - SVTHEVCEncoderSettings
 
@@ -37,17 +38,18 @@ primary_api_classes:
 
 [VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
-This guide explores hardware-accelerated HEVC (H.265) encoding options available in VisioForge .NET SDKs. We'll cover implementation details for AMD, NVIDIA, and Intel GPU encoders, helping you choose the right solution for your video processing needs.
+This guide explores hardware-accelerated HEVC (H.265) encoding options available in VisioForge .NET SDKs. We'll cover implementation details for AMD, NVIDIA, and Intel GPU encoders plus Apple VideoToolbox, helping you choose the right solution for your video processing needs.
 
 For Windows-specific output formats, refer to our [MP4 output documentation](../output-formats/mp4.md).
 
 ## Hardware HEVC Encoders Overview
 
-Modern GPUs offer powerful hardware encoding capabilities that significantly outperform software-based solutions. VisioForge SDKs support three major hardware HEVC encoders:
+Modern GPUs offer powerful hardware encoding capabilities that significantly outperform software-based solutions. VisioForge SDKs support four hardware HEVC encoders:
 
 - **AMD AMF** - For AMD Radeon GPUs
 - **NVIDIA NVENC** - For NVIDIA GeForce and professional GPUs
 - **Intel QuickSync** - For Intel CPUs with integrated graphics
+- **Apple VideoToolbox** - For macOS, Mac Catalyst and iOS
 
 Each encoder provides unique features and optimization options. Let's explore their capabilities and implementation details.
 
@@ -189,15 +191,88 @@ var encoder = new QSVHEVCEncoderSettings
 };
 ```
 
+## Apple VideoToolbox HEVC Encoder
+
+VideoToolbox is the hardware encoder on macOS, Mac Catalyst and iOS. It is available on
+Apple Silicon and on Intel Macs with QuickSync-capable graphics.
+
+### Key Features
+
+- **Rate Control**:
+  - `ABR` (Average Bitrate, the default)
+  - `CBR` (Constant Bitrate)
+  - Data rate limits - a bitrate ceiling averaged over a sliding window, in `ABR` mode
+
+- **Profile Support**:
+  - Main (8-bit)
+  - Main10 (10-bit)
+
+- **Alpha channel** - `PreserveAlpha` switches to the alpha-capable encoder
+
+### Implementation Example
+
+```csharp
+// Constant bitrate, for a fixed-bandwidth endpoint.
+var cbr = new AppleMediaHEVCEncoderSettings
+{
+    Bitrate = 3000,                              // 3 Mbps
+    RateControl = AppleMediaRateControl.CBR,
+    Profile = AppleMediaHEVCProfile.Main,
+    Realtime = true,
+    Quality = 0.5
+};
+
+// Average bitrate with a hard ceiling: 3 Mbps target, never more than 4.5 Mbps
+// averaged over any one second.
+var cappedAbr = new AppleMediaHEVCEncoderSettings
+{
+    Bitrate = 3000,
+    RateControl = AppleMediaRateControl.ABR,     // the default
+    DataRateLimitBitrate = 4500,
+    DataRateLimitDuration = 1.0,
+    Profile = AppleMediaHEVCProfile.Main
+};
+```
+
+### CBR and the data rate limits are alternatives
+
+Do not set both. With `CBR` selected the encoder ignores the data rate limits outright and says
+so in its log (`Ignoring data-rate-limits property, CBR mode is enabled`) — constant bitrate is
+already a ceiling. The limits apply in `ABR` mode, where they turn "aim for this bitrate" into
+"aim for this bitrate and never exceed that one over any window of this length".
+
+### CBR is not constant everywhere
+
+True constant bitrate is a VideoToolbox capability, not an SDK one: it requires macOS 13+ or
+iOS 16+ on Apple Silicon. On older systems and on Intel Macs, VideoToolbox emulates CBR
+through data rate limits of its own, derived from `Bitrate`, and reports it in its own log
+(`CBR is unsupported on your system, emulating with custom data rate limits`). The encoded
+output is then near-constant rather than constant, which matters if you are sizing a fixed
+transport budget around it.
+
+### Platform notes
+
+- **10-bit** (`AppleMediaHEVCProfile.Main10`), the **alpha** encoder and rate control all need the
+  GStreamer 1.28.6 runtime, which ships with the macOS and Mac Catalyst packages. The iOS package
+  still bundles 1.24.9, whose VideoToolbox encoder has none of them — rate control is discarded
+  there with a warning rather than silently applied, and 10-bit fails to negotiate.
+- `ForceHWUsage` pins the encoder to the hardware-only element, failing rather than falling back
+  to a software implementation. It is not available on iOS.
+- On the MediaBlocks pipeline path the SDK always inserts `h265parse` after this encoder:
+  VideoToolbox emits `hvc1` only, while the MPEG-TS muxer behind SRT/UDP/RIST output accepts
+  byte-stream only. The RTSP path needs no parser — `rtph265pay` takes `hvc1` directly.
+
 ## Quality Presets for Simplified Configuration
 
-All encoders support standardized quality presets through the `VideoQuality` enum, providing a simplified configuration approach:
+The AMD, NVIDIA and Intel encoders support standardized quality presets through the `VideoQuality` enum, providing a simplified configuration approach:
 
 - **Low**: 1 Mbps target, 2 Mbps max (for basic streaming)
 - **Normal**: 3 Mbps target, 5 Mbps max (for standard content)
 - **High**: 6 Mbps target, 10 Mbps max (for detailed content)
 - **Very High**: 15 Mbps target, 25 Mbps max (for premium quality)
 
+
+`AppleMediaHEVCEncoderSettings` has no `VideoQuality` constructor — set `Bitrate` and `Quality` on it directly, as the VideoToolbox example above does.
 ### Using Quality Presets
 
 ```csharp
@@ -233,13 +308,14 @@ IHEVCEncoderSettings GetOptimalHEVCEncoder()
     }
     else
     {
-#if NET_LINUX
+#if __MACOS__ || __MACCATALYST__ || __IOS__
+        // Apple VideoToolbox.
+        return new AppleMediaHEVCEncoderSettings { Bitrate = 6000 };
+#elif NET_LINUX
         // Fall back to the SVT-HEVC software encoder on Linux (Linux-only — see SVTHEVCEncoderSettings).
         return new SVTHEVCEncoderSettings();
 #else
-        // The X engine does NOT ship a typed IHEVCEncoderSettings fallback for Windows or Apple.
-        // (On Apple platforms, VideoToolbox HEVC is reachable only via lower-level GStreamer wiring —
-        // no `AppleMedia*HEVC*Settings` class exists; only AppleMediaH264EncoderSettings is provided.)
+        // The X engine does NOT ship a typed IHEVCEncoderSettings software fallback for Windows.
         // Let the caller decide: keep H.264 output, install a GPU driver enabling QSV/NVENC/AMF, or
         // use the classic engine's FFMPEG-EXE pipeline.
         throw new NotSupportedException("No HEVC encoder available on this platform. Install a GPU driver or switch to H.264.");
@@ -255,6 +331,7 @@ IHEVCEncoderSettings GetOptimalHEVCEncoder()
 - **AMD GPUs**: Best for applications where you know users have AMD hardware
 - **NVIDIA GPUs**: Provides consistent quality across generations, ideal for professional applications
 - **Intel QuickSync**: Great universal option when a dedicated GPU isn't guaranteed
+- **Apple VideoToolbox**: The only hardware HEVC encoder on macOS, Mac Catalyst and iOS
 
 ### 2. Rate Control Selection
 

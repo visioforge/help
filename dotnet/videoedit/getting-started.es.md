@@ -42,7 +42,7 @@ Para un proceso de configuración fluido, por favor consulta nuestra [guía de i
 
 ### Inicializando el Motor de Edición de Video
 
-El SDK proporciona un objeto de edición principal robusto que sirve como la base de tu aplicación de edición de video. Sigue estos pasos para crear e inicializar este componente esencial:
+El SDK proporciona un objeto de edición principal robusto que sirve como la base de tu aplicación de edición de video. `VideoEditCoreX` es un motor X y requiere inicialización del SDK antes de crear cualquier núcleo (consulta [Inicialización](../init.md)); el `VideoEditCore` DirectShow no la requiere. Sigue estos pasos para crear e inicializar este componente esencial:
 
 === "VideoEditCore"
 
@@ -60,12 +60,28 @@ El SDK proporciona un objeto de edición principal robusto que sirve como la bas
     ```cs
     private VideoEditCoreX core;
     
-    core = new VideoEditCoreX(VideoView1 as IVideoView);
+    private async void Form_Load(object sender, EventArgs e)
+    {
+        // Motor X: inicializa el SDK una vez antes de crear cualquier núcleo.
+        // InitSDKAsync puede fallar (p. ej., faltan librerías nativas, o la inicialización falló en otro hilo); protege para que la app no se bloquee.
+        try
+        {
+            await VisioForge.Core.VisioForgeX.InitSDKAsync();
+        }
+        catch (Exception ex)
+        {
+            // Registra el fallo de inicialización en lugar de fallar por un await faulted en async void.
+            System.Diagnostics.Debug.WriteLine($"La inicialización del SDK falló: {ex.Message}");
+            return;
+        }
+        
+        core = new VideoEditCoreX(VideoView1 as IVideoView);
+    }
     ```
     
 
 
-Necesitarás especificar un objeto Video View como parámetro para habilitar la funcionalidad de vista previa de video durante las operaciones de edición.
+Necesitarás especificar un objeto Video View como parámetro para habilitar la funcionalidad de vista previa de video durante las operaciones de edición. Para el motor `VideoEditCoreX`, inicializa el SDK y crea el núcleo dentro de un controlador `async void Form_Load` (o tu ruta de inicio equivalente) antes de configurar el editor — el `core` del motor está listo solo cuando `await InitSDKAsync()` termina.
 
 ### Implementando Manejo de Eventos Robusto
 
@@ -450,3 +466,5 @@ Durante el proceso de edición, tu aplicación recibirá actualizaciones de prog
 ## Conclusión
 
 Siguiendo esta guía, has aprendido las técnicas fundamentales para crear una aplicación potente de edición de video usando el Video Edit SDK para .NET. Esta base te permitirá construir herramientas sofisticadas de edición de video que pueden competir con software profesional de edición de video mientras están adaptadas a tus requisitos específicos.
+
+Cuando tu aplicación termine, desinicializa el SDK con `VisioForge.Core.VisioForgeX.DestroySDK()` (necesario para los motores X, incluido `VideoEditCoreX`) para evitar un bloqueo al salir; consulta [Inicialización](../init.md).

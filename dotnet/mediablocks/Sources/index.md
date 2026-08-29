@@ -979,14 +979,15 @@ The `RTSPSourceBlock` is configured using `RTSPSourceSettings`. Key properties i
 - `Login`: Username for RTSP authentication, if required.
 - `Password`: Password for RTSP authentication, if required.
 - `AudioEnabled`: A boolean indicating whether to attempt to process the audio stream.
-- `Latency`: Specifies the buffering duration for the incoming stream (default is 1000ms).
+- `Latency`: Specifies the buffering duration for the incoming stream (default is 500ms). `LowLatencyMode` uses 150ms, or the explicit `Latency` if you set it to 150ms or less.
 - `AllowedProtocols`: Defines the transport protocols to be used for receiving the stream. It's a flags enum `RTSPSourceProtocol` with values:
   - `UDP`: Stream data over UDP.
   - `UDP_Multicast`: Stream data over UDP multicast.
   - `TCP` (Recommended): Stream data over TCP.
   - `HTTP`: Stream data tunneled over HTTP.
   - `EnableTLS`: Encrypt TCP and HTTP with TLS (use `rtsps://` or `httpsps://` in URI).
-- `DoRTCP`: Enables RTCP (RTP Control Protocol) for stream statistics and control (default is usually true).
+- `DoRTCP`: Enables RTCP (RTP Control Protocol) for stream statistics and control. Default is `true`. Many cameras use RTCP receiver reports to tell that a client is still watching and drop the session without them, so disable this only for an old server that cannot handle RTCP.
+- `ForceCustomKeepAlive`: When `true`, turns off the built-in RTSP keep-alive and sends GET_PARAMETER every 30 seconds instead. Default is `false`. Use it if a camera drops the session under the default keep-alive.
 - `RTPBlockSize`: Specifies the size of RTP blocks.
 - `UDPBufferSize`: Buffer size for UDP transport.
 - `CustomVideoDecoder`: Allows specifying a custom GStreamer video decoder element name if the default is not suitable.
@@ -1068,6 +1069,7 @@ Use the factory method `RTSPRAWSourceSettings.CreateAsync(uri, login, password, 
 | `WaitForKeyframe` | `bool` | `true` | Wait for IDR frame before forwarding video |
 | `SyncAudioWithKeyframe` | `bool` | `true` | Synchronize audio delivery to first keyframe |
 | `DoRTCP` | `bool` | — | Enable RTCP control protocol |
+| `ForceCustomKeepAlive` | `bool` | `false` | Send GET_PARAMETER every 30 s instead of the default keep-alive |
 | `UDPBufferSize` | `int` | — | UDP receive buffer size |
 
 #### The sample pipeline

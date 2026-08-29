@@ -25,7 +25,7 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.9.1" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
   </ItemGroup>
   <!-- Linux: plain net10.0 + Exe; native runtime comes from system-installed GStreamer (no NuGet redist). -->
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
@@ -34,16 +34,16 @@
   </PropertyGroup>
   <!-- Avalonia base packages — managed-only, resolve per-OS native bits at runtime. Unconditional. -->
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="12.0.3" />
-    <PackageReference Include="Avalonia.Desktop" Version="12.0.3" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.3" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.3" />
+    <PackageReference Include="Avalonia" Version="12.0.5" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.5" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.5" />
     <!-- Diagnostics tools only in Debug — keeps Release output clean. -->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.1" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
   </ItemGroup>
   <!-- VisioForge wrapper packages — unconditional, managed-only. The .Avalonia package is what carries the Avalonia VideoView control. -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.7.27" />
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.7.27" />
+    <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.8.16" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.8.16" />
   </ItemGroup>
 </Project>

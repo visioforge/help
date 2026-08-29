@@ -1,6 +1,6 @@
 ---
 title: AAC Audio Encoding with M4A Container Output in C# .NET
-description: Use avenc_aac, voaacenc, and Media Foundation backends with runtime detection. Bitrate 32-320 kbps, 5.1 surround, and M4A/MP4 containers.
+description: Use avenc_aac, voaacenc, atenc, and Media Foundation backends with runtime detection. Bitrate 32-320 kbps, 5.1 surround, and M4A/MP4 containers.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -29,6 +29,7 @@ primary_api_classes:
   - AACObject
   - AVENCAACEncoderSettings
   - VOAACEncoderSettings
+  - AppleAACEncoderSettings
   - AACOutput
 
 ---
@@ -52,6 +53,7 @@ The cross-platform capable SDKs (VideoCaptureCoreX, VideoEditCoreX, MediaBlocksP
 1. [AVENC AAC Encoder](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.AVENCAACEncoderSettings.html) - A feature-rich, cross-platform encoder.
 2. [VO-AAC Encoder](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VOAACEncoderSettings.html) - A streamlined, cross-platform encoder.
 3. Media Foundation AAC Encoder - A Windows-specific system encoder, accessible on Windows platforms via `MFAACEncoderSettings`.
+4. Apple AAC Encoder - The AudioToolbox encoder built into macOS, accessible on macOS and Mac Catalyst via `AppleAACEncoderSettings`.
 
 ### AVENC AAC Encoder
 
@@ -118,6 +120,55 @@ var aacSettings = new VOAACEncoderSettings
 - **Sample Rates**: 8000 to 96000 Hz
 - **Channels**: 1-2 channels
 
+### Apple AAC Encoder (macOS and Mac Catalyst)
+
+`AppleAACEncoderSettings` wraps `atenc`, the AAC encoder built into the operating system through
+AudioToolbox — the same one the rest of macOS encodes AAC with. It is available on macOS and Mac
+Catalyst; the iOS runtime shipped with the SDK does not carry it yet, so always gate on
+`IsAvailable()` rather than on the platform.
+
+#### Key Features
+
+- Produced by the operating system's own encoder
+- Up to 8 channels, more than any other AAC backend in the SDK
+- Four rate control modes, including true VBR
+
+#### Rate Control
+
+`RateControl` selects how the encoder spends bits, and it decides whether `Bitrate` is read at all:
+
+- `Constant` (default): constant bitrate, driven by `Bitrate`.
+- `LongTermAverage`: the instantaneous rate varies, the long-term average follows `Bitrate`.
+- `VariableConstrained`: constrained VBR. **`Bitrate` is ignored.**
+- `Variable`: true VBR driven by `VBRQuality` (0-127, default 65). **`Bitrate` is ignored.**
+
+In the two variable modes the resulting file size is a function of the content and, for `Variable`,
+of `VBRQuality` alone — setting `Bitrate` there has no effect at all.
+
+#### Sample Configuration
+
+```csharp
+var aacSettings = new AppleAACEncoderSettings
+{
+    Bitrate = 192,
+    RateControl = AppleAACRateControl.Constant
+};
+```
+
+#### Supported Parameters
+
+- **Bitrates**: 0 (Auto), 32, 64, 96, 128, 160, 192, 224, 256, 320 kbps
+- **Sample Rates**: 8000 to 48000 Hz
+- **Channels**: 1 to 8 channels
+
+!!! note "It is not the default"
+    `AVENCAACEncoderSettings` remains the default AAC encoder on macOS. Measured on Apple Silicon
+    against a lossless source, the two encoders trade places depending on the bitrate - `atenc` is
+    behind at 96 kbps, level at 128 kbps and ahead at 192 kbps - and their CPU cost is
+    indistinguishable, since AAC encoding runs at well over a hundred times realtime either way.
+    Select `AppleAACEncoderSettings` explicitly when you want the platform encoder, more than six
+    channels, or true VBR.
+
 ### Media Foundation AAC Encoder (Windows Only)
 
 This encoder is specific to Windows platforms and offers a limited but performance-optimized encoding solution.
@@ -139,6 +190,13 @@ This encoder is specific to Windows platforms and offers a limited but performan
 Each encoder provides a static `IsAvailable()` method to check if the encoder can be used in the current environment. This is useful for runtime compatibility checks.
 
 ```csharp
+#if __MACOS__ || __MACCATALYST__
+if (AppleAACEncoderSettings.IsAvailable())
+{
+    // Use the operating system's own AAC encoder
+}
+#endif
+
 if (AVENCAACEncoderSettings.IsAvailable())
 {
     // Use AVENC AAC Encoder
@@ -176,6 +234,11 @@ output.Audio = new AVENCAACEncoderSettings();
 // For MF AAC encoder (Windows only)
 #if NET_WINDOWS
 output.Audio = new MFAACEncoderSettings();
+#endif
+
+// For the Apple AAC encoder (macOS and Mac Catalyst)
+#if __MACOS__ || __MACCATALYST__
+output.Audio = new AppleAACEncoderSettings();
 #endif
 ```
 

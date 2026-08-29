@@ -501,7 +501,7 @@ To skip sync: replace the preload/resume block with a single loop that calls `aw
 
 For a responsive 16-camera wall, tune each `RTSPSourceSettings`:
 
-- **`LowLatencyMode = true`** — sets `buffer-mode=None` + `drop-on-latency=true` internally. Cuts jitter buffer from ~1 s to ~200 ms.
+- **`LowLatencyMode = true`** — sets `buffer-mode=None` + `drop-on-latency=false` internally. Cuts jitter buffer from 500 ms to 150 ms.
 - **`UseGPUDecoder = true`** — hardware H.264 / H.265 decode. Without it a 16-stream 1080p wall will saturate CPU on most laptops.
 - **`AudioEnabled = false`** — on all 16. No one wants 16 overlapping audio streams.
 - **`VideoRendererBlock.IsSync = false`** — drop-late-frames. The wrapper above already sets this.
@@ -525,16 +525,27 @@ For a production NVR you'd add: timestamps, severity filtering, and a "camera di
 
 ## Reconnection — Fallback Switch
 
-`RTSPSourceSettings` exposes a `FallbackSwitch` property: when the RTSP stream fails, the pipeline automatically switches to a static image, text card, or fallback media file without tearing itself down. That means the cell keeps showing *something* (like a "camera offline" slate) instead of freezing on the last good frame.
+When an RTSP stream fails, the pipeline can automatically switch to a static image, text card, or fallback media file instead of freezing on the last good frame — the cell keeps showing *something* (like a "camera offline" slate) until the camera recovers.
+
+In the Media Blocks SDK the fallback is wired at the pipeline level with `FallbackSwitchSourceBlock`, which wraps the source: build it from your `RTSPSourceSettings` plus a `FallbackSwitchSettings`, then connect its separate `VideoOutput` / `AudioOutput` pads exactly as you would the source block's. In the `RTSPPlayEngine` helper above it **replaces** the bare `RTSPSourceBlock` — do not wire both.
 
 ```csharp
-settings.FallbackSwitch = new FallbackSwitchSettings
+var fallbackSwitch = new FallbackSwitchSourceBlock(
+    rtspSettings,
+    new FallbackSwitchSettings
+    {
+        Enabled = true,
+        Fallback = new StaticTextFallbackSettings { Text = "CAMERA OFFLINE" },
+    });
+
+_pipeline.Connect(fallbackSwitch.VideoOutput, _videoRenderer.Input);
+if (rtspSettings.AudioEnabled)
 {
-    // Image/text settings — see the FallbackSwitch docs for options.
-};
+    _pipeline.Connect(fallbackSwitch.AudioOutput, _audioRenderer.Input);
+}
 ```
 
-For the full `FallbackSwitch` API (text / image / alternate-media types, tunable timeouts, `ManualUnblock`, pipeline-level telemetry via `OnNetworkSourceDisconnect`) see the dedicated [RTSP reconnection and fallback switch guide](../../general/network-sources/reconnection-and-fallback.md). For a multi-camera wall, enabling it on every engine is a one-line upgrade to production resilience.
+Setting `rtspSettings.FallbackSwitch` alone is **not enough** in a Media Blocks pipeline — a bare `RTSPSourceBlock` does not apply it and logs a warning at build time; the declarative property is applied by `VideoCaptureCoreX`. For the full `FallbackSwitch` API (text / image / alternate-media types, tunable timeouts, `ManualUnblock`) see the dedicated [RTSP reconnection and fallback switch guide](../../general/network-sources/reconnection-and-fallback.md).
 
 ## Related Documentation
 

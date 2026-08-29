@@ -147,7 +147,7 @@ Configura tu proyecto con el objetivo de framework macOS apropiado:
 
 ```xml
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <TargetFramework>net8.0-macos14.0</TargetFramework>
+  <TargetFramework>net10.0-macos</TargetFramework>
   <OutputType>Exe</OutputType>
 </PropertyGroup>
 ```
@@ -162,7 +162,7 @@ Configura el framework objetivo apropiado para entornos Linux:
 
 ```xml
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
-  <TargetFramework>net8.0</TargetFramework>
+  <TargetFramework>net10.0</TargetFramework>
   <OutputType>Exe</OutputType>
 </PropertyGroup>
 ```
@@ -182,13 +182,12 @@ La implementación en Android requiere pasos adicionales únicos para el modelo 
 La implementación de VisioForge para Android requiere un puente de binding entre .NET y las APIs nativas de Android:
 
 1. Obtén el proyecto de binding Java del [repositorio de ejemplos de VisioForge](https://github.com/visioforge/.Net-SDK-s-samples) en el directorio `AndroidDependency`
-2. Agrega el proyecto de binding apropiado a tu solución:
-   - Usa `VisioForge.Core.Android.X8.csproj` para aplicaciones .NET 8
+2. Elige el proyecto de binding que coincida con la versión de .NET con la que compilas - la carpeta incluye un `VisioForge.Core.Android.X{N}.csproj` por cada versión de .NET soportada (por ejemplo, `VisioForge.Core.Android.X9.csproj` para .NET 9, `VisioForge.Core.Android.X10.csproj` para .NET 10). Si tu versión de .NET no aparece en la lista, elige la más cercana disponible.
 3. Referencia este proyecto en tu proyecto principal de Android:
 
 ```xml
 <ItemGroup>
-  <ProjectReference Include="..\..\ruta\a\VisioForge.Core.Android.X8.csproj" />
+  <ProjectReference Include="..\..\ruta\a\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
 
@@ -222,7 +221,10 @@ Agrega el redistributable específico de iOS a tu proyecto principal de iOS:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.*" />
+  <!-- La versión del redistribuable de iOS va por detrás de la versión del SDK a propósito - sigue
+       el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. No la subas para
+       igualar VisioForge.DotNet.*; no existe una versión 2026.x en nuget.org. -->
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
 </ItemGroup>
 ```
 
@@ -282,16 +284,16 @@ La integración de VisioForge con Avalonia sobresale con una estructura de proye
         <AvaloniaResource Include="Assets\**" />
       </ItemGroup>
       <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-        <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-windows</TargetFrameworks>
+        <TargetFrameworks>net10.0-android;net10.0-ios;net10.0-windows</TargetFrameworks>
       </PropertyGroup>
       <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-        <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-macos14.0</TargetFrameworks>
+        <TargetFrameworks>net10.0-android;net10.0-ios;net10.0-macos</TargetFrameworks>
       </PropertyGroup>
       <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
-        <TargetFrameworks>net8.0-android;net8.0</TargetFrameworks>
+        <TargetFrameworks>net10.0-android;net10.0</TargetFrameworks>
       </PropertyGroup>
       <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.2.2" />
+        <PackageReference Include="Avalonia" Version="12.0.5" />
         <!-- Referencias adicionales de Avalonia -->
       </ItemGroup>
       <ItemGroup>

@@ -263,7 +263,7 @@ Los siguientes efectos artísticos están disponibles exclusivamente en la imple
 | VideoEffectTextLogo | 🪟 Classic | Superposición de texto flexible con amplia personalización incluyendo fuentes, colores, rotación, efectos y texto animado. |
 | VideoEffectScrollingTextLogo | 🪟 Classic | Banner de texto desplazable con control de dirección y velocidad. |
 | TextOverlayVideoEffect | 🌍 Multiplataforma | Superposición de texto multiplataforma con control tipográfico avanzado. Soporta marcas de tiempo, hora del sistema y texto dinámico. |
-| OverlayManagerText | 🌍 Multiplataforma | Superposición de texto avanzada con sombras, degradados y animaciones. |
+| OverlayManagerText | 🌍 Multiplataforma | Superposición de texto avanzada con sombras, degradados y animaciones. Un callback `TextProvider` puede reconstruir el texto en cada fotograma, y `StartTime`/`EndTime` delimitan cuándo se dibuja. |
 | OverlayManagerScrollingText | 🌍 Multiplataforma | Texto desplazable con control total sobre velocidad, dirección y apariencia. |
 | OverlayManagerDateTime | 🌍 Multiplataforma | Superposición de fecha/hora con formato personalizable. |
 

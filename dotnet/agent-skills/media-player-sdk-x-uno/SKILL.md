@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Media Player SDK X** — the cross-platfor
 
 `MediaPlayerCoreX` is the high-level open/play/seek god-object — same API as on the WPF/MAUI/WinUI hosts, just bound to Uno's `VideoView`. Under the hood it shares the GStreamer-backed engine with Media Blocks. It opens local files, HTTP(S)/HLS/DASH/RTSP streams, and any other URL the underlying engine can demux.
 
-Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Player sample): wrapper **`2026.5.4`**, Uno UI **`2026.5.4`**, Windows redists **`2026.4.29`**, Android redist **`2026.4.18.0`**, iOS redist **`2025.0.16`**, Mac Catalyst redist **`2025.9.1`**. Newer 2026.x.x patch versions are usually drop-in compatible — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin the per-OS redists to the values from the upstream csproj for your wrapper version.
+Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Player sample): wrapper **`2026.5.4`**, Uno UI **`2026.5.4`**, Windows redists **`2026.4.29`**, Android redist **`2026.7.27`**, iOS redist **`2025.0.16`**, Mac Catalyst redist **`2025.9.1`**. Newer 2026.x.x patch versions are usually drop-in compatible — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin the per-OS redists to the values from the upstream csproj for your wrapper version.
 
 ## When to use this skill
 
@@ -160,6 +160,8 @@ The `#if !__IOS__ || __MACCATALYST__` guard around `Audio_OutputDevicesAsync` is
 Skipping `InitSDKAsync` is the #1 source of "DLL not found" / "no element X" failures on first run.
 
 ## License registration
+
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
 
 The SDK ships with a 30-day trial. To register a purchased licence, call `await _player.SetLicenseCertificateAsync(certBytes)` on every `MediaPlayerCoreX` instance, after the constructor and before `OpenAsync`:
 

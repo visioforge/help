@@ -38,36 +38,37 @@ This Agreement applies to all software development kits and related products dev
 
 Subject to the terms and conditions of this Agreement and upon payment of the applicable license fees, Licensor grants you a limited, non-exclusive, non-transferable license to use the Software as follows:
 
+Current commercial license types and terms are summarized on the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
+
 ### 3.1. Developer License Rights
 
-**3.1.1. One-Year Developer License**
+**3.1.1. Annual Developer License**
 
-- Permits installation and use of the Software on up to three (3) developer workstations by a single developer
+- Permits installation and use of the Software by one named developer; the license is counted by developer, not by workstation
 - Valid for one calendar year from date of purchase
-- Includes access to all updates and technical support during the license period
+- Includes all minor and major updates and email support for twelve (12) months from the date of purchase
 - After expiration, you may continue using the latest version available during your license period, but without updates or support
 - License may be renewed at any time
 - License is not transferable to another company but may be reassigned to another developer within the same company
 
 **3.1.2. Lifetime·Team License**
 
-- Permits installation and use of the Software on unlimited developer workstations at a single physical location
+- Permits all developers in the purchasing organization at one location within one city to install and use the Software
 - Valid in perpetuity without renewal requirements
-- Includes updates and technical support for the first year after purchase
-- Optional support and update subscription available after the first year
+- Includes all minor and major updates and email support for the lifetime of the product
 - License is not transferable to another company
 
 ### 3.2. Distribution Rights
 
 - You may incorporate the Software into your own commercial applications and distribute such applications without royalty payments
 - End users of your applications are not required to purchase separate licenses
-- Distribution rights apply to both the One-Year Developer License and the Lifetime·Team License
+- Distribution rights apply to both the Annual Developer License and the Lifetime·Team License
 
 ### 3.3. Evaluation License
 
-- You may evaluate the Software for a period of thirty (30) calendar days
-- During the evaluation period, you may use the Software solely for evaluation and testing purposes
-- You may not use the evaluation version of the Software to develop commercial applications or products
+- You may use the full functionality of the Software for a period of thirty (30) calendar days
+- During the evaluation period, you may evaluate, test, and develop commercial applications or products internally
+- You may not use the evaluation version in production or distribute applications or products built with it
 - After the evaluation period, you must either purchase a license or discontinue use of the Software
 
 ## 4. LICENSE RESTRICTIONS
@@ -95,9 +96,9 @@ Except as expressly permitted in this Agreement, you may not:
 
 **6.1.** Technical support is provided to licensed users as specified in the license type purchased.
 
-**6.2.** Minor version updates (e.g., from version 1.1 to 1.2) are provided free of charge to all licensed users during their license period.
+**6.2.** The Annual Developer License includes minor and major updates and email support for twelve (12) months from the date of purchase. After that period, the licensee may continue using the last version released during the license period without updates or support.
 
-**6.3.** Major version upgrades (e.g., from version 1.x to 2.0) may require additional payment, though at a reduced price for existing customers.
+**6.3.** The Lifetime·Team License includes minor and major updates and email support for the lifetime of the product.
 
 **6.4.** Licensor has no obligation to provide support for evaluation versions of the Software.
 
@@ -158,4 +159,4 @@ Website: www.visioforge.com
 
 ---
 © VisioForge. All rights reserved.
-Last Updated: 2026-06-24
+Last Updated: 2026-08-27

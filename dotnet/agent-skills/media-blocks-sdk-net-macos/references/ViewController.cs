@@ -351,12 +351,13 @@ public partial class ViewController : NSViewController
             _pipeline = null;
         }
 
-        // Dispose the individual MediaBlock instances created in StartAsync.
-        // DisposeAsync on the pipeline does NOT dispose blocks wired only via Connect.
-        _videoSource?.Dispose(); _videoSource = null;
-        _audioSource?.Dispose(); _audioSource = null;
-        _videoRenderer?.Dispose(); _videoRenderer = null;
-        _audioRenderer?.Dispose(); _audioRenderer = null;
+        // Drop the references to the blocks created in StartAsync. The pipeline owns every
+        // block you connected to it and disposed them above, so do not dispose them again.
+        // Stopping alone disposes nothing — a stopped pipeline can be started again as-is.
+        _videoSource = null;
+        _audioSource = null;
+        _videoRenderer = null;
+        _audioRenderer = null;
     }
 
     /// <summary>

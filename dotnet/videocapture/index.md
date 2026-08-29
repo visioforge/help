@@ -309,4 +309,4 @@ For a detailed migration guide with side-by-side code examples, see [Migrate fro
 * [API Reference](https://api.visioforge.org/dotnet/api/index.html)
 * [Changelog](../changelog.md)
 * [End User License Agreement](../../eula.md)
-* [Licensing Information](../../../licensing.md)
+* [Licensing Information](https://www.visioforge.com/licensing)

@@ -51,7 +51,7 @@ Le Video Edit SDK assemble des timelines, applique des transitions/effets/superp
 
 ## Prise en charge des plateformes
 
-- `VideoEditCoreX` (multiplateforme, GStreamer) : Windows, macOS (Intel + Apple Silicon), Linux (Ubuntu/Debian/CentOS), Android (via MAUI), iOS (via MAUI).
+- `VideoEditCoreX` (multiplateforme, GStreamer) : Windows, macOS (Intel + Apple Silicon), Linux (Ubuntu/Debian/CentOS), Android (via [MAUI](./maui/video-editing-maui.md)), iOS (via [MAUI](./maui/video-editing-maui.md)).
 - `VideoEditCore` (historique, DirectShow) : Windows x64 uniquement.
 - Frameworks d'interface : WinForms, WPF, MAUI, Avalonia, Uno, Console.
 - Matrice complète moteur × plateforme × interface : [platform-matrix.md](../platform-matrix.md).
@@ -170,6 +170,7 @@ Pour le rognage, utilisez plutôt `Input_AddVideoFile` avec un `VideoFileSource(
     - Diaporama à partir d'images → [video-images-console.md](./code-samples/video-images-console.md)
     - Mélange audio / enveloppe de volume → [audio-envelope.md](./code-samples/audio-envelope.md), [volume-for-track.md](./code-samples/volume-for-track.md)
     - Application d'édition iOS → [ios-video-editor.md](./code-samples/ios-video-editor.md)
+    - Application d'édition MAUI (Android / iOS / macCatalyst / Windows) → [video-editing-maui.md](./maui/video-editing-maui.md)
 - **Déploiement** — [Windows / macOS / Ubuntu / Android / iOS](../deployment-x/index.md)
 - **Installation et matrice** — [Guide d'installation](../install/index.md) · [Matrice des plateformes](../platform-matrix.md)
 

@@ -64,11 +64,13 @@ Cette application console enregistre l'audio depuis le microphone par défaut et
 ### Paquets NuGet requis
 
 ```bash
-dotnet add package VisioForge.DotNet.Core.TRIAL
-dotnet add package VisioForge.DotNet.VideoCapture.TRIAL
+dotnet add package VisioForge.DotNet.Core
+dotnet add package VisioForge.DotNet.VideoCapture
 ```
 
 Ajoutez le [paquet redist](../../deployment-x/index.md) pour votre plateforme (par ex. `VisioForge.DotNet.Redist.Base.Windows.x64`).
+
+Les mêmes paquets sont utilisés pour l’essai de 30 jours et les applications sous licence. Consultez la [page de licence VisioForge](https://www.visioforge.com/licensing) pour les conditions d’essai et l’activation avec `.vflicense`.
 
 ### Exemple complet
 

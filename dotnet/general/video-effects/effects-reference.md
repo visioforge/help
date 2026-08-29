@@ -263,7 +263,7 @@ The following artistic effects are available exclusively in the cross-platform i
 | VideoEffectTextLogo | 🪟 Classic | Flexible text overlay with extensive customization including fonts, colors, rotation, effects, and animated text. |
 | VideoEffectScrollingTextLogo | 🪟 Classic | Scrolling text banner with direction and speed control. |
 | TextOverlayVideoEffect | 🌍 Cross-platform | Cross-platform text overlay with advanced typography control. Supports timestamps, system time, and dynamic text. |
-| OverlayManagerText | 🌍 Cross-platform | Advanced text overlay with shadows, gradients, and animations. |
+| OverlayManagerText | 🌍 Cross-platform | Advanced text overlay with shadows, gradients, and animations. A `TextProvider` callback can rebuild the text on every frame, and `StartTime`/`EndTime` bound when it is drawn. |
 | OverlayManagerScrollingText | 🌍 Cross-platform | Scrolling text with full control over speed, direction, and appearance. |
 | OverlayManagerDateTime | 🌍 Cross-platform | Date/time overlay with customizable formatting. |
 

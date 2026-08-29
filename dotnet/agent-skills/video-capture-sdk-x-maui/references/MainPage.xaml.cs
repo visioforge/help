@@ -24,10 +24,10 @@ namespace SimpleCapture
     /// VideoCaptureCoreX god-object (preview + record from a single instance)
     /// rather than building a Media Blocks graph by hand.
     ///
-    /// Engine boot model is different from the WPF host: here we DON'T call
-    /// VisioForgeX.InitSDKAsync() before constructing VideoCaptureCoreX — the
-    /// MAUI handler chain initializes the native runtime when AddVisioForgeHandlers()
-    /// is registered in MauiProgram. We DO call VisioForgeX.DestroySDK() on shutdown.
+    /// Engine boot model is the same as the WPF host: AddVisioForgeHandlers() only
+    /// registers the VideoView handlers, so VisioForgeX.InitSDKAsync() has to run
+    /// before the first VideoCaptureCoreX is constructed, and VisioForgeX.DestroySDK()
+    /// on shutdown.
     /// </summary>
     public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
@@ -136,6 +136,10 @@ namespace SimpleCapture
 #endif
 
             // The MAUI VideoView yields the platform IVideoView the engine binds to.
+            // Loads the native GStreamer stack. Without it the constructor below
+            // throws DllNotFoundException on a clean machine.
+            await VisioForgeX.InitSDKAsync();
+
             IVideoView vv = videoView.GetVideoView();
             _core = new VideoCaptureCoreX(vv);
             _core.OnError += Core_OnError;

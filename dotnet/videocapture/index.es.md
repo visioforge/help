@@ -309,4 +309,4 @@ Para una guía de migración detallada con ejemplos de código lado a lado, cons
 * [Referencia de API](https://api.visioforge.org/dotnet/api/index.html)
 * [Registro de Cambios](../changelog.md)
 * [Contrato de Licencia de Usuario Final](../../eula.md)
-* [Información de Licenciamiento](../../../licensing.md)
+* [Información de Licenciamiento](https://www.visioforge.com/es/licensing)

@@ -79,6 +79,8 @@ The bundled `Program.cs` calls `pipeline.Start()` / `pipeline.Stop()` and `Visio
 
 ## License registration
 
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
+
 The SDK ships with a 30-day trial — the bundled `references/Program.cs` runs in trial mode by design (the upstream sample never sets a licence). To register a purchased licence, load the `.vflicense` file as bytes and call `SetLicenseCertificateAsync` on every `MediaBlocksPipeline` instance, after the constructor and before `Start`:
 
 ```csharp

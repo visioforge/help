@@ -146,7 +146,7 @@ Para cámaras ONVIF, autentíquese a través de `ONVIFClientX` para recuperar la
 
 ## Modo de Baja Latencia
 
-Para monitoreo en tiempo real o control PTZ, habilite el modo de baja latencia para reducir el retraso del stream de los ~250ms por defecto a 60–120ms:
+Para monitoreo en tiempo real o control PTZ, habilite el modo de baja latencia para reducir el búfer de jitter de 500 ms por defecto a 150 ms. Establezca `Latency` en 150 ms o menos para bajar más:
 
 ```csharp
 var rtspSettings = await RTSPSourceSettings.CreateAsync(
@@ -323,7 +323,16 @@ Use passthrough para archivo de vigilancia y aplicaciones NVR — requiere cero 
 
 ### ¿Cómo reduzco la latencia del stream RTSP por debajo de 100ms?
 
-Habilite `LowLatencyMode = true` en `RTSPSourceSettings` y deshabilite la sincronización del renderizador de video con `IsSync = false`. Use transporte UDP cuando su red lo soporte. Latencia esperada: 60–120ms vs los 250ms por defecto. Consulte la [guía del protocolo RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md) para opciones avanzadas de ajuste de buffers.
+Habilite `LowLatencyMode = true` en `RTSPSourceSettings` (búfer de jitter de 150 ms frente a 500 ms por defecto). Para un retraso aún menor, establezca `Latency` en 150 ms o menos y deshabilite la sincronización del renderizador de video con `IsSync = false`. Use transporte UDP cuando su red lo soporte. Consulte la [guía del protocolo RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md) para opciones avanzadas de ajuste de buffers.
+
+### ¿VLC reproduce el stream pero la vista previa se congela o termina a los ~60 segundos?
+
+La lista de protocolos por defecto prueba UDP primero. Fuerce TCP y, si la cámara sigue cerrando la sesión, active `ForceCustomKeepAlive` para enviar GET_PARAMETER cada 30 segundos:
+
+```cs
+rtspSettings.AllowedProtocols = RTSPSourceProtocol.TCP;
+rtspSettings.ForceCustomKeepAlive = true;
+```
 
 ### ¿Puedo ver y grabar de múltiples cámaras IP simultáneamente?
 

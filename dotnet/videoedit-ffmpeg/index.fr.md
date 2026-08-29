@@ -1,6 +1,6 @@
 ---
 title: Édition vidéo FFmpeg et conversion de format en C# .NET
-description: Éditez, convertissez et traitez la vidéo avec VisioForge Video Edit SDK FFmpeg .NET. Boîte à outils multiplateforme avec effets et encodage matériel.
+description: Éditez, convertissez et traitez la vidéo avec VisioForge Video Edit SDK FFmpeg .NET. Boîte à outils Windows uniquement avec effets et encodage matériel.
 sidebar_label: Video Edit SDK FFmpeg .NET
 order: 11
 tags:

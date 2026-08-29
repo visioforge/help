@@ -280,6 +280,34 @@ DeviceEnumerator.Shared.OnVideoSourceRemoved += (sender, device) =>
 };
 ```
 
+### Savoir quand la première énumération est terminée
+
+Le démarrage d'une surveillance remplit la liste des périphériques à partir des notifications envoyées
+par la plateforme : une interface peut donc la démarrer sans l'attendre et afficher son propre état
+« énumération en cours... ». `OnDeviceEnumerationCompleted` indique quand cette première passe est terminée :
+
+```csharp
+DeviceEnumerator.Shared.OnDeviceEnumerationCompleted += (sender, e) =>
+{
+    // e.Kind vaut VideoSources, AudioSources ou AudioOutputs.
+    Debug.WriteLine($"Énumération {e.Kind} terminée");
+};
+
+// Sans await : la liste se remplit via OnVideoSourceAdded pendant que l'interface reste réactive.
+_ = DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
+```
+
+Sur macOS, cela compte au premier lancement d'une application : les boîtes de dialogue d'autorisation
+de la caméra et du microphone sont validées par l'utilisateur, et l'énumération ne se termine qu'ensuite.
+
+Sur Mac Catalyst, les moniteurs audio n'existent pas — les requêtes CoreAudio/AVFoundation peuvent se
+bloquer dans les processus macabi — donc `StartAudioSourceMonitorAsync` / `StartAudioSinkMonitorAsync`
+reviennent sans déclencher `OnDeviceEnumerationCompleted`, et l'énumération audio signale un seul
+périphérique par défaut. Lisez plutôt la liste directement au lieu d'attendre l'événement (#1150).
+
+Sur Android, il n'y a pas de surveillance des sources vidéo à démarrer : seuls `AudioSources` et
+`AudioOutputs` y sont signalés.
+
 ## Considérations spécifiques aux plateformes
 
 ### Windows

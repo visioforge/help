@@ -218,25 +218,28 @@ namespace MediaBlocks_Simple_Video_Capture_Demo
                 if (_pipeline != null)
                 {
                     await _pipeline.StopAsync();
-                    _pipeline.ClearBlocks();
                     _pipeline.OnError -= Pipeline_OnError;
                     await _pipeline.DisposeAsync();
                     _pipeline = null;
                 }
 
-                // Dispose individual MediaBlock instances created in btStart_Click.
-                // ClearBlocks/DisposeAsync on the pipeline does NOT dispose blocks
-                // that were not added via AddBlock — sources/renderers/encoders
-                // wired only via Connect remain owned by the caller.
-                _videoSource?.Dispose(); _videoSource = null;
-                _audioSource?.Dispose(); _audioSource = null;
-                _videoRenderer?.Dispose(); _videoRenderer = null;
-                _audioRenderer?.Dispose(); _audioRenderer = null;
-                _videoTee?.Dispose(); _videoTee = null;
-                _audioTee?.Dispose(); _audioTee = null;
-                _h264Encoder?.Dispose(); _h264Encoder = null;
-                _aacEncoder?.Dispose(); _aacEncoder = null;
-                _mp4Muxer?.Dispose(); _mp4Muxer = null;
+                // The pipeline owns every block you connected to it, so disposing the
+                // pipeline disposes them too — do not dispose them yourself as well.
+                // Just drop the references.
+                //
+                // Note that stopping alone does NOT dispose anything: a stopped pipeline
+                // keeps its blocks and connections and can simply be started again. If
+                // this button is meant to be followed by another Start, keep _pipeline
+                // and the blocks and skip the disposal entirely.
+                _videoSource = null;
+                _audioSource = null;
+                _videoRenderer = null;
+                _audioRenderer = null;
+                _videoTee = null;
+                _audioTee = null;
+                _h264Encoder = null;
+                _aacEncoder = null;
+                _mp4Muxer = null;
 
                 VideoView1.Invalidate();
             }

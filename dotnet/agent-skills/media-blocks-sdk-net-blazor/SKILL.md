@@ -123,6 +123,8 @@ The Razor component injects the service and calls methods on it; component dispo
 
 ## License registration
 
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
+
 Call `await pipeline.SetLicenseCertificateAsync(certBytes)` on every `MediaBlocksPipeline` instance, after the constructor and before `StartAsync`. In the singleton-service pattern this means inside `StartStreamingAsync` (or wherever you `new MediaBlocksPipeline()`):
 
 ```csharp

@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a **native .NET for Android** application (TFM `net10.0-android`, Activity-based, NOT MAUI and NOT classic Xamarin.Android). The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) that mirrors the legacy `VideoCaptureCore` API. The same C# code works unchanged on WPF / MAUI / Avalonia / Uno / iOS / macOS — only the UI host swaps (`VideoViewGL` here, `<my:VideoView />` on MAUI, etc.) and the per-OS native redist NuGet.
 
-Pinned NuGet versions: wrapper **`2026.5.4`**, Android redist **`2026.4.18.0`** (matches the [official Simple Video Capture Android sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Android/Simple%20Video%20Capture)). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.5.4`**, Android redist **`2026.7.27`** (matches the [official Simple Video Capture Android sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Android/Simple%20Video%20Capture)). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
 
 ## When to use this skill
 
@@ -37,7 +37,7 @@ A native Android capture project needs **two NuGet packages plus one ProjectRefe
 ```xml
 <ItemGroup>
   <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.5.4" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.4.18.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
   <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
 </ItemGroup>
 <ItemGroup>
@@ -92,6 +92,8 @@ The Android-specific renderer is `VisioForge.Core.UI.Android.VideoViewGL` (an Op
 Resolve it in code with `FindViewById<VisioForge.Core.UI.Android.VideoViewGL>(Resource.Id.videoView)`. There is **no** Android-specific XML namespace declaration — the fully-qualified type name in the element is enough; the Mono/.NET-for-Android resource compiler binds it automatically.
 
 ## License registration
+
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
 
 The SDK ships with a 30-day trial. To register a purchased licence, call `await _core.SetLicenseCertificateAsync(certBytes)` on every `VideoCaptureCoreX` instance, after the constructor and before `StartAsync`:
 

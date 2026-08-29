@@ -280,6 +280,35 @@ DeviceEnumerator.Shared.OnVideoSourceRemoved += (sender, device) =>
 };
 ```
 
+### Saber cuándo terminó la primera enumeración
+
+Iniciar un monitor llena la lista de dispositivos a partir de las notificaciones que envía la
+plataforma, así que una interfaz puede iniciarlo sin esperarlo y mostrar su propio estado
+«enumerando...». `OnDeviceEnumerationCompleted` indica cuándo terminó esa primera pasada:
+
+```csharp
+DeviceEnumerator.Shared.OnDeviceEnumerationCompleted += (sender, e) =>
+{
+    // e.Kind es VideoSources, AudioSources o AudioOutputs.
+    Debug.WriteLine($"Enumeración de {e.Kind} terminada");
+};
+
+// Sin await: la lista se llena mediante OnVideoSourceAdded mientras la interfaz sigue respondiendo.
+_ = DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
+```
+
+En macOS esto importa en la primera ejecución de una aplicación: los diálogos de permiso de la cámara
+y del micrófono los responde el usuario, y la enumeración solo termina cuando lo han hecho.
+
+En Mac Catalyst los monitores de audio no existen — las consultas de CoreAudio/AVFoundation pueden
+bloquearse en procesos macabi — por lo que `StartAudioSourceMonitorAsync` /
+`StartAudioSinkMonitorAsync` regresan sin emitir `OnDeviceEnumerationCompleted`, y la enumeración
+de audio informa un único dispositivo predeterminado. Allí lea la lista directamente en lugar de
+esperar el evento (#1150).
+
+En Android no hay un monitor de fuentes de video que iniciar: allí solo se informan `AudioSources` y
+`AudioOutputs`.
+
 ## Consideraciones Específicas de Plataforma
 
 ### Windows

@@ -145,6 +145,7 @@ La implementación multiplataforma incluye amplios efectos de distorsión artís
 * [**Superposición de texto**](text-overlay.md) — agrega texto personalizable con control sobre fuente, tamaño, color, rotación y animación
   - Clásico: `VideoEffectTextLogo`, `VideoEffectScrollingTextLogo`
   - Multiplataforma: `TextOverlayVideoEffect`, `OverlayManagerText`, `OverlayManagerScrollingText`, `OverlayManagerDateTime`
+  * `OverlayManagerText.TextProvider` reconstruye el texto en cada fotograma, para lecturas en vivo: un valor de sensor, el número de fotograma o el reloj
 * [**Superposición de imagen**](image-overlay.md) — incorpora logotipos, marcas de agua y elementos gráficos con soporte de transparencia
   - Clásico: `VideoEffectImageLogo`
   - Multiplataforma: `ImageOverlayVideoEffect`, `ImageOverlayCairoVideoEffect`, `OverlayManagerImage`, `OverlayManagerGIF`

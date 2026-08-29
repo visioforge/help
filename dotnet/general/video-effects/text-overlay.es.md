@@ -22,6 +22,7 @@ tags:
   - C#
 primary_api_classes:
   - TextOverlayVideoEffect
+  - OverlayManagerText
   - FontSettings
   - VideoEffectTextLogo
 
@@ -186,6 +187,67 @@ textOverlay.Mode = TextOverlayMode.SystemTime;
 
 // agregar el efecto
 await videoCapture1.Video_Effects_AddOrUpdateAsync(textOverlay);
+```
+
+### Texto que cambia en cada fotograma
+
+`TextOverlayVideoEffect` está pensado para texto que cambia poco y no ofrece ninguna ventana
+temporal. Para una lectura en vivo - un valor de sensor, el número de fotograma, el reloj - use
+`OverlayManagerText` a través de `Video_Overlay_Add` y asígnele un `TextProvider`. Se le pide el
+texto una vez por fotograma:
+
+```csharp
+// El gestor de superposiciones solo se inserta en el pipeline cuando esto es true,
+// y debe establecerse antes de Start/StartAsync.
+videoCapture1.Video_Overlay_Enabled = true;
+
+var text = new OverlayManagerText(string.Empty, x: 40, y: 40);
+text.Color = SKColors.Yellow;
+text.Font.Size = 28;
+
+// Se llama una vez por fotograma en el hilo de streaming. El argumento es la marca de
+// tiempo del fotograma, contada desde el inicio del pipeline.
+text.TextProvider = ts => "Camera 1\nOperator: demo\nREC\n"
+    + $"Sensor {_sensorValue:F1}   {DateTime.Now:HH:mm:ss}   {ts:hh\\:mm\\:ss}";
+
+videoCapture1.Video_Overlay_Add(text);
+```
+
+Las líneas estáticas y dinámicas caben en una sola cadena, así que un bloque de rótulos con una única
+línea viva sigue costando una llamada por fotograma. Devolver la misma cadena que la vez anterior es
+barato: la maquetación del texto solo se vuelve a medir cuando la cadena realmente cambia.
+
+El callback se ejecuta en el hilo de streaming, bajo el mismo bloqueo que toman `Video_Overlay_Add` y
+`Video_Overlay_Remove`. Manténgalo corto y no bloquee dentro de él: llamar a `Dispatcher.Invoke`
+desde ahí para leer un valor de la interfaz puede provocar un interbloqueo, no solo perder un
+fotograma. Lea en su lugar un campo que el hilo de interfaz ya haya escrito. Un callback que lanza una
+excepción se registra una vez y después deja de llamarse, y el elemento vuelve a su `Text`; volver a
+asignar `TextProvider` lo reactiva.
+
+`OverlayManagerText` también respeta `StartTime` y `EndTime`. Cada límite funciona por sí solo - un
+`StartTime` cero significa «desde el principio» y un `EndTime` cero significa «sin fin» - y ambos se
+comparan con la marca de tiempo del fotograma, no con el reloj del sistema.
+
+Consulte la [página de OverlayManagerBlock](../../mediablocks/VideoProcessing/OverlayManagerBlock.md)
+para ver la lista completa de elementos de superposición.
+
+`X` e `Y` son la esquina superior izquierda del texto, en píxeles. `(0, 0)` es la esquina superior
+izquierda del fotograma y la primera línea de un texto multilínea queda visible allí.
+
+### Superposiciones solo en la vista previa de MediaPlayerCoreX
+
+La misma API `Video_Overlay_*` está disponible en `MediaPlayerCoreX`. Establezca
+`Video_Overlay_Enabled` antes de `OpenAsync` / `PlayAsync`. La superposición se inserta solo en la
+rama del renderizador, después del sample grabber y de cualquier salida de vídeo personalizada, de
+modo que el archivo en disco, las capturas y las exportaciones no se modifican. Los elementos
+añadidos con `Video_Overlay_Add` sobreviven a `Stop` y a abrir otro archivo:
+
+```csharp
+mediaPlayer1.Video_Overlay_Enabled = true;
+
+var text = new OverlayManagerText(string.Empty, x: 0, y: 0);
+text.TextProvider = ts => $"T {ts:hh\\:mm\\:ss}";
+mediaPlayer1.Video_Overlay_Add(text);
 ```
 
 ## Mejores prácticas para superposiciones de texto

@@ -218,8 +218,9 @@ plus faible — anticipez-le plutôt que de lutter contre :
   la vidéo en direct continue de jouer ; les boîtes reflètent l'inférence terminée la plus récente.
 - **Réduisez la fréquence d'inférence** avec `FramesToSkip` lorsque vous n'avez pas besoin d'un
   résultat à chaque image — le bloc continue de transmettre chaque image.
-- **Utilisez un fournisseur GPU** (`CUDA`, `DirectML` ou `CoreML`) via `Provider`/`DeviceId` pour une
-  forte baisse de latence par rapport au CPU.
+- **Utilisez un fournisseur GPU** (`CUDA` ou `DirectML`) via `Provider`/`DeviceId` pour une forte
+  baisse de latence par rapport au CPU. **Ne définissez pas `CoreML` pour ces modèles sur du matériel
+  Apple** — voir la note ci-dessous.
 - **La taille d'entrée est fixe par famille** (OWLv2 960x960 ; Grounding DINO sa taille intégrée) et ne
   peut pas être réduite pour échanger la précision contre la vitesse — choisissez plutôt le modèle le
   plus léger si vous avez besoin de plus de marge.
@@ -335,8 +336,22 @@ persistantes, des lignes de franchissement ou du comptage par zone, consultez
 ### Un GPU est-il nécessaire ?
 
 Non. `Provider` vaut `Auto` par défaut, ce qui s'exécute sur le CPU lorsqu'aucun fournisseur GPU n'est
-présent. Un fournisseur `CUDA`, `DirectML` ou `CoreML` réduit la latence par image, ce qui compte le
-plus pour ces modèles plus lourds.
+présent. Un fournisseur `CUDA` ou `DirectML` réduit la latence par image, ce qui compte le plus pour
+ces modèles plus lourds.
+
+### Pourquoi `Auto` n'utilise-t-il pas CoreML pour ce bloc ?
+
+Sur du matériel Apple, `Auto` choisit le CPU pour la détection à vocabulaire ouvert bien que CoreML
+soit disponible, et c'est délibéré. ONNX Runtime ne peut pas mapper ces graphes sur CoreML d'un seul
+tenant : il découpe OWLv2 en 126 partitions et Grounding DINO en 255, chacune compilée et conservée
+comme un modèle CoreML distinct. Le résultat n'est pas lent, il est inutilisable — mesuré sur un Mac
+de 24 Go, la session a dépassé 5,8 Go résidents plus plusieurs Go de swap sans jamais se stabiliser,
+alors que le même modèle sur CPU plafonne autour de 4 Go et rend une image en environ 1,3 s.
+
+Seule la valeur par défaut `Auto` est redirigée. Définir explicitement
+`Provider = OnnxExecutionProvider.CoreML` fait toujours exactement ce que vous demandez, et ce n'est
+pas recommandé pour ces deux familles de modèles. Les autres blocs d'IA ne sont pas affectés : les
+modèles que CoreML mappe en quelques partitions continuent de l'utiliser.
 
 ### La détection à vocabulaire ouvert est-elle identique à la détection d'objets zero-shot ?
 

@@ -78,6 +78,10 @@ https://files.visioforge.com/unity/VisioForge.MediaBlocks.Unity.unitypackage
 Use an existing Unity 6 project or create a new one (any template). Keep the project root on a
 short NTFS path (see the warning above).
 
+The sample scenes render video into a uGUI `RawImage`, so the project needs the **uGUI** package
+(`com.unity.ugui`) — every Unity Hub template ships it, but a hand-trimmed project may not. No
+render pipeline is required: the scenes work on Built-in, URP and HDRP alike.
+
 ![Creating a Unity 6 project on a short NTFS path in Unity Hub](unity-new-project.webp)
 
 ## Step 2 — Import the package

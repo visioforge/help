@@ -45,7 +45,7 @@ Linux is the odd one out — there is no NuGet redist. The Linux target uses the
 
 ### Multi-target csproj
 
-This is the core of the skill — get the per-OS conditionals right and the rest follows. The csproj declares `<TargetFramework>` (singular) **conditionally per host OS**: Windows (`net10.0-windows` + `WinExe`) on Windows hosts; macOS (`net10.0-macos26.2` + `Exe`) on macOS hosts; plain `net10.0` + `Exe` on Linux. This is different from the MAUI multi-target pattern (which uses `<TargetFrameworks>` plural and emits one binary per OS) — the Avalonia sample emits **one binary per OS**, with the active TFM picked at build time by the host OS detection.
+This is the core of the skill — get the per-OS conditionals right and the rest follows. The csproj declares `<TargetFramework>` (singular) **conditionally per host OS**: Windows (`net10.0-windows` + `WinExe`) on Windows hosts; macOS (`net10.0-macos` + `Exe`) on macOS hosts; plain `net10.0` + `Exe` on Linux. This is different from the MAUI multi-target pattern (which uses `<TargetFrameworks>` plural and emits one binary per OS) — the Avalonia sample emits **one binary per OS**, with the active TFM picked at build time by the host OS detection.
 
 The full minimal csproj is in `references/Sample.csproj`. Adapted from the official Simple Video Capture sample (`Video Capture SDK X/Avalonia/Simple Video Capture/SimpleVideoCaptureA.csproj`). Highlights:
 
@@ -60,7 +60,7 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
 </ItemGroup>
 
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <TargetFramework>net10.0-macos26.2</TargetFramework>
+  <TargetFramework>net10.0-macos</TargetFramework>
   <OutputType>Exe</OutputType>
 </PropertyGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
@@ -145,6 +145,8 @@ private void MainWindow_Activated(object sender, EventArgs e)
 `InitSDK`-in-constructor + `CreateEngine`-in-Activated-with-guard is the canonical pattern for Avalonia + Video Capture SDK X. See `references/MainWindow.axaml.cs` for the full code.
 
 ## License registration
+
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
 
 The SDK ships with a 30-day trial. To register a purchased licence, call `await VideoCapture1.SetLicenseCertificateAsync(certBytes)` on every `VideoCaptureCoreX` instance, after the constructor and before `StartAsync`:
 

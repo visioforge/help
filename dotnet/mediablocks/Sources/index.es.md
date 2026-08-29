@@ -979,14 +979,15 @@ El `RTSPSourceBlock` está configurado usando `RTSPSourceSettings`. Propiedades 
 - `Login`: Nombre de usuario para autenticación RTSP, si requerida.
 - `Password`: Contraseña para autenticación RTSP, si requerida.
 - `AudioEnabled`: Un booleano indicando si intentar procesar el stream de audio.
-- `Latency`: Especifica la duración de buffering para el stream entrante (predeterminado 1000ms).
+- `Latency`: Especifica la duración de buffering para el stream entrante (predeterminado 500ms). `LowLatencyMode` usa 150ms, o el `Latency` explícito si lo establece en 150ms o menos.
 - `AllowedProtocols`: Define los protocolos de transporte a usar para recibir el stream. Es un enum de flags `RTSPSourceProtocol` con valores:
   - `UDP`: Stream de datos sobre UDP.
   - `UDP_Multicast`: Stream de datos sobre UDP multicast.
   - `TCP` (Recomendado): Stream de datos sobre TCP.
   - `HTTP`: Stream de datos tunneled sobre HTTP.
   - `EnableTLS`: Encriptar TCP y HTTP con TLS (usar `rtsps://` o `httpsps://` en URI).
-- `DoRTCP`: Habilita RTCP (RTP Control Protocol) para estadísticas de stream y control (generalmente true por defecto).
+- `DoRTCP`: Habilita RTCP (RTP Control Protocol) para estadísticas de stream y control. El valor predeterminado es `true`. Muchas cámaras usan los informes de recepción RTCP para saber que un cliente sigue conectado y cierran la sesión sin ellos, así que desactívelo solo para un servidor antiguo que no admita RTCP.
+- `ForceCustomKeepAlive`: Si es `true`, desactiva el keep-alive RTSP integrado y envía GET_PARAMETER cada 30 segundos. El valor predeterminado es `false`. Úselo si la cámara cierra la sesión con el keep-alive predeterminado.
 - `RTPBlockSize`: Especifica el tamaño de bloques RTP.
 - `UDPBufferSize`: Tamaño de buffer para transporte UDP.
 - `CustomVideoDecoder`: Permite especificar un nombre de elemento decodificador de video GStreamer personalizado si el predeterminado no es adecuado.
@@ -1068,6 +1069,7 @@ Use el método de fábrica `RTSPRAWSourceSettings.CreateAsync(uri, login, passwo
 | `WaitForKeyframe` | `bool` | `true` | Esperar fotograma IDR antes de reenviar video |
 | `SyncAudioWithKeyframe` | `bool` | `true` | Sincronizar entrega de audio al primer fotograma clave |
 | `DoRTCP` | `bool` | — | Habilitar protocolo de control RTCP |
+| `ForceCustomKeepAlive` | `bool` | `false` | Enviar GET_PARAMETER cada 30 s en lugar del keep-alive predeterminado |
 | `UDPBufferSize` | `int` | — | Tamaño del búfer de recepción UDP |
 
 #### El pipeline de muestra

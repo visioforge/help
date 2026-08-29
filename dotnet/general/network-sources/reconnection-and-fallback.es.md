@@ -257,7 +257,9 @@ var fallback = new FallbackSwitchSettings
 
 ## Usando FallbackSwitch — alto nivel (`RTSPSourceSettings.FallbackSwitch`)
 
-La vía más simple: adjunta el objeto de configuración directamente a `RTSPSourceSettings` y pásalo a `VideoCaptureCoreX` / `MediaPlayerCoreX` como siempre. Sin plomería extra de pipeline.
+La vía más simple: adjunte el objeto de configuración directamente a `RTSPSourceSettings` y páselo a `VideoCaptureCoreX` como siempre — el motor envuelve la fuente con un fallback switch automáticamente. Sin plomería extra de pipeline.
+
+> En `MediaPlayerCoreX` y el Media Blocks SDK esta propiedad **no** la aplica un bloque de fuente directamente (`RTSPSourceBlock` registra una advertencia si la activa ahí) — use en su lugar el `FallbackSwitchSourceBlock` de bajo nivel de la siguiente sección.
 
 ```csharp
 var rtsp = await RTSPSourceSettings.CreateAsync(
@@ -317,7 +319,7 @@ var stats = fallbackSwitch.GetStatistics();
 
 **UX declarativa + telemetría reactiva** — deja que `FallbackSwitch` mantenga la pantalla viva, y usa `pipeline.OnNetworkSourceDisconnect` para alimentar tu dashboard de monitoreo / alerta Slack / log NVR. Ningún enfoque excluye al otro.
 
-**Muro multi-cámara** — nunca derribes todo el grid por un fallo. Consulta la [guía de grid RTSP multi-cámara](../../mediablocks/Guides/multi-camera-rtsp-grid.md) para el patrón un-pipeline-por-cámara; adjunta un `FallbackSwitch` a cada motor independientemente.
+**Muro multi-cámara** — nunca derribe todo el grid por un fallo. Consulte la [guía de grid RTSP multi-cámara](../../mediablocks/Guides/multi-camera-rtsp-grid.md) para el patrón un-pipeline-por-cámara; envuelva la fuente de cada cámara con un `FallbackSwitchSourceBlock` (en `VideoCaptureCoreX` basta con asignar `FallbackSwitch` en los ajustes de la fuente).
 
 **Nota multiplataforma** — `FallbackSwitch` depende del elemento GStreamer `fallbackswitch`, que viene con el redist X. Los clásicos solo-Windows `VideoCaptureCore` / `MediaPlayerCore` no lo tienen — usa el enfoque reactivo allí.
 

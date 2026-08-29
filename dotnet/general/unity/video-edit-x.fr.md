@@ -71,8 +71,8 @@ graph LR;
 Le cœur de la construction + exécution :
 
 ```csharp
-// VideoEditCoreX repose sur GStreamer Editing Services — initialisez GES une seule fois.
-VideoEditCoreX.SDKInit();
+// Un seul appel d'initialisation pour tout le SDK (démarre GStreamer). VideoEditCoreX initialise GES dans son constructeur.
+VisioForgeEnvironment.InitializeSdk();
 
 _editor = new VideoEditCoreX();
 _editor.Input_AddAudioVideoFile(clip1);
@@ -151,8 +151,11 @@ aucun aperçu en direct n'est produit pendant un rendu.
 
 ### Ai-je besoin d'un appel d'initialisation du SDK distinct ?
 
-Oui. Appelez `VideoEditCoreX.SDKInit()` une seule fois (en plus du `VisioForgeEnvironment.InitializeSdk()` du
-paquet) — il initialise GStreamer Editing Services.
+Oui. Appelez le `VisioForgeEnvironment.InitializeSdk()` du paquet une seule fois — il démarre GStreamer
+(ce qui évite le `DllNotFoundException`). `VideoEditCoreX` initialise GStreamer Editing Services lui-même
+dans son constructeur, donc aucun appel séparé à `VideoEditCoreX.SDKInit()` n'est nécessaire.
+`VisioForgeEnvironment.InitializeSdk()` enveloppe `VisioForgeX.InitSDK()` ; pour les hôtes .NET
+hors Unity, l'équivalent est `VisioForgeX.InitSDKAsync()` — voir [Initialisation](../../init.md).
 
 ### Comment ajouter d'autres clips ou effets ?
 

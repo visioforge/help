@@ -1,6 +1,6 @@
 ---
 title: Encodage audio AAC avec conteneur M4A en C# .NET VisioForge
-description: Utilisez les backends avenc_aac, voaacenc et Media Foundation avec détection à l'exécution. Débit 32-320 kbps, surround 5.1, conteneurs M4A/MP4.
+description: Utilisez les backends avenc_aac, voaacenc, atenc et Media Foundation avec détection à l'exécution. Débit 32-320 kbps, surround 5.1, conteneurs M4A/MP4.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -29,6 +29,7 @@ primary_api_classes:
   - AACObject
   - AVENCAACEncoderSettings
   - VOAACEncoderSettings
+  - AppleAACEncoderSettings
   - AACOutput
 
 ---
@@ -52,6 +53,7 @@ Les SDK avec capacités multiplateformes (VideoCaptureCoreX, VideoEditCoreX, Med
 1. [Encodeur AVENC AAC](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.AVENCAACEncoderSettings.html) - Un encodeur multiplateforme riche en fonctionnalités.
 2. [Encodeur VO-AAC](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VOAACEncoderSettings.html) - Un encodeur multiplateforme simplifié.
 3. Encodeur AAC Media Foundation - Un encodeur système spécifique à Windows, accessible sur les plateformes Windows via `MFAACEncoderSettings`.
+4. Encodeur Apple AAC - L'encodeur AudioToolbox intégré à macOS, accessible sur macOS et Mac Catalyst via `AppleAACEncoderSettings`.
 
 ### Encodeur AVENC AAC
 
@@ -118,6 +120,55 @@ var aacSettings = new VOAACEncoderSettings
 - **Fréquences d'échantillonnage** : 8000 à 96000 Hz
 - **Canaux** : 1-2 canaux
 
+### Encodeur Apple AAC (macOS et Mac Catalyst)
+
+`AppleAACEncoderSettings` encapsule `atenc`, l'encodeur AAC intégré au système d'exploitation via
+AudioToolbox — celui-là même avec lequel le reste de macOS encode l'AAC. Il est disponible sur macOS
+et Mac Catalyst ; le runtime iOS livré avec le SDK ne le contient pas encore, il faut donc toujours
+tester `IsAvailable()` plutôt que la plateforme.
+
+#### Caractéristiques principales
+
+- Produit par l'encodeur du système d'exploitation lui-même
+- Jusqu'à 8 canaux, plus que tout autre backend AAC du SDK
+- Quatre modes de contrôle de débit, dont un vrai VBR
+
+#### Contrôle de débit
+
+`RateControl` détermine comment l'encodeur répartit les bits, et décide aussi si `Bitrate` est lu :
+
+- `Constant` (par défaut) : débit constant, piloté par `Bitrate`.
+- `LongTermAverage` : le débit instantané varie, la moyenne à long terme suit `Bitrate`.
+- `VariableConstrained` : VBR contraint. **`Bitrate` est ignoré.**
+- `Variable` : vrai VBR piloté par `VBRQuality` (0-127, 65 par défaut). **`Bitrate` est ignoré.**
+
+Dans les deux modes variables, la taille obtenue dépend du contenu et, pour `Variable`, de
+`VBRQuality` seul — y définir `Bitrate` n'a aucun effet.
+
+#### Exemple de configuration
+
+```csharp
+var aacSettings = new AppleAACEncoderSettings
+{
+    Bitrate = 192,
+    RateControl = AppleAACRateControl.Constant
+};
+```
+
+#### Paramètres pris en charge
+
+- **Débits** : 0 (Auto), 32, 64, 96, 128, 160, 192, 224, 256, 320 kbps
+- **Fréquences d'échantillonnage** : 8000 à 48000 Hz
+- **Canaux** : 1 à 8 canaux
+
+!!! note "Ce n'est pas l'encodeur par défaut"
+    `AVENCAACEncoderSettings` reste l'encodeur AAC par défaut sur macOS. Mesurés sur Apple Silicon
+    face à une source sans perte, les deux encodeurs alternent selon le débit - `atenc` est en
+    retrait à 96 kbps, à égalité à 128 kbps et devant à 192 kbps - et leur coût CPU est
+    indiscernable, l'encodage AAC tournant à plus de cent fois le temps réel dans les deux cas.
+    Choisissez `AppleAACEncoderSettings` explicitement lorsque vous voulez l'encodeur de la
+    plateforme, plus de six canaux, ou un vrai VBR.
+
 ### Encodeur AAC Media Foundation (Windows uniquement)
 
 Cet encodeur est spécifique aux plateformes Windows et offre une solution d'encodage limitée mais optimisée pour les performances.
@@ -139,6 +190,13 @@ Cet encodeur est spécifique aux plateformes Windows et offre une solution d'enc
 Chaque encodeur fournit une méthode statique `IsAvailable()` pour vérifier s'il peut être utilisé dans l'environnement courant. C'est utile pour les vérifications de compatibilité à l'exécution.
 
 ```csharp
+#if __MACOS__ || __MACCATALYST__
+if (AppleAACEncoderSettings.IsAvailable())
+{
+    // Utiliser l'encodeur AAC du système d'exploitation
+}
+#endif
+
 if (AVENCAACEncoderSettings.IsAvailable())
 {
     // Utiliser l'encodeur AVENC AAC
@@ -176,6 +234,11 @@ output.Audio = new AVENCAACEncoderSettings();
 // Pour l'encodeur MF AAC (Windows uniquement)
 #if NET_WINDOWS
 output.Audio = new MFAACEncoderSettings();
+#endif
+
+// Pour l'encodeur Apple AAC (macOS et Mac Catalyst)
+#if __MACOS__ || __MACCATALYST__
+output.Audio = new AppleAACEncoderSettings();
 #endif
 ```
 

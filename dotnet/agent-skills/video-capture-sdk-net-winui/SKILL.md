@@ -88,6 +88,8 @@ This is a structural difference from WPF (where `<my:VideoView/>` is itself the 
 
 ## License registration
 
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
+
 The SDK ships with a 30-day trial — the bundled `references/MainWindow.xaml.cs` runs in trial mode by design. To register a purchased licence, add two lines to `CreateEngine()`:
 
 ```csharp

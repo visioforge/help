@@ -118,7 +118,7 @@ The main project, `SimplePlayerMVVM.csproj`, targets multiple platforms. Key pac
 
 * `Avalonia`: The core Avalonia UI framework.
 * `Avalonia.Themes.Fluent`: Provides a Fluent Design theme.
-* `Avalonia.ReactiveUI`: For MVVM support using ReactiveUI.
+* `ReactiveUI.Avalonia`: For MVVM support using ReactiveUI.
 * `VisioForge.DotNet.MediaBlocks`: Core VisioForge media processing components.
 * `VisioForge.DotNet.Core.UI.Avalonia`: VisioForge UI components for Avalonia, including the `VideoView`.
 
@@ -133,27 +133,27 @@ The main project, `SimplePlayerMVVM.csproj`, targets multiple platforms. Key pac
   <AvaloniaResource Include="Assets\**" />
  </ItemGroup>
  <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-  <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-windows</TargetFrameworks>
+  <TargetFrameworks>net10.0-android;net10.0-ios;net10.0-windows</TargetFrameworks>
  </PropertyGroup>
  <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-macos14.0</TargetFrameworks>
+  <TargetFrameworks>net10.0-android;net10.0-ios;net10.0-macos</TargetFrameworks>
  </PropertyGroup>
  <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
-  <TargetFrameworks>net8.0-android;net8.0</TargetFrameworks>
+  <TargetFrameworks>net10.0-android;net10.0</TargetFrameworks>
  </PropertyGroup>
  <ItemGroup>
   <AvaloniaResource Include="Assets\**" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="Avalonia" Version="11.3.0" />
-  <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
-  <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0" />
-  <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-  <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.0" />
-  <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
+  <PackageReference Include="Avalonia" Version="12.0.5" />
+  <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.5" />
+  <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.5" />
+  <!--Condition below is needed to remove AvaloniaUI.DiagnosticsSupport package from build output in Release configuration.-->
+  <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
+  <PackageReference Include="ReactiveUI.Avalonia" Version="12.0.3" />
  </ItemGroup>
- <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
-  <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
+ <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
+  <PackageReference Include="Avalonia.Android" Version="12.0.5" />
  </ItemGroup>
  <ItemGroup>
   <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2025.5.1" />
@@ -175,7 +175,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
 
 ```xml
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
@@ -183,14 +183,14 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2025.4.9" />
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <TargetFramework>net8.0-macos14.0</TargetFramework>
+    <TargetFramework>net10.0-macos</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
     <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.2.15" />
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 ```
@@ -204,7 +204,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0-android</TargetFramework>
+    <TargetFramework>net10.0-android</TargetFramework>
     <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <ApplicationId>com.CompanyName.Simple_Player_MVVM</ApplicationId>
@@ -215,11 +215,11 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
   </PropertyGroup>
   <!-- ... other items ... -->
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\AndroidDependency\VisioForge.Core.Android.X8.csproj" />
+    <ProjectReference Include="..\..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="15.10.33" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
   </ItemGroup>
 </Project>
 ```
@@ -233,7 +233,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0-ios</TargetFramework>
+    <TargetFramework>net10.0-ios</TargetFramework>
     <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>Simple_Player_MVVM.iOS</RootNamespace>
@@ -241,8 +241,8 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
   </PropertyGroup>
   <!-- ... other items ... -->
   <ItemGroup>
-    <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.0.16" />
+    <PackageReference Include="Avalonia.iOS" Version="12.0.5" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
@@ -1116,7 +1116,7 @@ To abstract platform-specific functionality, interfaces are defined in the core 
 * **File Access:** On desktop, file access is generally more straightforward. The `MainViewModel` uses `TopLevel.StorageProvider.OpenFilePickerAsync` which works across Windows, macOS, and Linux without specific helper services like those for Android or iOS URI/permission complexities.
 
 * **Project File (`SimplePlayerMVVM.Desktop.csproj`):**
-  * Targets specific desktop frameworks (e.g., `net8.0-windows`, `net8.0-macos14.0`, `net8.0` for Linux).
+  * Targets specific desktop frameworks (e.g., `net10.0-windows`, `net10.0-macos`, `net10.0` for Linux).
   * Includes `Avalonia.Desktop`.
   * Includes platform-specific VisioForge native libraries for Windows (x64) and macOS through `PackageReference` conditions.
 

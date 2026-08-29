@@ -135,6 +135,8 @@ For codecs requiring a different plugin family (HAP, DNxHD, ProRes via plugin va
 
 ## License registration
 
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
+
 The SDK ships with a 30-day trial. To register a purchased licence, call `await MediaPlayer1.SetLicenseCertificateAsync(certBytes)` on every `MediaPlayerCoreX` instance, after the constructor and before `OpenAsync`:
 
 ```csharp

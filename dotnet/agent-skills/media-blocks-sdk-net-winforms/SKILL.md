@@ -76,6 +76,8 @@ That graph is exactly what `references/MainForm.cs` builds.
 
 ## License registration
 
+For commercial license types, scope, updates, support, and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
+
 The SDK ships with a 30-day trial. To register a purchased licence, load the `.vflicense` file as bytes and call `await pipeline.SetLicenseCertificateAsync(certBytes)` on **every** `MediaBlocksPipeline` instance, after construction and before `StartAsync` — there is no global "set once" helper:
 
 ```csharp
