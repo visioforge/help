@@ -300,12 +300,6 @@ _ = DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
 En macOS esto importa en la primera ejecución de una aplicación: los diálogos de permiso de la cámara
 y del micrófono los responde el usuario, y la enumeración solo termina cuando lo han hecho.
 
-En Mac Catalyst los monitores de audio no existen — las consultas de CoreAudio/AVFoundation pueden
-bloquearse en procesos macabi — por lo que `StartAudioSourceMonitorAsync` /
-`StartAudioSinkMonitorAsync` regresan sin emitir `OnDeviceEnumerationCompleted`, y la enumeración
-de audio informa un único dispositivo predeterminado. Allí lea la lista directamente en lugar de
-esperar el evento (#1150).
-
 En Android no hay un monitor de fuentes de video que iniciar: allí solo se informan `AudioSources` y
 `AudioOutputs`.
 
@@ -340,6 +334,24 @@ Por defecto, la enumeración de dispositivos Media Foundation está deshabilitad
 DeviceEnumerator.Shared.IsEnumerateMediaFoundationDevices = true;
 #endif
 ```
+
+### macOS y Mac Catalyst
+
+La enumeración de dispositivos solicita acceso a la cámara y al micrófono, y el inicio del proveedor
+de dispositivos de audio espera detrás de ese diálogo. Por eso el paquete de la aplicación debe
+declarar ambas descripciones de uso en su `Info.plist`, o el sistema termina el proceso la primera
+vez que se solicita el acceso — no se limita a denegarlo:
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>Por qué su aplicación necesita la cámara.</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Por qué su aplicación necesita el micrófono.</string>
+```
+
+Aquí conviene usar los métodos asíncronos: los síncronos `AudioSources()` / `AudioOutputs()` inician
+el proveedor de dispositivos de CoreAudio y pueden bloquear el hilo llamante hasta que el usuario
+responda al diálogo.
 
 ### iOS y Android
 

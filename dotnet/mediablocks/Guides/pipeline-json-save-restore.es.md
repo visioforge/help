@@ -161,6 +161,42 @@ if (result.Success)
 }
 ```
 
+### Las fuentes de red se sondean al iniciar el pipeline
+
+Un documento guarda el punto de conexión de una fuente, nunca su información multimedia: restaurarlo no
+contacta con nada. Dos fuentes necesitan esa información antes de poder construirse: `RTSPRAWSourceBlock`
+elige su depayloader y su parser a partir de la disposición de los flujos, y el `NDISourceBlock` de
+escritorio crea sus conversores a partir del número de flujos. Por eso `StartAsync` las sondea por usted,
+una sola vez, antes de construir el grafo. La cámara o el emisor debe estar accesible en ese momento; si
+no lo está, `StartAsync` devuelve `false` y registra qué fuente no se pudo leer.
+
+El `Start` síncrono no tiene dónde esperar un sondeo y no hace esto, y tampoco lo hacen los motores
+`VideoCaptureCoreX` y `MediaPlayerCoreX`, que construyen su grafo a través de él. Si va a iniciar el
+pipeline de esa forma, sustituya esas configuraciones tras la materialización por otras creadas con
+`RTSPRAWSourceSettings.CreateAsync` / `NDISourceSettings.CreateAsync`.
+
+### Los dispositivos de audio se vuelven a emparejar con esta máquina
+
+Un documento guarda lo que identifica a un dispositivo de audio —su nombre, la API a la que pertenece,
+la ruta del punto de conexión allí donde la plataforma la publica y, en macOS, el `unique-id` estable
+de CoreAudio— y nunca el handle activo del enumerador, que no significa nada fuera del proceso que lo
+creó. La materialización compara esa identidad con los dispositivos que la máquina tiene ahora y
+devuelve al bloque un dispositivo real. Por eso también un pipeline restaurado abre el punto de salida
+correcto: el identificador numérico de CoreAudio y la ruta
+de dispositivo de WASAPI se reasignan entre ejecuciones, y el emparejamiento vuelve a leer los actuales.
+
+Si el dispositivo ya no está, el pipeline se construye igualmente —sobre otro dispositivo de la misma
+API, notificado como una advertencia `MBS063` que nombra a ambos. Si la máquina no tiene ningún
+dispositivo de esa API, el bloque conserva la identidad del documento y la materialización notifica
+`MBS064`; el bloque no abrirá nada.
+
+El emparejamiento enumera dispositivos, lo que en un proceso recién iniciado arranca un monitor de
+dispositivos de GStreamer y puede tardar segundos, así que llame a `Materialize` fuera del hilo de la
+interfaz —o enumere una vez antes. Las entradas y las salidas se almacenan en cachés independientes:
+`AudioSourcesAsync` calienta los dispositivos de captura y `AudioOutputsAsync` los de reproducción; en
+las plataformas Apple, además, la llamada asíncrona de captura es la que solicita el permiso de
+micrófono. El emparejamiento síncrono dentro de `Materialize` no hace ninguna de las dos cosas.
+
 ## Validar antes de construir
 
 `Validate` responde a las mismas preguntas que respondería la materialización, sin construir nada, de
@@ -257,6 +293,8 @@ un `Code`, un `Message` y el `BlockId` al que pertenece.
 | `MBS060` | un bloque no expuso sus ajustes a la captura |
 | `MBS061` | un bloque no pudo nombrarse en la captura |
 | `MBS062` | una conexión no pudo expresarse en la captura |
+| `MBS063` | el dispositivo de audio que nombra un bloque ya no está, y se usa otro de la misma API en su lugar |
+| `MBS064` | el dispositivo de audio que nombra un bloque no se pudo asociar: no hay ninguno de esa API, o la búsqueda falló |
 
 ## Descubrir tipos de bloque
 

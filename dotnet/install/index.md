@@ -56,10 +56,16 @@ Setup files can be downloaded from the respective SDK product pages on our websi
 
 ### Using NuGet Packages
 
-For cross-platform development or CI/CD pipelines, our NuGet packages offer flexibility and easy integration:
+For cross-platform development or CI/CD pipelines, our NuGet packages offer flexibility and easy integration.
+
+Install the package for the SDK you bought — each one pulls `VisioForge.DotNet.Core` in as a
+dependency, so you never reference `Core` directly:
 
 ```cmd
-Install-Package VisioForge.DotNet.Core
+Install-Package VisioForge.DotNet.VideoCapture   # Video Capture SDK .Net
+Install-Package VisioForge.DotNet.VideoEdit      # Video Edit SDK .Net
+Install-Package VisioForge.DotNet.MediaPlayer    # Media Player SDK .Net
+Install-Package VisioForge.DotNet.MediaBlocks    # Media Blocks SDK .Net
 ```
 
 Additional UI-specific packages may be required depending on your target platform:

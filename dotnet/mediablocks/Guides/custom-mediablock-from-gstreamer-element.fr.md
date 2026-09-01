@@ -455,7 +455,7 @@ cela — lisez-le pour un exemple plus complet.
 
 Utilisez le skill agent `gstreamer-doc` — ou, sur Windows, le
 `gst-inspect-1.0.exe` local à
-`C:\gstreamer\1.0\msvc_x86_64x\bin\gst-inspect-1.0.exe` — pour
+`C:\gstreamer\1.0\msvc_x86_64\bin\gst-inspect-1.0.exe` — pour
 inspecter n'importe quel élément avant de l'encapsuler :
 
 ```cmd

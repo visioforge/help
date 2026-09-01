@@ -185,7 +185,7 @@ Get a media block pipeline template for a specific use case. Returns the list of
 ### 2. **SDK Class & API Tools**
 
 #### `list_sdk_classes`
-List core VisioForge SDK classes. These are the main entry-point classes for building media applications: VideoCaptureCoreX (video capture/recording), VideoEditCoreX (video editing), MediaPlayerCoreX (media playback), MediaInfoReaderCoreX (media analysis), SimplePlayerCoreX (simple playback), and more.
+List core VisioForge SDK classes. These are the main entry-point classes for building media applications: VideoCaptureCoreX (video capture/recording), VideoEditCoreX (video editing), MediaPlayerCoreX (media playback), MediaInfoReaderX (media analysis), SimplePlayerCoreX (simple playback), and more.
 
 **Example queries:**
 - "List all core SDK classes"
@@ -278,17 +278,22 @@ Get platform-specific file copying/build configuration code. Returns MSBuild tar
 > "I'm creating a video capture app with MAUI for Android. What NuGet packages do I need?"
 
 **Your AI assistant uses the MCP server to:**
-1. Call `get_nuget_packages_snippet` with `platform: Android, projectType: MAUI, sdkType: MediaBlocks`
+1. Call `get_nuget_packages_snippet` with `platform: Android, projectType: MAUI, sdkType: VideoCapture`
 2. Retrieve the correct package references
 3. Provide you with ready-to-paste XML:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.2.4" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
+
+`sdkType` is required and has no default. Name the SDK you licensed:
+`VideoCapture` for camera, screen and IP-camera recording, `MediaPlayer` for
+playback, `VideoEdit` for timeline editing. `MediaBlocks` is the pipeline layer
+underneath them — pick it only for a custom source-to-encoder graph.
 
 ### Example 2: Finding How to Use RTSP Streaming
 

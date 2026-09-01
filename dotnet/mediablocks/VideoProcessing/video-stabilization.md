@@ -6,6 +6,7 @@ tags:
   - .NET
   - MediaBlocksPipeline
   - Windows
+  - macOS
   - GStreamer
   - OpenCV
   - Effects
@@ -28,7 +29,7 @@ primary_api_classes:
 
 The `VideoStabilizationBlock` removes camera shake from a live or recorded video stream in real time. It estimates the global inter-frame motion (translation and rotation) with sparse optical flow, smooths the resulting camera trajectory with a causal moving-average window, and warps every frame back onto the smoothed path. A small centre zoom (crop ratio) hides the borders exposed by the compensation.
 
-The block is backed by the OpenCV `vfdeshake` GStreamer element, so it requires the OpenCV SDK redistributable. It is currently available on Windows.
+The block is backed by the OpenCV `vfdeshake` GStreamer element, so it requires the OpenCV SDK redistributable. It is currently available on Windows and macOS.
 
 Latency is zero: only past frames are used for smoothing, so the block can be used in live pipelines.
 

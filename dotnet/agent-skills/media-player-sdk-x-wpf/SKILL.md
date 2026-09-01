@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to a Windows WPF application. The X SDK shares its runtime with Media Blocks and Video Capture X (GStreamer-backed under the hood) and exposes a high-level playback god-object (`MediaPlayerCoreX`) that mirrors the legacy `MediaPlayerCore` API but runs on the cross-platform engine. Same C# code targets Windows / macOS / Linux / iOS / Android — the only thing that changes between platforms is the UI host (WPF here, MAUI / Avalonia / Uno / native elsewhere) and the per-OS native redist NuGet package.
 
-Pinned NuGet versions: wrapper **`2026.5.4`**, redist **`2026.4.29`** (matches the [official Simple Player Demo X sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WPF)). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.8.16`**, redist **`2026.4.29`** (matches the [official Simple Player Demo X sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WPF)). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
 
 ## When to use this skill
 
@@ -36,7 +36,7 @@ Three packages are required for a Windows WPF playback scenario — the .NET wra
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.8.16" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
@@ -44,7 +44,7 @@ Three packages are required for a Windows WPF playback scenario — the .NET wra
 </ItemGroup>
 ```
 
-`VisioForge.DotNet.VideoCapture` is the wrapper package the upstream Simple Player Demo X uses — `MediaPlayerCoreX` ships in it alongside `VideoCaptureCoreX` (a single wrapper assembly covers the whole X family on the Windows side). What switches you to playback is which god-object you instantiate (`MediaPlayerCoreX` here) plus the redist pair (`VisioForge.CrossPlatform.Core.Windows.x64` + `VisioForge.CrossPlatform.Libav.Windows.x64.UPX`) and the mandatory `VisioForgeX.InitSDKAsync()` boot below. The `.UPX` suffix on the libav redist is a UPX-compressed variant (smaller download, slightly slower first-load); the non-UPX `VisioForge.CrossPlatform.Libav.Windows.x64` works equally well — pick one and stay consistent within the project.
+`VisioForge.DotNet.MediaPlayer` is the wrapper package for this SKU. On the Windows side a single wrapper assembly covers the whole X family, so `MediaPlayerCoreX` is reachable from any of the four wrapper packages — the older Simple Player Demo X csproj still references `VisioForge.DotNet.VideoCapture` for that reason, and it compiles. Reference the package for the SDK you licensed anyway: it is what every recent Player X WPF demo does (Player Object Detection X, Player OCR X, Player PII Redaction X, Blazor Hybrid Video Player and the rest), and a Video Capture reference in a player project misstates which product the app is built on. What switches you to playback is which god-object you instantiate (`MediaPlayerCoreX` here) plus the redist pair (`VisioForge.CrossPlatform.Core.Windows.x64` + `VisioForge.CrossPlatform.Libav.Windows.x64.UPX`) and the mandatory `VisioForgeX.InitSDKAsync()` boot below. The `.UPX` suffix on the libav redist is a UPX-compressed variant (smaller download, slightly slower first-load); the non-UPX `VisioForge.CrossPlatform.Libav.Windows.x64` works equally well — pick one and stay consistent within the project.
 
 For 32-bit deployment, swap `.x64` for `.x86` on both redists. To support both architectures with a single AnyCPU build, reference both `.x64` and `.x86` of every redist and drop `<PlatformTarget>` from the csproj.
 
@@ -178,7 +178,7 @@ These are the four most common production issues — flag any of them on first r
 
 ### 1. `DllNotFoundException` / "Unable to load DLL" / "no element X"
 
-**Cause**: forgot the `await VisioForgeX.InitSDKAsync()` boot, **or** the redist NuGet for the build's RID is missing (`VisioForge.CrossPlatform.Core.Windows.x64` not referenced for an x64 build), **or** wrapper / redist version drift (e.g. wrapper `2026.5.4` paired with redist `2026.5.x` instead of `2026.4.29`).
+**Cause**: forgot the `await VisioForgeX.InitSDKAsync()` boot, **or** the redist NuGet for the build's RID is missing (`VisioForge.CrossPlatform.Core.Windows.x64` not referenced for an x64 build), **or** wrapper / redist version drift (e.g. wrapper `2026.8.16` paired with redist `2026.5.x` instead of `2026.4.29`).
 
 **Fix**: confirm `InitSDKAsync` runs before any other SDK call (see "Mandatory engine boot"). Confirm the redist NuGet matches the build platform (`x64` redist for x64, `x86` redist for x86, both for AnyCPU). Pin the redist version to the value shipped in the upstream csproj for your wrapper version — do not bump.
 

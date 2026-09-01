@@ -251,6 +251,8 @@ videoMixer.RemoveAt(1);
 videoMixer.Add(source, new Rect(0, 0, 1280, 720), chromaKey);
 ```
 
+The same entries are also reachable directly as `videoMixer.Sources`, a `List<VideoMixerSourceStream>` where each item carries its `Source`, `Rectangle` and optional `ChromaKeySettings`. That list is what gets written when the settings are saved into a Media Blocks pipeline document, so a saved composition is restored with its sources, their positions and their chroma keys.
+
 For true **runtime** layout changes (update position while the pipeline is live), drop down to Media Blocks: build your pipeline around a `VideoMixerBlock` and use its `Input_Get(Guid)` / `Input_Update(VideoMixerStream)` methods to mutate stream position, size, alpha, or z-order without restarting. See [Media Blocks video-processing reference](../../mediablocks/VideoProcessing/index.md) for the `VideoMixerBlock` API.
 
 #### Output Configuration

@@ -1,14 +1,11 @@
 ---
 title: Bloques de Procesamiento de Video OpenCV en C# .NET
-description: Añada detección de objetos, seguimiento y procesamiento de imágenes a pipelines de video con bloques OpenCV en VisioForge Media Blocks SDK. Multiplataforma.
+description: Añada detección de objetos, seguimiento y procesamiento de imágenes a pipelines de video con bloques OpenCV en Media Blocks SDK. Para Windows y macOS.
 tags:
   - Media Blocks SDK
   - .NET
   - Windows
   - macOS
-  - Linux
-  - Android
-  - iOS
 primary_api_classes:
   - SystemVideoSourceBlock
   - VideoRendererBlock
@@ -24,7 +21,7 @@ sidebar_label: OpenCV
 
 Los bloques OpenCV (Open Source Computer Vision Library) proporcionan potentes capacidades de procesamiento de video dentro del VisioForge Media Blocks SDK .Net. Estos bloques permiten una amplia gama de tareas de visión por computadora, desde manipulación básica de imágenes hasta detección y seguimiento de objetos complejos.
 
-Para usar los bloques OpenCV, asegúrese de que el paquete NuGet VisioForge.CrossPlatform.OpenCV.Windows.x64 (o el paquete correspondiente para su plataforma) esté incluido en su proyecto.
+Para usar los bloques OpenCV, añada el paquete NuGet redistribuible para su plataforma: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86` o `VisioForge.CrossPlatform.OpenCV.macOS`. Estas son las plataformas para las que actualmente se distribuye el plugin OpenCV de GStreamer; en cualquier otra plataforma el método `IsAvailable()` de cada bloque devuelve `false`.
 
 La mayoría de los bloques OpenCV típicamente requieren un elemento `videoconvert` antes de ellos para asegurar que el flujo de video de entrada esté en un formato compatible. El SDK maneja esto internamente cuando inicializa el bloque.
 

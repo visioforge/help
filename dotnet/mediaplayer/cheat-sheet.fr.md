@@ -68,35 +68,35 @@ Paquet principal du SDK (toujours requis) :
 Runtime natif Windows x64 :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.11.0" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
 ```
 
 Runtime natif Windows x86 :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2025.11.0" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.4.29" />
 ```
 
 macOS (natif) et MacCatalyst (MAUI macOS) :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.9.1" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2025.9.1" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
 ```
 
 Linux x64 (plus GStreamer 1.22+ du système) :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
 ```
 
 Android et iOS :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2025.11.0" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
 ```
 
 Paquets optionnels du framework UI — ajoutez celui qui correspond à votre cible :

@@ -59,7 +59,8 @@ RAV1E AV1 encoder settings. CPU encoder.
   - `MinKeyFrameInterval` (ulong): Minimum interval between keyframes. Default is `12`.
   - `MinQuantizer` (uint): Minimum quantizer value (range 0-255). Default is `0`.
   - `Quantizer` (uint): Quantizer value (range 0-255). Default is `100`.
-  - `SpeedPreset` (int): Encoding speed preset (10 fastest, 0 slowest). Default is `6`.
+  - `SpeedPreset` (int): Encoding speed preset (10 fastest, 0 slowest). Default is `10`.
+  - `Tiles` (uint): Tiles the frame is split into - this is what lets rav1e use more than one core. Default is `16`; `0` encodes the frame as a single tile.
   - `Tune` (`RAV1EEncoderTune`): Tune setting for the encoder. Default is `RAV1EEncoderTune.Psychovisual`.
 
 **Platforms:** Windows, Linux, macOS.

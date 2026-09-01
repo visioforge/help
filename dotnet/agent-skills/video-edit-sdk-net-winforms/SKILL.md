@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK .NET (non-linear editor) into a
 
 This skill helps you add **VisioForge Video Edit SDK .NET** to a Windows Forms application. The SDK is a non-linear editor (NLE): it cuts, trims, merges, transcodes, and applies effects to **existing** video and audio files. It does **not** capture from cameras or screen — for live capture see [`video-capture-sdk-net-winforms`](../video-capture-sdk-net-winforms/SKILL.md). The SDK is Windows-only (DirectShow / Media Foundation under the hood); for cross-platform editing (macOS, iOS, Android, Linux), use one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills.
 
-Pinned NuGet version: **`2026.5.4`** (matches the official Video Join Demo sample). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.8.16`** (matches the official Video Join Demo sample). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -37,7 +37,7 @@ The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
 </ItemGroup>
 ```
 

@@ -6,6 +6,7 @@ tags:
   - .NET
   - MediaBlocksPipeline
   - Windows
+  - macOS
   - GStreamer
   - OpenCV
   - Effects
@@ -28,7 +29,7 @@ primary_api_classes:
 
 El `VideoStabilizationBlock` elimina el temblor de la cámara de un flujo de vídeo en directo o grabado en tiempo real. Estima el movimiento global entre fotogramas (traslación y rotación) con flujo óptico disperso, suaviza la trayectoria resultante de la cámara con una ventana causal de media móvil y deforma cada fotograma para devolverlo a la trayectoria suavizada. Un pequeño zoom central (relación de recorte) oculta los bordes expuestos por la compensación.
 
-El bloque se apoya en el elemento GStreamer `vfdeshake` de OpenCV, por lo que requiere el redistribuible de OpenCV del SDK. Actualmente está disponible en Windows.
+El bloque se apoya en el elemento GStreamer `vfdeshake` de OpenCV, por lo que requiere el redistribuible de OpenCV del SDK. Actualmente está disponible en Windows y macOS.
 
 La latencia es cero: solo se usan fotogramas pasados para el suavizado, por lo que el bloque puede utilizarse en pipelines en directo.
 

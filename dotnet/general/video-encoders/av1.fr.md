@@ -13,7 +13,6 @@ tags:
   - macOS
   - Linux
   - Android
-  - iOS
   - Capture
   - Streaming
   - Encoding
@@ -40,6 +39,13 @@ VisioForge prend en charge plusieurs implémentations d'encodeurs AV1, chacune a
 
 Actuellement, les encodeurs AV1 sont pris en charge dans les moteurs multiplateformes : `VideoCaptureCoreX`, `VideoEditCoreX` et `Media Blocks SDK`.
 
+!!! note "Non disponible sur iOS"
+
+    L'encodage AV1 n'est pas disponible sur iOS. Apple ne fournit d'encodeur matériel AV1 sur aucune
+    puce, et les encodeurs AV1 logiciels ne font pas partie du redistribuable iOS. Le *décodage* AV1
+    fonctionne sur iOS - via VideoToolbox à partir de l'A17 Pro, et via le décodeur logiciel `dav1d`
+    partout ailleurs.
+
 ## Encodeurs disponibles
 
 1. [Encodeur AMD AMF AV1 (AMF)](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.AMFAV1EncoderSettings.html)
@@ -47,6 +53,13 @@ Actuellement, les encodeurs AV1 sont pris en charge dans les moteurs multiplatef
 3. [Encodeur Intel QuickSync AV1 (QSV)](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.QSVAV1EncoderSettings.html)
 4. [Encodeur AOM AV1](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.AOMAV1EncoderSettings.html)
 5. [Encodeur RAV1E](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.RAV1EEncoderSettings.html)
+6. [Encodeur SVT-AV1](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.SVTAV1EncoderSettings.html)
+
+L'encodeur SVT-AV1 est livré dans le paquet de runtime supplémentaire de votre plateforme - le paquet `VisioForge.CrossPlatform.Core.Windows.Adds.*` correspondant à votre architecture, `VisioForge.CrossPlatform.Core.macOS.Adds` (2026.8.25 ou plus récent) ou `VisioForge.CrossPlatform.Core.macCatalyst.Adds` (2026.8.26 ou plus récent) - référencé à côté du paquet principal. Sans lui, `AV1EncoderBlock.IsAvailable(new SVTAV1EncoderSettings())` renvoie `false`.
+
+L'encodeur AOM AV1 est disponible sur macOS, macCatalyst et Linux. C'est un encodeur logiciel orienté qualité, destiné à l'encodage hors ligne ; pour le flux de travail logiciel habituel, préférez SVT-AV1, nettement plus rapide et qui passe mieux à l'échelle sur plusieurs cœurs.
+
+Les paquets `VisioForge.CrossPlatform.Core.macOS.Adds` et `VisioForge.CrossPlatform.Core.macCatalyst.Adds` contiennent le runtime AOM nécessaire à partir de la version 2026.8.30. Sous Linux, installez un runtime GStreamer fournissant l'élément `av1enc` ; utilisez `AOMAV1EncoderSettings.IsAvailable()` pour vérifier le runtime actif.
 
 Vous pouvez utiliser l'encodeur AV1 avec une [sortie WebM](../output-formats/webm.md) ou pour le streaming réseau.
 
@@ -164,7 +177,7 @@ var encoderSettings = new QSVAV1EncoderSettings
 
 ## Encodeur AOM AV1
 
-L'encodeur AV1 de l'Alliance for Open Media (AOM) est une implémentation logicielle de référence.
+L'encodeur AV1 de l'Alliance for Open Media (AOM) est une implémentation logicielle de référence. Il privilégie l'efficacité de compression et les réglages AV1 détaillés à la vitesse d'encodage : il convient donc mieux à une sortie hors ligne qu'à la capture ou au streaming en direct.
 
 ### Fonctionnalités
 
@@ -181,6 +194,8 @@ L'encodeur AV1 de l'Alliance for Open Media (AOM) est une implémentation logici
 - `CQ` : mode qualité contrainte
 - `Q` : mode qualité constante
 
+Le contrôle de débit ne fonctionne que tant que `MaxQuantizer` laisse à l'encodeur la marge nécessaire pour dépenser moins de bits. Sa valeur par défaut est 63, le quantificateur le plus élevé d'AV1 ; l'abaisser impose un plancher de qualité au flux, et à 0 l'encodeur ignore `TargetBitrate` ainsi que tous les réglages de tampon et de dépassement. `TargetBitrate` vaut 0 par défaut : l'encodeur adapte alors sa propre valeur par défaut à la taille de l'image (256 Kbps en 320x240, environ 6900 Kbps en 1920x1080) ; indiquez-le en kilobits par seconde pour le fixer.
+
 ### Exemple d'utilisation
 
 ```csharp
@@ -189,10 +204,11 @@ var encoderSettings = new AOMAV1EncoderSettings
     BufferInitialSize = TimeSpan.FromMilliseconds(4000),
     BufferOptimalSize = TimeSpan.FromMilliseconds(5000),
     BufferSize = TimeSpan.FromMilliseconds(6000),
-    CPUUsed = 4,                                   // Niveau d'utilisation CPU
+    CPUUsed = 4,                                   // Niveau d'utilisation CPU, 0-9
     DropFrame = 0,                                 // Désactiver l'abandon d'images
     RateControl = AOMAV1EncoderEndUsageMode.VBR,   // Mode débit variable
-    TargetBitrate = 256,                           // 256 Kbps
+    MaxQuantizer = 63,                             // Plafond du quantificateur - garder 63
+    TargetBitrate = 0,                             // 0 = adapter la valeur par défaut à la taille de l'image
     Threads = 0,                                   // Nombre de threads automatique
     UseRowMT = true,                               // Activer le multithreading par ligne
     SuperResMode = AOMAV1SuperResolutionMode.None  // Pas de super-résolution
@@ -203,12 +219,15 @@ var encoderSettings = new AOMAV1EncoderSettings
 
 RAV1E est un encodeur AV1 rapide et sûr écrit en Rust.
 
+`Tiles` est ce qui lui permet d'utiliser plus d'un cœur : une tuile unique encode à la même vitesse sur 4 cœurs que sur 32. La valeur par défaut de 16 encode 8 secondes de 720p30 en environ 29 secondes contre 84 secondes sans tuiles, pour environ 1 % de débit en plus. Mettez-la à 0 pour encoder l'image comme une seule tuile.
+
 ### Fonctionnalités
 
 - Contrôle du préréglage de vitesse
 - Paramètres de quantificateur
 - Contrôle de l'intervalle d'images-clés
 - Mode basse latence
+- Encodage multicœur par tuiles
 - Réglage psychovisuel
 
 ### Exemple d'utilisation
@@ -222,8 +241,42 @@ var encoderSettings = new RAV1EEncoderSettings
     MinKeyFrameInterval = 12,                     // Intervalle minimum entre images-clés
     MinQuantizer = 0,                             // Valeur minimale du quantificateur
     Quantizer = 100,                              // Valeur de base du quantificateur
-    SpeedPreset = 6,                              // Préréglage de vitesse (0-10)
+    SpeedPreset = 10,                             // Préréglage de vitesse (0-10)
+    Tiles = 16,                                   // Tuiles en lesquelles l'image est découpée (0 - une seule tuile)
     Tune = RAV1EEncoderTune.Psychovisual          // Réglage psychovisuel
+};
+```
+
+## Encodeur SVT-AV1
+
+SVT-AV1 (Scalable Video Technology for AV1) est un encodeur AV1 logiciel haute performance qui exploite l'ensemble des cœurs du processeur. Il est nettement plus rapide que RAV1E à qualité comparable.
+
+### Fonctionnalités
+
+- Contrôle du preset vitesse/qualité (0-13)
+- Trois modes de contrôle de débit mutuellement exclusifs : CQP, CRF et CBR/VBR par débit
+- Contrôle de la période d'images intra et du découpage en tuiles
+- Nombre explicite de cœurs logiques
+
+### Modes de contrôle de débit
+
+Définissez exactement l'un des trois : les réglages sont appliqués dans cet ordre et le premier présent l'emporte :
+
+1. `CQP` - paramètre de quantification constant (1-63)
+2. `TargetBitrate` (avec le plafond facultatif `MaxBitrate` pour le VBR), les deux en kbits/s
+3. `CRF` - facteur de débit constant (1-63, 35 par défaut), utilisé si aucun des précédents n'est défini
+
+### Exemple d'utilisation
+
+```csharp
+var encoderSettings = new SVTAV1EncoderSettings
+{
+    TargetBitrate = 3000,                         // 3 Mbps (kbits/s), active le CBR/VBR
+    MaxBitrate = 4500,                            // Plafond VBR (kbits/s)
+    Preset = 8,                                   // Preset de vitesse (0-13), plus bas = plus lent et meilleur
+    IntraPeriodLength = 240,                      // Période d'images intra, -2 pour automatique
+    TileColumns = 1,                              // log2 : deux colonnes de tuiles
+    TileRows = 1                                  // log2 : deux lignes de tuiles
 };
 ```
 
@@ -232,7 +285,7 @@ var encoderSettings = new RAV1EEncoderSettings
 1. Tous les encodeurs implémentent l'interface `IAV1EncoderSettings`, offrant un moyen cohérent de créer des blocs d'encodeur.
 2. Chaque encodeur a son propre ensemble d'optimisations et de compromis.
 3. Les encodeurs matériels (AMF, NVENC, QSV) offrent généralement de meilleures performances mais peuvent avoir des exigences matérielles spécifiques.
-4. Les encodeurs logiciels (AOM, RAV1E) offrent plus de flexibilité mais peuvent nécessiter plus de ressources CPU.
+4. Les encodeurs logiciels (AOM, RAV1E, SVT-AV1) offrent plus de flexibilité mais peuvent nécessiter plus de ressources CPU.
 
 ## Recommandations
 
@@ -241,6 +294,7 @@ var encoderSettings = new RAV1EEncoderSettings
 - Pour les GPU Intel : utilisez l'encodeur QSV
 - Pour la qualité maximale : utilisez l'encodeur AOM
 - Pour un encodage efficace en CPU : utilisez l'encodeur RAV1E
+- Pour un encodage logiciel rapide : utilisez l'encodeur SVT-AV1
 
 ## Bonnes pratiques
 

@@ -27,6 +27,8 @@ primary_api_classes:
 
 Demuxer blocks are essential components in media processing pipelines. They take a multimedia stream, typically from a file or network source, and separate it into its constituent elementary streams, such as video, audio, and subtitles. This allows for individual processing or rendering of each stream. VisioForge Media Blocks SDK .Net provides several demuxer blocks to handle various container formats.
 
+> **Demuxer outputs are encoded.** A demuxer separates the container into its elementary streams; it does not decode them. A decoder block therefore has to sit between a demuxer output and any renderer, sample grabber or video processing block. `UniversalDecoderBlock` picks the decoder from the stream's caps; a codec-specific block such as `H264DecoderBlock` or `HEVCDecoderBlock` works too. Connecting a demuxer straight to a renderer builds and starts without an error and then delivers nothing.
+
 ## MPEG-TS Demux Block
 
 The `MPEGTSDemuxBlock` is used to demultiplex MPEG Transport Streams (MPEG-TS). MPEG-TS is a standard format for transmission and storage of audio, video, and Program and System Information Protocol (PSIP) data. It is commonly used in digital television broadcasting and streaming.
@@ -59,8 +61,10 @@ This example shows how to connect a source (like `HTTPSourceBlock` for a network
 ```mermaid
 graph LR;
     DataSourceBlock -- MPEG-TS Data --> MPEGTSDemuxBlock;
-    MPEGTSDemuxBlock -- Video Stream --> VideoRendererBlock;
-    MPEGTSDemuxBlock -- Audio Stream --> AudioRendererBlock;
+    MPEGTSDemuxBlock -- Video Stream --> VideoDecoderBlock;
+    VideoDecoderBlock -- Decoded Video --> VideoRendererBlock;
+    MPEGTSDemuxBlock -- Audio Stream --> AudioDecoderBlock;
+    AudioDecoderBlock -- Decoded Audio --> AudioRendererBlock;
     MPEGTSDemuxBlock -- Subtitle Stream --> SubtitleOverlayOrRendererBlock;
 ```
 
@@ -96,12 +100,18 @@ var audioRenderer = new AudioRendererBlock();
 // Connect demuxer outputs
 if (mpegTSDemuxBlock.VideoOutput != null)
 {
-    pipeline.Connect(mpegTSDemuxBlock.VideoOutput, videoRenderer.Input);
+    // The demuxer hands out encoded data, so a decoder goes between it and the renderer.
+    var videoDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+    pipeline.Connect(mpegTSDemuxBlock.VideoOutput, videoDecoder.Input);
+    pipeline.Connect(videoDecoder.Output, videoRenderer.Input);
 }
 
 if (mpegTSDemuxBlock.AudioOutput != null)
 {
-    pipeline.Connect(mpegTSDemuxBlock.AudioOutput, audioRenderer.Input);
+    // The demuxer hands out encoded data, so a decoder goes between it and the renderer.
+    var audioDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Audio);
+    pipeline.Connect(mpegTSDemuxBlock.AudioOutput, audioDecoder.Input);
+    pipeline.Connect(audioDecoder.Output, audioRenderer.Input);
 }
 
 if (mpegTSDemuxBlock.SubtitleOutput != null)
@@ -149,8 +159,10 @@ This example shows how to connect a source block that outputs raw MP4/MOV data t
 ```mermaid
 graph LR;
     DataSourceBlock -- MP4/MOV Data --> QTDemuxBlock;
-    QTDemuxBlock -- Video Stream --> VideoRendererBlock;
-    QTDemuxBlock -- Audio Stream --> AudioRendererBlock;
+    QTDemuxBlock -- Video Stream --> VideoDecoderBlock;
+    VideoDecoderBlock -- Decoded Video --> VideoRendererBlock;
+    QTDemuxBlock -- Audio Stream --> AudioDecoderBlock;
+    AudioDecoderBlock -- Decoded Audio --> AudioRendererBlock;
 ```
 
 ### Sample code
@@ -183,12 +195,18 @@ var audioRenderer = new AudioRendererBlock();
 // Connect demuxer outputs
 if (qtDemuxBlock.VideoOutput != null)
 {
-    pipeline.Connect(qtDemuxBlock.VideoOutput, videoRenderer.Input);
+    // The demuxer hands out encoded data, so a decoder goes between it and the renderer.
+    var videoDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+    pipeline.Connect(qtDemuxBlock.VideoOutput, videoDecoder.Input);
+    pipeline.Connect(videoDecoder.Output, videoRenderer.Input);
 }
 
 if (qtDemuxBlock.AudioOutput != null)
 {
-    pipeline.Connect(qtDemuxBlock.AudioOutput, audioRenderer.Input);
+    // The demuxer hands out encoded data, so a decoder goes between it and the renderer.
+    var audioDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Audio);
+    pipeline.Connect(qtDemuxBlock.AudioOutput, audioDecoder.Input);
+    pipeline.Connect(audioDecoder.Output, audioRenderer.Input);
 }
 
 // Start pipeline
@@ -257,8 +275,10 @@ This example demonstrates using `UniversalDemuxBlock` to demultiplex a file. Not
 ```mermaid
 graph LR;
     DataSourceBlock -- Container Data --> UniversalDemuxBlock;
-    UniversalDemuxBlock -- Video Stream 1 --> VideoRendererBlock1;
-    UniversalDemuxBlock -- Audio Stream 1 --> AudioRendererBlock1;
+    UniversalDemuxBlock -- Video Stream 1 --> VideoDecoderBlock1;
+    VideoDecoderBlock1 -- Decoded Video --> VideoRendererBlock1;
+    UniversalDemuxBlock -- Audio Stream 1 --> AudioDecoderBlock1;
+    AudioDecoderBlock1 -- Decoded Audio --> AudioRendererBlock1;
     UniversalDemuxBlock -- Subtitle Stream 1 --> SubtitleHandler1;
 ```
 
@@ -310,7 +330,10 @@ if (videoOutputs.Length > 0)
 {
     // Example: connect the first video stream
     var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
-    pipeline.Connect(videoOutputs[0], videoRenderer.Input);
+    // The demuxer hands out encoded data, so a decoder goes between it and the renderer.
+    var videoDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+    pipeline.Connect(videoOutputs[0], videoDecoder.Input);
+    pipeline.Connect(videoDecoder.Output, videoRenderer.Input);
 }
 
 // Audio outputs (MediaBlockPad[])
@@ -319,7 +342,10 @@ if (audioOutputs.Length > 0)
 {
     // Example: connect the first audio stream
     var audioRenderer = new AudioRendererBlock();
-    pipeline.Connect(audioOutputs[0], audioRenderer.Input);
+    // The demuxer hands out encoded data, so a decoder goes between it and the renderer.
+    var audioDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Audio);
+    pipeline.Connect(audioOutputs[0], audioDecoder.Input);
+    pipeline.Connect(audioDecoder.Output, audioRenderer.Input);
 }
 
 // Subtitle outputs (MediaBlockPad[])
@@ -384,8 +410,10 @@ This example shows how to connect a source block that provides raw container dat
 ```mermaid
 graph LR;
     DataSourceBlock -- Container Data --> UniversalAutoDemuxerBlock;
-    UniversalAutoDemuxerBlock -- Video Stream --> VideoRendererBlock;
-    UniversalAutoDemuxerBlock -- Audio Stream --> AudioRendererBlock;
+    UniversalAutoDemuxerBlock -- Video Stream --> VideoDecoderBlock;
+    VideoDecoderBlock -- Decoded Video --> VideoRendererBlock;
+    UniversalAutoDemuxerBlock -- Audio Stream --> AudioDecoderBlock;
+    AudioDecoderBlock -- Decoded Audio --> AudioRendererBlock;
 ```
 
 ### Sample code
@@ -415,12 +443,18 @@ var audioRenderer = new AudioRendererBlock();
 // Connect demuxer outputs (pads become linked once the format is detected).
 if (autoDemuxBlock.VideoOutput != null)
 {
-    pipeline.Connect(autoDemuxBlock.VideoOutput, videoRenderer.Input);
+    // The demuxer hands out encoded data, so a decoder goes between it and the renderer.
+    var videoDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+    pipeline.Connect(autoDemuxBlock.VideoOutput, videoDecoder.Input);
+    pipeline.Connect(videoDecoder.Output, videoRenderer.Input);
 }
 
 if (autoDemuxBlock.AudioOutput != null)
 {
-    pipeline.Connect(autoDemuxBlock.AudioOutput, audioRenderer.Input);
+    // The demuxer hands out encoded data, so a decoder goes between it and the renderer.
+    var audioDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Audio);
+    pipeline.Connect(autoDemuxBlock.AudioOutput, audioDecoder.Input);
+    pipeline.Connect(audioDecoder.Output, audioRenderer.Input);
 }
 
 // Start pipeline once the data source is connected.

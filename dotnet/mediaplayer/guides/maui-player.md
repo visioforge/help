@@ -63,7 +63,7 @@ primary_api_classes:
                   Condition="$(TargetFramework.Contains('windows'))" />
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29"
                   Condition="$(TargetFramework.Contains('windows'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2025.9.1"
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5"
                   Condition="$(TargetFramework.Contains('maccatalyst'))" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27"
                   Condition="$(TargetFramework.Contains('android'))" />

@@ -264,13 +264,17 @@ Most modern IP cameras support **ONVIF (Open Network Video Interface Forum)**, w
 === "Cross-platform (recommended)"
 
     ```bash
-    dotnet add package VisioForge.CrossPlatform.Core
+    dotnet add package VisioForge.DotNet.VideoCapture
+    dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
     ```
 
-=== "Windows-only"
+    Swap the second package for the native runtime of your target OS —
+    `VisioForge.CrossPlatform.Core.Linux.x64`, `.macOS`, `.Android` or `.iOS`.
+
+=== "Windows-only (legacy DirectShow engine)"
 
     ```bash
-    dotnet add package VisioForge.DotNet.Core
+    dotnet add package VisioForge.DotNet.VideoCapture
     dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
     ```
 

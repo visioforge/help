@@ -99,7 +99,7 @@ dotnet restore
   <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="2025.8.7" />
   
   <!-- Opcional: Integración con MongoDB -->
-  <PackageReference Include="VisioForge.DotNet.VideoFingerprinting.MongoDB" Version="2025.8.7" />
+  <PackageReference Include="VisioForge.DotNet.VideoFingerprinting.MongoDB" Version="2025.8.6" />
 </ItemGroup>
 ```
 
@@ -149,13 +149,7 @@ Install-Package VisioForge.DotNet.Core.Redist.Base.x86  # Soporte extendido de W
 
 #### Para Aplicaciones Móviles
 
-```powershell
-# Soporte de UI para iOS/macOS/tvOS
-Install-Package VisioForge.DotNet.Core.UI.Apple
-
-# Soporte de UI para Android
-Install-Package VisioForge.DotNet.Core.UI.Android
-```
+Ningún paquete adicional: los controles `VideoView` de Apple y Android se fusionaron en `VisioForge.DotNet.Core`.
 
 ### Configuración Específica de Plataforma
 

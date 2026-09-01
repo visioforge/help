@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a .NET MAUI application that targets **Windows, Android, iOS, and Mac Catalyst** from a single codebase. The X SDK shares its native runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) that mirrors the legacy `VideoCaptureCore` API but runs on the cross-platform engine. Same C# code targets every OS — only the platform handler glue and per-OS redist NuGets change between TFMs.
 
-Pinned NuGet versions: wrapper **`2026.5.4`**, MAUI handlers **`2026.5.4`**, plus per-OS native redists at the versions shown in the csproj below — these match the official [Video Capture X MAUI samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/MAUI). Newer 2026.x.x patch versions are drop-in compatible; keep `VisioForge.DotNet.VideoCapture` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same wrapper version. The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin to the value shipped in the upstream csproj for your wrapper version; do not blindly bump.
+Pinned NuGet versions: wrapper **`2026.8.16`**, MAUI handlers **`2026.8.16`**, plus per-OS native redists at the versions shown in the csproj below — these match the official [Video Capture X MAUI samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/MAUI). Newer 2026.x.x patch versions are drop-in compatible; keep `VisioForge.DotNet.VideoCapture` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same wrapper version. The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin to the value shipped in the upstream csproj for your wrapper version; do not blindly bump.
 
 ## When to use this skill
 
@@ -76,8 +76,8 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.5.4" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.8.16" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
@@ -89,10 +89,10 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.0.16" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2025.9.1" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
 </ItemGroup>
 ```
 
@@ -277,7 +277,7 @@ These are the five most common production issues — flag any of them on first r
 
 ### 2. `DllNotFoundException` / `dlopen` failure on first capture (per-OS)
 
-**Cause**: the matching per-OS native runtime package is missing from the conditional `<ItemGroup>`, **or** wrapper / redist version drift (e.g. wrapper `2026.5.4` paired with redist `2026.5.x` instead of `2026.4.29`). Common slips:
+**Cause**: the matching per-OS native runtime package is missing from the conditional `<ItemGroup>`, **or** wrapper / redist version drift (e.g. wrapper `2026.8.16` paired with redist `2026.5.x` instead of `2026.4.29`). Common slips:
 
 - Windows: forgot `VisioForge.CrossPlatform.Core.Windows.x64` (build succeeds but `VideoCaptureCoreX` construction fails).
 - Android: missing `<ProjectReference Include="...AndroidDependency\VisioForge.Core.Android.X10.csproj" />` — the package alone is not enough; the companion csproj binds the `.aar`.

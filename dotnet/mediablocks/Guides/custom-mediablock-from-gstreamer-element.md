@@ -433,7 +433,7 @@ settings class for this — read it for a fuller example.
 
 Use the `gstreamer-doc` agent skill — or, on Windows, the local
 `gst-inspect-1.0.exe` at
-`C:\gstreamer\1.0\msvc_x86_64x\bin\gst-inspect-1.0.exe` — to inspect any
+`C:\gstreamer\1.0\msvc_x86_64\bin\gst-inspect-1.0.exe` — to inspect any
 element before wrapping it:
 
 ```cmd

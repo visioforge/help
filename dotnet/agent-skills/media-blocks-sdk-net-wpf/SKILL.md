@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK .NET into a Windows WPF appli
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a Windows WPF application. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. Compared to the higher-level Video Capture SDK (a single `VideoCaptureCore` god-object), Media Blocks gives you full control over the topology — splitting streams with tees, mixing sources, transcoding without preview, swapping sinks at runtime — at the cost of having to wire every edge yourself.
 
-Pinned NuGet version: **`2026.5.4`** (matches the [official Simple Capture Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.8.16`** (matches the [official Simple Capture Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo)). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -35,7 +35,7 @@ Three packages are required for a Windows WPF capture-and-record pipeline — th
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.8.16" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
@@ -43,7 +43,7 @@ Three packages are required for a Windows WPF capture-and-record pipeline — th
 </ItemGroup>
 ```
 
-The redist version (`2026.4.29` here) tracks the underlying GStreamer/libav rebuild cadence and lags the wrapper version (`2026.5.4`) on purpose — pin both to the values shipped in the upstream sample's csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper. Mismatches between wrapper and redist in either direction are undefined behaviour and surface as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
+The redist version (`2026.4.29` here) tracks the underlying GStreamer/libav rebuild cadence and lags the wrapper version (`2026.8.16`) on purpose — pin both to the values shipped in the upstream sample's csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper. Mismatches between wrapper and redist in either direction are undefined behaviour and surface as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
 ### Full minimal csproj
 

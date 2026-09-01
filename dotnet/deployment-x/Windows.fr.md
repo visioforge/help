@@ -138,6 +138,56 @@ Lors du déploiement d'applications basées sur VisioForge pour Windows, prenez 
 4. Pour les applications sensibles à la sécurité, envisagez d'utiliser les versions compressées UPX pour obfusquer les bibliothèques natives
 5. Testez toujours votre déploiement sur un système propre pour vous assurer que toutes les dépendances sont correctement résolues
 
+## Le cache partagé des plugins natifs
+
+Au démarrage, le SDK ne charge pas ses bibliothèques GStreamer directement depuis le dossier de sortie de
+votre application. Il recopie le sous-dossier `x64`, `x86` ou `arm64` de ce dossier vers un emplacement
+partagé et charge depuis celui-ci :
+
+```text
+%PUBLIC%\.gstreamer\<version-du-sdk>-<jeu-natif>\<architecture>
+```
+
+GStreamer tient un registre de plugins qui note chaque plugin par son **chemin absolu**. Un dossier
+canonique unique permet donc à toutes les applications VisioForge de la machine de partager un même
+registre déjà chaud : seul le premier démarrage après une mise à jour du SDK paie le coût de l'analyse de
+l'ensemble des plugins, et tout démarrage ultérieur de n'importe quelle application le réutilise. Ce
+dossier reste par ailleurs accessible en écriture, ce que le répertoire d'une application installée sous
+`Program Files` n'est pas.
+
+Le dossier est déterminé par la version du SDK **et** par une empreinte des redistribuables core et Libav que
+l'application déploie réellement - les paquets `VisioForge.CrossPlatform.*` sont versionnés indépendamment du
+SDK managé - si bien que des applications portant des redistribuables différents ne s'écrasent plus mutuellement
+leurs bibliothèques à chaque démarrage. Deux déploiements ne différant que par un paquet qu'aucune des deux
+empreintes ne couvre (OpenCV, AWS, celui d'un fabricant de caméras) partagent bien un dossier ; les noms de
+fichiers de ces paquets sont disjoints du reste, l'effet est donc que quelques fichiers sont recopiés, non
+qu'une mauvaise bibliothèque soit chargée. Un cache créé par
+le SDK et qui n'a pas été démarré depuis 30 jours est supprimé ; un dossier laissé par un SDK antérieur
+utilisant l'ancienne disposition partagée est laissé intact, car les applications construites avec cette
+version y chargent toujours.
+
+Deux conséquences à connaître lorsque vous testez un déploiement :
+
+- Le cache accumule les bibliothèques de toutes les applications de cette version du SDK sur la machine. Un
+  poste de développement ayant exécuté un jeu de paquets plus complet peut donc satisfaire une dépendance
+  que votre application ne distribue pas réellement — et cette même application échoue ensuite sur une
+  machine vierge.
+- Supprimer `%PUBLIC%\.gstreamer` est sans danger à tout moment ; le démarrage suivant le reconstruit.
+
+Pour écarter le cache partagé et charger exactement ce que votre application a déployé, faites pointer
+`VisioForgeX.CacheFolder` vers votre propre dossier natif **avant** d'appeler `InitSDK` :
+
+```csharp
+VisioForgeX.CacheFolder = Path.Combine(AppContext.BaseDirectory, "x64");
+VisioForgeX.InitSDK();
+```
+
+C'est le réglage à retenir pour vérifier qu'un redistribuable est complet, et pour une application qui ne
+doit rien écrire en dehors de son propre répertoire. Le coût est que l'application ne partage plus le
+registre de la machine et analyse elle-même l'ensemble des plugins à chaque premier démarrage.
+
+Les applications MAUI, WinUI 3 et Unity chargent toujours sur place et n'utilisent jamais le cache partagé.
+
 ## Dépannage des problèmes courants
 
 ### Problèmes de déploiement

@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a native .NET for macOS 
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a **native .NET for macOS** application (`net10.0-macos`, AppKit / Storyboards / `NSApplication`). Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. On macOS the host UI is AppKit (`NSViewController`, `NSWindow`) and the preview surface is `VideoView` from `VisioForge.Core.UI.Apple`.
 
-Pinned NuGet versions: wrapper **`2026.5.4`**, macOS native redist **`2025.9.1`** (matches the [official Simple Video Capture MB sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/macOS/SimpleVideoCaptureMBMac)). The macOS redist version lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not bump the redist to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.8.16`**, macOS native redist **`2026.8.5`** (matches the [official Simple Video Capture MB sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/macOS/SimpleVideoCaptureMBMac)). The macOS redist version lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not bump the redist to match the wrapper.
 
 ## When to use this skill
 
@@ -43,10 +43,10 @@ Two packages — the .NET wrapper plus a single macOS native redist. There is no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.8.16" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.9.1" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
 </ItemGroup>
 ```
 

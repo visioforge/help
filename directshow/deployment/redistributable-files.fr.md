@@ -316,7 +316,6 @@ YourApp\
 
 **Réseau** :
 - `VisioForge_RTSP_Sink_x64.ax`
-- `VisioForge_RTSP_Sink_X_x64.ax`
 - `VisioForge_RTSP_Source_Live555_x64.ax`
 
 **Filtres de base** (requis) :

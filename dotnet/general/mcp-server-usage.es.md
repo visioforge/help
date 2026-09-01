@@ -185,7 +185,7 @@ Obtener una plantilla de pipeline de media blocks para un caso de uso específic
 ### 2. **Herramientas de Clases SDK y API**
 
 #### `list_sdk_classes`
-Listar las clases principales del SDK de VisioForge. Estas son las clases principales de punto de entrada para construir aplicaciones multimedia: VideoCaptureCoreX (captura/grabación de video), VideoEditCoreX (edición de video), MediaPlayerCoreX (reproducción multimedia), MediaInfoReaderCoreX (análisis multimedia), SimplePlayerCoreX (reproducción simple) y más.
+Listar las clases principales del SDK de VisioForge. Estas son las clases principales de punto de entrada para construir aplicaciones multimedia: VideoCaptureCoreX (captura/grabación de video), VideoEditCoreX (edición de video), MediaPlayerCoreX (reproducción multimedia), MediaInfoReaderX (análisis multimedia), SimplePlayerCoreX (reproducción simple) y más.
 
 **Consultas de ejemplo:**
 - "Listar todas las clases principales del SDK"
@@ -278,17 +278,22 @@ Obtener código de configuración específico de plataforma para copia de archiv
 > "Estoy creando una aplicación de captura de video con MAUI para Android. ¿Qué paquetes NuGet necesito?"
 
 **Su asistente IA usa el servidor MCP para:**
-1. Llamar a `get_nuget_packages_snippet` con `platform: Android, projectType: MAUI, sdkType: MediaBlocks`
+1. Llamar a `get_nuget_packages_snippet` con `platform: Android, projectType: MAUI, sdkType: VideoCapture`
 2. Recuperar las referencias de paquetes correctas
 3. Proporcionarle XML listo para pegar:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.2.4" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
+
+`sdkType` es obligatorio y no tiene valor predeterminado. Indique el SDK con licencia:
+`VideoCapture` para grabación de cámaras, pantalla y cámaras IP, `MediaPlayer` para
+reproducción, `VideoEdit` para edición por línea de tiempo. `MediaBlocks` es la capa de
+canalización subyacente — elíjala solo para un grafo personalizado de origen a codificador.
 
 ### Ejemplo 2: Encontrar Cómo Usar Streaming RTSP
 

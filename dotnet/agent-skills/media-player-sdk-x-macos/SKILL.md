@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the playback SDK — to a **native .NET for macOS** application (`net10.0-macos`, AppKit / Storyboards / `NSApplication`). The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes the high-level `MediaPlayerCoreX` god-object with the same API across all platforms; on macOS the host UI is AppKit (`NSViewController`, `NSWindow`) and the rendering surface is `VideoView` from `VisioForge.Core.UI.Apple`.
 
-Pinned NuGet versions: wrapper **`2026.5.4`**, macOS native redist **`2025.9.1`** (matches the [official Simple Media Player sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/macOS/SimpleMediaPlayer)). The macOS redist version lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not bump the redist to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.8.16`**, macOS native redist **`2026.8.5`** (matches the [official Simple Media Player sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/macOS/SimpleMediaPlayer)). The macOS redist version lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not bump the redist to match the wrapper.
 
 ## When to use this skill
 
@@ -44,10 +44,10 @@ Two packages — the .NET wrapper plus a single macOS native redist. There is no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.8.16" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.9.1" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
 </ItemGroup>
 ```
 

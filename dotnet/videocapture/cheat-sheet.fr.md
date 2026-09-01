@@ -73,24 +73,23 @@ Runtimes natifs spécifiques à chaque plateforme — ajoutez ceux que vous cibl
 
 ```xml
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.11.0" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
 
 <!-- Windows x86 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2025.11.0" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.4.29" />
 
 <!-- macOS / macCatalyst -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.9.1" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2025.2.15" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
 
-<!-- Linux x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.11.0" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Linux.x64" Version="2025.11.0" />
+<!-- Linux x64 (nécessite GStreamer 1.22+ du système) -->
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
 
 <!-- Android / iOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="15.10.24" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.0.16" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
 ```
 
 Intégration de l'interface utilisateur (choisissez celle qui correspond à votre pile UI) :

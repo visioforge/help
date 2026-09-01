@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Media Blocks SDK .NET** — the graph-base
 
 The same C# pipeline code runs unchanged on every Uno target; what differs is the per-OS native redist NuGet, the permission paperwork, and the `Uno.Sdk` MSBuild SDK plus the `VisioForge.DotNet.Core.UI.Uno` `VideoView` control. Under the hood the engine is GStreamer-based and shared with `VideoCaptureCoreX`.
 
-Pinned NuGet versions (match the bundled `references/Sample.csproj` and the upstream Uno `VideoCaptureUnoX` sample): wrapper **`2026.5.4`**, Uno UI **`2026.5.4`**, Windows redists **`2026.4.29`**, Android redist **`2026.7.27`**, iOS redist **`2025.0.16`**, Mac Catalyst redist **`2025.9.1`**. Newer 2026.x.x patch versions are usually drop-in compatible — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin the per-OS redists to the values from the upstream csproj for your wrapper version. Mismatches between wrapper and redist are undefined behaviour and surface as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
+Pinned NuGet versions (match the bundled `references/Sample.csproj` and the upstream Uno `VideoCaptureUnoX` sample): wrapper **`2026.8.16`**, Uno UI **`2026.8.16`**, Windows redists **`2026.4.29`**, Android redist **`2026.7.27`**, iOS redist **`2025.12.0`**, Mac Catalyst redist **`2026.8.5`**. Newer 2026.x.x patch versions are usually drop-in compatible — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin the per-OS redists to the values from the upstream csproj for your wrapper version. Mismatches between wrapper and redist are undefined behaviour and surface as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
 ## When to use this skill
 

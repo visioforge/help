@@ -162,6 +162,44 @@ if (result.Success)
 }
 ```
 
+### Les sources réseau sont sondées au démarrage du pipeline
+
+Un document porte le point de connexion d'une source, jamais ses informations média : le restaurer ne
+contacte rien. Deux sources ont besoin de ces informations avant de pouvoir être construites :
+`RTSPRAWSourceBlock` choisit son depayloader et son parser d'après la disposition des flux, et le
+`NDISourceBlock` de bureau crée ses convertisseurs d'après le nombre de flux. `StartAsync` les sonde donc
+pour vous, une seule fois, avant la construction du graphe. La caméra ou l'émetteur doit être joignable à
+ce moment-là ; sinon `StartAsync` renvoie `false` et journalise la source qui n'a pas pu être lue.
+
+Le `Start` synchrone n'a nulle part où attendre un sondage et ne fait pas cela, pas plus que les moteurs
+`VideoCaptureCoreX` et `MediaPlayerCoreX`, qui construisent leur graphe à travers lui. Si vous démarrez
+le pipeline de cette façon, remplacez ces configurations après la matérialisation par des configurations
+créées via `RTSPRAWSourceSettings.CreateAsync` / `NDISourceSettings.CreateAsync`.
+
+### Les périphériques audio sont réassociés à cette machine
+
+Un document enregistre ce qui identifie un périphérique audio — son nom, l'API à laquelle il appartient,
+le chemin du point de connexion là où la plateforme en publie un et, sur macOS, l'`unique-id` stable de
+CoreAudio — et jamais le handle vivant de l'énumérateur, qui ne signifie rien en dehors du processus qui
+l'a créé. La matérialisation compare cette identité aux périphériques dont la machine dispose à présent
+et redonne au bloc un périphérique réel. C'est aussi pourquoi un pipeline restauré ouvre la bonne
+sortie : l'identifiant numérique CoreAudio et le chemin de
+périphérique WASAPI sont réattribués d'une exécution à l'autre, et l'association relit les valeurs
+actuelles.
+
+Si le périphérique a disparu, le pipeline se construit quand même — sur un autre périphérique de la même
+API, signalé par un avertissement `MBS063` qui nomme les deux. Si la machine n'a aucun périphérique de
+cette API, le bloc conserve l'identité du document et la matérialisation signale `MBS064` ; le bloc
+n'ouvrira rien.
+
+L'association énumère les périphériques, ce qui, dans un processus qui démarre, lance un moniteur de
+périphériques GStreamer et peut prendre quelques secondes : appelez donc `Materialize` en dehors du
+thread d'interface — ou énumérez une fois auparavant. Les entrées et les sorties ont des caches
+distincts : `AudioSourcesAsync` préchauffe les périphériques de capture et `AudioOutputsAsync` ceux de
+restitution ; sur les plateformes Apple, l'appel asynchrone de capture est de plus celui qui demande
+l'autorisation du microphone. L'association synchrone à l'intérieur de `Materialize` ne fait ni l'un ni
+l'autre.
+
 ## Valider avant de construire
 
 `Validate` répond aux mêmes questions que la matérialisation, sans rien construire — une interface peut
@@ -258,6 +296,8 @@ un `Message` et le `BlockId` auquel elle se rapporte.
 | `MBS060` | un bloc n'a pas exposé ses réglages à la capture |
 | `MBS061` | un bloc n'a pas pu être nommé dans la capture |
 | `MBS062` | une connexion n'a pas pu être exprimée dans la capture |
+| `MBS063` | le périphérique audio nommé par un bloc a disparu, un autre de la même API est utilisé à la place |
+| `MBS064` | le périphérique audio nommé par un bloc n'a pas pu être associé : aucun de cette API n'est présent, ou la recherche a échoué |
 
 ## Découvrir les types de blocs
 

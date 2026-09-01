@@ -59,7 +59,8 @@ Paramètres d'encodeur RAV1E AV1. Encodeur CPU.
   - `MinKeyFrameInterval` (ulong) : intervalle minimal entre images clés. Par défaut `12`.
   - `MinQuantizer` (uint) : valeur minimale du quantificateur (plage 0-255). Par défaut `0`.
   - `Quantizer` (uint) : valeur du quantificateur (plage 0-255). Par défaut `100`.
-  - `SpeedPreset` (int) : préréglage de vitesse d'encodage (10 le plus rapide, 0 le plus lent). Par défaut `6`.
+  - `SpeedPreset` (int) : préréglage de vitesse d'encodage (10 le plus rapide, 0 le plus lent). Par défaut `10`.
+  - `Tiles` (uint) : tuiles en lesquelles l'image est découpée - c'est ce qui permet à rav1e d'utiliser plus d'un cœur. Par défaut `16` ; `0` encode l'image comme une seule tuile.
   - `Tune` (`RAV1EEncoderTune`) : réglage de tune pour l'encodeur. Par défaut `RAV1EEncoderTune.Psychovisual`.
 
 **Plateformes :** Windows, Linux, macOS.

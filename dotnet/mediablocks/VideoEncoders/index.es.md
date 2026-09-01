@@ -59,7 +59,8 @@ Configuraciones del codificador RAV1E AV1. Codificador CPU.
   - `MinKeyFrameInterval` (ulong): Intervalo mínimo entre fotogramas clave. Predeterminado es `12`.
   - `MinQuantizer` (uint): Valor mínimo del cuantizador (rango 0-255). Predeterminado es `0`.
   - `Quantizer` (uint): Valor del cuantizador (rango 0-255). Predeterminado es `100`.
-  - `SpeedPreset` (int): Preajuste de velocidad de codificación (10 más rápido, 0 más lento). Predeterminado es `6`.
+  - `SpeedPreset` (int): Preajuste de velocidad de codificación (10 más rápido, 0 más lento). Predeterminado es `10`.
+  - `Tiles` (uint): Teselas en que se divide el fotograma - esto es lo que permite a rav1e usar más de un núcleo. Predeterminado es `16`; `0` codifica el fotograma como una sola tesela.
   - `Tune` (`RAV1EEncoderTune`): Configuración de ajuste para el codificador. Predeterminado es `RAV1EEncoderTune.Psychovisual`.
 
 **Plataformas:** Windows, Linux, macOS.

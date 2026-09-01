@@ -110,8 +110,8 @@ You'll need the VisioForge Media Blocks SDK. Add it to your .NET project via NuG
 Depending on your target platform, add the corresponding native runtime package. For Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.4.9" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2025.4.9" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
 ```
 
 For detailed platform-specific dependencies, see the [Deployment Guide](../../deployment-x/index.md).

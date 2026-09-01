@@ -89,8 +89,8 @@ Necesitará el SDK de VisioForge Media Blocks. Puede agregarlo a su proyecto .NE
 Dependiendo de su plataforma objetivo (Windows, macOS, Linux, incluyendo sistemas embebidos como Jetson Nano para aplicaciones de cámara embebida), también necesitará los paquetes de runtime nativos correspondientes. Por ejemplo, en Windows para grabar video:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.4.9" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2025.4.9" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
 ```
 
 Para información detallada sobre requisitos de deployment, y dependencias específicas de plataforma, por favor refiérase a nuestra [Guía de Deployment](../../deployment-x/index.md). Es importante verificar estos detalles para asegurar que su aplicación de captura de video stream funcione correctamente.

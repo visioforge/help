@@ -300,11 +300,6 @@ _ = DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
 Sur macOS, cela compte au premier lancement d'une application : les boîtes de dialogue d'autorisation
 de la caméra et du microphone sont validées par l'utilisateur, et l'énumération ne se termine qu'ensuite.
 
-Sur Mac Catalyst, les moniteurs audio n'existent pas — les requêtes CoreAudio/AVFoundation peuvent se
-bloquer dans les processus macabi — donc `StartAudioSourceMonitorAsync` / `StartAudioSinkMonitorAsync`
-reviennent sans déclencher `OnDeviceEnumerationCompleted`, et l'énumération audio signale un seul
-périphérique par défaut. Lisez plutôt la liste directement au lieu d'attendre l'événement (#1150).
-
 Sur Android, il n'y a pas de surveillance des sources vidéo à démarrer : seuls `AudioSources` et
 `AudioOutputs` y sont signalés.
 
@@ -339,6 +334,25 @@ Par défaut, l'énumération des périphériques Media Foundation est désactiv�
 DeviceEnumerator.Shared.IsEnumerateMediaFoundationDevices = true;
 #endif
 ```
+
+### macOS et Mac Catalyst
+
+L'énumération des périphériques demande l'accès à la caméra et au microphone, et le démarrage du
+fournisseur de périphériques audio attend derrière cette boîte de dialogue. Le bundle de
+l'application doit donc déclarer les deux descriptions d'usage dans son `Info.plist`, sinon le
+système met fin au processus lors de la première demande d'accès — il ne se contente pas de la
+refuser :
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>Pourquoi votre application a besoin de la caméra.</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Pourquoi votre application a besoin du microphone.</string>
+```
+
+Préférez ici les méthodes asynchrones : les méthodes synchrones `AudioSources()` / `AudioOutputs()`
+démarrent le fournisseur de périphériques CoreAudio et peuvent bloquer le thread appelant jusqu'à ce
+que l'utilisateur ait répondu.
 
 ### iOS et Android
 

@@ -135,6 +135,23 @@ This package contains:
 - Interface assemblies for .NET integration
 - Both x64 and ARM64 binaries
 
+### Computer Vision with OpenCV
+
+For applications requiring advanced image processing and computer vision capabilities, add:
+
+- [VisioForge.CrossPlatform.OpenCV.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.macOS)
+
+The package ships one universal (x64 + ARM64) GStreamer plugin with OpenCV linked into it, so there are no separate OpenCV libraries to deploy, plus the Haar cascade files `CVFaceDetectBlock`, `CVFaceBlurBlock` and `CVHandDetectBlock` load by default. It provides the Media Blocks in the `VisioForge.Core.MediaBlocks.OpenCV` namespace:
+
+- Image transformation: `CVDewarpBlock`, `CVDilateBlock`, `CVErodeBlock`
+- Edge and feature detection: `CVEdgeDetectBlock`, `CVLaplaceBlock`, `CVSobelBlock`
+- Face processing: `CVFaceBlurBlock`, `CVFaceDetectBlock`
+- Motion detection: `CVMotionCellsBlock`
+- Object recognition: `CVTemplateMatchBlock`, `CVHandDetectBlock`
+- Image enhancement: `CVEqualizeHistogramBlock`, `CVSmoothBlock`
+- Tracking and overlay: `CVTrackerBlock`, `CVTextOverlayBlock`
+- Stabilization: `VideoStabilizationBlock`
+
 ### Getting Started with Native macOS Projects
 
 To begin developing native macOS applications with VisioForge SDKs:
@@ -159,8 +176,8 @@ For MAUI projects targeting macOS (through MacCatalyst), add these packages:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="15.10.11" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="15.10.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.8.16" />
 </ItemGroup>
 ```
 

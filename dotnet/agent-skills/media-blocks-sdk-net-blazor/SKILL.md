@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a Blazor Server applicat
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a Blazor **Server** application. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `RTSPServerBlock`, `MP4SinkBlock`, `UniversalSourceBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. The Razor UI is just a remote control: every pipeline runs **on the server process** (the same machine hosting the ASP.NET Core app); the browser only sees status text, button clicks, and form posts. There is no `VideoView` in Blazor — to expose the live media to the user you publish it from the server (RTSP server, MP4 file, RTMP push, HLS, WebRTC WHIP, …) and let the browser consume that URL with a separate player or `<video>` element.
 
-Pinned NuGet version: **`2026.5.4`** (matches the [official RTSP Webcam Blazor Server demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Blazor)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.8.16`** (matches the [official RTSP Webcam Blazor Server demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Blazor)). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -47,18 +47,18 @@ The .NET wrapper is a single package; the native redist is per-OS and **not tran
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.8.16" />
 </ItemGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-macos'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.9.1" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
 </ItemGroup>
 ```
 
-The redist version (`2026.4.29` here) tracks the underlying GStreamer/libav rebuild cadence and lags the wrapper version (`2026.5.4`) on purpose — pin both to the values shipped in the upstream sample's csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper. Mismatches surface as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
+The redist version (`2026.4.29` here) tracks the underlying GStreamer/libav rebuild cadence and lags the wrapper version (`2026.8.16`) on purpose — pin both to the values shipped in the upstream sample's csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper. Mismatches surface as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
 For Linux deployment add the matching `VisioForge.CrossPlatform.Core.Linux.x64` package; for ARM64 hosts (Apple Silicon, Raspberry Pi, ARM Linux) swap `.x64` for the `.arm64` variant. See `references/Sample.csproj` for a complete working file.
 

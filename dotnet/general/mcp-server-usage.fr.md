@@ -185,7 +185,7 @@ Obtient un modèle de pipeline de blocs multimédias pour un cas d'usage spécif
 ### 2. **Outils de classes et d'API du SDK**
 
 #### `list_sdk_classes`
-Liste les classes principales du SDK VisioForge. Ce sont les classes principales servant de points d'entrée pour la création d'applications multimédia : VideoCaptureCoreX (capture/enregistrement vidéo), VideoEditCoreX (édition vidéo), MediaPlayerCoreX (lecture multimédia), MediaInfoReaderCoreX (analyse multimédia), SimplePlayerCoreX (lecture simple), et plus encore.
+Liste les classes principales du SDK VisioForge. Ce sont les classes principales servant de points d'entrée pour la création d'applications multimédia : VideoCaptureCoreX (capture/enregistrement vidéo), VideoEditCoreX (édition vidéo), MediaPlayerCoreX (lecture multimédia), MediaInfoReaderX (analyse multimédia), SimplePlayerCoreX (lecture simple), et plus encore.
 
 **Exemples de requêtes :**
 - « Lister toutes les classes principales du SDK »
@@ -278,17 +278,22 @@ Obtient le code de configuration de copie de fichiers / de build propre à la pl
 > "Je crée une application de capture vidéo avec MAUI pour Android. Quels paquets NuGet me faut-il ?"
 
 **Votre assistant IA utilise le serveur MCP pour :**
-1. Appeler `get_nuget_packages_snippet` avec `platform: Android, projectType: MAUI, sdkType: MediaBlocks`
+1. Appeler `get_nuget_packages_snippet` avec `platform: Android, projectType: MAUI, sdkType: VideoCapture`
 2. Récupérer les références de paquets correctes
 3. Vous fournir un XML prêt à coller :
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.2.4" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
+
+`sdkType` est obligatoire et n'a pas de valeur par défaut. Indiquez le SDK sous licence :
+`VideoCapture` pour l'enregistrement de caméras, d'écran et de caméras IP, `MediaPlayer`
+pour la lecture, `VideoEdit` pour le montage sur timeline. `MediaBlocks` est la couche de
+pipeline sous-jacente — ne la choisissez que pour un graphe source-vers-encodeur sur mesure.
 
 ### Exemple 2 : trouver comment utiliser le streaming RTSP
 

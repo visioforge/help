@@ -58,19 +58,13 @@ Le Video Edit SDK assemble des timelines, applique des transitions/effets/superp
 
 ## Paquets NuGet
 
-Moteur multiplateforme (recommandé pour les nouveaux projets) :
+Un seul paquet embarque les deux moteurs : `VideoEditCoreX` et l'historique `VideoEditCore` y cohabitent, le choix du moteur se fait donc dans le code, pas dans le packaging :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core" Version="*" />
-<PackageReference Include="VisioForge.DotNet.VideoEditX" Version="*" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
 ```
 
-Moteur historique exclusivement Windows :
-
-```xml
-<PackageReference Include="VisioForge.DotNet.Core" Version="*" />
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="*" />
-```
+Il tire `VisioForge.DotNet.Core` en dépendance ; inutile de référencer `Core` séparément.
 
 Intégration de l'interface utilisateur (choisissez celle qui correspond à votre pile UI) :
 

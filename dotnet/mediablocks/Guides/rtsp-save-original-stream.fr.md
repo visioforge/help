@@ -89,8 +89,8 @@ Vous aurez besoin du VisioForge Media Blocks SDK. Vous pouvez l'ajouter à votre
 Selon votre plateforme cible (Windows, macOS, Linux, y compris les systèmes ARM comme Jetson Nano pour les applications de caméras embarquées), vous aurez également besoin des paquets de runtime natifs correspondants. Par exemple, sous Windows pour enregistrer la vidéo :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.4.9" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2025.4.9" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
 ```
 
 Pour des informations détaillées sur les exigences de déploiement et les dépendances spécifiques aux plateformes, consultez notre [guide de déploiement](../../deployment-x/index.md). Il est important de vérifier ces détails pour que votre application de capture de flux vidéo fonctionne correctement.

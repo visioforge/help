@@ -118,7 +118,7 @@ Ajoutez les paquets NuGet suivants à votre projet selon la plateforme cible :
 ```xml
 <!-- Paquet NuGet personnalisé et code cible pour maccatalyst pour copier les fichiers redist NuGet vers le fichier d'application -->
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2025.9.1" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
 </ItemGroup>
 
 <Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">

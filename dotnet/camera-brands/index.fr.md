@@ -264,13 +264,17 @@ La plupart des caméras IP modernes prennent en charge **ONVIF (Open Network Vid
 === "Multiplateforme (recommandé)"
 
     ```bash
-    dotnet add package VisioForge.CrossPlatform.Core
+    dotnet add package VisioForge.DotNet.VideoCapture
+    dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
     ```
 
-=== "Windows uniquement"
+    Remplacez le second paquet par le runtime natif de votre système cible :
+    `VisioForge.CrossPlatform.Core.Linux.x64`, `.macOS`, `.Android` ou `.iOS`.
+
+=== "Windows uniquement (moteur DirectShow historique)"
 
     ```bash
-    dotnet add package VisioForge.DotNet.Core
+    dotnet add package VisioForge.DotNet.VideoCapture
     dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
     ```
 

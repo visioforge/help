@@ -118,7 +118,7 @@ Agregue los siguientes paquetes NuGet a su proyecto según la plataforma objetiv
 ```xml
 <!-- Paquete NuGet personalizado y código de target para maccatalyst para copiar archivos redistribuibles NuGet al archivo de la app -->
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2025.9.1" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
 </ItemGroup>
 
 <Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">

@@ -309,7 +309,7 @@ The `SpinnakerSourceBlock` is configured using `SpinnakerSourceSettings`. Key pr
 - `ShutterType` (`SpinnakerSourceShutterType` enum): Type of shutter (e.g., `Rolling`, `Global`). Default `Rolling`.
 
 Constructor:
-`SpinnakerSourceSettings(string deviceName, Rect region, VideoFrameRate frameRate, SpinnakerPixelFormat pixelFormat = SpinnakerPixelFormat.RGB)`
+`SpinnakerSourceSettings(string name, Rect region, VideoFrameRate frameRate, SpinnakerPixelFormat pixelFormat = SpinnakerPixelFormat.RGB)`
 
 #### Block info
 
@@ -2190,13 +2190,13 @@ var pipeline = new MediaBlocksPipeline();
 
 var settings = new VideoMixerSourceSettings(1920, 1080, VideoFrameRate.FPS_30);
 
-// Add a file source on the left half
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("source1.mp4"));
-settings.Add(fileSource, new Rect(0, 0, 960, 1080));
+// Add a file source on the left half. Add takes source SETTINGS, not blocks - the mixer
+// creates the source block for each entry itself.
+// Rect is (left, top, right, bottom), so the right half ends at 1920, not at its width.
+settings.Add(await UniversalSourceSettings.CreateAsync("source1.mp4"), new Rect(0, 0, 960, 1080));
 
 // Add a webcam on the right half
-var videoSource = new SystemVideoSourceBlock(videoSourceSettings);
-settings.Add(videoSource, new Rect(960, 0, 960, 1080));
+settings.Add(videoSourceSettings, new Rect(960, 0, 1920, 1080));
 
 var mixer = new VideoMixerSourceBlock(pipeline, settings);
 
@@ -2749,11 +2749,11 @@ iOS (not available on macOS Catalyst)
 
 ### macOS Audio Source Block
 
-OSXAudioSourceBlock provides audio capture from input devices on macOS platforms.
+SystemAudioSourceBlock, configured with `OSXAudioSourceSettings`, provides audio capture from input devices on macOS platforms.
 
 #### Block info
 
-Name: OSXAudioSourceBlock.
+Name: SystemAudioSourceBlock.
 
 | Pin direction | Media type         | Pins count |
 |---------------|:------------------:|:----------:|
@@ -2767,7 +2767,7 @@ Use `DeviceEnumerator.Shared.AudioSourcesAsync()` to get a list of available aud
 
 ```mermaid
 graph LR;
-    OSXAudioSourceBlock-->AudioRendererBlock;
+    SystemAudioSourceBlock-->AudioRendererBlock;
 ```
 
 #### Sample code
@@ -2782,15 +2782,12 @@ var device = devices.Length > 0 ? devices[0] : null;
 OSXAudioSourceSettings audioSourceSettings = null;
 if (device != null)
 {
-    var formatItem = device.Formats[0];
-    if (formatItem != null)
-    {
-        audioSourceSettings = new OSXAudioSourceSettings(device.DeviceID, formatItem);
-    }
+    // the device constructor records the stable CoreAudio unique-id and the enumerated format
+    audioSourceSettings = new OSXAudioSourceSettings(device);
 }
 
 // create macOS audio source block
-var audioSource = new OSXAudioSourceBlock(audioSourceSettings);
+var audioSource = new SystemAudioSourceBlock(audioSourceSettings);
 
 // create audio renderer block
 var audioRenderer = new AudioRendererBlock();

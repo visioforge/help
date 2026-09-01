@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK .NET into a Windows Forms app
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a Windows Forms application. Unlike Video Capture SDK's high-level "set device + click record" API, Media Blocks is a **graph-based pipeline SDK**: you instantiate `MediaBlocksPipeline`, then construct source / transform / sink blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, …) and wire their pads together with `pipeline.Connect(outPad, inPad)`. This is the right tool when you need a custom topology — multi-source mixing, branched recording-plus-streaming via `TeeBlock`, on-the-fly transcoding, sample-grabber callbacks, etc. For a plain "show webcam, hit record" scenario, prefer `video-capture-sdk-net-winforms`.
 
-Pinned NuGet version: **`2026.5.4`** (matches the [official Simple Video Capture demo for Media Blocks WinForms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/Simple%20Video%20Capture%20Demo)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.8.16`** (matches the [official Simple Video Capture demo for Media Blocks WinForms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/Simple%20Video%20Capture%20Demo)). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -35,13 +35,13 @@ The SDK ships as a single .NET meta-package plus two native runtime packages (th
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.8.16" />
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
 </ItemGroup>
 ```
 
-`VisioForge.CrossPlatform.Core.Windows.x64` is the GStreamer core + VisioForge plugins. `VisioForge.CrossPlatform.Libav.Windows.x64.UPX` is the FFmpeg/libav redist (needed for H.264/AAC encode and most decode paths). Pin the runtime packages to the latest 2026.x release available — version drift between the .NET wrapper and native runtime is undefined behaviour but minor patch-version skew (as shown above: `2026.5.4` wrapper + `2026.4.29` runtime) matches the official sample and works in practice.
+`VisioForge.CrossPlatform.Core.Windows.x64` is the GStreamer core + VisioForge plugins. `VisioForge.CrossPlatform.Libav.Windows.x64.UPX` is the FFmpeg/libav redist (needed for H.264/AAC encode and most decode paths). Pin the runtime packages to the latest 2026.x release available — version drift between the .NET wrapper and native runtime is undefined behaviour but minor patch-version skew (as shown above: `2026.8.16` wrapper + `2026.4.29` runtime) matches the official sample and works in practice.
 
 For 32-bit deployment swap `.x64` for `.x86`. To support both architectures with a single AnyCPU build, reference both `.x64` and `.x86` of every redist.
 

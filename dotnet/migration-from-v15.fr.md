@@ -133,15 +133,19 @@ Vous avez besoin de paquets supplémentaires pour les moteurs X :
 <!-- Runtime de plateforme (requis pour les moteurs X) -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.*" />
 
-<!-- Paquet d'interface utilisateur (choisissez-en un selon votre framework UI) -->
-<PackageReference Include="VisioForge.DotNet.Core.UI.WPF" Version="2026.*" />
-<!-- OU -->
-<PackageReference Include="VisioForge.DotNet.Core.UI.WinForms" Version="2026.*" />
-<!-- OU -->
+<!-- Paquet d'interface utilisateur - uniquement pour MAUI, Avalonia, WinUI et Uno ; choisissez-en un -->
 <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.*" />
 <!-- OU -->
 <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.*" />
+<!-- OU -->
+<PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.*" />
+<!-- OU -->
+<PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.*" />
 ```
+
+WPF et WinForms n'ont besoin d'aucun paquet d'interface : leurs contrôles `VideoView` ont été
+fusionnés dans `VisioForge.DotNet.Core`. Les espaces de noms sont inchangés, seule la
+`<PackageReference>` disparaît.
 
 ### Initialisation du SDK (requise pour les moteurs X)
 

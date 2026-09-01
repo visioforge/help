@@ -138,6 +138,55 @@ Al desplegar aplicaciones basadas en VisioForge para Windows, considera estas re
 4. Para aplicaciones sensibles a la seguridad, considera usar las versiones comprimidas UPX para ofuscar bibliotecas nativas
 5. Siempre prueba tu despliegue en un sistema limpio para asegurar que todas las dependencias se resuelvan correctamente
 
+## La caché compartida de plugins nativos
+
+Al iniciarse, el SDK no carga sus bibliotecas de GStreamer directamente desde la carpeta de salida de su
+aplicación. Copia la subcarpeta `x64`, `x86` o `arm64` de esa carpeta a una ubicación compartida y carga
+desde allí:
+
+```text
+%PUBLIC%\.gstreamer\<version-del-sdk>-<conjunto-nativo>\<arquitectura>
+```
+
+GStreamer mantiene un registro de plugins que anota cada plugin por su **ruta absoluta**. Por eso una
+única carpeta canónica permite que todas las aplicaciones de VisioForge de la máquina compartan un mismo
+registro ya calentado: solo el primer inicio tras actualizar el SDK paga el coste de escanear el conjunto
+de plugins, y cualquier inicio posterior de cualquier aplicación lo reutiliza. Además, esa carpeta siempre
+tiene permiso de escritura, cosa que el directorio de una aplicación instalada bajo `Program Files` no tiene.
+
+La carpeta está delimitada por la versión del SDK **y** por una huella de los redistribuibles core y Libav que
+la aplicación realmente distribuye - los paquetes `VisioForge.CrossPlatform.*` se versionan de forma
+independiente del SDK gestionado - de modo que las aplicaciones con redistribuibles distintos ya no se
+sobrescriben las bibliotecas en cada arranque. Dos despliegues que solo difieran en un paquete que ninguna de
+las dos huellas cubre (OpenCV, AWS, el de un fabricante de cámaras) sí comparten carpeta; los nombres de
+archivo de esos paquetes son disjuntos del resto, así que el efecto es que unos pocos archivos se vuelven a
+copiar, no que se cargue una biblioteca equivocada. Una caché creada por
+el SDK que no se ha iniciado durante 30 días se elimina; una carpeta dejada por un SDK anterior con el diseño
+compartido previo se deja intacta, porque las aplicaciones construidas con esa versión siguen cargando de
+ella.
+
+Dos consecuencias que conviene conocer al probar un despliegue:
+
+- La caché acumula las bibliotecas de todas las aplicaciones de esa versión del SDK en la máquina. Un
+  equipo de desarrollo que haya ejecutado un conjunto de paquetes más completo puede por tanto satisfacer
+  una dependencia que su aplicación en realidad no distribuye, y esa misma aplicación falla luego en una
+  máquina limpia.
+- Borrar `%PUBLIC%\.gstreamer` es seguro en cualquier momento; el siguiente inicio la reconstruye.
+
+Para dejar la caché compartida fuera de juego y cargar exactamente lo que su aplicación distribuye, apunte
+`VisioForgeX.CacheFolder` a su propia carpeta nativa **antes** de llamar a `InitSDK`:
+
+```csharp
+VisioForgeX.CacheFolder = Path.Combine(AppContext.BaseDirectory, "x64");
+VisioForgeX.InitSDK();
+```
+
+Esta es la configuración adecuada para verificar que un redistribuible está completo, y para una aplicación
+que no debe escribir fuera de su propio directorio. El coste es que la aplicación ya no comparte el registro
+de toda la máquina y escanea el conjunto de plugins por su cuenta en cada primer inicio.
+
+Las aplicaciones MAUI, WinUI 3 y Unity siempre cargan en su sitio y nunca usan la caché compartida.
+
 ## Solución de Problemas Comunes
 
 ### Problemas de Despliegue

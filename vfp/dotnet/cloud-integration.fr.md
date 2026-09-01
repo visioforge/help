@@ -33,20 +33,20 @@ primary_api_classes:
 Le Video Fingerprinting SDK fournit un paquet NuGet prêt à l'emploi pour l'intégration MongoDB :
 
 **Paquet :** `VisioForge.DotNet.VideoFingerPrinting.MongoDB`  
-**Version :** 2025.8.7  
+**Version :** 2025.8.6  
 **Objectif :** intégration MongoDB complète avec prise en charge GridFS pour le stockage d'empreintes
 
 #### Installation
 
 ```bash
 # Console du gestionnaire de paquets
-Install-Package VisioForge.DotNet.VideoFingerPrinting.MongoDB -Version 2025.8.7
+Install-Package VisioForge.DotNet.VideoFingerPrinting.MongoDB -Version 2025.8.6
 
 # CLI .NET
-dotnet add package VisioForge.DotNet.VideoFingerPrinting.MongoDB --version 2025.8.7
+dotnet add package VisioForge.DotNet.VideoFingerPrinting.MongoDB --version 2025.8.6
 
 # PackageReference
-<PackageReference Include="VisioForge.DotNet.VideoFingerPrinting.MongoDB" Version="2025.8.7" />
+<PackageReference Include="VisioForge.DotNet.VideoFingerPrinting.MongoDB" Version="2025.8.6" />
 ```
 
 #### Fonctionnalités clés

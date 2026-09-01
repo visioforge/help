@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to a **native .NET for iOS** application (`net10.0-ios` TFM, UIKit, no MAUI/Xamarin shell). The X SDK shares its runtime with Media Blocks and Video Capture X (GStreamer-backed under the hood) and exposes the high-level `MediaPlayerCoreX` god-object that mirrors the legacy `MediaPlayerCore` API. Same C# playback code ports to Windows / macOS / Android / MAUI / Avalonia / Uno — only the UI host changes.
 
-Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaPlayer` 2026.5.4**, native iOS redist **`VisioForge.CrossPlatform.Core.iOS` 2025.0.16** (matches the upstream Media Player SDK X iOS sample at `_DEMOS/Media Player SDK X/iOS/MediaPlayer/`). The iOS redist version trails the wrapper version on purpose — it tracks the underlying GStreamer-iOS rebuild cadence, which has slower release tempo than the managed wrapper. Pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redist to match the wrapper.
+Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaPlayer` 2026.8.16**, native iOS redist **`VisioForge.CrossPlatform.Core.iOS` 2025.12.0** (matches the upstream Media Player SDK X iOS sample at `_DEMOS/Media Player SDK X/iOS/MediaPlayer/`). The iOS redist version trails the wrapper version on purpose — it tracks the underlying GStreamer-iOS rebuild cadence, which has slower release tempo than the managed wrapper. Pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redist to match the wrapper.
 
 ## When to use this skill
 
@@ -37,10 +37,10 @@ Two packages — the .NET wrapper plus the iOS native redist. The redist is **no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.8.16" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.0.16" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
 </ItemGroup>
 ```
 
@@ -92,7 +92,7 @@ public override bool FinishedLaunching(UIApplication application, NSDictionary l
 }
 ```
 
-There is no public `DestroySDK()` for the iOS redist as of 2025.0.16 — disposing the `MediaPlayerCoreX` instance with `await _player.DisposeAsync()` is sufficient at app shutdown. The bundled `references/AppDelegate.cs` shows the canonical placement.
+There is no public `DestroySDK()` for the iOS redist as of 2025.12.0 — disposing the `MediaPlayerCoreX` instance with `await _player.DisposeAsync()` is sufficient at app shutdown. The bundled `references/AppDelegate.cs` shows the canonical placement.
 
 Skipping `InitSDK()` is the #1 source of "Element 'X' not found" failures on first run.
 

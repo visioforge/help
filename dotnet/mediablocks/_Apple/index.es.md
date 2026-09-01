@@ -14,7 +14,7 @@ primary_api_classes:
   - MetalVideoCompositorBlock
   - MediaBlocksPipeline
   - VideoRendererBlock
-  - OSXAudioSourceBlock
+  - SystemAudioSourceBlock
   - OSXAudioSinkBlock
 
 ---
@@ -29,10 +29,7 @@ Esta sección cubre los MediaBlocks específicamente optimizados para plataforma
 
 ### Fuentes de audio
 
-- **OSXAudioSourceBlock**: captura de audio en macOS mediante Core Audio
-  - Consulte la [documentación de fuentes de audio](../Sources/index.md#system-audio-source)
-  
-- **IOSAudioSourceBlock**: captura de audio en iOS
+- **SystemAudioSourceBlock**: captura de audio en macOS e iOS mediante Core Audio, configurado con `OSXAudioSourceSettings` en macOS y Mac Catalyst, e `IOSAudioSourceSettings` en iOS
   - Consulte la [documentación de fuentes de audio](../Sources/index.md#system-audio-source)
 
 ### Salidas de audio
@@ -60,6 +57,7 @@ Esta sección cubre los MediaBlocks específicamente optimizados para plataforma
 - **MetalDeinterlaceBlock**: desentrelazado acelerado por GPU mediante Apple Metal
 - **MetalOverlayBlock**: composición de imágenes superpuestas en GPU mediante Apple Metal
 - **MetalTransformBlock**: operaciones de volteo, rotación y recorte en GPU mediante Apple Metal
+- **MetalVideoFilterBlock**: brillo, contraste, saturación, tono, gamma, nitidez, sepia, inversión, grano de película y viñeteado en GPU mediante Apple Metal
 
 ## Metal Video Compositor
 
@@ -150,7 +148,7 @@ Devuelve `true` si el plugin GStreamer `vfmetalcompositor` está disponible en e
 
 #### Plataformas
 
-macOS, iOS.
+macOS, iOS. En iOS, los elementos Metal forman parte únicamente del runtime del dispositivo: no están disponibles en el Simulador de iOS, donde `IsAvailable()` devuelve `false`.
 
 ## Metal Convert/Scale
 
@@ -218,7 +216,7 @@ Devuelve `true` si el plugin GStreamer `vfmetalconvertscale` está disponible en
 
 #### Plataformas
 
-macOS, iOS.
+macOS, iOS. En iOS, los elementos Metal forman parte únicamente del runtime del dispositivo: no están disponibles en el Simulador de iOS, donde `IsAvailable()` devuelve `false`.
 
 ## Metal Deinterlace
 
@@ -286,7 +284,7 @@ Devuelve `true` si el plugin GStreamer `vfmetaldeinterlace` está disponible en 
 
 #### Plataformas
 
-macOS, iOS.
+macOS, iOS. En iOS, los elementos Metal forman parte únicamente del runtime del dispositivo: no están disponibles en el Simulador de iOS, donde `IsAvailable()` devuelve `false`.
 
 ## Metal Overlay
 
@@ -360,7 +358,7 @@ Devuelve `true` si el plugin GStreamer `vfmetaloverlay` está disponible en el s
 
 #### Plataformas
 
-macOS, iOS.
+macOS, iOS. En iOS, los elementos Metal forman parte únicamente del runtime del dispositivo: no están disponibles en el Simulador de iOS, donde `IsAvailable()` devuelve `false`.
 
 ## Metal Transform
 
@@ -430,7 +428,90 @@ Devuelve `true` si el plugin GStreamer `vfmetaltransform` está disponible en el
 
 #### Plataformas
 
-macOS, iOS.
+macOS, iOS. En iOS, los elementos Metal forman parte únicamente del runtime del dispositivo: no están disponibles en el Simulador de iOS, donde `IsAvailable()` devuelve `false`.
+
+## Metal Video Filter
+
+### Metal Video Filter Block
+
+El `MetalVideoFilterBlock` aplica ajustes de color e imagen en la GPU usando el framework Apple Metal. Brillo, contraste, saturación, tono, gamma, nitidez, sepia, inversión, grano de película, viñeteado, croma y una LUT 3D se aplican en una sola pasada de GPU.
+
+#### Información del bloque
+
+Nombre: MetalVideoFilterBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Entrada de video | Video sin comprimir | 1 |
+| Salida de video | Video sin comprimir | 1 |
+
+#### Configuración
+
+El bloque acepta una instancia de `MetalVideoFilterSettings`:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | :---: | --- |
+| `Brightness` | `double` | 0.0 | Ajuste de brillo, de -1.0 a 1.0 |
+| `Contrast` | `double` | 1.0 | Ajuste de contraste, de 0.0 a 2.0 |
+| `Saturation` | `double` | 1.0 | Ajuste de saturación, de 0.0 a 2.0 |
+| `Hue` | `double` | 0.0 | Rotación de tono, de -1.0 a 1.0 |
+| `Gamma` | `double` | 1.0 | Corrección gamma, de 0.01 a 10.0 |
+| `Sharpness` | `double` | 0.0 | Desenfoca por debajo de 0, enfoca por encima, de -1.0 a 1.0 |
+| `Sepia` | `double` | 0.0 | Cantidad de mezcla sepia, de 0.0 a 1.0 |
+| `Invert` | `bool` | false | Invierte los colores |
+| `Noise` | `double` | 0.0 | Cantidad de grano de película, de 0.0 a 1.0 |
+| `Vignette` | `double` | 0.0 | Oscurecimiento del viñeteado, de 0.0 a 1.0 |
+| `ChromaKeyEnabled` | `bool` | false | Activa la eliminación por croma (pantalla verde) |
+| `ChromaKeyColor` | `uint` | 0xFF00FF00 | Color objetivo del croma en formato ARGB |
+| `ChromaKeyTolerance` | `double` | 0.2 | Tolerancia de coincidencia de color del croma, de 0.0 a 1.0 |
+| `ChromaKeySmoothness` | `double` | 0.1 | Suavidad de los bordes del croma, de 0.0 a 1.0 |
+| `LutFile` | `string` | null | Ruta a un archivo LUT 3D (`.cube` o `.png`); null desactiva la LUT |
+
+Llame a `Settings.Update()` tras cambiar una propiedad para aplicarla a una tubería en ejecución.
+
+#### Pipeline de ejemplo
+
+```mermaid
+graph LR;
+    VideoSource-->MetalVideoFilterBlock;
+    MetalVideoFilterBlock-->VideoRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var videoSource = new IOSVideoSourceBlock(videoSettings);
+
+// Imagen más cálida y algo más contrastada, con un viñeteado suave
+var settings = new MetalVideoFilterSettings
+{
+    Brightness = 0.05,
+    Contrast = 1.15,
+    Saturation = 1.2,
+    Vignette = 0.3
+};
+var filter = new MetalVideoFilterBlock(settings);
+pipeline.Connect(videoSource.Output, filter.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(filter.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Disponibilidad
+
+```csharp
+bool available = MetalVideoFilterBlock.IsAvailable();
+```
+
+Devuelve `true` si el plugin de GStreamer `vfmetalvideofilter` está disponible en el sistema actual.
+
+#### Plataformas
+
+macOS, iOS. En iOS, los elementos Metal forman parte únicamente del runtime del dispositivo: no están disponibles en el Simulador de iOS, donde `IsAvailable()` devuelve `false`.
 
 ## Requisitos de plataforma
 
@@ -469,7 +550,7 @@ await pipeline.StartAsync();
 var pipeline = new MediaBlocksPipeline();
 
 // Fuente de audio macOS
-var audioSource = new OSXAudioSourceBlock(audioSettings);
+var audioSource = new SystemAudioSourceBlock(audioSettings);
 
 // Salida de audio macOS
 var audioSink = new OSXAudioSinkBlock();

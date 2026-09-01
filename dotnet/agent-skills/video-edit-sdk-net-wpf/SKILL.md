@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK .NET (non-linear editor) into a
 
 This skill helps you add **VisioForge Video Edit SDK .NET** to a Windows WPF application. The SDK is a non-linear editor (NLE): it cuts, trims, merges, transcodes, and applies effects to **existing** video and audio files. It does **not** capture from cameras or screen — for live capture see `video-capture-sdk-net-wpf`. The SDK is Windows-only (DirectShow / Media Foundation under the hood); for cross-platform editing (macOS, iOS, Android, Linux), use `video-edit-sdk-x-wpf` or one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills.
 
-Pinned NuGet version: **`2026.5.4`** (matches the official Cut Video File and Video Join Demo samples). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.8.16`** (matches the official Cut Video File and Video Join Demo samples). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -37,7 +37,7 @@ The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
 </ItemGroup>
 ```
 
@@ -45,7 +45,7 @@ Add codec-heavy outputs (WebM, FFMPEG-based custom containers) by adding the mat
 
 ### Full minimal csproj
 
-See `references/Sample.csproj`. Adapted from the official Cut Video File sample (`x:/MediaFrameworkDotNet/_SETUP/GitHub/Video Edit SDK/WPF/CSharp/Cut Video File/`). Changes vs upstream: the in-repo `<ProjectReference>` is replaced by `<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.5.4" />`; the demo's hard-coded `<Platform>x64</Platform>` is removed (default AnyCPU works — see "Project platform" below); `<AssemblyName>` is set to `WPF Cut Video File` for clarity. The bundled file builds standalone against the public NuGet package.
+See `references/Sample.csproj`. Adapted from the official Cut Video File sample (`x:/MediaFrameworkDotNet/_SETUP/GitHub/Video Edit SDK/WPF/CSharp/Cut Video File/`). Changes vs upstream: the in-repo `<ProjectReference>` is replaced by `<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />`; the demo's hard-coded `<Platform>x64</Platform>` is removed (default AnyCPU works — see "Project platform" below); `<AssemblyName>` is set to `WPF Cut Video File` for clarity. The bundled file builds standalone against the public NuGet package.
 
 ### Project platform
 

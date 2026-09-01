@@ -447,7 +447,7 @@ para un ejemplo más completo.
 
 Use el agent skill `gstreamer-doc` — o, en Windows, el
 `gst-inspect-1.0.exe` local en
-`C:\gstreamer\1.0\msvc_x86_64x\bin\gst-inspect-1.0.exe` — para
+`C:\gstreamer\1.0\msvc_x86_64\bin\gst-inspect-1.0.exe` — para
 inspeccionar cualquier elemento antes de envolverlo:
 
 ```cmd

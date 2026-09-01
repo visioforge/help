@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK .NET into a .NET console app
 
 This skill helps you add **VisioForge Video Capture SDK .NET** to a .NET console application — no window, no UI thread, no preview surface. The host process drives the SDK directly: enumerate devices, configure inputs, start recording, keep the process alive while frames flow, stop and dispose. The SDK is Windows-only (DirectShow / Media Foundation under the hood) — for cross-platform headless capture (macOS, iOS, Android, Linux) use one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills.
 
-Pinned NuGet version: **`2026.5.4`** (matches the [official Video Capture Console sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/Console/Video%20Capture%20Demo)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.8.16`** (matches the [official Video Capture Console sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/Console/Video%20Capture%20Demo)). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -33,7 +33,7 @@ The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
 </ItemGroup>
 ```
 

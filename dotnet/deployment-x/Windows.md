@@ -138,6 +138,51 @@ When deploying VisioForge-based applications for Windows, consider these recomme
 4. For security-sensitive applications, consider using the UPX compressed versions to obfuscate native libraries
 5. Always test your deployment on a clean system to ensure all dependencies are properly resolved
 
+## The shared native plugin cache
+
+At start-up the SDK does not load its GStreamer libraries from your application's output folder directly.
+It mirrors that folder's `x64`, `x86` or `arm64` subfolder into a shared location and loads from there:
+
+```text
+%PUBLIC%\.gstreamer\<sdk-version>-<native-set>\<arch>
+```
+
+GStreamer keeps a plugin registry that records each plugin by its **absolute path**. A single canonical
+folder therefore lets every VisioForge application on the machine share one warm registry, so only the
+first start after an SDK upgrade pays the cost of scanning the plugin set; every later start on any
+application reuses it. The folder also stays writable, which an installed application's own directory
+under `Program Files` is not.
+
+The folder is keyed to the SDK version **and** to a stamp of the core and Libav redistributables the
+application actually deployed - the `VisioForge.CrossPlatform.*` packages version independently of the managed
+SDK - so applications carrying different redistributables no longer overwrite each other's libraries on every
+start. Two deployments differing only in a package neither marker covers (OpenCV, AWS, a camera vendor's) do
+still share a folder; the file names in those packages are disjoint from everything else, so the effect is a
+few files being re-copied, not a wrong library being loaded. A cache the SDK created and nothing has started for
+30 days is removed; a folder left by an older SDK that used the previous shared layout is left alone, because
+applications built on that release still load from it.
+
+Two consequences worth knowing when you test a deployment:
+
+- The cache accumulates the libraries of every application of that SDK version on the machine. A
+  development box that has run a fuller package set can therefore satisfy a dependency your application
+  does not actually ship - and the same application then fails on a clean machine.
+- Clearing `%PUBLIC%\.gstreamer` is safe at any time; the next start rebuilds it.
+
+To take the shared cache out of the picture and load exactly what your application deployed, point
+`VisioForgeX.CacheFolder` at your own native folder **before** calling `InitSDK`:
+
+```csharp
+VisioForgeX.CacheFolder = Path.Combine(AppContext.BaseDirectory, "x64");
+VisioForgeX.InitSDK();
+```
+
+This is the right setting for verifying that a redistributable is complete, and for an application that
+must not write outside its own directory. The cost is that the application no longer shares the
+machine-wide registry and scans the plugin set itself on every first start.
+
+MAUI, WinUI 3 and Unity applications always load in place and never use the shared cache.
+
 ## Troubleshooting Common Issues
 
 ### Deployment Issues

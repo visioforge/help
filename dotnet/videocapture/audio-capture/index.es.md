@@ -68,7 +68,7 @@ dotnet add package VisioForge.DotNet.Core
 dotnet add package VisioForge.DotNet.VideoCapture
 ```
 
-Agregue el [paquete de redistribución](../../deployment-x/index.md) para su plataforma (por ejemplo, `VisioForge.DotNet.Redist.Base.Windows.x64`).
+Agregue el [paquete de redistribución](../../deployment-x/index.md) para su plataforma (por ejemplo, `VisioForge.DotNet.Core.Redist.Base.x64`).
 
 Los mismos paquetes se usan para la prueba de 30 días y las aplicaciones con licencia. Consulte la [página de licencias de VisioForge](https://www.visioforge.com/licensing) para conocer las condiciones de la prueba y la activación mediante `.vflicense`.
 

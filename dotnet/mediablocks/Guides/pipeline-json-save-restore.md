@@ -159,6 +159,39 @@ if (result.Success)
 }
 ```
 
+### Network sources are probed when the pipeline starts
+
+A document carries a source's endpoint, never its media information: restoring one contacts nothing.
+Two sources need that information before they can be built — `RTSPRAWSourceBlock` picks its
+depayloader and parser from the stream layout, and the desktop `NDISourceBlock` creates its converters
+from the stream counts — so `StartAsync` probes them for you, once, before the graph is built. The
+camera or sender has to be reachable at that moment; if it is not, `StartAsync` returns `false` and
+logs which source could not be read.
+
+The synchronous `Start` has nowhere to await a probe and does not do this, and neither do the
+`VideoCaptureCoreX` and `MediaPlayerCoreX` engines, which build their graph through it. Restore a
+document whose pipeline you intend to start that way by replacing those settings with ones built
+through `RTSPRAWSourceSettings.CreateAsync` / `NDISourceSettings.CreateAsync` after materialization.
+
+### Audio devices are matched back to this machine
+
+A document stores what identifies an audio device — its name, the API it belongs to, the endpoint path
+where the platform publishes one, and, on macOS, the stable CoreAudio `unique-id` — and never the
+enumerator's live handle, which means nothing outside the process that made it. Materialization
+matches that identity against the devices this machine has now and hands the block a live device
+again. That is also why a restored pipeline opens the right endpoint: the numeric CoreAudio id and
+the WASAPI device path are reassigned between runs, and the match re-reads the current ones.
+
+If the device is gone, the pipeline still builds — on another device of the same API, reported as an
+`MBS063` warning naming both. If the machine has no device of that API at all, the block keeps the
+document's identity and materialization reports `MBS064`; the block will not open anything.
+
+Matching enumerates devices, which on a cold process starts a GStreamer device monitor and can take
+seconds, so call `Materialize` off the UI thread — or enumerate once beforehand. Inputs and outputs
+are cached separately: `AudioSourcesAsync` warms capture devices, `AudioOutputsAsync` warms
+renderers, and on Apple platforms the asynchronous capture call is also the one that asks for
+microphone permission. The synchronous match inside `Materialize` does neither.
+
 ## Validating before you build
 
 `Validate` answers the same questions materialization would, without constructing anything — so a UI
@@ -250,6 +283,8 @@ whole list at once. Each carries a `Severity`, a `Code`, a `Message` and the `Bl
 | `MBS060` | a block did not expose its settings to a snapshot |
 | `MBS061` | a block could not be named in a snapshot |
 | `MBS062` | a connection could not be expressed in a snapshot |
+| `MBS063` | the audio device a block names is gone, and another device of the same API is used instead |
+| `MBS064` | the audio device a block names could not be attached at all — nothing of that API is present, or the lookup failed |
 
 ## Discovering block types
 

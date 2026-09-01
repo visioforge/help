@@ -6,6 +6,7 @@ tags:
   - .NET
   - MediaBlocksPipeline
   - Windows
+  - macOS
   - GStreamer
   - OpenCV
   - Effects
@@ -28,7 +29,7 @@ primary_api_classes:
 
 Le `VideoStabilizationBlock` supprime les tremblements de caméra d'un flux vidéo en direct ou enregistré en temps réel. Il estime le mouvement global entre les images (translation et rotation) à l'aide d'un flux optique épars, lisse la trajectoire de caméra obtenue avec une fenêtre causale de moyenne mobile, puis déforme chaque image pour la ramener sur la trajectoire lissée. Un léger zoom central (rapport de recadrage) masque les bords exposés par la compensation.
 
-Le bloc s'appuie sur l'élément GStreamer `vfdeshake` d'OpenCV et nécessite donc le redistribuable OpenCV du SDK. Il est actuellement disponible sous Windows.
+Le bloc s'appuie sur l'élément GStreamer `vfdeshake` d'OpenCV et nécessite donc le redistribuable OpenCV du SDK. Il est actuellement disponible sous Windows et macOS.
 
 La latence est nulle : seules les images passées sont utilisées pour le lissage, de sorte que le bloc peut être utilisé dans des pipelines en direct.
 

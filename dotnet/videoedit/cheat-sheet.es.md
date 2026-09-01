@@ -58,19 +58,13 @@ Video Edit SDK ensambla líneas de tiempo, aplica transiciones/efectos/superposi
 
 ## Paquetes NuGet
 
-Motor multiplataforma (recomendado para proyectos nuevos):
+Un solo paquete incluye ambos motores: `VideoEditCoreX` y el heredado `VideoEditCore` conviven en él, así que elegir motor es una decisión de código, no de empaquetado:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core" Version="*" />
-<PackageReference Include="VisioForge.DotNet.VideoEditX" Version="*" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
 ```
 
-Motor heredado exclusivo de Windows:
-
-```xml
-<PackageReference Include="VisioForge.DotNet.Core" Version="*" />
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="*" />
-```
+Arrastra `VisioForge.DotNet.Core` como dependencia; no hace falta referenciar `Core` por separado.
 
 Integración de UI (elija el framework que utilice):
 

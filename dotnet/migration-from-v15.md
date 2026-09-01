@@ -133,15 +133,18 @@ You need additional packages for X-engines:
 <!-- Platform runtime (required for X-engines) -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.*" />
 
-<!-- UI package (choose one based on your UI framework) -->
-<PackageReference Include="VisioForge.DotNet.Core.UI.WPF" Version="2026.*" />
-<!-- OR -->
-<PackageReference Include="VisioForge.DotNet.Core.UI.WinForms" Version="2026.*" />
-<!-- OR -->
+<!-- UI package - only for MAUI, Avalonia, WinUI and Uno; choose one -->
 <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.*" />
 <!-- OR -->
 <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.*" />
+<!-- OR -->
+<PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.*" />
+<!-- OR -->
+<PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.*" />
 ```
+
+WPF and WinForms need no UI package at all — their `VideoView` controls were merged into
+`VisioForge.DotNet.Core`. The namespaces are unchanged, so only the `<PackageReference>` goes away.
 
 ### SDK initialization (required for X-engines)
 

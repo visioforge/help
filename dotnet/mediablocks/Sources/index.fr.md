@@ -309,7 +309,7 @@ Le `SpinnakerSourceBlock` se configure via `SpinnakerSourceSettings`. Propriét�
 - `ShutterType` (enum `SpinnakerSourceShutterType`) : type d'obturateur (par ex. `Rolling`, `Global`). Par défaut `Rolling`.
 
 Constructeur :
-`SpinnakerSourceSettings(string deviceName, Rect region, VideoFrameRate frameRate, SpinnakerPixelFormat pixelFormat = SpinnakerPixelFormat.RGB)`
+`SpinnakerSourceSettings(string name, Rect region, VideoFrameRate frameRate, SpinnakerPixelFormat pixelFormat = SpinnakerPixelFormat.RGB)`
 
 #### Informations sur le bloc
 
@@ -2190,13 +2190,13 @@ var pipeline = new MediaBlocksPipeline();
 
 var settings = new VideoMixerSourceSettings(1920, 1080, VideoFrameRate.FPS_30);
 
-// Ajouter une source fichier sur la moitié gauche
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("source1.mp4"));
-settings.Add(fileSource, new Rect(0, 0, 960, 1080));
+// Ajouter une source fichier sur la moitié gauche. Add prend les PARAMÈTRES de la source,
+// pas des blocs : le mélangeur crée lui-même le bloc de chaque entrée.
+// Rect est (left, top, right, bottom), donc la moitié droite se termine à 1920, pas à sa largeur.
+settings.Add(await UniversalSourceSettings.CreateAsync("source1.mp4"), new Rect(0, 0, 960, 1080));
 
 // Ajouter une webcam sur la moitié droite
-var videoSource = new SystemVideoSourceBlock(videoSourceSettings);
-settings.Add(videoSource, new Rect(960, 0, 960, 1080));
+settings.Add(videoSourceSettings, new Rect(960, 0, 1920, 1080));
 
 var mixer = new VideoMixerSourceBlock(pipeline, settings);
 
@@ -2749,11 +2749,11 @@ iOS (non disponible sur macOS Catalyst)
 
 ### Bloc source audio macOS
 
-`OSXAudioSourceBlock` fournit la capture audio depuis les périphériques d'entrée sur les plateformes macOS.
+`SystemAudioSourceBlock`, configuré avec `OSXAudioSourceSettings`, fournit la capture audio depuis les périphériques d'entrée sur les plateformes macOS.
 
 #### Informations sur le bloc
 
-Nom : OSXAudioSourceBlock.
+Nom : SystemAudioSourceBlock.
 
 | Direction du pin | Type de média | Nombre de pins |
 |---------------|:------------------:|:----------:|
@@ -2767,7 +2767,7 @@ Utilisez `DeviceEnumerator.Shared.AudioSourcesAsync()` pour obtenir la liste des
 
 ```mermaid
 graph LR;
-    OSXAudioSourceBlock-->AudioRendererBlock;
+    SystemAudioSourceBlock-->AudioRendererBlock;
 ```
 
 #### Exemple de code
@@ -2782,15 +2782,12 @@ var device = devices.Length > 0 ? devices[0] : null;
 OSXAudioSourceSettings audioSourceSettings = null;
 if (device != null)
 {
-    var formatItem = device.Formats[0];
-    if (formatItem != null)
-    {
-        audioSourceSettings = new OSXAudioSourceSettings(device.DeviceID, formatItem);
-    }
+    // le constructeur de périphérique enregistre l'unique-id CoreAudio stable et le format énuméré
+    audioSourceSettings = new OSXAudioSourceSettings(device);
 }
 
 // créer le bloc source audio macOS
-var audioSource = new OSXAudioSourceBlock(audioSourceSettings);
+var audioSource = new SystemAudioSourceBlock(audioSourceSettings);
 
 // créer le bloc de rendu audio
 var audioRenderer = new AudioRendererBlock();

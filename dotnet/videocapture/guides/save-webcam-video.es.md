@@ -244,19 +244,18 @@ Paquete principal del SDK:
 Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.11.0" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
 ```
 
 Para otras plataformas:
 
 ```xml
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.9.1" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
 
-<!-- Linux x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.11.0" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Linux.x64" Version="2025.11.0" />
+<!-- Linux x64 (requiere GStreamer 1.22+ del sistema) -->
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
 ```
 
 ## Compatibilidad Multiplataforma

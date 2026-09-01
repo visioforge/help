@@ -27,6 +27,8 @@ sidebar_label: Demuxers
 
 Los bloques demuxer son componentes esenciales en pipelines de procesamiento de medios. Toman un flujo multimedia, típicamente de un archivo o fuente de red, y lo separan en sus flujos elementales constituyentes, como video, audio y subtítulos. Esto permite el procesamiento o renderizado individual de cada flujo. VisioForge Media Blocks SDK .Net proporciona varios bloques demuxer para manejar varios formatos de contenedor.
 
+> **Las salidas del demultiplexor están codificadas.** Un demultiplexor separa el contenedor en sus flujos elementales; no los decodifica. Por eso debe haber un bloque decodificador entre una salida del demultiplexor y cualquier renderizador, capturador de muestras o bloque de procesamiento de video. `UniversalDecoderBlock` elige el decodificador a partir de los caps del flujo; también sirve un bloque específico del códec, como `H264DecoderBlock` o `HEVCDecoderBlock`. Conectar un demultiplexor directamente a un renderizador se construye e inicia sin error y luego no entrega nada.
+
 ## Bloque MPEG-TS Demux
 
 El `MPEGTSDemuxBlock` se usa para demultiplexar MPEG Transport Streams (MPEG-TS). MPEG-TS es un formato estándar para transmisión y almacenamiento de datos de audio, video y Program and System Information Protocol (PSIP). Se usa comúnmente en transmisión de televisión digital y streaming.
@@ -59,8 +61,10 @@ Este ejemplo muestra cómo conectar una fuente (como `HTTPSourceBlock` para un f
 ```mermaid
 graph LR;
     DataSourceBlock -- Datos MPEG-TS --> MPEGTSDemuxBlock;
-    MPEGTSDemuxBlock -- Flujo de Video --> VideoRendererBlock;
-    MPEGTSDemuxBlock -- Flujo de Audio --> AudioRendererBlock;
+    MPEGTSDemuxBlock -- Flujo de Video --> VideoDecoderBlock;
+    VideoDecoderBlock -- Video Decodificado --> VideoRendererBlock;
+    MPEGTSDemuxBlock -- Flujo de Audio --> AudioDecoderBlock;
+    AudioDecoderBlock -- Audio Decodificado --> AudioRendererBlock;
     MPEGTSDemuxBlock -- Flujo de Subtítulos --> SubtitleOverlayOrRendererBlock;
 ```
 
@@ -96,12 +100,18 @@ var audioRenderer = new AudioRendererBlock();
 // Conectar salidas del demuxer
 if (mpegTSDemuxBlock.VideoOutput != null)
 {
-    pipeline.Connect(mpegTSDemuxBlock.VideoOutput, videoRenderer.Input);
+    // El demultiplexor entrega datos codificados, por lo que se coloca un decodificador entre él y el renderizador.
+    var videoDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+    pipeline.Connect(mpegTSDemuxBlock.VideoOutput, videoDecoder.Input);
+    pipeline.Connect(videoDecoder.Output, videoRenderer.Input);
 }
 
 if (mpegTSDemuxBlock.AudioOutput != null)
 {
-    pipeline.Connect(mpegTSDemuxBlock.AudioOutput, audioRenderer.Input);
+    // El demultiplexor entrega datos codificados, por lo que se coloca un decodificador entre él y el renderizador.
+    var audioDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Audio);
+    pipeline.Connect(mpegTSDemuxBlock.AudioOutput, audioDecoder.Input);
+    pipeline.Connect(audioDecoder.Output, audioRenderer.Input);
 }
 
 if (mpegTSDemuxBlock.SubtitleOutput != null)
@@ -149,8 +159,10 @@ Este ejemplo muestra cómo conectar un bloque fuente que emite datos MP4/MOV sin
 ```mermaid
 graph LR;
     DataSourceBlock -- Datos MP4/MOV --> QTDemuxBlock;
-    QTDemuxBlock -- Flujo de Video --> VideoRendererBlock;
-    QTDemuxBlock -- Flujo de Audio --> AudioRendererBlock;
+    QTDemuxBlock -- Flujo de Video --> VideoDecoderBlock;
+    VideoDecoderBlock -- Video Decodificado --> VideoRendererBlock;
+    QTDemuxBlock -- Flujo de Audio --> AudioDecoderBlock;
+    AudioDecoderBlock -- Audio Decodificado --> AudioRendererBlock;
 ```
 
 ### Código de ejemplo
@@ -183,12 +195,18 @@ var audioRenderer = new AudioRendererBlock();
 // Conectar salidas del demuxer
 if (qtDemuxBlock.VideoOutput != null)
 {
-    pipeline.Connect(qtDemuxBlock.VideoOutput, videoRenderer.Input);
+    // El demultiplexor entrega datos codificados, por lo que se coloca un decodificador entre él y el renderizador.
+    var videoDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+    pipeline.Connect(qtDemuxBlock.VideoOutput, videoDecoder.Input);
+    pipeline.Connect(videoDecoder.Output, videoRenderer.Input);
 }
 
 if (qtDemuxBlock.AudioOutput != null)
 {
-    pipeline.Connect(qtDemuxBlock.AudioOutput, audioRenderer.Input);
+    // El demultiplexor entrega datos codificados, por lo que se coloca un decodificador entre él y el renderizador.
+    var audioDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Audio);
+    pipeline.Connect(qtDemuxBlock.AudioOutput, audioDecoder.Input);
+    pipeline.Connect(audioDecoder.Output, audioRenderer.Input);
 }
 
 // Iniciar pipeline
@@ -257,8 +275,10 @@ Este ejemplo demuestra usar `UniversalDemuxBlock` para demultiplexar un archivo.
 ```mermaid
 graph LR;
     DataSourceBlock -- Datos de Contenedor --> UniversalDemuxBlock;
-    UniversalDemuxBlock -- Flujo de Video 1 --> VideoRendererBlock1;
-    UniversalDemuxBlock -- Flujo de Audio 1 --> AudioRendererBlock1;
+    UniversalDemuxBlock -- Flujo de Video 1 --> VideoDecoderBlock1;
+    VideoDecoderBlock1 -- Video Decodificado --> VideoRendererBlock1;
+    UniversalDemuxBlock -- Flujo de Audio 1 --> AudioDecoderBlock1;
+    AudioDecoderBlock1 -- Audio Decodificado --> AudioRendererBlock1;
     UniversalDemuxBlock -- Flujo de Subtítulos 1 --> SubtitleHandler1;
 ```
 
@@ -310,7 +330,10 @@ if (videoOutputs.Length > 0)
 {
     // Ejemplo: conectar el primer flujo de video
     var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
-    pipeline.Connect(videoOutputs[0], videoRenderer.Input);
+    // El demultiplexor entrega datos codificados, por lo que se coloca un decodificador entre él y el renderizador.
+    var videoDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+    pipeline.Connect(videoOutputs[0], videoDecoder.Input);
+    pipeline.Connect(videoDecoder.Output, videoRenderer.Input);
 }
 
 // Salidas de audio (MediaBlockPad[])
@@ -319,7 +342,10 @@ if (audioOutputs.Length > 0)
 {
     // Ejemplo: conectar el primer flujo de audio
     var audioRenderer = new AudioRendererBlock();
-    pipeline.Connect(audioOutputs[0], audioRenderer.Input);
+    // El demultiplexor entrega datos codificados, por lo que se coloca un decodificador entre él y el renderizador.
+    var audioDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Audio);
+    pipeline.Connect(audioOutputs[0], audioDecoder.Input);
+    pipeline.Connect(audioDecoder.Output, audioRenderer.Input);
 }
 
 // Salidas de subtítulos (MediaBlockPad[])
@@ -384,8 +410,10 @@ Este ejemplo muestra cómo conectar un bloque fuente que proporciona datos de co
 ```mermaid
 graph LR;
     DataSourceBlock -- Datos de Contenedor --> UniversalAutoDemuxerBlock;
-    UniversalAutoDemuxerBlock -- Flujo de Video --> VideoRendererBlock;
-    UniversalAutoDemuxerBlock -- Flujo de Audio --> AudioRendererBlock;
+    UniversalAutoDemuxerBlock -- Flujo de Video --> VideoDecoderBlock;
+    VideoDecoderBlock -- Video Decodificado --> VideoRendererBlock;
+    UniversalAutoDemuxerBlock -- Flujo de Audio --> AudioDecoderBlock;
+    AudioDecoderBlock -- Audio Decodificado --> AudioRendererBlock;
 ```
 
 ### Código de ejemplo
@@ -415,12 +443,18 @@ var audioRenderer = new AudioRendererBlock();
 // Conectar salidas del demuxer (los pads quedan vinculados una vez que se detecta el formato).
 if (autoDemuxBlock.VideoOutput != null)
 {
-    pipeline.Connect(autoDemuxBlock.VideoOutput, videoRenderer.Input);
+    // El demultiplexor entrega datos codificados, por lo que se coloca un decodificador entre él y el renderizador.
+    var videoDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+    pipeline.Connect(autoDemuxBlock.VideoOutput, videoDecoder.Input);
+    pipeline.Connect(videoDecoder.Output, videoRenderer.Input);
 }
 
 if (autoDemuxBlock.AudioOutput != null)
 {
-    pipeline.Connect(autoDemuxBlock.AudioOutput, audioRenderer.Input);
+    // El demultiplexor entrega datos codificados, por lo que se coloca un decodificador entre él y el renderizador.
+    var audioDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Audio);
+    pipeline.Connect(autoDemuxBlock.AudioOutput, audioDecoder.Input);
+    pipeline.Connect(audioDecoder.Output, audioRenderer.Input);
 }
 
 // Iniciar pipeline una vez que la fuente de datos esté conectada.

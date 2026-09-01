@@ -85,7 +85,7 @@ attach to a `RawImage` (or any material).
 |---|---|---|---|---|
 | H.264 | ✅ | ✅ HW | ✅ HW (VideoToolbox) | ✅ HW (VideoToolbox) |
 | H.265 / HEVC | ✅ | ✅ HW | ✅ HW (VideoToolbox) | ✅ HW (VideoToolbox) |
-| AV1 | ✅ SW (libdav1d) | ✅ HW where available | ✅ HW where available | ✅ HW where available |
+| AV1 | ✅ SW (libdav1d) | ✅ HW where available | ✅ HW where available, SW (libdav1d) otherwise | ✅ HW where available, SW (libdav1d) otherwise |
 | VP8 / VP9 | ✅ | ✅ | ✅ | ✅ |
 | MPEG-4 part 2 | ✅ | ✅ | ✅ | ✅ |
 | MPEG-2 | ✅ | ✅ | ✅ | ✅ |
@@ -98,7 +98,7 @@ attach to a `RawImage` (or any material).
 |---|---|---|---|---|
 | H.264 | ✅ NVENC / QSV / SW | ✅ HW (MediaCodec) | ✅ HW (VideoToolbox) | ✅ HW (VideoToolbox) |
 | H.265 / HEVC | ✅ NVENC / QSV / SW | ✅ HW (MediaCodec) | ✅ HW (VideoToolbox) | ✅ HW (VideoToolbox) |
-| AV1 | ✅ SW (SVT-AV1) | ⚠️ device-dependent | ⚠️ SW only | ⚠️ SW only |
+| AV1 | ✅ SW (SVT-AV1) | ⚠️ device-dependent | ⚠️ SW only | ❌ not available |
 | VP8 / VP9 | ✅ SW | ✅ SW | ✅ SW | ✅ SW |
 | MJPEG | ✅ | ✅ | ✅ | ✅ |
 

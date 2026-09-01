@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Media Blocks SDK .NET** to a .NET console 
 
 In a console host the trade-off is simpler than on WPF/WinForms: there is no `VideoView` and therefore no `VideoRendererBlock`. Every running pipeline must terminate on a non-renderer sink (file sink, network sink, app-sink with custom delivery). The host process drives the pipeline directly and must keep the entry thread blocked until the pipeline reports stopped, or the muxer trailer never gets written.
 
-Pinned NuGet version: **`2026.5.4`** (matches the [official FileConvert sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/FileConvert)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.8.16`** (matches the [official FileConvert sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/FileConvert)). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -36,7 +36,7 @@ Three packages are required for a Windows console pipeline — the .NET wrapper 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.8.16" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
@@ -44,7 +44,7 @@ Three packages are required for a Windows console pipeline — the .NET wrapper 
 </ItemGroup>
 ```
 
-The redist version (`2026.4.29` here) tracks the underlying GStreamer/libav rebuild cadence and lags the wrapper version (`2026.5.4`) on purpose — pin both to the values shipped in the upstream sample's csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper. Mismatches between wrapper and redist in either direction are undefined behaviour and surface as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
+The redist version (`2026.4.29` here) tracks the underlying GStreamer/libav rebuild cadence and lags the wrapper version (`2026.8.16`) on purpose — pin both to the values shipped in the upstream sample's csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper. Mismatches between wrapper and redist in either direction are undefined behaviour and surface as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
 ### Full minimal csproj
 

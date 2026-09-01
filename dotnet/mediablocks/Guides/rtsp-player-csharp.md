@@ -67,8 +67,8 @@ Add the Media Blocks SDK NuGet package to your project:
 You also need the platform-specific runtime packages. For Windows:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.4.9" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2025.4.9" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
 ```
 
 For other platforms (macOS, Linux, Android, iOS), see the [Deployment Guide](../../deployment-x/index.md).

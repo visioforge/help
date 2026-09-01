@@ -51,8 +51,8 @@ Agregue los siguientes paquetes a su proyecto VB.NET:
 
 ```xml
 <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.2.19" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.11.0" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
 ```
 
 ## Ejemplo completo de grabación de pantalla en VB.NET

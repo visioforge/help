@@ -56,10 +56,16 @@ Les fichiers d'installation peuvent être téléchargés depuis les pages produi
 
 ### Avec les paquets NuGet
 
-Pour le développement multiplateforme ou les pipelines CI/CD, nos paquets NuGet offrent souplesse et intégration aisée :
+Pour le développement multiplateforme ou les pipelines CI/CD, nos paquets NuGet offrent souplesse et intégration aisée.
+
+Installez le paquet du SDK que vous avez acheté : chacun tire `VisioForge.DotNet.Core` en
+dépendance, il n'y a donc jamais à référencer `Core` directement :
 
 ```cmd
-Install-Package VisioForge.DotNet.Core
+Install-Package VisioForge.DotNet.VideoCapture   # Video Capture SDK .Net
+Install-Package VisioForge.DotNet.VideoEdit      # Video Edit SDK .Net
+Install-Package VisioForge.DotNet.MediaPlayer    # Media Player SDK .Net
+Install-Package VisioForge.DotNet.MediaBlocks    # Media Blocks SDK .Net
 ```
 
 Des paquets d'interface utilisateur supplémentaires peuvent être nécessaires selon la plateforme cible :

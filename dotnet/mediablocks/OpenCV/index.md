@@ -1,15 +1,12 @@
 ---
 title: OpenCV Computer Vision Blocks for Video Pipeline in C# .NET
-description: Add object detection, tracking, and image processing to video pipelines with OpenCV blocks in VisioForge Media Blocks SDK. Cross-platform computer vision.
+description: Add object detection, tracking, and image processing to video pipelines with OpenCV blocks in VisioForge Media Blocks SDK. Computer vision on Windows and macOS.
 sidebar_label: OpenCV
 tags:
   - Media Blocks SDK
   - .NET
   - Windows
   - macOS
-  - Linux
-  - Android
-  - iOS
 primary_api_classes:
   - SystemVideoSourceBlock
   - VideoRendererBlock
@@ -25,7 +22,7 @@ primary_api_classes:
 
 OpenCV (Open Source Computer Vision Library) blocks provide powerful video processing capabilities within the VisioForge Media Blocks SDK .Net. These blocks enable a wide range of computer vision tasks, from basic image manipulation to complex object detection and tracking.
 
-To use OpenCV blocks, ensure that the VisioForge.CrossPlatform.OpenCV.Windows.x64 (or corresponding package for your platform) NuGet package is included in your project.
+To use OpenCV blocks, add the redistributable NuGet package for your platform: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86` or `VisioForge.CrossPlatform.OpenCV.macOS`. These are the platforms the OpenCV GStreamer plugin currently ships for; on any other platform each block's `IsAvailable()` returns `false`.
 
 Most OpenCV blocks typically require a `videoconvert` element before them to ensure the input video stream is in a compatible format. The SDK handles this internally when you initialize the block.
 

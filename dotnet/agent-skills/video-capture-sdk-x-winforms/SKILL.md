@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a Windows Forms application. The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) that mirrors the legacy `VideoCaptureCore` API but runs on the cross-platform engine. Same C# code targets Windows / macOS / Linux / iOS / Android — the only thing that changes between platforms is the UI host (WinForms here, MAUI / Avalonia / Uno / native elsewhere) and the per-OS native redist NuGet package.
 
-Pinned NuGet versions: wrapper **`2026.5.4`**, redist **`2026.4.29`** (matches the [official Computer Vision sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WinForms/CSharp/Computer%20Vision) — the only WinForms sample shipped for Video Capture SDK X today). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.8.16`**, redist **`2026.4.29`** (matches the [official Computer Vision sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WinForms/CSharp/Computer%20Vision) — the only WinForms sample shipped for Video Capture SDK X today). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
 
 ## When to use this skill
 
@@ -33,11 +33,14 @@ Video Capture SDK X 2026.x supports `net472`, `net6.0-windows`, `net7.0-windows`
 
 ### NuGet packages
 
-Three packages are required for a Windows WinForms capture-and-record scenario — the .NET wrapper plus two native redist packages (Core runtime + libav muxers/encoders). The redists are **not** transitive; you must reference them explicitly:
+Three packages are required for a Windows WinForms capture-and-record scenario — the .NET wrapper plus two native redist packages (Core runtime + libav muxers/encoders). The redists are **not** transitive; you must reference them explicitly. `VisioForge.DotNet.Core.CV` is a fourth, and it is not optional if you build the bundled reference: its `Form1.cs` does `using VisioForge.Core.CV`, so without it the sample does not compile. Drop that line only once you have removed the computer-vision processors from your own code.
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.5.4" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
+  <!-- Required by the bundled reference sample (face / pedestrian detection,
+       car counter). Remove it if you drop those processors. -->
+  <PackageReference Include="VisioForge.DotNet.Core.CV" Version="2026.8.16" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
@@ -47,7 +50,7 @@ Three packages are required for a Windows WinForms capture-and-record scenario �
 
 `VisioForge.DotNet.VideoCapture` is the **same wrapper package** the legacy SDK uses — both `VideoCaptureCore` (legacy) and `VideoCaptureCoreX` (cross-platform) ship in it. What switches you to the X engine is the redist pair (`VisioForge.CrossPlatform.Core.Windows.x64` + a libav redist) plus the mandatory `VisioForgeX.InitSDKAsync()` boot below. The bundled `references/Sample.csproj` uses `VisioForge.CrossPlatform.Libav.Windows.x64.UPX` — a UPX-compressed variant (smaller download, slightly slower first-load); the non-UPX `VisioForge.CrossPlatform.Libav.Windows.x64` is interchangeable. Either works; pick one and stay consistent within the project.
 
-For computer-vision processors (face detection, pedestrian detection, car counter — used by the bundled reference) add `VisioForge.DotNet.Core.CV` at the same wrapper version. For 32-bit deployment, swap `.x64` for `.x86` on both redists. To support both architectures with a single AnyCPU build, reference both `.x64` and `.x86` of every redist and drop `<PlatformTarget>` from the csproj.
+`VisioForge.DotNet.Core.CV` carries the computer-vision processors (face detection, pedestrian detection, car counter) and always tracks the wrapper version. For 32-bit deployment, swap `.x64` for `.x86` on both redists. To support both architectures with a single AnyCPU build, reference both `.x64` and `.x86` of every redist and drop `<PlatformTarget>` from the csproj.
 
 ### Full minimal csproj
 
@@ -210,7 +213,7 @@ These are the four most common production issues — flag any of them on first r
 
 ### 1. `DllNotFoundException` / "Unable to load DLL" / "no element X"
 
-**Cause**: forgot the `await VisioForgeX.InitSDKAsync()` boot, **or** the redist NuGet for the build's RID is missing (`VisioForge.CrossPlatform.Core.Windows.x64` not referenced for an x64 build), **or** wrapper / redist version drift (e.g. wrapper `2026.5.4` paired with redist `2026.5.x` instead of `2026.4.29`).
+**Cause**: forgot the `await VisioForgeX.InitSDKAsync()` boot, **or** the redist NuGet for the build's RID is missing (`VisioForge.CrossPlatform.Core.Windows.x64` not referenced for an x64 build), **or** wrapper / redist version drift (e.g. wrapper `2026.8.16` paired with redist `2026.5.x` instead of `2026.4.29`).
 
 **Fix**: confirm `InitSDKAsync` runs before any other SDK call (see "Mandatory engine boot"). Confirm the redist NuGet matches the build platform (`x64` redist for x64, `x86` redist for x86, both for AnyCPU). Pin the redist version to the value shipped in the upstream csproj for your wrapper version — do not bump.
 

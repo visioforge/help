@@ -58,19 +58,13 @@ Video Edit SDK assembles timelines, applies transitions/effects/overlays, and ex
 
 ## NuGet packages
 
-Cross-platform engine (recommended for new projects):
+One package ships both engines — `VideoEditCoreX` and the legacy `VideoEditCore` live side by side in it, so the engine is a code-level choice, not a packaging one:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core" Version="*" />
-<PackageReference Include="VisioForge.DotNet.VideoEditX" Version="*" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
 ```
 
-Legacy Windows-only engine:
-
-```xml
-<PackageReference Include="VisioForge.DotNet.Core" Version="*" />
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="*" />
-```
+It pulls in `VisioForge.DotNet.Core` as a dependency; you do not need to reference `Core` separately.
 
 UI integration (pick the framework you target):
 

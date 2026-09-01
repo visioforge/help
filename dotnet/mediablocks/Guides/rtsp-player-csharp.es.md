@@ -68,8 +68,8 @@ Agregue el paquete NuGet del Media Blocks SDK a su proyecto:
 También necesita los paquetes de runtime específicos de la plataforma. Para Windows:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.4.9" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2025.4.9" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
 ```
 
 Para otras plataformas (macOS, Linux, Android, iOS), consulte la [Guía de Despliegue](../../deployment-x/index.md).

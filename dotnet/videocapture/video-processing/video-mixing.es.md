@@ -251,6 +251,8 @@ mezcladorVideo.RemoveAt(1);
 mezcladorVideo.Add(source, new Rect(0, 0, 1280, 720), chromaKey);
 ```
 
+Las mismas entradas también son accesibles directamente como `mezcladorVideo.Sources`, una `List<VideoMixerSourceStream>` donde cada elemento lleva su `Source`, su `Rectangle` y sus `ChromaKeySettings` opcionales. Esa lista es lo que se escribe cuando los settings se guardan en un documento de pipeline de Media Blocks, de modo que una composición guardada se restaura con sus fuentes, sus posiciones y sus chroma keys.
+
 Para cambios de layout **en runtime** (actualizar posición mientras el pipeline corre), baja a Media Blocks: construye tu pipeline con un `VideoMixerBlock` y usa sus métodos `Input_Get(Guid)` / `Input_Update(VideoMixerStream)` para mutar posición, tamaño, alpha o z-order sin reiniciar. Ver [referencia video-processing de Media Blocks](../../mediablocks/VideoProcessing/index.md) para la API de `VideoMixerBlock`.
 
 #### Configuración de salida

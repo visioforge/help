@@ -13,7 +13,6 @@ tags:
   - macOS
   - Linux
   - Android
-  - iOS
   - Capture
   - Streaming
   - Encoding
@@ -40,6 +39,13 @@ VisioForge soporta múltiples implementaciones de codificadores AV1, cada una co
 
 Actualmente, los codificadores AV1 están soportados en los motores multiplataforma: `VideoCaptureCoreX`, `VideoEditCoreX`, y `Media Blocks SDK`.
 
+!!! note "No disponible en iOS"
+
+    La codificación AV1 no está disponible en iOS. Apple no incluye ningún codificador AV1 por
+    hardware en ninguno de sus chips, y los codificadores AV1 por software no forman parte del
+    redistribuible de iOS. La *decodificación* AV1 sí funciona en iOS: mediante VideoToolbox a partir
+    del A17 Pro, y mediante el decodificador por software `dav1d` en el resto de dispositivos.
+
 ## Codificadores disponibles
 
 1. [Codificador AMD AMF AV1 (AMF)](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.AMFAV1EncoderSettings.html)
@@ -47,6 +53,13 @@ Actualmente, los codificadores AV1 están soportados en los motores multiplatafo
 3. [Codificador Intel QuickSync AV1 (QSV)](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.QSVAV1EncoderSettings.html)
 4. [Codificador AOM AV1](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.AOMAV1EncoderSettings.html)
 5. [Codificador RAV1E](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.RAV1EEncoderSettings.html)
+6. [Codificador SVT-AV1](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.SVTAV1EncoderSettings.html)
+
+El codificador SVT-AV1 se distribuye en el paquete de runtime adicional de su plataforma - el paquete `VisioForge.CrossPlatform.Core.Windows.Adds.*` de su arquitectura, `VisioForge.CrossPlatform.Core.macOS.Adds` (2026.8.25 o posterior) o `VisioForge.CrossPlatform.Core.macCatalyst.Adds` (2026.8.26 o posterior) - que se referencia junto al paquete principal. Sin él, `AV1EncoderBlock.IsAvailable(new SVTAV1EncoderSettings())` devuelve `false`.
+
+El codificador AOM AV1 está disponible en macOS, macCatalyst y Linux. Es un codificador por software orientado a la calidad y pensado para codificación offline; para el flujo de trabajo habitual por software prefiera SVT-AV1, que es bastante más rápido y escala mejor entre núcleos.
+
+Los paquetes `VisioForge.CrossPlatform.Core.macOS.Adds` y `VisioForge.CrossPlatform.Core.macCatalyst.Adds` incluyen el runtime AOM necesario a partir de la versión 2026.8.30. En Linux, instale un runtime de GStreamer que proporcione el elemento `av1enc`; use `AOMAV1EncoderSettings.IsAvailable()` para comprobar el runtime activo.
 
 Puede usar el codificador AV1 con [salida WebM](../output-formats/webm.md) o para streaming de red.
 
@@ -164,7 +177,7 @@ var encoderSettings = new QSVAV1EncoderSettings
 
 ## Codificador AOM AV1
 
-El codificador AOM AV1 de la Alliance for Open Media es una implementación de referencia basada en software.
+El codificador AOM AV1 de la Alliance for Open Media es una implementación de referencia basada en software. Prioriza la eficiencia de compresión y el control detallado de AV1 sobre la velocidad de codificación, por lo que es más adecuado para salida offline que para captura o streaming en vivo.
 
 ### Características
 
@@ -181,6 +194,8 @@ El codificador AOM AV1 de la Alliance for Open Media es una implementación de r
 - `CQ`: Modo de calidad restringida
 - `Q`: Modo de calidad constante
 
+El control de tasa solo funciona mientras `MaxQuantizer` deja al codificador margen para gastar menos bits. Su valor por defecto es 63, el cuantizador más alto de AV1; bajarlo impone un mínimo de calidad al flujo, y con 0 el codificador ignora `TargetBitrate` y todos los ajustes de buffer y de overshoot. `TargetBitrate` vale 0 por defecto, lo que significa que el codificador escala su propio valor por defecto al tamaño del cuadro (256 Kbps a 320x240, unos 6900 Kbps a 1920x1080); indíquelo en kilobits por segundo para fijarlo.
+
 ### Ejemplo de uso
 
 ```csharp
@@ -189,10 +204,11 @@ var encoderSettings = new AOMAV1EncoderSettings
     BufferInitialSize = TimeSpan.FromMilliseconds(4000),
     BufferOptimalSize = TimeSpan.FromMilliseconds(5000),
     BufferSize = TimeSpan.FromMilliseconds(6000),
-    CPUUsed = 4,                                   // Nivel de uso de CPU
+    CPUUsed = 4,                                   // Nivel de uso de CPU, 0-9
     DropFrame = 0,                                 // Deshabilitar descarte de cuadros
     RateControl = AOMAV1EncoderEndUsageMode.VBR,   // Modo de tasa de bits variable
-    TargetBitrate = 256,                           // 256 Kbps
+    MaxQuantizer = 63,                             // Techo del cuantizador - mantener en 63
+    TargetBitrate = 0,                             // 0 = escalar el valor por defecto al tamaño del cuadro
     Threads = 0,                                   // Conteo automático de hilos
     UseRowMT = true,                               // Habilitar threading basado en filas
     SuperResMode = AOMAV1SuperResolutionMode.None  // Sin super-resolución
@@ -203,12 +219,15 @@ var encoderSettings = new AOMAV1EncoderSettings
 
 RAV1E es un codificador AV1 rápido y seguro escrito en Rust.
 
+`Tiles` es lo que le permite usar más de un núcleo: una sola tesela codifica a la misma velocidad con 4 núcleos que con 32. El valor predeterminado de 16 codifica 8 segundos de 720p30 en unos 29 segundos frente a 84 segundos sin teselas, a cambio de aproximadamente un 1% más de tasa de bits. Póngalo a 0 para codificar el fotograma como una sola tesela.
+
 ### Características
 
 - Control de preajuste de velocidad
 - Configuración de cuantizador
 - Control de intervalo de keyframes
 - Modo de baja latencia
+- Codificación multinúcleo por teselas
 - Ajuste psicovisual
 
 ### Ejemplo de uso
@@ -222,8 +241,42 @@ var encoderSettings = new RAV1EEncoderSettings
     MinKeyFrameInterval = 12,                     // Intervalo mínimo de keyframes
     MinQuantizer = 0,                             // Valor mínimo de cuantizador
     Quantizer = 100,                              // Valor base de cuantizador
-    SpeedPreset = 6,                              // Preajuste de velocidad (0-10)
+    SpeedPreset = 10,                             // Preajuste de velocidad (0-10)
+    Tiles = 16,                                   // Teselas en que se divide el fotograma (0 - una tesela)
     Tune = RAV1EEncoderTune.Psychovisual          // Ajuste psicovisual
+};
+```
+
+## Codificador SVT-AV1
+
+SVT-AV1 (Scalable Video Technology for AV1) es un codificador AV1 por software de alto rendimiento que escala entre los núcleos de la CPU. Es considerablemente más rápido que RAV1E con una calidad comparable.
+
+### Características
+
+- Control del preset de velocidad/calidad (0-13)
+- Tres modos de control de tasa mutuamente excluyentes: CQP, CRF y CBR/VBR por bitrate
+- Control del periodo de fotogramas intra y del mosaico (tiling)
+- Número explícito de núcleos lógicos
+
+### Modos de control de tasa
+
+Establezca exactamente uno de los tres: los ajustes se aplican en este orden y prevalece el primero presente:
+
+1. `CQP` - parámetro de cuantización constante (1-63)
+2. `TargetBitrate` (con el techo opcional `MaxBitrate` para VBR), ambos en kbits/seg
+3. `CRF` - factor de tasa constante (1-63, por defecto 35), usado cuando no se establece ninguno de los anteriores
+
+### Ejemplo de uso
+
+```csharp
+var encoderSettings = new SVTAV1EncoderSettings
+{
+    TargetBitrate = 3000,                         // 3 Mbps (kbits/seg), activa CBR/VBR
+    MaxBitrate = 4500,                            // Techo de VBR (kbits/seg)
+    Preset = 8,                                   // Preset de velocidad (0-13), menor es más lento y mejor
+    IntraPeriodLength = 240,                      // Periodo de fotogramas intra, -2 para automático
+    TileColumns = 1,                              // log2: dos columnas de mosaico
+    TileRows = 1                                  // log2: dos filas de mosaico
 };
 ```
 
@@ -232,7 +285,7 @@ var encoderSettings = new RAV1EEncoderSettings
 1. Todos los codificadores implementan la interfaz `IAV1EncoderSettings`, proporcionando una forma consistente de crear bloques de codificador.
 2. Cada codificador tiene su propio conjunto específico de optimizaciones y compensaciones.
 3. Los codificadores de hardware (AMF, NVENC, QSV) generalmente proporcionan mejor rendimiento pero pueden tener requisitos de hardware específicos.
-4. Los codificadores de software (AOM, RAV1E) ofrecen más flexibilidad pero pueden requerir más recursos de CPU.
+4. Los codificadores de software (AOM, RAV1E, SVT-AV1) ofrecen más flexibilidad pero pueden requerir más recursos de CPU.
 
 ## Recomendaciones
 
@@ -241,6 +294,7 @@ var encoderSettings = new RAV1EEncoderSettings
 - Para GPUs Intel: Use el codificador QSV
 - Para máxima calidad: Use el codificador AOM
 - Para codificación eficiente en CPU: Use el codificador RAV1E
+- Para codificación por software rápida: Use el codificador SVT-AV1
 
 ## Mejores prácticas
 

@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Video Capture SDK X exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) — webcam / IP camera / screen / NDI sources, optional MP4 / AVI / MOV / MPEG-TS / WebM recording, snapshots, pause/resume. Same C# code targets all three desktop OSes — only the UI host (Avalonia here) and the per-OS native redist NuGet package change between platforms.
 
-Pinned NuGet versions: wrapper **`2026.5.4`**, Windows redists **`2026.4.29`**, macOS redist **`2025.9.1`** (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Avalonia)). The redist versions track the underlying GStreamer rebuild cadence per OS and lag the wrapper version on purpose — pin every redist to the value shipped in the upstream csproj for the wrapper version you're using; do not blindly bump.
+Pinned NuGet versions: wrapper **`2026.8.16`**, Windows redists **`2026.4.29`**, macOS redist **`2026.8.5`** (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Avalonia)). The redist versions track the underlying GStreamer rebuild cadence per OS and lag the wrapper version on purpose — pin every redist to the value shipped in the upstream csproj for the wrapper version you're using; do not blindly bump.
 
 ## When to use this skill
 
@@ -64,7 +64,7 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <OutputType>Exe</OutputType>
 </PropertyGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2025.9.1" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
 </ItemGroup>
 
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
@@ -226,7 +226,7 @@ These are the cross-platform pitfalls that bite first.
 **Cause**: the matching per-OS native runtime package is missing from the conditional `<ItemGroup>`, **or** `VisioForgeX.InitSDK()` was not called before the first `DeviceEnumerator` query / `VideoCaptureCoreX` constructor. Common slips:
 
 - Windows build but `VisioForge.CrossPlatform.Core.Windows.x64` was added unconditionally and no `Condition="$([MSBuild]::IsOsPlatform('Windows'))"` wraps it — works on Windows, but `dotnet build` on a macOS / Linux host fails NuGet restore because the Windows redist has no macOS / Linux RID.
-- Wrapper / redist version drift (e.g. wrapper `2026.5.4` paired with redist `2026.5.x` instead of `2026.4.29` Windows / `2025.9.1` macOS).
+- Wrapper / redist version drift (e.g. wrapper `2026.8.16` paired with redist `2026.5.x` instead of `2026.4.29` Windows / `2026.8.5` macOS).
 - `VisioForgeX.InitSDK()` placed after `new VideoCaptureCoreX(...)` instead of before it.
 
 **Fix**: cross-check against `references/Sample.csproj` — every per-OS `ItemGroup` needs the matching `Condition`. Pin every redist to the value shipped in the upstream csproj for your wrapper version. Confirm `InitSDK` is the very first SDK call in `MainWindow`'s constructor.

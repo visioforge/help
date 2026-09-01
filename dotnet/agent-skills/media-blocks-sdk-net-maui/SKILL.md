@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK .NET into a .NET MAUI cross-p
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a .NET MAUI application that targets **Windows, Android, iOS, and macOS (Mac Catalyst)** from a single codebase. Media Blocks is a *graph-based* pipeline SDK — you build a `MediaBlocksPipeline` by connecting `MediaBlock` nodes (sources → transforms → encoders → sinks/renderers) similar to GStreamer or DirectShow. That's the primary trade-off vs the higher-level capture/edit/player SDKs: more flexibility, more wiring code.
 
-Pinned NuGet version: **`2026.5.4`** for the MAUI SDK packages, with platform-specific redists at the versions shown in the csproj below — these match the official [Simple Capture MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/SimpleCapture). Newer 2026.x.x patch versions are drop-in compatible; keep `VisioForge.DotNet.MediaBlocks` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same version.
+Pinned NuGet version: **`2026.8.16`** for the MAUI SDK packages, with platform-specific redists at the versions shown in the csproj below — these match the official [Simple Capture MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/SimpleCapture). Newer 2026.x.x patch versions are drop-in compatible; keep `VisioForge.DotNet.MediaBlocks` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same version.
 
 ## When to use this skill
 
@@ -83,10 +83,10 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.0.16" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2025.9.1" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
 </ItemGroup>
 ```
 

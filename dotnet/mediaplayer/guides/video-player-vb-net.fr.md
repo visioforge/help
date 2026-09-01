@@ -56,8 +56,8 @@ Ce guide vous accompagne dans la construction d'une application de lecteur vidé
 
 ```xml
 <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.2.19" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.11.0" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
 ```
 
 ## Exemple complet de lecteur vidéo VB.NET

@@ -50,7 +50,7 @@ SDK supports the following video codecs:
 | H264       | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | H264/HEVC  | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | VP8/VP9    | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
-| AV1        | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
+| AV1        | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2718; (*) |
 | MJPEG      | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | WMV        | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | MPEG-4 ASP | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
@@ -60,6 +60,10 @@ SDK supports the following video codecs:
 | Theora     | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | DNxHD      | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | DV         | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
+
+(*) AV1 *decoding* is available on iOS - through VideoToolbox on A17 Pro and later, and through the
+software `dav1d` decoder everywhere else. AV1 *encoding* is not: Apple ships no AV1 hardware encoder
+on any chip, and the software AV1 encoders are not part of the iOS redist.
 
 ### GPU-accelerated encoding and decoding
 

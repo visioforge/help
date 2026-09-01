@@ -254,11 +254,13 @@ dimensiona un presupuesto de transporte fijo a partir de ella.
 ### Notas de plataforma
 
 - **10 bits** (`AppleMediaHEVCProfile.Main10`), el codificador con **alfa** y el control de tasa
-  requieren el runtime de GStreamer 1.28.6, que se incluye en los paquetes de macOS y Mac Catalyst.
-  El paquete de iOS todavía incluye 1.24.9, que no tiene ninguno de ellos: allí el control de tasa
-  se descarta con una advertencia en lugar de aplicarse en silencio, y los 10 bits no negocian.
+  requieren el runtime de GStreamer 1.28.6, que ahora se incluye en todos los paquetes de Apple:
+  macOS, Mac Catalyst e iOS. Que el VideoToolbox del dispositivo codifique realmente a 10 bits
+  sigue siendo una cuestión de cada chip.
 - `ForceHWUsage` fija el codificador al elemento exclusivo de hardware, fallando en lugar de caer
-  a una implementación por software. No está disponible en iOS.
+  a una implementación por software. No tiene efecto en iOS: allí todos los codificadores
+  VideoToolbox son por hardware, por lo que GStreamer no registra ningún elemento exclusivo de
+  hardware aparte.
 - En la ruta del pipeline de MediaBlocks el SDK siempre inserta `h265parse` después de este
   codificador: VideoToolbox emite solo `hvc1`, mientras que el multiplexor MPEG-TS detrás de la
   salida SRT/UDP/RIST acepta solo byte-stream. La ruta RTSP no necesita parser: `rtph265pay` acepta

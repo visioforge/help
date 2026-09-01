@@ -56,8 +56,8 @@ Esta guía le muestra paso a paso cómo crear una aplicación de reproductor de 
 
 ```xml
 <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.2.19" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2025.11.0" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2025.11.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
 ```
 
 ## Ejemplo completo de reproductor de video en VB.NET
