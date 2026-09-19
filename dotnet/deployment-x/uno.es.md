@@ -107,8 +107,8 @@ Agregue los siguientes paquetes a su proyecto:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2025.12.9" />
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2025.4.10" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
 </ItemGroup>
 ```
 
@@ -217,8 +217,8 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
   
   <!-- Referencias Core de VisioForge -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2025.12.9" />
-    <PackageReference Include="VisioForge.DotNet.Core" Version="2025.4.10" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.17" />
+    <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
   </ItemGroup>
   
   <!-- Plataforma Windows -->

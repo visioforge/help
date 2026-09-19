@@ -62,7 +62,7 @@ Los casos de uso comunes incluyen paneles de vigilancia, aplicaciones NVR (graba
 Agregue el paquete NuGet del Media Blocks SDK a su proyecto:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2025.5.2" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
 ```
 
 También necesita los paquetes de runtime específicos de la plataforma. Para Windows:

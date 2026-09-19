@@ -293,8 +293,8 @@ After setting up your video clips and transition, you'll need to start the proce
     var outputFormat = new MP4Output("output.mp4");
     
     // Tune encoder settings through the nested Video / Audio subsettings on MP4Output, e.g.:
-    // (outputFormat.Video as H264EncoderSettings).Bitrate = 5000;  // kbit/s
-    // (outputFormat.Audio as AACEncoderSettings).Bitrate = 192;    // kbit/s
+    // (outputFormat.Video as OpenH264EncoderSettings).Bitrate = 5000;  // kbit/s
+    // (outputFormat.Audio as AVENCAACEncoderSettings).Bitrate = 192;    // kbit/s
     // Output frame size comes from VideoEdit1.Output_VideoSize and frame rate from Output_VideoFrameRate.
     
     // STEP 2: Assign the output format to the VideoEdit component

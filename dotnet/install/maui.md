@@ -200,12 +200,19 @@ Add the iOS-specific package to your project:
 - **Privacy descriptions**: Add the necessary usage description strings in your Info.plist file for camera and microphone access:
   - `NSCameraUsageDescription`
   - `NSMicrophoneUsageDescription`
+  - `NSLocalNetworkUsageDescription` — required to reach a server or device on the local network. Without it, iOS 14+ silently drops LAN traffic (no prompt, no error).
 
 ### macOS Configuration
 
 For macOS Catalyst applications:
 
-#### 1. Configure Runtime Identifiers
+#### 1. Local Network Access
+
+If your application connects to a server or device on the local network, add
+`NSLocalNetworkUsageDescription` to the Mac Catalyst `Info.plist`. Without this key, iOS and
+Mac Catalyst can silently block local-network traffic without showing a permission prompt.
+
+#### 2. Configure Runtime Identifiers
 
 To ensure your application works correctly on both Intel and Apple Silicon Macs, specify the appropriate runtime identifiers:
 
@@ -218,7 +225,7 @@ To ensure your application works correctly on both Intel and Apple Silicon Macs,
 </PropertyGroup>
 ```
 
-#### 2. Enable Trimming
+#### 3. Enable Trimming
 
 For optimal performance on macOS, enable the PublishTrimmed option:
 

@@ -1,6 +1,6 @@
 ---
-title: Guide URL RTSP TP-Link et Tapo pour C# .NET — caméras IP
-description: Modèles d'URL RTSP pour caméras TP-Link et Tapo série C en C# .NET. Intégrez les modèles TL-SC, NC et Tapo avec le VisioForge Video Capture SDK.
+title: URL RTSP Tapo et TP-Link — port 554 et accès en C# .NET
+description: URL de flux RTSP des caméras Tapo C et TL-SC (stream1/stream2), port 554, identifiants par gamme et chemins d'instantané, avec du code C# .NET.
 tags:
   - Video Capture SDK
   - Media Blocks SDK

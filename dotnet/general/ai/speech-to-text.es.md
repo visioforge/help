@@ -181,8 +181,10 @@ Si solo necesita archivos, es más sencillo establecer `OutputSrtPath` y/o `Outp
 
 ### SubtitleRenderer — subtítulos en pantalla
 
-`SubtitleRenderer` controla una única superposición de texto en un `OverlayManagerBlock`: muestra el
-último subtítulo y lo oculta automáticamente tras la duración de visualización del segmento.
+`SubtitleRenderer` controla una única superposición de texto en un `OverlayManagerBlock`. Cada subtítulo
+aparece cuando la imagen llega al momento en que se pronunciaron las palabras, no cuando el transcriptor
+las terminó: el renderer almacena los segmentos reconocidos en un `CaptionTimeline` y la superposición
+elige el subtítulo de cada fotograma a partir de la marca de tiempo de ese fotograma.
 
 ```csharp
 using SkiaSharp;
@@ -203,21 +205,29 @@ var subtitleRenderer = new SubtitleRenderer(overlayManagerBlock, style);
 stt.OnSpeechRecognized += subtitleRenderer.OnSpeechRecognized;
 
 // ... más tarde, al finalizar:
-subtitleRenderer.Dispose(); // elimina la superposición y detiene el temporizador de ocultamiento automático
+subtitleRenderer.Clear();   // al empezar un archivo nuevo, o después de un salto
+subtitleRenderer.Dispose(); // elimina la superposición
 ```
 
-Conecte `SubtitleRenderer.OnSpeechRecognized` directamente como el manejador de eventos del bloque.
-Limita el tiempo en pantalla dentro de `[MinDisplay, MaxDisplay]` según la duración del segmento y
-llama a `OverlayManagerBlock.Video_Overlay_Update` desde cualquier hilo que lo invoque — despache la
-llamada si su framework de UI lo requiere. Valores predeterminados de `SubtitleStyle`:
-`FontName = "Arial"`, `FontSize = 32`, `Color = White`, `X = 50`, `Y = 50`, `MinDisplay = 1.5 s`,
-`MaxDisplay = 6 s`.
+Conecte `SubtitleRenderer.OnSpeechRecognized` directamente como el manejador de eventos del bloque: allí
+solo almacena, así que no hace falta despachar nada al hilo de UI para la superposición. El tiempo en
+pantalla es la duración del propio segmento limitada a `[MinDisplay, MaxDisplay]`. Llame a `Clear()` al
+empezar un archivo nuevo o después de un salto: las posiciones se leen como puntos en la línea de tiempo
+del flujo actual. Valores predeterminados de `SubtitleStyle`: `FontName = "Arial"`, `FontSize = 32`,
+`Color = White`, `X = 50`, `Y = 50`, `MinDisplay = 1.5 s`, `MaxDisplay = 6 s`.
 
-!!! note "Aún sin demo incluida"
-    `SubtitleRenderer` existe en el SDK y está documentado a partir de su código fuente, pero
-    actualmente ninguna demo incluida lo utiliza — las demos de Live Subtitles X actualizan una
-    etiqueta de UI directamente desde `OnSpeechRecognized` en su lugar. Use `SubtitleWriter` o
-    `OutputSrtPath`/`OutputVttPath` si solo necesita un archivo de subtítulos.
+Para controlar su propia etiqueta de subtítulos en lugar de una superposición, use la misma línea de
+tiempo directamente: aliméntela con `captions.Add(e)` desde `OnSpeechRecognized` y lea
+`captions.TextAt(position)` desde un temporizador de UI que consulte la posición de reproducción. Es lo
+que hacen las demos de Live Subtitles.
+
+!!! tip "Dónde verlo funcionando"
+    La demo *Live Subtitles* de WPF del Media Blocks SDK renderiza a través de `SubtitleRenderer`; las
+    demos de Media Player X y de MAUI del Media Blocks SDK controlan una etiqueta de UI desde un
+    `CaptionTimeline`. Las demos de Video Capture X asignan su etiqueta directamente desde
+    `OnSpeechRecognized`: una cámara y un micrófono en vivo ya marcan el ritmo del pipeline, así que no hay
+    posición de reproducción que consultar y allí un subtítulo solo puede retrasarse, nunca adelantarse.
+    Use `SubtitleWriter` o `OutputSrtPath`/`OutputVttPath` si solo necesita un archivo de subtítulos.
 
 ## Pipeline manual de Media Blocks
 

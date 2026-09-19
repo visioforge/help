@@ -1,6 +1,6 @@
 ---
-title: URL RTSP Hikvision en C# .NET — Guide caméra IP et NVR
-description: Format d'URL RTSP Hikvision pour DS-2CD, DS-2DE et modèles NVR en C# .NET. Découverte ONVIF, flux multi-canaux et intégration SDK VisioForge.
+title: URL RTSP Hikvision — canaux 101/102, NVR et C# .NET
+description: Format d'URL RTSP /Streaming/Channels/101 et 102 pour les caméras DS-2CD et DS-2DE, numérotation des canaux NVR, découverte ONVIF et code C# .NET.
 tags:
   - Video Capture SDK
   - Media Blocks SDK

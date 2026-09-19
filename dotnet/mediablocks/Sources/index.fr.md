@@ -1156,8 +1156,8 @@ Propriétés clés :
 
 ```mermaid
 graph LR;
-    RTMPSourceBlock-->VideoRendererBlock;
-    RTMPSourceBlock-->AudioRendererBlock;
+    RTMPSourceBlock-->H264ParseBlock-->H264DecoderBlock-->VideoRendererBlock;
+    RTMPSourceBlock-->UniversalDecoderBlock-->AudioRendererBlock;
 ```
 
 #### Exemple de code
@@ -1171,11 +1171,21 @@ var rtmpSettings = await RTMPSourceSettings.CreateAsync(
 
 var rtmpSource = new RTMPSourceBlock(rtmpSettings);
 
+// Les deux sorties RTMP transportent des flux compressés : chacune a donc besoin d'un analyseur/décodeur avant un moteur de rendu.
+var h264Parser = new H264ParseBlock();
+pipeline.Connect(rtmpSource.VideoOutput, h264Parser.Input);
+
+var h264Decoder = new H264DecoderBlock();
+pipeline.Connect(h264Parser.Output, h264Decoder.Input);
+
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(rtmpSource.VideoOutput, videoRenderer.Input);
+pipeline.Connect(h264Decoder.Output, videoRenderer.Input);
+
+var audioDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Audio);
+pipeline.Connect(rtmpSource.AudioOutput, audioDecoder.Input);
 
 var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(rtmpSource.AudioOutput, audioRenderer.Input);
+pipeline.Connect(audioDecoder.Output, audioRenderer.Input);
 
 await pipeline.StartAsync();
 ```
@@ -1347,7 +1357,7 @@ Windows, macOS, Linux.
 
 ### Bloc source NDI X
 
-Le `NDISourceXBlock` est une source NDI étendue qui capture la vidéo et l'audio depuis des sources réseau NDI. Il utilise les mêmes `NDISourceSettings` que `NDISourceBlock` mais s'appuie sur un élément NDI GStreamer alternatif (`ndisrcx`).
+Le `NDISourceXBlock` reçoit la vidéo et l'audio d'une source réseau NDI directement via le SDK NDI, et non via l'élément GStreamer `ndisrc` qu'utilise `NDISourceBlock`. Il accepte les mêmes `NDISourceSettings`. Préférez `NDISourceBlock`, qui est la voie multiplateforme ; ce bloc est réservé à Windows et existe pour ceux qui veulent le récepteur propre au SDK NDI.
 
 #### Informations sur le bloc
 
@@ -1356,7 +1366,7 @@ Nom : NDISourceXBlock.
 | Direction du pin | Type de média | Nombre de pins |
 | --- | :---: | :---: |
 | Vidéo en sortie | Vidéo non compressée | 1 |
-| Audio en sortie | Audio non compressé | 1 |
+| Audio en sortie | Audio non compressé | 1, uniquement lorsque l'émetteur possède une piste audio |
 
 #### Paramètres
 
@@ -1375,9 +1385,11 @@ Propriétés clés de `NDISourceSettings` :
 | `ReceiverName` | `string` | `"VF NDI Receiver"` | Nom de l'application réceptrice |
 | `Bandwidth` | `int` | `100` | −10 métadonnées uniquement, 10 audio uniquement, 100 qualité maximale |
 | `ColorFormat` | `NDIRecvColorFormat` | `UyvyBgra` | Format de pixel pour la vidéo reçue |
-| `Timeout` | `TimeSpan` | 5 s | Délai d'attente pour détecter une déconnexion |
-| `ConnectTimeout` | `TimeSpan` | 10 s | Délai d'attente pour la connexion initiale |
-| `TimestampMode` | `NDITimestampMode` | `Auto` | Mode de synchronisation des horodatages |
+| `ProbeTimeoutMs` | `int` | `10000` | Durée d'attente de la première trame vidéo lors de la construction |
+
+`Timeout`, `ConnectTimeout`, `TimestampMode`, `MaxQueueLength` et `DoTimestamp` appartiennent à
+l'élément `ndisrc` et sont ignorés ici, tout comme `FallbackSwitch` : l'activer inscrit un
+avertissement et la lecture continue sans bascule.
 
 #### Exemple de pipeline
 

@@ -16,6 +16,7 @@ primary_api_classes:
   - SileroVadSettings
   - SubtitleRenderer
   - SubtitleStyle
+  - CaptionTimeline
   - SubtitleWriter
   - SubtitleFormat
   - SpeechRecognizedEventArgs
@@ -91,6 +92,18 @@ informativo (permite a su aplicación etiquetar o elegir una descarga); el archi
 | `Base` | Buen valor predeterminado para CPU en tiempo real. |
 | `Small` / `Medium` | Mayor precisión, más pesado. |
 | `LargeV3` / `LargeV3Turbo` | Máxima precisión; se recomienda GPU. |
+
+## Dos formas de ejecutarlo
+
+El destino con el que termina la rama de audio decide el ritmo de todo el pipeline. Elija la receta que
+corresponda al trabajo; ambas usan el mismo `SpeechToTextBlock`:
+
+| Receta | Cómo se conecta | Úsela para |
+| --- | --- | --- |
+| **Velocidad máxima** | La rama de audio termina en un `NullRendererBlock` con `IsSync = false`, así que ningún reloj limita la ejecución. | Transcripción sin conexión, generación de SRT/VTT, procesos por lotes: terminar un archivo tan rápido como Whisper pueda. |
+| **Reproducción en tiempo real** | Un `AudioRendererBlock` audible marca el ritmo del pipeline a 1x y el transcriptor corre en su propia rama desacoplada. | Ver un archivo o una fuente en vivo con los subtítulos apareciendo junto a las palabras. |
+
+Las secciones siguientes cubren primero la receta de velocidad máxima y luego la de tiempo real.
 
 ## Transcribir un archivo multimedia
 
@@ -191,6 +204,10 @@ pipeline.Connect(stt.Output, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
+Aquí el transcriptor está en línea, por lo que marca el ritmo de la fuente: la salida audible se mantiene
+fluida solo mientras el modelo aguante. Colóquelo en su propia rama de un tee cuando el audio deba oírse
+haga lo que haga el modelo — vea «Reproducción en tiempo real con subtítulos en vivo» más abajo.
+
 ## Renderizar subtítulos en vivo sobre el video
 
 `SpeechToTextBlock` es solo de audio, por lo que no dibuja subtítulos por sí mismo. Para subtítulos
@@ -204,7 +221,7 @@ using VisioForge.Core.MediaBlocks.VideoProcessing;
 using VisioForge.Core.MediaBlocks.VideoRendering;
 
 var overlay = new OverlayManagerBlock();
-var videoRenderer = new VideoRendererBlock(pipeline, videoView) { IsSync = false };
+var videoRenderer = new VideoRendererBlock(pipeline, videoView) { IsSync = false }; // receta de velocidad máxima
 
 var subtitleRenderer = new SubtitleRenderer(
     overlay,
@@ -225,11 +242,22 @@ pipeline.Connect(source.VideoOutput, overlay.Input);
 pipeline.Connect(overlay.Output, videoRenderer.Input);
 ```
 
-`SubtitleRenderer` controla un único overlay de texto, muestra el último subtítulo reconocido y lo
-oculta automáticamente tras la duración del segmento limitada a `MinDisplay..MaxDisplay`.
-`OnSpeechRecognized` se emite en el hilo de streaming de GStreamer; haga marshal al hilo UI antes de tocar
-objetos estrictamente UI si su plataforma lo requiere. Deseche el renderer al detener el pipeline
-para quitar el overlay y el temporizador.
+`SubtitleRenderer` controla un único overlay de texto y sincroniza los subtítulos con el reloj del video:
+almacena los segmentos reconocidos en un `CaptionTimeline` y el overlay elige el subtítulo de cada
+fotograma a partir de la marca de tiempo de ese mismo fotograma. Así el subtítulo aparece cuando la imagen
+llega a las palabras — tanto si el reconocimiento va por delante de la reproducción como si va por detrás —
+y no interviene ningún temporizador. `OnSpeechRecognized` se emite en el hilo de streaming de GStreamer y
+el renderer solo almacena ahí, por lo que el overlay no necesita marshal al hilo UI (una lista de
+transcripción en su propia interfaz sí lo necesita). Deseche el renderer al detener el pipeline para quitar
+el overlay.
+
+Cada segmento se convierte en su propio subtítulo, mostrado desde su `StartTime` durante la duración del
+segmento limitada a `MinDisplay..MaxDisplay`. Un subtítulo que llega cuando la reproducción ya pasó su
+ventana no se descarta: comienza en la posición actual y se encola detrás de cualquier otro subtítulo
+atrasado, que es lo que mantiene los subtítulos en pantalla en la receta de velocidad máxima.
+
+El `IsSync = false` del renderer de video de arriba pertenece a esa receta: la imagen corre tan rápido como
+el transcriptor. Para reproducción en tiempo real ponga `IsSync = true`, como en la sección siguiente.
 
 | Propiedad de `SubtitleStyle` | Predeterminado | Descripción |
 | --- | --- | --- |
@@ -237,6 +265,105 @@ para quitar el overlay y el temporizador.
 | `Color` | `White` | Color del texto. |
 | `X` / `Y` | `50` / `50` | Posición del overlay en píxeles. |
 | `MinDisplay` / `MaxDisplay` | `1.5 s` / `6 s` | Tiempo mínimo y máximo en pantalla para cada subtítulo. |
+
+## Reproducción en tiempo real con subtítulos en vivo
+
+La reproducción y la transcripción quieren ramas separadas, así que divida el audio con un `TeeBlock`: una
+rama se reproduce por un `AudioRendererBlock` audible — eso es lo que mantiene el pipeline a 1x — y la otra
+alimenta a Whisper a través de un búfer lo bastante profundo para absorber una ráfaga de inferencia. Ambas
+ramas quedan sujetas al reloj; la nota tras el código explica por qué la del transcriptor también.
+
+```mermaid
+graph LR;
+    Source-- audio -->TeeBlock;
+    TeeBlock-->AudioRendererBlock;
+    TeeBlock-->SpeechToTextBlock;
+    SpeechToTextBlock-->NullRendererBlock;
+    Source-- video -->OverlayManagerBlock;
+    OverlayManagerBlock-->VideoRendererBlock;
+    SpeechToTextBlock-. OnSpeechRecognized .->SubtitleRenderer;
+    SubtitleRenderer-. subtítulos .->OverlayManagerBlock;
+```
+
+```csharp
+using VisioForge.Core.AI.Whisper.Subtitles;
+using VisioForge.Core.MediaBlocks.AudioRendering;
+using VisioForge.Core.MediaBlocks.Special;      // TeeBlock, NullRendererBlock
+using VisioForge.Core.MediaBlocks.VideoProcessing;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types.X.Special;          // TeeQueueSettings
+
+// Un buffer de 10 segundos en la rama del transcriptor absorbe una ráfaga de inferencia de Whisper para que
+// no frene al renderer. NO lo pongas a descartar: los tiempos de los segmentos vienen de un contador de
+// muestras, no de las marcas de tiempo de los búferes, así que un búfer descartado adelanta todos los
+// subtítulos y líneas SRT posteriores, durante el resto del archivo.
+var queueSettings = new TeeQueueSettings
+{
+    MaxSizeBuffers = 0,
+    MaxSizeBytes = 0,
+    MaxSizeTime = (ulong)TimeSpan.FromSeconds(10).TotalMilliseconds * 1000000,   // 10 s, en nanosegundos
+    Leaky = TeeQueueLeaky.No,
+};
+
+var audioTee = new TeeBlock(2, MediaBlockPadMediaType.Audio, queueSettings);
+var audioRenderer = new AudioRendererBlock();                                        // audible: marca el ritmo a 1x
+var sttSink = new NullRendererBlock(MediaBlockPadMediaType.Audio);   // sujeto al reloj: vea la nota de abajo
+
+var overlay = new OverlayManagerBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, videoView) { IsSync = true };    // imagen sujeta al reloj
+
+var subtitleRenderer = new SubtitleRenderer(overlay, new SubtitleStyle { X = 40, Y = 380 });
+stt.OnSpeechRecognized += subtitleRenderer.OnSpeechRecognized;
+
+pipeline.Connect(source.AudioOutput, audioTee.Input);
+pipeline.Connect(audioTee.Outputs[0], audioRenderer.Input);   // altavoces
+pipeline.Connect(audioTee.Outputs[1], stt.Input);             // transcriptor
+pipeline.Connect(stt.Output, sttSink.Input);
+
+pipeline.Connect(source.VideoOutput, overlay.Input);
+pipeline.Connect(overlay.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+`TeeBlock.Outputs[i]` son los pads src de las propias colas por salida del tee, así que cada rama ya está
+desacoplada: no hay que añadir ningún bloque de cola aparte. Tenga en cuenta que **en este modo todos los
+sumideros están sujetos al reloj, incluido el del transcriptor**: una consulta de posición del pipeline la
+responde el sumidero más avanzado, así que dejar ese libre informaría del frente del transcriptor en lugar de
+la posición de reproducción - segundos por delante del audio, que es justo lo que hace que los subtítulos
+aparezcan antes de tiempo.
+ Diez segundos de buffer absorben las ráfagas
+que produce un transcriptor que trabaja por segmentos; una máquina que no alcanza el tiempo real durante un
+tramo largo llena esa cola y la reproducción se entrecorta. Ese es el fallo honesto aquí, y la razón para no
+recurrir a `TeeQueueLeaky.Downstream`: descartar búferes mantendría la imagen fluida mientras desplaza en
+silencio todos los subtítulos posteriores fuera de sincronía.
+
+### Con MediaPlayerCoreX y VideoCaptureCoreX
+
+En los motores X el bloque entra en la propia cadena de audio del motor mediante
+`Audio_Processing_AddBlock`, por lo que queda **en serie** entre el decodificador y la salida de audio: una
+salida real de altavoz sufriría cortes con una inferencia larga. Termine la cadena con un renderer nulo y
+deje que `IsSync` elija el modo:
+
+```csharp
+// Renderer nulo sincronizado: ritmo 1x, en silencio. Con IsSync = false transcribe a velocidad máxima.
+player.Audio_OutputBlock = new NullRendererBlock(MediaBlockPadMediaType.Audio) { IsSync = true };
+player.Audio_Processing_AddBlock(stt);
+```
+
+En esa ruta no hay bloque de overlay, así que alimente una etiqueta de subtítulos de la interfaz con un
+`CaptionTimeline` propio y pregúntele qué corresponde a la posición actual de reproducción:
+
+```csharp
+var captions = new CaptionTimeline();
+stt.OnSpeechRecognized += (s, e) => captions.Add(e);   // seguro desde el hilo de streaming
+
+// Un temporizador de UI de 200 ms basta; el timeline decide qué subtítulo corresponde a esa posición.
+timer.Tick += async (s, e) => subtitleLabel.Text = captions.TextAt(await player.Position_GetAsync());
+```
+
+Llame a `CaptionTimeline.Clear()` antes de empezar un archivo nuevo y después de un salto: las posiciones se
+leen como puntos en la línea de tiempo del flujo actual. `SubtitleRenderer` expone el mismo `Clear()`.
 
 ## Resultados del reconocimiento
 
@@ -310,6 +437,8 @@ stt.OnSpeechRecognized += (sender, e) =>
 - **Live Subtitles** (Consola) — [Live Subtitles](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/Live%20Subtitles) — transcripción de archivos sin pérdidas e informe de progreso.
 - **Live Subtitles Demo** (WPF) — [Live Subtitles Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Live%20Subtitles%20Demo) — subtitulado en vivo de micrófono/cámara con una superposición en pantalla.
 - **Live Subtitles MB** (MAUI) — [Live Subtitles MB](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/Live%20Subtitles%20MB).
+
+Cada demo incluye un interruptor **Real-time playback** que alterna entre las dos recetas anteriores.
 
 ## Véase también
 

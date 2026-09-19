@@ -284,7 +284,7 @@ Obtener código de configuración específico de plataforma para copia de archiv
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>

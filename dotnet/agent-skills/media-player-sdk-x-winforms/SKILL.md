@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the playback SDK — to a Windows Forms application. The X SDK shares its runtime with Media Blocks and Video Capture X (GStreamer-backed under the hood) and exposes a high-level player god-object (`MediaPlayerCoreX`) that mirrors the legacy `MediaPlayerCore` API but runs on the cross-platform engine. Same C# code targets Windows / macOS / Linux / iOS / Android — the only thing that changes between platforms is the UI host (WinForms here, MAUI / Avalonia / Uno / native elsewhere) and the per-OS native redist NuGet package.
 
-Pinned NuGet versions: wrapper **`2026.8.16`**, redist **`2026.4.29`** (matches the upstream "Main Demo" sample at `_SETUP/GitHub/Media Player SDK X/WinForms/Main Demo/`). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.17`**, redist **`2026.9.11`** (matches the upstream "Main Demo" sample at `_SETUP/GitHub/Media Player SDK X/WinForms/Main Demo/`). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -22,8 +22,8 @@ Pinned NuGet versions: wrapper **`2026.8.16`**, redist **`2026.4.29`** (matches 
 
 - **Windows-only legacy stack** (DirectShow / Media Foundation, smaller deploy footprint, no GStreamer redist): use `media-player-sdk-net-winforms`. The two SDKs ship side-by-side and can coexist in one app.
 - **Custom pipeline topology** (split-with-tee for simultaneous playback + recording, multi-source mix, runtime sink swap, RTSP-to-file transcode without preview): use `media-blocks-sdk-net-winforms` — `MediaPlayerCoreX` is the high-level wrapper around exactly the same engine.
-- **Capture / recording** (webcam, IP camera, screen, NDI) instead of playback: use [`video-capture-sdk-x-winforms`](../video-capture-sdk-x-winforms/SKILL.md).
-- **WPF instead of WinForms**: same SDK, different UI shell → [`media-player-sdk-x-wpf`](../media-player-sdk-x-wpf/SKILL.md).
+- **Capture / recording** (webcam, IP camera, screen, NDI) instead of playback: use [`video-capture-sdk-x-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-x-winforms.zip).
+- **WPF instead of WinForms**: same SDK, different UI shell → [`media-player-sdk-x-wpf`](https://www.visioforge.com/.well-known/agent-skills/media-player-sdk-x-wpf.zip).
 - **Cross-platform host instead of WinForms**: same SDK, different UI shell → `media-player-sdk-x-{maui,avalonia,uno}`. The `MediaPlayerCoreX` API is identical across platforms.
 
 ## Project setup
@@ -38,11 +38,11 @@ Three packages are required for a Windows WinForms playback scenario — the .NE
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -132,9 +132,9 @@ These are the four most common production issues — flag any of them on first r
 
 ### 1. `DllNotFoundException` / "Unable to load DLL" / "no element X"
 
-**Cause**: forgot the `await VisioForgeX.InitSDKAsync()` boot, **or** the redist NuGet for the build's RID is missing (`VisioForge.CrossPlatform.Core.Windows.x64` not referenced for an x64 build), **or** wrapper / redist version drift (e.g. wrapper `2026.8.16` paired with redist `2026.5.x` instead of `2026.4.29`).
+**Cause**: forgot the `await VisioForgeX.InitSDKAsync()` boot, **or** the redist NuGet for the build's RID is missing (`VisioForge.CrossPlatform.Core.Windows.x64` not referenced for an x64 build), **or** wrapper / redist version drift (e.g. wrapper `2026.9.11` paired with an older native redist).
 
-**Fix**: confirm `InitSDKAsync` runs before any other SDK call (see "Mandatory engine boot"). Confirm the redist NuGet matches the build platform (`x64` redist for x64, `x86` redist for x86, both for AnyCPU). Pin the redist version to the value shipped in the upstream csproj for your wrapper version — do not bump.
+**Fix**: confirm `InitSDKAsync` runs before any other SDK call (see "Mandatory engine boot"). Confirm the redist NuGet matches the build platform (`x64` redist for x64, `x86` redist for x86, both for AnyCPU). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
@@ -182,8 +182,8 @@ The `references/` folder is self-contained — copy all of it into a fresh proje
 - **Official samples on GitHub**: <https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X>
 - **MCP server** (queryable API + class lookup): see `/.well-known/mcp.json` for the `search_api`, `get_class_info`, `get_code_example`, and `get_deployment_guide` tools.
 - **Adjacent skills**:
-    - [`media-player-sdk-x-wpf`](../media-player-sdk-x-wpf/SKILL.md) — same X SDK on WPF.
-    - [`video-capture-sdk-x-winforms`](../video-capture-sdk-x-winforms/SKILL.md) — capture / recording on WinForms with the same X engine.
+    - [`media-player-sdk-x-wpf`](https://www.visioforge.com/.well-known/agent-skills/media-player-sdk-x-wpf.zip) — same X SDK on WPF.
+    - [`video-capture-sdk-x-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-x-winforms.zip) — capture / recording on WinForms with the same X engine.
     - `media-player-sdk-net-winforms` — same scenario on the legacy Windows-only DirectShow/MF stack (smaller deploy footprint, no GStreamer redist).
     - `media-blocks-sdk-net-winforms` — same engine, lower-level graph-based API for custom pipeline topologies.
     - `media-player-sdk-x-maui` — same X SDK on .NET MAUI.

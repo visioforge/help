@@ -367,6 +367,8 @@ var availableVideoEncoders = output.GetVideoEncoders();
 var availableAudioEncoders = output.GetAudioEncoders();
 ```
 
+Sur Android et sur les plateformes Apple, la liste comprend également les encodeurs matériels de l'appareil : `Android H264`, `Android HEVC`, `Android AV1`, `Apple H264`, `Apple HEVC`. Sur Android, une entrée n'apparaît que si le MediaCodec de l'appareil fournit réellement cet encodeur, de sorte que HEVC n'est proposé que sur les téléphones capables de l'encoder.
+
 ### Problèmes courants et solutions
 
 1. **Accès aux fichiers** : Le constructeur MP4Output tente de vérifier l'accès en écriture en créant puis en supprimant immédiatement un fichier de test. Assurez-vous que l'application dispose des autorisations adéquates sur le répertoire de sortie.

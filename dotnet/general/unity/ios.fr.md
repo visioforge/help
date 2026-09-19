@@ -164,10 +164,13 @@ les builds incrémentaux sont en quelques secondes parce que Xcode met presque t
 
 ### Le SDK envoie-t-il des données vers les serveurs VisioForge ?
 
-Non. Le SDK tourne entièrement en processus — pas de télémétrie, pas d'appel-maison de
-licence, pas d'analyse d'usage. L'exigence `NSLocalNetworkUsageDescription` concerne
-purement les connexions RTSP / HTTP sortantes de votre app, qu'iOS traite comme visibles
-par l'utilisateur.
+Pas depuis l'application que vous distribuez. Il n'y a pas d'appel-maison de licence ni d'analyse
+d'usage, et une compilation exécutée sans débogueur n'envoie rien du tout. Lorsqu'un débogueur est
+attaché — c'est-à-dire uniquement pendant votre propre développement — le SDK signale ses propres
+erreurs sous forme anonymisée ; voyez [Télémétrie et confidentialité](../telemetry.md) pour savoir
+exactement ce que cela contient, et définissez `Debug_Telemetry = false` pour le désactiver.
+L'exigence `NSLocalNetworkUsageDescription` concerne purement les connexions RTSP / HTTP sortantes
+de votre application, qu'iOS traite comme visibles par l'utilisateur.
 
 ## Voir aussi
 

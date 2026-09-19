@@ -5,11 +5,11 @@ description: Integrate VisioForge Media Blocks SDK into a .NET console applicati
 
 # Media Blocks SDK .NET — Console integration
 
-This skill helps you add **VisioForge Media Blocks SDK .NET** to a .NET console application — no window, no UI thread, no preview surface. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`UniversalSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, `RTSPSinkBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `pipeline.Start()` (or `await pipeline.StartAsync()`). Compared to the higher-level Video Capture SDK (a single `VideoCaptureCore` god-object), Media Blocks gives you full control over the topology — multi-source mix, transcode without preview, network streaming sinks, dynamic source switch — at the cost of having to wire every edge yourself.
+This skill helps you add **VisioForge Media Blocks SDK .NET** to a .NET console application — no window, no UI thread, no preview surface. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`UniversalSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, `RTSPServerBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `pipeline.Start()` (or `await pipeline.StartAsync()`). Compared to the higher-level Video Capture SDK (a single `VideoCaptureCore` god-object), Media Blocks gives you full control over the topology — multi-source mix, transcode without preview, network streaming sinks, dynamic source switch — at the cost of having to wire every edge yourself.
 
 In a console host the trade-off is simpler than on WPF/WinForms: there is no `VideoView` and therefore no `VideoRendererBlock`. Every running pipeline must terminate on a non-renderer sink (file sink, network sink, app-sink with custom delivery). The host process drives the pipeline directly and must keep the entry thread blocked until the pipeline reports stopped, or the muxer trailer never gets written.
 
-Pinned NuGet version: **`2026.8.16`** (matches the [official FileConvert sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/FileConvert)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.9.17`** (matches the [official FileConvert sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/FileConvert)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it.
 
 ## When to use this skill
 
@@ -20,8 +20,8 @@ Pinned NuGet version: **`2026.8.16`** (matches the [official FileConvert sample]
 
 ## When NOT to use this skill
 
-- **Interactive UI** (live preview surface, buttons, file dialogs): use [`media-blocks-sdk-net-wpf`](../media-blocks-sdk-net-wpf/SKILL.md) — the WPF host has the same block API plus the `VideoView` / `VideoRendererBlock` pair for preview. `media-blocks-sdk-net-winforms` for WinForms.
-- **Plain webcam capture and record** (no custom topology): [`video-capture-sdk-net-console`](../video-capture-sdk-net-console/SKILL.md) is dramatically less code — one `VideoCaptureCore` object, no graph wiring.
+- **Interactive UI** (live preview surface, buttons, file dialogs): use [`media-blocks-sdk-net-wpf`](https://www.visioforge.com/.well-known/agent-skills/media-blocks-sdk-net-wpf.zip) — the WPF host has the same block API plus the `VideoView` / `VideoRendererBlock` pair for preview. `media-blocks-sdk-net-winforms` for WinForms.
+- **Plain webcam capture and record** (no custom topology): [`video-capture-sdk-net-console`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-console.zip) is dramatically less code — one `VideoCaptureCore` object, no graph wiring.
 - **Cross-platform** (macOS, iOS, Android, Linux): same SDK family, different host → `media-blocks-sdk-net-{maui,avalonia,uno,android,ios,macos}`. The block API is identical across platforms; only the redist NuGet family differs (`VisioForge.CrossPlatform.Core.macOS`, `.Linux`, etc. instead of `.Windows.x64`).
 
 ## Project setup
@@ -36,15 +36,15 @@ Three packages are required for a Windows console pipeline — the .NET wrapper 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 </ItemGroup>
 ```
 
-The redist version (`2026.4.29` here) tracks the underlying GStreamer/libav rebuild cadence and lags the wrapper version (`2026.8.16`) on purpose — pin both to the values shipped in the upstream sample's csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper. Mismatches between wrapper and redist in either direction are undefined behaviour and surface as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
+The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. A redist ahead of the wrapper is undefined behaviour and surfaces as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
 ### Full minimal csproj
 
@@ -61,7 +61,7 @@ This is the core mental shift from Video Capture SDK. There is no `Core.Start()`
 The five concepts you need (with the console-specific note on renderers):
 
 1. **`MediaBlocksPipeline`** — the container. Holds the GStreamer-equivalent runtime, bus, clock, error events. One pipeline per logical scenario; multiple pipelines per process are fine.
-2. **Source blocks** (`UniversalSourceBlock` for files / network URIs, `SystemVideoSourceBlock` for webcams, `RTSPSourceBlock`, `ScreenCaptureSourceBlock`, …) — produce media on output pads.
+2. **Source blocks** (`UniversalSourceBlock` for files / network URIs, `SystemVideoSourceBlock` for webcams, `RTSPSourceBlock`, `ScreenSourceBlock`, …) — produce media on output pads.
 3. **Transform blocks** (`H264EncoderBlock`, `AACEncoderBlock`, `VPXEncoderBlock`, `TeeBlock`, `VideoMixerBlock`, `AudioMixerBlock`, …) — accept on input pads, produce on output pads.
 4. **Sink blocks** — terminate the graph. **In a console host you do not use renderer sinks** (`VideoRendererBlock`, `AudioRendererBlock`) because there is no `VideoView` to bind to and no audio-output device association you want from a batch job — the constructors require host-UI handles you don't have. Use **file / network sinks** instead: `MP4SinkBlock`, `MPEGTSSinkBlock`, `WebMSinkBlock`, `RTSPServerBlock`, `SRTMPEGTSSinkBlock`, `RTMPSinkBlock`, `HLSSinkBlock`, …. Multi-stream sinks (any muxer) implement `IMediaBlockDynamicInputs` — call `mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video)` to create the video input pad, again for audio.
 5. **Connections** — `pipeline.Connect(producer.Output, consumer.Input)`. For tees and dynamic-input muxers you address `block.Outputs[i]` / the pad created by `CreateNewInput`. Connections must be made before `Start`; reconnecting at runtime is supported by specific blocks (live-source-switch, bridge) but not the general case.
@@ -192,7 +192,7 @@ These are the most common production issues — flag any of them on first run.
 
 **Cause**: missing redist NuGet (`VisioForge.CrossPlatform.Core.Windows.x64`, `VisioForge.CrossPlatform.Libav.Windows.x64.UPX`), or `<PlatformTarget>` doesn't match the redist's architecture (e.g. `<PlatformTarget>x86</PlatformTarget>` with the `.x64` redist), or the wrapper and redist versions drifted apart enough that the native ABI changed, or the TFM is bare `net10.0` instead of `net10.0-windows` so the `runtimes/win-*/native/` folder is never picked up.
 
-**Fix**: reference both redist packages from the "NuGet packages" section, set `<PlatformTarget>x64</PlatformTarget>` to match, use a `-windows`-suffixed TFM, and pin the redist version to the value used by the upstream sample for your wrapper version (do not blindly bump). For 32-bit deployment swap `.x64` for `.x86` in both redist names and set `<PlatformTarget>x86</PlatformTarget>`.
+**Fix**: reference both redist packages from the "NuGet packages" section, set `<PlatformTarget>x64</PlatformTarget>` to match, use a `-windows`-suffixed TFM, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. For 32-bit deployment swap `.x64` for `.x86` in both redist names and set `<PlatformTarget>x86</PlatformTarget>`.
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
@@ -210,7 +210,7 @@ These are the most common production issues — flag any of them on first run.
 
 **Cause**: console-specific. `VideoRendererBlock` and `AudioRendererBlock` are designed to terminate a graph at a UI surface (`VideoView` for WPF/WinForms/MAUI/Avalonia/Uno). Constructing them in a console host either throws on the missing host argument or constructs a renderer with no surface to draw into — frames flow until the renderer's queue saturates, then the upstream tee/encoder back-pressures and the pipeline appears to hang.
 
-**Fix**: do not use renderer blocks in a console host. Terminate the graph on a file sink (`MP4SinkBlock`, `MPEGTSSinkBlock`, `WebMSinkBlock`, …) or a network sink (`RTSPServerBlock`, `RTMPSinkBlock`, `SRTMPEGTSSinkBlock`, `HLSSinkBlock`, `WHIPSinkBlock`, …). If you genuinely need to consume frames in code from a console host, use `AppSinkBlock` / `VideoSampleGrabberBlock` and process the buffers in your callback instead of rendering them.
+**Fix**: do not use renderer blocks in a console host. Terminate the graph on a file sink (`MP4SinkBlock`, `MPEGTSSinkBlock`, `WebMSinkBlock`, …) or a network sink (`RTSPServerBlock`, `RTMPSinkBlock`, `SRTMPEGTSSinkBlock`, `HLSSinkBlock`, `WHIPSinkBlock`, …). If you genuinely need to consume frames in code from a console host, use `VideoSampleGrabberBlock` / `AudioSampleGrabberBlock` and process the buffers in your callback instead of rendering them.
 
 ### 5. Process exits before the file is finalised — output is empty / unplayable
 
@@ -251,7 +251,7 @@ The `references/` folder is self-contained — copy both files into a fresh proj
 - **Official samples on GitHub**: <https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console>
 - **MCP server** (queryable API + class lookup): see `/.well-known/mcp.json` for the `search_api`, `get_class_info`, `get_code_example`, and `get_deployment_guide` tools.
 - **Adjacent skills**:
-    - [`media-blocks-sdk-net-wpf`](../media-blocks-sdk-net-wpf/SKILL.md) — same SDK on WPF (with preview).
-    - [`video-capture-sdk-net-console`](../video-capture-sdk-net-console/SKILL.md) — high-level capture-and-record API on console; use this if you don't need a custom pipeline.
+    - [`media-blocks-sdk-net-wpf`](https://www.visioforge.com/.well-known/agent-skills/media-blocks-sdk-net-wpf.zip) — same SDK on WPF (with preview).
+    - [`video-capture-sdk-net-console`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-console.zip) — high-level capture-and-record API on console; use this if you don't need a custom pipeline.
     - `media-blocks-sdk-net-winforms` — same SDK on WinForms.
     - `media-blocks-sdk-net-{maui,avalonia,uno,android,ios,macos}` — same SDK on cross-platform hosts.

@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a Windows Forms application. The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) that mirrors the legacy `VideoCaptureCore` API but runs on the cross-platform engine. Same C# code targets Windows / macOS / Linux / iOS / Android — the only thing that changes between platforms is the UI host (WinForms here, MAUI / Avalonia / Uno / native elsewhere) and the per-OS native redist NuGet package.
 
-Pinned NuGet versions: wrapper **`2026.8.16`**, redist **`2026.4.29`** (matches the [official Computer Vision sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WinForms/CSharp/Computer%20Vision) — the only WinForms sample shipped for Video Capture SDK X today). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.17`**, redist **`2026.9.11`** (matches the [official Computer Vision sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WinForms/CSharp/Computer%20Vision) — the only WinForms sample shipped for Video Capture SDK X today). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -19,10 +19,10 @@ Pinned NuGet versions: wrapper **`2026.8.16`**, redist **`2026.4.29`** (matches 
 
 ## When NOT to use this skill
 
-- **Windows-only legacy stack** (DirectShow / Media Foundation, smaller deploy footprint, no GStreamer redist): use [`video-capture-sdk-net-winforms`](../video-capture-sdk-net-winforms/SKILL.md). The two SDKs ship side-by-side and can coexist in one app.
+- **Windows-only legacy stack** (DirectShow / Media Foundation, smaller deploy footprint, no GStreamer redist): use [`video-capture-sdk-net-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-winforms.zip). The two SDKs ship side-by-side and can coexist in one app.
 - **Custom pipeline topology** (split-with-tee, multi-source mix, transcode without preview, runtime sink swap): use `media-blocks-sdk-net-winforms` — `VideoCaptureCoreX` is the high-level wrapper around exactly the same engine.
 - **Playback only** (play files / streams without capturing): `media-player-sdk-net-winforms`.
-- **WPF instead of WinForms**: same SDK, different UI shell → [`video-capture-sdk-x-wpf`](../video-capture-sdk-x-wpf/SKILL.md).
+- **WPF instead of WinForms**: same SDK, different UI shell → [`video-capture-sdk-x-wpf`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-x-wpf.zip).
 - **Cross-platform host instead of WinForms**: same SDK, different UI shell → `video-capture-sdk-x-{maui,avalonia,uno}`. The `VideoCaptureCoreX` API is identical across platforms.
 
 ## Project setup
@@ -37,14 +37,14 @@ Three packages are required for a Windows WinForms capture-and-record scenario �
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
   <!-- Required by the bundled reference sample (face / pedestrian detection,
        car counter). Remove it if you drop those processors. -->
-  <PackageReference Include="VisioForge.DotNet.Core.CV" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.Core.CV" Version="2026.9.17" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -213,9 +213,9 @@ These are the four most common production issues — flag any of them on first r
 
 ### 1. `DllNotFoundException` / "Unable to load DLL" / "no element X"
 
-**Cause**: forgot the `await VisioForgeX.InitSDKAsync()` boot, **or** the redist NuGet for the build's RID is missing (`VisioForge.CrossPlatform.Core.Windows.x64` not referenced for an x64 build), **or** wrapper / redist version drift (e.g. wrapper `2026.8.16` paired with redist `2026.5.x` instead of `2026.4.29`).
+**Cause**: forgot the `await VisioForgeX.InitSDKAsync()` boot, **or** the redist NuGet for the build's RID is missing (`VisioForge.CrossPlatform.Core.Windows.x64` not referenced for an x64 build), **or** wrapper / redist version drift (e.g. wrapper `2026.9.11` paired with an older native redist).
 
-**Fix**: confirm `InitSDKAsync` runs before any other SDK call (see "Mandatory engine boot"). Confirm the redist NuGet matches the build platform (`x64` redist for x64, `x86` redist for x86, both for AnyCPU). Pin the redist version to the value shipped in the upstream csproj for your wrapper version — do not bump.
+**Fix**: confirm `InitSDKAsync` runs before any other SDK call (see "Mandatory engine boot"). Confirm the redist NuGet matches the build platform (`x64` redist for x64, `x86` redist for x86, both for AnyCPU). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
@@ -263,8 +263,8 @@ The `references/` folder is self-contained — copy all of it into a fresh proje
 - **Official samples on GitHub**: <https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X>
 - **MCP server** (queryable API + class lookup): see `/.well-known/mcp.json` for the `search_api`, `get_class_info`, `get_code_example`, and `get_deployment_guide` tools.
 - **Adjacent skills**:
-    - [`video-capture-sdk-x-wpf`](../video-capture-sdk-x-wpf/SKILL.md) — same X SDK on WPF.
-    - [`video-capture-sdk-net-winforms`](../video-capture-sdk-net-winforms/SKILL.md) — same scenario on the legacy Windows-only DirectShow/MF stack (smaller deploy footprint, no GStreamer redist).
+    - [`video-capture-sdk-x-wpf`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-x-wpf.zip) — same X SDK on WPF.
+    - [`video-capture-sdk-net-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-winforms.zip) — same scenario on the legacy Windows-only DirectShow/MF stack (smaller deploy footprint, no GStreamer redist).
     - `media-blocks-sdk-net-winforms` — same engine, lower-level graph-based API for custom pipeline topologies.
     - `video-capture-sdk-x-maui` — same X SDK on .NET MAUI.
     - `video-capture-sdk-x-avalonia` — same X SDK on Avalonia.

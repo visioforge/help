@@ -2279,7 +2279,7 @@ Output | Uncompressed video | 1
 
 ### Configuration
 
-`TextOverlayBlock` is configured using `TextOverlaySettings`. Key properties:
+On Windows, macOS, Linux, and iOS, `TextOverlayBlock` is configured using `TextOverlaySettings`. Key properties:
 
 - `Text` (string): The text to overlay.
 - `Font` (FontSettings): Font configuration (family, size, weight, etc.).
@@ -2294,6 +2294,8 @@ Output | Uncompressed video | 1
 - `DeltaX` (int): X position offset in pixels.
 - `DeltaY` (int): Y position offset in pixels.
 
+On Android, `TextOverlaySettings` supports simple and dynamic text only: `Text`, `TextProvider`, `Font`, `Color`, `X`, `Y`, and `Enabled`. `TextProvider` is invoked for every frame with the timestamp counted from the pipeline start and takes precedence over `Text`. It does not include the alignment, padding, position-offset, outline, mode, shading, or wrapping properties available on the other platforms. Its Android renderer also does not apply inherited `OverlayManagerText` settings for background, shadow, opacity, rotation, Z-order, display times, or custom dimensions. Use [OverlayManagerBlock](OverlayManagerBlock.md) with `OverlayManagerText` on Android when you need these features.
+
 ### The sample pipeline
 
 ```mermaid
@@ -2302,7 +2304,7 @@ graph LR;
     TextOverlayBlock-->VideoRendererBlock;
 ```
 
-### Sample code
+### Sample code (Windows, macOS, Linux, and iOS)
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
@@ -2331,9 +2333,36 @@ pipeline.Connect(textOverlay.Output, videoRenderer.Input);
 await pipeline.StartAsync();
 ```
 
+### Android sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
+
+var textOverlay = new TextOverlayBlock(new TextOverlaySettings("Hello world!")
+{
+    Font = new FontSettings
+    {
+        Name = "Arial",
+        Size = 32
+    },
+    Color = SKColors.Yellow,
+    X = 50,
+    Y = 50
+});
+pipeline.Connect(fileSource.VideoOutput, textOverlay.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(textOverlay.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
 ### Platforms
 
-Windows, macOS, Linux, iOS, Android.
+Windows, macOS, Linux, and iOS. Android supports simple and dynamic text only; use [OverlayManagerBlock](OverlayManagerBlock.md) for advanced text overlays.
 
 ## Tunnel
 

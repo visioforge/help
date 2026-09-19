@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Video Edit SDK X** — the cross-platform 
 
 The SDK is a non-linear editor: it cuts, trims, joins, transcodes, and applies effects to **existing** video and audio files. It does **not** capture from cameras or screen — for live capture see `video-capture-sdk-x-wpf`.
 
-Pinned NuGet versions: wrapper **`2026.8.16`**, redist **`2026.4.29`** (matches the [official Video Join Demo X sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/WPF/CSharp/Video%20Join%20Demo%20X)). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.17`**, redist **`2026.9.11`** (matches the [official Video Join Demo X sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/WPF/CSharp/Video%20Join%20Demo%20X)). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -40,11 +40,11 @@ Three packages are required for a Windows WPF edit-and-transcode scenario — th
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -159,9 +159,9 @@ These are the four most common production issues — flag any of them on first r
 
 ### 1. `DllNotFoundException` / "Unable to load DLL" / "no element X"
 
-**Cause**: forgot the `await VisioForgeX.InitSDKAsync()` boot, **or** the redist NuGet for the build's RID is missing (`VisioForge.CrossPlatform.Core.Windows.x64` not referenced for an x64 build), **or** wrapper / redist version drift (e.g. wrapper `2026.8.16` paired with redist `2026.5.x` instead of `2026.4.29`).
+**Cause**: forgot the `await VisioForgeX.InitSDKAsync()` boot, **or** the redist NuGet for the build's RID is missing (`VisioForge.CrossPlatform.Core.Windows.x64` not referenced for an x64 build), **or** wrapper / redist version drift (e.g. wrapper `2026.9.11` paired with an older native redist).
 
-**Fix**: confirm `InitSDKAsync` runs before any other SDK call (see "Mandatory engine boot"). Confirm the redist NuGet matches the build platform (`x64` redist for x64, `x86` redist for x86, both for AnyCPU). Pin the redist version to the value shipped in the upstream csproj for your wrapper version — do not bump.
+**Fix**: confirm `InitSDKAsync` runs before any other SDK call (see "Mandatory engine boot"). Confirm the redist NuGet matches the build platform (`x64` redist for x64, `x86` redist for x86, both for AnyCPU). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 

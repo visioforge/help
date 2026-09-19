@@ -1,6 +1,6 @@
 ---
-title: TP-Link Tapo — URLs RTSP y conexión de cámaras IP en C#
-description: Conecta cámaras TP-Link y cámaras Tapo en C# .NET con patrones de URL RTSP y ejemplos de código para modelos TL-SC, NC y Tapo C.
+title: URL RTSP Tapo y TP-Link — puerto 554 y acceso en C# .NET
+description: URLs RTSP de cámaras Tapo C y TL-SC (stream1/stream2), puerto 554, credenciales por línea de producto y rutas de instantánea, con código C# .NET.
 tags:
   - Video Capture SDK
   - Media Blocks SDK

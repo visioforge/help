@@ -5,9 +5,9 @@ description: Integrate VisioForge Video Edit SDK .NET (non-linear editor) into a
 
 # Video Edit SDK .NET — WinForms integration
 
-This skill helps you add **VisioForge Video Edit SDK .NET** to a Windows Forms application. The SDK is a non-linear editor (NLE): it cuts, trims, merges, transcodes, and applies effects to **existing** video and audio files. It does **not** capture from cameras or screen — for live capture see [`video-capture-sdk-net-winforms`](../video-capture-sdk-net-winforms/SKILL.md). The SDK is Windows-only (DirectShow / Media Foundation under the hood); for cross-platform editing (macOS, iOS, Android, Linux), use one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills.
+This skill helps you add **VisioForge Video Edit SDK .NET** to a Windows Forms application. The SDK is a non-linear editor (NLE): it cuts, trims, merges, transcodes, and applies effects to **existing** video and audio files. It does **not** capture from cameras or screen — for live capture see [`video-capture-sdk-net-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-winforms.zip). The SDK is Windows-only (DirectShow / Media Foundation under the hood); for cross-platform editing (macOS, iOS, Android, Linux), use one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills.
 
-Pinned NuGet version: **`2026.8.16`** (matches the official Video Join Demo sample). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.9.17`** (matches the official Video Join Demo sample). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -19,10 +19,10 @@ Pinned NuGet version: **`2026.8.16`** (matches the official Video Join Demo samp
 
 ## When NOT to use this skill
 
-- **Live capture** from webcam / IP camera / screen → [`video-capture-sdk-net-winforms`](../video-capture-sdk-net-winforms/SKILL.md).
+- **Live capture** from webcam / IP camera / screen → [`video-capture-sdk-net-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-winforms.zip).
 - **Playback only**: play files / streams without editing → `media-player-sdk-net-winforms`.
 - **Cross-platform** editing on macOS / iOS / Android / Linux → `media-blocks-sdk-net-{maui,avalonia,uno}`.
-- **WPF instead of WinForms**: same SDK, different UI host → [`video-edit-sdk-net-wpf`](../video-edit-sdk-net-wpf/SKILL.md).
+- **WPF instead of WinForms**: same SDK, different UI host → [`video-edit-sdk-net-wpf`](https://www.visioforge.com/.well-known/agent-skills/video-edit-sdk-net-wpf.zip).
 - **Custom media pipeline** (per-block control over decoders, filters, sinks) → `media-blocks-sdk-net-winforms`.
 
 ## Project setup
@@ -37,7 +37,7 @@ The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
 </ItemGroup>
 ```
 
@@ -55,7 +55,7 @@ Use AnyCPU (the default — no `<Platform>` or `<PlatformTarget>` element requir
 
 `VideoEditCore` exposes two distinct editing paths:
 
-**1. Fast-edit (stream-copy, no re-encode)** — `FastEdit_CutFileAsync(source, start, stop, output)`. Stream-copies a single segment of an MP4/MOV/M4A without touching the codec. Fast (I/O-bound) and lossless, but limited to one input and supports MP4-family containers only.
+**1. Fast-edit (stream-copy, no re-encode)** — `FastEdit_CutFileAsync(source, start, stop, output)`. Stream-copies a single segment of an MP4/MOV/M4A or compatible MPEG-TS-family file (`.ts`, `.m2ts`, or `.mts`) without touching the codec. Fast (I/O-bound) and lossless, but limited to one input. Use the overload with `FastEditSeekMode.Input` as the fifth argument for input-side seeking in large transport-stream files; the default `FastEditSeekMode.Output` preserves the existing behavior. Input-side seeking remains keyframe-dependent and may not be frame-accurate.
 
 **2. Timeline (decode → re-encode)** — multiple `Input_Add*FileAsync` calls populate an ordered list of input segments (video, audio, image), each with an in/out `TimeSpan` for sub-clipping. The engine concatenates them into a single output stream that re-encodes through the format set in `Output_Format`. This is the path used by the bundled `references/Form1.cs` (joining multiple files), and it's the one to pick for transcoding, applying effects, or building a slideshow.
 
@@ -200,8 +200,8 @@ The `references/` folder is self-contained — copy all of it into a fresh proje
 - **Official samples on GitHub**: <https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK>
 - **MCP server** (queryable API + class lookup): see `/.well-known/mcp.json` for the `search_api`, `get_class_info`, `get_code_example`, and `get_deployment_guide` tools.
 - **Adjacent skills**:
-    - [`video-edit-sdk-net-wpf`](../video-edit-sdk-net-wpf/SKILL.md) — same SDK on WPF.
-    - [`video-capture-sdk-net-winforms`](../video-capture-sdk-net-winforms/SKILL.md) — capture from webcam / IP camera / screen / DV (when you need to record live, not edit existing files).
+    - [`video-edit-sdk-net-wpf`](https://www.visioforge.com/.well-known/agent-skills/video-edit-sdk-net-wpf.zip) — same SDK on WPF.
+    - [`video-capture-sdk-net-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-winforms.zip) — capture from webcam / IP camera / screen / DV (when you need to record live, not edit existing files).
     - `video-edit-sdk-x-winforms` — newer "X" line on WinForms (cross-process, modernised pipeline).
     - `media-blocks-sdk-net-winforms` — alternative when you need a custom media pipeline rather than the high-level NLE API.
     - `media-player-sdk-net-winforms` — playback-only sibling.

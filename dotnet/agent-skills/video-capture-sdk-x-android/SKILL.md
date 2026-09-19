@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a **native .NET for Android** application (TFM `net10.0-android`, Activity-based, NOT MAUI and NOT classic Xamarin.Android). The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) that mirrors the legacy `VideoCaptureCore` API. The same C# code works unchanged on WPF / MAUI / Avalonia / Uno / iOS / macOS — only the UI host swaps (`VideoViewGL` here, `<my:VideoView />` on MAUI, etc.) and the per-OS native redist NuGet.
 
-Pinned NuGet versions: wrapper **`2026.8.16`**, Android redist **`2026.7.27`** (matches the [official Simple Video Capture Android sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Android/Simple%20Video%20Capture)). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.17`**, Android redist **`2026.9.11`** (matches the [official Simple Video Capture Android sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Android/Simple%20Video%20Capture)). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -36,8 +36,8 @@ A native Android capture project needs **two NuGet packages plus one ProjectRefe
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.11" />
   <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
 </ItemGroup>
 <ItemGroup>
@@ -158,6 +158,7 @@ Minimum viable capture-and-preview snippet — a self-contained `MainActivity` y
 ```csharp
 // MainActivity.cs
 using Android;
+using Android.Content.PM;
 using Android.Runtime;
 using Android.Util;
 using VisioForge.Core;
@@ -168,7 +169,8 @@ using VisioForge.Core.VideoCaptureX;
 namespace YourApp
 {
     [Activity(Label = "@string/app_name", MainLauncher = true,
-              ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait,
+              ScreenOrientation = Android.Content.PM.ScreenOrientation.FullUser,
+              ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize,
               Theme = "@android:style/Theme.NoTitleBar.Fullscreen")]
     public class MainActivity : Activity
     {
@@ -216,7 +218,11 @@ namespace YourApp
                     //   using var ms = new MemoryStream(); await s.CopyToAsync(ms);
                     //   await _core.SetLicenseCertificateAsync(ms.ToArray());
 
-                    _core.Video_Source = new VideoCaptureDeviceSourceSettings(cameras[0]);
+                    var videoSourceSettings = new VideoCaptureDeviceSourceSettings(cameras[0])
+                    {
+                        AutoUpdateOrientation = true
+                    };
+                    _core.Video_Source = videoSourceSettings;
                     _core.Video_Play = true;
 
                     await _core.StartAsync();
@@ -239,6 +245,63 @@ namespace YourApp
 Note: unlike WPF / MAUI, the Android host does **not** require an explicit `await VisioForgeX.InitSDKAsync()` before constructing `VideoCaptureCoreX` — the Android wrapper boots the engine on first use. You DO still need `VisioForgeX.DestroySDK()` on `OnDestroy` to release native resources cleanly between Activity recreations.
 
 `references/MainActivity.cs` (paired with `references/Resources/layout/activity_main.xml`) ships the full pattern with MP4 recording (pre-configured with `Outputs_Add` + `autoStart: false` so preview can run while record toggles), front/back camera switching with live `Video_Source_SwitchCamera` + full-restart fallback, gallery save via `PhotoGalleryHelper.AddVideoToGalleryAsync`, and `OnError` logging.
+
+## Device orientation
+
+The camera orientation is resolved from the sensor orientation and the display rotation, and applied
+once, when the pipeline is built. An activity pinned to one orientation needs no further orientation
+handling. The copyable sample above uses `ScreenOrientation.FullUser` plus `ConfigurationChanges` so
+Android allows rotation and keeps the same Activity instance while reporting it.
+
+An activity that rotates does. Without it the preview and the recorded file keep the orientation
+capture started in, and go sideways the moment the phone is turned.
+
+`FullUser` honours the device's auto-rotate lock, so on a phone with rotation locked the activity
+never rotates and no orientation change is reported, so nothing in the rotation path runs - that is
+the user's choice, not a defect. (`OnConfigurationChanged` still fires for the other declared changes:
+split-screen, freeform resize, a foldable unfolding.) Use `Sensor` or `FullSensor` instead if the app must follow the device
+regardless of that setting.
+
+The copyable sample above already turns the automatic mode on, by setting `AutoUpdateOrientation` on the
+`VideoCaptureDeviceSourceSettings` before the source is created; the first form below is the same
+flag on the core, settable at runtime after `Video_Source` is assigned, and the second is for an
+application that would rather drive it from its own orientation handling — that one belongs in the
+full `references/MainActivity.cs`, whose `_isRecording` field it reads. Neither restarts the camera:
+
+```csharp
+// After assigning _core.Video_Source, let the source watch the display itself.
+_core.Video_Source_AutoUpdateOrientation = true;
+
+// Or: re-apply it from your own orientation handling. Skip it while recording -
+// see the frame-size warning below.
+public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
+{
+    base.OnConfigurationChanged(newConfig);
+    if (!_isRecording)
+    {
+        _core?.Video_Source_UpdateOrientation();
+    }
+}
+```
+
+`Video_Source_AutoUpdateOrientation` defaults to `false`, so an application that never sets it keeps
+the old behaviour — the sample above sets it deliberately.
+
+**Do not let the orientation change mid-recording.** A quarter turn swaps the frame width and
+height: a preview renegotiates and follows, but an encoder and muxer already writing a file cannot
+take a frame size change part way through. So follow the device while previewing and bracket the
+recording - the automatic mode has a runtime switch for exactly this:
+
+```csharp
+_core.Video_Source_AutoUpdateOrientation = false;
+await _core.StartCaptureAsync(0, filename);
+// ... recording ...
+await _core.StopCaptureAsync(0);
+_core.Video_Source_AutoUpdateOrientation = true;
+```
+
+If you drive it manually instead, skip the `Video_Source_UpdateOrientation()` call while a recording
+is running.
 
 ## Common deployment failures
 

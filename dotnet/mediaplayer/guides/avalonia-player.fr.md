@@ -156,8 +156,8 @@ Le projet principal, `SimplePlayerMVVM.csproj`, cible plusieurs plateformes. Les
   <PackageReference Include="Avalonia.Android" Version="12.0.5" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2025.5.1" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2025.5.1" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.17" />
  </ItemGroup>
 </Project>
 ```

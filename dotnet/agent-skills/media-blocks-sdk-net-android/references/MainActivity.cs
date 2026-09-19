@@ -1,6 +1,5 @@
 using Android;
 using Android.Content;
-using Android.Content.Res;
 using Android.OS;
 using Android.Provider;
 using Android.Runtime;
@@ -35,7 +34,7 @@ namespace Simple_Video_Capture
     /// <summary>
     /// The main activity.
     /// </summary>
-    [Activity(Label = "@string/app_name", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait, Theme = "@android:style/Theme.NoTitleBar.Fullscreen")]
+    [Activity(Label = "@string/app_name", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.FullUser, ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize | Android.Content.PM.ConfigChanges.ScreenLayout | Android.Content.PM.ConfigChanges.SmallestScreenSize, Theme = "@android:style/Theme.NoTitleBar.Fullscreen")]
     public class MainActivity : Activity
     {
         /// <summary>
@@ -133,8 +132,9 @@ namespace Simple_Video_Capture
         /// <summary>
         /// Asynchronously creates the media blocks engine pipeline and initializes blocks.
         /// </summary>
+        /// <param name="autoUpdateOrientation">Whether the camera source follows display rotation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        private async Task CreateEngineAsync()
+        private async Task CreateEngineAsync(bool autoUpdateOrientation)
         {
             _pipeline = new MediaBlocksPipeline();
             _pipeline.OnError += _pipeline_OnError;
@@ -195,6 +195,8 @@ namespace Simple_Video_Capture
                 _pipeline = null;
                 return;
             }
+
+            videoSourceSettings.AutoUpdateOrientation = autoUpdateOrientation;
 
             Log.Info("SimpleVideoCapture", $"Selected format: {videoSourceSettings.Format.Width}x{videoSourceSettings.Format.Height} @ {videoSourceSettings.Format.FrameRate}");
 
@@ -435,7 +437,7 @@ namespace Simple_Video_Capture
         {
             await StopAsync();
 
-            await CreateEngineAsync();
+            await CreateEngineAsync(autoUpdateOrientation: true);
 
             // connect directly: source → renderer (no tee needed for preview)
             _pipeline.Connect(_videoSource.Output, _videoRenderer.Input);
@@ -457,7 +459,7 @@ namespace Simple_Video_Capture
                 {
                     // start recording
                     await StopAsync();
-                    await CreateEngineAsync();
+                    await CreateEngineAsync(autoUpdateOrientation: false);
 
                     if (_pipeline == null)
                     {

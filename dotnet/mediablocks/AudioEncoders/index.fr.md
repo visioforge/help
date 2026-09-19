@@ -53,7 +53,7 @@ Cette vérification est importante car tous les encodeurs ne sont pas disponible
 
 L'encodeur AAC est utilisé pour encoder des fichiers aux formats MP4, MKV, M4A et quelques autres, ainsi que pour le streaming réseau via RTSP et HLS.
 
-Utilisez la classe `AACEncoderSettings` pour définir les paramètres.
+Les paramètres se définissent via une implémentation d'`IAACEncoderSettings` ; `AACEncoderBlock.GetDefaultSettings()` renvoie l'implémentation optimale pour la plateforme actuelle.
 
 ### Informations sur le bloc
 

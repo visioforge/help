@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK .NET (non-linear editor) into a
 
 This skill helps you add **VisioForge Video Edit SDK .NET** to a headless .NET console application — for scripts, scheduled jobs, server-side processing, and CI pipelines that cut, trim, merge, transcode, or apply effects to existing video files. The SDK is a non-linear editor (NLE): it does **not** capture from cameras or screen — for that see `video-capture-sdk-net-wpf`. The SDK is Windows-only (DirectShow / Media Foundation under the hood); for cross-platform batch editing (macOS, Linux containers) see the [Video Edit SDK X product page](https://www.visioforge.com/video-edit-sdk-net).
 
-Pinned NuGet version: **`2026.8.16`** (matches the official Main Demo CLI sample at `_SETUP/GitHub/Video Edit SDK/Console/CSharp/Main Demo CLI/`). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.9.17`** (matches the official Main Demo CLI sample at `_SETUP/GitHub/Video Edit SDK/Console/CSharp/Main Demo CLI/`). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -35,7 +35,7 @@ The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
 </ItemGroup>
 ```
 
@@ -53,9 +53,9 @@ Use AnyCPU (the default — no `<Platform>` or `<PlatformTarget>` element requir
 
 `VideoEditCore` exposes two distinct editing paths:
 
-**1. Fast-edit (stream-copy, no re-encode)** — `FastEdit_CutFileAsync(source, start, stop, output)`. Stream-copies a single segment of an MP4/MOV/M4A without touching the codec. Fast (I/O-bound) and lossless, but limited to one input and supports MP4-family containers only. For a batch script that just needs to chop a chunk off the end of an MP4, this is the path: no `Output_Format` / no `Mode` / no event-driven completion ceremony beyond awaiting the call.
+**1. Fast-edit (stream-copy, no re-encode)** — `FastEdit_CutFileAsync(source, start, stop, output)`. Stream-copies a single segment of an MP4/MOV/M4A or compatible MPEG-TS-family file (`.ts`, `.m2ts`, or `.mts`) without touching the codec. Fast (I/O-bound) and lossless, but limited to one input. Use the overload with `FastEditSeekMode.Input` as the fifth argument for input-side seeking in large transport-stream files; the default `FastEditSeekMode.Output` preserves the existing behavior. Input-side seeking remains keyframe-dependent and may not be frame-accurate. For a batch script that just needs to chop a chunk off the end of an MP4, this is the path: no `Output_Format` / no `Mode` / no event-driven completion ceremony beyond awaiting the call.
 
-**2. Timeline (decode → re-encode)** — multiple `Input_Add*FileAsync` calls populate an ordered list of input segments (video, audio, image), each with an in/out `TimeSpan` for sub-clipping. The engine concatenates them into a single output stream that re-encodes through the format set in `Output_Format`. This is the path for merging multiple files, transcoding, applying effects, building a slideshow, or cutting from a non-MP4 container.
+**2. Timeline (decode → re-encode)** — multiple `Input_Add*FileAsync` calls populate an ordered list of input segments (video, audio, image), each with an in/out `TimeSpan` for sub-clipping. The engine concatenates them into a single output stream that re-encodes through the format set in `Output_Format`. This is the path for merging multiple files, transcoding, applying effects, building a slideshow, or cutting from a container fast-edit does not cover (see above).
 
 For the timeline path in a console host, you must:
 
@@ -130,7 +130,7 @@ static async Task<int> Main(string[] args)
 }
 ```
 
-For a pure FastEdit cut (MP4 / MOV input, no re-encode), the same shape applies but you replace the timeline calls + `StartAsync` with a single `await core.FastEdit_CutFileAsync(input, cutStart, cutStop, output);` — `OnStop` still fires when the muxer finishes, so keep the `done`/`await` pattern even though the call returns quickly.
+For a pure FastEdit cut (MP4 / MOV / MPEG-TS input, no re-encode), the same shape applies but you replace the timeline calls + `StartAsync` with a single `await core.FastEdit_CutFileAsync(input, cutStart, cutStop, output);` — `OnStop` still fires when the muxer finishes, so keep the `done`/`await` pattern even though the call returns quickly.
 
 ## Optional codec packages
 

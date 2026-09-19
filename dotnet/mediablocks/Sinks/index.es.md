@@ -178,9 +178,9 @@ Nombre: AVISinkBlock.
 ```mermaid
 graph LR;
     UniversalSourceBlock-->MP3EncoderBlock;
-    UniversalSourceBlock-->DIVXEncoderBlock;
+    UniversalSourceBlock-->H264EncoderBlock;
     MP3EncoderBlock-->AVISinkBlock;
-    DIVXEncoderBlock-->AVISinkBlock;
+    H264EncoderBlock-->AVISinkBlock;
 ```
 
 #### Código de ejemplo
@@ -195,8 +195,8 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 var audioEncoderBlock = new MP3EncoderBlock(new MP3EncoderSettings() { Bitrate = 192 });
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
 
-// Configurar codificador de video DIVX
-var videoEncoderBlock = new DIVXEncoderBlock(new DIVXEncoderSettings());
+// Configurar codificador de video H.264
+var videoEncoderBlock = new H264EncoderBlock(new OpenH264EncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
 
 // Crear sink AVI y conectar las entradas
@@ -297,9 +297,9 @@ Nombre: MKVSinkBlock.
 ```mermaid
 graph LR;
     UniversalSourceBlock-->VorbisEncoderBlock;
-    UniversalSourceBlock-->VP9EncoderBlock;
+    UniversalSourceBlock-->VPXEncoderBlock;
     VorbisEncoderBlock-->MKVSinkBlock;
-    VP9EncoderBlock-->MKVSinkBlock;
+    VPXEncoderBlock-->MKVSinkBlock;
 ```
 
 #### Código de ejemplo
@@ -315,7 +315,7 @@ var audioEncoderBlock = new VorbisEncoderBlock(new VorbisEncoderSettings() { Bit
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
 
 // Codificador de video VP9
-var videoEncoderBlock = new VP9EncoderBlock(new VP9EncoderSettings() { Bitrate = 2000 });
+var videoEncoderBlock = new VPXEncoderBlock(new VP9EncoderSettings() { TargetBitrate = 2000 });
 pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
 
 // Sink MKV
@@ -379,7 +379,7 @@ var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Codificador de audio AAC
-var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
+var audioEncoderBlock = new AACEncoderBlock(AACEncoderBlock.GetDefaultSettings());
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
 
 // Codificador de video H.264
@@ -447,7 +447,7 @@ var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Codificador de audio AAC
-var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
+var audioEncoderBlock = new AACEncoderBlock(AACEncoderBlock.GetDefaultSettings());
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
 
 // Codificador de video H.264
@@ -573,7 +573,7 @@ var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // Codificador de audio AAC
-var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
+var audioEncoderBlock = new AACEncoderBlock(AACEncoderBlock.GetDefaultSettings());
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
 
 // Codificador de video H.264
@@ -625,10 +625,10 @@ Nombre: MXFSinkBlock.
 
 ```mermaid
 graph LR;
-    UniversalSourceBlock-->PCMEncoderBlock;
-    UniversalSourceBlock-->DIVXEncoderBlock;
-    PCMEncoderBlock-->MXFSinkBlock;
-    DIVXEncoderBlock-->MXFSinkBlock;
+    UniversalSourceBlock-->ALAWEncoderBlock;
+    UniversalSourceBlock-->H264EncoderBlock;
+    ALAWEncoderBlock-->MXFSinkBlock;
+    H264EncoderBlock-->MXFSinkBlock;
 ```
 
 #### Código de ejemplo
@@ -639,16 +639,16 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
-// Bloque de audio PCM
-var audioBlock = new PCMEncoderBlock(new PCMEncoderSettings());
+// Bloque de audio ALAW
+var audioBlock = new ALAWEncoderBlock();
 pipeline.Connect(fileSource.AudioOutput, audioBlock.Input);
 
-// Codificador de video DIVX
-var videoEncoderBlock = new DIVXEncoderBlock(new DIVXEncoderSettings());
+// Codificador de video H.264
+var videoEncoderBlock = new H264EncoderBlock(new OpenH264EncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
 
 // Sink MXF
-var sinkBlock = new MXFSinkBlock(new MXFSinkSettings(@"output.mxf"));
+var sinkBlock = new MXFSinkBlock(new MXFSinkSettings(@"output.mxf", MXFVideoStreamType.H264, MXFAudioStreamType.ALAW));
 pipeline.Connect(audioBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
 pipeline.Connect(videoEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
 
@@ -723,7 +723,7 @@ Windows, macOS, Linux, iOS, Android.
 
 WAV (Waveform Audio File Format) es un estándar de formato de archivo de audio desarrollado por IBM y Microsoft para almacenar flujos de bits de audio en PCs. Es el formato principal usado en sistemas Windows para audio crudo y típicamente sin comprimir.
 
-El sink recibe su destino como argumento filename o como un objeto `WAVSinkSettings`, que es también la forma que lleva un documento de pipeline guardado. El formato de muestras proviene de la configuración del `PCMEncoderBlock` aguas arriba.
+El sink recibe su destino como argumento filename o como un objeto `WAVSinkSettings`, que es también la forma que lleva un documento de pipeline guardado. El formato de muestras proviene de la configuración del `AudioConverterBlock` aguas arriba.
 
 #### Información del bloque
 
@@ -739,8 +739,8 @@ Nombre: WAVSinkBlock.
 
 ```mermaid
 graph LR;
-    UniversalSourceBlock-->PCMEncoderBlock;
-    PCMEncoderBlock-->WAVSinkBlock;
+    UniversalSourceBlock-->AudioConverterBlock;
+    AudioConverterBlock-->WAVSinkBlock;
 ```
 
 ### Código de ejemplo
@@ -751,8 +751,8 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
-// Bloque de audio PCM
-var audioBlock = new PCMEncoderBlock(new PCMEncoderSettings());
+// Conversión de audio a PCM para el sink WAV
+var audioBlock = new AudioConverterBlock();
 pipeline.Connect(fileSource.AudioOutput, audioBlock.Input);
 
 // Sink WAV
@@ -790,9 +790,9 @@ Nombre: WebMSinkBlock.
 ```mermaid
 graph LR;
     UniversalSourceBlock-->VorbisEncoderBlock;
-    UniversalSourceBlock-->VP9EncoderBlock;
+    UniversalSourceBlock-->VPXEncoderBlock;
     VorbisEncoderBlock-->WebMSinkBlock;
-    VP9EncoderBlock-->WebMSinkBlock;
+    VPXEncoderBlock-->WebMSinkBlock;
 ```
 
 #### Código de ejemplo
@@ -808,7 +808,7 @@ var audioEncoderBlock = new VorbisEncoderBlock(new VorbisEncoderSettings() { Bit
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
 
 // Codificador de video VP9
-var videoEncoderBlock = new VP9EncoderBlock(new VP9EncoderSettings());
+var videoEncoderBlock = new VPXEncoderBlock(new VP9EncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
 
 // Sink WebM
@@ -1030,7 +1030,7 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
-var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
+var audioEncoderBlock = new AACEncoderBlock(AACEncoderBlock.GetDefaultSettings());
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
 
 // 3 codificadores de video con diferentes bitrates para transmisión adaptativa
@@ -1364,7 +1364,7 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
-var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
+var audioEncoderBlock = new AACEncoderBlock(AACEncoderBlock.GetDefaultSettings());
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
 
 var videoEncoderBlock = new H264EncoderBlock(new OpenH264EncoderSettings());
@@ -1454,10 +1454,7 @@ var h264Settings = new OpenH264EncoderSettings
 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
-var aacSettings = new AACEncoderSettings
-{
-    Bitrate = 192 // 192 kbps para audio
-};
+var aacSettings = AACEncoderBlock.GetDefaultSettings();
 var aacEncoder = new AACEncoderBlock(aacSettings);
 
 pipeline.Connect(videoSource.Output, h264Encoder.Input);
@@ -1922,7 +1919,7 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
-var audioEncoderBlock = new AACEncoderBlock(new AACEncoderSettings() { Bitrate = 192 });
+var audioEncoderBlock = new AACEncoderBlock(AACEncoderBlock.GetDefaultSettings());
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
 
 var videoEncoderBlock = new H264EncoderBlock(new OpenH264EncoderSettings());
@@ -2240,16 +2237,19 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var source = new SystemVideoSourceBlock(new SystemVideoSourceSettings(/* ... */));
-var bufferSink = new BufferSinkBlock(VideoFormatX.BGR);
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("input.mp4"));
 
+// VideoFormatX es un enum (BGRA / RGBA / NV12 / I420 / ...). El tamaño de fotograma y
+// la tasa se heredan de los caps aguas arriba; pase allowFrameDrop=true si su callback
+// puede quedarse por detrás de la fuente.
+var bufferSink = new BufferSinkBlock(VideoFormatX.BGRA, allowFrameDrop: false);
 bufferSink.OnVideoFrameBuffer += (sender, e) =>
 {
-    // e.Frame contiene los datos de video en crudo
-    Console.WriteLine($"Fotograma recibido: {e.Frame.Width}x{e.Frame.Height}");
+    // e.Frame contiene los datos de píxeles, dimensiones y timestamp
+    Console.WriteLine($"Fotograma en {e.Frame.Timestamp}: {e.Frame.Width}x{e.Frame.Height}");
 };
 
-pipeline.Connect(source.Output, bufferSink.Input);
+pipeline.Connect(source.VideoOutput, bufferSink.Input);
 await pipeline.StartAsync();
 ```
 

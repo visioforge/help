@@ -61,7 +61,7 @@ Le Video Edit SDK assemble des timelines, applique des transitions/effets/superp
 Un seul paquet embarque les deux moteurs : `VideoEditCoreX` et l'historique `VideoEditCore` y cohabitent, le choix du moteur se fait donc dans le code, pas dans le packaging :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
 ```
 
 Il tire `VisioForge.DotNet.Core` en dépendance ; inutile de référencer `Core` séparément.

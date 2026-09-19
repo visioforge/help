@@ -289,7 +289,7 @@ Propriétés clés de `MP4SinkSettings` :
 
 - `Filename` (string) : chemin du fichier M4A de sortie.
 
-Propriétés clés d'`IAACEncoderSettings` (consultez `AACEncoderSettings` pour plus de détails) :
+Propriétés clés d'`IAACEncoderSettings` (consultez les implémentations d'`IAACEncoderSettings` — `AVENCAACEncoderSettings`, `VOAACEncoderSettings`, `AppleAACEncoderSettings` — pour plus de détails) :
 
 - Débit binaire, profil, etc.
 

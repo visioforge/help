@@ -115,6 +115,30 @@ Android se niega a entregar un dispositivo de video USB a una aplicación que no
 
 La captura desde cámara USB requiere **Android 9 (nivel de API 28) o posterior**. Para el recorrido completo, consulte [Captura desde cámara USB en Android](../general/guides/android-usb-camera.md).
 
+### Fuentes para las superposiciones de texto
+
+Las superposiciones de texto — `TextOverlayBlock`, el renderizado de subtítulos y la marca de agua de la versión de prueba — resuelven las familias de fuentes mediante fontconfig, que el SDK configura durante la inicialización. Enumera las fuentes del sistema Android y, además de ellas, las que incluye su propia aplicación, de modo que una superposición pueda nombrar una tipografía que el dispositivo no tiene instalada.
+
+Una fuente se detecta cuando llega al APK como **asset**. Una aplicación .NET MAUI lo obtiene sin trabajo adicional:
+
+```xml
+<ItemGroup>
+  <MauiFont Include="Resources\Fonts\*" />
+</ItemGroup>
+```
+
+Una aplicación .NET para Android convencional declara la fuente por su cuenta, ya sea en la raíz de la carpeta de assets o en una subcarpeta `assets/fonts`:
+
+```xml
+<ItemGroup>
+  <AndroidAsset Include="Assets\OpenSans-Regular.ttf" />
+</ItemGroup>
+```
+
+Se reconocen `.ttf`, `.ttc`, `.otf` y `.otc`. El SDK las extrae al almacenamiento privado de la aplicación en el primer arranque tras una instalación o actualización, por lo que un inicio normal no copia nada, y una fuente eliminada en una versión posterior deja de resolverse.
+
+> **Nota:** en su código, indique el nombre de la **familia** tal como está registrado dentro del archivo: `Open Sans`, no `OpenSans-Regular.ttf`. Las fuentes declaradas como *recursos* de Android en `Resources/font/` no son assets y las superposiciones de texto no las ven; distribuya el archivo como asset en su lugar.
+
 ## Integración de Biblioteca de Bindings Java
 
 Las aplicaciones Android que usan el SDK de VisioForge requieren una Biblioteca de Bindings Java personalizada para la funcionalidad adecuada. Este paso esencial asegura la comunicación adecuada entre el framework .NET y el entorno basado en Java de Android.

@@ -99,7 +99,7 @@ graph LR;
 Añade el Media Blocks SDK a tu proyecto mediante NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.5.30" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
 ```
 
 En Windows también necesitas los paquetes de runtime nativo. Para grabar (multiplexar) necesitas el runtime principal; el paquete Libav aporta los multiplexores:

@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a Blazor Server applicat
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a Blazor **Server** application. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `RTSPServerBlock`, `MP4SinkBlock`, `UniversalSourceBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. The Razor UI is just a remote control: every pipeline runs **on the server process** (the same machine hosting the ASP.NET Core app); the browser only sees status text, button clicks, and form posts. There is no `VideoView` in Blazor — to expose the live media to the user you publish it from the server (RTSP server, MP4 file, RTMP push, HLS, WebRTC WHIP, …) and let the browser consume that URL with a separate player or `<video>` element.
 
-Pinned NuGet version: **`2026.8.16`** (matches the [official RTSP Webcam Blazor Server demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Blazor)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.9.17`** (matches the [official RTSP Webcam Blazor Server demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Blazor)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it.
 
 ## When to use this skill
 
@@ -18,7 +18,7 @@ Pinned NuGet version: **`2026.8.16`** (matches the [official RTSP Webcam Blazor 
 ## When NOT to use this skill
 
 - **Blazor WebAssembly** (`Microsoft.NET.Sdk.BlazorWebAssembly`, browser-side `.wasm` execution): **not supported**. Media Blocks calls native code (GStreamer-equivalent runtime, libav, hardware capture APIs) through `VisioForge.CrossPlatform.*` redist packages — none of these run in the browser sandbox. There is no WebAssembly redist and no plan to ship one. If you need a media pipeline in Blazor WASM you have to call out to a separate server-side service (REST/SignalR/gRPC) that runs Media Blocks; that server-side service is the project this skill applies to.
-- **Capture device on the user's machine** (laptop's webcam, the user's mic): the server-side `SystemVideoSourceBlock` enumerates devices on the *server host*, not on the connected client. Users can't share their local webcam through this. For client-side capture use `getUserMedia` + WebRTC and ingest the WebRTC stream into Media Blocks server-side via the WebRTC source block.
+- **Capture device on the user's machine** (laptop's webcam, the user's mic): the server-side `SystemVideoSourceBlock` enumerates devices on the *server host*, not on the connected client. Users can't share their local webcam through this. For client-side capture use `getUserMedia` in the browser, relay the media to the server yourself (WebSocket/HTTP upload), and ingest it there with `PushVideoSourceBlock` / `PushAudioSourceBlock` — the SDK has no WebRTC ingestion classes.
 - **Plain webcam capture and record** with no custom topology, on a desktop UI: `video-capture-sdk-net-wpf` / `video-capture-sdk-net-winforms` is dramatically less code.
 - **Desktop UI** (WPF, WinForms, Avalonia, MAUI): same SDK, different host → `media-blocks-sdk-net-wpf`, `media-blocks-sdk-net-winforms`, `media-blocks-sdk-net-avalonia`, `media-blocks-sdk-net-maui`.
 
@@ -47,18 +47,18 @@ The .NET wrapper is a single package; the native redist is per-OS and **not tran
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
 </ItemGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-macos'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
-The redist version (`2026.4.29` here) tracks the underlying GStreamer/libav rebuild cadence and lags the wrapper version (`2026.8.16`) on purpose — pin both to the values shipped in the upstream sample's csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper. Mismatches surface as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
+The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. A redist ahead of the wrapper is undefined behaviour and surfaces as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
 For Linux deployment add the matching `VisioForge.CrossPlatform.Core.Linux.x64` package; for ARM64 hosts (Apple Silicon, Raspberry Pi, ARM Linux) swap `.x64` for the `.arm64` variant. See `references/Sample.csproj` for a complete working file.
 
@@ -67,9 +67,9 @@ For Linux deployment add the matching `VisioForge.CrossPlatform.Core.Linux.x64` 
 The five concepts (identical to all other Media Blocks hosts):
 
 1. **`MediaBlocksPipeline`** — the container. Holds the GStreamer-equivalent runtime, bus, clock, error events. One pipeline per logical scenario; multiple pipelines per process are fine.
-2. **Source blocks** (`SystemVideoSourceBlock`, `SystemAudioSourceBlock`, `RTSPSourceBlock`, `UniversalSourceBlock` for files, `WebRTCSourceBlock`, …) — produce media on output pads.
+2. **Source blocks** (`SystemVideoSourceBlock`, `SystemAudioSourceBlock`, `RTSPSourceBlock`, `UniversalSourceBlock` for files, `PushVideoSourceBlock` / `PushAudioSourceBlock` for programmatic frame injection, …) — produce media on output pads.
 3. **Transform blocks** (`H264EncoderBlock`, `AACEncoderBlock`, `TeeBlock`, `VideoMixerBlock`, …) — accept on input pads, produce on output pads.
-4. **Sink blocks** terminate the graph. In Blazor Server you almost always pick a **publishing sink** (`RTSPServerBlock`, `MP4SinkBlock`, `WebMSinkBlock`, `MPEGTSSinkBlock`, `RTMPSinkBlock`, `HLSSinkBlock`, `WebRTCWHIPSinkBlock`, …) instead of a renderer sink — there is no on-screen `VideoRendererBlock` because there is no Win32 HWND to render into. `VideoRendererBlock` exists in the SDK but only makes sense in WPF/WinForms/MAUI hosts that own a `VideoView`.
+4. **Sink blocks** terminate the graph. In Blazor Server you almost always pick a **publishing sink** (`RTSPServerBlock`, `MP4SinkBlock`, `WebMSinkBlock`, `MPEGTSSinkBlock`, `RTMPSinkBlock`, `HLSSinkBlock`, `WHIPSinkBlock`, …) instead of a renderer sink — there is no on-screen `VideoRendererBlock` because there is no Win32 HWND to render into. `VideoRendererBlock` exists in the SDK but only makes sense in WPF/WinForms/MAUI hosts that own a `VideoView`.
 5. **Connections** — `pipeline.Connect(producer.Output, consumer.Input)`. Multi-stream sinks (any muxer) implement `IMediaBlockDynamicInputs` — call `(sink as IMediaBlockDynamicInputs).CreateNewInput(MediaBlockPadMediaType.Video)` then again for audio.
 
 Topology for the bundled RTSP webcam sample:
@@ -145,7 +145,7 @@ The bundled `references/Services/VisioForgeService.cs` runs in 30-day trial mode
 
 **Cause**: missing redist NuGet for the host OS, or `<PlatformTarget>` doesn't match the redist's architecture (e.g. `x86` build with the `x64` redist), or wrapper and redist versions drifted apart enough that the native ABI changed. Common on Linux/Docker deploys when the Windows redist condition matched on the dev machine but the deploy didn't pull the Linux redist.
 
-**Fix**: reference the matching redist for every OS your csproj targets, set `<PlatformTarget>x64</PlatformTarget>` to match, and pin the redist version to the value used by the upstream sample for your wrapper version. For ARM64 hosts swap `.x64` for `.arm64` in the redist names.
+**Fix**: reference the matching redist for every OS your csproj targets, set `<PlatformTarget>x64</PlatformTarget>` to match, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. For ARM64 hosts swap `.x64` for `.arm64` in the redist names.
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on `StartAsync`
 
@@ -157,7 +157,7 @@ The bundled `references/Services/VisioForgeService.cs` runs in 30-day trial mode
 
 **Cause**: the server process can't see capture devices. On Linux, USB webcams need V4L2 kernel modules and the process needs read access to `/dev/video*`; in Docker the device isn't passed through unless you `--device=/dev/video0` (and similar for audio). On Windows server hosts, RDP sessions and Service-account contexts may not see USB devices the interactive logon sees. The SDK does **not** emulate or share the connected browser client's webcam — `getUserMedia` is a separate world.
 
-**Fix**: enumerate devices on the server console (not over the Razor UI) to confirm the OS sees them; run the dev test on the same account/session the production service will run in; for Docker/Kubernetes pass the device(s) through explicitly. If the requirement is "the user's local webcam" you need a WebRTC-ingest pipeline, not `SystemVideoSourceBlock`.
+**Fix**: enumerate devices on the server console (not over the Razor UI) to confirm the OS sees them; run the dev test on the same account/session the production service will run in; for Docker/Kubernetes pass the device(s) through explicitly. If the requirement is "the user's local webcam" you need to relay the media from the browser to the server and ingest it with push source blocks, not `SystemVideoSourceBlock`.
 
 ### 4. Pipeline keeps running after the browser tab closes (or — opposite — pipeline dies when the tab closes)
 

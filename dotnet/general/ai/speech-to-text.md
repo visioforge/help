@@ -178,8 +178,10 @@ as final segments are recognized, and disposes them for you.
 
 ### SubtitleRenderer — on-screen captions
 
-`SubtitleRenderer` drives a single text overlay on an `OverlayManagerBlock`: it shows the latest
-caption and auto-hides it after the segment's display duration.
+`SubtitleRenderer` drives a single text overlay on an `OverlayManagerBlock`. Each caption appears when
+the picture reaches the moment the words were spoken, not when the transcriber finished them: the
+renderer buffers recognized segments into a `CaptionTimeline` and the overlay picks the caption for
+each frame from that frame's own timestamp.
 
 ```csharp
 using SkiaSharp;
@@ -200,20 +202,27 @@ var subtitleRenderer = new SubtitleRenderer(overlayManagerBlock, style);
 stt.OnSpeechRecognized += subtitleRenderer.OnSpeechRecognized;
 
 // ... later, when tearing down:
-subtitleRenderer.Dispose(); // removes the overlay and stops the auto-hide timer
+subtitleRenderer.Clear();   // when a new file starts, or after a seek
+subtitleRenderer.Dispose(); // removes the overlay
 ```
 
-Wire `SubtitleRenderer.OnSpeechRecognized` directly as the block's event handler. It clamps the
-on-screen time into `[MinDisplay, MaxDisplay]` based on the segment's duration and calls
-`OverlayManagerBlock.Video_Overlay_Update` from whatever thread invokes it — marshal the call if your
-UI framework requires it. `SubtitleStyle` defaults: `FontName = "Arial"`, `FontSize = 32`,
-`Color = White`, `X = 50`, `Y = 50`, `MinDisplay = 1.5 s`, `MaxDisplay = 6 s`.
+Wire `SubtitleRenderer.OnSpeechRecognized` directly as the block's event handler — it only buffers
+there, so no marshalling to a UI thread is needed for the overlay. The on-screen time is the segment's
+own duration clamped into `[MinDisplay, MaxDisplay]`. Call `Clear()` when a new file starts or after a
+seek: positions are read as points on the current stream's timeline. `SubtitleStyle` defaults:
+`FontName = "Arial"`, `FontSize = 32`, `Color = White`, `X = 50`, `Y = 50`, `MinDisplay = 1.5 s`,
+`MaxDisplay = 6 s`.
 
-!!! note "No shipping demo yet"
-    `SubtitleRenderer` exists in the SDK and is documented from its source, but no bundled demo
-    currently uses it — the Live Subtitles X demos update a UI label directly from
-    `OnSpeechRecognized` instead. Use `SubtitleWriter` or `OutputSrtPath`/`OutputVttPath` if you only
-    need a subtitle file.
+To drive your own caption label instead of an overlay, use the same timeline directly: feed it
+`captions.Add(e)` from `OnSpeechRecognized` and read `captions.TextAt(position)` from a UI timer that
+polls the playback position. That is what the Live Subtitles demos do.
+
+!!! tip "Where to see it running"
+    The Media Blocks SDK WPF *Live Subtitles* demo renders through `SubtitleRenderer`; the Media Player X
+    and Media Blocks MAUI demos drive a UI label from a `CaptionTimeline` instead. The Video Capture X
+    demos set their label straight from `OnSpeechRecognized` — a live camera and microphone already pace
+    the pipeline, so there is no playback position to poll and a caption there can only lag, never lead.
+    Use `SubtitleWriter` or `OutputSrtPath`/`OutputVttPath` if you only need a subtitle file.
 
 ## Manual Media Blocks pipeline
 

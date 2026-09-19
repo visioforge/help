@@ -115,6 +115,30 @@ Android refuse de confier un périphérique vidéo USB à une application qui ne
 
 La capture depuis une caméra USB requiert **Android 9 (niveau d'API 28) ou une version ultérieure**. Pour la procédure complète, consultez [Capture depuis une caméra USB sur Android](../general/guides/android-usb-camera.md).
 
+### Polices pour les incrustations de texte
+
+Les incrustations de texte — `TextOverlayBlock`, le rendu des sous-titres et le filigrane de la version d'essai — résolvent les familles de polices via fontconfig, que le SDK configure lors de l'initialisation. Il répertorie les polices système d'Android et, en plus d'elles, celles que votre application embarque, afin qu'une incrustation puisse nommer une police qui n'est pas installée sur l'appareil.
+
+Une police est prise en compte lorsqu'elle arrive dans l'APK en tant qu'**asset**. Une application .NET MAUI l'obtient sans effort :
+
+```xml
+<ItemGroup>
+  <MauiFont Include="Resources\Fonts\*" />
+</ItemGroup>
+```
+
+Une application .NET pour Android classique déclare la police elle-même, soit à la racine du dossier des assets, soit dans un sous-dossier `assets/fonts` :
+
+```xml
+<ItemGroup>
+  <AndroidAsset Include="Assets\OpenSans-Regular.ttf" />
+</ItemGroup>
+```
+
+Les extensions `.ttf`, `.ttc`, `.otf` et `.otc` sont reconnues. Le SDK les extrait dans le stockage privé de l'application au premier démarrage suivant une installation ou une mise à jour : un lancement ordinaire ne copie donc rien, et une police retirée d'une version ultérieure cesse d'être résolue.
+
+> **Remarque :** dans votre code, indiquez le nom de la **famille** de polices tel qu'il est enregistré dans le fichier — `Open Sans`, et non `OpenSans-Regular.ttf`. Les polices déclarées comme *ressources* Android sous `Resources/font/` ne sont pas des assets et restent invisibles pour les incrustations de texte ; livrez le fichier en tant qu'asset à la place.
+
 ## Intégration de la bibliothèque de bindings Java
 
 Les applications Android utilisant le SDK VisioForge requièrent une bibliothèque de bindings Java personnalisée pour fonctionner correctement. Cette étape essentielle garantit une communication correcte entre le framework .NET et l'environnement Java d'Android.

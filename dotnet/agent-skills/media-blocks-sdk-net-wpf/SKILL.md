@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK .NET into a Windows WPF appli
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a Windows WPF application. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. Compared to the higher-level Video Capture SDK (a single `VideoCaptureCore` god-object), Media Blocks gives you full control over the topology — splitting streams with tees, mixing sources, transcoding without preview, swapping sinks at runtime — at the cost of having to wire every edge yourself.
 
-Pinned NuGet version: **`2026.8.16`** (matches the [official Simple Capture Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.9.17`** (matches the [official Simple Capture Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it.
 
 ## When to use this skill
 
@@ -35,15 +35,15 @@ Three packages are required for a Windows WPF capture-and-record pipeline — th
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 </ItemGroup>
 ```
 
-The redist version (`2026.4.29` here) tracks the underlying GStreamer/libav rebuild cadence and lags the wrapper version (`2026.8.16`) on purpose — pin both to the values shipped in the upstream sample's csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper. Mismatches between wrapper and redist in either direction are undefined behaviour and surface as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
+The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. A redist ahead of the wrapper is undefined behaviour and surfaces as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
 ### Full minimal csproj
 
@@ -224,7 +224,7 @@ These are the four most common production issues — flag any of them on first r
 
 **Cause**: missing redist NuGet (`VisioForge.CrossPlatform.Core.Windows.x64`, `VisioForge.CrossPlatform.Libav.Windows.x64.UPX`), or `<PlatformTarget>` doesn't match the redist's architecture (e.g. `<PlatformTarget>x86</PlatformTarget>` with the `.x64` redist), or the wrapper and redist versions drifted apart enough that the native ABI changed.
 
-**Fix**: reference both redist packages from the "NuGet packages" section, set `<PlatformTarget>x64</PlatformTarget>` to match, and pin the redist version to the value used by the upstream sample for your wrapper version (do not blindly bump). For 32-bit deployment swap `.x64` for `.x86` in both redist names and set `<PlatformTarget>x86</PlatformTarget>`.
+**Fix**: reference both redist packages from the "NuGet packages" section, set `<PlatformTarget>x64</PlatformTarget>` to match, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. For 32-bit deployment swap `.x64` for `.x86` in both redist names and set `<PlatformTarget>x86</PlatformTarget>`.
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 

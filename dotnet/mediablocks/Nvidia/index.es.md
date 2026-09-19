@@ -96,7 +96,7 @@ Nombre: NVDataUploadBlock.
 
 ```mermaid
 graph LR;
-    SystemVideoSourceBlock-->NVDataUploadBlock-->NVH264EncoderBlock;
+    SystemVideoSourceBlock-->NVDataUploadBlock-->H264EncoderBlock;
 ```
 
 #### Código de ejemplo
@@ -113,8 +113,8 @@ var videoSource = new UniversalSourceBlock(sourceSettings);
 // crear bloque de carga de datos Nvidia
 var nvDataUpload = new NVDataUploadBlock();
 
-// crear un codificador acelerado Nvidia (ej., NVH264EncoderBlock)
-// var nvEncoder = new NVH264EncoderBlock(new NVH264EncoderSettings()); // Conceptual
+// crear un codificador acelerado Nvidia (ej., un H264EncoderBlock con ajustes NVENC)
+// var nvEncoder = new H264EncoderBlock(new NVENCH264EncoderSettings()); // Conceptual
 
 // conectar bloques
 // pipeline.Connect(videoSource.VideoOutput, nvDataUpload.Input); // Conectar fuente de memoria del sistema al bloque de carga
@@ -214,7 +214,7 @@ El `NVVideoResizeBlock` se configura usando un objeto `VisioForge.Core.Types.Siz
 
 ```mermaid
 graph LR;
-    NVDataUploadBlock-->NVVideoResizeBlock-->NVH264EncoderBlock;
+    NVDataUploadBlock-->NVVideoResizeBlock-->H264EncoderBlock;
 ```
 
 #### Código de ejemplo
@@ -234,7 +234,7 @@ var targetResolution = new VisioForge.Core.Types.Size(1280, 720);
 var nvVideoResize = new NVVideoResizeBlock(targetResolution);
 
 // Asuma que el video redimensionado será codificado por un codificador NV
-// var nvEncoder = new NVH264EncoderBlock(new NVH264EncoderSettings()); // Conceptual
+// var nvEncoder = new H264EncoderBlock(new NVENCH264EncoderSettings()); // Conceptual
 
 // conectar bloques
 // pipeline.Connect(nvUploadedSource.Output, nvVideoResize.Input);

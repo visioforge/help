@@ -1576,11 +1576,11 @@ Output | Uncompressed audio | 1
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `Mode` | `EbuR128Mode` | `All` | Measurement mode flags: `MomentaryLoudness`, `ShortTermLoudness`, `GlobalLoudness`, `LoudnessRange`, `SamplePeak`, `TruePeak`, `All` |
+| `Mode` | `EbuR128Mode` | `All` | Measurement mode flags: `Momentary`, `ShortTerm`, `Global`, `LoudnessRange`, `SamplePeak`, `TruePeak`, `All` |
 | `PostMessages` | `bool` | `true` | Whether to post GStreamer bus messages with measurement results |
 | `Interval` | `TimeSpan` | `1 s` | Interval between measurement updates |
 
-`EbuR128LevelBlock` measures loudness internally and posts results on the GStreamer bus when `PostMessages = true`. It does **not** expose a managed event — read the `level` property or handle the bus message yourself if you need the values inside .NET.
+`EbuR128LevelBlock` raises `OnMeasurement` once per `Interval` while `PostMessages = true`. `EbuR128LevelEventArgs` carries `Momentary`, `ShortTerm`, `Global`, `RelativeThreshold` and `LoudnessRange`, each `null` unless `Mode` enables that metric, plus the `Timestamp` of the measured window - itself `null` whenever the element reports that window's running time as unknown, which it does for the first message of a run and for any window the current segment cannot map. A null `Timestamp` does not invalidate the metrics on the same event. The per-channel sample and true peaks are not carried by the event. The handler runs on the pipeline's bus thread, so keep it short.
 
 **GStreamer Element**: `ebur128level`
 
@@ -1606,6 +1606,14 @@ var ebuR128 = new EbuR128LevelBlock
     PostMessages = true,                      // enable GStreamer bus messages with measurement results
     Interval     = TimeSpan.FromSeconds(1)    // measurement cadence
 };
+ebuR128.OnMeasurement += (sender, args) =>
+{
+    // Every metric is null until Mode enables it and the element has enough audio for it -
+    // integrated loudness is absent from the first messages of a run.
+    Console.WriteLine($"integrated: {args.Global?.ToString("F1") ?? "n/a"} LUFS, "
+                    + $"short-term: {args.ShortTerm?.ToString("F1") ?? "n/a"} LUFS");
+};
+
 pipeline.Connect(fileSource.AudioOutput, ebuR128.Input);
 
 var audioRenderer = new AudioRendererBlock();
@@ -1798,7 +1806,7 @@ Windows, macOS, Linux.
 
 ### Silence Detector
 
-The `SilenceDetectorBlock` analyzes audio levels in real time to detect silence periods based on a configurable dBFS threshold. It is a pass-through block — audio is forwarded unchanged while `OnSilenceStarted` and `OnSilenceEnded` events fire at state transitions. Detected periods can be retrieved as a list or exported as JSON.
+The `SilenceDetectorBlock` analyzes audio levels in real time to detect silence periods based on a configurable dBFS threshold. It is a pass-through block — audio is forwarded unchanged while `OnSilenceStarted` and `OnSilenceEnded` events fire at state transitions. Detected periods can be retrieved as a list or exported as JSON. `SilenceDetectionEventArgs.Timestamp` and `SilenceDetectionData.Timestamp` are `TimeSpan?`: when the element cannot place a measurement on the timeline, the events still fire on every crossing with a `null` position, and `SilenceDetectionEventArgs.Period` is `null` with it - a period is recorded only when both of its ends are known, so nothing is ever written down at the wrong position.
 
 #### Block info
 

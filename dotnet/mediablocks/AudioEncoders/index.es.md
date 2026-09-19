@@ -53,7 +53,7 @@ Esta verificación es importante porque no todos los codificadores están dispon
 
 El codificador AAC se usa para codificar archivos en formatos MP4, MKV, M4A y otros, así como para streaming de red usando RTSP y HLS.
 
-Use la clase `AACEncoderSettings` para establecer los parámetros.
+Los parámetros se establecen mediante una implementación de `IAACEncoderSettings`; `AACEncoderBlock.GetDefaultSettings()` devuelve la implementación óptima para la plataforma actual.
 
 ### Información del bloque
 

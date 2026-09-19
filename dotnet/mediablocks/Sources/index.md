@@ -218,6 +218,8 @@ await pipeline.StartAsync();
 
 You can specify an API to use during the device enumeration. Android and iOS platforms have only one API, while Windows and Linux have multiple APIs.
 
+On Windows, WASAPI (1) capture endpoints (`wasapisrc`) are left out of the device lists by default because they describe the same physical endpoints as the WASAPI2 ones. Set `DeviceEnumerator.Shared.LegacyWasapiDeviceProviderEnabled = true` before enumerating to list them as well, and any later change re-enumerates on the next read - the entries then carry the `[WASAPI]` tag, distinct from `[WASAPI2]`. To capture from one, pass the enumerated device to `WASAPIAudioCaptureDeviceSourceSettings`.
+
 #### Platforms
 
 Windows, macOS, Linux, iOS, Android.
@@ -1156,8 +1158,8 @@ Key properties:
 
 ```mermaid
 graph LR;
-    RTMPSourceBlock-->VideoRendererBlock;
-    RTMPSourceBlock-->AudioRendererBlock;
+    RTMPSourceBlock-->H264ParseBlock-->H264DecoderBlock-->VideoRendererBlock;
+    RTMPSourceBlock-->UniversalDecoderBlock-->AudioRendererBlock;
 ```
 
 #### Sample code
@@ -1171,11 +1173,21 @@ var rtmpSettings = await RTMPSourceSettings.CreateAsync(
 
 var rtmpSource = new RTMPSourceBlock(rtmpSettings);
 
+// Both RTMP outputs carry compressed streams, so each needs a parser/decoder before a renderer.
+var h264Parser = new H264ParseBlock();
+pipeline.Connect(rtmpSource.VideoOutput, h264Parser.Input);
+
+var h264Decoder = new H264DecoderBlock();
+pipeline.Connect(h264Parser.Output, h264Decoder.Input);
+
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(rtmpSource.VideoOutput, videoRenderer.Input);
+pipeline.Connect(h264Decoder.Output, videoRenderer.Input);
+
+var audioDecoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Audio);
+pipeline.Connect(rtmpSource.AudioOutput, audioDecoder.Input);
 
 var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(rtmpSource.AudioOutput, audioRenderer.Input);
+pipeline.Connect(audioDecoder.Output, audioRenderer.Input);
 
 await pipeline.StartAsync();
 ```
@@ -1347,7 +1359,7 @@ Windows, macOS, Linux.
 
 ### NDI Source X Block
 
-The `NDISourceXBlock` is an extended NDI source that captures video and audio from NDI network sources. It uses the same `NDISourceSettings` as `NDISourceBlock` but uses an alternative GStreamer-based NDI element (`ndisrcx`).
+The `NDISourceXBlock` receives video and audio from an NDI network source through the NDI SDK directly, rather than through the GStreamer `ndisrc` element that `NDISourceBlock` drives. It takes the same `NDISourceSettings`. Prefer `NDISourceBlock`, which is the cross-platform path; this block is Windows-only and exists for callers who want the NDI SDK's own receiver.
 
 #### Block info
 
@@ -1356,28 +1368,32 @@ Name: NDISourceXBlock.
 | Pin direction | Media type | Pins count |
 | --- | :---: | :---: |
 | Output video | Uncompressed video | 1 |
-| Output audio | Uncompressed audio | 1 |
+| Output audio | Uncompressed audio | 1, only when the sender has an audio stream |
 
 #### Settings
 
-The block accepts `NDISourceSettings`. Use the static async factory to create it:
+The block accepts `NDISourceSettings`. Either the source name or the URL must be set; both is
+best, because the address lets the receiver bind directly instead of running its own discovery pass.
+Use the static async factory when the sender is reachable up front:
 
 ```csharp
 var ndiSettings = await NDISourceSettings.CreateAsync(context, ndiSourceInfo);
 ```
 
-Key properties of `NDISourceSettings`:
+The properties this block reads:
 
 | Property | Type | Default | Description |
 | --- | --- | :---: | --- |
 | `SourceName` | `string` | `""` | Name of the NDI source |
-| `URL` | `string` | `""` | Source URL |
+| `URL` | `string` | `""` | Source address, `host:port` |
 | `ReceiverName` | `string` | `"VF NDI Receiver"` | Receiver application name |
-| `Bandwidth` | `int` | `100` | −10 metadata only, 10 audio only, 100 full quality |
-| `ColorFormat` | `NDIRecvColorFormat` | `UyvyBgra` | Pixel format for received video |
-| `Timeout` | `TimeSpan` | 5 s | Timeout for detecting disconnection |
-| `ConnectTimeout` | `TimeSpan` | 10 s | Timeout for initial connection |
-| `TimestampMode` | `NDITimestampMode` | `Auto` | Timestamp synchronization mode |
+| `Bandwidth` | `int` | `100` | -10 metadata only, 10 audio only, 100 full quality |
+| `ColorFormat` | `NDIRecvColorFormat` | `UyvyBgra` | Pixel format requested from the sender |
+| `ProbeTimeoutMs` | `int` | `10000` | How long the build waits for the first video frame |
+
+`Timeout`, `ConnectTimeout`, `TimestampMode`, `MaxQueueLength` and `DoTimestamp` belong to the
+`ndisrc` element and are ignored here, as is `FallbackSwitch` - enabling it logs a warning and
+playback proceeds without failover.
 
 #### The sample pipeline
 
@@ -1403,6 +1419,7 @@ var ndiSource = new NDISourceXBlock(ndiSettings);
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(ndiSource.VideoOutput, videoRenderer.Input);
 
+// Only when the sender carries audio. Leaving the audio output unconnected is fine.
 var audioRenderer = new AudioRendererBlock();
 pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);
 

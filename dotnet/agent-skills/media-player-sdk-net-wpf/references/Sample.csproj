@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Manually maintained for the agent-skill bundle. Do NOT regenerate from the
   upstream demo csproj (_SOURCE/_DEMOS/Media Player SDK/WPF/CSharp/Simple
   Player Demo/). The bundle deliberately diverges: PackageReference is kept
@@ -9,29 +9,4 @@
   the SDK icon (visioforge_main_icon.ico) is deliberately NOT included; the
   AssemblyName is shortened to "WPF Simple Player".
   See SKILL.md "Full minimal csproj" for the full diff rationale.
--->
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>Simple_Player_Demo</RootNamespace>
-    <AssemblyName>WPF Simple Player</AssemblyName>
-    <TargetFramework>net10.0-windows</TargetFramework>
-    <AssemblyTitle>Simple Player Demo</AssemblyTitle>
-    <Company>VisioForge</Company>
-    <Product>Simple Player Demo</Product>
-    <Copyright>Copyright (c) 2025</Copyright>
-    <AssemblyVersion>2026.8.16.0</AssemblyVersion>
-    <FileVersion>2026.8.16.0</FileVersion>
-    <UseWPF>true</UseWPF>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.8.16" />
-  </ItemGroup>
-</Project>
+--><Project Sdk="Microsoft.NET.Sdk.WindowsDesktop"><PropertyGroup><OutputType>WinExe</OutputType><RootNamespace>Simple_Player_Demo</RootNamespace><AssemblyName>WPF Simple Player</AssemblyName><TargetFramework>net10.0-windows</TargetFramework><AssemblyTitle>Simple Player Demo</AssemblyTitle><Company>VisioForge</Company><Product>Simple Player Demo</Product><Copyright>Copyright (c) 2026</Copyright><AssemblyVersion>2026.9.17.0</AssemblyVersion><FileVersion>2026.9.17.0</FileVersion><UseWPF>true</UseWPF><OutputPath>bin\$(Configuration)\</OutputPath></PropertyGroup><PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' "><DebugType>full</DebugType></PropertyGroup><PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' "><DebugType>pdbonly</DebugType></PropertyGroup><ItemGroup><PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" /></ItemGroup></Project>

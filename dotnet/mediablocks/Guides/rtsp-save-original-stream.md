@@ -83,7 +83,7 @@ The main idea is to take the raw video stream from the RTSP source and directly 
 You'll need the VisioForge Media Blocks SDK. You can add it to your .NET project via NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2025.5.2" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
 ```
 
 Depending on your target platform (Windows, macOS, Linux, including ARM-based systems like Jetson Nano for embedded camera applications), you will also need the corresponding native runtime packages. For example, on Windows to record video:

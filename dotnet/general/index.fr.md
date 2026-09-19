@@ -17,6 +17,7 @@ Cette section fournit des informations essentielles, des manuels logiciels déta
 - **[Utiliser VisioForge dans Unity](unity/index.md)** — Importez le paquet Unity autonome pour la lecture vidéo et le streaming de caméras RTSP dans Unity 6 sur Windows
 - [Exemples de code](code-samples/index.md)
 - [Comment envoyer les journaux ?](sendlogs.md)
+- [Télémétrie et confidentialité](telemetry.md) - ce que le SDK signale lorsqu'un débogueur est attaché, et comment le désactiver
 
 ## Guides
 

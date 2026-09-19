@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a native .NET for macOS 
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a **native .NET for macOS** application (`net10.0-macos`, AppKit / Storyboards / `NSApplication`). Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. On macOS the host UI is AppKit (`NSViewController`, `NSWindow`) and the preview surface is `VideoView` from `VisioForge.Core.UI.Apple`.
 
-Pinned NuGet versions: wrapper **`2026.8.16`**, macOS native redist **`2026.8.5`** (matches the [official Simple Video Capture MB sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/macOS/SimpleVideoCaptureMBMac)). The macOS redist version lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not bump the redist to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.17`**, macOS native redist **`2026.9.11`** (matches the [official Simple Video Capture MB sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/macOS/SimpleVideoCaptureMBMac)). The macOS native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -43,14 +43,14 @@ Two packages — the .NET wrapper plus a single macOS native redist. There is no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
-The macOS redist is a **fat binary** that contains both `arm64` (Apple Silicon) and `x86_64` (Intel) native libraries — one PackageReference covers both architectures. Do **not** look for a `.macOS.arm64` / `.macOS.x64` pair like on Windows; they don't exist for this SDK. Mismatches between wrapper and redist (jumping the redist to match the wrapper version, or vice versa) are undefined behaviour and surface as `DllNotFoundException` / `dlopen` failures or `Element 'X' not found` errors at pipeline start.
+The macOS redist is a **fat binary** that contains both `arm64` (Apple Silicon) and `x86_64` (Intel) native libraries — one PackageReference covers both architectures. Do **not** look for a `.macOS.arm64` / `.macOS.x64` pair like on Windows; they don't exist for this SDK. A redist ahead of the wrapper is undefined behaviour and surfaces as `DllNotFoundException` / `dlopen` failures or `Element 'X' not found` errors at pipeline start.
 
 ### Full minimal csproj
 
@@ -246,9 +246,9 @@ These are the five most common production issues — flag any of them on first r
 
 **Cause A — missing redist**: `VisioForge.CrossPlatform.Core.macOS` is not referenced (build succeeds against the managed wrapper alone; the `dlopen` happens on first `MediaBlocksPipeline` use).
 **Cause B — hand-assembled bundle**: the `.app` bundle was assembled by hand and the `.dylib` files under `bin/.../net10.0-macos/<RID>/` were not copied into the bundle's `Contents/MonoBundle/`.
-**Cause C — wrapper/redist drift**: someone bumped the wrapper version without bumping the redist (or vice versa) past the ABI boundary; the same symptom surfaces as a missing element from the GStreamer plugin registry rather than a `dlopen` error.
+**Cause C — wrapper/redist drift**: the redist is not the one the pinning rule above selects — either it runs ahead of the wrapper, or it was left several releases further behind than the newest one published at or before the wrapper's release, far enough back to cross an ABI boundary. The same symptom surfaces as a missing element from the GStreamer plugin registry rather than a `dlopen` error.
 
-**Fix**: confirm the redist PackageReference is present and pinned to the value used by the upstream sample for your wrapper version (see "NuGet packages"). The redist is a fat binary — one reference covers both Apple Silicon and Intel. If you use `dotnet publish -r osx-arm64` / `osx-x64`, `dotnet publish` handles the native copy; for hand-assembled bundles, mirror the layout that `dotnet publish` produces.
+**Fix**: confirm the redist PackageReference is present and pinned per the rule in "NuGet packages" - newest version published for that package at or before your wrapper's release. The redist is a fat binary — one reference covers both Apple Silicon and Intel. If you use `dotnet publish -r osx-arm64` / `osx-x64`, `dotnet publish` handles the native copy; for hand-assembled bundles, mirror the layout that `dotnet publish` produces.
 
 ### 4. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 

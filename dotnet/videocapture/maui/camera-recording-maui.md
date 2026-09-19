@@ -75,8 +75,8 @@ Use the latest NuGet package versions of the SDK for .NET in your project.
 Add the following NuGet packages to your project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.8.16" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
 ```
 
 The `VideoCapture` package contains the main video capture functionality, while the `Core.UI.MAUI` package contains the `VideoView` control for video preview in .NET MAUI apps.

@@ -121,7 +121,8 @@ vous attachez à un `RawImage` (ou à n'importe quel material).
 | Callback frame RGBA `BufferSinkBlock` | ✅ | ✅ | ✅ | ✅ |
 | Effets audio (volume, EQ, normalize) | ✅ | ✅ | ✅ | ✅ |
 | Effets vidéo (color, transform, deinterlace) | ✅ | ✅ | ✅ | ✅ |
-| `TextOverlayBlock` / `ImageOverlayBlock` (texte / image sur vidéo) | ✅ | ✅ | ✅ | ✅ |
+| `TextOverlayBlock` (texte sur vidéo) | ✅ | ⚠️ texte simple et dynamique uniquement | ✅ | ✅ |
+| `ImageOverlayBlock` (image sur vidéo) | ✅ | ✅ | ✅ | ✅ |
 | `VideoMixerBlock` / `AudioMixerBlock` (composition en direct) | ✅ | ✅ | ✅ | ✅ |
 
 ## Protocoles réseau

@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK .NET into a .NET console app
 
 This skill helps you add **VisioForge Video Capture SDK .NET** to a .NET console application — no window, no UI thread, no preview surface. The host process drives the SDK directly: enumerate devices, configure inputs, start recording, keep the process alive while frames flow, stop and dispose. The SDK is Windows-only (DirectShow / Media Foundation under the hood) — for cross-platform headless capture (macOS, iOS, Android, Linux) use one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills.
 
-Pinned NuGet version: **`2026.8.16`** (matches the [official Video Capture Console sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/Console/Video%20Capture%20Demo)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.9.17`** (matches the [official Video Capture Console sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/Console/Video%20Capture%20Demo)). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -17,7 +17,7 @@ Pinned NuGet version: **`2026.8.16`** (matches the [official Video Capture Conso
 
 ## When NOT to use this skill
 
-- **Interactive UI**: live preview surface, buttons, file dialogs → use [`video-capture-sdk-net-wpf`](../video-capture-sdk-net-wpf/SKILL.md) or [`video-capture-sdk-net-winforms`](../video-capture-sdk-net-winforms/SKILL.md) instead.
+- **Interactive UI**: live preview surface, buttons, file dialogs → use [`video-capture-sdk-net-wpf`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-wpf.zip) or [`video-capture-sdk-net-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-winforms.zip) instead.
 - **Cross-platform**: target macOS, iOS, Android, or Linux → use `media-blocks-sdk-net-{maui,avalonia,uno}`. Video Capture SDK is Windows-only.
 - **Editing instead of capture**: cut, merge, transcode existing files → `video-edit-sdk-net-console`.
 
@@ -33,7 +33,7 @@ The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
 </ItemGroup>
 ```
 
@@ -216,6 +216,6 @@ The `references/` folder is self-contained — copy both files into a fresh proj
 - **Official samples on GitHub**: <https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK>
 - **MCP server** (queryable API + class lookup): see `/.well-known/mcp.json` for the `search_api`, `get_class_info`, `get_code_example`, and `get_deployment_guide` tools.
 - **Adjacent skills**:
-    - [`video-capture-sdk-net-wpf`](../video-capture-sdk-net-wpf/SKILL.md) — same SDK on WPF (with preview).
-    - [`video-capture-sdk-net-winforms`](../video-capture-sdk-net-winforms/SKILL.md) — same SDK on WinForms (with preview).
+    - [`video-capture-sdk-net-wpf`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-wpf.zip) — same SDK on WPF (with preview).
+    - [`video-capture-sdk-net-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-winforms.zip) — same SDK on WinForms (with preview).
     - `media-blocks-sdk-net-console` — alternative when you need a custom media pipeline rather than the high-level capture-and-record API.

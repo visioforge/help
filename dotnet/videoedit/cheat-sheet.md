@@ -61,7 +61,7 @@ Video Edit SDK assembles timelines, applies transitions/effects/overlays, and ex
 One package ships both engines — `VideoEditCoreX` and the legacy `VideoEditCore` live side by side in it, so the engine is a code-level choice, not a packaging one:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
 ```
 
 It pulls in `VisioForge.DotNet.Core` as a dependency; you do not need to reference `Core` separately.

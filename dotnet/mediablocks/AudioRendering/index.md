@@ -226,6 +226,8 @@ foreach (var device in availableDevices)
 var audioRenderer = new AudioRendererBlock(availableDevices[0]);
 ```
 
+On Windows the WASAPI (1) endpoints (`wasapisink`, `AudioOutputDeviceAPI.WASAPI`) are left out of the lists by default, because they describe the same physical endpoints as the WASAPI2 ones. Set `DeviceEnumerator.Shared.LegacyWasapiDeviceProviderEnabled = true` before enumerating to list them too; the entries then carry the `[WASAPI]` tag, distinct from `[WASAPI2]`, and `new WASAPIRendererSettings(device)` builds the WASAPI (1) renderer.
+
 ### Default Device Handling
 
 When no specific device is selected, the block automatically routes audio to the system's default output device. The no-parameter constructor attempts to select an appropriate default device based on the platform:

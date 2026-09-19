@@ -127,6 +127,14 @@ tracker has assigned an identity.
 `YOLOObjectDetectorBlock.ActiveProvider` reports the provider actually engaged after the block is
 built.
 
+!!! note "RT-DETR on macOS runs on the CPU under `Auto`"
+
+    CoreML splits the RT-DETR graph into 81 partitions and gains nothing from them: measured on Apple
+    silicon, 109 ms per frame against 105 ms on the CPU, 1277 MB resident against 535 MB, and 2.3 s to
+    create the session against 0.09 s. `Auto` therefore selects the CPU for `ObjectDetectorModel.RTDETR`
+    on macOS. YOLOv8 and YOLOX are unaffected and keep CoreML, where they run 4-6x faster than the CPU.
+    Setting `Provider = OnnxExecutionProvider.CoreML` explicitly still selects CoreML for any model.
+
 ## Use with VideoCaptureCoreX and MediaPlayerCoreX
 
 ```csharp
@@ -189,7 +197,9 @@ No — each detection is independent per frame (`TrackerId` is always `-1`). Use
 ### Is a GPU required for real-time detection?
 
 No, but a GPU execution provider (`CUDA`, `DirectML`, or `CoreML`) lowers per-frame latency
-compared to CPU, which matters most for high frame rates or larger detector models.
+compared to CPU, which matters most for high frame rates or larger detector models. The one
+exception is RT-DETR on macOS, where CoreML is no faster than the CPU and uses more than twice the
+memory, so `Auto` keeps that model on the CPU.
 
 ## Demos
 

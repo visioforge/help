@@ -1,6 +1,6 @@
 ---
-title: URL RTSP de Hikvision en C# .NET — Guía Cámara IP y NVR
-description: Conecta cámaras Hikvision en C# .NET con patrones de URL RTSP, descubrimiento ONVIF y ejemplos de código completos para modelos DS-2CD, DS-2DE y NVR.
+title: URL RTSP Hikvision — canales 101/102, NVR y C# .NET
+description: Formato de URL RTSP /Streaming/Channels/101 y 102 para cámaras DS-2CD y DS-2DE, numeración de canales NVR, descubrimiento ONVIF y código C# .NET.
 tags:
   - Video Capture SDK
   - Media Blocks SDK

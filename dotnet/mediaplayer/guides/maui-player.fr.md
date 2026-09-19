@@ -55,8 +55,8 @@ primary_api_classes:
 ## Paquets NuGet
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.8.16" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.8.16" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
 
 <!-- Redists de plateforme — incluez uniquement les cibles que vous construisez -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29"

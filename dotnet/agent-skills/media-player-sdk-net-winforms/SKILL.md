@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK .NET (file/stream playback) i
 
 This skill helps you add **VisioForge Media Player SDK .NET** to a Windows Forms application. It covers playing local video/audio files and network streams (HTTP, RTSP, UDP, HLS, MMS) with frame-accurate seek, variable playback speed, looping, multi-output volume/balance, and frame-step navigation. The SDK is Windows-only (DirectShow / Media Foundation under the hood) — for cross-platform playback (macOS, iOS, Android, Linux), use one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills instead.
 
-Pinned NuGet version: **`2026.8.16`** (matches the [official Simple Video Player sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WinForms/CSharp/Simple%20Video%20Player)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.9.17`** (matches the [official Simple Video Player sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WinForms/CSharp/Simple%20Video%20Player)). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -19,7 +19,7 @@ Pinned NuGet version: **`2026.8.16`** (matches the [official Simple Video Player
 ## When NOT to use this skill
 
 - **Cross-platform**: target macOS, iOS, Android, or Linux → use `media-blocks-sdk-net-{maui,avalonia,uno}` instead. Media Player SDK is Windows-only.
-- **Capture instead of playback**: webcam, IP camera, screen, or DV capture → [`video-capture-sdk-net-winforms`](../video-capture-sdk-net-winforms/SKILL.md).
+- **Capture instead of playback**: webcam, IP camera, screen, or DV capture → [`video-capture-sdk-net-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-winforms.zip).
 - **Editing instead of playback**: cut, merge, transcode existing files → `video-edit-sdk-net-winforms`.
 - **WPF instead of WinForms**: same SDK, different UI host → `media-player-sdk-net-wpf`.
 
@@ -35,7 +35,7 @@ The SDK ships as a single meta-package. The redist packages (Core, codec runtime
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
 </ItemGroup>
 ```
 
@@ -224,6 +224,6 @@ The `references/` folder is self-contained — copy all of it into a fresh proje
 - **MCP server** (queryable API + class lookup): see `/.well-known/mcp.json` for the `search_api`, `get_class_info`, `get_code_example`, and `get_deployment_guide` tools.
 - **Adjacent skills**:
     - `media-player-sdk-net-wpf` — same SDK on WPF.
-    - [`video-capture-sdk-net-winforms`](../video-capture-sdk-net-winforms/SKILL.md) — when you need to capture (webcam, IP camera, screen) instead of play back.
+    - [`video-capture-sdk-net-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-winforms.zip) — when you need to capture (webcam, IP camera, screen) instead of play back.
     - `video-edit-sdk-net-winforms` — when you need to cut, merge, or transcode files instead of just play them.
     - `media-blocks-sdk-net-winforms` — alternative when you need a custom media pipeline rather than the high-level playback API.

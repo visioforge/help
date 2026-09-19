@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Video Capture SDK X** — the cross-platfo
 
 `VideoCaptureCoreX` is the high-level capture-and-record god-object — same API as on the WPF/MAUI/WinUI hosts, just bound to Uno's `VideoView`. Under the hood it shares the GStreamer-backed engine with Media Blocks.
 
-Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Capture sample): wrapper **`2026.8.16`**, Uno UI **`2026.8.16`**, Windows redists **`2026.4.29`**, Android redist **`2026.7.27`**, iOS redist **`2025.12.0`**, Mac Catalyst redist **`2026.8.5`**. Newer 2026.x.x patch versions are usually drop-in compatible — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin the per-OS redists to the values from the upstream csproj for your wrapper version.
+Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Capture sample): wrapper **`2026.9.17`**, Uno UI **`2026.9.17`**, Windows redists **`2026.9.11`**, Android redist **`2026.9.11`**, iOS redist **`2026.9.11`**, Mac Catalyst redist **`2026.9.11`**. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -74,8 +74,8 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoCapture"   Version="2026.8.16" />
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno"    Version="2026.8.16" />
+    <PackageReference Include="VisioForge.DotNet.VideoCapture"   Version="2026.9.17" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno"    Version="2026.9.17" />
   </ItemGroup>
 </Project>
 ```

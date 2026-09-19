@@ -1,6 +1,6 @@
 ---
-title: Eufy Security RTSP URL - Conectar Cámara en C# .NET
-description: Conecte cámaras Eufy Security en C# .NET con patrones de URL RTSP. El soporte ONVIF y RTSP varía según el modelo. Guía para eufyCam, SoloCam e Indoor Cam.
+title: URL RTSP Eufy — modelos compatibles y configuración en C#
+description: Qué modelos eufyCam, SoloCam e Indoor Cam admiten RTSP, cómo activarlo en la app, URLs live0/live1 y puerto 554, con ejemplos de código C# .NET.
 tags:
   - Video Capture SDK
   - Media Blocks SDK

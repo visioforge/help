@@ -289,7 +289,7 @@ Key `MP4SinkSettings` properties:
 
 - `Filename` (string): The path to the output M4A file.
 
-Key `IAACEncoderSettings` properties (refer to `AACEncoderSettings` for details):
+Key `IAACEncoderSettings` properties (refer to the `IAACEncoderSettings` implementations — `AVENCAACEncoderSettings`, `VOAACEncoderSettings`, `AppleAACEncoderSettings` — for details):
 
 - Bitrate, profile, etc.
 

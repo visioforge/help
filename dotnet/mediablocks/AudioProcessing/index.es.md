@@ -1577,11 +1577,11 @@ Salida | Audio sin comprimir | 1
 
 | Propiedad | Tipo | Predeterminado | Descripción |
 |----------|------|---------|-------------|
-| `Mode` | `EbuR128Mode` | `All` | Indicadores de modo de medición: `MomentaryLoudness`, `ShortTermLoudness`, `GlobalLoudness`, `LoudnessRange`, `SamplePeak`, `TruePeak`, `All` |
+| `Mode` | `EbuR128Mode` | `All` | Indicadores de modo de medición: `Momentary`, `ShortTerm`, `Global`, `LoudnessRange`, `SamplePeak`, `TruePeak`, `All` |
 | `PostMessages` | `bool` | `true` | Si se deben publicar mensajes de bus GStreamer con los resultados de medición |
 | `Interval` | `TimeSpan` | `1 s` | Intervalo entre actualizaciones de medición |
 
-`EbuR128LevelBlock` mide la sonoridad internamente y publica los resultados en el bus GStreamer cuando `PostMessages = true`. **No** expone un evento managed — lee la propiedad `level` o maneja el mensaje del bus tú mismo si necesitas los valores desde .NET.
+`EbuR128LevelBlock` lanza `OnMeasurement` una vez por `Interval` mientras `PostMessages = true`. `EbuR128LevelEventArgs` lleva `Momentary`, `ShortTerm`, `Global`, `RelativeThreshold` y `LoudnessRange`, cada uno `null` salvo que `Mode` habilite esa métrica, más el `Timestamp` de la ventana medida, que a su vez es `null` siempre que el elemento informe como desconocido el tiempo de ejecución de esa ventana, cosa que ocurre en el primer mensaje de una ejecución y en cualquier ventana que el segmento actual no pueda mapear. Un `Timestamp` nulo no invalida las métricas del mismo evento. Los picos de muestra y reales por canal no los lleva el evento. El manejador se ejecuta en el hilo del bus de la pipeline, así que mantenlo corto.
 
 **Elemento GStreamer**: `ebur128level`
 
@@ -1607,6 +1607,14 @@ var ebuR128 = new EbuR128LevelBlock
     PostMessages = true,                      // habilita mensajes del bus GStreamer con resultados de medición
     Interval     = TimeSpan.FromSeconds(1)    // cadencia de medición
 };
+ebuR128.OnMeasurement += (sender, args) =>
+{
+    // Cada métrica es null hasta que Mode la habilite y el elemento tenga audio suficiente:
+    // la sonoridad integrada no aparece en los primeros mensajes de una ejecución.
+    Console.WriteLine($"integrada: {args.Global?.ToString("F1") ?? "n/a"} LUFS, "
+                    + $"corto plazo: {args.ShortTerm?.ToString("F1") ?? "n/a"} LUFS");
+};
+
 pipeline.Connect(fileSource.AudioOutput, ebuR128.Input);
 
 var audioRenderer = new AudioRendererBlock();
@@ -1799,7 +1807,7 @@ Windows, macOS, Linux.
 
 ### Detector de Silencio
 
-El `SilenceDetectorBlock` analiza los niveles de audio en tiempo real para detectar períodos de silencio basándose en un umbral configurable en dBFS. Es un bloque de paso -- el audio se reenvía sin cambios mientras los eventos `OnSilenceStarted` y `OnSilenceEnded` se disparan en las transiciones de estado. Los períodos detectados pueden recuperarse como lista o exportarse como JSON.
+El `SilenceDetectorBlock` analiza los niveles de audio en tiempo real para detectar períodos de silencio basándose en un umbral configurable en dBFS. Es un bloque de paso -- el audio se reenvía sin cambios mientras los eventos `OnSilenceStarted` y `OnSilenceEnded` se disparan en las transiciones de estado. Los períodos detectados pueden recuperarse como lista o exportarse como JSON. `SilenceDetectionEventArgs.Timestamp` y `SilenceDetectionData.Timestamp` son `TimeSpan?`: cuando el elemento no puede situar una medición en la línea de tiempo, los eventos siguen disparándose en cada transición con una posición `null`, y `SilenceDetectionEventArgs.Period` es `null` junto con ella; un período solo se registra cuando se conocen sus dos extremos, así que nada queda anotado en una posición equivocada.
 
 #### Información del bloque
 

@@ -2279,7 +2279,7 @@ Sortie | Vidéo non compressée | 1
 
 ### Configuration
 
-Le `TextOverlayBlock` est configuré à l'aide de `TextOverlaySettings`. Propriétés clés :
+Sous Windows, macOS, Linux et iOS, `TextOverlayBlock` est configuré à l'aide de `TextOverlaySettings`. Propriétés clés :
 
 - `Text` (string) : le texte à superposer.
 - `Font` (FontSettings) : configuration de la police (famille, taille, graisse, etc.).
@@ -2294,6 +2294,8 @@ Le `TextOverlayBlock` est configuré à l'aide de `TextOverlaySettings`. Propri�
 - `DeltaX` (int) : décalage de position X en pixels.
 - `DeltaY` (int) : décalage de position Y en pixels.
 
+Sous Android, `TextOverlaySettings` prend uniquement en charge du texte simple et dynamique : `Text`, `TextProvider`, `Font`, `Color`, `X`, `Y` et `Enabled`. `TextProvider` est appelé pour chaque image avec l'horodatage compté depuis le démarrage du pipeline et a priorité sur `Text`. Il n'inclut pas les propriétés d'alignement, de marge, de décalage de position, de contour, de mode, d'ombrage ou de retour à la ligne disponibles sur les autres plateformes. Son moteur de rendu Android n'applique pas non plus les paramètres `OverlayManagerText` hérités pour l'arrière-plan, l'ombre, l'opacité, la rotation, l'ordre Z, les durées d'affichage ou les dimensions personnalisées. Utilisez [OverlayManagerBlock](OverlayManagerBlock.md) avec `OverlayManagerText` sous Android lorsque vous avez besoin de ces fonctionnalités.
+
 ### Exemple de pipeline
 
 ```mermaid
@@ -2302,7 +2304,7 @@ graph LR;
     TextOverlayBlock-->VideoRendererBlock;
 ```
 
-### Exemple de code
+### Exemple de code (Windows, macOS, Linux et iOS)
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
@@ -2331,9 +2333,36 @@ pipeline.Connect(textOverlay.Output, videoRenderer.Input);
 await pipeline.StartAsync();
 ```
 
+### Exemple de code Android
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
+
+var textOverlay = new TextOverlayBlock(new TextOverlaySettings("Hello world!")
+{
+    Font = new FontSettings
+    {
+        Name = "Arial",
+        Size = 32
+    },
+    Color = SKColors.Yellow,
+    X = 50,
+    Y = 50
+});
+pipeline.Connect(fileSource.VideoOutput, textOverlay.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(textOverlay.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
 ### Plateformes
 
-Windows, macOS, Linux, iOS, Android.
+Windows, macOS, Linux et iOS. Android prend uniquement en charge le texte simple et dynamique ; utilisez [OverlayManagerBlock](OverlayManagerBlock.md) pour les superpositions de texte avancées.
 
 ## Tunnel
 

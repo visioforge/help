@@ -55,7 +55,7 @@ This guide walks you through building a full-featured video player application i
 ## Required NuGet Packages
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.2.19" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
 ```

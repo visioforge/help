@@ -61,7 +61,7 @@ Common use cases include surveillance dashboards, NVR (network video recorder) a
 Add the Media Blocks SDK NuGet package to your project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2025.5.2" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
 ```
 
 You also need the platform-specific runtime packages. For Windows:

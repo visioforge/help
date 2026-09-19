@@ -200,12 +200,19 @@ Ajoutez le paquet spécifique à iOS à votre projet :
 - **Descriptions de confidentialité** : ajoutez les chaînes de description d'usage nécessaires dans votre fichier Info.plist pour l'accès à la caméra et au microphone :
   - `NSCameraUsageDescription`
   - `NSMicrophoneUsageDescription`
+  - `NSLocalNetworkUsageDescription` — requis pour joindre un serveur ou un appareil sur le réseau local. Sans cette clé, iOS 14+ bloque silencieusement le trafic LAN (pas de demande, pas d'erreur).
 
 ### Configuration macOS
 
 Pour les applications macOS Catalyst :
 
-#### 1. Configurer les identifiants de runtime
+#### 1. Accès au réseau local
+
+Si votre application se connecte à un serveur ou à un appareil du réseau local, ajoutez
+`NSLocalNetworkUsageDescription` à l'`Info.plist` de Mac Catalyst. Sans cette clé, iOS et
+Mac Catalyst peuvent bloquer silencieusement le trafic du réseau local sans afficher de demande d'autorisation.
+
+#### 2. Configurer les identifiants de runtime
 
 Pour garantir le bon fonctionnement de votre application sur les Mac Intel et Apple Silicon, spécifiez les identifiants de runtime appropriés :
 
@@ -218,7 +225,7 @@ Pour garantir le bon fonctionnement de votre application sur les Mac Intel et Ap
 </PropertyGroup>
 ```
 
-#### 2. Activer le trimming
+#### 3. Activer le trimming
 
 Pour des performances optimales sur macOS, activez l'option PublishTrimmed :
 

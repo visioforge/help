@@ -53,8 +53,8 @@ El ejemplo completo está en [GitHub](https://github.com/visioforge/.Net-SDK-s-s
 Dos paquetes: el propio SDK y el control `VideoView` de MAUI.
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.8.16" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
 ```
 
 `VisioForge.DotNet.Core.UI.MAUI` solo proporciona el control `VideoView` — por sí solo no puede

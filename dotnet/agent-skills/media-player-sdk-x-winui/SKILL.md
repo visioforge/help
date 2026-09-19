@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the playback SDK — to a Windows App SDK / WinUI 3 desktop application. The X SDK shares its runtime with Media Blocks and Video Capture X (GStreamer-backed under the hood) and exposes a high-level player god-object (`MediaPlayerCoreX`) that mirrors the legacy `MediaPlayerCore` API but runs on the cross-platform engine. The same C# code targets Windows / macOS / Linux / iOS / Android — only the UI host (WinUI 3 here, MAUI / Avalonia / Uno / native elsewhere) and the per-OS native redist NuGet package change.
 
-Pinned NuGet versions: wrapper **`2026.8.16`**, redist **`2026.4.29`**, Windows App SDK **`Microsoft.WindowsAppSDK 1.8.251106002`** (matches the [official Simple Media Player WinUIX sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinUI)). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.17`**, redist **`2026.9.11`**, Windows App SDK **`Microsoft.WindowsAppSDK 1.8.251106002`** (matches the [official Simple Media Player WinUIX sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinUI)). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -53,12 +53,12 @@ Four packages are required for a WinUI 3 playback scenario — the .NET wrapper,
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.8.16" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.9.17" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -255,9 +255,9 @@ Five most common production issues in WinUI 3 — flag any of them on first run.
 
 ### 1. `DllNotFoundException` / "Unable to load DLL" / "no element X" (unpackaged)
 
-**Cause**: the X redist NuGets aren't being honoured (the WinUI loader sometimes leaves natives in `runtimes/win-x64/native/` and won't search there for unpackaged builds), **or** wrapper / redist version drift (e.g. wrapper `2026.8.16` paired with redist `2026.5.x` instead of `2026.4.29`), **or** the registry build hadn't completed before the first `OpenAsync` (rare but possible on very slow disks).
+**Cause**: the X redist NuGets aren't being honoured (the WinUI loader sometimes leaves natives in `runtimes/win-x64/native/` and won't search there for unpackaged builds), **or** wrapper / redist version drift (e.g. wrapper `2026.9.11` paired with an older native redist), **or** the registry build hadn't completed before the first `OpenAsync` (rare but possible on very slow disks).
 
-**Fix**: For unpackaged builds, publish self-contained: `dotnet publish -c Release -r win-x64 --self-contained true /p:WindowsAppSDKSelfContained=true /p:WindowsPackageType=None` — that flattens the natives into the publish root. Verify by listing the publish folder: the GStreamer DLLs from `VisioForge.CrossPlatform.Core.Windows.x64` must sit next to (or be loadable from) the .exe. Pin the redist version to the value shipped in the upstream csproj for your wrapper version — do not bump. If errors persist, switch to the explicit `await VisioForgeX.InitSDKAsync()` boot pattern (see "Engine boot") so the registry is fully built before any `OpenAsync` call.
+**Fix**: For unpackaged builds, publish self-contained: `dotnet publish -c Release -r win-x64 --self-contained true /p:WindowsAppSDKSelfContained=true /p:WindowsPackageType=None` — that flattens the natives into the publish root. Verify by listing the publish folder: the GStreamer DLLs from `VisioForge.CrossPlatform.Core.Windows.x64` must sit next to (or be loadable from) the .exe. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. If errors persist, switch to the explicit `await VisioForgeX.InitSDKAsync()` boot pattern (see "Engine boot") so the registry is fully built before any `OpenAsync` call.
 
 ### 2. Native DLLs missing on end-user machine (MSIX)
 
@@ -307,7 +307,7 @@ Run through these after first integration:
 
 The `references/` folder is a faithful copy of the official sample with the SDK icon stripped and the target framework bumped to `net10.0`. Copy all of it into a fresh project folder; you'll also need the `Assets/` PNGs from any WinUI 3 desktop template (or the upstream sample) for the package to build:
 
-- `references/Sample.csproj` — minimal working WinUI 3 csproj, version-pinned to the same NuGet release as the prose (wrapper `2026.8.16`, redist `2026.4.29`, WindowsAppSDK `1.8.251106002`).
+- `references/Sample.csproj` — minimal working WinUI 3 csproj, version-pinned to the same NuGet release as the prose (wrapper `2026.9.17`, redist `2026.9.11`, WindowsAppSDK `1.8.251106002`).
 - `references/App.xaml` + `references/App.xaml.cs` — Application entry point.
 - `references/MainWindow.xaml` — XAML with `<win2d:CanvasControl x:Name="canvasControl"/>` for the playback surface, file/URL textbox + browse, and Play / Pause / Resume / Stop / position-slider transport bar.
 - `references/MainWindow.xaml.cs` — full code-behind with `MediaPlayerCoreX` construction in the ctor, file picker, `UniversalSourceSettings.CreateAsync` open, `DispatcherTimer`-driven position display, audio output device pick, `OnError` wiring, and `MainWindow_Closed → StopAsync → DisposeAsync → VisioForgeX.DestroySDK()` shutdown. Use as a copy-paste starting template. (Runs in trial mode by design; add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence.)

@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK .NET (non-linear editor) into a
 
 This skill helps you add **VisioForge Video Edit SDK .NET** to a Windows WPF application. The SDK is a non-linear editor (NLE): it cuts, trims, merges, transcodes, and applies effects to **existing** video and audio files. It does **not** capture from cameras or screen — for live capture see `video-capture-sdk-net-wpf`. The SDK is Windows-only (DirectShow / Media Foundation under the hood); for cross-platform editing (macOS, iOS, Android, Linux), use `video-edit-sdk-x-wpf` or one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills.
 
-Pinned NuGet version: **`2026.8.16`** (matches the official Cut Video File and Video Join Demo samples). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.9.17`** (matches the official Cut Video File and Video Join Demo samples). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -37,7 +37,7 @@ The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
 </ItemGroup>
 ```
 
@@ -45,7 +45,7 @@ Add codec-heavy outputs (WebM, FFMPEG-based custom containers) by adding the mat
 
 ### Full minimal csproj
 
-See `references/Sample.csproj`. Adapted from the official Cut Video File sample (`x:/MediaFrameworkDotNet/_SETUP/GitHub/Video Edit SDK/WPF/CSharp/Cut Video File/`). Changes vs upstream: the in-repo `<ProjectReference>` is replaced by `<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.8.16" />`; the demo's hard-coded `<Platform>x64</Platform>` is removed (default AnyCPU works — see "Project platform" below); `<AssemblyName>` is set to `WPF Cut Video File` for clarity. The bundled file builds standalone against the public NuGet package.
+See `references/Sample.csproj`. Adapted from the official Cut Video File sample (`x:/MediaFrameworkDotNet/_SETUP/GitHub/Video Edit SDK/WPF/CSharp/Cut Video File/`). Changes vs upstream: the in-repo `<ProjectReference>` is replaced by `<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />`; the demo's hard-coded `<Platform>x64</Platform>` is removed (default AnyCPU works — see "Project platform" below); `<AssemblyName>` is set to `WPF Cut Video File` for clarity. The bundled file builds standalone against the public NuGet package.
 
 ### Project platform
 
@@ -55,7 +55,7 @@ Use AnyCPU (the default — no `<Platform>` or `<PlatformTarget>` element requir
 
 `VideoEditCore` exposes two distinct editing paths:
 
-**1. Fast-edit (stream-copy, no re-encode)** — `FastEdit_CutFileAsync(source, start, stop, output)`. Stream-copies a single segment of an MP4/MOV/M4A without touching the codec. Fast (I/O-bound) and lossless, but limited to one input and supports MP4-family containers only. Used by the bundled `references/MainWindow.xaml.cs`.
+**1. Fast-edit (stream-copy, no re-encode)** — `FastEdit_CutFileAsync(source, start, stop, output)`. Stream-copies a single segment of an MP4/MOV/M4A or compatible MPEG-TS-family file (`.ts`, `.m2ts`, or `.mts`) without touching the codec. Fast (I/O-bound) and lossless, but limited to one input. Use the overload with `FastEditSeekMode.Input` as the fifth argument for input-side seeking in large transport-stream files; the default `FastEditSeekMode.Output` preserves the existing behavior. Input-side seeking remains keyframe-dependent and may not be frame-accurate. Used by the bundled `references/MainWindow.xaml.cs`.
 
 **2. Timeline (decode → re-encode)** — multiple `Input_Add*FileAsync` calls populate an ordered list of input segments (video, audio, image), each with an in/out `TimeSpan` for sub-clipping. The engine concatenates them into a single output stream that re-encodes through the format set in `Output_Format`. This is the path for merging multiple files, transcoding, applying effects, or building a slideshow.
 
@@ -125,7 +125,7 @@ Note `Window_Loaded` becomes `async void` — keep it `async void` only for even
 
 ## Hello-World cut
 
-`references/MainWindow.xaml.cs` is the full hello-world: load a source file, set start / stop seconds, click Start, the SDK stream-copies the segment to an MP4 with no re-encoding via `FastEdit_CutFileAsync`. No `VideoView` is needed for this path (no preview is shown — the engine writes the output file directly and fires `OnProgress` + `OnStop`).
+`references/MainWindow.xaml.cs` is the full hello-world: load a source file, set start / stop seconds, click Start, and the SDK stream-copies the segment without re-encoding via `FastEdit_CutFileAsync`. The sample automatically selects `FastEditSeekMode.Input` for `.ts`, `.m2ts`, and `.mts` inputs, and keeps `FastEditSeekMode.Output` for other files. No `VideoView` is needed for this path (no preview is shown — the engine writes the output file directly and fires `OnProgress` + `OnStop`).
 
 For a hello-world that exercises the timeline model and previews the result, copy the merge snippet from "Timeline model" above into a `Window_Loaded`-driven button click in a fresh WPF window with a `<wpf:VideoView x:Name="VideoView1" />` element (declare `xmlns:wpf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"` on the `<Window>` root) and pass the `VideoView1` to the `VideoEditCore` constructor.
 

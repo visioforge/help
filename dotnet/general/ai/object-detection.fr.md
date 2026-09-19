@@ -130,6 +130,15 @@ Chaque `OnnxDetection` contient la boîte englobante `Box` en coordonnées de pi
 `YOLOObjectDetectorBlock.ActiveProvider` indique le fournisseur réellement utilisé une fois le bloc
 construit.
 
+!!! note "Sous macOS, RT-DETR s'exécute sur le CPU avec `Auto`"
+
+    CoreML découpe le graphe RT-DETR en 81 partitions sans rien y gagner : mesuré sur Apple silicon,
+    109 ms par image contre 105 ms sur le CPU, 1277 Mo résidents contre 535 Mo, et 2,3 s pour créer la
+    session contre 0,09 s. `Auto` sélectionne donc le CPU pour `ObjectDetectorModel.RTDETR` sous macOS.
+    YOLOv8 et YOLOX ne sont pas concernés et conservent CoreML, où ils sont 4 à 6 fois plus rapides que
+    le CPU. Définir explicitement `Provider = OnnxExecutionProvider.CoreML` sélectionne toujours CoreML,
+    quel que soit le modèle.
+
 ## Utilisation avec VideoCaptureCoreX et MediaPlayerCoreX
 
 ```csharp
@@ -200,7 +209,8 @@ lignes de franchissement ou de zones.
 
 Non, mais un fournisseur d'exécution GPU (`CUDA`, `DirectML` ou `CoreML`) réduit la latence par
 image par rapport au CPU, ce qui compte le plus pour des fréquences d'images élevées ou des modèles
-de détecteur plus volumineux.
+de détecteur plus volumineux. La seule exception est RT-DETR sous macOS, où CoreML n'est pas plus
+rapide que le CPU et consomme plus du double de mémoire : `Auto` y maintient donc ce modèle sur le CPU.
 
 ## Démos
 

@@ -12,7 +12,7 @@ using VisioForge.Core.VideoCaptureX;
 
 namespace YourApp
 {
-    [Activity(Label = "@string/app_name", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait, Theme = "@android:style/Theme.NoTitleBar.Fullscreen")]
+    [Activity(Label = "@string/app_name", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.FullUser, ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize | Android.Content.PM.ConfigChanges.ScreenLayout | Android.Content.PM.ConfigChanges.SmallestScreenSize, Theme = "@android:style/Theme.NoTitleBar.Fullscreen")]
     public class MainActivity : Activity
     {
         private VisioForge.Core.UI.Android.VideoViewGL videoView;
@@ -79,6 +79,8 @@ namespace YourApp
                 _core = null;
                 return;
             }
+
+            videoSourceSettings.AutoUpdateOrientation = true;
 
             Log.Info("SimpleVideoCapture", $"Selected format: {videoSourceSettings.Format.Width}x{videoSourceSettings.Format.Height} @ {videoSourceSettings.Format.FrameRate}");
 
@@ -268,6 +270,7 @@ namespace YourApp
                     var moviesDir = GetExternalFilesDir(Android.OS.Environment.DirectoryMovies);
                     moviesDir.Mkdirs();
                     _filename = Path.Combine(moviesDir.AbsolutePath, $"visioforge_{now.Hour}_{now.Minute}_{now.Second}.mp4");
+                    _core.Video_Source_AutoUpdateOrientation = false;
                     await _core.StartCaptureAsync(0, _filename);
 
                     _isRecording = true;
@@ -277,6 +280,7 @@ namespace YourApp
                 else
                 {
                     await _core.StopCaptureAsync(0);
+                    _core.Video_Source_AutoUpdateOrientation = true;
                     await PhotoGalleryHelper.AddVideoToGalleryAsync(_filename);
 
                     _isRecording = false;

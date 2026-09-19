@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a native .NET for Androi
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a **native .NET for Android** application (TFM `net10.0-android`, Activity-based, NOT MAUI and NOT classic Xamarin.Android). Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. The same C# block code runs unchanged on WPF / MAUI / Avalonia / Uno / iOS / macOS — only the UI host swaps (`VideoViewGL` here, `<my:VideoView />` on MAUI, etc.) and the per-OS native redist NuGet.
 
-Pinned NuGet versions: wrapper **`2026.8.16`**, Android redist **`2026.7.27`** (matches the [official Simple Video Capture Android sample for Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Android/Simple%20Video%20Capture)). The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not blindly bump the redists to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.17`**, Android redist **`2026.9.11`** (matches the [official Simple Video Capture Android sample for Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Android/Simple%20Video%20Capture)). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -36,8 +36,8 @@ A native Android Media Blocks project needs **two NuGet packages plus one Projec
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.8.16" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.11" />
   <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
 </ItemGroup>
 <ItemGroup>
@@ -201,6 +201,7 @@ Minimum viable preview-only pipeline (no recording) — drop into a fresh `net10
 ```csharp
 // MainActivity.cs
 using Android;
+using Android.Content.PM;
 using Android.Runtime;
 using Android.Util;
 using VisioForge.Core;
@@ -214,7 +215,8 @@ using Activity = Android.App.Activity;
 namespace YourApp
 {
     [Activity(Label = "@string/app_name", MainLauncher = true,
-              ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait,
+              ScreenOrientation = Android.Content.PM.ScreenOrientation.FullUser,
+              ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize,
               Theme = "@android:style/Theme.NoTitleBar.Fullscreen")]
     public class MainActivity : Activity
     {
@@ -264,7 +266,11 @@ namespace YourApp
                     //   using var ms = new MemoryStream(); await s.CopyToAsync(ms);
                     //   await _pipeline.SetLicenseCertificateAsync(ms.ToArray());
 
-                    var src = new SystemVideoSourceBlock(new VideoCaptureDeviceSourceSettings(cameras[0]));
+                    var sourceSettings = new VideoCaptureDeviceSourceSettings(cameras[0])
+                    {
+                        AutoUpdateOrientation = true
+                    };
+                    var src = new SystemVideoSourceBlock(sourceSettings);
                     var renderer = new VideoRendererBlock(_pipeline, videoView) { IsSync = false };
                     _pipeline.Connect(src.Output, renderer.Input);
 
@@ -293,7 +299,92 @@ namespace YourApp
 }
 ```
 
-`references/MainActivity.cs` (paired with `references/Resources/layout/activity_main.xml`) ships the full pattern: `CreateEngineAsync()` builds the source/renderer/audio chain, `StartPreviewAsync()` connects source → renderer directly for preview, `btStartRecord_Click` rebuilds the graph with `TeeBlock` + `H264EncoderBlock` + `AACEncoderBlock` + `MP4SinkBlock` and writes recordings to `GetExternalFilesDir(Android.OS.Environment.DirectoryMovies)`, `btSwitchCam_Click` does live `_videoSource.SwitchCamera(...)` first with a full pipeline restart fallback when the new camera doesn't expose the current resolution/fps, and `OnDestroy` runs `DisposeAsync → DestroySDK`. Use it as a copy-paste starting template when you outgrow the snippet above.
+`references/MainActivity.cs` (paired with `references/Resources/layout/activity_main.xml`) ships the full pattern: `CreateEngineAsync(bool autoUpdateOrientation)` builds the source/renderer/audio chain, `StartPreviewAsync()` connects source → renderer directly for preview, `btStartRecord_Click` rebuilds the graph with `TeeBlock` + `H264EncoderBlock` + `AACEncoderBlock` + `MP4SinkBlock` and writes recordings to `GetExternalFilesDir(Android.OS.Environment.DirectoryMovies)`, `btSwitchCam_Click` does live `_videoSource.SwitchCamera(...)` first with a full pipeline restart fallback when the new camera doesn't expose the current resolution/fps, and `OnDestroy` runs `DisposeAsync → DestroySDK`. Use it as a copy-paste starting template when you outgrow the snippet above.
+
+## Device orientation
+
+The camera orientation is resolved from the sensor orientation and the display rotation, and applied
+once, when the pipeline is built. An activity pinned to one orientation needs no further orientation
+handling. The copyable sample above uses `ScreenOrientation.FullUser` plus `ConfigurationChanges` so
+Android allows rotation and keeps the same Activity instance while reporting it.
+
+An activity that rotates does. Without it the preview and the recorded file keep the orientation
+capture started in, and go sideways the moment the phone is turned.
+
+Use automatic updates for the preview source, or call `UpdateOrientation()` yourself from
+`OnConfigurationChanged`; neither path restarts the camera.
+
+`FullUser` honours the device's auto-rotate lock, so on a phone with rotation locked the activity
+never rotates and no orientation change is reported, so nothing in the rotation path runs - that is
+the user's choice, not a defect. (`OnConfigurationChanged` still fires for the other declared changes:
+split-screen, freeform resize, a foldable unfolding.) Use `Sensor` or `FullSensor` instead if the app must follow the device
+regardless of that setting.
+
+For the minimal Hello-World sample, replace its existing source construction with this complete
+setup (the surrounding sample already declares `cameras`):
+
+```csharp
+var sourceSettings = new VideoCaptureDeviceSourceSettings(cameras[0])
+{
+    AutoUpdateOrientation = true
+};
+var src = new SystemVideoSourceBlock(sourceSettings);
+```
+
+The full `references/MainActivity.cs` sample rebuilds its source when switching between preview
+and recording, and already passes the setting through the method that creates the source — this is
+that code, for reading rather than pasting:
+
+```csharp
+// The method already declares `videoSourceSettings` while selecting the camera format.
+private async Task CreateEngineAsync(bool autoUpdateOrientation)
+{
+    // Keep the existing camera selection and format code above these lines.
+    videoSourceSettings.AutoUpdateOrientation = autoUpdateOrientation;
+    _videoSource = new SystemVideoSourceBlock(videoSourceSettings);
+}
+
+// In StartPreviewAsync:
+await CreateEngineAsync(autoUpdateOrientation: true);
+
+// In btStartRecord_Click when starting recording:
+await CreateEngineAsync(autoUpdateOrientation: false);
+```
+
+`AutoUpdateOrientation` defaults to `false`, so nothing changes for an application that does not ask
+for it.
+
+**Do not let the orientation change mid-recording.** A quarter turn swaps the frame width and
+height: a preview renegotiates and follows, but an encoder and muxer already writing a file cannot
+take a frame size change part way through. So follow the device while previewing and bracket the
+recording - the full reference disables automatic updates when it creates the recording source and
+re-enables them when `StartPreviewAsync()` creates the next preview source. Do not toggle a source
+that `StopAsync()` has already disposed:
+
+```csharp
+// In btStartRecord_Click when starting recording, dispose the preview first.
+await StopAsync();
+await CreateEngineAsync(autoUpdateOrientation: false); // recording pipeline
+// Connect the recording graph and start it.
+
+// In btStartRecord_Click when stopping recording, rebuild the preview.
+await StopAsync(force: false);
+await StartPreviewAsync(); // creates the next source with auto updates enabled
+```
+
+If you drive it manually instead, add this override to the full reference `MainActivity` (its
+`_videoSource` and `_isRecording` fields are already declared) and skip the update while recording:
+
+```csharp
+public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
+{
+    base.OnConfigurationChanged(newConfig);
+    if (!_isRecording)
+    {
+        _videoSource?.UpdateOrientation();
+    }
+}
+```
 
 ## Common deployment failures
 

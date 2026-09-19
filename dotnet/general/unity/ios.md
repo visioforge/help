@@ -157,9 +157,12 @@ builds are seconds because Xcode caches almost everything.
 
 ### Does the SDK upload data to VisioForge servers?
 
-No. The SDK runs entirely in-process — no telemetry, no licensing call-home, no usage analytics.
-The `NSLocalNetworkUsageDescription` requirement is purely about your app's outgoing RTSP /
-HTTP connections, which iOS treats as user-visible.
+Not from the app you ship. There is no licensing call-home and no usage analytics, and a build
+running without a debugger sends nothing at all. While a debugger is attached — that is, only
+during your own development — the SDK reports its own errors in anonymized form; see
+[Telemetry and privacy](../telemetry.md) for exactly what that contains and set
+`Debug_Telemetry = false` to switch it off. The `NSLocalNetworkUsageDescription` requirement is
+purely about your app's outgoing RTSP / HTTP connections, which iOS treats as user-visible.
 
 ## See also
 

@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK X (cross-platform editor editio
 
 This skill helps you add **VisioForge Video Edit SDK X** — the cross-platform "X" edition of the editor SDK — to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Video Edit SDK X exposes a high-level non-linear editor god-object (`VideoEditCoreX`) with a list-of-clips timeline (`Input_AddAudioVideoFile`, `Input_AddImageFile`, `Input_AddAudioFile`) and a single configurable `Output_Format` sink. Same C# code targets all three desktop OSes — only the UI host (Avalonia here) and the per-OS native redist NuGet package change between platforms.
 
-Pinned NuGet versions: wrapper **`2026.8.16`**, Windows redists **`2026.4.29`**, macOS redist **`2026.8.5`** (matches the [official VideoJoin Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/Avalonia)). The redist versions track the underlying GStreamer rebuild cadence per OS and lag the wrapper version on purpose — pin every redist to the value shipped in the upstream csproj for the wrapper version you're using; do not blindly bump.
+Pinned NuGet versions: wrapper **`2026.9.17`**, Windows redists **`2026.9.11`**, macOS redist **`2026.9.11`** (matches the [official VideoJoin Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/Avalonia)). All native redists use the current `2026.9.11` release — pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -53,8 +53,8 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <OutputType>WinExe</OutputType>
 </PropertyGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 </ItemGroup>
 
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
@@ -62,7 +62,7 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <OutputType>Exe</OutputType>
 </PropertyGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 </ItemGroup>
 
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
@@ -185,9 +185,9 @@ These are the cross-platform pitfalls that bite first.
 **Cause**: the matching per-OS native runtime package is missing from the conditional `<ItemGroup>`. Common slips:
 
 - Windows build but `VisioForge.CrossPlatform.Core.Windows.x64` was added unconditionally and no `Condition="$([MSBuild]::IsOsPlatform('Windows'))"` wraps it — works on Windows, but `dotnet build` on a macOS / Linux host fails with NuGet restore errors because the Windows redist has no macOS / Linux RID.
-- Wrapper / redist version drift (e.g. wrapper `2026.8.16` paired with redist `2026.5.x` instead of `2026.4.29` Windows / `2026.8.5` macOS).
+- Wrapper / redist version drift (e.g. wrapper `2026.9.11` paired with an older Windows or macOS redist).
 
-**Fix**: cross-check against `references/Sample.csproj` — every per-OS `ItemGroup` needs the matching `Condition`. Pin every redist to the value shipped in the upstream csproj for your wrapper version; do not bump.
+**Fix**: cross-check against `references/Sample.csproj` — every per-OS `ItemGroup` needs the matching `Condition`. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ### 2. Linux: app launches but `Start()` errors with "no element X"
 

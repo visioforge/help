@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into an Avalonia UI applicati
 
 This skill helps you add **VisioForge Media Blocks SDK .Net** to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4OutputBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring them with `pipeline.Connect(producer, consumer)`, then calling `await pipeline.StartAsync()`. Compared to the higher-level Video Capture SDK X (a single `VideoCaptureCoreX` god-object), Media Blocks gives you full control over the topology — splitting streams with tees, mixing sources, transcoding without preview, swapping sinks at runtime — at the cost of having to wire every edge yourself.
 
-Pinned NuGet versions: wrapper **`2026.8.16`**, Windows redists **`2026.4.29`**, macOS redist **`2026.8.5`** (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia)). Newer 2026.x.x patch versions of the wrapper are drop-in compatible — but the redist versions track the underlying GStreamer/libav rebuild cadence per OS and lag the wrapper on purpose. Pin every redist to the value shipped in the upstream csproj for the wrapper version you're using; do not blindly bump.
+Pinned NuGet versions: wrapper **`2026.9.17`**, Windows redists **`2026.9.11`**, macOS redist **`2026.9.11`** (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia)). Moving the wrapper to a newer 2026.x.x release means re-checking each redist against it — all native redists currently use `2026.9.11` release. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -57,8 +57,8 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <OutputType>WinExe</OutputType>
 </PropertyGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 </ItemGroup>
 
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
@@ -66,7 +66,7 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <OutputType>Exe</OutputType>
 </PropertyGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 </ItemGroup>
 
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
@@ -175,10 +175,10 @@ These are the cross-platform pitfalls that bite first.
 
 - Windows redist added unconditionally (no `Condition="$([MSBuild]::IsOsPlatform('Windows'))"`) — works on Windows but breaks NuGet restore on a macOS / Linux host because the Windows redist has no matching RID.
 - Windows pipeline mux es to MP4 / MPEG-TS / WebM but only `VisioForge.CrossPlatform.Core.Windows.x64` is referenced — the libav redist is a separate NuGet and is what most "no element" errors trace back to.
-- Wrapper / redist version drift (wrapper `2026.8.16` paired with Windows redist `2026.5.x` instead of `2026.4.29`, or macOS redist `2026.x.x` instead of `2026.8.5`).
+- Wrapper / redist version drift (wrapper `2026.9.11` paired with an older Windows or macOS redist).
 - `VisioForgeX.InitSDK()` placed after `new MediaBlocksPipeline()` instead of before it.
 
-**Fix**: cross-check against `references/Sample.csproj`. On Windows reference both Core and Libav. Pin every redist to the upstream-sample value for your wrapper version. Confirm `InitSDK` is the very first SDK call in `MainWindow`'s constructor.
+**Fix**: cross-check against `references/Sample.csproj`. On Windows reference both Core and Libav. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. Confirm `InitSDK` is the very first SDK call in `MainWindow`'s constructor.
 
 ### 2. Linux: app launches but `StartAsync()` errors with "no element X" / "Element 'h264parse' not found"
 

@@ -115,6 +115,30 @@ Android refuses to hand a USB video device to an app that does not hold `android
 
 USB camera capture requires **Android 9 (API level 28) or newer**. For the full walkthrough see [USB camera capture on Android](../general/guides/android-usb-camera.md).
 
+### Fonts for text overlays
+
+Text overlays - `TextOverlayBlock`, subtitle rendering and the trial watermark - resolve font families through fontconfig, which the SDK configures during initialization. It lists the Android system faces and, on top of them, the fonts your own application ships, so an overlay can name a typeface the device does not have installed.
+
+A font is picked up when it reaches the APK as an **asset**. A .NET MAUI app gets that for free:
+
+```xml
+<ItemGroup>
+  <MauiFont Include="Resources\Fonts\*" />
+</ItemGroup>
+```
+
+A plain .NET for Android app declares the font itself, either at the root of the assets folder or in an `assets/fonts` subfolder:
+
+```xml
+<ItemGroup>
+  <AndroidAsset Include="Assets\OpenSans-Regular.ttf" />
+</ItemGroup>
+```
+
+`.ttf`, `.ttc`, `.otf` and `.otc` are recognized. The SDK extracts them into the application's private storage on the first start after an install or update, so nothing is copied on an ordinary launch, and a font dropped from a later version stops resolving.
+
+> **Note:** In your code, name the font **family** as it is recorded inside the file - `Open Sans`, not `OpenSans-Regular.ttf`. Fonts declared as Android *resources* under `Resources/font/` are not assets and are not visible to text overlays; ship the file as an asset instead.
+
 ## Java Bindings Library Integration
 
 Android applications using VisioForge SDK require a custom Java Bindings Library for proper functionality. This essential step ensures proper communication between the .NET framework and Android's Java-based environment.

@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to a .NET MAUI application that targets **Windows, Android, iOS, and Mac Catalyst** from a single codebase. The X SDK shares its native runtime with Video Capture X and Media Blocks (GStreamer-backed under the hood) and exposes a high-level playback god-object (`MediaPlayerCoreX`) that mirrors the legacy `MediaPlayerCore` API but runs on the cross-platform engine. Same C# code targets every OS — only the platform handler glue and per-OS redist NuGets change between TFMs.
 
-Pinned NuGet versions: wrapper **`2026.8.16`**, MAUI handlers **`2026.8.16`**, plus per-OS native redists at the versions shown in the csproj below — these match the official [Media Player X MAUI samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/MAUI). Newer 2026.x.x patch versions are drop-in compatible; keep `VisioForge.DotNet.MediaPlayer` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same wrapper version. The redist version tracks the underlying GStreamer rebuild cadence and lags the wrapper version on purpose — pin to the value shipped in the upstream csproj for your wrapper version; do not blindly bump.
+Pinned NuGet versions: wrapper **`2026.9.17`**, MAUI handlers **`2026.9.17`**, plus per-OS native redists at the versions shown in the csproj below — these match the official [Media Player X MAUI samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/MAUI). Moving to a newer 2026.x.x release means moving the wrapper pair to that version and re-checking each redist against it; keep `VisioForge.DotNet.MediaPlayer` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same wrapper version. Native redists use the current `2026.9.11` release in this skill. The `VisioForge.CrossPlatform.*` packages are built on their own cadence, so pin each to the newest version published **at or before** the wrapper's release rather than assuming the wrapper's number exists for it; the upstream csproj is a starting point and can itself lag.
 
 ## When to use this skill
 
@@ -76,23 +76,23 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.8.16" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.11" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -281,13 +281,13 @@ These are the five most common production issues — flag any of them on first r
 
 ### 2. `DllNotFoundException` / `dlopen` failure on first playback (per-OS)
 
-**Cause**: the matching per-OS native runtime package is missing from the conditional `<ItemGroup>`, **or** wrapper / redist version drift (e.g. wrapper `2026.8.16` paired with redist `2026.5.x` instead of `2026.4.29`). Common slips:
+**Cause**: the matching per-OS native runtime package is missing from the conditional `<ItemGroup>`, **or** wrapper / redist version drift (e.g. wrapper `2026.9.11` paired with an older native redist). Common slips:
 
 - Windows: forgot `VisioForge.CrossPlatform.Core.Windows.x64` (build succeeds but `MediaPlayerCoreX` construction fails).
 - Android: missing `<ProjectReference Include="...AndroidDependency\VisioForge.Core.Android.X10.csproj" />` — the package alone is not enough; the companion csproj binds the `.aar`.
 - Mac Catalyst: the `CopyNativeLibrariesToMonoBundle` `<Target>` was deleted, so `.dylib` files never reach `.app/Contents/MonoBundle/`.
 
-**Fix**: cross-check against `references/Sample.csproj` — every conditional ItemGroup matters. Pin redist versions to the values shipped in the upstream csproj for your wrapper version; do not bump.
+**Fix**: cross-check against `references/Sample.csproj` — every conditional ItemGroup matters. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ### 3. iOS / Mac Catalyst app crashes during MAUI XAML load
 

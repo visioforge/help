@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a **native .NET for macOS** application (`net10.0-macos`, AppKit / Storyboards / `NSApplication`). The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes the high-level `VideoCaptureCoreX` god-object with the same API across all platforms; on macOS the host UI is AppKit (`NSViewController`, `NSWindow`) and the preview surface is `VideoViewGL` from `VisioForge.Core.UI.Apple`.
 
-Pinned NuGet versions: wrapper **`2026.8.16`**, macOS native redist **`2026.8.5`** (matches the [official Simple Video Capture sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/macOS/SimpleVideoCapture)). The macOS redist version lags the wrapper version on purpose — pin both to the values shipped in the upstream csproj for the wrapper version you're using; do not bump the redist to match the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.17`**, macOS native redist **`2026.9.11`** (matches the [official Simple Video Capture sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/macOS/SimpleVideoCapture)). The macOS native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -42,10 +42,10 @@ Two packages — the .NET wrapper plus a single macOS native redist. There is no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.8.16" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
