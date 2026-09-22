@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK .NET (file/stream playback) i
 
 This skill helps you add **VisioForge Media Player SDK .NET** to a Windows WPF application. It covers playback of local video/audio files, network streams (HTTP, RTSP, UDP, RTMP), and DVD/Blu-ray, with seek, pause/resume, audio device selection, volume control, and a bindable timeline. The SDK is Windows-only (DirectShow / Media Foundation under the hood) — for cross-platform playback (macOS, iOS, Android, Linux), use one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills instead.
 
-Pinned NuGet version: **`2026.9.17`** (matches the [official Simple Player Demo sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WPF/CSharp/Simple%20Player%20Demo)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.9.22`** (matches the [official Simple Player Demo sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WPF/CSharp/Simple%20Player%20Demo)). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -36,7 +36,7 @@ The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
 </ItemGroup>
 ```
 

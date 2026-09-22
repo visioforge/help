@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK .NET into a Windows WPF appli
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a Windows WPF application. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. Compared to the higher-level Video Capture SDK (a single `VideoCaptureCore` god-object), Media Blocks gives you full control over the topology — splitting streams with tees, mixing sources, transcoding without preview, swapping sinks at runtime — at the cost of having to wire every edge yourself.
 
-Pinned NuGet version: **`2026.9.17`** (matches the [official Simple Capture Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it.
+Pinned NuGet version: **`2026.9.22`** (matches the [official Simple Capture Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it.
 
 ## When to use this skill
 
@@ -35,7 +35,7 @@ Three packages are required for a Windows WPF capture-and-record pipeline — th
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />

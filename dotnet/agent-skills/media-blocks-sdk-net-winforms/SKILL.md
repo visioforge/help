@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK .NET into a Windows Forms app
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a Windows Forms application. Unlike Video Capture SDK's high-level "set device + click record" API, Media Blocks is a **graph-based pipeline SDK**: you instantiate `MediaBlocksPipeline`, then construct source / transform / sink blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, …) and wire their pads together with `pipeline.Connect(outPad, inPad)`. This is the right tool when you need a custom topology — multi-source mixing, branched recording-plus-streaming via `TeeBlock`, on-the-fly transcoding, sample-grabber callbacks, etc. For a plain "show webcam, hit record" scenario, prefer `video-capture-sdk-net-winforms`.
 
-Pinned NuGet version: **`2026.9.17`** (matches the [official Simple Video Capture demo for Media Blocks WinForms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/Simple%20Video%20Capture%20Demo)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it: pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet version: **`2026.9.22`** (matches the [official Simple Video Capture demo for Media Blocks WinForms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/Simple%20Video%20Capture%20Demo)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it: pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -35,7 +35,7 @@ The SDK ships as a single .NET meta-package plus two native runtime packages (th
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 </ItemGroup>

@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK .NET into a .NET MAUI cross-p
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a .NET MAUI application that targets **Windows, Android, iOS, and macOS (Mac Catalyst)** from a single codebase. Media Blocks is a *graph-based* pipeline SDK — you build a `MediaBlocksPipeline` by connecting `MediaBlock` nodes (sources → transforms → encoders → sinks/renderers) similar to GStreamer or DirectShow. That's the primary trade-off vs the higher-level capture/edit/player SDKs: more flexibility, more wiring code.
 
-Pinned NuGet version: **`2026.9.17`** for the MAUI SDK packages, with platform-specific redists at the versions shown in the csproj below — these match the official [Simple Capture MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/SimpleCapture). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it; keep `VisioForge.DotNet.MediaBlocks` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet version: **`2026.9.22`** for the MAUI SDK packages, with platform-specific redists at the versions shown in the csproj below — these match the official [Simple Capture MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/SimpleCapture). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it; keep `VisioForge.DotNet.MediaBlocks` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -79,7 +79,7 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">

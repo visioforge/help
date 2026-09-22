@@ -75,8 +75,8 @@ Use las últimas versiones de paquetes NuGet del SDK para .NET en su proyecto.
 Agregue los siguientes paquetes NuGet a su proyecto:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 ```
 
 El paquete `VideoCapture` contiene la funcionalidad principal de captura de video, mientras que el paquete `Core.UI.MAUI` contiene el control `VideoView` para vista previa de video en apps .NET MAUI.
@@ -89,8 +89,8 @@ Agregue los siguientes paquetes NuGet a su proyecto según la plataforma objetiv
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -98,7 +98,7 @@ Agregue los siguientes paquetes NuGet a su proyecto según la plataforma objetiv
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
@@ -109,7 +109,7 @@ Agregue los siguientes paquetes NuGet a su proyecto según la plataforma objetiv
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- La versión del redistribuable de iOS va por detrás de la versión del SDK a propósito - sigue
        el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -118,7 +118,7 @@ Agregue los siguientes paquetes NuGet a su proyecto según la plataforma objetiv
 ```xml
 <!-- Paquete NuGet personalizado y código de target para maccatalyst para copiar archivos redistribuibles NuGet al archivo de la app -->
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 
 <Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">

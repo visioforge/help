@@ -73,23 +73,23 @@ Runtimes nativos específicos por plataforma — añade los que correspondan a t
 
 ```xml
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 
 <!-- Windows x86 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.9.11" />
 
 <!-- macOS / macCatalyst -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 
 <!-- Linux x64 (requiere GStreamer 1.22+ del sistema) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 
 <!-- Android / iOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 Integración de UI (elige la que corresponda a tu stack de UI):

@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK X (cross-platform editor editio
 
 This skill helps you add **VisioForge Video Edit SDK X** — the cross-platform "X" edition of the editor SDK — to a Windows Forms application. The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level non-linear-editor god-object (`VideoEditCoreX`) that mirrors the legacy `VideoEditCore` API but runs on the cross-platform engine. Same C# code targets Windows / macOS / Linux / iOS / Android — the only thing that changes between platforms is the UI host (WinForms here, Avalonia / Console / WPF / MAUI elsewhere) and the per-OS native redist NuGet package.
 
-Pinned NuGet versions: wrapper **`2026.9.17`**, redist **`2026.9.11`** (matches the upstream Main Demo X sample at `_DEMOS/Video Edit SDK X/WinForms/CSharp/Main Demo X/`). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.22`**, redist **`2026.9.11`** (matches the upstream Main Demo X sample at `_DEMOS/Video Edit SDK X/WinForms/CSharp/Main Demo X/`). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -38,7 +38,7 @@ Three packages are required for a Windows WinForms edit-and-transcode scenario �
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.22" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />

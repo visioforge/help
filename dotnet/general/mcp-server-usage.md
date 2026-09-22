@@ -284,8 +284,8 @@ Get platform-specific file copying/build configuration code. Returns MSBuild tar
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```

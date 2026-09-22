@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK .NET (file/stream playback) i
 
 This skill helps you add **VisioForge Media Player SDK .NET** to a Windows App SDK / WinUI 3 desktop application. It covers playback of local files and network streams (HTTP/RTSP/UDP/file-based MMS) with seek, pause/resume, audio output control, and a position timer. WinUI 3 is the right host when you want native Windows 10/11 look-and-feel, MSIX/Store deployment, and the modern Fluent control set; for the traditional WPF stack use `media-player-sdk-net-wpf`, for WinForms use `media-player-sdk-net-winforms`. The SDK is Windows-only (DirectShow / Media Foundation under the hood).
 
-Pinned NuGet version: **`2026.9.17`** (matches the [official Simple Media Player WinUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WinUI/CSharp/Simple%20Media%20Player%20WinUI)). Newer 2026.x.x patch versions are drop-in compatible. Pinned Windows App SDK: **`Microsoft.WindowsAppSDK 1.8.251106002`**.
+Pinned NuGet version: **`2026.9.22`** (matches the [official Simple Media Player WinUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WinUI/CSharp/Simple%20Media%20Player%20WinUI)). Newer 2026.x.x patch versions are drop-in compatible. Pinned Windows App SDK: **`Microsoft.WindowsAppSDK 1.8.251106002`**.
 
 ## When to use this skill
 
@@ -49,10 +49,10 @@ WinUI requires **two** VisioForge packages — the SDK itself and the WinUI-spec
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="2026.9.22" />
 </ItemGroup>
 ```
 

@@ -43,14 +43,14 @@ Add platform-specific native dependencies:
 
 ```xml
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 
 <!-- Linux x64 (needs system GStreamer 1.22+) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 For the full list of packages and UI framework support (WinForms, WPF, MAUI, Avalonia), see the [Installation Guide](../install/index.md).

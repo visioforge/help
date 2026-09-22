@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the playback SDK — to a Windows App SDK / WinUI 3 desktop application. The X SDK shares its runtime with Media Blocks and Video Capture X (GStreamer-backed under the hood) and exposes a high-level player god-object (`MediaPlayerCoreX`) that mirrors the legacy `MediaPlayerCore` API but runs on the cross-platform engine. The same C# code targets Windows / macOS / Linux / iOS / Android — only the UI host (WinUI 3 here, MAUI / Avalonia / Uno / native elsewhere) and the per-OS native redist NuGet package change.
 
-Pinned NuGet versions: wrapper **`2026.9.17`**, redist **`2026.9.11`**, Windows App SDK **`Microsoft.WindowsAppSDK 1.8.251106002`** (matches the [official Simple Media Player WinUIX sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinUI)). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.22`**, redist **`2026.9.11`**, Windows App SDK **`Microsoft.WindowsAppSDK 1.8.251106002`** (matches the [official Simple Media Player WinUIX sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinUI)). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -53,8 +53,8 @@ Four packages are required for a WinUI 3 playback scenario — the .NET wrapper,
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.9.22" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
@@ -307,7 +307,7 @@ Run through these after first integration:
 
 The `references/` folder is a faithful copy of the official sample with the SDK icon stripped and the target framework bumped to `net10.0`. Copy all of it into a fresh project folder; you'll also need the `Assets/` PNGs from any WinUI 3 desktop template (or the upstream sample) for the package to build:
 
-- `references/Sample.csproj` — minimal working WinUI 3 csproj, version-pinned to the same NuGet release as the prose (wrapper `2026.9.17`, redist `2026.9.11`, WindowsAppSDK `1.8.251106002`).
+- `references/Sample.csproj` — minimal working WinUI 3 csproj, version-pinned to the same NuGet release as the prose (wrapper `2026.9.22`, redist `2026.9.11`, WindowsAppSDK `1.8.251106002`).
 - `references/App.xaml` + `references/App.xaml.cs` — Application entry point.
 - `references/MainWindow.xaml` — XAML with `<win2d:CanvasControl x:Name="canvasControl"/>` for the playback surface, file/URL textbox + browse, and Play / Pause / Resume / Stop / position-slider transport bar.
 - `references/MainWindow.xaml.cs` — full code-behind with `MediaPlayerCoreX` construction in the ctor, file picker, `UniversalSourceSettings.CreateAsync` open, `DispatcherTimer`-driven position display, audio output device pick, `OnError` wiring, and `MainWindow_Closed → StopAsync → DisposeAsync → VisioForgeX.DestroySDK()` shutdown. Use as a copy-paste starting template. (Runs in trial mode by design; add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence.)

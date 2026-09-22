@@ -83,14 +83,14 @@ L'idée principale est de prendre le flux vidéo brut de la source RTSP et de l'
 Vous aurez besoin du VisioForge Media Blocks SDK. Vous pouvez l'ajouter à votre projet .NET via NuGet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Selon votre plateforme cible (Windows, macOS, Linux, y compris les systèmes ARM comme Jetson Nano pour les applications de caméras embarquées), vous aurez également besoin des paquets de runtime natifs correspondants. Par exemple, sous Windows pour enregistrer la vidéo :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Pour des informations détaillées sur les exigences de déploiement et les dépendances spécifiques aux plateformes, consultez notre [guide de déploiement](../../deployment-x/index.md). Il est important de vérifier ces détails pour que votre application de capture de flux vidéo fonctionne correctement.

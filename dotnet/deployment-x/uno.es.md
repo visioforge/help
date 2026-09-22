@@ -107,8 +107,8 @@ Agregue los siguientes paquetes a su proyecto:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.22" />
 </ItemGroup>
 ```
 
@@ -121,8 +121,8 @@ Agregue paquetes redistributables específicos de plataforma a su proyecto:
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
   <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -130,7 +130,7 @@ Agregue paquetes redistributables específicos de plataforma a su proyecto:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
 </ItemGroup>
 ```
 
@@ -146,7 +146,7 @@ Adicionalmente, necesitará agregar la Biblioteca de Bindings de Java. Clónela 
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -154,7 +154,7 @@ Adicionalmente, necesitará agregar la Biblioteca de Bindings de Java. Clónela 
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -217,31 +217,31 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
   
   <!-- Referencias Core de VisioForge -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.17" />
-    <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.22" />
+    <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.22" />
   </ItemGroup>
   
   <!-- Plataforma Windows -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
   </ItemGroup>
   
   <!-- Plataforma Android -->
   <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
     <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
   </ItemGroup>
   
   <!-- Plataforma iOS -->
   <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
   </ItemGroup>
   
   <!-- Plataforma macOS Catalyst -->
   <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
   </ItemGroup>
   
   <!-- macOS: Copiar bibliotecas nativas al bundle de la app -->

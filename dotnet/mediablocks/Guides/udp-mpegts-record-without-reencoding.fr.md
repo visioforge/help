@@ -99,14 +99,14 @@ graph LR;
 Ajoutez le Media Blocks SDK à votre projet via NuGet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Sous Windows, vous avez également besoin des paquets de runtime natif. Pour enregistrer (multiplexer), vous avez besoin du runtime principal ; le paquet Libav fournit les multiplexeurs :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Pour les paquets de runtime macOS, Linux, Android et iOS et les notes propres à chaque plateforme, consultez le [Guide de déploiement](../../deployment-x/index.md).

@@ -100,7 +100,7 @@ Vous pouvez ajouter ces paquets via le gestionnaire de paquets NuGet de votre ID
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <PackageReference Include="VisioForge.DotNet.Core" Version="2026.*" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 

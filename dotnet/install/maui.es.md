@@ -190,7 +190,7 @@ Agrega el paquete específico de iOS a tu proyecto:
   <!-- La versión del redistribuable de iOS va por detrás de la versión del SDK a propósito - sigue
        el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. No la subas para
        igualar VisioForge.DotNet.*; no existe una versión 2026.x en nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 

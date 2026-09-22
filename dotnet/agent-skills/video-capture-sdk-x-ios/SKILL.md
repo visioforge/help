@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a **native .NET for iOS** application (`net10.0-ios` TFM, UIKit, no MAUI/Xamarin shell). The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes the high-level `VideoCaptureCoreX` god-object that mirrors the legacy `VideoCaptureCore` API. Same C# capture/recording code ports to Windows / macOS / Android / MAUI / Avalonia / Uno — only the UI host changes.
 
-Pinned NuGet versions: wrapper **`VisioForge.DotNet.VideoCapture` 2026.9.17**, native iOS redist **`VisioForge.CrossPlatform.Core.iOS` 2026.9.11** (matches the [official Simple Video Capture X iOS sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/iOS/SimpleVideoCapture)). The iOS native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`VisioForge.DotNet.VideoCapture` 2026.9.22**, native iOS redist **`VisioForge.CrossPlatform.Core.iOS` 2026.9.11** (matches the [official Simple Video Capture X iOS sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/iOS/SimpleVideoCapture)). The iOS native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -35,7 +35,7 @@ Two packages — the .NET wrapper plus the iOS native redist. The redist is **no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />

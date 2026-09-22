@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the playback SDK — to a Windows Forms application. The X SDK shares its runtime with Media Blocks and Video Capture X (GStreamer-backed under the hood) and exposes a high-level player god-object (`MediaPlayerCoreX`) that mirrors the legacy `MediaPlayerCore` API but runs on the cross-platform engine. Same C# code targets Windows / macOS / Linux / iOS / Android — the only thing that changes between platforms is the UI host (WinForms here, MAUI / Avalonia / Uno / native elsewhere) and the per-OS native redist NuGet package.
 
-Pinned NuGet versions: wrapper **`2026.9.17`**, redist **`2026.9.11`** (matches the upstream "Main Demo" sample at `_SETUP/GitHub/Media Player SDK X/WinForms/Main Demo/`). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.22`**, redist **`2026.9.11`** (matches the upstream "Main Demo" sample at `_SETUP/GitHub/Media Player SDK X/WinForms/Main Demo/`). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -38,7 +38,7 @@ Three packages are required for a Windows WinForms playback scenario — the .NE
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />

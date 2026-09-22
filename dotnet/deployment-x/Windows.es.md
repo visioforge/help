@@ -60,6 +60,13 @@ Cada aplicación Windows construida con el SDK de VisioForge requiere el paquete
 
 Dependiendo de los requisitos de tu aplicación, puedes necesitar incluir paquetes adicionales para funcionalidad especializada. Estos componentes opcionales extienden las capacidades del SDK en varios dominios.
 
+### Intel Quick Sync Video (QSV)
+
+Los codificadores y decodificadores por hardware QSV (`QSVH264EncoderSettings`, `QSVHEVCEncoderSettings`, `QSVAV1EncoderSettings` y el resto de ajustes `QSV*`) se distribuyen en un paquete aparte. Sin él, crear un codificador QSV falla con `Unable to create H264 encoder 'qsvh264enc'`:
+
+- [VisioForge.CrossPlatform.Core.Windows.Intel.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Intel.x86) - Intel QSV para aplicaciones de 32 bits
+- [VisioForge.CrossPlatform.Core.Windows.Intel.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Intel.x64) - Intel QSV para aplicaciones de 64 bits
+
 ### Procesamiento de Medios FFMPEG (Recomendado)
 
 Estos paquetes proporcionan soporte completo de codecs para una amplia gama de formatos de medios a través de la integración de la biblioteca FFMPEG:

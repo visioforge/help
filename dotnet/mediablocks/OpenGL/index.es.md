@@ -516,8 +516,8 @@ Nombre: GLOverlayBlock.
 
 | Dirección del pin | Tipo de medio | Cantidad de pines |
 | --- | :---: | :---: |
-| Entrada | Video (memoria GL) | 1 |
-| Salida | Video (memoria GL) | 1 |
+| Entrada | Video (memoria de sistema o GL) | 1 |
+| Salida | Video (memoria de sistema o GL) | 1 |
 
 La superposición se configura con `GLOverlaySettings` (ver [Ajustes de Superposición](#ajustes-de-superposicion-gloverlaysettings) arriba). Llame a `UpdateSettings()` después de cambiar las propiedades de `Settings` para aplicar los cambios a un pipeline en ejecución.
 
@@ -576,8 +576,8 @@ Nombre: GLResizeBlock.
 
 | Dirección del pin | Tipo de medio | Cantidad de pines |
 | --- | :---: | :---: |
-| Entrada | Video (memoria GL) | 1 |
-| Salida | Video (memoria GL) | 1 |
+| Entrada | Video (memoria de sistema o GL) | 1 |
+| Salida | Video (memoria de sistema o GL) | 1 |
 
 #### El pipeline de ejemplo
 
@@ -626,8 +626,8 @@ Nombre: GLSquareBlock.
 
 | Dirección del pin | Tipo de medio | Cantidad de pines |
 | --- | :---: | :---: |
-| Entrada | Video (memoria GL) | 1 |
-| Salida | Video (memoria GL) | 1 |
+| Entrada | Video (memoria de sistema o GL) | 1 |
+| Salida | Video (memoria de sistema o GL) | 1 |
 
 #### El pipeline de ejemplo
 

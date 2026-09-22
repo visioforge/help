@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a Blazor Server applicat
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a Blazor **Server** application. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `RTSPServerBlock`, `MP4SinkBlock`, `UniversalSourceBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. The Razor UI is just a remote control: every pipeline runs **on the server process** (the same machine hosting the ASP.NET Core app); the browser only sees status text, button clicks, and form posts. There is no `VideoView` in Blazor — to expose the live media to the user you publish it from the server (RTSP server, MP4 file, RTMP push, HLS, WebRTC WHIP, …) and let the browser consume that URL with a separate player or `<video>` element.
 
-Pinned NuGet version: **`2026.9.17`** (matches the [official RTSP Webcam Blazor Server demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Blazor)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it.
+Pinned NuGet version: **`2026.9.22`** (matches the [official RTSP Webcam Blazor Server demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Blazor)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it.
 
 ## When to use this skill
 
@@ -47,7 +47,7 @@ The .NET wrapper is a single package; the native redist is per-OS and **not tran
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 </ItemGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />

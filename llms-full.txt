@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-09-19 06:45:23 UTC (93e2dfcd70d)
+**Generated:** 2026-09-22 14:21:40 UTC (f6595639e13)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 1365 help documentation pages + 66 website pages
 
@@ -39720,14 +39720,63 @@ In the Zmodo RTSP URL, `av0_0` is the main (highest quality) stream and `av0_1` 
 ## VisioForge .NET SDKs — Changelog and Release Notes
 **URL:** https://www.visioforge.com/help/docs/dotnet/changelog/
 **Description:** Version history for Video Capture, Media Player, Video Edit, and Media Blocks SDKs. New features, bug fixes, API changes, and platform updates.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, DirectShow, Windows, Capture, Playback, Streaming, Editing
+**API:** VideoCaptureCore, VideoCaptureCoreX, VideoView, MediaPlayerCoreX, DeviceEnumerator
 
 # Changelog
 
 Changes and updates for all .Net SDKs.
 
-## 2026.9.19
+## 2026.9.22
 
+- [Media Blocks SDK .Net] **Fixed: a block added to a running pipeline with `AddBlockLive` / `ConnectLive` / `SyncBlockStateLive` could stop the data flow while `SyncBlockStateLive` reported success** - affected the OpenGL effect blocks (`GLResizeBlock` and the rest of the `GL*Block` effects), the H264 encoder, video resize, and file output blocks such as `MP4SinkBlock` (a live-started recording ended without a playable file). Every element of such a block is now started together with it. (#1688)
+- [Video Capture SDK .Net] [Media Player SDK .Net] **Fixed: an engine finalized without `Dispose()` logged an `Error` for every dropped instance, even one that was never started** - an app creating many players or capture objects and dropping them could flood the log with identical errors. An instance that had a graph or a start in flight still logs the `Error`; one that never started now logs a `Warning`, and both messages name the source file or capture device to help locate the dropped instance. (#1680)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Media Blocks SDK .Net] **Fixed: removing a video effect from a running capture could freeze the preview until the capture was restarted** - most often at 1080p with a USB camera, with another effect still applied, and logged as `the pipeline did not return to Playing`. Video effects are now added and removed while the pipeline keeps playing, without pausing it. (#1673)
+- [Media Blocks SDK .Net] **Fixed: `StopAsync()` on the Live Video Compositor, Live Video Compositor V2 and Live Source Switch reported "Unable to stop ... pipeline" errors for pipelines that were not running** — for example when stopping after a failed start (such as an expired trial), calling stop a second time, or when two stops overlapped. Stopping a pipeline that is not running is now handled quietly. (#1676)
+- [Media Blocks SDK .Net] **Fixed: the OpenGL video effect blocks (`GLResizeBlock`, `GLGrayscaleBlock`, `GLShaderBlock`, and the rest of the `GL*Block` effects) failed to link when placed between regular system-memory video blocks** - the pipeline reported a bare `Noformat` error and never started. The blocks now upload frames to the GPU and download the result back internally, so they work between any video blocks, and non-RGBA input formats (NV12, BGRx) that previously failed even with explicit `GLUploadBlock`/`GLDownloadBlock` are supported. The explicit blocks remain optional, not required. (#1677)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: when a DirectShow filter had no redist file name for the running architecture, creating it threw `ArgumentNullException` (`Parameter name: path2`) instead of reporting the deployment problem.** The engine now logs the usual "Unable to create filter (from file) ... Please check Deployment" error, as it does when the file exists but cannot be loaded. (#1678)
+- [Media Blocks SDK .Net] **Fixed: an app using the HTTP MJPEG live sink (`HTTPMJPEGLiveSinkBlock`) crashed when a browser client disconnected — for example, when the page showing the stream was refreshed.** The whole process terminated with `System.ObjectDisposedException` instead of just dropping the stale connection; the server now logs the disconnect and keeps serving new viewers. (#1675)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with the EVR or VMR-9 video renderer, a resize, `Video_Renderer_Update()` or video adjustment (ProcAmp) call made while a capture or playback was restarting could log `COM object that has been separated from its underlying RCW cannot be used`.** Such a call is now skipped quietly while the renderer is being rebuilt; the video position and size are applied when the restart completes. (#1560)
+- [Video Capture SDK .Net] [Media Blocks SDK .Net] [Video Edit SDK .Net] **Improved: when an Intel Quick Sync (QSV) encoder cannot be created on Windows, the error now names the encoder and the package that provides it** - `VisioForge.CrossPlatform.Core.Windows.Intel.x64` (or `.x86`) - instead of a bare `Unable to create H264 encoder.` (#1670)
+- [Demos] The WPF demos that offer QSV encoders now reference `VisioForge.CrossPlatform.Core.Windows.Intel.x64`, so selecting "QSV H264" records instead of failing with `Unable to create H264 encoder.` (#1670)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - the hosting window could not be made always-on-top while video played:** setting `Form.TopMost` (or calling `SetWindowPos` with `HWND_TOPMOST`) reported success and changed nothing. (#1668)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with the EVR video renderer, shrinking the video area left the previous, larger picture on screen around the new one.** The part of the video window the picture no longer covers is now cleared. (#1654)
+- [Media Player SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - `StopAsync()`/`Stop()` could take a minute and a half or never return at all, leaving the player impossible to stop or dispose.** Playback with that renderer now starts and stops as quickly as it does with EVR, VMR-9 and Direct2D, whether it was started with `PlayAsync()` or with `Play()`, and whichever thread started it. (#1573, #1659)
+- [Video Capture SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - a capture or preview started with `Start()` from a thread that runs no message loop - a thread-pool thread, a worker thread, a console `Main` - could never be stopped or disposed.** `VideoCaptureCore` now builds and tears that graph down on a dedicated message-pumping thread, as `MediaPlayerCore` and `VideoEditCore` already did. (#1658)
+- [Media Player SDK .Net] **Fixed: `VideoRendererMode.VideoRenderer` took the desktop foreground away from the hosting application on every `Video_Renderer_Update()`**, dropping the application window's always-on-top state and letting other windows cover it. The video window is still shown on each update, but no longer changes which window is in front. (#1573)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - the picture was drawn too large and cropped to the video window in an application whose process DPI awareness differs from that of the window it plays into** - a scaled display showed only the top-left part of the frame, which could look like frozen video. The renderer's window is now created and positioned in the DPI awareness context of the window it is given. (#1658)
+- [Video Capture SDK .Net] [Media Player SDK .Net] **Fixed: `OSD_Layers_Draw_Image(id, filename, left, top)` drew the image in the top-left corner of the layer with its first `left` x `top` pixels cut off, instead of placing it at (`left`, `top`).** Code that compensated by passing negative offsets must now pass the intended position; code that used the `OSD_Layers_Draw_Image(id, filename, srcRect, destRect, ...)` overload instead is unaffected. (#1570)
+- [Media Player SDK .Net] **Fixed: `Stop()`/`StopAsync()` called while `Play()`/`PlayAsync()` was still opening the source was ignored, and the playback started anyway.** The stop is now carried out as soon as the start finishes: `PlayAsync()` returns `false`, the player ends stopped, and the task returned by `StopAsync()` completes once it has. (#1646)
+- [Media Player SDK .Net] **Fixed: disposing a `MediaPlayerCore` that was still playing never returned**, and neither did its finalizer when the player was dropped without `Dispose()`. The playback is now stopped before the player is released, so `Dispose()` works without a prior `Stop()`. (#1643)
+- [Video Capture SDK .Net] **Fixed: `Stop()`/`StopAsync()` called while `Start()`/`StartAsync()` was still building the graph tore the graph down while it was being built.** The stop now waits for the build and is carried out when the start finishes, which then returns `false`. (#1646)
+- [Video Capture SDK .Net] [Media Player SDK .Net] **Fixed: a Picture-in-Picture source added, deleted or cleared from another thread at the moment `Start`/`Play` began could still slip into the graph build, failing the start with "Unable to set PIP layer settings" or a "Collection was modified" error, and PiP calls made from several threads at once could lose sources.** The PiP source list now changes atomically with the start. (#1569)
+- [Media Player SDK .Net] **Fixed: calling `Play()` on a player that was already playing, or on a paused one to resume it, left it unstoppable - `Stop()`/`StopAsync()` returned without stopping playback, and the Picture-in-Picture sources could be changed under the running graph.** (#1569, #1644)
+- [Video Edit SDK .Net] **Fixed: `FFMPEGEXEOutput.AddFakeAudioSource` had no effect in `VideoEditCore`.** A job with no audio now gets a silent audio track, as in `VideoCaptureCore`, for both file output and network streaming. `KLVEnabled` does not apply to Video Edit sources and now logs a warning instead of being silently ignored. (#1576)
+- [Video Edit SDK .Net] **Fixed: in Preview mode, `VideoEditCore.StopAsync()`/`Stop()` could hang for minutes or never return, and `OnStop` never fired; the stop at the end of the timeline could hang the same way.** This now holds for a job started with `Start()` from a thread with no message loop - a thread-pool thread, a worker thread, a console `Main` - as well as for `StartAsync()`. (#1645, #1659)
+- [Video Edit SDK .Net] **Changed: `VideoEditCore.Start()` called while a job is already running or starting now reports an error and returns `false` instead of restarting in place.** `StartAsync()` has always refused it; call `Stop()` before starting again. (#1659)
+- [Video Edit SDK .Net] **Fixed: two `VideoEditCore.Start()`/`StartAsync()` calls issued at almost the same moment - a double-clicked Start button, for instance - could both be accepted and build two jobs over one instance**, giving a truncated or corrupt output file, a preview that could not be stopped, a leaked thread, or a crash. The second call is now always refused, and a job started with `Start()` is always stoppable with `Stop()`. (#1661)
+- [Video Edit SDK .Net] **Fixed: disposing a `VideoEditCore` while `Start()`/`StartAsync()` was still building the job - closing the window right after pressing Start, for instance - released the objects the build was still using, which could crash the application or leave a job running with no owner.** The release is now carried out as soon as the start finishes, and the start returns `false`. (#1663)
+- [Video Edit SDK .Net] **Fixed: starting the next job with `Start()` from the `OnStop` handler of a finished conversion - the batch-convert pattern - stalled for ten seconds and was then refused with "Previous graph pump thread is still running".** The next job now starts straight away. (#1664)
+- [Video Capture SDK .Net] **Fixed: `Dispose()` called while `Start()`/`StartAsync()` was still building the graph - from an `OnStart` or `OnError` handler, or by closing the window right after starting - tore the graph down under the build, after which the start still reported a running capture on the disposed engine; with the legacy `VideoRendererMode.VideoRenderer` started from a thread with no message loop it was instead refused with an error or blocked for about 40 seconds.** The release is now carried out as soon as the start finishes, and the start returns `false`. (#1663)
+- [Video Edit SDK .Net] **Fixed: converting to `FFMPEGEXEOutput` with `UsePipe = false` recorded only the first few frames of the timeline and reported success.** `VideoEditCore` now always feeds FFMPEG.exe through a pipe and logs a warning when `UsePipe = false`. (#1641)
+- [Video Capture SDK .Net] [Video Edit SDK .Net] **Fixed: `FFMPEGEXEOutput` with the MPEG-4, MPEG-1, MPEG-2, H.263 or FLV1 video encoder failed to start with the default `VideoBufferSize`** ("Either both buffer size and max rate or neither must be specified"). (#1641)
+- [Media Player SDK .Net] **Fixed: with NDI or virtual camera output enabled, `MediaPlayerCore` never raised `OnAudioFrameBuffer`, and the VU meters and audio effects did nothing.** Playback itself was unaffected, and no error was reported. The audio sample grabber now sits in front of every output, so the NDI stream and the virtual microphone carry the same processed audio as the speakers. (#1595)
+- [Media Player SDK .Net] [Video Capture SDK .Net] [Video Edit SDK .Net] **Fixed: the virtual microphone and NDI audio did not work for a source with no video.** `MediaPlayerCore` failed to play an audio-only file (MP3, WAV, AAC, ...) with the virtual camera or NDI output enabled, `VideoCaptureCore` failed to start an audio capture with the virtual camera output enabled, and `VideoEditCore` silently ignored both outputs when previewing a timeline with only audio. All three now send the audio to the virtual microphone or the NDI stream. (#1592)
+- [Video Edit SDK .Net] **Fixed: with the virtual camera or NDI output enabled, `VideoEditCore` preview played no sound through the speakers when `Audio_Preview_Enabled` was on.** (#1592)
+- [Media Player SDK .Net] **Fixed: with the virtual camera output enabled, `MediaPlayerCore` ignored `Audio_OutputDevice_Volume_Set` and `Audio_OutputDevice_Balance_Set`.** The calls reported nothing and the speakers kept playing at the original level. (#1594)
+- [Video Capture SDK .Net] **Changed: `VideoCaptureCore` now respects `MultiScreen_Enabled`.** Screens added with `MultiScreen_AddScreen` are shown only while `MultiScreen_Enabled` is `true`, as in `MediaPlayerCore`; before, they were shown whenever any screen was added, and the property had no effect. (#1561)
+- [Video Capture SDK .Net] **Fixed: window capture on a scaled display (125%, 150%, ...) captured only the top-left part of the window, enlarged.** `ScreenCaptureMode.Window` now captures the whole window whichever thread starts the capture. (#1561)
+- [Video Capture SDK .Net] **Fixed: closed captions were not shown while `VideoCaptureCore` multiscreen was on.** (#1561)
+- [Video Capture SDK .Net] **Fixed: `VideoCaptureCore` showed and recorded no video from a BDA/DVB source (`BDAPreview`/`BDACapture`).** The tuner's stream now reaches the preview and the output, with or without audio. (#1589)
+- [Video Capture SDK .Net] **Fixed: `SeparateCapture_StopAsync` could never return with `MP4HWOutput` using Intel Quick Sync, leaving the recording unfinished.** The Quick Sync H.264 and HEVC encoders could stop accepting frames mid-recording; they no longer do, and an encoder that stops accepting frames for any other reason now delays the stop by a few seconds instead of hanging it. (#1622)
+- [Video Capture SDK .Net] **Fixed: with Separate Capture enabled on `MP4HWOutput`, `OnError` could fire "encoder is null" for every frame between the preview start and the first `SeparateCapture_StartAsync`.** (#1622)
+- [Video Capture SDK .Net] **Fixed: an `FFMPEGEXEOutput` pipe output with `KLVEnabled` and a muxer that cannot carry KLV (for example, FLV for RTMP streaming, or MP4) recorded nothing.** KLV metadata is kept with the MPEG-TS, RTP/MPEG-TS and HLS muxers; with any other muxer the video and audio are now recorded without it and a warning is logged. (#1581)
+- [Video Capture SDK .Net] **Fixed: with network streaming through `FFMPEGEXEOutput`, the stream ignored the settings of `Network_Streaming_Output`.** It was encoded with FFmpeg's default codec for its container (Sorenson `flv1` for RTMP) at the source resolution, or with the file's settings when both used the same container. The stream now uses its own encoder, bitrate, resize and `Custom_Additional*Args`. (#1579)
+- [Video Capture SDK .Net] **Fixed: stopping an `FFMPEGEXEOutput` pipe output could occasionally raise `OnError` with "The handle is invalid", although the recording had finished normally.**
+- [Video Capture SDK .Net] **Fixed: stopping a hung `FFMPEGEXEOutput`/VLC.EXE task could report the stop as done while the ffmpeg.exe/vlc.exe process still ran and held the output file locked.** The stop now waits for the killed process to actually exit before reporting completion. (#1598)
+- [Video Edit SDK .Net] **Fixed: with network streaming through `FFMPEGEXEOutput`, the stream used the container and encoder settings of the output file instead of `Network_Streaming_Output`.** (#1579)
 - [Video Edit SDK .Net] **Added: `FastEdit_CutFileAsync` can seek before opening the input, which makes cutting from a long file fast wherever the cut starts.** Pass `FastEditSeekMode.Input` as the new fifth argument; the four-argument overload keeps the previous behavior, where cutting near the end of a multi-hour MPEG-TS recording read the whole file up to the cut. For MPEG-TS input (`.ts`, `.m2ts`, `.mts`) the cut starts on the keyframe preceding the requested start, so the output is decodable from its first frame and audio and video stay in sync. The Video Edit demos and agent skills show the new mode for transport streams. (#1623)
+- [Video Edit SDK .Net] **Fixed: an operation stopped with `FastEdit_StopAsync` was reported as failed with an error ("No process is associated with this object").** A stopped cut, join, audio extraction or mux now raises `OnStop` with `Successful = false` and no error. The tasks returned by `FastEdit_CutFileAsync`, `FastEdit_JoinFilesAsync` and `FastEdit_ExtractAudioStreamAsync` now carry the operation's result as documented, instead of always `true`. (#1597)
 
 ## 2026.9.17
 
@@ -42172,7 +42221,7 @@ You can add these packages using the NuGet Package Manager in your IDE or by add
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. Do not bump it to
        match VisioForge.DotNet.*; there is no 2026.x on nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -42565,8 +42614,8 @@ For MAUI projects targeting macOS (through MacCatalyst), add these packages:
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 </ItemGroup>
 ```
 
@@ -43031,8 +43080,8 @@ Add the following packages to your project:
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.22" />
 </ItemGroup>
 ```
 
@@ -43045,8 +43094,8 @@ Add platform-specific redistributable packages to your project:
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
   <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -43054,7 +43103,7 @@ Add platform-specific redistributable packages to your project:
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
 </ItemGroup>
 ```
 
@@ -43070,7 +43119,7 @@ Additionally, you'll need to add the Java Bindings Library. Clone it from our [G
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -43078,7 +43127,7 @@ Additionally, you'll need to add the Java Bindings Library. Clone it from our [G
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -43141,31 +43190,31 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
 
   <!-- VisioForge Core References -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.17" />
-    <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.22" />
+    <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.22" />
   </ItemGroup>
 
   <!-- Windows Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
   </ItemGroup>
 
   <!-- Android Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
     <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
   </ItemGroup>
 
   <!-- iOS Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
   </ItemGroup>
 
   <!-- macOS Catalyst Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
   </ItemGroup>
 
   <!-- macOS: Copy native libraries to app bundle -->
@@ -43399,6 +43448,13 @@ Every Windows application built with VisioForge SDK requires the appropriate bas
 ## Optional Component Packages
 
 Depending on your application's requirements, you may need to include additional packages for specialized functionality. These optional components extend the SDK's capabilities in various domains.
+
+### Intel Quick Sync Video (QSV)
+
+The QSV hardware encoders and decoders (`QSVH264EncoderSettings`, `QSVHEVCEncoderSettings`, `QSVAV1EncoderSettings` and the other `QSV*` settings) ship in a separate package. Without it, creating a QSV encoder fails with `Unable to create H264 encoder 'qsvh264enc'`:
+
+- [VisioForge.CrossPlatform.Core.Windows.Intel.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Intel.x86) - Intel QSV for 32-bit applications
+- [VisioForge.CrossPlatform.Core.Windows.Intel.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Intel.x64) - Intel QSV for 64-bit applications
 
 ### FFMPEG Media Processing (Recommended)
 
@@ -59542,8 +59598,8 @@ Get platform-specific file copying/build configuration code. Returns MSBuild tar
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
@@ -74135,7 +74191,7 @@ Add the iOS-specific redistributable to your iOS head project:
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. Do not bump it to
        match VisioForge.DotNet.*; there is no 2026.x on nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -74715,7 +74771,7 @@ Add the iOS-specific package to your project:
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. Do not bump it to
        match VisioForge.DotNet.*; there is no 2026.x on nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -81122,49 +81178,49 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 Main SDK package (all platforms):
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Windows x64 runtime (pick x86 for 32-bit apps):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
 <!-- Optional: extra decoders/encoders via Libav -->
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Windows x86:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="2026.9.11" />
 ```
 
 macOS (native and MAUI / macCatalyst):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 ```
 
 Linux x64 (also requires GStreamer 1.22+ installed on the system):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 Android and iOS:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 UI integration packages (optional, per framework):
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.22" />
 ```
 
 Full install walkthrough: [install/index.md](../../install/).
@@ -88040,14 +88096,14 @@ graph TD;
 You'll need the VisioForge Media Blocks SDK. Add it to your .NET project via NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Depending on your target platform, add the corresponding native runtime package. For Windows x64:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 For detailed platform-specific dependencies, see the [Deployment Guide](../../../deployment-x/).
@@ -88423,14 +88479,14 @@ For complete working examples, see the [RTSP demos on GitHub](https://github.com
 Add the Media Blocks SDK NuGet package to your project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 You also need the platform-specific runtime packages. For Windows:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 For other platforms (macOS, Linux, Android, iOS), see the [Deployment Guide](../../../deployment-x/).
@@ -88776,14 +88832,14 @@ The main idea is to take the raw video stream from the RTSP source and directly 
 You'll need the VisioForge Media Blocks SDK. You can add it to your .NET project via NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Depending on your target platform (Windows, macOS, Linux, including ARM-based systems like Jetson Nano for embedded camera applications), you will also need the corresponding native runtime packages. For example, on Windows to record video:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 For detailed information about deployment requirements, and platform-specific dependencies, please refer to our [Deployment Guide](../../../deployment-x/). It's important to check these details to ensure your video stream capture application works correctly.
@@ -89236,14 +89292,14 @@ graph LR;
 Add the Media Blocks SDK to your project via NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 On Windows you also need the native runtime packages. For recording (muxing) you need the core runtime; the Libav package supplies the muxers:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 For macOS, Linux, Android, and iOS runtime packages and platform-specific notes, see the [Deployment Guide](../../../deployment-x/).
@@ -91505,7 +91561,7 @@ Ensure the VisioForge OpenCV NuGet package is referenced. The choice of tracking
 
 [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net)
 
-OpenGL video effects in VisioForge Media Blocks SDK .Net allow for powerful, hardware-accelerated manipulation of video streams. Each effect ships as its own stand-alone MediaBlock (e.g. `GLBlurBlock`, `GLFlipBlock`, `GLAlphaBlock`) and is chained between `GLUploadBlock` on the input side and `GLDownloadBlock` on the output side. This guide covers the available effects, their configuration settings, and other related OpenGL types.
+OpenGL video effects in VisioForge Media Blocks SDK .Net allow for powerful, hardware-accelerated manipulation of video streams. Each effect ships as its own stand-alone MediaBlock (e.g. `GLBlurBlock`, `GLFlipBlock`, `GLAlphaBlock`) that carries its GPU upload and download internally, so it can be chained directly between regular system-memory video blocks; explicit `GLUploadBlock` / `GLDownloadBlock` blocks around it are optional and still work. This guide covers the available effects, their configuration settings, and other related OpenGL types.
 
 ## Base Effect: `GLBaseVideoEffect`
 
@@ -91523,7 +91579,7 @@ All OpenGL video effects inherit from the `GLBaseVideoEffect` class, which provi
 
 ## Available Video Effects
 
-This section details the various OpenGL video effects you can use. Each effect is an independent MediaBlock — instantiate the block directly (e.g. `new GLBlurBlock()`) and connect it between `GLUploadBlock` and `GLDownloadBlock` (or between other GL blocks) in your pipeline.
+This section details the various OpenGL video effects you can use. Each effect is an independent MediaBlock — instantiate the block directly (e.g. `new GLBlurBlock()`) and connect it between any video blocks, system-memory or OpenGL, in your pipeline.
 
 ### Alpha Effect (`GLAlphaVideoEffect`)
 
@@ -91973,7 +92029,7 @@ Defines the test pattern generated by `GLVirtualVideoSourceBlock`.
 
 ## OpenGL Processing Blocks
 
-In addition to the per-effect blocks listed above, the SDK ships several stand-alone OpenGL processing blocks for overlay compositing, GPU resizing, format conversion, multi-stream mixing, and hardware-accelerated rendering. Like the effect blocks, these operate on GPU memory and are typically chained between `GLUploadBlock` (CPU memory to GL) and `GLDownloadBlock` (GL to CPU memory), or fed directly from other OpenGL blocks. Each block exposes a static `IsAvailable()` method you can call to verify OpenGL support on the current system before building the pipeline.
+In addition to the per-effect blocks listed above, the SDK ships several stand-alone OpenGL processing blocks for overlay compositing, GPU resizing, format conversion, multi-stream mixing, and hardware-accelerated rendering. The overlay and resize blocks carry their own upload/download like the effect blocks. The format converter, mixer and renderer operate on GPU memory only and are chained between `GLUploadBlock` (CPU memory to GL) and `GLDownloadBlock` (GL to CPU memory), or fed directly from other OpenGL blocks. Each block exposes a static `IsAvailable()` method you can call to verify OpenGL support on the current system before building the pipeline.
 
 ### GL Overlay
 
@@ -91985,8 +92041,8 @@ Name: GLOverlayBlock.
 
 | Pin direction | Media type | Pins count |
 | --- | --- | --- |
-| Input | Video (GL memory) | 1 |
-| Output | Video (GL memory) | 1 |
+| Input | Video (system or GL memory) | 1 |
+| Output | Video (system or GL memory) | 1 |
 
 The overlay is configured with `GLOverlaySettings` (see [Overlay Settings](#overlay-settings-gloverlaysettings) above). Call `UpdateSettings()` after changing the `Settings` properties to apply changes to a running pipeline.
 
@@ -92045,8 +92101,8 @@ Name: GLResizeBlock.
 
 | Pin direction | Media type | Pins count |
 | --- | --- | --- |
-| Input | Video (GL memory) | 1 |
-| Output | Video (GL memory) | 1 |
+| Input | Video (system or GL memory) | 1 |
+| Output | Video (system or GL memory) | 1 |
 
 #### The sample pipeline
 
@@ -92095,8 +92151,8 @@ Name: GLSquareBlock.
 
 | Pin direction | Media type | Pins count |
 | --- | --- | --- |
-| Input | Video (GL memory) | 1 |
-| Output | Video (GL memory) | 1 |
+| Input | Video (system or GL memory) | 1 |
+| Output | Video (system or GL memory) | 1 |
 
 #### The sample pipeline
 
@@ -110660,48 +110716,48 @@ All cross-platform targets use a GStreamer-backed decoding pipeline with hardwar
 Main SDK package (always required):
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
 ```
 
 Windows x64 native runtime:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 Windows x86 native runtime:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.9.11" />
 ```
 
 macOS (native) and MacCatalyst (MAUI macOS):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 ```
 
 Linux x64 (plus system GStreamer 1.22+):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 Android and iOS:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 Optional UI framework packages — add whichever you target:
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.22" />
 ```
 
 Full per-IDE install walkthrough: [install/index.md](../../install/).
@@ -112901,8 +112957,8 @@ The main project, `SimplePlayerMVVM.csproj`, targets multiple platforms. Key pac
   <PackageReference Include="Avalonia.Android" Version="12.0.5" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.22" />
  </ItemGroup>
 </Project>
 ```
@@ -112924,15 +112980,15 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
     <TargetFramework>net10.0-macos</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
     <TargetFramework>net10.0</TargetFramework>
@@ -112964,7 +113020,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   </ItemGroup>
 </Project>
 ```
@@ -112987,7 +113043,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
   <!-- ... other items ... -->
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="12.0.5" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
@@ -113859,11 +113915,11 @@ To abstract platform-specific functionality, interfaces are defined in the core 
   ```
   ```xml
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
   </ItemGroup>
   ```
   ```
@@ -114635,19 +114691,19 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 ## NuGet Packages
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 
 <!-- Platform redists — include only the targets you build for -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29"
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('windows'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29"
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('windows'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5"
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('maccatalyst'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27"
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17"
                   Condition="$(TargetFramework.Contains('android'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0"
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('ios'))" />
 ```
 
@@ -114933,9 +114989,9 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 ### Required NuGet Packages
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ### Complete C# Video Player Implementation
@@ -115195,9 +115251,9 @@ This guide walks you through building a full-featured video player application i
 ## Required NuGet Packages
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ## Complete VB.NET Video Player Example
@@ -115463,14 +115519,14 @@ Add platform-specific native dependencies:
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 
 <!-- Linux x64 (needs system GStreamer 1.22+) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 For the full list of packages and UI framework support (WinForms, WPF, MAUI, Avalonia), see the [Installation Guide](../install/).
@@ -117793,23 +117849,23 @@ Platform-specific native runtimes — add the ones you target:
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 
 <!-- Windows x86 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.9.11" />
 
 <!-- macOS / macCatalyst -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 
 <!-- Linux x64 (needs system GStreamer 1.22+) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 
 <!-- Android / iOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 UI integration (pick the one that matches your UI stack):
@@ -119062,13 +119118,13 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 Major SDK package (managed):
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
 ```
 
 Native dependencies for Windows x64:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
 ```
 
 For alternative platforms (macOS, Linux, Android, iOS), use the corresponding native dependency packages. See the [Deployment Guide](../../../deployment-x/) for details.
@@ -119114,9 +119170,9 @@ Recording webcam video in VB.NET applications is a common requirement for video 
 Add the following packages to your VB.NET project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ## Complete VB.NET Webcam Recording Example
@@ -119589,7 +119645,7 @@ Video Capture SDK .Net relies on native libraries to access webcam devices and p
 Main SDK package:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
 ```
 
 ### Platform-Specific Redist Packages
@@ -119597,18 +119653,18 @@ Main SDK package:
 Windows x64:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 For other platforms:
 
 ```
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 
 <!-- Linux x64 (needs system GStreamer 1.22+) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 ## Cross-Platform Compatibility
@@ -119700,9 +119756,9 @@ Recording your desktop screen in VB.NET (Visual Basic .NET) applications is esse
 Add the following packages to your VB.NET project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ## Complete VB.NET Screen Recording Example
@@ -120227,14 +120283,14 @@ Add platform-specific native dependencies:
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 
 <!-- Linux x64 (needs system GStreamer 1.22+) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 For the full list of packages and UI framework support (WinForms, WPF, MAUI, Avalonia), see the [Installation Guide](../install/).
@@ -120546,8 +120602,8 @@ Use the latest NuGet package versions of the SDK for .NET in your project.
 Add the following NuGet packages to your project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 ```
 
 The `VideoCapture` package contains the main video capture functionality, while the `Core.UI.MAUI` package contains the `VideoView` control for video preview in .NET MAUI apps.
@@ -120560,8 +120616,8 @@ Add the following NuGet packages to your project based on target platform:
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -120569,7 +120625,7 @@ Add the following NuGet packages to your project based on target platform:
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
@@ -120580,7 +120636,7 @@ Add the following NuGet packages to your project based on target platform:
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -120589,7 +120645,7 @@ Add the following NuGet packages to your project based on target platform:
 ```
 <!-- Custom NuGet package and target code for maccatalyst to copy NuGet redist files to app file -->
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 
 <Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">
@@ -129765,7 +129821,7 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 One package ships both engines — `VideoEditCoreX` and the legacy `VideoEditCore` live side by side in it, so the engine is a code-level choice, not a packaging one:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.22" />
 ```
 
 It pulls in `VisioForge.DotNet.Core` as a dependency; you do not need to reference `Core` separately.
@@ -132684,8 +132740,8 @@ The full sample is on [GitHub](https://github.com/visioforge/.Net-SDK-s-samples/
 Two packages: the SDK itself and the MAUI `VideoView` control.
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 ```
 
 `VisioForge.DotNet.Core.UI.MAUI` only supplies the `VideoView` control — on its own it cannot compile `VideoEditCoreX`. The `VisioForge.DotNet.VideoEdit` package is what brings the engine in.
@@ -132694,23 +132750,23 @@ Then add the redistributable for each platform you build for. See [Installing in
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -141259,7 +141315,7 @@ dotnet restore
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.22" />
   <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="2025.8.7" />
 
   <!-- Optional: MongoDB integration -->
@@ -186894,9 +186950,56 @@ En la URL RTSP de Zmodo, `av0_0` es el flujo principal (mayor calidad) y `av0_1`
 
 Changes and updates for all .Net SDKs.
 
-## 2026.9.19
+## 2026.9.22
 
+- [Media Blocks SDK .Net] **Fixed: a block added to a running pipeline with `AddBlockLive` / `ConnectLive` / `SyncBlockStateLive` could stop the data flow while `SyncBlockStateLive` reported success** - affected the OpenGL effect blocks (`GLResizeBlock` and the rest of the `GL*Block` effects), the H264 encoder, video resize, and file output blocks such as `MP4SinkBlock` (a live-started recording ended without a playable file). Every element of such a block is now started together with it. (#1688)
+- [Video Capture SDK .Net] [Media Player SDK .Net] **Fixed: an engine finalized without `Dispose()` logged an `Error` for every dropped instance, even one that was never started** - an app creating many players or capture objects and dropping them could flood the log with identical errors. An instance that had a graph or a start in flight still logs the `Error`; one that never started now logs a `Warning`, and both messages name the source file or capture device to help locate the dropped instance. (#1680)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Media Blocks SDK .Net] **Fixed: removing a video effect from a running capture could freeze the preview until the capture was restarted** - most often at 1080p with a USB camera, with another effect still applied, and logged as `the pipeline did not return to Playing`. Video effects are now added and removed while the pipeline keeps playing, without pausing it. (#1673)
+- [Media Blocks SDK .Net] **Fixed: `StopAsync()` on the Live Video Compositor, Live Video Compositor V2 and Live Source Switch reported "Unable to stop ... pipeline" errors for pipelines that were not running** — for example when stopping after a failed start (such as an expired trial), calling stop a second time, or when two stops overlapped. Stopping a pipeline that is not running is now handled quietly. (#1676)
+- [Media Blocks SDK .Net] **Fixed: the OpenGL video effect blocks (`GLResizeBlock`, `GLGrayscaleBlock`, `GLShaderBlock`, and the rest of the `GL*Block` effects) failed to link when placed between regular system-memory video blocks** - the pipeline reported a bare `Noformat` error and never started. The blocks now upload frames to the GPU and download the result back internally, so they work between any video blocks, and non-RGBA input formats (NV12, BGRx) that previously failed even with explicit `GLUploadBlock`/`GLDownloadBlock` are supported. The explicit blocks remain optional, not required. (#1677)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: when a DirectShow filter had no redist file name for the running architecture, creating it threw `ArgumentNullException` (`Parameter name: path2`) instead of reporting the deployment problem.** The engine now logs the usual "Unable to create filter (from file) ... Please check Deployment" error, as it does when the file exists but cannot be loaded. (#1678)
+- [Media Blocks SDK .Net] **Fixed: an app using the HTTP MJPEG live sink (`HTTPMJPEGLiveSinkBlock`) crashed when a browser client disconnected — for example, when the page showing the stream was refreshed.** The whole process terminated with `System.ObjectDisposedException` instead of just dropping the stale connection; the server now logs the disconnect and keeps serving new viewers. (#1675)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with the EVR or VMR-9 video renderer, a resize, `Video_Renderer_Update()` or video adjustment (ProcAmp) call made while a capture or playback was restarting could log `COM object that has been separated from its underlying RCW cannot be used`.** Such a call is now skipped quietly while the renderer is being rebuilt; the video position and size are applied when the restart completes. (#1560)
+- [Video Capture SDK .Net] [Media Blocks SDK .Net] [Video Edit SDK .Net] **Improved: when an Intel Quick Sync (QSV) encoder cannot be created on Windows, the error now names the encoder and the package that provides it** - `VisioForge.CrossPlatform.Core.Windows.Intel.x64` (or `.x86`) - instead of a bare `Unable to create H264 encoder.` (#1670)
+- [Demos] The WPF demos that offer QSV encoders now reference `VisioForge.CrossPlatform.Core.Windows.Intel.x64`, so selecting "QSV H264" records instead of failing with `Unable to create H264 encoder.` (#1670)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - the hosting window could not be made always-on-top while video played:** setting `Form.TopMost` (or calling `SetWindowPos` with `HWND_TOPMOST`) reported success and changed nothing. (#1668)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with the EVR video renderer, shrinking the video area left the previous, larger picture on screen around the new one.** The part of the video window the picture no longer covers is now cleared. (#1654)
+- [Media Player SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - `StopAsync()`/`Stop()` could take a minute and a half or never return at all, leaving the player impossible to stop or dispose.** Playback with that renderer now starts and stops as quickly as it does with EVR, VMR-9 and Direct2D, whether it was started with `PlayAsync()` or with `Play()`, and whichever thread started it. (#1573, #1659)
+- [Video Capture SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - a capture or preview started with `Start()` from a thread that runs no message loop - a thread-pool thread, a worker thread, a console `Main` - could never be stopped or disposed.** `VideoCaptureCore` now builds and tears that graph down on a dedicated message-pumping thread, as `MediaPlayerCore` and `VideoEditCore` already did. (#1658)
+- [Media Player SDK .Net] **Fixed: `VideoRendererMode.VideoRenderer` took the desktop foreground away from the hosting application on every `Video_Renderer_Update()`**, dropping the application window's always-on-top state and letting other windows cover it. The video window is still shown on each update, but no longer changes which window is in front. (#1573)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - the picture was drawn too large and cropped to the video window in an application whose process DPI awareness differs from that of the window it plays into** - a scaled display showed only the top-left part of the frame, which could look like frozen video. The renderer's window is now created and positioned in the DPI awareness context of the window it is given. (#1658)
+- [Video Capture SDK .Net] [Media Player SDK .Net] **Fixed: `OSD_Layers_Draw_Image(id, filename, left, top)` drew the image in the top-left corner of the layer with its first `left` x `top` pixels cut off, instead of placing it at (`left`, `top`).** Code that compensated by passing negative offsets must now pass the intended position; code that used the `OSD_Layers_Draw_Image(id, filename, srcRect, destRect, ...)` overload instead is unaffected. (#1570)
+- [Media Player SDK .Net] **Fixed: `Stop()`/`StopAsync()` called while `Play()`/`PlayAsync()` was still opening the source was ignored, and the playback started anyway.** The stop is now carried out as soon as the start finishes: `PlayAsync()` returns `false`, the player ends stopped, and the task returned by `StopAsync()` completes once it has. (#1646)
+- [Media Player SDK .Net] **Fixed: disposing a `MediaPlayerCore` that was still playing never returned**, and neither did its finalizer when the player was dropped without `Dispose()`. The playback is now stopped before the player is released, so `Dispose()` works without a prior `Stop()`. (#1643)
+- [Video Capture SDK .Net] **Fixed: `Stop()`/`StopAsync()` called while `Start()`/`StartAsync()` was still building the graph tore the graph down while it was being built.** The stop now waits for the build and is carried out when the start finishes, which then returns `false`. (#1646)
+- [Video Capture SDK .Net] [Media Player SDK .Net] **Fixed: a Picture-in-Picture source added, deleted or cleared from another thread at the moment `Start`/`Play` began could still slip into the graph build, failing the start with "Unable to set PIP layer settings" or a "Collection was modified" error, and PiP calls made from several threads at once could lose sources.** The PiP source list now changes atomically with the start. (#1569)
+- [Media Player SDK .Net] **Fixed: calling `Play()` on a player that was already playing, or on a paused one to resume it, left it unstoppable - `Stop()`/`StopAsync()` returned without stopping playback, and the Picture-in-Picture sources could be changed under the running graph.** (#1569, #1644)
+- [Video Edit SDK .Net] **Fixed: `FFMPEGEXEOutput.AddFakeAudioSource` had no effect in `VideoEditCore`.** A job with no audio now gets a silent audio track, as in `VideoCaptureCore`, for both file output and network streaming. `KLVEnabled` does not apply to Video Edit sources and now logs a warning instead of being silently ignored. (#1576)
+- [Video Edit SDK .Net] **Fixed: in Preview mode, `VideoEditCore.StopAsync()`/`Stop()` could hang for minutes or never return, and `OnStop` never fired; the stop at the end of the timeline could hang the same way.** This now holds for a job started with `Start()` from a thread with no message loop - a thread-pool thread, a worker thread, a console `Main` - as well as for `StartAsync()`. (#1645, #1659)
+- [Video Edit SDK .Net] **Changed: `VideoEditCore.Start()` called while a job is already running or starting now reports an error and returns `false` instead of restarting in place.** `StartAsync()` has always refused it; call `Stop()` before starting again. (#1659)
+- [Video Edit SDK .Net] **Fixed: two `VideoEditCore.Start()`/`StartAsync()` calls issued at almost the same moment - a double-clicked Start button, for instance - could both be accepted and build two jobs over one instance**, giving a truncated or corrupt output file, a preview that could not be stopped, a leaked thread, or a crash. The second call is now always refused, and a job started with `Start()` is always stoppable with `Stop()`. (#1661)
+- [Video Edit SDK .Net] **Fixed: disposing a `VideoEditCore` while `Start()`/`StartAsync()` was still building the job - closing the window right after pressing Start, for instance - released the objects the build was still using, which could crash the application or leave a job running with no owner.** The release is now carried out as soon as the start finishes, and the start returns `false`. (#1663)
+- [Video Edit SDK .Net] **Fixed: starting the next job with `Start()` from the `OnStop` handler of a finished conversion - the batch-convert pattern - stalled for ten seconds and was then refused with "Previous graph pump thread is still running".** The next job now starts straight away. (#1664)
+- [Video Capture SDK .Net] **Fixed: `Dispose()` called while `Start()`/`StartAsync()` was still building the graph - from an `OnStart` or `OnError` handler, or by closing the window right after starting - tore the graph down under the build, after which the start still reported a running capture on the disposed engine; with the legacy `VideoRendererMode.VideoRenderer` started from a thread with no message loop it was instead refused with an error or blocked for about 40 seconds.** The release is now carried out as soon as the start finishes, and the start returns `false`. (#1663)
+- [Video Edit SDK .Net] **Fixed: converting to `FFMPEGEXEOutput` with `UsePipe = false` recorded only the first few frames of the timeline and reported success.** `VideoEditCore` now always feeds FFMPEG.exe through a pipe and logs a warning when `UsePipe = false`. (#1641)
+- [Video Capture SDK .Net] [Video Edit SDK .Net] **Fixed: `FFMPEGEXEOutput` with the MPEG-4, MPEG-1, MPEG-2, H.263 or FLV1 video encoder failed to start with the default `VideoBufferSize`** ("Either both buffer size and max rate or neither must be specified"). (#1641)
+- [Media Player SDK .Net] **Fixed: with NDI or virtual camera output enabled, `MediaPlayerCore` never raised `OnAudioFrameBuffer`, and the VU meters and audio effects did nothing.** Playback itself was unaffected, and no error was reported. The audio sample grabber now sits in front of every output, so the NDI stream and the virtual microphone carry the same processed audio as the speakers. (#1595)
+- [Media Player SDK .Net] [Video Capture SDK .Net] [Video Edit SDK .Net] **Fixed: the virtual microphone and NDI audio did not work for a source with no video.** `MediaPlayerCore` failed to play an audio-only file (MP3, WAV, AAC, ...) with the virtual camera or NDI output enabled, `VideoCaptureCore` failed to start an audio capture with the virtual camera output enabled, and `VideoEditCore` silently ignored both outputs when previewing a timeline with only audio. All three now send the audio to the virtual microphone or the NDI stream. (#1592)
+- [Video Edit SDK .Net] **Fixed: with the virtual camera or NDI output enabled, `VideoEditCore` preview played no sound through the speakers when `Audio_Preview_Enabled` was on.** (#1592)
+- [Media Player SDK .Net] **Fixed: with the virtual camera output enabled, `MediaPlayerCore` ignored `Audio_OutputDevice_Volume_Set` and `Audio_OutputDevice_Balance_Set`.** The calls reported nothing and the speakers kept playing at the original level. (#1594)
+- [Video Capture SDK .Net] **Changed: `VideoCaptureCore` now respects `MultiScreen_Enabled`.** Screens added with `MultiScreen_AddScreen` are shown only while `MultiScreen_Enabled` is `true`, as in `MediaPlayerCore`; before, they were shown whenever any screen was added, and the property had no effect. (#1561)
+- [Video Capture SDK .Net] **Fixed: window capture on a scaled display (125%, 150%, ...) captured only the top-left part of the window, enlarged.** `ScreenCaptureMode.Window` now captures the whole window whichever thread starts the capture. (#1561)
+- [Video Capture SDK .Net] **Fixed: closed captions were not shown while `VideoCaptureCore` multiscreen was on.** (#1561)
+- [Video Capture SDK .Net] **Fixed: `VideoCaptureCore` showed and recorded no video from a BDA/DVB source (`BDAPreview`/`BDACapture`).** The tuner's stream now reaches the preview and the output, with or without audio. (#1589)
+- [Video Capture SDK .Net] **Fixed: `SeparateCapture_StopAsync` could never return with `MP4HWOutput` using Intel Quick Sync, leaving the recording unfinished.** The Quick Sync H.264 and HEVC encoders could stop accepting frames mid-recording; they no longer do, and an encoder that stops accepting frames for any other reason now delays the stop by a few seconds instead of hanging it. (#1622)
+- [Video Capture SDK .Net] **Fixed: with Separate Capture enabled on `MP4HWOutput`, `OnError` could fire "encoder is null" for every frame between the preview start and the first `SeparateCapture_StartAsync`.** (#1622)
+- [Video Capture SDK .Net] **Fixed: an `FFMPEGEXEOutput` pipe output with `KLVEnabled` and a muxer that cannot carry KLV (for example, FLV for RTMP streaming, or MP4) recorded nothing.** KLV metadata is kept with the MPEG-TS, RTP/MPEG-TS and HLS muxers; with any other muxer the video and audio are now recorded without it and a warning is logged. (#1581)
+- [Video Capture SDK .Net] **Fixed: with network streaming through `FFMPEGEXEOutput`, the stream ignored the settings of `Network_Streaming_Output`.** It was encoded with FFmpeg's default codec for its container (Sorenson `flv1` for RTMP) at the source resolution, or with the file's settings when both used the same container. The stream now uses its own encoder, bitrate, resize and `Custom_Additional*Args`. (#1579)
+- [Video Capture SDK .Net] **Fixed: stopping an `FFMPEGEXEOutput` pipe output could occasionally raise `OnError` with "The handle is invalid", although the recording had finished normally.**
+- [Video Capture SDK .Net] **Fixed: stopping a hung `FFMPEGEXEOutput`/VLC.EXE task could report the stop as done while the ffmpeg.exe/vlc.exe process still ran and held the output file locked.** The stop now waits for the killed process to actually exit before reporting completion. (#1598)
+- [Video Edit SDK .Net] **Fixed: with network streaming through `FFMPEGEXEOutput`, the stream used the container and encoder settings of the output file instead of `Network_Streaming_Output`.** (#1579)
 - [Video Edit SDK .Net] **Added: `FastEdit_CutFileAsync` can seek before opening the input, which makes cutting from a long file fast wherever the cut starts.** Pass `FastEditSeekMode.Input` as the new fifth argument; the four-argument overload keeps the previous behavior, where cutting near the end of a multi-hour MPEG-TS recording read the whole file up to the cut. For MPEG-TS input (`.ts`, `.m2ts`, `.mts`) the cut starts on the keyframe preceding the requested start, so the output is decodable from its first frame and audio and video stay in sync. The Video Edit demos and agent skills show the new mode for transport streams. (#1623)
+- [Video Edit SDK .Net] **Fixed: an operation stopped with `FastEdit_StopAsync` was reported as failed with an error ("No process is associated with this object").** A stopped cut, join, audio extraction or mux now raises `OnStop` with `Successful = false` and no error. The tasks returned by `FastEdit_CutFileAsync`, `FastEdit_JoinFilesAsync` and `FastEdit_ExtractAudioStreamAsync` now carry the operation's result as documented, instead of always `true`. (#1597)
 
 ## 2026.9.17
 
@@ -189338,7 +189441,7 @@ Puedes agregar estos paquetes usando el NuGet Package Manager en tu IDE o agrega
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <PackageReference Include="VisioForge.DotNet.Core" Version="2026.*" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -189731,8 +189834,8 @@ Para proyectos MAUI apuntando a macOS (a través de MacCatalyst), agrega estos p
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 </ItemGroup>
 ```
 
@@ -190190,8 +190293,8 @@ Agregue los siguientes paquetes a su proyecto:
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.22" />
 </ItemGroup>
 ```
 
@@ -190204,8 +190307,8 @@ Agregue paquetes redistributables específicos de plataforma a su proyecto:
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
   <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -190213,7 +190316,7 @@ Agregue paquetes redistributables específicos de plataforma a su proyecto:
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
 </ItemGroup>
 ```
 
@@ -190229,7 +190332,7 @@ Adicionalmente, necesitará agregar la Biblioteca de Bindings de Java. Clónela 
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -190237,7 +190340,7 @@ Adicionalmente, necesitará agregar la Biblioteca de Bindings de Java. Clónela 
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -190300,31 +190403,31 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
 
   <!-- Referencias Core de VisioForge -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.17" />
-    <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.22" />
+    <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.22" />
   </ItemGroup>
 
   <!-- Plataforma Windows -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
   </ItemGroup>
 
   <!-- Plataforma Android -->
   <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
     <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
   </ItemGroup>
 
   <!-- Plataforma iOS -->
   <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
   </ItemGroup>
 
   <!-- Plataforma macOS Catalyst -->
   <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
   </ItemGroup>
 
   <!-- macOS: Copiar bibliotecas nativas al bundle de la app -->
@@ -190558,6 +190661,13 @@ Cada aplicación Windows construida con el SDK de VisioForge requiere el paquete
 ## Paquetes de Componentes Opcionales
 
 Dependiendo de los requisitos de tu aplicación, puedes necesitar incluir paquetes adicionales para funcionalidad especializada. Estos componentes opcionales extienden las capacidades del SDK en varios dominios.
+
+### Intel Quick Sync Video (QSV)
+
+Los codificadores y decodificadores por hardware QSV (`QSVH264EncoderSettings`, `QSVHEVCEncoderSettings`, `QSVAV1EncoderSettings` y el resto de ajustes `QSV*`) se distribuyen en un paquete aparte. Sin él, crear un codificador QSV falla con `Unable to create H264 encoder 'qsvh264enc'`:
+
+- [VisioForge.CrossPlatform.Core.Windows.Intel.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Intel.x86) - Intel QSV para aplicaciones de 32 bits
+- [VisioForge.CrossPlatform.Core.Windows.Intel.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Intel.x64) - Intel QSV para aplicaciones de 64 bits
 
 ### Procesamiento de Medios FFMPEG (Recomendado)
 
@@ -206705,8 +206815,8 @@ Obtener código de configuración específico de plataforma para copia de archiv
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
@@ -221293,7 +221403,7 @@ Agrega el redistributable específico de iOS a tu proyecto principal de iOS:
   <!-- La versión del redistribuable de iOS va por detrás de la versión del SDK a propósito - sigue
        el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. No la subas para
        igualar VisioForge.DotNet.*; no existe una versión 2026.x en nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -221873,7 +221983,7 @@ Agrega el paquete específico de iOS a tu proyecto:
   <!-- La versión del redistribuable de iOS va por detrás de la versión del SDK a propósito - sigue
        el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. No la subas para
        igualar VisioForge.DotNet.*; no existe una versión 2026.x en nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -228279,49 +228389,49 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 Paquete principal del SDK (todas las plataformas):
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Runtime de Windows x64 (elija x86 para aplicaciones de 32 bits):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
 <!-- Opcional: decodificadores/codificadores adicionales vía Libav -->
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Windows x86:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="2026.9.11" />
 ```
 
 macOS (nativo y MAUI / macCatalyst):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 ```
 
 Linux x64 (también requiere GStreamer 1.22+ instalado en el sistema):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 Android e iOS:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 Paquetes de integración de UI (opcionales, por framework):
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.22" />
 ```
 
 Guía completa de instalación: [install/index.md](../../install/).
@@ -235198,14 +235308,14 @@ graph TD;
 Necesitará el SDK de VisioForge Media Blocks. Agréguelo a su proyecto .NET vía NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Dependiendo de su plataforma objetivo, agregue el paquete runtime nativo correspondiente. Para Windows x64:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Para dependencias específicas de plataforma detalladas, vea la [Guía de Despliegue](../../../deployment-x/).
@@ -235581,14 +235691,14 @@ Para ejemplos funcionales completos, vea los [demos RTSP en GitHub](https://gith
 Agregue el paquete NuGet del Media Blocks SDK a su proyecto:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 También necesita los paquetes de runtime específicos de la plataforma. Para Windows:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Para otras plataformas (macOS, Linux, Android, iOS), consulte la [Guía de Despliegue](../../../deployment-x/).
@@ -235934,14 +236044,14 @@ La idea principal es tomar el stream de video raw desde la fuente RTSP y enviarl
 Necesitará el SDK de VisioForge Media Blocks. Puede agregarlo a su proyecto .NET vía NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Dependiendo de su plataforma objetivo (Windows, macOS, Linux, incluyendo sistemas embebidos como Jetson Nano para aplicaciones de cámara embebida), también necesitará los paquetes de runtime nativos correspondientes. Por ejemplo, en Windows para grabar video:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Para información detallada sobre requisitos de deployment, y dependencias específicas de plataforma, por favor refiérase a nuestra [Guía de Deployment](../../../deployment-x/). Es importante verificar estos detalles para asegurar que su aplicación de captura de video stream funcione correctamente.
@@ -236393,14 +236503,14 @@ graph LR;
 Añade el Media Blocks SDK a tu proyecto mediante NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 En Windows también necesitas los paquetes de runtime nativo. Para grabar (multiplexar) necesitas el runtime principal; el paquete Libav aporta los multiplexores:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Para los paquetes de runtime de macOS, Linux, Android e iOS y las notas específicas de cada plataforma, consulta la [Guía de despliegue](../../../deployment-x/).
@@ -239141,8 +239251,8 @@ Nombre: GLOverlayBlock.
 
 | Dirección del pin | Tipo de medio | Cantidad de pines |
 | --- | --- | --- |
-| Entrada | Video (memoria GL) | 1 |
-| Salida | Video (memoria GL) | 1 |
+| Entrada | Video (memoria de sistema o GL) | 1 |
+| Salida | Video (memoria de sistema o GL) | 1 |
 
 La superposición se configura con `GLOverlaySettings` (ver [Ajustes de Superposición](#ajustes-de-superposicion-gloverlaysettings) arriba). Llame a `UpdateSettings()` después de cambiar las propiedades de `Settings` para aplicar los cambios a un pipeline en ejecución.
 
@@ -239201,8 +239311,8 @@ Nombre: GLResizeBlock.
 
 | Dirección del pin | Tipo de medio | Cantidad de pines |
 | --- | --- | --- |
-| Entrada | Video (memoria GL) | 1 |
-| Salida | Video (memoria GL) | 1 |
+| Entrada | Video (memoria de sistema o GL) | 1 |
+| Salida | Video (memoria de sistema o GL) | 1 |
 
 #### El pipeline de ejemplo
 
@@ -239251,8 +239361,8 @@ Nombre: GLSquareBlock.
 
 | Dirección del pin | Tipo de medio | Cantidad de pines |
 | --- | --- | --- |
-| Entrada | Video (memoria GL) | 1 |
-| Salida | Video (memoria GL) | 1 |
+| Entrada | Video (memoria de sistema o GL) | 1 |
+| Salida | Video (memoria de sistema o GL) | 1 |
 
 #### El pipeline de ejemplo
 
@@ -257821,48 +257931,48 @@ Todos los objetivos multiplataforma usan una pipeline de decodificación respald
 Paquete principal del SDK (siempre obligatorio):
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
 ```
 
 Runtime nativo para Windows x64:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 Runtime nativo para Windows x86:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.9.11" />
 ```
 
 macOS (nativo) y MacCatalyst (MAUI macOS):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 ```
 
 Linux x64 (más GStreamer 1.22+ del sistema):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 Android e iOS:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 Paquetes opcionales de frameworks de UI — agregue el que corresponda a su objetivo:
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.22" />
 ```
 
 Guía completa de instalación por IDE: [install/index.md](../../install/).
@@ -260062,8 +260172,8 @@ El proyecto principal, `SimplePlayerMVVM.csproj`, apunta a múltiples plataforma
   <PackageReference Include="Avalonia.Android" Version="12.0.5" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.22" />
  </ItemGroup>
 </Project>
 ```
@@ -260085,15 +260195,15 @@ Cada proyecto principal de plataforma (`SimplePlayerMVVM.Android.csproj`, `Simpl
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
     <TargetFramework>net10.0-macos</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
     <TargetFramework>net10.0</TargetFramework>
@@ -260125,7 +260235,7 @@ Cada proyecto principal de plataforma (`SimplePlayerMVVM.Android.csproj`, `Simpl
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   </ItemGroup>
 </Project>
 ```
@@ -260148,7 +260258,7 @@ Cada proyecto principal de plataforma (`SimplePlayerMVVM.Android.csproj`, `Simpl
   <!-- ... otros elementos ... -->
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="12.0.5" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
@@ -261020,11 +261130,11 @@ Para abstraer la funcionalidad específica de plataforma, se definen interfaces 
   ```
   ```xml
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
   </ItemGroup>
   ```
   ```
@@ -261796,19 +261906,19 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 ## Paquetes NuGet
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 
 <!-- Redists de plataforma — incluya solo los targets para los que compila -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29"
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('windows'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29"
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('windows'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5"
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('maccatalyst'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27"
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17"
                   Condition="$(TargetFramework.Contains('android'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0"
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('ios'))" />
 ```
 
@@ -262094,9 +262204,9 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 ### Paquetes NuGet Requeridos
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ### Implementación Completa del Reproductor de Video en C
@@ -262356,9 +262466,9 @@ Esta guía le muestra paso a paso cómo crear una aplicación de reproductor de 
 ## Paquetes NuGet requeridos
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ## Ejemplo completo de reproductor de video en VB.NET
@@ -262624,14 +262734,14 @@ Agrega dependencias nativas específicas de plataforma:
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 
 <!-- Linux x64 (requiere GStreamer 1.22+ del sistema) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 Para la lista completa de paquetes y soporte de frameworks de UI (WinForms, WPF, MAUI, Avalonia), consulta la [Guía de Instalación](../install/).
@@ -264954,23 +265064,23 @@ Runtimes nativos específicos por plataforma — añade los que correspondan a t
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 
 <!-- Windows x86 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.9.11" />
 
 <!-- macOS / macCatalyst -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 
 <!-- Linux x64 (requiere GStreamer 1.22+ del sistema) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 
 <!-- Android / iOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 Integración de UI (elige la que corresponda a tu stack de UI):
@@ -266214,13 +266324,13 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 Paquete principal del SDK (administrado):
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
 ```
 
 Dependencias nativas para Windows x64:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
 ```
 
 Para plataformas alternativas (macOS, Linux, Android, iOS), use los paquetes de dependencias nativas correspondientes. Vea la [Guía de Despliegue](../../../deployment-x/) para más detalles.
@@ -266266,9 +266376,9 @@ Grabar video de webcam en aplicaciones VB.NET es un requisito común para proyec
 Agregue los siguientes paquetes a su proyecto VB.NET:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ## Ejemplo completo de grabación de webcam en VB.NET
@@ -266741,7 +266851,7 @@ Video Capture SDK .Net depende de bibliotecas nativas para acceder a dispositivo
 Paquete principal del SDK:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
 ```
 
 ### Paquetes Redist Específicos de Plataforma
@@ -266749,18 +266859,18 @@ Paquete principal del SDK:
 Windows x64:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 Para otras plataformas:
 
 ```
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 
 <!-- Linux x64 (requiere GStreamer 1.22+ del sistema) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 ## Compatibilidad Multiplataforma
@@ -266852,9 +266962,9 @@ Grabar la pantalla del escritorio en aplicaciones VB.NET (Visual Basic .NET) es 
 Agregue los siguientes paquetes a su proyecto VB.NET:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ## Ejemplo completo de grabación de pantalla en VB.NET
@@ -267379,14 +267489,14 @@ Agrega dependencias nativas específicas de plataforma:
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 
 <!-- Linux x64 (requiere GStreamer 1.22+ del sistema) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 Para la lista completa de paquetes y soporte de frameworks de UI (WinForms, WPF, MAUI, Avalonia), consulta la [Guía de Instalación](../install/).
@@ -267698,8 +267808,8 @@ Use las últimas versiones de paquetes NuGet del SDK para .NET en su proyecto.
 Agregue los siguientes paquetes NuGet a su proyecto:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 ```
 
 El paquete `VideoCapture` contiene la funcionalidad principal de captura de video, mientras que el paquete `Core.UI.MAUI` contiene el control `VideoView` para vista previa de video en apps .NET MAUI.
@@ -267712,8 +267822,8 @@ Agregue los siguientes paquetes NuGet a su proyecto según la plataforma objetiv
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -267721,7 +267831,7 @@ Agregue los siguientes paquetes NuGet a su proyecto según la plataforma objetiv
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
@@ -267732,7 +267842,7 @@ Agregue los siguientes paquetes NuGet a su proyecto según la plataforma objetiv
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- La versión del redistribuable de iOS va por detrás de la versión del SDK a propósito - sigue
        el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -267741,7 +267851,7 @@ Agregue los siguientes paquetes NuGet a su proyecto según la plataforma objetiv
 ```
 <!-- Paquete NuGet personalizado y código de target para maccatalyst para copiar archivos redistribuibles NuGet al archivo de la app -->
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 
 <Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">
@@ -276917,7 +277027,7 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 Un solo paquete incluye ambos motores: `VideoEditCoreX` y el heredado `VideoEditCore` conviven en él, así que elegir motor es una decisión de código, no de empaquetado:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.22" />
 ```
 
 Arrastra `VisioForge.DotNet.Core` como dependencia; no hace falta referenciar `Core` por separado.
@@ -279838,8 +279948,8 @@ El ejemplo completo está en [GitHub](https://github.com/visioforge/.Net-SDK-s-s
 Dos paquetes: el propio SDK y el control `VideoView` de MAUI.
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 ```
 
 `VisioForge.DotNet.Core.UI.MAUI` solo proporciona el control `VideoView` — por sí solo no puede compilar `VideoEditCoreX`. El paquete `VisioForge.DotNet.VideoEdit` es el que incorpora el motor.
@@ -279848,23 +279958,23 @@ Luego agregue el redistribuible para cada plataforma que compile. Consulta [Inst
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- La versión del redistribuable de iOS va por detrás de la versión del SDK a propósito - sigue
        el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -288404,7 +288514,7 @@ dotnet restore
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.22" />
   <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="2025.8.7" />
 
   <!-- Opcional: Integración con MongoDB -->
@@ -333694,9 +333804,56 @@ Dans l'URL RTSP Zmodo, `av0_0` est le flux principal (de la plus haute qualité)
 
 Changes and updates for all .Net SDKs.
 
-## 2026.9.19
+## 2026.9.22
 
+- [Media Blocks SDK .Net] **Fixed: a block added to a running pipeline with `AddBlockLive` / `ConnectLive` / `SyncBlockStateLive` could stop the data flow while `SyncBlockStateLive` reported success** - affected the OpenGL effect blocks (`GLResizeBlock` and the rest of the `GL*Block` effects), the H264 encoder, video resize, and file output blocks such as `MP4SinkBlock` (a live-started recording ended without a playable file). Every element of such a block is now started together with it. (#1688)
+- [Video Capture SDK .Net] [Media Player SDK .Net] **Fixed: an engine finalized without `Dispose()` logged an `Error` for every dropped instance, even one that was never started** - an app creating many players or capture objects and dropping them could flood the log with identical errors. An instance that had a graph or a start in flight still logs the `Error`; one that never started now logs a `Warning`, and both messages name the source file or capture device to help locate the dropped instance. (#1680)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Media Blocks SDK .Net] **Fixed: removing a video effect from a running capture could freeze the preview until the capture was restarted** - most often at 1080p with a USB camera, with another effect still applied, and logged as `the pipeline did not return to Playing`. Video effects are now added and removed while the pipeline keeps playing, without pausing it. (#1673)
+- [Media Blocks SDK .Net] **Fixed: `StopAsync()` on the Live Video Compositor, Live Video Compositor V2 and Live Source Switch reported "Unable to stop ... pipeline" errors for pipelines that were not running** — for example when stopping after a failed start (such as an expired trial), calling stop a second time, or when two stops overlapped. Stopping a pipeline that is not running is now handled quietly. (#1676)
+- [Media Blocks SDK .Net] **Fixed: the OpenGL video effect blocks (`GLResizeBlock`, `GLGrayscaleBlock`, `GLShaderBlock`, and the rest of the `GL*Block` effects) failed to link when placed between regular system-memory video blocks** - the pipeline reported a bare `Noformat` error and never started. The blocks now upload frames to the GPU and download the result back internally, so they work between any video blocks, and non-RGBA input formats (NV12, BGRx) that previously failed even with explicit `GLUploadBlock`/`GLDownloadBlock` are supported. The explicit blocks remain optional, not required. (#1677)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: when a DirectShow filter had no redist file name for the running architecture, creating it threw `ArgumentNullException` (`Parameter name: path2`) instead of reporting the deployment problem.** The engine now logs the usual "Unable to create filter (from file) ... Please check Deployment" error, as it does when the file exists but cannot be loaded. (#1678)
+- [Media Blocks SDK .Net] **Fixed: an app using the HTTP MJPEG live sink (`HTTPMJPEGLiveSinkBlock`) crashed when a browser client disconnected — for example, when the page showing the stream was refreshed.** The whole process terminated with `System.ObjectDisposedException` instead of just dropping the stale connection; the server now logs the disconnect and keeps serving new viewers. (#1675)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with the EVR or VMR-9 video renderer, a resize, `Video_Renderer_Update()` or video adjustment (ProcAmp) call made while a capture or playback was restarting could log `COM object that has been separated from its underlying RCW cannot be used`.** Such a call is now skipped quietly while the renderer is being rebuilt; the video position and size are applied when the restart completes. (#1560)
+- [Video Capture SDK .Net] [Media Blocks SDK .Net] [Video Edit SDK .Net] **Improved: when an Intel Quick Sync (QSV) encoder cannot be created on Windows, the error now names the encoder and the package that provides it** - `VisioForge.CrossPlatform.Core.Windows.Intel.x64` (or `.x86`) - instead of a bare `Unable to create H264 encoder.` (#1670)
+- [Demos] The WPF demos that offer QSV encoders now reference `VisioForge.CrossPlatform.Core.Windows.Intel.x64`, so selecting "QSV H264" records instead of failing with `Unable to create H264 encoder.` (#1670)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - the hosting window could not be made always-on-top while video played:** setting `Form.TopMost` (or calling `SetWindowPos` with `HWND_TOPMOST`) reported success and changed nothing. (#1668)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with the EVR video renderer, shrinking the video area left the previous, larger picture on screen around the new one.** The part of the video window the picture no longer covers is now cleared. (#1654)
+- [Media Player SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - `StopAsync()`/`Stop()` could take a minute and a half or never return at all, leaving the player impossible to stop or dispose.** Playback with that renderer now starts and stops as quickly as it does with EVR, VMR-9 and Direct2D, whether it was started with `PlayAsync()` or with `Play()`, and whichever thread started it. (#1573, #1659)
+- [Video Capture SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - a capture or preview started with `Start()` from a thread that runs no message loop - a thread-pool thread, a worker thread, a console `Main` - could never be stopped or disposed.** `VideoCaptureCore` now builds and tears that graph down on a dedicated message-pumping thread, as `MediaPlayerCore` and `VideoEditCore` already did. (#1658)
+- [Media Player SDK .Net] **Fixed: `VideoRendererMode.VideoRenderer` took the desktop foreground away from the hosting application on every `Video_Renderer_Update()`**, dropping the application window's always-on-top state and letting other windows cover it. The video window is still shown on each update, but no longer changes which window is in front. (#1573)
+- [Video Capture SDK .Net] [Media Player SDK .Net] [Video Edit SDK .Net] **Fixed: with `VideoRendererMode.VideoRenderer` - the legacy DirectShow Video Renderer - the picture was drawn too large and cropped to the video window in an application whose process DPI awareness differs from that of the window it plays into** - a scaled display showed only the top-left part of the frame, which could look like frozen video. The renderer's window is now created and positioned in the DPI awareness context of the window it is given. (#1658)
+- [Video Capture SDK .Net] [Media Player SDK .Net] **Fixed: `OSD_Layers_Draw_Image(id, filename, left, top)` drew the image in the top-left corner of the layer with its first `left` x `top` pixels cut off, instead of placing it at (`left`, `top`).** Code that compensated by passing negative offsets must now pass the intended position; code that used the `OSD_Layers_Draw_Image(id, filename, srcRect, destRect, ...)` overload instead is unaffected. (#1570)
+- [Media Player SDK .Net] **Fixed: `Stop()`/`StopAsync()` called while `Play()`/`PlayAsync()` was still opening the source was ignored, and the playback started anyway.** The stop is now carried out as soon as the start finishes: `PlayAsync()` returns `false`, the player ends stopped, and the task returned by `StopAsync()` completes once it has. (#1646)
+- [Media Player SDK .Net] **Fixed: disposing a `MediaPlayerCore` that was still playing never returned**, and neither did its finalizer when the player was dropped without `Dispose()`. The playback is now stopped before the player is released, so `Dispose()` works without a prior `Stop()`. (#1643)
+- [Video Capture SDK .Net] **Fixed: `Stop()`/`StopAsync()` called while `Start()`/`StartAsync()` was still building the graph tore the graph down while it was being built.** The stop now waits for the build and is carried out when the start finishes, which then returns `false`. (#1646)
+- [Video Capture SDK .Net] [Media Player SDK .Net] **Fixed: a Picture-in-Picture source added, deleted or cleared from another thread at the moment `Start`/`Play` began could still slip into the graph build, failing the start with "Unable to set PIP layer settings" or a "Collection was modified" error, and PiP calls made from several threads at once could lose sources.** The PiP source list now changes atomically with the start. (#1569)
+- [Media Player SDK .Net] **Fixed: calling `Play()` on a player that was already playing, or on a paused one to resume it, left it unstoppable - `Stop()`/`StopAsync()` returned without stopping playback, and the Picture-in-Picture sources could be changed under the running graph.** (#1569, #1644)
+- [Video Edit SDK .Net] **Fixed: `FFMPEGEXEOutput.AddFakeAudioSource` had no effect in `VideoEditCore`.** A job with no audio now gets a silent audio track, as in `VideoCaptureCore`, for both file output and network streaming. `KLVEnabled` does not apply to Video Edit sources and now logs a warning instead of being silently ignored. (#1576)
+- [Video Edit SDK .Net] **Fixed: in Preview mode, `VideoEditCore.StopAsync()`/`Stop()` could hang for minutes or never return, and `OnStop` never fired; the stop at the end of the timeline could hang the same way.** This now holds for a job started with `Start()` from a thread with no message loop - a thread-pool thread, a worker thread, a console `Main` - as well as for `StartAsync()`. (#1645, #1659)
+- [Video Edit SDK .Net] **Changed: `VideoEditCore.Start()` called while a job is already running or starting now reports an error and returns `false` instead of restarting in place.** `StartAsync()` has always refused it; call `Stop()` before starting again. (#1659)
+- [Video Edit SDK .Net] **Fixed: two `VideoEditCore.Start()`/`StartAsync()` calls issued at almost the same moment - a double-clicked Start button, for instance - could both be accepted and build two jobs over one instance**, giving a truncated or corrupt output file, a preview that could not be stopped, a leaked thread, or a crash. The second call is now always refused, and a job started with `Start()` is always stoppable with `Stop()`. (#1661)
+- [Video Edit SDK .Net] **Fixed: disposing a `VideoEditCore` while `Start()`/`StartAsync()` was still building the job - closing the window right after pressing Start, for instance - released the objects the build was still using, which could crash the application or leave a job running with no owner.** The release is now carried out as soon as the start finishes, and the start returns `false`. (#1663)
+- [Video Edit SDK .Net] **Fixed: starting the next job with `Start()` from the `OnStop` handler of a finished conversion - the batch-convert pattern - stalled for ten seconds and was then refused with "Previous graph pump thread is still running".** The next job now starts straight away. (#1664)
+- [Video Capture SDK .Net] **Fixed: `Dispose()` called while `Start()`/`StartAsync()` was still building the graph - from an `OnStart` or `OnError` handler, or by closing the window right after starting - tore the graph down under the build, after which the start still reported a running capture on the disposed engine; with the legacy `VideoRendererMode.VideoRenderer` started from a thread with no message loop it was instead refused with an error or blocked for about 40 seconds.** The release is now carried out as soon as the start finishes, and the start returns `false`. (#1663)
+- [Video Edit SDK .Net] **Fixed: converting to `FFMPEGEXEOutput` with `UsePipe = false` recorded only the first few frames of the timeline and reported success.** `VideoEditCore` now always feeds FFMPEG.exe through a pipe and logs a warning when `UsePipe = false`. (#1641)
+- [Video Capture SDK .Net] [Video Edit SDK .Net] **Fixed: `FFMPEGEXEOutput` with the MPEG-4, MPEG-1, MPEG-2, H.263 or FLV1 video encoder failed to start with the default `VideoBufferSize`** ("Either both buffer size and max rate or neither must be specified"). (#1641)
+- [Media Player SDK .Net] **Fixed: with NDI or virtual camera output enabled, `MediaPlayerCore` never raised `OnAudioFrameBuffer`, and the VU meters and audio effects did nothing.** Playback itself was unaffected, and no error was reported. The audio sample grabber now sits in front of every output, so the NDI stream and the virtual microphone carry the same processed audio as the speakers. (#1595)
+- [Media Player SDK .Net] [Video Capture SDK .Net] [Video Edit SDK .Net] **Fixed: the virtual microphone and NDI audio did not work for a source with no video.** `MediaPlayerCore` failed to play an audio-only file (MP3, WAV, AAC, ...) with the virtual camera or NDI output enabled, `VideoCaptureCore` failed to start an audio capture with the virtual camera output enabled, and `VideoEditCore` silently ignored both outputs when previewing a timeline with only audio. All three now send the audio to the virtual microphone or the NDI stream. (#1592)
+- [Video Edit SDK .Net] **Fixed: with the virtual camera or NDI output enabled, `VideoEditCore` preview played no sound through the speakers when `Audio_Preview_Enabled` was on.** (#1592)
+- [Media Player SDK .Net] **Fixed: with the virtual camera output enabled, `MediaPlayerCore` ignored `Audio_OutputDevice_Volume_Set` and `Audio_OutputDevice_Balance_Set`.** The calls reported nothing and the speakers kept playing at the original level. (#1594)
+- [Video Capture SDK .Net] **Changed: `VideoCaptureCore` now respects `MultiScreen_Enabled`.** Screens added with `MultiScreen_AddScreen` are shown only while `MultiScreen_Enabled` is `true`, as in `MediaPlayerCore`; before, they were shown whenever any screen was added, and the property had no effect. (#1561)
+- [Video Capture SDK .Net] **Fixed: window capture on a scaled display (125%, 150%, ...) captured only the top-left part of the window, enlarged.** `ScreenCaptureMode.Window` now captures the whole window whichever thread starts the capture. (#1561)
+- [Video Capture SDK .Net] **Fixed: closed captions were not shown while `VideoCaptureCore` multiscreen was on.** (#1561)
+- [Video Capture SDK .Net] **Fixed: `VideoCaptureCore` showed and recorded no video from a BDA/DVB source (`BDAPreview`/`BDACapture`).** The tuner's stream now reaches the preview and the output, with or without audio. (#1589)
+- [Video Capture SDK .Net] **Fixed: `SeparateCapture_StopAsync` could never return with `MP4HWOutput` using Intel Quick Sync, leaving the recording unfinished.** The Quick Sync H.264 and HEVC encoders could stop accepting frames mid-recording; they no longer do, and an encoder that stops accepting frames for any other reason now delays the stop by a few seconds instead of hanging it. (#1622)
+- [Video Capture SDK .Net] **Fixed: with Separate Capture enabled on `MP4HWOutput`, `OnError` could fire "encoder is null" for every frame between the preview start and the first `SeparateCapture_StartAsync`.** (#1622)
+- [Video Capture SDK .Net] **Fixed: an `FFMPEGEXEOutput` pipe output with `KLVEnabled` and a muxer that cannot carry KLV (for example, FLV for RTMP streaming, or MP4) recorded nothing.** KLV metadata is kept with the MPEG-TS, RTP/MPEG-TS and HLS muxers; with any other muxer the video and audio are now recorded without it and a warning is logged. (#1581)
+- [Video Capture SDK .Net] **Fixed: with network streaming through `FFMPEGEXEOutput`, the stream ignored the settings of `Network_Streaming_Output`.** It was encoded with FFmpeg's default codec for its container (Sorenson `flv1` for RTMP) at the source resolution, or with the file's settings when both used the same container. The stream now uses its own encoder, bitrate, resize and `Custom_Additional*Args`. (#1579)
+- [Video Capture SDK .Net] **Fixed: stopping an `FFMPEGEXEOutput` pipe output could occasionally raise `OnError` with "The handle is invalid", although the recording had finished normally.**
+- [Video Capture SDK .Net] **Fixed: stopping a hung `FFMPEGEXEOutput`/VLC.EXE task could report the stop as done while the ffmpeg.exe/vlc.exe process still ran and held the output file locked.** The stop now waits for the killed process to actually exit before reporting completion. (#1598)
+- [Video Edit SDK .Net] **Fixed: with network streaming through `FFMPEGEXEOutput`, the stream used the container and encoder settings of the output file instead of `Network_Streaming_Output`.** (#1579)
 - [Video Edit SDK .Net] **Added: `FastEdit_CutFileAsync` can seek before opening the input, which makes cutting from a long file fast wherever the cut starts.** Pass `FastEditSeekMode.Input` as the new fifth argument; the four-argument overload keeps the previous behavior, where cutting near the end of a multi-hour MPEG-TS recording read the whole file up to the cut. For MPEG-TS input (`.ts`, `.m2ts`, `.mts`) the cut starts on the keyframe preceding the requested start, so the output is decodable from its first frame and audio and video stay in sync. The Video Edit demos and agent skills show the new mode for transport streams. (#1623)
+- [Video Edit SDK .Net] **Fixed: an operation stopped with `FastEdit_StopAsync` was reported as failed with an error ("No process is associated with this object").** A stopped cut, join, audio extraction or mux now raises `OnStop` with `Successful = false` and no error. The tasks returned by `FastEdit_CutFileAsync`, `FastEdit_JoinFilesAsync` and `FastEdit_ExtractAudioStreamAsync` now carry the operation's result as documented, instead of always `true`. (#1597)
 
 ## 2026.9.17
 
@@ -336132,7 +336289,7 @@ Vous pouvez ajouter ces paquets via le gestionnaire de paquets NuGet de votre ID
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <PackageReference Include="VisioForge.DotNet.Core" Version="2026.*" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -336523,8 +336680,8 @@ Pour les projets MAUI ciblant macOS (via MacCatalyst), ajoutez ces paquets :
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 </ItemGroup>
 ```
 
@@ -336987,8 +337144,8 @@ Ajoutez les paquets suivants à votre projet :
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.22" />
 </ItemGroup>
 ```
 
@@ -337001,8 +337158,8 @@ Ajoutez les paquets redistribuables spécifiques à chaque plateforme à votre p
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
   <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -337010,7 +337167,7 @@ Ajoutez les paquets redistribuables spécifiques à chaque plateforme à votre p
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
 </ItemGroup>
 ```
 
@@ -337026,7 +337183,7 @@ Vous devez également ajouter la bibliothèque de bindings Java. Clonez-la depui
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -337034,7 +337191,7 @@ Vous devez également ajouter la bibliothèque de bindings Java. Clonez-la depui
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -337097,31 +337254,31 @@ Voici un exemple complet de fichier `.csproj` pour une application Uno Platform 
 
   <!-- Références principales VisioForge -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.17" />
-    <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.9.22" />
+    <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.22" />
   </ItemGroup>
 
   <!-- Plateforme Windows -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
   </ItemGroup>
 
   <!-- Plateforme Android -->
   <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
     <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
   </ItemGroup>
 
   <!-- Plateforme iOS -->
   <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
   </ItemGroup>
 
   <!-- Plateforme macOS Catalyst -->
   <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
   </ItemGroup>
 
   <!-- macOS : copier les bibliothèques natives vers le bundle d'application -->
@@ -337353,6 +337510,13 @@ Chaque application Windows créée avec le SDK VisioForge requiert le paquet de 
 ## Paquets de composants optionnels
 
 Selon les exigences de votre application, vous pouvez avoir besoin d'inclure des paquets supplémentaires pour des fonctionnalités spécialisées. Ces composants optionnels étendent les capacités du SDK dans divers domaines.
+
+### Intel Quick Sync Video (QSV)
+
+Les encodeurs et décodeurs matériels QSV (`QSVH264EncoderSettings`, `QSVHEVCEncoderSettings`, `QSVAV1EncoderSettings` et les autres réglages `QSV*`) sont livrés dans un paquet séparé. Sans lui, la création d'un encodeur QSV échoue avec `Unable to create H264 encoder 'qsvh264enc'` :
+
+- [VisioForge.CrossPlatform.Core.Windows.Intel.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Intel.x86) — Intel QSV pour les applications 32 bits
+- [VisioForge.CrossPlatform.Core.Windows.Intel.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Intel.x64) — Intel QSV pour les applications 64 bits
 
 ### Traitement multimédia FFMPEG (recommandé)
 
@@ -353389,8 +353553,8 @@ Obtient le code de configuration de copie de fichiers / de build propre à la pl
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
@@ -367879,7 +368043,7 @@ Ajoutez le redistribuable spécifique à iOS à votre projet principal iOS :
   <!-- La version du redistribuable iOS est volontairement en retard sur celle du SDK - elle suit
        le rythme de reconstruction de GStreamer-iOS, pas celui du wrapper. Ne l'alignez pas sur
        VisioForge.DotNet.* ; il n'existe pas de version 2026.x sur nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -368455,7 +368619,7 @@ Ajoutez le paquet spécifique à iOS à votre projet :
   <!-- La version du redistribuable iOS est volontairement en retard sur celle du SDK - elle suit
        le rythme de reconstruction de GStreamer-iOS, pas celui du wrapper. Ne l'alignez pas sur
        VisioForge.DotNet.* ; il n'existe pas de version 2026.x sur nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -374830,49 +374994,49 @@ Claude Code : `claude mcp add --transport http visioforge-sdk https://mcp.visiof
 Paquet SDK principal (toutes les plateformes) :
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Runtime Windows x64 (choisissez x86 pour les applications 32 bits) :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
 <!-- Optionnel : décodeurs/encodeurs supplémentaires via Libav -->
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Windows x86 :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="2026.9.11" />
 ```
 
 macOS (natif et MAUI / macCatalyst) :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 ```
 
 Linux x64 (nécessite également GStreamer 1.22+ installé sur le système) :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 Android et iOS :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 Paquets d'intégration UI (optionnels, par framework) :
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.22" />
 ```
 
 Procédure d'installation complète : [install/index.md](../../install/).
@@ -381715,14 +381879,14 @@ graph TD;
 Vous aurez besoin du VisioForge Media Blocks SDK. Ajoutez-le à votre projet .NET via NuGet :
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Selon votre plateforme cible, ajoutez le paquet de runtime natif correspondant. Pour Windows x64 :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Pour les dépendances détaillées par plateforme, consultez le [guide de déploiement](../../../deployment-x/).
@@ -382096,14 +382260,14 @@ Pour des exemples complets et fonctionnels, consultez les [démos RTSP sur GitHu
 Ajoutez le paquet NuGet du Media Blocks SDK à votre projet :
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Vous avez également besoin des paquets de runtime spécifiques à la plateforme. Pour Windows :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Pour les autres plateformes (macOS, Linux, Android, iOS), consultez le [guide de déploiement](../../../deployment-x/).
@@ -382447,14 +382611,14 @@ L'idée principale est de prendre le flux vidéo brut de la source RTSP et de l'
 Vous aurez besoin du VisioForge Media Blocks SDK. Vous pouvez l'ajouter à votre projet .NET via NuGet :
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Selon votre plateforme cible (Windows, macOS, Linux, y compris les systèmes ARM comme Jetson Nano pour les applications de caméras embarquées), vous aurez également besoin des paquets de runtime natifs correspondants. Par exemple, sous Windows pour enregistrer la vidéo :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Pour des informations détaillées sur les exigences de déploiement et les dépendances spécifiques aux plateformes, consultez notre [guide de déploiement](../../../deployment-x/). Il est important de vérifier ces détails pour que votre application de capture de flux vidéo fonctionne correctement.
@@ -382905,14 +383069,14 @@ graph LR;
 Ajoutez le Media Blocks SDK à votre projet via NuGet :
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 ```
 
 Sous Windows, vous avez également besoin des paquets de runtime natif. Pour enregistrer (multiplexer), vous avez besoin du runtime principal ; le paquet Libav fournit les multiplexeurs :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
 ```
 
 Pour les paquets de runtime macOS, Linux, Android et iOS et les notes propres à chaque plateforme, consultez le [Guide de déploiement](../../../deployment-x/).
@@ -385645,8 +385809,8 @@ Nom : GLOverlayBlock.
 
 | Direction du pin | Type de média | Nombre de pins |
 | --- | --- | --- |
-| Entrée | Vidéo (mémoire GL) | 1 |
-| Sortie | Vidéo (mémoire GL) | 1 |
+| Entrée | Vidéo (mémoire système ou GL) | 1 |
+| Sortie | Vidéo (mémoire système ou GL) | 1 |
 
 La superposition est configurée avec `GLOverlaySettings` (voir [Paramètres de superposition](#parametres-de-superposition-gloverlaysettings) ci-dessus). Appelez `UpdateSettings()` après avoir modifié les propriétés de `Settings` pour appliquer les changements à un pipeline en cours d'exécution.
 
@@ -385705,8 +385869,8 @@ Nom : GLResizeBlock.
 
 | Direction du pin | Type de média | Nombre de pins |
 | --- | --- | --- |
-| Entrée | Vidéo (mémoire GL) | 1 |
-| Sortie | Vidéo (mémoire GL) | 1 |
+| Entrée | Vidéo (mémoire système ou GL) | 1 |
+| Sortie | Vidéo (mémoire système ou GL) | 1 |
 
 #### Exemple de pipeline
 
@@ -385755,8 +385919,8 @@ Nom : GLSquareBlock.
 
 | Direction du pin | Type de média | Nombre de pins |
 | --- | --- | --- |
-| Entrée | Vidéo (mémoire GL) | 1 |
-| Sortie | Vidéo (mémoire GL) | 1 |
+| Entrée | Vidéo (mémoire système ou GL) | 1 |
+| Sortie | Vidéo (mémoire système ou GL) | 1 |
 
 #### Exemple de pipeline
 
@@ -404285,48 +404449,48 @@ Toutes les cibles multiplateformes utilisent un pipeline de décodage basé sur 
 Paquet principal du SDK (toujours requis) :
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
 ```
 
 Runtime natif Windows x64 :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 Runtime natif Windows x86 :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.9.11" />
 ```
 
 macOS (natif) et MacCatalyst (MAUI macOS) :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 ```
 
 Linux x64 (plus GStreamer 1.22+ du système) :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 Android et iOS :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 Paquets optionnels du framework UI — ajoutez celui qui correspond à votre cible :
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.22" />
 ```
 
 Guide d'installation complet par IDE : [install/index.md](../../install/).
@@ -406509,8 +406673,8 @@ Le projet principal, `SimplePlayerMVVM.csproj`, cible plusieurs plateformes. Les
   <PackageReference Include="Avalonia.Android" Version="12.0.5" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.9.22" />
  </ItemGroup>
 </Project>
 ```
@@ -406532,15 +406696,15 @@ Chaque projet principal de plateforme (`SimplePlayerMVVM.Android.csproj`, `Simpl
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
     <TargetFramework>net10.0-macos</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
     <TargetFramework>net10.0</TargetFramework>
@@ -406572,7 +406736,7 @@ Chaque projet principal de plateforme (`SimplePlayerMVVM.Android.csproj`, `Simpl
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   </ItemGroup>
 </Project>
 ```
@@ -406595,7 +406759,7 @@ Chaque projet principal de plateforme (`SimplePlayerMVVM.Android.csproj`, `Simpl
   <!-- ... other items ... -->
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="12.0.5" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
@@ -407467,11 +407631,11 @@ Pour abstraire les fonctionnalités spécifiques aux plateformes, des interfaces
   ```
   ```xml
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.4.29" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
   </ItemGroup>
   ```
   ```
@@ -408237,19 +408401,19 @@ Claude Code : `claude mcp add --transport http visioforge-sdk https://mcp.visiof
 ## Paquets NuGet
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 
 <!-- Redists de plateforme — incluez uniquement les cibles que vous construisez -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29"
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('windows'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29"
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('windows'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5"
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('maccatalyst'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27"
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17"
                   Condition="$(TargetFramework.Contains('android'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0"
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11"
                   Condition="$(TargetFramework.Contains('ios'))" />
 ```
 
@@ -408533,9 +408697,9 @@ Claude Code : `claude mcp add --transport http visioforge-sdk https://mcp.visiof
 ### Paquets NuGet requis
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ### Implémentation complète du lecteur vidéo C
@@ -408793,9 +408957,9 @@ Ce guide vous accompagne dans la construction d'une application de lecteur vidé
 ## Paquets NuGet requis
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ## Exemple complet de lecteur vidéo VB.NET
@@ -409059,14 +409223,14 @@ Ajoutez les dépendances natives spécifiques à la plateforme :
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 
 <!-- Linux x64 (nécessite GStreamer 1.22+ du système) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 Pour la liste complète des paquets et la prise en charge des frameworks UI (WinForms, WPF, MAUI, Avalonia), consultez le [Guide d'installation](../install/).
@@ -411373,23 +411537,23 @@ Runtimes natifs spécifiques à chaque plateforme — ajoutez ceux que vous cibl
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 
 <!-- Windows x86 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="2026.9.11" />
 
 <!-- macOS / macCatalyst -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 
 <!-- Linux x64 (nécessite GStreamer 1.22+ du système) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 
 <!-- Android / iOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 Intégration de l'interface utilisateur (choisissez celle qui correspond à votre pile UI) :
@@ -412632,13 +412796,13 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 Paquet principal du SDK (managé) :
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
 ```
 
 Dépendances natives pour Windows x64 :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
 ```
 
 Pour les plateformes alternatives (macOS, Linux, Android, iOS), utilisez les paquets de dépendances natives correspondants. Consultez le [guide de déploiement](../../../deployment-x/) pour plus de détails.
@@ -412682,9 +412846,9 @@ L'enregistrement vidéo webcam dans les applications VB.NET est une exigence cou
 Ajoutez les paquets suivants à votre projet VB.NET :
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ## Exemple complet d'enregistrement webcam en VB.NET
@@ -413155,7 +413319,7 @@ Video Capture SDK .Net s'appuie sur des bibliothèques natives pour accéder aux
 Paquet principal du SDK :
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
 ```
 
 ### Paquets redistribuables spécifiques aux plateformes
@@ -413163,18 +413327,18 @@ Paquet principal du SDK :
 Windows x64 :
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 Pour les autres plateformes :
 
 ```
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 
 <!-- Linux x64 (nécessite GStreamer 1.22+ du système) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 ## Compatibilité multiplateforme
@@ -413264,9 +413428,9 @@ L'enregistrement de l'écran du bureau dans les applications VB.NET (Visual Basi
 Ajoutez les paquets suivants à votre projet VB.NET :
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```
 
 ## Exemple complet d'enregistrement d'écran en VB.NET
@@ -413787,14 +413951,14 @@ Ajoutez les dépendances natives spécifiques à la plateforme :
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.8.5" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />
 
 <!-- Linux x64 (nécessite GStreamer 1.22+ du système) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2025.9.0" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 ```
 
 Pour la liste complète des paquets et la prise en charge des frameworks UI (WinForms, WPF, MAUI, Avalonia), consultez le [Guide d'installation](../install/).
@@ -414104,8 +414268,8 @@ Utilisez les dernières versions des paquets NuGet du SDK pour .NET dans votre p
 Ajoutez les paquets NuGet suivants à votre projet :
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 ```
 
 Le paquet `VideoCapture` contient la fonctionnalité principale de capture vidéo, tandis que le paquet `Core.UI.MAUI` contient le contrôle `VideoView` pour l'aperçu vidéo dans les applications .NET MAUI.
@@ -414118,8 +414282,8 @@ Ajoutez les paquets NuGet suivants à votre projet selon la plateforme cible :
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -414127,7 +414291,7 @@ Ajoutez les paquets NuGet suivants à votre projet selon la plateforme cible :
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
@@ -414138,7 +414302,7 @@ Ajoutez les paquets NuGet suivants à votre projet selon la plateforme cible :
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- La version du redistribuable iOS est volontairement en retard sur celle du SDK - elle suit
        le rythme de reconstruction de GStreamer-iOS, pas celui du wrapper. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -414147,7 +414311,7 @@ Ajoutez les paquets NuGet suivants à votre projet selon la plateforme cible :
 ```
 <!-- Paquet NuGet personnalisé et code cible pour maccatalyst pour copier les fichiers redist NuGet vers le fichier d'application -->
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 
 <Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">
@@ -423254,7 +423418,7 @@ Claude Code : `claude mcp add --transport http visioforge-sdk https://mcp.visiof
 Un seul paquet embarque les deux moteurs : `VideoEditCoreX` et l'historique `VideoEditCore` y cohabitent, le choix du moteur se fait donc dans le code, pas dans le packaging :
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.22" />
 ```
 
 Il tire `VisioForge.DotNet.Core` en dépendance ; inutile de référencer `Core` séparément.
@@ -426143,8 +426307,8 @@ L'exemple complet se trouve sur [GitHub](https://github.com/visioforge/.Net-SDK-
 Deux paquets : le SDK lui-même et le contrôle `VideoView` de MAUI.
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 ```
 
 `VisioForge.DotNet.Core.UI.MAUI` ne fournit que le contrôle `VideoView` — à lui seul, il ne peut pas compiler `VideoEditCoreX`. C'est le paquet `VisioForge.DotNet.VideoEdit` qui apporte le moteur.
@@ -426153,23 +426317,23 @@ Ajoutez ensuite le redistribuable pour chaque plateforme que vous ciblez. Consul
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.7.27" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- La version du redistribuable iOS est volontairement en retard sur celle du SDK - elle suit
        le rythme de reconstruction de GStreamer-iOS, pas celui du wrapper. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2025.12.0" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.8.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.4.29" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.4.29" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 ```
 
@@ -434695,7 +434859,7 @@ dotnet restore
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.9.22" />
   <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="2025.8.7" />
 
   <!-- Optionnel : intégration MongoDB -->

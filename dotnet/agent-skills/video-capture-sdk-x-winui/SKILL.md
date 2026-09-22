@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a Windows App SDK / WinUI 3 desktop application. The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) that mirrors the legacy `VideoCaptureCore` API but runs on the cross-platform engine. Same C# code targets Windows / macOS / Linux / iOS / Android — the only thing that changes between platforms is the UI host (WinUI 3 here, MAUI / Avalonia / Uno / native elsewhere) and the per-OS native redist NuGet package.
 
-Pinned NuGet versions: wrapper **`2026.9.17`**, redist **`2026.9.11`**, Windows App SDK **`Microsoft.WindowsAppSDK 1.8.251106002`** (matches the [official Simple Video Capture WinUIX sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WinUI)). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.22`**, redist **`2026.9.11`**, Windows App SDK **`Microsoft.WindowsAppSDK 1.8.251106002`** (matches the [official Simple Video Capture WinUIX sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WinUI)). The native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -47,8 +47,8 @@ Four packages are required for a WinUI 3 capture-and-record scenario — the .NE
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="2026.9.22" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
@@ -279,7 +279,7 @@ Run through these after first integration:
 
 The `references/` folder is a faithful copy of the official sample with the SDK icon stripped. Copy all of it into a fresh project folder; you'll also need the `Assets/` PNGs from any WinUI 3 desktop template (or the upstream sample) for the package to build:
 
-- `references/Sample.csproj` — minimal working WinUI 3 csproj, version-pinned to the same NuGet release as the prose (wrapper `2026.9.17`, redist `2026.9.11`, WindowsAppSDK `1.8.251106002`).
+- `references/Sample.csproj` — minimal working WinUI 3 csproj, version-pinned to the same NuGet release as the prose (wrapper `2026.9.22`, redist `2026.9.11`, WindowsAppSDK `1.8.251106002`).
 - `references/App.xaml` + `references/App.xaml.cs` — Application entry point.
 - `references/MainWindow.xaml` — XAML with `<win2d:CanvasControl x:Name="canvasControl"/>` for the preview surface plus the device/output/log Pivot UI.
 - `references/MainWindow.xaml.cs` — full code-behind with `InitSDKAsync` boot, `DeviceEnumerator` wiring, MP4 recording, audio routing, recording-time display, and `OnError` wiring. Use as a copy-paste starting template. (Runs in trial mode by design; add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence.)

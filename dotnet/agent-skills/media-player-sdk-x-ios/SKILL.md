@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to a **native .NET for iOS** application (`net10.0-ios` TFM, UIKit, no MAUI/Xamarin shell). The X SDK shares its runtime with Media Blocks and Video Capture X (GStreamer-backed under the hood) and exposes the high-level `MediaPlayerCoreX` god-object that mirrors the legacy `MediaPlayerCore` API. Same C# playback code ports to Windows / macOS / Android / MAUI / Avalonia / Uno — only the UI host changes.
 
-Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaPlayer` 2026.9.17**, native iOS redist **`VisioForge.CrossPlatform.Core.iOS` 2026.9.11** (matches the upstream Media Player SDK X iOS sample at `_DEMOS/Media Player SDK X/iOS/MediaPlayer/`). The iOS native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaPlayer` 2026.9.22**, native iOS redist **`VisioForge.CrossPlatform.Core.iOS` 2026.9.11** (matches the upstream Media Player SDK X iOS sample at `_DEMOS/Media Player SDK X/iOS/MediaPlayer/`). The iOS native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -37,7 +37,7 @@ Two packages — the .NET wrapper plus the iOS native redist. The redist is **no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.9.22" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />

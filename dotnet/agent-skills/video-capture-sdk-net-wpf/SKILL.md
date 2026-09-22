@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK .NET into a Windows WPF appl
 
 This skill helps you add **VisioForge Video Capture SDK .NET** to a Windows WPF application. It covers webcam, IP camera, screen, and DV-camera capture with preview, recording, and snapshot. The SDK is Windows-only (DirectShow / Media Foundation under the hood) — for cross-platform capture (macOS, iOS, Android, Linux), use one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills instead.
 
-Pinned NuGet version: **`2026.9.17`** (matches the [official Simple Video Capture sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/Simple%20Video%20Capture)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.9.22`** (matches the [official Simple Video Capture sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/Simple%20Video%20Capture)). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -35,7 +35,7 @@ The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
 </ItemGroup>
 ```
 
@@ -43,7 +43,7 @@ If you add codec-heavy outputs (WebM, certain GPU-accelerated MP4 paths), add th
 
 ### Full minimal csproj
 
-See `references/Sample.csproj` in the bundled archive. Adapted from the official Simple Video Capture sample (`_DEMOS/Video Capture SDK/WPF/CSharp/Simple Video Capture/`). Changes vs upstream: the in-repo `<ProjectReference>` is swapped for a `<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.17" />`; demo-only properties are removed (`<BaseIntermediateOutputPath>`, `<TreatWarningsAsErrors>`, per-TFM `<NoWarn>` blocks, `<DefaultItemExcludes>obj/**`, the analyzer block `<EnableNETAnalyzers>` / `<AnalysisLevel>` / `<NoWarn>S2325</NoWarn>`); the dead `Condition='net472'` ItemGroup and the legacy `<ProductVersion>` / `<ProjectTypeGuids>` fields (ignored by the modern SDK) are dropped; `<AssemblyName>` is shortened to `WPF Simple Video Capture`. The bundled file builds standalone against the public NuGet package.
+See `references/Sample.csproj` in the bundled archive. Adapted from the official Simple Video Capture sample (`_DEMOS/Video Capture SDK/WPF/CSharp/Simple Video Capture/`). Changes vs upstream: the in-repo `<ProjectReference>` is swapped for a `<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />`; demo-only properties are removed (`<BaseIntermediateOutputPath>`, `<TreatWarningsAsErrors>`, per-TFM `<NoWarn>` blocks, `<DefaultItemExcludes>obj/**`, the analyzer block `<EnableNETAnalyzers>` / `<AnalysisLevel>` / `<NoWarn>S2325</NoWarn>`); the dead `Condition='net472'` ItemGroup and the legacy `<ProductVersion>` / `<ProjectTypeGuids>` fields (ignored by the modern SDK) are dropped; `<AssemblyName>` is shortened to `WPF Simple Video Capture`. The bundled file builds standalone against the public NuGet package.
 
 ### Project platform
 

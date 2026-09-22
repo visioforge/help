@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a native .NET for macOS 
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a **native .NET for macOS** application (`net10.0-macos`, AppKit / Storyboards / `NSApplication`). Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. On macOS the host UI is AppKit (`NSViewController`, `NSWindow`) and the preview surface is `VideoView` from `VisioForge.Core.UI.Apple`.
 
-Pinned NuGet versions: wrapper **`2026.9.17`**, macOS native redist **`2026.9.11`** (matches the [official Simple Video Capture MB sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/macOS/SimpleVideoCaptureMBMac)). The macOS native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.9.22`**, macOS native redist **`2026.9.11`** (matches the [official Simple Video Capture MB sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/macOS/SimpleVideoCaptureMBMac)). The macOS native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -43,7 +43,7 @@ Two packages — the .NET wrapper plus a single macOS native redist. There is no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.9.22" />
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.9.11" />

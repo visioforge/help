@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK X (cross-platform edition) into
 
 This skill helps you add **VisioForge Video Edit SDK X** — the cross-platform "X" edition of the editing SDK — to a .NET MAUI application targeting **Windows, Android, iOS, and Mac Catalyst** from a single codebase. `VideoEditCoreX` is a timeline engine on the GStreamer backend: you append clips, images and audio tracks, optionally add effects and transitions, then either preview the timeline into a `VideoView` or render it to a file. The same C# runs on every OS — only the per-TFM redist NuGets change.
 
-Pinned NuGet versions: wrapper **`2026.9.17`**, MAUI handlers **`2026.9.17`**, plus the five native redists in the csproj below — `Core.Windows.x64`, `Libav.Windows.x64`, `Core.Android`, `Core.iOS` and `Core.macCatalyst` — which all happen to be on that same **`2026.9.11`** release today. `VisioForge.DotNet.VideoEdit` and `VisioForge.DotNet.Core.UI.MAUI` always move together and must carry the same version. The `VisioForge.CrossPlatform.*` redists are built on their own cadence: for each one, pin the newest version published **at or before** the wrapper's release. That may trail the wrapper by several releases — `Core.iOS` has a handful of published versions where the wrapper has dozens — and it must never run ahead of it, which is undefined behaviour. The [official Video Edit X MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/MAUI/SimpleEdit) is the reference for the project layout, not for the version to pin — it can lag a release.
+Pinned NuGet versions: wrapper **`2026.9.22`**, MAUI handlers **`2026.9.22`**, plus the five native redists in the csproj below: `Core.Android` on **`2026.9.17`**, and `Core.Windows.x64`, `Libav.Windows.x64`, `Core.iOS` and `Core.macCatalyst` on **`2026.9.11`**, which is the newest release published for each of those four. `VisioForge.DotNet.VideoEdit` and `VisioForge.DotNet.Core.UI.MAUI` always move together and must carry the same version. The `VisioForge.CrossPlatform.*` redists are built on their own cadence: for each one, pin the newest version published **at or before** the wrapper's release. That may trail the wrapper by several releases — `Core.iOS` has a handful of published versions where the wrapper has dozens — and it must never run ahead of it, which is undefined behaviour. The [official Video Edit X MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/MAUI/SimpleEdit) is the reference for the project layout, not for the version to pin — it can lag a release.
 
 ## When to use this skill
 
@@ -74,8 +74,8 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.17" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.9.22" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.9.22" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
@@ -83,7 +83,7 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
