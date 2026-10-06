@@ -152,6 +152,7 @@ int SetLoadTimeOut(uint milliseconds);
 - Particularmente importante para streams de red que pueden tener tiempos de conexión lentos
 - Establezca valores más altos para conexiones de red lentas o archivos grandes
 - Establezca valores más bajos para fallar rápidamente en fuentes inalcanzables
+- Para URLs `rtsp://` también limita el stream: la conexión y cada lectura de red esperan como máximo la mitad del valor, así que una cámara que deja de enviar termina el stream tras aproximadamente este tiempo. `SetCustomOption("timeout", ...)` reemplaza la espera por lectura (microsegundos); `"0"` espera indefinidamente
 **Ejemplo (C++)**:
 ```cpp
 // Establecer timeout de 30 segundos para streams de red

@@ -516,7 +516,7 @@ Name: `SubtitleSourceBlock`.
 
 The `SubtitleSourceBlock` is configured using `SubtitleSourceSettings`. Key properties include:
 
-- `Filename` (string): The path to the subtitle file (e.g., .srt, .ass).
+- `Filename` (string): The path to the subtitle file (.srt, .vtt or .sub).
 
 #### The sample pipeline
 
@@ -703,6 +703,8 @@ pipeline.Connect(source.AudioOutput, audioRenderer.Input);
 
 await pipeline.StartAsync();
 ```
+
+The block decodes with GStreamer's `decodebin3`. Set `UseLegacyDecodeBin = true` before starting the pipeline to use the legacy `decodebin` instead. `MediaPlayerCoreX` takes the same switch as `StreamSourceSettings.UseLegacyDecodeBin`.
 
 #### Platforms
 
@@ -1550,6 +1552,8 @@ pipeline.Connect(source.AudioOutput, audioRenderer.Input);
 
 await pipeline.StartAsync();
 ```
+
+The block decodes with GStreamer's `decodebin3`. Set `SRTSourceSettings.UseLegacyDecodeBin = true` before starting the pipeline to use the legacy `decodebin` instead. `VideoCaptureCoreX` builds this block for SRT, so the setting applies there too, except with `FallbackSwitch` enabled, which takes a different source. The legacy element shows no video on a stream whose PMT lists a stream that never carries data.
 
 #### Sample applications
 

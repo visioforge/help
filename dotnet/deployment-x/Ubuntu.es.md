@@ -164,6 +164,18 @@ arecord -L  # Para dispositivos de grabación
 aplay -L    # Para dispositivos de reproducción
 ```
 
+## Ejecución bajo WSL (WSLg)
+
+WSLg es conveniente para el desarrollo, y todo excepto la vista previa de video funciona en él igual que en una instalación nativa. La vista previa de video es la única excepción: cuando el control `VideoView` crea su ventana hija nativa (HWND en Windows, X11/XEmbed en Linux), la pila de ventanas de WSLg no consigue inicializarla y la aplicación se cierra en cuanto llega el primer fotograma — normalmente con errores de Mesa como `ZINK: failed to choose pdev` o `failed to create dri2 screen` en la consola. Es una limitación de WSLg, no un defecto de la aplicación ni del SDK.
+
+Para desarrollar dentro de WSL, cambie el `VideoView` a renderizado por software antes de iniciar el pipeline — el video se dibuja dentro del árbol visual de Avalonia, no se crea ninguna ventana hija nativa y las vistas previas funcionan bajo WSLg:
+
+```cs
+videoView.SetNativeRendering(false);
+```
+
+El modo software cuesta una copia de CPU por fotograma y está pensado para desarrollo y escenarios de superposición; en una instalación nativa de Ubuntu, la incrustación nativa por defecto sigue siendo la vía recomendada. Véase [Superponer controles Avalonia sobre el video](../general/code-samples/avalonia-controls-over-video.md) para más detalles.
+
 ## Solución de Problemas
 
 ### Problemas de Permisos

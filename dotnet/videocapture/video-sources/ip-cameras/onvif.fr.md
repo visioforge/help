@@ -240,6 +240,27 @@ if (profiles != null && profiles.Length > 0)
 }
 ```
 
+### Laisser le SDK choisir le profil
+
+Avec l'URL du service de périphérique ONVIF, `RTSPSourceSettings.CreateAsync` (Media Blocks SDK, `VideoCaptureCoreX`) et le `VideoCaptureCore` classique choisissent le profil d'après son flux vidéo au lieu de prendre le premier, car les caméras ne classent pas leurs profils par qualité :
+
+- H.264 et H.265 passent avant MPEG-4, qui passe avant JPEG ; ensuite l'emporte la plus grande taille d'image, puis la plus haute limite de fréquence d'images.
+- Seuls les profils de la même source vidéo (entrée) que le premier profil sont pris en compte.
+- Seules les caméras dotées du service ONVIF Media 2.0 signalent des profils H.265. Dans les moteurs X, ils ne comptent que si un décodeur H.265 est disponible (le paquet redist Libav ou le décodage GPU) ; sinon un profil H.264 est choisi.
+- Le profil choisi est écrit dans le journal.
+
+```cs
+// Choix automatique
+var settings = await RTSPSourceSettings.CreateAsync(
+    new Uri("http://192.168.1.100/onvif/device_service"), "admin", "password", audioEnabled: true);
+
+// Un profil précis, par jeton ou par nom
+var mainStream = await RTSPSourceSettings.CreateAsync(
+    new Uri("http://192.168.1.100/onvif/device_service"), "admin", "password", true, onvifProfile: "Profile_1");
+```
+
+Pour `VideoCaptureCore`, renseignez `IPCameraSourceSettings.ONVIF_SourceProfile` avec le jeton ou le nom d'un profil, ou laissez-le vide pour le choix automatique.
+
 ## Aperçu vidéo
 
 ### Configuration de l'aperçu de base

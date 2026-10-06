@@ -213,6 +213,10 @@ L'interface de votre application doit indiquer clairement l'état actuel de l'ap
 - Implémentez des contrôles d'interface utilisateur appropriés pour chaque état
 - Envisagez d'ajouter des minuteurs et des indicateurs d'enregistrement
 
+### Métadonnées KLV
+
+Lorsque les métadonnées KLV d'une caméra IP sont enregistrées dans les fichiers de capture séparée (`FFMPEGOutput` avec `MPEG_TS_KLV`), laissez `SeparateCapture_GMFMode` à sa valeur par défaut `true` : le KLV est alors horodaté depuis le début de chaque fichier, comme sa vidéo. Avec `SeparateCapture_GMFMode = false`, ou avec `IPCameraSourceSettings.ForcedFramerate` défini, la vidéo de chaque fichier commence à zéro mais son KLV conserve le temps écoulé de la capture, et le SDK émet un avertissement une fois par capture. Dans tous les modes, aucun KLV n'est écrit pendant `SeparateCapture_Pause`.
+
 ## Bonnes pratiques d'intégration
 
 Pour des performances et une fiabilité optimales :

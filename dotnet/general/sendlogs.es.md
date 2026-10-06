@@ -147,6 +147,17 @@ Diferentes entornos de implementación pueden requerir diferentes enfoques de re
 #endif
 ```
 
+### Diagnóstico de fallos nativos aleatorios
+
+Si su aplicación, que usa los motores X (`MediaPlayerCoreX`, `VideoCaptureCoreX`, `VideoEditCoreX`) o un `MediaBlocksPipeline`, termina de vez en cuando con una `ExecutionEngineException` o una `AccessViolationException` que ningún `try`/`catch` puede interceptar, active `Debug_NativeCriticals`:
+
+```csharp
+videoCapture.Debug_Dir = "C:\\Logs\\MyApplication";
+videoCapture.Debug_NativeCriticals = true;
+```
+
+Un mensaje crítico de GStreamer/GLib es una llamada nativa que no superó una comprobación de validez, normalmente un objeto usado después de haber sido liberado. No lanza ninguna excepción, por lo que suele pasar desapercibido hasta que el proceso falla en otro punto. Con esta propiedad activada, cada mensaje crítico se escribe de inmediato, junto con la pila de llamadas de .NET que lo produjo (en una ráfaga, para los primeros 20 de cada segundo), en un archivo `gstreamer_criticals_*.txt` dentro de `Debug_Dir`, y además se notifica mediante el evento `OnError`. El archivo conserva las entradas anteriores a un fallo, así que inclúyalo cuando envíe los registros al soporte técnico. El ajuste se aplica a todo el proceso y no tiene coste mientras no se produzca ningún mensaje crítico.
+
 ## Mejores prácticas para un registro efectivo
 
 Para asegurarse de obtener la información más valiosa de sus registros, siga estas mejores prácticas:

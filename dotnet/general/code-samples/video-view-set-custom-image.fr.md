@@ -96,6 +96,8 @@ using (Bitmap dynamicImage = new Bitmap(VideoView1.Width, VideoView1.Height))
 }
 ```
 
+Le video view devient propriétaire du bitmap dès qu'il est passé à `PictureBoxSetImage` et le libère : le `VideoView` WPF immédiatement, car il affiche une copie, et le `VideoView` WinForms lorsque vous définissez une nouvelle image, appelez `PictureBoxDestroy`, libérez le view ou que la PictureBox disparaît ; `MediaPlayerCore` la supprime au démarrage ou à la reprise de la lecture, et `VideoCaptureCoreX` au démarrage de la capture. Ne libérez pas et ne réutilisez pas un bitmap après l'avoir passé ; c'est pourquoi l'exemple ci-dessus passe un clone. Passez un nouveau bitmap chaque fois que vous affichez une image d'attente que vous conservez.
+
 ### Considérations sur le format d'image
 
 Le format d'image que vous choisissez peut impacter les performances et la qualité visuelle :

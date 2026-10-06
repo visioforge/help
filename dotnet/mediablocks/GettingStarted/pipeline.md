@@ -66,7 +66,7 @@ pipeline.Name = "MainVideoPlayer";
 
 ### Implementing Robust Error Handling
 
-Media applications must handle various error scenarios that may occur during operation. Implementing proper error handling ensures your application remains stable:
+Media applications must handle various error scenarios that may occur during operation. Implementing proper error handling ensures your application remains stable. The handler runs on a thread-pool thread, not the UI thread, so update controls from your own UI thread; calling `Stop()` from it is safe.
 
 ```csharp
 // Subscribe to error events to capture and handle exceptions

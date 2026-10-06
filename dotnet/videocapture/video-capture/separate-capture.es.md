@@ -213,6 +213,10 @@ La UI de su aplicación debería indicar claramente el estado actual de la vista
 - Implemente controles de UI apropiados para cada estado
 - Considere agregar temporizadores e indicadores de grabación
 
+### Metadatos KLV
+
+Cuando los metadatos KLV de una cámara IP se graban en los archivos de captura separada (`FFMPEGOutput` con `MPEG_TS_KLV`), mantenga `SeparateCapture_GMFMode` en su valor predeterminado `true`: el KLV se marca entonces desde el inicio de cada archivo, igual que su vídeo. Con `SeparateCapture_GMFMode = false`, o con `IPCameraSourceSettings.ForcedFramerate` establecido, el vídeo de cada archivo empieza en cero pero su KLV conserva el tiempo transcurrido de la captura, y el SDK emite una advertencia una vez por captura. En todos los modos, no se escribe KLV durante `SeparateCapture_Pause`.
+
 ## Mejores Prácticas de Integración
 
 Para rendimiento y confiabilidad óptimos:

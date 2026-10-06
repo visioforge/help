@@ -96,6 +96,8 @@ using (Bitmap dynamicImage = new Bitmap(VideoView1.Width, VideoView1.Height))
 }
 ```
 
+The video view owns a bitmap once it is passed to `PictureBoxSetImage` and disposes it: the WPF `VideoView` right away, because it shows a copy, and the WinForms `VideoView` when you set a new image, call `PictureBoxDestroy`, dispose the view, or the picture box goes away - `MediaPlayerCore` removes it when playback starts or resumes, and `VideoCaptureCoreX` when capture starts. Do not dispose or reuse a bitmap after passing it, which is why the sample above passes a clone; pass a new bitmap each time you show a placeholder you keep.
+
 ### Image Format Considerations
 
 The image format you choose can impact performance and visual quality:

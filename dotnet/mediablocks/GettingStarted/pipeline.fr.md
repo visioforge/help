@@ -66,7 +66,7 @@ pipeline.Name = "MainVideoPlayer";
 
 ### Mise en œuvre d'une gestion d'erreurs robuste
 
-Les applications multimédias doivent gérer divers scénarios d'erreur qui peuvent survenir pendant l'exécution. Mettre en place une gestion d'erreurs appropriée garantit la stabilité de votre application :
+Les applications multimédias doivent gérer divers scénarios d'erreur qui peuvent survenir pendant l'exécution. Mettre en place une gestion d'erreurs appropriée garantit la stabilité de votre application. Le gestionnaire s'exécute sur un thread du pool, pas sur le thread de l'interface : mettez à jour les contrôles depuis votre thread d'interface. Appeler `Stop()` depuis ce gestionnaire est sûr.
 
 ```csharp
 // S'abonner aux événements d'erreur pour capturer et gérer les exceptions

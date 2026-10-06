@@ -164,6 +164,18 @@ arecord -L  # For recording devices
 aplay -L    # For playback devices
 ```
 
+## Running under WSL (WSLg)
+
+WSLg is convenient for development, and everything except the video preview works in it the same way as on a native installation. The video preview is the one exception: when the `VideoView` control creates its native child window (HWND on Windows, X11/XEmbed on Linux), the WSLg windowing stack fails to initialize it, and the application exits as soon as the first frame arrives — typically with Mesa errors such as `ZINK: failed to choose pdev` or `failed to create dri2 screen` in the console. This is a WSLg limitation, not an application or SDK defect.
+
+For development inside WSL, switch the `VideoView` to software rendering before starting the pipeline — the video is then drawn inside the Avalonia visual tree, no native child window is created, and previews work under WSLg:
+
+```cs
+videoView.SetNativeRendering(false);
+```
+
+Software mode costs a CPU copy per frame and is intended for development and overlay scenarios; on a native Ubuntu installation the default native embedding remains the recommended path. See [Overlaying Avalonia Controls on Video](../general/code-samples/avalonia-controls-over-video.md) for details.
+
 ## Troubleshooting
 
 ### Permission Issues

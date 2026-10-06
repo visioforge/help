@@ -147,6 +147,17 @@ Différents environnements de déploiement peuvent nécessiter différentes appr
 #endif
 ```
 
+### Diagnostic des plantages natifs aléatoires
+
+Si votre application, qui utilise les moteurs X (`MediaPlayerCoreX`, `VideoCaptureCoreX`, `VideoEditCoreX`) ou un `MediaBlocksPipeline`, s'arrête de temps en temps sur une `ExecutionEngineException` ou une `AccessViolationException` qu'aucun `try`/`catch` ne peut intercepter, activez `Debug_NativeCriticals` :
+
+```csharp
+videoCapture.Debug_Dir = "C:\\Logs\\MyApplication";
+videoCapture.Debug_NativeCriticals = true;
+```
+
+Un message critique GStreamer/GLib est un appel natif qui a échoué à une vérification de validité, le plus souvent un objet utilisé après sa libération. Il ne lève aucune exception, si bien qu'il passe généralement inaperçu jusqu'à ce que le processus plante ailleurs. Lorsque cette propriété est activée, chaque message critique est écrit immédiatement, avec la pile d'appels .NET qui l'a produit (lors d'une rafale, pour les 20 premiers de chaque seconde), dans un fichier `gstreamer_criticals_*.txt` du dossier `Debug_Dir`, et il est également signalé par l'événement `OnError`. Le fichier conserve les entrées qui ont précédé un plantage : joignez-le lorsque vous envoyez vos journaux au support. Le réglage s'applique à tout le processus et ne coûte rien tant qu'aucun message critique n'est émis.
+
 ## Bonnes pratiques pour une journalisation efficace
 
 Pour vous assurer d'obtenir les informations les plus précieuses de vos journaux, suivez ces bonnes pratiques :

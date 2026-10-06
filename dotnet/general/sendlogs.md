@@ -147,6 +147,17 @@ Different deployment environments may require different logging approaches:
 #endif
 ```
 
+### Diagnosing Random Native Crashes
+
+If your application running the X engines (`MediaPlayerCoreX`, `VideoCaptureCoreX`, `VideoEditCoreX`) or a `MediaBlocksPipeline` occasionally terminates with an `ExecutionEngineException` or `AccessViolationException` that no `try`/`catch` can intercept, enable `Debug_NativeCriticals`:
+
+```csharp
+videoCapture.Debug_Dir = "C:\\Logs\\MyApplication";
+videoCapture.Debug_NativeCriticals = true;
+```
+
+A GStreamer/GLib critical is a native call that failed a sanity check, typically an object used after it was released. It does not throw, so it usually goes unnoticed until the process crashes somewhere else. With this property on, every critical is written immediately, together with the .NET call stack that raised it (during a burst, for the first 20 each second), to a `gstreamer_criticals_*.txt` file in `Debug_Dir`, and is also reported through the `OnError` event. The file keeps the entries that preceded a crash, so please include it when you send logs to support. The setting applies to the whole process, and it costs nothing while no critical is raised.
+
 ## Best Practices for Effective Logging
 
 To ensure you get the most valuable information from your logs, follow these best practices:

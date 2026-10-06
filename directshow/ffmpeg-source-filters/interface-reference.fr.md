@@ -152,6 +152,7 @@ int SetLoadTimeOut(uint milliseconds);
 - Particulièrement importante pour les flux réseau pouvant avoir des temps de connexion lents
 - Définissez des valeurs plus élevées pour les connexions réseau lentes ou les fichiers volumineux
 - Définissez des valeurs plus basses pour échouer rapidement sur des sources injoignables
+- Pour les URL `rtsp://`, elle borne aussi le flux : la connexion et chaque lecture réseau attendent au plus la moitié de la valeur, donc une caméra qui cesse d'émettre termine le flux après environ cette durée. `SetCustomOption("timeout", ...)` remplace l'attente par lecture (microsecondes) ; `"0"` attend indéfiniment
 **Exemple (C++)** :
 ```cpp
 // Definir un delai de 30 secondes pour les flux reseau

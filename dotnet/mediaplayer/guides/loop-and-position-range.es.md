@@ -74,23 +74,17 @@ mediaPlayer.Loop = false;
 
 #### Propiedad `Loop_DoNotSeekToBeginning`
 
-Controla si se debe buscar al principio cuando se reinicia el bucle.
+Se mantiene por compatibilidad; ya no cambia cómo se reinicia el bucle.
 
 ```csharp
-// Reiniciar sin buscar al principio (bucle sin interrupciones)
-mediaPlayer.Loop_DoNotSeekToBeginning = true;
-
-// Buscar al principio antes de reiniciar (predeterminado)
+// Sin efecto: cada pasada del bucle se reinicia desde Selection_Start o desde el principio
 mediaPlayer.Loop_DoNotSeekToBeginning = false;
 ```
 
 **Valor predeterminado**: `false`
 
 **Comportamiento**:
-- Solo afecta el comportamiento cuando `Loop` es `true`
-- Cuando es `true`, reinicia desde la posición actual sin buscar
-- Mejora el rendimiento y evita fallos visuales durante las transiciones de bucle
-- Útil para bucles sin interrupciones de contenido
+- Cada pasada del bucle reinicia la reproducción desde `Selection_Start` cuando hay un rango activo, o desde el principio del archivo en caso contrario, sea cual sea este valor
 
 ### Propiedades de Rango de Posición
 
@@ -170,7 +164,8 @@ mediaPlayer.OnLoop += (sender, e) =>
 **Cuándo se dispara**:
 - Solo cuando la propiedad `Loop` es `true`
 - Cada vez que la reproducción cicla del final al principio
-- Después de buscar al principio (si corresponde)
+- Después de volver al principio, o a `Selection_Start` cuando hay un rango activo
+- No cuando la fuente rechaza volver atrás (por ejemplo, un flujo de red que ha terminado): el reproductor se detiene en ese archivo y luego genera `OnError`. Una fuente que termina de nuevo justo después de cada reinicio se detiene igual tras unos pocos eventos `OnLoop` de ese tipo
 
 **Casos de uso**:
 - Rastrear iteraciones de bucle
@@ -204,23 +199,7 @@ player.Playlist_Add(@"C:\Videos\sample.mp4");
 await player.PlayAsync();
 ```
 
-#### Ejemplo 2: Bucle Sin Interrupciones Sin Búsqueda
-
-```csharp
-using VisioForge.Core.MediaPlayer;
-
-var player = new MediaPlayerCore();
-
-// Habilitar bucle sin interrupciones (sin buscar al principio)
-player.Loop = true;
-player.Loop_DoNotSeekToBeginning = true;
-
-player.Playlist_Clear();
-player.Playlist_Add(@"C:\Videos\background.mp4");
-await player.PlayAsync();
-```
-
-#### Ejemplo 3: Reproducir Segmento Específico
+#### Ejemplo 2: Reproducir Segmento Específico
 
 ```csharp
 using VisioForge.Core.MediaPlayer;
@@ -239,7 +218,7 @@ player.Playlist_Add(@"C:\Videos\long-video.mp4");
 await player.PlayAsync();
 ```
 
-#### Ejemplo 4: Bucle de Segmento Específico
+#### Ejemplo 3: Bucle de Segmento Específico
 
 ```csharp
 using VisioForge.Core.MediaPlayer;
@@ -267,7 +246,7 @@ player.Playlist_Add(@"C:\Videos\video.mp4");
 await player.PlayAsync();
 ```
 
-#### Ejemplo 5: Actualización Dinámica de Rango de Posición
+#### Ejemplo 4: Actualización Dinámica de Rango de Posición
 
 ```csharp
 using VisioForge.Core.MediaPlayer;
@@ -552,15 +531,11 @@ await player.PlayAsync();
 
 ### Consideraciones de Rendimiento
 
-1. **Bucle Sin Interrupciones (MediaPlayerCore)**:
-   - Use `Loop_DoNotSeekToBeginning = true` para bucles sin interrupciones sin fallos visuales
-   - Pruebe con su formato de medio específico para obtener mejores resultados
-
-2. **Segmentos Cortos**:
+1. **Segmentos Cortos**:
    - Para segmentos muy cortos (< 1 segundo), asegúrese de que el medio esté correctamente indexado
    - Algunos formatos pueden no admitir búsqueda con precisión de fotograma
 
-3. **Multiplataforma (MediaPlayerCoreX)**:
+2. **Multiplataforma (MediaPlayerCoreX)**:
    - Pruebe en todas las plataformas de destino ya que el comportamiento de GStreamer puede variar ligeramente
    - Use códecs de video apropiados que admitan búsqueda (H.264, H.265)
 
@@ -570,7 +545,6 @@ await player.PlayAsync();
 ```csharp
 // MediaPlayerCore (Windows)
 player.Loop = true;
-player.Loop_DoNotSeekToBeginning = true;
 
 // MediaPlayerCoreX (Multiplataforma)
 player.Loop = true;
@@ -608,7 +582,7 @@ player.Segment_Stop = segmentEnd;
 
 **MediaPlayerCore**:
 - Asegúrese de que la propiedad `Loop` esté configurada antes de llamar a `PlayAsync()`
-- Verifique que el evento `OnStop` no esté llamando al método `Stop()`
+- Siga cada pasada con `OnLoop` - una pasada del bucle no genera `OnStop`, que solo llega cuando se detiene la reproducción
 - Verifique que el archivo multimedia no esté dañado
 
 **MediaPlayerCoreX**:
@@ -640,7 +614,6 @@ player.Segment_Stop = segmentEnd;
 | Característica | MediaPlayerCore | MediaPlayerCoreX |
 |----------------|-----------------|------------------|
 | **Modo de Bucle** | `Loop` (bool) | `Loop` (bool) |
-| **Bucle Sin Interrupciones** | `Loop_DoNotSeekToBeginning` (bool) | Integrado (sin propiedad adicional) |
 | **Rango Activo** | `Selection_Active` (bool) | Implícito (cuando se establecen propiedades de Segment) |
 | **Posición de Inicio** | `Selection_Start` (TimeSpan) | `Segment_Start` (TimeSpan) |
 | **Posición de Fin** | `Selection_Stop` (TimeSpan) | `Segment_Stop` (TimeSpan) |
@@ -652,7 +625,7 @@ player.Segment_Stop = segmentEnd;
 
 ### ¿Cómo creo un bucle de video sin interrupciones ni fallos en C#?
 
-Para el motor DirectShow (MediaPlayerCore), establezca `Loop = true` y `Loop_DoNotSeekToBeginning = true` para evitar un salto visible entre iteraciones. Para el motor multiplataforma GStreamer (MediaPlayerCoreX), el reinicio sin interrupciones está integrado — simplemente establezca `Loop = true`. En ambos casos, use formatos bien indexados como MP4 con codificación H.264 o H.265 para las transiciones más fluidas.
+Establezca `Loop = true` en cualquiera de los dos motores (MediaPlayerCore o MediaPlayerCoreX); cada pasada se reinicia desde el principio, o desde el inicio del rango cuando hay uno definido. Use formatos bien indexados como MP4 con codificación H.264 o H.265 para las transiciones más fluidas.
 
 ### ¿El SDK de Media Player admite búsqueda con precisión de fotograma para reproducción de segmentos?
 

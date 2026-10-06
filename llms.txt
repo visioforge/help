@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-09-22 14:21:37 UTC (f6595639e13)
+**Generated:** 2026-10-06 08:32:28 UTC (1ba995edd54)
 
 ## MCP Server (for AI coding agents)
 
@@ -27,19 +27,178 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [Video Encryption SDK — Encrypt & Protect Video Files (.NET)](https://www.visioforge.com/video-encryption-sdk): Encrypt video/audio files with AES-256 and custom keys in C# / .NET. DRM-level protection for distributed and on-device content. Free 30-day trial.
 - [All-in-One Media Framework — Video SDK for Delphi & ActiveX](https://www.visioforge.com/all-in-one-media-framework): Video capture, editing, playback, and streaming for Delphi and ActiveX in one bundle. VCL components + ActiveX controls. RAD Studio, VB6, C++ Builder.
 
+## Pricing
+
+- [Buy — bundles, checkout and payment methods](https://www.visioforge.com/buy)
+- [Price list (PDF)](https://www.visioforge.com/pricelist.pdf)
+- [Free trial — .NET SDKs installer](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe): Video Capture, Media Player, Video Edit and Media Blocks SDKs; other products link their own trial on their product page
+- [Trial terms](https://www.visioforge.com/licensing#trial)
+
+In the tables below, **Regular** is an annual subscription billed every year for one named developer; **Lifetime** is a one-time payment for a Team license. See Notes at the end.
+
+### .NET SDK's
+
+#### Media Blocks SDK .NET (NEW)
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| Media Blocks SDK .NET | €500 | €1500 |
+
+#### Video Capture SDK .NET
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| Video Capture SDK .NET Standard | €250 | €750 |
+| Video Capture SDK .NET Professional | €350 | €1000 |
+| Video Capture SDK .NET Premium | €500 | €1500 |
+
+#### Video Edit SDK .NET
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| Video Edit SDK .NET Standard | €250 | €750 |
+| Video Edit SDK .NET Professional | €350 | €1000 |
+| Video Edit SDK .NET Premium | €500 | €1500 |
+
+#### Video Edit SDK FFmpeg .NET
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| Video Edit SDK FFmpeg .NET Standard | €250 | €750 |
+| Video Edit SDK FFmpeg .NET Professional | €350 | €1000 |
+| Video Edit SDK FFmpeg .NET Premium | €500 | €1500 |
+
+#### Media Player SDK .NET
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| Media Player SDK .NET Standard | €250 | €750 |
+| Media Player SDK .NET Professional | €350 | €1000 |
+| Media Player SDK .NET Premium | €500 | €1500 |
+
+---
+
+### Other Products
+
+#### Virtual Camera SDK
+| Product | Regular | Lifetime | Source Code |
+|---------|---------|----------|-------------|
+| Virtual Camera SDK | €500 | €1500 | €2500 |
+
+#### Video Encryption SDK
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| Video Encryption SDK | €500 | €1500 |
+
+#### Video Fingerprinting SDK .NET / C++
+| Product | Regular | Lifetime | Runtime per core |
+|---------|---------|----------|---------|
+| Video Fingerprinting SDK | €900 | €2000 | €25/year |
+
+#### Encoding Filters Pack
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| Encoding Filters Pack | €500 | €1500 |
+
+#### Processing Filters Pack
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| Processing Filters Pack | €350 | €1000 |
+
+#### FFmpeg Source DirectShow Filter
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| FFmpeg Source Filter | €300 | €900 |
+
+#### VLC Source DirectShow Filter
+| Product | Regular | Lifetime | Source Code |
+|---------|---------|----------|-------------|
+| VLC Source Filter | €300 | €900 | €1500 |
+
+#### All-in-One Media Framework (Delphi/ActiveX)
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| All-in-One Media Framework Standard | €350 | €700 |
+| All-in-One Media Framework Professional | €500 | €1000 |
+| All-in-One Media Framework Premium | €750 | €1500 |
+
+---
+
+### Bundle Packages
+
+#### .NET SDK Bundle Professional
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| Bundle Professional | €700 | €1800 |
+
+**Includes:**
+- Video Capture SDK .NET Professional
+- Video Edit SDK .NET Professional
+- Video Edit SDK FFmpeg .NET Professional
+- Media Player SDK .NET Professional
+- Media Blocks SDK .NET
+
+#### .NET SDK Bundle Premium
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| Bundle Premium | €1000 | €2500 |
+
+**Includes:**
+- Video Capture SDK .NET Premium
+- Video Edit SDK .NET Premium
+- Video Edit SDK FFmpeg .NET Premium
+- Media Player SDK .NET Premium
+- Media Blocks SDK .NET
+
+#### DirectShow All-In-One Bundle
+| Product | Regular | Lifetime |
+|---------|---------|----------|
+| DirectShow All-In-One Bundle | €1000 | €2500 |
+
+**Includes:**
+- FFmpeg Source DirectShow Filter
+- VLC Source DirectShow Filter
+- DirectShow Processing Filters Pack
+- DirectShow Encoding Filters Pack
+- Virtual Camera SDK
+
+---
+
+### Volume Licensing
+
+Volume licensing is available through sales: contact [sales@visioforge.com](mailto:sales@visioforge.com).
+
+---
+
+### Removed Products (No Longer Available)
+
+The following products from the old price list are no longer sold:
+
+- **DirectShow Source SDK for Kinect** - Discontinued due to Microsoft Kinect discontinuation
+
+---
+
+### Notes
+
+- All licenses include **royalty-free distribution rights**
+- **Annual licenses** are assigned to **one named developer** and include minor and major updates plus email support for 12 months; automatic renewal can be cancelled anytime
+- **Lifetime·Team licenses** cover all developers in the purchasing organization at one location in one city and include perpetual use, lifetime minor and major updates, and email support
+- After an Annual subscription ends, the last SDK version covered by the subscription continues to function, but newer updates are not available
+- A separate free non-commercial license is available by request
+- All prices are in **Euros (€)**
+- Any product can be purchased on the product page at [www.visioforge.com](https://www.visioforge.com)
+
+---
+
+**Last Updated:** 2026-09-26
+
 ## Website
 
 - [VisioForge — Video Capture, Edit & Playback SDKs for .NET](https://www.visioforge.com/)
 - [About VisioForge — Video & Audio SDKs for .NET & Delphi](https://www.visioforge.com/about)
 - [VisioForge Pricing — Video SDK Licenses & Source Code](https://www.visioforge.com/buy)
-- [Products](https://www.visioforge.com/products)
-- [Broadcasting & Live Streaming SDK — RTMP, SRT, HLS in C#](https://www.visioforge.com/solutions-broadcasting)
-- [Video Surveillance SDK — NVR, VMS, ONVIF, RTSP in .NET](https://www.visioforge.com/solutions-surveillance)
-- [Video Editing SDK — Build Editors in C# .NET, Cross-Platform](https://www.visioforge.com/solutions-video-editing)
-- [Encoding Filters Pack — MP4, H.264, HEVC, AV1 for DirectShow](https://www.visioforge.com/encoding-filters-pack)
-- [FFmpeg Source DirectShow Filter — MP4, HEVC, AV1, GPU Decode](https://www.visioforge.com/ffmpeg-source-directshow-filter)
+- [Broadcasting & Live Streaming SDK — RTMP, SRT, HLS in C#](https://www.visioforge.com/solutions/broadcasting)
+- [Video Surveillance SDK — NVR, VMS, ONVIF, RTSP in .NET](https://www.visioforge.com/solutions/surveillance)
+- [Video Editing SDK — Build Editors in C# .NET, Cross-Platform](https://www.visioforge.com/solutions/video-editing)
+- [Encoding Filters Pack — MP4, H.264, HEVC for DirectShow](https://www.visioforge.com/encoding-filters-pack)
+- [FFmpeg Source DirectShow Filter — MP4, HEVC, VP9, GPU Decode](https://www.visioforge.com/ffmpeg-source-directshow-filter)
 - [Processing Filters Pack — Video Effects, Chroma Key, Motion](https://www.visioforge.com/processing-filters-pack)
-- [VLC Source DirectShow Filter — Play 400+ Formats in Any App](https://www.visioforge.com/vlc-source-directshow-filter)
+- [VLC Source DirectShow Filter — Play 100+ Formats in Any App](https://www.visioforge.com/vlc-source-directshow-filter)
 - [Cookie Policy (EU) — Privacy & Data Controls | VisioForge](https://www.visioforge.com/cookie-policy-eu)
 - [Detect Pirated Video — Automated Piracy Detection SDK](https://www.visioforge.com/detecting-pirated-video-content)
 - [GStreamer Metal Plugin — 15 GPU Video Effects on macOS/iOS](https://www.visioforge.com/gstreamer-metal)
@@ -49,7 +208,6 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [LLMs.txt API Documentation for AI Agents | VisioForge](https://www.visioforge.com/llms)
 - [Privacy Policy — Usage Statistics & Tracking | VisioForge](https://www.visioforge.com/privacy-policy)
 - [Refund Policy for Products & Services | VisioForge](https://www.visioforge.com/refund-policy)
-- [Support Service Level Agreement (SLA) - VisioForge](https://www.visioforge.com/support-service-level-agreement-sla)
 - [Terms & Conditions — Products & Services | VisioForge](https://www.visioforge.com/terms-and-conditions)
 - [Play, Capture & Stream Video in Unity — VisioForge .NET](https://www.visioforge.com/unity-video-sdk)
 - [Which VisioForge .NET SDK Should You Use? — Selection Guide](https://www.visioforge.com/which-dotnet-sdk)
@@ -370,7 +528,7 @@ The MCP server returns surgical answers (single API class, single code example) 
 
 ## Comparisons
 
-- [Compare VisioForge SDKs — Find the Right .NET Video SDK](https://www.visioforge.com/compare/landing)
+- [Compare VisioForge SDKs — Find the Right .NET Video SDK](https://www.visioforge.com/compare)
 - [Media Blocks SDK vs FFmpeg — .NET Pipeline Comparison](https://www.visioforge.com/compare/media-blocks-vs-ffmpeg)
 - [Media Blocks SDK vs LEADTOOLS — .NET Pipeline Comparison](https://www.visioforge.com/compare/media-blocks-vs-leadtools)
 - [Media Blocks SDK vs LibVLCSharp — .NET Pipeline Comparison](https://www.visioforge.com/compare/media-blocks-vs-libvlcsharp)
@@ -405,7 +563,6 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [API Reference](https://api.visioforge.org/): Complete API documentation
 - [Discord Community](https://discord.gg/yvXUG56WCH): Developer community support
 - [Email Support](mailto:support@visioforge.com): Professional support
-- [Pricing](https://www.visioforge.com/buy): Licensing options and pricing
 
 ## Contact
 

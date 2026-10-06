@@ -213,6 +213,10 @@ Your application UI should clearly indicate the current state of both preview an
 - Implement appropriate UI controls for each state
 - Consider adding recording timers and indicators
 
+### KLV Metadata
+
+When an IP camera's KLV metadata is recorded into the separate-capture files (`FFMPEGOutput` with `MPEG_TS_KLV`), keep `SeparateCapture_GMFMode` at its default `true`: KLV is then timed from the start of each file, as its video is. With `SeparateCapture_GMFMode = false`, or with `IPCameraSourceSettings.ForcedFramerate` set, each file's video starts at zero but its KLV keeps the capture's running time, and the SDK reports a warning once per capture. In every mode, no KLV is written during `SeparateCapture_Pause`.
+
 ## Integration Best Practices
 
 For optimal performance and reliability:

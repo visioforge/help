@@ -474,6 +474,8 @@ pipeline.Connect(decryptorPlayer.AudioOutput, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
+El bloque decodifica con el elemento `decodebin3` de GStreamer. Establezca `UseLegacyDecodeBin = true` antes de iniciar el pipeline para usar el `decodebin` heredado.
+
 ### Plataformas
 
 Windows, macOS, Linux.
@@ -1044,6 +1046,8 @@ pipeline.Connect(fileSource.VideoOutput, decodeBin.Input);
 // DecodeBin creará pads de salida dinámicamente a medida que se descubran streams
 await pipeline.StartAsync();
 ```
+
+El bloque decodifica con el elemento `decodebin3` de GStreamer. Establezca `UseLegacyDecodeBin = true` antes de iniciar el pipeline para usar el `decodebin` heredado. El elemento heredado no muestra video en un stream MPEG-TS en vivo cuya PMT declara un stream que nunca transporta datos.
 
 ### Plataformas
 

@@ -42,7 +42,7 @@ Before the AMA blocks can be used, the target machine must have:
 
 - Linux x86_64 (Ubuntu, Alma/RHEL, or Debian per the AMD AMA SDK support matrix).
 - An AMD Alveo media accelerator installed and provisioned (kernel driver, huge pages, IOMMU / Above-4G decoding enabled in the host firmware).
-- The AMD AMA Video SDK installed, including its GStreamer plugins, so the `ama_*` elements are discoverable by GStreamer.
+- The AMD AMA Video SDK installed, including its GStreamer plugin package (`amd-ama-gstreamer`), so the `ama_*` elements are discoverable by GStreamer. AMD last shipped this package with AMA SDK 1.2.1 — the 1.4.0 release notes list GStreamer under obsolete features, and the 1.5.0 package feed contains no GStreamer package, so on AMA SDK 1.4.0 or newer the AMA blocks are unavailable.
 
 Every AMA settings and block class exposes a static `IsAvailable()` method that probes for the required `ama_*` elements. Call it before building a pipeline and fall back to a software or other-vendor encoder when it returns `false`:
 
@@ -368,6 +368,10 @@ Because AMA targets dedicated Alveo media accelerators rather than a Radeon GPU,
 - The AMA runtime must be installed separately (see [Prerequisites](#prerequisites)); the SDK bundles no AMD binaries.
 
 ## FAQ
+
+### Which AMD AMA SDK version should I install?
+
+AMA SDK 1.2.1 — the last release that ships the `amd-ama-gstreamer` GStreamer plugin package the `ama_*` elements come from. The 1.4.0 release notes list GStreamer under obsolete features, and the 1.5.0 package feed contains no GStreamer package at all, so on those releases `gst-inspect-1.0` finds no `ama_*` elements and every AMA block reports as unavailable. Install the 1.2.1 driver, core, and `amd-ama-gstreamer` packages from the same release, then verify with `gst-inspect-1.0 ama_h264enc` and `gst-inspect-1.0 ama_upload`.
 
 ### Does VisioForge support AMD AMA and Alveo hardware encoding?
 

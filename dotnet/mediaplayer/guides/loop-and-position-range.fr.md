@@ -74,23 +74,17 @@ mediaPlayer.Loop = false;
 
 #### Propriété `Loop_DoNotSeekToBeginning`
 
-Contrôle s'il faut se positionner au début lorsque la boucle redémarre.
+Conservée pour la compatibilité ; elle ne modifie plus la façon dont la boucle redémarre.
 
 ```csharp
-// Redémarrer sans se positionner au début (boucle fluide)
-mediaPlayer.Loop_DoNotSeekToBeginning = true;
-
-// Se positionner au début avant de redémarrer (par défaut)
+// Sans effet : chaque passage de la boucle redémarre depuis Selection_Start ou depuis le début
 mediaPlayer.Loop_DoNotSeekToBeginning = false;
 ```
 
 **Valeur par défaut** : `false`
 
 **Comportement** :
-- N'affecte le comportement que lorsque `Loop` est `true`
-- Lorsque `true`, redémarre depuis la position actuelle sans se positionner
-- Améliore les performances et évite les artefacts visuels durant les transitions de boucle
-- Utile pour un bouclage fluide du contenu
+- Chaque passage de la boucle redémarre la lecture depuis `Selection_Start` lorsqu'une plage est active, ou depuis le début du fichier sinon, quelle que soit cette valeur
 
 ### Propriétés de plage de position
 
@@ -170,7 +164,8 @@ mediaPlayer.OnLoop += (sender, e) =>
 **Quand il se déclenche** :
 - Uniquement lorsque la propriété `Loop` est `true`
 - Chaque fois que la lecture cycle de la fin vers le début
-- Après le positionnement au début (le cas échéant)
+- Après le retour au début, ou à `Selection_Start` lorsqu'une plage est active
+- Pas lorsque la source refuse le retour en arrière (par exemple un flux réseau terminé) : le lecteur s'arrête sur ce fichier, puis déclenche `OnError`. Une source qui se termine de nouveau juste après chaque redémarrage est arrêtée de la même façon après quelques événements `OnLoop` de ce type
 
 **Cas d'usage** :
 - Suivre les itérations de boucle
@@ -204,23 +199,7 @@ player.Playlist_Add(@"C:\Videos\sample.mp4");
 await player.PlayAsync();
 ```
 
-#### Exemple 2 : Boucle fluide sans positionnement
-
-```csharp
-using VisioForge.Core.MediaPlayer;
-
-var player = new MediaPlayerCore();
-
-// Activer la boucle fluide (pas de positionnement au début)
-player.Loop = true;
-player.Loop_DoNotSeekToBeginning = true;
-
-player.Playlist_Clear();
-player.Playlist_Add(@"C:\Videos\background.mp4");
-await player.PlayAsync();
-```
-
-#### Exemple 3 : Lire un segment spécifique
+#### Exemple 2 : Lire un segment spécifique
 
 ```csharp
 using VisioForge.Core.MediaPlayer;
@@ -239,7 +218,7 @@ player.Playlist_Add(@"C:\Videos\long-video.mp4");
 await player.PlayAsync();
 ```
 
-#### Exemple 4 : Boucler un segment spécifique
+#### Exemple 3 : Boucler un segment spécifique
 
 ```csharp
 using VisioForge.Core.MediaPlayer;
@@ -267,7 +246,7 @@ player.Playlist_Add(@"C:\Videos\video.mp4");
 await player.PlayAsync();
 ```
 
-#### Exemple 5 : Mise à jour dynamique de la plage de position
+#### Exemple 4 : Mise à jour dynamique de la plage de position
 
 ```csharp
 using VisioForge.Core.MediaPlayer;
@@ -552,15 +531,11 @@ await player.PlayAsync();
 
 ### Considérations de performance
 
-1. **Bouclage fluide (MediaPlayerCore)** :
-   - Utilisez `Loop_DoNotSeekToBeginning = true` pour des boucles fluides sans artefacts visuels
-   - Testez avec votre format multimédia spécifique pour les meilleurs résultats
-
-2. **Segments courts** :
+1. **Segments courts** :
    - Pour des segments très courts (< 1 seconde), assurez-vous que le média est correctement indexé
    - Certains formats peuvent ne pas prendre en charge un positionnement précis à l'image près
 
-3. **Multiplateforme (MediaPlayerCoreX)** :
+2. **Multiplateforme (MediaPlayerCoreX)** :
    - Testez sur toutes les plateformes cibles car le comportement GStreamer peut légèrement varier
    - Utilisez des codecs vidéo appropriés qui prennent en charge le positionnement (H.264, H.265)
 
@@ -570,7 +545,6 @@ await player.PlayAsync();
 ```csharp
 // MediaPlayerCore (Windows)
 player.Loop = true;
-player.Loop_DoNotSeekToBeginning = true;
 
 // MediaPlayerCoreX (multiplateforme)
 player.Loop = true;
@@ -608,7 +582,7 @@ player.Segment_Stop = segmentEnd;
 
 **MediaPlayerCore** :
 - Vérifiez que la propriété `Loop` est définie avant d'appeler `PlayAsync()`
-- Vérifiez que l'événement `OnStop` n'appelle pas la méthode `Stop()`
+- Suivez chaque passage avec `OnLoop` - un passage de boucle ne déclenche pas `OnStop`, qui n'arrive qu'à l'arrêt de la lecture
 - Vérifiez que le fichier multimédia n'est pas corrompu
 
 **MediaPlayerCoreX** :
@@ -640,7 +614,6 @@ player.Segment_Stop = segmentEnd;
 | Fonctionnalité | MediaPlayerCore | MediaPlayerCoreX |
 |---------|-----------------|------------------|
 | **Mode boucle** | `Loop` (bool) | `Loop` (bool) |
-| **Boucle fluide** | `Loop_DoNotSeekToBeginning` (bool) | Intégrée (pas de propriété supplémentaire) |
 | **Plage active** | `Selection_Active` (bool) | Implicite (quand les propriétés Segment sont définies) |
 | **Position de début** | `Selection_Start` (TimeSpan) | `Segment_Start` (TimeSpan) |
 | **Position de fin** | `Selection_Stop` (TimeSpan) | `Segment_Stop` (TimeSpan) |
@@ -652,7 +625,7 @@ player.Segment_Stop = segmentEnd;
 
 ### Comment créer une boucle vidéo fluide sans artefacts en C# ?
 
-Pour le moteur DirectShow (MediaPlayerCore), définissez `Loop = true` et `Loop_DoNotSeekToBeginning = true` pour éviter un retour visible entre les itérations. Pour le moteur multiplateforme GStreamer (MediaPlayerCoreX), le redémarrage fluide est intégré — il suffit de définir `Loop = true`. Dans les deux cas, utilisez des formats bien indexés comme MP4 avec encodage H.264 ou H.265 pour les transitions les plus fluides.
+Définissez `Loop = true` sur l'un ou l'autre moteur (MediaPlayerCore ou MediaPlayerCoreX) ; chaque passage redémarre depuis le début, ou depuis le début de la plage lorsqu'une plage est définie. Utilisez des formats bien indexés comme MP4 avec encodage H.264 ou H.265 pour les transitions les plus fluides.
 
 ### Media Player SDK prend-il en charge un positionnement précis à l'image près pour la lecture par segments ?
 

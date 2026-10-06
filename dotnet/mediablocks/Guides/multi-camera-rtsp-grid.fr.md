@@ -536,10 +536,11 @@ var fallbackSwitch = new FallbackSwitchSourceBlock(
     {
         Enabled = true,
         Fallback = new StaticTextFallbackSettings { Text = "CAMERA OFFLINE" },
+        EnableAudio = rtspSettings.AudioEnabled, // les sorties du bloc suivent EnableVideo / EnableAudio
     });
 
 _pipeline.Connect(fallbackSwitch.VideoOutput, _videoRenderer.Input);
-if (rtspSettings.AudioEnabled)
+if (fallbackSwitch.AudioOutput != null)
 {
     _pipeline.Connect(fallbackSwitch.AudioOutput, _audioRenderer.Input);
 }

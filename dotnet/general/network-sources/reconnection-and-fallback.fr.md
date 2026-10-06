@@ -283,7 +283,7 @@ await _videoCapture.StartAsync();
 
 ## Utilisation du FallbackSwitch — bas niveau (`FallbackSwitchSourceBlock`)
 
-Dans le Media Blocks SDK, vous câblez le repli directement au niveau du pipeline via `FallbackSwitchSourceBlock`. Cela fonctionne avec *n'importe quelle* source — RTSP, HTTP MJPEG, fichier, périphérique — pas seulement RTSP.
+Dans le Media Blocks SDK, vous câblez le repli directement au niveau du pipeline via `FallbackSwitchSourceBlock`. Il enveloppe une source RTSP, SRT, RTMP, HTTP ou NDI et produit de la vidéo et de l'audio décodés.
 
 ```csharp
 using VisioForge.Core.MediaBlocks;
@@ -301,7 +301,7 @@ var fallbackSwitch = new FallbackSwitchSourceBlock(
 pipeline.OnNetworkSourceDisconnect += (s, e) =>
     metrics.RecordDisconnect(e.SourceElementName, e.Uri, e.Timestamp);
 
-// FallbackSwitchSourceBlock expose des pads VideoOutput / AudioOutput distincts — aucun Output unique.
+// FallbackSwitchSourceBlock expose des pads VideoOutput / AudioOutput distincts ; Output est celui de la vidéo.
 pipeline.Connect(fallbackSwitch.VideoOutput, renderer.Input);
 await pipeline.StartAsync();
 

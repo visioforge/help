@@ -66,7 +66,7 @@ pipeline.Name = "MainVideoPlayer";
 
 ### Implementando Manejo de Errores Robusto
 
-Las aplicaciones de medios deben manejar varios escenarios de error que pueden ocurrir durante la operación. Implementar manejo de errores apropiado asegura que su aplicación permanezca estable:
+Las aplicaciones de medios deben manejar varios escenarios de error que pueden ocurrir durante la operación. Implementar manejo de errores apropiado asegura que su aplicación permanezca estable. El controlador se ejecuta en un subproceso del grupo, no en el de la interfaz: actualice los controles desde su propio subproceso de interfaz. Llamar a `Stop()` desde él es seguro.
 
 ```csharp
 // Suscribirse a eventos de error para capturar y manejar excepciones

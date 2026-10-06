@@ -236,7 +236,7 @@ Video Capture SDK .Net relies on native libraries to access webcam devices and p
 Main SDK package:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.9.22" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.10.2" />
 ```
 
 ### Platform-Specific Redist Packages

@@ -74,23 +74,17 @@ mediaPlayer.Loop = false;
 
 #### `Loop_DoNotSeekToBeginning` Property
 
-Controls whether to seek to the beginning when loop restarts.
+Kept for compatibility; it no longer changes how the loop restarts.
 
 ```csharp
-// Restart without seeking to beginning (seamless loop)
-mediaPlayer.Loop_DoNotSeekToBeginning = true;
-
-// Seek to beginning before restarting (default)
+// Has no effect: each loop pass restarts from Selection_Start or the beginning
 mediaPlayer.Loop_DoNotSeekToBeginning = false;
 ```
 
 **Default value**: `false`
 
 **Behavior**:
-- Only affects behavior when `Loop` is `true`
-- When `true`, restarts from current position without seeking
-- Improves performance and avoids visual glitches during loop transitions
-- Useful for seamless looping of content
+- Each loop pass restarts playback from `Selection_Start` when a range is active, or from the beginning of the file otherwise, whatever this value is
 
 ### Position Range Properties
 
@@ -170,7 +164,8 @@ mediaPlayer.OnLoop += (sender, e) =>
 **When it fires**:
 - Only when `Loop` property is `true`
 - Each time playback cycles from end to beginning
-- After seeking to the beginning (if applicable)
+- After seeking back to the beginning, or to `Selection_Start` when a range is active
+- Not when the source refuses to seek back (for example a network stream that has ended): the player stops on that file, then raises `OnError`. A source that ends again right after each restart is stopped the same way after a few such `OnLoop` events
 
 **Use cases**:
 - Track loop iterations
@@ -204,23 +199,7 @@ player.Playlist_Add(@"C:\Videos\sample.mp4");
 await player.PlayAsync();
 ```
 
-#### Example 2: Seamless Loop Without Seeking
-
-```csharp
-using VisioForge.Core.MediaPlayer;
-
-var player = new MediaPlayerCore();
-
-// Enable seamless loop (no seeking to beginning)
-player.Loop = true;
-player.Loop_DoNotSeekToBeginning = true;
-
-player.Playlist_Clear();
-player.Playlist_Add(@"C:\Videos\background.mp4");
-await player.PlayAsync();
-```
-
-#### Example 3: Play Specific Segment
+#### Example 2: Play Specific Segment
 
 ```csharp
 using VisioForge.Core.MediaPlayer;
@@ -239,7 +218,7 @@ player.Playlist_Add(@"C:\Videos\long-video.mp4");
 await player.PlayAsync();
 ```
 
-#### Example 4: Loop Specific Segment
+#### Example 3: Loop Specific Segment
 
 ```csharp
 using VisioForge.Core.MediaPlayer;
@@ -267,7 +246,7 @@ player.Playlist_Add(@"C:\Videos\video.mp4");
 await player.PlayAsync();
 ```
 
-#### Example 5: Dynamic Position Range Update
+#### Example 4: Dynamic Position Range Update
 
 ```csharp
 using VisioForge.Core.MediaPlayer;
@@ -552,15 +531,11 @@ await player.PlayAsync();
 
 ### Performance Considerations
 
-1. **Seamless Looping (MediaPlayerCore)**:
-   - Use `Loop_DoNotSeekToBeginning = true` for seamless loops without visual glitches
-   - Test with your specific media format for best results
-
-2. **Short Segments**:
+1. **Short Segments**:
    - For very short segments (< 1 second), ensure media is properly indexed
    - Some formats may not support frame-accurate seeking
 
-3. **Cross-Platform (MediaPlayerCoreX)**:
+2. **Cross-Platform (MediaPlayerCoreX)**:
    - Test on all target platforms as GStreamer behavior may vary slightly
    - Use appropriate video codecs that support seeking (H.264, H.265)
 
@@ -570,7 +545,6 @@ await player.PlayAsync();
 ```csharp
 // MediaPlayerCore (Windows)
 player.Loop = true;
-player.Loop_DoNotSeekToBeginning = true;
 
 // MediaPlayerCoreX (Cross-platform)
 player.Loop = true;
@@ -608,7 +582,7 @@ player.Segment_Stop = segmentEnd;
 
 **MediaPlayerCore**:
 - Ensure `Loop` property is set before calling `PlayAsync()`
-- Check that `OnStop` event is not calling `Stop()` method
+- Track each pass with `OnLoop` - a loop pass does not raise `OnStop`, which comes only when playback is stopped
 - Verify media file is not corrupted
 
 **MediaPlayerCoreX**:
@@ -640,7 +614,6 @@ player.Segment_Stop = segmentEnd;
 | Feature | MediaPlayerCore | MediaPlayerCoreX |
 |---------|-----------------|------------------|
 | **Loop Mode** | `Loop` (bool) | `Loop` (bool) |
-| **Seamless Loop** | `Loop_DoNotSeekToBeginning` (bool) | Built-in (no extra property) |
 | **Range Active** | `Selection_Active` (bool) | Implicit (when Segment properties set) |
 | **Start Position** | `Selection_Start` (TimeSpan) | `Segment_Start` (TimeSpan) |
 | **Stop Position** | `Selection_Stop` (TimeSpan) | `Segment_Stop` (TimeSpan) |
@@ -652,7 +625,7 @@ player.Segment_Stop = segmentEnd;
 
 ### How do I create a seamless video loop without glitches in C#?
 
-For the DirectShow engine (MediaPlayerCore), set `Loop = true` and `Loop_DoNotSeekToBeginning = true` to avoid a visible seek-back between iterations. For the cross-platform GStreamer engine (MediaPlayerCoreX), seamless restart is built in — simply set `Loop = true`. In both cases, use well-indexed formats like MP4 with H.264 or H.265 encoding for the smoothest transitions.
+Set `Loop = true` on either engine (MediaPlayerCore or MediaPlayerCoreX); each pass restarts from the beginning, or from the start of the range when one is set. Use well-indexed formats like MP4 with H.264 or H.265 encoding for the smoothest transitions.
 
 ### Does the Media Player SDK support frame-accurate seeking for segment playback?
 

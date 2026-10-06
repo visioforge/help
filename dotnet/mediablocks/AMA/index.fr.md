@@ -42,7 +42,7 @@ Avant de pouvoir utiliser les blocs AMA, la machine cible doit disposer de :
 
 - Linux x86_64 (Ubuntu, Alma/RHEL ou Debian selon la matrice de compatibilité de l'AMD AMA SDK).
 - Un accélérateur multimédia AMD Alveo installé et provisionné (pilote noyau, huge pages, IOMMU / décodage au-dessus de 4 Go activé dans le firmware de l'hôte).
-- L'AMD AMA Video SDK installé, y compris ses plugins GStreamer, afin que les éléments `ama_*` soient détectables par GStreamer.
+- L'AMD AMA Video SDK installé, y compris son paquet de plugins GStreamer (`amd-ama-gstreamer`), afin que les éléments `ama_*` soient détectables par GStreamer. AMD a livré ce paquet pour la dernière fois avec le AMA SDK 1.2.1 : les notes de la version 1.4.0 placent GStreamer dans les fonctionnalités obsolètes et le dépôt de paquets de la 1.5.0 ne contient aucun paquet GStreamer ; avec le AMA SDK 1.4.0 ou ultérieur, les blocs AMA sont donc indisponibles.
 
 Chaque classe de configuration et de bloc AMA expose une méthode statique `IsAvailable()` qui vérifie la présence des éléments `ama_*` requis. Appelez-la avant de construire un pipeline et repliez-vous sur un encodeur logiciel ou d'un autre fournisseur lorsqu'elle renvoie `false` :
 
@@ -368,6 +368,10 @@ Comme AMA cible des accélérateurs multimédias Alveo dédiés plutôt qu'un GP
 - Le runtime AMA doit être installé séparément (voir [Prérequis](#prerequis)) ; le SDK ne fournit aucun binaire AMD.
 
 ## Foire aux questions
+
+### Quelle version de l'AMD AMA SDK dois-je installer ?
+
+Le AMA SDK 1.2.1, la dernière version qui livre le paquet de plugins GStreamer `amd-ama-gstreamer` d'où proviennent les éléments `ama_*`. Les notes de la version 1.4.0 placent GStreamer dans les fonctionnalités obsolètes et le dépôt de paquets de la 1.5.0 ne contient aucun paquet GStreamer ; sur ces versions, `gst-inspect-1.0` ne trouve aucun élément `ama_*` et tous les blocs AMA sont signalés comme indisponibles. Installez le pilote, le noyau et le paquet `amd-ama-gstreamer` de cette même version 1.2.1, puis vérifiez avec `gst-inspect-1.0 ama_h264enc` et `gst-inspect-1.0 ama_upload`.
 
 ### VisioForge prend-il en charge l'encodage matériel AMD AMA et Alveo ?
 
