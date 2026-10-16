@@ -62,7 +62,7 @@ Toutes les cibles multiplateformes utilisent un pipeline de décodage basé sur 
 Paquet principal du SDK (toujours requis) :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.10.2" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.10.15" />
 ```
 
 Runtime natif Windows x64 :
@@ -95,15 +95,15 @@ Linux x64 (plus GStreamer 1.22+ du système) :
 Android et iOS :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.10.9" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 Paquets optionnels du framework UI — ajoutez celui qui correspond à votre cible :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.2" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.10.2" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.15" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.10.15" />
 ```
 
 Guide d'installation complet par IDE : [install/index.md](../install/index.md).

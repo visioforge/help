@@ -88,6 +88,13 @@ La forma indexada es la preferible al generar documentos: sirve para cualquier b
 forma sin índice necesita un pad principal que no todos los bloques tienen. En un sink multiplexor como
 `MP4SinkBlock`, `input:0` e `input:1` son los flujos de vídeo y de audio.
 
+Los sinks multiplexores crean sus entradas mientras se carga el documento. Para ellos,
+la referencia `To` también puede llevar un `mediaType` (`Video`, `Audio`, …) —el snapshot del pipeline
+lo escribe— y la entrada se crea con ese tipo; sin él, la entrada toma el tipo del pad de salida
+conectado. Un sink que no tiene pista para el tipo de una entrada —una entrada `Auto` de un tee o de un
+parser en un sink MP4, por ejemplo— hace fallar el inicio del pipeline con un error; un sink MPEG-TS
+fuera del modo segmentado acepta una entrada `Auto`.
+
 Un documento mínimo:
 
 ```json

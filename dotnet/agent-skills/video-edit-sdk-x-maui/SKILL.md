@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK X (cross-platform edition) into
 
 This skill helps you add **VisioForge Video Edit SDK X** — the cross-platform "X" edition of the editing SDK — to a .NET MAUI application targeting **Windows, Android, iOS, and Mac Catalyst** from a single codebase. `VideoEditCoreX` is a timeline engine on the GStreamer backend: you append clips, images and audio tracks, optionally add effects and transitions, then either preview the timeline into a `VideoView` or render it to a file. The same C# runs on every OS — only the per-TFM redist NuGets change.
 
-Pinned NuGet versions: wrapper **`2026.10.2`**, MAUI handlers **`2026.10.2`**, plus the five native redists in the csproj below: `Core.Android` on **`2026.9.17`**, and `Core.Windows.x64`, `Libav.Windows.x64`, `Core.iOS` and `Core.macCatalyst` on **`2026.9.11`**, which is the newest release published for each of those four. `VisioForge.DotNet.VideoEdit` and `VisioForge.DotNet.Core.UI.MAUI` always move together and must carry the same version. The `VisioForge.CrossPlatform.*` redists are built on their own cadence: for each one, pin the newest version published **at or before** the wrapper's release. That may trail the wrapper by several releases — `Core.iOS` has a handful of published versions where the wrapper has dozens — and it must never run ahead of it, which is undefined behaviour. The [official Video Edit X MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/MAUI/SimpleEdit) is the reference for the project layout, not for the version to pin — it can lag a release.
+Pinned NuGet versions: wrapper **`2026.10.15`**, MAUI handlers **`2026.10.15`**, plus the five native redists at the versions shown in the csproj below. `VisioForge.DotNet.VideoEdit` and `VisioForge.DotNet.Core.UI.MAUI` always move together and must carry the same version. The `VisioForge.CrossPlatform.*` redists are built on their own cadence: for each one, pin the newest version published **at or before** the wrapper's release. That may trail the wrapper by several releases — `Core.iOS` has a handful of published versions where the wrapper has dozens — and it must never run ahead of it, which is undefined behaviour. The [official Video Edit X MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/MAUI/SimpleEdit) is the reference for the project layout, not for the version to pin — it can lag a release.
 
 ## When to use this skill
 
@@ -74,27 +74,64 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.10.2" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.2" />
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.10.15" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.15" />
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.10.15" />
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.10.15" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.10.14" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.10.15" />
 </ItemGroup>
 ```
 
 The Mac Catalyst target additionally needs an `AfterTargets="Build"` step (`CopyNativeLibrariesToMonoBundle`) that copies `.dylib` / `.so` files into `.app/Contents/MonoBundle/`. It is in `references/Sample.csproj` verbatim. Without it the bundled `.app` cannot find the native runtime and crashes with a `dlopen` failure on first `VideoEditCoreX` construction.
+
+### Scene lifecycle and minimum OS versions (iOS 27 SDK)
+
+Apps built with the iOS 27 and Mac Catalyst 27 SDKs must use the UIKit scene lifecycle: without a `UIApplicationSceneManifest` the app is killed at launch, before any UI appears. Each Apple head (`Platforms/iOS` and `Platforms/MacCatalyst`) needs the manifest in its `Info.plist` and a registered `SceneDelegate`. MAUI forwards the scene events itself, so the class stays empty:
+
+```xml
+<key>UIApplicationSceneManifest</key>
+<dict>
+    <key>UIApplicationSupportsMultipleScenes</key>
+    <false/>
+    <key>UISceneConfigurations</key>
+    <dict>
+        <key>UIWindowSceneSessionRoleApplication</key>
+        <array>
+            <dict>
+                <key>UISceneConfigurationName</key>
+                <string>__MAUI_DEFAULT_SCENE_CONFIGURATION__</string>
+                <key>UISceneDelegateClassName</key>
+                <string>SceneDelegate</string>
+            </dict>
+        </array>
+    </dict>
+</dict>
+```
+
+```csharp
+// Platforms/iOS/SceneDelegate.cs and Platforms/MacCatalyst/SceneDelegate.cs
+using Foundation;
+using Microsoft.Maui;
+
+[Register("SceneDelegate")]
+public class SceneDelegate : MauiUISceneDelegate
+{
+}
+```
+
+Keep `__MAUI_DEFAULT_SCENE_CONFIGURATION__` verbatim (it must match MAUI's own configuration name) and the `[Register]` name equal to `UISceneDelegateClassName`. The same SDKs refuse a `SupportedOSPlatformVersion` below 15.0 for iOS and 17.0 for Mac Catalyst, and VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older; `references/Sample.csproj` uses 16.4 for iOS and 17.0 for Mac Catalyst.
 
 ### MauiProgram registration
 
@@ -229,7 +266,7 @@ Every `VideoEditCoreX` instance needs its own call before its `Start()`.
 
 **Cause**: the pinned version was never published for that redist. Usually it was copied from the wrapper: the native packages are rebuilt on their own cadence, so the iOS redist has a handful of releases where the wrapper has dozens, and the wrapper's number frequently does not exist for it.
 
-**Fix**: on nuget.org, find the newest version of that exact package published at or before the wrapper's release, and pin that — per redist, never ahead of the wrapper. As of the wrapper version in this skill it is `2026.9.11` for all five, but do not assume that holds after the next release.
+**Fix**: on nuget.org, find the newest version of that exact package published at or before the wrapper's release, and pin that — per redist, never ahead of the wrapper. The csproj below carries the version pinned for each of the five, but do not assume it holds after the next release.
 
 ## Verification checklist
 
@@ -242,6 +279,7 @@ Every `VideoEditCoreX` instance needs its own call before its `Start()`.
 - [ ] Render produces a file that plays back in another player, and `OnStop` reports `Successful == true`.
 - [ ] `VisioForgeX.DestroySDK()` runs on page unload / window destroy.
 - [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called on every instance before `Start()`.
+- [ ] `Platforms/iOS` and `Platforms/MacCatalyst` each have the `UIApplicationSceneManifest` in `Info.plist` and a `SceneDelegate : MauiUISceneDelegate` (the iOS 27 SDK kills a scene-less app at launch).
 
 ## Bundled references
 

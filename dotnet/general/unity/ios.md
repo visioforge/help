@@ -44,7 +44,7 @@ macOS, and iOS together.
 |---|---|---|
 | Target Platform | **iOS** | File → Build Profiles → iOS |
 | Target SDK | **Device SDK** | File → Build Profiles → iOS |
-| Target minimum iOS Version | **15.0** or later | Project Settings → Player → Other Settings → Configuration |
+| Target minimum iOS Version | **16.4** or later | Project Settings → Player → Other Settings → Configuration |
 | Architecture | **ARM64** | Project Settings → Player → Other Settings → Configuration |
 | Api Compatibility Level | **.NET Standard 2.1** | Project Settings → Player → Other Settings → Configuration |
 | Scripting Backend | **IL2CPP** *(mandatory — Mono is not supported on iOS by Unity itself)* | Project Settings → Player → Other Settings → Configuration |

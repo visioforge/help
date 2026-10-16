@@ -246,7 +246,7 @@ Pour référence rapide, voici les principaux modèles d'URL RTSP pour les marqu
 | Imou | `rtsp://IP:554/cam/realmonitor?channel=1&subtype=0` | 554 |
 | Wyze | `rtsp://IP:8554/live` | 8554 |
 | Aqara | `rtsp://IP:554/live/ch00_1` | 554 |
-| Verkada | N/A (cloud uniquement) | N/A |
+| Verkada | `rtsp://IP:8554/standard` (RTSP activé caméra par caméra) | 8554 |
 | Rhombus | `rtsp://IP:554/live` (si activé) | 554 |
 | Arlo | N/A (pas de RTSP) | N/A |
 | Eufy Security | `rtsp://IP:554/live0` | 554 |

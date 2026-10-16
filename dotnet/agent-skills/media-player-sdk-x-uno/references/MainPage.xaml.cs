@@ -25,7 +25,6 @@ namespace SimplePlayerUno;
 public sealed partial class MainPage : Page
 {
     private MediaPlayerCoreX? _player;
-    private string? _filename;
     private readonly DispatcherTimer _tmPosition;
     private readonly DispatcherQueue _dispatcherQueue;
     private volatile bool _isTimerUpdate;
@@ -90,8 +89,22 @@ public sealed partial class MainPage : Page
             _player.OnStart -= Player_OnStart;
             _player.OnStop -= Player_OnStop;
 
-            await _player.StopAsync();
-            await _player.DisposeAsync();
+            try
+            {
+                try
+                {
+                    await _player.StopAsync();
+                }
+                finally
+                {
+                    await _player.DisposeAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in Unloaded: {ex.Message}");
+            }
+
             _player = null;
         }
 
@@ -234,35 +247,57 @@ public sealed partial class MainPage : Page
             return;
         }
 
-        switch (_player.State)
+        // Disabled until the open or stop finishes, so a second tap cannot overlap it.
+        btPlayStop.IsEnabled = false;
+
+        try
         {
-            case PlaybackState.Play:
-            case PlaybackState.Pause:
-                // Stop playback
-                await StopAllAsync();
-                playStopIcon.Glyph = ""; // Play icon
-                break;
+            switch (_player.State)
+            {
+                case PlaybackState.Play:
+                case PlaybackState.Pause:
+                    // Stop playback
+                    await StopAllAsync();
+                    playStopIcon.Glyph = ""; // Play icon
+                    break;
 
-            case PlaybackState.Free:
-                // Get media URL from text box
-                if (string.IsNullOrEmpty(_filename) && !string.IsNullOrWhiteSpace(txtMediaUrl.Text))
-                {
-                    _filename = txtMediaUrl.Text.Trim();
-                }
+                case PlaybackState.Free:
+                    var filename = txtMediaUrl.Text.Trim();
+                    if (string.IsNullOrEmpty(filename))
+                    {
+                        return;
+                    }
 
-                if (string.IsNullOrEmpty(_filename))
-                {
-                    return;
-                }
+                    lbError.Visibility = Visibility.Collapsed;
 
-                var sourceSettings = await CreateSourceSettingsAsync(_filename);
-                await _player.OpenAsync(sourceSettings);
-                await _player.PlayAsync();
+                    var sourceSettings = await CreateSourceSettingsAsync(filename);
+                    if (!await _player.OpenAsync(sourceSettings) || !await _player.PlayAsync())
+                    {
+                        ShowError("Unable to open or play the media.");
+                        await StopAllAsync();
+                        return;
+                    }
 
-                _tmPosition.Start();
-                playStopIcon.Glyph = ""; // Stop icon
-                break;
+                    _tmPosition.Start();
+                    playStopIcon.Glyph = ""; // Stop icon
+                    break;
+            }
         }
+        catch (Exception ex)
+        {
+            // An async void handler must not let an exception escape - it would terminate the app.
+            ShowError($"Playback error: {ex.Message}");
+        }
+        finally
+        {
+            btPlayStop.IsEnabled = true;
+        }
+    }
+
+    private void ShowError(string message)
+    {
+        lbError.Text = message;
+        lbError.Visibility = Visibility.Visible;
     }
 
     private static async Task<UniversalSourceSettings> CreateSourceSettingsAsync(string input)

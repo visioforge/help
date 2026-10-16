@@ -246,7 +246,7 @@ Para referencia rápida, estos son los patrones de URL RTSP principales para mar
 | Imou | `rtsp://IP:554/cam/realmonitor?channel=1&subtype=0` | 554 |
 | Wyze | `rtsp://IP:8554/live` | 8554 |
 | Aqara | `rtsp://IP:554/live/ch00_1` | 554 |
-| Verkada | N/A (solo nube) | N/A |
+| Verkada | `rtsp://IP:8554/standard` (RTSP habilitado por cámara) | 8554 |
 | Rhombus | `rtsp://IP:554/live` (si está habilitado) | 554 |
 | Arlo | N/A (sin RTSP) | N/A |
 | Eufy Security | `rtsp://IP:554/live0` | 554 |

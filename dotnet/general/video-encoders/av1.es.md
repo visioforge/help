@@ -39,12 +39,16 @@ VisioForge soporta múltiples implementaciones de codificadores AV1, cada una co
 
 Actualmente, los codificadores AV1 están soportados en los motores multiplataforma: `VideoCaptureCoreX`, `VideoEditCoreX`, y `Media Blocks SDK`.
 
-!!! note "No disponible en iOS"
+!!! note "No disponible en iOS ni en Android"
 
     La codificación AV1 no está disponible en iOS. Apple no incluye ningún codificador AV1 por
     hardware en ninguno de sus chips, y los codificadores AV1 por software no forman parte del
     redistribuible de iOS. La *decodificación* AV1 sí funciona en iOS: mediante VideoToolbox a partir
     del A17 Pro, y mediante el decodificador por software `dav1d` en el resto de dispositivos.
+
+    Los codificadores SVT-AV1 y rav1e tampoco forman parte del redistribuible de Android: la
+    codificación AV1 por software es mucho más lenta que el tiempo real en un teléfono. La
+    decodificación AV1 funciona en Android mediante `dav1d`.
 
 ## Codificadores disponibles
 

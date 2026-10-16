@@ -75,8 +75,8 @@ Use las últimas versiones de paquetes NuGet del SDK para .NET en su proyecto.
 Agregue los siguientes paquetes NuGet a su proyecto:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.10.2" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.2" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.10.15" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.15" />
 ```
 
 El paquete `VideoCapture` contiene la funcionalidad principal de captura de video, mientras que el paquete `Core.UI.MAUI` contiene el control `VideoView` para vista previa de video en apps .NET MAUI.
@@ -98,7 +98,7 @@ Agregue los siguientes paquetes NuGet a su proyecto según la plataforma objetiv
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.10.9" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```

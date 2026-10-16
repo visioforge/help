@@ -61,7 +61,7 @@ Les cas d'usage courants incluent les tableaux de bord de vidéosurveillance, le
 Ajoutez le paquet NuGet du Media Blocks SDK à votre projet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.2" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.15" />
 ```
 
 Vous avez également besoin des paquets de runtime spécifiques à la plateforme. Pour Windows :
@@ -162,6 +162,26 @@ pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
 ```
 
 Pour le réglage détaillé du tampon et la configuration transport UDP vs TCP, consultez la référence [Configuration du protocole RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md).
+
+## Horloge de la caméra pour chaque image
+
+Pour horodater chaque image avec l'horloge de la caméra - par exemple pour dessiner une incrustation d'horodatage uniforme sur des caméras de marques différentes - activez `AddReferenceTimestampMeta`. Chaque image d'un sample grabber ou d'un buffer sink porte alors l'heure NTP de la caméra dans `SenderNTPTime` :
+
+```csharp
+rtspSettings.AddReferenceTimestampMeta = true;
+
+// Entre la source et le moteur de rendu
+var grabber = new VideoSampleGrabberBlock();
+grabber.OnVideoFrameBuffer += (s, e) =>
+{
+    DateTime? cameraTime = e.Frame.SenderNTPTime; // UTC, null sans Sender Reports
+};
+
+pipeline.Connect(rtspSource.VideoOutput, grabber.Input);
+pipeline.Connect(grabber.Output, videoRenderer.Input);
+```
+
+L'heure provient des RTCP Sender Reports de la caméra et dépend donc de celle-ci : elle vaut `null` jusqu'à l'arrivée du premier rapport, et pendant toute la session si la caméra n'en envoie pas ou si les rapports sont bloqués (en transport UDP, essayez `AllowedProtocols = RTSPSourceProtocol.TCP`). Le SDK journalise un avertissement si aucun rapport n'arrive en 10 secondes. Un `VideoMixerBlock` crée de nouvelles images : lisez l'heure avant le mixeur. `FallbackSwitchSourceBlock` ne la transmet pas : utilisez `RTSPSourceBlock`.
 
 ## Découverte de caméra ONVIF
 

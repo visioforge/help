@@ -45,7 +45,7 @@ contient Windows, Android, macOS et iOS ensemble.
 |---|---|---|
 | Target Platform | **iOS** | File → Build Profiles → iOS |
 | Target SDK | **Device SDK** | File → Build Profiles → iOS |
-| Target minimum iOS Version | **15.0** ou plus récent | Project Settings → Player → Other Settings → Configuration |
+| Target minimum iOS Version | **16.4** ou plus récent | Project Settings → Player → Other Settings → Configuration |
 | Architecture | **ARM64** | Project Settings → Player → Other Settings → Configuration |
 | Api Compatibility Level | **.NET Standard 2.1** | Project Settings → Player → Other Settings → Configuration |
 | Scripting Backend | **IL2CPP** *(obligatoire — Mono n'est pas pris en charge sur iOS par Unity)* | Project Settings → Player → Other Settings → Configuration |

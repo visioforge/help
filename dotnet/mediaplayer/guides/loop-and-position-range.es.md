@@ -70,7 +70,7 @@ mediaPlayer.Loop = false;
 **Comportamiento**:
 - Cuando está habilitado, la reproducción se reinicia automáticamente desde el principio al llegar al final
 - El evento `OnLoop` se dispara cada vez que se reinicia la reproducción
-- Para listas de reproducción, repite toda la lista, no archivos individuales
+- Repite el archivo que se está reproduciendo; en una lista de reproducción, los archivos siguientes no se reproducen mientras `Loop` esté habilitado
 
 #### Propiedad `Loop_DoNotSeekToBeginning`
 

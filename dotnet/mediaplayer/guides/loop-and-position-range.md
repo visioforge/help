@@ -70,7 +70,7 @@ mediaPlayer.Loop = false;
 **Behavior**:
 - When enabled, playback automatically restarts from the beginning when the end is reached
 - The `OnLoop` event fires each time playback restarts
-- For playlists, loops the entire playlist, not individual files
+- Loops the file that is playing; in a playlist, the following files do not play while `Loop` is enabled
 
 #### `Loop_DoNotSeekToBeginning` Property
 

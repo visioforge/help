@@ -387,17 +387,17 @@ public class AppDelegate : UIApplicationDelegate
         _filename = Path.Combine(libraryPath, $"video_{DateTime.Now.Ticks}.mp4");
     }
 
-    public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+    /// <summary>
+    /// Builds the UI into the window of the connecting scene. Called from <c>SceneDelegate.WillConnect</c>.
+    /// </summary>
+    /// <param name="window">The window created for the scene.</param>
+    public void SetupWindow(UIWindow window)
     {
-        Window = new UIWindow(UIScreen.MainScreen.Bounds);
+        Window = window;
         var vc = new UIViewController();
 
         // Install the VC into the window BEFORE building the subview hierarchy so
-        // vc.View.Bounds is non-zero when VideoView/Metal initialises. Touching
-        // vc.View on an orphan VC fires loadView with Bounds = CGRect.Empty —
-        // Metal drawables created against a zero-sized layer don't gain a surface
-        // even after AutoresizingMask later resizes the UIView, so the camera
-        // records fine (LED on) but preview stays black.
+        // Install the VC into the window first, then build the view hierarchy on it.
         Window.RootViewController = vc;
         Window.MakeKeyAndVisible();
         vc.View.LayoutIfNeeded();
@@ -427,7 +427,5 @@ public class AppDelegate : UIApplicationDelegate
                 Debug.WriteLine($"Initial capture start failed: {ex}");
             }
         });
-
-        return true;
     }
 }

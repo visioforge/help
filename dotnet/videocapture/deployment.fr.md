@@ -170,6 +170,11 @@ Pour un contrôle complet sur le processus de déploiement ou dans les environne
 **Capture audio :**
 
 - VisioForge_WhatYouHear_Source.ax / VisioForge_WhatYouHear_Source_x64.ax
+- VisioForge_ASIO_Source.ax / VisioForge_ASIO_Source_x64.ax (périphériques ASIO)
+
+**Caméras MJPEG :**
+
+- VisioForge_MJPEGDec.ax / VisioForge_MJPEGDec_x64.ax
 
 **Caméra virtuelle :**
 

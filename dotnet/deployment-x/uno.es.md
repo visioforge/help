@@ -107,8 +107,8 @@ Agregue los siguientes paquetes a su proyecto:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.10.2" />
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.10.2" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.10.15" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.10.15" />
 </ItemGroup>
 ```
 
@@ -130,7 +130,7 @@ Agregue paquetes redistributables específicos de plataforma a su proyecto:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.10.9" />
 </ItemGroup>
 ```
 
@@ -217,8 +217,8 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
   
   <!-- Referencias Core de VisioForge -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.10.2" />
-    <PackageReference Include="VisioForge.DotNet.Core" Version="2026.10.2" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.10.15" />
+    <PackageReference Include="VisioForge.DotNet.Core" Version="2026.10.15" />
   </ItemGroup>
   
   <!-- Plataforma Windows -->
@@ -230,7 +230,7 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
   
   <!-- Plataforma Android -->
   <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.10.9" />
     <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
   </ItemGroup>
   

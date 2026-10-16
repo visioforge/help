@@ -99,7 +99,7 @@ graph LR;
 Add the Media Blocks SDK to your project via NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.2" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.15" />
 ```
 
 On Windows you also need the native runtime packages. For recording (muxing) you need the core runtime; the Libav package supplies the muxers:

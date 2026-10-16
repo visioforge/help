@@ -1,9 +1,6 @@
 ---
 title: Cámaras Rhombus Systems - Guía de Conexión RTSP en C# .NET
 description: Opciones de integración de cámaras Rhombus en C# .NET. Arquitectura gestionada en la nube, acceso API y enfoques alternativos para cámaras Rhombus Systems.
-meta:
-  - name: robots
-    content: "noindex, follow"
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -51,7 +48,7 @@ En cámaras Rhombus compatibles:
 
 1. Inicie sesión en la **Consola Rhombus** (console.rhombus.com)
 2. Navegue a la configuración de su cámara
-3. Busque **Transmisión local** o configuración **RTSP**
+3. Busque **Local Streaming** o configuración **RTSP**
 4. Habilite RTSP y anote la URL proporcionada
 
 ### Formato de URL RTSP
@@ -113,7 +110,7 @@ Si su cámara Rhombus tiene RTSP habilitado, sí. Use la URL RTSP de la consola 
 
 **¿Cómo se compara Rhombus con Verkada?**
 
-Ambas son plataformas gestionadas en la nube. Rhombus ofrece RTSP en algunos modelos, mientras que Verkada no soporta RTSP en absoluto. Ambas proporcionan APIs REST para acceso a clips/capturas. Consulte nuestra [guía de Verkada](verkada.md) para comparación.
+Ambas son plataformas gestionadas en la nube, y ambas pueden transmitir por RTSP local: Rhombus en algunos modelos y Verkada en las cámaras que soportan RTSP una vez que se habilita en Command. Además, proporcionan APIs REST para acceso a clips y capturas. Consulte nuestra [guía de Verkada](verkada.md) para comparación.
 
 **¿Cuáles son buenas alternativas a Rhombus con soporte RTSP completo?**
 

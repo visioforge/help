@@ -774,7 +774,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Animated GIF Source Block
 
-The `AnimatedGIFSourceBlock` generates a video stream from an animated GIF file. It supports configurable frame rate, looping, and live/seekable stream mode.
+The `AnimatedGIFSourceBlock` generates a video stream from an animated GIF file. It plays the GIF at its own frame delays, as a live stream, and supports looping.
 
 #### Block info
 
@@ -791,10 +791,10 @@ The block takes an `ImageVideoSourceSettings` instance:
 | Property | Type | Default | Description |
 | --- | --- | :---: | --- |
 | `Filename` | `string` | required | Path to the animated GIF file |
-| `IsLive` | `bool` | `false` | Treat the source as live (non-seekable) |
-| `NumBuffers` | `int` | `-1` | Maximum frames to output (−1 = unlimited) |
+| `IsLive` | `bool` | `false` | Not used: the GIF source is always live |
+| `NumBuffers` | `int` | `-1` | Not used by this block |
 | `AnimationInfiniteLoop` | `bool` | `true` | Loop the animation indefinitely |
-| `FrameRate` | `VideoFrameRate` | `FPS_10` | Output frame rate |
+| `FrameRate` | `VideoFrameRate` | `FPS_10` | Not used: the GIF plays at its own frame delays |
 
 #### The sample pipeline
 
@@ -810,8 +810,7 @@ var pipeline = new MediaBlocksPipeline();
 
 var settings = new ImageVideoSourceSettings("C:/media/animation.gif")
 {
-    AnimationInfiniteLoop = true,
-    FrameRate = VideoFrameRate.FPS_25
+    AnimationInfiniteLoop = true
 };
 
 var gifSource = new AnimatedGIFSourceBlock(settings);
@@ -1764,7 +1763,7 @@ The first constructor argument is `IVideoSourceSettings`. Supported implementati
 
 - `StaticTextFallbackSettings` — text overlay with configurable font, color, and position
 - `StaticImageFallbackSettings` — displays a static image (file path, scale, aspect ratio options)
-- `MediaBlockFallbackSettings` — plays a fallback URI or custom GStreamer pipeline
+- `MediaBlockFallbackSettings` — plays a fallback URI
 
 **Diagnostic methods:**
 
@@ -2122,7 +2121,7 @@ The block is configured via `StaticTextFallbackSettings`:
 | `Text` | `string` | `"Source Unavailable"` | Text to display |
 | `FontFamily` | `string` | `"Arial"` | Font family name |
 | `FontSize` | `float` | `24` | Font size in points |
-| `FontStyle` | `FontStyle` | `Normal` | Font style (Normal, Bold, Italic, etc.) |
+| `FontStyle` | `FontStyle` | `Normal` | Font style (Normal, Italic, Oblique) |
 | `TextColor` | `SKColor` | White | Text color |
 | `BackgroundColor` | `SKColor` | Black | Background fill color |
 | `Position` | `SKPoint` | `(0.5, 0.5)` | Text anchor position as proportion (0–1) |
@@ -2828,7 +2827,7 @@ macOS (not available on iOS)
 
 ### Blu-Ray Source Block
 
-The `BluRaySourceBlock` reads video, audio, and optional subtitle streams from a Blu-Ray disc or Blu-Ray disc image folder using GStreamer's `bluray` element.
+The `BluRaySourceBlock` reads video, audio, and optional subtitle streams from a Blu-Ray disc or Blu-Ray disc image folder by decoding the disc's `.m2ts` stream with GStreamer's `decodebin3`.
 
 #### Block info
 
@@ -2848,9 +2847,9 @@ Name: BluRaySourceBlock.
 | `Title` | `int` | `-1` | Title to play (−1 = main/longest title) |
 | `RenderVideo` | `bool` | `true` | Enable video output pad |
 | `RenderAudio` | `bool` | `true` | Enable audio output pad |
-| `RenderSubtitle` | `bool` | `false` | Enable subtitle output pad |
+| `RenderSubtitle` | `bool` | `false` | Enable subtitle output pad (receives no data: PGS subtitles are not delivered) |
 | `AudioStream` | `int` | `-1` | Audio stream index (−1 = default) |
-| `SubtitleStream` | `int` | `-1` | Subtitle stream index (−1 = default) |
+| `SubtitleStream` | `int` | `-1` | Subtitle stream index (−1 = default; no effect, PGS subtitles are not delivered) |
 
 #### The sample pipeline
 
@@ -3110,65 +3109,6 @@ bool available = RaspberryPiSourceBlock.IsAvailable();
 #### Platforms
 
 Linux (Raspberry Pi).
-
----
-
-### GStreamer PlayBin Source Block
-
-The `PlayBinSourceBlock` plays back media using GStreamer's built-in `playbin` element. It accepts the same `UniversalSourceSettings` as `UniversalSourceBlock` but delegates the entire decoding pipeline to GStreamer's high-level playback engine.
-
-#### Block info
-
-Name: PlayBinSourceBlock.
-
-| Pin direction | Media type | Pins count |
-| --- | :---: | :---: |
-| Output video | Uncompressed video | 0 or 1 |
-| Output audio | Uncompressed audio | 0 or 1 |
-| Output subtitle | Subtitle | 0 or 1 |
-
-#### Settings
-
-Uses `UniversalSourceSettings`. Key properties:
-
-| Property | Type | Default | Description |
-| --- | --- | :---: | --- |
-| `URI` | `Uri` | required | Media source URI |
-| `RenderVideo` | `bool` | `true` | Enable video output pad |
-| `RenderAudio` | `bool` | `true` | Enable audio output pad |
-| `RenderSubtitle` | `bool` | `false` | Enable subtitle output pad |
-| `StartPosition` | `TimeSpan?` | `null` | Playback start position |
-| `StopPosition` | `TimeSpan?` | `null` | Playback stop position |
-| `VideoCustomFrameRate` | `VideoFrameRate?` | `null` | Override output frame rate |
-
-#### The sample pipeline
-
-```mermaid
-graph LR;
-    PlayBinSourceBlock -- Video --> VideoRendererBlock;
-    PlayBinSourceBlock -- Audio --> AudioRendererBlock;
-```
-
-#### Sample code
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var settings = await UniversalSourceSettings.CreateAsync(new Uri("file:///video.mp4"));
-var source = new PlayBinSourceBlock(settings);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(source.VideoOutput, videoRenderer.Input);
-
-var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(source.AudioOutput, audioRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-#### Platforms
-
-Windows, macOS, Linux, Android, iOS.
 
 ---
 

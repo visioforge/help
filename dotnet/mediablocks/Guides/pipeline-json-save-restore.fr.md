@@ -89,6 +89,13 @@ La forme indexée est à privilégier lorsque vous générez des documents : ell
 bloc, alors que la forme sans index exige un pad principal que tous les blocs n'ont pas. Pour un sink
 multiplexeur comme `MP4SinkBlock`, `input:0` et `input:1` sont les flux vidéo et audio.
 
+Les sinks multiplexeurs créent leurs entrées pendant le chargement du document. Pour
+ceux-ci, la référence `To` peut aussi porter un `mediaType` (`Video`, `Audio`, …) — le snapshot du
+pipeline l'écrit — et l'entrée est créée avec ce type ; sans lui, l'entrée prend le type du pad de
+sortie connecté. Un sink qui n'a pas de piste pour le type d'une entrée — une entrée `Auto` venant d'un tee ou
+d'un parseur sur un sink MP4, par exemple — fait échouer le démarrage du pipeline avec une erreur ; un sink
+MPEG-TS hors mode segmenté accepte une entrée `Auto`.
+
 Un document minimal :
 
 ```json

@@ -1906,7 +1906,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Linux, iOS, Android.
+Windows, macOS, Linux, iOS.
 
 ## Simple Video Mark
 
@@ -3297,13 +3297,16 @@ Name: MotionDetectionBlock.
 | --- | :---: | :---: | --- |
 | `MotionThreshold` | `int` | `5` | Minimum motion level (0–100) required to fire the event |
 | `CompareGreyscale` | `bool` | `true` | Compare frames using greyscale averaging |
+| `CompareRed` | `bool` | `true` | Compare the red channel when `CompareGreyscale` is `false` |
+| `CompareGreen` | `bool` | `true` | Compare the green channel when `CompareGreyscale` is `false` |
+| `CompareBlue` | `bool` | `true` | Compare the blue channel when `CompareGreyscale` is `false` |
 | `GridWidth` | `int` | `8` | Number of horizontal cells in the motion matrix |
 | `GridHeight` | `int` | `8` | Number of vertical cells in the motion matrix |
 
 The `OnMotionDetected` event provides:
 
 - `Level` — overall motion intensity (0–100)
-- `Matrix` — `byte[]` of size `GridWidth × GridHeight`, per-cell motion intensity
+- `Matrix` — `byte[]` of size `GridWidth × GridHeight`, per-cell motion intensity; empty, with an error logged once, when the grid does not fit the frame (a dimension below 1 or above the frame's)
 
 The event fires only when `Level >= MotionThreshold`. Event handlers run on a GStreamer background thread and must be thread-safe.
 

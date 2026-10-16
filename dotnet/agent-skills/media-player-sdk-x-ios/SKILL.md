@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to a **native .NET for iOS** application (`net10.0-ios` TFM, UIKit, no MAUI/Xamarin shell). The X SDK shares its runtime with Media Blocks and Video Capture X (GStreamer-backed under the hood) and exposes the high-level `MediaPlayerCoreX` god-object that mirrors the legacy `MediaPlayerCore` API. Same C# playback code ports to Windows / macOS / Android / MAUI / Avalonia / Uno — only the UI host changes.
 
-Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaPlayer` 2026.10.2**, native iOS redist **`VisioForge.CrossPlatform.Core.iOS` 2026.9.11** (matches the upstream Media Player SDK X iOS sample at `_DEMOS/Media Player SDK X/iOS/MediaPlayer/`). The iOS native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaPlayer` 2026.10.15**, native iOS redist at the version shown in the csproj below (matches the upstream Media Player SDK X iOS sample at `_DEMOS/Media Player SDK X/iOS/MediaPlayer/`). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -29,7 +29,7 @@ Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaPlayer` 2026.10.2**, na
 
 ### Target framework
 
-Use `net10.0-ios` with `<SupportedOSPlatformVersion>14.0</SupportedOSPlatformVersion>` — that's the floor the SDK is tested against. The upstream sample csproj currently sets `13.0`, but the H.264 / HEVC VideoToolbox decode path the iOS redist relies on was finalised at iOS 14 and 13.x slices may surface stutter on first decode. Bump to 14.0 unless you have a hard requirement for older devices.
+Use `net10.0-ios` with `<SupportedOSPlatformVersion>16.4</SupportedOSPlatformVersion>` — VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older (the .NET 10 iOS workload itself refuses anything below 15.0), and the upstream sample csproj is at 16.4 as well.
 
 ### NuGet packages
 
@@ -37,10 +37,10 @@ Two packages — the .NET wrapper plus the iOS native redist. The redist is **no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.10.2" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.10.15" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.10.14" />
 </ItemGroup>
 ```
 
@@ -67,16 +67,42 @@ The X SDK uses dynamic codegen paths (`DynamicMethod`, late-bound generic instan
 
 ### Full minimal csproj
 
-See `references/Sample.csproj`. Adapted from the official Media Player SDK X iOS sample (`_DEMOS/Media Player SDK X/iOS/MediaPlayer/MediaPlayerX.csproj`) — kept verbatim except for replacing the source-tree `<ProjectReference>`s with public `<PackageReference>`s and bumping `SupportedOSPlatformVersion` from 13.0 to 14.0. The bundled file builds standalone against the public NuGet packages.
+See `references/Sample.csproj`. Adapted from the official Media Player SDK X iOS sample (`_DEMOS/Media Player SDK X/iOS/MediaPlayer/MediaPlayerX.csproj`) — kept verbatim except for replacing the source-tree `<ProjectReference>`s with public `<PackageReference>`s; `SupportedOSPlatformVersion` is 16.4 in both. The bundled file builds standalone against the public NuGet packages.
 
 ## Mandatory engine boot
 
 Before any `MediaPlayerCoreX` instance is constructed, call `VisioForgeX.InitSDK()` exactly once per process — synchronous on iOS, unlike the `InitSDKAsync()` used on WPF/MAUI. On a fresh install the first call builds the GStreamer plugin-registry cache inside the app sandbox (~1-3 s, one-time); subsequent launches are instant.
 
+iOS 27 requires the scene lifecycle: `Info.plist` needs the `UIApplicationSceneManifest` pointing at `SceneDelegate` (bundled `references/Info.plist` and `references/SceneDelegate.cs`), and an app that still builds its window in `FinishedLaunching` without the manifest is killed at launch on iOS 27 before any UI appears. The window therefore comes from the connecting `UIWindowScene`, and the UI plus the SDK boot live in `AppDelegate.SetupWindow`:
+
 ```csharp
-public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+// SceneDelegate.cs — iOS hands the app a UIWindowScene; the window is built from it.
+[Export("scene:willConnectToSession:options:")]
+public void WillConnect(UIScene scene, UISceneSession session, UISceneConnectionOptions connectionOptions)
 {
-    Window = new UIWindow(UIScreen.MainScreen.Bounds);
+    if (scene is not UIWindowScene windowScene)
+    {
+        return;
+    }
+
+    var app = (AppDelegate)UIApplication.SharedApplication.Delegate;
+    Window = app.Window ?? new UIWindow(windowScene);
+    if (app.Window is null)
+    {
+        app.SetupWindow(Window);
+    }
+    else
+    {
+        // A scene that reconnects after a disconnect gets the existing window back.
+        Window.WindowScene = windowScene;
+        Window.MakeKeyAndVisible();
+    }
+}
+
+// AppDelegate.cs
+public void SetupWindow(UIWindow window)
+{
+    Window = window;
 
     // CustomViewController.ctor builds the VideoView at full-window size.
     _vc = new CustomViewController(Window, out _videoView);
@@ -87,12 +113,10 @@ public override bool FinishedLaunching(UIApplication application, NSDictionary l
     Window.MakeKeyAndVisible();
 
     VisioForgeX.InitSDK();   // <-- mandatory; before any MediaPlayerCoreX
-
-    return true;
 }
 ```
 
-There is no public `DestroySDK()` for the iOS redist as of 2026.9.11 — disposing the `MediaPlayerCoreX` instance with `await _player.DisposeAsync()` is sufficient at app shutdown. The bundled `references/AppDelegate.cs` shows the canonical placement.
+At app shutdown, stop and dispose the `MediaPlayerCoreX` instance, then call `VisioForgeX.DestroySDK()` once. `WillTerminate` is synchronous, so use the sync `Stop()` / `Dispose()` overloads there. The bundled `references/AppDelegate.cs` shows the canonical placement.
 
 Skipping `InitSDK()` is the #1 source of "Element 'X' not found" failures on first run.
 
@@ -201,7 +225,7 @@ These are the five most common production issues — flag any of them on first r
 
 **Fix A**: switch the URL to HTTPS, or add `NSExceptionAllowsInsecureHTTPLoads` for the specific host (preferred over blanket `NSAllowsArbitraryLoads`). See "App Transport Security" above.
 
-**Cause B — VideoView built before window was key-and-visible**: the VideoView's `MTKView` grabs its Metal drawable lazily; if you build it on an orphan UIViewController (one not yet assigned to `Window.RootViewController`), `loadView` fires too early, the drawable never gets a backing surface, and `AutoresizingMask` resizing the UIView later does NOT recover the surface.
+**Cause B — VideoView not sized to the window**: the `VideoView` (`VisioForge.Core.UI.Apple.VideoView`) was created with a frame other than the area it is shown in — for example a fixed or zero `CGRect`, or on a view that was later resized without `AutoresizingMask`/constraints on the `VideoView`. Check `_videoView.Bounds` and `DrawableSize` after the window appears; both should match the visible area.
 
 **Fix B**: assign `Window.RootViewController = vc` and call `Window.MakeKeyAndVisible()` **before** constructing `MediaPlayerCoreX(_videoView as IVideoView)`. The bundled `AppDelegate.cs` shows the correct order.
 
@@ -217,7 +241,7 @@ These are the five most common production issues — flag any of them on first r
 
 **Cause A — `InitSDK()` skipped**: the GStreamer plugin-registry cache was never built, so element factories like `decodebin3` / `videoconvert` / `glimagesink` cannot be created.
 
-**Fix A**: call `VisioForgeX.InitSDK()` exactly once in `FinishedLaunching` after `Window.MakeKeyAndVisible()` and before any `MediaPlayerCoreX` construction. See "Mandatory engine boot" above.
+**Fix A**: call `VisioForgeX.InitSDK()` exactly once in `AppDelegate.SetupWindow` after `Window.MakeKeyAndVisible()` and before any `MediaPlayerCoreX` construction. See "Mandatory engine boot" above.
 
 **Cause B — exotic codec the iOS redist doesn't ship**: the iOS redist is a slimmed GStreamer build (no x265, no patent-encumbered audio codecs beyond what VideoToolbox provides). H.264 / H.265 / AAC / Opus / Vorbis / MP3 / FLAC all work; rare codecs (AV1 in some containers, Dolby TrueHD, DTS:X) may not.
 
@@ -235,6 +259,7 @@ Run through these after first integration:
 
 - [ ] `dotnet build -c Debug` succeeds with the bundled `references/` files copied into a fresh `net10.0-ios` project (no missing-DLL warnings).
 - [ ] `Info.plist` contains `NSPhotoLibraryUsageDescription` with reviewer-safe wording.
+- [ ] `Info.plist` has `UIApplicationSceneManifest` → `SceneDelegate` (iOS 27 kills a scene-less app at launch).
 - [ ] First run on a physical iPhone shows the photo-library prompt (only on Photos picker), then a working preview within ~2 s after `PlayAsync`.
 - [ ] Position slider seeks without stutter and without re-entrant `Position_SetAsync` overlap (the bundled `_isSeeking` flag handles this).
 - [ ] `OnStop` fires at end-of-stream and the UI button text resets to "PLAY" without leaking `MediaPlayerCoreX` (every Play→Stop cycle calls `await _player.DisposeAsync()` and reassigns to `null`).
@@ -247,8 +272,9 @@ Run through these after first integration:
 The `references/` folder is self-contained — copy all of it into a fresh project folder (alongside an `Assets.xcassets`, `LaunchScreen.storyboard`, and `Entitlements.plist` from the standard .NET for iOS template) and `dotnet build` succeeds with no extra files needed:
 
 - `references/Sample.csproj` — minimal working `net10.0-ios` csproj, version-pinned to the same NuGet release as the prose, with `MtouchInterpreter=all` on both Debug and Release.
-- `references/Info.plist` — bundle metadata with the `NSPhotoLibraryUsageDescription` privacy key filled in with reviewer-safe wording, and a commented-out ATS exception block ready to enable for HTTP streams.
+- `references/Info.plist` — bundle metadata with the `UIApplicationSceneManifest` that points iOS at `SceneDelegate` (required — iOS 27 kills a scene-less app at launch), the `NSPhotoLibraryUsageDescription` privacy key filled in with reviewer-safe wording, and a commented-out ATS exception block ready to enable for HTTP streams.
 - `references/AppDelegate.cs` — full code-behind: `VisioForgeX.InitSDK` boot, `UniversalSourceSettings` URL probe, video / audio stream auto-detection, `OnStart` / `OnStop` / `OnError` wiring, position-slider seek with reentrancy guard. Use as a copy-paste starting template. (Runs in trial mode by design; add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence.)
+- `references/SceneDelegate.cs` — creates the window from the connecting `UIWindowScene` and calls `AppDelegate.SetupWindow`; the scene lifecycle iOS 27 requires.
 - `references/CustomViewController.cs` — root `UIViewController` that builds the `VisioForge.Core.UI.Apple.VideoView` at full-window size, hosts the SELECT FILE / PLAY buttons + position slider, and acts as the `IUIDocumentPickerDelegate` for picking the media file.
 
 ## Related

@@ -92,7 +92,7 @@ VideoCapture1.PIP_CustomOutputSize_Set(1920, 1080);
 
 ### Añadir Fuentes de Video
 
-La primera fuente configurada sirve como entrada principal, mientras que fuentes adicionales pueden añadirse usando la API PIP.
+La primera fuente configurada sirve como entrada principal, mientras que fuentes adicionales pueden añadirse usando la API PIP. `Stop`/`StopAsync` elimina y libera todas las fuentes PIP, así que vuelva a añadirlas antes de cada `StartAsync`, normalmente en el mismo controlador que inicia la captura.
 
 #### Añadir un Dispositivo de Captura de Video
 

@@ -92,7 +92,7 @@ VideoCapture1.PIP_CustomOutputSize_Set(1920, 1080);
 
 ### Adding Video Sources
 
-The first configured source serves as the main input, while additional sources can be added using the PIP API.
+The first configured source serves as the main input, while additional sources can be added using the PIP API. `Stop`/`StopAsync` removes and releases every PIP source, so add them again before each `StartAsync` - typically in the same handler that starts the capture.
 
 #### Adding a Video Capture Device
 

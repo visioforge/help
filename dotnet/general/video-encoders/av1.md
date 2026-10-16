@@ -39,12 +39,15 @@ VisioForge supports multiple AV1 encoder implementations, each with its own uniq
 
 Currently, AV1 encoder are supported in the cross-platform engines: `VideoCaptureCoreX`, `VideoEditCoreX`, and `Media Blocks SDK`.
 
-!!! note "Not available on iOS"
+!!! note "Not available on iOS or Android"
 
     AV1 encoding is not available on iOS. Apple ships no AV1 hardware encoder on any chip, and the
     software AV1 encoders are not part of the iOS redistributable. AV1 *decoding* works on iOS -
     through VideoToolbox on A17 Pro and later, and through the software `dav1d` decoder everywhere
     else.
+
+    The SVT-AV1 and rav1e encoders are not part of the Android redistributable either: software AV1
+    encoding runs far below real time on a phone. AV1 decoding works on Android through `dav1d`.
 
 ## Available Encoders
 

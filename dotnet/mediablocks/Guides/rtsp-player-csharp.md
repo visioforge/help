@@ -61,7 +61,7 @@ Common use cases include surveillance dashboards, NVR (network video recorder) a
 Add the Media Blocks SDK NuGet package to your project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.2" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.15" />
 ```
 
 You also need the platform-specific runtime packages. For Windows:
@@ -162,6 +162,26 @@ pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
 ```
 
 For detailed buffer tuning and UDP vs TCP transport configuration, see the [RTSP Protocol Configuration](../../videocapture/video-sources/ip-cameras/rtsp.md) reference.
+
+## Camera Time per Frame
+
+To stamp every frame with the camera's own clock - for example to draw one uniform timestamp overlay across cameras of different brands - enable `AddReferenceTimestampMeta`. Each frame from a sample grabber or a buffer sink then carries the camera's NTP time in `SenderNTPTime`:
+
+```csharp
+rtspSettings.AddReferenceTimestampMeta = true;
+
+// Between the source and the renderer
+var grabber = new VideoSampleGrabberBlock();
+grabber.OnVideoFrameBuffer += (s, e) =>
+{
+    DateTime? cameraTime = e.Frame.SenderNTPTime; // UTC, null without Sender Reports
+};
+
+pipeline.Connect(rtspSource.VideoOutput, grabber.Input);
+pipeline.Connect(grabber.Output, videoRenderer.Input);
+```
+
+The time comes from the camera's RTCP Sender Reports, so it depends on the camera: it is `null` until the first report arrives, and for the whole session when the camera sends none or the reports are blocked (with UDP transport, try `AllowedProtocols = RTSPSourceProtocol.TCP`). The SDK logs one warning when no report arrives within 10 seconds. A `VideoMixerBlock` creates new frames, so read the time before the mixer. `FallbackSwitchSourceBlock` does not carry it - use `RTSPSourceBlock`.
 
 ## ONVIF Camera Discovery
 

@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a **native .NET for iOS** application (`net10.0-ios` TFM, UIKit, no MAUI/Xamarin shell). The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes the high-level `VideoCaptureCoreX` god-object that mirrors the legacy `VideoCaptureCore` API. Same C# capture/recording code ports to Windows / macOS / Android / MAUI / Avalonia / Uno — only the UI host changes.
 
-Pinned NuGet versions: wrapper **`VisioForge.DotNet.VideoCapture` 2026.10.2**, native iOS redist **`VisioForge.CrossPlatform.Core.iOS` 2026.9.11** (matches the [official Simple Video Capture X iOS sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/iOS/SimpleVideoCapture)). The iOS native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`VisioForge.DotNet.VideoCapture` 2026.10.15**, native iOS redist at the version shown in the csproj below (matches the [official Simple Video Capture X iOS sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/iOS/SimpleVideoCapture)). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -27,7 +27,7 @@ Pinned NuGet versions: wrapper **`VisioForge.DotNet.VideoCapture` 2026.10.2**, n
 
 ### Target framework
 
-Use `net10.0-ios` with `<SupportedOSPlatformVersion>14.0</SupportedOSPlatformVersion>` — that's the floor the SDK is tested against. Older platform versions (iOS 12 / 13) may load but `AppleMediaH264EncoderSettings` (VideoToolbox H.264 path) is the only encoder the iOS redist ships, and its API was finalised at iOS 14.
+Use `net10.0-ios` with `<SupportedOSPlatformVersion>16.4</SupportedOSPlatformVersion>` — VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older (the .NET 10 iOS workload itself refuses anything below 15.0), and the upstream sample csproj is at 16.4 as well.
 
 ### NuGet packages
 
@@ -35,10 +35,10 @@ Two packages — the .NET wrapper plus the iOS native redist. The redist is **no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.10.2" />
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.10.15" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.10.14" />
 </ItemGroup>
 ```
 
@@ -71,10 +71,36 @@ See `references/Sample.csproj` in the bundled archive. Adapted from the official
 
 Before any `VideoCaptureCoreX` instance is constructed (and before any `DeviceEnumerator` query), call `VisioForgeX.InitSDK()` exactly once per process — synchronous on iOS, unlike the `InitSDKAsync()` used on WPF/MAUI. On a fresh install the first call builds the GStreamer plugin-registry cache inside the app sandbox (~1-3 s, one-time); subsequent launches are instant.
 
+iOS 27 requires the scene lifecycle: `Info.plist` needs the `UIApplicationSceneManifest` pointing at `SceneDelegate` (bundled `references/Info.plist` and `references/SceneDelegate.cs`), and an app that still builds its window in `FinishedLaunching` without the manifest is killed at launch on iOS 27 before any UI appears. The window therefore comes from the connecting `UIWindowScene`, and the UI plus the SDK boot live in `AppDelegate.SetupWindow`:
+
 ```csharp
-public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+// SceneDelegate.cs — iOS hands the app a UIWindowScene; the window is built from it.
+[Export("scene:willConnectToSession:options:")]
+public void WillConnect(UIScene scene, UISceneSession session, UISceneConnectionOptions connectionOptions)
 {
-    Window = new UIWindow(UIScreen.MainScreen.Bounds);
+    if (scene is not UIWindowScene windowScene)
+    {
+        return;
+    }
+
+    var app = (AppDelegate)UIApplication.SharedApplication.Delegate;
+    Window = app.Window ?? new UIWindow(windowScene);
+    if (app.Window is null)
+    {
+        app.SetupWindow(Window);
+    }
+    else
+    {
+        // A scene that reconnects after a disconnect gets the existing window back.
+        Window.WindowScene = windowScene;
+        Window.MakeKeyAndVisible();
+    }
+}
+
+// AppDelegate.cs
+public void SetupWindow(UIWindow window)
+{
+    Window = window;
     var vc = new UIViewController();
     Window.RootViewController = vc;
     Window.MakeKeyAndVisible();
@@ -90,12 +116,10 @@ public override bool FinishedLaunching(UIApplication application, NSDictionary l
         try { await StartAsync(); }
         catch (Exception ex) { Debug.WriteLine($"Capture start failed: {ex}"); }
     });
-
-    return true;
 }
 ```
 
-There is no public `DestroySDK()` for the iOS redist as of 2026.9.11 — disposing the `VideoCaptureCoreX` instance with `await _player.DisposeAsync()` is sufficient at app shutdown. The bundled `references/AppDelegate.cs` shows the canonical placement.
+At app shutdown, stop and dispose the `VideoCaptureCoreX` instance, then call `VisioForgeX.DestroySDK()` once. `WillTerminate` is synchronous, so use the sync `Stop()` / `Dispose()` overloads there — an `await` in it never completes before the process exits. The bundled `references/AppDelegate.cs` has no shutdown hook; add one in `WillTerminate`.
 
 Skipping `InitSDK()` is the #1 source of "Element 'X' not found" failures on first run.
 
@@ -197,11 +221,11 @@ These are the five most common production issues — flag any of them on first r
 
 **Cause A**: forgot `_player.Video_Play = true` after the constructor. `VideoCaptureCoreX.Video_Play` defaults to `false` on iOS — the pipeline runs (capture session is up), but the video tee is never connected to the `IVideoView` renderer.
 
-**Cause B**: `VideoView` was created against a `UIViewController` whose `View.Bounds` was `CGRect.Empty`. This happens when you touch `vc.View` on an orphan VC (one not yet assigned to `Window.RootViewController`) — `loadView` fires too early, Metal drawables never get a backing surface, and `AutoresizingMask` resizing the UIView later does NOT recover the surface.
+**Cause B — VideoView not sized to the window**: the `VideoView` (`VisioForge.Core.UI.Apple.VideoView`) was created with a frame other than the area it is shown in — for example a fixed or zero `CGRect`, or on a view that was later resized without `AutoresizingMask`/constraints on the `VideoView`. Check `_videoView.Bounds` and `DrawableSize` after the window appears; both should match the visible area.
 
 **Fix A**: set `_player.Video_Play = true` immediately after `new VideoCaptureCoreX(...)`.
 
-**Fix B**: assign `Window.RootViewController = vc` and call `Window.MakeKeyAndVisible()` + `vc.View.LayoutIfNeeded()` **before** building the subview hierarchy that contains your `VideoView`. The bundled `AppDelegate.cs` shows the correct order.
+**Fix B**: create the `VideoView` from `vc.View.Bounds` with `AutoresizingMask = FlexibleWidth | FlexibleHeight` (or pin it with constraints). The bundled `AppDelegate.cs` installs the VC (`Window.RootViewController = vc`, `Window.MakeKeyAndVisible()`, `vc.View.LayoutIfNeeded()`) before building the hierarchy — the recommended order.
 
 ## Verification checklist
 
@@ -209,6 +233,7 @@ Run through these after first integration:
 
 - [ ] `dotnet build -c Debug` succeeds with the bundled `references/` files copied into a fresh `net10.0-ios` project (no missing-DLL warnings).
 - [ ] `Info.plist` contains all three privacy keys (`NSCameraUsageDescription`, `NSMicrophoneUsageDescription`, `NSPhotoLibraryUsageDescription`) with reviewer-safe strings.
+- [ ] `Info.plist` has `UIApplicationSceneManifest` → `SceneDelegate` (iOS 27 kills a scene-less app at launch).
 - [ ] First run on a physical iPhone shows the camera/mic permission prompts, then a working preview within ~2 s after grant.
 - [ ] Camera-flip button toggles between front / back without leaking `VideoCaptureCoreX` (every flip calls `StopCaptureAsync(0)` → `StopAsync()` → `DisposeAsync()` → fresh `CreateEngineAsync`).
 - [ ] On clean app suspend / terminate, recordings finalise correctly (verify the MP4 plays back in the Photos app or another player).
@@ -220,8 +245,9 @@ Run through these after first integration:
 The `references/` folder is self-contained — copy all of it into a fresh project folder (alongside an `Assets.xcassets`, `LaunchScreen.storyboard`, and `Entitlements.plist` from the standard .NET for iOS template) and `dotnet build` succeeds with no extra files needed:
 
 - `references/Sample.csproj` — minimal working `net10.0-ios` csproj, version-pinned to the same NuGet release as the prose, with `MtouchInterpreter=all` on both Debug and Release.
-- `references/Info.plist` — bundle metadata with the three mandatory privacy-usage keys filled in with reviewer-safe wording.
-- `references/AppDelegate.cs` — full code-behind: `VisioForgeX.InitSDK` boot, `DeviceEnumerator` wiring, MP4 recording with VideoToolbox H.264, front/back camera flip, capture-button state machine, photo-library save via `PHAssetCreationRequest`. Use as a copy-paste starting template. (Runs in trial mode by design; add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence.) This sample builds the root `UIViewController` inline inside `FinishedLaunching` rather than a separate `MainViewController.cs` file — the camera preview and controls live directly on `vc.View`.
+- `references/Info.plist` — bundle metadata with the `UIApplicationSceneManifest` that points iOS at `SceneDelegate` (required — iOS 27 kills a scene-less app at launch), and the three mandatory privacy-usage keys filled in with reviewer-safe wording.
+- `references/AppDelegate.cs` — full code-behind: `VisioForgeX.InitSDK` boot, `DeviceEnumerator` wiring, MP4 recording with VideoToolbox H.264, front/back camera flip, capture-button state machine, photo-library save via `PHAssetCreationRequest`. Use as a copy-paste starting template. (Runs in trial mode by design; add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence.) This sample builds the root `UIViewController` inline inside `SetupWindow` rather than a separate `MainViewController.cs` file — the camera preview and controls live directly on `vc.View`.
+- `references/SceneDelegate.cs` — creates the window from the connecting `UIWindowScene` and calls `AppDelegate.SetupWindow`; the scene lifecycle iOS 27 requires.
 - `references/Main.cs` — top-level `UIApplication.Main(args, null, typeof(AppDelegate))` entry point.
 
 ## Related

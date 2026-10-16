@@ -1906,7 +1906,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Linux, iOS, Android.
+Windows, macOS, Linux, iOS.
 
 ## Marca de Video Simple
 
@@ -3297,13 +3297,16 @@ Nombre: MotionDetectionBlock.
 | --- | :---: | :---: | --- |
 | `MotionThreshold` | `int` | `5` | Nivel mínimo de movimiento (0–100) para disparar el evento |
 | `CompareGreyscale` | `bool` | `true` | Comparar fotogramas usando promedio de escala de grises |
+| `CompareRed` | `bool` | `true` | Comparar el canal rojo cuando `CompareGreyscale` es `false` |
+| `CompareGreen` | `bool` | `true` | Comparar el canal verde cuando `CompareGreyscale` es `false` |
+| `CompareBlue` | `bool` | `true` | Comparar el canal azul cuando `CompareGreyscale` es `false` |
 | `GridWidth` | `int` | `8` | Número de celdas horizontales en la matriz de movimiento |
 | `GridHeight` | `int` | `8` | Número de celdas verticales en la matriz de movimiento |
 
 El evento `OnMotionDetected` proporciona:
 
 - `Level` — intensidad de movimiento general (0–100)
-- `Matrix` — `byte[]` de tamaño `GridWidth × GridHeight`, intensidad de movimiento por celda
+- `Matrix` — `byte[]` de tamaño `GridWidth × GridHeight`, intensidad de movimiento por celda; vacío, con un error registrado una vez, cuando la cuadrícula no cabe en el fotograma (una dimensión menor que 1 o mayor que la del fotograma)
 
 El evento se dispara solo cuando `Level >= MotionThreshold`. Los manejadores de eventos se ejecutan en un hilo en segundo plano de GStreamer y deben ser seguros para subprocesos.
 

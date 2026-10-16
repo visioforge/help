@@ -41,7 +41,7 @@ Leyenda: ✅ soportado · ⚠️ parcial · ❌ no soportado
 | Windows Editor + Standalone Player | x86_64 | Mono *(predeterminado)* o IL2CPP | Windows 10 1809 / Server 2019 |
 | macOS Editor + Standalone Player | Universal arm64 + x86_64 | Mono *(predeterminado)* o IL2CPP | macOS 11 Big Sur |
 | Android Standalone Player | arm64-v8a | IL2CPP *(obligatorio)* | Android 7.0 / API 24 |
-| iOS Standalone Player | dispositivo arm64 | IL2CPP *(obligatorio)* | iOS 15 |
+| iOS Standalone Player | dispositivo arm64 | IL2CPP *(obligatorio)* | iOS 16.4 |
 
 Otros targets de build (Linux, WebGL, UWP, tvOS, visionOS, SDKs de consola) no son parte del
 paquete hoy.

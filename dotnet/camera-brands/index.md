@@ -246,7 +246,7 @@ For quick reference, here are the primary RTSP URL patterns for popular camera b
 | Imou | `rtsp://IP:554/cam/realmonitor?channel=1&subtype=0` | 554 |
 | Wyze | `rtsp://IP:8554/live` | 8554 |
 | Aqara | `rtsp://IP:554/live/ch00_1` | 554 |
-| Verkada | N/A (cloud-only) | N/A |
+| Verkada | `rtsp://IP:8554/standard` (RTSP enabled per camera) | 8554 |
 | Rhombus | `rtsp://IP:554/live` (if enabled) | 554 |
 | Arlo | N/A (no RTSP) | N/A |
 | Eufy Security | `rtsp://IP:554/live0` | 554 |

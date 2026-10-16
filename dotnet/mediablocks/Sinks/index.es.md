@@ -1011,13 +1011,9 @@ Nombre: HLSSinkBlock.
 ```mermaid
 graph LR;
     UniversalSourceBlock-->AACEncoderBlock;
-    UniversalSourceBlock-->H264EncoderBlock1;
-    UniversalSourceBlock-->H264EncoderBlock2;
-    UniversalSourceBlock-->H264EncoderBlock3;
+    UniversalSourceBlock-->H264EncoderBlock;
     AACEncoderBlock-->HLSSinkBlock;
-    H264EncoderBlock1-->HLSSinkBlock;
-    H264EncoderBlock2-->HLSSinkBlock;
-    H264EncoderBlock3-->HLSSinkBlock;
+    H264EncoderBlock-->HLSSinkBlock;
 ```
 
 #### Código de ejemplo
@@ -1033,14 +1029,8 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 var audioEncoderBlock = new AACEncoderBlock(AACEncoderBlock.GetDefaultSettings());
 pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
 
-// 3 codificadores de video con diferentes bitrates para transmisión adaptativa
-var videoEncoderBlock1 = new H264EncoderBlock(new OpenH264EncoderSettings { Bitrate = 3000, Width = 1920, Height = 1080 });
-var videoEncoderBlock2 = new H264EncoderBlock(new OpenH264EncoderSettings { Bitrate = 1500, Width = 1280, Height = 720 });
-var videoEncoderBlock3 = new H264EncoderBlock(new OpenH264EncoderSettings { Bitrate = 800, Width = 854, Height = 480 });
-
-pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock1.Input);
-pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock2.Input);
-pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock3.Input);
+var videoEncoderBlock = new H264EncoderBlock(new OpenH264EncoderSettings { Bitrate = 3000 });
+pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
 
 // Configurar sink HLS con selección automática (prefiere hlssink3)
 var hlsSettings = new HLSSinkSettings()
@@ -1058,13 +1048,8 @@ var hlsSettings = new HLSSinkSettings()
 
 var sinkBlock = new HLSSinkBlock(hlsSettings);
 
-// Conectar audio
 pipeline.Connect(audioEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
-
-// Conectar variantes de video
-pipeline.Connect(videoEncoderBlock1.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
-pipeline.Connect(videoEncoderBlock2.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
-pipeline.Connect(videoEncoderBlock3.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(videoEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
 
 await pipeline.StartAsync();
 ```
@@ -1086,7 +1071,9 @@ var hlsSettings = new HLSSinkSettings()
 };
 
 var sinkBlock = new HLSSinkBlock(hlsSettings);
-// Conecte los streams como en el ejemplo básico
+
+// hlscmafsink acepta un único stream: conecte una entrada de video o una de audio, no ambas
+pipeline.Connect(videoEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
 ```
 
 ##### Streaming VOD (vídeo bajo demanda)
@@ -1110,34 +1097,57 @@ var sinkBlock = new HLSSinkBlock(hlsSettings);
 
 ##### Streaming adaptativo multi-variante (playlist maestra)
 
+Cada entrada se añade con una variante (`HLSVariantStream`: URI de la playlist de medios y ancho de banda en bits por segundo) o una renditión alternativa (`HLSAlternateRendition`). Las URI son relativas a la playlist maestra; cada playlist de medios y sus segmentos se escriben en la carpeta que indica su URI, por lo que cada variante y renditión necesita su propia carpeta, y `Location` no se utiliza.
+
 ```csharp
-// Configurar el sink HLS con soporte multivariante para streaming adaptativo real
+// Dividir el video en dos renditiones de distinto tamaño y bitrate
+var tee = new TeeBlock(2, MediaBlockPadMediaType.Video);
+pipeline.Connect(fileSource.VideoOutput, tee.Input);
+
+var resizeHi = new VideoResizeBlock(1280, 720);
+var resizeLo = new VideoResizeBlock(640, 360);
+pipeline.Connect(tee.Outputs[0], resizeHi.Input);
+pipeline.Connect(tee.Outputs[1], resizeLo.Input);
+
+var encoderHi = new H264EncoderBlock(new OpenH264EncoderSettings { Bitrate = 3000 });
+var encoderLo = new H264EncoderBlock(new OpenH264EncoderSettings { Bitrate = 800 });
+pipeline.Connect(resizeHi.Output, encoderHi.Input);
+pipeline.Connect(resizeLo.Output, encoderLo.Input);
+
 var hlsSettings = new HLSSinkSettings()
 {
     SinkType = HLSSinkType.HlsMultivariantSink,
+    MultivariantMuxerType = HLSMultivariantMuxerType.Cmaf,
     PlaylistLocation = @"c:\inetpub\wwwroot\hls\master.m3u8",
     TargetDuration = TimeSpan.FromSeconds(6)
 };
 
 var sinkBlock = new HLSSinkBlock(hlsSettings);
 
-// Conectar varias variantes de video con distintas calidades
-// hlsmultivariantsink crea automáticamente las playlists de variantes y la playlist maestra
-pipeline.Connect(videoEncoderBlock1.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
-pipeline.Connect(videoEncoderBlock2.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
-pipeline.Connect(videoEncoderBlock3.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video));
-pipeline.Connect(audioEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio));
+// Dos variantes de video que se reproducen con el grupo de audio "aac"
+pipeline.Connect(encoderHi.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video,
+    new HLSVariantStream("hi/video.m3u8", 3000000) { AudioGroupId = "aac" }));
+pipeline.Connect(encoderLo.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Video,
+    new HLSVariantStream("lo/video.m3u8", 800000) { AudioGroupId = "aac" }));
+
+// Audio como renditión alternativa del grupo "aac"
+pipeline.Connect(audioEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPadMediaType.Audio,
+    new HLSAlternateRendition("audio/audio.m3u8", "aac", "English") { Language = "en", Default = true }));
 ```
+
+Con `MultivariantMuxerType = HLSMultivariantMuxerType.MpegTs`, una entrada de video y una de audio añadidas con la misma URI de variante se multiplexan en un único stream MPEG-TS. Con CMAF cada variante y renditión lleva un único stream, por lo que el audio va en una renditión alternativa.
 
 #### Características del sink HLS
 
 ##### Tipos de sink
 
-- **Auto** (predeterminado): selecciona automáticamente la mejor implementación disponible (prefiere hlssink3 → hlsmultivariantsink → hlscmafsink → hlssink2)
+- **Auto** (predeterminado): selecciona automáticamente la mejor implementación disponible (hlssink3, con hlssink2 como alternativa)
 - **HlsSink3**: implementación más reciente con segmentos MPEG-TS, soporta tipos de playlist, program date time y funciones mejoradas
-- **HlsMultivariantSink**: streaming adaptativo multi-bitrate con generación automática de playlist maestra para múltiples variantes de calidad
-- **HlsCmafSink**: segmentos CMAF/fMP4 para mejor compatibilidad con navegadores y reproductores modernos
+- **HlsMultivariantSink**: streaming adaptativo multi-bitrate con generación automática de playlist maestra para múltiples variantes de calidad; cada entrada necesita un `HLSVariantStream` o un `HLSAlternateRendition`
+- **HlsCmafSink**: segmentos CMAF/fMP4 para mejor compatibilidad con navegadores y reproductores modernos; acepta un único stream (una entrada de video o una de audio)
 - **HlsSink2**: implementación heredada para compatibilidad hacia atrás
+
+Cualquier tipo distinto de Auto hace fallar el inicio si su elemento no está disponible en el runtime; solo Auto recurre a una alternativa.
 
 ##### Tipos de playlist
 
@@ -1150,14 +1160,15 @@ pipeline.Connect(audioEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPa
 | Propiedad | Descripción | Soporte por sink |
 |----------|-------------|------------------|
 | `SinkType` | Implementación de sink (Auto, HlsSink2, HlsSink3, HlsCmafSink, HlsMultivariantSink) | Todos |
+| `MultivariantMuxerType` | Contenedor de los segmentos (Cmaf, MpegTs) | HlsMultivariantSink |
 | `Location` | Patrón del archivo de segmento (p. ej., segment_%05d.ts o .m4s) | Todos excepto HlsMultivariantSink |
 | `InitLocation` | Patrón del segmento de init para CMAF (p. ej., init_%03d.mp4) | HlsCmafSink |
-| `PlaylistLocation` | Ruta del archivo de playlist de salida (.m3u8, master.m3u8 para multivariante) | Todos |
+| `PlaylistLocation` | Ruta del archivo de playlist de salida (.m3u8; la playlist maestra en multivariante) | Todos |
 | `PlaylistRoot` | URL base para los segmentos en la playlist | Todos excepto HlsMultivariantSink |
 | `TargetDuration` | Duración objetivo del segmento (TimeSpan) | Todos |
-| `PlaylistLength` | Número de segmentos en la playlist (0 = sin límite) | Todos excepto HlsMultivariantSink |
-| `MaxFiles` | Máximo de archivos conservados en disco | Todos excepto HlsMultivariantSink |
-| `PlaylistType` | Tipo de playlist (Unspecified, Event, Vod) | HlsSink3, HlsCmafSink |
+| `PlaylistLength` | Número de segmentos en la playlist (0 = sin límite) | Todos |
+| `MaxFiles` | Máximo de archivos conservados en disco | Todos |
+| `PlaylistType` | Tipo de playlist (Unspecified, Event, Vod) | HlsSink3, HlsCmafSink, HlsMultivariantSink |
 | `EnableProgramDateTime` | Añade etiquetas #EXT-X-PROGRAM-DATE-TIME | HlsSink3, HlsCmafSink |
 | `EnableEndlist` | Añade #EXT-X-ENDLIST al final | HlsSink3, HlsCmafSink |
 | `IFramesOnly` | Crea playlist de solo I-frames | HlsSink3 |
@@ -1599,14 +1610,14 @@ Use `DASHSinkSettings` para configurar la salida DASH:
 
 | Propiedad | Tipo | Valor por defecto | Descripción |
 | --- | --- | --- | --- |
-| `MPDFilename` | `string` | `c:\inetpub\wwwroot\dash\manifest.mpd` | Ruta completa del archivo de manifiesto MPD |
+| `MPDFilename` | `string` | `c:\inetpub\wwwroot\dash\manifest.mpd` | Ruta completa del archivo de manifiesto MPD; los segmentos de medios se escriben en la misma carpeta |
 | `MPDBaseURL` | `string` | `""` | URL base antepuesta a los nombres de segmentos en el manifiesto |
-| `TargetDuration` | `TimeSpan` | 5 s | Duración objetivo por segmento de medios |
+| `TargetDuration` | `TimeSpan` | 5 s | Duración objetivo por segmento de medios, redondeada hacia arriba a segundos enteros; `TimeSpan.Zero` desactiva la segmentación |
 | `MinBufferTime` | `TimeSpan` | 2 s | Tiempo mínimo de buffer anunciado en el manifiesto |
 | `Dynamic` | `bool` | `false` | `false` = VOD/estático; `true` = transmisión en vivo |
 | `PresentationDelay` | `TimeSpan` | 0 | Retraso de presentación (solo en vivo) |
 | `MinimumUpdatePeriod` | `TimeSpan` | 0 | Intervalo de actualización del MPD (solo en vivo) |
-| `TimeShiftBufferDepth` | `TimeSpan` | 0 | Profundidad de ventana DVR (solo en vivo) |
+| `TimeShiftBufferDepth` | `TimeSpan` | 0 | No se aplica: el sink DASH subyacente no tiene ajuste de ventana DVR |
 | `SendKeyframeRequests` | `bool` | `true` | Solicitar keyframes en los límites de segmentos |
 | `Custom_HTTP_Server_Enabled` | `bool` | `false` | Habilitar servidor HTTP integrado para servir segmentos |
 | `Custom_HTTP_Server_Port` | `int` | 80 | Puerto del servidor HTTP integrado |

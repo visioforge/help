@@ -87,6 +87,13 @@ The indexed form is the one to prefer when you generate documents: it addresses 
 unindexed form needs a main pad that not every block has. For a muxing sink such as `MP4SinkBlock`,
 `input:0` and `input:1` are the video and audio streams.
 
+Muxing sinks create their inputs while the document loads. For those, the `To` reference may
+also carry a `mediaType` (`Video`, `Audio`, …) — the pipeline snapshot writes it — and the input is
+created with that type; without it, the input takes the type of the connected output pad. A sink that has
+no track for an input's type — an `Auto` input from a tee or a parser on an MP4 sink, for one — fails
+the pipeline start with an error; an MPEG-TS sink outside split mode takes an `Auto`
+input.
+
 A minimal document:
 
 ```json

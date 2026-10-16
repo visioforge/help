@@ -44,11 +44,11 @@ Before beginning your iOS deployment process, ensure your development environmen
 
 ### Software Requirements
 
-- Apple iOS device running iOS 12 or later (latest version recommended)
-- Xcode 12 or later with iOS SDK installed
+- Apple iOS device running iOS 16.4 or later (the minimum of the native `VisioForge.CrossPlatform.Core.iOS` libraries)
+- .NET 9 or .NET 10 SDK with the iOS workload (`dotnet workload install ios`); the SDK targets `net9.0-ios` and `net10.0-ios`
+- The Xcode version your iOS workload requires (Xcode 26 or later for .NET 10)
 - Apple Developer account (required for app signing and distribution)
-- Visual Studio for Mac, JetBrains Rider, or Visual Studio Code
-- .Net 7.0 SDK or later (we recommend the latest stable version)
+- JetBrains Rider or Visual Studio Code (Visual Studio for Mac was retired in 2024)
 
 ## Architecture Support
 
@@ -64,8 +64,8 @@ The VisioForge SDK for iOS provides native support for both major iOS device arc
 
 Follow these steps to properly set up and deploy your VisioForge-powered iOS application:
 
-1. Install the .Net SDK for iOS development
-2. Create a new iOS project in your preferred IDE (Visual Studio for Mac or JetBrains Rider recommended)
+1. Install the .NET SDK and the iOS workload
+2. Create a new iOS project in your preferred IDE (JetBrains Rider or Visual Studio Code)
 3. Add the required NuGet packages to your project (detailed in the next section)
 4. Configure the necessary permissions and entitlements in your app's Info.plist file
 5. Implement your application logic using the VisioForge SDK components
@@ -175,6 +175,23 @@ Here's a complete example of an Info.plist file with all necessary permissions:
     </array>
     <key>XSAppIconAssets</key>
     <string>Assets.xcassets/appicon.appiconset</string>
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <false/>
+        <key>UISceneConfigurations</key>
+        <dict>
+            <key>UIWindowSceneSessionRoleApplication</key>
+            <array>
+                <dict>
+                    <key>UISceneConfigurationName</key>
+                    <string>Default Configuration</string>
+                    <key>UISceneDelegateClassName</key>
+                    <string>SceneDelegate</string>
+                </dict>
+            </array>
+        </dict>
+    </dict>
     <key>NSCameraUsageDescription</key>
     <string>Camera access is required for video recording</string>
     <key>NSMicrophoneUsageDescription</key>
@@ -238,6 +255,9 @@ Properly initialize the VisioForge SDK in your application's lifecycle:
 
 ```csharp
 // In your AppDelegate or application startup code
+// The window SceneDelegate creates is kept here
+public override UIWindow? Window { get; set; }
+
 public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 {
     // Initialize the VisioForge SDK
@@ -257,6 +277,74 @@ public override void WillTerminate(UIApplication application)
     // Your other cleanup code
 }
 ```
+
+!!! warning "iOS 27: the scene lifecycle is required"
+    Apps built with the iOS 27 SDK must adopt the UIKit scene lifecycle. Without `UIApplicationSceneManifest` in `Info.plist`, iOS kills the app at launch, before any UI appears. `InitSDK()` can stay in `FinishedLaunching`, but the window must be created in a `SceneDelegate` from the connecting `UIWindowScene`, not in `FinishedLaunching`.
+
+Add the scene manifest to `Info.plist` (the complete example above already has it):
+
+```xml
+<key>UIApplicationSceneManifest</key>
+<dict>
+    <key>UIApplicationSupportsMultipleScenes</key>
+    <false/>
+    <key>UISceneConfigurations</key>
+    <dict>
+        <key>UIWindowSceneSessionRoleApplication</key>
+        <array>
+            <dict>
+                <key>UISceneConfigurationName</key>
+                <string>Default Configuration</string>
+                <key>UISceneDelegateClassName</key>
+                <string>SceneDelegate</string>
+            </dict>
+        </array>
+    </dict>
+</dict>
+```
+
+Create the window in `SceneDelegate.cs`:
+
+```csharp
+[Register("SceneDelegate")]
+public class SceneDelegate : UIResponder, IUIWindowSceneDelegate
+{
+    [Export("window")] public UIWindow? Window { get; set; }
+
+    [Export("scene:willConnectToSession:options:")]
+    public void WillConnect(UIScene scene, UISceneSession session, UISceneConnectionOptions connectionOptions)
+    {
+        if (scene is not UIWindowScene windowScene)
+        {
+            return;
+        }
+
+        // Keep the window in AppDelegate: a scene that reconnects gets the same window back.
+        // MainViewController stands for your own root view controller.
+        var app = (AppDelegate)UIApplication.SharedApplication.Delegate;
+        app.Window ??= new UIWindow(windowScene) { RootViewController = new MainViewController() };
+        Window = app.Window;
+        Window.WindowScene = windowScene;
+        Window.MakeKeyAndVisible();
+    }
+}
+```
+
+### .NET MAUI Apps
+
+In a MAUI app, MAUI creates the window itself, so the native `SceneDelegate` above is not needed. Add the same `UIApplicationSceneManifest`, with `__MAUI_DEFAULT_SCENE_CONFIGURATION__` as the `UISceneConfigurationName` (MAUI looks its configuration up by that name), to `Platforms/iOS/Info.plist` (and to `Platforms/MacCatalyst/Info.plist` if you target Mac Catalyst), keep the template's `AppDelegate : MauiUIApplicationDelegate`, and add an empty `SceneDelegate` next to it:
+
+```csharp
+// Platforms/iOS/SceneDelegate.cs, and the same file in Platforms/MacCatalyst/
+using Foundation;
+
+[Register("SceneDelegate")]
+public class SceneDelegate : MauiUISceneDelegate
+{
+}
+```
+
+The iOS [agent skills](../agent-skills/index.md) (`media-player-sdk-x-ios`, `video-capture-sdk-x-ios`, `media-blocks-sdk-net-ios`) bundle a complete `SceneDelegate.cs` and `Info.plist`.
 
 ## Implementation Best Practices
 

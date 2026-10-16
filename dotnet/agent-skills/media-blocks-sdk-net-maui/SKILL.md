@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK .NET into a .NET MAUI cross-p
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a .NET MAUI application that targets **Windows, Android, iOS, and macOS (Mac Catalyst)** from a single codebase. Media Blocks is a *graph-based* pipeline SDK — you build a `MediaBlocksPipeline` by connecting `MediaBlock` nodes (sources → transforms → encoders → sinks/renderers) similar to GStreamer or DirectShow. That's the primary trade-off vs the higher-level capture/edit/player SDKs: more flexibility, more wiring code.
 
-Pinned NuGet version: **`2026.10.2`** for the MAUI SDK packages, with platform-specific redists at the versions shown in the csproj below — these match the official [Simple Capture MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/SimpleCapture). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it; keep `VisioForge.DotNet.MediaBlocks` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet version: **`2026.10.15`** for the MAUI SDK packages, with platform-specific redists at the versions shown in the csproj below — these match the official [Simple Capture MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/SimpleCapture). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it; keep `VisioForge.DotNet.MediaBlocks` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -75,22 +75,59 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.10.15" />
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.10.15" />
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.10.14" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.10.15" />
 </ItemGroup>
 ```
 
 The Mac Catalyst target additionally needs an `AfterTargets="Build"` step (`CopyNativeLibrariesToMonoBundle`) that copies `.dylib` / `.so` files into the `.app/Contents/MonoBundle/` folder. This is included verbatim in `references/Sample.csproj`. Without it, the bundled `.app` cannot find the native runtime at launch and crashes with a `dlopen` failure.
+
+### Scene lifecycle and minimum OS versions (iOS 27 SDK)
+
+Apps built with the iOS 27 and Mac Catalyst 27 SDKs must use the UIKit scene lifecycle: without a `UIApplicationSceneManifest` the app is killed at launch, before any UI appears. Each Apple head (`Platforms/iOS` and `Platforms/MacCatalyst`) needs the manifest in its `Info.plist` and a registered `SceneDelegate`. MAUI forwards the scene events itself, so the class stays empty:
+
+```xml
+<key>UIApplicationSceneManifest</key>
+<dict>
+    <key>UIApplicationSupportsMultipleScenes</key>
+    <false/>
+    <key>UISceneConfigurations</key>
+    <dict>
+        <key>UIWindowSceneSessionRoleApplication</key>
+        <array>
+            <dict>
+                <key>UISceneConfigurationName</key>
+                <string>__MAUI_DEFAULT_SCENE_CONFIGURATION__</string>
+                <key>UISceneDelegateClassName</key>
+                <string>SceneDelegate</string>
+            </dict>
+        </array>
+    </dict>
+</dict>
+```
+
+```csharp
+// Platforms/iOS/SceneDelegate.cs and Platforms/MacCatalyst/SceneDelegate.cs
+using Foundation;
+using Microsoft.Maui;
+
+[Register("SceneDelegate")]
+public class SceneDelegate : MauiUISceneDelegate
+{
+}
+```
+
+Keep `__MAUI_DEFAULT_SCENE_CONFIGURATION__` verbatim (it must match MAUI's own configuration name) and the `[Register]` name equal to `UISceneDelegateClassName`. The same SDKs refuse a `SupportedOSPlatformVersion` below 15.0 for iOS and 17.0 for Mac Catalyst, and VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older; `references/Sample.csproj` uses 16.4 for iOS and 17.0 for Mac Catalyst.
 
 ### MauiProgram registration
 
@@ -282,6 +319,7 @@ The bundled `references/MainPage.xaml.cs` extends this with audio source, audio 
 - [ ] App launches on each target OS and shows the camera preview within ~2 s after permission grant.
 - [ ] If recording: the MP4 is finalised when `StopAsync` runs to completion before `Dispose` (verify the file plays back in another player).
 - [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called on every `MediaBlocksPipeline` instance before its `StartAsync`.
+- [ ] `Platforms/iOS` and `Platforms/MacCatalyst` each have the `UIApplicationSceneManifest` in `Info.plist` and a `SceneDelegate : MauiUISceneDelegate` (the iOS 27 SDK kills a scene-less app at launch).
 
 ## Bundled references
 

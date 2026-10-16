@@ -62,7 +62,7 @@ All cross-platform targets use a GStreamer-backed decoding pipeline with hardwar
 Main SDK package (always required):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.10.2" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.10.15" />
 ```
 
 Windows x64 native runtime:
@@ -95,15 +95,15 @@ Linux x64 (plus system GStreamer 1.22+):
 Android and iOS:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.10.9" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 
 Optional UI framework packages — add whichever you target:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.2" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.10.2" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.15" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.10.15" />
 ```
 
 Full per-IDE install walkthrough: [install/index.md](../install/index.md).

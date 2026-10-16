@@ -775,7 +775,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Animated GIF Source Block
 
-El `AnimatedGIFSourceBlock` genera un flujo de video a partir de un archivo GIF animado. Admite tasa de fotogramas configurable, bucle y modos de transmisión en vivo o con capacidad de búsqueda.
+El `AnimatedGIFSourceBlock` genera un flujo de video a partir de un archivo GIF animado. Reproduce el GIF con sus propios retardos de fotograma, como flujo en vivo, y admite bucle.
 
 #### Información del bloque
 
@@ -792,10 +792,10 @@ El bloque acepta una instancia de `ImageVideoSourceSettings`:
 | Propiedad | Tipo | Predeterminado | Descripción |
 | --- | --- | :---: | --- |
 | `Filename` | `string` | requerido | Ruta al archivo GIF animado |
-| `IsLive` | `bool` | `false` | Tratar la fuente como en vivo (no buscable) |
-| `NumBuffers` | `int` | `-1` | Máximo de fotogramas a emitir (−1 = ilimitado) |
+| `IsLive` | `bool` | `false` | No se usa: la fuente GIF es siempre en vivo |
+| `NumBuffers` | `int` | `-1` | No lo usa este bloque |
 | `AnimationInfiniteLoop` | `bool` | `true` | Reproducir la animación en bucle indefinidamente |
-| `FrameRate` | `VideoFrameRate` | `FPS_10` | Tasa de fotogramas de salida |
+| `FrameRate` | `VideoFrameRate` | `FPS_10` | No se usa: el GIF se reproduce con sus propios retardos de fotograma |
 
 #### El pipeline de muestra
 
@@ -811,8 +811,7 @@ var pipeline = new MediaBlocksPipeline();
 
 var settings = new ImageVideoSourceSettings("C:/media/animation.gif")
 {
-    AnimationInfiniteLoop = true,
-    FrameRate = VideoFrameRate.FPS_25
+    AnimationInfiniteLoop = true
 };
 
 var gifSource = new AnimatedGIFSourceBlock(settings);
@@ -1759,7 +1758,7 @@ El primer argumento del constructor es `IVideoSourceSettings`. Implementaciones 
 
 - `StaticTextFallbackSettings` — superposición de texto con fuente, color y posición configurables
 - `StaticImageFallbackSettings` — muestra una imagen estática (ruta, escala, opciones de relación de aspecto)
-- `MediaBlockFallbackSettings` — reproduce un URI de respaldo o pipeline GStreamer personalizado
+- `MediaBlockFallbackSettings` — reproduce un URI de respaldo
 
 **Métodos de diagnóstico:**
 
@@ -2117,7 +2116,7 @@ El bloque se configura mediante `StaticTextFallbackSettings`:
 | `Text` | `string` | `"Source Unavailable"` | Texto a mostrar |
 | `FontFamily` | `string` | `"Arial"` | Nombre de la familia de fuentes |
 | `FontSize` | `float` | `24` | Tamaño de fuente en puntos |
-| `FontStyle` | `FontStyle` | `Normal` | Estilo de fuente (Normal, Negrita, Cursiva, etc.) |
+| `FontStyle` | `FontStyle` | `Normal` | Estilo de fuente (Normal, Italic, Oblique) |
 | `TextColor` | `SKColor` | Blanco | Color del texto |
 | `BackgroundColor` | `SKColor` | Negro | Color de relleno del fondo |
 | `Position` | `SKPoint` | `(0.5, 0.5)` | Posición de anclaje del texto como proporción (0–1) |
@@ -2823,7 +2822,7 @@ macOS (no disponible en iOS)
 
 ### Blu-Ray Source Block
 
-El `BluRaySourceBlock` lee flujos de video, audio y subtítulos opcionales desde un disco Blu-Ray o una carpeta de imagen de disco Blu-Ray usando el elemento GStreamer `bluray`.
+El `BluRaySourceBlock` lee flujos de video, audio y subtítulos opcionales desde un disco Blu-Ray o una carpeta de imagen de disco Blu-Ray decodificando el flujo `.m2ts` del disco con el elemento GStreamer `decodebin3`.
 
 #### Información del bloque
 
@@ -2843,9 +2842,9 @@ Nombre: BluRaySourceBlock.
 | `Title` | `int` | `-1` | Título a reproducir (−1 = título principal) |
 | `RenderVideo` | `bool` | `true` | Habilitar salida de video |
 | `RenderAudio` | `bool` | `true` | Habilitar salida de audio |
-| `RenderSubtitle` | `bool` | `false` | Habilitar salida de subtítulos |
+| `RenderSubtitle` | `bool` | `false` | Habilitar salida de subtítulos (no recibe datos: los subtítulos PGS no se entregan) |
 | `AudioStream` | `int` | `-1` | Índice del flujo de audio (−1 = predeterminado) |
-| `SubtitleStream` | `int` | `-1` | Índice del flujo de subtítulos (−1 = predeterminado) |
+| `SubtitleStream` | `int` | `-1` | Índice del flujo de subtítulos (−1 = predeterminado; sin efecto, los subtítulos PGS no se entregan) |
 
 #### El pipeline de muestra
 
@@ -3100,65 +3099,6 @@ bool available = RaspberryPiSourceBlock.IsAvailable();
 #### Plataformas
 
 Linux (Raspberry Pi).
-
----
-
-### GStreamer PlayBin Source Block
-
-El `PlayBinSourceBlock` reproduce medios usando el elemento `playbin` integrado de GStreamer. Acepta los mismos `UniversalSourceSettings` que `UniversalSourceBlock`, pero delega toda la construcción del pipeline de decodificación al motor de reproducción de alto nivel de GStreamer.
-
-#### Información del bloque
-
-Nombre: PlayBinSourceBlock.
-
-| Dirección del pin | Tipo de medio | Conteo de pines |
-| --- | :---: | :---: |
-| Salida video | Video sin comprimir | 0 o 1 |
-| Salida audio | Audio sin comprimir | 0 o 1 |
-| Salida subtítulo | Subtítulo | 0 o 1 |
-
-#### Configuración
-
-Usa `UniversalSourceSettings`. Propiedades clave:
-
-| Propiedad | Tipo | Predeterminado | Descripción |
-| --- | --- | :---: | --- |
-| `URI` | `Uri` | requerido | URI de la fuente de medios |
-| `RenderVideo` | `bool` | `true` | Habilitar salida de video |
-| `RenderAudio` | `bool` | `true` | Habilitar salida de audio |
-| `RenderSubtitle` | `bool` | `false` | Habilitar salida de subtítulos |
-| `StartPosition` | `TimeSpan?` | `null` | Posición de inicio de reproducción |
-| `StopPosition` | `TimeSpan?` | `null` | Posición de fin de reproducción |
-| `VideoCustomFrameRate` | `VideoFrameRate?` | `null` | Anular la tasa de fotogramas de salida |
-
-#### El pipeline de muestra
-
-```mermaid
-graph LR;
-    PlayBinSourceBlock -- Video --> VideoRendererBlock;
-    PlayBinSourceBlock -- Audio --> AudioRendererBlock;
-```
-
-#### Código de muestra
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var settings = await UniversalSourceSettings.CreateAsync(new Uri("file:///video.mp4"));
-var source = new PlayBinSourceBlock(settings);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(source.VideoOutput, videoRenderer.Input);
-
-var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(source.AudioOutput, audioRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-#### Plataformas
-
-Windows, macOS, Linux, Android, iOS.
 
 ---
 

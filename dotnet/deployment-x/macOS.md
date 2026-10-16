@@ -177,7 +177,7 @@ For MAUI projects targeting macOS (through MacCatalyst), add these packages:
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.2" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.15" />
 </ItemGroup>
 ```
 

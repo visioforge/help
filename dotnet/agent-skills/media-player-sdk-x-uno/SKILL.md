@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Media Player SDK X** — the cross-platfor
 
 `MediaPlayerCoreX` is the high-level open/play/seek god-object — same API as on the WPF/MAUI/WinUI hosts, just bound to Uno's `VideoView`. Under the hood it shares the GStreamer-backed engine with Media Blocks. It opens local files, HTTP(S)/HLS/DASH/RTSP streams, and any other URL the underlying engine can demux.
 
-Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Player sample): wrapper **`2026.10.2`**, Uno UI **`2026.10.2`**, Windows redists **`2026.9.11`**, Android redist **`2026.9.17`**, iOS redist **`2026.9.11`**, Mac Catalyst redist **`2026.9.11`**. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Player sample): wrapper **`2026.10.15`**, Uno UI **`2026.10.15`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -68,13 +68,14 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net10.0-windows10.0.19041;net10.0-android</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net10.0-maccatalyst;net10.0-android</TargetFrameworks>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">17.0</SupportedOSPlatformVersion>
     <UnoSingleProject>true</UnoSingleProject>
     <RunAOTCompilation>false</RunAOTCompilation>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.10.2" />
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.10.2" />
+    <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.10.15" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.10.15" />
   </ItemGroup>
 </Project>
 ```
@@ -85,13 +86,65 @@ The Mac Catalyst target additionally needs an `AfterTargets="Build"` step (`Copy
 
 `<RunAOTCompilation>false</RunAOTCompilation>` is required — the native-interop layer is reflection-heavy in places and doesn't survive AOT trimming today. Uno's default for some heads is AOT-on; the upstream sample explicitly turns it off, and so should you.
 
+### Scene lifecycle and minimum OS versions (iOS 27 SDK)
+
+Apps built with the iOS 27 and Mac Catalyst 27 SDKs must use the UIKit scene lifecycle: without a `UIApplicationSceneManifest` the app is killed at launch, before any UI appears. Uno 6 has no scene delegate of its own and still builds its window in `OnLaunched`, so each Apple head (`Platforms/MacCatalyst`, and `Platforms/iOS` if you add it) needs the manifest in its `Info.plist` and a small `SceneDelegate` that hands that window to the scene. `App` exposes that window as a static `MainWindow` property for it (see `references/App.xaml.cs`):
+
+```xml
+<key>UIApplicationSceneManifest</key>
+<dict>
+    <key>UIApplicationSupportsMultipleScenes</key>
+    <false/>
+    <key>UISceneConfigurations</key>
+    <dict>
+        <key>UIWindowSceneSessionRoleApplication</key>
+        <array>
+            <dict>
+                <key>UISceneConfigurationName</key>
+                <string>Default Configuration</string>
+                <key>UISceneDelegateClassName</key>
+                <string>SceneDelegate</string>
+            </dict>
+        </array>
+    </dict>
+</dict>
+```
+
+```csharp
+// Platforms/MacCatalyst/SceneDelegate.cs (and Platforms/iOS/SceneDelegate.cs)
+using Foundation;
+using Uno.UI.Xaml;
+using UIKit;
+
+// A child of App's namespace, so `App` resolves without a using.
+namespace MyUnoApp.MacCatalyst;
+
+[Register("SceneDelegate")]
+public class SceneDelegate : UIWindowSceneDelegate
+{
+    public override UIWindow? Window { get; set; }
+
+    public override void WillConnect(UIScene scene, UISceneSession session, UISceneConnectionOptions connectionOptions)
+    {
+        if (scene is UIWindowScene windowScene && App.MainWindow is { } window && WindowHelper.GetNativeWindow(window) is UIWindow nativeWindow)
+        {
+            Window = nativeWindow;
+            nativeWindow.WindowScene = windowScene;
+            nativeWindow.MakeKeyAndVisible();
+        }
+    }
+}
+```
+
+The same SDKs refuse a `SupportedOSPlatformVersion` below 17.0 for Mac Catalyst and 15.0 for iOS, VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older, and `Uno.Sdk` 6.x defaults to 15.0 for iOS and 14.2 for Mac Catalyst, so set them explicitly; `references/Sample.csproj` sets 17.0 for Mac Catalyst and already carries 16.4 for iOS, which takes effect once you add `net10.0-ios` to its `TargetFrameworks`.
+
 ### Uno "single project" structure
 
 Unlike MAUI, an Uno app is conventionally split into multiple **head projects** — one per target OS — each consuming a shared library project. The upstream Simple Player Uno sample uses the newer **`UnoSingleProject` mode** (`<UnoSingleProject>true</UnoSingleProject>`) which collapses the heads into a single multi-targeted csproj. That's the layout reflected in `references/Sample.csproj`. If your existing solution still uses the older multi-head layout, add the VisioForge package references and conditional redist blocks to **the head project that builds for that target**, not to the shared library.
 
 ### App.xaml.cs registration
 
-Uno's `App` class is plain WinUI / WinAppSDK. There is **no MAUI-style handler registration** — the `<vf:VideoView />` control wires itself up through its own `xmlns` declaration in XAML, so nothing needs to be done in `App.xaml.cs` beyond what the Uno template generates. See `references/App.xaml.cs` for the unchanged template.
+Uno's `App` class is plain WinUI / WinAppSDK. There is **no MAUI-style handler registration** — the `<vf:VideoView />` control wires itself up through its own `xmlns` declaration in XAML, so `App.xaml.cs` needs no VisioForge registration. The one change from the Uno template is that `MainWindow` is `public static`, for the Apple heads' `SceneDelegate` (see "Scene lifecycle and minimum OS versions" above); `references/App.xaml.cs` has it.
 
 ## Per-platform considerations
 
@@ -147,8 +200,13 @@ private async void MainPage_Unloaded(object sender, RoutedEventArgs e)
 {
     if (_player != null)
     {
-        await _player.StopAsync();
-        await _player.DisposeAsync();
+        // async void: an exception escaping here terminates the app.
+        try
+        {
+            try { await _player.StopAsync(); }
+            finally { await _player.DisposeAsync(); }
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); }
         _player = null;
     }
     VisioForgeX.DestroySDK();
@@ -225,12 +283,15 @@ public sealed partial class MainPage : Page
         // a network URL blocked by ATS / cleartext-traffic policy.
         try
         {
-            const string url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+            const string url = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4";
             var settings = await UniversalSourceSettings.CreateAsync(new Uri(url));
-            await _player!.OpenAsync(settings);
-            await _player.PlayAsync();
+            // A source that cannot be opened or played is reported by returning false.
+            if (!await _player!.OpenAsync(settings) || !await _player.PlayAsync())
+            {
+                System.Diagnostics.Debug.WriteLine("Unable to open or play the media.");
+            }
         }
-        catch (Exception ex) { /* surface to UI */ }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); /* surface to UI */ }
     }
 }
 ```
@@ -295,13 +356,14 @@ public sealed partial class MainPage : Page
 - [ ] Network URL playback works over HTTPS on every OS; cleartext HTTP works only where the manifest opts in.
 - [ ] On clean shutdown, the page's `Unloaded` runs `StopAsync → DisposeAsync → VisioForgeX.DestroySDK()` in that order.
 - [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called on every `MediaPlayerCoreX` instance before its `OpenAsync` (otherwise the app runs in 30-day trial mode).
+- [ ] Every Apple head has the `UIApplicationSceneManifest` in `Info.plist` and the `SceneDelegate` that hands `App.MainWindow` to the scene (the iOS 27 SDK kills a scene-less app at launch).
 
 ## Bundled references
 
 The `references/` folder is self-contained — copy all of it into a fresh `Uno.Sdk` project folder, set up `Platforms/` per the standard Uno template, and `dotnet build` succeeds with no extra files needed (apart from the `AndroidDependency/VisioForge.Core.Android.X10.csproj` companion project, which lives a few directory levels up — adjust the `<ProjectReference>` path to match your repo layout).
 
 - `references/Sample.csproj` — multi-target Uno csproj with all per-OS conditional package references and the Mac Catalyst native-copy `<Target>`.
-- `references/App.xaml` + `references/App.xaml.cs` — Uno Application entry point (unchanged from the Uno template; no VisioForge-specific registration needed).
+- `references/App.xaml` + `references/App.xaml.cs` — Uno Application entry point (the Uno template with `MainWindow` made `public static` for the `SceneDelegate`; no VisioForge-specific registration needed).
 - `references/MainPage.xaml` — XAML with `<vf:VideoView />`, seek slider, position/duration labels, play/stop button, URL textbox, and volume slider.
 - `references/MainPage.xaml.cs` — full code-behind: `InitSDKAsync` boot, `MediaPlayerCoreX` lifecycle, `OnStart` / `OnStop` / `OnError` wiring, `DispatcherTimer`-based position updates, slider seek (`Position_SetAsync`), volume control, per-OS source-settings creation (`NSUrl` on iOS, `Uri` everywhere else), and audio-device selection guarded for plain iOS. Runs in 30-day trial mode by design — add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence.
 

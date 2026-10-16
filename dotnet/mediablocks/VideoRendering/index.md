@@ -78,6 +78,7 @@ Name: VideoRendererBlock
 | Pin direction | Media type | Pins count |
 | --- | :---: | :---: |
 | Input video | uncompressed video | one or more |
+| Input subtitle | text or subpicture subtitles | one (optional) |
 
 ## Implementation Guide
 
@@ -116,6 +117,25 @@ pipeline.Connect(fileSource.VideoOutput, videoRenderer.Input);
 
 // start the pipeline
 await pipeline.StartAsync();
+```
+
+### Displaying Embedded Subtitles
+
+Connect a source's subtitle output to `SubtitleInput` and set `SubtitleEnabled` to draw the subtitle track of the file over the video - text (SRT, SSA/ASS, tx3g) and bitmap (DVD, DVB, PGS) subtitles. It works with every video view. To draw an external file instead, set `SubtitleExternalFile` and leave `SubtitleInput` unconnected.
+
+```csharp
+var fileSource = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(filename, renderSubtitle: true));
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(fileSource.VideoOutput, videoRenderer.Input);
+// SubtitleOutput is null when the file has no subtitle track
+if (fileSource.SubtitleOutput != null)
+{
+    videoRenderer.SubtitleEnabled = true;
+    pipeline.Connect(fileSource.SubtitleOutput, videoRenderer.SubtitleInput);
+}
 ```
 
 ## Platform Compatibility

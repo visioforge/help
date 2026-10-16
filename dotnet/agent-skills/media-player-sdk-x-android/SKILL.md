@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to a **native .NET for Android** application (TFM `net10.0-android`, Activity-based, NOT MAUI and NOT classic Xamarin.Android). The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level playback god-object (`MediaPlayerCoreX`) that mirrors the legacy `MediaPlayerCore` API. The same C# code works unchanged on WPF / MAUI / Avalonia / Uno / iOS / macOS — only the UI host swaps (`VideoViewTX` here, `<my:VideoView />` on MAUI, etc.) and the per-OS native redist NuGet.
 
-Pinned NuGet versions: wrapper **`2026.10.2`**, Android redist **`2026.9.17`** (the [official MediaPlayer Android sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Android/MediaPlayer) is the reference for the project layout, not for the version to pin — it can lag a release). The native redist uses the same `2026.9.17` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.10.15`**, Android redist **`2026.10.15`** (the [official MediaPlayer Android sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Android/MediaPlayer) is the reference for the project layout, not for the version to pin — it can lag a release). The native redist uses the same `2026.10.15` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -36,8 +36,8 @@ A native Android playback project needs **two NuGet packages plus one ProjectRef
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.10.2" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.10.15" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.10.15" />
   <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
 </ItemGroup>
 <ItemGroup>
@@ -252,7 +252,7 @@ Run through these after first integration:
 
 - [ ] `dotnet build -f net10.0-android` succeeds with the bundled `references/` files copied in plus the `AndroidDependency/` folder in place (no missing `.so` warnings, no `ClassNotFoundException` at runtime).
 - [ ] `dotnet build -t:Run -f net10.0-android` deploys to a connected device or emulator and plays the upstream sample's selected file end-to-end.
-- [ ] Network playback works against an HTTPS source (e.g. `https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`) without `SocketException`.
+- [ ] Network playback works against an HTTPS source (e.g. `https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4`) without `SocketException`.
 - [ ] Local-file playback works after `FilePicker.PickAsync()` returns a path (storage permission was implicitly granted by the picker on API 33+).
 - [ ] Seekbar scrubbing via `Position_Set` produces a near-instant frame update (not a multi-second stall) — confirms the source supports seek and `decodebin` chose the correct demuxer.
 - [ ] `OnDestroy` runs `StopAsync → DisposeAsync → DestroySDK` cleanly; relaunching the app shows a fresh `VideoViewTX`, not a black screen.

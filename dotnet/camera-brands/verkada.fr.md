@@ -1,14 +1,10 @@
 ---
-title: Options d'intégration RTSP et C# .NET pour caméras Verkada
-description: Options d'intégration des caméras Verkada en C# .NET. Comprenez l'architecture gérée dans le cloud, les limitations RTSP et les approches alternatives.
-meta:
-  - name: robots
-    content: "noindex, follow"
+title: URL RTSP Verkada et connexion des caméras en C# .NET
+description: Format d'URL RTSP Verkada rtsp://IP:8554/standard pour C# .NET. Activez RTSP dans Verkada Command et connectez-vous depuis Media Blocks SDK .NET.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
   - .NET
-  - MediaBlocksPipeline
   - Windows
   - macOS
   - Linux
@@ -16,15 +12,11 @@ tags:
   - iOS
   - Capture
   - Streaming
-  - Webcam
   - IP Camera
   - RTSP
-  - ONVIF
   - C#
 primary_api_classes:
-  - MediaBlocksPipeline
-  - SystemVideoSourceBlock
-  - VideoRendererBlock
+  - RTSPSourceSettings
 
 ---
 
@@ -34,66 +26,72 @@ primary_api_classes:
 
 ## Présentation de la marque
 
-**Verkada** est une société américaine de caméras de sécurité gérées dans le cloud dont le siège est à San Mateo, en Californie. Fondée en 2016, Verkada propose des caméras d'entreprise avec une architecture entièrement gérée dans le cloud. Contrairement aux caméras IP traditionnelles, les caméras Verkada sont gérées exclusivement via la plateforme cloud de Verkada — il n'y a pas de flux RTSP locaux, de prise en charge ONVIF ni d'accès réseau direct aux caméras.
+**Verkada** est une société américaine de caméras de sécurité gérées dans le cloud dont le siège est à San Mateo, en Californie. Fondée en 2016, Verkada propose des caméras d'entreprise gérées via la plateforme Verkada Command. En plus de cette gestion dans le cloud, une caméra peut diffuser des flux RTSP directement sur le réseau local dès que RTSP est activé pour elle — les caméras CR de la série distante font exception.
 
 **Faits clés :**
 
-- **Gammes de produits :** CD (mini dôme), CB (bullet), CE (dôme extérieur), CF (fisheye), CM (multi-capteurs), CP (PTZ)
-- **Architecture :** Gérée dans le cloud — tout le traitement vidéo et l'accès passent par la plateforme Verkada Command
-- **Prise en charge RTSP :** Non
+- **Gammes de produits :** CD (dôme), CB (bullet), CF (fisheye), CM (mini dôme), CH et CY (multi-capteurs), CP (PTZ), CR (distante) ; le suffixe `-E` désigne une version extérieure
+- **Architecture :** Gérée dans le cloud, avec streaming RTSP local
+- **Prise en charge RTSP :** Oui — activée caméra par caméra dans Command
 - **Prise en charge ONVIF :** Non
-- **Accès réseau local :** Aucun accès direct — les caméras communiquent uniquement avec le cloud Verkada
-- **Codecs vidéo :** H.264, H.265 (gérés par la plateforme cloud)
-- **Accès API :** API Verkada (basée sur le cloud, nécessite un abonnement entreprise)
+- **Port RTSP :** 8554
+- **Chemins de flux :** `/standard` et `/high`
+- **Accès réseau local :** RTSP uniquement, sur des adresses privées RFC 1918
+- **Codecs vidéo :** H.264, H.265 — choisis caméra par caméra dans Command
+- **Accès API :** API Verkada (basée sur le cloud ; un administrateur de l'organisation émet les clés dans Command)
 
-!!! warning "Pas de RTSP ni de streaming local"
-    Les caméras Verkada ne prennent **pas** en charge RTSP, ONVIF ou tout autre protocole de streaming local standard. Ce sont des appareils gérés dans le cloud, accessibles uniquement via la plateforme Command ou l'API de Verkada. L'intégration directe avec la source RTSP du SDK VisioForge n'est pas possible avec les caméras Verkada.
+## Activer RTSP
 
-## Pourquoi Verkada n'a pas de RTSP
+RTSP reste désactivé jusqu'à ce qu'un administrateur du site l'active pour une caméra donnée : **All Products → Cameras → sélectionnez la caméra → Settings → Device → Real Time Streaming Protocol (RTSP)**. Définissez un nom d'utilisateur et un mot de passe, puis cliquez sur **Enable**. Le mot de passe n'est affiché qu'une fois : conservez-le. Command affiche ensuite l'URL RTSP de la caméra avec un espace réservé `[PASSWORD]` : c'est à vous de le remplacer par le mot de passe que vous venez de définir, car le mot de passe ne peut plus être relu dans Command. Command peut aussi exporter un CSV de toutes les caméras de l'organisation dont RTSP est activé, avec leur URL.
 
-L'architecture de Verkada est fondamentalement différente de celle des caméras IP traditionnelles :
+Aucune licence RTSP distincte n'est requise : la règle habituelle d'une licence par caméra s'applique.
 
-1. **Conception cloud-first :** La vidéo est traitée sur la caméra et diffusée vers le cloud Verkada
-2. **Pas de ports réseau locaux :** Les caméras n'exposent pas le port 554 ni aucun point de terminaison RTSP
-3. **Accès géré :** Tout l'accès vidéo passe par Verkada Command (web/mobile)
-4. **Sécurité zero-trust :** Pas de connexions directes caméra-client sur le LAN
+## Format de l'URL RTSP
 
-Cette architecture offre un déploiement simplifié et une gestion centralisée mais élimine l'intégration directe via SDK.
-
-## Options d'intégration
-
-### Option 1 : API Verkada (basée sur le cloud)
-
-Verkada propose une API REST pour les clients entreprise qui fournit :
-
-- Liste et statut des caméras
-- Export/téléchargement de clips vidéo
-- Récupération de miniatures/captures
-- Données d'événements et d'alertes
-
-L'API **ne fournit pas** de flux RTSP en direct ni de flux vidéo en temps réel. Elle est conçue pour la récupération de clips et l'accès aux métadonnées.
-
-### Option 2 : Sortie HDMI (certains modèles)
-
-Certains modèles Verkada incluent un port de sortie HDMI pour l'affichage local. Vous pouvez capturer cette sortie à l'aide d'une carte de capture HDMI :
-
-```csharp
-// Capturer la sortie HDMI d'une caméra Verkada via une carte de capture USB
-var pipeline = new MediaBlocksPipeline();
-
-// Utiliser la source vidéo système (la carte de capture HDMI apparaît comme une webcam)
-var captureDevice = new SystemVideoSourceBlock(captureDeviceSettings);
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-
-pipeline.Connect(captureDevice.Output, videoRenderer.Input);
-await pipeline.StartAsync();
+```
+rtsp://[USERNAME]:[PASSWORD]@[CAMERA-IP]:8554/[STREAM]
 ```
 
-Cette approche fournit une vidéo locale en temps réel mais nécessite une connectivité HDMI physique et une carte de capture.
+| Flux | Chemin | Remarques |
+|--------|------|-------|
+| Standard | `/standard` | Débit plus faible |
+| Haute qualité | `/high` | Qualité complète |
 
-### Option 3 : Caméras alternatives avec RTSP
+La résolution et le débit suivent les flux natifs de la caméra et ne peuvent pas être modifiés pour RTSP.
 
-Si vous avez besoin d'une intégration RTSP directe avec des caméras d'entreprise, envisagez ces alternatives :
+Les caméras multi-capteurs (séries CH et CY) placent l'id de la caméra avant le segment de flux, `rtsp://[USERNAME]:[PASSWORD]@[CAMERA-IP]:8554/[CAMERA-ID]/high`, où l'id est celui que Command affiche pour ce capteur.
+
+## Connexion avec le SDK VisioForge
+
+Placez l'adresse et le chemin du flux dans l'URI, et passez les identifiants de Command comme `login` et `password` :
+
+```csharp
+// Caméra Verkada avec RTSP activé, flux haute qualité
+var rtspSettings = await RTSPSourceSettings.CreateAsync(
+    uri: new Uri("rtsp://192.168.1.100:8554/high"),
+    login: "rtsp-user",
+    password: "YourRtspPassword",
+    audioEnabled: true);
+```
+
+Une URI contenant le mot de passe (`rtsp://rtsp-user:YourRtspPassword@192.168.1.100:8554/high`) fonctionne également, car `rtspsrc` s'authentifie avec les identifiants présents dans l'URL. Il reste préférable de les passer séparément : l'URL que Command affiche contient un espace réservé `[PASSWORD]` à renseigner, et une fois renseignée elle circule dans les journaux, les fichiers de configuration et les captures d'écran, où le mot de passe n'a rien à faire.
+
+## Limites
+
+- **Réseau local uniquement.** Le flux provient directement de la caméra sur des adresses privées et n'est pas relayé par Verkada Cloud : un client situé sur un autre réseau a besoin d'un VPN vers ce réseau.
+- **Non chiffré.** Verkada ne propose pas RTSPS. Leur propre recommandation est de garder le réseau des caméras privé et de limiter les clients autorisés à y accéder.
+- **Le codec appartient à la caméra.** Le réglage **Settings → Device → Video Codec** de la caméra décide si le flux RTSP est en H.264 ou H.265, et H.265 n'est pas activé automatiquement pour RTSP. Il n'existe pas de repli vers H.264 : un client incapable de décoder H.265 ne voit rien tant que la caméra n'est pas configurée en H.264.
+- **L'audio est désactivé tant qu'il n'est pas activé.** L'audio de la caméra est désactivé par défaut ; un administrateur du site l'active caméra par caméra dans **Settings → Device → Camera Audio**, ce qui redémarre cette caméra. Tant qu'il est désactivé, le flux RTSP ne comporte aucune piste audio et `CreateAsync` renvoie des réglages avec `AudioEnabled` désactivé.
+- **Certains modèles n'ont pas d'audio en RTSP pour autant.** Les CD22, CD22-E, CM22, CF81-E, CF83-E, toute la série CB (Bullet), CH52-E, CP52-E et CP63-E : passez `audioEnabled: false` pour ceux-là. Parmi les modèles qui diffusent effectivement en RTSP, les autres comportent une piste audio.
+- **Pas de RTSP sur les CR63-E et CR63-TE.**
+
+## API Verkada
+
+L'API REST de Verkada couvre la liste et l'état des caméras, l'export et le téléchargement de clips, les miniatures, ainsi que les données d'événements et d'alertes, et elle diffuse aussi la vidéo en direct — avec une clé à laquelle un accès streaming a été accordé. Un administrateur de l'organisation émet les clés d'API dans **Command → Admin → API & Integrations**, où leurs permissions sont également définies. Utilisez l'API lorsque la vidéo doit venir de l'extérieur du réseau de la caméra ; le flux RTSP est la voie locale à faible latence.
+
+## Caméras d'entreprise avec RTSP et ONVIF
+
+Verkada diffuse désormais en RTSP, mais ne propose toujours pas ONVIF : la découverte automatique et la sélection de profils restent indisponibles. Lorsque cela compte, ces marques offrent les deux :
 
 | Alternative | Segment de marché | RTSP | ONVIF | Guide |
 |------------|---------------|------|-------|-------|
@@ -105,26 +103,29 @@ Si vous avez besoin d'une intégration RTSP directe avec des caméras d'entrepri
 
 ## FAQ
 
-**Puis-je me connecter aux caméras Verkada avec RTSP ?**
+**Quelle est l'URL RTSP d'une caméra Verkada ?**
 
-Non. Les caméras Verkada ne prennent pas en charge RTSP, ONVIF ou tout autre protocole de streaming local. Ce sont des appareils gérés dans le cloud, accessibles uniquement via la plateforme Command ou l'API de Verkada.
+`rtsp://[USERNAME]:[PASSWORD]@[CAMERA-IP]:8554/high`, où `CAMERA-IP` est l'adresse privée de la caméra et `[USERNAME]` et `[PASSWORD]` sont les identifiants définis pour cette caméra dans Command. Utilisez `/standard` à la place de `/high` pour le flux à débit plus faible. Les caméras multi-capteurs insèrent l'id de la caméra avant le segment de flux.
 
-**Verkada dispose-t-il d'une API pour l'accès vidéo ?**
+**Les caméras Verkada prennent-elles en charge RTSP ?**
 
-Oui, mais l'API Verkada fournit l'export de clips et la récupération de captures, pas le streaming vidéo en direct. La vidéo en temps réel n'est disponible que via l'interface web Verkada Command ou l'application mobile. L'accès à l'API entreprise nécessite un abonnement Verkada.
+Oui. Verkada a annoncé le RTSP à faible latence pour ses caméras, diffusé sur le réseau local. Il est désactivé par défaut et un administrateur du site doit l'activer caméra par caméra dans Command.
 
-**Puis-je utiliser le SDK VisioForge avec les caméras Verkada ?**
+**Les caméras Verkada prennent-elles en charge ONVIF ?**
 
-Pas directement via RTSP. La seule option d'intégration locale consiste à capturer la sortie HDMI de certains modèles Verkada à l'aide d'une carte de capture avec la source vidéo système du SDK VisioForge. Pour une intégration basée sur le cloud, vous devrez utiliser séparément l'API de Verkada.
+Non. Il n'existe pas de point de terminaison ONVIF : la découverte ONVIF et la sélection de profils ne s'appliquent pas. Utilisez l'URL RTSP fournie par Command.
 
-**Quelles caméras d'entreprise prennent en charge RTSP ?**
+**Puis-je accéder à un flux RTSP Verkada depuis l'extérieur du réseau local ?**
 
-Pour les caméras d'entreprise avec prise en charge RTSP et ONVIF complète, consultez nos guides pour [Axis](axis.md), [Bosch](bosch.md), [Hanwha Vision](hanwha.md), [Avigilon](avigilon.md) et [Hikvision](hikvision.md).
+Pas directement. Verkada ne diffuse RTSP que sur des adresses privées et ne le relaie pas via le cloud : un client sur un autre réseau a besoin d'un VPN.
+
+**Le flux RTSP Verkada inclut-il l'audio ?**
+
+Pas avant qu'un administrateur du site n'active **Camera Audio** pour cette caméra dans Command (**Settings → Device → Camera Audio**, ce qui redémarre la caméra) : jusque-là, aucune piste audio n'est présente. Et pas sur les modèles dont le flux RTSP ne comporte pas d'audio : CD22, CD22-E, CM22, CF81-E, CF83-E, la série CB, CH52-E, CP52-E et CP63-E. Parmi les modèles qui diffusent en RTSP, les autres comportent une piste audio : `audioEnabled: true` s'applique.
 
 ## Ressources connexes
 
 - [Toutes les marques de caméras — Annuaire des URL RTSP](index.md)
-- [Guide de connexion Axis](axis.md) — Alternative d'entreprise avec RTSP
-- [Guide de connexion Bosch](bosch.md) — Alternative d'entreprise avec RTSP
-- [Guide de connexion Rhombus](rhombus.md) — Une autre plateforme gérée dans le cloud
+- [Guide de connexion Rhombus](rhombus.md) — Une autre plateforme gérée dans le cloud avec RTSP
+- [Guide de connexion Axis](axis.md) — Alternative d'entreprise avec RTSP et ONVIF
 - [Installation du SDK et exemples](index.md#get-started)

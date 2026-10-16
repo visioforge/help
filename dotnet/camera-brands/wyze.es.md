@@ -1,9 +1,6 @@
 ---
 title: Cómo Conectar una Cámara Wyze en C# .NET - Soluciones RTSP
 description: Conecte cámaras Wyze en C# .NET usando firmware RTSP o puente RTSP Docker. Limitaciones RTSP, soluciones y enfoques alternativos explicados.
-meta:
-  - name: robots
-    content: "noindex, follow"
 tags:
   - Video Capture SDK
   - Media Blocks SDK

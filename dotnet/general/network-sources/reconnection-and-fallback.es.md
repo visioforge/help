@@ -226,6 +226,7 @@ var fallback = new FallbackSwitchSettings
 var fallback = new FallbackSwitchSettings
 {
     Enabled = true,
+    FallbackVideoCaps = "video/x-raw,width=1920,height=1080",
     Fallback = new StaticImageFallbackSettings
     {
         ImagePath           = @"C:\assets\camera-offline.png",
@@ -237,6 +238,8 @@ var fallback = new FallbackSwitchSettings
 };
 ```
 
+La imagen se compone sobre un fotograma del tamaño de `FallbackVideoCaps`; si las caps no indican tamaño, la imagen se reproduce tal cual, en su propio tamaño, y `ScaleToFit`, `MaintainAspectRatio`, `Position` y `BackgroundColor` no se aplican. `Position` alinea la imagen: `0` pegada a la izquierda/arriba, `0.5` centrada, `1` pegada a la derecha/abajo.
+
 ## Fallback — fuente de media alternativa
 
 ```csharp
@@ -246,14 +249,13 @@ var fallback = new FallbackSwitchSettings
     Fallback = new MediaBlockFallbackSettings
     {
         FallbackUri      = "file:///C:/assets/standby-loop.mp4",
-        IsLive           = false,
         RestartOnEos     = true,      // reiniciar el bucle cuando el archivo termine
         TimeoutMs        = 3000,
     },
 };
 ```
 
-`FallbackUri` acepta cualquier URI que GStreamer pueda leer — `file://`, otro `rtsp://`, HLS, HTTP. `CustomPipeline` te permite inyectar una línea de lanzamiento GStreamer personalizada para escenarios avanzados (ej. `videotestsrc pattern=snow`).
+`FallbackUri` acepta cualquier URI que GStreamer pueda leer — `file://`, otro `rtsp://`, HLS, HTTP.
 
 ## Usando FallbackSwitch — alto nivel (`RTSPSourceSettings.FallbackSwitch`)
 

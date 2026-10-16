@@ -525,16 +525,20 @@ public class AppDelegate : UIApplicationDelegate
         view!.AddSubview(_videoView);
     }
 
-        /// <summary>
-        /// Finished launching.
-        /// </summary>
-    public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+    /// <summary>
+    /// Builds the UI into the window of the connecting scene. Called from <c>SceneDelegate.WillConnect</c>.
+    /// </summary>
+    /// <param name="window">The window created for the scene.</param>
+    public void SetupWindow(UIWindow window)
     {
-        // create a new window instance based on the screen size
-        Window = new UIWindow(UIScreen.MainScreen.Bounds);
+        Window = window;
 
-        // create a UIViewController with a single UILabel
         var vc = new UIViewController();
+
+        // Install the VC into the window first, then build the view hierarchy on it.
+        Window.RootViewController = vc;
+        Window.MakeKeyAndVisible();
+        vc.View.LayoutIfNeeded();
 
         CreateVideoView(vc.View);
 
@@ -552,10 +556,6 @@ public class AppDelegate : UIApplicationDelegate
                 // Handle the case where permission is denied
             }
         });
-
-        Window.RootViewController = vc;
-
-        Window.MakeKeyAndVisible();
 
         VisioForgeX.InitSDK();
 
@@ -575,8 +575,6 @@ public class AppDelegate : UIApplicationDelegate
                 ShowToastOnMain("Initial preview failed: " + ex.Message);
             }
         });
-
-        return true;
     }
 
     /// <summary>

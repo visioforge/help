@@ -156,8 +156,8 @@ The main project, `SimplePlayerMVVM.csproj`, targets multiple platforms. Key pac
   <PackageReference Include="Avalonia.Android" Version="12.0.5" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.2" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.10.2" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.15" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.10.15" />
  </ItemGroup>
 </Project>
 ```
@@ -219,7 +219,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.10.9" />
   </ItemGroup>
 </Project>
 ```

@@ -772,7 +772,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Bloc source GIF animé
 
-Le `AnimatedGIFSourceBlock` génère un flux vidéo à partir d'un fichier GIF animé. Il prend en charge la fréquence d'images configurable, le bouclage et le mode de flux en direct ou seekable.
+Le `AnimatedGIFSourceBlock` génère un flux vidéo à partir d'un fichier GIF animé. Il lit le GIF selon ses propres délais d'image, en flux en direct, et prend en charge le bouclage.
 
 #### Informations sur le bloc
 
@@ -789,10 +789,10 @@ Le bloc prend une instance de `ImageVideoSourceSettings` :
 | Propriété | Type | Par défaut | Description |
 | --- | --- | :---: | --- |
 | `Filename` | `string` | requis | Chemin du fichier GIF animé |
-| `IsLive` | `bool` | `false` | Traiter la source comme un flux en direct (non seekable) |
-| `NumBuffers` | `int` | `-1` | Nombre maximal d'images à produire (−1 = illimité) |
+| `IsLive` | `bool` | `false` | Non utilisé : la source GIF est toujours en direct |
+| `NumBuffers` | `int` | `-1` | Non utilisé par ce bloc |
 | `AnimationInfiniteLoop` | `bool` | `true` | Boucler indéfiniment l'animation |
-| `FrameRate` | `VideoFrameRate` | `FPS_10` | Fréquence d'images en sortie |
+| `FrameRate` | `VideoFrameRate` | `FPS_10` | Non utilisé : le GIF est lu selon ses propres délais d'image |
 
 #### Exemple de pipeline
 
@@ -808,8 +808,7 @@ var pipeline = new MediaBlocksPipeline();
 
 var settings = new ImageVideoSourceSettings("C:/media/animation.gif")
 {
-    AnimationInfiniteLoop = true,
-    FrameRate = VideoFrameRate.FPS_25
+    AnimationInfiniteLoop = true
 };
 
 var gifSource = new AnimatedGIFSourceBlock(settings);
@@ -1759,7 +1758,7 @@ Propriétés **`FallbackSwitchSettingsBase`** (partagées par tous les types de 
 
 - `StaticTextFallbackSettings` — superposition de texte avec police, couleur et position configurables
 - `StaticImageFallbackSettings` — affiche une image statique (options : chemin de fichier, échelle, ratio d'aspect)
-- `MediaBlockFallbackSettings` — lit une URI de repli ou un pipeline GStreamer personnalisé
+- `MediaBlockFallbackSettings` — lit une URI de repli
 
 **Méthodes de diagnostic :**
 
@@ -2117,7 +2116,7 @@ Le bloc se configure via `StaticTextFallbackSettings` :
 | `Text` | `string` | `"Source Unavailable"` | Texte à afficher |
 | `FontFamily` | `string` | `"Arial"` | Nom de la famille de polices |
 | `FontSize` | `float` | `24` | Taille de la police en points |
-| `FontStyle` | `FontStyle` | `Normal` | Style de la police (Normal, Bold, Italic, etc.) |
+| `FontStyle` | `FontStyle` | `Normal` | Style de la police (Normal, Italic, Oblique) |
 | `TextColor` | `SKColor` | Blanc | Couleur du texte |
 | `BackgroundColor` | `SKColor` | Noir | Couleur de remplissage du fond |
 | `Position` | `SKPoint` | `(0.5, 0.5)` | Position d'ancrage du texte en proportion (0–1) |
@@ -2823,7 +2822,7 @@ macOS (non disponible sur iOS)
 
 ### Bloc source Blu-Ray
 
-Le `BluRaySourceBlock` lit des flux vidéo, audio et sous-titres optionnels depuis un disque Blu-Ray ou un dossier d'image disque Blu-Ray à l'aide de l'élément `bluray` de GStreamer.
+Le `BluRaySourceBlock` lit des flux vidéo, audio et sous-titres optionnels depuis un disque Blu-Ray ou un dossier d'image disque Blu-Ray en décodant le flux `.m2ts` du disque avec l'élément `decodebin3` de GStreamer.
 
 #### Informations sur le bloc
 
@@ -2843,9 +2842,9 @@ Nom : BluRaySourceBlock.
 | `Title` | `int` | `-1` | Titre à lire (−1 = titre principal/le plus long) |
 | `RenderVideo` | `bool` | `true` | Active le pad de sortie vidéo |
 | `RenderAudio` | `bool` | `true` | Active le pad de sortie audio |
-| `RenderSubtitle` | `bool` | `false` | Active le pad de sortie sous-titres |
+| `RenderSubtitle` | `bool` | `false` | Active le pad de sortie sous-titres (ne reçoit aucune donnée : les sous-titres PGS ne sont pas transmis) |
 | `AudioStream` | `int` | `-1` | Index du flux audio (−1 = par défaut) |
-| `SubtitleStream` | `int` | `-1` | Index du flux de sous-titres (−1 = par défaut) |
+| `SubtitleStream` | `int` | `-1` | Index du flux de sous-titres (−1 = par défaut ; sans effet, les sous-titres PGS ne sont pas transmis) |
 
 #### Exemple de pipeline
 
@@ -3105,65 +3104,6 @@ bool available = RaspberryPiSourceBlock.IsAvailable();
 #### Plateformes
 
 Linux (Raspberry Pi).
-
----
-
-### Bloc source GStreamer PlayBin
-
-Le `PlayBinSourceBlock` lit les médias en utilisant l'élément `playbin` intégré de GStreamer. Il accepte les mêmes `UniversalSourceSettings` que `UniversalSourceBlock` mais délègue l'intégralité du pipeline de décodage au moteur de lecture haut niveau de GStreamer.
-
-#### Informations sur le bloc
-
-Nom : PlayBinSourceBlock.
-
-| Direction du pin | Type de média | Nombre de pins |
-| --- | :---: | :---: |
-| Vidéo en sortie | Vidéo non compressée | 0 ou 1 |
-| Audio en sortie | Audio non compressé | 0 ou 1 |
-| Sous-titres en sortie | Sous-titres | 0 ou 1 |
-
-#### Paramètres
-
-Utilise `UniversalSourceSettings`. Propriétés clés :
-
-| Propriété | Type | Par défaut | Description |
-| --- | --- | :---: | --- |
-| `URI` | `Uri` | requis | URI de la source multimédia |
-| `RenderVideo` | `bool` | `true` | Active le pad de sortie vidéo |
-| `RenderAudio` | `bool` | `true` | Active le pad de sortie audio |
-| `RenderSubtitle` | `bool` | `false` | Active le pad de sortie sous-titres |
-| `StartPosition` | `TimeSpan?` | `null` | Position de début de lecture |
-| `StopPosition` | `TimeSpan?` | `null` | Position d'arrêt de lecture |
-| `VideoCustomFrameRate` | `VideoFrameRate?` | `null` | Remplace la fréquence d'images en sortie |
-
-#### Exemple de pipeline
-
-```mermaid
-graph LR;
-    PlayBinSourceBlock -- Vidéo --> VideoRendererBlock;
-    PlayBinSourceBlock -- Audio --> AudioRendererBlock;
-```
-
-#### Exemple de code
-
-```csharp
-var pipeline = new MediaBlocksPipeline();
-
-var settings = await UniversalSourceSettings.CreateAsync(new Uri("file:///video.mp4"));
-var source = new PlayBinSourceBlock(settings);
-
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(source.VideoOutput, videoRenderer.Input);
-
-var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(source.AudioOutput, audioRenderer.Input);
-
-await pipeline.StartAsync();
-```
-
-#### Plateformes
-
-Windows, macOS, Linux, Android, iOS.
 
 ---
 

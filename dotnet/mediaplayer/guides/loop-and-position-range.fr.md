@@ -70,7 +70,7 @@ mediaPlayer.Loop = false;
 **Comportement** :
 - Lorsque activée, la lecture redémarre automatiquement depuis le début lorsque la fin est atteinte
 - L'événement `OnLoop` se déclenche chaque fois que la lecture redémarre
-- Pour les listes de lecture, la boucle s'applique à toute la liste, pas aux fichiers individuels
+- La boucle s'applique au fichier en cours de lecture ; dans une liste de lecture, les fichiers suivants ne sont pas lus tant que `Loop` est activé
 
 #### Propriété `Loop_DoNotSeekToBeginning`
 

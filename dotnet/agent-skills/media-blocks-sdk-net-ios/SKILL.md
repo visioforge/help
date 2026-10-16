@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a native .NET for iOS ap
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a **native .NET for iOS** application (`net10.0-ios` TFM, UIKit, no MAUI/Xamarin shell). Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `SystemAudioSourceBlock`, `H264EncoderBlock`, `AACEncoderBlock`, `MP4SinkBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. Compared to the higher-level Video Capture SDK X (a single `VideoCaptureCoreX` god-object), Media Blocks gives you full control over the topology — splitting streams with tees, mixing sources, transcoding without preview, swapping sinks at runtime — at the cost of having to wire every edge yourself.
 
-Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaBlocks` 2026.10.2**, native iOS redist **`VisioForge.CrossPlatform.Core.iOS` 2026.9.11** (matches the [official Simple Video Capture MB iOS sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/iOS/SimpleVideoCapture)). The iOS native redist uses the same `2026.9.11` release as the wrapper in this skill; keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaBlocks` 2026.10.15**, native iOS redist at the version shown in the csproj below (matches the [official Simple Video Capture MB iOS sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/iOS/SimpleVideoCapture)). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -28,7 +28,7 @@ Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaBlocks` 2026.10.2**, na
 
 ### Target framework
 
-Use `net10.0-ios` with `<SupportedOSPlatformVersion>14.0</SupportedOSPlatformVersion>` — that's the floor the SDK is tested against. iOS 13 may load but `AppleMediaH264EncoderSettings` (the VideoToolbox H.264 path the iOS redist ships) was finalised at iOS 14, and the GStreamer-iOS plugin set assumes the iOS 14 AVFoundation surface.
+Use `net10.0-ios` with `<SupportedOSPlatformVersion>16.4</SupportedOSPlatformVersion>` — VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older (the .NET 10 iOS workload itself refuses anything below 15.0), and the upstream sample csproj is at 16.4 as well.
 
 Set `<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>` for device builds. The redist NuGet bundles both Apple Silicon device and simulator slices in one package, but the simulator slice is intended for non-camera UI work only — see "No camera devices" below.
 
@@ -38,10 +38,10 @@ Two packages — the .NET wrapper plus the iOS native redist. The redist is **no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.2" />
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.15" />
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.10.14" />
 </ItemGroup>
 ```
 
@@ -94,17 +94,45 @@ SystemAudioSourceBlock(IOSAudioSourceSettings)  --audio-->  AACEncoderBlock --> 
 
 Before any `MediaBlocksPipeline` instance is constructed (and before any `DeviceEnumerator` query), call `VisioForgeX.InitSDK()` exactly once per process — synchronous on iOS, unlike the `InitSDKAsync()` used on WPF/MAUI. On a fresh install the first call builds the GStreamer plugin-registry cache inside the app sandbox (~1-3 s, one-time); subsequent launches are instant.
 
+iOS 27 requires the scene lifecycle: `Info.plist` needs the `UIApplicationSceneManifest` pointing at `SceneDelegate` (bundled `references/Info.plist` and `references/SceneDelegate.cs`), and an app that still builds its window in `FinishedLaunching` without the manifest is killed at launch on iOS 27 before any UI appears. The window therefore comes from the connecting `UIWindowScene`, and the UI plus the SDK boot live in `AppDelegate.SetupWindow`:
+
 ```csharp
-public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+// SceneDelegate.cs — iOS hands the app a UIWindowScene; the window is built from it.
+[Export("scene:willConnectToSession:options:")]
+public void WillConnect(UIScene scene, UISceneSession session, UISceneConnectionOptions connectionOptions)
 {
-    Window = new UIWindow(UIScreen.MainScreen.Bounds);
+    if (scene is not UIWindowScene windowScene)
+    {
+        return;
+    }
+
+    var app = (AppDelegate)UIApplication.SharedApplication.Delegate;
+    Window = app.Window ?? new UIWindow(windowScene);
+    if (app.Window is null)
+    {
+        app.SetupWindow(Window);
+    }
+    else
+    {
+        // A scene that reconnects after a disconnect gets the existing window back.
+        Window.WindowScene = windowScene;
+        Window.MakeKeyAndVisible();
+    }
+}
+
+// AppDelegate.cs
+public void SetupWindow(UIWindow window)
+{
+    Window = window;
     var vc = new UIViewController();
+
+    // Install the VC into the window first, then build the view hierarchy on it.
+    Window.RootViewController = vc;
+    Window.MakeKeyAndVisible();
+    vc.View.LayoutIfNeeded();
 
     CreateVideoView(vc.View);
     AddButtons(vc.View);
-
-    Window.RootViewController = vc;
-    Window.MakeKeyAndVisible();
 
     VisioForgeX.InitSDK();   // mandatory; before any MediaBlocksPipeline ctor
 
@@ -113,12 +141,10 @@ public override bool FinishedLaunching(UIApplication application, NSDictionary l
         try { await StartPreview(); }
         catch (Exception ex) { Debug.WriteLine($"Preview start failed: {ex}"); }
     });
-
-    return true;
 }
 ```
 
-There is no public `DestroySDK()` for the iOS redist as of `2026.9.11` — disposing the active `MediaBlocksPipeline` with `await _pipeline.DisposeAsync()` is sufficient at app shutdown. The bundled `references/AppDelegate.cs` shows the canonical placement.
+At app shutdown, stop and dispose the active `MediaBlocksPipeline` and its blocks, then call `VisioForgeX.DestroySDK()` once. `WillTerminate` is synchronous, so use the sync `Stop(force: true)` / `Dispose()` overloads there. The bundled `references/AppDelegate.cs` shows the canonical placement.
 
 Skipping `InitSDK()` is the #1 source of "Element 'X' not found" failures on first run.
 
@@ -211,21 +237,21 @@ These are the five most common production issues — flag any of them on first r
 
 ### 4. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
-**Cause**: no `.vflicense` certificate has been loaded — either nothing was loaded at all (trial mode runs silently for the first 30 days), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`), or the certificate was loaded on a *different* `MediaBlocksPipeline` instance than the one being started. The bundled sample creates a fresh pipeline on every camera flip / capture toggle, so a single one-time licence call in `FinishedLaunching` won't cover later pipelines.
+**Cause**: no `.vflicense` certificate has been loaded — either nothing was loaded at all (trial mode runs silently for the first 30 days), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`), or the certificate was loaded on a *different* `MediaBlocksPipeline` instance than the one being started. The bundled sample creates a fresh pipeline on every camera flip / capture toggle, so a single one-time licence call in `SetupWindow` won't cover later pipelines.
 
 **Fix**: ship the `.vflicense` as a bundle resource (Build Action = `BundleResource`), read it via `NSBundle.MainBundle.PathForResource("license", "vflicense")` + `File.ReadAllBytes`, and call `await _pipeline.SetLicenseCertificateAsync(certBytes)` inside `CreateEngineAsync` after the constructor and before any `Connect` calls (see "License registration" above).
 
 ### 5. Pipeline `OnError` fires with "Element 'X' not found" / preview is black
 
-**Cause A — SDK not initialised**: forgot `VisioForgeX.InitSDK()` in `FinishedLaunching` before pipeline construction. The plugin registry isn't built, so encoder/sink blocks fail to find their backing GStreamer elements when `StartAsync` runs.
+**Cause A — SDK not initialised**: forgot `VisioForgeX.InitSDK()` in `AppDelegate.SetupWindow` before pipeline construction. The plugin registry isn't built, so encoder/sink blocks fail to find their backing GStreamer elements when `StartAsync` runs.
 
-**Cause B — VideoView attached too late**: `VideoRendererBlock` was constructed and `pipeline.StartAsync` ran before the `VideoView` (`VisioForge.Core.UI.Apple.VideoView`) was added as a subview of a `UIViewController` whose view was already realised. `loadView` hasn't fired, the Metal drawable has no backing surface, and `AutoresizingMask` resizing the UIView later does NOT recover the surface.
+**Cause B — VideoView not sized to the window**: the `VideoView` (`VisioForge.Core.UI.Apple.VideoView`) was created with a frame other than the area it is shown in — for example a fixed or zero `CGRect`, or on a view that was later resized without `AutoresizingMask`/constraints on the `VideoView`. Check `_videoView.Bounds` and `DrawableSize` after the window appears; both should match the visible area.
 
 **Cause C — `IsSync = true` on a drifting source**: leaving `VideoRendererBlock.IsSync` at its default (true) clock-throttles renderer frames against the pipeline clock. iOS camera sources whose timestamps drift against `clock_gettime` cause the renderer to drop or freeze frames waiting for clock sync — the LED is on, the encoder writes a valid MP4, but preview stays black.
 
-**Fix A**: call `VisioForgeX.InitSDK()` exactly once in `FinishedLaunching` *before* any `MediaBlocksPipeline` constructor.
+**Fix A**: call `VisioForgeX.InitSDK()` exactly once in `AppDelegate.SetupWindow` *before* any `MediaBlocksPipeline` constructor.
 
-**Fix B**: assign `Window.RootViewController = vc` and call `Window.MakeKeyAndVisible()` **before** building the subview hierarchy that contains your `VideoView`. The bundled `AppDelegate.cs` shows the correct order.
+**Fix B**: create the `VideoView` from `vc.View.Bounds` with `AutoresizingMask = FlexibleWidth | FlexibleHeight` (or pin it with constraints). The bundled `AppDelegate.cs` installs the VC (`Window.RootViewController = vc`, `Window.MakeKeyAndVisible()`, `vc.View.LayoutIfNeeded()`) before building the hierarchy — the recommended order.
 
 **Fix C**: set `_videoRenderer = new VideoRendererBlock(_pipeline, _videoView as IVideoView) { IsSync = false };` on every renderer in iOS pipelines that pull from a live capture source.
 
@@ -235,10 +261,11 @@ Run through these after first integration:
 
 - [ ] `dotnet build -c Debug` succeeds with the bundled `references/` files copied into a fresh `net10.0-ios` project (no missing-DLL warnings).
 - [ ] `Info.plist` contains all three privacy keys (`NSCameraUsageDescription`, `NSMicrophoneUsageDescription`, `NSPhotoLibraryUsageDescription`) with reviewer-safe strings.
+- [ ] `Info.plist` has `UIApplicationSceneManifest` → `SceneDelegate` (iOS 27 kills a scene-less app at launch).
 - [ ] First run on a physical iPhone shows the camera/mic permission prompts, then a working preview within ~2 s after grant.
 - [ ] Camera-flip and capture toggle do not leak — every transition calls `await _pipeline.StopAsync()` → `await _pipeline.DisposeAsync()` → fresh `CreateEngineAsync` (the bundled `StopCamera` / `DestroyEngineAsync` show this).
 - [ ] On clean app suspend / terminate, recordings finalise correctly (verify the MP4 plays back in the Photos app or another player).
-- [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called inside `CreateEngineAsync` (NOT just once in `FinishedLaunching`) so every fresh `MediaBlocksPipeline` gets registered before `StartAsync`.
+- [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called inside `CreateEngineAsync` (NOT just once in `SetupWindow`) so every fresh `MediaBlocksPipeline` gets registered before `StartAsync`.
 - [ ] `MtouchInterpreter=all` is set on both Debug and Release configurations — confirm by checking the build log for `--interpreter`.
 
 ## Bundled references
@@ -246,8 +273,9 @@ Run through these after first integration:
 The `references/` folder is self-contained — copy all of it into a fresh project folder (alongside an `Assets.xcassets`, `LaunchScreen.storyboard`, and `Entitlements.plist` from the standard .NET for iOS template) and `dotnet build` succeeds with no extra files needed:
 
 - `references/Sample.csproj` — minimal working `net10.0-ios` csproj, version-pinned to the same NuGet release as the prose, with `MtouchInterpreter=all` on both Debug and Release.
-- `references/Info.plist` — bundle metadata with the three mandatory privacy-usage keys filled in with reviewer-safe wording.
-- `references/AppDelegate.cs` — full code-behind: `VisioForgeX.InitSDK` boot, `DeviceEnumerator` wiring, source → tee → renderer + H.264/AAC → MP4 graph builders, front/back camera flip, capture-button state machine, photo-library save via `PHAssetCreationRequest`. Use as a copy-paste starting template. (Runs in trial mode by design; add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence — see "License registration" for the exact insertion point inside `CreateEngineAsync`.) This sample builds the root `UIViewController` inline inside `FinishedLaunching` rather than a separate `MainViewController.cs` file — the camera preview and controls live directly on `vc.View`.
+- `references/Info.plist` — bundle metadata with the `UIApplicationSceneManifest` that points iOS at `SceneDelegate` (required — iOS 27 kills a scene-less app at launch), and the three mandatory privacy-usage keys filled in with reviewer-safe wording.
+- `references/AppDelegate.cs` — full code-behind: `VisioForgeX.InitSDK` boot, `DeviceEnumerator` wiring, source → tee → renderer + H.264/AAC → MP4 graph builders, front/back camera flip, capture-button state machine, photo-library save via `PHAssetCreationRequest`. Use as a copy-paste starting template. (Runs in trial mode by design; add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence — see "License registration" for the exact insertion point inside `CreateEngineAsync`.) This sample builds the root `UIViewController` inline inside `SetupWindow` rather than a separate `MainViewController.cs` file — the camera preview and controls live directly on `vc.View`.
+- `references/SceneDelegate.cs` — creates the window from the connecting `UIWindowScene` and calls `AppDelegate.SetupWindow`; the scene lifecycle iOS 27 requires.
 - `references/Toast.cs` — small UIKit toast helper used by `AppDelegate.cs` for permission-denied / no-device messages.
 - `references/Main.cs` — top-level `UIApplication.Main(args, null, typeof(AppDelegate))` entry point.
 

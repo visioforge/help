@@ -1,6 +1,6 @@
 ---
 title: Despliegue iOS con VisioForge SDK .NET - Guía Completa
-description: Despliega aplicaciones .NET en iOS con integración del SDK de VisioForge, permisos, soporte de arquitectura y mejores prácticas de despliegue multiplataforma.
+description: Despliegue aplicaciones .NET en iOS con integración del SDK de VisioForge, permisos, soporte de arquitectura y mejores prácticas de despliegue multiplataforma.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -28,13 +28,13 @@ primary_api_classes:
 
 ## Descripción General
 
-Esta guía completa te lleva a través del proceso de despliegue de aplicaciones potenciadas por el SDK de VisioForge en dispositivos Apple iOS. El SDK de VisioForge proporciona un framework potente para construir aplicaciones ricas en medios en iOS, ofreciendo soporte robusto para capacidades de captura, edición, reproducción y procesamiento de video.
+Esta guía completa le lleva a través del proceso de despliegue de aplicaciones potenciadas por el SDK de VisioForge en dispositivos Apple iOS. El SDK de VisioForge proporciona un framework potente para construir aplicaciones ricas en medios en iOS, ofreciendo soporte robusto para capacidades de captura, edición, reproducción y procesamiento de video.
 
-El proceso de despliegue en iOS involucra varias consideraciones clave, desde gestión de paquetes hasta manejo de permisos y optimización de rendimiento. Este documento te guiará a través de cada paso para asegurar una experiencia de despliegue fluida.
+El proceso de despliegue en iOS involucra varias consideraciones clave, desde gestión de paquetes hasta manejo de permisos y optimización de rendimiento. Este documento le guiará a través de cada paso para asegurar una experiencia de despliegue fluida.
 
 ## Requisitos del Sistema
 
-Antes de comenzar tu proceso de despliegue en iOS, asegúrate de que tu entorno de desarrollo cumpla los siguientes requisitos:
+Antes de comenzar su proceso de despliegue en iOS, asegúrese de que su entorno de desarrollo cumpla los siguientes requisitos:
 
 ### Requisitos de Hardware
 
@@ -44,11 +44,11 @@ Antes de comenzar tu proceso de despliegue en iOS, asegúrate de que tu entorno 
 
 ### Requisitos de Software
 
-- Dispositivo Apple iOS con iOS 12 o posterior (se recomienda la última versión)
-- Xcode 12 o posterior con iOS SDK instalado
+- Dispositivo Apple iOS con iOS 16.4 o posterior (el mínimo de las bibliotecas nativas `VisioForge.CrossPlatform.Core.iOS`)
+- SDK de .NET 9 o .NET 10 con la carga de trabajo de iOS (`dotnet workload install ios`); el SDK se dirige a `net9.0-ios` y `net10.0-ios`
+- La versión de Xcode que exige su carga de trabajo de iOS (Xcode 26 o posterior para .NET 10)
 - Cuenta de desarrollador Apple (requerida para firma y distribución de apps)
-- Visual Studio para Mac, JetBrains Rider o Visual Studio Code
-- .Net 7.0 SDK o posterior (recomendamos la última versión estable)
+- JetBrains Rider o Visual Studio Code (Visual Studio para Mac se retiró en 2024)
 
 ## Soporte de Arquitectura
 
@@ -62,14 +62,14 @@ El SDK de VisioForge para iOS proporciona soporte nativo para las principales ar
 
 ## Proceso de Instalación
 
-Sigue estos pasos para configurar e implementar correctamente tu aplicación iOS con VisioForge:
+Siga estos pasos para configurar e implementar correctamente su aplicación iOS con VisioForge:
 
-1. Instala el .Net SDK para desarrollo iOS
-2. Crea un nuevo proyecto iOS en tu IDE preferido (se recomienda Visual Studio para Mac o JetBrains Rider)
-3. Agrega los paquetes NuGet requeridos a tu proyecto (detallado en la siguiente sección)
-4. Configura los permisos y entitlements necesarios en el archivo Info.plist de tu app
-5. Implementa la lógica de tu aplicación usando los componentes del SDK de VisioForge
-6. Compila, firma y despliega tu aplicación en dispositivos de prueba
+1. Instale el SDK de .NET y la carga de trabajo de iOS
+2. Cree un nuevo proyecto iOS en su IDE preferido (JetBrains Rider o Visual Studio Code)
+3. Agregue los paquetes NuGet requeridos a su proyecto (detallado en la siguiente sección)
+4. Configure los permisos y entitlements necesarios en el archivo Info.plist de su app
+5. Implemente la lógica de su aplicación usando los componentes del SDK de VisioForge
+6. Compile, firme y despliegue su aplicación en dispositivos de prueba
 
 ## Paquetes NuGet
 
@@ -95,7 +95,7 @@ Cada paquete de UI tiene los mismos controles VideoView pero diferentes implemen
 
 - [VisioForge.CrossPlatform.Core.iOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.iOS) - Contiene los componentes principales de redistribución requeridos para cualquier aplicación iOS usando tecnologías VisioForge.
 
-Puedes agregar estos paquetes usando el NuGet Package Manager en tu IDE o agregando lo siguiente a tu archivo de proyecto (usa las últimas versiones):
+Puede agregar estos paquetes usando el NuGet Package Manager en su IDE o agregando lo siguiente a su archivo de proyecto (use las últimas versiones):
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
@@ -104,11 +104,11 @@ Puedes agregar estos paquetes usando el NuGet Package Manager en tu IDE o agrega
 </ItemGroup>
 ```
 
-Nota: Reemplaza los números de versión con las últimas versiones disponibles.
+Nota: Reemplace los números de versión con las últimas versiones disponibles.
 
 ## Permisos y Entitlements Requeridos
 
-Las aplicaciones iOS requieren permisos explícitos para acceder a características del dispositivo como cámaras, micrófonos y la biblioteca de fotos. Configura estos permisos en el archivo Info.plist de tu app:
+Las aplicaciones iOS requieren permisos explícitos para acceder a características del dispositivo como cámaras, micrófonos y la biblioteca de fotos. Configure estos permisos en el archivo Info.plist de su app:
 
 ### Acceso a Cámara
 
@@ -172,6 +172,23 @@ Aquí hay un ejemplo completo de un archivo Info.plist con todos los permisos ne
     </array>
     <key>XSAppIconAssets</key>
     <string>Assets.xcassets/appicon.appiconset</string>
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <false/>
+        <key>UISceneConfigurations</key>
+        <dict>
+            <key>UIWindowSceneSessionRoleApplication</key>
+            <array>
+                <dict>
+                    <key>UISceneConfigurationName</key>
+                    <string>Default Configuration</string>
+                    <key>UISceneDelegateClassName</key>
+                    <string>SceneDelegate</string>
+                </dict>
+            </array>
+        </dict>
+    </dict>
     <key>NSCameraUsageDescription</key>
     <string>Se requiere acceso a la cámara para grabación de video</string>
     <key>NSMicrophoneUsageDescription</key>
@@ -184,7 +201,7 @@ Aquí hay un ejemplo completo de un archivo Info.plist con todos los permisos ne
 
 ## Manejo de Permisos en Tiempo de Ejecución
 
-Además de declarar permisos en tu archivo Info.plist, también debes solicitar permisos en tiempo de ejecución. Aquí hay un ejemplo de cómo solicitar permisos de cámara y micrófono:
+Además de declarar permisos en su archivo Info.plist, también debe solicitar permisos en tiempo de ejecución. Aquí hay un ejemplo de cómo solicitar permisos de cámara y micrófono:
 
 ```csharp
 using System.Diagnostics;
@@ -231,16 +248,19 @@ private void RequestPhotoLibraryPermission()
 
 ## Inicialización del SDK
 
-Inicializa correctamente el SDK de VisioForge en el ciclo de vida de tu aplicación:
+Inicialice correctamente el SDK de VisioForge en el ciclo de vida de su aplicación:
 
 ```csharp
-// En tu AppDelegate o código de inicio de aplicación
+// En su AppDelegate o código de inicio de aplicación
+// Aquí se guarda la ventana que crea SceneDelegate
+public override UIWindow? Window { get; set; }
+
 public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 {
     // Inicializar el SDK de VisioForge
     VisioForge.Core.VisioForgeX.InitSDK();
     
-    // Tu otro código de inicialización
+    // Su otro código de inicialización
     
     return true;
 }
@@ -251,35 +271,103 @@ public override void WillTerminate(UIApplication application)
     // Limpiar recursos del SDK de VisioForge
     VisioForge.Core.VisioForgeX.DestroySDK();
     
-    // Tu otro código de limpieza
+    // Su otro código de limpieza
 }
 ```
+
+!!! warning "iOS 27: el ciclo de vida de escenas es obligatorio"
+    Las aplicaciones compiladas con el SDK de iOS 27 deben adoptar el ciclo de vida de escenas de UIKit. Sin `UIApplicationSceneManifest` en `Info.plist`, iOS cierra la aplicación al iniciarse, antes de que aparezca cualquier interfaz. `InitSDK()` puede permanecer en `FinishedLaunching`, pero la ventana debe crearse en un `SceneDelegate` a partir de la `UIWindowScene` que se conecta, no en `FinishedLaunching`.
+
+Agregue el manifiesto de escenas a `Info.plist` (el ejemplo completo anterior ya lo incluye):
+
+```xml
+<key>UIApplicationSceneManifest</key>
+<dict>
+    <key>UIApplicationSupportsMultipleScenes</key>
+    <false/>
+    <key>UISceneConfigurations</key>
+    <dict>
+        <key>UIWindowSceneSessionRoleApplication</key>
+        <array>
+            <dict>
+                <key>UISceneConfigurationName</key>
+                <string>Default Configuration</string>
+                <key>UISceneDelegateClassName</key>
+                <string>SceneDelegate</string>
+            </dict>
+        </array>
+    </dict>
+</dict>
+```
+
+Cree la ventana en `SceneDelegate.cs`:
+
+```csharp
+[Register("SceneDelegate")]
+public class SceneDelegate : UIResponder, IUIWindowSceneDelegate
+{
+    [Export("window")] public UIWindow? Window { get; set; }
+
+    [Export("scene:willConnectToSession:options:")]
+    public void WillConnect(UIScene scene, UISceneSession session, UISceneConnectionOptions connectionOptions)
+    {
+        if (scene is not UIWindowScene windowScene)
+        {
+            return;
+        }
+
+        // Guardar la ventana en AppDelegate: una escena que se reconecta recupera la misma ventana.
+        // MainViewController representa su propio controlador de vista raíz.
+        var app = (AppDelegate)UIApplication.SharedApplication.Delegate;
+        app.Window ??= new UIWindow(windowScene) { RootViewController = new MainViewController() };
+        Window = app.Window;
+        Window.WindowScene = windowScene;
+        Window.MakeKeyAndVisible();
+    }
+}
+```
+
+### Aplicaciones .NET MAUI
+
+En una aplicación MAUI, MAUI crea la ventana por sí mismo, por lo que el `SceneDelegate` nativo anterior no es necesario. Agregue el mismo `UIApplicationSceneManifest`, con `__MAUI_DEFAULT_SCENE_CONFIGURATION__` como `UISceneConfigurationName` (MAUI busca su configuración con ese nombre), a `Platforms/iOS/Info.plist` (y a `Platforms/MacCatalyst/Info.plist` si se dirige a Mac Catalyst), conserve el `AppDelegate : MauiUIApplicationDelegate` de la plantilla y agregue junto a él un `SceneDelegate` vacío:
+
+```csharp
+// Platforms/iOS/SceneDelegate.cs, y el mismo archivo en Platforms/MacCatalyst/
+using Foundation;
+
+[Register("SceneDelegate")]
+public class SceneDelegate : MauiUISceneDelegate
+{
+}
+```
+
+Las [habilidades para agentes](../agent-skills/index.md) de iOS (`media-player-sdk-x-ios`, `video-capture-sdk-x-ios`, `media-blocks-sdk-net-ios`) incluyen un `SceneDelegate.cs` y un `Info.plist` completos.
 
 ## Mejores Prácticas de Implementación
 
 ### Usando Controles VideoView
 
-El SDK de VisioForge proporciona un control `VideoView` para mostrar contenido de video. En iOS `VideoView` es una subclase de `MTKView` acelerada por Metal que implementa directamente `IVideoView` (usa `VideoViewGL` si necesitas la variante legacy con OpenGL basada en `UIView`):
+El SDK de VisioForge proporciona un control `VideoView` para mostrar contenido de video. En iOS `VideoView` es una subclase de `MTKView` acelerada por Metal que implementa directamente `IVideoView` (use `VideoViewGL` si necesita la variante legacy con OpenGL basada en `UIView`):
 
 ```csharp
 // Crear una instancia de VideoView — VideoView implementa IVideoView, no hace falta casting ni helper
 var videoView = new VisioForge.Core.UI.Apple.VideoView(new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, UIScreen.MainScreen.Bounds.Height));
 View.AddSubview(videoView);
 
-// Pasa el propio videoView donde se espera un IVideoView
+// Pase el propio videoView donde se espera un IVideoView
 var captureCore = new VideoCaptureCoreX(videoView);
 ```
 
-Puedes agregar el VideoView usando un storyboard o código.
+Puede agregar el VideoView usando un storyboard o código.
 
 ### Gestión de Recursos
 
-Los dispositivos iOS tienen recursos limitados comparados con computadoras de escritorio. Sigue estas mejores prácticas:
+Los dispositivos iOS tienen recursos limitados comparados con computadoras de escritorio. Siga estas mejores prácticas:
 
-1. Libera recursos cuando no estén en uso
-2. Usa configuraciones de menor resolución para procesamiento en tiempo real
-3. Implementa gestión adecuada del ciclo de vida en tus ViewControllers
-4. Prueba en dispositivos reales, no solo simuladores
+1. Libere recursos cuando no estén en uso
+2. Use configuraciones de menor resolución para procesamiento en tiempo real
+3. Implemente gestión adecuada del ciclo de vida en sus ViewControllers
+4. Pruebe en dispositivos reales, no solo simuladores
 
 ## Pruebas y Depuración
 
@@ -291,39 +379,39 @@ Aunque el simulador iOS puede ser útil para pruebas básicas de interfaz, tiene
 - Cámara y micrófono no están disponibles en el simulador
 - Las características de aceleración de hardware pueden no estar disponibles o comportarse diferente
 
-**Siempre prueba tu aplicación de medios en dispositivos iOS físicos antes del lanzamiento.**
+**Pruebe siempre su aplicación de medios en dispositivos iOS físicos antes del lanzamiento.**
 
 ### Consideraciones Comunes de Rendimiento
 
-Al desplegar aplicaciones de medios en iOS, considera estos factores de rendimiento:
+Al desplegar aplicaciones de medios en iOS, considere estos factores de rendimiento:
 
-1. **Resolución y velocidad de cuadros:** Reduce estos ajustes para mejor rendimiento en dispositivos más antiguos
-2. **Selección de codificador:** Usa codificadores acelerados por hardware cuando estén disponibles
-3. **Gestión de memoria:** Implementa eliminación adecuada de objetos grandes y monitorea el uso de memoria
-4. **Impacto en batería:** El procesamiento de medios es intensivo en energía; implementa medidas de ahorro de energía
+1. **Resolución y velocidad de cuadros:** Reduzca estos ajustes para mejor rendimiento en dispositivos más antiguos
+2. **Selección de codificador:** Use codificadores acelerados por hardware cuando estén disponibles
+3. **Gestión de memoria:** Implemente eliminación adecuada de objetos grandes y monitoree el uso de memoria
+4. **Impacto en batería:** El procesamiento de medios es intensivo en energía; implemente medidas de ahorro de energía
 
 ## Solución de Problemas Comunes
 
 ### Denegaciones de Permisos
 
-Si tu app no puede acceder a la cámara o micrófono:
+Si su app no puede acceder a la cámara o micrófono:
 
-1. Verifica que todos los permisos requeridos estén en tu Info.plist
-2. Verifica que estés solicitando permisos en tiempo de ejecución antes de intentar usar el hardware
-3. Prueba si el usuario ha denegado manualmente los permisos en Ajustes de iOS
+1. Verifique que todos los permisos requeridos estén en su Info.plist
+2. Verifique que esté solicitando permisos en tiempo de ejecución antes de intentar usar el hardware
+3. Compruebe si el usuario ha denegado manualmente los permisos en Ajustes de iOS
 
 ### Errores de Carga de Bibliotecas
 
-Si encuentras errores al cargar bibliotecas nativas:
+Si encuentra errores al cargar bibliotecas nativas:
 
-1. Verifica que todos los paquetes NuGet requeridos estén correctamente instalados
-2. Busca versiones de paquetes en conflicto
-3. Asegúrate de que estés apuntando a la arquitectura iOS correcta (ARM64)
+1. Verifique que todos los paquetes NuGet requeridos estén correctamente instalados
+2. Busque versiones de paquetes en conflicto
+3. Asegúrese de que esté apuntando a la arquitectura iOS correcta (ARM64)
 
 ## Recursos Adicionales
 
-- Visita el [repositorio GitHub de VisioForge](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos de código y proyectos de ejemplo
-- Explora la [documentación de API de VisioForge](https://api.visioforge.org/dotnet/api/index.html) para referencia completa del SDK
+- Visite el [repositorio GitHub de VisioForge](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos de código y proyectos de ejemplo
+- Explore la [documentación de API de VisioForge](https://api.visioforge.org/dotnet/api/index.html) para referencia completa del SDK
 
 ---
-Siguiendo esta guía de despliegue, deberías poder crear, configurar y desplegar exitosamente aplicaciones potenciadas por VisioForge en dispositivos iOS. Para preguntas específicas o necesidades de configuración avanzada, por favor contacta al soporte técnico de VisioForge.
+Siguiendo esta guía de despliegue, debería poder crear, configurar y desplegar exitosamente aplicaciones potenciadas por VisioForge en dispositivos iOS. Para preguntas específicas o necesidades de configuración avanzada, por favor contacte al soporte técnico de VisioForge.

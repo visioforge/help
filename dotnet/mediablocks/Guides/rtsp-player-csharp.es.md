@@ -62,7 +62,7 @@ Los casos de uso comunes incluyen paneles de vigilancia, aplicaciones NVR (graba
 Agregue el paquete NuGet del Media Blocks SDK a su proyecto:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.2" />
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="2026.10.15" />
 ```
 
 También necesita los paquetes de runtime específicos de la plataforma. Para Windows:
@@ -163,6 +163,26 @@ pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
 ```
 
 Para configuración detallada de buffers y transporte UDP vs TCP, consulte la referencia de [Configuración del Protocolo RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md).
+
+## Hora de la Cámara en Cada Fotograma
+
+Para marcar cada fotograma con el reloj de la propia cámara - por ejemplo, para dibujar una superposición de hora uniforme en cámaras de distintas marcas - active `AddReferenceTimestampMeta`. Cada fotograma de un sample grabber o de un buffer sink lleva entonces la hora NTP de la cámara en `SenderNTPTime`:
+
+```csharp
+rtspSettings.AddReferenceTimestampMeta = true;
+
+// Entre la fuente y el renderizador
+var grabber = new VideoSampleGrabberBlock();
+grabber.OnVideoFrameBuffer += (s, e) =>
+{
+    DateTime? cameraTime = e.Frame.SenderNTPTime; // UTC, null sin Sender Reports
+};
+
+pipeline.Connect(rtspSource.VideoOutput, grabber.Input);
+pipeline.Connect(grabber.Output, videoRenderer.Input);
+```
+
+La hora procede de los RTCP Sender Reports de la cámara, por lo que depende de ella: es `null` hasta que llega el primer informe, y durante toda la sesión si la cámara no los envía o están bloqueados (con transporte UDP, pruebe `AllowedProtocols = RTSPSourceProtocol.TCP`). El SDK registra una advertencia si no llega ningún informe en 10 segundos. Un `VideoMixerBlock` crea fotogramas nuevos, así que lea la hora antes del mezclador. `FallbackSwitchSourceBlock` no la transmite: use `RTSPSourceBlock`.
 
 ## Descubrimiento de Cámaras ONVIF
 

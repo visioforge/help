@@ -50,7 +50,7 @@ Recording your desktop screen in VB.NET (Visual Basic .NET) applications is esse
 Add the following packages to your VB.NET project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.10.2" />
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.10.15" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11" />
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
 ```

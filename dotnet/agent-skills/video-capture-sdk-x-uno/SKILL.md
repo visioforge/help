@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Video Capture SDK X** — the cross-platfo
 
 `VideoCaptureCoreX` is the high-level capture-and-record god-object — same API as on the WPF/MAUI/WinUI hosts, just bound to Uno's `VideoView`. Under the hood it shares the GStreamer-backed engine with Media Blocks.
 
-Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Capture sample): wrapper **`2026.10.2`**, Uno UI **`2026.10.2`**, Windows redists **`2026.9.11`**, Android redist **`2026.9.17`**, iOS redist **`2026.9.11`**, Mac Catalyst redist **`2026.9.11`**. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Capture sample): wrapper **`2026.10.15`**, Uno UI **`2026.10.15`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -69,13 +69,14 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net10.0-windows10.0.19041;net10.0-android</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net10.0-maccatalyst;net10.0-android</TargetFrameworks>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">17.0</SupportedOSPlatformVersion>
     <UnoSingleProject>true</UnoSingleProject>
     <RunAOTCompilation>false</RunAOTCompilation>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoCapture"   Version="2026.10.2" />
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno"    Version="2026.10.2" />
+    <PackageReference Include="VisioForge.DotNet.VideoCapture"   Version="2026.10.15" />
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno"    Version="2026.10.15" />
   </ItemGroup>
 </Project>
 ```
@@ -86,13 +87,65 @@ The Mac Catalyst target additionally needs an `AfterTargets="Build"` step (`Copy
 
 `<RunAOTCompilation>false</RunAOTCompilation>` is required — the native-interop layer is reflection-heavy in places and doesn't survive AOT trimming today. Uno's default for some heads is AOT-on; the upstream sample explicitly turns it off, and so should you.
 
+### Scene lifecycle and minimum OS versions (iOS 27 SDK)
+
+Apps built with the iOS 27 and Mac Catalyst 27 SDKs must use the UIKit scene lifecycle: without a `UIApplicationSceneManifest` the app is killed at launch, before any UI appears. Uno 6 has no scene delegate of its own and still builds its window in `OnLaunched`, so each Apple head (`Platforms/MacCatalyst`, and `Platforms/iOS` if you add it) needs the manifest in its `Info.plist` and a small `SceneDelegate` that hands that window to the scene. `App` exposes that window as a static `MainWindow` property for it (see `references/App.xaml.cs`):
+
+```xml
+<key>UIApplicationSceneManifest</key>
+<dict>
+    <key>UIApplicationSupportsMultipleScenes</key>
+    <false/>
+    <key>UISceneConfigurations</key>
+    <dict>
+        <key>UIWindowSceneSessionRoleApplication</key>
+        <array>
+            <dict>
+                <key>UISceneConfigurationName</key>
+                <string>Default Configuration</string>
+                <key>UISceneDelegateClassName</key>
+                <string>SceneDelegate</string>
+            </dict>
+        </array>
+    </dict>
+</dict>
+```
+
+```csharp
+// Platforms/MacCatalyst/SceneDelegate.cs (and Platforms/iOS/SceneDelegate.cs)
+using Foundation;
+using Uno.UI.Xaml;
+using UIKit;
+
+// A child of App's namespace, so `App` resolves without a using.
+namespace MyUnoApp.MacCatalyst;
+
+[Register("SceneDelegate")]
+public class SceneDelegate : UIWindowSceneDelegate
+{
+    public override UIWindow? Window { get; set; }
+
+    public override void WillConnect(UIScene scene, UISceneSession session, UISceneConnectionOptions connectionOptions)
+    {
+        if (scene is UIWindowScene windowScene && App.MainWindow is { } window && WindowHelper.GetNativeWindow(window) is UIWindow nativeWindow)
+        {
+            Window = nativeWindow;
+            nativeWindow.WindowScene = windowScene;
+            nativeWindow.MakeKeyAndVisible();
+        }
+    }
+}
+```
+
+The same SDKs refuse a `SupportedOSPlatformVersion` below 17.0 for Mac Catalyst and 15.0 for iOS, VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older, and `Uno.Sdk` 6.x defaults to 15.0 for iOS and 14.2 for Mac Catalyst, so set them explicitly; `references/Sample.csproj` sets 17.0 for Mac Catalyst and already carries 16.4 for iOS, which takes effect once you add `net10.0-ios` to its `TargetFrameworks`.
+
 ### Uno "single project" structure
 
 Unlike MAUI, an Uno app is conventionally split into multiple **head projects** — one per target OS (a Windows head, an Android head, an iOS head, …) — each consuming a shared library project. The upstream Simple Capture Uno sample uses the newer **`UnoSingleProject` mode** (`<UnoSingleProject>true</UnoSingleProject>`) which collapses the heads into a single multi-targeted csproj. That's the layout reflected in `references/Sample.csproj`. If your existing solution still uses the older multi-head layout, add the VisioForge package references and conditional redist blocks to **the head project that builds for that target**, not to the shared library.
 
 ### App.xaml.cs registration
 
-Uno's `App` class is plain WinUI / WinAppSDK. There is **no MAUI-style handler registration** — the `<vf:VideoView />` control wires itself up through its own `xmlns` declaration in XAML, so nothing needs to be done in `App.xaml.cs` beyond what the Uno template generates. See `references/App.xaml.cs` for the unchanged template.
+Uno's `App` class is plain WinUI / WinAppSDK. There is **no MAUI-style handler registration** — the `<vf:VideoView />` control wires itself up through its own `xmlns` declaration in XAML, so `App.xaml.cs` needs no VisioForge registration. The one change from the Uno template is that `MainWindow` is `public static`, for the Apple heads' `SceneDelegate` (see "Scene lifecycle and minimum OS versions" above); `references/App.xaml.cs` has it.
 
 ## Per-platform permissions
 
@@ -318,13 +371,14 @@ public sealed partial class MainPage : Page
 - [ ] If recording: the MP4 is finalised when `StopCaptureAsync` runs to completion before `Dispose` (verify the file plays back in another player).
 - [ ] On clean shutdown, the page's `Unloaded` runs `StopAsync → Dispose → VisioForgeX.DestroySDK()` in that order.
 - [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called on every `VideoCaptureCoreX` instance before its `StartAsync` (otherwise the app runs in 30-day trial mode).
+- [ ] Every Apple head has the `UIApplicationSceneManifest` in `Info.plist` and the `SceneDelegate` that hands `App.MainWindow` to the scene (the iOS 27 SDK kills a scene-less app at launch).
 
 ## Bundled references
 
 The `references/` folder is self-contained — copy all of it into a fresh `Uno.Sdk` project folder, set up `Platforms/` per the standard Uno template, and `dotnet build` succeeds with no extra files needed (apart from the `AndroidDependency/VisioForge.Core.Android.X10.csproj` companion project, which lives a few directory levels up — adjust the `<ProjectReference>` path to match your repo layout).
 
 - `references/Sample.csproj` — multi-target Uno csproj with all per-OS conditional package references and the Mac Catalyst native-copy `<Target>`.
-- `references/App.xaml` + `references/App.xaml.cs` — Uno Application entry point (unchanged from the Uno template; no VisioForge-specific registration needed).
+- `references/App.xaml` + `references/App.xaml.cs` — Uno Application entry point (the Uno template with `MainWindow` made `public static` for the `SceneDelegate`; no VisioForge-specific registration needed).
 - `references/MainPage.xaml` — XAML with `<vf:VideoView />` and camera/mic/speaker/preview/capture buttons.
 - `references/MainPage.xaml.cs` — full code-behind: per-OS permission helpers (Android, iOS, Mac Catalyst, Windows), `InitSDKAsync` boot, `DeviceEnumerator` wiring, MP4 recording, per-platform output-path logic (Android scoped storage, iOS Library, Mac Catalyst `~/Movies`, Windows `MyVideos`), gallery save on mobile, and `OnError` wiring. Runs in 30-day trial mode by design — add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence.
 

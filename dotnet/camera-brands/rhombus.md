@@ -1,9 +1,6 @@
 ---
 title: Rhombus Camera RTSP URL and Cloud API C# Integration
 description: Rhombus camera integration options in C# .NET. Cloud-managed architecture, API access, and alternative approaches for Rhombus Systems cameras.
-meta:
-  - name: robots
-    content: "noindex, follow"
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -113,7 +110,7 @@ If your Rhombus camera has RTSP enabled, yes. Use the RTSP URL from the Rhombus 
 
 **How does Rhombus compare to Verkada?**
 
-Both are cloud-managed platforms. Rhombus offers RTSP on some models, while Verkada does not support RTSP at all. Both provide REST APIs for clip/snapshot access. See our [Verkada guide](verkada.md) for comparison.
+Both are cloud-managed platforms, and both can stream RTSP locally: Rhombus on some models, Verkada on every camera that supports RTSP, once it is enabled in Command. Both also provide REST APIs for clip and snapshot access. See our [Verkada guide](verkada.md) for comparison.
 
 **What are good alternatives to Rhombus with full RTSP support?**
 

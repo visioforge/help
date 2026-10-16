@@ -571,7 +571,7 @@ public class OverlayManagerVideo : IOverlayManagerElement, IDisposable
 | `PlaybackRate` | `double` | `1.0` | Playback speed (1.0 = normal) |
 | `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | How to fit video |
 | `VideoView` | `IVideoView` | `null` | Optional external video preview window |
-| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings for VideoView |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings for VideoView (`null`: Direct3D 11 on Windows; not used by a WPF VideoView) |
 | `AudioOutput` | `AudioOutputDeviceInfo` | `null` | Audio output device (null = discard audio) |
 | `AudioOutput_Volume` | `double` | `1.0` | Audio volume (0.0-1.0+, above 1.0 amplifies) |
 | `AudioOutput_Mute` | `bool` | `false` | Mute audio output |
@@ -698,7 +698,7 @@ public class OverlayManagerDecklinkVideo : IOverlayManagerElement
 | `Height` | `int` | - | Overlay height |
 | `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | How to fit video |
 | `VideoView` | `IVideoView` | `null` | Optional video preview |
-| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings (`null`: Direct3D 11 on Windows) |
 
 **Example:**
 
@@ -744,7 +744,7 @@ public class OverlayManagerNDIVideo : IOverlayManagerElement
 | `Height` | `int` | - | Overlay height |
 | `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | How to fit video |
 | `VideoView` | `IVideoView` | `null` | Optional video preview |
-| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings (`null`: Direct3D 11 on Windows) |
 
 **Example:**
 
@@ -960,7 +960,7 @@ public class OverlayManagerWebView2Video : IOverlayManagerElement, IDisposable
 | `Height` | `int` | - | Overlay height |
 | `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | How to fit the rendered content |
 | `VideoView` | `IVideoView` | `null` | Optional external video preview window |
-| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings for VideoView |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings for VideoView (`null`: Direct3D 11 on Windows) |
 
 **Methods:**
 

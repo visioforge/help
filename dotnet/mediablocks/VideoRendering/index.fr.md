@@ -78,6 +78,7 @@ Nom : VideoRendererBlock
 | Direction du pin | Type de média | Nombre de pins |
 | --- | :---: | :---: |
 | Vidéo en entrée | vidéo non compressée | un ou plusieurs |
+| Sous-titres en entrée | sous-titres texte ou image | un (facultatif) |
 
 ## Guide d'implémentation
 
@@ -116,6 +117,25 @@ pipeline.Connect(fileSource.VideoOutput, videoRenderer.Input);
 
 // démarrer le pipeline
 await pipeline.StartAsync();
+```
+
+### Afficher les sous-titres intégrés
+
+Connectez la sortie de sous-titres d'une source à `SubtitleInput` et activez `SubtitleEnabled` pour dessiner la piste de sous-titres du fichier sur la vidéo : sous-titres texte (SRT, SSA/ASS, tx3g) et image (DVD, DVB, PGS). Cela fonctionne avec toutes les vues vidéo. Pour dessiner un fichier externe à la place, définissez `SubtitleExternalFile` et laissez `SubtitleInput` non connecté.
+
+```csharp
+var fileSource = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(filename, renderSubtitle: true));
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(fileSource.VideoOutput, videoRenderer.Input);
+// SubtitleOutput est null lorsque le fichier n'a pas de piste de sous-titres
+if (fileSource.SubtitleOutput != null)
+{
+    videoRenderer.SubtitleEnabled = true;
+    pipeline.Connect(fileSource.SubtitleOutput, videoRenderer.SubtitleInput);
+}
 ```
 
 ## Compatibilité avec les plateformes

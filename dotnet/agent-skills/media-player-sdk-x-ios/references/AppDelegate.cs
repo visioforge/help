@@ -61,11 +61,15 @@ public class AppDelegate : UIApplicationDelegate
         rootViewController?.PresentViewController(alert, true, null);
     }
 
-    public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+    /// <summary>
+    /// Builds the UI into the window of the connecting scene. Called from <c>SceneDelegate.WillConnect</c>.
+    /// </summary>
+    /// <param name="window">The window created for the scene.</param>
+    public void SetupWindow(UIWindow window)
     {
-        // Build the window FIRST. The VideoView's MTKView grabs its drawable
+        // Assign the window FIRST. The VideoView's MTKView grabs its drawable
         // surface lazily; building it before the window is real is a black-preview pitfall.
-        Window = new UIWindow(UIScreen.MainScreen.Bounds);
+        Window = window;
 
         // CustomViewController hands us back the embedded VideoView as a UIView,
         // and exposes SelectButton / PlayButton / PositionSlider for wiring below.
@@ -127,8 +131,6 @@ public class AppDelegate : UIApplicationDelegate
         VisioForgeX.InitSDK();
 
         _tmPosition.Elapsed += async (sender, e) => await UpdatePositionAsync();
-
-        return true;
     }
 
     /// <summary>

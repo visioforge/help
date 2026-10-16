@@ -1,9 +1,6 @@
 ---
 title: Connecter une caméra IP Arlo en C# .NET — RTSP et streaming
 description: Limitations RTSP des caméras Arlo en C# .NET. Pas de prise en charge RTSP native. Options de contournement et alternatives recommandées pour développeurs.
-meta:
-  - name: robots
-    content: "noindex, follow"
 tags:
   - Video Capture SDK
   - Media Blocks SDK

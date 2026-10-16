@@ -88,7 +88,7 @@ Platform-specific native runtimes — add the ones you target:
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.9.11" />
 
 <!-- Android / iOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.9.17" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.10.9" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11" />
 ```
 

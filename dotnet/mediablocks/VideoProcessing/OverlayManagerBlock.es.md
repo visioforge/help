@@ -574,7 +574,7 @@ public class OverlayManagerVideo : IOverlayManagerElement, IDisposable
 | `PlaybackRate` | `double` | `1.0` | Velocidad de reproducción (1.0 = normal) |
 | `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | Cómo ajustar el video |
 | `VideoView` | `IVideoView` | `null` | Ventana de vista previa de video externa opcional |
-| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Configuración del renderizador para VideoView |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Configuración del renderizador para VideoView (`null`: Direct3D 11 en Windows; no se usa con un VideoView de WPF) |
 | `AudioOutput` | `AudioOutputDeviceInfo` | `null` | Dispositivo de salida de audio (null = descartar audio) |
 | `AudioOutput_Volume` | `double` | `1.0` | Volumen de audio (0.0-1.0+, superior a 1.0 amplifica) |
 | `AudioOutput_Mute` | `bool` | `false` | Silenciar salida de audio |
@@ -701,7 +701,7 @@ public class OverlayManagerDecklinkVideo : IOverlayManagerElement
 | `Height` | `int` | - | Alto de superposición |
 | `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | Cómo ajustar el video |
 | `VideoView` | `IVideoView` | `null` | Vista previa de video opcional |
-| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Configuración del renderizador |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Configuración del renderizador (`null`: Direct3D 11 en Windows) |
 
 **Ejemplo:**
 
@@ -747,7 +747,7 @@ public class OverlayManagerNDIVideo : IOverlayManagerElement
 | `Height` | `int` | - | Alto de superposición |
 | `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | Cómo ajustar el video |
 | `VideoView` | `IVideoView` | `null` | Vista previa de video opcional |
-| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Configuración del renderizador |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Configuración del renderizador (`null`: Direct3D 11 en Windows) |
 
 **Ejemplo:**
 
@@ -963,7 +963,7 @@ public class OverlayManagerWebView2Video : IOverlayManagerElement, IDisposable
 | `Height` | `int` | - | Alto de la superposición |
 | `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | Cómo ajustar el contenido renderizado |
 | `VideoView` | `IVideoView` | `null` | Ventana de vista previa de video externa opcional |
-| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Configuración del renderizador para VideoView |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Configuración del renderizador para VideoView (`null`: Direct3D 11 en Windows) |
 
 **Métodos:**
 
