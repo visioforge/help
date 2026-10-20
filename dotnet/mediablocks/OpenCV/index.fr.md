@@ -1,6 +1,6 @@
 ---
 title: Blocs OpenCV pour pipeline vidéo en C# .NET — vision SDK
-description: Ajoutez détection d'objets, suivi et traitement d'image aux pipelines vidéo avec les blocs OpenCV en Media Blocks SDK. Pour Windows et macOS.
+description: Ajoutez détection d'objets, suivi et traitement d'image aux pipelines vidéo avec les blocs OpenCV en Media Blocks SDK. Pour Windows, macOS et Mac Catalyst.
 sidebar_label: OpenCV
 tags:
   - Media Blocks SDK
@@ -22,7 +22,7 @@ primary_api_classes:
 
 Les blocs OpenCV (Open Source Computer Vision Library) offrent de puissantes capacités de traitement vidéo dans le VisioForge Media Blocks SDK .Net. Ces blocs permettent un large éventail de tâches de vision par ordinateur, de la manipulation d'image basique à la détection et au suivi d'objets complexes.
 
-Pour utiliser les blocs OpenCV, ajoutez le paquet NuGet redistribuable correspondant à votre plateforme : `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86` ou `VisioForge.CrossPlatform.OpenCV.macOS`. Ce sont les plateformes pour lesquelles le plugin OpenCV de GStreamer est actuellement distribué ; sur toute autre plateforme, la méthode `IsAvailable()` de chaque bloc renvoie `false`.
+Pour utiliser les blocs OpenCV, ajoutez le paquet NuGet redistribuable correspondant à votre plateforme : `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86` ou `VisioForge.CrossPlatform.OpenCV.macOS` (macOS et Mac Catalyst). Ce sont les plateformes pour lesquelles le plugin OpenCV de GStreamer est actuellement distribué ; sur toute autre plateforme, la méthode `IsAvailable()` de chaque bloc renvoie `false`.
 
 La plupart des blocs OpenCV nécessitent généralement un élément `videoconvert` en amont pour garantir que le flux vidéo d'entrée est dans un format compatible. Le SDK gère cela en interne lors de l'initialisation du bloc.
 
@@ -92,7 +92,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -144,7 +144,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -209,7 +209,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -261,7 +261,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -313,7 +313,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -383,7 +383,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -480,7 +480,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -564,7 +564,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -629,7 +629,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -730,7 +730,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -800,7 +800,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -865,7 +865,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -944,7 +944,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -1015,7 +1015,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 
@@ -1088,7 +1088,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Mac Catalyst.
 
 ### Remarques
 

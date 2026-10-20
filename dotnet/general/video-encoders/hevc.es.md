@@ -254,8 +254,8 @@ dimensiona un presupuesto de transporte fijo a partir de ella.
 ### Notas de plataforma
 
 - **10 bits** (`AppleMediaHEVCProfile.Main10`), el codificador con **alfa** y el control de tasa
-  requieren el runtime de GStreamer 1.28.6, que ahora se incluye en todos los paquetes de Apple:
-  macOS, Mac Catalyst e iOS. Que el VideoToolbox del dispositivo codifique realmente a 10 bits
+  funcionan con el runtime de GStreamer 1.28 que ahora incluyen todos los paquetes de Apple:
+  macOS, Mac Catalyst e iOS (el codificador con alfa y el control de tasa requieren al menos la 1.26). Que el VideoToolbox del dispositivo codifique realmente a 10 bits
   sigue siendo una cuestión de cada chip.
 - `ForceHWUsage` fija el codificador al elemento exclusivo de hardware, fallando en lugar de caer
   a una implementación por software. No tiene efecto en iOS: allí todos los codificadores

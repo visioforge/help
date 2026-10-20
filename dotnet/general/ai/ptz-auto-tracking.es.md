@@ -268,7 +268,8 @@ dispositivo con `ONVIFClientX.GetPresetsAsync`.
 
 `OnvifPTZMoveTransport` es la implementación ONVIF integrada. Para dirigir un dispositivo PTZ que no
 sea ONVIF, implemente `IPTZMoveTransport` (`ContinuousMoveAsync`, `StopAsync`, `GoToPresetAsync`) y
-pase su implementación al controlador.
+pase su implementación al controlador. Cada método devuelve `Task<bool>`: `true` cuando el dispositivo
+aceptó el comando y `false` en caso contrario.
 
 ## Demostración
 

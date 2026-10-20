@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into an Avalonia UI applicati
 
 This skill helps you add **VisioForge Media Blocks SDK .Net** to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4OutputBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring them with `pipeline.Connect(producer, consumer)`, then calling `await pipeline.StartAsync()`. Compared to the higher-level Video Capture SDK X (a single `VideoCaptureCoreX` god-object), Media Blocks gives you full control over the topology — splitting streams with tees, mixing sources, transcoding without preview, swapping sinks at runtime — at the cost of having to wire every edge yourself.
 
-Pinned NuGet versions: wrapper **`2026.10.15`**, Windows and macOS native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia)). Moving the wrapper to a newer 2026.x.x release means re-checking each redist against it — the csproj below carries the version pinned for each. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.10.20`**, Windows and macOS native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia)). Moving the wrapper to a newer 2026.x.x release means re-checking each redist against it — the csproj below carries the version pinned for each. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -57,8 +57,8 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <OutputType>WinExe</OutputType>
 </PropertyGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.10.15" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
 </ItemGroup>
 
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
@@ -66,7 +66,7 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <OutputType>Exe</OutputType>
 </PropertyGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.10.15" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
 </ItemGroup>
 
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">

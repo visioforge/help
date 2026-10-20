@@ -192,6 +192,17 @@ MAUI, WinUI 3 and Unity applications always load in place and never use the shar
 
 ## Troubleshooting Common Issues
 
+### Native library load errors
+
+If a GStreamer-based engine or MediaBlock throws `DllNotFoundException`, read the SDK message for the
+redistributable package matching the **process architecture**, the native library folders, and the
+deployment guide. A `BadImageFormatException` can indicate a native library built for a different
+architecture. If the redist is present, check its dependencies, including the Visual C++ runtime.
+
+`HelpLinks.DeploymentX` in `VisioForge.Core.UI` returns the deployment guide for the SDK's target platform.
+Visual Studio can still stop at the original exception before the SDK catches it when breaking on
+thrown exceptions is enabled; the exception delivered to your application contains the SDK guidance.
+
 ### Deployment Issues
 
 If you encounter issues after deployment:

@@ -1208,6 +1208,21 @@ Nombre: HTTPSourceBlock.
 |-------------------|:---------------:|:----------------:|
 | Salida            |     Datos       |        1         |
 
+#### Configuración
+
+`LocationTrusted`: cuando una redirección HTTP conduce a otro esquema, host o puerto, la fuente elimina normalmente las cookies (`Cookies`), los encabezados personalizados (`ExtraHeaders`) y las credenciales de autenticación (`UserID`, `UserPassword`) antes de seguirla. Establezca `LocationTrusted` en `true` para conservarlos, por ejemplo cuando una URL de medios redirige a una CDN o a una pasarela de autenticación que usted controla. Actívelo solo para destinos de redirección de confianza.
+
+```csharp
+var settings = new HTTPSourceSettings(new Uri("https://example.com/stream"))
+{
+    LocationTrusted = true,
+    UserID = "username",
+    UserPassword = "password"
+};
+```
+
+El valor predeterminado es `false`. La opción requiere GStreamer 1.28.7 o posterior; en un entorno de ejecución anterior se usa el valor predeterminado (valores eliminados) y se registra una advertencia.
+
 #### El pipeline de muestra
 
 El pipeline de muestra lee datos desde una cámara MJPEG y los muestra usando VideoView.
@@ -1314,8 +1329,8 @@ Nombre: NDISourceBlock.
 
 | Dirección del pin   |      Tipo de medio      | Conteo de pines  |
 |---------------------|:-----------------------:|:----------------:|
-| Salida de audio     |     Sin comprimir       |        1         |
-| Salida de video     |     Sin comprimir       |        1         |
+| Salida de audio     |     Sin comprimir       |        1, solo cuando el emisor tiene una pista de audio         |
+| Salida de video     |     Sin comprimir       |        1, solo cuando el emisor tiene una pista de video         |
 
 #### El pipeline de muestra
 
@@ -1339,14 +1354,33 @@ var ndiSettings = await NDISourceSettings.CreateAsync(pipeline.GetContext(), ndi
 
 var ndiSource = new NDISourceBlock(ndiSettings);
 
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(ndiSource.VideoOutput, videoRenderer.Input);
+// conectar el video solo si el emisor tiene un flujo de video
+if (ndiSettings.GetInfo().VideoStreams.Count > 0)
+{
+    var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+    pipeline.Connect(ndiSource.VideoOutput, videoRenderer.Input);
+}
 
-var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);      
+// conectar el audio solo si el emisor tiene un flujo de audio
+if (ndiSettings.GetInfo().AudioStreams.Count > 0)
+{
+    var audioRenderer = new AudioRendererBlock();
+    pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);
+}
 
 await pipeline.StartAsync();
 ```
+
+Un emisor sin audio (o sin video) no obtiene pad para esa salida, así que compruebe `GetInfo()` antes
+de conectarla. Un flujo que comienza después de terminar el análisis no se detecta: para darle más tiempo,
+establezca `ReadInfoTimeoutMs` (Windows, Android) o `ProbeTimeoutMs` (macOS, Linux) en una configuración
+creada con el constructor sin parámetros antes de llamar a `ReadInfoAsync`; `CreateAsync` analiza con los
+valores predeterminados.
+
+En Windows y Android, cuando se conoce la dirección del emisor y un flujo llega sin el otro, el
+análisis se vuelve a conectar al emisor al cabo de dos segundos, hasta tres veces; un emisor que solo
+admite unos pocos receptores ve estas conexiones. Cuando solo se establece el nombre, el SDK busca la
+dirección por ese nombre.
 
 #### Aplicaciones de muestra
 
@@ -1387,10 +1421,30 @@ Propiedades clave de `NDISourceSettings`:
 | `Bandwidth` | `int` | `100` | −10 solo metadatos, 10 solo audio, 100 calidad completa |
 | `ColorFormat` | `NDIRecvColorFormat` | `UyvyBgra` | Formato de píxel para el video recibido |
 | `ProbeTimeoutMs` | `int` | `10000` | Cuánto espera la construcción el primer cuadro de video |
+| `ReadInfoTimeoutMs` | `int` | `10000` | Cuánto espera el análisis del emisor el video y el audio; establézcalo antes de analizar la configuración |
 
 `Timeout`, `ConnectTimeout`, `TimestampMode`, `MaxQueueLength` y `DoTimestamp` pertenecen al elemento
 `ndisrc` y este bloque los ignora, igual que `FallbackSwitch`: activarlo registra una advertencia y la
 reproduccion continua sin conmutacion por error.
+
+`CreateAsync` analiza el emisor con el valor predeterminado de `ReadInfoTimeoutMs`, y el resultado del
+análisis se conserva durante toda la vida de la configuración. Para un emisor cuyo video o audio
+comienza tarde, establezca el tiempo de espera antes del análisis:
+
+```csharp
+var ndiSettings = new NDISourceSettings
+{
+    SourceName = ndiSourceInfo.Name,
+    URL = ndiSourceInfo.URL,
+    ReadInfoTimeoutMs = 15000,
+};
+
+if (await ndiSettings.ReadInfoAsync(context) == null)
+{
+    // el emisor no es accesible o no tiene flujos
+    return;
+}
+```
 
 #### El pipeline de muestra
 
@@ -1416,8 +1470,12 @@ var ndiSource = new NDISourceXBlock(ndiSettings);
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(ndiSource.VideoOutput, videoRenderer.Input);
 
-var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);
+// solo si el emisor tiene un flujo de audio
+if (ndiSettings.GetInfo().AudioStreams.Count > 0)
+{
+    var audioRenderer = new AudioRendererBlock();
+    pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);
+}
 
 await pipeline.StartAsync();
 ```
@@ -2115,12 +2173,12 @@ El bloque se configura mediante `StaticTextFallbackSettings`:
 | --- | --- | :---: | --- |
 | `Text` | `string` | `"Source Unavailable"` | Texto a mostrar |
 | `FontFamily` | `string` | `"Arial"` | Nombre de la familia de fuentes |
-| `FontSize` | `float` | `24` | Tamaño de fuente en puntos |
+| `FontSize` | `float` | `24` | Tamaño de fuente en puntos, escalado con el ancho del fotograma respecto a 640 píxeles. En Windows los puntos se convierten a píxeles con los DPI que Windows comunica a la aplicación, por lo que en una aplicación compatible con DPI el texto es más grande con un escalado de pantalla superior al 100 % |
 | `FontStyle` | `FontStyle` | `Normal` | Estilo de fuente (Normal, Italic, Oblique) |
 | `TextColor` | `SKColor` | Blanco | Color del texto |
 | `BackgroundColor` | `SKColor` | Negro | Color de relleno del fondo |
-| `Position` | `SKPoint` | `(0.5, 0.5)` | Posición de anclaje del texto como proporción (0–1) |
-| `CenterAlign` | `bool` | `true` | Centrar el texto |
+| `Position` | `SKPoint` | `(0.5, 0.5)` | Con `CenterAlign`, el punto del fotograma en el que se centra el texto (proporciones 0–1); cerca de un borde, el texto se mantiene dentro del fotograma. Sin él, la ubicación del texto en el fotograma: `0` pegado a la izquierda/arriba, `0.5` centrado, `1` pegado a la derecha/abajo. Los valores fuera de 0–1 se limitan a ese rango |
+| `CenterAlign` | `bool` | `true` | Centra el texto en `Position`; si no, `Position` alinea el texto dentro del fotograma |
 
 #### El pipeline de muestra
 

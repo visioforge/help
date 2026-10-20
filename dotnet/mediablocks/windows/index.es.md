@@ -15,6 +15,13 @@ primary_api_classes:
   - D3D11H264DecoderBlock
   - D3D11UploadBlock
   - D3D11DownloadBlock
+  - D3D12InterlaceBlock
+  - D3D12InterlaceSettings
+  - D3D12FisheyeDewarpBlock
+  - D3D12FisheyeDewarpSettings
+  - D3D12RemapBlock
+  - D3D12RemapSettings
+  - D3D12UVRemapMap
   - UniversalSourceBlock
   - UniversalSourceSettings
 
@@ -53,6 +60,44 @@ Consulte la [documentación de procesamiento de video](../VideoProcessing/index.
 
 - **D3D11VideoCompositorBlock**: composición y mezcla de video acelerada por GPU
 
+### Procesamiento Direct3D 12
+
+- **D3D12InterlaceBlock**: conversión en la GPU de video progresivo a video entrelazado, para difusión y otras salidas que requieren un orden de campos explícito
+
+Es lo contrario del desentrelazado (`DeinterlaceBlock`): la entrada debe ser progresiva y la salida es video entrelazado (interleaved). `D3D12InterlaceSettings` define:
+
+- `FieldPattern`: `OneToOne` combina dos fotogramas progresivos en un fotograma entrelazado y reduce a la mitad la velocidad de fotogramas (60p a 60i, 30 fotogramas por segundo); `TwoToTwo` divide cada fotograma progresivo en dos campos y conserva la velocidad de fotogramas (30p a 60i, 30 fotogramas por segundo)
+- `TopFieldFirst`: campo superior primero con `true`, campo inferior primero con `false` (valor predeterminado)
+- `Engine`: el motor de la GPU (`Auto`, `ThreeD`, `Compute`)
+- `AdapterIndex`: el adaptador de GPU, `-1` para el adaptador predeterminado
+
+El bloque mueve por sí mismo los fotogramas hacia la GPU y desde ella: tanto su entrada como su salida aceptan memoria del sistema, D3D11 o D3D12, según el bloque vecino, y la memoria D3D12 del adaptador de GPU del propio bloque se pasa sin copia tanto en la entrada como en la salida. Requiere una GPU compatible con Direct3D 12. El consumidor posterior debe aceptar video entrelazado (por ejemplo, el codificador MPEG-2): uno que solo acepta video progresivo no se puede enlazar con el bloque, y el pipeline informa del enlace fallido mediante `OnError`. Un adaptador de GPU inexistente hace fallar el inicio del pipeline.
+
+- **D3D12FisheyeDewarpBlock**: corrección en la GPU de una imagen fisheye circular a una vista equirrectangular, panorámica o en perspectiva
+
+`D3D12FisheyeDewarpSettings` define:
+
+- `Projection`: `Equirectangular` (valor predeterminado), `Panorama`, `Perspective` o `Passthrough`
+- `CenterX`, `CenterY`, `RadiusX`, `RadiusY`: el círculo fisheye en la imagen de entrada, normalizado de 0 a 1, con el radio de al menos 1e-6 (por defecto: centrado, radio 0,5)
+- `FisheyeFOV`: el campo de visión del objetivo en grados (180 por defecto)
+- `HorizontalFOV`, `VerticalFOV`: el campo de visión de la salida en grados (90 por defecto); `Panorama` no los usa. El elemento reduce los ángulos módulo 360; una vez reducido, un ángulo debe estar entre 0,001 y 359,999 grados, y no superar 179,999 para `Perspective`. `FisheyeFOV` sigue el rango de 0,001 a 359,999 en todas las proyecciones. Un fotograma `Equirectangular` abarca `HorizontalFOV` por `VerticalFOV`: uno amplio usa, por ejemplo, 300 por 180
+- `RotationX` (cabeceo), `RotationY` (guiñada), `RotationZ` (alabeo) en grados, con `RotationOrder` y `RotationSpace` (`Local`, relativo a la cámara, o `World`, ejes fijos); a `Panorama` solo se aplica el alabeo
+- `InnerRadius`: la parte central que se recorta de un `Panorama`, normalizada (0,3 por defecto)
+- `RoiX`, `RoiY`, `RoiWidth`, `RoiHeight`: la región de interés en el espacio de la imagen de salida, normalizada, con ancho y alto de al menos 1e-6; el elemento no la limita. Fuera del fotograma en horizontal gira la vista (un panorama cruza su costura); en vertical, un panorama muestra filas negras y un fotograma equirrectangular se pliega sobre el polo
+- `ViewportX`, `ViewportY`, `ViewportWidth`, `ViewportHeight`: dónde se dibuja el resultado en el fotograma de salida, normalizado, con ancho y alto de al menos 1e-6
+- `AdapterIndex`: el adaptador de GPU, `-1` para el adaptador predeterminado
+
+Todos los ajustes excepto `AdapterIndex` se pueden cambiar mientras el pipeline se ejecuta: modifique `Settings` y llame a `Update()`, que devuelve `false` cuando un valor está fuera de rango y, una vez que el bloque está en un pipeline, informa de la causa mediante `OnError`. Así, una sola cámara fisheye se convierte en una cámara PTZ virtual. La salida conserva el tamaño, el formato y la velocidad de fotogramas de la entrada; coloque un `VideoResizeBlock` después del bloque para obtener otro tamaño, por ejemplo 2:1 para un fotograma equirrectangular. Al igual que el bloque de entrelazado, mueve por sí mismo los fotogramas hacia la GPU y desde ella, y requiere una GPU compatible con Direct3D 12. En la CPU, la alternativa es `CVDewarpBlock` (OpenCV).
+
+- **D3D12RemapBlock**: reasignación del video en la GPU según un mapa UV, para la calibración de lentes, la corrección de distorsión y otras transformaciones geométricas
+
+`D3D12RemapSettings` configura:
+
+- `Map`: un `D3D12UVRemapMap`, o `null` para dejar pasar el video sin cambios
+- `AdapterIndex`: el adaptador de GPU, `-1` para el adaptador predeterminado
+
+Un `D3D12UVRemapMap` se crea a partir de su ancho y su alto (cada uno de 1 a 16384) y de una matriz de valores `ushort`, cuatro por punto del mapa, fila por fila desde la esquina superior izquierda: U, V, sin uso y máscara. U y V son la posición de entrada que muestra el punto, de 0 a 65535 para 0 a 1 del ancho y del alto de la entrada. Una máscara de 32768 o más muestra allí la entrada; una menor muestra negro. El mapa se estira sobre el fotograma de salida, por lo que su tamaño no tiene que coincidir con el del video: el punto (x, y) del mapa corresponde a la posición de salida ((x + 0,5) / ancho, (y + 0,5) / alto). El mapa se copia al crearlo y ocupa 8 bytes por punto; un mapa del tamaño del video es más que suficiente. Un pipeline guardado (`ToJson`, `SaveJsonAsync`) incluye el mapa, de hasta 80 millones de puntos (8192x8192 tiene 67 millones); un pipeline con un mapa más grande se guarda sin los ajustes del bloque, y `ToDocument` lo informa. Para reemplazarlo o quitarlo mientras el pipeline se ejecuta, modifique `Settings.Map` y llame a `Update()`; el siguiente fotograma muestra el cambio. El bloque sube el mapa a la GPU en la que están los fotogramas de video y es el propietario de esa copia, por lo que la aplicación nunca maneja un recurso Direct3D; el fotograma que recibe un mapa nuevo espera a que se suba. Un fallo de la subida se informa mediante `OnError`, y el mapa anterior sigue en uso (si no lo hay, o se hizo para otra GPU, el video pasa sin cambios) hasta el siguiente `Update()`, que vuelve a subir el mapa, o hasta que el video pase a otra GPU. Al igual que el bloque de entrelazado, mueve por sí mismo los fotogramas hacia la GPU y desde ella, y requiere una GPU compatible con Direct3D 12.
+
 ### Efectos de video de Windows
 
 - **VideoEffectsWinBlock**: efectos de video específicos de Windows
@@ -83,11 +128,16 @@ Consulte la [documentación de bloques especiales](../Special/index.md)
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
+// El decodificador recibe el flujo codificado: demultiplexar el MP4 y analizar su H.264 en lugar de decodificarlo en un bloque de origen (otro contenedor necesita su propio demultiplexor)
+var fileSource = new BasicFileSourceBlock("video.mp4");
+var demux = new QTDemuxBlock(renderVideo: true, renderAudio: false);
+var parse = new H264ParseBlock();
+pipeline.Connect(fileSource.Output, demux.Input);
+pipeline.Connect(demux.VideoOutput, parse.Input);
 
 // Decodificador D3D11 por hardware
 var d3d11Decoder = new D3D11H264DecoderBlock();
-pipeline.Connect(fileSource.VideoOutput, d3d11Decoder.Input);
+pipeline.Connect(parse.Output, d3d11Decoder.Input);
 
 // Procesar en GPU o descargar a la memoria del sistema
 var d3d11Download = new D3D11DownloadBlock();
@@ -104,13 +154,16 @@ await pipeline.StartAsync();
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
+// Decodificación por software: un decodificador por hardware ya entrega memoria de GPU y la subida no tendría nada que hacer
+var settings = await UniversalSourceSettings.CreateAsync("video.mp4");
+settings.DisableHWDecoders = true;
+var fileSource = new UniversalSourceBlock(settings);
 
 // Subir a la GPU
 var d3d11Upload = new D3D11UploadBlock();
 pipeline.Connect(fileSource.VideoOutput, d3d11Upload.Input);
 
-// Conversión de color en GPU
+// Conversión de color en GPU, aplicada cuando el bloque siguiente necesita otro formato
 var d3d11Converter = new D3D11VideoConverterBlock();
 pipeline.Connect(d3d11Upload.Output, d3d11Converter.Input);
 
@@ -122,6 +175,83 @@ var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(d3d11Download.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
+```
+
+### De progresivo a entrelazado en la GPU
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Una fuente progresiva 25p
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
+
+// 25p a 50i, campo superior primero
+var interlace = new D3D12InterlaceBlock(new D3D12InterlaceSettings
+{
+    FieldPattern = D3D12InterlacePattern.TwoToTwo,
+    TopFieldFirst = true
+});
+pipeline.Connect(fileSource.VideoOutput, interlace.Input);
+
+// MPEG-2 conserva el entrelazado y el orden de campos en el flujo
+var encoder = new MPEG2EncoderBlock(new MPEG2VideoEncoderSettings());
+pipeline.Connect(interlace.Output, encoder.Input);
+
+var sink = new MPEGTSSinkBlock(new MPEGTSSinkSettings("output.ts"));
+pipeline.Connect(encoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+### Corrección fisheye en la GPU
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Una grabación fisheye circular
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("fisheye.mp4"));
+
+// Una vista en perspectiva de 90 grados, girada 30 grados alrededor del eje vertical (guiñada)
+var dewarp = new D3D12FisheyeDewarpBlock(new D3D12FisheyeDewarpSettings
+{
+    Projection = D3D12FisheyeProjection.Perspective,
+    RotationY = 30
+});
+pipeline.Connect(fileSource.VideoOutput, dewarp.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(dewarp.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+
+// Más tarde, durante la reproducción: girar la vista
+dewarp.Settings.RotationY = -45;
+dewarp.Update();
+```
+
+### Reasignación de video en la GPU
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
+
+// Su propio mapa, por ejemplo de una calibración de lente: 1920 x 1080 puntos, cuatro valores cada uno (U, V, sin uso, máscara)
+ushort[] calibration = LoadCalibrationMap();
+var remap = new D3D12RemapBlock(new D3D12RemapSettings
+{
+    Map = new D3D12UVRemapMap(1920, 1080, calibration)
+});
+pipeline.Connect(fileSource.VideoOutput, remap.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(remap.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+
+// Más tarde, durante la reproducción: cambiar a otra calibración
+remap.Settings.Map = new D3D12UVRemapMap(1920, 1080, LoadOtherCalibrationMap());
+remap.Update();
 ```
 
 ### Composición de video

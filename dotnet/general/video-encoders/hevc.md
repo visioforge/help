@@ -252,8 +252,9 @@ transport budget around it.
 
 ### Platform notes
 
-- **10-bit** (`AppleMediaHEVCProfile.Main10`), the **alpha** encoder and rate control all need the
-  GStreamer 1.28.6 runtime, which every Apple package now ships — macOS, Mac Catalyst and iOS alike.
+- **10-bit** (`AppleMediaHEVCProfile.Main10`), the **alpha** encoder and rate control all work on the
+  GStreamer 1.28 runtime every Apple package now ships — macOS, Mac Catalyst and iOS alike (the alpha
+  encoder and rate control need at least 1.26).
   Whether the device's VideoToolbox actually encodes 10-bit is still a per-chip question.
 - `ForceHWUsage` pins the encoder to the hardware-only element, failing rather than falling back
   to a software implementation. It has no effect on iOS: every VideoToolbox encoder there is

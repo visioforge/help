@@ -39,7 +39,7 @@ primary_api_classes:
 
 WavPack is a powerful audio codec that offers both lossless and hybrid lossy compression capabilities, making it highly versatile for different application requirements. The VisioForge.Core library provides a robust implementation of this codec for .NET developers seeking high-quality audio compression solutions.
 
-With support for various quality levels, correction modes, and stereo encoding options, the WavPack encoder can handle multiple channel configurations while delivering excellent compression across a wide range of bitrates and sample rates.
+With support for various quality levels, correction modes, and stereo encoding options, the WavPack encoder produces mono and stereo files while delivering excellent compression across a wide range of bitrates and sample rates.
 
 ## Getting Started with WavPack
 
@@ -162,7 +162,7 @@ Note that correction modes only function when lossy encoding is active, making t
 The WavPack encoder supports:
 
 - Sample rates from 6,000 Hz to 192,000 Hz
-- 1 to 8 audio channels
+- Mono and stereo output: input with more channels is downmixed to stereo, packed 24-bit input (`S24LE`) is encoded as 32-bit, a stereo layout other than front left/right is remixed to it, and mono with a channel position is written as plain mono (GStreamer's WavPack encoder crashes on that input as it is); stereo or multichannel input without channel positions cannot be converted and fails with a negotiation error
 - Optional MD5 hash storage of raw samples for verification
 - Additional processing options for quality enhancement
 

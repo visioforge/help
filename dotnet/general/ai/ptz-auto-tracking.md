@@ -262,7 +262,8 @@ with the video clock. Get the preset tokens for your device with `ONVIFClientX.G
 
 `OnvifPTZMoveTransport` is the built-in ONVIF implementation. To drive a non-ONVIF PTZ device,
 implement `IPTZMoveTransport` (`ContinuousMoveAsync`, `StopAsync`, `GoToPresetAsync`) and pass your
-implementation to the controller.
+implementation to the controller. Each method returns `Task<bool>`: `true` when the device accepted the
+command, `false` otherwise.
 
 ## Demo
 

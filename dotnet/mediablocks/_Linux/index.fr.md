@@ -59,13 +59,18 @@ Voir la [documentation des décodeurs vidéo](../VideoDecoders/index.md)
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
+// Le décodeur attend le flux encodé : démultiplexer le MP4 et analyser son H.264 au lieu de le décoder dans un bloc source (un autre conteneur demande son propre démultiplexeur)
+var fileSource = new BasicFileSourceBlock("video.mp4");
+var demux = new QTDemuxBlock(renderVideo: true, renderAudio: false);
+var parse = new H264ParseBlock();
+pipeline.Connect(fileSource.Output, demux.Input);
+pipeline.Connect(demux.VideoOutput, parse.Input);
 
 // Décodeur matériel VA-API
 if (VAAPIH264DecoderBlock.IsAvailable())
 {
     var vaapiDecoder = new VAAPIH264DecoderBlock();
-    pipeline.Connect(fileSource.VideoOutput, vaapiDecoder.Input);
+    pipeline.Connect(parse.Output, vaapiDecoder.Input);
     
     var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
     pipeline.Connect(vaapiDecoder.Output, videoRenderer.Input);
@@ -74,7 +79,7 @@ else
 {
     // Solution de repli vers le décodeur logiciel
     var decoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
-    pipeline.Connect(fileSource.VideoOutput, decoder.Input);
+    pipeline.Connect(parse.Output, decoder.Input);
     
     var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
     pipeline.Connect(decoder.VideoOutput, videoRenderer.Input);
@@ -89,14 +94,22 @@ await pipeline.StartAsync();
 var pipeline = new MediaBlocksPipeline();
 
 // Décoder le flux H.264
-var h264Source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("h264.mp4"));
+var h264Source = new BasicFileSourceBlock("h264.mp4");
+var h264Demux = new QTDemuxBlock(renderVideo: true, renderAudio: false);
+var h264Parse = new H264ParseBlock();
 var h264Decoder = new VAAPIH264DecoderBlock();
-pipeline.Connect(h264Source.VideoOutput, h264Decoder.Input);
+pipeline.Connect(h264Source.Output, h264Demux.Input);
+pipeline.Connect(h264Demux.VideoOutput, h264Parse.Input);
+pipeline.Connect(h264Parse.Output, h264Decoder.Input);
 
 // Décoder le flux H.265
-var h265Source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("h265.mp4"));
+var h265Source = new BasicFileSourceBlock("h265.mp4");
+var h265Demux = new QTDemuxBlock(renderVideo: true, renderAudio: false);
+var h265Parse = new H265ParseBlock();
 var h265Decoder = new VAAPIHEVCDecoderBlock();
-pipeline.Connect(h265Source.VideoOutput, h265Decoder.Input);
+pipeline.Connect(h265Source.Output, h265Demux.Input);
+pipeline.Connect(h265Demux.VideoOutput, h265Parse.Input);
+pipeline.Connect(h265Parse.Output, h265Decoder.Input);
 
 // Mélanger les deux flux (exemple)
 var mixer = new VideoMixerBlock(mixerSettings);

@@ -862,10 +862,12 @@ Nom : UniversalDecoderBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+var fileSource = new BasicFileSourceBlock("test.mp4");
+var demux = new QTDemuxBlock(renderVideo: true, renderAudio: false);
+pipeline.Connect(fileSource.Output, demux.Input);
 
-var decoder = new UniversalDecoderBlock();
-pipeline.Connect(fileSource.VideoOutput, decoder.Input);
+var decoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+pipeline.Connect(demux.VideoOutput, decoder.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(decoder.VideoOutput, videoRenderer.Input);
@@ -1272,6 +1274,68 @@ await pipeline.StartAsync();
 ### Plateformes
 
 Windows, macOS, Linux.
+
+## Clock Sync
+
+Le `ClockSyncBlock` encapsule l'élément GStreamer `clocksync` pour cadencer un pipeline à un multiple choisi du temps réel. Un pipeline de fichier à fichier s'exécute normalement aussi vite que la machine le permet ; avec ce bloc, chaque tampon attend son heure sur l'horloge du pipeline, mise à l'échelle par `ClockSyncSettings.Rate`. Aucun tampon n'est abandonné ni dupliqué.
+
+Le facteur ne cadence que le traitement. Les horodatages et la durée de la sortie ne changent pas : un fichier écrit au facteur 2 se lit toujours à vitesse normale — ce bloc ne contrôle pas la vitesse de lecture. Utilisez-le pour éviter qu'un transcodage ne sature le processeur ou le disque, ou pour alimenter un consommateur en aval à une vitesse régulière.
+
+### Informations sur le bloc
+
+Nom : ClockSyncBlock.
+
+Direction du pin | Type de média | Nombre de pins
+--- | :---: | :---:
+Entrée | Tout type | 1
+Sortie | Tout type | 1
+
+### Paramètres
+
+Propriétés de `ClockSyncSettings` :
+
+- `Rate` — vitesse de traitement en multiple du temps réel (`1` = temps réel, `2` = deux fois le temps réel, `0.5` = la moitié). Doit être supérieur à zéro. Par défaut : `1`.
+- `SyncToFirst` — prend le décalage d'horodatage du premier tampon, afin qu'un flux dont les horodatages ne commencent pas au temps d'exécution du pipeline soit cadencé à partir de son premier tampon. Par défaut : `false`.
+
+Les paramètres sont appliqués au démarrage du pipeline et restent fixes pendant son exécution ; une modification prend effet au démarrage suivant. Pour cadencer un fichier avec audio et vidéo, placez un bloc avec le même facteur sur chaque flux et laissez `SyncToFirst` désactivé, afin que les deux flux soient cadencés sur le même temps d'exécution.
+
+Aucune image n'est abandonnée tant que la source attend le pipeline, comme le fait un fichier, et que les sorties ne se synchronisent pas sur l'horloge, comme une sortie fichier ou un `NullRendererBlock` avec `IsSync = false`. Une source en direct (caméra, flux réseau) continue de produire en temps réel : un facteur inférieur à 1 la fait déborder et des images sont abandonnées en amont du bloc. Un moteur de rendu en aval lit toujours en temps réel, car le bloc transmet les horodatages d'origine : au-dessus du facteur 1, il retient les images ; en dessous, il les abandonne comme étant en retard.
+
+Le facteur s'applique à un flux continu. Une source qui enchaîne des segments (boucle, playlist, recherche sans vidage) n'est plus cadencée correctement après son premier segment : au facteur 2, elle attend environ la moitié de ce qui a déjà été lu avant de continuer. Le pipeline se comporte aussi comme un pipeline en direct : il ne fait pas de préchargement, donc un pipeline en pause n'affiche aucune image, et au facteur 1 le bloc répond à la requête de latence comme une source en direct, donc un mélangeur en aval agrège en mode direct.
+
+Le bloc propose l'horloge système au pipeline. Sauf si un élément plus en amont fournit sa propre horloge, l'horloge système devient l'horloge du pipeline, et un moteur de rendu audio du même pipeline lui est asservi.
+
+`ClockSyncBlock.Resync()` demande à l'élément de recalculer le décalage d'horodatage à partir du tampon suivant. Utilisez-le avec `SyncToFirst` après une interruption du flux (par exemple, par une sonde de pad bloquante) pour que le cadencement reprenne à partir des tampons suivants. Renvoie `false` si le bloc n'est pas encore construit, ou si la synchronisation sur le premier tampon ou la synchronisation de l'élément est désactivée, auquel cas une resynchronisation n'a aucun effet.
+
+### Disponibilité
+
+`ClockSyncBlock.IsAvailable()` renvoie `true` si l'élément GStreamer `clocksync` est présent avec la prise en charge du facteur (GStreamer 1.28 ou plus récent).
+
+### Exemple de code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var sourceSettings = await UniversalSourceSettings.CreateAsync("input.mp4");
+sourceSettings.RenderAudio = false;
+var source = new UniversalSourceBlock(sourceSettings);
+
+// Process at twice real time: a 10-minute file takes about 5 minutes.
+var clockSync = new ClockSyncBlock(new ClockSyncSettings { Rate = 2.0 });
+pipeline.Connect(source.VideoOutput, clockSync.Input);
+
+var encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+pipeline.Connect(clockSync.Output, encoder.Input);
+
+var sink = new MP4SinkBlock(new MP4SinkSettings("output.mp4"));
+pipeline.Connect(encoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+### Plateformes
+
+Windows, macOS, Linux, iOS, Android (GStreamer 1.28 ou plus récent).
 
 ## Custom Media Block
 

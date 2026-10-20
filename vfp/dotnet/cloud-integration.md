@@ -46,7 +46,7 @@ Install-Package VisioForge.DotNet.VideoFingerPrinting.MongoDB -Version 2025.8.6
 dotnet add package VisioForge.DotNet.VideoFingerPrinting.MongoDB --version 2025.8.6
 
 # PackageReference
-<PackageReference Include="VisioForge.DotNet.VideoFingerPrinting.MongoDB" Version="2025.8.6" />
+<PackageReference Include="VisioForge.DotNet.VideoFingerPrinting.MongoDB" Version="[2025.8.6]"/>
 ```
 
 #### Key Features

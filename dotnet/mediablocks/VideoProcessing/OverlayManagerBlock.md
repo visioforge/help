@@ -576,6 +576,8 @@ public class OverlayManagerVideo : IOverlayManagerElement, IDisposable
 | `AudioOutput_Volume` | `double` | `1.0` | Audio volume (0.0-1.0+, above 1.0 amplifies) |
 | `AudioOutput_Mute` | `bool` | `false` | Mute audio output |
 
+Like every overlay element, it supports the common `IOverlayManagerElement` properties, including the `StartTime`/`EndTime` visibility window — see [Common Properties](#common-properties-ioverlaymanagerelement).
+
 **Methods:**
 
 - `Initialize(bool autoStart)` - Initialize the video pipeline. If `autoStart` is true, begins playing immediately; if false, preloads to PAUSED state.
@@ -600,6 +602,8 @@ var videoOverlay = new OverlayManagerVideo(
     Loop = true,
     Opacity = 0.9,
     StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    StartTime = TimeSpan.FromSeconds(5),   // show from 5 s of the main video
+    EndTime = TimeSpan.FromSeconds(30),    // hide after 30 s
     ZIndex = 5
 };
 

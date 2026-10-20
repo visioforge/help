@@ -39,7 +39,7 @@ primary_api_classes:
 
 WavPack est un puissant codec audio qui offre des capacités de compression à la fois sans perte et hybride avec perte, ce qui le rend très polyvalent pour différentes exigences d'application. La bibliothèque VisioForge.Core fournit une implémentation robuste de ce codec pour les développeurs .NET à la recherche de solutions de compression audio de haute qualité.
 
-Avec la prise en charge de divers niveaux de qualité, modes de correction et options d'encodage stéréo, l'encodeur WavPack peut gérer plusieurs configurations de canaux tout en offrant une excellente compression sur une large gamme de débits et fréquences d'échantillonnage.
+Avec la prise en charge de divers niveaux de qualité, modes de correction et options d'encodage stéréo, l'encodeur WavPack produit des fichiers mono et stéréo tout en offrant une excellente compression sur une large gamme de débits et fréquences d'échantillonnage.
 
 ## Prise en main de WavPack
 
@@ -162,7 +162,7 @@ Notez que les modes de correction ne fonctionnent que lorsque l'encodage avec pe
 L'encodeur WavPack prend en charge :
 
 - Fréquences d'échantillonnage de 6 000 Hz à 192 000 Hz
-- 1 à 8 canaux audio
+- Sortie mono et stéréo : une entrée avec plus de canaux est réduite en stéréo, une entrée 24 bits compacte (`S24LE`) est encodée en 32 bits, une disposition stéréo autre qu'avant gauche/droite y est remixée, et un mono avec une position de canal est écrit en mono simple (l'encodeur WavPack de GStreamer plante sur ces entrées telles quelles) ; une entrée stéréo ou multicanal sans positions de canaux ne peut pas être convertie et échoue avec une erreur de négociation
 - Stockage facultatif du hachage MD5 des échantillons bruts pour vérification
 - Options de traitement supplémentaires pour l'amélioration de la qualité
 

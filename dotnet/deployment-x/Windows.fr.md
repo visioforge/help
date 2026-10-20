@@ -197,6 +197,19 @@ Les applications MAUI, WinUI 3 et Unity chargent toujours sur place et n'utilise
 
 ## Dépannage des problèmes courants
 
+### Erreurs de chargement des bibliothèques natives
+
+Si un moteur basé sur GStreamer ou un MediaBlock lève `DllNotFoundException`, consultez le message du SDK :
+il indique le package de redistribution correspondant à **l’architecture du processus**, les dossiers
+des bibliothèques natives et le guide de déploiement. Une `BadImageFormatException` peut signaler une
+bibliothèque compilée pour une autre architecture. Si la redistribution est présente, vérifiez ses
+dépendances, notamment le runtime Visual C++.
+
+`HelpLinks.DeploymentX`, dans `VisioForge.Core.UI`, renvoie le guide de déploiement de la plateforme
+cible du SDK. Visual Studio peut encore s’arrêter sur l’exception d’origine avant sa capture par le SDK
+si l’arrêt au déclenchement des exceptions est activé ; l’exception reçue par votre application contient
+les indications du SDK.
+
 ### Problèmes de déploiement
 
 Si vous rencontrez des problèmes après le déploiement :

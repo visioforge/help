@@ -861,10 +861,12 @@ Nombre: UniversalDecoderBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+var fileSource = new BasicFileSourceBlock("test.mp4");
+var demux = new QTDemuxBlock(renderVideo: true, renderAudio: false);
+pipeline.Connect(fileSource.Output, demux.Input);
 
-var decoder = new UniversalDecoderBlock();
-pipeline.Connect(fileSource.VideoOutput, decoder.Input);
+var decoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+pipeline.Connect(demux.VideoOutput, decoder.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(decoder.VideoOutput, videoRenderer.Input);
@@ -1271,6 +1273,68 @@ await pipeline.StartAsync();
 ### Plataformas
 
 Windows, macOS, Linux.
+
+## Sincronización de Reloj
+
+El `ClockSyncBlock` envuelve el elemento GStreamer `clocksync` para marcar el ritmo de un pipeline a un múltiplo elegido del tiempo real. Un pipeline de archivo a archivo normalmente se ejecuta tan rápido como lo permite la máquina; con este bloque, cada búfer espera su momento en el reloj del pipeline, escalado por `ClockSyncSettings.Rate`. No se descarta ni se duplica ningún búfer.
+
+El factor solo marca el ritmo del procesamiento. Las marcas de tiempo y la duración de la salida no cambian, por lo que un archivo escrito con factor 2 se sigue reproduciendo a velocidad normal: este bloque no controla la velocidad de reproducción. Úselo para evitar que una transcodificación sature la CPU o el disco, o para alimentar a un consumidor posterior a una velocidad constante.
+
+### Información del bloque
+
+Nombre: ClockSyncBlock.
+
+Dirección del pin | Tipo de medio | Conteo de pines
+--- | :---: | :---:
+Entrada | Cualquiera | 1
+Salida | Cualquiera | 1
+
+### Configuración
+
+Propiedades de `ClockSyncSettings`:
+
+- `Rate` — velocidad de procesamiento como múltiplo del tiempo real (`1` = tiempo real, `2` = el doble, `0.5` = la mitad). Debe ser mayor que cero. Valor predeterminado: `1`.
+- `SyncToFirst` — toma el desplazamiento de marcas de tiempo del primer búfer, de modo que un flujo cuyas marcas de tiempo no empiezan en el tiempo de ejecución del pipeline se procese a ritmo desde su primer búfer. Valor predeterminado: `false`.
+
+La configuración se aplica al iniciar el pipeline y permanece fija mientras se ejecuta; un cambio surte efecto en el siguiente inicio. Para marcar el ritmo de un archivo con audio y video, coloque un bloque con el mismo factor en cada flujo y deje `SyncToFirst` desactivado, para que ambos flujos sigan el mismo tiempo de ejecución.
+
+No se descarta ningún fotograma mientras la fuente espere al pipeline, como hace un archivo, y las salidas no se sincronicen con el reloj, como una salida de archivo o un `NullRendererBlock` con `IsSync = false`. Una fuente en vivo (cámara, flujo de red) sigue produciendo en tiempo real, por lo que un factor menor que 1 la desborda y se descartan fotogramas antes del bloque. Un renderizador posterior sigue reproduciendo en tiempo real, porque el bloque reenvía las marcas de tiempo originales: con un factor mayor que 1 retiene los fotogramas y con uno menor los descarta por llegar tarde.
+
+El factor se aplica a un flujo continuo. Una fuente que encadena segmentos (un bucle, una lista de reproducción, una búsqueda sin vaciado) deja de procesarse al ritmo correcto después de su primer segmento: con factor 2 espera aproximadamente la mitad de lo ya reproducido antes de continuar. El pipeline también se comporta como uno en vivo: no realiza precarga, por lo que un pipeline en pausa no muestra ningún fotograma, y con factor 1 el bloque responde a la consulta de latencia como en vivo, por lo que un mezclador posterior agrega en modo en vivo.
+
+El bloque ofrece el reloj del sistema al pipeline. Salvo que un elemento anterior proporcione su propio reloj, el reloj del sistema pasa a ser el reloj del pipeline, y un renderizador de audio del mismo pipeline se sincroniza con él.
+
+`ClockSyncBlock.Resync()` pide al elemento que recalcule el desplazamiento de marcas de tiempo a partir del siguiente búfer. Úselo con `SyncToFirst` después de que el flujo se haya detenido (por ejemplo, por una sonda de pad que bloquea) para que el ritmo se reanude desde los búferes siguientes. Devuelve `false` si el bloque aún no está construido, o si la sincronización con el primer búfer o la sincronización del elemento está desactivada, en cuyo caso la resincronización no tiene efecto.
+
+### Disponibilidad
+
+`ClockSyncBlock.IsAvailable()` devuelve `true` si el elemento GStreamer `clocksync` está presente con soporte de factor (GStreamer 1.28 o posterior).
+
+### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var sourceSettings = await UniversalSourceSettings.CreateAsync("input.mp4");
+sourceSettings.RenderAudio = false;
+var source = new UniversalSourceBlock(sourceSettings);
+
+// Process at twice real time: a 10-minute file takes about 5 minutes.
+var clockSync = new ClockSyncBlock(new ClockSyncSettings { Rate = 2.0 });
+pipeline.Connect(source.VideoOutput, clockSync.Input);
+
+var encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+pipeline.Connect(clockSync.Output, encoder.Input);
+
+var sink = new MP4SinkBlock(new MP4SinkSettings("output.mp4"));
+pipeline.Connect(encoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+### Plataformas
+
+Windows, macOS, Linux, iOS, Android (GStreamer 1.28 o posterior).
 
 ## Custom Media Block
 

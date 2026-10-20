@@ -55,20 +55,20 @@ primary_api_classes:
 ## Paquets NuGet
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.10.15" />
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.15" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.20]"/>
 
 <!-- Redists de plateforme — incluez uniquement les cibles que vous construisez -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.9.11"
-                  Condition="$(TargetFramework.Contains('windows'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11"
-                  Condition="$(TargetFramework.Contains('windows'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11"
-                  Condition="$(TargetFramework.Contains('maccatalyst'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.10.9"
-                  Condition="$(TargetFramework.Contains('android'))" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.9.11"
-                  Condition="$(TargetFramework.Contains('ios'))" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64"
+                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64"
+                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst"
+                  Condition="$(TargetFramework.Contains('maccatalyst'))" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android"
+                  Condition="$(TargetFramework.Contains('android'))" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS"
+                  Condition="$(TargetFramework.Contains('ios'))" Version="[2026.10.20]"/>
 ```
 
 ## MauiProgram.cs

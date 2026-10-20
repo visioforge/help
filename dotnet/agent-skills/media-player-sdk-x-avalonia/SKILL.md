@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Media Player SDK X exposes a high-level playback god-object (`MediaPlayerCoreX`) — local files, HTTP(S), HLS, RTSP, RTMP, MMS, image sequences — with seek, pause/resume, rate control, volume, audio-device selection, frame-stepping, tag reading, and `MediaInfoReaderX` stream introspection. Same C# code targets all three desktop OSes — only the UI host (Avalonia here) and the per-OS native redist NuGet package change between platforms.
 
-Pinned NuGet versions: wrapper **`2026.10.15`**, Windows and macOS native redists at the versions shown in the csproj below (matches the [official Simple Media Player Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.10.20`**, Windows and macOS native redists at the versions shown in the csproj below (matches the [official Simple Media Player Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -68,8 +68,8 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <OutputType>WinExe</OutputType>
 </PropertyGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.10.15" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
 </ItemGroup>
 
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
@@ -77,7 +77,7 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <OutputType>Exe</OutputType>
 </PropertyGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.10.15" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
 </ItemGroup>
 
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">

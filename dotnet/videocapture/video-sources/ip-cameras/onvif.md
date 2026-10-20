@@ -461,7 +461,7 @@ await onvifClient.SetPresetAsync(profileToken, "MyPreset");
 
 ```cs
 // Move to absolute pan + tilt + zoom position with per-axis speeds
-await onvifClient.AbsoluteMoveAsync(
+bool moved = await onvifClient.AbsoluteMoveAsync(
     profileToken,
     pan:       0.5f,
     tilt:      0.3f,
@@ -470,6 +470,8 @@ await onvifClient.AbsoluteMoveAsync(
     tiltSpeed: 1.0f,
     zoomSpeed: 1.0f);
 ```
+
+Every PTZ command (`AbsoluteMoveAsync`, `RelativeMoveAsync`, `ContinuousMoveAsync`, `StopMoveAsync`, `GoToPresetAsync`, `GotoHomePositionAsync`, `RemovePresetAsync`) returns `true` when the camera accepted it and `false` when the command did not reach the camera or the camera rejected it; the reason is written to the SDK log. A camera that does not answer makes each request wait for `ONVIFClientX.RequestTimeout` (one minute by default) — set it before `ConnectAsync` to fail sooner. `GotoHomePositionAsync` sends the camera's own home-position command and, only when the camera refuses it (no home position configured, or the operation is not supported), falls back to a preset named "Home", then the preset with token "1"; with neither, it returns `false`.
 
 ## Camera Actions and Capabilities
 

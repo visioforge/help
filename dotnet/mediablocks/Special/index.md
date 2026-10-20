@@ -862,10 +862,12 @@ Name: UniversalDecoderBlock.
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+var fileSource = new BasicFileSourceBlock("test.mp4");
+var demux = new QTDemuxBlock(renderVideo: true, renderAudio: false);
+pipeline.Connect(fileSource.Output, demux.Input);
 
-var decoder = new UniversalDecoderBlock();
-pipeline.Connect(fileSource.VideoOutput, decoder.Input);
+var decoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+pipeline.Connect(demux.VideoOutput, decoder.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(decoder.VideoOutput, videoRenderer.Input);
@@ -1272,6 +1274,68 @@ await pipeline.StartAsync();
 ### Platforms
 
 Windows, macOS, Linux.
+
+## Clock Sync
+
+The `ClockSyncBlock` wraps the GStreamer `clocksync` element to pace a pipeline at a chosen multiple of real time. A file-to-file pipeline normally runs as fast as the machine allows; with this block every buffer waits for its time on the pipeline clock, scaled by `ClockSyncSettings.Rate`. No buffer is dropped or duplicated.
+
+The rate paces the processing only. Timestamps and duration of the output are unchanged, so a file written at rate 2 still plays at normal speed — this block is not a playback-speed control. Use it to keep a transcode from saturating the CPU or disk, or to feed a downstream consumer at a steady speed.
+
+### Block info
+
+Name: ClockSyncBlock.
+
+Pin direction | Media type | Pins count
+--- | :---: | :---:
+Input | Any | 1
+Output | Any | 1
+
+### Settings
+
+`ClockSyncSettings` properties:
+
+- `Rate` — processing speed as a multiple of real time (`1` = real time, `2` = twice real time, `0.5` = half). Must be greater than zero. Default: `1`.
+- `SyncToFirst` — take the timestamp offset from the first buffer, so a stream whose timestamps do not start at the pipeline's running time is paced from its first buffer. Default: `false`.
+
+The settings are applied when the pipeline starts and stay fixed while it runs; a change takes effect on the next start. To pace a file with both audio and video, put one block with the same rate on each stream and leave `SyncToFirst` off, so both streams are paced against the same running time.
+
+No frame is dropped as long as the source waits for the pipeline, as a file does, and the sinks do not sync to the clock, such as a file sink or a `NullRendererBlock` with `IsSync = false`. A live source (camera, network stream) keeps producing in real time, so a rate below 1 backs it up and frames are dropped upstream of the block. A renderer downstream still plays at real time, because the block forwards the original timestamps: above rate 1 it holds the frames back, below rate 1 it drops them as late.
+
+The rate scales one continuous stream. A source that chains segments (a loop, a playlist, a non-flushing seek) is not paced correctly after its first segment: at rate 2 it waits about half of what has played before going on. The pipeline also behaves as a live one: it does not preroll, so a paused pipeline shows no frame, and at rate 1 the block answers the latency query as live, so a mixer downstream aggregates in live mode.
+
+The block offers the system clock to the pipeline. Unless an element further upstream provides its own clock, the system clock becomes the pipeline clock, and an audio renderer in the same pipeline is slaved to it.
+
+`ClockSyncBlock.Resync()` asks the element to recalculate the timestamp offset from the next buffer. Use it with `SyncToFirst` after the flow was held up (for example, by a blocking pad probe) so pacing restarts from the buffers that follow. It returns `false` if the block is not built yet, or the element's sync-to-first or sync is off, where a resync has no effect.
+
+### Availability
+
+`ClockSyncBlock.IsAvailable()` returns `true` if the GStreamer `clocksync` element is present with rate support (GStreamer 1.28 or newer).
+
+### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var sourceSettings = await UniversalSourceSettings.CreateAsync("input.mp4");
+sourceSettings.RenderAudio = false;
+var source = new UniversalSourceBlock(sourceSettings);
+
+// Process at twice real time: a 10-minute file takes about 5 minutes.
+var clockSync = new ClockSyncBlock(new ClockSyncSettings { Rate = 2.0 });
+pipeline.Connect(source.VideoOutput, clockSync.Input);
+
+var encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+pipeline.Connect(clockSync.Output, encoder.Input);
+
+var sink = new MP4SinkBlock(new MP4SinkSettings("output.mp4"));
+pipeline.Connect(encoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (GStreamer 1.28 or newer).
 
 ## Custom Media Block
 

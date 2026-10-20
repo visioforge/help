@@ -53,6 +53,7 @@ Propriétés clés de `MPEGTSDemuxSettings` :
 
 - `Latency` (`TimeSpan`) : obtient ou définit la latence. Par défaut 700 millisecondes.
 - `ProgramNumber` (int) : obtient ou définit le numéro de programme. Utilisez -1 pour la sélection automatique/par défaut.
+- `SkewCorrections` (bool) : obtient ou définit si le démultiplexeur corrige en continu les horodatages de sortie d'un flux en direct alimenté par push. La valeur par défaut est `true`, ce qui maintient le flux en direct synchronisé. Mettez-la à `false` lorsque les horodatages d'entrée sont déjà corrigés par l'horloge, ou lorsque le pipeline doit conserver la chronologie d'entrée au lieu de la corriger. Nécessite GStreamer 1.28 ou une version ultérieure ; sur un runtime plus ancien, le réglage n'est pas appliqué et le journal du SDK contient un avertissement.
 
 ### Pipeline d'exemple
 
@@ -254,7 +255,7 @@ Le `UniversalDemuxBlock` est configuré au moyen d'une implémentation de `IUniv
   - `MKVDemuxSettings`
   - `MP4DemuxSettings`
   - `MPEGPSDemuxSettings`
-  - `MPEGTSDemuxSettings` (inclut les propriétés `Latency` et `ProgramNumber`)
+  - `MPEGTSDemuxSettings` (inclut les propriétés `Latency`, `ProgramNumber` et `SkewCorrections`)
   - `OGGDemuxSettings`
   - `WebMDemuxSettings`
   - `UniversalDemuxSettings` (pour le type `Auto`)

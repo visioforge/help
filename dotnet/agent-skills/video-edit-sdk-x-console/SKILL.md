@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK X (cross-platform editor editio
 
 This skill helps you add **VisioForge Video Edit SDK X** — the cross-platform "X" edition of the editor SDK — to a headless .NET console application: scripts, scheduled jobs, server-side workers, and CI pipelines that cut, trim, merge, transcode, or apply effects to existing video files. The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level non-linear-editor god-object (`VideoEditCoreX`) that mirrors the legacy `VideoEditCore` API but runs on the cross-platform engine. Same C# code targets Windows / macOS / Linux — the only thing that changes between platforms is the per-OS native redist NuGet package. Like every editor SDK, X **does not** capture from cameras or screen — for that see `video-capture-sdk-x-wpf` (or its console-/service-host siblings on the roadmap).
 
-Pinned NuGet versions: wrapper **`2026.10.15`**, native redists at the versions shown in the csproj below (matches the [official Video From Images X CLI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/Console)). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.10.20`**, native redists at the versions shown in the csproj below (matches the [official Video From Images X CLI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/Console)). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -35,11 +35,11 @@ Three packages are required for a Windows console scenario — the .NET wrapper 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="2026.10.15" />
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.20]"/>
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.10.15" />
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.9.11" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
 </ItemGroup>
 ```
 

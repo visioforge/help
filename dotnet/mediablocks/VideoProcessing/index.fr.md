@@ -90,6 +90,7 @@ primary_api_classes:
 - [Warp](#warp)
 - [Water ripple](#water-ripple)
 - [D3D11 Video Converter](#d3d11-video-converter)
+- [D3D12 Interlace](#d3d12-interlace)
 - [Video Effects (Windows)](#video-effects-windows)
 - [D3D11 Video Compositor](#d3d11-video-compositor)
 - [VR360 Processor](#vr360-processor)
@@ -3118,6 +3119,170 @@ await pipeline.StartAsync();
 ### Plateformes
 
 Windows (Direct3D 11 requis).
+
+## D3D12 Interlace
+
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+Le bloc D3D12 Interlace convertit sur un GPU Direct3D 12 une vidéo progressive en vidéo entrelacée, pour la diffusion et les autres sorties qui exigent une vidéo entrelacée avec un ordre de trames explicite. C'est l'équivalent GPU du bloc [Interlace](#interlace) et l'inverse du désentrelacement. Le motif de trames, l'ordre des trames, le moteur GPU et l'adaptateur se règlent avec `D3D12InterlaceSettings` ; voir [Blocs de la plateforme Windows](../windows/index.md#traitement-direct3d-12) pour le détail.
+
+### Informations sur le bloc
+
+Nom : D3D12InterlaceBlock.
+
+Direction du pad | Type de média | Nombre de pads
+--- | :---: | :---:
+Entrée | Vidéo non compressée (progressive) | 1
+Sortie | Vidéo non compressée (entrelacée) | 1
+
+### Exemple de pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->D3D12InterlaceBlock;
+    D3D12InterlaceBlock-->MPEG2EncoderBlock;
+    MPEG2EncoderBlock-->MPEGTSSinkBlock;
+```
+
+### Exemple de code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+
+var interlace = new D3D12InterlaceBlock(new D3D12InterlaceSettings
+{
+    FieldPattern = D3D12InterlacePattern.TwoToTwo,
+    TopFieldFirst = true
+});
+pipeline.Connect(fileSource.VideoOutput, interlace.Input);
+
+var encoder = new MPEG2EncoderBlock(new MPEG2VideoEncoderSettings());
+pipeline.Connect(interlace.Output, encoder.Input);
+
+var sink = new MPEGTSSinkBlock(new MPEGTSSinkSettings("output.ts"));
+pipeline.Connect(encoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+### Plateformes
+
+Windows (Direct3D 12 requis).
+
+## D3D12 Fisheye Dewarp
+
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+Le bloc D3D12 Fisheye Dewarp transforme sur un GPU Direct3D 12 une image fisheye circulaire en vue équirectangulaire, panoramique ou en perspective. La vue peut être orientée et zoomée pendant l'exécution du pipeline en modifiant `Settings` puis en appelant `Update()`. La sortie conserve la taille, le format et la fréquence d'images de l'entrée. La projection, le cercle fisheye, le champ de vision, la rotation, le rayon intérieur du panorama, la région d'intérêt, le viewport et l'adaptateur se règlent avec `D3D12FisheyeDewarpSettings` ; voir [Blocs de la plateforme Windows](../windows/index.md#traitement-direct3d-12) pour le détail. Le bloc [CV Dewarp](../OpenCV/index.md#bloc-cv-dewarp) est l'alternative sur CPU.
+
+### Informations sur le bloc
+
+Nom : D3D12FisheyeDewarpBlock.
+
+Direction du pad | Type de média | Nombre de pads
+--- | :---: | :---:
+Entrée | Vidéo non compressée (fisheye) | 1
+Sortie | Vidéo non compressée | 1
+
+### Exemple de pipeline
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->D3D12FisheyeDewarpBlock;
+    D3D12FisheyeDewarpBlock-->VideoRendererBlock;
+```
+
+### Exemple de code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("fisheye.mp4"));
+
+var dewarp = new D3D12FisheyeDewarpBlock(new D3D12FisheyeDewarpSettings
+{
+    Projection = D3D12FisheyeProjection.Perspective,
+    HorizontalFOV = 100,
+    VerticalFOV = 70
+});
+pipeline.Connect(fileSource.VideoOutput, dewarp.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(dewarp.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+
+// Incliner la vue pendant la lecture
+dewarp.Settings.RotationX = -20;
+dewarp.Update();
+```
+
+### Plateformes
+
+Windows (Direct3D 12 requis).
+
+## D3D12 Remap
+
+[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+
+Le bloc D3D12 Remap déplace les pixels de la vidéo sur un GPU Direct3D 12 selon une carte UV fournie par l'application : chaque point de l'image de sortie affiche le point de l'image d'entrée que la carte lui associe. Cela couvre la calibration d'objectif et la correction de distorsion, la déformation, le miroir et toute autre transformation géométrique décrite point par point. Le bloc envoie lui-même la carte sur le GPU, et la carte peut être remplacée ou retirée pendant l'exécution du pipeline en modifiant `Settings.Map` puis en appelant `Update()`. La sortie conserve la taille, le format et la fréquence d'images de l'entrée. Voir [Blocs de la plateforme Windows](../windows/index.md#traitement-direct3d-12) pour le format de la carte.
+
+### Informations sur le bloc
+
+Nom : D3D12RemapBlock.
+
+Direction de la broche | Type de média | Nombre de broches
+--- | :---: | :---:
+Entrée | Vidéo non compressée | 1
+Sortie | Vidéo non compressée | 1
+
+### Le pipeline d'exemple
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->D3D12RemapBlock;
+    D3D12RemapBlock-->VideoRendererBlock;
+```
+
+### Exemple de code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
+
+// Une carte 256x256 qui inverse la vidéo horizontalement : U, V, inutilisé et masque pour chaque point
+const int size = 256;
+var data = new ushort[size * size * 4];
+for (var y = 0; y < size; y++)
+{
+    for (var x = 0; x < size; x++)
+    {
+        var i = ((y * size) + x) * 4;
+        data[i] = (ushort)((1 - ((x + 0.5) / size)) * 65535); // U : la colonne d'entrée
+        data[i + 1] = (ushort)(((y + 0.5) / size) * 65535);   // V : la ligne d'entrée
+        data[i + 3] = 65535;                                  // masque : afficher l'entrée
+    }
+}
+
+var remap = new D3D12RemapBlock(new D3D12RemapSettings { Map = new D3D12UVRemapMap(size, size, data) });
+pipeline.Connect(fileSource.VideoOutput, remap.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(remap.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+
+// Plus tard, pendant la lecture : retirer la carte
+remap.Settings.Map = null;
+remap.Update();
+```
+
+### Plateformes
+
+Windows (Direct3D 12 requis).
 
 ## Video Effects (Windows)
 

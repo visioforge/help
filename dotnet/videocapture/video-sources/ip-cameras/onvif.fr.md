@@ -461,7 +461,7 @@ await onvifClient.SetPresetAsync(profileToken, "MyPreset");
 
 ```cs
 // Se déplacer vers une position pan + tilt + zoom absolue avec des vitesses par axe
-await onvifClient.AbsoluteMoveAsync(
+bool moved = await onvifClient.AbsoluteMoveAsync(
     profileToken,
     pan:       0.5f,
     tilt:      0.3f,
@@ -470,6 +470,8 @@ await onvifClient.AbsoluteMoveAsync(
     tiltSpeed: 1.0f,
     zoomSpeed: 1.0f);
 ```
+
+Chaque commande PTZ (`AbsoluteMoveAsync`, `RelativeMoveAsync`, `ContinuousMoveAsync`, `StopMoveAsync`, `GoToPresetAsync`, `GotoHomePositionAsync`, `RemovePresetAsync`) renvoie `true` lorsque la caméra l'a acceptée et `false` lorsque la commande n'a pas atteint la caméra ou que la caméra l'a refusée ; la raison est écrite dans le journal du SDK. Une caméra qui ne répond pas fait attendre chaque requête pendant `ONVIFClientX.RequestTimeout` (une minute par défaut) : définissez-le avant `ConnectAsync` pour échouer plus tôt. `GotoHomePositionAsync` envoie la commande de position d'origine de la caméra elle-même et, uniquement lorsque la caméra la refuse (aucune position d'origine configurée, ou opération non prise en charge), se rabat sur un préréglage nommé « Home », puis sur le préréglage de jeton « 1 » ; sans l'un ni l'autre, elle renvoie `false`.
 
 ## Actions et capacités de la caméra
 

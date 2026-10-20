@@ -53,6 +53,7 @@ Key properties of `MPEGTSDemuxSettings`:
 
 - `Latency` (`TimeSpan`): Gets or sets the latency. Default is 700 milliseconds.
 - `ProgramNumber` (int): Gets or sets the program number. Use -1 for default/automatic selection.
+- `SkewCorrections` (bool): Gets or sets whether the demuxer continuously corrects the output timestamps of a pushed live feed. Default is `true`, which keeps a live feed in synchronization. Set it to `false` when the input timestamps are already clock-corrected, or when the pipeline should keep the input timeline instead of correcting it. Needs GStreamer 1.28 or newer; on an older runtime the setting is not applied and the SDK log carries a warning.
 
 ### The sample pipeline
 
@@ -254,7 +255,7 @@ The `UniversalDemuxBlock` is configured using an implementation of `IUniversalDe
   - `MKVDemuxSettings`
   - `MP4DemuxSettings`
   - `MPEGPSDemuxSettings`
-  - `MPEGTSDemuxSettings` (includes `Latency` and `ProgramNumber` properties)
+  - `MPEGTSDemuxSettings` (includes `Latency`, `ProgramNumber` and `SkewCorrections` properties)
   - `OGGDemuxSettings`
   - `WebMDemuxSettings`
   - `UniversalDemuxSettings` (for `Auto` type)

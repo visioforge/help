@@ -1061,6 +1061,35 @@ var sinkBlock = new HLSSinkBlock(hlsSettings);
 // Connecter les flux comme dans l'exemple de base
 ```
 
+##### Fichier multimédia unique (playlist à plages d'octets)
+
+Pour la VOD et l'archivage, `SingleMediaFile` écrit tous les segments dans un seul fichier multimédia et la playlist les adresse par des décalages `#EXT-X-BYTERANGE`, au lieu d'écrire un fichier de segment par fragment. `Location` n'est pas utilisé dans ce mode et `MaxFiles` ne peut pas supprimer le fichier d'archive.
+
+```csharp
+var hlsSettings = new HLSSinkSettings()
+{
+    SinkType = HLSSinkType.HlsSink3,
+    SingleMediaFile = @"c:\videos\hls\archive.ts",  // tous les segments dans un seul fichier
+    PlaylistLocation = @"c:\videos\hls\playlist.m3u8",
+    TargetDuration = TimeSpan.FromSeconds(10),
+    PlaylistType = HLSPlaylistType.Vod,
+    EnableEndlist = true,
+    PlaylistLength = 0
+};
+
+var sinkBlock = new HLSSinkBlock(hlsSettings);
+// Connecter les flux comme dans l'exemple de base
+```
+
+Avec `HLSSinkType.HlsCmafSink`, le segment d'initialisation et les fragments partagent un seul fichier `.mp4`, et la playlist porte la plage d'octets du segment d'initialisation dans `#EXT-X-MAP` ; `InitLocation` n'est pas utilisé.
+
+La playlist référence le fichier multimédia par son nom : le fichier doit donc être joignable depuis l'URL de la playlist. Placez-le dans le même dossier que la playlist, ou définissez `PlaylistRoot`.
+
+!!! warning "Le serveur HTTP doit prendre en charge les plages d'octets"
+    Un lecteur qui lit une playlist à plages d'octets demande au serveur les décalages indiqués dans `#EXT-X-BYTERANGE` : le serveur doit donc répondre par `206 Partial Content` et cette plage, et non par le fichier entier. Le serveur intégré (`Custom_HTTP_Server_Enabled`) respecte `Range` ; tout autre serveur doit faire de même.
+
+`SingleMediaFile` s'applique à `HlsSink3` et `HlsCmafSink`. Le définir sur un autre type de puits fait échouer le démarrage avec une erreur, au lieu d'écrire silencieusement une sortie segmentée, et il en va de même avec un runtime GStreamer antérieur à 1.24.
+
 ##### Streaming adaptatif multi-variantes (playlist principale)
 
 Chaque entrée est ajoutée avec une variante (`HLSVariantStream` : URI de la playlist de médias et bande passante en bits par seconde) ou un rendu alternatif (`HLSAlternateRendition`). Les URI sont relatives à la playlist principale ; chaque playlist de médias et ses segments sont écrits dans le dossier que désigne son URI : chaque variante et chaque rendu a donc besoin de son propre dossier, et `Location` n'est pas utilisé.
@@ -1129,6 +1158,7 @@ Tout type autre qu'Auto fait échouer le démarrage si son élément n'est pas d
 | `MultivariantMuxerType` | Conteneur des segments (Cmaf, MpegTs) | HlsMultivariantSink |
 | `Location` | Modèle de fichier de segment (par ex., segment_%05d.ts ou .m4s) | Tous sauf HlsMultivariantSink |
 | `InitLocation` | Modèle de segment d'initialisation pour CMAF (par ex., init_%03d.mp4) | HlsCmafSink |
+| `SingleMediaFile` | Un seul fichier multimédia contenant tous les segments, adressé par plages d'octets dans la playlist (vide = un fichier par segment) | HlsSink3, HlsCmafSink |
 | `PlaylistLocation` | Chemin du fichier de playlist en sortie (.m3u8 ; la playlist principale en multivariant) | Tous |
 | `PlaylistRoot` | URL de base pour les segments dans la playlist | Tous sauf HlsMultivariantSink |
 | `TargetDuration` | Durée cible d'un segment (TimeSpan) | Tous |

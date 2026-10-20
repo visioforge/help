@@ -95,11 +95,11 @@ dotnet restore
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.10.15" />
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="2025.8.7" />
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="[2025.9.5]"/>
   
   <!-- Optionnel : intégration MongoDB -->
-  <PackageReference Include="VisioForge.DotNet.VideoFingerprinting.MongoDB" Version="2025.8.6" />
+  <PackageReference Include="VisioForge.DotNet.VideoFingerprinting.MongoDB" Version="[2025.8.6]"/>
 </ItemGroup>
 ```
 

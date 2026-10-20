@@ -170,14 +170,18 @@ Pour les applications MacCatalyst (y compris les projets MAUI) ciblant le framew
 
 - [VisioForge.CrossPlatform.Core.macCatalyst](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macCatalyst)
 
+Pour les blocs OpenCV (`VisioForge.Core.MediaBlocks.OpenCV`, dont `VideoStabilizationBlock`), ajoutez aussi [VisioForge.CrossPlatform.OpenCV.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.macOS), le même paquet que pour macOS : son plugin fonctionne tel quel sous Mac Catalyst. Dans un projet MAUI multi-cibles, gardez-le dans la condition `-maccatalyst`, comme dans l'extrait ci-dessous, afin qu'il ne soit pas copié dans les builds iOS et Android.
+
 ### Configuration des paquets MAUI
 
 Pour les projets MAUI ciblant macOS (via MacCatalyst), ajoutez ces paquets :
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.9.11" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.10.15" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.20]"/>
+  <!-- Uniquement pour les blocs OpenCV -->
+  <PackageReference Include="VisioForge.CrossPlatform.OpenCV.macOS" Version="[2026.9.11]"/>
 </ItemGroup>
 ```
 

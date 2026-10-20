@@ -254,8 +254,8 @@ si vous dimensionnez un budget de transport fixe à partir de celle-ci.
 ### Notes de plateforme
 
 - Le **10 bits** (`AppleMediaHEVCProfile.Main10`), l'encodeur **alpha** et le contrôle de débit
-  exigent le runtime GStreamer 1.28.6, désormais livré avec tous les paquets Apple — macOS, Mac
-  Catalyst et iOS. Que le VideoToolbox de l'appareil encode réellement en 10 bits reste une
+  fonctionnent avec le runtime GStreamer 1.28 désormais livré avec tous les paquets Apple — macOS,
+  Mac Catalyst et iOS (l'encodeur alpha et le contrôle de débit exigent au moins la 1.26). Que le VideoToolbox de l'appareil encode réellement en 10 bits reste une
   question propre à chaque puce.
 - `ForceHWUsage` épingle l'encodeur sur l'élément exclusivement matériel : il échoue au lieu de
   se replier sur une implémentation logicielle. Sans effet sur iOS : tous les encodeurs

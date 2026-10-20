@@ -1210,6 +1210,21 @@ Name: HTTPSourceBlock.
 |---------------|:------------:|:-----------:|
 | Output        |     Data     |      1      |
 
+#### Settings
+
+`LocationTrusted`: when an HTTP redirect leads to a different scheme, host or port, the source normally removes the cookies (`Cookies`), the custom headers (`ExtraHeaders`) and the authentication credentials (`UserID`, `UserPassword`) before following it. Set `LocationTrusted` to `true` to keep them - for example when a media URL redirects to a CDN or to an authentication gateway you control. Enable it only for redirect targets you trust.
+
+```csharp
+var settings = new HTTPSourceSettings(new Uri("https://example.com/stream"))
+{
+    LocationTrusted = true,
+    UserID = "username",
+    UserPassword = "password"
+};
+```
+
+The default is `false`. The option requires GStreamer 1.28.7 or newer; on an older runtime the default (stripped values) is used and a warning is logged.
+
 #### The sample pipeline
 
 The sample pipeline reads data from an MJPEG camera and displays it using VideoView.
@@ -1316,8 +1331,8 @@ Name: NDISourceBlock.
 
 | Pin direction   |      Media type      | Pins count  |
 |-----------------|:--------------------:|:-----------:|
-| Output audio    |     Uncompressed     |      1      |
-| Output video    |     Uncompressed     |      1      |
+| Output audio    |     Uncompressed     |      1, only when the sender has an audio stream      |
+| Output video    |     Uncompressed     |      1, only when the sender has a video stream      |
 
 #### The sample pipeline
 
@@ -1341,14 +1356,31 @@ var ndiSettings = await NDISourceSettings.CreateAsync(pipeline.GetContext(), ndi
 
 var ndiSource = new NDISourceBlock(ndiSettings);
 
-var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
-pipeline.Connect(ndiSource.VideoOutput, videoRenderer.Input);
+// connect video only when the sender has a video stream
+if (ndiSettings.GetInfo().VideoStreams.Count > 0)
+{
+    var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+    pipeline.Connect(ndiSource.VideoOutput, videoRenderer.Input);
+}
 
-var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);      
+// connect audio only when the sender has an audio stream
+if (ndiSettings.GetInfo().AudioStreams.Count > 0)
+{
+    var audioRenderer = new AudioRendererBlock();
+    pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);
+}
 
 await pipeline.StartAsync();
 ```
+
+A sender without audio (or without video) gets no pad for that output, so check `GetInfo()` before
+connecting it. A stream that starts after the probe ends is not detected: to give it more time, set
+`ReadInfoTimeoutMs` (Windows, Android) or `ProbeTimeoutMs` (macOS, Linux) on settings made with the
+parameterless constructor before calling `ReadInfoAsync` - `CreateAsync` probes with the defaults.
+
+On Windows and Android, when the sender's address is known and one stream arrives without the other,
+the probe reconnects to the sender after two seconds, up to three times - a sender that accepts only a
+few receivers sees these connections. When only the name is set, the SDK looks the address up by it.
 
 #### Sample applications
 
@@ -1391,10 +1423,30 @@ The properties this block reads:
 | `Bandwidth` | `int` | `100` | -10 metadata only, 10 audio only, 100 full quality |
 | `ColorFormat` | `NDIRecvColorFormat` | `UyvyBgra` | Pixel format requested from the sender |
 | `ProbeTimeoutMs` | `int` | `10000` | How long the build waits for the first video frame |
+| `ReadInfoTimeoutMs` | `int` | `10000` | How long the sender probe waits for video and audio; set it before the settings are probed |
 
 `Timeout`, `ConnectTimeout`, `TimestampMode`, `MaxQueueLength` and `DoTimestamp` belong to the
 `ndisrc` element and are ignored here, as is `FallbackSwitch` - enabling it logs a warning and
 playback proceeds without failover.
+
+`CreateAsync` probes the sender with the default `ReadInfoTimeoutMs`, and a probe result is kept for
+the life of the settings. For a sender whose video or audio starts late, set the timeout before the
+probe:
+
+```csharp
+var ndiSettings = new NDISourceSettings
+{
+    SourceName = ndiSourceInfo.Name,
+    URL = ndiSourceInfo.URL,
+    ReadInfoTimeoutMs = 15000,
+};
+
+if (await ndiSettings.ReadInfoAsync(context) == null)
+{
+    // the sender is not reachable or has no streams
+    return;
+}
+```
 
 #### The sample pipeline
 
@@ -1421,8 +1473,11 @@ var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(ndiSource.VideoOutput, videoRenderer.Input);
 
 // Only when the sender carries audio. Leaving the audio output unconnected is fine.
-var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);
+if (ndiSettings.GetInfo().AudioStreams.Count > 0)
+{
+    var audioRenderer = new AudioRendererBlock();
+    pipeline.Connect(ndiSource.AudioOutput, audioRenderer.Input);
+}
 
 await pipeline.StartAsync();
 ```
@@ -2120,12 +2175,12 @@ The block is configured via `StaticTextFallbackSettings`:
 | --- | --- | :---: | --- |
 | `Text` | `string` | `"Source Unavailable"` | Text to display |
 | `FontFamily` | `string` | `"Arial"` | Font family name |
-| `FontSize` | `float` | `24` | Font size in points |
+| `FontSize` | `float` | `24` | Font size in points, scaled with the frame width relative to 640 pixels. On Windows the points are converted to pixels at the DPI Windows reports to the application, so in a DPI-aware application the text is larger with display scaling above 100% |
 | `FontStyle` | `FontStyle` | `Normal` | Font style (Normal, Italic, Oblique) |
 | `TextColor` | `SKColor` | White | Text color |
 | `BackgroundColor` | `SKColor` | Black | Background fill color |
-| `Position` | `SKPoint` | `(0.5, 0.5)` | Text anchor position as proportion (0–1) |
-| `CenterAlign` | `bool` | `true` | Center-align the text |
+| `Position` | `SKPoint` | `(0.5, 0.5)` | With `CenterAlign`, the point of the frame the text is centered on (proportions 0–1), kept inside the frame near an edge. Without it, where the text sits in the frame: `0` flush left/top, `0.5` centered, `1` flush right/bottom. Values outside 0–1 are clamped |
+| `CenterAlign` | `bool` | `true` | Center the text on `Position`; otherwise `Position` aligns the text within the frame |
 
 #### The sample pipeline
 
