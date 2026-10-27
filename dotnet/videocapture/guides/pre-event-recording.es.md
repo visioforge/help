@@ -40,7 +40,7 @@ La grabación pre-evento permite a su aplicación almacenar continuamente video 
 
 ## Características Clave de la Grabación Pre-Evento de Video Capture SDK .Net
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 - **Duración de buffer configurable**: Almacene los últimos 5 a 120+ segundos de video en memoria
 - **Grabación post-evento automática**: Continúe grabando por una duración configurable después del disparador
@@ -361,13 +361,13 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 Paquete principal del SDK (administrado):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
 ```
 
 Dependencias nativas para Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 Para plataformas alternativas (macOS, Linux, Android, iOS), use los paquetes de dependencias nativas correspondientes. Vea la [Guía de Despliegue](../../deployment-x/index.md) para más detalles.

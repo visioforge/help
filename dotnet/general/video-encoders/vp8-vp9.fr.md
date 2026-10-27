@@ -33,7 +33,7 @@ primary_api_classes:
 
 # Encodeurs VP8 et VP9 dans VisioForge .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce guide vous montre comment implémenter l'encodage vidéo VP8 et VP9 dans les SDK VisioForge .NET. Vous découvrirez les options d'encodeur disponibles et comment les optimiser pour les besoins spécifiques de votre application.
 

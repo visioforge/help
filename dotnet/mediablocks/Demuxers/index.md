@@ -23,7 +23,7 @@ primary_api_classes:
 
 # Demuxer Blocks - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Demuxer blocks are essential components in media processing pipelines. They take a multimedia stream, typically from a file or network source, and separate it into its constituent elementary streams, such as video, audio, and subtitles. This allows for individual processing or rendering of each stream. VisioForge Media Blocks SDK .Net provides several demuxer blocks to handle various container formats.
 

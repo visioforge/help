@@ -1,5 +1,5 @@
 ---
-title: Desplegar Filtros DirectShow con WiX, NSIS e Inno Setup
+title: Desplegar filtros DirectShow con WiX, NSIS e Inno Setup
 description: Integre filtros DirectShow en instaladores WiX, NSIS, InstallShield con acciones personalizadas, registro y gestión de dependencias.
 tags:
   - DirectShow
@@ -8,7 +8,7 @@ tags:
 
 ---
 
-# Guía de Integración con Instaladores
+# Guía de integración con instaladores
 
 ## Resumen
 
@@ -17,17 +17,17 @@ Esta guía proporciona instrucciones completas para integrar filtros VisioForge 
 ---
 ## Prerrequisitos
 Antes de crear un instalador, asegúrese de entender:
-- [Archivos Redistribuibles](redistributable-files.md) - Archivos a incluir en el instalador
-- [Registro de Filtros](filter-registration.md) - Mecanismos de registro
+- [Archivos redistribuibles](redistributable-files.md) - Archivos a incluir en el instalador
+- [Registro de filtros](filter-registration.md) - Mecanismos de registro
 - Arquitectura de plataforma objetivo (x86/x64)
 - Requisitos de Visual C++ Redistributable
 ---
 
-## Resumen de Tecnologías de Instaladores
+## Resumen de tecnologías de instaladores
 
 ### WiX Toolset
 
-**Mejor Para**: Aplicaciones empresariales, despliegues basados en MSI, automatización IT
+**Mejor para**: Aplicaciones empresariales, despliegues basados en MSI, automatización IT
 
 **Ventajas**:
 
@@ -43,11 +43,11 @@ Antes de crear un instalador, asegúrese de entender:
 - Integración con Visual Studio (opcional)
 - Archivos de proyecto .wixproj
 
-[Ver Ejemplos WiX →](#ejemplos-wix-toolset)
+[Ver ejemplos WiX →](#ejemplos-wix-toolset)
 
 ---
 ### NSIS (Nullsoft Scriptable Install System)
-**Mejor Para**: Instaladores ligeros, UI personalizada, aplicaciones portátiles
+**Mejor para**: Instaladores ligeros, UI personalizada, aplicaciones portátiles
 **Ventajas**:
 - Tamaño pequeño del instalador
 - Altamente personalizable
@@ -57,12 +57,12 @@ Antes de crear un instalador, asegúrese de entender:
 **Requisitos**:
 - Compilador NSIS 3.x
 - Archivos de script .nsi
-[Ver Ejemplos NSIS →](#ejemplos-nsis)
+[Ver ejemplos NSIS →](#ejemplos-nsis)
 ---
 
 ### InstallShield
 
-**Mejor Para**: Aplicaciones comerciales, instalaciones complejas, características avanzadas
+**Mejor para**: Aplicaciones comerciales, instalaciones complejas, características avanzadas
 
 **Ventajas**:
 
@@ -77,11 +77,11 @@ Antes de crear un instalador, asegúrese de entender:
 - InstallShield Limited Edition (Visual Studio) o Professional
 - Archivos de proyecto .ism
 
-[Ver Guía InstallShield →](#integracion-installshield)
+[Ver guía InstallShield →](#integracion-installshield)
 
 ---
 ### Inno Setup
-**Mejor Para**: Instaladores simples, aplicaciones pequeñas, software gratuito
+**Mejor para**: Instaladores simples, aplicaciones pequeñas, software gratuito
 **Ventajas**:
 - Gratuito y de código abierto
 - Soporte de scripting Pascal
@@ -91,12 +91,12 @@ Antes de crear un instalador, asegúrese de entender:
 **Requisitos**:
 - Compilador Inno Setup 6.x
 - Archivos de script .iss
-[Ver Ejemplos Inno Setup →](#ejemplos-inno-setup)
+[Ver ejemplos Inno Setup →](#ejemplos-inno-setup)
 ---
 
 ## Ejemplos WiX Toolset
 
-### Instalación Básica de Filtros
+### Instalación básica de filtros
 
 Cree un instalador WiX completo para un filtro DirectShow con registro automático.
 
@@ -106,7 +106,7 @@ Cree un instalador WiX completo para un filtro DirectShow con registro automáti
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*"
-           Name="MyApp con Filtros DirectShow"
+           Name="MyApp con filtros DirectShow"
            Language="1033"
            Version="1.0.0.0"
            Manufacturer="Su Empresa"
@@ -160,7 +160,7 @@ Cree un instalador WiX completo para un filtro DirectShow con registro automáti
 </Wix>
 ```
 
-#### Filters.wxs (Definición de Componentes)
+#### Filters.wxs (definición de componentes)
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -168,7 +168,7 @@ Cree un instalador WiX completo para un filtro DirectShow con registro automáti
   <Fragment>
     <ComponentGroup Id="FilterComponents" Directory="FilterFolder">
 
-      <!-- Filtro Fuente FFMPEG -->
+      <!-- Filtro FFMPEG Source -->
       <Component Id="FFMPEGSourceFilter" Guid="SU-GUID-1">
         <File Id="FFMPEGSourceAX"
               Source="$(var.SourceDir)\VisioForge_FFMPEG_Source_x64.ax"
@@ -191,7 +191,7 @@ Cree un instalador WiX completo para un filtro DirectShow con registro automáti
 </Wix>
 ```
 
-#### VCRedist.wxs (Verificación de Prerrequisitos)
+#### VCRedist.wxs (verificación de prerrequisitos)
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -215,7 +215,7 @@ Cree un instalador WiX completo para un filtro DirectShow con registro automáti
 </Wix>
 ```
 
-#### Construyendo Instalador WiX
+#### Construyendo instalador WiX
 
 ```bash
 # Usando WiX 3.x línea de comandos
@@ -227,7 +227,7 @@ wix build Product.wxs Filters.wxs VCRedist.wxs -ext WixToolset.UI.wixext -out My
 ```
 
 ---
-### WiX Avanzado: Paquete Autoextraíble
+### WiX avanzado: Paquete autoextraíble
 Cree un paquete que incluya Visual C++ Redistributable.
 #### Bundle.wxs
 ```xml
@@ -280,7 +280,7 @@ wix build Bundle.wxs -ext WixToolset.Bal.wixext -out MyAppSetup.exe
 ```
 ---
 
-### WiX: DLL C++ Personalizada para Registro
+### WiX: DLL C++ personalizada para registro
 
 Para más control, cree una acción personalizada DLL.
 
@@ -446,11 +446,11 @@ extern "C" __declspec(dllexport) UINT __stdcall UnregisterDirectShowFilters(MSIH
 
 ---
 ## Ejemplos NSIS
-### Instalador NSIS Básico
+### Instalador NSIS básico
 Cree un script de instalador NSIS completo.
 #### Installer.nsi
 ```nsis
-; Instalador MyApp con Filtros DirectShow
+; Instalador MyApp con filtros DirectShow
 ; Script NSIS 3.x
 ;--------------------------------
 ; Incluye
@@ -468,7 +468,7 @@ InstallDirRegKey HKLM "Software\MyApp" "InstallDir"
 ; Solicitar privilegios de aplicación
 RequestExecutionLevel admin
 ;--------------------------------
-; Configuración de Interfaz
+; Configuración de interfaz
 !define MUI_ABORTWARNING
 !define MUI_ICON "installer.ico"
 !define MUI_UNICON "uninstaller.ico"
@@ -485,14 +485,14 @@ RequestExecutionLevel admin
 ; Idiomas
 !insertmacro MUI_LANGUAGE "English"
 ;--------------------------------
-; Información de Versión
+; Información de versión
 VIProductVersion "1.0.0.0"
 VIAddVersionKey "ProductName" "MyApp"
 VIAddVersionKey "CompanyName" "Su Empresa"
 VIAddVersionKey "FileDescription" "Instalador MyApp"
 VIAddVersionKey "FileVersion" "1.0.0.0"
 ;--------------------------------
-; Secciones del Instalador
+; Secciones del instalador
 Section "MyApp (requerido)" SecMain
   SectionIn RO
   ; Establecer ruta de salida
@@ -503,7 +503,7 @@ Section "MyApp (requerido)" SecMain
   ; Crear subdirectorio Filters
   CreateDirectory "$INSTDIR\Filters"
   SetOutPath "$INSTDIR\Filters"
-  ; Instalar Filtro Fuente FFMPEG
+  ; Instalar filtro FFMPEG Source
   File "Filters\VisioForge_FFMPEG_Source_x64.ax"
   File "Filters\avcodec-58.dll"
   File "Filters\avdevice-58.dll"
@@ -536,28 +536,31 @@ Section "MyApp (requerido)" SecMain
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\MyApp" "NoRepair" 1
 SectionEnd
 ;--------------------------------
-; Secciones Opcionales
-Section "Filtro Fuente VLC" SecVLC
+; Secciones opcionales
+Section "Filtro VLC Source" SecVLC
   SetOutPath "$INSTDIR\Filters"
-  ; Instalar filtro fuente VLC
-  File "Filters\VisioForge_VLC_Source.ax"
+  ; Instalar filtro VLC Source
+  File "Filters\VisioForge_VLC_Source_x64.ax"
   File "Filters\libvlc.dll"
   File "Filters\libvlccore.dll"
   ; Instalar directorio plugins VLC
   SetOutPath "$INSTDIR\Filters\plugins"
   File /r "Filters\plugins\*.*"
-  ; Registrar filtro fuente VLC
-  DetailPrint "Registrando filtro fuente VLC..."
-  ExecWait 'regsvr32 /s "$INSTDIR\Filters\VisioForge_VLC_Source.ax"'
+  ; Registrar filtro VLC Source
+  DetailPrint "Registrando filtro VLC Source..."
+  ExecWait 'regsvr32 /s "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"' $0
+  ${If} $0 != 0
+    MessageBox MB_OK|MB_ICONEXCLAMATION "Registro de filtro falló. Código: $0"
+  ${EndIf}
 SectionEnd
 ;--------------------------------
-; Descripciones de Sección
+; Descripciones de sección
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecMain} "Archivos de aplicación principales y filtro fuente FFMPEG (requerido)"
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecVLC} "Filtro fuente VLC para soporte de formato adicional (opcional)"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecMain} "Archivos de aplicación principales y filtro FFMPEG Source (requerido)"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecVLC} "Filtro VLC Source para soporte de formato adicional (opcional)"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 ;--------------------------------
-; Funciones del Instalador
+; Funciones del instalador
 Function .onInit
   ; Verificar si Windows 64-bit
   ${If} ${RunningX64}
@@ -577,12 +580,12 @@ Function .onInit
   ${EndIf}
 FunctionEnd
 ;--------------------------------
-; Sección Desinstalador
+; Sección desinstalador
 Section "Uninstall"
   ; Desregistrar filtros
   DetailPrint "Desregistrando filtros DirectShow..."
   ExecWait 'regsvr32 /s /u "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"'
-  ExecWait 'regsvr32 /s /u "$INSTDIR\Filters\VisioForge_VLC_Source.ax"'
+  ExecWait 'regsvr32 /s /u "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"'
   ; Remover archivos
   Delete "$INSTDIR\MyApp.exe"
   Delete "$INSTDIR\MyApp.exe.config"
@@ -603,16 +606,16 @@ Section "Uninstall"
   DeleteRegKey HKLM "Software\MyApp"
 SectionEnd
 ```
-#### Construyendo Instalador NSIS
+#### Construyendo instalador NSIS
 ```bash
 # Compilar con NSIS
 makensis.exe Installer.nsi
 # O usar GUI del compilador NSIS
-# Archivo > Cargar Script > Seleccionar Installer.nsi > Probar Instalador
+# File > Load Script > Seleccionar Installer.nsi > Test Installer
 ```
 ---
 
-### NSIS: Soporte de Instalación Silenciosa
+### NSIS: Soporte de instalación silenciosa
 
 Agregar parámetros de instalación silenciosa.
 
@@ -637,9 +640,9 @@ silent_mode:
 ```
 
 ---
-### NSIS: Plugin Personalizado para Registro
+### NSIS: Plugin personalizado para registro
 Cree un plugin NSIS para más control.
-#### FilterRegistration.cpp (Plugin NSIS)
+#### FilterRegistration.cpp (plugin NSIS)
 ```cpp
 #include <windows.h>
 #include "pluginapi.h"
@@ -695,62 +698,62 @@ ${EndIf}
 
 ## Integración InstallShield {: #integracion-installshield }
 
-### Configuración Básica de Proyecto InstallShield
+### Configuración básica de proyecto InstallShield
 
-1. **Crear Nuevo Proyecto**:
-   - Archivo > Nuevo Proyecto
-   - Seleccionar "Proyecto Básico MSI"
+1. **Crear nuevo proyecto**:
+   - File > New Project
+   - Seleccionar "Basic MSI Project"
    - Establecer nombre de proyecto y ubicación
 
-2. **Agregar Archivos**:
-   - Vista Archivos de Aplicación
+2. **Agregar archivos**:
+   - Vista **Application Files**
    - Agregar archivos de filtro a `[INSTALLDIR]\Filters`
    - Agregar ejecutables de aplicación
 
-3. **Agregar Acción Personalizada**:
+3. **Agregar acción personalizada**:
 
 #### Método 1: Usando regsvr32
 
-1. Ir a **Comportamiento y Lógica** > **Acciones Personalizadas**
-2. Clic derecho **Instalar** > **Nueva Acción Personalizada**
+1. Ir a **Behavior and Logic** > **Custom Actions**
+2. Clic derecho en **Install** > **New Custom Action**
 3. Establecer propiedades:
-   - Nombre: `Registrar Filtros DirectShow`
-   - Tipo: `Almacenado en la Tabla de Directorios`
-   - Directorio de Trabajo: `[INSTALLDIR]Filters`
-   - Nombre de Archivo: `regsvr32.exe`
-   - Línea de Comando: `/s VisioForge_FFMPEG_Source_x64.ax`
-   - Ejecutar: `Ejecución Diferida en Contexto de Sistema`
-   - Condición: `NOT Installed`
+   - Name: `Register DirectShow Filters`
+   - Type: `Stored in the Directory Table`
+   - Working Directory: `[INSTALLDIR]Filters`
+   - Filename: `regsvr32.exe`
+   - Command Line: `/s VisioForge_FFMPEG_Source_x64.ax`
+   - Run: `Deferred Execution in System Context`
+   - Condition: `NOT Installed`
 
 4. Para desinstalar:
-   - Nombre: `Desregistrar Filtros DirectShow`
-   - Línea de Comando: `/s /u VisioForge_FFMPEG_Source_x64.ax`
-   - Secuencia: Antes de **RemoveFiles**
-   - Condición: `Installed`
+   - Name: `Unregister DirectShow Filters`
+   - Command Line: `/s /u VisioForge_FFMPEG_Source_x64.ax`
+   - Sequence: antes de **RemoveFiles**
+   - Condition: `Installed`
 
-#### Método 2: Usando DLL Personalizada
+#### Método 2: Usando DLL personalizada
 
 1. Crear DLL C++ con código de registro (similar al ejemplo WiX arriba)
-2. Agregar DLL a **Archivos de Soporte** en InstallShield
+2. Agregar DLL a **Support Files** en InstallShield
 3. Crear acción personalizada:
-   - Tipo: `DLL de la instalación`
-   - Nombre DLL: `CustomActions.dll`
-   - Función: `RegisterDirectShowFilters`
+   - Type: `DLL from the installation`
+   - DLL Name: `CustomActions.dll`
+   - Function: `RegisterDirectShowFilters`
 
-### InstallShield: Configuración de Prerrequisitos
+### InstallShield: Configuración de prerrequisitos
 
-1. Ir a vista **Redistribuibles**
+1. Ir a la vista **Redistributables**
 2. Agregar **Microsoft Visual C++ 2015-2022 Redistributable (x64)**:
-   - Clic derecho > **Agregar Prerrequisito**
+   - Clic derecho > **Add Prerequisite**
    - Examinar a `VC_redist.x64.exe`
-   - Establecer: **Instalar Antes de Esta Aplicación**
+   - Establecer: **Install Before This Application**
 
 ---
 ## Ejemplos Inno Setup
-### Script Básico Inno Setup
+### Script básico Inno Setup
 #### Setup.iss
 ```pascal
-; Script de Configuración MyApp para Inno Setup 6.x
+; Script de configuración MyApp para Inno Setup 6.x
 [Setup]
 AppName=MyApp
 AppVersion=1.0
@@ -767,7 +770,7 @@ MinVersion=10.0
 [Files]
 ; Aplicación principal
 Source: "MyApp.exe"; DestDir: "{app}"; Flags: ignoreversion
-; Filtro Fuente FFMPEG
+; Filtro FFMPEG Source
 Source: "Filters\VisioForge_FFMPEG_Source_x64.ax"; DestDir: "{app}\Filters"; Flags: ignoreversion regserver restartreplace uninsrestartdelete
 Source: "Filters\avcodec-58.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
 Source: "Filters\avdevice-58.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
@@ -805,7 +808,7 @@ begin
   end;
 end;
 ```
-#### Inno Setup Avanzado: Registro Personalizado
+#### Inno Setup avanzado: Registro personalizado
 ```pascal
 [Files]
 ; No usar flag regserver - registraremos manualmente
@@ -884,9 +887,9 @@ end;
 ```
 ---
 
-## Instalación Silenciosa
+## Instalación silenciosa
 
-### Parámetros de Instalación Silenciosa
+### Parámetros de instalación silenciosa
 
 #### MSI (WiX, InstallShield MSI)
 
@@ -931,9 +934,9 @@ unins000.exe /SILENT
 ```
 
 ---
-## Empaquetado de Dependencias
+## Empaquetado de dependencias
 ### Visual C++ Redistributable
-#### Opción 1: Bootstrapper de Descarga
+#### Opción 1: Bootstrapper de descarga
 ```xml
 <!-- WiX Bundle.wxs -->
 <ExePackage Id="VCRedist2022"
@@ -941,7 +944,7 @@ unins000.exe /SILENT
             InstallCommand="/install /quiet /norestart"
             DetectCondition="VCREDIST2022_X64" />
 ```
-#### Opción 2: Incluir Redistributable
+#### Opción 2: Incluir el redistribuible
 ```nsis
 ; NSIS
 Section "VC++ Redistributable"
@@ -950,7 +953,7 @@ Section "VC++ Redistributable"
   Delete "$INSTDIR\VC_redist.x64.exe"
 SectionEnd
 ```
-#### Opción 3: Módulos de Mezcla (WiX)
+#### Opción 3: Módulos de mezcla (WiX)
 ```xml
 <DirectoryRef Id="TARGETDIR">
   <Merge Id="VCRedist" SourceFile="$(var.VCRedistMergeModule)" DiskId="1" Language="0"/>
@@ -961,31 +964,31 @@ SectionEnd
 ```
 ---
 
-## Mejores Prácticas
+## Mejores prácticas
 
-### Timing de Registro
+### Timing de registro
 
-1. **Secuencia de Instalación**:
+1. **Secuencia de instalación**:
 
    ```
    InstallFiles
    ↓
-   Registrar Filtros (Acción Personalizada)
+   Registrar filtros (acción personalizada)
    ↓
    InstallFinalize
    ```
 
-2. **Secuencia de Desinstalación**:
+2. **Secuencia de desinstalación**:
 
    ```
-   Desregistrar Filtros (Acción Personalizada)
+   Desregistrar filtros (acción personalizada)
    ↓
    RemoveFiles
    ↓
    UninstallFinalize
    ```
 
-### Manejo de Errores
+### Manejo de errores
 
 **Siempre**:
 
@@ -1010,7 +1013,7 @@ if (FAILED(hr))
 }
 ```
 
-### Soporte de Reversión
+### Soporte de reversión
 
 Asegurar reversión apropiada si instalación falla:
 
@@ -1032,7 +1035,7 @@ Asegurar reversión apropiada si instalación falla:
 </InstallExecuteSequence>
 ```
 
-### Privilegios de Admin
+### Privilegios de admin
 
 **Siempre requerir** privilegios admin/elevados:
 
@@ -1051,7 +1054,7 @@ RequestExecutionLevel admin
 PrivilegesRequired=admin
 ```
 
-### Consideraciones de Arquitectura
+### Consideraciones de arquitectura
 
 ```xml
 <!-- WiX: Paquetes separados para x86/x64 -->
@@ -1074,8 +1077,8 @@ ${EndIf}
 ```
 
 ---
-## Probando Instalación
-### Lista de Verificación de Pruebas Manuales
+## Probando instalación
+### Lista de verificación de pruebas manuales
 - [ ] Instalar en Windows 10/11 limpio
 - [ ] Verificar todos los archivos copiados
 - [ ] Verificar registro de filtro (GraphEdit/GraphStudioNext)
@@ -1087,7 +1090,7 @@ ${EndIf}
 - [ ] Probar funcionalidad de reparación
 - [ ] Probar instalación silenciosa
 - [ ] Probar en diferentes cuentas de usuario
-### Pruebas Automatizadas
+### Pruebas automatizadas
 ```powershell
 # Script de prueba PowerShell
 $installerPath = ".\MyAppSetup.msi"
@@ -1115,11 +1118,11 @@ if (Test-Path $regPath) {
 ```
 ---
 
-## Solución de Problemas
+## Solución de problemas
 
-### Problemas Comunes
+### Problemas comunes
 
-#### Registro Falla con Acceso Denegado
+#### Registro falla con acceso denegado
 
 **Causa**: Privilegios insuficientes
 
@@ -1130,7 +1133,7 @@ if (Test-Path $regPath) {
 <CustomAction Execute="deferred" Impersonate="no" />
 ```
 
-#### Filtro Funciona en Desarrollo pero no Después de Instalar
+#### Filtro funciona en desarrollo pero no después de instalar
 
 **Causa**: Dependencias faltantes o rutas incorrectas
 
@@ -1140,7 +1143,7 @@ if (Test-Path $regPath) {
 - Asegurar todas las DLL en mismo directorio que filtro
 - Verificar variable de entorno PATH
 
-#### Instalación Silenciosa se Cuelga
+#### Instalación silenciosa se cuelga
 
 **Causa**: Interacción de usuario requerida
 
@@ -1151,7 +1154,7 @@ if (Test-Path $regPath) {
 msiexec /i MyApp.msi /quiet /norestart
 ```
 
-#### Desinstalación Deja Entradas de Registro
+#### Desinstalación deja entradas de registro
 
 **Causa**: Acción personalizada de desregistro no ejecutándose
 
@@ -1163,12 +1166,12 @@ msiexec /i MyApp.msi /quiet /norestart
 ```
 
 ---
-## Ver También
+## Ver también
 ### Documentación
-- [Registro de Filtros](filter-registration.md) - Métodos de registro manual
-- [Archivos Redistribuibles](redistributable-files.md) - Archivos a incluir en instalador
-- [Resumen de Despliegue](index.md) - Guía completa de despliegue
-### Recursos Externos
+- [Registro de filtros](filter-registration.md) - Métodos de registro manual
+- [Archivos redistribuibles](redistributable-files.md) - Archivos a incluir en instalador
+- [Resumen de despliegue](index.md) - Guía completa de despliegue
+### Recursos externos
 - [Documentación WiX Toolset](https://docs.firegiant.com/wix/)
 - [Documentación NSIS](https://nsis.sourceforge.io/Docs/)
 - [Documentación Inno Setup](https://jrsoftware.org/ishelp/)

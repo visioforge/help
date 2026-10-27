@@ -39,12 +39,12 @@ primary_api_classes:
 
 # VisioForge Video Capture SDK .Net — Hoja de referencia
 
-Video Capture SDK .Net captura desde webcams, cámaras IP (RTSP/ONVIF), pantallas, Decklink y dispositivos GenICam/GigE Vision en las 5 plataformas .NET (Windows, macOS, Linux, Android, iOS). `VideoCaptureCoreX` es el motor multiplataforma; las fuentes se configuran mediante clases de ajustes tipadas como `VideoCaptureDeviceSourceSettings`, y los dispositivos se enumeran de forma asíncrona con `DeviceEnumerator`.
+El Video Capture SDK .Net captura desde webcams, cámaras IP (RTSP/ONVIF), pantallas, Decklink y dispositivos GenICam/GigE Vision en las 5 plataformas .NET (Windows, macOS, Linux, Android, iOS). `VideoCaptureCoreX` es el motor multiplataforma; las fuentes se configuran mediante clases de ajustes tipadas como `VideoCaptureDeviceSourceSettings`, y los dispositivos se enumeran de forma asíncrona con `DeviceEnumerator`.
 
 !!! tip "Agentes de IA para programación: usen el servidor MCP de VisioForge"
 
-    ¿Estás construyendo esto con **Claude Code**, **Cursor** u otro agente de IA para programación?
-    Conéctate al [servidor MCP público de VisioForge](../general/mcp-server-usage.md)
+    ¿Está construyendo esto con **Claude Code**, **Cursor** u otro agente de IA para programación?
+    Conéctese al [servidor MCP público de VisioForge](../general/mcp-server-usage.md)
     en `https://mcp.visioforge.com/mcp` para obtener búsquedas estructuradas de la API,
     ejemplos de código ejecutables y guías de despliegue — más preciso que rastrear
     `llms.txt`. No requiere autenticación.
@@ -59,7 +59,7 @@ Video Capture SDK .Net captura desde webcams, cámaras IP (RTSP/ONVIF), pantalla
 - **Android** — MAUI. Fuentes de cámara nativas + codificación por hardware MediaCodec.
 - **iOS** — MAUI. Fuentes de cámara AVFoundation + codificación por hardware VideoToolbox.
 
-Para la matriz completa de códec × fuente × plataforma consulta [platform-matrix.md](../platform-matrix.md).
+Para la matriz completa de códec × fuente × plataforma consulte [platform-matrix.md](../platform-matrix.md).
 
 ## Paquetes NuGet
 
@@ -69,37 +69,37 @@ Paquete principal del SDK (obligatorio, todas las plataformas):
 <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="2026.*" />
 ```
 
-Runtimes nativos específicos por plataforma — añade los que correspondan a tu objetivo:
+Runtimes nativos específicos por plataforma — añada los que correspondan a su objetivo:
 
 ```xml
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 
 <!-- Windows x86 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.26]"/>
 
 <!-- macOS / macCatalyst -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>
 
 <!-- Linux x64 (requiere GStreamer 1.22+ del sistema) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 
 <!-- Android / iOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 ```
 
-Integración de UI (elige la que corresponda a tu stack de UI):
+Integración de UI (elija la que corresponda a su stack de UI):
 
 ```xml
 <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.*" />
 <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.*" />
 ```
 
-Los controles `VideoView` para WinForms y WPF se incluyen dentro del paquete principal. Para la lista completa de paquetes (incluidos los redistribuibles del motor `VideoCaptureCore` exclusivo de Windows) consulta la [Guía de instalación](../install/index.md).
+Los controles `VideoView` para WinForms y WPF se incluyen dentro del paquete principal. Para la lista completa de paquetes (incluidos los redistribuibles del motor `VideoCaptureCore` exclusivo de Windows) consulte la [Guía de instalación](../install/index.md).
 
 ## Clases principales de la API
 
@@ -115,7 +115,7 @@ Clases de ajustes de fuente adicionales: `RTSPSourceSettings` (cámaras IP — c
 
 ## Ejemplo canónico mínimo
 
-Graba la primera webcam + micrófono predeterminado a `recording.mp4`:
+Grabe la primera webcam + micrófono predeterminado a `recording.mp4`:
 
 ```csharp
 using VisioForge.Core;
@@ -156,24 +156,24 @@ await capture.DisposeAsync();  // Releases the pipeline.
 VisioForgeX.DestroySDK();
 ```
 
-Sustituye `VideoCaptureDeviceSourceSettings(...)` por `await RTSPSourceSettings.CreateAsync(new Uri("rtsp://..."), login, password, audioEnabled)` para cámaras IP, o por `new ScreenCaptureD3D11SourceSettings()` para grabación de escritorio (Windows) — el resto de la canalización es idéntico.
+Sustituya `VideoCaptureDeviceSourceSettings(...)` por `await RTSPSourceSettings.CreateAsync(new Uri("rtsp://..."), login, password, audioEnabled)` para cámaras IP, o por `new ScreenCaptureD3D11SourceSettings()` para grabación de escritorio (Windows) — el resto de la canalización es idéntico.
 
 ## Flujo de trabajo típico
 
 1. **Inicializar** — `await VisioForgeX.InitSDKAsync()` (una vez por aplicación).
 2. **Enumerar** — `DeviceEnumerator.Shared.VideoSourcesAsync()` / `AudioSourcesAsync()`.
-3. **Configurar fuente** — elige una clase de ajustes (`VideoCaptureDeviceSourceSettings`, `RTSPSourceSettings`, `ScreenCaptureD3D11SourceSettings`, `DecklinkVideoSourceSettings`, ...) y asígnala a `capture.Video_Source`.
+3. **Configurar fuente** — elija una clase de ajustes (`VideoCaptureDeviceSourceSettings`, `RTSPSourceSettings`, `ScreenCaptureD3D11SourceSettings`, `DecklinkVideoSourceSettings`, ...) y asígnela a `capture.Video_Source`.
 4. **Crear motor** — `new VideoCaptureCoreX(videoView)` para vista previa, o `new VideoCaptureCoreX(null)` para modo sin UI.
 5. **Añadir salidas** — `capture.Outputs_Add(new MP4Output(path))`, o `MKVOutput` / `WebMOutput` / `AVIOutput` / `RTMPOutput` / `HLSOutput`.
 6. **Ejecutar** — `StartAsync()` → `StopAsync()` → `DisposeAsync()`, y luego `VisioForgeX.DestroySDK()` al cerrar la aplicación.
 
 ## Errores comunes
 
-- **La enumeración de dispositivos es asíncrona.** Usa siempre `await DeviceEnumerator.Shared.VideoSourcesAsync()` — llamar a `.Result` o `.Wait()` en el hilo de la UI puede provocar un interbloqueo. El audio utiliza sus propias llamadas `AudioSourcesAsync()` / `AudioOutputsAsync()`; el enumerador de video no las cubre.
-- **Las salidas deben añadirse antes de `StartAsync`.** No se admite `Outputs_Add(...)` durante una captura activa — detén la captura, añade la salida y vuelve a iniciarla.
-- **Virtual Camera requiere un registro adicional.** El paquete redistribuible `VirtualCamera` debe registrarse (consulta la [guía de despliegue](./deployment.md)) antes de que la cámara virtual sea visible para aplicaciones externas como Zoom o Teams.
-- **Las aplicaciones AnyCPU necesitan los redistribuibles x86 y x64.** En Windows, distribuye ambas arquitecturas o fuerza una específica mediante `<PlatformTarget>` — un despliegue parcial falla en silencio al inicializar la fuente.
-- **Los permisos en móviles deben concederse antes de la enumeración.** En Android e iOS, los permisos de cámara y micrófono deben solicitarse y concederse antes de ejecutar `DeviceEnumerator` — de lo contrario la lista devuelta estará vacía. Consulta la [guía de grabación con cámara en MAUI](./maui/camera-recording-maui.md) para la configuración de permisos por plataforma.
+- **La enumeración de dispositivos es asíncrona.** Use siempre `await DeviceEnumerator.Shared.VideoSourcesAsync()` — llamar a `.Result` o `.Wait()` en el hilo de la UI puede provocar un interbloqueo. El audio utiliza sus propias llamadas `AudioSourcesAsync()` / `AudioOutputsAsync()`; el enumerador de video no las cubre.
+- **Las salidas deben añadirse antes de `StartAsync`.** No se admite `Outputs_Add(...)` durante una captura activa — detenga la captura, añada la salida y vuelva a iniciarla.
+- **Virtual Camera requiere un registro adicional.** El paquete redistribuible `VirtualCamera` debe registrarse (consulte la [guía de despliegue](./deployment.md)) antes de que la cámara virtual sea visible para aplicaciones externas como Zoom o Teams.
+- **Las aplicaciones AnyCPU necesitan los redistribuibles x86 y x64.** En Windows, distribuya ambas arquitecturas o fuerce una específica mediante `<PlatformTarget>` — un despliegue parcial falla en silencio al inicializar la fuente.
+- **Los permisos en móviles deben concederse antes de la enumeración.** En Android e iOS, los permisos de cámara y micrófono deben solicitarse y concederse antes de ejecutar `DeviceEnumerator` — de lo contrario la lista devuelta estará vacía. Consulte la [guía de grabación con cámara en MAUI](./maui/camera-recording-maui.md) para la configuración de permisos por plataforma.
 
 ## Ver también
 
@@ -200,8 +200,8 @@ Sustituye `VideoCaptureDeviceSourceSettings(...)` por `await RTSPSourceSettings.
 
 ### ¿Este SDK admite cámaras IP?
 
-Sí. Construye los ajustes mediante la factoría async — `await RTSPSourceSettings.CreateAsync(new Uri("rtsp://..."), login, password, audioEnabled)` — y asígnalos a `VideoCaptureCoreX.Video_Source`. El constructor es privado, por lo que `new RTSPSourceSettings(...)` no compila. También se admiten cámaras ONVIF y HTTP-JPEG. Consulta el [directorio de marcas de cámaras IP](../camera-brands/index.md) para URLs específicas de cada fabricante.
+Sí. Construya los ajustes mediante la factoría async — `await RTSPSourceSettings.CreateAsync(new Uri("rtsp://..."), login, password, audioEnabled)` — y asígnelos a `VideoCaptureCoreX.Video_Source`. El constructor es privado, por lo que `new RTSPSourceSettings(...)` no compila. También se admiten cámaras ONVIF y HTTP-JPEG. Consulte el [directorio de marcas de cámaras IP](../camera-brands/index.md) para URLs específicas de cada fabricante.
 
 ### ¿A qué formatos de archivo puedo grabar?
 
-MP4 (H.264 / H.265 + AAC), MKV, WebM (VP8 / VP9 / AV1 + Opus / Vorbis), AVI, GIF, además de streaming en directo RTMP / RTSP / HLS / SRT / NDI. Consulta las tablas de formatos de salida en [la descripción general del SDK](./index.md).
+MP4 (H.264 / H.265 + AAC), MKV, WebM (VP8 / VP9 / AV1 + Opus / Vorbis), AVI, GIF, además de streaming en directo RTMP / RTSP / HLS / SRT / NDI. Consulte las tablas de formatos de salida en [la descripción general del SDK](./index.md).

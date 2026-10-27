@@ -1,6 +1,6 @@
 ---
 title: Video Capture SDK .NET para MAUI - Guía de Instalación
-description: Implementa capacidades de video y medios en aplicaciones multiplataforma .NET MAUI para Windows, Android, iOS y macOS con SDKs de VisioForge.
+description: Implemente capacidades de video y medios en aplicaciones multiplataforma .NET MAUI para Windows, Android, iOS y macOS con SDKs de VisioForge.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -23,26 +23,26 @@ primary_api_classes:
 
 ---
 
-# Integrando SDKs de VisioForge con Aplicaciones .NET MAUI
+# Integrar SDKs de VisioForge con aplicaciones .NET MAUI
 
-## Descripción General
+## Descripción general
 
 .NET Multi-platform App UI (MAUI) permite a los desarrolladores construir aplicaciones multiplataforma para móviles y escritorio desde una única base de código. VisioForge proporciona soporte completo para aplicaciones MAUI a través del paquete NuGet `VisioForge.DotNet.Core.UI.MAUI` (espacio de nombres: `VisioForge.Core.UI.MAUI`), que contiene controles de UI especializados diseñados específicamente para la plataforma .NET MAUI.
 
 Nuestros SDKs habilitan potentes capacidades multimedia en todas las plataformas soportadas por MAUI:
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! tip "¿Busca un tutorial funcional?"
     Una vez instalados los paquetes, siga la [Guía del Reproductor de Video .NET MAUI](../mediaplayer/guides/maui-player.md) — una implementación completa de `VideoView` + `MediaPlayerCoreX` con selector de archivos, búsqueda y volumen que funciona en iOS, Android, macOS y Windows desde una sola base de código.
 
-## Comenzando
+## Comenzar
 
 ### Instalación
 
-Para comenzar a usar VisioForge con tu proyecto MAUI, instala los paquetes NuGet requeridos:
+Para comenzar a usar VisioForge con su proyecto MAUI, instale los paquetes NuGet requeridos:
 
-1. El paquete SDK para el producto que estés usando - uno de:
+1. El paquete SDK para el producto que esté usando - uno de:
    - `VisioForge.DotNet.VideoCapture` - captura de cámara, pantalla y cámara IP (`VideoCaptureCoreX`)
    - `VisioForge.DotNet.MediaPlayer` - reproducción de archivos y de red (`MediaPlayerCoreX`)
    - `VisioForge.DotNet.VideoEdit` - edición de línea de tiempo y renderizado (`VideoEditCoreX`)
@@ -52,7 +52,7 @@ Para comenzar a usar VisioForge con tu proyecto MAUI, instala los paquetes NuGet
 
 ```xml
 <ItemGroup>
-  <!-- Sustituye por el paquete SDK que use tu aplicación. -->
+  <!-- Sustituir por el paquete SDK que use su aplicación. -->
   <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.*" />
   <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.*" />
 </ItemGroup>
@@ -64,7 +64,7 @@ lo que los incorpora.
 
 ### Inicialización del SDK
 
-La inicialización adecuada es esencial para que los SDKs de VisioForge funcionen correctamente dentro de tu aplicación MAUI. Este proceso debe completarse en tu archivo `MauiProgram.cs`.
+La inicialización adecuada es esencial para que los SDKs de VisioForge funcionen correctamente dentro de su aplicación MAUI. Este proceso debe completarse en su archivo `MauiProgram.cs`.
 
 ```csharp
 using SkiaSharp.Views.Maui.Controls.Hosting;
@@ -81,14 +81,14 @@ public static class MauiProgram
           .UseSkiaSharp()
           // Inicializa el paquete MAUI de VisioForge agregando la línea de código a continuación
           .ConfigureMauiHandlers(handlers => handlers.AddVisioForgeHandlers())
-          // Después de inicializar el paquete MAUI de VisioForge, opcionalmente agrega fuentes adicionales
+          // Después de inicializar el paquete MAUI de VisioForge, opcionalmente agregar fuentes adicionales
           .ConfigureFonts(fonts =>
           {
               fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
               fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
           });
 
-        // Continúa inicializando tu App .NET MAUI aquí
+        // Continuar inicializando su App .NET MAUI aquí
         return builder.Build();
     }
 }
@@ -116,17 +116,17 @@ Libera el SDK cuando la página o la aplicación se cierren:
 VisioForgeX.DestroySDK();
 ```
 
-## Usando Controles de VisioForge en XAML
+## Usar controles de VisioForge en XAML
 
-El control `VideoView` es la interfaz principal para mostrar contenido de video en tu aplicación MAUI. Para usar controles de VisioForge en tus archivos XAML:
+El control `VideoView` es la interfaz principal para mostrar contenido de video en su aplicación MAUI. Para usar controles de VisioForge en sus archivos XAML:
 
-1. Agrega el espacio de nombres de VisioForge a tu archivo XAML:
+1. Agregue el espacio de nombres de VisioForge a su archivo XAML:
 
 ```xaml
 xmlns:vf="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI"
 ```
 
-2. Agrega el control VideoView a tu diseño:
+2. Agregue el control VideoView a su diseño:
 
 ```xaml
 <vf:VideoView Grid.Row="0"               
@@ -136,21 +136,21 @@ xmlns:vf="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI
                 Background="Black"/>
 ```
 
-El control VideoView se adapta a las capacidades de renderizado nativas de cada plataforma mientras proporciona una API consistente para el código de tu aplicación.
+El control VideoView se adapta a las capacidades de renderizado nativas de cada plataforma mientras proporciona una API consistente para el código de su aplicación.
 
-## Configuración Específica de Plataforma
+## Configuración específica de plataforma
 
 ### Implementación en Android
 
 Android requiere pasos de configuración adicionales para asegurar el funcionamiento adecuado:
 
-#### 1. Agregar Biblioteca de Bindings Java
+#### 1. Agregar biblioteca de bindings Java
 
 El SDK de VisioForge depende de funcionalidad nativa de Android que requiere una biblioteca de bindings Java personalizada:
 
 1. Clona la biblioteca de binding de nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency)
-2. Elige el proyecto de binding que coincida con la versión de .NET con la que compilas - la carpeta incluye un `VisioForge.Core.Android.X{N}.csproj` por cada versión de .NET soportada (por ejemplo, `VisioForge.Core.Android.X9.csproj` para .NET 9, `VisioForge.Core.Android.X10.csproj` para .NET 10). Si tu versión de .NET no aparece en la lista, elige la más cercana disponible.
-3. Agrega la referencia a tu archivo de proyecto:
+2. Elija el proyecto de binding que coincida con la versión de .NET con la que compila - la carpeta incluye un `VisioForge.Core.Android.X{N}.csproj` por cada versión de .NET soportada (por ejemplo, `VisioForge.Core.Android.X9.csproj` para .NET 9, `VisioForge.Core.Android.X10.csproj` para .NET 10). Si su versión de .NET no aparece en la lista, elija la más cercana disponible.
+3. Agregue la referencia a su archivo de proyecto:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
@@ -158,7 +158,7 @@ El SDK de VisioForge depende de funcionalidad nativa de Android que requiere una
 </ItemGroup>
 ```
 
-#### 2. Agregar Paquete Redistributable de Android
+#### 2. Agregar paquete redistributable de Android
 
 Incluye el paquete redistributable específico de Android:
 
@@ -170,7 +170,7 @@ Incluye el paquete redistributable específico de Android:
 
 #### 3. Permisos de Android
 
-Asegúrate de que tu AndroidManifest.xml incluya los permisos necesarios para acceso a cámara, micrófono y almacenamiento dependiendo de la funcionalidad de tu aplicación. Los permisos comúnmente requeridos incluyen:
+Asegúrese de que su AndroidManifest.xml incluya los permisos necesarios para acceso a cámara, micrófono y almacenamiento dependiendo de la funcionalidad de su aplicación. Los permisos comúnmente requeridos incluyen:
 
 - `android.permission.CAMERA`
 - `android.permission.RECORD_AUDIO`
@@ -181,23 +181,23 @@ Asegúrate de que tu AndroidManifest.xml incluya los permisos necesarios para ac
 
 La integración con iOS requiere menos pasos pero tiene algunas consideraciones importantes:
 
-#### 1. Agregar Redistributable de iOS
+#### 1. Agregar redistributable de iOS
 
-Agrega el paquete específico de iOS a tu proyecto:
+Agregue el paquete específico de iOS a su proyecto:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- La versión del redistribuable de iOS va por detrás de la versión del SDK a propósito - sigue
-       el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. No la subas para
+       el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. No subirla para
        igualar VisioForge.DotNet.*; no existe una versión 2026.x en nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
-#### 2. Notas Importantes para Desarrollo iOS
+#### 2. Notas importantes para desarrollo iOS
 
-- **Usa dispositivos físicos**: El SDK requiere pruebas en dispositivos iOS físicos en lugar de simuladores para funcionalidad completa.
-- **Descripciones de privacidad**: Agrega las cadenas de descripción de uso necesarias en tu archivo Info.plist para acceso a cámara y micrófono:
+- **Use dispositivos físicos**: El SDK requiere pruebas en dispositivos iOS físicos en lugar de simuladores para funcionalidad completa.
+- **Descripciones de privacidad**: Agregue las cadenas de descripción de uso necesarias en su archivo Info.plist para acceso a cámara y micrófono:
   - `NSCameraUsageDescription`
   - `NSMicrophoneUsageDescription`
   - `NSLocalNetworkUsageDescription` — necesario para alcanzar un servidor o dispositivo en la red local. Sin esta clave, iOS 14+ descarta el tráfico LAN en silencio (sin diálogo ni error).
@@ -208,13 +208,13 @@ Para aplicaciones macOS Catalyst:
 
 #### 1. Acceso a la red local
 
-Si tu aplicación se conecta a un servidor o dispositivo de la red local, agrega
+Si su aplicación se conecta a un servidor o dispositivo de la red local, agregue
 `NSLocalNetworkUsageDescription` al `Info.plist` de Mac Catalyst. Sin esta clave, iOS y
 Mac Catalyst pueden bloquear silenciosamente el tráfico de la red local sin mostrar un aviso de permiso.
 
-#### 2. Configurar Identificadores de Runtime
+#### 2. Configurar identificadores de runtime
 
-Para asegurar que tu aplicación funcione correctamente tanto en Macs Intel como Apple Silicon, especifica los identificadores de runtime apropiados:
+Para asegurar que su aplicación funcione correctamente tanto en Macs Intel como Apple Silicon, especifica los identificadores de runtime apropiados:
 
 ```xml
 <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' AND $(TargetFramework.Contains('-maccatalyst'))">
@@ -225,7 +225,7 @@ Para asegurar que tu aplicación funcione correctamente tanto en Macs Intel como
 </PropertyGroup>
 ```
 
-#### 3. Habilitar Recorte
+#### 3. Habilitar recorte
 
 Para rendimiento óptimo en macOS, habilita la opción PublishTrimmed:
 
@@ -233,13 +233,13 @@ Para rendimiento óptimo en macOS, habilita la opción PublishTrimmed:
 <PublishTrimmed Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">true</PublishTrimmed>
 ```
 
-Para información más detallada sobre el despliegue en macOS, consulta nuestra página de documentación de [macOS](../deployment-x/macOS.md).
+Para información más detallada sobre el despliegue en macOS, consulte nuestra página de documentación de [macOS](../deployment-x/macOS.md).
 
 ### Configuración de Windows
 
-Para aplicaciones Windows, necesitas incluir varios paquetes redistributables:
+Para aplicaciones Windows, necesita incluir varios paquetes redistributables:
 
-#### 1. Agregar Redistributables Base de Windows
+#### 1. Agregar redistributables base de Windows
 
 Incluye los paquetes principales de Windows:
 
@@ -249,7 +249,7 @@ Incluye los paquetes principales de Windows:
 </ItemGroup>
 ```
 
-#### 2. Agregar Soporte Extendido de Codecs (Opcional pero Recomendado)
+#### 2. Agregar soporte extendido de codecs (opcional pero recomendado)
 
 Para soporte mejorado de formatos de medios, incluye el paquete libAV (FFMPEG):
 
@@ -259,28 +259,28 @@ Para soporte mejorado de formatos de medios, incluye el paquete libAV (FFMPEG):
 </ItemGroup>
 ```
 
-### Optimización de Rendimiento
+### Optimización de rendimiento
 
 Para rendimiento óptimo en todas las plataformas:
 
-1. Usa aceleración de hardware cuando esté disponible
-2. Ajusta la resolución de video basándote en las capacidades del dispositivo objetivo
-3. Considera las restricciones de memoria en dispositivos móviles al procesar archivos de medios grandes
+1. Use aceleración de hardware cuando esté disponible
+2. Ajuste la resolución de video basándose en las capacidades del dispositivo objetivo
+3. Considere las restricciones de memoria en dispositivos móviles al procesar archivos de medios grandes
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-- **Pantalla de video en blanco**: Asegúrate de que los permisos adecuados estén otorgados en plataformas móviles
-- **Codecs faltantes**: Verifica que todos los paquetes redistributables específicos de plataforma estén correctamente instalados
-- **Problemas de rendimiento**: Verifica que la aceleración de hardware esté habilitada cuando esté disponible
-- **Errores de despliegue**: Confirma que los identificadores de runtime estén correctamente especificados para la plataforma objetivo
+- **Pantalla de video en blanco**: Asegúrese de que los permisos adecuados estén otorgados en plataformas móviles
+- **Codecs faltantes**: Verifique que todos los paquetes redistributables específicos de plataforma estén correctamente instalados
+- **Problemas de rendimiento**: Verifique que la aceleración de hardware esté habilitada cuando esté disponible
+- **Errores de despliegue**: Confirme que los identificadores de runtime estén correctamente especificados para la plataforma objetivo
 
 ## Conclusión
 
-El SDK de VisioForge proporciona una solución completa para agregar potentes capacidades multimedia a tus aplicaciones .NET MAUI. Siguiendo las instrucciones de configuración específicas de plataforma y las mejores prácticas descritas en esta guía, puedes crear aplicaciones multiplataforma ricas con características avanzadas de video y audio.
+El SDK de VisioForge proporciona una solución completa para agregar potentes capacidades multimedia a sus aplicaciones .NET MAUI. Siguiendo las instrucciones de configuración específicas de plataforma y las mejores prácticas descritas en esta guía, puede crear aplicaciones multiplataforma ricas con características avanzadas de video y audio.
 
-Para ejemplos adicionales y código de muestra, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para ejemplos adicionales y código de muestra, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
 
-## Siguientes Pasos
+## Siguientes pasos
 
 - [Guía del Reproductor de Video .NET MAUI](../mediaplayer/guides/maui-player.md) — tutorial completo de `VideoView` con búsqueda, volumen y selector de archivos
 - [Guía del Reproductor Avalonia](../mediaplayer/guides/avalonia-player.md) — alternativa multiplataforma orientada al escritorio (incluye Linux)

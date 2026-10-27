@@ -24,7 +24,7 @@ primary_api_classes:
 
 # Enregistrement d'une webcam vers un fichier AVI dans des applications .NET C#
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Vue d'ensemble
 

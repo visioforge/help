@@ -1,6 +1,6 @@
 ---
 title: Amcrest — URLs RTSP y conexión de cámaras IP en C# .NET
-description: Conecta cámaras Amcrest en C# .NET con patrones de URL RTSP y ejemplos de código para modelos IP2M, IP4M, IP5M, IP8M y NVR.
+description: Conecte cámaras Amcrest en C# .NET con patrones de URL RTSP y ejemplos de código para modelos IP2M, IP4M, IP5M, IP8M y NVR.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -20,11 +20,11 @@ tags:
 
 ---
 
-# Cómo Conectar una Cámara IP Amcrest en C# .NET
+# Cómo conectar una cámara IP Amcrest en C# .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Descripción de la Marca
+## Descripción de la marca
 
 **Amcrest** (Amcrest Technologies LLC) es una marca americana de cámaras de seguridad para consumidores con sede en Houston, Texas. Las cámaras Amcrest son fabricadas por **Dahua Technology** y usan firmware y protocolos de Dahua. Esto significa que las cámaras Amcrest comparten patrones de URL RTSP, interfaces web y endpoints de API idénticos con las cámaras Dahua. Amcrest se ha convertido en una de las marcas de cámaras IP más vendidas en Amazon en Norteamérica.
 
@@ -39,11 +39,11 @@ tags:
 - **Base OEM:** Dahua (formato de URL RTSP idéntico)
 
 !!! info "Amcrest = Dahua"
-    Las cámaras Amcrest usan firmware de Dahua y exactamente el mismo formato de URL RTSP que las cámaras Dahua. Si estás familiarizado con la integración de Dahua, Amcrest funciona de manera idéntica. Consulta nuestra [guía de conexión Dahua](dahua.md) para detalles adicionales.
+    Las cámaras Amcrest usan firmware de Dahua y exactamente el mismo formato de URL RTSP que las cámaras Dahua. Si está familiarizado con la integración de Dahua, Amcrest funciona de manera idéntica. Consulte nuestra [guía de conexión Dahua](dahua.md) para detalles adicionales.
 
 ## Patrones de URL RTSP
 
-### Formato de URL Estándar
+### Formato de URL estándar
 
 Amcrest usa el patrón de URL `cam/realmonitor` de Dahua:
 
@@ -58,7 +58,7 @@ rtsp://[USUARIO]:[CONTRASEÑA]@[IP]:554/cam/realmonitor?channel=1&subtype=0
 | `subtype` | 1 | Subflujo (resolución más baja, menos ancho de banda) |
 | `subtype` | 2 | Tercer flujo (si es compatible, optimizado para móvil) |
 
-### Modelos de Cámaras
+### Modelos de cámaras
 
 | Modelo | Resolución | URL Flujo Principal | Audio |
 |-------|-----------|----------------|-------|
@@ -71,7 +71,7 @@ rtsp://[USUARIO]:[CONTRASEÑA]@[IP]:554/cam/realmonitor?channel=1&subtype=0
 | ASH-41 (pan/tilt) | 2560x1440 | `rtsp://IP:554/cam/realmonitor?channel=1&subtype=0` | Sí |
 | ASH-42 (interior) | 1920x1080 | `rtsp://IP:554/cam/realmonitor?channel=1&subtype=0` | Sí |
 
-### URLs de Canales NVR
+### URLs de canales NVR
 
 Para NVRs Amcrest (NV4108E, NV4216E, NV5216E, etc.):
 
@@ -81,7 +81,7 @@ Para NVRs Amcrest (NV4108E, NV4216E, NV5216E, etc.):
 | Cámara 2 | `rtsp://IP:554/cam/realmonitor?channel=2&subtype=0` | `rtsp://IP:554/cam/realmonitor?channel=2&subtype=1` |
 | Cámara N | `rtsp://IP:554/cam/realmonitor?channel=N&subtype=0` | `rtsp://IP:554/cam/realmonitor?channel=N&subtype=1` |
 
-### Formatos de URL Alternativos
+### Formatos de URL alternativos
 
 Algunos modelos Amcrest más antiguos o versiones de firmware soportan estas URLs alternativas:
 
@@ -93,7 +93,7 @@ Algunos modelos Amcrest más antiguos o versiones de firmware soportan estas URL
 
 ## Conexión con VisioForge SDK
 
-Usa la URL RTSP de tu cámara Amcrest con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
+Use la URL RTSP de su cámara Amcrest con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
 
 ```csharp
 // Amcrest IP4M-1051, main stream
@@ -102,9 +102,9 @@ var username = "admin";
 var password = "YourPassword";
 ```
 
-Para acceder al subflujo, usa `subtype=1` en lugar de `subtype=0`.
+Para acceder al subflujo, use `subtype=1` en lugar de `subtype=0`.
 
-## URLs de Captura y MJPEG
+## URLs de captura y MJPEG
 
 | Tipo | Patrón de URL | Notas |
 |------|-------------|-------|
@@ -113,20 +113,20 @@ Para acceder al subflujo, usa `subtype=1` en lugar de `subtype=0`.
 | Flujo MJPEG | `http://IP/cgi-bin/mjpg/video.cgi?channel=1&subtype=1` | MJPEG continuo |
 | Imagen actual | `http://IP/onvif-http/snapshot?channel=1` | Captura HTTP ONVIF |
 
-## Solución de Problemas
+## Solución de problemas
 
 ### Error "401 Unauthorized"
 
-Las cámaras Amcrest con firmware más reciente requieren que la contraseña se cambie del valor predeterminado en el primer inicio de sesión. Si no has configurado la cámara a través de la interfaz web o la app Amcrest aún:
+Las cámaras Amcrest con firmware más reciente requieren que la contraseña se cambie del valor predeterminado en el primer inicio de sesión. Si no ha configurado la cámara a través de la interfaz web o la app Amcrest aún:
 
-1. Accede a la cámara en `http://IP_CAMARA` desde un navegador
+1. Acceda a la cámara en `http://IP_CAMARA` desde un navegador
 2. Completa el asistente de configuración inicial
-3. Establece una contraseña segura
-4. Usa esas credenciales en tu URL RTSP
+3. Establezca una contraseña segura
+4. Use esas credenciales en su URL RTSP
 
 ### Puerto 554 vs puerto personalizado
 
-Algunas versiones de firmware Amcrest permiten cambiar el puerto RTSP. Verifica la configuración del puerto en:
+Algunas versiones de firmware Amcrest permiten cambiar el puerto RTSP. Verifique la configuración del puerto en:
 
 - Interfaz web: **Configuración > Red > Puerto > Puerto RTSP**
 - El predeterminado es 554
@@ -141,7 +141,7 @@ Algunas versiones de firmware Amcrest permiten cambiar el puerto RTSP. Verifica 
 
 Las cámaras de la serie ASH (como ASH-41, ASH-42) usan el mismo formato de URL RTSP, pero algunos modelos requieren habilitar RTSP en la app Amcrest Smart Home primero.
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 **¿Son las cámaras Amcrest y Dahua lo mismo?**
 
@@ -159,7 +159,7 @@ Sí. Todas las cámaras Amcrest actuales soportan ONVIF Profile S y Profile T. O
 
 Sí. RTSP, ONVIF y la interfaz web funcionan localmente sin ninguna dependencia de la nube. El servicio de nube de Amcrest es opcional y solo es necesario para la visualización remota a través de las apps de Amcrest.
 
-## Recursos Relacionados
+## Recursos relacionados
 
 - [Todas las Marcas de Cámaras — Directorio de URLs RTSP](index.md)
 - [Guía de Conexión Dahua](dahua.md) — Mismo formato de URL (base OEM)

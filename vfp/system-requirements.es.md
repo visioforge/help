@@ -22,7 +22,7 @@ Esta página describe los requisitos del sistema para ejecutar el Video Fingerpr
 ### Windows
 
 - **Sistema Operativo**: Windows 10 versión 1903+ o Windows 11
-- **Arquitectura**: x86, x64 o ARM64 (ARM64 solo para SDK .NET)
+- **Arquitectura**: x86, x64 o ARM64 (ARM64 solo para SDK .NET, con .NET 6+; en ARM64 una aplicación .NET Framework debe ejecutarse como x86, o como x64 en Windows 11)
 - **Runtime**: Microsoft Visual C++ Redistributables 2019 o posterior
 - **Bibliotecas Adicionales**: Filtros DirectShow para soporte de códec mejorado (opcional)
 
@@ -77,7 +77,9 @@ Esta página describe los requisitos del sistema para ejecutar el Video Fingerpr
 
 - **Versión de .NET**: 
   - Windows: .NET Framework 4.6.1+ o .NET 6.0+
-  - Linux/macOS: .NET 6.0+
+  - Linux: .NET 6.0+
+  - macOS: .NET 9.0+
+  - Framework de destino (aplicaciones .NET 5+): añada el sistema operativo, `-windows` en Windows (`net8.0-windows`) y `-macos` en macOS (`net9.0-macos` o posterior). Un framework de destino sin sufijo de sistema operativo (`net8.0`) es la compilación para Linux: en Windows o macOS informa de que falta la biblioteca nativa.
 - **IDE**: Visual Studio 2019+ (Windows), Visual Studio Code, o JetBrains Rider
 
 ### SDK C++

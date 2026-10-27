@@ -32,13 +32,13 @@ primary_api_classes:
 
 ---
 
-# Escribir Etiquetas de Audio con SDK de Media Blocks
+# Escribir Etiquetas de Audio con Media Blocks SDK
 
-[SDK de Media Blocks .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Tabla de Contenidos
 
-- [Escribir Etiquetas de Audio con SDK de Media Blocks](#escribir-etiquetas-de-audio-con-sdk-de-media-blocks)
+- [Escribir Etiquetas de Audio con Media Blocks SDK](#escribir-etiquetas-de-audio-con-media-blocks-sdk)
   - [Tabla de Contenidos](#tabla-de-contenidos)
   - [Resumen](#resumen)
   - [Características Principales](#caracteristicas-principales)

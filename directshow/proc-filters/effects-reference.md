@@ -32,7 +32,7 @@ The DirectShow Processing Filters Pack provides 35+ real-time video effects that
 - **Image Adjustment** - Brightness, contrast, saturation
 - **Spatial Effects** - Flip, mirror, rotate
 - **Artistic Effects** - Marble, solarize, posterize, mosaic
-- **Noise and Quality** - Denoising algorithms (CAST, adaptive, mosquito)
+- **Noise and Quality** - Denoising algorithms (CAST, adaptive, mosquito, SNR)
 - **Deinterlacing** - Blend, triangle, CAVT methods
 - **Creative Effects** - Blur, shake, spray, invert
 
@@ -457,13 +457,15 @@ CAST (Combined Adaptive Spatial-Temporal) denoising algorithm.
 | `TemporalDifferenceThreshold` | 0-255 | 16 | Motion detection threshold |
 | `NumberOfMotionPixelsThreshold` | 0-16 | 0 | Min pixels for motion |
 | `StrongEdgeThreshold` | 0-255 | 8 | Edge preservation |
-| `BlockWidth` | 1-16 | 4 | Processing block width |
+| `BlockWidth` | 1-16 | 4 | Processing block width, in pixels |
 | `BlockHeight` | 1-16 | 4 | Processing block height |
 | `EdgePixelWeight` | 0-255 | 128 | Edge blending weight |
 | `NonEdgePixelWeight` | 0-255 | 16 | Smooth area weight |
-| `GaussianThresholdY` | int | 12 | Luma noise threshold |
-| `GaussianThresholdUV` | int | 6 | Chroma noise threshold |
+| `GaussianThresholdY` | 0-255 | 12 | Spatial noise threshold, applied to each of the B, G and R channels |
+| `GaussianThresholdUV` | 0-255 | 6 | Not used: the filter works on RGB24, which has no chroma channels |
 | `HistoryWeight` | 0-255 | 192 | Temporal filtering strength |
+
+A `BlockWidth` or `BlockHeight` of 0 means the structure was not filled in: the filter then uses the default of every parameter.
 
 **Use Cases**:
 - Low-light video cleanup
@@ -472,15 +474,15 @@ CAST (Combined Adaptive Spatial-Temporal) denoising algorithm.
 
 **Example (C++)**:
 ```cpp
-CVFEffect effect;
+CVFEffect effect = {};
 effect.Type = ef_denoise_cast;
 effect.Enabled = TRUE;
 
 // Moderate noise reduction
+effect.DenoiseCAST = { 16, 0, 8, 4, 4, 128, 16, 12, 6, 192 };
 effect.DenoiseCAST.TemporalDifferenceThreshold = 20;
 effect.DenoiseCAST.StrongEdgeThreshold = 10;
 effect.DenoiseCAST.GaussianThresholdY = 15;
-effect.DenoiseCAST.GaussianThresholdUV = 8;
 
 pEffects->add_effect(effect);
 ```
@@ -511,6 +513,21 @@ Reduces mosquito noise (compression artifacts around edges).
 - Clean up heavily compressed video
 - Remove MPEG/H.264 artifacts
 - Post-processing for streaming
+
+---
+### ef_denoise_snr
+
+Spatial noise reduction: smooths random noise within the frame while keeping edges. Each colour channel is filtered on its own. Needs Video Effects Pro and `VisioForge_MFP.dll` 2026.10.27.2 or later: an older filter ignores the type, and the filter does not load with an older `VisioForge_MFP.dll`.
+
+**Effect Type**: `CVFEffectType.ef_denoise_snr`
+
+**Parameters**:
+- `pDenoiseSNRThreshold` - Noise threshold (0-255). Higher values denoise more strongly; typical range 10-50
+
+**Use Cases**:
+- Camera noise in a single frame
+- Low-light video
+- Noise reduction without a dependency on previous frames
 
 ---
 ### ef_color_noise
@@ -630,7 +647,7 @@ pEffects->add_effect(timestamp);
 - Simple deinterlacing
 **High Impact** (15-40% CPU):
 - Blur (large radius)
-- Denoise (CAST, adaptive)
+- Denoise (CAST, adaptive, SNR)
 - Mosaic (small blocks)
 - Marble/artistic effects
 ### Optimization Tips

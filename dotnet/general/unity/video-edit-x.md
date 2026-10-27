@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Edit and render video in Unity with VideoEditCoreX
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The **`VideoEditX`** scene combines clips on a **`VideoEditCoreX`** timeline, optionally applies a
 grayscale effect, and either **previews** the timeline into a Unity `RawImage` or **renders** it to

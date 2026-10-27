@@ -39,11 +39,11 @@ primary_api_classes:
 
 # Build a Video Player in VB.NET
 
-This guide walks you through building a full-featured video player application in VB.NET (Visual Basic .NET) using [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net). The player supports MP4, AVI, MKV, WMV, WebM, and many other formats with playback controls, timeline seeking, and volume adjustment.
+This guide walks you through building a full-featured video player application in VB.NET (Visual Basic .NET) using [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net). The player supports MP4, AVI, MKV, WMV, WebM, and many other formats with playback controls, timeline seeking, and volume adjustment.
 
 ## Why Use Media Player SDK .Net for VB.NET
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) provides robust VB.NET video playback with:
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) provides robust VB.NET video playback with:
 
 - Support for all major video formats (MP4, AVI, MKV, WMV, WebM, MOV, TS)
 - Audio format support (MP3, AAC, WAV, WMA, FLAC)
@@ -55,9 +55,9 @@ This guide walks you through building a full-featured video player application i
 ## Required NuGet Packages
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 ## Complete VB.NET Video Player Example
@@ -290,4 +290,4 @@ Include the NuGet redist packages listed in the NuGet reference section above �
 - [Loop Mode & Position Range](loop-and-position-range.md) — loop playback and segment selection for both engines
 - [Record Webcam Video in VB.NET](../../videocapture/guides/record-webcam-vb-net.md) — webcam capture application in Visual Basic .NET
 - [Code Samples](../code-samples/index.md) — frame extraction, playlists, and reverse playback examples
-- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — product page and downloads
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) — product page and downloads

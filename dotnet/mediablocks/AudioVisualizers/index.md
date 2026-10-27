@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Audio visualizer blocks
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 VisioForge Media Blocks SDK .Net includes a set of audio visualizer blocks that allow you to create audio-reactive visualizations for your applications. These blocks take audio input and produce video output representing the audio characteristics.
 

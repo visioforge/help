@@ -1,6 +1,6 @@
 ---
 title: Crear video desde imágenes en consola C# con Video Edit SDK
-description: Genera videos desde secuencias de imágenes en C# con orientación paso a paso, ejemplos de código y consejos de rendimiento para .NET.
+description: Genere videos desde secuencias de imágenes en C# con orientación paso a paso, ejemplos de código y consejos de rendimiento para .NET.
 tags:
   - Video Edit SDK
   - .NET
@@ -19,9 +19,9 @@ primary_api_classes:
 
 ---
 
-# Crear Videos desde Imágenes en Aplicaciones de Consola C#
+# Crear videos desde imágenes en aplicaciones de consola C#
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
 ## Introducción
 
@@ -29,28 +29,28 @@ Convertir una secuencia de imágenes en un archivo de video es un requisito com�
 
 ## Prerrequisitos
 
-Antes de comenzar, asegúrate de tener:
+Antes de comenzar, asegúrese de tener:
 
 - Entorno de desarrollo .NET configurado
 - Video Edit SDK .Net instalado
 - Conocimiento básico de programación C#
 - Una carpeta que contenga archivos de imagen (JPG, PNG, etc.)
 
-## Conceptos Clave
+## Conceptos clave
 
-Al crear videos desde imágenes, entender estos conceptos fundamentales te ayudará a lograr mejores resultados:
+Al crear videos desde imágenes, entender estos conceptos fundamentales le ayudará a lograr mejores resultados:
 
-- **Tasa de fotogramas**: Determina qué tan suavemente se reproduce tu video (típicamente 25-30 fotogramas por segundo)
+- **Tasa de fotogramas**: Determina qué tan suavemente se reproduce su video (típicamente 25-30 fotogramas por segundo)
 - **Duración de imagen**: Cuánto tiempo aparece cada imagen en el video
 - **Efectos de transición**: Efectos opcionales entre imágenes
 - **Formato de salida**: El contenedor de video y especificaciones de códec
 - **Resolución**: Las dimensiones del video de salida
 
-## Implementación Paso a Paso
+## Implementación paso a paso
 
-### Configurar el Proyecto
+### Configurar el proyecto
 
-Primero, crea un nuevo proyecto de aplicación de consola y añade las referencias necesarias:
+Primero, cree un nuevo proyecto de aplicación de consola y añada las referencias necesarias:
 
 ```cs
 using System;
@@ -60,7 +60,7 @@ using VisioForge.Core.Types.Output;
 using VisioForge.Core.VideoEdit;
 ```
 
-### Implementación Principal
+### Implementación principal
 
 ```cs
 namespace ve_console
@@ -148,9 +148,9 @@ namespace ve_console
 }
 ```
 
-## Desglose Detallado de Componentes
+## Desglose detallado de componentes
 
-### Configuración de Entrada de Imágenes
+### Configuración de entrada de imágenes
 
 El código anterior usa la sobrecarga de siete argumentos de `Input_AddImageFile` en `VideoEditCore`:
 
@@ -171,10 +171,10 @@ Notas de parámetros:
 - **duration** — cuánto tiempo aparece la imagen (2000 ms en este ejemplo)
 - **timelineInsertTime** — cuándo aparece la imagen en la línea de tiempo final
 - **stretchMode** — comportamiento de ajuste (`Letterbox` preserva aspecto con barras negras; `Stretch` llena el frame; `Crop` recorta al centro)
-- **targetVideoStream** — índice de stream de video (pasa `0` a menos que construyas una edición multi-pista)
+- **targetVideoStream** — índice de stream de video (pase `0` a menos que construya una edición multi-pista)
 - **customWidth / customHeight** — dimensiones objetivo, típicamente coincidiendo con `Video_Resize_Width` / `Video_Resize_Height` configurados en el core
 
-### Configuración de Salida de Video
+### Configuración de salida de video
 
 La configuración del video de salida se establece con estas propiedades clave:
 
@@ -185,7 +185,7 @@ La configuración del video de salida se establece con estas propiedades clave:
 - **Output_Format**: Formato de contenedor y configuración de códec
 - **Output_Filename**: Dónde guardar el archivo de video resultante
 
-### Manejo de Progreso y Errores
+### Manejo de progreso y errores
 
 La implementación incluye manejadores de eventos para monitorear el progreso y capturar errores:
 
@@ -196,11 +196,11 @@ ve.OnProgress += VideoEdit1_OnProgress;
 
 Estos manejadores proporcionan retroalimentación durante la creación del video, lo cual es esencial para operaciones más largas.
 
-## Opciones de Personalización Avanzadas
+## Opciones de personalización avanzadas
 
-### Efectos de Transición
+### Efectos de transición
 
-Para añadir transiciones entre imágenes, puedes usar el método `Video_Transition_Add`.
+Para añadir transiciones entre imágenes, puede usar el método `Video_Transition_Add`.
 El motor clásico `VideoEditCore` envía nombres DXTransform — valores comunes incluyen
 `"Fade"`, `"Horizontal"`, `"Upper right"`, `"Radial, top"`, `"Wheel, 4 spoke"`,
 `"Pixelate"`, `"Page peel"`, etc. (llame a `Video_Transitions_GetList()` para enumerar
@@ -245,35 +245,35 @@ ve.Video_Transition_Add(
 // );
 ```
 
-## Consejos de Optimización de Rendimiento
+## Consejos de optimización de rendimiento
 
-- **Pre-redimensionar imágenes**: Para mejor rendimiento, redimensiona las imágenes antes del procesamiento
-- **Procesamiento por lotes**: Procesa imágenes en lotes más pequeños para grandes colecciones
-- **Gestión de memoria**: Libera objetos grandes cuando ya no se necesiten
-- **Códec de salida**: Elige códecs basándote en requisitos de calidad vs. velocidad de procesamiento
-- **Aceleración por hardware**: Habilita la aceleración por hardware cuando esté disponible
+- **Pre-redimensionar imágenes**: Para mejor rendimiento, redimensione las imágenes antes del procesamiento
+- **Procesamiento por lotes**: Procese imágenes en lotes más pequeños para grandes colecciones
+- **Gestión de memoria**: Libere objetos grandes cuando ya no se necesiten
+- **Códec de salida**: Elija códecs basándose en requisitos de calidad vs. velocidad de procesamiento
+- **Aceleración por hardware**: Habilite la aceleración por hardware cuando esté disponible
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-### Errores de Códec Faltante
+### Errores de códec faltante
 
-Si encuentras errores relacionados con códecs, asegúrate de haber instalado los redistribuibles requeridos:
+Si encuentra errores relacionados con códecs, asegúrese de haber instalado los redistribuibles requeridos:
 
 - Redistribuible de Video Edit SDK [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
 
-### Compatibilidad de Formato de Imagen
+### Compatibilidad de formato de imagen
 
 No todos los formatos de imagen son soportados igualmente. Para mejores resultados:
 
-- Usa formatos comunes como JPG, PNG o BMP
-- Asegura dimensiones consistentes entre imágenes
-- Prueba con un pequeño subconjunto antes de procesar grandes colecciones
+- Use formatos comunes como JPG, PNG o BMP
+- Asegure dimensiones consistentes entre imágenes
+- Pruebe con un pequeño subconjunto antes de procesar grandes colecciones
 
 ## Conclusión
 
-Crear videos desde imágenes en una aplicación de consola C# es sencillo con el enfoque correcto. Esta guía cubrió los detalles esenciales de implementación, opciones de configuración y mejores prácticas para ayudarte a integrar exitosamente esta funcionalidad en tus aplicaciones.
+Crear videos desde imágenes en una aplicación de consola C# es sencillo con el enfoque correcto. Esta guía cubrió los detalles esenciales de implementación, opciones de configuración y mejores prácticas para ayudarle a integrar exitosamente esta funcionalidad en sus aplicaciones.
 
-Recuerda ajustar los parámetros para que coincidan con tus requisitos específicos, particularmente la duración de la imagen, la tasa de fotogramas y la configuración del formato de salida.
+Recuerde ajustar los parámetros para que coincidan con sus requisitos específicos, particularmente la duración de la imagen, la tasa de fotogramas y la configuración del formato de salida.
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para más muestras de código e implementaciones.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para más muestras de código e implementaciones.

@@ -36,9 +36,9 @@ primary_api_classes:
 
 # Construire un lecteur vidéo C# pour WinForms et WPF
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Ce guide vous montre comment construire un lecteur vidéo complet pour **applications bureau Windows** en C# en utilisant [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) avec le moteur de haut niveau `MediaPlayerCoreX`. Vous mettrez en place la lecture de fichiers, le positionnement dans la timeline, la pause/reprise, le volume et la vitesse de lecture face à un contrôle `VideoView` WinForms ou WPF.
+Ce guide vous montre comment construire un lecteur vidéo complet pour **applications bureau Windows** en C# en utilisant [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) avec le moteur de haut niveau `MediaPlayerCoreX`. Vous mettrez en place la lecture de fichiers, le positionnement dans la timeline, la pause/reprise, le volume et la vitesse de lecture face à un contrôle `VideoView` WinForms ou WPF.
 
 !!! info "Choisissez votre approche"
     Cette page concerne les **applications bureau Windows** (WinForms ou WPF) utilisant Media Player SDK .Net.
@@ -66,9 +66,9 @@ Ce guide vous montre comment construire un lecteur vidéo complet pour **applica
 ### Paquets NuGet requis
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 ### Implémentation complète du lecteur vidéo C#
@@ -299,4 +299,4 @@ Oui. Le SDK fonctionne sur Windows, macOS, Linux, Android et iOS. Pour des appli
 - [Guide du lecteur Android](android-player.md) — configuration et déploiement du lecteur spécifiques à Android
 - [Mode boucle et plage de position](loop-and-position-range.md) — configurez la lecture en boucle, la répétition A-B et la lecture par segments
 - [Lecteur Media Blocks SDK](../../mediablocks/GettingStarted/player.md) — alternative basée sur un pipeline avec rendus explicites
-- [Page produit Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net)
+- [Page produit Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)

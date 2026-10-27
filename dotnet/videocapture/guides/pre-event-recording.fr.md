@@ -40,7 +40,7 @@ L'enregistrement pré-événement permet à votre application de mettre en mémo
 
 ## Fonctionnalités clés de l'enregistrement pré-événement de Video Capture SDK .Net
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 - **Durée de tampon configurable** : mettez en tampon les 5 à 120+ dernières secondes de vidéo en mémoire
 - **Enregistrement post-événement automatique** : continuez l'enregistrement pendant une durée configurable après le déclencheur
@@ -361,13 +361,13 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 Paquet principal du SDK (managé) :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
 ```
 
 Dépendances natives pour Windows x64 :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 Pour les plateformes alternatives (macOS, Linux, Android, iOS), utilisez les paquets de dépendances natives correspondants. Consultez le [guide de déploiement](../../deployment-x/index.md) pour plus de détails.

@@ -294,7 +294,7 @@ Vamos a crear una aplicación simple que genera una huella desde un archivo de v
 
 int main(int argc, char* argv[])
 {
-    std::cout << "SDK VisioForge Video Fingerprinting - Primera Aplicación\n";
+    std::cout << "VisioForge Video Fingerprinting SDK - Primera Aplicación\n";
     std::cout << "========================================================\n\n";
     
     // Comprobar argumentos de la línea de comandos

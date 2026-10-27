@@ -16,7 +16,7 @@ primary_api_classes:
 
 # Lecture multimédia depuis la mémoire dans le SDK .NET
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction à la lecture multimédia basée sur la mémoire
 

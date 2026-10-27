@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Audio Processing and Effect Blocks for .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 VisioForge Media Blocks SDK provides a pipeline-based approach to audio processing in C# and .NET. Connect audio blocks — converters, resamplers, mixers, equalizers, effects, and analyzers — to build real-time audio processing chains for your applications. Each block has typed input/output pins that you wire together using `pipeline.Connect()`.
 
@@ -344,6 +344,7 @@ Configure via `AudioMixerSettings`:
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `Format` | `AudioInfoX` | `S16LE, 48000 Hz, 2 ch` | Output audio format (sample format, sample rate, channel count) |
+| `Latency` | `TimeSpan` | `100 ms` | How long the mixer waits for late input on a live pipeline before mixing without it; too low a value is heard as clicks and dropouts on live sources. `TimeSpan.Zero` waits only for the latency the inputs report. Applied when the pipeline starts |
 
 **Runtime methods:**
 

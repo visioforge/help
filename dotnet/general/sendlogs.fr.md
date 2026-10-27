@@ -11,7 +11,7 @@ tags:
 
 # Dépannage à l'aide des journaux pour les produits SDK .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Pourquoi les journaux sont importants pour le dépannage du SDK
 
@@ -63,7 +63,7 @@ Lorsque vous développez vos propres applications avec nos SDK, vous devrez acti
 Quel que soit le SDK que vous utilisez, l'approche de base pour activer les journaux suit un modèle similaire :
 
 ```csharp
-// Exemple pour MediaPlayer SDK
+// Exemple pour Media Player SDK
 mediaPlayer.Debug_Mode = true;
 mediaPlayer.Debug_Dir = "C:\\Logs\\MyApplication";
 

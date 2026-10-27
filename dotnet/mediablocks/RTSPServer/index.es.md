@@ -1,5 +1,5 @@
 ---
-title: Servidor RTSP - Streaming H.264 de Baja Latencia en C# .NET
+title: Servidor RTSP - streaming H.264 de baja latencia en C# .NET
 description: Cree servidores de streaming RTSP para entrega de audio y video de baja latencia con soporte H.264/H.265 usando VisioForge Media Blocks SDK.
 tags:
   - Media Blocks SDK
@@ -22,14 +22,14 @@ sidebar_label: RTSP Server
 
 # Bloque Servidor RTSP - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Soporte multiplataforma"
-    El `RTSPServerBlock` funciona en **Windows, macOS y Linux** vía GStreamer (requiere el plugin `gst-rtsp-server`). Consulta la [matriz de soporte de plataformas](../../platform-matrix.md) para códecs y detalles de aceleración por hardware, y la [guía de despliegue en Linux](../../deployment-x/Ubuntu.md) para configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.
+    El `RTSPServerBlock` funciona en **Windows, macOS y Linux** vía GStreamer (requiere el plugin `gst-rtsp-server`). Consulte la [matriz de soporte de plataformas](../../platform-matrix.md) para códecs y detalles de aceleración por hardware, y la [guía de despliegue en Linux](../../deployment-x/Ubuntu.md) para configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.
 
 El bloque Servidor RTSP crea un endpoint de servidor RTSP (Protocolo de Transmisión en Tiempo Real) para transmitir contenido de audio/video a través de redes. Los clientes pueden conectarse para recibir streams de medios en vivo o grabados con baja latencia.
 
-## Visión General
+## Visión general
 
 El RTSPServerBlock proporciona una implementación completa de servidor de streaming RTSP con las siguientes capacidades:
 
@@ -42,7 +42,7 @@ El RTSPServerBlock proporciona una implementación completa de servidor de strea
 - **Configurable**: Vinculación de puerto personalizada y puntos de montaje
 - **Baja Latencia**: Optimizado para aplicaciones de streaming en tiempo real
 
-## Información del Bloque
+## Información del bloque
 
 Nombre: RTSPServerBlock.
 
@@ -51,7 +51,7 @@ Nombre: RTSPServerBlock.
 | Entrada de video | video comprimido (H.264, H.265) | 1 |
 | Entrada de audio | audio comprimido (AAC, MP3, etc.) | 1 |
 
-## Pipeline de Ejemplo
+## Pipeline de ejemplo
 
 ```mermaid
 graph LR;
@@ -79,12 +79,12 @@ El RTSPServerBlock se configura usando `RTSPServerSettings`:
 - `VideoEncoder` (`IVideoEncoder`): Configuración del codificador de video. Pasa `null` para deshabilitar el stream de video.
 - `AudioEncoder` (`IAudioEncoder`): Configuración del codificador de audio. Pasa `null` para deshabilitar el stream de audio.
 
-`RTSPServerSettings` **no tiene constructor sin parámetros**. Usa uno de:
+`RTSPServerSettings` **no tiene constructor sin parámetros**. Use uno de:
 
 - `new RTSPServerSettings(IVideoEncoder videoEncoder, IAudioEncoder audioEncoder)`
 - `new RTSPServerSettings(Uri uri, IVideoEncoder videoEncoder, IAudioEncoder audioEncoder)` — parsea host / puerto / point desde el URI.
 
-## Código de Ejemplo
+## Código de ejemplo
 
 ### Servidor RTSP Básico
 
@@ -124,7 +124,7 @@ pipeline.Connect(audioSource.Output, aacEncoder.Input);
 
 // Crear servidor RTSP (el ctor de settings toma videoEncoder + audioEncoder).
 // Como pre-codificamos arriba, pasa null a ambos aquí — RTSPServerBlock solo reenvía los streams
-// codificados. Pasa codificadores concretos solo cuando quieras que el servidor codifique internamente.
+// codificados. Pasar codificadores concretos solo cuando quiera que el servidor codifique internamente.
 var rtspSettings = new RTSPServerSettings(videoEncoder: null, audioEncoder: null)
 {
     Port = 8554,
@@ -159,7 +159,7 @@ var rtspSettings = new RTSPServerSettings(
 
 var rtspServer = new RTSPServerBlock(rtspSettings);
 
-// Conecta fuentes crudas (no codificadas) — el servidor codificará.
+// Conectar fuentes crudas (no codificadas) — el servidor codificará.
 pipeline.Connect(videoSource.Output, rtspServer.VideoInput);
 
 await pipeline.StartAsync();
@@ -218,7 +218,7 @@ await pipeline.StartAsync();
 Console.WriteLine($"Servidor RTSP Video-on-Demand iniciado en {rtspSettings.URL}");
 ```
 
-## Conexión de Cliente
+## Conexión de cliente
 
 Los clientes pueden conectarse al servidor RTSP usando el formato de URL:
 
@@ -250,7 +250,7 @@ ffmpeg -i rtsp://localhost:8554/live -c copy output.mp4
 gst-launch-1.0 rtspsrc location=rtsp://localhost:8554/live ! decodebin ! autovideosink
 ```
 
-## Casos de Uso
+## Casos de uso
 
 - **Streaming en Vivo**: Transmitir feeds de cámara en vivo a través de redes
 - **Sistemas de Seguridad**: Transmitir cámaras de vigilancia a estaciones de monitoreo
@@ -260,7 +260,7 @@ gst-launch-1.0 rtspsrc location=rtsp://localhost:8554/live ! decodebin ! autovid
 - **Videoconferencia**: Transmitir feeds de participantes a espectadores
 - **Cámaras IoT**: Proporcionar endpoint RTSP para dispositivos de cámara inteligente
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
 - **Codificación**: Video/audio debe ser codificado antes de transmitir
 - **Ancho de Banda**: Monitorear ancho de banda de red para múltiples clientes
@@ -285,7 +285,7 @@ Windows, macOS, Linux.
 
 Nota: Requiere GStreamer con soporte de servidor RTSP (plugin gst-rtsp-server).
 
-## Aplicaciones de Ejemplo
+## Aplicaciones de ejemplo
 
 - [Servidor RTSP Webcam](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/RTSP%20Webcam%20Server)
 
@@ -297,10 +297,10 @@ Nota: Requiere GStreamer con soporte de servidor RTSP (plugin gst-rtsp-server).
 - [SystemVideoSourceBlock](../Sources/index.md#fuente-de-video-del-sistema) - Captura de cámara
 - [SystemAudioSourceBlock](../Sources/index.md#fuente-de-audio-del-sistema) - Captura de audio
 
-## Guías Relacionadas
+## Guías relacionadas
 
 - [Inmersión profunda en el protocolo RTSP](../../general/network-streaming/rtsp.md) — cómo funciona RTSP por dentro
-- [Configuración de fuente de cámara RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md) — consumir streams RTSP en tus aplicaciones
+- [Configuración de fuente de cámara RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md) — consumir streams RTSP en sus aplicaciones
 - [Reproductor RTSP de Media Blocks](../Guides/rtsp-player-csharp.md) — pipeline cliente para streams RTSP (combinar con este servidor)
 - [Guardar stream RTSP sin re-codificación](../Guides/rtsp-save-original-stream.md) — archivar streams desde una fuente RTSP a disco
 - [Reconexión RTSP y fallback switch](../../general/network-sources/reconnection-and-fallback.md) — maneja caídas de fuente upstream con eventos de reconexión y `FallbackSwitch` cuando alimentas este servidor desde una cámara RTSP

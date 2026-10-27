@@ -22,14 +22,14 @@ primary_api_classes:
 
 # Matriz de plataformas
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 Esta página enumera qué funciona en qué target de build Unity — la matriz está filtrada al
 runtime que se distribuye en el `.unitypackage` acumulativo. Para la matriz de funciones del
-SDK que cubre todos los tipos de proyecto .NET (no solo Unity), consulta
+SDK que cubre todos los tipos de proyecto .NET (no solo Unity), consulte
 [Matriz de plataformas (.NET)](../../platform-matrix.md).
 
 Leyenda: ✅ soportado · ⚠️ parcial · ❌ no soportado
@@ -139,7 +139,7 @@ adjuntas a un `RawImage` (o cualquier material).
 | NDI | ✅ | ❌ | ✅ | ❌ |
 
 WebRTC es compatible en todos los targets. Como cualquier despliegue WebRTC, necesita un servidor de
-signalling y configuración ICE / STUN / TURN para tu red — ese cableado es específico de la
+signalling y configuración ICE / STUN / TURN para su red — ese cableado es específico de la
 aplicación, no una limitación de plataforma.
 
 ## Distribución del paquete acumulativo

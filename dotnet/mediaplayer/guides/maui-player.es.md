@@ -27,7 +27,7 @@ primary_api_classes:
 
 # Crear un Reproductor de Video .NET MAUI en C#
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 .NET MAUI permite distribuir una sola base de código C# a **iOS, Android, macOS y Windows**. Esta guía conecta el control `VideoView` de VisioForge con `MediaPlayerCoreX` para reproducir archivos locales y streams de red — un arranque enfocado que refleja el [demo SimplePlayer MAUI](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/MAUI/SimplePlayer).
 
@@ -56,20 +56,20 @@ primary_api_classes:
 ## Paquetes NuGet
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.26]"/>
 
 <!-- Redists de plataforma — incluya solo los targets para los que compila -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64"
-                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.10.20]"/>
+                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.10.26]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64"
-                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.10.16]"/>
+                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.10.26]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst"
-                  Condition="$(TargetFramework.Contains('maccatalyst'))" Version="[2026.10.20]"/>
+                  Condition="$(TargetFramework.Contains('maccatalyst'))" Version="[2026.10.26]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android"
-                  Condition="$(TargetFramework.Contains('android'))" Version="[2026.10.20]"/>
+                  Condition="$(TargetFramework.Contains('android'))" Version="[2026.10.26]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS"
-                  Condition="$(TargetFramework.Contains('ios'))" Version="[2026.10.20]"/>
+                  Condition="$(TargetFramework.Contains('ios'))" Version="[2026.10.26]"/>
 ```
 
 ## MauiProgram.cs

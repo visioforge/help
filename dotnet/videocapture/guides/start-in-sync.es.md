@@ -1,6 +1,6 @@
 ---
 title: Sincronizar grabación multi-cámara con Video Capture SDK
-description: Sincroniza múltiples flujos de captura de video en .NET con ejemplos de código, consejos de solución de problemas y mejores prácticas para apps de grabación.
+description: Sincronice múltiples flujos de captura de video en .NET con ejemplos de código, consejos de solución de problemas y mejores prácticas para apps de grabación.
 tags:
   - Video Capture SDK
   - .NET
@@ -16,17 +16,17 @@ primary_api_classes:
 
 ---
 
-# Sincronizar Múltiples Capturas de Video en .NET
+# Sincronizar múltiples capturas de video en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción a la Captura de Video Multi-Fuente
 
-Cuando se desarrollan aplicaciones que requieren grabación desde múltiples fuentes de video simultáneamente, la sincronización se convierte en un desafío crítico. Ya sea que estés construyendo sistemas de vigilancia, soluciones de grabación multi-cámara, o herramientas especializadas de producción de video, asegurar que todos los flujos de video comiencen y terminen la grabación en el mismo momento preciso puede hacer la diferencia entre resultados de grado profesional y amateur.
+Cuando se desarrollan aplicaciones que requieren grabación desde múltiples fuentes de video simultáneamente, la sincronización se convierte en un desafío crítico. Ya sea que esté construyendo sistemas de vigilancia, soluciones de grabación multi-cámara, o herramientas especializadas de producción de video, asegurar que todos los flujos de video comiencen y terminen la grabación en el mismo momento preciso puede hacer la diferencia entre resultados de grado profesional y amateur.
 
 Esta guía explica cómo sincronizar correctamente múltiples objetos de captura de video en aplicaciones .NET, eliminando las discrepancias de tiempo entre diferentes cámaras o fuentes de entrada.
 
-## Entendiendo el Desafío de la Sincronización de Video
+## Entender el desafío de la sincronización de video
 
 Sin una sincronización adecuada, múltiples grabaciones de video iniciadas secuencialmente tendrán desfases de tiempo. Incluso diferencias de milisegundos pueden causar problemas en aplicaciones donde se requiere una alineación de tiempo precisa, tales como:
 
@@ -36,11 +36,11 @@ Sin una sincronización adecuada, múltiples grabaciones de video iniciadas secu
 - Mediciones y observaciones científicas
 - Producción de video profesional
 
-Estas discrepancias de tiempo ocurren porque cada vez que inicializas un dispositivo de captura e inicias la grabación, hay sobrecarga de procesamiento que varía entre dispositivos.
+Estas discrepancias de tiempo ocurren porque cada vez que inicializa un dispositivo de captura e inicia la grabación, hay sobrecarga de procesamiento que varía entre dispositivos.
 
 ## La Solución: Mecanismo de Inicio Retrasado
 
-El Video Capture SDK proporciona una solución elegante a través de su mecanismo de inicio retrasado. Este enfoque te permite:
+El Video Capture SDK proporciona una solución elegante a través de su mecanismo de inicio retrasado. Este enfoque le permite:
 
 1. Inicializar todos los objetos de captura y prepararlos para grabar
 2. Ponerlos en un estado "listo" donde están esperando una señal final
@@ -48,13 +48,13 @@ El Video Capture SDK proporciona una solución elegante a través de su mecanism
 
 Este enfoque reduce dramáticamente el desfase de sincronización entre grabaciones comparado con operaciones de inicio secuencial.
 
-## Implementación Usando VideoCaptureCore
+## Implementación usando VideoCaptureCore
 
 En esta implementación, usaremos el motor `VideoCaptureCore` para demostrar la técnica de sincronización.
 
-### Paso 1: Configurar Tus Objetos de Captura de Video
+### Paso 1: Configurar sus objetos de captura de video
 
-Primero, crea y configura tus objetos de captura de video para cada fuente:
+Primero, cree y configure sus objetos de captura de video para cada fuente:
 
 ```csharp
 // Crear objetos de captura de video
@@ -83,7 +83,7 @@ capture2.Start_DelayEnabled = true;
 
 ### Paso 3: Inicializar los Objetos de Captura
 
-A continuación, llama al método `Start` o `StartAsync` en cada objeto. Esto inicializa las fuentes, códecs y archivos de salida pero no comienza el proceso de grabación real:
+A continuación, llame al método `Start` o `StartAsync` en cada objeto. Esto inicializa las fuentes, códecs y archivos de salida pero no comienza el proceso de grabación real:
 
 ```csharp
 // Inicializar todos los objetos de captura (pero no comenzar a grabar aún)
@@ -95,11 +95,11 @@ await capture2.StartAsync();
 // capture2.Start();
 ```
 
-En este punto, todos tus objetos de captura están inicializados y esperando el disparador final.
+En este punto, todos sus objetos de captura están inicializados y esperando el disparador final.
 
 ### Paso 4: Disparar la Grabación Sincronizada
 
-Finalmente, llama al método `StartDelayed` o `StartDelayedAsync` en cada objeto para comenzar la grabación con un retraso mínimo entre ellos:
+Finalmente, llame al método `StartDelayed` o `StartDelayedAsync` en cada objeto para comenzar la grabación con un retraso mínimo entre ellos:
 
 ```csharp
 // Comenzar grabación sincronizada
@@ -113,7 +113,7 @@ await capture2.StartDelayedAsync();
 
 Esto dispara que la grabación real comience en todos los dispositivos preparados con el menor retraso posible entre ellos.
 
-## Ejemplo Completo de Sincronización
+## Ejemplo completo de sincronización
 
 Aquí hay un ejemplo completo que demuestra la grabación sincronizada desde dos fuentes de video:
 
@@ -187,40 +187,40 @@ namespace AppGrabacionMultiCamara
 
 ### Sincronización por Hardware
 
-Para aplicaciones que requieren sincronización perfecta a nivel de fotograma, considera estos enfoques adicionales:
+Para aplicaciones que requieren sincronización perfecta a nivel de fotograma, considere estos enfoques adicionales:
 
 - Disparadores de hardware externos: Algunas cámaras profesionales soportan entradas de disparo externo
 - Genlock: Los equipos de transmisión profesionales a menudo usan genlock para sincronización a nivel de fotograma
 - Sincronización de código de tiempo: Incrustar códigos de tiempo coincidentes en los archivos de video
 
-### Consideraciones de Múltiples Formatos de Archivo
+### Consideraciones de múltiples formatos de archivo
 
-Cuando grabas a diferentes formatos de archivo simultáneamente, ten en cuenta que ciertos formatos tienen diferentes tiempos de inicialización. Para minimizar este efecto:
+Cuando graba a diferentes formatos de archivo simultáneamente, tenga en cuenta que ciertos formatos tienen diferentes tiempos de inicialización. Para minimizar este efecto:
 
-- Usa configuraciones de codificación idénticas cuando sea posible
-- Prefiere formatos de contenedor con sobrecarga similar
-- Cuando mezcles formatos de contenedor, inicializa primero el formato más complejo
+- Use configuraciones de codificación idénticas cuando sea posible
+- Prefiera formatos de contenedor con sobrecarga similar
+- Cuando mezcle formatos de contenedor, inicialice primero el formato más complejo
 
-## Solución de Problemas de Sincronización
+## Solución de problemas de sincronización
 
-Si encuentras problemas de sincronización, considera estos problemas comunes:
+Si encuentra problemas de sincronización, considere estos problemas comunes:
 
-1. **Tiempos de Inicialización Variables**: Diferentes modelos de cámara pueden tener diferentes tiempos de arranque. Llama a `StartDelayedAsync` en orden del dispositivo más lento al más rápido.
+1. **Tiempos de inicialización variables**: Diferentes modelos de cámara pueden tener diferentes tiempos de arranque. Llame a `StartDelayedAsync` en orden del dispositivo más lento al más rápido.
 
-2. **Contención de Recursos**: Múltiples capturas de alta resolución pueden competir por recursos del sistema. Considera reducir la resolución o la tasa de fotogramas para mejor sincronización.
+2. **Contención de recursos**: Múltiples capturas de alta resolución pueden competir por recursos del sistema. Considere reducir la resolución o la tasa de fotogramas para mejor sincronización.
 
-3. **Limitaciones de Ancho de Banda USB**: Cuando uses múltiples cámaras USB, las restricciones de ancho de banda pueden causar retrasos. Usa controladores USB separados cuando sea posible.
+3. **Limitaciones de ancho de banda USB**: Cuando use múltiples cámaras USB, las restricciones de ancho de banda pueden causar retrasos. Use controladores USB separados cuando sea posible.
 
-4. **Sobrecarga de CPU**: La codificación de alta resolución a través de múltiples flujos puede sobrecargar la CPU. Monitorea el uso de CPU y considera usar codificación por hardware.
+4. **Sobrecarga de CPU**: La codificación de alta resolución a través de múltiples flujos puede sobrecargar la CPU. Monitoree el uso de CPU y considere usar codificación por hardware.
 
-## Optimización del Rendimiento
+## Optimización del rendimiento
 
 Para maximizar la precisión de sincronización:
 
-- Prioriza tu hilo de grabación usando configuraciones de prioridad de hilo del sistema
-- Cierra aplicaciones innecesarias para liberar recursos del sistema
-- Usa SSDs para las salidas de grabación para minimizar cuellos de botella de I/O
-- Considera tarjetas gráficas dedicadas con soporte de codificación por hardware
+- Priorice su hilo de grabación usando configuraciones de prioridad de hilo del sistema
+- Cierre aplicaciones innecesarias para liberar recursos del sistema
+- Use SSDs para las salidas de grabación para minimizar cuellos de botella de I/O
+- Considere tarjetas gráficas dedicadas con soporte de codificación por hardware
 
 ## Conclusión
 
@@ -229,4 +229,4 @@ Sincronizar correctamente múltiples fuentes de captura de video es esencial par
 Este enfoque separa la fase de inicialización de la fase de grabación, permitiendo que todos los dispositivos estén preparados antes de que ninguno comience a grabar, resultando en una sincronización significativamente mejorada entre fuentes.
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.

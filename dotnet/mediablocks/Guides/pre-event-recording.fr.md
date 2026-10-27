@@ -34,7 +34,7 @@ primary_api_classes:
 
 # Implémenter l'enregistrement pré-événement pour caméras IP en C#
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Table des matières
 
@@ -104,14 +104,14 @@ graph TD;
 Vous aurez besoin du VisioForge Media Blocks SDK. Ajoutez-le à votre projet .NET via NuGet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
 ```
 
 Selon votre plateforme cible, ajoutez le paquet de runtime natif correspondant. Pour Windows x64 :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 ```
 
 Pour les dépendances détaillées par plateforme, consultez le [guide de déploiement](../../deployment-x/index.md).
@@ -121,7 +121,7 @@ Pour les dépendances détaillées par plateforme, consultez le [guide de déplo
 Le code C# suivant est basé sur la [démo Pre-Event Recording WPF](https://github.com/visioforge/.Net-SDK-s-samples). Il montre un pipeline complet avec source caméra, détection de mouvement pour déclenchement automatique, aperçu vidéo et enregistrement pré-événement vers des fichiers MP4.
 
 !!!info Exemple de démo
-    Pour un projet complet et fonctionnel avec XAML et toutes les dépendances, consultez la [démo Pre-Event Recording Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/PreEventRecording%20Demo).
+    Pour un projet complet et fonctionnel avec XAML et toutes les dépendances, consultez la [démo Pre-Event Recording Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/PreEventRecording).
 
 ```csharp
 using System;

@@ -1,5 +1,5 @@
 ---
-title: Configuración del SDK Delphi ActiveX - Instalación
+title: Configuración del SDK Delphi ActiveX - instalación
 description: Instale y configure los componentes TVFMediaPlayer, TVFVideoCapture y TVFVideoEdit en Delphi. Paquetes 64-bit, errores .otares e integración IDE.
 tags:
   - All-in-One Media Framework
@@ -11,11 +11,11 @@ tags:
 sidebar_label: Información general
 ---
 
-# Bibliotecas Delphi/ActiveX para Desarrollo Multimedia
+# Bibliotecas Delphi/ActiveX para desarrollo multimedia
 
 Bienvenido a nuestro centro de documentación para desarrolladores de bibliotecas multimedia Delphi/ActiveX. Este recurso proporciona información técnica detallada, ejemplos de código y guías de implementación para desarrolladores que trabajan con nuestros componentes especializados.
 
-## Beneficios Principales de las Bibliotecas
+## Beneficios principales de las bibliotecas
 
 Nuestras bibliotecas empoderan a los desarrolladores Delphi para crear aplicaciones multimedia sofisticadas con mínimo esfuerzo de codificación. Los componentes están diseñados para máximo rendimiento y confiabilidad en entornos de desarrollo profesional. Las ventajas clave incluyen:
 
@@ -24,26 +24,26 @@ Nuestras bibliotecas empoderan a los desarrolladores Delphi para crear aplicacio
 - Compatibilidad entre versiones con múltiples lanzamientos de Delphi
 - Extensas opciones de personalización para requisitos especializados
 
-## Organización de la Documentación
+## Organización de la documentación
 
-### Materiales de Referencia Técnica
+### Materiales de referencia técnica
 
-Cada sección de biblioteca contiene referencias de API detalladas, ejemplos de implementación y prácticas recomendadas. Navega a la documentación específica de la biblioteca para información completa sobre:
+Cada sección de biblioteca contiene referencias de API detalladas, ejemplos de implementación y prácticas recomendadas. Navegue a la documentación específica de la biblioteca para información completa sobre:
 
 - Propiedades y atributos de componentes
 - Firmas de métodos y parámetros
 - Manejadores de eventos y funciones de callback
 - Definiciones de tipos y constantes
 
-### Ejemplos de Código y Tutoriales
+### Ejemplos de código y tutoriales
 
-Nuestra documentación incluye fragmentos de código prácticos y ejemplos de implementación completos para acelerar tu proceso de desarrollo. Estos ejemplos demuestran técnicas efectivas para escenarios comunes de programación multimedia.
+Nuestra documentación incluye fragmentos de código prácticos y ejemplos de implementación completos para acelerar su proceso de desarrollo. Estos ejemplos demuestran técnicas efectivas para escenarios comunes de programación multimedia.
 
-## Guía de Solución de Problemas de Instalación
+## Guía de solución de problemas de instalación
 
-Al integrar nuestras bibliotecas en tu entorno de desarrollo, podrías encontrar estos problemas técnicos conocidos:
+Al integrar nuestras bibliotecas en su entorno de desarrollo, podrá encontrar estos problemas técnicos conocidos:
 
-### Compatibilidad de Arquitectura 64-bit
+### Compatibilidad de arquitectura 64-bit
 
 El entorno de compilación de 64-bit de Delphi requiere configuración especial en algunos casos:
 
@@ -51,7 +51,7 @@ El entorno de compilación de 64-bit de Delphi requiere configuración especial 
 - Manejar requisitos de alineación de memoria en entornos de 64-bit
 - Abordar diferencias de tamaño de puntero entre arquitecturas
 
-### Gestión de Archivos de Recursos
+### Gestión de archivos de recursos
 
 El manejo apropiado de recursos es esencial para una operación estable:
 
@@ -61,4 +61,4 @@ El manejo apropiado de recursos es esencial para una operación estable:
 
 ## Comenzar
 
-Para comenzar a implementar nuestras bibliotecas en tus proyectos, sigue las guías de instalación específicas de cada biblioteca y revisa las aplicaciones de ejemplo. Nuestra documentación proporciona instrucciones paso a paso para ayudarte a lograr resultados óptimos.
+Para comenzar a implementar nuestras bibliotecas en sus proyectos, siga las guías de instalación específicas de cada biblioteca y revise las aplicaciones de ejemplo. Nuestra documentación proporciona instrucciones paso a paso para ayudarle a lograr resultados óptimos.

@@ -1,6 +1,6 @@
 ---
-title: Envolvente de Volumen de Audio en .NET con Video Edit SDK
-description: Implementa efectos de envolvente de volumen de audio profesionales en aplicaciones .NET con tutorial completo y muestras de código paso a paso.
+title: Envolvente de volumen de audio en .NET con Video Edit SDK
+description: Implemente efectos de envolvente de volumen de audio profesionales en aplicaciones .NET con tutorial completo y muestras de código paso a paso.
 tags:
   - Video Edit SDK
   - .NET
@@ -17,27 +17,27 @@ primary_api_classes:
 
 ---
 
-# Implementar Efectos de Envolvente de Volumen de Audio en .NET
+# Implementar efectos de envolvente de volumen de audio en .NET
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
-Las envolventes de volumen de audio son herramientas esenciales para la producción de video profesional, permitiendo a los desarrolladores controlar precisamente los niveles de audio a lo largo de una línea de tiempo. Este tutorial demuestra cómo implementar estos efectos en tus aplicaciones .NET.
+Las envolventes de volumen de audio son herramientas esenciales para la producción de video profesional, permitiendo a los desarrolladores controlar precisamente los niveles de audio a lo largo de una línea de tiempo. Este tutorial demuestra cómo implementar estos efectos en sus aplicaciones .NET.
 
-## ¿Qué es una Envolvente de Volumen de Audio?
+## ¿Qué es una envolvente de volumen de audio?
 
-Una envolvente de volumen de audio te permite ajustar los niveles de volumen de tu pista de audio. En lugar de ajustar manualmente el volumen durante el proceso de edición, las envolventes proporcionan una forma programática de establecer niveles de volumen consistentes. Esto es particularmente útil cuando se trabaja con múltiples pistas de audio que necesitan mantener relaciones de volumen específicas.
+Una envolvente de volumen de audio le permite ajustar los niveles de volumen de su pista de audio. En lugar de ajustar manualmente el volumen durante el proceso de edición, las envolventes proporcionan una forma programática de establecer niveles de volumen consistentes. Esto es particularmente útil cuando se trabaja con múltiples pistas de audio que necesitan mantener relaciones de volumen específicas.
 
-## Descripción General de la Implementación
+## Descripción general de la implementación
 
 El proceso de implementación involucra tres pasos clave:
 
-1. Crear una fuente de audio desde tu archivo
-2. Crear el efecto de envolvente de volumen con tu nivel deseado
-3. Añadir el audio con el efecto a tu línea de tiempo
+1. Crear una fuente de audio desde su archivo
+2. Crear el efecto de envolvente de volumen con su nivel deseado
+3. Añadir el audio con el efecto a su línea de tiempo
 
 Cada paso requiere componentes de código específicos que exploraremos en detalle a continuación.
 
-## Entender la Clase AudioVolumeEnvelopeEffect
+## Entender la clase AudioVolumeEnvelopeEffect
 
 La clase `AudioVolumeEnvelopeEffect` es el componente central para implementar el control de volumen:
 
@@ -62,17 +62,17 @@ public class AudioVolumeEnvelopeEffect : AudioTrackEffect
 }
 ```
 
-Como puedes ver, esta clase:
+Como puede ver, esta clase:
 
 - Hereda de `AudioTrackEffect`
 - Tiene una propiedad `Level` que acepta valores de 0-100 (representando porcentaje de volumen)
 - Proporciona un constructor para establecer el nivel inicial
 
-## Pasos de Implementación Detallados
+## Pasos de implementación detallados
 
-### 1. Crear tu Fuente de Audio
+### 1. Crear su fuente de audio
 
-El primer paso involucra inicializar un objeto de fuente de audio que referencia tu archivo de audio. Este objeto sirve como base para aplicar efectos.
+El primer paso involucra inicializar un objeto de fuente de audio que referencia su archivo de audio. Este objeto sirve como base para aplicar efectos.
 
 ```cs
 var audioFile = new AudioSource(file, segments, null);
@@ -80,13 +80,13 @@ var audioFile = new AudioSource(file, segments, null);
 
 En este código:
 
-- `file` es la ruta a tu archivo de audio
-- `segments` define segmentos de tiempo si solo estás usando porciones del audio
+- `file` es la ruta a su archivo de audio
+- `segments` define segmentos de tiempo si solo está usando porciones del audio
 - El parámetro final puede contener opciones adicionales (null en este ejemplo básico)
 
-### 2. Configurar el Efecto de Envolvente de Volumen
+### 2. Configurar el efecto de envolvente de volumen
 
-A continuación, crea y configura el efecto de envolvente de volumen especificando tu nivel de volumen deseado:
+A continuación, cree y configure el efecto de envolvente de volumen especificando su nivel de volumen deseado:
 
 ```cs
 var envelope = new AudioVolumeEnvelopeEffect(70);
@@ -98,31 +98,31 @@ Esto crea un efecto de envolvente de volumen establecido al 70%. El parámetro a
 - 50 = mitad de volumen
 - 100 = volumen completo
 
-También puedes ajustar el nivel después de la creación:
+También puede ajustar el nivel después de la creación:
 
 ```cs
 var envelope = new AudioVolumeEnvelopeEffect(50);
 envelope.Level = 75; // Cambiado a 75% de volumen
 ```
 
-### 3. Añadir Audio con Efecto de Envolvente a la Línea de Tiempo
+### 3. Añadir audio con efecto de envolvente a la línea de tiempo
 
-El paso final es añadir tu fuente de audio con el efecto de envolvente aplicado a la línea de tiempo de tu proyecto:
+El paso final es añadir su fuente de audio con el efecto de envolvente aplicado a la línea de tiempo de su proyecto:
 
 ```cs
 VideoEdit1.Input_AddAudioFile(
-    audioFile,                        // Tu fuente de audio configurada
+    audioFile,                        // Su fuente de audio configurada
     TimeSpan.FromMilliseconds(0),     // Posición inicial en la línea de tiempo
     0,                                // Índice de pista
     new []{ envelope }                // Array de efectos a aplicar
 );
 ```
 
-Esto posiciona tu audio al principio de la línea de tiempo (0ms) y aplica el efecto de envolvente que configuramos anteriormente.
+Esto posiciona su audio al principio de la línea de tiempo (0ms) y aplica el efecto de envolvente que configuramos anteriormente.
 
-## Casos de Uso Comunes
+## Casos de uso comunes
 
-### Normalizar Niveles de Audio
+### Normalizar niveles de audio
 
 Al trabajar con audio de diferentes fuentes, la normalización asegura niveles de volumen consistentes:
 
@@ -138,9 +138,9 @@ var musicEnvelope = new AudioVolumeEnvelopeEffect(30);
 VideoEdit1.Input_AddAudioFile(backgroundMusic, TimeSpan.Zero, 1, new[] { musicEnvelope });
 ```
 
-### Silenciar Secciones Específicas
+### Silenciar secciones específicas
 
-Si necesitas silenciar secciones de audio en tu línea de tiempo, puedes crear y aplicar diferentes efectos de envolvente:
+Si necesita silenciar secciones de audio en su línea de tiempo, puede crear y aplicar diferentes efectos de envolvente:
 
 ```cs
 // Crear fuentes de audio para diferentes segmentos usando AudioSource(filename, FileSegment[], fileToSync, streamNumber, rate)
@@ -158,42 +158,42 @@ VideoEdit1.Input_AddAudioFile(segment2, TimeSpan.FromMilliseconds(10000), 0, new
 VideoEdit1.Input_AddAudioFile(segment3, TimeSpan.FromMilliseconds(15000), 0, new[] { new AudioVolumeEnvelopeEffect(100) });
 ```
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Para implementar efectos de envolvente de audio, necesitarás:
+Para implementar efectos de envolvente de audio, necesitará:
 
 - Paquetes redistribuibles de Video Edit SDK .NET:
   - [versión x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
   - [versión x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
 
-Puedes instalar estos paquetes a través del Administrador de Paquetes NuGet:
+Puede instalar estos paquetes a través del Administrador de Paquetes NuGet:
 
 ```nuget
 Install-Package VisioForge.DotNet.Core.Redist.VideoEdit.x64
 ```
 
-Para más información sobre cómo desplegar estas dependencias en los sistemas de tus usuarios, consulta nuestra [documentación de despliegue](../deployment.md).
+Para más información sobre cómo desplegar estas dependencias en los sistemas de sus usuarios, consulte nuestra [documentación de despliegue](../deployment.md).
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
-Al implementar efectos de volumen de audio, considera estos consejos de rendimiento:
+Al implementar efectos de volumen de audio, considere estos consejos de rendimiento:
 
 - Aplicar efectos de envolvente durante la fase de edición/renderizado en lugar de en tiempo de ejecución
-- Al trabajar con múltiples pistas, considera el efecto acumulativo de todo el procesamiento de audio
-- Prueba en tu hardware objetivo para asegurar una reproducción fluida
+- Al trabajar con múltiples pistas, considere el efecto acumulativo de todo el procesamiento de audio
+- Pruebe en su hardware objetivo para asegurar una reproducción fluida
 
-## Solucionar Problemas Comunes
+## Solucionar problemas comunes
 
-Si encuentras problemas con tu implementación de envolvente de audio:
+Si encuentra problemas con su implementación de envolvente de audio:
 
-- Verifica que las rutas y formatos de archivo de audio sean compatibles
-- Comprueba que los porcentajes de volumen estén dentro del rango 0-100
-- Asegúrate de que el efecto de audio esté correctamente añadido al array de efectos
-- Verifica que el posicionamiento en la línea de tiempo no cree conflictos entre segmentos de audio
+- Verifique que las rutas y formatos de archivo de audio sean compatibles
+- Compruebe que los porcentajes de volumen estén dentro del rango 0-100
+- Asegúrese de que el efecto de audio esté correctamente añadido al array de efectos
+- Verifique que el posicionamiento en la línea de tiempo no cree conflictos entre segmentos de audio
 
 ## Conclusión
 
-Los efectos de envolvente de volumen de audio proporcionan control esencial sobre la experiencia de audio de tu aplicación. Siguiendo esta guía, has aprendido cómo implementar el control de volumen en tus proyectos de edición de video .NET, equilibrando diferentes fuentes de audio para resultados profesionales.
+Los efectos de envolvente de volumen de audio proporcionan control esencial sobre la experiencia de audio de su aplicación. Siguiendo esta guía, ha aprendido cómo implementar el control de volumen en sus proyectos de edición de video .NET, equilibrando diferentes fuentes de audio para resultados profesionales.
 
 ---
-Para más muestras de código y técnicas avanzadas, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para más muestras de código y técnicas avanzadas, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

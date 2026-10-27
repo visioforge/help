@@ -1,5 +1,5 @@
 ---
-title: Manejo de Eventos de Rueda del Ratón en Apps de Video .NET
+title: Manejo de eventos de rueda del ratón en apps de video .NET
 description: Maneje eventos de rueda del ratón en aplicaciones de video .NET para zoom, desplazamiento y navegación de línea de tiempo con mejores prácticas y optimización.
 tags:
   - Video Capture SDK
@@ -12,30 +12,30 @@ tags:
 
 ---
 
-# Implementación de Eventos de Rueda del Ratón en SDKs .NET
+# Implementación de eventos de rueda del ratón en SDKs .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Introducción a los Eventos de Rueda del Ratón
+## Introducción a los eventos de rueda del ratón
 
-Los eventos de rueda del ratón proporcionan una manera intuitiva para que los usuarios interactúen con contenido de video en aplicaciones multimedia. Ya sea que estés desarrollando un reproductor de video, editor o aplicación de captura, implementar el manejo adecuado de eventos de rueda del ratón mejora la experiencia del usuario al permitir zoom suave, desplazamiento o navegación de línea de tiempo.
+Los eventos de rueda del ratón proporcionan una manera intuitiva para que los usuarios interactúen con contenido de video en aplicaciones multimedia. Ya sea que esté desarrollando un reproductor de video, editor o aplicación de captura, implementar el manejo adecuado de eventos de rueda del ratón mejora la experiencia del usuario al permitir zoom suave, desplazamiento o navegación de línea de tiempo.
 
 En aplicaciones .NET, el evento `MouseWheel` se activa cuando el usuario rota la rueda del ratón. Este evento proporciona información crucial sobre la dirección e intensidad del movimiento de la rueda a través del parámetro `MouseEventArgs`.
 
-## ¿Por Qué Implementar Eventos de Rueda del Ratón?
+## ¿Por qué implementar eventos de rueda del ratón?
 
-La funcionalidad de rueda del ratón ofrece varios beneficios para tus aplicaciones de video:
+La funcionalidad de rueda del ratón ofrece varios beneficios para sus aplicaciones de video:
 
 - **Experiencia de Usuario Mejorada**: Habilita funcionalidad de zoom intuitiva en visualizadores de video
 - **Navegación Mejorada**: Permite desplazamiento rápido de línea de tiempo en editores de video
 - **Control de Volumen**: Proporciona ajuste de volumen conveniente en reproductores de medios
 - **Interacción de UI Eficiente**: Reduce la dependencia de controles en pantalla
 
-## Implementación Básica
+## Implementación básica
 
-### Configurando Manejadores de Eventos
+### Configurar manejadores de eventos
 
-Para implementar funcionalidad de rueda del ratón en tu aplicación .NET, necesitas configurar tres manejadores de eventos clave:
+Para implementar funcionalidad de rueda del ratón en su aplicación .NET, necesita configurar tres manejadores de eventos clave:
 
 1. `MouseEnter`: Asegura que el control gane foco cuando el ratón entra
 2. `MouseLeave`: Libera el foco cuando el ratón sale
@@ -72,11 +72,11 @@ El manejador de eventos `MouseWheel` recibe un parámetro `MouseEventArgs` que i
 - **Delta Negativo**: La rueda rotó hacia atrás (hacia el usuario)
 - **Magnitud del Delta**: Indica la intensidad de la rotación
 
-## Técnicas de Implementación Avanzada
+## Técnicas de implementación avanzada
 
-### Implementando Funcionalidad de Zoom
+### Implementar funcionalidad de zoom
 
-Un uso común de la rueda del ratón en aplicaciones de video es hacer zoom hacia adentro y afuera. Aquí está cómo podrías implementar funcionalidad de zoom:
+Un uso común de la rueda del ratón en aplicaciones de video es hacer zoom hacia adentro y afuera. Aquí está cómo podría implementar funcionalidad de zoom:
 
 ```cs
 private void VideoView1_MouseWheel(object sender, MouseEventArgs e)
@@ -115,7 +115,7 @@ private void ZoomOut(double factor)
 }
 ```
 
-### Navegación de Línea de Tiempo
+### Navegación de línea de tiempo
 
 Para aplicaciones de edición de video, la rueda del ratón puede usarse para navegar a través de la línea de tiempo:
 
@@ -147,8 +147,8 @@ private void VideoView1_MouseWheel(object sender, MouseEventArgs e)
     // El volumen es a nivel del motor (no en VideoView). El motor clásico expone
     // Audio_OutputDevice_Volume en rango 0–100 (porcentaje); el motor X lo expone
     // en rango 0.0–1.0. El ejemplo siguiente apunta al motor clásico
-    // VideoCaptureCore / MediaPlayerCore — ajusta la aritmética a una proporción
-    // 0–1 si estás en el motor X.
+    // VideoCaptureCore / MediaPlayerCore — ajustar la aritmética a una proporción
+    // 0–1 si está en el motor X.
     int volumeChangePercent = (int)Math.Round(e.Delta / 120.0 * 5.0); // 5 puntos porcentuales por "clic" de rueda
 
     int newVolume = videoCapture1.Audio_OutputDevice_Volume + volumeChangePercent;
@@ -161,9 +161,9 @@ private void VideoView1_MouseWheel(object sender, MouseEventArgs e)
 }
 ```
 
-## Manejo de Gestión de Foco
+## Manejo de gestión de foco
 
-La gestión adecuada del foco es crucial para que los eventos de rueda del ratón funcionen correctamente. El código de ejemplo muestra una implementación básica, pero en aplicaciones más complejas, puedes necesitar un enfoque más sofisticado:
+La gestión adecuada del foco es crucial para que los eventos de rueda del ratón funcionen correctamente. El código de ejemplo muestra una implementación básica, pero en aplicaciones más complejas, puede necesitar un enfoque más sofisticado:
 
 ```cs
 private void VideoView1_MouseEnter(object sender, EventArgs e)
@@ -196,13 +196,13 @@ private void VideoView1_MouseLeave(object sender, EventArgs e)
 }
 ```
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
-Al implementar eventos de rueda del ratón, considera estos consejos de rendimiento:
+Al implementar eventos de rueda del ratón, considere estos consejos de rendimiento:
 
 1. **Debounce de Eventos de Rueda**: Las ruedas del ratón pueden generar muchos eventos en rápida sucesión
-2. **Optimizar Cálculos**: Evita cálculos complejos en el manejador de eventos de rueda
-3. **Usar Animación**: Para zoom suave, considera usar animación en lugar de cambios abruptos
+2. **Optimizar Cálculos**: Evite cálculos complejos en el manejador de eventos de rueda
+3. **Usar Animación**: Para zoom suave, considere usar animación en lugar de cambios abruptos
 
 Aquí hay un ejemplo de debouncing de eventos de rueda:
 
@@ -227,15 +227,15 @@ private void VideoView1_MouseWheel(object sender, MouseEventArgs e)
 }
 ```
 
-## Consideraciones Multiplataforma
+## Consideraciones multiplataforma
 
-Si estás desarrollando aplicaciones .NET multiplataforma, ten en cuenta que el comportamiento de la rueda del ratón puede variar:
+Si está desarrollando aplicaciones .NET multiplataforma, tenga en cuenta que el comportamiento de la rueda del ratón puede variar:
 
 - **Windows**: Típicamente 120 unidades por "clic"
 - **macOS**: Puede tener diferentes configuraciones de sensibilidad
 - **Linux**: Puede variar según distribución y configuración
 
-Tu código debe tener en cuenta estas diferencias:
+Su código debe tener en cuenta estas diferencias:
 
 ```cs
 private void VideoView1_MouseWheel(object sender, MouseEventArgs e)
@@ -261,29 +261,29 @@ private void VideoView1_MouseWheel(object sender, MouseEventArgs e)
 }
 ```
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-### Eventos de Rueda del Ratón No se Disparan
+### Eventos de rueda del ratón no se disparan
 
-Si tus eventos de rueda del ratón no se disparan, verifica:
+Si sus eventos de rueda del ratón no se disparan, verifique:
 
-1. **Problemas de Foco**: Asegura que el control tenga foco cuando el ratón está sobre él
-2. **Registro de Eventos**: Verifica que el manejador de eventos esté correctamente registrado
+1. **Problemas de Foco**: Asegure que el control tenga foco cuando el ratón está sobre él
+2. **Registro de Eventos**: Verifique que el manejador de eventos esté correctamente registrado
 3. **Propiedades del Control**: Algunos controles necesitan propiedades específicas establecidas para recibir eventos de rueda
 
-### Comportamiento Inconsistente
+### Comportamiento inconsistente
 
 Si los eventos de rueda se comportan inconsistentemente:
 
-1. **Normalización de Delta**: Asegura que estás normalizando correctamente los valores delta
-2. **Configuraciones del Usuario**: Ten en cuenta configuraciones de ratón específicas del usuario
+1. **Normalización de Delta**: Asegure que está normalizando correctamente los valores delta
+2. **Configuraciones del Usuario**: Tenga en cuenta configuraciones de ratón específicas del usuario
 3. **Variaciones de Hardware**: Diferentes hardware de ratón puede producir diferentes valores delta
 
 ## Conclusión
 
-El manejo de eventos de rueda del ratón es un aspecto esencial de crear aplicaciones de video intuitivas y amigables para el usuario. Al implementar las técnicas descritas en esta guía, puedes mejorar tus aplicaciones de video .NET con controles suaves e intuitivos que mejoran la experiencia general del usuario.
+El manejo de eventos de rueda del ratón es un aspecto esencial de crear aplicaciones de video intuitivas y amigables para el usuario. Al implementar las técnicas descritas en esta guía, puede mejorar sus aplicaciones de video .NET con controles suaves e intuitivos que mejoran la experiencia general del usuario.
 
-La implementación puede variar dependiendo de tus requisitos específicos, pero los principios centrales permanecen iguales: manejar el foco correctamente, normalizar valores delta de rueda y aplicar cambios apropiados basándose en la entrada del usuario.
+La implementación puede variar dependiendo de sus requisitos específicos, pero los principios centrales permanecen iguales: manejar el foco correctamente, normalizar valores delta de rueda y aplicar cambios apropiados basándose en la entrada del usuario.
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.

@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Extraction d'images vidéo depuis des fichiers vidéo en .NET
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 L'extraction d'images vidéo est une exigence courante dans de nombreuses applications multimédias. Que vous construisiez un outil d'édition vidéo, créiez des miniatures ou effectuiez une analyse vidéo, extraire des images spécifiques de fichiers vidéo est une capacité essentielle. Ce guide explique les différentes approches pour capturer des images depuis des fichiers vidéo dans des applications .NET.
 

@@ -1,6 +1,6 @@
 ---
-title: Media Player SDK .NET - Reproductor de Video en C#
-description: SDK de reproductor de video para C# y .NET — reproduce MP4, AVI, MKV, transmite RTSP/HLS. API multiplataforma para Windows, macOS, Linux, Android, iOS.
+title: Media Player SDK .NET - Reproductor de video en C#
+description: Media Player SDK .NET para C# — reproduce MP4, AVI, MKV, transmite RTSP/HLS. API multiplataforma para Windows, macOS, Linux, Android, iOS.
 sidebar_label: Media Player SDK .NET
 tags:
   - Media Player SDK
@@ -21,19 +21,19 @@ primary_api_classes:
 order: 13
 ---
 
-# Media Player SDK para C# .NET — Reproductor de Video, Reproductor de Audio y API de Streaming
+# Media Player SDK para C# .NET — Reproductor de video, reproductor de audio y API de streaming
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción
 
-El Media Player SDK para .NET es una API de reproductor de video en C# que te permite reproducir archivos de video y audio, streams de red (RTSP, HLS, MPEG-DASH) y contenido especial como videos de 360 grados en tus aplicaciones .NET. Reemplaza el código de reproducción DirectShow de bajo nivel y la integración con Windows Media Player SDK con una API async moderna — abre un archivo, inicia la reproducción y controla la búsqueda y el volumen en pocas líneas de C#.
+El Media Player SDK para .NET es una API de reproductor de video en C# que le permite reproducir archivos de video y audio, streams de red (RTSP, HLS, MPEG-DASH) y contenido especial como videos de 360 grados en sus aplicaciones .NET. Reemplaza el código de reproducción DirectShow de bajo nivel y la integración con Windows Media Player SDK con una API async moderna — abra un archivo, inicie la reproducción y controle la búsqueda y el volumen en pocas líneas de C#.
 
-El SDK usa decodificación basada en GStreamer con aceleración por hardware y se ejecuta en Windows, macOS, Linux, Android e iOS. Ya sea que necesites construir un reproductor de video de escritorio, integrar reproducción de medios en una app de kiosko o transmitir feeds RTSP desde cámaras IP, la API lo cubre.
+El SDK usa decodificación basada en GStreamer con aceleración por hardware y se ejecuta en Windows, macOS, Linux, Android e iOS. Ya sea que necesite construir un reproductor de video de escritorio, integrar reproducción de medios en una app de kiosko o transmitir feeds RTSP desde cámaras IP, la API lo cubre.
 
-## Inicio Rápido
+## Inicio rápido
 
-### 1. Instalar Paquetes NuGet
+### 1. Instalar paquetes NuGet
 
 ```bash
 dotnet add package VisioForge.DotNet.MediaPlayer
@@ -43,17 +43,17 @@ Agrega dependencias nativas específicas de plataforma:
 
 ```xml
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
 
 <!-- Linux x64 (requiere GStreamer 1.22+ del sistema) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
 
-Para la lista completa de paquetes y soporte de frameworks de UI (WinForms, WPF, MAUI, Avalonia), consulta la [Guía de Instalación](../install/index.md).
+Para la lista completa de paquetes y soporte de frameworks de UI (WinForms, WPF, MAUI, Avalonia), consulte la [Guía de Instalación](../install/index.md).
 
 ### 2. Inicializar el SDK
 
@@ -65,7 +65,7 @@ using VisioForge.Core;
 await VisioForgeX.InitSDKAsync();
 ```
 
-### 3. Reproducir Video en C# (Ejemplo Mínimo)
+### 3. Reproducir video en C# (ejemplo mínimo)
 
 ```csharp
 using VisioForge.Core;
@@ -88,13 +88,13 @@ await player.StopAsync();
 await player.DisposeAsync();
 ```
 
-### 4. Limpieza al Cerrar
+### 4. Limpieza al cerrar
 
 ```csharp
 VisioForgeX.DestroySDK();
 ```
 
-## Flujo de Trabajo Principal
+## Flujo de trabajo principal
 
 Toda aplicación de reproductor de medios sigue el mismo patrón:
 
@@ -107,11 +107,11 @@ Toda aplicación de reproductor de medios sigue el mismo patrón:
 7. **Liberar** — `await player.DisposeAsync()` libera todos los recursos
 8. **Destruir SDK** — `VisioForgeX.DestroySDK()` al cerrar la aplicación
 
-## Escenarios Comunes de Reproductor de Video en C#
+## Escenarios comunes de reproductor de video en C#
 
-### Reproducir Archivo de Video en C# (MP4, AVI, MKV)
+### Reproducir archivo de video en C# (MP4, AVI, MKV)
 
-Abre y reproduce cualquier archivo de video soportado con detección automática de codecs:
+Abra y reproduzca cualquier archivo de video soportado con detección automática de codecs:
 
 ```csharp
 var source = await UniversalSourceSettings.CreateAsync(
@@ -133,7 +133,7 @@ await player.OpenAsync(source);
 await player.PlayAsync();
 ```
 
-### Reproducción Solo de Audio
+### Reproducción solo de audio
 
 Reproduce archivos de audio (MP3, AAC, FLAC, WAV) sin vista de video:
 
@@ -145,7 +145,7 @@ await player.OpenAsync(source);
 await player.PlayAsync();
 ```
 
-### Extraer Fotograma del Video
+### Extraer fotograma del video
 
 Captura una imagen fija de la posición de reproducción actual:
 
@@ -165,7 +165,7 @@ if (frame != null)
 
 Ver: [Obtener un Fotograma Específico de un Archivo de Video](code-samples/get-frame-from-video-file.md)
 
-### Control de Búsqueda, Volumen y Velocidad
+### Control de búsqueda, volumen y velocidad
 
 ```csharp
 // Buscar una posición específica
@@ -182,7 +182,7 @@ player.Audio_OutputDevice_Volume = 0.8;
 await player.Rate_SetAsync(1.5);
 ```
 
-### Reproducción en Bucle y Reproducción de Segmentos
+### Reproducción en bucle y reproducción de segmentos
 
 Reproduce un segmento específico de un archivo o repite continuamente:
 
@@ -197,7 +197,7 @@ player.Segment_Stop = TimeSpan.FromSeconds(60);
 
 Ver: [Modo Bucle y Reproducción por Rango de Posición](guides/loop-and-position-range.md)
 
-## Formatos Soportados
+## Formatos soportados
 
 | Categoría | Formatos |
 | --------- | -------- |
@@ -206,7 +206,7 @@ Ver: [Modo Bucle y Reproducción por Rango de Posición](guides/loop-and-positio
 | Codecs de Video | H.264, H.265/HEVC, VP8, VP9, AV1, MPEG-2 |
 | Protocolos de Streaming | RTSP, HTTP, HLS, MPEG-DASH |
 
-## Soporte de Plataformas
+## Soporte de plataformas
 
 | Plataforma | Frameworks de UI | Notas |
 | ---------- | ---------------- | ----- |
@@ -218,7 +218,7 @@ Ver: [Modo Bucle y Reproducción por Rango de Posición](guides/loop-and-positio
 
 Para implementaciones multiplataforma, consulte la [Guía del reproductor Avalonia](guides/avalonia-player.md) (escritorio, incluye Linux) o la [Guía del reproductor .NET MAUI](guides/maui-player.md) (móvil + escritorio).
 
-## Documentación para Desarrolladores
+## Documentación para desarrolladores
 
 ### Guías
 
@@ -230,7 +230,7 @@ Para implementaciones multiplataforma, consulte la [Guía del reproductor Avalon
 * [Modo Bucle y Rango de Posición](guides/loop-and-position-range.md)
 * [Todas las Guías](guides/index.md)
 
-### Ejemplos de Código
+### Ejemplos de código
 
 * [Obtener un Fotograma de un Archivo de Video](code-samples/get-frame-from-video-file.md)
 * [Reproducir un Fragmento de un Archivo](code-samples/play-fragment-file.md)
@@ -244,7 +244,7 @@ Para implementaciones multiplataforma, consulte la [Guía del reproductor Avalon
 
 * [Guía de Despliegue](deployment.md)
 
-## Recursos para Desarrolladores
+## Recursos para desarrolladores
 
 * [Ejemplos de Código en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/)
 * [Referencia de API](https://api.visioforge.org/dotnet/api/index.html)

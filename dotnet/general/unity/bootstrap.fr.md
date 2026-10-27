@@ -23,10 +23,10 @@ primary_api_classes:
 
 # Démarrage et cycle de vie
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 Le paquet Unity inclut un assistant statique, `VisioForgeEnvironment`, qui prépare le runtime natif
 fourni avant le chargement de la première scène. Vous ne l'appelez pas depuis vos scripts —

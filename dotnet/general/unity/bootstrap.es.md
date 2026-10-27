@@ -1,5 +1,5 @@
 ---
-title: Bootstrap del SDK en Unity — Configura el runtime nativo
+title: Bootstrap del SDK en Unity — Configure el runtime nativo
 description: Cómo VisioForgeEnvironment.Configure arranca el runtime nativo GStreamer en Unity 6 en Windows, Android, macOS e iOS más el ciclo de vida del Editor.
 sidebar_label: Bootstrap y ciclo de vida
 order: 52
@@ -23,15 +23,15 @@ primary_api_classes:
 
 # Bootstrap y ciclo de vida
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 El paquete de Unity incluye un asistente estático, `VisioForgeEnvironment`, que pone en marcha el
-runtime nativo incluido antes de que cargue la primera escena. No lo invocas desde tus scripts:
+runtime nativo incluido antes de que cargue la primera escena. No lo invoca desde sus scripts:
 Unity lo llama automáticamente mediante `RuntimeInitializeOnLoadMethod`. Esta página explica qué
-hace en cada plataforma y las reglas de ciclo de vida que tus scripts deben respetar.
+hace en cada plataforma y las reglas de ciclo de vida que sus scripts deben respetar.
 
 El mismo arranque en dos pasos se aplica a **todos** los motores del paquete: el de bajo nivel
 `MediaBlocksPipeline` y los de alto nivel `MediaPlayerCoreX`, `VideoCaptureCoreX` y `VideoEditCoreX`
@@ -39,19 +39,19 @@ se ejecutan sobre el único runtime GStreamer incluido que arrancan `Configure()
 `InitializeSdk()`. El bootstrap es independiente del motor — nada en esta página es específico de un
 solo motor.
 
-Si solo necesitas distribuir el SDK, puedes saltar esta página: arrastra `MediaBlocksPlayer` o
-`RTSPViewerPlayer` a una escena y pulsa **Play**. Vuelve aquí cuando escribas tus propios
-scripts, encuentres un error en tiempo de ejecución o quieras entender por qué los ajustes del
+Si solo necesita distribuir el SDK, puede saltar esta página: arrastre `MediaBlocksPlayer` o
+`RTSPViewerPlayer` a una escena y pulse **Play**. Vuelva aquí cuando escriba sus propios
+scripts, encuentre un error en tiempo de ejecución o quiera entender por qué los ajustes del
 Editor son obligatorios.
 
 ## Los dos puntos de entrada
 
-`VisioForgeEnvironment` tiene exactamente dos métodos públicos con los que tu código interactúa:
+`VisioForgeEnvironment` tiene exactamente dos métodos públicos con los que su código interactúa:
 
 | Método | Cuándo se ejecuta | Qué hace |
 |---|---|---|
 | `Configure()` | Automáticamente, **antes de cargar la primera escena** (`[RuntimeInitializeOnLoadMethod(BeforeSceneLoad)]`). | Prepara el runtime nativo para la plataforma actual — ruta de búsqueda DLL, variables de entorno, paquete CA, bootstrap Java. Idempotente. |
-| `InitializeSdk()` | Lo llamas una vez antes de construir un pipeline. Los players de ejemplo lo hacen en `Start()`. | Llama a `VisioForgeX.InitSDK()` y escanea el registro de plugins incluido. Idempotente. |
+| `InitializeSdk()` | Lo llama una vez antes de construir un pipeline. Los players de ejemplo lo hacen en `Start()`. | Llama a `VisioForgeX.InitSDK()` y escanea el registro de plugins incluido. Idempotente. |
 
 Ambos métodos son estáticos. Ambos marcan su finalización solo tras ejecutar con éxito cada
 paso — así un fallo recuperable (por ejemplo, el bootstrap Java de Android ejecutándose antes
@@ -145,7 +145,7 @@ de su cargador nativo.
 
     `Configure()` establece el flag de éxito y registra una advertencia. No existe runtime
     nativo para la plataforma actual, así que cualquier `[DllImport]` posterior lanzaría
-    `DllNotFoundException`. Compila para una de las cuatro plataformas soportadas.
+    `DllNotFoundException`. Compile para una de las cuatro plataformas soportadas.
 
 ## Qué hace `InitializeSdk()`
 
@@ -174,19 +174,19 @@ Tras que `Configure()` haya preparado el runtime, `InitializeSdk()` termina la p
 Todos los scripts de ejemplo — los de bajo nivel `MediaBlocksPlayer` / `RTSPViewerPlayer` y los de
 alto nivel `MediaPlayerXPlayer` / `VideoCaptureXRecorder` / `IPCameraXViewer` / `VideoEditXRenderer`
 — llaman a `InitializeSdk()` desde su método `Start()`, antes de construir un pipeline o crear un
-motor. Tus scripts deben seguir el mismo patrón.
+motor. Sus scripts deben seguir el mismo patrón.
 
 ## El ciclo de vida del Editor
 
 El SDK se inicializa una vez por proceso del Editor y se reusa a través de las sesiones
 **Play → Stop → Play**. Dos consecuencias:
 
-- **No necesitas desactivar Domain Reload.** El comportamiento predeterminado de Enter Play
+- **No necesita desactivar Domain Reload.** El comportamiento predeterminado de Enter Play
   Mode de Unity (Domain + Scene Reload) está totalmente soportado. El SDK ejecuta su bucle
   principal GLib en un hilo de fondo que Unity no puede abortar, pero el paquete instala un
   guard de recarga (abajo) que detiene ese hilo antes de cada recarga de dominio, de modo que
   entrar/salir del modo Play y las recompilaciones de script se completan limpiamente.
-- **No llames a `VisioForgeX.DestroySDK()` en Stop ni en `OnDestroy`.** `gst_deinit` de
+- **No llame a `VisioForgeX.DestroySDK()` en Stop ni en `OnDestroy`.** `gst_deinit` de
   GStreamer no puede reinicializarse en el mismo proceso — destruir el SDK en Stop e intentar
   usarlo de nuevo en el siguiente Play crashea dentro del registro nativo. Los players de
   ejemplo siguen esta regla: su `OnDestroy` solo libera el pipeline por-Play. El SDK
@@ -198,14 +198,14 @@ Hay un guard Editor-only que el paquete instala automáticamente: un
 de fondo dedicado, bloqueado dentro de una llamada nativa que Unity no puede abortar — sin este
 guard, la recarga de dominio que sigue a una recompilación de script o a entrar en modo Play se colgaría. El guard
 **no** llama a `DestroySDK` (ver arriba); solo para el hilo del bucle, y el siguiente Play
-reconstruye el bucle. Este guard es interno — tus scripts deben ignorarlo.
+reconstruye el bucle. Este guard es interno — sus scripts deben ignorarlo.
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 ### ¿Tengo que llamar a `Configure()` manualmente?
 
-No. El atributo `[RuntimeInitializeOnLoadMethod(BeforeSceneLoad)]` de Unity lo ejecuta por ti
-antes de que cargue la primera escena. La única vez que lo volverías a llamar es desde un path
+No. El atributo `[RuntimeInitializeOnLoadMethod(BeforeSceneLoad)]` de Unity lo ejecuta por usted
+antes de que cargue la primera escena. La única vez que lo volvería a llamar es desde un path
 de recuperación personalizado cuando un intento anterior falló — y `Configure()` es
 idempotente, así que una llamada redundante es inocua.
 
@@ -225,9 +225,9 @@ otro modo crashearía dentro del código nativo con un error mucho menos acciona
 
 ### ¿Puedo ejecutar dos pipelines en paralelo?
 
-Sí. `InitializeSdk()` arranca el SDK una vez por proceso; después puedes construir tantas
+Sí. `InitializeSdk()` arranca el SDK una vez por proceso; después puede construir tantas
 instancias de `MediaBlocksPipeline` — o motores `MediaPlayerCoreX` / `VideoCaptureCoreX` /
-`VideoEditCoreX` — como quieras. Cada una es independiente — el patrón de muestra multi-cámara RTSP
+`VideoEditCoreX` — como quiera. Cada una es independiente — el patrón de muestra multi-cámara RTSP
 consiste en adjuntar un `RTSPViewerPlayer` por `RawImage`, y cada uno construye y destruye su
 propio pipeline.
 

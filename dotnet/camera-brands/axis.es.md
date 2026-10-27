@@ -23,11 +23,11 @@ tags:
 
 ---
 
-# Cómo Conectar una Cámara IP Axis en C# .NET
+# Cómo conectar una cámara IP Axis en C# .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Descripción de la Marca
+## Descripción de la marca
 
 **Axis Communications** es un fabricante sueco ampliamente reconocido como el pionero de las cámaras de red, habiendo creado la primera cámara IP del mundo en 1996. Con sede en Lund, Suecia y ahora subsidiaria de Canon, Axis produce cámaras IP premium, codificadores y productos de audio en red principalmente para el mercado de vigilancia profesional y empresarial.
 
@@ -51,7 +51,7 @@ Las cámaras Axis usan la ruta RTSP `axis-media/media.amp` con parámetros opcio
 rtsp://[USUARIO]:[CONTRASEÑA]@[IP]:[PUERTO]/axis-media/media.amp
 ```
 
-### URLs RTSP Principales
+### URLs RTSP principales
 
 | Serie de Modelo | URL RTSP | Códec | Audio |
 |-------------|----------|-------|-------|
@@ -61,7 +61,7 @@ rtsp://[USUARIO]:[CONTRASEÑA]@[IP]:[PUERTO]/axis-media/media.amp
 | Perfil ONVIF | `rtsp://IP:554/onvif-media/media.amp` | H.264 | Sí |
 | Modelos legacy | `rtsp://IP:554/mpeg4/media.amp` | MPEG-4 | Posible |
 
-### Selección de Perfil de Flujo
+### Selección de perfil de flujo
 
 Las cámaras Axis soportan perfiles de flujo nombrados que se pueden seleccionar mediante parámetro de URL:
 
@@ -74,7 +74,7 @@ Las cámaras Axis soportan perfiles de flujo nombrados que se pueden seleccionar
 | `rtsp://IP:554/axis-media/media.amp?resolution=640x480` | Resolución más baja |
 | `rtsp://IP:554/axis-media/media.amp?fps=15` | Límite de tasa de fotogramas |
 
-### Modelos Multicanal (Codificadores, Multisensor)
+### Modelos multicanal (codificadores, multisensor)
 
 Para dispositivos multicanal como codificadores de video (M7001, P7214) y cámaras multisensor:
 
@@ -85,7 +85,7 @@ Para dispositivos multicanal como codificadores de video (M7001, P7214) y cámar
 | Canal 3 | `rtsp://IP:554/axis-media/media.amp?camera=3` | 3 |
 | Canal 4 | `rtsp://IP:554/axis-media/media.amp?camera=4` | 4 |
 
-### Formatos de URL Legacy
+### Formatos de URL legacy
 
 Las cámaras Axis más antiguas (serie 200, primeras series 1000) pueden requerir estos formatos:
 
@@ -99,7 +99,7 @@ Las cámaras Axis más antiguas (serie 200, primeras series 1000) pueden requeri
 
 ## Conexión con VisioForge SDK
 
-Usa la URL RTSP de tu cámara Axis con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
+Use la URL RTSP de su cámara Axis con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
 
 ```csharp
 // Axis camera, H.264 main stream
@@ -108,13 +108,13 @@ var username = "root";
 var password = "YourPassword";
 ```
 
-Para acceder al subflujo, agrega el parámetro `?resolution=640x480`.
+Para acceder al subflujo, agregue el parámetro `?resolution=640x480`.
 
 ### Descubrimiento ONVIF
 
-Axis fue miembro fundador de ONVIF y tiene cumplimiento ONVIF líder en la industria. Consulta la [guía de integración ONVIF](../mediablocks/Sources/index.md) para ejemplos de código de descubrimiento.
+Axis fue miembro fundador de ONVIF y tiene cumplimiento ONVIF líder en la industria. Consulte la [guía de integración ONVIF](../mediablocks/Sources/index.md) para ejemplos de código de descubrimiento.
 
-## URLs de Captura y MJPEG (API VAPIX)
+## URLs de captura y MJPEG (API VAPIX)
 
 Las cámaras Axis proporcionan la API HTTP VAPIX, que es más rica en funciones que la mayoría de las otras marcas:
 
@@ -130,7 +130,7 @@ Las cámaras Axis proporcionan la API HTTP VAPIX, que es más rica en funciones 
 | MJPEG (resolución) | `http://IP/axis-cgi/mjpg/video.cgi?resolution=640x480` | MJPEG dimensionado |
 | MJPEG (directo) | `http://IP/mjpg/video.mjpg` | MJPEG directo (legacy) |
 
-## Solución de Problemas
+## Solución de problemas
 
 ### Audio "Posible" vs "Sí"
 
@@ -139,23 +139,23 @@ Axis marca el soporte de audio como "Posible" en muchos flujos RTSP porque la di
 ### Errores "401 Unauthorized"
 
 - Las cámaras Axis usan autenticación digest por defecto para RTSP
-- Asegúrate de usar las credenciales correctas (el nombre de usuario predeterminado es `root`, no `admin`)
+- Asegúrese de usar las credenciales correctas (el nombre de usuario predeterminado es `root`, no `admin`)
 - En firmware más reciente, la contraseña debe cumplir requisitos de complejidad (mínimo 8 caracteres)
 
 ### Flujo MPEG-4 no disponible en modelos más recientes
 
-Las cámaras Axis modernas (firmware 5.x+) han eliminado el soporte MPEG-4. Usa `/axis-media/media.amp` (H.264) en lugar de `/mpeg4/media.amp`.
+Las cámaras Axis modernas (firmware 5.x+) han eliminado el soporte MPEG-4. Use `/axis-media/media.amp` (H.264) en lugar de `/mpeg4/media.amp`.
 
 ### La resolución no coincide con la salida esperada
 
-Las cámaras Axis negocian la resolución dinámicamente. Para forzar una resolución específica, agrega el parámetro `resolution`:
+Las cámaras Axis negocian la resolución dinámicamente. Para forzar una resolución específica, agregue el parámetro `resolution`:
 `rtsp://IP:554/axis-media/media.amp?resolution=1920x1080`
 
 ### Conexiones de codificador multicanal
 
-Al conectarte a un codificador Axis (M7001, P7214, etc.), debes especificar el parámetro de cámara/canal. Sin él, obtienes el canal 1 por defecto.
+Al conectarse a un codificador Axis (M7001, P7214, etc.), debe especificar el parámetro de cámara/canal. Sin él, obtiene el canal 1 por defecto.
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 **¿Cuál es la URL RTSP predeterminada para cámaras Axis?**
 
@@ -163,7 +163,7 @@ La URL estándar es `rtsp://root:password@IP_CAMARA:554/axis-media/media.amp`. E
 
 **¿Cómo cambio entre H.264 y H.265 en cámaras Axis?**
 
-Agrega el parámetro `videocodec` a la URL RTSP: `rtsp://IP:554/axis-media/media.amp?videocodec=h265` para H.265, o `videocodec=h264` para H.264. Ten en cuenta que H.265 solo está disponible en modelos Axis más recientes con chipsets Artpec-7 o posteriores.
+Agregue el parámetro `videocodec` a la URL RTSP: `rtsp://IP:554/axis-media/media.amp?videocodec=h265` para H.265, o `videocodec=h264` para H.264. Tenga en cuenta que H.265 solo está disponible en modelos Axis más recientes con chipsets Artpec-7 o posteriores.
 
 **¿Puedo controlar la calidad del flujo mediante la URL RTSP?**
 
@@ -173,7 +173,7 @@ Sí. Axis soporta varios parámetros de URL: `resolution` (ej., `1920x1080`), `f
 
 Las cámaras Axis ejecutan Linux embebido y, siguiendo las convenciones de Unix, el usuario administrativo se llama `root`. Esto es diferente de la mayoría de las otras marcas de cámaras que usan `admin`.
 
-## Recursos Relacionados
+## Recursos relacionados
 
 - [Todas las Marcas de Cámaras — Directorio de URLs RTSP](index.md)
 - [Guía de Conexión Bosch](bosch.md) — Par de vigilancia empresarial

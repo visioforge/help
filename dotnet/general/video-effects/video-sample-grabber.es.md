@@ -26,7 +26,7 @@ primary_api_classes:
 
 # Uso del capturador de muestras de video
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Obtención de cuadros de video RAW como puntero de memoria no administrada dentro de la estructura
 
@@ -41,9 +41,6 @@ primary_api_classes:
     {
         // Procesar el objeto VideoFrameX
         ProcessFrame(e.Frame);
-        
-        // Si ha modificado el cuadro y quiere actualizar el flujo de video
-        e.UpdateData = true;
     }
     
     // Ejemplo de procesamiento de un cuadro VideoFrameX - ajustando brillo
@@ -66,15 +63,25 @@ primary_api_classes:
         
         // Factor de brillo (1.2 = 20% más brillante, 0.8 = 20% más oscuro)
         float brightnessFactor = 1.2f;
-        
-        // Procesar cada píxel
-        for (int i = 0; i < data.Length; i += pixelSize)
+
+        // Precalcular una tabla de búsqueda para que el bucle interno sea una consulta de tabla, no una multiplicación
+        var lut = new byte[256];
+        for (int v = 0; v < 256; v++)
         {
-            // Ajustar canales R, G, B
-            for (int j = 0; j < 3; j++)
+            lut[v] = (byte)Math.Min(255, (int)(v * brightnessFactor));
+        }
+
+        // Las filas se rellenan con una longitud de 4 bytes (stride): recorrer fila por fila, nunca data.Length
+        int stride = frame.Stride;
+        for (int y = 0; y < frame.Height; y++)
+        {
+            int row = y * stride;
+            for (int x = 0; x < frame.Width; x++)
             {
-                int newValue = (int)(data[i + j] * brightnessFactor);
-                data[i + j] = (byte)Math.Min(255, newValue);
+                int pixel = row + x * pixelSize;
+                data[pixel] = lut[data[pixel]];
+                data[pixel + 1] = lut[data[pixel + 1]];
+                data[pixel + 2] = lut[data[pixel + 2]];
             }
         }
         
@@ -114,15 +121,23 @@ primary_api_classes:
         
         // Factor de brillo (1.2 = 20% más brillante, 0.8 = 20% más oscuro)
         float brightnessFactor = 1.2f;
-        
-        // Procesar cada píxel (formato RGB24 = 3 bytes por píxel)
-        for (int i = 0; i < data.Length; i += 3)
+
+        // Precalcular una tabla de búsqueda para que el bucle interno sea una consulta de tabla, no una multiplicación
+        var lut = new byte[256];
+        for (int v = 0; v < 256; v++)
         {
-            // Ajustar canales R, G, B
-            for (int j = 0; j < 3; j++)
+            lut[v] = (byte)Math.Min(255, (int)(v * brightnessFactor));
+        }
+
+        // Las filas RGB24 se rellenan con una longitud de 4 bytes (stride): recorrer fila por fila, nunca data.Length
+        int stride = frame.Info.Stride;
+        int rowBytes = frame.Info.Width * 3;
+        for (int y = 0; y < frame.Info.Height; y++)
+        {
+            int row = y * stride;
+            for (int i = 0; i < rowBytes; i++)
             {
-                int newValue = (int)(data[i + j] * brightnessFactor);
-                data[i + j] = (byte)Math.Min(255, newValue);
+                data[row + i] = lut[data[row + i]];
             }
         }
         
@@ -138,15 +153,14 @@ primary_api_classes:
     ```csharp
     // Crear y configurar bloque capturador de muestras de video
     var videoSampleGrabberBlock = new VideoSampleGrabberBlock(VideoFormatX.RGB);
+    // Necesario cuando el controlador escribe en el cuadro
+    videoSampleGrabberBlock.AllowFrameModification = true;
     videoSampleGrabberBlock.OnVideoFrameBuffer += OnVideoFrameBuffer;
     
     private void OnVideoFrameBuffer(object sender, VideoFrameXBufferEventArgs e)
     {
         // Procesar el objeto VideoFrameX
         ProcessFrame(e.Frame);
-        
-        // Si ha modificado el cuadro y quiere actualizar el flujo de video
-        e.UpdateData = true;
     }
     
     // Ejemplo de procesamiento de un cuadro VideoFrameX - ajustando brillo
@@ -162,15 +176,23 @@ primary_api_classes:
         
         // Factor de brillo (1.2 = 20% más brillante, 0.8 = 20% más oscuro)
         float brightnessFactor = 1.2f;
-        
-        // Procesar cada píxel (formato RGB = 3 bytes por píxel)
-        for (int i = 0; i < data.Length; i += 3)
+
+        // Precalcular una tabla de búsqueda para que el bucle interno sea una consulta de tabla, no una multiplicación
+        var lut = new byte[256];
+        for (int v = 0; v < 256; v++)
         {
-            // Ajustar canales R, G, B
-            for (int j = 0; j < 3; j++)
+            lut[v] = (byte)Math.Min(255, (int)(v * brightnessFactor));
+        }
+
+        // Las filas RGB se rellenan con una longitud de 4 bytes (stride): recorrer fila por fila, nunca data.Length
+        int stride = frame.Stride;
+        int rowBytes = frame.Width * 3;
+        for (int y = 0; y < frame.Height; y++)
+        {
+            int row = y * stride;
+            for (int i = 0; i < rowBytes; i++)
             {
-                int newValue = (int)(data[i + j] * brightnessFactor);
-                data[i + j] = (byte)Math.Min(255, newValue);
+                data[row + i] = lut[data[row + i]];
             }
         }
         
@@ -181,9 +203,13 @@ primary_api_classes:
     
 
 
+!!! note "Prefiera el efecto de brillo integrado para un brillo simple"
+
+    El brillo es un efecto de vídeo integrado: llame a `VideoEffects_SetBrightness` (valores de -1.0 a 1.0) en los motores clásicos, o añada un `VideoBalanceBlock` con `VideoBalanceVideoEffect.Brightness` establecido en una pipeline de Media Blocks. Ambos se ejecutan de forma nativa y son más rápidos que el procesamiento por cuadro en código administrado. Utilice el sample grabber para el procesamiento personalizado por cuadro que los efectos integrados no cubren.
+
 ## Trabajando con cuadros de bitmap
 
-Si necesita trabajar con objetos Bitmap administrados en lugar de punteros de memoria sin procesar, puede usar el evento `OnVideoFrameBitmap` de las clases `core` o el SampleGrabberBlock:
+Si necesita trabajar con objetos Bitmap administrados en lugar de punteros de memoria sin procesar, puede usar el evento `OnVideoFrameBitmap` de las clases `core` o el SampleGrabberBlock. Los motores X y el SampleGrabberBlock entregan una copia del cuadro, por lo que los cambios en ese bitmap solo llegan al flujo de video con los motores clásicos, y solo si establece `e.UpdateData = true`:
 
 ```csharp
 // Suscribirse al evento de cuadro de bitmap
@@ -198,12 +224,27 @@ private void OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
     e.UpdateData = true;
 }
 
+// Copia reutilizable del fotograma
+private Bitmap _source;
+
 // Ejemplo de procesamiento de un Bitmap - ajustando brillo
 private void ProcessBitmap(Bitmap bitmap)
 {
     // Usar métodos de Bitmap o Graphics para manipular la imagen
     // Este ejemplo usa ColorMatrix para ajuste de brillo
     
+    // GDI+ no puede dibujar un bitmap sobre su propio Graphics, así que primero se copia el fotograma en un búfer reutilizable
+    if (_source == null || _source.Width != bitmap.Width || _source.Height != bitmap.Height)
+    {
+        _source?.Dispose();
+        _source = new Bitmap(bitmap.Width, bitmap.Height);
+    }
+
+    using (Graphics copy = Graphics.FromImage(_source))
+    {
+        copy.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+    }
+
     // Crear un objeto graphics desde el bitmap
     using (Graphics g = Graphics.FromImage(bitmap))
     {
@@ -224,7 +265,7 @@ private void ProcessBitmap(Bitmap bitmap)
             attributes.SetColorMatrix(colorMatrix);
             
             // Dibujar la imagen con el ajuste de brillo
-            g.DrawImage(bitmap, 
+            g.DrawImage(_source, 
                 new Rectangle(0, 0, bitmap.Width, bitmap.Height),
                 0, 0, bitmap.Width, bitmap.Height,
                 GraphicsUnit.Pixel, attributes);
@@ -366,11 +407,13 @@ El evento `OnVideoFrameBuffer` es más rápido y proporciona el puntero de memor
    - RGBA/BGRA/ARGB: 4 bytes por píxel (con canal alfa)
    - Formatos YUV: Diferentes arreglos de componentes
 
-2. Establezca `e.UpdateData = true` si ha modificado los datos del cuadro y quiere que los cambios sean visibles en el flujo de video.
+2. Con los motores clásicos, establezca `e.UpdateData = true` si ha modificado los datos del cuadro y quiere que los cambios sean visibles en el flujo de video. El Media Blocks SDK y los motores X no leen `UpdateData`.
 
-3. Para procesamiento que requiere múltiples cuadros u operaciones complejas, considere usar un buffer o cola para almacenar cuadros.
+3. Establezca `AllowFrameModification = true` en el `VideoSampleGrabberBlock` (Media Blocks SDK) antes de iniciar la canalización, o en el `CustomVideoSampleGrabberEffect` (Media Blocks SDK y motores X) antes de agregar el efecto. Sin ello, el cuadro se asigna solo para lectura y sus cambios pueden llegar a otra rama de un `TeeBlock` que comparte el mismo cuadro.
 
-4. Al usar `OnVideoFrameSKBitmap`, seleccione RGBA o BGRA como el formato del cuadro al crear el VideoSampleGrabberBlock.
+4. Para procesamiento que requiere múltiples cuadros u operaciones complejas, considere usar un buffer o cola para almacenar cuadros.
+
+5. Al usar `OnVideoFrameSKBitmap`, seleccione RGBA o BGRA como el formato del cuadro al crear el VideoSampleGrabberBlock.
 
 ---
 Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.

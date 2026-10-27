@@ -34,7 +34,7 @@ primary_api_classes:
 
 # RTSP Stream Viewer and IP Camera Player in C#
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! tip "AI coding agents: use the VisioForge MCP server"
 
@@ -61,14 +61,14 @@ Common use cases include surveillance dashboards, NVR (network video recorder) a
 Add the Media Blocks SDK NuGet package to your project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
 ```
 
 You also need the platform-specific runtime packages. For Windows:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 ```
 
 For other platforms (macOS, Linux, Android, iOS), see the [Deployment Guide](../../deployment-x/index.md).
@@ -371,4 +371,4 @@ Use MP4 for standard playback compatibility across devices and players. Use MPEG
 - [Multi-camera RTSP grid (NVR wall)](multi-camera-rtsp-grid.md) — scale from a single player to a 4×4 live preview wall on WPF or MAUI
 - [RTSP reconnection and fallback switch](../../general/network-sources/reconnection-and-fallback.md) — handle camera drops with reconnect events and declarative `FallbackSwitch`
 - [Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — RTSP preview, capture, and multi-view demos
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads

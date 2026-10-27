@@ -12,7 +12,7 @@ tags:
 
 # Effets vidéo
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Video Capture SDK .Net vous permet d'appliquer divers effets vidéo à la vidéo capturée depuis différentes sources. Les effets vidéo sont appliqués en temps réel.
 

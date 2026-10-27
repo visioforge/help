@@ -1,6 +1,6 @@
 ---
 title: Capturar una webcam en Unity 6 con VideoCaptureCoreX
-description: Captura una webcam y micrófono en Unity 6 con VideoCaptureCoreX — vista previa en vivo hacia un RawImage vía OnVideoFrameUnity más grabación MP4 a disco.
+description: Capture una webcam y micrófono en Unity 6 con VideoCaptureCoreX — vista previa en vivo hacia un RawImage vía OnVideoFrameUnity más grabación MP4 a disco.
 sidebar_label: Grabador VideoCaptureX
 order: 61
 tags:
@@ -24,19 +24,19 @@ primary_api_classes:
 
 # Capturar una webcam en Unity con VideoCaptureCoreX
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button target="_blank" }
 
 La escena **`VideoCaptureX`** captura desde una webcam local (y micrófono) con el motor de alto nivel
 **`VideoCaptureCoreX`**, muestra una vista previa de los fotogramas en vivo en un `RawImage` de Unity y graba a un
-archivo MP4 al mismo tiempo. También puedes capturar una webcam con la API de bajo nivel
+archivo MP4 al mismo tiempo. También puede capturar una webcam con la API de bajo nivel
 **`MediaBlocksPipeline`** — esa receta está en [Capturar con la canalización de Media Blocks](#capturar-con-la-canalizacion-de-media-blocks-bajo-nivel)
-más abajo. Este artículo asume que has importado el paquete de Unity y aplicado los ajustes de
-proyecto necesarios; consulta primero [Uso de VisioForge en Unity](index.md).
+más abajo. Este artículo asume que ha importado el paquete de Unity y aplicado los ajustes de
+proyecto necesarios; consulte primero [Uso de VisioForge en Unity](index.md).
 
 !!! info "Compatibilidad de plataformas para la captura de cámara local"
     La captura local de webcam/micrófono en el paquete de Unity está dirigida a **Windows** y **macOS
-    Standalone** en esta versión. En **Android** e **iOS**, usa el
+    Standalone** en esta versión. En **Android** e **iOS**, use el
     [ejemplo de cámara IP / RTSP](rtsp-viewer.md) — `VideoCaptureCoreX` sobre RTSP funciona en las cuatro
     plataformas. La captura de dispositivos locales en Android/iOS depende de las APIs de cámara de la plataforma que aún no están
     integradas en el paquete multiplataforma.
@@ -45,15 +45,15 @@ proyecto necesarios; consulta primero [Uso de VisioForge en Unity](index.md).
 
 `VideoCaptureCoreX` expone el evento exclusivo de Unity **`OnVideoFrameUnity`**: cada fotograma llega como
 **RGBA32** empaquetado de forma compacta (`Stride == Width * 4`), listo para `Texture2D.LoadRawTextureData` sin
-conversión. Suscríbete antes de `StartAsync`.
+conversión. Suscríbase antes de `StartAsync`.
 
 ## Ejecutar el ejemplo
 
-1. Conecta una webcam, luego abre `Assets/Scenes/SampleScene.unity`.
-2. En la **Hierarchy** selecciona el GameObject **RawImage** — el componente `VideoCaptureXRecorder`
+1. Conecte una webcam, luego abra `Assets/Scenes/SampleScene.unity`.
+2. En la **Hierarchy** seleccione el GameObject **RawImage** — el componente `VideoCaptureXRecorder`
    está adjunto a él.
-3. En el **Inspector** establece **Camera Index** y el **Output Path**.
-4. Pulsa **▶ Play** — la cámara en vivo se renderiza en la vista Game. Alterna la grabación con
+3. En el **Inspector** establezca **Camera Index** y el **Output Path**.
+4. Pulse **▶ Play** — la cámara en vivo se renderiza en la vista Game. Alterne la grabación con
    `StartRecordingAsync()` / `StopRecordingAsync()` (por ejemplo, desde un botón de UI).
 
 ## Campos del Inspector
@@ -104,10 +104,10 @@ await _capture.StopCaptureAsync(0);              // detener grabación
 
 ## Capturar con la canalización de Media Blocks (bajo nivel)
 
-`VideoCaptureCoreX` es el motor de alto nivel. Para un control total de la canalización puedes
+`VideoCaptureCoreX` es el motor de alto nivel. Para un control total de la canalización puede
 capturar la misma webcam con la API de bajo nivel **`MediaBlocksPipeline`** — el enfoque que usan las
 [escenas SimplePlayer / RTSPViewer](simple-player.md). No hay una escena de webcam prediseñada para
-esta vía; añade la receta de abajo a tu propio `MonoBehaviour` (modélala sobre el `MediaBlocksPlayer`
+esta vía; añada la receta de abajo a su propio `MonoBehaviour` (modélala sobre el `MediaBlocksPlayer`
 incluido):
 
 Un `TeeBlock` divide el video de la cámara para que alimente a la vez la vista previa
@@ -159,7 +159,7 @@ await _pipeline.StartAsync();             // vista previa + grabación corren a 
 interno H.264 / AAC, así que crea exactamente una por stream. `BufferSinkBlock.OnVideoFrameBuffer`
 tiene la misma firma `VisioForgeVideoView.OnFrameBuffer` que el evento `OnVideoFrameUnity` del motor,
 por lo que la misma vista renderiza la previsualización. Quita el `videoTee` / `MP4OutputBlock` / la
-rama de audio para solo previsualizar; o usa la vía de alto nivel `VideoCaptureCoreX` de arriba, que
+rama de audio para solo previsualizar; o use la vía de alto nivel `VideoCaptureCoreX` de arriba, que
 permite iniciar y detener la grabación en tiempo de ejecución sin reconstruir la canalización. Esta
 vía de bajo nivel usa la misma fuente de dispositivo que el motor, por lo que la captura de cámara
 local tiene el mismo alcance **Windows / macOS**.
@@ -174,7 +174,7 @@ local tiene el mismo alcance **Windows / macOS**.
     | Api Compatibility Level | `.NET Standard 2.1` |
     | Scripting Backend | Mono *(predeterminado)* o IL2CPP |
 
-    No se requiere ninguna entrada de manifiesto para el acceso a la cámara. Consulta [Compilar para Windows](windows.md).
+    No se requiere ninguna entrada de manifiesto para el acceso a la cámara. Consulte [Compilar para Windows](windows.md).
 
 === "macOS"
 
@@ -183,32 +183,32 @@ local tiene el mismo alcance **Windows / macOS**.
     | Architecture | Universal arm64 + x86_64 |
     | Api Compatibility Level | `.NET Standard 2.1` |
     | Scripting Backend | Mono *(predeterminado)* o IL2CPP |
-    | Privacy | Añade descripciones de uso / entitlements de cámara + micrófono |
+    | Privacy | Añada descripciones de uso / entitlements de cámara + micrófono |
 
-    La cámara se selecciona a través de `avfvideosrc`. Consulta [Compilar para macOS](macos.md).
+    La cámara se selecciona a través de `avfvideosrc`. Consulte [Compilar para macOS](macos.md).
 
 ## Preguntas frecuentes
 
 ### ¿Cómo grabo a un archivo?
 
 El ejemplo pre-registra un `MP4Output` y alterna la captura con `StartCaptureAsync(0, path)` /
-`StopCaptureAsync(0)`, por lo que la vista previa en vivo se ejecuta tanto si estás grabando como si no.
+`StopCaptureAsync(0)`, por lo que la vista previa en vivo se ejecuta tanto si está grabando como si no.
 
 ### ¿Puedo capturar desde una cámara local en Android o iOS?
 
-No en esta versión. Usa el [ejemplo de cámara IP / RTSP](rtsp-viewer.md) en móviles —
+No en esta versión. Use el [ejemplo de cámara IP / RTSP](rtsp-viewer.md) en móviles —
 `VideoCaptureCoreX` sobre RTSP funciona en las cuatro plataformas. La captura de dispositivos locales en Android/iOS está
 planificada para un paquete futuro.
 
 ### ¿Cómo elijo una cámara específica?
 
-Establece **Camera Index** en la posición del dispositivo en `DeviceEnumerator.Shared.VideoSourcesAsync()`.
+Establezca **Camera Index** en la posición del dispositivo en `DeviceEnumerator.Shared.VideoSourcesAsync()`.
 
 ### ¿Con qué codificadores graba?
 
-`MP4Output` usa por defecto video H.264 + audio AAC. Ajusta la configuración de `MP4Output` para codificadores personalizados.
+`MP4Output` usa por defecto video H.264 + audio AAC. Ajuste la configuración de `MP4Output` para codificadores personalizados.
 
-## Consulta también
+## Consulte también
 
 - [Uso de VisioForge en Unity](index.md) — descripción general del paquete, configuración y cómo funciona el renderizado
 - [Ver una cámara IP / RTSP en Unity](rtsp-viewer.md) — `VideoCaptureCoreX` sobre RTSP (todas las plataformas)

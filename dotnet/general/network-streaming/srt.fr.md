@@ -38,7 +38,7 @@ primary_api_classes:
 
 # Guide d'implémentation de la diffusion SRT
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Qu'est-ce que SRT ?
 
@@ -381,4 +381,4 @@ Abaissez la propriété `Latency` sur les paramètres de l'émetteur et du réce
 - [Format de sortie MPEG-TS](../output-formats/mpegts.md) — configuration du conteneur MPEG-TS
 - [Guide de déploiement](../../deployment-x/index.md) — paquets d'exécution spécifiques aux plateformes
 - [Exemples de code sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — démo source SRT
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — page produit et téléchargements
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — page produit et téléchargements

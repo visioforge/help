@@ -14,7 +14,6 @@ tags:
   - Streaming
   - Decoding
   - Editing
-  - IP Camera
   - RTSP
   - MP4
   - WebM
@@ -29,7 +28,7 @@ tags:
 
 ## Introduction au déploiement de VideoEditCore
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le VisioForge Video Edit SDK pour .Net fournit un ensemble puissant d'outils pour le traitement, l'édition et l'analyse vidéo en environnement Windows. Ce guide complet détaille les options de déploiement pour garantir le bon fonctionnement du SDK sur les systèmes cibles.
 
@@ -63,8 +62,8 @@ Les paquets NuGet offrent la méthode de déploiement la plus simple, ne nécess
 
 **Composants de base (toujours requis)** :
 
-- Paquet de base du SDK : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x64/)
-- Paquet Video Edit SDK : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
+- Paquet de base du SDK : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x64/) | [ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.arm64/) (.NET 5 ou ultérieur)
+- Paquet Video Edit SDK : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/) | ARM64 : pas encore disponible
 
 **Composants spécifiques au format** :
 
@@ -75,8 +74,9 @@ Les paquets NuGet offrent la méthode de déploiement la plus simple, ne nécess
 **Composants de sources multimédias** :
 
 - FFMPEG (sortie fichier / diffusion réseau) : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/)
-- Source VLC (fichier / caméra IP) : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x64/)
 - Filtres LAV : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
+
+> **Windows ARM64 :** les filtres LAV existent uniquement en x86 et x64. Il n'en existe aucune version ARM64 en amont, le SDK ne fournit donc pas de paquet LAV ARM64, et la plupart des autres filtres DirectShow des moteurs classiques n'ont pas encore de version ARM64 non plus. Une application exécutée en tant que processus ARM64 ne peut pas les charger. Les applications AnyCPU s'y exécutent généralement aussi en ARM64. Sous Windows ARM64, utilisez `VideoEditCoreX` ou Media Blocks SDK .NET, ou compilez l'application pour x64 (`PlatformTarget` défini sur `x64` ; elle s'exécute alors en émulation).
 
 La mise en œuvre est simple : ajoutez les paquets requis à votre projet d'application, et après la compilation, les fichiers redistribuables nécessaires seront automatiquement inclus dans le dossier de votre application.
 
@@ -91,7 +91,6 @@ Pour les scénarios où des droits administratifs sont disponibles, les installa
 **Composants de sources multimédias** :
 
 - Paquet FFMPEG : [x86](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x64.exe)
-- Paquet source VLC : [x86](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x64.exe)
 - Filtres LAV : [x86](https://files.visioforge.com/redists_net/redist_dotnet_lav_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_lav_x64.exe)
 
 **Composants spécifiques au format** :
@@ -149,22 +148,7 @@ L'installation manuelle offre le plus haut niveau de contrôle sur le processus 
 - VisioForge_SSF_Muxer.ax - Multiplexeur format SSF
 - Tous les filtres MP4 (historique/moderne) sauf le multiplexeur
 
-**Sources RTSP/RTMP/HTTP** :
-
-- VisioForge_RTSP_Source.ax - Entrée flux RTSP
-- VisioForge_RTSP_Source_Live555.ax - RTSP avec bibliothèque Live555
-- VisioForge_IP_HTTP_Source.ax - Entrée source HTTP
-- Filtres FFMPEG, VLC ou LAV selon les besoins
-
 ### Filtres de sources multimédias
-
-**Source VLC** :
-
-- VisioForge_VLC_Source.ax - Entrée multimédia basée sur VLC
-- Le déploiement complet nécessite :
-  - La copie de tous les fichiers du dossier Redist\VLC
-  - L'enregistrement COM des fichiers .ax
-  - L'ajout de la variable d'environnement VLC_PLUGIN_PATH pointant vers le dossier VLC\plugins
 
 **Source FFMPEG** :
 

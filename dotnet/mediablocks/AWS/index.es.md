@@ -21,7 +21,7 @@ sidebar_label: Amazon Web Services
 
 # Bloques AWS S3 - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Los bloques AWS S3 permiten la interacción con Amazon Simple Storage Service (S3) para leer archivos de medios como fuentes o escribir archivos de medios como sinks dentro de sus pipelines.
 

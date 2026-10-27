@@ -34,7 +34,7 @@ primary_api_classes:
 
 # Visor de Streams RTSP y Reproductor de Cámaras IP en C#
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
 
@@ -62,14 +62,14 @@ Los casos de uso comunes incluyen paneles de vigilancia, aplicaciones NVR (graba
 Agregue el paquete NuGet del Media Blocks SDK a su proyecto:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
 ```
 
 También necesita los paquetes de runtime específicos de la plataforma. Para Windows:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 ```
 
 Para otras plataformas (macOS, Linux, Android, iOS), consulte la [Guía de Despliegue](../../deployment-x/index.md).
@@ -372,4 +372,4 @@ Use MP4 para compatibilidad estándar de reproducción en dispositivos y reprodu
 - [Grid RTSP multi-cámara (muro NVR)](multi-camera-rtsp-grid.md) — escalar de un reproductor único a un muro de vista previa 4×4 en WPF o MAUI
 - [Reconexión RTSP y fallback switch](../../general/network-sources/reconnection-and-fallback.md) — maneja caídas de cámara con eventos de reconexión y `FallbackSwitch` declarativo
 - [Ejemplos de Código en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — demos de vista previa, captura y multi-vista RTSP
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas

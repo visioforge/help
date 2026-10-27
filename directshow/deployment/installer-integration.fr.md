@@ -546,7 +546,7 @@ SectionEnd
 Section "VLC Source Filter" SecVLC
   SetOutPath "$INSTDIR\Filters"
   ; Installer le filtre VLC Source
-  File "Filters\VisioForge_VLC_Source.ax"
+  File "Filters\VisioForge_VLC_Source_x64.ax"
   File "Filters\libvlc.dll"
   File "Filters\libvlccore.dll"
   ; Installer le repertoire de plugins VLC
@@ -554,7 +554,10 @@ Section "VLC Source Filter" SecVLC
   File /r "Filters\plugins\*.*"
   ; Enregistrer le filtre VLC Source
   DetailPrint "Registering VLC Source filter..."
-  ExecWait 'regsvr32 /s "$INSTDIR\Filters\VisioForge_VLC_Source.ax"'
+  ExecWait 'regsvr32 /s "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"' $0
+  ${If} $0 != 0
+    MessageBox MB_OK|MB_ICONEXCLAMATION "Filter registration failed. Code: $0"
+  ${EndIf}
 SectionEnd
 ;--------------------------------
 ; Descriptions des sections
@@ -588,7 +591,7 @@ Section "Uninstall"
   ; Desenregistrer les filtres
   DetailPrint "Unregistering DirectShow filters..."
   ExecWait 'regsvr32 /s /u "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"'
-  ExecWait 'regsvr32 /s /u "$INSTDIR\Filters\VisioForge_VLC_Source.ax"'
+  ExecWait 'regsvr32 /s /u "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"'
   ; Supprimer les fichiers
   Delete "$INSTDIR\MyApp.exe"
   Delete "$INSTDIR\MyApp.exe.config"

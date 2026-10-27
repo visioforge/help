@@ -14,7 +14,7 @@ tags:
 
 # Supprimer des filtres DirectShow sous Windows
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Les filtres DirectShow sont des composants essentiels pour les applications multimédias dans les environnements Windows. Ils permettent aux logiciels de traiter efficacement les données audio et vidéo. Cependant, il peut y avoir des situations où vous devez désinstaller ces filtres, par exemple lors de la mise à niveau de votre application, de la résolution de conflits ou de la suppression complète d'un paquet logiciel. Ce guide fournit des instructions détaillées sur la façon de désinstaller correctement les filtres DirectShow de votre système.
 

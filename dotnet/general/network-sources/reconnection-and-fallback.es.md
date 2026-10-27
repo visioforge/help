@@ -1,6 +1,6 @@
 ---
-title: Reconexión RTSP y Fallback Switch en C# .NET — Todos SDKs
-description: Gestiona desconexiones de cámaras IP con eventos de reconexión, DisconnectEventInterval y FallbackSwitch en los SDK de VisioForge.
+title: Reconexión RTSP y Fallback Switch en C# .NET — todos los SDK
+description: Gestione desconexiones de cámaras IP con eventos de reconexión, DisconnectEventInterval y FallbackSwitch en los SDK de VisioForge.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -35,17 +35,17 @@ primary_api_classes:
 
 # Reconexión RTSP y Fallback Switch en C# / .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Soporte multiplataforma"
-    Los eventos de reconexión funcionan en todos los SDK. El `FallbackSwitch` declarativo se basa en GStreamer y funciona en **Windows, macOS, Linux, Android e iOS** en los motores `X` modernos y Media Blocks — no está disponible en los motores clásicos solo-Windows DirectShow. Consulta la [matriz de soporte de plataformas](../../platform-matrix.md) y la [guía de despliegue en Linux](../../deployment-x/Ubuntu.md).
+    Los eventos de reconexión funcionan en todos los SDK. El `FallbackSwitch` declarativo se basa en GStreamer y funciona en **Windows, macOS, Linux, Android e iOS** en los motores `X` modernos y Media Blocks — no está disponible en los motores clásicos solo-Windows DirectShow. Consulte la [matriz de soporte de plataformas](../../platform-matrix.md) y la [guía de despliegue en Linux](../../deployment-x/Ubuntu.md).
 
-Las cámaras IP pierden conexiones — parpadeos de red, ciclos de energía, reinicios de router, falta de keyframes. Los SDKs VisioForge te dan dos formas de manejarlo:
+Las cámaras IP pierden conexiones — parpadeos de red, ciclos de energía, reinicios de router, falta de keyframes. Los SDKs VisioForge le dan dos formas de manejarlo:
 
-- **Reactivo** — tu código se suscribe a un evento de desconexión, luego detiene y reinicia la fuente.
-- **Declarativo** — configuras un `FallbackSwitch` en la fuente, el pipeline cambia automáticamente a una imagen / tarjeta de texto / stream alternativo, y tu código nunca ve el fallo.
+- **Reactivo** — su código se suscribe a un evento de desconexión, luego detiene y reinicia la fuente.
+- **Declarativo** — configure un `FallbackSwitch` en la fuente, el pipeline cambia automáticamente a una imagen / tarjeta de texto / stream alternativo, y su código nunca ve el fallo.
 
-Elige según el SDK que uses y la UX que quieras. Esta guía cubre ambos enfoques en todos los SDK de la familia.
+Elija según el SDK que use y la UX que quiera. Esta guía cubre ambos enfoques en todos los SDK de la familia.
 
 ## Qué enfoque está disponible dónde
 
@@ -57,11 +57,11 @@ Elige según el SDK que uses y la UX que quieras. Esta guía cubre ambos enfoque
 | MediaPlayerCoreX (multiplataforma) | ✅ pipeline `OnNetworkSourceDisconnect` / `OnError` | ✅ |
 | Media Blocks SDK | ✅ evento de pipeline | ✅ `FallbackSwitchSourceBlock` |
 
-Regla general: en los motores clásicos Windows solo tienes reactivo. En cualquier motor moderno (multiplataforma), prefiere declarativo para la UX, y añade reactivo encima para telemetría.
+Regla general: en los motores clásicos Windows solo tiene reactivo. En cualquier motor moderno (multiplataforma), prefiera declarativo para la UX, y añada reactivo encima para telemetría.
 
 ## Reactivo — VideoCaptureCore (clásico)
 
-`IPCameraSourceSettings.DisconnectEventInterval` define cuánto espera el SDK sin frames entrantes antes de disparar el evento de desconexión. El valor por defecto es 10 segundos; bájalo a 3–5 segundos para vigilancia.
+`IPCameraSourceSettings.DisconnectEventInterval` define cuánto espera el SDK sin frames entrantes antes de disparar el evento de desconexión. El valor por defecto es 10 segundos; bájelo a 3–5 segundos para vigilancia.
 
 ```csharp
 using VisioForge.Core.VideoCapture;
@@ -95,11 +95,11 @@ videoCapture1.Mode = VideoCaptureMode.IPPreview;
 await videoCapture1.StartAsync();
 ```
 
-`OnNetworkSourceDisconnect` se dispara desde un hilo temporizador — marshall al hilo UI (`Invoke` / `Dispatcher.Invoke`) antes de tocar controles.
+`OnNetworkSourceDisconnect` se dispara desde un hilo temporizador — marshalle al hilo UI (`Invoke` / `Dispatcher.Invoke`) antes de tocar controles.
 
 ## Reactivo — MediaPlayerCore (clásico)
 
-El `MediaPlayerCore` clásico expone `OnNetworkSourceStop` en el motor FFMPEG; para otros motores y cualquier fallo genérico, suscríbete a `OnError`.
+El `MediaPlayerCore` clásico expone `OnNetworkSourceStop` en el motor FFMPEG; para otros motores y cualquier fallo genérico, suscríbase a `OnError`.
 
 ```csharp
 using VisioForge.Core.MediaPlayer;
@@ -120,7 +120,7 @@ mediaPlayer1.OnError += (s, e) =>
 
 ## Reactivo — pipelines Media Blocks
 
-`MediaBlocksPipeline` expone `OnNetworkSourceDisconnect` con `NetworkSourceDisconnectEventArgs` rico — útil cuando múltiples fuentes RTSP comparten una app y necesitas saber *cuál* se cayó.
+`MediaBlocksPipeline` expone `OnNetworkSourceDisconnect` con `NetworkSourceDisconnectEventArgs` rico — útil cuando múltiples fuentes RTSP comparten una app y necesita saber *cuál* se cayó.
 
 ```csharp
 using VisioForge.Core.Types.Events;
@@ -145,22 +145,22 @@ pipeline.OnError += (s, e) =>
 
 `VideoCaptureCoreX` y `MediaPlayerCoreX` **no** exponen públicamente su `MediaBlocksPipeline` interno. Para reaccionar a desconexiones en estos motores:
 
-1. Suscríbete a `OnError` en el motor — se dispara para todos los errores a nivel de pipeline incluyendo pérdidas de fuentes RTSP.
-2. Usa el `FallbackSwitch` declarativo (abajo) para mantener la UI viva durante caídas transitorias.
-3. Si necesitas el `NetworkSourceDisconnectEventArgs` granular por fuente, construye el pipeline de captura directamente con `MediaBlocksPipeline` + `RTSPSourceBlock` y usa el patrón Media Blocks de arriba.
+1. Suscríbase a `OnError` en el motor — se dispara para todos los errores a nivel de pipeline incluyendo pérdidas de fuentes RTSP.
+2. Use el `FallbackSwitch` declarativo (abajo) para mantener la UI viva durante caídas transitorias.
+3. Si necesita el `NetworkSourceDisconnectEventArgs` granular por fuente, construya el pipeline de captura directamente con `MediaBlocksPipeline` + `RTSPSourceBlock` y use el patrón Media Blocks de arriba.
 
 ```csharp
 videoCaptureCoreX.OnError += (s, e) =>
 {
     // e.Message lleva el error a nivel de motor; para caídas RTSP el texto incluye
-    // el nombre del elemento fuente. Empareja este handler con un bucle de reintentos o FallbackSwitch.
+    // el nombre del elemento fuente. Emparejar este handler con un bucle de reintentos o FallbackSwitch.
     Log($"VideoCaptureCoreX error: {e.Message}");
 };
 ```
 
 ## Declarativo — Visión general de FallbackSwitch
 
-`FallbackSwitch` envuelve una fuente en vivo con failover automático. Cuando la fuente principal deja de producir frames por más de `TimeoutMs`, el pipeline cambia a un fallback preconfigurado (texto, imagen o media alternativo) y mantiene tu `VideoView` renderizando. Cuando la fuente principal se recupera, el pipeline cambia de vuelta.
+`FallbackSwitch` envuelve una fuente en vivo con failover automático. Cuando la fuente principal deja de producir frames por más de `TimeoutMs`, el pipeline cambia a un fallback preconfigurado (texto, imagen o media alternativo) y mantiene su `VideoView` renderizando. Cuando la fuente principal se recupera, el pipeline cambia de vuelta.
 
 ### El contenedor `FallbackSwitchSettings`
 
@@ -257,7 +257,7 @@ var fallback = new FallbackSwitchSettings
 
 `FallbackUri` acepta cualquier URI que GStreamer pueda leer — `file://`, otro `rtsp://`, HLS, HTTP.
 
-## Usando FallbackSwitch — alto nivel (`RTSPSourceSettings.FallbackSwitch`)
+## Usar FallbackSwitch — alto nivel (`RTSPSourceSettings.FallbackSwitch`)
 
 La vía más simple: adjunte el objeto de configuración directamente a `RTSPSourceSettings` y páselo a `VideoCaptureCoreX` como siempre — el motor envuelve la fuente con un fallback switch automáticamente. Sin plomería extra de pipeline.
 
@@ -283,9 +283,9 @@ _videoCapture.Video_Source = rtsp;
 await _videoCapture.StartAsync();
 ```
 
-## Usando FallbackSwitch — bajo nivel (`FallbackSwitchSourceBlock`)
+## Usar FallbackSwitch — bajo nivel (`FallbackSwitchSourceBlock`)
 
-En el Media Blocks SDK cableas el fallback directamente a nivel de pipeline vía `FallbackSwitchSourceBlock`. Envuelve una fuente RTSP, SRT, RTMP, HTTP o NDI y entrega vídeo y audio decodificados.
+En el Media Blocks SDK cablee el fallback directamente a nivel de pipeline vía `FallbackSwitchSourceBlock`. Envuelve una fuente RTSP, SRT, RTMP, HTTP o NDI y entrega vídeo y audio decodificados.
 
 ```csharp
 using VisioForge.Core.MediaBlocks;
@@ -317,29 +317,29 @@ var stats = fallbackSwitch.GetStatistics();
 
 ## Patrones Comunes
 
-**Retroceso exponencial** — en el bucle reactivo, duplica el retraso en cada reconexión fallida, limita a 30 s. Evita que machaques la caché ARP de una cámara muerta.
+**Retroceso exponencial** — en el bucle reactivo, duplique el retraso en cada reconexión fallida, limite a 30 s. Evite que machaque la caché ARP de una cámara muerta.
 
-**UX declarativa + telemetría reactiva** — deja que `FallbackSwitch` mantenga la pantalla viva, y usa `pipeline.OnNetworkSourceDisconnect` para alimentar tu dashboard de monitoreo / alerta Slack / log NVR. Ningún enfoque excluye al otro.
+**UX declarativa + telemetría reactiva** — deje que `FallbackSwitch` mantenga la pantalla viva, y use `pipeline.OnNetworkSourceDisconnect` para alimentar su dashboard de monitoreo / alerta Slack / log NVR. Ningún enfoque excluye al otro.
 
 **Muro multi-cámara** — nunca derribe todo el grid por un fallo. Consulte la [guía de grid RTSP multi-cámara](../../mediablocks/Guides/multi-camera-rtsp-grid.md) para el patrón un-pipeline-por-cámara; envuelva la fuente de cada cámara con un `FallbackSwitchSourceBlock` (en `VideoCaptureCoreX` basta con asignar `FallbackSwitch` en los ajustes de la fuente).
 
-**Nota multiplataforma** — `FallbackSwitch` depende del elemento GStreamer `fallbackswitch`, que viene con el redist X. Los clásicos solo-Windows `VideoCaptureCore` / `MediaPlayerCore` no lo tienen — usa el enfoque reactivo allí.
+**Nota multiplataforma** — `FallbackSwitch` depende del elemento GStreamer `fallbackswitch`, que viene con el redist X. Los clásicos solo-Windows `VideoCaptureCore` / `MediaPlayerCore` no lo tienen — use el enfoque reactivo allí.
 
-## Solución de Problemas
+## Solución de problemas
 
-**El fallback nunca se activa** — ¿`Enabled = true`? ¿`TimeoutMs` menor que el gap que quieres capturar? Los primeros frames necesitan tener éxito antes de que el timeout empiece a contar — una cámara que falla en el primer handshake es un error de inicio de pipeline, no un timeout.
+**El fallback nunca se activa** — ¿`Enabled = true`? ¿`TimeoutMs` menor que el gap que quiere capturar? Los primeros frames necesitan tener éxito antes de que el timeout empiece a contar — una cámara que falla en el primer handshake es un error de inicio de pipeline, no un timeout.
 
-**El fallback se activa pero nunca sale** — la fuente principal no se está recuperando. Verifica `RestartTimeoutMs` (muy alto retrasa el siguiente reintento) y `RetryTimeoutMs` (después de esta ventana el bloque deja de reintentar). Con `ManualUnblock = true` debes llamar `fallbackSwitch.Unblock()` tú mismo.
+**El fallback se activa pero nunca sale** — la fuente principal no se está recuperando. Verifique `RestartTimeoutMs` (muy alto retrasa el siguiente reintento) y `RetryTimeoutMs` (después de esta ventana el bloque deja de reintentar). Con `ManualUnblock = true` debe llamar `fallbackSwitch.Unblock()` usted mismo.
 
-**El fallback de imagen muestra negro** — desajuste de caps de códec entre el pipeline principal y el decodificador de fallback. Establece `FallbackVideoCaps` explícitamente, ej. `"video/x-raw,width=1920,height=1080,format=RGB"`, que coincida con el formato esperado del renderizador.
+**El fallback de imagen muestra negro** — desajuste de caps de códec entre el pipeline principal y el decodificador de fallback. Establezca `FallbackVideoCaps` explícitamente, ej. `"video/x-raw,width=1920,height=1080,format=RGB"`, que coincida con el formato esperado del renderizador.
 
-**Fallback de texto — fuente / posición incorrectas** — `FontFamily` debe existir en la plataforma objetivo (Arial está en Windows y macOS; prefiere `DejaVuSans` en Linux). `Position` son fracciones 0.0–1.0 del cuadro de video.
+**Fallback de texto — fuente / posición incorrectas** — `FontFamily` debe existir en la plataforma objetivo (Arial está en Windows y macOS; prefiera `DejaVuSans` en Linux). `Position` son fracciones 0.0–1.0 del cuadro de video.
 
-**`OnNetworkSourceDisconnect` se dispara repetidamente** — el bloque de fuente está reintentando y fallando en rápida sucesión. Sube `RestartTimeoutMs` a 10–15 s en una red reconocidamente inestable, o envuelve el logging con un debounce.
+**`OnNetworkSourceDisconnect` se dispara repetidamente** — el bloque de fuente está reintentando y fallando en rápida sucesión. Suba `RestartTimeoutMs` a 10–15 s en una red reconocidamente inestable, o envuelve el logging con un debounce.
 
-**Excepciones de hilo UI** — `OnNetworkSourceDisconnect` se dispara desde el hilo del bus GStreamer. Usa `Dispatcher.Invoke` (WPF) / `Control.Invoke` (WinForms) / `MainThread.BeginInvokeOnMainThread` (MAUI) antes de tocar controles.
+**Excepciones de hilo UI** — `OnNetworkSourceDisconnect` se dispara desde el hilo del bus GStreamer. Use `Dispatcher.Invoke` (WPF) / `Control.Invoke` (WinForms) / `MainThread.BeginInvokeOnMainThread` (MAUI) antes de tocar controles.
 
-## Documentación Relacionada
+## Documentación relacionada
 
 - [Inmersión profunda en el protocolo RTSP](../network-streaming/rtsp.md) — cómo funciona RTSP, opciones de transporte y arquitectura de streaming
 - [Configuración de fuente de cámara RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md) — referencia de `IPCameraSourceSettings` / `RTSPSourceSettings`
@@ -347,8 +347,8 @@ var stats = fallbackSwitch.GetStatistics();
 - [Reproductor RTSP de Media Blocks](../../mediablocks/Guides/rtsp-player-csharp.md) — pipeline mono-cámara
 - [Grid RTSP multi-cámara (muro NVR)](../../mediablocks/Guides/multi-camera-rtsp-grid.md) — muro 4×4 con fallback por celda
 - [Guardar stream RTSP sin re-codificación](../../mediablocks/Guides/rtsp-save-original-stream.md) — archivar junto con la vista previa en vivo
-- [Salida servidor RTSP](../../mediablocks/RTSPServer/index.md) — resiliencia del lado servidor para tu propio stream
+- [Salida servidor RTSP](../../mediablocks/RTSPServer/index.md) — resiliencia del lado servidor para su propio stream
 - [Matriz de soporte de plataformas](../../platform-matrix.md) — detalles de códecs y aceleración por hardware
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos de código incluyendo demos RTSP de vista previa, grabación y MultiView.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos de código incluyendo demos RTSP de vista previa, grabación y MultiView.

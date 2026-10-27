@@ -24,7 +24,7 @@ primary_api_classes:
 
 # Guide de déploiement Apple iOS
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Vue d'ensemble
 
@@ -100,7 +100,7 @@ Vous pouvez ajouter ces paquets via le gestionnaire de paquets NuGet de votre ID
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <PackageReference Include="VisioForge.DotNet.Core" Version="2026.*" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 

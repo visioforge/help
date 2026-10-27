@@ -25,7 +25,7 @@ primary_api_classes:
 
 # Intégration de caméras USB3 Vision, GigE et GenICam
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button }
 
 !!! tip "Agents de codage IA : utilisez le serveur MCP VisioForge"
 
@@ -145,7 +145,7 @@ L'utilisation de GenTL avec VisioForge offre plusieurs avantages :
 Pour utiliser des caméras GenTL avec VisioForge :
 
 1. Installez le producteur GenTL approprié de votre fabricant de caméra
-2. Définissez la variable d'environnement `GENICAM_GENTL64_PATH` pour qu'elle pointe vers la bibliothèque du producteur
+2. Définissez la variable d'environnement `GENICAM_GENTL64_PATH` pour qu'elle pointe vers la bibliothèque du producteur. Le producteur doit correspondre à l'architecture de votre application : une application ARM64 a besoin du producteur ARM64 du fabricant, et un producteur x64 ne s'y charge pas : ses caméras manquent dans la liste, sans aucune erreur
 3. Assurez-vous que les caméras sont correctement connectées et reconnues par le producteur GenTL
 4. Utilisez les méthodes d'énumération GenICam standards de VisioForge pour découvrir les périphériques GenTL
 
@@ -185,7 +185,7 @@ sudo apt-get install libaravis-0.8-dev
 
 ### Windows
 
-Installez le paquet `VisioForge.CrossPlatform.GenICam.Windows.x64` dans votre projet via NuGet.
+Pour Windows x64, installez le paquet `VisioForge.CrossPlatform.GenICam.Windows.x64` dans votre projet via NuGet. Pour Windows sur ARM64 (.NET 5 ou version ultérieure), installez `VisioForge.CrossPlatform.GenICam.Windows.arm64` ; une application qui s'exécute sur x64 et sur ARM64 référence les deux paquets.
 
 #### Installation du pilote USB sur Windows
 
@@ -793,6 +793,7 @@ using System.Threading.Tasks;
 // GENICAM_GENTL64_PATH doit pointer vers la bibliothèque du producteur GenTL
 
 // Exemple : définir au démarrage de l'application ou dans l'environnement
+// Un producteur x64 : dans une application ARM64, pointez vers le producteur ARM64 du fabricant
 Environment.SetEnvironmentVariable("GENICAM_GENTL64_PATH", @"C:\Program Files\Basler\pylon 7\Runtime\x64");
 
 // Initialiser le SDK

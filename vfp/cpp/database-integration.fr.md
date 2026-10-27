@@ -15,7 +15,7 @@ primary_api_classes:
 
 ---
 
-# Guide de base de données pour le SDK Fingerprinting C++
+# Guide de base de données pour le Video Fingerprinting SDK C++
 
 Ce guide démontre comment intégrer le Video Fingerprinting SDK pour C++ avec divers systèmes de base de données pour un stockage et une récupération efficaces des empreintes.
 

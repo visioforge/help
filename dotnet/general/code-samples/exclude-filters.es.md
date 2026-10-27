@@ -1,5 +1,5 @@
 ---
-title: Cómo Excluir Filtros DirectShow en Aplicaciones .NET
+title: Cómo excluir filtros DirectShow en aplicaciones .NET
 description: Identifique y excluya filtros DirectShow problemáticos de pipelines multimedia en aplicaciones de captura, edición y reproducción de video .NET.
 tags:
   - Video Capture SDK
@@ -22,17 +22,17 @@ primary_api_classes:
 
 ---
 
-# Exclusión de Filtros DirectShow en Aplicaciones .NET
+# Exclusión de filtros DirectShow en aplicaciones .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción
 
-Al desarrollar aplicaciones multimedia en .NET, frecuentemente interactuarás con DirectShow — el framework de Microsoft para streaming multimedia. DirectShow usa una arquitectura basada en filtros donde componentes individuales (filtros) procesan datos de medios. Sin embargo, no todos los filtros son iguales. Algunos pueden causar problemas de rendimiento, problemas de compatibilidad o simplemente no cumplen con las necesidades específicas de tu aplicación.
+Al desarrollar aplicaciones multimedia en .NET, frecuentemente interactuará con DirectShow — el framework de Microsoft para streaming multimedia. DirectShow usa una arquitectura basada en filtros donde componentes individuales (filtros) procesan datos de medios. Sin embargo, no todos los filtros son iguales. Algunos pueden causar problemas de rendimiento, problemas de compatibilidad o simplemente no cumplen con las necesidades específicas de su aplicación.
 
-Esta guía explora cómo identificar y excluir efectivamente filtros DirectShow problemáticos del pipeline de procesamiento de tu aplicación.
+Esta guía explora cómo identificar y excluir efectivamente filtros DirectShow problemáticos del pipeline de procesamiento de su aplicación.
 
-## Entendiendo los Filtros DirectShow
+## Entender los filtros DirectShow
 
 Los filtros DirectShow son objetos COM que realizan operaciones específicas en datos de medios, tales como:
 
@@ -47,9 +47,9 @@ Cuando DirectShow construye un grafo de filtros, selecciona automáticamente fil
 - Introducir problemas de compatibilidad
 - Anular métodos de procesamiento preferidos
 
-## Problemas Comunes con Filtros DirectShow
+## Problemas comunes con filtros DirectShow
 
-### Conflictos de Decodificadores
+### Conflictos de decodificadores
 
 Múltiples decodificadores instalados en un sistema pueden competir para manejar los mismos formatos de medios. Por ejemplo:
 
@@ -57,7 +57,7 @@ Múltiples decodificadores instalados en un sistema pueden competir para manejar
 - Paquetes de códecs de terceros podrían introducir decodificadores de baja calidad
 - Decodificadores heredados podrían ser seleccionados sobre otros más nuevos y eficientes
 
-### Cuellos de Botella de Rendimiento
+### Cuellos de botella de rendimiento
 
 Algunos filtros pueden impactar significativamente el rendimiento:
 
@@ -65,7 +65,7 @@ Algunos filtros pueden impactar significativamente el rendimiento:
 - Filtros sin soporte de aceleración por hardware
 - Filtros de depuración que añaden sobrecarga de registro
 
-### Problemas de Compatibilidad
+### Problemas de compatibilidad
 
 No todos los filtros funcionan bien juntos:
 
@@ -73,34 +73,34 @@ No todos los filtros funcionan bien juntos:
 - Filtros con diferentes expectativas de formato de píxel
 - Implementación no estándar de interfaces
 
-## Cuándo Excluir Filtros DirectShow
+## Cuándo excluir filtros DirectShow
 
-Considera excluir filtros DirectShow cuando:
+Considere excluir filtros DirectShow cuando:
 
-1. Notas problemas de rendimiento inexplicables durante la reproducción o procesamiento de medios
-2. Tu aplicación se bloquea al manejar formatos de medios específicos
+1. Nota problemas de rendimiento inexplicables durante la reproducción o procesamiento de medios
+2. Su aplicación se bloquea al manejar formatos de medios específicos
 3. La calidad de los medios es inesperadamente baja
-4. Quieres imponer comportamiento consistente a través de diferentes sistemas de usuario
-5. Estás implementando un pipeline de procesamiento personalizado con requisitos específicos
+4. Quiere imponer comportamiento consistente a través de diferentes sistemas de usuario
+5. Está implementando un pipeline de procesamiento personalizado con requisitos específicos
 
-## Implementando Exclusión de Filtros
+## Implementar exclusión de filtros
 
 Nuestros SDKs .NET proporcionan una API directa para gestionar exclusiones de filtros DirectShow.
 
-### Limpiando la Lista Negra
+### Limpiar la lista negra
 
-Antes de configurar tu lista de exclusión, puede que quieras limpiar cualquier filtro previamente bloqueado:
+Antes de configurar su lista de exclusión, puede que quiera limpiar cualquier filtro previamente bloqueado:
 
 ```csharp
 // Limpiar cualquier filtro bloqueado existente
 videoProcessor.DirectShow_Filters_Blacklist_Clear();
 ```
 
-Esto asegura que estás comenzando con una pizarra limpia y tu lista de exclusión contiene solo los filtros que especificas explícitamente.
+Esto asegura que está comenzando con una pizarra limpia y su lista de exclusión contiene solo los filtros que especifica explícitamente.
 
-### Agregando Filtros a la Lista Negra
+### Agregar filtros a la lista negra
 
-Para excluir filtros específicos, usarás el método `DirectShow_Filters_Blacklist_Add` con el nombre exacto del filtro:
+Para excluir filtros específicos, usará el método `DirectShow_Filters_Blacklist_Add` con el nombre exacto del filtro:
 
 ```csharp
 // Excluir filtros específicos por nombre
@@ -142,47 +142,47 @@ public class EjemploExclusionFiltros
 }
 ```
 
-## Mejores Prácticas para Exclusión de Filtros
+## Mejores prácticas para exclusión de filtros
 
-### Identificar Antes de Excluir
+### Identificar antes de excluir
 
-Antes de bloquear filtros, identifica cuáles están causando problemas:
+Antes de bloquear filtros, identifique cuáles están causando problemas:
 
-1. Usa herramientas de diagnóstico DirectShow como GraphEdit o GraphStudio
-2. Habilita el registro en tu aplicación para rastrear qué filtros se están usando
-3. Prueba con diferentes configuraciones de filtros para aislar componentes problemáticos
+1. Use herramientas de diagnóstico DirectShow como GraphEdit o GraphStudio
+2. Habilite el registro en su aplicación para rastrear qué filtros se están usando
+3. Pruebe con diferentes configuraciones de filtros para aislar componentes problemáticos
 
-### Sé Específico con los Nombres de Filtros
+### Sea específico con los nombres de filtros
 
-Usa nombres de filtros exactos y sensibles a mayúsculas/minúsculas al excluir:
+Use nombres de filtros exactos y sensibles a mayúsculas/minúsculas al excluir:
 
 ```csharp
-// Correcto - usa nombre exacto del filtro
+// Correcto - usar nombre exacto del filtro
 videoProcessor.DirectShow_Filters_Blacklist_Add("ffdshow Video Decoder");
 
 // Incorrecto - puede excluir filtros no deseados o ninguno
 videoProcessor.DirectShow_Filters_Blacklist_Add("ffdshow");
 ```
 
-### Considera Enfoques Alternativos
+### Considere enfoques alternativos
 
 La exclusión de filtros no siempre es la mejor solución:
 
 - **Ajuste de mérito**: El SDK permite ajustar el mérito del filtro en lugar de exclusión completa
-- **Construcción explícita del grafo**: Construye el grafo de filtros manualmente con filtros preferidos
-- **Frameworks alternativos**: Considera MediaFoundation para aplicaciones más nuevas
+- **Construcción explícita del grafo**: Construya el grafo de filtros manualmente con filtros preferidos
+- **Frameworks alternativos**: Considere MediaFoundation para aplicaciones más nuevas
 
-## Solución de Problemas
+## Solución de problemas
 
-### El Filtro Sigue Siendo Usado a Pesar del Bloqueo
+### El filtro sigue siendo usado a pesar del bloqueo
 
 Si un filtro continúa siendo usado a pesar de estar bloqueado:
 
-1. Verifica que estás usando el nombre exacto del filtro (sensible a mayúsculas/minúsculas)
-2. Asegúrate de que la lista negra se establezca antes de construir el grafo de filtros
-3. Verifica si el filtro está siendo insertado a través de un método alternativo
+1. Verifique que está usando el nombre exacto del filtro (sensible a mayúsculas/minúsculas)
+2. Asegúrese de que la lista negra se establezca antes de construir el grafo de filtros
+3. Verifique si el filtro está siendo insertado a través de un método alternativo
 
-### Problemas de Rendimiento Después del Bloqueo
+### Problemas de rendimiento después del bloqueo
 
 Si el rendimiento se degrada después de bloquear ciertos filtros:
 
@@ -190,9 +190,9 @@ Si el rendimiento se degrada después de bloquear ciertos filtros:
 2. El filtro de reemplazo podría ser menos eficiente
 3. El grafo de filtros podría ser más complejo sin el filtro excluido
 
-### Bloqueos de Aplicación Después de la Exclusión de Filtros
+### Bloqueos de aplicación después de la exclusión de filtros
 
-Si tu aplicación se vuelve inestable después de la exclusión de filtros:
+Si su aplicación se vuelve inestable después de la exclusión de filtros:
 
 1. Algunos filtros podrían ser requeridos para operación adecuada
 2. La ruta de filtro alternativa podría tener problemas de compatibilidad
@@ -200,9 +200,9 @@ Si tu aplicación se vuelve inestable después de la exclusión de filtros:
 
 ## Conclusión
 
-Excluir filtros DirectShow problemáticos proporciona una herramienta poderosa para optimizar y estabilizar tus aplicaciones multimedia. Al identificar y bloquear cuidadosamente los filtros problemáticos, puedes asegurar comportamiento consistente, mejor rendimiento y procesamiento de medios de mayor calidad a través de diferentes sistemas de usuario.
+Excluir filtros DirectShow problemáticos proporciona una herramienta poderosa para optimizar y estabilizar sus aplicaciones multimedia. Al identificar y bloquear cuidadosamente los filtros problemáticos, puede asegurar comportamiento consistente, mejor rendimiento y procesamiento de medios de mayor calidad a través de diferentes sistemas de usuario.
 
-Recuerda probar exhaustivamente después de implementar exclusiones de filtros, ya que el grafo de filtros DirectShow puede comportarse diferentemente cuando ciertos componentes no están disponibles.
+Recuerde probar exhaustivamente después de implementar exclusiones de filtros, ya que el grafo de filtros DirectShow puede comportarse diferentemente cuando ciertos componentes no están disponibles.
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código y ejemplos de implementación.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código y ejemplos de implementación.

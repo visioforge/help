@@ -454,6 +454,12 @@ Consultez [examples.md](examples.md) pour le motif d'aide canonique réutilisé 
 
 ## Historique des versions
 
+### Version 2026.10.23
+
+- Mise à jour vers le cœur VLC v3.0.24 (décodeurs FFmpeg 8.1, correctifs de sécurité en amont)
+- Nouvelle version native Windows ARM64, `VisioForge_VLC_Source_arm64.ax`, disponible dans le package NuGet `VisioForge.DotNet.Core.Redist.VLC.arm64` (le programme d'installation reste x86/x64)
+- libVLC 3.0.24 n'inclut plus les modules RealRTSP, Schroedinger (Dirac) et SDL_image ni le script de playlist YouTube : les flux RealRTSP, la vidéo Dirac et les URL de pages YouTube ne s'ouvrent plus
+
 ### Version 2026.3.4
 
 - Mise à jour vers le cœur VLC v3.0.23

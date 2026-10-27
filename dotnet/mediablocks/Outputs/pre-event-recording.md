@@ -28,7 +28,7 @@ primary_api_classes:
 
 # Pre-Event Recording Block - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The `PreEventRecordingBlock` continuously buffers encoded video and audio frames in a memory-based circular (ring) buffer. When an event triggers (motion detection, alarm, API call), it flushes the buffered pre-event footage to a file and continues recording live frames for a configurable post-event duration. This creates complete event clips that include footage from before the trigger occurred.
 

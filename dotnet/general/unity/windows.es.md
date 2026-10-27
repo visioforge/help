@@ -17,15 +17,15 @@ primary_api_classes:
 
 # Compilar para Windows
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 Windows x64 es el target base del paquete Unity — se distribuye en cada variante de
 `.unitypackage` que produce el pipeline de build. Esta página cubre los Player Settings, el
-layout en disco y los problemas que puedes encontrar específicamente en Windows. Para el resto,
-consulta [Bootstrap y ciclo de vida](bootstrap.md).
+layout en disco y los problemas que puede encontrar específicamente en Windows. Para el resto,
+consulte [Bootstrap y ciclo de vida](bootstrap.md).
 
 ## Player Settings
 
@@ -38,11 +38,11 @@ consulta [Bootstrap y ciclo de vida](bootstrap.md).
 
 Si importaste el paquete con el diálogo **Apply**, el ajuste de proyecto obligatorio
 (`.NET Standard 2.1`) ya está en su sitio. El comportamiento predeterminado de Enter Play Mode
-de Unity (Domain + Scene Reload) está totalmente soportado — no necesitas desactivar Domain Reload.
+de Unity (Domain + Scene Reload) está totalmente soportado — no necesita desactivar Domain Reload.
 
 ## Organización en disco
 
-El paso de build `deploy-unity-natives.ps1` despliega el runtime de Windows en tu proyecto así:
+El paso de build `deploy-unity-natives.ps1` despliega el runtime de Windows en su proyecto así:
 
 | Ruta | Contenido |
 |---|---|
@@ -72,26 +72,26 @@ El `<game>.exe` resultante junto con su carpeta `_Data/` es todo el artefacto di
 
 ## Tamaño en disco
 
-El runtime de Windows añade aproximadamente **50 MB** de bibliotecas nativas a tu build
-(hasta ~30 MB si excluyes libav con `-SkipLibav` al reconstruir el paquete). Los ensamblados
+El runtime de Windows añade aproximadamente **50 MB** de bibliotecas nativas a su build
+(hasta ~30 MB si excluye libav con `-SkipLibav` al reconstruir el paquete). Los ensamblados
 gestionados añaden otros ~5 MB.
 
 ## Solución de problemas
 
 | Síntoma | Causa | Arreglo |
 |---|---|---|
-| `DllNotFoundException: gstreamer-1.0-0` en Play | `Assets/StreamingAssets/VisioForge/x64/` falta o está vacía. | Reimporta el `.unitypackage` con todos los ítems marcados, o revisa la línea de la Consola `[VisioForge] Native runtime not found at …` para la ruta resuelta. |
-| El pipeline se cuelga al arrancar, el log muestra dos llamadas `gst_init` | Una instalación de GStreamer en el `PATH` del sistema carga una segunda copia de `gstreamer-1.0-0.dll`. | `Configure()` ya limpia el `PATH` — confirma inspeccionando la Consola: se registra el conteo de entradas eliminadas. Si el conteo es 0 pero sigues viendo el síntoma, un lanzador externo está reinyectando GStreamer tras `Configure()`. |
-| `TypeLoadException` en la primera llamada al SDK | Api Compatibility Level es `.NET Framework` en lugar de `.NET Standard 2.1`. | Ajústalo a `.NET Standard 2.1` (Project Settings → Player → Other Settings → Configuration → Api Compatibility Level). |
-| Streams RTSPS / HTTPS fallan al conectar con error TLS | `SSL_CERT_FILE` no apunta al paquete CA incluido. | `Configure()` lo establece cuando `ca-certificates.crt` está presente en la carpeta de nativos. Un paquete CA ausente se registra como advertencia — vuelve a preparar el runtime mediante `deploy-unity-natives.ps1`. |
-| El Editor se cuelga en "Reloading domain" tras Play/Stop | Una versión del SDK anterior a esta release, previa a la incorporación del guard de recarga del Editor. | Actualiza a la versión más reciente del SDK — su guard de recarga detiene el hilo del bucle principal de GStreamer antes de cada recarga de dominio, por lo que Domain Reload es seguro. No necesitas desactivarlo. |
+| `DllNotFoundException: gstreamer-1.0-0` en Play | `Assets/StreamingAssets/VisioForge/x64/` falta o está vacía. | Reimporte el `.unitypackage` con todos los ítems marcados, o revise la línea de la Consola `[VisioForge] Native runtime not found at …` para la ruta resuelta. |
+| El pipeline se cuelga al arrancar, el log muestra dos llamadas `gst_init` | Una instalación de GStreamer en el `PATH` del sistema carga una segunda copia de `gstreamer-1.0-0.dll`. | `Configure()` ya limpia el `PATH` — confirme inspeccionando la Consola: se registra el conteo de entradas eliminadas. Si el conteo es 0 pero sigue viendo el síntoma, un lanzador externo está reinyectando GStreamer tras `Configure()`. |
+| `TypeLoadException` en la primera llamada al SDK | Api Compatibility Level es `.NET Framework` en lugar de `.NET Standard 2.1`. | Ajústelo a `.NET Standard 2.1` (Project Settings → Player → Other Settings → Configuration → Api Compatibility Level). |
+| Streams RTSPS / HTTPS fallan al conectar con error TLS | `SSL_CERT_FILE` no apunta al paquete CA incluido. | `Configure()` lo establece cuando `ca-certificates.crt` está presente en la carpeta de nativos. Un paquete CA ausente se registra como advertencia — vuelva a preparar el runtime mediante `deploy-unity-natives.ps1`. |
+| El Editor se cuelga en "Reloading domain" tras Play/Stop | Una versión del SDK anterior a esta release, previa a la incorporación del guard de recarga del Editor. | Actualice a la versión más reciente del SDK — su guard de recarga detiene el hilo del bucle principal de GStreamer antes de cada recarga de dominio, por lo que Domain Reload es seguro. No necesita desactivarlo. |
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 ### ¿Puedo usar IL2CPP en Windows?
 
 Sí — compila y se ejecuta. Mono es el predeterminado y es lo que ejercita la matriz CI del
-paquete. Cambia a IL2CPP solo si tienes una razón a nivel de proyecto (otros plugins que lo
+paquete. Cambie a IL2CPP solo si tiene una razón a nivel de proyecto (otros plugins que lo
 requieran, superficie de despliegue más pequeña). El mismo `link.xml` que se distribuye con el
 paquete preserva los tipos gestionados del SDK frente al stripping de IL2CPP en cualquier
 backend.

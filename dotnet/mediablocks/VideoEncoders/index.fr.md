@@ -26,7 +26,7 @@ primary_api_classes:
 
 # Encodage vidéo
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 L'encodage vidéo est le processus de conversion des données vidéo brutes en un format compressé. Ce processus est essentiel pour réduire la taille des fichiers vidéo, ce qui les rend plus faciles à stocker et à diffuser sur Internet. VisioForge Media Blocks SDK fournit une large gamme d'encodeurs vidéo prenant en charge divers formats et codecs.
 

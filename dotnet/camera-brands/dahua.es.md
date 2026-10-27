@@ -1,6 +1,6 @@
 ---
-title: Dahua RTSP en C# .NET - URLs, ONVIF y Código de Ejemplo
-description: Conecta cámaras Dahua en C# .NET con patrones de URL RTSP, soporte ONVIF y ejemplos de código para modelos IPC-HDW, IPC-HFW, NVR y DVR.
+title: Dahua RTSP en C# .NET - URLs, ONVIF y código de ejemplo
+description: Conecte cámaras Dahua en C# .NET con patrones de URL RTSP, soporte ONVIF y ejemplos de código para modelos IPC-HDW, IPC-HFW, NVR y DVR.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -20,11 +20,11 @@ tags:
 
 ---
 
-# Cómo Conectar una Cámara IP Dahua en C# .NET
+# Cómo conectar una cámara IP Dahua en C# .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Descripción de la Marca
+## Descripción de la marca
 
 **Dahua Technology** (Zhejiang Dahua Technology Co., Ltd.) es el segundo mayor fabricante de videovigilancia del mundo. Fundada en 2001 y con sede en Hangzhou, China, Dahua produce cámaras IP, NVRs, DVRs, sistemas de control de acceso e intercomunicadores de video. Las cámaras Dahua también se venden ampliamente bajo marcas OEM incluyendo Amcrest, Lorex y otras.
 
@@ -52,7 +52,7 @@ rtsp://[USUARIO]:[CONTRASEÑA]@[IP]:[PUERTO]/cam/realmonitor?channel=[CH]&subtyp
 - `channel` = número de canal de la cámara (1 para cámaras de un solo canal, 1-N para NVR/DVR)
 - `subtype` = tipo de flujo: 0 = flujo principal, 1 = subflujo, 2 = tercer flujo
 
-### Cámaras IP (Canal Único)
+### Cámaras IP (canal único)
 
 | Serie de Modelo | URL RTSP | Flujo | Audio |
 |-------------|----------|--------|-------|
@@ -63,7 +63,7 @@ rtsp://[USUARIO]:[CONTRASEÑA]@[IP]:[PUERTO]/cam/realmonitor?channel=[CH]&subtyp
 | SD (PTZ) | `rtsp://IP:554/cam/realmonitor?channel=1&subtype=0` | Principal | Sí |
 | DH-IPC-HF2100P | `rtsp://IP:1554/cam/realmonitor?channel=1&subtype=0` | Principal | Sí |
 
-### Formato de URL Simplificado
+### Formato de URL simplificado
 
 Muchas cámaras Dahua también aceptan un formato de URL más corto:
 
@@ -94,7 +94,7 @@ Las cámaras Amcrest y Lorex usan el mismo formato de URL RTSP que Dahua:
 
 ## Conexión con VisioForge SDK
 
-Usa la URL RTSP de tu cámara Dahua con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
+Use la URL RTSP de su cámara Dahua con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
 
 ```csharp
 // Dahua IPC-HDW series, main stream
@@ -103,13 +103,13 @@ var username = "admin";
 var password = "YourPassword";
 ```
 
-Para acceder al subflujo, usa `subtype=1` en su lugar.
+Para acceder al subflujo, use `subtype=1` en su lugar.
 
 ### Descubrimiento ONVIF
 
-Las cámaras Dahua proporcionan un sólido soporte ONVIF. Consulta la [guía de integración ONVIF](../mediablocks/Sources/index.md) para ejemplos de código de descubrimiento.
+Las cámaras Dahua proporcionan un sólido soporte ONVIF. Consulte la [guía de integración ONVIF](../mediablocks/Sources/index.md) para ejemplos de código de descubrimiento.
 
-## URLs de Captura y MJPEG
+## URLs de captura y MJPEG
 
 | Tipo | Patrón de URL | Notas |
 |------|-------------|-------|
@@ -120,41 +120,41 @@ Las cámaras Dahua proporcionan un sólido soporte ONVIF. Consulta la [guía de 
 | Captura CGI | `http://IP/cgi-bin/video.jpg` | Captura simple |
 | Imagen CGI | `http://IP/cgi-bin/jpg/image.cgi` | Captura alternativa |
 
-## Solución de Problemas
+## Solución de problemas
 
 ### Puerto 554 vs 1554
 
-Algunos modelos Dahua (especialmente la serie DH-IPC-HF) usan el puerto **1554** en lugar del estándar 554. Si la conexión falla en el puerto 554, prueba con 1554.
+Algunos modelos Dahua (especialmente la serie DH-IPC-HF) usan el puerto **1554** en lugar del estándar 554. Si la conexión falla en el puerto 554, pruebe con 1554.
 
 ### Métodos de autenticación
 
 - Dahua soporta autenticación RTSP tanto **básica** como **digest**
 - El firmware más reciente usa autenticación digest por defecto
 - El VisioForge SDK maneja ambos métodos automáticamente
-- Si usas URLs HTTP de captura, algunas requieren credenciales embebidas en la URL (parámetros `loginuse`/`loginpas`) mientras que el firmware más reciente usa autenticación HTTP básica/digest estándar
+- Si usa URLs HTTP de captura, algunas requieren credenciales embebidas en la URL (parámetros `loginuse`/`loginpas`) mientras que el firmware más reciente usa autenticación HTTP básica/digest estándar
 
 ### Desconexiones
 
-- Las cámaras Dahua pueden ser sensibles a la congestión de red. Usa transporte TCP para mayor fiabilidad.
-- Reduce la resolución del flujo principal o cambia al subflujo (`subtype=1`) para reducir el ancho de banda
-- Verifica la configuración de **Conexiones Máximas de Usuario** de la cámara (Configuración > Red > Conexión) -- el valor predeterminado es típicamente 10
+- Las cámaras Dahua pueden ser sensibles a la congestión de red. Use transporte TCP para mayor fiabilidad.
+- Reduzca la resolución del flujo principal o cambie al subflujo (`subtype=1`) para reducir el ancho de banda
+- Verifique la configuración de **Conexiones Máximas de Usuario** de la cámara (Configuración > Red > Conexión) -- el valor predeterminado es típicamente 10
 
 ### Las cámaras Amcrest/Lorex no se conectan
 
-Si tienes una cámara Amcrest o Lorex (OEM de Dahua), usa exactamente los mismos patrones de URL RTSP listados arriba. Los puertos y rutas predeterminados son idénticos a Dahua. La única diferencia puede estar en las credenciales predeterminadas:
+Si tiene una cámara Amcrest o Lorex (OEM de Dahua), use exactamente los mismos patrones de URL RTSP listados arriba. Los puertos y rutas predeterminados son idénticos a Dahua. La única diferencia puede estar en las credenciales predeterminadas:
 
 - **Predeterminado Amcrest:** admin / admin
 - **Predeterminado Lorex:** admin / (establecido durante configuración)
 
 ### Formato de flujo extra del DVR
 
-Al conectarte a canales del DVR, nota que `subtype=00` y `subtype=0` son equivalentes para el flujo principal. Algunos firmware más antiguos requieren el formato de dos dígitos (`01` en lugar de `1`).
+Al conectarse a canales del DVR, note que `subtype=00` y `subtype=0` son equivalentes para el flujo principal. Algunos firmware más antiguos requieren el formato de dos dígitos (`01` en lugar de `1`).
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 **¿Cuál es la URL RTSP predeterminada para cámaras Dahua?**
 
-La URL estándar es `rtsp://admin:password@IP_CAMARA:554/cam/realmonitor?channel=1&subtype=0` para el flujo principal. Usa `subtype=1` para el subflujo (menor resolución, menos ancho de banda).
+La URL estándar es `rtsp://admin:password@IP_CAMARA:554/cam/realmonitor?channel=1&subtype=0` para el flujo principal. Use `subtype=1` para el subflujo (menor resolución, menos ancho de banda).
 
 **¿Las cámaras Amcrest usan las mismas URLs RTSP que Dahua?**
 
@@ -162,13 +162,13 @@ Sí. Las cámaras Amcrest son fabricadas por Dahua y usan patrones de URL RTSP, 
 
 **¿Cómo accedo a múltiples cámaras en un NVR Dahua?**
 
-Cambia el parámetro `channel` en la URL RTSP. El canal 1 es la primera cámara, el canal 2 es la segunda, y así sucesivamente. Por ejemplo, `rtsp://IP:554/cam/realmonitor?channel=3&subtype=0` conecta a la tercera cámara en el flujo principal del NVR.
+Cambie el parámetro `channel` en la URL RTSP. El canal 1 es la primera cámara, el canal 2 es la segunda, y así sucesivamente. Por ejemplo, `rtsp://IP:554/cam/realmonitor?channel=3&subtype=0` conecta a la tercera cámara en el flujo principal del NVR.
 
 **¿Por qué mi cámara Dahua usa el puerto 1554 en lugar del 554?**
 
-Algunos modelos Dahua más antiguos, particularmente la serie DH-IPC-HF, usan por defecto el puerto RTSP 1554. Puedes cambiar esto en la interfaz web de la cámara en Configuración > Red > Puerto. Los modelos más recientes usan el puerto 554 por defecto.
+Algunos modelos Dahua más antiguos, particularmente la serie DH-IPC-HF, usan por defecto el puerto RTSP 1554. Puede cambiar esto en la interfaz web de la cámara en Configuración > Red > Puerto. Los modelos más recientes usan el puerto 554 por defecto.
 
-## Recursos Relacionados
+## Recursos relacionados
 
 - [Todas las Marcas de Cámaras — Directorio de URLs RTSP](index.md)
 - [Guía de Conexión Amcrest](amcrest.md) — OEM de Dahua, formato de URL idéntico

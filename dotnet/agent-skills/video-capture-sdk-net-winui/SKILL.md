@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK .NET into a WinUI 3 (Windows
 
 This skill helps you add **VisioForge Video Capture SDK .NET** to a Windows App SDK / WinUI 3 desktop application. It covers webcam, IP camera, screen, and DV-camera capture with preview, recording, and snapshot. WinUI 3 is the right host when you want native Windows 10/11 look-and-feel, MSIX/Store deployment, and the modern Fluent control set; for the traditional WPF stack use `video-capture-sdk-net-wpf`, for WinForms use `video-capture-sdk-net-winforms`. The SDK is Windows-only (DirectShow / Media Foundation under the hood).
 
-Pinned NuGet version: **`2026.10.20`** (matches the [official Simple Video Capture WinUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinUI/CSharp/Simple%20Video%20Capture%20Demo%20WinUI)). Newer 2026.x.x patch versions are drop-in compatible. Pinned Windows App SDK: **`Microsoft.WindowsAppSDK 1.8.251106002`**.
+Pinned NuGet version: **`2026.10.26`** (matches the [official Simple Video Capture WinUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinUI/CSharp/Simple%20Video%20Capture%20Demo%20WinUI)). Newer 2026.x.x patch versions are drop-in compatible. Pinned Windows App SDK: **`Microsoft.WindowsAppSDK 1.8.251106002`**.
 
 ## When to use this skill
 
@@ -40,7 +40,7 @@ WinUI 3 desktop apps use the plain **`Microsoft.NET.Sdk`** SDK (not `WindowsDesk
 <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 ```
 
-WinUI 3 apps are commonly pinned to **x64** rather than AnyCPU — both because Windows App SDK ships separate x64/x86/arm64 native binaries and because the redist packages used here are `.x64`-only. If you need x86 or arm64, swap the redist suffixes accordingly and add the matching RID to `<Platforms>` / `<RuntimeIdentifiers>`. `<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>` bundles the WinAppSDK runtime so end users don't have to install it separately.
+WinUI 3 apps are commonly pinned to **x64** rather than AnyCPU — both because Windows App SDK ships separate x64/x86/arm64 native binaries and because the redist packages used here are `.x64`-only. If you need x86, swap the redist suffixes to `.x86` and add the matching RID to `<Platforms>` / `<RuntimeIdentifiers>`. There is no arm64 swap: these redists, LAV included, ship no `.arm64` variant (LAV Filters have no upstream ARM64 build). For Windows ARM64 keep the app on x64 (it runs under emulation) or use `VideoCaptureCoreX`. `<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>` bundles the WinAppSDK runtime so end users don't have to install it separately.
 
 ### NuGet packages
 
@@ -48,13 +48,13 @@ WinUI requires **two** VisioForge packages — the SDK itself and the WinUI-spec
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="[2026.10.26]"/>
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoCapture.x64" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.MP4.x64" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoCapture.x64" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.MP4.x64" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 

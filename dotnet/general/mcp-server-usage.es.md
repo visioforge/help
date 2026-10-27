@@ -28,7 +28,7 @@ primary_api_classes:
 
 # Uso del Servidor MCP de VisioForge para Desarrollo Asistido por IA
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción al Servidor MCP de VisioForge
 
@@ -251,7 +251,7 @@ Obtener la guía de implementación completa para un escenario específico. Devu
 
 **Consultas de ejemplo:**
 - "Obtener la guía de implementación de Android"
-- "Mostrar pasos de implementación para plataforma Uno"
+- "Mostrar pasos de implementación para Uno Platform"
 - "Cómo implementar en macOS"
 
 #### `get_nuget_packages_snippet`
@@ -284,8 +284,8 @@ Obtener código de configuración específico de plataforma para copia de archiv
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
@@ -368,7 +368,7 @@ Siempre mencione su plataforma objetivo y framework de UI:
 
 - "Estoy usando MAUI en iOS..."
 - "Mi aplicación Avalonia se dirige a Windows y Linux..."
-- "Para mi aplicación de Plataforma Uno en Android..."
+- "Para mi aplicación de Uno Platform en Android..."
 
 ### 3. **Pregunte sobre Implementación Temprano**
 

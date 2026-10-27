@@ -1,6 +1,6 @@
 ---
 title: Despliegue de Media Player SDK .Net con NuGet y filtros
-description: Despliega aplicaciones de Media Player SDK con paquetes NuGet, dependencias de runtime, filtros DirectShow para Windows y entornos multiplataforma.
+description: Despliegue aplicaciones de Media Player SDK con paquetes NuGet, dependencias de runtime, filtros DirectShow para Windows y entornos multiplataforma.
 tags:
   - Media Player SDK
   - .NET
@@ -26,9 +26,9 @@ tags:
 
 # Guía de Despliegue de Media Player SDK .Net
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Esta guía completa cubre todos los escenarios de despliegue para el Media Player SDK .Net, asegurando que tus aplicaciones funcionen correctamente en diferentes entornos. Ya sea que estés desarrollando aplicaciones multiplataforma o soluciones específicas de Windows, esta guía proporciona los pasos necesarios para un despliegue exitoso.
+Esta guía completa cubre todos los escenarios de despliegue para el Media Player SDK .Net, asegurando que sus aplicaciones funcionen correctamente en diferentes entornos. Ya sea que esté desarrollando aplicaciones multiplataforma o soluciones específicas de Windows, esta guía proporciona los pasos necesarios para un despliegue exitoso.
 
 ## Descripción General de Tipos de Motor
 
@@ -36,13 +36,13 @@ El Media Player SDK .Net ofrece dos tipos principales de motor, cada uno diseña
 
 ### Motor MediaPlayerCoreX (Multiplataforma)
 
-MediaPlayerCoreX es nuestra solución multiplataforma que funciona en múltiples sistemas operativos. Para instrucciones detalladas de despliegue específicas de este motor, consulta la [Guía de Despliegue Multiplataforma](../deployment-x/index.md) principal.
+MediaPlayerCoreX es nuestra solución multiplataforma que funciona en múltiples sistemas operativos. Para instrucciones detalladas de despliegue específicas de este motor, consulte la [Guía de Despliegue Multiplataforma](../deployment-x/index.md) principal.
 
 ### Motor MediaPlayerCore (Solo Windows)
 
-El motor MediaPlayerCore está optimizado específicamente para entornos Windows. Cuando despliegues aplicaciones que usan este motor en computadoras sin el SDK preinstalado, debes incluir los componentes necesarios del SDK con tu aplicación.
+El motor MediaPlayerCore está optimizado específicamente para entornos Windows. Cuando despliegue aplicaciones que usan este motor en computadoras sin el SDK preinstalado, debe incluir los componentes necesarios del SDK con su aplicación.
 
-> **Importante**: Para aplicaciones AnyCPU, debes desplegar tanto los redistribuibles x86 como x64 para asegurar compatibilidad en diferentes arquitecturas de sistema.
+> **Importante**: Para aplicaciones AnyCPU, debe desplegar tanto los redistribuibles x86 como x64 para asegurar compatibilidad en diferentes arquitecturas de sistema.
 
 ## Opciones de Despliegue
 
@@ -54,7 +54,7 @@ Hay tres métodos principales para desplegar los componentes del Media Player SD
 
 ## Despliegue con Paquetes NuGet
 
-Los paquetes NuGet proporcionan el método de despliegue más simple, manejando automáticamente la inclusión de archivos necesarios en la carpeta de tu aplicación durante el proceso de compilación.
+Los paquetes NuGet proporcionan el método de despliegue más simple, manejando automáticamente la inclusión de archivos necesarios en la carpeta de su aplicación durante el proceso de compilación.
 
 ### Paquetes NuGet Requeridos
 
@@ -63,9 +63,11 @@ Los paquetes NuGet proporcionan el método de despliegue más simple, manejando 
 * **Paquete Base del SDK**:
   * [Versión x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x86/)
   * [Versión x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x64/)
+  * [Versión ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.arm64/) (.NET 5 o posterior)
 * **Paquete Media Player SDK**:
   * [Versión x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x86/)
   * [Versión x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x64/)
+  * ARM64: aún no disponible
 
 #### Paquetes Específicos de Características (Añadir según sea necesario)
 
@@ -85,6 +87,7 @@ Los paquetes NuGet proporcionan el método de despliegue más simple, manejando 
 * **Paquete Fuente VLC** (para fuentes de archivo/cámara IP):
   * [Versión x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x86/)
   * [Versión x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x64/)
+  * [Versión ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.arm64/)
 
 ##### Soporte de Formatos de Audio
 
@@ -97,6 +100,8 @@ Los paquetes NuGet proporcionan el método de despliegue más simple, manejando 
 * **Paquete Filtros LAV**:
   * [Versión x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/)
   * [Versión x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
+
+> **Windows ARM64:** los filtros LAV existen solo para x86 y x64. No hay una versión ARM64 oficial, por lo que el SDK no incluye un paquete LAV para ARM64. `LAV` es el valor predeterminado de `Source_Mode` en `MediaPlayerCore`, así que una aplicación `MediaPlayerCore` que se ejecuta como proceso ARM64 no puede reproducir archivos. Las aplicaciones AnyCPU también suelen ejecutarse allí como ARM64. En Windows ARM64, establezca `Source_Mode` en `MediaPlayerSourceMode.File_VLC` y agregue el paquete VLC para ARM64 (la reproducción funciona, pero los filtros de VisioForge que todavía no tienen versión ARM64, como YUV2RGB, aún generan `OnError`), use `MediaPlayerCoreX` o Media Blocks SDK .NET, o compile la aplicación para x64 (`PlatformTarget` con el valor `x64`; se ejecuta en emulación).
 
 ## Instaladores Silenciosos Automáticos
 
@@ -134,32 +139,32 @@ Para escenarios donde prefieras despliegue basado en instaladores, el SDK ofrece
   * [Instalador x86](https://files.visioforge.com/redists_net/redist_dotnet_lav_x86.exe)
   * [Instalador x64](https://files.visioforge.com/redists_net/redist_dotnet_lav_x64.exe)
 
-> **Nota**: Para desinstalar cualquier paquete instalado, ejecuta el ejecutable con privilegios administrativos usando los parámetros: `/x //`
+> **Nota**: Para desinstalar cualquier paquete instalado, ejecute el ejecutable con privilegios administrativos usando los parámetros: `/x //`
 
 ## Instalación Manual
 
-Para escenarios de despliegue avanzados que requieren control preciso sobre la instalación de componentes, sigue estos pasos:
+Para escenarios de despliegue avanzados que requieren control preciso sobre la instalación de componentes, siga estos pasos:
 
 ### Paso 1: Dependencias de Runtime
 
-* **Con Privilegios Administrativos**: Instala el runtime VC++ 2022 (v143) (x86/x64) y las DLLs de runtime OpenMP usando ejecutables redistribuibles o módulos MSM.
-* **Sin Privilegios Administrativos**: Copia las DLLs de runtime VC++ 2022 (v143) (x86/x64) y runtime OpenMP directamente a la carpeta de tu aplicación.
+* **Con Privilegios Administrativos**: Instale el runtime VC++ 2022 (v143) (x86/x64) y las DLLs de runtime OpenMP usando ejecutables redistribuibles o módulos MSM.
+* **Sin Privilegios Administrativos**: Copie las DLLs de runtime VC++ 2022 (v143) (x86/x64) y runtime OpenMP directamente a la carpeta de su aplicación.
 
 ### Paso 2: Componentes Principales
 
-* Copia las DLLs VisioForge_MFP/VisioForge_MFPX (o versiones x64) desde el directorio Redist\Filters a la carpeta de tu aplicación.
+* Copie las DLLs VisioForge_MFP/VisioForge_MFPX (o versiones x64) desde el directorio Redist\Filters a la carpeta de su aplicación.
 
 ### Paso 3: Ensamblados .NET
 
-* Ya sea copia los ensamblados .NET a la carpeta de tu aplicación o instálalos en el Caché de Ensamblados Global (GAC).
+* Copie los ensamblados .NET a la carpeta de su aplicación o instálelos en el Caché de Ensamblados Global (GAC).
 
 ### Paso 4: Filtros DirectShow
 
-* Copia y registra en COM los filtros DirectShow del SDK usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5) u otro método adecuado.
+* Copie y registre en COM los filtros DirectShow del SDK usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5) u otro método adecuado.
 
 ### Paso 5: Configuración del Entorno
 
-* Añade la carpeta que contiene los filtros a la variable de entorno PATH del sistema si el ejecutable de tu aplicación está ubicado en un directorio diferente.
+* Añada la carpeta que contiene los filtros a la variable de entorno PATH del sistema si el ejecutable de su aplicación está ubicado en un directorio diferente.
 
 ## Configuración de Filtros DirectShow
 
@@ -243,7 +248,7 @@ El SDK usa varios filtros DirectShow para funcionalidad específica. A continuac
 
 ### Consejo de Registro de Filtros
 
-Para simplificar el proceso de registro COM para todos los filtros DirectShow en un directorio, coloca el archivo "reg_special.exe" del redistribuible del SDK en la carpeta de filtros y ejecútalo con privilegios administrativos.
+Para simplificar el proceso de registro COM para todos los filtros DirectShow en un directorio, coloque el archivo "reg_special.exe" del redistribuible del SDK en la carpeta de filtros y ejecútelo con privilegios administrativos.
 
 ---
-Para más ejemplos de código y ejemplos, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para más ejemplos de código y ejemplos, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

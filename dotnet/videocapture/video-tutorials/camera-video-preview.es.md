@@ -1,6 +1,6 @@
 ---
-title: Vista Previa de Webcam en C# .NET con Captura de Frames
-description: Implementa vista previa de video de webcam en tiempo real con captura de frames en C# .NET con ejemplos de código funcionales para WinForms, WPF y Console.
+title: Vista previa de webcam en C# .NET con captura de frames
+description: Implemente vista previa de video de webcam en tiempo real con captura de frames en C# .NET con ejemplos de código funcionales para WinForms, WPF y Console.
 tags:
   - Video Capture SDK
   - .NET
@@ -20,37 +20,37 @@ primary_api_classes:
 
 ---
 
-# Implementación de Vista Previa de Video de Webcam con Captura de Frames en C#
+# Implementación de vista previa de video de webcam con captura de frames en C#
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Descripción General
+## Descripción general
 
 Este tutorial demuestra cómo crear una aplicación profesional de vista previa de video de webcam con la capacidad de capturar frames individuales como imágenes. Esta funcionalidad es esencial para desarrollar aplicaciones que requieren análisis de imagen, capacidades de captura de instantáneas o interfaces de cámara personalizadas.
 
-## Tutorial de Video Paso a Paso
+## Tutorial de video paso a paso
 
-Mira nuestro video detallado que cubre todos los aspectos de la integración de webcam:
+Mire nuestro video detallado que cubre todos los aspectos de la integración de webcam:
 
 <div class="video-wrapper">
   <iframe src="https://www.youtube.com/embed/kxC6JrJddek?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
-## Primeros Pasos
+## Primeros pasos
 
-Antes de sumergirte en el código, necesitarás configurar tu entorno de desarrollo con las dependencias necesarias. El código fuente completo está disponible en GitHub como referencia:
+Antes de sumergirse en el código, necesitará configurar su entorno de desarrollo con las dependencias necesarias. El código fuente completo está disponible en GitHub como referencia:
 
 [Código fuente en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/video-preview-webcam-frame-capture)
 
-## Guía de Implementación
+## Guía de implementación
 
-### Dependencias Requeridas
+### Dependencias requeridas
 
-Primero, asegúrate de tener instalados los siguientes paquetes NuGet:
+Primero, asegúrese de tener instalados los siguientes paquetes NuGet:
 
 - Redistribuibles de captura de video [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-### Ejemplo de Código Fuente
+### Ejemplo de código fuente
 
 La siguiente implementación en C# demuestra cómo:
 
@@ -134,17 +134,17 @@ namespace video_preview_webcam_frame_capture
 }
 ```
 
-## Desglose del Código
+## Desglose del código
 
 ### Inicialización
 
 La aplicación comienza creando una nueva instancia de `VideoCaptureCore` durante la carga del formulario, que sirve como la interfaz principal para interactuar con dispositivos de webcam.
 
-### Selección de Dispositivo
+### Selección de dispositivo
 
-Cuando el usuario hace clic en el botón Iniciar, la aplicación selecciona automáticamente los primeros dispositivos de captura de video y audio disponibles. En un entorno de producción, podrías querer proporcionar una selección desplegable para usuarios con múltiples cámaras.
+Cuando el usuario hace clic en el botón Iniciar, la aplicación selecciona automáticamente los primeros dispositivos de captura de video y audio disponibles. En un entorno de producción, podría querer proporcionar una selección desplegable para usuarios con múltiples cámaras.
 
-### Modo de Vista Previa
+### Modo de vista previa
 
 La aplicación está configurada en modo `VideoPreview`, que habilita la visualización en tiempo real sin grabar el stream a disco. Esto es ideal para aplicaciones que solo necesitan mostrar la salida de la cámara.
 
@@ -152,7 +152,7 @@ La aplicación está configurada en modo `VideoPreview`, que habilita la visuali
 
 La funcionalidad de captura de frame demuestra cómo guardar el frame de video actual como una imagen JPEG con un nivel de calidad especificado. La imagen se guarda en la carpeta Imágenes del usuario por defecto.
 
-## Aplicaciones Avanzadas
+## Aplicaciones avanzadas
 
 Este código puede extenderse para soportar varias aplicaciones del mundo real:
 
@@ -162,9 +162,9 @@ Este código puede extenderse para soportar varias aplicaciones del mundo real:
 - Visión por computadora y procesamiento de imágenes
 - Sistemas de seguridad y vigilancia
 
-## Recursos Adicionales
+## Recursos adicionales
 
 - [Grabación Pre-Evento](../guides/pre-event-recording.md) — almacenar video de cámara en buffer y guardar clips con detección de movimiento o disparador manual
 - [Captura de Webcam a MP4](video-capture-webcam-mp4.md) — grabar video de webcam a archivo MP4
 
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para explorar más ejemplos de código y técnicas de implementación avanzada.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para explorar más ejemplos de código y técnicas de implementación avanzada.

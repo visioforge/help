@@ -39,11 +39,11 @@ primary_api_classes:
 
 # Construire un lecteur vidéo en VB.NET
 
-Ce guide vous accompagne dans la construction d'une application de lecteur vidéo complète en VB.NET (Visual Basic .NET) en utilisant [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net). Le lecteur prend en charge MP4, AVI, MKV, WMV, WebM et de nombreux autres formats avec des contrôles de lecture, le positionnement dans la timeline et le réglage du volume.
+Ce guide vous accompagne dans la construction d'une application de lecteur vidéo complète en VB.NET (Visual Basic .NET) en utilisant [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net). Le lecteur prend en charge MP4, AVI, MKV, WMV, WebM et de nombreux autres formats avec des contrôles de lecture, le positionnement dans la timeline et le réglage du volume.
 
 ## Pourquoi utiliser Media Player SDK .Net pour VB.NET
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) fournit une lecture vidéo VB.NET robuste avec :
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) fournit une lecture vidéo VB.NET robuste avec :
 
 - Prise en charge de tous les principaux formats vidéo (MP4, AVI, MKV, WMV, WebM, MOV, TS)
 - Prise en charge des formats audio (MP3, AAC, WAV, WMA, FLAC)
@@ -55,9 +55,9 @@ Ce guide vous accompagne dans la construction d'une application de lecteur vidé
 ## Paquets NuGet requis
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 ## Exemple complet de lecteur vidéo VB.NET
@@ -290,4 +290,4 @@ Incluez les paquets redist NuGet listés dans la section de référence NuGet ci
 - [Mode boucle et plage de position](loop-and-position-range.md) — lecture en boucle et sélection de segments pour les deux moteurs
 - [Enregistrer une vidéo webcam en VB.NET](../../videocapture/guides/record-webcam-vb-net.md) — application de capture webcam en Visual Basic .NET
 - [Exemples de code](../code-samples/index.md) — exemples d'extraction d'image, listes de lecture et lecture inversée
-- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — page produit et téléchargements
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) — page produit et téléchargements

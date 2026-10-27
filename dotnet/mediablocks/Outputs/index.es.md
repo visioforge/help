@@ -1,5 +1,5 @@
 ---
-title: Bloques de Salida en C# .NET - MP4, MKV, WebM, RTMP
+title: Bloques de salida en C# .NET - MP4, MKV, WebM, RTMP
 description: Guarde video a MP4, AVI, MKV, WebM o transmita vía RTMP y HLS con los bloques de salida de VisioForge Media Blocks SDK y ejemplos en C#.
 sidebar_label: Salidas
 tags:
@@ -20,15 +20,15 @@ primary_api_classes:
 
 ---
 
-# Bloques de Salida - VisioForge Media Blocks SDK .Net
+# Bloques de salida - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Los bloques de salida, también conocidos como sumideros, son responsables de escribir datos de medios a archivos, flujos de red u otros destinos. Generalmente son los últimos bloques en cualquier cadena de procesamiento de medios. VisioForge Media Blocks SDK .Net proporciona una colección completa de bloques de salida para varios formatos y protocolos.
 
 Esta guía cubre bloques de salida de archivos como MP4, AVI, WebM, MKV, y bloques de streaming de red para protocolos como RTMP (usado por YouTube y Facebook Live).
 
-## Bloque de Salida AVI
+## Bloque de salida AVI
 
 El `AVIOutputBlock` se usa para crear archivos AVI. Combina codificadores de video y audio con un sumidero de archivo para producir archivos `.avi`.
 
@@ -117,7 +117,7 @@ Para verificar disponibilidad:
 
 Primariamente Windows. La disponibilidad en otras plataformas depende del soporte de plugins GStreamer para muxing AVI y los codificadores elegidos.
 
-## Bloque de Salida Facebook Live
+## Bloque de salida Facebook Live
 
 El `FacebookLiveOutputBlock` está diseñado para transmitir video y audio a Facebook Live usando RTMP. Usa internamente codificadores H.264 video y AAC audio.
 
@@ -202,7 +202,7 @@ Asegúrese de que `FacebookLiveSink`, `H264Encoder`, y `AACEncoder` estén dispo
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte RTMP GStreamer y disponibilidad de codificadores).
 
-## Bloque de Salida FLAC
+## Bloque de salida FLAC
 
 El `FLACOutputBlock` se usa para crear archivos de audio FLAC (Free Lossless Audio Codec). Toma datos de audio sin comprimir, los codifica usando un codificador FLAC, y los guarda en un archivo `.flac`.
 
@@ -269,7 +269,7 @@ Para verificar si el bloque y sus dependencias están disponibles:
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte de codificador FLAC GStreamer y sumidero de archivo).
 
-## Bloque de Salida M4A
+## Bloque de salida M4A
 
 El `M4AOutputBlock` crea archivos M4A (MPEG-4 Audio), comúnmente usados para audio AAC codificado. Usa un codificador de audio AAC y un sumidero MP4 para producir archivos `.m4a`.
 
@@ -346,7 +346,7 @@ Para verificar disponibilidad:
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte de muxer MP4 GStreamer y codificador AAC).
 
-## Bloque de Salida MKV
+## Bloque de salida MKV
 
 El `MKVOutputBlock` se usa para crear archivos Matroska (MKV). MKV es un formato de contenedor flexible que puede contener varios flujos de video, audio y subtítulos. Este bloque combina codificadores de video y audio especificados con un sumidero MKV.
 
@@ -445,7 +445,7 @@ Para verificar disponibilidad (ejemplo con H.264 y AAC):
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte de muxer MKV GStreamer y codificadores elegidos).
 
-## Bloque de Salida MP3
+## Bloque de salida MP3
 
 El `MP3OutputBlock` se usa para crear archivos de audio MP3. Codifica datos de audio sin comprimir usando un codificador MP3 y los guarda en un archivo `.mp3`.
 
@@ -515,7 +515,7 @@ Para verificar si el bloque y sus dependencias están disponibles:
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte de codificador MP3 GStreamer (ej. LAME) y sumidero de archivo).
 
-## Bloque de Salida MP4
+## Bloque de salida MP4
 
 El `MP4OutputBlock` se usa para crear archivos MP4. Puede combinar varios codificadores de video y audio con un sumidero MP4 para producir archivos `.mp4`.
 
@@ -617,7 +617,7 @@ Para verificar disponibilidad (ejemplo con H.264 y AAC):
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte de muxer MP4 GStreamer y codificadores elegidos).
 
-## Bloque de Salida OGG Opus
+## Bloque de salida OGG Opus
 
 El `OGGOpusOutputBlock` se usa para crear archivos de audio Ogg Opus. Codifica datos de audio sin comprimir usando un codificador Opus y los multiplexa en un contenedor Ogg, guardando en un archivo `.opus` o `.ogg`.
 
@@ -685,7 +685,7 @@ Para verificar si el bloque y sus dependencias están disponibles:
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte de muxer Ogg GStreamer y codificador Opus).
 
-## Bloque de Salida OGG Speex
+## Bloque de salida OGG Speex
 
 El `OGGSpeexOutputBlock` se usa para crear archivos de audio Ogg Speex, típicamente para voz. Codifica datos de audio sin comprimir usando un codificador Speex, los multiplexa en un contenedor Ogg, y guarda en un archivo `.spx` o `.ogg`.
 
@@ -753,7 +753,7 @@ Para verificar si el bloque y sus dependencias están disponibles:
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte de muxer Ogg GStreamer y codificador Speex).
 
-## Bloque de Salida OGG Vorbis
+## Bloque de salida OGG Vorbis
 
 El `OGGVorbisOutputBlock` se usa para crear archivos de audio Ogg Vorbis. Codifica datos de audio sin comprimir usando un codificador Vorbis, los multiplexa en un contenedor Ogg, y guarda en un archivo `.ogg`.
 
@@ -821,7 +821,7 @@ Para verificar si el bloque y sus dependencias están disponibles:
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte de muxer Ogg GStreamer y codificador Vorbis).
 
-## Bloque de Salida WebM
+## Bloque de salida WebM
 
 El `WebMOutputBlock` se usa para crear archivos WebM, típicamente conteniendo video VP8 o VP9 y audio Vorbis. Combina un codificador de video VPX y un codificador de audio Vorbis con un sumidero WebM.
 
@@ -921,7 +921,7 @@ Para verificar disponibilidad:
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte de muxer WebM GStreamer, codificador VPX, y codificador Vorbis).
 
-## Bloque de Salida Separado
+## Bloque de salida separado
 
 El `SeparateOutputBlock` proporciona una forma flexible de configurar pipelines de salida personalizados, permitiendo especificar codificadores de video y audio distintos, procesadores, y un escritor/sumidero final. Usa fuentes puente (`BridgeVideoSourceBlock`, `BridgeAudioSourceBlock`) para derivar del pipeline principal, habilitando grabación independientemente de vista previa u otro procesamiento.
 
@@ -970,10 +970,10 @@ graph LR;
 ### Código de muestra
 
 ```csharp
-// Asumiendo 'pipeline' es tu MediaBlocksPipeline principal
-// Asumiendo 'mainVideoSourceOutputPad' y 'mainAudioSourceOutputPad' son salidas de tus fuentes principales
+// Asumiendo 'pipeline' es su MediaBlocksPipeline principal
+// Asumiendo 'mainVideoSourceOutputPad' y 'mainAudioSourceOutputPad' son salidas de sus fuentes principales
 
-// 1. Configurar Sumideros Puente en tu pipeline principal
+// 1. Configurar Sumideros Puente en su pipeline principal
 // BridgeVideoSinkSettings/BridgeAudioSinkSettings requieren un nombre de canal + información de formato (VideoFrameInfoX / AudioInfoX).
 var videoInfo = new VideoFrameInfoX(1920, 1080, new VideoFrameRate(30));
 var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 48000, 2);
@@ -1040,7 +1040,7 @@ Los componentes `VideoEncoder`, `AudioEncoder`, `Sink`, y `Writer` deben constru
 
 Depende de los componentes usados dentro de la configuración `SeparateOutput`. Generalmente multiplataforma si los elementos GStreamer están disponibles.
 
-## Bloque de Salida WMV
+## Bloque de salida WMV
 
 El `WMVOutputBlock` se usa para crear archivos Windows Media Video (WMV). Usa codificadores WMV video (`WMVEncoder`) y WMA audio (`WMAEncoder`) con un sumidero ASF (Advanced Systems Format) para producir archivos `.wmv`.
 
@@ -1132,7 +1132,7 @@ Para verificar disponibilidad:
 
 Primariamente Windows. La disponibilidad en otras plataformas depende del soporte de plugins GStreamer para muxing ASF, WMV, y codificadores WMA (que pueden ser limitados fuera de Windows).
 
-## Bloque de Salida YouTube
+## Bloque de salida YouTube
 
 El `YouTubeOutputBlock` está diseñado para transmitir video y audio a YouTube Live usando RTMP. Utiliza internamente codificadores H.264 video y AAC audio.
 
@@ -1219,7 +1219,7 @@ Es crucial configurar configuraciones de codificador (bitrate, resolución, fram
 
 Windows, macOS, Linux, iOS, Android (La disponibilidad de plataforma depende del soporte RTMP GStreamer y disponibilidad de codificadores H.264/AAC).
 
-## Bloque de Salida Enhanced FLV
+## Bloque de salida Enhanced FLV
 
 El `EFLVOutputBlock` crea archivos Enhanced FLV (Flash Video) con soporte para Enhanced RTMP (V2). A diferencia del contenedor FLV clásico, el muxer Enhanced FLV señaliza los códecs mediante valores FOURCC, por lo que puede transportar códecs de video modernos como H.265/HEVC junto a H.264, y admite múltiples pistas de video y audio. Combina codificadores de video y audio por pista con un sumidero Enhanced FLV para producir archivos `.flv`.
 
@@ -1305,13 +1305,13 @@ Para verificar disponibilidad:
 
 Windows, macOS, Linux, iOS, Android (depende de la disponibilidad del muxer Enhanced FLV y de los plugins de codificador elegidos).
 
-## Bloque de Grabación Pre-Evento
+## Bloque de grabación pre-evento
 
 El `PreEventRecordingBlock` implementa grabación de búfer circular (pre-evento). Almacena continuamente video y audio codificados en memoria y escribe clips de eventos a disco al activarse, incluyendo material de antes de que ocurriera el evento.
 
 Para documentación completa, configuraciones, máquina de estados y ejemplos de código, consulte la página dedicada de [Bloque de Grabación Pre-Evento](pre-event-recording.md).
 
-## Bloque de Salida Separado Pre-Evento
+## Bloque de salida separado pre-evento
 
 El `PreEventSeparateOutputBlock` combina el patrón de sub-pipeline independiente del [Bloque de Salida Separado](#bloque-de-salida-separado) con la [grabación pre-evento (búfer circular)](pre-event-recording.md). En lugar de enrutar los streams codificados hacia un muxer + sumidero de archivo, los enruta hacia un `PreEventRecordingBlock`, de modo que la rama pre-evento graba clips de eventos (incluyendo material previo al disparo) de forma independiente de la cadena principal de vista previa/procesamiento. Deriva del pipeline principal mediante fuentes puente (`BridgeVideoSourceBlock`, `BridgeAudioSourceBlock`).
 
@@ -1349,7 +1349,7 @@ graph LR;
 ### Código de muestra
 
 ```csharp
-// Asumiendo 'pipeline' es tu MediaBlocksPipeline principal
+// Asumiendo 'pipeline' es su MediaBlocksPipeline principal
 // Asumiendo que los sumideros puente para las rutas principales de video/audio ya están configurados
 // con los nombres de canal "pe_video_bridge" / "pe_audio_bridge".
 
@@ -1398,10 +1398,10 @@ El `PreEventSeparateOutputBlock` escribe los segmentos pre-evento y principal en
 
 Depende de los componentes usados dentro de la configuración `SeparateOutput` y del `PreEventRecordingBlock` (codificadores, procesadores). Generalmente multiplataforma si los elementos GStreamer requeridos están disponibles.
 
-## Ver También
+## Ver también
 
 - [Primeros Pasos con Media Blocks](../GettingStarted/index.md) — conceptos básicos de pipeline, instalación y configuración del primer proyecto
 - [Arquitectura de Pipeline](../GettingStarted/pipeline.md) — ciclo de vida de MediaBlocksPipeline, conexión de bloques y manejo de errores
 - [Codificadores de Video](../VideoEncoders/index.md) — bloques de codificación H.264, HEVC, VP8/VP9, AV1 y acelerados por GPU
 - [Fuentes de Medios](../Sources/index.md) — bloques de fuente de cámara, pantalla, archivo y red
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas

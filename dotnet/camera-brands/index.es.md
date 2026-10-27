@@ -1,6 +1,6 @@
 ---
-title: URLs RTSP de Cámaras IP — Directorio de 62 Marcas en C#
-description: Directorio completo de URLs RTSP para 62 marcas de cámaras IP. Conecta Hikvision, Dahua, Axis, Uniview, EZVIZ, Wisenet, Arlo y más usando VisioForge .NET SDK.
+title: URLs RTSP de cámaras IP — Directorio de 62 marcas en C#
+description: Directorio completo de URLs RTSP para 62 marcas de cámaras IP. Conecte Hikvision, Dahua, Axis, Uniview, EZVIZ, Wisenet, Arlo y más usando VisioForge .NET SDK.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -21,24 +21,24 @@ primary_api_classes:
 
 ---
 
-# Guía de Conexión de Cámaras IP por Marca
+# Guía de conexión de cámaras IP por marca
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Conectar cámaras IP en C# .NET es sencillo cuando conoces el patrón de URL RTSP correcto para tu marca de cámara. Cada fabricante utiliza formatos de URL, puertos y métodos de autenticación ligeramente diferentes.
+Conectar cámaras IP en C# .NET es sencillo cuando conoce el patrón de URL RTSP correcto para su marca de cámara. Cada fabricante utiliza formatos de URL, puertos y métodos de autenticación ligeramente diferentes.
 
 Este directorio proporciona **patrones de URL RTSP específicos por marca**, ejemplos de código de conexión usando VisioForge SDK y consejos de solución de problemas para los fabricantes de cámaras IP más populares.
 
-## Cómo Funcionan las Conexiones RTSP de Cámaras
+## Cómo funcionan las conexiones RTSP de cámaras
 
 La mayoría de las cámaras IP modernas exponen flujos de video mediante el **protocolo RTSP (Real-Time Streaming Protocol)** en el puerto 554. El flujo general de conexión es:
 
-1. Determinar la dirección IP de tu cámara (mediante descubrimiento ONVIF, tabla de asignaciones DHCP o utilidad del fabricante)
+1. Determinar la dirección IP de su cámara (mediante descubrimiento ONVIF, tabla de asignaciones DHCP o utilidad del fabricante)
 2. Construir la URL RTSP usando el patrón específico de la marca
 3. Autenticarse con las credenciales de la cámara
 4. Conectar y renderizar el flujo de video
 
-### Código de Inicio Rápido
+### Código de inicio rápido
 
 Conéctate a cualquier cámara RTSP usando uno de los tres enfoques del VisioForge SDK:
 
@@ -103,9 +103,9 @@ Conéctate a cualquier cámara RTSP usando uno de los tres enfoques del VisioFor
     await pipeline.StartAsync();
     ```
 
-Reemplaza la URL RTSP con el patrón específico de tu marca de las páginas siguientes.
+Reemplace la URL RTSP con el patrón específico de su marca de las páginas siguientes.
 
-### ¿Qué SDK Debo Elegir?
+### ¿Qué SDK debo elegir?
 
 | SDK | Ideal Para | Plataformas |
 |-----|----------|-----------|
@@ -113,11 +113,11 @@ Reemplaza la URL RTSP con el patrón específico de tu marca de las páginas sig
 | **VideoCaptureCore** | Proyectos solo Windows, .NET Framework legacy | Windows |
 | **Media Blocks** | Pipelines avanzados, cadenas de procesamiento personalizadas | Windows, macOS, Linux, Android, iOS |
 
-**VideoCaptureCoreX** es recomendado para la mayoría de los proyectos nuevos. Usa **Media Blocks** cuando necesites construir pipelines de procesamiento personalizados con múltiples fuentes, filtros o salidas.
+**VideoCaptureCoreX** es recomendado para la mayoría de los proyectos nuevos. Use **Media Blocks** cuando necesite construir pipelines de procesamiento personalizados con múltiples fuentes, filtros o salidas.
 
-## Marcas de Cámaras
+## Marcas de cámaras
 
-### Marcas Destacadas (Guías Completas)
+### Marcas destacadas (guías completas)
 
 | Marca | Sede | Segmento de Mercado | Guía |
 |-------|-------------|----------------|-------|
@@ -184,7 +184,7 @@ Reemplaza la URL RTSP con el patrón específico de tu marca de las páginas sig
 | **Tenda** | Shenzhen, China | Consumidor / Económico | [Guía de Conexión](tenda.md) |
 | **Mercusys** | Shenzhen, China (TP-Link) | Consumidor / Económico | [Guía de Conexión](mercusys.md) |
 
-### Patrones Comunes de URL RTSP por Marca
+### Patrones comunes de URL RTSP por marca
 
 Para referencia rápida, estos son los patrones de URL RTSP principales para marcas populares de cámaras:
 
@@ -255,7 +255,7 @@ Para referencia rápida, estos son los patrones de URL RTSP principales para mar
 
 ## Descubrimiento ONVIF
 
-La mayoría de las cámaras IP modernas soportan **ONVIF (Open Network Video Interface Forum)**, que permite el descubrimiento automático de cámaras en tu red. VisioForge SDK soporta descubrimiento ONVIF -- consulta nuestra [guía de integración ONVIF](../mediablocks/Sources/index.md) para más detalles.
+La mayoría de las cámaras IP modernas soportan **ONVIF (Open Network Video Interface Forum)**, que permite el descubrimiento automático de cámaras en su red. VisioForge SDK soporta descubrimiento ONVIF -- consulte nuestra [guía de integración ONVIF](../mediablocks/Sources/index.md) para más detalles.
 
 ## Comenzar
 
@@ -278,7 +278,7 @@ La mayoría de las cámaras IP modernas soportan **ONVIF (Open Network Video Int
     dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
     ```
 
-### Proyectos de Ejemplo
+### Proyectos de ejemplo
 
 Ejemplos funcionales completos para integración de cámaras IP:
 
@@ -286,7 +286,7 @@ Ejemplos funcionales completos para integración de cámaras IP:
 - [Grabación de Cámara IP a MP4](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-capture-mp4) — Grabar flujos a archivo
 - [Todos los Ejemplos del SDK .NET](https://github.com/visioforge/.Net-SDK-s-samples) — Repositorio completo de ejemplos
 
-## Recursos Relacionados
+## Recursos relacionados
 
 - [Documentación del Bloque Fuente RTSP](../mediablocks/Sources/index.md)
 - [Tutorial de Vista Previa de Cámara IP](../videocapture/video-tutorials/ip-camera-preview.md)

@@ -22,13 +22,13 @@ primary_api_classes:
 
 ---
 
-# Android Media Player SDK - Professional Video Playback Solution
+# Media Player SDK .NET for Android - Professional Video Playback Solution
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview
 
-The VisioForge Android Player SDK enables developers to integrate professional video playback, streaming, and editing into native Android apps. Built on GStreamer, it provides a comprehensive API for feature-rich applications.
+VisioForge Media Player SDK .NET enables developers to integrate professional video playback, streaming, and real-time effects into native Android apps. Built on GStreamer, it provides a comprehensive API for feature-rich applications.
 
 The SDK supports extensive video formats, codecs, and streaming protocols.
 
@@ -36,21 +36,21 @@ The SDK supports extensive video formats, codecs, and streaming protocols.
 
 ### Video Playback and Streaming
 
-Our Android player SDK delivers powerful playback with hardware acceleration, ensuring optimal performance for high-resolution content. Developers integrate the player using an intuitive API with support for MP4, MKV, AVI, WebM, and other formats.
+On Android, Media Player SDK .NET delivers powerful playback with hardware acceleration, ensuring optimal performance for high-resolution content. Developers integrate the player using an intuitive API with support for MP4, MKV, AVI, WebM, and other formats.
 
 The player provides precise control with play, pause, seek, and navigation. Variable playback speeds and frame-by-frame navigation give complete control over the viewing experience.
 
 Stream content from various sources including HTTP Live Streaming (HLS), RTSP, and RTMP. Adaptive bitrate streaming adjusts quality based on bandwidth for mobile users.
 
-### Video Editing and Effects
+### Video Effects and Overlays
 
-The SDK includes video editing capabilities for creating editor applications. Apply real-time effects including brightness, contrast, and saturation adjustments.
+Apply real-time effects during playback, including brightness, contrast, and saturation adjustments.
 
 Overlay text, images, and SVG graphics with control over positioning and transparency for picture-in-picture, watermarks, and interactive elements.
 
 ### Native Android and Cross-Platform Support
 
-The SDK integrates seamlessly with Android Studio, supporting Java and Kotlin development. The VideoView component embeds into any Android layout.
+You build the app in C# with .NET for Android (Visual Studio or Rider). The VideoView component embeds into any Android layout.
 
 The SDK also supports .NET MAUI and Avalonia for cross-platform development, enabling code sharing across Android, iOS, Windows, macOS, and Linux.
 
@@ -70,7 +70,7 @@ The SDK is optimized for mobile with attention to battery and memory. Hardware a
 
 ### Installation and Setup
 
-Integrate the VisioForge Android Player SDK using NuGet. Add the package reference to your project. For .NET MAUI, configure to use the VideoView control.
+Integrate VisioForge Media Player SDK .NET using NuGet. Add the package reference to your project. For .NET MAUI, configure to use the VideoView control.
 
 Setup instructions are in our documentation.
 
@@ -129,7 +129,7 @@ private async void StopVideo() => await _player.StopAsync();
 
 ### Sample Applications
 
-GitHub samples demonstrate SDK capabilities: [Media Player sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Android/MediaPlayer) with playback, streaming, and editing.
+GitHub samples demonstrate SDK capabilities: [Media Player sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Android/MediaPlayer) with playback and streaming.
 
 ### Alternative: Media Blocks SDK
 
@@ -137,24 +137,23 @@ The [Media Blocks SDK](https://github.com/visioforge/.Net-SDK-s-samples/tree/mas
 
 ## Use Cases
 
-The Android Player SDK is ideal for:
+On Android, Media Player SDK .NET is ideal for:
 
 - **Video Streaming Apps**: Adaptive streaming support
 - **Educational Platforms**: Video lessons and e-learning
 - **Media Players**: Native mediaplayer apps with subtitle support
 - **Social Media**: User-generated content playback
-- **Video Editors**: Mobile editing with real-time preview
 - **Security**: Surveillance apps with live streaming
 
 The SDK supports Android TV and picture-in-picture mode on Android 8.0+.
 
 ## Licensing
 
-The Android Player SDK is available under a commercial license. A single license covers all supported platforms. Trial versions are available.
+Media Player SDK .NET is available under a commercial license. A single license covers all supported platforms. Trial versions are available.
 
 ## Conclusion
 
-The VisioForge Android Player SDK provides professional video playback for Android applications. With streaming, editing, and advanced features, developers can create powerful media apps quickly.
+VisioForge Media Player SDK .NET provides professional video playback for Android applications. With streaming, real-time effects, and overlays, developers can create powerful media apps quickly.
 
 For more information, visit our [product page](https://www.visioforge.com/media-player-sdk-net) or [API documentation](https://api.visioforge.org/dotnet/api/index.html).
 

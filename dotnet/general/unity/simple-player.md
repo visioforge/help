@@ -24,8 +24,8 @@ primary_api_classes:
 
 # Play a media file in Unity
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
 
 There are two ways to play a local file or a network URL in Unity, and the package ships a ready
 scene for each. Both render into a Unity `RawImage` and run on **Windows**, **Android**, **macOS

@@ -1,5 +1,5 @@
 ---
-title: VisioForge .NET SDKs — Requisitos del Sistema y Plataformas
+title: VisioForge .NET SDKs — Requisitos del sistema y plataformas
 description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 16.4+, Android 9+. .NET 6–9, ARM64, requisitos de memoria 4K. Compatible con WPF, WinForms, MAUI y Avalonia.
 tags:
   - Video Capture SDK
@@ -15,23 +15,23 @@ tags:
 
 ---
 
-# Requisitos del Sistema para SDKs .NET
+# Requisitos del sistema para SDKs .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Esta guía detalla los requisitos del sistema y compatibilidad de plataformas para la suite de SDKs .NET de VisioForge, diseñados para aplicaciones de procesamiento y reproducción de video de alto rendimiento.
 
-## Descripción General
+## Descripción general
 
 Desbloquea potentes capacidades de video multiplataforma con los SDKs .NET de VisioForge, totalmente compatibles con Windows, Linux, macOS, Android e iOS. Nuestros SDKs proporcionan soporte robusto para .NET Framework, .NET Core y .NET 5+ moderno (incluyendo .NET 8 LTS y .NET 9), permitiendo una integración perfecta con WinForms, WPF, WinUI 3, Avalonia, .NET MAUI y Xamarin. Desarrolla aplicaciones de video de alto rendimiento con paradigmas familiares de C# en todos los sistemas operativos principales y frameworks de UI.
 
 > **Nota Importante**: Mientras que los usuarios de Windows se benefician de nuestro paquete instalador dedicado, los desarrolladores que trabajan en otras plataformas deben utilizar el método de distribución de paquetes NuGet para la implementación.
 
-## Requisitos del Entorno de Desarrollo
+## Requisitos del entorno de desarrollo
 
-Las siguientes secciones describen los requisitos específicos para configurar tu entorno de desarrollo al trabajar con nuestros SDKs.
+Las siguientes secciones describen los requisitos específicos para configurar su entorno de desarrollo al trabajar con nuestros SDKs.
 
-### Sistemas Operativos para Desarrollo
+### Sistemas operativos para desarrollo
 
 El desarrollo de aplicaciones usando nuestros SDKs es soportado en las siguientes plataformas:
 
@@ -52,7 +52,7 @@ El desarrollo de aplicaciones usando nuestros SDKs es soportado en las siguiente
 * macOS 12 (Monterey) o más reciente
 * Procesadores Apple Silicon (M1/M2/M3) e Intel soportados
 
-### Requisitos de Hardware
+### Requisitos de hardware
 
 Para una experiencia de desarrollo óptima, recomendamos:
 
@@ -61,11 +61,11 @@ Para una experiencia de desarrollo óptima, recomendamos:
 * Almacenamiento: SSD con al menos 10 GB de espacio libre
 * Gráficos: GPU compatible con DirectX 11 (Windows) o GPU compatible con Metal (macOS)
 
-## Plataformas de Despliegue Objetivo
+## Plataformas de despliegue objetivo
 
-Nuestros SDKs pueden desplegarse en una variedad de plataformas, permitiendo una amplia distribución de tus aplicaciones.
+Nuestros SDKs pueden desplegarse en una variedad de plataformas, permitiendo una amplia distribución de sus aplicaciones.
 
-### Plataformas de Escritorio
+### Plataformas de escritorio
 
 #### Windows
 
@@ -86,7 +86,7 @@ Nuestros SDKs pueden desplegarse en una variedad de plataformas, permitiendo una
 * Arquitecturas Intel y Apple Silicon soportadas nativamente
 * Rosetta 2 no requerido para dispositivos Apple Silicon
 
-### Plataformas Móviles
+### Plataformas móviles
 
 #### Android
 
@@ -113,7 +113,7 @@ Nuestros SDKs proporcionan amplia compatibilidad con varias implementaciones de 
 * .NET Framework 4.8
 * .NET Framework 4.8.1
 
-### .NET Moderno
+### .NET moderno
 
 * .NET Core 3.1 (LTS)
 * .NET 5.0
@@ -122,17 +122,17 @@ Nuestros SDKs proporcionan amplia compatibilidad con varias implementaciones de 
 * .NET 8.0 (LTS)
 * .NET 9.0
 
-### Xamarin (Legacy)
+### Xamarin (legacy)
 
 * Xamarin.iOS 12.0+
 * Xamarin.Android 9.0+
 * Xamarin.Mac 5.0+
 
-## Integración con Frameworks de UI
+## Integración con frameworks de UI
 
 Los SDKs se integran con una amplia variedad de frameworks de UI, permitiendo desarrollo de aplicaciones flexible:
 
-### Frameworks Específicos de Windows
+### Frameworks específicos de Windows
 
 * Windows Forms (WinForms)
   * .NET Framework 4.6.1+ y .NET Core 3.1+
@@ -149,7 +149,7 @@ Los SDKs se integran con una amplia variedad de frameworks de UI, permitiendo de
   * Componentes modernos de Fluent Design
   * Integración con Windows App SDK
 
-### Frameworks Multiplataforma
+### Frameworks multiplataforma
 
 * .NET MAUI
   * Desarrollo unificado para Windows, macOS, iOS y Android
@@ -161,7 +161,7 @@ Los SDKs se integran con una amplia variedad de frameworks de UI, permitiendo de
   * Basado en XAML con paradigmas familiares
   * Compatible con Windows, Linux, macOS
 
-### Frameworks Específicos para Móviles
+### Frameworks específicos para móviles
 
 * UI Nativa de iOS
   * Integración con UIKit
@@ -178,11 +178,11 @@ Los SDKs se integran con una amplia variedad de frameworks de UI, permitiendo de
   * Soporte para Activities y Fragments
   * Compatibilidad con componentes de Material Design
 
-## Métodos de Distribución
+## Métodos de distribución
 
 ### Paquetes NuGet
 
-Nuestros SDKs están disponibles como paquetes NuGet, simplificando la integración con tu flujo de trabajo de desarrollo.
+Nuestros SDKs están disponibles como paquetes NuGet, simplificando la integración con su flujo de trabajo de desarrollo.
 
 ### Instalador de Windows
 
@@ -193,9 +193,9 @@ Para desarrolladores de Windows, ofrecemos un paquete instalador dedicado que in
 * Componentes de integración con Visual Studio
 * Herramientas y utilidades para desarrolladores
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
-### Requisitos de Memoria
+### Requisitos de memoria
 
 * Huella de memoria base: ~50MB
 * Procesamiento de video: 100-500MB adicionales dependiendo de la resolución y complejidad
@@ -207,17 +207,17 @@ Para desarrolladores de Windows, ofrecemos un paquete instalador dedicado que in
 * Efectos en tiempo real: 10-40% adicional dependiendo de la complejidad
 * Aceleración de hardware recomendada para entornos de producción
 
-### Requisitos de Almacenamiento
+### Requisitos de almacenamiento
 
 * Instalación del SDK: ~250MB
 * Caché en tiempo de ejecución: ~100MB
 * Archivos de procesamiento temporal: Hasta varios GB dependiendo de la carga de trabajo
 
-## Licenciamiento y Despliegue
+## Licenciamiento y despliegue
 
-Consulta nuestra página de [Licenciamiento](https://www.visioforge.com/es/licensing) para más información sobre las diferentes opciones de licenciamiento disponibles para nuestros SDKs.
+Consulte nuestra página de [Licenciamiento](https://www.visioforge.com/es/licensing) para más información sobre las diferentes opciones de licenciamiento disponibles para nuestros SDKs.
 
-## Recursos de Soporte Técnico
+## Recursos de soporte técnico
 
 Proporcionamos amplios recursos para asegurar una implementación exitosa:
 
@@ -226,11 +226,11 @@ Proporcionamos amplios recursos para asegurar una implementación exitosa:
 * Consejos de solución de problemas y optimización
 * Canales de soporte directo para desarrolladores licenciados
 
-## Ejemplos de Código y Muestras
+## Ejemplos de código y muestras
 
-Visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para una extensa colección de ejemplos de código que demuestran características del SDK y patrones de implementación en las plataformas soportadas.
+Visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para una extensa colección de ejemplos de código que demuestran características del SDK y patrones de implementación en las plataformas soportadas.
 
-## Actualizaciones y Mantenimiento
+## Actualizaciones y mantenimiento
 
 * Actualizaciones regulares del SDK con nuevas características y optimizaciones
 * Parches de seguridad y correcciones de errores

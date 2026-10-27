@@ -24,7 +24,7 @@ tags:
 
 # Uno Platform Implementation and Deployment Guide
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to VisioForge SDKs for Uno Platform
 
@@ -107,8 +107,8 @@ Add the following packages to your project:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
@@ -121,8 +121,8 @@ Add platform-specific redistributable packages to your project:
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
   <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
@@ -130,7 +130,7 @@ Add platform-specific redistributable packages to your project:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
@@ -146,7 +146,7 @@ Additionally, you'll need to add the Java Bindings Library. Clone it from our [G
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
@@ -154,7 +154,7 @@ Additionally, you'll need to add the Java Bindings Library. Clone it from our [G
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
@@ -217,31 +217,31 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
   
   <!-- VisioForge Core References -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.20]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.26]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.26]"/>
   </ItemGroup>
   
   <!-- Windows Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
   </ItemGroup>
   
   <!-- Android Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
     <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
   </ItemGroup>
   
   <!-- iOS Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
   </ItemGroup>
   
   <!-- macOS Catalyst Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>
   </ItemGroup>
   
   <!-- macOS: Copy native libraries to app bundle -->

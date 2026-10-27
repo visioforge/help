@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Capture vidéo au format DV dans des applications .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 DV (Digital Video) est un format vidéo numérique de qualité professionnelle largement utilisé dans l'industrie de la diffusion et du cinéma. Initialement développé pour les caméscopes, le DV offre une qualité exceptionnelle tout en conservant des tailles de fichier raisonnables, ce qui le rend adapté aux environnements de production vidéo grand public comme professionnels.
 

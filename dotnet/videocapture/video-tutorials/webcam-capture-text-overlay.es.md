@@ -1,6 +1,6 @@
 ---
 title: Superposición de Texto en Video de Webcam (C# .NET)
-description: Captura video de webcam y agrega superposiciones de texto personalizadas en C# .NET con instrucciones paso a paso, ejemplos de código completos y técnicas.
+description: Capture video de webcam y agregue superposiciones de texto personalizadas en C# .NET con instrucciones paso a paso, ejemplos de código completos y técnicas.
 tags:
   - Video Capture SDK
   - .NET
@@ -22,11 +22,11 @@ primary_api_classes:
 
 ---
 
-# Agregando Superposiciones de Texto a Captura de Video de Webcam en C# .NET
+# Agregar superposiciones de texto a captura de video de webcam en C# .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Tutorial en Video Paso a Paso
+## Tutorial en video paso a paso
 
 El siguiente video demuestra el proceso de captura de video de una webcam y agregado de superposiciones de texto usando C# y .NET:
 
@@ -34,25 +34,25 @@ El siguiente video demuestra el proceso de captura de video de una webcam y agre
   <iframe src="https://www.youtube.com/embed/D_JPo9A9HMA?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
-## Acceso al Código Fuente
+## Acceso al código fuente
 
-Accede al código fuente completo para esta implementación en nuestro repositorio de GitHub:
+Acceda al código fuente completo para esta implementación en nuestro repositorio de GitHub:
 
 [Código fuente en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/video-capture-text-overlay)
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Para implementar esta funcionalidad en tu aplicación, necesitarás instalar los siguientes paquetes NuGet:
+Para implementar esta funcionalidad en su aplicación, necesitará instalar los siguientes paquetes NuGet:
 
-- **Dependencias de Captura de Video:**
+- **Dependencias de captura de video:**
   - [versión x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
   - [versión x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
   
-- **Dependencias de Procesamiento MP4:**
+- **Dependencias de procesamiento MP4:**
   - [versión x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/)
   - [versión x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
 
-## Descripción General de Implementación
+## Descripción general de implementación
 
 Este tutorial demuestra cómo:
 
@@ -63,7 +63,7 @@ Este tutorial demuestra cómo:
 
 La implementación usa Windows Forms para la interfaz de usuario, pero la funcionalidad core de captura y superposición de texto funciona con cualquier framework de UI .NET.
 
-## Implementación Completa en C#
+## Implementación completa en C#
 
 El siguiente ejemplo de código demuestra una implementación completa de captura de webcam con funcionalidad de superposición de texto:
 
@@ -147,7 +147,7 @@ namespace video_capture_text_overlay
         private void Form1_Load(object sender, EventArgs e)
         {
             // Inicializar el VideoCaptureCore con el control de vista de video
-            // VideoView1 debe ser un control en tu formulario que implemente IVideoView
+            // VideoView1 debe ser un control en su formulario que implemente IVideoView
             videoCapture1 = new VideoCaptureCore(VideoView1 as IVideoView);
             
             // Opciones de inicialización adicionales:
@@ -158,29 +158,29 @@ namespace video_capture_text_overlay
 }
 ```
 
-## Detalles Clave de Implementación
+## Detalles clave de implementación
 
-### Selección y Configuración de Dispositivo
+### Selección y configuración de dispositivo
 
-El código selecciona automáticamente la primera cámara y dispositivo de micrófono disponibles para captura de video y audio. En un entorno de producción, podrías querer proporcionar a los usuarios opciones para seleccionar dispositivos específicos.
+El código selecciona automáticamente la primera cámara y dispositivo de micrófono disponibles para captura de video y audio. En un entorno de producción, podría querer proporcionar a los usuarios opciones para seleccionar dispositivos específicos.
 
-### Propiedades de Superposición de Texto
+### Propiedades de superposición de texto
 
 La implementación de superposición de texto soporta varias opciones de personalización:
 
-- **Contenido de Texto**: Cualquier cadena puede mostrarse en el video
-- **Posición**: Especifica las coordenadas exactas para colocación del texto
-- **Color**: Elige cualquier color para la visualización del texto
-- **Tamaño y Estilo**: Personaliza fuente, tamaño y estilo (opciones comentadas)
+- **Contenido de texto**: Cualquier cadena puede mostrarse en el video
+- **Posición**: Especifique las coordenadas exactas para colocación del texto
+- **Color**: Elija cualquier color para la visualización del texto
+- **Tamaño y estilo**: Personalice fuente, tamaño y estilo (opciones comentadas)
 
-### Operación Asíncrona
+### Operación asíncrona
 
-La implementación usa el patrón async/await de C# para operaciones de video sin bloqueo, asegurando que tu aplicación permanezca receptiva durante la captura.
+La implementación usa el patrón async/await de C# para operaciones de video sin bloqueo, asegurando que su aplicación permanezca receptiva durante la captura.
 
-### Salida de Archivo
+### Salida de archivo
 
-El video capturado con superposición de texto se guarda como archivo MP4 en la carpeta Videos del usuario. El formato de salida y ubicación pueden personalizarse según los requisitos de tu aplicación.
+El video capturado con superposición de texto se guarda como archivo MP4 en la carpeta Videos del usuario. El formato de salida y ubicación pueden personalizarse según los requisitos de su aplicación.
 
-## Recursos Adicionales
+## Recursos adicionales
 
-Para más ejemplos y muestras de código relacionadas con procesamiento y manipulación de video, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para más ejemplos y muestras de código relacionadas con procesamiento y manipulación de video, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

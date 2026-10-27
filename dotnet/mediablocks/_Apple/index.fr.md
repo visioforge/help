@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Blocs plateforme Apple - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Cette section couvre les MediaBlocks spécifiquement optimisés pour les plateformes Apple (iOS, macOS, tvOS).
 
@@ -222,7 +222,7 @@ macOS, iOS. Sur iOS, les éléments Metal ne font partie que du runtime de l'app
 
 ### Bloc Metal Deinterlace
 
-Le `MetalDeinterlaceBlock` supprime les artefacts d'entrelacement sur le GPU à l'aide du framework Apple Metal. Il prend en charge les algorithmes bob, weave, linéaire et greedy-H (adaptatif au mouvement).
+Le `MetalDeinterlaceBlock` supprime les artefacts d'entrelacement sur le GPU à l'aide du framework Apple Metal. Il prend en charge les algorithmes bob, weave, linéaire et greedy-H (adaptatif au mouvement). La sortie est progressive : ses caps indiquent `interlace-mode=progressive` et les images ne portent aucun indicateur d'entrelacement, de sorte que les éléments en aval la traitent comme une vidéo progressive.
 
 #### Informations sur le bloc
 
@@ -364,7 +364,7 @@ macOS, iOS. Sur iOS, les éléments Metal ne font partie que du runtime de l'app
 
 ### Bloc Metal Transform
 
-Le `MetalTransformBlock` applique des opérations de retournement, de rotation et de rognage sur le GPU à l'aide du framework Apple Metal.
+Le `MetalTransformBlock` applique des opérations de retournement, de rotation et de rognage sur le GPU à l'aide du framework Apple Metal. Le rognage est appliqué en premier, dans les coordonnées de l'image source, puis la rotation : l'image de sortie a la taille rognée, avec la largeur et la hauteur inversées pour `Clockwise`, `CounterClockwise`, `UpperLeftDiagonal` et `UpperRightDiagonal`.
 
 #### Informations sur le bloc
 

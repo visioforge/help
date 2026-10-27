@@ -16,7 +16,7 @@ primary_api_classes:
 
 # Implémenter des effets de zoom en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -106,7 +106,7 @@ private void SDK_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
 
 ### Note sur les moteurs X
 
-Sur les moteurs X multiplateformes (`VideoCaptureCoreX`, `MediaPlayerCoreX`), le tampon arrive dans `VideoFrameXBufferEventArgs`. Les dimensions plates résident directement sur `e.Frame.Width` / `Height` / `Stride`, et les images sont généralement en BGRA. Pour des calculs de pixels lourds, enveloppez le tampon dans `SKPixmap` (SkiaSharp est déjà une dépendance transitive des moteurs X).
+Sur les moteurs X multiplateformes (`VideoCaptureCoreX`, `MediaPlayerCoreX`), le tampon arrive dans `VideoFrameXBufferEventArgs`. Les dimensions plates résident directement sur `e.Frame.Width` / `Height` / `Stride`, et les images arrivent au format du grabber du moteur — RGBA sur `VideoCaptureCoreX`, RGB sur `MediaPlayerCoreX` (vérifiez `e.Frame.Format` avant d'envelopper). Pour des calculs de pixels lourds, enveloppez le tampon dans `SKPixmap` (SkiaSharp est déjà une dépendance transitive des moteurs X).
 
 ## Considérations de performance
 

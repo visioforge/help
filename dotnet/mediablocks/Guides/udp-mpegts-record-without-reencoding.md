@@ -35,7 +35,7 @@ primary_api_classes:
 
 # How to Record a UDP MPEG-TS Stream to File Without Re-encoding
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!!info Demo Sample
 For a complete, runnable example see the [UDP RAW Capture Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/UDP%20RAW%20Capture%20Demo).
@@ -99,14 +99,14 @@ graph LR;
 Add the Media Blocks SDK to your project via NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
 ```
 
 On Windows you also need the native runtime packages. For recording (muxing) you need the core runtime; the Libav package supplies the muxers:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 ```
 
 For macOS, Linux, Android, and iOS runtime packages and platform-specific notes, see the [Deployment Guide](../../deployment-x/index.md).

@@ -24,7 +24,7 @@ primary_api_classes:
 
 # Adding Text Overlays to Webcam Video Capture in C# .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Video Tutorial Walkthrough
 

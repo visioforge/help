@@ -38,7 +38,7 @@ primary_api_classes:
 
 # Salida MPEG-TS
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El módulo de salida MPEG-TS (Transport Stream) en el SDK de VisioForge proporciona funcionalidad para crear archivos de flujo de transporte MPEG con varias opciones de codificación de video y audio. Esta guía explica cómo configurar y usar la clase `MPEGTSOutput` efectivamente.
 

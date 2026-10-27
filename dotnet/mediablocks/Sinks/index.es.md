@@ -1,5 +1,5 @@
 ---
-title: Bloques Sink - Guardar a MP4, MKV y Transmitir en C# .NET
+title: Bloques sink - guardar a MP4, MKV y transmitir en C# .NET
 description: Escriba medios a MP4, MKV, AVI o transmita vía RTMP, HLS, SRT con los bloques destino de VisioForge Media Blocks SDK en C# .NET.
 tags:
   - Media Blocks SDK
@@ -22,7 +22,7 @@ sidebar_label: Sinks
 
 # Sinks
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Los sinks son bloques que guardan o transmiten datos. Son los últimos bloques en el pipeline.
 Opcionalmente, algunos sinks pueden tener pines de salida para pasar datos al siguiente bloque en el pipeline.
@@ -73,7 +73,7 @@ Los siguientes sinks de utilidad están disponibles:
 - [Sink de Búfer](#sink-de-bufer)
 - [Sink de Cámara Virtual](#sink-de-camara-virtual)
 
-## Sinks de Archivo
+## Sinks de archivo
 
 ### ASF
 
@@ -823,7 +823,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Sinks de Transmisión en Red
+## Sinks de transmisión en red
 
 ### RTMP
 
@@ -1018,7 +1018,7 @@ graph LR;
 
 #### Código de ejemplo
 
-##### Transmisión HLS Básica (modo Auto)
+##### Transmisión HLS básica (modo Auto)
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
@@ -1577,7 +1577,7 @@ var shoutcastSettings = new ShoutcastSinkSettings
     StreamName = "Mi Radio Stream",
     Genre = "Varios",
     Description = "Mi increíble estación de radio por internet",
-    URL = "https://mi-sitio-radio.com", // URL de página principal para tu flujo (aparece en metadatos del directorio)
+    URL = "https://mi-sitio-radio.com", // URL de página principal para su flujo (aparece en metadatos del directorio)
     Public = true,                       // Establecer a true para listar en directorios públicos (si el servidor soporta)
     Username = "source"                  // Nombre de usuario para autenticación (frecuentemente "source"; verificar configuración del servidor)
     // Otros parámetros del flujo como bitrate de audio, samplerate, canales son típicamente determinados
@@ -2122,9 +2122,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Sinks de Utilidad
+## Sinks de utilidad
 
-### Sink de Stream
+### Sink de stream
 
 El `StreamSinkBlock` escribe datos multimedia en cualquier objeto `Stream` de .NET, permitiendo salida flexible a búferes de memoria, archivos, conexiones de red, capas de cifrado o cualquier stream escribible.
 
@@ -2161,7 +2161,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Sink de Descriptor de Archivo
+### Sink de descriptor de archivo
 
 El `FDSinkBlock` escribe datos multimedia en un descriptor de archivo Unix (un manejador entero). Esto es útil para enviar datos a tuberías (pipes), sockets o stdin de un proceso hijo.
 
@@ -2200,7 +2200,7 @@ await pipeline.StartAsync();
 
 Linux, macOS. Soporte limitado en Windows.
 
-### Sink de Archivo KLV
+### Sink de archivo KLV
 
 El `KLVFileSinkBlock` escribe flujos de metadatos KLV (Key-Length-Value) en un archivo. KLV se usa en aplicaciones compatibles con MISB/STANAG 4609 — incluyendo video de UAV, vigilancia y aeroespacial — para insertar metadatos geoespaciales junto con el video.
 
@@ -2234,7 +2234,7 @@ Para un flujo de trabajo completo — extraer KLV de un archivo MPEG-TS, decodif
 
 Windows, macOS, Linux.
 
-### Sink de Búfer
+### Sink de búfer
 
 El `BufferSinkBlock` captura datos multimedia en memoria y los entrega fotograma a fotograma mediante callbacks de eventos. A diferencia de los sinks de archivo o red, devuelve muestras de medios en crudo directamente al código de su aplicación.
 
@@ -2302,7 +2302,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Sink de Cámara Virtual
+### Sink de cámara virtual
 
 El `VirtualCameraSinkBlock` expone la salida del pipeline como una cámara virtual del sistema (y un micrófono virtual), de modo que cualquier otra aplicación de Windows — Zoom, Teams, OBS, un navegador — pueda recibir el video y audio procesados como si provinieran de un dispositivo de captura real. Los fotogramas se entregan a los filtros de fuente DirectShow Virtual Camera y Virtual Audio Card de VisioForge a través de memoria compartida.
 
@@ -2368,7 +2368,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-`VirtualCameraSinkBlock.IsAvailable()` devuelve `true` si el sink de cámara virtual subyacente está disponible en este sistema. `VirtualCameraSinkBlock.IsCOMRegistered()` devuelve `true` cuando ambos filtros de fuente, Virtual Camera y Virtual Audio Card, están registrados.
+`VirtualCameraSinkBlock.IsAvailable()` devuelve `true` si el sink de cámara virtual subyacente está disponible en este sistema. `VirtualCameraSinkBlock.IsCOMRegistered()` devuelve `true` cuando ambos filtros de fuente, Virtual Camera y Virtual Audio Card, están registrados. En Windows ARM64, las compilaciones x64 y ARM64 comparten un mismo registro, por lo que cuenta el registro de cualquiera de ellas.
 
 #### Plataformas
 

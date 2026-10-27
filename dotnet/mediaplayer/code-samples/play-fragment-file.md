@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Playing Media File Fragments: Implementation Guide for .NET Developers
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 When developing media applications, one frequently requested feature is the ability to play specific segments of a video or audio file. This functionality is crucial for creating video editors, highlight reels, educational platforms, or any application requiring precise media segment playback.
 

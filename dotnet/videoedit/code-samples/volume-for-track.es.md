@@ -16,19 +16,19 @@ primary_api_classes:
 
 ---
 
-# Establecer Niveles de Volumen Personalizados para Pistas de Audio en Aplicaciones C#
+# Establecer niveles de volumen personalizados para pistas de audio en aplicaciones C#
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
-## Descripción General
+## Descripción general
 
-Gestionar los niveles de volumen de audio es un aspecto crítico de las aplicaciones de producción y edición de video. Esta guía demuestra cómo implementar controles de volumen individuales para pistas de audio separadas en tu aplicación .NET.
+Gestionar los niveles de volumen de audio es un aspecto crítico de las aplicaciones de producción y edición de video. Esta guía demuestra cómo implementar controles de volumen individuales para pistas de audio separadas en su aplicación .NET.
 
-## Detalles de Implementación
+## Detalles de implementación
 
-Establecer niveles de volumen personalizados para pistas de audio da a tus usuarios un control más preciso sobre su mezcla de audio. Cada pista puede tener su propia configuración de volumen independiente, permitiendo un equilibrio de audio de calidad profesional.
+Establecer niveles de volumen personalizados para pistas de audio da a sus usuarios un control más preciso sobre su mezcla de audio. Cada pista puede tener su propia configuración de volumen independiente, permitiendo un equilibrio de audio de calidad profesional.
 
-## Implementación de Código de Ejemplo
+## Implementación de código de ejemplo
 
 El siguiente ejemplo en C# muestra cómo aplicar un efecto de envolvente de volumen a una pista de audio:
 
@@ -48,24 +48,24 @@ var audioSource = new AudioSource(audioFile);
 VideoEdit1.Input_AddAudioFile(audioSource, null, 0, new[] { volume });
 ```
 
-## Entender los Parámetros
+## Entender los parámetros
 
-- `AudioVolumeEnvelopeEffect(level: 10)`: envolvente de volumen constante. `level` es un `int`; usa las propiedades `StartTime`/`StopTime` (ambas `TimeSpan`) para limitar el efecto a una ventana temporal.
+- `AudioVolumeEnvelopeEffect(level: 10)`: envolvente de volumen constante. `level` es un `int`; use las propiedades `StartTime`/`StopTime` (ambas `TimeSpan`) para limitar el efecto a una ventana temporal.
 - `audioFile` (string) debe envolverse en un `new AudioSource(...)` — la sobrecarga con arreglo de efectos de `Input_AddAudioFile` solo acepta un `AudioSource`, no un nombre de archivo en crudo.
 - `Input_AddAudioFile`: añade el archivo de audio a la línea de tiempo aplicando los efectos al stream de audio elegido.
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Para implementar esta funcionalidad, necesitarás los siguientes paquetes redistribuibles:
+Para implementar esta funcionalidad, necesitará los siguientes paquetes redistribuibles:
 
 - Redistribuibles de Video Edit SDK:
   - [paquete x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
   - [paquete x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
 
-## Información de Despliegue
+## Información de despliegue
 
-Para información sobre cómo instalar o desplegar los componentes requeridos en los sistemas de tus usuarios finales, por favor consulta nuestra [guía de despliegue](../deployment.md).
+Para información sobre cómo instalar o desplegar los componentes requeridos en los sistemas de sus usuarios finales, por favor consulte nuestra [guía de despliegue](../deployment.md).
 
 ---
-## Recursos Adicionales
-Para más ejemplos de código y técnicas de implementación, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) con proyectos de ejemplo completos.
+## Recursos adicionales
+Para más ejemplos de código y técnicas de implementación, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) con proyectos de ejemplo completos.

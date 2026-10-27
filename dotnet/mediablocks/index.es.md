@@ -23,13 +23,13 @@ order: 14
 
 ## Introducción
 
-Media Blocks SDK para .NET es un framework multimedia basado en pipelines que te permite construir flujos de trabajo personalizados de procesamiento de video y audio en C#. En lugar de usar una API fija con comportamiento predefinido, creas un pipeline conectando bloques tipados — fuentes, codificadores, efectos, renderizadores y sinks — para construir exactamente la cadena de procesamiento que tu aplicación necesita.
+El Media Blocks SDK para .NET es un framework multimedia basado en pipelines que le permite construir flujos de trabajo personalizados de procesamiento de video y audio en C#. En lugar de usar una API fija con comportamiento predefinido, usted crea un pipeline conectando bloques tipados — fuentes, codificadores, efectos, renderizadores y sinks — para construir exactamente la cadena de procesamiento que su aplicación necesita.
 
 El SDK se ejecuta en Windows, macOS, Linux, Android e iOS. Cubre casos de uso que los SDKs de nivel superior Video Capture SDK y Media Player SDK no pueden cubrir: composición multi-fuente, pipelines de transcodificación personalizados, codificación simultánea a múltiples formatos, cadenas de efectos de video en tiempo real e integración con hardware como Blackmagic Decklink o cámaras industriales.
 
 ## Cuándo Usar Media Blocks
 
-Media Blocks SDK es la elección correcta cuando necesitas control total sobre el pipeline multimedia. Úsalo en lugar de (o junto con) los otros SDKs de VisioForge cuando:
+El Media Blocks SDK es la elección correcta cuando necesita control total sobre el pipeline multimedia. Úselo en lugar de (o junto con) los otros SDKs de VisioForge cuando:
 
 | Escenario | SDK Recomendado |
 | --------- | --------------- |
@@ -46,37 +46,37 @@ Media Blocks SDK es la elección correcta cuando necesitas control total sobre e
 
 ### Transcodificación y Conversión de Formato de Video
 
-Convierte archivos de video entre formatos (por ejemplo, AVI a MP4, MKV a WebM) con control total sobre codecs, resolución, bitrate y procesamiento. Encadena bloques de redimensionado, desentrelazado o corrección de color entre la fuente y el codificador.
+Convierta archivos de video entre formatos (por ejemplo, AVI a MP4, MKV a WebM) con control total sobre codecs, resolución, bitrate y procesamiento. Encadene bloques de redimensionado, desentrelazado o corrección de color entre la fuente y el codificador.
 
 ### Captura de Cámara Personalizada con Pipeline de Procesamiento
 
-Construye flujos de trabajo de captura de cámara que van más allá de la grabación simple. Inserta efectos en tiempo real, superposiciones de texto o bloques de visión por computadora entre la fuente de cámara y el sink de archivo. Envía a múltiples destinos simultáneamente — ventana de previsualización, archivo y stream de red.
+Construya flujos de trabajo de captura de cámara que van más allá de la grabación simple. Inserte efectos en tiempo real, superposiciones de texto o bloques de visión por computadora entre la fuente de cámara y el sink de archivo. Envíe a múltiples destinos simultáneamente — ventana de previsualización, archivo y stream de red.
 
 Ver: [Tutorial de Aplicación de Visor de Cámara](GettingStarted/camera.md)
 
 ### Composición y Mezcla de Video en Vivo
 
-Combina múltiples fuentes de video en una sola salida con el [Compositor de Video en Vivo](LiveVideoCompositor/index.md). Posiciona, escala y superpone feeds de video para producción multi-cámara, picture-in-picture o layouts de cuadrícula de vigilancia.
+Combine múltiples fuentes de video en una sola salida con el [Compositor de Video en Vivo](LiveVideoCompositor/index.md). Posicione, escale y superponga feeds de video para producción multi-cámara, picture-in-picture o layouts de cuadrícula de vigilancia.
 
 ### Grabación de Stream RTSP con Post-Procesamiento
 
-Captura streams RTSP de cámaras IP y aplica procesamiento antes de guardar — redimensiona a menor resolución, agrega superposiciones de marca de tiempo, recodifica con diferentes configuraciones de calidad o divide en segmentos.
+Capture streams RTSP de cámaras IP y aplique procesamiento antes de guardar — redimensione a menor resolución, agregue superposiciones de marca de tiempo, recodifique con diferentes configuraciones de calidad o divida en segmentos.
 
 Ver: [Guía de Guardado de Stream RTSP](Guides/rtsp-save-original-stream.md) | [Captura ONVIF con Post-Procesamiento](Guides/onvif-capture-with-postprocessing.md)
 
 ### Superposición de Texto e Imagen / Marca de Agua
 
-Agrega superposiciones de texto, imágenes o SVG a video en vivo o archivos grabados usando el [Bloque de Gestión de Overlay](VideoProcessing/OverlayManagerBlock.md). Útil para marcas de agua, inserción de marca de tiempo, branding y visualización en pantalla.
+Agregue superposiciones de texto, imágenes o SVG a video en vivo o archivos grabados usando el [Bloque de Gestión de Overlay](VideoProcessing/OverlayManagerBlock.md). Útil para marcas de agua, inserción de marca de tiempo, branding y visualización en pantalla.
 
 ### Lectura de Códigos de Barras y QR desde Video
 
-Procesa feeds de cámara en vivo o archivos de video para detectar y decodificar códigos de barras y códigos QR en tiempo real.
+Procese feeds de cámara en vivo o archivos de video para detectar y decodificar códigos de barras y códigos QR en tiempo real.
 
 Ver: [Guía de Lector de Códigos de Barras y QR](Guides/barcode-qr-reader-guide.md)
 
 ### Grabación Pre-Evento
 
-Implementa grabación con buffer circular que captura video continuamente y escribe clips de eventos (incluyendo metraje anterior al disparador) en disco.
+Implemente grabación con buffer circular que captura video continuamente y escribe clips de eventos (incluyendo metraje anterior al disparador) en disco.
 
 Ver: [Guía de Grabación Pre-Evento](Guides/pre-event-recording.md)
 
@@ -148,7 +148,7 @@ Bloques de IA en el dispositivo (ONNX / Whisper) que se insertan directamente en
 
 ## Comenzar
 
-Listo para construir tu primer pipeline? La Guía de Inicio Rápido para Desarrolladores cubre la instalación, conceptos principales, arquitectura de pipeline y ejemplos de código paso a paso:
+¿Listo para construir su primer pipeline? La Guía de Inicio Rápido para Desarrolladores cubre la instalación, conceptos principales, arquitectura de pipeline y ejemplos de código paso a paso:
 
 [Guía de Inicio Rápido para Desarrolladores](GettingStarted/index.md)
 

@@ -30,7 +30,7 @@ primary_api_classes:
 
 # Integración de Transmisión Network Device Interface (NDI)
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## ¿Qué es NDI?
 
@@ -306,4 +306,4 @@ Llame a `NDISinkBlock.IsAvailable()` antes de crear componentes del pipeline NDI
 - [Visor de Streams RTSP y Reproductor de Cámaras IP](../../mediablocks/Guides/rtsp-player-csharp.md) — guía similar de streaming IP para cámaras RTSP
 - [Guía de Despliegue](../../deployment-x/index.md) — paquetes de runtime específicos de plataforma para Windows, macOS, Linux
 - [Ejemplos de Código en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — demos de transmisor y fuente NDI
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas

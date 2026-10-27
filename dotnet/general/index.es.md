@@ -1,5 +1,5 @@
 ---
-title: Guías Generales y Documentación de VisioForge .NET SDK
+title: Guías generales y documentación de VisioForge .NET SDK
 description: Guías completas para VisioForge .NET SDKs que cubren captura de video, reproducción de medios, edición, codificadores, efectos y streaming de red.
 tags:
   - .NET
@@ -9,12 +9,12 @@ order: 18
 sidebar_label: General Information
 ---
 
-# SDKs .Net de VisioForge: Información, Manuales y Uso
+# SDKs .Net de VisioForge: información, manuales y uso
 
-Esta sección proporciona información esencial, manuales de software detallados y guías de uso prácticas para la suite de SDKs .Net de VisioForge. Ya sea que estés trabajando con captura de video, reproducción de medios o edición de video, encuentra los recursos que necesitas a continuación.
+Esta sección proporciona información esencial, manuales de software detallados y guías de uso prácticas para la suite de SDKs .Net de VisioForge. Ya sea que esté trabajando con captura de video, reproducción de medios o edición de video, encuentre los recursos que necesita a continuación.
 
-- **[Guía de Uso del Servidor MCP](mcp-server-usage.md)** - Conecta tu asistente de programación con IA al Servidor MCP de VisioForge para acceso instantáneo a documentación de API, guías de despliegue y ejemplos de código
-- **[Usar VisioForge en Unity](unity/index.md)** - Importa el paquete autónomo de Unity para reproducción de video y streaming de cámara RTSP en Unity 6 en Windows
+- **[Guía de Uso del Servidor MCP](mcp-server-usage.md)** - Conecte su asistente de programación con IA al Servidor MCP de VisioForge para acceso instantáneo a documentación de API, guías de despliegue y ejemplos de código
+- **[Usar VisioForge en Unity](unity/index.md)** - Importe el paquete autónomo de Unity para reproducción de video y streaming de cámara RTSP en Unity 6 en Windows
 - [Ejemplos de código](code-samples/index.md)
 - [¿Cómo enviar registros?](sendlogs.md)
 - [Telemetría y privacidad](telemetry.md) - qué informa el SDK mientras hay un depurador adjunto, y cómo desactivarlo
@@ -26,19 +26,19 @@ Esta sección proporciona información esencial, manuales de software detallados
 
 ## Componentes del SDK
 
-Explora los componentes principales de los SDKs .Net de VisioForge:
+Explore los componentes principales de los SDKs .Net de VisioForge:
 
-### Procesamiento de Medios y Efectos
+### Procesamiento de medios y efectos
 
-- **[Efectos de Video y Procesamiento](video-effects/index.md)**: Mejora tus aplicaciones con potentes efectos de video, superposiciones y capacidades de procesamiento. Aprende cómo implementar efectos visuales de grado profesional, superposiciones de texto/imagen y procesamiento de video personalizado.
-- **[Efectos de Audio](audio-effects/audio-sample-grabber.md)**: Explora opciones para aplicar varios efectos de audio y mejoras dentro de tus aplicaciones .NET.
+- **[Efectos de Video y Procesamiento](video-effects/index.md)**: Mejore sus aplicaciones con potentes efectos de video, superposiciones y capacidades de procesamiento. Aprenda cómo implementar efectos visuales de grado profesional, superposiciones de texto/imagen y procesamiento de video personalizado.
+- **[Efectos de Audio](audio-effects/audio-sample-grabber.md)**: Explore opciones para aplicar varios efectos de audio y mejoras dentro de sus aplicaciones .NET.
 
-### Codificación y Formatos
+### Codificación y formatos
 
 - **[Codificadores de Video](video-encoders/index.md)**: Descripción detallada de codificadores de video (H.264, HEVC, AV1, etc.) - características, rendimiento e implementación para desarrolladores .NET.
-- **[Codificadores de Audio](audio-encoders/index.md)**: Domina la codificación de audio (AAC, FLAC, MP3, Opus) con guía sobre configuraciones óptimas, consejos de rendimiento y mejores prácticas.
-- **[Formatos de Salida](output-formats/index.md)**: Aprende sobre formatos de contenedor de video y audio (MP4, WebM, AVI, MKV) incluyendo ejemplos, comparaciones de codecs y compatibilidad.
+- **[Codificadores de Audio](audio-encoders/index.md)**: Domine la codificación de audio (AAC, FLAC, MP3, Opus) con guía sobre configuraciones óptimas, consejos de rendimiento y mejores prácticas.
+- **[Formatos de Salida](output-formats/index.md)**: Aprenda sobre formatos de contenedor de video y audio (MP4, WebM, AVI, MKV) incluyendo ejemplos, comparaciones de codecs y compatibilidad.
 
-### Streaming y Conectividad
+### Streaming y conectividad
 
-- **[Streaming de Red](network-streaming/index.md)**: Implementa streaming RTMP, RTSP, HLS y NDI en .NET. Incluye ejemplos para transmisión en vivo, aceleración de hardware e integración de plataformas.
+- **[Streaming de Red](network-streaming/index.md)**: Implemente streaming RTMP, RTSP, HLS y NDI en .NET. Incluye ejemplos para transmisión en vivo, aceleración de hardware e integración de plataformas.

@@ -26,7 +26,7 @@ tags:
 
 # Comprehensive Deployment Guide for Video Capture SDK .Net
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 When deploying the Video Capture SDK .Net to systems without the SDK pre-installed, proper component deployment is essential for functionality. For AnyCPU applications, both x86 and x64 redistributables must be deployed to ensure compatibility across different system architectures.
 
@@ -52,20 +52,22 @@ Add the required NuGet packages to your application project, and after building,
 
 **Core Components (Required):**
 
-- SDK Base Package: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x64)
-- Video Capture SDK: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64)
+- SDK Base Package: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x64) | [ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.arm64) (.NET 5 or later)
+- Video Capture SDK: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64) | ARM64: not available yet
 
 **Feature-Specific Packages:**
 
 - FFMPEG Integration (for file output/network streaming): [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64)
 - MP4 Output Support: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64)
-- VLC Source Integration (for file/IP camera sources): [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x64)
+- VLC Source Integration (for file/IP camera sources): [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x64) | [ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.arm64)
 - WebM Output Format: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.WebM.x86)
 - XIPH Format Support (Ogg, Vorbis, FLAC): [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x64)
 - LAV Filters: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64)
-- Virtual Camera Support: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VirtualCamera.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VirtualCamera.x64)
+- Virtual Camera Support: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VirtualCamera.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VirtualCamera.x64) | [ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VirtualCamera.arm64)
 
-> **Note:** When using the Virtual Camera package, additional registration of camera files is required as outlined in the Manual Installation section if you want the virtual camera to be accessible from external applications.
+> **Windows ARM64:** LAV Filters exist for x86 and x64 only. There is no upstream ARM64 build, so the SDK has no ARM64 LAV package, and most other DirectShow filters of the classic engines have no ARM64 build yet either. An app running as an ARM64 process cannot load them. AnyCPU apps usually run as ARM64 there too. On Windows ARM64, use `VideoCaptureCoreX` or Media Blocks SDK .NET, or build the app for x64 (`PlatformTarget` set to `x64`; it runs under emulation).
+
+> **Note:** When using the Virtual Camera package, additional registration of camera files is required as outlined in the Manual Installation section if you want the virtual camera to be accessible from external applications. On Windows ARM64 the x64 and ARM64 builds share one registration: register the build that matches the applications that will use the camera, because the one registered last replaces the other.
 
 ### Silent Installer Deployment (Administrator Privileges Required)
 
@@ -180,6 +182,7 @@ For complete control over the deployment process or in environments with specifi
 
 - VisioForge_Virtual_Camera.ax / VisioForge_Virtual_Camera_x64.ax
 - VisioForge_Virtual_Audio_Card.ax / VisioForge_Virtual_Audio_Card_x64.ax
+- Windows ARM64: VisioForge_Virtual_Camera_arm64.ax and VisioForge_Virtual_Audio_Card_arm64.ax, in the `arm64` folder of the application (with VisioForge_Bridge_Video_arm64.ax and VisioForge_Bridge_Audio_arm64.ax, which separate capture and IP camera sources with `ForcedFramerate` need)
 
 **Video Processing:**
 

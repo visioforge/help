@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Lecture de fragments de fichiers multimédias : guide d'implémentation pour les développeurs .NET
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Lors du développement d'applications multimédias, une fonctionnalité fréquemment demandée est la capacité à lire des segments spécifiques d'un fichier vidéo ou audio. Cette fonctionnalité est cruciale pour créer des éditeurs vidéo, des séquences de moments forts, des plateformes éducatives ou toute application nécessitant une lecture précise par segment multimédia.
 

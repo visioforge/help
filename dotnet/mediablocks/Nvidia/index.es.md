@@ -21,7 +21,7 @@ sidebar_label: Nvidia
 
 # Bloques Nvidia - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Los bloques Nvidia aprovechan las capacidades de GPU Nvidia para tareas de procesamiento de medios aceleradas como transferencia de datos, conversión de video y redimensionamiento.
 

@@ -26,7 +26,7 @@ primary_api_classes:
 
 # Capturer les flux de caméras IP vers des fichiers MP4 en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction à l'enregistrement de caméras IP
 

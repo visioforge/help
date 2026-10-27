@@ -10,7 +10,7 @@ tags:
 
 # Transitions
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 La transition SMPTE Wipe produit l'un des balayages standard définis par la Society of Motion Picture and Television Engineers (SMPTE) dans le document SMPTE 258M-1993, à l'exception du quad split.
 

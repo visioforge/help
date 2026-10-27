@@ -23,7 +23,7 @@ primary_api_classes:
 
 # Guide de connexion aux caméras IP par marque
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Se connecter à des caméras IP en C# .NET est simple lorsque vous connaissez le modèle d'URL RTSP correct pour votre marque de caméra. Chaque fabricant utilise des formats d'URL, des ports et des méthodes d'authentification légèrement différents.
 

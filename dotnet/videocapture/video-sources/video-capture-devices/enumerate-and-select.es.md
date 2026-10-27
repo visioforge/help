@@ -1,6 +1,6 @@
 ---
 title: Enumerar dispositivos de captura de video en C# .NET
-description: Detecta, enumera y configura dispositivos de captura de video en .NET con ejemplos de código para listar dispositivos, formatos y tasas de fotogramas.
+description: Detecte, enumere y configure dispositivos de captura de video en .NET con ejemplos de código para listar dispositivos, formatos y tasas de fotogramas.
 tags:
   - Video Capture SDK
   - .NET
@@ -22,15 +22,15 @@ primary_api_classes:
 
 # Trabajar con dispositivos de captura de video en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
 ## Introducción a la gestión de dispositivos de video
 
-Video Capture SDK .Net proporciona un soporte robusto para cualquier dispositivo de captura de video reconocido por tu sistema operativo. Esta guía demuestra cómo descubrir los dispositivos disponibles, inspeccionar sus capacidades e integrarlos en tus aplicaciones.
+El Video Capture SDK .Net proporciona un soporte robusto para cualquier dispositivo de captura de video reconocido por su sistema operativo. Esta guía demuestra cómo descubrir los dispositivos disponibles, inspeccionar sus capacidades e integrarlos en sus aplicaciones.
 
 ## Enumerar los dispositivos de captura de video disponibles
 
-Antes de poder usar un dispositivo de captura, necesitas identificar cuáles están conectados al sistema. Los siguientes ejemplos de código muestran cómo obtener una lista de los dispositivos disponibles y mostrarlos en un componente de la interfaz de usuario:
+Antes de poder usar un dispositivo de captura, necesita identificar cuáles están conectados al sistema. Los siguientes ejemplos de código muestran cómo obtener una lista de los dispositivos disponibles y mostrarlos en un componente de la interfaz de usuario:
 
 === "VideoCaptureCore"
 
@@ -64,7 +64,7 @@ Antes de poder usar un dispositivo de captura, necesitas identificar cuáles est
 
 ## Descubrir las capacidades de formato de video
 
-Después de identificar un dispositivo de captura, puedes examinar sus formatos de video y tasas de fotogramas soportados. Esto te permite ofrecer a los usuarios las opciones de configuración adecuadas:
+Después de identificar un dispositivo de captura, puede examinar sus formatos de video y tasas de fotogramas soportados. Esto le permite ofrecer a los usuarios las opciones de configuración adecuadas:
 
 === "VideoCaptureCore"
 
@@ -115,7 +115,7 @@ Después de identificar un dispositivo de captura, puedes examinar sus formatos 
 
 ## Configurar y activar un dispositivo de captura de video
 
-Una vez que has seleccionado un dispositivo e identificado tus ajustes de formato preferidos, puedes inicializar la fuente de captura con estos parámetros:
+Una vez que ha seleccionado un dispositivo e identificado sus ajustes de formato preferidos, puede inicializar la fuente de captura con estos parámetros:
 
 === "VideoCaptureCore"
 
@@ -133,7 +133,7 @@ Una vez que has seleccionado un dispositivo e identificado tus ajustes de format
     // Establecer la tasa de fotogramas por defecto desde la primera opción disponible para el formato seleccionado
     VideoCapture1.Video_CaptureDevice.FrameRate = deviceItem.VideoFormats[0].FrameRates[0];
     
-    // Nota: después de esta configuración, usa el modo VideoPreview o VideoCapture para iniciar la transmisión
+    // Nota: después de esta configuración, use el modo VideoPreview o VideoCapture para iniciar la transmisión
     ```
     
 
@@ -172,13 +172,13 @@ Una vez que has seleccionado un dispositivo e identificado tus ajustes de format
 
 ## Recursos adicionales y ejemplos de código
 
-Para escenarios de uso más avanzados y ejemplos completos de implementación, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) con proyectos de demostración exhaustivos.
+Para escenarios de uso más avanzados y ejemplos completos de implementación, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) con proyectos de demostración exhaustivos.
 
 ## Solución de problemas en la detección de dispositivos
 
-Si tu aplicación no puede detectar los dispositivos esperados, considera estos problemas comunes:
+Si su aplicación no puede detectar los dispositivos esperados, considere estos problemas comunes:
 
-1. Asegúrate de que el dispositivo esté correctamente conectado y encendido
-2. Verifica que los controladores del dispositivo estén correctamente instalados
-3. Comprueba que ninguna otra aplicación esté usando el dispositivo en este momento
-4. Reinicia la aplicación después de conectar nuevos dispositivos
+1. Asegúrese de que el dispositivo esté correctamente conectado y encendido
+2. Verifique que los controladores del dispositivo estén correctamente instalados
+3. Compruebe que ninguna otra aplicación esté usando el dispositivo en este momento
+4. Reinicie la aplicación después de conectar nuevos dispositivos

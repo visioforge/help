@@ -30,11 +30,11 @@ primary_api_classes:
 
 # Screen Capture in VB.NET: Complete Guide to Record Desktop Video
 
-Recording your desktop screen in VB.NET (Visual Basic .NET) applications is essential for building screen recorders, tutorial tools, and surveillance software. Whether you need full screen capture, region recording, or system audio capture, this guide provides step-by-step Visual Basic code examples using [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net).
+Recording your desktop screen in VB.NET (Visual Basic .NET) applications is essential for building screen recorders, tutorial tools, and surveillance software. Whether you need full screen capture, region recording, or system audio capture, this guide provides step-by-step Visual Basic code examples using [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net).
 
 ## Why Use Video Capture SDK .Net for VB.NET Screen Recording
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) provides a complete screen recording solution for VB.NET developers:
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) provides a complete screen recording solution for VB.NET developers:
 
 - Full desktop capture and custom region screen recording
 - Multi-monitor support with display enumeration
@@ -50,9 +50,9 @@ Recording your desktop screen in VB.NET (Visual Basic .NET) applications is esse
 Add the following packages to your VB.NET project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 ## Complete VB.NET Screen Recording Example
@@ -322,4 +322,4 @@ Yes. Create `VideoCaptureCoreX` without a `VideoView` parameter: `VideoCapture1 
 - [Save Webcam Video in C#](save-webcam-video.md) — same webcam capture functionality with C# code examples
 - [Build a Video Player in VB.NET](../../mediaplayer/guides/video-player-vb-net.md) — VB.NET media player with playback controls
 - [Pre-Event Recording](pre-event-recording.md) — circular buffer recording that captures footage before the trigger event
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — product page and downloads
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — product page and downloads

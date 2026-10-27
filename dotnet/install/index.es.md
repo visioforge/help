@@ -24,37 +24,37 @@ order: 21
 sidebar_label: Instalación
 ---
 
-# Guía de Instalación de SDKs .NET de VisioForge
+# Guía de instalación de SDKs .NET de VisioForge
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-VisioForge ofrece potentes SDKs multimedia para desarrolladores .NET que permiten capacidades avanzadas de captura, edición, reproducción y procesamiento de medios en tus aplicaciones. Esta guía cubre todo lo que necesitas saber para instalar y configurar correctamente nuestros SDKs en tu entorno de desarrollo.
+VisioForge ofrece potentes SDKs multimedia para desarrolladores .NET que permiten capacidades avanzadas de captura, edición, reproducción y procesamiento de medios en sus aplicaciones. Esta guía cubre todo lo que necesita saber para instalar y configurar correctamente nuestros SDKs en su entorno de desarrollo.
 
-## SDKs .NET Disponibles
+## SDKs .NET disponibles
 
 VisioForge proporciona varios SDKs especializados para abordar diferentes necesidades multimedia:
 
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) - Para capturar video de cámaras, grabación de pantalla y streaming
-- [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net) - Para edición de video, procesamiento y conversión de formato
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) - Para construir pipelines de procesamiento de medios personalizados
-- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) - Para crear reproductores de medios personalizados con características avanzadas
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) - Para capturar video de cámaras, grabación de pantalla y streaming
+- [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) - Para edición de video, procesamiento y conversión de formato
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) - Para construir pipelines de procesamiento de medios personalizados
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) - Para crear reproductores de medios personalizados con características avanzadas
 
-## Métodos de Instalación
+## Métodos de instalación
 
-Puedes instalar nuestros SDKs usando dos métodos principales:
+Puede instalar nuestros SDKs usando dos métodos principales:
 
-### Usando Archivos de Instalación
+### Usar archivos de instalación
 
 El método de instalación con archivo de configuración se recomienda para entornos de desarrollo Windows. Este enfoque:
 
 1. Instala automáticamente todas las dependencias requeridas
 2. Configura la integración con Visual Studio
-3. Incluye proyectos de ejemplo para ayudarte a comenzar rápidamente
+3. Incluye proyectos de ejemplo para ayudarle a comenzar rápidamente
 4. Proporciona documentación y recursos adicionales
 
 Los archivos de instalación pueden descargarse desde las páginas de productos SDK respectivas en nuestro sitio web.
 
-### Usando Paquetes NuGet
+### Usar paquetes NuGet
 
 Para desarrollo multiplataforma o pipelines de CI/CD, nuestros paquetes NuGet ofrecen flexibilidad y fácil integración.
 
@@ -68,7 +68,7 @@ Install-Package VisioForge.DotNet.MediaPlayer    # Media Player SDK .Net
 Install-Package VisioForge.DotNet.MediaBlocks    # Media Blocks SDK .Net
 ```
 
-Pueden requerirse paquetes adicionales específicos de UI dependiendo de tu plataforma objetivo:
+Pueden requerirse paquetes adicionales específicos de UI dependiendo de su plataforma objetivo:
 
 ```cmd
 Install-Package VisioForge.DotNet.Core.UI.MAUI
@@ -77,7 +77,7 @@ Install-Package VisioForge.DotNet.Core.UI.Avalonia
 Install-Package VisioForge.DotNet.Core.UI.Uno
 ```
 
-## Integración y Configuración del IDE
+## Integración y configuración del IDE
 
 Nuestros SDKs se integran perfectamente con entornos de desarrollo .NET populares:
 
@@ -90,7 +90,7 @@ Nuestros SDKs se integran perfectamente con entornos de desarrollo .NET populare
 - Soporte de diseñador para controles visuales
 - Gestión de paquetes NuGet
 
-Para instrucciones detalladas de configuración de Visual Studio, consulta nuestra [guía de integración de Visual Studio](visual-studio.md).
+Para instrucciones detalladas de configuración de Visual Studio, consulte nuestra [guía de integración de Visual Studio](visual-studio.md).
 
 ### Integración con JetBrains Rider
 
@@ -101,7 +101,7 @@ Para instrucciones detalladas de configuración de Visual Studio, consulta nuest
 - Gestión integrada de paquetes NuGet
 - Capacidades de depuración multiplataforma
 
-Para instrucciones específicas de Rider, visita nuestra [documentación de integración de Rider](rider.md).
+Para instrucciones específicas de Rider, visite nuestra [documentación de integración de Rider](rider.md).
 
 ### Visual Studio para Mac
 
@@ -113,9 +113,9 @@ Los usuarios de [Visual Studio para Mac](visual-studio-mac.md) pueden desarrolla
 
 Aprende más en nuestra [guía de configuración de Visual Studio para Mac](visual-studio-mac.md).
 
-## Configuración Específica de Plataforma
+## Configuración específica de plataforma
 
-### Configuración del Framework Objetivo
+### Configuración del framework objetivo
 
 Cada sistema operativo requiere configuraciones específicas de framework objetivo para compatibilidad óptima:
 
@@ -137,7 +137,7 @@ Los proyectos Android requieren el sufijo de framework `-android`:
 <TargetFramework>net8.0-android</TargetFramework>
 ```
 
-Asegúrate de que las cargas de trabajo de Android estén instaladas en tu entorno de desarrollo:
+Asegúrese de que las cargas de trabajo de Android estén instaladas en su entorno de desarrollo:
 
 ```
 dotnet workload install android
@@ -161,7 +161,7 @@ Las aplicaciones nativas de macOS usan el framework `-macos` o `-maccatalyst`:
 <TargetFramework>net8.0-macos</TargetFramework>
 ```
 
-Para aplicaciones .NET MAUI dirigidas a macOS, usa:
+Para aplicaciones .NET MAUI dirigidas a macOS, use:
 
 ```xml
 <TargetFramework>net8.0-maccatalyst</TargetFramework>
@@ -175,23 +175,23 @@ Las aplicaciones Linux usan el framework objetivo estándar sin sufijo de plataf
 <TargetFramework>net8.0</TargetFramework>
 ```
 
-Asegúrate de que las cargas de trabajo .NET requeridas estén instaladas:
+Asegúrese de que las cargas de trabajo .NET requeridas estén instaladas:
 
 ```
 dotnet workload install linux
 ```
 
-## Soporte de Frameworks Especiales
+## Soporte de frameworks especiales
 
 ### Aplicaciones .NET MAUI
 
 Los [proyectos MAUI](maui.md) requieren configuración especial:
 
 - Agregar el paquete NuGet `VisioForge.DotNet.Core.UI.MAUI`
-- Configurar permisos específicos de plataforma en tu proyecto
+- Configurar permisos específicos de plataforma en su proyecto
 - Usar controles de vista de video específicos de MAUI
 
-Consulta nuestra [guía detallada de MAUI](maui.md) para instrucciones completas.
+Consulte nuestra [guía detallada de MAUI](maui.md) para instrucciones completas.
 
 ### Framework Avalonia UI
 
@@ -211,7 +211,7 @@ Los [proyectos de Uno Platform](uno.md) permiten construir aplicaciones para Win
 - Usar controles de vista de video específicos de Uno Platform
 - Configurar redistribuibles específicos de plataforma
 
-Consulta nuestra [guía de Uno Platform](uno.md) para instrucciones de configuración completas.
+Consulte nuestra [guía de Uno Platform](uno.md) para instrucciones de configuración completas.
 
 ### Unity
 
@@ -221,13 +221,13 @@ La integración con [Unity](unity.md) usa un `.unitypackage` listo para importar
 - Sin compilación desde el código fuente, sin NuGet y sin dependencias externas
 - El video se renderiza en un `RawImage` de Unity mediante los scripts incluidos
 
-Consulta nuestra [guía de instalación de Unity](unity.md) para la configuración paso a paso.
+Consulte nuestra [guía de instalación de Unity](unity.md) para la configuración paso a paso.
 
-## Inicialización del SDK para Motores Multiplataforma
+## Inicialización del SDK para motores multiplataforma
 
 Nuestros SDKs incluyen tanto motores DirectShow específicos de Windows (como `VideoCaptureCore`) como motores X multiplataforma (como `VideoCaptureCoreX`). Los motores X requieren inicialización y limpieza explícitas.
 
-### Inicializando el SDK
+### Inicializar el SDK
 
 Antes de usar cualquier componente de motor X, inicializa el SDK:
 
@@ -239,9 +239,9 @@ VisioForge.Core.VisioForgeX.InitSDK();
 await VisioForge.Core.VisioForgeX.InitSDKAsync();
 ```
 
-### Limpiando Recursos
+### Limpiar recursos
 
-Cuando tu aplicación termine, libera correctamente los recursos:
+Cuando su aplicación termine, libere correctamente los recursos:
 
 ```csharp
 // Limpiar al salir de la aplicación (sync — DestroySDK no tiene variante async)
@@ -250,7 +250,7 @@ VisioForge.Core.VisioForgeX.DestroySDK();
 
 No inicializar o limpiar correctamente puede resultar en fugas de memoria o comportamiento inestable.
 
-## Controles de Renderizado de Video
+## Controles de renderizado de video
 
 Cada framework de UI requiere controles de vista de video específicos para mostrar contenido multimedia:
 
@@ -260,7 +260,7 @@ Cada framework de UI requiere controles de vista de video específicos para most
 // Agregar referencia a VisioForge.DotNet.Core
 using VisioForge.Core.UI.WinForms;
 
-// En tu formulario
+// En su formulario
 videoView = new VideoView();
 this.Controls.Add(videoView);
 ```
@@ -271,7 +271,7 @@ this.Controls.Add(videoView);
 // Agregar referencia a VisioForge.DotNet.Core
 using VisioForge.Core.UI.WPF;
 
-// En tu XAML
+// En su XAML
 <vf:VideoView x:Name="videoView" />
 ```
 
@@ -281,7 +281,7 @@ using VisioForge.Core.UI.WPF;
 // Agregar referencia a VisioForge.DotNet.Core.UI.MAUI
 using VisioForge.Core.UI.MAUI;
 
-// En tu XAML
+// En su XAML
 <vf:VideoView x:Name="videoView" />
 ```
 
@@ -291,11 +291,11 @@ using VisioForge.Core.UI.MAUI;
 // Agregar referencia a VisioForge.DotNet.Core.UI.Avalonia
 using VisioForge.Core.UI.Avalonia;
 
-// En tu XAML
+// En su XAML
 <vf:VideoView Name="videoView" />
 ```
 
-## Gestión de Dependencias Nativas
+## Gestión de dependencias nativas
 
 Nuestros SDKs aprovechan bibliotecas nativas para rendimiento óptimo. Estas dependencias deben gestionarse correctamente para el despliegue:
 
@@ -304,19 +304,19 @@ Nuestros SDKs aprovechan bibliotecas nativas para rendimiento óptimo. Estas dep
 - Android: Incluidas en paquetes NuGet con soporte de arquitectura apropiado
 - Linux: Pueden requerir paquetes de sistema adicionales dependiendo de la distribución
 
-Para instrucciones detalladas de despliegue, consulta nuestra [guía de despliegue](../deployment-x/index.md).
+Para instrucciones detalladas de despliegue, consulte nuestra [guía de despliegue](../deployment-x/index.md).
 
-## Solución de Problemas Comunes de Instalación
+## Solución de problemas comunes de instalación
 
-Si encuentras problemas durante la instalación:
+Si encuentra problemas durante la instalación:
 
-1. Verifica la compatibilidad del framework objetivo con tu tipo de proyecto
-2. Asegúrate de que todas las cargas de trabajo requeridas estén instaladas (`dotnet workload list`)
-3. Verifica conflictos de dependencias en tu proyecto
-4. Confirma la inicialización adecuada del SDK para motores X
-5. Revisa los requisitos específicos de plataforma en nuestra documentación
+1. Verifique la compatibilidad del framework objetivo con su tipo de proyecto
+2. Asegúrese de que todas las cargas de trabajo requeridas estén instaladas (`dotnet workload list`)
+3. Verifique conflictos de dependencias en su proyecto
+4. Confirme la inicialización adecuada del SDK para motores X
+5. Revise los requisitos específicos de plataforma en nuestra documentación
 
-## Código de Ejemplo y Recursos
+## Código de ejemplo y recursos
 
 Mantenemos una extensa colección de aplicaciones de ejemplo en nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para ayudarte a comenzar rápidamente con nuestros SDKs.
 
@@ -327,8 +327,8 @@ Estos ejemplos cubren escenarios comunes como:
 - Edición y procesamiento de video
 - Desarrollo multiplataforma
 
-Visita nuestro repositorio para los últimos ejemplos de código y mejores prácticas para usar nuestros SDKs.
+Visite nuestro repositorio para los últimos ejemplos de código y mejores prácticas para usar nuestros SDKs.
 
 ---
 
-Para soporte adicional o preguntas, por favor contacta a nuestro equipo de soporte técnico o visita nuestro portal de documentación.
+Para soporte adicional o preguntas, por favor contacte a nuestro equipo de soporte técnico o visite nuestro portal de documentación.

@@ -24,11 +24,11 @@ primary_api_classes:
 
 ---
 
-# Source Blocks - VisioForge Media Blocks SDK .Net
+# Source Blocks - VisioForge Media Blocks SDK .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Source blocks provide data to the pipeline and are typically the first blocks in any media processing chain. VisioForge Media Blocks SDK .Net provides a comprehensive collection of source blocks for various inputs including hardware devices, files, networks, and virtual sources.
+Source blocks provide data to the pipeline and are typically the first blocks in any media processing chain. VisioForge Media Blocks SDK .NET provides a comprehensive collection of source blocks for various inputs including hardware devices, files, networks, and virtual sources.
 
 !!! tip "AI coding agents: use the VisioForge MCP server"
 
@@ -272,7 +272,7 @@ await pipeline.StartAsync();
 
 #### Platforms
 
-Windows, Linux.
+Windows (x64), Linux. Windows on Arm and 32-bit (x86) apps are not supported: on Windows, Basler pylon SDK supports x64 only.
 
 ### Spinnaker/FLIR Source Block
 
@@ -301,14 +301,14 @@ You select a `SpinnakerCameraInfo` object from the list to initialize `Spinnaker
 The `SpinnakerSourceBlock` is configured using `SpinnakerSourceSettings`. Key properties:
 
 - `Name` (string): The name of the camera (from `SpinnakerCameraInfo.Name`) to use.
-- `Region` (`Rect`): Defines the Region of Interest (ROI) to capture from the camera sensor. Set X, Y, Width, Height.
-- `FrameRate` (`VideoFrameRate`): The desired frame rate.
-- `PixelFormat` (`SpinnakerPixelFormat` enum): The desired pixel format (e.g., `RGB`, `Mono8`, `BayerRG8`). Default `RGB`.
-- `OffsetX` (int): X offset for the ROI on the sensor (default 0). Often implicitly part of `Region.X`.
-- `OffsetY` (int): Y offset for the ROI on the sensor (default 0). Often implicitly part of `Region.Y`.
+- `Region` (`Rect`): The frame size to capture from the camera sensor — pass `new Rect(0, 0, width, height)`. The X and Y offset is not applied yet: the camera keeps the offset it already has, and a non-zero X or Y is reported as a warning.
+- `FrameRate` (`VideoFrameRate`): The desired frame rate, a whole number of frames per second (a fractional rate such as 29.97 is refused). Empty keeps the camera's own rate.
+- `PixelFormat` (`SpinnakerPixelFormat` enum): The desired pixel format (`RGB` or `GRAY8`). Default `RGB`.
+- `OffsetX` (int): X offset for the ROI on the sensor (default 0). Not applied yet; a non-zero value is reported as a warning.
+- `OffsetY` (int): Y offset for the ROI on the sensor (default 0). Not applied yet; a non-zero value is reported as a warning.
 - `ExposureMinimum` (int): Minimum exposure time for auto-exposure algorithm (microseconds, e.g., 10-29999999). Default 0 (auto/camera default).
 - `ExposureMaximum` (int): Maximum exposure time for auto-exposure algorithm (microseconds). Default 0 (auto/camera default).
-- `ShutterType` (`SpinnakerSourceShutterType` enum): Type of shutter (e.g., `Rolling`, `Global`). Default `Rolling`.
+- `ShutterType` (`SpinnakerSourceShutterType?`): Type of shutter (e.g., `Rolling`, `Global`). Default `null` (the camera's own shutter mode).
 
 Constructor:
 `SpinnakerSourceSettings(string name, Rect region, VideoFrameRate frameRate, SpinnakerPixelFormat pixelFormat = SpinnakerPixelFormat.RGB)`
@@ -347,7 +347,7 @@ await pipeline.StartAsync();
 
 #### Platforms
 
-Windows
+Windows (x64). Windows on Arm and 32-bit (x86) apps are not supported: on Windows, Teledyne Spinnaker SDK supports x64 only.
 
 ### Allied Vision Source Block
 
@@ -420,7 +420,7 @@ await pipeline.StartAsync();
 
 #### Platforms
 
-Windows, macOS, Linux.
+Windows (x64), macOS, Linux. Windows on Arm and 32-bit (x86) apps are not supported: on Windows, Allied Vision Vimba X SDK supports x64 only.
 
 ### Blackmagic Decklink Source Block
 
@@ -2750,7 +2750,7 @@ The `PushData()` method converts AVC to byte-stream automatically and in-place (
 
 #### Sample applications
 
-- [RTSP RAW Camera H264 Callback Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20RAW%20Camera%20H264%20Callback%20Demo)
+- [RTSP RAW Camera H264 Callback Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20RAW%20Camera%20With%20H264%20Callback%20Sample)
 
 #### Platforms
 

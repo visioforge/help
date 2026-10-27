@@ -16,11 +16,11 @@ primary_api_classes:
 
 ---
 
-# Preguntas Frecuentes del Video Fingerprinting SDK
+# Preguntas frecuentes del Video Fingerprinting SDK
 
-Esta FAQ completa aborda las preguntas más comunes sobre el Video Fingerprinting SDK de VisioForge. Si no puedes encontrar tu respuesta aquí, por favor visita nuestro [foro de soporte](https://support.visioforge.com/) o [comunidad de Discord](https://discord.com/invite/yvXUG56WCH).
+Esta FAQ completa aborda las preguntas más comunes sobre el Video Fingerprinting SDK de VisioForge. Si no puede encontrar su respuesta aquí, por favor visite nuestro [foro de soporte](https://support.visioforge.com/) o [comunidad de Discord](https://discord.com/invite/yvXUG56WCH).
 
-## Tabla de Contenidos
+## Tabla de contenidos
 
 - [Preguntas sobre Licencias](#preguntas-sobre-licencias)
 - [Rendimiento y Optimización](#rendimiento-y-optimizacion)
@@ -29,9 +29,9 @@ Esta FAQ completa aborda las preguntas más comunes sobre el Video Fingerprintin
 - [Integración y Desarrollo](#integracion-y-desarrollo)
 - [Base de Datos y Almacenamiento](#base-de-datos-y-almacenamiento)
 
-## Preguntas sobre Licencias
+## Preguntas sobre licencias
 
-### P: ¿Cuál es la diferencia entre licencias de Prueba y Comerciales?
+### P: ¿Cuál es la diferencia entre licencias de prueba y comerciales?
 
 **R:** Las diferencias clave son:
 
@@ -44,9 +44,9 @@ Esta FAQ completa aborda las preguntas más comunes sobre el Video Fingerprintin
 | Soporte Técnico | Solo foro | Email/Prioridad/Teléfono |
 | Actualizaciones | Solo período de prueba | 1 año |
 
-### P: ¿Puedo usar la licencia de Prueba para desarrollo?
+### P: ¿Puedo usar la licencia de prueba para desarrollo?
 
-**R:** ¡Sí! La licencia de prueba es perfecta para desarrollo y pruebas. Incluye todas las características con una marca de agua. Puedes desarrollar toda tu aplicación con la licencia de prueba y comprar una licencia comercial cuando estés listo para producción.
+**R:** ¡Sí! La licencia de prueba es perfecta para desarrollo y pruebas. Incluye todas las características con una marca de agua. Puede desarrollar toda su aplicación con la licencia de prueba y comprar una licencia comercial cuando esté listo para producción.
 
 ```csharp
 // Entorno de desarrollo
@@ -58,7 +58,7 @@ VFPAnalyzer.SetLicenseKey(Environment.GetEnvironmentVariable("VFP_LICENSE_KEY"))
 
 ### P: ¿Qué sucede cuando expira mi prueba?
 
-**R:** Después de 30 días, el SDK dejará de procesar videos y devolverá un error. Tu código permanece intacto - simplemente compra una licencia y actualiza la clave para continuar.
+**R:** Después de 30 días, el SDK dejará de procesar videos y devolverá un error. Su código permanece intacto - simplemente compre una licencia y actualice la clave para continuar.
 
 ### P: ¿Hay limitaciones de características con diferentes licencias?
 
@@ -66,18 +66,18 @@ VFPAnalyzer.SetLicenseKey(Environment.GetEnvironmentVariable("VFP_LICENSE_KEY"))
 
 ### P: ¿Puedo usar una licencia en múltiples máquinas?
 
-**R:** Los términos de licencia dependen de tu compra:
+**R:** Los términos de licencia dependen de su compra:
 - **One Developer Annual**: Un desarrollador designado; las licencias se cuentan por desarrollador, no por estación de trabajo
 - **Lifetime·Team**: Todos los desarrolladores de la organización compradora en una ubicación dentro de una misma ciudad
 - **Licencias personalizadas y por volumen**: Disponibles a través de ventas para organizaciones que necesitan condiciones diferentes
 
-Ambos tipos de licencia de pago incluyen la distribución sin regalías de las aplicaciones creadas con el SDK. Los usuarios finales no necesitan licencias runtime independientes. Consulta la [política de licencias canónica](https://www.visioforge.com/es/licensing) para conocer las condiciones actuales.
+Ambos tipos de licencia de pago incluyen la distribución sin regalías de las aplicaciones creadas con el SDK. Los usuarios finales no necesitan licencias runtime independientes. Consulte la [política de licencias canónica](https://www.visioforge.com/es/licensing) para conocer las condiciones actuales.
 
 ### P: ¿Cómo manejo las licencias en una aplicación distribuida?
 
-**R:** Las licencias comerciales incluyen distribución sin regalías, por lo que los clientes que ejecutan tu aplicación no necesitan licencias runtime independientes. Mantén privado el material de registro adquirido y aplícalo mediante la API de registro documentada del producto. Consulta la [política de licencias canónica](https://www.visioforge.com/es/licensing) para conocer las condiciones comerciales actuales.
+**R:** Las licencias comerciales incluyen distribución sin regalías, por lo que los clientes que ejecutan su aplicación no necesitan licencias runtime independientes. Mantenga privado el material de registro adquirido y aplíquelo mediante la API de registro documentada del producto. Consulte la [política de licencias canónica](https://www.visioforge.com/es/licensing) para conocer las condiciones comerciales actuales.
 
-## Rendimiento y Optimización
+## Rendimiento y optimización
 
 ### P: ¿Qué tan rápido puede el SDK procesar videos?
 
@@ -203,7 +203,7 @@ var source = new VFPFingerprintSource(localCapturePath)
    `CustomCropSize` / `IgnoredAreas` para acelerar el trabajo por fotograma sin
    descartar fotogramas.
 
-## Precisión y Detección
+## Precisión y detección
 
 ### P: ¿Qué tan precisa es la coincidencia de video?
 
@@ -277,7 +277,7 @@ foreach (var matchStart in results)
 
 ### P: ¿Cómo maneja el SDK diferentes relaciones de aspecto?
 
-**R:** El SDK normaliza las relaciones de aspecto automáticamente, pero puedes mejorar la precisión:
+**R:** El SDK normaliza las relaciones de aspecto automáticamente, pero puede mejorar la precisión:
 
 ```csharp
 // Para videos con letterboxing/pillarboxing.
@@ -322,7 +322,7 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
 }
 ```
 
-## Formatos y Códecs Soportados
+## Formatos y códecs soportados
 
 ### P: ¿Qué formatos de video están soportados?
 
@@ -360,7 +360,7 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
 
 **R:** El Video Fingerprinting SDK requiere contenido de video.
 
-## Compatibilidad de Plataformas
+## Compatibilidad de plataformas
 
 ### P: ¿Qué plataformas están soportadas?
 
@@ -368,13 +368,16 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
 
 | Plataforma | Arquitectura | Versión .NET | Estado |
 |------------|-------------|-------------|---------|
-| Windows 10/11 | x86, x64, ARM64 | .NET Framework 4.6.1+, .NET 6+ | ✅ Soporte Completo |
+| Windows 10/11 | x86, x64 | .NET Framework 4.6.1+, .NET 6+ | ✅ Soporte Completo |
+| Windows 10/11 | ARM64 | .NET 6+ (una aplicación .NET Framework se ejecuta como x86, o como x64 en Windows 11) | ✅ Soporte Completo |
 | Windows Server 2016+ | x64 | .NET Framework 4.6.1+, .NET 6+ | ✅ Soporte Completo |
 | Ubuntu 20.04+ | x64, ARM64 | .NET 6+ | ✅ Soporte Completo |
 | Debian 11+ | x64, ARM64 | .NET 6+ | ✅ Soporte Completo |
 | RHEL/CentOS 8+ | x64 | .NET 6+ | ✅ Soporte Completo |
-| macOS 12+ | x64, ARM64 | .NET 6+ | ✅ Soporte Completo |
+| macOS 12+ | x64, ARM64 | .NET 9+ | ✅ Soporte Completo |
 | Docker/Kubernetes | Basado en Linux | .NET 6+ | ✅ Soporte Completo |
+
+En .NET 5+ el framework de destino elige la compilación de la plataforma: `-windows` en Windows (`net8.0-windows`), `-macos` en macOS (`net9.0-macos` o posterior). Un framework de destino sin sufijo de sistema operativo (`net8.0`) es la compilación para Linux.
 
 ### P: ¿Puedo usar el SDK en contenedores Docker?
 
@@ -412,15 +415,7 @@ ENTRYPOINT ["dotnet", "YourProject.dll"]
 
 ### P: ¿Hay diferencias de rendimiento específicas de plataforma?
 
-**R:** Sí, el rendimiento varía por plataforma:
-
-| Plataforma | Rendimiento Relativo | Aceleración por Hardware |
-|------------|---------------------|-------------------------|
-| Windows x64 | 100% (línea base) | NVENC, Quick Sync, D3D11 |
-| Linux x64 | 95-100% | NVENC, VAAPI |
-| macOS Intel | 90-95% | VideoToolbox |
-| macOS ARM64 | 85-90% | VideoToolbox |
-| Windows ARM64 | 70-80% | Limitado |
+**R:** El algoritmo de huella digital es el mismo código portable en todas las plataformas y se ejecuta en la CPU, por lo que su velocidad depende del procesador y no del sistema operativo. La decodificación del video de origen añade su propio coste, que depende del archivo y de los decodificadores de la plataforma. Para dimensionar una implementación, mida en el hardware de destino.
 
 ### P: ¿Puedo usar el SDK en entornos de nube?
 
@@ -444,11 +439,11 @@ ENTRYPOINT ["dotnet", "YourProject.dll"]
 // O serie de máquinas A2 para mejor rendimiento
 ```
 
-## Integración y Desarrollo
+## Integración y desarrollo
 
 ### P: ¿Puedo usar el SDK en una aplicación web?
 
-**R:** Sí, para procesamiento del lado del servidor en ASP.NET Core:
+**R:** Sí, para procesamiento del lado del servidor en ASP.NET Core en Windows o Linux (en Windows, añada `-windows` al framework de destino, p. ej. `net8.0-windows`: sin sufijo de sistema operativo es la compilación para Linux):
 
 ```csharp
 public class VideoFingerprintService
@@ -518,7 +513,7 @@ tracker.ProgressChanged += (s, progress) => {
 };
 ```
 
-## Base de Datos y Almacenamiento
+## Base de datos y almacenamiento
 
 ### P: ¿Cómo debería almacenar huellas digitales en una base de datos?
 
@@ -614,7 +609,7 @@ public long EstimateStorageNeeded(int videoCount, double avgDurationMinutes)
 
 ### P: ¿Debería usar almacenamiento de sistema de archivos o base de datos?
 
-**R:** Depende de tus requerimientos:
+**R:** Depende de sus requerimientos:
 
 | Tipo de Almacenamiento | Pros | Contras | Mejor Para |
 |----------------------|------|---------|------------|
@@ -701,15 +696,15 @@ public class PerformanceMonitor
 }
 ```
 
-## Recursos Adicionales
+## Recursos adicionales
 
 - **[Referencia de API](https://api.visioforge.org/dotnet/)** - Documentación completa de API
 - **[Muestras de GitHub](https://github.com/visioforge/.Net-SDK-s-samples/)** - Ejemplos de código
 - **[Comunidad de Discord](https://discord.com/invite/yvXUG56WCH)** - Obtén ayuda de la comunidad
 
-## Contactar Soporte
+## Contactar soporte
 
-Si no puedes encontrar una respuesta en esta FAQ:
+Si no puede encontrar una respuesta en esta FAQ:
 
 1. **Buscar en el foro**: [https://support.visioforge.com/](https://support.visioforge.com/)
 2. **Unirse a Discord**: [https://discord.com/invite/yvXUG56WCH](https://discord.com/invite/yvXUG56WCH)

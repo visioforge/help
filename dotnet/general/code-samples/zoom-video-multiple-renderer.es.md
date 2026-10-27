@@ -1,5 +1,5 @@
 ---
-title: Configurar Zoom en Múltiples Renderizadores de Video
+title: Configurar zoom en múltiples renderizadores de video
 description: Configure parámetros de zoom y posición independientes para múltiples renderizadores de video en pantallas multi-monitor en aplicaciones multimedia .NET.
 tags:
   - Video Capture SDK
@@ -12,15 +12,15 @@ primary_api_classes:
   - VideoRendererType
 ---
 
-# Configuración de Zoom para Múltiples Renderizadores de Video en .NET
+# Configuración de zoom para múltiples renderizadores de video en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Al desarrollar aplicaciones multimedia que utilizan múltiples renderizadores de video, controlar los parámetros de zoom y posición de forma independiente para cada pantalla es esencial para crear interfaces de usuario de calidad profesional. Esta guía cubre los detalles de implementación, configuraciones de parámetros y mejores prácticas para configurar múltiples renderizadores de video con configuraciones de zoom personalizadas en tus aplicaciones .NET.
+Al desarrollar aplicaciones multimedia que utilizan múltiples renderizadores de video, controlar los parámetros de zoom y posición de forma independiente para cada pantalla es esencial para crear interfaces de usuario de calidad profesional. Esta guía cubre los detalles de implementación, configuraciones de parámetros y mejores prácticas para configurar múltiples renderizadores de video con configuraciones de zoom personalizadas en sus aplicaciones .NET.
 
-## Entendiendo las Configuraciones de Múltiples Renderizadores
+## Entender las configuraciones de múltiples renderizadores
 
-El soporte de múltiples renderizadores (también conocido como funcionalidad multipantalla) permite a tu aplicación mostrar contenido de video en diferentes áreas de visualización simultáneamente. Cada renderizador puede configurarse con su propio:
+El soporte de múltiples renderizadores (también conocido como funcionalidad multipantalla) permite a su aplicación mostrar contenido de video en diferentes áreas de visualización simultáneamente. Cada renderizador puede configurarse con su propio:
 
 - Ratio de zoom (nivel de magnificación)
 - Desplazamiento horizontal (posicionamiento en eje X)
@@ -33,7 +33,7 @@ Esta capacidad es particularmente valiosa para aplicaciones como:
 - Aplicaciones de imágenes médicas que requieren diferentes niveles de zoom para análisis
 - Sistemas de kiosco multi-pantalla con contenido sincronizado
 
-## Implementando el Método MultiScreen_SetZoom
+## Implementar el método MultiScreen_SetZoom
 
 El SDK proporciona el método `MultiScreen_SetZoom` que toma cuatro parámetros clave:
 
@@ -42,7 +42,7 @@ El SDK proporciona el método `MultiScreen_SetZoom` que toma cuatro parámetros 
 3. **Desplazamiento X**: Ajusta el posicionamiento horizontal (píxeles o porcentaje)
 4. **Desplazamiento Y**: Ajusta el posicionamiento vertical (píxeles o porcentaje)
 
-### Firma del Método y Parámetros
+### Firma del método y parámetros
 
 ```cs
 // Firma del método
@@ -56,7 +56,7 @@ void MultiScreen_SetZoom(int screenIndex, int zoomRatio, int shiftX, int shiftY)
 | shiftX | Desplazamiento horizontal | -1000 a 1000 |
 | shiftY | Desplazamiento vertical | -1000 a 1000 |
 
-## Ejemplo de Código: Configurando Múltiples Renderizadores
+## Ejemplo de código: configurar múltiples renderizadores
 
 El siguiente ejemplo demuestra cómo establecer diferentes valores de zoom y posicionamiento para tres renderizadores separados:
 
@@ -74,13 +74,13 @@ VideoCapture1.MultiScreen_SetZoom(1, 20, 10, 20);
 VideoCapture1.MultiScreen_SetZoom(2, 30, 0, 30);
 ```
 
-## Mejores Prácticas para Gestión de Múltiples Renderizadores
+## Mejores prácticas para gestión de múltiples renderizadores
 
-Al implementar configuraciones de múltiples renderizadores, considera estas mejores prácticas:
+Al implementar configuraciones de múltiples renderizadores, considere estas mejores prácticas:
 
-### 1. Inicializar Todos los Renderizadores Antes de Establecer el Zoom
+### 1. Inicializar todos los renderizadores antes de establecer el zoom
 
-Siempre asegúrate de que todos los renderizadores estén correctamente inicializados antes de aplicar configuraciones de zoom:
+Siempre asegúrese de que todos los renderizadores estén correctamente inicializados antes de aplicar configuraciones de zoom:
 
 ```cs
 // Inicializar múltiples renderizadores
@@ -99,13 +99,13 @@ VideoCapture1.MultiScreen_SetZoom(2, 30, 0, 30);
 // Configuraciones adicionales...
 ```
 
-### 2. Manejar Cambios de Resolución Apropiadamente
+### 2. Manejar cambios de resolución apropiadamente
 
-Si el formato de la fuente cambia durante la sesión, lee la resolución actual dentro
+Si el formato de la fuente cambia durante la sesión, lea la resolución actual dentro
 del callback `OnVideoFrameBuffer` (`e.Frame.Info.Width` / `e.Frame.Info.Height`) y
-vuelve a aplicar el zoom. Lleva tú mismo el conteo de pantallas — `VideoCaptureCore`
-no expone una propiedad `MultiScreen_Count`; ya sabes cuántas añadiste porque tú
-llamaste a `MultiScreen_AddScreen`.
+vuelva a aplicar el zoom. Lleve usted mismo el conteo de pantallas — `VideoCaptureCore`
+no expone una propiedad `MultiScreen_Count`; ya sabe cuántas añadió porque usted
+llamó a `MultiScreen_AddScreen`.
 
 ```cs
 private int _multiScreenCount = 0; // incrementado tras cada llamada a MultiScreen_AddScreen
@@ -122,9 +122,9 @@ private void VideoCapture1_OnVideoFrameBuffer(object sender, VideoFrameBufferEve
 }
 ```
 
-### 3. Proporcionar Controles de Usuario para Ajuste de Zoom
+### 3. Proporcionar controles de usuario para ajuste de zoom
 
-Para aplicaciones interactivas, considera implementar controles de UI que permitan a los usuarios ajustar configuraciones de zoom:
+Para aplicaciones interactivas, considere implementar controles de UI que permitan a los usuarios ajustar configuraciones de zoom:
 
 ```cs
 private void zoomTrackBar_ValueChanged(object sender, EventArgs e)
@@ -139,11 +139,11 @@ private void zoomTrackBar_ValueChanged(object sender, EventArgs e)
 }
 ```
 
-## Configuraciones de Zoom Avanzadas
+## Configuraciones de zoom avanzadas
 
-### Transiciones de Zoom Dinámicas
+### Transiciones de zoom dinámicas
 
-Para transiciones de zoom suaves, considera implementar cambios graduales de zoom:
+Para transiciones de zoom suaves, considere implementar cambios graduales de zoom:
 
 ```cs
 async Task AnimateZoomAsync(int screenIndex, int startZoom, int targetZoom, int duration)
@@ -168,12 +168,12 @@ async Task AnimateZoomAsync(int screenIndex, int startZoom, int targetZoom, int 
 await AnimateZoomAsync(0, 50, 100, 1000); // Animar de 50% a 100% en 1 segundo
 ```
 
-## Optimizando Rendimiento con Múltiples Renderizadores
+## Optimizar rendimiento con múltiples renderizadores
 
-Al trabajar con múltiples renderizadores, ten en cuenta las implicaciones de rendimiento:
+Al trabajar con múltiples renderizadores, tenga en cuenta las implicaciones de rendimiento:
 
-1. **Limitar Actualizaciones Frecuentes**: Evita cambiar configuraciones de zoom rápidamente ya que puede impactar el rendimiento
-2. **Considerar Aceleración por Hardware**: Habilita aceleración por hardware cuando esté disponible
+1. **Limitar Actualizaciones Frecuentes**: Evite cambiar configuraciones de zoom rápidamente ya que puede impactar el rendimiento
+2. **Considerar Aceleración por Hardware**: Habilite aceleración por hardware cuando esté disponible
 3. **Monitorear Uso de Memoria**: Múltiples renderizadores de alta resolución pueden consumir memoria significativa
 
 ```cs
@@ -184,9 +184,9 @@ VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.EVR;
 VideoCapture1.Video_Renderer.Deinterlace_EVR_Mode = VideoRendererEVRDeinterlaceMode.Auto;
 ```
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-### Problema: Los Renderizadores Muestran Pantalla Negra Después de Cambios de Zoom
+### Problema: los renderizadores muestran pantalla negra después de cambios de zoom
 
 Esto puede ocurrir cuando los valores de zoom exceden rangos válidos o cuando los renderizadores no están correctamente inicializados:
 
@@ -201,9 +201,9 @@ public void ResetZoomSettings()
 }
 ```
 
-### Problema: Imagen Distorsionada Después del Zoom
+### Problema: imagen distorsionada después del zoom
 
-Valores de zoom extremos pueden causar distorsión. Implementa límites para valores de zoom:
+Valores de zoom extremos pueden causar distorsión. Implemente límites para valores de zoom:
 
 ```cs
 public void SetSafeZoom(int screenIndex, int requestedZoom, int shiftX, int shiftY)
@@ -219,6 +219,6 @@ public void SetSafeZoom(int screenIndex, int requestedZoom, int shiftX, int shif
 
 ## Conclusión
 
-Los múltiples renderizadores de video correctamente configurados con configuraciones de zoom independientes pueden mejorar significativamente la experiencia del usuario en aplicaciones multimedia. Siguiendo las guías y mejores prácticas descritas en este documento, puedes implementar configuraciones de visualización de video sofisticadas adaptadas a los requisitos específicos de tu aplicación.
+Los múltiples renderizadores de video correctamente configurados con configuraciones de zoom independientes pueden mejorar significativamente la experiencia del usuario en aplicaciones multimedia. Siguiendo las guías y mejores prácticas descritas en este documento, puede implementar configuraciones de visualización de video sofisticadas adaptadas a los requisitos específicos de su aplicación.
 
-Para ejemplos de código adicionales y guía de implementación, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para ejemplos de código adicionales y guía de implementación, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

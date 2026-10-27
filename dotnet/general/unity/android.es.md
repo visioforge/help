@@ -19,16 +19,16 @@ primary_api_classes:
 
 # Compilar para Android
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 El flavor Android se distribuye como un `libgstreamer_android.so` monolítico con cada plugin de
 GStreamer enlazado estáticamente, más los ensamblados gestionados del paquete compilados contra
 `netstandard2.1`. Esta página cubre los ajustes del Build Profile, los permisos del manifiesto
 y los problemas específicos de Android. Para la secuencia de arranque compartida entre
-plataformas, consulta [Bootstrap y ciclo de vida](bootstrap.md).
+plataformas, consulte [Bootstrap y ciclo de vida](bootstrap.md).
 
 El flavor Android se incluye en el `.unitypackage` cuando el pipeline de build se ejecuta con
 `-IncludeAndroid`. El resultado es un paquete acumulativo que contiene los runtimes Windows,
@@ -45,7 +45,7 @@ metadatos `PluginImporter` por archivo.
 | Scripting Backend | **IL2CPP** *(obligatorio — Mono no está soportado en Android por Unity)* | Project Settings → Player → Other Settings → Configuration |
 | Target Architectures | **ARM64** *(ARMv7 no se distribuye — desmárcalo)* | Project Settings → Player → Other Settings → Configuration |
 | Internet Access | **Require** *(necesario para fuentes RTSP / HTTPS)* | Project Settings → Player → Other Settings → Configuration |
-| Write Permission | **External (SDCard)** si escribes o grabas medios en el almacenamiento externo | Project Settings → Player → Other Settings → Configuration |
+| Write Permission | **External (SDCard)** si escribe o graba medios en el almacenamiento externo | Project Settings → Player → Other Settings → Configuration |
 | Minimum API Level | **24 (Android 7.0)** o posterior | Project Settings → Player → Other Settings → Identification |
 
 Mono no puede cargar `libgstreamer_android.so` correctamente a través del runtime Android de
@@ -53,20 +53,20 @@ Unity — solo se ejercita IL2CPP en CI y se soporta en producción.
 
 ## Entradas obligatorias en AndroidManifest
 
-Unity genera `AndroidManifest.xml` por ti. Los ajustes anteriores se traducen en las entradas
-estándar; si necesitas un manifiesto personalizado, asegúrate de que contenga:
+Unity genera `AndroidManifest.xml` por usted. Los ajustes anteriores se traducen en las entradas
+estándar; si necesita un manifiesto personalizado, asegúrese de que contenga:
 
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 
-<!-- Solo si tu app usa discovery RTSP / hace stream audio-out vía UDP en el segmento local -->
+<!-- Solo si su app usa discovery RTSP / hace stream audio-out vía UDP en el segmento local -->
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-<!-- Solo si tu app usa micrófono o cámara como fuente -->
+<!-- Solo si su app usa micrófono o cámara como fuente -->
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
 <uses-permission android:name="android.permission.CAMERA" />
 
-<!-- Solo si lees medios desde almacenamiento externo -->
+<!-- Solo si lee medios desde almacenamiento externo -->
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
                  android:maxSdkVersion="32" />
 <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
@@ -74,12 +74,12 @@ estándar; si necesitas un manifiesto personalizado, asegúrate de que contenga:
 ```
 
 `READ_MEDIA_VIDEO` / `READ_MEDIA_AUDIO` reemplazan al `READ_EXTERNAL_STORAGE` legacy en
-Android 13+ (API 33+); declara ambas formas para que los dispositivos más antiguos sigan
+Android 13+ (API 33+); declare ambas formas para que los dispositivos más antiguos sigan
 funcionando.
 
 ## Qué añade el paquete para Android
 
-El paso `deploy-unity-natives.ps1` despliega el runtime Android en tu proyecto así:
+El paso `deploy-unity-natives.ps1` despliega el runtime Android en su proyecto así:
 
 | Ruta | Contenido |
 |---|---|
@@ -92,7 +92,7 @@ El paso `deploy-unity-natives.ps1` despliega el runtime Android en tu proyecto a
 El `link.xml` es obligatorio. Sin él, el stripping de código gestionado de IL2CPP elimina tipos
 a los que el SDK accede por reflexión — subclases `GLib.SignalArgs`, `SignalClosure.MarshalCallback`
 — y el primer disparo de delegado lanza `MissingMethodException`. El paquete distribuye un
-`link.xml` probado; no lo elimines de `Assets/`.
+`link.xml` probado; no lo elimine de `Assets/`.
 
 ## Tamaño de build
 
@@ -102,8 +102,8 @@ El flavor Android añade aproximadamente **35 MB** al APK / AAB:
 - `libVisioForge_Core.so` — ~2 MB
 - Ensamblados gestionados — ~3 MB
 
-Si distribuyes también ARMv7 (no incluido actualmente por el paquete, pero si lo despliegas
-manualmente), espera duplicar las bibliotecas nativas.
+Si distribuye también ARMv7 (no incluido actualmente por el paquete, pero si lo despliega
+manualmente), espere duplicar las bibliotecas nativas.
 
 ## Build Standalone
 
@@ -119,21 +119,21 @@ Probado en:
 
 | Síntoma | Causa | Arreglo |
 |---|---|---|
-| `DllNotFoundException: libgstreamer_android` al cargar la escena | El Scripting Backend es Mono, no IL2CPP. | Cambia a IL2CPP en Project Settings → Player → Other Settings. |
-| `MissingMethodException` de `GLib.SignalArgs` o `SignalClosure.MarshalCallback` | `link.xml` falta o fue eliminado. | Confirma que `Assets/VisioForge/link.xml` existe. Reimporta el paquete si no está. |
-| `InvalidOperationException: Unity Android bootstrap requires com.unity3d.player.UnityPlayer.currentActivity to be available` | Wear OS / Android TV / host Unity-as-a-library donde el campo es null en `BeforeSceneLoad`. | Difiere `VisioForgeEnvironment.Configure()` al primer evento de Activity observable y llámalo manualmente desde allí. |
-| El init Java falla con `failed to find getFilesDir` | La Activity no es una `UnityPlayerActivity` y no expone la API Context estándar de Android. | Confirma que la Activity host hereda de una `Activity` real de Android. |
-| Streams RTSPS / HTTPS fallan con error TLS | La extracción del paquete CA falló silenciosamente. | Mira en Logcat `[VisioForge] CA cert extraction failed`. Reimporta el paquete si el recurso embebido falta. |
-| La app crashea en el segundo `Awake` tras volver de fondo | Se llamó a `VisioForgeX.DestroySDK()` en `OnDestroy`. | No lo llames — consulta [Bootstrap y ciclo de vida](bootstrap.md#el-ciclo-de-vida-del-editor). |
+| `DllNotFoundException: libgstreamer_android` al cargar la escena | El Scripting Backend es Mono, no IL2CPP. | Cambie a IL2CPP en Project Settings → Player → Other Settings. |
+| `MissingMethodException` de `GLib.SignalArgs` o `SignalClosure.MarshalCallback` | `link.xml` falta o fue eliminado. | Confirme que `Assets/VisioForge/link.xml` existe. Reimporte el paquete si no está. |
+| `InvalidOperationException: Unity Android bootstrap requires com.unity3d.player.UnityPlayer.currentActivity to be available` | Wear OS / Android TV / host Unity-as-a-library donde el campo es null en `BeforeSceneLoad`. | Difiera `VisioForgeEnvironment.Configure()` al primer evento de Activity observable y llámelo manualmente desde allí. |
+| El init Java falla con `failed to find getFilesDir` | La Activity no es una `UnityPlayerActivity` y no expone la API Context estándar de Android. | Confirme que la Activity host hereda de una `Activity` real de Android. |
+| Streams RTSPS / HTTPS fallan con error TLS | La extracción del paquete CA falló silenciosamente. | Mire en Logcat `[VisioForge] CA cert extraction failed`. Reimporte el paquete si el recurso embebido falta. |
+| La app crashea en el segundo `Awake` tras volver de fondo | Se llamó a `VisioForgeX.DestroySDK()` en `OnDestroy`. | No lo llame — consulte [Bootstrap y ciclo de vida](bootstrap.md#el-ciclo-de-vida-del-editor). |
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 ### ¿Por qué no se distribuye ARMv7?
 
 Los dispositivos Android modernos (línea base API 24 / Android 7.0) son predominantemente
 arm64. Distribuir los ~30 MB del GStreamer monolítico para ambas ABIs duplicaría el tamaño del
-paquete para una cuota de dispositivos minúscula. Si tienes un requisito ARMv7 estricto,
-contacta con soporte.
+paquete para una cuota de dispositivos minúscula. Si tiene un requisito ARMv7 estricto,
+contacte con soporte.
 
 ### ¿Puedo usar el SDK en un proyecto Android no-Unity?
 
@@ -143,7 +143,7 @@ ese runtime más el bootstrap Java y `link.xml`; el wrapper es específico de Un
 
 ### ¿Funciona el SDK en el modo Android Editor (Project Player → Run In Editor)?
 
-Run-in-Editor para targets Android no se ejercita; compila y despliega a un dispositivo real.
+Run-in-Editor para targets Android no se ejercita; compile y despliegue a un dispositivo real.
 El propio Editor ejecuta el flavor **Windows** del SDK en un host Windows — cambiar el Build
 Target a Android en Build Profiles no cambia qué runtime nativo carga el Editor.
 

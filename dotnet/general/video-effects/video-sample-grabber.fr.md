@@ -26,7 +26,7 @@ primary_api_classes:
 
 # Utilisation du capteur d'échantillons vidéo
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Obtention des images vidéo brutes sous forme de pointeur de mémoire non managée à l'intérieur de la structure
 
@@ -41,9 +41,6 @@ primary_api_classes:
     {
         // Traiter l'objet VideoFrameX
         ProcessFrame(e.Frame);
-        
-        // Si vous avez modifié l'image et souhaitez mettre à jour le flux vidéo
-        e.UpdateData = true;
     }
     
     // Exemple de traitement d'une image VideoFrameX — ajustement de la luminosité
@@ -66,15 +63,25 @@ primary_api_classes:
         
         // Facteur de luminosité (1.2 = 20 % plus lumineux, 0.8 = 20 % plus sombre)
         float brightnessFactor = 1.2f;
-        
-        // Traiter chaque pixel
-        for (int i = 0; i < data.Length; i += pixelSize)
+
+        // Précalculer une table de correspondance pour que la boucle interne soit une consultation de table, pas une multiplication
+        var lut = new byte[256];
+        for (int v = 0; v < 256; v++)
         {
-            // Ajuster les canaux R, G, B
-            for (int j = 0; j < 3; j++)
+            lut[v] = (byte)Math.Min(255, (int)(v * brightnessFactor));
+        }
+
+        // Les lignes sont complétées sur un stride de 4 octets : parcourir ligne par ligne, jamais data.Length
+        int stride = frame.Stride;
+        for (int y = 0; y < frame.Height; y++)
+        {
+            int row = y * stride;
+            for (int x = 0; x < frame.Width; x++)
             {
-                int newValue = (int)(data[i + j] * brightnessFactor);
-                data[i + j] = (byte)Math.Min(255, newValue);
+                int pixel = row + x * pixelSize;
+                data[pixel] = lut[data[pixel]];
+                data[pixel + 1] = lut[data[pixel + 1]];
+                data[pixel + 2] = lut[data[pixel + 2]];
             }
         }
         
@@ -114,15 +121,23 @@ primary_api_classes:
         
         // Facteur de luminosité (1.2 = 20 % plus lumineux, 0.8 = 20 % plus sombre)
         float brightnessFactor = 1.2f;
-        
-        // Traiter chaque pixel (format RGB24 = 3 octets par pixel)
-        for (int i = 0; i < data.Length; i += 3)
+
+        // Précalculer une table de correspondance pour que la boucle interne soit une consultation de table, pas une multiplication
+        var lut = new byte[256];
+        for (int v = 0; v < 256; v++)
         {
-            // Ajuster les canaux R, G, B
-            for (int j = 0; j < 3; j++)
+            lut[v] = (byte)Math.Min(255, (int)(v * brightnessFactor));
+        }
+
+        // Les lignes RGB24 sont complétées sur un stride de 4 octets : parcourir ligne par ligne, jamais data.Length
+        int stride = frame.Info.Stride;
+        int rowBytes = frame.Info.Width * 3;
+        for (int y = 0; y < frame.Info.Height; y++)
+        {
+            int row = y * stride;
+            for (int i = 0; i < rowBytes; i++)
             {
-                int newValue = (int)(data[i + j] * brightnessFactor);
-                data[i + j] = (byte)Math.Min(255, newValue);
+                data[row + i] = lut[data[row + i]];
             }
         }
         
@@ -138,15 +153,14 @@ primary_api_classes:
     ```csharp
     // Créer et configurer le bloc de capteur d'échantillons vidéo
     var videoSampleGrabberBlock = new VideoSampleGrabberBlock(VideoFormatX.RGB);
+    // Requis lorsque le gestionnaire écrit dans l'image
+    videoSampleGrabberBlock.AllowFrameModification = true;
     videoSampleGrabberBlock.OnVideoFrameBuffer += OnVideoFrameBuffer;
     
     private void OnVideoFrameBuffer(object sender, VideoFrameXBufferEventArgs e)
     {
         // Traiter l'objet VideoFrameX
         ProcessFrame(e.Frame);
-        
-        // Si vous avez modifié l'image et souhaitez mettre à jour le flux vidéo
-        e.UpdateData = true;
     }
     
     // Exemple de traitement d'une image VideoFrameX — ajustement de la luminosité
@@ -162,15 +176,23 @@ primary_api_classes:
         
         // Facteur de luminosité (1.2 = 20 % plus lumineux, 0.8 = 20 % plus sombre)
         float brightnessFactor = 1.2f;
-        
-        // Traiter chaque pixel (format RGB = 3 octets par pixel)
-        for (int i = 0; i < data.Length; i += 3)
+
+        // Précalculer une table de correspondance pour que la boucle interne soit une consultation de table, pas une multiplication
+        var lut = new byte[256];
+        for (int v = 0; v < 256; v++)
         {
-            // Ajuster les canaux R, G, B
-            for (int j = 0; j < 3; j++)
+            lut[v] = (byte)Math.Min(255, (int)(v * brightnessFactor));
+        }
+
+        // Les lignes RGB sont complétées sur un stride de 4 octets : parcourir ligne par ligne, jamais data.Length
+        int stride = frame.Stride;
+        int rowBytes = frame.Width * 3;
+        for (int y = 0; y < frame.Height; y++)
+        {
+            int row = y * stride;
+            for (int i = 0; i < rowBytes; i++)
             {
-                int newValue = (int)(data[i + j] * brightnessFactor);
-                data[i + j] = (byte)Math.Min(255, newValue);
+                data[row + i] = lut[data[row + i]];
             }
         }
         
@@ -181,9 +203,13 @@ primary_api_classes:
     
 
 
+!!! note "Préférez l'effet de luminosité intégré pour une simple luminosité"
+
+    La luminosité est un effet vidéo intégré : appelez `VideoEffects_SetBrightness` (valeurs de -1.0 à 1.0) sur les moteurs classiques, ou ajoutez un `VideoBalanceBlock` avec `VideoBalanceVideoEffect.Brightness` défini dans un pipeline Media Blocks. Les deux s'exécutent nativement et sont plus rapides que le traitement par image en code managé. Utilisez le sample grabber pour le traitement personnalisé par image que les effets intégrés ne couvrent pas.
+
 ## Travailler avec des images bitmap
 
-Si vous avez besoin de travailler avec des objets Bitmap managés plutôt qu'avec des pointeurs vers de la mémoire brute, vous pouvez utiliser l'événement `OnVideoFrameBitmap` des classes `core` ou du SampleGrabberBlock :
+Si vous avez besoin de travailler avec des objets Bitmap managés plutôt qu'avec des pointeurs vers de la mémoire brute, vous pouvez utiliser l'événement `OnVideoFrameBitmap` des classes `core` ou du SampleGrabberBlock. Les moteurs X et le SampleGrabberBlock transmettent une copie de l'image, donc les modifications de ce bitmap n'atteignent le flux vidéo qu'avec les moteurs classiques, et seulement si vous définissez `e.UpdateData = true` :
 
 ```csharp
 // S'abonner à l'événement d'image bitmap
@@ -198,12 +224,27 @@ private void OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
     e.UpdateData = true;
 }
 
+// Copie réutilisable de l'image
+private Bitmap _source;
+
 // Exemple de traitement d'un Bitmap — ajustement de la luminosité
 private void ProcessBitmap(Bitmap bitmap)
 {
     // Utilisez les méthodes Bitmap ou Graphics pour manipuler l'image
     // Cet exemple utilise ColorMatrix pour l'ajustement de la luminosité
     
+    // GDI+ ne peut pas dessiner un bitmap sur son propre Graphics, on copie donc d'abord l'image dans un tampon réutilisable
+    if (_source == null || _source.Width != bitmap.Width || _source.Height != bitmap.Height)
+    {
+        _source?.Dispose();
+        _source = new Bitmap(bitmap.Width, bitmap.Height);
+    }
+
+    using (Graphics copy = Graphics.FromImage(_source))
+    {
+        copy.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+    }
+
     // Créer un objet graphics à partir du bitmap
     using (Graphics g = Graphics.FromImage(bitmap))
     {
@@ -224,7 +265,7 @@ private void ProcessBitmap(Bitmap bitmap)
             attributes.SetColorMatrix(colorMatrix);
             
             // Dessiner l'image avec l'ajustement de luminosité
-            g.DrawImage(bitmap, 
+            g.DrawImage(_source, 
                 new Rectangle(0, 0, bitmap.Width, bitmap.Height),
                 0, 0, bitmap.Width, bitmap.Height,
                 GraphicsUnit.Pixel, attributes);
@@ -366,11 +407,13 @@ L'événement `OnVideoFrameBuffer` est plus rapide et fournit le pointeur de mé
    - RGBA/BGRA/ARGB : 4 octets par pixel (avec canal alpha)
    - Formats YUV : arrangements de composantes différents
 
-2. Définissez `e.UpdateData = true` si vous avez modifié les données de l'image et souhaitez que les modifications soient visibles dans le flux vidéo.
+2. Avec les moteurs classiques, définissez `e.UpdateData = true` si vous avez modifié les données de l'image et souhaitez que les modifications soient visibles dans le flux vidéo. Media Blocks SDK et les moteurs X ne lisent pas `UpdateData`.
 
-3. Pour un traitement nécessitant plusieurs images ou des opérations complexes, envisagez d'utiliser un tampon ou une file d'attente pour stocker les images.
+3. Définissez `AllowFrameModification = true` sur le `VideoSampleGrabberBlock` (Media Blocks SDK) avant le démarrage du pipeline, ou sur le `CustomVideoSampleGrabberEffect` (Media Blocks SDK et moteurs X) avant d'ajouter l'effet. Sans cela, l'image est mappée en lecture seule et vos modifications peuvent atteindre une autre branche d'un `TeeBlock` qui partage la même image.
 
-4. Lorsque vous utilisez `OnVideoFrameSKBitmap`, sélectionnez RGBA ou BGRA comme format d'image lors de la création du VideoSampleGrabberBlock.
+4. Pour un traitement nécessitant plusieurs images ou des opérations complexes, envisagez d'utiliser un tampon ou une file d'attente pour stocker les images.
+
+5. Lorsque vous utilisez `OnVideoFrameSKBitmap`, sélectionnez RGBA ou BGRA comme format d'image lors de la création du VideoSampleGrabberBlock.
 
 ---
 Visitez notre page [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) pour obtenir d'autres exemples de code.

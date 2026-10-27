@@ -10,11 +10,11 @@ tags:
 
 ---
 
-# Guía de Implementación de Visión por Computadora
+# Guía de implementación de visión por computadora
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }, [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }, [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }, [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }, [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Resumen de Paquetes Disponibles
+## Resumen de paquetes disponibles
 
 Nuestro SDK proporciona dos paquetes NuGet con capacidades de visión por computadora para sus aplicaciones:
 
@@ -23,11 +23,11 @@ Nuestro SDK proporciona dos paquetes NuGet con capacidades de visión por comput
 
 Ambos paquetes proporcionan una API consistente para integrar visión por computadora directamente en sus aplicaciones .NET.
 
-## Requisitos de Despliegue
+## Requisitos de despliegue
 
-### Paquete CV Específico para Windows
+### Paquete CV específico para Windows
 
-#### Proceso de Instalación
+#### Proceso de instalación
 
 El paquete CV específico para Windows está diseñado para una integración sin problemas:
 
@@ -35,11 +35,11 @@ El paquete CV específico para Windows está diseñado para una integración sin
 - No se necesitan pasos adicionales de despliegue
 - Listo para usar inmediatamente después de la instalación
 
-### Paquete CVD Multiplataforma
+### Paquete CVD multiplataforma
 
 Nuestro paquete CVD multiplataforma requiere configuraciones específicas según su sistema operativo:
 
-#### Configuración del Entorno Windows
+#### Configuración del entorno Windows
 
 Al desplegar en sistemas Windows:
 
@@ -61,7 +61,7 @@ Estos paquetes proporcionan funcionalidades esenciales:
 - `libopenblas-dev`: Optimiza las operaciones de matrices para algoritmos de visión por computadora
 - `libx11-6`: Maneja la biblioteca cliente del protocolo X Window System
 
-#### Instrucciones de Configuración para macOS
+#### Instrucciones de configuración para macOS
 
 Para entornos macOS, use Homebrew para instalar las dependencias requeridas:
 
@@ -75,7 +75,7 @@ Estos componentes habilitan:
 - XQuartz: Proporciona funcionalidad X11 en macOS
 - mono-libgdiplus: Asegura la compatibilidad con System.Drawing
 
-## Recursos Adicionales
+## Recursos adicionales
 
 Para ejemplos de implementación y orientación técnica:
 

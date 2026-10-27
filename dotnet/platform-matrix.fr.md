@@ -17,7 +17,7 @@ tags:
 
 # SDK .NET : fonctionnalités et plateformes prises en charge
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Découvrez l'ensemble complet de fonctionnalités et la large compatibilité de plateformes des SDK .NET VisioForge. Les tableaux ci-dessous détaillent les formats d'entrée et de sortie pris en charge, les codecs vidéo et audio, l'accélération matérielle, les périphériques de capture et les protocoles réseau sur Windows, Linux, macOS, Android et iOS.
 

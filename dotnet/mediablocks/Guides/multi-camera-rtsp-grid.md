@@ -32,7 +32,7 @@ primary_api_classes:
 
 # Multi-Camera RTSP Grid — 4×4 NVR Wall in C# / .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Cross-platform support"
     The Media Blocks SDK runs on **Windows, macOS, Linux, Android, and iOS** via GStreamer — the WPF and MAUI examples below cover the full cross-platform story. See the [platform support matrix](../../platform-matrix.md) for codec and hardware-acceleration details, and the [Linux deployment guide](../../deployment-x/Ubuntu.md) for Ubuntu / NVIDIA Jetson / Raspberry Pi setup.

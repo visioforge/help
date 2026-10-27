@@ -28,7 +28,7 @@ primary_api_classes:
 
 # Using the VisioForge MCP Server for AI-Assisted Development
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to the VisioForge MCP Server
 
@@ -284,8 +284,8 @@ Get platform-specific file copying/build configuration code. Returns MSBuild tar
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```

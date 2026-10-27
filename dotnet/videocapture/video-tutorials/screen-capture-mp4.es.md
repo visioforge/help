@@ -1,7 +1,7 @@
 ---
-title: Grabación de Pantalla en C# .NET — MP4, GPU, Multi-Monitor
+title: Grabación de pantalla en C# .NET — MP4, GPU, Multi-Monitor
 description: Grabación pantalla completa, región y multi-monitor. Codificación GPU (NVENC/QSV/AMF), audio loopback, resaltado de cursor. Ejemplos API legacy y moderna.
-sidebar_label: Captura de Pantalla a MP4
+sidebar_label: Captura de pantalla a MP4
 tags:
   - Video Capture SDK
   - .NET
@@ -32,7 +32,7 @@ primary_api_classes:
 
 # Captura de pantalla a archivo MP4
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Tutorial de YouTube
 
@@ -47,11 +47,11 @@ primary_api_classes:
 - Redistribuibles de captura de video [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 - Redistribuibles MP4 [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
 
-## API Moderna — Video Capture SDK X
+## API moderna — Video Capture SDK X
 
 La API moderna multiplataforma usa `VideoCaptureCoreX` con captura de pantalla Direct3D 11 y Windows Graphics Capture (WGC). Esta aplicación de consola graba la pantalla completa a MP4 con audio del sistema opcional.
 
-### Paquetes NuGet Requeridos
+### Paquetes NuGet requeridos
 
 ```bash
 dotnet add package VisioForge.DotNet.Core
@@ -62,7 +62,7 @@ Agregue el [paquete de redistribución](../../deployment-x/index.md) para su pla
 
 Los mismos paquetes se usan para la prueba de 30 días y las aplicaciones con licencia. Consulte la [página de licencias de VisioForge](https://www.visioforge.com/licensing) para conocer las condiciones de la prueba y la activación mediante `.vflicense`.
 
-### Ejemplo Completo
+### Ejemplo completo
 
 ```csharp
 using System;
@@ -125,7 +125,7 @@ class Program
 }
 ```
 
-### Agregar Audio del Sistema (Loopback)
+### Agregar audio del sistema (Loopback)
 
 Para incluir el audio del escritorio en la grabación, agregue captura de loopback WASAPI2:
 
@@ -144,7 +144,7 @@ if (audioOutputs.Length > 0)
 
 Para audio de micrófono en su lugar, use `DeviceEnumerator.Shared.AudioSourcesAsync()` — consulte la [guía de Captura de Audio](../audio-capture/index.md) para ejemplos completos.
 
-## Codificación Acelerada por GPU
+## Codificación acelerada por GPU
 
 La codificación acelerada por hardware descarga la compresión H.264/HEVC a su GPU, reduciendo significativamente el uso de CPU durante grabaciones de alta resolución o alta tasa de fotogramas.
 
@@ -180,7 +180,7 @@ Los codificadores HEVC (H.265) también están disponibles para mejor compresió
     `VisioForge.Core.Types.Output.MP4Output` con una forma de settings
     diferente — no los mezcle.
 
-## Captura de Pantalla con Media Blocks SDK
+## Captura de pantalla con Media Blocks SDK
 
 El Media Blocks SDK usa un enfoque de pipeline donde conecta bloques de fuente, procesamiento y salida. Esto da control total sobre el flujo de datos y permite dividir el flujo de video a múltiples salidas simultáneamente.
 
@@ -241,7 +241,7 @@ class Program
 }
 ```
 
-## Captura de Pantalla Multiplataforma
+## Captura de pantalla multiplataforma
 
 El SDK soporta captura de pantalla en Windows, macOS y Linux con configuraciones de fuente específicas por plataforma:
 
@@ -260,9 +260,9 @@ var screenSource = new ScreenCaptureD3D11SourceSettings
 };
 ```
 
-## API Legada — Video Capture SDK
+## API legada — Video Capture SDK
 
-### Ejemplo de Código
+### Ejemplo de código
 
 ```csharp
 using System;
@@ -375,7 +375,7 @@ namespace screen_capture_mp4
         private void Form1_Load(object sender, EventArgs e)
         {
             // Inicializar el componente de captura de video y conectarlo a un control de vista previa de video
-            // VideoView1 debe ser un control en tu formulario que implemente la interfaz IVideoView
+            // VideoView1 debe ser un control en su formulario que implemente la interfaz IVideoView
             // Esto permite vista previa en vivo de la captura cuando se desee
             videoCapture1 = new VideoCaptureCore(VideoView1 as IVideoView);
         }
@@ -383,7 +383,7 @@ namespace screen_capture_mp4
 }
 ```
 
-## Cómo Funciona — API Legada
+## Cómo funciona — API legada
 
 Esta aplicación de Windows Forms demuestra la funcionalidad de captura de pantalla con y sin audio usando VisioForge Video Capture SDK:
 
@@ -405,7 +405,7 @@ Esta aplicación de Windows Forms demuestra la funcionalidad de captura de panta
 
 La aplicación demuestra cómo configurar diferentes escenarios de captura con código mínimo usando la interfaz fluida del SDK y patrones async.
 
-### Configuración de Audio
+### Configuración de audio
 
 El ejemplo de código anterior captura audio del micrófono seleccionando el primer dispositivo disponible. Puede seleccionar un dispositivo de audio específico por nombre, incluyendo dispositivos de audio del sistema (loopback) para capturar el sonido del escritorio:
 
@@ -436,7 +436,7 @@ videoCapture1.Audio_PlayAudio = false;
 videoCapture1.Audio_RecordAudio = false;
 ```
 
-### Captura de Región
+### Captura de región
 
 En lugar de grabar la pantalla completa, capture un área rectangular específica estableciendo `FullScreen = false` y proporcionando coordenadas en píxeles:
 
@@ -453,7 +453,7 @@ videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
 
 Las coordenadas definen el rectángulo de captura en píxeles de pantalla. Esto es útil para grabar una ventana de aplicación específica o una porción del escritorio.
 
-### Grabación Multi-Monitor
+### Grabación multi-monitor
 
 Seleccione qué pantalla grabar usando la propiedad `DisplayIndex`. El monitor principal es el índice `0`, el secundario es `1`, y así sucesivamente:
 
@@ -465,7 +465,7 @@ videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
 };
 ```
 
-### Configuración de Calidad de Grabación
+### Configuración de calidad de grabación
 
 Personalice la salida MP4 configurando el codificador H.264. El bitrate predeterminado es 3500 kbps, que produce aproximadamente 25 MB por minuto a 1080p:
 
@@ -479,7 +479,7 @@ videoCapture1.Output_Format = mp4Output;
 
 Para codificación acelerada por GPU, consulte la sección [Codificación Acelerada por GPU](#codificacion-acelerada-por-gpu) anterior.
 
-### Opciones del Cursor del Mouse
+### Opciones del cursor del mouse
 
 Incluya el cursor del mouse en la grabación y opcionalmente agregue un efecto de resaltado para screencasts estilo tutorial:
 
@@ -497,11 +497,11 @@ videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
 
 El resaltado dibuja un círculo translúcido alrededor del cursor, facilitando que los espectadores sigan los movimientos del mouse.
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 ### ¿Qué licencia necesito para una aplicación de captura de pantalla en C#?
 
-Video Capture SDK .Net requiere una licencia para desarrollo y distribución. Una licencia de Desarrollador elimina la marca de agua de evaluación y desbloquea todas las funciones durante el desarrollo. Una licencia de Release es necesaria al distribuir su aplicación a los usuarios finales. El SDK está disponible en edición Premium que incluye todos los modos de captura, salida MP4/AVI/WMV y los motores DirectShow y GStreamer. Puede evaluar el SDK sin licencia — la captura de pantalla funciona completamente pero incluye una marca de agua superpuesta. Visite la [página del producto](https://www.visioforge.com/video-capture-sdk-net) para conocer precios y opciones de licencia.
+El Video Capture SDK .Net requiere una licencia para desarrollo y distribución. Una licencia de Desarrollador elimina la marca de agua de evaluación y desbloquea todas las funciones durante el desarrollo. Una licencia de Release es necesaria al distribuir su aplicación a los usuarios finales. El SDK está disponible en edición Premium que incluye todos los modos de captura, salida MP4/AVI/WMV y los motores DirectShow y GStreamer. Puede evaluar el SDK sin licencia — la captura de pantalla funciona completamente pero incluye una marca de agua superpuesta. Visite la [página del producto](https://www.visioforge.com/video-capture-sdk-net) para conocer precios y opciones de licencia.
 
 ### ¿Cómo controlo la calidad de grabación y el tamaño de archivo para la captura de pantalla MP4?
 
@@ -519,7 +519,7 @@ Establezca la propiedad `DisplayIndex` en `ScreenCaptureSourceSettings` — use 
 
 La tasa de fotogramas predeterminada es 10 FPS. Use 15 FPS para presentaciones, diapositivas y contenido mayormente estático. Use 25–30 FPS para tutoriales de software y demostraciones de UI donde el movimiento suave del mouse importa. Use 60 FPS para grabación de juegos o contenido con mucho movimiento. Tasas de fotogramas más altas aumentan el tamaño del archivo y el uso de CPU proporcionalmente. Establezca la tasa de fotogramas a través de `ScreenCaptureSourceSettings.FrameRate`.
 
-## Ver También
+## Ver también
 
 - [Captura de Pantalla a AVI](screen-capture-avi.md) — grabar pantalla a formato AVI con video sin comprimir o MJPEG
 - [Captura de Pantalla a WMV](screen-capture-wmv.md) — grabar pantalla a formato Windows Media
@@ -527,4 +527,4 @@ La tasa de fotogramas predeterminada es 10 FPS. Use 15 FPS para presentaciones, 
 - [Configuración de Fuente de Pantalla](../video-sources/screen.md) — referencia completa para región de captura, multi-monitor, cursor y configuración de tasa de fotogramas
 - [Guardar Video de Webcam](../guides/save-webcam-video.md) — captura de webcam a MP4 con configuración de audio
 - [Ejemplos de Código](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — ejemplos adicionales de captura de pantalla en GitHub
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas

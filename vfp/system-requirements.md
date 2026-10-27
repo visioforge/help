@@ -22,7 +22,7 @@ This page outlines the system requirements for running the Video Fingerprinting 
 ### Windows
 
 - **Operating System**: Windows 10 version 1903+ or Windows 11
-- **Architecture**: x86, x64, or ARM64 (ARM64 for .NET SDK only)
+- **Architecture**: x86, x64, or ARM64 (ARM64 for the .NET SDK only, with .NET 6+; on ARM64 a .NET Framework app must run as x86, or as x64 on Windows 11)
 - **Runtime**: Microsoft Visual C++ Redistributables 2019 or later
 - **Additional Libraries**: DirectShow filters for enhanced codec support (optional)
 
@@ -77,7 +77,9 @@ This page outlines the system requirements for running the Video Fingerprinting 
 
 - **.NET Version**: 
   - Windows: .NET Framework 4.6.1+ or .NET 6.0+
-  - Linux/macOS: .NET 6.0+
+  - Linux: .NET 6.0+
+  - macOS: .NET 9.0+
+  - Target framework (.NET 5+ apps): add the OS to it, `-windows` on Windows (`net8.0-windows`) and `-macos` on macOS (`net9.0-macos` or later). A target framework without an OS suffix (`net8.0`) is the Linux build: on Windows or macOS it reports the native library as missing.
 - **IDE**: Visual Studio 2019+ (Windows), Visual Studio Code, or JetBrains Rider
 
 ### C++ SDK

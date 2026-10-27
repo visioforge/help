@@ -1,6 +1,6 @@
 ---
 title: Integración de Radio FM y Sintonizador de TV en .NET
-description: Implementa sintonización de radio FM y TV en aplicaciones C# para escanear frecuencias, gestionar canales e integrar capacidades de transmisión en .NET.
+description: Implemente sintonización de radio FM y TV en aplicaciones C# para escanear frecuencias, gestionar canales e integrar capacidades de transmisión en .NET.
 tags:
   - Video Capture SDK
   - .NET
@@ -15,23 +15,23 @@ primary_api_classes:
 
 ---
 
-# Integración de Radio FM y Sintonización de TV para Aplicaciones .NET
+# Integración de radio FM y sintonización de TV para aplicaciones .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
-## Introducción a la Integración de Transmisión
+## Introducción a la integración de transmisión
 
-Las aplicaciones .NET modernas pueden aprovechar las capacidades del hardware para proporcionar funcionalidad de sintonización de radio FM y TV. Esta guía demuestra cómo implementar estas características en tus aplicaciones C#, ya sea que estés construyendo aplicaciones WPF, WinForms o de consola. Siguiendo estos ejemplos, podrás detectar dispositivos sintonizadores disponibles, escanear frecuencias, gestionar canales y entregar una experiencia de transmisión completa a tus usuarios.
+Las aplicaciones .NET modernas pueden aprovechar las capacidades del hardware para proporcionar funcionalidad de sintonización de radio FM y TV. Esta guía demuestra cómo implementar estas características en sus aplicaciones C#, ya sea que esté construyendo aplicaciones WPF, WinForms o de consola. Siguiendo estos ejemplos, podrá detectar dispositivos sintonizadores disponibles, escanear frecuencias, gestionar canales y entregar una experiencia de transmisión completa a sus usuarios.
 
-## Requisitos de Hardware
+## Requisitos de hardware
 
-Antes de implementar las muestras de código a continuación, asegúrate de que tu sistema de desarrollo tenga:
+Antes de implementar las muestras de código a continuación, asegúrese de que su sistema de desarrollo tenga:
 
 1. Una tarjeta sintonizadora de TV o dispositivo USB compatible
 2. Instalación correcta de controladores
 3. .NET Framework 4.7+ o .NET Core 3.1+/.NET 5.0+ para aplicaciones modernas
 
-## Detectar Dispositivos Sintonizadores Disponibles
+## Detectar dispositivos sintonizadores disponibles
 
 El primer paso en la implementación de funcionalidad de sintonizador es detectar todos los dispositivos sintonizadores disponibles en el sistema. Esto permite a los usuarios seleccionar el hardware apropiado para sus necesidades.
 
@@ -43,13 +43,13 @@ foreach (var tunerDevice in VideoCapture1.TVTuner_Devices())
 }
 ```
 
-Luego puedes permitir a los usuarios seleccionar su dispositivo preferido de la lista poblada, o seleccionar automáticamente el primer dispositivo disponible para una experiencia más fluida.
+Luego puede permitir a los usuarios seleccionar su dispositivo preferido de la lista poblada, o seleccionar automáticamente el primer dispositivo disponible para una experiencia más fluida.
 
-## Conceptos Básicos de Configuración
+## Conceptos básicos de configuración
 
-### Selección de Formato de TV
+### Selección de formato de TV
 
-Diferentes regiones usan diferentes estándares de transmisión. Tu aplicación debería detectar y permitir la selección del estándar apropiado:
+Diferentes regiones usan diferentes estándares de transmisión. Su aplicación debería detectar y permitir la selección del estándar apropiado:
 
 ```cs
 // Listar todos los formatos de TV soportados (PAL, NTSC, SECAM, etc.)
@@ -59,9 +59,9 @@ foreach (var tunerTVFormat in VideoCapture1.TVTuner_TVFormats())
 }
 ```
 
-### Configuraciones Regionales
+### Configuraciones regionales
 
-Las frecuencias de transmisión varían por país. Configura tu aplicación con las configuraciones regionales correctas:
+Las frecuencias de transmisión varían por país. Configure su aplicación con las configuraciones regionales correctas:
 
 ```cs
 // Poblar selección de país para frecuencias específicas de la región
@@ -73,7 +73,7 @@ foreach (var tunerCountry in VideoCapture1.TVTuner_Countries())
 
 ## Configurar el Sintonizador
 
-Después de detectar los dispositivos disponibles, necesitas seleccionar e inicializar el sintonizador:
+Después de detectar los dispositivos disponibles, necesita seleccionar e inicializar el sintonizador:
 
 ```cs
 // Seleccionar el dispositivo Sintonizador de TV
@@ -85,9 +85,9 @@ await VideoCapture1.TVTuner_ReadAsync();
 
 Este proceso de inicialización preparará el sintonizador para operaciones adicionales y leerá su configuración actual.
 
-## Trabajar con Diferentes Fuentes de Señal
+## Trabajar con diferentes fuentes de señal
 
-La mayoría de los sintonizadores soportan múltiples tipos de entrada. Necesitarás determinar qué modos están disponibles:
+La mayoría de los sintonizadores soportan múltiples tipos de entrada. Necesitará determinar qué modos están disponibles:
 
 ```cs
 // Obtener todos los modos disponibles (TV, Radio FM, etc.)
@@ -97,7 +97,7 @@ foreach (var tunerMode in VideoCapture1.TVTuner_Modes())
 }
 ```
 
-Luego selecciona la fuente de entrada apropiada:
+Luego seleccione la fuente de entrada apropiada:
 
 ```cs
 // Seleccionar la fuente de señal (Antena, Cable, etc.)
@@ -107,9 +107,9 @@ cbTVInput.SelectedIndex = cbTVInput.Items.IndexOf(VideoCapture1.TVTuner_InputTyp
 cbTVMode.SelectedIndex = cbTVMode.Items.IndexOf(VideoCapture1.TVTuner_Mode);
 ```
 
-## Gestión Avanzada de Frecuencias
+## Gestión avanzada de frecuencias
 
-Para control detallado, puedes trabajar directamente con los valores de frecuencia:
+Para control detallado, puede trabajar directamente con los valores de frecuencia:
 
 ```cs
 // Mostrar configuraciones de frecuencia actuales
@@ -119,9 +119,9 @@ edAudioFreq.Text = Convert.ToString(VideoCapture1.TVTuner_AudioFrequency());
 
 Estos valores pueden ser útiles para depuración o crear interfaces de selección de frecuencia personalizadas.
 
-## Configurar Estándares del Sistema de Transmisión
+## Configurar estándares del sistema de transmisión
 
-Diferentes regiones usan diferentes estándares de transmisión. Configura tu aplicación con el sistema correcto:
+Diferentes regiones usan diferentes estándares de transmisión. Configure su aplicación con el sistema correcto:
 
 ```cs
 // Seleccionar el sistema de TV (PAL, NTSC, SECAM, etc.)
@@ -131,7 +131,7 @@ cbTVSystem.SelectedIndex = cbTVSystem.Items.IndexOf(VideoCapture1.TVTuner_TVForm
 cbTVCountry.SelectedIndex = cbTVCountry.Items.IndexOf(VideoCapture1.TVTuner_Country);
 ```
 
-## Escaneo Automatizado de Canales
+## Escaneo automatizado de canales
 
 Una de las características más importantes es la capacidad de escanear y detectar automáticamente los canales disponibles. Esto requiere implementar un manejador de eventos para recibir los resultados del escaneo:
 
@@ -159,11 +159,11 @@ private void VideoCapture1_OnTVTunerTuneChannels(object sender, TVTunerTuneChann
 }
 ```
 
-Este manejador de eventos será llamado para cada frecuencia mientras se escanea, permitiéndote actualizar tu UI y recolectar los canales encontrados.
+Este manejador de eventos será llamado para cada frecuencia mientras se escanea, permitiéndole actualizar su UI y recolectar los canales encontrados.
 
-## Iniciar el Proceso de Escaneo de Canales
+## Iniciar el proceso de escaneo de canales
 
-Una vez que el manejador de eventos está en su lugar, puedes iniciar el proceso de escaneo:
+Una vez que el manejador de eventos está en su lugar, puede iniciar el proceso de escaneo:
 
 ```cs
 const int KHz = 1000;
@@ -190,11 +190,11 @@ VideoCapture1.TVTuner_TuneChannels_Start();
 
 Este código prepara el sintonizador y comienza el escaneo. Para modo de radio FM, establece rangos de frecuencia y pasos específicos.
 
-## Gestión Manual de Canales
+## Gestión manual de canales
 
-Además del escaneo automático, tu aplicación debería permitir la selección manual de canales:
+Además del escaneo automático, su aplicación debería permitir la selección manual de canales:
 
-### Establecer Canal por Número
+### Establecer canal por número
 
 ```cs
 // Establecer a un número de canal específico
@@ -202,7 +202,7 @@ VideoCapture1.TVTuner_Channel = Convert.ToInt32(edChannel.Text);
 await VideoCapture1.TVTuner_ApplyAsync();
 ```
 
-### Establecer Canal por Frecuencia
+### Establecer canal por frecuencia
 
 ```cs
 // Establecer canal a -1 para permitir configuración directa de frecuencia
@@ -217,14 +217,14 @@ Este enfoque da a los usuarios avanzados más control sobre su experiencia de si
 
 ## Optimizar la Experiencia del Usuario
 
-Para la mejor experiencia de usuario, considera implementar estas características adicionales:
+Para la mejor experiencia de usuario, considere implementar estas características adicionales:
 
 1. **Canales favoritos**: Permitir a los usuarios guardar y acceder rápidamente a sus canales preferidos
 2. **Indicador de intensidad de señal**: Mostrar la calidad de señal actual
 3. **Información del canal**: Mostrar información del programa cuando esté disponible
 4. **Tarea programada de auto-sintonización**: Escanear periódicamente nuevos canales
 
-## Mejores Prácticas de Manejo de Errores
+## Mejores prácticas de manejo de errores
 
 El manejo robusto de errores es esencial para aplicaciones de sintonizador:
 
@@ -233,17 +233,17 @@ El manejo robusto de errores es esencial para aplicaciones de sintonizador:
 3. Proporcionar mensajes de error claros cuando la sintonización falla
 4. Implementar tiempos de espera para operaciones de escaneo
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Para usar las características de sintonización de radio FM y TV, incluye estos paquetes:
+Para usar las características de sintonización de radio FM y TV, incluya estos paquetes:
 
 - Redistribuibles de captura de video:
   - [Paquete x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
   - [Paquete x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-Puedes agregar estos paquetes vía NuGet Package Manager o editando tu archivo .csproj directamente.
+Puede agregar estos paquetes vía NuGet Package Manager o editando su archivo .csproj directamente.
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
 Al implementar funcionalidad de sintonizador:
 
@@ -254,7 +254,7 @@ Al implementar funcionalidad de sintonizador:
 
 ## Conclusión
 
-Siguiendo esta guía, puedes implementar capacidades completas de sintonización de radio FM y TV en tus aplicaciones .NET. Estas características pueden mejorar aplicaciones de medios, sistemas de automatización del hogar o software de transmisión especializado. El SDK proporciona una API limpia y consistente que maneja las complejidades de diferentes hardware de sintonizador.
+Siguiendo esta guía, puede implementar capacidades completas de sintonización de radio FM y TV en sus aplicaciones .NET. Estas características pueden mejorar aplicaciones de medios, sistemas de automatización del hogar o software de transmisión especializado. El SDK proporciona una API limpia y consistente que maneja las complejidades de diferentes hardware de sintonizador.
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más muestras de código.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más muestras de código.

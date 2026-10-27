@@ -1,5 +1,5 @@
 ---
-title: Instalar SDK de Video VisioForge en Aplicaciones Avalonia
+title: Instalar SDK de Video VisioForge en aplicaciones Avalonia
 description: Construye aplicaciones Avalonia multiplataforma con capacidades multimedia para Windows, macOS, Linux, Android e iOS usando SDKs de video de VisioForge.
 tags:
   - Video Capture SDK
@@ -21,19 +21,19 @@ primary_api_classes:
 
 ---
 
-# Construyendo Aplicaciones Avalonia Ricas en Medios con VisioForge
+# Construir aplicaciones Avalonia ricas en medios con VisioForge
 
-## Descripción General del Framework
+## Descripción general del framework
 
 Avalonia UI destaca como un framework de UI .NET versátil y verdaderamente multiplataforma con soporte que abarca entornos de escritorio (Windows, macOS, Linux) y plataformas móviles (iOS y Android). VisioForge mejora este ecosistema a través del paquete especializado `VisioForge.DotNet.Core.UI.Avalonia`, que ofrece controles multimedia de alto rendimiento adaptados a la arquitectura de Avalonia.
 
 Nuestra suite de SDKs potencia a los desarrolladores de Avalonia con amplias capacidades multimedia:
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Configuración e Instalación
+## Configuración e instalación
 
-### Instalación de Paquetes Esenciales
+### Instalación de paquetes esenciales
 
 Crear una aplicación Avalonia con capacidades multimedia de VisioForge requiere instalar varios componentes NuGet clave:
 
@@ -41,7 +41,7 @@ Crear una aplicación Avalonia con capacidades multimedia de VisioForge requiere
 2. Paquete de funcionalidad principal: `VisioForge.DotNet.Core` (o variante de SDK especializado)
 3. Bindings nativos específicos de plataforma (cubiertos en detalle en secciones posteriores)
 
-Agrega estos a tu manifiesto de proyecto (`.csproj`):
+Agregue estos a su manifiesto de proyecto (`.csproj`):
 
 ```xml
 <ItemGroup>
@@ -51,11 +51,11 @@ Agrega estos a tu manifiesto de proyecto (`.csproj`):
 </ItemGroup>
 ```
 
-### Arquitectura de Inicialización de Avalonia
+### Arquitectura de inicialización de Avalonia
 
 Una ventaja clave de la integración de VisioForge con Avalonia es su modelo de inicialización fluido. A diferencia de algunos frameworks que requieren configuración global explícita, los controles de Avalonia están disponibles inmediatamente una vez que se hace referencia al paquete principal.
 
-Tu código de arranque estándar de Avalonia en `Program.cs` permanece sin cambios:
+Su código de arranque estándar de Avalonia en `Program.cs` permanece sin cambios:
 
 ```csharp
 using Avalonia;
@@ -76,9 +76,9 @@ class Program
 }
 ```
 
-### Implementando el Componente VideoView
+### Implementar el componente VideoView
 
-El control `VideoView` sirve como el elemento central de renderizado. Intégralo en tus archivos `.axaml` usando:
+El control `VideoView` sirve como el elemento central de renderizado. Intégrelo en sus archivos `.axaml` usando:
 
 1. Primero, declara el espacio de nombres de VisioForge:
 
@@ -86,7 +86,7 @@ El control `VideoView` sirve como el elemento central de renderizado. Intégralo
 xmlns:vf="clr-namespace:VisioForge.Core.UI.Avalonia;assembly=VisioForge.Core.UI.Avalonia"
 ```
 
-2. Luego, implementa el control en tu estructura de diseño:
+2. Luego, implemente el control en su estructura de diseño:
 
 ```xml
 <vf:VideoView 
@@ -99,15 +99,15 @@ xmlns:vf="clr-namespace:VisioForge.Core.UI.Avalonia;assembly=VisioForge.Core.UI.
 
 Este control se adapta automáticamente al pipeline de renderizado específico de la plataforma mientras mantiene una superficie de API consistente.
 
-## Integración de Plataformas de Escritorio
+## Integración de plataformas de escritorio
 
-### Guía de Implementación en Windows
+### Guía de implementación en Windows
 
 El despliegue en Windows requiere componentes nativos específicos empaquetados como referencias NuGet.
 
-#### Componentes Principales de Windows
+#### Componentes principales de Windows
 
-Agrega los siguientes paquetes específicos de Windows a tu proyecto de escritorio:
+Agregue los siguientes paquetes específicos de Windows a su proyecto de escritorio:
 
 ```xml
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
@@ -115,7 +115,7 @@ Agrega los siguientes paquetes específicos de Windows a tu proyecto de escritor
 </ItemGroup>
 ```
 
-#### Soporte Avanzado de Formatos de Medios
+#### Soporte avanzado de formatos de medios
 
 Para compatibilidad extendida de codecs, incluye la variante UPX optimizada en tamaño de las bibliotecas libAV:
 
@@ -131,7 +131,7 @@ La variante UPX ofrece optimización significativa de tamaño mientras mantiene 
 
 Para despliegue en macOS:
 
-#### Paquete de Binding Nativo
+#### Paquete de binding nativo
 
 Incluye los componentes nativos específicos de macOS:
 
@@ -143,7 +143,7 @@ Incluye los componentes nativos específicos de macOS:
 
 #### Configuración del Framework
 
-Configura tu proyecto con el objetivo de framework macOS apropiado:
+Configure su proyecto con el objetivo de framework macOS apropiado:
 
 ```xml
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
@@ -158,7 +158,7 @@ El soporte de Linux incluye:
 
 #### Configuración del Framework
 
-Configura el framework objetivo apropiado para entornos Linux:
+Configure el framework objetivo apropiado para entornos Linux:
 
 ```xml
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
@@ -167,23 +167,23 @@ Configura el framework objetivo apropiado para entornos Linux:
 </PropertyGroup>
 ```
 
-#### Dependencias del Sistema
+#### Dependencias del sistema
 
-Para despliegue en Linux, asegúrate de que las bibliotecas de sistema requeridas estén disponibles en el sistema objetivo. A diferencia de Windows y macOS que usan paquetes NuGet, Linux puede requerir dependencias a nivel de sistema. Consulta la documentación de VisioForge para Linux para requisitos específicos de plataforma.
+Para despliegue en Linux, asegúrese de que las bibliotecas de sistema requeridas estén disponibles en el sistema objetivo. A diferencia de Windows y macOS que usan paquetes NuGet, Linux puede requerir dependencias a nivel de sistema. Consulte la documentación de VisioForge para Linux para requisitos específicos de plataforma.
 
-## Desarrollo Móvil
+## Desarrollo móvil
 
 ### Configuración de Android
 
 La implementación en Android requiere pasos adicionales únicos para el modelo de integración de Avalonia con Android:
 
-#### Capa de Interoperabilidad Java
+#### Capa de interoperabilidad Java
 
 La implementación de VisioForge para Android requiere un puente de binding entre .NET y las APIs nativas de Android:
 
-1. Obtén el proyecto de binding Java del [repositorio de ejemplos de VisioForge](https://github.com/visioforge/.Net-SDK-s-samples) en el directorio `AndroidDependency`
-2. Elige el proyecto de binding que coincida con la versión de .NET con la que compilas - la carpeta incluye un `VisioForge.Core.Android.X{N}.csproj` por cada versión de .NET soportada (por ejemplo, `VisioForge.Core.Android.X9.csproj` para .NET 9, `VisioForge.Core.Android.X10.csproj` para .NET 10). Si tu versión de .NET no aparece en la lista, elige la más cercana disponible.
-3. Referencia este proyecto en tu proyecto principal de Android:
+1. Obtenga el proyecto de binding Java del [repositorio de ejemplos de VisioForge](https://github.com/visioforge/.Net-SDK-s-samples) en el directorio `AndroidDependency`
+2. Elija el proyecto de binding que coincida con la versión de .NET con la que compila - la carpeta incluye un `VisioForge.Core.Android.X{N}.csproj` por cada versión de .NET soportada (por ejemplo, `VisioForge.Core.Android.X9.csproj` para .NET 9, `VisioForge.Core.Android.X10.csproj` para .NET 10). Si su versión de .NET no aparece en la lista, elija la más cercana disponible.
+3. Referencia este proyecto en su proyecto principal de Android:
 
 ```xml
 <ItemGroup>
@@ -191,9 +191,9 @@ La implementación de VisioForge para Android requiere un puente de binding entr
 </ItemGroup>
 ```
 
-#### Paquete Específico de Android
+#### Paquete específico de Android
 
-Agrega el paquete redistributable de Android:
+Agregue el paquete redistributable de Android:
 
 ```xml
 <ItemGroup>
@@ -201,9 +201,9 @@ Agrega el paquete redistributable de Android:
 </ItemGroup>
 ```
 
-#### Permisos de Tiempo de Ejecución
+#### Permisos de tiempo de ejecución
 
-Configura el `AndroidManifest.xml` con los permisos apropiados:
+Configure el `AndroidManifest.xml` con los permisos apropiados:
 
 - `android.permission.CAMERA`
 - `android.permission.RECORD_AUDIO`
@@ -215,59 +215,59 @@ Configura el `AndroidManifest.xml` con los permisos apropiados:
 
 La integración con iOS en Avalonia requiere:
 
-#### Componentes Nativos
+#### Componentes nativos
 
-Agrega el redistributable específico de iOS a tu proyecto principal de iOS:
+Agregue el redistributable específico de iOS a su proyecto principal de iOS:
 
 ```xml
 <ItemGroup>
   <!-- La versión del redistribuable de iOS va por detrás de la versión del SDK a propósito - sigue
-       el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. No la subas para
+       el ciclo de reconstrucción de GStreamer-iOS, no el lanzamiento del wrapper. No subirla para
        igualar VisioForge.DotNet.*; no existe una versión 2026.x en nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
-#### Notas Importantes de Implementación
+#### Notas importantes de implementación
 
 - Las pruebas en dispositivos físicos son esenciales, ya que el soporte de simulador es limitado
-- Actualiza tu `Info.plist` con descripciones de privacidad:
+- Actualice su `Info.plist` con descripciones de privacidad:
   - `NSCameraUsageDescription` para acceso a cámara
   - `NSMicrophoneUsageDescription` para grabación de audio
 
-## Ingeniería de Rendimiento
+## Ingeniería de rendimiento
 
 Maximiza el rendimiento de la aplicación con estas optimizaciones específicas de Avalonia:
 
-1. Habilita la aceleración de hardware cuando sea soportada por la plataforma subyacente
-2. Implementa escalado de resolución adaptativo basado en las capacidades del dispositivo
-3. Optimiza los patrones de uso de memoria, especialmente para objetivos móviles
-4. Utiliza el modelo de composición de Avalonia efectivamente minimizando la complejidad del árbol visual alrededor del `VideoView`
+1. Habilite la aceleración de hardware cuando sea soportada por la plataforma subyacente
+2. Implemente escalado de resolución adaptativo basado en las capacidades del dispositivo
+3. Optimice los patrones de uso de memoria, especialmente para objetivos móviles
+4. Utilice el modelo de composición de Avalonia efectivamente minimizando la complejidad del árbol visual alrededor del `VideoView`
 
-## Guía de Solución de Problemas
+## Guía de solución de problemas
 
-### Problemas de Formato de Medios
+### Problemas de formato de medios
 
 - **Fallos de reproducción**:
-  - Asegúrate de que todos los paquetes de plataforma estén correctamente referenciados
-  - Verifica la disponibilidad del codec para el formato de medios objetivo
-  - Verifica las restricciones de formato específicas de la plataforma
+  - Asegúrese de que todos los paquetes de plataforma estén correctamente referenciados
+  - Verifique la disponibilidad del codec para el formato de medios objetivo
+  - Verifique las restricciones de formato específicas de la plataforma
 
-### Preocupaciones de Rendimiento
+### Preocupaciones de rendimiento
 
 - **Reproducción o renderizado lento**:
-  - Habilita la aceleración de hardware donde esté disponible
-  - Reduce la resolución de procesamiento cuando sea apropiado
-  - Utiliza el modelo de threading de Avalonia correctamente
+  - Habilite la aceleración de hardware donde esté disponible
+  - Reduzca la resolución de procesamiento cuando sea apropiado
+  - Utilice el modelo de threading de Avalonia correctamente
 
-### Desafíos de Despliegue
+### Desafíos de despliegue
 
 - **Errores de tiempo de ejecución específicos de plataforma**:
   - Valida las especificaciones del framework objetivo
-  - Verifica la disponibilidad de dependencias nativas
+  - Verifique la disponibilidad de dependencias nativas
   - Asegura el aprovisionamiento adecuado para objetivos móviles
 
-## Arquitectura de Proyecto Multi-Plataforma
+## Arquitectura de proyecto multi-plataforma
 
 La integración de VisioForge con Avalonia sobresale con una estructura de proyecto especializada multi-cabeza. El ejemplo `SimplePlayerMVVM` demuestra esta arquitectura:
 
@@ -314,4 +314,4 @@ Para aplicaciones más simples solo de escritorio, `SimpleVideoCaptureA.csproj` 
 
 La integración de VisioForge con Avalonia ofrece un enfoque sofisticado para el desarrollo multimedia multiplataforma que aprovecha las ventajas arquitectónicas únicas de Avalonia. A través de componentes específicos de plataforma cuidadosamente estructurados y una API unificada, los desarrolladores pueden construir aplicaciones de medios ricas que abarcan plataformas de escritorio y móviles sin comprometer el rendimiento o las capacidades.
 
-Para ejemplos de código completos y aplicaciones de muestra, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples), que contiene demostraciones especializadas de Avalonia en las secciones de Video Capture SDK X y Media Player SDK X.
+Para ejemplos de código completos y aplicaciones de muestra, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples), que contiene demostraciones especializadas de Avalonia en las secciones de Video Capture SDK X y Media Player SDK X.

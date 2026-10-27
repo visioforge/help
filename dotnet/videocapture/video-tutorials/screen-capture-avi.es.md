@@ -32,7 +32,7 @@ primary_api_classes:
 
 # Guía de Implementación de Captura de Pantalla a AVI en C#
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Tutorial en Video Paso a Paso
 
@@ -176,4 +176,4 @@ Elija AVI cuando necesite acceso independiente a fotogramas para edición de vid
 - [Captura de Pantalla en VB.NET](../guides/screen-capture-vb-net.md) — grabación de pantalla en Visual Basic .NET
 - [Configuración de Fuente de Pantalla](../video-sources/screen.md) — referencia completa para configuración de captura
 - [Ejemplos de Código](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — ejemplos adicionales de captura de pantalla en GitHub
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas

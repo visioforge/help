@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Blocs de traitement vidéo
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Table des matières
 
@@ -97,7 +97,7 @@ primary_api_classes:
 
 ## Aging
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Aging simule la détérioration et l'usure des films d'époque, en appliquant à la vidéo des effets de vieillissement réalistes : rayures de pellicule, particules de poussière, dégradation des couleurs, virage sépia et fluctuations temporelles, afin de recréer une apparence authentique de film ancien.
 
@@ -148,7 +148,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Alpha Combine
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc AlphaCombine combine deux flux vidéo grâce au mélange par canal alpha, permettant des opérations de composition sophistiquées avec un contrôle de la transparence.
 
@@ -195,7 +195,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Auto Deinterlace
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc AutoDeinterlace détecte et désentrelace automatiquement le contenu vidéo entrelacé, en le convertissant au format progressif. Il détermine intelligemment quand le désentrelacement est nécessaire en se basant sur les propriétés du flux vidéo.
 
@@ -239,7 +239,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Bayer to RGB
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Bayer2RGB convertit les données brutes de capteur au motif Bayer en vidéo couleur RGB. Ce traitement est indispensable pour les vidéos issues de caméras et capteurs industriels qui délivrent des données brutes au format Bayer.
 
@@ -283,7 +283,7 @@ Windows, macOS, Linux.
 
 ## Chroma Key
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc ChromaKey fournit des fonctions professionnelles de composition par fond vert et d'incrustation par chrominance, en supprimant des couleurs spécifiques du contenu vidéo et en combinant les sujets de premier plan sur différents arrière-plans. Il intègre une sélection de couleurs avancée, un raffinement des bords, la suppression des débordements de teinte et la génération d'un canal alpha.
 
@@ -357,7 +357,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Codec Alpha Demux
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc CodecAlphaDemux sépare le canal alpha des codecs vidéo qui prennent en charge un canal alpha intégré (comme VP8, VP9 ou ProRes avec alpha).
 
@@ -403,7 +403,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Color effects
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc effectue un traitement colorimétrique de base sur les images vidéo : effet caméra thermique factice, virage sépia, inversion avec légère teinte bleue, traitement croisé (cross processing) et filtre couleur premier plan jaune / arrière-plan bleu.
 
@@ -448,7 +448,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Dice
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Dice divise l'image vidéo en une grille de tuiles et applique diverses transformations pour créer un effet visuel fragmenté, façon mosaïque.
 
@@ -492,7 +492,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Edge
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Edge détecte et met en évidence les contours dans les images vidéo, créant un effet visuel de détection de contours utile à des fins artistiques ou pour le prétraitement en vision par ordinateur.
 
@@ -536,7 +536,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Deinterlace
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc désentrelace les images vidéo entrelacées pour produire des images progressives. Plusieurs méthodes de traitement sont disponibles.
 Utilisez la classe `DeinterlaceSettings` pour configurer le bloc.
@@ -581,7 +581,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Fish eye
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc fisheye simule un objectif fisheye en zoomant sur le centre de l'image et en compressant les bords.
 
@@ -625,7 +625,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Flip/Rotate
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc retourne et fait pivoter le flux vidéo.
 Utilisez l'énumération `VideoFlipRotateMethod` pour le configurer.
@@ -671,7 +671,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Gamma
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc effectue la correction gamma sur un flux vidéo.
 
@@ -715,7 +715,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Gaussian blur
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc applique un flou au flux vidéo en utilisant la fonction gaussienne.
 
@@ -759,7 +759,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Grayscale
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Grayscale convertit la vidéo couleur en niveaux de gris (noir et blanc), en supprimant toute information de couleur tout en préservant la luminance.
 
@@ -803,7 +803,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Image overlay
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc superpose une image chargée depuis un fichier sur un flux vidéo.
 
@@ -849,7 +849,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Image Overlay Cairo
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc ImageOverlayCairo offre des fonctionnalités avancées de superposition d'image en s'appuyant sur la bibliothèque graphique Cairo, avec une qualité de rendu améliorée et des fonctionnalités supplémentaires par rapport au bloc de superposition d'image standard.
 
@@ -893,7 +893,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Interlace
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Interlace convertit la vidéo progressive au format entrelacé, en créant des lignes de trames alternées. Utile pour la diffusion ou la compatibilité avec les systèmes d'affichage entrelacés.
 
@@ -937,7 +937,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Key Frame Detector
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc KeyFrameDetector analyse les flux vidéo pour détecter et identifier les images-clés (I-frames) de la séquence vidéo, utile pour les applications d'édition et d'analyse vidéo.
 
@@ -986,7 +986,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## LUT Processor
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc LUT Processor (Look-Up Table) applique l'étalonnage et la correction colorimétriques au moyen de fichiers LUT 3D, permettant des transformations de couleurs professionnelles et des rendus cinématographiques.
 
@@ -1034,7 +1034,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Mirror
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc miroir divise l'image en deux moitiés et réfléchit l'une par-dessus l'autre.
 
@@ -1078,7 +1078,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Moving Blur
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc MovingBlur crée des effets de flou de mouvement dynamiques en mélangeant les images courantes avec les précédentes, simulant un flou de bougé caméra ou créant des effets de traînée artistiques.
 
@@ -1122,7 +1122,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Moving Echo
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc MovingEcho crée des effets visuels d'écho en superposant des versions retardées des images vidéo, produisant un effet de fantôme ou de traînée.
 
@@ -1166,7 +1166,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Moving Zoom Echo
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc MovingZoomEcho combine des effets d'écho de mouvement avec des transformations de zoom, créant des effets visuels dynamiques qui simulent des traînées de zoom.
 
@@ -1210,7 +1210,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Optical Animation BW
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc OpticalAnimationBW applique des effets d'animation optique en noir et blanc, créant des transformations visuelles de style film vintage.
 
@@ -1254,7 +1254,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Overlay Manager
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc OverlayManager fournit un système complet pour gérer plusieurs superpositions (texte, images, formes) sur la vidéo, avec prise en charge des mises à jour dynamiques et des animations.
 
@@ -1312,7 +1312,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Perspective
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc perspective applique une transformation de perspective 2D.
 
@@ -1356,7 +1356,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Pinch
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc applique la transformation géométrique de pincement (pinch) à l'image.
 
@@ -1400,7 +1400,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Pseudo 3D
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Pseudo3D applique des transformations de perspective de type 3D pour créer des illusions de profondeur dans la vidéo 2D.
 
@@ -1444,7 +1444,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## QR Code Overlay
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc QRCodeOverlay génère et superpose des QR codes sur le contenu vidéo, utile pour intégrer des URLs, des métadonnées ou des informations de suivi.
 
@@ -1488,7 +1488,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Quark
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Quark applique un effet visuel de type particules qui fragmente l'image en éléments façon quark.
 
@@ -1532,7 +1532,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Ripple
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Ripple crée des effets de distorsion façon ondulations à la surface de l'eau sur l'image vidéo.
 
@@ -1576,7 +1576,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Rotate
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc fait pivoter l'image selon un angle spécifié.
 
@@ -1620,7 +1620,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Rounded Corners
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc RoundedCorners applique des coins arrondis aux images vidéo, créant une apparence moderne aux bords adoucis.
 
@@ -1664,7 +1664,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Resize
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc redimensionne le flux vidéo. Vous pouvez configurer la méthode de redimensionnement, l'indicateur letterbox, et de nombreuses autres options.
 
@@ -1710,7 +1710,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Video sample grabber
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le capteur d'échantillons vidéo (video sample grabber) déclenche un événement pour chaque image vidéo. Vous pouvez enregistrer ou traiter l'image vidéo reçue.
 
@@ -1760,7 +1760,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## SMPTE
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc SMPTE crée des transitions de type volet (wipe) de qualité diffusion entre deux sources vidéo, en utilisant les motifs de transition standard SMPTE (Society of Motion Picture and Television Engineers).
 
@@ -1812,7 +1812,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## SMPTE Alpha
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc SMPTEAlpha crée des transitions de type volet (wipe) au format SMPTE avec prise en charge du canal alpha pour une composition tenant compte de la transparence.
 
@@ -1863,7 +1863,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## SVG Overlay
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc SVGOverlay restitue du contenu SVG (Scalable Vector Graphics) par-dessus la vidéo, permettant des superpositions graphiques vectorielles redimensionnables de haute qualité.
 
@@ -1911,7 +1911,7 @@ Windows, macOS, Linux, iOS.
 
 ## Simple Video Mark
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc SimpleVideoMark intègre des filigranes ou marqueurs invisibles dans le contenu vidéo à des fins de suivi et de vérification.
 
@@ -1955,7 +1955,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Simple Video Mark Detect
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc SimpleVideoMarkDetect détecte et extrait les filigranes invisibles intégrés par le bloc SimpleVideoMark.
 
@@ -2003,7 +2003,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Smooth
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Smooth applique des filtres de lissage pour réduire le bruit et donner à la vidéo une apparence plus douce.
 
@@ -2047,7 +2047,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Sphere
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc sphère applique une transformation géométrique sphérique à la vidéo.
 
@@ -2091,7 +2091,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Square
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc square (carré) déforme la partie centrale de la vidéo en lui donnant une forme carrée.
 
@@ -2135,7 +2135,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Pan Zoom
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le `PanZoomBlock` applique des transformations de panoramique et de zoom à un flux vidéo en utilisant un rendu basé sur Cairo via l'élément GStreamer `cairooverlay`. Le bloc prend en charge le panoramique et le zoom statiques ainsi qu'animés (interpolés dans le temps), ainsi que le mappage de la vidéo sur un rectangle cible arbitraire.
 
@@ -2221,7 +2221,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Stretch
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc stretch (étirement) étire la vidéo en cercle autour du point central.
 
@@ -2265,7 +2265,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Text overlay
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc ajoute la superposition de texte par-dessus le flux vidéo.
 
@@ -2367,7 +2367,7 @@ Windows, macOS, Linux et iOS. Android prend uniquement en charge le texte simple
 
 ## Tunnel
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc applique un effet de tunnel lumineux à un flux vidéo.
 
@@ -2411,7 +2411,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Twirl
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc twirl (tourbillon) fait tournoyer l'image vidéo depuis le centre vers l'extérieur.
 
@@ -2455,7 +2455,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Video balance
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce bloc traite le flux vidéo et vous permet de modifier la luminosité, le contraste, la teinte et la saturation.
 Utilisez la classe `VideoBalanceVideoEffect` pour configurer les paramètres du bloc.
@@ -2500,7 +2500,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Video mixer
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc de mélangeur vidéo possède plusieurs entrées et une seule sortie. Le bloc dessine les entrées dans l'ordre sélectionné aux positions sélectionnées. Vous pouvez également définir le niveau de transparence souhaité pour chaque flux.
 
@@ -2661,7 +2661,7 @@ Le choix du mélangeur approprié dépend des exigences de votre application. Po
 
 ## Water ripple
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc water ripple crée un effet d'ondulation d'eau sur le flux vidéo.
 Utilisez la classe `WaterRippleVideoEffect` pour la configuration.
@@ -2706,7 +2706,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Video Aspect Ratio Crop
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc VideoAspectRatioCrop rogne automatiquement la vidéo selon un rapport d'aspect spécifique, en supprimant les bandes noires horizontales (letterbox) ou verticales (pillarbox).
 
@@ -2750,7 +2750,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Video Box
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc VideoBox ajoute des bordures colorées ou des bandes de type letterbox autour du contenu vidéo.
 
@@ -2800,7 +2800,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Video Converter
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc VideoConverter convertit la vidéo entre différents espaces colorimétriques et formats de pixels.
 
@@ -2844,7 +2844,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Video Crop
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc VideoCrop supprime des parties de l'image vidéo en rognant des régions spécifiques.
 
@@ -2895,7 +2895,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Video Effects
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc VideoEffects fournit une collection complète d'effets vidéo, comprenant des ajustements colorimétriques, des filtres et des transformations.
 
@@ -2939,7 +2939,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Video Padding Changer
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc VideoPaddingChanger modifie dynamiquement le remplissage (padding) / les bordures de la vidéo.
 
@@ -2990,7 +2990,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Video Rate
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc VideoRate ajuste la fréquence d'images du contenu vidéo par duplication ou suppression d'images.
 
@@ -3034,7 +3034,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Warp
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Warp applique des transformations géométriques de déformation pour créer des effets de distorsion.
 
@@ -3078,7 +3078,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## D3D11 Video Converter
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc D3D11 Video Converter effectue une conversion de format vidéo accélérée matériellement via Direct3D 11. Utile pour des changements efficaces d'espace colorimétrique ou de format sur les plateformes Windows.
 
@@ -3122,7 +3122,7 @@ Windows (Direct3D 11 requis).
 
 ## D3D12 Interlace
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc D3D12 Interlace convertit sur un GPU Direct3D 12 une vidéo progressive en vidéo entrelacée, pour la diffusion et les autres sorties qui exigent une vidéo entrelacée avec un ordre de trames explicite. C'est l'équivalent GPU du bloc [Interlace](#interlace) et l'inverse du désentrelacement. Le motif de trames, l'ordre des trames, le moteur GPU et l'adaptateur se règlent avec `D3D12InterlaceSettings` ; voir [Blocs de la plateforme Windows](../windows/index.md#traitement-direct3d-12) pour le détail.
 
@@ -3173,7 +3173,7 @@ Windows (Direct3D 12 requis).
 
 ## D3D12 Fisheye Dewarp
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc D3D12 Fisheye Dewarp transforme sur un GPU Direct3D 12 une image fisheye circulaire en vue équirectangulaire, panoramique ou en perspective. La vue peut être orientée et zoomée pendant l'exécution du pipeline en modifiant `Settings` puis en appelant `Update()`. La sortie conserve la taille, le format et la fréquence d'images de l'entrée. La projection, le cercle fisheye, le champ de vision, la rotation, le rayon intérieur du panorama, la région d'intérêt, le viewport et l'adaptateur se règlent avec `D3D12FisheyeDewarpSettings` ; voir [Blocs de la plateforme Windows](../windows/index.md#traitement-direct3d-12) pour le détail. Le bloc [CV Dewarp](../OpenCV/index.md#bloc-cv-dewarp) est l'alternative sur CPU.
 
@@ -3225,7 +3225,7 @@ Windows (Direct3D 12 requis).
 
 ## D3D12 Remap
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc D3D12 Remap déplace les pixels de la vidéo sur un GPU Direct3D 12 selon une carte UV fournie par l'application : chaque point de l'image de sortie affiche le point de l'image d'entrée que la carte lui associe. Cela couvre la calibration d'objectif et la correction de distorsion, la déformation, le miroir et toute autre transformation géométrique décrite point par point. Le bloc envoie lui-même la carte sur le GPU, et la carte peut être remplacée ou retirée pendant l'exécution du pipeline en modifiant `Settings.Map` puis en appelant `Update()`. La sortie conserve la taille, le format et la fréquence d'images de l'entrée. Voir [Blocs de la plateforme Windows](../windows/index.md#traitement-direct3d-12) pour le format de la carte.
 
@@ -3286,7 +3286,7 @@ Windows (Direct3D 12 requis).
 
 ## Video Effects (Windows)
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Video Effects (Windows) vous permet d'ajouter, de mettre à jour et de gérer plusieurs effets vidéo en temps réel. Ce bloc est spécifique à Windows et tire parti du pipeline Media Foundation pour le traitement des effets.
 
@@ -3332,7 +3332,7 @@ Windows.
 
 ## D3D11 Video Compositor
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc D3D11 Video Compositor fournit un mélange et une composition vidéo accélérés matériellement via Direct3D 11. Il est conçu pour la composition vidéo multi-flux haute performance sur Windows.
 
@@ -3388,7 +3388,7 @@ Windows (Direct3D 11 requis).
 
 ## VR360 Processor
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc VR360 Processor applique des effets vidéo équirectangulaires à 360 degrés, adaptés au contenu VR. Il utilise Direct3D 11 pour un traitement accéléré par GPU et permet l'ajustement en temps réel du lacet (yaw), du tangage (pitch), du roulis (roll) et du champ de vision.
 
@@ -3519,7 +3519,7 @@ Windows, macOS, Linux.
 
 ## Squeezeback
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc Squeezeback reproduit l'effet « squeezeback » (DVE) de diffusion : la vidéo principale est réduite dans un rectangle tandis qu'une image d'arrière-plan remplit le reste de l'image — une disposition couramment utilisée pour faire défiler le générique de fin ou des promotions à côté du contenu en direct. En interne, il perce un trou alpha-transparent dans l'image d'arrière-plan à l'emplacement du rectangle vidéo et compose la vidéo à travers celui-ci. La position et l'opacité de la vidéo peuvent être animées à l'exécution, et l'image d'arrière-plan peut apparaître et disparaître en fondu.
 
@@ -3580,7 +3580,7 @@ Windows.
 
 ## Squeezeback V2
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 `SqueezebackBlockV2` est l'implémentation de squeezeback recommandée. Elle construit l'effet par-dessus un `VideoMixerBlock` au lieu d'une superposition à trou alpha, de sorte que l'image d'arrière-plan et la vidéo principale sont des couches de mixeur indépendantes. Cela ajoute un rectangle d'image d'arrière-plan distinct, un indicateur `videoOnTop` pour contrôler l'ordre de profondeur (z-order), l'échange de couches à l'exécution, ainsi qu'une animation indépendante de la position, de l'opacité et du fondu pour la vidéo comme pour l'image.
 
@@ -3637,7 +3637,7 @@ Windows.
 
 ## Stabilisation vidéo
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le bloc VideoStabilization supprime en temps réel les tremblements de caméra d'un flux vidéo en direct ou enregistré. Il estime le mouvement global entre les images par flux optique épars, lisse la trajectoire de la caméra avec une fenêtre de moyenne mobile causale, puis déforme chaque image pour la ramener sur la trajectoire lissée. Il s'appuie sur l'élément OpenCV `vfdeshake` et nécessite donc le redistribuable OpenCV.
 

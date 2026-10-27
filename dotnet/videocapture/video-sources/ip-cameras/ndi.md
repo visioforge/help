@@ -31,7 +31,7 @@ primary_api_classes:
 
 # Implementing NDI Video Sources in .NET Applications
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
 !!! info "Cross-platform support"
     The `VideoCaptureCoreX` engine with NDI runs on **Windows, macOS, Linux, Android, and iOS** via GStreamer; install the NDI runtime for each target platform. The classic `VideoCaptureCore` NDI source is Windows-only. See the [platform support matrix](../../../platform-matrix.md) and the [Linux deployment guide](../../../deployment-x/Ubuntu.md).

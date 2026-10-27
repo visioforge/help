@@ -1,5 +1,5 @@
 ---
-title: Registrar Filtros DirectShow con regsvr32, C++ y C# .NET
+title: Registrar filtros DirectShow con regsvr32, C++ y C# .NET
 description: Registre filtros DirectShow de VisioForge usando regsvr32 manual, métodos programáticos y automatización de instaladores con consejos de solución de problemas.
 tags:
   - DirectShow
@@ -17,37 +17,37 @@ primary_api_classes:
 
 ---
 
-# Guía de Registro de Filtros DirectShow
+# Guía de registro de filtros DirectShow
 
-## Descripción General
+## Descripción general
 
 Los filtros DirectShow deben estar registrados con Windows antes de poder usarse en aplicaciones. Esta guía cubre todos los métodos de registro para los filtros DirectShow de VisioForge.
 
 ---
-## Métodos de Registro
-### Método 1: Registro Automático (Instalador)
+## Métodos de registro
+### Método 1: Registro automático (instalador)
 El método recomendado para usuarios finales es usar el instalador oficial.
-**Instaladores Disponibles**:
+**Instaladores disponibles**:
 - `visioforge_ffmpeg_source_filter_setup.exe` - FFMPEG Source DirectShow Filter
 - `visioforge_vlc_source_filter_setup.exe` - VLC Source DirectShow Filter
 - `visioforge_processing_filters_pack_setup.exe` - Processing Filters Pack
 - `visioforge_encoding_filters_pack_setup.exe` - Encoding Filters Pack
 - `visioforge_virtual_camera_sdk_setup.exe` - Virtual Camera SDK
-**Pasos de Instalación**:
-1. Ejecute el instalador como Administrador
+**Pasos de instalación**:
+1. Ejecute el instalador como administrador
 2. Siga el asistente de instalación
 3. Los filtros se registran automáticamente
 4. No se requieren pasos adicionales
 ---
 
-### Método 2: Registro Manual (regsvr32)
+### Método 2: Registro manual (regsvr32)
 
 Para desarrollo y pruebas, puede registrar manualmente los filtros usando la utilidad `regsvr32` de Windows.
 
-#### Comando de Registro
+#### Comando de registro
 
 ```batch
-# Abra el Símbolo del sistema como Administrador
+# Abra el Símbolo del sistema como administrador
 # Clic derecho en Inicio → Símbolo del sistema (Admin)
 
 # Registrar filtro x86 (32-bit)
@@ -60,7 +60,7 @@ regsvr32 "C:\Ruta\Al\Filtro_x64.ax"
 regsvr32 /u "C:\Ruta\Al\Filtro.ax"
 ```
 
-#### Ejemplos Específicos por SDK
+#### Ejemplos específicos por SDK
 
 **FFMPEG Source DirectShow Filter**:
 ```batch
@@ -73,21 +73,24 @@ regsvr32 "C:\Program Files\VisioForge\FFMPEG Source\VisioForge_FFMPEG_Source_x64
 
 **VLC Source DirectShow Filter**:
 ```batch
-# Solo x86
+# x86
 regsvr32 "C:\Program Files (x86)\VisioForge\VLC Source\VisioForge_VLC_Source.ax"
+
+# x64
+regsvr32 "C:\Program Files\VisioForge\VLC Source\VisioForge_VLC_Source_x64.ax"
 ```
 
 **Processing Filters Pack** (múltiples filtros):
 ```batch
-# Efectos de Video
+# Efectos de video
 regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Video_Effects_Pro.ax"
 regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
 
-# Mezclador de Video
+# Mezclador de video
 regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Video_Mixer.ax"
 regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Video_Mixer_x64.ax"
 
-# Mejorador de Audio
+# Mejorador de audio
 regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Audio_Enhancer.ax"
 regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Audio_Enhancer_x64.ax"
 ```
@@ -113,7 +116,7 @@ regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_MP4_Muxer_x64.
 
 **Virtual Camera SDK**:
 ```batch
-# Controlador de Cámara Virtual
+# Controlador de cámara virtual
 regsvr32 "C:\Program Files\VisioForge\Virtual Camera\VisioForge_Virtual_Camera.ax"
 regsvr32 "C:\Program Files\VisioForge\Virtual Camera\VisioForge_Virtual_Camera_x64.ax"
 
@@ -123,7 +126,7 @@ regsvr32 "C:\Program Files\VisioForge\Virtual Camera\VisioForge_Push_Video_Sourc
 ```
 
 ---
-### Método 3: Registro Programático (C++)
+### Método 3: Registro programático (C++)
 Registre filtros programáticamente desde el código de su aplicación.
 #### Usando LoadLibrary y DllRegisterServer
 ```cpp
@@ -194,7 +197,7 @@ int main()
     return 0;
 }
 ```
-#### Usando la Utilidad reg_special.exe
+#### Usando la utilidad reg_special.exe
 Los SDKs de VisioForge incluyen una utilidad `reg_special.exe` para registro simplificado:
 ```cpp
 #include <windows.h>
@@ -225,7 +228,7 @@ HRESULT RegisterWithUtility(const wchar_t* filterPath)
 ```
 ---
 
-### Método 4: Registro Programático (.NET/C#)
+### Método 4: Registro programático (.NET/C#)
 
 Registre filtros desde aplicaciones .NET usando P/Invoke.
 
@@ -365,22 +368,22 @@ class Program
 ```
 
 ---
-## Verificación de Registro
+## Verificación de registro
 ### Método 1: Usando GraphEdit/GraphStudioNext
 1. Inicie GraphEdit (Windows SDK) o GraphStudioNext
 2. Clic en "Graph" → "Insert Filters"
 3. Busque el nombre del filtro (ej., "FFMPEG Source", "VLC Source")
 4. Si el filtro aparece en la lista, el registro fue exitoso
-### Método 2: Usando el Editor de Registro
+### Método 2: Usando el Editor del Registro
 ```batch
-# Abrir Editor de Registro
+# Abrir Editor del Registro
 regedit
 # Navegar a:
 HKEY_CLASSES_ROOT\CLSID\{GUID}
 # Ejemplo para FFMPEG Source:
 # HKEY_CLASSES_ROOT\CLSID\{1974D893-83E4-4F89-9908-795C524CC17E}
 ```
-### Método 3: Verificación Programática (C++)
+### Método 3: Verificación programática (C++)
 ```cpp
 #include <dshow.h>
 bool IsFilterRegistered(const CLSID& filterClsid)
@@ -399,7 +402,7 @@ bool IsFilterRegistered(const CLSID& filterClsid)
 int main()
 {
     CoInitialize(NULL);
-    // CLSID del Filtro Fuente FFMPEG
+    // CLSID del filtro FFMPEG Source
     CLSID ffmpegSourceClsid =
         { 0x1974D893, 0x83E4, 0x4F89, { 0x99, 0x08, 0x79, 0x5C, 0x52, 0x4C, 0xC1, 0x7E } };
     if (IsFilterRegistered(ffmpegSourceClsid))
@@ -414,7 +417,7 @@ int main()
     return 0;
 }
 ```
-### Método 4: Verificación Programática (.NET/C#)
+### Método 4: Verificación programática (.NET/C#)
 ```csharp
 using System;
 using System.Runtime.InteropServices;
@@ -447,31 +450,31 @@ if (IsFilterRegistered(ffmpegSourceClsid))
 ```
 ---
 
-## Solución de Problemas
+## Solución de problemas
 
 ### Problema: "DllRegisterServer failed" o "Error 0x80004005"
 
 **Causas**:
-- No se está ejecutando como Administrador
+- No se está ejecutando como administrador
 - Dependencias faltantes (DLLs)
 - Arquitectura incorrecta (x86 vs x64)
 
 **Soluciones**:
 
-1. **Ejecutar como Administrador**:
+1. **Ejecutar como administrador**:
    ```batch
    # Clic derecho en Símbolo del sistema → Ejecutar como administrador
    regsvr32 "C:\Ruta\Al\Filtro.ax"
    ```
 
-2. **Verificar Dependencias**:
+2. **Verificar dependencias**:
    Use Dependency Walker o Dependencies.exe para verificar DLLs faltantes:
    ```batch
    # Descargue Dependencies de: https://github.com/lucasg/Dependencies
    Dependencies.exe "C:\Ruta\Al\Filtro.ax"
    ```
 
-3. **Verificar Arquitectura**:
+3. **Verificar arquitectura**:
    ```batch
    # Para aplicación 32-bit, registre filtro 32-bit
    regsvr32 "C:\Ruta\Al\Filtro.ax"
@@ -497,28 +500,28 @@ if (IsFilterRegistered(ffmpegSourceClsid))
 
 **Soluciones**:
 
-1. **Coincidir Arquitectura de Aplicación**:
+1. **Coincidir arquitectura de aplicación**:
    - App 32-bit necesita filtro 32-bit
    - App 64-bit necesita filtro 64-bit
 
-2. **Registro a Nivel de Sistema**:
+2. **Registro a nivel de sistema**:
    ```batch
-   # Ejecute Símbolo del sistema como Administrador
+   # Ejecute Símbolo del sistema como administrador
    # Esto registra a nivel de sistema (HKEY_LOCAL_MACHINE)
    regsvr32 "C:\Ruta\Al\Filtro.ax"
    ```
 
-3. **Verificar Ambos Registros**:
+3. **Verificar ambos registros**:
    - `HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID`
    - `HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID`
 
-### Problema: Acceso Denegado
+### Problema: Acceso denegado
 
 **Causa**: Permisos insuficientes.
 
 **Solución**:
 ```batch
-# Siempre ejecute como Administrador para registro de filtros
+# Siempre ejecute como administrador para registro de filtros
 # Clic derecho en Símbolo del sistema → Ejecutar como administrador
 ```
 
@@ -531,23 +534,23 @@ if (IsFilterRegistered(ffmpegSourceClsid))
 
 **Soluciones**:
 
-1. **Verificar Licencia**:
+1. **Verificar licencia**:
    - Verifique si la licencia de prueba ha expirado
    - Asegúrese de que la clave de licencia esté correctamente activada
 
-2. **Verificar Dependencias de Runtime**:
+2. **Verificar dependencias de runtime**:
    - FFMPEG Source: Requiere DLLs de FFmpeg (avcodec, avformat, etc.)
    - VLC Source: Requiere bibliotecas VLC (libvlc.dll, libvlccore.dll, plugins/)
    - NVENC: Requiere GPU NVIDIA y controladores
    - Processing/Encoding: Puede requerir Visual C++ Redistributables
 
-3. **Verificar Ubicaciones de Archivos**:
+3. **Verificar ubicaciones de archivos**:
    Todas las DLLs dependientes deben estar en el mismo directorio que el archivo .ax o en el PATH del sistema.
 
 ---
-## COM Sin Registro (Avanzado)
+## COM sin registro (avanzado)
 Para despliegue xcopy sin registro, use COM sin registro con archivos manifest.
-### Creando Archivo Manifest
+### Creando archivo manifest
 **filter.manifest** (colocar junto al archivo .ax):
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -588,94 +591,147 @@ Para despliegue xcopy sin registro, use COM sin registro con archivos manifest.
 - Los filtros registrados en el sistema tienen precedencia
 ---
 
-## Scripts de Registro por Lotes
+## Scripts de registro por lotes
 
-### Registrar Todos los Filtros (Script Batch)
+### Registrar todos los filtros (script batch)
 
 ```batch
 @echo off
-echo Registrando Filtros DirectShow de VisioForge...
+setlocal
+echo Registrando filtros DirectShow de VisioForge...
 echo.
 
-REM Verificar privilegios de Administrador
+REM Verificar privilegios de administrador
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo ERROR: ¡Este script debe ejecutarse como Administrador!
+    echo ERROR: Este script debe ejecutarse como administrador.
     pause
     exit /b 1
 )
 
 REM Establecer ruta de instalación
 set INSTALL_PATH=C:\Program Files\VisioForge
+set FAILED=
+set FOUND=
 
 REM Registrar FFMPEG Source
 echo Registrando FFMPEG Source...
-regsvr32 /s "%INSTALL_PATH%\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
-if %errorLevel% equ 0 (
-    echo   [OK] FFMPEG Source registrado
-) else (
-    echo   [FALLÓ] Registro de FFMPEG Source falló
-)
+call :register "%INSTALL_PATH%\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
 
 REM Registrar VLC Source
 echo Registrando VLC Source...
-regsvr32 /s "%INSTALL_PATH%\VLC Source\VisioForge_VLC_Source.ax"
-if %errorLevel% equ 0 (
-    echo   [OK] VLC Source registrado
-) else (
-    echo   [FALLÓ] Registro de VLC Source falló
-)
+call :register "%INSTALL_PATH%\VLC Source\VisioForge_VLC_Source_x64.ax"
 
-REM Registrar Filtros de Procesamiento
-echo Registrando Filtros de Procesamiento...
-regsvr32 /s "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
-regsvr32 /s "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Mixer_x64.ax"
-regsvr32 /s "%INSTALL_PATH%\Processing Filters\VisioForge_Audio_Enhancer_x64.ax"
-echo   [OK] Filtros de Procesamiento registrados
+REM Registrar Processing Filters
+echo Registrando Processing Filters...
+call :register "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
+call :register "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Mixer_x64.ax"
+call :register "%INSTALL_PATH%\Processing Filters\VisioForge_Audio_Enhancer_x64.ax"
 
-REM Registrar Filtros de Codificación
-echo Registrando Filtros de Codificación...
-regsvr32 /s "%INSTALL_PATH%\Encoding Filters\VisioForge_NVENC_x64.ax"
-regsvr32 /s "%INSTALL_PATH%\Encoding Filters\VisioForge_H264_Encoder_x64.ax"
-regsvr32 /s "%INSTALL_PATH%\Encoding Filters\VisioForge_AAC_Encoder_x64.ax"
-regsvr32 /s "%INSTALL_PATH%\Encoding Filters\VisioForge_MP4_Muxer_x64.ax"
-echo   [OK] Filtros de Codificación registrados
+REM Registrar Encoding Filters
+echo Registrando Encoding Filters...
+call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_NVENC_x64.ax"
+call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_H264_Encoder_x64.ax"
+call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_AAC_Encoder_x64.ax"
+call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_MP4_Muxer_x64.ax"
 
 echo.
-echo ¡Registro completo!
+if not defined FOUND (
+    echo No se encontraron archivos de filtros de VisioForge. Compruebe INSTALL_PATH.
+    pause
+    exit /b 1
+)
+if defined FAILED (
+    echo Registro finalizado con errores.
+    pause
+    exit /b 1
+)
+echo Registro completo.
 pause
+exit /b 0
+
+REM Registrar un filtro e informar del resultado
+:register
+if not exist %1 (
+    echo   [OMITIDO] %~nx1 - no encontrado
+    exit /b
+)
+set FOUND=1
+regsvr32 /s %1
+if %errorLevel% equ 0 (
+    echo   [OK] %~nx1
+) else (
+    echo   [FALLO] %~nx1
+    set FAILED=1
+)
+exit /b
 ```
 
-### Desregistrar Todos los Filtros
+### Desregistrar todos los filtros
 
 ```batch
 @echo off
-echo Desregistrando Filtros DirectShow de VisioForge...
+setlocal
+echo Desregistrando filtros DirectShow de VisioForge...
 echo.
 
-REM Verificar privilegios de Administrador
+REM Verificar privilegios de administrador
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo ERROR: ¡Este script debe ejecutarse como Administrador!
+    echo ERROR: Este script debe ejecutarse como administrador.
     pause
     exit /b 1
 )
 
 set INSTALL_PATH=C:\Program Files\VisioForge
+set FAILED=
+set FOUND=
 
 REM Desregistrar todos los filtros
-regsvr32 /s /u "%INSTALL_PATH%\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
-regsvr32 /s /u "%INSTALL_PATH%\VLC Source\VisioForge_VLC_Source.ax"
-regsvr32 /s /u "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
-regsvr32 /s /u "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Mixer_x64.ax"
-regsvr32 /s /u "%INSTALL_PATH%\Encoding Filters\VisioForge_NVENC_x64.ax"
+call :unregister "%INSTALL_PATH%\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
+call :unregister "%INSTALL_PATH%\VLC Source\VisioForge_VLC_Source_x64.ax"
+call :unregister "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
+call :unregister "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Mixer_x64.ax"
+call :unregister "%INSTALL_PATH%\Processing Filters\VisioForge_Audio_Enhancer_x64.ax"
+call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_NVENC_x64.ax"
+call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_H264_Encoder_x64.ax"
+call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_AAC_Encoder_x64.ax"
+call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_MP4_Muxer_x64.ax"
 
-echo ¡Desregistro completo!
+echo.
+if not defined FOUND (
+    echo No se encontraron archivos de filtros de VisioForge. Compruebe INSTALL_PATH.
+    pause
+    exit /b 1
+)
+if defined FAILED (
+    echo Desregistro finalizado con errores.
+    pause
+    exit /b 1
+)
+echo Desregistro completo.
 pause
+exit /b 0
+
+REM Desregistrar un filtro e informar del resultado
+:unregister
+if not exist %1 (
+    echo   [OMITIDO] %~nx1 - no encontrado
+    exit /b
+)
+set FOUND=1
+regsvr32 /s /u %1
+if %errorLevel% equ 0 (
+    echo   [OK] %~nx1
+) else (
+    echo   [FALLO] %~nx1
+    set FAILED=1
+)
+exit /b
 ```
 
 ---
-## Ver También
-- [Archivos Redistributables](redistributable-files.md) - Lista completa de archivos para cada SDK
-- [Integración con Instaladores](installer-integration.md) - Creando instaladores personalizados
-- [Descripción General de Despliegue](index.md) - Guía principal de despliegue
+## Ver también
+- [Archivos redistribuibles](redistributable-files.md) - Lista completa de archivos para cada SDK
+- [Integración con instaladores](installer-integration.md) - Creando instaladores personalizados
+- [Descripción general de despliegue](index.md) - Guía principal de despliegue

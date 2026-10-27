@@ -73,10 +73,12 @@ YourApp\
 
 ### Fichiers principaux
 
-#### x86 (32 bits) uniquement
+#### x86, x64 et ARM64
 
-**Filtre** :
-- `VisioForge_VLC_Source.ax` — filtre DirectShow principal
+**Filtre** (un par architecture) :
+- `VisioForge_VLC_Source.ax` — filtre DirectShow principal (x86)
+- `VisioForge_VLC_Source_x64.ax` — filtre DirectShow principal (x64)
+- `VisioForge_VLC_Source_arm64.ax` — filtre DirectShow principal (ARM64, fourni par le paquet NuGet `VisioForge.DotNet.Core.Redist.VLC.arm64` ; le programme d'installation fournit x86 et x64)
 
 **Bibliothèques VLC** (requises) :
 - `libvlc.dll` — bibliothèque cœur VLC
@@ -114,7 +116,7 @@ YourApp\
 
 ```
 YourApp\
-├── VisioForge_VLC_Source.ax
+├── VisioForge_VLC_Source.ax          (x86 ; _x64.ax ou _arm64.ax pour x64 / ARM64)
 ├── libvlc.dll
 ├── libvlccore.dll
 ├── plugins\
@@ -133,13 +135,13 @@ YourApp\
 
 ### Dépendances
 
-- **Redistribuable Visual C++ 2015-2022** (x86)
+- **Redistribuable Visual C++ 2015-2022** (même architecture que le filtre)
 
 ### Remarques importantes
 
 - **Tous les plugins VLC doivent être inclus** — l'absence de plugins entraînera des échecs de lecture pour certains formats
 - **Conservez la structure de répertoire** — VLC attend les plugins dans le sous-répertoire `plugins\`
-- **Pas de version x64** — le VLC Source Filter est uniquement 32 bits
+- **Une architecture par dossier** — chaque build fournit ses propres `libvlc.dll`, `libvlccore.dll` et `plugins\` ; déployez l'ensemble correspondant au filtre et ne les mélangez jamais dans un même dossier. Une application AnyCPU place chaque ensemble dans son propre sous-dossier (par exemple `x86\` et `x64\`)
 
 ---
 ## Processing Filters Pack
@@ -547,20 +549,36 @@ Pour chaque SDK, vous devez inclure :
 
 ---
 ## Tester le paquet de déploiement
-Avant publication, vérifiez que tous les fichiers sont inclus :
+Avant publication, vérifiez que tous les fichiers sont inclus. Placez le script dans le dossier du paquet et exécutez-le sur une machine de test propre : à la fin, il désenregistre le filtre.
 ```batch
 @echo off
+setlocal
 echo Test de l'enregistrement des filtres...
+
+REM Verifier les privileges administrateur
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo ERREUR : ce script doit etre execute en tant qu'administrateur !
+    exit /b 1
+)
+
 REM Tester chaque filtre
-regsvr32 /s "VisioForge_FFMPEG_Source_x64.ax"
+regsvr32 /s "%~dp0VisioForge_FFMPEG_Source_x64.ax"
 if %errorLevel% neq 0 (
     echo ERREUR : echec d'enregistrement de FFMPEG Source
-    echo Verifier la presence de toutes les DLL FFmpeg
+    echo Verifier que le fichier .ax et toutes les DLL FFmpeg sont dans le dossier du script
     exit /b 1
 )
 REM Tester la creation du filtre
-YourTestApp.exe
-echo Tous les filtres ont ete enregistres avec succes !
+"%~dp0YourTestApp.exe"
+set TEST_RESULT=%errorLevel%
+REM Retirer l'enregistrement de test
+regsvr32 /s /u "%~dp0VisioForge_FFMPEG_Source_x64.ax"
+if %TEST_RESULT% neq 0 (
+    echo ERREUR : YourTestApp.exe n'a pas pu creer le filtre
+    exit /b 1
+)
+echo Test de FFMPEG Source reussi !
 ```
 ---
 

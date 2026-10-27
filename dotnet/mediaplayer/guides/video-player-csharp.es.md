@@ -36,9 +36,9 @@ primary_api_classes:
 
 # Crear un Reproductor de Video en C# para WinForms y WPF
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Esta guía le muestra cómo crear un reproductor de video **para escritorio Windows** (WinForms o WPF) en C# utilizando [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) con el motor de alto nivel `MediaPlayerCoreX`. Conectará reproducción de archivos, búsqueda en la línea de tiempo, pausa/reanudación, volumen y velocidad de reproducción contra un control `VideoView` de WinForms o WPF.
+Esta guía le muestra cómo crear un reproductor de video **para escritorio Windows** (WinForms o WPF) en C# utilizando [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) con el motor de alto nivel `MediaPlayerCoreX`. Conectará reproducción de archivos, búsqueda en la línea de tiempo, pausa/reanudación, volumen y velocidad de reproducción contra un control `VideoView` de WinForms o WPF.
 
 !!! info "Elija su enfoque"
     Esta página es para **aplicaciones de escritorio Windows** (WinForms o WPF) con Media Player SDK .Net.
@@ -67,9 +67,9 @@ Esta guía le muestra cómo crear un reproductor de video **para escritorio Wind
 ### Paquetes NuGet Requeridos
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 ### Implementación Completa del Reproductor de Video en C#
@@ -300,4 +300,4 @@ Sí. El SDK funciona en Windows, macOS, Linux, Android e iOS. Para aplicaciones 
 - [Guía del reproductor Android](android-player.md) — configuración y despliegue específicos de Android
 - [Modo Bucle y Rango de Posición](loop-and-position-range.md) — configure el bucle, repetición A-B y reproducción de segmentos
 - [Reproductor Media Blocks SDK](../../mediablocks/GettingStarted/player.md) — alternativa basada en pipeline con renderizadores explícitos
-- [Página del Producto Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net)
+- [Página del Producto Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)

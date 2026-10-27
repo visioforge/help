@@ -30,11 +30,11 @@ primary_api_classes:
 
 # Capture d'écran en VB.NET : guide complet pour enregistrer la vidéo du bureau
 
-L'enregistrement de l'écran du bureau dans les applications VB.NET (Visual Basic .NET) est essentiel pour créer des enregistreurs d'écran, des outils de tutoriels et des logiciels de surveillance. Que vous ayez besoin de capture plein écran, d'enregistrement par région ou de capture audio système, ce guide fournit des exemples Visual Basic étape par étape avec [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net).
+L'enregistrement de l'écran du bureau dans les applications VB.NET (Visual Basic .NET) est essentiel pour créer des enregistreurs d'écran, des outils de tutoriels et des logiciels de surveillance. Que vous ayez besoin de capture plein écran, d'enregistrement par région ou de capture audio système, ce guide fournit des exemples Visual Basic étape par étape avec [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net).
 
 ## Pourquoi utiliser Video Capture SDK .Net pour l'enregistrement d'écran en VB.NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) offre une solution complète d'enregistrement d'écran pour les développeurs VB.NET :
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) offre une solution complète d'enregistrement d'écran pour les développeurs VB.NET :
 
 - Capture complète du bureau et enregistrement d'écran par région personnalisée
 - Prise en charge multi-écran avec énumération des moniteurs
@@ -50,9 +50,9 @@ L'enregistrement de l'écran du bureau dans les applications VB.NET (Visual Basi
 Ajoutez les paquets suivants à votre projet VB.NET :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 ## Exemple complet d'enregistrement d'écran en VB.NET
@@ -322,4 +322,4 @@ Oui. Créez `VideoCaptureCoreX` sans paramètre `VideoView` : `VideoCapture1 = N
 - [Enregistrer une vidéo webcam en C#](save-webcam-video.md) — même fonctionnalité de capture webcam avec exemples C#
 - [Créer un lecteur vidéo en VB.NET](../../mediaplayer/guides/video-player-vb-net.md) — lecteur multimédia VB.NET avec contrôles de lecture
 - [Enregistrement pré-événement](pre-event-recording.md) — enregistrement par tampon circulaire qui capture les images avant l'événement déclencheur
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements

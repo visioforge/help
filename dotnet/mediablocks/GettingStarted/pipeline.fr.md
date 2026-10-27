@@ -26,7 +26,7 @@ primary_api_classes:
 
 # Pipeline Media Blocks : fonctionnalités principales
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Vue d'ensemble de la structure du pipeline et des blocs
 

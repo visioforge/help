@@ -23,9 +23,9 @@ primary_api_classes:
 
 # Compositeur de vidéo en direct
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Le compositeur de vidéo en direct fait partie du [VisioForge Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) et permet d'ajouter et de retirer des sources et des sorties d'un pipeline en temps réel.
+Le compositeur de vidéo en direct fait partie du [VisioForge Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) et permet d'ajouter et de retirer des sources et des sorties d'un pipeline en temps réel.
 
 Vous pouvez ainsi créer des applications qui prennent simultanément en charge plusieurs sources vidéo et audio.
 
@@ -54,6 +54,7 @@ La classe `LiveVideoCompositor` est la classe principale qui permet l'ajout et l
 - `AudioEnabled` : booléen indiquant si le flux audio est activé.
 - `VideoWidth`, `VideoHeight`, `VideoFrameRate` : définissent la résolution et la fréquence d'images de sortie.
 - `AudioFormat`, `AudioSampleRate`, `AudioChannels` : définissent les paramètres audio de sortie.
+- `AudioMixerLatency` : durée pendant laquelle le mélangeur audio attend une entrée en retard avant de mixer sans elle. 100 ms par défaut ; `TimeSpan.Zero` n'attend que la latence annoncée par les entrées. Lue une seule fois, à la construction du compositeur.
 - `VideoView` : `IVideoView` facultatif pour effectuer le rendu de la sortie vidéo directement.
 - `AudioOutput` : `AudioRendererBlock` facultatif pour effectuer le rendu de la sortie audio directement.
 

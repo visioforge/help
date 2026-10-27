@@ -1,6 +1,6 @@
 ---
-title: Despliegue Multiplataforma del SDK .NET en Uno Platform
-description: Despliegue de VisioForge .NET SDK en Uno Platform con integración de VideoView, soporte multiplataforma para Windows, Android, iOS, macOS y Linux.
+title: Despliegue multiplataforma del SDK .NET en Uno Platform
+description: Despliegue sus aplicaciones con el SDK .NET de VisioForge en Uno Platform: VideoView y soporte para Windows, Android, iOS, macOS y Linux.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -22,9 +22,9 @@ tags:
 
 ---
 
-# Guía de Implementación y Despliegue de Uno Platform
+# Guía de implementación y despliegue de Uno Platform
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción a los SDKs de VisioForge para Uno Platform
 
@@ -32,30 +32,30 @@ Uno Platform es un potente framework de UI multiplataforma que permite a los des
 
 El proceso de despliegue de Uno Platform requiere consideración especial para cada plataforma objetivo. Este documento proporciona instrucciones detalladas para asegurar que su aplicación funcione correctamente en todas las plataformas soportadas.
 
-## Plataformas Soportadas
+## Plataformas soportadas
 
 Los SDKs de VisioForge soportan los siguientes objetivos de Uno Platform:
 
-| Plataforma | Framework Objetivo | Estado |
+| Plataforma | Framework objetivo | Estado |
 |------------|-------------------|--------|
-| Windows Desktop | net10.0-windows10.0.19041.0 | &#x2714; Soporte Completo |
-| Android | net10.0-android | &#x2714; Soporte Completo |
-| iOS | net10.0-ios | &#x2714; Soporte Completo |
-| macOS (Catalyst) | net10.0-maccatalyst | &#x2714; Soporte Completo |
-| Linux Desktop (Skia) | net10.0-desktop | &#x2714; Soporte Completo |
+| Windows Desktop | net10.0-windows10.0.19041.0 | &#x2714; Soporte completo |
+| Android | net10.0-android | &#x2714; Soporte completo |
+| iOS | net10.0-ios | &#x2714; Soporte completo |
+| macOS (Catalyst) | net10.0-maccatalyst | &#x2714; Soporte completo |
+| Linux Desktop (Skia) | net10.0-desktop | &#x2714; Soporte completo |
 
-## Requisitos del Sistema
+## Requisitos del sistema
 
 Antes de comenzar su implementación de Uno Platform, asegúrese de que su entorno de desarrollo cumple con los siguientes requisitos:
 
-### Requisitos del Entorno de Desarrollo
+### Requisitos del entorno de desarrollo
 
 - Computadora con Windows, Linux o macOS
 - Visual Studio 2022 con extensión Uno Platform, JetBrains Rider o Visual Studio Code
 - .NET 10.0 SDK o posterior (última versión estable recomendada)
 - Plantillas de Uno Platform instaladas
 
-### Requisitos Específicos por Plataforma
+### Requisitos específicos por plataforma
 
 #### Windows
 - Windows 10 versión 17763 o posterior
@@ -75,17 +75,17 @@ Antes de comenzar su implementación de Uno Platform, asegúrese de que su entor
 - Runtime de GStreamer instalado
 - Servidor de visualización X11 o Wayland
 
-## Proceso de Instalación y Configuración
+## Proceso de instalación y configuración
 
 Siga estos pasos para configurar y desplegar correctamente su aplicación Uno Platform con VisioForge:
 
-### 1. Instalar Plantillas de Uno Platform
+### 1. Instalar plantillas de Uno Platform
 
 ```bash
 dotnet new install Uno.Templates
 ```
 
-### 2. Instalar Workloads Requeridos
+### 2. Instalar workloads requeridos
 
 ```bash
 # Para Android
@@ -95,24 +95,24 @@ dotnet workload install android
 dotnet workload install ios maccatalyst
 ```
 
-### 3. Crear un Nuevo Proyecto Uno Platform
+### 3. Crear un nuevo proyecto Uno Platform
 
 ```bash
 dotnet new unoapp -o MyMediaApp
 ```
 
-### 4. Agregar Paquetes NuGet de VisioForge
+### 4. Agregar paquetes NuGet de VisioForge
 
 Agregue los siguientes paquetes a su proyecto:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
-### Redistributables Específicos por Plataforma
+### Redistributables específicos por plataforma
 
 Agregue paquetes redistributables específicos de plataforma a su proyecto:
 
@@ -121,8 +121,8 @@ Agregue paquetes redistributables específicos de plataforma a su proyecto:
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
   <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
@@ -130,11 +130,11 @@ Agregue paquetes redistributables específicos de plataforma a su proyecto:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
-Adicionalmente, necesitará agregar la Biblioteca de Bindings de Java. Clónela desde nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency) y agregue una referencia:
+Adicionalmente, necesitará agregar la biblioteca de bindings de Java. Clónela desde nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency) y agregue una referencia:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
@@ -146,7 +146,7 @@ Adicionalmente, necesitará agregar la Biblioteca de Bindings de Java. Clónela 
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
@@ -154,7 +154,7 @@ Adicionalmente, necesitará agregar la Biblioteca de Bindings de Java. Clónela 
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
@@ -186,7 +186,7 @@ sudo apt-get install gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstream
 sudo dnf install gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-ugly-free
 ```
 
-### Archivo de Proyecto de Ejemplo Completo
+### Archivo de proyecto de ejemplo completo
 
 Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Platform con VisioForge SDK:
 
@@ -217,31 +217,31 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
   
   <!-- Referencias Core de VisioForge -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.20]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.26]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.26]"/>
   </ItemGroup>
   
   <!-- Plataforma Windows -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
   </ItemGroup>
   
   <!-- Plataforma Android -->
   <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
     <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
   </ItemGroup>
   
   <!-- Plataforma iOS -->
   <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
   </ItemGroup>
   
   <!-- Plataforma macOS Catalyst -->
   <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>
   </ItemGroup>
   
   <!-- macOS: Copiar bibliotecas nativas al bundle de la app -->
@@ -260,13 +260,13 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
 </Project>
 ```
 
-## Configuración Específica por Plataforma
+## Configuración específica por plataforma
 
 ### Configuración de Windows
 
 Las aplicaciones Windows usan renderizado nativo WinUI 3 y soportan aceleración por hardware vía DirectX.
 
-#### Capacidades Requeridas
+#### Capacidades requeridas
 
 Agregue las capacidades requeridas a su `Package.appxmanifest`:
 
@@ -294,7 +294,7 @@ Agregue los permisos necesarios a su `AndroidManifest.xml`:
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
 
-#### Solicitudes de Permisos en Tiempo de Ejecución
+#### Solicitudes de permisos en tiempo de ejecución
 
 Solicite permisos en tiempo de ejecución en su código:
 
@@ -366,7 +366,7 @@ Para aplicaciones de escritorio Linux usando Skia:
 export GST_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/gstreamer-1.0
 ```
 
-## Compilación para Diferentes Plataformas
+## Compilación para diferentes plataformas
 
 ### Windows
 
@@ -398,28 +398,28 @@ dotnet build -c Release -f net10.0-maccatalyst
 dotnet build -c Release -f net10.0-desktop
 ```
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
-- **Aceleración por Hardware**: Habilite el renderizado acelerado por hardware donde esté disponible (Windows DirectX, Apple VideoToolbox, Android MediaCodec)
-- **Dispositivos Físicos**: Siempre pruebe en dispositivos físicos, especialmente para plataformas móviles. Los simuladores pueden no representar con precisión el rendimiento real
-- **Gestión de Memoria**: Monitoree el uso de memoria, particularmente en dispositivos móviles al procesar archivos de medios grandes
-- **Streaming de Red**: Use tamaños de buffer apropiados para streaming de red para equilibrar latencia y fluidez
+- **Aceleración por hardware**: Habilite el renderizado acelerado por hardware donde esté disponible (Windows DirectX, Apple VideoToolbox, Android MediaCodec)
+- **Dispositivos físicos**: Siempre pruebe en dispositivos físicos, especialmente para plataformas móviles. Los simuladores pueden no representar con precisión el rendimiento real
+- **Gestión de memoria**: Monitoree el uso de memoria, particularmente en dispositivos móviles al procesar archivos de medios grandes
+- **Streaming de red**: Use tamaños de buffer apropiados para streaming de red para equilibrar latencia y fluidez
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-### El Video No Se Muestra
+### El video no se muestra
 
 1. Verifique que el VideoView esté correctamente inicializado y agregado al árbol visual
 2. Compruebe que los redistributables específicos de plataforma estén correctamente instalados
 3. Asegúrese de que los permisos estén otorgados en plataformas móviles
 
-### Problemas de Rendimiento
+### Problemas de rendimiento
 
 1. Compruebe que la aceleración por hardware esté habilitada
 2. Reduzca la resolución de video para dispositivos de menor potencia
 3. Monitoree el uso de memoria y optimice los tamaños de buffer
 
-### Errores de Compilación
+### Errores de compilación
 
 1. Verifique que todos los workloads requeridos estén instalados
 2. Compruebe la compatibilidad de versiones de paquetes NuGet

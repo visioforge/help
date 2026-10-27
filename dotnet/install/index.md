@@ -26,7 +26,7 @@ primary_api_classes:
 
 # VisioForge .NET SDKs Installation Guide
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 VisioForge offers powerful multimedia SDKs for .NET developers that enable advanced video capture, editing, playback, and media processing capabilities in your applications. This guide covers everything you need to know to properly install and configure our SDKs in your development environment.
 
@@ -34,10 +34,10 @@ VisioForge offers powerful multimedia SDKs for .NET developers that enable advan
 
 VisioForge provides several specialized SDKs to address different multimedia needs:
 
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) - For capturing video from cameras, screen recording, and streaming
-- [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net) - For video editing, processing, and format conversion
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) - For building custom media processing pipelines
-- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) - For creating custom media players with advanced features
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) - For capturing video from cameras, screen recording, and streaming
+- [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) - For video editing, processing, and format conversion
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) - For building custom media processing pipelines
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) - For creating custom media players with advanced features
 
 ## Installation Methods
 

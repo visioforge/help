@@ -24,7 +24,7 @@ primary_api_classes:
 
 ## Introduction
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 This comprehensive guide walks you through the process of installing and configuring VisioForge .Net SDKs within JetBrains Rider, a powerful cross-platform IDE for .NET development. While we'll use a Windows application with WPF as our primary example, these installation steps can be readily adapted for macOS, iOS, or Android applications as well. JetBrains Rider provides a consistent development experience across Windows, macOS, and Linux platforms, making it an excellent choice for cross-platform .NET development.
 

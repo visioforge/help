@@ -1,6 +1,6 @@
 ---
-title: Cómo Conectar una Cámara IP Samsung (Hanwha) en C# .NET
-description: Conecta cámaras Samsung Wisenet y Hanwha Vision en C# .NET con patrones de URL RTSP y ejemplos de código para modelos SNO, SND, XNO, XND y PNO.
+title: Cómo conectar una cámara IP Samsung (Hanwha) en C# .NET
+description: Conecte cámaras Samsung Wisenet y Hanwha Vision en C# .NET con patrones de URL RTSP y ejemplos de código para modelos SNO, SND, XNO, XND y PNO.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -22,11 +22,11 @@ tags:
 
 ---
 
-# Cómo Conectar una Cámara IP Samsung (Hanwha) en C# .NET
+# Cómo conectar una cámara IP Samsung (Hanwha) en C# .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Descripción de la Marca
+## Descripción de la marca
 
 **Hanwha Vision** (anteriormente Samsung Techwin, luego Hanwha Techwin) es un fabricante surcoreano de equipos de videovigilancia profesional y empresarial. La marca de cámaras de seguridad Samsung fue renombrada a **Wisenet** después de que Hanwha Group adquiriera Samsung Techwin en 2015. Las cámaras Hanwha Vision se despliegan ampliamente en instalaciones empresariales, gubernamentales y de infraestructura crítica en todo el mundo.
 
@@ -42,7 +42,7 @@ tags:
 
 ## Patrones de URL RTSP
 
-### Modelos Actuales (Wisenet Series X/P/Q)
+### Modelos actuales (Wisenet Series X/P/Q)
 
 Las cámaras Hanwha Vision actuales usan un formato de URL basado en perfiles:
 
@@ -56,7 +56,7 @@ Las cámaras Hanwha Vision actuales usan un formato de URL basado en perfiles:
 !!! warning "Doble barra en URLs ONVIF"
     Las URLs ONVIF de Samsung/Hanwha usan una doble barra (`//onvif/`). Esto es intencional y obligatorio. Usar una sola barra fallará.
 
-### Samsung Serie S Legacy
+### Samsung serie S legacy
 
 | Serie de Modelo | URL RTSP | Códec |
 |-------------|----------|-------|
@@ -66,7 +66,7 @@ Las cámaras Hanwha Vision actuales usan un formato de URL basado en perfiles:
 | SNV-xxxx (antivandalismo) | `rtsp://IP:554/profile2/media.smp` | H.264 |
 | SNP-xxxx (PTZ) | `rtsp://IP:554/profile2/media.smp` | H.264 |
 
-### Modelos Samsung Más Antiguos (Pre-Wisenet)
+### Modelos Samsung más antiguos (pre-Wisenet)
 
 Los modelos Samsung más antiguos usaban formatos de URL diferentes:
 
@@ -90,7 +90,7 @@ Los modelos Samsung más antiguos usaban formatos de URL diferentes:
 
 ## Conexión con VisioForge SDK
 
-Usa la URL RTSP de tu cámara Samsung (Hanwha Wisenet) con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
+Use la URL RTSP de su cámara Samsung (Hanwha Wisenet) con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
 
 ```csharp
 // Hanwha Wisenet X-series camera, main stream
@@ -99,9 +99,9 @@ var username = "admin";
 var password = "YourPassword";
 ```
 
-Para acceder al subflujo, usa `profile3/media.smp` en lugar de `profile2/media.smp`. Para modelos legacy Samsung serie S, usa la contraseña predeterminada `4321` y la ruta de URL `/mpeg4unicast` o `/H264/media.smp`.
+Para acceder al subflujo, use `profile3/media.smp` en lugar de `profile2/media.smp`. Para modelos legacy Samsung serie S, use la contraseña predeterminada `4321` y la ruta de URL `/mpeg4unicast` o `/H264/media.smp`.
 
-## URLs de Captura y MJPEG
+## URLs de captura y MJPEG
 
 | Tipo | Patrón de URL | Notas |
 |------|-------------|-------|
@@ -112,7 +112,7 @@ Para acceder al subflujo, usa `profile3/media.smp` en lugar de `profile2/media.s
 | Captura CGI | `http://IP/cgi-bin/webra_fcgi.fcgi?api=get_jpeg_raw&chno=CHANNEL` | Modelos DVR |
 | Captura (dimensionada) | `http://IP/snap.jpg?JpegSize=XL` | Algunos firmware OEM Bosch |
 
-## Solución de Problemas
+## Solución de problemas
 
 ### Diferencias en contraseña predeterminada
 
@@ -144,11 +144,11 @@ Samsung Techwin fue adquirida por Hanwha en 2015. La marca se ha llamado:
 
 Todos usan los mismos patrones de URL RTSP dentro de su respectiva generación.
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 **¿Cuál es la URL RTSP predeterminada para cámaras Samsung/Hanwha?**
 
-Para modelos Wisenet actuales, la URL es `rtsp://admin:password@IP_CAMARA:554/profile2/media.smp`. Para modelos Samsung legacy, prueba `rtsp://admin:4321@IP_CAMARA:554/mpeg4unicast` o `rtsp://IP_CAMARA:554/H264/media.smp`.
+Para modelos Wisenet actuales, la URL es `rtsp://admin:password@IP_CAMARA:554/profile2/media.smp`. Para modelos Samsung legacy, pruebe `rtsp://admin:4321@IP_CAMARA:554/mpeg4unicast` o `rtsp://IP_CAMARA:554/H264/media.smp`.
 
 **¿Samsung es lo mismo que Hanwha Vision?**
 
@@ -162,7 +162,7 @@ Sí. Las cámaras actuales de las series X y P soportan H.265 (HEVC). Las cámar
 
 El VMS propio de Hanwha es **Wisenet WAVE**. Sin embargo, todas las cámaras Hanwha soportan RTSP estándar y ONVIF, haciéndolas compatibles con cualquier software de terceros incluyendo aplicaciones del VisioForge SDK.
 
-## Recursos Relacionados
+## Recursos relacionados
 
 - [Todas las Marcas de Cámaras — Directorio de URLs RTSP](index.md)
 - [Guía de Conexión Hanwha Vision](hanwha.md) — Nombre de marca actual, mismas URLs

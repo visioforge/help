@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Ajouter des superpositions d'image aux vidéos en .NET
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
 
 ## Introduction aux superpositions d'image
 

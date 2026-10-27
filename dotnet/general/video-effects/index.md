@@ -29,7 +29,7 @@ primary_api_classes:
 
 # Video Effects and Processing for .Net Applications
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -268,7 +268,8 @@ var brighten = new GPUVideoEffectBrightness(
     value: 180,
     name: "Brighten"
 );
-videoCapture.Video_Effects_Add(brighten);
+videoCapture.Video_Effects_GPU_Enabled = true; // GPU effects are applied only while this is true
+videoCapture.Video_Effects_GPU_Add(brighten);
 ```
 
 ### Basic Usage Example (Cross-platform Effects)

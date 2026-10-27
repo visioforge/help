@@ -15,7 +15,7 @@ primary_api_classes:
 
 # Configurer les paramètres de zoom pour plusieurs moteurs de rendu vidéo en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Lors du développement d'applications multimédias utilisant plusieurs moteurs de rendu vidéo, contrôler les paramètres de zoom et de position indépendamment pour chaque affichage est essentiel pour créer des interfaces utilisateur de qualité professionnelle. Ce guide couvre les détails d'implémentation, les configurations de paramètres et les bonnes pratiques pour configurer plusieurs moteurs de rendu vidéo avec des paramètres de zoom personnalisés dans vos applications .NET.
 

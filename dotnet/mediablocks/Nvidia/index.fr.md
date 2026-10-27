@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Blocs Nvidia - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Les blocs Nvidia exploitent les capacités du GPU Nvidia pour accélérer les tâches de traitement multimédia telles que le transfert de données, la conversion vidéo et le redimensionnement.
 

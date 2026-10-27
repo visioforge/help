@@ -27,8 +27,8 @@ primary_api_classes:
 
 # View an RTSP camera in Unity
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
 
 There are two ways to view a live RTSP / IP camera stream in Unity, and the package ships a ready
 scene for each. Both render into a Unity `RawImage` and run on **Windows**, **Android**, **macOS

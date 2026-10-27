@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK .NET (non-linear editor) into a
 
 This skill helps you add **VisioForge Video Edit SDK .NET** to a Windows Forms application. The SDK is a non-linear editor (NLE): it cuts, trims, merges, transcodes, and applies effects to **existing** video and audio files. It does **not** capture from cameras or screen — for live capture see [`video-capture-sdk-net-winforms`](https://www.visioforge.com/.well-known/agent-skills/video-capture-sdk-net-winforms.zip). The SDK is Windows-only (DirectShow / Media Foundation under the hood); for cross-platform editing (macOS, iOS, Android, Linux), use one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills.
 
-Pinned NuGet version: **`2026.10.20`** (matches the official Video Join Demo sample). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.10.26`** (matches the official Video Join Demo sample). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -37,7 +37,7 @@ The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
@@ -138,7 +138,6 @@ You only need these if your output format actually uses them. Default MP4 (Media
 | WebM (VP8/VP9 + Vorbis/Opus) | `VisioForge.DotNet.Core.Redist.WebM.x64` |
 | FFmpeg-based output (custom muxers, network sinks) | `VisioForge.DotNet.Core.Redist.FFMPEG.x64` |
 | LAV-based decoding (uncommon legacy formats) | `VisioForge.DotNet.Core.Redist.LAV.x64` |
-| VLC-based source | `VisioForge.DotNet.Core.Redist.VLC.x64` |
 | Xiph (Vorbis/Theora/FLAC/Speex) standalone codecs | `VisioForge.DotNet.Core.Redist.XIPH.x64` |
 
 Pin all redist packages to **the same version as `VisioForge.DotNet.VideoEdit`** — version drift between main and redist is undefined behaviour. For a 32-bit deployment swap `.x64` for `.x86`. To support both architectures with a single AnyCPU build, reference both `.x64` and `.x86` of every redist package you need.

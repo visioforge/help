@@ -36,9 +36,9 @@ primary_api_classes:
 
 # Build a C# Video Player for WinForms & WPF
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-This guide shows you how to build a full-featured **Windows desktop** video player in C# using [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) with the high-level `MediaPlayerCoreX` engine. You will wire up file playback, timeline seeking, pause/resume, volume, and playback speed against a WinForms or WPF `VideoView` control.
+This guide shows you how to build a full-featured **Windows desktop** video player in C# using [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) with the high-level `MediaPlayerCoreX` engine. You will wire up file playback, timeline seeking, pause/resume, volume, and playback speed against a WinForms or WPF `VideoView` control.
 
 !!! info "Choose your approach"
     This page is for **Windows desktop apps** (WinForms or WPF) using Media Player SDK .Net.
@@ -66,9 +66,9 @@ This guide shows you how to build a full-featured **Windows desktop** video play
 ### Required NuGet Packages
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 ### Complete C# Video Player Implementation

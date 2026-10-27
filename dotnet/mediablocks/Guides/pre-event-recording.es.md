@@ -34,7 +34,7 @@ primary_api_classes:
 
 # Cómo Implementar Grabación Pre-Evento para Cámaras IP en C#
 
-[SDK de Media Blocks .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Tabla de Contenidos
 
@@ -52,7 +52,7 @@ primary_api_classes:
 
 La grabación pre-evento (también conocida como grabación con buffer circular o grabación retrospectiva) es una característica clave de vigilancia que almacena continuamente los últimos N segundos de video y audio codificados en memoria. Cuando se activa un evento — como detección de movimiento, una señal de alarma o una llamada API — el metraje pre-evento almacenado se escribe a un archivo junto con la grabación post-evento. Esto crea clips de eventos completos que incluyen metraje de antes del disparador, para que nunca se pierda momentos críticos.
 
-Esta guía demuestra cómo grabar streams de cámaras IP y video de webcam con almacenamiento pre-evento usando el SDK de VisioForge Media Blocks para .NET. Cubre captura de cámara RTSP, grabación activada por detección de movimiento y guardado de clips de eventos en archivos MP4 o MPEG-TS.
+Esta guía demuestra cómo grabar streams de cámaras IP y video de webcam con almacenamiento pre-evento usando Media Blocks SDK .NET. Cubre captura de cámara RTSP, grabación activada por detección de movimiento y guardado de clips de eventos en archivos MP4 o MPEG-TS.
 
 ## Características Principales
 
@@ -101,17 +101,17 @@ graph TD;
 
 ## Prerrequisitos
 
-Necesitará el SDK de VisioForge Media Blocks. Agréguelo a su proyecto .NET vía NuGet:
+Necesitará el Media Blocks SDK .NET. Agréguelo a su proyecto .NET vía NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
 ```
 
 Dependiendo de su plataforma objetivo, agregue el paquete runtime nativo correspondiente. Para Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 ```
 
 Para dependencias específicas de plataforma detalladas, vea la [Guía de Despliegue](../../deployment-x/index.md).
@@ -121,7 +121,7 @@ Para dependencias específicas de plataforma detalladas, vea la [Guía de Despli
 El siguiente código C# está basado en la [demo WPF de Grabación Pre-Evento](https://github.com/visioforge/.Net-SDK-s-samples). Demuestra un pipeline completo con una fuente de cámara, detección de movimiento para activación automática, vista previa de video y grabación pre-evento a archivos MP4.
 
 !!!info Muestra de Demo
-    Para un proyecto funcional completo con XAML y todas las dependencias, vea la [Demo de Grabación Pre-Evento Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/PreEventRecording%20Demo).
+    Para un proyecto funcional completo con XAML y todas las dependencias, vea la [Demo de Grabación Pre-Evento Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/PreEventRecording).
 
 ```csharp
 using System;

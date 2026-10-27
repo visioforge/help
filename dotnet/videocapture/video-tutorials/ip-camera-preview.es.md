@@ -1,6 +1,6 @@
 ---
-title: Vista Previa en Vivo de Cámara IP en C# .NET — Tutorial RTSP
-description: Implementa vista previa de cámara IP en tiempo real en aplicaciones .NET con tutorial paso a paso y ejemplos de código C# completos para WinForms, WPF, Console.
+title: Vista previa en vivo de cámara IP en C# .NET — tutorial RTSP
+description: Implemente vista previa de cámara IP en tiempo real en aplicaciones .NET con tutorial paso a paso y ejemplos de código C# completos para WinForms, WPF, Console.
 tags:
   - Video Capture SDK
   - .NET
@@ -22,13 +22,13 @@ primary_api_classes:
 
 ---
 
-# Guía de Implementación de Vista Previa de Cámara IP
+# Guía de implementación de vista previa de cámara IP
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Tutorial en Video
+## Tutorial en video
 
-Este tutorial demuestra cómo configurar la funcionalidad de vista previa de cámara IP en tus aplicaciones .NET:
+Este tutorial demuestra cómo configurar la funcionalidad de vista previa de cámara IP en sus aplicaciones .NET:
 
 <div class="video-wrapper">
   <iframe src="https://www.youtube.com/embed/9n44ChQJT7s?controls=1" frameborder="0" allowfullscreen></iframe>
@@ -36,14 +36,14 @@ Este tutorial demuestra cómo configurar la funcionalidad de vista previa de cá
 
 [Código fuente en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-preview)
 
-## Redistribuibles Requeridos
+## Redistribuibles requeridos
 
-Antes de comenzar, asegúrate de tener instalados los siguientes paquetes:
+Antes de comenzar, asegúrese de tener instalados los siguientes paquetes:
 
 - Redistribuibles de captura de video [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 - Redistribuibles LAV [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
 
-## Ejemplo de Implementación
+## Ejemplo de implementación
 
 A continuación se muestra un ejemplo completo de WinForms mostrando cómo integrar la funcionalidad de vista previa de cámara IP:
 
@@ -81,7 +81,7 @@ namespace ip_camera_preview
 
         private async void btStart_Click(object sender, EventArgs e)
         {
-            // Hay varios motores disponibles. Usaremos LAV como el más compatible. Para reproducción RTSP de baja latencia, usa el motor RTSP Low Latency.
+            // Hay varios motores disponibles. Usaremos LAV como el más compatible. Para reproducción RTSP de baja latencia, usar el motor RTSP Low Latency.
             videoCapture1.IP_Camera_Source = new IPCameraSourceSettings()
             {
                 URL = new Uri("http://192.168.233.129:8000/camera/mjpeg"),
@@ -102,9 +102,9 @@ namespace ip_camera_preview
 }
 ```
 
-## Detalles Clave de Implementación
+## Detalles clave de implementación
 
-### Configurando la Fuente de Cámara IP
+### Configurar la fuente de cámara IP
 
 El código demuestra la configuración de la fuente de cámara IP con la URL apropiada y tipo de motor:
 
@@ -116,15 +116,15 @@ videoCapture1.IP_Camera_Source = new IPCameraSourceSettings()
 };
 ```
 
-### Manejando Configuración de Audio
+### Manejar la configuración de audio
 
-Para aplicaciones de vista previa simples, puede que quieras deshabilitar la reproducción y grabación de audio:
+Para aplicaciones de vista previa simples, puede que quiera deshabilitar la reproducción y grabación de audio:
 
 ```csharp
 videoCapture1.Audio_PlayAudio = videoCapture1.Audio_RecordAudio = false;
 ```
 
-### Estableciendo el Modo de Captura
+### Establecer el modo de captura
 
 El modo correcto para vista previa de cámara IP es:
 
@@ -132,9 +132,9 @@ El modo correcto para vista previa de cámara IP es:
 videoCapture1.Mode = VideoCaptureMode.IPPreview;
 ```
 
-## Opciones Avanzadas
+## Opciones avanzadas
 
-Para aplicaciones de producción, considera implementar:
+Para aplicaciones de producción, considere implementar:
 
 - Manejo de errores y lógica de reintento de conexión
 - Retroalimentación de UI durante intentos de conexión
@@ -148,4 +148,4 @@ Para aplicaciones de producción, considera implementar:
 - [Grabar stream RTSP a MP4](ip-camera-capture-mp4.md) — capturar el stream previsualizado a un archivo
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para explorar más ejemplos de código. ¿Necesitas la URL RTSP para tu cámara? Consulta nuestro [directorio de marcas de cámaras IP](../../camera-brands/index.md).
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para explorar más ejemplos de código. ¿Necesita la URL RTSP para su cámara? Consulte nuestro [directorio de marcas de cámaras IP](../../camera-brands/index.md).

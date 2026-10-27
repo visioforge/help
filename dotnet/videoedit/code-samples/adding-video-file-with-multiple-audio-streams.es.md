@@ -1,6 +1,6 @@
 ---
-title: Manejo de Múltiples Pistas de Audio en Video (.NET)
-description: Maneja archivos de video con múltiples pistas de audio en .NET usando técnicas de implementación, soluciones alternativas y ejemplos de código completos.
+title: Manejo de múltiples pistas de audio en video (.NET)
+description: Maneje archivos de video con múltiples pistas de audio en .NET usando técnicas de implementación, soluciones alternativas y ejemplos de código completos.
 tags:
   - Video Edit SDK
   - .NET
@@ -13,11 +13,11 @@ tags:
 
 ---
 
-# Trabajar con Múltiples Pistas de Audio en Archivos de Video
+# Trabajar con múltiples pistas de audio en archivos de video
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
-## Introducción a Múltiples Pistas de Audio
+## Introducción a múltiples pistas de audio
 
 Los archivos de video comúnmente contienen múltiples pistas de audio para soportar diferentes idiomas, pistas de comentarios o calidades de audio. Para desarrolladores que construyen aplicaciones de edición o procesamiento de video, manejar correctamente estas múltiples pistas es esencial para crear software de grado profesional. Esta guía explora los desafíos técnicos y soluciones para trabajar con archivos de video con múltiples pistas de audio en aplicaciones .NET.
 
@@ -28,28 +28,28 @@ Las múltiples pistas de audio sirven varios propósitos importantes en aplicaci
 - **Variaciones de calidad de audio**: Ofrecer diferentes tasas de bits o formatos (estéreo/envolvente)
 - **Canales de audio especiales**: Soportar audio descriptivo para accesibilidad
 
-## Antecedentes Técnicos sobre Manejo de Pistas de Audio
+## Antecedentes técnicos sobre manejo de pistas de audio
 
-### Entender la Arquitectura DirectShow
+### Entender la arquitectura DirectShow
 
 Al trabajar con archivos de video que contienen múltiples pistas de audio, es crucial entender cómo la arquitectura subyacente DirectShow procesa estas pistas. DirectShow usa una arquitectura de grafo de filtros donde cada componente (filtro) procesa aspectos específicos de los datos multimedia.
 
 El Video Edit SDK aprovecha el motor DirectShow Editing Services (DES) para el procesamiento multimedia, que viene con limitaciones y capacidades específicas respecto al manejo de múltiples pistas de audio. Estas limitaciones provienen de cómo DES interactúa con diferentes tipos de filtros divisores.
 
-### Tipos de Filtros Divisores y Limitaciones
+### Tipos de filtros divisores y limitaciones
 
 Los filtros divisores analizan archivos fuente y extraen varias pistas (video, audio, subtítulos) para procesamiento. Hay dos mecanismos principales a través de los cuales los divisores exponen múltiples pistas de audio:
 
 1. **Múltiples pines de salida**: Algunos divisores crean pines de salida separados para cada pista de audio
 2. **Interfaz IAMStreamSelect**: Otros usan esta interfaz para permitir la selección de múltiples pistas a través de un único pin de salida
 
-El motor DirectShow Editing Services tiene limitaciones específicas al trabajar con el primer tipo de divisor. Si necesitas acceder a cualquier pista de audio que no sea la primera, puedes encontrar restricciones con ciertos tipos de divisores.
+El motor DirectShow Editing Services tiene limitaciones específicas al trabajar con el primer tipo de divisor. Si necesita acceder a cualquier pista de audio que no sea la primera, puede encontrar restricciones con ciertos tipos de divisores.
 
-## Consideraciones Específicas por Formato
+## Consideraciones específicas por formato
 
-### Soporte de Formato AVI
+### Soporte de formato AVI
 
-El divisor AVI proporciona excelente soporte para múltiples pistas de audio. Al trabajar con archivos AVI, típicamente puedes acceder y manipular todas las pistas de audio disponibles sin problemas significativos.
+El divisor AVI proporciona excelente soporte para múltiples pistas de audio. Al trabajar con archivos AVI, típicamente puede acceder y manipular todas las pistas de audio disponibles sin problemas significativos.
 
 Esto se demuestra en la visualización del grafo de filtros a continuación:
 
@@ -57,7 +57,7 @@ Esto se demuestra en la visualización del grafo de filtros a continuación:
 
 Como es visible en el diagrama, el divisor AVI crea rutas separadas para cada pista de audio, haciéndolas accesibles independientemente a través de la API del SDK.
 
-### Desafíos con Formatos de Contenedor Modernos
+### Desafíos con formatos de contenedor modernos
 
 Los formatos de contenedor modernos como MP4, MKV y MOV a menudo usan divisores más sofisticados como LAV Splitter. Mientras estos divisores soportan una amplia gama de formatos y códecs, pueden presentar desafíos al intentar acceder a múltiples pistas de audio simultáneamente.
 
@@ -67,9 +67,9 @@ El grafo de filtros para LAV Splitter demuestra esta limitación:
 
 LAV Splitter, aunque excelente para soporte de formatos, no expone múltiples pistas de audio de una manera que permita acceso directo a pistas secundarias a través del motor DES. Esta limitación requiere enfoques alternativos.
 
-## Enfoques Recomendados
+## Enfoques recomendados
 
-### Método de Archivo de Audio Externo
+### Método de archivo de audio externo
 
 El enfoque más confiable para manejar múltiples pistas de audio es extraer y trabajar con pistas de audio como archivos externos separados. Este método evita completamente las limitaciones de los filtros divisores y proporciona máxima flexibilidad.
 
@@ -81,41 +81,41 @@ Pasos para implementar este enfoque:
 
 Este método asegura compatibilidad a través de todos los tipos de formato y configuraciones de divisores.
 
-### Selección y Configuración de Divisores
+### Selección y configuración de divisores
 
-En escenarios donde los archivos de audio externos no son factibles, puedes controlar qué filtro divisor se usa para analizar tus archivos fuente. Al permitir selectivamente solo ciertos divisores, puedes asegurar que tu aplicación use divisores que expongan correctamente múltiples pistas de audio.
+En escenarios donde los archivos de audio externos no son factibles, puede controlar qué filtro divisor se usa para analizar sus archivos fuente. Al permitir selectivamente solo ciertos divisores, puede asegurar que su aplicación use divisores que expongan correctamente múltiples pistas de audio.
 
-Usa el método `DirectShow_Filters_Blacklist_Add` para excluir divisores incompatibles:
+Use el método `DirectShow_Filters_Blacklist_Add` para excluir divisores incompatibles:
 
 ```csharp
 // Ejemplo: Excluir LAV Splitter para forzar el uso de divisores nativos
 videoEdit.DirectShow_Filters_Blacklist_Add("{B98D13E7-55DB-4385-A33D-09FD1BA26338}");
 ```
 
-Para ejemplos de implementación más detallados, consulta la [documentación de API para trabajar con múltiples fuentes](output-file-from-multiple-sources.md).
+Para ejemplos de implementación más detallados, consulte la [documentación de API para trabajar con múltiples fuentes](output-file-from-multiple-sources.md).
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
-Trabajar con múltiples pistas de audio puede impactar el rendimiento, especialmente con video de alta resolución o requisitos de procesamiento complejos. Considera estas estrategias de optimización:
+Trabajar con múltiples pistas de audio puede impactar el rendimiento, especialmente con video de alta resolución o requisitos de procesamiento complejos. Considere estas estrategias de optimización:
 
 - Pre-extraer pistas de audio para proyectos de edición complejos
 - Usar aceleración por hardware cuando esté disponible
 - Implementar mecanismos de búfer para reproducción más suave
 - Considerar submuestreo temporal durante operaciones de vista previa
 
-## Componentes y Dependencias Requeridos
+## Componentes y dependencias requeridos
 
-Para implementar las técnicas descritas en esta guía, necesitarás incluir las siguientes dependencias:
+Para implementar las técnicas descritas en esta guía, necesitará incluir las siguientes dependencias:
 
 - Redistribuible de Video Edit SDK [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
 
-Para información sobre cómo desplegar estas dependencias en sistemas de usuarios finales, consulta la [documentación de despliegue](../deployment.md).
+Para información sobre cómo desplegar estas dependencias en sistemas de usuarios finales, consulte la [documentación de despliegue](../deployment.md).
 
 ## Conclusión
 
 Manejar efectivamente múltiples pistas de audio en archivos de video requiere entender la arquitectura subyacente y limitaciones de los componentes DirectShow. Al usar las técnicas apropiadas—ya sea archivos de audio externos, selección de divisores o métodos especializados de API—los desarrolladores pueden crear aplicaciones de video robustas que soporten correctamente contenido multilingüe, pistas de comentarios y otros escenarios multi-audio.
 
-Para escenarios de implementación avanzados y ejemplos de código adicionales, consulta nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para escenarios de implementación avanzados y ejemplos de código adicionales, consulte nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más muestras de código.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más muestras de código.

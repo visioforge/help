@@ -18,7 +18,7 @@ primary_api_classes:
 
 # Audio Visualization: Implementing VU Meters and Waveform Displays in .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Audio visualization is a crucial component of modern media applications, providing users with visual feedback about audio levels and waveform patterns. This guide demonstrates how to implement VU (Volume Unit) meters and waveform visualizers in both WinForms and WPF applications.
 

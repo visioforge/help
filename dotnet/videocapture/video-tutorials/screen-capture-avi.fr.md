@@ -32,7 +32,7 @@ primary_api_classes:
 
 # Guide d'implémentation de capture d'écran en AVI en C#
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Tutoriel vidéo pas à pas
 
@@ -176,4 +176,4 @@ Choisissez AVI lorsque vous avez besoin d'un accès indépendant aux images pour
 - [Capture d'écran en VB.NET](../guides/screen-capture-vb-net.md) — enregistrement d'écran en Visual Basic .NET
 - [Configuration de source écran](../video-sources/screen.md) — référence complète des paramètres de capture
 - [Exemples de code](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — extraits de code supplémentaires de capture d'écran sur GitHub
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements

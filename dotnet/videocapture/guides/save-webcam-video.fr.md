@@ -36,7 +36,7 @@ Capturer et enregistrer la vidéo des webcams est une exigence courante dans de 
 
 ## Fonctionnalités clés de Video Capture SDK .Net
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) est une bibliothèque puissante conçue spécifiquement pour les développeurs .NET qui doivent implémenter la fonctionnalité de capture de webcam dans leurs applications. Que vous souhaitiez enregistrer la vidéo de la webcam, sauvegarder les images de la webcam sous forme d'images ou afficher le flux de la webcam dans votre application, ce SDK répond à vos besoins. Parmi ses caractéristiques remarquables :
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) est une bibliothèque puissante conçue spécifiquement pour les développeurs .NET qui doivent implémenter la fonctionnalité de capture de webcam dans leurs applications. Que vous souhaitiez enregistrer la vidéo de la webcam, sauvegarder les images de la webcam sous forme d'images ou afficher le flux de la webcam dans votre application, ce SDK répond à vos besoins. Parmi ses caractéristiques remarquables :
 
 - Intégration transparente avec les applications .NET
 - Prise en charge de plusieurs périphériques de capture (webcams USB, caméras IP, cartes de capture)
@@ -236,7 +236,7 @@ Video Capture SDK .Net s'appuie sur des bibliothèques natives pour accéder aux
 Paquet principal du SDK :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
 ```
 
 ### Paquets redistribuables spécifiques aux plateformes
@@ -244,18 +244,18 @@ Paquet principal du SDK :
 Windows x64 :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 Pour les autres plateformes :
 
 ```xml
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
 
 <!-- Linux x64 (nécessite GStreamer 1.22+ du système) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
 
 ## Compatibilité multiplateforme
@@ -273,7 +273,7 @@ Pour les développeurs travaillant avec .NET MAUI (Multi-platform App UI), Video
 
 Cette capacité multiplateforme permet aux développeurs d'écrire le code une seule fois et de le déployer sur Windows, macOS et plateformes mobiles via MAUI, réduisant significativement le temps de développement et les coûts de maintenance.
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) fournit une solution complète pour ajouter des capacités de capture vidéo webcam à vos applications DotNet. Que vous deviez enregistrer des images de webcam, sauvegarder des images de webcam ou simplement afficher le flux de la webcam dans votre application, cette bibliothèque rend le processus simple avec seulement quelques lignes de code C#.
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) fournit une solution complète pour ajouter des capacités de capture vidéo webcam à vos applications DotNet. Que vous deviez enregistrer des images de webcam, sauvegarder des images de webcam ou simplement afficher le flux de la webcam dans votre application, cette bibliothèque rend le processus simple avec seulement quelques lignes de code C#.
 
 Avec la prise en charge de formats standard de l'industrie comme MP4 et WebM, de codecs modernes incluant H.264/H.265 et VP8/VP9/AV1, et une puissante accélération GPU, elle offre les performances et la flexibilité nécessaires pour les applications de capture vidéo les plus exigeantes. La capacité de créer et d'enregistrer efficacement des fichiers vidéo rend cette bibliothèque idéale pour toute application devant enregistrer du contenu webcam.
 
@@ -314,4 +314,4 @@ Vous cherchez l'enregistrement webcam en VB.NET ? Consultez notre guide dédié 
 - [Tutoriel webcam vers MP4](../video-tutorials/video-capture-webcam-mp4.md) — guide pas à pas d'enregistrement MP4
 - [Capture caméra IP vers MP4](../video-tutorials/ip-camera-capture-mp4.md) — enregistrer depuis des caméras réseau au lieu de webcams locales
 - [Lecteur de codes-barres et QR codes](../../mediablocks/Guides/barcode-qr-reader-guide.md) — combiner la capture webcam avec la détection de codes-barres
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements

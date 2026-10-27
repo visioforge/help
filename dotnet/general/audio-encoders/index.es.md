@@ -1,7 +1,7 @@
 ---
-title: Codificadores de Audio para .NET — Guía AAC, FLAC, MP3, Opus
+title: Codificadores de audio para .NET — guía AAC, FLAC, MP3, Opus
 description: Implemente codificadores de audio AAC, FLAC, MP3, Opus y otros en .NET con configuraciones óptimas, consejos de rendimiento y mejores prácticas.
-sidebar_label: Codificadores de Audio
+sidebar_label: Codificadores de audio
 
 order: 20
 tags:
@@ -20,9 +20,9 @@ tags:
 
 # Codificadores de Audio para Desarrollo en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Introducción a la Codificación de Audio en Aplicaciones .NET
+## Introducción a la codificación de audio en aplicaciones .NET
 
 Al desarrollar aplicaciones multimedia en .NET, elegir el codificador de audio adecuado es crucial para garantizar un rendimiento óptimo, compatibilidad y calidad. El conjunto de SDKs .NET de VisioForge proporciona a los desarrolladores herramientas potentes para la codificación de audio en varios formatos, permitiendo la creación de aplicaciones multimedia de nivel profesional.
 
@@ -30,7 +30,7 @@ Los codificadores de audio son componentes esenciales que convierten datos de au
 
 ## Inicio rápido — Elegir un codificador de audio
 
-Cada encoder en los motores multiplataforma es una clase de settings que asignas a la propiedad `Audio` del output (o pasas a un `*OutputBlock` en Media Blocks). El pipeline circundante es el mismo — solo cambia el tipo de settings.
+Cada encoder en los motores multiplataforma es una clase de settings que asigna a la propiedad `Audio` del output (o pasa a un `*OutputBlock` en Media Blocks). El pipeline circundante es el mismo — solo cambia el tipo de settings.
 
 ```csharp
 using VisioForge.Core.Types.X.AudioEncoders;
@@ -58,9 +58,9 @@ var ogg = new OGGVorbisOutput("music.ogg"); // OGG + Vorbis
 // core.Output_Format = mp4;      // VideoEditCoreX
 ```
 
-Elige el codec según tu objetivo: **AAC** para amplia compatibilidad (MP4, M4A, streaming), **Opus** para voz/música de baja latencia o bajo bitrate, **MP3** para distribución legacy, **FLAC** para archivos lossless, **Vorbis** para pipelines WebM/OGG de formato abierto. Las páginas por codec cubren tablas de bitrate, límites de sample-rate y parámetros de tuning.
+Elija el codec según su objetivo: **AAC** para amplia compatibilidad (MP4, M4A, streaming), **Opus** para voz/música de baja latencia o bajo bitrate, **MP3** para distribución legacy, **FLAC** para archivos lossless, **Vorbis** para pipelines WebM/OGG de formato abierto. Las páginas por codec cubren tablas de bitrate, límites de sample-rate y parámetros de tuning.
 
-## Codificadores de Audio Disponibles
+## Codificadores de audio disponibles
 
 Los SDKs .NET de VisioForge incluyen soporte para los siguientes codificadores de audio, cada uno diseñado para casos de uso específicos:
 
@@ -176,7 +176,7 @@ Windows Media Audio (WMA) proporciona un conjunto de códecs de audio desarrolla
 
 WMA es particularmente útil para aplicaciones centradas en Windows, soluciones empresariales y escenarios donde se requiere protección DRM.
 
-## Eligiendo el Codificador de Audio Adecuado
+## Elegir el codificador de audio adecuado
 
 Seleccionar el codificador de audio apropiado depende de varios factores:
 
@@ -190,7 +190,7 @@ Seleccionar el codificador de audio apropiado depende de varios factores:
 
 5. **Requisitos de Licencia**: Si su proyecto requiere soluciones de código abierto o libres de patentes, concéntrese en FLAC, Vorbis u Opus.
 
-## Consideraciones de Implementación
+## Consideraciones de implementación
 
 Al implementar codificadores de audio en su aplicación .NET:
 
@@ -200,7 +200,7 @@ Al implementar codificadores de audio en su aplicación .NET:
 - **Metadatos**: La mayoría de los formatos soportan etiquetas de metadatos—úselas para mejorar la experiencia del usuario.
 - **Preprocesamiento**: Considere implementar normalización de audio u otro preprocesamiento antes de codificar para obtener resultados óptimos.
 
-## Optimización de Rendimiento
+## Optimización de rendimiento
 
 Para lograr el mejor rendimiento al usar codificadores de audio:
 
@@ -210,7 +210,7 @@ Para lograr el mejor rendimiento al usar codificadores de audio:
 - Procese archivos de audio por lotes cuando sea posible en lugar de codificar bajo demanda
 - Monitoree el uso de memoria, especialmente al procesar archivos de audio largos
 
-## Comenzando
+## Comenzar
 
 Para comenzar a implementar codificadores de audio en su aplicación .NET utilizando los SDKs de VisioForge, siga estos pasos:
 

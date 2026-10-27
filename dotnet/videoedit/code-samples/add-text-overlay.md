@@ -20,7 +20,7 @@ primary_api_classes:
 
 # Implementing Text Overlays in Video Projects
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
 
 ## Introduction to Text Overlays
 

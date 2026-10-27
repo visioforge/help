@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK .NET (non-linear editor) into a
 
 This skill helps you add **VisioForge Video Edit SDK .NET** to a headless .NET console application — for scripts, scheduled jobs, server-side processing, and CI pipelines that cut, trim, merge, transcode, or apply effects to existing video files. The SDK is a non-linear editor (NLE): it does **not** capture from cameras or screen — for that see `video-capture-sdk-net-wpf`. The SDK is Windows-only (DirectShow / Media Foundation under the hood); for cross-platform batch editing (macOS, Linux containers) see the [Video Edit SDK X product page](https://www.visioforge.com/video-edit-sdk-net).
 
-Pinned NuGet version: **`2026.10.20`** (matches the official Main Demo CLI sample at `_SETUP/GitHub/Video Edit SDK/Console/CSharp/Main Demo CLI/`). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.10.26`** (matches the official Main Demo CLI sample at `_SETUP/GitHub/Video Edit SDK/Console/CSharp/Main Demo CLI/`). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -35,7 +35,7 @@ The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
@@ -141,7 +141,6 @@ You only need these if your output format actually uses them. Default MP4 (Media
 | WebM (VP8/VP9 + Vorbis/Opus) | `VisioForge.DotNet.Core.Redist.WebM.x64` |
 | FFmpeg-based output (custom muxers, network sinks) | `VisioForge.DotNet.Core.Redist.FFMPEG.x64` |
 | LAV-based decoding (uncommon legacy formats) | `VisioForge.DotNet.Core.Redist.LAV.x64` |
-| VLC-based source | `VisioForge.DotNet.Core.Redist.VLC.x64` |
 | Xiph (Vorbis/Theora/FLAC/Speex) standalone codecs | `VisioForge.DotNet.Core.Redist.XIPH.x64` |
 
 Pin all redist packages to **the same version as `VisioForge.DotNet.VideoEdit`** — version drift between main and redist is undefined behaviour. For a 32-bit deployment swap `.x64` for `.x86`. To support both architectures with a single AnyCPU build, reference both `.x64` and `.x86` of every redist package you need.

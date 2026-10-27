@@ -32,7 +32,7 @@ primary_api_classes:
 
 # Cómo Crear un Escáner de Códigos de Barras y Lector de Códigos QR en C# .NET
 
-[SDK de Media Blocks .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción
 
@@ -73,7 +73,7 @@ El escáner de códigos de barras en C# soporta una amplia gama de formatos de c
 
 ## Arquitectura del Pipeline del Escáner de Códigos de Barras
 
-El SDK de Media Blocks utiliza una arquitectura basada en pipeline donde los fotogramas de video fluyen a través de bloques conectados para la detección de códigos de barras en tiempo real:
+El Media Blocks SDK utiliza una arquitectura basada en pipeline donde los fotogramas de video fluyen a través de bloques conectados para la detección de códigos de barras en tiempo real:
 
 ```mermaid
 graph LR;

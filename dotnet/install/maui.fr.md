@@ -31,7 +31,7 @@ primary_api_classes:
 
 Nos SDK apportent de puissantes capacités multimédias sur toutes les plateformes prises en charge par MAUI :
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! tip "Vous cherchez un tutoriel concret ?"
     Une fois les paquets installés, suivez le [Guide du lecteur vidéo .NET MAUI](../mediaplayer/guides/maui-player.md) — une implémentation complète de `VideoView` + `MediaPlayerCoreX` avec sélecteur de fichiers, recherche et volume, qui fonctionne sur iOS, Android, macOS et Windows à partir d'une seule base de code.
@@ -190,7 +190,7 @@ Ajoutez le paquet spécifique à iOS à votre projet :
   <!-- La version du redistribuable iOS est volontairement en retard sur celle du SDK - elle suit
        le rythme de reconstruction de GStreamer-iOS, pas celui du wrapper. Ne l'alignez pas sur
        VisioForge.DotNet.* ; il n'existe pas de version 2026.x sur nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 

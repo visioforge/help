@@ -19,16 +19,16 @@ primary_api_classes:
 
 # Compilar para macOS
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 El flavor macOS distribuye un runtime GStreamer Universal (arm64 + x86_64) más los ensamblados
 gestionados del paquete compilados contra `netstandard2.1`. El runtime nativo es un conjunto de
 ~300 dylibs separados — libs core de GStreamer, plugins, módulos GIO, backend OpenSSL TLS,
 paquete CA — plano en `Assets/Plugins/macOS/`. Esta página cubre los ajustes del Build Profile,
-el layout de dylibs y los problemas específicos de macOS; para la secuencia de arranque consulta
+el layout de dylibs y los problemas específicos de macOS; para la secuencia de arranque consulte
 [Bootstrap y ciclo de vida](bootstrap.md).
 
 El flavor macOS se incluye en el `.unitypackage` cuando el pipeline de build se ejecuta con
@@ -47,7 +47,7 @@ macOS juntos — Unity elige los archivos correctos por Build Target a través d
 | Mac App Store Validation | **Off** *(o firma primero los dylibs de GStreamer, ver abajo)* | Project Settings → Player → Other Settings |
 
 Ambos backends de scripting están probados. Mono es el predeterminado y es más rápido para
-iterar; cambia a IL2CPP solo si tienes una razón a nivel de proyecto. El mismo `link.xml` que
+iterar; cambie a IL2CPP solo si tiene una razón a nivel de proyecto. El mismo `link.xml` que
 distribuye el paquete preserva los tipos gestionados del SDK en cualquier backend.
 
 ## Organización en disco
@@ -90,42 +90,42 @@ durante el resto del proceso — no hay ajuste por versión de Unity.
 
 El flavor macOS añade aproximadamente **100 MB** al bundle `.app` (Universal arm64 + x86_64).
 Es el más grande de los flavors del paquete acumulativo porque cada plugin se distribuye como
-su propio dylib y se incluyen ambas arquitecturas. Si solo apuntas a Apple silicon, puedes
+su propio dylib y se incluyen ambas arquitecturas. Si solo apunta a Apple silicon, puede
 post-procesar el bundle para eliminar las slices x86_64 con `lipo`, pero el paquete en sí no
 las separa por defecto.
 
 ## Firma de código y notarización
 
-Para distribución fuera de la Mac App Store típicamente quieres firmar y notarizar el bundle:
+Para distribución fuera de la Mac App Store típicamente quiere firmar y notarizar el bundle:
 
-1. **Hardened Runtime** habilitado (Project Settings → Player → Other Settings o tu flujo de
+1. **Hardened Runtime** habilitado (Project Settings → Player → Other Settings o su flujo de
    firma).
-2. **Codesign cada dylib en `Contents/PlugIns/`** con tu certificado Developer ID Application
-   antes de firmar el propio `.app`. Unity no firma plugins de terceros por ti.
+2. **Codesign cada dylib en `Contents/PlugIns/`** con su certificado Developer ID Application
+   antes de firmar el propio `.app`. Unity no firma plugins de terceros por usted.
 3. **Notariza** el `.app` final (o su `.zip` / `.dmg`) con `xcrun notarytool submit … --wait`.
 4. **Staple** el ticket de notarización con `xcrun stapler staple <app-bundle>`.
 
 Los dylibs de GStreamer no requieren ningún entitlement Apple más allá del valor predeterminado del
-Hardened Runtime; no acceden a recursos protegidos desde su código nativo. Tu propia app
+Hardened Runtime; no acceden a recursos protegidos desde su código nativo. Su propia app
 determina qué entitlements (cámara, micrófono, red, etc.) son requeridos.
 
 Para envío a la Mac App Store, el `libgioopenssl.so` y `libgmp.10.dylib` incluidos están
 enlazados estáticamente y se distribuyen bajo licencias permisivas, pero la revisión del App
-Store puede marcar la extensión `.so` para un bundle macOS. Si necesitas distribución por App
-Store, contacta con soporte — ese path no está ejercitado por la CI del paquete.
+Store puede marcar la extensión `.so` para un bundle macOS. Si necesita distribución por App
+Store, contacte con soporte — ese path no está ejercitado por la CI del paquete.
 
 ## Solución de problemas
 
 | Síntoma | Causa | Arreglo |
 |---|---|---|
-| `DllNotFoundException: libgstreamer-1.0.0` en Play | `Plugins/macOS/` está vacío o falta el centinela `libgstreamer-1.0.0.dylib`. | Reimporta el `.unitypackage` con todos los ítems marcados. La Consola muestra el `NativesPath` resuelto — confirma que el centinela está allí. |
-| `[VisioForge] Native runtime folder not found at '…/Contents/PlugIns'` en un build Standalone | Los plugins no se prepararon en el `.app` porque el flavor macOS no estaba en el paquete. | Reconstruye el paquete con `-IncludeMacOS` (o importa el `.unitypackage` acumulativo que incluya macOS). |
-| El pipeline se cuelga al arrancar, el log muestra dos llamadas `gst_init` | Una instalación homebrew o de sistema de GStreamer está en `DYLD_LIBRARY_PATH`. | `Configure()` lo limpia — confirma que el número de eliminaciones no es cero en la Consola. Hardened Runtime elimina `DYLD_*` antes de que el proceso arranque, así que esto es principalmente una preocupación del Editor Mono. |
-| RTSPS / HTTPS falla con `Peer certificate cannot be authenticated with given CA certificates` | `ca-certificates.crt` no encontrado en la ruta esperada. | `Configure()` registra una advertencia si el paquete falta. Reimporta el paquete o vuelve a ejecutar `deploy-unity-natives.ps1 -Platform macOS`. |
-| El bundle lanzado desde Finder muestra el diálogo `Damaged app` | El `.app` no está firmado y se descargó con el flag de cuarentena. | Firma + notariza para distribución, o para pruebas locales ejecuta `xattr -d com.apple.quarantine <app-bundle>` una vez. |
-| El bundle lanzado desde un build TestFlight de Mac App Store crashea | Los archivos `.so` en el bundle violan las reglas de layout del App Store. | Contacta con soporte — el envío a App Store necesita un empaquetado nativo alternativo. |
+| `DllNotFoundException: libgstreamer-1.0.0` en Play | `Plugins/macOS/` está vacío o falta el centinela `libgstreamer-1.0.0.dylib`. | Reimporte el `.unitypackage` con todos los ítems marcados. La Consola muestra el `NativesPath` resuelto — confirme que el centinela está allí. |
+| `[VisioForge] Native runtime folder not found at '…/Contents/PlugIns'` en un build Standalone | Los plugins no se prepararon en el `.app` porque el flavor macOS no estaba en el paquete. | Reconstruya el paquete con `-IncludeMacOS` (o importa el `.unitypackage` acumulativo que incluya macOS). |
+| El pipeline se cuelga al arrancar, el log muestra dos llamadas `gst_init` | Una instalación homebrew o de sistema de GStreamer está en `DYLD_LIBRARY_PATH`. | `Configure()` lo limpia — confirme que el número de eliminaciones no es cero en la Consola. Hardened Runtime elimina `DYLD_*` antes de que el proceso arranque, así que esto es principalmente una preocupación del Editor Mono. |
+| RTSPS / HTTPS falla con `Peer certificate cannot be authenticated with given CA certificates` | `ca-certificates.crt` no encontrado en la ruta esperada. | `Configure()` registra una advertencia si el paquete falta. Reimporte el paquete o vuelva a ejecutar `deploy-unity-natives.ps1 -Platform macOS`. |
+| El bundle lanzado desde Finder muestra el diálogo `Damaged app` | El `.app` no está firmado y se descargó con el flag de cuarentena. | Firme + notarice para distribución, o para pruebas locales ejecute `xattr -d com.apple.quarantine <app-bundle>` una vez. |
+| El bundle lanzado desde un build TestFlight de Mac App Store crashea | Los archivos `.so` en el bundle violan las reglas de layout del App Store. | Contacte con soporte — el envío a App Store necesita un empaquetado nativo alternativo. |
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 ### ¿Funciona el flavor macOS en el Editor en un Mac?
 
@@ -135,22 +135,22 @@ Editor y sondea el layout del bundle en el player.
 
 ### ¿Necesito el flavor macOS para abrir el paquete en un Editor host Mac?
 
-Sí. El `.unitypackage` que importas debe contener el flavor macOS (`-IncludeMacOS`) para que el
+Sí. El `.unitypackage` que importa debe contener el flavor macOS (`-IncludeMacOS`) para que el
 Editor host Mac encuentre un runtime nativo que cargar. Un paquete solo-Windows, abierto en un
 Editor Mac, mostrará el desajuste de flavor cruzado como `[VisioForge] Native runtime folder not
-found at '…' for runtime platform OSXEditor` — consulta
+found at '…' for runtime platform OSXEditor` — consulte
 [Bootstrap y ciclo de vida](bootstrap.md).
 
 ### ¿Puedo distribuir solo Apple silicon y omitir x86_64?
 
-Sí. Tras el build, ejecuta `lipo -thin arm64 <dylib> -output <dylib>` en cada `.dylib` en
+Sí. Tras el build, ejecute `lipo -thin arm64 <dylib> -output <dylib>` en cada `.dylib` en
 `Contents/PlugIns/` para eliminar las slices Intel. El paquete no lo hace por defecto porque
 ambas arquitecturas siguen siendo útiles para pruebas de compatibilidad.
 
 ### ¿Funciona el mismo paquete en iOS también?
 
 El flavor iOS se distribuye como una plataforma separada dentro del mismo `.unitypackage`
-cuando se construye con `-IncludeIOS`. Consulta [Compilar para iOS](ios.md).
+cuando se construye con `-IncludeIOS`. Consulte [Compilar para iOS](ios.md).
 
 ## Véase también
 

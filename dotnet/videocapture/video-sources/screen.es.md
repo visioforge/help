@@ -1,5 +1,5 @@
 ---
-title: Captura de Pantalla en C# .NET para Escritorio o Región
+title: Captura de pantalla en C# .NET para escritorio o región
 description: Capture pantalla completa, ventanas específicas o regiones personalizadas con VisioForge Video Capture SDK usando DirectX 11/12 y Windows Graphics Capture.
 tags:
   - Video Capture SDK
@@ -19,14 +19,14 @@ primary_api_classes:
   - ScreenCaptureDX9SourceSettings
 ---
 
-# Guía de Implementación de Captura de Pantalla
+# Guía de implementación de captura de pantalla
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
-!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+!!! tip "Agentes de IA: use el servidor MCP de VisioForge"
 
-    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
-    Conecta al servidor MCP público de VisioForge
+    ¿Lo construye con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecte al servidor MCP público de VisioForge
     ([documentación](../../general/mcp-server-usage.md))
     en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
     ejemplos de código ejecutables y guías de despliegue — más preciso que
@@ -34,7 +34,7 @@ primary_api_classes:
 
     Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
-## Introducción a la Captura de Pantalla
+## Introducción a la captura de pantalla
 
 La tecnología de captura de pantalla permite a los desarrolladores grabar y transmitir programáticamente el contenido visual mostrado en un monitor de computadora. Esta poderosa funcionalidad sirve como base para numerosas aplicaciones incluyendo:
 
@@ -44,9 +44,9 @@ La tecnología de captura de pantalla permite a los desarrolladores grabar y tra
 - Sistemas de webinars y presentaciones
 - Automatización de control de calidad y pruebas
 
-Video Capture SDK .Net proporciona a los desarrolladores herramientas robustas para capturar contenido de pantalla con alto rendimiento y flexibilidad. El SDK soporta capturar pantallas completas, ventanas de aplicaciones individuales o regiones de pantalla personalizadas.
+El Video Capture SDK .Net proporciona a los desarrolladores herramientas robustas para capturar contenido de pantalla con alto rendimiento y flexibilidad. El SDK soporta capturar pantallas completas, ventanas de aplicaciones individuales o regiones de pantalla personalizadas.
 
-## Soporte de Plataforma y Descripción General de la Tecnología
+## Soporte de plataforma y descripción general de la tecnología
 
 ### Implementación en Windows
 
@@ -60,7 +60,7 @@ DirectX 11 es particularmente recomendado para escenarios de captura de ventanas
 === "VideoCaptureCore"
 
     
-    ### Configuración de Captura Principal
+    ### Configuración de captura principal
     
     La implementación de VideoCaptureCore proporciona opciones de configuración sencillas para controlar el proceso de captura:
     
@@ -72,7 +72,7 @@ DirectX 11 es particularmente recomendado para escenarios de captura de ventanas
 === "VideoCaptureCoreX"
 
     
-    ### Configuración de Captura Avanzada
+    ### Configuración de captura avanzada
     
     VideoCaptureCoreX ofrece control más granular a través de clases de configuración dedicadas:
     
@@ -81,14 +81,14 @@ DirectX 11 es particularmente recomendado para escenarios de captura de ventanas
     
 
 
-## Implementación de Captura de Pantalla Completa y Región
+## Implementación de captura de pantalla completa y región
 
 Capturar ya sea una pantalla completa o una región de pantalla definida es un requisito común para muchas aplicaciones. A continuación están los enfoques de implementación para VideoCaptureCore y VideoCaptureCoreX.
 
 === "VideoCaptureCore"
 
     
-    ### Configurar Captura de Pantalla Completa y Región
+    ### Configurar captura de pantalla completa y región
     
     El siguiente código demuestra cómo configurar los ajustes de captura de pantalla para modo de pantalla completa o una región rectangular específica:
     
@@ -130,7 +130,7 @@ Capturar ya sea una pantalla completa o una región de pantalla definida es un r
 === "VideoCaptureCoreX"
 
     
-    ### Captura de Pantalla Avanzada con DirectX 11
+    ### Captura de pantalla avanzada con DirectX 11
     
     VideoCaptureCoreX proporciona una implementación más potente usando tecnología DirectX 11:
     
@@ -179,7 +179,7 @@ Capturar ya sea una pantalla completa o una región de pantalla definida es un r
     
 
 
-## Implementación de Captura de Ventana
+## Implementación de captura de ventana
 
 Capturar ventanas de aplicación específicas permite la grabación dirigida de aplicaciones individuales sin incluir otro contenido del escritorio. Esto es particularmente útil para:
 
@@ -190,7 +190,7 @@ Capturar ventanas de aplicación específicas permite la grabación dirigida de 
 === "VideoCaptureCore"
 
     
-    ### Captura de Ventana Básica
+    ### Captura de ventana básica
     
     Para capturar una ventana específica con VideoCaptureCore:
     
@@ -212,7 +212,7 @@ Capturar ventanas de aplicación específicas permite la grabación dirigida de 
     };
     ```
     
-    El parámetro `windowHandle` debe ser un HWND válido a la ventana objetivo. Obténlo vía `FindWindow` (P/Invoke):
+    El parámetro `windowHandle` debe ser un HWND válido a la ventana objetivo. Obténgalo vía `FindWindow` (P/Invoke):
 
     ```csharp
     using System.Runtime.InteropServices;
@@ -229,7 +229,7 @@ Capturar ventanas de aplicación específicas permite la grabación dirigida de 
 === "VideoCaptureCoreX"
 
     
-    ### Captura de Ventana Mejorada
+    ### Captura de ventana mejorada
     
     VideoCaptureCoreX proporciona una implementación optimizada de captura de ventana:
     
@@ -253,19 +253,19 @@ Capturar ventanas de aplicación específicas permite la grabación dirigida de 
     
 
 
-## Técnicas de Optimización de Rendimiento
+## Técnicas de optimización de rendimiento
 
-Optimizar el rendimiento de captura de pantalla es crucial para mantener altas tasas de fotogramas mientras se minimiza el uso de CPU y memoria. Considera las siguientes mejores prácticas:
+Optimizar el rendimiento de captura de pantalla es crucial para mantener altas tasas de fotogramas mientras se minimiza el uso de CPU y memoria. Considere las siguientes mejores prácticas:
 
-### Gestión de Tasa de Fotogramas
+### Gestión de tasa de fotogramas
 
-Selecciona cuidadosamente una tasa de fotogramas apropiada basada en los requisitos de tu aplicación:
+Seleccione cuidadosamente una tasa de fotogramas apropiada basada en los requisitos de su aplicación:
 
 - Para grabación de propósito general: 15-30 FPS es típicamente suficiente
 - Para juegos o contenido con mucho movimiento: 30-60 FPS puede ser necesario
 - Para contenido estático o basado en documentos: 5-10 FPS puede reducir significativamente el uso de recursos
 
-### Consideraciones de Resolución
+### Consideraciones de resolución
 
 Las capturas de mayor resolución requieren más poder de procesamiento y memoria. Considera:
 
@@ -273,7 +273,7 @@ Las capturas de mayor resolución requieren más poder de procesamiento y memori
 - Usar captura de región en lugar de pantalla completa cuando solo parte de la pantalla es relevante
 - Implementar cambio de resolución basado en el tipo de contenido
 
-### Aceleración por Hardware
+### Aceleración por hardware
 
 Cuando esté disponible, usar DirectX 11/12 con aceleración por hardware puede mejorar significativamente el rendimiento:
 
@@ -281,9 +281,9 @@ Cuando esté disponible, usar DirectX 11/12 con aceleración por hardware puede 
 - Proporciona mejores tasas de fotogramas, especialmente con contenido de alta resolución
 - Permite codificación más eficiente cuando se combina con codificadores de video acelerados por hardware
 
-## Escenarios de Implementación Avanzada
+## Escenarios de implementación avanzada
 
-### Configuración Multi-Monitor
+### Configuración multi-monitor
 
 Trabajar con configuraciones de múltiples monitores requiere consideración especial:
 
@@ -301,9 +301,9 @@ for (int i = 0; i < screens.Length; i++)
 // Una vez hecha la selección, establecer el DisplayIndex/MonitorIndex apropiado
 ```
 
-### Selección de Ventana de Aplicación
+### Selección de ventana de aplicación
 
-Enumera las ventanas top-level con `EnumWindows` + `GetWindowText` y deja que el usuario elija una:
+Enumere las ventanas top-level con `EnumWindows` + `GetWindowText` y deje que el usuario elija una:
 
 ```csharp
 using System.Runtime.InteropServices;
@@ -346,7 +346,7 @@ VideoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings
 };
 ```
 
-### Selección de Región Dinámica
+### Selección de región dinámica
 
 Permitir a los usuarios seleccionar interactivamente una región de pantalla para capturar:
 
@@ -374,33 +374,33 @@ VideoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings
 };
 ```
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-### Captura en Blanco o Negra
+### Captura en blanco o negra
 
 Si el contenido capturado aparece en blanco o negro:
 
-- Verifica que tienes permisos apropiados para la ventana o pantalla
-- Comprueba si la aplicación usa aceleración por hardware que podría conflictuar con la captura
-- Prueba versiones alternativas de DirectX (9 vs 11/12)
+- Verifique que tiene permisos apropiados para la ventana o pantalla
+- Compruebe si la aplicación usa aceleración por hardware que podría conflictuar con la captura
+- Pruebe versiones alternativas de DirectX (9 vs 11/12)
 - Para contenido protegido (como video DRM), la captura puede estar bloqueada por mecanismos de seguridad
 
-### Problemas de Rendimiento
+### Problemas de rendimiento
 
-Si experimentas captura lenta o con interrupciones:
+Si experimenta captura lenta o con interrupciones:
 
-- Reduce la resolución de captura y/o tasa de fotogramas
-- Usa DirectX 11/12 en lugar de DirectX 9 cuando esté disponible
-- Cierra aplicaciones de fondo innecesarias
-- Verifica que la aceleración por hardware está habilitada cuando sea aplicable
+- Reduzca la resolución de captura y/o tasa de fotogramas
+- Use DirectX 11/12 en lugar de DirectX 9 cuando esté disponible
+- Cierre aplicaciones de fondo innecesarias
+- Verifique que la aceleración por hardware está habilitada cuando sea aplicable
 
 ## Conclusión
 
-La funcionalidad de captura de pantalla permite a los desarrolladores crear aplicaciones potentes para demostración, educación, soporte y entretenimiento. Video Capture SDK .Net proporciona un framework robusto para implementar esta funcionalidad con mínimo esfuerzo de desarrollo.
+La funcionalidad de captura de pantalla permite a los desarrolladores crear aplicaciones potentes para demostración, educación, soporte y entretenimiento. El Video Capture SDK .Net proporciona un framework robusto para implementar esta funcionalidad con mínimo esfuerzo de desarrollo.
 
-Aprovechando las opciones de configuración apropiadas para tus requisitos específicos, puedes implementar características de captura de pantalla de alto rendimiento en tus aplicaciones .NET.
+Aprovechando las opciones de configuración apropiadas para sus requisitos específicos, puede implementar características de captura de pantalla de alto rendimiento en sus aplicaciones .NET.
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 ### ¿Cuál es la diferencia entre la captura de pantalla con DirectX 9 y DirectX 11/12?
 
@@ -418,10 +418,10 @@ Establezca `GrabMouseCursor = true` en `ScreenCaptureSourceSettings` (VideoCaptu
 
 Sí. Use `DisplayIndex` (VideoCaptureCore) o `MonitorIndex` (VideoCaptureCoreX) para seleccionar qué monitor capturar. Enumere los monitores disponibles con `System.Windows.Forms.Screen.AllScreens` y presente la lista al usuario. Cada monitor se captura de forma independiente — para grabar todos los monitores simultáneamente, cree instancias de captura separadas para cada pantalla.
 
-## Ver También
+## Ver también
 
 - [Captura de Pantalla en VB.NET](../guides/screen-capture-vb-net.md) — guía completa de Visual Basic con pantalla completa, captura de región y grabación de audio
 - [Tutorial de Captura de Pantalla a MP4](../video-tutorials/screen-capture-mp4.md) — tutorial de C# para grabar escritorio a MP4 con video explicativo
 - [Guardar Video de Webcam en C#](../guides/save-webcam-video.md) — capturar desde webcam en lugar de pantalla
 - [Captura de Cámaras IP](ip-cameras/index.md) — grabar desde cámaras de red usando RTSP
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas

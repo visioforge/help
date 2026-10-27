@@ -642,4 +642,4 @@ Oui. Dans MediaPlayerCore, activez `Loop` et `Selection_Active`, puis définisse
 - [Lecteur multimédia Avalonia](avalonia-player.md) — lecteur multiplateforme avec patron MVVM
 - [Construire un lecteur vidéo en VB.NET](video-player-vb-net.md) — lecteur VB.NET avec positionnement et contrôle du volume
 - [Exemples de code](../code-samples/index.md) — exemples d'extraction d'image, listes de lecture et lecture inversée
-- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — page produit et téléchargements
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) — page produit et téléchargements

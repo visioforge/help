@@ -105,7 +105,7 @@ Determine which SDKs your application uses:
 | SDK | Purpose | Key File |
 |-----|---------|----------|
 | **FFMPEG Source** | Media playback, streaming | VisioForge_FFMPEG_Source_x64.ax |
-| **VLC Source** | Multi-track playback | VisioForge_VLC_Source.ax |
+| **VLC Source** | Multi-track playback | VisioForge_VLC_Source_x64.ax |
 | **Processing Filters** | Effects, mixing | VisioForge_Video_Effects_Pro_x64.ax |
 | **Encoding Filters** | Video encoding | VisioForge_NVENC_x64.ax |
 | **Virtual Camera** | Virtual devices | VisioForge_Virtual_Camera_x64.ax |
@@ -153,8 +153,13 @@ YourApp\
 
 ```batch
 @echo off
-cd /d "%~dp0Filters"
-regsvr32 /s VisioForge_FFMPEG_Source_x64.ax
+REM Check for Administrator privileges
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo ERROR: This script must be run as Administrator!
+    exit /b 1
+)
+regsvr32 /s "%~dp0Filters\VisioForge_FFMPEG_Source_x64.ax"
 if %ERRORLEVEL% EQU 0 (
     echo Registration successful
 ) else (

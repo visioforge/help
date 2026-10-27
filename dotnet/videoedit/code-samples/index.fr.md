@@ -10,7 +10,7 @@ tags:
 
 # Exemples de code et tutoriels d'édition vidéo .NET
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Cette page rassemble des recettes C# prêtes à l'emploi pour les scénarios d'édition les plus courants utilisant Video Edit SDK .Net. Chaque extrait est vérifié par rapport au code source du SDK et aux démos sous [`Video Edit SDK`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK). Les recettes ci-dessous utilisent le moteur `VideoEditCore` (Windows uniquement). Le code multi-plateforme basé sur `VideoEditCoreX` suit une forme similaire avec des types de source et d'effet spécifiques au moteur.
 

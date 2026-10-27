@@ -1,6 +1,6 @@
 ---
 title: Redimensionar, recortar y escalar video en vivo en C# .NET
-description: Redimensiona y recorta video en vivo de webcams, pantallas y cámaras IP con Video Capture SDK — relación de aspecto y región de interés en C#.
+description: Redimensione y recorte video en vivo de webcams, pantallas y cámaras IP con Video Capture SDK — relación de aspecto y región de interés en C#.
 tags:
   - Video Capture SDK
   - .NET
@@ -14,19 +14,19 @@ primary_api_classes:
 
 # Operaciones de redimensionado y recorte de video para desarrolladores .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción al procesamiento de video
 
-Al trabajar con flujos de video en aplicaciones .NET, controlar las dimensiones y el área de enfoque de tu video es esencial para crear aplicaciones profesionales. Esta guía explica cómo implementar operaciones de redimensionado y recorte en flujos de video provenientes de webcams, capturas de pantalla, cámaras IP y otras fuentes.
+Al trabajar con flujos de video en aplicaciones .NET, controlar las dimensiones y el área de enfoque de su video es esencial para crear aplicaciones profesionales. Esta guía explica cómo implementar operaciones de redimensionado y recorte en flujos de video provenientes de webcams, capturas de pantalla, cámaras IP y otras fuentes.
 
 ## Implementación de redimensionado de video
 
-El redimensionado te permite estandarizar las dimensiones de video entre distintas fuentes, lo cual es particularmente útil cuando trabajas con múltiples entradas de cámara o cuando apuntas a formatos de salida específicos.
+El redimensionado le permite estandarizar las dimensiones de video entre distintas fuentes, lo cual es particularmente útil cuando trabaja con múltiples entradas de cámara o cuando apunta a formatos de salida específicos.
 
 ### Paso 1: habilitar la funcionalidad de redimensionado
 
-Primero, habilita la funcionalidad de redimensionado o recorte en tu aplicación:
+Primero, habilite la funcionalidad de redimensionado o recorte en su aplicación:
 
 ```cs
 VideoCapture1.Video_ResizeOrCrop_Enabled = true;
@@ -34,7 +34,7 @@ VideoCapture1.Video_ResizeOrCrop_Enabled = true;
 
 ### Paso 2: configurar los parámetros de redimensionado
 
-Define el ancho y la altura deseados, y determina si quieres mantener la relación de aspecto con letterboxing:
+Defina el ancho y la altura deseados, y determine si quiere mantener la relación de aspecto con letterboxing:
 
 ```cs
 VideoCapture1.Video_Resize = new VideoResizeSettings
@@ -47,7 +47,7 @@ VideoCapture1.Video_Resize = new VideoResizeSettings
 
 ### Paso 3: seleccionar el algoritmo de redimensionado apropiado
 
-Elige el algoritmo que mejor se ajuste a tus requisitos de rendimiento y calidad:
+Elija el algoritmo que mejor se ajuste a sus requisitos de rendimiento y calidad:
 
 ```cs
 // Video_Resize está tipado como la interfaz marcadora IVideoResizeSettings;
@@ -64,11 +64,11 @@ switch (cbResizeMode.SelectedIndex)
 
 ## Implementación de recorte de video
 
-El recorte te permite enfocarte en regiones de interés específicas en tu flujo de video, eliminando las áreas no deseadas del fotograma.
+El recorte le permite enfocarse en regiones de interés específicas en su flujo de video, eliminando las áreas no deseadas del fotograma.
 
 ### Paso 1: habilitar la funcionalidad de recorte
 
-De manera similar al redimensionado, primero habilita la funcionalidad de recorte:
+De manera similar al redimensionado, primero habilite la funcionalidad de recorte:
 
 ```cs
 VideoCapture1.Video_ResizeOrCrop_Enabled = true;
@@ -76,7 +76,7 @@ VideoCapture1.Video_ResizeOrCrop_Enabled = true;
 
 ### Paso 2: definir la región de recorte
 
-Especifica la región de recorte estableciendo los márgenes a eliminar de cada borde del fotograma de video:
+Especifique la región de recorte estableciendo los márgenes a eliminar de cada borde del fotograma de video:
 
 ```cs
 VideoCapture1.Video_Crop = new VideoCropSettings(40, 0, 40, 0);
@@ -84,18 +84,18 @@ VideoCapture1.Video_Crop = new VideoCropSettings(40, 0, 40, 0);
 
 ## Consideraciones de rendimiento
 
-Al implementar operaciones de redimensionado y recorte en aplicaciones de producción, ten en cuenta lo siguiente:
+Al implementar operaciones de redimensionado y recorte en aplicaciones de producción, tenga en cuenta lo siguiente:
 
 - Las operaciones de redimensionado requieren recursos de CPU, especialmente a resoluciones más altas
 - Los algoritmos más complejos (Bicubic, Lanczos) proporcionan mejor calidad pero requieren más potencia de procesamiento
-- Para aplicaciones en tiempo real, equilibra calidad y rendimiento en función del hardware objetivo
+- Para aplicaciones en tiempo real, equilibre calidad y rendimiento en función del hardware objetivo
 
 ## Dependencias requeridas
 
-Asegúrate de que tu proyecto incluya los paquetes redistribuibles necesarios:
+Asegúrese de que su proyecto incluya los paquetes redistribuibles necesarios:
 
 - Redist Video Capture [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
 ## Recursos adicionales
 
-Para implementaciones más avanzadas y ejemplos de código, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) con numerosos ejemplos para desarrolladores .NET.
+Para implementaciones más avanzadas y ejemplos de código, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) con numerosos ejemplos para desarrolladores .NET.

@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Editar y renderizar video en Unity con VideoEditCoreX
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 La escena **`VideoEditX`** combina clips en una línea de tiempo **`VideoEditCoreX`**, opcionalmente aplica un
 efecto de escala de grises, y o bien **previsualiza** la línea de tiempo en un `RawImage` de Unity o la **renderiza** a

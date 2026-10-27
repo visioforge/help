@@ -39,11 +39,11 @@ primary_api_classes:
 
 # Crear un reproductor de video en VB.NET
 
-Esta guía le muestra paso a paso cómo crear una aplicación de reproductor de video completa en VB.NET (Visual Basic .NET) utilizando [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net). El reproductor es compatible con MP4, AVI, MKV, WMV, WebM y muchos otros formatos, e incluye controles de reproducción, búsqueda en la línea de tiempo y ajuste de volumen.
+Esta guía le muestra paso a paso cómo crear una aplicación de reproductor de video completa en VB.NET (Visual Basic .NET) utilizando [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net). El reproductor es compatible con MP4, AVI, MKV, WMV, WebM y muchos otros formatos, e incluye controles de reproducción, búsqueda en la línea de tiempo y ajuste de volumen.
 
 ## Por qué usar Media Player SDK .Net para VB.NET
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) proporciona una reproducción de video robusta en VB.NET con:
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) proporciona una reproducción de video robusta en VB.NET con:
 
 - Compatibilidad con todos los principales formatos de video (MP4, AVI, MKV, WMV, WebM, MOV, TS)
 - Compatibilidad con formatos de audio (MP3, AAC, WAV, WMA, FLAC)
@@ -55,9 +55,9 @@ Esta guía le muestra paso a paso cómo crear una aplicación de reproductor de 
 ## Paquetes NuGet requeridos
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 ## Ejemplo completo de reproductor de video en VB.NET
@@ -268,7 +268,7 @@ Demos completas de reproductor de video en VB.NET:
 
 ### ¿Qué licencia necesito para una aplicación de reproductor de video en VB.NET?
 
-Media Player SDK .Net requiere una licencia para desarrollo y distribución. Una licencia de Desarrollador elimina la marca de agua de evaluación y desbloquea todas las funciones durante el desarrollo. Una licencia de Release es necesaria al distribuir su aplicación a los usuarios finales. El SDK está disponible en edición Premium que incluye todos los formatos compatibles, aceleración por hardware y los motores DirectShow y GStreamer. Puede evaluar el SDK sin licencia — la reproducción funciona completamente pero incluye una marca de agua superpuesta. Visite la [página del producto](https://www.visioforge.com/media-player-sdk-net) para conocer precios y opciones de licencia.
+El Media Player SDK .Net requiere una licencia para desarrollo y distribución. Una licencia de Desarrollador elimina la marca de agua de evaluación y desbloquea todas las funciones durante el desarrollo. Una licencia de Release es necesaria al distribuir su aplicación a los usuarios finales. El SDK está disponible en edición Premium que incluye todos los formatos compatibles, aceleración por hardware y los motores DirectShow y GStreamer. Puede evaluar el SDK sin licencia — la reproducción funciona completamente pero incluye una marca de agua superpuesta. Visite la [página del producto](https://www.visioforge.com/media-player-sdk-net) para conocer precios y opciones de licencia.
 
 ### ¿Qué formatos de video y audio admite el reproductor VB.NET?
 
@@ -290,4 +290,4 @@ Incluya los paquetes NuGet redist listados en la sección de referencia de NuGet
 - [Modo Loop y Rango de Posición](loop-and-position-range.md) — reproducción en bucle y selección de segmentos para ambos motores
 - [Grabar Video de Webcam en VB.NET](../../videocapture/guides/record-webcam-vb-net.md) — aplicación de captura de webcam en Visual Basic .NET
 - [Ejemplos de Código](../code-samples/index.md) — extracción de fotogramas, listas de reproducción y ejemplos de reproducción inversa
-- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — página del producto y descargas
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) — página del producto y descargas

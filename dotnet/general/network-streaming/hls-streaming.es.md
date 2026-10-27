@@ -35,7 +35,7 @@ primary_api_classes:
 
 # Guía Completa para Implementación de Transmisión de Red HLS en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
 
@@ -153,7 +153,7 @@ Puede usar este SDK para transmitir tanto captura de video en vivo como archivos
 
 ## Transmisión HLS con Video Capture SDK .NET
 
-Video Capture SDK .NET proporciona un enfoque simplificado para transmisión HLS específicamente diseñado para fuentes de video en vivo como webcams, tarjetas de captura y otros dispositivos de entrada.
+El Video Capture SDK .NET proporciona un enfoque simplificado para transmisión HLS específicamente diseñado para fuentes de video en vivo como webcams, tarjetas de captura y otros dispositivos de entrada.
 
 ### Implementación VideoCaptureCoreX
 

@@ -18,7 +18,7 @@ primary_api_classes:
 
 # Visualisation audio : implémenter des VU-mètres et des affichages de forme d'onde en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 La visualisation audio est un composant crucial des applications multimédias modernes, fournissant aux utilisateurs un retour visuel sur les niveaux audio et les motifs de forme d'onde. Ce guide montre comment implémenter des VU-mètres (Volume Unit) et des visualiseurs de forme d'onde dans des applications WinForms et WPF.
 

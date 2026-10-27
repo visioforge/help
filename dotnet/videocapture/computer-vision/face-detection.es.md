@@ -1,5 +1,5 @@
 ---
-title: Detección de Rostros en Aplicaciones de Video .NET
+title: Detección de rostros en aplicaciones de video .NET
 description: Implemente la detección de rostros en aplicaciones .NET con ejemplos de código, opciones de configuración y técnicas de optimización para flujos de video.
 tags:
   - Video Capture SDK
@@ -16,11 +16,11 @@ primary_api_classes:
 
 ---
 
-# Implementación de Detección de Rostros en Aplicaciones de Video .NET
+# Implementación de detección de rostros en aplicaciones de video .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Introducción a la Tecnología de Detección de Rostros
+## Introducción a la tecnología de detección de rostros
 
 La detección de rostros es una tecnología de visión por computadora que identifica y localiza rostros humanos dentro de imágenes digitales o cuadros de video. A diferencia del reconocimiento facial (que identifica a individuos específicos), la detección de rostros simplemente responde a la pregunta: "¿Hay un rostro en esta imagen y, de ser así, dónde se encuentra?"
 
@@ -35,9 +35,9 @@ Esta tecnología sirve como base para numerosas aplicaciones:
 
 Para los desarrolladores que construyen aplicaciones .NET, implementar la detección de rostros puede agregar un valor significativo a las aplicaciones de captura y procesamiento de video. Esta guía proporciona un recorrido completo para implementar la detección de rostros en sus proyectos .NET.
 
-## Comenzando con la Detección de Rostros en .NET
+## Comenzar con la detección de rostros en .NET
 
-### Requisitos Previos
+### Requisitos previos
 
 Antes de implementar la detección de rostros en su aplicación, asegúrese de tener:
 
@@ -47,7 +47,7 @@ Antes de implementar la detección de rostros en su aplicación, asegúrese de t
 - Administrador de paquetes NuGet
 - Redistribuibles requeridos (detallados más adelante en este documento)
 
-### Descripción General de la Implementación
+### Descripción general de la implementación
 
 El proceso de implementación sigue estos pasos clave:
 
@@ -59,9 +59,9 @@ El proceso de implementación sigue estos pasos clave:
 
 Desglosemos cada uno de estos pasos con ejemplos de código detallados.
 
-## Paso 1: Configurar Su Fuente de Video
+## Paso 1: Configurar su fuente de video
 
-El seguimiento de rostros corre sobre la fuente a la que esté enlazada la instancia `VideoCaptureCore`. Elige una de las siguientes configuraciones:
+El seguimiento de rostros corre sobre la fuente a la que esté enlazada la instancia `VideoCaptureCore`. Elija una de las siguientes configuraciones:
 
 === "Cámara web"
 
@@ -86,11 +86,11 @@ El seguimiento de rostros corre sobre la fuente a la que esté enlazada la insta
 
 === "Archivo de video (Media Player SDK)"
 
-    Para detección de rostros offline en archivos, usa `MediaPlayerCore` del Media Player SDK — la propiedad `Face_Tracking` se comporta igual en todos los motores. El resto de esta guía (Pasos 2–5) sigue aplicando; reemplaza `VideoCapture1` por tu instancia `MediaPlayer1`.
+    Para detección de rostros offline en archivos, use `MediaPlayerCore` del Media Player SDK — la propiedad `Face_Tracking` se comporta igual en todos los motores. El resto de esta guía (Pasos 2–5) sigue aplicando; reemplace `VideoCapture1` por su instancia `MediaPlayer1`.
 
-Elige un patrón y continúa con el Paso 2 para habilitar el seguimiento de rostros en esa fuente.
+Elija un patrón y continúe con el Paso 2 para habilitar el seguimiento de rostros en esa fuente.
 
-## Paso 2: Configurar Ajustes de Seguimiento de Rostros
+## Paso 2: Configurar ajustes de seguimiento de rostros
 
 Con su fuente de video configurada, el siguiente paso es configurar los parámetros de detección de rostros. Estos ajustes determinan cómo el SDK identifica y rastrea los rostros:
 
@@ -117,7 +117,7 @@ VideoCapture1.Face_Tracking = new FaceTrackingSettings
 };
 ```
 
-### Entendiendo los Parámetros de Seguimiento de Rostros
+### Entender los parámetros de seguimiento de rostros
 
 - **ColorMode** (`CamshiftMode`): Determina cómo el algoritmo procesa los colores para la detección
   - RGB: Procesamiento de color RGB estándar
@@ -136,7 +136,7 @@ VideoCapture1.Face_Tracking = new FaceTrackingSettings
   - Valores más pequeños capturan rostros distantes pero aumentan los falsos positivos
   - Valores más grandes son más confiables pero pueden perder rostros más pequeños/distantes
 
-## Paso 3: Configurar el Manejo de Eventos de Detección de Rostros
+## Paso 3: Configurar el manejo de eventos de detección de rostros
 
 Para responder a los rostros detectados, necesita crear un manejador de eventos y registrarlo con el SDK:
 
@@ -180,11 +180,11 @@ Este manejador de eventos proporciona actualizaciones en tiempo real cada vez qu
 - Activar acciones basadas en la posición del rostro
 - Registrar datos de detección
 
-## Paso 4: Procesamiento de Resultados de Detección
+## Paso 4: Procesamiento de resultados de detección
 
 Con el manejador de eventos en su lugar, puede procesar los resultados de la detección. Algunas tareas de procesamiento comunes incluyen:
 
-### Visualización de Rostros Detectados
+### Visualización de rostros detectados
 
 Más allá del resaltado incorporado, es posible que desee implementar visualizaciones personalizadas:
 
@@ -218,7 +218,7 @@ private void DrawFacesOnOverlay(Rectangle[] faceRectangles, PictureBox overlay)
 }
 ```
 
-### Implementación de Lógica de Seguimiento de Rostros
+### Implementación de lógica de seguimiento de rostros
 
 Para aplicaciones más avanzadas, es posible que desee rastrear rostros a lo largo del tiempo:
 
@@ -308,7 +308,7 @@ private class TrackedFace
 }
 ```
 
-## Paso 5: Iniciar Flujo de Video y Detección de Rostros
+## Paso 5: Iniciar flujo de video y detección de rostros
 
 El paso final es iniciar el flujo de video y el proceso de detección de rostros:
 
@@ -324,7 +324,7 @@ Si necesita detener el proceso:
 await VideoCapture1.StopAsync();
 ```
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
 Para asegurarse de que su aplicación funcione correctamente, deberá incluir los paquetes redistribuibles apropiados:
 

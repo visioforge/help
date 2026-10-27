@@ -34,7 +34,7 @@ primary_api_classes:
 
 # Construire un lecteur vidéo multiplateforme en C# avec Avalonia UI
 
-Construisez un lecteur vidéo en C# qui s'exécute sur **Windows, macOS, Linux, Android et iOS** à partir d'une seule base de code Avalonia UI. Ce guide utilise le patron MVVM avec le moteur `MediaPlayerCoreX` de [VisioForge Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) et le contrôle `VideoView`, et fait référence à la [démo SimplePlayerMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayerMVVM) sur GitHub pour chaque extrait présenté.
+Construisez un lecteur vidéo en C# qui s'exécute sur **Windows, macOS, Linux, Android et iOS** à partir d'une seule base de code Avalonia UI. Ce guide utilise le patron MVVM avec le moteur `MediaPlayerCoreX` de [VisioForge Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) et le contrôle `VideoView`, et fait référence à la [démo SimplePlayerMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayerMVVM) sur GitHub pour chaque extrait présenté.
 
 Formats pris en charge nativement : **H.264, H.265/HEVC, VP9, AV1, MP4, MKV, WebM, RTSP, HLS, MPEG-DASH**.
 
@@ -97,7 +97,7 @@ Avant de commencer, assurez-vous que les éléments suivants sont installés :
 * Pour le développement iOS (nécessite une machine macOS) :
   * Xcode
   * Profils d'approvisionnement et certificats nécessaires.
-* SDK .NET VisioForge (MediaPlayer SDK X). Vous pouvez l'obtenir sur le site VisioForge. Les paquets nécessaires seront ajoutés via NuGet.
+* SDK .NET VisioForge (Media Player SDK .NET). Vous pouvez l'obtenir sur le site VisioForge. Les paquets nécessaires seront ajoutés via NuGet.
 
 ## 2. Configuration du projet
 
@@ -156,8 +156,8 @@ Le projet principal, `SimplePlayerMVVM.csproj`, cible plusieurs plateformes. Les
   <PackageReference Include="Avalonia.Android" Version="12.0.5" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.26]"/>
  </ItemGroup>
 </Project>
 ```
@@ -179,15 +179,15 @@ Chaque projet principal de plateforme (`SimplePlayerMVVM.Android.csproj`, `Simpl
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
     <TargetFramework>net10.0-macos</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
     <TargetFramework>net10.0</TargetFramework>
@@ -219,7 +219,7 @@ Chaque projet principal de plateforme (`SimplePlayerMVVM.Android.csproj`, `Simpl
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
   </ItemGroup>
 </Project>
 ```
@@ -242,7 +242,7 @@ Chaque projet principal de plateforme (`SimplePlayerMVVM.Android.csproj`, `Simpl
   <!-- ... other items ... -->
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="12.0.5" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
@@ -1122,11 +1122,11 @@ Pour abstraire les fonctionnalités spécifiques aux plateformes, des interfaces
 
         ```xml
         <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-          <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-          <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
         </ItemGroup>
         <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-          <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
         </ItemGroup>
         ```
 
@@ -1137,7 +1137,7 @@ Ces projets et configurations spécifiques aux plateformes garantissent que la l
 
 ## 7. Composants clés du SDK VisioForge utilisés
 
-Cette application exploite plusieurs composants clés du VisioForge Media Player SDK X :
+Cette application exploite plusieurs composants clés du VisioForge Media Player SDK .NET :
 
 * **`VisioForge.Core.MediaPlayerX.MediaPlayerCoreX` :**
   * Le moteur central pour la lecture multimédia. Il gère l'ouverture des sources multimédias, le contrôle de la lecture (lire, pause, arrêter, positionner, vitesse), la gestion de l'audio et de la vidéo, et fournit des informations d'état (position, durée).
@@ -1172,13 +1172,13 @@ Comprendre ces composants est crucial pour travailler avec le SDK VisioForge et 
 
 ## 9. Conclusion
 
-Ce guide a démontré comment construire un lecteur multimédia multiplateforme en utilisant Avalonia UI avec le patron MVVM et le VisioForge Media Player SDK X. En tirant parti d'un projet principal partagé pour les ViewModels et les Views, et en gérant les spécificités des plateformes dans des projets principaux dédiés, nous pouvons créer une application maintenable qui s'exécute sur une large gamme d'appareils.
+Ce guide a démontré comment construire un lecteur multimédia multiplateforme en utilisant Avalonia UI avec le patron MVVM et le VisioForge Media Player SDK .NET. En tirant parti d'un projet principal partagé pour les ViewModels et les Views, et en gérant les spécificités des plateformes dans des projets principaux dédiés, nous pouvons créer une application maintenable qui s'exécute sur une large gamme d'appareils.
 
 Points clés à retenir :
 
 * Le patron MVVM aide à séparer les préoccupations et améliore la testabilité.
 * ReactiveUI simplifie l'implémentation MVVM avec Avalonia.
-* VisioForge Media Player SDK X fournit de puissantes capacités de lecture multimédia, avec `MediaPlayerCoreX` comme moteur principal et `VideoView` pour l'intégration UI Avalonia.
+* VisioForge Media Player SDK .NET fournit de puissantes capacités de lecture multimédia, avec `MediaPlayerCoreX` comme moteur principal et `VideoView` pour l'intégration UI Avalonia.
 * Les considérations spécifiques aux plateformes, en particulier pour l'accès aux fichiers et les permissions, sont gérées via des interfaces et des implémentations spécifiques aux plateformes.
 * L'initialisation correcte (`VisioForgeX.InitSDK()`) et le nettoyage (`VisioForgeX.DestroySDK()`) du SDK VisioForge sont essentiels.
 
@@ -1212,4 +1212,4 @@ Implémentez une interface `IFilePickerService` spécifique à la plateforme com
 - [Construire un lecteur vidéo en VB.NET](video-player-vb-net.md) — lecteur multimédia VB.NET pour WinForms
 - [Mode boucle et plage de position](loop-and-position-range.md) — configurez la lecture en boucle, la répétition A-B et la lecture par segments
 - [Exemples de code](../code-samples/index.md) — extraction d'image, listes de lecture et exemples de lecture additionnels
-- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — page produit et téléchargements
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) — page produit et téléchargements

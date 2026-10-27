@@ -1,6 +1,6 @@
 ---
-title: Guía de Implementación de TVFVideoCapture en Delphi
-description: Implemente TVFVideoCapture en Delphi - instale componentes, registre filtros DirectShow, configure el entorno para la implementación exitosa de aplicaciones.
+title: Despliegue de la biblioteca TVFVideoCapture en Delphi
+description: Despliegue TVFVideoCapture en Delphi: instale componentes, registre filtros DirectShow y configure el entorno para desplegar sus aplicaciones con éxito.
 tags:
   - All-in-One Media Framework
   - Delphi
@@ -18,51 +18,51 @@ primary_api_classes:
 
 ---
 
-# Guía Completa de Despliegue de la Biblioteca TVFVideoCapture
+# Guía completa de despliegue de la biblioteca TVFVideoCapture
 
 Al distribuir aplicaciones construidas con la biblioteca TVFVideoCapture, necesitará desplegar varios componentes del framework para asegurar la funcionalidad adecuada en sistemas de usuarios finales. Esta guía cubre todos los escenarios de despliegue para ayudarle a crear instalaciones confiables.
 
-## Resumen de Opciones de Despliegue
+## Resumen de opciones de despliegue
 
 Tiene dos enfoques principales para desplegar los componentes necesarios: instaladores automáticos para despliegue más simple o instalación manual para configuraciones más personalizadas.
 
-## Instaladores Silenciosos Automáticos (Requiere Derechos de Administrador)
+## Instaladores silenciosos automáticos (se requieren derechos de administrador)
 
 Estos instaladores preconfigurados manejan dependencias automáticamente y pueden integrarse en el proceso de instalación de su aplicación:
 
-### Componentes Esenciales
+### Componentes esenciales
 
-- **Paquete Base** (obligatorio para todos los despliegues)
+- **Paquete base** (obligatorio para todos los despliegues)
   - [Versión Delphi](https://files.visioforge.com/redists_delphi/redist_video_capture_base_delphi.exe)
   - [Versión ActiveX](https://files.visioforge.com/redists_delphi/redist_video_capture_base_ax.exe)
 
-### Componentes de Características Opcionales
+### Componentes de características opcionales
 
 - **Paquete FFMPEG** (requerido para fuentes de archivo o cámara IP)
   - [Arquitectura x86](https://files.visioforge.com/redists_delphi/redist_video_capture_ffmpeg.exe)
 
-- **Soporte de Salida MP4**
+- **Soporte de salida MP4**
   - [Arquitectura x86](https://files.visioforge.com/redists_delphi/redist_video_capture_mp4.exe)
 
-- **Paquete de Fuente VLC** (opción alternativa para fuentes de archivo o cámara IP)
+- **Paquete VLC Source** (opción alternativa para fuentes de archivo o cámara IP)
   - [Arquitectura x86](https://files.visioforge.com/redists_delphi/redist_video_capture_vlc.exe)
 
-## Proceso de Instalación Manual (Requiere Derechos de Administrador)
+## Proceso de instalación manual (se requieren derechos de administrador)
 
 Para más control sobre el proceso de despliegue, siga estos pasos detallados:
 
-### Paso 1: Instalar Dependencias Requeridas
+### Paso 1: Instalar dependencias requeridas
 
 1. Desplegar redistribuibles de Visual C++ 2010 SP1:
    - [Arquitectura x86](https://files.visioforge.com/shared/vcredist_2010_x86.exe)
    - [Arquitectura x64](https://files.visioforge.com/shared/vcredist_2010_x64.exe)
 
-### Paso 2: Desplegar Componentes Centrales
+### Paso 2: Desplegar componentes centrales
 
 1. Copie todos los DLLs de Media Foundation Platform (MFP) del directorio `Redist\Filters` a la carpeta de su aplicación
 2. Para implementaciones ActiveX: copie y registre el archivo OCX usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5)
 
-### Paso 3: Registrar Filtros DirectShow
+### Paso 3: Registrar filtros DirectShow
 
 Usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5), registre estos filtros DirectShow esenciales:
 
@@ -79,7 +79,7 @@ Usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-r
 
 > **Importante:** Agregue el directorio de filtros a la variable de entorno PATH del sistema si el ejecutable de su aplicación reside en una carpeta diferente.
 
-## Instalación de Componentes Avanzados
+## Instalación de componentes avanzados
 
 ### Integración FFMPEG
 
@@ -93,19 +93,19 @@ Usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-r
 2. Registre el archivo .ax incluido usando regsvr32.exe
 3. Cree una variable de entorno llamada `VLC_PLUGIN_PATH` apuntando al directorio `VLC\plugins`
 
-### Soporte de Salida de Audio (LAME)
+### Soporte de salida de audio (LAME)
 
 1. Copie `lame.ax` de la carpeta `Redist\Formats`
 2. Registre el archivo `lame.ax` usando regsvr32.exe
 
-### Soporte de Formatos de Contenedor
+### Soporte de formatos de contenedor
 
 - **Soporte WebM:** Instale códecs gratuitos de [xiph.org](https://www.xiph.org)
 - **Soporte Matroska:** Despliegue `Haali Matroska Splitter`
 
-### Configuración de Salida MP4
+### Configuración de salida MP4
 
-#### Configuración de Codificador Moderno
+#### Configuración de codificador moderno
 
 1. Copie los archivos de biblioteca apropiados:
    - `libmfxsw32.dll` (para despliegues de 32 bits)
@@ -116,7 +116,7 @@ Usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-r
    - `VisioForge_AAC_Encoder.ax`
    - `VisioForge_Video_Resize.ax`
 
-#### Configuración de Codificador Heredado (para sistemas antiguos)
+#### Configuración de codificador heredado (para sistemas antiguos)
 
 1. Copie los archivos de biblioteca apropiados:
    - `libmfxxp32.dll` (para despliegues de 32 bits)
@@ -127,7 +127,7 @@ Usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-r
    - `VisioForge_AAC_Encoder_XP.ax`
    - `VisioForge_Video_Resize.ax`
 
-## Utilidad de Registro Masivo
+## Utilidad de registro masivo
 
 Para simplificar el registro de filtros DirectShow, puede usar la utilidad `reg_special.exe` de la configuración del framework. Coloque este ejecutable en su directorio de filtros y ejecútelo con privilegios de administrador para registrar todos los filtros de una vez.
 

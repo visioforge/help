@@ -15,7 +15,7 @@ primary_api_classes:
 
 ---
 
-# Guía de Base de Datos del SDK Fingerprinting para C++
+# Guía de Base de Datos del Video Fingerprinting SDK para C++
 
 Esta guía demuestra cómo integrar el Video Fingerprinting SDK para C++ con varios sistemas de bases de datos para almacenamiento y recuperación eficiente de huellas.
 

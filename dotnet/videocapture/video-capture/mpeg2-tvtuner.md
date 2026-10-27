@@ -22,7 +22,7 @@ primary_api_classes:
 
 # MPEG-2 Video Capture Using TV Tuner Hardware Encoder in .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Introduction to MPEG-2 Video Capture
 

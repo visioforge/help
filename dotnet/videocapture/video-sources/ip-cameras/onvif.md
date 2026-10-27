@@ -36,7 +36,7 @@ primary_api_classes:
 
 # ONVIF IP Camera Integration - Complete Guide
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Cross-platform support"
     ONVIF discovery and PTZ control work on both `VideoCaptureCore` (Windows-only, classic DirectShow) and `VideoCaptureCoreX` / Media Blocks SDK (cross-platform: **Windows, macOS, Linux, Android, and iOS** via GStreamer). See the [platform support matrix](../../../platform-matrix.md) and the [Linux deployment guide](../../../deployment-x/Ubuntu.md).

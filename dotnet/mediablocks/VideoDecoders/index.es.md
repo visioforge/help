@@ -22,11 +22,11 @@ primary_api_classes:
   - AMAAV1DecoderSettings
 ---
 
-# Bloques Decodificadores de Video - SDK de VisioForge Media Blocks .Net
+# Bloques Decodificadores de Video - Media Blocks SDK .NET
 
-[SDK de Media Blocks .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Los bloques Decodificadores de Video son componentes esenciales en un pipeline de medios, responsables de descomprimir streams de video codificados en frames de video raw que pueden procesarse o renderizarse posteriormente. El SDK de VisioForge Media Blocks .Net ofrece una variedad de bloques decodificadores de video soportando numerosos códecs y tecnologías de aceleración de hardware.
+Los bloques Decodificadores de Video son componentes esenciales en un pipeline de medios, responsables de descomprimir streams de video codificados en frames de video raw que pueden procesarse o renderizarse posteriormente. El Media Blocks SDK .NET ofrece una variedad de bloques decodificadores de video soportando numerosos códecs y tecnologías de aceleración de hardware.
 
 ## Bloques Decodificadores de Video Disponibles
 

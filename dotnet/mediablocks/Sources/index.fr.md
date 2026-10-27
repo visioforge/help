@@ -24,11 +24,11 @@ primary_api_classes:
 
 ---
 
-# Blocs de sources — VisioForge Media Blocks SDK .Net
+# Blocs de sources — VisioForge Media Blocks SDK .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Les blocs de sources fournissent des données au pipeline et sont généralement les premiers blocs de toute chaîne de traitement multimédia. VisioForge Media Blocks SDK .Net fournit une collection complète de blocs de sources pour diverses entrées, notamment les périphériques matériels, les fichiers, les réseaux et les sources virtuelles.
+Les blocs de sources fournissent des données au pipeline et sont généralement les premiers blocs de toute chaîne de traitement multimédia. VisioForge Media Blocks SDK .NET fournit une collection complète de blocs de sources pour diverses entrées, notamment les périphériques matériels, les fichiers, les réseaux et les sources virtuelles.
 
 !!! tip "Agents IA de programmation : utilisez le serveur MCP VisioForge"
 
@@ -270,7 +270,7 @@ await pipeline.StartAsync();
 
 #### Plateformes
 
-Windows, Linux.
+Windows (x64), Linux. Windows on Arm et les applications 32 bits (x86) ne sont pas pris en charge : sous Windows, Basler pylon SDK ne prend en charge que x64.
 
 ### Bloc source Spinnaker/FLIR
 
@@ -299,14 +299,14 @@ Vous sélectionnez un objet `SpinnakerCameraInfo` dans la liste pour initialiser
 Le `SpinnakerSourceBlock` se configure via `SpinnakerSourceSettings`. Propriétés clés :
 
 - `Name` (string) : nom de la caméra (issu de `SpinnakerCameraInfo.Name`) à utiliser.
-- `Region` (`Rect`) : définit la région d'intérêt (ROI) à capturer depuis le capteur de la caméra. Renseignez X, Y, Width, Height.
-- `FrameRate` (`VideoFrameRate`) : fréquence d'images souhaitée.
-- `PixelFormat` (enum `SpinnakerPixelFormat`) : format de pixel souhaité (par ex. `RGB`, `Mono8`, `BayerRG8`). Par défaut `RGB`.
-- `OffsetX` (int) : décalage X pour la ROI sur le capteur (par défaut 0). Souvent implicitement inclus dans `Region.X`.
-- `OffsetY` (int) : décalage Y pour la ROI sur le capteur (par défaut 0). Souvent implicitement inclus dans `Region.Y`.
+- `Region` (`Rect`) : taille d'image à capturer depuis le capteur de la caméra — passez `new Rect(0, 0, width, height)`. Le décalage X et Y n'est pas encore appliqué : la caméra conserve le décalage qu'elle a déjà, et un X ou Y non nul est signalé par un avertissement.
+- `FrameRate` (`VideoFrameRate`) : fréquence d'images souhaitée, en nombre entier d'images par seconde (une fréquence fractionnaire comme 29,97 est refusée). Vide : la fréquence propre de la caméra.
+- `PixelFormat` (enum `SpinnakerPixelFormat`) : format de pixel souhaité (`RGB` ou `GRAY8`). Par défaut `RGB`.
+- `OffsetX` (int) : décalage X pour la ROI sur le capteur (par défaut 0). Pas encore appliqué ; une valeur non nulle est signalée par un avertissement.
+- `OffsetY` (int) : décalage Y pour la ROI sur le capteur (par défaut 0). Pas encore appliqué ; une valeur non nulle est signalée par un avertissement.
 - `ExposureMinimum` (int) : temps d'exposition minimum pour l'algorithme d'exposition automatique (microsecondes, par ex. 10-29999999). Par défaut 0 (auto/valeur par défaut de la caméra).
 - `ExposureMaximum` (int) : temps d'exposition maximum pour l'algorithme d'exposition automatique (microsecondes). Par défaut 0 (auto/valeur par défaut de la caméra).
-- `ShutterType` (enum `SpinnakerSourceShutterType`) : type d'obturateur (par ex. `Rolling`, `Global`). Par défaut `Rolling`.
+- `ShutterType` (`SpinnakerSourceShutterType?`) : type d'obturateur (par ex. `Rolling`, `Global`). Par défaut `null` (le mode d'obturateur propre de la caméra).
 
 Constructeur :
 `SpinnakerSourceSettings(string name, Rect region, VideoFrameRate frameRate, SpinnakerPixelFormat pixelFormat = SpinnakerPixelFormat.RGB)`
@@ -345,7 +345,7 @@ await pipeline.StartAsync();
 
 #### Plateformes
 
-Windows
+Windows (x64). Windows on Arm et les applications 32 bits (x86) ne sont pas pris en charge : sous Windows, Teledyne Spinnaker SDK ne prend en charge que x64.
 
 ### Bloc source Allied Vision
 
@@ -418,7 +418,7 @@ await pipeline.StartAsync();
 
 #### Plateformes
 
-Windows, macOS, Linux.
+Windows (x64), macOS, Linux. Windows on Arm et les applications 32 bits (x86) ne sont pas pris en charge : sous Windows, Allied Vision Vimba X SDK ne prend en charge que x64.
 
 ### Bloc source Blackmagic Decklink
 
@@ -2748,7 +2748,7 @@ La méthode `PushData()` convertit automatiquement AVC vers byte-stream sur plac
 
 #### Exemples d'applications
 
-- [Démo callback caméra H264 RTSP brut (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20RAW%20Camera%20H264%20Callback%20Demo)
+- [Démo callback caméra H264 RTSP brut (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20RAW%20Camera%20With%20H264%20Callback%20Sample)
 
 #### Plateformes
 

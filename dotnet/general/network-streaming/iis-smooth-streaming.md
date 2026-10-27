@@ -25,7 +25,7 @@ IIS Smooth Streaming is Microsoft's implementation of adaptive streaming technol
 
 ## Compatible VisioForge SDKs
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 

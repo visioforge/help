@@ -31,7 +31,7 @@ primary_api_classes:
 
 Our SDKs enable powerful multimedia capabilities across all MAUI-supported platforms:
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! tip "Looking for a working tutorial?"
     Once the packages are installed, walk through the [.NET MAUI Video Player Guide](../mediaplayer/guides/maui-player.md) — a full `VideoView` + `MediaPlayerCoreX` implementation with file picker, seek, and volume that runs on iOS, Android, macOS, and Windows from one codebase.
@@ -190,7 +190,7 @@ Add the iOS-specific package to your project:
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. Do not bump it to
        match VisioForge.DotNet.*; there is no 2026.x on nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 

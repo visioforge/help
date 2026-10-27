@@ -24,8 +24,8 @@ primary_api_classes:
 
 # Lire un fichier multimédia dans Unity
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
 
 Il existe deux façons de lire un fichier local ou une URL réseau dans Unity, et le paquet fournit
 une scène prête pour chacune. Les deux s'affichent dans un `RawImage` Unity et fonctionnent sur

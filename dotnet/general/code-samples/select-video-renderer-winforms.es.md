@@ -1,6 +1,6 @@
 ---
 title: Renderizador de Video en C# .NET — EVR, Direct2D, WPF, MadVR
-description: Configura renderizado de video en C# / .NET en WinForms, WPF y WinUI 3. EVR, Direct2D, madVR, HWND nativo, modos callback — setup y aceleración hardware.
+description: Configure renderizado de video en C# / .NET en WinForms, WPF y WinUI 3. EVR, Direct2D, madVR, HWND nativo, modos callback — setup y aceleración hardware.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -32,13 +32,13 @@ primary_api_classes:
 
 ---
 
-# Opciones de Renderizador de Video en C# .NET
+# Opciones de renderizador de video en C# .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción
 
-Los motores clásicos (`VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore`) exponen **10 modos de renderizador** a través del enum `VideoRendererMode`. Elegir el correcto controla cómo los frames llegan a la pantalla: filtros DirectShow crudos, superficies GPU Direct2D, HWND nativo embebido en WPF, callbacks de frame para renderizado personalizado, controles WinUI 3, o el renderizador externo madVR. Esta guía recorre cada modo con código mínimo de activación, disponibilidad por plataforma, y una tabla de decisión arriba para saltar directo al modo que tu app necesita.
+Los motores clásicos (`VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore`) exponen **10 modos de renderizador** a través del enum `VideoRendererMode`. Elegir el correcto controla cómo los frames llegan a la pantalla: filtros DirectShow crudos, superficies GPU Direct2D, HWND nativo embebido en WPF, callbacks de frame para renderizado personalizado, controles WinUI 3, o el renderizador externo madVR. Esta guía recorre cada modo con código mínimo de activación, disponibilidad por plataforma, y una tabla de decisión arriba para saltar directo al modo que su app necesita.
 
 !!! note "Solo motores clásicos"
     Esta página cubre los motores clásicos basados en DirectShow. Los motores multiplataforma `VideoCaptureCoreX` / `MediaPlayerCoreX` usan un control `VideoView` con sinks de GStreamer y no exponen un enum `VideoRendererMode` en el motor — el modo de renderizado se selecciona en el propio control `VideoView`. Consulte [Superponer controles WPF sobre el video](wpf-controls-over-video.md) para conocer los modos de renderizado WPF de ambas familias de motores.
@@ -58,11 +58,11 @@ Los motores clásicos (`VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore`) e
 | `MadVR` | WinForms | Escalado + color de referencia, requiere instalación externa de madVR |
 | `None` | cualquiera | Headless / solo audio / conversión de archivo sin preview |
 
-## Entendiendo las Opciones de Renderizador de Video Disponibles
+## Entender las opciones de renderizador de video disponibles
 
 Las secciones detalladas a continuación describen cada modo, empezando por los tres renderizadores DirectShow clásicos.
 
-### Renderizador de Video Heredado (basado en GDI)
+### Renderizador de video heredado (basado en GDI)
 
 El Video Renderer es la opción más antigua en el ecosistema DirectShow. Se basa en GDI (Graphics Device Interface) para operaciones de dibujo.
 
@@ -140,7 +140,7 @@ VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.EVR;
 
 ### Renderizador Direct2D
 
-Direct2D proporciona renderizado 2D de alto rendimiento con aceleración por GPU. Disponible tanto en WinForms como en WPF, es la opción moderna recomendada cuando necesitas renderizado acelerado por hardware con controles simples de rotación, flip y stretch.
+Direct2D proporciona renderizado 2D de alto rendimiento con aceleración por GPU. Disponible tanto en WinForms como en WPF, es la opción moderna recomendada cuando necesita renderizado acelerado por hardware con controles simples de rotación, flip y stretch.
 
 **Características clave:**
 
@@ -169,7 +169,7 @@ await VideoCapture1.Video_Renderer_UpdateAsync();
 
 ### Renderizador Direct2DManaged (WPF)
 
-Variante gestionada de Direct2D específica para WPF. Se integra más limpiamente con el modelo de objetos de WPF y pausa automáticamente el renderizado cuando la ventana se minimiza — útil en apps de reproducción de larga duración donde no quieres trabajo de GPU en ventanas ocultas.
+Variante gestionada de Direct2D específica para WPF. Se integra más limpiamente con el modelo de objetos de WPF y pausa automáticamente el renderizado cuando la ventana se minimiza — útil en apps de reproducción de larga duración donde no quiere trabajo de GPU en ventanas ocultas.
 
 **Ejemplo de implementación:**
 
@@ -183,12 +183,12 @@ Rotación, flip y stretch se comparten con el modo `Direct2D` regular. La pausa-
 
 **Cuándo usar:**
 
-- Apps WPF donde quieras rendimiento Direct2D con ciclo de vida compatible con WPF
+- Apps WPF donde quiera rendimiento Direct2D con ciclo de vida compatible con WPF
 - Dashboards multi-ventana donde las ventanas inactivas no deben consumir ciclos de GPU
 
 ### Renderizador WPF Native HWND
 
-Hospeda un HWND Win32 nativo dentro del control `VideoView` de WPF. Te da el rendimiento crudo del renderizador DirectShow en un layout WPF a costa de los problemas típicos del render-chain WPF (airspace con controles superpuestos).
+Hospeda un HWND Win32 nativo dentro del control `VideoView` de WPF. Le da el rendimiento crudo del renderizador DirectShow en un layout WPF a costa de los problemas típicos del render-chain WPF (airspace con controles superpuestos).
 
 **Ejemplo de implementación:**
 
@@ -201,11 +201,11 @@ await VideoCapture1.Video_Renderer_UpdateAsync();
 
 - Apps WPF que necesitan máximo rendimiento de renderizado DirectShow
 - Apps que embeben filtros legacy que esperan un HWND como target
-- No necesitas superponer controles WPF sobre la superficie de video
+- No necesita superponer controles WPF sobre la superficie de video
 
 ### Renderizador FrameCallback (WPF_WinUI_Callback)
 
-Modo de renderizado basado en callbacks. En vez de dibujar los frames directamente, el motor entrega cada frame a tu código vía eventos, dejándote renderizar con cualquier librería (SkiaSharp, `System.Drawing`, OpenGL/DirectX personalizado, WriteableBitmap) o alimentar un pipeline no-visual (visión por computadora, inferencia AI, streaming a un endpoint remoto).
+Modo de renderizado basado en callbacks. En vez de dibujar los frames directamente, el motor entrega cada frame a su código vía eventos, dejándole renderizar con cualquier librería (SkiaSharp, `System.Drawing`, OpenGL/DirectX personalizado, WriteableBitmap) o alimentar un pipeline no-visual (visión por computadora, inferencia AI, streaming a un endpoint remoto).
 
 `FrameCallback` es un alias de `WPF_WinUI_Callback` — el mismo modo con un nombre más auto-descriptivo.
 
@@ -215,15 +215,15 @@ Modo de renderizado basado en callbacks. En vez de dibujar los frames directamen
 VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.FrameCallback;
 await VideoCapture1.Video_Renderer_UpdateAsync();
 
-// Suscríbete a los eventos de frame
+// Suscribirse a los eventos de frame
 VideoCapture1.OnVideoFrameBitmap += (sender, e) =>
 {
-    // e.Frame es un System.Drawing.Bitmap — renderiza a un PictureBox, WriteableBitmap, etc.
+    // e.Frame es un System.Drawing.Bitmap — renderizar a un PictureBox, WriteableBitmap, etc.
 };
 
 VideoCapture1.OnVideoFrameBuffer += (sender, e) =>
 {
-    // e.Frame.Data es IntPtr — envuelve con SkiaSharp / Marshal.Copy para trabajo pixel-level
+    // e.Frame.Data es IntPtr — envolver con SkiaSharp / Marshal.Copy para trabajo pixel-level
 };
 ```
 
@@ -238,7 +238,7 @@ Ver [Dibujo de imágenes vía OnVideoFrameBuffer](image-onvideoframebuffer.md) y
 
 ### Renderizador WinUI 3
 
-Renderizado nativo para apps WinUI 3 en Windows 10/11. Usa este modo cuando tu shell sea `Microsoft.UI.Xaml` y alojes un control `VisioForge.Core.UI.WinUI.VideoView`.
+Renderizado nativo para apps WinUI 3 en Windows 10/11. Use este modo cuando su shell sea `Microsoft.UI.Xaml` y alojes un control `VisioForge.Core.UI.WinUI.VideoView`.
 
 **Ejemplo de implementación:**
 
@@ -250,7 +250,7 @@ await VideoCapture1.Video_Renderer_UpdateAsync();
 **Cuándo usar:**
 
 - Apps WinUI 3 (Windows App SDK, no el antiguo WinUI 2 / UWP)
-- Quieres consistencia look-and-feel nativa con otro contenido WinUI
+- Quiere consistencia look-and-feel nativa con otro contenido WinUI
 
 ### Renderizador madVR (externo)
 
@@ -263,13 +263,13 @@ VideoCapture1.Video_Renderer.VideoRenderer = VideoRendererMode.MadVR;
 await VideoCapture1.Video_Renderer_UpdateAsync();
 ```
 
-**Requisito de runtime:** asegúrate de que madVR esté instalado en el sistema objetivo. Si el filtro no está, `Video_Renderer_UpdateAsync` fallará — usa el patrón de fallback mostrado en [Problemas de Compatibilidad del Renderizador](#problemas-de-compatibilidad-del-renderizador) abajo para degradar con gracia a EVR.
+**Requisito de runtime:** asegúrese de que madVR esté instalado en el sistema objetivo. Si el filtro no está, `Video_Renderer_UpdateAsync` fallará — use el patrón de fallback mostrado en [Problemas de compatibilidad del renderizador](#problemas-de-compatibilidad-del-renderizador) abajo para degradar con gracia a EVR.
 
 **Cuándo usar:**
 
 - Calidad de video de referencia para mastering, HTPC o UIs de media server
 - Audiencias con GPUs que pueden absorber el coste extra de renderizado
-- Puedes enviar / documentar un paso de instalación separado de madVR
+- Puede enviar / documentar un paso de instalación separado de madVR
 
 ### None (headless)
 
@@ -289,15 +289,15 @@ await VideoCapture1.Video_Renderer_UpdateAsync();
 - Pipelines de renderizado server-side
 - Pruebas unitarias y runs CI headless
 
-## Opciones de Configuración Avanzada
+## Opciones de configuración avanzada
 
 Más allá de solo seleccionar un renderizador, el SDK proporciona varias opciones de configuración para ajustar la presentación de video.
 
-### Trabajando con Modos de Desentrelazado
+### Trabajar con modos de desentrelazado
 
 Al mostrar contenido de video entrelazado (común en fuentes de transmisión), el desentrelazado adecuado mejora significativamente la calidad visual. El SDK soporta varios algoritmos de desentrelazado dependiendo del renderizador elegido.
 
-Primero, recupera los modos de desentrelazado disponibles. `Video_Renderer_Deinterlace_Modes()` devuelve los nombres de modos VMR-9 auto-descubiertos del driver actual:
+Primero, recupere los modos de desentrelazado disponibles. `Video_Renderer_Deinterlace_Modes()` devuelve los nombres de modos VMR-9 auto-descubiertos del driver actual:
 
 ```cs
 // Poblar un desplegable con los modos VMR-9 disponibles
@@ -329,11 +329,11 @@ VMR9 y EVR soportan varios algoritmos de desentrelazado incluyendo:
 
 La disponibilidad de algoritmos específicos depende de las capacidades de la tarjeta de video e implementación del driver.
 
-### Gestionando Relación de Aspecto y Modos de Estiramiento
+### Gestionar relación de aspecto y modos de estiramiento
 
-Al mostrar video en una ventana o control que no coincide con la relación de aspecto nativa de la fuente, necesitas decidir cómo manejar esta discrepancia. El SDK proporciona múltiples modos de estiramiento para abordar diferentes escenarios.
+Al mostrar video en una ventana o control que no coincide con la relación de aspecto nativa de la fuente, necesita decidir cómo manejar esta discrepancia. El SDK proporciona múltiples modos de estiramiento para abordar diferentes escenarios.
 
-#### Modo Estirar
+#### Modo estirar
 
 Este modo estira el video para llenar toda el área de visualización, potencialmente distorsionando la imagen:
 
@@ -381,9 +381,9 @@ VideoCapture1.Video_Renderer_Update();
 - Visualización de video estilo redes sociales
 - Cuando se intenta eliminar letterboxing en contenido ya con letterbox
 
-### Forzar Relación de Aspecto
+### Forzar relación de aspecto
 
-Para forzar una relación de aspecto específica (ej. mostrar contenido 4:3 con letterbox dentro de un contenedor 16:9), habilita el override y asigna los componentes:
+Para forzar una relación de aspecto específica (ej. mostrar contenido 4:3 con letterbox dentro de un contenedor 16:9), habilite el override y asigne los componentes:
 
 ```cs
 VideoCapture1.Video_Renderer.Aspect_Ratio_Override = true;
@@ -403,7 +403,7 @@ VideoCapture1.Video_Renderer.Zoom_ShiftY = 0;
 VideoCapture1.Video_Renderer_Update();
 ```
 
-### Flip y Rotación
+### Flip y rotación
 
 ```cs
 VideoCapture1.Video_Renderer.Flip_Horizontal = true;
@@ -413,11 +413,11 @@ VideoCapture1.Video_Renderer.RotationAngle   = 90;
 VideoCapture1.Video_Renderer_Update();
 ```
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-### Problemas de Compatibilidad del Renderizador
+### Problemas de compatibilidad del renderizador
 
-Si encuentras problemas con un renderizador específico, intenta volver a una opción más compatible:
+Si encuentra problemas con un renderizador específico, intente volver a una opción más compatible:
 
 ```cs
 try
@@ -443,28 +443,28 @@ catch
 }
 ```
 
-## Mejores Prácticas y Recomendaciones
+## Mejores prácticas y recomendaciones
 
-1. **Elige el renderizador correcto para tu entorno objetivo**:
+1. **Elija el renderizador correcto para su entorno objetivo**:
    - Para Windows moderno: EVR
    - Para compatibilidad amplia: VMR9
    - Para sistemas heredados: Video Renderer
 
-2. **Prueba en varias configuraciones de hardware**: El renderizado de video puede comportarse diferentemente a través de proveedores de GPU y versiones de drivers.
+2. **Pruebe en varias configuraciones de hardware**: El renderizado de video puede comportarse diferentemente a través de proveedores de GPU y versiones de drivers.
 
-3. **Implementa lógica de respaldo de renderizador**: Siempre ten un plan de respaldo si el renderizador preferido falla.
+3. **Implemente lógica de respaldo de renderizador**: Siempre tenga un plan de respaldo si el renderizador preferido falla.
 
-4. **Considera tu contenido de video**: El contenido de mayor resolución o entrelazado se beneficiará más de renderizadores avanzados.
+4. **Considere su contenido de video**: El contenido de mayor resolución o entrelazado se beneficiará más de renderizadores avanzados.
 
-5. **Equilibra calidad vs. rendimiento**: Las configuraciones de más alta calidad pueden no siempre entregar la mejor experiencia de usuario si impactan el rendimiento.
+5. **Equilibre calidad vs. rendimiento**: Las configuraciones de más alta calidad pueden no siempre entregar la mejor experiencia de usuario si impactan el rendimiento.
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Para asegurar la funcionalidad apropiada de estos renderizadores, asegúrate de incluir:
+Para asegurar la funcionalidad apropiada de estos renderizadores, asegúrese de incluir:
 
 - Paquetes redistribuibles del SDK
 - DirectX End-User Runtime (versión más reciente recomendada)
-- .NET Framework runtime apropiado para tu aplicación
+- .NET Framework runtime apropiado para su aplicación
 
 ## Conclusión
 
@@ -480,4 +480,4 @@ Para aplicaciones construidas sobre los motores multiplataforma `VideoCaptureCor
 
 ---
 
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.

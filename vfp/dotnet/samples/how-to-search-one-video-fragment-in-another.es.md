@@ -1,6 +1,6 @@
 ---
 title: Buscar fragmentos de video con Fingerprinting en C#
-description: Encuentre fragmentos de video dentro de archivos mayores usando el SDK de fingerprinting de VisioForge en C# .NET con implementación paso a paso.
+description: Encuentre fragmentos de video dentro de archivos mayores usando el Video Fingerprinting SDK de VisioForge en C# .NET con implementación paso a paso.
 tags:
   - Video Fingerprinting SDK
   - .NET
@@ -16,7 +16,7 @@ primary_api_classes:
 
 ---
 
-# Encontrando Fragmentos de Video en Contenido de Video Más Grande
+# Encontrar fragmentos de video en contenido de video más grande
 
 ## Introducción
 
@@ -24,9 +24,9 @@ La tecnología de huellas de video permite a los desarrolladores identificar y l
 
 Los ejemplos principales en este tutorial usan la implementación de API .NET, pero funcionalidad equivalente está disponible a través de la API C++ para desarrolladores que prefieren soluciones de código nativo.
 
-## Proceso de Implementación
+## Proceso de implementación
 
-### Paso 1: Analizar el Archivo de Fragmento
+### Paso 1: Analizar el archivo de fragmento
 
 Primero, necesitamos extraer una huella del fragmento de video más pequeño que queremos localizar dentro del video más grande. Este proceso implica analizar las características únicas del video y generar una firma digital.
 
@@ -46,7 +46,7 @@ En este bloque de código:
 - Establecemos un límite de duración de 5 segundos para el análisis
 - Generamos una huella buscable usando el analizador
 
-### Paso 2: Analizar el Video Objetivo
+### Paso 2: Analizar el video objetivo
 
 A continuación, necesitamos extraer una huella del video más grande donde buscaremos nuestro fragmento. El proceso es similar, pero sin limitaciones de tiempo.
 
@@ -57,7 +57,7 @@ var mainSrc = new VFPFingerprintSource(LongFile);
 var main = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(mainSrc, ErrorCallback);
 ```
 
-### Paso 3: Configurar el Manejo de Errores
+### Paso 3: Configurar el manejo de errores
 
 Para mantener un manejo de errores robusto, implementamos una función de callback que captura y muestra cualquier error encontrado durante el proceso de generación de huellas.
 
@@ -68,7 +68,7 @@ private static void ErrorCallback(string error)
 }
 ```
 
-### Paso 4: Realizar la Operación de Búsqueda
+### Paso 4: Realizar la operación de búsqueda
 
 Con ambas huellas listas, ahora podemos buscar el fragmento dentro del archivo de video más grande.
 
@@ -98,14 +98,14 @@ En este código:
 - Verificamos si se encontró una posición coincidente (valor de resultado positivo)
 - Convertimos el resultado a una marca de tiempo y la mostramos junto con el valor de diferencia
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
 La tecnología de huellas usa algoritmos sofisticados que equilibran precisión y rendimiento. Para resultados óptimos:
 
-- Considera ajustar el nivel máximo de diferencia basándote en tus requisitos específicos
+- Considere ajustar el nivel máximo de diferencia basándose en sus requisitos específicos
 - Procesa videos en su resolución nativa cuando sea posible
-- Para archivos muy grandes, considera dividir la búsqueda en fragmentos manejables
+- Para archivos muy grandes, considere dividir la búsqueda en fragmentos manejables
 
-## Recursos Adicionales
+## Recursos adicionales
 
-Para documentación completa, ejemplos de implementación en otros lenguajes e información de licencias, visita la [página del producto](https://www.visioforge.com/video-fingerprinting-sdk).
+Para documentación completa, ejemplos de implementación en otros lenguajes e información de licencias, visite la [página del producto](https://www.visioforge.com/video-fingerprinting-sdk).

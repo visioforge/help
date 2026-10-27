@@ -1,6 +1,6 @@
 ---
-title: Decklink SDK .NET — Captura de Video con Blackmagic
-description: Implementa captura de video profesional en .NET con dispositivos Blackmagic Decklink usando ejemplos de código para aplicaciones de calidad broadcast.
+title: Decklink SDK .NET — Captura de video con Blackmagic
+description: Implemente captura de video profesional en .NET con dispositivos Blackmagic Decklink usando ejemplos de código para aplicaciones de calidad broadcast.
 tags:
   - Video Capture SDK
   - .NET
@@ -22,11 +22,11 @@ primary_api_classes:
 
 ---
 
-# Integrar Dispositivos Blackmagic Decklink con Aplicaciones .NET
+# Integrar dispositivos Blackmagic Decklink con aplicaciones .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
-## ¿Qué Son los Dispositivos Decklink?
+## ¿Qué son los dispositivos Decklink?
 
 Los dispositivos Decklink de Blackmagic Design representan tarjetas de captura y reproducción estándar de la industria diseñadas para entornos de producción de video profesional. Estas soluciones de hardware de alto rendimiento entregan capacidades excepcionales para desarrolladores que integran funcionalidad de captura de video en aplicaciones .NET.
 
@@ -40,11 +40,11 @@ Las tarjetas Decklink son reconocidas por sus especificaciones técnicas superio
 
 Para desarrolladores .NET que construyen aplicaciones de video profesionales, la integración Decklink proporciona una base confiable para manejar procesamiento de señales de video de calidad broadcast.
 
-## Detección Programática de Dispositivos
+## Detección programática de dispositivos
 
-El primer paso en la implementación de funcionalidad Decklink es la enumeración apropiada de dispositivos. Las siguientes muestras de código demuestran cómo detectar hardware Decklink disponible en tu aplicación .NET.
+El primer paso en la implementación de funcionalidad Decklink es la enumeración apropiada de dispositivos. Las siguientes muestras de código demuestran cómo detectar hardware Decklink disponible en su aplicación .NET.
 
-### Enumerar Dispositivos Disponibles
+### Enumerar dispositivos disponibles
 
 === "VideoCaptureCore"
 
@@ -73,7 +73,7 @@ El primer paso en la implementación de funcionalidad Decklink es la enumeració
     }
     ```
     
-    Al trabajar con VideoCaptureCoreX, también necesitarás enumerar las fuentes de audio por separado:
+    Al trabajar con VideoCaptureCoreX, también necesitará enumerar las fuentes de audio por separado:
     
     ```cs
     var audioCaptureDevices = await DeviceEnumerator.Shared.DecklinkAudioSourcesAsync();
@@ -90,11 +90,11 @@ El primer paso en la implementación de funcionalidad Decklink es la enumeració
     
 
 
-## Trabajar con Formatos de Video y Tasas de Fotogramas
+## Trabajar con formatos de video y tasas de fotogramas
 
 Después de enumerar dispositivos, el siguiente paso involucra determinar los formatos de video y tasas de fotogramas disponibles. Las tarjetas Decklink soportan numerosos formatos profesionales, pero las opciones específicas dependen de la fuente de entrada conectada.
 
-### Obtener Información de Formato
+### Obtener información de formato
 
 === "VideoCaptureCore"
 
@@ -118,13 +118,13 @@ Después de enumerar dispositivos, el siguiente paso involucra determinar los fo
     }
     ```
     
-    Este enfoque proporciona información de diagnóstico valiosa. Si no se retornan formatos, típicamente indica que no hay una entrada activa conectada al dispositivo Decklink. Implementar esta verificación ayuda a los usuarios a solucionar problemas de conexión directamente desde la interfaz de tu aplicación.
+    Este enfoque proporciona información de diagnóstico valiosa. Si no se retornan formatos, típicamente indica que no hay una entrada activa conectada al dispositivo Decklink. Implementar esta verificación ayuda a los usuarios a solucionar problemas de conexión directamente desde la interfaz de su aplicación.
     
 
 === "VideoCaptureCoreX"
 
     
-    Con VideoCaptureCoreX, trabajarás con modos predefinidos de la enumeración DecklinkMode:
+    Con VideoCaptureCoreX, trabajará con modos predefinidos de la enumeración DecklinkMode:
     
     ```cs
     var decklinkModes = Enum.GetValues(typeof(DecklinkMode));
@@ -134,15 +134,15 @@ Después de enumerar dispositivos, el siguiente paso involucra determinar los fo
     }
     ```
     
-    Este enfoque usa configuraciones de modo estandarizadas que deben configurarse en tu hardware Decklink.
+    Este enfoque usa configuraciones de modo estandarizadas que deben configurarse en su hardware Decklink.
     
 
 
-## Configurar Decklink como Fuente de Video
+## Configurar Decklink como fuente de video
 
-Una vez que has detectado dispositivos e identificado los formatos disponibles, necesitas configurar el hardware Decklink como tu fuente de captura. Este paso crítico establece la conexión entre hardware y software.
+Una vez que ha detectado dispositivos e identificado los formatos disponibles, necesita configurar el hardware Decklink como su fuente de captura. Este paso crítico establece la conexión entre hardware y software.
 
-### Establecer Parámetros de Fuente
+### Establecer parámetros de fuente
 
 === "VideoCaptureCore"
 
@@ -154,7 +154,7 @@ Una vez que has detectado dispositivos e identificado los formatos disponibles, 
         VideoFormat = cbDecklinkCaptureVideoFormat.Text
     };
 
-    // Selecciona el modo Decklink antes de StartAsync:
+    // Seleccionar el modo Decklink antes de StartAsync:
     //   DecklinkSourcePreview — monitoreo en tiempo real con procesamiento mínimo.
     //   DecklinkSourceCapture — grabación de alta calidad con buffering mejorado.
     VideoCapture1.Mode = VideoCaptureMode.DecklinkSourcePreview;   // o VideoCaptureMode.DecklinkSourceCapture
@@ -221,26 +221,26 @@ Una vez que has detectado dispositivos e identificado los formatos disponibles, 
     VideoCapture1.Audio_Source = audioSourceSettings;
     ```
     
-    Esta separación ofrece mayor flexibilidad para escenarios avanzados donde podrías necesitar procesar video y audio independientemente.
+    Esta separación ofrece mayor flexibilidad para escenarios avanzados donde podría necesitar procesar video y audio independientemente.
     
 
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
-Al implementar captura Decklink en entornos de producción, considera estos factores de rendimiento:
+Al implementar captura Decklink en entornos de producción, considere estos factores de rendimiento:
 
 1. **Gestión de búfer:** Los formatos de video profesional requieren asignación sustancial de memoria, especialmente para resoluciones 4K+
 2. **Utilización de CPU:** La codificación en tiempo real de flujos Decklink puede ser intensiva en procesador
-3. **E/S de disco:** Al capturar a almacenamiento, asegúrate de que tus velocidades de escritura soporten la tasa de datos del formato seleccionado
+3. **E/S de disco:** Al capturar a almacenamiento, asegúrese de que sus velocidades de escritura soporten la tasa de datos del formato seleccionado
 4. **Ancho de banda de memoria:** Los flujos de alta resolución sin comprimir demandan recursos significativos del sistema
 
-Implementar manejo de errores apropiado alrededor de la conexión del dispositivo y detección de formato mejorará la resiliencia de tu aplicación en entornos de producción.
+Implementar manejo de errores apropiado alrededor de la conexión del dispositivo y detección de formato mejorará la resiliencia de su aplicación en entornos de producción.
 
-## Aplicaciones de Ejemplo y Ejemplos de Implementación
+## Aplicaciones de ejemplo y ejemplos de implementación
 
 Examinar ejemplos funcionales proporciona valiosas perspectivas sobre patrones de implementación efectivos. El SDK incluye numerosas aplicaciones de ejemplo que demuestran la integración Decklink.
 
-### Aplicaciones de Referencia
+### Aplicaciones de referencia
 
 === "VideoCaptureCore"
 
@@ -257,16 +257,16 @@ Examinar ejemplos funcionales proporciona valiosas perspectivas sobre patrones d
     
 
 
-## Mejores Prácticas para Integración
+## Mejores prácticas para integración
 
 Basándonos en pruebas de campo extensas y experiencias de implementación de clientes, recomendamos estas mejores prácticas:
 
-1. **Siempre verificar conectividad del dispositivo:** Verifica los formatos disponibles para confirmar la conexión apropiada de señal
-2. **Implementar alternativas elegantes:** Proporciona mensajes de error significativos cuando los dispositivos esperados no están disponibles
+1. **Siempre verificar conectividad del dispositivo:** Verifique los formatos disponibles para confirmar la conexión apropiada de señal
+2. **Implementar alternativas elegantes:** Proporcione mensajes de error significativos cuando los dispositivos esperados no están disponibles
 3. **Probar con múltiples tasas de fotogramas:** Algunas aplicaciones pueden comportarse diferente con formatos de entrada variados
 4. **Gestionar memoria efectivamente:** La captura de alta resolución requiere gestión apropiada de recursos
 5. **Monitorear uso de CPU:** Las operaciones de codificación pueden ser intensivas en procesador durante la captura
-6. **Proporcionar detalles de formato a usuarios:** Da información clara sobre formatos detectados y estado de conexión
+6. **Proporcionar detalles de formato a usuarios:** Dé información clara sobre formatos detectados y estado de conexión
 
 Estas recomendaciones ayudan a asegurar implementaciones robustas que funcionan confiablemente a través de diferentes configuraciones de hardware y condiciones de operación.
 
@@ -277,4 +277,4 @@ Integrar dispositivos Blackmagic Decklink con aplicaciones .NET proporciona capa
 El Video Capture SDK ofrece un enfoque simplificado para trabajar con estos dispositivos profesionales, abstrayendo mucha de la complejidad mientras proporciona la flexibilidad necesaria para personalización avanzada.
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para acceder a muestras de código adicionales y recursos de implementación.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para acceder a muestras de código adicionales y recursos de implementación.

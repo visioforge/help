@@ -32,7 +32,7 @@ primary_api_classes:
 
 # Captura MP4 de Cámara ONVIF con Postprocesamiento
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Soporte multiplataforma"
     El Media Blocks SDK funciona en **Windows, macOS, Linux, Android e iOS** a través de GStreamer. Consulte la [matriz de soporte de plataformas](../../platform-matrix.md) para detalles de códecs y aceleración por hardware, y la [guía de despliegue para Linux](../../deployment-x/Ubuntu.md) para Ubuntu / NVIDIA Jetson / Raspberry Pi.

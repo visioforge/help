@@ -1,5 +1,5 @@
 ---
-title: Guía de Interfaces de Filtros DirectShow Personalizados .NET
+title: Guía de interfaces de filtros DirectShow personalizados .NET
 description: Implemente interfaces de filtros DirectShow personalizados en .NET con acceso y manipulación de IBaseFilter para aplicaciones multimedia.
 tags:
   - Video Capture SDK
@@ -19,49 +19,49 @@ primary_api_classes:
 
 ---
 
-# Uso de Interfaces de Filtros DirectShow Personalizados
+# Uso de interfaces de filtros DirectShow personalizados
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 *Nota: La API mostrada en esta guía es la misma en todos nuestros productos SDK, incluyendo Video Capture SDK .Net, Video Edit SDK .Net y Media Player SDK .Net.*
 
-DirectShow es un framework multimedia poderoso que permite a los desarrolladores realizar operaciones complejas en flujos de medios. Una de sus fortalezas clave es la capacidad de trabajar con interfaces de filtros personalizados, dándote control preciso sobre el procesamiento de medios. Esta guía te guiará a través de la implementación y utilización de interfaces de filtros DirectShow personalizados en tus aplicaciones .NET.
+DirectShow es un framework multimedia poderoso que permite a los desarrolladores realizar operaciones complejas en flujos de medios. Una de sus fortalezas clave es la capacidad de trabajar con interfaces de filtros personalizados, dándole control preciso sobre el procesamiento de medios. Esta guía le guiará a través de la implementación y utilización de interfaces de filtros DirectShow personalizados en sus aplicaciones .NET.
 
-## Entendiendo los Filtros DirectShow
+## Entender los filtros DirectShow
 
 DirectShow usa una arquitectura basada en filtros donde cada filtro realiza una operación específica en el flujo de medios. Estos filtros están conectados en un grafo, creando un pipeline para el procesamiento de medios.
 
-### Componentes Clave de DirectShow
+### Componentes clave de DirectShow
 
 - **Filtro**: Un componente que procesa datos de medios
 - **Pin**: Puntos de conexión entre filtros
 - **Grafo de Filtros**: El pipeline completo de filtros conectados
 - **IBaseFilter**: La interfaz fundamental que todos los filtros DirectShow implementan
 
-## Comenzando con Interfaces de Filtros Personalizados
+## Comenzar con interfaces de filtros personalizados
 
-Para trabajar con filtros DirectShow en .NET, necesitarás:
+Para trabajar con filtros DirectShow en .NET, necesitará:
 
-1. Agregar las referencias apropiadas a tu proyecto
+1. Agregar las referencias apropiadas a su proyecto
 2. Acceder al filtro a través de eventos apropiados
-3. Convertir el filtro a la interfaz que necesitas
-4. Implementar tu lógica personalizada
+3. Convertir el filtro a la interfaz que necesita
+4. Implementar su lógica personalizada
 
-### Referencias de Proyecto Requeridas
+### Referencias de proyecto requeridas
 
-Para acceder a la funcionalidad DirectShow, incluye el paquete apropiado en tu proyecto:
+Para acceder a la funcionalidad DirectShow, incluya el paquete apropiado en su proyecto:
 
 ```xml
 <PackageReference Include="VisioForge.DotNet.Core" Version="X.X.X" />
 ```
 
-También puedes agregar la referencia al ensamblado `VisioForge.Core` directamente a tu proyecto.
+También puede agregar la referencia al ensamblado `VisioForge.Core` directamente a su proyecto.
 
-## Implementando Acceso a Interfaz de Filtro Personalizado
+## Implementar acceso a interfaz de filtro personalizado
 
-Nuestro SDK proporciona varios eventos que te dan acceso a los filtros a medida que se agregan al grafo de filtros. Aquí está cómo usarlos efectivamente:
+Nuestro SDK proporciona varios eventos que le dan acceso a los filtros a medida que se agregan al grafo de filtros. Aquí está cómo usarlos efectivamente:
 
-### Accediendo a Filtros en Video Capture SDK
+### Acceder a filtros en Video Capture SDK
 
 El Video Capture SDK ofrece el evento `OnFilterAdded` que se dispara cada vez que un filtro se agrega al grafo. Este evento proporciona acceso a cada filtro a través de sus argumentos de evento.
 
@@ -75,7 +75,7 @@ private void VideoCaptureCore_OnFilterAdded(object sender, FilterEventArgs event
     // Acceder a la interfaz del filtro DirectShow
     IBaseFilter baseFilter = eventArgs.Filter as IBaseFilter;
     
-    // Ahora puedes trabajar con el filtro a través de la interfaz IBaseFilter
+    // Ahora puede trabajar con el filtro a través de la interfaz IBaseFilter
     if (baseFilter != null)
     {
         // El código de manipulación de filtro personalizado va aquí
@@ -83,11 +83,11 @@ private void VideoCaptureCore_OnFilterAdded(object sender, FilterEventArgs event
 }
 ```
 
-## Trabajando con la Interfaz IBaseFilter
+## Trabajar con la interfaz IBaseFilter
 
-La interfaz `IBaseFilter` es la base de los filtros DirectShow. Esto es lo que puedes hacer con ella:
+La interfaz `IBaseFilter` es la base de los filtros DirectShow. Esto es lo que puede hacer con ella:
 
-### Recuperando Información del Filtro
+### Recuperar información del filtro
 
 ```cs
 private void ObtenerInfoFiltro(IBaseFilter filter)
@@ -99,7 +99,7 @@ private void ObtenerInfoFiltro(IBaseFilter filter)
     {
         Console.WriteLine($"Nombre del Filtro: {filterInfo.achName}");
         
-        // No olvides liberar la referencia al grafo de filtros
+        // No olvidar liberar la referencia al grafo de filtros
         if (filterInfo.pGraph != null)
         {
             Marshal.ReleaseComObject(filterInfo.pGraph);
@@ -108,7 +108,7 @@ private void ObtenerInfoFiltro(IBaseFilter filter)
 }
 ```
 
-### Enumerando Pines del Filtro
+### Enumerar pines del filtro
 
 ```cs
 private void EnumerarPinesFiltro(IBaseFilter filter)
@@ -140,9 +140,9 @@ private void EnumerarPinesFiltro(IBaseFilter filter)
 }
 ```
 
-## Identificando el Filtro Correcto
+## Identificar el filtro correcto
 
-Al trabajar con el evento `OnFilterAdded`, recuerda que puede ser llamado múltiples veces a medida que varios filtros se agregan al grafo. Para trabajar con un filtro específico, necesitarás identificarlo correctamente:
+Al trabajar con el evento `OnFilterAdded`, recuerde que puede ser llamado múltiples veces a medida que varios filtros se agregan al grafo. Para trabajar con un filtro específico, necesitará identificarlo correctamente:
 
 ```cs
 private void VideoCaptureCore_OnFilterAdded(object sender, FilterEventArgs eventArgs)
@@ -170,11 +170,11 @@ private void VideoCaptureCore_OnFilterAdded(object sender, FilterEventArgs event
 }
 ```
 
-## Configuración Avanzada de Filtros
+## Configuración avanzada de filtros
 
-Una vez que tienes acceso a la interfaz del filtro, puedes realizar configuraciones avanzadas:
+Una vez que tiene acceso a la interfaz del filtro, puede realizar configuraciones avanzadas:
 
-### Estableciendo Propiedades del Filtro
+### Establecer propiedades del filtro
 
 ```cs
 private void EstablecerPropiedadFiltro(IBaseFilter filter, Guid propertySet, int propertyId, object propertyValue)
@@ -201,7 +201,7 @@ private void EstablecerPropiedadFiltro(IBaseFilter filter, Guid propertySet, int
 }
 ```
 
-### Recuperando Propiedades del Filtro
+### Recuperar propiedades del filtro
 
 ```cs
 private object ObtenerPropiedadFiltro(IBaseFilter filter, Guid propertySet, int propertyId, Type propertyType)
@@ -238,11 +238,11 @@ private object ObtenerPropiedadFiltro(IBaseFilter filter, Guid propertySet, int 
 }
 ```
 
-## Casos de Uso Comunes para Interfaces de Filtros Personalizados
+## Casos de uso comunes para interfaces de filtros personalizados
 
-### Filtros de Procesamiento de Video
+### Filtros de procesamiento de video
 
-Al trabajar con video, podrías necesitar acceder a propiedades específicas de dispositivos de cámara:
+Al trabajar con video, podría necesitar acceder a propiedades específicas de dispositivos de cámara:
 
 ```cs
 private void ConfigurarFiltroCaptura(IBaseFilter captureFilter)
@@ -263,9 +263,9 @@ private void ConfigurarFiltroCaptura(IBaseFilter captureFilter)
 }
 ```
 
-### Filtros de Procesamiento de Audio
+### Filtros de procesamiento de audio
 
-Para procesamiento de audio, podrías querer ajustar configuraciones de volumen o calidad de audio:
+Para procesamiento de audio, podría querer ajustar configuraciones de volumen o calidad de audio:
 
 ```cs
 private void ConfigurarFiltroAudio(IBaseFilter audioFilter)
@@ -283,7 +283,7 @@ private void ConfigurarFiltroAudio(IBaseFilter audioFilter)
 }
 ```
 
-## Manejando Recursos Correctamente
+## Manejar recursos correctamente
 
 Al trabajar con interfaces DirectShow, es crucial liberar correctamente los objetos COM para prevenir fugas de memoria:
 
@@ -297,7 +297,7 @@ private void LiberarObjetoCom(object comObject)
 }
 ```
 
-## Ejemplo Completo
+## Ejemplo completo
 
 Aquí hay un ejemplo más completo que demuestra encontrar y configurar un filtro de captura de video:
 
@@ -350,7 +350,7 @@ public class EjemploFiltroPersonalizado
     
     private void ConfigurarFiltroCaptura(IBaseFilter captureFilter)
     {
-        // Tu código de configuración de filtro aquí
+        // Su código de configuración de filtro aquí
     }
     
     public void Limpiar()
@@ -366,15 +366,15 @@ public class EjemploFiltroPersonalizado
 }
 ```
 
-## Componentes de Sistema Requeridos
+## Componentes de sistema requeridos
 
-Para usar la funcionalidad DirectShow en tu aplicación, asegúrate de que tus usuarios finales tengan los siguientes componentes instalados:
+Para usar la funcionalidad DirectShow en su aplicación, asegúrese de que sus usuarios finales tengan los siguientes componentes instalados:
 
 - DirectX Runtime (incluido con Windows)
 - Componentes redistribuibles del SDK
 
 ## Conclusión
 
-Trabajar con interfaces de filtros DirectShow personalizados te da capacidades poderosas para el procesamiento de medios en tus aplicaciones .NET. Siguiendo los patrones descritos en esta guía, puedes acceder y manipular los componentes DirectShow subyacentes para lograr control preciso sobre tus aplicaciones multimedia.
+Trabajar con interfaces de filtros DirectShow personalizados le da capacidades poderosas para el procesamiento de medios en sus aplicaciones .NET. Siguiendo los patrones descritos en esta guía, puede acceder y manipular los componentes DirectShow subyacentes para lograr control preciso sobre sus aplicaciones multimedia.
 
-Para asistencia adicional con la implementación de estas técnicas, por favor contacta a nuestro equipo de soporte. Visita nuestro repositorio de GitHub para más ejemplos de código y ejemplos de implementación.
+Para asistencia adicional con la implementación de estas técnicas, por favor contacte a nuestro equipo de soporte. Visite nuestro repositorio de GitHub para más ejemplos de código y ejemplos de implementación.

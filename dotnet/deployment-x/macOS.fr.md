@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Guide de déploiement Apple macOS
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -178,8 +178,8 @@ Pour les projets MAUI ciblant macOS (via MacCatalyst), ajoutez ces paquets :
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.26]"/>
   <!-- Uniquement pour les blocs OpenCV -->
   <PackageReference Include="VisioForge.CrossPlatform.OpenCV.macOS" Version="[2026.9.11]"/>
 </ItemGroup>

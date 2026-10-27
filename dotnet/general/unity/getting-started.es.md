@@ -1,5 +1,5 @@
 ---
-title: Empieza con Media Blocks SDK en Unity 6 — Guía rápida
+title: Empiece con Media Blocks SDK en Unity 6 — Guía rápida
 description: Guía rápida de cinco pasos desde un proyecto Unity 6 nuevo a un video reproduciéndose con el .unitypackage de VisioForge.
 sidebar_label: Primeros pasos
 order: 51
@@ -18,27 +18,27 @@ primary_api_classes:
 
 # Primeros pasos
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 Esta página es el camino en cinco pasos desde un proyecto Unity 6 nuevo hasta un video
 reproduciéndose. Para detalles de instalación, notas profundas por plataforma y la explicación
-del bootstrap, sigue los enlaces al final.
+del bootstrap, siga los enlaces al final.
 
-## Qué necesitas
+## Qué necesita
 
 - **Unity 6 LTS** (`6000.x`) — verificado en `6000.4.6f1`. Versiones Unity LTS anteriores
   (2022 / 2023) podrían funcionar (sin verificar), siempre que ofrezcan `.NET Standard 2.1` como opción de
   Api Compatibility Level.
-- **Una ruta NTFS corta** en Windows — por ejemplo, `C:\unity\MyApp`. Evita Dev Drive (ReFS) y
+- **Una ruta NTFS corta** en Windows — por ejemplo, `C:\unity\MyApp`. Evite Dev Drive (ReFS) y
   rutas muy largas; la caché de paquetes de Unity puede desbordar el límite de 260 caracteres
   `MAX_PATH` de Windows.
 - Para los targets móviles / Apple, el módulo Unity correspondiente instalado mediante Unity Hub
   (Android Build Support, iOS Build Support, macOS Build Support).
 
-## Paso 1 — Descarga el `.unitypackage` acumulativo
+## Paso 1 — Descargue el `.unitypackage` acumulativo
 
 [**VisioForge.MediaBlocks.Unity.unitypackage**](https://files.visioforge.com/unity/VisioForge.MediaBlocks.Unity.unitypackage)
 
@@ -50,10 +50,10 @@ El paquete es autónomo — ensamblados gestionados, cada runtime nativo soporta
 ejemplo y el asistente de configuración de un único uso, todo está dentro. Sin restauración NuGet,
 sin instalación externa de GStreamer, sin descargas por plataforma.
 
-## Paso 2 — Importa el paquete
+## Paso 2 — Importe el paquete
 
-En Unity: **Assets → Import Package → Custom Package…**, selecciona el `.unitypackage`
-descargado y haz clic en **Import** con todos los ítems marcados.
+En Unity: **Assets → Import Package → Custom Package…**, seleccione el `.unitypackage`
+descargado y haga clic en **Import** con todos los ítems marcados.
 
 El paquete acumulativo publicado añade los cuatro runtimes de plataforma (un build privado personalizado solo incluye las plataformas para las que se optó con sus switches `-Include*`):
 
@@ -68,55 +68,55 @@ El paquete acumulativo publicado añade los cuatro runtimes de plataforma (un bu
 - `Assets/VisioForge/` — el asistente de configuración de un único uso y (en builds móviles /
   macOS) `link.xml`
 
-## Paso 3 — Aplica los ajustes del proyecto
+## Paso 3 — Aplique los ajustes del proyecto
 
 En la primera importación, el asistente de configuración ofrece aplicar el ajuste obligatorio.
-Pulsa **Apply** y se configura por ti:
+Pulse **Apply** y se configura por usted:
 
 | Ajuste | Valor | Por qué |
 |---|---|---|
 | Api Compatibility Level | `.NET Standard 2.1` | El SDK se distribuye como ensamblados `netstandard2.1`. El ajuste legacy `.NET Framework` no puede cargarlos. |
 
-Si pulsas **Skip**, configúralo manualmente en **Edit → Project Settings → Player → Other
+Si pulsa **Skip**, configúrelo manualmente en **Edit → Project Settings → Player → Other
 Settings → Configuration → Api Compatibility Level**.
 
 El comportamiento predeterminado de Enter Play Mode de Unity (Domain + Scene Reload) está
-totalmente soportado — no necesitas desactivar Domain Reload. El SDK sobrevive a las recargas
+totalmente soportado — no necesita desactivar Domain Reload. El SDK sobrevive a las recargas
 de Play/Stop del Editor.
 
-Para targets móviles (Android, iOS), también establece **Scripting Backend = IL2CPP** en la
+Para targets móviles (Android, iOS), también establezca **Scripting Backend = IL2CPP** en la
 misma sección Configuration. Mono no está soportado en Android o iOS por el propio Unity.
 
-## Paso 4 — Ejecuta la escena de ejemplo
+## Paso 4 — Ejecute la escena de ejemplo
 
-1. En la ventana **Project** abre `Assets/Scenes/SimplePlayer.unity` (doble clic — no te quedes
+1. En la ventana **Project** abra `Assets/Scenes/SimplePlayer.unity` (doble clic — no se quede
    en la escena predeterminada vacía).
-2. Selecciona el GameObject **RawImage** en la **Hierarchy**.
-3. En el **Inspector** establece **File Path** a una ruta absoluta a un archivo multimedia local.
-4. Pulsa **▶ Play**.
+2. Seleccione el GameObject **RawImage** en la **Hierarchy**.
+3. En el **Inspector** establezca **File Path** a una ruta absoluta a un archivo multimedia local.
+4. Pulse **▶ Play**.
 
 El video se renderiza en la Game view; el audio se reproduce por el dispositivo de audio
 predeterminado del sistema.
 
-Si tienes una cámara RTSP local, abre `Assets/Scenes/RTSPViewer.unity` en su lugar, establece
-**Rtsp Url** (más **Login** / **Password** si la cámara requiere autenticación) y pulsa **Play**.
+Si tiene una cámara RTSP local, abra `Assets/Scenes/RTSPViewer.unity` en su lugar, establezca
+**Rtsp Url** (más **Login** / **Password** si la cámara requiere autenticación) y pulse **Play**.
 
-## Paso 5 — Adáptalo a tu propia escena
+## Paso 5 — Adáptelo a su propia escena
 
-No tienes que usar las escenas de ejemplo. Para reproducir un video en tu propia UI:
+No tiene que usar las escenas de ejemplo. Para reproducir un video en su propia UI:
 
-1. Añade un **Canvas → Raw Image** (*GameObject → UI → Raw Image*).
-2. Selecciona el **Raw Image** y **Add Component →** `MediaBlocksPlayer` (o `RTSPViewerPlayer`
+1. Añada un **Canvas → Raw Image** (*GameObject → UI → Raw Image*).
+2. Seleccione el **Raw Image** y **Add Component →** `MediaBlocksPlayer` (o `RTSPViewerPlayer`
    para RTSP).
-3. Establece el campo **File Path** (o **Rtsp Url**) y pulsa **▶ Play**.
+3. Establezca el campo **File Path** (o **Rtsp Url**) y pulse **▶ Play**.
 
 El manejo de aspecto, el flip vertical y la subida de `Texture2D` están gestionados por el
-`VisioForgeVideoView` incluido. Tu script es solo el pipeline — consulta
+`VisioForgeVideoView` incluido. Su script es solo el pipeline — consulte
 [Reproducir un archivo multimedia en Unity](simple-player.md) para el desglose en C#.
 
-## Compila para una plataforma destino
+## Compile para una plataforma destino
 
-Cuando estés listo para distribuir:
+Cuando esté listo para distribuir:
 
 - [Windows x64](windows.md) — base del Editor y el Standalone Player.
 - [Android](android.md) — IL2CPP arm64, permisos AndroidManifest, notas de tamaño.

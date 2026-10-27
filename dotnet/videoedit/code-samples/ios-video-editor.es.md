@@ -1,6 +1,6 @@
 ---
-title: Editor de Video iOS | Crea Apps de Video más Rápido
-description: Integra edición de video profesional en tu app iOS con Video Edit SDK. Configuración rápida, UI personalizable y soporte para filtros y transiciones.
+title: Editor de video iOS | Cree apps de video más rápido
+description: Integre edición de video profesional en su app iOS con Video Edit SDK. Configuración rápida, UI personalizable y soporte para filtros y transiciones.
 tags:
   - Video Edit SDK
   - .NET
@@ -23,34 +23,34 @@ primary_api_classes:
 
 ---
 
-# Editor de Video iOS para Edición de Video Integrada
+# Editor de video iOS para edición de video integrada
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
 
-## Introducción a la Edición de Video en iOS
+## Introducción a la edición de video en iOS
 
 Construir una aplicación de edición de video profesional para iPhone y iPad requiere un SDK robusto que entregue rendimiento nativo con características personalizables. El VisioForge Video Edit SDK proporciona herramientas para crear impresionantes aplicaciones de edición que rivalizan con Adobe Premiere o DaVinci Resolve en dispositivos Apple.
 
-Nuestro Video Edit SDK para iOS integra capacidades avanzadas de edición de video en tu app iOS de manera eficiente. Construye una aplicación de foto y video, herramientas de creación de contenido o una aplicación de editor de video profesional con las características que los usuarios esperan de las aplicaciones de edición modernas.
+Nuestro Video Edit SDK para iOS integra capacidades avanzadas de edición de video en su app iOS de manera eficiente. Construya una aplicación de foto y video, herramientas de creación de contenido o una aplicación de editor de video profesional con las características que los usuarios esperan de las aplicaciones de edición modernas.
 
-## Características Principales
+## Características principales
 
 El SDK proporciona características completas de edición de video para el desarrollo de aplicaciones iOS:
 
 - **Recorte**: Recorte de video preciso a nivel de fotograma con controles táctiles
-- **Línea de Tiempo**: Edita múltiples pistas de video y audio simultáneamente  
+- **Línea de tiempo**: Edite múltiples pistas de video y audio simultáneamente  
 - **Transiciones**: Efectos suaves incluyendo fundidos y cortinas entre clips
-- **Efectos de Video**: Aplica filtros y corrección de color a tus videos
-- **Mezcla de Audio**: Controla el volumen y mezcla múltiples fuentes de audio
-- **Superposiciones de Texto**: Añade títulos y marcas de agua personalizables
+- **Efectos de video**: Aplique filtros y corrección de color a sus videos
+- **Mezcla de audio**: Controle el volumen y mezcle múltiples fuentes de audio
+- **Superposiciones de texto**: Añada títulos y marcas de agua personalizables
 
-Aunque optimizado para iOS, nuestro framework soporta Android a través de .NET MAUI, permitiéndote crear soluciones de edición multiplataforma.
+Aunque optimizado para iOS, nuestro framework soporta Android a través de .NET MAUI, permitiéndole crear soluciones de edición multiplataforma.
 
 ## Comenzar con VideoEditCoreX
 
 ### Inicialización del SDK
 
-Inicializa el motor de edición de video en tu app iOS:
+Inicialice el motor de edición de video en su app iOS:
 
 ```csharp
 using System.Drawing;                              // Size
@@ -67,9 +67,9 @@ videoEdit.OnProgress += VideoEdit_OnProgress;
 videoEdit.OnStop += VideoEdit_OnStop;
 ```
 
-### Añadir Contenido de Video
+### Añadir contenido de video
 
-Añade archivos de video a tu línea de tiempo:
+Añada archivos de video a su línea de tiempo:
 
 ```csharp
 // Añadir archivo de video completo
@@ -83,9 +83,9 @@ videoEdit.Input_AddAudioVideoFile(
     insertTime: null);
 ```
 
-### Aplicar Efectos
+### Aplicar efectos
 
-Mejora los videos con efectos que los usuarios eligen para su contenido:
+Mejore los videos con efectos que los usuarios eligen para su contenido:
 
 ```csharp
 using VisioForge.Core.Types.X.VideoEffects;
@@ -96,9 +96,9 @@ balance.Contrast = 1.0;
 videoEdit.Video_Effects.Add(balance);
 ```
 
-### Configurar la Salida
+### Configurar la salida
 
-Exporta videos optimizados para YouTube o cumplimiento con políticas de App Store:
+Exporte videos optimizados para YouTube o cumplimiento con políticas de App Store:
 
 ```csharp
 using VisioForge.Core.Types;
@@ -112,9 +112,9 @@ videoEdit.Output_Format = mp4Output;
 videoEdit.Start();
 ```
 
-### Manejo de Eventos
+### Manejo de eventos
 
-Monitorea el progreso de la edición:
+Monitoree el progreso de la edición:
 
 ```csharp
 private void VideoEdit_OnProgress(object sender, ProgressEventArgs e)
@@ -128,11 +128,11 @@ private void VideoEdit_OnStop(object sender, StopEventArgs e)
 }
 ```
 
-## Opciones Avanzadas
+## Opciones avanzadas
 
-### API de Superposición de Texto
+### API de superposición de texto
 
-Añade superposiciones de texto usando la API de renderizado nativa:
+Añada superposiciones de texto usando la API de renderizado nativa:
 
 ```csharp
 using VisioForge.Core.Types.X.VideoEdit;
@@ -141,9 +141,9 @@ var textOverlay = new TextOverlay("Tu Título");
 videoEdit.Video_TextOverlays.Add(textOverlay);
 ```
 
-### Transiciones de Video
+### Transiciones de video
 
-Crea transiciones suaves entre clips:
+Cree transiciones suaves entre clips:
 
 ```csharp
 var transition = new VideoTransition(
@@ -155,13 +155,13 @@ videoEdit.Video_Transitions.Add(transition);
 
 ## Despliegue en iOS
 
-Para instrucciones detalladas de despliegue en iOS, incluyendo paquetes NuGet, permisos y mejores prácticas, consulta nuestra [Guía de Despliegue iOS](../../deployment-x/iOS.md).
+Para instrucciones detalladas de despliegue en iOS, incluyendo paquetes NuGet, permisos y mejores prácticas, consulte nuestra [Guía de despliegue iOS](../../deployment-x/iOS.md).
 
-## Por Qué Elegir VisioForge
+## Por qué elegir VisioForge
 
-- **API Profesional**: Control completo sobre la edición de video
-- **UI Personalizable**: Construye tu propia interfaz
-- **Rendimiento Nativo**: Codificación acelerada por GPU en dispositivos Apple
+- **API profesional**: Control completo sobre la edición de video
+- **UI personalizable**: Construya su propia interfaz
+- **Rendimiento nativo**: Codificación acelerada por GPU en dispositivos Apple
 
 ---
-Explora muestras de edición de video iOS en nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) o contacta a [soporte](https://support.visioforge.com/) para recursos.
+Explore muestras de edición de video iOS en nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) o contacte a [soporte](https://support.visioforge.com/) para recursos.

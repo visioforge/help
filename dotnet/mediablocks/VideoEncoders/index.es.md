@@ -1,7 +1,7 @@
 ---
-title: Codificadores de Video en C# .NET - H264, HEVC, AV1, VP9
+title: Codificadores de video en C# .NET - H264, HEVC, AV1, VP9
 description: Codifique video a H.264, HEVC, AV1 y VP9 con aceleración GPU usando VisioForge Media Blocks SDK. Bitrate, calidad y códecs configurables.
-sidebar_label: Codificadores de Video
+sidebar_label: Codificadores de video
 order: 18
 tags:
   - Media Blocks SDK
@@ -26,7 +26,7 @@ primary_api_classes:
 
 # Codificación de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 La codificación de video es el proceso de convertir datos de video sin comprimir en un formato comprimido. Este proceso es esencial para reducir el tamaño de los archivos de video, facilitando su almacenamiento y transmisión por internet. VisioForge Media Blocks SDK proporciona una amplia gama de codificadores de video que soportan varios formatos y códecs.
 
@@ -38,7 +38,7 @@ Se soportan GPUs NVidia, Intel y AMD para aceleración de hardware.
 
 `AV1 (AOMedia Video 1)`: Desarrollado por la Alliance for Open Media, AV1 es un formato de codificación de video abierto y libre de regalías diseñado para transmisiones de video por Internet. Es conocido por su alta eficiencia de compresión y mejor calidad a tasas de bits más bajas en comparación con sus predecesores, haciéndolo adecuado para aplicaciones de streaming de video de alta resolución.
 
-Usa clases que implementan la interfaz `IAV1EncoderSettings` para establecer los parámetros.
+Use clases que implementan la interfaz `IAV1EncoderSettings` para establecer los parámetros.
 
 #### Codificadores CPU
 
@@ -312,7 +312,7 @@ Windows, macOS, Linux, iOS, Android.
 
 El bloque codificador H264 se usa para codificar archivos en MP4, MKV y algunos otros formatos, así como para streaming de red usando RTSP y HLS.
 
-Usa clases que implementan la interfaz IH264EncoderSettings para establecer los parámetros.
+Use clases que implementan la interfaz IH264EncoderSettings para establecer los parámetros.
 
 ### Configuraciones
 
@@ -348,7 +348,7 @@ Codificador H264 CPU software.
 
 #### CustomH264EncoderSettings
 
-Permite usar un elemento GStreamer personalizado para codificación H264. Puedes especificar el nombre del elemento GStreamer y configurar sus propiedades.
+Permite usar un elemento GStreamer personalizado para codificación H264. Puede especificar el nombre del elemento GStreamer y configurar sus propiedades.
 
 **Plataformas:** Windows, Linux, macOS.
 
@@ -399,7 +399,7 @@ Windows, macOS, Linux, iOS, Android.
 
 El codificador HEVC se usa para codificar archivos en MP4, MKV y algunos otros formatos, así como para streaming de red usando RTSP y HLS.
 
-Usa clases que implementan la interfaz IHEVCEncoderSettings para establecer los parámetros.
+Use clases que implementan la interfaz IHEVCEncoderSettings para establecer los parámetros.
 
 ### Configuraciones
 
@@ -435,7 +435,7 @@ Codificador de video HEVC GPU Intel.
 
 #### CustomHEVCEncoderSettings
 
-Permite usar un elemento GStreamer personalizado para codificación HEVC. Puedes especificar el nombre del elemento GStreamer y configurar sus propiedades.
+Permite usar un elemento GStreamer personalizado para codificación HEVC. Puede especificar el nombre del elemento GStreamer y configurar sus propiedades.
 
 **Plataformas:** Windows, Linux, macOS.
 
@@ -480,7 +480,7 @@ Windows, macOS, Linux, iOS, Android.
 ## Codificador MJPEG
 
 `MJPEG (Motion JPEG)`: Un formato de compresión de video donde cada fotograma de video se comprime por separado en una imagen JPEG. Esta técnica es directa y resulta en ninguna compresión inter-frame, haciéndola ideal para situaciones donde se requiere edición o acceso específico de fotograma, como en vigilancia e imágenes médicas.
-Usa clases que implementan la interfaz IH264EncoderSettings para establecer los parámetros.
+Use clases que implementan la interfaz IH264EncoderSettings para establecer los parámetros.
 
 ### Configuraciones
 
@@ -934,7 +934,7 @@ macOS, iOS.
 
 ### Disponibilidad
 
-Puedes verificar si el codificador Apple ProRes está disponible en tu entorno usando:
+Puede verificar si el codificador Apple ProRes está disponible en su entorno usando:
 
 ```csharp
 bool available = AppleProResEncoderBlock.IsAvailable();

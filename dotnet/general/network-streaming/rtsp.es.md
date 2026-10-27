@@ -1,5 +1,5 @@
 ---
-title: Servidor RTSP en C# .NET — H.264/HEVC + Codificación GPU
+title: Servidor RTSP en C# .NET — H.264/HEVC + codificación GPU
 description: Servidor RTSP con codificación H.264/AAC, aceleración GPU (NVENC, QSV, AMF), autenticación y ajuste de latencia. Ejemplos C# con VisioForge SDK.
 tags:
   - Video Capture SDK
@@ -39,17 +39,17 @@ primary_api_classes:
 
 ---
 
-# Dominando la Transmisión RTSP con SDKs de VisioForge
+# Dominar la transmisión RTSP con SDKs de VisioForge
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Soporte multiplataforma"
-    El motor `VideoCaptureCoreX` y el Media Blocks SDK funcionan en **Windows, macOS, Linux, Android e iOS** vía GStreamer. Consulta la [matriz de soporte de plataformas](../../platform-matrix.md) para códecs y detalles de aceleración por hardware, y la [guía de despliegue en Linux](../../deployment-x/Ubuntu.md) para configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.
+    El motor `VideoCaptureCoreX` y el Media Blocks SDK funcionan en **Windows, macOS, Linux, Android e iOS** vía GStreamer. Consulte la [matriz de soporte de plataformas](../../platform-matrix.md) para códecs y detalles de aceleración por hardware, y la [guía de despliegue en Linux](../../deployment-x/Ubuntu.md) para configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.
 
-!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+!!! tip "Agentes de IA: usen el servidor MCP de VisioForge"
 
-    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
-    Conecta al servidor MCP público de VisioForge
+    ¿Lo construye con **Claude Code**, **Cursor** u otro agente de IA?
+    Conéctese al servidor MCP público de VisioForge
     ([documentación](../mcp-server-usage.md))
     en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
     ejemplos de código ejecutables y guías de despliegue — más preciso que
@@ -70,7 +70,7 @@ Nuestros SDKs integran RTSP con códecs estándar de la industria como **H.264 (
 
 Esta guía profundiza en los detalles de la implementación de la transmisión RTSP utilizando los SDKs de VisioForge, cubriendo tanto enfoques modernos multiplataforma como métodos heredados específicos de Windows.
 
-## Salida RTSP Multiplataforma (Recomendado)
+## Salida RTSP multiplataforma (recomendado)
 
 [VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
@@ -109,7 +109,7 @@ VisioForge proporciona acceso a una amplia gama de codificadores, permitiendo la
         *   `MP3`: Ampliamente compatible pero menos eficiente que AAC.
         *   `OPUS`: Excelente códec de baja latencia, ideal para aplicaciones interactivas.
 
-### Configurando la Transmisión: `RTSPServerSettings`
+### Configurar la transmisión: `RTSPServerSettings`
 
 Esta clase encapsula todos los parámetros necesarios para definir el comportamiento y propiedades de su servidor RTSP.
 
@@ -147,9 +147,9 @@ Al usar el Media Blocks SDK, el `RTSPServerBlock` representa el elemento real ba
 *   **Verificación de Disponibilidad:** El método estático `IsAvailable()` permite verificar si los complementos de GStreamer necesarios para la transmisión RTSP están presentes en el sistema.
 *   **Gestión de Recursos:** Implementa `IDisposable` para la limpieza adecuada de sockets de red y recursos de GStreamer cuando el bloque ya no se necesita.
 
-### Ejemplos Prácticos de Uso
+### Ejemplos prácticos de uso
 
-#### Ejemplo 1: Configuración Básica del Servidor (VideoCaptureCoreX / VideoEditCoreX)
+#### Ejemplo 1: Configuración básica del servidor (VideoCaptureCoreX / VideoEditCoreX)
 
 ```csharp
 // 1. Elegir y configurar codificadores
@@ -214,7 +214,7 @@ pipeline.Connect(audioSource.Output, rtspSink.AudioInput); // Conectar fuente di
 await pipeline.StartAsync();
 ```
 
-#### Ejemplo 3: Configuración Avanzada con Autenticación
+#### Ejemplo 3: Configuración avanzada con autenticación
 
 ```csharp
 // Usando configuraciones del Ejemplo 1...
@@ -236,7 +236,7 @@ var secureRtspOutput = new RTSPServerOutput(secureSettings);
 // videoCapture.Outputs_Add(secureRtspOutput); 
 ```
 
-### Mejores Prácticas de Transmisión
+### Mejores prácticas de transmisión
 
 1.  **Estrategia de Selección de Codificador:**
     *   **Priorizar Hardware:** Siempre prefiera codificadores de hardware (NVENC, QSV, AMF) cuando estén disponibles en el sistema de destino. Reducen drásticamente la carga de CPU, permitiendo resoluciones más altas, velocidades de cuadro o más transmisiones simultáneas.
@@ -253,7 +253,7 @@ var secureRtspOutput = new RTSPServerOutput(secureSettings);
     *   **Patrón Dispose:** Las instancias del servidor RTSP mantienen recursos de red (sockets) y tuberías GStreamer potencialmente complejas. *Siempre* asegúrese de que se eliminen correctamente usando declaraciones `using` o llamadas explícitas `.Dispose()` en bloques `finally` para prevenir fugas de recursos.
     *   **Apagado Elegante:** Al detener el proceso de captura o edición, asegúrese de que la salida se elimine correctamente o la tubería se detenga limpiamente para permitir que el servidor RTSP se apague con gracia.
 
-### Consideraciones de Rendimiento
+### Consideraciones de rendimiento
 
 Optimizar la transmisión RTSP implica equilibrar calidad, latencia y uso de recursos:
 
@@ -266,7 +266,7 @@ Optimizar la transmisión RTSP implica equilibrar calidad, latencia y uso de rec
     *   **Memoria:** Monitoree el uso de RAM, especialmente si maneja múltiples transmisiones o tuberías complejas de Media Blocks.
     *   **Red:** Asegúrese de que la interfaz de red del servidor tenga suficiente ancho de banda para la tasa de bits configurada, resolución y número de clientes conectados. Calcule el ancho de banda requerido (Tasa de Bits de Video + Tasa de Bits de Audio) * Número de Clientes.
 
-## Salida RTSP Solo Windows (Heredado)
+## Salida RTSP solo Windows (heredado)
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
@@ -274,11 +274,11 @@ La implementación incluye varios mecanismos de manejo de errores:
 
 Las versiones anteriores del SDK (`VideoCaptureCore`, `VideoEditCore`) incluían un mecanismo de salida RTSP más simple y específico de Windows. Aunque funcional, ofrece menos flexibilidad y soporte de códecs en comparación con el `RTSPServerOutput` multiplataforma. **Generalmente se recomienda usar el enfoque `CoreX` / Media Blocks para nuevos proyectos.**
 
-### Cómo Funciona
+### Cómo funciona
 
 Este método aprovecha componentes integrados de Windows o filtros específicos incluidos. La configuración se realiza directamente a través de propiedades en el objeto `VideoCaptureCore` o `VideoEditCore`.
 
-### Código de Configuración de Muestra
+### Código de configuración de muestra
 
 ```csharp
 using VisioForge.Core.Types.Output;           // MP4Output, NetworkStreamingFormat, H264Profile
@@ -337,7 +337,7 @@ await VideoCapture1.StartAsync();
 * [Tutorial de vista previa en vivo de cámara IP](../../videocapture/video-tutorials/ip-camera-preview.md) — video explicativo con ejemplo mínimo de vista previa
 * [Grabar stream RTSP a MP4](../../videocapture/video-tutorials/ip-camera-capture-mp4.md) — capturar cualquier cámara IP a archivo MP4 en .NET
 * [Reproductor RTSP de Media Blocks](../../mediablocks/Guides/rtsp-player-csharp.md) — reproducción RTSP basada en pipeline con Media Blocks SDK
-* [Bloque de salida de servidor RTSP](../../mediablocks/RTSPServer/index.md) — transmitir tu propio stream de video y audio por RTSP
+* [Bloque de salida de servidor RTSP](../../mediablocks/RTSPServer/index.md) — transmitir su propio stream de video y audio por RTSP
 * [Grid RTSP multi-cámara (muro NVR)](../../mediablocks/Guides/multi-camera-rtsp-grid.md) — construir un muro de vista previa 4×4 con WPF o MAUI, con inicio sincronizado
 * [Grabación Pre-Evento con Cámara IP](../../mediablocks/Guides/pre-event-recording.md) — grabar streams RTSP con buffer circular y disparadores de detección de movimiento
 * [Guardar Stream RTSP Original](../../mediablocks/Guides/rtsp-save-original-stream.md) — guardar video RTSP sin re-codificación

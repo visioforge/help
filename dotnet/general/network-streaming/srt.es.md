@@ -1,5 +1,5 @@
 ---
-title: Streaming SRT en C# .NET - Enviar y Recibir Video por IP
+title: Streaming SRT en C# .NET - Enviar y recibir video por IP
 description: Transmita y reciba video mediante el protocolo SRT en C# .NET con modos caller/listener, cifrado AES y multiplexación MPEG-TS. Incluye ejemplos de código SDK.
 tags:
   - Video Capture SDK
@@ -36,9 +36,9 @@ primary_api_classes:
 
 ---
 
-# Guía de Implementación de Transmisión SRT
+# Guía de implementación de transmisión SRT
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## ¿Qué es SRT?
 
@@ -59,7 +59,7 @@ bool srtAvailable = SRTSinkBlock.IsAvailable(); // para enviar
 bool srtSourceAvailable = SRTSourceBlock.IsAvailable(); // para recibir
 ```
 
-## Modos de Conexión SRT
+## Modos de conexión SRT
 
 [VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
@@ -106,7 +106,7 @@ var settings = new SRTSinkSettings
 };
 ```
 
-## Salida SRT Básica
+## Salida SRT básica
 
 ### Video Capture SDK
 
@@ -203,7 +203,7 @@ await pipeline.StartAsync();
 
 Los receptores pueden conectarse usando `ffplay srt://tu-ip:8888` o cualquier reproductor compatible con SRT.
 
-## Recepción de un Flujo SRT
+## Recepción de un flujo SRT
 
 [MediaBlocksPipeline](#){ .md-button }
 
@@ -233,7 +233,7 @@ Para grabación passthrough sin decodificación (por ejemplo, guardar el flujo M
 
 SRT soporta cifrado AES con claves de 128, 192 o 256 bits. Tanto el emisor como el receptor deben usar la misma frase de contraseña y longitud de clave.
 
-### Emisor (Cifrado)
+### Emisor (cifrado)
 
 ```csharp
 var sinkSettings = new SRTSinkSettings
@@ -245,7 +245,7 @@ var sinkSettings = new SRTSinkSettings
 };
 ```
 
-### Receptor (Cifrado)
+### Receptor (cifrado)
 
 ```csharp
 // Use la factoría async — SRTSourceSettings tiene un ctor privado; Uri es System.Uri, no string.
@@ -283,13 +283,13 @@ var settings = new SRTSinkSettings
 | Internet confiable | 125ms (por defecto) | Buen equilibrio |
 | No confiable/larga distancia | 250–1000ms | Previene pérdidas |
 
-## Opciones de Codificación de Video
+## Opciones de codificación de video
 
-### Codificadores de Software
+### Codificadores de software
 
 - **OpenH264** — Codificador H.264 multiplataforma por defecto
 
-### Codificadores Acelerados por Hardware
+### Codificadores acelerados por hardware
 
 - **NVIDIA NVENC** (H.264/HEVC) — Codificación acelerada por GPU en tarjetas NVIDIA
 - **Intel Quick Sync** (H.264/HEVC) — Aceleración de GPU integrada Intel
@@ -319,9 +319,9 @@ Los flujos SRT típicamente usan audio AAC. El SDK proporciona múltiples codifi
 
 El SDK auto-selecciona el mejor codificador disponible por plataforma (MF AAC en Windows, VO AAC en otras).
 
-## Solución de Problemas
+## Solución de problemas
 
-### No se Puede Establecer Conexión SRT
+### No se puede establecer conexión SRT
 
 **Síntoma:** La conexión expira o es rechazada.
 
@@ -332,7 +332,7 @@ El SDK auto-selecciona el mejor codificador disponible por plataforma (MF AAC en
 - Confirme que ambos lados usen modos de conexión compatibles (un caller, un listener)
 - Verifique que las frases de contraseña coincidan si el cifrado está habilitado
 
-### Alto Uso de CPU o Frames Descartados
+### Alto uso de CPU o frames descartados
 
 **Síntoma:** El rendimiento se degrada durante la transmisión.
 
@@ -342,7 +342,7 @@ El SDK auto-selecciona el mejor codificador disponible por plataforma (MF AAC en
 - Reduzca resolución o bitrate
 - Aumente el valor de `Latency` para dar más espacio de buffer
 
-### El Codificador Falla al Inicializar
+### El codificador falla al inicializar
 
 **Síntoma:** Excepción al iniciar el pipeline.
 
@@ -352,7 +352,7 @@ El SDK auto-selecciona el mejor codificador disponible por plataforma (MF AAC en
 - Verifique que los controladores de GPU estén actualizados para codificadores de hardware
 - Retroceda a OpenH264 como codificador de software universal
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 ### ¿Cuál es la diferencia entre los modos caller y listener de SRT?
 
@@ -374,11 +374,11 @@ SRT en sí es agnóstico de codec — transporta cualquier dato por la red. Cuan
 
 Baje la propiedad `Latency` tanto en la configuración del emisor como del receptor (el valor por defecto es 125ms). Para redes locales, valores tan bajos como 20–50ms funcionan bien. Para streaming por internet, mantenga al menos 125ms para manejar el jitter. También asegúrese de que su codificador esté configurado para modo de baja latencia y que esté usando aceleración por hardware para minimizar el retraso de codificación.
 
-## Ver También
+## Ver también
 
 - [Integración de Transmisión NDI](ndi.md) — transmisión de video sobre IP con NDI
 - [Visor de Streams RTSP y Reproductor de Cámaras IP](../../mediablocks/Guides/rtsp-player-csharp.md) — guía de streaming de cámaras RTSP
 - [Formato de Salida MPEG-TS](../output-formats/mpegts.md) — configuración del contenedor MPEG-TS
 - [Guía de Despliegue](../../deployment-x/index.md) — paquetes de runtime específicos de plataforma
 - [Ejemplos de Código en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — demo de fuente SRT
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas

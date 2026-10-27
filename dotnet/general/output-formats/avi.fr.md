@@ -37,7 +37,7 @@ primary_api_classes:
 
 # Sortie de fichier AVI dans les SDK VisioForge .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 L'AVI (Audio Video Interleave) est un format de conteneur multimédia développé par Microsoft qui stocke à la fois les données audio et vidéo dans un seul fichier avec une lecture synchronisée. Il prend en charge à la fois les données compressées et non compressées, offrant une flexibilité tout en aboutissant parfois à des tailles de fichier plus importantes.
 

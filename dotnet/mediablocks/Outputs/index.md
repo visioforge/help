@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Output Blocks - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Output blocks, also known as sinks, are responsible for writing media data to files, network streams, or other destinations. They are typically the last blocks in any media processing chain. VisioForge Media Blocks SDK .Net provides a comprehensive collection of output blocks for various formats and protocols.
 
@@ -1403,4 +1403,4 @@ Depends on the components used within the `SeparateOutput` configuration and the
 - [Pipeline Architecture](../GettingStarted/pipeline.md) — MediaBlocksPipeline lifecycle, connecting blocks, and error handling
 - [Video Encoders](../VideoEncoders/index.md) — H.264, HEVC, VP8/VP9, AV1, and GPU-accelerated encoder blocks
 - [Media Sources](../Sources/index.md) — camera, screen, file, and network source blocks
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads

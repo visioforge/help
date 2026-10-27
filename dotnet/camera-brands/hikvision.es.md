@@ -24,11 +24,11 @@ primary_api_classes:
 
 ---
 
-# Cómo Conectar una Cámara IP Hikvision en C# .NET
+# Cómo conectar una cámara IP Hikvision en C# .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Descripción de la Marca
+## Descripción de la marca
 
 **Hikvision** (Hangzhou Hikvision Digital Technology Co., Ltd.) es el mayor fabricante de equipos de videovigilancia del mundo por cuota de mercado. Fundada en 2001 y con sede en Hangzhou, China, Hikvision produce cámaras IP, DVRs, NVRs y software de gestión de video utilizados en mercados empresariales, gubernamentales y de consumo.
 
@@ -57,7 +57,7 @@ rtsp://[USUARIO]:[CONTRASEÑA]@[IP]:[PUERTO]/Streaming/Channels/[ID_CANAL]
 - Flujo 1 = flujo principal, Flujo 2 = subflujo, Flujo 3 = tercer flujo
 - Ejemplo: Cámara 1, flujo principal = **101**; Cámara 1, subflujo = **102**
 
-### Cámaras IP (Canal Único)
+### Cámaras IP (canal único)
 
 | Serie de Modelo | URL RTSP | Flujo | Audio |
 |-------------|----------|--------|-------|
@@ -72,7 +72,7 @@ rtsp://[USUARIO]:[CONTRASEÑA]@[IP]:[PUERTO]/Streaming/Channels/[ID_CANAL]
 
 ### Canales NVR / DVR
 
-Para dispositivos NVR y DVR, cambia el número de cámara en el ID de canal:
+Para dispositivos NVR y DVR, cambie el número de cámara en el ID de canal:
 
 | Dispositivo | Canal | URL RTSP | Flujo |
 |--------|---------|----------|--------|
@@ -83,7 +83,7 @@ Para dispositivos NVR y DVR, cambia el número de cámara en el ID de canal:
 | NVR Cámara 8 | 8 | `rtsp://IP:554/Streaming/Channels/801` | Principal |
 | DVR Canal 1 | 1 | `rtsp://IP:554/Streaming/Channels/101` | Principal |
 
-### Formatos de URL Alternativos
+### Formatos de URL alternativos
 
 Algunos modelos Hikvision más antiguos y variantes OEM utilizan patrones de URL diferentes:
 
@@ -99,7 +99,7 @@ Algunos modelos Hikvision más antiguos y variantes OEM utilizan patrones de URL
 
 ## Conexión con VisioForge SDK
 
-Usa la URL RTSP de tu cámara Hikvision con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
+Use la URL RTSP de su cámara Hikvision con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
 
 ```csharp
 // Hikvision DS-2CD2032-I, main stream
@@ -108,13 +108,13 @@ var username = "admin";
 var password = "YourPassword";
 ```
 
-Para acceder al subflujo, usa `/Streaming/Channels/102` en su lugar.
+Para acceder al subflujo, use `/Streaming/Channels/102` en su lugar.
 
 ### Descubrimiento ONVIF
 
-Las cámaras Hikvision tienen excelente soporte ONVIF. Usa ONVIF para descubrir automáticamente cámaras en tu red y obtener sus URIs de flujo sin construir manualmente las URLs RTSP. Consulta la [guía de integración ONVIF](../mediablocks/Sources/index.md) para ejemplos de código de descubrimiento.
+Las cámaras Hikvision tienen excelente soporte ONVIF. Use ONVIF para descubrir automáticamente cámaras en su red y obtener sus URIs de flujo sin construir manualmente las URLs RTSP. Consulte la [guía de integración ONVIF](../mediablocks/Sources/index.md) para ejemplos de código de descubrimiento.
 
-## URLs de Captura y MJPEG
+## URLs de captura y MJPEG
 
 Las cámaras Hikvision también proporcionan endpoints HTTP para capturas y flujos MJPEG:
 
@@ -125,36 +125,36 @@ Las cámaras Hikvision también proporcionan endpoints HTTP para capturas y fluj
 | Captura Legacy | `http://IP/Streaming/channels/1/picture` | Firmware antiguo |
 | Captura CGI | `http://IP/cgi-bin/snapshot.cgi` | Autenticación básica |
 
-## Solución de Problemas
+## Solución de problemas
 
 ### "Doble barra" en la ruta de URL
 
-Las URLs RTSP de Hikvision usan una ruta que comienza con `/Streaming/Channels/`. Algunas herramientas o código generan `//Streaming/Channels/` (doble barra). Ambas funcionan con cámaras Hikvision, pero usa una sola barra para mayor corrección.
+Las URLs RTSP de Hikvision usan una ruta que comienza con `/Streaming/Channels/`. Algunas herramientas o código generan `//Streaming/Channels/` (doble barra). Ambas funcionan con cámaras Hikvision, pero use una sola barra para mayor corrección.
 
 ### Conexión rechazada en el puerto 554
 
-- Verifica que RTSP esté habilitado en la interfaz web de la cámara: **Configuración > Red > Configuración Avanzada > RTSP**
+- Verifique que RTSP esté habilitado en la interfaz web de la cámara: **Configuración > Red > Configuración Avanzada > RTSP**
 - Comprueba que el puerto RTSP no haya sido cambiado del predeterminado (554)
-- Asegúrate de que ningún firewall esté bloqueando el puerto entre tu aplicación y la cámara
+- Asegúrese de que ningún firewall esté bloqueando el puerto entre su aplicación y la cámara
 
 ### Fallos de autenticación
 
 - Las cámaras Hikvision requieren **autenticación digest** por defecto. El VisioForge SDK maneja esto automáticamente.
-- En firmware más reciente, las credenciales predeterminadas `admin/12345` están deshabilitadas. Debes establecer una contraseña segura durante la configuración inicial mediante la herramienta Hikvision SADP o la interfaz web.
-- Si te conectas a un NVR, usa las credenciales del NVR, no las credenciales individuales de la cámara.
+- En firmware más reciente, las credenciales predeterminadas `admin/12345` están deshabilitadas. Debe establecer una contraseña segura durante la configuración inicial mediante la herramienta Hikvision SADP o la interfaz web.
+- Si se conecta a un NVR, use las credenciales del NVR, no las credenciales individuales de la cámara.
 
 ### El flujo H.265 no se reproduce
 
-- Asegúrate de tener instalado el redistributable del decodificador HEVC
-- Alternativamente, configura la cámara para usar codificación H.264 en sus ajustes de video
-- Usa `rtspSettings.UseGPUDecoder = true` para decodificación H.265 acelerada por hardware
+- Asegúrese de tener instalado el redistributable del decodificador HEVC
+- Alternativamente, configure la cámara para usar codificación H.264 en sus ajustes de video
+- Use `rtspSettings.UseGPUDecoder = true` para decodificación H.265 acelerada por hardware
 
 ### Alta latencia
 
-- Usa transporte TCP: `rtspSettings.AllowedProtocols = RTSPSourceProtocol.TCP`
-- Reduce la latencia del buffer: `rtspSettings.Latency = TimeSpan.FromMilliseconds(200)`
-- Cambia al subflujo (canal 102) para menores requisitos de ancho de banda
-- Desactiva el audio si no es necesario: `audioEnabled: false`
+- Use transporte TCP: `rtspSettings.AllowedProtocols = RTSPSourceProtocol.TCP`
+- Reduzca la latencia del buffer: `rtspSettings.Latency = TimeSpan.FromMilliseconds(200)`
+- Cambie al subflujo (canal 102) para menores requisitos de ancho de banda
+- Desactive el audio si no es necesario: `audioEnabled: false`
 
 Combinado en una sola instancia `RTSPSourceSettings` (construida vía factory async):
 
@@ -170,25 +170,25 @@ rtspSettings.AllowedProtocols = RTSPSourceProtocol.TCP;      // transporte TCP
 rtspSettings.Latency          = TimeSpan.FromMilliseconds(200);
 ```
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 **¿Cuál es la URL RTSP predeterminada para cámaras Hikvision?**
 
-La URL RTSP estándar para cámaras Hikvision es `rtsp://admin:password@IP_CAMARA:554/Streaming/Channels/101` para el flujo principal. Reemplaza `admin` y `password` con las credenciales de tu cámara, e `IP_CAMARA` con la dirección IP de la cámara. Usa el canal `102` para el subflujo.
+La URL RTSP estándar para cámaras Hikvision es `rtsp://admin:password@IP_CAMARA:554/Streaming/Channels/101` para el flujo principal. Reemplace `admin` y `password` con las credenciales de su cámara, e `IP_CAMARA` con la dirección IP de la cámara. Use el canal `102` para el subflujo.
 
 **¿Cómo encuentro la dirección IP de mi cámara Hikvision?**
 
-Usa la herramienta Hikvision SADP (Search Active Devices Protocol), que es una utilidad gratuita que descubre todos los dispositivos Hikvision en tu red local. Alternativamente, consulta la lista de clientes DHCP de tu router o usa el descubrimiento de dispositivos ONVIF con el VisioForge SDK.
+Use la herramienta Hikvision SADP (Search Active Devices Protocol), que es una utilidad gratuita que descubre todos los dispositivos Hikvision en su red local. Alternativamente, consulte la lista de clientes DHCP de su router o use el descubrimiento de dispositivos ONVIF con el VisioForge SDK.
 
 **¿Puedo conectarme a un NVR Hikvision y ver canales de cámaras individuales?**
 
-Sí. Usa el mismo formato de URL RTSP pero cambia el número de canal. La cámara 1 es el canal 101 (principal) o 102 (sub), la cámara 2 es el canal 201/202, y así sucesivamente. La fórmula es: ID de canal = (número_de_cámara x 100) + número_de_flujo.
+Sí. Use el mismo formato de URL RTSP pero cambie el número de canal. La cámara 1 es el canal 101 (principal) o 102 (sub), la cámara 2 es el canal 201/202, y así sucesivamente. La fórmula es: ID de canal = (número_de_cámara x 100) + número_de_flujo.
 
 **¿El VisioForge SDK soporta H.265+ (Smart Codec) de Hikvision?**
 
 Sí. El SDK soporta decodificación estándar H.265/HEVC. El H.265+ de Hikvision es una optimización de compresión propietaria que produce flujos H.265 estándar, por lo que funciona con cualquier decodificador compatible con H.265.
 
-## Recursos Relacionados
+## Recursos relacionados
 
 - [Todas las Marcas de Cámaras — Directorio de URLs RTSP](index.md)
 - [Guía de Conexión LTS](lts.md) — OEM de Hikvision, usa el mismo formato de URL

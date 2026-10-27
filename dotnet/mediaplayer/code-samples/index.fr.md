@@ -13,7 +13,7 @@ tags:
 
 # Exemples d'implémentation .NET Media Player SDK
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Cette page rassemble des recettes C# prêtes à l'emploi pour les scénarios de lecture les plus courants utilisant Media Player SDK .Net. Chaque extrait est vérifié par rapport au code source du SDK et aux démos sous [`Media Player SDK`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK). Le moteur `MediaPlayerCore` (Windows uniquement) est utilisé dans les exemples ci-dessous ; le code multi-plateforme basé sur `MediaPlayerCoreX` suit la même structure générale avec des paramètres de source spécifiques au moteur.
 
@@ -131,7 +131,7 @@ public class ControllablePlayer
 
 ## Recette — Capturer l'image courante
 
-`Frame_GetCurrent()` retourne l'image la plus récemment rendue sous forme de `System.Drawing.Bitmap`. Sauvegardez-la via l'API `Bitmap.Save` ou utilisez `Frame_Save` pour une écriture disque intégrée avec `ImageFormat`.
+`Frame_GetCurrent()` retourne l'image la plus récemment rendue sous forme de `System.Drawing.Bitmap`. Sauvegardez-la via l'API `Bitmap.Save` ou utilisez `Frame_Save` pour une écriture disque intégrée avec `ImageFormat`. Appelez-les pendant la lecture : après `Stop`, ils retournent `null` ou `false` et signalent la raison via `OnError`.
 
 ```csharp
 using System.Drawing.Imaging;

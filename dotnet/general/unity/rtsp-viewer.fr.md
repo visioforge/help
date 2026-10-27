@@ -27,8 +27,8 @@ primary_api_classes:
 
 # Afficher une caméra RTSP dans Unity
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
 
 Il existe deux façons d'afficher un flux de caméra RTSP / IP en direct dans Unity, et le paquet
 fournit une scène prête pour chacune. Les deux s'affichent dans un `RawImage` Unity et fonctionnent

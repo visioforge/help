@@ -37,7 +37,7 @@ primary_api_classes:
 
 # VisioForge Video Edit SDK .Net — Hoja de referencia
 
-Video Edit SDK ensambla líneas de tiempo, aplica transiciones/efectos/superposiciones y exporta a MP4/MKV/WebM. `VideoEditCoreX` es el motor multiplataforma (GStreamer); `VideoEditCore` es el motor heredado exclusivo de Windows basado en DirectShow. Elija `VideoEditCoreX` para proyectos nuevos.
+El Video Edit SDK ensambla líneas de tiempo, aplica transiciones/efectos/superposiciones y exporta a MP4/MKV/WebM. `VideoEditCoreX` es el motor multiplataforma (GStreamer); `VideoEditCore` es el motor heredado exclusivo de Windows basado en DirectShow. Elija `VideoEditCoreX` para proyectos nuevos.
 
 !!! tip "Agentes de IA para programación: usen el servidor MCP de VisioForge"
 
@@ -61,7 +61,7 @@ Video Edit SDK ensambla líneas de tiempo, aplica transiciones/efectos/superposi
 Un solo paquete incluye ambos motores: `VideoEditCoreX` y el heredado `VideoEditCore` conviven en él, así que elegir motor es una decisión de código, no de empaquetado:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.26]"/>
 ```
 
 Arrastra `VisioForge.DotNet.Core` como dependencia; no hace falta referenciar `Core` por separado.
@@ -84,7 +84,7 @@ Los redistribuibles nativos específicos de plataforma siguen el mismo patrón q
 | `VideoEditCoreX` | Motor multiplataforma de línea de tiempo (basado en GStreamer) | [getting-started.md](./getting-started.md) |
 | `VideoEditCore` | Motor heredado exclusivo de Windows (DirectShow) — para mantener aplicaciones existentes en funcionamiento | [getting-started.md](./getting-started.md) |
 | `MP4Output` | Configuración de salida MP4 codificada (H.264/H.265 + AAC) | [getting-started.md](./getting-started.md) |
-| `GIFOutput` | Salida GIF animado (solo video, sin audio, paleta de 256 colores) — `gifenc` escribe el archivo directamente sin contenedor | [getting-started.md](./getting-started.md#renderizando-a-gif-animado) |
+| `GIFOutput` | Salida GIF animado (solo video, sin audio, paleta de 256 colores) — `gifenc` escribe el archivo directamente sin contenedor | [getting-started.md](./getting-started.md#renderizar-a-gif-animado) |
 | `VideoSource` / `VideoFileSource` | Descriptor de entrada de vídeo por segmento (`VideoSource` para `VideoEditCore`, `VideoFileSource` para `VideoEditCoreX`) | [code-samples/several-segments.md](./code-samples/several-segments.md) |
 | `AudioFileSource` | Entrada de audio desde archivo para mezclar en la línea de tiempo | [code-samples/volume-for-track.md](./code-samples/volume-for-track.md) |
 

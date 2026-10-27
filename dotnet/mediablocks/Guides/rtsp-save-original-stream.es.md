@@ -33,7 +33,7 @@ primary_api_classes:
 
 # Cómo Guardar Stream RTSP a Archivo: Grabar Video de Cámara IP sin Re-codificación
 
-[SDK de Media Blocks .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!!info Muestra de Demo
 Para un ejemplo completo de grabación de streams RTSP sin re-codificación, vea la [Demo RTSP MultiView](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/RTSP%20MultiView%20Demo).
@@ -59,7 +59,7 @@ Para documentación específica de cámara ONVIF, vea la [Guía de Integración 
 
 ## Resumen
 
-Esta guía demuestra cómo guardar un stream RTSP a un archivo MP4 capturando el stream de video original desde una cámara RTSP IP sin re-codificar el video. Este enfoque es altamente beneficioso para preservar la calidad de video original de las cámaras y minimizar el uso de CPU cuando necesita grabar metraje. El stream de audio puede pasarse a través o, opcionalmente, re-codificarse para mejor compatibilidad, permitiendo guardar los datos completos del streaming. Herramientas como FFmpeg y VLC ofrecen métodos de línea de comandos o UI para grabar un stream RTSP; sin embargo, esta guía se enfoca en un enfoque programático usando el SDK de VisioForge Media Blocks para desarrolladores .NET que necesitan crear aplicaciones que se conecten y graben video desde cámaras RTSP.
+Esta guía demuestra cómo guardar un stream RTSP a un archivo MP4 capturando el stream de video original desde una cámara RTSP IP sin re-codificar el video. Este enfoque es altamente beneficioso para preservar la calidad de video original de las cámaras y minimizar el uso de CPU cuando necesita grabar metraje. El stream de audio puede pasarse a través o, opcionalmente, re-codificarse para mejor compatibilidad, permitiendo guardar los datos completos del streaming. Herramientas como FFmpeg y VLC ofrecen métodos de línea de comandos o UI para grabar un stream RTSP; sin embargo, esta guía se enfoca en un enfoque programático usando Media Blocks SDK .NET, para desarrolladores que necesitan crear aplicaciones que se conecten y graben video desde cámaras RTSP.
 
 ## Características Principales
 
@@ -69,7 +69,7 @@ Esta guía demuestra cómo guardar un stream RTSP a un archivo MP4 capturando el
 - **Integración Profesional**: Control programático para aplicaciones empresariales
 - **Alto Rendimiento**: Optimizado para grabación continua
 
-Usaremos el SDK de VisioForge Media Blocks, una poderosa biblioteca .NET para construir aplicaciones personalizadas de procesamiento de medios, para guardar RTSP a archivo de manera efectiva.
+Usaremos el Media Blocks SDK .NET, una poderosa biblioteca .NET para construir aplicaciones personalizadas de procesamiento de medios, para guardar RTSP a archivo de manera efectiva.
 
 ## Concepto Principal
 
@@ -80,17 +80,17 @@ La idea principal es tomar el stream de video raw desde la fuente RTSP y enviarl
 
 ## Prerrequisitos
 
-Necesitará el SDK de VisioForge Media Blocks. Puede agregarlo a su proyecto .NET vía NuGet:
+Necesitará el Media Blocks SDK .NET. Puede agregarlo a su proyecto .NET vía NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
 ```
 
 Dependiendo de su plataforma objetivo (Windows, macOS, Linux, incluyendo sistemas embebidos como Jetson Nano para aplicaciones de cámara embebida), también necesitará los paquetes de runtime nativos correspondientes. Por ejemplo, en Windows para grabar video:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 ```
 
 Para información detallada sobre requisitos de deployment, y dependencias específicas de plataforma, por favor refiérase a nuestra [Guía de Deployment](../../deployment-x/index.md). Es importante verificar estos detalles para asegurar que su aplicación de captura de video stream funcione correctamente.
@@ -464,4 +464,4 @@ Problemas comunes y sus soluciones al guardar streams RTSP:
 - [Reconexión RTSP y fallback switch](../../general/network-sources/reconnection-and-fallback.md) — mantén las grabaciones funcionando ante caídas de cámara con `FallbackSwitch` automático
 
 ---
-Esta guía proporciona una comprensión fundamental de cómo guardar un stream RTSP preservando el video original mientras maneja flexiblemente el stream de audio usando el SDK de VisioForge Media Blocks. Al aprovechar el `RTSPRAWSourceBlock` y conexiones directas de pipeline, puede lograr grabaciones eficientes y de alta calidad.
+Esta guía proporciona una comprensión fundamental de cómo guardar un stream RTSP preservando el video original mientras maneja flexiblemente el stream de audio usando Media Blocks SDK .NET. Al aprovechar el `RTSPRAWSourceBlock` y conexiones directas de pipeline, puede lograr grabaciones eficientes y de alta calidad.

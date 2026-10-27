@@ -1,5 +1,5 @@
 ---
-title: Capturar Video a MPEG-TS con Aceleración Hardware en C# .NET
+title: Capturar video a MPEG-TS con aceleración hardware en C# .NET
 description: Capture video y audio a archivos MPEG-TS en C# con aceleración por hardware, selección de formato y soporte multiplataforma para aplicaciones .NET.
 tags:
   - Video Capture SDK
@@ -30,7 +30,7 @@ primary_api_classes:
 
 ---
 
-# Captura de Video a MPEG-TS en C# y .NET: Guía Completa
+# Captura de video a MPEG-TS en C# y .NET: guía completa
 
 ## Introducción
 
@@ -38,13 +38,13 @@ Esta guía técnica demuestra cómo capturar video TS en C# desde cámaras y mic
 
 ## Instalación y despliegue
 
-Por favor consulta la [guía de instalación](../../install/index.md) para instrucciones detalladas sobre cómo instalar los SDKs .NET de VisioForge en tu sistema.
+Por favor consulte la [guía de instalación](../../install/index.md) para instrucciones detalladas sobre cómo instalar los SDKs .NET de VisioForge en su sistema.
 
 ## Video Capture SDK .NET (VideoCaptureCoreX) - Capturar MPEG-TS en C#
 
 VideoCaptureCoreX proporciona un enfoque simplificado para capturar video y audio TS en C#. Su arquitectura basada en componentes maneja el complejo pipeline de medios, permitiendo a los desarrolladores enfocarse en la configuración en lugar de detalles de implementación de bajo nivel al trabajar con archivos TS en .NET.
 
-### Componentes Principales
+### Componentes principales
 
 1. **VideoCaptureCoreX**: Motor principal para gestionar captura de video, renderizado y salida TS.
 2. **VideoView**: Componente de UI para renderizado de video en tiempo real durante la captura.
@@ -53,7 +53,7 @@ VideoCaptureCoreX proporciona un enfoque simplificado para capturar video y audi
 5. **AudioRendererSettings**: Configuración para reproducción de audio con soporte AAC.
 6. **MPEGTSOutput**: Configuración específicamente para salida de archivo MPEG-TS.
 
-### Ejemplo de Implementación
+### Ejemplo de implementación
 
 Aquí hay una implementación completa en C# para capturar y grabar archivos MPEG-TS:
 
@@ -177,7 +177,7 @@ private async Task StopCaptureAsync()
 }
 ```
 
-### Características Avanzadas de VideoCaptureCoreX para Grabación MPEG-TS
+### Características avanzadas de VideoCaptureCoreX para grabación MPEG-TS
 
 1. **Aceleración por Hardware**: Soporte para codificación por hardware NVIDIA (NVENC), Intel (QSV) y AMD (AMF).
 2. **Selección de Formato**: El SDK proporciona acceso a los formatos nativos de cámara y tasas de fotogramas.
@@ -188,7 +188,7 @@ private async Task StopCaptureAsync()
 
 El motor MediaBlocksPipeline en Media Blocks SDK .Net toma un enfoque arquitectónico diferente, enfocándose en un sistema modular basado en bloques donde cada componente (bloque) tiene responsabilidades específicas en el pipeline de procesamiento de medios.
 
-### Bloques Principales
+### Bloques principales
 
 1. **MediaBlocksPipeline**: El contenedor principal y controlador para el pipeline de bloques de medios.
 2. **SystemVideoSourceBlock**: Captura video desde webcams.
@@ -200,7 +200,7 @@ El motor MediaBlocksPipeline en Media Blocks SDK .Net toma un enfoque arquitect�
 8. **AACEncoderBlock**: Codifica audio usando AAC.
 9. **MPEGTSSinkBlock**: Guarda flujos codificados a un archivo MPEG-TS.
 
-### Ejemplo de Implementación
+### Ejemplo de implementación
 
 Aquí está cómo implementar captura avanzada de archivos TS en C#:
 
@@ -282,7 +282,7 @@ private async Task StopCaptureAsync()
 }
 ```
 
-### Características Avanzadas de MediaBlocksPipeline
+### Características avanzadas de MediaBlocksPipeline
 
 1. **Control Detallado**: Control directo sobre cada paso de procesamiento en el pipeline.
 2. **Construcción Dinámica de Pipeline**: Capacidad de crear pipelines de procesamiento complejos conectando bloques.
@@ -290,11 +290,11 @@ private async Task StopCaptureAsync()
 4. **Bloques Personalizados**: Capacidad de crear e integrar bloques de procesamiento personalizados.
 5. **Manejo de Errores Granular**: Eventos de error a nivel de cada bloque.
 
-## Configuración de Salida TS con Audio AAC
+## Configuración de salida TS con audio AAC
 
 Ambos SDKs proporcionan soporte robusto para salida MPEG-TS, que es particularmente útil para aplicaciones de transmisión y streaming debido a sus características de resistencia a errores y baja latencia.
 
-### División de Archivos para Grabación MPEG-TS
+### División de archivos para grabación MPEG-TS
 
 Ambos SDKs soportan división automática de archivos para salida MPEG-TS, habilitando grabación segmentada basada en duración, tamaño de archivo o código de tiempo. Esto es esencial para:
 
@@ -303,7 +303,7 @@ Ambos SDKs soportan división automática de archivos para salida MPEG-TS, habil
 - **Funcionalidad DVR**: Grabar flujos continuos con rotación automática de archivos
 - **Grabación Time-Lapse**: Dividir grabaciones a intervalos regulares
 
-#### Usando División de Archivos con VideoCaptureCoreX
+#### Usar división de archivos con VideoCaptureCoreX
 
 ```csharp
 using VisioForge.Core.Types.X.Sinks;
@@ -321,7 +321,7 @@ mpegtsOutput.Sink = new MPEGTSSplitSinkSettings("grabacion_%05d.ts")
 videoCapture.Outputs_Add(mpegtsOutput, autostart: true);
 ```
 
-#### Usando División de Archivos con MediaBlocksPipeline
+#### Usar división de archivos con MediaBlocksPipeline
 
 ```csharp
 using VisioForge.Core.Types.X.Sinks;
@@ -343,7 +343,7 @@ pipeline.Connect(videoEncoder.Output, (muxer as IMediaBlockDynamicInputs).Create
 pipeline.Connect(audioEncoder.Output, (muxer as IMediaBlockDynamicInputs).CreateNewInput(MediaBlockPadMediaType.Audio));
 ```
 
-#### Opciones de Configuración de División
+#### Opciones de configuración de división
 
 La clase `MPEGTSSplitSinkSettings` proporciona varias opciones:
 
@@ -356,13 +356,13 @@ La clase `MPEGTSSplitSinkSettings` proporciona varias opciones:
 
 Los archivos se dividirán cuando **cualquiera** de los criterios configurados (duración, tamaño o código de tiempo) se cumpla primero.
 
-#### Patrón de Nombre de Archivo
+#### Patrón de nombre de archivo
 
 El patrón de nombre de archivo usa formato estilo printf para números de segmento:
 - `"video_%05d.ts"` → `video_00000.ts`, `video_00001.ts`, ...
 - `"stream_%02d.ts"` → `stream_00.ts`, `stream_01.ts`, ...
 
-Lee más sobre codificadores de video y audio disponibles para captura TS en .NET:
+Lea más sobre codificadores de video y audio disponibles para captura TS en .NET:
 
 - [Codificadores H264](../video-encoders/h264.md)
 - [Codificadores HEVC](../video-encoders/hevc.md)
@@ -370,7 +370,7 @@ Lee más sobre codificadores de video y audio disponibles para captura TS en .NE
 - [Codificadores MP3](../audio-encoders/mp3.md)
 - [Salida MPEG-TS](../output-formats/mpegts.md)
 
-## Consideraciones Multiplataforma
+## Consideraciones multiplataforma
 
 Ambos SDKs ofrecen capacidades multiplataforma, pero con diferentes enfoques:
 
@@ -382,7 +382,7 @@ Ambos SDKs ofrecen capacidades multiplataforma, pero con diferentes enfoques:
 - [Aplicación de Ejemplo VideoCaptureCoreX](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/Simple%20Video%20Capture)
 - [Aplicación de Ejemplo MediaBlocksPipeline](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo)
 
-## Conclusión: Elegir el SDK Correcto para Captura MPEG-TS en C#
+## Conclusión: elegir el SDK correcto para captura MPEG-TS en C#
 
 VisioForge ofrece dos soluciones potentes para grabar archivos MPEG-TS en C# y .NET:
 
@@ -392,4 +392,4 @@ VisioForge ofrece dos soluciones potentes para grabar archivos MPEG-TS en C# y .
 
 Ambos SDKs sobresalen en capturar video desde cámaras y audio desde micrófonos, con soporte completo para salida MPEG-TS, haciéndolos herramientas valiosas para desarrollar una amplia gama de aplicaciones multimedia.
 
-Elige VideoCaptureCoreX para implementación rápida de escenarios de captura TS estándar, o MediaBlocksPipeline para flujos de trabajo avanzados de edición y procesamiento personalizado con archivos TS en tus aplicaciones .NET.
+Elija VideoCaptureCoreX para implementación rápida de escenarios de captura TS estándar, o MediaBlocksPipeline para flujos de trabajo avanzados de edición y procesamiento personalizado con archivos TS en sus aplicaciones .NET.

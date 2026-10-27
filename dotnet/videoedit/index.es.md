@@ -25,9 +25,9 @@ order: 12
 
 ## Introducción
 
-Video Edit SDK para .NET es una biblioteca de edición de video en C# que te permite construir aplicaciones de edición de video basadas en línea de tiempo. Agrega archivos de video y audio a una línea de tiempo, recorta segmentos, aplica transiciones y efectos, superpone texto e imágenes, y renderiza el resultado a MP4, AVI, MKV, WebM, GIF animado u otros formatos — todo desde tu código .NET.
+El Video Edit SDK para .NET es una biblioteca de edición de video en C# que le permite construir aplicaciones de edición de video basadas en línea de tiempo. Agregue archivos de video y audio a una línea de tiempo, recorte segmentos, aplique transiciones y efectos, superponga texto e imágenes, y renderice el resultado a MP4, AVI, MKV, WebM, GIF animado u otros formatos — todo desde su código .NET.
 
-El SDK proporciona dos motores: **VideoEditCore** (solo Windows, basado en DirectShow) y **VideoEditCoreX** (multiplataforma, se ejecuta en Windows, macOS, Linux, Android e iOS). Ambos motores comparten el mismo modelo de línea de tiempo — agrega fuentes, configura la salida e inicia la edición.
+El SDK proporciona dos motores: **VideoEditCore** (solo Windows, basado en DirectShow) y **VideoEditCoreX** (multiplataforma, se ejecuta en Windows, macOS, Linux, Android e iOS). Ambos motores comparten el mismo modelo de línea de tiempo — agregue fuentes, configure la salida e inicie la edición.
 
 ## Inicio Rápido
 
@@ -37,7 +37,7 @@ El SDK proporciona dos motores: **VideoEditCore** (solo Windows, basado en Direc
 dotnet add package VisioForge.DotNet.VideoEdit
 ```
 
-Para dependencias específicas de plataforma y configuración de frameworks de UI, consulta la [Guía de Instalación](../install/index.md).
+Para dependencias específicas de plataforma y configuración de frameworks de UI, consulte la [Guía de Instalación](../install/index.md).
 
 ### 2. Ejemplo Mínimo de Edición de Video
 
@@ -74,49 +74,49 @@ editor.Dispose();
 VisioForgeX.DestroySDK();
 ```
 
-Para la guía de implementación completa con manejo de eventos, fuentes de audio, fuentes de imagen y configuración avanzada de línea de tiempo, consulta la [Guía de Inicio Rápido](getting-started.md).
+Para la guía de implementación completa con manejo de eventos, fuentes de audio, fuentes de imagen y configuración avanzada de línea de tiempo, consulte la [Guía de Inicio Rápido](getting-started.md).
 
 ## Casos de Uso Comunes
 
 ### Combinar Múltiples Archivos de Video
 
-Fusiona múltiples clips de video en un solo archivo de salida. Agrega archivos a la línea de tiempo en secuencia, establece el formato de salida y renderiza. Soporta mezclar diferentes formatos de origen — combina archivos MP4, AVI y MOV en una sola salida.
+Fusione múltiples clips de video en un solo archivo de salida. Agregue archivos a la línea de tiempo en secuencia, establezca el formato de salida y renderice. Soporta mezclar diferentes formatos de origen — combine archivos MP4, AVI y MOV en una sola salida.
 
 Ver: [Crear Videos desde Múltiples Fuentes](code-samples/output-file-from-multiple-sources.md)
 
 ### Recortar y Cortar Segmentos de Video
 
-Extrae rangos de tiempo específicos de archivos de video estableciendo tiempos de inicio y fin en cada fuente. Combina múltiples segmentos del mismo archivo o diferentes archivos en una edición final.
+Extraiga rangos de tiempo específicos de archivos de video estableciendo tiempos de inicio y fin en cada fuente. Combine múltiples segmentos del mismo archivo o diferentes archivos en una edición final.
 
 Ver: [Trabajar con Segmentos de Video](code-samples/several-segments.md)
 
 ### Agregar Superposiciones de Texto e Imagen
 
-Inserta títulos de texto, subtítulos, logos y marcas de agua sobre el contenido de video. Posiciona, escala y temporiza las superposiciones en la línea de tiempo.
+Inserte títulos de texto, subtítulos, logos y marcas de agua sobre el contenido de video. Posicione, escale y temporice las superposiciones en la línea de tiempo.
 
 Ver: [Implementación de Superposición de Texto](code-samples/add-text-overlay.md) | [Agregar Superposiciones de Imagen](code-samples/add-image-overlay.md)
 
 ### Aplicar Transiciones entre Clips
 
-Agrega disoluciones cruzadas, barridos, deslizamientos, fundidos y más de 100 transiciones estándar SMPTE entre segmentos de video. Controla la duración de la transición, estilo de borde y dirección.
+Agregue disoluciones cruzadas, barridos, deslizamientos, fundidos y más de 100 transiciones estándar SMPTE entre segmentos de video. Controle la duración de la transición, estilo de borde y dirección.
 
 Ver: [Efectos de Transición entre Fragmentos de Video](code-samples/transition-video.md) | [Referencia de Transiciones](transitions.md)
 
 ### Crear Presentación desde Imágenes
 
-Construye presentaciones de video desde imágenes JPG, PNG, BMP y GIF con duración de visualización configurable por imagen, transiciones entre diapositivas y música de fondo.
+Construya presentaciones de video desde imágenes JPG, PNG, BMP y GIF con duración de visualización configurable por imagen, transiciones entre diapositivas y música de fondo.
 
 Ver: [Generar Videos desde Secuencias de Imágenes](code-samples/video-images-console.md)
 
 ### Agregar Música de Fondo y Mezcla de Audio
 
-Mezcla múltiples pistas de audio con contenido de video. Controla el volumen por pista, aplica efectos de envolvente de audio para fade-in/fade-out, y sincroniza audio con video.
+Mezcle múltiples pistas de audio con contenido de video. Controle el volumen por pista, aplique efectos de envolvente de audio para fade-in/fade-out, y sincronice audio con video.
 
 Ver: [Efectos de Envolvente de Volumen de Audio](code-samples/audio-envelope.md) | [Control de Volumen Personalizado](code-samples/volume-for-track.md)
 
 ### Composición Picture-in-Picture
 
-Superpone múltiples fuentes de video con control de posición y tamaño para layouts picture-in-picture, videos de reacción o composiciones multi-cámara.
+Superponga múltiples fuentes de video con control de posición y tamaño para layouts picture-in-picture, videos de reacción o composiciones multi-cámara.
 
 Ver: [Efectos Picture-In-Picture](code-samples/picture-in-picture.md)
 

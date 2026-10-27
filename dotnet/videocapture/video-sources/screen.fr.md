@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Guide d'implémentation de la capture d'écran
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
 !!! tip "Agents de codage IA : utilisez le serveur MCP VisioForge"
 
@@ -424,4 +424,4 @@ Oui. Utilisez `DisplayIndex` (VideoCaptureCore) ou `MonitorIndex` (VideoCaptureC
 - [Tutoriel capture d'écran vers MP4](../video-tutorials/screen-capture-mp4.md) — tutoriel C# pour enregistrer le bureau vers MP4 avec vidéo explicative
 - [Enregistrer la vidéo d'une webcam en C#](../guides/save-webcam-video.md) — capturer depuis une webcam au lieu de l'écran
 - [Capture caméra IP](ip-cameras/index.md) — enregistrer depuis des caméras réseau via RTSP
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements

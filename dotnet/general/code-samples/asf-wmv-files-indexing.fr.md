@@ -18,7 +18,7 @@ tags:
 
 # Indexation des fichiers ASF et WMV en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Lorsque vous travaillez avec des fichiers Windows Media dans vos applications .NET, vous pouvez rencontrer des problèmes de recherche avec les fichiers ASF, WMV ou WMA produits sans index approprié. Cette page explique le problème sous-jacent et indique l'outil approprié pour construire l'index avant que VisioForge ne consomme le fichier.
 

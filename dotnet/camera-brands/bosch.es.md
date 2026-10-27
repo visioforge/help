@@ -1,6 +1,6 @@
 ---
 title: Bosch — URLs RTSP y conexión de cámaras IP en C# .NET
-description: Conecta cámaras Bosch Security en C# .NET con patrones de URL RTSP y ejemplos de código para modelos Dinion, Flexidome, Autodome y codificadores VIP.
+description: Conecte cámaras Bosch Security en C# .NET con patrones de URL RTSP y ejemplos de código para modelos Dinion, Flexidome, Autodome y codificadores VIP.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -23,11 +23,11 @@ tags:
 
 ---
 
-# Cómo Conectar una Cámara IP Bosch en C# .NET
+# Cómo conectar una cámara IP Bosch en C# .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Descripción de la Marca
+## Descripción de la marca
 
 **Bosch Security and Safety Systems** (una división de Robert Bosch GmbH) es un fabricante alemán de equipos de videovigilancia profesional y empresarial. Con sede en Grasbrunn cerca de Múnich, Bosch produce cámaras IP, codificadores, soluciones de grabación y análisis de video principalmente para mercados de infraestructura crítica, transporte y seguridad empresarial.
 
@@ -45,19 +45,19 @@ tags:
 
 Las cámaras Bosch usan varios patrones de URL dependiendo de la generación del modelo. Los más comunes son las rutas `/rtsp_tunnel` y `/video`.
 
-### Modelos Actuales (Firmware Bosch CPP)
+### Modelos actuales (firmware Bosch CPP)
 
 | Flujo | URL RTSP | Notas |
 |--------|----------|-------|
 | Flujo de video 1 | `rtsp://IP:554/video?inst=1` | Flujo principal |
 | Flujo de video 2 | `rtsp://IP:554/video?inst=2` | Subflujo |
-| Túnel RTSP | `rtsp://IP:554//rtsp_tunnel` | Compatible con firewall (nota la doble barra) |
+| Túnel RTSP | `rtsp://IP:554//rtsp_tunnel` | Compatible con firewall (note la doble barra) |
 | H.264 directo | `rtsp://IP:554/h264` | Flujo H.264 directo |
 
 !!! info "Modo túnel RTSP"
-    La URL `//rtsp_tunnel` (con doble barra) es el modo de túnel RTSP propietario de Bosch que funciona mejor a través de firewalls y NAT. Encapsula datos RTP dentro de la conexión TCP RTSP. Usa la URL estándar `/video` para la mayoría de las integraciones.
+    La URL `//rtsp_tunnel` (con doble barra) es el modo de túnel RTSP propietario de Bosch que funciona mejor a través de firewalls y NAT. Encapsula datos RTP dentro de la conexión TCP RTSP. Use la URL estándar `/video` para la mayoría de las integraciones.
 
-### URLs Específicas por Modelo
+### URLs específicas por modelo
 
 | Serie de Modelo | URL RTSP | Códec | Notas |
 |-------------|----------|-------|-------|
@@ -74,7 +74,7 @@ Las cámaras Bosch usan varios patrones de URL dependiendo de la generación del
 | NTI-50022-V3 | `rtsp://IP:554/h264` | H.264 | Bala IP |
 | NWC-0455-20P | `rtsp://IP:554/h264` | H.264 | Compacta |
 
-### URLs de Codificadores
+### URLs de codificadores
 
 Los codificadores de video Bosch (series VideoJet, VIP) permiten conectar cámaras analógicas a redes IP:
 
@@ -96,7 +96,7 @@ Los codificadores de video Bosch (series VideoJet, VIP) permiten conectar cámar
 
 ## Conexión con VisioForge SDK
 
-Usa la URL RTSP de tu cámara Bosch con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
+Use la URL RTSP de su cámara Bosch con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
 
 ```csharp
 // Bosch Dinion/Flexidome, main stream
@@ -105,9 +105,9 @@ var username = "service";
 var password = "YourPassword";
 ```
 
-Para acceder al subflujo, usa `?inst=2` en lugar de `?inst=1`. Para modelos Bosch legacy, usa la URL de túnel RTSP `//rtsp_tunnel` (nota la doble barra).
+Para acceder al subflujo, use `?inst=2` en lugar de `?inst=1`. Para modelos Bosch legacy, use la URL de túnel RTSP `//rtsp_tunnel` (note la doble barra).
 
-## URLs de Captura y MJPEG
+## URLs de captura y MJPEG
 
 | Tipo | Patrón de URL | Notas |
 |------|-------------|-------|
@@ -119,7 +119,7 @@ Para acceder al subflujo, usa `?inst=2` en lugar de `?inst=1`. Para modelos Bosc
 | Imagen | `http://IP/img.jpg` | Fotograma único |
 | Imagen (alt) | `http://IP/image.jpg` | Ruta alternativa |
 
-## Solución de Problemas
+## Solución de problemas
 
 ### Doble barra en la URL rtsp_tunnel
 
@@ -136,7 +136,7 @@ Muchas cámaras Bosch requieren configuración inicial a través de la aplicaci�
 
 - **Modelos actuales:** Usuario `service` con contraseña establecida durante la configuración
 - **Modelos legacy:** Pueden usar `admin`, `user` o `service` dependiendo del firmware
-- Consulta el Bosch Configuration Manager o la interfaz web de la cámara para la configuración de usuarios
+- Consulte el Bosch Configuration Manager o la interfaz web de la cámara para la configuración de usuarios
 
 ### Parámetro inst
 
@@ -147,15 +147,15 @@ El parámetro `?inst=1` selecciona la instancia del flujo de video:
 
 ### Selección de canal del codificador
 
-Para codificadores multicanal (VIP X1600, series VideoJet X), usa el parámetro `inst` para seleccionar el canal:
+Para codificadores multicanal (VIP X1600, series VideoJet X), use el parámetro `inst` para seleccionar el canal:
 - `rtsp://IP:554/video?inst=1` = Canal 1
 - `rtsp://IP:554/video?inst=2` = Canal 2
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 **¿Cuál es la URL RTSP predeterminada para cámaras Bosch?**
 
-Para cámaras Bosch actuales, la URL es `rtsp://service:password@IP_CAMARA:554/video?inst=1`. Para modelos legacy, prueba `rtsp://IP_CAMARA:554//rtsp_tunnel` o `rtsp://IP_CAMARA:554/h264`.
+Para cámaras Bosch actuales, la URL es `rtsp://service:password@IP_CAMARA:554/video?inst=1`. Para modelos legacy, pruebe `rtsp://IP_CAMARA:554//rtsp_tunnel` o `rtsp://IP_CAMARA:554/h264`.
 
 **¿Qué es el modo túnel RTSP de Bosch?**
 
@@ -163,13 +163,13 @@ El túnel RTSP (`//rtsp_tunnel`) es el modo propietario de Bosch que encapsula d
 
 **¿Las cámaras Bosch soportan H.265?**
 
-Las cámaras IP Bosch actuales (plataforma CPP13/CPP14, incluyendo series Dinion/Flexidome 7000/8000) soportan H.265. Las cámaras legacy soportan H.264 y MPEG-4. Consulta la hoja de datos de tu modelo específico para soporte de códecs.
+Las cámaras IP Bosch actuales (plataforma CPP13/CPP14, incluyendo series Dinion/Flexidome 7000/8000) soportan H.265. Las cámaras legacy soportan H.264 y MPEG-4. Consulte la hoja de datos de su modelo específico para soporte de códecs.
 
 **¿Puedo usar codificadores Bosch para conectar cámaras analógicas?**
 
-Sí. Los codificadores Bosch VideoJet y VIP convierten señales de cámaras analógicas a flujos IP accesibles vía RTSP. Usa el mismo formato de URL (`/video?inst=1` o `//rtsp_tunnel`) que las cámaras IP.
+Sí. Los codificadores Bosch VideoJet y VIP convierten señales de cámaras analógicas a flujos IP accesibles vía RTSP. Use el mismo formato de URL (`/video?inst=1` o `//rtsp_tunnel`) que las cámaras IP.
 
-## Recursos Relacionados
+## Recursos relacionados
 
 - [Todas las Marcas de Cámaras — Directorio de URLs RTSP](index.md)
 - [Guía de Conexión Axis](axis.md) — Par de vigilancia empresarial

@@ -23,7 +23,7 @@ primary_api_classes:
 
 # Blocs démultiplexeurs - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Les blocs démultiplexeurs sont des composants essentiels des pipelines de traitement multimédia. Ils prennent un flux multimédia, généralement issu d'un fichier ou d'une source réseau, et le séparent en flux élémentaires constitutifs : vidéo, audio et sous-titres. Cela permet le traitement ou le rendu individuel de chaque flux. VisioForge Media Blocks SDK .Net fournit plusieurs blocs démultiplexeurs pour gérer divers formats de conteneurs.
 

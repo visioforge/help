@@ -11,7 +11,7 @@ tags:
 
 # Solución de problemas con registros para productos SDK .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Por qué son importantes los registros en la solución de problemas del SDK
 
@@ -63,7 +63,7 @@ Cuando desarrolla sus propias aplicaciones con nuestros SDKs, necesitará habili
 Independientemente del SDK que esté usando, el enfoque básico para habilitar registros sigue un patrón similar:
 
 ```csharp
-// Ejemplo para MediaPlayer SDK
+// Ejemplo para Media Player SDK
 mediaPlayer.Debug_Mode = true;
 mediaPlayer.Debug_Dir = "C:\\Logs\\MiAplicacion";
 

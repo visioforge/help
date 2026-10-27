@@ -20,10 +20,10 @@ primary_api_classes:
 
 # Compilar para iOS
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button target="_blank" }
 
 El flavor iOS se distribuye como un único `GStreamerX.framework` (~68 MB en disco, dispositivo arm64
 solamente) con cada plugin de GStreamer registrado estáticamente dentro del framework, más los
@@ -31,7 +31,7 @@ ensamblados gestionados del paquete compilados contra `netstandard2.1`. No hay a
 plugin separados ni escaneo de plugins en tiempo de ejecución — dyld carga el framework
 mediante `@rpath` cuando dispara el primer `[DllImport]`. Esta página cubre el flujo de
 exportación a Xcode, las entradas Info.plist y los problemas específicos de iOS; para la
-secuencia de arranque consulta [Bootstrap y ciclo de vida](bootstrap.md).
+secuencia de arranque consulte [Bootstrap y ciclo de vida](bootstrap.md).
 
 El flavor iOS se incluye en el `.unitypackage` cuando el pipeline de build se ejecuta con
 `-IncludeMacOS` y `-IncludeIOS`. El desarrollo iOS ocurre en un host Mac, así que el flavor
@@ -53,29 +53,29 @@ Android, macOS e iOS juntos.
 | Enable Bitcode | **Off** *(eliminado de Xcode 14+)* | Project Settings → Player → Other Settings → Configuration |
 
 El Editor aplica automáticamente `Api Compatibility Level = .NET Standard 2.1` para iOS cuando
-se ejecuta el diálogo de configuración de un único uso del paquete. Si saltaste ese diálogo,
-ajústalo manualmente.
+se ejecuta el diálogo de configuración de un único uso del paquete. Si se saltó ese diálogo,
+ajústelo manualmente.
 
 ## Entradas Info.plist obligatorias
 
-Estas se añaden al `Info.plist` del proyecto Xcode generado. Edítalas a través de la UI
-**Player Settings** de Unity o mediante un script post-process en tus scripts de Editor:
+Estas se añaden al `Info.plist` del proyecto Xcode generado. Edítelas a través de la UI
+**Player Settings** de Unity o mediante un script post-process en sus scripts de Editor:
 
 | Clave | Valor | Necesaria para |
 |---|---|---|
-| `NSCameraUsageDescription` | Razón por la que necesitas acceso a la cámara | Fuentes de captura de cámara |
-| `NSMicrophoneUsageDescription` | Razón por la que necesitas acceso al micrófono | Fuentes de captura de micrófono |
-| `NSLocalNetworkUsageDescription` | Razón por la que necesitas acceso LAN | Streams RTSP en la red local (`192.168.*`, discovery mDNS) |
+| `NSCameraUsageDescription` | Razón por la que necesita acceso a la cámara | Fuentes de captura de cámara |
+| `NSMicrophoneUsageDescription` | Razón por la que necesita acceso al micrófono | Fuentes de captura de micrófono |
+| `NSLocalNetworkUsageDescription` | Razón por la que necesita acceso LAN | Streams RTSP en la red local (`192.168.*`, discovery mDNS) |
 | `NSAppTransportSecurity` → `NSAllowsArbitraryLoads` = `YES` | (opcional) | URLs `http://` planas y certificados `https://` / `rtsps://` autofirmados |
 
 Sin `NSLocalNetworkUsageDescription`, iOS 14+ bloquea silenciosamente el primer intento de
 conexión a cualquier dirección de red local — `RTSPSourceBlock` entonces presenta un timeout de
-conexión que parece un error del lado de la cámara. Establece la cadena a algo que los
+conexión que parece un error del lado de la cámara. Establezca la cadena a algo que los
 revisores del App Store aceptarán (por ejemplo, "Esta app reproduce video de cámaras IP
-locales en tu red.").
+locales en su red.").
 
-Si solo streameas URLs públicas `https://` / `rtsps://` desde hosts de internet con
-certificados válidos firmados por CA, puedes saltarte la excepción ATS completamente — App
+Si solo streamea URLs públicas `https://` / `rtsps://` desde hosts de internet con
+certificados válidos firmados por CA, puede saltarse la excepción ATS completamente — App
 Transport Security las acepta por defecto.
 
 ## Organización en disco
@@ -105,11 +105,11 @@ arrancar y apunta `SSL_CERT_FILE` allí.
 
 1. **File → Build Profiles → iOS → Build** — Unity produce un proyecto Xcode, no un `.ipa`
    final.
-2. Abre el `.xcworkspace` (o `.xcodeproj`) generado en Xcode en el mismo Mac.
-3. Pestaña **Signing & Capabilities** en el target Unity-iPhone — establece tu equipo Apple
-   Developer y un bundle identifier que poseas.
-4. Conecta el iPhone (o stub de simulador — ver la nota Simulator abajo), elígelo como target
-   Run y pulsa **▶ Run**.
+2. Abra el `.xcworkspace` (o `.xcodeproj`) generado en Xcode en el mismo Mac.
+3. Pestaña **Signing & Capabilities** en el target Unity-iPhone — establezca su equipo Apple
+   Developer y un bundle identifier que posea.
+4. Conecte el iPhone (o stub de simulador — ver la nota Simulator abajo), elíjalo como target
+   Run y pulse **▶ Run**.
 
 El primer build tarda unos minutos — Xcode está compilando C++ generado por IL2CPP a arm64
 dispositivo. Los builds incrementales son de segundos.
@@ -117,8 +117,8 @@ dispositivo. Los builds incrementales son de segundos.
 !!! note "Simulator no soportado"
     `GStreamerX.framework` se distribuye solo dispositivo-arm64. El Simulator iOS (x86_64 en
     Macs Intel, arm64-sim en Apple silicon) no puede cargarlo — Xcode aborta el build con
-    `Could not find module 'GStreamerX' for target 'arm64-apple-ios-simulator'`. Prueba en un
-    iPhone o iPad real. Si tienes un requisito Simulator estricto, contacta con soporte.
+    `Could not find module 'GStreamerX' for target 'arm64-apple-ios-simulator'`. Pruebe en un
+    iPhone o iPad real. Si tiene un requisito Simulator estricto, contacte con soporte.
 
 ## Tamaño de build
 
@@ -134,15 +134,15 @@ El `.ipa` comprimido es típicamente más pequeño tras el App Store thinning.
 
 | Síntoma | Causa | Arreglo |
 |---|---|---|
-| Xcode aborta: `dyld: Library not loaded: @rpath/GStreamerX.framework/GStreamerX` | `Add To Embedded Binaries` no se aplicó al slot PluginImporter del framework. | Confirma que el `.meta` de `Assets/Plugins/iOS/GStreamerX.framework` tiene `AddToEmbeddedBinaries: 1`. Si lo sustituiste manualmente, reimporta el paquete. |
-| `UnityException: get_dataPath can only be called from the main thread` desde un callback de GStreamer | El primer lector de `NativesPath` corrió en un hilo de fondo antes del precargado de hilo principal de `Configure()`. | Confirma que `Configure()` se completó — imprime `[VisioForge] iOS environment configured (GStreamerX.framework via @rpath).` en la Consola. Si está ausente, el bootstrap falló antes del precargado. |
-| `MissingMethodException` de `GLib.SignalArgs` o `SignalClosure.MarshalCallback` | `link.xml` fue eliminado o el stripping gestionado IL2CPP está activo sin él. | Confirma que `Assets/VisioForge/link.xml` existe. Reimporta el paquete si falta. |
-| El stream RTSP agota timeout antes de conectar en iOS 14+ | `NSLocalNetworkUsageDescription` falta — iOS bloquea la primera conexión LAN. | Añade la clave al `Info.plist` con una razón cara al usuario. |
-| RTSPS / HTTPS falla con error TLS en la primera petición | La extracción del paquete CA falló silenciosamente. | Revisa la Consola para `[VisioForge] CA cert extraction failed`. El recurso embebido se distribuye en `VisioForge.Core.dll` — confirma que el DLL no fue eliminado. |
-| App rechazada de revisión del App Store por "razón de privacidad ausente" | Una fuente de captura necesita `NSCameraUsageDescription` o `NSMicrophoneUsageDescription`. | Añade las claves correspondientes con razones cara al usuario. |
-| Crash en el segundo `Play` en Xcode | Se llamó a `VisioForgeX.DestroySDK()` en `OnDestroy`. | No lo llames — consulta [Bootstrap y ciclo de vida](bootstrap.md#el-ciclo-de-vida-del-editor). |
+| Xcode aborta: `dyld: Library not loaded: @rpath/GStreamerX.framework/GStreamerX` | `Add To Embedded Binaries` no se aplicó al slot PluginImporter del framework. | Confirme que el `.meta` de `Assets/Plugins/iOS/GStreamerX.framework` tiene `AddToEmbeddedBinaries: 1`. Si lo sustituyó manualmente, reimporte el paquete. |
+| `UnityException: get_dataPath can only be called from the main thread` desde un callback de GStreamer | El primer lector de `NativesPath` corrió en un hilo de fondo antes del precargado de hilo principal de `Configure()`. | Confirme que `Configure()` se completó — imprime `[VisioForge] iOS environment configured (GStreamerX.framework via @rpath).` en la Consola. Si está ausente, el bootstrap falló antes del precargado. |
+| `MissingMethodException` de `GLib.SignalArgs` o `SignalClosure.MarshalCallback` | `link.xml` fue eliminado o el stripping gestionado IL2CPP está activo sin él. | Confirme que `Assets/VisioForge/link.xml` existe. Reimporte el paquete si falta. |
+| El stream RTSP agota timeout antes de conectar en iOS 14+ | `NSLocalNetworkUsageDescription` falta — iOS bloquea la primera conexión LAN. | Añada la clave al `Info.plist` con una razón cara al usuario. |
+| RTSPS / HTTPS falla con error TLS en la primera petición | La extracción del paquete CA falló silenciosamente. | Revise la Consola para `[VisioForge] CA cert extraction failed`. El recurso embebido se distribuye en `VisioForge.Core.dll` — confirme que el DLL no fue eliminado. |
+| App rechazada de revisión del App Store por "razón de privacidad ausente" | Una fuente de captura necesita `NSCameraUsageDescription` o `NSMicrophoneUsageDescription`. | Añada las claves correspondientes con razones cara al usuario. |
+| Crash en el segundo `Play` en Xcode | Se llamó a `VisioForgeX.DestroySDK()` en `OnDestroy`. | No lo llame — consulte [Bootstrap y ciclo de vida](bootstrap.md#el-ciclo-de-vida-del-editor). |
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 ### ¿Puedo usar Mono en iOS?
 
@@ -151,12 +151,12 @@ iOS. El SDK coincide con esa restricción.
 
 ### ¿Funciona el flavor iOS en el Simulator de iOS?
 
-No. `GStreamerX.framework` es solo dispositivo-arm64 — ver la nota arriba. Prueba en hardware
+No. `GStreamerX.framework` es solo dispositivo-arm64 — ver la nota arriba. Pruebe en hardware
 real.
 
 ### ¿Por qué el build Xcode es el paso lento?
 
-IL2CPP transpila cada ensamblado gestionado (tus scripts + motor Unity + el SDK) a C++, y luego
+IL2CPP transpila cada ensamblado gestionado (sus scripts + motor Unity + el SDK) a C++, y luego
 Xcode compila ese C++ para dispositivo arm64. El primer build en frío es de ~3 — 5 minutos;
 los builds incrementales son de segundos porque Xcode cachea casi todo.
 
@@ -174,6 +174,6 @@ aplicación, que iOS trata como visibles al usuario.
 
 - [Instalar el Media Blocks SDK en Unity](../../install/unity.md) — configuración del paquete
 - [Bootstrap y ciclo de vida](bootstrap.md) — cómo `Configure()` arranca el runtime iOS
-- [Compilar para macOS](macos.md) — el host Mac correspondiente que necesitas para compilar iOS
+- [Compilar para macOS](macos.md) — el host Mac correspondiente que necesita para compilar iOS
 - [Ver una cámara RTSP en Unity](rtsp-viewer.md) — el ejemplo `RTSPViewer`
 - [Solución de problemas](troubleshooting.md) — referencia de errores entre plataformas

@@ -23,7 +23,7 @@ primary_api_classes:
 
 # Audio encoders blocks
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Audio encoding is the process of converting raw audio data into a compressed format. This process is essential for reducing the size of audio files, making them easier to store and stream over the internet. VisioForge Media Blocks SDK provides a wide range of audio encoders that support various formats and codecs.
 

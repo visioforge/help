@@ -1,5 +1,5 @@
 ---
-title: SDKs .NET para Captura, Edición y Reproducción de Video
+title: SDKs .NET para captura, edición y reproducción de video
 description: SDKs .NET para captura, edición, reproducción y procesamiento de video en Windows, macOS, Linux, Android e iOS con aceleración de hardware.
 tags:
   - .NET
@@ -10,13 +10,13 @@ order: 20
 sidebar_label: .Net SDKs
 ---
 
-# SDKs .NET para Desarrollo Profesional de Medios
+# SDKs .NET para desarrollo profesional de medios
 
-## Introducción a Nuestros SDKs .NET
+## Introducción a nuestros SDKs .NET
 
-Nuestros potentes SDKs .NET permiten a los desarrolladores integrar sin problemas capacidades avanzadas de captura de video, edición de video sofisticada, reproducción fluida y procesamiento de medios eficiente en sus aplicaciones de software. Estas herramientas diseñadas profesionalmente proporcionan una solución completa para todas tus necesidades de desarrollo multimedia.
+Nuestros potentes SDKs .NET permiten a los desarrolladores integrar sin problemas capacidades avanzadas de captura de video, edición de video sofisticada, reproducción fluida y procesamiento de medios eficiente en sus aplicaciones de software. Estas herramientas diseñadas profesionalmente proporcionan una solución completa para todas sus necesidades de desarrollo multimedia.
 
-## Compatibilidad Multi-Plataforma
+## Compatibilidad multi-plataforma
 
 Todos nuestros SDKs .NET están diseñados con funcionalidad multiplataforma en mente, proporcionando soporte robusto en:
 
@@ -26,32 +26,32 @@ Todos nuestros SDKs .NET están diseñados con funcionalidad multiplataforma en 
 - Dispositivos móviles Android
 - Aplicaciones iOS
 
-Esta versatilidad asegura que tus aplicaciones de medios puedan llegar a usuarios en prácticamente cualquier plataforma sin comprometer la funcionalidad.
+Esta versatilidad asegura que sus aplicaciones de medios puedan llegar a usuarios en prácticamente cualquier plataforma sin comprometer la funcionalidad.
 
-## Tecnologías de Aceleración de Hardware
+## Tecnologías de aceleración de hardware
 
 Nuestros SDKs aprovechan tecnologías de codificación y decodificación aceleradas por GPU de vanguardia para maximizar el rendimiento:
 
-### Plataformas de Escritorio
+### Plataformas de escritorio
 
 - Intel Quick Sync Video para aceleración de hardware eficiente
 - NVIDIA NVENC para rendimiento de codificación superior
 - AMD VCE (Video Coding Engine) para procesamiento optimizado
 
-### Plataformas Móviles
+### Plataformas móviles
 
 - Capacidades nativas de codificación y decodificación de hardware
 - Implementaciones optimizadas para eficiencia de batería
 
-## Recursos para Comenzar
+## Recursos para comenzar
 
-### Tutoriales de Uso del SDK
+### Tutoriales de uso del SDK
 
 - [Guía de Instalación](install/index.md) - Instrucciones de configuración paso a paso
 - [Inicialización del SDK](init.md) - Procedimientos de inicialización adecuados
 - [Requisitos del Sistema](system-requirements.md) - Información detallada de compatibilidad
 
-## Productos SDK Disponibles
+## Productos SDK disponibles
 
 ### [Video Capture SDK .NET](videocapture/index.md)
 
@@ -92,7 +92,7 @@ Bloques de construcción modulares para crear:
 - Soluciones de medios multiplataforma
 - Sistemas de flujo de trabajo integrados
 
-## Recursos Adicionales para Desarrolladores
+## Recursos adicionales para desarrolladores
 
 - [Guía de Migración: v15 a v2026](migration-from-v15.md) - Instrucciones de actualización paso a paso
 - [Registro de Cambios](changelog.md) - Historial detallado de versiones y actualizaciones

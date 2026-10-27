@@ -454,6 +454,12 @@ See [examples.md](examples.md) for the canonical helper pattern reused across mu
 
 ## Version History
 
+### Version 2026.10.23
+
+- Updated to VLC v3.0.24 core (FFmpeg 8.1 decoders, upstream security fixes)
+- New native Windows ARM64 build, `VisioForge_VLC_Source_arm64.ax`, available in the `VisioForge.DotNet.Core.Redist.VLC.arm64` NuGet package (the installer remains x86/x64)
+- libVLC 3.0.24 no longer includes the RealRTSP, Schroedinger (Dirac) and SDL_image modules or the YouTube playlist script, so RealRTSP streams, Dirac video and YouTube page URLs no longer open
+
 ### Version 2026.3.4
 
 - Updated to VLC v3.0.23 core

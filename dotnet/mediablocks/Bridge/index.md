@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Bridge blocks
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Bridges can be used to link two pipelines and dynamically switch between them. For example, you can switch between different files or cameras in the first Pipeline without interrupting streaming in the second Pipeline.
 
@@ -243,7 +243,7 @@ await sinkPipeline.StartAsync();
 
 ## Platforms
 
-All bridge blocks are supported on Windows, macOS, Linux, iOS, and Android.
+All bridge blocks are supported on Windows, macOS, Linux, iOS, and Android. The interpipe plugin behind the InterPipe blocks is bundled only with the Windows packages.
 
 ## Bridge Buffer sink and source
 
@@ -286,7 +286,9 @@ await sinkPipeline.StartAsync();
 
 ## InterPipe sink and source
 
-InterPipe blocks use GStreamer's interpipesink/interpipesrc elements for efficient inter-pipeline communication with support for both audio and video.
+InterPipe blocks use GStreamer's interpipesink/interpipesrc elements for efficient inter-pipeline communication with support for both audio and video. The interpipe plugin is bundled with the Windows packages; on other platforms the blocks work only if the interpipe GStreamer plugin is installed.
+
+With the plugin from the Windows packages, frames cross the bridge only while the sending pipeline plays: a paused or preloaded sender pushes nothing, and a seek made while it is paused reaches the receiving pipeline when playback resumes.
 
 ### Block info
 
@@ -526,6 +528,6 @@ appBridgeAudioSink.Dispose();
 
 ## Platforms
 
-All bridge blocks are supported on Windows, macOS, Linux, iOS, and Android.
+All bridge blocks are supported on Windows, macOS, Linux, iOS, and Android. The interpipe plugin behind the InterPipe blocks is bundled only with the Windows packages.
 
 Note: InterPipe and RSInter blocks require the corresponding GStreamer plugins to be installed.

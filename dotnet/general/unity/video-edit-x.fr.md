@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Éditer et rendre une vidéo dans Unity avec VideoEditCoreX
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 La scène **`VideoEditX`** assemble des clips sur un montage **`VideoEditCoreX`**, applique éventuellement
 un effet de niveaux de gris, puis soit **affiche l'aperçu** du montage dans un `RawImage` Unity, soit le

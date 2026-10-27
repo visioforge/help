@@ -1,7 +1,7 @@
 ---
-title: Bloques de Procesamiento y Efectos de Video en C# .NET
+title: Bloques de procesamiento y efectos de video en C# .NET
 description: Aplique ajustes de color, desentrelazado, superposiciones, transformaciones geométricas y efectos visuales en tiempo real con VisioForge Media Blocks SDK.
-sidebar_label: Procesamiento y Efectos de Video
+sidebar_label: Procesamiento y efectos de video
 tags:
   - Media Blocks SDK
   - .NET
@@ -21,9 +21,9 @@ primary_api_classes:
 
 # Bloques de procesamiento de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Tabla de Contenidos
+## Tabla de contenidos
 
 - [Envejecimiento](#envejecimiento)
 - [Combinación Alfa](#combinacion-alfa)
@@ -97,7 +97,7 @@ primary_api_classes:
 
 ## Envejecimiento
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque de Envejecimiento simula el deterioro de película vintage y efectos de desgaste, aplicando efectos de envejecimiento realistas al contenido de video incluyendo rasguños de película, partículas de polvo, degradación de color y tonos sepia, y fluctuaciones temporales para crear apariencia auténtica de película vintage.
 
@@ -146,9 +146,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Combinación Alfa
+## Combinación alfa
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque AlphaCombine combina dos flujos de video usando mezcla de canal alfa, habilitando operaciones sofisticadas de composición con control de transparencia.
 
@@ -193,9 +193,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Desentrelazado Automático
+## Desentrelazado automático
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque AutoDeinterlace detecta y desentrelaza automáticamente contenido de video entrelazado, convirtiéndolo a formato progresivo. Determina inteligentemente cuándo se necesita el desentrelazado basado en las propiedades del flujo de video.
 
@@ -239,7 +239,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Bayer a RGB
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Bayer2RGB convierte datos de sensor raw de patrón Bayer a video RGB color. Esto es esencial para procesar video de cámaras industriales y sensores que generan datos raw de patrón Bayer.
 
@@ -281,9 +281,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux.
 
-## Croma Key
+## Croma key
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque ChromaKey proporciona funcionalidad profesional de composición de pantalla verde y keying de color, removiendo colores específicos del contenido de video y componiendo sujetos en primer plano en fondos diferentes. Características selección sofisticada de color, refinamiento de bordes, supresión de spill y generación de canal alfa.
 
@@ -355,9 +355,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Demux Alfa de Codec
+## Demux alfa de codec
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque CodecAlphaDemux separa el canal alfa de codecs de video que soportan canales alfa embebidos (como VP8, VP9, o ProRes con alfa).
 
@@ -401,9 +401,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Efectos de Color
+## Efectos de color
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque realiza procesamiento básico de color de marco de video: toning de cámara de calor falsa, toning sepia, invertir y ligeramente sombrear a azul, procesamiento cruzado toning, y filtro de primer plano amarillo/fondo azul de color.
 
@@ -448,7 +448,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Dados
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Dice divide el marco de video en una cuadrícula de mosaicos y aplica varias transformaciones para crear un efecto visual fragmentado, tipo mosaico.
 
@@ -492,7 +492,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Borde
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Edge detecta y resalta bordes en marcos de video, creando un efecto visual de detección de bordes útil para propósitos artísticos o preprocesamiento de visión por computadora.
 
@@ -536,10 +536,10 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Desentrelazado
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque desentrelaza marcos de video entrelazados en marcos de video progresivos. Varios métodos de procesamiento están disponibles.
-Usa la clase DeinterlaceSettings para configurar el bloque.
+Use la clase DeinterlaceSettings para configurar el bloque.
 
 ### Información del bloque
 
@@ -581,7 +581,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Ojo de Pez
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque de ojo de pez simula una lente de ojo de pez al hacer zoom en el centro de la imagen y comprimir los bordes.
 
@@ -625,10 +625,10 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Voltear/Girar
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque voltea y gira el flujo de video.
-Usa la enumeración VideoFlipRotateMethod para configurar.
+Use la enumeración VideoFlipRotateMethod para configurar.
 
 ### Información del bloque
 
@@ -671,7 +671,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Gamma
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque realiza corrección gamma en un flujo de video.
 
@@ -713,9 +713,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Desenfoque Gaussiano
+## Desenfoque gaussiano
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque desenfoca el flujo de video usando la función Gaussiana.
 
@@ -759,7 +759,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Escala de Grises
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Grayscale convierte video color a escala de grises (blanco y negro), removiendo toda la información de color mientras preserva la luminancia.
 
@@ -801,13 +801,13 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Superposición de Imagen
+## Superposición de imagen
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque superpone una imagen cargada desde un archivo en un flujo de video.
 
-Puedes configurar una posición de imagen y valor alfa opcional. 32-bit imágenes con canal alfa están soportadas.
+Puede configurar una posición de imagen y valor alfa opcional. 32-bit imágenes con canal alfa están soportadas.
 
 ### Información del bloque
 
@@ -847,9 +847,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Superposición de Imagen Cairo
+## Superposición de imagen Cairo
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque ImageOverlayCairo proporciona capacidades avanzadas de superposición de imagen usando la biblioteca gráfica Cairo, ofreciendo calidad de renderizado mejorada y características adicionales comparado con el bloque de superposición de imagen estándar.
 
@@ -893,7 +893,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Entrelazado
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Interlace convierte video progresivo a formato entrelazado, creando líneas de campo alternas. Esto es útil para broadcast o compatibilidad con sistemas de display entrelazados.
 
@@ -935,9 +935,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Detector de Fotograma Clave
+## Detector de fotograma clave
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque KeyFrameDetector analiza flujos de video para detectar e identificar fotogramas clave (I-frames) en la secuencia de video, útil para aplicaciones de edición de video y análisis.
 
@@ -986,7 +986,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Procesador LUT
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Procesador LUT (Look-Up Table) aplica corrección y gradación de color usando archivos LUT 3D, habilitando transformaciones de color profesionales y looks cinematográficos.
 
@@ -1034,7 +1034,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Espejo
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque espejo divide la imagen en dos mitades y refleja una sobre la otra.
 
@@ -1078,7 +1078,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Desenfoque en Movimiento
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque MovingBlur crea efectos dinámicos de desenfoque de movimiento al mezclar el marco actual con marcos previos, simulando desenfoque de movimiento de cámara o creando efectos artísticos de arrastre.
 
@@ -1122,7 +1122,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Eco en Movimiento
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque MovingEcho crea efectos eco-like al capas versiones retardadas de marcos de video, produciendo un efecto de ghosting o trail.
 
@@ -1166,7 +1166,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Eco de Zoom en Movimiento
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque MovingZoomEcho combina efectos eco de movimiento con transformaciones de zoom, creando efectos visuales dinámicos que simulan trails de zoom.
 
@@ -1210,7 +1210,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Animación Óptica BW
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque OpticalAnimationBW aplica efectos de animación óptica blanco y negro, creando transformaciones visuales estilo película vintage.
 
@@ -1254,7 +1254,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Administrador de Superposiciones
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque OverlayManager proporciona un sistema completo para gestionar múltiples superposiciones (texto, imágenes, formas) en video, con soporte para actualizaciones dinámicas y animaciones.
 
@@ -1291,7 +1291,7 @@ pipeline.Connect(overlayManager.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 
-// Añade overlays construyendo el tipo de elemento y llamando a Video_Overlay_Add.
+// Añadir overlays construyendo el tipo de elemento y llamando a Video_Overlay_Add.
 var textOverlay = new OverlayManagerText("Hola Mundo", x: 100, y: 100);
 overlayManager.Video_Overlay_Add(textOverlay);
 
@@ -1312,7 +1312,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Perspectiva
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque perspectiva aplica una transformación de perspectiva 2D.
 
@@ -1356,7 +1356,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Pellizco
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque realiza la transformación geométrica de pellizco de la imagen.
 
@@ -1400,7 +1400,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Pseudo 3D
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Pseudo3D aplica transformaciones de perspectiva 3D-like para crear ilusiones de profundidad en video 2D.
 
@@ -1442,9 +1442,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Superposición de Código QR
+## Superposición de código QR
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque QRCodeOverlay genera y superpone códigos QR en contenido de video, útil para embeber URLs, metadatos o información de tracking.
 
@@ -1488,7 +1488,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Quark
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Quark aplica un efecto visual tipo partícula que rompe la imagen en fragmentos quark-style.
 
@@ -1532,7 +1532,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Ondulación
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Ripple crea efectos de distorsión tipo ondulación de agua a través del marco de video.
 
@@ -1576,7 +1576,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Girar
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque gira la imagen por un ángulo especificado.
 
@@ -1618,9 +1618,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Esquinas Redondeadas
+## Esquinas redondeadas
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque RoundedCorners aplica esquinas redondeadas a marcos de video, creando una apariencia moderna y suave.
 
@@ -1662,13 +1662,13 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Cambiar Tamaño
+## Cambiar tamaño
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-El bloque cambia el tamaño del flujo de video. Puedes configurar el método de cambio de tamaño, el flag letterbox, y muchas otras opciones.
+El bloque cambia el tamaño del flujo de video. Puede configurar el método de cambio de tamaño, el flag letterbox, y muchas otras opciones.
 
-Usa la clase `ResizeVideoEffect` para configurar.
+Use la clase `ResizeVideoEffect` para configurar.
 
 ### Información del bloque
 
@@ -1708,11 +1708,11 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Capturador de Muestra de Video
+## Capturador de muestra de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-El capturador de muestra de video llama a un evento para cada marco de video. Puedes guardar o procesar el marco de video recibido.
+El capturador de muestra de video llama a un evento para cada marco de video. Puede guardar o procesar el marco de video recibido.
 
 ### Información del bloque
 
@@ -1760,7 +1760,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## SMPTE
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque SMPTE crea transiciones de wipe profesionales estilo broadcast entre dos fuentes de video usando patrones de transición estándar SMPTE (Society of Motion Picture and Television Engineers).
 
@@ -1810,9 +1810,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## SMPTE Alfa
+## SMPTE alfa
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque SMPTEAlpha crea transiciones de wipe estilo SMPTE con soporte de canal alfa para composición aware de transparencia.
 
@@ -1863,7 +1863,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Superposición SVG
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque SVGOverlay renderiza contenido SVG (Scalable Vector Graphics) encima de video, habilitando superposiciones gráficas escalables de alta calidad.
 
@@ -1894,7 +1894,7 @@ var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAs
 
 var svgSettings = new SVGOverlayVideoEffect
 {
-    Filename = "logo.svg"   // ruta al archivo SVG; alternativa: establece Data con el SVG inline
+    Filename = "logo.svg"   // ruta al archivo SVG; alternativa: establecer Data con el SVG inline
 };
 var svgOverlay = new SVGOverlayBlock(svgSettings);
 pipeline.Connect(fileSource.VideoOutput, svgOverlay.Input);
@@ -1909,9 +1909,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS.
 
-## Marca de Video Simple
+## Marca de video simple
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque SimpleVideoMark embebe marcas de agua invisibles o marcadores en contenido de video para propósitos de tracking y verificación.
 
@@ -1953,9 +1953,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Detección de Marca de Video Simple
+## Detección de marca de video simple
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque SimpleVideoMarkDetect detecta y extrae marcas de agua invisibles embebidas por el bloque SimpleVideoMark.
 
@@ -2003,7 +2003,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Suavizar
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Smooth aplica filtros de suavizado para reducir ruido y crear apariencia de video más suave.
 
@@ -2047,7 +2047,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Esfera
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque esfera aplica una transformación geométrica de esfera al video.
 
@@ -2091,7 +2091,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Cuadrado
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque cuadrado distorsiona la parte central de la imagen en un cuadrado.
 
@@ -2135,7 +2135,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Paneo y Zoom
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El `PanZoomBlock` aplica transformaciones de paneo y zoom a un flujo de video usando renderizado Cairo a través del elemento GStreamer `cairooverlay`. El bloque admite paneo y zoom estáticos y animados (interpolados en el tiempo), así como el mapeo del video a un rectángulo destino arbitrario.
 
@@ -2221,7 +2221,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Estirar
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque estirar estira el video en el círculo alrededor del punto central.
 
@@ -2265,7 +2265,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Superposición de Texto
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque agrega la superposición de texto encima del flujo de video.
 
@@ -2367,7 +2367,7 @@ Windows, macOS, Linux e iOS. Android admite únicamente texto sencillo y dinámi
 
 ## Túnel
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque aplica un efecto de túnel de luz al flujo de video.
 
@@ -2411,7 +2411,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Remolino
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque remolino tuerce el marco de video desde el centro hacia afuera.
 
@@ -2455,10 +2455,10 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Balance de Video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque procesa el flujo de video y permite cambiar brillo, contraste, tono, y saturación.
-Usa la clase VideoBalanceVideoEffect para configurar los ajustes del bloque.
+Use la clase VideoBalanceVideoEffect para configurar los ajustes del bloque.
 
 ### Información del bloque
 
@@ -2498,11 +2498,11 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Mezclador de Video
+## Mezclador de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-El bloque mezclador de video tiene varias entradas y una salida. El bloque dibuja las entradas en el orden seleccionado en las posiciones seleccionadas. También puedes configurar el nivel deseado de transparencia para cada flujo.
+El bloque mezclador de video tiene varias entradas y una salida. El bloque dibuja las entradas en el orden seleccionado en las posiciones seleccionadas. También puede configurar el nivel deseado de transparencia para cada flujo.
 
 ### Información del bloque
 
@@ -2528,10 +2528,10 @@ graph LR;
 var pipeline = new MediaBlocksPipeline();
 
 // Definir archivos fuente
-var filename1 = "test.mp4"; // Reemplaza con tu primer archivo de video
+var filename1 = "test.mp4"; // Reemplazar con su primer archivo de video
 var fileSource1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename1));
 
-var filename2 = "test2.mp4"; // Reemplaza con tu segundo archivo de video
+var filename2 = "test2.mp4"; // Reemplazar con su segundo archivo de video
 var fileSource2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename2));
 
 // Configurar VideoMixerSettings con resolución de salida y tasa de cuadros
@@ -2557,7 +2557,7 @@ pipeline.Connect(fileSource1.VideoOutput, videoMixer.Inputs[0]);
 pipeline.Connect(fileSource2.VideoOutput, videoMixer.Inputs[1]);
 
 // Crear un VideoRendererBlock para mostrar el video mezclado
-// VideoView1 es un placeholder para tu elemento UI (ej. un control WPF)
+// VideoView1 es un placeholder para su elemento UI (ej. un control WPF)
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); 
 pipeline.Connect(videoMixer.Output, videoRenderer.Input);
 
@@ -2569,13 +2569,13 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Tipos de Mezclador de Video y Configuración
+### Tipos de mezclador de video y configuración
 
-El Media Blocks SDK ofrece varios tipos de mezcladores de video, permitiéndote elegir el más adecuado para las necesidades de rendimiento de tu aplicación y capacidades de plataforma objetivo. Estos incluyen mezcladores basados en CPU, Direct3D 11, y OpenGL.
+El Media Blocks SDK ofrece varios tipos de mezcladores de video, permitiéndole elegir el más adecuado para las necesidades de rendimiento de su aplicación y capacidades de plataforma objetivo. Estos incluyen mezcladores basados en CPU, Direct3D 11, y OpenGL.
 
 Todas las clases de configuración de mezclador heredan de `VideoMixerBaseSettings`, que define propiedades comunes como resolución de salida (`Width`, `Height`), `FrameRate`, y la lista de `Streams` a mezclar.
 
-#### 1. Mezclador de Video basado en CPU (VideoMixerSettings)
+#### 1. Mezclador de video basado en CPU (VideoMixerSettings)
 
 Este es el mezclador de video predeterminado y se basa en procesamiento CPU para mezclar flujos de video. Es agnóstico de plataforma y una buena opción de propósito general.
 
@@ -2596,7 +2596,7 @@ var mixerSettings = new VideoMixerSettings(outputWidth, outputHeight, outputFram
 var videoMixer = new VideoMixerBlock(mixerSettings);
 ```
 
-#### 2. Compositor de Video Direct3D 11 (D3D11VideoCompositorSettings)
+#### 2. Compositor de video Direct3D 11 (D3D11VideoCompositorSettings)
 
 Para aplicaciones Windows, el `D3D11VideoCompositorSettings` proporciona mezcla de video acelerada por hardware usando Direct3D 11. Esto puede ofrecer mejoras significativas de rendimiento, especialmente con video de alta resolución o un gran número de flujos.
 
@@ -2615,7 +2615,7 @@ var d3dMixerSettings = new D3D11VideoCompositorSettings(outputWidth, outputHeigh
 
 // Los flujos se agregan de manera similar a VideoMixerSettings
 // d3dMixerSettings.AddStream(new VideoMixerStream(new Rect(0, 0, outputWidth, outputHeight), 0));
-// Para control más avanzado, puedes usar D3D11VideoCompositorStream para especificar estados de blend
+// Para control más avanzado, puede usar D3D11VideoCompositorStream para especificar estados de blend
 // d3dMixerSettings.AddStream(new D3D11VideoCompositorStream(new Rect(50, 50, 370, 230), 1) 
 // {
 //     BlendSourceRGB = D3D11CompositorBlend.SourceAlpha,
@@ -2628,7 +2628,7 @@ var videoMixer = new VideoMixerBlock(d3dMixerSettings);
 
 La clase `D3D11VideoCompositorStream`, que hereda de `VideoMixerStream`, permite control granular sobre estados de blend D3D11 si es necesario.
 
-#### 3. Mezclador de Video OpenGL (GLVideoMixerSettings)
+#### 3. Mezclador de video OpenGL (GLVideoMixerSettings)
 
 El `GLVideoMixerSettings` habilita mezcla de video acelerada por hardware usando OpenGL. Esta es una solución multiplataforma para aprovechar capacidades GPU en Windows, macOS, y Linux.
 
@@ -2642,7 +2642,7 @@ var glMixerSettings = new GLVideoMixerSettings(outputWidth, outputHeight, output
 
 // Los flujos se agregan de manera similar a VideoMixerSettings
 // glMixerSettings.AddStream(new VideoMixerStream(new Rect(0, 0, outputWidth, outputHeight), 0));
-// Para control más avanzado, puedes usar GLVideoMixerStream para especificar funciones y ecuaciones de blend
+// Para control más avanzado, puede usar GLVideoMixerStream para especificar funciones y ecuaciones de blend
 // glMixerSettings.AddStream(new GLVideoMixerStream(new Rect(50, 50, 370, 230), 1)
 // {
 //     BlendFunctionSourceRGB = GLVideoMixerBlendFunction.SourceAlpha,
@@ -2656,14 +2656,14 @@ var videoMixer = new VideoMixerBlock(glMixerSettings);
 
 La clase `GLVideoMixerStream`, heredando de `VideoMixerStream`, proporciona propiedades para controlar parámetros de blending específicos de OpenGL.
 
-Elegir el mezclador apropiado depende de los requisitos de tu aplicación. Para mezcla simple o compatibilidad máxima, el mezclador basado en CPU es adecuado. Para rendimiento crítico de aplicaciones en Windows, D3D11 es recomendado. Para aceleración GPU multiplataforma, OpenGL es la opción preferida.
+Elegir el mezclador apropiado depende de los requisitos de su aplicación. Para mezcla simple o compatibilidad máxima, el mezclador basado en CPU es adecuado. Para rendimiento crítico de aplicaciones en Windows, D3D11 es recomendado. Para aceleración GPU multiplataforma, OpenGL es la opción preferida.
 
-## Ondulación de Agua
+## Ondulación de agua
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque de ondulación de agua crea un efecto de ondulación de agua en el flujo de video.
-Usa la clase `WaterRippleVideoEffect` para configurar.
+Use la clase `WaterRippleVideoEffect` para configurar.
 
 ### Información del bloque
 
@@ -2703,9 +2703,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Recorte de Relación de Aspecto de Video
+## Recorte de relación de aspecto de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque VideoAspectRatioCrop recorta automáticamente video a una relación de aspecto específica, removiendo letterboxing o pillarboxing.
 
@@ -2747,9 +2747,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Caja de Video
+## Caja de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque VideoBox agrega bordes coloreados o letterboxing alrededor del contenido de video.
 
@@ -2797,9 +2797,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Convertidor de Video
+## Convertidor de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque VideoConverter convierte video entre diferentes espacios de color y formatos de píxel.
 
@@ -2841,9 +2841,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Recorte de Video
+## Recorte de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque VideoCrop remueve porciones del marco de video al recortar regiones específicas.
 
@@ -2892,9 +2892,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Efectos de Video
+## Efectos de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque VideoEffects proporciona una colección completa de efectos de video incluyendo ajustes de color, filtros, y transformaciones.
 
@@ -2936,9 +2936,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Cambia Relleno de Video
+## Cambia relleno de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque VideoPaddingChanger modifica el relleno/bordes de video dinámicamente.
 
@@ -2987,9 +2987,9 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Tasa de Video
+## Tasa de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque VideoRate ajusta la tasa de cuadros del contenido de video a través de duplicación o dropping de cuadros.
 
@@ -3033,7 +3033,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Deformar
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Warp aplica transformaciones de warping geométrico para crear efectos de distorsión.
 
@@ -3076,9 +3076,9 @@ await pipeline.StartAsync();
 Windows, macOS, Linux, iOS, Android.
 
 <a id="d3d11-video-converter"></a>
-## Convertidor de Video D3D11
+## Convertidor de video D3D11
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Convertidor de Video D3D11 realiza conversión de formato de video acelerada por hardware usando Direct3D 11. Esto es útil para cambios eficientes de espacio de color o formato en plataformas Windows.
 
@@ -3122,7 +3122,7 @@ Windows (Direct3D 11 requerido).
 
 ## Entrelazado D3D12
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque de Entrelazado D3D12 convierte video progresivo en video entrelazado en una GPU Direct3D 12, para difusión y otras salidas que requieren video entrelazado con un orden de campos explícito. Es el equivalente en GPU del bloque [Entrelazado](#entrelazado) y lo contrario del desentrelazado. El patrón de campos, el orden de campos, el motor de la GPU y el adaptador se configuran con `D3D12InterlaceSettings`; consulte [Bloques de la plataforma Windows](../windows/index.md#procesamiento-direct3d-12) para los detalles.
 
@@ -3173,7 +3173,7 @@ Windows (Direct3D 12 requerido).
 
 ## Corrección fisheye D3D12
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque de corrección fisheye D3D12 convierte una imagen fisheye circular en una vista equirrectangular, panorámica o en perspectiva en una GPU Direct3D 12. La vista se puede orientar y ampliar mientras el pipeline se ejecuta: modifique `Settings` y llame a `Update()`. La salida conserva el tamaño, el formato y la velocidad de fotogramas de la entrada. La proyección, el círculo fisheye, el campo de visión, la rotación, el radio interior del panorama, la región de interés, el viewport y el adaptador se configuran con `D3D12FisheyeDewarpSettings`; consulte [Bloques de la plataforma Windows](../windows/index.md#procesamiento-direct3d-12) para los detalles. El bloque [CV Dewarp](../OpenCV/index.md#bloque-cv-dewarp) es la alternativa en la CPU.
 
@@ -3225,7 +3225,7 @@ Windows (Direct3D 12 requerido).
 
 ## Reasignación D3D12
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque de reasignación D3D12 mueve los píxeles del video en una GPU Direct3D 12 según un mapa UV que proporciona la aplicación: cada punto del fotograma de salida muestra el punto del fotograma de entrada que el mapa le asigna. Esto cubre la calibración de lentes y la corrección de distorsión, la deformación, el reflejo y cualquier otra transformación geométrica que se pueda describir punto por punto. El bloque sube el mapa a la GPU por sí mismo, y el mapa se puede reemplazar o quitar mientras el pipeline se ejecuta: modifique `Settings.Map` y llame a `Update()`. La salida conserva el tamaño, el formato y la velocidad de fotogramas de la entrada. Consulte [Bloques de la plataforma Windows](../windows/index.md#procesamiento-direct3d-12) para el formato del mapa.
 
@@ -3284,9 +3284,9 @@ remap.Update();
 
 Windows (Direct3D 12 requerido).
 
-## Efectos de Video (Windows)
+## Efectos de video (Windows)
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Efectos de Video (Windows) permite agregar, actualizar, y gestionar múltiples efectos de video en tiempo real. Este bloque es específico de Windows y aprovecha el pipeline de Media Foundation para procesamiento de efectos.
 
@@ -3330,9 +3330,9 @@ await pipeline.StartAsync();
 
 Windows.
 
-## Compositor de Video D3D11
+## Compositor de video D3D11
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Compositor de Video D3D11 proporciona composición y mezcla de video acelerada por hardware usando Direct3D 11. Está diseñado para composición de multi-flujo de video de alto rendimiento en Windows.
 
@@ -3388,7 +3388,7 @@ Windows (Direct3D 11 requerido).
 
 ## Procesador VR360
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" ]
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Procesador VR360 aplica efectos de video equirectangular de 360 grados, adecuado para contenido VR. Usa Direct3D 11 para procesamiento acelerado por GPU y permite ajuste en tiempo real de yaw, pitch, roll, y campo de visión.
 
@@ -3519,11 +3519,11 @@ Windows, macOS, Linux.
 
 ## Squeezeback
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque Squeezeback reproduce el efecto "squeezeback" (DVE) de difusión: el video principal se reduce a un rectángulo mientras una imagen de fondo rellena el resto del fotograma — una disposición usada comúnmente para pasar los créditos finales o promociones junto al contenido en vivo. Internamente perfora un agujero alfa-transparente en la imagen de fondo en el rectángulo del video y compone el video a través de él. La posición y la opacidad del video se pueden animar en tiempo de ejecución, y la imagen de fondo puede aparecer y desvanecerse gradualmente.
 
-> Nota: `SqueezebackBlockV2` reemplaza a este bloque — consulta [Squeezeback V2](#squeezeback-v2) para la API recomendada.
+> Nota: `SqueezebackBlockV2` reemplaza a este bloque — consulte [Squeezeback V2](#squeezeback-v2) para la API recomendada.
 
 ### Información del bloque
 
@@ -3568,7 +3568,7 @@ await pipeline.StartAsync();
 // anima el video hacia la esquina en 1 segundo
 squeezeback.Input_Move(new Rect(1280, 720, 1920, 1080), TimeSpan.FromSeconds(1), null, null);
 
-// haz aparecer la imagen de fondo gradualmente
+// hacer aparecer la imagen de fondo gradualmente
 squeezeback.StartFadeIn(TimeSpan.FromSeconds(1));
 ```
 
@@ -3580,7 +3580,7 @@ Windows.
 
 ## Squeezeback V2
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 `SqueezebackBlockV2` es la implementación de squeezeback recomendada. Construye el efecto sobre un `VideoMixerBlock` en lugar de una superposición con agujero alfa, de modo que la imagen de fondo y el video principal son capas independientes del mezclador. Esto añade un rectángulo separado para la imagen de fondo, un indicador `videoOnTop` para controlar el orden z, intercambio de capas en tiempo de ejecución, y animación independiente de posición/opacidad/desvanecimiento tanto para el video como para la imagen.
 
@@ -3627,7 +3627,7 @@ await pipeline.StartAsync();
 // anima la capa de video a una nueva posición en 1 segundo
 squeezeback.AnimateVideo(new Rect(960, 540, 1920, 1080), TimeSpan.FromSeconds(1));
 
-// haz aparecer y desvanecer la capa de video gradualmente
+// hacer aparecer y desvanecer la capa de video gradualmente
 squeezeback.StartVideoFadeIn(TimeSpan.FromSeconds(1));
 ```
 
@@ -3635,9 +3635,9 @@ squeezeback.StartVideoFadeIn(TimeSpan.FromSeconds(1));
 
 Windows.
 
-## Estabilización de Video
+## Estabilización de video
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El bloque VideoStabilization elimina el temblor de la cámara de un flujo de vídeo en directo o grabado en tiempo real. Estima el movimiento global entre fotogramas mediante flujo óptico disperso, suaviza la trayectoria de la cámara con una ventana de media móvil causal y deforma cada fotograma para devolverlo a la trayectoria suavizada. Se apoya en el elemento `vfdeshake` de OpenCV, por lo que requiere el redistribuible de OpenCV.
 

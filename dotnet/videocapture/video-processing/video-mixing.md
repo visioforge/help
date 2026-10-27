@@ -28,7 +28,7 @@ primary_api_classes:
 
 # Mixing Multiple Video Streams in .NET Applications
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Video Stream Mixing
 

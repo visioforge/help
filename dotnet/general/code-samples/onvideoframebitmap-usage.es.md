@@ -15,11 +15,11 @@ primary_api_classes:
 
 # Guía de Frames en Tiempo Real con OnVideoFrameBitmap
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El evento `OnVideoFrameBitmap` es una característica poderosa en las bibliotecas de procesamiento de video .NET que permite a los desarrolladores acceder y modificar frames de video en tiempo real. Esta guía explora las aplicaciones prácticas, técnicas de implementación y consideraciones de rendimiento al trabajar con manipulación de frames bitmap en aplicaciones C#.
 
-## Entendiendo los Eventos OnVideoFrameBitmap
+## Entender los eventos OnVideoFrameBitmap
 
 El evento `OnVideoFrameBitmap` proporciona una interfaz directa para acceder a frames de video mientras son procesados por el SDK. Esta capacidad es esencial para aplicaciones que requieren:
 
@@ -31,11 +31,11 @@ El evento `OnVideoFrameBitmap` proporciona una interfaz directa para acceder a f
 
 Cuando el evento se dispara, entrega una representación bitmap del frame de video actual, permitiendo acceso y manipulación a nivel de píxel antes de que el frame continúe a través del pipeline de procesamiento.
 
-## Implementación Básica
+## Implementación básica
 
-`OnVideoFrameBitmap` existe en los motores Windows: `VideoCaptureCore`, `MediaPlayerCore` y `VideoEditCore`. En los snippets de abajo, `VideoCapture1` es una instancia de `VideoCaptureCore` — reemplaza por `MediaPlayer1` o `VideoEdit1` si usas otro motor.
+`OnVideoFrameBitmap` existe en los motores Windows: `VideoCaptureCore`, `MediaPlayerCore` y `VideoEditCore`. En los snippets de abajo, `VideoCapture1` es una instancia de `VideoCaptureCore` — reemplace por `MediaPlayer1` o `VideoEdit1` si usa otro motor.
 
-Suscríbete antes de arrancar el pipeline para no perder el primer frame:
+Suscríbase antes de arrancar el pipeline para no perder el primer frame:
 
 ```csharp
 // Tipo del evento: EventHandler<VideoFrameBitmapEventArgs>. Se dispara en un hilo worker.
@@ -45,13 +45,13 @@ VideoCapture1.OnVideoFrameBitmap += VideoCapture1_OnVideoFrameBitmap;
 private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
 {
     // e.Frame — el frame actual como System.Drawing.Bitmap (pertenece al SDK; no dispose).
-    // Establece e.UpdateData = true si mutas el bitmap in-place.
+    // Establecer e.UpdateData = true si muta el bitmap in-place.
 }
 ```
 
-## Manipulando Frames de Video
+## Manipular frames de video
 
-### Ejemplo Simple de Superposición de Bitmap
+### Ejemplo simple de superposición de bitmap
 
 El siguiente ejemplo demuestra cómo superponer una imagen en cada frame de video:
 
@@ -74,9 +74,9 @@ En este código:
 3. Establecemos `e.UpdateData = true` para informar al SDK que hemos modificado el frame
 4. Liberamos nuestros recursos correctamente para prevenir fugas de memoria
 
-> **Importante:** Siempre establece `e.UpdateData = true` cuando modifiques el bitmap del frame. Esto señala al SDK que use tu frame modificado en lugar del original.
+> **Importante:** Siempre establezca `e.UpdateData = true` cuando modifique el bitmap del frame. Esto señala al SDK que use su frame modificado en lugar del original.
 
-### Agregando Superposiciones de Texto
+### Agregar superposiciones de texto
 
 Las superposiciones de texto se usan comúnmente para marcas de tiempo, subtítulos o visualizaciones informativas:
 
@@ -100,11 +100,11 @@ using (Graphics g = Graphics.FromImage(e.Frame))
 }
 ```
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
-Al trabajar con `OnVideoFrameBitmap`, es crucial optimizar tu código para el rendimiento. Cada operación de procesamiento de frame debe completarse rápidamente para mantener una reproducción de video fluida.
+Al trabajar con `OnVideoFrameBitmap`, es crucial optimizar su código para el rendimiento. Cada operación de procesamiento de frame debe completarse rápidamente para mantener una reproducción de video fluida.
 
-### Gestión de Recursos
+### Gestión de recursos
 
 La gestión adecuada de recursos es esencial:
 
@@ -142,14 +142,14 @@ private void CleanupResources()
 }
 ```
 
-### Optimizando el Tiempo de Procesamiento
+### Optimizar el tiempo de procesamiento
 
 Para mantener una reproducción de video fluida:
 
 1. **Pre-computar donde sea posible**: Prepara recursos antes de que comience el procesamiento
-2. **Cachear objetos usados frecuentemente**: Evita crear nuevos objetos para cada frame
+2. **Cachear objetos usados frecuentemente**: Evite crear nuevos objetos para cada frame
 3. **Procesar solo cuando sea necesario**: Agrega lógica condicional para omitir frames o realizar operaciones menos intensivas cuando sea necesario
-4. **Usar operaciones de dibujo eficientes**: Elige métodos GDI+ apropiados según tus necesidades
+4. **Usar operaciones de dibujo eficientes**: Elija métodos GDI+ apropiados según sus necesidades
 
 ```csharp
 private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
@@ -159,7 +159,7 @@ private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEve
     {
         using (Graphics g = Graphics.FromImage(e.Frame))
         {
-            // Tu código de procesamiento de frame
+            // Su código de procesamiento de frame
             e.UpdateData = true;
         }
     }
@@ -167,11 +167,11 @@ private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEve
 }
 ```
 
-## Técnicas Avanzadas de Manipulación de Frames
+## Técnicas avanzadas de manipulación de frames
 
-### Aplicando Filtros y Efectos
+### Aplicar filtros y efectos
 
-Puedes implementar filtros de procesamiento de imagen personalizados:
+Puede implementar filtros de procesamiento de imagen personalizados:
 
 ```csharp
 private void ApplyGrayscaleFilter(Bitmap bitmap)
@@ -226,35 +226,35 @@ private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEve
 }
 ```
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-### Fugas de Memoria
+### Fugas de memoria
 
-Si experimentas crecimiento de memoria durante procesamiento prolongado de video:
+Si experimenta crecimiento de memoria durante procesamiento prolongado de video:
 
-1. Asegúrate de que todos los objetos `Graphics` estén liberados
-2. Libera correctamente cualquier objeto `Bitmap` temporal
-3. Evita capturar objetos grandes en expresiones lambda
+1. Asegúrese de que todos los objetos `Graphics` estén liberados
+2. Libere correctamente cualquier objeto `Bitmap` temporal
+3. Evite capturar objetos grandes en expresiones lambda
 
-### Degradación del Rendimiento
+### Degradación del rendimiento
 
 Si el procesamiento de frames se vuelve lento:
 
-1. Perfila tu manejador de eventos para identificar cuellos de botella
-2. Considera reducir la frecuencia de procesamiento
-3. Optimiza operaciones GDI+ o considera DirectX para aplicaciones críticas de rendimiento
+1. Perfile su manejador de eventos para identificar cuellos de botella
+2. Considere reducir la frecuencia de procesamiento
+3. Optimice operaciones GDI+ o considere DirectX para aplicaciones críticas de rendimiento
 
 ## Integración del SDK
 
 El evento `OnVideoFrameBitmap` está disponible en los siguientes SDKs:
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Para usar la funcionalidad descrita en esta guía, necesitarás:
+Para usar la funcionalidad descrita en esta guía, necesitará:
 
 - Paquete de redistribución del SDK
 - System.Drawing (incluido en .NET Framework)
 - Soporte de Windows GDI+
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código y proyectos que demuestran estas técnicas en acción.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código y proyectos que demuestran estas técnicas en acción.

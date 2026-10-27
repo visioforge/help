@@ -18,7 +18,7 @@ primary_api_classes:
 
 # Implémenter la détection de visages dans les applications vidéo .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction à la technologie de détection de visages
 

@@ -315,7 +315,15 @@ public void ApplyDenoise(IBaseFilter effectFilter, VideoEffectType denoiseType)
                 eff.DenoiseCAST = new MFPDenoiseCAST
                 {
                     TemporalDifferenceThreshold = 16,
-                    StrongEdgeThreshold = 8
+                    NumberOfMotionPixelsThreshold = 0,
+                    StrongEdgeThreshold = 8,
+                    BlockWidth = 4,
+                    BlockHeight = 4,
+                    EdgePixelWeight = 128,
+                    NonEdgePixelWeight = 16,
+                    GaussianThresholdY = 12,
+                    GaussianThresholdUV = 6,
+                    HistoryWeight = 192
                 };
                 break;
 

@@ -29,7 +29,7 @@ primary_api_classes:
 
 # Creating Custom Text Overlays with OnVideoFrameBuffer in .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -45,10 +45,10 @@ The `OnVideoFrameBuffer` event is exposed on both engine families:
 | Engine | Event args type | Frame pixel format |
 |---|---|---|
 | `VideoCaptureCore` (DirectShow, Windows) | `VideoFrameBufferEventArgs` | RGB24 / RGB32 |
-| `VideoCaptureCoreX` (GStreamer, cross-platform) | `VideoFrameXBufferEventArgs` | BGRA (most common) |
-| `MediaPlayerCoreX` (GStreamer, cross-platform) | `VideoFrameXBufferEventArgs` | BGRA (most common) |
+| `VideoCaptureCoreX` (GStreamer, cross-platform) | `VideoFrameXBufferEventArgs` | RGBA |
+| `MediaPlayerCoreX` (GStreamer, cross-platform) | `VideoFrameXBufferEventArgs` | RGB (RGBA when `OnVideoFrameUnity` is subscribed) |
 
-Both engines follow the same pattern — subscribe to the event, read `e.Frame.Data` (an `IntPtr`) with `Width` / `Height` / `Stride`, render into the buffer in place, and set `e.UpdateData = true` to propagate changes downstream.
+Both engines follow the same pattern — subscribe to the event, read `e.Frame.Data` (an `IntPtr`) with `Width` / `Height` / `Stride`, and render into the buffer in place. The classic engine takes the changes only when you set `e.UpdateData = true`; the X engines do not read `UpdateData`.
 
 ## Understanding the OnVideoFrameBuffer Event
 
@@ -291,26 +291,27 @@ private void SDK_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
 
 ## VideoCaptureCoreX / MediaPlayerCoreX (X engines) example
 
-On the cross-platform X engines the event signature is `VideoFrameXBufferEventArgs` and the frame buffer typically arrives in **BGRA** format (4 bytes per pixel). The example below uses SkiaSharp to wrap the raw buffer and draw text on top; SkiaSharp is a transitive dependency of the X engines, so no extra NuGet package is needed.
+On the cross-platform X engines the event signature is `VideoFrameXBufferEventArgs` and the frame buffer arrives in the engine's grabber format — RGBA on `VideoCaptureCoreX`, RGB on `MediaPlayerCoreX` (RGBA when `OnVideoFrameUnity` is subscribed). The example below uses SkiaSharp to wrap the raw buffer and draw text on top; SkiaSharp is a transitive dependency of the X engines, so no extra NuGet package is needed.
 
 ```cs
 using SkiaSharp;
+using VisioForge.Core.Helpers;
+using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.X;
 
-// Create paints once, reuse across frames
+// Create the font and paints once, reuse across frames
+private SKFont _textFont = new SKFont(SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold), 32);
+
 private SKPaint _textPaint = new SKPaint
 {
     Color = SKColors.White,
-    TextSize = 32,
-    IsAntialias = true,
-    Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold)
+    IsAntialias = true
 };
 
 private SKPaint _shadowPaint = new SKPaint
 {
     Color = SKColors.Black.WithAlpha(160),
-    TextSize = 32,
-    IsAntialias = true,
-    Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold)
+    IsAntialias = true
 };
 
 // Subscribe after constructing VideoCaptureCoreX / MediaPlayerCoreX
@@ -323,36 +324,49 @@ private void VideoCapture_OnVideoFrameBuffer(object sender, VideoFrameXBufferEve
         return;
     }
 
-    // Wrap the raw BGRA buffer in a SkiaSharp surface (no extra allocation)
-    var info = new SKImageInfo(e.Frame.Width, e.Frame.Height, SKColorType.Bgra8888, SKAlphaType.Premul);
+    // Dynamic content built per frame
+    var timestamp = e.Frame.Timestamp.ToString(@"hh\:mm\:ss\.fff");
+    var line = $"REC  {timestamp}";
 
+    // The grabber format differs per engine: VideoCaptureCoreX delivers RGBA,
+    // MediaPlayerCoreX RGB (RGBA when OnVideoFrameUnity is subscribed). Never assume BGRA.
+    if (e.Frame.Format == VideoFormatX.RGB)
+    {
+        // 24-bit RGB has no SKColorType — convert with the SDK helper and draw on the copy.
+        using (var bmp = e.Frame.VideoFrameRGBToSKBitmap())
+        {
+            var rgbCanvas = bmp.Canvas;
+            rgbCanvas.DrawText(line, 18, 42, SKTextAlign.Left, _textFont, _shadowPaint);
+            rgbCanvas.DrawText(line, 16, 40, SKTextAlign.Left, _textFont, _textPaint);
+        }
+
+        return;
+    }
+
+    var colorType = e.Frame.Format == VideoFormatX.BGRA ? SKColorType.Bgra8888 : SKColorType.Rgba8888;
+    var info = new SKImageInfo(e.Frame.Width, e.Frame.Height, colorType, SKAlphaType.Premul);
+
+    // Wrap the raw 32-bit buffer in a SkiaSharp surface (no extra allocation)
     using (var pixmap = new SKPixmap(info, e.Frame.Data, e.Frame.Stride))
     using (var surface = SKSurface.Create(pixmap))
     {
         var canvas = surface.Canvas;
 
-        // Dynamic content built per frame
-        var timestamp = e.Frame.Timestamp.ToString(@"hh\:mm\:ss\.fff");
-        var line = $"REC  {timestamp}";
-
         // Draw shadow first, then main text for legibility on any background
-        canvas.DrawText(line, 18, 42, _shadowPaint);
-        canvas.DrawText(line, 16, 40, _textPaint);
+        canvas.DrawText(line, 18, 42, SKTextAlign.Left, _textFont, _shadowPaint);
+        canvas.DrawText(line, 16, 40, SKTextAlign.Left, _textFont, _textPaint);
         canvas.Flush();
     }
-
-    // Propagate the modified frame downstream
-    e.UpdateData = true;
 }
 ```
 
-**Why BGRA matters.** The X engines request BGRA by default for frame callbacks because it maps 1:1 to SkiaSharp, System.Drawing, and most GPU-friendly interop paths. If you need a different format, request a format conversion block upstream rather than converting on every frame.
+**Which format you get.** Read `e.Frame.Format` instead of assuming a format: `VideoCaptureCoreX` delivers RGBA and `MediaPlayerCoreX` RGB (RGBA when `OnVideoFrameUnity` is subscribed). RGB has 3 bytes per pixel and no matching `SKColorType`, so the sample converts it with the SDK helper `VideoFrameRGBToSKBitmap` (an extra copy). If you need a different format, request a format conversion block upstream rather than converting on every frame.
 
-**Measuring and positioning text.** Use `_textPaint.MeasureText(line)` to compute width for right- or center-alignment. SkiaSharp also exposes `SKFontMetrics` via `_textPaint.FontMetrics` for baseline / ascent / descent to position text precisely against frame edges.
+**Measuring and positioning text.** Use `_textFont.MeasureText(line)` to compute width for right- or center-alignment. SkiaSharp also exposes `SKFontMetrics` via `_textFont.Metrics` for baseline / ascent / descent to position text precisely against frame edges.
 
-**Alternative imaging stacks.** You can also use `System.Drawing.Graphics` wrapping a `Bitmap` constructed over the raw buffer on Windows, or direct byte writes with `Marshal.Copy` / `Span<byte>` for full control. SkiaSharp is the recommended option on macOS / Linux / iOS / Android.
+**Alternative imaging stacks.** You can also use `System.Drawing.Graphics` wrapping a `Bitmap` constructed over the raw buffer on Windows (pick the `PixelFormat` that matches `e.Frame.Format`), or direct byte writes with `Marshal.Copy` / `Span<byte>` for full control. SkiaSharp is the recommended option on macOS / Linux / iOS / Android.
 
-**Engine-level parity.** Everything in [Performance Considerations](#performance-considerations) and [Multiple Text Elements](#multiple-text-elements) applies equally to the X engines — the event fires on a processing thread, `UpdateData` propagates changes, and heavy work should be offloaded to avoid dropping frames.
+**Engine-level parity.** Everything in [Performance Considerations](#performance-considerations) and [Multiple Text Elements](#multiple-text-elements) applies equally to the X engines — the event fires on a processing thread, and heavy work should be offloaded to avoid dropping frames.
 
 ## Required Components
 
@@ -364,7 +378,7 @@ To implement this solution, you'll need:
 
 ## Conclusion
 
-The `OnVideoFrameBuffer` event gives direct access to every raw frame on both the classic `VideoCaptureCore` engine (RGB24/RGB32 via `VideoFrameBufferEventArgs` + `FastImageProcessing`) and the cross-platform X engines (`VideoCaptureCoreX` / `MediaPlayerCoreX`, BGRA via `VideoFrameXBufferEventArgs` + SkiaSharp). This is the right tool when you need pixel-level text rendering — custom fonts, per-frame dynamic content, anti-aliasing you control, or integration with third-party text/graphics libraries.
+The `OnVideoFrameBuffer` event gives direct access to every raw frame on both the classic `VideoCaptureCore` engine (RGB24/RGB32 via `VideoFrameBufferEventArgs` + `FastImageProcessing`) and the cross-platform X engines (`VideoCaptureCoreX` / `MediaPlayerCoreX`, grabber-format frames via `VideoFrameXBufferEventArgs` + SkiaSharp). This is the right tool when you need pixel-level text rendering — custom fonts, per-frame dynamic content, anti-aliasing you control, or integration with third-party text/graphics libraries.
 
 For static or clock-driven text overlays without writing a per-frame handler, the one-line [text overlay effect](../video-effects/text-overlay.md) is usually the better choice.
 

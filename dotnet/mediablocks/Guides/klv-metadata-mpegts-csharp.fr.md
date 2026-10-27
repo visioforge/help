@@ -20,7 +20,7 @@ primary_api_classes:
 
 # Métadonnées KLV / MISB en MPEG-TS avec C# .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Vue d'ensemble
 

@@ -1,6 +1,6 @@
 ---
 title: Efectos de video .NET — superposiciones y procesamiento
-description: Implementa efectos de video profesionales, superposiciones de texto/imagen y procesamiento personalizado con herramientas potentes para aplicaciones .NET.
+description: Implemente efectos de video profesionales, superposiciones de texto/imagen y procesamiento personalizado con herramientas potentes para aplicaciones .NET.
 sidebar_label: Efectos de video y procesamiento
 
 order: 15
@@ -29,11 +29,11 @@ primary_api_classes:
 
 # Efectos de video y procesamiento para aplicaciones .Net
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción
 
-Nuestros SDK .Net ofrecen a los desarrolladores dos implementaciones distintas de efectos de video para cubrir tus requisitos de plataforma y rendimiento:
+Nuestros SDK .Net ofrecen a los desarrolladores dos implementaciones distintas de efectos de video para cubrir sus requisitos de plataforma y rendimiento:
 
 ### Efectos clásicos (solo Windows)
 Disponibles en **VideoCaptureCore**, **MediaPlayerCore** y **VideoEditCore**:
@@ -204,7 +204,7 @@ Efectos NVIDIA Maxine con IA (requiere GPU NVIDIA RTX con soporte del SDK Maxine
 - **Efectos GPU** (`GPUVideoEffect*`): mejor rendimiento para video de alta resolución en Windows
 - **Efectos CPU** (`VideoEffect*`): compatibilidad universal en Windows, rendimiento moderado
 - **Efectos IA** (`Maxine*`): calidad de última generación, requiere GPU NVIDIA RTX
-- Usa efectos acelerados por GPU para procesamiento HD/4K en tiempo real
+- Use efectos acelerados por GPU para procesamiento HD/4K en tiempo real
 - Aceleración hardware DirectX para rendimiento óptimo en Windows
 
 ### Efectos multiplataforma
@@ -220,11 +220,11 @@ Efectos NVIDIA Maxine con IA (requiere GPU NVIDIA RTX con soporte del SDK Maxine
 
 ### Buenas prácticas
 
-* Elige efectos GPU/acelerados para video de alta resolución
-* Considera las combinaciones de efectos y su impacto en el rendimiento
-* Aplica efectos limitados en el tiempo cuando sea apropiado para reducir la sobrecarga de procesamiento
-* Prueba el rendimiento en las configuraciones de hardware objetivo
-* Usa efectos multiplataforma para despliegue multiplataforma
+* Elija efectos GPU/acelerados para video de alta resolución
+* Considere las combinaciones de efectos y su impacto en el rendimiento
+* Aplique efectos limitados en el tiempo cuando sea apropiado para reducir la sobrecarga de procesamiento
+* Pruebe el rendimiento en las configuraciones de hardware objetivo
+* Use efectos multiplataforma para despliegue multiplataforma
 
 ## Soporte de plataformas
 
@@ -250,9 +250,9 @@ Efectos NVIDIA Maxine con IA (requiere GPU NVIDIA RTX con soporte del SDK Maxine
 
 ## Métodos de integración
 
-Nuestros SDK proporcionan dos APIs distintas para la integración de efectos de video según el motor SDK que utilices.
+Nuestros SDK proporcionan dos APIs distintas para la integración de efectos de video según el motor SDK que utilice.
 
-### Ejemplo de uso básico (efectos Clásicos)
+### Ejemplo de uso básico (efectos clásicos)
 
 ```csharp
 // Solo Windows: efecto basado en CPU
@@ -268,7 +268,8 @@ var brighten = new GPUVideoEffectBrightness(
     value: 180,
     name: "Brighten"
 );
-videoCapture.Video_Effects_Add(brighten);
+videoCapture.Video_Effects_GPU_Enabled = true; // Los efectos GPU solo se aplican mientras esto sea true
+videoCapture.Video_Effects_GPU_Add(brighten);
 ```
 
 ### Ejemplo de uso básico (efectos multiplataforma)
@@ -289,7 +290,7 @@ var balance = new VideoBalanceVideoEffect("color_adjust")
 await videoCaptureX.Video_Effects_AddOrUpdateAsync(balance);
 ```
 
-### Ejemplo de efecto animado (Clásico)
+### Ejemplo de efecto animado (clásico)
 
 ```csharp
 // Fundido a negro en 3 segundos (solo Windows)
@@ -353,8 +354,8 @@ videoCaptureX.Video_Overlay_Add(textOverlay);
 
 ## Más información
 
-Numerosos efectos de video adicionales y funciones de procesamiento están disponibles en los SDK. Consulta la [Referencia completa de efectos](effects-reference.md) para información detallada sobre todos los efectos, o visita la documentación del SDK específico que estés usando para ejemplos de implementación y referencias de API.
+Numerosos efectos de video adicionales y funciones de procesamiento están disponibles en los SDK. Consulte la [Referencia completa de efectos](effects-reference.md) para información detallada sobre todos los efectos, o visite la documentación del SDK específico que esté usando para ejemplos de implementación y referencias de API.
   
 ---
 
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para acceder a más ejemplos de código y muestras de implementación.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para acceder a más ejemplos de código y muestras de implementación.

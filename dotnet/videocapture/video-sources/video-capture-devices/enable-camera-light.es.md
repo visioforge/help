@@ -1,6 +1,6 @@
 ---
 title: Habilitar luz de cámara en tablets Windows 10+ con C# .NET
-description: Controla la luz de cámara en tablets Windows 10+ en aplicaciones .NET con ejemplos de código C#, paquetes requeridos e implementación de API TorchControl.
+description: Controle la luz de cámara en tablets Windows 10+ en aplicaciones .NET con ejemplos de código C#, paquetes requeridos e implementación de API TorchControl.
 tags:
   - Video Capture SDK
   - .NET
@@ -15,13 +15,13 @@ primary_api_classes:
 
 ---
 
-# Habilitar Luz de Cámara en Tablets Windows 10+
+# Habilitar luz de cámara en tablets Windows 10+
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Introducción
 
-Las tablets modernas con Windows 10+ vienen equipadas con funcionalidad de luz de cámara que los desarrolladores pueden controlar programáticamente. Esta guía explica cómo implementar controles de luz de cámara en tus aplicaciones .NET usando la API TorchControl.
+Las tablets modernas con Windows 10+ vienen equipadas con funcionalidad de luz de cámara que los desarrolladores pueden controlar programáticamente. Esta guía explica cómo implementar controles de luz de cámara en sus aplicaciones .NET usando la API TorchControl.
 
 ## Implementación con la API TorchControl
 
@@ -31,13 +31,13 @@ La API TorchControl proporciona una forma completa de gestionar luces de cámara
 - Control granular para habilitar y deshabilitar luces de cámara
 - Compatibilidad entre dispositivos
 
-### Pasos Básicos de Implementación
+### Pasos básicos de implementación
 
 1. Inicializar el componente VideoCaptureCore
 2. Obtener dispositivos disponibles con capacidades de antorcha
 3. Habilitar o deshabilitar funcionalidad de antorcha para dispositivos específicos
 
-## Ejemplo de Código Funcional
+## Ejemplo de código funcional
 
 ```cs
 // Inicializar VideoCaptureCore
@@ -56,7 +56,7 @@ if (devices.Length > 0)
 await videoCapture.TorchControl_EnableAsync(devices[0], false);
 ```
 
-## Ejemplo de Implementación Completa
+## Ejemplo de implementación completa
 
 ```cs
 using System;
@@ -112,34 +112,34 @@ namespace Demo_Luz_Camara
 }
 ```
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Para implementar funcionalidad de luz de cámara en tu aplicación, necesitarás:
+Para implementar funcionalidad de luz de cámara en su aplicación, necesitará:
 
-1. **Paquete NuGet**: Instala el paquete [VisioForge.DotNet.Core.WindowsExtensions](https://www.nuget.org/packages/VisioForge.DotNet.Core.WindowsExtensions).
+1. **Paquete NuGet**: Instale el paquete [VisioForge.DotNet.Core.WindowsExtensions](https://www.nuget.org/packages/VisioForge.DotNet.Core.WindowsExtensions).
 
 2. **Redistribuibles de Video Capture**:
    - [Paquete Redist x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
    - [Paquete Redist x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-## Aplicación de Ejemplo Completa
+## Aplicación de ejemplo completa
 
 Para una implementación completamente funcional, explora nuestra [aplicación Demo de Luz de Cámara](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WinForms/CSharp/Camera%20Light%20Demo) disponible en nuestro repositorio de GitHub.
 
-## Notas de Compatibilidad
+## Notas de compatibilidad
 
 - Esta funcionalidad está diseñada principalmente para dispositivos tablet con Windows 10 y versiones más nuevas
 - El hardware del dispositivo debe soportar control programable de luz de cámara
 - Algunos fabricantes de dispositivos pueden implementar APIs propietarias que requieren configuración adicional
 
-## Consejos de Solución de Problemas
+## Consejos de solución de problemas
 
-Si encuentras problemas al habilitar la luz de cámara:
+Si encuentra problemas al habilitar la luz de cámara:
 
-- Verifica que tu dispositivo tenga hardware compatible
-- Asegúrate de que todos los paquetes requeridos estén instalados apropiadamente
-- Revisa los permisos del dispositivo en el manifiesto de tu aplicación
-- Asegúrate de que el dispositivo se reporte como compatible con antorcha usando TorchControl_GetDevicesAsync()
+- Verifique que su dispositivo tenga hardware compatible
+- Asegúrese de que todos los paquetes requeridos estén instalados apropiadamente
+- Revise los permisos del dispositivo en el manifiesto de su aplicación
+- Asegúrese de que el dispositivo se reporte como compatible con antorcha usando TorchControl_GetDevicesAsync()
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para acceder a más muestras de código y ejemplos.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para acceder a más muestras de código y ejemplos.

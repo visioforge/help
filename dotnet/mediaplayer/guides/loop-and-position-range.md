@@ -642,4 +642,4 @@ Yes. In MediaPlayerCore, enable `Loop` and `Selection_Active`, then set `Selecti
 - [Avalonia Media Player](avalonia-player.md) — cross-platform player with MVVM pattern
 - [Build a Video Player in VB.NET](video-player-vb-net.md) — VB.NET player with seeking and volume control
 - [Code Samples](../code-samples/index.md) — frame extraction, playlists, and reverse playback examples
-- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — product page and downloads
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) — product page and downloads

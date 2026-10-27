@@ -1,5 +1,5 @@
 ---
-title: Audio Sample Grabber para .NET - Capturar Frames de Audio
+title: Audio Sample Grabber para .NET - Capturar frames de audio
 description: Capture y procese frames de audio en tiempo real usando Audio Sample Grabber con motores X-engines y Classic en aplicaciones SDK .NET.
 tags:
   - Video Capture SDK
@@ -19,11 +19,11 @@ primary_api_classes:
 
 # Trabajar con Audio Sample Grabber en SDKs .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción al Audio Sample Grabber
 
-El Audio Sample Grabber es una característica potente disponible en todos nuestros SDKs .NET que permite a los desarrolladores acceder directamente a fotogramas de audio crudos tanto de fuentes en vivo como de archivos multimedia. Esta capacidad abre un amplio rango de posibilidades para procesamiento de audio, análisis y manipulación en tus aplicaciones.
+El Audio Sample Grabber es una característica potente disponible en todos nuestros SDKs .NET que permite a los desarrolladores acceder directamente a fotogramas de audio crudos tanto de fuentes en vivo como de archivos multimedia. Esta capacidad abre un amplio rango de posibilidades para procesamiento de audio, análisis y manipulación en sus aplicaciones.
 
 Al trabajar con procesamiento de audio, obtener acceso a fotogramas de audio individuales es esencial para tareas como:
 
@@ -34,11 +34,11 @@ Al trabajar con procesamiento de audio, obtener acceso a fotogramas de audio ind
 - Conversión de formato de audio personalizado
 - Algoritmos de detección de sonido
 
-El evento `OnAudioFrameBuffer` es el mecanismo central que proporciona acceso a estos fotogramas de audio crudos. Este evento se dispara cada vez que un nuevo fotograma de audio está disponible, dándote acceso directo a memoria no administrada que contiene los datos de audio decodificados.
+El evento `OnAudioFrameBuffer` es el mecanismo central que proporciona acceso a estos fotogramas de audio crudos. Este evento se dispara cada vez que un nuevo fotograma de audio está disponible, dándole acceso directo a memoria no administrada que contiene los datos de audio decodificados.
 
-## Cómo Funciona el Audio Sample Grabber
+## Cómo funciona el Audio Sample Grabber
 
-El Audio Sample Grabber intercepta el pipeline de audio durante la reproducción o captura, proporcionándote los datos de audio crudos antes de que se rendericen al dispositivo de salida. Estos datos están típicamente en formato PCM (Modulación por Codificación de Pulsos), que es el formato estándar para audio digital sin comprimir, pero ocasionalmente puede estar en formato de punto flotante IEEE dependiendo de la fuente de audio.
+El Audio Sample Grabber intercepta el pipeline de audio durante la reproducción o captura, proporcionándole los datos de audio crudos antes de que se rendericen al dispositivo de salida. Estos datos están típicamente en formato PCM (Modulación por Codificación de Pulsos), que es el formato estándar para audio digital sin comprimir, pero ocasionalmente puede estar en formato de punto flotante IEEE dependiendo de la fuente de audio.
 
 Cada vez que se dispara el evento `OnAudioFrameBuffer`, proporciona un objeto `AudioFrameBufferEventArgs` que contiene información crítica sobre el fotograma de audio:
 
@@ -54,30 +54,30 @@ Cada vez que se dispara el evento `OnAudioFrameBuffer`, proporciona un objeto `A
 
 ## Configurar el Audio Sample Grabber
 
-El proceso de configuración varía ligeramente dependiendo de si estás usando nuestros nuevos motores X o los motores Clásicos. Exploremos ambos enfoques:
+El proceso de configuración varía ligeramente dependiendo de si está usando nuestros nuevos motores X o los motores Clásicos. Exploremos ambos enfoques:
 
 === "Motores X"
 
     
-    Para los motores X, configurar el Audio Sample Grabber es sencillo. Simplemente necesitas crear un manejador de eventos para el evento `OnAudioFrameBuffer`:
+    Para los motores X, configurar el Audio Sample Grabber es sencillo. Simplemente necesita crear un manejador de eventos para el evento `OnAudioFrameBuffer`:
     
     ```csharp
     VideoCapture1.OnAudioFrameBuffer += OnAudioFrameBuffer;
     ```
     
-    La arquitectura de los motores X habilita automáticamente la captura de muestras de audio cuando te suscribes a este evento, sin requerir configuración adicional.
+    La arquitectura de los motores X habilita automáticamente la captura de muestras de audio cuando se suscribe a este evento, sin requerir configuración adicional.
     
 
 === "Motores Clásicos"
 
     
-    Al usar motores Clásicos, necesitas habilitar explícitamente la funcionalidad de Audio Sample Grabber antes de crear el manejador de eventos:
+    Al usar motores Clásicos, necesita habilitar explícitamente la funcionalidad de Audio Sample Grabber antes de crear el manejador de eventos:
     
     ```csharp
     VideoCapture1.Audio_Sample_Grabber_Enabled = true;
     ```
     
-    Luego, como con los motores X, crea tu manejador de eventos:
+    Luego, como con los motores X, cree su manejador de eventos:
     
     ```csharp
     VideoCapture1.OnAudioFrameBuffer += OnAudioFrameBuffer;
@@ -89,13 +89,13 @@ El proceso de configuración varía ligeramente dependiendo de si estás usando 
 === "Media Blocks SDK"
 
     
-    El Media Blocks SDK también soporta captura de muestras de audio. Usa el componente `AudioSampleGrabberBlock` para capturar fotogramas de audio.
+    El Media Blocks SDK también soporta captura de muestras de audio. Use el componente `AudioSampleGrabberBlock` para capturar fotogramas de audio.
     
     ```csharp
     private AudioSampleGrabberBlock _audioSampleGrabberSink;
     ```
     
-    Luego, como con los motores X, crea tu manejador de eventos y especifica el formato de audio:
+    Luego, como con los motores X, cree su manejador de eventos y especifique el formato de audio:
     
     ```csharp
     _audioSampleGrabberBlock = new AudioSampleGrabberBlock(VisioForge.Core.Types.X.AudioFormatX.S16LE);
@@ -104,9 +104,9 @@ El proceso de configuración varía ligeramente dependiendo de si estás usando 
     
 
 
-## Procesar Fotogramas de Audio
+## Procesar fotogramas de audio
 
-Una vez que hayas configurado el manejador de eventos, puedes procesar los fotogramas de audio a medida que llegan. Aquí hay un ejemplo básico de cómo manejar el evento `OnAudioFrameBuffer`:
+Una vez que haya configurado el manejador de eventos, puede procesar los fotogramas de audio a medida que llegan. Aquí hay un ejemplo básico de cómo manejar el evento `OnAudioFrameBuffer`:
 
 ```csharp
 using VisioForge.Types;
@@ -127,16 +127,16 @@ private void OnAudioFrameBuffer(object sender, AudioFrameBufferEventArgs e)
     int bitsPerSample = e.Frame.Info.BPS;
     AudioFormat format = e.Frame.Info.Format;
     
-    // Tu código de procesamiento de audio personalizado aquí
+    // Su código de procesamiento de audio personalizado aquí
     // ...
 }
 ```
 
-## Trabajar con Datos de Audio
+## Trabajar con datos de audio
 
-### Convertir Memoria No Administrada a Arrays Administrados
+### Convertir memoria no administrada a arrays administrados
 
-Mientras `e.Frame.Data` proporciona un puntero a memoria no administrada, a menudo necesitas trabajar con los datos en una forma más conveniente. La clase `AudioFrame` proporciona un método útil `GetDataArray()` que retorna una copia de los datos de audio como un array de bytes:
+Mientras `e.Frame.Data` proporciona un puntero a memoria no administrada, a menudo necesita trabajar con los datos en una forma más conveniente. La clase `AudioFrame` proporciona un método útil `GetDataArray()` que retorna una copia de los datos de audio como un array de bytes:
 
 ```csharp
 private void VideoCapture1_OnAudioFrameBuffer(object sender, AudioFrameBufferEventArgs e)
@@ -144,14 +144,14 @@ private void VideoCapture1_OnAudioFrameBuffer(object sender, AudioFrameBufferEve
     // Obtener una copia administrada de los datos de audio
     byte[] audioData = e.Frame.GetDataArray();
     
-    // Ahora puedes trabajar con los datos usando operaciones estándar de arrays C#
+    // Ahora puede trabajar con los datos usando operaciones estándar de arrays C#
     // ...
 }
 ```
 
-### Convertir Datos PCM a Muestras
+### Convertir datos PCM a muestras
 
-Para muchas tareas de procesamiento de audio, querrás convertir los bytes PCM crudos en valores reales de muestras de audio. Aquí hay un método auxiliar para convertir un array de bytes PCM a un array de muestras de audio (asumiendo muestras de 16 bits):
+Para muchas tareas de procesamiento de audio, querrá convertir los bytes PCM crudos en valores reales de muestras de audio. Aquí hay un método auxiliar para convertir un array de bytes PCM a un array de muestras de audio (asumiendo muestras de 16 bits):
 
 ```csharp
 private short[] ConvertBytesToSamples(byte[] audioData)
@@ -168,9 +168,9 @@ private short[] ConvertBytesToSamples(byte[] audioData)
 }
 ```
 
-### Manejar Audio Multicanal
+### Manejar audio multicanal
 
-Al trabajar con audio estéreo o multicanal, las muestras están típicamente entrelazadas. Para un flujo estéreo, los datos están arreglados como: [Izq0, Der0, Izq1, Der1, ...]. Puede que quieras separar estos canales para procesamiento:
+Al trabajar con audio estéreo o multicanal, las muestras están típicamente entrelazadas. Para un flujo estéreo, los datos están arreglados como: [Izq0, Der0, Izq1, Der1, ...]. Puede que quiera separar estos canales para procesamiento:
 
 ```csharp
 private void ProcessStereoAudio(short[] samples, int channelCount)
@@ -194,7 +194,7 @@ private void ProcessStereoAudio(short[] samples, int channelCount)
 }
 ```
 
-## Escenarios Comunes de Procesamiento de Audio
+## Escenarios comunes de procesamiento de audio
 
 ### Medición de Nivel de Audio
 
@@ -216,17 +216,17 @@ private void CalculateAudioLevel(short[] samples)
     // Convertir a decibelios
     double db = 20 * Math.Log10(rms / 32768);
     
-    // Actualizar UI con el nivel (necesitarás invocar si estás en un hilo diferente)
+    // Actualizar UI con el nivel (necesitará invocar si está en un hilo diferente)
     Debug.WriteLine($"Nivel de audio: {db} dB");
 }
 ```
 
-### FFT en Tiempo Real para Análisis de Espectro
+### FFT en tiempo real para análisis de espectro
 
-Para análisis de espectro de frecuencia, podrías querer realizar una FFT (Transformada Rápida de Fourier) en los datos de audio:
+Para análisis de espectro de frecuencia, podría querer realizar una FFT (Transformada Rápida de Fourier) en los datos de audio:
 
 ```csharp
-// Nota: Necesitarás una biblioteca para cálculo de FFT
+// Nota: Necesitará una biblioteca para cálculo de FFT
 // Este es un ejemplo simplificado
 private void PerformFFTAnalysis(short[] samples)
 {
@@ -242,23 +242,23 @@ private void PerformFFTAnalysis(short[] samples)
 }
 ```
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
-Al trabajar con el Audio Sample Grabber, ten en cuenta estas consideraciones de rendimiento:
+Al trabajar con el Audio Sample Grabber, tenga en cuenta estas consideraciones de rendimiento:
 
 1. **Minimizar Tiempo de Procesamiento**: El evento `OnAudioFrameBuffer` se llama en el hilo de procesamiento de audio. Operaciones de larga duración pueden causar fallos de audio.
 
-2. **Considerar Seguridad de Hilos**: Si necesitas actualizar elementos de UI o interactuar con otros componentes, usa métodos apropiados de sincronización de hilos.
+2. **Considerar Seguridad de Hilos**: Si necesita actualizar elementos de UI o interactuar con otros componentes, use métodos apropiados de sincronización de hilos.
 
-3. **Evitar Asignaciones de Memoria**: Asignaciones de memoria frecuentes en el manejador de eventos pueden llevar a pausas de recolección de basura. Reutiliza arrays donde sea posible.
+3. **Evitar Asignaciones de Memoria**: Asignaciones de memoria frecuentes en el manejador de eventos pueden llevar a pausas de recolección de basura. Reutilice arrays donde sea posible.
 
-4. **Copia de Búfer**: El método `GetDataArray()` crea una copia de los datos de audio. Para escenarios de muy alto rendimiento, considera trabajar directamente con el puntero no administrado.
+4. **Copia de Búfer**: El método `GetDataArray()` crea una copia de los datos de audio. Para escenarios de muy alto rendimiento, considere trabajar directamente con el puntero no administrado.
 
 ## Conclusión
 
-El Audio Sample Grabber proporciona una forma potente de acceder y procesar datos de audio crudos en tiempo real tanto de fuentes en vivo como de archivos multimedia. Al aprovechar esta funcionalidad, puedes implementar características sofisticadas de procesamiento de audio en tus aplicaciones, desde medición de nivel simple hasta análisis de audio complejo y procesamiento de efectos.
+El Audio Sample Grabber proporciona una forma potente de acceder y procesar datos de audio crudos en tiempo real tanto de fuentes en vivo como de archivos multimedia. Al aprovechar esta funcionalidad, puede implementar características sofisticadas de procesamiento de audio en sus aplicaciones, desde medición de nivel simple hasta análisis de audio complejo y procesamiento de efectos.
 
-Ya sea que estés construyendo una aplicación de audio profesional, implementando visualización de audio o integrando con servicios de reconocimiento de voz, el Audio Sample Grabber te da los datos crudos que necesitas para dar vida a tus ideas de procesamiento de audio.
+Ya sea que esté construyendo una aplicación de audio profesional, implementando visualización de audio o integrando con servicios de reconocimiento de voz, el Audio Sample Grabber le da los datos crudos que necesita para dar vida a sus ideas de procesamiento de audio.
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más muestras de código.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más muestras de código.

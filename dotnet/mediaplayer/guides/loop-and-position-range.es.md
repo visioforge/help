@@ -29,7 +29,7 @@ primary_api_classes:
 
 # Modo de Bucle y Reproducción por Rango de Posición
 
-Esta guía explica cómo usar el modo de bucle y las funciones de posición de inicio y fin personalizadas (rango de posición) en el SDK de Media Player para MediaPlayerCore (motor DirectShow) y MediaPlayerCoreX (motor GStreamer).
+Esta guía explica cómo usar el modo de bucle y las funciones de posición de inicio y fin personalizadas (rango de posición) en Media Player SDK para MediaPlayerCore (motor DirectShow) y MediaPlayerCoreX (motor GStreamer).
 
 ## Descripción General
 
@@ -627,7 +627,7 @@ player.Segment_Stop = segmentEnd;
 
 Establezca `Loop = true` en cualquiera de los dos motores (MediaPlayerCore o MediaPlayerCoreX); cada pasada se reinicia desde el principio, o desde el inicio del rango cuando hay uno definido. Use formatos bien indexados como MP4 con codificación H.264 o H.265 para las transiciones más fluidas.
 
-### ¿El SDK de Media Player admite búsqueda con precisión de fotograma para reproducción de segmentos?
+### ¿El Media Player SDK admite búsqueda con precisión de fotograma para reproducción de segmentos?
 
 La precisión de la búsqueda depende del contenedor multimedia y el códec. Los archivos MP4 y MKV con indexación adecuada de fotogramas clave proporcionan los mejores resultados. Para segmentos muy cortos (menos de un segundo), el reproductor puede posicionarse en el fotograma clave más cercano en lugar de la posición exacta solicitada. Si la precisión a nivel de fotograma es crítica, codifique su fuente con una longitud de GOP (Grupo de Imágenes) corta para aumentar la densidad de fotogramas clave.
 
@@ -642,4 +642,4 @@ Sí. En MediaPlayerCore, active `Loop` y `Selection_Active`, luego establezca `S
 - [Reproductor Multimedia Avalonia](avalonia-player.md) — reproductor multiplataforma con patrón MVVM
 - [Crear un Reproductor de Video en VB.NET](video-player-vb-net.md) — reproductor VB.NET con búsqueda y control de volumen
 - [Ejemplos de Código](../code-samples/index.md) — extracción de fotogramas, listas de reproducción y ejemplos de reproducción inversa
-- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — página del producto y descargas
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) — página del producto y descargas

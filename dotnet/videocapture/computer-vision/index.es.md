@@ -11,11 +11,11 @@ tags:
 
 # Integración de visión por computadora para aplicaciones .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Resumen
 
-Nuestro SDK proporciona potentes capacidades integradas de visión por computadora que permiten a los desarrolladores enriquecer sus aplicaciones con funciones inteligentes de análisis de video. Estas funcionalidades permiten que tu software detecte y siga automáticamente diversos elementos en flujos de video, incluyendo rostros humanos, objetos generales, vehículos y peatones en tiempo real.
+Nuestro SDK proporciona potentes capacidades integradas de visión por computadora que permiten a los desarrolladores enriquecer sus aplicaciones con funciones inteligentes de análisis de video. Estas funcionalidades permiten que su software detecte y siga automáticamente diversos elementos en flujos de video, incluyendo rostros humanos, objetos generales, vehículos y peatones en tiempo real.
 
 ## Módulos clave de visión por computadora
 
@@ -34,11 +34,11 @@ Los desarrolladores pueden acceder a ejemplos completos y funcionales en nuestro
 
 ## Funcionalidades avanzadas
 
-* [Detección de rostros](face-detection.md) — Conoce el reconocimiento facial, la detección de puntos de referencia y el análisis de emociones
+* [Detección de rostros](face-detection.md) — Conozca el reconocimiento facial, la detección de puntos de referencia y el análisis de emociones
 * Integración con aprendizaje automático
 * Soporte para modelos de detección personalizados
 * Técnicas de optimización multihilo
 
 ---
 
-Para más ejemplos de código y guía de implementación, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para más ejemplos de código y guía de implementación, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

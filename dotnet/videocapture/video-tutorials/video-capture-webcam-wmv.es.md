@@ -1,6 +1,6 @@
 ---
 title: Captura de video de webcam a WMV en C# - Tutorial .NET
-description: Implementa captura de video de webcam a formato WMV en .NET con instrucciones paso a paso, ejemplos de código C# y mejores prácticas de integración.
+description: Implemente captura de video de webcam a formato WMV en .NET con instrucciones paso a paso, ejemplos de código C# y mejores prácticas de integración.
 tags:
   - Video Capture SDK
   - .NET
@@ -22,11 +22,11 @@ primary_api_classes:
 
 ---
 
-# Captura de Video de Webcam a Formato WMV en .NET
+# Captura de video de webcam a formato WMV en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Tutorial de Implementación en Video
+## Tutorial de implementación en video
 
 Este tutorial demuestra cómo crear una aplicación de Windows Forms que captura video de una webcam y lo guarda en formato WMV usando el Video Capture SDK .NET. El ejemplo a continuación proporciona un recorrido completo con código fuente completamente comentado.
 
@@ -34,29 +34,29 @@ Este tutorial demuestra cómo crear una aplicación de Windows Forms que captura
   <iframe src="https://www.youtube.com/embed/Bqss-zdalXg?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
-## Acceso al Código Fuente
+## Acceso al código fuente
 
-Accede al proyecto completo con todos los archivos fuente y ejemplos adicionales en nuestro repositorio de GitHub:
+Acceda al proyecto completo con todos los archivos fuente y ejemplos adicionales en nuestro repositorio de GitHub:
 
 [Código fuente en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/video-capture-webcam-wmv)
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Antes de implementar el código, asegúrate de haber instalado los paquetes redistribuibles necesarios vía NuGet:
+Antes de implementar el código, asegúrese de haber instalado los paquetes redistribuibles necesarios vía NuGet:
 
-- **Redistribuibles de Captura de Video:**
+- **Redistribuibles de captura de video:**
   - [Paquete x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
   - [Paquete x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-## Pasos de Implementación
+## Pasos de implementación
 
-Las siguientes secciones describen los pasos clave para implementar funcionalidad de captura de webcam en tu aplicación .NET.
+Las siguientes secciones describen los pasos clave para implementar funcionalidad de captura de webcam en su aplicación .NET.
 
-### Configurar Estructura del Proyecto
+### Configurar estructura del proyecto
 
-Primero, crea una aplicación de Windows Forms y agrega las referencias del SDK a través de NuGet. Luego implementa el formulario con los controles necesarios incluyendo un área de vista previa de video y botones de inicio/detención.
+Primero, cree una aplicación de Windows Forms y agregue las referencias del SDK a través de NuGet. Luego implemente el formulario con los controles necesarios incluyendo un área de vista previa de video y botones de inicio/detención.
 
-### Código de Implementación C#
+### Código de implementación C#
 
 ```csharp
 using System;
@@ -121,17 +121,17 @@ namespace video_capture_webcam_wmv
 }
 ```
 
-### Detalles Clave de Implementación
+### Detalles clave de implementación
 
-1. **Inicialización del Componente**: El `VideoCaptureCore` se inicializa cuando el formulario se carga, conectándose al control de vista previa de video.
+1. **Inicialización del componente**: El `VideoCaptureCore` se inicializa cuando el formulario se carga, conectándose al control de vista previa de video.
 
-2. **Selección de Dispositivo**: El código selecciona automáticamente la primera webcam y dispositivo de micrófono disponibles en el sistema.
+2. **Selección de dispositivo**: El código selecciona automáticamente la primera webcam y dispositivo de micrófono disponibles en el sistema.
 
-3. **Configuración de Salida**: El formato WMV está seleccionado por su compatibilidad con sistemas Windows y amplio soporte de plataformas.
+3. **Configuración de salida**: El formato WMV está seleccionado por su compatibilidad con sistemas Windows y amplio soporte de plataformas.
 
-4. **Gestión de Recursos**: El método `StopAsync()` asegura limpieza adecuada de recursos del sistema cuando la grabación termina.
+4. **Gestión de recursos**: El método `StopAsync()` asegura limpieza adecuada de recursos del sistema cuando la grabación termina.
 
-## Opciones de Personalización Avanzada
+## Opciones de personalización avanzada
 
 El SDK proporciona opciones adicionales no mostradas en este ejemplo básico:
 
@@ -140,11 +140,11 @@ El SDK proporciona opciones adicionales no mostradas en este ejemplo básico:
 - Marcas de agua y superposiciones personalizadas
 - Capacidades de captura multi-dispositivo
 
-## Consejos de Solución de Problemas
+## Consejos de solución de problemas
 
-- Asegura que tu webcam esté correctamente conectada y reconocida por Windows
-- Verifica que los redistribuibles correctos estén instalados para tu plataforma objetivo (x86/x64)
-- Verifica los permisos de Windows para acceso a cámara en sistemas operativos más nuevos
+- Asegure que su webcam esté correctamente conectada y reconocida por Windows
+- Verifique que los redistribuibles correctos estén instalados para su plataforma objetivo (x86/x64)
+- Verifique los permisos de Windows para acceso a cámara en sistemas operativos más nuevos
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código y ejemplos de implementación avanzada.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código y ejemplos de implementación avanzada.

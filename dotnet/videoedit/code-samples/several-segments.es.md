@@ -1,6 +1,6 @@
 ---
 title: Extraer y combinar segmentos de video en C# con .NET
-description: Extrae y combina múltiples segmentos del mismo archivo de video o audio en C# con guía paso a paso y ejemplos de código para .NET.
+description: Extraiga y combine múltiples segmentos del mismo archivo de video o audio en C# con guía paso a paso y ejemplos de código para .NET.
 tags:
   - Video Edit SDK
   - .NET
@@ -16,17 +16,17 @@ primary_api_classes:
 
 ---
 
-# Añadir Múltiples Segmentos desde un Único Archivo de Video en C#
+# Añadir múltiples segmentos desde un único archivo de video en C#
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
 ## Introducción
 
-Al desarrollar aplicaciones de edición de video, a menudo necesitas extraer porciones específicas de un archivo de video y combinarlas en una nueva composición. Esta técnica es esencial para crear resúmenes de momentos destacados, eliminar secciones no deseadas o ensamblar una compilación de momentos clave de un video más largo.
+Al desarrollar aplicaciones de edición de video, a menudo necesita extraer porciones específicas de un archivo de video y combinarlas en una nueva composición. Esta técnica es esencial para crear resúmenes de momentos destacados, eliminar secciones no deseadas o ensamblar una compilación de momentos clave de un video más largo.
 
-Esta guía demuestra cómo extraer y combinar programáticamente múltiples segmentos del mismo archivo de video usando C#. Aprenderás el proceso paso a paso con ejemplos de código funcionales que puedes implementar en tus propias aplicaciones.
+Esta guía demuestra cómo extraer y combinar programáticamente múltiples segmentos del mismo archivo de video usando C#. Aprenderá el proceso paso a paso con ejemplos de código funcionales que puede implementar en sus propias aplicaciones.
 
-## ¿Por qué Extraer Múltiples Segmentos?
+## ¿Por qué extraer múltiples segmentos?
 
 Extraer segmentos específicos de videos sirve muchos propósitos prácticos:
 
@@ -36,21 +36,21 @@ Extraer segmentos específicos de videos sirve muchos propósitos prácticos:
 - Crear trailers o vistas previas de contenido de larga duración
 - Generar clips más cortos para redes sociales de videos más largos
 
-## Descripción General de la Implementación
+## Descripción general de la implementación
 
 La implementación involucra tres pasos clave:
 
-1. Definir los segmentos de tiempo que quieres extraer
+1. Definir los segmentos de tiempo que quiere extraer
 2. Crear una fuente de video que incluya estos segmentos especificados
-3. Añadir el archivo segmentado a tu línea de tiempo de edición
+3. Añadir el archivo segmentado a su línea de tiempo de edición
 
 Desglosemos cada paso con ejemplos de código detallados y explicaciones.
 
-## Implementación Detallada
+## Implementación detallada
 
-### Paso 1: Definir tus Segmentos
+### Paso 1: Definir sus segmentos
 
-Primero, necesitas especificar los tiempos de inicio y fin de cada segmento. Cada segmento está definido por un punto de inicio y duración, medidos en milisegundos.
+Primero, necesita especificar los tiempos de inicio y fin de cada segmento. Cada segmento está definido por un punto de inicio y duración, medidos en milisegundos.
 
 ```cs
 // Definir múltiples segmentos desde un único archivo de video
@@ -65,16 +65,16 @@ En este ejemplo, hemos definido dos segmentos:
 - El primer segmento comienza al principio del video (0ms) y dura 5 segundos
 - El segundo segmento comienza en la marca de 3 segundos y continúa por 10 segundos
 
-Nota que los segmentos pueden superponerse, como se muestra en este ejemplo donde el segundo segmento comienza antes de que el primero termine. Esto puede ser útil para crear transiciones suaves o cuando quieres que ciertas porciones aparezcan múltiples veces.
+Nota que los segmentos pueden superponerse, como se muestra en este ejemplo donde el segundo segmento comienza antes de que el primero termine. Esto puede ser útil para crear transiciones suaves o cuando quiere que ciertas porciones aparezcan múltiples veces.
 
-### Paso 2: Crear una Fuente de Video con Segmentos
+### Paso 2: Crear una fuente de video con segmentos
 
-A continuación, crea un objeto VideoSource que incorpore tus segmentos definidos:
+A continuación, cree un objeto VideoSource que incorpore sus segmentos definidos:
 
 ```cs
 // Crear una fuente de video que incluya los segmentos especificados
 VideoSource videoFile = new VideoSource(
-    videoFileName,   // Ruta a tu archivo de video
+    videoFileName,   // Ruta a su archivo de video
     segments,        // Array de segmentos definidos arriba
     VideoEditStretchMode.Letterbox,  // Cómo manejar diferencias de relación de aspecto
     0,               // streamNumber — qué stream de video leer de un archivo multi-stream
@@ -83,35 +83,35 @@ VideoSource videoFile = new VideoSource(
 
 El constructor de VideoSource toma varios parámetros:
 
-- `videoFileName`: La ruta a tu archivo de video fuente
-- `segments`: El array de objetos FileSegment que definiste en el Paso 1
+- `videoFileName`: La ruta a su archivo de video fuente
+- `segments`: El array de objetos FileSegment que definió en el Paso 1
 - `VideoEditStretchMode`: Cómo manejar diferencias de relación de aspecto (Letterbox, Stretch, Crop)
 - `streamNumber`: Índice base-cero del stream de video a usar en un archivo multi-stream (no rotación)
 - `rate`: Multiplicador de tasa de reproducción — 1.0 = normal, 0.5 = cámara lenta, 2.0 = avance rápido
 
-### Paso 3: Añadir a la Línea de Tiempo
+### Paso 3: Añadir a la línea de tiempo
 
-Finalmente, añade la fuente de video segmentada a tu línea de tiempo de edición:
+Finalmente, añada la fuente de video segmentada a su línea de tiempo de edición:
 
 ```cs
 // Añadir el archivo segmentado a la línea de tiempo.
 // Firma: Input_AddVideoFile(VideoSource fileSource, TimeSpan? timelineInsertTime = null,
 //   int targetVideoStream = 0, int customWidth = 0, int customHeight = 0).
-// Pasa solo la fuente para agregar al final de la línea de tiempo.
+// Pasar solo la fuente para agregar al final de la línea de tiempo.
 VideoEdit1.Input_AddVideoFile(videoFile);
 
-// O insértalo en una posición específica de la línea de tiempo:
+// O insertarlo en una posición específica de la línea de tiempo:
 // VideoEdit1.Input_AddVideoFile(videoFile, TimeSpan.FromSeconds(5));
 ```
 
 El método `Input_AddVideoFile` toma el `VideoSource` más una posición opcional de inserción en la línea de tiempo (`TimeSpan?`, no un `int` de número de pista). Parámetros opcionales adicionales eligen qué stream de video consumir de una fuente multi-stream y anulan el ancho/alto personalizado.
 
-## Trabajar con Segmentos de Audio
+## Trabajar con segmentos de audio
 
-El mismo enfoque funciona para archivos de audio. Simplemente usa AudioSource en lugar de VideoSource:
+El mismo enfoque funciona para archivos de audio. Simplemente use AudioSource en lugar de VideoSource:
 
 ```cs
-// Definir tus segmentos de audio. FileSegment(startTime, stopTime) — stop debe ser mayor que start.
+// Definir sus segmentos de audio. FileSegment(startTime, stopTime) — stop debe ser mayor que start.
 FileSegment[] audioSegments = new[] {
     new FileSegment(TimeSpan.FromMilliseconds(0),     TimeSpan.FromMilliseconds(8000)),   // 0 → 8s
     new FileSegment(TimeSpan.FromMilliseconds(15000), TimeSpan.FromMilliseconds(27000))   // 15s → 27s
@@ -120,7 +120,7 @@ FileSegment[] audioSegments = new[] {
 // Crear fuente de audio con segmentos.
 // Firma: AudioSource(string filename, FileSegment[] segments, string fileToSync = null,
 //   int streamNumber = 0, double rate = 1.0).
-// La posición 3 es fileToSync (un *string*), no un factor de velocidad — usa un arg nombrado para rate.
+// La posición 3 es fileToSync (un *string*), no un factor de velocidad — usar un arg nombrado para rate.
 AudioSource audioFile = new AudioSource(
     audioFileName,
     audioSegments,
@@ -130,11 +130,11 @@ AudioSource audioFile = new AudioSource(
 VideoEdit1.Input_AddAudioFile(audioFile);
 ```
 
-## Escenarios de Uso Avanzado
+## Escenarios de uso avanzado
 
-### Segmentos de Velocidad Variable
+### Segmentos de velocidad variable
 
-Puedes crear efectos interesantes variando el factor de velocidad para diferentes segmentos:
+Puede crear efectos interesantes variando el factor de velocidad para diferentes segmentos:
 
 ```cs
 // Crear segmentos con diferentes velocidades. FileSegment(start, stop) — stop debe ser > start.
@@ -157,9 +157,9 @@ VideoEdit1.Input_AddVideoFile(slowMotionSegment);
 VideoEdit1.Input_AddVideoFile(fastForwardSegment, TimeSpan.FromMilliseconds(3000));
 ```
 
-### Combinar Múltiples Archivos con Segmentos
+### Combinar múltiples archivos con segmentos
 
-Puedes combinar segmentos de diferentes archivos creando múltiples objetos VideoSource:
+Puede combinar segmentos de diferentes archivos creando múltiples objetos VideoSource:
 
 ```cs
 // Crear segmentos de diferentes archivos. FileSegment(start, stop) — stop debe ser > start.
@@ -182,21 +182,21 @@ VideoEdit1.Input_AddVideoFile(file1Segments);
 VideoEdit1.Input_AddVideoFile(file2Segments, TimeSpan.FromMilliseconds(5000));
 ```
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Para usar esta funcionalidad, necesitarás instalar los paquetes redistribuibles apropiados:
+Para usar esta funcionalidad, necesitará instalar los paquetes redistribuibles apropiados:
 
 - Redistribuibles de Video Edit SDK:
   - [paquete x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
   - [paquete x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
 
-Para información sobre cómo instalar o desplegar estos redistribuibles en los PCs de tus usuarios, consulta la [guía de despliegue](../deployment.md).
+Para información sobre cómo instalar o desplegar estos redistribuibles en los PCs de sus usuarios, consulte la [guía de despliegue](../deployment.md).
 
 ## Conclusión
 
-Extraer y combinar múltiples segmentos de un archivo de video es una técnica poderosa para crear contenido de video dinámico en tus aplicaciones. Siguiendo los pasos descritos en esta guía, puedes implementar esta funcionalidad en tus aplicaciones C# con mínimo esfuerzo.
+Extraer y combinar múltiples segmentos de un archivo de video es una técnica poderosa para crear contenido de video dinámico en sus aplicaciones. Siguiendo los pasos descritos en esta guía, puede implementar esta funcionalidad en sus aplicaciones C# con mínimo esfuerzo.
 
-Este enfoque te da control detallado sobre qué porciones de un video se incluyen en tu salida final, permitiendo posibilidades de edición creativas sin requerir herramientas complejas de edición de video manual.
+Este enfoque le da control detallado sobre qué porciones de un video se incluyen en su salida final, permitiendo posibilidades de edición creativas sin requerir herramientas complejas de edición de video manual.
 
 ---
-Visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para más muestras de código y ejemplos.
+Visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para más muestras de código y ejemplos.

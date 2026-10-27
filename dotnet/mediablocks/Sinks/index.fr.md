@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Puits
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Les puits sont des blocs qui enregistrent ou diffusent les données. Ce sont les derniers blocs du pipeline.
 Optionnellement, certains puits peuvent avoir des pins de sortie pour transmettre les données au bloc suivant dans le pipeline.
@@ -2338,7 +2338,7 @@ await pipeline.StartAsync();
 
 #### Disponibilité
 
-`VirtualCameraSinkBlock.IsAvailable()` renvoie `true` si le puits caméra virtuelle sous-jacent est disponible sur ce système. `VirtualCameraSinkBlock.IsCOMRegistered()` renvoie `true` lorsque les deux filtres source Virtual Camera et Virtual Audio Card sont enregistrés.
+`VirtualCameraSinkBlock.IsAvailable()` renvoie `true` si le puits caméra virtuelle sous-jacent est disponible sur ce système. `VirtualCameraSinkBlock.IsCOMRegistered()` renvoie `true` lorsque les deux filtres source Virtual Camera et Virtual Audio Card sont enregistrés. Sous Windows ARM64, les versions x64 et ARM64 partagent un même enregistrement : l'enregistrement de l'une ou l'autre compte.
 
 #### Plateformes
 

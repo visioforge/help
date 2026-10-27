@@ -28,7 +28,7 @@ primary_api_classes:
 
 # Bloc d'enregistrement pré-événement — VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le `PreEventRecordingBlock` met en tampon en continu les images vidéo et audio encodées dans un tampon circulaire en mémoire (ring buffer). Lorsqu'un événement se déclenche (détection de mouvement, alarme, appel d'API), il vide les images pré-événement mises en tampon vers un fichier et continue d'enregistrer les images en direct pendant une durée post-événement configurable. Cela crée des clips d'événement complets qui incluent les images antérieures au déclenchement.
 

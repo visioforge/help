@@ -1,6 +1,6 @@
 ---
-title: Mezcla de Video en .NET con Picture-in-Picture y Multicámara
-description: Implementa Picture-in-Picture con múltiples fuentes de video en .NET usando ejemplos de código C# para mezclar flujos con layouts personalizados.
+title: Mezcla de video en .NET con Picture-in-Picture y Multicámara
+description: Implemente Picture-in-Picture con múltiples fuentes de video en .NET usando ejemplos de código C# para mezclar flujos con layouts personalizados.
 tags:
   - Video Capture SDK
   - .NET
@@ -26,15 +26,15 @@ primary_api_classes:
 
 ---
 
-# Mezclar Múltiples Flujos de Video en Aplicaciones .NET
+# Mezclar múltiples flujos de video en aplicaciones .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Introducción a la Mezcla de Flujos de Video
+## Introducción a la mezcla de flujos de video
 
 El SDK proporciona capacidades poderosas para mezclar varios flujos de video con diferentes resoluciones y tasas de fotogramas. Esta funcionalidad es esencial para crear aplicaciones de video profesionales que requieren efectos Picture-in-Picture, vistas multi-cámara o salidas de visualización combinadas.
 
-## Características Clave de la Mezcla de Video
+## Características clave de la mezcla de video
 
 - Combinar múltiples fuentes de video en una sola salida
 - Soporte para diferentes resoluciones de video y tasas de fotogramas
@@ -53,11 +53,11 @@ El proceso de implementación implica tres pasos principales:
 
 Exploremos cada paso en detalle con ejemplos de código.
 
-### Configurar Modo de Mezcla de Video
+### Configurar modo de mezcla de video
 
 El SDK soporta varios layouts predefinidos así como configuraciones personalizadas.
 
-#### Layout de Pila Horizontal
+#### Layout de pila horizontal
 
 Este modo organiza todas las fuentes de video horizontalmente en una fila:
 
@@ -65,7 +65,7 @@ Este modo organiza todas las fuentes de video horizontalmente en una fila:
 VideoCapture1.PIP_Mode = PIPMode.Horizontal;
 ```
 
-#### Layout de Pila Vertical
+#### Layout de pila vertical
 
 Este modo organiza todas las fuentes de video verticalmente en una columna:
 
@@ -73,7 +73,7 @@ Este modo organiza todas las fuentes de video verticalmente en una columna:
 VideoCapture1.PIP_Mode = PIPMode.Vertical;
 ```
 
-#### Layout de Cuadrícula (2×2)
+#### Layout de cuadrícula (2×2)
 
 Este modo organiza hasta cuatro fuentes de video en una cuadrícula cuadrada:
 
@@ -81,20 +81,20 @@ Este modo organiza hasta cuatro fuentes de video en una cuadrícula cuadrada:
 VideoCapture1.PIP_Mode = PIPMode.Mode2x2;
 ```
 
-#### Layout Personalizado con Resolución Específica
+#### Layout personalizado con resolución específica
 
-Para escenarios avanzados, puedes definir un layout personalizado con dimensiones de salida precisas:
+Para escenarios avanzados, puede definir un layout personalizado con dimensiones de salida precisas:
 
 ```cs
 VideoCapture1.PIP_Mode = PIPMode.Custom;
 VideoCapture1.PIP_CustomOutputSize_Set(1920, 1080);
 ```
 
-### Añadir Fuentes de Video
+### Añadir fuentes de video
 
 La primera fuente configurada sirve como entrada principal, mientras que fuentes adicionales pueden añadirse usando la API PIP. `Stop`/`StopAsync` elimina y libera todas las fuentes PIP, así que vuelva a añadirlas antes de cada `StartAsync`, normalmente en el mismo controlador que inicia la captura.
 
-#### Añadir un Dispositivo de Captura de Video
+#### Añadir un dispositivo de captura de video
 
 Para incorporar una cámara u otro dispositivo de captura de video:
 
@@ -110,7 +110,7 @@ VideoCapture1.PIP_Sources_Add_VideoCaptureDevice(
     left: 100, top: 100, width: 320, height: 240);
 ```
 
-#### Añadir una Fuente de Cámara IP
+#### Añadir una fuente de cámara IP
 
 Para cámaras basadas en red:
 
@@ -131,7 +131,7 @@ VideoCapture1.PIP_Sources_Add_IPCamera(
     alto);
 ```
 
-#### Añadir una Fuente de Captura de Pantalla
+#### Añadir una fuente de captura de pantalla
 
 Para incluir escritorio o ventanas de aplicación:
 
@@ -147,13 +147,13 @@ VideoCapture1.PIP_Sources_Add_ScreenSource(
     alto);
 ```
 
-### Ajustes Dinámicos de Fuentes
+### Ajustes dinámicos de fuentes
 
 Una ventaja principal del SDK es la capacidad de ajustar parámetros de fuentes en tiempo real durante la operación.
 
-#### Reposicionar Fuentes
+#### Reposicionar fuentes
 
-Puedes modificar la posición y dimensiones de cualquier fuente:
+Puede modificar la posición y dimensiones de cualquier fuente:
 
 ```cs
 // SetSourcePositionAsync recibe (int index, Rectangle rect).
@@ -162,9 +162,9 @@ await VideoCapture1.PIP_Sources_SetSourcePositionAsync(
     new System.Drawing.Rectangle(izquierda, arriba, ancho, alto));
 ```
 
-#### Ajustar Propiedades Visuales
+#### Ajustar propiedades visuales
 
-Ajusta finamente la apariencia con controles de transparencia y orientación:
+Ajuste finamente la apariencia con controles de transparencia y orientación:
 
 ```cs
 int transparencia = 127; // Rango: 0-255
@@ -179,9 +179,9 @@ await VideoCapture1.PIP_Sources_SetSourceSettingsAsync(
     voltearY);
 ```
 
-### Dependencias Requeridas
+### Dependencias requeridas
 
-Para usar la funcionalidad de mezcla de video, asegúrate de incluir los paquetes redistribuibles apropiados:
+Para usar la funcionalidad de mezcla de video, asegúrese de incluir los paquetes redistribuibles apropiados:
 
 - Video capture redistributables:
   - [Paquete x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
@@ -191,11 +191,11 @@ Para usar la funcionalidad de mezcla de video, asegúrate de incluir los paquete
 
 El motor VideoCaptureCoreX es una versión más nueva del motor VideoCaptureCore que proporciona características adicionales y mejoras.
 
-### Mezcla de Video con VideoCaptureCoreX
+### Mezcla de video con VideoCaptureCoreX
 
 El motor VideoCaptureCoreX ofrece un enfoque más flexible y poderoso para la mezcla de video a través de la clase `VideoMixerSourceSettings`.
 
-#### Configuración Básica
+#### Configuración básica
 
 ```cs
 using System;
@@ -212,9 +212,9 @@ var captureX = new VideoCaptureCoreX();
 captureX.Video_Source = mezcladorVideo;
 ```
 
-#### Añadir Múltiples Fuentes
+#### Añadir múltiples fuentes
 
-Puedes añadir varias fuentes de video al mezclador, posicionando cada una exactamente donde se necesite:
+Puede añadir varias fuentes de video al mezclador, posicionando cada una exactamente donde se necesite:
 
 ```cs
 // Rect usa (left, top, right, bottom) — NO (left, top, width, height). Width y
@@ -240,24 +240,24 @@ mezcladorVideo.Add(fuentePantalla, new Rect(1280, 0, 1920, 480));
 
 #### Reconfigurar fuentes antes de Start
 
-`VideoMixerSourceSettings` es configuración — sus fuentes quedan fijadas en `StartAsync`. Para cambiar el layout mutas la lista de settings (vía `Get`/`RemoveAt`/`Add`) **antes** de iniciar el pipeline:
+`VideoMixerSourceSettings` es configuración — sus fuentes quedan fijadas en `StartAsync`. Para cambiar el layout muta la lista de settings (vía `Get`/`RemoveAt`/`Add`) **antes** de iniciar el pipeline:
 
 ```cs
-// Inspecciona una fuente en el índice 1 (devuelve Tuple<IVideoMixerSource, Rect, ChromaKeySettingsX>).
+// Inspeccionar una fuente en el índice 1 (devuelve Tuple<IVideoMixerSource, Rect, ChromaKeySettingsX>).
 var (source, currentRect, chromaKey) = mezcladorVideo.Get(1);
 
-// Intercambia su rectángulo removiendo y re-añadiendo en su lugar.
+// Intercambiar su rectángulo removiendo y re-añadiendo en su lugar.
 mezcladorVideo.RemoveAt(1);
 mezcladorVideo.Add(source, new Rect(0, 0, 1280, 720), chromaKey);
 ```
 
 Las mismas entradas también son accesibles directamente como `mezcladorVideo.Sources`, una `List<VideoMixerSourceStream>` donde cada elemento lleva su `Source`, su `Rectangle` y sus `ChromaKeySettings` opcionales. Esa lista es lo que se escribe cuando los settings se guardan en un documento de pipeline de Media Blocks, de modo que una composición guardada se restaura con sus fuentes, sus posiciones y sus chroma keys.
 
-Para cambios de layout **en runtime** (actualizar posición mientras el pipeline corre), baja a Media Blocks: construye tu pipeline con un `VideoMixerBlock` y usa sus métodos `Input_Get(Guid)` / `Input_Update(VideoMixerStream)` para mutar posición, tamaño, alpha o z-order sin reiniciar. Ver [referencia video-processing de Media Blocks](../../mediablocks/VideoProcessing/index.md) para la API de `VideoMixerBlock`.
+Para cambios de layout **en runtime** (actualizar posición mientras el pipeline corre), baja a Media Blocks: construya su pipeline con un `VideoMixerBlock` y use sus métodos `Input_Get(Guid)` / `Input_Update(VideoMixerStream)` para mutar posición, tamaño, alpha o z-order sin reiniciar. Ver [referencia video-processing de Media Blocks](../../mediablocks/VideoProcessing/index.md) para la API de `VideoMixerBlock`.
 
 #### Configuración de salida
 
-Configura el destino de salida para tu video mezclado:
+Configure el destino de salida para su video mezclado:
 
 ```cs
 // Configurar grabación MP4
@@ -281,11 +281,11 @@ await captureX.StopAsync();
 | Rendimiento | Bueno | Mejorado con pipeline de renderizado optimizado |
 | Cambios en Tiempo Real | Limitado | Manipulación completa de fuentes |
 
-### Dependencias Requeridas
+### Dependencias requeridas
 
-Consulta la página principal de [Despliegue](../deployment.md) para las dependencias más recientes.
+Consulte la página principal de [Despliegue](../deployment.md) para las dependencias más recientes.
 
-## Escenarios de Uso Avanzado
+## Escenarios de uso avanzado
 
 Las capacidades de mezcla de video habilitan numerosos escenarios de aplicación:
 
@@ -295,12 +295,12 @@ Las capacidades de mezcla de video habilitan numerosos escenarios de aplicación
 - Presentaciones educativas con múltiples entradas
 - Streams de gaming con cámara de jugador
 
-## Consejos de Solución de Problemas
+## Consejos de solución de problemas
 
-- Asegura que los recursos de hardware sean suficientes para el número de flujos
-- Monitorea uso de CPU y memoria durante la operación
-- Considera resoluciones más bajas para rendimiento más fluido con muchas fuentes
-- Prueba diferentes configuraciones de layout para resultados visuales óptimos
+- Asegure que los recursos de hardware sean suficientes para el número de flujos
+- Monitoree uso de CPU y memoria durante la operación
+- Considere resoluciones más bajas para rendimiento más fluido con muchas fuentes
+- Pruebe diferentes configuraciones de layout para resultados visuales óptimos
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para muestras de código adicionales y ejemplos de implementación.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para muestras de código adicionales y ejemplos de implementación.

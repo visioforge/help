@@ -1,6 +1,6 @@
 ---
-title: Cámara IP ONVIF en C# .NET — Descubrimiento y Control PTZ
-description: Descubre cámaras vía WS-Discovery, controla presets PTZ, extrae URIs RTSP y graba streams. Vista previa baja latencia y solución de problemas.
+title: Cámara IP ONVIF en C# .NET — descubrimiento y control PTZ
+description: Descubra cámaras vía WS-Discovery, controle presets PTZ, extraiga URIs RTSP y grabe streams. Vista previa baja latencia y solución de problemas.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -34,17 +34,17 @@ primary_api_classes:
 
 ---
 
-# Integración de Cámaras IP ONVIF - Guía Completa {: #integracion-de-camaras-ip-onvif---guia-completa }
+# Integración de cámaras IP ONVIF - Guía completa {: #integracion-de-camaras-ip-onvif---guia-completa }
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Soporte multiplataforma"
-    El descubrimiento ONVIF y el control PTZ funcionan tanto en `VideoCaptureCore` (solo Windows, DirectShow clásico) como en `VideoCaptureCoreX` / Media Blocks SDK (multiplataforma: **Windows, macOS, Linux, Android e iOS** vía GStreamer). Consulta la [matriz de soporte de plataformas](../../../platform-matrix.md) y la [guía de despliegue en Linux](../../../deployment-x/Ubuntu.md).
+    El descubrimiento ONVIF y el control PTZ funcionan tanto en `VideoCaptureCore` (solo Windows, DirectShow clásico) como en `VideoCaptureCoreX` / Media Blocks SDK (multiplataforma: **Windows, macOS, Linux, Android e iOS** vía GStreamer). Consulte la [matriz de soporte de plataformas](../../../platform-matrix.md) y la [guía de despliegue en Linux](../../../deployment-x/Ubuntu.md).
 
-!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+!!! tip "Agentes de IA: use el servidor MCP de VisioForge"
 
-    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
-    Conecta al servidor MCP público de VisioForge
+    ¿Lo construye con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecte al servidor MCP público de VisioForge
     ([documentación](../../../general/mcp-server-usage.md))
     en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
     ejemplos de código ejecutables y guías de despliegue — más preciso que
@@ -52,72 +52,72 @@ primary_api_classes:
 
     Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
-## Tabla de Contenidos
+## Tabla de contenidos
 
-- [Integración de Cámaras IP ONVIF - Guía Completa](#integracion-de-camaras-ip-onvif---guia-completa)
-  - [Tabla de Contenidos](#tabla-de-contenidos)
+- [Integración de cámaras IP ONVIF - Guía completa](#integracion-de-camaras-ip-onvif---guia-completa)
+  - [Tabla de contenidos](#tabla-de-contenidos)
   - [¿Qué es ONVIF?](#que-es-onvif)
-  - [Beneficios de la Integración ONVIF](#beneficios-de-la-integracion-onvif)
-  - [Descubrimiento y Enumeración de Cámaras](#descubrimiento-y-enumeracion-de-camaras)
-    - [Descubriendo Cámaras ONVIF en Tu Red](#descubriendo-camaras-onvif-en-tu-red)
-    - [Consultando Capacidades de Cámara](#consultando-capacidades-de-camara)
-  - [Conectando a Cámaras ONVIF](#conectando-a-camaras-onvif)
-    - [Conexión Básica](#conexion-basica)
-  - [Trabajando con Perfiles de Medios](#trabajando-con-perfiles-de-medios)
-  - [Vista Previa de Video](#vista-previa-de-video)
-    - [Configuración Básica de Vista Previa](#configuracion-basica-de-vista-previa)
-    - [Vista Previa de Baja Latencia](#vista-previa-de-baja-latencia)
+  - [Beneficios de la integración ONVIF](#beneficios-de-la-integracion-onvif)
+  - [Descubrimiento y enumeración de cámaras](#descubrimiento-y-enumeracion-de-camaras)
+    - [Descubrir cámaras ONVIF en su red](#descubrir-camaras-onvif-en-su-red)
+    - [Consultar capacidades de cámara](#consultar-capacidades-de-camara)
+  - [Conectar a cámaras ONVIF](#conectar-a-camaras-onvif)
+    - [Conexión básica](#conexion-basica)
+  - [Trabajar con perfiles de medios](#trabajar-con-perfiles-de-medios)
+  - [Vista previa de video](#vista-previa-de-video)
+    - [Configuración básica de vista previa](#configuracion-basica-de-vista-previa)
+    - [Vista previa de baja latencia](#vista-previa-de-baja-latencia)
   - [Control PTZ (Pan-Tilt-Zoom)](#control-ptz-pan-tilt-zoom)
-    - [Operaciones PTZ Básicas](#operaciones-ptz-basicas)
+    - [Operaciones PTZ básicas](#operaciones-ptz-basicas)
     - [Preajustes PTZ](#preajustes-ptz)
-    - [Posicionamiento Absoluto](#posicionamiento-absoluto)
-  - [Acciones y Capacidades de Cámara](#acciones-y-capacidades-de-camara)
-    - [Consultar Capacidades de Cámara](#consultar-capacidades-de-camara)
-    - [Reiniciar Cámara](#reiniciar-camara)
-    - [Obtener Fecha y Hora del Sistema](#obtener-fecha-y-hora-del-sistema)
-  - [Convertir Cámara Local en Fuente ONVIF](#convertir-camara-local-en-fuente-onvif)
-  - [Mejores Prácticas](#mejores-practicas)
-    - [Gestión de Conexión](#gestion-de-conexion)
-    - [Optimización de Rendimiento](#optimizacion-de-rendimiento)
-    - [Consideraciones de Red](#consideraciones-de-red)
+    - [Posicionamiento absoluto](#posicionamiento-absoluto)
+  - [Acciones y capacidades de cámara](#acciones-y-capacidades-de-camara)
+    - [Consultar capacidades de cámara](#consultar-capacidades-de-camara)
+    - [Reiniciar cámara](#reiniciar-camara)
+    - [Obtener fecha y hora del sistema](#obtener-fecha-y-hora-del-sistema)
+  - [Convertir cámara local en fuente ONVIF](#convertir-camara-local-en-fuente-onvif)
+  - [Mejores prácticas](#mejores-practicas)
+    - [Gestión de conexión](#gestion-de-conexion)
+    - [Optimización de rendimiento](#optimizacion-de-rendimiento)
+    - [Consideraciones de red](#consideraciones-de-red)
     - [Seguridad](#seguridad)
-    - [Manejo de Errores](#manejo-de-errores)
-  - [Solución de Problemas](#solucion-de-problemas)
-    - [Problemas Comunes](#problemas-comunes)
+    - [Manejo de errores](#manejo-de-errores)
+  - [Solución de problemas](#solucion-de-problemas)
+    - [Problemas comunes](#problemas-comunes)
       - ["No se puede conectar a cámara ONVIF"](#no-se-puede-conectar-a-camara-onvif)
       - ["No se descubrieron cámaras"](#no-se-descubrieron-camaras)
       - ["El stream no se reproduce"](#el-stream-no-se-reproduce)
       - ["Alto uso de CPU durante grabación"](#alto-uso-de-cpu-durante-grabacion)
       - ["Comandos PTZ no funcionan"](#comandos-ptz-no-funcionan)
-    - [Herramientas de Diagnóstico](#herramientas-de-diagnostico)
-      - [Habilitar Registro de Depuración](#habilitar-registro-de-depuracion)
-      - [Probar Conexión RTSP](#probar-conexion-rtsp)
-    - [Obtener Ayuda](#obtener-ayuda)
-    - [Demos Relacionados](#demos-relacionados)
+    - [Herramientas de diagnóstico](#herramientas-de-diagnostico)
+      - [Habilitar registro de depuración](#habilitar-registro-de-depuracion)
+      - [Probar conexión RTSP](#probar-conexion-rtsp)
+    - [Obtener ayuda](#obtener-ayuda)
+    - [Demos relacionados](#demos-relacionados)
 
 ## ¿Qué es ONVIF?
 
 ONVIF (Open Network Video Interface Forum) es un protocolo estándar de la industria que habilita interoperabilidad perfecta entre productos de video en red de diferentes fabricantes. Este protocolo define una interfaz común para dispositivos de seguridad basados en IP incluyendo cámaras, NVR (Network Video Recorders), y sistemas de control de acceso.
 
 **Beneficios Clave:**
-- **Independencia de Proveedor**: Trabaja con cámaras de diferentes fabricantes usando una API unificada
+- **Independencia de Proveedor**: Trabaje con cámaras de diferentes fabricantes usando una API unificada
 - **Comunicación Estandarizada**: Métodos consistentes para descubrimiento de dispositivos, streaming y control
 - **A Prueba del Futuro**: Nuevos dispositivos compatibles con ONVIF funcionan con aplicaciones existentes
 - **Conjunto Rico de Características**: Acceso a perfiles, streams de medios, eventos, PTZ y más
 
 ## Beneficios de la Integración ONVIF
 
-- **Neutralidad de Proveedor**: Construye aplicaciones que funcionan con cámaras de múltiples fabricantes
-- **Desarrollo a Prueba del Futuro**: A medida que nuevas cámaras compatibles con ONVIF entran al mercado, tu aplicación las soportará
+- **Neutralidad de Proveedor**: Construya aplicaciones que funcionan con cámaras de múltiples fabricantes
+- **Desarrollo a Prueba del Futuro**: A medida que nuevas cámaras compatibles con ONVIF entran al mercado, su aplicación las soportará
 - **Comunicación Estandarizada**: Métodos consistentes para descubrimiento de dispositivos, streaming de video y controles PTZ
 - **Tiempo de Desarrollo Reducido**: No hay necesidad de implementar APIs propietarias para cada marca de cámara
 - **Características Avanzadas**: Acceso a perfiles, streams de medios, eventos y gestión de dispositivos
 
 ## Descubrimiento y Enumeración de Cámaras
 
-### Descubriendo Cámaras ONVIF en Tu Red
+### Descubrir cámaras ONVIF en su red
 
-El primer paso para trabajar con cámaras ONVIF es descubrirlas en tu red local usando el protocolo WS-Discovery.
+El primer paso para trabajar con cámaras ONVIF es descubrirlas en su red local usando el protocolo WS-Discovery.
 
 ```cs
 using VisioForge.Core.ONVIFDiscovery;
@@ -139,7 +139,7 @@ try
             if (!string.IsNullOrEmpty(address))
             {
                 Console.WriteLine($"Cámara encontrada en: {address}");
-                // Agregar a tu lista de UI, etc.
+                // Agregar a su lista de UI, etc.
             }
         }
     }, _cts.Token);
@@ -151,14 +151,14 @@ catch (OperationCanceledException)
 ```
 
 **Características Clave:**
-- **Protocolo WS-Discovery**: Descubre automáticamente cámaras compatibles con ONVIF en la red local
-- **Control de Tiempo de Espera**: Especifica duración del descubrimiento en segundos
-- **Callback Asíncrono**: Recibe dispositivos descubiertos en tiempo real a medida que responden
-- **Soporte de Cancelación**: Cancela descubrimiento usando CancellationToken
+- **Protocolo WS-Discovery**: Descubra automáticamente cámaras compatibles con ONVIF en la red local
+- **Control de Tiempo de Espera**: Especifique duración del descubrimiento en segundos
+- **Callback Asíncrono**: Reciba dispositivos descubiertos en tiempo real a medida que responden
+- **Soporte de Cancelación**: Cancele descubrimiento usando CancellationToken
 
-### Consultando Capacidades de Cámara
+### Consultar capacidades de cámara
 
-Una vez descubiertas, puedes conectarte a una cámara y consultar sus capacidades:
+Una vez descubiertas, puede conectarse a una cámara y consultar sus capacidades:
 
 ```cs
 using VisioForge.Core.ONVIFX;
@@ -188,9 +188,9 @@ if (result)
 }
 ```
 
-## Conectando a Cámaras ONVIF
+## Conectar a cámaras ONVIF
 
-### Conexión Básica
+### Conexión básica
 
 ```cs
 using VisioForge.Core.ONVIFX;
@@ -212,7 +212,7 @@ else
 }
 ```
 
-## Trabajando con Perfiles de Medios
+## Trabajar con perfiles de medios
 
 Las cámaras ONVIF típicamente proporcionan múltiples perfiles de medios con diferentes resoluciones, codecs y tasas de cuadros.
 
@@ -262,9 +262,9 @@ var mainStream = await RTSPSourceSettings.CreateAsync(
 
 Para `VideoCaptureCore`, asigne a `IPCameraSourceSettings.ONVIF_SourceProfile` el token o el nombre de un perfil, o déjelo vacío para la elección automática.
 
-## Vista Previa de Video
+## Vista previa de video
 
-### Configuración Básica de Vista Previa
+### Configuración básica de vista previa
 
 === "Media Blocks SDK"
 
@@ -339,9 +339,9 @@ Para `VideoCaptureCore`, asigne a `IPCameraSourceSettings.ONVIF_SourceProfile` e
     
 
 
-### Vista Previa de Baja Latencia
+### Vista previa de baja latencia
 
-Para aplicaciones de vigilancia y monitoreo en tiempo real, habilita el modo de baja latencia:
+Para aplicaciones de vigilancia y monitoreo en tiempo real, habilite el modo de baja latencia:
 
 === "Media Blocks SDK"
 
@@ -393,7 +393,7 @@ Para aplicaciones de vigilancia y monitoreo en tiempo real, habilita el modo de 
 
 ## Control PTZ (Pan-Tilt-Zoom)
 
-### Operaciones PTZ Básicas
+### Operaciones PTZ básicas
 
 ```cs
 using VisioForge.Core.ONVIFX;
@@ -458,7 +458,7 @@ if (presets != null && presets.Length > 0)
 await onvifClient.SetPresetAsync(profileToken, "MiPreajuste");
 ```
 
-### Posicionamiento Absoluto
+### Posicionamiento absoluto
 
 ```cs
 // Mover a posición absoluta pan + tilt + zoom con velocidades por eje
@@ -474,9 +474,9 @@ bool moved = await onvifClient.AbsoluteMoveAsync(
 
 Cada comando PTZ (`AbsoluteMoveAsync`, `RelativeMoveAsync`, `ContinuousMoveAsync`, `StopMoveAsync`, `GoToPresetAsync`, `GotoHomePositionAsync`, `RemovePresetAsync`) devuelve `true` cuando la cámara lo aceptó y `false` cuando el comando no llegó a la cámara o la cámara lo rechazó; el motivo se escribe en el registro del SDK. Una cámara que no responde hace que cada solicitud espere `ONVIFClientX.RequestTimeout` (un minuto por defecto); establézcalo antes de `ConnectAsync` para fallar antes. `GotoHomePositionAsync` envía el comando de posición inicial de la propia cámara y, solo cuando la cámara lo rechaza (no hay posición inicial configurada o la operación no es compatible), recurre a un preset llamado "Home" y luego al preset con token "1"; si no hay ninguno, devuelve `false`.
 
-## Acciones y Capacidades de Cámara
+## Acciones y capacidades de cámara
 
-### Consultar Capacidades de Cámara
+### Consultar capacidades de cámara
 
 ```cs
 using VisioForge.Core.ONVIFX;
@@ -514,22 +514,22 @@ if (capabilities?.Events != null)
 }
 ```
 
-### Reiniciar Cámara
+### Reiniciar cámara
 
 ```cs
 await onvifClient.SystemRebootAsync();
 ```
 
-### Obtener Fecha y Hora del Sistema
+### Obtener fecha y hora del sistema
 
 ```cs
 var dateTime = await onvifClient.GetSystemDateAndTimeAsync();
 Console.WriteLine($"Hora de la cámara: {dateTime}");
 ```
 
-## Convertir Cámara Local en Fuente ONVIF
+## Convertir cámara local en fuente ONVIF
 
-Convierte tu cámara USB/webcam local en un stream IP que los clientes ONVIF puedan consumir. El demo de consola `RTSP Webcam Server` incluido con el Media Blocks SDK expone una cámara DirectShow como un endpoint RTSP que los grabadores ONVIF y software VMS pueden ingerir.
+Convierta su cámara USB/webcam local en un stream IP que los clientes ONVIF puedan consumir. El demo de consola `RTSP Webcam Server` incluido con el Media Blocks SDK expone una cámara DirectShow como un endpoint RTSP que los grabadores ONVIF y software VMS pueden ingerir.
 
 === "Media Blocks SDK"
 
@@ -621,11 +621,11 @@ Convierte tu cámara USB/webcam local en un stream IP que los clientes ONVIF pue
     
 
 
-## Mejores Prácticas
+## Mejores prácticas
 
-### Gestión de Conexión
+### Gestión de conexión
 
-1. **Siempre desecha clientes ONVIF apropiadamente:**
+1. **Siempre deseche clientes ONVIF apropiadamente:**
    ```cs
    using (var onvifClient = new ONVIFClientX())
    {
@@ -634,7 +634,7 @@ Convierte tu cámara USB/webcam local en un stream IP que los clientes ONVIF pue
    } // Automáticamente desechado
    ```
 
-2. **Maneja fallos de conexión con elegancia:**
+2. **Maneje fallos de conexión con elegancia:**
    ```cs
    var maxRetries = 3;
    var retryCount = 0;
@@ -657,7 +657,7 @@ Convierte tu cámara USB/webcam local en un stream IP que los clientes ONVIF pue
    }
    ```
 
-3. **Usa tokens de cancelación para descubrimiento:**
+3. **Use tokens de cancelación para descubrimiento:**
    ```cs
    var cts = new CancellationTokenSource();
    cts.CancelAfter(TimeSpan.FromSeconds(10));
@@ -665,29 +665,29 @@ Convierte tu cámara USB/webcam local en un stream IP que los clientes ONVIF pue
    await _onvifDiscovery.Discover(10, callback, cts.Token);
    ```
 
-### Optimización de Rendimiento
+### Optimización de rendimiento
 
-1. **Usa RTSPRAWSourceBlock para grabación sin re-codificación** - reduce significativamente el uso de CPU
-2. **Habilita modo de baja latencia solo cuando sea necesario** - intercambia estabilidad por velocidad
-3. **Limita streams concurrentes** basado en tus capacidades de hardware
-4. **Usa decodificadores de hardware** cuando estén disponibles:
+1. **Use RTSPRAWSourceBlock para grabación sin re-codificación** - reduce significativamente el uso de CPU
+2. **Habilite modo de baja latencia solo cuando sea necesario** - intercambia estabilidad por velocidad
+3. **Limite streams concurrentes** basado en sus capacidades de hardware
+4. **Use decodificadores de hardware** cuando estén disponibles:
    ```cs
    rtspSettings.UseGPUDecoder = true;
    ```
 
-### Consideraciones de Red
+### Consideraciones de red
 
-1. **Usa TCP para conexiones confiables** (`AllowedProtocols` es un flag-enum `RTSPSourceProtocol` — asígnalo para forzar un transporte específico):
+1. **Use TCP para conexiones confiables** (`AllowedProtocols` es un flag-enum `RTSPSourceProtocol` — asígnelo para forzar un transporte específico):
    ```cs
    rtspSettings.AllowedProtocols = RTSPSourceProtocol.TCP;
    ```
 
-2. **Ajusta la latencia del jitter-buffer** (no hay propiedad `Timeout` separada; `Latency` controla el jitter-buffer RTSP — valores más altos cambian latencia por estabilidad en redes con pérdidas):
+2. **Ajuste la latencia del jitter-buffer** (no hay propiedad `Timeout` separada; `Latency` controla el jitter-buffer RTSP — valores más altos cambian latencia por estabilidad en redes con pérdidas):
    ```cs
    rtspSettings.Latency = TimeSpan.FromMilliseconds(1000);
    ```
 
-3. **Monitorea desconexiones:**
+3. **Monitoree desconexiones:**
    ```cs
    pipeline.OnError += (sender, e) =>
    {
@@ -700,15 +700,15 @@ Convierte tu cámara USB/webcam local en un stream IP que los clientes ONVIF pue
 
 ### Seguridad
 
-1. **Nunca codifiques credenciales** - usa archivos de configuración o almacenamiento seguro
-2. **Usa HTTPS para streaming web** cuando sea posible
-3. **Implementa autenticación** para endpoints de streaming
-4. **Valida entrada de usuario** cuando construyas URLs
-5. **Mantén credenciales en memoria por tiempo mínimo**
+1. **Nunca codifique credenciales** - use archivos de configuración o almacenamiento seguro
+2. **Use HTTPS para streaming web** cuando sea posible
+3. **Implemente autenticación** para endpoints de streaming
+4. **Valide entrada de usuario** cuando construya URLs
+5. **Mantenga credenciales en memoria por tiempo mínimo**
 
-### Manejo de Errores
+### Manejo de errores
 
-1. **Registra todos los errores para diagnóstico:**
+1. **Registre todos los errores para diagnóstico:**
    ```cs
    pipeline.OnError += (sender, e) =>
    {
@@ -716,15 +716,15 @@ Convierte tu cámara USB/webcam local en un stream IP que los clientes ONVIF pue
    };
    ```
 
-2. **Habilita modo debug durante desarrollo:**
+2. **Habilite modo debug durante desarrollo:**
    ```cs
    pipeline.Debug_Mode = true;
    pipeline.Debug_Dir = @"C:\Logs\VisioForge";
    ```
 
-3. **Maneja interrupciones de stream:**
+3. **Maneje interrupciones de stream:**
    ```cs
-   // Implementa lógica de reconexión automática
+   // Implementar lógica de reconexión automática
    var reconnectAttempts = 0;
    const int maxReconnects = 5;
    
@@ -740,9 +740,9 @@ Convierte tu cámara USB/webcam local en un stream IP que los clientes ONVIF pue
    };
    ```
 
-## Solución de Problemas
+## Solución de problemas
 
-### Problemas Comunes
+### Problemas comunes
 
 #### "No se puede conectar a cámara ONVIF"
 
@@ -754,7 +754,7 @@ Convierte tu cámara USB/webcam local en un stream IP que los clientes ONVIF pue
 
 **Soluciones:**
 ```cs
-// Prueba diferentes formatos de URL
+// Probar diferentes formatos de URL
 var urls = new[]
 {
     "http://192.168.1.100:80/onvif/device_service",
@@ -780,10 +780,10 @@ foreach (var url in urls)
 - Firewall bloqueando WS-Discovery
 
 **Soluciones:**
-1. Verifica configuración de red
-2. Prueba conexión directa con IP conocido
-3. Verifica que el soporte ONVIF de la cámara esté habilitado
-4. Incrementa timeout de descubrimiento
+1. Verifique configuración de red
+2. Pruebe conexión directa con IP conocido
+3. Verifique que el soporte ONVIF de la cámara esté habilitado
+4. Incremente timeout de descubrimiento
 
 #### "El stream no se reproduce"
 
@@ -816,13 +816,13 @@ Console.WriteLine($"Bitrate: {info.VideoStreams[0].Bitrate}");
 - Decodificación por software en lugar de hardware
 
 **Soluciones:**
-1. Usa `RTSPRAWSourceBlock` para grabación sin re-codificación
-2. Habilita decodificador de hardware:
+1. Use `RTSPRAWSourceBlock` para grabación sin re-codificación
+2. Habilite decodificador de hardware:
    ```cs
    rtspSettings.UseGPUDecoder = true;
    ```
-3. Limita streams concurrentes
-4. Reduce resolución/bitrate en la cámara
+3. Limite streams concurrentes
+4. Reduzca resolución/bitrate en la cámara
 
 #### "Comandos PTZ no funcionan"
 
@@ -833,13 +833,13 @@ Console.WriteLine($"Bitrate: {info.VideoStreams[0].Bitrate}");
 
 **Soluciones:**
 ```cs
-// Verifica capacidades PTZ
+// Verificar capacidades PTZ
 var capabilities = await onvifClient.GetCapabilitiesAsync();
 if (capabilities?.PTZ != null)
 {
     Console.WriteLine("PTZ está soportado");
     
-    // Obtén configuración PTZ
+    // Obtener configuración PTZ
     var profiles = await onvifClient.GetProfilesAsync();
     foreach (var profile in profiles)
     {
@@ -852,9 +852,9 @@ else
 }
 ```
 
-### Herramientas de Diagnóstico
+### Herramientas de diagnóstico
 
-#### Habilitar Registro de Depuración
+#### Habilitar registro de depuración
 
 === "Media Blocks SDK"
 
@@ -881,10 +881,10 @@ else
     
 
 
-#### Probar Conexión RTSP
+#### Probar conexión RTSP
 
 ```cs
-// Prueba si la URL RTSP es válida
+// Probar si la URL RTSP es válida
 var rtspSettings = await RTSPSourceSettings.CreateAsync(
     new Uri(rtspUrl), 
     username, 
@@ -909,20 +909,20 @@ else
 }
 ```
 
-### Obtener Ayuda
+### Obtener ayuda
 
 - **Código de Muestra**: [Repositorio de Muestras en GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 - **Documentación**: [Documentación de VisioForge](https://www.visioforge.com/help/)
 - **Foro de Soporte**: [Soporte de VisioForge](https://support.visioforge.com)
 
-### Demos Relacionados
+### Demos relacionados
 
 - [Demo RTSP MultiView](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/RTSP%20MultiView%20Demo) - Grabación de múltiples cámaras sin re-codificación
 - [Demo RTSP Preview](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) - Vista previa y grabación con postprocesamiento
 - [Demo IP Capture](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) - Integración completa de cámara IP con control PTZ
 - [Directorio de Marcas de Cámaras IP](../../../camera-brands/index.md) - URLs RTSP y guías de conexión para más de 60 fabricantes de cámaras
 
-### Documentación Relacionada
+### Documentación relacionada
 
 - [Configuración de fuente de cámara RTSP](rtsp.md) — referencia de `IPCameraSourceSettings` y `RTSPSourceSettings` con ajuste UDP/TCP
 - [Inmersión profunda en el protocolo RTSP](../../../general/network-streaming/rtsp.md) — internos del protocolo y arquitectura de streaming

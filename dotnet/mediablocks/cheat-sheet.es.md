@@ -38,7 +38,7 @@ primary_api_classes:
 
 # Hoja de referencia de VisioForge Media Blocks SDK en C# .NET
 
-Media Blocks SDK es el SDK .NET más flexible de VisioForge — permite construir pipelines de medios arbitrarios componiendo bloques (fuentes, codificadores, renderizadores, sinks). Elija Media Blocks cuando necesite pipelines personalizados que los SDK de más alto nivel (Media Player / Video Capture / Video Edit) no puedan expresar.
+El Media Blocks SDK es el SDK .NET más flexible de VisioForge — permite construir pipelines de medios arbitrarios componiendo bloques (fuentes, codificadores, renderizadores, sinks). Elija Media Blocks cuando necesite pipelines personalizados que los SDK de más alto nivel (Media Player / Video Capture / Video Edit) no puedan expresar.
 
 !!! tip "Agentes de IA para programación: usen el servidor MCP de VisioForge"
 
@@ -62,49 +62,49 @@ Media Blocks SDK es el SDK .NET más flexible de VisioForge — permite construi
 Paquete principal del SDK (todas las plataformas):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
 ```
 
 Runtime de Windows x64 (elija x86 para aplicaciones de 32 bits):
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
 <!-- Opcional: decodificadores/codificadores adicionales vía Libav -->
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 ```
 
 Windows x86:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="[2026.10.26]"/>
 ```
 
 macOS (nativo y MAUI / macCatalyst):
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>
 ```
 
 Linux x64 (también requiere GStreamer 1.22+ instalado en el sistema):
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
 
 Android e iOS:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 ```
 
 Paquetes de integración de UI (opcionales, por framework):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.26]"/>
 ```
 
 Guía completa de instalación: [install/index.md](../install/index.md).
@@ -212,7 +212,7 @@ Sustituya `UniversalSourceBlock` por `SystemVideoSourceBlock` (cámara) o `RTSPS
 
 ### ¿En qué se diferencia Media Blocks de Media Player SDK?
 
-Media Player SDK es un reproductor de alto nivel con una sola clase (`MediaPlayerCoreX`) y controles de reproducción integrados — óptimo cuando solo necesita reproducir un archivo o stream. Media Blocks expone el pipeline subyacente para que pueda insertar codificadores, efectos, sinks multi-salida o procesamiento personalizado. Si se encuentra luchando contra Media Player SDK para añadir un paso que no expone, cambie a Media Blocks.
+El Media Player SDK es un reproductor de alto nivel con una sola clase (`MediaPlayerCoreX`) y controles de reproducción integrados — óptimo cuando solo necesita reproducir un archivo o stream. Media Blocks expone el pipeline subyacente para que pueda insertar codificadores, efectos, sinks multi-salida o procesamiento personalizado. Si se encuentra luchando contra el Media Player SDK para añadir un paso que no expone, cambie a Media Blocks.
 
 ### ¿Puedo ejecutarlo en Linux sin GStreamer?
 

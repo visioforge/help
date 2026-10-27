@@ -1,5 +1,5 @@
 ---
-title: Efectos de Video OpenGL en C# .NET - Aceleración GPU
+title: Efectos de video OpenGL en C# .NET - aceleración GPU
 description: Aplique efectos OpenGL acelerados por GPU como desenfoque, corrección de color y shaders en tiempo real con pipelines de VisioForge Media Blocks SDK.
 sidebar_label: Efectos OpenGL
 tags:
@@ -18,13 +18,13 @@ primary_api_classes:
 
 ---
 
-# Efectos de Video OpenGL - SDK de VisioForge Media Blocks .Net
+# Efectos de video OpenGL - Media Blocks SDK .NET
 
-[SDK de Media Blocks .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Los efectos de video OpenGL en el SDK de VisioForge Media Blocks .Net permiten manipulación poderosa y hardware-acelerada de streams de video. Cada efecto se distribuye como su propio MediaBlock independiente (p.ej. `GLBlurBlock`, `GLFlipBlock`, `GLAlphaBlock`) y se encadena entre `GLUploadBlock` en la entrada y `GLDownloadBlock` en la salida. Esta guía cubre los efectos disponibles, sus ajustes de configuración y otros tipos OpenGL relacionados.
+Los efectos de video OpenGL en Media Blocks SDK .NET permiten manipulación poderosa y hardware-acelerada de streams de video. Cada efecto se distribuye como su propio MediaBlock independiente (p.ej. `GLBlurBlock`, `GLFlipBlock`, `GLAlphaBlock`) y se encadena entre `GLUploadBlock` en la entrada y `GLDownloadBlock` en la salida. Esta guía cubre los efectos disponibles, sus ajustes de configuración y otros tipos OpenGL relacionados.
 
-## Efecto Base: `GLBaseVideoEffect`
+## Efecto base: `GLBaseVideoEffect`
 
 Todos los efectos de video OpenGL heredan de la clase `GLBaseVideoEffect`, que proporciona propiedades y eventos comunes.
 
@@ -38,11 +38,11 @@ Todos los efectos de video OpenGL heredan de la clase `GLBaseVideoEffect`, que p
 
 - `OnUpdate`: Ocurre cuando las propiedades del efecto necesitan actualizarse en el pipeline. Llame a `OnUpdateCall()` para activarlo.
 
-## Efectos de Video Disponibles
+## Efectos de video disponibles
 
-Esta sección detalla los diversos efectos de video OpenGL que puede usar. Cada efecto es un MediaBlock independiente — instancia el bloque directamente (p.ej. `new GLBlurBlock()`) y conéctalo entre `GLUploadBlock` y `GLDownloadBlock` (u otros bloques GL) en tu pipeline.
+Esta sección detalla los diversos efectos de video OpenGL que puede usar. Cada efecto es un MediaBlock independiente — instancie el bloque directamente (p.ej. `new GLBlurBlock()`) y conéctelo entre `GLUploadBlock` y `GLDownloadBlock` (u otros bloques GL) en su pipeline.
 
-### Efecto Alfa (`GLAlphaVideoEffect`)
+### Efecto alfa (`GLAlphaVideoEffect`)
 
 Reemplaza un color seleccionado con un canal alfa o establece/ajusta el canal alfa existente.
 
@@ -69,15 +69,15 @@ Define el modo de operación para el efecto de video Alfa.
 | `Blue`   | Chroma Key en azul puro.               |
 | `Custom` | Chroma Key en el color especificado por `CustomColor`. |
 
-### Efecto Desenfoque (`GLBlurVideoEffect`)
+### Efecto desenfoque (`GLBlurVideoEffect`)
 
 Aplica un efecto de desenfoque usando convolución separable 9x9. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Burbuja (`GLBulgeVideoEffect`)
+### Efecto burbuja (`GLBulgeVideoEffect`)
 
 Crea una distorsión de burbuja en el video. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Balance de Color (`GLColorBalanceVideoEffect`)
+### Efecto balance de color (`GLColorBalanceVideoEffect`)
 
 Ajusta el balance de color del video, incluyendo brillo, contraste, tono y saturación.
 
@@ -90,7 +90,7 @@ Ajusta el balance de color del video, incluyendo brillo, contraste, tono y satur
 | `Hue`        | `double` | `0`                  | Ajusta tono (-1.0 a 1.0, 0 significa sin cambio).    |
 | `Saturation` | `double` | `1`                  | Ajusta saturación (0.0 a infinito, 1 significa sin cambio). |
 
-### Efecto Desentrelazado (`GLDeinterlaceVideoEffect`)
+### Efecto desentrelazado (`GLDeinterlaceVideoEffect`)
 
 Aplica un filtro de desentrelazado al video.
 
@@ -109,11 +109,11 @@ Define el método para el efecto de video Desentrelazado.
 | `VerticalBlur` | Método de desenfoque vertical.          |
 | `MAAD`         | Adaptativo de Movimiento: Detección Avanzada. |
 
-### Efecto Ojo de Pez (`GLFishEyeVideoEffect`)
+### Efecto ojo de pez (`GLFishEyeVideoEffect`)
 
 Aplica una distorsión de lente ojo de pez. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Voltear (`GLFlipVideoEffect`)
+### Efecto voltear (`GLFlipVideoEffect`)
 
 Voltea o rota el video.
 
@@ -138,19 +138,19 @@ Define el método de volteo o rotación de video.
 | `UpperLeftDiagonal`  | Voltear a través de diagonal superior izquierda/inferior derecha. |
 | `UpperRightDiagonal` | Voltear a través de diagonal superior derecha/inferior izquierda. |
 
-### Efecto Iluminación de Brillo (`GLGlowLightingVideoEffect`)
+### Efecto iluminación de brillo (`GLGlowLightingVideoEffect`)
 
 Agrega un efecto de iluminación de brillo al video. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Escala de Grises (`GLGrayscaleVideoEffect`)
+### Efecto escala de grises (`GLGrayscaleVideoEffect`)
 
 Convierte el video a escala de grises. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Calor (`GLHeatVideoEffect`)
+### Efecto calor (`GLHeatVideoEffect`)
 
 Aplica un efecto tipo firma de calor al video. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Laplaciano (`GLLaplacianVideoEffect`)
+### Efecto laplaciano (`GLLaplacianVideoEffect`)
 
 Aplica un filtro de detección de bordes Laplaciano.
 
@@ -160,19 +160,19 @@ Aplica un filtro de detección de bordes Laplaciano.
 |----------|---------|----------------------|-------------------------------------------------------------------|
 | `Invert` | `bool`  | `false`              | Si `true`, invierte colores para obtener bordes oscuros en un fondo brillante. |
 
-### Efecto Túnel de Luz (`GLLightTunnelVideoEffect`)
+### Efecto túnel de luz (`GLLightTunnelVideoEffect`)
 
 Crea un efecto visual de túnel de luz. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Procesamiento Cruzado Luma (`GLLumaCrossProcessingVideoEffect`)
+### Efecto procesamiento cruzado luma (`GLLumaCrossProcessingVideoEffect`)
 
 Aplica un efecto de procesamiento cruzado luma (a menudo "xpro"). Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Espejo (`GLMirrorVideoEffect`)
+### Efecto espejo (`GLMirrorVideoEffect`)
 
 Aplica un efecto espejo al video. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Cambiar Tamaño (`GLResizeVideoEffect`)
+### Efecto cambiar tamaño (`GLResizeVideoEffect`)
 
 Cambia el tamaño del video a las dimensiones especificadas.
 
@@ -183,7 +183,7 @@ Cambia el tamaño del video a las dimensiones especificadas.
 | `Width`  | `int` | El ancho objetivo para el cambio de tamaño de video. |
 | `Height` | `int` | La altura objetivo para el cambio de tamaño de video.|
 
-### Efecto Sepia (`GLSepiaVideoEffect`)
+### Efecto sepia (`GLSepiaVideoEffect`)
 
 Aplica un tono sepia al video. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
@@ -201,19 +201,19 @@ Aplica un filtro de detección de bordes Sobel.
 |----------|---------|----------------------|-------------------------------------------------------------------|
 | `Invert` | `bool`  | `false`              | Si `true`, invierte colores para obtener bordes oscuros en un fondo brillante. |
 
-### Efecto Cuadrado (`GLSquareVideoEffect`)
+### Efecto cuadrado (`GLSquareVideoEffect`)
 
 Aplica un efecto de distorsión o pixelación "cuadrado". Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Aplastar (`GLSqueezeVideoEffect`)
+### Efecto aplastar (`GLSqueezeVideoEffect`)
 
 Aplica un efecto de distorsión de aplastamiento. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Estirar (`GLStretchVideoEffect`)
+### Efecto estirar (`GLStretchVideoEffect`)
 
 Aplica un efecto de distorsión de estiramiento. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Transformación (`GLTransformationVideoEffect`)
+### Efecto transformación (`GLTransformationVideoEffect`)
 
 Aplica transformaciones 3D al video, incluyendo rotación, escalado y traslación.
 
@@ -235,15 +235,15 @@ Aplica transformaciones 3D al video, incluyendo rotación, escalado y traslació
 | `TranslationY` | `float` | `0.0f`               | Traslación a lo largo del eje Y (coordenadas universales [0-1]).      |
 | `TranslationZ` | `float` | `0.0f`               | Traslación a lo largo del eje Z (coordenadas universales [0-1], profundidad). |
 
-### Efecto Remolino (`GLTwirlVideoEffect`)
+### Efecto remolino (`GLTwirlVideoEffect`)
 
 Aplica un efecto de distorsión de remolino. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-### Efecto Rayos X (`GLXRayVideoEffect`)
+### Efecto rayos X (`GLXRayVideoEffect`)
 
 Aplica un efecto visual tipo rayos X. Este efecto no tiene propiedades configurables adicionales más allá de las heredadas de `GLBaseVideoEffect`.
 
-## Identificación de Efectos OpenGL: Enum `GLVideoEffectID`
+## Identificación de efectos OpenGL: enum `GLVideoEffectID`
 
 Esta enumeración lista todos los tipos de efectos de video OpenGL disponibles, usados por `GLBaseVideoEffect.ID`.
 
@@ -274,11 +274,11 @@ Esta enumeración lista todos los tipos de efectos de video OpenGL disponibles, 
 | `Alpha`          | El efecto de canales alfa.                |
 | `Transformation` | El efecto de transformación.              |
 
-## Renderizado y Configuración de Vista OpenGL
+## Renderizado y configuración de vista OpenGL
 
 Estos tipos asisten en configurar cómo se renderiza o ve el video en un contexto OpenGL, especialmente para escenarios especializados como VR o visualización personalizada.
 
-### Ajustes de Vista Equirectangular (`GLEquirectangularViewSettings`)
+### Ajustes de vista equirectangular (`GLEquirectangularViewSettings`)
 
 Maneja ajustes para renderizar video equirectangular (360 grados), comúnmente usado en aplicaciones VR. Implementa `IVRVideoControl`.
 
@@ -302,7 +302,7 @@ Maneja ajustes para renderizar video equirectangular (360 grados), comúnmente u
 
 - `SettingsChanged`: Ocurre cuando cualquier ajuste de vista es cambiado.
 
-### Ajustes de Renderizador de Video (`GLVideoRendererSettings`)
+### Ajustes de renderizador de video (`GLVideoRendererSettings`)
 
 Configura propiedades generales para un renderizador de video basado en OpenGL.
 
@@ -328,11 +328,11 @@ Define métodos de rotación para el renderizador de video OpenGL.
 | `FlipHorizontal` | Voltear horizontalmente.                |
 | `FlipVertical`   | Voltear verticalmente.                  |
 
-## Shaders OpenGL Personalizados
+## Shaders OpenGL personalizados
 
 Permite la aplicación de shaders GLSL personalizados al stream de video.
 
-### Definición de Shader (`GLShader`)
+### Definición de shader (`GLShader`)
 
 Representa un par de shaders de vértice y fragmento.
 
@@ -347,7 +347,7 @@ Representa un par de shaders de vértice y fragmento.
 - `GLShader()`
 - `GLShader(string vertexShader, string fragmentShader)`
 
-### Ajustes de Shader (`GLShaderSettings`)
+### Ajustes de shader (`GLShaderSettings`)
 
 Configura shaders GLSL personalizados para usar en el pipeline.
 
@@ -364,11 +364,11 @@ Configura shaders GLSL personalizados para usar en el pipeline.
 - `GLShaderSettings(string vertex, string fragment)`
 - `GLShaderSettings(GLShader shader)`
 
-## Superposiciones de Imagen en OpenGL
+## Superposiciones de imagen en OpenGL
 
 Proporciona ajustes para superponer imágenes estáticas en un stream de video dentro de un contexto OpenGL.
 
-### Ajustes de Superposición (`GLOverlaySettings`)
+### Ajustes de superposición (`GLOverlaySettings`)
 
 Define las propiedades de una superposición de imagen.
 
@@ -387,11 +387,11 @@ Define las propiedades de una superposición de imagen.
 **Constructor:**
 - `GLOverlaySettings(string filename)`
 
-## Mezcla de Video OpenGL
+## Mezcla de video OpenGL
 
 Estos tipos se usan para configurar un mezclador de video basado en OpenGL, permitiendo combinar y componer múltiples streams de video.
 
-### Ajustes de Mezclador (`GLVideoMixerSettings`)
+### Ajustes de mezclador (`GLVideoMixerSettings`)
 
 Extiende `VideoMixerBaseSettings` para mezcla específica de OpenGL. Maneja una lista de objetos `GLVideoMixerStream` e hereda propiedades como `Width`, `Height`, y `FrameRate`.
 
@@ -404,7 +404,7 @@ Extiende `VideoMixerBaseSettings` para mezcla específica de OpenGL. Maneja una 
 - `GLVideoMixerSettings(int width, int height, VideoFrameRate frameRate)`
 - `GLVideoMixerSettings(int width, int height, VideoFrameRate frameRate, List<VideoMixerStream> streams)`
 
-### Stream de Mezclador (`GLVideoMixerStream`)
+### Stream de mezclador (`GLVideoMixerStream`)
 
 Extiende `VideoMixerStream` y define propiedades para un stream individual dentro del mezclador de video OpenGL. Hereda `Rectangle`, `ZOrder`, y `Alpha` de `VideoMixerStream`.
 
@@ -427,7 +427,7 @@ Extiende `VideoMixerStream` y define propiedades para un stream individual dentr
 **Constructor:**
 - `GLVideoMixerStream(Rect rectangle, uint zorder, double alpha = 1.0)`
 
-### Ecuación de Mezcla (`GLVideoMixerBlendEquation` Enum)
+### Ecuación de mezcla (`GLVideoMixerBlendEquation` enum)
 
 Especifica cómo se combinan los colores fuente y destino durante la mezcla.
 
@@ -437,7 +437,7 @@ Especifica cómo se combinan los colores fuente y destino durante la mezcla.
 | `Subtract`        | Fuente - Destino                                |
 | `ReverseSubtract` | Destino - Fuente                                |
 
-### Función de Mezcla (`GLVideoMixerBlendFunction` Enum)
+### Función de mezcla (`GLVideoMixerBlendFunction` enum)
 
 Define factores para colores fuente y destino en operaciones de mezcla. (Rs, Gs, Bs, As son componentes de color fuente; Rd, Gd, Bd, Ad son componentes de color destino; Rc, Gc, Bc, Ac son componentes de color constante).
 
@@ -459,11 +459,11 @@ Define factores para colores fuente y destino en operaciones de mezcla. (Rs, Gs,
 | `OneMinusContantAlpha`     | Factor es (1-Ac, 1-Ac, 1-Ac, 1-Ac).         |
 | `SourceAlphaSaturate`      | Factor es (min(As, 1-Ad), min(As, 1-Ad), min(As, 1-Ad), 1). |
 
-## Fuentes Virtuales de Prueba para OpenGL
+## Fuentes virtuales de prueba para OpenGL
 
 Estas clases de ajustes se usan para configurar fuentes que generan patrones de prueba directamente dentro de un contexto OpenGL.
 
-### Ajustes de Fuente de Video Virtual (`GLVirtualVideoSourceSettings`)
+### Ajustes de fuente de video virtual (`GLVirtualVideoSourceSettings`)
 
 Configura un bloque fuente (`GLVirtualVideoSourceBlock`) que produce datos de video de prueba. Implementa `IMediaPlayerBaseSourceSettings` e `IVideoCaptureBaseVideoSourceSettings`.
 
@@ -502,7 +502,7 @@ Define el patrón de prueba generado por `GLVirtualVideoSourceBlock`.
 - `Task<MediaFileInfo> ReadInfoAsync()`: Lee asincrónicamente información de medios (devuelve información sintética basada en ajustes).
 - `MediaBlock CreateBlock()`: Crea una instancia `GLVirtualVideoSourceBlock` configurada con estos ajustes.
 
-## Bloques de Procesamiento OpenGL
+## Bloques de procesamiento OpenGL
 
 Además de los bloques por efecto listados arriba, el SDK incluye varios bloques de procesamiento OpenGL independientes para composición de superposiciones, redimensionamiento por GPU, conversión de formato, mezcla de múltiples streams y renderizado acelerado por hardware. Como los bloques de efectos, estos operan sobre memoria de GPU y normalmente se encadenan entre `GLUploadBlock` (memoria CPU a GL) y `GLDownloadBlock` (GL a memoria CPU), o se alimentan directamente desde otros bloques OpenGL. Cada bloque expone un método estático `IsAvailable()` que puede llamar para verificar el soporte de OpenGL en el sistema actual antes de construir el pipeline.
 

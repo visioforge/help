@@ -35,7 +35,7 @@ primary_api_classes:
 
 # Comment enregistrer un flux UDP MPEG-TS dans un fichier sans réencodage
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!!info Exemple de démonstration
 Pour un exemple complet et exécutable, consultez la [démo UDP RAW Capture](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/UDP%20RAW%20Capture%20Demo).
@@ -99,14 +99,14 @@ graph LR;
 Ajoutez le Media Blocks SDK à votre projet via NuGet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
 ```
 
 Sous Windows, vous avez également besoin des paquets de runtime natif. Pour enregistrer (multiplexer), vous avez besoin du runtime principal ; le paquet Libav fournit les multiplexeurs :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 ```
 
 Pour les paquets de runtime macOS, Linux, Android et iOS et les notes propres à chaque plateforme, consultez le [Guide de déploiement](../../deployment-x/index.md).

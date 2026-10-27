@@ -34,7 +34,7 @@ primary_api_classes:
 
 # Build a Cross-Platform Video Player in C# with Avalonia UI
 
-Build a video player in C# that runs on **Windows, macOS, Linux, Android, and iOS** from a single Avalonia UI codebase. This guide uses the MVVM pattern with [VisioForge Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net)'s `MediaPlayerCoreX` engine and the `VideoView` control, and references the [SimplePlayerMVVM demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayerMVVM) on GitHub for every snippet shown.
+Build a video player in C# that runs on **Windows, macOS, Linux, Android, and iOS** from a single Avalonia UI codebase. This guide uses the MVVM pattern with [VisioForge Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)'s `MediaPlayerCoreX` engine and the `VideoView` control, and references the [SimplePlayerMVVM demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayerMVVM) on GitHub for every snippet shown.
 
 Supported formats out of the box: **H.264, H.265/HEVC, VP9, AV1, MP4, MKV, WebM, RTSP, HLS, MPEG-DASH**.
 
@@ -97,7 +97,7 @@ Before you begin, ensure you have the following installed:
 * For iOS development (requires a macOS machine):
   * Xcode
   * Necessary provisioning profiles and certificates.
-* VisioForge .NET SDK (MediaPlayer SDK X). You can obtain this from the VisioForge website. The necessary packages will be added via NuGet.
+* VisioForge .NET SDK (Media Player SDK .NET). You can obtain this from the VisioForge website. The necessary packages will be added via NuGet.
 
 ## 2. Project Setup
 
@@ -156,8 +156,8 @@ The main project, `SimplePlayerMVVM.csproj`, targets multiple platforms. Key pac
   <PackageReference Include="Avalonia.Android" Version="12.0.5" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.26]"/>
  </ItemGroup>
 </Project>
 ```
@@ -179,15 +179,15 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
     <TargetFramework>net10.0-macos</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
     <TargetFramework>net10.0</TargetFramework>
@@ -219,7 +219,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
   </ItemGroup>
 </Project>
 ```
@@ -242,7 +242,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
   <!-- ... other items ... -->
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="12.0.5" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
@@ -1122,11 +1122,11 @@ To abstract platform-specific functionality, interfaces are defined in the core 
 
         ```xml
         <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-          <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-          <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
         </ItemGroup>
         <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-          <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
         </ItemGroup>
         ```
 
@@ -1137,7 +1137,7 @@ These platform-specific projects and configurations ensure that the shared core 
 
 ## 7. Key VisioForge SDK Components Used
 
-This application leverages several key components from the VisioForge Media Player SDK X:
+This application leverages several key components from the VisioForge Media Player SDK .NET:
 
 * **`VisioForge.Core.MediaPlayerX.MediaPlayerCoreX`:**
   * The central engine for media playback. It handles opening media sources, controlling playback (play, pause, stop, seek, rate), managing audio and video, and providing status information (position, duration).
@@ -1172,13 +1172,13 @@ Understanding these components is crucial for working with the VisioForge SDK an
 
 ## 9. Conclusion
 
-This guide has demonstrated how to build a cross-platform media player using Avalonia UI with the MVVM pattern and the VisioForge Media Player SDK X. By leveraging a shared core project for ViewModels and Views, and handling platform-specifics in dedicated head projects, we can create a maintainable application that runs on a wide range of devices.
+This guide has demonstrated how to build a cross-platform media player using Avalonia UI with the MVVM pattern and the VisioForge Media Player SDK .NET. By leveraging a shared core project for ViewModels and Views, and handling platform-specifics in dedicated head projects, we can create a maintainable application that runs on a wide range of devices.
 
 Key takeaways:
 
 * The MVVM pattern helps separate concerns and improves testability.
 * ReactiveUI simplifies implementing MVVM with Avalonia.
-* VisioForge Media Player SDK X provides powerful media playback capabilities, with `MediaPlayerCoreX` as the core engine and `VideoView` for Avalonia UI integration.
+* VisioForge Media Player SDK .NET provides powerful media playback capabilities, with `MediaPlayerCoreX` as the core engine and `VideoView` for Avalonia UI integration.
 * Platform-specific considerations, especially for file access and permissions, are handled through interfaces and platform-specific implementations.
 * Proper initialization (`VisioForgeX.InitSDK()`) and cleanup (`VisioForgeX.DestroySDK()`) of the VisioForge SDK are essential.
 
@@ -1212,4 +1212,4 @@ Implement a platform-specific `IFilePickerService` interface as shown in section
 - [Build a Video Player in VB.NET](video-player-vb-net.md) — VB.NET media player for WinForms
 - [Loop Mode and Position Range](loop-and-position-range.md) — configure looping, A-B repeat, and segment playback
 - [Code Samples](../code-samples/index.md) — frame extraction, playlists, and additional playback examples
-- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — product page and downloads
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) — product page and downloads

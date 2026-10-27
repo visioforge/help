@@ -30,7 +30,7 @@ Si vous cherchez à être opérationnel rapidement :
 
 1. Installez le SDK via NuGet : `Install-Package VisioForge.DotNet.Core`
 2. Ajoutez le paquet de redistribution : `Install-Package VisioForge.DotNet.Core.Redist.VideoFingerprinting`
-   - Ce paquet unique prend en charge Windows (x86/x64), Linux (x64/ARM64) et macOS
+   - Ce paquet unique prend en charge Windows (x86/x64/ARM64), Linux (x64/ARM64) et macOS
 3. Définissez votre clé de licence : `VFPAnalyzer.SetLicenseKey("TRIAL");`
 4. Générez votre première empreinte à l'aide des exemples ci-dessous
 
@@ -42,7 +42,9 @@ Pour les exigences détaillées, notamment les plateformes prises en charge, les
 
 - **Version de .NET** : 
   - Windows : .NET Framework 4.6.1+ ou .NET 6.0+
-  - Linux/macOS : .NET 6.0+
+  - Linux : .NET 6.0+
+  - macOS : .NET 9.0+
+  - Framework cible (applications .NET 5+) : ajoutez-y le système, `-windows` sous Windows (`net8.0-windows`) et `-macos` sous macOS (`net9.0-macos` ou ultérieur). Un framework cible sans suffixe de système (`net8.0`) est la version Linux : sous Windows ou macOS, elle signale que la bibliothèque native est introuvable.
 - **IDE** : Visual Studio 2019+ (Windows), Visual Studio Code ou JetBrains Rider
 - **Gestionnaire de paquets NuGet** : pour une installation et des mises à jour faciles
 
@@ -67,7 +69,7 @@ La façon la plus simple d'installer le SDK passe par le gestionnaire de paquets
 Install-Package VisioForge.DotNet.Core
 
 # Installer le paquet de redistribution avec les bibliothèques natives (requis)
-# Ce paquet inclut la prise en charge Windows (x86/x64), Linux (x64/arm64) et macOS
+# Ce paquet inclut la prise en charge Windows (x86/x64/ARM64), Linux (x64/arm64) et macOS
 Install-Package VisioForge.DotNet.Core.Redist.VideoFingerprinting
 
 # Pour l'intégration MongoDB (optionnel)
@@ -81,7 +83,7 @@ Install-Package VisioForge.DotNet.VideoFingerprinting.MongoDB
 dotnet add package VisioForge.DotNet.Core
 
 # Ajouter le paquet de redistribution avec les bibliothèques natives (requis)
-# Ce paquet inclut la prise en charge Windows (x86/x64), Linux (x64/arm64) et macOS
+# Ce paquet inclut la prise en charge Windows (x86/x64/ARM64), Linux (x64/arm64) et macOS
 dotnet add package VisioForge.DotNet.Core.Redist.VideoFingerprinting
 
 # Pour l'intégration MongoDB (optionnel)
@@ -95,8 +97,8 @@ dotnet restore
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="[2025.9.5]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="[2026.10.26]"/>
   
   <!-- Optionnel : intégration MongoDB -->
   <PackageReference Include="VisioForge.DotNet.VideoFingerprinting.MongoDB" Version="[2025.8.6]"/>
@@ -108,7 +110,7 @@ dotnet restore
     Le SDK requiert deux paquets :
 
     1. **VisioForge.DotNet.Core** — bibliothèque principale du SDK avec l'API C#
-    2. **VisioForge.DotNet.Core.Redist.VideoFingerprinting** — bibliothèques natives pour la fonctionnalité d'empreinte vidéo (prend en charge Windows x86/x64, Linux x64/arm64 et macOS)
+    2. **VisioForge.DotNet.Core.Redist.VideoFingerprinting** — bibliothèques natives pour la fonctionnalité d'empreinte vidéo (prend en charge Windows x86/x64/ARM64, Linux x64/arm64 et macOS)
 
     Les deux paquets doivent être installés pour que le SDK fonctionne correctement. Le paquet de redistribution contient des bibliothèques natives spécifiques à chaque plateforme, automatiquement déployées dans votre répertoire de sortie.
 
@@ -119,7 +121,7 @@ dotnet restore
     **Prise en charge des plateformes :**
     Le paquet `VisioForge.DotNet.Core.Redist.VideoFingerprinting` inclut les bibliothèques natives pour :
 
-    - Windows (x86 et x64)
+    - Windows (x86, x64 et ARM64 ; ARM64 nécessite .NET 6+ et la version 2026.10.23 ou ultérieure de `VisioForge.DotNet.Core` et de `VisioForge.DotNet.Core.Redist.VideoFingerprinting`, sur ARM64 une application .NET Framework doit s'exécuter en x86, ou en x64 sous Windows 11)
     - Linux (x64 et ARM64)
     - macOS (Intel et Apple Silicon)
 
@@ -266,6 +268,8 @@ cd VideoFingerprintingDemo
 dotnet add package VisioForge.DotNet.Core
 dotnet add package VisioForge.DotNet.Core.Redist.VideoFingerprinting
 ```
+
+Sous Windows, ajoutez `-windows` à `<TargetFramework>` dans `VideoFingerprintingDemo.csproj` (`net10.0` devient `net10.0-windows`). Sous macOS, ajoutez `-macos`, ce qui demande .NET 9 ou ultérieur, Xcode et `dotnet workload install macos`. Le framework cible écrit par `dotnet new console` n'a pas de suffixe de système : c'est la version Linux.
 
 ### Étape 2 : implémentation de base
 

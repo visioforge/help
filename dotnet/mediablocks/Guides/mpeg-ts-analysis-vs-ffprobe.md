@@ -20,7 +20,7 @@ primary_api_classes:
 
 # MPEG-TS Analysis in C#: VisioForge vs ffprobe
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Why this matters
 

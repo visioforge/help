@@ -23,11 +23,11 @@ primary_api_classes:
 
 ---
 
-# Video Decoder Blocks - VisioForge Media Blocks SDK .Net
+# Video Decoder Blocks - VisioForge Media Blocks SDK .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Video Decoder blocks are essential components in a media pipeline, responsible for decompressing encoded video streams into raw video frames that can be further processed or rendered. VisioForge Media Blocks SDK .Net offers a variety of video decoder blocks supporting numerous codecs and hardware acceleration technologies.
+Video Decoder blocks are essential components in a media pipeline, responsible for decompressing encoded video streams into raw video frames that can be further processed or rendered. VisioForge Media Blocks SDK .NET offers a variety of video decoder blocks supporting numerous codecs and hardware acceleration technologies.
 
 ## Available Video Decoder Blocks
 

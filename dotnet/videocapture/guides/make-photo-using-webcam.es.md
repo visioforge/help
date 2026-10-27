@@ -1,5 +1,5 @@
 ---
-title: Captura de Fotos con Webcam en C# .NET — API Still Frame
+title: Captura de fotos con webcam en C# .NET — API Still Frame
 description: Tome fotos desde una webcam en C# / .NET. Captura still frame por botón hardware o trigger software. Guardar en JPEG, PNG, BMP. Ejemplo de código incluido.
 tags:
   - Video Capture SDK
@@ -16,12 +16,12 @@ primary_api_classes:
 
 ---
 
-# Captura de Fotos con Webcam en Aplicaciones .NET
+# Captura de fotos con webcam en aplicaciones .NET
 
-!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+!!! tip "Agentes de IA: use el servidor MCP de VisioForge"
 
-    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
-    Conecta al servidor MCP público de VisioForge
+    ¿Lo construye con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecte al servidor MCP público de VisioForge
     ([documentación](../../general/mcp-server-usage.md))
     en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
     ejemplos de código ejecutables y guías de despliegue — más preciso que
@@ -35,7 +35,7 @@ Las aplicaciones modernas requieren cada vez más integración de webcam para va
 
 Las webcams pueden capturar imágenes a través de dos métodos principales: capturas activadas por software (donde la aplicación inicia el proceso) y capturas activadas por hardware, donde un botón físico en el dispositivo de webcam activa la captura de imagen. Este último método se conoce como "captura de fotograma fijo" y proporciona una experiencia de usuario más intuitiva en muchas aplicaciones.
 
-## Entendiendo la Captura de Fotogramas Fijos
+## Entender la captura de fotogramas fijos
 
 La captura de fotogramas fijos es una función especializada disponible en muchos modelos de webcam que permite a los usuarios capturar imágenes de alta calidad presionando un botón dedicado en el dispositivo. Este enfoque ofrece varias ventajas:
 
@@ -44,18 +44,18 @@ La captura de fotogramas fijos es una función especializada disponible en mucho
 - Menor probabilidad de movimiento de cámara
 - A menudo mejor calidad de imagen que la extracción de fotogramas de video
 
-No todas las webcams soportan captura de fotogramas fijos, por lo que es importante verificar las especificaciones de tu dispositivo o probar esta funcionalidad antes de depender de ella en tu aplicación.
+No todas las webcams soportan captura de fotogramas fijos, por lo que es importante verificar las especificaciones de su dispositivo o probar esta funcionalidad antes de depender de ella en su aplicación.
 
-## Implementando Captura de Fotos con Webcam en .NET
+## Implementar captura de fotos con webcam en .NET
 
-El Video Capture SDK para .NET proporciona un framework robusto para implementar captura de fotos con webcam en tus aplicaciones. A continuación, cubriremos los pasos esenciales para integrar esta funcionalidad.
+El Video Capture SDK para .NET proporciona un framework robusto para implementar captura de fotos con webcam en sus aplicaciones. A continuación, cubriremos los pasos esenciales para integrar esta funcionalidad.
 
-### Configurando Tu Proyecto
+### Configurar su proyecto
 
-Antes de entrar en los detalles de implementación, asegúrate de que tu entorno de desarrollo esté correctamente configurado:
+Antes de entrar en los detalles de implementación, asegúrese de que su entorno de desarrollo esté correctamente configurado:
 
-1. Crea un nuevo proyecto de aplicación .NET
-2. Añade la referencia del Video Capture SDK a tu proyecto
+1. Cree un nuevo proyecto de aplicación .NET
+2. Añada la referencia del Video Capture SDK a su proyecto
 3. Importa los namespaces necesarios:
 
 ```csharp
@@ -67,9 +67,9 @@ using VisioForge.Core.Types.VideoCapture;
 using VisioForge.Core.VideoCapture;
 ```
 
-### Habilitando la Captura de Fotogramas Fijos
+### Habilitar la captura de fotogramas fijos
 
-El primer paso para implementar la captura de fotogramas fijos es configurar correctamente tu aplicación para detectar y responder a las pulsaciones del botón de hardware de la webcam. Así es como:
+El primer paso para implementar la captura de fotogramas fijos es configurar correctamente su aplicación para detectar y responder a las pulsaciones del botón de hardware de la webcam. Así es como:
 
 ```csharp
 // Inicializar el componente de captura de video. Pase un IVideoView para vista previa,
@@ -81,7 +81,7 @@ videoCapture.Video_Still_Frames_Grabber_Enabled = true;
 
 // Seleccionar dispositivo de captura por nombre. Enumera dispositivos con videoCapture.Video_CaptureDevices().
 videoCapture.Video_CaptureDevice = new VideoCaptureSource("USB Camera");
-videoCapture.Video_CaptureDevice.Format_UseBest = true;     // o establece Format + FrameRate explícitamente
+videoCapture.Video_CaptureDevice.Format_UseBest = true;     // o establecer Format + FrameRate explícitamente
 videoCapture.Audio_RecordAudio = false;
 videoCapture.Audio_PlayAudio = false;
 
@@ -94,9 +94,9 @@ await videoCapture.StartAsync();
 
 Configurar la propiedad `Video_Still_Frames_Grabber_Enabled` a `true` es crucial. Esta configuración le dice al SDK que monitoree las pulsaciones del botón de hardware y active los eventos apropiados cuando se capture un fotograma fijo.
 
-### Manejando Fotogramas Capturados
+### Manejar fotogramas capturados
 
-Una vez que la captura de fotogramas fijos está habilitada, necesitas manejar los eventos que se activan cuando se captura un fotograma. El SDK proporciona dos eventos principales para este propósito:
+Una vez que la captura de fotogramas fijos está habilitada, necesita manejar los eventos que se activan cuando se captura un fotograma. El SDK proporciona dos eventos principales para este propósito:
 
 ```csharp
 // Para manejar fotogramas como objetos Bitmap
@@ -131,7 +131,7 @@ private void VideoCapture_OnStillVideoFrameBitmap(object sender, VideoFrameBitma
 }
 ```
 
-Para acceso al buffer crudo (sin asignación de Bitmap, útil en pipelines de imagen personalizados), suscríbete a `OnStillVideoFrameBuffer`. Su firma es `EventHandler<VideoFrameBufferEventArgs>`:
+Para acceso al buffer crudo (sin asignación de Bitmap, útil en pipelines de imagen personalizados), suscríbase a `OnStillVideoFrameBuffer`. Su firma es `EventHandler<VideoFrameBufferEventArgs>`:
 
 ```csharp
 private void VideoCapture_OnStillVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
@@ -146,25 +146,25 @@ private void VideoCapture_OnStillVideoFrameBuffer(object sender, VideoFrameBuffe
         File.WriteAllBytes($"frame-{e.Frame.Timestamp.Ticks}.raw", e.FrameArray);
     }
 
-    // Marca UpdateData = true si mutaste el buffer y quieres que el cambio se propague downstream.
+    // Marcar UpdateData = true si muta el buffer y quiere que el cambio se propague downstream.
     // e.UpdateData = true;
 }
 ```
 
-### Guardando Imágenes Capturadas
+### Guardar imágenes capturadas
 
-Después de capturar y potencialmente procesar la imagen, a menudo querrás guardarla en disco. El SDK proporciona un método conveniente para este propósito:
+Después de capturar y potencialmente procesar la imagen, a menudo querrá guardarla en disco. El SDK proporciona un método conveniente para este propósito:
 
 ```csharp
 // Guardar el fotograma actual en un archivo (API async — funciona después de StartAsync).
 await videoCapture.Frame_SaveAsync("imagenCapturada.jpg", ImageFormat.Jpeg);
 ```
 
-Puedes especificar diferentes formatos de imagen basados en los requisitos de tu aplicación, como PNG para calidad sin pérdida o JPEG para tamaños de archivo más pequeños.
+Puede especificar diferentes formatos de imagen basados en los requisitos de su aplicación, como PNG para calidad sin pérdida o JPEG para tamaños de archivo más pequeños.
 
-### Obteniendo el Fotograma Actual
+### Obtener el fotograma actual
 
-En algunos escenarios, podrías querer capturar una imagen programáticamente sin depender del botón de hardware. Puedes hacer esto usando el método `Frame_GetCurrent`:
+En algunos escenarios, podría querer capturar una imagen programáticamente sin depender del botón de hardware. Puede hacer esto usando el método `Frame_GetCurrent`:
 
 ```csharp
 // Obtener el fotograma actual como un Bitmap
@@ -181,14 +181,14 @@ if (currentFrame != null)
 }
 ```
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
-Las aplicaciones de webcam pueden ser intensivas en recursos, especialmente al procesar imágenes de alta resolución. Considera estas técnicas de optimización:
+Las aplicaciones de webcam pueden ser intensivas en recursos, especialmente al procesar imágenes de alta resolución. Considere estas técnicas de optimización:
 
-1. Usa procesamiento en segundo plano para operaciones de guardado de imágenes
-2. Implementa limitación de tasa de fotogramas si es necesario el monitoreo continuo
-3. Reduce la resolución para vista previa mientras mantienes alta resolución para capturas
-4. Libera los recursos correctamente cuando la aplicación se cierra:
+1. Use procesamiento en segundo plano para operaciones de guardado de imágenes
+2. Implemente limitación de tasa de fotogramas si es necesario el monitoreo continuo
+3. Reduzca la resolución para vista previa mientras mantiene alta resolución para capturas
+4. Libere los recursos correctamente cuando la aplicación se cierra:
 
    ```csharp
    protected override void OnFormClosing(FormClosingEventArgs e)
@@ -200,18 +200,18 @@ Las aplicaciones de webcam pueden ser intensivas en recursos, especialmente al p
    }
    ```
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-- **Cámara No Detectada**: Asegúrate de que la webcam esté correctamente conectada y los controladores estén instalados
-- **Captura de Fotograma Fijo No Funciona**: Verifica que tu modelo de webcam soporte captura con botón de hardware
-- **Mala Calidad de Imagen**: Verifica los ajustes de resolución y asegura condiciones de iluminación adecuadas
-- **Aplicación Se Bloquea**: Implementa manejo de errores apropiado y gestión de recursos
+- **Cámara no detectada**: Asegúrese de que la webcam esté correctamente conectada y los controladores estén instalados
+- **Captura de fotograma fijo no funciona**: Verifique que su modelo de webcam soporte captura con botón de hardware
+- **Mala calidad de imagen**: Verifique los ajustes de resolución y asegure condiciones de iluminación adecuadas
+- **Aplicación se bloquea**: Implemente manejo de errores apropiado y gestión de recursos
 
 ## Conclusión
 
-Implementar captura de fotos con webcam en aplicaciones .NET proporciona funcionalidad valiosa para muchos escenarios. Siguiendo las directrices en este artículo, puedes crear aplicaciones robustas y fáciles de usar que aprovechan efectivamente las capacidades de la webcam.
+Implementar captura de fotos con webcam en aplicaciones .NET proporciona funcionalidad valiosa para muchos escenarios. Siguiendo las directrices en este artículo, puede crear aplicaciones robustas y fáciles de usar que aprovechan efectivamente las capacidades de la webcam.
 
-Recuerda probar tu implementación en diferentes modelos de webcam y configuraciones para asegurar un rendimiento y fiabilidad consistentes.
+Recuerde probar su implementación en diferentes modelos de webcam y configuraciones para asegurar un rendimiento y fiabilidad consistentes.
 
 ---
-Para más ejemplos de código e implementaciones, visita nuestro repositorio de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para más ejemplos de código e implementaciones, visite nuestro repositorio de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

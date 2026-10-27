@@ -29,7 +29,7 @@ Avalonia UI se distingue comme un framework d'interface utilisateur .NET polyval
 
 Notre suite de SDK donne aux développeurs Avalonia accès à de larges capacités multimédias :
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Installation et configuration
 
@@ -224,7 +224,7 @@ Ajoutez le redistribuable spécifique à iOS à votre projet principal iOS :
   <!-- La version du redistribuable iOS est volontairement en retard sur celle du SDK - elle suit
        le rythme de reconstruction de GStreamer-iOS, pas celui du wrapper. Ne l'alignez pas sur
        VisioForge.DotNet.* ; il n'existe pas de version 2026.x sur nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 

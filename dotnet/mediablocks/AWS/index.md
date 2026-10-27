@@ -21,7 +21,7 @@ primary_api_classes:
 
 # AWS S3 Blocks - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 AWS S3 blocks enable interaction with Amazon Simple Storage Service (S3) to read media files as sources or write media files as sinks within your pipelines.
 

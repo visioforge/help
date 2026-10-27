@@ -41,7 +41,7 @@ primary_api_classes:
 
 # Maîtriser la diffusion RTSP avec les SDK VisioForge
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Prise en charge multiplateforme"
     Le moteur `VideoCaptureCoreX` et le Media Blocks SDK fonctionnent sur **Windows, macOS, Linux, Android et iOS** via GStreamer. Consultez la [matrice de prise en charge des plateformes](../../platform-matrix.md) pour les détails des codecs et de l'accélération matérielle, et le [guide de déploiement Linux](../../deployment-x/Ubuntu.md) pour la configuration sur Ubuntu / NVIDIA Jetson / Raspberry Pi.

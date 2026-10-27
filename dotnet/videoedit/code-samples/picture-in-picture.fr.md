@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Créer des vidéos image dans l'image et écran partagé en .NET
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
 ## Introduction aux techniques de composition vidéo
 

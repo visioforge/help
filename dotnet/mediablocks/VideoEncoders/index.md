@@ -26,7 +26,7 @@ primary_api_classes:
 
 # Video encoding
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Video encoding is the process of converting raw video data into a compressed format. This process is essential for reducing the size of video files, making them easier to store and stream over the internet. VisioForge Media Blocks SDK provides a wide range of video encoders that support various formats and codecs.
 

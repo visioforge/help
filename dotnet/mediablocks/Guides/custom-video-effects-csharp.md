@@ -25,7 +25,7 @@ primary_api_classes:
 
 # Custom Video Effects and OpenGL Shaders in C# .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The VisioForge Media Blocks SDK provides 70+ video processing blocks for real-time effects, GPU-accelerated OpenGL shaders, professional LUT color grading, and animated pan/zoom transformations. Effects are applied by inserting processing blocks into the pipeline between a video source and a renderer or encoder.
 
@@ -550,4 +550,4 @@ OpenGL effects are supported on Windows, Linux, macOS, and Android — any platf
 - [Effects Reference (100+ effects)](../../general/video-effects/effects-reference.md) — detailed parameters for all effects
 - [Deployment Guide](../../deployment-x/index.md) — platform-specific runtime packages
 - [Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — shader and effects demos
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads

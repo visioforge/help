@@ -33,7 +33,7 @@ primary_api_classes:
 
 # How to Save RTSP Stream to File: Record IP Camera Video without Re-encoding
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!!info Demo Sample
 For a complete working example of recording RTSP streams without re-encoding, see the [RTSP MultiView Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/RTSP%20MultiView%20Demo).
@@ -83,14 +83,14 @@ The main idea is to take the raw video stream from the RTSP source and directly 
 You'll need the VisioForge Media Blocks SDK. You can add it to your .NET project via NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
 ```
 
 Depending on your target platform (Windows, macOS, Linux, including ARM-based systems like Jetson Nano for embedded camera applications), you will also need the corresponding native runtime packages. For example, on Windows to record video:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 ```
 
 For detailed information about deployment requirements, and platform-specific dependencies, please refer to our [Deployment Guide](../../deployment-x/index.md). It's important to check these details to ensure your video stream capture application works correctly.

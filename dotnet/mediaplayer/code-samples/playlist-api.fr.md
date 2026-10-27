@@ -16,7 +16,7 @@ primary_api_classes:
 
 # Guide complet de l'API de liste de lecture en .NET
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [MediaPlayerCore](#){ .md-button }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [MediaPlayerCore](#){ .md-button }
 
 ## Introduction à la gestion des listes de lecture
 

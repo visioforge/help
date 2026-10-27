@@ -1,6 +1,6 @@
 ---
 title: Cámara RTSP en Unity con Media Blocks o VideoCaptureCoreX
-description: Visualiza una cámara RTSP / IP en vivo en Unity 6 con el pipeline Media Blocks RTSPViewer o el motor VideoCaptureCoreX, con grabación opcional.
+description: Visualice una cámara RTSP / IP en vivo en Unity 6 con el pipeline Media Blocks RTSPViewer o el motor VideoCaptureCoreX, con grabación opcional.
 sidebar_label: Ver una cámara RTSP
 order: 58
 tags:
@@ -27,23 +27,23 @@ primary_api_classes:
 
 # Ver una cámara RTSP en Unity
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" }
 
 Hay dos formas de visualizar un stream en vivo de cámara RTSP / IP en Unity, y el paquete incluye
 una escena lista para cada una. Ambas renderizan en un `RawImage` de Unity y se ejecutan en
-**Windows**, **Android**, **macOS Standalone** e **iOS**. Este artículo asume que ya has importado
-el paquete de Unity y aplicado los dos ajustes de proyecto requeridos — consulta primero
+**Windows**, **Android**, **macOS Standalone** e **iOS**. Este artículo asume que ya ha importado
+el paquete de Unity y aplicado los dos ajustes de proyecto requeridos — consulte primero
 [Usar VisioForge en Unity](index.md).
 
 ## Dos escenas, dos motores
 
 | Escena | Motor | Nivel | Ideal para |
 |---|---|---|---|
-| **`RTSPViewer`** | `MediaBlocksPipeline` (Media Blocks SDK) | Bajo nivel | Control total de la canalización — eliges tus propios sinks, efectos y salidas. |
+| **`RTSPViewer`** | `MediaBlocksPipeline` (Media Blocks SDK) | Bajo nivel | Control total de la canalización — elija sus propios sinks, efectos y salidas. |
 | **`IPCameraX`** | `VideoCaptureCoreX` (Video Capture SDK) | Alto nivel | Motor de captura listo para usar — añade salidas de grabación, instantáneas, enrutamiento de audio y superposiciones sobre el mismo stream. |
 
-Elige `RTSPViewer` cuando quieras montar la canalización tú mismo; elige `IPCameraX` cuando quieras
+Elija `RTSPViewer` cuando quiera montar la canalización usted mismo; elija `IPCameraX` cuando quiera
 un motor de captura que además pueda grabar mientras previsualiza. Ambas alimentan el mismo
 `VisioForgeVideoView` incluido, así que la subida de textura, el manejo de aspecto y el volteo
 vertical son idénticos.
@@ -55,12 +55,12 @@ SDK .NET** de bajo nivel, renderizado en un `RawImage`.
 
 ### Ejecutar la escena RTSPViewer
 
-1. En la ventana **Project** abre `Assets/Scenes/RTSPViewer.unity` (haz doble clic en ella).
-2. En la **Hierarchy** selecciona el GameObject **RawImage**. El componente `RTSPViewerPlayer` está
+1. En la ventana **Project** abra `Assets/Scenes/RTSPViewer.unity` (haga doble clic en ella).
+2. En la **Hierarchy** seleccione el GameObject **RawImage**. El componente `RTSPViewerPlayer` está
    adjunto a él.
-3. En el **Inspector**, establece **Rtsp Url** (y **Login** / **Password** si la cámara requiere
+3. En el **Inspector**, establezca **Rtsp Url** (y **Login** / **Password** si la cámara requiere
    autenticación).
-4. Pulsa **▶ Play** — el stream se renderiza en la vista Game.
+4. Pulse **▶ Play** — el stream se renderiza en la vista Game.
 
 ![Hierarchy de la escena RTSPViewer: Canvas con RawImage, EventSystem, Main Camera](unity-rtspviewer-hierarchy.webp)
 
@@ -71,7 +71,7 @@ SDK .NET** de bajo nivel, renderizado en un `RawImage`.
 | Campo | Predeterminado | Descripción |
 |---|---|---|
 | **Rtsp Url** | `rtsp://192.168.1.10:554/stream` | URL RTSP de la cámara/stream. |
-| **Login** | *(vacío)* | Nombre de usuario RTSP — déjalo vacío si el stream no necesita autenticación. |
+| **Login** | *(vacío)* | Nombre de usuario RTSP — déjelo vacío si el stream no necesita autenticación. |
 | **Password** | *(vacío)* | Contraseña RTSP. |
 | **Auto Play On Start** | `true` | Conectar automáticamente en `Start()`. |
 | **Render Audio** | `true` | Renderizar audio a través del dispositivo predeterminado del sistema. |
@@ -125,15 +125,15 @@ canalización `RTSPViewer` construida a mano no proporciona de fábrica.
 
 `VideoCaptureCoreX` expone el evento exclusivo de Unity **`OnVideoFrameUnity`**: cada fotograma llega
 como **RGBA32** empaquetado de forma compacta (`Stride == Width * 4`), listo para
-`Texture2D.LoadRawTextureData` sin conversión. Suscríbete antes de `StartAsync`.
+`Texture2D.LoadRawTextureData` sin conversión. Suscríbase antes de `StartAsync`.
 
 ### Ejecutar la escena IPCameraX
 
-1. En la ventana **Project** abre `Assets/Scenes/SampleScene.unity`.
-2. En la **Hierarchy** selecciona el GameObject **RawImage** — el componente `IPCameraXViewer` está
+1. En la ventana **Project** abra `Assets/Scenes/SampleScene.unity`.
+2. En la **Hierarchy** seleccione el GameObject **RawImage** — el componente `IPCameraXViewer` está
    adjunto a él.
-3. En el **Inspector** establece **Rtsp Url** (y **Login** / **Password** si la cámara los necesita).
-4. Pulsa **▶ Play** — el stream de la cámara aparece en la vista Game.
+3. En el **Inspector** establezca **Rtsp Url** (y **Login** / **Password** si la cámara los necesita).
+4. Pulse **▶ Play** — el stream de la cámara aparece en la vista Game.
 
 ### Campos del Inspector (IPCameraXViewer)
 
@@ -175,13 +175,13 @@ if (recordToFile)
 await _capture.StartAsync();
 ```
 
-## Úsalo en tu propia escena
+## Úselo en su propia escena
 
-Añade un **Canvas → Raw Image** (*GameObject → UI → Raw Image*), selecciónalo, **Add Component →**
+Añada un **Canvas → Raw Image** (*GameObject → UI → Raw Image*), selecciónelo, **Add Component →**
 `RTSPViewerPlayer` (canalización Media Blocks) o `IPCameraXViewer` (motor VideoCaptureCoreX),
-establece **Rtsp Url** y pulsa **▶ Play**. El diseño del `RawImage`, el manejo del aspecto y el
+establezca **Rtsp Url** y pulse **▶ Play**. El diseño del `RawImage`, el manejo del aspecto y el
 volteo vertical los gestiona el `VisioForgeVideoView` incluido. Para reproducción de archivos
-locales en lugar de RTSP, usa `MediaBlocksPlayer` o `MediaPlayerXPlayer` (consulta
+locales en lugar de RTSP, use `MediaBlocksPlayer` o `MediaPlayerXPlayer` (consulte
 [Reproducir un archivo multimedia](simple-player.md)).
 
 ## Ajustes de build y permisos de red por plataforma
@@ -199,7 +199,7 @@ propios requisitos de permisos de red y de Build Profile.
 
     El TCP / UDP saliente al puerto RTSP de la cámara funciona sin declaración especial.
     Windows Defender Firewall puede preguntar la primera vez que el player vincule un socket
-    UDP — acepta el prompt de red privada. Consulta [Compilar para Windows](windows.md) para
+    UDP — acepta el prompt de red privada. Consulte [Compilar para Windows](windows.md) para
     la lista completa.
 
 === "Android"
@@ -220,7 +220,7 @@ propios requisitos de permisos de red y de Build Profile.
 
     Para RTSP sobre UDP en una red pública, Android 9+ (API 28+) también requiere
     `android:usesCleartextTraffic="true"` en el elemento `<application>` si la cámara solo es
-    alcanzable vía RTSP / RTP plano sin TLS. Consulta [Compilar para Android](android.md) para
+    alcanzable vía RTSP / RTP plano sin TLS. Consulte [Compilar para Android](android.md) para
     la lista completa.
 
 === "macOS"
@@ -232,9 +232,9 @@ propios requisitos de permisos de red y de Build Profile.
     | Scripting Backend | Mono *(predeterminado)* o IL2CPP |
 
     No hay entradas de manifiesto adicionales — las conexiones salientes son irrestrictas por
-    defecto. Para distribución por Mac App Store, añade el entitlement
+    defecto. Para distribución por Mac App Store, añada el entitlement
     **com.apple.security.network.client** al bundle firmado para que el App Sandbox permita
-    acceso de red saliente. Consulta [Compilar para macOS](macos.md) para notas de firma de
+    acceso de red saliente. Consulte [Compilar para macOS](macos.md) para notas de firma de
     código y notarización.
 
 === "iOS"
@@ -246,14 +246,14 @@ propios requisitos de permisos de red y de Build Profile.
     | Scripting Backend | **IL2CPP** (obligatorio) |
 
     iOS 14+ bloquea el primer intento de conexión a cualquier dirección de red local hasta que
-    tu app declare por qué. Añade a `Info.plist`:
+    su app declare por qué. Añada a `Info.plist`:
 
     ```xml
     <key>NSLocalNetworkUsageDescription</key>
     <string>Esta app reproduce video de cámaras IP locales en tu red.</string>
     ```
 
-    Para URLs `rtsp://` planas (sin TLS) o `http://`, añade una excepción de App Transport
+    Para URLs `rtsp://` planas (sin TLS) o `http://`, añada una excepción de App Transport
     Security:
 
     ```xml
@@ -265,13 +265,13 @@ propios requisitos de permisos de red y de Build Profile.
     ```
 
     Las URLs públicas `https://` / `rtsps://` con certificados firmados por CA no necesitan
-    excepción ATS. Consulta [Compilar para iOS](ios.md) para el flujo Xcode completo.
+    excepción ATS. Consulte [Compilar para iOS](ios.md) para el flujo Xcode completo.
 
 ## Auto-reconexión
 
 Ambos motores se reconectan automáticamente cuando el stream cae, con backoff entre intentos — sin
-máquina de estado manual en tu script. Para `RTSPViewer`, sube el timeout en los ajustes
-`RTSPSourceSettings` subyacentes antes de pasarlos a `RTSPSourceBlock` si necesitas una ventana más
+máquina de estado manual en su script. Para `RTSPViewer`, suba el timeout en los ajustes
+`RTSPSourceSettings` subyacentes antes de pasarlos a `RTSPSourceBlock` si necesita una ventana más
 larga; `IPCameraX` (`VideoCaptureCoreX`) gestiona los reinicios de la cámara y las breves
 interrupciones de la misma forma.
 
@@ -279,29 +279,29 @@ interrupciones de la misma forma.
 
 ### ¿Qué escena debería usar — RTSPViewer o IPCameraX?
 
-Usa **`RTSPViewer`** (`MediaBlocksPipeline`) para una canalización ligera de solo visualización que
-montas tú mismo. Usa **`IPCameraX`** (`VideoCaptureCoreX`) cuando además quieras grabación a MP4,
+Use **`RTSPViewer`** (`MediaBlocksPipeline`) para una canalización ligera de solo visualización que
+monta usted mismo. Use **`IPCameraX`** (`VideoCaptureCoreX`) cuando además quiera grabación a MP4,
 instantáneas, enrutamiento de audio o superposiciones sobre el mismo stream — vienen listas en el
 motor de captura.
 
 ### ¿Cómo proporciono las credenciales de la cámara?
 
-Establece los campos **Login** y **Password** en cualquiera de los componentes. Déjalos vacíos para
+Establezca los campos **Login** y **Password** en cualquiera de los componentes. Déjelos vacíos para
 streams que no necesitan autenticación; las credenciales se envían a la cámara, no se incrustan en
 la URL.
 
 ### ¿Qué formato de URL debo usar?
 
-La forma estándar `rtsp://host:port/path` que expone tu cámara, p. ej.
+La forma estándar `rtsp://host:port/path` que expone su cámara, p. ej.
 `rtsp://192.168.1.21:554/Streaming/Channels/101` (Hikvision) o
-`rtsp://192.168.1.22:554/cam/realmonitor?channel=1&subtype=0` (Dahua). Consulta el manual de tu
+`rtsp://192.168.1.22:554/cam/realmonitor?channel=1&subtype=0` (Dahua). Consulte el manual de su
 cámara para conocer la ruta exacta del stream.
 
 ### ¿Graba la cámara?
 
-`IPCameraX` sí — activa **Record To File** para añadir un `MP4Output` junto a la vista previa.
-`RTSPViewer` es solo de visualización; añade tú mismo una rama de grabación a su canalización si la
-necesitas.
+`IPCameraX` sí — active **Record To File** para añadir un `MP4Output` junto a la vista previa.
+`RTSPViewer` es solo de visualización; añada usted mismo una rama de grabación a su canalización si la
+necesita.
 
 ### ¿Qué ocurre si la cámara no tiene audio?
 
@@ -310,7 +310,7 @@ lleva audio, por lo que una cámara solo de video no necesita ningún cambio.
 
 ### ¿Puedo mostrar varias cámaras a la vez?
 
-Sí. Añade un `RawImage` con su propio `RTSPViewerPlayer` o `IPCameraXViewer` para cada cámara; cada
+Sí. Añada un `RawImage` con su propio `RTSPViewerPlayer` o `IPCameraXViewer` para cada cámara; cada
 uno construye un pipeline independiente.
 
 ## Véase también

@@ -25,7 +25,7 @@ primary_api_classes:
 
 La huella digital de video es una tecnología sofisticada que crea firmas digitales únicas de contenido de video, permitiendo identificación y coincidencia precisa incluso cuando los videos han sido transformados, comprimidos o modificados. A diferencia del hashing criptográfico (MD5, SHA) que produce resultados completamente diferentes incluso de cambios diminutos, la huella digital de video genera firmas perceptualmente similares para contenido visualmente similar.
 
-El SDK de Huella Digital de Video de VisioForge implementa algoritmos de vanguardia que analizan múltiples dimensiones de datos de video para crear huellas robustas y compactas que pueden sobrevivir a varias transformaciones mientras mantienen alta precisión en identificación de contenido.
+El Video Fingerprinting SDK de VisioForge implementa algoritmos de vanguardia que analizan múltiples dimensiones de datos de video para crear huellas robustas y compactas que pueden sobrevivir a varias transformaciones mientras mantienen alta precisión en identificación de contenido.
 
 ## Cómo Funciona la Huella Digital de Video
 
@@ -298,9 +298,9 @@ Diseñado para despliegue a gran escala:
 
 ## Conclusión
 
-El SDK de Huella Digital de Video de VisioForge implementa algoritmos sofisticados que crean firmas digitales robustas capaces de identificar contenido de video a pesar de transformaciones significativas. Combinando análisis espacial, patrones temporales y modelado perceptual, la tecnología logra alta precisión mientras mantiene eficiencia computacional.
+El Video Fingerprinting SDK de VisioForge implementa algoritmos sofisticados que crean firmas digitales robustas capaces de identificar contenido de video a pesar de transformaciones significativas. Combinando análisis espacial, patrones temporales y modelado perceptual, la tecnología logra alta precisión mientras mantiene eficiencia computacional.
 
-La arquitectura del SDK, construida en técnicas probadas como DCT, hashing perceptual e integración temporal, proporciona a los desarrolladores una herramienta poderosa para identificación de contenido, detección de duplicados y búsqueda de fragmentos. Ya sea que esté construyendo un sistema de gestión de contenido, implementando protección de derechos de autor o creando soluciones de monitoreo de medios, el SDK de Huella Digital de Video ofrece la precisión, velocidad y robustez requeridas para despliegues de producción.
+La arquitectura del SDK, construida en técnicas probadas como DCT, hashing perceptual e integración temporal, proporciona a los desarrolladores una herramienta poderosa para identificación de contenido, detección de duplicados y búsqueda de fragmentos. Ya sea que esté construyendo un sistema de gestión de contenido, implementando protección de derechos de autor o creando soluciones de monitoreo de medios, el Video Fingerprinting SDK ofrece la precisión, velocidad y robustez requeridas para despliegues de producción.
 
 ## Lectura Adicional
 

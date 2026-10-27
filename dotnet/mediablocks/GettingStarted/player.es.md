@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Construcción de un Reproductor de Video con Funciones Completas usando Media Blocks SDK
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Este tutorial detallado le guía a través del proceso de crear una aplicación de reproductor de video de grado profesional usando Media Blocks SDK .Net. Siguiendo estas instrucciones, entenderá cómo implementar funcionalidades clave incluyendo carga de medios, control de reproducción y renderizado de audio-video.
 

@@ -73,10 +73,12 @@ YourApp\
 
 ### Core Files
 
-#### x86 (32-bit) Only
+#### x86, x64 and ARM64
 
-**Filter**:
-- `VisioForge_VLC_Source.ax` - Main DirectShow filter
+**Filter** (one per architecture):
+- `VisioForge_VLC_Source.ax` - Main DirectShow filter (x86)
+- `VisioForge_VLC_Source_x64.ax` - Main DirectShow filter (x64)
+- `VisioForge_VLC_Source_arm64.ax` - Main DirectShow filter (ARM64, from the `VisioForge.DotNet.Core.Redist.VLC.arm64` NuGet package; the installer ships x86 and x64)
 
 **VLC Libraries** (required):
 - `libvlc.dll` - VLC core library
@@ -114,7 +116,7 @@ YourApp\
 
 ```
 YourApp\
-├── VisioForge_VLC_Source.ax
+├── VisioForge_VLC_Source.ax          (x86; _x64.ax or _arm64.ax for x64 / ARM64)
 ├── libvlc.dll
 ├── libvlccore.dll
 ├── plugins\
@@ -133,13 +135,13 @@ YourApp\
 
 ### Dependencies
 
-- **Visual C++ Redistributable 2015-2022** (x86)
+- **Visual C++ Redistributable 2015-2022** (same architecture as the filter)
 
 ### Important Notes
 
 - **All VLC plugins must be included** - Missing plugins will cause playback failures for certain formats
 - **Maintain directory structure** - VLC expects plugins in `plugins\` subdirectory
-- **No x64 version** - VLC Source Filter is 32-bit only
+- **One architecture per folder** - Each build ships its own `libvlc.dll`, `libvlccore.dll` and `plugins\`; deploy the set that matches the filter and never mix them in one folder. An AnyCPU app keeps each set in its own subfolder (for example `x86\` and `x64\`)
 
 ---
 ## Processing Filters Pack
@@ -547,20 +549,36 @@ For each SDK, you must include:
 
 ---
 ## Testing Deployment Package
-Before releasing, verify all files are included:
+Before releasing, verify all files are included. Put the script in the package folder and run it on a clean test machine: it unregisters the filter when it finishes.
 ```batch
 @echo off
+setlocal
 echo Testing Filter Registration...
+
+REM Check for Administrator privileges
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo ERROR: This script must be run as Administrator!
+    exit /b 1
+)
+
 REM Test each filter
-regsvr32 /s "VisioForge_FFMPEG_Source_x64.ax"
+regsvr32 /s "%~dp0VisioForge_FFMPEG_Source_x64.ax"
 if %errorLevel% neq 0 (
     echo ERROR: FFMPEG Source failed to register
-    echo Check if all FFmpeg DLLs are present
+    echo Check that the .ax file and all FFmpeg DLLs are in the script folder
     exit /b 1
 )
 REM Test filter creation
-YourTestApp.exe
-echo All filters registered successfully!
+"%~dp0YourTestApp.exe"
+set TEST_RESULT=%errorLevel%
+REM Remove the test registration
+regsvr32 /s /u "%~dp0VisioForge_FFMPEG_Source_x64.ax"
+if %TEST_RESULT% neq 0 (
+    echo ERROR: YourTestApp.exe could not create the filter
+    exit /b 1
+)
+echo FFMPEG Source test passed!
 ```
 ---
 

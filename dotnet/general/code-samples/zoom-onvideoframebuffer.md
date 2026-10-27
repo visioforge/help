@@ -16,7 +16,7 @@ primary_api_classes:
 
 # Implementing Zoom Effects in .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -106,7 +106,7 @@ private void SDK_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
 
 ### X-engine note
 
-On the cross-platform X engines (`VideoCaptureCoreX`, `MediaPlayerCoreX`) the buffer arrives in `VideoFrameXBufferEventArgs`. Flat dimensions live directly on `e.Frame.Width` / `Height` / `Stride`, and frames are typically BGRA. For heavy pixel math, wrap the buffer in `SKPixmap` (SkiaSharp is already a transitive dependency of the X engines).
+On the cross-platform X engines (`VideoCaptureCoreX`, `MediaPlayerCoreX`) the buffer arrives in `VideoFrameXBufferEventArgs`. Flat dimensions live directly on `e.Frame.Width` / `Height` / `Stride`, and frames arrive in the engine's grabber format — RGBA on `VideoCaptureCoreX`, RGB on `MediaPlayerCoreX` (check `e.Frame.Format` before wrapping). For heavy pixel math, wrap the buffer in `SKPixmap` (SkiaSharp is already a transitive dependency of the X engines).
 
 ## Performance Considerations
 

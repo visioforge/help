@@ -1,6 +1,6 @@
 ---
-title: Superposiciones de Texto en Videos .NET con C# y SDK
-description: Crea superposiciones de texto dinámicas con control completo sobre fuente, color, posición y temporización. Incluye ejemplos de código y animaciones.
+title: Superposiciones de texto en videos .NET con C# y SDK
+description: Cree superposiciones de texto dinámicas con control completo sobre fuente, color, posición y temporización. Incluye ejemplos de código y animaciones.
 tags:
   - Video Edit SDK
   - .NET
@@ -17,15 +17,15 @@ primary_api_classes:
   - TextOverlay
 ---
 
-# Implementar Superposiciones de Texto en Proyectos de Video
+# Implementar superposiciones de texto en proyectos de video
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
 
-## Introducción a las Superposiciones de Texto
+## Introducción a las superposiciones de texto
 
-Las superposiciones de texto son componentes esenciales en la edición de video profesional. Te permiten añadir títulos, subtítulos, marcas de agua, leyendas y otros elementos de texto importantes a tus videos. Con el Video Edit SDK para .NET, puedes crear superposiciones de texto sofisticadas con control preciso sobre apariencia, posicionamiento y temporización.
+Las superposiciones de texto son componentes esenciales en la edición de video profesional. Le permiten añadir títulos, subtítulos, marcas de agua, leyendas y otros elementos de texto importantes a sus videos. Con el Video Edit SDK para .NET, puede crear superposiciones de texto sofisticadas con control preciso sobre apariencia, posicionamiento y temporización.
 
-## Características y Capacidades Principales
+## Características y capacidades principales
 
 El SDK proporciona amplias opciones de personalización para superposiciones de texto, incluyendo:
 
@@ -38,7 +38,7 @@ El SDK proporciona amplias opciones de personalización para superposiciones de 
 
 ## Ejemplo de Implementación
 
-El siguiente código demuestra cómo crear y configurar una superposición de texto en tu aplicación .NET:
+El siguiente código demuestra cómo crear y configurar una superposición de texto en su aplicación .NET:
 
 ```cs
 // Inicializar el objeto VideoEditCoreX (se asume que ya está creado)
@@ -68,14 +68,14 @@ textOverlay.FontWeight = SkiaSharp.SKFontStyleWeight.Bold;   // Aplicar peso neg
 textOverlay.Color = SkiaSharp.SKColors.Red;
 
 // Establecer un fondo transparente detrás del texto
-// Podrías usar cualquier color con canal alfa para semi-transparencia
+// Se puede usar cualquier color con canal alfa para semi-transparencia
 textOverlay.BackgroundColor = SkiaSharp.SKColors.Transparent;
 
-// Añadir la superposición de texto configurada a tu proyecto de video
+// Añadir la superposición de texto configurada a su proyecto de video
 videoEdit.Video_TextOverlays.Add(textOverlay);
 ```
 
-## Opciones de Posicionamiento
+## Opciones de posicionamiento
 
 El SDK usa las coordenadas X e Y para posicionamiento absoluto. X e Y representan coordenadas en píxeles desde la esquina superior izquierda del fotograma de video:
 
@@ -84,7 +84,7 @@ El SDK usa las coordenadas X e Y para posicionamiento absoluto. X e Y representa
 textOverlay.X = 50;   // Posición horizontal desde el borde izquierdo
 textOverlay.Y = 50;   // Posición vertical desde el borde superior
 
-// También puedes posicionar el texto en otras áreas:
+// También se puede posicionar el texto en otras áreas:
 // Esquina inferior derecha (asumiendo video de 1920x1080):
 // textOverlay.X = 1820;  // 1920 - 100 para algo de margen
 // textOverlay.Y = 980;   // 1080 - 100 para algo de margen
@@ -94,20 +94,20 @@ textOverlay.Y = 50;   // Posición vertical desde el borde superior
 // textOverlay.Y = 540;   // Mitad de la altura del video
 ```
 
-## Trabajar con Fuentes
+## Trabajar con fuentes
 
 El SDK aprovecha la biblioteca SkiaSharp para capacidades potentes de renderizado de texto. Esto proporciona acceso a todas las fuentes del sistema y características tipográficas avanzadas.
 
-### Obtener Familias de Fuentes Disponibles
+### Obtener familias de fuentes disponibles
 
-Puedes recuperar dinámicamente la lista de fuentes disponibles en el sistema actual:
+Puede recuperar dinámicamente la lista de fuentes disponibles en el sistema actual:
 
 ```cs
 // Obtener todas las fuentes disponibles en el sistema actual
-// Esto es útil para crear menús desplegables de selección de fuentes en tu UI
+// Esto es útil para crear menús desplegables de selección de fuentes en su UI
 var availableFonts = videoEdit.Fonts;
 
-// Ahora puedes iterar a través de las fuentes o vincularlas a un control de UI
+// Ahora se puede iterar a través de las fuentes o vincularlas a un control de UI
 foreach (var font in availableFonts)
 {
     // Usar la información de fuente según sea necesario
@@ -115,15 +115,15 @@ foreach (var font in availableFonts)
 }
 ```
 
-## Técnicas de Estilo Avanzadas
+## Técnicas de estilo avanzadas
 
-Para efectos de texto más sofisticados, considera combinar superposiciones de texto con otras características del SDK:
+Para efectos de texto más sofisticados, considere combinar superposiciones de texto con otras características del SDK:
 
 - Aplicar efectos de animación para hacer que el texto se mueva por la pantalla
 - Usar múltiples superposiciones de texto con diferentes tiempos para visualización secuencial
 - Combinar con superposiciones de forma para crear cuadros de texto con fondos personalizados
 - Integrar con transiciones de video para efectos dinámicos de entrada y salida de texto
 
-## Recursos de Desarrollo
+## Recursos de desarrollo
 
-Para más ejemplos de código y técnicas de implementación avanzadas, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) que contiene muestras completas del SDK .NET.
+Para más ejemplos de código y técnicas de implementación avanzadas, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) que contiene muestras completas del SDK .NET.

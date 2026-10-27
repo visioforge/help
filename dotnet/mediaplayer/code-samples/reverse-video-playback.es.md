@@ -1,6 +1,6 @@
 ---
 title: Reproducción de Video en Reversa con Media Player SDK .NET
-description: Implementa reproducción en reversa con navegación fotograma a fotograma y optimización de rendimiento para aplicaciones de video Windows y multiplataforma.
+description: Implemente reproducción en reversa con navegación fotograma a fotograma y optimización de rendimiento para aplicaciones de video Windows y multiplataforma.
 tags:
   - Media Player SDK
   - .NET
@@ -21,13 +21,13 @@ primary_api_classes:
 
 ---
 
-# Implementando Reproducción de Video en Reversa en Aplicaciones .NET
+# Implementar reproducción de video en reversa en aplicaciones .NET
 
 Reproducir video en reversa es una característica poderosa para aplicaciones multimedia, permitiendo a los usuarios revisar contenido, crear efectos visuales únicos, o mejorar la experiencia de usuario con opciones de reproducción no lineal. Esta guía proporciona implementaciones completas para reproducción en reversa en aplicaciones .NET, enfocándose tanto en soluciones multiplataforma como específicas de Windows.
 
-## Entendiendo los Mecanismos de Reproducción en Reversa
+## Entender los mecanismos de reproducción en reversa
 
-La reproducción de video en reversa puede lograrse a través de varias técnicas, cada una con ventajas distintas dependiendo de los requisitos de tu aplicación:
+La reproducción de video en reversa puede lograrse a través de varias técnicas, cada una con ventajas distintas dependiendo de los requisitos de su aplicación:
 
 1. **Reproducción en reversa basada en tasa** - Establecer una tasa de reproducción negativa para invertir el flujo de video
 2. **Navegación hacia atrás fotograma a fotograma** - Retroceder manualmente a través de fotogramas de video almacenados en caché
@@ -35,11 +35,11 @@ La reproducción de video en reversa puede lograrse a través de varias técnica
 
 Exploremos cómo implementar cada enfoque usando el Media Player SDK para .NET.
 
-## Reproducción en Reversa Multiplataforma con MediaPlayerCoreX
+## Reproducción en reversa multiplataforma con MediaPlayerCoreX
 
 El motor MediaPlayerCoreX proporciona soporte multiplataforma para reproducción de video en reversa con una implementación directa. Este enfoque funciona en Windows, macOS y otras plataformas soportadas.
 
-### Implementación Básica
+### Implementación básica
 
 El método más simple para reproducción en reversa implica establecer un valor de tasa negativo:
 
@@ -58,9 +58,9 @@ await MediaPlayer1.PlayAsync();
 MediaPlayer1.Rate_Set(-1.0);
 ```
 
-### Controlando la Velocidad de Reproducción en Reversa
+### Controlar la velocidad de reproducción en reversa
 
-Puedes controlar la velocidad de reproducción en reversa ajustando el valor de tasa negativo:
+Puede controlar la velocidad de reproducción en reversa ajustando el valor de tasa negativo:
 
 ```cs
 // Reproducción en reversa a doble velocidad
@@ -73,7 +73,7 @@ MediaPlayer1.Rate_Set(-0.5);
 MediaPlayer1.Rate_Set(-0.25);
 ```
 
-### Seguimiento de Posición Durante la Reproducción en Reversa
+### Seguimiento de posición durante la reproducción en reversa
 
 `MediaPlayerCoreX` no emite un evento de cambio de posición; sondea la posición en un temporizador:
 
@@ -93,13 +93,13 @@ var positionTimer = new System.Threading.Timer(_ =>
 }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
 ```
 
-## Navegación en Reversa Fotograma a Fotograma Específica de Windows
+## Navegación en reversa fotograma a fotograma específica de Windows
 
 El motor clásico `MediaPlayerCore` (solo Windows) proporciona control mejorado fotograma a fotograma con su sistema de caché de fotogramas, permitiendo navegación hacia atrás precisa incluso con códecs que no lo soportan nativamente. Declara una instancia separada del motor clásico — la API `ReversePlayback_*` vive en `MediaPlayerCore` y **no** está disponible en `MediaPlayerCoreX`.
 
-### Configurando el Caché de Fotogramas
+### Configurar el caché de fotogramas
 
-Antes de iniciar la reproducción, configura el caché de reproducción en reversa:
+Antes de iniciar la reproducción, configure el caché de reproducción en reversa:
 
 ```cs
 // Motor Windows clásico — tipo distinto al MediaPlayerCoreX usado arriba
@@ -113,9 +113,9 @@ classicPlayer.ReversePlayback_Enabled = true;  // Habilitar la característica
 await classicPlayer.PlayAsync();
 ```
 
-### Navegando Fotograma a Fotograma
+### Navegar fotograma a fotograma
 
-Con el caché configurado, puedes navegar a fotogramas anteriores:
+Con el caché configurado, puede navegar a fotogramas anteriores:
 
 ```cs
 // Navegar al fotograma anterior
@@ -130,19 +130,19 @@ for(int i = 0; i < 5; i++)
 }
 ```
 
-### Configuración Avanzada del Caché de Fotogramas
+### Configuración avanzada del caché de fotogramas
 
-Para aplicaciones con requisitos específicos de memoria o rendimiento, puedes ajustar el caché:
+Para aplicaciones con requisitos específicos de memoria o rendimiento, puede ajustar el caché:
 
 ```cs
-// Para videos de alta resolución, podrías necesitar menos fotogramas para manejar la memoria
+// Para videos de alta resolución, podría necesitar menos fotogramas para manejar la memoria
 classicPlayer.ReversePlayback_CacheSize = 50; // Reducir tamaño del caché
 
 // Para aplicaciones que necesitan navegación hacia atrás extensiva
 classicPlayer.ReversePlayback_CacheSize = 250; // Aumentar tamaño del caché
 ```
 
-## Implementando Controles de UI para Reproducción en Reversa
+## Implementar controles de UI para reproducción en reversa
 
 Una implementación completa de reproducción en reversa típicamente incluye controles de UI dedicados:
 
@@ -189,12 +189,12 @@ private async void PreviousFrameButton_Click(object sender, EventArgs e)
 }
 ```
 
-## Consideraciones de Rendimiento
+## Consideraciones de rendimiento
 
-La reproducción en reversa puede ser intensiva en recursos, especialmente con videos de alta resolución. Considera estas técnicas de optimización:
+La reproducción en reversa puede ser intensiva en recursos, especialmente con videos de alta resolución. Considere estas técnicas de optimización:
 
-1. **Limita el tamaño del caché** para dispositivos con restricciones de memoria
-2. **Usa aceleración por hardware** cuando esté disponible
+1. **Limite el tamaño del caché** para dispositivos con restricciones de memoria
+2. **Use aceleración por hardware** cuando esté disponible
 3. **Monitorea el rendimiento** durante la reproducción en reversa con herramientas de depuración
 4. **Proporciona opciones alternativas** para dispositivos que tienen dificultades con la reproducción en reversa a velocidad completa
 
@@ -224,7 +224,7 @@ private void MonitorPerformance()
 }
 ```
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
 Para asegurar la funcionalidad correcta de las características de reproducción en reversa, incluye estas dependencias:
 
@@ -233,9 +233,9 @@ Para asegurar la funcionalidad correcta de las características de reproducción
 
 Estos paquetes contienen los códecs necesarios y componentes de procesamiento multimedia para habilitar reproducción en reversa fluida en diferentes formatos de video.
 
-## Recursos Adicionales y Técnicas Avanzadas
+## Recursos adicionales y técnicas avanzadas
 
-Para aplicaciones multimedia complejas que requieren características avanzadas de reproducción en reversa, considera explorar:
+Para aplicaciones multimedia complejas que requieren características avanzadas de reproducción en reversa, considere explorar:
 
 - Extracción de fotogramas y renderizado manual para efectos personalizados
 - Análisis de fotogramas clave para navegación optimizada

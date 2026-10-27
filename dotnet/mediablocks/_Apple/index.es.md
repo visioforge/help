@@ -21,7 +21,7 @@ primary_api_classes:
 
 # Bloques de plataforma Apple - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Esta sección cubre los MediaBlocks específicamente optimizados para plataformas Apple (iOS, macOS, tvOS).
 
@@ -222,7 +222,7 @@ macOS, iOS. En iOS, los elementos Metal forman parte únicamente del runtime del
 
 ### Metal Deinterlace Block
 
-El `MetalDeinterlaceBlock` elimina los artefactos de entrelazado en la GPU usando el framework Apple Metal. Admite los algoritmos bob, weave, lineal y greedy-H (adaptativo al movimiento).
+El `MetalDeinterlaceBlock` elimina los artefactos de entrelazado en la GPU usando el framework Apple Metal. Admite los algoritmos bob, weave, lineal y greedy-H (adaptativo al movimiento). La salida es progresiva: sus caps indican `interlace-mode=progressive` y los fotogramas no llevan indicadores de entrelazado, por lo que los elementos posteriores la tratan como vídeo progresivo.
 
 #### Información del bloque
 
@@ -364,7 +364,7 @@ macOS, iOS. En iOS, los elementos Metal forman parte únicamente del runtime del
 
 ### Metal Transform Block
 
-El `MetalTransformBlock` aplica operaciones de volteo, rotación y recorte en la GPU usando el framework Apple Metal.
+El `MetalTransformBlock` aplica operaciones de volteo, rotación y recorte en la GPU usando el framework Apple Metal. El recorte se aplica primero, en coordenadas del fotograma de origen, y la rotación después: el fotograma de salida tiene el tamaño recortado, con el ancho y el alto intercambiados para `Clockwise`, `CounterClockwise`, `UpperLeftDiagonal` y `UpperRightDiagonal`.
 
 #### Información del bloque
 

@@ -24,7 +24,7 @@ primary_api_classes:
 
 # Ajouter des superpositions de texte à la capture vidéo d'une webcam en C# .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Tutoriel vidéo pas à pas
 

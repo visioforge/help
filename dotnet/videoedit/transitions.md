@@ -10,7 +10,7 @@ tags:
 
 # Transitions
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 The SMPTE Wipe transition produces any of the standard wipes defined by the Society of Motion Picture and Television Engineers (SMPTE) in SMPTE document 258M-1993, except for the quad split.
 

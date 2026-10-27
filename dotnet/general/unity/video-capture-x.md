@@ -24,8 +24,8 @@ primary_api_classes:
 
 # Capture a webcam in Unity with VideoCaptureCoreX
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button target="_blank" }
 
 The **`VideoCaptureX`** scene captures from a local webcam (and microphone) with the high-level
 **`VideoCaptureCoreX`** engine, previews the live frames into a Unity `RawImage`, and records to an

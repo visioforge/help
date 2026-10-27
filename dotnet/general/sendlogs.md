@@ -11,7 +11,7 @@ tags:
 
 # Troubleshooting with Logs for .NET SDK Products
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Why Logs Matter in SDK Troubleshooting
 
@@ -63,7 +63,7 @@ When you're developing your own applications with our SDKs, you'll need to expli
 Regardless of which SDK you're using, the basic approach to enabling logs follows a similar pattern:
 
 ```csharp
-// Example for MediaPlayer SDK
+// Example for Media Player SDK
 mediaPlayer.Debug_Mode = true;
 mediaPlayer.Debug_Dir = "C:\\Logs\\MyApplication";
 

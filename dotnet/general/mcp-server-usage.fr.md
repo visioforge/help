@@ -28,7 +28,7 @@ primary_api_classes:
 
 # Utilisation du serveur MCP VisioForge pour le développement assisté par IA
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction au serveur MCP VisioForge
 
@@ -251,7 +251,7 @@ Obtient le guide de déploiement complet pour un scénario spécifique. Retourne
 
 **Exemples de requêtes :**
 - « Obtenir le guide de déploiement Android »
-- « Montrer les étapes de déploiement pour la plateforme Uno »
+- « Montrer les étapes de déploiement pour Uno Platform »
 - « Comment déployer sur macOS »
 
 #### `get_nuget_packages_snippet`
@@ -284,8 +284,8 @@ Obtient le code de configuration de copie de fichiers / de build propre à la pl
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```

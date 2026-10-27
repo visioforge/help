@@ -16,7 +16,7 @@ primary_api_classes:
 
 # Complete Guide to Playlist API Implementation in .NET
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [MediaPlayerCore](#){ .md-button }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [MediaPlayerCore](#){ .md-button }
 
 ## Introduction to Playlist Management
 

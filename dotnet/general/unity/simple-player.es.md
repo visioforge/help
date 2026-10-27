@@ -1,6 +1,6 @@
 ---
 title: Reproducir en Unity con Media Blocks o MediaPlayerCoreX
-description: Reproduce archivos y URLs en Unity 6 con el pipeline Media Blocks SimplePlayer o el motor de alto nivel MediaPlayerCoreX, hacia un RawImage.
+description: Reproduzca archivos y URLs en Unity 6 con el pipeline Media Blocks SimplePlayer o el motor de alto nivel MediaPlayerCoreX, hacia un RawImage.
 sidebar_label: Reproducir un archivo multimedia
 order: 57
 tags:
@@ -24,24 +24,24 @@ primary_api_classes:
 
 # Reproducir un archivo multimedia en Unity
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button target="_blank" }
 
 Hay dos formas de reproducir un archivo local o una URL de red en Unity, y el paquete incluye una
 escena lista para cada una. Ambas renderizan en un `RawImage` de Unity y se ejecutan en
-**Windows**, **Android**, **macOS Standalone** e **iOS**. Este artículo asume que ya has importado
-el paquete de Unity y aplicado los dos ajustes de proyecto requeridos; consulta primero
+**Windows**, **Android**, **macOS Standalone** e **iOS**. Este artículo asume que ya ha importado
+el paquete de Unity y aplicado los dos ajustes de proyecto requeridos; consulte primero
 [Usar VisioForge en Unity](index.md).
 
 ## Dos escenas, dos motores
 
 | Escena | Motor | Nivel | Ideal para |
 |---|---|---|---|
-| **`SimplePlayer`** | `MediaBlocksPipeline` (Media Blocks SDK) | Bajo nivel | Control total de la canalización — eliges tu propia fuente, sinks, efectos y codificadores. |
+| **`SimplePlayer`** | `MediaBlocksPipeline` (Media Blocks SDK) | Bajo nivel | Control total de la canalización — elija su propia fuente, sinks, efectos y codificadores. |
 | **`MediaPlayerX`** | `MediaPlayerCoreX` (Media Player SDK) | Alto nivel | Control de reproducción listo para usar — reproducir, pausar, reanudar, buscar, volumen y velocidad sin conexión manual. |
 
-Elige `SimplePlayer` cuando quieras montar la canalización tú mismo; elige `MediaPlayerX` cuando
-quieras un motor de reproductor que ya expone controles de transporte. Ambas alimentan el mismo
+Elija `SimplePlayer` cuando quiera montar la canalización usted mismo; elija `MediaPlayerX` cuando
+quiera un motor de reproductor que ya expone controles de transporte. Ambas alimentan el mismo
 `VisioForgeVideoView` incluido, así que la subida de textura, el manejo de aspecto y el volteo
 vertical son idénticos.
 
@@ -52,18 +52,18 @@ bajo nivel y lo renderiza en un `RawImage`.
 
 ### Ejecutar la escena SimplePlayer
 
-1. En la ventana **Project** abre `Assets/Scenes/SimplePlayer.unity` (haz doble clic en ella).
-2. En la **Hierarchy** selecciona el GameObject **RawImage**. El componente `MediaBlocksPlayer` está
+1. En la ventana **Project** abra `Assets/Scenes/SimplePlayer.unity` (haga doble clic en ella).
+2. En la **Hierarchy** seleccione el GameObject **RawImage**. El componente `MediaBlocksPlayer` está
    adjunto a él.
-3. En el **Inspector**, establece **File Path** en una ruta absoluta a un archivo multimedia local.
-4. Pulsa **▶ Play** — el video aparece en la vista Game y el audio se reproduce a través del
+3. En el **Inspector**, establezca **File Path** en una ruta absoluta a un archivo multimedia local.
+4. Pulse **▶ Play** — el video aparece en la vista Game y el audio se reproduce a través del
    dispositivo predeterminado del sistema.
 
 ![Hierarchy de la escena SimplePlayer: Canvas con RawImage, EventSystem, Main Camera](unity-simpleplayer-hierarchy.webp)
 
 ![Componente MediaBlocksPlayer en el Inspector con el campo File Path](unity-simpleplayer-inspector.webp)
 
-!!! tip "El RawImage está en blanco hasta que pulsas Play"
+!!! tip "El RawImage está en blanco hasta que pulsa Play"
     La textura de video se crea en tiempo de ejecución, por lo que el `RawImage` no muestra nada en
     el modo de edición.
 
@@ -120,7 +120,7 @@ await _pipeline.StartAsync();
 
 La escena **`MediaPlayerX`** reproduce los mismos archivos y URLs con el motor de alto nivel
 **`MediaPlayerCoreX`**. A diferencia de la canalización `SimplePlayer` construida a mano,
-`MediaPlayerCoreX` te ofrece control de reproducción listo para usar — reproducir, pausar, reanudar,
+`MediaPlayerCoreX` le ofrece control de reproducción listo para usar — reproducir, pausar, reanudar,
 buscar, volumen y velocidad de reproducción — sin conexión manual de la canalización.
 
 ### El evento OnVideoFrameUnity
@@ -128,16 +128,16 @@ buscar, volumen y velocidad de reproducción — sin conexión manual de la cana
 `MediaPlayerCoreX`, `VideoCaptureCoreX` y `VideoEditCoreX` exponen un evento exclusivo de Unity,
 **`OnVideoFrameUnity`**, que entrega cada fotograma de vista previa como **RGBA32** empaquetado de
 forma compacta (`Stride == Width * 4`, sin relleno de fila). Se sube directamente a una `Texture2D`
-sin conversión de píxeles. Suscríbete a él antes de abrir la fuente para que el motor conecte su
+sin conversión de píxeles. Suscríbase a él antes de abrir la fuente para que el motor conecte su
 capturador interno de fotogramas en la canalización.
 
 ### Ejecutar la escena MediaPlayerX
 
-1. En la ventana **Project** abre `Assets/Scenes/SampleScene.unity`.
-2. En la **Hierarchy** selecciona el GameObject **RawImage** — el componente `MediaPlayerXPlayer`
+1. En la ventana **Project** abra `Assets/Scenes/SampleScene.unity`.
+2. En la **Hierarchy** seleccione el GameObject **RawImage** — el componente `MediaPlayerXPlayer`
    está adjunto a él.
-3. En el **Inspector**, establece **File Path** en una ruta absoluta o una URL.
-4. Pulsa **▶ Play** — el video aparece en la vista Game y el audio se reproduce por el dispositivo
+3. En el **Inspector**, establezca **File Path** en una ruta absoluta o una URL.
+4. Pulse **▶ Play** — el video aparece en la vista Game y el audio se reproduce por el dispositivo
    predeterminado.
 
 ### Campos del Inspector (MediaPlayerXPlayer)
@@ -183,26 +183,26 @@ await _player.OpenAsync(source);
 await _player.PlayAsync();
 ```
 
-`PauseAsync`, `ResumeAsync` y `Position_SetAsync(TimeSpan)` te dan control de transporte; el
+`PauseAsync`, `ResumeAsync` y `Position_SetAsync(TimeSpan)` le dan control de transporte; el
 ejemplo los expone como `PauseAsync()`, `ResumeAsync()` y `SeekAsync(position)`.
 
-## Úsalo en tu propia escena
+## Úselo en su propia escena
 
-No tienes que usar una escena de ejemplo:
+No tiene que usar una escena de ejemplo:
 
-1. Añade un **Canvas → Raw Image** (*GameObject → UI → Raw Image*).
-2. Selecciona el **Raw Image** y **Add Component →** `MediaBlocksPlayer` (canalización Media Blocks)
+1. Añada un **Canvas → Raw Image** (*GameObject → UI → Raw Image*).
+2. Seleccione el **Raw Image** y **Add Component →** `MediaBlocksPlayer` (canalización Media Blocks)
    o `MediaPlayerXPlayer` (motor MediaPlayerCoreX).
-3. Establece **File Path** y pulsa **▶ Play**.
+3. Establezca **File Path** y pulse **▶ Play**.
 
 El manejo del aspecto (`Stretch` / `Letterbox` / `Crop`), el diseño del `RawImage` y el volteo
-vertical los gestiona por ti el `VisioForgeVideoView` incluido — no escribes ningún código de
-textura. Para cambiar el mismo GameObject a reproducción RTSP, usa `RTSPViewerPlayer` o
-`IPCameraXViewer` (consulta [Ver una cámara RTSP](rtsp-viewer.md)).
+vertical los gestiona por usted el `VisioForgeVideoView` incluido — no escribe ningún código de
+textura. Para cambiar el mismo GameObject a reproducción RTSP, use `RTSPViewerPlayer` o
+`IPCameraXViewer` (consulte [Ver una cámara RTSP](rtsp-viewer.md)).
 
 ## Ajustes de build por plataforma
 
-Ambas escenas se ejecutan sin cambios en cada plataforma soportada. Cambia Build Target y aplica los
+Ambas escenas se ejecutan sin cambios en cada plataforma soportada. Cambie Build Target y aplique los
 ajustes correspondientes:
 
 === "Windows"
@@ -214,7 +214,7 @@ ajustes correspondientes:
     | Scripting Backend | Mono *(predeterminado)* o IL2CPP |
 
     Las rutas de archivos locales usan la forma estándar de Windows
-    (`C:\Samples\video.mp4`). Consulta [Compilar para Windows](windows.md) para la lista
+    (`C:\Samples\video.mp4`). Consulte [Compilar para Windows](windows.md) para la lista
     completa.
 
 === "Android"
@@ -229,7 +229,7 @@ ajustes correspondientes:
     Los archivos locales viven en `Application.persistentDataPath` o
     `Application.streamingAssetsPath` — las rutas absolutas de Windows no son portables. Para
     leer medios desde almacenamiento externo, declara `READ_MEDIA_VIDEO` / `READ_MEDIA_AUDIO`
-    en `AndroidManifest.xml`. Consulta [Compilar para Android](android.md) para la lista
+    en `AndroidManifest.xml`. Consulte [Compilar para Android](android.md) para la lista
     completa.
 
 === "macOS"
@@ -240,7 +240,7 @@ ajustes correspondientes:
     | Api Compatibility Level | `.NET Standard 2.1` |
     | Scripting Backend | Mono *(predeterminado)* o IL2CPP |
 
-    Las rutas de archivos locales usan la forma Unix (`/Users/<tu>/Movies/video.mp4`). Consulta
+    Las rutas de archivos locales usan la forma Unix (`/Users/<tu>/Movies/video.mp4`). Consulte
     [Compilar para macOS](macos.md) para notas de firma de código y notarización.
 
 === "iOS"
@@ -250,20 +250,20 @@ ajustes correspondientes:
     | Architecture | dispositivo arm64 (Simulator no soportado) |
     | Api Compatibility Level | `.NET Standard 2.1` |
     | Scripting Backend | **IL2CPP** (obligatorio) |
-    | App Transport Security | Añade una excepción ATS para URLs HTTP/RTSP en texto plano |
+    | App Transport Security | Añada una excepción ATS para URLs HTTP/RTSP en texto plano |
 
     Los archivos locales deben vivir dentro del sandbox de la app — típicamente
     `Application.persistentDataPath` (la carpeta Documents) o `Application.streamingAssetsPath`
-    (solo lectura dentro del bundle `.app`). Consulta [Compilar para iOS](ios.md) para el
+    (solo lectura dentro del bundle `.app`). Consulte [Compilar para iOS](ios.md) para el
     flujo Xcode.
 
 ## Preguntas frecuentes
 
 ### ¿Qué escena debería usar — SimplePlayer o MediaPlayerX?
 
-Usa **`SimplePlayer`** (`MediaBlocksPipeline`) cuando quieras construir la canalización tú mismo —
-añadir efectos, varios sinks, grabación o fuentes personalizadas. Usa **`MediaPlayerX`**
-(`MediaPlayerCoreX`) cuando quieras un motor de reproductor que ya proporciona búsqueda,
+Use **`SimplePlayer`** (`MediaBlocksPipeline`) cuando quiera construir la canalización usted mismo —
+añadir efectos, varios sinks, grabación o fuentes personalizadas. Use **`MediaPlayerX`**
+(`MediaPlayerCoreX`) cuando quiera un motor de reproductor que ya proporciona búsqueda,
 pausa/reanudar, duración, selección de dispositivo de audio y control de velocidad como métodos
 listos para usar.
 
@@ -277,14 +277,14 @@ automáticamente el formato.
 
 Sí. `MediaPlayerX` toma una URL `http`/`https`/`rtsp`/`hls` directamente en **File Path**
 (`UniversalSourceSettings` gestiona tanto archivos locales como URLs). `SimplePlayer` reproduce
-archivos locales; para una canalización de cámara en vivo dedicada usa
+archivos locales; para una canalización de cámara en vivo dedicada use
 [Ver una cámara RTSP](rtsp-viewer.md).
 
 ### ¿Cómo busco o pauso?
 
-En `MediaPlayerX`, llama a `SeekAsync(TimeSpan)`, `PauseAsync()` y `ResumeAsync()` en el componente —
+En `MediaPlayerX`, llame a `SeekAsync(TimeSpan)`, `PauseAsync()` y `ResumeAsync()` en el componente —
 envuelven `Position_SetAsync`, `PauseAsync` y `ResumeAsync` en `MediaPlayerCoreX`. El `SimplePlayer`
-de bajo nivel no expone controles de transporte; reconstruye la canalización para cambiar de fuente.
+de bajo nivel no expone controles de transporte; reconstruya la canalización para cambiar de fuente.
 
 ### ¿Por qué MediaPlayerX necesita establecer un dispositivo de salida de audio?
 
@@ -294,7 +294,7 @@ en cambio enruta el audio a través de un `AudioRendererBlock`.
 
 ### ¿Cómo controlo cómo se ajusta el video al RawImage?
 
-Usa el campo **Aspect Mode** en cualquiera de los componentes: `Stretch` (rellenar, puede
+Use el campo **Aspect Mode** en cualquiera de los componentes: `Stretch` (rellenar, puede
 distorsionar), `Letterbox` (ajustar con bandas) o `Crop` (rellenar y recortar el sobrante).
 
 ## Véase también

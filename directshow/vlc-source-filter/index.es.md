@@ -454,6 +454,12 @@ Vea [examples.md](examples.md) para el patrón canónico reutilizado en múltipl
 
 ## Historial de Versiones
 
+### Versión 2026.10.23
+
+- Actualizado a núcleo VLC v3.0.24 (decodificadores FFmpeg 8.1, correcciones de seguridad de upstream)
+- Nueva compilación nativa para Windows ARM64, `VisioForge_VLC_Source_arm64.ax`, disponible en el paquete NuGet `VisioForge.DotNet.Core.Redist.VLC.arm64` (el instalador sigue siendo x86/x64)
+- libVLC 3.0.24 ya no incluye los módulos RealRTSP, Schroedinger (Dirac) y SDL_image ni el script de listas de reproducción de YouTube, por lo que las transmisiones RealRTSP, el vídeo Dirac y las URL de páginas de YouTube ya no se abren
+
 ### Versión 2026.3.4
 
 - Actualizado a núcleo VLC v3.0.23

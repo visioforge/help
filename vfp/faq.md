@@ -365,13 +365,16 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
 
 | Platform | Architecture | .NET Version | Status |
 |----------|-------------|-------------|---------|
-| Windows 10/11 | x86, x64, ARM64 | .NET Framework 4.6.1+, .NET 6+ | ✅ Full Support |
+| Windows 10/11 | x86, x64 | .NET Framework 4.6.1+, .NET 6+ | ✅ Full Support |
+| Windows 10/11 | ARM64 | .NET 6+ (a .NET Framework app runs as x86, or as x64 on Windows 11) | ✅ Full Support |
 | Windows Server 2016+ | x64 | .NET Framework 4.6.1+, .NET 6+ | ✅ Full Support |
 | Ubuntu 20.04+ | x64, ARM64 | .NET 6+ | ✅ Full Support |
 | Debian 11+ | x64, ARM64 | .NET 6+ | ✅ Full Support |
 | RHEL/CentOS 8+ | x64 | .NET 6+ | ✅ Full Support |
-| macOS 12+ | x64, ARM64 | .NET 6+ | ✅ Full Support |
+| macOS 12+ | x64, ARM64 | .NET 9+ | ✅ Full Support |
 | Docker/Kubernetes | Linux-based | .NET 6+ | ✅ Full Support |
+
+On .NET 5+ the target framework selects the platform build: `-windows` on Windows (`net8.0-windows`), `-macos` on macOS (`net9.0-macos` or later). A target framework without an OS suffix (`net8.0`) is the Linux build.
 
 ### Q: Can I use the SDK in Docker containers?
 
@@ -409,15 +412,7 @@ ENTRYPOINT ["dotnet", "YourProject.dll"]
 
 ### Q: Are there platform-specific performance differences?
 
-**A:** Yes, performance varies by platform:
-
-| Platform | Relative Performance | Hardware Acceleration |
-|----------|---------------------|----------------------|
-| Windows x64 | 100% (baseline) | NVENC, Quick Sync, D3D11 |
-| Linux x64 | 95-100% | NVENC, VAAPI |
-| macOS Intel | 90-95% | VideoToolbox |
-| macOS ARM64 | 85-90% | VideoToolbox |
-| Windows ARM64 | 70-80% | Limited |
+**A:** The fingerprinting algorithm is the same portable code on every platform and runs on the CPU, so its speed depends on the processor rather than on the operating system. Decoding the source video adds its own cost, which depends on the file and on the platform's decoders. To size a deployment, measure on the target hardware.
 
 ### Q: Can I use the SDK in cloud environments?
 
@@ -445,7 +440,7 @@ ENTRYPOINT ["dotnet", "YourProject.dll"]
 
 ### Q: Can I use the SDK in a web application?
 
-**A:** Yes, for server-side processing in ASP.NET Core:
+**A:** Yes, for server-side processing in ASP.NET Core on Windows or Linux (on Windows, add `-windows` to the target framework, e.g. `net8.0-windows`: without an OS suffix it is the Linux build):
 
 ```csharp
 public class VideoFingerprintService

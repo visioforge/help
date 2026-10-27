@@ -33,7 +33,7 @@ primary_api_classes:
 
 # Enregistrer un flux RTSP dans un fichier : capturer la vidéo de caméra IP sans réencodage
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!!info Exemple de démo
 Pour un exemple complet et fonctionnel d'enregistrement de flux RTSP sans réencodage, consultez la [démo RTSP MultiView](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/RTSP%20MultiView%20Demo).
@@ -83,14 +83,14 @@ L'idée principale est de prendre le flux vidéo brut de la source RTSP et de l'
 Vous aurez besoin du VisioForge Media Blocks SDK. Vous pouvez l'ajouter à votre projet .NET via NuGet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
 ```
 
 Selon votre plateforme cible (Windows, macOS, Linux, y compris les systèmes ARM comme Jetson Nano pour les applications de caméras embarquées), vous aurez également besoin des paquets de runtime natifs correspondants. Par exemple, sous Windows pour enregistrer la vidéo :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 ```
 
 Pour des informations détaillées sur les exigences de déploiement et les dépendances spécifiques aux plateformes, consultez notre [guide de déploiement](../../deployment-x/index.md). Il est important de vérifier ces détails pour que votre application de capture de flux vidéo fonctionne correctement.

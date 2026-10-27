@@ -20,7 +20,7 @@ primary_api_classes:
 
 # Guide d'installation et de déploiement Windows pour le SDK multiplateforme VisioForge
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction à l'installation et au déploiement du SDK VisioForge
 
@@ -53,8 +53,9 @@ Chaque application Windows créée avec le SDK VisioForge requiert le paquet de 
 
 - [VisioForge.CrossPlatform.Core.Windows.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x86) — pour les applications Windows 32 bits
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64) — pour les applications Windows 64 bits
+- [VisioForge.CrossPlatform.Core.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.arm64) — pour les applications Windows on Arm (ARM64) ; contrairement à x64, la lecture MP3 y nécessite `VisioForge.CrossPlatform.Libav.Windows.arm64` (ci-dessous)
 
-> **Note** : pour les applications ciblant plusieurs architectures, vous devez inclure les deux paquets et implémenter une logique de sélection appropriée à l'exécution.
+> **Note** : pour les applications ciblant plusieurs architectures, vous devez inclure le paquet de chaque architecture que vous livrez et implémenter une logique de sélection appropriée à l'exécution.
 
 ## Paquets de composants optionnels
 
@@ -73,6 +74,7 @@ Ces paquets fournissent une prise en charge complète des codecs pour une large 
 
 - [VisioForge.CrossPlatform.Libav.Windows.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x86) — prise en charge FFMPEG 32 bits
 - [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64) — prise en charge FFMPEG 64 bits
+- [VisioForge.CrossPlatform.Libav.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.arm64) — prise en charge FFMPEG ARM64. Aucun paquet Core ne contient les éléments FFmpeg (libav), et `Core.Windows.arm64` n'a pas non plus le décodeur MP3 mpg123 : sous Windows on Arm, la lecture MP3 nécessite donc aussi ce paquet
 
 Pour les applications avec des contraintes de taille, des versions compressées de ces paquets utilisant la compression UPX sont disponibles :
 
@@ -85,6 +87,7 @@ Pour les applications nécessitant une intégration de stockage cloud avec AWS S
 
 - [VisioForge.CrossPlatform.AWS.Windows.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.AWS.Windows.x86) — prise en charge AWS 32 bits
 - [VisioForge.CrossPlatform.AWS.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.AWS.Windows.x64) — prise en charge AWS 64 bits
+- [VisioForge.CrossPlatform.AWS.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.AWS.Windows.arm64) — prise en charge AWS ARM64
 
 Lorsque ces paquets sont utilisés, le Media Block suivant devient disponible :
 
@@ -133,7 +136,8 @@ Pour l'imagerie thermique et les caméras FLIR spécialisées :
 
 Pour les caméras utilisant le protocole standardisé GenICam :
 
-- [VisioForge.CrossPlatform.GenICam.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.GenICam.Windows.x64)
+- [VisioForge.CrossPlatform.GenICam.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.GenICam.Windows.x64) — prise en charge GenICam 64 bits
+- [VisioForge.CrossPlatform.GenICam.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.GenICam.Windows.arm64) — prise en charge GenICam ARM64 (.NET 5 ou version ultérieure)
 
 ## Bonnes pratiques de déploiement
 

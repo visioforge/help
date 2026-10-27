@@ -1,6 +1,6 @@
 ---
-title: Guía de Implementación de Filtros DirectShow para Windows
-description: Implemente filtros DirectShow con registro COM, integración de instaladores WiX/NSIS/Inno Setup, lista de archivos redistribuibles y solución de problemas.
+title: Guía de despliegue de filtros DirectShow para Windows
+description: Despliegue filtros DirectShow con registro COM, integración de instaladores WiX/NSIS/Inno Setup, lista de archivos redistribuibles y solución de problemas.
 sidebar_label: Despliegue
 tags:
   - DirectShow
@@ -10,19 +10,19 @@ tags:
 
 ---
 
-# SDKs de DirectShow - Guía de Despliegue
+# SDKs de DirectShow - Guía de despliegue
 
-## Descripción General
+## Descripción general
 
 Esta guía de despliegue completa cubre todo lo que necesita saber sobre el despliegue de SDKs de VisioForge DirectShow en entornos de producción. Desde el registro de filtros hasta la creación de instaladores profesionales, esta guía asegura que sus aplicaciones se desplieguen sin problemas.
 
 ---
 
-## Qué se Cubre
+## Qué se cubre
 
-### Temas Principales de Despliegue
+### Temas principales de despliegue
 
-#### [Registro de Filtros](filter-registration.md)
+#### [Registro de filtros](filter-registration.md)
 
 Aprenda cómo registrar filtros DirectShow utilizando múltiples métodos.
 
@@ -35,11 +35,11 @@ Aprenda cómo registrar filtros DirectShow utilizando múltiples métodos.
 - Solución de problemas de registro
 - COM sin registro
 
-**Cuándo Leer**: Esencial para todos los escenarios de despliegue
+**Cuándo leer**: Esencial para todos los escenarios de despliegue
 
 ---
 
-#### [Archivos Redistribuibles](redistributable-files.md)
+#### [Archivos redistribuibles](redistributable-files.md)
 
 Referencia completa de archivos para incluir en su despliegue.
 
@@ -52,11 +52,11 @@ Referencia completa de archivos para incluir en su despliegue.
 - Archivos del Virtual Camera SDK (~15-35MB)
 - Dependencias y estructuras de directorios
 
-**Cuándo Leer**: Antes de crear instaladores o paquetes de despliegue
+**Cuándo leer**: Antes de crear instaladores o paquetes de despliegue
 
 ---
 
-#### [Integración de Instaladores](installer-integration.md)
+#### [Integración con instaladores](installer-integration.md)
 
 Cree instaladores profesionales con WiX, NSIS, InstallShield e Inno Setup.
 
@@ -70,51 +70,51 @@ Cree instaladores profesionales con WiX, NSIS, InstallShield e Inno Setup.
 - Instalación silenciosa
 - Empaquetado de prerrequisitos
 
-**Cuándo Leer**: Al crear paquetes de instalación automatizados
+**Cuándo leer**: Al crear paquetes de instalación automatizados
 
 ---
 
-## Inicio Rápido
+## Inicio rápido
 
-### Flujo de Trabajo de Despliegue
+### Flujo de trabajo de despliegue
 
 Siga este flujo de trabajo recomendado para desplegar filtros DirectShow:
 
 ```mermaid
 graph TD
-    A[Identificar SDKs Requeridos] --> B[Recopilar Archivos Redistribuibles]
-    B --> C[Elegir Método de Despliegue]
-    C --> D{¿Método de Instalación?}
-    D -->|Manual| E[Crear Scripts por Lotes]
-    D -->|Instalador| F[Crear Paquete de Instalador]
-    E --> G[Registrar Filtros]
+    A[Identificar SDKs requeridos] --> B[Recopilar archivos redistribuibles]
+    B --> C[Elegir método de despliegue]
+    C --> D{¿Método de instalación?}
+    D -->|Manual| E[Crear scripts por lotes]
+    D -->|Instalador| F[Crear paquete de instalador]
+    E --> G[Registrar filtros]
     F --> G
-    G --> H[Probar Despliegue]
+    G --> H[Probar despliegue]
     H --> I{¿Funciona?}
-    I -->|No| J[Solucionar Problemas]
-    I -->|Sí| K[Desplegar a Producción]
+    I -->|No| J[Solucionar problemas]
+    I -->|Sí| K[Desplegar a producción]
     J --> H
 ```
 
-### Inicio Rápido Paso a Paso
+### Inicio rápido paso a paso
 
-#### Paso 1: Identifique Sus SDKs
+#### Paso 1: Identifique sus SDKs
 
 Determine qué SDKs utiliza su aplicación:
 
-| SDK | Propósito | Archivo Clave |
+| SDK | Propósito | Archivo clave |
 |-----|-----------|---------------|
-| **Fuente FFMPEG** | Reproducción de medios, streaming | VisioForge_FFMPEG_Source_x64.ax |
-| **Fuente VLC** | Reproducción multipista | VisioForge_VLC_Source.ax |
-| **Filtros de Procesamiento** | Efectos, mezcla | VisioForge_Video_Effects_Pro_x64.ax |
-| **Filtros de Codificación** | Codificación de video | VisioForge_NVENC_x64.ax |
-| **Cámara Virtual** | Dispositivos virtuales | VisioForge_Virtual_Camera_x64.ax |
+| **FFMPEG Source** | Reproducción de medios, streaming | VisioForge_FFMPEG_Source_x64.ax |
+| **VLC Source** | Reproducción multipista | VisioForge_VLC_Source_x64.ax |
+| **Processing Filters** | Efectos, mezcla | VisioForge_Video_Effects_Pro_x64.ax |
+| **Encoding Filters** | Codificación de video | VisioForge_NVENC_x64.ax |
+| **Virtual Camera** | Dispositivos virtuales | VisioForge_Virtual_Camera_x64.ax |
 
-[Ver Listas Completas de Archivos →](redistributable-files.md)
+[Ver listas completas de archivos →](redistributable-files.md)
 
 ---
 
-#### Paso 2: Recopilar Archivos
+#### Paso 2: Recopilar archivos
 
 Cree la estructura de carpetas de despliegue:
 
@@ -129,32 +129,37 @@ SuApp\
     └── ... (otras dependencias)
 ```
 
-[Ver Estructuras de Directorios →](redistributable-files.md#estructura-del-directorio-de-instalacion)
+[Ver estructuras de directorios →](redistributable-files.md#estructura-del-directorio-de-instalacion)
 
 ---
 
-#### Paso 3: Elegir Método de Despliegue
+#### Paso 3: Elegir método de despliegue
 
-| Método | Mejor Para | Complejidad |
+| Método | Mejor para | Complejidad |
 |--------|------------|-------------|
-| **Script por Lotes** | Despliegue interno, pruebas | Baja |
+| **Script por lotes** | Despliegue interno, pruebas | Baja |
 | **WiX (MSI)** | Empresa, automatización TI | Media-Alta |
 | **NSIS** | Instaladores pequeños, UI personalizada | Media |
 | **InstallShield** | Apps comerciales, características avanzadas | Media |
 | **Inno Setup** | Instaladores simples, código abierto | Baja-Media |
 
-[Ver Comparaciones de Instaladores →](#eligiendo-una-tecnologia-de-instalador)
+[Ver comparaciones de instaladores →](#eligiendo-una-tecnologia-de-instalador)
 
 ---
 
-#### Paso 4: Registrar Filtros
+#### Paso 4: Registrar filtros
 
-**Opción A: Registro Manual (Desarrollo/Pruebas)**
+**Opción A: Registro manual (desarrollo/pruebas)**
 
 ```batch
 @echo off
-cd /d "%~dp0Filters"
-regsvr32 /s VisioForge_FFMPEG_Source_x64.ax
+REM Verificar privilegios de administrador
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo ERROR: Este script debe ejecutarse como administrador.
+    exit /b 1
+)
+regsvr32 /s "%~dp0Filters\VisioForge_FFMPEG_Source_x64.ax"
 if %ERRORLEVEL% EQU 0 (
     echo Registro exitoso
 ) else (
@@ -162,17 +167,17 @@ if %ERRORLEVEL% EQU 0 (
 )
 ```
 
-**Opción B: Acción Personalizada del Instalador (Producción)**
+**Opción B: Acción personalizada del instalador (producción)**
 
-Vea la [Guía de Integración de Instaladores](installer-integration.md) para ejemplos de WiX, NSIS y otros.
+Vea la [Guía de integración con instaladores](installer-integration.md) para ejemplos de WiX, NSIS y otros.
 
-[Ver Todos los Métodos de Registro →](filter-registration.md)
+[Ver todos los métodos de registro →](filter-registration.md)
 
 ---
 
-#### Paso 5: Probar Despliegue
+#### Paso 5: Probar despliegue
 
-**Lista de Verificación**:
+**Lista de verificación**:
 
 - [ ] Instalar en máquina de prueba limpia
 - [ ] Verificar que todos los archivos se copiaron correctamente
@@ -183,11 +188,11 @@ Vea la [Guía de Integración de Instaladores](installer-integration.md) para ej
 - [ ] Probar en Windows 10 y Windows 11
 - Probar tanto x64 como x86 (si aplica)
 
-[Ver Procedimientos de Prueba →](#probando-despliegues)
+[Ver procedimientos de prueba →](#probando-despliegues)
 
 ---
 
-## Eligiendo una Tecnología de Instalador
+## Eligiendo una tecnología de instalador
 
 ### WiX Toolset
 
@@ -205,14 +210,14 @@ Vea la [Guía de Integración de Instaladores](installer-integration.md) para ej
 - Requiere paso de compilación
 - UI menos flexible que instaladores personalizados
 
-**Recomendado Para**:
+**Recomendado para**:
 
 - Aplicaciones empresariales
 - Despliegues gestionados por TI
 - Aplicaciones que requieren despliegue por Política de Grupo
 - Organizaciones con infraestructura MSI existente
 
-[Ver Ejemplos WiX →](installer-integration.md#ejemplos-wix-toolset)
+[Ver ejemplos WiX →](installer-integration.md#ejemplos-wix-toolset)
 
 ---
 
@@ -232,14 +237,14 @@ Vea la [Guía de Integración de Instaladores](installer-integration.md) para ej
 - Menos integración con Windows Installer
 - Gestión manual de actualizaciones
 
-**Recomendado Para**:
+**Recomendado para**:
 
 - Aplicaciones de consumo
 - Instaladores pequeños a medianos
 - Aplicaciones que requieren UI personalizada
 - Creación de aplicaciones portátiles
 
-[Ver Ejemplos NSIS →](installer-integration.md#ejemplos-nsis)
+[Ver ejemplos NSIS →](installer-integration.md#ejemplos-nsis)
 
 ---
 
@@ -259,14 +264,14 @@ Vea la [Guía de Integración de Instaladores](installer-integration.md) para ej
 - Puede ser complejo para instaladores simples
 - Curva de aprendizaje mayor
 
-**Recomendado Para**:
+**Recomendado para**:
 
 - Productos de software comercial
 - Requisitos de instalación complejos
 - Apariencia de instalador profesional
 - Organizaciones con experiencia en InstallShield
 
-[Ver Guía InstallShield →](installer-integration.md#integracion-installshield)
+[Ver guía InstallShield →](installer-integration.md#integracion-installshield)
 
 ---
 
@@ -286,28 +291,28 @@ Vea la [Guía de Integración de Instaladores](installer-integration.md) para ej
 - Menos características avanzadas que herramientas comerciales
 - Características empresariales limitadas
 
-**Recomendado Para**:
+**Recomendado para**:
 
 - Proyectos de código abierto
 - Instaladores simples
 - Aplicaciones pequeñas
 - Despliegues conscientes del presupuesto
 
-[Ver Ejemplos Inno Setup →](installer-integration.md#ejemplos-inno-setup)
+[Ver ejemplos Inno Setup →](installer-integration.md#ejemplos-inno-setup)
 
 ---
 
-## Escenarios Comunes de Despliegue
+## Escenarios comunes de despliegue
 
-### Escenario 1: Aplicación de Reproductor Multimedia
+### Escenario 1: Aplicación de reproductor multimedia
 
 **Requisitos**:
 
 - FFMPEG Source DirectShow Filter
-- Filtros de Procesamiento (efectos de video)
+- Processing Filters (efectos de video)
 - Instalador amigable para el usuario
 
-**Enfoque Recomendado**:
+**Enfoque recomendado**:
 
 1. Usar **NSIS** o **Inno Setup** para instalador amigable al consumidor
 2. Incluir verificación de Visual C++ Redistributable
@@ -315,25 +320,25 @@ Vea la [Guía de Integración de Instaladores](installer-integration.md) para ej
 4. Crear acceso directo en escritorio
 5. Asociar tipos de archivos multimedia (opcional)
 
-**Archivos para Desplegar** (~100-150MB):
+**Archivos para desplegar** (~100-150MB):
 
 - VisioForge_FFMPEG_Source_x64.ax + DLLs de FFmpeg
 - VisioForge_Video_Effects_Pro_x64.ax + dependencias
 
-[Ver Lista Completa de Archivos →](redistributable-files.md#filtro-ffmpeg-source)
+[Ver lista completa de archivos →](redistributable-files.md#filtro-ffmpeg-source)
 
 ---
 
-### Escenario 2: Procesamiento de Video Empresarial
+### Escenario 2: Procesamiento de video empresarial
 
 **Requisitos**:
 
-- Fuente FFMPEG + Filtros de Codificación
+- FFMPEG Source + Encoding Filters
 - Soporte de instalación silenciosa
 - Despliegue basado en MSI
 - Despliegue por Política de Grupo
 
-**Enfoque Recomendado**:
+**Enfoque recomendado**:
 
 1. Usar **WiX Toolset** para creación de MSI
 2. Empaquetar Visual C++ Redistributable
@@ -347,11 +352,11 @@ Vea la [Guía de Integración de Instaladores](installer-integration.md) para ej
 msiexec /i EnterpriseVideoApp.msi /quiet /norestart /l*v install.log
 ```
 
-[Ver Ejemplos de Paquete WiX →](installer-integration.md#empaquetado-de-dependencias)
+[Ver ejemplos de paquete WiX →](installer-integration.md#empaquetado-de-dependencias)
 
 ---
 
-### Escenario 3: Solución de Cámara Virtual
+### Escenario 3: Solución de cámara virtual
 
 **Requisitos**:
 
@@ -359,7 +364,7 @@ msiexec /i EnterpriseVideoApp.msi /quiet /norestart /l*v install.log
 - Instalación de controladores
 - Acceso a nivel de sistema
 
-**Enfoque Recomendado**:
+**Enfoque recomendado**:
 
 1. Usar **WiX** o **InstallShield** para soporte de controladores
 2. Requerir privilegios de administrador
@@ -367,17 +372,17 @@ msiexec /i EnterpriseVideoApp.msi /quiet /norestart /l*v install.log
 4. Registrar filtros DirectShow
 5. Proporcionar instrucciones claras de instalación
 
-**Consideraciones Especiales**:
+**Consideraciones especiales**:
 
 - Los controladores requieren firmas digitales
 - Puede necesitar reinicio del sistema
 - Advertencias de seguridad mejoradas
 
-[Ver Archivos de Virtual Camera SDK →](redistributable-files.md#virtual-camera-sdk)
+[Ver archivos de Virtual Camera SDK →](redistributable-files.md#virtual-camera-sdk)
 
 ---
 
-### Escenario 4: Redistribución de SDK de Desarrollo
+### Escenario 4: Redistribución de SDK de desarrollo
 
 **Requisitos**:
 
@@ -385,7 +390,7 @@ msiexec /i EnterpriseVideoApp.msi /quiet /norestart /l*v install.log
 - Soportar tanto x86 como x64
 - Integración flexible
 
-**Enfoque Recomendado**:
+**Enfoque recomendado**:
 
 1. Proporcionar paquetes separados x86/x64
 2. Incluir scripts por lotes de registro
@@ -393,7 +398,7 @@ msiexec /i EnterpriseVideoApp.msi /quiet /norestart /l*v install.log
 4. Considerar distribución por paquete NuGet
 5. Incluir archivos de cabecera y bibliotecas de tipos
 
-**Estructura del Paquete**:
+**Estructura del paquete**:
 
 ```
 SuSDK\
@@ -410,18 +415,18 @@ SuSDK\
 
 ---
 
-## Prerrequisitos y Dependencias
+## Prerrequisitos y dependencias
 
 ### Visual C++ Redistributable
 
-**Versión Requerida**: Visual C++ 2015-2022 Redistributable
+**Versión requerida**: Visual C++ 2015-2022 Redistributable
 
-**Enlaces de Descarga**:
+**Enlaces de descarga**:
 
 - x64: <https://aka.ms/vs/17/release/vc_redist.x64.exe>
 - x86: <https://aka.ms/vs/17/release/vc_redist.x86.exe>
 
-**Claves de Registro de Detección**:
+**Claves de registro de detección**:
 
 ```
 x64: HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64
@@ -429,9 +434,9 @@ x86: HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86
 Valor: "Installed" = 1 (DWORD)
 ```
 
-**Integración de Instalador**:
+**Integración de instalador**:
 
-Vea [Empaquetado de Dependencias](installer-integration.md#empaquetado-de-dependencias) para ejemplos de WiX, NSIS y otros.
+Vea [Empaquetado de dependencias](installer-integration.md#empaquetado-de-dependencias) para ejemplos de WiX, NSIS y otros.
 
 ---
 
@@ -449,7 +454,7 @@ Si su aplicación usa .NET:
 
 ---
 
-### Requisitos de Hardware (Opcional)
+### Requisitos de hardware (opcional)
 
 Para características de aceleración por hardware:
 
@@ -463,20 +468,20 @@ Documente los requisitos de hardware en su instalador o documentación.
 
 ---
 
-## Probando Despliegues
+## Probando despliegues
 
-### Configuración del Entorno de Prueba
+### Configuración del entorno de prueba
 
 Cree entornos de prueba aislados:
 
-1. **VM Windows 10 Limpia** - Probar en instalación fresca
-2. **VM Windows 11 Limpia** - Probar último SO
-3. **Instalación Mínima** - Sin Visual Studio o herramientas de desarrollo
-4. **Diferentes Cuentas de Usuario** - Probar usuario estándar vs. admin
+1. **VM Windows 10 limpia** - Probar en instalación fresca
+2. **VM Windows 11 limpia** - Probar último SO
+3. **Instalación mínima** - Sin Visual Studio o herramientas de desarrollo
+4. **Diferentes cuentas de usuario** - Probar usuario estándar vs. admin
 
-### Lista de Verificación de Pruebas
+### Lista de verificación de pruebas
 
-#### Pruebas de Instalación
+#### Pruebas de instalación
 
 - [ ] El instalador se ejecuta sin errores
 - [ ] Todos los archivos copiados a ubicaciones correctas
@@ -487,7 +492,7 @@ Cree entornos de prueba aislados:
 - [ ] El usuario puede lanzar la aplicación
 - [ ] La aplicación funciona correctamente
 
-#### Pruebas de Desinstalación
+#### Pruebas de desinstalación
 
 - [ ] El desinstalador se ejecuta sin errores
 - [ ] Todos los archivos eliminados
@@ -496,14 +501,14 @@ Cree entornos de prueba aislados:
 - [ ] Accesos directos del menú inicio eliminados
 - [ ] No quedan archivos huérfanos
 
-#### Pruebas de Actualización
+#### Pruebas de actualización
 
 - [ ] La actualización desde versión anterior funciona
 - [ ] Datos de usuario preservados
 - [ ] Configuraciones mantenidas
 - [ ] Filtros antiguos reemplazados con nuevas versiones
 
-#### Pruebas de Instalación Silenciosa
+#### Pruebas de instalación silenciosa
 
 ```batch
 REM Instalar silenciosamente
@@ -516,7 +521,7 @@ REM Desinstalar silenciosamente
 "%ProgramFiles%\MiApp\Uninstall.exe" /S
 ```
 
-### Script de Prueba Automatizada
+### Script de prueba automatizada
 
 ```powershell
 # Script de prueba de despliegue PowerShell
@@ -566,7 +571,7 @@ Write-Host "¡Todas las pruebas pasaron!" -ForegroundColor Green
 
 ---
 
-## Consideraciones de Arquitectura
+## Consideraciones de arquitectura
 
 ### Despliegue x86 vs x64
 
@@ -582,15 +587,15 @@ Write-Host "¡Todas las pruebas pasaron!" -ForegroundColor Green
 - Instalar en `C:\Program Files (x86)\SuApp`
 - Registrar en vista de registro de 32-bits (regsvr32 maneja automáticamente)
 
-**Aplicaciones Mixtas**:
+**Aplicaciones mixtas**:
 
 - Incluir filtros tanto x86 como x64
 - Subdirectorios separados: `Filters\x86` y `Filters\x64`
 - Registro condicional basado en arquitectura del proceso
 
-### Consideraciones de Registro
+### Consideraciones de registro
 
-**Vistas de Registro de Windows 64-bits**:
+**Vistas de registro de Windows 64-bits**:
 
 ```
 HKLM\SOFTWARE\Classes\CLSID\{GUID}           ← vista 64-bits
@@ -604,9 +609,9 @@ HKLM\SOFTWARE\Wow6432Node\Classes\CLSID\{GUID} ← vista 32-bits
 
 ---
 
-## Consideraciones de Seguridad
+## Consideraciones de seguridad
 
-### Firma de Código
+### Firma de código
 
 **Recomendado**: Firmar todos los ejecutables e instaladores con certificado Authenticode.
 
@@ -619,17 +624,17 @@ signtool sign /f MiCert.pfx /p password /t https://timestamp.digicert.com MiAppS
 
 - Elimina advertencias de SmartScreen
 - Establece confianza con los usuarios
-- Requerido para controladores en modo kernel (Cámara Virtual)
+- Requerido para controladores en modo kernel (Virtual Camera)
 
-### Requisitos de Permisos
+### Requisitos de permisos
 
-**El Registro de Filtros Requiere**:
+**El registro de filtros requiere**:
 
 - Privilegios de administrador
 - Acceso de escritura al registro HKLM
 - Acceso de escritura a System32 (si se registra allí)
 
-**Mejores Prácticas**:
+**Mejores prácticas**:
 
 - Siempre solicitar elevación en manifiesto del instalador
 - Verificar privilegios antes del registro
@@ -642,13 +647,13 @@ signtool sign /f MiCert.pfx /p password /t https://timestamp.digicert.com MiAppS
 
 ---
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-### Problema: Falla el Registro de Filtro
+### Problema: Falla el registro de filtro
 
 **Síntomas**: regsvr32 devuelve error, filtro no está en registro
 
-**Posibles Causas**:
+**Posibles causas**:
 
 1. Dependencias faltantes (Visual C++ Runtime, DLLs)
 2. Privilegios insuficientes
@@ -662,15 +667,15 @@ signtool sign /f MiCert.pfx /p password /t https://timestamp.digicert.com MiAppS
 3. Verificar integridad de archivo (checksums)
 4. Asegurar que app x86 use filtro x86, app x64 use filtro x64
 
-[Ver Solución de Problemas Completa →](filter-registration.md#solucion-de-problemas)
+[Ver solución de problemas completa →](filter-registration.md#solucion-de-problemas)
 
 ---
 
-### Problema: La Aplicación No Puede Encontrar el Filtro
+### Problema: La aplicación no puede encontrar el filtro
 
 **Síntomas**: La aplicación falla al crear gráfico de filtros, CLSID no encontrado
 
-**Posibles Causas**:
+**Posibles causas**:
 
 1. Filtro no registrado
 2. CLSID incorrecto usado
@@ -689,11 +694,11 @@ if (hr == REGDB_E_CLASSNOTREG) {
 
 ---
 
-### Problema: La Instalación Silenciosa se Cuelga
+### Problema: La instalación silenciosa se cuelga
 
 **Síntomas**: El instalador deja de responder durante instalación silenciosa
 
-**Posibles Causas**:
+**Posibles causas**:
 
 1. Esperando entrada del usuario
 2. Reinicio requerido
@@ -713,11 +718,11 @@ ${EndIf}
 
 ---
 
-### Problema: La Desinstalación Deja Archivos
+### Problema: La desinstalación deja archivos
 
 **Síntomas**: El directorio de la aplicación todavía existe después de desinstalar
 
-**Posibles Causas**:
+**Posibles causas**:
 
 1. Archivos creados después de la instalación no rastreados
 2. Identificadores de archivo abiertos previniendo eliminación
@@ -731,7 +736,7 @@ ${EndIf}
 
 ---
 
-## Resumen de Mejores Prácticas
+## Resumen de mejores prácticas
 
 ### HACER
 
@@ -761,11 +766,11 @@ ${EndIf}
 
 ---
 
-## Lista de Verificación de Despliegue
+## Lista de verificación de despliegue
 
 Use esta lista de verificación antes de lanzar su instalador:
 
-### Pre-Lanzamiento
+### Prelanzamiento
 
 - [ ] Todos los archivos redistribuibles identificados
 - [ ] Arquitectura correcta (x86/x64) seleccionada
@@ -799,18 +804,18 @@ Use esta lista de verificación antes de lanzar su instalador:
 
 ---
 
-## Recursos Adicionales
+## Recursos adicionales
 
 ### Documentación
 
-- [Guía de Registro de Filtros](filter-registration.md) - Referencia completa de registro
-- [Archivos Redistribuibles](redistributable-files.md) - Todos los archivos SDK listados
-- [Integración de Instaladores](installer-integration.md) - Ejemplos WiX, NSIS, InstallShield
+- [Guía de registro de filtros](filter-registration.md) - Referencia completa de registro
+- [Archivos redistribuibles](redistributable-files.md) - Todos los archivos SDK listados
+- [Integración con instaladores](installer-integration.md) - Ejemplos WiX, NSIS, InstallShield
 
-### Recursos Externos
+### Recursos externos
 
 - [Registro DirectShow (Microsoft)](https://learn.microsoft.com/en-us/windows/win32/directshow/how-to-register-directshow-filters)
-- [Mejores Prácticas de Windows Installer](https://learn.microsoft.com/en-us/windows/win32/msi/windows-installer-best-practices)
+- [Mejores prácticas de Windows Installer](https://learn.microsoft.com/en-us/windows/win32/msi/windows-installer-best-practices)
 - [WiX Toolset](https://www.firegiant.com/wixtoolset/)
 - [NSIS](https://nsis.sourceforge.io/Main_Page)
 - [Inno Setup](https://jrsoftware.org/isinfo.php)
@@ -829,7 +834,7 @@ Use esta lista de verificación antes de lanzar su instalador:
 
 Para asistencia de despliegue:
 
-1. Revise la sección [Solución de Problemas](#solucion-de-problemas-comunes)
-2. Revise [Registro de Filtros](filter-registration.md#solucion-de-problemas)
+1. Revise la sección [Solución de problemas](#solucion-de-problemas-comunes)
+2. Revise [Registro de filtros](filter-registration.md#solucion-de-problemas)
 3. Contacte soporte VisioForge: <support@visioforge.com>
 4. Visite: <https://www.visioforge.com/>

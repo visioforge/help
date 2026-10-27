@@ -73,8 +73,11 @@ regsvr32 "C:\Program Files\VisioForge\FFMPEG Source\VisioForge_FFMPEG_Source_x64
 
 **VLC Source Filter** :
 ```batch
-# x86 uniquement
+# x86
 regsvr32 "C:\Program Files (x86)\VisioForge\VLC Source\VisioForge_VLC_Source.ax"
+
+# x64
+regsvr32 "C:\Program Files\VisioForge\VLC Source\VisioForge_VLC_Source_x64.ax"
 ```
 
 **Processing Filters Pack** (plusieurs filtres) :
@@ -594,6 +597,7 @@ Pour un déploiement xcopy sans enregistrement, utilisez le COM sans enregistrem
 
 ```batch
 @echo off
+setlocal
 echo Enregistrement des filtres DirectShow VisioForge...
 echo.
 
@@ -607,49 +611,67 @@ if %errorLevel% neq 0 (
 
 REM Definir le chemin d'installation
 set INSTALL_PATH=C:\Program Files\VisioForge
+set FAILED=
+set FOUND=
 
 REM Enregistrer FFMPEG Source
 echo Enregistrement de FFMPEG Source...
-regsvr32 /s "%INSTALL_PATH%\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
-if %errorLevel% equ 0 (
-    echo   [OK] FFMPEG Source enregistre
-) else (
-    echo   [ECHEC] Enregistrement de FFMPEG Source echoue
-)
+call :register "%INSTALL_PATH%\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
 
 REM Enregistrer VLC Source
 echo Enregistrement de VLC Source...
-regsvr32 /s "%INSTALL_PATH%\VLC Source\VisioForge_VLC_Source.ax"
-if %errorLevel% equ 0 (
-    echo   [OK] VLC Source enregistre
-) else (
-    echo   [ECHEC] Enregistrement de VLC Source echoue
-)
+call :register "%INSTALL_PATH%\VLC Source\VisioForge_VLC_Source_x64.ax"
 
 REM Enregistrer les filtres de traitement
 echo Enregistrement des filtres de traitement...
-regsvr32 /s "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
-regsvr32 /s "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Mixer_x64.ax"
-regsvr32 /s "%INSTALL_PATH%\Processing Filters\VisioForge_Audio_Enhancer_x64.ax"
-echo   [OK] Filtres de traitement enregistres
+call :register "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
+call :register "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Mixer_x64.ax"
+call :register "%INSTALL_PATH%\Processing Filters\VisioForge_Audio_Enhancer_x64.ax"
 
 REM Enregistrer les filtres d'encodage
 echo Enregistrement des filtres d'encodage...
-regsvr32 /s "%INSTALL_PATH%\Encoding Filters\VisioForge_NVENC_x64.ax"
-regsvr32 /s "%INSTALL_PATH%\Encoding Filters\VisioForge_H264_Encoder_x64.ax"
-regsvr32 /s "%INSTALL_PATH%\Encoding Filters\VisioForge_AAC_Encoder_x64.ax"
-regsvr32 /s "%INSTALL_PATH%\Encoding Filters\VisioForge_MP4_Muxer_x64.ax"
-echo   [OK] Filtres d'encodage enregistres
+call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_NVENC_x64.ax"
+call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_H264_Encoder_x64.ax"
+call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_AAC_Encoder_x64.ax"
+call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_MP4_Muxer_x64.ax"
 
 echo.
+if not defined FOUND (
+    echo Aucun fichier de filtre VisioForge trouve. Verifiez INSTALL_PATH.
+    pause
+    exit /b 1
+)
+if defined FAILED (
+    echo Enregistrement termine avec des erreurs.
+    pause
+    exit /b 1
+)
 echo Enregistrement termine !
 pause
+exit /b 0
+
+REM Enregistrer un filtre et afficher le resultat
+:register
+if not exist %1 (
+    echo   [IGNORE] %~nx1 - introuvable
+    exit /b
+)
+set FOUND=1
+regsvr32 /s %1
+if %errorLevel% equ 0 (
+    echo   [OK] %~nx1
+) else (
+    echo   [ECHEC] %~nx1
+    set FAILED=1
+)
+exit /b
 ```
 
 ### Désenregistrer tous les filtres
 
 ```batch
 @echo off
+setlocal
 echo Desenregistrement des filtres DirectShow VisioForge...
 echo.
 
@@ -662,16 +684,50 @@ if %errorLevel% neq 0 (
 )
 
 set INSTALL_PATH=C:\Program Files\VisioForge
+set FAILED=
+set FOUND=
 
 REM Desenregistrer tous les filtres
-regsvr32 /s /u "%INSTALL_PATH%\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
-regsvr32 /s /u "%INSTALL_PATH%\VLC Source\VisioForge_VLC_Source.ax"
-regsvr32 /s /u "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
-regsvr32 /s /u "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Mixer_x64.ax"
-regsvr32 /s /u "%INSTALL_PATH%\Encoding Filters\VisioForge_NVENC_x64.ax"
+call :unregister "%INSTALL_PATH%\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
+call :unregister "%INSTALL_PATH%\VLC Source\VisioForge_VLC_Source_x64.ax"
+call :unregister "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
+call :unregister "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Mixer_x64.ax"
+call :unregister "%INSTALL_PATH%\Processing Filters\VisioForge_Audio_Enhancer_x64.ax"
+call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_NVENC_x64.ax"
+call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_H264_Encoder_x64.ax"
+call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_AAC_Encoder_x64.ax"
+call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_MP4_Muxer_x64.ax"
 
+echo.
+if not defined FOUND (
+    echo Aucun fichier de filtre VisioForge trouve. Verifiez INSTALL_PATH.
+    pause
+    exit /b 1
+)
+if defined FAILED (
+    echo Desenregistrement termine avec des erreurs.
+    pause
+    exit /b 1
+)
 echo Desenregistrement termine !
 pause
+exit /b 0
+
+REM Desenregistrer un filtre et afficher le resultat
+:unregister
+if not exist %1 (
+    echo   [IGNORE] %~nx1 - introuvable
+    exit /b
+)
+set FOUND=1
+regsvr32 /s /u %1
+if %errorLevel% equ 0 (
+    echo   [OK] %~nx1
+) else (
+    echo   [ECHEC] %~nx1
+    set FAILED=1
+)
+exit /b
 ```
 
 ---

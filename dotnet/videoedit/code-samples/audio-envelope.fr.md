@@ -19,7 +19,7 @@ primary_api_classes:
 
 # Mise en œuvre d'effets d'enveloppe de volume audio en .NET
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
 Les enveloppes de volume audio sont des outils essentiels pour la production vidéo professionnelle, permettant aux développeurs de contrôler avec précision les niveaux audio sur toute une timeline. Ce tutoriel illustre comment mettre en œuvre ces effets dans vos applications .NET.
 

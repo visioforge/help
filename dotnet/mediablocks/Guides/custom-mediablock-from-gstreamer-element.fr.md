@@ -24,7 +24,7 @@ primary_api_classes:
 
 # Créer son propre MediaBlock à partir d'un élément GStreamer en C# .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le Media Blocks SDK fournit déjà plus de 70 blocs typés pour les tâches
 courantes de vidéo, d'audio, d'encodage et de streaming. Toutefois, il

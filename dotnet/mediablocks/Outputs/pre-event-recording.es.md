@@ -28,7 +28,7 @@ primary_api_classes:
 
 # Bloque de Grabación Pre-Evento - VisioForge Media Blocks SDK .Net
 
-[SDK de Media Blocks .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El `PreEventRecordingBlock` almacena continuamente fotogramas de video y audio codificados en un buffer circular (anillo) basado en memoria. Cuando se activa un evento (detección de movimiento, alarma, llamada API), vacía el metraje pre-evento almacenado a un archivo y continúa grabando fotogramas en vivo durante una duración post-evento configurable. Esto crea clips de eventos completos que incluyen metraje de antes de que ocurriera el disparador.
 

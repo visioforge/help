@@ -35,7 +35,7 @@ primary_api_classes:
 
 # Reconnexion RTSP et Fallback Switch en C# / .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Prise en charge multiplateforme"
     Les événements de reconnexion fonctionnent sur tous les SDK. Le `FallbackSwitch` déclaratif repose sur GStreamer et fonctionne donc sur **Windows, macOS, Linux, Android et iOS** dans les moteurs `X` modernes et Media Blocks — il n'est pas disponible sur les moteurs classiques DirectShow uniquement Windows. Consultez la [matrice de prise en charge des plateformes](../../platform-matrix.md) et le [guide de déploiement Linux](../../deployment-x/Ubuntu.md).

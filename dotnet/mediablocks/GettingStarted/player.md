@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Building a Feature-Rich Video Player with Media Blocks SDK
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 This detailed tutorial walks you through the process of creating a professional-grade video player application using Media Blocks SDK .Net. By following these instructions, you'll understand how to implement key functionalities including media loading, playback control, and audio-video rendering.
 

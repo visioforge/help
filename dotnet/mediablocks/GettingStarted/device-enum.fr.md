@@ -25,7 +25,7 @@ primary_api_classes:
 
 # Guide complet de l'énumération des périphériques multimédias en .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le Media Blocks SDK offre une manière puissante et efficace de découvrir et travailler avec divers périphériques multimédias dans vos applications .NET. Ce guide vous accompagne dans le processus d'énumération de différents types de périphériques multimédias à l'aide de la classe `DeviceEnumerator` du SDK.
 
@@ -196,7 +196,7 @@ foreach (var deviceUri in onvifDevices)
 
 ### Caméras industrielles Basler
 
-Pour les applications nécessitant des caméras industrielles Basler :
+Pour les applications nécessitant des caméras industrielles Basler (dans un processus ARM64 ou x86 sous Windows, l'appel lève `PlatformNotSupportedException`, car sous Windows Basler pylon SDK ne prend en charge que x64) :
 
 ```csharp
 var baslerCameras = await DeviceEnumerator.Shared.BaslerSourcesAsync();
@@ -210,7 +210,7 @@ foreach (var device in baslerCameras)
 
 ### Caméras industrielles Allied Vision
 
-Pour travailler avec des caméras Allied Vision dans votre application :
+Pour travailler avec des caméras Allied Vision dans votre application (dans un processus ARM64 ou x86 sous Windows, l'appel lève `PlatformNotSupportedException`, car sous Windows Allied Vision Vimba X SDK ne prend en charge que x64) :
 
 ```csharp
 var alliedCameras = await DeviceEnumerator.Shared.AlliedVisionSourcesAsync();
@@ -224,7 +224,7 @@ foreach (var device in alliedCameras)
 
 ### Caméras compatibles avec le SDK Spinnaker
 
-Pour les caméras prenant en charge le SDK Spinnaker (Windows uniquement) :
+Pour les caméras prenant en charge le SDK Spinnaker (Windows x64 uniquement ; dans un processus ARM64 ou x86 sous Windows, l'appel lève `PlatformNotSupportedException`) :
 
 ```csharp
 #if NET_WINDOWS

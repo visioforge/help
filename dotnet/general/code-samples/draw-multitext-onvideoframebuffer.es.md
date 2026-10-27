@@ -12,17 +12,17 @@ primary_api_classes:
   - VideoFrameBufferEventArgs
 ---
 
-# Implementación de Superposiciones de Texto Dinámicas en Frames de Video en .NET
+# Implementación de superposiciones de texto dinámicas en frames de video en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción
 
 Agregar superposiciones de texto al contenido de video se ha vuelto esencial para varias aplicaciones, desde agregar marcas de agua y marcas de tiempo hasta crear anotaciones informativas y subtítulos. Mientras que muchos SDKs ofrecen capacidades de superposición de texto incorporadas, estas funciones podrían no siempre proporcionar el nivel de personalización o flexibilidad requerido para proyectos avanzados.
 
-Esta guía demuestra cómo implementar superposiciones de texto personalizadas usando el evento `OnVideoFrameBuffer`. Este enfoque te da control total sobre la apariencia, posición y comportamiento del texto, permitiendo implementaciones de superposición más sofisticadas de lo que es posible con métodos API estándar.
+Esta guía demuestra cómo implementar superposiciones de texto personalizadas usando el evento `OnVideoFrameBuffer`. Este enfoque le da control total sobre la apariencia, posición y comportamiento del texto, permitiendo implementaciones de superposición más sofisticadas de lo que es posible con métodos API estándar.
 
-## ¿Por Qué Usar Superposiciones de Texto Personalizadas?
+## ¿Por qué usar superposiciones de texto personalizadas?
 
 Las APIs de superposición de texto estándar a menudo tienen limitaciones en áreas como:
 
@@ -33,9 +33,9 @@ Las APIs de superposición de texto estándar a menudo tienen limitaciones en á
 - Control de posicionamiento preciso
 - Gestión de canal alfa
 
-Al aprovechar el evento `OnVideoFrameBuffer` y trabajar directamente con datos de bitmap, puedes superar estas limitaciones e implementar exactamente lo que tu aplicación necesita.
+Al aprovechar el evento `OnVideoFrameBuffer` y trabajar directamente con datos de bitmap, puede superar estas limitaciones e implementar exactamente lo que su aplicación necesita.
 
-## Entendiendo el Enfoque
+## Entender el enfoque
 
 La técnica demostrada en este artículo involucra:
 
@@ -47,7 +47,7 @@ La técnica demostrada en este artículo involucra:
 
 Esto proporciona un método poderoso para la creación de superposiciones de texto mientras mantiene buen rendimiento.
 
-## Implementación Básica
+## Implementación básica
 
 El siguiente ejemplo de código muestra una implementación directa para dibujar múltiples superposiciones de texto en frames de video:
 
@@ -125,7 +125,7 @@ El siguiente ejemplo de código muestra una implementación directa para dibujar
         }
 ```
 
-### Componentes Clave Explicados
+### Componentes clave explicados
 
 1. **Creación de Bitmap**: Creamos un bitmap de 32 bits (con canal alfa) que coincide con las dimensiones del frame de video
 2. **Configuración de Gráficos**: Configuramos anti-aliasing, interpolación y suavizado para renderizado de texto de alta calidad
@@ -135,9 +135,9 @@ El siguiente ejemplo de código muestra una implementación directa para dibujar
 6. **Superposición de Búfer**: Dibujamos el búfer RGBA en el frame de video usando `FastImageProcessing.Draw_RGB32OnRGB24`
 7. **Bandera de Actualización de Frame**: Establecemos `e.UpdateData = true` para informar al SDK que los datos del frame han sido modificados
 
-## Implementación Avanzada con Actualizaciones Dinámicas
+## Implementación avanzada con actualizaciones dinámicas
 
-Para aplicaciones más interactivas, podrías necesitar actualizar las superposiciones de texto dinámicamente. La siguiente implementación soporta actualizaciones en tiempo real del contenido de texto, fuentes y colores:
+Para aplicaciones más interactivas, podría necesitar actualizar las superposiciones de texto dinámicamente. La siguiente implementación soporta actualizaciones en tiempo real del contenido de texto, fuentes y colores:
 
 ```cs
         // Imagen
@@ -273,7 +273,7 @@ Para aplicaciones más interactivas, podrías necesitar actualizar las superposi
         }
 ```
 
-### Nuevas Características en la Implementación Avanzada
+### Nuevas características en la implementación avanzada
 
 1. **Seguridad de Hilos**: Usamos un objeto lock para prevenir acceso concurrente a recursos compartidos
 2. **Mecanismo de Actualización**: El método `UpdateText` proporciona una interfaz limpia para cambiar propiedades de texto
@@ -283,40 +283,40 @@ Para aplicaciones más interactivas, podrías necesitar actualizar las superposi
 6. **Actualización de Búfer**: Actualizamos el búfer de memoria cuando las propiedades del texto cambian
 7. **Integración de UI**: Un manejador de clic de botón de ejemplo demuestra cómo activar actualizaciones de texto
 
-## Consejos de Optimización de Rendimiento
+## Consejos de optimización de rendimiento
 
-Al implementar superposiciones de texto con este método, considera estas optimizaciones de rendimiento:
+Al implementar superposiciones de texto con este método, considere estas optimizaciones de rendimiento:
 
-1. **Minimizar Recreaciones de Bitmap**: Solo recrea el bitmap cuando sea necesario (cambios de texto, cambios de resolución)
-2. **Cachear Objetos Font**: La creación de fuentes es costosa; crea fuentes una vez y reutilízalas
-3. **Usar Memoria Eficientemente**: Libera memoria no administrada cuando ya no se necesite
-4. **Optimizar Operaciones de Dibujo**: Usa aceleración de hardware cuando esté disponible
-5. **Considera la Frecuencia de Actualización**: Para actualizaciones frecuentes, considera técnicas de doble búfer
-6. **Perfila Tu Código**: Usa herramientas de perfilado de rendimiento para identificar cuellos de botella
+1. **Minimizar Recreaciones de Bitmap**: Solo recree el bitmap cuando sea necesario (cambios de texto, cambios de resolución)
+2. **Cachear Objetos Font**: La creación de fuentes es costosa; cree fuentes una vez y reutilícelas
+3. **Usar Memoria Eficientemente**: Libere memoria no administrada cuando ya no se necesite
+4. **Optimizar Operaciones de Dibujo**: Use aceleración de hardware cuando esté disponible
+5. **Considere la Frecuencia de Actualización**: Para actualizaciones frecuentes, considere técnicas de doble búfer
+6. **Perfile su código**: Use herramientas de perfilado de rendimiento para identificar cuellos de botella
 
-## Características Avanzadas a Considerar
+## Características avanzadas a considerar
 
 Esta implementación básica puede extenderse con características adicionales:
 
-1. **Animación de Texto**: Implementa movimiento de texto, desvanecimiento u otras animaciones
-2. **Formato de Texto**: Agrega soporte para formato de texto enriquecido (negrita, cursiva, etc.)
-3. **Efectos de Texto**: Implementa sombras, contornos o efectos de brillo
-4. **Alineación de Texto**: Agrega soporte para diferentes opciones de alineación de texto
-5. **Texto Multi-línea**: Implementa manejo apropiado de texto multi-línea con ajuste
-6. **Localización**: Agrega soporte para diferentes idiomas y direcciones de texto
-7. **Monitoreo de Rendimiento**: Agrega diagnósticos para monitorear el rendimiento de renderizado
+1. **Animación de Texto**: Implemente movimiento de texto, desvanecimiento u otras animaciones
+2. **Formato de Texto**: Agregue soporte para formato de texto enriquecido (negrita, cursiva, etc.)
+3. **Efectos de Texto**: Implemente sombras, contornos o efectos de brillo
+4. **Alineación de Texto**: Agregue soporte para diferentes opciones de alineación de texto
+5. **Texto Multi-línea**: Implemente manejo apropiado de texto multi-línea con ajuste
+6. **Localización**: Agregue soporte para diferentes idiomas y direcciones de texto
+7. **Monitoreo de Rendimiento**: Agregue diagnósticos para monitorear el rendimiento de renderizado
 
-## Consideraciones de Gestión de Memoria
+## Consideraciones de gestión de memoria
 
 Al trabajar con memoria no administrada, es crucial manejar la limpieza de recursos correctamente:
 
-1. Implementa el patrón `IDisposable` en tu clase
-2. Libera memoria no administrada en el método `Dispose`
-3. Considera usar `SafeHandle` o construcciones similares para gestión de recursos más segura
-4. Establece punteros de búfer a `IntPtr.Zero` después de liberarlos
-5. Usa manejo de excepciones estructurado alrededor de operaciones de memoria
+1. Implemente el patrón `IDisposable` en su clase
+2. Libere memoria no administrada en el método `Dispose`
+3. Considere usar `SafeHandle` o construcciones similares para gestión de recursos más segura
+4. Establezca punteros de búfer a `IntPtr.Zero` después de liberarlos
+5. Use manejo de excepciones estructurado alrededor de operaciones de memoria
 
-## Ejemplo de Limpieza
+## Ejemplo de limpieza
 
 ```cs
 protected override void Dispose(bool disposing)
@@ -343,7 +343,7 @@ protected override void Dispose(bool disposing)
 }
 ```
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
 - Componentes redistribuibles del SDK
 
@@ -351,7 +351,7 @@ protected override void Dispose(bool disposing)
 
 Implementar superposiciones de texto personalizadas usando el evento `OnVideoFrameBuffer` proporciona una solución poderosa y flexible para aplicaciones que requieren capacidades avanzadas de visualización de texto. Aunque requiere más código que usar métodos API incorporados, la flexibilidad y control adicionales lo hacen valioso para aplicaciones de video sofisticadas.
 
-Siguiendo los patrones demostrados en esta guía, puedes crear superposiciones de texto dinámicas y de alta calidad que pueden actualizarse en tiempo real, proporcionando una experiencia de usuario rica en tus aplicaciones de video.
+Siguiendo los patrones demostrados en esta guía, puede crear superposiciones de texto dinámicas y de alta calidad que pueden actualizarse en tiempo real, proporcionando una experiencia de usuario rica en sus aplicaciones de video.
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.

@@ -34,7 +34,7 @@ primary_api_classes:
 
 # Cree un Reproductor de Video Multiplataforma en C# con Avalonia UI
 
-Cree un reproductor de video en C# que funciona en **Windows, macOS, Linux, Android e iOS** desde una sola base de código Avalonia UI. Esta guía utiliza el patrón MVVM con el motor `MediaPlayerCoreX` del [VisioForge Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) y el control `VideoView`, y hace referencia al [demo SimplePlayerMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayerMVVM) en GitHub para cada fragmento mostrado.
+Cree un reproductor de video en C# que funciona en **Windows, macOS, Linux, Android e iOS** desde una sola base de código Avalonia UI. Esta guía utiliza el patrón MVVM con el motor `MediaPlayerCoreX` del [VisioForge Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) y el control `VideoView`, y hace referencia al [demo SimplePlayerMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayerMVVM) en GitHub para cada fragmento mostrado.
 
 Formatos compatibles de serie: **H.264, H.265/HEVC, VP9, AV1, MP4, MKV, WebM, RTSP, HLS, MPEG-DASH**.
 
@@ -98,7 +98,7 @@ Antes de comenzar, asegúrese de tener instalado lo siguiente:
 * Para desarrollo en iOS (requiere una máquina macOS):
   * Xcode
   * Perfiles de aprovisionamiento y certificados necesarios.
-* VisioForge .NET SDK (MediaPlayer SDK X). Puede obtenerlo desde el sitio web de VisioForge. Los paquetes necesarios se agregarán a través de NuGet.
+* VisioForge .NET SDK (Media Player SDK .NET). Puede obtenerlo desde el sitio web de VisioForge. Los paquetes necesarios se agregarán a través de NuGet.
 
 ## 2. Configuración del Proyecto
 
@@ -157,8 +157,8 @@ El proyecto principal, `SimplePlayerMVVM.csproj`, apunta a múltiples plataforma
   <PackageReference Include="Avalonia.Android" Version="12.0.5" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.26]"/>
  </ItemGroup>
 </Project>
 ```
@@ -180,15 +180,15 @@ Cada proyecto principal de plataforma (`SimplePlayerMVVM.Android.csproj`, `Simpl
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
     <TargetFramework>net10.0-macos</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
     <TargetFramework>net10.0</TargetFramework>
@@ -220,7 +220,7 @@ Cada proyecto principal de plataforma (`SimplePlayerMVVM.Android.csproj`, `Simpl
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
   </ItemGroup>
 </Project>
 ```
@@ -243,7 +243,7 @@ Cada proyecto principal de plataforma (`SimplePlayerMVVM.Android.csproj`, `Simpl
   <!-- ... otros elementos ... -->
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="12.0.5" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
@@ -1123,11 +1123,11 @@ Para abstraer la funcionalidad específica de plataforma, se definen interfaces 
 
         ```xml
         <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-          <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-          <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
         </ItemGroup>
         <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-          <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
         </ItemGroup>
         ```
 
@@ -1213,4 +1213,4 @@ Implemente una interfaz `IFilePickerService` específica de plataforma como se m
 - [Crear un Reproductor de Video en VB.NET](video-player-vb-net.md) — reproductor multimedia VB.NET para WinForms
 - [Modo Loop y Rango de Posición](loop-and-position-range.md) — configurar bucle, repetición A-B y reproducción de segmentos
 - [Ejemplos de Código](../code-samples/index.md) — extracción de fotogramas, listas de reproducción y ejemplos adicionales de reproducción
-- [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net) — página del producto y descargas
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) — página del producto y descargas

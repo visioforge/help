@@ -18,11 +18,11 @@ primary_api_classes:
 
 ---
 
-# Effets vidéo OpenGL - VisioForge Media Blocks SDK .Net
+# Effets vidéo OpenGL - VisioForge Media Blocks SDK .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Les effets vidéo OpenGL dans VisioForge Media Blocks SDK .Net permettent une manipulation puissante et accélérée matériellement des flux vidéo. Chaque effet est livré comme MediaBlock autonome (par ex. `GLBlurBlock`, `GLFlipBlock`, `GLAlphaBlock`) et se chaîne entre `GLUploadBlock` côté entrée et `GLDownloadBlock` côté sortie. Ce guide couvre les effets disponibles, leurs paramètres de configuration et les autres types OpenGL associés.
+Les effets vidéo OpenGL dans VisioForge Media Blocks SDK .NET permettent une manipulation puissante et accélérée matériellement des flux vidéo. Chaque effet est livré comme MediaBlock autonome (par ex. `GLBlurBlock`, `GLFlipBlock`, `GLAlphaBlock`) et se chaîne entre `GLUploadBlock` côté entrée et `GLDownloadBlock` côté sortie. Ce guide couvre les effets disponibles, leurs paramètres de configuration et les autres types OpenGL associés.
 
 ## Effet de base : `GLBaseVideoEffect`
 

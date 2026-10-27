@@ -16,7 +16,7 @@ primary_api_classes:
 
 # Lectura de Información de Archivos de Medios en C#
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción
 
@@ -24,7 +24,7 @@ Acceder a información detallada incrustada dentro de archivos de medios es esen
 
 Esta guía demuestra cómo leer información completa de archivos de video y audio usando C# y la clase `MediaInfoReader`. Las técnicas mostradas son aplicables a varios proyectos .NET y proporcionan una base para manejar archivos de medios programáticamente.
 
-## ¿Por Qué Extraer Información de Archivos de Medios?
+## ¿Por qué extraer información de archivos de medios?
 
 La información de archivos de medios sirve múltiples propósitos en el desarrollo de aplicaciones:
 
@@ -34,11 +34,11 @@ La información de archivos de medios sirve múltiples propósitos en el desarro
 - **Organización de Contenido**: Catalogar bibliotecas de medios con metadatos precisos
 - **Evaluación de Calidad**: Evaluar archivos de medios para problemas potenciales
 
-## Guía de Implementación
+## Guía de implementación
 
 Exploremos el proceso de extracción de información de archivos de medios en un enfoque paso a paso. Los ejemplos asumen una aplicación WinForms con un control `TextBox` llamado `mmInfo` para mostrar la información extraída.
 
-### Paso 1: Inicializar el Lector de Información de Medios
+### Paso 1: Inicializar el lector de información de medios
 
 El primer paso implica crear una instancia de la clase `MediaInfoReader`:
 
@@ -53,7 +53,7 @@ var infoReader = new MediaInfoReader();
 
 Esta inicialización prepara al lector para procesar archivos de medios.
 
-### Paso 2: Verificar la Reproducibilidad del Archivo (Opcional)
+### Paso 2: Verificar la reproducibilidad del archivo (opcional)
 
 Antes de profundizar en el análisis detallado, a menudo es útil verificar si el archivo es compatible:
 
@@ -63,7 +63,7 @@ FilePlaybackError errorCode;
 string errorText;
 
 // Especificar la ruta al archivo de medios
-string filename = @"C:\ruta\a\tu\archivodemedio.mp4"; // Reemplazar con tu ruta de archivo real
+string filename = @"C:\ruta\a\tu\archivodemedio.mp4"; // Reemplazar con su ruta de archivo real
 
 // Verificar si el archivo es reproducible
 if (MediaInfoReader.IsFilePlayable(filename, out errorCode, out errorText))
@@ -203,13 +203,13 @@ catch (Exception ex)
 }
 ```
 
-## Mejores Prácticas para Análisis de Archivos de Medios
+## Mejores prácticas para análisis de archivos de medios
 
-Al implementar análisis de archivos de medios en tus aplicaciones, considera estas mejores prácticas:
+Al implementar análisis de archivos de medios en sus aplicaciones, considere estas mejores prácticas:
 
-### Manejo de Errores
+### Manejo de errores
 
-Siempre envuelve las operaciones de archivo en bloques try-catch apropiados. Los archivos de medios pueden estar corruptos, inaccesibles o en formatos inesperados, lo que podría causar excepciones.
+Siempre envuelva las operaciones de archivo en bloques try-catch apropiados. Los archivos de medios pueden estar corruptos, inaccesibles o en formatos inesperados, lo que podría causar excepciones.
 
 ```csharp
 try {
@@ -220,9 +220,9 @@ catch (Exception ex) {
 }
 ```
 
-### Gestión de Recursos
+### Gestión de recursos
 
-Libera apropiadamente los objetos que acceden a recursos de archivo para prevenir problemas de bloqueo de archivos:
+Libere apropiadamente los objetos que acceden a recursos de archivo para prevenir problemas de bloqueo de archivos:
 
 ```csharp
 using (var infoReader = new MediaInfoReader())
@@ -238,22 +238,22 @@ finally {
 }
 ```
 
-### Consideraciones de Rendimiento
+### Consideraciones de rendimiento
 
-Para bibliotecas de medios grandes, considera:
+Para bibliotecas de medios grandes, considere:
 
 1. Implementar mecanismos de caché para análisis repetidos
 2. Usar hilos de fondo para procesamiento para mantener la UI responsiva
 3. Limitar la profundidad del análisis para escaneos rápidos iniciales
 
-## Componentes Requeridos
+## Componentes requeridos
 
-Para una implementación exitosa, asegúrate de que tu proyecto incluya las dependencias necesarias según lo especificado en la documentación del SDK.
+Para una implementación exitosa, asegúrese de que su proyecto incluya las dependencias necesarias según lo especificado en la documentación del SDK.
 
 ## Conclusión
 
-Extraer información de archivos de medios es una capacidad poderosa para desarrolladores que construyen aplicaciones que trabajan con contenido de audio y video. Con las técnicas descritas en esta guía, puedes acceder a propiedades técnicas detalladas y etiquetas de metadatos para mejorar la funcionalidad de tu aplicación.
+Extraer información de archivos de medios es una capacidad poderosa para desarrolladores que construyen aplicaciones que trabajan con contenido de audio y video. Con las técnicas descritas en esta guía, puede acceder a propiedades técnicas detalladas y etiquetas de metadatos para mejorar la funcionalidad de su aplicación.
 
-La clase `MediaInfoReader` proporciona una manera conveniente y eficiente de extraer los metadatos necesarios, permitiéndote construir características de manejo de medios más sofisticadas en tus aplicaciones C#.
+La clase `MediaInfoReader` proporciona una manera conveniente y eficiente de extraer los metadatos necesarios, permitiéndole construir características de manejo de medios más sofisticadas en sus aplicaciones C#.
 
-Para escenarios más avanzados, explora las capacidades completas del SDK y consulta la documentación detallada. Puedes encontrar ejemplos de código adicionales y muestras en GitHub para expandir aún más tus capacidades de procesamiento de archivos de medios.
+Para escenarios más avanzados, explore las capacidades completas del SDK y consulte la documentación detallada. Puede encontrar ejemplos de código adicionales y muestras en GitHub para expandir aún más sus capacidades de procesamiento de archivos de medios.

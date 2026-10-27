@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Bloc serveur RTSP - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Prise en charge multiplateforme"
     Le `RTSPServerBlock` fonctionne sous **Windows, macOS et Linux** via GStreamer (nécessite le plugin `gst-rtsp-server`). Consultez la [matrice de prise en charge des plateformes](../../platform-matrix.md) pour les détails sur les codecs et l'accélération matérielle, ainsi que le [guide de déploiement Linux](../../deployment-x/Ubuntu.md) pour la configuration Ubuntu / NVIDIA Jetson / Raspberry Pi.

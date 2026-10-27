@@ -1,5 +1,5 @@
 ---
-title: Despliegue iOS con VisioForge SDK .NET - Guía Completa
+title: Despliegue iOS con VisioForge SDK .NET - Guía completa
 description: Despliegue aplicaciones .NET en iOS con integración del SDK de VisioForge, permisos, soporte de arquitectura y mejores prácticas de despliegue multiplataforma.
 tags:
   - Video Capture SDK
@@ -22,27 +22,27 @@ primary_api_classes:
 
 ---
 
-# Guía de Despliegue para Apple iOS
+# Guía de despliegue para Apple iOS
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Descripción General
+## Descripción general
 
 Esta guía completa le lleva a través del proceso de despliegue de aplicaciones potenciadas por el SDK de VisioForge en dispositivos Apple iOS. El SDK de VisioForge proporciona un framework potente para construir aplicaciones ricas en medios en iOS, ofreciendo soporte robusto para capacidades de captura, edición, reproducción y procesamiento de video.
 
 El proceso de despliegue en iOS involucra varias consideraciones clave, desde gestión de paquetes hasta manejo de permisos y optimización de rendimiento. Este documento le guiará a través de cada paso para asegurar una experiencia de despliegue fluida.
 
-## Requisitos del Sistema
+## Requisitos del sistema
 
 Antes de comenzar su proceso de despliegue en iOS, asegúrese de que su entorno de desarrollo cumpla los siguientes requisitos:
 
-### Requisitos de Hardware
+### Requisitos de hardware
 
 - Computadora Apple Mac para desarrollo (requerida para firma de apps iOS)
 - Dispositivo iOS para pruebas (altamente recomendado sobre simuladores)
 - Espacio de almacenamiento suficiente para herramientas de desarrollo y activos de aplicación
 
-### Requisitos de Software
+### Requisitos de software
 
 - Dispositivo Apple iOS con iOS 16.4 o posterior (el mínimo de las bibliotecas nativas `VisioForge.CrossPlatform.Core.iOS`)
 - SDK de .NET 9 o .NET 10 con la carga de trabajo de iOS (`dotnet workload install ios`); el SDK se dirige a `net9.0-ios` y `net10.0-ios`
@@ -50,7 +50,7 @@ Antes de comenzar su proceso de despliegue en iOS, asegúrese de que su entorno 
 - Cuenta de desarrollador Apple (requerida para firma y distribución de apps)
 - JetBrains Rider o Visual Studio Code (Visual Studio para Mac se retiró en 2024)
 
-## Soporte de Arquitectura
+## Soporte de arquitectura
 
 El SDK de VisioForge para iOS proporciona soporte nativo para las principales arquitecturas de dispositivos iOS:
 
@@ -60,7 +60,7 @@ El SDK de VisioForge para iOS proporciona soporte nativo para las principales ar
 - Bibliotecas nativas optimizadas para máximo rendimiento
 - Procesamiento de video acelerado por hardware donde sea soportado por el dispositivo
 
-## Proceso de Instalación
+## Proceso de instalación
 
 Siga estos pasos para configurar e implementar correctamente su aplicación iOS con VisioForge:
 
@@ -75,23 +75,23 @@ Siga estos pasos para configurar e implementar correctamente su aplicación iOS 
 
 El SDK de VisioForge para iOS se distribuye a través de paquetes NuGet:
 
-### Paquetes Principales
+### Paquetes principales
 
-- [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core) - Paquete principal que contiene clases principales y controles de UI, incluyendo componentes de reproducción y visualización de video. Este es independiente de plataforma y puede usarse en cualquier proyecto .Net.
+- [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core) - Paquete principal que contiene clases principales y controles de UI, incluyendo componentes de reproducción y visualización de video. Este es independiente de plataforma y puede usarse en cualquier proyecto .NET.
 
 ### Paquetes de UI
 
 Cada paquete de UI tiene los mismos controles VideoView pero diferentes implementaciones para la plataforma objetivo:
 
-#### Plataforma objetivo .Net iOS
+#### Plataforma objetivo .NET iOS
 
 - [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core) - Contiene controles de UI y todas las clases principales para la plataforma iOS.
 
-#### Plataforma objetivo .Net MAUI
+#### Plataforma objetivo .NET MAUI
 
 - [VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI) - Contiene controles de UI para la plataforma MAUI.
 
-### Paquetes Redistributables
+### Paquetes redistributables
 
 - [VisioForge.CrossPlatform.Core.iOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.iOS) - Contiene los componentes principales de redistribución requeridos para cualquier aplicación iOS usando tecnologías VisioForge.
 
@@ -100,17 +100,17 @@ Puede agregar estos paquetes usando el NuGet Package Manager en su IDE o agregan
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <PackageReference Include="VisioForge.DotNet.Core" Version="2026.*" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
 Nota: Reemplace los números de versión con las últimas versiones disponibles.
 
-## Permisos y Entitlements Requeridos
+## Permisos y entitlements requeridos
 
 Las aplicaciones iOS requieren permisos explícitos para acceder a características del dispositivo como cámaras, micrófonos y la biblioteca de fotos. Configure estos permisos en el archivo Info.plist de su app:
 
-### Acceso a Cámara
+### Acceso a cámara
 
 Requerido para funcionalidad de captura de video:
 
@@ -119,7 +119,7 @@ Requerido para funcionalidad de captura de video:
 <string>Esta app requiere acceso a la cámara para grabación de video</string>
 ```
 
-### Acceso a Micrófono
+### Acceso a micrófono
 
 Requerido para grabación de audio:
 
@@ -128,7 +128,7 @@ Requerido para grabación de audio:
 <string>Esta app requiere acceso al micrófono para grabación de audio</string>
 ```
 
-### Acceso a Biblioteca de Fotos
+### Acceso a biblioteca de fotos
 
 Requerido para guardar videos en la biblioteca de fotos del dispositivo:
 
@@ -137,7 +137,7 @@ Requerido para guardar videos en la biblioteca de fotos del dispositivo:
 <string>Esta app requiere acceso a la biblioteca de fotos para guardar videos</string>
 ```
 
-### Ejemplo de Configuración Info.plist
+### Ejemplo de configuración Info.plist
 
 Aquí hay un ejemplo completo de un archivo Info.plist con todos los permisos necesarios:
 
@@ -199,7 +199,7 @@ Aquí hay un ejemplo completo de un archivo Info.plist con todos los permisos ne
 </plist>
 ```
 
-## Manejo de Permisos en Tiempo de Ejecución
+## Manejo de permisos en tiempo de ejecución
 
 Además de declarar permisos en su archivo Info.plist, también debe solicitar permisos en tiempo de ejecución. Aquí hay un ejemplo de cómo solicitar permisos de cámara y micrófono:
 
@@ -343,9 +343,9 @@ public class SceneDelegate : MauiUISceneDelegate
 
 Las [habilidades para agentes](../agent-skills/index.md) de iOS (`media-player-sdk-x-ios`, `video-capture-sdk-x-ios`, `media-blocks-sdk-net-ios`) incluyen un `SceneDelegate.cs` y un `Info.plist` completos.
 
-## Mejores Prácticas de Implementación
+## Mejores prácticas de implementación
 
-### Usando Controles VideoView
+### Uso de controles VideoView
 
 El SDK de VisioForge proporciona un control `VideoView` para mostrar contenido de video. En iOS `VideoView` es una subclase de `MTKView` acelerada por Metal que implementa directamente `IVideoView` (use `VideoViewGL` si necesita la variante legacy con OpenGL basada en `UIView`):
 
@@ -360,7 +360,7 @@ var captureCore = new VideoCaptureCoreX(videoView);
 
 Puede agregar el VideoView usando un storyboard o código.
 
-### Gestión de Recursos
+### Gestión de recursos
 
 Los dispositivos iOS tienen recursos limitados comparados con computadoras de escritorio. Siga estas mejores prácticas:
 
@@ -369,9 +369,9 @@ Los dispositivos iOS tienen recursos limitados comparados con computadoras de es
 3. Implemente gestión adecuada del ciclo de vida en sus ViewControllers
 4. Pruebe en dispositivos reales, no solo simuladores
 
-## Pruebas y Depuración
+## Pruebas y depuración
 
-### Pruebas en Dispositivo Físico
+### Pruebas en dispositivo físico
 
 Aunque el simulador iOS puede ser útil para pruebas básicas de interfaz, tiene limitaciones significativas para aplicaciones de medios:
 
@@ -381,7 +381,7 @@ Aunque el simulador iOS puede ser útil para pruebas básicas de interfaz, tiene
 
 **Pruebe siempre su aplicación de medios en dispositivos iOS físicos antes del lanzamiento.**
 
-### Consideraciones Comunes de Rendimiento
+### Consideraciones comunes de rendimiento
 
 Al desplegar aplicaciones de medios en iOS, considere estos factores de rendimiento:
 
@@ -390,9 +390,9 @@ Al desplegar aplicaciones de medios en iOS, considere estos factores de rendimie
 3. **Gestión de memoria:** Implemente eliminación adecuada de objetos grandes y monitoree el uso de memoria
 4. **Impacto en batería:** El procesamiento de medios es intensivo en energía; implemente medidas de ahorro de energía
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-### Denegaciones de Permisos
+### Denegaciones de permisos
 
 Si su app no puede acceder a la cámara o micrófono:
 
@@ -400,7 +400,7 @@ Si su app no puede acceder a la cámara o micrófono:
 2. Verifique que esté solicitando permisos en tiempo de ejecución antes de intentar usar el hardware
 3. Compruebe si el usuario ha denegado manualmente los permisos en Ajustes de iOS
 
-### Errores de Carga de Bibliotecas
+### Errores de carga de bibliotecas
 
 Si encuentra errores al cargar bibliotecas nativas:
 
@@ -408,7 +408,7 @@ Si encuentra errores al cargar bibliotecas nativas:
 2. Busque versiones de paquetes en conflicto
 3. Asegúrese de que esté apuntando a la arquitectura iOS correcta (ARM64)
 
-## Recursos Adicionales
+## Recursos adicionales
 
 - Visite el [repositorio GitHub de VisioForge](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos de código y proyectos de ejemplo
 - Explore la [documentación de API de VisioForge](https://api.visioforge.org/dotnet/api/index.html) para referencia completa del SDK

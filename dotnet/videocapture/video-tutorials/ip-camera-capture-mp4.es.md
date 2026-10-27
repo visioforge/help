@@ -1,5 +1,5 @@
 ---
-title: Grabar Cámara IP RTSP a MP4 en C# .NET con Código Guía
+title: Grabar cámara IP RTSP a MP4 en C# .NET con código guía
 description: Graba streams RTSP de cámaras IP a archivos MP4 en C# / .NET. Autenticación, descubrimiento ONVIF, reconexión, codificación GPU. Ejemplo de código completo.
 tags:
   - Video Capture SDK
@@ -24,15 +24,15 @@ primary_api_classes:
 
 ---
 
-# Capturando Streams de Cámara IP a Archivos MP4 en .NET
+# Capturar streams de cámara IP a archivos MP4 en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Introducción a la Grabación de Cámara IP
+## Introducción a la grabación de cámara IP
 
-Las cámaras IP proporcionan potentes capacidades de vigilancia y monitoreo a través de conexiones de red. Esta guía demuestra cómo aprovechar estos dispositivos en aplicaciones .NET para capturar y guardar streams de video a archivos MP4. Usando prácticas modernas de codificación C#, aprenderás cómo establecer conexiones a cámaras IP, configurar streams de video y guardar grabaciones de alta calidad para varias aplicaciones incluyendo sistemas de seguridad, soluciones de monitoreo y herramientas de archivo de video.
+Las cámaras IP proporcionan potentes capacidades de vigilancia y monitoreo a través de conexiones de red. Esta guía demuestra cómo aprovechar estos dispositivos en aplicaciones .NET para capturar y guardar streams de video a archivos MP4. Usando prácticas modernas de codificación C#, aprenderá cómo establecer conexiones a cámaras IP, configurar streams de video y guardar grabaciones de alta calidad para varias aplicaciones incluyendo sistemas de seguridad, soluciones de monitoreo y herramientas de archivo de video.
 
-## Tutorial de Implementación en Video
+## Tutorial de implementación en video
 
 El siguiente video recorre el proceso de implementación completo:
 
@@ -42,11 +42,11 @@ El siguiente video recorre el proceso de implementación completo:
 
 [Código fuente en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-capture-mp4)
 
-## Guía de Implementación Paso a Paso
+## Guía de implementación paso a paso
 
 Esta guía demuestra cómo establecer conexiones a cámaras IP, transmitir su contenido de video y codificarlo directamente a archivos MP4 usando el componente VideoCaptureCoreX. La implementación soporta múltiples protocolos de cámara incluyendo RTSP, HTTP y ONVIF.
 
-### Implementación de Código
+### Implementación de código
 
 ```csharp
 using System;
@@ -130,9 +130,9 @@ private async void Form1_Load(object sender, EventArgs e)
 }
 ```
 
-Siempre inicializa el SDK al inicio de la aplicación para asegurar que todos los componentes requeridos estén correctamente cargados antes de intentar conexiones de cámara.
+Siempre inicialice el SDK al inicio de la aplicación para asegurar que todos los componentes requeridos estén correctamente cargados antes de intentar conexiones de cámara.
 
-### Configuración de Conexión de Cámara
+### Configuración de conexión de cámara
 
 El ejemplo usa RTSP (Real-Time Streaming Protocol), uno de los protocolos más comunes para streaming de cámara IP:
 
@@ -142,14 +142,14 @@ var rtsp = await RTSPSourceSettings.CreateAsync(new Uri(edURL.Text), edLogin.Tex
 videoCapture1.Video_Source = rtsp;
 ```
 
-Al conectar a cámaras IP, considera estos parámetros importantes:
+Al conectar a cámaras IP, considere estos parámetros importantes:
 
-- **URL de Cámara** - La URL RTSP completa de tu cámara (ej., `rtsp://192.168.1.100:554/stream1`)
+- **URL de cámara** - La URL RTSP completa de su cámara (ej., `rtsp://192.168.1.100:554/stream1`)
 - **Autenticación** - Muchas cámaras requieren credenciales de nombre de usuario y contraseña
-- **Stream de Audio** - Alterna si incluir audio de la cámara
-- **Timeout de Conexión** - Para aplicaciones de producción, implementa manejo de timeout apropiado
+- **Stream de audio** - Alterne si incluir audio de la cámara
+- **Timeout de conexión** - Para aplicaciones de producción, implemente manejo de timeout apropiado
 
-### Configuración de Salida MP4
+### Configuración de salida MP4
 
 MP4 es un formato contenedor ideal para grabaciones de video debido a su excelente compatibilidad y compresión:
 
@@ -159,14 +159,14 @@ var mp4Output = new MP4Output(Path.Combine(Environment.GetFolderPath(Environment
 videoCapture1.Outputs_Add(mp4Output);
 ```
 
-Al configurar salida MP4, considera estas opciones:
+Al configurar salida MP4, considere estas opciones:
 
-- **Nombre de Archivo** - Implementa nombres de archivo dinámicos basados en fecha/hora para grabaciones organizadas
-- **Ubicación de Almacenamiento** - Elige rutas de almacenamiento apropiadas con suficiente espacio en disco
-- **Calidad de Video** - Configura bitrate, framerate y ajustes de resolución basados en tus requisitos
-- **Metadatos** - Agrega metadatos relevantes a las grabaciones para clasificación y búsqueda más fáciles
+- **Nombre de archivo** - Implemente nombres de archivo dinámicos basados en fecha/hora para grabaciones organizadas
+- **Ubicación de almacenamiento** - Elija rutas de almacenamiento apropiadas con suficiente espacio en disco
+- **Calidad de video** - Configure bitrate, framerate y ajustes de resolución basados en sus requisitos
+- **Metadatos** - Agregue metadatos relevantes a las grabaciones para clasificación y búsqueda más fáciles
 
-### Gestión de Recursos
+### Gestión de recursos
 
 La gestión adecuada de recursos es crítica al trabajar con streams de video para prevenir fugas de memoria y asegurar rendimiento estable:
 
@@ -183,41 +183,41 @@ private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 }
 ```
 
-Siempre implementa limpieza adecuada de recursos, especialmente:
+Siempre implemente limpieza adecuada de recursos, especialmente:
 
-- Detén streams activos antes de cerrar la aplicación
-- Libera recursos de captura cuando ya no se necesiten
-- Libera recursos del SDK cuando tu aplicación termine
+- Detenga streams activos antes de cerrar la aplicación
+- Libere recursos de captura cuando ya no se necesiten
+- Libere recursos del SDK cuando su aplicación termine
 
-### Consideraciones Avanzadas de Implementación
+### Consideraciones avanzadas de implementación
 
-Para aplicaciones de grado de producción, considera estas características adicionales:
+Para aplicaciones de grado de producción, considere estas características adicionales:
 
-1. **Manejo de Errores** - Implementa manejo de errores comprehensivo para desconexiones de red, fallos de autenticación y problemas de almacenamiento
-2. **Monitoreo** - Agrega monitoreo de estado para rastrear salud del stream y estado de grabación
-3. **Lógica de Reconexión** - Implementa reconexión automática para interrupciones de red
-4. **Soporte Multi-Cámara** - Extiende la implementación para manejar múltiples streams de cámara simultáneamente
-5. **Programación de Grabación** - Agrega funciones de grabación basadas en tiempo para aplicaciones de vigilancia
+1. **Manejo de errores** - Implemente manejo de errores comprehensivo para desconexiones de red, fallos de autenticación y problemas de almacenamiento
+2. **Monitoreo** - Agregue monitoreo de estado para rastrear salud del stream y estado de grabación
+3. **Lógica de reconexión** - Implemente reconexión automática para interrupciones de red
+4. **Soporte multi-cámara** - Extienda la implementación para manejar múltiples streams de cámara simultáneamente
+5. **Programación de grabación** - Agregue funciones de grabación basadas en tiempo para aplicaciones de vigilancia
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Para que esta implementación funcione correctamente, los siguientes paquetes deben incluirse en tu proyecto:
+Para que esta implementación funcione correctamente, los siguientes paquetes deben incluirse en su proyecto:
 
 - Redistribuibles de captura de video [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 - Redistribuibles LAV [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
 - Redistribuibles MP4 [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-Al implementar captura de cámara IP, prepárate para abordar estos desafíos comunes:
+Al implementar captura de cámara IP, prepárese para abordar estos desafíos comunes:
 
-1. **Fallos de Conexión** - Verifica conectividad de red, credenciales de cámara y configuración de firewall
-2. **Rendimiento de Stream** - Equilibra ajustes de calidad con ancho de banda disponible y potencia de procesamiento
-3. **Errores de Archivo de Salida** - Asegura espacio de disco adecuado y permisos de escritura apropiados
-4. **Fugas de Recursos** - Monitorea uso de memoria durante sesiones de grabación largas
-5. **Compatibilidad de Cámara** - Diferentes modelos de cámara pueden requerir ajustes de configuración específicos
+1. **Fallos de conexión** - Verifique conectividad de red, credenciales de cámara y configuración de firewall
+2. **Rendimiento de stream** - Equilibre ajustes de calidad con ancho de banda disponible y potencia de procesamiento
+3. **Errores de archivo de salida** - Asegure espacio de disco adecuado y permisos de escritura apropiados
+4. **Fugas de recursos** - Monitoree uso de memoria durante sesiones de grabación largas
+5. **Compatibilidad de cámara** - Diferentes modelos de cámara pueden requerir ajustes de configuración específicos
 
-## Guías Relacionadas
+## Guías relacionadas
 
 - [Tutorial de vista previa en vivo de cámara IP](ip-camera-preview.md) — comienza con la vista previa antes de añadir grabación
 - [Configuración de fuente de cámara RTSP](../video-sources/ip-cameras/rtsp.md) — transporte UDP/TCP, ajuste de baja latencia, selección de motor
@@ -225,4 +225,4 @@ Al implementar captura de cámara IP, prepárate para abordar estos desafíos co
 - [Guardar stream RTSP original sin re-codificación](../../mediablocks/Guides/rtsp-save-original-stream.md) — alternativa con Media Blocks preservando bitrate de origen
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código. ¿Necesitas la URL RTSP para tu cámara? Consulta nuestro [directorio de marcas de cámaras IP](../../camera-brands/index.md).
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código. ¿Necesita la URL RTSP para su cámara? Consulte nuestro [directorio de marcas de cámaras IP](../../camera-brands/index.md).

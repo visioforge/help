@@ -30,7 +30,7 @@ primary_api_classes:
 
 # Drawing Images with OnVideoFrameBuffer in .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -46,20 +46,20 @@ The `OnVideoFrameBuffer` event is exposed on both engine families:
 | Engine | Event args type | Frame pixel format |
 |---|---|---|
 | `VideoCaptureCore` (DirectShow, Windows) | `VideoFrameBufferEventArgs` | RGB24 / RGB32 |
-| `VideoCaptureCoreX` (GStreamer, cross-platform) | `VideoFrameXBufferEventArgs` | BGRA (most common) |
-| `MediaPlayerCoreX` (GStreamer, cross-platform) | `VideoFrameXBufferEventArgs` | BGRA (most common) |
+| `VideoCaptureCoreX` (GStreamer, cross-platform) | `VideoFrameXBufferEventArgs` | RGBA |
+| `MediaPlayerCoreX` (GStreamer, cross-platform) | `VideoFrameXBufferEventArgs` | RGB (RGBA when `OnVideoFrameUnity` is subscribed) |
 
-Both engines follow the same pattern — subscribe to the event, read `e.Frame.Data` (an `IntPtr`) along with `Width` / `Height` / `Stride`, optionally modify the buffer in place, and set `e.UpdateData = true` to have the changes propagated downstream.
+Both engines follow the same pattern — subscribe to the event, read `e.Frame.Data` (an `IntPtr`) along with `Width` / `Height` / `Stride`, and optionally modify the buffer in place. The classic engine takes the changes only when you set `e.UpdateData = true`; the X engines do not read `UpdateData`.
 
 ## Understanding the process
 
 When working with video frames you need to:
 
 1. Load your image (logo, watermark, etc.) into memory.
-2. Convert the image to a compatible buffer format (RGB24/RGB32 for the legacy engine, BGRA for the X engines).
+2. Convert the image to a compatible buffer format (RGB24/RGB32 for the legacy engine, RGBA for the X engines — check `e.Frame.Format`).
 3. Subscribe to the `OnVideoFrameBuffer` event.
 4. Draw the image onto each video frame as it is processed.
-5. Set `e.UpdateData = true` so the modified frame replaces the original downstream.
+5. With the classic engine, set `e.UpdateData = true` so the modified frame replaces the original downstream.
 
 ## VideoCaptureCore (DirectShow) example
 
@@ -185,10 +185,13 @@ Once the buffer is prepared, drawing takes place:
 
 ## VideoCaptureCoreX / MediaPlayerCoreX (X engines) example
 
-On the cross-platform X engines the event signature changes to `VideoFrameXBufferEventArgs` and the frame buffer typically arrives in **BGRA** format (4 bytes per pixel). The same pattern applies — subscribe, inspect, modify, flag updates. The example below uses SkiaSharp to wrap the raw buffer and draw a PNG logo on top; SkiaSharp is already a transitive dependency of the X engines, so no extra NuGet package is needed.
+On the cross-platform X engines the event signature changes to `VideoFrameXBufferEventArgs` and the frame buffer arrives in the engine's grabber format — RGBA on `VideoCaptureCoreX`, RGB on `MediaPlayerCoreX` (RGBA when `OnVideoFrameUnity` is subscribed). The same pattern applies — subscribe, inspect, modify, flag updates. The example below uses SkiaSharp to wrap the raw buffer and draw a PNG logo on top; SkiaSharp is already a transitive dependency of the X engines, so no extra NuGet package is needed.
 
 ```cs
 using SkiaSharp;
+using VisioForge.Core.Helpers;
+using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.X;
 
 // Load logo once (PNG with alpha works well for watermarks)
 private SKBitmap _logo = SKBitmap.Decode(@"logo.png");
@@ -203,9 +206,26 @@ private void VideoCapture_OnVideoFrameBuffer(object sender, VideoFrameXBufferEve
         return;
     }
 
-    // Wrap the raw BGRA buffer in a SkiaSharp canvas (no extra allocation)
-    var info = new SKImageInfo(e.Frame.Width, e.Frame.Height, SKColorType.Bgra8888, SKAlphaType.Premul);
+    // The grabber format differs per engine: VideoCaptureCoreX delivers RGBA,
+    // MediaPlayerCoreX RGB (RGBA when OnVideoFrameUnity is subscribed). Never assume BGRA.
+    if (e.Frame.Format == VideoFormatX.RGB)
+    {
+        // 24-bit RGB has no SKColorType — convert with the SDK helper (one copy per frame;
+        // the drawing happens on the copy, the source frame stays untouched).
+        using (var bmp = e.Frame.VideoFrameRGBToSKBitmap())
+        {
+            var x = bmp.Width - _logo.Width - 16;
+            var y = bmp.Height - _logo.Height - 16;
+            bmp.Canvas.DrawBitmap(_logo, x, y);
+        }
 
+        return;
+    }
+
+    var colorType = e.Frame.Format == VideoFormatX.BGRA ? SKColorType.Bgra8888 : SKColorType.Rgba8888;
+    var info = new SKImageInfo(e.Frame.Width, e.Frame.Height, colorType, SKAlphaType.Premul);
+
+    // Wrap the raw 32-bit buffer in a SkiaSharp canvas (no extra allocation)
     using (var pixmap = new SKPixmap(info, e.Frame.Data, e.Frame.Stride))
     using (var surface = SKSurface.Create(pixmap))
     {
@@ -217,17 +237,14 @@ private void VideoCapture_OnVideoFrameBuffer(object sender, VideoFrameXBufferEve
         canvas.DrawBitmap(_logo, x, y);
         canvas.Flush();
     }
-
-    // Propagate the modified frame downstream
-    e.UpdateData = true;
 }
 ```
 
-**Why BGRA matters.** The X engines request BGRA by default for frame callbacks because it maps 1:1 to SkiaSharp, System.Drawing, and most GPU-friendly interop paths. If you need a different format (I420, NV12, RGB24), request a format conversion block upstream of your handler rather than converting on every frame.
+**Which format you get.** Read `e.Frame.Format` instead of assuming a format: `VideoCaptureCoreX` delivers RGBA and `MediaPlayerCoreX` RGB (RGBA when `OnVideoFrameUnity` is subscribed). RGB has 3 bytes per pixel and no matching `SKColorType`, so the sample converts it with the SDK helper `VideoFrameRGBToSKBitmap` (an extra copy). If you need a different format (I420, NV12, BGRA), request a format conversion block upstream of your handler rather than converting on every frame.
 
-**Alternative imaging stacks.** You can also use `System.Drawing.Bitmap` via `new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, data)` on Windows, or manual byte writes via `Marshal.Copy` / `Span<byte>` for maximum control. SkiaSharp is the recommended option on macOS / Linux / iOS / Android.
+**Alternative imaging stacks.** You can also use `System.Drawing.Bitmap` via `new Bitmap(width, height, stride, pixelFormat, data)` on Windows — pick the `PixelFormat` that matches `e.Frame.Format` (`Format32bppArgb` for BGRA data) — or manual byte writes via `Marshal.Copy` / `Span<byte>` for maximum control. SkiaSharp is the recommended option on macOS / Linux / iOS / Android.
 
-**Engine-level parity.** Everything documented in the [Memory Management](#memory-management), [Error Handling](#error-handling), and [Performance Optimization](#performance-optimization) sections below applies equally to the X engines — the event fires on a processing thread, `UpdateData` toggles whether the buffer is re-used downstream, and heavy work should be offloaded to avoid dropping frames.
+**Engine-level parity.** Everything documented in the [Memory Management](#memory-management), [Error Handling](#error-handling), and [Performance Optimization](#performance-optimization) sections below applies equally to the X engines — the event fires on a processing thread, and heavy work should be offloaded to avoid dropping frames.
 
 ## Best Practices for Image Overlay
 
@@ -288,7 +305,7 @@ For high-performance applications, consider these optimizations:
 
 ## Conclusion
 
-The `OnVideoFrameBuffer` event gives direct access to every raw frame on both the legacy `VideoCaptureCore` engine (RGB24/RGB32 via `VideoFrameBufferEventArgs`) and the cross-platform X engines (`VideoCaptureCoreX` / `MediaPlayerCoreX`, BGRA via `VideoFrameXBufferEventArgs`). This is the right tool when you need pixel-level control — custom blend modes, per-frame CV annotations, or integration with third-party imaging libraries.
+The `OnVideoFrameBuffer` event gives direct access to every raw frame on both the legacy `VideoCaptureCore` engine (RGB24/RGB32 via `VideoFrameBufferEventArgs`) and the cross-platform X engines (`VideoCaptureCoreX` / `MediaPlayerCoreX`, grabber-format frames via `VideoFrameXBufferEventArgs`). This is the right tool when you need pixel-level control — custom blend modes, per-frame CV annotations, or integration with third-party imaging libraries.
 
 For static or animated image overlays without writing a per-frame handler, the one-line [image overlay effect](../video-effects/image-overlay.md) is usually the better choice.
 

@@ -26,11 +26,11 @@ primary_api_classes:
 
 # Grabar video de webcam en VB.NET: Guía completa
 
-Grabar video de webcam en aplicaciones VB.NET es un requisito común para proyectos de videoconferencia, vigilancia y multimedia. Esta guía proporciona instrucciones paso a paso para capturar, previsualizar y guardar video de webcam en archivos MP4 usando [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) en VB.NET (Visual Basic .NET).
+Grabar video de webcam en aplicaciones VB.NET es un requisito común para proyectos de videoconferencia, vigilancia y multimedia. Esta guía proporciona instrucciones paso a paso para capturar, previsualizar y guardar video de webcam en archivos MP4 usando [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) en VB.NET (Visual Basic .NET).
 
 ## Por qué usar Video Capture SDK .Net para grabación de webcam en VB.NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) ofrece soporte de primera clase para VB.NET con:
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) ofrece soporte de primera clase para VB.NET con:
 
 - Soporte completo de async/await para captura de webcam sin bloqueo
 - Enumeración de dispositivos para fuentes de video, fuentes de audio y salidas de audio
@@ -44,9 +44,9 @@ Grabar video de webcam en aplicaciones VB.NET es un requisito común para proyec
 Agregue los siguientes paquetes a su proyecto VB.NET:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 ## Ejemplo completo de grabación de webcam en VB.NET
@@ -302,4 +302,4 @@ Suscríbase al evento `OnError` usando `AddHandler VideoCapture1.OnError, Addres
 - [Crear un Reproductor de Video en VB.NET](../../mediaplayer/guides/video-player-vb-net.md) — reproductor multimedia VB.NET con controles de reproducción
 - [Tutorial de Webcam a MP4](../video-tutorials/video-capture-webcam-mp4.md) — tutorial paso a paso de grabación de webcam en C#
 - [Captura de Foto con Cámara Web](make-photo-using-webcam.md) — capturar imágenes fijas de la webcam en lugar de video
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas

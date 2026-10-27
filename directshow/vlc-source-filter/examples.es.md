@@ -1236,9 +1236,10 @@ public partial class MainForm : Form
 
 ### Problema: Error "Class not registered"
 
-**Solución**: Asegúrese de que el filtro de Fuente VLC esté registrado:
+**Solución**: Registre la compilación de VLC Source que corresponda a su aplicación (x86 o x64):
 ```bash
 regsvr32 VisioForge_VLC_Source.ax
+regsvr32 VisioForge_VLC_Source_x64.ax
 ```
 
 ### Problema: El Recuento de Pistas de Audio/Subtítulos Devuelve 0

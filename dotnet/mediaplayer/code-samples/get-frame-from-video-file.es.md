@@ -1,6 +1,6 @@
 ---
-title: Extraer Frames de Video en C# .NET como Bitmap o Byte[]
-description: Obtén frames como Bitmap, SkiaSharp SKBitmap o arrays RGB. Busca cualquier timestamp, extracción masiva y genera miniaturas de video.
+title: Extraer frames de video en C# .NET como Bitmap o Byte[]
+description: Obtenga frames como Bitmap, SkiaSharp SKBitmap o arrays RGB. Busque cualquier timestamp, extracción masiva y genere miniaturas de video.
 tags:
   - Media Player SDK
   - .NET
@@ -20,16 +20,16 @@ primary_api_classes:
 
 ---
 
-# Extrayendo Frames de Video de Archivos de Video en .NET
+# Extraer frames de video de archivos de video en .NET
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-La extracción de frames de video es un requisito común en muchas aplicaciones multimedia. Ya sea que estés construyendo una herramienta de edición de video, creando miniaturas, o realizando análisis de video, extraer frames específicos de archivos de video es una capacidad esencial. Esta guía explica diferentes enfoques para capturar frames de archivos de video en aplicaciones .NET.
+La extracción de frames de video es un requisito común en muchas aplicaciones multimedia. Ya sea que esté construyendo una herramienta de edición de video, creando miniaturas, o realizando análisis de video, extraer frames específicos de archivos de video es una capacidad esencial. Esta guía explica diferentes enfoques para capturar frames de archivos de video en aplicaciones .NET.
 
-!!! tip "Agentes de IA: usa el servidor MCP de VisioForge"
+!!! tip "Agentes de IA: use el servidor MCP de VisioForge"
 
-    ¿Lo construyes con **Claude Code**, **Cursor** u otro agente de IA?
-    Conecta al servidor MCP público de VisioForge
+    ¿Lo construye con **Claude Code**, **Cursor** u otro agente de IA?
+    Conecte al servidor MCP público de VisioForge
     ([documentación](../../general/mcp-server-usage.md))
     en `https://mcp.visioforge.com/mcp` para consultas estructuradas de la API,
     ejemplos de código ejecutables y guías de despliegue — más preciso que
@@ -37,7 +37,7 @@ La extracción de frames de video es un requisito común en muchas aplicaciones 
 
     Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
 
-## ¿Por Qué Extraer Frames de Video?
+## ¿Por qué extraer frames de video?
 
 Hay numerosos casos de uso para extracción de frames de video:
 
@@ -48,20 +48,20 @@ Hay numerosos casos de uso para extracción de frames de video:
 - Crear secuencias timelapse de material de video
 - Capturar imágenes fijas de grabaciones de video
 
-## Entendiendo la Extracción de Frames de Video
+## Entender la extracción de frames de video
 
-Los archivos de video contienen secuencias de frames mostrados en intervalos específicos para crear la ilusión de movimiento. Al extraer un frame, esencialmente estás capturando una sola imagen en una marca de tiempo específica dentro del video. Este proceso involucra:
+Los archivos de video contienen secuencias de frames mostrados en intervalos específicos para crear la ilusión de movimiento. Al extraer un frame, esencialmente está capturando una sola imagen en una marca de tiempo específica dentro del video. Este proceso involucra:
 
 1. Abrir el archivo de video
 2. Buscar la marca de tiempo específica
 3. Decodificar los datos del frame
 4. Convertirlo a un formato de imagen
 
-## Métodos de Extracción de Frames en .NET
+## Métodos de extracción de frames en .NET
 
-Hay varios enfoques para extraer frames de archivos de video en .NET, dependiendo de tus requisitos y entorno.
+Hay varios enfoques para extraer frames de archivos de video en .NET, dependiendo de sus requisitos y entorno.
 
-### Usando Componentes SDK Específicos de Windows
+### Usar componentes SDK específicos de Windows
 
 Para aplicaciones solo Windows, los componentes clásicos del SDK ofrecen métodos directos para extracción de frames:
 
@@ -99,11 +99,11 @@ public void ExtractFrameWithMediaPlayerCore()
 
 El método `Helpful_GetFrameFromFile` simplifica el proceso manejando las operaciones de apertura de archivo, búsqueda y decodificación de frame en una sola llamada. Los cuatro argumentos son obligatorios: la ruta al archivo, la marca de tiempo para el seek, un flag `oldWay` (pase `false` para la ruta moderna de decodificación) y un selector de motor `MediaPlayerSourceMode` (`LAV`, `FFMPEG` o `File_DS`).
 
-### Soluciones Multiplataforma con X-Engine
+### Soluciones multiplataforma con X-Engine
 
 Las aplicaciones .NET modernas a menudo necesitan ejecutarse en múltiples plataformas. El X-engine proporciona capacidades multiplataforma para extracción de frames de video:
 
-#### Extrayendo Frames como System.Drawing.Bitmap
+#### Extraer frames como System.Drawing.Bitmap
 
 El enfoque más común es extraer frames como objetos `System.Drawing.Bitmap`:
 
@@ -124,9 +124,9 @@ public void ExtractFrameAsBitmap()
 }
 ```
 
-#### Extrayendo Frames como Bitmaps de SkiaSharp
+#### Extraer frames como bitmaps de SkiaSharp
 
-Para aplicaciones que usan SkiaSharp para procesamiento gráfico, puedes extraer frames directamente como objetos `SKBitmap`:
+Para aplicaciones que usan SkiaSharp para procesamiento gráfico, puede extraer frames directamente como objetos `SKBitmap`:
 
 ```csharp
 using VisioForge.Core.MediaInfo;
@@ -147,9 +147,9 @@ public void ExtractFrameAsSkiaBitmap()
 }
 ```
 
-#### Trabajando con Datos RGB Sin Procesar
+#### Trabajar con datos RGB sin procesar
 
-Para escenarios más avanzados o cuando necesitas manipulación directa de píxeles, puedes extraer frames como arrays de bytes RGB:
+Para escenarios más avanzados o cuando necesita manipulación directa de píxeles, puede extraer frames como arrays de bytes RGB:
 
 ```csharp
 using VisioForge.Core.MediaInfo;
@@ -167,14 +167,14 @@ public void ExtractFrameAsRGBArray()
 }
 ```
 
-## Mejores Prácticas para Extracción de Frames de Video
+## Mejores prácticas para extracción de frames de video
 
-Al implementar extracción de frames de video en tus aplicaciones, considera estas mejores prácticas:
+Al implementar extracción de frames de video en sus aplicaciones, considere estas mejores prácticas:
 
-### Consideraciones de Rendimiento
+### Consideraciones de rendimiento
 
 - Extraer frames puede ser intensivo en CPU, especialmente para videos de alta resolución
-- Considera implementar mecanismos de caché para frames accedidos frecuentemente
+- Considere implementar mecanismos de caché para frames accedidos frecuentemente
 - Para extracción por lotes, implementa procesamiento paralelo donde sea apropiado
 
 ```csharp
@@ -236,7 +236,7 @@ public void ExtractFrameWithProperDisposal()
 }
 ```
 
-## Aplicaciones Comunes
+## Aplicaciones comunes
 
 La extracción de frames se usa en varias aplicaciones multimedia:
 
@@ -248,9 +248,9 @@ La extracción de frames se usa en varias aplicaciones multimedia:
 
 ## Conclusión
 
-Extraer frames de archivos de video es una capacidad poderosa para desarrolladores .NET trabajando con contenido multimedia. Ya sea que estés construyendo aplicaciones específicas de Windows o soluciones multiplataforma, los métodos descritos en esta guía proporcionan formas eficientes de capturar y trabajar con frames de video.
+Extraer frames de archivos de video es una capacidad poderosa para desarrolladores .NET trabajando con contenido multimedia. Ya sea que esté construyendo aplicaciones específicas de Windows o soluciones multiplataforma, los métodos descritos en esta guía proporcionan formas eficientes de capturar y trabajar con frames de video.
 
-Al entender los diferentes enfoques y seguir las mejores prácticas, puedes implementar funcionalidad robusta de extracción de frames en tus aplicaciones .NET.
+Al entender los diferentes enfoques y seguir las mejores prácticas, puede implementar funcionalidad robusta de extracción de frames en sus aplicaciones .NET.
 
 ## Véase también
 
@@ -260,4 +260,4 @@ Una vez extraído un fotograma en cualquier marca de tiempo, se puede indexar y 
 - [Detección de vocabulario abierto](../../general/ai/open-vocabulary-detection.md) — permite detectar cualquier objeto que se pueda nombrar en una indicación de texto, sin datos de entrenamiento.
 
 ---
-Para más ejemplos de código y muestras, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para más ejemplos de código y muestras, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

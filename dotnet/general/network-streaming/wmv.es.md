@@ -1,5 +1,5 @@
 ---
-title: Implementación de Streaming en Red WMV en Apps .NET
+title: Implementación de streaming en red WMV en apps .NET
 description: Implemente streaming de Windows Media Video en .NET con algoritmos de compresión, bitrates adaptativos y optimización de ancho de banda para entrega en red.
 tags:
   - Video Capture SDK
@@ -19,11 +19,11 @@ primary_api_classes:
   - NetworkStreamingFormat
 ---
 
-# Guía de Implementación de Streaming en Red Windows Media Video (WMV)
+# Guía de implementación de streaming en red Windows Media Video (WMV)
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
-## Introducción a la Tecnología de Streaming WMV
+## Introducción a la tecnología de streaming WMV
 
 Windows Media Video (WMV) representa una tecnología de streaming versátil y potente desarrollada por Microsoft. Como componente integral del framework de Windows Media, WMV se ha establecido como una solución confiable para entregar contenido de video de manera eficiente a través de redes. Este formato utiliza algoritmos de compresión sofisticados que reducen sustancialmente los tamaños de archivo mientras mantienen calidad visual aceptable, haciéndolo particularmente adecuado para aplicaciones de streaming donde la optimización del ancho de banda es crítica.
 
@@ -52,7 +52,7 @@ WMV implementa el contenedor Advanced Systems Format (ASF), que proporciona vari
 | Soporte de audio | WMA (Windows Media Audio) |
 | Protocolos de streaming | HTTP, RTSP, MMS |
 
-## Implementación de Streaming WMV solo Windows
+## Implementación de streaming WMV solo Windows
 
 [VideoCaptureCore](#){ .md-button }
 
@@ -191,7 +191,7 @@ public partial class StreamViewerForm : Form
     {
         InitializeComponent();
 
-        // Suponiendo que tienes un control de Windows Media Player llamado 'wmPlayer' en el formulario
+        // Suponiendo que tiene un control de Windows Media Player llamado 'wmPlayer' en el formulario
         wmPlayer.URL = streamUrl;
         wmPlayer.Ctlcontrols.play();
     }

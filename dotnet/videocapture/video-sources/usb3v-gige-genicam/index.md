@@ -25,7 +25,7 @@ primary_api_classes:
 
 # USB3 Vision, GigE, and GenICam Camera Integration
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button }
 
 !!! tip "AI coding agents: use the VisioForge MCP server"
 
@@ -144,7 +144,7 @@ Using GenTL with VisioForge provides several advantages:
 To use GenTL cameras with VisioForge:
 
 1. Install the appropriate GenTL producer from your camera manufacturer
-2. Set the `GENICAM_GENTL64_PATH` environment variable to point to the producer library
+2. Set the `GENICAM_GENTL64_PATH` environment variable to point to the producer library. The producer must match your app's architecture: an ARM64 app needs the manufacturer's ARM64 producer, and an x64 producer does not load there: its cameras are missing from the list, with no error
 3. Ensure cameras are properly connected and recognized by the GenTL producer
 4. Use standard VisioForge GenICam enumeration methods to discover GenTL devices
 
@@ -184,7 +184,7 @@ sudo apt-get install libaravis-0.8-dev
 
 ### Windows
 
-Install the `VisioForge.CrossPlatform.GenICam.Windows.x64` package to your project using NuGet.
+For Windows x64, install the `VisioForge.CrossPlatform.GenICam.Windows.x64` package to your project using NuGet. For Windows on ARM64 (.NET 5 or later), install `VisioForge.CrossPlatform.GenICam.Windows.arm64`; an app that runs on both x64 and ARM64 references both packages.
 
 #### USB Driver Installation on Windows
 
@@ -792,6 +792,7 @@ using System.Threading.Tasks;
 // GENICAM_GENTL64_PATH should point to the GenTL producer library
 
 // Example: Set in your application startup or environment
+// An x64 producer: in an ARM64 app, point to the manufacturer's ARM64 producer instead
 Environment.SetEnvironmentVariable("GENICAM_GENTL64_PATH", @"C:\Program Files\Basler\pylon 7\Runtime\x64");
 
 // Initialize SDK

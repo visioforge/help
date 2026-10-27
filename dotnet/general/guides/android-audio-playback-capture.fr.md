@@ -27,7 +27,7 @@ primary_api_classes:
 
 # Enregistrer l'audio d'une autre application sur Android en C# et .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -326,5 +326,5 @@ Les deux causes courantes sont : l'application source s'est exclue de la capture
 - [Implémentation et déploiement sur Android](../../deployment-x/Android.md) : configuration NuGet et empaquetage pour les applications Android
 - [Capture audio et enregistrement du son système](../../videocapture/audio-capture/index.md) : enregistrez le microphone et l'audio système en C#
 - [Blocs encodeurs audio](../../mediablocks/AudioEncoders/index.md) : encodeurs AAC, MP3, FLAC et Opus pour le pipeline Media Blocks
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) : le moteur de haut niveau `VideoCaptureCoreX`
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) : le moteur de bas niveau `MediaBlocksPipeline`
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) : le moteur de haut niveau `VideoCaptureCoreX`
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) : le moteur de bas niveau `MediaBlocksPipeline`

@@ -9,13 +9,13 @@ VisioForge publica **Agent Skills** por plataforma en `https://www.visioforge.co
 
 ## ¿Qué es esto?
 
-Un **Skill** es un paquete pequeño y autocontenido de conocimiento procedimental que un agente de IA puede cargar bajo demanda: los paquetes NuGet a añadir, el código de registro de licencia, las particularidades del archivo de proyecto y los modos de fallo de despliegue que un desarrollador encuentra en la práctica. Los skills se cargan automáticamente por agentes compatibles — no requiere instalación de tu parte.
+Un **Skill** es un paquete pequeño y autocontenido de conocimiento procedimental que un agente de IA puede cargar bajo demanda: los paquetes NuGet a añadir, el código de registro de licencia, las particularidades del archivo de proyecto y los modos de fallo de despliegue que un desarrollador encuentra en la práctica. Los skills se cargan automáticamente por agentes compatibles — no requiere instalación de su parte.
 
-Cuando un desarrollador le pide al agente (Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI, OpenCode, Goose, Junie, …) algo como *"añade captura de video VisioForge a esta app WPF"*, el agente inspecciona el índice de descubrimiento, encuentra el skill correspondiente, descarga el archivo y sigue las instrucciones empaquetadas. El resultado es una configuración que usa las versiones *actuales* de los paquetes y evita las trampas de despliegue que documentamos.
+Cuando un desarrollador le pide al agente (Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI, OpenCode, Goose, Junie, …) algo como *"añada captura de video VisioForge a esta app WPF"*, el agente inspecciona el índice de descubrimiento, encuentra el skill correspondiente, descarga el archivo y sigue las instrucciones empaquetadas. El resultado es una configuración que usa las versiones *actuales* de los paquetes y evita las trampas de despliegue que documentamos.
 
 ## Superficie de descubrimiento
 
-Los endpoints bien-conocidos y las señales HTML/HTTP los emite el sitio de marketing `www.visioforge.com` (el host que sirve `/.well-known/agent-skills/`); el sitio de ayuda donde estás leyendo esto (`help.visioforge.com`) actualmente no inyecta el `<link>` ni la cabecera `Link:` de descubrimiento. Los agentes que nos descubran desde una página del sitio de ayuda deberían seguir directamente el enlace inline a `https://www.visioforge.com/.well-known/agent-skills/index.json`.
+Los endpoints bien-conocidos y las señales HTML/HTTP los emite el sitio de marketing `www.visioforge.com` (el host que sirve `/.well-known/agent-skills/`); el sitio de ayuda donde está leyendo esto (`help.visioforge.com`) actualmente no inyecta el `<link>` ni la cabecera `Link:` de descubrimiento. Los agentes que nos descubran desde una página del sitio de ayuda deberían seguir directamente el enlace inline a `https://www.visioforge.com/.well-known/agent-skills/index.json`.
 
 | Endpoint (servido por `www.visioforge.com`) | Propósito |
 |---|---|

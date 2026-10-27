@@ -25,7 +25,7 @@ primary_api_classes:
 
 # Éditeur vidéo iOS pour une édition vidéo intégrée et fluide
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
 
 ## Introduction à l'édition vidéo sur iOS
 

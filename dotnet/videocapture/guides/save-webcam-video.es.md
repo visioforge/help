@@ -36,7 +36,7 @@ Capturar y guardar video de webcams es un requisito común en muchas aplicacione
 
 ## Características Clave de Video Capture SDK .Net
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) es una biblioteca poderosa diseñada específicamente para desarrolladores .NET que necesitan implementar funcionalidad de captura de webcam en sus aplicaciones. Ya sea que desee grabar video de webcam, guardar fotogramas de webcam como imágenes o mostrar la transmisión de la webcam en su aplicación, este SDK lo tiene cubierto. Algunas de sus características destacadas incluyen:
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) es una biblioteca poderosa diseñada específicamente para desarrolladores .NET que necesitan implementar funcionalidad de captura de webcam en sus aplicaciones. Ya sea que desee grabar video de webcam, guardar fotogramas de webcam como imágenes o mostrar la transmisión de la webcam en su aplicación, este SDK lo tiene cubierto. Algunas de sus características destacadas incluyen:
 
 - Integración perfecta con aplicaciones .NET
 - Soporte para múltiples dispositivos de captura (webcams USB, cámaras IP, tarjetas de captura)
@@ -85,7 +85,7 @@ Una de las características destacadas de Video Capture SDK .Net es su robusto s
 
 ### Tecnologías GPU Soportadas
 
-Video Capture SDK .Net aprovecha múltiples tecnologías de aceleración GPU:
+El Video Capture SDK .Net aprovecha múltiples tecnologías de aceleración GPU:
 
 - **NVIDIA NVENC:** Codificación acelerada por hardware en GPUs NVIDIA
 - **AMD AMF/VCE:** Aceleración en tarjetas gráficas AMD
@@ -229,14 +229,14 @@ await videoCapture1.Snapshot_SaveAsync(
 
 ## Dependencias Nativas
 
-Video Capture SDK .Net depende de bibliotecas nativas para acceder a dispositivos de webcam y realizar procesamiento de video y audio. Estas dependencias nativas se incluyen con el SDK y se implementan automáticamente con su aplicación, asegurando una integración perfecta y compatibilidad en diferentes sistemas.
+El Video Capture SDK .Net depende de bibliotecas nativas para acceder a dispositivos de webcam y realizar procesamiento de video y audio. Estas dependencias nativas se incluyen con el SDK y se implementan automáticamente con su aplicación, asegurando una integración perfecta y compatibilidad en diferentes sistemas.
 
 ### Referencia de Paquete
 
 Paquete principal del SDK:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
 ```
 
 ### Paquetes Redist Específicos de Plataforma
@@ -244,23 +244,23 @@ Paquete principal del SDK:
 Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 Para otras plataformas:
 
 ```xml
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
 
 <!-- Linux x64 (requiere GStreamer 1.22+ del sistema) -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
 
 ## Compatibilidad Multiplataforma
 
-Video Capture SDK .Net está diseñado con la compatibilidad multiplataforma en mente, lo que lo convierte en una opción ideal para desarrolladores que trabajan en aplicaciones que necesitan ejecutarse en múltiples sistemas operativos.
+El Video Capture SDK .Net está diseñado con la compatibilidad multiplataforma en mente, lo que lo convierte en una opción ideal para desarrolladores que trabajan en aplicaciones que necesitan ejecutarse en múltiples sistemas operativos.
 
 ### Compatibilidad con MAUI
 
@@ -273,7 +273,7 @@ Para desarrolladores que trabajan con .NET MAUI (Interfaz de Usuario de Aplicaci
 
 Esta capacidad multiplataforma permite a los desarrolladores escribir código una vez e implementarlo en Windows, macOS y plataformas móviles a través de MAUI, reduciendo significativamente el tiempo de desarrollo y la sobrecarga de mantenimiento.
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) proporciona una solución integral para agregar capacidades de captura de video de webcam a sus aplicaciones DotNet. Ya sea que necesite grabar imágenes de webcam, guardar imágenes de webcam o simplemente mostrar la transmisión de la webcam en su aplicación, esta biblioteca hace que el proceso sea simple con solo unas pocas líneas de código C#.
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) proporciona una solución integral para agregar capacidades de captura de video de webcam a sus aplicaciones DotNet. Ya sea que necesite grabar imágenes de webcam, guardar imágenes de webcam o simplemente mostrar la transmisión de la webcam en su aplicación, esta biblioteca hace que el proceso sea simple con solo unas pocas líneas de código C#.
 
 Con soporte para formatos estándar de la industria como MP4 y WebM, códecs modernos incluyendo H.264/H.265 y VP8/VP9/AV1, y potente aceleración GPU, ofrece el rendimiento y la flexibilidad necesarios incluso para las aplicaciones de captura de video más exigentes. La capacidad de crear y guardar archivos de video eficientemente hace que esta biblioteca sea perfecta para cualquier aplicación que necesite grabar contenido de webcam.
 
@@ -293,7 +293,7 @@ Use la clase `VideoCaptureDeviceSourceSettings` para seleccionar una resolución
 
 ### ¿Puedo usar aceleración GPU para grabar video de webcam en C#?
 
-Sí. Video Capture SDK .Net detecta automáticamente el hardware GPU disponible — NVIDIA NVENC, AMD AMF/VCE e Intel Quick Sync Video — y selecciona la codificación acelerada por hardware cuando crea un `MP4Output` o `WebMOutput`. No se requiere configuración adicional. Si no se encuentra una GPU compatible, el SDK recurre a la codificación por software optimizada de forma transparente.
+Sí. El Video Capture SDK .Net detecta automáticamente el hardware GPU disponible — NVIDIA NVENC, AMD AMF/VCE e Intel Quick Sync Video — y selecciona la codificación acelerada por hardware cuando crea un `MP4Output` o `WebMOutput`. No se requiere configuración adicional. Si no se encuentra una GPU compatible, el SDK recurre a la codificación por software optimizada de forma transparente.
 
 ### ¿Cómo grabo video de webcam con audio?
 
@@ -314,4 +314,4 @@ Sí. El SDK es completamente multiplataforma. Agregue los paquetes NuGet redist 
 - [Tutorial de Webcam a MP4](../video-tutorials/video-capture-webcam-mp4.md) — guía paso a paso para grabación en MP4
 - [Captura de Cámara IP a MP4](../video-tutorials/ip-camera-capture-mp4.md) — grabar desde cámaras de red en lugar de webcams locales
 - [Escáner de Códigos de Barras y QR](../../mediablocks/Guides/barcode-qr-reader-guide.md) — combinar captura de webcam con detección de códigos de barras
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas

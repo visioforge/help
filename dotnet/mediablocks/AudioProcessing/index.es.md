@@ -1,7 +1,7 @@
 ---
-title: Procesamiento de Audio en C# .NET - Mezclador, EQ, Efectos
+title: Procesamiento de audio en C# .NET - Mezclador, EQ, efectos
 description: Pipelines de audio en C# con VisioForge Media Blocks SDK — mezclador, ecualizador, reverberación, reducción de ruido y más de 30 bloques.
-sidebar_label: Procesamiento y Efectos de Audio
+sidebar_label: Procesamiento y efectos de audio
 tags:
   - Media Blocks SDK
   - .NET
@@ -20,9 +20,9 @@ primary_api_classes:
 
 ---
 
-# Bloques de Procesamiento y Efectos de Audio para .NET
+# Bloques de procesamiento y efectos de audio para .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 VisioForge Media Blocks SDK proporciona un enfoque basado en pipelines para el procesamiento de audio en C# y .NET. Conecte bloques de audio — conversores, remuestreadores, mezcladores, ecualizadores, efectos y analizadores — para construir cadenas de procesamiento de audio en tiempo real para sus aplicaciones. Cada bloque tiene pines de entrada/salida tipados que se conectan entre sí usando `pipeline.Connect()`.
 
@@ -30,7 +30,7 @@ Para obtener información detallada sobre los parámetros y propiedades de los e
 
 Todos los bloques son multiplataforma y funcionan en Windows, macOS, Linux, iOS y Android.
 
-## Procesamiento Básico de Audio
+## Procesamiento básico de audio
 
 ### Audio Converter
 
@@ -344,6 +344,7 @@ Configure mediante `AudioMixerSettings`:
 | Propiedad | Tipo | Predeterminado | Descripción |
 |----------|------|---------|-------------|
 | `Format` | `AudioInfoX` | `S16LE, 48000 Hz, 2 ch` | Formato de audio de salida (formato de muestra, tasa de muestreo, número de canales) |
+| `Latency` | `TimeSpan` | `100 ms` | Tiempo que el mezclador espera la entrada retrasada en una canalización en vivo antes de mezclar sin ella; un valor demasiado bajo se oye como clics y cortes en fuentes en vivo. `TimeSpan.Zero` espera solo la latencia que informan las entradas. Se aplica al iniciar la canalización |
 
 **Métodos en tiempo de ejecución:**
 
@@ -471,7 +472,7 @@ audioSampleGrabber.OnAudioFrameBuffer += (sender, args) =>
     // args.Frame.DataSize    — tamaño en bytes del buffer
     // args.Frame.Info.Format — AudioFormat (ej. S16LE, F32LE)
     // args.Frame.Info.SampleRate / Channels / BPS
-    // Establece args.UpdateData = true si mutas el buffer y quieres que se propague downstream.
+    // Establecer args.UpdateData = true si muta el buffer y quiere que se propague downstream.
 };
 pipeline.Connect(fileSource.AudioOutput, audioSampleGrabber.Input);
 
@@ -485,7 +486,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Efectos de Audio
+## Efectos de audio
 
 ### Amplify
 
@@ -774,7 +775,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Ecualización y Filtrado
+## Ecualización y filtrado
 
 ### Balance
 
@@ -857,7 +858,7 @@ El ecualizador proporciona 10 bandas de frecuencia fija. Use `SetBand(int index,
 | 8 | 7523 Hz | 5765 Hz |
 | 9 | 15011 Hz | 11498 Hz |
 
-El constructor no tiene parámetros. Usa `SetBand(int index, double gain)` para ajustar cada una de las 10 bandas después de la construcción.
+El constructor no tiene parámetros. Use `SetBand(int index, double gain)` para ajustar cada una de las 10 bandas después de la construcción.
 
 **Elemento GStreamer**: `equalizer-10bands`
 
@@ -897,7 +898,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Ecualizador (Paramétrico)
+### Ecualizador (paramétrico)
 
 El bloque de ecualizador paramétrico proporciona un ecualizador paramétrico para el procesamiento de audio.
 
@@ -1084,7 +1085,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Procesamiento Dinámico
+## Procesamiento dinámico
 
 ### Compresor/Expansor
 
@@ -1110,7 +1111,7 @@ Configure mediante `CompressorExpanderAudioEffect`:
 | `Ratio` | `float` | `1.0` | Relación de compresión/expansión (por ejemplo, 2.0 = compresión 2:1) |
 | `Threshold` | `float` | `0.0` | Nivel de umbral (0.0–1.0). La señal por encima de este nivel se comprime/expande |
 
-El constructor no tiene parámetros. Configura vía `Ratio`, `Threshold`, `Mode` y `Characteristics` después de construir.
+El constructor no tiene parámetros. Configure vía `Ratio`, `Threshold`, `Mode` y `Characteristics` después de construir.
 
 **Elemento GStreamer**: `audiodynamic`
 
@@ -1208,7 +1209,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Análisis y Medición
+## Análisis y medición
 
 ### VU Meter
 
@@ -1275,7 +1276,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Efectos de Audio
+## Efectos de audio
 
 ### Audio Effects
 
@@ -1332,7 +1333,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Normalización de Sonoridad de Audio
+### Normalización de sonoridad de audio
 
 El bloque AudioLoudNorm normaliza la sonoridad del audio según los estándares EBU R128, asegurando una sonoridad percibida consistente entre diferentes contenidos de audio.
 
@@ -1387,7 +1388,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Reducción de Ruido RNN
+### Reducción de ruido RNN
 
 El bloque AudioRNNoise utiliza reducción de ruido basada en redes neuronales recurrentes (RNN) para eliminar el ruido de fondo de los flujos de audio mientras preserva la calidad del habla.
 
@@ -1437,7 +1438,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-### Eliminar Silencio
+### Eliminar silencio
 
 El bloque RemoveSilence detecta y elimina automáticamente las porciones silenciosas de los flujos de audio, útil para podcasts, grabaciones de voz y edición de audio.
 
@@ -1545,7 +1546,7 @@ var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 // CsoundFilterBlock toma el contenido del script Csound (.csd) directamente, no un objeto settings.
-// Carga el script desde disco y pasa el texto al constructor — opcionalmente establece Loop/ScoreOffset.
+// Cargar el script desde disco y pasar el texto al constructor — opcionalmente establecer Loop/ScoreOffset.
 var csdText = File.ReadAllText("filter.csd");
 var csound = new CsoundFilterBlock(csdText, loop: false, scoreOffset: 0.0);
 pipeline.Connect(fileSource.AudioOutput, csound.Input);
@@ -1581,7 +1582,7 @@ Salida | Audio sin comprimir | 1
 | `PostMessages` | `bool` | `true` | Si se deben publicar mensajes de bus GStreamer con los resultados de medición |
 | `Interval` | `TimeSpan` | `1 s` | Intervalo entre actualizaciones de medición |
 
-`EbuR128LevelBlock` lanza `OnMeasurement` una vez por `Interval` mientras `PostMessages = true`. `EbuR128LevelEventArgs` lleva `Momentary`, `ShortTerm`, `Global`, `RelativeThreshold` y `LoudnessRange`, cada uno `null` salvo que `Mode` habilite esa métrica, más el `Timestamp` de la ventana medida, que a su vez es `null` siempre que el elemento informe como desconocido el tiempo de ejecución de esa ventana, cosa que ocurre en el primer mensaje de una ejecución y en cualquier ventana que el segmento actual no pueda mapear. Un `Timestamp` nulo no invalida las métricas del mismo evento. Los picos de muestra y reales por canal no los lleva el evento. El manejador se ejecuta en el hilo del bus de la pipeline, así que mantenlo corto.
+`EbuR128LevelBlock` lanza `OnMeasurement` una vez por `Interval` mientras `PostMessages = true`. `EbuR128LevelEventArgs` lleva `Momentary`, `ShortTerm`, `Global`, `RelativeThreshold` y `LoudnessRange`, cada uno `null` salvo que `Mode` habilite esa métrica, más el `Timestamp` de la ventana medida, que a su vez es `null` siempre que el elemento informe como desconocido el tiempo de ejecución de esa ventana, cosa que ocurre en el primer mensaje de una ejecución y en cualquier ventana que el segmento actual no pueda mapear. Un `Timestamp` nulo no invalida las métricas del mismo evento. Los picos de muestra y reales por canal no los lleva el evento. El manejador se ejecuta en el hilo del bus de la pipeline, así que manténgalo corto.
 
 **Elemento GStreamer**: `ebur128level`
 
@@ -1669,7 +1670,7 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
-// HRTFRenderBlock tiene constructor sin parámetros; configura vía propiedades.
+// HRTFRenderBlock tiene constructor sin parámetros; configurar vía propiedades.
 // Descargue un binario HRIR compatible desde https://github.com/mrDIMAS/hrir_sphere_builder/tree/master/hrtf_base/IRCAM.
 var hrtf = new HRTFRenderBlock
 {
@@ -1732,7 +1733,7 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
-// RSAudioEchoBlock tiene constructor sin parámetros; configura vía propiedades (Delay/MaxDelay son TimeSpan).
+// RSAudioEchoBlock tiene constructor sin parámetros; configurar vía propiedades (Delay/MaxDelay son TimeSpan).
 var rsEcho = new RSAudioEchoBlock
 {
     Delay     = TimeSpan.FromMilliseconds(500),
@@ -1805,7 +1806,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux.
 
-### Detector de Silencio
+### Detector de silencio
 
 El `SilenceDetectorBlock` analiza los niveles de audio en tiempo real para detectar períodos de silencio basándose en un umbral configurable en dBFS. Es un bloque de paso -- el audio se reenvía sin cambios mientras los eventos `OnSilenceStarted` y `OnSilenceEnded` se disparan en las transiciones de estado. Los períodos detectados pueden recuperarse como lista o exportarse como JSON. `SilenceDetectionEventArgs.Timestamp` y `SilenceDetectionData.Timestamp` son `TimeSpan?`: cuando el elemento no puede situar una medición en la línea de tiempo, los eventos siguen disparándose en cada transición con una posición `null`, y `SilenceDetectionEventArgs.Period` es `null` junto con ella; un período solo se registra cuando se conocen sus dos extremos, así que nada queda anotado en una posición equivocada.
 
@@ -1865,7 +1866,7 @@ Console.WriteLine(json);
 
 Windows, macOS, Linux, iOS, Android.
 
-### Mezcla de Canales Ponderada
+### Mezcla de canales ponderada
 
 El `WeightedChannelMixBlock` mezcla los canales estéreo izquierdo y derecho con pesos ajustables de forma independiente, produciendo una salida mono o estéreo. Se utiliza principalmente para fuentes de doble mono, como audio de karaoke donde un canal lleva una pista instrumental y el otro una mezcla completa.
 
@@ -1917,7 +1918,7 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 ???+ "¿Cómo conecto bloques de audio en un pipeline?"
     Cree un `MediaBlocksPipeline`, instancie los bloques que necesite, luego conéctelos usando `pipeline.Connect(sourceBlock.Output, destinationBlock.Input)`. Cada bloque tiene pines de entrada y salida tipados -- el pipeline valida que los pines conectados tengan tipos de medios compatibles.
@@ -1934,7 +1935,7 @@ Windows, macOS, Linux, iOS, Android.
 ???+ "¿Los bloques de audio soportan cambios de parámetros en tiempo real?"
     Sí. Puede modificar las propiedades de los bloques durante la reproducción. Por ejemplo, cambiar el nivel de volumen, ajustar bandas del EQ o actualizar los pesos del mezclador mientras el pipeline está en ejecución. Los cambios toman efecto inmediatamente sin detener el pipeline.
 
-## Ver También
+## Ver también
 
 * [Descripción General de Efectos de Audio](../../general/audio-effects/index.md)
 * [Referencia de Efectos de Audio](../../general/audio-effects/reference.md)

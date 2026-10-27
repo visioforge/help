@@ -24,7 +24,7 @@ primary_api_classes:
 
 # Guía Completa para la Integración de Cámaras IP y Fuentes de Red
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
 !!! info "Soporte multiplataforma"
     El motor `VideoCaptureCoreX` funciona en **Windows, macOS, Linux, Android e iOS** vía GStreamer. El motor clásico `VideoCaptureCore` es solo Windows. Consulta la [matriz de soporte de plataformas](../../../platform-matrix.md) para códecs y detalles de aceleración por hardware, y la [guía de despliegue en Linux](../../../deployment-x/Ubuntu.md) para configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.

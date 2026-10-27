@@ -1,6 +1,6 @@
 ---
 title: Ejemplos C# de Media Player SDK .NET — playlist y streaming
-description: Implementa reproducción, extracción de fotogramas, listas de reproducción y streaming con VisioForge Media Player SDK .NET. WinForms, WPF y Consola.
+description: Implemente reproducción, extracción de fotogramas, listas de reproducción y streaming con VisioForge Media Player SDK .NET. WinForms, WPF y Consola.
 sidebar_label: Ejemplos de código
 tags:
   - Media Player SDK
@@ -13,7 +13,7 @@ tags:
 
 # Ejemplos de implementación de Media Player SDK .NET
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Esta página recopila recetas en C# listas para usar para los escenarios de reproducción más comunes con Media Player SDK .Net. Cada fragmento está verificado contra el código fuente del SDK y las demos bajo [`Media Player SDK`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK). En los ejemplos siguientes se utiliza el motor `MediaPlayerCore` (solo Windows); el código multiplataforma basado en `MediaPlayerCoreX` sigue la misma estructura general con ajustes de fuente específicos del motor.
 
@@ -37,7 +37,7 @@ Esta página recopila recetas en C# listas para usar para los escenarios de repr
 
 ## Receta — Reproductor simple
 
-La siguiente clase encapsula `MediaPlayerCore` con llamadas start/stop. El constructor recibe una instancia `IVideoView` (`VideoView` para WPF, `VideoViewWinForms` para WinForms, etc.) que proporciona tu capa de UI.
+La siguiente clase encapsula `MediaPlayerCore` con llamadas start/stop. El constructor recibe una instancia `IVideoView` (`VideoView` para WPF, `VideoViewWinForms` para WinForms, etc.) que proporciona su capa de UI.
 
 ```csharp
 using System;
@@ -131,7 +131,7 @@ public class ControllablePlayer
 
 ## Receta — Capturar el fotograma actual
 
-`Frame_GetCurrent()` devuelve el fotograma más recientemente renderizado como `System.Drawing.Bitmap`. Guárdalo mediante la API `Bitmap.Save` o utiliza `Frame_Save` para escritura en disco integrada con `ImageFormat`.
+`Frame_GetCurrent()` devuelve el fotograma más recientemente renderizado como `System.Drawing.Bitmap`. Guárdalo mediante la API `Bitmap.Save` o utiliza `Frame_Save` para escritura en disco integrada con `ImageFormat`. Llámalos durante la reproducción: después de `Stop` devuelven `null` o `false` e informan del motivo mediante `OnError`.
 
 ```csharp
 using System.Drawing.Imaging;
@@ -146,7 +146,7 @@ public Task<bool> SaveCurrentFrameAsync(MediaPlayerCore player, string outputPat
 
 ## Receta — Reproducir un flujo de red
 
-Para consumir URLs RTSP, RTMP, HTTP, UDP o TCP a través del backend FFmpeg, cambia `Source_Mode` a `MediaPlayerSourceMode.FFMPEG` y añade la URL a la lista de reproducción como cualquier otra fuente.
+Para consumir URLs RTSP, RTMP, HTTP, UDP o TCP a través del backend FFmpeg, cambie `Source_Mode` a `MediaPlayerSourceMode.FFMPEG` y añada la URL a la lista de reproducción como cualquier otra fuente.
 
 ```csharp
 using System.Threading.Tasks;
@@ -166,7 +166,7 @@ public async Task PlayRtspAsync(MediaPlayerCore player, string url)
 
 ## Receta — Navegación por la lista de reproducción
 
-La API de lista de reproducción integrada lleva el índice actual por ti. `Playlist_PlayNext` avanza al elemento siguiente; `OnStop` se dispara al final natural del flujo, donde puedes encadenar la siguiente pista.
+La API de lista de reproducción integrada lleva el índice actual por usted. `Playlist_PlayNext` avanza al elemento siguiente; `OnStop` se dispara al final natural del flujo, donde puede encadenar la siguiente pista.
 
 ```csharp
 using System;
@@ -219,4 +219,4 @@ public class PlaylistPlayer
 
 ## Recursos adicionales
 
-Para una colección más extensa de ejemplos de código y escenarios de implementación, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para una colección más extensa de ejemplos de código y escenarios de implementación, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

@@ -1,5 +1,5 @@
 ---
-title: Video Edit SDK .NET - Crea aplicaciones de edición de video
+title: Video Edit SDK .NET - Cree aplicaciones de edición de video
 description: Edición de video en SDK .NET con líneas de tiempo personalizables, múltiples formatos, transiciones, efectos y vistas previas en tiempo real.
 sidebar_position: 0
 tags:
@@ -24,25 +24,25 @@ primary_api_classes:
 
 ---
 
-# Construyendo Aplicaciones Profesionales de Edición de Video con SDK .NET
+# Construir aplicaciones profesionales de edición de video con SDK .NET
 
-## Introducción a la Edición de Video con .NET
+## Introducción a la edición de video con .NET
 
-El Video Edit SDK ofrece funcionalidad potente para desarrolladores .NET que desean crear aplicaciones profesionales de edición de video. Este SDK soporta una amplia gama de plataformas y frameworks de UI, permitiéndote construir editores de video ricos en características que manejan múltiples formatos, aplican efectos, gestionan transiciones y entregan salida de alta calidad.
+El Video Edit SDK ofrece funcionalidad potente para desarrolladores .NET que desean crear aplicaciones profesionales de edición de video. Este SDK soporta una amplia gama de plataformas y frameworks de UI, permitiéndole construir editores de video ricos en características que manejan múltiples formatos, aplican efectos, gestionan transiciones y entregan salida de alta calidad.
 
-## Configurando Tu Entorno de Desarrollo
+## Configurar su entorno de desarrollo
 
-### Creando Tu Proyecto Inicial
+### Crear su proyecto inicial
 
-El SDK está diseñado para funcionar sin problemas con varios entornos de desarrollo. Puedes utilizar tanto Visual Studio como JetBrains Rider para crear tu proyecto, seleccionando tu plataforma y framework de UI preferidos según tus requisitos.
+El SDK está diseñado para funcionar sin problemas con varios entornos de desarrollo. Puede utilizar tanto Visual Studio como JetBrains Rider para crear su proyecto, seleccionando su plataforma y framework de UI preferidos según sus requisitos.
 
-Para un proceso de configuración fluido, por favor consulta nuestra [guía de instalación](../install/index.md) detallada que proporciona instrucciones para agregar los paquetes NuGet necesarios y configurar las dependencias nativas correctamente.
+Para un proceso de configuración fluido, por favor consulte nuestra [guía de instalación](../install/index.md) detallada que proporciona instrucciones para agregar los paquetes NuGet necesarios y configurar las dependencias nativas correctamente.
 
-## Implementando la Funcionalidad Principal de Edición de Video
+## Implementar la funcionalidad principal de edición de video
 
-### Inicializando el Motor de Edición de Video
+### Inicializar el motor de edición de video
 
-El SDK proporciona un objeto de edición principal robusto que sirve como la base de tu aplicación de edición de video. `VideoEditCoreX` es un motor X y requiere inicialización del SDK antes de crear cualquier núcleo (consulta [Inicialización](../init.md)); el `VideoEditCore` DirectShow no la requiere. Sigue estos pasos para crear e inicializar este componente esencial:
+El SDK proporciona un objeto de edición principal robusto que sirve como la base de su aplicación de edición de video. `VideoEditCoreX` es un motor X y requiere inicialización del SDK antes de crear cualquier núcleo (consulte [Inicialización](../init.md)); el `VideoEditCore` DirectShow no la requiere. Siga estos pasos para crear e inicializar este componente esencial:
 
 === "VideoEditCore"
 
@@ -81,13 +81,13 @@ El SDK proporciona un objeto de edición principal robusto que sirve como la bas
     
 
 
-Necesitarás especificar un objeto Video View como parámetro para habilitar la funcionalidad de vista previa de video durante las operaciones de edición. Para el motor `VideoEditCoreX`, inicializa el SDK y crea el núcleo dentro de un controlador `async void Form_Load` (o tu ruta de inicio equivalente) antes de configurar el editor — el `core` del motor está listo solo cuando `await InitSDKAsync()` termina.
+Necesitará especificar un objeto Video View como parámetro para habilitar la funcionalidad de vista previa de video durante las operaciones de edición. Para el motor `VideoEditCoreX`, inicialice el SDK y cree el núcleo dentro de un controlador `async void Form_Load` (o su ruta de inicio equivalente) antes de configurar el editor — el `core` del motor está listo solo cuando `await InitSDKAsync()` termina.
 
-### Implementando Manejo de Eventos Robusto
+### Implementar manejo de eventos robusto
 
-#### Gestión de Eventos de Error
+#### Gestión de eventos de error
 
-Para gestión adecuada de errores en tu aplicación, implementa el manejador de evento `OnError`:
+Para gestión adecuada de errores en su aplicación, implemente el manejador de evento `OnError`:
 
 ```cs
 core.OnError += Core_OnError;
@@ -98,9 +98,9 @@ private void Core_OnError(object sender, ErrorsEventArgs e)
 }
 ```
 
-#### Sistema de Seguimiento de Progreso
+#### Sistema de seguimiento de progreso
 
-Para mantener a tus usuarios informados sobre procesos en curso, implementa el manejador de evento de progreso:
+Para mantener a sus usuarios informados sobre procesos en curso, implemente el manejador de evento de progreso:
 
 ```cs
 core.OnProgress += Core_OnProgress;
@@ -111,9 +111,9 @@ private void Core_OnProgress(object sender, ProgressEventArgs e)
 }
 ```
 
-#### Notificación de Finalización de Operación
+#### Notificación de finalización de operación
 
-Para detectar cuando las operaciones de edición han completado, implementa el manejador de evento de parada:
+Para detectar cuando las operaciones de edición han completado, implemente el manejador de evento de parada:
 
 ```cs
 core.OnStop += Core_OnStop;
@@ -124,9 +124,9 @@ private void Core_OnStop(object sender, StopEventArgs e)
 }
 ```
 
-### Configurando Parámetros de Línea de Tiempo
+### Configurar parámetros de línea de tiempo
 
-Antes de agregar fuentes de medios a tu proyecto, debes establecer los parámetros básicos de línea de tiempo como velocidad de cuadros y resolución, que varían dependiendo de qué motor estés usando:
+Antes de agregar fuentes de medios a su proyecto, debe establecer los parámetros básicos de línea de tiempo como velocidad de cuadros y resolución, que varían dependiendo de qué motor esté usando:
 
 === "VideoEditCore"
 
@@ -146,19 +146,19 @@ Antes de agregar fuentes de medios a tu proyecto, debes establecer los parámetr
     
 
 
-## Trabajando con Fuentes de Medios
+## Trabajar con fuentes de medios
 
-### Gestionando Video y Audio en Tu Línea de Tiempo
+### Gestionar video y audio en su línea de tiempo
 
-El SDK te permite agregar varias fuentes de medios a tu línea de tiempo usando métodos de API directos. Para cada fuente, puedes controlar precisamente parámetros como tiempo de inicio, tiempo de fin y posición en la línea de tiempo. Tienes la flexibilidad de agregar fuentes de video y audio tanto independientemente como juntas.
+El SDK le permite agregar varias fuentes de medios a su línea de tiempo usando métodos de API directos. Para cada fuente, puede controlar precisamente parámetros como tiempo de inicio, tiempo de fin y posición en la línea de tiempo. Tiene la flexibilidad de agregar fuentes de video y audio tanto independientemente como juntas.
 
-### Integrando Archivos de Video
+### Integrar archivos de video
 
-El SDK soporta una extensa gama de formatos de video incluyendo MP4, AVI, MOV, WMV y muchos otros. Así es como agregar contenido de video a tu proyecto:
+El SDK soporta una extensa gama de formatos de video incluyendo MP4, AVI, MOV, WMV y muchos otros. Así es como agregar contenido de video a su proyecto:
 
-Primero, crea un objeto de fuente de video y establece la ruta del archivo fuente. Puedes especificar tiempos de inicio y fin en el constructor o usar parámetros null para incluir el archivo completo.
+Primero, cree un objeto de fuente de video y establezca la ruta del archivo fuente. Puede especificar tiempos de inicio y fin en el constructor o usar parámetros null para incluir el archivo completo.
 
-Para archivos con múltiples streams de video, puedes seleccionar qué stream usar especificando el número de stream.
+Para archivos con múltiples streams de video, puede seleccionar qué stream usar especificando el número de stream.
 
 === "VideoEditCore"
 
@@ -211,9 +211,9 @@ Para archivos con múltiples streams de video, puedes seleccionar qué stream us
     
 
 
-Puedes controlar la velocidad de reproducción ajustando el parámetro rate. Por ejemplo, establecer rate a 2.0 reproducirá el archivo al doble de la velocidad normal.
+Puede controlar la velocidad de reproducción ajustando el parámetro rate. Por ejemplo, establecer rate a 2.0 reproducirá el archivo al doble de la velocidad normal.
 
-Un constructor alternativo te permite agregar múltiples segmentos de archivo:
+Un constructor alternativo le permite agregar múltiples segmentos de archivo:
 
 === "VideoEditCore"
 
@@ -241,7 +241,7 @@ Un constructor alternativo te permite agregar múltiples segmentos de archivo:
     
 
 
-Para agregar la fuente a tu línea de tiempo, usa los siguientes métodos:
+Para agregar la fuente a su línea de tiempo, use los siguientes métodos:
 
 === "VideoEditCore"
 
@@ -253,7 +253,7 @@ Para agregar la fuente a tu línea de tiempo, usa los siguientes métodos:
         0);
     ```
     
-    El tercer parámetro especifica el número de stream de video de destino. Usa 0 para agregar la fuente al primer stream de video.
+    El tercer parámetro especifica el número de stream de video de destino. Use 0 para agregar la fuente al primer stream de video.
     
     API:
     
@@ -288,7 +288,7 @@ Para agregar la fuente a tu línea de tiempo, usa los siguientes métodos:
 
 El segundo parámetro determina la posición en la línea de tiempo. Usar null automáticamente agrega la fuente al final de la línea de tiempo existente.
 
-### Incorporando Archivos de Audio
+### Incorporar archivos de audio
 
 El SDK soporta numerosos formatos de audio incluyendo AAC, MP3, WMA, OPUS, Vorbis y más. El proceso para agregar audio es similar a agregar video:
 
@@ -305,7 +305,7 @@ El SDK soporta numerosos formatos de audio incluyendo AAC, MP3, WMA, OPUS, Vorbi
         rate: 1.0);                      
     ```
     
-    El parámetro `fileToSync` habilita la sincronización audio-video. Al trabajar con archivos separados de video y audio, puedes especificar el nombre del archivo de video en este parámetro para asegurar que el audio se sincronice correctamente con el video.
+    El parámetro `fileToSync` habilita la sincronización audio-video. Al trabajar con archivos separados de video y audio, puede especificar el nombre del archivo de video en este parámetro para asegurar que el audio se sincronice correctamente con el video.
     
     ```cs
     await core.Input_AddAudioFileAsync(
@@ -331,9 +331,9 @@ El SDK soporta numerosos formatos de audio incluyendo AAC, MP3, WMA, OPUS, Vorbi
     
 
 
-### Combinando Fuentes de Video y Audio
+### Combinar fuentes de video y audio
 
-Para eficiencia, puedes agregar fuentes combinadas de video y audio con una sola llamada de método:
+Para eficiencia, puede agregar fuentes combinadas de video y audio con una sola llamada de método:
 
 === "VideoEditCoreX"
 
@@ -348,9 +348,9 @@ Para eficiencia, puedes agregar fuentes combinadas de video y audio con una sola
     
 
 
-### Trabajando con Imágenes Estáticas
+### Trabajar con imágenes estáticas
 
-El SDK soporta agregar imágenes fijas a tu línea de tiempo, incluyendo formatos JPG, PNG, BMP y GIF. Al agregar una imagen, necesitarás especificar cuánto tiempo debe aparecer en la línea de tiempo:
+El SDK soporta agregar imágenes fijas a su línea de tiempo, incluyendo formatos JPG, PNG, BMP y GIF. Al agregar una imagen, necesitará especificar cuánto tiempo debe aparecer en la línea de tiempo:
 
 === "VideoEditCore"
 
@@ -376,13 +376,13 @@ El SDK soporta agregar imágenes fijas a tu línea de tiempo, incluyendo formato
     
 
 
-## Configurando Ajustes de Salida
+## Configurar ajustes de salida
 
-### Estableciendo Formato de Salida y Opciones de Codificación
+### Establecer formato de salida y opciones de codificación
 
 El SDK ofrece opciones de salida flexibles con soporte para numerosos formatos de video y audio, incluyendo MP4, AVI, WMV, MKV, WebM, AAC, MP3, GIF animado y muchos otros.
 
-Usa la propiedad `Output_Format` para configurar tu formato de salida deseado:
+Use la propiedad `Output_Format` para configurar su formato de salida deseado:
 
 === "VideoEditCore"
 
@@ -403,9 +403,9 @@ Usa la propiedad `Output_Format` para configurar tu formato de salida deseado:
     
 
 
-Para una lista completa de formatos de salida soportados y ejemplos de código detallados, por favor consulta nuestra sección de documentación de [Formatos de Salida](../general/output-formats/index.md).
+Para una lista completa de formatos de salida soportados y ejemplos de código detallados, por favor consulte nuestra sección de documentación de [Formatos de salida](../general/output-formats/index.md).
 
-### Renderizando a GIF animado
+### Renderizar a GIF animado
 
 `VideoEditCoreX` puede renderizar la línea de tiempo directamente a un GIF animado mediante `GIFOutput`. GIF no tiene contenedor — `gifenc` escribe el archivo `.gif` final en un solo paso, por lo que el perfil de codificación contiene solo el flujo de video y cualquier audio en la línea de tiempo se descarta.
 
@@ -426,23 +426,23 @@ Notas:
 - La paleta de 256 colores por fotograma es una limitacion del formato — los archivos seran mas grandes que con codecs de video equivalentes para clips largos.
 - `SmartRender = true` es incompatible con la salida GIF (ningun clip de origen estara ya en `image/gif`).
 
-## Mejorando Tus Videos
+## Mejorar sus videos
 
-### Aplicando Efectos de Video Profesionales
+### Aplicar efectos de video profesionales
 
-El SDK proporciona una rica colección de efectos de video que puedes aplicar para mejorar tu contenido de video. Para información detallada sobre implementación de efectos, consulta nuestra guía de [Efectos de Video](../general/video-effects/index.md).
+El SDK proporciona una rica colección de efectos de video que puede aplicar para mejorar su contenido de video. Para información detallada sobre implementación de efectos, consulte nuestra guía de [Efectos de video](../general/video-effects/index.md).
 
-El motor `VideoEditCoreX` incluye métodos de API dedicados para agregar superposiciones de texto. Para detalles de implementación, consulta nuestra guía de [Superposiciones de Texto](./code-samples/add-text-overlay.md).
+El motor `VideoEditCoreX` incluye métodos de API dedicados para agregar superposiciones de texto. Para detalles de implementación, consulte nuestra guía de [Superposiciones de texto](./code-samples/add-text-overlay.md).
 
-### Agregando Transiciones Suaves
+### Agregar transiciones suaves
 
-Para crear transiciones de aspecto profesional entre clips de video, consulta nuestro [ejemplo de código de uso de transiciones](./code-samples/transition-video.md) detallado.
+Para crear transiciones de aspecto profesional entre clips de video, consulte nuestro [ejemplo de código de uso de transiciones](./code-samples/transition-video.md) detallado.
 
-## Procesando Tu Proyecto de Video
+## Procesar su proyecto de video
 
-### Iniciando el Proceso de Edición
+### Iniciar el proceso de edición
 
-Una vez que hayas configurado todas tus fuentes, efectos y ajustes de salida, puedes iniciar el proceso de edición:
+Una vez que haya configurado todas sus fuentes, efectos y ajustes de salida, puede iniciar el proceso de edición:
 
 === "VideoEditCore"
 
@@ -461,10 +461,10 @@ Una vez que hayas configurado todas tus fuentes, efectos y ajustes de salida, pu
     
 
 
-Durante el proceso de edición, tu aplicación recibirá actualizaciones de progreso a través de los manejadores de eventos que has implementado, y serás notificado cuando la operación complete a través del evento de parada.
+Durante el proceso de edición, su aplicación recibirá actualizaciones de progreso a través de los manejadores de eventos que ha implementado, y será notificado cuando la operación complete a través del evento de parada.
 
 ## Conclusión
 
-Siguiendo esta guía, has aprendido las técnicas fundamentales para crear una aplicación potente de edición de video usando el Video Edit SDK para .NET. Esta base te permitirá construir herramientas sofisticadas de edición de video que pueden competir con software profesional de edición de video mientras están adaptadas a tus requisitos específicos.
+Siguiendo esta guía, ha aprendido las técnicas fundamentales para crear una aplicación potente de edición de video usando el Video Edit SDK para .NET. Esta base le permitirá construir herramientas sofisticadas de edición de video que pueden competir con software profesional de edición de video mientras están adaptadas a sus requisitos específicos.
 
-Cuando tu aplicación termine, desinicializa el SDK con `VisioForge.Core.VisioForgeX.DestroySDK()` (necesario para los motores X, incluido `VideoEditCoreX`) para evitar un bloqueo al salir; consulta [Inicialización](../init.md).
+Cuando su aplicación termine, desinicialice el SDK con `VisioForge.Core.VisioForgeX.DestroySDK()` (necesario para los motores X, incluido `VideoEditCoreX`) para evitar un bloqueo al salir; consulte [Inicialización](../init.md).

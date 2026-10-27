@@ -1,6 +1,6 @@
 ---
-title: Cómo Conectar una Cámara IP Ubiquiti (UniFi) en C# .NET
-description: Conecta cámaras Ubiquiti UniFi Protect y AirCam en C# .NET con patrones de URL RTSP y ejemplos de código para modelos G3, G4, G5 y series AI.
+title: Cómo conectar una cámara IP Ubiquiti (UniFi) en C# .NET
+description: Conecte cámaras Ubiquiti UniFi Protect y AirCam en C# .NET con patrones de URL RTSP y ejemplos de código para modelos G3, G4, G5 y series AI.
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -20,11 +20,11 @@ tags:
 
 ---
 
-# Cómo Conectar una Cámara IP Ubiquiti (UniFi) en C# .NET
+# Cómo conectar una cámara IP Ubiquiti (UniFi) en C# .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Descripción de la Marca
+## Descripción de la marca
 
 **Ubiquiti Inc.** es una empresa tecnológica americana con sede en la ciudad de Nueva York, conocida por equipos de red bajo la marca **UniFi**. La línea de cámaras de Ubiquiti es parte del ecosistema **UniFi Protect**, que incluye cámaras, NVRs (grabadores de vídeo en red), timbres y sensores. Las cámaras UniFi Protect se gestionan a través de una consola central (Dream Machine, Cloud Key o NVR) y son populares en entornos prosumer y PYME.
 
@@ -38,20 +38,20 @@ tags:
 - **Códecs de vídeo:** H.264 (todos los modelos)
 
 !!! warning "RTSP debe habilitarse"
-    Las cámaras UniFi Protect **no** tienen RTSP habilitado por defecto. Debes habilitar RTSP para cada cámara individualmente a través de la interfaz web o app de UniFi Protect. Sin habilitarlo, la cámara no responderá a conexiones RTSP.
+    Las cámaras UniFi Protect **no** tienen RTSP habilitado por defecto. Debe habilitar RTSP para cada cámara individualmente a través de la interfaz web o app de UniFi Protect. Sin habilitarlo, la cámara no responderá a conexiones RTSP.
 
-### Habilitación de RTSP en Cámaras UniFi Protect
+### Habilitación de RTSP en cámaras UniFi Protect
 
-1. Abre la interfaz web de **UniFi Protect** (a través de tu Dream Machine, Cloud Key o NVR)
-2. Ve a **Dispositivos** y selecciona la cámara
-3. Abre la pestaña **Configuración**
+1. Abra la interfaz web de **UniFi Protect** (a través de su Dream Machine, Cloud Key o NVR)
+2. Vaya a **Dispositivos** y seleccione la cámara
+3. Abra la pestaña **Configuración**
 4. Desplázate a la sección **Avanzado**
 5. Habilita el interruptor **RTSP**
 6. Anota la URL RTSP mostrada (incluye un token único)
 
 ## Patrones de URL RTSP
 
-### Cámaras UniFi Protect (Actuales)
+### Cámaras UniFi Protect (actuales)
 
 Las cámaras UniFi Protect exponen RTSP en el **puerto 7447** con selección de calidad de flujo:
 
@@ -62,7 +62,7 @@ Las cámaras UniFi Protect exponen RTSP en el **puerto 7447** con selección de 
 | Baja calidad | `rtsp://IP:7447/STREAM_TOKEN` | Baja (640x360) | Optimizado para ancho de banda |
 
 !!! info "Tokens de flujo"
-    UniFi Protect genera URLs RTSP únicas por cámara cuando habilitas RTSP. La URL contiene un token único. Puedes encontrar la URL exacta en la interfaz de UniFi Protect bajo la configuración Avanzada de cada cámara.
+    UniFi Protect genera URLs RTSP únicas por cámara cuando habilita RTSP. La URL contiene un token único. Puede encontrar la URL exacta en la interfaz de UniFi Protect bajo la configuración Avanzada de cada cámara.
 
 El formato de URL RTSP es típicamente:
 
@@ -72,7 +72,7 @@ rtsp://IP_CAMARA:7447/CADENA_TOKEN_UNICO
 
 Donde el token es generado automáticamente y mostrado en la interfaz de UniFi Protect.
 
-### Modelos de Cámaras UniFi Protect
+### Modelos de cámaras UniFi Protect
 
 | Modelo | Resolución | Flujos | Factor de Forma |
 |-------|-----------|---------|-------------|
@@ -92,7 +92,7 @@ Donde el token es generado automáticamente y mostrado en la interfaz de UniFi P
 | AI Bullet | 3840x2160 | Alto/Medio/Bajo | Bala exterior |
 | AI Pro | 3840x2160 | Alto/Medio/Bajo | Pro exterior |
 
-### URLs Legacy AirCam/AirVision
+### URLs legacy AirCam/AirVision
 
 Las cámaras Ubiquiti más antiguas (serie AirCam, antes de UniFi Protect) usaban el puerto estándar 554:
 
@@ -105,18 +105,18 @@ Las cámaras Ubiquiti más antiguas (serie AirCam, antes de UniFi Protect) usaba
 
 ## Conexión con VisioForge SDK
 
-Usa la URL RTSP de tu cámara UniFi Protect con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
+Use la URL RTSP de su cámara UniFi Protect con cualquiera de los tres enfoques del SDK mostrados en la [Guía de Inicio Rápido](index.md#codigo-de-inicio-rapido):
 
 ```csharp
 // UniFi Protect camera, token-based auth (no username/password needed)
 var uri = new Uri("rtsp://192.168.1.40:7447/YOUR_STREAM_TOKEN");
 ```
 
-Las cámaras UniFi Protect usan autenticación basada en token -- el token de flujo único se proporciona en la interfaz de UniFi Protect cuando habilitas RTSP. No se requiere nombre de usuario ni contraseña por separado. Para diferentes calidades de flujo (alta/media/baja), selecciona el flujo correspondiente en la interfaz de Protect para obtener su token.
+Las cámaras UniFi Protect usan autenticación basada en token -- el token de flujo único se proporciona en la interfaz de UniFi Protect cuando habilita RTSP. No se requiere nombre de usuario ni contraseña por separado. Para diferentes calidades de flujo (alta/media/baja), seleccione el flujo correspondiente en la interfaz de Protect para obtener su token.
 
-Para modelos legacy AirCam, usa el puerto 554 con credenciales `ubnt`/`ubnt` y la ruta `/live/ch00_0`.
+Para modelos legacy AirCam, use el puerto 554 con credenciales `ubnt`/`ubnt` y la ruta `/live/ch00_0`.
 
-## URLs de Captura
+## URLs de captura
 
 ### Legacy AirCam
 
@@ -128,20 +128,20 @@ Para modelos legacy AirCam, usa el puerto 554 con credenciales `ubnt`/`ubnt` y l
 
 ### UniFi Protect
 
-Las cámaras UniFi Protect no exponen endpoints HTTP de captura directamente. Las capturas se acceden a través de la API de UniFi Protect o capturando fotogramas del flujo RTSP en tu aplicación.
+Las cámaras UniFi Protect no exponen endpoints HTTP de captura directamente. Las capturas se acceden a través de la API de UniFi Protect o capturando fotogramas del flujo RTSP en su aplicación.
 
-## Solución de Problemas
+## Solución de problemas
 
 ### "Connection refused" en el puerto 554
 
-Las cámaras UniFi Protect usan el **puerto 7447** para RTSP, no el puerto estándar 554. El puerto 554 solo aplica a modelos legacy AirCam. Asegúrate de usar el puerto correcto:
+Las cámaras UniFi Protect usan el **puerto 7447** para RTSP, no el puerto estándar 554. El puerto 554 solo aplica a modelos legacy AirCam. Asegúrese de usar el puerto correcto:
 
 - **Cámaras UniFi Protect:** Puerto 7447
 - **Legacy AirCam:** Puerto 554
 
 ### RTSP no habilitado
 
-RTSP está deshabilitado por defecto en las cámaras UniFi Protect. Debes habilitarlo en la interfaz de UniFi Protect:
+RTSP está deshabilitado por defecto en las cámaras UniFi Protect. Debe habilitarlo en la interfaz de UniFi Protect:
 
 1. UniFi Protect > Dispositivos > Seleccionar Cámara > Configuración > Avanzado > Habilitar RTSP
 
@@ -152,21 +152,21 @@ El token de flujo RTSP puede cambiar si:
 - Reseteas la cámara
 - Actualizas el firmware
 
-Siempre verifica la URL RTSP actual en la interfaz de UniFi Protect si tu conexión deja de funcionar.
+Siempre verifique la URL RTSP actual en la interfaz de UniFi Protect si su conexión deja de funcionar.
 
 ### Alta latencia
 
 Las cámaras UniFi Protect pueden presentar 2-5 segundos de latencia por defecto. Para reducir la latencia:
 
-- Establece `LowLatencyMode = true` en el `RTSPSourceSettings` pasado a VideoCaptureCoreX
-- Selecciona el flujo de baja calidad (menor resolución = menos buffering)
-- Usa transporte TCP para una entrega más confiable
+- Establezca `LowLatencyMode = true` en el `RTSPSourceSettings` pasado a VideoCaptureCoreX
+- Seleccione el flujo de baja calidad (menor resolución = menos buffering)
+- Use transporte TCP para una entrega más confiable
 
 ### Sin soporte ONVIF
 
-Las cámaras UniFi Protect no soportan ONVIF. Usa RTSP para integración con terceros. Si necesitas descubrimiento ONVIF, no funcionará con estas cámaras.
+Las cámaras UniFi Protect no soportan ONVIF. Use RTSP para integración con terceros. Si necesita descubrimiento ONVIF, no funcionará con estas cámaras.
 
-## Preguntas Frecuentes
+## Preguntas frecuentes
 
 **¿Cuál es la URL RTSP predeterminada para cámaras UniFi Protect?**
 
@@ -174,7 +174,7 @@ El formato de URL RTSP es `rtsp://IP_CAMARA:7447/TOKEN_UNICO`. RTSP debe habilit
 
 **¿Puedo usar cámaras UniFi sin UniFi Protect?**
 
-Las cámaras UniFi actuales requieren un controlador UniFi Protect (Dream Machine, Cloud Key o NVR) para la configuración y gestión inicial. Una vez que RTSP está habilitado, puedes transmitir a software de terceros. Los modelos legacy AirCam funcionan de forma independiente.
+Las cámaras UniFi actuales requieren un controlador UniFi Protect (Dream Machine, Cloud Key o NVR) para la configuración y gestión inicial. Una vez que RTSP está habilitado, puede transmitir a software de terceros. Los modelos legacy AirCam funcionan de forma independiente.
 
 **¿Las cámaras UniFi soportan H.265?**
 
@@ -184,7 +184,7 @@ Con el firmware actual, las cámaras UniFi Protect transmiten H.264 por RTSP. El
 
 Las cámaras legacy AirCam usan `ubnt` / `ubnt` como credenciales predeterminadas. Las cámaras UniFi Protect actuales usan autenticación RTSP basada en token.
 
-## Recursos Relacionados
+## Recursos relacionados
 
 - [Todas las Marcas de Cámaras — Directorio de URLs RTSP](index.md)
 - [Guía de Conexión Reolink](reolink.md) — Alternativa prosumer con RTSP

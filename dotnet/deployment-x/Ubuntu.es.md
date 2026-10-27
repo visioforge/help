@@ -1,6 +1,6 @@
 ---
-title: Guía de Despliegue Multiplataforma .NET para Ubuntu
-description: Despliega aplicaciones multimedia .NET en Ubuntu Linux con configuración de GStreamer, configuración de hardware y optimización de rendimiento multiplataforma.
+title: Guía de despliegue multiplataforma .NET para Ubuntu
+description: Despliegue sus aplicaciones multimedia .NET en Ubuntu Linux: configuración de GStreamer y del hardware, y optimización del rendimiento.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -13,19 +13,19 @@ tags:
 
 ---
 
-# Guía de Despliegue para Ubuntu de Aplicaciones del SDK de VisioForge
+# Guía de despliegue para Ubuntu de aplicaciones del SDK de VisioForge
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción
 
-Desplegar aplicaciones .NET con SDKs de VisioForge en Ubuntu Linux ofrece múltiples beneficios, incluyendo compatibilidad multiplataforma, acceso a hardware específico de Linux y la capacidad de ejecutar tus aplicaciones multimedia en entornos que van desde infraestructura de servidor hasta dispositivos edge. Esta guía completa te llevará a través del proceso completo de configurar tu entorno Ubuntu, instalar las dependencias necesarias y desplegar tu aplicación .NET con VisioForge.
+Desplegar aplicaciones .NET con SDKs de VisioForge en Ubuntu Linux ofrece múltiples beneficios, incluyendo compatibilidad multiplataforma, acceso a hardware específico de Linux y la capacidad de ejecutar sus aplicaciones multimedia en entornos que van desde infraestructura de servidor hasta dispositivos edge. Esta guía completa le llevará a través del proceso completo de configurar su entorno Ubuntu, instalar las dependencias necesarias y desplegar su aplicación .NET con VisioForge.
 
 La familia de SDKs de VisioForge funciona en Ubuntu y otras distribuciones Linux que soporten bibliotecas `GStreamer`. Las plataformas adicionales soportadas incluyen dispositivos `Nvidia Jetson` y `Raspberry Pi`, haciéndolo perfecto para una amplia gama de aplicaciones desde software multimedia de escritorio hasta soluciones IoT.
 
-## Requisitos del Sistema
+## Requisitos del sistema
 
-Antes de desplegar tu aplicación, asegúrate de que tu entorno Ubuntu cumpla estos requisitos mínimos:
+Antes de desplegar su aplicación, asegúrese de que su entorno Ubuntu cumpla estos requisitos mínimos:
 
 - Ubuntu 20.04 LTS o posterior (22.04 LTS y posterior recomendado)
 - Runtime .NET 7.0 o posterior
@@ -33,19 +33,19 @@ Antes de desplegar tu aplicación, asegúrate de que tu entorno Ubuntu cumpla es
 - Arquitectura x86_64 o ARM64
 - Conexión a internet para instalación de paquetes
 
-## Instalación y Configuración
+## Instalación y configuración
 
-### Instalando .NET
+### Instalar .NET
 
-Descarga el último paquete de [instalador .NET](https://dotnet.microsoft.com/en-us/download/dotnet) del sitio web de Microsoft y sigue las instrucciones de instalación.
+Descargue el último paquete de [instalador .NET](https://dotnet.microsoft.com/en-us/download/dotnet) del sitio web de Microsoft y siga las instrucciones de instalación.
 
 ## Instalación de GStreamer
 
 GStreamer forma la columna vertebral multimedia para los SDKs de VisioForge en plataformas Linux. Proporciona funcionalidad esencial para captura, procesamiento y reproducción de audio y video.
 
-### Paquetes GStreamer Requeridos
+### Paquetes GStreamer requeridos
 
-Instala los siguientes paquetes GStreamer usando apt-get. Requerimos v1.22.0 o posterior, aunque v1.24.0+ es altamente recomendado para acceso a las últimas características y optimizaciones:
+Instale los siguientes paquetes GStreamer usando apt-get. Requerimos v1.22.0 o posterior, aunque v1.24.0+ es altamente recomendado para acceso a las últimas características y optimizaciones:
 
 - `gstreamer1.0-plugins-base`: Plugins esenciales de línea base
 - `gstreamer1.0-plugins-good`: Plugins de alta calidad, bien probados
@@ -56,9 +56,9 @@ Instala los siguientes paquetes GStreamer usando apt-get. Requerimos v1.22.0 o p
 - `libges-1.0-0`: GStreamer Editing Services
 - `gstreamer1.0-libav`: Integración FFMPEG (OPCIONAL pero recomendado para soporte de formatos más amplio)
 
-### Script de Instalación Completo
+### Script de instalación completo
 
-Los siguientes comandos actualizarán tus repositorios de paquetes e instalarán todos los componentes GStreamer requeridos:
+Los siguientes comandos actualizarán sus repositorios de paquetes e instalarán todos los componentes GStreamer requeridos:
 
 ```bash
 sudo apt update
@@ -68,41 +68,41 @@ sudo apt update
 sudo apt install gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-pulseaudio gstreamer1.0-libav libges-1.0-0
 ```
 
-### Requisitos Adicionales para Raspberry Pi
+### Requisitos adicionales para Raspberry Pi
 
-Para Raspberry Pi, adicionalmente, necesitas instalar los siguientes paquetes:
+Para Raspberry Pi, adicionalmente, necesita instalar los siguientes paquetes:
 
 ```bash
 sudo apt install gstreamer1.0-libcamera
 ```
 
-### Verificando la Instalación de GStreamer
+### Verificar la instalación de GStreamer
 
-Después de la instalación, verifica tu configuración de GStreamer ejecutando:
+Después de la instalación, verifique su configuración de GStreamer ejecutando:
 
 ```bash
 gst-inspect-1.0 --version
 ```
 
-Esto debería mostrar la versión instalada de GStreamer. Asegúrate de que cumpla el requisito mínimo (1.22.0+) o idealmente muestre 1.24.0 o posterior.
+Esto debería mostrar la versión instalada de GStreamer. Asegúrese de que cumpla el requisito mínimo (1.22.0+) o idealmente muestre 1.24.0 o posterior.
 
-## Paquetes NuGet Requeridos
+## Paquetes NuGet requeridos
 
-Al desplegar tu aplicación .NET en Ubuntu, necesitarás incluir paquetes NuGet adicionales específicos de plataforma que proporcionen las bibliotecas nativas y bindings necesarios.
+Al desplegar su aplicación .NET en Ubuntu, necesitará incluir paquetes NuGet adicionales específicos de plataforma que proporcionen las bibliotecas nativas y bindings necesarios.
 
-### Paquete Principal Adicional de Linux
+### Paquete principal adicional de Linux
 
 El paquete [VisioForge.CrossPlatform.Core.Linux.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Linux.x64) contiene bibliotecas nativas esenciales y bindings para la plataforma .NET Linux. Este paquete es obligatorio para todos los despliegues del SDK de VisioForge en Ubuntu.
 
-### Entorno de Desarrollo
+### Entorno de desarrollo
 
-Puedes usar Rider para desarrollar tu proyecto en Linux. Por favor consulta la página de instalación de [Rider](../install/rider.md) para más información.
+Puede usar Rider para desarrollar su proyecto en Linux. Por favor consulte la página de instalación de [Rider](../install/rider.md) para más información.
 
-## Despliegue de la Aplicación
+## Despliegue de la aplicación
 
-Sigue estos pasos para desplegar tu aplicación en Ubuntu:
+Siga estos pasos para desplegar su aplicación en Ubuntu:
 
-### Publicando Tu Aplicación
+### Publicar su aplicación
 
 Para crear un despliegue autocontenido que incluya todas las dependencias del runtime .NET:
 
@@ -116,33 +116,33 @@ Para despliegues más pequeños donde la máquina objetivo ya tiene .NET instala
 dotnet publish -c Release -r linux-x64 --self-contained false
 ```
 
-### Estructura de Despliegue
+### Estructura de despliegue
 
-Tu carpeta de despliegue debería contener:
+Su carpeta de despliegue debería contener:
 
-- Tu ejecutable de aplicación
+- Su ejecutable de aplicación
 - DLLs de la aplicación
 - Ensamblados del SDK de VisioForge
 - Bibliotecas nativas de Linux de los paquetes NuGet de VisioForge
 
-### Estableciendo Permisos de Ejecución
+### Establecer permisos de ejecución
 
-Asegúrate de que tu ejecutable de aplicación tenga los permisos adecuados:
+Asegúrese de que su ejecutable de aplicación tenga los permisos adecuados:
 
 ```bash
 chmod +x ./NombreDeTuAplicacion
 ```
 
-## Consideraciones de Hardware
+## Consideraciones de hardware
 
-### Soporte de Cámaras
+### Soporte de cámaras
 
 Ubuntu soporta varios tipos de cámaras:
 
 - **Webcams USB**: La mayoría de las webcams USB funcionan directamente
 - **Cámaras IP**: Soportadas vía RTSP, streams HTTP
-- **Cámaras Profesionales**: Muchas cámaras profesionales con drivers Linux son soportadas
-- **Dispositivos Virtuales**: v4l2loopback puede usarse para creación de cámaras virtuales
+- **Cámaras profesionales**: Muchas cámaras profesionales con drivers Linux son soportadas
+- **Dispositivos virtuales**: v4l2loopback puede usarse para creación de cámaras virtuales
 
 Para listar dispositivos de cámara disponibles:
 
@@ -150,7 +150,7 @@ Para listar dispositivos de cámara disponibles:
 v4l2-ctl --list-devices
 ```
 
-### Dispositivos de Audio
+### Dispositivos de audio
 
 La captura y reproducción de audio es soportada a través de:
 
@@ -176,32 +176,32 @@ videoView.SetNativeRendering(false);
 
 El modo software cuesta una copia de CPU por fotograma y está pensado para desarrollo y escenarios de superposición; en una instalación nativa de Ubuntu, la incrustación nativa por defecto sigue siendo la vía recomendada. Véase [Superponer controles Avalonia sobre el video](../general/code-samples/avalonia-controls-over-video.md) para más detalles.
 
-## Solución de Problemas
+## Solución de problemas
 
-### Problemas de Permisos
+### Problemas de permisos
 
-Los problemas de acceso a cámara o dispositivos de audio a menudo pueden resolverse agregando tu usuario a los grupos apropiados:
+Los problemas de acceso a cámara o dispositivos de audio a menudo pueden resolverse agregando su usuario a los grupos apropiados:
 
 ```bash
 sudo usermod -a -G video,audio $USER
 ```
 
-Recuerda cerrar sesión y volver a entrar para que los cambios de grupo tomen efecto.
+Recuerde cerrar sesión y volver a entrar para que los cambios de grupo tomen efecto.
 
-### Optimización de Rendimiento
+### Optimización de rendimiento
 
 Para rendimiento óptimo en Ubuntu:
 
-- Usa la última versión de GStreamer (1.24.0+)
-- Habilita la aceleración de hardware donde esté disponible
-- Para GPUs NVIDIA, instala los paquetes apropiados de CUDA y nvcodec
-- Ajusta la prioridad del proceso usando `nice` para aplicaciones intensivas en recursos
+- Use la última versión de GStreamer (1.24.0+)
+- Habilite la aceleración de hardware donde esté disponible
+- Para GPUs NVIDIA, instale los paquetes apropiados de CUDA y nvcodec
+- Ajuste la prioridad del proceso usando `nice` para aplicaciones intensivas en recursos
 
 ## Conclusión
 
-Desplegar aplicaciones del SDK de VisioForge en Ubuntu proporciona un entorno potente y flexible para aplicaciones multimedia. Siguiendo esta guía, puedes asegurar que tu aplicación .NET aproveche las capacidades completas del ecosistema del SDK de VisioForge en plataformas Linux.
+Desplegar aplicaciones del SDK de VisioForge en Ubuntu proporciona un entorno potente y flexible para aplicaciones multimedia. Siguiendo esta guía, puede asegurar que su aplicación .NET aproveche las capacidades completas del ecosistema del SDK de VisioForge en plataformas Linux.
 
-Para escenarios de despliegue específicos o asistencia de solución de problemas, consulta la documentación completa disponible en el sitio web de VisioForge o contacta a nuestro equipo de soporte técnico.
+Para escenarios de despliegue específicos o asistencia de solución de problemas, consulte la documentación completa disponible en el sitio web de VisioForge o contacte a nuestro equipo de soporte técnico.
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.

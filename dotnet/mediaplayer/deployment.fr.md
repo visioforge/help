@@ -26,7 +26,7 @@ tags:
 
 # Guide de déploiement de Media Player SDK .Net
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Ce guide complet couvre tous les scénarios de déploiement pour le Media Player SDK .Net, garantissant que vos applications fonctionnent correctement dans différents environnements. Que vous développiez des applications multiplateformes ou des solutions spécifiques à Windows, ce guide fournit les étapes nécessaires à un déploiement réussi.
 
@@ -63,9 +63,11 @@ Les paquets NuGet fournissent la méthode de déploiement la plus simple, géran
 * **Paquet de base du SDK** :
   * [Version x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x86/)
   * [Version x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x64/)
+  * [Version ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.arm64/) (.NET 5 ou ultérieur)
 * **Paquet Media Player SDK** :
   * [Version x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x86/)
   * [Version x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x64/)
+  * ARM64 : pas encore disponible
 
 #### Paquets propres aux fonctionnalités (ajouter selon les besoins)
 
@@ -85,6 +87,7 @@ Les paquets NuGet fournissent la méthode de déploiement la plus simple, géran
 * **Paquet source VLC** (pour les sources fichier / caméra IP) :
   * [Version x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x86/)
   * [Version x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x64/)
+  * [Version ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.arm64/)
 
 ##### Prise en charge des formats audio
 
@@ -97,6 +100,8 @@ Les paquets NuGet fournissent la méthode de déploiement la plus simple, géran
 * **Paquet de filtres LAV** :
   * [Version x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/)
   * [Version x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
+
+> **Windows ARM64 :** les filtres LAV existent uniquement en x86 et x64. Il n'en existe aucune version ARM64 en amont, le SDK ne fournit donc pas de paquet LAV ARM64. `LAV` est la valeur par défaut de `Source_Mode` dans `MediaPlayerCore` : une application `MediaPlayerCore` exécutée en tant que processus ARM64 ne peut donc pas lire de fichier. Les applications AnyCPU s'y exécutent généralement aussi en ARM64. Sous Windows ARM64, définissez `Source_Mode` sur `MediaPlayerSourceMode.File_VLC` et ajoutez le paquet VLC ARM64 (la lecture fonctionne, mais les filtres VisioForge qui n'ont pas encore de version ARM64, comme YUV2RGB, déclenchent encore `OnError`), utilisez `MediaPlayerCoreX` ou Media Blocks SDK .NET, ou compilez l'application pour x64 (`PlatformTarget` défini sur `x64` ; elle s'exécute alors en émulation).
 
 ## Programmes d'installation silencieux automatiques
 

@@ -23,7 +23,7 @@ primary_api_classes:
 
 # Bloques AMD AMA - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El **AMD AMA Video SDK** es la plataforma de aceleración multimedia por hardware de AMD para los aceleradores de medios AMD Alveo. Incluye una familia de elementos de GStreamer (`ama_h264enc`, `ama_h265enc`, `ama_av1enc`, `ama_h264dec`, `ama_h265dec`, `ama_av1dec`, `ama_scaler`, `ama_upload`, `ama_download`) que ejecutan la codificación, decodificación y escalado de H.264, HEVC y AV1 íntegramente en el acelerador. VisioForge Media Blocks SDK envuelve esta plataforma para que usted pueda descargar el procesamiento de video al hardware de AMD desde un pipeline estándar de C#. La plataforma AMA es distinta de AMD AMF (que controla las GPU Radeon): AMA se dirige a aceleradores de medios Alveo dedicados, como el **Alveo MA35D**, el dispositivo compatible actualmente.
 

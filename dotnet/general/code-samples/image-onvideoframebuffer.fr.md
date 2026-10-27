@@ -30,7 +30,7 @@ primary_api_classes:
 
 # Dessiner des images avec OnVideoFrameBuffer en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -46,20 +46,20 @@ L'événement `OnVideoFrameBuffer` est exposé sur les deux familles de moteurs 
 | Moteur | Type d'arguments d'événement | Format de pixel |
 |---|---|---|
 | `VideoCaptureCore` (DirectShow, Windows) | `VideoFrameBufferEventArgs` | RGB24 / RGB32 |
-| `VideoCaptureCoreX` (GStreamer, multiplateforme) | `VideoFrameXBufferEventArgs` | BGRA (le plus courant) |
-| `MediaPlayerCoreX` (GStreamer, multiplateforme) | `VideoFrameXBufferEventArgs` | BGRA (le plus courant) |
+| `VideoCaptureCoreX` (GStreamer, multiplateforme) | `VideoFrameXBufferEventArgs` | RGBA |
+| `MediaPlayerCoreX` (GStreamer, multiplateforme) | `VideoFrameXBufferEventArgs` | RGB (RGBA quand `OnVideoFrameUnity` est abonné) |
 
-Les deux moteurs suivent le même modèle — s'abonner à l'événement, lire `e.Frame.Data` (un `IntPtr`) avec `Width` / `Height` / `Stride`, modifier éventuellement le tampon sur place, et définir `e.UpdateData = true` pour propager les changements en aval.
+Les deux moteurs suivent le même modèle — s'abonner à l'événement, lire `e.Frame.Data` (un `IntPtr`) avec `Width` / `Height` / `Stride`, et modifier éventuellement le tampon sur place. Le moteur classique ne prend les changements que si vous définissez `e.UpdateData = true` ; les moteurs X ne lisent pas `UpdateData`.
 
 ## Comprendre le processus
 
 Lorsque vous travaillez avec des images vidéo, vous devez :
 
 1. Charger votre image (logo, tatouage, etc.) en mémoire.
-2. Convertir l'image en un format de tampon compatible (RGB24/RGB32 pour le moteur classique, BGRA pour les moteurs X).
+2. Convertir l'image en un format de tampon compatible (RGB24/RGB32 pour le moteur classique, RGBA pour les moteurs X — vérifiez `e.Frame.Format`).
 3. Vous abonner à l'événement `OnVideoFrameBuffer`.
 4. Dessiner l'image sur chaque image vidéo au fur et à mesure de son traitement.
-5. Définir `e.UpdateData = true` pour que l'image modifiée remplace l'original en aval.
+5. Avec le moteur classique, définir `e.UpdateData = true` pour que l'image modifiée remplace l'original en aval.
 
 ## Exemple VideoCaptureCore (DirectShow)
 
@@ -185,10 +185,13 @@ Une fois le tampon préparé, le dessin a lieu :
 
 ## Exemple VideoCaptureCoreX / MediaPlayerCoreX (moteurs X)
 
-Sur les moteurs X multiplateformes, la signature de l'événement passe à `VideoFrameXBufferEventArgs` et le tampon d'image arrive typiquement au format **BGRA** (4 octets par pixel). Le même modèle s'applique — s'abonner, inspecter, modifier, marquer les mises à jour. L'exemple ci-dessous utilise SkiaSharp pour envelopper le tampon brut et dessiner un logo PNG par-dessus ; SkiaSharp est déjà une dépendance transitive des moteurs X, donc aucun paquet NuGet supplémentaire n'est nécessaire.
+Sur les moteurs X multiplateformes, la signature de l'événement passe à `VideoFrameXBufferEventArgs` et le tampon d'image arrive au format du grabber du moteur — RGBA sur `VideoCaptureCoreX`, RGB sur `MediaPlayerCoreX` (RGBA quand `OnVideoFrameUnity` est abonné). Le même modèle s'applique — s'abonner, inspecter, modifier, marquer les mises à jour. L'exemple ci-dessous utilise SkiaSharp pour envelopper le tampon brut et dessiner un logo PNG par-dessus ; SkiaSharp est déjà une dépendance transitive des moteurs X, donc aucun paquet NuGet supplémentaire n'est nécessaire.
 
 ```cs
 using SkiaSharp;
+using VisioForge.Core.Helpers;
+using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.X;
 
 // Charger le logo une seule fois (un PNG avec alpha fonctionne bien pour les tatouages numériques)
 private SKBitmap _logo = SKBitmap.Decode(@"logo.png");
@@ -203,9 +206,26 @@ private void VideoCapture_OnVideoFrameBuffer(object sender, VideoFrameXBufferEve
         return;
     }
 
-    // Envelopper le tampon BGRA brut dans un canevas SkiaSharp (sans allocation supplémentaire)
-    var info = new SKImageInfo(e.Frame.Width, e.Frame.Height, SKColorType.Bgra8888, SKAlphaType.Premul);
+    // Le format du grabber diffère selon le moteur : VideoCaptureCoreX livre RGBA,
+    // MediaPlayerCoreX RGB (RGBA quand OnVideoFrameUnity est abonné). Ne présumez jamais BGRA.
+    if (e.Frame.Format == VideoFormatX.RGB)
+    {
+        // Le RGB 24 bits n'a pas de SKColorType — convertissez-le avec le helper du SDK
+        // (une copie par image ; le dessin se fait sur la copie, l'image source reste intacte).
+        using (var bmp = e.Frame.VideoFrameRGBToSKBitmap())
+        {
+            var x = bmp.Width - _logo.Width - 16;
+            var y = bmp.Height - _logo.Height - 16;
+            bmp.Canvas.DrawBitmap(_logo, x, y);
+        }
 
+        return;
+    }
+
+    var colorType = e.Frame.Format == VideoFormatX.BGRA ? SKColorType.Bgra8888 : SKColorType.Rgba8888;
+    var info = new SKImageInfo(e.Frame.Width, e.Frame.Height, colorType, SKAlphaType.Premul);
+
+    // Envelopper le tampon brut 32 bits dans un canevas SkiaSharp (sans allocation supplémentaire)
     using (var pixmap = new SKPixmap(info, e.Frame.Data, e.Frame.Stride))
     using (var surface = SKSurface.Create(pixmap))
     {
@@ -217,17 +237,14 @@ private void VideoCapture_OnVideoFrameBuffer(object sender, VideoFrameXBufferEve
         canvas.DrawBitmap(_logo, x, y);
         canvas.Flush();
     }
-
-    // Propager l'image modifiée en aval
-    e.UpdateData = true;
 }
 ```
 
-**Pourquoi BGRA importe.** Les moteurs X demandent BGRA par défaut pour les rappels d'image, car il correspond 1:1 à SkiaSharp, System.Drawing et la plupart des chemins d'interopérabilité conviviaux pour le GPU. Si vous avez besoin d'un autre format (I420, NV12, RGB24), demandez un bloc de conversion de format en amont de votre gestionnaire plutôt que de convertir à chaque image.
+**Quel format vous recevez.** Lisez `e.Frame.Format` au lieu de présumer un format : `VideoCaptureCoreX` livre RGBA et `MediaPlayerCoreX` RGB (RGBA quand `OnVideoFrameUnity` est abonné). Le RGB fait 3 octets par pixel et n'a pas de `SKColorType` correspondant ; l'exemple le convertit donc avec le helper du SDK `VideoFrameRGBToSKBitmap` (une copie supplémentaire). Si vous avez besoin d'un autre format (I420, NV12, BGRA), demandez un bloc de conversion de format en amont de votre gestionnaire plutôt que de convertir à chaque image.
 
-**Piles d'imagerie alternatives.** Vous pouvez aussi utiliser `System.Drawing.Bitmap` via `new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, data)` sur Windows, ou des écritures manuelles d'octets via `Marshal.Copy` / `Span<byte>` pour un contrôle maximal. SkiaSharp est l'option recommandée sur macOS / Linux / iOS / Android.
+**Piles d'imagerie alternatives.** Vous pouvez aussi utiliser `System.Drawing.Bitmap` via `new Bitmap(width, height, stride, pixelFormat, data)` sur Windows — choisissez le `PixelFormat` qui correspond à `e.Frame.Format` (`Format32bppArgb` pour des données BGRA) —, ou des écritures manuelles d'octets via `Marshal.Copy` / `Span<byte>` pour un contrôle maximal. SkiaSharp est l'option recommandée sur macOS / Linux / iOS / Android.
 
-**Parité au niveau du moteur.** Tout ce qui est documenté dans les sections [Gestion de la mémoire](#gestion-de-la-memoire), [Gestion des erreurs](#gestion-des-erreurs) et [Optimisation des performances](#optimisation-des-performances) ci-dessous s'applique également aux moteurs X — l'événement est déclenché sur un thread de traitement, `UpdateData` détermine si le tampon est réutilisé en aval, et le travail lourd doit être délégué pour éviter de perdre des images.
+**Parité au niveau du moteur.** Tout ce qui est documenté dans les sections [Gestion de la mémoire](#gestion-de-la-memoire), [Gestion des erreurs](#gestion-des-erreurs) et [Optimisation des performances](#optimisation-des-performances) ci-dessous s'applique également aux moteurs X — l'événement est déclenché sur un thread de traitement, et le travail lourd doit être délégué pour éviter de perdre des images.
 
 ## Bonnes pratiques pour la superposition d'image
 
@@ -288,7 +305,7 @@ Pour les applications hautes performances, envisagez ces optimisations :
 
 ## Conclusion
 
-L'événement `OnVideoFrameBuffer` donne un accès direct à chaque image brute, à la fois sur le moteur classique `VideoCaptureCore` (RGB24/RGB32 via `VideoFrameBufferEventArgs`) et sur les moteurs X multiplateformes (`VideoCaptureCoreX` / `MediaPlayerCoreX`, BGRA via `VideoFrameXBufferEventArgs`). C'est le bon outil lorsque vous avez besoin d'un contrôle au niveau pixel — modes de mélange personnalisés, annotations CV par image, ou intégration avec des bibliothèques d'imagerie tierces.
+L'événement `OnVideoFrameBuffer` donne un accès direct à chaque image brute, à la fois sur le moteur classique `VideoCaptureCore` (RGB24/RGB32 via `VideoFrameBufferEventArgs`) et sur les moteurs X multiplateformes (`VideoCaptureCoreX` / `MediaPlayerCoreX`, images du grabber via `VideoFrameXBufferEventArgs`). C'est le bon outil lorsque vous avez besoin d'un contrôle au niveau pixel — modes de mélange personnalisés, annotations CV par image, ou intégration avec des bibliothèques d'imagerie tierces.
 
 Pour les superpositions d'images statiques ou animées sans écrire un gestionnaire par image, l'[effet de superposition d'image](../video-effects/image-overlay.md) en une ligne est généralement le meilleur choix.
 

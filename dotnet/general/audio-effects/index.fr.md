@@ -27,7 +27,7 @@ primary_api_classes:
 
 # Effets audio en temps réel pour applications .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Le VisioForge Media Framework fournit plus de 30 effets audio pour le traitement audio en temps réel dans les applications C# et .NET. Construits sur GStreamer, les effets multiplateformes incluent des égaliseurs, de la réverbération, de l'écho, de la compression dynamique, des filtres, du pitch shifting, une réduction de bruit basée sur l'IA, et plus encore — tout fonctionnant sur Windows, macOS, Linux, iOS et Android.
 

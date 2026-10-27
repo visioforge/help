@@ -31,7 +31,7 @@ primary_api_classes:
 
 # Dominando el Audio MP3: Grabar, Capturar y Editar en C# y .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 El SDK de VisioForge permite a los desarrolladores grabar, capturar y editar audio MP3 de forma fluida dentro de aplicaciones C#. Esta guía explora cómo aprovechar nuestro robusto SDK .NET para el procesamiento de audio MP3 de alta calidad. Ya sea que necesite capturar flujos multimedia, grabar archivos MP3 o editar formas de onda de audio, nuestro kit de herramientas multimedia C# proporciona herramientas completas usando la biblioteca LAME. MP3, un formato de compresión de audio con pérdida ampliamente adoptado, es ideal para streaming de audio y almacenamiento eficiente.
 

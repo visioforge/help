@@ -1,6 +1,6 @@
 ---
 title: Streaming de cámaras RTSP en C# .NET — modos UDP y TCP
-description: Conéctate a flujos de cámaras RTSP con VisioForge Video Capture SDK. Configuración de baja latencia, opciones de transporte UDP/TCP y ejemplos de código en C#.
+description: Conéctese a flujos de cámaras RTSP con VisioForge Video Capture SDK. Configuración de baja latencia, opciones de transporte UDP/TCP y ejemplos de código en C#.
 tags:
   - Video Capture SDK
   - .NET
@@ -31,18 +31,18 @@ primary_api_classes:
 
 # Integración de flujos de cámaras RTSP en aplicaciones .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
 !!! info "Soporte multiplataforma"
-    El motor `VideoCaptureCoreX` funciona en **Windows, macOS, Linux, Android e iOS** vía GStreamer; el motor clásico `VideoCaptureCore` es solo Windows. Consulta la [matriz de soporte de plataformas](../../../platform-matrix.md) para detalles de códecs y aceleración por hardware, y la [guía de despliegue en Linux](../../../deployment-x/Ubuntu.md) para la configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.
+    El motor `VideoCaptureCoreX` funciona en **Windows, macOS, Linux, Android e iOS** vía GStreamer; el motor clásico `VideoCaptureCore` es solo Windows. Consulte la [matriz de soporte de plataformas](../../../platform-matrix.md) para detalles de códecs y aceleración por hardware, y la [guía de despliegue en Linux](../../../deployment-x/Ubuntu.md) para la configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.
 
 ## Configurar fuentes de cámaras RTSP estándar
 
-Implementar flujos de cámaras RTSP en tus aplicaciones .NET proporciona acceso flexible a cámaras de red y flujos de video. Esta capacidad permite monitorización en tiempo real, funcionalidades de vigilancia y procesamiento de video directamente dentro de tu aplicación.
+Implementar flujos de cámaras RTSP en sus aplicaciones .NET proporciona acceso flexible a cámaras de red y flujos de video. Esta capacidad permite monitorización en tiempo real, funcionalidades de vigilancia y procesamiento de video directamente dentro de su aplicación.
 
 === "VideoCaptureCore"
 
-    Para opciones de conexión adicionales y protocolos alternativos, consulta nuestra documentación detallada de [cámaras IP](index.md), que cubre un amplio rango de enfoques de integración de cámaras.
+    Para opciones de conexión adicionales y protocolos alternativos, consulte nuestra documentación detallada de [cámaras IP](index.md), que cubre un amplio rango de enfoques de integración de cámaras.
 
 === "VideoCaptureCoreX"
 
@@ -117,12 +117,12 @@ La baja latencia es crítica para muchas aplicaciones en tiempo real, incluyendo
     - ✓ Sistemas de seguridad en vivo
     - ✓ Aplicaciones de video interactivas
     - ✓ Sistemas de control remoto
-    - ✗ Grabación en redes inestables (usa el modo predeterminado)
-    - ✗ Captura para archivado a largo plazo (usa el modo predeterminado)
+    - ✗ Grabación en redes inestables (use el modo predeterminado)
+    - ✗ Captura para archivado a largo plazo (use el modo predeterminado)
     
     **Configuración avanzada:**
     
-    Para un control ajustado, puedes configurar manualmente los parámetros de latencia:
+    Para un control ajustado, puede configurar manualmente los parámetros de latencia:
     
     ```cs
     var rtsp = await RTSPSourceSettings.CreateAsync(uri, login, password, audioEnabled);
@@ -137,7 +137,7 @@ La baja latencia es crítica para muchas aplicaciones en tiempo real, incluyendo
 
 ## Ejemplos de implementación y aplicaciones de referencia
 
-Estos proyectos de ejemplo demuestran patrones prácticos de implementación RTSP y pueden servir como puntos de partida para tu propio desarrollo. Revisar estos ejemplos te ayudará a comprender las mejores prácticas para la integración RTSP.
+Estos proyectos de ejemplo demuestran patrones prácticos de implementación RTSP y pueden servir como puntos de partida para su propio desarrollo. Revisar estos ejemplos le ayudará a comprender las mejores prácticas para la integración RTSP.
 
 === "VideoCaptureCore"
 
@@ -153,14 +153,14 @@ Estos proyectos de ejemplo demuestran patrones prácticos de implementación RTS
 
 ## Solución de problemas en conexiones RTSP
 
-Cuando trabajas con cámaras RTSP, puedes encontrarte con problemas de conectividad relacionados con la configuración de red, los ajustes del firewall o la autenticación. Estos son los factores clave a considerar:
+Cuando trabaja con cámaras RTSP, puede encontrarse con problemas de conectividad relacionados con la configuración de red, los ajustes del firewall o la autenticación. Estos son los factores clave a considerar:
 
-- Verifica la conectividad de red entre tu aplicación y la cámara
-- Asegúrate de proporcionar las credenciales de autenticación correctas
-- Comprueba si hay firewalls bloqueando los puertos requeridos (típicamente 554 para RTSP)
-- Considera usar TCP en lugar de UDP si experimentas pérdida de paquetes
-- Prueba los flujos de cámara con VLC o herramientas similares para aislar problemas específicos de la aplicación
-- Si VLC reproduce el stream pero la vista previa se congela o termina a los ~60 segundos, fuerza TCP y, si no basta, envía keep-alives GET_PARAMETER:
+- Verifique la conectividad de red entre su aplicación y la cámara
+- Asegúrese de proporcionar las credenciales de autenticación correctas
+- Compruebe si hay firewalls bloqueando los puertos requeridos (típicamente 554 para RTSP)
+- Considere usar TCP en lugar de UDP si experimenta pérdida de paquetes
+- Pruebe los flujos de cámara con VLC o herramientas similares para aislar problemas específicos de la aplicación
+- Si VLC reproduce el stream pero la vista previa se congela o termina a los ~60 segundos, fuerce TCP y, si no basta, envíe keep-alives GET_PARAMETER:
 
     ```cs
     rtsp.AllowedProtocols = RTSPSourceProtocol.TCP;
@@ -169,7 +169,7 @@ Cuando trabajas con cámaras RTSP, puedes encontrarte con problemas de conectivi
 
     `ForceCustomKeepAlive` está desactivado por defecto. La demo RTSP Preview expone ambos controles (Auto / TCP / UDP y la casilla Force custom keep-alive).
 
-¿Necesitas la URL RTSP para tu cámara? Explora nuestro [directorio de marcas de cámaras IP](../../../camera-brands/index.md) para URLs RTSP específicas por marca y ejemplos de conexión.
+¿Necesita la URL RTSP para su cámara? Explore nuestro [directorio de marcas de cámaras IP](../../../camera-brands/index.md) para URLs RTSP específicas por marca y ejemplos de conexión.
 
 ## Documentación relacionada
 

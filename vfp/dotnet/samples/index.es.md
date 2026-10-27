@@ -13,9 +13,9 @@ order: 91
 sidebar_label: Muestras
 ---
 
-# Muestras de Código del SDK de Huella Digital de Video
+# Muestras de Código del Video Fingerprinting SDK
 
-Explore nuestra colección completa de muestras de código y aplicaciones que demuestran el poder del SDK de Huella Digital de Video de VisioForge. Cada muestra incluye código fuente completo, instrucciones detalladas y casos de uso del mundo real.
+Explore nuestra colección completa de muestras de código y aplicaciones que demuestran el poder del Video Fingerprinting SDK de VisioForge. Cada muestra incluye código fuente completo, instrucciones detalladas y casos de uso del mundo real.
 
 ## Herramientas de Línea de Comandos
 

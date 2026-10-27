@@ -38,7 +38,7 @@ primary_api_classes:
 
 # Salida de archivo MP4
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 MP4 (MPEG-4 Part 14), introducido en 2001, es un formato de contenedor multimedia digital más comúnmente usado para almacenar video y audio. También soporta subtítulos e imágenes. MP4 es conocido por su alta compresión y compatibilidad entre varios dispositivos y plataformas, haciéndolo una opción popular para streaming y compartir.
 

@@ -25,7 +25,7 @@ primary_api_classes:
 
 # Implémentation de capture vidéo de webcam en MP4 en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction à la capture de webcam dans les applications .NET
 

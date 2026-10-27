@@ -16,7 +16,7 @@ sidebar_label: Video Fingerprinting SDK
 
 # Video Fingerprinting SDK
 
-## ¿Qué es la Huella Digital de Video?
+## ¿Qué es la huella digital de video?
 
 Nuestra tecnología de huella digital de video de vanguardia crea firmas digitales únicas del contenido de video analizando múltiples dimensiones de datos visuales. El sistema emplea algoritmos sofisticados que se enfocan en:
 
@@ -26,9 +26,9 @@ Nuestra tecnología de huella digital de video de vanguardia crea firmas digital
 - **Distribución de color** - Mapeando paletas visuales y variaciones tonales
 - **Patrones temporales** - Examinando cómo los elementos visuales cambian con el tiempo
 
-Estos elementos se combinan para formar una huella distintiva que identifica únicamente cada video en tu base de datos.
+Estos elementos se combinan para formar una huella distintiva que identifica únicamente cada video en su base de datos.
 
-## Capacidades y Beneficios Clave
+## Capacidades y beneficios clave
 
 El SDK puede hacer coincidir videos con precisión a pesar de transformaciones significativas, incluyendo:
 
@@ -42,7 +42,7 @@ El SDK puede hacer coincidir videos con precisión a pesar de transformaciones s
 
 Esta robustez hace que la tecnología sea ideal para verificación de contenido, protección de derechos de autor y aplicaciones de monitoreo de medios.
 
-## Soporte de Plataformas e Integración
+## Soporte de plataformas e integración
 
 El SDK ofrece compatibilidad multiplataforma con:
 
@@ -58,13 +58,13 @@ Los desarrolladores pueden integrar usando múltiples lenguajes de programación
 - Delphi - Vía interoperabilidad COM
 - Otros lenguajes vía bindings
 
-Lee más sobre el SDK en la [página del producto](https://www.visioforge.com/video-fingerprinting-sdk).
+Lea más sobre el SDK en la [página del producto](https://www.visioforge.com/video-fingerprinting-sdk).
 
-## Aplicaciones de Ejemplo
+## Aplicaciones de ejemplo
 
 Proporcionamos dos potentes aplicaciones de ejemplo construidas con nuestro SDK:
 
-### Herramienta de Monitoreo de Medios
+### Herramienta de monitoreo de medios
 
 Una aplicación Windows diseñada para detectar anuncios y segmentos de contenido específicos en transmisiones de video grabadas o en vivo. Ideal para:
 
@@ -73,7 +73,7 @@ Una aplicación Windows diseñada para detectar anuncios y segmentos de contenid
 - Verificación de cumplimiento de transmisión
 - Análisis de contenido para compañías de medios
 
-### Buscador de Videos Duplicados
+### Buscador de videos duplicados
 
 Una herramienta Windows especializada para identificar contenido de video duplicado en grandes colecciones. La aplicación puede detectar coincidencias incluso cuando los videos tienen:
 
@@ -83,7 +83,7 @@ Una herramienta Windows especializada para identificar contenido de video duplic
 - Marcas de agua o subtítulos agregados
 - Ediciones menores o recortes
 
-## Elige Tu SDK
+## Elija su SDK
 
 ### Documentación del SDK .NET
 
@@ -102,7 +102,7 @@ El SDK C++ ofrece rendimiento nativo y control detallado:
 - [Referencia de API C++](cpp/api.md) - Documentación de API nativa
 - [Descripción General del SDK C++](cpp/index.md) - Características y capacidades
 
-### Conceptos Principales (Ambos SDKs)
+### Conceptos principales (ambos SDKs)
 
 - [Requisitos del Sistema](system-requirements.md) - Requisitos de plataforma y hardware para ambos SDKs
 - [Entendiendo la Huella Digital de Video](understanding-video-fingerprinting.md) - Cómo funciona la tecnología
@@ -110,7 +110,7 @@ El SDK C++ ofrece rendimiento nativo y control detallado:
 
 ## Comparación de SDKs
 
-### Tabla de Comparación Rápida
+### Tabla de comparación rápida
 
 | Característica | SDK .NET | SDK C++ |
 |---------------|----------|---------|
@@ -123,43 +123,43 @@ El SDK C++ ofrece rendimiento nativo y control detallado:
 | **Curva de Aprendizaje** | Más fácil para desarrolladores .NET | Más pronunciada, más control |
 | **Despliegue** | Requiere runtime .NET | Binarios autocontenidos |
 
-### Eligiendo el SDK Correcto
+### Elegir el SDK correcto
 
-**Elige el SDK .NET si:**
+**Elija el SDK .NET si:**
 
-- Necesitas desarrollo rápido de aplicaciones
-- Quieres integración de base de datos incorporada
+- Necesita desarrollo rápido de aplicaciones
+- Quiere integración de base de datos incorporada
 - Prefieres gestión automática de memoria
-- Estás construyendo aplicaciones GUI
-- Tienes infraestructura .NET existente
+- Está construyendo aplicaciones GUI
+- Tiene infraestructura .NET existente
 
-**Elige el SDK C++ si:**
+**Elija el SDK C++ si:**
 
-- Requieres máximo rendimiento
-- Necesitas control detallado de memoria
-- Estás integrando con código nativo
+- Requiere máximo rendimiento
+- Necesita control detallado de memoria
+- Está integrando con código nativo
 - Despliegas en sistemas embebidos
-- Quieres dependencias mínimas
+- Quiere dependencias mínimas
 
-## Tutoriales y Guías
+## Tutoriales y guías
 
-### Tutoriales Paso a Paso
+### Tutoriales paso a paso
 
 - [Cómo Comparar Dos Archivos de Video](dotnet/samples/how-to-compare-two-video-files.md) - Guía de comparación de video (.NET)
 - [Cómo Encontrar un Fragmento de Video en Otro](dotnet/samples/how-to-search-one-video-fragment-in-another.md) - Guía de búsqueda de fragmentos (.NET)
 
-### Guías de Integración
+### Guías de integración
 
 - [Integración de Base de Datos .NET](dotnet/database-integration.md) - MongoDB con SDK .NET
 - [Ejemplos de Línea de Comandos .NET](dotnet/samples/index.md) - Utilidades CLI y ejemplos
 - [Ejemplos de Línea de Comandos C++](cpp/samples/index.md) - Ejemplos CLI nativos
 - [Patrones de Integración C++](cpp/index.md#patrones-de-integracion) - Ejemplos de integración nativa
 
-## Casos de Uso y Aplicaciones
+## Casos de uso y aplicaciones
 
 - [Casos de Uso del Mundo Real](use-cases.md) - Aplicaciones y escenarios de la industria
 
-## Aplicaciones de Ejemplo
+## Aplicaciones de ejemplo
 
 ### Aplicaciones Windows .NET
 
@@ -167,28 +167,28 @@ El SDK C++ ofrece rendimiento nativo y control detallado:
 - [MMT Live Edition](dotnet/samples/mmt-live.md) - Análisis de transmisiones en tiempo real
 - [Escáner de Videos Duplicados (DVS)](dotnet/samples/dvs.md) - Encuentra videos duplicados
 
-### Herramientas de Línea de Comandos
+### Herramientas de línea de comandos
 
 - [Herramientas CLI .NET](dotnet/samples/index.md) - Generador VFP, Comparar, Buscar
 - [Ejemplos C++](cpp/samples/index.md) - Utilidades nativas de línea de comandos
 
-### Ejemplos de Código
+### Ejemplos de código
 
 - [Ejemplos de Código .NET](dotnet/samples/index.md) - Ejemplos completos de .NET
 - [Ejemplos de Código C++](cpp/samples/index.md) - Ejemplos nativos de C++
 
-## Ayuda y Soporte
+## Ayuda y soporte
 
-### Recursos Esenciales
+### Recursos esenciales
 
 - **[FAQ](faq.md)** - Preguntas frecuentes con respuestas detalladas
 
-### Documentación de Referencia
+### Documentación de referencia
 
 - [Referencia Completa de API .NET](https://api.visioforge.org/vfpnet/)
 - [Registro de Cambios del SDK](changelog.md)
 
-## Recursos Adicionales
+## Recursos adicionales
 
 - [Referencia Completa de API .NET](https://api.visioforge.org/vfpnet/)
 - [Registro de Cambios del SDK](changelog.md)

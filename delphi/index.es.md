@@ -1,5 +1,5 @@
 ---
-title: Componentes VCL y ActiveX para Video en Delphi y C++ Builder
+title: Componentes VCL y ActiveX para video en Delphi y C++ Builder
 description: Componentes VCL y controles ActiveX para reproducción, captura, grabación de pantalla y edición de video en Delphi y C++ Builder.
 tags:
   - All-in-One Media Framework
@@ -24,7 +24,7 @@ Un conjunto de bibliotecas Delphi/ActiveX para procesamiento, reproducción y ca
 
 El framework proporciona una solución completa para el manejo de medios en aplicaciones Delphi, ofreciendo capacidades de procesamiento de video de alto rendimiento que de otro modo requerirían extensa programación de bajo nivel. Los desarrolladores pueden implementar flujos de trabajo de video complejos con una arquitectura simple basada en componentes.
 
-Puedes encontrar la documentación de las siguientes bibliotecas aquí:
+Puede encontrar la documentación de las siguientes bibliotecas aquí:
 
 ## Bibliotecas
 
@@ -32,7 +32,7 @@ Puedes encontrar la documentación de las siguientes bibliotecas aquí:
 - [TVFVideoCapture](videocapture/index.md) - Potente componente de captura de video que soporta webcams, tarjetas de captura, cámaras IP y grabación de pantalla
 - [TVFVideoEdit](videoedit/index.md) - Componente de edición de video profesional con soporte de línea de tiempo, transiciones, filtros y salida a múltiples formatos
 
-## Ejemplos de Implementación
+## Ejemplos de implementación
 
 El framework incluye numerosos ejemplos que demuestran cómo implementar tareas de medios comunes:
 
@@ -42,13 +42,13 @@ El framework incluye numerosos ejemplos que demuestran cómo implementar tareas 
 - Utilidades de conversión de formato
 - Aplicaciones de medios de streaming
 
-## Información General
+## Información general
 
-Los paquetes ActiveX pueden usarse en múltiples lenguajes de programación y entornos de desarrollo incluyendo Visual C++, Visual Basic y C++ Builder. Estos componentes extienden las capacidades de tu software, acelerando el desarrollo y mejorando el rendimiento. Con la integración ActiveX, puedes incorporar componentes de software existentes en tus proyectos, impulsando la eficiencia y funcionalidad.
+Los paquetes ActiveX pueden usarse en múltiples lenguajes de programación y entornos de desarrollo incluyendo Visual C++, Visual Basic y C++ Builder. Estos componentes extienden las capacidades de su software, acelerando el desarrollo y mejorando el rendimiento. Con la integración ActiveX, puede incorporar componentes de software existentes en sus proyectos, impulsando la eficiencia y funcionalidad.
 
 Nuestro framework es compatible con todas las versiones de Delphi desde Delphi 6 hasta Delphi 11 y posteriores, haciéndolo adecuado tanto para proyectos heredados como para nuevo desarrollo. Los componentes mantienen una API consistente a través de diferentes versiones de Delphi, simplificando la migración entre diferentes versiones del IDE.
 
-## Especificaciones Técnicas
+## Especificaciones técnicas
 
 - **Formatos de Medios Soportados**: MP4, AVI, MOV, MKV, MPEG, WMV y muchos otros
 - **Soporte de Audio**: AAC, MP3, PCM, WMA y otros codecs de audio populares
@@ -56,22 +56,22 @@ Nuestro framework es compatible con todas las versiones de Delphi desde Delphi 6
 - **Fuentes de Captura**: Webcams, tarjetas de captura HDMI, cámaras IP, captura de pantalla
 - **Aceleración de Hardware**: NVIDIA NVENC, Intel Quick Sync, AMD AMF
 
-## Limitaciones de Soporte x64
+## Limitaciones de soporte x64
 
-Con Delphi XE2 y posteriores, puedes desarrollar aplicaciones de 64 bits. Nuestro framework soporta completamente estas aplicaciones de 64 bits, permitiéndote aprovechar el poder de computación moderno y manejar mayores requisitos de memoria. El soporte de 64 bits permite el procesamiento de videos de mayor resolución y operaciones de edición más complejas que serían imposibles en entornos de 32 bits.
+Con Delphi XE2 y posteriores, puede desarrollar aplicaciones de 64 bits. Nuestro framework soporta completamente estas aplicaciones de 64 bits, permitiéndole aprovechar el poder de computación moderno y manejar mayores requisitos de memoria. El soporte de 64 bits permite el procesamiento de videos de mayor resolución y operaciones de edición más complejas que serían imposibles en entornos de 32 bits.
 
-Microsoft Visual Basic 6 no soporta aplicaciones de 64 bits. Si estás usando Visual Basic 6, necesitarás usar la versión de 32 bits de nuestro framework debido a las limitaciones inherentes de VB6. Aunque las aplicaciones de 32 bits pueden acceder hasta 4GB de memoria con la configuración adecuada, para aplicaciones de video exigentes, recomendamos usar Delphi u otros entornos de desarrollo con soporte de 64 bits.
+Microsoft Visual Basic 6 no soporta aplicaciones de 64 bits. Si está usando Visual Basic 6, necesitará usar la versión de 32 bits de nuestro framework debido a las limitaciones inherentes de VB6. Aunque las aplicaciones de 32 bits pueden acceder hasta 4GB de memoria con la configuración adecuada, para aplicaciones de video exigentes, recomendamos usar Delphi u otros entornos de desarrollo con soporte de 64 bits.
 
-## Mejores Prácticas de Desarrollo
+## Mejores prácticas de desarrollo
 
-Al integrar el framework en tus aplicaciones, considera estas mejores prácticas:
+Al integrar el framework en sus aplicaciones, considere estas mejores prácticas:
 
 - Inicializa los componentes en tiempo de diseño cuando sea posible para mejor integración con el IDE
-- Usa aceleración de hardware para operaciones exigentes como codificación y decodificación
-- Implementa manejo de errores adecuado para operaciones de medios
-- Considera la gestión de memoria para archivos de medios grandes
-- Prueba con varias fuentes de medios para asegurar compatibilidad
+- Use aceleración de hardware para operaciones exigentes como codificación y decodificación
+- Implemente manejo de errores adecuado para operaciones de medios
+- Considere la gestión de memoria para archivos de medios grandes
+- Pruebe con varias fuentes de medios para asegurar compatibilidad
 
 ---
 
-Para más información sobre el framework, visita la página del producto [All-in-One Media Framework (Delphi/ActiveX)](https://www.visioforge.com/all-in-one-media-framework).
+Para más información sobre el framework, visite la página del producto [All-in-One Media Framework (Delphi/ActiveX)](https://www.visioforge.com/all-in-one-media-framework).

@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Bloc de rendu audio : traitement de sortie audio multiplateforme
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction au rendu audio
 

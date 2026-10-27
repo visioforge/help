@@ -20,54 +20,56 @@ primary_api_classes:
 
 ---
 
-# Primeros Pasos con Video Fingerprinting SDK
+# Primeros pasos con Video Fingerprinting SDK
 
-¡Bienvenido al VisioForge Video Fingerprinting SDK! Esta guía completa te llevará a través de todo lo que necesitas para comenzar, desde la instalación hasta tu primera aplicación funcional. Al final de esta guía, tendrás una base sólida para construir aplicaciones de huella digital de video.
+¡Bienvenido al VisioForge Video Fingerprinting SDK! Esta guía completa le llevará a través de todo lo que necesita para comenzar, desde la instalación hasta su primera aplicación funcional. Al final de esta guía, tendrá una base sólida para construir aplicaciones de huella digital de video.
 
-## Resumen de Inicio Rápido
+## Resumen de inicio rápido
 
-Si buscas ponerte en marcha rápidamente:
+Si busca ponerse en marcha rápidamente:
 
-1. Instala el SDK vía NuGet: `Install-Package VisioForge.DotNet.Core`
-2. Agrega el paquete de redistribución: `Install-Package VisioForge.DotNet.Core.Redist.VideoFingerprinting`
-   - Este paquete único soporta Windows (x86/x64), Linux (x64/ARM64) y macOS
-3. Establece tu clave de licencia: `VFPAnalyzer.SetLicenseKey("TRIAL");`
-4. Genera tu primera huella digital usando los ejemplos a continuación
+1. Instale el SDK vía NuGet: `Install-Package VisioForge.DotNet.Core`
+2. Agregue el paquete de redistribución: `Install-Package VisioForge.DotNet.Core.Redist.VideoFingerprinting`
+   - Este paquete único soporta Windows (x86/x64/ARM64), Linux (x64/ARM64) y macOS
+3. Establezca su clave de licencia: `VFPAnalyzer.SetLicenseKey("TRIAL");`
+4. Genere su primera huella digital usando los ejemplos a continuación
 
-## Prerrequisitos y Requisitos del Sistema
+## Prerrequisitos y requisitos del sistema
 
-Para requisitos detallados del sistema incluyendo plataformas soportadas, especificaciones de hardware y consideraciones de rendimiento, por favor consulta nuestra guía completa de [Requisitos del Sistema](../system-requirements.md).
+Para requisitos detallados del sistema incluyendo plataformas soportadas, especificaciones de hardware y consideraciones de rendimiento, por favor consulte nuestra guía completa de [Requisitos del Sistema](../system-requirements.md).
 
-### Requisitos Específicos de .NET
+### Requisitos específicos de .NET
 
 - **Versión de .NET**: 
   - Windows: .NET Framework 4.6.1+ o .NET 6.0+
-  - Linux/macOS: .NET 6.0+
+  - Linux: .NET 6.0+
+  - macOS: .NET 9.0+
+  - Framework de destino (aplicaciones .NET 5+): añada el sistema operativo, `-windows` en Windows (`net8.0-windows`) y `-macos` en macOS (`net9.0-macos` o posterior). Un framework de destino sin sufijo de sistema operativo (`net8.0`) es la compilación para Linux: en Windows o macOS informa de que falta la biblioteca nativa.
 - **IDE**: Visual Studio 2019+ (Windows), Visual Studio Code, o JetBrains Rider
 - **Administrador de Paquetes NuGet**: Para instalación y actualizaciones fáciles
 
-## Métodos de Instalación
+## Métodos de instalación
 
-### Método 1: Administrador de Paquetes NuGet (Recomendado)
+### Método 1: Administrador de paquetes NuGet (recomendado)
 
 La forma más fácil de instalar el SDK es a través del Administrador de Paquetes NuGet en Visual Studio.
 
-#### Vía Interfaz de Usuario del Administrador de Paquetes
+#### Vía interfaz de usuario del Administrador de paquetes
 
-1. Haz clic derecho en tu proyecto en el Explorador de Soluciones
-2. Selecciona "Administrar Paquetes NuGet"
-3. Haz clic en "Examinar" y busca "VisioForge.DotNet.Core"
-4. Selecciona el paquete y haz clic en "Instalar"
-5. Acepta el acuerdo de licencia
+1. Haga clic derecho en su proyecto en el Explorador de Soluciones
+2. Seleccione "Administrar Paquetes NuGet"
+3. Haga clic en "Examinar" y busque "VisioForge.DotNet.Core"
+4. Seleccione el paquete y haga clic en "Instalar"
+5. Acepte el acuerdo de licencia
 
-#### Vía Consola del Administrador de Paquetes
+#### Vía consola del Administrador de paquetes
 
 ```powershell
-# Instala el paquete principal del SDK
+# Instalar el paquete principal del SDK
 Install-Package VisioForge.DotNet.Core
 
-# Instala el paquete de redistribución con bibliotecas nativas (requerido)
-# Este paquete incluye soporte para Windows (x86/x64), Linux (x64/arm64) y macOS
+# Instalar el paquete de redistribución con bibliotecas nativas (requerido)
+# Este paquete incluye soporte para Windows (x86/x64/ARM64), Linux (x64/arm64) y macOS
 Install-Package VisioForge.DotNet.Core.Redist.VideoFingerprinting
 
 # Para integración con MongoDB (opcional)
@@ -77,17 +79,17 @@ Install-Package VisioForge.DotNet.VideoFingerprinting.MongoDB
 #### Vía CLI de .NET
 
 ```bash
-# Agrega el paquete principal del SDK
+# Agregar el paquete principal del SDK
 dotnet add package VisioForge.DotNet.Core
 
-# Agrega el paquete de redistribución con bibliotecas nativas (requerido)
-# Este paquete incluye soporte para Windows (x86/x64), Linux (x64/arm64) y macOS
+# Agregar el paquete de redistribución con bibliotecas nativas (requerido)
+# Este paquete incluye soporte para Windows (x86/x64/ARM64), Linux (x64/arm64) y macOS
 dotnet add package VisioForge.DotNet.Core.Redist.VideoFingerprinting
 
 # Para integración con MongoDB (opcional)
 dotnet add package VisioForge.DotNet.VideoFingerprinting.MongoDB
 
-# Restaura paquetes
+# Restaurar paquetes
 dotnet restore
 ```
 
@@ -95,8 +97,8 @@ dotnet restore
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="[2025.9.5]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="[2026.10.26]"/>
   
   <!-- Opcional: Integración con MongoDB -->
   <PackageReference Include="VisioForge.DotNet.VideoFingerprinting.MongoDB" Version="[2025.8.6]"/>
@@ -108,9 +110,9 @@ dotnet restore
     El SDK requiere dos paquetes:
 
     1. **VisioForge.DotNet.Core** - La biblioteca principal del SDK con API de C#
-    2. **VisioForge.DotNet.Core.Redist.VideoFingerprinting** - Bibliotecas nativas para funcionalidad de huella digital de video (soporta Windows x86/x64, Linux x64/arm64 y macOS)
+    2. **VisioForge.DotNet.Core.Redist.VideoFingerprinting** - Bibliotecas nativas para funcionalidad de huella digital de video (soporta Windows x86/x64/ARM64, Linux x64/arm64 y macOS)
 
-    Ambos paquetes deben instalarse para que el SDK funcione correctamente. El paquete de redistribución contiene bibliotecas nativas específicas de plataforma que se despliegan automáticamente a tu directorio de salida.
+    Ambos paquetes deben instalarse para que el SDK funcione correctamente. El paquete de redistribución contiene bibliotecas nativas específicas de plataforma que se despliegan automáticamente a su directorio de salida.
 
     **Paquetes opcionales:**
 
@@ -119,39 +121,39 @@ dotnet restore
     **Soporte de Plataforma:**
     El paquete `VisioForge.DotNet.Core.Redist.VideoFingerprinting` incluye bibliotecas nativas para:
 
-    - Windows (x86 y x64)
+    - Windows (x86, x64 y ARM64; ARM64 requiere .NET 6+ y la versión 2026.10.23 o posterior de `VisioForge.DotNet.Core` y de `VisioForge.DotNet.Core.Redist.VideoFingerprinting`, en ARM64 una aplicación .NET Framework debe ejecutarse como x86, o como x64 en Windows 11)
     - Linux (x64 y ARM64)
     - macOS (Intel y Apple Silicon)
 
-    Las bibliotecas específicas de plataforma correctas se seleccionan y despliegan automáticamente basadas en tu tiempo de ejecución objetivo.
+    Las bibliotecas específicas de plataforma correctas se seleccionan y despliegan automáticamente basadas en su tiempo de ejecución objetivo.
 
-### Método 2: Instalación Manual
+### Método 2: Instalación manual
 
 Para entornos donde NuGet no está disponible o para escenarios de despliegue personalizados:
 
-1. **Descarga el SDK**
-   - Visita la [página del producto](https://www.visioforge.com/video-fingerprinting-sdk)
-   - Elige tu plataforma y arquitectura
+1. **Descargue el SDK**
+   - Visite la [página del producto](https://www.visioforge.com/video-fingerprinting-sdk)
+   - Elija su plataforma y arquitectura
 
-2. **Ejecuta el instalador**
+2. **Ejecute el instalador**
 
-### Paquetes Adicionales Específicos de Plataforma
+### Paquetes adicionales específicos de plataforma
 
-Mientras que el paquete `VisioForge.DotNet.Core.Redist.VideoFingerprinting` incluye todas las bibliotecas nativas necesarias para huella digital de video, puedes necesitar paquetes adicionales para funcionalidad extendida:
+Mientras que el paquete `VisioForge.DotNet.Core.Redist.VideoFingerprinting` incluye todas las bibliotecas nativas necesarias para huella digital de video, puede necesitar paquetes adicionales para funcionalidad extendida:
 
-#### Para Aplicaciones Windows
+#### Para aplicaciones Windows
 
 ```powershell
-# Paquetes adicionales específicos de Windows (opcional, basado en tus necesidades)
+# Paquetes adicionales específicos de Windows (opcional, basado en sus necesidades)
 Install-Package VisioForge.DotNet.Core.Redist.Base.x64  # Soporte extendido de Windows x64
 Install-Package VisioForge.DotNet.Core.Redist.Base.x86  # Soporte extendido de Windows x86
 ```
 
-#### Para Aplicaciones Móviles
+#### Para aplicaciones móviles
 
 Ningún paquete adicional: los controles `VideoView` de Apple y Android se fusionaron en `VisioForge.DotNet.Core`.
 
-### Configuración Específica de Plataforma
+### Configuración específica de plataforma
 
 #### Configuración de Windows
 
@@ -159,7 +161,7 @@ No requerida.
 
 #### Configuración de Linux
 
-1. **Instala Dependencias de GStreamer**
+1. **Instale Dependencias de GStreamer**
 
    ```bash
    # Ubuntu/Debian
@@ -184,21 +186,21 @@ No requerida.
 
 No requerida.
 
-## Activación de Clave de Licencia
+## Activación de clave de licencia
 
-### Obteniendo una Clave de Licencia
+### Obtener una clave de licencia
 
 1. **Licencia de Prueba**
-   - Usa cadena vacía para evaluación
+   - Use cadena vacía para evaluación
    - Funcionalidad completa con marca de agua
    - Período de evaluación de 30 días
 
 2. **Licencia Comercial**
-   - Compra desde [Página del Producto](https://www.visioforge.com/video-fingerprinting-sdk)
-   - Recibe clave de licencia vía email
-   - Usa clave de licencia en tu aplicación
+   - Compre desde [Página del Producto](https://www.visioforge.com/video-fingerprinting-sdk)
+   - Reciba clave de licencia vía email
+   - Use clave de licencia en su aplicación
 
-### Activando Tu Licencia
+### Activar su licencia
 
 ```csharp
 using VisioForge.Core.VideoFingerPrinting;
@@ -206,22 +208,22 @@ using VisioForge.Core.VideoFingerPrinting;
 // Al inicio de la aplicación
 public static void InitializeSDK()
 {
-    // Para evaluación de prueba - no hagas nada
+    // Para evaluación de prueba - no hacer nada
     
     // Para licencia comercial
     VFPAnalyzer.SetLicenseKey("YOUR-LICENSE-KEY-HERE");    
 }
 ```
 
-### Validación de Licencia
+### Validación de licencia
 
 ```csharp
-// Verifica el estado de la licencia
+// Verificar el estado de la licencia
 public static bool ValidateLicense()
 {
     try
     {
-        // Intenta una operación simple para verificar la licencia
+        // Intentar una operación simple para verificar la licencia
         var testSource = new VFPFingerprintSource("test.mp4");
         testSource.StopTime = TimeSpan.FromSeconds(1);
         
@@ -238,7 +240,7 @@ public static bool ValidateLicense()
 }
 ```
 
-### Tipos de Licencia
+### Tipos de licencia
 
 | Característica | Prueba | Comercial |
 |---------|-------|------------|
@@ -251,23 +253,25 @@ public static bool ValidateLicense()
 | Soporte Técnico | Foro | Email/Prioridad |
 | Actualizaciones | 30 días | 1 año |
 
-## Tu Primera Generación de Huella Digital
+## Su primera generación de huella digital
 
 Vamos a crear una aplicación de consola simple que genera una huella digital de video:
 
-### Paso 1: Crear un Nuevo Proyecto
+### Paso 1: Crear un nuevo proyecto
 
 ```bash
-# Crea una nueva aplicación de consola
+# Crear una nueva aplicación de consola
 dotnet new console -n VideoFingerprintingDemo
 cd VideoFingerprintingDemo
 
-# Agrega los paquetes del SDK
+# Agregar los paquetes del SDK
 dotnet add package VisioForge.DotNet.Core
 dotnet add package VisioForge.DotNet.Core.Redist.VideoFingerprinting
 ```
 
-### Paso 2: Implementación Básica
+En Windows, añada `-windows` a `<TargetFramework>` en `VideoFingerprintingDemo.csproj` (`net10.0` pasa a `net10.0-windows`). En macOS añada `-macos`, que requiere .NET 9 o posterior, Xcode y `dotnet workload install macos`. El framework de destino que escribe `dotnet new console` no lleva sufijo de sistema operativo, por lo que es la compilación para Linux.
+
+### Paso 2: Implementación básica
 
 ```csharp
 using System;
@@ -282,10 +286,10 @@ namespace VideoFingerprintingDemo
     {
         static async Task Main(string[] args)
         {
-            // Inicializa el SDK con tu licencia
+            // Inicializar el SDK con su licencia
             VFPAnalyzer.SetLicenseKey("TRIAL");
             
-            // Especifica el archivo de video a procesar
+            // Especificar el archivo de video a procesar
             string videoPath = @"C:\Videos\sample.mp4";
             
             if (!File.Exists(videoPath))
@@ -296,7 +300,7 @@ namespace VideoFingerprintingDemo
             
             try
             {
-                // Genera la huella digital
+                // Generar la huella digital
                 await GenerateFingerprint(videoPath);
             }
             catch (Exception ex)
@@ -310,16 +314,16 @@ namespace VideoFingerprintingDemo
             Console.WriteLine($"Procesando: {Path.GetFileName(videoPath)}");
             Console.WriteLine("----------------------------------------");
             
-            // Crea configuración de fuente
+            // Crear configuración de fuente
             var source = new VFPFingerprintSource(videoPath);
             
-            // Opcional: Procesa solo los primeros 30 segundos para pruebas
+            // Opcional: Procesar solo los primeros 30 segundos para pruebas
             source.StopTime = TimeSpan.FromSeconds(30);
             
-            // Opcional: Reduce resolución para procesamiento más rápido
+            // Opcional: Reducir resolución para procesamiento más rápido
             source.CustomResolution = new VisioForge.Core.Types.Size(640, 480);
             
-            // Genera huella digital con seguimiento de progreso
+            // Generar huella digital con seguimiento de progreso
             var fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(
                 source,
                 errorDelegate: (error) => {
@@ -334,14 +338,14 @@ namespace VideoFingerprintingDemo
             
             if (fingerprint != null)
             {
-                // Muestra información de la huella digital
+                // Mostrar información de la huella digital
                 Console.WriteLine("\n¡Huella Digital Generada Exitosamente!");
                 Console.WriteLine($"  Duración: {fingerprint.Duration}");
                 Console.WriteLine($"  Resolución: {fingerprint.Width}x{fingerprint.Height}");
                 Console.WriteLine($"  Tasa de Cuadros: {fingerprint.FrameRate:F2} fps");
                 Console.WriteLine($"  Tamaño de Datos: {fingerprint.Data?.Length ?? 0} bytes");
                 
-                // Guarda huella digital en archivo
+                // Guardar huella digital en archivo
                 string outputPath = Path.ChangeExtension(videoPath, ".vfp");
                 fingerprint.Save(outputPath);
                 
@@ -357,10 +361,10 @@ namespace VideoFingerprintingDemo
 }
 ```
 
-### Paso 3: Ejecutar la Aplicación
+### Paso 3: Ejecutar la aplicación
 
 ```bash
-# Construye y ejecuta
+# Compilar y ejecutar
 dotnet build
 dotnet run
 
@@ -379,7 +383,7 @@ dotnet run
 # Tamaño del archivo: 122 KB
 ```
 
-## Ejemplo Básico de Comparación
+## Ejemplo básico de comparación
 
 Ahora vamos a comparar dos videos para determinar su similitud:
 
@@ -408,7 +412,7 @@ class VideoComparisonDemo
         Console.WriteLine($"Video 2: {Path.GetFileName(path2)}");
         Console.WriteLine("----------------------------------------");
         
-        // Crea fuentes con límites de tiempo para comparación rápida
+        // Crear fuentes con límites de tiempo para comparación rápida
         var source1 = new VFPFingerprintSource(path1)
         {
             StopTime = TimeSpan.FromSeconds(30),
@@ -421,7 +425,7 @@ class VideoComparisonDemo
             CustomResolution = new VisioForge.Core.Types.Size(640, 480)
         };
         
-        // Genera huellas digitales
+        // Generar huellas digitales
         Console.Write("Generando huella digital 1...");
         var fp1 = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(source1);
         Console.WriteLine(" Hecho");
@@ -432,7 +436,7 @@ class VideoComparisonDemo
         
         if (fp1 != null && fp2 != null)
         {
-            // Compara huellas digitales
+            // Comparar huellas digitales
             int difference = VFPAnalyzer.Compare(
                 fp1, 
                 fp2, 
@@ -442,11 +446,11 @@ class VideoComparisonDemo
             Console.WriteLine($"\nResultados de Comparación:");
             Console.WriteLine($"  Puntaje de Diferencia: {difference}");
             
-            // Interpreta los resultados
+            // Interpretar los resultados
             string interpretation = GetInterpretation(difference);
             Console.WriteLine($"  Interpretación: {interpretation}");
             
-            // Proporciona análisis detallado
+            // Proporcionar análisis detallado
             if (difference < 100)
             {
                 double similarity = Math.Max(0, 100 - (difference / 3.0));
@@ -479,7 +483,7 @@ class VideoComparisonDemo
 }
 ```
 
-## Errores Comunes y Soluciones
+## Errores comunes y soluciones
 
 ### Problema 1: DllNotFoundException
 
@@ -487,25 +491,25 @@ class VideoComparisonDemo
 
 **Solución**:
 
-Agrega el paquete NuGet `VisioForge.DotNet.Core.Redist.VideoFingerprinting` a tu proyecto.
+Agregue el paquete NuGet `VisioForge.DotNet.Core.Redist.VideoFingerprinting` a su proyecto.
 
-### Problema 2: Excepción de Memoria Insuficiente
+### Problema 2: Excepción de memoria insuficiente
 
 **Problema**: "System.OutOfMemoryException" al procesar videos grandes
 
 **Soluciones**:
 
 ```csharp
-// Solución 1: Usa proceso de 64 bits y aumenta memoria
-// Agrega a .csproj:
+// Solución 1: Usar proceso de 64 bits y aumentar memoria
+// Agregar a .csproj:
 <PropertyGroup>
   <PlatformTarget>x64</PlatformTarget>
   <LargeAddressAware>true</LargeAddressAware>
 </PropertyGroup>
 
-// Solución 2: Reduce resolución de video. VFPFingerprintSource no expone una
-// propiedad FrameRate — para reducir los FPS analizados, transcodifique la fuente
-// previamente o re-muestree upstream. Knobs disponibles: CustomResolution,
+// Solución 2: Reducir resolución de video. VFPFingerprintSource no expone una
+// propiedad FrameRate — para reducir los FPS analizados, transcodificar la fuente
+// previamente o re-muestrear upstream. Knobs disponibles: CustomResolution,
 // CustomCropSize, IgnoredAreas, StartTime / StopTime.
 var source = new VFPFingerprintSource(videoPath)
 {
@@ -513,14 +517,14 @@ var source = new VFPFingerprintSource(videoPath)
 };
 ```
 
-### Problema 3: Velocidad de Procesamiento Lenta
+### Problema 3: Velocidad de procesamiento lenta
 
 **Problema**: La generación de huella digital toma demasiado tiempo
 
 **Soluciones**:
 
 ```csharp
-// Solución 1: Usa procesamiento paralelo para múltiples videos
+// Solución 1: Usar procesamiento paralelo para múltiples videos
 static async Task ProcessMultipleVideos(string[] videoPaths)
 {
     var tasks = videoPaths.Select(path => Task.Run(async () =>
@@ -536,7 +540,7 @@ static async Task ProcessMultipleVideos(string[] videoPaths)
     var fingerprints = await Task.WhenAll(tasks);
 }
 
-// Solución 3: Cachea huellas digitales
+// Solución 3: Cachear huellas digitales
 class FingerprintCache
 {
     private static Dictionary<string, VFPFingerPrint> cache = new();
@@ -557,7 +561,7 @@ class FingerprintCache
             return fp;
         }
         
-        // Genera nueva huella digital
+        // Generar nueva huella digital
         var source = new VFPFingerprintSource(videoPath);
         var fingerprint = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(source);
         
@@ -578,17 +582,17 @@ class FingerprintCache
 }
 ```
 
-### Problema 4: Resultados de Similitud Incorrectos
+### Problema 4: Resultados de similitud incorrectos
 
 **Problema**: Videos que deberían coincidir se muestran como diferentes
 
 **Soluciones**:
 
 ```csharp
-// Solución 1: Ajusta parámetros de comparación
+// Solución 1: Ajustar parámetros de comparación
 static int CompareWithTolerance(VFPFingerPrint fp1, VFPFingerPrint fp2)
 {
-    // Prueba diferentes desplazamientos de tiempo
+    // Probar diferentes desplazamientos de tiempo
     int[] shifts = { 100, 500, 1000, 2000 }; // milisegundos
     int minDifference = int.MaxValue;
     
@@ -601,11 +605,11 @@ static int CompareWithTolerance(VFPFingerPrint fp1, VFPFingerPrint fp2)
     return minDifference;
 }
 
-// Solución 2: Maneja videos con diferentes relaciones de aspecto.
+// Solución 2: Manejar videos con diferentes relaciones de aspecto.
 // El constructor de Rect es (left, top, right, bottom) — NO width/height.
 var source = new VFPFingerprintSource(videoFilePath);
 {
-    // Ignora áreas letterbox/pillarbox (banda 1920x140 arriba + abajo en frame 1920x1080)
+    // Ignorar áreas letterbox/pillarbox (banda 1920x140 arriba + abajo en frame 1920x1080)
     source.IgnoredAreas.AddRange(new[]
     {
         new Rect(0, 0,    1920, 140),    // Letterbox superior: y en [0, 140)
@@ -614,34 +618,34 @@ var source = new VFPFingerprintSource(videoFilePath);
 };
 ```
 
-## Resumen de Mejores Prácticas
+## Resumen de mejores prácticas
 
-### Cosas que Hacer
+### Cosas que hacer
 
-- ✅ Siempre establece clave de licencia antes de cualquier operación del SDK
-- ✅ Usa bloques try-catch alrededor de llamadas del SDK
-- ✅ Procesa videos a resolución más baja para análisis más rápido
-- ✅ Cachea huellas digitales para evitar reprocesamiento
-- ✅ Usa tipo apropiado de huella digital (Búsqueda vs Comparación)
-- ✅ Prueba con segmentos de video pequeños primero
-- ✅ Implementa callbacks de progreso para retroalimentación del usuario
-- ✅ Desecha objetos de huella digital cuando termines
+- ✅ Siempre establezca clave de licencia antes de cualquier operación del SDK
+- ✅ Use bloques try-catch alrededor de llamadas del SDK
+- ✅ Procese videos a resolución más baja para análisis más rápido
+- ✅ Cachee huellas digitales para evitar reprocesamiento
+- ✅ Use tipo apropiado de huella digital (Búsqueda vs Comparación)
+- ✅ Pruebe con segmentos de video pequeños primero
+- ✅ Implemente callbacks de progreso para retroalimentación del usuario
+- ✅ Deseche objetos de huella digital cuando termine
 
-### Cosas que No Hacer
+### Cosas que no hacer
 
-- ❌ No ignores callbacks de error
-- ❌ No compares huellas digitales de diferentes tipos
-- ❌ No proceses múltiples videos grandes simultáneamente sin gestión de memoria
+- ❌ No ignore callbacks de error
+- ❌ No compare huellas digitales de diferentes tipos
+- ❌ No procese múltiples videos grandes simultáneamente sin gestión de memoria
 
-## Próximos Pasos
+## Próximos pasos
 
-Ahora que tienes el SDK instalado y funcionando, explora estos recursos:
+Ahora que tiene el SDK instalado y funcionando, explore estos recursos:
 
 1. **[Documentación de API](api.md)** - Referencia completa para todas las clases y métodos
 2. **[Casos de Uso y Aplicaciones](../use-cases.md)** - Escenarios de implementación del mundo real
 3. **[Entendiendo la Tecnología](../understanding-video-fingerprinting.md)** - Inmersión técnica profunda
 
-## Obteniendo Ayuda
+## Obtener ayuda
 
 ### Recursos
 
@@ -650,7 +654,7 @@ Ahora que tienes el SDK instalado y funcionando, explora estos recursos:
 - **Foro de Soporte**: [https://support.visioforge.com/](https://support.visioforge.com/)
 - **Comunidad de Discord**: [https://discord.com/invite/yvXUG56WCH](https://discord.com/invite/yvXUG56WCH)
 
-### Preguntas Comunes
+### Preguntas comunes
 
 - **P: ¿Puedo usar el SDK en una aplicación web?**
   R: Sí, el SDK puede usarse en aplicaciones ASP.NET Core para procesamiento del lado del servidor.
@@ -664,7 +668,7 @@ Ahora que tienes el SDK instalado y funcionando, explora estos recursos:
 - **P: ¿Puede detectar videos con marcas de agua agregadas?**
   R: Sí, el SDK puede identificar videos incluso con marcas de agua, logos o subtítulos agregados.
 
-## Ejemplo Completo Funcional
+## Ejemplo completo funcional
 
 Aquí hay una aplicación de consola completa que demuestra todas las operaciones básicas:
 
@@ -683,10 +687,10 @@ namespace VideoFingerprintingDemo
     {
         static async Task Main(string[] args)
         {
-            // Inicializa SDK
+            // Inicializar SDK
             VFPAnalyzer.SetLicenseKey("TRIAL");
             
-            // Configura rutas
+            // Configurar rutas
             string videosDir = @"C:\Videos";
             string dbDir = @"C:\FingerprintDB";
             Directory.CreateDirectory(dbDir);
@@ -1008,7 +1012,7 @@ namespace VideoFingerprintingDemo
 }
 ```
 
-## Benchmarks de Rendimiento
+## Benchmarks de rendimiento
 
 | Operación | Duración | Tamaño de Archivo | Tiempo de Procesamiento | Uso de Memoria |
 |-----------|----------|-----------|----------------|------------|
@@ -1020,15 +1024,15 @@ namespace VideoFingerprintingDemo
 
 ## Resumen
 
-Ahora has aprendido cómo:
+Ahora ha aprendido cómo:
 
-- ✅ Instalar y configurar el SDK de Huella Digital de Video con paquetes NuGet apropiados
+- ✅ Instalar y configurar el Video Fingerprinting SDK con paquetes NuGet apropiados
 - ✅ Generar huellas digitales desde archivos de video
 - ✅ Comparar videos para similitud
 - ✅ Buscar fragmentos dentro de videos
 - ✅ Construir y consultar una base de datos de huellas digitales
 - ✅ Manejar problemas comunes y optimizar rendimiento
 
-El SDK de Huella Digital de Video proporciona una base poderosa para aplicaciones de identificación de contenido, detección de duplicados y monitoreo de medios. Comienza con los ejemplos simples e incorpora gradualmente características más avanzadas a medida que crezcan tus necesidades.
+El Video Fingerprinting SDK proporciona una base poderosa para aplicaciones de identificación de contenido, detección de duplicados y monitoreo de medios. Comience con los ejemplos simples e incorpore gradualmente características más avanzadas a medida que crezcan sus necesidades.
 
-¡Felicitaciones! Ahora estás listo para construir poderosas aplicaciones de huella digital de video con el SDK de VisioForge.
+¡Felicitaciones! Ahora está listo para construir poderosas aplicaciones de huella digital de video con el SDK de VisioForge.

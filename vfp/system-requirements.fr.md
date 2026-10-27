@@ -22,7 +22,7 @@ Cette page décrit la configuration système requise pour exécuter le Video Fin
 ### Windows
 
 - **Système d'exploitation** : Windows 10 version 1903+ ou Windows 11
-- **Architecture** : x86, x64 ou ARM64 (ARM64 uniquement pour le SDK .NET)
+- **Architecture** : x86, x64 ou ARM64 (ARM64 uniquement pour le SDK .NET, avec .NET 6+ ; sur ARM64 une application .NET Framework doit s'exécuter en x86, ou en x64 sous Windows 11)
 - **Runtime** : Microsoft Visual C++ Redistributables 2019 ou ultérieur
 - **Bibliothèques supplémentaires** : filtres DirectShow pour une prise en charge étendue des codecs (optionnel)
 
@@ -77,7 +77,9 @@ Cette page décrit la configuration système requise pour exécuter le Video Fin
 
 - **Version de .NET** : 
   - Windows : .NET Framework 4.6.1+ ou .NET 6.0+
-  - Linux/macOS : .NET 6.0+
+  - Linux : .NET 6.0+
+  - macOS : .NET 9.0+
+  - Framework cible (applications .NET 5+) : ajoutez-y le système, `-windows` sous Windows (`net8.0-windows`) et `-macos` sous macOS (`net9.0-macos` ou ultérieur). Un framework cible sans suffixe de système (`net8.0`) est la version Linux : sous Windows ou macOS, elle signale que la bibliothèque native est introuvable.
 - **IDE** : Visual Studio 2019+ (Windows), Visual Studio Code ou JetBrains Rider
 
 ### SDK C++

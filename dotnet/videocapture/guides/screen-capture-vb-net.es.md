@@ -30,11 +30,11 @@ primary_api_classes:
 
 # Captura de pantalla en VB.NET: Guía completa para grabar video del escritorio
 
-Grabar la pantalla del escritorio en aplicaciones VB.NET (Visual Basic .NET) es esencial para crear grabadores de pantalla, herramientas de tutoriales y software de vigilancia. Ya sea que necesite captura de pantalla completa, grabación por región o captura de audio del sistema, esta guía proporciona ejemplos de código Visual Basic paso a paso usando [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net).
+Grabar la pantalla del escritorio en aplicaciones VB.NET (Visual Basic .NET) es esencial para crear grabadores de pantalla, herramientas de tutoriales y software de vigilancia. Ya sea que necesite captura de pantalla completa, grabación por región o captura de audio del sistema, esta guía proporciona ejemplos de código Visual Basic paso a paso usando [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net).
 
 ## Por qué usar Video Capture SDK .Net para grabación de pantalla en VB.NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) proporciona una solución completa de grabación de pantalla para desarrolladores VB.NET:
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) proporciona una solución completa de grabación de pantalla para desarrolladores VB.NET:
 
 - Captura de escritorio completa y grabación de pantalla por región personalizada
 - Soporte multi-monitor con enumeración de pantallas
@@ -50,9 +50,9 @@ Grabar la pantalla del escritorio en aplicaciones VB.NET (Visual Basic .NET) es 
 Agregue los siguientes paquetes a su proyecto VB.NET:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 ## Ejemplo completo de grabación de pantalla en VB.NET
@@ -322,4 +322,4 @@ Sí. Cree `VideoCaptureCoreX` sin un parámetro `VideoView`: `VideoCapture1 = Ne
 - [Guardar video de webcam en C#](save-webcam-video.md) — misma funcionalidad de captura de webcam con ejemplos de código en C#
 - [Crear un reproductor de video en VB.NET](../../mediaplayer/guides/video-player-vb-net.md) — reproductor multimedia VB.NET con controles de reproducción
 - [Grabación pre-evento](pre-event-recording.md) — grabación de búfer circular que captura material antes del evento desencadenante
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas

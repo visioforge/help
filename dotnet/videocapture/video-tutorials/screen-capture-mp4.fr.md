@@ -32,7 +32,7 @@ primary_api_classes:
 
 # Capture d'écran vers un fichier MP4
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Tutoriel YouTube
 
@@ -527,4 +527,4 @@ La fréquence d'images par défaut est de 10 FPS. Utilisez 15 FPS pour les prés
 - [Configuration de source écran](../video-sources/screen.md) — référence complète pour la région de capture, le multi-écrans, le curseur et la fréquence d'images
 - [Enregistrer la vidéo de webcam](../guides/save-webcam-video.md) — capture de webcam en MP4 avec configuration audio
 - [Exemples de code](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — extraits de code supplémentaires de capture d'écran sur GitHub
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements

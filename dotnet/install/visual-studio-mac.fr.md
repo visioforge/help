@@ -23,7 +23,7 @@ primary_api_classes:
 
 # Guide complet d'intégration des SDK VisioForge .NET avec Visual Studio pour Mac
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! warning "Visual Studio pour Mac est abandonné"
     Microsoft a [abandonné Visual Studio pour Mac](https://learn.microsoft.com/en-us/visualstudio/releases/2022/what-happened-to-vs-for-mac) le 31 août 2024. Aucune nouvelle installation n'est possible et l'IDE ne reçoit plus de mises à jour. Pour le développement .NET macOS avec les SDK VisioForge, utilisez plutôt **[JetBrains Rider](./rider.md)** ou **Visual Studio Code avec le C# Dev Kit**. Les noms de paquets NuGet, les contrôles d'interface utilisateur et les extraits C# de cette page s'appliquent à l'identique à ces IDE.

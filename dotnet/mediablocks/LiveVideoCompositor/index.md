@@ -23,9 +23,9 @@ primary_api_classes:
 
 # Live Video Compositor
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Live Video Compositor is a part of the [VisioForge Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) that allows you to add and remove sources and outputs in real time to a pipeline.
+Live Video Compositor is a part of the [VisioForge Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) that allows you to add and remove sources and outputs in real time to a pipeline.
 
 This allows you to create applications that simultaneously handle multiple video and audio sources.
 
@@ -54,6 +54,7 @@ The `LiveVideoCompositor` is the main class that allows the addition and removal
 - `AudioEnabled`: A boolean indicating whether the audio stream is enabled.
 - `VideoWidth`, `VideoHeight`, `VideoFrameRate`: Define the output video resolution and frame rate.
 - `AudioFormat`, `AudioSampleRate`, `AudioChannels`: Define the output audio parameters.
+- `AudioMixerLatency`: How long the audio mixer waits for late input before it mixes without it. Default 100 ms; `TimeSpan.Zero` waits only for the latency the inputs report. Read once, when the compositor is constructed.
 - `VideoView`: An optional `IVideoView` for rendering video output directly.
 - `AudioOutput`: An optional `AudioRendererBlock` for rendering audio output directly.
 

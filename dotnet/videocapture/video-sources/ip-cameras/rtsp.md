@@ -31,7 +31,7 @@ primary_api_classes:
 
 # Integrating RTSP Camera Streams in .NET Applications
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
 !!! info "Cross-platform support"
     The `VideoCaptureCoreX` engine runs on **Windows, macOS, Linux, Android, and iOS** via GStreamer; the classic `VideoCaptureCore` engine is Windows-only. See the [platform support matrix](../../../platform-matrix.md) for codec and hardware-acceleration details, and the [Linux deployment guide](../../../deployment-x/Ubuntu.md) for Ubuntu / NVIDIA Jetson / Raspberry Pi setup.

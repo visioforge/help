@@ -26,7 +26,7 @@ primary_api_classes:
 
 # Video sample grabber usage
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Getting RAW video frames as unmanaged memory pointer inside the structure
 
@@ -41,9 +41,6 @@ primary_api_classes:
     {
         // Process the VideoFrameX object
         ProcessFrame(e.Frame);
-        
-        // If you've modified the frame and want to update the video stream
-        e.UpdateData = true;
     }
     
     // Example of processing a VideoFrameX frame - adjusting brightness
@@ -66,15 +63,25 @@ primary_api_classes:
         
         // Brightness factor (1.2 = 20% brighter, 0.8 = 20% darker)
         float brightnessFactor = 1.2f;
-        
-        // Process each pixel
-        for (int i = 0; i < data.Length; i += pixelSize)
+
+        // Precompute a lookup table so the inner loop is a table lookup, not a multiply
+        var lut = new byte[256];
+        for (int v = 0; v < 256; v++)
         {
-            // Adjust R, G, B channels
-            for (int j = 0; j < 3; j++)
+            lut[v] = (byte)Math.Min(255, (int)(v * brightnessFactor));
+        }
+
+        // Rows are padded to a 4-byte stride: walk row by row, never data.Length
+        int stride = frame.Stride;
+        for (int y = 0; y < frame.Height; y++)
+        {
+            int row = y * stride;
+            for (int x = 0; x < frame.Width; x++)
             {
-                int newValue = (int)(data[i + j] * brightnessFactor);
-                data[i + j] = (byte)Math.Min(255, newValue);
+                int pixel = row + x * pixelSize;
+                data[pixel] = lut[data[pixel]];
+                data[pixel + 1] = lut[data[pixel + 1]];
+                data[pixel + 2] = lut[data[pixel + 2]];
             }
         }
         
@@ -114,15 +121,23 @@ primary_api_classes:
         
         // Brightness factor (1.2 = 20% brighter, 0.8 = 20% darker)
         float brightnessFactor = 1.2f;
-        
-        // Process each pixel (RGB24 format = 3 bytes per pixel)
-        for (int i = 0; i < data.Length; i += 3)
+
+        // Precompute a lookup table so the inner loop is a table lookup, not a multiply
+        var lut = new byte[256];
+        for (int v = 0; v < 256; v++)
         {
-            // Adjust R, G, B channels
-            for (int j = 0; j < 3; j++)
+            lut[v] = (byte)Math.Min(255, (int)(v * brightnessFactor));
+        }
+
+        // RGB24 rows are padded to a 4-byte stride: walk row by row, never data.Length
+        int stride = frame.Info.Stride;
+        int rowBytes = frame.Info.Width * 3;
+        for (int y = 0; y < frame.Info.Height; y++)
+        {
+            int row = y * stride;
+            for (int i = 0; i < rowBytes; i++)
             {
-                int newValue = (int)(data[i + j] * brightnessFactor);
-                data[i + j] = (byte)Math.Min(255, newValue);
+                data[row + i] = lut[data[row + i]];
             }
         }
         
@@ -138,15 +153,14 @@ primary_api_classes:
     ```csharp
     // Create and set up video sample grabber block
     var videoSampleGrabberBlock = new VideoSampleGrabberBlock(VideoFormatX.RGB);
+    // Required when the handler writes into the frame
+    videoSampleGrabberBlock.AllowFrameModification = true;
     videoSampleGrabberBlock.OnVideoFrameBuffer += OnVideoFrameBuffer;
     
     private void OnVideoFrameBuffer(object sender, VideoFrameXBufferEventArgs e)
     {
         // Process the VideoFrameX object
         ProcessFrame(e.Frame);
-        
-        // If you've modified the frame and want to update the video stream
-        e.UpdateData = true;
     }
     
     // Example of processing a VideoFrameX frame - adjusting brightness
@@ -162,15 +176,23 @@ primary_api_classes:
         
         // Brightness factor (1.2 = 20% brighter, 0.8 = 20% darker)
         float brightnessFactor = 1.2f;
-        
-        // Process each pixel (RGB format = 3 bytes per pixel)
-        for (int i = 0; i < data.Length; i += 3)
+
+        // Precompute a lookup table so the inner loop is a table lookup, not a multiply
+        var lut = new byte[256];
+        for (int v = 0; v < 256; v++)
         {
-            // Adjust R, G, B channels
-            for (int j = 0; j < 3; j++)
+            lut[v] = (byte)Math.Min(255, (int)(v * brightnessFactor));
+        }
+
+        // RGB rows are padded to a 4-byte stride: walk row by row, never data.Length
+        int stride = frame.Stride;
+        int rowBytes = frame.Width * 3;
+        for (int y = 0; y < frame.Height; y++)
+        {
+            int row = y * stride;
+            for (int i = 0; i < rowBytes; i++)
             {
-                int newValue = (int)(data[i + j] * brightnessFactor);
-                data[i + j] = (byte)Math.Min(255, newValue);
+                data[row + i] = lut[data[row + i]];
             }
         }
         
@@ -181,9 +203,13 @@ primary_api_classes:
     
 
 
+!!! note "Prefer the built-in brightness effect for plain brightness"
+
+    Brightness is a built-in video effect: call `VideoEffects_SetBrightness` (values from -1.0 to 1.0) on the classic engines, or add a `VideoBalanceBlock` with `VideoBalanceVideoEffect.Brightness` set to a Media Blocks pipeline. Both run natively and are faster than per-frame managed processing. Use the sample grabber for custom per-frame processing the built-in effects do not cover.
+
 ## Working with bitmap frames
 
-If you need to work with managed Bitmap objects instead of raw memory pointers, you can use the `OnVideoFrameBitmap` event of the `core` classes or the SampleGrabberBlock:
+If you need to work with managed Bitmap objects instead of raw memory pointers, you can use the `OnVideoFrameBitmap` event of the `core` classes or the SampleGrabberBlock. The X-engines and the SampleGrabberBlock pass a copy of the frame, so changes to that bitmap reach the video stream only with the classic engines, and only when you set `e.UpdateData = true`:
 
 ```csharp
 // Subscribe to the bitmap frame event
@@ -198,12 +224,27 @@ private void OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
     e.UpdateData = true;
 }
 
+// Reusable copy of the frame
+private Bitmap _source;
+
 // Example of processing a Bitmap - adjusting brightness
 private void ProcessBitmap(Bitmap bitmap)
 {
     // Use Bitmap methods or Graphics to manipulate the image
     // This example uses ColorMatrix for brightness adjustment
     
+    // GDI+ cannot draw a bitmap onto its own Graphics, so copy the frame into a reusable buffer first
+    if (_source == null || _source.Width != bitmap.Width || _source.Height != bitmap.Height)
+    {
+        _source?.Dispose();
+        _source = new Bitmap(bitmap.Width, bitmap.Height);
+    }
+
+    using (Graphics copy = Graphics.FromImage(_source))
+    {
+        copy.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
+    }
+
     // Create a graphics object from the bitmap
     using (Graphics g = Graphics.FromImage(bitmap))
     {
@@ -224,7 +265,7 @@ private void ProcessBitmap(Bitmap bitmap)
             attributes.SetColorMatrix(colorMatrix);
             
             // Draw the image with the brightness adjustment
-            g.DrawImage(bitmap, 
+            g.DrawImage(_source, 
                 new Rectangle(0, 0, bitmap.Width, bitmap.Height),
                 0, 0, bitmap.Width, bitmap.Height,
                 GraphicsUnit.Pixel, attributes);
@@ -366,11 +407,13 @@ The `OnVideoFrameBuffer` event is faster and provides the unmanaged memory point
    - RGBA/BGRA/ARGB: 4 bytes per pixel (with alpha channel)
    - YUV formats: Different component arrangements
 
-2. Set `e.UpdateData = true` if you've modified the frame data and want the changes to be visible in the video stream.
+2. With the classic engines, set `e.UpdateData = true` if you've modified the frame data and want the changes to be visible in the video stream. Media Blocks SDK and the X-engines do not read `UpdateData`.
 
-3. For processing that requires multiple frames or complex operations, consider using a buffer or queue to store frames.
+3. Set `AllowFrameModification = true` on the `VideoSampleGrabberBlock` (Media Blocks SDK) before the pipeline starts, or on the `CustomVideoSampleGrabberEffect` (Media Blocks SDK and X-engines) before you add the effect. Without it the frame is mapped read-only, and your changes can reach another branch of a `TeeBlock` that shares the same frame.
 
-4. When using `OnVideoFrameSKBitmap`, select either RGBA or BGRA as the frame format when creating the VideoSampleGrabberBlock.
+4. For processing that requires multiple frames or complex operations, consider using a buffer or queue to store frames.
+
+5. When using `OnVideoFrameSKBitmap`, select either RGBA or BGRA as the frame format when creating the VideoSampleGrabberBlock.
 
 ---
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

@@ -1236,9 +1236,10 @@ public partial class MainForm : Form
 
 ### Issue: "Class not registered" Error
 
-**Solution**: Ensure VLC Source filter is registered:
+**Solution**: Register the VLC Source build that matches your application (x86 or x64):
 ```bash
 regsvr32 VisioForge_VLC_Source.ax
+regsvr32 VisioForge_VLC_Source_x64.ax
 ```
 
 ### Issue: Audio/Subtitle Track Count Returns 0

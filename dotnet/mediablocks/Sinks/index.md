@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Sinks
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Sinks are blocks that save or stream data. They are the last blocks in the pipeline.
 Optionally, some sinks can have output pins to pass data to the next block in the pipeline.
@@ -2338,7 +2338,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-`VirtualCameraSinkBlock.IsAvailable()` returns `true` if the underlying virtual camera sink is available on this system. `VirtualCameraSinkBlock.IsCOMRegistered()` returns `true` when both the Virtual Camera and Virtual Audio Card source filters are registered.
+`VirtualCameraSinkBlock.IsAvailable()` returns `true` if the underlying virtual camera sink is available on this system. `VirtualCameraSinkBlock.IsCOMRegistered()` returns `true` when both the Virtual Camera and Virtual Audio Card source filters are registered. On Windows ARM64 the x64 and ARM64 builds share one registration, so a registration of either build counts.
 
 #### Platforms
 

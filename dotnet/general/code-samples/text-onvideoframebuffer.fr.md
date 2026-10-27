@@ -29,7 +29,7 @@ primary_api_classes:
 
 # Créer des superpositions de texte personnalisées avec OnVideoFrameBuffer en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
@@ -45,10 +45,10 @@ L'événement `OnVideoFrameBuffer` est exposé sur les deux familles de moteurs 
 | Moteur | Type d'arguments d'événement | Format de pixel |
 |---|---|---|
 | `VideoCaptureCore` (DirectShow, Windows) | `VideoFrameBufferEventArgs` | RGB24 / RGB32 |
-| `VideoCaptureCoreX` (GStreamer, multiplateforme) | `VideoFrameXBufferEventArgs` | BGRA (le plus courant) |
-| `MediaPlayerCoreX` (GStreamer, multiplateforme) | `VideoFrameXBufferEventArgs` | BGRA (le plus courant) |
+| `VideoCaptureCoreX` (GStreamer, multiplateforme) | `VideoFrameXBufferEventArgs` | RGBA |
+| `MediaPlayerCoreX` (GStreamer, multiplateforme) | `VideoFrameXBufferEventArgs` | RGB (RGBA quand `OnVideoFrameUnity` est abonné) |
 
-Les deux moteurs suivent le même modèle — s'abonner à l'événement, lire `e.Frame.Data` (un `IntPtr`) avec `Width` / `Height` / `Stride`, rendre dans le tampon sur place, et définir `e.UpdateData = true` pour propager les changements en aval.
+Les deux moteurs suivent le même modèle — s'abonner à l'événement, lire `e.Frame.Data` (un `IntPtr`) avec `Width` / `Height` / `Stride`, et rendre dans le tampon sur place. Le moteur classique ne prend les changements que si vous définissez `e.UpdateData = true` ; les moteurs X ne lisent pas `UpdateData`.
 
 ## Comprendre l'événement OnVideoFrameBuffer
 
@@ -291,26 +291,27 @@ private void SDK_OnVideoFrameBuffer(object sender, VideoFrameBufferEventArgs e)
 
 ## Exemple VideoCaptureCoreX / MediaPlayerCoreX (moteurs X)
 
-Sur les moteurs X multiplateformes, la signature de l'événement est `VideoFrameXBufferEventArgs` et le tampon d'image arrive généralement au format **BGRA** (4 octets par pixel). L'exemple ci-dessous utilise SkiaSharp pour envelopper le tampon brut et y dessiner du texte ; SkiaSharp est une dépendance transitive des moteurs X, donc aucun paquet NuGet supplémentaire n'est nécessaire.
+Sur les moteurs X multiplateformes, la signature de l'événement est `VideoFrameXBufferEventArgs` et le tampon d'image arrive au format du grabber du moteur — RGBA sur `VideoCaptureCoreX`, RGB sur `MediaPlayerCoreX` (RGBA quand `OnVideoFrameUnity` est abonné). L'exemple ci-dessous utilise SkiaSharp pour envelopper le tampon brut et y dessiner du texte ; SkiaSharp est une dépendance transitive des moteurs X, donc aucun paquet NuGet supplémentaire n'est nécessaire.
 
 ```cs
 using SkiaSharp;
+using VisioForge.Core.Helpers;
+using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.X;
 
-// Créer les paints une fois, les réutiliser entre les images
+// Créer la police et les paints une fois, les réutiliser entre les images
+private SKFont _textFont = new SKFont(SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold), 32);
+
 private SKPaint _textPaint = new SKPaint
 {
     Color = SKColors.White,
-    TextSize = 32,
-    IsAntialias = true,
-    Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold)
+    IsAntialias = true
 };
 
 private SKPaint _shadowPaint = new SKPaint
 {
     Color = SKColors.Black.WithAlpha(160),
-    TextSize = 32,
-    IsAntialias = true,
-    Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold)
+    IsAntialias = true
 };
 
 // S'abonner après avoir construit VideoCaptureCoreX / MediaPlayerCoreX
@@ -323,36 +324,49 @@ private void VideoCapture_OnVideoFrameBuffer(object sender, VideoFrameXBufferEve
         return;
     }
 
-    // Envelopper le tampon BGRA brut dans une surface SkiaSharp (sans allocation supplémentaire)
-    var info = new SKImageInfo(e.Frame.Width, e.Frame.Height, SKColorType.Bgra8888, SKAlphaType.Premul);
+    // Contenu dynamique construit par image
+    var timestamp = e.Frame.Timestamp.ToString(@"hh\:mm\:ss\.fff");
+    var line = $"REC  {timestamp}";
 
+    // Le format du grabber diffère selon le moteur : VideoCaptureCoreX livre RGBA,
+    // MediaPlayerCoreX RGB (RGBA quand OnVideoFrameUnity est abonné). Ne présumez jamais BGRA.
+    if (e.Frame.Format == VideoFormatX.RGB)
+    {
+        // Le RGB 24 bits n'a pas de SKColorType — convertissez-le avec le helper du SDK et dessinez sur la copie.
+        using (var bmp = e.Frame.VideoFrameRGBToSKBitmap())
+        {
+            var rgbCanvas = bmp.Canvas;
+            rgbCanvas.DrawText(line, 18, 42, SKTextAlign.Left, _textFont, _shadowPaint);
+            rgbCanvas.DrawText(line, 16, 40, SKTextAlign.Left, _textFont, _textPaint);
+        }
+
+        return;
+    }
+
+    var colorType = e.Frame.Format == VideoFormatX.BGRA ? SKColorType.Bgra8888 : SKColorType.Rgba8888;
+    var info = new SKImageInfo(e.Frame.Width, e.Frame.Height, colorType, SKAlphaType.Premul);
+
+    // Envelopper le tampon brut 32 bits dans une surface SkiaSharp (sans allocation supplémentaire)
     using (var pixmap = new SKPixmap(info, e.Frame.Data, e.Frame.Stride))
     using (var surface = SKSurface.Create(pixmap))
     {
         var canvas = surface.Canvas;
 
-        // Contenu dynamique construit par image
-        var timestamp = e.Frame.Timestamp.ToString(@"hh\:mm\:ss\.fff");
-        var line = $"REC  {timestamp}";
-
         // Dessiner d'abord l'ombre, puis le texte principal pour la lisibilité sur n'importe quel arrière-plan
-        canvas.DrawText(line, 18, 42, _shadowPaint);
-        canvas.DrawText(line, 16, 40, _textPaint);
+        canvas.DrawText(line, 18, 42, SKTextAlign.Left, _textFont, _shadowPaint);
+        canvas.DrawText(line, 16, 40, SKTextAlign.Left, _textFont, _textPaint);
         canvas.Flush();
     }
-
-    // Propager l'image modifiée en aval
-    e.UpdateData = true;
 }
 ```
 
-**Pourquoi BGRA importe.** Les moteurs X demandent BGRA par défaut pour les rappels d'image, car il correspond 1:1 à SkiaSharp, System.Drawing et la plupart des chemins d'interopérabilité conviviaux pour le GPU. Si vous avez besoin d'un autre format, demandez un bloc de conversion de format en amont plutôt que de convertir à chaque image.
+**Quel format vous recevez.** Lisez `e.Frame.Format` au lieu de présumer un format : `VideoCaptureCoreX` livre RGBA et `MediaPlayerCoreX` RGB (RGBA quand `OnVideoFrameUnity` est abonné). Le RGB fait 3 octets par pixel et n'a pas de `SKColorType` correspondant ; l'exemple le convertit donc avec le helper du SDK `VideoFrameRGBToSKBitmap` (une copie supplémentaire). Si vous avez besoin d'un autre format, demandez un bloc de conversion de format en amont plutôt que de convertir à chaque image.
 
-**Mesurer et positionner le texte.** Utilisez `_textPaint.MeasureText(line)` pour calculer la largeur pour un alignement à droite ou centré. SkiaSharp expose aussi `SKFontMetrics` via `_textPaint.FontMetrics` pour la ligne de base / ascent / descent afin de positionner le texte avec précision contre les bords de l'image.
+**Mesurer et positionner le texte.** Utilisez `_textFont.MeasureText(line)` pour calculer la largeur pour un alignement à droite ou centré. SkiaSharp expose aussi `SKFontMetrics` via `_textFont.Metrics` pour la ligne de base / ascent / descent afin de positionner le texte avec précision contre les bords de l'image.
 
-**Piles d'imagerie alternatives.** Vous pouvez aussi utiliser `System.Drawing.Graphics` enveloppant un `Bitmap` construit sur le tampon brut sur Windows, ou des écritures d'octets directes avec `Marshal.Copy` / `Span<byte>` pour un contrôle total. SkiaSharp est l'option recommandée sur macOS / Linux / iOS / Android.
+**Piles d'imagerie alternatives.** Vous pouvez aussi utiliser `System.Drawing.Graphics` enveloppant un `Bitmap` construit sur le tampon brut sur Windows (choisissez le `PixelFormat` qui correspond à `e.Frame.Format`), ou des écritures d'octets directes avec `Marshal.Copy` / `Span<byte>` pour un contrôle total. SkiaSharp est l'option recommandée sur macOS / Linux / iOS / Android.
 
-**Parité au niveau du moteur.** Tout ce qui figure dans [Considérations de performance](#considerations-de-performance) et [Plusieurs éléments de texte](#plusieurs-elements-de-texte) s'applique également aux moteurs X — l'événement est déclenché sur un thread de traitement, `UpdateData` propage les changements et le travail lourd doit être délégué pour éviter de perdre des images.
+**Parité au niveau du moteur.** Tout ce qui figure dans [Considérations de performance](#considerations-de-performance) et [Plusieurs éléments de texte](#plusieurs-elements-de-texte) s'applique également aux moteurs X — l'événement est déclenché sur un thread de traitement et le travail lourd doit être délégué pour éviter de perdre des images.
 
 ## Composants requis
 
@@ -364,7 +378,7 @@ Pour implémenter cette solution, vous aurez besoin de :
 
 ## Conclusion
 
-L'événement `OnVideoFrameBuffer` donne un accès direct à chaque image brute, à la fois sur le moteur classique `VideoCaptureCore` (RGB24/RGB32 via `VideoFrameBufferEventArgs` + `FastImageProcessing`) et sur les moteurs X multiplateformes (`VideoCaptureCoreX` / `MediaPlayerCoreX`, BGRA via `VideoFrameXBufferEventArgs` + SkiaSharp). C'est le bon outil lorsque vous avez besoin d'un rendu de texte au niveau pixel — polices personnalisées, contenu dynamique par image, anticrénelage que vous contrôlez, ou intégration avec des bibliothèques de texte/graphiques tierces.
+L'événement `OnVideoFrameBuffer` donne un accès direct à chaque image brute, à la fois sur le moteur classique `VideoCaptureCore` (RGB24/RGB32 via `VideoFrameBufferEventArgs` + `FastImageProcessing`) et sur les moteurs X multiplateformes (`VideoCaptureCoreX` / `MediaPlayerCoreX`, images du grabber via `VideoFrameXBufferEventArgs` + SkiaSharp). C'est le bon outil lorsque vous avez besoin d'un rendu de texte au niveau pixel — polices personnalisées, contenu dynamique par image, anticrénelage que vous contrôlez, ou intégration avec des bibliothèques de texte/graphiques tierces.
 
 Pour les superpositions de texte statiques ou pilotées par horloge sans écrire un gestionnaire par image, l'[effet de superposition de texte](../video-effects/text-overlay.md) en une ligne est généralement le meilleur choix.
 

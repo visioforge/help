@@ -33,7 +33,7 @@ primary_api_classes:
 
 # Referencia API de Efectos de Audio
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Referencia completa de parámetros para todos los efectos de audio disponibles en los SDKs .NET de VisioForge. Cada efecto multiplataforma envuelve un elemento de GStreamer y admite cambios de parámetros en tiempo real desde código C# durante la reproducción. Los efectos multiplataforma funcionan en Windows, macOS, Linux, iOS y Android.
 

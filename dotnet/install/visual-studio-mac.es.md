@@ -1,6 +1,6 @@
 ---
 title: Instalar SDKs .NET en Visual Studio para Mac - Guía completa
-description: Instala y configura SDKs .NET de VisioForge en Visual Studio para Mac para desarrollo de aplicaciones multimedia macOS e iOS.
+description: Instale y configure SDKs .NET de VisioForge en Visual Studio para Mac para desarrollo de aplicaciones multimedia macOS e iOS.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -21,66 +21,66 @@ primary_api_classes:
 
 ---
 
-# Guía Completa para Integrar SDKs .NET de VisioForge con Visual Studio para Mac
+# Guía completa para integrar SDKs .NET de VisioForge con Visual Studio para Mac
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! warning "Visual Studio para Mac está descontinuado"
-    Microsoft [retiró Visual Studio para Mac](https://learn.microsoft.com/en-us/visualstudio/releases/2022/what-happened-to-vs-for-mac) el 31 de agosto de 2024. No es posible realizar nuevas instalaciones y el IDE ya no recibe actualizaciones. Para desarrollo .NET en macOS con los SDKs de VisioForge, usa **[JetBrains Rider](./rider.md)** o **Visual Studio Code con el C# Dev Kit** en su lugar. Los nombres de paquetes NuGet, controles de UI y fragmentos de C# de esta página aplican de manera idéntica a esos IDEs.
+    Microsoft [retiró Visual Studio para Mac](https://learn.microsoft.com/en-us/visualstudio/releases/2022/what-happened-to-vs-for-mac) el 31 de agosto de 2024. No es posible realizar nuevas instalaciones y el IDE ya no recibe actualizaciones. Para desarrollo .NET en macOS con los SDKs de VisioForge, use **[JetBrains Rider](./rider.md)** o **Visual Studio Code con el C# Dev Kit** en su lugar. Los nombres de paquetes NuGet, controles de UI y fragmentos de C# de esta página aplican de manera idéntica a esos IDEs.
 
 ## Introducción a SDKs de VisioForge en macOS
 
-VisioForge proporciona potentes SDKs multimedia para desarrolladores .NET que trabajan en plataformas macOS e iOS. Esta guía detallada te llevará a través de todo el proceso de integración de estos SDKs en tus proyectos de Visual Studio para Mac. Aunque este tutorial se enfoca principalmente en el desarrollo de aplicaciones macOS, los mismos principios se aplican a aplicaciones iOS con mínimas adaptaciones.
+VisioForge proporciona potentes SDKs multimedia para desarrolladores .NET que trabajan en plataformas macOS e iOS. Esta guía detallada le llevará a través de todo el proceso de integración de estos SDKs en sus proyectos de Visual Studio para Mac. Aunque este tutorial se enfoca principalmente en el desarrollo de aplicaciones macOS, los mismos principios se aplican a aplicaciones iOS con mínimas adaptaciones.
 
-Siguiendo esta guía, aprenderás cómo configurar correctamente tu entorno de desarrollo, instalar los paquetes necesarios, configurar componentes de UI y preparar tu aplicación para el despliegue. Este conocimiento servirá como una base sólida para construir aplicaciones multimedia sofisticadas usando tecnología VisioForge.
+Siguiendo esta guía, aprenderá cómo configurar correctamente su entorno de desarrollo, instalar los paquetes necesarios, configurar componentes de UI y preparar su aplicación para el despliegue. Este conocimiento servirá como una base sólida para construir aplicaciones multimedia sofisticadas usando tecnología VisioForge.
 
-## Prerrequisitos para el Desarrollo
+## Prerrequisitos para el desarrollo
 
-Antes de comenzar el proceso de integración, asegúrate de tener:
+Antes de comenzar el proceso de integración, asegúrese de tener:
 
 - Visual Studio para Mac (se recomienda la última versión)
 - .NET SDK instalado (versión mínima 6.0)
 - Conocimiento básico de C# y desarrollo .NET
-- Acceso administrativo a tu sistema macOS
+- Acceso administrativo a su sistema macOS
 - Conexión a internet activa para descargas de paquetes NuGet
 - Opcional: XCode para edición de storyboards
 
 Tener estos prerrequisitos en su lugar asegurará un proceso de instalación fluido y prevendrá problemas comunes de configuración.
 
-## Configurando un Nuevo Proyecto macOS
+## Configurar un nuevo proyecto macOS
 
 Comencemos creando un nuevo proyecto macOS en Visual Studio para Mac. Esto servirá como la base para nuestra integración del SDK de VisioForge.
 
-### Creando la Estructura del Proyecto
+### Crear la estructura del proyecto
 
 1. Lanza Visual Studio para Mac.
-2. Selecciona **File > New Solution** desde la barra de menú.
-3. En el diálogo de selección de plantillas, navega a **.NET > App**.
-4. Elige **macOS Application** como tu plantilla de proyecto.
-5. Configura los ajustes de tu proyecto, incluyendo:
-   - Nombre del proyecto (elige algo descriptivo)
+2. Seleccione **File > New Solution** desde la barra de menú.
+3. En el diálogo de selección de plantillas, navegue a **.NET > App**.
+4. Elija **macOS Application** como su plantilla de proyecto.
+5. Configure los ajustes de su proyecto, incluyendo:
+   - Nombre del proyecto (elija algo descriptivo)
    - Identificador de organización (típicamente en formato de dominio inverso)
    - Framework objetivo (.NET 6.0 o posterior recomendado)
-   - Nombre de la solución (puede coincidir con el nombre de tu proyecto)
-6. Haz clic en **Create** para generar tu plantilla de proyecto.
+   - Nombre de la solución (puede coincidir con el nombre de su proyecto)
+6. Haga clic en **Create** para generar su plantilla de proyecto.
 
 Esto crea una aplicación macOS básica con la estructura de proyecto estándar requerida para la integración del SDK de VisioForge.
 
 ![Creando un nuevo proyecto macOS en Visual Studio para Mac](vsmac1.webp)
 
-## Instalando Paquetes del SDK de VisioForge
+## Instalar paquetes del SDK de VisioForge
 
-Después de crear tu proyecto, el siguiente paso es instalar los paquetes del SDK de VisioForge necesarios vía NuGet. Estos paquetes contienen la funcionalidad principal y los componentes de UI requeridos para operaciones multimedia.
+Después de crear su proyecto, el siguiente paso es instalar los paquetes del SDK de VisioForge necesarios vía NuGet. Estos paquetes contienen la funcionalidad principal y los componentes de UI requeridos para operaciones multimedia.
 
-### Agregando el Paquete Principal del SDK
+### Agregar el paquete principal del SDK
 
-Cada línea de productos de VisioForge tiene un paquete principal dedicado que contiene la funcionalidad central. Necesitarás elegir el paquete apropiado según tus requisitos de desarrollo.
+Cada línea de productos de VisioForge tiene un paquete principal dedicado que contiene la funcionalidad central. Necesitará elegir el paquete apropiado según sus requisitos de desarrollo.
 
-1. Haz clic derecho en tu proyecto en el Solution Explorer.
-2. Selecciona **Manage NuGet Packages** del menú contextual.
-3. Haz clic en la pestaña **Browse** en el NuGet Package Manager.
+1. Haga clic derecho en su proyecto en el Solution Explorer.
+2. Seleccione **Manage NuGet Packages** del menú contextual.
+3. Haga clic en la pestaña **Browse** en el NuGet Package Manager.
 4. En el cuadro de búsqueda, escribe "VisioForge" para encontrar todos los paquetes disponibles.
-5. Selecciona uno de los siguientes paquetes según tus requisitos:
+5. Seleccione uno de los siguientes paquetes según sus requisitos:
 
 Paquetes NuGet disponibles:
 
@@ -89,16 +89,16 @@ Paquetes NuGet disponibles:
 - [VisioForge.DotNet.MediaPlayer](https://www.nuget.org/packages/VisioForge.DotNet.MediaPlayer) - Para reproducción de medios y streaming
 - [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks) - Para flujos de trabajo avanzados de procesamiento de medios
 
-6. Haz clic en **Add Package** para instalar tu paquete seleccionado.
+6. Haga clic en **Add Package** para instalar su paquete seleccionado.
 7. Acepta cualquier acuerdo de licencia que aparezca.
 
-El proceso de instalación resolverá automáticamente las dependencias y agregará referencias a tu proyecto.
+El proceso de instalación resolverá automáticamente las dependencias y agregará referencias a su proyecto.
 
 ![Instalando el paquete principal del SDK vía NuGet](vsmac2.webp)
 
 ### Controles de UI para Apple
 
-Para aplicaciones macOS e iOS, los controles específicos de Apple (`VideoView`, `GLView`) **se distribuyen dentro del paquete principal `VisioForge.DotNet.Core`** — no existe un paquete NuGet `UI.Apple` separado. Una vez agregado `VisioForge.DotNet.Core` arriba, usa los controles mediante el espacio de nombres `VisioForge.Core.UI.Apple`:
+Para aplicaciones macOS e iOS, los controles específicos de Apple (`VideoView`, `GLView`) **se distribuyen dentro del paquete principal `VisioForge.DotNet.Core`** — no existe un paquete NuGet `UI.Apple` separado. Una vez agregado `VisioForge.DotNet.Core` arriba, use los controles mediante el espacio de nombres `VisioForge.Core.UI.Apple`:
 
 ```csharp
 using VisioForge.Core.UI.Apple;
@@ -106,21 +106,21 @@ using VisioForge.Core.UI.Apple;
 
 ![Agregando el paquete principal — la UI de Apple viaja dentro de él](vsmac3.webp)
 
-## Integrando Capacidades de Vista Previa de Video
+## Integrar capacidades de vista previa de video
 
 La mayoría de las aplicaciones multimedia requieren funcionalidad de vista previa de video. Los SDKs de VisioForge proporcionan controles especializados para este propósito que se integran perfectamente con aplicaciones macOS.
 
-### Agregando el Control VideoView
+### Agregar el control VideoView
 
-El control VideoView es el componente principal para mostrar contenido de video en tu aplicación. Aquí está cómo agregarlo a tu interfaz:
+El control VideoView es el componente principal para mostrar contenido de video en su aplicación. Aquí está cómo agregarlo a su interfaz:
 
-1. Abre el archivo de storyboard principal de tu aplicación haciendo doble clic en el Solution Explorer.
+1. Abra el archivo de storyboard principal de su aplicación haciendo doble clic en el Solution Explorer.
 2. Visual Studio para Mac abrirá XCode Interface Builder para edición de storyboard.
 3. Desde la Object Library, encuentra el control **Custom View**.
-4. Arrastra el control Custom View a tu ventana donde quieres que aparezca el video.
-5. Establece restricciones apropiadas para asegurar dimensionamiento y posicionamiento adecuados.
-6. Usando el Identity Inspector, establece un nombre descriptivo para tu Custom View (por ejemplo, "videoViewHost").
-7. Guarda tus cambios y regresa a Visual Studio para Mac.
+4. Arrastre el control Custom View a su ventana donde quiere que aparezca el video.
+5. Establezca restricciones apropiadas para asegurar dimensionamiento y posicionamiento adecuados.
+6. Usando el Identity Inspector, establezca un nombre descriptivo para su Custom View (por ejemplo, "videoViewHost").
+7. Guarde sus cambios y regrese a Visual Studio para Mac.
 
 Este Custom View servirá como contenedor para el control VideoView de VisioForge, que se agregará programáticamente.
 
@@ -128,19 +128,19 @@ Este Custom View servirá como contenedor para el control VideoView de VisioForg
 
 ![Estableciendo propiedades para el Custom View](vsmac5.webp)
 
-### Inicializando el VideoView en Código
+### Inicializar el VideoView en código
 
-Después de agregar el Custom View contenedor, necesitas inicializar el control VideoView programáticamente:
+Después de agregar el Custom View contenedor, necesita inicializar el control VideoView programáticamente:
 
-1. Abre tu archivo ViewController.cs.
-2. Agrega las directivas using necesarias en la parte superior del archivo:
+1. Abra su archivo ViewController.cs.
+2. Agregue las directivas using necesarias en la parte superior del archivo:
 
 ```csharp
 using VisioForge.Core.UI.Apple;
 using CoreGraphics;
 ```
 
-3. Agrega un campo privado a tu clase ViewController para mantener la referencia del VideoView:
+3. Agregue un campo privado a su clase ViewController para mantener la referencia del VideoView:
 
 ```csharp
 private VideoView _videoView;
@@ -166,8 +166,8 @@ public override void ViewDidLoad()
 
 private async void InitializeMediaComponents()
 {
-    // Inicializa tus componentes del SDK de VisioForge aquí. En macOS, siempre
-    // usa los motores X multiplataforma — los clásicos VideoCaptureCore /
+    // Inicializar sus componentes del SDK de VisioForge aquí. En macOS, siempre
+    // usar los motores X multiplataforma — los clásicos VideoCaptureCore /
     // MediaPlayerCore / VideoEditCore son solo Windows.
     await VisioForgeX.InitSDKAsync();
 
@@ -179,39 +179,39 @@ private async void InitializeMediaComponents()
 }
 ```
 
-Este código crea una instancia de `VideoView`, la dimensiona para coincidir con tu vista contenedora y la agrega como subvista. La propiedad `AutoresizingMask` asegura que la vista de video se redimensione correctamente cuando cambia el tamaño de la ventana.
+Este código crea una instancia de `VideoView`, la dimensiona para coincidir con su vista contenedora y la agrega como subvista. La propiedad `AutoresizingMask` asegura que la vista de video se redimensione correctamente cuando cambia el tamaño de la ventana.
 
-## Agregando Paquetes de Redistribución Requeridos
+## Agregar paquetes de redistribución requeridos
 
-Los SDKs de VisioForge dependen de varias bibliotecas nativas y componentes que deben incluirse en el bundle de tu aplicación. Estas dependencias varían según el SDK específico que estés usando y tu plataforma objetivo.
+Los SDKs de VisioForge dependen de varias bibliotecas nativas y componentes que deben incluirse en el bundle de su aplicación. Estas dependencias varían según el SDK específico que esté usando y su plataforma objetivo.
 
-Consulta la [documentación de despliegue](../deployment-x/index.md) para información detallada sobre qué paquetes de redistribución se requieren para tu escenario específico.
+Consulte la [documentación de despliegue](../deployment-x/index.md) para información detallada sobre qué paquetes de redistribución se requieren para su escenario específico.
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-Si encuentras problemas durante la instalación o integración, considera estas soluciones comunes:
+Si encuentra problemas durante la instalación o integración, considere estas soluciones comunes:
 
-1. **Dependencias faltantes**: Asegúrate de que todos los paquetes de redistribución requeridos estén instalados
-2. **Errores de compilación**: Verifica que tu proyecto tenga como objetivo una versión compatible de .NET
-3. **Bloqueos en tiempo de ejecución**: Verifica problemas de inicialización específicos de la plataforma
-4. **Pantalla de video negra**: Verifica que el VideoView esté correctamente inicializado y agregado a la jerarquía de vistas
-5. **Problemas de rendimiento**: Considera habilitar la aceleración de hardware donde esté disponible
+1. **Dependencias faltantes**: Asegúrese de que todos los paquetes de redistribución requeridos estén instalados
+2. **Errores de compilación**: Verifique que su proyecto tenga como objetivo una versión compatible de .NET
+3. **Bloqueos en tiempo de ejecución**: Verifique problemas de inicialización específicos de la plataforma
+4. **Pantalla de video negra**: Verifique que el VideoView esté correctamente inicializado y agregado a la jerarquía de vistas
+5. **Problemas de rendimiento**: Considere habilitar la aceleración de hardware donde esté disponible
 
-Para guía de solución de problemas más específica, consulta la documentación de VisioForge o contacta a su equipo de soporte.
+Para guía de solución de problemas más específica, consulte la documentación de VisioForge o contacte a su equipo de soporte.
 
-## Próximos Pasos y Recursos
+## Próximos pasos y recursos
 
-Ahora que has integrado exitosamente los SDKs de VisioForge en tu proyecto de Visual Studio para Mac, puedes explorar características y capacidades más avanzadas:
+Ahora que ha integrado exitosamente los SDKs de VisioForge en su proyecto de Visual Studio para Mac, puede explorar características y capacidades más avanzadas:
 
 - Crear flujos de trabajo personalizados de procesamiento de video
 - Implementar funcionalidad de grabación y captura
 - Desarrollar características sofisticadas de edición de medios
 - Construir aplicaciones de medios de streaming
 
-### Recursos Adicionales
+### Recursos adicionales
 
-- Visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos de código y proyectos de ejemplo
-- Únete al [foro de desarrolladores](https://support.visioforge.com/) para conectar con otros desarrolladores
-- Suscríbete a nuestro boletín para actualizaciones sobre nuevas características y mejores prácticas
+- Visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos de código y proyectos de ejemplo
+- Únase al [foro de desarrolladores](https://support.visioforge.com/) para conectar con otros desarrolladores
+- Suscríbase a nuestro boletín para actualizaciones sobre nuevas características y mejores prácticas
 
-Siguiendo esta guía, has establecido una base sólida para desarrollar potentes aplicaciones multimedia en macOS e iOS usando SDKs de VisioForge y Visual Studio para Mac.
+Siguiendo esta guía, ha establecido una base sólida para desarrollar potentes aplicaciones multimedia en macOS e iOS usando SDKs de VisioForge y Visual Studio para Mac.

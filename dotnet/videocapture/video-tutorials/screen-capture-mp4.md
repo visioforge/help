@@ -32,7 +32,7 @@ primary_api_classes:
 
 # Screen capture to MP4 file
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## YouTube tutorial
 
@@ -526,4 +526,4 @@ The default frame rate is 10 FPS. Use 15 FPS for presentations, slides, and most
 - [Screen Source Configuration](../video-sources/screen.md) — full reference for capture region, multi-monitor, cursor, and frame rate settings
 - [Save Webcam Video](../guides/save-webcam-video.md) — webcam capture to MP4 with audio configuration
 - [Code Samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — additional screen capture code snippets on GitHub
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net) — product page and downloads
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — product page and downloads

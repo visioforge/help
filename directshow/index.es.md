@@ -1,5 +1,5 @@
 ---
-title: Filtros DirectShow para Reproducción, Codificación y Efectos
+title: Filtros DirectShow para reproducción, codificación y efectos
 description: Filtros DirectShow para reproducción FFmpeg/VLC, codificación H.264/H.265/NVENC, 35+ efectos de video, chroma key, cámara virtual y cifrado AES-256.
 tags:
   - DirectShow
@@ -10,65 +10,65 @@ order: 19
 sidebar_label: DirectShow SDKs and filters
 ---
 
-# SDKs y Filtros DirectShow para Desarrollo de Video
+# SDKs y Filtros DirectShow para desarrollo de video
 
-## Introducción a la Tecnología DirectShow
+## Introducción a la tecnología DirectShow
 
 La tecnología DirectShow permite a los desarrolladores crear aplicaciones multimedia robustas para capturar, procesar y reproducir contenido de video. Nuestra suite completa de filtros DirectShow y SDKs proporciona los bloques de construcción esenciales para desarrollar aplicaciones sofisticadas de procesamiento y reproducción de video con mínimo esfuerzo.
 
-## Soluciones de Reproducción y Decodificación
+## Soluciones de reproducción y decodificación
 
-### Filtros de Fuente de Alto Rendimiento
+### Filtros de fuente de alto rendimiento
 
-Nuestros potentes filtros de fuente permiten la reproducción fluida de diversos formatos de video en tus aplicaciones personalizadas. Construidos sobre bibliotecas estándar de la industria, estos filtros aseguran máxima compatibilidad y rendimiento.
+Nuestros potentes filtros de fuente permiten la reproducción fluida de diversos formatos de video en sus aplicaciones personalizadas. Construidos sobre bibliotecas estándar de la industria, estos filtros aseguran máxima compatibilidad y rendimiento.
 
-#### Filtro DirectShow de Fuente VLC
+#### Filtro DirectShow de fuente VLC
 
 El filtro de Fuente VLC ofrece capacidades de reproducción excepcionales para numerosos formatos de medios, aprovechando el versátil framework de medios VLC para un rendimiento óptimo y soporte de formato.
 
 - [Explorar Filtro DirectShow de Fuente VLC](vlc-source-filter/index.md)
 
-#### Filtro DirectShow de Fuente FFMPEG
+#### Filtro DirectShow de fuente FFMPEG
 
-Nuestros filtros basados en FFMPEG proporcionan compatibilidad de formato de medios sin igual, utilizando las bibliotecas FFMPEG ampliamente adoptadas para manejar virtualmente cualquier formato de video o audio en tus aplicaciones.
+Nuestros filtros basados en FFMPEG proporcionan compatibilidad de formato de medios sin igual, utilizando las bibliotecas FFMPEG ampliamente adoptadas para manejar virtualmente cualquier formato de video o audio en sus aplicaciones.
 
 - [Descubrir Filtro DirectShow de Fuente FFMPEG](ffmpeg-source-filters/index.md)
 
-## Soluciones de Codificación Avanzada
+## Soluciones de codificación avanzada
 
-### Filtros de Codificación Profesional
+### Filtros de codificación profesional
 
 Nuestros filtros de codificación permiten a los desarrolladores implementar codificación de video y audio de alta calidad directamente dentro de las aplicaciones. La suite soporta numerosos codecs estándar de la industria para máxima flexibilidad.
 
 - [Explorar el Pack Completo de Filtros de Codificación](filters-enc/index.md)
 
-## Procesamiento y Mejora de Video
+## Procesamiento y mejora de video
 
-### Filtros de Procesamiento Especializados
+### Filtros de procesamiento especializados
 
 Transforma y mejora el contenido de video con nuestros filtros de procesamiento que permiten rotación, escalado, gradación de color, capacidades de superposición y numerosos otros efectos visuales para crear salida de video de calidad profesional.
 
 - [Explorar Pack de Filtros de Procesamiento de Video](proc-filters/index.md)
 
-## Implementación de Cámara Virtual
+## Implementación de cámara virtual
 
-### SDK de Desarrollo de Cámara Virtual
+### SDK de desarrollo de cámara virtual
 
-Crea e integra dispositivos de cámara virtual en tus aplicaciones con nuestro SDK especializado. La cámara virtual se interfaz perfectamente con cualquier aplicación compatible con DirectShow, incluyendo software popular de videoconferencia.
+Cree e integre dispositivos de cámara virtual en sus aplicaciones con nuestro SDK especializado. La cámara virtual se interfaz perfectamente con cualquier aplicación compatible con DirectShow, incluyendo software popular de videoconferencia.
 
 - [Aprender sobre Virtual Camera SDK](virtual-camera-sdk/index.md)
 
-## Soluciones de Video Seguro
+## Soluciones de video seguro
 
-### SDK de Encriptación de Contenido de Video
+### SDK de encriptación de contenido de video
 
-Implementa protección robusta de contenido de video con nuestro SDK de encriptación. Asegura tus activos de video mientras mantienes la compatibilidad de reproducción con reproductores DirectShow estándar como Windows Media Player y MPC-BE.
+Implemente protección robusta de contenido de video con nuestro SDK de encriptación. Asegure sus activos de video mientras mantiene la compatibilidad de reproducción con reproductores DirectShow estándar como Windows Media Player y MPC-BE.
 
 - [Descubrir Video Encryption SDK](video-encryption-sdk/index.md)
 
-## Guías de Implementación
+## Guías de implementación
 
-### Documentación Técnica y Tutoriales
+### Documentación técnica y tutoriales
 
 Comienza rápidamente con nuestros tutoriales técnicos detallados diseñados específicamente para desarrolladores implementando componentes DirectShow:
 

@@ -1,6 +1,6 @@
 ---
-title: Grid RTSP Multi-Cámara en C# .NET para Muros NVR 4x4
-description: Construye un muro de cámaras RTSP estilo NVR 4×4 en C# / .NET con VisioForge Media Blocks SDK. Ejemplos WPF y MAUI, inicio sincronizado, baja latencia.
+title: Grid RTSP multi-cámara en C# .NET para muros NVR 4x4
+description: Construya un muro de cámaras RTSP estilo NVR 4×4 en C# / .NET con VisioForge Media Blocks SDK. Ejemplos WPF y MAUI, inicio sincronizado, baja latencia.
 tags:
   - Media Blocks SDK
   - .NET
@@ -30,21 +30,21 @@ primary_api_classes:
 
 ---
 
-# Grid RTSP Multi-Cámara — Muro NVR 4×4 en C# / .NET
+# Grid RTSP multi-cámara — muro NVR 4×4 en C# / .NET
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Soporte multiplataforma"
-    El Media Blocks SDK funciona en **Windows, macOS, Linux, Android e iOS** vía GStreamer — los ejemplos WPF y MAUI a continuación cubren toda la historia multiplataforma. Consulta la [matriz de soporte de plataformas](../../platform-matrix.md) para códecs y detalles de aceleración por hardware, y la [guía de despliegue en Linux](../../deployment-x/Ubuntu.md) para configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.
+    El Media Blocks SDK funciona en **Windows, macOS, Linux, Android e iOS** vía GStreamer — los ejemplos WPF y MAUI a continuación cubren toda la historia multiplataforma. Consulte la [matriz de soporte de plataformas](../../platform-matrix.md) para códecs y detalles de aceleración por hardware, y la [guía de despliegue en Linux](../../deployment-x/Ubuntu.md) para configuración en Ubuntu / NVIDIA Jetson / Raspberry Pi.
 
 Esta guía muestra cómo construir un grid de vista previa en vivo 4×4 (16 cámaras RTSP simultáneas) usando VisioForge Media Blocks SDK — el clásico layout NVR / muro de video / dashboard de vigilancia. Obtendrás una clase helper `RTSPPlayEngine` reutilizable más ejemplos completos de XAML + código para WPF y MAUI, incluyendo el patrón de inicio sincronizado que mantiene los 16 streams alineados cuadro a cuadro en pantalla.
 
-## Arquitectura — Un Pipeline por Cámara
+## Arquitectura — un pipeline por cámara
 
-Media Blocks SDK soporta dos formas de mostrar múltiples videos a la vez, y elegir la correcta importa:
+El Media Blocks SDK soporta dos formas de mostrar múltiples videos a la vez, y elegir la correcta importa:
 
 - **Un pipeline por cámara, un `VideoRendererBlock` por celda** (esta guía). Cada cámara obtiene su propio `MediaBlocksPipeline` + `RTSPSourceBlock` + `VideoRendererBlock`, y cada `VideoRendererBlock` dibuja en su propio `VideoView` en la UI. Esto es lo que un muro NVR necesita — 16 streams independientes, cada uno redimensionable, cada uno reiniciable por separado.
-- **Un pipeline con `VideoMixerBlock`** componiendo todas las fuentes en un único frame de salida. Útil cuando quieres un video único fusionado (transmitir todo el muro como un feed RTMP único, grabarlo como un MP4). No es lo que quieres para un grid de vista previa interactivo — pierdes el control independiente.
+- **Un pipeline con `VideoMixerBlock`** componiendo todas las fuentes en un único frame de salida. Útil cuando quiere un video único fusionado (transmitir todo el muro como un feed RTMP único, grabarlo como un MP4). No es lo que quiere para un grid de vista previa interactivo — pierde el control independiente.
 
 Esta guía usa el primer patrón. La topología para 16 cámaras:
 
@@ -60,7 +60,7 @@ Esta guía usa el primer patrón. La topología para 16 cámaras:
                            ... ×16 pipelines independientes ...
 ```
 
-## Paquetes NuGet Requeridos
+## Paquetes NuGet requeridos
 
 **WPF (Windows x64)**:
 
@@ -72,7 +72,7 @@ Esta guía usa el primer patrón. La topología para 16 cámaras:
 - [VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI/) — control `VideoView` de MAUI
 - Por plataforma: [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/), [VisioForge.CrossPlatform.Core.Android](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Android/), [VisioForge.CrossPlatform.Core.iOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.iOS/), [VisioForge.CrossPlatform.Core.macCatalyst](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macCatalyst/)
 
-## La Clase Helper Reutilizable `RTSPPlayEngine`
+## La clase helper reutilizable `RTSPPlayEngine`
 
 Tanto el ejemplo WPF como el MAUI usan la misma clase wrapper. Toma un `RTSPSourceSettings` ya configurado más un `IVideoView`, construye un grafo de reproducción de pipeline único, y expone métodos async de ciclo de vida más un evento `OnError`.
 
@@ -147,8 +147,8 @@ public class RTSPPlayEngine : IAsyncDisposable
 
 Los dos puntos de diseño clave:
 
-- **`IsSync = false`** en ambos renderizadores. Para vigilancia en vivo quieres comportamiento de descarte de frames tardíos, no el lipsync basado en reloj por defecto (que bloquearía toda la celda si un solo paquete llega tarde).
-- **`PreloadAsync` vs `StartAsync`**. `PreloadAsync` llama a `pipeline.StartAsync(true)` que precarga el pipeline al estado Pausado. Combinado con un `ResumeAsync` posterior, esto te permite arrancar las 16 cámaras, esperar hasta que cada una esté en su primer frame, y luego lanzarlas todas a Play a la vez — sin desfase en el muro.
+- **`IsSync = false`** en ambos renderizadores. Para vigilancia en vivo quiere comportamiento de descarte de frames tardíos, no el lipsync basado en reloj por defecto (que bloquearía toda la celda si un solo paquete llega tarde).
+- **`PreloadAsync` vs `StartAsync`**. `PreloadAsync` llama a `pipeline.StartAsync(true)` que precarga el pipeline al estado Pausado. Combinado con un `ResumeAsync` posterior, esto le permite arrancar las 16 cámaras, esperar hasta que cada una esté en su primer frame, y luego lanzarlas todas a Play a la vez — sin desfase en el muro.
 
 ## Ejemplo WPF — Grid 4×4
 
@@ -210,7 +210,7 @@ public partial class MainWindow : Window
     private readonly RTSPPlayEngine[] _engines = new RTSPPlayEngine[GridSize * GridSize];
     private readonly IVideoView[] _views;
 
-    // 16 URLs RTSP — reemplaza con las tuyas. Las URLs de servicio ONVIF también funcionan;
+    // 16 URLs RTSP — reemplazar con las suyas. Las URLs de servicio ONVIF también funcionan;
     // RTSPSourceSettings.CreateAsync las resolverá a RTSP internamente.
     private static readonly string[] Urls =
     {
@@ -466,7 +466,7 @@ public partial class MainPage : ContentPage
 
 ### Manifiesto Android
 
-Añade en `Platforms/Android/AndroidManifest.xml`:
+Añada en `Platforms/Android/AndroidManifest.xml`:
 
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
@@ -475,7 +475,7 @@ Añade en `Platforms/Android/AndroidManifest.xml`:
 
 ### iOS / MacCatalyst
 
-Añade al `.csproj` para que las dependencias de GStreamer carguen correctamente bajo el intérprete Mono:
+Añada al `.csproj` para que las dependencias de GStreamer carguen correctamente bajo el intérprete Mono:
 
 ```xml
 <PropertyGroup Condition="$(TargetFramework.Contains('-ios')) Or $(TargetFramework.Contains('-maccatalyst'))">
@@ -483,7 +483,7 @@ Añade al `.csproj` para que las dependencias de GStreamer carguen correctamente
 </PropertyGroup>
 ```
 
-## Inicio Sincronizado — Por Qué Preload + Resume
+## Inicio sincronizado — por qué Preload + Resume
 
 Si simplemente llamas a `StartAsync()` en 16 pipelines en un bucle, cada uno empezará a reproducir en el instante en que llegue su primer keyframe — y eso es un tiempo de reloj de pared diferente por cámara, dependiendo de la latencia del handshake RTSP y la cadencia de keyframes. El ojo detecta el desfase inmediatamente en una vista de muro.
 
@@ -493,11 +493,11 @@ El patrón Preload + Resume lo arregla:
 2. Polling hasta que `IsPaused()` sea true en las 16.
 3. `ResumeAsync()` en cada pipeline en rápida sucesión → todas las celdas se descongelan dentro del mismo frame.
 
-No necesitas este patrón si las cámaras muestran escenas no relacionadas (16 salas diferentes). Úsalo cuando la continuidad visual entre celdas importa (misma sala desde múltiples ángulos, reproducción sincronizada en tiempo, etc).
+No necesita este patrón si las cámaras muestran escenas no relacionadas (16 salas diferentes). Úselo cuando la continuidad visual entre celdas importa (misma sala desde múltiples ángulos, reproducción sincronizada en tiempo, etc).
 
 Para omitir la sincronización: reemplaza el bloque preload/resume por un único bucle que llame a `await engine.StartAsync()` en cada engine, secuencialmente o vía `Task.WhenAll`.
 
-## Ajuste de Rendimiento
+## Ajuste de rendimiento
 
 Para un muro de 16 cámaras responsivo, ajusta cada `RTSPSourceSettings`:
 
@@ -509,7 +509,7 @@ Para un muro de 16 cámaras responsivo, ajusta cada `RTSPSourceSettings`:
 
 En un escritorio gama media (CPU 8 cores + GPU integrada), un muro 4×4 720p H.264 se mantiene en aproximadamente 15–25% de CPU y ≤200 MB de RAM con estos ajustes.
 
-## Manejo de Errores
+## Manejo de errores
 
 La clase `RTSPPlayEngine` reenvía los errores del pipeline a través de su evento `OnError`. En una vista de muro la respuesta correcta es **registrar y mantener las otras 15 funcionando** — nunca derribar todo el grid por un fallo de una sola cámara.
 
@@ -548,19 +548,19 @@ if (fallbackSwitch.AudioOutput != null)
 
 Asignar solo `rtspSettings.FallbackSwitch` **no basta** en un pipeline de Media Blocks: un `RTSPSourceBlock` directamente no lo aplica y registra una advertencia al construirse; la propiedad declarativa la aplica `VideoCaptureCoreX`. Para la API completa de `FallbackSwitch` (tipos texto / imagen / media alternativo, timeouts ajustables, `ManualUnblock`) consulte la [guía dedicada de reconexión RTSP y fallback switch](../../general/network-sources/reconnection-and-fallback.md).
 
-## Documentación Relacionada
+## Documentación relacionada
 
 - [Configuración de fuente de cámara RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md) — referencia de `RTSPSourceSettings`, transporte UDP/TCP, ajuste de buffer
-- [Integración de cámara IP ONVIF](../../videocapture/video-sources/ip-cameras/onvif.md) — WS-Discovery y selección de perfiles para encontrar las URLs de sub-stream para tu muro
+- [Integración de cámara IP ONVIF](../../videocapture/video-sources/ip-cameras/onvif.md) — WS-Discovery y selección de perfiles para encontrar las URLs de sub-stream para su muro
 - [Reproductor RTSP mono-cámara](rtsp-player-csharp.md) — la versión de stream único de esta guía
 - [Guardar stream RTSP original](rtsp-save-original-stream.md) — grabar cualquiera / todos los 16 feeds a disco sin re-codificar
 - [Inmersión profunda en el protocolo RTSP](../../general/network-streaming/rtsp.md) — cómo funciona RTSP por dentro
-- [Bloque de salida de servidor RTSP](../RTSPServer/index.md) — servir tu propio muro compuesto como una única salida RTSP
+- [Bloque de salida de servidor RTSP](../RTSPServer/index.md) — servir su propio muro compuesto como una única salida RTSP
 
-## Proyectos de Ejemplo en GitHub
+## Proyectos de ejemplo en GitHub
 
 - [RTSP MultiViewSync Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20MultiViewSync%20Demo) — demo de sincronización de 3 cámaras en la que se basa esta guía
 - [RTSP MultiView Demo (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/RTSP%20MultiView%20Demo) — equivalente 3×3 en WinForms (sin sincronización)
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para más ejemplos de código Media Blocks SDK. ¿Necesitas la URL RTSP para tu cámara? Consulta nuestro [directorio de marcas de cámaras IP](../../camera-brands/index.md) cubriendo más de 60 fabricantes.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para más ejemplos de código Media Blocks SDK. ¿Necesita la URL RTSP para su cámara? Consulte nuestro [directorio de marcas de cámaras IP](../../camera-brands/index.md) cubriendo más de 60 fabricantes.

@@ -23,9 +23,9 @@ sidebar_label: Live Video Compositor
 
 # Compositor de Video en Vivo
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-El Compositor de Video en Vivo es parte del [VisioForge Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) que le permite agregar y eliminar fuentes y salidas en tiempo real a un pipeline.
+El Compositor de Video en Vivo es parte del [VisioForge Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) que le permite agregar y eliminar fuentes y salidas en tiempo real a un pipeline.
 
 Esto le permite crear aplicaciones que manejan simultáneamente múltiples fuentes de video y audio.
 
@@ -54,6 +54,7 @@ El `LiveVideoCompositor` es la clase principal que permite agregar y eliminar fu
 - `AudioEnabled`: Un booleano que indica si el flujo de audio está habilitado.
 - `VideoWidth`, `VideoHeight`, `VideoFrameRate`: Definen la resolución de video de salida y tasa de frames.
 - `AudioFormat`, `AudioSampleRate`, `AudioChannels`: Definen los parámetros de audio de salida.
+- `AudioMixerLatency`: Cuánto espera el mezclador de audio una entrada retrasada antes de mezclar sin ella. Por defecto 100 ms; `TimeSpan.Zero` espera solo la latencia que informan las entradas. Se lee una vez, al construir el compositor.
 - `VideoView`: Un `IVideoView` opcional para renderizar la salida de video directamente.
 - `AudioOutput`: Un `AudioRendererBlock` opcional para renderizar la salida de audio directamente.
 

@@ -32,7 +32,7 @@ El DirectShow Processing Filters Pack proporciona más de 35 efectos de video en
 - **Ajuste de Imagen** - Brillo, contraste, saturación
 - **Efectos Espaciales** - Voltear, espejo, rotar
 - **Efectos Artísticos** - Mármol, solarizar, posterizar, mosaico
-- **Ruido y Calidad** - Algoritmos de eliminación de ruido (CAST, adaptativo, mosquito)
+- **Ruido y Calidad** - Algoritmos de eliminación de ruido (CAST, adaptativo, mosquito, SNR)
 - **Desentrelazado** - Métodos de mezcla, triángulo, CAVT
 - **Efectos Creativos** - Desenfoque, sacudida, spray, invertir
 
@@ -457,13 +457,15 @@ Algoritmo de eliminación de ruido CAST (Combined Adaptive Spatial-Temporal).
 | `TemporalDifferenceThreshold` | 0-255 | 16 | Umbral de detección de movimiento |
 | `NumberOfMotionPixelsThreshold` | 0-16 | 0 | Píxeles mínimos para movimiento |
 | `StrongEdgeThreshold` | 0-255 | 8 | Preservación de bordes |
-| `BlockWidth` | 1-16 | 4 | Ancho de bloque de procesamiento |
+| `BlockWidth` | 1-16 | 4 | Ancho de bloque de procesamiento, en píxeles |
 | `BlockHeight` | 1-16 | 4 | Alto de bloque de procesamiento |
 | `EdgePixelWeight` | 0-255 | 128 | Peso de mezcla de bordes |
 | `NonEdgePixelWeight` | 0-255 | 16 | Peso de área suave |
-| `GaussianThresholdY` | int | 12 | Umbral de ruido Luma |
-| `GaussianThresholdUV` | int | 6 | Umbral de ruido Croma |
+| `GaussianThresholdY` | 0-255 | 12 | Umbral de ruido espacial, aplicado a cada uno de los canales B, G y R |
+| `GaussianThresholdUV` | 0-255 | 6 | No se usa: el filtro trabaja con RGB24, que no tiene canales de croma |
 | `HistoryWeight` | 0-255 | 192 | Fuerza de filtrado temporal |
+
+Un `BlockWidth` o `BlockHeight` de 0 indica que la estructura no se ha rellenado: el filtro usa entonces el valor predeterminado de todos los parámetros.
 
 **Casos de Uso**:
 - Limpieza de video con poca luz
@@ -472,15 +474,15 @@ Algoritmo de eliminación de ruido CAST (Combined Adaptive Spatial-Temporal).
 
 **Ejemplo (C++)**:
 ```cpp
-CVFEffect effect;
+CVFEffect effect = {};
 effect.Type = ef_denoise_cast;
 effect.Enabled = TRUE;
 
 // Reducción de ruido moderada
+effect.DenoiseCAST = { 16, 0, 8, 4, 4, 128, 16, 12, 6, 192 };
 effect.DenoiseCAST.TemporalDifferenceThreshold = 20;
 effect.DenoiseCAST.StrongEdgeThreshold = 10;
 effect.DenoiseCAST.GaussianThresholdY = 15;
-effect.DenoiseCAST.GaussianThresholdUV = 8;
 
 pEffects->add_effect(effect);
 ```
@@ -511,6 +513,21 @@ Reduce el ruido mosquito (artefactos de compresión alrededor de los bordes).
 - Limpiar video muy comprimido
 - Eliminar artefactos MPEG/H.264
 - Post-procesamiento para transmisión
+
+---
+### ef_denoise_snr
+
+Reducción de ruido espacial: suaviza el ruido aleatorio dentro del fotograma conservando los bordes. Cada canal de color se filtra por separado. Requiere Video Effects Pro y `VisioForge_MFP.dll` 2026.10.27.2 o posterior: un filtro anterior ignora el tipo, y el filtro no se carga con una `VisioForge_MFP.dll` anterior.
+
+**Tipo de Efecto**: `CVFEffectType.ef_denoise_snr`
+
+**Parámetros**:
+- `pDenoiseSNRThreshold` - Umbral de ruido (0-255). Valores más altos eliminan más ruido; rango típico 10-50
+
+**Casos de Uso**:
+- Ruido de cámara en un solo fotograma
+- Video con poca luz
+- Reducción de ruido sin depender de los fotogramas anteriores
 
 ---
 ### ef_color_noise
@@ -630,7 +647,7 @@ pEffects->add_effect(timestamp);
 - Desentrelazado simple
 **Alto Impacto** (15-40% CPU):
 - Desenfoque (radio grande)
-- Denoise (CAST, adaptativo)
+- Denoise (CAST, adaptativo, SNR)
 - Mosaico (bloques pequeños)
 - Mármol/efectos artísticos
 ### Consejos de Optimización

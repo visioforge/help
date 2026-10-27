@@ -1,5 +1,5 @@
 ---
-title: VisioForge SDK .NET — Matriz de Plataformas Soportadas
+title: VisioForge SDK .NET — Matriz de plataformas soportadas
 description: Matriz de soporte del SDK .NET de VisioForge para codecs de video/audio, aceleración de hardware y captura en Windows, Linux, macOS, Android, iOS.
 tags:
   - Video Capture SDK
@@ -15,9 +15,9 @@ tags:
 
 ---
 
-# SDK .NET: Características y Plataformas Soportadas
+# SDK .NET: características y plataformas soportadas
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Descubre el conjunto completo de características y amplia compatibilidad de plataformas de los SDKs .NET de VisioForge. Las tablas a continuación detallan formatos de entrada/salida soportados, codecs de video/audio, aceleración de hardware, dispositivos de captura y protocolos de red en Windows, Linux, macOS, Android e iOS.
 
@@ -110,7 +110,7 @@ La tabla a continuación muestra el soporte para codecs de audio en cada platafo
 | OPUS          | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | Wavpack       | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 
-También puedes usar cualquier otro codificador de audio o video disponible en FFMPEG o GStreamer.
+También puede usar cualquier otro codificador de audio o video disponible en FFMPEG o GStreamer.
 
 ## Dispositivos
 

@@ -26,7 +26,7 @@ primary_api_classes:
 
 # Création de formats de sortie vidéo personnalisés avec des filtres DirectShow
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 

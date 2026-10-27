@@ -367,13 +367,16 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
 
 | Plateforme | Architecture | Version .NET | Statut |
 |----------|-------------|-------------|---------|
-| Windows 10/11 | x86, x64, ARM64 | .NET Framework 4.6.1+, .NET 6+ | ✅ Prise en charge complète |
+| Windows 10/11 | x86, x64 | .NET Framework 4.6.1+, .NET 6+ | ✅ Prise en charge complète |
+| Windows 10/11 | ARM64 | .NET 6+ (une application .NET Framework s'exécute en x86, ou en x64 sous Windows 11) | ✅ Prise en charge complète |
 | Windows Server 2016+ | x64 | .NET Framework 4.6.1+, .NET 6+ | ✅ Prise en charge complète |
 | Ubuntu 20.04+ | x64, ARM64 | .NET 6+ | ✅ Prise en charge complète |
 | Debian 11+ | x64, ARM64 | .NET 6+ | ✅ Prise en charge complète |
 | RHEL/CentOS 8+ | x64 | .NET 6+ | ✅ Prise en charge complète |
-| macOS 12+ | x64, ARM64 | .NET 6+ | ✅ Prise en charge complète |
+| macOS 12+ | x64, ARM64 | .NET 9+ | ✅ Prise en charge complète |
 | Docker/Kubernetes | Basé sur Linux | .NET 6+ | ✅ Prise en charge complète |
+
+Sous .NET 5+, le framework cible choisit la version de la plateforme : `-windows` sous Windows (`net8.0-windows`), `-macos` sous macOS (`net9.0-macos` ou ultérieur). Un framework cible sans suffixe de système (`net8.0`) est la version Linux.
 
 ### Q : puis-je utiliser le SDK dans des conteneurs Docker ?
 
@@ -411,15 +414,7 @@ ENTRYPOINT ["dotnet", "YourProject.dll"]
 
 ### Q : existe-t-il des différences de performance selon les plateformes ?
 
-**R :** oui, les performances varient selon la plateforme :
-
-| Plateforme | Performance relative | Accélération matérielle |
-|----------|---------------------|----------------------|
-| Windows x64 | 100 % (référence) | NVENC, Quick Sync, D3D11 |
-| Linux x64 | 95 à 100 % | NVENC, VAAPI |
-| macOS Intel | 90 à 95 % | VideoToolbox |
-| macOS ARM64 | 85 à 90 % | VideoToolbox |
-| Windows ARM64 | 70 à 80 % | Limitée |
+**R :** l'algorithme d'empreinte est le même code portable sur toutes les plateformes et s'exécute sur le CPU : sa vitesse dépend du processeur, pas du système d'exploitation. Le décodage de la vidéo source ajoute son propre coût, qui dépend du fichier et des décodeurs de la plateforme. Pour dimensionner un déploiement, mesurez sur le matériel cible.
 
 ### Q : puis-je utiliser le SDK dans des environnements cloud ?
 
@@ -447,7 +442,7 @@ ENTRYPOINT ["dotnet", "YourProject.dll"]
 
 ### Q : puis-je utiliser le SDK dans une application web ?
 
-**R :** oui, pour le traitement côté serveur dans ASP.NET Core :
+**R :** oui, pour le traitement côté serveur dans ASP.NET Core sous Windows ou Linux (sous Windows, ajoutez `-windows` au framework cible, par exemple `net8.0-windows` : sans suffixe de système, c'est la version Linux) :
 
 ```csharp
 public class VideoFingerprintService

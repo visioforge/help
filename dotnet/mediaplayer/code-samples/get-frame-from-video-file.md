@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Extracting Video Frames from Video Files in .NET
 
-[Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Video frame extraction is a common requirement in many multimedia applications. Whether you're building a video editing tool, creating thumbnails, or performing video analysis, extracting specific frames from video files is an essential capability. This guide explains different approaches to capturing frames from video files in .NET applications.
 

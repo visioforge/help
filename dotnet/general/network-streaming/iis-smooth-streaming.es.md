@@ -1,5 +1,5 @@
 ---
-title: Guía de Configuración de IIS Smooth Streaming para Apps .NET
+title: Guía de configuración de IIS Smooth Streaming para apps .NET
 description: Configure Microsoft IIS Smooth Streaming en .NET con bitrate adaptativo, compatibilidad móvil y solución de problemas para entrega de video de calidad.
 tags:
   - Video Capture SDK
@@ -19,20 +19,20 @@ tags:
 
 ---
 
-# Guía Completa para Implementación de IIS Smooth Streaming
+# Guía completa para implementación de IIS Smooth Streaming
 
 IIS Smooth Streaming es la implementación de Microsoft de tecnología de transmisión adaptativa que ajusta dinámicamente la calidad de video basada en condiciones de red y capacidades de CPU. Esta guía proporciona instrucciones detalladas sobre configuración e implementación de IIS Smooth Streaming usando SDK de VisioForge.
 
 ## SDK de VisioForge Compatibles
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
 !!! warning "IIS Media Services e IIS Smooth Streaming no reciben mantenimiento"
     Microsoft retiró el feed de **Web Platform Installer** el 31 de diciembre de 2022 (consulte el [anuncio oficial](https://blogs.iis.net/iisteam/web-platform-installer-end-of-support-feed)) y eliminó **IIS Media Services 4.1** — el componente que proporciona Smooth Streaming — del portal de descargas de IIS. El cliente Silverlight que utiliza el reproductor de Smooth Streaming fue retirado por Microsoft el 12 de octubre de 2021. Para nuevos proyectos, use **[HLS](hls-streaming.md)** en su lugar: es el formato moderno de bitrate adaptativo compatible de forma nativa con navegadores y dispositivos móviles, y `MP4Output` / `HLSOutput` de VisioForge producen flujos HLS de forma directa. Las instrucciones siguientes permanecen disponibles únicamente para clientes que mantienen despliegues existentes de IIS Media Services 4.1.
 
-## Descripción General de IIS Smooth Streaming
+## Descripción general de IIS Smooth Streaming
 
 IIS Smooth Streaming proporciona varias ventajas clave para desarrolladores y usuarios finales:
 
@@ -54,7 +54,7 @@ Antes de implementar IIS Smooth Streaming con SDK de VisioForge, asegúrese de t
 
 ## Configuración IIS Paso a Paso
 
-### Instalando Componentes Requeridos
+### Instalar los componentes requeridos
 
 1. Instale [Web Platform Installer](https://blogs.iis.net/iisteam/web-platform-installer-end-of-support-feed/) en su servidor.
 2. A través del Web Platform Installer, busque e instale IIS Media Services.
@@ -63,7 +63,7 @@ Antes de implementar IIS Smooth Streaming con SDK de VisioForge, asegúrese de t
 
 Este paquete de componentes incluye todos los módulos necesarios para funcionalidad Smooth Streaming, incluyendo el servicio Live Smooth Streaming Publishing.
 
-### Configurando IIS Manager
+### Configurar IIS Manager
 
 1. Abra IIS Manager en su servidor a través del menú Inicio o ejecutando `inetmgr` en el diálogo Ejecutar.
 
@@ -71,7 +71,7 @@ Este paquete de componentes incluye todos los módulos necesarios para funcional
 
 2. En el panel de navegación izquierdo, localice y expanda el nombre de su servidor, luego seleccione el sitio donde desea habilitar Smooth Streaming.
 
-### Creando un Punto de Publicación
+### Crear un punto de publicación
 
 1. Dentro del sitio seleccionado, encuentre y abra la característica "Live Smooth Streaming Publishing Points".
 2. Haga clic en "Add" para crear un nuevo punto de publicación.
@@ -88,7 +88,7 @@ Este paquete de componentes incluye todos los módulos necesarios para funcional
 
 ![Ajustes adicionales de punto de publicación](https://www.visioforge.com/wp-content/uploads/2021/02/iis5.jpg)
 
-### Habilitando Soporte de Dispositivos Móviles
+### Habilitar el soporte de dispositivos móviles
 
 Para asegurar que su contenido Smooth Streaming sea accesible en dispositivos móviles:
 
@@ -99,7 +99,7 @@ Para asegurar que su contenido Smooth Streaming sea accesible en dispositivos m�
 
 Esta configuración genera los formatos y manifiestos necesarios para reproducción móvil, expandiendo significativamente el alcance de su contenido.
 
-### Configurando el Reproductor
+### Configurar el reproductor
 
 Para proporcionar a los espectadores una forma de ver su contenido Smooth Streaming:
 
@@ -131,18 +131,18 @@ mediaurl=http://localhost/mainstream.isml/manifest" />
 
 Esta configuración inicializa el reproductor Silverlight con ajustes óptimos para reproducción Smooth Streaming. El parámetro `mediaurl` debería apuntar al manifiesto de su punto de publicación.
 
-### Iniciando el Punto de Publicación
+### Iniciar el punto de publicación
 
 1. Regrese a IIS Manager y seleccione su punto de publicación configurado.
 2. Haga clic en la acción "Start" en el panel derecho.
 
 El punto de publicación ahora estará activo y listo para recibir contenido de su aplicación.
 
-## Implementando Smooth Streaming en Aplicaciones SDK de VisioForge
+## Implementar Smooth Streaming en aplicaciones SDK de VisioForge
 
-### Configuración Básica
+### Configuración básica
 
-Configura una instancia existente de `VideoCaptureCore` (o `VideoEditCore`) para publicar en tu punto de publicación IIS usando `NetworkStreamingFormat.SSF_H264_AAC_SW` (Smooth Streaming, H.264 + AAC, codificación por software):
+Configure una instancia existente de `VideoCaptureCore` (o `VideoEditCore`) para publicar en su punto de publicación IIS usando `NetworkStreamingFormat.SSF_H264_AAC_SW` (Smooth Streaming, H.264 + AAC, codificación por software):
 
 ```csharp
 using VisioForge.Core.Types.Output;
@@ -152,7 +152,7 @@ using VisioForge.Core.VideoCapture;
 VideoCapture1.Network_Streaming_Enabled       = true;
 VideoCapture1.Network_Streaming_Audio_Enabled = true;
 
-// Elige el formato Smooth Streaming. Usa SSF_FFMPEG_EXE si prefieres codificación basada en FFMPEG.
+// Elegir el formato Smooth Streaming. Usar SSF_FFMPEG_EXE si prefiere codificación basada en FFMPEG.
 VideoCapture1.Network_Streaming_Format = NetworkStreamingFormat.SSF_H264_AAC_SW;
 
 // URL del punto de publicación IIS creado arriba.
@@ -177,7 +177,7 @@ await VideoCapture1.StartAsync();
 
 ![Configurando Smooth Streaming en la demo del SDK](https://www.visioforge.com/wp-content/uploads/2021/02/iis7.jpg)
 
-### Verificando la Conexión
+### Verificar la conexión
 
 Una vez que su aplicación esté configurada:
 
@@ -190,7 +190,7 @@ Una vez que su aplicación esté configurada:
 
 ![Reproducción de flujo en navegador](https://www.visioforge.com/wp-content/uploads/2021/02/iis10.jpg)
 
-### Transmisión HTML5 para Dispositivos iOS
+### Transmisión HTML5 para dispositivos iOS
 
 Para compatibilidad de dispositivo más amplia, particularmente dispositivos iOS que no soportan Silverlight, cree un reproductor HTML5:
 
@@ -231,7 +231,7 @@ Para compatibilidad de dispositivo más amplia, particularmente dispositivos iOS
 
 Este reproductor HTML5 usa formato HLS (HTTP Live Streaming), que es generado automáticamente por IIS Media Services cuando habilita soporte de dispositivo móvil.
 
-## Redistribuibles Requeridos
+## Redistribuibles requeridos
 
 Para asegurar que su aplicación funcione correctamente con IIS Smooth Streaming, incluya los siguientes redistribuibles:
 
@@ -246,7 +246,7 @@ Puede agregar estos paquetes a través de NuGet Package Manager en Visual Studio
 Install-Package VisioForge.DotNet.Core.Redist.MP4.x64
 ```
 
-## Opciones de Configuración Avanzada
+## Opciones de configuración avanzada
 
 Para entornos de producción, considere estas configuraciones adicionales:
 
@@ -256,7 +256,7 @@ Para entornos de producción, considere estas configuraciones adicionales:
 - **Cifrado de contenido**: Habilite protección DRM para contenido sensible
 - **Balanceo de carga**: Configure múltiples puntos de publicación detrás de un balanceador de carga para escenarios de alto tráfico
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
 - **Fallos de conexión**: Verifique que la configuración de firewall permita tráfico en el puerto de transmisión (típicamente 80 o 443)
 - **Reproducción entrecortada**: Verifique recursos del servidor y considere aumentar ajustes de buffer

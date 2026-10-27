@@ -62,48 +62,48 @@ Todos los objetivos multiplataforma usan una pipeline de decodificación respald
 Paquete principal del SDK (siempre obligatorio):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
 ```
 
 Runtime nativo para Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
 ```
 
 Runtime nativo para Windows x86:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.26]"/>
 ```
 
 macOS (nativo) y MacCatalyst (MAUI macOS):
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>
 ```
 
 Linux x64 (más GStreamer 1.22+ del sistema):
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
 
 Android e iOS:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
 ```
 
 Paquetes opcionales de frameworks de UI — agregue el que corresponda a su objetivo:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.26]"/>
 ```
 
 Guía completa de instalación por IDE: [install/index.md](../install/index.md).
@@ -223,7 +223,7 @@ Linux. En Linux x64, el paquete NuGet `VisioForge.CrossPlatform.Core.Linux.x64` 
 
 ### ¿Cuál es la diferencia entre `MediaPlayerCoreX` y `MediaPlayerCore`?
 
-`MediaPlayerCoreX` es el motor multiplataforma utilizado a lo largo de esta hoja de referencia — se ejecuta en Windows, macOS, Linux, Android e iOS mediante GStreamer y usa firmas de método asíncronas. `MediaPlayerCore` (sin `X`) es el motor DirectShow exclusivo de Windows con una API síncrona basada en eventos; sigue siendo un motor de primera clase y totalmente soportado (elígelo cuando tu objetivo sea solo Windows y necesites comportamiento específico de DirectShow). Para nuevos proyectos multiplataforma, prefiere `MediaPlayerCoreX`.
+`MediaPlayerCoreX` es el motor multiplataforma utilizado a lo largo de esta hoja de referencia — se ejecuta en Windows, macOS, Linux, Android e iOS mediante GStreamer y usa firmas de método asíncronas. `MediaPlayerCore` (sin `X`) es el motor DirectShow exclusivo de Windows con una API síncrona basada en eventos; sigue siendo un motor de primera clase y totalmente soportado (elíjalo cuando su objetivo sea solo Windows y necesite comportamiento específico de DirectShow). Para nuevos proyectos multiplataforma, prefiere `MediaPlayerCoreX`.
 
 ### ¿Cómo reproduzco audio sin mostrar una ventana de video?
 

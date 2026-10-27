@@ -24,7 +24,7 @@ primary_api_classes:
 
 # Lecteur vidéo HLS pour ASP.NET Web Forms en C#
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Fonctionnement
 
@@ -59,10 +59,10 @@ Le contrôle construit et gère ce pipeline pour vous via `HlsStreamManager`. Il
 
 <ItemGroup>
   <Reference Include="System.Web" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.WebForms" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.WebForms" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 </ItemGroup>
 ```
 
@@ -215,4 +215,4 @@ namespace MyWebApp
 - [Bloc sink HLS](../Sinks/index.md#hls) - paramètres de `HLSSinkBlock` en détail
 - [Streaming HLS](../../general/network-streaming/hls-streaming.md) - le streaming HLS dans les différents SDK
 - [Visionneuse RTSP](rtsp-player-csharp.md) - sources RTSP et authentification
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net) - page produit et téléchargements
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) - page produit et téléchargements

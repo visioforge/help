@@ -15,7 +15,7 @@ primary_api_classes:
 
 # Guide d'utilisation d'OnVideoFrameBitmap en temps réel
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 L'événement `OnVideoFrameBitmap` est une fonctionnalité puissante des bibliothèques de traitement vidéo .NET qui permet aux développeurs d'accéder aux images vidéo et de les modifier en temps réel. Ce guide explore les applications pratiques, les techniques d'implémentation et les considérations de performance pour la manipulation d'images vidéo au format bitmap dans les applications C#.
 

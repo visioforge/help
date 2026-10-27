@@ -1,6 +1,6 @@
 ---
-title: Superposiciones de Imagen en Videos .NET con C# y SDK
-description: Añade superposiciones de imagen a videos con guía paso a paso. Incluye ejemplos de código para posicionamiento, transparencia y temporización.
+title: Superposiciones de imagen en videos .NET con C# y SDK
+description: Añada superposiciones de imagen a videos con guía paso a paso. Incluye ejemplos de código para posicionamiento, transparencia y temporización.
 tags:
   - Video Edit SDK
   - .NET
@@ -18,15 +18,15 @@ primary_api_classes:
   - VideoEffectImageLogo
 ---
 
-# Añadir Superposiciones de Imagen a Videos en .NET
+# Añadir superposiciones de imagen a videos en .NET
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCoreX](#){ .md-button }
 
-## Introducción a las Superposiciones de Imagen
+## Introducción a las superposiciones de imagen
 
-Nuestro SDK .NET proporciona una potente funcionalidad para añadir superposiciones de imagen a tus proyectos de video. Con esta característica, los desarrolladores pueden integrar sin problemas logotipos, marcas de agua, gráficos y otros elementos visuales en el contenido de video. El SDK ofrece amplias opciones de personalización incluyendo posicionamiento preciso, ajuste de transparencia y control de temporización.
+Nuestro SDK .NET proporciona una potente funcionalidad para añadir superposiciones de imagen a sus proyectos de video. Con esta característica, los desarrolladores pueden integrar sin problemas logotipos, marcas de agua, gráficos y otros elementos visuales en el contenido de video. El SDK ofrece amplias opciones de personalización incluyendo posicionamiento preciso, ajuste de transparencia y control de temporización.
 
-## Formatos de Archivo de Imagen Soportados
+## Formatos de archivo de imagen soportados
 
 El SDK es compatible con todos los formatos de imagen estándar utilizados en la producción de video profesional:
 
@@ -36,11 +36,11 @@ El SDK es compatible con todos los formatos de imagen estándar utilizados en la
 - PNG (Gráficos de Red Portátil)
 - TIFF (Formato de Archivo de Imagen Etiquetado)
 
-## Guía de Implementación
+## Guía de implementación
 
-A continuación encontrarás ejemplos de código detallados que demuestran cómo implementar superposiciones de imagen en tus aplicaciones de procesamiento de video usando nuestro SDK.
+A continuación encontrará ejemplos de código detallados que demuestran cómo implementar superposiciones de imagen en sus aplicaciones de procesamiento de video usando nuestro SDK.
 
-### Usando el Motor VideoEditCoreX
+### Usar el motor VideoEditCoreX
 
 El siguiente ejemplo de código demuestra cómo añadir una superposición de imagen con posicionamiento personalizado, transparencia y temporización usando el motor VideoEditCoreX:
 
@@ -63,14 +63,14 @@ imageOverlay.StopTime = TimeSpan.FromSeconds(5);
 VideoEdit1.Video_Effects.Add(imageOverlay);
 ```
 
-### Usando el Motor VideoEditCore
+### Usar el motor VideoEditCore
 
 Para desarrolladores que trabajan con el motor VideoEditCore, aquí está cómo lograr la misma funcionalidad:
 
 ```cs
 var effect = new VideoEffectImageLogo(true, "Logo1");
 
-// apunta al archivo de imagen (o asigna effect.MemoryBitmap para datos de imagen en memoria)
+// apuntar al archivo de imagen (o asignar effect.MemoryBitmap para datos de imagen en memoria)
 effect.Filename = "logo.png";
 
 // establecer posición
@@ -87,15 +87,15 @@ effect.StopTime = TimeSpan.FromSeconds(15);
 VideoEdit1.Video_Effects_Add(effect);
 ```
 
-## Opciones de Configuración Avanzadas
+## Opciones de configuración avanzadas
 
-Al implementar superposiciones de imagen, considera estas opciones de configuración adicionales:
+Al implementar superposiciones de imagen, considere estas opciones de configuración adicionales:
 
-- **Posicionamiento**: Ajusta los valores X/Y o Left/Top para colocar tu superposición con precisión
-- **Transparencia**: Configura Alpha o TransparencyLevel para controlar la opacidad de la superposición
-- **Temporización**: Establece StartTime y StopTime para determinar cuándo aparece y desaparece la superposición
-- **Tamaño**: Puedes redimensionar las superposiciones para ajustarse a tus requisitos específicos
+- **Posicionamiento**: Ajuste los valores X/Y o Left/Top para colocar su superposición con precisión
+- **Transparencia**: Configure Alpha o TransparencyLevel para controlar la opacidad de la superposición
+- **Temporización**: Establezca StartTime y StopTime para determinar cuándo aparece y desaparece la superposición
+- **Tamaño**: Puede redimensionar las superposiciones para ajustarse a sus requisitos específicos
 
-## Recursos Adicionales
+## Recursos adicionales
 
-Para más ejemplos de código y guías de implementación, visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para más ejemplos de código y guías de implementación, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

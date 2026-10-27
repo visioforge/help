@@ -1,6 +1,6 @@
 ---
 title: Grabar un flujo UDP MPEG-TS sin recodificar en C# .NET
-description: Remultiplexa un flujo UDP MPEG-TS (H.264/HEVC + AAC) a MP4 o MPEG-TS sin transcodificar con VisioForge Media Blocks SDK. Captura passthrough en C#.
+description: Remultiplexe un flujo UDP MPEG-TS (H.264/HEVC + AAC) a MP4 o MPEG-TS sin transcodificar con VisioForge Media Blocks SDK. Captura passthrough en C#.
 sidebar_label: Grabación UDP MPEG-TS
 tags:
   - Media Blocks SDK
@@ -35,12 +35,12 @@ primary_api_classes:
 
 # Cómo grabar un flujo UDP MPEG-TS en archivo sin recodificar
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!!info Ejemplo de demostración
-Para un ejemplo completo y ejecutable, consulta la [demo UDP RAW Capture](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/UDP%20RAW%20Capture%20Demo).
+Para un ejemplo completo y ejecutable, consulte la [demo UDP RAW Capture](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/UDP%20RAW%20Capture%20Demo).
 
-Para los fundamentos del streaming UDP (lado emisor, contenedor, multicast), consulta la [guía de streaming UDP](../../general/network-streaming/udp.md).
+Para los fundamentos del streaming UDP (lado emisor, contenedor, multicast), consulte la [guía de streaming UDP](../../general/network-streaming/udp.md).
 !!!
 
 ## Tabla de contenidos
@@ -62,7 +62,7 @@ Para los fundamentos del streaming UDP (lado emisor, contenedor, multicast), con
 
 ## Resumen
 
-Esta guía muestra cómo recibir un flujo UDP MPEG-TS y escribirlo en un archivo **sin recodificar** el vídeo ni el audio. Muchos codificadores, equipos de hardware y feeds de contribución de difusión envían vídeo H.264 o H.265 junto con audio AAC por UDP dentro de un flujo de transporte MPEG. Cuando solo necesitas grabar ese feed, decodificarlo y recodificarlo desperdicia CPU y degrada la calidad. El **remultiplexado** —también llamado copia de flujo o captura passthrough— traslada los paquetes ya comprimidos a un nuevo contenedor, de modo que la grabación es idéntica bit a bit a lo que llegó por la red.
+Esta guía muestra cómo recibir un flujo UDP MPEG-TS y escribirlo en un archivo **sin recodificar** el vídeo ni el audio. Muchos codificadores, equipos de hardware y feeds de contribución de difusión envían vídeo H.264 o H.265 junto con audio AAC por UDP dentro de un flujo de transporte MPEG. Cuando solo necesita grabar ese feed, decodificarlo y recodificarlo desperdicia CPU y degrada la calidad. El **remultiplexado** —también llamado copia de flujo o captura passthrough— traslada los paquetes ya comprimidos a un nuevo contenedor, de modo que la grabación es idéntica bit a bit a lo que llegó por la red.
 
 VisioForge Media Blocks SDK convierte esto en un pipeline corto: un `UDPRAWSourceBlock` escucha en un puerto UDP, demultiplexa el flujo de transporte y expone los flujos elementales codificados en sus pads de salida. Conectas esos pads directamente a un sink MP4 o MPEG-TS y el SDK multiplexa los datos al disco. Sin decodificador, sin codificador, con un uso mínimo de CPU.
 
@@ -86,7 +86,7 @@ Un feed UDP MPEG-TS transporta uno o más flujos elementales (vídeo codificado,
 3. Marcar cada búfer con una marca de tiempo de presentación (PTS) válida — los multiplexores estrictos como `mp4mux` rechazan los búferes que no la tienen.
 4. Multiplexar los flujos codificados en el contenedor de destino.
 
-`UDPRAWSourceBlock` realiza los pasos 1–3 por ti. En modo `Auto`/`MPEGTS` pasa el flujo de transporte por una cadena de analizadores (`h264parse`/`h265parse` para vídeo, `aacparse` para audio) que infiere e interpola las marcas de tiempo, de modo que los búferes que salen de la fuente ya están listos para multiplexar. Solo conectas la fuente a un sink:
+`UDPRAWSourceBlock` realiza los pasos 1–3 por usted. En modo `Auto`/`MPEGTS` pasa el flujo de transporte por una cadena de analizadores (`h264parse`/`h265parse` para vídeo, `aacparse` para audio) que infiere e interpola las marcas de tiempo, de modo que los búferes que salen de la fuente ya están listos para multiplexar. Solo conecte la fuente a un sink:
 
 ```mermaid
 graph LR;
@@ -96,20 +96,20 @@ graph LR;
 
 ## Requisitos previos
 
-Añade el Media Blocks SDK a tu proyecto mediante NuGet:
+Añada el Media Blocks SDK a su proyecto mediante NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
 ```
 
-En Windows también necesitas los paquetes de runtime nativo. Para grabar (multiplexar) necesitas el runtime principal; el paquete Libav aporta los multiplexores:
+En Windows también necesita los paquetes de runtime nativo. Para grabar (multiplexar) necesita el runtime principal; el paquete Libav aporta los multiplexores:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.20]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
 ```
 
-Para los paquetes de runtime de macOS, Linux, Android e iOS y las notas específicas de cada plataforma, consulta la [Guía de despliegue](../../deployment-x/index.md).
+Para los paquetes de runtime de macOS, Linux, Android e iOS y las notas específicas de cada plataforma, consulte la [Guía de despliegue](../../deployment-x/index.md).
 
 ## Ejemplo de código: clase UDPRemuxRecorder
 
@@ -219,7 +219,7 @@ namespace UDPCaptureSample
 
 ## Explicación del código
 
-- **`VisioForgeX.InitSDKAsync()`** inicializa el SDK una vez por proceso. Llama a `VisioForgeX.DestroySDK()` cuando tu aplicación se cierre.
+- **`VisioForgeX.InitSDKAsync()`** inicializa el SDK una vez por proceso. Llame a `VisioForgeX.DestroySDK()` cuando su aplicación se cierre.
 - **`UDPRAWSourceSettings`** recibe la URL de escucha. `Mode = UDPRAWSourceMode.Auto` permite que la fuente detecte el contenedor MPEG-TS y exponga los flujos codificados; `UDPRAWSourceMode.MPEGTS` fuerza el mismo comportamiento de forma explícita. Establecer `AudioEnabled = true` indica a la fuente que exponga el flujo elemental de audio en `AudioOutput`.
 - **`_source.VideoOutput`** siempre transporta el vídeo codificado (H.264 o H.265) — no se produce decodificación. **`_source.AudioOutput`** solo es no nulo cuando `AudioEnabled` es `true` y el modo es `Auto`/`MPEGTS`; transporta el audio AAC codificado.
 - **`MP4SinkBlock` implementa `IMediaBlockDynamicInputs`**, por lo que llamas a `CreateNewInput(MediaBlockPadMediaType.Video)` / `CreateNewInput(MediaBlockPadMediaType.Audio)` para añadir un pad de entrada por pista y luego conectas el pad de origen correspondiente.
@@ -293,7 +293,7 @@ El marcador `%05d` del patrón de ubicación se sustituye por el índice de segm
 
 ## Añadir una vista previa en vivo
 
-Puedes grabar y previsualizar simultáneamente ramificando (tee) el vídeo codificado, enviando una rama al grabador y decodificando la otra para mostrarla. Esto refleja la [demo UDP RAW Capture](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/UDP%20RAW%20Capture%20Demo):
+Puede grabar y previsualizar simultáneamente ramificando (tee) el vídeo codificado, enviando una rama al grabador y decodificando la otra para mostrarla. Esto refleja la [demo UDP RAW Capture](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/UDP%20RAW%20Capture%20Demo):
 
 ```csharp
 using VisioForge.Core.MediaBlocks.Special;
@@ -320,16 +320,16 @@ La rama de grabación sigue siendo un passthrough puro; solo la rama de vista pr
 
 - **Compatibilidad de contenedor/códec**: MP4 almacena bien H.264, H.265 y AAC — justo lo que transporta un feed de difusión UDP MPEG-TS típico. MPEG-TS (`.ts`) es más permisivo y más resistente ante una grabación que termina de forma abrupta (corte de corriente), porque no tiene un índice final que escribir.
 - **El audio es opcional**: si dejas `AudioEnabled = false`, `AudioOutput` permanece `null` y la grabación es solo de vídeo. Comprueba siempre `if (source.AudioOutput != null)` antes de conectar el audio.
-- **Multicast frente a unicast**: una dirección de grupo multicast en la URL (`224.0.0.0`–`239.255.255.255`) se une automáticamente; un enlace unicast (`0.0.0.0` o una IP local concreta) solo escucha. Asegúrate de que tu firewall permita el tráfico UDP entrante en el puerto elegido.
-- **Pérdida de paquetes**: UDP no retransmite. En una red con pérdidas puedes ver breves artefactos en la grabación; el multiplexor sigue funcionando y el archivo permanece válido.
+- **Multicast frente a unicast**: una dirección de grupo multicast en la URL (`224.0.0.0`–`239.255.255.255`) se une automáticamente; un enlace unicast (`0.0.0.0` o una IP local concreta) solo escucha. Asegúrese de que su firewall permita el tráfico UDP entrante en el puerto elegido.
+- **Pérdida de paquetes**: UDP no retransmite. En una red con pérdidas puede ver breves artefactos en la grabación; el multiplexor sigue funcionando y el archivo permanece válido.
 - **Liberación de recursos**: libera el grabador (y por tanto el pipeline) cuando termines, y llama a `VisioForgeX.DestroySDK()` una vez al cerrar la aplicación.
 
 ## Solución de problemas
 
-- **Archivo vacío o de duración cero** — normalmente significa que no llegaron datos. Confirma que el emisor apunta al mismo puerto, revisa el firewall y verifica que la URL sea el punto de escucha local (`0.0.0.0:puerto`), no la dirección del emisor.
-- **Errores `Could not multiplex` / del multiplexor** — indican búferes sin PTS. Usa `Mode = Auto` o `Mode = MPEGTS` para que la fuente inserte los analizadores que infieren las marcas de tiempo; no los omitas para un feed con contenedor.
+- **Archivo vacío o de duración cero** — normalmente significa que no llegaron datos. Confirme que el emisor apunta al mismo puerto, revise el firewall y verifique que la URL sea el punto de escucha local (`0.0.0.0:puerto`), no la dirección del emisor.
+- **Errores `Could not multiplex` / del multiplexor** — indican búferes sin PTS. Use `Mode = Auto` o `Mode = MPEGTS` para que la fuente inserte los analizadores que infieren las marcas de tiempo; no los omita para un feed con contenedor.
 - **Grabación sin sonido** — `AudioEnabled` se dejó en `false`, o el flujo no transporta audio, por lo que `AudioOutput` era `null` y no se conectó ningún pad de audio.
-- **No se recibe el flujo multicast** — puede que la red no enrute el grupo a tu host. Confirma la dirección multicast y que el switch/router la reenvíe; prueba primero con un enlace unicast.
+- **No se recibe el flujo multicast** — puede que la red no enrute el grupo a su host. Confirme la dirección multicast y que el switch/router la reenvíe; pruebe primero con un enlace unicast.
 - **Códec erróneo asumido en modo RTP/Raw** — los modos `Auto`/`MPEGTS` detectan el códec a partir del contenedor. Solo los modos `RTP` y `Raw` requieren que establezcas `VideoCodec` explícitamente.
 
 ## Preguntas frecuentes
@@ -344,11 +344,11 @@ Remultiplexar (copia de flujo/passthrough) copia los paquetes comprimidos a un n
 
 ### ¿Cómo grabo un flujo UDP multicast?
 
-Usa una dirección de grupo multicast en la URL, p. ej. `udp://239.1.1.1:1234`. La fuente se une al grupo automáticamente. Asegúrate de que tu red reenvíe el grupo multicast al host de grabación y de que el firewall permita el tráfico UDP entrante en el puerto.
+Use una dirección de grupo multicast en la URL, p. ej. `udp://239.1.1.1:1234`. La fuente se une al grupo automáticamente. Asegúrese de que su red reenvíe el grupo multicast al host de grabación y de que el firewall permita el tráfico UDP entrante en el puerto.
 
 ### ¿En qué contenedor debo grabar: MP4 o MPEG-TS?
 
-Usa MP4 cuando quieras un único archivo ampliamente compatible para H.264/H.265 + AAC. Usa MPEG-TS (`.ts`) cuando necesites la máxima flexibilidad de códecs o resistencia ante una parada abrupta, ya que TS no tiene un índice final que deba finalizarse.
+Use MP4 cuando quiera un único archivo ampliamente compatible para H.264/H.265 + AAC. Use MPEG-TS (`.ts`) cuando necesite la máxima flexibilidad de códecs o resistencia ante una parada abrupta, ya que TS no tiene un índice final que deba finalizarse.
 
 ### ¿Remultiplexar a MP4 conserva la calidad de vídeo original?
 

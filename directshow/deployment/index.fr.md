@@ -105,7 +105,7 @@ Déterminez les SDK utilisés par votre application :
 | SDK | Rôle | Fichier clé |
 |-----|---------|----------|
 | **FFMPEG Source** | Lecture multimédia, streaming | VisioForge_FFMPEG_Source_x64.ax |
-| **VLC Source** | Lecture multipiste | VisioForge_VLC_Source.ax |
+| **VLC Source** | Lecture multipiste | VisioForge_VLC_Source_x64.ax |
 | **Processing Filters** | Effets, mixage | VisioForge_Video_Effects_Pro_x64.ax |
 | **Encoding Filters** | Encodage vidéo | VisioForge_NVENC_x64.ax |
 | **Virtual Camera** | Périphériques virtuels | VisioForge_Virtual_Camera_x64.ax |
@@ -153,8 +153,13 @@ YourApp\
 
 ```batch
 @echo off
-cd /d "%~dp0Filters"
-regsvr32 /s VisioForge_FFMPEG_Source_x64.ax
+REM Verifier les privileges administrateur
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo ERREUR : ce script doit etre execute en tant qu'administrateur !
+    exit /b 1
+)
+regsvr32 /s "%~dp0Filters\VisioForge_FFMPEG_Source_x64.ax"
 if %ERRORLEVEL% EQU 0 (
     echo Enregistrement reussi
 ) else (

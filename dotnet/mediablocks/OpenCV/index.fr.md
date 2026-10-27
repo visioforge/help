@@ -18,7 +18,7 @@ primary_api_classes:
 
 # Blocs OpenCV - VisioForge Media Blocks SDK .Net
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Les blocs OpenCV (Open Source Computer Vision Library) offrent de puissantes capacités de traitement vidéo dans le VisioForge Media Blocks SDK .Net. Ces blocs permettent un large éventail de tâches de vision par ordinateur, de la manipulation d'image basique à la détection et au suivi d'objets complexes.
 

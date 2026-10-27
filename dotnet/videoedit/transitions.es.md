@@ -10,7 +10,7 @@ tags:
 
 # Transiciones
 
-[Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 La transición de Barrido SMPTE produce cualquiera de los barridos estándar definidos por la Sociedad de Ingenieros de Cine y Televisión (SMPTE) en el documento SMPTE 258M-1993, excepto el quad split.
 

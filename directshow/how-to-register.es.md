@@ -1,5 +1,5 @@
 ---
-title: Registro de Filtros DirectShow - IVFRegister en C++ y C#
+title: Registro de filtros DirectShow - IVFRegister en C++ y C#
 description: Registre filtros DirectShow y SDKs en C++, C# y Delphi con interfaz IVFRegister y ejemplos de código de registro alternativos.
 tags:
   - DirectShow
@@ -11,15 +11,15 @@ primary_api_classes:
 
 ---
 
-# Guía de Registro del SDK
+# Guía de registro del SDK
 
-Los filtros DirectShow y componentes del SDK frecuentemente requieren registro apropiado para funcionar correctamente dentro de tus aplicaciones. Esta guía proporciona métodos de implementación detallados para registrar filtros DirectShow a través de múltiples lenguajes de programación.
+Los filtros DirectShow y componentes del SDK frecuentemente requieren registro apropiado para funcionar correctamente dentro de sus aplicaciones. Esta guía proporciona métodos de implementación detallados para registrar filtros DirectShow a través de múltiples lenguajes de programación.
 
-## Descripción General del Registro
+## Descripción general del registro
 
 La mayoría de los filtros DirectShow en el SDK pueden registrarse usando la interfaz IVFRegister. Este enfoque estandarizado funciona consistentemente a través de entornos de desarrollo. Sin embargo, algunos filtros especializados (como los convertidores RGB2YUV) están diseñados para funcionar sin registro explícito.
 
-## Métodos de Registro por Lenguaje
+## Métodos de registro por lenguaje
 
 ### Implementación en C++
 
@@ -36,7 +36,7 @@ DEFINE_GUID(IID_IVFRegister,
 DECLARE_INTERFACE_(IVFRegister, IUnknown)
 {
     /// <summary>
-    /// Establece el registro.
+    /// Establecer el registro.
     /// </summary>
     /// <param name="licenseKey">
     /// Clave de Licencia.
@@ -63,7 +63,7 @@ Para desarrolladores .NET, la interfaz de registro puede importarse usando el si
     public interface IVFRegister
     {
         /// <summary>
-        /// Establece el registro.
+        /// Establecer el registro.
         /// </summary>
         /// <param name="licenseKey">
         /// Clave de Licencia.
@@ -75,7 +75,7 @@ Para desarrolladores .NET, la interfaz de registro puede importarse usando el si
 
 ### Implementación en Delphi
 
-Para desarrolladores Delphi, implementa la interfaz de registro de la siguiente manera:
+Para desarrolladores Delphi, implemente la interfaz de registro de la siguiente manera:
 
 ```pascal
 const
@@ -87,7 +87,7 @@ type
   /// </summary>
   IVFRegister = interface(IUnknown)
     /// <summary>
-    /// Establece el registro.
+    /// Establecer el registro.
     /// </summary>
     /// <param name="licenseKey">
     /// Clave de Licencia.

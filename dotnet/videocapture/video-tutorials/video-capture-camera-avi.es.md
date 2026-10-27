@@ -1,6 +1,6 @@
 ---
 title: Captura de video de webcam a AVI en aplicaciones C# .NET
-description: Implementa grabación de webcam a archivo AVI en .NET con tutorial paso a paso incluyendo ejemplo de código C# completo con async y selección de dispositivo.
+description: Implemente grabación de webcam a archivo AVI en .NET con tutorial paso a paso incluyendo ejemplo de código C# completo con async y selección de dispositivo.
 tags:
   - Video Capture SDK
   - .NET
@@ -22,47 +22,47 @@ primary_api_classes:
 
 ---
 
-# Grabación de Webcam a Archivo AVI en Aplicaciones .NET C#
+# Grabación de webcam a archivo AVI en aplicaciones .NET C#
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Descripción General
+## Descripción general
 
-Este tutorial demuestra cómo capturar video de una webcam y guardarlo directamente a formato de archivo AVI en tus aplicaciones .NET. La implementación usa técnicas de programación asíncrona para una respuesta de UI fluida y proporciona un enfoque de arquitectura limpia adecuado para desarrollo de software profesional.
+Este tutorial demuestra cómo capturar video de una webcam y guardarlo directamente a formato de archivo AVI en sus aplicaciones .NET. La implementación usa técnicas de programación asíncrona para una respuesta de UI fluida y proporciona un enfoque de arquitectura limpia adecuado para desarrollo de software profesional.
 
-## Tutorial en Video
+## Tutorial en video
 
-Mira nuestro tutorial de video detallado cubriendo el proceso de implementación:
+Mire nuestro tutorial de video detallado cubriendo el proceso de implementación:
 
 <div class="video-wrapper">
   <iframe src="https://www.youtube.com/embed/8yFKz1QOJbk?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
-## Repositorio de Código Fuente
+## Repositorio de código fuente
 
-Accede al código fuente completo desde nuestro repositorio oficial de GitHub:
+Acceda al código fuente completo desde nuestro repositorio oficial de GitHub:
 
 [Código fuente en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/video-capture-webcam-avi)
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Antes de implementar esta solución, asegúrate de haber instalado las dependencias necesarias:
+Antes de implementar esta solución, asegúrese de haber instalado las dependencias necesarias:
 
 - Redistribuibles de captura de video:
   - [Versión x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
   - [Versión x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-## Detalles de Implementación
+## Detalles de implementación
 
 ### Prerrequisitos
 
-Antes de comenzar, asegúrate de tener:
+Antes de comenzar, asegúrese de tener:
 
 - Visual Studio con herramientas de desarrollo .NET
-- Una webcam conectada a tu máquina de desarrollo
+- Una webcam conectada a su máquina de desarrollo
 - Entendimiento básico de aplicaciones Windows Forms
 
-### Implementación de Código
+### Implementación de código
 
 El siguiente ejemplo demuestra una implementación completa para captura de webcam a archivo AVI:
 
@@ -140,19 +140,19 @@ namespace video_capture_webcam_avi
 
 ### Puntos Clave de Implementación
 
-#### Selección de Dispositivo
+#### Selección de dispositivo
 
-El ejemplo selecciona automáticamente los primeros dispositivos de video y audio disponibles. En una aplicación de producción, podrías querer presentar a los usuarios una lista de dispositivos disponibles para selección.
+El ejemplo selecciona automáticamente los primeros dispositivos de video y audio disponibles. En una aplicación de producción, podría querer presentar a los usuarios una lista de dispositivos disponibles para selección.
 
-#### Configuración de Salida de Archivo
+#### Configuración de salida de archivo
 
-El ejemplo guarda la salida a un archivo AVI en la carpeta Videos del usuario. Puedes personalizar la ruta y el nombre del archivo según los requisitos de tu aplicación.
+El ejemplo guarda la salida a un archivo AVI en la carpeta Videos del usuario. Puede personalizar la ruta y el nombre del archivo según los requisitos de su aplicación.
 
-#### Operación Asíncrona
+#### Operación asíncrona
 
 La implementación usa el patrón async/await para prevenir el congelamiento de la UI durante las operaciones de captura, lo cual es crítico para mantener una experiencia de aplicación receptiva.
 
-## Opciones de Personalización Avanzada
+## Opciones de personalización avanzada
 
 El SDK proporciona numerosas opciones de personalización incluyendo:
 
@@ -162,4 +162,4 @@ El SDK proporciona numerosas opciones de personalización incluyendo:
 - Efectos de video y transformaciones
 
 ---
-Visita nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código y explorar escenarios de implementación adicionales.
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código y explorar escenarios de implementación adicionales.

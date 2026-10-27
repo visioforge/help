@@ -23,7 +23,7 @@ sidebar_label: Audio Encoders
 
 # Bloques de codificadores de audio
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 La codificación de audio es el proceso de convertir datos de audio sin procesar a un formato comprimido. Este proceso es esencial para reducir el tamaño de los archivos de audio, haciéndolos más fáciles de almacenar y transmitir por internet. VisioForge Media Blocks SDK proporciona una amplia gama de codificadores de audio que soportan varios formatos y códecs.
 

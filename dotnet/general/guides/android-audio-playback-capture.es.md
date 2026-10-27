@@ -27,17 +27,17 @@ primary_api_classes:
 
 # Grabar el audio de otra aplicación en Android con C# y .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción
 
-Esta guía muestra cómo grabar el audio reproducido por **otra aplicación** en Android con C# y .NET. La captura utiliza la API `AudioPlaybackCapture` de Android junto con un token de consentimiento `MediaProjection` (Android 10 / API 29 y posteriores) y escribe el resultado en un archivo AAC `.m4a`. VisioForge expone la función a través de dos motores, de modo que puedes elegir el que mejor se adapte a tu aplicación: el de alto nivel `VideoCaptureCoreX` (grabación declarativa) y el de bajo nivel `MediaBlocksPipeline` (control total del grafo).
+Esta guía muestra cómo grabar el audio reproducido por **otra aplicación** en Android con C# y .NET. La captura utiliza la API `AudioPlaybackCapture` de Android junto con un token de consentimiento `MediaProjection` (Android 10 / API 29 y posteriores) y escribe el resultado en un archivo AAC `.m4a`. VisioForge expone la función a través de dos motores, de modo que puede elegir el que mejor se adapte a su aplicación: el de alto nivel `VideoCaptureCoreX` (grabación declarativa) y el de bajo nivel `MediaBlocksPipeline` (control total del grafo).
 
-Para la instalación y la configuración de los paquetes, consulta la [guía de instalación](../../install/index.md). Los proyectos de ejemplo de Android en los que se basa esta guía se incluyen con el SDK en `Video Capture SDK X/Android/Audio Playback Capture` y `Media Blocks SDK/Android/Audio Playback Capture`.
+Para la instalación y la configuración de los paquetes, consulte la [guía de instalación](../../install/index.md). Los proyectos de ejemplo de Android en los que se basa esta guía se incluyen con el SDK en `Video Capture SDK X/Android/Audio Playback Capture` y `Media Blocks SDK/Android/Audio Playback Capture`.
 
 ## ¿Cómo funciona la captura de audio de reproducción en Android?
 
-Android enruta el audio de otras aplicaciones a través de una fuente `REMOTE_SUBMIX` especial que solo puedes abrir después de que el usuario acepte un diálogo de consentimiento de captura de pantalla/audio. Tu aplicación solicita ese consentimiento, recibe un token `MediaProjection` y lo entrega a la fuente de VisioForge. La fuente abre el `AudioRecord` de captura de reproducción, el SDK codifica el flujo a AAC y un multiplexor escribe el archivo `.m4a`.
+Android enruta el audio de otras aplicaciones a través de una fuente `REMOTE_SUBMIX` especial que solo puede abrir después de que el usuario acepte un diálogo de consentimiento de captura de pantalla/audio. Su aplicación solicita ese consentimiento, recibe un token `MediaProjection` y lo entrega a la fuente de VisioForge. La fuente abre el `AudioRecord` de captura de reproducción, el SDK codifica el flujo a AAC y un multiplexor escribe el archivo `.m4a`.
 
 ```mermaid
 graph LR;
@@ -47,11 +47,11 @@ graph LR;
     enc --> sink["Archivo M4A / MP4"];
 ```
 
-**La captura está restringida por diseño.** Solo se pueden capturar las aplicaciones que publican audio con un `usage` de `Media`, `Game` o `Unknown`, y únicamente cuando la aplicación **no** se ha excluido mediante `android:allowAudioPlaybackCapture="false"`. Los reproductores protegidos (Spotify, Netflix y la mayoría de las aplicaciones con DRM) se excluyen, por lo que producen silencio. Pruébalo con vídeo o música reproducidos localmente, o con tu propia aplicación.
+**La captura está restringida por diseño.** Solo se pueden capturar las aplicaciones que publican audio con un `usage` de `Media`, `Game` o `Unknown`, y únicamente cuando la aplicación **no** se ha excluido mediante `android:allowAudioPlaybackCapture="false"`. Los reproductores protegidos (Spotify, Netflix y la mayoría de las aplicaciones con DRM) se excluyen, por lo que producen silencio. Pruébelo con vídeo o música reproducidos localmente, o con su propia aplicación.
 
 ## Requisitos previos y permisos
 
-- **Android 10 (API nivel 29) o posterior.** Establece `<SupportedOSPlatformVersion>29.0</SupportedOSPlatformVersion>` en el `.csproj`.
+- **Android 10 (API nivel 29) o posterior.** Establezca `<SupportedOSPlatformVersion>29.0</SupportedOSPlatformVersion>` en el `.csproj`.
 - **Permisos y un servicio en primer plano** declarados en `AndroidManifest.xml`. El servicio debe usar el tipo de primer plano `mediaProjection` y, en Android 14+, debe iniciarse **después** de que se conceda el consentimiento.
 
 ```xml
@@ -69,13 +69,13 @@ graph LR;
 </manifest>
 ```
 
-`RECORD_AUDIO` es un permiso en tiempo de ejecución: solicítalo antes de iniciar la captura. `INTERNET` solo es necesario si transmites el resultado; un grabador de archivos puro puede prescindir de él.
+`RECORD_AUDIO` es un permiso en tiempo de ejecución: solicítelo antes de iniciar la captura. `INTERNET` solo es necesario si transmite el resultado; un grabador de archivos puro puede prescindir de él.
 
 ## Solicitar el token de MediaProjection
 
-El flujo del token es idéntico para ambos motores. El orden importa en Android 14+: solicita el consentimiento, luego inicia el servicio en primer plano y, por último, llama a `GetMediaProjection` una vez que el servicio esté en primer plano.
+El flujo del token es idéntico para ambos motores. El orden importa en Android 14+: solicite el consentimiento, luego inicie el servicio en primer plano y, por último, llame a `GetMediaProjection` una vez que el servicio esté en primer plano.
 
-Primero, lanza el diálogo de consentimiento del sistema cuando el usuario pulse Iniciar:
+Primero, lance el diálogo de consentimiento del sistema cuando el usuario pulse Iniciar:
 
 ```csharp
 // _projectionManager = (MediaProjectionManager)GetSystemService(MediaProjectionService);
@@ -123,7 +123,7 @@ public class AudioCaptureService : Service
 }
 ```
 
-Por último, en `OnActivityResult`, inicia el servicio y obtén el token después de que esté en primer plano:
+Por último, en `OnActivityResult`, inicie el servicio y obtenga el token después de que esté en primer plano:
 
 ```csharp
 protected override void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
@@ -156,11 +156,11 @@ protected override void OnActivityResult(int requestCode, Android.App.Result res
 }
 ```
 
-Con `_mediaProjection` en la mano, entrégalo a cualquiera de los motores que se muestran a continuación.
+Con `_mediaProjection` en la mano, entréguelo a cualquiera de los motores que se muestran a continuación.
 
 ## ¿Cómo grabo el audio de una app con VideoCaptureCoreX?
 
-`VideoCaptureCoreX` es la ruta recomendada: estableces la fuente de audio y añades una salida, y el motor construye el grafo por ti. Como aquí no hay cámara, crea el motor sin un `VideoView` y ejecútalo solo con audio.
+`VideoCaptureCoreX` es la ruta recomendada: establece la fuente de audio y añade una salida, y el motor construye el grafo por usted. Como aquí no hay cámara, cree el motor sin un `VideoView` y ejecútelo solo con audio.
 
 ```csharp
 using VisioForge.Core.Types.X.Android.Sources;
@@ -175,8 +175,8 @@ private async Task StartCaptureCoreAsync()
 
     // Fuente de captura de reproducción de audio (graba el audio de otras apps mediante MediaProjection).
     _core.Audio_Source = new AndroidAudioPlaybackCaptureSourceSettings(_mediaProjection);
-    _core.Audio_Play = false;   // no reproduzcas el audio capturado por el altavoz
-    _core.Audio_Record = true;  // enrútalo hacia la salida
+    _core.Audio_Play = false;   // no reproduzca el audio capturado por el altavoz
+    _core.Audio_Record = true;  // enrútelo hacia la salida
 
     var musicDir = GetExternalFilesDir(Android.OS.Environment.DirectoryMusic);
     musicDir.Mkdirs();
@@ -189,7 +189,7 @@ private async Task StartCaptureCoreAsync()
 }
 ```
 
-Para detener y finalizar el archivo, detén y libera el motor:
+Para detener y finalizar el archivo, detenga y libere el motor:
 
 ```csharp
 private async Task StopCaptureCoreAsync()
@@ -210,7 +210,7 @@ private async Task StopCaptureCoreAsync()
 
 ## ¿Cómo grabo el audio de una app con MediaBlocksPipeline?
 
-`MediaBlocksPipeline` te da el grafo explícito. Creas tú mismo los bloques de fuente, codificador y sumidero, y conectas sus pads. Usa esta opción cuando necesites insertar procesamiento personalizado (por ejemplo, un bloque de volumen, un tee o un sumidero de red) entre la captura y el archivo.
+`MediaBlocksPipeline` le da el grafo explícito. Cree usted mismo los bloques de fuente, codificador y sumidero, y conecte sus pads. Use esta opción cuando necesite insertar procesamiento personalizado (por ejemplo, un bloque de volumen, un tee o un sumidero de red) entre la captura y el archivo.
 
 ```csharp
 using VisioForge.Core.MediaBlocks;
@@ -270,17 +270,17 @@ private async Task StopCaptureCoreAsync()
 
 ## ¿Qué motor debo elegir?
 
-Ambos motores usan el mismo `AndroidAudioPlaybackCaptureSourceSettings` y producen el mismo tipo de archivo `.m4a`. La diferencia es cuánto del grafo gestionas tú.
+Ambos motores usan el mismo `AndroidAudioPlaybackCaptureSourceSettings` y producen el mismo tipo de archivo `.m4a`. La diferencia es cuánto del grafo gestiona usted.
 
 | Aspecto | VideoCaptureCoreX | MediaBlocksPipeline |
 | --- | --- | --- |
 | Fuente | `Audio_Source = new AndroidAudioPlaybackCaptureSourceSettings(token)` | `new AndroidAudioPlaybackCaptureSourceBlock(settings)` |
 | Salida | `Outputs_Add(new M4AOutput(file), true)` | `AACEncoderBlock` → `MP4SinkBlock` conectados a mano |
-| Grafo | Lo construye el motor | Conectas cada pad |
+| Grafo | Lo construye el motor | Conecta cada pad |
 | Ideal para | Grabación rápida con un mínimo de código | Procesamiento personalizado, varias salidas, streaming |
 | Iniciar / detener | `StartAsync` / `StopAsync` / `DisposeAsync` | `StartAsync` / `StopAsync` / `DisposeAsync` |
 
-Empieza con `VideoCaptureCoreX`; pasa a `MediaBlocksPipeline` cuando necesites ramificar el audio o añadir elementos que la salida de alto nivel no expone.
+Empiece con `VideoCaptureCoreX`; pase a `MediaBlocksPipeline` cuando necesite ramificar el audio o añadir elementos que la salida de alto nivel no expone.
 
 ## Guardar el archivo en la biblioteca del dispositivo
 
@@ -302,11 +302,11 @@ input.CopyTo(output);
 
 ### ¿Puedo grabar el audio de Spotify, Netflix o YouTube?
 
-Por lo general, no. Las aplicaciones que reproducen contenido protegido o con DRM establecen `android:allowAudioPlaybackCapture="false"` (o publican audio con un `usage` no capturable), lo que las excluye de `AudioPlaybackCapture`. Capturarlas produce silencio. Pruébalo con contenido reproducido localmente o con aplicaciones que permitan la captura.
+Por lo general, no. Las aplicaciones que reproducen contenido protegido o con DRM establecen `android:allowAudioPlaybackCapture="false"` (o publican audio con un `usage` no capturable), lo que las excluye de `AudioPlaybackCapture`. Capturarlas produce silencio. Pruébelo con contenido reproducido localmente o con aplicaciones que permitan la captura.
 
 ### ¿La captura de audio de reproducción requiere root?
 
-No. Usa la API pública `AudioPlaybackCapture` y un diálogo de consentimiento `MediaProjection` concedido por el usuario. No se necesita root, ni firma del sistema, ni ningún permiso especial del fabricante.
+No. Use la API pública `AudioPlaybackCapture` y un diálogo de consentimiento `MediaProjection` concedido por el usuario. No se necesita root, ni firma del sistema, ni ningún permiso especial del fabricante.
 
 ### ¿Cuál es la versión mínima de Android?
 
@@ -318,13 +318,13 @@ La fuente de esta guía captura únicamente el audio de reproducción. Mezclarlo
 
 ### ¿Por qué mi grabación está en silencio?
 
-Las dos causas habituales son: la aplicación de origen se excluyó de la captura de reproducción (contenido protegido) o simplemente no estaba produciendo sonido durante la ventana de captura. Confírmalo con un archivo de audio o vídeo local que se reproduzca de forma audible, y verifica que se concedió `RECORD_AUDIO` y que el servicio en primer plano se inició antes de llamar a `GetMediaProjection`.
+Las dos causas habituales son: la aplicación de origen se excluyó de la captura de reproducción (contenido protegido) o simplemente no estaba produciendo sonido durante la ventana de captura. Confírmelo con un archivo de audio o vídeo local que se reproduzca de forma audible, y verifique que se concedió `RECORD_AUDIO` y que el servicio en primer plano se inició antes de llamar a `GetMediaProjection`.
 
 ## Véase también
 
-- [Guía de instalación](../../install/index.md): añade los paquetes de VisioForge .NET a tu proyecto
+- [Guía de instalación](../../install/index.md): añada los paquetes de VisioForge .NET a su proyecto
 - [Implementación y despliegue en Android](../../deployment-x/Android.md): configuración de NuGet y empaquetado para aplicaciones Android
-- [Captura de audio y grabación del sonido del sistema](../../videocapture/audio-capture/index.md): graba el micrófono y el audio del sistema en C#
+- [Captura de audio y grabación del sonido del sistema](../../videocapture/audio-capture/index.md): grabe el micrófono y el audio del sistema en C#
 - [Bloques codificadores de audio](../../mediablocks/AudioEncoders/index.md): codificadores AAC, MP3, FLAC y Opus para la canalización de Media Blocks
-- [Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net): el motor de alto nivel `VideoCaptureCoreX`
-- [Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net): el motor de bajo nivel `MediaBlocksPipeline`
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net): el motor de alto nivel `VideoCaptureCoreX`
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net): el motor de bajo nivel `MediaBlocksPipeline`

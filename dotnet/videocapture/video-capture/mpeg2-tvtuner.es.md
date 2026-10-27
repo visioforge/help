@@ -22,7 +22,7 @@ primary_api_classes:
 
 # Captura de Video MPEG-2 Usando Codificador de Hardware de Sintonizador de TV en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCore](#){ .md-button }
 
 ## Introducción a la Captura de Video MPEG-2
 

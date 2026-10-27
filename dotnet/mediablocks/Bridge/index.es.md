@@ -22,7 +22,7 @@ sidebar_label: Video and Audio Bridges
 
 # Bloques Bridge
 
-[Media Blocks SDK .Net](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Los bridges pueden usarse para enlazar dos pipelines y cambiar dinámicamente entre ellos. Por ejemplo, puede cambiar entre diferentes archivos o cámaras en el primer Pipeline sin interrumpir el streaming en el segundo Pipeline.
 
@@ -243,7 +243,7 @@ await sinkPipeline.StartAsync();
 
 ## Plataformas
 
-Todos los bloques bridge son soportados en Windows, macOS, Linux, iOS y Android.
+Todos los bloques bridge son soportados en Windows, macOS, Linux, iOS y Android. El plugin interpipe en el que se basan los bloques InterPipe solo se incluye en los paquetes de Windows.
 
 ## Bridge Buffer sink y source
 
@@ -286,7 +286,9 @@ await sinkPipeline.StartAsync();
 
 ## InterPipe sink y source
 
-Los bloques InterPipe usan los elementos interpipesink/interpipesrc de GStreamer para comunicación eficiente entre pipelines con soporte para audio y video.
+Los bloques InterPipe usan los elementos interpipesink/interpipesrc de GStreamer para comunicación eficiente entre pipelines con soporte para audio y video. El plugin interpipe se incluye en los paquetes de Windows; en otras plataformas los bloques solo funcionan si el plugin interpipe de GStreamer está instalado.
+
+Con el plugin de los paquetes de Windows, los fotogramas cruzan el puente solo mientras el pipeline emisor está en reproducción: un emisor en pausa o precargado no envía nada, y una búsqueda realizada durante la pausa llega al pipeline receptor cuando se reanuda la reproducción.
 
 ### Información del bloque
 
@@ -526,6 +528,6 @@ appBridgeAudioSink.Dispose();
 
 ## Plataformas
 
-Todos los bloques bridge son soportados en Windows, macOS, Linux, iOS y Android.
+Todos los bloques bridge son soportados en Windows, macOS, Linux, iOS y Android. El plugin interpipe en el que se basan los bloques InterPipe solo se incluye en los paquetes de Windows.
 
 Nota: Los bloques InterPipe y RSInter requieren que los plugins GStreamer correspondientes estén instalados.

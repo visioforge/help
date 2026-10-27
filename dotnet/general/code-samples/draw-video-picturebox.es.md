@@ -1,5 +1,5 @@
 ---
-title: Renderizar Video en PictureBox WinForms — Guía C# .NET
+title: Renderizar video en PictureBox WinForms — Guía C# .NET
 description: Actualizaciones thread-safe, liberación de bitmap y double buffering para evitar parpadeo. Frame skipping para alto FPS. Modos zoom con VisioForge SDK.
 tags:
   - Video Capture SDK
@@ -13,19 +13,19 @@ primary_api_classes:
 
 ---
 
-# Dibujo de Video en PictureBox en Aplicaciones .NET
+# Dibujo de video en PictureBox en aplicaciones .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Introducción al Renderizado de Video en WinForms
+## Introducción al renderizado de video en WinForms
 
-Mostrar contenido de video en aplicaciones de escritorio es un requisito común para muchos desarrolladores de software que trabajan con multimedia. Ya sea que estés construyendo aplicaciones para videovigilancia, reproductores de medios, herramientas de edición de video o cualquier software que procese flujos de video, entender cómo renderizar video efectivamente es crucial.
+Mostrar contenido de video en aplicaciones de escritorio es un requisito común para muchos desarrolladores de software que trabajan con multimedia. Ya sea que esté construyendo aplicaciones para videovigilancia, reproductores de medios, herramientas de edición de video o cualquier software que procese flujos de video, entender cómo renderizar video efectivamente es crucial.
 
 El control PictureBox es una de las maneras más directas de mostrar frames de video en aplicaciones Windows Forms. Aunque no fue diseñado específicamente para reproducción de video, con una implementación adecuada, puede proporcionar renderizado de video suave con consumo mínimo de recursos.
 
 Esta guía se enfoca en implementar el renderizado de video en controles PictureBox en aplicaciones WinForms .NET. Cubriremos todo el proceso desde la configuración hasta la implementación, abordando errores comunes y técnicas de optimización.
 
-## ¿Por Qué Usar PictureBox para Visualización de Video?
+## ¿Por qué usar PictureBox para visualización de video?
 
 Antes de profundizar en los detalles de implementación, examinemos las ventajas de usar PictureBox para visualización de video:
 
@@ -38,19 +38,19 @@ Sin embargo, es importante notar que PictureBox no fue diseñado específicament
 
 ## Prerrequisitos
 
-Para implementar renderizado de video en un PictureBox, necesitarás:
+Para implementar renderizado de video en un PictureBox, necesitará:
 
 - Conocimiento básico de desarrollo C# y .NET WinForms
 - Visual Studio u otro IDE para desarrollo .NET
 - Una fuente de video (de Video Capture SDK, Video Edit SDK o Media Player SDK)
 - Entendimiento de programación orientada a eventos
 
-## Configurando Tu Entorno
+## Configurar su entorno
 
-### Configurando el Control PictureBox
+### Configurar el control PictureBox
 
-1. Agrega un control PictureBox a tu formulario a través del diseñador o programáticamente.
-2. Configura las propiedades básicas para visualización óptima de video:
+1. Agregue un control PictureBox a su formulario a través del diseñador o programáticamente.
+2. Configure las propiedades básicas para visualización óptima de video:
 
 ```cs
 // Configurar PictureBox para visualización de video
@@ -69,17 +69,17 @@ Para la mayoría de las aplicaciones de video, `StretchImage` o `Zoom` funcionan
 
 ## Pasos de Implementación
 
-### Paso 1: Preparar Tu Clase con Variables Requeridas
+### Paso 1: Preparar su clase con variables requeridas
 
-Agrega un miembro booleano de clase para rastrear cuando se está aplicando una imagen al PictureBox. Esto previene condiciones de carrera cuando múltiples frames llegan en rápida sucesión:
+Agregue un miembro booleano de clase para rastrear cuando se está aplicando una imagen al PictureBox. Esto previene condiciones de carrera cuando múltiples frames llegan en rápida sucesión:
 
 ```cs
 private bool applyingPictureBoxImage = false;
 ```
 
-### Paso 2: Inicializar Configuraciones de Video en el Manejador de Inicio
+### Paso 2: Inicializar configuraciones de video en el manejador de inicio
 
-Al iniciar tu captura o reproducción de video, asegúrate de que la bandera esté correctamente inicializada:
+Al iniciar su captura o reproducción de video, asegúrese de que la bandera esté correctamente inicializada:
 
 ```cs
 private async void btnStart_Click(object sender, EventArgs e)
@@ -87,11 +87,11 @@ private async void btnStart_Click(object sender, EventArgs e)
     // Reiniciar la bandera antes de iniciar captura/reproducción.
     applyingPictureBoxImage = false;
 
-    // Suscríbete a OnVideoFrameBitmap antes de arrancar para no perder el primer frame.
+    // Suscribirse a OnVideoFrameBitmap antes de arrancar para no perder el primer frame.
     // El evento es EventHandler<VideoFrameBitmapEventArgs>, disparado desde un hilo worker.
     videoCapture1.OnVideoFrameBitmap += VideoCapture1_OnVideoFrameBitmap;
 
-    // Ejemplo con Video Capture SDK — reemplaza por MediaPlayer1 / VideoEdit1 si usas esos motores.
+    // Ejemplo con Video Capture SDK — reemplace por MediaPlayer1 / VideoEdit1 si usa esos motores.
     videoCapture1.Video_CaptureDevice = new VideoCaptureSource("USB Camera");
     videoCapture1.Mode = VideoCaptureMode.VideoPreview;
     videoCapture1.Audio_RecordAudio = false;
@@ -102,7 +102,7 @@ private async void btnStart_Click(object sender, EventArgs e)
 
 El mismo evento `OnVideoFrameBitmap` existe en los tres motores — `VideoCaptureCore`, `MediaPlayerCore` y `VideoEditCore` — así que el manejador de abajo funciona sin cambios sin importar qué SDK lo haya lanzado.
 
-### Paso 3: Implementar el Manejador de Frames
+### Paso 3: Implementar el manejador de frames
 
 El núcleo del renderizado de video es el manejador de frames. Este evento se dispara cada vez que un nuevo frame de video está disponible. Aquí está cómo implementarlo eficientemente:
 
@@ -147,14 +147,14 @@ Esta implementación incluye varios conceptos importantes:
 2. **Gestión de memoria**: Liberar correctamente la imagen anterior previene fugas de memoria.
 3. **Manejo de excepciones**: Capturar excepciones previene caídas de la aplicación durante el renderizado.
 
-### Paso 4: Implementar Limpieza al Detener el Video
+### Paso 4: Implementar limpieza al detener el video
 
-Al detener la captura o reproducción de video, necesitas limpiar los recursos correctamente:
+Al detener la captura o reproducción de video, necesita limpiar los recursos correctamente:
 
 ```cs
 private void btnStop_Click(object sender, EventArgs e)
 {
-    // Tu código de detención de video aquí
+    // Su código de detención de video aquí
     // videoCapture1.Stop(); o llamada similar del SDK
     
     // Esperar hasta que cualquier actualización de frame en progreso se complete
@@ -178,11 +178,11 @@ Este proceso de limpieza:
 2. Libera correctamente la imagen
 3. Establece la imagen del PictureBox a null para limpieza visual
 
-## Consideraciones de Implementación Avanzada
+## Consideraciones de implementación avanzada
 
-### Manejando Altas Tasas de Frames
+### Manejar altas tasas de frames
 
-Para fuentes de video de alta tasa de frames, puede que quieras implementar omisión de frames para mantener la capacidad de respuesta de la aplicación:
+Para fuentes de video de alta tasa de frames, puede que quiera implementar omisión de frames para mantener la capacidad de respuesta de la aplicación:
 
 ```cs
 private DateTime lastFrameTime = DateTime.MinValue;
@@ -208,9 +208,9 @@ private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEve
 }
 ```
 
-### Invocación entre Hilos
+### Invocación entre hilos
 
-Al manejar frames de video desde hilos de fondo, necesitarás usar invocación entre hilos:
+Al manejar frames de video desde hilos de fondo, necesitará usar invocación entre hilos:
 
 ```cs
 private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEventArgs e)
@@ -238,11 +238,11 @@ private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEve
 }
 ```
 
-## Consejos de Optimización de Rendimiento
+## Consejos de optimización de rendimiento
 
-### Reducir el Overhead de Creación de Bitmap
+### Reducir el overhead de creación de bitmap
 
-Crear un nuevo Bitmap para cada frame puede ser costoso. Considera reutilizar objetos Bitmap:
+Crear un nuevo Bitmap para cada frame puede ser costoso. Considere reutilizar objetos Bitmap:
 
 ```cs
 private Bitmap displayBitmap;
@@ -285,53 +285,53 @@ private void VideoCapture1_OnVideoFrameBitmap(object sender, VideoFrameBitmapEve
 }
 ```
 
-### Considera Usar Doble Búfer
+### Considere usar doble búfer
 
-Para una visualización más suave, habilita el doble búfer en tu formulario:
+Para una visualización más suave, habilite el doble búfer en su formulario:
 
 ```cs
-// En el constructor de tu formulario
+// En el constructor de su formulario
 this.DoubleBuffered = true;
 ```
 
-## Solución de Problemas Comunes
+## Solución de problemas comunes
 
-### Fugas de Memoria
+### Fugas de memoria
 
-Si tu aplicación experimenta aumento de uso de memoria, verifica:
+Si su aplicación experimenta aumento de uso de memoria, verifique:
 
 - Liberación adecuada de objetos Bitmap antiguos
 - Referencias a frames que podrían prevenir la recolección de basura
 - Si los frames están siendo omitidos cuando es necesario
 
-### Visualización con Parpadeo
+### Visualización con parpadeo
 
 Si la visualización de video parpadea:
 
-- Asegúrate de que el doble búfer esté habilitado
-- Verifica si múltiples hilos están actualizando el PictureBox simultáneamente
-- Considera implementar un mecanismo de sincronización de frames más sofisticado
+- Asegúrese de que el doble búfer esté habilitado
+- Verifique si múltiples hilos están actualizando el PictureBox simultáneamente
+- Considere implementar un mecanismo de sincronización de frames más sofisticado
 
-### Alto Uso de CPU
+### Alto uso de CPU
 
 Si el renderizado causa alto uso de CPU:
 
-- Implementa omisión de frames como se mostró arriba
-- Considera reducir la tasa de frames de la fuente si es posible
-- Optimiza el manejo de bitmap para reducir la presión del GC
+- Implemente omisión de frames como se mostró arriba
+- Considere reducir la tasa de frames de la fuente si es posible
+- Optimice el manejo de bitmap para reducir la presión del GC
 
-## Dependencias Requeridas
+## Dependencias requeridas
 
-Para implementar esta solución, necesitarás:
+Para implementar esta solución, necesitará:
 
 - .NET Framework o .NET Core/5+
-- Archivos redist del SDK para el SDK de video específico que estés usando
+- Archivos redist del SDK para el SDK de video específico que esté usando
 
 ## Conclusión
 
-Implementar renderizado de video en un control PictureBox proporciona una manera directa de mostrar video en aplicaciones Windows Forms. Siguiendo los patrones descritos en esta guía, puedes lograr una visualización de video suave mientras evitas errores comunes como fugas de memoria, problemas de seguridad de hilos y cuellos de botella de rendimiento.
+Implementar renderizado de video en un control PictureBox proporciona una manera directa de mostrar video en aplicaciones Windows Forms. Siguiendo los patrones descritos en esta guía, puede lograr una visualización de video suave mientras evita errores comunes como fugas de memoria, problemas de seguridad de hilos y cuellos de botella de rendimiento.
 
-Recuerda que aunque PictureBox es adecuado para muchas aplicaciones, las aplicaciones de video de alto rendimiento pueden beneficiarse de enfoques de renderizado más especializados usando DirectX u OpenGL.
+Recuerde que aunque PictureBox es adecuado para muchas aplicaciones, las aplicaciones de video de alto rendimiento pueden beneficiarse de enfoques de renderizado más especializados usando DirectX u OpenGL.
 
 ---
-Para más ejemplos de código, visita nuestro repositorio de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
+Para más ejemplos de código, visite nuestro repositorio de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples).

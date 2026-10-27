@@ -20,7 +20,7 @@ primary_api_classes:
 
 # Implémenter plusieurs écrans de sortie vidéo dans les applications WPF
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Lors du développement d'applications WPF qui nécessitent de gérer plusieurs flux vidéo simultanément, les développeurs font souvent face à des défis de performance, de synchronisation et de gestion des ressources. Ce guide fournit une approche complète pour implémenter plusieurs écrans de sortie vidéo dans vos applications WPF en C# avec le contrôle Image.
 

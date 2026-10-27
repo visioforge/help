@@ -1,6 +1,6 @@
 ---
 title: Procesar Frames de Video en C# .NET — OnVideoFrameBuffer
-description: Accede al buffer de frames de video en C# / .NET mediante OnVideoFrameBuffer. Modifica píxeles, dibuja imágenes, aplica mezclas personalizadas.
+description: Acceda al buffer de frames de video en C# / .NET mediante OnVideoFrameBuffer. Modifique píxeles, dibuje imágenes, aplique mezclas personalizadas.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -30,14 +30,14 @@ primary_api_classes:
 
 # Dibujo de Imágenes con OnVideoFrameBuffer en .NET
 
-[Video Capture SDK .Net](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .Net](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .Net](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introducción
 
 El evento `OnVideoFrameBuffer` da acceso directo, a nivel de píxel, a cada frame de video conforme pasa por el pipeline. Los handlers reciben el buffer crudo y pueden inspeccionar, modificar o reescribir píxeles antes de que el frame continúe a la siguiente etapa (preview, encoder, salida a archivo). Dibujar una imagen sobre el frame — para una marca de agua, logo, overlay de depuración o anotación de visión por computadora — es el caso de uso más común y el que recorre esta guía.
 
-!!! tip "¿Buscas la función de overlay de alto nivel?"
-    Si solo necesitas colocar una imagen estática o animada sobre el video (PNG / JPG / GIF / BMP), usa el [efecto de image overlay](../video-effects/image-overlay.md) dedicado — una línea de código mediante `Video_Effects_Add(new VideoEffectImageLogo(...))`. Usa `OnVideoFrameBuffer` (esta página) cuando necesites **control a nivel de píxel**: modos de blending personalizados, lógica por frame, anotaciones de CV o integración con bibliotecas de imagen de terceros.
+!!! tip "¿Busca la función de overlay de alto nivel?"
+    Si solo necesita colocar una imagen estática o animada sobre el video (PNG / JPG / GIF / BMP), use el [efecto de image overlay](../video-effects/image-overlay.md) dedicado — una línea de código mediante `Video_Effects_Add(new VideoEffectImageLogo(...))`. Use `OnVideoFrameBuffer` (esta página) cuando necesite **control a nivel de píxel**: modos de blending personalizados, lógica por frame, anotaciones de CV o integración con bibliotecas de imagen de terceros.
 
 ### Motores soportados
 
@@ -46,37 +46,37 @@ El evento `OnVideoFrameBuffer` está expuesto en ambas familias de motores:
 | Motor | Tipo de event args | Formato de píxel |
 |---|---|---|
 | `VideoCaptureCore` (DirectShow, Windows) | `VideoFrameBufferEventArgs` | RGB24 / RGB32 |
-| `VideoCaptureCoreX` (GStreamer, multiplataforma) | `VideoFrameXBufferEventArgs` | BGRA (lo más común) |
-| `MediaPlayerCoreX` (GStreamer, multiplataforma) | `VideoFrameXBufferEventArgs` | BGRA (lo más común) |
+| `VideoCaptureCoreX` (GStreamer, multiplataforma) | `VideoFrameXBufferEventArgs` | RGBA |
+| `MediaPlayerCoreX` (GStreamer, multiplataforma) | `VideoFrameXBufferEventArgs` | RGB (RGBA cuando `OnVideoFrameUnity` está suscrito) |
 
-Ambos motores siguen el mismo patrón — suscribirse al evento, leer `e.Frame.Data` (un `IntPtr`) junto con `Width` / `Height` / `Stride`, opcionalmente modificar el buffer in-place, y poner `e.UpdateData = true` para que los cambios se propaguen downstream.
+Ambos motores siguen el mismo patrón — suscribirse al evento, leer `e.Frame.Data` (un `IntPtr`) junto con `Width` / `Height` / `Stride`, y opcionalmente modificar el buffer in-place. El motor clásico solo toma los cambios si pone `e.UpdateData = true`; los motores X no leen `UpdateData`.
 
-## Entendiendo el proceso
+## Entender el proceso
 
-Al trabajar con frames de video necesitas:
+Al trabajar con frames de video necesita:
 
-1. Cargar tu imagen (logo, marca de agua, etc.) en memoria.
-2. Convertir la imagen a un formato de buffer compatible (RGB24/RGB32 para el motor clásico, BGRA para los motores X).
-3. Suscribirte al evento `OnVideoFrameBuffer`.
+1. Cargar su imagen (logo, marca de agua, etc.) en memoria.
+2. Convertir la imagen a un formato de buffer compatible (RGB24/RGB32 para el motor clásico, RGBA para los motores X — compruebe `e.Frame.Format`).
+3. Suscribirse al evento `OnVideoFrameBuffer`.
 4. Dibujar la imagen en cada frame de video mientras se procesa.
-5. Establecer `e.UpdateData = true` para que el frame modificado reemplace al original downstream.
+5. Con el motor clásico, establecer `e.UpdateData = true` para que el frame modificado reemplace al original downstream.
 
 ## Ejemplo con VideoCaptureCore (DirectShow)
 
 Revisemos la implementación paso a paso:
 
-### Paso 1: Cargar Tu Imagen
+### Paso 1: Cargar su imagen
 
-Primero, carga el archivo de imagen que quieres superponer en el video:
+Primero, cargue el archivo de imagen que quiere superponer en el video:
 
 ```cs
 // Carga de Bitmap desde archivo
 private Bitmap logoImage = new Bitmap(@"logo24.jpg");
-// También puedes usar PNG con canal alfa para transparencia
+// También puede usar PNG con canal alfa para transparencia
 //private Bitmap logoImage = new Bitmap(@"logo32.png");
 ```
 
-### Paso 2: Preparar Búferes de Memoria
+### Paso 2: Preparar búferes de memoria
 
 Inicializa punteros para el búfer de imagen:
 
@@ -86,7 +86,7 @@ private IntPtr logoImageBuffer = IntPtr.Zero;
 private int logoImageBufferSize = 0;
 ```
 
-### Paso 3: Implementar el Manejador del Evento OnVideoFrameBuffer
+### Paso 3: Implementar el manejador del evento OnVideoFrameBuffer
 
 La implementación completa del manejador de eventos:
 
@@ -155,9 +155,9 @@ private void VideoCapture1_OnVideoFrameBuffer(Object sender, VideoFrameBufferEve
 }
 ```
 
-## Explicación Detallada
+## Explicación detallada
 
-### Gestión de Memoria
+### Gestión de memoria
 
 El código maneja tanto formatos de imagen de 24 bits como de 32 bits. Esto es lo que sucede:
 
@@ -171,7 +171,7 @@ El código maneja tanto formatos de imagen de 24 bits como de 32 bits. Esto es l
 
 4. **Conversión de Imagen**: Convierte el Bitmap a datos de píxeles crudos en el búfer asignado usando `BitmapHelper.BitmapToIntPtr()`.
 
-### Proceso de Dibujo
+### Proceso de dibujo
 
 Una vez que el búfer está preparado, el dibujo se realiza:
 
@@ -185,15 +185,18 @@ Una vez que el búfer está preparado, el dibujo se realiza:
 
 ## Ejemplo con VideoCaptureCoreX / MediaPlayerCoreX (motores X)
 
-En los motores X multiplataforma la firma del evento cambia a `VideoFrameXBufferEventArgs` y el buffer del frame típicamente llega en formato **BGRA** (4 bytes por píxel). Aplica el mismo patrón — suscribirse, inspeccionar, modificar, marcar los cambios. El ejemplo siguiente usa SkiaSharp para envolver el buffer crudo y dibujar un logo PNG encima; SkiaSharp ya es una dependencia transitiva de los motores X, así que no se necesita un paquete NuGet adicional.
+En los motores X multiplataforma la firma del evento cambia a `VideoFrameXBufferEventArgs` y el buffer del frame llega en el formato del grabber del motor — RGBA en `VideoCaptureCoreX`, RGB en `MediaPlayerCoreX` (RGBA cuando `OnVideoFrameUnity` está suscrito). Aplique el mismo patrón — suscribirse, inspeccionar, modificar, marcar los cambios. El ejemplo siguiente usa SkiaSharp para envolver el buffer crudo y dibujar un logo PNG encima; SkiaSharp ya es una dependencia transitiva de los motores X, así que no se necesita un paquete NuGet adicional.
 
 ```cs
 using SkiaSharp;
+using VisioForge.Core.Helpers;
+using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.X;
 
 // Carga el logo una sola vez (PNG con alpha funciona bien para marcas de agua)
 private SKBitmap _logo = SKBitmap.Decode(@"logo.png");
 
-// Suscríbete después de construir VideoCaptureCoreX / MediaPlayerCoreX
+// Suscribirse después de construir VideoCaptureCoreX / MediaPlayerCoreX
 _videoCapture.OnVideoFrameBuffer += VideoCapture_OnVideoFrameBuffer;
 
 private void VideoCapture_OnVideoFrameBuffer(object sender, VideoFrameXBufferEventArgs e)
@@ -203,47 +206,61 @@ private void VideoCapture_OnVideoFrameBuffer(object sender, VideoFrameXBufferEve
         return;
     }
 
-    // Envuelve el buffer crudo BGRA en un canvas de SkiaSharp (sin asignación extra)
-    var info = new SKImageInfo(e.Frame.Width, e.Frame.Height, SKColorType.Bgra8888, SKAlphaType.Premul);
+    // El formato del grabber difiere por motor: VideoCaptureCoreX entrega RGBA,
+    // MediaPlayerCoreX RGB (RGBA cuando OnVideoFrameUnity está suscrito). Nunca asumas BGRA.
+    if (e.Frame.Format == VideoFormatX.RGB)
+    {
+        // El RGB de 24 bits no tiene SKColorType — convertirlo con el helper del SDK
+        // (una copia por frame; el dibujo ocurre en la copia, el frame original queda intacto).
+        using (var bmp = e.Frame.VideoFrameRGBToSKBitmap())
+        {
+            var x = bmp.Width - _logo.Width - 16;
+            var y = bmp.Height - _logo.Height - 16;
+            bmp.Canvas.DrawBitmap(_logo, x, y);
+        }
 
+        return;
+    }
+
+    var colorType = e.Frame.Format == VideoFormatX.BGRA ? SKColorType.Bgra8888 : SKColorType.Rgba8888;
+    var info = new SKImageInfo(e.Frame.Width, e.Frame.Height, colorType, SKAlphaType.Premul);
+
+    // Envolver el buffer crudo de 32 bits en un canvas de SkiaSharp (sin asignación extra)
     using (var pixmap = new SKPixmap(info, e.Frame.Data, e.Frame.Stride))
     using (var surface = SKSurface.Create(pixmap))
     {
         var canvas = surface.Canvas;
 
-        // Dibuja el logo en la esquina inferior derecha con 16px de padding
+        // Dibujar el logo en la esquina inferior derecha con 16px de padding
         var x = e.Frame.Width - _logo.Width - 16;
         var y = e.Frame.Height - _logo.Height - 16;
         canvas.DrawBitmap(_logo, x, y);
         canvas.Flush();
     }
-
-    // Propaga el frame modificado downstream
-    e.UpdateData = true;
 }
 ```
 
-**Por qué importa BGRA.** Los motores X solicitan BGRA por defecto para los callbacks de frame porque mapea 1:1 a SkiaSharp, System.Drawing y la mayoría de rutas de interop amigables con GPU. Si necesitas otro formato (I420, NV12, RGB24), solicita un bloque de conversión de formato aguas arriba de tu handler en lugar de convertir en cada frame.
+**Qué formato recibe.** Lea `e.Frame.Format` en lugar de asumir un formato: `VideoCaptureCoreX` entrega RGBA y `MediaPlayerCoreX` RGB (RGBA cuando `OnVideoFrameUnity` está suscrito). RGB tiene 3 bytes por píxel y no tiene un `SKColorType` equivalente, así que el ejemplo lo convierte con el helper del SDK `VideoFrameRGBToSKBitmap` (una copia extra). Si necesita otro formato (I420, NV12, BGRA), solicite un bloque de conversión de formato aguas arriba de su handler en lugar de convertir en cada frame.
 
-**Pilas de imagen alternativas.** También puedes usar `System.Drawing.Bitmap` mediante `new Bitmap(width, height, stride, PixelFormat.Format32bppArgb, data)` en Windows, o escrituras manuales de bytes con `Marshal.Copy` / `Span<byte>` para el control máximo. SkiaSharp es la opción recomendada en macOS / Linux / iOS / Android.
+**Pilas de imagen alternativas.** También puede usar `System.Drawing.Bitmap` mediante `new Bitmap(width, height, stride, pixelFormat, data)` en Windows — elija el `PixelFormat` que coincida con `e.Frame.Format` (`Format32bppArgb` para datos BGRA) —, o escrituras manuales de bytes con `Marshal.Copy` / `Span<byte>` para el control máximo. SkiaSharp es la opción recomendada en macOS / Linux / iOS / Android.
 
-**Paridad entre motores.** Todo lo documentado en las secciones [Gestión de Memoria](#gestion-de-memoria), [Manejo de Errores](#manejo-de-errores) y [Optimización de Rendimiento](#optimizacion-de-rendimiento) aplica por igual a los motores X — el evento se dispara en un hilo de procesamiento, `UpdateData` decide si el buffer se reutiliza downstream, y el trabajo pesado debe moverse fuera para evitar descartar frames.
+**Paridad entre motores.** Todo lo documentado en las secciones [Gestión de Memoria](#gestion-de-memoria), [Manejo de Errores](#manejo-de-errores) y [Optimización de Rendimiento](#optimizacion-de-rendimiento) aplica por igual a los motores X — el evento se dispara en un hilo de procesamiento, y el trabajo pesado debe moverse fuera para evitar descartar frames.
 
-## Mejores Prácticas para Superposición de Imágenes
+## Mejores prácticas para superposición de imágenes
 
 Para rendimiento óptimo al superponer imágenes en frames de video:
 
-1. **Gestión de Memoria**: Siempre libera la memoria asignada cuando ya no se necesite para prevenir fugas de memoria.
+1. **Gestión de Memoria**: Siempre libere la memoria asignada cuando ya no se necesite para prevenir fugas de memoria.
 
-2. **Reutilización de Búfer**: Crea el búfer una vez y reutilízalo para frames subsiguientes en lugar de recrearlo para cada frame.
+2. **Reutilización de Búfer**: Cree el búfer una vez y reutilícelo para frames subsiguientes en lugar de recrearlo para cada frame.
 
-3. **Consideraciones de Tamaño de Imagen**: Usa imágenes de tamaño apropiado; superponer imágenes grandes puede impactar el rendimiento.
+3. **Consideraciones de Tamaño de Imagen**: Use imágenes de tamaño apropiado; superponer imágenes grandes puede impactar el rendimiento.
 
 4. **Selección de Formato**:
-   - Usa PNG (RGB32) cuando necesites transparencia
-   - Usa JPG (RGB24) cuando no se requiera transparencia (más eficiente)
+   - Use PNG (RGB32) cuando necesite transparencia
+   - Use JPG (RGB24) cuando no se requiera transparencia (más eficiente)
 
-5. **Cálculo de Posición**: Para posicionamiento dinámico, calcula coordenadas basándote en las dimensiones del frame. En el motor clásico (`VideoFrameBufferEventArgs`) Width/Height viven en `e.Frame.Info`; en los motores X (`VideoFrameXBufferEventArgs`) están planos en `e.Frame`.
+5. **Cálculo de Posición**: Para posicionamiento dinámico, calcule coordenadas basándose en las dimensiones del frame. En el motor clásico (`VideoFrameBufferEventArgs`) Width/Height viven en `e.Frame.Info`; en los motores X (`VideoFrameXBufferEventArgs`) están planos en `e.Frame`.
 
    ```cs
    // Motor clásico — Width/Height viven en e.Frame.Info
@@ -251,14 +268,14 @@ Para rendimiento óptimo al superponer imágenes en frames de video:
    int yPos = e.Frame.Info.Height - logoImage.Height - 10;
    ```
 
-## Manejo de Errores
+## Manejo de errores
 
-Al implementar esta funcionalidad, considera agregar manejo de errores:
+Al implementar esta funcionalidad, considere agregar manejo de errores:
 
 ```cs
 try 
 {
-    // Tu implementación existente
+    // Su implementación existente
 }
 catch (OutOfMemoryException ex)
 {
@@ -276,19 +293,19 @@ finally
 }
 ```
 
-## Optimización de Rendimiento
+## Optimización de rendimiento
 
-Para aplicaciones de alto rendimiento, considera estas optimizaciones:
+Para aplicaciones de alto rendimiento, considere estas optimizaciones:
 
-1. **Pre-asignación de Búfer**: Inicializa búferes durante el inicio de la aplicación en lugar de durante el procesamiento de video.
+1. **Pre-asignación de Búfer**: Inicialice búferes durante el inicio de la aplicación en lugar de durante el procesamiento de video.
 
-2. **Procesamiento Condicional**: Solo procesa frames que necesitan la superposición (por ejemplo, omitir procesamiento para ciertos frames).
+2. **Procesamiento Condicional**: Solo procese frames que necesitan la superposición (por ejemplo, omitir procesamiento para ciertos frames).
 
-3. **Procesamiento Paralelo**: Para operaciones complejas, considera usar técnicas de procesamiento paralelo.
+3. **Procesamiento Paralelo**: Para operaciones complejas, considere usar técnicas de procesamiento paralelo.
 
 ## Conclusión
 
-El evento `OnVideoFrameBuffer` da acceso directo a cada frame crudo tanto en el motor clásico `VideoCaptureCore` (RGB24/RGB32 vía `VideoFrameBufferEventArgs`) como en los motores X multiplataforma (`VideoCaptureCoreX` / `MediaPlayerCoreX`, BGRA vía `VideoFrameXBufferEventArgs`). Es la herramienta correcta cuando necesitas control a nivel de píxel — modos de blending personalizados, anotaciones de CV por frame, o integración con bibliotecas de imagen de terceros.
+El evento `OnVideoFrameBuffer` da acceso directo a cada frame crudo tanto en el motor clásico `VideoCaptureCore` (RGB24/RGB32 vía `VideoFrameBufferEventArgs`) como en los motores X multiplataforma (`VideoCaptureCoreX` / `MediaPlayerCoreX`, frames del grabber vía `VideoFrameXBufferEventArgs`). Es la herramienta correcta cuando necesita control a nivel de píxel — modos de blending personalizados, anotaciones de CV por frame, o integración con bibliotecas de imagen de terceros.
 
 Para overlays de imagen estáticos o animados sin escribir un handler por frame, el [efecto de image overlay](../video-effects/image-overlay.md) de una línea suele ser la mejor elección.
 
@@ -300,4 +317,4 @@ Para overlays de imagen estáticos o animados sin escribir un handler por frame,
 
 ---
 
-¿Buscas más ejemplos de código? Visita nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos y recursos adicionales.
+¿Busca más ejemplos de código? Visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para ejemplos y recursos adicionales.
