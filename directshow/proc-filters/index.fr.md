@@ -118,7 +118,7 @@ Avant d'utiliser les exemples de code et d'intégrer les filtres dans votre appl
 
 ### Améliorations de la version 15.1
 
-- Intégration à l'architecture des SDK .Net 15.1
+- Intégration à l'architecture des SDK .NET 15.1
 - Améliorations significatives des moteurs de mélange audio et vidéo
 - Prise en charge renforcée du multithreading pour de meilleures performances sur les systèmes multicœurs
 - Bibliothèque d'effets vidéo enrichie avec de nouvelles options de traitement
@@ -127,39 +127,39 @@ Avant d'utiliser les exemples de code et d'intégrer les filtres dans votre appl
 
 ### Améliorations de la version 15.0
 
-- Alignement complet avec le framework des SDK .Net 15.0
+- Alignement complet avec le framework des SDK .NET 15.0
 - Traitement haute résolution optimisé pour les filtres de luminosité, contraste, saturation et teinte
 
 ### Mises à jour de la version 14.0
 
-- Compatibilité complète avec les SDK .Net 14.0
+- Compatibilité complète avec les SDK .NET 14.0
 - Optimisation des performances des opérations de redimensionnement vidéo
 - Algorithme bicubique de redimensionnement vidéo amélioré pour une qualité supérieure
 
 ### Améliorations de la version 12.0
 
-- Intégration à l'infrastructure des SDK .Net 12.0
+- Intégration à l'infrastructure des SDK .NET 12.0
 - Mélangeur audio redessiné avec performances améliorées
 - Correction des problèmes de stabilité lors de l'utilisation de rognage ou redimensionnement avec des paramètres incorrects
 
 ### Fonctionnalités de la version 11.0
 
-- Mise à jour pour correspondre aux spécifications des SDK .Net 11.0
+- Mise à jour pour correspondre aux spécifications des SDK .NET 11.0
 - Algorithmes améliorés de manipulation de tempo et de hauteur tonale audio
 - Performances optimisées de la balance vidéo pour un traitement plus fluide
 
 ### Développements de la version 10.0
 
-- Alignement avec l'architecture des SDK .Net 10.0
+- Alignement avec l'architecture des SDK .NET 10.0
 - Composant Video Mixer entièrement repensé
 
 ### Avancées de la version 9.0
 
-- Intégration au framework des SDK .Net 9.2
+- Intégration au framework des SDK .NET 9.2
 - Bibliothèque d'effets vidéo enrichie
 - Optimisations spécifiques au traitement de contenu 4K
 
 ### Version 8.5 — version initiale
 
-- Première version publique, intégrant les filtres des SDK .Net 8.5
+- Première version publique, intégrant les filtres des SDK .NET 8.5
 - Introduction de la prise en charge Lanczos dans le filtre de redimensionnement vidéo pour une mise à l'échelle de qualité supérieure

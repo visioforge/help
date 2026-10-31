@@ -49,7 +49,7 @@ Esta guía recorre la implementación de captura de video MPEG-2 usando sintoniz
 
 Antes de implementar captura de video MPEG-2, asegúrese de tener:
 
-- Instalado el Video Capture SDK .Net
+- Instalado el Video Capture SDK .NET
 - Un dispositivo sintonizador de TV compatible con capacidad de codificación MPEG-2 interna
 - Paquetes redistributables configurados correctamente para su plataforma objetivo
 - Comprensión básica de conceptos de captura de video en .NET

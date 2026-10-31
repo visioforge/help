@@ -19,7 +19,7 @@ primary_api_classes:
 
 ---
 
-# Blocs AWS S3 - VisioForge Media Blocks SDK .Net
+# Blocs AWS S3 - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 

@@ -20,11 +20,11 @@ primary_api_classes:
 
 ---
 
-# Blocs de sortie — VisioForge Media Blocks SDK .Net
+# Blocs de sortie — VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Les blocs de sortie, également appelés puits, sont responsables de l'écriture des données multimédias vers des fichiers, des flux réseau ou d'autres destinations. Ce sont généralement les derniers blocs d'une chaîne de traitement multimédia. VisioForge Media Blocks SDK .Net fournit une collection complète de blocs de sortie pour divers formats et protocoles.
+Les blocs de sortie, également appelés puits, sont responsables de l'écriture des données multimédias vers des fichiers, des flux réseau ou d'autres destinations. Ce sont généralement les derniers blocs d'une chaîne de traitement multimédia. VisioForge Media Blocks SDK .NET fournit une collection complète de blocs de sortie pour divers formats et protocoles.
 
 Ce guide couvre les blocs de sortie fichier comme MP4, AVI, WebM, MKV, ainsi que les blocs de streaming réseau pour des protocoles comme RTMP (utilisé par YouTube et Facebook Live).
 

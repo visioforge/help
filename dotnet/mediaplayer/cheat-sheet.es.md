@@ -1,6 +1,6 @@
 ---
 title: Hoja de referencia de VisioForge Media Player SDK en C# .NET
-description: Referencia de una página para Media Player SDK .Net — paquetes NuGet, API MediaPlayerCoreX, ejemplo canónico en C#, soporte de plataformas y fallos comunes.
+description: Referencia de una página para Media Player SDK .NET — paquetes NuGet, API MediaPlayerCoreX, ejemplo canónico en C#, soporte de plataformas y fallos comunes.
 tags:
   - Media Player SDK
   - .NET
@@ -35,7 +35,7 @@ primary_api_classes:
 
 # Hoja de referencia de VisioForge Media Player SDK en C# .NET
 
-Use VisioForge Media Player SDK .Net cuando necesite reproducir archivos locales (MP4, MKV, MOV, WebM), streams de red (RTSP, HLS, MPEG-DASH) y audio (MP3, AAC, FLAC) dentro de una aplicación C# en Windows, macOS, Linux, Android o iOS. `MediaPlayerCoreX` es el motor multiplataforma principal; `VideoView` es el control de UI que vincula el motor al árbol visual.
+Use VisioForge Media Player SDK .NET cuando necesite reproducir archivos locales (MP4, MKV, MOV, WebM), streams de red (RTSP, HLS, MPEG-DASH) y audio (MP3, AAC, FLAC) dentro de una aplicación C# en Windows, macOS, Linux, Android o iOS. `MediaPlayerCoreX` es el motor multiplataforma principal; `VideoView` es el control de UI que vincula el motor al árbol visual.
 
 !!! tip "Agentes de IA para programación: usen el servidor MCP de VisioForge"
 
@@ -62,21 +62,21 @@ Todos los objetivos multiplataforma usan una pipeline de decodificación respald
 Paquete principal del SDK (siempre obligatorio):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.28]"/>
 ```
 
 Runtime nativo para Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 Runtime nativo para Windows x86:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.28]"/>
 ```
 
 macOS (nativo) y MacCatalyst (MAUI macOS):
@@ -96,14 +96,14 @@ Android e iOS:
 
 ```xml
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.27]"/>
 ```
 
 Paquetes opcionales de frameworks de UI — agregue el que corresponda a su objetivo:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.28]"/>
 ```
 
 Guía completa de instalación por IDE: [install/index.md](../install/index.md).

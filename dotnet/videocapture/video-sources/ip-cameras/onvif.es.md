@@ -913,7 +913,7 @@ else
 
 - **Código de Muestra**: [Repositorio de Muestras en GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 - **Documentación**: [Documentación de VisioForge](https://www.visioforge.com/help/)
-- **Foro de Soporte**: [Soporte de VisioForge](https://support.visioforge.com)
+- **Foro de Soporte**: [Soporte de VisioForge](https://helpdesk.visioforge.com/helpdesk/my-tickets/new)
 
 ### Demos relacionados
 

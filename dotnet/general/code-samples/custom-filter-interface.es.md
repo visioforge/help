@@ -23,7 +23,7 @@ primary_api_classes:
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-*Nota: La API mostrada en esta guía es la misma en todos nuestros productos SDK, incluyendo Video Capture SDK .Net, Video Edit SDK .Net y Media Player SDK .Net.*
+*Nota: La API mostrada en esta guía es la misma en todos nuestros productos SDK, incluyendo Video Capture SDK .NET, Video Edit SDK .NET y Media Player SDK .NET.*
 
 DirectShow es un framework multimedia poderoso que permite a los desarrolladores realizar operaciones complejas en flujos de medios. Una de sus fortalezas clave es la capacidad de trabajar con interfaces de filtros personalizados, dándole control preciso sobre el procesamiento de medios. Esta guía le guiará a través de la implementación y utilización de interfaces de filtros DirectShow personalizados en sus aplicaciones .NET.
 

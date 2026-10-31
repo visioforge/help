@@ -80,7 +80,7 @@ var maxDifference = 500;
 var res = VFPSearch.Search(fragment, 0, main, 0, out var difference, maxDifference);
 
 // verificar el resultado
-if (res > 0)
+if (res != int.MaxValue)
 {
     TimeSpan ts = new TimeSpan(res * TimeSpan.TicksPerSecond);
     Console.WriteLine($"Fragmento detectado en {ts:g}, nivel de diferencia es {difference}");
@@ -95,7 +95,7 @@ En este código:
 
 - Definimos un nivel de tolerancia para diferencias entre huellas
 - Realizamos la operación de búsqueda entre nuestro fragmento y el video principal
-- Verificamos si se encontró una posición coincidente (valor de resultado positivo)
+- Verificamos si se encontró una posición coincidente (`Search` devuelve `int.MaxValue` cuando no encuentra el fragmento; 0 significa una coincidencia al inicio del video)
 - Convertimos el resultado a una marca de tiempo y la mostramos junto con el valor de diferencia
 
 ## Consideraciones de rendimiento

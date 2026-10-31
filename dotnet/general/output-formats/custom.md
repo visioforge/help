@@ -222,12 +222,12 @@ When implementing custom output formats, keep these performance tips in mind:
 
 To use custom DirectShow filters, ensure you have the appropriate redistributable packages installed:
 
-### Video Capture SDK .Net
+### Video Capture SDK .NET
 
 - [x86 Package](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
 - [x64 Package](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-### Video Edit SDK .Net
+### Video Edit SDK .NET
 
 - [x86 Package](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
 - [x64 Package](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)

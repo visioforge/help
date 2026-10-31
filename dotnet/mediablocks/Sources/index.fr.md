@@ -439,7 +439,7 @@ Le `UniversalSourceBlock` se configure via `UniversalSourceSettings`. Il est rec
 Propriétés et paramètres clés de `UniversalSourceSettings` :
 
 - **URI/Nom de fichier** :
-  - `UniversalSourceSettings.CreateAsync(string filename, bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false)` : crée les paramètres à partir d'un chemin de fichier local.
+  - `UniversalSourceSettings.CreateAsync(string filename, bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false)` : crée les paramètres à partir d'un chemin de fichier local ou d'une URI (`scheme://` ou `data:`).
   - `UniversalSourceSettings.CreateAsync(System.Uri uri, bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false)` : crée les paramètres à partir d'un `System.Uri` (peut être une URI de fichier ou une URI réseau telle que HTTP, RTSP — bien que des blocs dédiés soient souvent préférés pour les flux réseau). Pour iOS, un `Foundation.NSUrl` est utilisé.
   - Les booléens `renderVideo`, `renderAudio`, `renderSubtitle` contrôlent les flux traités. La méthode `CreateAsync` peut les actualiser en fonction de la disponibilité réelle des flux dans le fichier/flux multimédia si `ignoreMediaInfoReader` est `false` (par défaut).
 - `StartPosition` (`TimeSpan?`) : définit la position de départ de la lecture.
@@ -1388,7 +1388,7 @@ l'adresse par ce nom.
 
 #### Plateformes
 
-Windows, macOS, Linux.
+Windows (x86, x64), macOS, Linux, Android. Non disponible dans un processus Windows ARM64 natif (`IsAvailable()` renvoie `false`) ; une build x64 exécute NDI sous Windows on Arm en émulation.
 
 ### Bloc source NDI X
 
@@ -1482,7 +1482,7 @@ await pipeline.StartAsync();
 
 #### Plateformes
 
-Windows.
+Windows (x86, x64). Non disponible dans un processus Windows ARM64 natif (`IsAvailable()` renvoie `false`) ; une build x64 exécute NDI sous Windows on Arm en émulation.
 
 ### Bloc source GenICam
 

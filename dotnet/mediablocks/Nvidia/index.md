@@ -19,7 +19,7 @@ primary_api_classes:
 
 ---
 
-# Nvidia Blocks - VisioForge Media Blocks SDK .Net
+# Nvidia Blocks - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 

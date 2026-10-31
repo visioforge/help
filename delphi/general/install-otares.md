@@ -113,4 +113,4 @@ When basic fixes don't work, try these advanced approaches:
    - Confirm library paths in IDE options
 
 ---
-For personalized assistance with this issue, [contact our support team](https://support.visioforge.com/) and our technical experts will guide you through resolving your specific package installation problems.
+For personalized assistance with this issue, [contact our support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) and our technical experts will guide you through resolving your specific package installation problems.

@@ -28,7 +28,7 @@ primary_api_classes:
 
 ## Introduction
 
-Ce guide complet montre comment créer une application de visualisation de caméra entièrement fonctionnelle à l'aide du Media Blocks SDK .Net. Le SDK fournit un framework robuste pour capturer, traiter et afficher des flux vidéo sur de multiples plateformes, notamment Windows, macOS, iOS et Android.
+Ce guide complet montre comment créer une application de visualisation de caméra entièrement fonctionnelle à l'aide du Media Blocks SDK .NET. Le SDK fournit un framework robuste pour capturer, traiter et afficher des flux vidéo sur de multiples plateformes, notamment Windows, macOS, iOS et Android.
 
 ## Vue d'ensemble de l'architecture
 
@@ -318,6 +318,6 @@ public class CameraViewerExample
 
 ## Conclusion
 
-Avec Media Blocks SDK .Net, construire des applications caméra puissantes devient simple. L'architecture à composants offre flexibilité et performance sur toutes les plateformes tout en masquant la complexité de l'intégration des périphériques caméra.
+Avec Media Blocks SDK .NET, construire des applications caméra puissantes devient simple. L'architecture à composants offre flexibilité et performance sur toutes les plateformes tout en masquant la complexité de l'intégration des périphériques caméra.
 
 Pour des exemples de code source complets, consultez notre [dépôt GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo).

@@ -173,4 +173,4 @@ When selecting a renderer for your application, consider these factors:
 4. Compatibility needs for your deployment environment
 
 ---
-Please get in touch with [support](https://support.visioforge.com/) if you need technical assistance with this implementation. Visit our [GitHub](https://github.com/visioforge/) repository for additional code samples and resources.
+Please get in touch with [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) if you need technical assistance with this implementation. Visit our [GitHub](https://github.com/visioforge/) repository for additional code samples and resources.

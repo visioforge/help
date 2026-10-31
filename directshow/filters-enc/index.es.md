@@ -79,20 +79,20 @@ Para especificaciones detalladas y una lista completa de todos los codificadores
 
 ### Versión 11.4
 
-- Componentes de filtros actualizados para coincidir con implementaciones actuales del SDK .Net
+- Componentes de filtros actualizados para coincidir con implementaciones actuales del SDK .NET
 - Codificadores AMD AMF H264/H265 mejorados con últimas optimizaciones
 - Codificadores Intel QuickSync H265 mejorados para mejor rendimiento
 - Aplicaciones de ejemplo actualizadas con nuevos ejemplos de código
 
 ### Versión 11.0
 
-- Filtros sincronizados con versiones actuales del SDK .Net
+- Filtros sincronizados con versiones actuales del SDK .NET
 - Codificadores Nvidia NVENC H264/H265 actualizados para mejor calidad
 - Introducido nuevo componente de filtro muxer SSF
 
 ### Versión 10.0
 
-- Todos los filtros actualizados para alinear con implementaciones del SDK .Net
+- Todos los filtros actualizados para alinear con implementaciones del SDK .NET
 - Codificadores Media Foundation mejorados (H264, H265, AAC)
 - Agregado filtro de codificador de video NVENC dedicado como reemplazo del codificador CUDA
 
@@ -111,7 +111,7 @@ Para especificaciones detalladas y una lista completa de todos los codificadores
 
 ### Versión 8.5 - Lanzamiento Inicial
 
-- Primer lanzamiento público incluyendo filtros de SDKs .Net
+- Primer lanzamiento público incluyendo filtros de SDKs .NET
 - Componentes principales: codificador AAC, codificadores H264 (CPU/GPU)
 - Codificadores adicionales: H265 (CPU/GPU), VP8, Vorbis
 - Soporte de contenedor: muxer MP4, muxer WebM

@@ -1,5 +1,5 @@
 ---
-title: Captura Separada de Vista Previa en Video Capture SDK .Net
+title: Captura Separada de Vista Previa en Video Capture SDK .NET
 description: Controla captura y vista previa de forma independiente en .NET con ejemplos de código para gestión eficiente de grabación.
 tags:
   - Video Capture SDK

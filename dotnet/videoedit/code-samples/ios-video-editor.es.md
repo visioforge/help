@@ -164,4 +164,4 @@ Para instrucciones detalladas de despliegue en iOS, incluyendo paquetes NuGet, p
 - **Rendimiento nativo**: Codificación acelerada por GPU en dispositivos Apple
 
 ---
-Explore muestras de edición de video iOS en nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) o contacte a [soporte](https://support.visioforge.com/) para recursos.
+Explore muestras de edición de video iOS en nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples) o contacte a [soporte](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) para recursos.

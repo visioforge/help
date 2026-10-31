@@ -126,7 +126,7 @@ Les sections suivantes listent tous les effets disponibles. Chaque effet inclut 
 | Effet | SDK | Description |
 |--------|-----|-------------|
 | VideoEffectLUT | 🪟 Classique | Étalonnage par table de correspondance utilisant des fichiers LUT 3D pour correction colorimétrique professionnelle. |
-| LUTVideoEffect | 🌍 Multiplateforme | Prise en charge LUT 3D multiplateforme avec plusieurs modes d'interpolation. |
+| LUTVideoEffect | 🌍 Multiplateforme | Prise en charge LUT 3D multiplateforme avec plusieurs modes d'interpolation. Non disponible sur iOS. |
 | VideoEffectPosterize | 🪟 Classique | Réduit le nombre de couleurs, créant un effet d'affiche avec des niveaux de couleur discrets. |
 | VideoEffectSolorize | 🪟 Classique | Effet de solarisation qui inverse les couleurs au-dessus d'un seuil de luminosité. |
 

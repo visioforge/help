@@ -112,7 +112,7 @@ Une fois l'installation terminée, vous pouvez commencer à utiliser le contrôl
 Pour les développeurs souhaitant explorer des exemples et techniques d'implémentation supplémentaires :
 
 - Accédez à notre [dépôt GitHub](https://github.com/visioforge/) pour des exemples de code et des projets d'exemple
-- Contactez notre [équipe de support technique](https://support.visioforge.com/) pour une assistance personnalisée dans les défis d'intégration
+- Contactez notre [équipe de support technique](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) pour une assistance personnalisée dans les défis d'intégration
 - Consultez notre documentation pour des références d'API détaillées et des scénarios d'utilisation avancés
 
 En suivant ce guide d'installation, vous aurez intégré avec succès le contrôle ActiveX TVFVideoCapture dans votre environnement de développement C++ Builder, activant ainsi de puissantes capacités de capture vidéo dans vos applications.

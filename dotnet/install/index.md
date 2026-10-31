@@ -62,10 +62,10 @@ Install the package for the SDK you bought — each one pulls `VisioForge.DotNet
 dependency, so you never reference `Core` directly:
 
 ```cmd
-Install-Package VisioForge.DotNet.VideoCapture   # Video Capture SDK .Net
-Install-Package VisioForge.DotNet.VideoEdit      # Video Edit SDK .Net
-Install-Package VisioForge.DotNet.MediaPlayer    # Media Player SDK .Net
-Install-Package VisioForge.DotNet.MediaBlocks    # Media Blocks SDK .Net
+Install-Package VisioForge.DotNet.VideoCapture   # Video Capture SDK .NET
+Install-Package VisioForge.DotNet.VideoEdit      # Video Edit SDK .NET
+Install-Package VisioForge.DotNet.MediaPlayer    # Media Player SDK .NET
+Install-Package VisioForge.DotNet.MediaBlocks    # Media Blocks SDK .NET
 ```
 
 Additional UI-specific packages may be required depending on your target platform:

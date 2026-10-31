@@ -1,6 +1,6 @@
 ---
 title: Capture d'écran en VB.NET — bureau vers MP4 avec VisioForge
-description: Apprenez à enregistrer l'écran du bureau en VB.NET. Guide complet pour la capture plein écran et région vers MP4 avec audio système via Video Capture SDK .Net.
+description: Apprenez à enregistrer l'écran du bureau en VB.NET. Guide complet pour la capture plein écran et région vers MP4 avec audio système via Video Capture SDK .NET.
 tags:
   - Video Capture SDK
   - .NET
@@ -32,7 +32,7 @@ primary_api_classes:
 
 L'enregistrement de l'écran du bureau dans les applications VB.NET (Visual Basic .NET) est essentiel pour créer des enregistreurs d'écran, des outils de tutoriels et des logiciels de surveillance. Que vous ayez besoin de capture plein écran, d'enregistrement par région ou de capture audio système, ce guide fournit des exemples Visual Basic étape par étape avec [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net).
 
-## Pourquoi utiliser Video Capture SDK .Net pour l'enregistrement d'écran en VB.NET
+## Pourquoi utiliser Video Capture SDK .NET pour l'enregistrement d'écran en VB.NET
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) offre une solution complète d'enregistrement d'écran pour les développeurs VB.NET :
 
@@ -50,9 +50,9 @@ L'enregistrement de l'écran du bureau dans les applications VB.NET (Visual Basi
 Ajoutez les paquets suivants à votre projet VB.NET :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 ## Exemple complet d'enregistrement d'écran en VB.NET

@@ -26,7 +26,7 @@ primary_api_classes:
 
 ## Introduction à la gestion des périphériques vidéo
 
-Le Video Capture SDK .Net offre une prise en charge robuste de tout périphérique de capture vidéo reconnu par votre système d'exploitation. Ce guide montre comment découvrir les périphériques disponibles, inspecter leurs capacités et les intégrer dans vos applications.
+Le Video Capture SDK .NET offre une prise en charge robuste de tout périphérique de capture vidéo reconnu par votre système d'exploitation. Ce guide montre comment découvrir les périphériques disponibles, inspecter leurs capacités et les intégrer dans vos applications.
 
 ## Énumération des périphériques de capture vidéo disponibles
 

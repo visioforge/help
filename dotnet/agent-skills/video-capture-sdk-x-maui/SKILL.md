@@ -7,11 +7,11 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a .NET MAUI application that targets **Windows, Android, iOS, and Mac Catalyst** from a single codebase. The X SDK shares its native runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) that mirrors the legacy `VideoCaptureCore` API but runs on the cross-platform engine. Same C# code targets every OS — only the platform handler glue and per-OS redist NuGets change between TFMs.
 
-Pinned NuGet versions: wrapper **`2026.10.26`**, MAUI handlers **`2026.10.26`**, plus per-OS native redists at the versions shown in the csproj below — these match the official [Video Capture X MAUI samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/MAUI). Moving to a newer 2026.x.x release means moving the wrapper pair to that version and re-checking each redist against it; keep `VisioForge.DotNet.VideoCapture` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same wrapper version. Native redists are pinned to the versions shown in the csproj below. The `VisioForge.CrossPlatform.*` packages are built on their own cadence, so pin each to the newest version published **at or before** the wrapper's release rather than assuming the wrapper's number exists for it; the upstream csproj is a starting point and can itself lag.
+Pinned NuGet versions: wrapper **`2026.10.28`**, MAUI handlers **`2026.10.28`**, plus per-OS native redists at the versions shown in the csproj below — these match the official [Video Capture X MAUI samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/MAUI). Moving to a newer 2026.x.x release means moving the wrapper pair to that version and re-checking each redist against it; keep `VisioForge.DotNet.VideoCapture` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same wrapper version. Native redists are pinned to the versions shown in the csproj below. The `VisioForge.CrossPlatform.*` packages are built on their own cadence, so pin each to the newest version published **at or before** the wrapper's release rather than assuming the wrapper's number exists for it; the upstream csproj is a starting point and can itself lag.
 
 ## When to use this skill
 
-- One MAUI codebase that runs on **Windows, Android, iOS, and Mac Catalyst** with webcam, IP camera, screen, or NDI capture and recording.
+- One MAUI codebase that runs on **Windows, Android, iOS, and Mac Catalyst** with webcam, IP camera, screen, or NDI capture (NDI: not on iOS) and recording.
 - Recording captured video/audio to MP4 (incl. fragmented), MOV, MPEG-TS, AVI, or WebM from a single high-level API.
 - Mobile-friendly preview using `VisioForge.Core.UI.MAUI.VideoView`.
 - Sharing capture/recording code between a Windows desktop "main" app and one or more cross-platform companion apps — the `VideoCaptureCoreX` API is identical across hosts (WPF / MAUI / Avalonia / Uno).
@@ -76,20 +76,20 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.28]"/>
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.27]"/>
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>

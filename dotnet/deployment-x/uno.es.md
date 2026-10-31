@@ -63,7 +63,7 @@ Antes de comenzar su implementación de Uno Platform, asegúrese de que su entor
 
 #### Android
 - Android SDK con niveles de API apropiados
-- Dispositivo Android 5.0 (API 21) o posterior
+- Dispositivo Android 7.0 (API 24) o posterior
 - Java Development Kit (JDK) 11 o posterior
 
 #### iOS/macOS
@@ -107,8 +107,8 @@ Agregue los siguientes paquetes a su proyecto:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.26]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.28]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.28]"/>
 </ItemGroup>
 ```
 
@@ -121,8 +121,8 @@ Agregue paquetes redistributables específicos de plataforma a su proyecto:
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
   <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 </ItemGroup>
 ```
 
@@ -146,7 +146,7 @@ Adicionalmente, necesitará agregar la biblioteca de bindings de Java. Clónela 
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.27]"/>
 </ItemGroup>
 ```
 
@@ -217,15 +217,15 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
   
   <!-- Referencias Core de VisioForge -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.26]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.26]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.10.28]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.10.28]"/>
   </ItemGroup>
   
   <!-- Plataforma Windows -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
   </ItemGroup>
   
   <!-- Plataforma Android -->
@@ -236,7 +236,7 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
   
   <!-- Plataforma iOS -->
   <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.27]"/>
   </ItemGroup>
   
   <!-- Plataforma macOS Catalyst -->

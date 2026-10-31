@@ -1,5 +1,5 @@
 ---
-title: MMT Live - Real-Time Media Monitoring Tool for .Net
+title: MMT Live - Real-Time Media Monitoring Tool for .NET
 description: Use MMT Live to monitor live streams and detect video fragments in real-time with features to help find and manage media library.
 tags:
   - Video Fingerprinting SDK

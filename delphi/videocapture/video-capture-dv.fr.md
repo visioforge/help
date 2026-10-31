@@ -306,4 +306,4 @@ L'implémentation de la capture vidéo DV dans vos applications Delphi, C++ MFC 
 En suivant les exemples d'implémentation de ce guide, vous pouvez intégrer des capacités de capture vidéo de qualité professionnelle dans vos solutions logicielles personnalisées.
 
 ---
-Besoin d'aide supplémentaire pour votre implémentation de capture vidéo ? Visitez notre page [GitHub](https://github.com/visioforge/) pour plus d'exemples de code ou contactez notre [équipe de support](https://support.visioforge.com/) pour des conseils personnalisés.
+Besoin d'aide supplémentaire pour votre implémentation de capture vidéo ? Visitez notre page [GitHub](https://github.com/visioforge/) pour plus d'exemples de code ou contactez notre [équipe de support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) pour des conseils personnalisés.

@@ -1,6 +1,6 @@
 ---
 title: Screen Capture in VB.NET - Record Desktop Video to MP4
-description: Learn how to record your desktop screen in VB.NET. Complete guide for full screen and region capture to MP4 with system audio using Video Capture SDK .Net.
+description: Learn how to record your desktop screen in VB.NET. Complete guide for full screen and region capture to MP4 with system audio using Video Capture SDK .NET.
 tags:
   - Video Capture SDK
   - .NET
@@ -32,7 +32,7 @@ primary_api_classes:
 
 Recording your desktop screen in VB.NET (Visual Basic .NET) applications is essential for building screen recorders, tutorial tools, and surveillance software. Whether you need full screen capture, region recording, or system audio capture, this guide provides step-by-step Visual Basic code examples using [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net).
 
-## Why Use Video Capture SDK .Net for VB.NET Screen Recording
+## Why Use Video Capture SDK .NET for VB.NET Screen Recording
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) provides a complete screen recording solution for VB.NET developers:
 
@@ -50,9 +50,9 @@ Recording your desktop screen in VB.NET (Visual Basic .NET) applications is esse
 Add the following packages to your VB.NET project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 ## Complete VB.NET Screen Recording Example

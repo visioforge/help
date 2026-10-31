@@ -374,7 +374,7 @@ public interface IVFRegister { /* ... */ }
 **Required NuGet Packages:**
 
 - `VisioForge.DirectShowAPI` - DirectShow wrapper library
-- `MediaFoundation.Net` - Media Foundation wrapper for EVR renderer
+- `MediaFoundation.NET` - Media Foundation wrapper for EVR renderer
 
 **Audio Track Selection Example:**
 
@@ -508,7 +508,7 @@ See [examples.md](examples.md) for the canonical helper pattern reused across mu
 ### Version 10.0
 
 - Initial release as a standalone DirectShow filter
-- For earlier version history, please refer to Video Capture SDK .Net changelog
+- For earlier version history, please refer to Video Capture SDK .NET changelog
 
 ## Additional Resources
 

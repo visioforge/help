@@ -187,4 +187,4 @@ Successfully managing Delphi packages for both 32-bit and 64-bit development fun
 While this approach introduces additional complexity compared to purely 32-bit development, the structured methodology enables you to leverage the substantial benefits of 64-bit compilation while maintaining a fully functional design-time experience within the familiar Delphi IDE environment. Consistent testing across both platforms represents the final, crucial verification step to guarantee robust, reliable applications that perform optimally in both 32-bit and 64-bit environments.
 
 ---
-Need additional information? Please [contact support](https://support.visioforge.com/) for assistance with specific scenarios or component issues.
+Need additional information? Please [contact support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) for assistance with specific scenarios or component issues.

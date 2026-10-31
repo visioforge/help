@@ -284,7 +284,7 @@ Obtener código de configuración específico de plataforma para copia de archiv
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
@@ -468,7 +468,7 @@ El servidor MCP ofrece:
 
 ¿Necesita ayuda? Póngase en contacto:
 
-- **[Portal de Soporte](https://support.visioforge.com/)** - Soporte técnico y reporte de problemas
+- **[Portal de Soporte](https://helpdesk.visioforge.com/helpdesk/my-tickets)** - Soporte técnico y reporte de problemas
 - **[Comunidad Discord](https://discord.com/invite/yvXUG56WCH)** - Chatea con desarrolladores y obtén respuestas rápidas
 - **[Muestras en GitHub](https://github.com/visioforge/.Net-SDK-s-samples)** - Proyectos de ejemplo completos
 - **Correo electrónico:** <support@visioforge.com>

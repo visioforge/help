@@ -284,7 +284,7 @@ Get platform-specific file copying/build configuration code. Returns MSBuild tar
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
@@ -468,7 +468,7 @@ The MCP server features:
 
 Need help? Get in touch:
 
-- **[Support Portal](https://support.visioforge.com/)** - Technical support and issue reporting
+- **[Support Portal](https://helpdesk.visioforge.com/helpdesk/my-tickets)** - Technical support and issue reporting
 - **[Discord Community](https://discord.com/invite/yvXUG56WCH)** - Chat with developers and get quick answers
 - **[GitHub Samples](https://github.com/visioforge/.Net-SDK-s-samples)** - Complete example projects
 - **Email:** <support@visioforge.com>

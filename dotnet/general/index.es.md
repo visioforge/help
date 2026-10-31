@@ -9,9 +9,9 @@ order: 18
 sidebar_label: General Information
 ---
 
-# SDKs .Net de VisioForge: información, manuales y uso
+# SDKs .NET de VisioForge: información, manuales y uso
 
-Esta sección proporciona información esencial, manuales de software detallados y guías de uso prácticas para la suite de SDKs .Net de VisioForge. Ya sea que esté trabajando con captura de video, reproducción de medios o edición de video, encuentre los recursos que necesita a continuación.
+Esta sección proporciona información esencial, manuales de software detallados y guías de uso prácticas para la suite de SDKs .NET de VisioForge. Ya sea que esté trabajando con captura de video, reproducción de medios o edición de video, encuentre los recursos que necesita a continuación.
 
 - **[Guía de Uso del Servidor MCP](mcp-server-usage.md)** - Conecte su asistente de programación con IA al Servidor MCP de VisioForge para acceso instantáneo a documentación de API, guías de despliegue y ejemplos de código
 - **[Usar VisioForge en Unity](unity/index.md)** - Importe el paquete autónomo de Unity para reproducción de video y streaming de cámara RTSP en Unity 6 en Windows
@@ -26,7 +26,7 @@ Esta sección proporciona información esencial, manuales de software detallados
 
 ## Componentes del SDK
 
-Explore los componentes principales de los SDKs .Net de VisioForge:
+Explore los componentes principales de los SDKs .NET de VisioForge:
 
 ### Procesamiento de medios y efectos
 

@@ -140,7 +140,9 @@ Le tableau ci-dessous présente la prise en charge des protocoles réseau pour c
 | UDP                           | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | TCP                           | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | HTTP                          | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
-| NDI                           | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
+| NDI                           | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2718; |
 | VNC (source)                  | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | GenICam (source)              | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | AWS S3                        | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
+
+Sous Windows, NDI couvre x86 et x64 ; il n'est pas disponible dans un processus Windows ARM64 natif. NDI n'est pas disponible sous iOS : le runtime GStreamer iOS du SDK n'inclut pas le plugin NDI. Sous Android, la réception NDI fonctionne dès que la bibliothèque du SDK NDI du fournisseur (`libndi.so`) est empaquetée avec l'application, et le SDK la trouve à l'exécution ; la sortie NDI n'est pas disponible sous Android.

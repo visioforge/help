@@ -19,11 +19,11 @@ primary_api_classes:
 
 ---
 
-# Parser Blocks - VisioForge Media Blocks SDK .Net
+# Parser Blocks - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Parser blocks are essential components in media processing pipelines. They are used to parse elementary streams, which might be raw or partially processed, to extract metadata, and to prepare the streams for further processing like decoding or multiplexing. VisioForge Media Blocks SDK .Net offers a variety of parser blocks for common video and audio codecs.
+Parser blocks are essential components in media processing pipelines. They are used to parse elementary streams, which might be raw or partially processed, to extract metadata, and to prepare the streams for further processing like decoding or multiplexing. VisioForge Media Blocks SDK .NET offers a variety of parser blocks for common video and audio codecs.
 
 ## Video Parser Blocks
 

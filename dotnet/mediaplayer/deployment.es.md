@@ -1,5 +1,5 @@
 ---
-title: Despliegue de Media Player SDK .Net con NuGet y filtros
+title: Despliegue de Media Player SDK .NET con NuGet y filtros
 description: Despliegue aplicaciones de Media Player SDK con paquetes NuGet, dependencias de runtime, filtros DirectShow para Windows y entornos multiplataforma.
 tags:
   - Media Player SDK
@@ -24,15 +24,15 @@ tags:
 
 ---
 
-# Guía de Despliegue de Media Player SDK .Net
+# Guía de Despliegue de Media Player SDK .NET
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Esta guía completa cubre todos los escenarios de despliegue para el Media Player SDK .Net, asegurando que sus aplicaciones funcionen correctamente en diferentes entornos. Ya sea que esté desarrollando aplicaciones multiplataforma o soluciones específicas de Windows, esta guía proporciona los pasos necesarios para un despliegue exitoso.
+Esta guía completa cubre todos los escenarios de despliegue para el Media Player SDK .NET, asegurando que sus aplicaciones funcionen correctamente en diferentes entornos. Ya sea que esté desarrollando aplicaciones multiplataforma o soluciones específicas de Windows, esta guía proporciona los pasos necesarios para un despliegue exitoso.
 
 ## Descripción General de Tipos de Motor
 
-El Media Player SDK .Net ofrece dos tipos principales de motor, cada uno diseñado para escenarios de despliegue específicos:
+El Media Player SDK .NET ofrece dos tipos principales de motor, cada uno diseñado para escenarios de despliegue específicos:
 
 ### Motor MediaPlayerCoreX (Multiplataforma)
 
@@ -46,7 +46,7 @@ El motor MediaPlayerCore está optimizado específicamente para entornos Windows
 
 ## Opciones de Despliegue
 
-Hay tres métodos principales para desplegar los componentes del Media Player SDK .Net:
+Hay tres métodos principales para desplegar los componentes del Media Player SDK .NET:
 
 1. Usando paquetes NuGet (recomendado para la mayoría de escenarios)
 2. Usando instaladores silenciosos automáticos (requiere privilegios administrativos)

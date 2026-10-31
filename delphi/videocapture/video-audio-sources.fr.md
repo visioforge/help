@@ -316,4 +316,4 @@ VideoCapture1.Audio_CaptureLine = cbAudioInputLine.Text
 ```
 
 ---
-Veuillez contacter le [support](https://support.visioforge.com/) pour obtenir de l'aide concernant ce tutoriel. Visitez notre page [GitHub](https://github.com/visioforge/) pour obtenir plus d'exemples de code.
+Veuillez contacter le [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) pour obtenir de l'aide concernant ce tutoriel. Visitez notre page [GitHub](https://github.com/visioforge/) pour obtenir plus d'exemples de code.

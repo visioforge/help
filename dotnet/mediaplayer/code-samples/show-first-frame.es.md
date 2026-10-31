@@ -86,3 +86,4 @@ Cuando implemente esta característica, tenga en cuenta:
 - La visualización del primer fotograma es casi instantánea para la mayoría de los formatos de video
 - El uso de recursos es mínimo ya que el reproductor no almacena en buffer más allá del primer fotograma
 - Funciona con todos los formatos de video soportados incluyendo MP4, MOV, AVI y más
+- En `MediaPlayerCore`, la propiedad se aplica a un solo inicio y después vuelve a `false`; no se aplica con `ConsoleUsage`, cuyo `Play()` espera hasta el final del archivo, ni a una fuente en vivo que indica que no puede mostrar un fotograma en pausa, la cual se reproduce en su lugar

@@ -26,7 +26,7 @@ primary_api_classes:
 
 ---
 
-# Bloque de Grabación Pre-Evento - VisioForge Media Blocks SDK .Net
+# Bloque de Grabación Pre-Evento - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -102,6 +102,8 @@ stateDiagram-v2
 | `PostEventRecording` | Fase post-evento — grabando fotogramas en vivo hasta que el temporizador expire. |
 | `Stopped` | Detenido e inactivo. |
 
+Un cambio del formato codificado durante una ejecución — resolución, perfil, nivel, datos de códec, o la frecuencia, el número de canales o el códec de audio — cierra una grabación en curso, igual que `StopRecording()`, y descarta los fotogramas almacenados de ese flujo. El otro flujo permanece en el búfer. El archivo siguiente se construye con el formato nuevo. Una frecuencia de imagen o una relación de aspecto de píxel repetidas no cierran la grabación.
+
 ## Eventos
 
 ```csharp
@@ -122,7 +124,7 @@ Propiedades de `PreEventRecordingEventArgs`:
 
 | Método | Descripción |
 | --- | --- |
-| `TriggerRecording(string filename)` | Vaciar el buffer circular al archivo especificado e iniciar la grabación de fotogramas en vivo. Si ya está grabando, extiende la grabación actual (reinicia el temporizador post-evento). |
+| `TriggerRecording(string filename)` | Vaciar el buffer circular al archivo especificado e iniciar la grabación de fotogramas en vivo. Si ya está grabando, extiende la grabación actual (reinicia el temporizador post-evento). Se rechaza, con un error, hasta que llega el primer fotograma de vídeo codificado y, si el audio está habilitado, hasta que llega el primer fotograma de audio codificado. Una llamada posterior graba con normalidad. |
 | `ExtendRecording()` | Reiniciar el temporizador post-evento. Llame a esto cuando la condición del disparador sigue activa (ej. el movimiento continúa). |
 | `StopRecording()` | Detener manualmente la grabación actual y volver al modo de almacenamiento en buffer. |
 | `StartBuffering()` | Iniciar o reanudar el almacenamiento en buffer después de estar detenido. |

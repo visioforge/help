@@ -86,3 +86,4 @@ Lors de l'implémentation de cette fonctionnalité, gardez à l'esprit :
 - L'affichage de la première image est quasi instantané pour la plupart des formats vidéo
 - L'utilisation des ressources est minimale car le lecteur ne met pas en tampon au-delà de la première image
 - Fonctionne avec tous les formats vidéo pris en charge, notamment MP4, MOV, AVI, etc.
+- Dans `MediaPlayerCore`, la propriété s'applique à un seul démarrage, puis revient à `false` ; elle n'est pas appliquée avec `ConsoleUsage`, dont `Play()` attend la fin du fichier, ni à une source en direct qui signale ne pas pouvoir afficher d'image en pause, laquelle est lue à la place

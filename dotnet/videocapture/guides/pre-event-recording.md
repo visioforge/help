@@ -34,11 +34,11 @@ primary_api_classes:
 
 ---
 
-# Pre-Event Recording Using C# .Net: Circular Buffer Video Capture
+# Pre-Event Recording Using C# .NET: Circular Buffer Video Capture
 
 Pre-event recording allows your application to continuously buffer video and audio in memory and save event clips that include footage from before the trigger occurred. Use it to record webcam video, capture IP camera streams, or save RTSP footage with motion detection triggers — essential for surveillance, security, and monitoring applications where capturing what happened before an event is critical.
 
-## Key Features of Video Capture SDK .Net Pre-Event Recording
+## Key Features of Video Capture SDK .NET Pre-Event Recording
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -361,20 +361,20 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 Major SDK package (managed):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
 ```
 
 Native dependencies for Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 For alternative platforms (macOS, Linux, Android, iOS), use the corresponding native dependency packages. See the [Deployment Guide](../../deployment-x/index.md) for details.
 
 ## Cross-Platform Compatibility
 
-Pre-event recording is available on all platforms supported by Video Capture SDK .Net:
+Pre-event recording is available on all platforms supported by Video Capture SDK .NET:
 
 - Windows (x86, x64, ARM64)
 - macOS (x64, ARM64)

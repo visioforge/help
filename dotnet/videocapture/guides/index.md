@@ -14,17 +14,17 @@ primary_api_classes:
 
 ---
 
-# Advanced Video Capture SDK .Net Guides & Tutorials
+# Advanced Video Capture SDK .NET Guides & Tutorials
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview
 
-Explore advanced implementation techniques, specialized usage guides, and tutorials for the Video Capture SDK .Net. These resources address specific development scenarios that require custom approaches, including synchronizing multiple capture objects, webcam integration, DirectShow capture techniques, and more.
+Explore advanced implementation techniques, specialized usage guides, and tutorials for the Video Capture SDK .NET. These resources address specific development scenarios that require custom approaches, including synchronizing multiple capture objects, webcam integration, DirectShow capture techniques, and more.
 
 ## Available Guides
 
-This curated collection of guides addresses specific advanced functionalities within the Video Capture SDK .Net. Each guide provides practical instructions and insights to help you implement complex features effectively.
+This curated collection of guides addresses specific advanced functionalities within the Video Capture SDK .NET. Each guide provides practical instructions and insights to help you implement complex features effectively.
 
 ### Getting Started Guides
 
@@ -48,7 +48,7 @@ Explore specialized guides on integrating various camera functionalities and mas
 
 ## Additional Resources
 
-Beyond the specific guides listed above, we offer a wealth of supplementary materials to support your development journey with the Video Capture SDK .Net.
+Beyond the specific guides listed above, we offer a wealth of supplementary materials to support your development journey with the Video Capture SDK .NET.
 
 ### Code Samples
 

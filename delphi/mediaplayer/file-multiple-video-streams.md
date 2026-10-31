@@ -262,4 +262,4 @@ The ability to play video files with multiple streams opens up numerous possibil
 By following the techniques outlined in this guide, you can effectively incorporate multiple video stream support into your applications, enhancing user experience and expanding the capabilities of your multimedia projects.
 
 ---
-Please get in touch with [support](https://support.visioforge.com/) if you need assistance with this functionality. Visit our [GitHub](https://github.com/visioforge/) page for additional code samples and implementation examples.
+Please get in touch with [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) if you need assistance with this functionality. Visit our [GitHub](https://github.com/visioforge/) page for additional code samples and implementation examples.

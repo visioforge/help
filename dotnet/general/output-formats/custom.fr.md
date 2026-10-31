@@ -222,12 +222,12 @@ Lors de l'implémentation de formats de sortie personnalisés, gardez ces consei
 
 Pour utiliser des filtres DirectShow personnalisés, assurez-vous d'avoir installé les paquets redistribuables appropriés :
 
-### Video Capture SDK .Net
+### Video Capture SDK .NET
 
 - [Paquet x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
 - [Paquet x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-### Video Edit SDK .Net
+### Video Edit SDK .NET
 
 - [Paquet x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
 - [Paquet x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)

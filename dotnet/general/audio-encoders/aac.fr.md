@@ -42,7 +42,7 @@ Le SDK VisioForge fournit plusieurs implémentations d'encodeurs AAC, chacune av
 
 ## Qu'est-ce que la sortie M4A ?
 
-M4A est un format de fichier utilisé pour stocker des données audio encodées avec le codec Advanced Audio Coding (AAC). Les SDK VisioForge .Net offrent une prise en charge robuste pour la création de fichiers audio M4A de haute qualité via leur classe dédiée M4AOutput. Ce format est largement utilisé pour la distribution audio numérique grâce à son excellente efficacité de compression et à sa qualité sonore.
+M4A est un format de fichier utilisé pour stocker des données audio encodées avec le codec Advanced Audio Coding (AAC). Les SDK VisioForge .NET offrent une prise en charge robuste pour la création de fichiers audio M4A de haute qualité via leur classe dédiée M4AOutput. Ce format est largement utilisé pour la distribution audio numérique grâce à son excellente efficacité de compression et à sa qualité sonore.
 
 ## Sortie M4A (AAC) multiplateforme
 

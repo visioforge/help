@@ -165,4 +165,4 @@ For optimal screen recording performance:
 - Remember that cursor capture adds slight processing overhead
 
 ---
-For additional code samples and implementation examples, visit our [GitHub](https://github.com/visioforge/) repository. For technical assistance with implementation, please contact our [support team](https://support.visioforge.com/).
+For additional code samples and implementation examples, visit our [GitHub](https://github.com/visioforge/) repository. For technical assistance with implementation, please contact our [support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new).

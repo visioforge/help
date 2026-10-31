@@ -1,6 +1,6 @@
 ---
 title: Ejemplos de código C# para edición de video con .NET SDK
-description: Ejemplos prácticos de Video Edit SDK .Net — superposiciones de texto/imagen, efectos, transiciones y manipulación de audio para desarrolladores .NET.
+description: Ejemplos prácticos de Video Edit SDK .NET — superposiciones de texto/imagen, efectos, transiciones y manipulación de audio para desarrolladores .NET.
 sidebar_label: Ejemplos de código
 tags:
   - Video Edit SDK
@@ -12,7 +12,7 @@ tags:
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Esta página recopila recetas en C# listas para usar para los escenarios de edición más comunes con Video Edit SDK .Net. Cada fragmento está verificado contra el código fuente del SDK y las demos bajo [`Video Edit SDK`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK). Las recetas siguientes utilizan el motor `VideoEditCore` (solo Windows). El código multiplataforma basado en `VideoEditCoreX` sigue una forma similar con tipos de fuente y de efecto específicos del motor.
+Esta página recopila recetas en C# listas para usar para los escenarios de edición más comunes con Video Edit SDK .NET. Cada fragmento está verificado contra el código fuente del SDK y las demos bajo [`Video Edit SDK`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK). Las recetas siguientes utilizan el motor `VideoEditCore` (solo Windows). El código multiplataforma basado en `VideoEditCoreX` sigue una forma similar con tipos de fuente y de efecto específicos del motor.
 
 ## Recetas disponibles
 

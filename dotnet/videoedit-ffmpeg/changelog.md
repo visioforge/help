@@ -16,9 +16,9 @@ primary_api_classes:
 
 Our latest release brings significant improvements to deployment flexibility and framework compatibility:
 
-### .Net Framework Upgrade
+### .NET Framework Upgrade
 
-* Full migration to .Net 4.6 framework ensuring better performance and compatibility with modern systems
+* Full migration to .NET 4.6 framework ensuring better performance and compatibility with modern systems
 * Enhanced runtime reliability with updated core components
 
 ### Streamlined Distribution Model
@@ -28,7 +28,7 @@ Our latest release brings significant improvements to deployment flexibility and
 
 ### Cross-Platform Development
 
-* Consolidated .Net Core and .Net Framework packages into a single unified distribution
+* Consolidated .NET Core and .NET Framework packages into a single unified distribution
 * Simplified dependency management across different target platforms
 
 ### Deployment Improvements
@@ -49,8 +49,8 @@ This version focused on core audio capabilities and cross-platform support:
 
 ### Framework Updates
 
-* Added comprehensive .Net Core support for cross-platform development
-* Backward compatibility maintained with existing .Net Framework implementations
+* Added comprehensive .NET Core support for cross-platform development
+* Backward compatibility maintained with existing .NET Framework implementations
 * Performance optimizations for both runtime environments
 
 ### Technical Improvements
@@ -97,7 +97,7 @@ A significant update with many new features and architectural improvements:
 
 ### Output Format Additions
 
-* GIF output support in both Video Edit SDK .Net and Video Capture SDK .Net
+* GIF output support in both Video Edit SDK .NET and Video Capture SDK .NET
 * Custom MP3 splitter addressing playback issues with problematic MP3 files
 
 ### Structural Changes
@@ -171,8 +171,8 @@ The foundation release that established the core functionality:
 
 When upgrading between versions, please consider the following:
 
-* Version 12.1 requires .Net Framework 4.6 or higher
-* Version 11.3 and above support both .Net Core and .Net Framework
+* Version 12.1 requires .NET Framework 4.6 or higher
+* Version 11.3 and above support both .NET Core and .NET Framework
 * Version 10.0 introduced breaking changes in assembly structure
 * NuGet packages provide the simplest upgrade path between versions
 

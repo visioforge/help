@@ -32,7 +32,7 @@ When working with video processing in .NET applications, you'll often need to ap
 
 ### Example: Lightness Effect in Media Player SDK
 
-This detailed example demonstrates how to implement a lightness effect, which is a common video enhancement technique. The same implementation approach applies to Video Edit SDK .Net and Video Capture SDK .Net environments.
+This detailed example demonstrates how to implement a lightness effect, which is a common video enhancement technique. The same implementation approach applies to Video Edit SDK .NET and Video Capture SDK .NET environments.
 
 ### Step 1: Define the Effect Interface
 

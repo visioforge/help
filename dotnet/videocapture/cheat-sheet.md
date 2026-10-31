@@ -37,9 +37,9 @@ primary_api_classes:
   - MP4Output
 ---
 
-# VisioForge Video Capture SDK .Net — Cheat Sheet
+# VisioForge Video Capture SDK .NET — Cheat Sheet
 
-Video Capture SDK .Net captures from webcams, IP cameras (RTSP/ONVIF), screens, Decklink, and GenICam/GigE Vision devices on all 5 .NET platforms (Windows, macOS, Linux, Android, iOS). `VideoCaptureCoreX` is the cross-platform engine; sources are configured via typed settings classes such as `VideoCaptureDeviceSourceSettings`, and devices are listed asynchronously with `DeviceEnumerator`.
+Video Capture SDK .NET captures from webcams, IP cameras (RTSP/ONVIF), screens, Decklink, and GenICam/GigE Vision devices on all 5 .NET platforms (Windows, macOS, Linux, Android, iOS). `VideoCaptureCoreX` is the cross-platform engine; sources are configured via typed settings classes such as `VideoCaptureDeviceSourceSettings`, and devices are listed asynchronously with `DeviceEnumerator`.
 
 !!! tip "AI coding agents: use the VisioForge MCP server"
 
@@ -73,12 +73,12 @@ Platform-specific native runtimes — add the ones you target:
 
 ```xml
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 
 <!-- Windows x86 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.28]"/>
 
 <!-- macOS / macCatalyst -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
@@ -89,7 +89,7 @@ Platform-specific native runtimes — add the ones you target:
 
 <!-- Android / iOS -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.27]"/>
 ```
 
 UI integration (pick the one that matches your UI stack):

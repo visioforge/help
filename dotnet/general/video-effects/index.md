@@ -27,13 +27,13 @@ primary_api_classes:
 
 ---
 
-# Video Effects and Processing for .Net Applications
+# Video Effects and Processing for .NET Applications
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
-Our .Net SDKs provide developers with two distinct implementations of video effects to match your platform and performance requirements:
+Our .NET SDKs provide developers with two distinct implementations of video effects to match your platform and performance requirements:
 
 ### Classic Effects (Windows Only)
 Available in **VideoCaptureCore**, **MediaPlayerCore**, and **VideoEditCore**:
@@ -71,7 +71,7 @@ The following effect categories are available in both Classic and Cross-Platform
   - Cross-platform: `VideoBalanceVideoEffect`, `GammaVideoEffect`
 * **Saturation and Color Grading** - Adjust color intensity and apply color corrections
   - Classic: `VideoEffectSaturation` / `GPUVideoEffectSaturation`
-  - Cross-platform: `VideoBalanceVideoEffect`, `ColorEffectsVideoEffect`, `LUTVideoEffect`
+  - Cross-platform: `VideoBalanceVideoEffect`, `ColorEffectsVideoEffect`, `LUTVideoEffect` (not on iOS)
 * **Lightness** - HSL-based brightness adjustment preserving color relationships
   - Classic: `VideoEffectLightness`
 * **Color Filters** - Isolate or enhance specific color channels (Red, Green, Blue)

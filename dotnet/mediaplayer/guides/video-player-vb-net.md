@@ -41,7 +41,7 @@ primary_api_classes:
 
 This guide walks you through building a full-featured video player application in VB.NET (Visual Basic .NET) using [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net). The player supports MP4, AVI, MKV, WMV, WebM, and many other formats with playback controls, timeline seeking, and volume adjustment.
 
-## Why Use Media Player SDK .Net for VB.NET
+## Why Use Media Player SDK .NET for VB.NET
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) provides robust VB.NET video playback with:
 
@@ -55,9 +55,9 @@ This guide walks you through building a full-featured video player application i
 ## Required NuGet Packages
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 ## Complete VB.NET Video Player Example
@@ -268,7 +268,7 @@ Complete VB.NET video player demos:
 
 ### What license do I need for a VB.NET video player application?
 
-Media Player SDK .Net requires a license for development and distribution. A Developer license removes the evaluation watermark and unlocks all features during development. A Release license is required when distributing your application to end users. The SDK is available in Premium edition which includes all supported formats, hardware acceleration, and both DirectShow and GStreamer engines. You can evaluate the SDK without a license — playback works fully but includes a watermark overlay. Visit the [product page](https://www.visioforge.com/media-player-sdk-net) for pricing and license options.
+Media Player SDK .NET requires a license for development and distribution. A Developer license removes the evaluation watermark and unlocks all features during development. A Release license is required when distributing your application to end users. The SDK is available in Premium edition which includes all supported formats, hardware acceleration, and both DirectShow and GStreamer engines. You can evaluate the SDK without a license — playback works fully but includes a watermark overlay. Visit the [product page](https://www.visioforge.com/media-player-sdk-net) for pricing and license options.
 
 ### Which video and audio formats does the VB.NET player support?
 

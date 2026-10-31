@@ -21,11 +21,11 @@ primary_api_classes:
 
 ---
 
-# Demuxer Blocks - VisioForge Media Blocks SDK .Net
+# Demuxer Blocks - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Demuxer blocks are essential components in media processing pipelines. They take a multimedia stream, typically from a file or network source, and separate it into its constituent elementary streams, such as video, audio, and subtitles. This allows for individual processing or rendering of each stream. VisioForge Media Blocks SDK .Net provides several demuxer blocks to handle various container formats.
+Demuxer blocks are essential components in media processing pipelines. They take a multimedia stream, typically from a file or network source, and separate it into its constituent elementary streams, such as video, audio, and subtitles. This allows for individual processing or rendering of each stream. VisioForge Media Blocks SDK .NET provides several demuxer blocks to handle various container formats.
 
 > **Demuxer outputs are encoded.** A demuxer separates the container into its elementary streams; it does not decode them. A decoder block therefore has to sit between a demuxer output and any renderer, sample grabber or video processing block. `UniversalDecoderBlock` picks the decoder from the stream's caps; a codec-specific block such as `H264DecoderBlock` or `HEVCDecoderBlock` works too. Connecting a demuxer straight to a renderer builds and starts without an error and then delivers nothing.
 

@@ -118,7 +118,7 @@ Installation problems related to `.otares` files are documented in our [dedicate
 
 For additional code examples and implementations, visit our [GitHub repository](https://github.com/visioforge/) where we maintain a collection of sample projects.
 
-If you need personalized assistance with installation or implementation, please contact our [technical support team](https://support.visioforge.com/) who can provide guidance specific to your development environment.
+If you need personalized assistance with installation or implementation, please contact our [technical support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) who can provide guidance specific to your development environment.
 
 ---
-For technical questions or installation assistance with this library, please reach out to our [development support team](https://support.visioforge.com/). Browse additional code samples and resources on our [GitHub](https://github.com/visioforge/) page.
+For technical questions or installation assistance with this library, please reach out to our [development support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new). Browse additional code samples and resources on our [GitHub](https://github.com/visioforge/) page.

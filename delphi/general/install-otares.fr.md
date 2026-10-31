@@ -113,4 +113,4 @@ Lorsque les corrections de base ne fonctionnent pas, essayez ces approches avanc
    - Confirmez les chemins de bibliothèque dans les options de l'IDE
 
 ---
-Pour une assistance personnalisée sur ce problème, [contactez notre équipe de support](https://support.visioforge.com/) ; nos experts techniques vous guideront pour résoudre vos problèmes spécifiques d'installation de paquets.
+Pour une assistance personnalisée sur ce problème, [contactez notre équipe de support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) ; nos experts techniques vous guideront pour résoudre vos problèmes spécifiques d'installation de paquets.

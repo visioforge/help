@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-10-27 18:57:10 UTC (094f104bb00)
+**Generated:** 2026-10-31 12:13:22 UTC (2f0070b5992)
 
 ## MCP Server (for AI coding agents)
 
@@ -389,7 +389,7 @@ The following products from the old price list are no longer sold:
 - [Install TVFVideoEdit in Delphi, VB6, and C++ Builder](https://www.visioforge.com/help/docs/delphi/videoedit/install/): Install TVFVideoEdit library in Delphi and ActiveX-compatible IDEs including MFC, VB6, and C++ Builder with package and control setup.
 - [VisioForge Video Edit SDK in C# .NET — Cheat Sheet](https://www.visioforge.com/help/docs/dotnet/videoedit/cheat-sheet/): One-page Video Edit SDK reference with NuGet packages, VideoEditCoreX APIs, a timeline example, platform support, and pitfalls.
 - [Video Editing Code Examples for C# and .NET Developers](https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/): Ready-to-use C# code examples for VisioForge Video Edit SDK .NET. Overlays, transitions, trimming, merging, and audio control with detailed tutorials.
-- [Deploy Video Edit SDK .Net on Windows — NuGet and Installers](https://www.visioforge.com/help/docs/dotnet/videoedit/deployment/): Configure NuGet packages, silent installers, and runtime dependencies for VisioForge Video Edit SDK .NET on x86 and x64 Windows targets.
+- [Deploy Video Edit SDK .NET on Windows — NuGet and Installers](https://www.visioforge.com/help/docs/dotnet/videoedit/deployment/): Configure NuGet packages, silent installers, and runtime dependencies for VisioForge Video Edit SDK .NET on x86 and x64 Windows targets.
 - [Getting Started - Timeline Video Editing API in C# .NET](https://www.visioforge.com/help/docs/dotnet/videoedit/getting-started/): Set up your first project with VisioForge Video Edit SDK .NET. Customizable timelines, multi-format support, transitions, effects, and live preview.
 - [Video Editing - Timeline, Transitions, Overlays in C# .NET](https://www.visioforge.com/help/docs/dotnet/videoedit/): Build video editing apps with VisioForge Video Edit SDK .NET. Timeline editing, transitions, overlays, format conversion, and GPU-accelerated encoding.
 - [SMPTE Wipe Transitions - 100+ Video Effects in C# .NET](https://www.visioforge.com/help/docs/dotnet/videoedit/transitions/): Apply 100+ SMPTE video transition effects with VisioForge Video Edit SDK .NET. Customize border width, softness, and positioning between clips.

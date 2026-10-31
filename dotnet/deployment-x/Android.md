@@ -43,7 +43,7 @@ Before beginning your Android implementation and deployment process, ensure your
 
 - Windows, Linux, or macOS computer
 - Visual Studio with .NET MAUI or Xamarin workloads installed, JetBrains Rider, or Visual Studio Code
-- .Net 8.0 SDK or later (latest stable version recommended)
+- .NET 8.0 SDK or later (latest stable version recommended)
 - Android SDK with appropriate API levels installed
 - Java Development Kit (JDK) 11 or later
 - Basic knowledge of .NET development for Android
@@ -290,7 +290,7 @@ dotnet build -f net8.0-android -c Release /p:AndroidPackageFormat=aab
 
 If you encounter issues with your VisioForge SDK deployment on Android, please consult:
 
-- [Support Portal](https://support.visioforge.com)
+- [Support Portal](https://helpdesk.visioforge.com/helpdesk/my-tickets)
 - [GitHub Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 
 ## Conclusion

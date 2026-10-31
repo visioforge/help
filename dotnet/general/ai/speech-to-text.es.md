@@ -75,7 +75,7 @@ normalización) no aplican.
 | `ModelSize` | `WhisperModelSize.Base` | Etiqueta informativa de la variante de modelo en `WhisperModelPath` (ver abajo). |
 | `Language` | `"auto"` | Código ISO 639-1 (`"en"`, `"es"`, `"fr"`, ...), o `"auto"` para que Whisper lo detecte. |
 | `Task` | `Transcribe` | `Transcribe` (idioma de origen) o `Translate` (a inglés). |
-| `Provider` | `Auto` | Solo `CPU` y `CUDA` tienen sentido para el backend GGML (sin DirectML); `Auto` elige CUDA si está presente, de lo contrario CPU. |
+| `Provider` | `Auto` | Solo `CPU` y `CUDA` tienen sentido para el backend GGML (sin DirectML); `Auto` elige CUDA si está presente, de lo contrario CPU. El runtime de CUDA no forma parte del paquete: para usarlo, agregue `Whisper.net.Runtime.Cuda12.Windows` (o `Whisper.net.Runtime.Cuda12.Linux`) a la aplicación, con la misma versión que `Whisper.net`. |
 | `DeviceId` | `0` | ID del dispositivo de hardware cuando se selecciona un proveedor de GPU. |
 | `Threads` | `0` | Hilos de CPU que usa Whisper. `0` deja que Whisper.net elija según el número de procesadores disponibles. |
 | `EnableVad` | `true` | Segmenta la voz con Silero VAD antes de la transcripción. Cuando es `false`, el audio se transcribe en ventanas fijas, lo que tiende a alucinar texto durante el silencio. |
@@ -323,7 +323,7 @@ bloque nuevo para la siguiente sesión.
 | --- | --- | --- |
 | Nunca se reconoce ningún segmento | `WhisperModelPath` no es válido, o la cadena de audio no está construida | Confirme que el archivo del modelo GGML existe en esa ruta; para captura/reproducción, confirme que la cadena de audio está activa (ver `Audio_OutputBlock` abajo). |
 | Whisper "alucina" texto durante el silencio | `EnableVad` es `false` | Habilite VAD (`EnableVad = true`, el valor predeterminado) para que Whisper solo se ejecute sobre voz detectada, no sobre ventanas fijas que pueden estar en silencio. |
-| La transcripción se retrasa respecto al audio en vivo | Whisper es más lento que el tiempo real en el hardware/tamaño de modelo actual | Elija un `WhisperModelSize`/archivo de modelo más pequeño, o use `Provider = CUDA` en una máquina con GPU NVIDIA. |
+| La transcripción se retrasa respecto al audio en vivo | Whisper es más lento que el tiempo real en el hardware/tamaño de modelo actual | Elija un `WhisperModelSize`/archivo de modelo más pequeño, o use `Provider = CUDA` en una máquina con GPU NVIDIA, con el paquete del runtime de CUDA referenciado (vea `Provider` arriba). |
 | Los segmentos se cortan a mitad de frase | `SileroVadSettings.MaxSpeechMs` corta forzosamente una locución continua larga | Este es un límite deliberado (15 s por defecto) para que una transcripción en curso no pueda crecer sin límite; aumente `MaxSpeechMs` si su escenario necesita segmentos ininterrumpidos más largos y puede tolerar el límite mayor. |
 | No llega audio al bloque en `VideoCaptureCoreX`/`MediaPlayerCoreX` | Cadena de audio no construida (falta `Audio_Source`/`Audio_Play`) | Consulte [Transcripción de micrófono en vivo con VideoCaptureCoreX](#transcripcion-de-microfono-en-vivo-con-videocapturecorex) y [Transcripción de archivo con MediaPlayerCoreX](#transcripcion-de-archivo-con-mediaplayercorex) arriba. |
 | El archivo `.srt`/`.vtt` está vacío | Los segmentos nunca se finalizaron, o la ruta es incorrecta | Confirme que `OutputSrtPath`/`OutputVttPath` apuntan a una ruta con permisos de escritura y que realmente se detectó voz; solo se escriben los segmentos finales. |

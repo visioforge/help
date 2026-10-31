@@ -186,6 +186,10 @@ Les empreintes Search utilisent un algorithme différent optimisé pour la déte
 3. **Redondance réduite** : élimine les informations dupliquées pour un stockage compact
 4. **Correspondance rapide** : optimisée pour les opérations de recherche par fenêtre glissante
 
+!!! warning "Les empreintes Search sont multiplateformes dans le SDK .NET depuis la 2026.10.29"
+
+    Avec le paquet `VisioForge.DotNet.Core.Redist.VideoFingerprinting` 2026.10.29 ou ultérieur, une empreinte Search est identique sous Windows, macOS et Linux : `VFPSearch.Search` retrouve sur chacun d'eux une empreinte créée sur un autre. Les empreintes Search créées sous macOS ou Linux avec une version antérieure de ce paquet utilisent un autre format : la version actuelle les lit de manière incorrecte, ce qui produit des correspondances manquées comme des correspondances fausses ; ne lancez pas de recherche avec elles et générez-les à nouveau. Les empreintes créées sous Windows et toutes les empreintes Compare continuent de fonctionner sans changement.
+
 ### Caractéristiques de performance
 
 | Métrique | Valeur typique | Notes |

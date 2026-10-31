@@ -18,7 +18,7 @@ tags:
 
 ## Introduction
 
-Les filtres de traitement vidéo tiers offrent des capacités puissantes pour manipuler les flux vidéo dans les applications .NET. Ces filtres peuvent être intégrés harmonieusement dans diverses plateformes SDK, y compris Video Capture SDK .Net, Media Player SDK .Net et Video Edit SDK .Net, afin d'enrichir vos applications avec des fonctionnalités avancées de traitement vidéo.
+Les filtres de traitement vidéo tiers offrent des capacités puissantes pour manipuler les flux vidéo dans les applications .NET. Ces filtres peuvent être intégrés harmonieusement dans diverses plateformes SDK, y compris Video Capture SDK .NET, Media Player SDK .NET et Video Edit SDK .NET, afin d'enrichir vos applications avec des fonctionnalités avancées de traitement vidéo.
 
 Ce guide explore comment implémenter, configurer et optimiser les filtres DirectShow tiers dans vos projets .NET, en vous fournissant les connaissances nécessaires pour créer des applications de traitement vidéo sophistiquées.
 

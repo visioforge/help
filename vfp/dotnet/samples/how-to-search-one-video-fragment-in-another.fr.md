@@ -80,7 +80,7 @@ var maxDifference = 500;
 var res = VFPSearch.Search(fragment, 0, main, 0, out var difference, maxDifference);
 
 // vérifier le résultat
-if (res > 0)
+if (res != int.MaxValue)
 {
     TimeSpan ts = new TimeSpan(res * TimeSpan.TicksPerSecond);
     Console.WriteLine($"Fichier fragment détecté à {ts:g}, niveau de différence : {difference}");
@@ -95,7 +95,7 @@ Dans ce code :
 
 - Nous définissons un niveau de tolérance pour les différences entre empreintes
 - Effectuons l'opération de recherche entre notre fragment et la vidéo principale
-- Vérifions si une position correspondante a été trouvée (valeur de résultat positive)
+- Vérifions si une position correspondante a été trouvée (`Search` renvoie `int.MaxValue` lorsque le fragment est introuvable ; 0 signifie une correspondance au tout début de la vidéo)
 - Convertissons le résultat en horodatage et l'affichons avec la valeur de différence
 
 ## Considérations de performance

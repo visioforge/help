@@ -1,5 +1,5 @@
 ---
-title: Video Capture SDK .Net pour l'enregistrement avancé
+title: Video Capture SDK .NET pour l'enregistrement avancé
 description: Video Capture SDK .NET puissant — formats étendus, intégration matérielle et déploiement flexible pour les applications d'enregistrement.
 sidebar_label: Capture vidéo
 order: 11

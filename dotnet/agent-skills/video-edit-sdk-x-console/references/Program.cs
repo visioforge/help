@@ -26,6 +26,14 @@ namespace VEX_Console_Sample
     {
         private static async Task<int> Main(string[] args)
         {
+#if __MACOS__
+            // A macOS exe has an AppKit context with no run loop; continuations posted to it never run.
+            System.Threading.SynchronizationContext.SetSynchronizationContext(null);
+            // The process starts inside the .app bundle; resolve relative paths against the shell's folder.
+            var shellDir = Environment.GetEnvironmentVariable("PWD");
+            if (Directory.Exists(shellDir)) Environment.CurrentDirectory = shellDir;
+#endif
+
             if (args.Length < 2)
             {
                 Console.Error.WriteLine("Usage: VEXConsoleSample <input.mp4> <output.mp4>");

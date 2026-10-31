@@ -92,7 +92,7 @@ videoCapture.Mode = VideoCaptureMode.VideoPreview;
 await videoCapture.StartAsync();
 ```
 
-Configurar la propiedad `Video_Still_Frames_Grabber_Enabled` a `true` es crucial. Esta configuración le dice al SDK que monitoree las pulsaciones del botón de hardware y active los eventos apropiados cuando se capture un fotograma fijo.
+Configurar la propiedad `Video_Still_Frames_Grabber_Enabled` a `true` es crucial. Esta configuración le dice al SDK que monitoree las pulsaciones del botón de hardware y active los eventos apropiados cuando se capture un fotograma fijo. Requiere una cámara que exponga un pin de imagen fija (un botón de captura por hardware); en una cámara sin él, los eventos de fotograma fijo no se generan y el SDK informa un error al iniciar. Para tomar una instantánea del flujo en vivo, llame a `Frame_GetCurrent()` y deje esta propiedad desactivada.
 
 ### Manejar fotogramas capturados
 

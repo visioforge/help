@@ -1,6 +1,6 @@
 ---
 title: Crear un reproductor de video en VB.NET - Guía completa
-description: Aprenda a crear un reproductor de video en VB.NET con controles de reproducción, búsqueda en línea de tiempo y volumen usando Media Player SDK .Net.
+description: Aprenda a crear un reproductor de video en VB.NET con controles de reproducción, búsqueda en línea de tiempo y volumen usando Media Player SDK .NET.
 tags:
   - Media Player SDK
   - .NET
@@ -41,7 +41,7 @@ primary_api_classes:
 
 Esta guía le muestra paso a paso cómo crear una aplicación de reproductor de video completa en VB.NET (Visual Basic .NET) utilizando [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net). El reproductor es compatible con MP4, AVI, MKV, WMV, WebM y muchos otros formatos, e incluye controles de reproducción, búsqueda en la línea de tiempo y ajuste de volumen.
 
-## Por qué usar Media Player SDK .Net para VB.NET
+## Por qué usar Media Player SDK .NET para VB.NET
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) proporciona una reproducción de video robusta en VB.NET con:
 
@@ -55,9 +55,9 @@ Esta guía le muestra paso a paso cómo crear una aplicación de reproductor de 
 ## Paquetes NuGet requeridos
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 ## Ejemplo completo de reproductor de video en VB.NET
@@ -268,7 +268,7 @@ Demos completas de reproductor de video en VB.NET:
 
 ### ¿Qué licencia necesito para una aplicación de reproductor de video en VB.NET?
 
-El Media Player SDK .Net requiere una licencia para desarrollo y distribución. Una licencia de Desarrollador elimina la marca de agua de evaluación y desbloquea todas las funciones durante el desarrollo. Una licencia de Release es necesaria al distribuir su aplicación a los usuarios finales. El SDK está disponible en edición Premium que incluye todos los formatos compatibles, aceleración por hardware y los motores DirectShow y GStreamer. Puede evaluar el SDK sin licencia — la reproducción funciona completamente pero incluye una marca de agua superpuesta. Visite la [página del producto](https://www.visioforge.com/media-player-sdk-net) para conocer precios y opciones de licencia.
+El Media Player SDK .NET requiere una licencia para desarrollo y distribución. Una licencia de Desarrollador elimina la marca de agua de evaluación y desbloquea todas las funciones durante el desarrollo. Una licencia de Release es necesaria al distribuir su aplicación a los usuarios finales. El SDK está disponible en edición Premium que incluye todos los formatos compatibles, aceleración por hardware y los motores DirectShow y GStreamer. Puede evaluar el SDK sin licencia — la reproducción funciona completamente pero incluye una marca de agua superpuesta. Visite la [página del producto](https://www.visioforge.com/media-player-sdk-net) para conocer precios y opciones de licencia.
 
 ### ¿Qué formatos de video y audio admite el reproductor VB.NET?
 

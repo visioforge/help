@@ -164,4 +164,4 @@ Pour des instructions détaillées de déploiement iOS, notamment les paquets Nu
 - **Performances natives** : encodage accéléré par GPU sur les appareils Apple
 
 ---
-Explorez les exemples d'édition vidéo iOS sur notre [dépôt GitHub](https://github.com/visioforge/.Net-SDK-s-samples) ou contactez le [support](https://support.visioforge.com/) pour des ressources.
+Explorez les exemples d'édition vidéo iOS sur notre [dépôt GitHub](https://github.com/visioforge/.Net-SDK-s-samples) ou contactez le [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) pour des ressources.

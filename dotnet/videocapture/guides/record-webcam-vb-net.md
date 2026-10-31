@@ -28,7 +28,7 @@ primary_api_classes:
 
 Recording webcam video in VB.NET applications is a common requirement for video conferencing, surveillance, and media projects. This guide provides step-by-step instructions to capture, preview, and save webcam video to MP4 files using [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) in VB.NET (Visual Basic .NET).
 
-## Why Use Video Capture SDK .Net for VB.NET Webcam Recording
+## Why Use Video Capture SDK .NET for VB.NET Webcam Recording
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) provides first-class VB.NET support with:
 
@@ -44,9 +44,9 @@ Recording webcam video in VB.NET applications is a common requirement for video 
 Add the following packages to your VB.NET project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 ## Complete VB.NET Webcam Recording Example
@@ -281,7 +281,7 @@ Complete VB.NET sample applications are available:
 
 ### How do I convert C# webcam capture examples to VB.NET?
 
-The Video Capture SDK .Net API is identical in C# and VB.NET — only the language syntax differs. Key conversions: replace `+=` event handlers with `AddHandler`/`AddressOf`, replace C# lambdas `(x) =>` with `Function(x)` or `Sub(x)`, and use `Async Sub` instead of `async void`. All classes, methods, and properties shown in C# documentation work directly in VB.NET with these syntax adjustments.
+The Video Capture SDK .NET API is identical in C# and VB.NET — only the language syntax differs. Key conversions: replace `+=` event handlers with `AddHandler`/`AddressOf`, replace C# lambdas `(x) =>` with `Function(x)` or `Sub(x)`, and use `Async Sub` instead of `async void`. All classes, methods, and properties shown in C# documentation work directly in VB.NET with these syntax adjustments.
 
 ### Does VB.NET support async webcam recording with Await?
 

@@ -1156,5 +1156,5 @@ settings.SetCustomOption("rtsp_transport", "tcp");
 - [Documentación de FFmpeg](https://ffmpeg.org/documentation.html)
 - [Guía de Programación DirectShow](https://learn.microsoft.com/en-us/windows/win32/DirectShow/directshow)
 ### Soporte
-- [Soporte Técnico](https://support.visioforge.com) - Obtenga ayuda del equipo de VisioForge
+- [Soporte Técnico](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) - Obtenga ayuda del equipo de VisioForge
 - [Comunidad de Discord](https://discord.com/invite/yvXUG56WCH) - Únase a nuestra comunidad

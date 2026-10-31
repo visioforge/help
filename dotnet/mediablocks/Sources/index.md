@@ -30,6 +30,8 @@ primary_api_classes:
 
 Source blocks provide data to the pipeline and are typically the first blocks in any media processing chain. VisioForge Media Blocks SDK .NET provides a comprehensive collection of source blocks for various inputs including hardware devices, files, networks, and virtual sources.
 
+File sources such as `ImageVideoSourceSettings` and `DemuxerSourceSettings` accept a local path or a `file:` URI, including `file:///`, `file://localhost/`, and `file:/` forms. URI escapes such as `%20` are decoded when the local file is opened. `FilenameHelper.FileUriToLocalPath` converts these URIs to paths for applications that need to pass them to .NET file APIs, leaving other strings unchanged.
+
 !!! tip "AI coding agents: use the VisioForge MCP server"
 
     Building this with **Claude Code**, **Cursor**, or another AI coding agent?
@@ -441,7 +443,7 @@ The `UniversalSourceBlock` is configured through `UniversalSourceSettings`. It's
 Key properties and parameters for `UniversalSourceSettings`:
 
 - **URI/Filename**:
-  - `UniversalSourceSettings.CreateAsync(string filename, bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false)`: Creates settings from a local file path.
+  - `UniversalSourceSettings.CreateAsync(string filename, bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false)`: Creates settings from a local file path or a URI string (`scheme://` or `data:`).
   - `UniversalSourceSettings.CreateAsync(System.Uri uri, bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false)`: Creates settings from a `System.Uri` (can be a file URI or network URI like HTTP, RTSP - though dedicated blocks are often preferred for network streams). For iOS, an `Foundation.NSUrl` is used.
   - The `renderVideo`, `renderAudio`, `renderSubtitle` booleans control which streams are processed. The `CreateAsync` method may update these based on actual stream availability in the media file/stream if `ignoreMediaInfoReader` is `false` (default).
 - `StartPosition` (`TimeSpan?`): Sets the starting position for playback.
@@ -1388,7 +1390,7 @@ few receivers sees these connections. When only the name is set, the SDK looks t
 
 #### Platforms
 
-Windows, macOS, Linux.
+Windows (x86, x64), macOS, Linux, Android. Not available in a native Windows ARM64 process (`IsAvailable()` returns `false`); an x64 build runs NDI on Windows on Arm under emulation.
 
 ### NDI Source X Block
 
@@ -1484,7 +1486,7 @@ await pipeline.StartAsync();
 
 #### Platforms
 
-Windows.
+Windows (x86, x64). Not available in a native Windows ARM64 process (`IsAvailable()` returns `false`); an x64 build runs NDI on Windows on Arm under emulation.
 
 ### GenICam Source Block
 

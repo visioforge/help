@@ -262,4 +262,4 @@ La capacité à lire des fichiers vidéo comportant plusieurs flux ouvre de nomb
 En suivant les techniques décrites dans ce guide, vous pouvez intégrer efficacement la prise en charge de plusieurs flux vidéo dans vos applications, améliorant l'expérience utilisateur et étendant les capacités de vos projets multimédias.
 
 ---
-N'hésitez pas à contacter le [support](https://support.visioforge.com/) si vous avez besoin d'aide pour cette fonctionnalité. Consultez notre page [GitHub](https://github.com/visioforge/) pour d'autres exemples de code et d'implémentation.
+N'hésitez pas à contacter le [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) si vous avez besoin d'aide pour cette fonctionnalité. Consultez notre page [GitHub](https://github.com/visioforge/) pour d'autres exemples de code et d'implémentation.

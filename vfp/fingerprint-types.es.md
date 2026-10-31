@@ -186,6 +186,10 @@ Las huellas digitales de búsqueda usan un algoritmo diferente optimizado para d
 3. **Redundancia Reducida**: Elimina información duplicada para almacenamiento compacto
 4. **Coincidencia Rápida**: Optimizada para operaciones de ventana deslizante
 
+!!! warning "Las huellas de búsqueda son multiplataforma en el SDK .NET desde 2026.10.29"
+
+    Con el paquete `VisioForge.DotNet.Core.Redist.VideoFingerprinting` 2026.10.29 o posterior, una huella de búsqueda es idéntica en Windows, macOS y Linux, por lo que `VFPSearch.Search` encuentra en cualquiera de ellos una huella creada en otro. Las huellas de búsqueda creadas en macOS o Linux con una versión anterior de ese paquete usan otro formato: la versión actual las lee de forma incorrecta, lo que produce tanto coincidencias perdidas como falsas, así que no busque con ellas y vuelva a generarlas. Las huellas creadas en Windows y todas las huellas de comparación siguen funcionando sin cambios.
+
 ### Características de Rendimiento
 
 | Métrica | Valor Típico | Notas |

@@ -79,20 +79,20 @@ Pour les spécifications détaillées et une liste complète de tous les encodeu
 
 ### Version 11.4
 
-- Composants de filtres mis à jour pour correspondre aux implémentations actuelles des SDK .Net
+- Composants de filtres mis à jour pour correspondre aux implémentations actuelles des SDK .NET
 - Encodeurs AMD AMF H264/H265 améliorés avec les dernières optimisations
 - Encodeurs Intel QuickSync H265 améliorés pour de meilleures performances
 - Applications d'exemple rafraîchies avec de nouveaux exemples de code
 
 ### Version 11.0
 
-- Filtres synchronisés avec les versions actuelles des SDK .Net
+- Filtres synchronisés avec les versions actuelles des SDK .NET
 - Encodeurs Nvidia NVENC H264/H265 mis à niveau pour une meilleure qualité
 - Introduction d'un nouveau composant de filtre multiplexeur SSF
 
 ### Version 10.0
 
-- Tous les filtres mis à jour pour s'aligner sur les implémentations des SDK .Net
+- Tous les filtres mis à jour pour s'aligner sur les implémentations des SDK .NET
 - Encodeurs Media Foundation améliorés (H264, H265, AAC)
 - Ajout d'un filtre d'encodeur vidéo NVENC dédié en remplacement de l'encodeur CUDA
 
@@ -111,7 +111,7 @@ Pour les spécifications détaillées et une liste complète de tous les encodeu
 
 ### Version 8.5 — version initiale
 
-- Première publication incluant les filtres des SDK .Net
+- Première publication incluant les filtres des SDK .NET
 - Composants principaux : encodeur AAC, encodeurs H264 (CPU/GPU)
 - Encodeurs supplémentaires : H265 (CPU/GPU), VP8, Vorbis
 - Prise en charge de conteneurs : multiplexeur MP4, multiplexeur WebM

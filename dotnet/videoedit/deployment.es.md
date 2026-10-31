@@ -1,6 +1,6 @@
 ---
-title: Guía de Despliegue de Video Edit SDK .Net | Windows
-description: Despliegue Video Edit SDK .Net en Windows con paquetes NuGet, instaladores silenciosos y configuraciones manuales para arquitecturas x86 y x64.
+title: Guía de Despliegue de Video Edit SDK .NET | Windows
+description: Despliegue Video Edit SDK .NET en Windows con paquetes NuGet, instaladores silenciosos y configuraciones manuales para arquitecturas x86 y x64.
 tags:
   - Video Edit SDK
   - .NET
@@ -24,7 +24,7 @@ tags:
 
 ---
 
-# Guía Completa de Despliegue para Video Edit SDK .Net
+# Guía Completa de Despliegue para Video Edit SDK .NET
 
 ## Introducción al Despliegue de VideoEditCore
 
@@ -203,4 +203,4 @@ Para el registro conveniente de múltiples filtros DirectShow, coloque la utilid
 
 Para ejemplos de código y ejemplos de implementación, visite nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
 
-Para soporte técnico, actualizaciones de documentación y discusiones de la comunidad, visite el [Portal de Desarrolladores de VisioForge](https://support.visioforge.com/).
+Para soporte técnico, actualizaciones de documentación y discusiones de la comunidad, visite el [Portal de Desarrolladores de VisioForge](https://helpdesk.visioforge.com/helpdesk/my-tickets).

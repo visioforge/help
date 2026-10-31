@@ -35,7 +35,7 @@ primary_api_classes:
   - VideoFileSource
 ---
 
-# VisioForge Video Edit SDK .Net — Cheat Sheet
+# VisioForge Video Edit SDK .NET — Cheat Sheet
 
 Video Edit SDK assembles timelines, applies transitions/effects/overlays, and exports to MP4/MKV/WebM. `VideoEditCoreX` is the cross-platform engine (GStreamer); `VideoEditCore` is the Windows-only DirectShow legacy engine. Choose `VideoEditCoreX` for new projects.
 
@@ -61,7 +61,7 @@ Video Edit SDK assembles timelines, applies transitions/effects/overlays, and ex
 One package ships both engines — `VideoEditCoreX` and the legacy `VideoEditCore` live side by side in it, so the engine is a code-level choice, not a packaging one:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.28]"/>
 ```
 
 It pulls in `VisioForge.DotNet.Core` as a dependency; you do not need to reference `Core` separately.

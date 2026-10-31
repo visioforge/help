@@ -164,7 +164,7 @@ With `TVFMediaPlayer` successfully installed, you can now explore its extensive 
 * **Explore Properties and Events:** Use the Delphi Object Inspector to examine the numerous properties and events available for the `TVFMediaPlayer` component.
 * **Consult Documentation:** Refer to the official VisioForge documentation installed with the SDK or available online for detailed API references and usage examples.
 * **Code Samples:** Visit the VisioForge [GitHub repository](https://github.com/visioforge/) to find demo projects and code snippets showcasing various functionalities.
-* **Seek Support:** If you encounter persistent issues or have specific questions not covered here, contact [VisioForge support](https://support.visioforge.com/) for assistance.
+* **Seek Support:** If you encounter persistent issues or have specific questions not covered here, contact [VisioForge support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) for assistance.
 
 ---
-Please get in touch with [support](https://support.visioforge.com/) to get help with this tutorial. Visit our [GitHub](https://github.com/visioforge/) page to get more code samples.
+Please get in touch with [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) to get help with this tutorial. Visit our [GitHub](https://github.com/visioforge/) page to get more code samples.

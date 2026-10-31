@@ -177,4 +177,4 @@ El SDK de Computer Vision es un paquete NuGet separado. Consulte la [guía de de
 
 - [Repositorio GitHub de VisioForge](https://github.com/visioforge/.Net-SDK-s-samples) - Ejemplos de código y proyectos de ejemplo
 - [Documentación de API](https://api.visioforge.org/dotnet/) - Referencia completa de API
-- [Portal de Soporte](https://support.visioforge.com/) - Soporte técnico y base de conocimientos
+- [Portal de Soporte](https://helpdesk.visioforge.com/helpdesk/my-tickets) - Soporte técnico y base de conocimientos

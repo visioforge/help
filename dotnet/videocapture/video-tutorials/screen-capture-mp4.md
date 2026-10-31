@@ -500,7 +500,7 @@ The highlight draws a translucent circle around the cursor, making it easier for
 
 ### What license do I need for a C# screen capture application?
 
-Video Capture SDK .Net requires a license for development and distribution. A Developer license removes the evaluation watermark and unlocks all features during development. A Release license is required when distributing your application to end users. The SDK is available in Premium edition which includes all capture modes, MP4/AVI/WMV output, and both DirectShow and GStreamer engines. You can evaluate the SDK without a license — screen capture works fully but includes a watermark overlay. Visit the [product page](https://www.visioforge.com/video-capture-sdk-net) for pricing and license options.
+Video Capture SDK .NET requires a license for development and distribution. A Developer license removes the evaluation watermark and unlocks all features during development. A Release license is required when distributing your application to end users. The SDK is available in Premium edition which includes all capture modes, MP4/AVI/WMV output, and both DirectShow and GStreamer engines. You can evaluate the SDK without a license — screen capture works fully but includes a watermark overlay. Visit the [product page](https://www.visioforge.com/video-capture-sdk-net) for pricing and license options.
 
 ### How do I control recording quality and file size for MP4 screen capture?
 

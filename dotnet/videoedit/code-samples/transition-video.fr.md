@@ -30,7 +30,7 @@ primary_api_classes:
 
 ## Introduction aux transitions vidéo
 
-Les transitions vidéo créent un flux visuel fluide entre différents clips vidéo dans vos projets d'édition. Des transitions efficaces peuvent améliorer considérablement l'expérience de visualisation, donnant à vos vidéos une apparence plus professionnelle et attrayante. Ce guide montre comment mettre en œuvre des transitions dans vos applications C# en utilisant Video Edit SDK .Net.
+Les transitions vidéo créent un flux visuel fluide entre différents clips vidéo dans vos projets d'édition. Des transitions efficaces peuvent améliorer considérablement l'expérience de visualisation, donnant à vos vidéos une apparence plus professionnelle et attrayante. Ce guide montre comment mettre en œuvre des transitions dans vos applications C# en utilisant Video Edit SDK .NET.
 
 Les transitions nécessitent des segments de timeline qui se chevauchent où les deux vidéos existent simultanément. Pendant ce chevauchement, l'effet de transition se produit, remplaçant progressivement la première vidéo par la seconde. Le SDK prend en charge plus de 100 effets de transition différents, des simples fondus aux balayages SMPTE standard complexes.
 

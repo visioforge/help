@@ -186,6 +186,10 @@ Search fingerprints use a different algorithm optimized for fragment detection:
 3. **Reduced Redundancy**: Eliminates duplicate information for compact storage
 4. **Fast Matching**: Optimized for sliding-window search operations
 
+!!! warning "Search fingerprints are cross-platform in the .NET SDK since 2026.10.29"
+
+    With the `VisioForge.DotNet.Core.Redist.VideoFingerprinting` package 2026.10.29 or later, a search fingerprint is the same on Windows, macOS and Linux, so one made on any of them is found by `VFPSearch.Search` on the others. Search fingerprints created on macOS or Linux with an older version of that package use a different layout: the current version reads them incorrectly, which gives missed matches as well as false ones, so do not search against them and generate them again. Fingerprints created on Windows and all compare fingerprints keep working unchanged.
+
 ### Performance Characteristics
 
 | Metric | Typical Value | Notes |

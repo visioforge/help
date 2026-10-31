@@ -29,7 +29,7 @@ ActiveX, une technologie développée par Microsoft, permet aux composants logic
 
 Bien qu'historiquement important, l'usage d'ActiveX a décliné, surtout au sein de l'écosystème .NET. Les frameworks .NET modernes offrent des moyens plus intégrés, robustes et sécurisés d'incorporer des composants d'interface utilisateur et des fonctionnalités. Néanmoins, des applications héritées ou des scénarios d'interopérabilité spécifiques peuvent encore nécessiter l'utilisation de contrôles ActiveX.
 
-Lorsque vous utilisez un contrôle ActiveX dans un projet .NET (C# ou VB.Net), Visual Studio n'interagit pas directement avec lui. À la place, il génère automatiquement des **Runtime Callable Wrappers (RCW)**. Ces wrappers sont essentiellement des assemblys .NET qui agissent comme intermédiaires, traduisant les appels .NET en appels COM que le contrôle ActiveX comprend, et inversement. Ce processus permet au code managé (.NET) d'utiliser des composants non managés (COM/ActiveX).
+Lorsque vous utilisez un contrôle ActiveX dans un projet .NET (C# ou VB.NET), Visual Studio n'interagit pas directement avec lui. À la place, il génère automatiquement des **Runtime Callable Wrappers (RCW)**. Ces wrappers sont essentiellement des assemblys .NET qui agissent comme intermédiaires, traduisant les appels .NET en appels COM que le contrôle ActiveX comprend, et inversement. Ce processus permet au code managé (.NET) d'utiliser des composants non managés (COM/ActiveX).
 
 ## Prérequis
 
@@ -77,7 +77,7 @@ Pour rendre le contrôle `TVFMediaPlayer` disponible, vous devez l'ajouter à la
 
 ![Sélection de VisioForge Media Player dans COM Components](mpvs2003_3.webp)
 
-Visual Studio ajoute alors le contrôle à votre boîte à outils et, si vous êtes dans un projet C# ou VB.Net, génère les assemblys RCW nécessaires (souvent nommés `AxInterop.VisioForgeMediaPlayerLib.dll` et `Interop.VisioForgeMediaPlayerLib.dll`) et ajoute les références correspondantes dans votre projet.
+Visual Studio ajoute alors le contrôle à votre boîte à outils et, si vous êtes dans un projet C# ou VB.NET, génère les assemblys RCW nécessaires (souvent nommés `AxInterop.VisioForgeMediaPlayerLib.dll` et `Interop.VisioForgeMediaPlayerLib.dll`) et ajoute les références correspondantes dans votre projet.
 
 ### **Étape 5 : ajouter le contrôle à votre formulaire**
 
@@ -174,4 +174,4 @@ Vous pouvez trouver la [version .NET native du SDK ici](https://www.visioforge.c
 L'intégration du contrôle ActiveX `TVFMediaPlayer` dans Visual Studio 2010+ est réalisable en l'ajoutant via la boîte de dialogue « Choose Toolbox Items ». Visual Studio gère la génération des assemblys wrapper pour les projets .NET, permettant l'interaction via les propriétés, méthodes et événements standard. Cependant, en raison des complexités, limitations et défis de déploiement associés à ActiveX/COM Interop dans l'environnement .NET, **il est vivement conseillé d'utiliser le SDK natif VisioForge Media Player pour .NET pour tout nouveau développement WinForms, WPF ou MAUI.** Le SDK natif offre une expérience plus robuste, performante et conviviale pour le développeur, alignée sur les pratiques modernes de développement d'applications.
 
 ---
-Besoin d'une assistance supplémentaire ? Veuillez contacter le [support VisioForge](https://support.visioforge.com/) ou explorer plus d'exemples sur notre page [GitHub](https://github.com/visioforge/).
+Besoin d'une assistance supplémentaire ? Veuillez contacter le [support VisioForge](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) ou explorer plus d'exemples sur notre page [GitHub](https://github.com/visioforge/).

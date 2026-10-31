@@ -43,7 +43,7 @@ primary_api_classes:
 
 Le MP4 (MPEG-4 Part 14), introduit en 2001, est un format de conteneur multimédia numérique utilisé le plus souvent pour stocker de la vidéo et de l'audio. Il prend également en charge les sous-titres et les images. MP4 est réputé pour sa forte compression et sa compatibilité avec divers appareils et plateformes, ce qui en fait un choix populaire pour le streaming et le partage.
 
-Capturer des vidéos depuis une webcam et les enregistrer dans un fichier est une exigence courante dans de nombreuses applications. Une façon d'y parvenir consiste à utiliser un kit de développement logiciel (SDK) tel que VisioForge Video Capture SDK .Net, qui fournit une API facile à utiliser pour capturer et traiter de la vidéo en C#.
+Capturer des vidéos depuis une webcam et les enregistrer dans un fichier est une exigence courante dans de nombreuses applications. Une façon d'y parvenir consiste à utiliser un kit de développement logiciel (SDK) tel que VisioForge Video Capture SDK .NET, qui fournit une API facile à utiliser pour capturer et traiter de la vidéo en C#.
 
 Pour capturer une vidéo au format MP4 avec Video Capture SDK, vous devez configurer le format de sortie vidéo via l'une des classes dédiées à la sortie MP4. Vous pouvez utiliser plusieurs encodeurs vidéo logiciels et matériels, notamment Intel QuickSync, Nvidia NVENC et AMD/ATI APU.
 
@@ -397,7 +397,7 @@ if (!NVENCH264EncoderSettings.IsAvailable())
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
-`Le même exemple de code peut être utilisé pour Video Edit SDK .Net. Utilisez la classe VideoEditCore à la place de VideoCaptureCore.`
+`Le même exemple de code peut être utilisé pour Video Edit SDK .NET. Utilisez la classe VideoEditCore à la place de VideoCaptureCore.`
 
 ### Encodeur CPU ou encodeur GPU Intel QuickSync
 

@@ -145,4 +145,4 @@ Después del despliegue, pruebe exhaustivamente su aplicación en la máquina de
   * Coincidencia correcta de arquitectura (x86/x64) entre su aplicación, los componentes de biblioteca y las dependencias de runtime.
 
 ---
-¿Necesita más asistencia? Contacte al [Soporte de VisioForge](https://support.visioforge.com/). Explore más ejemplos en nuestro [GitHub](https://github.com/visioforge/).
+¿Necesita más asistencia? Contacte al [Soporte de VisioForge](https://helpdesk.visioforge.com/helpdesk/my-tickets/new). Explore más ejemplos en nuestro [GitHub](https://github.com/visioforge/).

@@ -217,7 +217,7 @@ Collect a log and contact support:
 3. Unity version, Build Target, Scripting Backend, Api Compatibility Level.
 4. A minimal reproducible scene if possible.
 
-Open an issue at <https://support.visioforge.com/>.
+Open an issue at <https://helpdesk.visioforge.com/helpdesk/my-tickets/new>.
 
 ## See also
 

@@ -501,7 +501,7 @@ El resaltado dibuja un círculo translúcido alrededor del cursor, facilitando q
 
 ### ¿Qué licencia necesito para una aplicación de captura de pantalla en C#?
 
-El Video Capture SDK .Net requiere una licencia para desarrollo y distribución. Una licencia de Desarrollador elimina la marca de agua de evaluación y desbloquea todas las funciones durante el desarrollo. Una licencia de Release es necesaria al distribuir su aplicación a los usuarios finales. El SDK está disponible en edición Premium que incluye todos los modos de captura, salida MP4/AVI/WMV y los motores DirectShow y GStreamer. Puede evaluar el SDK sin licencia — la captura de pantalla funciona completamente pero incluye una marca de agua superpuesta. Visite la [página del producto](https://www.visioforge.com/video-capture-sdk-net) para conocer precios y opciones de licencia.
+El Video Capture SDK .NET requiere una licencia para desarrollo y distribución. Una licencia de Desarrollador elimina la marca de agua de evaluación y desbloquea todas las funciones durante el desarrollo. Una licencia de Release es necesaria al distribuir su aplicación a los usuarios finales. El SDK está disponible en edición Premium que incluye todos los modos de captura, salida MP4/AVI/WMV y los motores DirectShow y GStreamer. Puede evaluar el SDK sin licencia — la captura de pantalla funciona completamente pero incluye una marca de agua superpuesta. Visite la [página del producto](https://www.visioforge.com/video-capture-sdk-net) para conocer precios y opciones de licencia.
 
 ### ¿Cómo controlo la calidad de grabación y el tamaño de archivo para la captura de pantalla MP4?
 

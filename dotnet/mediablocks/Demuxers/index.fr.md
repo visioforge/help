@@ -21,11 +21,11 @@ primary_api_classes:
 
 ---
 
-# Blocs démultiplexeurs - VisioForge Media Blocks SDK .Net
+# Blocs démultiplexeurs - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Les blocs démultiplexeurs sont des composants essentiels des pipelines de traitement multimédia. Ils prennent un flux multimédia, généralement issu d'un fichier ou d'une source réseau, et le séparent en flux élémentaires constitutifs : vidéo, audio et sous-titres. Cela permet le traitement ou le rendu individuel de chaque flux. VisioForge Media Blocks SDK .Net fournit plusieurs blocs démultiplexeurs pour gérer divers formats de conteneurs.
+Les blocs démultiplexeurs sont des composants essentiels des pipelines de traitement multimédia. Ils prennent un flux multimédia, généralement issu d'un fichier ou d'une source réseau, et le séparent en flux élémentaires constitutifs : vidéo, audio et sous-titres. Cela permet le traitement ou le rendu individuel de chaque flux. VisioForge Media Blocks SDK .NET fournit plusieurs blocs démultiplexeurs pour gérer divers formats de conteneurs.
 
 > **Les sorties du démultiplexeur sont encodées.** Un démultiplexeur sépare le conteneur en ses flux élémentaires ; il ne les décode pas. Un bloc décodeur doit donc se placer entre une sortie du démultiplexeur et tout moteur de rendu, capteur d'échantillons ou bloc de traitement vidéo. `UniversalDecoderBlock` choisit le décodeur d'après les caps du flux ; un bloc spécifique au codec, comme `H264DecoderBlock` ou `HEVCDecoderBlock`, convient également. Relier un démultiplexeur directement à un moteur de rendu se construit et démarre sans erreur, puis ne délivre rien.
 

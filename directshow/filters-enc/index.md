@@ -79,20 +79,20 @@ For detailed specifications and a comprehensive list of all supported video/audi
 
 ### 11.4 Release
 
-- Updated filter components to match current .Net SDK implementations
+- Updated filter components to match current .NET SDK implementations
 - Enhanced AMD AMF H264/H265 encoders with latest optimizations
 - Improved Intel QuickSync H265 encoders for better performance
 - Refreshed sample applications with new coding examples
 
 ### 11.0 Release
 
-- Synchronized filters with current .Net SDK versions
+- Synchronized filters with current .NET SDK versions
 - Upgraded Nvidia NVENC H264/H265 encoders for better quality
 - Introduced new SSF muxer filter component
 
 ### 10.0 Release
 
-- Updated all filters to align with .Net SDK implementations
+- Updated all filters to align with .NET SDK implementations
 - Enhanced Media Foundation encoders (H264, H265, AAC)
 - Added dedicated NVENC video encoder filter as CUDA encoder replacement
 
@@ -111,7 +111,7 @@ For detailed specifications and a comprehensive list of all supported video/audi
 
 ### 8.5 Initial Release
 
-- First public release including filters from .Net SDKs
+- First public release including filters from .NET SDKs
 - Core components: AAC encoder, H264 encoders (CPU/GPU)
 - Additional encoders: H265 (CPU/GPU), VP8, Vorbis
 - Container support: MP4 muxer, WebM muxer

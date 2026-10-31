@@ -44,7 +44,7 @@ La tecnología de captura de pantalla permite a los desarrolladores grabar y tra
 - Sistemas de webinars y presentaciones
 - Automatización de control de calidad y pruebas
 
-El Video Capture SDK .Net proporciona a los desarrolladores herramientas robustas para capturar contenido de pantalla con alto rendimiento y flexibilidad. El SDK soporta capturar pantallas completas, ventanas de aplicaciones individuales o regiones de pantalla personalizadas.
+El Video Capture SDK .NET proporciona a los desarrolladores herramientas robustas para capturar contenido de pantalla con alto rendimiento y flexibilidad. El SDK soporta capturar pantallas completas, ventanas de aplicaciones individuales o regiones de pantalla personalizadas.
 
 ## Soporte de plataforma y descripción general de la tecnología
 
@@ -396,7 +396,7 @@ Si experimenta captura lenta o con interrupciones:
 
 ## Conclusión
 
-La funcionalidad de captura de pantalla permite a los desarrolladores crear aplicaciones potentes para demostración, educación, soporte y entretenimiento. El Video Capture SDK .Net proporciona un framework robusto para implementar esta funcionalidad con mínimo esfuerzo de desarrollo.
+La funcionalidad de captura de pantalla permite a los desarrolladores crear aplicaciones potentes para demostración, educación, soporte y entretenimiento. El Video Capture SDK .NET proporciona un framework robusto para implementar esta funcionalidad con mínimo esfuerzo de desarrollo.
 
 Aprovechando las opciones de configuración apropiadas para sus requisitos específicos, puede implementar características de captura de pantalla de alto rendimiento en sus aplicaciones .NET.
 

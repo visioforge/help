@@ -34,11 +34,11 @@ primary_api_classes:
 
 ---
 
-# Enregistrement pré-événement en C# .Net : capture vidéo par tampon circulaire
+# Enregistrement pré-événement en C# .NET : capture vidéo par tampon circulaire
 
 L'enregistrement pré-événement permet à votre application de mettre en mémoire tampon en continu la vidéo et l'audio en mémoire et de sauvegarder des clips d'événement qui incluent les images d'avant le déclencheur. Utilisez-le pour enregistrer la vidéo webcam, capturer les flux de caméra IP ou sauvegarder les images RTSP avec des déclencheurs de détection de mouvement — essentiel pour les applications de vidéosurveillance, de sécurité et de monitoring où capturer ce qui s'est passé avant un événement est critique.
 
-## Fonctionnalités clés de l'enregistrement pré-événement de Video Capture SDK .Net
+## Fonctionnalités clés de l'enregistrement pré-événement de Video Capture SDK .NET
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -361,20 +361,20 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 Paquet principal du SDK (managé) :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
 ```
 
 Dépendances natives pour Windows x64 :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 Pour les plateformes alternatives (macOS, Linux, Android, iOS), utilisez les paquets de dépendances natives correspondants. Consultez le [guide de déploiement](../../deployment-x/index.md) pour plus de détails.
 
 ## Compatibilité multiplateforme
 
-L'enregistrement pré-événement est disponible sur toutes les plateformes prises en charge par Video Capture SDK .Net :
+L'enregistrement pré-événement est disponible sur toutes les plateformes prises en charge par Video Capture SDK .NET :
 
 - Windows (x86, x64, ARM64)
 - macOS (x64, ARM64)

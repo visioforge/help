@@ -267,7 +267,7 @@ public interface IVFRegister { /* ... */ }
 **Required NuGet Packages:**
 
 - `VisioForge.DirectShowAPI` - DirectShow wrapper library
-- `MediaFoundation.Net` - Media Foundation wrapper for EVR renderer
+- `MediaFoundation.NET` - Media Foundation wrapper for EVR renderer
 
 **Stream Selection Example:**
 

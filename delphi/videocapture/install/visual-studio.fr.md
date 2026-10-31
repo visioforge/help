@@ -35,7 +35,7 @@ Vous pouvez implémenter le contrôle ActiveX TVFVideoCapture directement dans d
 
 Dans les projets C++, vous pouvez utiliser le contrôle ActiveX directement sans wrappers ni interfaces supplémentaires.
 
-### Pour les projets C#/VB.Net
+### Pour les projets C#/VB.NET
 
 Lorsque vous travaillez avec des projets C# ou Visual Basic .NET, Visual Studio génère automatiquement un assembly wrapper personnalisé. Ce wrapper expose l'API ActiveX via du code managé, rendant l'intégration transparente.
 
@@ -81,4 +81,4 @@ Bien que l'intégration ActiveX soit entièrement prise en charge, les développ
 Explorez notre documentation complète pour les options de configuration avancées et les techniques d'optimisation. Notre équipe de développement met continuellement à jour les ressources pour répondre aux défis d'implémentation courants.
 
 ---
-Pour obtenir une assistance technique concernant ce processus d'installation, veuillez contacter notre [équipe de support](https://support.visioforge.com/). Des exemples de code et des exemples d'implémentation supplémentaires sont disponibles sur notre [dépôt GitHub](https://github.com/visioforge/).
+Pour obtenir une assistance technique concernant ce processus d'installation, veuillez contacter notre [équipe de support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new). Des exemples de code et des exemples d'implémentation supplémentaires sont disponibles sur notre [dépôt GitHub](https://github.com/visioforge/).

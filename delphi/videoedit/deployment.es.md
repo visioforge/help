@@ -157,4 +157,4 @@ Los problemas comunes durante el despliegue a menudo incluyen:
 Asegúrese de que todos los archivos requeridos estén correctamente desplegados y registrados antes de iniciar su aplicación.
 
 ---
-Por favor contacte a [nuestro equipo de soporte](https://support.visioforge.com/) si encuentra algún problema con este proceso de despliegue. Visite nuestro [repositorio de GitHub](https://github.com/visioforge/) para ejemplos de código adicionales y ejemplos de implementación.
+Por favor contacte a [nuestro equipo de soporte](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) si encuentra algún problema con este proceso de despliegue. Visite nuestro [repositorio de GitHub](https://github.com/visioforge/) para ejemplos de código adicionales y ejemplos de implementación.

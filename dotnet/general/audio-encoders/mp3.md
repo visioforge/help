@@ -312,7 +312,7 @@ Determines how audio channels are encoded. Options include:
 
 #### VBR_Mode
 
-Enables Variable Bit Rate encoding when set to true (default). VBR allows the encoder to adjust bitrate based on audio complexity.
+Enables Variable Bit Rate encoding when set to true (default: false). VBR allows the encoder to adjust bitrate based on audio complexity.
 
 #### VBR_MinBitrate
 
@@ -523,4 +523,4 @@ The class constructor sets these default values:
 - EncodingQuality = 6
 - SampleRate = 44100 Hz
 - ChannelsMode = MP3ChannelsMode.StandardStereo
-- VBR_Mode = true
+- VBR_Mode = false

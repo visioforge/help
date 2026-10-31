@@ -126,7 +126,7 @@ The following sections list all available effects. Each effect includes SDK avai
 | Effect | SDK | Description |
 |--------|-----|-------------|
 | VideoEffectLUT | 🪟 Classic | Look-up table color grading using 3D LUT files for professional color correction. |
-| LUTVideoEffect | 🌍 Cross-platform | Cross-platform 3D LUT support with multiple interpolation modes. |
+| LUTVideoEffect | 🌍 Cross-platform | Cross-platform 3D LUT support with multiple interpolation modes. Not available on iOS. |
 | VideoEffectPosterize | 🪟 Classic | Reduces number of colors, creating poster-like effect with discrete color levels. |
 | VideoEffectSolorize | 🪟 Classic | Solarization effect that inverts colors above a threshold brightness level. |
 

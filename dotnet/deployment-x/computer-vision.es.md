@@ -18,22 +18,24 @@ tags:
 
 Nuestro SDK proporciona dos paquetes NuGet con capacidades de visión por computadora para sus aplicaciones:
 
-1. **[VisioForge.DotNet.Core.CV](https://www.nuget.org/packages/VisioForge.DotNet.Core.CV/)** — paquete CV solo para Windows.
+1. **[VisioForge.DotNet.Core.CV](https://www.nuget.org/packages/VisioForge.DotNet.Core.CV/)** — paquete CV para Windows x64, macOS en Apple Silicon y Linux x64.
 2. **[VisioForge.DotNet.Core.CVD](https://www.nuget.org/packages/VisioForge.DotNet.Core.CVD/)** — paquete CV multiplataforma para Windows, Linux y macOS.
 
 Ambos paquetes proporcionan una API consistente para integrar visión por computadora directamente en sus aplicaciones .NET.
 
 ## Requisitos de despliegue
 
-### Paquete CV específico para Windows
+### Paquete CV
 
 #### Proceso de instalación
 
-El paquete CV específico para Windows está diseñado para una integración sin problemas:
+El paquete CV incluye la biblioteca nativa de OpenCV para cada plataforma compatible:
 
 - Simplemente instale el paquete NuGet a través de su gestor de paquetes preferido
-- No se necesitan pasos adicionales de despliegue
-- Listo para usar inmediatamente después de la instalación
+- No se necesitan pasos adicionales de despliegue en Windows y macOS
+- En Linux, la biblioteca nativa necesita GTK 3. Las instalaciones de escritorio lo incluyen; en un servidor, una imagen mínima o un contenedor, instálelo con `sudo apt-get install libgtk-3-0` (Ubuntu/Debian) o `sudo dnf install gtk3` (RHEL/AlmaLinux)
+- Una aplicación con un framework .NET sin sufijo de plataforma (por ejemplo `net8.0`) recibe las bibliotecas nativas de todos los sistemas compatibles; publíquela con `dotnet publish -r <rid>` (por ejemplo `-r linux-x64`) para conservar solo la del sistema de destino
+- Windows de 32 bits, los Mac Intel, Mac Catalyst, iOS y Android no son compatibles
 
 ### Paquete CVD multiplataforma
 

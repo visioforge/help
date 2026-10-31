@@ -582,7 +582,7 @@ public class FingerprintFunction
                 );
                 
                 // Return success response
-                var response = req.CreateResponse(System.Net.HttpStatusCode.OK);
+                var response = req.CreateResponse(System.NET.HttpStatusCode.OK);
                 await response.WriteAsJsonAsync(new FingerprintResponse
                 {
                     Success = true,
@@ -600,7 +600,7 @@ public class FingerprintFunction
         {
             _logger.LogError(ex, "Error generating fingerprint");
             
-            var response = req.CreateResponse(System.Net.HttpStatusCode.InternalServerError);
+            var response = req.CreateResponse(System.NET.HttpStatusCode.InternalServerError);
             await response.WriteAsJsonAsync(new FingerprintResponse
             {
                 Success = false,
@@ -830,7 +830,7 @@ public class DurableFingerprintOrchestrator
             input);
         
         // Return status check URLs
-        var response = req.CreateResponse(System.Net.HttpStatusCode.Accepted);
+        var response = req.CreateResponse(System.NET.HttpStatusCode.Accepted);
         response.Headers.Add("Location", $"/api/status/{instanceId}");
         
         await response.WriteAsJsonAsync(new
@@ -894,7 +894,7 @@ public class S3FingerprintStorage
         {
             await _s3Client.HeadBucketAsync(new HeadBucketRequest { BucketName = _bucketName });
         }
-        catch (AmazonS3Exception ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        catch (AmazonS3Exception ex) when (ex.StatusCode == System.NET.HttpStatusCode.NotFound)
         {
             await _s3Client.PutBucketAsync(new PutBucketRequest
             {

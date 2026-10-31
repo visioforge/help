@@ -91,7 +91,7 @@ videoCapture.Mode = VideoCaptureMode.VideoPreview;
 await videoCapture.StartAsync();
 ```
 
-Définir la propriété `Video_Still_Frames_Grabber_Enabled` sur `true` est crucial. Cette configuration indique au SDK de surveiller les pressions du bouton matériel et de déclencher les événements appropriés lorsqu'une image fixe est capturée.
+Définir la propriété `Video_Still_Frames_Grabber_Enabled` sur `true` est crucial. Cette configuration indique au SDK de surveiller les pressions du bouton matériel et de déclencher les événements appropriés lorsqu'une image fixe est capturée. Elle nécessite une caméra qui expose une broche d'image fixe (un bouton de capture matériel) ; sur une caméra qui n'en a pas, les événements d'image fixe ne sont pas déclenchés et le SDK signale une erreur au démarrage. Pour prendre un instantané du flux en direct, appelez `Frame_GetCurrent()` et laissez cette propriété désactivée.
 
 ### Gérer les images capturées
 

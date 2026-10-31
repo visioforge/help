@@ -157,4 +157,4 @@ Les problèmes courants lors du déploiement incluent souvent :
 Assurez-vous que tous les fichiers requis sont correctement déployés et enregistrés avant de lancer votre application.
 
 ---
-Veuillez contacter [notre équipe de support](https://support.visioforge.com/) si vous rencontrez le moindre problème avec ce processus de déploiement. Visitez notre [dépôt GitHub](https://github.com/visioforge/) pour des exemples de code supplémentaires et des exemples d'implémentation.
+Veuillez contacter [notre équipe de support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) si vous rencontrez le moindre problème avec ce processus de déploiement. Visitez notre [dépôt GitHub](https://github.com/visioforge/) pour des exemples de code supplémentaires et des exemples d'implémentation.

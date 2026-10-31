@@ -165,4 +165,4 @@ Para un rendimiento óptimo de grabación de pantalla:
 - Recuerde que la captura del cursor añade una ligera sobrecarga de procesamiento
 
 ---
-Para ejemplos de código adicionales y ejemplos de implementación, visite nuestro repositorio de [GitHub](https://github.com/visioforge/). Para asistencia técnica con la implementación, por favor contacte a nuestro [equipo de soporte](https://support.visioforge.com/).
+Para ejemplos de código adicionales y ejemplos de implementación, visite nuestro repositorio de [GitHub](https://github.com/visioforge/). Para asistencia técnica con la implementación, por favor contacte a nuestro [equipo de soporte](https://helpdesk.visioforge.com/helpdesk/my-tickets/new).

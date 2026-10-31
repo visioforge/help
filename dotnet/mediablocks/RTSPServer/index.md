@@ -20,7 +20,7 @@ primary_api_classes:
 
 ---
 
-# RTSP Server Block - VisioForge Media Blocks SDK .Net
+# RTSP Server Block - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 

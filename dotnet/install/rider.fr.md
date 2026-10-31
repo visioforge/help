@@ -20,13 +20,13 @@ primary_api_classes:
 
 ---
 
-# Intégration des SDK .Net avec JetBrains Rider
+# Intégration des SDK .NET avec JetBrains Rider
 
 ## Introduction
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Ce guide complet vous accompagne pas à pas dans l'installation et la configuration des SDK VisioForge .Net au sein de JetBrains Rider, un puissant IDE multiplateforme pour le développement .NET. Bien que nous utilisions une application Windows en WPF comme exemple principal, ces étapes d'installation peuvent être facilement adaptées aux applications macOS, iOS ou Android. JetBrains Rider offre une expérience de développement cohérente sur Windows, macOS et Linux, ce qui en fait un excellent choix pour le développement .NET multiplateforme.
+Ce guide complet vous accompagne pas à pas dans l'installation et la configuration des SDK VisioForge .NET au sein de JetBrains Rider, un puissant IDE multiplateforme pour le développement .NET. Bien que nous utilisions une application Windows en WPF comme exemple principal, ces étapes d'installation peuvent être facilement adaptées aux applications macOS, iOS ou Android. JetBrains Rider offre une expérience de développement cohérente sur Windows, macOS et Linux, ce qui en fait un excellent choix pour le développement .NET multiplateforme.
 
 ## Création de votre projet
 
@@ -131,4 +131,4 @@ Notre portail de documentation propose également des références d'API complè
 
 ## Conclusion
 
-En suivant ce guide d'installation, vous avez intégré avec succès les SDK VisioForge .Net à JetBrains Rider, posant ainsi les bases pour développer de puissantes applications multimédias. La combinaison des solides capacités de traitement multimédia de VisioForge et de l'environnement de développement intelligent de JetBrains Rider constitue une plateforme idéale pour créer des applications multimédias sophistiquées sur plusieurs plateformes.
+En suivant ce guide d'installation, vous avez intégré avec succès les SDK VisioForge .NET à JetBrains Rider, posant ainsi les bases pour développer de puissantes applications multimédias. La combinaison des solides capacités de traitement multimédia de VisioForge et de l'environnement de développement intelligent de JetBrains Rider constitue une plateforme idéale pour créer des applications multimédias sophistiquées sur plusieurs plateformes.

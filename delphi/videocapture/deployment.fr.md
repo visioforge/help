@@ -132,4 +132,4 @@ Pour un meilleur contrôle du processus de déploiement, suivez ces étapes dét
 Pour simplifier l'enregistrement des filtres DirectShow, vous pouvez utiliser l'utilitaire `reg_special.exe` issu de la configuration du framework. Placez cet exécutable dans votre répertoire de filtres et exécutez-le avec des privilèges d'administrateur pour enregistrer tous les filtres en une seule fois.
 
 ---
-Pour des exemples de code et d'implémentation supplémentaires, visitez notre [dépôt GitHub](https://github.com/visioforge/). Si vous rencontrez des difficultés lors du déploiement, veuillez contacter le [support technique](https://support.visioforge.com/) pour une assistance personnalisée.
+Pour des exemples de code et d'implémentation supplémentaires, visitez notre [dépôt GitHub](https://github.com/visioforge/). Si vous rencontrez des difficultés lors du déploiement, veuillez contacter le [support technique](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) pour une assistance personnalisée.

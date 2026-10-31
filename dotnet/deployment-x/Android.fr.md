@@ -290,7 +290,7 @@ dotnet build -f net8.0-android -c Release /p:AndroidPackageFormat=aab
 
 Si vous rencontrez des problèmes lors du déploiement du SDK VisioForge sur Android, veuillez consulter :
 
-- [Portail de support](https://support.visioforge.com)
+- [Portail de support](https://helpdesk.visioforge.com/helpdesk/my-tickets)
 - [Exemples GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
 ## Conclusion

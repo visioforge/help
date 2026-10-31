@@ -262,4 +262,4 @@ La capacidad de reproducir archivos de video con múltiples streams abre numeros
 Siguiendo las técnicas descritas en esta guía, puede incorporar efectivamente el soporte de múltiples streams de video en sus aplicaciones, mejorando la experiencia del usuario y expandiendo las capacidades de sus proyectos multimedia.
 
 ---
-Por favor contacte con [soporte](https://support.visioforge.com/) si necesita asistencia con esta funcionalidad. Visite nuestra página de [GitHub](https://github.com/visioforge/) para ejemplos de código adicionales y ejemplos de implementación.
+Por favor contacte con [soporte](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) si necesita asistencia con esta funcionalidad. Visite nuestra página de [GitHub](https://github.com/visioforge/) para ejemplos de código adicionales y ejemplos de implementación.

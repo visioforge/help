@@ -27,7 +27,7 @@ primary_api_classes:
 
 ---
 
-# Blocs plateforme Windows - VisioForge Media Blocks SDK .Net
+# Blocs plateforme Windows - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 

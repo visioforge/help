@@ -28,7 +28,7 @@ primary_api_classes:
 
 ## Introduction
 
-This comprehensive guide demonstrates how to create a fully functional camera viewing application using the Media Blocks SDK .Net. The SDK provides a robust framework for capturing, processing, and displaying video streams across multiple platforms including Windows, macOS, iOS, and Android.
+This comprehensive guide demonstrates how to create a fully functional camera viewing application using the Media Blocks SDK .NET. The SDK provides a robust framework for capturing, processing, and displaying video streams across multiple platforms including Windows, macOS, iOS, and Android.
 
 ## Architecture Overview
 
@@ -318,6 +318,6 @@ public class CameraViewerExample
 
 ## Conclusion
 
-With Media Blocks SDK .Net, building powerful camera applications becomes straightforward. The component-based architecture provides flexibility and performance across platforms while abstracting the complexities of camera device integration.
+With Media Blocks SDK .NET, building powerful camera applications becomes straightforward. The component-based architecture provides flexibility and performance across platforms while abstracting the complexities of camera device integration.
 
 For complete source code examples, please visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo).

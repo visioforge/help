@@ -53,7 +53,7 @@ Every Windows application built with VisioForge SDK requires the appropriate bas
 
 - [VisioForge.CrossPlatform.Core.Windows.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x86) - For 32-bit Windows applications
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64) - For 64-bit Windows applications
-- [VisioForge.CrossPlatform.Core.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.arm64) - For Windows on Arm (ARM64) applications; unlike x64, MP3 playback here needs `VisioForge.CrossPlatform.Libav.Windows.arm64` (below)
+- [VisioForge.CrossPlatform.Core.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.arm64) - For Windows on Arm (ARM64) applications; unlike x64, MP3 playback here needs `VisioForge.CrossPlatform.Libav.Windows.arm64` (below), and NDI is not available (build the app as x64 to use NDI on Windows on Arm)
 
 > **Note**: For applications targeting multiple architectures, you should include the package for each architecture you ship and implement appropriate runtime selection logic.
 
@@ -159,26 +159,27 @@ It mirrors that folder's `x64`, `x86` or `arm64` subfolder into a shared locatio
 ```
 
 GStreamer keeps a plugin registry that records each plugin by its **absolute path**. A single canonical
-folder therefore lets every VisioForge application on the machine share one warm registry, so only the
-first start after an SDK upgrade pays the cost of scanning the plugin set; every later start on any
-application reuses it. The folder also stays writable, which an installed application's own directory
+folder therefore lets every VisioForge application on the machine that deploys the same native libraries share
+one warm registry, so only the first start pays the cost of scanning the plugin set; every later start of any
+of those applications reuses it. The folder is also normally writable, which an installed application's own directory
 under `Program Files` is not.
 
-The folder is keyed to the SDK version **and** to a stamp of the core and Libav redistributables the
-application actually deployed - the `VisioForge.CrossPlatform.*` packages version independently of the managed
-SDK - so applications carrying different redistributables no longer overwrite each other's libraries on every
-start. Two deployments differing only in a package neither marker covers (OpenCV, AWS, a camera vendor's) do
-still share a folder; the file names in those packages are disjoint from everything else, so the effect is a
-few files being re-copied, not a wrong library being loaded. A cache the SDK created and nothing has started for
-30 days is removed; a folder left by an older SDK that used the previous shared layout is left alone, because
-applications built on that release still load from it.
+The folder is keyed to the SDK version **and** to a stamp of every library and data file the SDK mirrors -
+the `VisioForge.CrossPlatform.*` packages version independently of the managed SDK - so one folder always holds
+exactly one set of libraries. Applications carrying different packages (an extra OpenCV or AWS plugin, a newer
+FFMPEG redist, a DLL you copied next to the natives) get folders of their own, each with its own registry, and
+never load each other's libraries. The libraries of the other redistributables that share the native folder -
+the DirectShow filters and the LAV, VLC, XIPH, WebM, MP4 and Shared redists (`VisioForge_MFP*`, `VisioForge_DXP*`, the x64/x86 VAP,
+ONVIF, MediaInfo and the VC++ runtime) - are not mirrored
+and not part of the stamp; they load from your application's folder. A cache the SDK created and nothing has started for 30 days is removed; a folder left by
+an older SDK that used the previous shared layout is left alone, because applications built on that release
+still load from it.
 
-Two consequences worth knowing when you test a deployment:
+If the cache folder cannot be created, the SDK loads the libraries in place from the application's folder. If
+it exists but cannot be written, the SDK uses it only when it already holds exactly the application's libraries
+and no others; otherwise it loads them in place.
 
-- The cache accumulates the libraries of every application of that SDK version on the machine. A
-  development box that has run a fuller package set can therefore satisfy a dependency your application
-  does not actually ship - and the same application then fails on a clean machine.
-- Clearing `%PUBLIC%\.gstreamer` is safe at any time; the next start rebuilds it.
+Clearing `%PUBLIC%\.gstreamer` is safe at any time; the next start rebuilds it.
 
 To take the shared cache out of the picture and load exactly what your application deployed, point
 `VisioForgeX.CacheFolder` at your own native folder **before** calling `InitSDK`:
@@ -249,7 +250,7 @@ To resolve this error, you need to remove the MOTW from the affected file:
 
 By unblocking the file, you remove the MOTW, allowing Visual Studio to process it normally during the build.
 
-For additional assistance, visit the [VisioForge support site](https://support.visioforge.com/) or consult the [API documentation](https://api.visioforge.org/dotnet/api/index.html).
+For additional assistance, visit the [VisioForge support site](https://helpdesk.visioforge.com/helpdesk/my-tickets) or consult the [API documentation](https://api.visioforge.org/dotnet/api/index.html).
 
 ---
 Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.

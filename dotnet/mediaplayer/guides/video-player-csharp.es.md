@@ -1,6 +1,6 @@
 ---
 title: Reproductor de Video C# WinForms/WPF — Búsqueda y Volumen
-description: Cree un reproductor de video en C# para aplicaciones de escritorio WinForms o WPF con Media Player SDK .Net — búsqueda, volumen, velocidad y subtítulos.
+description: Cree un reproductor de video en C# para aplicaciones de escritorio WinForms o WPF con Media Player SDK .NET — búsqueda, volumen, velocidad y subtítulos.
 tags:
   - Media Player SDK
   - .NET
@@ -41,7 +41,7 @@ primary_api_classes:
 Esta guía le muestra cómo crear un reproductor de video **para escritorio Windows** (WinForms o WPF) en C# utilizando [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) con el motor de alto nivel `MediaPlayerCoreX`. Conectará reproducción de archivos, búsqueda en la línea de tiempo, pausa/reanudación, volumen y velocidad de reproducción contra un control `VideoView` de WinForms o WPF.
 
 !!! info "Elija su enfoque"
-    Esta página es para **aplicaciones de escritorio Windows** (WinForms o WPF) con Media Player SDK .Net.
+    Esta página es para **aplicaciones de escritorio Windows** (WinForms o WPF) con Media Player SDK .NET.
 
     - **Escritorio multiplataforma (incluye Linux)** → [Guía del reproductor Avalonia](avalonia-player.md)
     - **Móvil + escritorio desde una sola base de código (iOS, Android, macOS, Windows)** → [Guía del reproductor .NET MAUI](maui-player.md)
@@ -67,9 +67,9 @@ Esta guía le muestra cómo crear un reproductor de video **para escritorio Wind
 ### Paquetes NuGet Requeridos
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 ### Implementación Completa del Reproductor de Video en C#

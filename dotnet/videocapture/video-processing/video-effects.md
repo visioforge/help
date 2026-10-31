@@ -14,9 +14,9 @@ tags:
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Video Capture SDK .Net allows you to apply various video effects to the video captured from different sources. The video effects are applied in realtime.
+Video Capture SDK .NET allows you to apply various video effects to the video captured from different sources. The video effects are applied in realtime.
 
-Read the [Video Effects in .Net SDKs](../../general/video-effects/index.md) article to learn more about video effects in Video Capture SDK .Net.
+Read the [Video Effects in .NET SDKs](../../general/video-effects/index.md) article to learn more about video effects in Video Capture SDK .NET.
 
 ## Required redists
 

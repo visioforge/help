@@ -30,7 +30,7 @@ primary_api_classes:
 
 ---
 
-# Integración de FFMPEG.exe con los SDK .Net de VisioForge
+# Integración de FFMPEG.exe con los SDK .NET de VisioForge
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 

@@ -821,7 +821,7 @@ effect.Squash = false;
 
 **Purpose**: Csound-based audio programming.
 
-**Platforms**: Windows, macOS, Linux (requires Csound installation).
+**Platforms**: Windows x64 and macOS, shipped in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` and `VisioForge.CrossPlatform.Core.macOS.Adds` packages. Linux needs the gst-plugins-rs `csound` plugin and Csound 6 installed on the system. An unpatched plugin aborts the process when the score offset is anything but 0, or when the pipeline stops before the audio format is negotiated. On Windows and macOS the SDK loads no external Csound opcode plugins unless `OPCODE6DIR64` names their directory before the SDK is initialized.
 
 **Parameters**:
 
@@ -1143,7 +1143,7 @@ videoCaptureCore.Audio_Effects_DS_WavesReverb(0, "reverb",
 | HRTF Render | Yes | No | Cross-platform (requires plugin) |
 | **Specialized** | | | |
 | RS Audio Echo | Yes | No | Cross-platform (requires plugin) |
-| Csound Filter | Yes | No | Windows/macOS/Linux (requires Csound) |
+| Csound Filter | Yes | No | Windows x64, macOS (Adds package); Linux (requires Csound) |
 | **DirectSound Effects (Windows Classic Only)** | | | |
 | DS Chorus | No | Yes | Windows only |
 | DS Distortion | No | Yes | Windows only |

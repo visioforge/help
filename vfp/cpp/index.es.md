@@ -191,7 +191,7 @@ void OnStreamEnd()
 ### Comunidad y Soporte
 
 - [GitHub Issues](https://github.com/visioforge/.Net-SDK-s-samples/issues)
-- [Portal de Soporte](https://support.visioforge.com)
+- [Portal de Soporte](https://helpdesk.visioforge.com/helpdesk/my-tickets)
 
 ## Registro de Licencia
 

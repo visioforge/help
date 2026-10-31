@@ -36,7 +36,7 @@ primary_api_classes:
 | RTSP         | ✅ | ✅ Windows · macOS · Linux · Android · iOS |
 | HTTP MJPEG   | ✅ | ✅ Windows · macOS · Linux · Android · iOS |
 | ONVIF        | ✅ | ✅ via `RTSPSourceSettings.CreateAsync` |
-| NDI          | ✅ | ✅ requires NDI runtime per platform |
+| NDI          | ✅ | ✅ requires NDI runtime per platform; not on iOS |
 | SRT          | ✅ | ✅ Windows · macOS · Linux · Android · iOS |
 | VNC          | ⛔ | ✅ |
 | UDP          | ✅ | ✅ |

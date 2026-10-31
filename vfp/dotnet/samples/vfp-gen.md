@@ -26,7 +26,7 @@ tags:
 - Generate fingerprints optimized for either comparison or search operations
 - Process full videos or specific durations
 - Support for all major video formats (MP4, AVI, MKV, MOV, etc.)
-- Cross-platform compatibility (Windows x64)
+- Cross-platform compatibility (Windows x64, macOS, Linux x64 and arm64)
 
 ## Usage
 

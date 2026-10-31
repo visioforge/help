@@ -1,7 +1,7 @@
 ---
 title: SDK .NET VisioForge — Capture, édition et lecture vidéo
 description: SDK .NET pour la capture, l'édition, la lecture et le traitement vidéo. Prise en charge multiplateforme pour Windows, macOS, Linux, Android et iOS.
-sidebar_label: SDK .Net
+sidebar_label: SDK .NET
 order: 20
 tags:
   - .NET

@@ -9,7 +9,6 @@ tags:
   - macOS
   - Linux
   - Android
-  - iOS
   - GStreamer
   - Capture
   - Streaming
@@ -34,7 +33,7 @@ primary_api_classes:
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoCaptureCoreX](#){ .md-button } [VideoCaptureCore](#){ .md-button }
 
 !!! info "Soporte multiplataforma"
-    El motor `VideoCaptureCoreX` con NDI funciona en **Windows, macOS, Linux, Android e iOS** vía GStreamer; instale el runtime NDI para cada plataforma objetivo. La fuente NDI del `VideoCaptureCore` clásico es solo Windows. Consulte la [matriz de soporte de plataformas](../../../platform-matrix.md) y la [guía de despliegue en Linux](../../../deployment-x/Ubuntu.md).
+    El motor `VideoCaptureCoreX` con NDI funciona en **Windows, macOS, Linux y Android** vía GStreamer (no en iOS: el runtime GStreamer de iOS del SDK no incluye el plugin NDI); instale el runtime NDI para cada plataforma objetivo. La fuente NDI del `VideoCaptureCore` clásico es solo Windows. Consulte la [matriz de soporte de plataformas](../../../platform-matrix.md) y la [guía de despliegue en Linux](../../../deployment-x/Ubuntu.md).
 
 ## Introducción a la Tecnología NDI
 
@@ -168,6 +167,8 @@ Una vez que has identificado las fuentes NDI en su red, el siguiente paso es est
 
 
 ## Patrón de Reproductor NDI en Android y MAUI
+
+NDI no está disponible en iOS, por lo que la demo MAUI solo se dirige a Android, Mac Catalyst y Windows.
 
 Las demos `Video Capture SDK X` Android y MAUI NDI Player usan `VideoCaptureCoreX` como receptor/reproductor NDI simple. El mismo flujo sirve para reproductores de pantalla completa, herramientas de monitorización y paneles de previsualización:
 

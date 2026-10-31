@@ -186,7 +186,7 @@ private async Task StopCaptureAsync()
 
 ## Media Blocks SDK .NET (MediaBlocksPipeline) — Capturer TS en C#
 
-Le moteur MediaBlocksPipeline du Media Blocks SDK .Net adopte une approche architecturale différente, axée sur un système modulaire basé sur des blocs où chaque composant (bloc) a des responsabilités spécifiques dans le pipeline de traitement multimédia.
+Le moteur MediaBlocksPipeline du Media Blocks SDK .NET adopte une approche architecturale différente, axée sur un système modulaire basé sur des blocs où chaque composant (bloc) a des responsabilités spécifiques dans le pipeline de traitement multimédia.
 
 ### Blocs principaux
 

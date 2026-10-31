@@ -738,6 +738,8 @@ decklinkOverlay.Dispose();
 
 Capture et affiche la vidéo depuis des sources NDI (Network Device Interface).
 
+Non disponible sous iOS : le runtime GStreamer iOS du SDK n'inclut pas le plugin NDI.
+
 ```csharp
 public class OverlayManagerNDIVideo : IOverlayManagerElement
 ```

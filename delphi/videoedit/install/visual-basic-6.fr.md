@@ -85,4 +85,4 @@ Pour commencer à utiliser le contrôle dans votre application :
 * Testez votre application en profondeur avec divers formats multimédias
 
 ---
-Pour toute question technique ou difficulté d'implémentation, contactez notre [équipe de support](https://support.visioforge.com/). Accédez à des exemples de code et ressources supplémentaires sur notre [dépôt GitHub](https://github.com/visioforge/).
+Pour toute question technique ou difficulté d'implémentation, contactez notre [équipe de support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new). Accédez à des exemples de code et ressources supplémentaires sur notre [dépôt GitHub](https://github.com/visioforge/).

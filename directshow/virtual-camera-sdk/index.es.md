@@ -265,7 +265,7 @@ Las aplicaciones de demostración de Delphi y .NET utilizan bibliotecas de terce
 
 ### Integración .NET
 
-Las aplicaciones .NET aprovechan [DirectShowLib.Net (LGPL)](https://sourceforge.net/projects/directshownet/) para implementar funcionalidad DirectShow en entornos de código administrado.
+Las aplicaciones .NET aprovechan [DirectShowLib.NET (LGPL)](https://sourceforge.net/projects/directshownet/) para implementar funcionalidad DirectShow en entornos de código administrado.
 
 Los desarrolladores pueden crear aplicaciones de consola, WinForms o WPF usando .NET. Las aplicaciones de demostración incluidas utilizan WinForms para la interfaz de usuario.
 

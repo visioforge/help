@@ -41,7 +41,7 @@ primary_api_classes:
 Ce guide vous montre comment construire un lecteur vidéo complet pour **applications bureau Windows** en C# en utilisant [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) avec le moteur de haut niveau `MediaPlayerCoreX`. Vous mettrez en place la lecture de fichiers, le positionnement dans la timeline, la pause/reprise, le volume et la vitesse de lecture face à un contrôle `VideoView` WinForms ou WPF.
 
 !!! info "Choisissez votre approche"
-    Cette page concerne les **applications bureau Windows** (WinForms ou WPF) utilisant Media Player SDK .Net.
+    Cette page concerne les **applications bureau Windows** (WinForms ou WPF) utilisant Media Player SDK .NET.
 
     - **Bureau multiplateforme (inclut Linux)** → [Guide du lecteur Avalonia](avalonia-player.md)
     - **Mobile + bureau à partir d'une seule base de code (iOS, Android, macOS, Windows)** → [Guide du lecteur .NET MAUI](maui-player.md)
@@ -66,9 +66,9 @@ Ce guide vous montre comment construire un lecteur vidéo complet pour **applica
 ### Paquets NuGet requis
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 ### Implémentation complète du lecteur vidéo C#

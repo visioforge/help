@@ -173,4 +173,4 @@ Al seleccionar un renderizador para su aplicación, considere estos factores:
 4. Necesidades de compatibilidad para su entorno de despliegue
 
 ---
-Por favor contacte con [soporte](https://support.visioforge.com/) si necesita asistencia técnica con esta implementación. Visite nuestro repositorio de [GitHub](https://github.com/visioforge/) para ejemplos de código adicionales y recursos.
+Por favor contacte con [soporte](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) si necesita asistencia técnica con esta implementación. Visite nuestro repositorio de [GitHub](https://github.com/visioforge/) para ejemplos de código adicionales y recursos.

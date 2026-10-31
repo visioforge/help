@@ -80,7 +80,7 @@ var maxDifference = 500;
 var res = VFPSearch.Search(fragment, 0, main, 0, out var difference, maxDifference);
 
 // check the result
-if (res > 0)
+if (res != int.MaxValue)
 {
     TimeSpan ts = new TimeSpan(res * TimeSpan.TicksPerSecond);
     Console.WriteLine($"Detected fragment file at {ts:g}, difference level is {difference}");
@@ -95,7 +95,7 @@ In this code:
 
 - We define a tolerance level for differences between fingerprints
 - Perform the search operation between our fragment and main video
-- Check if a matching position was found (positive result value)
+- Check if a matching position was found (`Search` returns `int.MaxValue` when the fragment is not found; 0 means a match at the very start)
 - Convert the result to a timestamp and display it along with the difference value
 
 ## Performance Considerations

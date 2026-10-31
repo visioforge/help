@@ -50,7 +50,9 @@ graph LR;
 Le bloc se trouve dans l'espace de noms `VisioForge.Core.MediaBlocks.AI` et est fourni dans le module complémentaire **VisioForge AI Whisper**
 — paquet NuGet `VisioForge.DotNet.Core.AI.Whisper` (assembly `VisioForge.Core.AI.Whisper`),
 construit sur `Whisper.net`. Il nécessite le paquet de runtime habituel de la plateforme
-(par exemple `VisioForge.CrossPlatform.Core.Windows.x64`) et fonctionne sous Windows, Linux et macOS.
+(par exemple `VisioForge.CrossPlatform.Core.Windows.x64`) et fonctionne sous Windows, Linux et macOS. Pour une
+transcription sur GPU NVIDIA (CUDA), référencez aussi `Whisper.net.Runtime.Cuda12.Windows` ou
+`Whisper.net.Runtime.Cuda12.Linux`, dans la même version que `Whisper.net`.
 
 ## Modèles
 
@@ -389,7 +391,7 @@ Chaque `SpeechSegment` possède :
 | `WhisperModelPath` | — | Chemin absolu vers le modèle GGML de Whisper (`ggml-*.bin`). Obligatoire. |
 | `Language` | `"auto"` | Code ISO 639-1 ou `"auto"` pour la détection. |
 | `Task` | `Transcribe` | `Transcribe` (langue source) ou `Translate` (vers l'anglais). |
-| `Provider` | `Auto` | `CPU` ou `CUDA` sont pertinents (GGML n'a pas de DirectML) ; `Auto` choisit CUDA si présent, sinon CPU. |
+| `Provider` | `Auto` | `CPU` ou `CUDA` sont pertinents (GGML n'a pas de DirectML) ; `Auto` choisit CUDA si présent, sinon CPU. Le runtime CUDA ne fait pas partie du package : pour l'utiliser, ajoutez `Whisper.net.Runtime.Cuda12.Windows` (ou `Whisper.net.Runtime.Cuda12.Linux`) à l'application, dans la même version que `Whisper.net`. |
 | `DeviceId` | `0` | Id du périphérique GPU lorsqu'un fournisseur GPU est utilisé. |
 | `Threads` | `0` | Threads CPU ; `0` laisse Whisper.net choisir. |
 | `EnableVad` | `true` | Utiliser Silero VAD pour segmenter la parole. Désactivez-le pour un découpage à fenêtre fixe. |

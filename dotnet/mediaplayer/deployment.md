@@ -24,15 +24,15 @@ tags:
 
 ---
 
-# Media Player SDK .Net Deployment Guide
+# Media Player SDK .NET Deployment Guide
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-This comprehensive guide covers all deployment scenarios for the Media Player SDK .Net, ensuring your applications work correctly across different environments. Whether you're developing cross-platform applications or Windows-specific solutions, this guide provides the necessary steps for successful deployment.
+This comprehensive guide covers all deployment scenarios for the Media Player SDK .NET, ensuring your applications work correctly across different environments. Whether you're developing cross-platform applications or Windows-specific solutions, this guide provides the necessary steps for successful deployment.
 
 ## Engine Types Overview
 
-The Media Player SDK .Net offers two primary engine types, each designed for specific deployment scenarios:
+The Media Player SDK .NET offers two primary engine types, each designed for specific deployment scenarios:
 
 ### MediaPlayerCoreX Engine (Cross-Platform)
 
@@ -46,7 +46,7 @@ The MediaPlayerCore engine is optimized specifically for Windows environments. W
 
 ## Deployment Options
 
-There are three primary methods for deploying the Media Player SDK .Net components:
+There are three primary methods for deploying the Media Player SDK .NET components:
 
 1. Using NuGet packages (recommended for most scenarios)
 2. Using automatic silent installers (requires administrative privileges)

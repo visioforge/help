@@ -177,4 +177,4 @@ Le SDK de vision par ordinateur est un paquet NuGet distinct. Consultez le [guid
 
 - [Dépôt GitHub VisioForge](https://github.com/visioforge/.Net-SDK-s-samples) — exemples de code et projets d'exemple
 - [Documentation de l'API](https://api.visioforge.org/dotnet/) — référence complète de l'API
-- [Portail de support](https://support.visioforge.com/) — support technique et base de connaissances
+- [Portail de support](https://helpdesk.visioforge.com/helpdesk/my-tickets) — support technique et base de connaissances

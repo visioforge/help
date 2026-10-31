@@ -53,7 +53,7 @@ Chaque application Windows créée avec le SDK VisioForge requiert le paquet de 
 
 - [VisioForge.CrossPlatform.Core.Windows.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x86) — pour les applications Windows 32 bits
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64) — pour les applications Windows 64 bits
-- [VisioForge.CrossPlatform.Core.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.arm64) — pour les applications Windows on Arm (ARM64) ; contrairement à x64, la lecture MP3 y nécessite `VisioForge.CrossPlatform.Libav.Windows.arm64` (ci-dessous)
+- [VisioForge.CrossPlatform.Core.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.arm64) — pour les applications Windows on Arm (ARM64) ; contrairement à x64, la lecture MP3 y nécessite `VisioForge.CrossPlatform.Libav.Windows.arm64` (ci-dessous), et NDI n'est pas disponible (compilez l'application en x64 pour utiliser NDI sous Windows on Arm)
 
 > **Note** : pour les applications ciblant plusieurs architectures, vous devez inclure le paquet de chaque architecture que vous livrez et implémenter une logique de sélection appropriée à l'exécution.
 
@@ -160,30 +160,27 @@ partagé et charge depuis celui-ci :
 ```
 
 GStreamer tient un registre de plugins qui note chaque plugin par son **chemin absolu**. Un dossier
-canonique unique permet donc à toutes les applications VisioForge de la machine de partager un même
-registre déjà chaud : seul le premier démarrage après une mise à jour du SDK paie le coût de l'analyse de
-l'ensemble des plugins, et tout démarrage ultérieur de n'importe quelle application le réutilise. Ce
-dossier reste par ailleurs accessible en écriture, ce que le répertoire d'une application installée sous
+canonique unique permet donc à toutes les applications VisioForge de la machine qui déploient les mêmes
+bibliothèques natives de partager un même registre déjà chaud : seul le premier démarrage paie le coût de
+l'analyse de l'ensemble des plugins, et tout démarrage ultérieur de l'une de ces applications le réutilise. Ce
+dossier est par ailleurs normalement accessible en écriture, ce que le répertoire d'une application installée sous
 `Program Files` n'est pas.
 
-Le dossier est déterminé par la version du SDK **et** par une empreinte des redistribuables core et Libav que
-l'application déploie réellement - les paquets `VisioForge.CrossPlatform.*` sont versionnés indépendamment du
-SDK managé - si bien que des applications portant des redistribuables différents ne s'écrasent plus mutuellement
-leurs bibliothèques à chaque démarrage. Deux déploiements ne différant que par un paquet qu'aucune des deux
-empreintes ne couvre (OpenCV, AWS, celui d'un fabricant de caméras) partagent bien un dossier ; les noms de
-fichiers de ces paquets sont disjoints du reste, l'effet est donc que quelques fichiers sont recopiés, non
-qu'une mauvaise bibliothèque soit chargée. Un cache créé par
-le SDK et qui n'a pas été démarré depuis 30 jours est supprimé ; un dossier laissé par un SDK antérieur
-utilisant l'ancienne disposition partagée est laissé intact, car les applications construites avec cette
-version y chargent toujours.
+Le dossier est déterminé par la version du SDK **et** par une empreinte de toutes les bibliothèques et fichiers de données que le SDK recopie - les paquets `VisioForge.CrossPlatform.*` sont versionnés indépendamment du SDK managé -
+si bien qu'un dossier contient toujours exactement un jeu de bibliothèques. Des applications portant des paquets
+différents (un plugin OpenCV ou AWS supplémentaire, un redistribuable FFMPEG plus récent, une DLL que vous avez
+copiée à côté des bibliothèques natives) obtiennent chacune leur propre dossier, avec son propre registre, et ne
+chargent jamais les bibliothèques d'une autre. Les bibliothèques des autres redistribuables qui partagent le
+dossier natif - les filtres DirectShow et les redistribuables LAV, VLC, XIPH, WebM, MP4 et Shared (`VisioForge_MFP*`,
+`VisioForge_DXP*`, VAP x64/x86, ONVIF, MediaInfo et le runtime VC++) - ne sont ni recopiées ni prises dans l'empreinte ; elles se chargent depuis le dossier de votre application. Un cache créé par le SDK et qui n'a pas été démarré depuis
+30 jours est supprimé ; un dossier laissé par un SDK antérieur utilisant l'ancienne disposition partagée est
+laissé intact, car les applications construites avec cette version y chargent toujours.
 
-Deux conséquences à connaître lorsque vous testez un déploiement :
+Si le dossier du cache ne peut pas être créé, le SDK charge les bibliothèques sur place, depuis le dossier de
+l'application. S'il existe mais n'est pas accessible en écriture, le SDK ne l'utilise que s'il contient déjà
+exactement les bibliothèques de l'application et aucune autre ; sinon il les charge sur place.
 
-- Le cache accumule les bibliothèques de toutes les applications de cette version du SDK sur la machine. Un
-  poste de développement ayant exécuté un jeu de paquets plus complet peut donc satisfaire une dépendance
-  que votre application ne distribue pas réellement — et cette même application échoue ensuite sur une
-  machine vierge.
-- Supprimer `%PUBLIC%\.gstreamer` est sans danger à tout moment ; le démarrage suivant le reconstruit.
+Supprimer `%PUBLIC%\.gstreamer` est sans danger à tout moment ; le démarrage suivant le reconstruit.
 
 Pour écarter le cache partagé et charger exactement ce que votre application a déployé, faites pointer
 `VisioForgeX.CacheFolder` vers votre propre dossier natif **avant** d'appeler `InitSDK` :
@@ -256,7 +253,7 @@ Pour résoudre cette erreur, vous devez retirer la MOTW du fichier concerné :
 
 En débloquant le fichier, vous supprimez la MOTW, ce qui permet à Visual Studio de le traiter normalement durant le build.
 
-Pour toute assistance supplémentaire, visitez le [site de support VisioForge](https://support.visioforge.com/) ou consultez la [documentation de l'API](https://api.visioforge.org/dotnet/api/index.html).
+Pour toute assistance supplémentaire, visitez le [site de support VisioForge](https://helpdesk.visioforge.com/helpdesk/my-tickets) ou consultez la [documentation de l'API](https://api.visioforge.org/dotnet/api/index.html).
 
 ---
 Visitez notre page [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) pour obtenir plus d'exemples de code.

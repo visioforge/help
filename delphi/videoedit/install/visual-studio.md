@@ -24,7 +24,7 @@ TVFVideoEdit provides powerful video editing capabilities through ActiveX contro
 
 ## Compatibility Information
 
-The ActiveX control can be used directly in C++ projects without additional wrappers. For C# or VB.Net development, Visual Studio automatically creates a custom wrapper assembly that enables the ActiveX API in managed code environments.
+The ActiveX control can be used directly in C++ projects without additional wrappers. For C# or VB.NET development, Visual Studio automatically creates a custom wrapper assembly that enables the ActiveX API in managed code environments.
 
 ## Prerequisites
 
@@ -39,7 +39,7 @@ Before beginning the installation process, ensure you have:
 ### Creating a New Project
 
 1. Start Visual Studio and create a new project using C++, C#, or Visual Basic.
-2. For this demonstration, we'll use a C# Windows Forms application, but the process applies similarly to VB.Net and C++ MFC projects.
+2. For this demonstration, we'll use a C# Windows Forms application, but the process applies similarly to VB.NET and C++ MFC projects.
 
 ![New project creation screen](vevs2003_1.webp)
 
@@ -91,4 +91,4 @@ When integrating TVFVideoEdit, you might encounter these common challenges:
 If you encounter any difficulties following this tutorial or need specialized assistance with your implementation, our development team is available to provide technical guidance.
 
 - Access additional code samples on our [GitHub repository](https://github.com/visioforge/)
-- Contact our [technical support team](https://support.visioforge.com/) for personalized assistance
+- Contact our [technical support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) for personalized assistance

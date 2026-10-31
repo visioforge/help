@@ -226,7 +226,7 @@ Recoja un log y contacte con soporte:
 3. Versión de Unity, Build Target, Scripting Backend, Api Compatibility Level.
 4. Una escena reproducible mínima si es posible.
 
-Abra un ticket en <https://support.visioforge.com/>.
+Abra un ticket en <https://helpdesk.visioforge.com/helpdesk/my-tickets/new>.
 
 ## Véase también
 

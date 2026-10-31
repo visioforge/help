@@ -41,7 +41,8 @@ vfp_compare -f "fingerprint1.vsigx" -s "fingerprint2.vsigx" [options]
 
 ### Optional Parameters
 
-- `-d, --md` : Maximum acceptable difference (default: 500)
+- `-d, --md` : Maximum time shift in seconds between the videos searched for the best alignment (default: 500)
+- `--threshold` : Difference below which the files are reported as similar (default: 300)
 - `-l, --license` : VisioForge license key (default: "TRIAL")
 
 ## Examples
@@ -53,7 +54,7 @@ vfp_compare -f "video1.vsigx" -s "video2.vsigx"
 
 ### Comparison with custom threshold
 ```bash
-vfp_compare -f "original.vsigx" -s "copy.vsigx" -d 100
+vfp_compare -f "original.vsigx" -s "copy.vsigx" --threshold 100
 ```
 
 ### Using license key

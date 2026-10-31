@@ -41,7 +41,7 @@ primary_api_classes:
 
 Ce guide vous accompagne dans la construction d'une application de lecteur vidéo complète en VB.NET (Visual Basic .NET) en utilisant [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net). Le lecteur prend en charge MP4, AVI, MKV, WMV, WebM et de nombreux autres formats avec des contrôles de lecture, le positionnement dans la timeline et le réglage du volume.
 
-## Pourquoi utiliser Media Player SDK .Net pour VB.NET
+## Pourquoi utiliser Media Player SDK .NET pour VB.NET
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) fournit une lecture vidéo VB.NET robuste avec :
 
@@ -55,9 +55,9 @@ Ce guide vous accompagne dans la construction d'une application de lecteur vidé
 ## Paquets NuGet requis
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 ## Exemple complet de lecteur vidéo VB.NET
@@ -268,7 +268,7 @@ Démos complètes de lecteur vidéo VB.NET :
 
 ### Quelle licence faut-il pour une application de lecteur vidéo VB.NET ?
 
-Media Player SDK .Net nécessite une licence pour le développement et la distribution. Une licence Developer supprime le filigrane d'évaluation et débloque toutes les fonctionnalités durant le développement. Une licence Release est requise lors de la distribution de votre application aux utilisateurs finaux. Le SDK est disponible en édition Premium qui inclut tous les formats pris en charge, l'accélération matérielle et les deux moteurs DirectShow et GStreamer. Vous pouvez évaluer le SDK sans licence — la lecture fonctionne entièrement mais inclut un filigrane superposé. Visitez la [page produit](https://www.visioforge.com/media-player-sdk-net) pour les tarifs et les options de licence.
+Media Player SDK .NET nécessite une licence pour le développement et la distribution. Une licence Developer supprime le filigrane d'évaluation et débloque toutes les fonctionnalités durant le développement. Une licence Release est requise lors de la distribution de votre application aux utilisateurs finaux. Le SDK est disponible en édition Premium qui inclut tous les formats pris en charge, l'accélération matérielle et les deux moteurs DirectShow et GStreamer. Vous pouvez évaluer le SDK sans licence — la lecture fonctionne entièrement mais inclut un filigrane superposé. Visitez la [page produit](https://www.visioforge.com/media-player-sdk-net) pour les tarifs et les options de licence.
 
 ### Quels formats vidéo et audio le lecteur VB.NET prend-il en charge ?
 

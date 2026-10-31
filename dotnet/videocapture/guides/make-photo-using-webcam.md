@@ -91,7 +91,7 @@ videoCapture.Mode = VideoCaptureMode.VideoPreview;
 await videoCapture.StartAsync();
 ```
 
-Setting the `Video_Still_Frames_Grabber_Enabled` property to `true` is crucial. This configuration tells the SDK to monitor for hardware button presses and trigger the appropriate events when a still frame is captured.
+Setting the `Video_Still_Frames_Grabber_Enabled` property to `true` is crucial. This configuration tells the SDK to monitor for hardware button presses and trigger the appropriate events when a still frame is captured. It needs a camera that exposes a still pin (a hardware snapshot button); on a camera without one, the still frame events are not raised and the SDK reports an error at start. To take a snapshot from the live stream instead, call `Frame_GetCurrent()` and leave this property off.
 
 ### Handling Captured Frames
 

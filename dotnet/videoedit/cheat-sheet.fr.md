@@ -35,7 +35,7 @@ primary_api_classes:
   - VideoFileSource
 ---
 
-# VisioForge Video Edit SDK .Net — Aide-mémoire
+# VisioForge Video Edit SDK .NET — Aide-mémoire
 
 Le Video Edit SDK assemble des timelines, applique des transitions/effets/superpositions et exporte vers MP4/MKV/WebM. `VideoEditCoreX` est le moteur multiplateforme (GStreamer) ; `VideoEditCore` est le moteur historique exclusivement Windows basé sur DirectShow. Choisissez `VideoEditCoreX` pour les nouveaux projets.
 
@@ -61,7 +61,7 @@ Le Video Edit SDK assemble des timelines, applique des transitions/effets/superp
 Un seul paquet embarque les deux moteurs : `VideoEditCoreX` et l'historique `VideoEditCore` y cohabitent, le choix du moteur se fait donc dans le code, pas dans le packaging :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.28]"/>
 ```
 
 Il tire `VisioForge.DotNet.Core` en dépendance ; inutile de référencer `Core` séparément.

@@ -312,7 +312,7 @@ Détermine comment les canaux audio sont encodés. Les options incluent :
 
 #### VBR_Mode
 
-Active l'encodage à débit variable lorsque défini à true (par défaut). Le VBR permet à l'encodeur d'ajuster le débit en fonction de la complexité audio.
+Active l'encodage à débit variable lorsque défini à true (par défaut : false). Le VBR permet à l'encodeur d'ajuster le débit en fonction de la complexité audio.
 
 #### VBR_MinBitrate
 
@@ -523,4 +523,4 @@ Le constructeur de la classe définit ces valeurs par défaut :
 - EncodingQuality = 6
 - SampleRate = 44100 Hz
 - ChannelsMode = MP3ChannelsMode.StandardStereo
-- VBR_Mode = true
+- VBR_Mode = false

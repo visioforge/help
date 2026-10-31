@@ -145,4 +145,4 @@ After deployment, thoroughly test your application on the target machine.
   * Correct architecture (x86/x64) match between your application, the library components, and runtime dependencies.
 
 ---
-Need further assistance? Contact [VisioForge Support](https://support.visioforge.com/). Explore more examples on our [GitHub](https://github.com/visioforge/).
+Need further assistance? Contact [VisioForge Support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new). Explore more examples on our [GitHub](https://github.com/visioforge/).

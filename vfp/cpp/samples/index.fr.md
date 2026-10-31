@@ -261,5 +261,5 @@ public:
 Pour les questions sur ces exemples :
 
 - Consultez la [FAQ](../../faq.md) pour les problèmes courants
-- Visitez notre [portail de support](https://support.visioforge.com)
+- Visitez notre [portail de support](https://helpdesk.visioforge.com/helpdesk/my-tickets)
 - Rejoignez notre [communauté Discord](https://discord.com/invite/yvXUG56WCH)

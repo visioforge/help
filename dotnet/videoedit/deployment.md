@@ -1,5 +1,5 @@
 ---
-title: Deploy Video Edit SDK .Net on Windows — NuGet and Installers
+title: Deploy Video Edit SDK .NET on Windows — NuGet and Installers
 description: Configure NuGet packages, silent installers, and runtime dependencies for VisioForge Video Edit SDK .NET on x86 and x64 Windows targets.
 tags:
   - Video Edit SDK
@@ -24,13 +24,13 @@ tags:
 
 ---
 
-# Comprehensive Deployment Guide for Video Edit SDK .Net
+# Comprehensive Deployment Guide for Video Edit SDK .NET
 
 ## Introduction to VideoEditCore Deployment
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-The VisioForge Video Edit SDK for .Net provides a powerful set of tools for video processing, editing, and analysis in Windows environments. This comprehensive guide details the deployment options for ensuring the SDK functions correctly on target systems.
+The VisioForge Video Edit SDK for .NET provides a powerful set of tools for video processing, editing, and analysis in Windows environments. This comprehensive guide details the deployment options for ensuring the SDK functions correctly on target systems.
 
 For applications built with the AnyCPU configuration, you must deploy both x86 and x64 redistributables to ensure compatibility across different processor architectures. This guide covers all deployment methods, from simple NuGet packages to detailed manual installations.
 
@@ -203,4 +203,4 @@ For convenient registration of multiple DirectShow filters, place the `reg_speci
 
 For code samples and implementation examples, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
 
-For technical support, documentation updates, and community discussions, visit the [VisioForge Developer Portal](https://support.visioforge.com/).
+For technical support, documentation updates, and community discussions, visit the [VisioForge Developer Portal](https://helpdesk.visioforge.com/helpdesk/my-tickets).

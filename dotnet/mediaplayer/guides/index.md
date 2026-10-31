@@ -20,17 +20,17 @@ primary_api_classes:
 
 ---
 
-# Advanced Media Player SDK .Net Guides & Tutorials
+# Advanced Media Player SDK .NET Guides & Tutorials
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Overview
 
-Explore advanced implementation techniques, specialized usage guides, and tutorials for the Media Player SDK .Net. These resources address specific development scenarios that require custom approaches, including loop playback, position range control, platform-specific implementations, and more.
+Explore advanced implementation techniques, specialized usage guides, and tutorials for the Media Player SDK .NET. These resources address specific development scenarios that require custom approaches, including loop playback, position range control, platform-specific implementations, and more.
 
 ## Available Guides
 
-This curated collection of guides addresses specific advanced functionalities within the Media Player SDK .Net. Each guide provides practical instructions and insights to help you implement complex features effectively.
+This curated collection of guides addresses specific advanced functionalities within the Media Player SDK .NET. Each guide provides practical instructions and insights to help you implement complex features effectively.
 
 ### Getting Started Guides
 
@@ -50,7 +50,7 @@ Explore specialized guides on controlling media playback with advanced features.
 
 ### Platform-Specific Implementation
 
-Learn how to implement Media Player SDK .Net across different platforms and UI frameworks.
+Learn how to implement Media Player SDK .NET across different platforms and UI frameworks.
 
 * [**Avalonia Player Implementation**](avalonia-player.md) - Comprehensive guide for implementing media playback in cross-platform Avalonia applications. Covers setup, integration, and platform-specific considerations for Windows, Linux, and macOS. Includes complete code examples and best practices for building professional media player applications with Avalonia UI framework.
 
@@ -58,7 +58,7 @@ Learn how to implement Media Player SDK .Net across different platforms and UI f
 
 ## Additional Resources
 
-Beyond the specific guides listed above, we offer a wealth of supplementary materials to support your development journey with the Media Player SDK .Net.
+Beyond the specific guides listed above, we offer a wealth of supplementary materials to support your development journey with the Media Player SDK .NET.
 
 ### Code Samples
 

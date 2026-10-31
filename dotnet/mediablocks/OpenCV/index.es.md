@@ -15,11 +15,11 @@ primary_api_classes:
 sidebar_label: OpenCV
 ---
 
-# Bloques OpenCV - VisioForge Media Blocks SDK .Net
+# Bloques OpenCV - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Los bloques OpenCV (Open Source Computer Vision Library) proporcionan potentes capacidades de procesamiento de video dentro del VisioForge Media Blocks SDK .Net. Estos bloques permiten una amplia gama de tareas de visión por computadora, desde manipulación básica de imágenes hasta detección y seguimiento de objetos complejos.
+Los bloques OpenCV (Open Source Computer Vision Library) proporcionan potentes capacidades de procesamiento de video dentro del VisioForge Media Blocks SDK .NET. Estos bloques permiten una amplia gama de tareas de visión por computadora, desde manipulación básica de imágenes hasta detección y seguimiento de objetos complejos.
 
 Para usar los bloques OpenCV, añada el paquete NuGet redistribuible para su plataforma: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86` o `VisioForge.CrossPlatform.OpenCV.macOS` (macOS y Mac Catalyst). Estas son las plataformas para las que actualmente se distribuye el plugin OpenCV de GStreamer; en cualquier otra plataforma el método `IsAvailable()` de cada bloque devuelve `false`.
 
@@ -991,7 +991,7 @@ var pipeline = new MediaBlocksPipeline();
 
 var textOverlaySettings = new CVTextOverlaySettings
 {
-    Text = "¡VisioForge MediaBlocks.Net ES GENIAL!", // Predeterminado: "Default text"
+    Text = "¡VisioForge MediaBlocks.NET ES GENIAL!", // Predeterminado: "Default text"
     X = 20, // Posición X del inicio del texto. Predeterminado: 50
     Y = 40, // Posición Y de la línea base del texto (desde arriba). Predeterminado: 50
     FontWidth = 1.2, // Escala de fuente. Predeterminado: 1.0

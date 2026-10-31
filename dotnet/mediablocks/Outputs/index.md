@@ -20,11 +20,11 @@ primary_api_classes:
 
 ---
 
-# Output Blocks - VisioForge Media Blocks SDK .Net
+# Output Blocks - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Output blocks, also known as sinks, are responsible for writing media data to files, network streams, or other destinations. They are typically the last blocks in any media processing chain. VisioForge Media Blocks SDK .Net provides a comprehensive collection of output blocks for various formats and protocols.
+Output blocks, also known as sinks, are responsible for writing media data to files, network streams, or other destinations. They are typically the last blocks in any media processing chain. VisioForge Media Blocks SDK .NET provides a comprehensive collection of output blocks for various formats and protocols.
 
 This guide covers file output blocks like MP4, AVI, WebM, MKV, and network streaming blocks for protocols such as RTMP (used by YouTube and Facebook Live).
 

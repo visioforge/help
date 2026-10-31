@@ -168,4 +168,4 @@ VideoCapture1.Audio_OutputDevice_SetBalance sldBalance.Value
 - Implemente retroalimentación visual cuando se cambien los ajustes de volumen o balance
 
 ---
-Por favor contacte a nuestro [equipo de soporte](https://support.visioforge.com/) si necesita asistencia con esta implementación. Visite nuestro [repositorio de GitHub](https://github.com/visioforge/) para ejemplos de código adicionales y recursos.
+Por favor contacte a nuestro [equipo de soporte](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) si necesita asistencia con esta implementación. Visite nuestro [repositorio de GitHub](https://github.com/visioforge/) para ejemplos de código adicionales y recursos.

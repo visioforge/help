@@ -508,7 +508,7 @@ hide:
     <p>Descarga nuestros SDKs con una prueba gratuita y comienza a construir hoy</p>
     <div class="buttons">
         <a href="https://www.visioforge.com/buy" class="btn primary">Ver Precios</a>
-        <a href="https://support.visioforge.com/" class="btn secondary">Contactar Soporte</a>
+        <a href="https://helpdesk.visioforge.com/helpdesk/my-tickets/new" class="btn secondary">Contactar Soporte</a>
     </div>
 </div>
 
@@ -530,5 +530,5 @@ hide:
     
     <p>Nuestros SDKs soportan el ecosistema .NET completo incluyendo .NET Framework 4.7.2+, .NET 5/6/7/8/9 y frameworks de UI como WinForms, WPF, MAUI, Avalonia y Blazor. Con codificación y decodificación acelerada por hardware mediante NVIDIA NVENC/NVDEC, Intel Quick Sync y AMD AMF, puedes crear aplicaciones de alto rendimiento que aprovechan las capacidades modernas de GPU.</p>
     
-    <p>Únete a miles de desarrolladores en todo el mundo que confían en los SDKs de VisioForge para sus proyectos multimedia. Explora nuestra documentación, descarga los proyectos de ejemplo y comienza a construir tu próxima aplicación de video hoy. ¿Necesitas ayuda? Nuestro <a href="https://support.visioforge.com/" target="_blank">equipo de soporte</a> y <a href="https://discord.com/invite/yvXUG56WCH" target="_blank">comunidad de Discord</a> están aquí para asistirte.</p>
+    <p>Únete a miles de desarrolladores en todo el mundo que confían en los SDKs de VisioForge para sus proyectos multimedia. Explora nuestra documentación, descarga los proyectos de ejemplo y comienza a construir tu próxima aplicación de video hoy. ¿Necesitas ayuda? Nuestro <a href="https://helpdesk.visioforge.com/helpdesk/my-tickets/new" target="_blank">equipo de soporte</a> y <a href="https://discord.com/invite/yvXUG56WCH" target="_blank">comunidad de Discord</a> están aquí para asistirte.</p>
 </div>

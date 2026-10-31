@@ -16,9 +16,9 @@ primary_api_classes:
 
 Notre dernière version apporte des améliorations significatives à la flexibilité de déploiement et à la compatibilité avec les frameworks :
 
-### Mise à niveau de .Net Framework
+### Mise à niveau de .NET Framework
 
-* Migration complète vers .Net 4.6 garantissant de meilleures performances et une compatibilité avec les systèmes modernes
+* Migration complète vers .NET 4.6 garantissant de meilleures performances et une compatibilité avec les systèmes modernes
 * Fiabilité d'exécution améliorée grâce à la mise à jour des composants principaux
 
 ### Modèle de distribution simplifié
@@ -28,7 +28,7 @@ Notre dernière version apporte des améliorations significatives à la flexibil
 
 ### Développement multiplateforme
 
-* Consolidation des paquets .Net Core et .Net Framework en une seule distribution unifiée
+* Consolidation des paquets .NET Core et .NET Framework en une seule distribution unifiée
 * Gestion simplifiée des dépendances entre différentes plateformes cibles
 
 ### Améliorations du déploiement
@@ -49,8 +49,8 @@ Cette version s'est concentrée sur les capacités audio principales et la prise
 
 ### Mises à jour du framework
 
-* Ajout de la prise en charge complète de .Net Core pour le développement multiplateforme
-* Rétrocompatibilité maintenue avec les implémentations existantes de .Net Framework
+* Ajout de la prise en charge complète de .NET Core pour le développement multiplateforme
+* Rétrocompatibilité maintenue avec les implémentations existantes de .NET Framework
 * Optimisations de performances pour les deux environnements d'exécution
 
 ### Améliorations techniques
@@ -97,7 +97,7 @@ Une mise à jour importante avec de nombreuses nouvelles fonctionnalités et am�
 
 ### Ajouts de formats de sortie
 
-* Prise en charge de la sortie GIF dans Video Edit SDK .Net et Video Capture SDK .Net
+* Prise en charge de la sortie GIF dans Video Edit SDK .NET et Video Capture SDK .NET
 * Séparateur MP3 personnalisé répondant aux problèmes de lecture avec les fichiers MP3 problématiques
 
 ### Changements structurels
@@ -171,8 +171,8 @@ La version fondatrice qui a établi les fonctionnalités principales :
 
 Lors de la mise à niveau entre versions, veuillez tenir compte des points suivants :
 
-* La version 12.1 nécessite .Net Framework 4.6 ou supérieur
-* La version 11.3 et au-delà prennent en charge à la fois .Net Core et .Net Framework
+* La version 12.1 nécessite .NET Framework 4.6 ou supérieur
+* La version 11.3 et au-delà prennent en charge à la fois .NET Core et .NET Framework
 * La version 10.0 a introduit des changements de rupture dans la structure des assemblies
 * Les paquets NuGet offrent la voie de mise à niveau la plus simple entre versions
 

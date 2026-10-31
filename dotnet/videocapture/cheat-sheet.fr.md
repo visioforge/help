@@ -1,6 +1,6 @@
 ---
 title: VisioForge Video Capture SDK en C# .NET — Aide-mémoire
-description: Référence d'une page pour Video Capture SDK .Net — paquets NuGet, API VideoCaptureCoreX, exemple d'enregistrement MP4, plateformes et pièges.
+description: Référence d'une page pour Video Capture SDK .NET — paquets NuGet, API VideoCaptureCoreX, exemple d'enregistrement MP4, plateformes et pièges.
 tags:
   - Video Capture SDK
   - .NET
@@ -37,9 +37,9 @@ primary_api_classes:
   - MP4Output
 ---
 
-# VisioForge Video Capture SDK .Net — Aide-mémoire
+# VisioForge Video Capture SDK .NET — Aide-mémoire
 
-Video Capture SDK .Net capture depuis des webcams, des caméras IP (RTSP/ONVIF), des écrans, des Decklink et des appareils GenICam/GigE Vision sur les 5 plateformes .NET (Windows, macOS, Linux, Android, iOS). `VideoCaptureCoreX` est le moteur multiplateforme ; les sources se configurent via des classes de paramètres typées comme `VideoCaptureDeviceSourceSettings`, et les périphériques sont énumérés de façon asynchrone avec `DeviceEnumerator`.
+Video Capture SDK .NET capture depuis des webcams, des caméras IP (RTSP/ONVIF), des écrans, des Decklink et des appareils GenICam/GigE Vision sur les 5 plateformes .NET (Windows, macOS, Linux, Android, iOS). `VideoCaptureCoreX` est le moteur multiplateforme ; les sources se configurent via des classes de paramètres typées comme `VideoCaptureDeviceSourceSettings`, et les périphériques sont énumérés de façon asynchrone avec `DeviceEnumerator`.
 
 !!! tip "Agents de codage IA : utilisez le serveur MCP VisioForge"
 
@@ -73,12 +73,12 @@ Runtimes natifs spécifiques à chaque plateforme — ajoutez ceux que vous cibl
 
 ```xml
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 
 <!-- Windows x86 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.28]"/>
 
 <!-- macOS / macCatalyst -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
@@ -89,7 +89,7 @@ Runtimes natifs spécifiques à chaque plateforme — ajoutez ceux que vous cibl
 
 <!-- Android / iOS -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.27]"/>
 ```
 
 Intégration de l'interface utilisateur (choisissez celle qui correspond à votre pile UI) :

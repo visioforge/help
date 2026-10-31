@@ -65,19 +65,14 @@ vfp_search -f "scene.vsigx" -m "full_movie.vsigx" -l "YOUR-LICENSE-KEY"
 ## Output
 
 The tool outputs:
-- Number of matches found
-- Timestamp for each match (format: HH:MM:SS)
-- Difference score for each match
+- Timestamp of the fragment in the main video (format: [d:]h:mm:ss) and its difference score, or "Fragment file not found."
 - Total processing time
 
 Example output:
 ```
 Starting analyze.
 Analyze finished. Elapsed time: 0:00:01.234
-Search results: 3
-00:05:32
-01:23:45
-02:15:18
+Detected fragment file at 0:05:32, difference level is 12.5
 ```
 
 ## Workflow Example
@@ -89,7 +84,7 @@ vfp_gen -i "commercial.mp4" -o "commercial.vsigx" -t search
 
 2. Generate fingerprint for the full video:
 ```bash
-vfp_gen -i "broadcast.mp4" -o "broadcast.vsigx" -t compare
+vfp_gen -i "broadcast.mp4" -o "broadcast.vsigx" -t search
 ```
 
 3. Search for the commercial in the broadcast:
@@ -108,7 +103,7 @@ vfp_search -f "commercial.vsigx" -m "broadcast.vsigx"
 ## Best Practices
 
 - Use "search" type fingerprints for fragments (`-t search` in vfp_gen)
-- Use "compare" type fingerprints for main videos (`-t compare` in vfp_gen)
+- Use "search" type fingerprints for main videos too (`-t search` in vfp_gen) — the search reads both files as search fingerprints
 - Fragments should be at least 5-10 seconds for reliable detection
 - Lower difference thresholds (< 100) for exact matches
 - Higher thresholds (100-500) for similar content with modifications

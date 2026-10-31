@@ -18,7 +18,7 @@ primary_api_classes:
 
 # Video Fingerprinting SDK FAQ
 
-This comprehensive FAQ addresses the most common questions about the VisioForge Video Fingerprinting SDK. If you can't find your answer here, please visit our [support forum](https://support.visioforge.com/) or [Discord community](https://discord.com/invite/yvXUG56WCH).
+This comprehensive FAQ addresses the most common questions about the VisioForge Video Fingerprinting SDK. If you can't find your answer here, please visit our [support forum](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) or [Discord community](https://discord.com/invite/yvXUG56WCH).
 
 ## Table of Contents
 

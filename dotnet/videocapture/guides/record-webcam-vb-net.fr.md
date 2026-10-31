@@ -28,7 +28,7 @@ primary_api_classes:
 
 L'enregistrement vidéo webcam dans les applications VB.NET est une exigence courante pour la visioconférence, la vidéosurveillance et les projets multimédias. Ce guide fournit des instructions étape par étape pour capturer, prévisualiser et sauvegarder une vidéo webcam dans des fichiers MP4 avec [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) en VB.NET (Visual Basic .NET).
 
-## Pourquoi utiliser Video Capture SDK .Net pour l'enregistrement webcam en VB.NET
+## Pourquoi utiliser Video Capture SDK .NET pour l'enregistrement webcam en VB.NET
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) offre une prise en charge VB.NET de premier ordre avec :
 
@@ -44,9 +44,9 @@ L'enregistrement vidéo webcam dans les applications VB.NET est une exigence cou
 Ajoutez les paquets suivants à votre projet VB.NET :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 ## Exemple complet d'enregistrement webcam en VB.NET
@@ -281,7 +281,7 @@ Des applications d'exemple VB.NET complètes sont disponibles :
 
 ### Comment convertir des exemples C# de capture webcam en VB.NET ?
 
-L'API Video Capture SDK .Net est identique en C# et VB.NET — seule la syntaxe du langage diffère. Conversions clés : remplacez les gestionnaires d'événements `+=` par `AddHandler`/`AddressOf`, remplacez les lambdas C# `(x) =>` par `Function(x)` ou `Sub(x)`, et utilisez `Async Sub` au lieu de `async void`. Toutes les classes, méthodes et propriétés affichées dans la documentation C# fonctionnent directement en VB.NET avec ces ajustements syntaxiques.
+L'API Video Capture SDK .NET est identique en C# et VB.NET — seule la syntaxe du langage diffère. Conversions clés : remplacez les gestionnaires d'événements `+=` par `AddHandler`/`AddressOf`, remplacez les lambdas C# `(x) =>` par `Function(x)` ou `Sub(x)`, et utilisez `Async Sub` au lieu de `async void`. Toutes les classes, méthodes et propriétés affichées dans la documentation C# fonctionnent directement en VB.NET avec ces ajustements syntaxiques.
 
 ### VB.NET prend-il en charge l'enregistrement webcam asynchrone avec Await ?
 

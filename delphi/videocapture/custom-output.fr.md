@@ -295,4 +295,4 @@ VideoCapture1.Start
 ```
 
 ---
-Veuillez contacter le [support](https://support.visioforge.com/) pour obtenir de l'aide sur ce tutoriel. Visitez notre page [GitHub](https://github.com/visioforge/) pour davantage d'exemples de code.
+Veuillez contacter le [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) pour obtenir de l'aide sur ce tutoriel. Visitez notre page [GitHub](https://github.com/visioforge/) pour davantage d'exemples de code.

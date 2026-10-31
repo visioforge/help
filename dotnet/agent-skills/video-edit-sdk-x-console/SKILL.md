@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK X (cross-platform editor editio
 
 This skill helps you add **VisioForge Video Edit SDK X** — the cross-platform "X" edition of the editor SDK — to a headless .NET console application: scripts, scheduled jobs, server-side workers, and CI pipelines that cut, trim, merge, transcode, or apply effects to existing video files. The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level non-linear-editor god-object (`VideoEditCoreX`) that mirrors the legacy `VideoEditCore` API but runs on the cross-platform engine. Same C# code targets Windows / macOS / Linux — the only thing that changes between platforms is the per-OS native redist NuGet package. Like every editor SDK, X **does not** capture from cameras or screen — for that see `video-capture-sdk-x-wpf` (or its console-/service-host siblings on the roadmap).
 
-Pinned NuGet versions: wrapper **`2026.10.26`**, native redists at the versions shown in the csproj below (matches the [official Video From Images X CLI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/Console)). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.10.28`**, native redists at the versions shown in the csproj below (matches the [official Video From Images X CLI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/Console)). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -35,11 +35,11 @@ Three packages are required for a Windows console scenario — the .NET wrapper 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.10.28]"/>
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 </ItemGroup>
 ```
 
@@ -58,10 +58,12 @@ The X engine itself is cross-platform — to ship a Linux or macOS console worke
 | Platform | TFM | Core redist | Libav redist |
 |---|---|---|---|
 | Windows x64 | `net10.0-windows` | `VisioForge.CrossPlatform.Core.Windows.x64` | `VisioForge.CrossPlatform.Libav.Windows.x64` |
-| macOS (arm64 + x64) | `net10.0` | `VisioForge.CrossPlatform.Core.macOS` | (libav bundled in Core on macOS) |
+| macOS (arm64 + x64) | `net10.0-macos15.0` | `VisioForge.CrossPlatform.Core.macOS` | (libav bundled in Core on macOS) |
 | Linux x64 | `net10.0` | `VisioForge.CrossPlatform.Core.Linux.x64` | (libav bundled in Core on Linux) |
 
-Linux builds also need `SkiaSharp.NativeAssets.Linux` for diagram/snapshot rendering. The C# code (the `references/Program.cs` body) is identical across platforms — only the csproj `<ItemGroup>` blocks switch via `Condition="$([MSBuild]::IsOsPlatform('...'))"` if you want one csproj that builds everywhere. See the upstream Video From Images X CLI csproj for the multi-OS conditional pattern.
+Linux builds also need `SkiaSharp.NativeAssets.Linux` for diagram/snapshot rendering. The C# code (the `references/Program.cs` body) is identical across platforms apart from the macOS block described below. Everything else that differs per OS lives in the csproj: the TFM, the redist `<ItemGroup>` blocks and the macOS `RunWithOpen` setting, each under `Condition="$([MSBuild]::IsOsPlatform('...'))"` if you want one csproj that builds everywhere. See the upstream Video From Images X CLI csproj for the multi-OS conditional pattern.
+
+A `net10.0-macos` console host starts as an AppKit app. Its main thread carries an AppKit `SynchronizationContext`, and nothing runs a run loop for it, so `async Main` hangs at the first `await`. Its working folder is also the `.app` bundle, not the shell's folder. The `#if __MACOS__` block at the top of `references/Program.cs` clears the context and restores the folder from `PWD`. Keep that block in any macOS console host, and set `<RunWithOpen>false</RunWithOpen>` in its csproj as `references/Sample.csproj` does: otherwise `dotnet run` starts the bundle through `open`, which passes no `PWD` and shows no output in the terminal.
 
 ## Mandatory engine boot
 
@@ -94,6 +96,7 @@ Key types and methods:
 - `core.ConsoleUsage = true` — tells the engine it is running in a console host (no message pump). Set this **before** `Start()`.
 - `core.Start()` (synchronous fire-and-forget) — kicks off the pipeline; completion is signalled later via `OnStop` / `OnError`. Unlike the legacy SDK, the X engine's `Start` is *not* awaitable.
 - `core.OnProgress` / `core.OnStop` / `core.OnError` — wire all three before calling `Start`.
+- **One thread from the first `Input_Add*` to `Start()`.** The timeline belongs to the thread of the first `Input_*` (or `Start()`) call; a later `Input_*` call or `Start()` from another thread throws `InvalidOperationException`. The `Output_*` properties can be set from any thread; set on another one, `Output_VideoSize` / `Output_VideoFrameRate` / `Output_AudioChannels` / `Output_AudioSampleRate` wait for the next `Start()`. A console host has no synchronization context, so an `await` resumes on a pool thread: `await` before the first input (`SetLicenseCertificateAsync`) is fine, an `await` between the inputs and `Start()` is not. `Stop()` and `Dispose()` work from any thread.
 
 Long-running worker reusing one core across jobs: clear the timeline between runs with `core.Input_Clear_List()` before adding the next batch of inputs.
 

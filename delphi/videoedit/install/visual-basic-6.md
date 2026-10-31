@@ -85,4 +85,4 @@ To begin using the control in your application:
 * Test your application thoroughly with various media formats
 
 ---
-For technical questions or implementation challenges, contact our [support team](https://support.visioforge.com/). Access additional code examples and resources on our [GitHub repository](https://github.com/visioforge/).
+For technical questions or implementation challenges, contact our [support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new). Access additional code examples and resources on our [GitHub repository](https://github.com/visioforge/).

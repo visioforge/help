@@ -912,7 +912,7 @@ else
 
 - **Exemples de code** : [Dépôt GitHub Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 - **Documentation** : [Documentation VisioForge](https://www.visioforge.com/help/)
-- **Forum de support** : [Support VisioForge](https://support.visioforge.com)
+- **Forum de support** : [Support VisioForge](https://helpdesk.visioforge.com/helpdesk/my-tickets/new)
 
 ### Démos associées
 

@@ -147,7 +147,7 @@ Some developers encounter problems related to `.otares` files during package ins
 
 For developers requiring additional assistance with the installation process or component implementation:
 
-- Contact our [technical support team](https://support.visioforge.com/) for personalized installation assistance
+- Contact our [technical support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) for personalized installation assistance
 - Visit our [GitHub repository](https://github.com/visioforge/) for additional code samples and implementation examples
 - Check our documentation for advanced usage scenarios and integration patterns
 

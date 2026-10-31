@@ -26,7 +26,7 @@ primary_api_classes:
 
 ---
 
-# Pre-Event Recording Block - VisioForge Media Blocks SDK .Net
+# Pre-Event Recording Block - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -102,6 +102,8 @@ stateDiagram-v2
 | `PostEventRecording` | Post-event phase — recording live frames until the timer expires. |
 | `Stopped` | Stopped and idle. |
 
+A change of the encoded format during a run — resolution, profile, level, codec data, or the audio rate, channel count or codec — closes a recording that is in progress, the same way `StopRecording()` does, and drops that stream's buffered frames. The other stream stays buffered. The next file is built from the new format. A restated frame rate or pixel aspect ratio does not close the recording.
+
 ## Events
 
 ```csharp
@@ -122,7 +124,7 @@ public event EventHandler<PreEventRecordingEventArgs> OnStateChanged;
 
 | Method | Description |
 | --- | --- |
-| `TriggerRecording(string filename)` | Flush the ring buffer to the specified file and start recording live frames. If already recording, extends the current recording (resets post-event timer). |
+| `TriggerRecording(string filename)` | Flush the ring buffer to the specified file and start recording live frames. If already recording, extends the current recording (resets post-event timer). Refused, with an error, until the first encoded video frame has arrived and, when audio is enabled, until the first encoded audio frame has arrived. A later call records normally. |
 | `ExtendRecording()` | Reset the post-event timer. Call this when the trigger condition is still active (e.g., motion continues). |
 | `StopRecording()` | Manually stop the current recording and return to buffering mode. |
 | `StartBuffering()` | Start or resume buffering after being stopped. |

@@ -1558,7 +1558,7 @@ await pipeline.StartAsync();
 
 #### Platforms
 
-Windows, macOS, Linux (requires Csound).
+Windows x64 and macOS, shipped in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` and `VisioForge.CrossPlatform.Core.macOS.Adds` packages. Linux needs the gst-plugins-rs `csound` plugin and Csound 6 installed on the system. An unpatched plugin aborts the process when the score offset is anything but 0, or when the pipeline stops before the audio format is negotiated. On Windows and macOS the SDK loads no external Csound opcode plugins unless `OPCODE6DIR64` names their directory before the SDK is initialized.
 
 ### EBU R128 Level
 
@@ -1886,6 +1886,7 @@ Output | Uncompressed audio | 1
 |----------|------|---------|-------------|
 | `LeftChannelWeight` | `float` | `0.5` | Mix weight for the left channel (0.0–1.0+) |
 | `RightChannelWeight` | `float` | `0.5` | Mix weight for the right channel (0.0–1.0+) |
+| `Settings.OutputStereo` (constructor: `outputStereo`) | `bool` | `true` | Output the mix as stereo (the same signal on both channels) or as mono. Set it before the pipeline starts: a change during playback applies from the next start |
 
 #### The sample pipeline
 

@@ -1,6 +1,6 @@
 ---
-title: Guías de Media Player SDK .Net para reproducción de video
-description: Guías y tutoriales de Media Player SDK .Net para reproducción en bucle, rango de posición e implementación en Avalonia, MAUI y Android.
+title: Guías de Media Player SDK .NET para reproducción de video
+description: Guías y tutoriales de Media Player SDK .NET para reproducción en bucle, rango de posición e implementación en Avalonia, MAUI y Android.
 sidebar_label: Guías adicionales
 order: 1
 tags:
@@ -20,17 +20,17 @@ primary_api_classes:
 
 ---
 
-# Guías y tutoriales avanzados de Media Player SDK .Net
+# Guías y tutoriales avanzados de Media Player SDK .NET
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Descripción general
 
-Explora técnicas de implementación avanzadas, guías de uso especializadas y tutoriales para el Media Player SDK .Net. Estos recursos abordan escenarios de desarrollo específicos que requieren enfoques personalizados, incluyendo reproducción en bucle, control de rango de posición, implementaciones específicas de plataforma y más.
+Explora técnicas de implementación avanzadas, guías de uso especializadas y tutoriales para el Media Player SDK .NET. Estos recursos abordan escenarios de desarrollo específicos que requieren enfoques personalizados, incluyendo reproducción en bucle, control de rango de posición, implementaciones específicas de plataforma y más.
 
 ## Guías disponibles
 
-Esta colección curada de guías aborda funcionalidades avanzadas específicas dentro del Media Player SDK .Net. Cada guía proporciona instrucciones prácticas e información para ayudarte a implementar características complejas efectivamente.
+Esta colección curada de guías aborda funcionalidades avanzadas específicas dentro del Media Player SDK .NET. Cada guía proporciona instrucciones prácticas e información para ayudarte a implementar características complejas efectivamente.
 
 ### Guías de inicio
 
@@ -50,7 +50,7 @@ Explora guías especializadas sobre control de reproducción de medios con carac
 
 ### Implementación específica de plataforma
 
-Aprende cómo implementar Media Player SDK .Net a través de diferentes plataformas y frameworks de UI.
+Aprende cómo implementar Media Player SDK .NET a través de diferentes plataformas y frameworks de UI.
 
 * [**Implementación de Reproductor Avalonia**](avalonia-player.md) - Guía completa para implementar reproducción de medios en aplicaciones Avalonia multiplataforma. Cubre configuración, integración y consideraciones específicas de plataforma para Windows, Linux y macOS. Incluye ejemplos de código completos y mejores prácticas para construir aplicaciones de reproductor de medios profesionales con el framework de UI Avalonia.
 
@@ -58,7 +58,7 @@ Aprende cómo implementar Media Player SDK .Net a través de diferentes platafor
 
 ## Recursos adicionales
 
-Más allá de las guías específicas listadas arriba, ofrecemos una gran cantidad de materiales suplementarios para apoyar su jornada de desarrollo con el Media Player SDK .Net.
+Más allá de las guías específicas listadas arriba, ofrecemos una gran cantidad de materiales suplementarios para apoyar su jornada de desarrollo con el Media Player SDK .NET.
 
 ### Ejemplos de código
 

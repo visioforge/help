@@ -238,4 +238,4 @@ Visitez notre [dépôt GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 * Guides de migration pour les transitions entre versions
 
 ---
-Ce document de spécification technique décrit la configuration système et la matrice de compatibilité pour notre Video Capture SDK .Net et les produits associés. Pour des détails d'implémentation spécifiques ou des scénarios d'intégration sur mesure, veuillez contacter notre équipe de support développeur.
+Ce document de spécification technique décrit la configuration système et la matrice de compatibilité pour notre Video Capture SDK .NET et les produits associés. Pour des détails d'implémentation spécifiques ou des scénarios d'intégration sur mesure, veuillez contacter notre équipe de support développeur.

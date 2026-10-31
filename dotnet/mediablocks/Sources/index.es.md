@@ -442,7 +442,7 @@ El `UniversalSourceBlock` está configurado a través de `UniversalSourceSetting
 Propiedades clave y parámetros para `UniversalSourceSettings`:
 
 - **URI/Nombre de archivo**:
-  - `UniversalSourceSettings.CreateAsync(string filename, bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false)`: Crea ajustes desde una ruta de archivo local.
+  - `UniversalSourceSettings.CreateAsync(string filename, bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false)`: Crea ajustes desde una ruta de archivo local o una URI (`scheme://` o `data:`).
   - `UniversalSourceSettings.CreateAsync(System.Uri uri, bool renderVideo = true, bool renderAudio = true, bool renderSubtitle = false)`: Crea ajustes desde un `System.Uri` (puede ser un URI de archivo o URI de red como HTTP, RTSP - aunque bloques dedicados son a menudo preferidos para streams de red). Para iOS, se usa un `Foundation.NSUrl`.
   - Los booleanos `renderVideo`, `renderAudio`, `renderSubtitle` control qué streams se procesan. El método `CreateAsync` puede actualizar estos basados en disponibilidad de stream real en el archivo/stream si `ignoreMediaInfoReader` es `false` (predeterminado).
 - `StartPosition` (`TimeSpan?`): Establece la posición inicial para reproducción.
@@ -1388,7 +1388,7 @@ dirección por ese nombre.
 
 #### Plataformas
 
-Windows, macOS, Linux.
+Windows (x86, x64), macOS, Linux, Android. No disponible en un proceso nativo de Windows ARM64 (`IsAvailable()` devuelve `false`); una compilación x64 ejecuta NDI en Windows on Arm mediante emulación.
 
 ### NDI Source X Block
 
@@ -1482,7 +1482,7 @@ await pipeline.StartAsync();
 
 #### Plataformas
 
-Windows.
+Windows (x86, x64). No disponible en un proceso nativo de Windows ARM64 (`IsAvailable()` devuelve `false`); una compilación x64 ejecuta NDI en Windows on Arm mediante emulación.
 
 ### Bloque Fuente GenICam
 

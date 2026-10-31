@@ -75,11 +75,14 @@ VideoCapture1.Video_Effects_Add(effect);
 
 ### Image overlay from `System.Drawing.Bitmap`
 
-You can overlay an image from a `System.Drawing.Bitmap` object.
+You can overlay an image from a `System.Drawing.Bitmap` object. The effect keeps its own copy of the bitmap, so the original can be disposed right after it is assigned.
 
 ```csharp
 var effect = new VideoEffectImageLogo(true, "imageoverlay");
-effect.MemoryBitmap = new Bitmap("logo.jpg");
+using (var logo = new Bitmap("logo.jpg"))
+{
+    effect.MemoryBitmap = logo;
+}
 VideoCapture1.Video_Effects_Add(effect);
 ```
 

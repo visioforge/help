@@ -26,7 +26,7 @@ primary_api_classes:
 
 ---
 
-# Bloc d'enregistrement pré-événement — VisioForge Media Blocks SDK .Net
+# Bloc d'enregistrement pré-événement — VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -102,6 +102,8 @@ stateDiagram-v2
 | `PostEventRecording` | Phase post-événement — enregistre les images en direct jusqu'à l'expiration du minuteur. |
 | `Stopped` | Arrêté et inactif. |
 
+Un changement du format encodé en cours d'exécution — résolution, profil, niveau, données de codec, ou la fréquence, le nombre de canaux ou le codec audio — ferme un enregistrement en cours, comme `StopRecording()`, et retire les images en tampon de ce flux. L'autre flux reste dans le tampon. Le fichier suivant est construit avec le nouveau format. Une fréquence d'images ou un rapport de pixels réaffirmé ne ferme pas l'enregistrement.
+
 ## Événements
 
 ```csharp
@@ -122,7 +124,7 @@ Propriétés de `PreEventRecordingEventArgs` :
 
 | Méthode | Description |
 | --- | --- |
-| `TriggerRecording(string filename)` | Vide le ring buffer dans le fichier spécifié et démarre l'enregistrement des images en direct. Si un enregistrement est déjà en cours, étend l'enregistrement courant (réinitialise le minuteur post-événement). |
+| `TriggerRecording(string filename)` | Vide le ring buffer dans le fichier spécifié et démarre l'enregistrement des images en direct. Si un enregistrement est déjà en cours, étend l'enregistrement courant (réinitialise le minuteur post-événement). Refusé, avec une erreur, tant que la première image vidéo encodée n'est pas arrivée et, si l'audio est activé, tant que le premier échantillon audio encodé n'est pas arrivé. Un appel ultérieur enregistre normalement. |
 | `ExtendRecording()` | Réinitialise le minuteur post-événement. Appelez ceci lorsque la condition de déclenchement est toujours active (par ex. le mouvement persiste). |
 | `StopRecording()` | Arrête manuellement l'enregistrement courant et revient au mode de mise en tampon. |
 | `StartBuffering()` | Démarre ou reprend la mise en tampon après un arrêt. |

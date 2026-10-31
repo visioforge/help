@@ -18,22 +18,24 @@ tags:
 
 Our SDK provides two NuGet packages that deliver computer-vision capabilities for your applications:
 
-1. **[VisioForge.DotNet.Core.CV](https://www.nuget.org/packages/VisioForge.DotNet.Core.CV/)** — Windows-only CV package.
+1. **[VisioForge.DotNet.Core.CV](https://www.nuget.org/packages/VisioForge.DotNet.Core.CV/)** — CV package for Windows x64, macOS on Apple Silicon and Linux x64.
 2. **[VisioForge.DotNet.Core.CVD](https://www.nuget.org/packages/VisioForge.DotNet.Core.CVD/)** — Cross-platform CV package for Windows, Linux, and macOS.
 
 Both packages provide a consistent API for integrating computer-vision features directly into your .NET applications.
 
 ## Deployment Requirements
 
-### Windows-Specific CV Package
+### CV Package
 
 #### Installation Process
 
-The Windows-specific CV package is designed for seamless integration:
+The CV package carries the native OpenCV library for each supported platform:
 
 - Simply install the NuGet package through your preferred package manager
-- No additional deployment steps are necessary
-- Ready to use immediately after installation
+- No additional deployment steps are necessary on Windows and macOS
+- On Linux, the native library needs GTK 3. Desktop installations include it; on a server, minimal or container image, install it with `sudo apt-get install libgtk-3-0` (Ubuntu/Debian) or `sudo dnf install gtk3` (RHEL/AlmaLinux)
+- An app on a plain .NET target framework (for example `net8.0`) receives the native libraries for every supported OS; publish with `dotnet publish -r <rid>` (for example `-r linux-x64`) to keep only the one it runs on
+- 32-bit Windows, Intel Macs, Mac Catalyst, iOS and Android are not supported
 
 ### Cross-Platform CVD Package
 

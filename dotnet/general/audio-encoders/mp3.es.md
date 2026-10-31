@@ -312,7 +312,7 @@ Determina cómo se codifican los canales de audio. Las opciones incluyen:
 
 #### VBR_Mode
 
-Habilita la codificación de tasa de bits variable cuando se establece a true (predeterminado). VBR permite al codificador ajustar la tasa de bits basándose en la complejidad del audio.
+Habilita la codificación de tasa de bits variable cuando se establece a true (predeterminado: false). VBR permite al codificador ajustar la tasa de bits basándose en la complejidad del audio.
 
 #### VBR_MinBitrate
 
@@ -523,4 +523,4 @@ El constructor de la clase establece estos valores predeterminados:
 - EncodingQuality = 6
 - SampleRate = 44100 Hz
 - ChannelsMode = MP3ChannelsMode.StandardStereo
-- VBR_Mode = true
+- VBR_Mode = false

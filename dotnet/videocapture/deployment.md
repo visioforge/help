@@ -24,11 +24,11 @@ tags:
 
 ---
 
-# Comprehensive Deployment Guide for Video Capture SDK .Net
+# Comprehensive Deployment Guide for Video Capture SDK .NET
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-When deploying the Video Capture SDK .Net to systems without the SDK pre-installed, proper component deployment is essential for functionality. For AnyCPU applications, both x86 and x64 redistributables must be deployed to ensure compatibility across different system architectures.
+When deploying the Video Capture SDK .NET to systems without the SDK pre-installed, proper component deployment is essential for functionality. For AnyCPU applications, both x86 and x64 redistributables must be deployed to ensure compatibility across different system architectures.
 
 ## Engine Options Overview
 

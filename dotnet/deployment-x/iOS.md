@@ -77,17 +77,17 @@ The VisioForge SDK for iOS is distributed through NuGet packages:
 
 ### Core Packages
 
-- [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core) - Core package containing core classes and UI controls, including video playback and display components. This is platform-independent and can be used in any .Net project.
+- [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core) - Core package containing core classes and UI controls, including video playback and display components. This is platform-independent and can be used in any .NET project.
 
 ### UI Packages
 
 Each UI package has the same VideoView controls but different implementations for the target platform:
 
-#### .Net iOS target platform
+#### .NET iOS target platform
 
 - [VisioForge.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core) - Contains UI controls and all core classes for the iOS platform.
 
-#### .Net MAUI target platform
+#### .NET MAUI target platform
 
 - [VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI) - Contains UI controls for the MAUI platform.
 
@@ -103,7 +103,7 @@ You can add these packages using the NuGet Package Manager in your IDE or by add
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. Do not bump it to
        match VisioForge.DotNet.*; there is no 2026.x on nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.27]"/>
 </ItemGroup>
 ```
 

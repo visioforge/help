@@ -18,7 +18,7 @@ tags:
 
 ## Introduction
 
-Third-party video processing filters provide powerful capabilities for manipulating video streams in .NET applications. These filters can be seamlessly integrated into various SDK platforms including Video Capture SDK .Net, Media Player SDK .Net, and Video Edit SDK .Net to enhance your applications with advanced video processing features.
+Third-party video processing filters provide powerful capabilities for manipulating video streams in .NET applications. These filters can be seamlessly integrated into various SDK platforms including Video Capture SDK .NET, Media Player SDK .NET, and Video Edit SDK .NET to enhance your applications with advanced video processing features.
 
 This guide explores how to implement, configure, and optimize third-party DirectShow filters within your .NET projects, providing you with the knowledge needed to create sophisticated video processing applications.
 

@@ -16,11 +16,11 @@ primary_api_classes:
 
 ---
 
-# Blocs OpenCV - VisioForge Media Blocks SDK .Net
+# Blocs OpenCV - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Les blocs OpenCV (Open Source Computer Vision Library) offrent de puissantes capacités de traitement vidéo dans le VisioForge Media Blocks SDK .Net. Ces blocs permettent un large éventail de tâches de vision par ordinateur, de la manipulation d'image basique à la détection et au suivi d'objets complexes.
+Les blocs OpenCV (Open Source Computer Vision Library) offrent de puissantes capacités de traitement vidéo dans le VisioForge Media Blocks SDK .NET. Ces blocs permettent un large éventail de tâches de vision par ordinateur, de la manipulation d'image basique à la détection et au suivi d'objets complexes.
 
 Pour utiliser les blocs OpenCV, ajoutez le paquet NuGet redistribuable correspondant à votre plateforme : `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86` ou `VisioForge.CrossPlatform.OpenCV.macOS` (macOS et Mac Catalyst). Ce sont les plateformes pour lesquelles le plugin OpenCV de GStreamer est actuellement distribué ; sur toute autre plateforme, la méthode `IsAvailable()` de chaque bloc renvoie `false`.
 
@@ -992,7 +992,7 @@ var pipeline = new MediaBlocksPipeline();
 
 var textOverlaySettings = new CVTextOverlaySettings
 {
-    Text = "VisioForge MediaBlocks.Net ROCKS!", // Par défaut : "Default text"
+    Text = "VisioForge MediaBlocks.NET ROCKS!", // Par défaut : "Default text"
     X = 20, // Position X de début du texte. Par défaut : 50
     Y = 40, // Position Y de la ligne de base du texte (depuis le haut). Par défaut : 50
     FontWidth = 1.2, // Échelle de police. Par défaut : 1.0

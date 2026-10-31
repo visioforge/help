@@ -76,7 +76,7 @@ The VisioForge SDK for macOS supports both major processor architectures:
 
 ### Universal Binary Considerations
 
-When targeting both architectures, consider building universal binaries that include both x64 and ARM64 code. This approach ensures your application runs natively on either platform without relying on Rosetta 2 translation.
+When targeting both architectures, consider building universal binaries that include both x64 and ARM64 code. This approach ensures your application runs natively on either platform without relying on Rosetta 2 translation. A Release build of a `net*-macos` app already produces both architectures; set the identifiers below when you need them in Debug or want them explicit.
 
 For universal binary builds targeting both Intel and Apple Silicon:
 
@@ -86,6 +86,18 @@ For universal binary builds targeting both Intel and Apple Silicon:
   <UseHardenedRuntime>true</UseHardenedRuntime>
 </PropertyGroup>
 ```
+
+`Microsoft.NET.Sdk.Web` projects (Blazor Server and other ASP.NET Core hosts) cannot use that recipe. Release builds a universal `.app` on macOS by default, and a Web project's static web assets manifest is then written only per runtime identifier, while the build that reads it looks in the shared folder: `dotnet build -c Release` fails with `Manifest file at 'obj/Release/net10.0-macos/staticwebassets.build.json' not found`, and setting `RuntimeIdentifiers` explicitly breaks Debug the same way. Pin a single runtime identifier instead — a Web SDK host also needs its own bundle identifier and no server GC — and publish one architecture at a time:
+
+```xml
+<PropertyGroup>
+  <ApplicationId>com.example.myapp</ApplicationId>
+  <ServerGarbageCollection>false</ServerGarbageCollection>
+  <RuntimeIdentifier Condition="$([MSBuild]::IsOsPlatform('OSX')) and '$(RuntimeIdentifier)' == ''">$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
+</PropertyGroup>
+```
+
+`dotnet publish -c Release -r osx-x64` (or `-r osx-arm64`) then produces a bundle for that architecture. Keeping the plural `RuntimeIdentifiers` as well as this line makes the build multi-RID again and produces one bundle per architecture.
 
 ## Core Technologies
 
@@ -179,7 +191,7 @@ For MAUI projects targeting macOS (through MacCatalyst), add these packages:
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.28]"/>
   <!-- Only for the OpenCV blocks -->
   <PackageReference Include="VisioForge.CrossPlatform.OpenCV.macOS" Version="[2026.9.11]"/>
 </ItemGroup>
@@ -307,6 +319,35 @@ await VisioForge.Core.VisioForgeX.InitSDKAsync();
 // Async cleanup
 await VisioForge.Core.VisioForgeX.DestroySDKAsync();
 ```
+
+## Console apps on macOS
+
+A `net10.0-macos` console executable is an AppKit application. Its main thread carries an AppKit synchronization context, and nothing runs an `NSApplication` run loop for it. `async Main` blocks that same thread, so the continuation after the first `await` — `await VisioForgeX.InitSDKAsync()` or `await UniversalSourceSettings.CreateAsync(...)` — never runs. The process hangs and prints nothing.
+
+Clear the context at the start of `Main`, and restore the working directory. The process starts inside the `.app` bundle, so a relative path does not find a file passed from the shell.
+
+```csharp
+using System.IO;
+using System.Threading;
+
+#if __MACOS__
+// A macOS exe has an AppKit context with no run loop; continuations posted to it never run.
+SynchronizationContext.SetSynchronizationContext(null);
+// The process starts inside the .app bundle; resolve relative paths against the shell's folder.
+var shellDir = Environment.GetEnvironmentVariable("PWD");
+if (Directory.Exists(shellDir)) Environment.CurrentDirectory = shellDir;
+#endif
+```
+
+`dotnet run` starts the bundle through `open` unless the project sets `RunWithOpen` to false. `open` passes no `PWD` and shows no output in the terminal.
+
+```xml
+<PropertyGroup>
+  <RunWithOpen Condition="$([MSBuild]::IsOsPlatform('OSX'))">false</RunWithOpen>
+</PropertyGroup>
+```
+
+A Blazor Server host that targets `net10.0-macos` needs the same context clear and the same `RunWithOpen` setting. Do not change its working directory: ASP.NET takes the content root from it. It also needs a single `RuntimeIdentifier` instead of the universal-binary recipe above, which breaks its static web assets manifest.
 
 ## Troubleshooting Common Issues
 

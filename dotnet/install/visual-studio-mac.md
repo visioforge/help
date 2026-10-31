@@ -211,7 +211,7 @@ Now that you've successfully integrated VisioForge SDKs into your Visual Studio 
 ### Additional Resources
 
 - Visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) for code samples and example projects
-- Join the [developer forum](https://support.visioforge.com/) to connect with other developers
+- Join the [developer forum](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) to connect with other developers
 - Subscribe to our newsletter for updates on new features and best practices
 
 By following this guide, you've established a solid foundation for developing powerful multimedia applications on macOS and iOS using VisioForge SDKs and Visual Studio for Mac.

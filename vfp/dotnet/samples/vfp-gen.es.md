@@ -26,7 +26,7 @@ tags:
 - Genera huellas optimizadas para operaciones de comparación o búsqueda
 - Procesa videos completos o duraciones específicas
 - Soporte para todos los formatos de video principales (MP4, AVI, MKV, MOV, etc.)
-- Compatibilidad multiplataforma (Windows x64)
+- Compatibilidad multiplataforma (Windows x64, macOS, Linux x64 y arm64)
 
 ## Uso
 

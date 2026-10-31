@@ -169,4 +169,4 @@ El VisioForge Media Framework proporciona versiones de 32 bits (x86) y 64 bits (
 Integrar TVFMediaPlayer en C++ Builder proporciona una solución potente para agregar reproducción multimedia a sus aplicaciones. Siguiendo los pasos apropiados para su versión de IDE, gestionando cuidadosamente las arquitecturas x86/x64, y entendiendo el sistema de paquetes, puede incorporar exitosamente este componente. Recuerde consultar la documentación oficial de VisioForge y los ejemplos para uso más avanzado y detalles de API.
 
 ---
-Para más asistencia o problemas específicos no cubiertos aquí, por favor contacte al [soporte](https://support.visioforge.com/) de VisioForge. Explore más ejemplos avanzados y código fuente en el repositorio de [GitHub](https://github.com/visioforge/) de VisioForge.
+Para más asistencia o problemas específicos no cubiertos aquí, por favor contacte al [soporte](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) de VisioForge. Explore más ejemplos avanzados y código fuente en el repositorio de [GitHub](https://github.com/visioforge/) de VisioForge.

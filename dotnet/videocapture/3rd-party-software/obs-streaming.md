@@ -16,13 +16,13 @@ primary_api_classes:
 
 ---
 
-# Integrating OBS Streaming in Video Capture SDK .Net
+# Integrating OBS Streaming in Video Capture SDK .NET
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to OBS Integration
 
-Open Broadcaster Software (OBS) has become the industry standard for live streaming and video recording. The Video Capture SDK .Net provides robust capabilities to stream video and audio from multiple sources directly into OBS, creating a powerful pipeline for broadcast-quality content creation.
+Open Broadcaster Software (OBS) has become the industry standard for live streaming and video recording. The Video Capture SDK .NET provides robust capabilities to stream video and audio from multiple sources directly into OBS, creating a powerful pipeline for broadcast-quality content creation.
 
 This integration allows developers to build applications that can:
 
@@ -50,7 +50,7 @@ The virtual camera appears to OBS as a standard webcam device, making it immedia
 
 Before implementing OBS streaming, ensure you have the following components installed:
 
-- Video Capture SDK .Net (latest version recommended)
+- Video Capture SDK .NET (latest version recommended)
 - DirectShow Virtual Camera components
 - OBS Studio (version 27.0 or higher recommended)
 - .NET Framework 4.6.2 or higher (for full compatibility)

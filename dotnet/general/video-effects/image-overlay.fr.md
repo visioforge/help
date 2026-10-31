@@ -75,11 +75,14 @@ VideoCapture1.Video_Effects_Add(effect);
 
 ### Superposition d'image à partir de `System.Drawing.Bitmap`
 
-Vous pouvez superposer une image à partir d'un objet `System.Drawing.Bitmap`.
+Vous pouvez superposer une image à partir d'un objet `System.Drawing.Bitmap`. L'effet conserve sa propre copie du bitmap : l'original peut donc être libéré juste après l'affectation.
 
 ```csharp
 var effect = new VideoEffectImageLogo(true, "imageoverlay");
-effect.MemoryBitmap = new Bitmap("logo.jpg");
+using (var logo = new Bitmap("logo.jpg"))
+{
+    effect.MemoryBitmap = logo;
+}
 VideoCapture1.Video_Effects_Add(effect);
 ```
 

@@ -1030,7 +1030,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, macOS, Linux, iOS, Android.
+Windows, macOS, Linux, Android.
 
 ## Mirror
 

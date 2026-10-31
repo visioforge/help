@@ -164,4 +164,4 @@ For detailed iOS deployment instructions, including NuGet packages, permissions,
 - **Native Performance**: GPU-accelerated encoding on Apple devices
 
 ---
-Explore iOS video editing samples on our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) or contact [support](https://support.visioforge.com/) for resources.
+Explore iOS video editing samples on our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) or contact [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) for resources.

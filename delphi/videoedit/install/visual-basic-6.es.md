@@ -85,4 +85,4 @@ Para comenzar a usar el control en su aplicación:
 * Pruebe su aplicación exhaustivamente con varios formatos de medios
 
 ---
-Para preguntas técnicas o desafíos de implementación, contacte a nuestro [equipo de soporte](https://support.visioforge.com/). Acceda a ejemplos de código adicionales y recursos en nuestro [repositorio de GitHub](https://github.com/visioforge/).
+Para preguntas técnicas o desafíos de implementación, contacte a nuestro [equipo de soporte](https://helpdesk.visioforge.com/helpdesk/my-tickets/new). Acceda a ejemplos de código adicionales y recursos en nuestro [repositorio de GitHub](https://github.com/visioforge/).

@@ -145,4 +145,4 @@ Après le déploiement, testez minutieusement votre application sur la machine c
   * La concordance correcte de l'architecture (x86/x64) entre votre application, les composants de la bibliothèque et les dépendances d'exécution.
 
 ---
-Besoin d'aide supplémentaire ? Contactez le [Support VisioForge](https://support.visioforge.com/). Découvrez d'autres exemples sur notre [GitHub](https://github.com/visioforge/).
+Besoin d'aide supplémentaire ? Contactez le [Support VisioForge](https://helpdesk.visioforge.com/helpdesk/my-tickets/new). Découvrez d'autres exemples sur notre [GitHub](https://github.com/visioforge/).

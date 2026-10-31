@@ -132,4 +132,4 @@ Usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-r
 Para simplificar el registro de filtros DirectShow, puede usar la utilidad `reg_special.exe` de la configuración del framework. Coloque este ejecutable en su directorio de filtros y ejecútelo con privilegios de administrador para registrar todos los filtros de una vez.
 
 ---
-Para ejemplos de código adicionales y ejemplos de implementación, visite nuestro [repositorio de GitHub](https://github.com/visioforge/). Si encuentra alguna dificultad con el despliegue, por favor contacte al [soporte técnico](https://support.visioforge.com/) para asistencia personalizada.
+Para ejemplos de código adicionales y ejemplos de implementación, visite nuestro [repositorio de GitHub](https://github.com/visioforge/). Si encuentra alguna dificultad con el despliegue, por favor contacte al [soporte técnico](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) para asistencia personalizada.

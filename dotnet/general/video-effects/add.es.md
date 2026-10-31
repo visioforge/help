@@ -32,7 +32,7 @@ Al trabajar con procesamiento de video en aplicaciones .NET, a menudo necesitar�
 
 ### Ejemplo: Efecto de luminosidad en Media Player SDK
 
-Este ejemplo detallado demuestra cómo implementar un efecto de luminosidad, que es una técnica común de mejora de video. El mismo enfoque de implementación se aplica a los entornos Video Edit SDK .Net y Video Capture SDK .Net.
+Este ejemplo detallado demuestra cómo implementar un efecto de luminosidad, que es una técnica común de mejora de video. El mismo enfoque de implementación se aplica a los entornos Video Edit SDK .NET y Video Capture SDK .NET.
 
 ### Paso 1: Definir la interfaz del efecto
 

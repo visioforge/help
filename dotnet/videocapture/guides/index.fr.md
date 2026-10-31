@@ -14,17 +14,17 @@ primary_api_classes:
 
 ---
 
-# Guides et tutoriels avancés Video Capture SDK .Net
+# Guides et tutoriels avancés Video Capture SDK .NET
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Vue d'ensemble
 
-Explorez des techniques d'implémentation avancées, des guides d'utilisation spécialisés et des tutoriels pour le Video Capture SDK .Net. Ces ressources traitent de scénarios de développement spécifiques qui nécessitent des approches personnalisées, notamment la synchronisation de plusieurs objets de capture, l'intégration webcam, les techniques de capture DirectShow et plus encore.
+Explorez des techniques d'implémentation avancées, des guides d'utilisation spécialisés et des tutoriels pour le Video Capture SDK .NET. Ces ressources traitent de scénarios de développement spécifiques qui nécessitent des approches personnalisées, notamment la synchronisation de plusieurs objets de capture, l'intégration webcam, les techniques de capture DirectShow et plus encore.
 
 ## Guides disponibles
 
-Cette collection sélectionnée de guides aborde des fonctionnalités avancées spécifiques au sein du Video Capture SDK .Net. Chaque guide fournit des instructions pratiques et des informations pour vous aider à implémenter efficacement des fonctionnalités complexes.
+Cette collection sélectionnée de guides aborde des fonctionnalités avancées spécifiques au sein du Video Capture SDK .NET. Chaque guide fournit des instructions pratiques et des informations pour vous aider à implémenter efficacement des fonctionnalités complexes.
 
 ### Guides de prise en main
 
@@ -48,7 +48,7 @@ Explorez des guides spécialisés sur l'intégration de diverses fonctionnalité
 
 ## Ressources supplémentaires
 
-Au-delà des guides spécifiques listés ci-dessus, nous offrons une mine de ressources complémentaires pour soutenir votre parcours de développement avec le Video Capture SDK .Net.
+Au-delà des guides spécifiques listés ci-dessus, nous offrons une mine de ressources complémentaires pour soutenir votre parcours de développement avec le Video Capture SDK .NET.
 
 ### Exemples de code
 

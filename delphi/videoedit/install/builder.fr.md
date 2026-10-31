@@ -154,7 +154,7 @@ Une fois installé :
 Si vous rencontrez des problèmes lors de l'installation ou de l'implémentation :
 
 1. Notre équipe de support technique est disponible pour vous aider
-2. Contactez le [support](https://support.visioforge.com/) avec des questions précises
+2. Contactez le [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) avec des questions précises
 3. Fournissez les détails sur votre version de Builder et votre environnement d'installation
 
 ### Exemples de code et documentation

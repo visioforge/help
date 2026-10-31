@@ -165,4 +165,4 @@ Pour des performances optimales d'enregistrement d'écran :
 - N'oubliez pas que la capture du curseur ajoute une légère surcharge de traitement
 
 ---
-Pour des exemples de code et des exemples d'implémentation supplémentaires, visitez notre dépôt [GitHub](https://github.com/visioforge/). Pour obtenir une assistance technique concernant l'implémentation, veuillez contacter notre [équipe de support](https://support.visioforge.com/).
+Pour des exemples de code et des exemples d'implémentation supplémentaires, visitez notre dépôt [GitHub](https://github.com/visioforge/). Pour obtenir une assistance technique concernant l'implémentation, veuillez contacter notre [équipe de support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new).

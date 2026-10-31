@@ -1274,7 +1274,7 @@ await pipeline.StartAsync();
 
 #### Plateformes
 
-Windows, macOS, Linux.
+Windows (x86, x64), macOS, Linux. Non disponible dans un processus Windows ARM64 natif (`IsAvailable()` renvoie `false`) ; une build x64 exécute NDI sous Windows on Arm en émulation.
 
 ### SRT
 

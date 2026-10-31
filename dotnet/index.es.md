@@ -7,7 +7,7 @@ tags:
   - Editing
 
 order: 20
-sidebar_label: .Net SDKs
+sidebar_label: .NET SDKs
 ---
 
 # SDKs .NET para desarrollo profesional de medios

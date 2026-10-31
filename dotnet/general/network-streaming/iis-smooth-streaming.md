@@ -49,7 +49,7 @@ Before implementing IIS Smooth Streaming with VisioForge SDKs, ensure you have:
 
 1. Windows Server with IIS installed
 2. Administrative access to the server
-3. Relevant VisioForge SDK (Video Capture SDK .Net or Video Edit SDK .Net)
+3. Relevant VisioForge SDK (Video Capture SDK .NET or Video Edit SDK .NET)
 4. Basic understanding of .NET development
 
 ## Step-by-Step IIS Configuration

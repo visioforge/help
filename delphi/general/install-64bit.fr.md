@@ -187,4 +187,4 @@ Gérer avec succès les paquets Delphi pour le développement 32 bits et 64 bits
 Bien que cette approche introduise une complexité supplémentaire par rapport au développement purement 32 bits, la méthodologie structurée vous permet de tirer parti des avantages substantiels de la compilation 64 bits tout en conservant une expérience de conception pleinement fonctionnelle dans l'environnement familier de l'IDE Delphi. Des tests cohérents sur les deux plateformes représentent l'étape de vérification finale et cruciale pour garantir des applications robustes et fiables fonctionnant de manière optimale dans les environnements 32 bits et 64 bits.
 
 ---
-Besoin d'informations supplémentaires ? Veuillez [contacter le support](https://support.visioforge.com/) pour une assistance sur des scénarios spécifiques ou des problèmes de composants.
+Besoin d'informations supplémentaires ? Veuillez [contacter le support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) pour une assistance sur des scénarios spécifiques ou des problèmes de composants.

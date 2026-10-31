@@ -49,7 +49,7 @@ This guide walks through implementing MPEG-2 video capture using TV tuners with 
 
 Before implementing MPEG-2 video capture, ensure you have:
 
-- Installed the Video Capture SDK .Net
+- Installed the Video Capture SDK .NET
 - A compatible TV tuner device with internal MPEG-2 encoding capability
 - Properly configured redist packages for your target platform
 - Basic understanding of video capture concepts in .NET

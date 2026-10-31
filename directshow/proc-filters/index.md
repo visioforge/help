@@ -118,7 +118,7 @@ Before using the code samples and integrating the filters into your application,
 
 ### Version 15.1 Enhancements
 
-- Integration with .Net SDKs 15.1 architecture
+- Integration with .NET SDKs 15.1 architecture
 - Significant improvements to audio and video mixing engines
 - Enhanced multithreading support for better performance on multi-core systems
 - Expanded video effects library with new processing options
@@ -127,39 +127,39 @@ Before using the code samples and integrating the filters into your application,
 
 ### Version 15.0 Improvements
 
-- Full alignment with .Net SDKs 15.0 framework
+- Full alignment with .NET SDKs 15.0 framework
 - Optimized high-resolution processing for brightness, contrast, saturation, and hue filters
 
 ### Version 14.0 Updates
 
-- Complete compatibility with .Net SDKs 14.0
+- Complete compatibility with .NET SDKs 14.0
 - Performance optimization for video resize operations
 - Enhanced bicubic video resize algorithm for superior quality
 
 ### Version 12.0 Refinements
 
-- Integration with .Net SDKs 12.0 infrastructure
+- Integration with .NET SDKs 12.0 infrastructure
 - Redesigned audio mixer with improved performance
 - Fixed stability issues when using crop or resize with incorrect parameters
 
 ### Version 11.0 Features
 
-- Updated to match .Net SDKs 11.0 specifications
+- Updated to match .NET SDKs 11.0 specifications
 - Improved audio tempo and pitch manipulation algorithms
 - Optimized video balance performance for smoother processing
 
 ### Version 10.0 Developments
 
-- Alignment with .Net SDKs 10.0 architecture
+- Alignment with .NET SDKs 10.0 architecture
 - Completely revamped Video Mixer component
 
 ### Version 9.0 Advancements
 
-- Integration with .Net SDKs 9.2 framework
+- Integration with .NET SDKs 9.2 framework
 - Enhanced video effects library
 - Specific optimizations for 4K content processing
 
 ### Version 8.5 Initial Release
 
-- First public release, featuring filters from .Net SDKs 8.5
+- First public release, featuring filters from .NET SDKs 8.5
 - Introduction of Lanczos support in video resize filter for superior quality scaling

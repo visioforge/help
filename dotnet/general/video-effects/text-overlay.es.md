@@ -72,12 +72,15 @@ MediaPlayer1.Video_Effects_Add(effect);
 Puede mostrar automáticamente información de fecha actual, hora o marca de tiempo del video usando modos especializados:
 
 ```csharp
+// establecer el texto en una cadena vacía: Text es un prefijo, y el "Hello!!!" predeterminado se dibujaría antes de la fecha
+effect.Text = string.Empty;
+
 // establecer modo y máscara
 effect.Mode = TextLogoMode.DateTime;
 effect.DateTimeMask = "yyyy-MM-dd. hh:mm:ss";
 ```
 
-El SDK soporta máscaras de formato personalizadas para marcas de tiempo y fechas, permitiendo control preciso sobre el formato de la información mostrada. La visualización del número de cuadro no requiere configuración adicional.
+El SDK soporta máscaras de formato personalizadas para marcas de tiempo y fechas, permitiendo control preciso sobre el formato de la información mostrada. La visualización del número de cuadro no requiere máscara. En estos tres modos Text se dibuja delante del valor: vacíelo para un reloj o un contador de cuadros.
 
 ### Efectos de animación y transición
 

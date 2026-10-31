@@ -211,7 +211,7 @@ Maintenant que vous avez intégré avec succès les SDK VisioForge dans votre pr
 ### Ressources supplémentaires
 
 - Consultez notre [dépôt GitHub](https://github.com/visioforge/.Net-SDK-s-samples) pour des exemples de code et des projets d'illustration
-- Rejoignez le [forum des développeurs](https://support.visioforge.com/) pour échanger avec d'autres développeurs
+- Rejoignez le [forum des développeurs](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) pour échanger avec d'autres développeurs
 - Abonnez-vous à notre newsletter pour recevoir les mises à jour sur les nouvelles fonctionnalités et les bonnes pratiques
 
 En suivant ce guide, vous avez établi une base solide pour développer de puissantes applications multimédias sous macOS et iOS à l'aide des SDK VisioForge et de Visual Studio pour Mac.

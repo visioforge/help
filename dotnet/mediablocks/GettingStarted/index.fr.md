@@ -21,17 +21,17 @@ primary_api_classes:
 
 ---
 
-# Media Blocks SDK .Net - Guide de démarrage rapide pour développeurs
+# Media Blocks SDK .NET - Guide de démarrage rapide pour développeurs
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction
 
-Ce guide propose un parcours complet pour intégrer le Media Blocks SDK .Net dans vos applications. Le SDK s'articule autour d'une architecture de pipeline modulaire qui vous permet de créer, connecter et gérer des blocs de traitement multimédia pour la vidéo, l'audio et plus encore. Que vous construisiez des outils de traitement vidéo, des solutions de streaming ou des applications multimédias, ce guide vous aidera à démarrer rapidement et correctement.
+Ce guide propose un parcours complet pour intégrer le Media Blocks SDK .NET dans vos applications. Le SDK s'articule autour d'une architecture de pipeline modulaire qui vous permet de créer, connecter et gérer des blocs de traitement multimédia pour la vidéo, l'audio et plus encore. Que vous construisiez des outils de traitement vidéo, des solutions de streaming ou des applications multimédias, ce guide vous aidera à démarrer rapidement et correctement.
 
 ## Processus d'installation du SDK
 
-Le SDK est distribué sous forme de paquet NuGet pour une intégration facile dans vos projets .Net. Installez-le avec :
+Le SDK est distribué sous forme de paquet NuGet pour une intégration facile dans vos projets .NET. Installez-le avec :
 
 ```bash
 dotnet add package VisioForge.DotNet.MediaBlocks

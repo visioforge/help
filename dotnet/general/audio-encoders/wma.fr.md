@@ -34,7 +34,7 @@ primary_api_classes:
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Windows Media Audio (WMA) est un codec audio populaire développé par Microsoft pour une compression audio efficace. Cette documentation couvre les implémentations d'encodeur WMA disponibles dans les SDK .Net de VisioForge.
+Windows Media Audio (WMA) est un codec audio populaire développé par Microsoft pour une compression audio efficace. Cette documentation couvre les implémentations d'encodeur WMA disponibles dans les SDK .NET de VisioForge.
 
 ## Vue d'ensemble
 

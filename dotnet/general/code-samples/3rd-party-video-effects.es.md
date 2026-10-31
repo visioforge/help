@@ -18,7 +18,7 @@ tags:
 
 ## Introducción
 
-Los filtros de procesamiento de video de terceros proporcionan capacidades potentes para manipular flujos de video en aplicaciones .NET. Estos filtros pueden integrarse perfectamente en varias plataformas SDK incluyendo Video Capture SDK .Net, Media Player SDK .Net y Video Edit SDK .Net para mejorar sus aplicaciones con características avanzadas de procesamiento de video.
+Los filtros de procesamiento de video de terceros proporcionan capacidades potentes para manipular flujos de video en aplicaciones .NET. Estos filtros pueden integrarse perfectamente en varias plataformas SDK incluyendo Video Capture SDK .NET, Media Player SDK .NET y Video Edit SDK .NET para mejorar sus aplicaciones con características avanzadas de procesamiento de video.
 
 Esta guía explora cómo implementar, configurar y optimizar filtros DirectShow de terceros dentro de sus proyectos .NET, proporcionándole el conocimiento necesario para crear aplicaciones sofisticadas de procesamiento de video.
 

@@ -26,7 +26,7 @@ primary_api_classes:
 
 ## Introducción a la gestión de dispositivos de video
 
-El Video Capture SDK .Net proporciona un soporte robusto para cualquier dispositivo de captura de video reconocido por su sistema operativo. Esta guía demuestra cómo descubrir los dispositivos disponibles, inspeccionar sus capacidades e integrarlos en sus aplicaciones.
+El Video Capture SDK .NET proporciona un soporte robusto para cualquier dispositivo de captura de video reconocido por su sistema operativo. Esta guía demuestra cómo descubrir los dispositivos disponibles, inspeccionar sus capacidades e integrarlos en sus aplicaciones.
 
 ## Enumerar los dispositivos de captura de video disponibles
 

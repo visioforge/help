@@ -743,5 +743,5 @@ Para información más detallada, vea:
 - [Acuerdo de Licencia de Usuario Final](../../eula.md)
 - [Repositorio de Código de Muestra](https://github.com/visioforge/directshow-samples/tree/main/Virtual%20Camera%20SDK)
 ## Soporte
-- **Soporte Técnico**: https://support.visioforge.com/
+- **Soporte Técnico**: https://helpdesk.visioforge.com/helpdesk/my-tickets/new
 - **Comunidad de Discord**: https://discord.com/invite/yvXUG56WCH

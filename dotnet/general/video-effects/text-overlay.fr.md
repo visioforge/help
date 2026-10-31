@@ -72,12 +72,15 @@ MediaPlayer1.Video_Effects_Add(effect);
 Vous pouvez afficher automatiquement la date courante, l'heure ou les informations d'horodatage vidéo en utilisant des modes spécialisés :
 
 ```csharp
+// définir le texte sur une chaîne vide : Text est un préfixe, et le "Hello!!!" par défaut serait dessiné avant la date
+effect.Text = string.Empty;
+
 // définir le mode et le masque
 effect.Mode = TextLogoMode.DateTime;
 effect.DateTimeMask = "yyyy-MM-dd. hh:mm:ss";
 ```
 
-Le SDK prend en charge des masques de formatage personnalisés pour les horodatages et les dates, permettant un contrôle précis du format d'affichage des informations. L'affichage du numéro d'image ne nécessite aucune configuration supplémentaire.
+Le SDK prend en charge des masques de formatage personnalisés pour les horodatages et les dates, permettant un contrôle précis du format d'affichage des informations. L'affichage du numéro d'image ne nécessite aucun masque. Dans ces trois modes, Text est dessiné devant la valeur : videz-le pour une horloge ou un compteur d'images.
 
 ### Effets d'animation et de transition
 

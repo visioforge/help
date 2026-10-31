@@ -30,7 +30,7 @@ primary_api_classes:
 
 ## Introduction to Video Transitions
 
-Video transitions create a smooth visual flow between different video clips in your editing projects. Effective transitions can significantly enhance the viewing experience, making your videos appear more professional and engaging. This guide demonstrates how to implement transitions in your C# applications using Video Edit SDK .Net.
+Video transitions create a smooth visual flow between different video clips in your editing projects. Effective transitions can significantly enhance the viewing experience, making your videos appear more professional and engaging. This guide demonstrates how to implement transitions in your C# applications using Video Edit SDK .NET.
 
 Transitions require overlapping timeline segments where both videos exist simultaneously. During this overlap, the transition effect occurs, gradually replacing the first video with the second one. The SDK supports over 100 different transition effects, from simple fades to complex SMPTE standard wipes.
 

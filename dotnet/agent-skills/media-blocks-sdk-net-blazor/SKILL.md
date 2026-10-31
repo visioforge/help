@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a Blazor Server applicat
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a Blazor **Server** application. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `RTSPServerBlock`, `MP4SinkBlock`, `UniversalSourceBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. The Razor UI is just a remote control: every pipeline runs **on the server process** (the same machine hosting the ASP.NET Core app); the browser only sees status text, button clicks, and form posts. There is no `VideoView` in Blazor — to expose the live media to the user you publish it from the server (RTSP server, MP4 file, RTMP push, HLS, WebRTC WHIP, …) and let the browser consume that URL with a separate player or `<video>` element.
 
-Pinned NuGet version: **`2026.10.26`** (matches the [official RTSP Webcam Blazor Server demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Blazor)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it.
+Pinned NuGet version: **`2026.10.28`** (matches the [official RTSP Webcam Blazor Server demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Blazor)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it.
 
 ## When to use this skill
 
@@ -33,13 +33,23 @@ The csproj uses **`Microsoft.NET.Sdk.Web`** (ASP.NET Core), not `Microsoft.NET.S
   <TargetFramework Condition="$([MSBuild]::IsOsPlatform('OSX'))">net10.0-macos</TargetFramework>
   <TargetFramework Condition="$([MSBuild]::IsOsPlatform('Windows'))">net10.0-windows</TargetFramework>
   <TargetFramework Condition="$([MSBuild]::IsOsPlatform('Linux'))">net10.0</TargetFramework>
-  <PlatformTarget>x64</PlatformTarget>
+  <PlatformTarget Condition="!$([MSBuild]::IsOsPlatform('OSX'))">x64</PlatformTarget>
   <Nullable>enable</Nullable>
   <ImplicitUsings>enable</ImplicitUsings>
 </PropertyGroup>
+<PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
+  <ApplicationId>com.example.myblazorserver</ApplicationId>
+  <ServerGarbageCollection>false</ServerGarbageCollection>
+  <RunWithOpen>false</RunWithOpen>
+  <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
+</PropertyGroup>
 ```
 
+On macOS, `net10.0-macos` builds an AppKit `.app` bundle. .NET for macOS rejects server GC, which the Web SDK turns on, so `ServerGarbageCollection` must be `false`. `ApplicationId` is the bundle identifier the `.app` is signed with; use your own reverse-DNS name. `RunWithOpen=false` makes `dotnet run` start the server in the terminal instead of through `open`, so its log output is visible. The app's main thread also carries an AppKit `SynchronizationContext` that no run loop serves, so the first `await` in `Program.cs` hangs: `references/Program.cs` clears it in an `#if __MACOS__` block before `WebApplication.CreateBuilder`. The bundle is also the ASP.NET content root and receives no web files, so `wwwroot` and `_framework/blazor.server.js` would 404: `references/Program.cs` points the content root at `Contents/Resources`, and the `CopyWebAssetsToBundle` target in `references/Sample.csproj` copies every primary static web asset (the project's `wwwroot` plus `blazor.server.js` from the framework) there before the bundle is signed.
+
 If you only deploy on one OS, drop the conditions and pin a single TFM. The Windows TFM is `net*.0-windows` (not `-windows10.0.x.x`) — Media Blocks does not need the Windows App SDK, and `net10.0-windows` resolves the Windows-specific capture APIs that the redist binds to.
+
+Release builds a universal macOS app (`osx-x64;osx-arm64`) by default, and a Web SDK project then writes its static web assets manifest only per RID, while the build that reads it looks in the RID-less folder: `dotnet build -c Release` and `dotnet publish` fail with `Manifest file at 'obj/Release/net10.0-macos/staticwebassets.build.json' not found`. The `RuntimeIdentifier` line pins the host architecture on macOS, which makes Release and `dotnet publish -c Release` both work, and the `.app` it produces is host-only: publish with `-r osx-x64` or `-r osx-arm64` for the other architecture.
 
 ### NuGet packages
 
@@ -47,11 +57,11 @@ The .NET wrapper is a single package; the native redist is per-OS and **not tran
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.28]"/>
 </ItemGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.28]"/>
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-macos'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
@@ -60,7 +70,7 @@ The .NET wrapper is a single package; the native redist is per-OS and **not tran
 
 keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. A redist ahead of the wrapper is undefined behaviour and surfaces as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
-For Linux deployment add the matching `VisioForge.CrossPlatform.Core.Linux.x64` package; for ARM64 hosts (Apple Silicon, Raspberry Pi, ARM Linux) swap `.x64` for the `.arm64` variant. See `references/Sample.csproj` for a complete working file.
+For Linux deployment add the matching `VisioForge.CrossPlatform.Core.Linux.x64` package; for ARM64 Linux hosts (Raspberry Pi, ARM Linux) swap `.x64` for the `.arm64` variant. The macOS package `VisioForge.CrossPlatform.Core.macOS` covers both Apple silicon and Intel Macs. See `references/Sample.csproj` for a complete working file.
 
 ## Pipeline model
 

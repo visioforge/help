@@ -284,7 +284,7 @@ Obtient le code de configuration de copie de fichiers / de build propre à la pl
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
@@ -468,7 +468,7 @@ Le serveur MCP propose :
 
 Besoin d'aide ? Prenez contact :
 
-- **[Portail d'assistance](https://support.visioforge.com/)** — Assistance technique et signalement de problèmes
+- **[Portail d'assistance](https://helpdesk.visioforge.com/helpdesk/my-tickets)** — Assistance technique et signalement de problèmes
 - **[Communauté Discord](https://discord.com/invite/yvXUG56WCH)** — Échangez avec les développeurs et obtenez des réponses rapides
 - **[Exemples GitHub](https://github.com/visioforge/.Net-SDK-s-samples)** — Projets d'exemple complets
 - **E-mail :** <support@visioforge.com>

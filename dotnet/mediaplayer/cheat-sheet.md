@@ -35,7 +35,7 @@ primary_api_classes:
 
 # VisioForge Media Player SDK in C# .NET — Cheat Sheet
 
-Use VisioForge Media Player SDK .Net when you need to play local files (MP4, MKV, MOV, WebM), network streams (RTSP, HLS, MPEG-DASH), and audio (MP3, AAC, FLAC) inside a C# app on Windows, macOS, Linux, Android, or iOS. `MediaPlayerCoreX` is the primary cross-platform engine; `VideoView` is the UI control that binds the engine to the visual tree.
+Use VisioForge Media Player SDK .NET when you need to play local files (MP4, MKV, MOV, WebM), network streams (RTSP, HLS, MPEG-DASH), and audio (MP3, AAC, FLAC) inside a C# app on Windows, macOS, Linux, Android, or iOS. `MediaPlayerCoreX` is the primary cross-platform engine; `VideoView` is the UI control that binds the engine to the visual tree.
 
 !!! tip "AI coding agents: use the VisioForge MCP server"
 
@@ -62,21 +62,21 @@ All cross-platform targets use a GStreamer-backed decoding pipeline with hardwar
 Main SDK package (always required):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.28]"/>
 ```
 
 Windows x64 native runtime:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 Windows x86 native runtime:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.28]"/>
 ```
 
 macOS (native) and MacCatalyst (MAUI macOS):
@@ -96,14 +96,14 @@ Android and iOS:
 
 ```xml
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.27]"/>
 ```
 
 Optional UI framework packages — add whichever you target:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.28]"/>
 ```
 
 Full per-IDE install walkthrough: [install/index.md](../install/index.md).

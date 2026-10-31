@@ -331,12 +331,12 @@ Surveillez l'espace disque libre et effectuez une rotation au niveau de l'applic
 
 ## Dépendances requises
 
-### Video Capture SDK .Net
+### Video Capture SDK .NET
 
 - [x86 Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
 - [x64 Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-### Video Edit SDK .Net
+### Video Edit SDK .NET
 
 - [x86 Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
 - [x64 Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
@@ -345,4 +345,4 @@ Surveillez l'espace disque libre et effectuez une rotation au niveau de l'applic
 
 - [Documentation de l'API VisioForge](https://api.visioforge.org/dotnet/)
 - [Dépôt de projets d'exemple](https://github.com/visioforge/.Net-SDK-s-samples)
-- [Forums de support et communauté](https://support.visioforge.com/)
+- [Forums de support et communauté](https://helpdesk.visioforge.com/helpdesk/my-tickets/new)

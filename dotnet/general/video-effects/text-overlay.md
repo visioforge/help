@@ -72,12 +72,15 @@ MediaPlayer1.Video_Effects_Add(effect);
 You can automatically display current date, time, or video timestamp information using specialized modes:
 
 ```csharp
+// set the text to an empty string: Text is a prefix, and the default "Hello!!!" would be drawn before the date
+effect.Text = string.Empty;
+
 // set mode and mask
 effect.Mode = TextLogoMode.DateTime;
 effect.DateTimeMask = "yyyy-MM-dd. hh:mm:ss";
 ```
 
-The SDK supports custom formatting masks for timestamps and dates, allowing precise control over the displayed information format. Frame number display requires no additional configuration.
+The SDK supports custom formatting masks for timestamps and dates, allowing precise control over the displayed information format. Frame number display needs no mask. In all three of these modes `Text` is drawn in front of the value, so clear it for a clock or a frame counter.
 
 ### Animation and Transition Effects
 

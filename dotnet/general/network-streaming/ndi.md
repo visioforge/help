@@ -210,7 +210,7 @@ VideoCapture1.Network_Streaming_Output = ndiOutput;
 #### 6. Generate the NDI URL (Optional)
 
 ```cs
-string ndiUrl = $"ndi://{System.Net.Dns.GetHostName()}/{streamName}";
+string ndiUrl = $"ndi://{System.NET.Dns.GetHostName()}/{streamName}";
 Debug.WriteLine(ndiUrl);
 ```
 
@@ -294,7 +294,7 @@ Yes. Use `UniversalSourceBlock` to read the file, connect video directly to `NDI
 
 ### What are the system requirements for NDI streaming in .NET?
 
-You need the [NDI SDK](https://ndi.video/for-developers/ndi-sdk/download/) or [NDI Tools](https://ndi.video/tools/) installed for runtime NDI support. The VisioForge SDK supports Windows, macOS, and Linux. Check NDI availability at runtime with `NDISinkBlock.IsAvailable()`. Network bandwidth requirements depend on resolution and framerate — a typical HD NDI stream uses approximately 100-150 Mbps.
+You need the [NDI SDK](https://ndi.video/for-developers/ndi-sdk/download/) or [NDI Tools](https://ndi.video/tools/) installed for runtime NDI support. The VisioForge SDK supports NDI on Windows, macOS, and Linux, and NDI receive also on Android; NDI is not available in a native Windows ARM64 process (an x64 build under emulation works). Check NDI availability at runtime with `NDISinkBlock.IsAvailable()` for sending and `NDISourceBlock.IsAvailable()` for receiving. Network bandwidth requirements depend on resolution and framerate — a typical HD NDI stream uses approximately 100-150 Mbps.
 
 ### How do I check if NDI is available on the system?
 

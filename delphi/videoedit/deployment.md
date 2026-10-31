@@ -157,4 +157,4 @@ Common issues during deployment often include:
 Ensure all required files are properly deployed and registered before launching your application.
 
 ---
-Please contact [our support team](https://support.visioforge.com/) if you encounter any issues with this deployment process. Visit our [GitHub repository](https://github.com/visioforge/) for additional code samples and implementation examples.
+Please contact [our support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) if you encounter any issues with this deployment process. Visit our [GitHub repository](https://github.com/visioforge/) for additional code samples and implementation examples.

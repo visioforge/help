@@ -24,15 +24,15 @@ tags:
 
 ---
 
-# Guide de déploiement de Media Player SDK .Net
+# Guide de déploiement de Media Player SDK .NET
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Ce guide complet couvre tous les scénarios de déploiement pour le Media Player SDK .Net, garantissant que vos applications fonctionnent correctement dans différents environnements. Que vous développiez des applications multiplateformes ou des solutions spécifiques à Windows, ce guide fournit les étapes nécessaires à un déploiement réussi.
+Ce guide complet couvre tous les scénarios de déploiement pour le Media Player SDK .NET, garantissant que vos applications fonctionnent correctement dans différents environnements. Que vous développiez des applications multiplateformes ou des solutions spécifiques à Windows, ce guide fournit les étapes nécessaires à un déploiement réussi.
 
 ## Vue d'ensemble des types de moteur
 
-Le Media Player SDK .Net offre deux types principaux de moteur, chacun conçu pour des scénarios de déploiement spécifiques :
+Le Media Player SDK .NET offre deux types principaux de moteur, chacun conçu pour des scénarios de déploiement spécifiques :
 
 ### Moteur MediaPlayerCoreX (multiplateforme)
 
@@ -46,7 +46,7 @@ Le moteur MediaPlayerCore est optimisé spécifiquement pour les environnements 
 
 ## Options de déploiement
 
-Il existe trois méthodes principales pour déployer les composants Media Player SDK .Net :
+Il existe trois méthodes principales pour déployer les composants Media Player SDK .NET :
 
 1. Utilisation des paquets NuGet (recommandé pour la plupart des scénarios)
 2. Utilisation des programmes d'installation silencieux automatiques (nécessite des privilèges administratifs)

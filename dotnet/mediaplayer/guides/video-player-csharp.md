@@ -1,6 +1,6 @@
 ---
 title: C# Video Player for WinForms & WPF — Seek & Volume Controls
-description: Build a C# video player for Windows WinForms or WPF desktop apps with VisioForge Media Player SDK .Net — seeking, volume, speed, and subtitle support.
+description: Build a C# video player for Windows WinForms or WPF desktop apps with VisioForge Media Player SDK .NET — seeking, volume, speed, and subtitle support.
 tags:
   - Media Player SDK
   - .NET
@@ -41,7 +41,7 @@ primary_api_classes:
 This guide shows you how to build a full-featured **Windows desktop** video player in C# using [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) with the high-level `MediaPlayerCoreX` engine. You will wire up file playback, timeline seeking, pause/resume, volume, and playback speed against a WinForms or WPF `VideoView` control.
 
 !!! info "Choose your approach"
-    This page is for **Windows desktop apps** (WinForms or WPF) using Media Player SDK .Net.
+    This page is for **Windows desktop apps** (WinForms or WPF) using Media Player SDK .NET.
 
     - **Cross-platform desktop (includes Linux)** → [Avalonia Player Guide](avalonia-player.md)
     - **Mobile + desktop from one codebase (iOS, Android, macOS, Windows)** → [.NET MAUI Player Guide](maui-player.md)
@@ -66,9 +66,9 @@ This guide shows you how to build a full-featured **Windows desktop** video play
 ### Required NuGet Packages
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
 ```
 
 ### Complete C# Video Player Implementation
@@ -299,4 +299,4 @@ Yes. The SDK runs on Windows, macOS, Linux, Android, and iOS. For cross-platform
 - [Android Player Guide](android-player.md) — Android-specific player configuration and deployment
 - [Loop Mode and Position Range](loop-and-position-range.md) — configure looping, A-B repeat, and segment playback
 - [Media Blocks SDK Player](../../mediablocks/GettingStarted/player.md) — pipeline-based alternative with explicit renderers
-- [Media Player SDK .Net Product Page](https://www.visioforge.com/media-player-sdk-net)
+- [Media Player SDK .NET Product Page](https://www.visioforge.com/media-player-sdk-net)

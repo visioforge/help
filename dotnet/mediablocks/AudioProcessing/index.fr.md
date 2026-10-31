@@ -1558,7 +1558,7 @@ await pipeline.StartAsync();
 
 #### Plateformes
 
-Windows, macOS, Linux (nécessite Csound).
+Windows x64 et macOS, livré dans les paquets `VisioForge.CrossPlatform.Core.Windows.Adds.x64` et `VisioForge.CrossPlatform.Core.macOS.Adds`. Sous Linux, nécessite le plugin `csound` de gst-plugins-rs et Csound 6 installés sur le système. Un plugin non corrigé fait planter le processus si le décalage de la partition est différent de 0 ou si le pipeline s'arrête avant la négociation du format audio. Sous Windows et macOS, le SDK ne charge aucun plugin d'opcodes Csound externe, sauf si `OPCODE6DIR64` indique leur dossier avant l'initialisation du SDK.
 
 ### Niveau EBU R128
 
@@ -1886,6 +1886,7 @@ Sortie | Audio non compressé | 1
 |----------|------|---------|-------------|
 | `LeftChannelWeight` | `float` | `0.5` | Poids de mélange pour le canal gauche (0.0–1.0+) |
 | `RightChannelWeight` | `float` | `0.5` | Poids de mélange pour le canal droit (0.0–1.0+) |
+| `Settings.OutputStereo` (constructeur : `outputStereo`) | `bool` | `true` | Sortie du mélange en stéréo (le même signal sur les deux canaux) ou en mono. Définissez-le avant de démarrer le pipeline : une modification pendant la lecture s'applique au démarrage suivant |
 
 #### Exemple de pipeline
 

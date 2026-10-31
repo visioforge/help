@@ -265,7 +265,7 @@ The Delphi and .NET demonstration applications utilize third-party libraries to 
 
 ### .NET Integration
 
-.NET applications leverage [DirectShowLib.Net (LGPL)](https://sourceforge.net/projects/directshownet/) to implement DirectShow functionality in managed code environments.
+.NET applications leverage [DirectShowLib.NET (LGPL)](https://sourceforge.net/projects/directshownet/) to implement DirectShow functionality in managed code environments.
 
 Developers can create console applications, WinForms, or WPF applications using .NET. The included demo applications utilize WinForms for the user interface.
 

@@ -19,11 +19,11 @@ primary_api_classes:
 
 ---
 
-# Blocs analyseurs — VisioForge Media Blocks SDK .Net
+# Blocs analyseurs — VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Les blocs analyseurs sont des composants essentiels dans les pipelines de traitement multimédia. Ils sont utilisés pour analyser les flux élémentaires, qui peuvent être bruts ou partiellement traités, pour en extraire des métadonnées et pour préparer les flux à un traitement ultérieur comme le décodage ou le multiplexage. VisioForge Media Blocks SDK .Net offre une variété de blocs analyseurs pour les codecs vidéo et audio courants.
+Les blocs analyseurs sont des composants essentiels dans les pipelines de traitement multimédia. Ils sont utilisés pour analyser les flux élémentaires, qui peuvent être bruts ou partiellement traités, pour en extraire des métadonnées et pour préparer les flux à un traitement ultérieur comme le décodage ou le multiplexage. VisioForge Media Blocks SDK .NET offre une variété de blocs analyseurs pour les codecs vidéo et audio courants.
 
 ## Blocs analyseurs vidéo
 

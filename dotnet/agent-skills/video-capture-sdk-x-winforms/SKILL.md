@@ -7,11 +7,11 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a Windows Forms application. The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) that mirrors the legacy `VideoCaptureCore` API but runs on the cross-platform engine. Same C# code targets Windows / macOS / Linux / iOS / Android — the only thing that changes between platforms is the UI host (WinForms here, MAUI / Avalonia / Uno / native elsewhere) and the per-OS native redist NuGet package.
 
-Pinned NuGet versions: wrapper **`2026.10.26`**, native redists at the versions shown in the csproj below (matches the [official Computer Vision sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WinForms/CSharp/Computer%20Vision) — the only WinForms sample shipped for Video Capture SDK X today). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.10.28`**, native redists at the versions shown in the csproj below (matches the [official Computer Vision sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WinForms/CSharp/Computer%20Vision) — the only WinForms sample shipped for Video Capture SDK X today). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
-- Adding webcam, IP camera, screen, or NDI capture to a Windows WinForms app **with an API that ports unchanged to other platforms** (MAUI, Avalonia, Uno, Android, iOS, macOS).
+- Adding webcam, IP camera, screen, or NDI capture to a Windows WinForms app **with an API that ports unchanged to other platforms** (MAUI, Avalonia, Uno, Android, iOS, macOS; NDI: not on iOS).
 - Recording captured video/audio to MP4 (incl. fragmented), AVI, MOV, MPEG-TS, or WebM.
 - Running computer-vision processors (face detector, pedestrian detector, car counter) over the live capture — `VideoCaptureCoreX.Face_Detector` / `Video_Processors` are wired identically on every host.
 - Sharing capture/recording code between a Windows WinForms "main" app and one or more cross-platform companion apps.
@@ -37,14 +37,14 @@ Three packages are required for a Windows WinForms capture-and-record scenario �
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
   <!-- Required by the bundled reference sample (face / pedestrian detection,
        car counter). Remove it if you drop those processors. -->
-  <PackageReference Include="VisioForge.DotNet.Core.CV" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.CV" Version="[2026.10.28]"/>
 </ItemGroup>
 <ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.26]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.28]"/>
 </ItemGroup>
 ```
 

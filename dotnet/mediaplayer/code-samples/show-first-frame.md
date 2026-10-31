@@ -86,3 +86,4 @@ When implementing this feature, keep in mind:
 - First frame display is nearly instantaneous for most video formats
 - Resource usage is minimal as the player doesn't buffer beyond the first frame
 - Works with all supported video formats including MP4, MOV, AVI, and more
+- In `MediaPlayerCore`, the property applies to one start and is then reset to `false`; it is not applied with `ConsoleUsage`, whose `Play()` waits for the end of the file, nor to a live source that reports it cannot show a frame while paused, which plays instead

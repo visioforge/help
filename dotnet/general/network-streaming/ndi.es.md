@@ -210,7 +210,7 @@ VideoCapture1.Network_Streaming_Output = ndiOutput;
 #### 6. Generar la URL NDI (Opcional)
 
 ```cs
-string ndiUrl = $"ndi://{System.Net.Dns.GetHostName()}/{streamName}";
+string ndiUrl = $"ndi://{System.NET.Dns.GetHostName()}/{streamName}";
 Debug.WriteLine(ndiUrl);
 ```
 
@@ -294,7 +294,7 @@ Sí. Use `UniversalSourceBlock` para leer el archivo, conecte el video directame
 
 ### ¿Cuáles son los requisitos del sistema para transmisión NDI en .NET?
 
-Necesita el [NDI SDK](https://ndi.video/for-developers/ndi-sdk/download/) o [NDI Tools](https://ndi.video/tools/) instalado para soporte NDI en tiempo de ejecución. El SDK de VisioForge soporta Windows, macOS y Linux. Verifique la disponibilidad de NDI en tiempo de ejecución con `NDISinkBlock.IsAvailable()`. Los requisitos de ancho de banda de red dependen de la resolución y la tasa de fotogramas — un flujo NDI HD típico usa aproximadamente 100-150 Mbps.
+Necesita el [NDI SDK](https://ndi.video/for-developers/ndi-sdk/download/) o [NDI Tools](https://ndi.video/tools/) instalado para soporte NDI en tiempo de ejecución. El SDK de VisioForge soporta NDI en Windows, macOS y Linux, y la recepción NDI también en Android; NDI no está disponible en un proceso nativo de Windows ARM64 (una compilación x64 en emulación funciona). Verifique la disponibilidad de NDI en tiempo de ejecución con `NDISinkBlock.IsAvailable()` para el envío y `NDISourceBlock.IsAvailable()` para la recepción. Los requisitos de ancho de banda de red dependen de la resolución y la tasa de fotogramas — un flujo NDI HD típico usa aproximadamente 100-150 Mbps.
 
 ### ¿Cómo verifico si NDI está disponible en el sistema?
 

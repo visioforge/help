@@ -20,17 +20,17 @@ primary_api_classes:
 
 ---
 
-# Guides et tutoriels avancés Media Player SDK .Net
+# Guides et tutoriels avancés Media Player SDK .NET
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Vue d'ensemble
 
-Explorez des techniques d'implémentation avancées, des guides d'utilisation spécialisés et des tutoriels pour le Media Player SDK .Net. Ces ressources abordent des scénarios de développement spécifiques qui nécessitent des approches personnalisées, notamment la lecture en boucle, le contrôle par plage de position, les implémentations spécifiques aux plateformes, et plus encore.
+Explorez des techniques d'implémentation avancées, des guides d'utilisation spécialisés et des tutoriels pour le Media Player SDK .NET. Ces ressources abordent des scénarios de développement spécifiques qui nécessitent des approches personnalisées, notamment la lecture en boucle, le contrôle par plage de position, les implémentations spécifiques aux plateformes, et plus encore.
 
 ## Guides disponibles
 
-Cette collection sélectionnée de guides aborde des fonctionnalités avancées spécifiques au Media Player SDK .Net. Chaque guide fournit des instructions pratiques et des éclairages pour vous aider à implémenter efficacement des fonctionnalités complexes.
+Cette collection sélectionnée de guides aborde des fonctionnalités avancées spécifiques au Media Player SDK .NET. Chaque guide fournit des instructions pratiques et des éclairages pour vous aider à implémenter efficacement des fonctionnalités complexes.
 
 ### Guides de prise en main
 
@@ -50,7 +50,7 @@ Explorez des guides spécialisés sur le contrôle de la lecture multimédia ave
 
 ### Implémentation spécifique aux plateformes
 
-Apprenez à implémenter Media Player SDK .Net sur différentes plateformes et frameworks UI.
+Apprenez à implémenter Media Player SDK .NET sur différentes plateformes et frameworks UI.
 
 * [**Implémentation du lecteur Avalonia**](avalonia-player.md) — Guide complet pour implémenter la lecture multimédia dans des applications Avalonia multiplateformes. Couvre la configuration, l'intégration et les considérations spécifiques aux plateformes pour Windows, Linux et macOS. Inclut des exemples de code complets et des bonnes pratiques pour construire des applications de lecteur multimédia professionnelles avec le framework UI Avalonia.
 
@@ -58,7 +58,7 @@ Apprenez à implémenter Media Player SDK .Net sur différentes plateformes et f
 
 ## Ressources supplémentaires
 
-Au-delà des guides spécifiques énumérés ci-dessus, nous offrons une multitude de matériels complémentaires pour soutenir votre parcours de développement avec le Media Player SDK .Net.
+Au-delà des guides spécifiques énumérés ci-dessus, nous offrons une multitude de matériels complémentaires pour soutenir votre parcours de développement avec le Media Player SDK .NET.
 
 ### Exemples de code
 

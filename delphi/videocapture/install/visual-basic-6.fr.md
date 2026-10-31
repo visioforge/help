@@ -63,5 +63,5 @@ Lors de l'implémentation du contrôle TVFVideoCapture dans votre application VB
 ## Support technique et ressources supplémentaires
 
 ---
-Pour les questions techniques ou les défis d'implémentation, veuillez contacter notre [équipe de support](https://support.visioforge.com/) qui se spécialise dans l'assistance aux développeurs pour les exigences d'intégration.
+Pour les questions techniques ou les défis d'implémentation, veuillez contacter notre [équipe de support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) qui se spécialise dans l'assistance aux développeurs pour les exigences d'intégration.
 Pour des exemples de code et des modèles d'implémentation supplémentaires, visitez notre [dépôt GitHub](https://github.com/visioforge/) qui contient de nombreux exemples illustrant les modèles d'utilisation optimaux.

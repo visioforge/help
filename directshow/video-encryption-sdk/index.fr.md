@@ -228,20 +228,20 @@ Ces exemples incluent :
 
 ### Version 11.4
 
-- Compatibilité totale avec les SDK VisioForge .Net 11.4
+- Compatibilité totale avec les SDK VisioForge .NET 11.4
 - Prise en charge renforcée de Nvidia NVENC pour les encodeurs vidéo H264 et H265
 - Prise en charge améliorée d'Intel QuickSync pour l'encodeur vidéo H264
 - Ajout de la prise en charge de l'espace colorimétrique NV12 pour de meilleures performances
 
 ### Version 11.0
 
-- Compatibilité complète avec les SDK VisioForge .Net 11.0
+- Compatibilité complète avec les SDK VisioForge .NET 11.0
 - Prise en charge renforcée des encodeurs GPU
 - Mise à niveau de la fonctionnalité de l'encodeur AAC
 
 ### Version 10.0
 
-- Compatibilité totale avec les SDK VisioForge .Net 10.0
+- Compatibilité totale avec les SDK VisioForge .NET 10.0
 - Compatibilité renforcée avec les formats vidéo H264 et H265
 - Prise en charge intégrée de l'accélération AMD AMF
 - Ajout de la prise en charge de la technologie Intel QuickSync

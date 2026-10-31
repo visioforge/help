@@ -129,4 +129,4 @@ If you encounter issues with your streaming implementation:
 - Validate network connectivity between the server and potential clients
 
 ---
-Please get in touch with [support](https://support.visioforge.com/) if you have questions about this implementation. Visit our [GitHub](https://github.com/visioforge/) page for additional code samples and resources.
+Please get in touch with [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) if you have questions about this implementation. Visit our [GitHub](https://github.com/visioforge/) page for additional code samples and resources.

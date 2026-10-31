@@ -65,19 +65,14 @@ vfp_search -f "escena.vsigx" -m "pelicula_completa.vsigx" -l "TU-CLAVE-DE-LICENC
 ## Salida
 
 La herramienta muestra:
-- Número de coincidencias encontradas
-- Marca de tiempo para cada coincidencia (formato: HH:MM:SS)
-- Puntuación de diferencia para cada coincidencia
+- Marca de tiempo del fragmento en el video principal (formato: [d:]h:mm:ss) y su puntuación de diferencia, o "Fragment file not found."
 - Tiempo total de procesamiento
 
 Ejemplo de salida:
 ```
 Starting analyze.
 Analyze finished. Elapsed time: 0:00:01.234
-Search results: 3
-00:05:32
-01:23:45
-02:15:18
+Detected fragment file at 0:05:32, difference level is 12.5
 ```
 
 ## Ejemplo de Flujo de Trabajo
@@ -89,7 +84,7 @@ vfp_gen -i "comercial.mp4" -o "comercial.vsigx" -t search
 
 2. Genera la huella para el video completo:
 ```bash
-vfp_gen -i "transmision.mp4" -o "transmision.vsigx" -t compare
+vfp_gen -i "transmision.mp4" -o "transmision.vsigx" -t search
 ```
 
 3. Busca el comercial en la transmisión:
@@ -108,7 +103,7 @@ vfp_search -f "comercial.vsigx" -m "transmision.vsigx"
 ## Mejores Prácticas
 
 - Usa huellas tipo "search" para fragmentos (`-t search` en vfp_gen)
-- Usa huellas tipo "compare" para videos principales (`-t compare` en vfp_gen)
+- Use también huellas tipo "search" para los videos principales (`-t search` en vfp_gen): la búsqueda lee ambos archivos como huellas de búsqueda
 - Los fragmentos deben tener al menos 5-10 segundos para detección confiable
 - Umbrales de diferencia más bajos (< 100) para coincidencias exactas
 - Umbrales más altos (100-500) para contenido similar con modificaciones

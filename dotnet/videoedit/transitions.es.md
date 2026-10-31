@@ -1,5 +1,5 @@
 ---
-title: Transiciones SMPTE de barrido en Video Edit SDK .Net
+title: Transiciones SMPTE de barrido en Video Edit SDK .NET
 description: Explora más de 100 efectos de transición de video en Video Edit SDK para .NET con barridos estándar SMPTE y bordes, suavidad y posicionamiento personalizables.
 tags:
   - Video Edit SDK

@@ -501,7 +501,7 @@ La surbrillance dessine un cercle translucide autour du curseur, ce qui facilite
 
 ### Quelle licence me faut-il pour une application de capture d'écran en C# ?
 
-Video Capture SDK .Net nécessite une licence pour le développement et la distribution. Une licence Développeur supprime le filigrane d'évaluation et débloque toutes les fonctionnalités pendant le développement. Une licence Release est nécessaire lors de la distribution de votre application aux utilisateurs finaux. Le SDK est disponible en édition Premium, qui inclut tous les modes de capture, les sorties MP4/AVI/WMV et les moteurs DirectShow et GStreamer. Vous pouvez évaluer le SDK sans licence — la capture d'écran fonctionne entièrement mais inclut un filigrane superposé. Visitez la [page produit](https://www.visioforge.com/video-capture-sdk-net) pour les tarifs et options de licence.
+Video Capture SDK .NET nécessite une licence pour le développement et la distribution. Une licence Développeur supprime le filigrane d'évaluation et débloque toutes les fonctionnalités pendant le développement. Une licence Release est nécessaire lors de la distribution de votre application aux utilisateurs finaux. Le SDK est disponible en édition Premium, qui inclut tous les modes de capture, les sorties MP4/AVI/WMV et les moteurs DirectShow et GStreamer. Vous pouvez évaluer le SDK sans licence — la capture d'écran fonctionne entièrement mais inclut un filigrane superposé. Visitez la [page produit](https://www.visioforge.com/video-capture-sdk-net) pour les tarifs et options de licence.
 
 ### Comment contrôler la qualité d'enregistrement et la taille du fichier pour la capture d'écran MP4 ?
 

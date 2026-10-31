@@ -331,12 +331,12 @@ Monitorea el espacio libre en disco y rota a nivel de aplicación cuando necesit
 
 ## Dependencias requeridas
 
-### Video Capture SDK .Net
+### Video Capture SDK .NET
 
 - [Redist x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
 - [Redist x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-### Video Edit SDK .Net
+### Video Edit SDK .NET
 
 - [Redist x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
 - [Redist x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
@@ -345,4 +345,4 @@ Monitorea el espacio libre en disco y rota a nivel de aplicación cuando necesit
 
 - [Documentación API de VisioForge](https://api.visioforge.org/dotnet/)
 - [Repositorio de proyectos de ejemplo](https://github.com/visioforge/.Net-SDK-s-samples)
-- [Foros de soporte y comunidad](https://support.visioforge.com/)
+- [Foros de soporte y comunidad](https://helpdesk.visioforge.com/helpdesk/my-tickets/new)

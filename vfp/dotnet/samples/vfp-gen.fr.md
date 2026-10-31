@@ -26,7 +26,7 @@ tags:
 - Générer des empreintes optimisées soit pour la comparaison, soit pour la recherche
 - Traiter des vidéos entières ou des durées spécifiques
 - Prise en charge de tous les principaux formats vidéo (MP4, AVI, MKV, MOV, etc.)
-- Compatibilité multiplateforme (Windows x64)
+- Compatibilité multiplateforme (Windows x64, macOS, Linux x64 et arm64)
 
 ## Utilisation
 

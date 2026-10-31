@@ -16,11 +16,11 @@ primary_api_classes:
 
 ---
 
-# OpenCV Blocks - VisioForge Media Blocks SDK .Net
+# OpenCV Blocks - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-OpenCV (Open Source Computer Vision Library) blocks provide powerful video processing capabilities within the VisioForge Media Blocks SDK .Net. These blocks enable a wide range of computer vision tasks, from basic image manipulation to complex object detection and tracking.
+OpenCV (Open Source Computer Vision Library) blocks provide powerful video processing capabilities within the VisioForge Media Blocks SDK .NET. These blocks enable a wide range of computer vision tasks, from basic image manipulation to complex object detection and tracking.
 
 To use OpenCV blocks, add the redistributable NuGet package for your platform: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86` or `VisioForge.CrossPlatform.OpenCV.macOS` (macOS and Mac Catalyst). These are the platforms the OpenCV GStreamer plugin currently ships for; on any other platform each block's `IsAvailable()` returns `false`.
 
@@ -992,7 +992,7 @@ var pipeline = new MediaBlocksPipeline();
 
 var textOverlaySettings = new CVTextOverlaySettings
 {
-    Text = "VisioForge MediaBlocks.Net ROCKS!", // Default: "Default text"
+    Text = "VisioForge MediaBlocks.NET ROCKS!", // Default: "Default text"
     X = 20, // X position of the text start. Default: 50
     Y = 40, // Y position of the text baseline (from top). Default: 50
     FontWidth = 1.2, // Font scale. Default: 1.0

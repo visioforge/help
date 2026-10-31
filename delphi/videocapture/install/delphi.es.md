@@ -147,7 +147,7 @@ Algunos desarrolladores encuentran problemas relacionados con archivos `.otares`
 
 Para desarrolladores que requieren asistencia adicional con el proceso de instalación o implementación de componentes:
 
-- Contacte a nuestro [equipo de soporte técnico](https://support.visioforge.com/) para asistencia personalizada de instalación
+- Contacte a nuestro [equipo de soporte técnico](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) para asistencia personalizada de instalación
 - Visite nuestro [repositorio de GitHub](https://github.com/visioforge/) para ejemplos de código adicionales y ejemplos de implementación
 - Revise nuestra documentación para escenarios de uso avanzado y patrones de integración
 

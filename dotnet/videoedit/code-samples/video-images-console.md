@@ -25,14 +25,14 @@ primary_api_classes:
 
 ## Introduction
 
-Converting a sequence of images into a video file is a common requirement for many software applications. This guide demonstrates how to create a video from images using a C# console application with the Video Edit SDK .Net. The same approach works for WinForms and WPF applications with minimal modifications.
+Converting a sequence of images into a video file is a common requirement for many software applications. This guide demonstrates how to create a video from images using a C# console application with the Video Edit SDK .NET. The same approach works for WinForms and WPF applications with minimal modifications.
 
 ## Prerequisites
 
 Before you begin, ensure you have:
 
 - .NET development environment set up
-- Video Edit SDK .Net installed
+- Video Edit SDK .NET installed
 - Basic knowledge of C# programming
 - A folder containing image files (JPG, PNG, etc.)
 

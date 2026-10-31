@@ -232,7 +232,7 @@ Récupérez un log et contactez le support :
 3. Version d'Unity, Build Target, Scripting Backend, Api Compatibility Level.
 4. Une scène reproductible minimale si possible.
 
-Ouvrez un ticket à <https://support.visioforge.com/>.
+Ouvrez un ticket à <https://helpdesk.visioforge.com/helpdesk/my-tickets/new>.
 
 ## Voir aussi
 

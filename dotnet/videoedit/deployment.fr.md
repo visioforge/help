@@ -24,13 +24,13 @@ tags:
 
 ---
 
-# Guide complet de déploiement pour Video Edit SDK .Net
+# Guide complet de déploiement pour Video Edit SDK .NET
 
 ## Introduction au déploiement de VideoEditCore
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Le VisioForge Video Edit SDK pour .Net fournit un ensemble puissant d'outils pour le traitement, l'édition et l'analyse vidéo en environnement Windows. Ce guide complet détaille les options de déploiement pour garantir le bon fonctionnement du SDK sur les systèmes cibles.
+Le VisioForge Video Edit SDK pour .NET fournit un ensemble puissant d'outils pour le traitement, l'édition et l'analyse vidéo en environnement Windows. Ce guide complet détaille les options de déploiement pour garantir le bon fonctionnement du SDK sur les systèmes cibles.
 
 Pour les applications construites avec la configuration AnyCPU, vous devez déployer à la fois les redistribuables x86 et x64 pour garantir la compatibilité entre différentes architectures de processeur. Ce guide couvre toutes les méthodes de déploiement, depuis les simples paquets NuGet jusqu'aux installations manuelles détaillées.
 
@@ -203,4 +203,4 @@ Pour un enregistrement pratique de plusieurs filtres DirectShow, placez l'utilit
 
 Pour des exemples de code et des exemples d'implémentation, visitez notre [dépôt GitHub](https://github.com/visioforge/.Net-SDK-s-samples).
 
-Pour le support technique, les mises à jour de la documentation et les discussions communautaires, visitez le [portail développeur VisioForge](https://support.visioforge.com/).
+Pour le support technique, les mises à jour de la documentation et les discussions communautaires, visitez le [portail développeur VisioForge](https://helpdesk.visioforge.com/helpdesk/my-tickets).

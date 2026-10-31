@@ -32,7 +32,7 @@ Lorsque vous travaillez avec le traitement vidéo dans des applications .NET, vo
 
 ### Exemple : effet de clarté dans le Media Player SDK
 
-Cet exemple détaillé montre comment implémenter un effet de clarté, une technique courante d'amélioration vidéo. La même approche d'implémentation s'applique aux environnements Video Edit SDK .Net et Video Capture SDK .Net.
+Cet exemple détaillé montre comment implémenter un effet de clarté, une technique courante d'amélioration vidéo. La même approche d'implémentation s'applique aux environnements Video Edit SDK .NET et Video Capture SDK .NET.
 
 ### Étape 1 : déclarer l'interface de l'effet
 

@@ -65,19 +65,14 @@ vfp_search -f "scene.vsigx" -m "full_movie.vsigx" -l "YOUR-LICENSE-KEY"
 ## Sortie
 
 L'outil affiche :
-- Nombre de correspondances trouvées
-- Horodatage pour chaque correspondance (format : HH:MM:SS)
-- Score de différence pour chaque correspondance
+- Horodatage du fragment dans la vidéo principale (format : [d:]h:mm:ss) et son score de différence, ou « Fragment file not found. »
 - Temps de traitement total
 
 Exemple de sortie :
 ```
 Starting analyze.
 Analyze finished. Elapsed time: 0:00:01.234
-Search results: 3
-00:05:32
-01:23:45
-02:15:18
+Detected fragment file at 0:05:32, difference level is 12.5
 ```
 
 ## Exemple de flux de travail
@@ -89,7 +84,7 @@ vfp_gen -i "commercial.mp4" -o "commercial.vsigx" -t search
 
 2. Générer l'empreinte de la vidéo complète :
 ```bash
-vfp_gen -i "broadcast.mp4" -o "broadcast.vsigx" -t compare
+vfp_gen -i "broadcast.mp4" -o "broadcast.vsigx" -t search
 ```
 
 3. Rechercher la publicité dans la diffusion :
@@ -108,7 +103,7 @@ vfp_search -f "commercial.vsigx" -m "broadcast.vsigx"
 ## Bonnes pratiques
 
 - Utilisez des empreintes de type « search » pour les fragments (`-t search` dans vfp_gen)
-- Utilisez des empreintes de type « compare » pour les vidéos principales (`-t compare` dans vfp_gen)
+- Utilisez aussi des empreintes de type « search » pour les vidéos principales (`-t search` dans vfp_gen) : la recherche lit les deux fichiers comme des empreintes de recherche
 - Les fragments doivent durer au moins 5 à 10 secondes pour une détection fiable
 - Seuils de différence plus bas (< 100) pour des correspondances exactes
 - Seuils plus élevés (100 à 500) pour du contenu similaire avec modifications

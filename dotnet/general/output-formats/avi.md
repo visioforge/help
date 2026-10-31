@@ -331,12 +331,12 @@ Watch free disk space and rotate at the application layer when you need multi-fi
 
 ## Required Dependencies
 
-### Video Capture SDK .Net
+### Video Capture SDK .NET
 
 - [x86 Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
 - [x64 Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 
-### Video Edit SDK .Net
+### Video Edit SDK .NET
 
 - [x86 Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
 - [x64 Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
@@ -345,4 +345,4 @@ Watch free disk space and rotate at the application layer when you need multi-fi
 
 - [VisioForge API Documentation](https://api.visioforge.org/dotnet/)
 - [Sample Projects Repository](https://github.com/visioforge/.Net-SDK-s-samples)
-- [Support and Community Forums](https://support.visioforge.com/)
+- [Support and Community Forums](https://helpdesk.visioforge.com/helpdesk/my-tickets/new)

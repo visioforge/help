@@ -129,4 +129,4 @@ Si vous rencontrez des problèmes avec votre implémentation de diffusion :
 - Validez la connectivité réseau entre le serveur et les clients potentiels
 
 ---
-Veuillez contacter le [support](https://support.visioforge.com/) si vous avez des questions concernant cette implémentation. Visitez notre page [GitHub](https://github.com/visioforge/) pour des exemples de code et des ressources supplémentaires.
+Veuillez contacter le [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) si vous avez des questions concernant cette implémentation. Visitez notre page [GitHub](https://github.com/visioforge/) pour des exemples de code et des ressources supplémentaires.

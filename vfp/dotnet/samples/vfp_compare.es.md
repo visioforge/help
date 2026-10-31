@@ -41,7 +41,8 @@ vfp_compare -f "huella1.vsigx" -s "huella2.vsigx" [opciones]
 
 ### Parámetros opcionales
 
-- `-d, --md` : Diferencia máxima aceptable (predeterminado: 500)
+- `-d, --md` : Desplazamiento temporal máximo en segundos entre los videos en el que se busca la mejor alineación (predeterminado: 500)
+- `--threshold` : Diferencia por debajo de la cual los archivos se consideran similares (predeterminado: 300)
 - `-l, --license` : Clave de licencia VisioForge (predeterminado: "TRIAL")
 
 ## Ejemplos
@@ -53,7 +54,7 @@ vfp_compare -f "video1.vsigx" -s "video2.vsigx"
 
 ### Comparación con umbral personalizado
 ```bash
-vfp_compare -f "original.vsigx" -s "copia.vsigx" -d 100
+vfp_compare -f "original.vsigx" -s "copia.vsigx" --threshold 100
 ```
 
 ### Usar clave de licencia

@@ -44,7 +44,7 @@ Screen capture technology enables developers to programmatically record and stre
 - Webinar and presentation systems
 - Quality assurance and testing automation
 
-Video Capture SDK .Net provides developers with robust tools for capturing screen content with high performance and flexibility. The SDK supports capturing entire screens, individual application windows, or custom-defined screen regions.
+Video Capture SDK .NET provides developers with robust tools for capturing screen content with high performance and flexibility. The SDK supports capturing entire screens, individual application windows, or custom-defined screen regions.
 
 ## Platform Support and Technology Overview
 
@@ -396,7 +396,7 @@ If experiencing slow or stuttering capture:
 
 ## Conclusion
 
-Screen capture functionality enables developers to create powerful applications for demonstration, education, support, and entertainment purposes. The Video Capture SDK .Net provides a robust framework for implementing this functionality with minimal development effort.
+Screen capture functionality enables developers to create powerful applications for demonstration, education, support, and entertainment purposes. The Video Capture SDK .NET provides a robust framework for implementing this functionality with minimal development effort.
 
 By leveraging the appropriate configuration options for your specific requirements, you can implement high-performance screen capture features in your .NET applications.
 

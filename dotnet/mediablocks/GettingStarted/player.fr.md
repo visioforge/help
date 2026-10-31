@@ -24,7 +24,7 @@ primary_api_classes:
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Ce tutoriel détaillé vous accompagne dans le processus de création d'une application de lecteur vidéo de niveau professionnel à l'aide du Media Blocks SDK .Net. En suivant ces instructions, vous comprendrez comment mettre en œuvre des fonctionnalités clés telles que le chargement de médias, le contrôle de la lecture et le rendu audio-vidéo.
+Ce tutoriel détaillé vous accompagne dans le processus de création d'une application de lecteur vidéo de niveau professionnel à l'aide du Media Blocks SDK .NET. En suivant ces instructions, vous comprendrez comment mettre en œuvre des fonctionnalités clés telles que le chargement de médias, le contrôle de la lecture et le rendu audio-vidéo.
 
 ## Composants essentiels pour votre application de lecteur
 

@@ -20,11 +20,11 @@ primary_api_classes:
 
 ---
 
-# Bloques de salida - VisioForge Media Blocks SDK .Net
+# Bloques de salida - VisioForge Media Blocks SDK .NET
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Los bloques de salida, también conocidos como sumideros, son responsables de escribir datos de medios a archivos, flujos de red u otros destinos. Generalmente son los últimos bloques en cualquier cadena de procesamiento de medios. VisioForge Media Blocks SDK .Net proporciona una colección completa de bloques de salida para varios formatos y protocolos.
+Los bloques de salida, también conocidos como sumideros, son responsables de escribir datos de medios a archivos, flujos de red u otros destinos. Generalmente son los últimos bloques en cualquier cadena de procesamiento de medios. VisioForge Media Blocks SDK .NET proporciona una colección completa de bloques de salida para varios formatos y protocolos.
 
 Esta guía cubre bloques de salida de archivos como MP4, AVI, WebM, MKV, y bloques de streaming de red para protocolos como RTMP (usado por YouTube y Facebook Live).
 

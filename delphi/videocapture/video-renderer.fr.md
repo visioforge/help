@@ -173,4 +173,4 @@ Lors du choix d'un moteur de rendu pour votre application, prenez en compte ces 
 4. Les besoins de compatibilité pour votre environnement de déploiement
 
 ---
-Veuillez contacter le [support](https://support.visioforge.com/) si vous avez besoin d'une assistance technique pour cette implémentation. Visitez notre dépôt [GitHub](https://github.com/visioforge/) pour des exemples de code et des ressources supplémentaires.
+Veuillez contacter le [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) si vous avez besoin d'une assistance technique pour cette implémentation. Visitez notre dépôt [GitHub](https://github.com/visioforge/) pour des exemples de code et des ressources supplémentaires.
