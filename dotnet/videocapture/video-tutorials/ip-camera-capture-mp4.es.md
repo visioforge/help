@@ -1,6 +1,6 @@
 ---
 title: Grabar cámara IP RTSP a MP4 en C# .NET con código guía
-description: Graba streams RTSP de cámaras IP a archivos MP4 en C# / .NET. Autenticación, descubrimiento ONVIF, reconexión, codificación GPU. Ejemplo de código completo.
+description: Grabe streams RTSP de cámaras IP a archivos MP4 en C# / .NET. Autenticación, descubrimiento ONVIF, reconexión, codificación GPU. Ejemplo de código completo.
 tags:
   - Video Capture SDK
   - .NET

@@ -413,6 +413,27 @@ VideoCapture1.Video_Renderer.RotationAngle   = 90;
 VideoCapture1.Video_Renderer_Update();
 ```
 
+## Renderer Settings on the VideoView
+
+Every `VideoView` has a `RendererSettings` property of type `VideoRendererSettingsX`. The same line works with the classic engines and the X engines, on every platform:
+
+```cs
+// Stretch the video to fill the view, with no black bars.
+videoView1.RendererSettings.Letterbox = false;
+```
+
+On MAUI, the settings belong to the platform view: `videoView1.GetVideoView().RendererSettings.Letterbox = false;`. `GetVideoView()` returns a view once the control is in the visual tree.
+
+| Engine | How `Letterbox` is applied |
+|---|---|
+| `VideoCaptureCoreX`, `MediaPlayerCoreX`, Live Video Compositor, `VideoRendererBlock` | At once while the video is playing. On macOS, and on a view that draws the frames itself (WPF, WinUI, MAUI, Avalonia software mode, Android, iOS), it applies with the next frame, so a paused picture changes when playback continues. |
+| `VideoEditCoreX`, `SimplePlayerCoreX` | Read when the engine starts. |
+| `VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore` | Stays in step with `Video_Renderer.StretchMode`: whichever was written last wins, and when an engine is first attached to a view, a stretch on either side wins. To apply a change while the video is playing, call `Video_Renderer_UpdateAsync()`, or `Video_Renderer_Update()` after a synchronous start. |
+
+To replace the whole settings object, assign `videoView1.RendererSettings` before the engine starts, and start from `VideoRendererSettingsX.CreateDefault()`: a plain `new VideoRendererSettingsX()` selects the OpenGL renderer instead of Direct3D 11 on Windows, and on macOS the picture can open in a separate window instead of the view. On the classic engines only `Letterbox` is used; every other renderer option stays on `Video_Renderer`.
+
+In Media Blocks SDK .NET, a `VideoRendererBlock` created with a view takes the view's settings. An object assigned to `VideoRendererBlock.Settings` afterwards is used instead of them, and its `Letterbox` value replaces the view's when the block is built. `GLVideoRendererBlock` has its own `Settings` and does not read the view's.
+
 ## Troubleshooting Common Issues
 
 ### Renderer Compatibility Problems

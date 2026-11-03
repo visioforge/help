@@ -413,6 +413,27 @@ VideoCapture1.Video_Renderer.RotationAngle   = 90;
 VideoCapture1.Video_Renderer_Update();
 ```
 
+## Paramètres du moteur de rendu sur le VideoView
+
+Chaque `VideoView` possède la propriété `RendererSettings` de type `VideoRendererSettingsX`. La même ligne fonctionne avec les moteurs classiques et les moteurs X, sur toutes les plateformes :
+
+```cs
+// Étirer la vidéo pour remplir la vue, sans bandes noires.
+videoView1.RendererSettings.Letterbox = false;
+```
+
+Sur MAUI, les paramètres appartiennent à la vue de la plateforme : `videoView1.GetVideoView().RendererSettings.Letterbox = false;`. `GetVideoView()` renvoie une vue une fois le contrôle présent dans l'arborescence visuelle.
+
+| Moteur | Application de `Letterbox` |
+|---|---|
+| `VideoCaptureCoreX`, `MediaPlayerCoreX`, Live Video Compositor, `VideoRendererBlock` | Immédiate pendant la lecture. Sur macOS, et avec une vue qui dessine elle-même les images (WPF, WinUI, MAUI, mode logiciel d'Avalonia, Android, iOS), elle s'applique à l'image suivante : une image en pause change donc à la reprise de la lecture. |
+| `VideoEditCoreX`, `SimplePlayerCoreX` | Lu au démarrage du moteur. |
+| `VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore` | Reste synchronisé avec `Video_Renderer.StretchMode` : la dernière valeur écrite l'emporte et, lorsqu'un moteur est associé pour la première fois à une vue, un étirement d'un côté ou de l'autre l'emporte. Pour appliquer un changement pendant la lecture, appelez `Video_Renderer_UpdateAsync()`, ou `Video_Renderer_Update()` après un démarrage synchrone. |
+
+Pour remplacer tout l'objet de paramètres, affectez `videoView1.RendererSettings` avant le démarrage du moteur, en partant de `VideoRendererSettingsX.CreateDefault()` : sous Windows, un simple `new VideoRendererSettingsX()` sélectionne le moteur de rendu OpenGL au lieu de Direct3D 11 et, sous macOS, l'image peut s'ouvrir dans une fenêtre distincte au lieu de la vue. Sur les moteurs classiques, seul `Letterbox` est utilisé ; les autres options du moteur de rendu restent sur `Video_Renderer`.
+
+Dans Media Blocks SDK .NET, un `VideoRendererBlock` créé avec une vue prend les paramètres de cette vue. Un objet affecté ensuite à `VideoRendererBlock.Settings` est utilisé à leur place, et sa valeur `Letterbox` remplace celle de la vue lors de la construction du bloc. `GLVideoRendererBlock` possède ses propres `Settings` et ne lit pas ceux de la vue.
+
 ## Dépannage des problèmes courants
 
 ### Problèmes de compatibilité du moteur de rendu

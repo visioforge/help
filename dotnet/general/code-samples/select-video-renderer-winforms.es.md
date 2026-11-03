@@ -413,6 +413,27 @@ VideoCapture1.Video_Renderer.RotationAngle   = 90;
 VideoCapture1.Video_Renderer_Update();
 ```
 
+## Ajustes del renderizador en el VideoView
+
+Cada `VideoView` tiene la propiedad `RendererSettings` de tipo `VideoRendererSettingsX`. La misma línea funciona con los motores clásicos y los motores X, en todas las plataformas:
+
+```cs
+// Estirar el video para llenar la vista, sin barras negras.
+videoView1.RendererSettings.Letterbox = false;
+```
+
+En MAUI, los ajustes pertenecen a la vista de la plataforma: `videoView1.GetVideoView().RendererSettings.Letterbox = false;`. `GetVideoView()` devuelve una vista cuando el control ya está en el árbol visual.
+
+| Motor | Cómo se aplica `Letterbox` |
+|---|---|
+| `VideoCaptureCoreX`, `MediaPlayerCoreX`, Live Video Compositor, `VideoRendererBlock` | De inmediato durante la reproducción. En macOS, y en una vista que dibuja los fotogramas por sí misma (WPF, WinUI, MAUI, modo de software de Avalonia, Android, iOS), se aplica con el siguiente fotograma, por lo que una imagen en pausa cambia cuando se reanuda la reproducción. |
+| `VideoEditCoreX`, `SimplePlayerCoreX` | Se lee cuando se inicia el motor. |
+| `VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore` | Se mantiene sincronizado con `Video_Renderer.StretchMode`: prevalece el último valor escrito y, cuando un motor se asocia por primera vez a una vista, prevalece el estiramiento de cualquiera de los dos lados. Para aplicar un cambio durante la reproducción, llame a `Video_Renderer_UpdateAsync()`, o a `Video_Renderer_Update()` tras un inicio síncrono. |
+
+Para reemplazar todo el objeto de ajustes, asigne `videoView1.RendererSettings` antes de iniciar el motor y parta de `VideoRendererSettingsX.CreateDefault()`: en Windows, un `new VideoRendererSettingsX()` simple selecciona el renderizador OpenGL en lugar de Direct3D 11 y, en macOS, la imagen puede abrirse en una ventana independiente en lugar de la vista. En los motores clásicos solo se usa `Letterbox`; las demás opciones del renderizador siguen en `Video_Renderer`.
+
+En Media Blocks SDK .NET, un `VideoRendererBlock` creado con una vista toma los ajustes de la vista. Un objeto asignado después a `VideoRendererBlock.Settings` se usa en su lugar, y su valor de `Letterbox` reemplaza al de la vista cuando se construye el bloque. `GLVideoRendererBlock` tiene sus propios `Settings` y no lee los de la vista.
+
 ## Solución de problemas comunes
 
 ### Problemas de compatibilidad del renderizador
