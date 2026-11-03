@@ -100,7 +100,7 @@ This ensures you're starting with a clean processing pipeline and prevents unexp
 To add a third-party filter to your video processing pipeline:
 
 ```cs
-// Ctor: CustomProcessingFilter(string name, Guid? clsid = null, bool beforeEffects = false)
+// Ctor: CustomProcessingFilter(string name, Guid? clsid = null, bool beforeEffects = true)
 // Use the filter name as registered in DirectShow; the SDK resolves the CLSID automatically.
 var myFilter = new CustomProcessingFilter("My Effect Filter");
 

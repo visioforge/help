@@ -210,10 +210,7 @@ public class MyGrayscaleBlock : MediaBlock, IMediaBlockInternals
 
     public static bool IsAvailable()
     {
-        var factory = ElementFactory.Find("videobalance");
-        if (factory == null) return false;
-        factory.Dispose();
-        return true;
+        return ElementFactory.Find("videobalance") != null;
     }
 
     public override bool Build()
@@ -339,12 +336,11 @@ appelants l'utilisent pour choisir entre plusieurs alternatives ou pour
 ```csharp
 public static bool IsAvailable()
 {
-    var factory = ElementFactory.Find("videobalance");
-    if (factory == null) return false;
-    factory.Dispose();
-    return true;
+    return ElementFactory.Find("videobalance") != null;
 }
 ```
+
+Ne libérez pas avec `Dispose()` une fabrique obtenue du registre GStreamer, par exemple via `ElementFactory.Find` ou `Registry.GetFeatureList`. Le processus partage une seule enveloppe par fabrique native : `Dispose()` l'invalide donc pour tous ses autres détenteurs, y compris le SDK.
 
 #### 6. `IMediaBlockInternals.SetContext`
 

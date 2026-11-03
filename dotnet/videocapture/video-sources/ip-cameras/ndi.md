@@ -125,10 +125,6 @@ Once you've identified the NDI sources on your network, the next step is to esta
     // Enable or disable audio capture
     settings.AudioCapture = false; 
     
-    // Set login information if needed
-    settings.Login = "username";
-    settings.Password = "password";
-    
     // Set the source to the VideoCaptureCore object
     VideoCapture1.IP_Camera_Source = settings;
 
@@ -257,8 +253,7 @@ When implementing NDI functionality, it's important to handle potential issues g
 
 1. **Source Not Found**: Verify that the NDI source is active and on the same network
 2. **Connection Timeout**: Check network configuration and firewall settings
-3. **Authentication Failure**: Ensure credentials are correct if authentication is required
-4. **Performance Issues**: Monitor CPU and network usage during capture
+3. **Performance Issues**: Monitor CPU and network usage during capture
 
 ### Implementing Robust Error Handling
 

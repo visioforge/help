@@ -224,9 +224,11 @@ effect.Update(); // Appliquer les modifications
 - `Frequency` (int) : fréquence de départ en Hz
     - Typique : 4000-8000 Hz
     - Les fréquences au-dessus sont renforcées
+    - Dans les SDK multiplateformes, elle va jusqu'à un sixième de la fréquence d'échantillonnage : 8000 Hz à 48 kHz, 7350 Hz à 44,1 kHz. Une valeur supérieure fonctionne à cette limite et déclenche un seul `OnError`
 - `Volume` (ushort) : quantité de renforcement
     - Plage : 0 à 10000
     - 0 = aucun effet
+    - 8000 amplifie la bande 20 fois ou plus, donc un signal fort sature bien en dessous de cette valeur
 
 **Utilisation** :
 
@@ -245,9 +247,11 @@ var effect = new TrebleEnhancerAudioEffect(6000, 5000);
 - `Frequency` (int) : limite supérieure de fréquence en Hz
     - Typique : 100-300 Hz
     - Les fréquences en dessous sont renforcées
+    - Dans les SDK multiplateformes, elle va jusqu'à un sixième de la fréquence d'échantillonnage : 8000 Hz à 48 kHz, 7350 Hz à 44,1 kHz. Une valeur supérieure fonctionne à cette limite et déclenche un seul `OnError`
 - `Volume` (ushort) : quantité de renforcement
     - Plage : 0 à 10000
     - 0 = aucun effet
+    - La sortie dans la bande vaut environ `1 + Volume / 400` fois l'entrée (1000 = 3,5x, 5000 = 13,5x, 10000 = 26x), donc un signal fort sature dès les valeurs basses
 
 **Utilisation** :
 
@@ -261,13 +265,14 @@ var effect = new TrueBassAudioEffect(150, 5000);
 
 ### HighPassAudioEffect
 
-**Implémentation** : DSP personnalisé (filtre passe-haut IIR)
+**Implémentation** : GStreamer `audiocheblimit` (SDK multiplateformes), DSP personnalisé (filtre passe-haut IIR) (SDK classiques)
 
 **Objectif** : supprimer les basses fréquences.
 
 **Paramètres** :
 
 - `CutOff` (uint) : fréquence de coupure en Hz
+    - Dans les SDK multiplateformes, elle doit rester inférieure à la moitié de la fréquence d'échantillonnage. Au-delà, la sortie est silencieuse et un `OnError` est déclenché
     - Les fréquences en dessous sont atténuées
     - Typique : 80-200 Hz pour la voix, 40 Hz pour la musique
 
@@ -287,13 +292,14 @@ var effect = new HighPassAudioEffect(100); // Supprimer les fréquences en desso
 
 ### LowPassAudioEffect
 
-**Implémentation** : DSP personnalisé (filtre passe-bas IIR)
+**Implémentation** : GStreamer `audiocheblimit` (SDK multiplateformes), DSP personnalisé (filtre passe-bas IIR) (SDK classiques)
 
 **Objectif** : supprimer les hautes fréquences.
 
 **Paramètres** :
 
 - `CutOff` (uint) : fréquence de coupure en Hz
+    - Dans les SDK multiplateformes, elle doit rester inférieure à la moitié de la fréquence d'échantillonnage. Au-delà, le son passe sans filtrage et un `OnError` est déclenché
     - Les fréquences au-dessus sont atténuées
     - Typique : 8000-12000 Hz pour suppression du souffle
 
@@ -313,7 +319,7 @@ var effect = new LowPassAudioEffect(10000); // Supprimer les fréquences au-dess
 
 ### BandPassAudioEffect
 
-**Implémentation** : DSP personnalisé (filtre à variables d'état)
+**Implémentation** : GStreamer `audiochebband` (SDK multiplateformes), DSP personnalisé (filtre à variables d'état) (SDK classiques)
 
 **Objectif** : autoriser uniquement une plage de fréquences spécifique.
 
@@ -321,6 +327,7 @@ var effect = new LowPassAudioEffect(10000); // Supprimer les fréquences au-dess
 
 - `CutOffHigh` (float) : limite supérieure de fréquence en Hz
 - `CutOffLow` (float) : limite inférieure de fréquence en Hz
+    - Dans les SDK multiplateformes, elle doit rester inférieure à `CutOffHigh` et à la moitié de la fréquence d'échantillonnage. `CutOffHigh` est vérifiée en premier : si la condition échoue, le filtre conserve sa bande précédente et, s'il n'en a pas, la sortie est silencieuse. Si seule la fréquence d'échantillonnage pose problème, la sortie est silencieuse. Dans les deux cas, un `OnError` est déclenché
 
 **Utilisation** :
 
@@ -333,13 +340,15 @@ var effect = new BandPassAudioEffect(5000, 300); // Autoriser 300-5000 Hz
 
 ### NotchAudioEffect
 
-**Implémentation** : DSP personnalisé (filtre réjecteur de bande)
+**Implémentation** : GStreamer `audiochebband` (SDK multiplateformes), DSP personnalisé (filtre réjecteur de bande) (SDK classiques)
 
 **Objectif** : supprimer une fréquence spécifique.
 
 **Paramètres** :
 
 - `CutOff` (uint) : fréquence centrale à supprimer en Hz
+    - Dans les SDK multiplateformes, le filtre supprime 10 % de cette fréquence de chaque côté, si bien que la bande s'élargit quand la fréquence augmente : de 7200 à 8800 Hz pour 8000 Hz
+    - Le bord inférieur de cette bande doit rester inférieur à la moitié de la fréquence d'échantillonnage. Au-delà, le son passe sans filtrage et un `OnError` est déclenché
     - Typique : 50/60 Hz pour suppression du ronflement
 
 **Utilisation** :
@@ -458,14 +467,14 @@ effect.Level = 0.5f;
 
 ### Sound3DAudioEffect
 
-**Objectif** : simulation d'audio spatial 3D.
+**Objectif** : simulation d'audio spatial 3D. Dans les SDK multiplateformes, il traite uniquement la stéréo ; tout autre flux passe sans traitement et déclenche un seul `OnError`.
 
 **Paramètres** :
 
 - `Value` (uint) : amplification spatiale
     - Plage : 1 à 20000
     - 1000 = neutre (désactivé)
-    - < 1000 = stéréo plus étroite
+    - < 1000 = stéréo plus étroite, jusqu'à la moitié de la largeur à 500
     - > 1000 = stéréo plus large
     - > 10000 peut distordre
 
@@ -622,8 +631,8 @@ effect.Level = 0.4f;
 
 - `StartVolume` (uint) : volume à l'heure de début
 - `StopVolume` (uint) : volume à l'heure d'arrêt
-- `StartTime` (TimeSpan) : moment où le fondu commence
-- `StopTime` (TimeSpan) : moment où le fondu se termine
+- `StartTime` (TimeSpan) : moment où le fondu commence. Avant, l'audio est lu à `StartVolume`
+- `StopTime` (TimeSpan) : moment où le fondu se termine. Après, l'audio est lu à `StopVolume`
 
 **Utilisation** :
 
@@ -651,7 +660,7 @@ var effect = new FadeAudioEffect(
 - `DryWetRatio` (byte) : ratio de mix
     - Plage : 0 à 255
     - 0 = dry, 255 = wet
-- `Feedback` (byte) : résonance
+- `Feedback` (byte) : résonance, de 0 à 100. Dans les SDK multiplateformes, une valeur supérieure fonctionne à 100 et déclenche un `OnError`
     - Plage : -100 à 100
 - `Frequency` (float) : vitesse LFO en Hz
     - Typique : 0.1 à 5 Hz
@@ -1194,7 +1203,7 @@ videoCaptureCore.Audio_Effects_DS_WavesReverb(0, "reverb",
     Oui. Les **noms** d'effets sont utilisés comme identifiants uniques, pas les types d'effets. Pour exécuter plusieurs instances du même type simultanément, donnez à chaque instance un nom distinct. Appeler `Audio_Effects_AddOrUpdate()` avec un effet dont le nom correspond à un existant remplace cette instance ; un nouveau nom ajoute une nouvelle instance à la chaîne.
 
 ???+ "Quelles fréquences d'échantillonnage et configurations de canaux sont prises en charge ?"
-    Tous les effets audio multiplateformes prennent en charge les fréquences d'échantillonnage standard (8 kHz à 192 kHz) et les configurations de canaux (mono, stéréo, multicanal). Les effets s'adaptent automatiquement au format audio du flux d'entrée. Certains effets comme `BalanceAudioEffect` et `WideStereoAudioEffect` nécessitent une entrée stéréo.
+    Tous les effets audio multiplateformes prennent en charge les fréquences d'échantillonnage standard (8 kHz à 192 kHz) et les configurations de canaux (mono, stéréo, multicanal). Les effets s'adaptent automatiquement au format audio du flux d'entrée. Certains effets comme `BalanceAudioEffect`, `Sound3DAudioEffect` et `WideStereoAudioEffect` nécessitent une entrée stéréo.
 
 ???+ "Comment supprimer un effet audio pendant la lecture ?"
     Utilisez la méthode `Audio_Effects_Remove()` avec le type d'effet pour le supprimer de la chaîne de traitement pendant la lecture. Le changement prend effet immédiatement sans interrompre le flux audio.

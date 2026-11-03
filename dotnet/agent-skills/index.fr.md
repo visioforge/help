@@ -1,6 +1,12 @@
 ---
 title: Agent Skills pour les SDK .NET VisioForge — agents IA et LLM
 description: Skills par plateforme pour les agents IA de codage (Claude Code, Cursor, Copilot, Codex, Gemini CLI) couvrant NuGet, licence et pièges de déploiement.
+tags:
+  - Video Capture SDK
+  - Media Player SDK
+  - Media Blocks SDK
+  - Video Edit SDK
+  - .NET
 ---
 
 # Agent Skills pour les SDK .NET VisioForge

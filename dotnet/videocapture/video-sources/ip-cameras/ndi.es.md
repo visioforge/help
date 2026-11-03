@@ -125,10 +125,6 @@ Una vez que has identificado las fuentes NDI en su red, el siguiente paso es est
     // Habilitar o deshabilitar captura de audio
     settings.AudioCapture = false;
 
-    // Establecer información de inicio de sesión si es necesario
-    settings.Login = "usuario";
-    settings.Password = "contraseña";
-
     // Establecer la fuente de cámara IP
     VideoCapture1.IP_Camera_Source = settings;
 
@@ -257,8 +253,7 @@ Al implementar la funcionalidad NDI, es importante manejar los posibles problema
 
 1. **Fuente no encontrada**: verifique que la fuente NDI esté activa y en la misma red
 2. **Timeout de conexión**: revise la configuración de red y los ajustes del firewall
-3. **Fallo de autenticación**: asegúrese de que las credenciales sean correctas si se requiere autenticación
-4. **Problemas de rendimiento**: supervise el uso de CPU y red durante la captura
+3. **Problemas de rendimiento**: supervise el uso de CPU y red durante la captura
 
 ### Implementación de manejo de errores robusto
 

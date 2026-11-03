@@ -224,9 +224,11 @@ effect.Update(); // Apply changes
 - `Frequency` (int): Starting frequency in Hz
     - Typical: 4000-8000 Hz
     - Frequencies above this are boosted
+    - In the cross-platform SDKs it goes up to one sixth of the sample rate: 8000 Hz at 48 kHz, 7350 Hz at 44.1 kHz. A higher value works at that limit and raises one `OnError`
 - `Volume` (ushort): Boost amount
     - Range: 0 to 10000
     - 0 = no effect
+    - 8000 boosts the band 20x or more, so loud material clips well below that
 
 **Usage**:
 
@@ -245,9 +247,11 @@ var effect = new TrebleEnhancerAudioEffect(6000, 5000);
 - `Frequency` (int): Upper frequency limit in Hz
     - Typical: 100-300 Hz
     - Frequencies below this are boosted
+    - In the cross-platform SDKs it goes up to one sixth of the sample rate: 8000 Hz at 48 kHz, 7350 Hz at 44.1 kHz. A higher value works at that limit and raises one `OnError`
 - `Volume` (ushort): Boost amount
     - Range: 0 to 10000
     - 0 = no effect
+    - Output in the band is about `1 + Volume / 400` times the input (1000 = 3.5x, 5000 = 13.5x, 10000 = 26x), so loud material clips at low values already
 
 **Usage**:
 
@@ -261,13 +265,14 @@ var effect = new TrueBassAudioEffect(150, 5000);
 
 ### HighPassAudioEffect
 
-**Implementation**: Custom DSP (IIR high-pass filter)
+**Implementation**: GStreamer `audiocheblimit` (cross-platform SDKs), Custom DSP (IIR high-pass filter) (Classic SDKs)
 
 **Purpose**: Remove low frequencies.
 
 **Parameters**:
 
 - `CutOff` (uint): Cutoff frequency in Hz
+    - In the cross-platform SDKs it has to be below half the sample rate. At or above it the output is silence, and one `OnError` is raised
     - Frequencies below are attenuated
     - Typical: 80-200 Hz for voice, 40 Hz for music
 
@@ -287,13 +292,14 @@ var effect = new HighPassAudioEffect(100); // Remove frequencies below 100 Hz
 
 ### LowPassAudioEffect
 
-**Implementation**: Custom DSP (IIR low-pass filter)
+**Implementation**: GStreamer `audiocheblimit` (cross-platform SDKs), Custom DSP (IIR low-pass filter) (Classic SDKs)
 
 **Purpose**: Remove high frequencies.
 
 **Parameters**:
 
 - `CutOff` (uint): Cutoff frequency in Hz
+    - In the cross-platform SDKs it has to be below half the sample rate. At or above it the sound passes unfiltered, and one `OnError` is raised
     - Frequencies above are attenuated
     - Typical: 8000-12000 Hz for hiss removal
 
@@ -313,7 +319,7 @@ var effect = new LowPassAudioEffect(10000); // Remove frequencies above 10 kHz
 
 ### BandPassAudioEffect
 
-**Implementation**: Custom DSP (state-variable filter)
+**Implementation**: GStreamer `audiochebband` (cross-platform SDKs), Custom DSP (state-variable filter) (Classic SDKs)
 
 **Purpose**: Allow only specific frequency range.
 
@@ -321,6 +327,7 @@ var effect = new LowPassAudioEffect(10000); // Remove frequencies above 10 kHz
 
 - `CutOffHigh` (float): Upper frequency boundary in Hz
 - `CutOffLow` (float): Lower frequency boundary in Hz
+    - In the cross-platform SDKs it has to be below `CutOffHigh` and below half the sample rate. Below `CutOffHigh` is checked first: if it fails, the filter keeps its previous band, and with no previous band the output is silence. If only the sample rate check fails, the output is silence. Either way one `OnError` is raised
 
 **Usage**:
 
@@ -333,13 +340,15 @@ var effect = new BandPassAudioEffect(5000, 300); // Allow 300-5000 Hz
 
 ### NotchAudioEffect
 
-**Implementation**: Custom DSP (band-reject filter)
+**Implementation**: GStreamer `audiochebband` (cross-platform SDKs), Custom DSP (band-reject filter) (Classic SDKs)
 
 **Purpose**: Remove specific frequency.
 
 **Parameters**:
 
 - `CutOff` (uint): Center frequency to remove in Hz
+    - In the cross-platform SDKs the filter removes 10% of this frequency to either side of it, so the band gets wider as the frequency goes up: 7200 to 8800 Hz at 8000 Hz
+    - The lower edge of that band has to be below half the sample rate. At or above it the sound passes unfiltered, and one `OnError` is raised
     - Typical: 50/60 Hz for hum removal
 
 **Usage**:
@@ -458,14 +467,14 @@ effect.Level = 0.5f;
 
 ### Sound3DAudioEffect
 
-**Purpose**: 3D spatial audio simulation.
+**Purpose**: 3D spatial audio simulation. In the cross-platform SDKs it processes stereo only; any other stream passes through unprocessed and raises one `OnError`.
 
 **Parameters**:
 
 - `Value` (uint): Spatial amplification
     - Range: 1 to 20000
     - 1000 = neutral (disabled)
-    - < 1000 = narrower stereo
+    - < 1000 = narrower stereo, down to half the width at 500
     - > 1000 = wider stereo
     - > 10000 may distort
 
@@ -622,8 +631,8 @@ effect.Level = 0.4f;
 
 - `StartVolume` (uint): Volume at start time
 - `StopVolume` (uint): Volume at stop time
-- `StartTime` (TimeSpan): When fade begins
-- `StopTime` (TimeSpan): When fade completes
+- `StartTime` (TimeSpan): When fade begins. Before it the audio plays at `StartVolume`
+- `StopTime` (TimeSpan): When fade completes. After it the audio plays at `StopVolume`
 
 **Usage**:
 
@@ -651,7 +660,7 @@ var effect = new FadeAudioEffect(
 - `DryWetRatio` (byte): Mix ratio
     - Range: 0 to 255
     - 0 = dry, 255 = wet
-- `Feedback` (byte): Resonance
+- `Feedback` (byte): Resonance, 0 to 100. In the cross-platform SDKs a higher value works at 100 and raises one `OnError`
     - Range: -100 to 100
 - `Frequency` (float): LFO speed in Hz
     - Typical: 0.1 to 5 Hz
@@ -1194,7 +1203,7 @@ videoCaptureCore.Audio_Effects_DS_WavesReverb(0, "reverb",
     Yes. Effect **names** are used as unique identifiers, not effect types. To run multiple instances of the same type simultaneously, give each instance a distinct name. Calling `Audio_Effects_AddOrUpdate()` with an effect whose name matches an existing one replaces that instance; a new name adds a new instance to the chain.
 
 ???+ "What sample rates and channel configurations are supported?"
-    All cross-platform audio effects support standard sample rates (8 kHz to 192 kHz) and channel configurations (mono, stereo, multi-channel). The effects automatically adapt to the audio format of the input stream. Some effects like `BalanceAudioEffect` and `WideStereoAudioEffect` require stereo input.
+    All cross-platform audio effects support standard sample rates (8 kHz to 192 kHz) and channel configurations (mono, stereo, multi-channel). The effects automatically adapt to the audio format of the input stream. Some effects like `BalanceAudioEffect`, `Sound3DAudioEffect` and `WideStereoAudioEffect` require stereo input.
 
 ???+ "How do I remove an audio effect during playback?"
     Use the `Audio_Effects_Remove()` method with the effect type to remove it from the processing chain during playback. The change takes effect immediately without interrupting the audio stream.

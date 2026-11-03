@@ -177,13 +177,14 @@ Create a complete WiX installer for a DirectShow filter with automatic registrat
 
       <!-- FFmpeg Dependencies -->
       <Component Id="FFMPEGLibraries" Guid="YOUR-GUID-2">
-        <File Id="avcodec58" Source="$(var.SourceDir)\avcodec-58.dll" />
-        <File Id="avdevice58" Source="$(var.SourceDir)\avdevice-58.dll" />
-        <File Id="avfilter7" Source="$(var.SourceDir)\avfilter-7.dll" />
-        <File Id="avformat58" Source="$(var.SourceDir)\avformat-58.dll" />
-        <File Id="avutil56" Source="$(var.SourceDir)\avutil-56.dll" />
-        <File Id="swresample3" Source="$(var.SourceDir)\swresample-3.dll" />
-        <File Id="swscale5" Source="$(var.SourceDir)\swscale-5.dll" />
+        <File Id="avcodec63" Source="$(var.SourceDir)\avcodec-63.dll" />
+        <File Id="avdevice63" Source="$(var.SourceDir)\avdevice-63.dll" />
+        <File Id="avfilter12" Source="$(var.SourceDir)\avfilter-12.dll" />
+        <File Id="avformat63" Source="$(var.SourceDir)\avformat-63.dll" />
+        <File Id="avutil61" Source="$(var.SourceDir)\avutil-61.dll" />
+        <File Id="swresample7" Source="$(var.SourceDir)\swresample-7.dll" />
+        <File Id="swscale10" Source="$(var.SourceDir)\swscale-10.dll" />
+        <File Id="cacert" Source="$(var.SourceDir)\cacert.pem" />
       </Component>
 
     </ComponentGroup>
@@ -511,13 +512,14 @@ Section "MyApp (required)" SecMain
   SetOutPath "$INSTDIR\Filters"
   ; Install FFMPEG Source Filter
   File "Filters\VisioForge_FFMPEG_Source_x64.ax"
-  File "Filters\avcodec-58.dll"
-  File "Filters\avdevice-58.dll"
-  File "Filters\avfilter-7.dll"
-  File "Filters\avformat-58.dll"
-  File "Filters\avutil-56.dll"
-  File "Filters\swresample-3.dll"
-  File "Filters\swscale-5.dll"
+  File "Filters\avcodec-63.dll"
+  File "Filters\avdevice-63.dll"
+  File "Filters\avfilter-12.dll"
+  File "Filters\avformat-63.dll"
+  File "Filters\avutil-61.dll"
+  File "Filters\swresample-7.dll"
+  File "Filters\swscale-10.dll"
+  File "Filters\cacert.pem"
   ; Register DirectShow filter
   DetailPrint "Registering DirectShow filters..."
   ExecWait 'regsvr32 /s "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"' $0
@@ -778,13 +780,14 @@ MinVersion=10.0
 Source: "MyApp.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; FFMPEG Source Filter
 Source: "Filters\VisioForge_FFMPEG_Source_x64.ax"; DestDir: "{app}\Filters"; Flags: ignoreversion regserver restartreplace uninsrestartdelete
-Source: "Filters\avcodec-58.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
-Source: "Filters\avdevice-58.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
-Source: "Filters\avfilter-7.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
-Source: "Filters\avformat-58.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
-Source: "Filters\avutil-56.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
-Source: "Filters\swresample-3.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
-Source: "Filters\swscale-5.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
+Source: "Filters\avcodec-63.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
+Source: "Filters\avdevice-63.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
+Source: "Filters\avfilter-12.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
+Source: "Filters\avformat-63.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
+Source: "Filters\avutil-61.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
+Source: "Filters\swresample-7.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
+Source: "Filters\swscale-10.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
+Source: "Filters\cacert.pem"; DestDir: "{app}\Filters"; Flags: ignoreversion
 [Icons]
 Name: "{group}\MyApp"; Filename: "{app}\MyApp.exe"
 Name: "{group}\Uninstall MyApp"; Filename: "{uninstallexe}"

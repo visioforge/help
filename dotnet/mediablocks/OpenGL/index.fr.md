@@ -412,7 +412,7 @@ Ces types servent à configurer un mélangeur vidéo OpenGL, permettant de combi
 
 | Propriété                        | Type                          | Par défaut                      | Description                                      |
 |---------------------------------|-------------------------------|------------------------------|--------------------------------------------------|
-| `Crop`                          | `Rect`                        | (s.o.)                        | Rectangle de rognage du flux d'entrée.             |
+| `Crop`                          | `Rect`                        | `null`                        | Pixels à rogner sur chaque bord de l'entrée : `Left`, `Top`, `Right`, `Bottom` sont des nombres de pixels, pas des coordonnées ; un bord négatif compte comme 0. `null` signifie aucun rognage. Nécessite GStreamer 1.22 ou ultérieur. |
 | `BlendConstantColorAlpha`       | `double`                      | `0`                          | Composante alpha pour la couleur de mélange constante.        |
 | `BlendConstantColorBlue`        | `double`                      | `0`                          | Composante bleue pour la couleur de mélange constante.         |
 | `BlendConstantColorGreen`       | `double`                      | `0`                          | Composante verte pour la couleur de mélange constante.        |

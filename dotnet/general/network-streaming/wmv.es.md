@@ -126,13 +126,19 @@ VideoCapture1.Network_Streaming_Output = wmvOutput;
 VideoCapture1.Network_Streaming_Network_Port = 12345;
 ```
 
+El puerto predeterminado es `0`, con el que el sistema elige uno libre; lea la dirección de `Network_Streaming_URL` después del inicio. Si el puerto que establezca no se puede abrir, por ejemplo porque está en uso, `OnError` lo notifica y el inicio falla.
+
 #### 4. Iniciar el proceso de streaming
 
 ```cs
 // Iniciar el proceso de streaming
 try
 {
-    await VideoCapture1.StartAsync();
+    // Un inicio fallido devuelve false y notifica el motivo mediante OnError
+    if (!await VideoCapture1.StartAsync())
+    {
+        return;
+    }
 
     // La URL de streaming ahora está disponible para clientes
     string streamingUrl = VideoCapture1.Network_Streaming_URL;

@@ -100,7 +100,7 @@ Esto asegura que está comenzando con un pipeline de procesamiento limpio y prev
 Para añadir un filtro de terceros a su pipeline de procesamiento de video:
 
 ```cs
-// Ctor: CustomProcessingFilter(string name, Guid? clsid = null, bool beforeEffects = false)
+// Ctor: CustomProcessingFilter(string name, Guid? clsid = null, bool beforeEffects = true)
 // Usar el nombre del filtro tal como está registrado en DirectShow; el SDK resuelve el CLSID automáticamente.
 var myFilter = new CustomProcessingFilter("Mi Filtro de Efectos");
 

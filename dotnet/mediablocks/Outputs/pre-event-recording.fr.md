@@ -84,14 +84,16 @@ Le bloc suit une machine à états bien définie :
 ```mermaid
 stateDiagram-v2
     [*] --> Idle
-    Idle --> Buffering : Build() / StartBuffering()
+    Idle --> Buffering : pipeline start / StartBuffering()
     Buffering --> Recording : TriggerRecording()
     Recording --> PostEventRecording : Pre-event buffer flushed
-    PostEventRecording --> Buffering : Post-event timer expires
-    PostEventRecording --> Buffering : StopRecording()
-    Buffering --> Stopped : StopBuffering()
-    PostEventRecording --> Stopped : StopBuffering()
-    Stopped --> Buffering : StartBuffering()
+    PostEventRecording --> Buffering : Post-event timer expires / StopRecording() / StartBuffering() / format change
+    Recording --> Buffering : StopRecording() / StartBuffering() / format change / trigger failed
+    Idle --> Stopped : StopBuffering()
+    Buffering --> Stopped : StopBuffering() / pipeline stop
+    Recording --> Stopped : StopBuffering() / pipeline stop
+    PostEventRecording --> Stopped : StopBuffering() / pipeline stop
+    Stopped --> Buffering : StartBuffering() / restart after a pipeline stop
 ```
 
 | État | Description |
@@ -100,7 +102,7 @@ stateDiagram-v2
 | `Buffering` | Met activement en tampon les images dans le ring buffer, sans enregistrer dans un fichier. |
 | `Recording` | Vide le tampon pré-événement vers le fichier et capture les images en direct. |
 | `PostEventRecording` | Phase post-événement — enregistre les images en direct jusqu'à l'expiration du minuteur. |
-| `Stopped` | Arrêté et inactif. |
+| `Stopped` | Pas de mise en tampon. Après un arrêt du pipeline, un redémarrage reprend la mise en tampon ; après `StopBuffering()`, seul `StartBuffering()` la reprend. |
 
 Un changement du format encodé en cours d'exécution — résolution, profil, niveau, données de codec, ou la fréquence, le nombre de canaux ou le codec audio — ferme un enregistrement en cours, comme `StopRecording()`, et retire les images en tampon de ce flux. L'autre flux reste dans le tampon. Le fichier suivant est construit avec le nouveau format. Une fréquence d'images ou un rapport de pixels réaffirmé ne ferme pas l'enregistrement.
 
@@ -111,6 +113,8 @@ public event EventHandler<PreEventRecordingEventArgs> OnRecordingStarted;
 public event EventHandler<PreEventRecordingEventArgs> OnRecordingStopped;
 public event EventHandler<PreEventRecordingEventArgs> OnStateChanged;
 ```
+
+Les événements sont déclenchés un par un, dans l'ordre des changements : un gestionnaire ne s'exécute jamais en même temps qu'un autre, et `OnRecordingStopped` suit le `OnRecordingStarted` du même fichier et arrive une fois le fichier finalisé. Pendant qu'un gestionnaire s'exécute, tout ce qui provoque un nouvel événement — `StopRecording()`, `StopBuffering()`, `StartBuffering()`, `TriggerRecording()`, l'arrêt du pipeline ou un changement de format, sur un autre thread ou dans le gestionnaire lui-même — retourne avant que cet événement soit déclenché ; le thread qui exécute le gestionnaire le déclenche lorsque le gestionnaire se termine. Un gestionnaire peut donc s'exécuter sur un thread de travail même si l'appel a été fait sur le thread de l'interface, et après l'arrêt du pipeline ou la libération du bloc ; repassez sur le thread de l'interface avant de toucher aux contrôles. `StopRecording()`, `StopBuffering()`, `StartBuffering()` et `TriggerRecording()` relancent ce que les gestionnaires qu'ils ont déclenchés ont levé ; sur le minuteur post-événement, le démarrage ou l'arrêt du pipeline ou un changement de format, l'exception est journalisée comme erreur.
 
 Propriétés de `PreEventRecordingEventArgs` :
 
@@ -127,8 +131,8 @@ Propriétés de `PreEventRecordingEventArgs` :
 | `TriggerRecording(string filename)` | Vide le ring buffer dans le fichier spécifié et démarre l'enregistrement des images en direct. Si un enregistrement est déjà en cours, étend l'enregistrement courant (réinitialise le minuteur post-événement). Refusé, avec une erreur, tant que la première image vidéo encodée n'est pas arrivée et, si l'audio est activé, tant que le premier échantillon audio encodé n'est pas arrivé. Un appel ultérieur enregistre normalement. |
 | `ExtendRecording()` | Réinitialise le minuteur post-événement. Appelez ceci lorsque la condition de déclenchement est toujours active (par ex. le mouvement persiste). |
 | `StopRecording()` | Arrête manuellement l'enregistrement courant et revient au mode de mise en tampon. |
-| `StartBuffering()` | Démarre ou reprend la mise en tampon après un arrêt. |
-| `StopBuffering()` | Arrête tout, y compris la mise en tampon, et vide le tampon. |
+| `StartBuffering()` | Démarre ou reprend la mise en tampon après un arrêt. Les images ne sont mises en tampon que pendant que le pipeline tourne. Appelée avant le démarrage du pipeline, elle déclenche `OnStateChanged` avec `Buffering` immédiatement, et le démarrage ne le déclenche pas une seconde fois. Ne fait rien si le bloc est déjà en mise en tampon. |
+| `StopBuffering()` | Arrête tout, y compris la mise en tampon, et vide le tampon. Le bloc reste arrêté, y compris après un redémarrage du pipeline, jusqu'à `StartBuffering()`. Un appel répété ne déclenche aucun événement. |
 
 ## Exemple de pipeline
 

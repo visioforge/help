@@ -84,14 +84,16 @@ El bloque sigue una máquina de estados bien definida:
 ```mermaid
 stateDiagram-v2
     [*] --> Idle
-    Idle --> Buffering : Build() / StartBuffering()
+    Idle --> Buffering : pipeline start / StartBuffering()
     Buffering --> Recording : TriggerRecording()
     Recording --> PostEventRecording : Pre-event buffer flushed
-    PostEventRecording --> Buffering : Post-event timer expires
-    PostEventRecording --> Buffering : StopRecording()
-    Buffering --> Stopped : StopBuffering()
-    PostEventRecording --> Stopped : StopBuffering()
-    Stopped --> Buffering : StartBuffering()
+    PostEventRecording --> Buffering : Post-event timer expires / StopRecording() / StartBuffering() / format change
+    Recording --> Buffering : StopRecording() / StartBuffering() / format change / trigger failed
+    Idle --> Stopped : StopBuffering()
+    Buffering --> Stopped : StopBuffering() / pipeline stop
+    Recording --> Stopped : StopBuffering() / pipeline stop
+    PostEventRecording --> Stopped : StopBuffering() / pipeline stop
+    Stopped --> Buffering : StartBuffering() / restart after a pipeline stop
 ```
 
 | Estado | Descripción |
@@ -100,7 +102,7 @@ stateDiagram-v2
 | `Buffering` | Almacenando activamente fotogramas en el buffer circular, sin grabar a archivo. |
 | `Recording` | Vaciando buffer pre-evento a archivo y capturando fotogramas en vivo. |
 | `PostEventRecording` | Fase post-evento — grabando fotogramas en vivo hasta que el temporizador expire. |
-| `Stopped` | Detenido e inactivo. |
+| `Stopped` | Sin almacenamiento en buffer. Tras detener el pipeline, un reinicio reanuda el almacenamiento en buffer; tras `StopBuffering()`, solo `StartBuffering()` lo reanuda. |
 
 Un cambio del formato codificado durante una ejecución — resolución, perfil, nivel, datos de códec, o la frecuencia, el número de canales o el códec de audio — cierra una grabación en curso, igual que `StopRecording()`, y descarta los fotogramas almacenados de ese flujo. El otro flujo permanece en el búfer. El archivo siguiente se construye con el formato nuevo. Una frecuencia de imagen o una relación de aspecto de píxel repetidas no cierran la grabación.
 
@@ -111,6 +113,8 @@ public event EventHandler<PreEventRecordingEventArgs> OnRecordingStarted;
 public event EventHandler<PreEventRecordingEventArgs> OnRecordingStopped;
 public event EventHandler<PreEventRecordingEventArgs> OnStateChanged;
 ```
+
+Los eventos se generan de uno en uno, en el orden en que ocurrieron los cambios: un controlador nunca se ejecuta al mismo tiempo que otro, y `OnRecordingStopped` llega después del `OnRecordingStarted` del mismo archivo y una vez finalizado el archivo. Mientras se ejecuta un controlador, todo lo que provoca un evento nuevo — `StopRecording()`, `StopBuffering()`, `StartBuffering()`, `TriggerRecording()`, la detención del pipeline o un cambio de formato, en otro hilo o dentro del propio controlador — regresa antes de que se genere ese evento; el hilo que ejecuta el controlador lo genera cuando el controlador termina. Por eso un controlador puede ejecutarse en un hilo de trabajo aunque la llamada se haya hecho en el hilo de la interfaz, y después de detener el pipeline o de liberar el bloque; pase al hilo de la interfaz antes de tocar los controles. `StopRecording()`, `StopBuffering()`, `StartBuffering()` y `TriggerRecording()` vuelven a lanzar lo que lanzaron los controladores de los eventos que generaron; en el temporizador posterior al evento, el inicio o la detención del pipeline o un cambio de formato, la excepción se registra como error.
 
 Propiedades de `PreEventRecordingEventArgs`:
 
@@ -127,8 +131,8 @@ Propiedades de `PreEventRecordingEventArgs`:
 | `TriggerRecording(string filename)` | Vaciar el buffer circular al archivo especificado e iniciar la grabación de fotogramas en vivo. Si ya está grabando, extiende la grabación actual (reinicia el temporizador post-evento). Se rechaza, con un error, hasta que llega el primer fotograma de vídeo codificado y, si el audio está habilitado, hasta que llega el primer fotograma de audio codificado. Una llamada posterior graba con normalidad. |
 | `ExtendRecording()` | Reiniciar el temporizador post-evento. Llame a esto cuando la condición del disparador sigue activa (ej. el movimiento continúa). |
 | `StopRecording()` | Detener manualmente la grabación actual y volver al modo de almacenamiento en buffer. |
-| `StartBuffering()` | Iniciar o reanudar el almacenamiento en buffer después de estar detenido. |
-| `StopBuffering()` | Detener todo incluyendo el almacenamiento en buffer y limpiar el buffer. |
+| `StartBuffering()` | Iniciar o reanudar el almacenamiento en buffer después de estar detenido. Los fotogramas se almacenan solo mientras el pipeline está en marcha. Si se llama antes de iniciar el pipeline, genera `OnStateChanged` con `Buffering` de inmediato, y el inicio no lo vuelve a generar. No hace nada si el bloque ya está almacenando en buffer. |
+| `StopBuffering()` | Detener todo incluyendo el almacenamiento en buffer y limpiar el buffer. El bloque permanece detenido, también tras reiniciar el pipeline, hasta `StartBuffering()`. Una llamada repetida no genera ningún evento. |
 
 ## El pipeline de muestra
 

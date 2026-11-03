@@ -124,8 +124,9 @@ SuApp\
 ├── SuApp.exe.config
 └── Filters\
     ├── VisioForge_FFMPEG_Source_x64.ax
-    ├── avcodec-58.dll
-    ├── avformat-58.dll
+    ├── avcodec-63.dll
+    ├── avformat-63.dll
+    ├── cacert.pem
     └── ... (otras dependencias)
 ```
 

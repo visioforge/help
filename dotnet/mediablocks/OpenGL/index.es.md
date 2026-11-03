@@ -412,7 +412,7 @@ Extiende `VideoMixerStream` y define propiedades para un stream individual dentr
 
 | Propiedad                        | Tipo                          | Valor Predeterminado                      | Descripción                                      |
 |----------------------------------|-------------------------------|------------------------------------------|--------------------------------------------------|
-| `Crop`                           | `Rect`                        | (N/A)                                    | Rectángulo de recorte para el stream de entrada. |
+| `Crop`                           | `Rect`                        | `null`                                   | Píxeles a recortar de cada borde de la entrada: `Left`, `Top`, `Right`, `Bottom` son cantidades, no coordenadas; un borde negativo cuenta como 0. `null` significa sin recorte. Requiere GStreamer 1.22 o posterior. |
 | `BlendConstantColorAlpha`        | `double`                      | `0`                                      | Componente alfa para color de mezcla constante.  |
 | `BlendConstantColorBlue`         | `double`                      | `0`                                      | Componente azul para color de mezcla constante.  |
 | `BlendConstantColorGreen`        | `double`                      | `0`                                      | Componente verde para color de mezcla constante. |

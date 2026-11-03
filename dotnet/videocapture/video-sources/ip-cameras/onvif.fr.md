@@ -211,6 +211,8 @@ else
 }
 ```
 
+Pour une caméra qui ne demande pas d'identifiants, passez un nom d'utilisateur et un mot de passe vides : `ConnectAsync` se connecte alors sans authentification. `ConnectAsync` accepte aussi un nom d'utilisateur avec un mot de passe vide, pour un compte sans mot de passe ; `VideoCaptureCore` envoie aussi l'identifiant d'un tel compte à l'ouverture du flux.
+
 ## Travailler avec les profils multimédias
 
 Les caméras ONVIF fournissent généralement plusieurs profils multimédias avec différentes résolutions, codecs et fréquences d'images.
@@ -259,7 +261,7 @@ var mainStream = await RTSPSourceSettings.CreateAsync(
     new Uri("http://192.168.1.100/onvif/device_service"), "admin", "password", true, onvifProfile: "Profile_1");
 ```
 
-Pour `VideoCaptureCore`, renseignez `IPCameraSourceSettings.ONVIF_SourceProfile` avec le jeton ou le nom d'un profil, ou laissez-le vide pour le choix automatique.
+Pour `VideoCaptureCore`, renseignez `IPCameraSourceSettings.ONVIF_SourceProfile` avec le jeton ou le nom d'un profil, ou laissez-le vide pour le choix automatique. `IPCameraSourceSettings.URL` reste l'adresse de l'appareil ; après un démarrage réussi, `VideoCaptureCore.IP_Camera_ONVIF_StreamURL` renvoie l'adresse du flux résolu par ce démarrage, jusqu'au démarrage suivant. Les moteurs `Auto_VLC`, `Auto_LAV`, `Auto_FFMPEG`, `RTSP_LowLatency` et `HTTP_MJPEG_LowLatency` demandent son flux à la caméra à chaque démarrage : son service ONVIF doit donc répondre à chaque fois. `HTTP_MJPEG_LowLatency` ne lit que les flux HTTP et refuse une caméra dont le flux est RTSP. Certaines caméras incluent l'identifiant et le mot de passe dans l'adresse du flux : traitez-la comme une donnée sensible si vous la journalisez ou l'affichez.
 
 ## Aperçu vidéo
 

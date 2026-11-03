@@ -130,7 +130,7 @@ For detailed parameters and properties of each effect, see [Audio Effects Refere
 
 ## GStreamer Elements
 
-All cross-platform audio effects are built on top of GStreamer multimedia framework. Each effect wraps one or more GStreamer elements:
+All cross-platform audio effects run in a GStreamer pipeline. `ChannelOrder`, `DownMix`, `DynamicAmplify`, `Fade`, `Flanger`, `PhaseInvert`, `Phaser`, `Sound3D`, `TrebleEnhancer` and `TrueBass` process the samples in managed code. The others wrap one or more GStreamer elements:
 
 | Category | GStreamer Elements |
 |----------|-------------------|

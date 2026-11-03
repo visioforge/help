@@ -29,39 +29,53 @@ This document provides a complete list of files required to redistribute each Di
 **Filter**:
 - `VisioForge_FFMPEG_Source.ax` - Main DirectShow filter
 **FFmpeg Libraries** (required):
-- `avcodec-58.dll` - Video/audio codec library
-- `avdevice-58.dll` - Device handling
-- `avfilter-7.dll` - Audio/video filtering
-- `avformat-58.dll` - Container format handling
-- `avutil-56.dll` - Utility functions
-- `swresample-3.dll` - Audio resampling
-- `swscale-5.dll` - Video scaling and color conversion
+- `avcodec-63.dll` - Video/audio codec library
+- `avdevice-63.dll` - Device handling
+- `avfilter-12.dll` - Audio/video filtering
+- `avformat-63.dll` - Container format handling
+- `avutil-61.dll` - Utility functions
+- `swresample-7.dll` - Audio resampling
+- `swscale-10.dll` - Video scaling and color conversion
+- `cacert.pem` - Root certificates; required for https://, rtmps:// and tls:// sources
 **Total Size**: ~80-100 MB
 #### x64 (64-bit)
 **Filter**:
 - `VisioForge_FFMPEG_Source_x64.ax` - Main DirectShow filter (64-bit)
 **FFmpeg Libraries** (required):
-- `avcodec-58.dll` - 64-bit version
-- `avdevice-58.dll` - 64-bit version
-- `avfilter-7.dll` - 64-bit version
-- `avformat-58.dll` - 64-bit version
-- `avutil-56.dll` - 64-bit version
-- `swresample-3.dll` - 64-bit version
-- `swscale-5.dll` - 64-bit version
+- `avcodec-63.dll` - 64-bit version
+- `avdevice-63.dll` - 64-bit version
+- `avfilter-12.dll` - 64-bit version
+- `avformat-63.dll` - 64-bit version
+- `avutil-61.dll` - 64-bit version
+- `swresample-7.dll` - 64-bit version
+- `swscale-10.dll` - 64-bit version
+- `cacert.pem` - Root certificates; required for https://, rtmps:// and tls:// sources
 **Total Size**: ~90-110 MB
 ### Installation Directory Structure
 ```
 YourApp\
-├── VisioForge_FFMPEG_Source.ax          (x86)
-├── VisioForge_FFMPEG_Source_x64.ax      (x64)
-├── avcodec-58.dll
-├── avdevice-58.dll
-├── avfilter-7.dll
-├── avformat-58.dll
-├── avutil-56.dll
-├── swresample-3.dll
-└── swscale-5.dll
+├── x86\
+│   ├── VisioForge_FFMPEG_Source.ax
+│   ├── avcodec-63.dll
+│   ├── avdevice-63.dll
+│   ├── avfilter-12.dll
+│   ├── avformat-63.dll
+│   ├── avutil-61.dll
+│   ├── swresample-7.dll
+│   ├── swscale-10.dll
+│   └── cacert.pem
+└── x64\
+    ├── VisioForge_FFMPEG_Source_x64.ax
+    ├── avcodec-63.dll
+    ├── avdevice-63.dll
+    ├── avfilter-12.dll
+    ├── avformat-63.dll
+    ├── avutil-61.dll
+    ├── swresample-7.dll
+    ├── swscale-10.dll
+    └── cacert.pem
 ```
+The x86 and x64 FFmpeg DLLs have the same names, so each architecture needs its own folder next to its own filter.
 ### License Files
 - `license.rtf` - SDK license agreement (include in installer)
 ### Dependencies
@@ -342,14 +356,14 @@ The FFMPEG Encoder has its own set of FFmpeg libraries:
 - `VisioForge_FFMPEG_Encoder.ax`
 
 **FFmpeg Libraries**:
-- `avcodec-58.dll`
-- `avdevice-58.dll`
-- `avfilter-7.dll`
-- `avformat-58.dll`
-- `avutil-56.dll`
-- `swresample-3.dll`
-- `swscale-5.dll`
-- `ffmedia.dll` - VisioForge FFmpeg wrapper
+- `avcodec-63.dll`
+- `avdevice-63.dll`
+- `avfilter-12.dll`
+- `avformat-63.dll`
+- `avutil-61.dll`
+- `swresample-7.dll`
+- `swscale-10.dll`
+- `cacert.pem` - Root certificates; required to publish to rtmps:// and tls:// outputs
 
 **Info**:
 - `vfffmpeg_info.txt` - FFmpeg build information
@@ -385,9 +399,8 @@ YourApp\
 └── FFMPEG\
     ├── x86\
     │   ├── VisioForge_FFMPEG_Encoder.ax
-    │   ├── avcodec-58.dll
-    │   ├── avformat-58.dll
-    │   ├── ffmedia.dll
+    │   ├── avcodec-63.dll
+    │   ├── avformat-63.dll
     │   └── ... (other FFmpeg DLLs)
     └── x64\
         ├── VisioForge_FFMPEG_Encoder_x64.ax

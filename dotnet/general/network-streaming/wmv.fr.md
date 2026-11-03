@@ -133,6 +133,8 @@ VideoCapture1.Network_Streaming_Output = wmvOutput;
 VideoCapture1.Network_Streaming_Network_Port = 12345;
 ```
 
+Le port par défaut est `0`, qui laisse le système en choisir un libre ; lisez l'adresse dans `Network_Streaming_URL` après le démarrage. Si le port que vous définissez ne peut pas être ouvert, par exemple parce qu'il est déjà utilisé, `OnError` le signale et le démarrage échoue.
+
 #### 4. Démarrer le processus de diffusion
 
 Une fois tout configuré, vous pouvez démarrer le processus de diffusion :
@@ -141,7 +143,11 @@ Une fois tout configuré, vous pouvez démarrer le processus de diffusion :
 // Démarrer le processus de diffusion
 try
 {
-    await VideoCapture1.StartAsync();
+    // Un démarrage en échec renvoie false et signale la raison via OnError
+    if (!await VideoCapture1.StartAsync())
+    {
+        return;
+    }
 
     // L'URL de diffusion est désormais disponible pour les clients
     string streamingUrl = VideoCapture1.Network_Streaming_URL;

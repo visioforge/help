@@ -710,7 +710,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Bloc source de séquence d'images
 
-Le `ImageSequenceSourceBlock` génère un flux vidéo à partir d'une séquence d'images fixes stockées dans un dossier. La fréquence d'images est configurable et le bloc prend en charge les modes de flux en direct ou seekable.
+Le `ImageSequenceSourceBlock` génère un flux vidéo à partir d'une séquence d'images fixes stockées dans un dossier. La fréquence d'images est configurable et le bloc prend en charge le mode en direct.
 
 #### Informations sur le bloc
 
@@ -730,12 +730,16 @@ Constructeur : `ImageSequenceSourceSettings(string folderPath, string filePatter
 | --- | --- | :---: | --- |
 | `FolderPath` | `string` | requis | Dossier contenant les fichiers d'images |
 | `FilePattern` | `string` | détection automatique | Motif de nom de fichier (par ex. `image_%05d.jpg`) ; détecté automatiquement si `null` |
-| `StartIndex` | `int` | détection automatique | Index de départ de la séquence d'images ; détecté automatiquement à partir du nom du premier fichier |
+| `StartIndex` | `int` | détection automatique | Index de départ de la séquence d'images ; détecté automatiquement à partir des fichiers désignés par un `FilePattern` à un seul espace réservé numérique dans le nom de fichier, sinon à partir du nom du premier fichier du dossier |
 | `FrameRate` | `VideoFrameRate` | `FPS_25` | Fréquence d'images en sortie |
-| `IsLive` | `bool` | `false` | Traiter la source comme un flux en direct (non seekable) |
+| `IsLive` | `bool` | `false` | Traiter la source comme un flux en direct. Une image décodée trop tard peut être abandonnée, ce qui est probable avec de grandes images à une fréquence élevée |
 | `NumBuffers` | `int` | `-1` | Nombre maximal d'images à produire (−1 = illimité) |
 
 Formats d'image pris en charge : `.jpg`, `.jpeg`, `.png`, `.bmp`, `.gif`, `.tiff`, `.tif`.
+
+Le format est détecté à partir du contenu de la première image, ou de son extension lorsque le contenu n'est pas reconnu. Toute la séquence est décodée avec ce format : toutes les images doivent donc le partager. L'événement `OnError` du pipeline se déclenche lorsqu'aucun format pris en charge ne peut être déterminé, lorsqu'aucune image de la séquence ne peut être décodée, lorsque moins d'images sont décodées que de fichiers lus parce qu'une image est tronquée ou dans un autre format, ou lorsque `FolderPath`, modifié après la construction, vaut `null` ou, sans `FilePattern`, ne contient aucune image. L'événement signalant les images perdues se déclenche à la fin de la séquence et ne les récupère pas : un PNG tronqué fait aussi perdre les images qui le suivent. Un fichier vide est ignoré sans erreur, et un JPEG ou un GIF coupé dans ses données d'image peut tout de même donner une image, ce qui ne déclenche pas non plus d'erreur.
+
+Une séquence se termine au premier numéro sans fichier. Un `FilePattern` peut désigner des fichiers de n'importe quelle extension ; sans espace réservé `%`, il désigne un seul fichier, lu une seule fois. Transmettez le modèle au constructeur si le dossier ne contient aucune image avec une extension prise en charge. Lorsque `StartIndex` n'est pas défini, un `FilePattern` comportant un seul espace réservé `%d`, `%i` ou `%u` dans le nom de fichier commence au plus petit numéro qui possède un fichier, ou à 0 s'il ne désigne aucun fichier ; avec tout autre modèle, le numéro provient de la première image du dossier. Dans un `FilePattern`, écrivez un signe de pourcentage littéral sous la forme `%%`. La détection à partir du contenu comprend les espaces réservés `%d`, `%i` et `%u`, avec une largeur et un remplissage par des zéros facultatifs ; avec tout autre espace réservé, le format provient de l'extension.
 
 #### Exemple de pipeline
 

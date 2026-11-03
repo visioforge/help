@@ -125,10 +125,6 @@ Une fois les sources NDI de votre réseau identifiées, l'étape suivante consis
     // Activer ou désactiver la capture audio
     settings.AudioCapture = false; 
     
-    // Définir les informations de connexion si nécessaire
-    settings.Login = "username";
-    settings.Password = "password";
-    
     // Affecter la source à l'objet VideoCaptureCore
     VideoCapture1.IP_Camera_Source = settings;
 
@@ -257,8 +253,7 @@ Lors de l'implémentation de la fonctionnalité NDI, il est important de gérer 
 
 1. **Source non trouvée** : vérifiez que la source NDI est active et sur le même réseau
 2. **Délai de connexion dépassé** : vérifiez la configuration réseau et les paramètres du pare-feu
-3. **Échec d'authentification** : assurez-vous que les identifiants sont corrects si l'authentification est requise
-4. **Problèmes de performance** : surveillez l'utilisation CPU et réseau pendant la capture
+3. **Problèmes de performance** : surveillez l'utilisation CPU et réseau pendant la capture
 
 ### Implémentation d'une gestion d'erreurs robuste
 

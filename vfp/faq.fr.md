@@ -31,9 +31,9 @@ Cette FAQ complète répond aux questions les plus fréquentes sur le VisioForge
 
 ## Questions de licence { #licensing-questions }
 
-### Q : quelle est la différence entre les licences d'essai et commerciale ?
+### Q : Quelle est la différence entre les licences d'essai et commerciale ?
 
-**R :** les différences clés sont :
+**R :** Les différences clés sont :
 
 | Fonctionnalité | Essai | Commerciale |
 |---------|-------|------------|
@@ -44,9 +44,9 @@ Cette FAQ complète répond aux questions les plus fréquentes sur le VisioForge
 | Support technique | Forum uniquement | E-mail/prioritaire/téléphone |
 | Mises à jour | Période d'essai uniquement | 1 an |
 
-### Q : puis-je utiliser la licence d'essai pour le développement ?
+### Q : Puis-je utiliser la licence d'essai pour le développement ?
 
-**R :** oui ! La licence d'essai est parfaite pour le développement et les tests. Elle inclut toutes les fonctionnalités avec un filigrane. Vous pouvez développer votre application entière avec la licence d'essai et acheter une licence commerciale lorsque vous êtes prêt pour la production.
+**R :** Oui ! La licence d'essai est parfaite pour le développement et les tests. Elle inclut toutes les fonctionnalités avec un filigrane. Vous pouvez développer votre application entière avec la licence d'essai et acheter une licence commerciale lorsque vous êtes prêt pour la production.
 
 ```csharp
 // Environnement de développement
@@ -56,32 +56,32 @@ VFPAnalyzer.SetLicenseKey("TRIAL");
 VFPAnalyzer.SetLicenseKey(Environment.GetEnvironmentVariable("VFP_LICENSE_KEY"));
 ```
 
-### Q : que se passe-t-il lorsque mon essai expire ?
+### Q : Que se passe-t-il lorsque mon essai expire ?
 
-**R :** après 30 jours, le SDK cesse de traiter les vidéos et retourne une erreur. Votre code reste intact — il suffit d'acheter une licence et de mettre à jour la clé pour continuer.
+**R :** Après 30 jours, le SDK cesse de traiter les vidéos et retourne une erreur. Votre code reste intact — il suffit d'acheter une licence et de mettre à jour la clé pour continuer.
 
-### Q : existe-t-il des limitations fonctionnelles entre les licences ?
+### Q : Existe-t-il des limitations fonctionnelles entre les licences ?
 
-**R :** non, la licence commerciale inclut toutes les fonctionnalités sans limitation. La seule différence entre les licences d'essai et commerciale est le filigrane en mode essai.
+**R :** Non, la licence commerciale inclut toutes les fonctionnalités sans limitation. La seule différence entre les licences d'essai et commerciale est le filigrane en mode essai.
 
-### Q : puis-je utiliser une licence sur plusieurs machines ?
+### Q : Puis-je utiliser une licence sur plusieurs machines ?
 
-**R :** les conditions de licence dépendent de votre achat :
+**R :** Les conditions de licence dépendent de votre achat :
 - **One Developer Annual** : un développeur désigné ; les licences sont comptées par développeur, et non par poste de travail
 - **Lifetime·Team** : tous les développeurs de l'organisation acheteuse sur un même site dans une seule ville
 - **Licences personnalisées et en volume** : disponibles auprès du service commercial pour les organisations qui ont besoin de conditions différentes
 
 Les deux types de licence payante incluent la distribution sans redevances des applications créées avec le SDK. Les utilisateurs finaux n'ont pas besoin de licences runtime distinctes. Consultez la [politique de licence de référence](https://www.visioforge.com/fr/licensing) pour connaître les conditions actuelles.
 
-### Q : comment gérer la licence dans une application distribuée ?
+### Q : Comment gérer la licence dans une application distribuée ?
 
-**R :** les licences commerciales incluent la distribution sans redevances, de sorte que les clients qui exécutent votre application n'ont pas besoin de licences runtime distinctes. Gardez confidentiel le matériel d'enregistrement acheté et appliquez-le au moyen de l'API d'enregistrement documentée du produit. Consultez la [politique de licence de référence](https://www.visioforge.com/fr/licensing) pour connaître les conditions commerciales actuelles.
+**R :** Les licences commerciales incluent la distribution sans redevances, de sorte que les clients qui exécutent votre application n'ont pas besoin de licences runtime distinctes. Gardez confidentiel le matériel d'enregistrement acheté et appliquez-le au moyen de l'API d'enregistrement documentée du produit. Consultez la [politique de licence de référence](https://www.visioforge.com/fr/licensing) pour connaître les conditions commerciales actuelles.
 
 ## Performance et optimisation { #performance-and-optimization }
 
-### Q : à quelle vitesse le SDK peut-il traiter les vidéos ?
+### Q : À quelle vitesse le SDK peut-il traiter les vidéos ?
 
-**R :** la vitesse de traitement dépend de plusieurs facteurs :
+**R :** La vitesse de traitement dépend de plusieurs facteurs :
 
 | Facteur | Impact sur la vitesse |
 |--------|----------------|
@@ -96,9 +96,9 @@ Benchmarks typiques sur du matériel moderne (Intel i7, 16 Go de RAM, SSD) :
 - **Vidéo 720p** : 30 à 60 secondes par heure de contenu
 - **Vidéo 480p** : 15 à 30 secondes par heure de contenu
 
-### Q : combien de mémoire la génération d'empreintes nécessite-t-elle ?
+### Q : Combien de mémoire la génération d'empreintes nécessite-t-elle ?
 
-**R :** l'utilisation mémoire évolue avec la résolution vidéo et la durée :
+**R :** L'utilisation mémoire évolue avec la résolution vidéo et la durée :
 
 ```csharp
 // Calcul approximatif de l'utilisation mémoire
@@ -121,9 +121,9 @@ long EstimateMemoryUsage(int width, int height, int durationSeconds)
 // Mémoire ≈ 100 Mo + (1920*1080*3*5) + (600*1Ko) ≈ 131 Mo
 ```
 
-### Q : puis-je traiter plusieurs vidéos simultanément ?
+### Q : Puis-je traiter plusieurs vidéos simultanément ?
 
-**R :** oui, mais avec quelques considérations :
+**R :** Oui, mais avec quelques considérations :
 
 ```csharp
 public class ParallelProcessor
@@ -169,9 +169,9 @@ Concurrence recommandée :
 - **16 Go de RAM** : 4 à 6 vidéos concurrentes
 - **32 Go de RAM** : 8 à 12 vidéos concurrentes
 
-### Q : comment optimiser pour le traitement en temps réel ?
+### Q : Comment optimiser pour le traitement en temps réel ?
 
-**R :** pour un traitement en temps réel ou quasi temps réel :
+**R :** Pour un traitement en temps réel ou quasi temps réel :
 
 1. **Réduire le travail par image** — `VFPFingerprintSource` n'expose pas les
    propriétés `UseHardwareAcceleration` ou `HardwareDevice`. Pour accélérer
@@ -206,9 +206,9 @@ var source = new VFPFingerprintSource(localCapturePath)
 
 ## Précision et détection { #accuracy-and-detection }
 
-### Q : à quel point la correspondance vidéo est-elle précise ?
+### Q : À quel point la correspondance vidéo est-elle précise ?
 
-**R :** la précision dépend du type de transformation :
+**R :** La précision dépend du type de transformation :
 
 | Transformation | Taux de détection | Taux de faux positifs |
 |----------------|---------------|-------------------|
@@ -220,9 +220,9 @@ var source = new VFPFingerprintSource(localCapturePath)
 | Compression élevée | 90 % | <3 % |
 | Transformations combinées | 85 à 95 % | <5 % |
 
-### Q : quel seuil de similarité dois-je utiliser ?
+### Q : Quel seuil de similarité dois-je utiliser ?
 
-**R :** recommandations de seuil selon le cas d'usage :
+**R :** Recommandations de seuil selon le cas d'usage :
 
 ```csharp
 public enum MatchingThreshold
@@ -246,9 +246,9 @@ Cas d'usage :
 - **Surveillance de contenu** : utiliser `Related` (50) pour plus de flexibilité
 - **Détection de scènes** : utiliser `PossiblyRelated` (100)
 
-### Q : le SDK peut-il détecter des correspondances partielles ?
+### Q : Le SDK peut-il détecter des correspondances partielles ?
 
-**R :** oui ! Le SDK excelle dans la recherche de fragments vidéo :
+**R :** Oui ! Le SDK excelle dans la recherche de fragments vidéo :
 
 ```csharp
 // Rechercher un clip de 30 secondes dans un film de 2 heures
@@ -275,9 +275,9 @@ foreach (var matchStart in results)
 }
 ```
 
-### Q : comment le SDK gère-t-il les différents rapports d'aspect ?
+### Q : Comment le SDK gère-t-il les différents rapports d'aspect ?
 
-**R :** le SDK normalise automatiquement les rapports d'aspect, mais vous pouvez améliorer la précision :
+**R :** Le SDK normalise automatiquement les rapports d'aspect, mais vous pouvez améliorer la précision :
 
 ```csharp
 // Pour les vidéos avec letterboxing/pillarboxing
@@ -296,9 +296,9 @@ var croppedSource = new VFPFingerprintSource(videoPath)
 };
 ```
 
-### Q : peut-il détecter des vidéos mises en miroir ou pivotées ?
+### Q : Peut-il détecter des vidéos mises en miroir ou pivotées ?
 
-**R :** le SDK peut détecter :
+**R :** Le SDK peut détecter :
 - ✅ Miroir horizontal (avec prétraitement)
 - ✅ Rotations mineures (< 5 degrés)
 - ⚠️ Rotations de 90/180/270 degrés (nécessite un prétraitement manuel)
@@ -323,9 +323,9 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
 
 ## Formats et codecs pris en charge { #supported-formats-and-codecs }
 
-### Q : quels formats vidéo sont pris en charge ?
+### Q : Quels formats vidéo sont pris en charge ?
 
-**R :** le SDK prend en charge virtuellement tous les formats courants via GStreamer :
+**R :** Le SDK prend en charge virtuellement tous les formats courants via GStreamer :
 
 **Formats de conteneur** :
 - MP4, M4V, MOV
@@ -346,24 +346,24 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
 - ProRes, DNxHD
 - AV1 (avec plugin)
 
-### Q : existe-t-il des limitations de format ?
+### Q : Existe-t-il des limitations de format ?
 
-**R :** certaines limitations existent :
+**R :** Certaines limitations existent :
 
 1. **Contenu protégé par DRM** : impossible de traiter les vidéos chiffrées
 2. **Codecs rares** : peuvent nécessiter des plugins GStreamer supplémentaires
 3. **Fichiers corrompus** : traitement partiel possible avec gestion des erreurs
 4. **Flux en direct** : pris en charge mais nécessite un traitement segmenté
 
-### Q : qu'en est-il des fichiers audio uniquement ?
+### Q : Qu'en est-il des fichiers audio uniquement ?
 
-**R :** le Video Fingerprinting SDK requiert du contenu vidéo.
+**R :** Le Video Fingerprinting SDK requiert du contenu vidéo.
 
 ## Compatibilité de plateformes
 
-### Q : quelles plateformes sont prises en charge ?
+### Q : Quelles plateformes sont prises en charge ?
 
-**R :** matrice complète de prise en charge :
+**R :** Matrice complète de prise en charge :
 
 | Plateforme | Architecture | Version .NET | Statut |
 |----------|-------------|-------------|---------|
@@ -378,9 +378,9 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
 
 Sous .NET 5+, le framework cible choisit la version de la plateforme : `-windows` sous Windows (`net8.0-windows`), `-macos` sous macOS (`net9.0-macos` ou ultérieur). Un framework cible sans suffixe de système (`net8.0`) est la version Linux.
 
-### Q : puis-je utiliser le SDK dans des conteneurs Docker ?
+### Q : Puis-je utiliser le SDK dans des conteneurs Docker ?
 
-**R :** oui ! Voici un exemple de Dockerfile :
+**R :** Oui ! Voici un exemple de Dockerfile :
 
 ```dockerfile
 FROM mcr.microsoft.com/dotnet/runtime:6.0 AS base
@@ -412,13 +412,13 @@ COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "YourProject.dll"]
 ```
 
-### Q : existe-t-il des différences de performance selon les plateformes ?
+### Q : Existe-t-il des différences de performance selon les plateformes ?
 
-**R :** l'algorithme d'empreinte est le même code portable sur toutes les plateformes et s'exécute sur le CPU : sa vitesse dépend du processeur, pas du système d'exploitation. Le décodage de la vidéo source ajoute son propre coût, qui dépend du fichier et des décodeurs de la plateforme. Pour dimensionner un déploiement, mesurez sur le matériel cible.
+**R :** L'algorithme d'empreinte est le même code portable sur toutes les plateformes et s'exécute sur le CPU : sa vitesse dépend du processeur, pas du système d'exploitation. Le décodage de la vidéo source ajoute son propre coût, qui dépend du fichier et des décodeurs de la plateforme. Pour dimensionner un déploiement, mesurez sur le matériel cible.
 
-### Q : puis-je utiliser le SDK dans des environnements cloud ?
+### Q : Puis-je utiliser le SDK dans des environnements cloud ?
 
-**R :** oui, le SDK fonctionne sur toutes les principales plateformes cloud :
+**R :** Oui, le SDK fonctionne sur toutes les principales plateformes cloud :
 
 **AWS** :
 ```csharp
@@ -440,9 +440,9 @@ ENTRYPOINT ["dotnet", "YourProject.dll"]
 
 ## Intégration et développement { #integration-and-development }
 
-### Q : puis-je utiliser le SDK dans une application web ?
+### Q : Puis-je utiliser le SDK dans une application web ?
 
-**R :** oui, pour le traitement côté serveur dans ASP.NET Core sous Windows ou Linux (sous Windows, ajoutez `-windows` au framework cible, par exemple `net8.0-windows` : sans suffixe de système, c'est la version Linux) :
+**R :** Oui, pour le traitement côté serveur dans ASP.NET Core sous Windows ou Linux (sous Windows, ajoutez `-windows` au framework cible, par exemple `net8.0-windows` : sans suffixe de système, c'est la version Linux) :
 
 ```csharp
 public class VideoFingerprintService
@@ -478,9 +478,9 @@ public class VideoFingerprintService
 }
 ```
 
-### Q : comment implémenter une barre de progression ?
+### Q : Comment implémenter une barre de progression ?
 
-**R :** utiliser le callback de progression :
+**R :** Utiliser le callback de progression :
 
 ```csharp
 public class ProgressTracker
@@ -514,9 +514,9 @@ tracker.ProgressChanged += (s, progress) => {
 
 ## Base de données et stockage { #database-and-storage }
 
-### Q : comment dois-je stocker les empreintes dans une base de données ?
+### Q : Comment dois-je stocker les empreintes dans une base de données ?
 
-**R :** bonnes pratiques pour le stockage en base de données :
+**R :** Bonnes pratiques pour le stockage en base de données :
 
 ```csharp
 // Exemple SQL Server
@@ -577,9 +577,9 @@ public class MongoFingerprintRepository
 }
 ```
 
-### Q : combien d'espace de stockage les empreintes nécessitent-elles ?
+### Q : Combien d'espace de stockage les empreintes nécessitent-elles ?
 
-**R :** les tailles d'empreintes sont prévisibles :
+**R :** Les tailles d'empreintes sont prévisibles :
 
 | Type d'empreinte | Formule de taille | Exemple (vidéo de 10 min) |
 |-----------------|--------------|------------------------|
@@ -606,9 +606,9 @@ public long EstimateStorageNeeded(int videoCount, double avgDurationMinutes)
 // Stockage ≈ 10 000 * (60 Ko * 30 * 1,2) = ~21 Go
 ```
 
-### Q : dois-je utiliser le système de fichiers ou une base de données ?
+### Q : Dois-je utiliser le système de fichiers ou une base de données ?
 
-**R :** cela dépend de vos besoins :
+**R :** Cela dépend de vos besoins :
 
 | Type de stockage | Avantages | Inconvénients | Idéal pour |
 |-------------|------|------|----------|
@@ -647,9 +647,9 @@ public class HybridStorage
 }
 ```
 
-### Q : comment déboguer les problèmes de performance ?
+### Q : Comment déboguer les problèmes de performance ?
 
-**R :** utiliser le profilage et les métriques :
+**R :** Utiliser le profilage et les métriques :
 
 ```csharp
 public class PerformanceMonitor

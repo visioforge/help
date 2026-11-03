@@ -130,7 +130,7 @@ Para parámetros detallados y propiedades de cada efecto, consulte la [Referenci
 
 ## Elementos GStreamer
 
-Todos los efectos de audio multiplataforma están construidos sobre el framework multimedia GStreamer. Cada efecto envuelve uno o más elementos de GStreamer:
+Todos los efectos de audio multiplataforma se ejecutan en un pipeline de GStreamer. `ChannelOrder`, `DownMix`, `DynamicAmplify`, `Fade`, `Flanger`, `PhaseInvert`, `Phaser`, `Sound3D`, `TrebleEnhancer` y `TrueBass` procesan las muestras en código administrado. Los demás envuelven uno o más elementos de GStreamer:
 
 | Categoría | Elementos GStreamer |
 |-----------|---------------------|

@@ -713,7 +713,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Image Sequence Source Block
 
-El `ImageSequenceSourceBlock` genera un flujo de video a partir de una secuencia de imágenes estáticas almacenadas en una carpeta. Admite tasa de fotogramas configurable y modos de transmisión en vivo o con capacidad de búsqueda.
+El `ImageSequenceSourceBlock` genera un flujo de video a partir de una secuencia de imágenes estáticas almacenadas en una carpeta. Admite tasa de fotogramas configurable y modo en vivo.
 
 #### Información del bloque
 
@@ -733,12 +733,16 @@ Constructor: `ImageSequenceSourceSettings(string folderPath, string filePattern 
 | --- | --- | :---: | --- |
 | `FolderPath` | `string` | requerido | Carpeta que contiene los archivos de imagen |
 | `FilePattern` | `string` | auto-detectado | Patrón de nombre de archivo (p. ej., `image_%05d.jpg`); auto-detectado si es `null` |
-| `StartIndex` | `int` | auto-detectado | Índice inicial de la secuencia de imágenes; auto-detectado del nombre del primer archivo |
+| `StartIndex` | `int` | auto-detectado | Índice inicial de la secuencia de imágenes; auto-detectado de los archivos que indica un `FilePattern` con un solo marcador numérico en el nombre de archivo; en otro caso, del nombre del primer archivo de la carpeta |
 | `FrameRate` | `VideoFrameRate` | `FPS_25` | Tasa de fotogramas de salida |
-| `IsLive` | `bool` | `false` | Tratar la fuente como en vivo (no buscable) |
+| `IsLive` | `bool` | `false` | Tratar la fuente como en vivo. Un fotograma decodificado demasiado tarde puede descartarse, algo probable con imágenes grandes a una frecuencia alta |
 | `NumBuffers` | `int` | `-1` | Máximo de fotogramas a emitir (−1 = ilimitado) |
 
 Formatos de imagen admitidos: `.jpg`, `.jpeg`, `.png`, `.bmp`, `.gif`, `.tiff`, `.tif`.
+
+El formato se detecta a partir del contenido de la primera imagen, o de su extensión cuando el contenido no se reconoce. Toda la secuencia se decodifica con ese formato, por lo que todas las imágenes deben compartirlo. El evento `OnError` del pipeline se dispara cuando no se puede determinar ningún formato admitido, cuando no se puede decodificar ninguna imagen de la secuencia, cuando se decodifican menos fotogramas que imágenes leídas porque una imagen está truncada o tiene otro formato, o cuando `FolderPath`, cambiado después de la construcción, es `null` o, sin `FilePattern`, no contiene ninguna imagen. El evento por fotogramas perdidos se dispara al final de la secuencia y no los recupera: un PNG truncado también hace perder las imágenes que le siguen. Un archivo vacío se omite sin error, y un JPEG o GIF cortado dentro de sus datos de imagen aún puede dar un fotograma, lo que tampoco genera ningún error.
+
+Una secuencia termina en el primer número sin archivo. Un `FilePattern` puede indicar archivos con cualquier extensión; sin marcador `%`, indica un solo archivo, que se reproduce una vez. Pase el patrón al constructor si la carpeta no contiene ninguna imagen con una extensión compatible. Cuando `StartIndex` no está establecido, un `FilePattern` con un solo marcador `%d`, `%i` o `%u` en el nombre de archivo comienza en el número más bajo que tiene un archivo, o en 0 si no indica ningún archivo; con cualquier otro patrón, el número se toma de la primera imagen de la carpeta. En un `FilePattern`, escriba un signo de porcentaje literal como `%%`. La detección a partir del contenido admite los marcadores `%d`, `%i` y `%u`, con ancho y relleno de ceros opcionales; con cualquier otro marcador, el formato se toma de la extensión.
 
 #### El pipeline de muestra
 

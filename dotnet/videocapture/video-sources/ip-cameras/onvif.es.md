@@ -212,6 +212,8 @@ else
 }
 ```
 
+Para una cámara que no requiere credenciales, pase un nombre de usuario y una contraseña vacíos: `ConnectAsync` se conecta entonces sin autenticación. `ConnectAsync` también acepta un nombre de usuario con una contraseña vacía, para una cuenta con contraseña en blanco; `VideoCaptureCore` también envía el usuario de esa cuenta al abrir el flujo.
+
 ## Trabajar con perfiles de medios
 
 Las cámaras ONVIF típicamente proporcionan múltiples perfiles de medios con diferentes resoluciones, codecs y tasas de cuadros.
@@ -260,7 +262,7 @@ var mainStream = await RTSPSourceSettings.CreateAsync(
     new Uri("http://192.168.1.100/onvif/device_service"), "admin", "password", true, onvifProfile: "Profile_1");
 ```
 
-Para `VideoCaptureCore`, asigne a `IPCameraSourceSettings.ONVIF_SourceProfile` el token o el nombre de un perfil, o déjelo vacío para la elección automática.
+Para `VideoCaptureCore`, asigne a `IPCameraSourceSettings.ONVIF_SourceProfile` el token o el nombre de un perfil, o déjelo vacío para la elección automática. `IPCameraSourceSettings.URL` sigue siendo la dirección del dispositivo; tras un inicio correcto, `VideoCaptureCore.IP_Camera_ONVIF_StreamURL` devuelve la dirección de la transmisión que resolvió ese inicio, hasta el siguiente inicio. Los motores `Auto_VLC`, `Auto_LAV`, `Auto_FFMPEG`, `RTSP_LowLatency` y `HTTP_MJPEG_LowLatency` solicitan la transmisión a la cámara en cada inicio, por lo que su servicio ONVIF debe responder cada vez. `HTTP_MJPEG_LowLatency` solo reproduce transmisiones HTTP y rechaza una cámara cuya transmisión sea RTSP. Algunas cámaras incluyen el usuario y la contraseña en la dirección de la transmisión: trátela como un dato sensible si la registra o la muestra.
 
 ## Vista previa de video
 

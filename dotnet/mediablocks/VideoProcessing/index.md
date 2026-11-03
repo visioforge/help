@@ -328,11 +328,11 @@ var videoSettings = new VideoCaptureDeviceSourceSettings(device)
 var videoSource = new SystemVideoSourceBlock(videoSettings);
 
 // Create chroma key block
-var chromaKeySettings = new ChromaKeySettingsX(new Size(1920, 1080))
+var chromaKeySettings = new ChromaKeySettingsX(new Size(videoSettings.Format.Width, videoSettings.Format.Height))
 {
     ChromaColor = ChromaKeyColor.Green,
-    Sensitivity = 0.5,
-    NoiseLevel = 0.1,
+    Sensitivity = 20,
+    NoiseLevel = 2,
     Alpha = 1.0
 };
 var chromaKey = new ChromaKeyBlock(chromaKeySettings);
@@ -2616,18 +2616,12 @@ var d3dMixerSettings = new D3D11VideoCompositorSettings(outputWidth, outputHeigh
 
 // Streams are added similarly to VideoMixerSettings
 // d3dMixerSettings.AddStream(new VideoMixerStream(new Rect(0, 0, outputWidth, outputHeight), 0));
-// For more advanced control, you can use D3D11VideoCompositorStream to specify blend states
-// d3dMixerSettings.AddStream(new D3D11VideoCompositorStream(new Rect(50, 50, 370, 230), 1) 
-// {
-//     BlendSourceRGB = D3D11CompositorBlend.SourceAlpha,
-//     BlendDestRGB = D3D11CompositorBlend.InverseSourceAlpha
-// });
 // ...
 
 var videoMixer = new VideoMixerBlock(d3dMixerSettings);
 ```
 
-The `D3D11VideoCompositorStream` class, which inherits from `VideoMixerStream`, allows for fine-grained control over D3D11 blend states if needed.
+The blend properties of `D3D11VideoCompositorStream` (`BlendSourceRGB`, `BlendDestRGB` and the rest) are obsolete and have no effect: the `d3d11compositor` element the SDK ships has no per-factor blend states to set, only a blending operator, which the SDK does not expose.
 
 #### 3. OpenGL Video Mixer (GLVideoMixerSettings)
 

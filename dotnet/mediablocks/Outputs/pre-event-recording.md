@@ -84,14 +84,16 @@ The block follows a well-defined state machine:
 ```mermaid
 stateDiagram-v2
     [*] --> Idle
-    Idle --> Buffering : Build() / StartBuffering()
+    Idle --> Buffering : pipeline start / StartBuffering()
     Buffering --> Recording : TriggerRecording()
     Recording --> PostEventRecording : Pre-event buffer flushed
-    PostEventRecording --> Buffering : Post-event timer expires
-    PostEventRecording --> Buffering : StopRecording()
-    Buffering --> Stopped : StopBuffering()
-    PostEventRecording --> Stopped : StopBuffering()
-    Stopped --> Buffering : StartBuffering()
+    PostEventRecording --> Buffering : Post-event timer expires / StopRecording() / StartBuffering() / format change
+    Recording --> Buffering : StopRecording() / StartBuffering() / format change / trigger failed
+    Idle --> Stopped : StopBuffering()
+    Buffering --> Stopped : StopBuffering() / pipeline stop
+    Recording --> Stopped : StopBuffering() / pipeline stop
+    PostEventRecording --> Stopped : StopBuffering() / pipeline stop
+    Stopped --> Buffering : StartBuffering() / restart after a pipeline stop
 ```
 
 | State | Description |
@@ -100,7 +102,7 @@ stateDiagram-v2
 | `Buffering` | Actively buffering frames in the ring buffer, not recording to file. |
 | `Recording` | Flushing pre-event buffer to file and capturing live frames. |
 | `PostEventRecording` | Post-event phase — recording live frames until the timer expires. |
-| `Stopped` | Stopped and idle. |
+| `Stopped` | Not buffering. After a pipeline stop, a restart resumes buffering; after `StopBuffering()`, only `StartBuffering()` does. |
 
 A change of the encoded format during a run — resolution, profile, level, codec data, or the audio rate, channel count or codec — closes a recording that is in progress, the same way `StopRecording()` does, and drops that stream's buffered frames. The other stream stays buffered. The next file is built from the new format. A restated frame rate or pixel aspect ratio does not close the recording.
 
@@ -111,6 +113,8 @@ public event EventHandler<PreEventRecordingEventArgs> OnRecordingStarted;
 public event EventHandler<PreEventRecordingEventArgs> OnRecordingStopped;
 public event EventHandler<PreEventRecordingEventArgs> OnStateChanged;
 ```
+
+The events are raised one at a time, in the order the changes happened: a handler never runs alongside another one, and `OnRecordingStopped` follows the `OnRecordingStarted` of the same file and comes once the file is finalized. While a handler is running, anything that causes a new event — `StopRecording()`, `StopBuffering()`, `StartBuffering()`, `TriggerRecording()`, a pipeline stop or a format change, on another thread or inside the handler — returns before that event is raised; the thread running the handler raises it when the handler returns. A handler can therefore run on a worker thread even when the call was made on the UI thread, and after the pipeline stopped or the block was disposed; marshal to the UI thread before touching controls. `StopRecording()`, `StopBuffering()`, `StartBuffering()` and `TriggerRecording()` rethrow what the handlers they raised threw; on the post-event timer, a pipeline start or stop, or a format change the exception is logged as an error.
 
 `PreEventRecordingEventArgs` properties:
 
@@ -127,8 +131,8 @@ public event EventHandler<PreEventRecordingEventArgs> OnStateChanged;
 | `TriggerRecording(string filename)` | Flush the ring buffer to the specified file and start recording live frames. If already recording, extends the current recording (resets post-event timer). Refused, with an error, until the first encoded video frame has arrived and, when audio is enabled, until the first encoded audio frame has arrived. A later call records normally. |
 | `ExtendRecording()` | Reset the post-event timer. Call this when the trigger condition is still active (e.g., motion continues). |
 | `StopRecording()` | Manually stop the current recording and return to buffering mode. |
-| `StartBuffering()` | Start or resume buffering after being stopped. |
-| `StopBuffering()` | Stop everything including buffering and clear the buffer. |
+| `StartBuffering()` | Start or resume buffering after being stopped. Frames are buffered only while the pipeline runs. Called before the pipeline starts, it raises `OnStateChanged` with `Buffering` at once, and the start does not raise it again. Does nothing when the block is already buffering. |
+| `StopBuffering()` | Stop everything including buffering and clear the buffer. The block stays stopped, across pipeline restarts, until `StartBuffering()`. A repeated call raises no event. |
 
 ## The sample pipeline
 

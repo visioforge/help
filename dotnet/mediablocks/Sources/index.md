@@ -714,7 +714,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Image Sequence Source Block
 
-The `ImageSequenceSourceBlock` generates a video stream from a sequence of still images stored in a folder. Configurable frame rate and live/seekable stream mode are supported.
+The `ImageSequenceSourceBlock` generates a video stream from a sequence of still images stored in a folder. Configurable frame rate and live mode are supported.
 
 #### Block info
 
@@ -734,12 +734,16 @@ Constructor: `ImageSequenceSourceSettings(string folderPath, string filePattern 
 | --- | --- | :---: | --- |
 | `FolderPath` | `string` | required | Folder containing image files |
 | `FilePattern` | `string` | auto-detected | Filename pattern (e.g., `image_%05d.jpg`); auto-detected if `null` |
-| `StartIndex` | `int` | auto-detected | Starting index of the image sequence; auto-detected from the first file name |
+| `StartIndex` | `int` | auto-detected | Starting index of the image sequence; auto-detected from the files a `FilePattern` with one number placeholder in the file name names, otherwise from the first file name in the folder |
 | `FrameRate` | `VideoFrameRate` | `FPS_25` | Output frame rate |
-| `IsLive` | `bool` | `false` | Treat the source as live (non-seekable) |
+| `IsLive` | `bool` | `false` | Treat the source as live. A frame decoded too late can be dropped, which large images at a high frame rate make likely |
 | `NumBuffers` | `int` | `-1` | Maximum frames to output (−1 = unlimited) |
 
 Supported image formats: `.jpg`, `.jpeg`, `.png`, `.bmp`, `.gif`, `.tiff`, `.tif`.
+
+The format is detected from the content of the first image, or from its extension when the content is not recognized. The whole sequence is decoded with that format, so all images must share it. The pipeline's `OnError` event fires when no supported format can be determined, when no image in the sequence can be decoded, when fewer frames are decoded than images read because an image is truncated or in another format, or when `FolderPath`, changed after construction, is `null` or, with no `FilePattern`, holds no image. The event for lost frames fires at the end of the sequence and does not bring them back: a truncated PNG also costs the images after it. An empty file is skipped with no error, and a JPEG or GIF cut inside its image data can still give a frame, which raises no error either.
+
+A sequence ends at the first number with no file. A `FilePattern` may name files with any extension; with no `%` placeholder it names one file, which plays once. Pass the pattern to the constructor if the folder has no image with a supported extension. When `StartIndex` is not set, a `FilePattern` with one `%d`, `%i` or `%u` placeholder in the file name starts at the lowest number that has a file, or at 0 when it names no file; with any other pattern, the number comes from the first image in the folder. In a `FilePattern`, write a literal percent sign as `%%`. Detection from content understands the `%d`, `%i` and `%u` placeholders, with an optional width and zero padding; with any other placeholder the format comes from the extension.
 
 #### The sample pipeline
 

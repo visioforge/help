@@ -412,7 +412,7 @@ Extends `VideoMixerStream` and defines properties for an individual stream withi
 
 | Property                        | Type                          | Default                      | Description                                      |
 |---------------------------------|-------------------------------|------------------------------|--------------------------------------------------|
-| `Crop`                          | `Rect`                        | (N/A)                        | Crop rectangle for the input stream.             |
+| `Crop`                          | `Rect`                        | `null`                       | Pixels to cut from each edge of the input: `Left`, `Top`, `Right`, `Bottom` are counts, not coordinates; a negative edge counts as 0. `null` means no crop. Requires GStreamer 1.22 or later. |
 | `BlendConstantColorAlpha`       | `double`                      | `0`                          | Alpha component for constant blend color.        |
 | `BlendConstantColorBlue`        | `double`                      | `0`                          | Blue component for constant blend color.         |
 | `BlendConstantColorGreen`       | `double`                      | `0`                          | Green component for constant blend color.        |
