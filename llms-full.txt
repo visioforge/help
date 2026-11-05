@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-05 10:08:37 UTC (6516f9d5c59)
+**Generated:** 2026-11-05 12:05:34 UTC (848efabe02e)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 1371 help documentation pages + 65 website pages
 
@@ -448893,7 +448893,7 @@ Buy Now
 -   [AI privacy redaction (faces, plates, text)](/help/docs/dotnet/general/ai/pii-redaction/)
 -   [AI open-vocabulary detection](/help/docs/dotnet/general/ai/open-vocabulary-detection/)
 -   [AI live scene captioning](/help/docs/dotnet/general/ai/vlm-captioning/)
--   [Output Formats](/help/docs/dotnet/general/output-formats/)+, MOV, MPEG-TS, MXF, MKVv2 (VideoCaptureCore), MPEG-1/2/4 using FFMPEG, MP4 (H264/HEVC + AAC) using software, Intel QuickSync, Nvidia NVENC/CUDA, or AMD Radeon encoders; pre-event (circular-buffer) recording, AWS S3 upload, Blackmagic Decklink output, custom output formats using Media Blocks or external DirectShow filters
+-   [Output Formats](/help/docs/dotnet/general/output-formats/)+, MOV, MPEG-TS, MXF, MPEG-1/2/4 using FFMPEG, MP4 (H264/HEVC + AAC) using software, Intel QuickSync, Nvidia NVENC/CUDA, or AMD Radeon encoders; pre-event (circular-buffer) recording, AWS S3 upload, Blackmagic Decklink output, custom output formats using Media Blocks or external DirectShow filters
 
 Pricing plan comparison
 |  |
@@ -449040,8 +449040,6 @@ Buy Now
 • MPEG-TS
 
 • MXF
-
-• MKVv2 (VideoCaptureCore)
 
 • MPEG-1/2/4 using FFMPEG
 
