@@ -217,10 +217,7 @@ var output = new M4AOutput("output.m4a");
 
 ### Switching Between Encoders
 
-The default encoder selection is platform-dependent:
-
-- Windows environments: MF AAC
-- Other platforms: VO-AAC
+`M4AOutput` uses AVENC AAC on every platform.
 
 You can override this default selection by explicitly setting the `Audio` property:
 

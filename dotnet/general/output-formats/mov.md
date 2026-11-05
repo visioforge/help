@@ -70,8 +70,8 @@ var movOutput = new MOVOutput("output.mov");
 
 This simple implementation automatically:
 
-- Selects NVENC H264 encoder if available (falls back to OpenH264)
-- Chooses the appropriate AAC encoder for your platform (MF AAC on Windows, VO-AAC elsewhere)
+- Selects a GPU H.264 encoder on Windows (NVENC, AMF or QSV) when its GStreamer element is available, otherwise OpenH264
+- Uses the AVENC AAC encoder on every platform
 - Configures MOV container settings for broad compatibility
 
 ### Default Configuration Behavior

@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-11-03 13:56:20 UTC (627ff856a6f)
+**Generated:** 2026-11-05 10:08:34 UTC (6516f9d5c59)
 
 ## MCP Server (for AI coding agents)
 
@@ -193,6 +193,7 @@ The following products from the old price list are no longer sold:
 - [About VisioForge — Video & Audio SDKs for .NET & Delphi](https://www.visioforge.com/about)
 - [VisioForge Pricing — Video SDK Licenses & Source Code](https://www.visioforge.com/buy)
 - [Broadcasting & Live Streaming SDK — RTMP, SRT, HLS in C#](https://www.visioforge.com/solutions/broadcasting)
+- [KLV / MISB Metadata SDK for .NET: KLV in MPEG-TS](https://www.visioforge.com/solutions/klv-misb-metadata)
 - [Video Surveillance SDK — NVR, VMS, ONVIF, RTSP in .NET](https://www.visioforge.com/solutions/surveillance)
 - [Video Editing SDK — Build Editors in C# .NET, Cross-Platform](https://www.visioforge.com/solutions/video-editing)
 - [Encoding Filters Pack — MP4, H.264, HEVC for DirectShow](https://www.visioforge.com/encoding-filters-pack)

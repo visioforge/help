@@ -418,7 +418,7 @@ These are the five most common production issues — flag any of them on first r
 
 ### 5. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
-**Cause**: no `.vflicense` certificate has been loaded on the pipeline instance — either nothing was loaded at all (trial mode runs silently for the first 30 days), or the trial 30-day window has elapsed (the engine surfaces `"SDK TRIAL period (30 days) is over."` via `OnError`), or the certificate was loaded on a *different* `MediaBlocksPipeline` instance than the one being started. The latter trips up Android apps in particular because the upstream sample disposes and rebuilds the pipeline on every record toggle and camera switch fallback.
+**Cause**: no `.vflicense` certificate has been loaded on the pipeline instance — either nothing was loaded at all (trial mode runs silently for the first 30 days), or the trial 30-day window has elapsed (the engine surfaces `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"` via `OnError`), or the certificate was loaded on a *different* `MediaBlocksPipeline` instance than the one being started. The latter trips up Android apps in particular because the upstream sample disposes and rebuilds the pipeline on every record toggle and camera switch fallback.
 
 **Fix**: ship the licence as an Android asset (place under `Assets/license.vflicense`, Build Action `AndroidAsset`) and call `await _pipeline.SetLicenseCertificateAsync(certBytes)` inside `CreateEngineAsync()` — every fresh `MediaBlocksPipeline` instance needs its own call before its `StartAsync`. Centralising the licence load in `CreateEngineAsync()` (rather than `OnCreate`) ensures every rebuild path stays licensed.
 

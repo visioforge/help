@@ -86,7 +86,7 @@ var cert = System.IO.File.ReadAllBytes("path/to/your.vflicense");
 await _pipeline.SetLicenseCertificateAsync(cert);
 ```
 
-The certificate-bytes form is the only public licensing API as of `2026.5.2` — the older `SetLicenseCertificate(string filePath)` and `SetLicenseCertificate(Stream)` overloads were removed in that release. For multi-pipeline apps every `MediaBlocksPipeline` instance needs its own `SetLicenseCertificateAsync` call before its `StartAsync`. Where the bytes come from (env var, embedded resource, secrets manager, …) is your application's choice — there is no built-in licence-loader helper class in the SDK. Without this call, `MediaBlocksPipeline.StartAsync()` succeeds in trial mode for the first 30 days, then aborts with a "trial expired" error event on `OnError`.
+The certificate-bytes form is the only public licensing API as of `2026.5.2` — the older `SetLicenseCertificate(string filePath)` and `SetLicenseCertificate(Stream)` overloads were removed in that release. For multi-pipeline apps every `MediaBlocksPipeline` instance needs its own `SetLicenseCertificateAsync` call before its `StartAsync`. Where the bytes come from (env var, embedded resource, secrets manager, …) is your application's choice — there is no built-in licence-loader helper class in the SDK. Without this call, `MediaBlocksPipeline.StartAsync()` succeeds in trial mode for the first 30 days, then aborts with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"` on `OnError`.
 
 ## Hello-World pipeline
 
@@ -205,7 +205,7 @@ These are the four most common production issues — flag any of them on first r
 
 **Fix**: reference both `VisioForge.CrossPlatform.Core.Windows.x64` and `VisioForge.CrossPlatform.Libav.Windows.x64.UPX` explicitly (the .NET wrapper does NOT bring them in transitively for the cross-platform line). Keep `<Platforms>AnyCPU</Platforms>` or align `<PlatformTarget>` with the redist RID.
 
-### 2. Trial-mode message / pipeline aborts with "trial period is over"
+### 2. Trial-mode message / pipeline aborts with "SDK TRIAL period (30 days) is over"
 
 **Cause**: no `.vflicense` was loaded — either nothing was loaded at all, or `SetLicenseCertificateAsync` was called *after* `pipeline.StartAsync()`, or the call was skipped in a non-debug build path.
 

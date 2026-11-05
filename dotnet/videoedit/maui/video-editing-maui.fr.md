@@ -224,15 +224,10 @@ private void btRender_Clicked(object sender, EventArgs e)
 }
 ```
 
-!!! warning "`new MP4Output(path)` seul vous donne du H.264 logiciel hors macOS et Android"
-    La valeur par défaut de `MP4Output` choisit `AppleMediaH264EncoderSettings` sur macOS et
-    appelle `H264EncoderBlock.GetDefaultSettings()` sur Android — mais iOS, Mac Catalyst et
-    Windows retombent tous sur `OpenH264EncoderSettings`, un encodeur logiciel.
-
-    `H264EncoderBlock.GetDefaultSettings()` est le sélecteur de plateforme du SDK lui-même et
-    privilégie le matériel partout : VideoToolbox sur Apple, MediaCodec sur Android, puis NVENC,
-    AMF et QSV avant de se rabattre sur le logiciel. Passez-le explicitement pour garder iOS,
-    Mac Catalyst et Windows sur le matériel.
+!!! note "`new MP4Output(path)` utilise le même sélecteur"
+    `H264EncoderBlock.GetDefaultSettings()` est le sélecteur de plateforme du SDK lui-même :
+    VideoToolbox sur Apple, MediaCodec sur Android, puis NVENC, AMF et QSV avant de se rabattre
+    sur le logiciel. `new MP4Output(path)` l'utilise aussi, sauf sur Linux, où il reste sur OpenH264.
 
     Il réside dans l'espace de noms `VisioForge.Core.MediaBlocks.VideoEncoders`, mais c'est un
     utilitaire partagé et non un pipeline Media Blocks — `MP4Output` l'appelle lui-même.

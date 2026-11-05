@@ -150,8 +150,8 @@ Audio quality significantly impacts the viewer experience. VisioForge supports m
 
 ### Supported Audio Encoders
 
-1. **VO-AAC** - VisioForge's optimized AAC encoder (default for non-Windows platforms)
-2. **AVENC AAC** - FFmpeg-based AAC encoder with wide platform support
+1. **VO-AAC** - VisioForge's optimized AAC encoder
+2. **AVENC AAC** - FFmpeg-based AAC encoder with wide platform support (the default on every platform)
 3. **MF AAC** - Microsoft Media Foundation AAC encoder (Windows-only, hardware-accelerated)
 
 ```csharp

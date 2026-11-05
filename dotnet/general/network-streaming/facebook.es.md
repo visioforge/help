@@ -150,8 +150,8 @@ La calidad de audio impacta significativamente la experiencia del espectador. Vi
 
 ### Codificadores de Audio Soportados
 
-1. **VO-AAC** - Codificador AAC optimizado de VisioForge (predeterminado para plataformas no Windows)
-2. **AVENC AAC** - Codificador AAC basado en FFmpeg con amplio soporte de plataforma
+1. **VO-AAC** - Codificador AAC optimizado de VisioForge
+2. **AVENC AAC** - Codificador AAC basado en FFmpeg con amplio soporte de plataforma (predeterminado en todas las plataformas)
 3. **MF AAC** - Codificador AAC de Microsoft Media Foundation (solo Windows, acelerado por hardware)
 
 ```csharp

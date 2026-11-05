@@ -103,9 +103,9 @@ Audio quality is equally important for most applications. VisioForge SDKs provid
 ### Supported Audio Codecs
 
 - **AAC Encoders** - See [AAC encoder documentation](../audio-encoders/aac.md):
-  - **VO AAC**: Default choice for non-Windows platforms
-  - **AVENC AAC**: FFMPEG AAC implementation
-  - **MF AAC**: Windows Media Foundation implementation (default on Windows)
+  - **VO AAC**: Alternative for non-Windows platforms
+  - **AVENC AAC**: FFMPEG AAC implementation (default on every platform)
+  - **MF AAC**: Windows Media Foundation implementation
   
 - **Alternative Audio Formats**:
   - **[MP3](../audio-encoders/mp3.md)**: Common format with wide compatibility

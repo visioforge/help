@@ -84,7 +84,7 @@ To preview the video at the same time, also connect `demux.VideoOutput` to a `Vi
 
 For **standard MISB KLV** extracted from an MPEG-TS stream, use `KLVParser`. It decodes MISB ST 0601
 local-set elements (precision time stamp, platform/sensor position and orientation, frame-center
-geolocation, target location, and 100+ more) and handles the **BER-encoded lengths** that MISB packets use:
+geolocation, target location, and the rest of its 90+ elements) and handles the **BER-encoded lengths** that MISB packets use:
 
 ```csharp
 using VisioForge.Core.Metadata.KLV;

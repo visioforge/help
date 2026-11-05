@@ -97,7 +97,7 @@ pipeline.Connect(aacEncoder.Output, rtmpSink.CreateNewInput(MediaBlockPadMediaTy
 
 VisioForge provides extensive support for various video encoders, making it possible to optimize streaming based on available hardware:
 
-- **OpenH264**: Default software encoder for most platforms
+- **OpenH264**: Software encoder, the default on Linux and on Windows when no GPU encoder is available
 - **NVENC H264**: Hardware-accelerated encoding for NVIDIA GPUs
 - **QSV H264**: Intel Quick Sync Video acceleration
 - **AMF H264**: AMD GPU-based acceleration
@@ -108,16 +108,12 @@ VisioForge provides extensive support for various video encoders, making it poss
 For optimal performance, it's recommended to utilize hardware acceleration when available:
 
 ```csharp
-// Check for NVIDIA encoder availability and use if present
+// Prefer NVIDIA explicitly
 if (NVENCH264EncoderSettings.IsAvailable())
 {
     rtmpOutput.Video = new NVENCH264EncoderSettings();
 }
-// Fall back to OpenH264 if hardware acceleration isn't available
-else
-{
-    rtmpOutput.Video = new OpenH264EncoderSettings();
-}
+// Otherwise leave Video unset: the SDK picks another GPU encoder, or OpenH264
 ```
 
 ## Audio Encoder Configuration
@@ -126,9 +122,9 @@ else
 
 The SDK supports multiple AAC encoder implementations:
 
-- **VO-AAC**: Default for non-Windows platforms
-- **AVENC AAC**: Cross-platform implementation
-- **MF AAC**: Default for Windows platforms
+- **VO-AAC**: Alternative for non-Windows platforms
+- **AVENC AAC**: Cross-platform implementation, the default on every platform
+- **MF AAC**: Alternative for Windows platforms
 
 ```csharp
 // Configure MF AAC encoder on Windows platforms
@@ -143,8 +139,8 @@ rtmpOutput.Audio = new VOAACEncoderSettings();
 ### Windows Implementation
 
 On Windows platforms, the default configuration uses:
-- OpenH264 for video encoding
-- MF AAC for audio encoding
+- A GPU H.264 encoder (NVENC, AMF or QSV) when its GStreamer element is available, otherwise OpenH264, for video encoding
+- AVENC AAC for audio encoding
 
 Additionally, Windows supports Microsoft Media Foundation HEVC encoding for high-efficiency streaming.
 
@@ -152,19 +148,11 @@ Additionally, Windows supports Microsoft Media Foundation HEVC encoding for high
 
 For macOS applications, the system uses:
 - AppleMediaH264EncoderSettings for video encoding
-- VO-AAC for audio encoding
+- AVENC AAC for audio encoding
 
 ### Automatic Platform Detection
 
-The SDK handles platform differences automatically through conditional compilation:
-
-```csharp
-#if __MACOS__
-    Video = new AppleMediaH264EncoderSettings();
-#else
-    Video = new OpenH264EncoderSettings();
-#endif
-```
+The SDK picks the video encoder for you: the platform's hardware encoder on Android, iOS and macOS, OpenH264 on Linux, and on Windows a GPU encoder when it finds one the first time `Video` is read, otherwise OpenH264. A first read before `VisioForgeX.InitSDK()` returns OpenH264. To choose another one, set `rtmpOutput.Video` yourself. An available GPU encoder can still fail to start; [H.264 encoders](../video-encoders/h264.md) shows how to check first.
 
 ## Best Practices for RTMP Streaming
 
@@ -182,6 +170,11 @@ if (QSVH264EncoderSettings.IsAvailable())
 else if (NVENCH264EncoderSettings.IsAvailable())
 {
     rtmpOutput.Video = new NVENCH264EncoderSettings();
+}
+// Check for AMD acceleration
+else if (AMFH264EncoderSettings.IsAvailable())
+{
+    rtmpOutput.Video = new AMFH264EncoderSettings();
 }
 // Fall back to software encoding
 else

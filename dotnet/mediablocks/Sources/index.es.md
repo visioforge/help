@@ -2151,7 +2151,7 @@ await pipeline.StartAsync();
 
 #### Comentarios
 
-Este bloque usa SkiaSharp para decodificación de imagen, así que asegurar dependencias necesarias si no usando paquete VisioForge estándar que lo incluye.
+GStreamer decodifica los archivos PNG y JPEG. Cualquier otro formato que SkiaSharp decodifica (BMP, GIF, ICO, WebP, WBMP y otros) se convierte a PNG con SkiaSharp al construir el bloque. Un GIF animado reproduce su animación; cualquier otra imagen, incluido un WebP animado, muestra su primer fotograma. Un formato para el que SkiaSharp no tiene códec, como HEIF o AVIF, hace que el constructor de `ImageVideoSourceSettings` lance una `InvalidOperationException`. El constructor no decodifica la imagen, así que un archivo dañado con un encabezado válido se notifica más tarde, como un error del pipeline al iniciarlo.
 
 #### Plataformas
 
@@ -2633,6 +2633,7 @@ Nombre: H264PushSourceBlock.
 #### Propiedades
 
 - `DoTimestamp` (bool): cuando es `true`, el appsrc autogenera marcas de tiempo usando el reloj del pipeline (latencia mínima, pero rompe la sincronía A/V). Cuando es `false` (predeterminado), se usa el PTS proporcionado a `PushData()` tras el rebase. Debe configurarse antes de iniciar el pipeline.
+- `InputFormat` (`H264InputFormat`): formato de los datos empujados: `Auto` (predeterminado), `AVC` (unidades NAL con prefijo de longitud de 4 bytes, convertidas a byte-stream) o `ByteStream` (códigos de inicio Annex B, se empujan sin cambios). `Auto` detecta el formato a partir del primer búfer que no deja dudas y lo mantiene hasta que se detiene el pipeline. Una sola unidad NAL tras un código de inicio de 3 bytes también puede leerse como AVC, y un AVC con bytes después de su última unidad NAL, como byte-stream, por lo que conviene que establezca el formato de forma explícita cuando conozca su fuente.
 
 #### Métodos
 

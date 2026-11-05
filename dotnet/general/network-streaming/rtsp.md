@@ -244,6 +244,7 @@ var secureRtspOutput = new RTSPServerOutput(secureSettings);
 2.  **Latency Tuning:**
     *   **Interactivity vs. Stability:** Lower latency (e.g., 100-200ms) is crucial for applications like video conferencing but makes the stream more susceptible to network hiccups.
     *   **Broadcast/Surveillance:** Higher latency (e.g., 500ms-1000ms+) provides larger buffers, improving stream resilience over unstable networks (like Wi-Fi or the internet) at the cost of increased delay. Start with the default (250ms) and adjust based on observed stream quality and requirements.
+    *   **AMD encoder:** `AMFH264EncoderSettings` encodes with `Usage = AMFH264EncoderUsage.Transcoding` by default. For the lowest encoder delay, set `Usage = AMFH264EncoderUsage.UltraLowLatency` (or `LowLatency`).
 3.  **Network Configuration:**
     *   **Security First:** Implement `Username` and `Password` authentication for any stream not intended for public anonymous access.
     *   **Binding Address:** Use `"0.0.0.0"` cautiously. For enhanced security, bind explicitly to the network interface (`Address`) intended for client connections if possible.

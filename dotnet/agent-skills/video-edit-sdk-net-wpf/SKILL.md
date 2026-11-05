@@ -154,7 +154,7 @@ These are the four most common production issues — flag any of them on first r
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
-**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all (trial-mode info string surfaces via `IVideoView.ShowMessage` or the `OnError` channel), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`). Or the certificate was loaded on a *different* `VideoEditCore` instance than the one being started.
+**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all (trial-mode info string surfaces via `IVideoView.ShowMessage` or the `OnError` channel), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`). Or the certificate was loaded on a *different* `VideoEditCore` instance than the one being started.
 
 **Fix**: read the `.vflicense` file as bytes and call `await _core.SetLicenseCertificateAsync(certBytes)` after the constructor and before `StartAsync` / `FastEdit_*Async` (see "License registration" above). For multi-window apps, every `VideoEditCore` instance needs its own call. The SDK never shows a blocking "License required" dialog.
 

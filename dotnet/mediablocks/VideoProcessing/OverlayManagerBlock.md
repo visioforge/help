@@ -89,31 +89,31 @@ Checks if the overlay manager is available in the current environment (requires 
 public void Video_Overlay_Add(IOverlayManagerElement overlay)
 ```
 
-Adds a new overlay element to the video composition.
+Adds a new overlay element to the video composition. Throws `ObjectDisposedException` for a disposed `OverlayManagerSVG`, `OverlayManagerGIF`, `OverlayManagerImage` or `OverlayManagerGroup`, which would draw nothing. `Video_Overlay_Remove`, `Video_Overlay_RemoveAt` and `Video_Overlay_Clear` dispose them: create a new one to add it again. A removed `OverlayManagerVideo` needs `Initialize` again before it draws.
 
 ```csharp
 public void Video_Overlay_Remove(IOverlayManagerElement overlay)
 ```
 
-Removes a specific overlay element.
+Removes a specific overlay element and disposes it if it implements `IDisposable`.
 
 ```csharp
 public void Video_Overlay_RemoveAt(int index)
 ```
 
-Removes an overlay at the specified index.
+Removes an overlay at the specified index and disposes it if it implements `IDisposable`.
 
 ```csharp
 public void Video_Overlay_Clear()
 ```
 
-Removes all overlay elements.
+Removes all overlay elements and disposes those that implement `IDisposable`.
 
 ```csharp
 public void Video_Overlay_Update(IOverlayManagerElement overlay)
 ```
 
-Updates an existing overlay (removes and re-adds with new properties).
+Updates an existing overlay with its new properties and keeps it alive. The overlay moves to the end of the list. Throws `ObjectDisposedException` in the same cases as `Video_Overlay_Add`.
 
 ## Overlay Element Types
 
@@ -1120,7 +1120,9 @@ public class OverlayManagerStar : IOverlayManagerElement
 
 ### OverlayManagerSVG
 
-Displays SVG vector graphics.
+Displays SVG vector graphics. The SVG is rendered once, at its own size, when the element is created, and that image is what gets drawn: a rotated SVG is resampled from it, and a large SVG holds its memory until `Dispose`.
+
+The constructor throws if the file cannot be used: `GLib.GException` with librsvg's message if it cannot be loaded, `Exception` if it has no size, is larger than 32767 pixels on a side or cannot be rendered.
 
 ```csharp
 public class OverlayManagerSVG : IOverlayManagerElement, IDisposable
@@ -1130,8 +1132,11 @@ public class OverlayManagerSVG : IOverlayManagerElement, IDisposable
 |----------|------|-------------|
 | `X` | `int` | X position |
 | `Y` | `int` | Y position |
-| `Width` | `int` | Display width |
-| `Height` | `int` | Display height |
+| `Width` | `int` | Width from the file, in pixels (read-only) |
+| `Height` | `int` | Height from the file, in pixels (read-only) |
+| `Opacity` | `double` | Opacity from 0.0 (transparent) to 1.0 (opaque) |
+| `Rotation` | `double` | Rotation around the center, in degrees |
+| `Shadow` | `OverlayManagerShadowSettings` | Shadow, shaped by the SVG's transparency |
 
 ### OverlayManagerCallback
 

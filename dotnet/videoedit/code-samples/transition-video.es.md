@@ -293,8 +293,8 @@ Después de configurar sus clips de video y transición, necesitará iniciar el 
     var outputFormat = new MP4Output("output.mp4");
     
     // Ajustar los parámetros del codificador mediante las subconfiguraciones Video / Audio de MP4Output, por ejemplo:
-    // (outputFormat.Video as OpenH264EncoderSettings).Bitrate = 5000;  // kbit/s
-    // (outputFormat.Audio as AVENCAACEncoderSettings).Bitrate = 192;    // kbit/s
+    // outputFormat.Video = new OpenH264EncoderSettings { Bitrate = 5000 };  // kbit/s
+    // outputFormat.Audio = new AVENCAACEncoderSettings { Bitrate = 192 };  // kbit/s
     // El tamaño de fotograma de salida proviene de VideoEdit1.Output_VideoSize y la velocidad de Output_VideoFrameRate.
     
     // PASO 2: Asignar el formato de salida al componente VideoEdit

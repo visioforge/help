@@ -97,7 +97,7 @@ pipeline.Connect(aacEncoder.Output, rtmpSink.CreateNewInput(MediaBlockPadMediaTy
 
 VisioForge proporciona soporte extenso para varios codificadores de video, haciendo posible optimizar la transmisión basada en hardware disponible:
 
-- **OpenH264**: Codificador de software predeterminado para la mayoría de plataformas
+- **OpenH264**: Codificador de software, predeterminado en Linux y en Windows cuando no hay un codificador de GPU disponible
 - **NVENC H264**: Codificación acelerada por hardware para GPU NVIDIA
 - **QSV H264**: Aceleración Intel Quick Sync Video
 - **AMF H264**: Aceleración basada en GPU AMD
@@ -108,16 +108,12 @@ VisioForge proporciona soporte extenso para varios codificadores de video, hacie
 Para rendimiento óptimo, se recomienda utilizar aceleración por hardware cuando esté disponible:
 
 ```csharp
-// Verificar disponibilidad de codificador NVIDIA y usar si está presente
+// Preferir NVIDIA de forma explícita
 if (NVENCH264EncoderSettings.IsAvailable())
 {
     rtmpOutput.Video = new NVENCH264EncoderSettings();
 }
-// Retroceder a OpenH264 si la aceleración por hardware no está disponible
-else
-{
-    rtmpOutput.Video = new OpenH264EncoderSettings();
-}
+// De lo contrario, deje Video sin asignar: el SDK elige otro codificador de GPU u OpenH264
 ```
 
 ## Configuración de Codificador de Audio
@@ -126,9 +122,9 @@ else
 
 El SDK soporta múltiples implementaciones de codificador AAC:
 
-- **VO-AAC**: Predeterminado para plataformas no Windows
-- **AVENC AAC**: Implementación multiplataforma
-- **MF AAC**: Predeterminado para plataformas Windows
+- **VO-AAC**: Alternativa para plataformas no Windows
+- **AVENC AAC**: Implementación multiplataforma, predeterminada en todas las plataformas
+- **MF AAC**: Alternativa para plataformas Windows
 
 ```csharp
 // Configurar codificador MF AAC en plataformas Windows
@@ -143,8 +139,8 @@ rtmpOutput.Audio = new VOAACEncoderSettings();
 ### Implementación Windows
 
 En plataformas Windows, la configuración predeterminada usa:
-- OpenH264 para codificación de video
-- MF AAC para codificación de audio
+- Un codificador H.264 de GPU (NVENC, AMF o QSV) cuando su elemento de GStreamer está disponible; de lo contrario, OpenH264, para codificación de video
+- AVENC AAC para codificación de audio
 
 Adicionalmente, Windows soporta codificación Microsoft Media Foundation HEVC para transmisión de alta eficiencia.
 
@@ -152,19 +148,11 @@ Adicionalmente, Windows soporta codificación Microsoft Media Foundation HEVC pa
 
 Para aplicaciones macOS, el sistema usa:
 - AppleMediaH264EncoderSettings para codificación de video
-- VO-AAC para codificación de audio
+- AVENC AAC para codificación de audio
 
 ### Detección Automática de Plataforma
 
-El SDK maneja diferencias de plataforma automáticamente a través de compilación condicional:
-
-```csharp
-#if __MACOS__
-    Video = new AppleMediaH264EncoderSettings();
-#else
-    Video = new OpenH264EncoderSettings();
-#endif
-```
+El SDK elige el codificador de video por usted: el codificador por hardware de la plataforma en Android, iOS y macOS, OpenH264 en Linux y, en Windows, un codificador de GPU si encuentra uno la primera vez que se lee `Video`; de lo contrario, OpenH264. Una primera lectura antes de `VisioForgeX.InitSDK()` devuelve OpenH264. Para elegir otro, asigne usted mismo `rtmpOutput.Video`. Un codificador de GPU disponible aún puede fallar al iniciarse; [Codificadores H.264](../video-encoders/h264.md) muestra cómo comprobarlo antes.
 
 ## Mejores Prácticas para Transmisión RTMP
 
@@ -182,6 +170,11 @@ if (QSVH264EncoderSettings.IsAvailable())
 else if (NVENCH264EncoderSettings.IsAvailable())
 {
     rtmpOutput.Video = new NVENCH264EncoderSettings();
+}
+// Verificar aceleración AMD
+else if (AMFH264EncoderSettings.IsAvailable())
+{
+    rtmpOutput.Video = new AMFH264EncoderSettings();
 }
 // Retroceder a codificación por software
 else

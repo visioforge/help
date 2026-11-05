@@ -80,7 +80,7 @@ El SDK proporciona soporte para múltiples codificadores de video, cada uno opti
 
 ### Selección dinámica de codificador
 
-El sistema selecciona inteligentemente codificadores predeterminados basándose en la plataforma:
+El sistema selecciona inteligentemente codificadores predeterminados basándose en la plataforma (en Windows, un codificador H.264 de GPU cuando su elemento de GStreamer está disponible; de lo contrario, OpenH264; OpenH264 en Linux; Apple Media H264 en macOS):
 
 ```csharp
 // Ejemplo: Usar codificador NVIDIA NVENC si está disponible
@@ -109,8 +109,8 @@ youtubeOutput.Video = videoSettings;
 
 El SDK soporta múltiples codificadores de audio AAC:
 
-- **VO-AAC**: Predeterminado para plataformas no Windows, proporcionando codificación de audio consistente
-- **AVENC AAC**: Opción alternativa multiplataforma
+- **VO-AAC**: Alternativa para plataformas no Windows
+- **AVENC AAC**: Opción multiplataforma, predeterminada en todas las plataformas
 - **MF AAC**: Codificador específico de Windows usando Media Foundation
 
 ### Ejemplo de configuración del codificador de audio
@@ -131,17 +131,17 @@ youtubeOutput.Audio = audioSettings;
 
 - Aprovecha los codificadores Media Foundation (MF) para un rendimiento óptimo en Windows
 - Proporciona capacidades extendidas de codificación HEVC/H265
-- Predetermina MF AAC para la codificación de audio, optimizado para la plataforma Windows
+- Predetermina AVENC AAC para la codificación de audio
 
 ### Consideraciones de implementación en macOS
 
 - Utiliza automáticamente el codificador Apple Media H264 para rendimiento nativo
-- Implementa VO-AAC para la codificación de audio con optimización para macOS
+- Usa AVENC AAC para la codificación de audio
 
 ### Capa de compatibilidad multiplataforma
 
 - Cae a OpenH264 para video en plataformas sin optimizaciones específicas
-- Utiliza VO-AAC para una codificación de audio consistente en diversos entornos
+- Utiliza AVENC AAC para una codificación de audio consistente en diversos entornos
 
 ## Mejores prácticas para streaming óptimo
 

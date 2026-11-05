@@ -345,7 +345,7 @@ public sealed partial class MainPage : Page
 
 ### 4. Trial-mode message or "SDK TRIAL period (30 days) is over" on app start
 
-**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`), or the certificate was loaded on a *different* `VideoCaptureCoreX` instance than the one being started.
+**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`), or the certificate was loaded on a *different* `VideoCaptureCoreX` instance than the one being started.
 
 **Fix**: read the `.vflicense` (shipped as `Content` / `ms-appx:///` resource on iOS / Android, see "License registration") and call `await _core.SetLicenseCertificateAsync(certBytes)` after the constructor and before `StartAsync`. Every `VideoCaptureCoreX` instance in the process needs its own call.
 

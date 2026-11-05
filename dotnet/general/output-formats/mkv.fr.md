@@ -103,9 +103,9 @@ La qualité audio est tout aussi importante pour la plupart des applications. Le
 ### Codecs audio pris en charge
 
 - **Encodeurs AAC** — Consultez la [documentation de l'encodeur AAC](../audio-encoders/aac.md) :
-  - **VO AAC** : Choix par défaut pour les plateformes non Windows
-  - **AVENC AAC** : Implémentation AAC FFMPEG
-  - **MF AAC** : Implémentation Windows Media Foundation (par défaut sur Windows)
+  - **VO AAC** : Alternative pour les plateformes non Windows
+  - **AVENC AAC** : Implémentation AAC FFMPEG (par défaut sur toutes les plateformes)
+  - **MF AAC** : Implémentation Windows Media Foundation
   
 - **Formats audio alternatifs** :
   - **[MP3](../audio-encoders/mp3.md)** : Format courant largement compatible

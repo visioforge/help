@@ -234,7 +234,7 @@ These are the five most common production issues — flag any of them on first r
 
 ### 4. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
-**Cause**: no `.vflicense` certificate has been loaded on the player instance — either nothing was loaded at all, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`), or the certificate was loaded on a *different* `MediaPlayerCoreX` instance than the one being opened.
+**Cause**: no `.vflicense` certificate has been loaded on the player instance — either nothing was loaded at all, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`), or the certificate was loaded on a *different* `MediaPlayerCoreX` instance than the one being opened.
 
 **Fix**: read the `.vflicense` file as bytes and call `await _player.SetLicenseCertificateAsync(certBytes)` after the constructor and before `OpenAsync` (see "License registration" above). Resolve the bundle path with `NSBundle.MainBundle.PathForResource("license", "vflicense")` — `File.ReadAllBytes("license.vflicense")` resolves against the working directory and fails inside an installed `.app`.
 

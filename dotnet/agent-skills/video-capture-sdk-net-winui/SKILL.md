@@ -219,7 +219,7 @@ Five most common production issues in WinUI 3 — flag any of them on first run.
 
 ### 3. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
-**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all (trial mode shows the info string `"TRIAL version of SDK without restrictions."` via `IVideoView.ShowMessage`), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`). Or the certificate was loaded on a *different* `VideoCaptureCore` instance than the one being started.
+**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all (trial mode shows the info string `"TRIAL version of SDK without restrictions."` via `IVideoView.ShowMessage`), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`). Or the certificate was loaded on a *different* `VideoCaptureCore` instance than the one being started.
 
 **Fix**: read the `.vflicense` file as bytes and call `await _videoCapture.SetLicenseCertificateAsync(certBytes)` after the `VideoCaptureCore` constructor and before `StartAsync` (see "License registration"). For multi-window apps, every `VideoCaptureCore` instance needs its own call. Under MSIX, load the certificate from `Package.Current.InstalledLocation.Path` — relative paths break.
 
@@ -245,7 +245,7 @@ Run through these after first integration:
 - [ ] `Video_CaptureDevices()` returns at least one device on the target machine and preview shows a non-black frame within ~1-2 s of `StartAsync` — confirms DirectShow / Media Foundation device enumeration works under the WinUI process.
 - [ ] Stopping and restarting capture from the UI does not leak `VideoCaptureCore` (always call `VideoCapture1.Dispose()` on `Window.Closed`).
 - [ ] If recording: output file is finalised correctly when the app exits cleanly (`StopAsync` runs to completion before `Dispose`); the chosen output format's redist is referenced (MP4 needs `MP4.x64`, WebM needs `WebM.x64`, etc.).
-- [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called on every `VideoCaptureCore` instance before its `StartAsync` (otherwise the app runs in 30-day trial mode and aborts after 30 days with `"SDK TRIAL period (30 days) is over."`). Under MSIX, the certificate path is resolved via `Package.Current.InstalledLocation.Path`.
+- [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called on every `VideoCaptureCore` instance before its `StartAsync` (otherwise the app runs in 30-day trial mode and aborts after 30 days with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`). Under MSIX, the certificate path is resolved via `Package.Current.InstalledLocation.Path`.
 - [ ] If publishing unpackaged: `dotnet publish -c Release -r win-x64 --self-contained true /p:WindowsAppSDKSelfContained=true /p:WindowsPackageType=None` — verify `VisioForge_*.dll` files land in the publish root, not buried under `runtimes/win-x64/native/`.
 - [ ] If publishing MSIX: open the `.msix` ZIP and confirm `\runtimes\win-x64\native\` contains the VisioForge + redist DLLs and that `Package.appxmanifest` declares the `runFullTrust` capability.
 

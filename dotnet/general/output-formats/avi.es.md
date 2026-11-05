@@ -69,7 +69,7 @@ var aviOutput = new AVIOutput("video_salida.avi");
 
 Este constructor inicializa automáticamente los codificadores predeterminados:
 
-- Video: Codificador OpenH264
+- Video: en Windows, un codificador H.264 de GPU (NVENC, AMF o QSV) cuando su elemento de GStreamer está disponible; de lo contrario, OpenH264
 - Audio: Codificador MP3
 
 ### Opciones de codificador de video

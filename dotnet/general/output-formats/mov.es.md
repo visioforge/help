@@ -70,8 +70,8 @@ var movOutput = new MOVOutput("output.mov");
 
 Esta implementación simple automáticamente:
 
-- Selecciona el codificador NVENC H264 si está disponible (recurre a OpenH264)
-- Elige el codificador AAC apropiado para su plataforma (MF AAC en Windows, VO-AAC en otras partes)
+- Selecciona un codificador H.264 de GPU en Windows (NVENC, AMF o QSV) cuando su elemento de GStreamer está disponible; de lo contrario, OpenH264
+- Usa el codificador AVENC AAC en todas las plataformas
 - Configura los ajustes del contenedor MOV para amplia compatibilidad
 
 ### Comportamiento de configuración predeterminada

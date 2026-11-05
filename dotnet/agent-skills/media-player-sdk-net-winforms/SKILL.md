@@ -180,9 +180,9 @@ These are the four most common production issues — flag any of them on first r
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
-**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all (trial mode shows the info string `"TRIAL version of SDK without restrictions."` via `IVideoView.ShowMessage`), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`). Or the certificate was loaded on a *different* `MediaPlayerCore` instance than the one being started.
+**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all (trial mode shows the info string `"TRIAL version of SDK without restrictions."` via `IVideoView.ShowMessage`), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`). Or the certificate was loaded on a *different* `MediaPlayerCore` instance than the one being started.
 
-**Fix**: read the `.vflicense` file as bytes and call `await _mediaPlayer.SetLicenseCertificateAsync(certBytes)` after the `new MediaPlayerCore(...)` constructor and before `PlayAsync` (see "License registration" above). For multi-form apps, every `MediaPlayerCore` instance needs its own `SetLicenseCertificateAsync` call. The SDK never shows a blocking "License required" dialog; it surfaces the trial-mode info string via `IVideoView.ShowMessage` and aborts startup with `"SDK TRIAL period (30 days) is over."` once the 30-day window elapses.
+**Fix**: read the `.vflicense` file as bytes and call `await _mediaPlayer.SetLicenseCertificateAsync(certBytes)` after the `new MediaPlayerCore(...)` constructor and before `PlayAsync` (see "License registration" above). For multi-form apps, every `MediaPlayerCore` instance needs its own `SetLicenseCertificateAsync` call. The SDK never shows a blocking "License required" dialog; it surfaces the trial-mode info string via `IVideoView.ShowMessage` and aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"` once the 30-day window elapses.
 
 ### 3. `OnError` fires with "Codec not found" / "Filter not registered" / "Unsupported format"
 

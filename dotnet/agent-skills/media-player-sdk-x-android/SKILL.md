@@ -236,7 +236,7 @@ These are the five most common production issues — flag any of them on first r
 
 ### 4. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
-**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."` surfaced via `OnError`), or the certificate was loaded on a *different* `MediaPlayerCoreX` instance than the one being started.
+**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"` surfaced via `OnError`), or the certificate was loaded on a *different* `MediaPlayerCoreX` instance than the one being started.
 
 **Fix**: ship the licence as an Android asset (place under `Assets/license.vflicense`, Build Action `AndroidAsset`), open with `Assets.Open(...)`, copy to `byte[]`, and call `await _player.SetLicenseCertificateAsync(certBytes)` after the constructor and before the first `OpenAsync` (see "License registration" above). Every `MediaPlayerCoreX` instance in the process needs its own call.
 

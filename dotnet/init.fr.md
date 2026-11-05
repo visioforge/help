@@ -66,6 +66,8 @@ VisioForge.Core.VisioForgeX.InitSDK();
 
 `InitSDKAsync` déporte `InitSDK` sur un thread du pool via `Task.Run`. Les gestionnaires d'exceptions non gérées de GStreamer / GLib sont liés au thread qui a déclenché l'initialisation en premier ; si votre application dépend d'une initialisation sur un thread précis (par exemple pour un état GLib statique par thread), appelez `InitSDK()` directement sur ce thread.
 
+Appelez également `InitSDK` avant toute vérification de disponibilité. Tant qu'il n'a pas été exécuté, un `IsAvailable()` qui recherche un élément GStreamer lève une exception vous demandant d'appeler `InitSDK` ; il ne renvoie pas `false`. Certains constructeurs qui choisissent un encodeur ou un décodeur par défaut lèvent également une exception : sur toutes les plateformes, `new HEVCEncoderBlock()`, `new UniversalDecoderBlock(...)` et les constructeurs sans paramètre de `H264DecoderBlock`, `HEVCDecoderBlock`, `VP8DecoderBlock` et `VP9DecoderBlock` ; sous Windows et Linux, `new H264EncoderBlock()`.
+
 ### Désinitialisation
 
 ```csharp

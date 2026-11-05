@@ -103,9 +103,9 @@ La calidad de audio es igualmente importante para la mayoría de aplicaciones. L
 ### Códecs de audio soportados
 
 - **Codificadores AAC** - Consulte la [documentación del codificador AAC](../audio-encoders/aac.md):
-  - **VO AAC**: Opción predeterminada para plataformas no Windows
-  - **AVENC AAC**: Implementación AAC de FFMPEG
-  - **MF AAC**: Implementación Windows Media Foundation (predeterminado en Windows)
+  - **VO AAC**: Alternativa para plataformas no Windows
+  - **AVENC AAC**: Implementación AAC de FFMPEG (predeterminado en todas las plataformas)
+  - **MF AAC**: Implementación Windows Media Foundation
   
 - **Formatos de audio alternativos**:
   - **[MP3](../audio-encoders/mp3.md)**: Formato común con amplia compatibilidad

@@ -89,31 +89,31 @@ Verifica si el overlay manager está disponible en el entorno actual (requiere s
 public void Video_Overlay_Add(IOverlayManagerElement overlay)
 ```
 
-Agrega un nuevo elemento de superposición a la composición de video.
+Agrega un nuevo elemento de superposición a la composición de video. Lanza `ObjectDisposedException` para un `OverlayManagerSVG`, `OverlayManagerGIF`, `OverlayManagerImage` u `OverlayManagerGroup` ya liberado, que no dibujaría nada. `Video_Overlay_Remove`, `Video_Overlay_RemoveAt` y `Video_Overlay_Clear` los liberan: cree uno nuevo para agregarlo otra vez. Un `OverlayManagerVideo` eliminado necesita `Initialize` de nuevo antes de dibujar.
 
 ```csharp
 public void Video_Overlay_Remove(IOverlayManagerElement overlay)
 ```
 
-Elimina un elemento de superposición específico.
+Elimina un elemento de superposición específico y lo libera si implementa `IDisposable`.
 
 ```csharp
 public void Video_Overlay_RemoveAt(int index)
 ```
 
-Elimina una superposición en el índice especificado.
+Elimina una superposición en el índice especificado y la libera si implementa `IDisposable`.
 
 ```csharp
 public void Video_Overlay_Clear()
 ```
 
-Elimina todos los elementos de superposición.
+Elimina todos los elementos de superposición y libera los que implementan `IDisposable`.
 
 ```csharp
 public void Video_Overlay_Update(IOverlayManagerElement overlay)
 ```
 
-Actualiza una superposición existente (elimina y re-agrega con nuevas propiedades).
+Actualiza una superposición existente con sus nuevas propiedades y la mantiene activa. La superposición pasa al final de la lista. Lanza `ObjectDisposedException` en los mismos casos que `Video_Overlay_Add`.
 
 ## Tipos de elementos de superposición
 
@@ -1123,7 +1123,9 @@ public class OverlayManagerStar : IOverlayManagerElement
 
 ### OverlayManagerSVG
 
-Muestra gráficos vectoriales SVG.
+Muestra gráficos vectoriales SVG. El SVG se renderiza una sola vez, a su propio tamaño, al crear el elemento, y lo que se dibuja es esa imagen: un SVG rotado se remuestrea a partir de ella y un SVG grande conserva su memoria hasta `Dispose`.
+
+El constructor lanza una excepción si el archivo no se puede usar: `GLib.GException` con el mensaje de librsvg si no se puede cargar, `Exception` si no tiene tamaño, supera los 32767 píxeles por lado o no se puede renderizar.
 
 ```csharp
 public class OverlayManagerSVG : IOverlayManagerElement, IDisposable
@@ -1133,8 +1135,11 @@ public class OverlayManagerSVG : IOverlayManagerElement, IDisposable
 |-----------|------|-------------|
 | `X` | `int` | Posición X |
 | `Y` | `int` | Posición Y |
-| `Width` | `int` | Ancho de visualización |
-| `Height` | `int` | Alto de visualización |
+| `Width` | `int` | Ancho del archivo, en píxeles (solo lectura) |
+| `Height` | `int` | Alto del archivo, en píxeles (solo lectura) |
+| `Opacity` | `double` | Opacidad de 0.0 (transparente) a 1.0 (opaco) |
+| `Rotation` | `double` | Rotación alrededor del centro, en grados |
+| `Shadow` | `OverlayManagerShadowSettings` | Sombra, con la forma de la transparencia del SVG |
 
 ### OverlayManagerCallback
 

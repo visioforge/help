@@ -244,6 +244,7 @@ var secureRtspOutput = new RTSPServerOutput(secureSettings);
 2.  **Réglage de la latence :**
     *   **Interactivité ou stabilité :** une faible latence (par exemple, 100 à 200 ms) est cruciale pour des applications comme la visioconférence mais rend le flux plus sensible aux à-coups du réseau.
     *   **Diffusion/surveillance :** une latence plus élevée (par exemple, 500 ms à 1 000 ms et plus) fournit des tampons plus importants, améliorant la résilience du flux sur des réseaux instables (comme le Wi-Fi ou Internet) au prix d'un délai accru. Commencez avec la valeur par défaut (250 ms) et ajustez selon la qualité observée et les besoins.
+    *   **Encodeur AMD :** `AMFH264EncoderSettings` encode avec `Usage = AMFH264EncoderUsage.Transcoding` par défaut. Pour le délai d'encodage le plus faible, définissez `Usage = AMFH264EncoderUsage.UltraLowLatency` (ou `LowLatency`).
 3.  **Configuration réseau :**
     *   **Sécurité d'abord :** implémentez l'authentification `Username` et `Password` pour tout flux non destiné à un accès public anonyme.
     *   **Adresse de liaison :** utilisez `"0.0.0.0"` avec prudence. Pour une sécurité accrue, liez-vous explicitement à l'interface réseau (`Address`) destinée aux connexions client si possible.

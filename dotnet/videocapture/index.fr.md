@@ -212,7 +212,6 @@ Consultez notre [répertoire des marques de caméras IP](../camera-brands/index.
 ### Équipements professionnels et industriels
 
 * Périphériques de capture Blackmagic Decklink
-* Microsoft Kinect et Kinect 2
 * Caméras industrielles GenICam / GigE Vision / USB3 Vision
 
 ### Sources audio

@@ -233,7 +233,7 @@ Six most common production issues in WinUI 3 — flag any of them on first run.
 
 ### 3. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
-**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all (trial mode shows the info string `"TRIAL version of SDK without restrictions."`), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`). Or the certificate was loaded on a *different* `MediaPlayerCore` instance than the one being started.
+**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all (trial mode shows the info string `"TRIAL version of SDK without restrictions."`), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`). Or the certificate was loaded on a *different* `MediaPlayerCore` instance than the one being started.
 
 **Fix**: read the `.vflicense` file as bytes and call `await MediaPlayer1.SetLicenseCertificateAsync(certBytes)` after the `MediaPlayerCore` constructor and before `PlayAsync` (see "License registration"). For multi-window apps, every `MediaPlayerCore` instance needs its own call. Under MSIX, load the certificate from `Package.Current.InstalledLocation.Path` — relative paths break.
 
@@ -265,7 +265,7 @@ Run through these after first integration:
 - [ ] First playback of a typical MP4 / MKV file works without an `OnError` "no demuxer found" / "filter not registered" message — confirms the LAV redist resolved correctly.
 - [ ] Stopping and restarting playback from the UI does not leak `MediaPlayerCore` (always call `MediaPlayer1.Dispose()` on `Window.Closed`).
 - [ ] Position slider updates smoothly while playing and lets you seek without freezing the UI (the bundled sample uses a 500 ms `DispatcherTimer` and a `_timerTag` flag to suppress feedback loops between slider events and timer ticks — keep that pattern).
-- [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called on every `MediaPlayerCore` instance before its `PlayAsync` (otherwise the app runs in 30-day trial mode and aborts after 30 days with `"SDK TRIAL period (30 days) is over."`). Under MSIX, the certificate path is resolved via `Package.Current.InstalledLocation.Path`.
+- [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called on every `MediaPlayerCore` instance before its `PlayAsync` (otherwise the app runs in 30-day trial mode and aborts after 30 days with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`). Under MSIX, the certificate path is resolved via `Package.Current.InstalledLocation.Path`.
 - [ ] If publishing unpackaged: `dotnet publish -c Release -r win-x64 --self-contained true /p:WindowsAppSDKSelfContained=true /p:WindowsPackageType=None` — verify `VisioForge_*.dll` files land in the publish root, not buried under `runtimes/win-x64/native/`.
 - [ ] If publishing MSIX: open the `.msix` ZIP and confirm `\runtimes\win-x64\native\` contains the VisioForge + LAV DLLs and that `Package.appxmanifest` declares the `runFullTrust` capability.
 

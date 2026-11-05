@@ -69,7 +69,9 @@ The simplest way to create an MP4Output instance is using the constructor with a
 var output = new MP4Output("output.mp4");
 ```
 
-This creates an MP4Output with default video and audio encoder settings. On Windows, it will use OpenH264 for video encoding and Media Foundation AAC for audio encoding by default.
+This creates an MP4Output with default video and audio encoder settings. On Windows, audio uses AVENC AAC. The video encoder is picked the first time `Video` is read: NVENC, AMF or QSV when its GStreamer element is available, otherwise OpenH264. A first read before `VisioForgeX.InitSDK()` returns OpenH264.
+
+An available element doesn't prove that the GPU can encode right now: all NVENC sessions can be in use, for example, and the recording then fails. To check first, after `VisioForgeX.InitSDK()`, call `await H264EncoderBlock.CanEncodeAsync((IH264EncoderSettings)output.Video)`. To stay on the CPU, set `output.Video = new OpenH264EncoderSettings()`.
 
 ### Video Encoder Configuration
 
@@ -77,7 +79,7 @@ The MP4Output class supports multiple video encoders through its `Video` propert
 
 **[H.264 Encoders](../video-encoders/h264.md)**
 
-- OpenH264EncoderSettings (Default, CPU)
+- OpenH264EncoderSettings (CPU, the default when no GPU encoder is available)
 - AMFH264EncoderSettings (AMD)
 - NVENCH264EncoderSettings (NVIDIA)
 - QSVH264EncoderSettings (Intel Quick Sync)

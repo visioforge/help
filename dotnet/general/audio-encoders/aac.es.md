@@ -217,10 +217,7 @@ var output = new M4AOutput("output.m4a");
 
 ### Cambio entre codificadores
 
-La selección predeterminada del codificador depende de la plataforma:
-
-- Entornos Windows: MF AAC
-- Otras plataformas: VO-AAC
+`M4AOutput` usa AVENC AAC en todas las plataformas.
 
 Puede anular esta selección predeterminada estableciendo explícitamente la propiedad `Audio`:
 

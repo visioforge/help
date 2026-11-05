@@ -69,7 +69,7 @@ var aviOutput = new AVIOutput("output_video.avi");
 
 Ce constructeur initialise automatiquement les encodeurs par défaut :
 
-- Vidéo : encodeur OpenH264
+- Vidéo : sur Windows, un encodeur H.264 GPU (NVENC, AMF ou QSV) lorsque son élément GStreamer est disponible, sinon OpenH264
 - Audio : encodeur MP3
 
 ### Options d'encodeur vidéo

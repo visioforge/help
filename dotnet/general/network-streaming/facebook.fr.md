@@ -150,8 +150,8 @@ La qualité audio impacte significativement l'expérience du spectateur. VisioFo
 
 ### Encodeurs audio pris en charge
 
-1. **VO-AAC** — encodeur AAC optimisé de VisioForge (par défaut pour les plateformes non-Windows)
-2. **AVENC AAC** — encodeur AAC basé sur FFmpeg avec une large prise en charge des plateformes
+1. **VO-AAC** — encodeur AAC optimisé de VisioForge
+2. **AVENC AAC** — encodeur AAC basé sur FFmpeg avec une large prise en charge des plateformes (par défaut sur toutes les plateformes)
 3. **MF AAC** — encodeur AAC Microsoft Media Foundation (uniquement Windows, accéléré matériellement)
 
 ```csharp

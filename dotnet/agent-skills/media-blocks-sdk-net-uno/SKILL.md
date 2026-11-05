@@ -292,7 +292,7 @@ private async void StartButton_Click(object sender, RoutedEventArgs e)
 
 ### 4. Trial-mode message or "SDK TRIAL period (30 days) is over" on app start
 
-**Cause**: no `.vflicense` certificate has been loaded on the pipeline instance — either nothing was loaded at all (trial mode runs silently for the first 30 days), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`), or the certificate was loaded on a *different* `MediaBlocksPipeline` instance than the one being started. The bundled sample re-creates the pipeline on every PREVIEW/CAPTURE click — if you put the licence call in `Loaded` it will be applied to a stale pipeline and the next click will run unlicensed.
+**Cause**: no `.vflicense` certificate has been loaded on the pipeline instance — either nothing was loaded at all (trial mode runs silently for the first 30 days), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`), or the certificate was loaded on a *different* `MediaBlocksPipeline` instance than the one being started. The bundled sample re-creates the pipeline on every PREVIEW/CAPTURE click — if you put the licence call in `Loaded` it will be applied to a stale pipeline and the next click will run unlicensed.
 
 **Fix**: read the `.vflicense` (shipped as `Content` / `ms-appx:///` resource on iOS / Android, see "License registration") and call `await _pipeline.SetLicenseCertificateAsync(certBytes)` inside `CreateEngine()` after `_pipeline = new MediaBlocksPipeline();` and before any `StartAsync`. Every pipeline instance in the process needs its own call.
 

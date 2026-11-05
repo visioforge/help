@@ -84,7 +84,7 @@ Pour prévisualiser la vidéo en même temps, connectez aussi `demux.VideoOutput
 
 Pour le **KLV MISB standard** extrait d'un flux MPEG-TS, utilisez `KLVParser`. Il décode les éléments du jeu
 local MISB ST 0601 (horodatage de précision, position et orientation de la plateforme/du capteur,
-géolocalisation du centre de l'image, position de la cible, et plus de 100 autres) et gère les **longueurs
+géolocalisation du centre de l'image, position de la cible, et le reste de ses plus de 90 éléments) et gère les **longueurs
 encodées en BER** qu'utilisent les paquets MISB :
 
 ```csharp

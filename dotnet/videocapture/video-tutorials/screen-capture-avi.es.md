@@ -66,7 +66,7 @@ Para la mayoría de los casos de uso de grabación de pantalla, [MP4 es el forma
 La API moderna multiplataforma usa `VideoCaptureCoreX`. Para el patrón completo de aplicación de consola con configuración de captura de pantalla, audio y ciclo de vida de grabación, consulte la guía de [Captura de Pantalla a MP4](screen-capture-mp4.md#api-moderna-video-capture-sdk-x). Para generar AVI en lugar de MP4, reemplace la configuración de salida:
 
 ```csharp
-// AVI con codecs predeterminados (OpenH264 video + MP3 audio)
+// AVI con codecs predeterminados (video H.264 + audio MP3)
 var aviOutput = new AVIOutput(outputPath);
 videoCapture.Outputs_Add(aviOutput, autostart: true);
 ```

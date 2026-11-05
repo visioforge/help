@@ -80,7 +80,7 @@ Le SDK prend en charge plusieurs encodeurs vidéo, chacun optimisé pour différ
 
 ### Sélection dynamique d'encodeur
 
-Le système sélectionne intelligemment les encodeurs par défaut en fonction de la plateforme (OpenH264 sur la plupart des plateformes, Apple Media H264 sur macOS). Les développeurs peuvent remplacer ces valeurs par défaut pour exploiter des capacités matérielles spécifiques :
+Le système sélectionne intelligemment les encodeurs par défaut en fonction de la plateforme (sur Windows, un encodeur H.264 GPU lorsque son élément GStreamer est disponible, sinon OpenH264 ; OpenH264 sur Linux ; Apple Media H264 sur macOS). Les développeurs peuvent remplacer ces valeurs par défaut pour exploiter des capacités matérielles spécifiques :
 
 ```csharp
 // Exemple : utiliser l'encodeur NVIDIA NVENC si disponible
@@ -110,8 +110,8 @@ youtubeOutput.Video = videoSettings;
 
 Le SDK prend en charge plusieurs encodeurs audio AAC pour assurer une qualité audio optimale sur différentes plateformes :
 
-- **VO-AAC** : par défaut pour les plateformes non-Windows, fournissant un encodage audio cohérent
-- **AVENC AAC** : option multiplateforme alternative avec différentes caractéristiques de performance
+- **VO-AAC** : alternative pour les plateformes non-Windows
+- **AVENC AAC** : option multiplateforme, par défaut sur toutes les plateformes
 - **MF AAC** : encodeur spécifique à Windows exploitant Media Foundation
 
 ### Exemple de configuration de l'encodeur audio
@@ -132,17 +132,17 @@ youtubeOutput.Audio = audioSettings;
 
 - Exploite les encodeurs Media Foundation (MF) pour des performances optimales sous Windows
 - Fournit des capacités d'encodage HEVC/H265 étendues
-- Par défaut sur MF AAC pour l'encodage audio, optimisé pour la plateforme Windows
+- Par défaut sur AVENC AAC pour l'encodage audio
 
 ### Considérations d'implémentation macOS
 
 - Utilise automatiquement l'encodeur Apple Media H264 pour des performances natives
-- Implémente VO-AAC pour l'encodage audio avec optimisation macOS
+- Utilise AVENC AAC pour l'encodage audio
 
 ### Couche de compatibilité multiplateforme
 
 - Replie sur OpenH264 pour la vidéo sur les plateformes sans optimisations spécifiques
-- Utilise VO-AAC pour un encodage audio cohérent dans divers environnements
+- Utilise AVENC AAC pour un encodage audio cohérent dans divers environnements
 
 ## Bonnes pratiques pour un streaming optimal
 

@@ -161,9 +161,9 @@ namespace Simple_Edit_MAUI
 
             // H264EncoderBlock.GetDefaultSettings() prefers a hardware encoder and falls back
             // to software: VideoToolbox on Apple, MediaCodec on Android, NVENC/AMF/QSV on
-            // Windows. MP4Output's own default only consults it on Android and hands every
-            // other platform OpenH264, so passing it here is what keeps iOS and Windows on
-            // hardware. Audio is left to MP4Output: AAC on Windows, MP3 elsewhere.
+            // Windows. MP4Output makes the same pick by itself, but on Windows only when Video
+            // is first read after InitSDKAsync; passing it here makes the choice explicit.
+            // Audio is left to MP4Output: AAC on Windows, MP3 elsewhere.
             _core.Output_Format = new MP4Output(output, H264EncoderBlock.GetDefaultSettings());
             _core.Start();
 

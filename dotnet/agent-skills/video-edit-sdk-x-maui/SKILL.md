@@ -1,6 +1,6 @@
 ---
 name: video-edit-sdk-x-maui
-description: Integrate VisioForge Video Edit SDK X (cross-platform edition) into a .NET MAUI app (Windows, Android, iOS, Mac Catalyst). Covers the VideoEditCoreX timeline API, the MAUI VideoView control, multi-target NuGet packages (per-OS native dependencies), SDK initialization, license registration, and the most common cross-platform pitfalls (missing InitSDKAsync, media-picker paths that are not filesystem paths, a bare MP4Output that silently encodes in software on iOS, Mac Catalyst and Windows, AOT JIT-only ExecutionEngineException, trial-period expiry). Use when joining, trimming, overlaying or rendering video from one MAUI codebase — for capture use video-capture-sdk-x-maui, for playback use media-player-sdk-x-maui.
+description: Integrate VisioForge Video Edit SDK X (cross-platform edition) into a .NET MAUI app (Windows, Android, iOS, Mac Catalyst). Covers the VideoEditCoreX timeline API, the MAUI VideoView control, multi-target NuGet packages (per-OS native dependencies), SDK initialization, license registration, and the most common cross-platform pitfalls (missing InitSDKAsync, media-picker paths that are not filesystem paths, a bare MP4Output that encodes in software on Windows when its Video is read before InitSDKAsync, AOT JIT-only ExecutionEngineException, trial-period expiry). Use when joining, trimming, overlaying or rendering video from one MAUI codebase — for capture use video-capture-sdk-x-maui, for playback use media-player-sdk-x-maui.
 ---
 
 # Video Edit SDK X — .NET MAUI integration
@@ -214,7 +214,7 @@ Other formats live in `VisioForge.Core.Types.X.Output`: `WebMOutput`, `MKVOutput
 
 For license types, scope, updates, support and trial terms, see the [canonical VisioForge licensing page](https://www.visioforge.com/licensing).
 
-The SDK ships with a 30-day trial; after it expires `Start()` returns `false` and logs `"SDK TRIAL period (30 days) is over."`. To register a purchased licence, call `await _core.SetLicenseCertificateAsync(certBytes)` after the constructor and before `Start()`. The cross-platform wrinkle is **where the bytes come from**: on iOS / Android / Mac Catalyst the working directory is the app bundle, not your dev machine. Ship the licence as a `MauiAsset`:
+The SDK ships with a 30-day trial; after it expires `Start()` returns `false` and logs `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`. To register a purchased licence, call `await _core.SetLicenseCertificateAsync(certBytes)` after the constructor and before `Start()`. The cross-platform wrinkle is **where the bytes come from**: on iOS / Android / Mac Catalyst the working directory is the app bundle, not your dev machine. Ship the licence as a `MauiAsset`:
 
 ```csharp
 // In csproj:
@@ -238,11 +238,11 @@ Every `VideoEditCoreX` instance needs its own call before its `Start()`.
 
 **Fix**: `await VisioForgeX.InitSDKAsync();` before the constructor.
 
-### 2. The render silently uses a software encoder on iOS, Mac Catalyst and Windows
+### 2. The render silently uses a software encoder on Windows
 
-**Cause**: the single-argument `new MP4Output(path)` was used. Its built-in default picks `AppleMediaH264EncoderSettings` under `__MACOS__` and calls `H264EncoderBlock.GetDefaultSettings()` under `__ANDROID__`, but iOS, Mac Catalyst and Windows all fall through to `OpenH264EncoderSettings` — software H.264. On mobile that shows up as dropped frames and battery drain on longer renders.
+**Cause**: `MP4Output` picks its encoder the first time `Video` is read, so a read before `VisioForgeX.InitSDKAsync()` keeps `OpenH264EncoderSettings` — software H.264. After it, the output uses `H264EncoderBlock.GetDefaultSettings()`, the SDK's platform selector — VideoToolbox on Apple, MediaCodec on Android, then NVENC / AMF / QSV, software last.
 
-**Fix**: pass `H264EncoderBlock.GetDefaultSettings()` as the video encoder. It is the SDK's platform selector — VideoToolbox on Apple, MediaCodec on Android, then NVENC / AMF / QSV, software last. Despite the `VisioForge.Core.MediaBlocks.VideoEncoders` namespace it is a shared helper, not a Media Blocks pipeline; `MP4Output` calls it itself. Leave the audio encoder unset so `MP4Output` picks AAC on Windows and MP3 elsewhere.
+**Fix**: call `await VisioForgeX.InitSDKAsync();` before you create the output, which covers `GetDefaultSettings()` too, or set the encoder yourself. Despite the `VisioForge.Core.MediaBlocks.VideoEncoders` namespace `GetDefaultSettings()` is a shared helper, not a Media Blocks pipeline. Leave the audio encoder unset so `MP4Output` picks AAC on Windows and MP3 elsewhere.
 
 ### 3. `Input_AddAudioVideoFile` gets a path that does not exist (iOS)
 

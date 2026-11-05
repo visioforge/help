@@ -265,7 +265,7 @@ If the device-monitor output is empty, the SDK's enumerator will be empty too �
 
 ### 4. Trial-mode message or "SDK TRIAL period (30 days) is over" on `StartAsync()`
 
-**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`), or the certificate was loaded on a *different* `VideoCaptureCoreX` instance than the one being started.
+**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`), or the certificate was loaded on a *different* `VideoCaptureCoreX` instance than the one being started.
 
 **Fix**: read the `.vflicense` file as bytes and call `await VideoCapture1.SetLicenseCertificateAsync(certBytes)` after the constructor and before `StartAsync` (see "License registration" above). Every `VideoCaptureCoreX` instance in the process needs its own call.
 

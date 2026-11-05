@@ -66,7 +66,7 @@ For most screen recording use cases, [MP4 is the recommended format](screen-capt
 The modern cross-platform API uses `VideoCaptureCoreX`. For the complete console application pattern with screen capture setup, audio configuration, and recording lifecycle, see the [Screen Capture to MP4](screen-capture-mp4.md#modern-api-video-capture-sdk-x) guide. To output AVI instead of MP4, replace the output configuration:
 
 ```csharp
-// AVI with default codecs (OpenH264 video + MP3 audio)
+// AVI with default codecs (H.264 video + MP3 audio)
 var aviOutput = new AVIOutput(outputPath);
 videoCapture.Outputs_Add(aviOutput, autostart: true);
 ```

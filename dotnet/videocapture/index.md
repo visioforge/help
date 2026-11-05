@@ -212,7 +212,6 @@ Browse our [IP camera brands directory](../camera-brands/index.md) for brand-spe
 ### Professional and Industrial Equipment
 
 * Blackmagic Decklink capture devices
-* Microsoft Kinect and Kinect 2
 * GenICam / GigE Vision / USB3 Vision industrial cameras
 
 ### Audio Sources

@@ -245,6 +245,7 @@ var secureRtspOutput = new RTSPServerOutput(secureSettings);
 2.  **Ajuste de Latencia:**
     *   **Interactividad vs. Estabilidad:** Una latencia más baja (ej., 100-200ms) es crucial para aplicaciones como videoconferencia pero hace que la transmisión sea más susceptible a problemas de red.
     *   **Transmisión/Vigilancia:** Una latencia más alta (ej., 500ms-1000ms+) proporciona búferes más grandes, mejorando la resistencia de la transmisión sobre redes inestables (como Wi-Fi o Internet) a costa de un mayor retardo. Comience con el predeterminado (250ms) y ajuste según la calidad de transmisión observada y los requisitos.
+    *   **Codificador AMD:** `AMFH264EncoderSettings` codifica con `Usage = AMFH264EncoderUsage.Transcoding` de forma predeterminada. Para el menor retardo del codificador, establezca `Usage = AMFH264EncoderUsage.UltraLowLatency` (o `LowLatency`).
 3.  **Configuración de Red:**
     *   **Seguridad Primero:** Implemente autenticación de `Username` y `Password` para cualquier transmisión no destinada al acceso público anónimo.
     *   **Dirección de Vinculación:** Use `"0.0.0.0"` con precaución. Para seguridad mejorada, vincule explícitamente a la interfaz de red (`Address`) destinada a conexiones de clientes si es posible.

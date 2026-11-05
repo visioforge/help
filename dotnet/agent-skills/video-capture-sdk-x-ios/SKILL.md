@@ -187,7 +187,7 @@ For recording add an `MP4Output` to `Outputs_Add` before `StartAsync`, then togg
 
 ## Common iOS failures
 
-These are the five most common production issues — flag any of them on first run.
+These are the six most common production issues — flag any of them on first run.
 
 ### 1. App silently terminates the first time the camera is touched
 
@@ -213,7 +213,7 @@ These are the five most common production issues — flag any of them on first r
 
 ### 4. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
-**Cause**: no `.vflicense` certificate has been loaded — either nothing was loaded, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`), or the certificate was loaded on a *different* `VideoCaptureCoreX` instance than the one being started.
+**Cause**: no `.vflicense` certificate has been loaded — either nothing was loaded, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`), or the certificate was loaded on a *different* `VideoCaptureCoreX` instance than the one being started.
 
 **Fix**: ship the `.vflicense` as a bundle resource (Build Action = `BundleResource`), read it via `NSBundle.MainBundle.PathForResource("license", "vflicense")` + `File.ReadAllBytes`, and call `await _player.SetLicenseCertificateAsync(certBytes)` after the constructor and before `StartAsync` (see "License registration" above). Every `VideoCaptureCoreX` instance in the process needs its own call.
 
@@ -226,6 +226,12 @@ These are the five most common production issues — flag any of them on first r
 **Fix A**: set `_player.Video_Play = true` immediately after `new VideoCaptureCoreX(...)`.
 
 **Fix B**: create the `VideoView` from `vc.View.Bounds` with `AutoresizingMask = FlexibleWidth | FlexibleHeight` (or pin it with constraints). The bundled `AppDelegate.cs` installs the VC (`Window.RootViewController = vc`, `Window.MakeKeyAndVisible()`, `vc.View.LayoutIfNeeded()`) before building the hierarchy — the recommended order.
+
+### 6. Preview goes sideways after the phone is turned
+
+**Cause**: the camera orientation is read from the device once, when capture starts. A turn after that leaves the frames in the start orientation, so the view draws them on their side.
+
+**Fix**: set `_player.Video_Source_AutoUpdateOrientation = true` while previewing — the source then follows the device without restarting the camera — or call `_player.Video_Source_UpdateOrientation()` from your own rotation handling (`ViewWillTransitionToSize`). Turn it off before starting a recording: a 90° turn swaps the frame width and height, which an MP4 already being written cannot take.
 
 ## Verification checklist
 

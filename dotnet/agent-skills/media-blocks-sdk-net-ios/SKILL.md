@@ -211,7 +211,7 @@ await _pipeline.StartAsync();
 
 ## Common iOS failures
 
-These are the five most common production issues — flag any of them on first run.
+These are the six most common production issues — flag any of them on first run.
 
 ### 1. App silently terminates the first time the camera is touched
 
@@ -237,7 +237,7 @@ These are the five most common production issues — flag any of them on first r
 
 ### 4. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
-**Cause**: no `.vflicense` certificate has been loaded — either nothing was loaded at all (trial mode runs silently for the first 30 days), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."`), or the certificate was loaded on a *different* `MediaBlocksPipeline` instance than the one being started. The bundled sample creates a fresh pipeline on every camera flip / capture toggle, so a single one-time licence call in `SetupWindow` won't cover later pipelines.
+**Cause**: no `.vflicense` certificate has been loaded — either nothing was loaded at all (trial mode runs silently for the first 30 days), or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`), or the certificate was loaded on a *different* `MediaBlocksPipeline` instance than the one being started. The bundled sample creates a fresh pipeline on every camera flip / capture toggle, so a single one-time licence call in `SetupWindow` won't cover later pipelines.
 
 **Fix**: ship the `.vflicense` as a bundle resource (Build Action = `BundleResource`), read it via `NSBundle.MainBundle.PathForResource("license", "vflicense")` + `File.ReadAllBytes`, and call `await _pipeline.SetLicenseCertificateAsync(certBytes)` inside `CreateEngineAsync` after the constructor and before any `Connect` calls (see "License registration" above).
 
@@ -254,6 +254,12 @@ These are the five most common production issues — flag any of them on first r
 **Fix B**: create the `VideoView` from `vc.View.Bounds` with `AutoresizingMask = FlexibleWidth | FlexibleHeight` (or pin it with constraints). The bundled `AppDelegate.cs` installs the VC (`Window.RootViewController = vc`, `Window.MakeKeyAndVisible()`, `vc.View.LayoutIfNeeded()`) before building the hierarchy — the recommended order.
 
 **Fix C**: set `_videoRenderer = new VideoRendererBlock(_pipeline, _videoView as IVideoView) { IsSync = false };` on every renderer in iOS pipelines that pull from a live capture source.
+
+### 6. Preview goes sideways after the phone is turned
+
+**Cause**: the camera orientation is read from the device once, when the pipeline starts. A turn after that leaves the frames in the start orientation, so the view draws them on their side.
+
+**Fix**: set `AutoUpdateOrientation = true` on the `VideoCaptureDeviceSourceSettings` of the preview source — the source then follows the device without restarting the camera — or call `(_videoSource as SystemVideoSourceBlock)?.UpdateOrientation()` from your own rotation handling, such as `ViewWillTransitionToSize` (the cast is there because the bundled sample declares the field as `MediaBlock`). Leave it off for a recording: a 90° turn swaps the frame width and height, which an MP4 already being written cannot take. The bundled `AppDelegate.cs` builds the preview with it on and the recording with it off.
 
 ## Verification checklist
 

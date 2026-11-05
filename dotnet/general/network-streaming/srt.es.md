@@ -287,7 +287,7 @@ var settings = new SRTSinkSettings
 
 ### Codificadores de software
 
-- **OpenH264** — Codificador H.264 multiplataforma por defecto
+- **OpenH264** — Codificador H.264 multiplataforma, predeterminado en Linux y en Windows cuando no hay un codificador de GPU disponible
 
 ### Codificadores acelerados por hardware
 
@@ -317,7 +317,7 @@ Los flujos SRT típicamente usan audio AAC. El SDK proporciona múltiples codifi
 - **AVENC AAC** — Basado en FFmpeg con opciones extensas
 - **MF AAC** — Solo Windows, Microsoft Media Foundation
 
-El SDK auto-selecciona el mejor codificador disponible por plataforma (MF AAC en Windows, VO AAC en otras).
+De forma predeterminada, el SDK usa AVENC AAC en todas las plataformas.
 
 ## Solución de problemas
 

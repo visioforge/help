@@ -287,7 +287,7 @@ var settings = new SRTSinkSettings
 
 ### Encodeurs logiciels
 
-- **OpenH264** — Encodeur H.264 multiplateforme par défaut
+- **OpenH264** — Encodeur H.264 multiplateforme, par défaut sur Linux et sur Windows lorsqu'aucun encodeur GPU n'est disponible
 
 ### Encodeurs accélérés matériellement
 
@@ -317,7 +317,7 @@ Les flux SRT utilisent typiquement de l'audio AAC. Le SDK fournit plusieurs enco
 - **AVENC AAC** — Basé sur FFmpeg avec options étendues
 - **MF AAC** — Windows uniquement, Microsoft Media Foundation
 
-Le SDK sélectionne automatiquement le meilleur encodeur disponible par plateforme (MF AAC sur Windows, VO AAC ailleurs).
+Par défaut, le SDK utilise AVENC AAC sur toutes les plateformes.
 
 ## Résolution des problèmes
 

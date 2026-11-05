@@ -80,7 +80,7 @@ The SDK provides support for multiple video encoders, each optimized for differe
 
 ### Dynamic Encoder Selection
 
-The system intelligently selects default encoders based on the platform (OpenH264 on most platforms, Apple Media H264 on macOS). Developers can override these defaults to leverage specific hardware capabilities:
+The system intelligently selects default encoders based on the platform (on Windows, a GPU H.264 encoder when its GStreamer element is available, otherwise OpenH264; OpenH264 on Linux; Apple Media H264 on macOS). Developers can override these defaults to leverage specific hardware capabilities:
 
 ```csharp
 // Example: Using NVIDIA NVENC encoder if available
@@ -110,8 +110,8 @@ youtubeOutput.Video = videoSettings;
 
 The SDK supports multiple AAC audio encoders to ensure optimal audio quality across different platforms:
 
-- **VO-AAC**: Default for non-Windows platforms, providing consistent audio encoding
-- **AVENC AAC**: Alternative cross-platform option with different performance characteristics
+- **VO-AAC**: Alternative for non-Windows platforms
+- **AVENC AAC**: Cross-platform option, the default on every platform
 - **MF AAC**: Windows-specific encoder leveraging Media Foundation
 
 ### Audio Encoder Configuration Example
@@ -132,17 +132,17 @@ youtubeOutput.Audio = audioSettings;
 
 - Leverages Media Foundation (MF) encoders for optimal Windows performance
 - Provides extended HEVC/H265 encoding capabilities
-- Defaults to MF AAC for audio encoding, optimized for the Windows platform
+- Defaults to AVENC AAC for audio encoding
 
 ### macOS Implementation Considerations
 
 - Automatically utilizes Apple Media H264 encoder for native performance
-- Implements VO-AAC for audio encoding with macOS optimization
+- Uses AVENC AAC for audio encoding
 
 ### Cross-Platform Compatibility Layer
 
 - Falls back to OpenH264 for video on platforms without specific optimizations
-- Utilizes VO-AAC for consistent audio encoding across diverse environments
+- Uses AVENC AAC for consistent audio encoding across diverse environments
 
 ## Best Practices for Optimal Streaming
 

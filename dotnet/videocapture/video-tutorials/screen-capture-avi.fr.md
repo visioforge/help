@@ -66,7 +66,7 @@ Pour la plupart des cas d'usage d'enregistrement d'écran, [MP4 est le format re
 L'API moderne multiplateforme utilise `VideoCaptureCoreX`. Pour le modèle complet d'application console avec configuration de capture d'écran, configuration audio et cycle de vie d'enregistrement, consultez le guide [Capture d'écran en MP4](screen-capture-mp4.md#api-moderne-video-capture-sdk-x). Pour produire de l'AVI au lieu de MP4, remplacez la configuration de sortie :
 
 ```csharp
-// AVI avec codecs par défaut (vidéo OpenH264 + audio MP3)
+// AVI avec codecs par défaut (vidéo H.264 + audio MP3)
 var aviOutput = new AVIOutput(outputPath);
 videoCapture.Outputs_Add(aviOutput, autostart: true);
 ```

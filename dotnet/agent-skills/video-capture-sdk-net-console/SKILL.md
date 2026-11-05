@@ -169,7 +169,7 @@ These are the most common production issues — flag any of them on first run.
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
-**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over."` via `OnError`). Or the certificate was loaded on a *different* `VideoCaptureCore` instance than the one being started.
+**Cause**: no `.vflicense` certificate has been loaded on the engine instance — either nothing was loaded at all, or the trial 30-day window has elapsed (the engine aborts startup with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"` via `OnError`). Or the certificate was loaded on a *different* `VideoCaptureCore` instance than the one being started.
 
 **Fix**: read the `.vflicense` file as bytes and call `await videoCapture.SetLicenseCertificateAsync(certBytes)` after `new VideoCaptureCore()` and before `Start` (see "License registration" above). For console hosts that recycle engines per request, every new instance needs its own call. The SDK never shows a blocking dialog from a console host — the trial-expiry message comes through `OnError` only, so make sure you've subscribed to that event before `Start` or the failure will look like a silent no-op.
 
