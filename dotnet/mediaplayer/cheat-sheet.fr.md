@@ -62,28 +62,28 @@ Toutes les cibles multiplateformes utilisent un pipeline de décodage basé sur 
 Paquet principal du SDK (toujours requis) :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.6]"/>
 ```
 
 Runtime natif Windows x64 :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
 ```
 
 Runtime natif Windows x86 :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.10.28]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.11.3]"/>
 ```
 
 macOS (natif) et MacCatalyst (MAUI macOS) :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.11.5]"/>
 ```
 
 Linux x64 (plus GStreamer 1.22+ du système) :
@@ -95,15 +95,15 @@ Linux x64 (plus GStreamer 1.22+ du système) :
 Android et iOS :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.10.26]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.10.27]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
 ```
 
 Paquets optionnels du framework UI — ajoutez celui qui correspond à votre cible :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.28]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.6]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.6]"/>
 ```
 
 Guide d'installation complet par IDE : [install/index.md](../install/index.md).

@@ -408,7 +408,7 @@ VideoCapture1.Video_Renderer_Update();
 ```cs
 VideoCapture1.Video_Renderer.Flip_Horizontal = true;
 VideoCapture1.Video_Renderer.Flip_Vertical   = false;
-// RotationAngle solo lo respeta el renderizador Direct2D y acepta 0, 90, 180 o 270.
+// RotationAngle solo lo respeta el renderizador Direct2D y acepta un múltiplo de 90 (-90 equivale a 270); cualquier otro ángulo muestra el vídeo sin rotar y registra una advertencia.
 VideoCapture1.Video_Renderer.RotationAngle   = 90;
 VideoCapture1.Video_Renderer_Update();
 ```

@@ -44,9 +44,9 @@ Recording webcam video in VB.NET applications is a common requirement for video 
 Add the following packages to your VB.NET project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.10.28]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.6]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
 ```
 
 ## Complete VB.NET Webcam Recording Example

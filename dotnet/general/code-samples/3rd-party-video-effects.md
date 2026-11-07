@@ -113,6 +113,9 @@ parameters are configured on the underlying COM filter (see the Filter Parameter
 
 You can add multiple filters in sequence to create complex processing chains. The order of filters matters, as each filter processes the output of the previous one.
 
+!!! note "Video Edit SDK edition"
+    In `VideoEditCore`, custom DirectShow video filters added with `Video_Filters_Add` require the Professional edition. With a Standard license the job runs in trial mode, with the trial watermark, only while the 30-day trial lasts; after that `Start` returns `false`.
+
 ## Advanced Filter Configuration
 
 ### Filter Parameters

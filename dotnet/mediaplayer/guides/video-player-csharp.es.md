@@ -67,9 +67,9 @@ Esta guía le muestra cómo crear un reproductor de video **para escritorio Wind
 ### Paquetes NuGet Requeridos
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.10.28]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.6]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
 ```
 
 ### Implementación Completa del Reproductor de Video en C#

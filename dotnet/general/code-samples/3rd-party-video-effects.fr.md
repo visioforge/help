@@ -114,6 +114,9 @@ de filtre ci-dessous).
 
 Vous pouvez ajouter plusieurs filtres en séquence pour créer des chaînes de traitement complexes. L'ordre des filtres importe, car chaque filtre traite la sortie du précédent.
 
+!!! note "Édition de Video Edit SDK"
+    Dans `VideoEditCore`, les filtres vidéo DirectShow personnalisés ajoutés avec `Video_Filters_Add` nécessitent l'édition Professional. Avec une licence Standard, la tâche s'exécute en mode d'essai, avec le filigrane d'essai, uniquement pendant les 30 jours d'essai ; ensuite, `Start` renvoie `false`.
+
 ## Configuration avancée des filtres
 
 ### Paramètres de filtre

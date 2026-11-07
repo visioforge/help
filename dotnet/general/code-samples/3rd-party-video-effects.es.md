@@ -113,6 +113,9 @@ del filtro se configuran sobre el filtro COM subyacente (ver la sección Paráme
 
 Puede añadir múltiples filtros en secuencia para crear cadenas de procesamiento complejas. El orden de los filtros importa, ya que cada filtro procesa la salida del anterior.
 
+!!! note "Edición de Video Edit SDK"
+    En `VideoEditCore`, los filtros de video DirectShow personalizados agregados con `Video_Filters_Add` requieren la edición Professional. Con una licencia Standard, el trabajo se ejecuta en modo de prueba, con la marca de agua de prueba, solo mientras duran los 30 días de prueba; después, `Start` devuelve `false`.
+
 ## Configuración avanzada de filtros
 
 ### Parámetros del filtro

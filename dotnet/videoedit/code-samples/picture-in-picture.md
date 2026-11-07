@@ -23,6 +23,9 @@ primary_api_classes:
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
+!!! note "Edition"
+    Picture-in-picture and split-screen composition in `VideoEditCore` require the Professional edition. With a Standard license the job runs in trial mode, with the trial watermark, only while the 30-day trial lasts; after that `Start` returns `false`.
+
 ## Introduction to Video Composition Techniques
 
 Professional video applications often require combining multiple video sources into a single output. This capability is essential for creating engaging content such as tutorials with presenter overlays, reaction videos, interview panels, or sports broadcasts with replay windows. The Video Edit SDK for .NET makes these advanced techniques straightforward to implement in your C# applications.

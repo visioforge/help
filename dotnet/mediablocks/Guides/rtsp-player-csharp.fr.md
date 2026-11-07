@@ -61,14 +61,14 @@ Les cas d'usage courants incluent les tableaux de bord de vidéosurveillance, le
 Ajoutez le paquet NuGet du Media Blocks SDK à votre projet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.6]"/>
 ```
 
 Vous avez également besoin des paquets de runtime spécifiques à la plateforme. Pour Windows :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.10.28]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.10.28]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.3]"/>
 ```
 
 Pour les autres plateformes (macOS, Linux, Android, iOS), consultez le [guide de déploiement](../../deployment-x/index.md).

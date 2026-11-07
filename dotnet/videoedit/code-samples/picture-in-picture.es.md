@@ -23,6 +23,9 @@ primary_api_classes:
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
+!!! note "Edición"
+    La composición de imagen en imagen y de pantalla dividida en `VideoEditCore` requiere la edición Professional. Con una licencia Standard, el trabajo se ejecuta en modo de prueba, con la marca de agua de prueba, solo mientras duran los 30 días de prueba; después, `Start` devuelve `false`.
+
 ## Introducción a las técnicas de composición de video
 
 Las aplicaciones de video profesionales a menudo requieren combinar múltiples fuentes de video en una única salida. Esta capacidad es esencial para crear contenido atractivo como tutoriales con superposiciones del presentador, videos de reacción, paneles de entrevistas o transmisiones deportivas con ventanas de repetición. El Video Edit SDK para .NET hace que estas técnicas avanzadas sean sencillas de implementar en sus aplicaciones C#.

@@ -190,8 +190,8 @@ Para proyectos MAUI apuntando a macOS (a través de MacCatalyst), agregue estos 
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.10.26]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.10.28]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.6]"/>
   <!-- Solo para los bloques OpenCV -->
   <PackageReference Include="VisioForge.CrossPlatform.OpenCV.macOS" Version="[2026.9.11]"/>
 </ItemGroup>

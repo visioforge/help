@@ -36,6 +36,9 @@ primary_api_classes:
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
+!!! note "Edition"
+    FFmpeg.exe output requires the Premium edition in both `VideoCaptureCore` and `VideoEditCore`. With a Standard or Professional license the job runs in trial mode, with the trial watermark, only while the 30-day trial lasts; after that `Start` returns `false`.
+
 ## Introduction to FFMPEG Output in .NET
 
 This guide provides detailed instructions for implementing FFMPEG.exe output in Windows applications using VisioForge's .NET SDKs. The integration works with both [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) and [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net), utilizing the `VideoCaptureCore` and `VideoEditCore` engines.

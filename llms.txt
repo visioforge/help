@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-11-05 12:05:31 UTC (848efabe02e)
+**Generated:** 2026-11-07 08:08:15 UTC (3833d8ebd4b)
 
 ## MCP Server (for AI coding agents)
 
@@ -24,6 +24,10 @@ The MCP server returns surgical answers (single API class, single code example) 
 - [Video Edit SDK .NET (FFmpeg)](https://www.visioforge.com/video-edit-sdk-ffmpeg-net): FFmpeg-based video editing SDK
 - [Virtual Camera SDK](https://www.visioforge.com/virtual-camera-sdk): Virtual camera driver for Windows
 - [Video Fingerprinting SDK](https://www.visioforge.com/video-fingerprinting-sdk): Digital signatures for video content detection
+- [Encoding Filters Pack](https://www.visioforge.com/encoding-filters-pack): DirectShow encoding filters for H.264, HEVC, VP9, AAC and MP3 with NVENC, QSV and AMF GPU acceleration
+- [FFmpeg Source DirectShow Filter](https://www.visioforge.com/ffmpeg-source-directshow-filter): FFmpeg-based DirectShow source filter: MP4, HEVC, VP9, ProRes, HLS and SRT with GPU decoding
+- [Processing Filters Pack](https://www.visioforge.com/processing-filters-pack): DirectShow processing filters: video effects, color correction, chroma key, motion detection, audio normalization
+- [VLC Source DirectShow Filter](https://www.visioforge.com/vlc-source-directshow-filter): VLC engine as a DirectShow source filter for network streams and hard-to-decode formats
 - [Video Encryption SDK — Encrypt & Protect Video Files (.NET)](https://www.visioforge.com/video-encryption-sdk): Encrypt video/audio files with AES-256 and custom keys in C# / .NET. DRM-level protection for distributed and on-device content. Free 30-day trial.
 - [All-in-One Media Framework — Video SDK for Delphi & ActiveX](https://www.visioforge.com/all-in-one-media-framework): Video capture, editing, playback, and streaming for Delphi and ActiveX in one bundle. VCL components + ActiveX controls. RAD Studio, VB6, C++ Builder.
 
@@ -196,10 +200,6 @@ The following products from the old price list are no longer sold:
 - [KLV / MISB Metadata SDK for .NET: KLV in MPEG-TS](https://www.visioforge.com/solutions/klv-misb-metadata)
 - [Video Surveillance SDK — NVR, VMS, ONVIF, RTSP in .NET](https://www.visioforge.com/solutions/surveillance)
 - [Video Editing SDK — Build Editors in C# .NET, Cross-Platform](https://www.visioforge.com/solutions/video-editing)
-- [Encoding Filters Pack — MP4, H.264, HEVC for DirectShow](https://www.visioforge.com/encoding-filters-pack)
-- [FFmpeg Source DirectShow Filter — MP4, HEVC, VP9, GPU Decode](https://www.visioforge.com/ffmpeg-source-directshow-filter)
-- [Processing Filters Pack — Video Effects, Chroma Key, Motion](https://www.visioforge.com/processing-filters-pack)
-- [VLC Source DirectShow Filter — Play 100+ Formats in Any App](https://www.visioforge.com/vlc-source-directshow-filter)
 - [Cookie Policy (EU) — Privacy & Data Controls | VisioForge](https://www.visioforge.com/cookie-policy-eu)
 - [Detect Pirated Video — Automated Piracy Detection SDK](https://www.visioforge.com/detecting-pirated-video-content)
 - [GStreamer Metal Plugin — 15 GPU Video Effects on macOS/iOS](https://www.visioforge.com/gstreamer-metal)
@@ -516,9 +516,10 @@ The following products from the old price list are no longer sold:
 - [Cross-Platform Codec and Device Support Matrix for .NET](https://www.visioforge.com/help/docs/dotnet/platform-matrix/): VisioForge .NET SDK cross-platform support matrix for video/audio codecs, hardware acceleration, and capture devices on Windows, Linux, macOS, Android, iOS.
 - [.NET SDKs — System Requirements & Platform Support](https://www.visioforge.com/help/docs/dotnet/system-requirements/): Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 16.4+, Android 9+. .NET 6–9, ARM64 support, 4K memory guidelines. WPF, WinForms, MAUI, and Avalonia compatible.
 - [SDK License Agreement — Usage Rights and Distribution Terms](https://www.visioforge.com/help/docs/eula/): End User License Agreement for VisioForge SDKs covering usage rights, distribution terms, and legal conditions for developers.
+- [VisioForge .NET SDKs — Changelog and Release Notes](https://www.visioforge.com/help/docs/dotnet/changelog/): Version history for Video Capture, Media Player, Video Edit, and Media Blocks SDKs. New features, bug fixes, API changes, and platform updates.
 - [VisioForge SDK Documentación y Referencia API](https://www.visioforge.com/help/es/): Tutoriales, referencia API y ejemplos de código C# para SDKs VisioForge .NET, Delphi y DirectShow. 7 plataformas, Raspberry Pi + NVIDIA Jetson.
 - [Agent Skills pour les SDK .NET VisioForge — agents IA et LLM](https://www.visioforge.com/help/fr/docs/dotnet/agent-skills/): Skills par plateforme pour les agents IA de codage (Claude Code, Cursor, Copilot, Codex, Gemini CLI) couvrant NuGet, licence et pièges de déploiement.
-- [VisioForge .NET SDKs — Changelog and Release Notes](https://www.visioforge.com/help/fr/docs/dotnet/changelog/): Version history for Video Capture, Media Player, Video Edit, and Media Blocks SDKs. New features, bug fixes, API changes, and platform updates.
+- [VisioForge .NET SDKs — Changelog and Release Notes](https://www.visioforge.com/help/docs/dotnet/changelog/): Version history for Video Capture, Media Player, Video Edit, and Media Blocks SDKs. New features, bug fixes, API changes, and platform updates.
 - [SDK .NET VisioForge — Capture, édition et lecture vidéo](https://www.visioforge.com/help/fr/docs/dotnet/): SDK .NET pour la capture, l'édition, la lecture et le traitement vidéo. Prise en charge multiplateforme pour Windows, macOS, Linux, Android et iOS.
 - [Guide de migration — SDK .NET VisioForge v15 vers v2026](https://www.visioforge.com/help/fr/docs/dotnet/migration-from-v15/): Guide pas à pas pour migrer du SDK .NET VisioForge v15 vers v2026, couvrant les parcours DirectShow et moteurs X multiplateformes.
 - [Matrice multiplateforme des codecs et périphériques .NET](https://www.visioforge.com/help/fr/docs/dotnet/platform-matrix/): Matrice multiplateforme du SDK .NET VisioForge pour codecs vidéo/audio, accélération matérielle et périphériques sur Windows, Linux, macOS, Android et iOS.

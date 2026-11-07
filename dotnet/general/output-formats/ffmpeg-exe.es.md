@@ -36,6 +36,9 @@ primary_api_classes:
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }
 
+!!! note "Edición"
+    La salida FFmpeg.exe requiere la edición Premium tanto en `VideoCaptureCore` como en `VideoEditCore`. Con una licencia Standard o Professional, el trabajo se ejecuta en modo de prueba, con la marca de agua de prueba, solo mientras duran los 30 días de prueba; después, `Start` devuelve `false`.
+
 ## Introducción a salida FFMPEG en .NET
 
 Esta guía proporciona instrucciones detalladas para implementar salida FFMPEG.exe en aplicaciones Windows usando los SDK .NET de VisioForge. La integración funciona tanto con [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) como con [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net), utilizando los motores `VideoCaptureCore` y `VideoEditCore`.
