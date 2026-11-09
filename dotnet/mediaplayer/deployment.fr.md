@@ -160,7 +160,7 @@ Pour les scénarios de déploiement avancés nécessitant un contrôle précis d
 
 ### Étape 4 : Filtres DirectShow
 
-* Copiez et enregistrez via COM les filtres DirectShow du SDK en utilisant [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5) ou une autre méthode appropriée.
+* Copiez et enregistrez via COM les filtres DirectShow du SDK en utilisant [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32) ou une autre méthode appropriée.
 
 ### Étape 5 : Configuration de l'environnement
 

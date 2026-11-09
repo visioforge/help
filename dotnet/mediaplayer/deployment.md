@@ -160,7 +160,7 @@ For advanced deployment scenarios requiring precise control over component insta
 
 ### Step 4: DirectShow Filters
 
-* Copy and COM-register SDK DirectShow filters using [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5) or another suitable method.
+* Copy and COM-register SDK DirectShow filters using [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32) or another suitable method.
 
 ### Step 5: Environment Configuration
 

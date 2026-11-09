@@ -1,11 +1,12 @@
 ---
 title: Bloques de Procesamiento de Video OpenCV en C# .NET
-description: Añada detección de objetos, seguimiento y procesamiento de imágenes a pipelines con bloques OpenCV en Media Blocks SDK. Windows, macOS y Mac Catalyst.
+description: "Bloques OpenCV en Media Blocks SDK .NET: detección de rostros, manos y movimiento, seguimiento, plantillas y filtros. Windows, Linux, macOS, Mac Catalyst, iOS."
 tags:
   - Media Blocks SDK
   - .NET
   - Windows
   - macOS
+  - iOS
 primary_api_classes:
   - SystemVideoSourceBlock
   - VideoRendererBlock
@@ -21,7 +22,7 @@ sidebar_label: OpenCV
 
 Los bloques OpenCV (Open Source Computer Vision Library) proporcionan potentes capacidades de procesamiento de video dentro del VisioForge Media Blocks SDK .NET. Estos bloques permiten una amplia gama de tareas de visión por computadora, desde manipulación básica de imágenes hasta detección y seguimiento de objetos complejos.
 
-Para usar los bloques OpenCV, añada el paquete NuGet redistribuible para su plataforma: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86` o `VisioForge.CrossPlatform.OpenCV.macOS` (macOS y Mac Catalyst). Estas son las plataformas para las que actualmente se distribuye el plugin OpenCV de GStreamer; en cualquier otra plataforma el método `IsAvailable()` de cada bloque devuelve `false`.
+Para usar los bloques OpenCV, añada el paquete NuGet redistribuible para su plataforma: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 y posteriores, con GStreamer 1.22 o posterior de la distribución), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS y Mac Catalyst) o `VisioForge.CrossPlatform.OpenCV.iOS` (dispositivos iOS y simuladores arm64). Estas son las plataformas para las que actualmente se distribuye el plugin OpenCV de GStreamer; en cualquier otra plataforma el método `IsAvailable()` de cada bloque devuelve `false`.
 
 La mayoría de los bloques OpenCV típicamente requieren un elemento `videoconvert` antes de ellos para asegurar que el flujo de video de entrada esté en un formato compatible. El SDK maneja esto internamente cuando inicializa el bloque.
 
@@ -91,7 +92,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -143,7 +144,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -208,7 +209,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -260,7 +261,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -312,7 +313,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -382,7 +383,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -420,7 +421,7 @@ Nota: Se debe llamar a `ProcessPaths(Context)` en el objeto de configuración pa
 
 ### Eventos
 
-- `FaceDetected`: Ocurre cuando se detectan rostros (y otras características habilitadas). Proporciona `CVFaceDetectedEventArgs` con un array de objetos `CVFace` y una marca de tiempo.
+- `FaceDetected`: Ocurre cuando se detectan rostros (y otras características habilitadas). Proporciona `CVFaceDetectedEventArgs` con un array de objetos `CVFace` y una marca de tiempo. Se dispara una vez por cada fotograma que contiene rostros; `TimeStamp` es la posición del fotograma en el medio, en la misma escala que la posición del pipeline; `HasTimeStamp` es `false` para un fotograma sin marca de tiempo.
   - `CVFace` contiene `Rect` para `Position`, `Nose`, `Mouth`, y una lista de `Rect` para `Eyes`.
 
 ### Pipeline de ejemplo
@@ -456,7 +457,7 @@ var faceDetectBlock = new CVFaceDetectBlock(faceDetectSettings);
 
 faceDetectBlock.FaceDetected += (s, e) => 
 {
-    Console.WriteLine($"Marca de tiempo: {e.Timestamp}, Rostros encontrados: {e.Faces.Length}");
+    Console.WriteLine($"Marca de tiempo: {e.TimeStamp}, Rostros encontrados: {e.Faces.Length}");
     foreach (var face in e.Faces)
     {
         Console.WriteLine($"  Rostro en [{face.Position.Left},{face.Position.Top},{face.Position.Width},{face.Position.Height}]");
@@ -479,7 +480,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -512,7 +513,7 @@ Nota: Se debe llamar a `ProcessPaths(Context)` en el objeto de configuración pa
 ### Eventos
 
 - `HandDetected`: Ocurre cuando se detectan manos. Proporciona `CVHandDetectedEventArgs` con un array de objetos `CVHand`.
-  - `CVHand` contiene `Rect` para `Position` y `CVHandGesture` para `Gesture` (Fist o Palm).
+  - `CVHand` contiene `Rect` para `Position` y `CVHandGesture` para `Gesture` (Fist o Palm). `Position` está en las coordenadas del fotograma de salida de 320x240 del bloque, no del fotograma de origen.
 
 ### Pipeline de ejemplo
 
@@ -563,11 +564,11 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
-Requiere archivos XML de cascada Haar para detección de puño y palma. El video de entrada es escalado internamente a 320x240 para el procesamiento por el elemento `handdetect`. El método `ProcessBusMessage` maneja los mensajes de GStreamer para disparar `HandDetected`.
+Requiere archivos XML de cascada Haar para detección de puño y palma. El bloque escala el video a 320x240 para el elemento `handdetect` y lo entrega a ese tamaño. El método `ProcessBusMessage` maneja los mensajes de GStreamer para disparar `HandDetected`.
 
 ## Bloque CV Laplace
 
@@ -628,7 +629,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -675,8 +676,10 @@ El `CVMotionCellsBlock` se configura usando `CVMotionCellsSettings`. Propiedades
   - `Cells`: Cadena indicando qué celdas tienen movimiento (ej., "0:0,1:2").
   - `StartedTime`: Marca de tiempo cuando el movimiento comenzó en el alcance del evento actual.
   - `FinishedTime`: Marca de tiempo cuando el movimiento terminó (si aplica al evento).
-  - `CurrentTime`: Marca de tiempo del fotograma actual relacionado con el evento.
+  - `CurrentTime`: Marca de tiempo del fotograma actual relacionado con el evento; en un evento sin movimiento, la del último fotograma con movimiento.
   - `IsMotion`: Booleano indicando si el evento significa movimiento (`true`) o sin movimiento (`false`).
+
+Los tiempos son posiciones en el medio, en la misma escala que la posición del pipeline; un tiempo es `null` para un fotograma sin posición en el medio: sin marca de tiempo o fuera del segmento reproducido. Un evento sin movimiento anterior a cualquier movimiento tampoco tiene tiempo, ni uno posterior a una búsqueda que se refiera a un movimiento anterior a ella.
 
 ### Pipeline de ejemplo
 
@@ -729,7 +732,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -799,7 +802,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -864,7 +867,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -894,7 +897,7 @@ El `CVTemplateMatchBlock` se configura usando `CVTemplateMatchSettings`. Propied
 ### Eventos
 
 - `TemplateMatch`: Ocurre cuando se encuentra una coincidencia de plantilla. Proporciona `CVTemplateMatchEventArgs`:
-  - `Rect`: Un objeto `Types.Rect` representando la ubicación (`Left`, `Top`, `Right`, `Bottom`) de la mejor coincidencia. `Width` y `Height` son propiedades calculadas (`Right - Left`, `Bottom - Top`).
+  - `Rectangle`: Un objeto `Types.Rect` representando la ubicación (`Left`, `Top`, `Right`, `Bottom`) de la mejor coincidencia. `Width` y `Height` son propiedades calculadas (`Right - Left`, `Bottom - Top`).
   - `Result`: Un valor double representando la calidad o resultado de la coincidencia, dependiendo del método usado.
 
 ### Pipeline de ejemplo
@@ -928,7 +931,7 @@ var templateMatchBlock = new CVTemplateMatchBlock(templateMatchSettings);
 
 templateMatchBlock.TemplateMatch += (s, e) => 
 {
-    Console.WriteLine($"Plantilla coincidente en [{e.Rect.Left},{e.Rect.Top},{e.Rect.Width},{e.Rect.Height}] con resultado: {e.Result}");
+    Console.WriteLine($"Plantilla coincidente en [{e.Rectangle.Left},{e.Rectangle.Top},{e.Rectangle.Width},{e.Rectangle.Height}] con resultado: {e.Result}");
 };
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Asumiendo VideoView1
@@ -943,7 +946,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -1014,7 +1017,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 
@@ -1087,7 +1090,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Observaciones
 

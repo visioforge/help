@@ -94,6 +94,15 @@ Lors du déploiement de votre application .NET sur Ubuntu, vous devez inclure de
 
 Le paquet [VisioForge.CrossPlatform.Core.Linux.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Linux.x64) contient les bibliothèques natives et les bindings essentiels pour la plateforme Linux .NET. Ce paquet est obligatoire pour tous les déploiements de SDK VisioForge sur Ubuntu.
 
+### Vision par ordinateur avec OpenCV
+
+Pour les blocs OpenCV (`VisioForge.Core.MediaBlocks.OpenCV`, dont `VideoStabilizationBlock`), ajoutez aussi le paquet correspondant à votre architecture :
+
+- [VisioForge.CrossPlatform.OpenCV.Linux.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Linux.x64)
+- [VisioForge.CrossPlatform.OpenCV.Linux.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Linux.arm64)
+
+Le paquet copie à côté de votre application un plugin GStreamer dans lequel OpenCV est lié, ainsi que les fichiers de cascade Haar que `CVFaceDetectBlock`, `CVFaceBlurBlock` et `CVHandDetectBlock` chargent par défaut ; le SDK charge le plugin au démarrage. Il fonctionne avec le GStreamer 1.22 ou ultérieur de la distribution : Debian 12, Ubuntu 24.04 et versions ultérieures. Ubuntu 22.04 fournit GStreamer 1.20 et n'est pas pris en charge pour ces blocs. N'utilisez pas le paquet `gstreamer1.0-opencv` de la distribution à sa place : il ne contient pas `vfdeshake`, donc `VideoStabilizationBlock` reste indisponible, et ses autres éléments n'ont pas les corrections du SDK. S'il est tout de même installé, le SDK utilise les éléments de ce paquet à sa place uniquement tant que rien ne charge ce plugin avant l'initialisation du SDK : les deux plugins définissent les mêmes types d'éléments, et celui qui est chargé en premier l'emporte. Ne le chargez pas vous-même (par exemple avec `Gst.Plugin.LoadByName("opencv")`) ; le désinstaller (`sudo apt remove gstreamer1.0-opencv`) écarte le conflit.
+
 ### Environnement de développement
 
 Vous pouvez utiliser Rider pour développer votre projet sous Linux. Consultez la page d'installation de [Rider](../install/rider.md) pour plus d'informations.

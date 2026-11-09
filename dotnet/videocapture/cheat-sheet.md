@@ -39,7 +39,7 @@ primary_api_classes:
 
 # VisioForge Video Capture SDK .NET — Cheat Sheet
 
-Video Capture SDK .NET captures from webcams, IP cameras (RTSP/ONVIF), screens, Decklink, and GenICam/GigE Vision devices on all 5 .NET platforms (Windows, macOS, Linux, Android, iOS). `VideoCaptureCoreX` is the cross-platform engine; sources are configured via typed settings classes such as `VideoCaptureDeviceSourceSettings`, and devices are listed asynchronously with `DeviceEnumerator`.
+Video Capture SDK .NET captures from webcams, IP cameras (RTSP/ONVIF), and screens on all 5 .NET platforms (Windows, macOS, Linux, Android, iOS), and from Decklink and GenICam/GigE Vision devices on Windows, macOS and Linux. `VideoCaptureCoreX` is the cross-platform engine; sources are configured via typed settings classes such as `VideoCaptureDeviceSourceSettings`, and devices are listed asynchronously with `DeviceEnumerator`.
 
 !!! tip "AI coding agents: use the VisioForge MCP server"
 
@@ -171,7 +171,7 @@ Swap `VideoCaptureDeviceSourceSettings(...)` for `await RTSPSourceSettings.Creat
 
 - **Device enumeration is async.** Always `await DeviceEnumerator.Shared.VideoSourcesAsync()` — calling `.Result` or `.Wait()` on the UI thread can deadlock. Audio uses its own `AudioSourcesAsync()` / `AudioOutputsAsync()` calls; the video enumerator does not cover them.
 - **Outputs must be added before `StartAsync`.** `Outputs_Add(...)` during an active capture is not supported — stop, add the output, and start again.
-- **Virtual Camera needs extra registration.** The `VirtualCamera` redist package must be registered (see the [deployment guide](./deployment.md)) before the virtual camera becomes visible to external applications like Zoom or Teams.
+- **Virtual Camera needs extra registration.** The `VirtualCamera` redist package must be registered (see the [deployment guide](./deployment.md)) before the virtual camera becomes visible to external applications like Zoom or OBS.
 - **AnyCPU apps need both x86 and x64 redistributables.** On Windows, ship both architectures or force a specific one via `<PlatformTarget>` — partial deployment silently fails at source init time.
 - **Mobile permissions must be granted before enumeration.** On Android and iOS, camera and microphone permissions must be requested and granted before `DeviceEnumerator` runs — otherwise the returned list is empty. See the [MAUI camera recording guide](./maui/camera-recording-maui.md) for per-platform permission setup.
 

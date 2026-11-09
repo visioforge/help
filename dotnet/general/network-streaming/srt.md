@@ -4,11 +4,9 @@ description: Stream and receive video over SRT protocol in C# .NET with caller/l
 tags:
   - Video Capture SDK
   - Media Blocks SDK
-  - Video Edit SDK
   - .NET
   - MediaBlocksPipeline
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - Windows
   - macOS
   - Linux
@@ -17,7 +15,6 @@ tags:
   - Capture
   - Streaming
   - Encoding
-  - Editing
   - Webcam
   - IP Camera
   - NDI
@@ -38,7 +35,7 @@ primary_api_classes:
 
 # SRT Streaming Implementation Guide
 
-[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## What is SRT?
 
@@ -61,7 +58,7 @@ bool srtSourceAvailable = SRTSourceBlock.IsAvailable(); // for receiving
 
 ## SRT Connection Modes
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
+[VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 SRT supports three connection modes via the `SRTConnectionMode` enum:
 

@@ -1,6 +1,6 @@
 ---
 title: Lecteur vidéo HLS pour ASP.NET Web Forms en C# et .NET
-description: Lisez fichiers, caméras RTSP et périphériques dans ASP.NET Web Forms : le SDK encode en HLS sur le serveur, le contrôle HlsPlayer le lit.
+description: "Lisez fichiers, caméras RTSP et périphériques dans ASP.NET Web Forms : le SDK encode en HLS sur le serveur, le contrôle HlsPlayer le lit."
 tags:
   - Media Blocks SDK
   - .NET

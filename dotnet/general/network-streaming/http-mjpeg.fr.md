@@ -8,7 +8,6 @@ tags:
   - .NET
   - MediaBlocksPipeline
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - Windows
   - macOS
   - Linux
@@ -50,7 +49,7 @@ La fonctionnalité du SDK qui consiste à diffuser de la vidéo encodée en Moti
 
 ## Sortie MJPEG multiplateforme
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
+[VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 La fonctionnalité de diffusion est implémentée via deux classes principales :
 

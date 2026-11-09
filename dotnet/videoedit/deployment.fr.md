@@ -118,7 +118,7 @@ L'installation manuelle offre le plus haut niveau de contrôle sur le processus 
    - Copiez les assemblages .NET dans le dossier de l'application ou installez-les dans le Global Assembly Cache (GAC)
 
 3. **Filtres DirectShow** :
-   - Copiez et enregistrez via COM les filtres DirectShow du SDK à l'aide de [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5) ou d'une méthode équivalente
+   - Copiez et enregistrez via COM les filtres DirectShow du SDK à l'aide de [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32) ou d'une méthode équivalente
    - Si l'exécutable de votre application se trouve dans un dossier différent, ajoutez le dossier contenant les filtres à la variable d'environnement système PATH
 
 ## Référence des filtres DirectShow essentiels

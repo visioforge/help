@@ -274,7 +274,7 @@ await pipeline.StartAsync();
 
 #### Platforms
 
-Windows (x64), Linux. Windows on Arm and 32-bit (x86) apps are not supported: on Windows, Basler pylon SDK supports x64 only.
+Windows (x64). Windows on Arm and 32-bit (x86) apps are not supported: on Windows, Basler pylon SDK supports x64 only. On Linux and macOS, use the [GenICam Source Block](#genicam-source-block).
 
 ### Spinnaker/FLIR Source Block
 
@@ -422,7 +422,7 @@ await pipeline.StartAsync();
 
 #### Platforms
 
-Windows (x64), macOS, Linux. Windows on Arm and 32-bit (x86) apps are not supported: on Windows, Allied Vision Vimba X SDK supports x64 only.
+Windows (x64). Windows on Arm and 32-bit (x86) apps are not supported: on Windows, Allied Vision Vimba X SDK supports x64 only. On Linux and macOS the SDK can load an installed Vimba X, but this is not tested and no `vmbsrc` plugin ships there; use the [GenICam Source Block](#genicam-source-block).
 
 ### Blackmagic Decklink Source Block
 

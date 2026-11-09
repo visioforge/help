@@ -140,7 +140,7 @@ The table below shows the support for network protocols for each platform.
 | HTTP                          | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | NDI                           | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2718; |
 | VNC (source)                  | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
-| GenICam (source)              | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
+| GenICam (source)              | &#x2714; | &#x2714; | &#x2714;| &#x2718; | &#x2718; |
 | AWS S3                        | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 
 NDI on Windows covers x86 and x64; it is not available in a native Windows ARM64 process. NDI is not available on iOS: the SDK's iOS GStreamer runtime does not include the NDI plugin. On Android, NDI receive works once the vendor's NDI SDK library (`libndi.so`) is packaged with the app, and the SDK finds it at runtime; NDI output is not available on Android.

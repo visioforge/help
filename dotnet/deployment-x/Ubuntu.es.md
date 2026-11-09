@@ -1,6 +1,6 @@
 ---
 title: Guía de despliegue multiplataforma .NET para Ubuntu
-description: Despliegue sus aplicaciones multimedia .NET en Ubuntu Linux: configuración de GStreamer y del hardware, y optimización del rendimiento.
+description: "Despliegue sus aplicaciones multimedia .NET en Ubuntu Linux: configuración de GStreamer y del hardware, y optimización del rendimiento."
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -93,6 +93,15 @@ Al desplegar su aplicación .NET en Ubuntu, necesitará incluir paquetes NuGet a
 ### Paquete principal adicional de Linux
 
 El paquete [VisioForge.CrossPlatform.Core.Linux.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Linux.x64) contiene bibliotecas nativas esenciales y bindings para la plataforma .NET Linux. Este paquete es obligatorio para todos los despliegues del SDK de VisioForge en Ubuntu.
+
+### Visión por computadora con OpenCV
+
+Para los bloques OpenCV (`VisioForge.Core.MediaBlocks.OpenCV`, entre ellos `VideoStabilizationBlock`), añada también el paquete de su arquitectura:
+
+- [VisioForge.CrossPlatform.OpenCV.Linux.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Linux.x64)
+- [VisioForge.CrossPlatform.OpenCV.Linux.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Linux.arm64)
+
+El paquete copia junto a su aplicación un plugin de GStreamer con OpenCV enlazado en su interior, además de los archivos de cascada Haar que `CVFaceDetectBlock`, `CVFaceBlurBlock` y `CVHandDetectBlock` cargan por defecto; el SDK carga el plugin al iniciarse. Funciona con GStreamer 1.22 o posterior de la distribución: Debian 12, Ubuntu 24.04 y versiones posteriores. Ubuntu 22.04 incluye GStreamer 1.20 y no es compatible con estos bloques. No use en su lugar el paquete `gstreamer1.0-opencv` de la distribución: no incluye `vfdeshake`, por lo que `VideoStabilizationBlock` sigue sin estar disponible, y sus demás elementos no tienen las correcciones del SDK. Si de todos modos está instalado, el SDK usa los elementos de este paquete en su lugar solo mientras nada cargue ese plugin antes de que el SDK se inicialice: ambos plugins definen los mismos tipos de elementos y gana el que se carga primero. No lo cargue usted mismo (por ejemplo con `Gst.Plugin.LoadByName("opencv")`); desinstalarlo (`sudo apt remove gstreamer1.0-opencv`) descarta el conflicto.
 
 ### Entorno de desarrollo
 

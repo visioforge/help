@@ -142,7 +142,7 @@ FFMPEG provides multiple video encoder options. Select and configure the appropr
 ```csharp
 var videoEncoder = new H264MFSettings
 {
-    Bitrate     = 5000, // Kbit/s — 5000 = 5 Mbps
+    Bitrate     = 5000000, // 5 Mbps
     RateControl = H264MFRateControl.CBR,
 };
 ffmpegOutput.Video = videoEncoder;
@@ -222,28 +222,28 @@ Install the following NuGet packages based on your target architecture to ensure
 
 ```cmd
 Install-Package VisioForge.DotNet.Core.Redist.VideoCapture.x64
-Install-Package VisioForge.DotNet.Core.Redist.FFMPEGEXE.x64
+Install-Package VisioForge.DotNet.Core.Redist.FFMPEG.x64
 ```
 
 For x86 targets:
 
 ```cmd
 Install-Package VisioForge.DotNet.Core.Redist.VideoCapture.x86
-Install-Package VisioForge.DotNet.Core.Redist.FFMPEGEXE.x86
+Install-Package VisioForge.DotNet.Core.Redist.FFMPEG.x86
 ```
 
 ### Video Edit SDK Dependencies
 
 ```cmd
 Install-Package VisioForge.DotNet.Core.Redist.VideoEdit.x64
-Install-Package VisioForge.DotNet.Core.Redist.FFMPEGEXE.x64
+Install-Package VisioForge.DotNet.Core.Redist.FFMPEG.x64
 ```
 
 For x86 targets:
 
 ```cmd
 Install-Package VisioForge.DotNet.Core.Redist.VideoEdit.x86
-Install-Package VisioForge.DotNet.Core.Redist.FFMPEGEXE.x86
+Install-Package VisioForge.DotNet.Core.Redist.FFMPEG.x86
 ```
 
 ## Troubleshooting and Optimization

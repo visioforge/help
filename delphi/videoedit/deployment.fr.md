@@ -61,7 +61,7 @@ Dans les situations où vous avez besoin d'un contrôle précis sur le déploiem
    * Copiez toutes les DLL MFP du répertoire `Redist\Filters` vers le dossier de votre application
 
 3. **Enregistrer les filtres DirectShow**
-   * Copiez et enregistrez en COM ces filtres DirectShow essentiels à l'aide de [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5).
+   * Copiez et enregistrez en COM ces filtres DirectShow essentiels à l'aide de [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32).
    * **Architecture :** le nom de fichier nu correspond au filtre **x86 (32 bits)** ; le filtre **x64 (64 bits)** correspondant porte le suffixe `_x64` (par exemple `VisioForge_Video_Effects_Pro_x64.ax`). Les deux sont livrés dans le redistribuable ; déployez et enregistrez la variante qui correspond à l'architecture cible de votre application. Les applications 64 bits doivent enregistrer les variantes `_x64`.
      * `VisioForge_Audio_Effects_4.ax`
      * `VisioForge_Dump.ax`

@@ -1,6 +1,6 @@
 ---
 title: Despliegue de la biblioteca TVFVideoCapture en Delphi
-description: Despliegue TVFVideoCapture en Delphi: instale componentes, registre filtros DirectShow y configure el entorno para desplegar sus aplicaciones con éxito.
+description: "Despliegue TVFVideoCapture en Delphi: instale componentes, registre filtros DirectShow y configure el entorno para desplegar sus aplicaciones con éxito."
 tags:
   - All-in-One Media Framework
   - Delphi
@@ -60,11 +60,11 @@ Para más control sobre el proceso de despliegue, siga estos pasos detallados:
 ### Paso 2: Desplegar componentes centrales
 
 1. Copie todos los DLLs de Media Foundation Platform (MFP) del directorio `Redist\Filters` a la carpeta de su aplicación
-2. Para implementaciones ActiveX: copie y registre el archivo OCX usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5)
+2. Para implementaciones ActiveX: copie y registre el archivo OCX usando [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32)
 
 ### Paso 3: Registrar filtros DirectShow
 
-Usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5), registre estos filtros DirectShow esenciales:
+Usando [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32), registre estos filtros DirectShow esenciales:
 
 - `VisioForge_Audio_Effects_4.ax`
 - `VisioForge_Dump.ax`

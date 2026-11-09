@@ -30,7 +30,7 @@ This page provides practical code examples for using the Virtual Camera SDK. The
 - Apply real-time video effects and processing
 - Support multiple virtual camera instances
 
-The virtual camera appears as a standard webcam to applications like Zoom, Teams, OBS, and other video conferencing software.
+The virtual camera appears as a standard webcam to Zoom, OBS Studio, browsers and other video applications.
 
 ---
 ## Architecture Overview

@@ -60,11 +60,11 @@ Pour un meilleur contrôle du processus de déploiement, suivez ces étapes dét
 ### Étape 2 : déployer les composants principaux
 
 1. Copiez toutes les DLL de Media Foundation Platform (MFP) du répertoire `Redist\Filters` vers le dossier de votre application
-2. Pour les implémentations ActiveX : copiez et enregistrez le fichier OCX à l'aide de [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5)
+2. Pour les implémentations ActiveX : copiez et enregistrez le fichier OCX à l'aide de [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32)
 
 ### Étape 3 : enregistrer les filtres DirectShow
 
-À l'aide de [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5), enregistrez ces filtres DirectShow essentiels :
+À l'aide de [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32), enregistrez ces filtres DirectShow essentiels :
 
 - `VisioForge_Audio_Effects_4.ax`
 - `VisioForge_Dump.ax`

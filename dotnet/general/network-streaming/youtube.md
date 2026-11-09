@@ -4,11 +4,9 @@ description: Stream to YouTube Live with RTMP in .NET applications using optimiz
 tags:
   - Video Capture SDK
   - Media Blocks SDK
-  - Video Edit SDK
   - .NET
   - MediaBlocksPipeline
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - Windows
   - macOS
   - Linux
@@ -17,7 +15,6 @@ tags:
   - Capture
   - Streaming
   - Encoding
-  - Editing
   - RTMP
   - H.264
   - H.265
@@ -25,7 +22,6 @@ tags:
   - C#
 primary_api_classes:
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - YouTubeOutput
   - NVENCH264EncoderSettings
   - MediaBlockPadMediaType
@@ -40,7 +36,7 @@ The YouTube RTMP output functionality in VisioForge SDKs enables developers to c
 
 ## Supported SDK Platforms
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
+[VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 All major VisioForge SDK platforms provide cross-platform capabilities for YouTube streaming, ensuring consistent functionality across Windows, macOS, and other operating systems.
 
@@ -166,9 +162,9 @@ youtubeOutput.Audio = audioSettings;
 
 ## Complete Implementation Examples
 
-### VideoCaptureCoreX/VideoEditCoreX Integration
+### VideoCaptureCoreX Integration
 
-This example demonstrates a complete YouTube streaming implementation with error handling for VideoCaptureCoreX/VideoEditCoreX:
+This example demonstrates a complete YouTube streaming implementation with error handling for VideoCaptureCoreX:
 
 ```csharp
 try
@@ -197,9 +193,6 @@ try
     
     // Add the output to the video capture instance
     core.Outputs_Add(youtubeOutput, true); // core is an instance of VideoCaptureCoreX
-
-    // Or set the output for the video edit instance
-    videoEdit.Output_Format = youtubeOutput; // videoEdit is an instance of VideoEditCoreX
 }
 catch (Exception ex)
 {

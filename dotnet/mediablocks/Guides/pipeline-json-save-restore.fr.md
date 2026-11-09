@@ -1,5 +1,5 @@
 ---
-title: Pipeline Media Blocks en JSON : enregistrer et restaurer
+title: "Pipeline Media Blocks en JSON : enregistrer et restaurer"
 description: Sérialisez un pipeline Media Blocks en JSON, validez-le, matérialisez-le et capturez un pipeline en cours. Exemples C# avec diagnostics.
 tags:
   - Media Blocks SDK

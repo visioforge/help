@@ -1,5 +1,5 @@
 ---
-title: Encodage HEVC GPU : AMD, NVIDIA, Intel, Apple VideoToolbox
+title: "Encodage HEVC GPU : AMD, NVIDIA, Intel, Apple VideoToolbox"
 description: Encodez en HEVC (H.265) avec les GPU AMD, NVIDIA, Intel et Apple VideoToolbox, y compris en 10 bits et avec alpha, dans vos applications .NET.
 tags:
   - Video Capture SDK

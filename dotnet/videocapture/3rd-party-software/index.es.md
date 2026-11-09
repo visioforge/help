@@ -23,6 +23,8 @@ El Video Capture SDK .NET proporciona capacidades robustas para integrar con var
 
 El SDK usa Virtual Camera SDK como puente entre nuestro Video Capture SDK y aplicaciones de terceros. Este puente crea un dispositivo de cámara virtual que puede ser detectado y usado por cualquier aplicación compatible con DirectShow en su entorno de desarrollo.
 
+Virtual Camera SDK se licencia por separado: sin su clave de licencia, indicada en `Virtual_Camera_Output_LicenseKey`, la cámara virtual muestra una franja TRIAL, y una licencia de Video Capture SDK .NET no la elimina.
+
 ### Puente de video
 
 La tecnología de cámara virtual permite que los flujos de video capturados pasen sin problemas a aplicaciones externas sin pérdida de calidad o impacto significativo en el rendimiento.
@@ -38,7 +40,7 @@ La cámara virtual funciona con numerosas aplicaciones compatibles con DirectSho
 - OBS (Open Broadcaster Software)
 - FFMPEG
 - VLC Media Player
-- Zoom, Teams y otro software de conferencias
+- Zoom y otro software de conferencias compatible con cámaras DirectShow
 - Aplicaciones DirectShow personalizadas
 
 ## Tutoriales detallados

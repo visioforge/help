@@ -94,6 +94,15 @@ When deploying your .NET application to Ubuntu, you'll need to include additiona
 
 The [VisioForge.CrossPlatform.Core.Linux.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Linux.x64) package contains essential native libraries and bindings for the .NET Linux platform. This package is mandatory for all VisioForge SDK deployments on Ubuntu.
 
+### Computer Vision with OpenCV
+
+For the OpenCV blocks (`VisioForge.Core.MediaBlocks.OpenCV`, `VideoStabilizationBlock` among them), also add the package for your architecture:
+
+- [VisioForge.CrossPlatform.OpenCV.Linux.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Linux.x64)
+- [VisioForge.CrossPlatform.OpenCV.Linux.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Linux.arm64)
+
+The package copies one GStreamer plugin with OpenCV linked inside, plus the Haar cascade files that `CVFaceDetectBlock`, `CVFaceBlurBlock` and `CVHandDetectBlock` load by default, next to your application; the SDK loads the plugin at startup. It runs on the distribution's GStreamer 1.22 or later - Debian 12, Ubuntu 24.04 and later releases. Ubuntu 22.04 ships GStreamer 1.20 and is not supported for these blocks. Do not use the distribution's `gstreamer1.0-opencv` in its place: it has no `vfdeshake`, so `VideoStabilizationBlock` stays unavailable, and its other elements lack the SDK's fixes. If it is installed anyway, the SDK uses this package's elements in its place only while nothing loads that plugin before the SDK initializes: both plugins define the same element types, and the one loaded first wins. Do not load it yourself (for example with `Gst.Plugin.LoadByName("opencv")`); removing it (`sudo apt remove gstreamer1.0-opencv`) rules the conflict out.
+
 ### Development Environment
 
 You can use Rider to develop your project in Linux. Please check the [Rider](../install/rider.md) installation page for more information.

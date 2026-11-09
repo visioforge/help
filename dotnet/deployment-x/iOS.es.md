@@ -106,6 +106,20 @@ Puede agregar estos paquetes usando el NuGet Package Manager en su IDE o agregan
 
 Nota: Reemplace los números de versión con las últimas versiones disponibles.
 
+### Visión por computadora con OpenCV
+
+Para los bloques OpenCV (`VisioForge.Core.MediaBlocks.OpenCV`, incluido `VideoStabilizationBlock`), añada también:
+
+- [VisioForge.CrossPlatform.OpenCV.iOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.iOS)
+
+El paquete enlaza en su aplicación una biblioteca estática con OpenCV incluido, para dispositivos iOS y simuladores arm64, y copia al bundle de la aplicación los archivos de cascadas Haar que `CVFaceDetectBlock`, `CVFaceBlurBlock` y `CVHandDetectBlock` cargan por defecto. El SDK registra el plugin al iniciarse; sin el paquete, el método `IsAvailable()` de cada bloque OpenCV devuelve `false`. En un proyecto MAUI multiplataforma, manténgalo dentro de la condición `-ios`:
+
+```xml
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+  <PackageReference Include="VisioForge.CrossPlatform.OpenCV.iOS" Version="[2026.11.8]"/>
+</ItemGroup>
+```
+
 ## Permisos y entitlements requeridos
 
 Las aplicaciones iOS requieren permisos explícitos para acceder a características del dispositivo como cámaras, micrófonos y la biblioteca de fotos. Configure estos permisos en el archivo Info.plist de su app:

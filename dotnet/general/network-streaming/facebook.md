@@ -4,11 +4,9 @@ description: Stream to Facebook Live in .NET with hardware-accelerated encoding,
 tags:
   - Video Capture SDK
   - Media Blocks SDK
-  - Video Edit SDK
   - .NET
   - MediaBlocksPipeline
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - Windows
   - macOS
   - Linux
@@ -17,7 +15,6 @@ tags:
   - Capture
   - Streaming
   - Encoding
-  - Editing
   - Screen Capture
   - RTMP
   - H.264
@@ -26,7 +23,6 @@ tags:
   - C#
 primary_api_classes:
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - FacebookLiveOutput
   - NVENCH264EncoderSettings
   - QSVH264EncoderSettings
@@ -35,7 +31,7 @@ primary_api_classes:
 
 # Facebook Live Streaming with VisioForge SDKs
 
-[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 ## Introduction to Facebook Live Streaming
 
@@ -45,11 +41,10 @@ This comprehensive guide explains how to implement Facebook Live streaming using
 
 ## Core Components for Facebook Live Integration
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
+[VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The cornerstone of Facebook Live integration in VisioForge is the `FacebookLiveOutput` class, which provides a complete implementation of the RTMP protocol required for Facebook streaming. This class implements multiple interfaces to ensure compatibility across various SDK components:
 
-- `IVideoEditXBaseOutput` - For Video Edit SDK integration
 - `IVideoCaptureXBaseOutput` - For Video Capture SDK integration
 - `IOutputVideoProcessor` - For video stream processing
 - `IOutputAudioProcessor` - For audio stream processing
@@ -77,9 +72,6 @@ var facebookOutput = new FacebookLiveOutput("your_facebook_streaming_key_here");
 
 // Add to your VideoCaptureCoreX instance
 captureCore.Outputs_Add(facebookOutput, true);
-
-// Or set as output format for VideoEditCoreX
-editCore.Output_Format = facebookOutput;
 ```
 
 This minimal setup uses the default encoders, which VisioForge selects based on your platform for optimal performance. For most applications, these defaults provide excellent results with minimal configuration overhead.
@@ -266,18 +258,6 @@ var captureCore = new VideoCaptureCoreX();
 var facebookOutput = ConfigureFacebookLiveStream("your_streaming_key_here");
 captureCore.Outputs_Add(facebookOutput, true);
 await captureCore.StartAsync();
-
-// Usage with VideoEditCoreX
-var editCore = new VideoEditCoreX();
-
-// Add sources
-// ...
-
-// Set output format
-editCore.Output_Format = ConfigureFacebookLiveStream("your_streaming_key_here");
-
-// Start
-await editCore.StartAsync();
 ```
 
 ## Media Blocks SDK Integration

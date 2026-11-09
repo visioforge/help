@@ -1,12 +1,13 @@
 ---
 title: OpenCV Computer Vision Blocks for Video Pipeline in C# .NET
-description: Add object detection, tracking, and image processing to video pipelines with OpenCV blocks in VisioForge Media Blocks SDK. Windows, macOS and Mac Catalyst.
+description: "OpenCV blocks in Media Blocks SDK .NET: face, hand and motion detection, tracking, template matching, image filters. Windows, Linux, macOS, Mac Catalyst, iOS."
 sidebar_label: OpenCV
 tags:
   - Media Blocks SDK
   - .NET
   - Windows
   - macOS
+  - iOS
 primary_api_classes:
   - SystemVideoSourceBlock
   - VideoRendererBlock
@@ -22,7 +23,7 @@ primary_api_classes:
 
 OpenCV (Open Source Computer Vision Library) blocks provide powerful video processing capabilities within the VisioForge Media Blocks SDK .NET. These blocks enable a wide range of computer vision tasks, from basic image manipulation to complex object detection and tracking.
 
-To use OpenCV blocks, add the redistributable NuGet package for your platform: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86` or `VisioForge.CrossPlatform.OpenCV.macOS` (macOS and Mac Catalyst). These are the platforms the OpenCV GStreamer plugin currently ships for; on any other platform each block's `IsAvailable()` returns `false`.
+To use OpenCV blocks, add the redistributable NuGet package for your platform: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 and later, with the distribution's GStreamer 1.22 or later), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS and Mac Catalyst) or `VisioForge.CrossPlatform.OpenCV.iOS` (iOS devices and arm64 simulators). These are the platforms the OpenCV GStreamer plugin currently ships for; on any other platform each block's `IsAvailable()` returns `false`.
 
 Most OpenCV blocks typically require a `videoconvert` element before them to ensure the input video stream is in a compatible format. The SDK handles this internally when you initialize the block.
 
@@ -92,7 +93,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -144,7 +145,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -209,7 +210,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -261,7 +262,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -313,7 +314,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -383,7 +384,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -421,7 +422,7 @@ Note: `ProcessPaths(Context)` should be called on the settings object for cascad
 
 ### Events
 
-- `FaceDetected`: Occurs when faces (and other enabled features) are detected. Provides `CVFaceDetectedEventArgs` with an array of `CVFace` objects and a timestamp.
+- `FaceDetected`: Occurs when faces (and other enabled features) are detected. Provides `CVFaceDetectedEventArgs` with an array of `CVFace` objects and a timestamp. It fires once per frame that contains faces; `TimeStamp` is the frame's position in the media, on the same timeline as the pipeline position; `HasTimeStamp` is `false` for a frame that had no timestamp.
   - `CVFace` contains `Rect` for `Position`, `Nose`, `Mouth`, and a list of `Rect` for `Eyes`.
 
 ### Sample pipeline
@@ -457,7 +458,7 @@ var faceDetectBlock = new CVFaceDetectBlock(faceDetectSettings);
 
 faceDetectBlock.FaceDetected += (s, e) => 
 {
-    Console.WriteLine($"Timestamp: {e.Timestamp}, Faces found: {e.Faces.Length}");
+    Console.WriteLine($"Timestamp: {e.TimeStamp}, Faces found: {e.Faces.Length}");
     foreach (var face in e.Faces)
     {
         Console.WriteLine($"  Face at [{face.Position.Left},{face.Position.Top},{face.Position.Width},{face.Position.Height}]");
@@ -480,7 +481,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -513,7 +514,7 @@ Note: `ProcessPaths(Context)` should be called on the settings object for cascad
 ### Events
 
 - `HandDetected`: Occurs when hands are detected. Provides `CVHandDetectedEventArgs` with an array of `CVHand` objects.
-  - `CVHand` contains `Rect` for `Position` and `CVHandGesture` for `Gesture` (Fist or Palm).
+  - `CVHand` contains `Rect` for `Position` and `CVHandGesture` for `Gesture` (Fist or Palm). `Position` is in the coordinates of the block's 320x240 output frame, not of the source frame.
 
 ### Sample pipeline
 
@@ -564,11 +565,11 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
-Requires Haar cascade XML files for fist and palm detection. The input video is internally scaled to 320x240 for processing by the `handdetect` element. The `ProcessBusMessage` method handles GStreamer messages to fire `HandDetected`.
+Requires Haar cascade XML files for fist and palm detection. The block scales the video to 320x240 for the `handdetect` element and outputs it at that size. The `ProcessBusMessage` method handles GStreamer messages to fire `HandDetected`.
 
 ## CV Laplace Block
 
@@ -629,7 +630,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -676,8 +677,10 @@ The `CVMotionCellsBlock` is configured using `CVMotionCellsSettings`. Key proper
   - `Cells`: String indicating which cells have motion (e.g., "0:0,1:2").
   - `StartedTime`: Timestamp when motion began in the current event scope.
   - `FinishedTime`: Timestamp when motion finished (if applicable to the event).
-  - `CurrentTime`: Timestamp of the current frame related to the event.
+  - `CurrentTime`: Timestamp of the current frame related to the event; for a no-motion event, of the last frame with motion.
   - `IsMotion`: Boolean indicating if the event signifies motion (`true`) or no motion (`false`).
+
+The times are positions in the media, on the same timeline as the pipeline position; a time is `null` for a frame with no position in the media: one that had no timestamp, or lies outside the played segment. A no-motion event before any motion has no time either, nor does one after a seek about motion before the seek.
 
 ### Sample pipeline
 
@@ -730,7 +733,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -800,7 +803,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -865,7 +868,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -895,7 +898,7 @@ The `CVTemplateMatchBlock` is configured using `CVTemplateMatchSettings`. Key pr
 ### Events
 
 - `TemplateMatch`: Occurs when a template match is found. Provides `CVTemplateMatchEventArgs`:
-  - `Rect`: A `Types.Rect` object representing the location (`Left`, `Top`, `Right`, `Bottom`) of the best match. `Width` and `Height` are computed properties (`Right - Left`, `Bottom - Top`).
+  - `Rectangle`: A `Types.Rect` object representing the location (`Left`, `Top`, `Right`, `Bottom`) of the best match. `Width` and `Height` are computed properties (`Right - Left`, `Bottom - Top`).
   - `Result`: A double value representing the quality or result of the match, depending on the method used.
 
 ### Sample pipeline
@@ -929,7 +932,7 @@ var templateMatchBlock = new CVTemplateMatchBlock(templateMatchSettings);
 
 templateMatchBlock.TemplateMatch += (s, e) => 
 {
-    Console.WriteLine($"Template matched at [{e.Rect.Left},{e.Rect.Top},{e.Rect.Width},{e.Rect.Height}] with result: {e.Result}");
+    Console.WriteLine($"Template matched at [{e.Rectangle.Left},{e.Rectangle.Top},{e.Rectangle.Width},{e.Rectangle.Height}] with result: {e.Result}");
 };
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
@@ -944,7 +947,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -1015,7 +1018,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 
@@ -1088,7 +1091,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, macOS, Mac Catalyst.
+Windows, Linux, macOS, Mac Catalyst, iOS.
 
 ### Remarks
 

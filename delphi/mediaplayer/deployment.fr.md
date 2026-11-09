@@ -115,7 +115,7 @@ Suivez ces étapes pour installer manuellement les composants de la bibliothèqu
         regsvr32.exe VisioForge_Video_Effects_Pro.ax
         ```
 
-        Alternativement, VisioForge fournit un utilitaire `reg_special.exe` dans les redistribuables. Copiez cet utilitaire dans le dossier contenant les fichiers `.ax` et exécutez-le avec les privilèges d'administrateur pour enregistrer automatiquement tous les filtres de ce répertoire. Consultez la documentation Microsoft pour résoudre les erreurs `regsvr32.exe` : [Comment utiliser l'outil Regsvr32](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5).
+        Alternativement, VisioForge fournit un utilitaire `reg_special.exe` dans les redistribuables. Copiez cet utilitaire dans le dossier contenant les fichiers `.ax` et exécutez-le avec les privilèges d'administrateur pour enregistrer automatiquement tous les filtres de ce répertoire. Consultez la documentation Microsoft pour résoudre les erreurs `regsvr32.exe` : [Comment utiliser l'outil Regsvr32](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32).
 3. **Mettez à jour le PATH système (facultatif mais recommandé) :** si les DLL de filtre et les fichiers `.ax` sont placés dans un répertoire distinct de l'exécutable de votre application, vous devez ajouter le chemin de ce répertoire à la variable d'environnement système `PATH`. Cela permet au système d'exploitation et à votre application de localiser ces fichiers essentiels. Ne pas le faire peut entraîner des erreurs « DLL not found » ou des erreurs d'enregistrement de filtre.
 
 ### Déploiement manuel des paquets facultatifs

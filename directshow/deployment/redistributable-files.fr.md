@@ -426,9 +426,9 @@ YourApp\
 ## Virtual Camera SDK { #virtual-camera-sdk }
 ### Fichiers principaux
 #### x86 (32 bits)
-**Pilotes de caméra virtuelle** :
-- `VisioForge_Virtual_Camera.ax` — pilote de périphérique caméra virtuelle
-- `VisioForge_Virtual_Audio_Card.ax` — pilote de périphérique audio virtuel
+**Filtres de caméra virtuelle** :
+- `VisioForge_Virtual_Camera.ax` — filtre source DirectShow de la caméra virtuelle
+- `VisioForge_Virtual_Audio_Card.ax` — filtre source DirectShow de la carte audio virtuelle
 **Filtres source** :
 - `VisioForge_Push_Video_Source.ax` — source push pour diffuser vers la caméra virtuelle
 - `VisioForge_Screen_Capture_DD.ax` — capture d'écran DirectDraw
@@ -439,10 +439,8 @@ YourApp\
 **Bibliothèques utilitaires** (requises) :
 - `VisioForge_MFP.dll`
 - `VisioForge_MFPX.dll`
-**Runtime** (requis) :
-- `vcomp140.dll` — runtime OpenMP Visual C++
 #### x64 (64 bits)
-**Pilotes de caméra virtuelle** :
+**Filtres de caméra virtuelle** :
 - `VisioForge_Virtual_Camera_x64.ax`
 - `VisioForge_Virtual_Audio_Card_x64.ax`
 **Filtres source** :
@@ -455,6 +453,15 @@ YourApp\
 **Bibliothèques utilitaires** (requises) :
 - `VisioForge_MFP64.dll`
 - `VisioForge_MFPX64.dll`
+**Runtime** (requis) :
+- `vcomp140.dll` — runtime OpenMP Visual C++, chargé par `VisioForge_MFPX64.dll`
+#### ARM64
+**Filtres de caméra virtuelle** :
+- `VisioForge_Virtual_Camera_arm64.ax`
+- `VisioForge_Virtual_Audio_Card_arm64.ax`
+**Bibliothèques utilitaires** (requises) :
+- `VisioForge_MFP_ARM64.dll`
+- `VisioForge_MFPX_ARM64.dll`
 ### Structure de répertoire d'installation
 ```
 YourApp\
@@ -474,6 +481,10 @@ YourApp\
 ├── VisioForge_MFP64.dll
 ├── VisioForge_MFPX.dll
 ├── VisioForge_MFPX64.dll
+├── VisioForge_Virtual_Camera_arm64.ax
+├── VisioForge_Virtual_Audio_Card_arm64.ax
+├── VisioForge_MFP_ARM64.dll
+├── VisioForge_MFPX_ARM64.dll
 └── vcomp140.dll
 ```
 ### Fichiers de licence
@@ -481,9 +492,10 @@ YourApp\
 ### Taille totale
 ~15-20 Mo
 ### Remarques importantes
-- Les périphériques de caméra virtuelle apparaissent dans les applications de visioconférence (Zoom, Teams, Skype, etc.)
+- Les périphériques de caméra virtuelle apparaissent comme webcams dans Zoom, OBS Studio, les navigateurs et d'autres applications vidéo
 - Prend en charge jusqu'à 4 instances de caméra virtuelle
-- Nécessite l'installation de pilote (incluse dans l'installeur)
+- Contrairement aux autres SDK, ne nécessite pas le Visual C++ Redistributable (la note [Dépendances communes](#dependances-communes) ne s'applique pas) : les filtres lient le runtime C de façon statique, et `vcomp140.dll` (x64 uniquement) figure dans la liste ci-dessus
+- Les filtres sont enregistrés avec `regsvr32` (l'installeur s'en charge)
 ---
 
 ## Dépendances communes

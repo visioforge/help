@@ -8,7 +8,6 @@ tags:
   - .NET
   - MediaBlocksPipeline
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - Windows
   - macOS
   - Linux
@@ -28,7 +27,6 @@ primary_api_classes:
   - NVENCH264EncoderSettings
   - RTMPSinkSettings
   - VideoCaptureCoreX
-  - VideoEditCoreX
 
 ---
 
@@ -44,9 +42,9 @@ Esta guía cubre detalles de implementación para transmisión RTMP en diferente
 
 ## Implementación RTMP Multiplataforma
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
+[VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
-La clase `RTMPOutput` sirve como el punto central de configuración para transmisión RTMP en escenarios multiplataforma. Implementa múltiples interfaces incluyendo `IVideoEditXBaseOutput` y `IVideoCaptureXBaseOutput`, haciéndola versátil para flujos de trabajo tanto de edición como de captura de video.
+La clase `RTMPOutput` sirve como el punto central de configuración para transmisión RTMP en escenarios multiplataforma. Implementa `IVideoCaptureXBaseOutput` y se usa con `VideoCaptureCoreX`; `VideoEditCoreX` solo genera archivos y no la acepta.
 
 ### Configurando Salida RTMP
 
@@ -68,13 +66,6 @@ rtmpOutput.Sink.Location = "rtmp://your-streaming-server/stream-key";
 ```csharp
 // Agregar salida RTMP al motor de Video Capture SDK
 core.Outputs_Add(rtmpOutput, true); // core es una instancia de VideoCaptureCoreX
-```
-
-#### Integración con Video Edit SDK
-
-```csharp
-// Configurar RTMP como formato de salida para Video Edit SDK
-core.Output_Format = rtmpOutput; // core es una instancia de VideoEditCoreX
 ```
 
 #### Integración con Media Blocks SDK

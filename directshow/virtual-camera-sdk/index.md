@@ -1,6 +1,6 @@
 ---
-title: Windows Virtual Camera SDK — DirectShow for Zoom, Teams, OBS
-description: Create virtual webcams recognized by Zoom, Teams, OBS, and browsers. VisioForge DirectShow SDK streams any video source with audio to virtual camera devices.
+title: Windows Virtual Camera SDK — DirectShow for Zoom, OBS
+description: Create virtual webcams recognized by Zoom, OBS, and browsers. VisioForge DirectShow SDK streams any video source with audio to virtual camera devices.
 sidebar_label: Virtual Camera SDK
 order: 6
 tags:
@@ -23,7 +23,7 @@ primary_api_classes:
 
 Our robust DirectShow-based Virtual Camera SDK enables developers to implement powerful virtual camera functionality in their applications. The SDK provides sink filters that can be utilized as output in Video Capture SDK or Video Edit SDK environments, while the source filters can be employed as video sources for various capture applications.
 
-With this versatile toolkit, you can stream video content from virtually any source directly to a virtual camera device. These virtual devices are fully compatible with popular communication platforms such as `Skype`, `Zoom`, `Microsoft Teams`, web browsers, and numerous other applications that support DirectShow virtual cameras. The SDK also includes comprehensive audio streaming capabilities for complete multimedia solutions.
+With this versatile toolkit, you can stream video content from virtually any source directly to a virtual camera device. These virtual devices work with `Zoom`, OBS Studio, web browsers, and numerous other applications that support DirectShow virtual cameras. The SDK also includes comprehensive audio streaming capabilities for complete multimedia solutions. The Virtual Audio Card is a DirectShow audio device, so DirectShow applications see it as a microphone.
 
 To help you get started quickly, the SDK package includes a fully-functional sample application that demonstrates how to stream video content from files to virtual camera devices.
 
@@ -49,12 +49,13 @@ Before using the code samples and integrating the SDK into your application, you
 ## Key Features and Capabilities
 
 * **Multiple Source Support**: Stream video to virtual camera from files, network streams, or capture devices
-* **Architecture Compatibility**: Full x86/x64 architecture support
+* **Architecture Compatibility**: x86, x64 and ARM64 filters
 * **High-Resolution Support**: Stream video content up to 4K resolution
 * **Customization Options**: Define and implement custom camera names
 * **SDK Integration**: Seamless integration with other development tools
 * **Audio Support**: Complete audio streaming capabilities
 * **Professional Applications**: Perfect for teleconferencing, streaming, and professional video applications
+* **.NET Push API**: Send your own frames and audio from C# with the `VisioForge.DotNet.VirtualCamera` NuGet package — see [.NET Push API](push-api.md)
 
 ## Technical Implementation
 
@@ -78,7 +79,13 @@ Set your purchased license key as a string value in this registry location.
 
 ### Deployment Guidelines
 
-For proper deployment, copy and COM-register the SDK DirectShow filters - these are the files in the `Redist` folder with .ax extension. Registration can be performed using `regsvr32.exe` or through COM registration in your application installer. Please note that administrative privileges are required for successful registration.
+For proper deployment, copy the SDK DirectShow filters (the `.ax` files in the `Redist` folder) together with the DLLs they load, and COM-register the `.ax` files. Each DLL goes into the same folder as the `.ax` that loads it:
+
+* x86: `VisioForge_Virtual_Camera.ax`, `VisioForge_MFP.dll`, `VisioForge_MFPX.dll`
+* x64: `VisioForge_Virtual_Camera_x64.ax`, `VisioForge_MFP64.dll`, `VisioForge_MFPX64.dll`, `vcomp140.dll`
+* ARM64: `VisioForge_Virtual_Camera_arm64.ax`, `VisioForge_MFP_ARM64.dll`, `VisioForge_MFPX_ARM64.dll`
+
+The video bridge filters (`VisioForge_Bridge_Video*.ax`) need the same `VisioForge_MFPX*.dll` (and `vcomp140.dll` on x64) as the camera filter of their architecture. The Virtual Audio Card and audio bridge filters (`VisioForge_Virtual_Audio_Card*.ax`, `VisioForge_Bridge_Audio*.ax`) need no extra files. Registration can be performed using `regsvr32.exe` or through COM registration in your application installer. Please note that administrative privileges are required for successful registration.
 
 ### No-Signal Application Configuration
 
@@ -283,10 +290,20 @@ Developers can utilize MFC, ATL, or other C++ frameworks to build their applicat
 
 The SDK is compatible with the following Microsoft Windows operating systems:
 
-* Windows 7, 8, 8.1, 10, and 11
-* Windows Server 2008, 2012, 2016, 2019, and 2022
+* Windows 10 (version 1809 or newer)
+* Windows 11 (all versions)
+* Windows Server 2019 and newer (with Desktop Experience)
+
+The filters are built for x86, x64 and ARM64. The SDK installer itself is an x64 package: it does not run on 32-bit Windows or on Windows 10 on ARM.
+
+The filters are native: no .NET or Visual C++ runtime has to be installed. `VisioForge_MFPX64.dll` loads `vcomp140.dll`, which ships next to it in the installer's `Redist` folder and in the `VisioForge.DotNet.Core.Redist.Shared.x64` package. .NET is needed only for the .NET samples and the `VisioForge.DotNet.VirtualCamera` package.
 
 ## Version History and Updates
+
+### Version 2026.11
+
+* `VisioForge.DotNet.VirtualCamera` NuGet package: push BGRA, BGR24 or YUY2 frames and PCM audio from .NET, with a license key parameter
+* Virtual Camera Push Demo (WPF, C#)
 
 ### Version 14.0
 

@@ -66,9 +66,11 @@ La première étape consiste à configurer votre source vidéo. Cela peut être 
 
 ```cs
 VideoCapture1.Virtual_Camera_Output_Enabled = true;
+// Clé de licence Virtual Camera SDK ; sans elle, la caméra virtuelle affiche une bande TRIAL
+VideoCapture1.Virtual_Camera_Output_LicenseKey = "YOUR-VIRTUAL-CAMERA-SDK-KEY";
 ```
 
-Cette unique ligne de code active la fonctionnalité de sortie Caméra virtuelle, rendant le flux vidéo disponible pour FFMPEG.
+La première ligne active la fonctionnalité de sortie Caméra virtuelle, rendant le flux vidéo disponible pour FFMPEG.
 
 ![Streaming FFMPEG depuis Main Demo](virtcam.webp)
 
@@ -82,6 +84,8 @@ Une fois la sortie Caméra virtuelle activée, vous devez initier le processus d
 
 // Activer la sortie Caméra virtuelle
 VideoCapture1.Virtual_Camera_Output_Enabled = true;
+// Clé de licence Virtual Camera SDK ; sans elle, la caméra virtuelle affiche une bande TRIAL
+VideoCapture1.Virtual_Camera_Output_LicenseKey = "YOUR-VIRTUAL-CAMERA-SDK-KEY";
 
 // Démarrer le processus de streaming
 VideoCapture1.Start();

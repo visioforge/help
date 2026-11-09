@@ -30,7 +30,7 @@ Cette page fournit des exemples de code pratiques pour utiliser le Virtual Camer
 - Appliquer des effets vidéo et un traitement en temps réel
 - Prendre en charge plusieurs instances de caméra virtuelle
 
-La caméra virtuelle apparaît comme une webcam standard pour les applications comme Zoom, Teams, OBS et autres logiciels de visioconférence.
+La caméra virtuelle apparaît comme une webcam standard pour Zoom, OBS Studio, les navigateurs et d'autres applications vidéo.
 
 ---
 ## Présentation de l'architecture

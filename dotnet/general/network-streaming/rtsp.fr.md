@@ -9,7 +9,6 @@ tags:
   - DirectShow
   - MediaBlocksPipeline
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - Windows
   - macOS
   - Linux
@@ -32,7 +31,6 @@ tags:
   - C#
 primary_api_classes:
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - RTSPServerOutput
   - RTSPServerSettings
   - RTSPServerBlock
@@ -71,17 +69,17 @@ Ce guide explore en détail l'implémentation de la diffusion RTSP avec les SDK 
 
 ## Sortie RTSP multiplateforme (recommandé)
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
+[VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 Les SDK VisioForge modernes (versions `CoreX` et Media Blocks) fournissent une implémentation flexible et puissante de serveur RTSP multiplateforme bâtie sur le framework robuste GStreamer. Cette approche offre un meilleur contrôle, une prise en charge plus large des codecs et la compatibilité avec Windows, Linux, macOS et d'autres plateformes.
 
 ### Composant central : `RTSPServerOutput`
 
-La classe `RTSPServerOutput` est le point central de configuration pour établir un flux RTSP dans les Video Capture SDK ou Video Edit (versions `CoreX`). Elle agit comme un pont entre votre pipeline de capture/édition et la logique sous-jacente du serveur RTSP.
+La classe `RTSPServerOutput` est le point central de configuration pour établir un flux RTSP dans le Video Capture SDK (`VideoCaptureCoreX`). Elle agit comme un pont entre votre pipeline de capture et la logique sous-jacente du serveur RTSP.
 
 **Principales responsabilités :**
 
-*   **Implémentation d'interfaces :** implémente `IVideoEditXBaseOutput` et `IVideoCaptureXBaseOutput`, permettant une intégration transparente comme format de sortie aussi bien dans les scénarios d'édition que de capture.
+*   **Implémentation d'interfaces :** implémente `IVideoCaptureXBaseOutput` et s'ajoute comme sortie à une capture `VideoCaptureCoreX`. `VideoEditCoreX` produit uniquement des fichiers et ne l'accepte pas.
 *   **Gestion des paramètres :** contient l'objet `RTSPServerSettings`, qui rassemble tous les paramètres de configuration détaillés de l'instance de serveur.
 *   **Spécification du codec :** définit les encodeurs vidéo et audio utilisés pour compresser le média avant la diffusion.
 
@@ -148,7 +146,7 @@ Avec le Media Blocks SDK, `RTSPServerBlock` représente l'élément réel basé 
 
 ### Exemples d'utilisation pratiques
 
-#### Exemple 1 : configuration de base du serveur (VideoCaptureCoreX / VideoEditCoreX)
+#### Exemple 1 : configuration de base du serveur (VideoCaptureCoreX)
 
 ```csharp
 // 1. Choisir et configurer les encodeurs
@@ -173,10 +171,6 @@ var rtspOutput = new RTSPServerOutput(settings);
 // Pour VideoCaptureCoreX :
 // videoCapture est une instance initialisée de VideoCaptureCoreX
 videoCapture.Outputs_Add(rtspOutput); 
-
-// Pour VideoEditCoreX :
-// videoEdit est une instance initialisée de VideoEditCoreX
-// videoEdit.Output_Format = rtspOutput; // À définir avant de démarrer l'édition/lecture
 ```
 
 #### Exemple 2 : pipeline Media Blocks
@@ -231,7 +225,7 @@ var secureSettings = new RTSPServerSettings(videoEncoder, audioEncoder)
 
 var secureRtspOutput = new RTSPServerOutput(secureSettings);
 
-// Ajouter à VideoCaptureCoreX ou définir pour VideoEditCoreX comme précédemment
+// Ajouter à VideoCaptureCoreX comme précédemment
 // videoCapture.Outputs_Add(secureRtspOutput); 
 ```
 

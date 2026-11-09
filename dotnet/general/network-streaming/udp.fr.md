@@ -259,11 +259,11 @@ vlc udp://@:5004
 Pour des performances de diffusion optimales, ajustez les débits binaires vidéo et audio à la capacité de votre
 réseau. `FFMPEGEXEOutput` expose les réglages d'encodeur via `.Video` et `.Audio`
 (et non `VideoSettings`/`AudioSettings`), et les sous-jacents
-`BasicVideoSettings` / `BasicAudioSettings` stockent le débit binaire en **kbps** :
+`BasicVideoSettings` / `BasicAudioSettings` stockent le débit binaire en **bits par seconde** :
 
 ```cs
-ffmpegOutput.Video.Bitrate = 2500; // 2,5 Mbps pour la vidéo (kbps)
-ffmpegOutput.Audio.Bitrate = 128;  // 128 kbps pour l'audio
+ffmpegOutput.Video.Bitrate = 2500000; // 2,5 Mbps pour la vidéo
+ffmpegOutput.Audio.Bitrate = 128000;  // 128 kbps pour l'audio
 ```
 
 ### Résolution et fréquence d'images

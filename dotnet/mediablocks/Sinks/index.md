@@ -2274,13 +2274,15 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Virtual Camera Sink
 
-The `VirtualCameraSinkBlock` exposes the pipeline output as a system virtual camera (and virtual microphone), so any other Windows application — Zoom, Teams, OBS, a browser — can pick up your processed video and audio as if it were a real capture device. Frames are delivered to the VisioForge Virtual Camera and Virtual Audio Card DirectShow source filters through shared memory.
+The `VirtualCameraSinkBlock` exposes the pipeline output as a system virtual camera and virtual audio card: Zoom, OBS, a browser or any other application that supports DirectShow cameras can pick up your processed video as if it came from a real webcam, and DirectShow applications can also pick up the audio as a microphone. Frames are delivered to the VisioForge Virtual Camera and Virtual Audio Card DirectShow source filters through shared memory.
 
 Both inputs are optional: create a video input, an audio input, or both. Use `CreateNewInput(MediaBlockPadMediaType.Video)` and `CreateNewInput(MediaBlockPadMediaType.Audio)` to add the pads you need.
 
 This block is **Windows-only**. The Virtual Camera and Virtual Audio Card source filters must be COM-registered on the machine before the virtual devices appear. Use `VirtualCameraSinkBlock.IsCOMRegistered()` to check, and `VirtualCameraSinkBlock.COMRegisterAsAdmin()` to register them with an elevation (UAC) prompt.
 
 Configure the output with `VirtualCameraSinkSettings`.
+
+Without a Virtual Camera SDK license key the virtual camera shows a TRIAL strip across the picture. The Virtual Camera SDK is licensed separately: a Media Blocks SDK .NET license does not remove the strip. Set the key you received with your Virtual Camera SDK license in `LicenseKey`.
 
 #### Block info
 
@@ -2305,6 +2307,7 @@ Name: VirtualCameraSinkBlock.
 | `AudioStreamName` | `string` | `"AudioStream1"` | Shared-memory stream name; must match the virtual audio card source filter |
 | `CustomVideoProcessor` | `MediaBlock` | `null` | Optional custom video processor block |
 | `CustomAudioProcessor` | `MediaBlock` | `null` | Optional custom audio processor block |
+| `LicenseKey` | `string` | `null` | Virtual Camera SDK license key; without it the virtual camera shows a TRIAL strip |
 
 #### The sample pipeline
 
@@ -2324,7 +2327,10 @@ var settings = new VirtualCameraSinkSettings
 {
     Width = 1280,
     Height = 720,
-    FrameRate = 30.0
+    FrameRate = 30.0,
+
+    // your Virtual Camera SDK license key; without it the camera shows a TRIAL strip
+    LicenseKey = "YOUR-VIRTUAL-CAMERA-SDK-KEY"
 };
 
 var virtualCameraSink = new VirtualCameraSinkBlock(settings);

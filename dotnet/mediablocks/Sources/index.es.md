@@ -273,7 +273,7 @@ await pipeline.StartAsync();
 
 #### Plataformas
 
-Windows (x64), Linux. Windows on Arm y las aplicaciones de 32 bits (x86) no son compatibles: en Windows, Basler pylon SDK solo es compatible con x64.
+Windows (x64). Windows on Arm y las aplicaciones de 32 bits (x86) no son compatibles: en Windows, Basler pylon SDK solo es compatible con x64. En Linux y macOS, use el [Bloque Fuente GenICam](#bloque-fuente-genicam).
 
 ### Bloque Fuente Spinnaker/FLIR
 
@@ -421,7 +421,7 @@ await pipeline.StartAsync();
 
 #### Plataformas
 
-Windows (x64), macOS, Linux. Windows on Arm y las aplicaciones de 32 bits (x86) no son compatibles: en Windows, Allied Vision Vimba X SDK solo es compatible con x64.
+Windows (x64). Windows on Arm y las aplicaciones de 32 bits (x86) no son compatibles: en Windows, Allied Vision Vimba X SDK solo es compatible con x64. En Linux y macOS el SDK puede cargar un Vimba X instalado, pero esto no está probado y no se distribuye ningún plugin `vmbsrc` allí; use el [Bloque Fuente GenICam](#bloque-fuente-genicam).
 
 ### Bloque Fuente Blackmagic Decklink
 

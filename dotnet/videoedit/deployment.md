@@ -118,7 +118,7 @@ Manual installation provides the highest level of control over the deployment pr
    - Copy .NET assemblies to the application folder or install them to the Global Assembly Cache (GAC)
 
 3. **DirectShow Filters**:
-   - Copy and COM-register SDK DirectShow filters using [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5) or an equivalent method
+   - Copy and COM-register SDK DirectShow filters using [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32) or an equivalent method
    - If your application executable is in a different folder, add the folder containing the filters to the system PATH environment variable
 
 ## Essential DirectShow Filters Reference

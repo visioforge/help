@@ -259,11 +259,11 @@ vlc udp://@:5004
 For optimal streaming performance, adjust the video and audio bitrates to match
 your network capacity. `FFMPEGEXEOutput` exposes the encoder knobs via `.Video`
 and `.Audio` (not `VideoSettings`/`AudioSettings`), and the underlying
-`BasicVideoSettings` / `BasicAudioSettings` store bitrate in **kbps**:
+`BasicVideoSettings` / `BasicAudioSettings` store bitrate in **bits per second**:
 
 ```cs
-ffmpegOutput.Video.Bitrate = 2500; // 2.5 Mbps for video (kbps)
-ffmpegOutput.Audio.Bitrate = 128;  // 128 kbps for audio
+ffmpegOutput.Video.Bitrate = 2500000; // 2.5 Mbps for video
+ffmpegOutput.Audio.Bitrate = 128000;  // 128 kbps for audio
 ```
 
 ### Resolution and Frame Rate

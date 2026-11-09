@@ -1,6 +1,6 @@
 ---
 title: Despliegue multiplataforma del SDK .NET en Uno Platform
-description: Despliegue sus aplicaciones con el SDK .NET de VisioForge en Uno Platform: VideoView y soporte para Windows, Android, iOS, macOS y Linux.
+description: "Despliegue sus aplicaciones con el SDK .NET de VisioForge en Uno Platform: VideoView y soporte para Windows, Android, iOS, macOS y Linux."
 tags:
   - Video Capture SDK
   - Media Player SDK

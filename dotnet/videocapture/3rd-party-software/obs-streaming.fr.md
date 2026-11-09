@@ -68,6 +68,8 @@ var videoCapture = new VideoCaptureCore();
 
 // Activer la sortie de caméra virtuelle
 videoCapture.Virtual_Camera_Output_Enabled = true;
+// Clé de licence Virtual Camera SDK ; sans elle, la caméra virtuelle affiche une bande TRIAL
+videoCapture.Virtual_Camera_Output_LicenseKey = "YOUR-VIRTUAL-CAMERA-SDK-KEY";
 
 // Démarrer la capture
 videoCapture.Start();
@@ -98,6 +100,8 @@ Pour le streaming audio, activez la sortie de caméra virtuelle en même temps q
 // Combiné avec Audio_RecordAudio = true, l'audio est automatiquement
 // routé vers la carte audio virtuelle — pas d'indicateur séparé.
 VideoCapture1.Virtual_Camera_Output_Enabled = true;
+// Clé de licence Virtual Camera SDK ; sans elle, la caméra virtuelle affiche une bande TRIAL
+VideoCapture1.Virtual_Camera_Output_LicenseKey = "YOUR-VIRTUAL-CAMERA-SDK-KEY";
 
 // Configurez votre source audio comme d'habitude.
 VideoCapture1.Audio_CaptureDevice  = new AudioCaptureSource("Microphone");
@@ -109,8 +113,8 @@ await VideoCapture1.StartAsync();
 
 Ensuite côté OBS :
 
-1. Ajoutez une source « Capture d'entrée audio »
-2. Sélectionnez « VisioForge Virtual Audio Card » comme périphérique
+1. Ouvrez les propriétés de la source « Périphérique de capture vidéo » qui affiche « VisioForge Virtual Camera »
+2. Cochez « Utiliser un périphérique audio personnalisé » et sélectionnez « VisioForge Virtual Audio Card » comme périphérique audio. Une source « Capture d'entrée audio » ne l'affiche pas : cette source ne liste que les périphériques audio de Windows, et la Virtual Audio Card est un périphérique DirectShow
 3. Ajustez les niveaux audio et les filtres selon les besoins
 
 Cela crée un pipeline audiovisuel complet de votre application vers OBS.

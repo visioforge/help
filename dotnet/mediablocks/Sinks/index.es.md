@@ -2304,13 +2304,15 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Sink de cámara virtual
 
-El `VirtualCameraSinkBlock` expone la salida del pipeline como una cámara virtual del sistema (y un micrófono virtual), de modo que cualquier otra aplicación de Windows — Zoom, Teams, OBS, un navegador — pueda recibir el video y audio procesados como si provinieran de un dispositivo de captura real. Los fotogramas se entregan a los filtros de fuente DirectShow Virtual Camera y Virtual Audio Card de VisioForge a través de memoria compartida.
+El `VirtualCameraSinkBlock` expone la salida del pipeline como una cámara virtual y una tarjeta de audio virtual del sistema: Zoom, OBS, un navegador o cualquier otra aplicación que admita cámaras DirectShow puede recibir el video procesado como si proviniera de una webcam real, y las aplicaciones DirectShow también pueden recibir el audio como un micrófono. Los fotogramas se entregan a los filtros de fuente DirectShow Virtual Camera y Virtual Audio Card de VisioForge a través de memoria compartida.
 
 Ambas entradas son opcionales: cree una entrada de video, una entrada de audio, o ambas. Use `CreateNewInput(MediaBlockPadMediaType.Video)` y `CreateNewInput(MediaBlockPadMediaType.Audio)` para añadir los pads que necesite.
 
 Este bloque es **solo para Windows**. Los filtros de fuente Virtual Camera y Virtual Audio Card deben estar registrados como COM en la máquina antes de que aparezcan los dispositivos virtuales. Use `VirtualCameraSinkBlock.IsCOMRegistered()` para comprobarlo, y `VirtualCameraSinkBlock.COMRegisterAsAdmin()` para registrarlos con una solicitud de elevación (UAC).
 
 Configure la salida con `VirtualCameraSinkSettings`.
+
+Sin una clave de licencia de Virtual Camera SDK, la cámara virtual muestra una franja TRIAL sobre la imagen. Virtual Camera SDK se licencia por separado: una licencia de Media Blocks SDK .NET no elimina la franja. Indique en `LicenseKey` la clave que recibió con su licencia de Virtual Camera SDK.
 
 #### Información del bloque
 
@@ -2335,6 +2337,7 @@ Nombre: VirtualCameraSinkBlock.
 | `AudioStreamName` | `string` | `"AudioStream1"` | Nombre del stream de memoria compartida; debe coincidir con el filtro de fuente de la tarjeta de audio virtual |
 | `CustomVideoProcessor` | `MediaBlock` | `null` | Bloque opcional de procesamiento de video personalizado |
 | `CustomAudioProcessor` | `MediaBlock` | `null` | Bloque opcional de procesamiento de audio personalizado |
+| `LicenseKey` | `string` | `null` | Clave de licencia de Virtual Camera SDK; sin ella, la cámara virtual muestra una franja TRIAL |
 
 #### El pipeline de muestra
 
@@ -2354,7 +2357,10 @@ var settings = new VirtualCameraSinkSettings
 {
     Width = 1280,
     Height = 720,
-    FrameRate = 30.0
+    FrameRate = 30.0,
+
+    // su clave de licencia de Virtual Camera SDK; sin ella, la cámara muestra una franja TRIAL
+    LicenseKey = "YOUR-VIRTUAL-CAMERA-SDK-KEY"
 };
 
 var virtualCameraSink = new VirtualCameraSinkBlock(settings);

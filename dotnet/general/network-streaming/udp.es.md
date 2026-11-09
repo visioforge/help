@@ -263,11 +263,11 @@ Para un rendimiento óptimo de transmisión, ajuste los bitrates de video y audi
 según la capacidad de su red. `FFMPEGEXEOutput` expone las perillas del
 codificador vía `.Video` y `.Audio` (no `VideoSettings`/`AudioSettings`), y los
 `BasicVideoSettings` / `BasicAudioSettings` subyacentes almacenan el bitrate en
-**kbps**:
+**bits por segundo**:
 
 ```cs
-ffmpegOutput.Video.Bitrate = 2500; // 2.5 Mbps para video (kbps)
-ffmpegOutput.Audio.Bitrate = 128;  // 128 kbps para audio
+ffmpegOutput.Video.Bitrate = 2500000; // 2.5 Mbps para video
+ffmpegOutput.Audio.Bitrate = 128000;  // 128 kbps para audio
 ```
 
 ### Resolución y Frame Rate

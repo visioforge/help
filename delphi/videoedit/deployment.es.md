@@ -61,7 +61,7 @@ Para situaciones donde necesita control preciso sobre el despliegue de component
    * Copie todos los DLLs MFP del directorio `Redist\Filters` a la carpeta de su aplicación
 
 3. **Registrar filtros DirectShow**
-   * Copie y registre COM estos filtros DirectShow esenciales usando [regsvr32.exe](https://support.microsoft.com/en-us/topic/how-to-use-the-regsvr32-tool-and-troubleshoot-regsvr32-error-messages-a98d960a-7392-e6fe-d90a-3f4e0cb543e5).
+   * Copie y registre COM estos filtros DirectShow esenciales usando [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32).
    * **Bitness:** el nombre de archivo simple es el filtro **x86 (32 bits)**; el filtro **x64 (64 bits)** correspondiente lleva el sufijo `_x64` (por ejemplo `VisioForge_Video_Effects_Pro_x64.ax`). Ambos se incluyen en el paquete redistribuible; despliegue y registre la variante que coincida con la arquitectura objetivo de su aplicación. Las aplicaciones de 64 bits deben registrar las variantes `_x64`.
      * `VisioForge_Audio_Effects_4.ax`
      * `VisioForge_Dump.ax`

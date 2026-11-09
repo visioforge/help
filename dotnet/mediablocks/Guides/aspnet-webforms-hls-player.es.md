@@ -1,6 +1,6 @@
 ---
 title: Reproductor de video HLS en ASP.NET Web Forms con C#
-description: Reproduzca archivos, cámaras RTSP y dispositivos de captura en ASP.NET Web Forms: el SDK codifica HLS en el servidor y el control HlsPlayer lo reproduce.
+description: "Reproduzca archivos, cámaras RTSP y dispositivos de captura en ASP.NET Web Forms: el SDK codifica HLS en el servidor y el control HlsPlayer lo reproduce."
 tags:
   - Media Blocks SDK
   - .NET

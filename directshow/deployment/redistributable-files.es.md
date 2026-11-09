@@ -426,9 +426,9 @@ YourApp\
 ## Virtual Camera SDK
 ### Archivos principales
 #### x86 (32-bit)
-**Drivers de cámara virtual**:
-- `VisioForge_Virtual_Camera.ax` - Driver de dispositivo de cámara virtual
-- `VisioForge_Virtual_Audio_Card.ax` - Driver de dispositivo de audio virtual
+**Filtros de cámara virtual**:
+- `VisioForge_Virtual_Camera.ax` - Filtro de fuente DirectShow de la cámara virtual
+- `VisioForge_Virtual_Audio_Card.ax` - Filtro de fuente DirectShow de la tarjeta de audio virtual
 **Filtros de fuente**:
 - `VisioForge_Push_Video_Source.ax` - Fuente push para streaming a cámara virtual
 - `VisioForge_Screen_Capture_DD.ax` - Captura de pantalla DirectDraw
@@ -439,10 +439,8 @@ YourApp\
 **Bibliotecas auxiliares** (requeridas):
 - `VisioForge_MFP.dll`
 - `VisioForge_MFPX.dll`
-**Runtime** (requerido):
-- `vcomp140.dll` - Runtime Visual C++ OpenMP
 #### x64 (64-bit)
-**Drivers de cámara virtual**:
+**Filtros de cámara virtual**:
 - `VisioForge_Virtual_Camera_x64.ax`
 - `VisioForge_Virtual_Audio_Card_x64.ax`
 **Filtros de fuente**:
@@ -455,6 +453,15 @@ YourApp\
 **Bibliotecas auxiliares** (requeridas):
 - `VisioForge_MFP64.dll`
 - `VisioForge_MFPX64.dll`
+**Runtime** (requerido):
+- `vcomp140.dll` - Runtime Visual C++ OpenMP, cargado por `VisioForge_MFPX64.dll`
+#### ARM64
+**Filtros de cámara virtual**:
+- `VisioForge_Virtual_Camera_arm64.ax`
+- `VisioForge_Virtual_Audio_Card_arm64.ax`
+**Bibliotecas auxiliares** (requeridas):
+- `VisioForge_MFP_ARM64.dll`
+- `VisioForge_MFPX_ARM64.dll`
 ### Estructura del directorio de instalación
 ```
 YourApp\
@@ -474,6 +481,10 @@ YourApp\
 ├── VisioForge_MFP64.dll
 ├── VisioForge_MFPX.dll
 ├── VisioForge_MFPX64.dll
+├── VisioForge_Virtual_Camera_arm64.ax
+├── VisioForge_Virtual_Audio_Card_arm64.ax
+├── VisioForge_MFP_ARM64.dll
+├── VisioForge_MFPX_ARM64.dll
 └── vcomp140.dll
 ```
 ### Archivos de licencia
@@ -481,9 +492,10 @@ YourApp\
 ### Tamaño total
 ~15-20 MB
 ### Notas importantes
-- Los dispositivos de cámara virtual aparecen en aplicaciones de videoconferencia (Zoom, Teams, Skype, etc.)
+- Los dispositivos de cámara virtual aparecen como cámaras web en Zoom, OBS Studio, los navegadores y otras aplicaciones de video
 - Soporta hasta 4 instancias de cámara virtual
-- Requiere instalación de driver (incluido en instalador)
+- A diferencia de los demás SDK, no necesita Visual C++ Redistributable (la nota de [Dependencias comunes](#dependencias-comunes) no se aplica): los filtros enlazan el runtime de C de forma estática, y `vcomp140.dll` (solo x64) está en la lista anterior
+- Los filtros se registran con `regsvr32` (el instalador lo hace)
 ---
 
 ## Dependencias comunes

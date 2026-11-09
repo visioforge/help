@@ -8,8 +8,6 @@ tags:
   - Windows
   - macOS
   - Linux
-  - Android
-  - iOS
   - Capture
   - Decklink
   - C#

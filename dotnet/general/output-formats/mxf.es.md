@@ -19,8 +19,6 @@ tags:
   - Editing
   - MXF
   - H.264
-  - H.265
-  - AAC
   - MP3
   - C#
 primary_api_classes:
@@ -28,7 +26,6 @@ primary_api_classes:
   - MXFOutput
   - NVENCH264EncoderSettings
   - AMFH264EncoderSettings
-  - MFAACEncoderSettings
 
 ---
 
@@ -72,7 +69,7 @@ Esto crea una salida MXF válida con configuraciones de codificación predetermi
 
 ## Opciones de codificación de video para MXF
 
-La calidad y compatibilidad de su salida MXF depende en gran medida de su elección del codificador de video. Los SDK de VisioForge admiten múltiples opciones de codificador para equilibrar rendimiento, calidad y compatibilidad. Para opciones detalladas de configuración, consulte la [documentación del codificador H.264](../video-encoders/h264.md) y la [documentación del codificador HEVC](../video-encoders/hevc.md).
+La calidad y compatibilidad de su salida MXF depende en gran medida de su elección del codificador de video. `MXFOutput` admite codificadores H.264, por hardware o por software, para equilibrar rendimiento, calidad y compatibilidad. Para opciones detalladas de configuración, consulte la [documentación del codificador H.264](../video-encoders/h264.md).
 
 > Las propiedades `Bitrate` de los codificadores de video del espacio X están en **Kbps** (así 8000 = 8 Mbps). No pases bits por segundo directos.
 
@@ -138,52 +135,15 @@ var openH264Settings = new OpenH264EncoderSettings
 mxfOutput.Video = openH264Settings;
 ```
 
-### Codificación de Video de Alta Eficiencia (HEVC/H.265)
+### HEVC/H.265
 
-Para aplicaciones que requieren mayor eficiencia de compresión:
-
-```csharp
-// Codificador HEVC NVIDIA
-if (NVENCHEVCEncoderSettings.IsAvailable())
-{
-    var nvencHevcSettings = new NVENCHEVCEncoderSettings
-    {
-        Bitrate = 5000, // Bitrate más bajo posible con HEVC
-    };
-
-    mxfOutput.Video = nvencHevcSettings;
-}
-```
+El multiplexor MXF no tiene entrada HEVC, por lo que `MXFOutput` solo admite codificadores H.264. Use [MP4](mp4.md) o [MKV](mkv.md) cuando necesite HEVC.
 
 ## Codificación de audio para archivos MXF
 
-Mientras que el video a menudo recibe la mayor atención, la codificación adecuada de audio es crucial para salidas MXF profesionales. Los SDK de VisioForge ofrecen múltiples opciones de codificador de audio. Para opciones detalladas de configuración, consulte la [documentación del codificador AAC](../audio-encoders/aac.md) y la [documentación del codificador MP3](../audio-encoders/mp3.md).
+Mientras que el video a menudo recibe la mayor atención, la codificación adecuada de audio es crucial para salidas MXF profesionales. El multiplexor MXF acepta audio MPEG-1/2, no AAC, por lo que `MXFOutput` codifica el audio con `MP3EncoderSettings`, su codificador predeterminado. Para opciones detalladas de configuración, consulte la [documentación del codificador MP3](../audio-encoders/mp3.md).
 
-> El `Bitrate` de codificadores de audio del espacio X también está en **Kbps** (así 192 = 192 kbps). `MFAACEncoderSettings` y `VOAACEncoderSettings` sí exponen una propiedad `SampleRate` (por defecto 48000); solo `MP3EncoderSettings` carece de setter de tasa de muestreo y sigue el formato de audio de la fuente upstream. La disposición de canales en los tres sigue el audio upstream salvo que se reconfigure antes (p. ej., con `AudioResamplerBlock`).
-
-### Codificadores AAC
-
-AAC es el códec preferido para la mayoría de aplicaciones profesionales:
-
-```csharp
-// Media Foundation AAC (solo Windows)
-#if NET_WINDOWS
-    var mfAacSettings = new MFAACEncoderSettings
-    {
-        Bitrate = 192, // kbps
-    };
-
-    mxfOutput.Audio = mfAacSettings;
-#else
-    // Alternativa AAC multiplataforma
-    var voAacSettings = new VOAACEncoderSettings
-    {
-        Bitrate = 192,
-    };
-
-    mxfOutput.Audio = voAacSettings;
-#endif
-```
+> El `Bitrate` de codificadores de audio del espacio X también está en **Kbps** (así 192 = 192 kbps). `MP3EncoderSettings` carece de setter de tasa de muestreo y sigue el formato de audio de la fuente upstream; la disposición de canales sigue el audio upstream salvo que se reconfigure antes (p. ej., con `AudioResamplerBlock`).
 
 ### Codificador MP3
 
@@ -238,15 +198,13 @@ var mxfOutput = new MXFOutput(
     if (QSVH264EncoderSettings.IsAvailable())
     {
         mxfOutput.Video = new QSVH264EncoderSettings { Bitrate = 8000 };
-        mxfOutput.Audio = new MFAACEncoderSettings { Bitrate = 192 };
     }
-#elif NET_MACOS
-    mxfOutput.Video = new OpenH264EncoderSettings { Bitrate = 8000 };
-    mxfOutput.Audio = new VOAACEncoderSettings { Bitrate = 192 };
 #else
     mxfOutput.Video = new OpenH264EncoderSettings { Bitrate = 8000 };
-    mxfOutput.Audio = new MP3EncoderSettings { Bitrate = 320 };
 #endif
+
+// MXF usa audio MP3 en todas las plataformas
+mxfOutput.Audio = new MP3EncoderSettings { Bitrate = 320 };
 ```
 
 ## Manejo de errores y validación
@@ -326,12 +284,8 @@ else
     mxfOutput.Video = new OpenH264EncoderSettings { Bitrate = 8000 };
 }
 
-// Configurar audio optimizado por plataforma (Kbps)
-#if NET_WINDOWS
-    mxfOutput.Audio = new MFAACEncoderSettings { Bitrate = 192 };
-#else
-    mxfOutput.Audio = new VOAACEncoderSettings { Bitrate = 192 };
-#endif
+// Configurar el audio (Kbps); el multiplexor MXF admite MP3, no AAC
+mxfOutput.Audio = new MP3EncoderSettings { Bitrate = 192 };
 
 // Adjuntar a VideoCaptureCoreX (o VideoEditCoreX: videoEdit.Output_Format = mxfOutput;)
 videoCapture.Outputs_Add(mxfOutput, autostart: true);
@@ -352,7 +306,7 @@ var mxfSettings = new MXFSinkSettings("output.mxf",
 
 var mxfSink = new MXFSinkBlock(mxfSettings);
 
-// videoEncoder / audioEncoder son instancias existentes de H264EncoderBlock / AACEncoderBlock
+// videoEncoder es una instancia existente de H264EncoderBlock; audioEncoder es new MP3EncoderBlock(new MP3EncoderSettings(), addParser: true), porque mxfmux requiere MP3 analizado
 pipeline.Connect(videoEncoder.Output, mxfSink.CreateNewInput(MediaBlockPadMediaType.Video));
 pipeline.Connect(audioEncoder.Output, mxfSink.CreateNewInput(MediaBlockPadMediaType.Audio));
 

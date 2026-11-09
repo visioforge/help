@@ -929,6 +929,8 @@ Name: BarcodeDetectorBlock.
 | Input | uncompressed video | 1 |
 | Output | uncompressed video | 1 (InputOutput mode) or 0 (InputOnly mode) |
 
+`OnBarcodeDetected` provides `BarcodeDetectorEventArgs` with the barcode type, the value and `Timestamp`, the frame's position in the media, on the same timeline as the pipeline position; `HasTimestamp` is `false` for a frame with no position in the media: one that had no timestamp, or lies outside the played segment.
+
 ### Sample code
 
 ```csharp

@@ -1,6 +1,6 @@
 ---
-title: Desplegar VisioForge .NET SDK en Android: NuGet y ajustes
-description: Despliegue sus aplicaciones .NET con VisioForge SDK en Android: paquetes NuGet, integración VideoView, soporte ARM64/x86 y permisos.
+title: "Desplegar VisioForge .NET SDK en Android: NuGet y ajustes"
+description: "Despliegue sus aplicaciones .NET con VisioForge SDK en Android: paquetes NuGet, integración VideoView, soporte ARM64/x86 y permisos."
 tags:
   - Video Capture SDK
   - Media Player SDK

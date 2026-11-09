@@ -196,7 +196,7 @@ foreach (var deviceUri in onvifDevices)
 
 ### Caméras industrielles Basler
 
-Pour les applications nécessitant des caméras industrielles Basler (dans un processus ARM64 ou x86 sous Windows, l'appel lève `PlatformNotSupportedException`, car sous Windows Basler pylon SDK ne prend en charge que x64) :
+Pour les applications nécessitant des caméras industrielles Basler (Windows x64 uniquement ; ailleurs — processus ARM64 ou x86 sous Windows, Linux, macOS — l'appel lève `PlatformNotSupportedException` ; sous Linux et macOS, utilisez [GenICam](#cameras-generiques-au-standard-genicam)) :
 
 ```csharp
 var baslerCameras = await DeviceEnumerator.Shared.BaslerSourcesAsync();
@@ -210,7 +210,7 @@ foreach (var device in baslerCameras)
 
 ### Caméras industrielles Allied Vision
 
-Pour travailler avec des caméras Allied Vision dans votre application (dans un processus ARM64 ou x86 sous Windows, l'appel lève `PlatformNotSupportedException`, car sous Windows Allied Vision Vimba X SDK ne prend en charge que x64) :
+Pour travailler avec des caméras Allied Vision dans votre application (fourni pour Windows x64 ; dans un processus ARM64 ou x86 sous Windows, l'appel lève `PlatformNotSupportedException`. Sous Linux et macOS, le SDK peut charger un Vimba X installé, mais ce cas n'est pas testé et aucun plugin `vmbsrc` n'y est fourni ; utilisez [GenICam](#cameras-generiques-au-standard-genicam)) :
 
 ```csharp
 var alliedCameras = await DeviceEnumerator.Shared.AlliedVisionSourcesAsync();

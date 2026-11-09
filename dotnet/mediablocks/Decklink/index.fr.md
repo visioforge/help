@@ -8,8 +8,6 @@ tags:
   - Windows
   - macOS
   - Linux
-  - Android
-  - iOS
   - Capture
 primary_api_classes:
   - DecklinkVideoAudioSourceBlock

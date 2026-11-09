@@ -10,8 +10,6 @@ tags:
   - Windows
   - macOS
   - Linux
-  - Android
-  - iOS
   - Capture
   - Streaming
 primary_api_classes:

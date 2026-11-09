@@ -4,11 +4,9 @@ description: Implement AWS S3 video and audio streaming in .NET with configurati
 tags:
   - Video Capture SDK
   - Media Blocks SDK
-  - Video Edit SDK
   - .NET
   - MediaBlocksPipeline
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - Windows
   - macOS
   - Linux
@@ -17,7 +15,6 @@ tags:
   - Capture
   - Streaming
   - Encoding
-  - Editing
   - C#
 primary_api_classes:
   - AWSS3Output
@@ -30,20 +27,20 @@ primary_api_classes:
 
 # AWS S3 Output
 
-[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
+[VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The AWS S3 Output functionality in VisioForge SDKs enables direct video and audio output streaming to Amazon S3 storage. This guide will walk you through setting up and using AWS S3 output in your applications.
 
 ## Overview
 
-The `AWSS3Output` class is a specialized output handler within the VisioForge SDKs that facilitates video and audio output streaming to Amazon Web Services (AWS) S3 storage. This class implements multiple interfaces to support both video editing (`IVideoEditXBaseOutput`) and video capture (`IVideoCaptureXBaseOutput`) scenarios, along with processing capabilities for both video and audio content.
+The `AWSS3Output` class is a specialized output handler within the VisioForge SDKs that facilitates video and audio output streaming to Amazon Web Services (AWS) S3 storage. This class implements `IVideoCaptureXBaseOutput` for video capture scenarios, along with processing capabilities for both video and audio content. `VideoEditCoreX` renders to local files only and does not accept it.
 
 ## Class Implementation
 
 ```csharp
-public class AWSS3Output : IVideoEditXBaseOutput, IVideoCaptureXBaseOutput, IOutputVideoProcessor, IOutputAudioProcessor
+public class AWSS3Output : IVideoCaptureXBaseOutput, IOutputVideoProcessor, IOutputAudioProcessor
 ```
 
 ## Key Features

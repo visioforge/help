@@ -39,7 +39,7 @@ primary_api_classes:
 
 # VisioForge Video Capture SDK .NET — Aide-mémoire
 
-Video Capture SDK .NET capture depuis des webcams, des caméras IP (RTSP/ONVIF), des écrans, des Decklink et des appareils GenICam/GigE Vision sur les 5 plateformes .NET (Windows, macOS, Linux, Android, iOS). `VideoCaptureCoreX` est le moteur multiplateforme ; les sources se configurent via des classes de paramètres typées comme `VideoCaptureDeviceSourceSettings`, et les périphériques sont énumérés de façon asynchrone avec `DeviceEnumerator`.
+Video Capture SDK .NET capture depuis des webcams, des caméras IP (RTSP/ONVIF) et des écrans sur les 5 plateformes .NET (Windows, macOS, Linux, Android, iOS), et depuis des Decklink et des appareils GenICam/GigE Vision sous Windows, macOS et Linux. `VideoCaptureCoreX` est le moteur multiplateforme ; les sources se configurent via des classes de paramètres typées comme `VideoCaptureDeviceSourceSettings`, et les périphériques sont énumérés de façon asynchrone avec `DeviceEnumerator`.
 
 !!! tip "Agents de codage IA : utilisez le serveur MCP VisioForge"
 
@@ -171,7 +171,7 @@ Remplacez `VideoCaptureDeviceSourceSettings(...)` par `await RTSPSourceSettings.
 
 - **L'énumération des périphériques est asynchrone.** Utilisez toujours `await DeviceEnumerator.Shared.VideoSourcesAsync()` — appeler `.Result` ou `.Wait()` sur le thread UI peut provoquer un interblocage. L'audio utilise ses propres appels `AudioSourcesAsync()` / `AudioOutputsAsync()` ; l'énumérateur vidéo ne les couvre pas.
 - **Les sorties doivent être ajoutées avant `StartAsync`.** `Outputs_Add(...)` pendant une capture active n'est pas pris en charge — arrêtez la capture, ajoutez la sortie, puis redémarrez.
-- **La caméra virtuelle nécessite un enregistrement supplémentaire.** Le paquet redistribuable `VirtualCamera` doit être enregistré (consultez le [guide de déploiement](./deployment.md)) avant que la caméra virtuelle ne devienne visible pour des applications externes comme Zoom ou Teams.
+- **La caméra virtuelle nécessite un enregistrement supplémentaire.** Le paquet redistribuable `VirtualCamera` doit être enregistré (consultez le [guide de déploiement](./deployment.md)) avant que la caméra virtuelle ne devienne visible pour des applications externes comme Zoom ou OBS.
 - **Les applications AnyCPU nécessitent à la fois les redistribuables x86 et x64.** Sous Windows, distribuez les deux architectures ou imposez-en une via `<PlatformTarget>` — un déploiement partiel échoue silencieusement à l'initialisation de la source.
 - **Les permissions mobiles doivent être accordées avant l'énumération.** Sur Android et iOS, les permissions de caméra et de microphone doivent être demandées et accordées avant l'exécution de `DeviceEnumerator` — sinon la liste retournée est vide. Consultez le [guide d'enregistrement caméra MAUI](./maui/camera-recording-maui.md) pour la configuration des permissions par plateforme.
 

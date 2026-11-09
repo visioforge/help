@@ -142,7 +142,7 @@ La tabla a continuación muestra el soporte para protocolos de red en cada plata
 | HTTP                              | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | NDI                               | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2718; |
 | VNC (fuente)                      | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
-| GenICam (fuente)                  | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
+| GenICam (fuente)                  | &#x2714; | &#x2714; | &#x2714;| &#x2718; | &#x2718; |
 | AWS S3                            | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 
 En Windows, NDI cubre x86 y x64; no está disponible en un proceso nativo de Windows ARM64. NDI no está disponible en iOS: el runtime GStreamer de iOS del SDK no incluye el plugin NDI. En Android, la recepción NDI funciona cuando la biblioteca del SDK NDI del fabricante (`libndi.so`) se empaqueta con la aplicación, y el SDK la encuentra en tiempo de ejecución; la salida NDI no está disponible en Android.

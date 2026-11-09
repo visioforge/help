@@ -1,6 +1,6 @@
 ---
 title: Despliegue de VisioForge .NET SDK en todas las plataformas
-description: Despliegue sus aplicaciones .NET en Windows, macOS, iOS, Android y Linux: bibliotecas nativas, dependencias e integración con frameworks de UI.
+description: "Despliegue sus aplicaciones .NET en Windows, macOS, iOS, Android y Linux: bibliotecas nativas, dependencias e integración con frameworks de UI."
 tags:
   - Video Capture SDK
   - Media Player SDK

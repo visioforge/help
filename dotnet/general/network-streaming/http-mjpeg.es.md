@@ -8,7 +8,6 @@ tags:
   - .NET
   - MediaBlocksPipeline
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - Windows
   - macOS
   - Linux
@@ -51,7 +50,7 @@ La característica del SDK de transmitir video codificado como Motion JPEG (MJPE
 
 ## Salida MJPEG multiplataforma
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
+[VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 La funcionalidad de streaming se implementa a través de dos clases principales:
 

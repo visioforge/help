@@ -8,7 +8,6 @@ tags:
   - .NET
   - MediaBlocksPipeline
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - Windows
   - macOS
   - Linux
@@ -50,7 +49,7 @@ The SDK's feature of streaming video encoded as Motion JPEG (MJPEG) over HTTP is
 
 ## Cross-platform MJPEG output
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
+[VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 The streaming functionality is implemented through two main classes:
 

@@ -1,5 +1,5 @@
 ---
-title: Codificación HEVC: AMD, NVIDIA, Intel y Apple VideoToolbox
+title: "Codificación HEVC: AMD, NVIDIA, Intel y Apple VideoToolbox"
 description: Codifique HEVC (H.265) con GPU AMD, NVIDIA, Intel y Apple VideoToolbox, incluido 10 bits y alfa, en sus aplicaciones .NET.
 tags:
   - Video Capture SDK

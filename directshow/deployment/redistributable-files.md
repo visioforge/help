@@ -426,9 +426,9 @@ YourApp\
 ## Virtual Camera SDK
 ### Core Files
 #### x86 (32-bit)
-**Virtual Camera Drivers**:
-- `VisioForge_Virtual_Camera.ax` - Virtual camera device driver
-- `VisioForge_Virtual_Audio_Card.ax` - Virtual audio device driver
+**Virtual Camera Filters**:
+- `VisioForge_Virtual_Camera.ax` - Virtual camera DirectShow source filter
+- `VisioForge_Virtual_Audio_Card.ax` - Virtual audio card DirectShow source filter
 **Source Filters**:
 - `VisioForge_Push_Video_Source.ax` - Push source for streaming to virtual camera
 - `VisioForge_Screen_Capture_DD.ax` - DirectDraw screen capture
@@ -439,10 +439,8 @@ YourApp\
 **Helper Libraries** (required):
 - `VisioForge_MFP.dll`
 - `VisioForge_MFPX.dll`
-**Runtime** (required):
-- `vcomp140.dll` - Visual C++ OpenMP runtime
 #### x64 (64-bit)
-**Virtual Camera Drivers**:
+**Virtual Camera Filters**:
 - `VisioForge_Virtual_Camera_x64.ax`
 - `VisioForge_Virtual_Audio_Card_x64.ax`
 **Source Filters**:
@@ -455,6 +453,15 @@ YourApp\
 **Helper Libraries** (required):
 - `VisioForge_MFP64.dll`
 - `VisioForge_MFPX64.dll`
+**Runtime** (required):
+- `vcomp140.dll` - Visual C++ OpenMP runtime, loaded by `VisioForge_MFPX64.dll`
+#### ARM64
+**Virtual Camera Filters**:
+- `VisioForge_Virtual_Camera_arm64.ax`
+- `VisioForge_Virtual_Audio_Card_arm64.ax`
+**Helper Libraries** (required):
+- `VisioForge_MFP_ARM64.dll`
+- `VisioForge_MFPX_ARM64.dll`
 ### Installation Directory Structure
 ```
 YourApp\
@@ -474,6 +481,10 @@ YourApp\
 ├── VisioForge_MFP64.dll
 ├── VisioForge_MFPX.dll
 ├── VisioForge_MFPX64.dll
+├── VisioForge_Virtual_Camera_arm64.ax
+├── VisioForge_Virtual_Audio_Card_arm64.ax
+├── VisioForge_MFP_ARM64.dll
+├── VisioForge_MFPX_ARM64.dll
 └── vcomp140.dll
 ```
 ### License Files
@@ -481,9 +492,10 @@ YourApp\
 ### Total Size
 ~15-20 MB
 ### Important Notes
-- Virtual camera devices appear in video conferencing apps (Zoom, Teams, Skype, etc.)
+- Virtual camera devices appear as webcams in Zoom, OBS Studio, browsers and other video applications
 - Supports up to 4 virtual camera instances
-- Requires driver installation (included in installer)
+- Unlike the other SDKs, needs no Visual C++ Redistributable (the [Common Dependencies](#common-dependencies) note does not apply): the filters link the C runtime statically, and `vcomp140.dll` (x64 only) is in the list above
+- The filters are registered with `regsvr32` (the installer does it)
 ---
 
 ## Common Dependencies

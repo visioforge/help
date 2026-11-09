@@ -1,6 +1,6 @@
 ---
 title: Despliegue del SDK .NET multiplataforma para Windows
-description: Despliegue sus aplicaciones con el SDK .NET de VisioForge en Windows: paquetes NuGet, dependencias y configuración de arquitectura x86/x64.
+description: "Despliegue sus aplicaciones con el SDK .NET de VisioForge en Windows: paquetes NuGet, dependencias y configuración de arquitectura x86/x64."
 tags:
   - Video Capture SDK
   - Media Player SDK

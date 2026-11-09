@@ -929,6 +929,8 @@ Nom : BarcodeDetectorBlock.
 | Entrée | vidéo non compressée | 1 |
 | Sortie | vidéo non compressée | 1 (mode InputOutput) ou 0 (mode InputOnly) |
 
+`OnBarcodeDetected` fournit un `BarcodeDetectorEventArgs` avec le type de code, la valeur et `Timestamp`, la position de l'image dans le média, sur la même échelle que la position du pipeline ; `HasTimestamp` vaut `false` pour une image sans position dans le média : sans horodatage, ou hors du segment lu.
+
 ### Exemple de code
 
 ```csharp

@@ -1,6 +1,6 @@
 ---
 title: Manual de despliegue multiplataforma .NET para macOS
-description: Despliegue sus aplicaciones con el SDK .NET de VisioForge en macOS: integración NSView, permisos, App Store y configuración de bibliotecas nativas.
+description: "Despliegue sus aplicaciones con el SDK .NET de VisioForge en macOS: integración NSView, permisos, App Store y configuración de bibliotecas nativas."
 tags:
   - Video Capture SDK
   - Media Player SDK

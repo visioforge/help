@@ -7,7 +7,6 @@ tags:
   - .NET
   - MediaBlocksPipeline
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - Windows
   - macOS
   - Linux
@@ -59,14 +58,14 @@ bool ndiAvailable = NDISinkBlock.IsAvailable();
 
 ## Sortie NDI multiplateforme
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
+[VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 ### Classe NDIOutput
 
-La classe `NDIOutput` fournit la sortie NDI pour les moteurs VideoCaptureCoreX et VideoEditCoreX :
+La classe `NDIOutput` fournit la sortie NDI pour le moteur VideoCaptureCoreX :
 
 ```csharp
-public class NDIOutput : IVideoEditXBaseOutput, IVideoCaptureXBaseOutput, IOutputVideoProcessor, IOutputAudioProcessor
+public class NDIOutput : IVideoCaptureXBaseOutput, IOutputVideoProcessor, IOutputAudioProcessor
 ```
 
 #### Configuration

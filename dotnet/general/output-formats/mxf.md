@@ -19,8 +19,6 @@ tags:
   - Editing
   - MXF
   - H.264
-  - H.265
-  - AAC
   - MP3
   - C#
 primary_api_classes:
@@ -28,7 +26,6 @@ primary_api_classes:
   - MXFOutput
   - NVENCH264EncoderSettings
   - AMFH264EncoderSettings
-  - MFAACEncoderSettings
 
 ---
 
@@ -72,7 +69,7 @@ This creates a valid MXF output with default encoding settings. For professional
 
 ## Video Encoding Options for MXF
 
-The quality and compatibility of your MXF output largely depends on your choice of video encoder. VisioForge SDKs support multiple encoder options to balance performance, quality, and compatibility. For detailed configuration options, see the [H.264 encoder documentation](../video-encoders/h264.md) and [HEVC encoder documentation](../video-encoders/hevc.md).
+The quality and compatibility of your MXF output largely depends on your choice of video encoder. `MXFOutput` takes H.264 encoders, hardware or software, to balance performance, quality, and compatibility. For detailed configuration options, see the [H.264 encoder documentation](../video-encoders/h264.md).
 
 > Video encoder `Bitrate` properties on the X namespace are in **Kbps** (so 8000 = 8 Mbps). Don't pass raw bits per second.
 
@@ -138,52 +135,15 @@ var openH264Settings = new OpenH264EncoderSettings
 mxfOutput.Video = openH264Settings;
 ```
 
-### High-Efficiency Video Coding (HEVC/H.265)
+### HEVC/H.265
 
-For applications requiring higher compression efficiency:
-
-```csharp
-// NVIDIA HEVC encoder
-if (NVENCHEVCEncoderSettings.IsAvailable())
-{
-    var nvencHevcSettings = new NVENCHEVCEncoderSettings
-    {
-        Bitrate = 5000, // Lower bitrate possible with HEVC
-    };
-
-    mxfOutput.Video = nvencHevcSettings;
-}
-```
+The MXF muxer has no HEVC input, so `MXFOutput` takes H.264 encoders only. Use [MP4](mp4.md) or [MKV](mkv.md) when you need HEVC.
 
 ## Audio Encoding for MXF Files
 
-While video often gets the most attention, proper audio encoding is crucial for professional MXF outputs. VisioForge SDKs offer multiple audio encoder options. For detailed configuration options, see the [AAC encoder documentation](../audio-encoders/aac.md) and [MP3 encoder documentation](../audio-encoders/mp3.md).
+While video often gets the most attention, proper audio encoding is crucial for professional MXF outputs. The MXF muxer takes MPEG-1/2 audio, not AAC, so `MXFOutput` encodes audio with `MP3EncoderSettings`, its default. For detailed configuration options, see the [MP3 encoder documentation](../audio-encoders/mp3.md).
 
-> Audio encoder `Bitrate` on the X namespace is also in **Kbps** (so 192 = 192 kbps). `MFAACEncoderSettings` and `VOAACEncoderSettings` do expose a `SampleRate` property (default 48000); only `MP3EncoderSettings` has no sample-rate setter and follows the upstream source's audio format. Channel layout on all three follows the upstream audio unless reshaped upstream (e.g., via `AudioResamplerBlock`).
-
-### AAC Encoders
-
-AAC is the preferred codec for most professional applications:
-
-```csharp
-// Media Foundation AAC (Windows-only)
-#if NET_WINDOWS
-    var mfAacSettings = new MFAACEncoderSettings
-    {
-        Bitrate = 192, // kbps
-    };
-
-    mxfOutput.Audio = mfAacSettings;
-#else
-    // Cross-platform AAC alternative
-    var voAacSettings = new VOAACEncoderSettings
-    {
-        Bitrate = 192,
-    };
-
-    mxfOutput.Audio = voAacSettings;
-#endif
-```
+> Audio encoder `Bitrate` on the X namespace is also in **Kbps** (so 192 = 192 kbps). `MP3EncoderSettings` has no sample-rate setter and follows the upstream source's audio format; its channel layout follows the upstream audio unless reshaped upstream (e.g., via `AudioResamplerBlock`).
 
 ### MP3 Encoder
 
@@ -238,15 +198,13 @@ var mxfOutput = new MXFOutput(
     if (QSVH264EncoderSettings.IsAvailable())
     {
         mxfOutput.Video = new QSVH264EncoderSettings { Bitrate = 8000 };
-        mxfOutput.Audio = new MFAACEncoderSettings { Bitrate = 192 };
     }
-#elif NET_MACOS
-    mxfOutput.Video = new OpenH264EncoderSettings { Bitrate = 8000 };
-    mxfOutput.Audio = new VOAACEncoderSettings { Bitrate = 192 };
 #else
     mxfOutput.Video = new OpenH264EncoderSettings { Bitrate = 8000 };
-    mxfOutput.Audio = new MP3EncoderSettings { Bitrate = 320 };
 #endif
+
+// MXF takes MP3 audio on every platform
+mxfOutput.Audio = new MP3EncoderSettings { Bitrate = 320 };
 ```
 
 ## Error Handling and Validation
@@ -326,12 +284,8 @@ else
     mxfOutput.Video = new OpenH264EncoderSettings { Bitrate = 8000 };
 }
 
-// Configure platform-optimized audio (Kbps)
-#if NET_WINDOWS
-    mxfOutput.Audio = new MFAACEncoderSettings { Bitrate = 192 };
-#else
-    mxfOutput.Audio = new VOAACEncoderSettings { Bitrate = 192 };
-#endif
+// Configure audio (Kbps); the MXF muxer takes MP3, not AAC
+mxfOutput.Audio = new MP3EncoderSettings { Bitrate = 192 };
 
 // Attach to VideoCaptureCoreX (or VideoEditCoreX: videoEdit.Output_Format = mxfOutput;)
 videoCapture.Outputs_Add(mxfOutput, autostart: true);
@@ -352,7 +306,7 @@ var mxfSettings = new MXFSinkSettings("output.mxf",
 
 var mxfSink = new MXFSinkBlock(mxfSettings);
 
-// videoEncoder / audioEncoder are existing H264EncoderBlock / AACEncoderBlock instances
+// videoEncoder is an existing H264EncoderBlock; audioEncoder is new MP3EncoderBlock(new MP3EncoderSettings(), addParser: true), since mxfmux needs parsed MP3
 pipeline.Connect(videoEncoder.Output, mxfSink.CreateNewInput(MediaBlockPadMediaType.Video));
 pipeline.Connect(audioEncoder.Output, mxfSink.CreateNewInput(MediaBlockPadMediaType.Audio));
 

@@ -4,11 +4,9 @@ description: Implemente streaming de video y audio a AWS S3 en .NET con configur
 tags:
   - Video Capture SDK
   - Media Blocks SDK
-  - Video Edit SDK
   - .NET
   - MediaBlocksPipeline
   - VideoCaptureCoreX
-  - VideoEditCoreX
   - Windows
   - macOS
   - Linux
@@ -17,7 +15,6 @@ tags:
   - Capture
   - Streaming
   - Encoding
-  - Editing
   - C#
 primary_api_classes:
   - AWSS3Output
@@ -30,20 +27,20 @@ primary_api_classes:
 
 # Salida AWS S3
 
-[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-[VideoCaptureCoreX](#){ .md-button } [VideoEditCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
+[VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }
 
 La funcionalidad de salida AWS S3 en los SDK de VisioForge habilita streaming directo de salida de video y audio al almacenamiento Amazon S3. Esta guía lo guiará a través de la configuración y uso de la salida AWS S3 en sus aplicaciones.
 
 ## Descripción general
 
-La clase `AWSS3Output` es un manejador de salida especializado dentro de los SDK de VisioForge que facilita el streaming de salida de video y audio al almacenamiento Amazon Web Services (AWS) S3. Esta clase implementa múltiples interfaces para soportar escenarios tanto de edición de video (`IVideoEditXBaseOutput`) como de captura de video (`IVideoCaptureXBaseOutput`), junto con capacidades de procesamiento para contenido de video y audio.
+La clase `AWSS3Output` es un manejador de salida especializado dentro de los SDK de VisioForge que facilita el streaming de salida de video y audio al almacenamiento Amazon Web Services (AWS) S3. Esta clase implementa `IVideoCaptureXBaseOutput` para escenarios de captura de video, junto con capacidades de procesamiento para contenido de video y audio. `VideoEditCoreX` solo genera archivos locales y no la acepta.
 
 ## Implementación de la clase
 
 ```csharp
-public class AWSS3Output : IVideoEditXBaseOutput, IVideoCaptureXBaseOutput, IOutputVideoProcessor, IOutputAudioProcessor
+public class AWSS3Output : IVideoCaptureXBaseOutput, IOutputVideoProcessor, IOutputAudioProcessor
 ```
 
 ## Características clave
