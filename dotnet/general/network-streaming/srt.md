@@ -250,15 +250,15 @@ var sinkSettings = new SRTSinkSettings
 
 ### Receiver (Encrypted)
 
-`SRTSourceSettings.CreateAsync` opens the stream with the URI alone to read its tracks before it returns, so when you use it for an encrypted stream, put the passphrase in the URI as `passphrase` and `pbkeylen` query parameters. A passphrase is 10 to 79 bytes in UTF-8, which is 10 to 79 characters for Latin letters and digits; in a URI, use letters, digits, `-`, `_`, `.` and `~`:
+`SRTSourceSettings.CreateAsync` opens the stream to read its tracks before it returns, so for an encrypted stream pass it the passphrase and key length. A passphrase is 10 to 79 bytes in UTF-8 and can contain any characters:
 
 ```csharp
-// CreateAsync reads the stream with the URI alone, so the passphrase and key length go in the query
+// CreateAsync reads the tracks with the passphrase; the settings it returns carry it
 var sourceSettings = await SRTSourceSettings.CreateAsync(
-    new Uri("srt://192.168.1.100:8888?passphrase=my-secret-passphrase&pbkeylen=32"));
+    new Uri("srt://192.168.1.100:8888"), "my secret passphrase!", SRTKeyLength.Length32);
 ```
 
-With Media Blocks SDK .NET you can skip `CreateAsync` and set the passphrase as a property instead. It then stays out of the URI, so it can contain any characters. `SRTSourceBlock` does not know the tracks in advance, so it creates both a video and an audio output:
+With Media Blocks SDK .NET you can also skip `CreateAsync` and set the passphrase as a property. `SRTSourceBlock` does not know the tracks in advance, so it creates both a video and an audio output:
 
 ```csharp
 var sourceSettings = new SRTSourceSettings
@@ -386,7 +386,7 @@ The **listener** binds to a port and waits for incoming connections — it acts 
 
 ### How do I encrypt an SRT stream?
 
-On the sender, set `Passphrase` (10 to 79 bytes in UTF-8) and `PbKeyLen` on `SRTSinkSettings`. On the receiver, pass the same values in the URI given to `SRTSourceSettings.CreateAsync` (`srt://host:8888?passphrase=...&pbkeylen=32`), because `CreateAsync` opens the stream with the URI alone; in a URI, use letters, digits, `-`, `_`, `.` and `~`. With Media Blocks SDK .NET you can instead set `Passphrase` and `PbKeyLen` on a new `SRTSourceSettings` and skip `CreateAsync`. Both sides must use identical values. Available key lengths are 128-bit (`Length16`), 192-bit (`Length24`), and 256-bit (`Length32`). See the [Encryption](#encryption) section for code examples.
+On the sender, set `Passphrase` (10 to 79 bytes in UTF-8) and `PbKeyLen` on `SRTSinkSettings`. On the receiver, pass the same values to `SRTSourceSettings.CreateAsync(uri, passphrase, keyLength)`, which opens the stream with them to read its tracks. With Media Blocks SDK .NET you can instead set `Passphrase` and `PbKeyLen` on a new `SRTSourceSettings` and skip `CreateAsync`. Both sides must use identical values. Available key lengths are 128-bit (`Length16`), 192-bit (`Length24`), and 256-bit (`Length32`). See the [Encryption](#encryption) section for code examples.
 
 ### How do I receive and play an SRT stream in C#?
 

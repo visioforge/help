@@ -1,5 +1,5 @@
 ---
-title: OCR en C# para video e imágenes — OcrBlock con PaddleOCR
+title: OcrBlock — Referencia OCR en .NET (PaddleOCR, ONNX Runtime)
 description: Referencia de OcrBlock — modelos, ajustes y solución de problemas para reconocer texto en video e imágenes con ONNX Runtime y PaddleOCR en C#, multiplataforma.
 sidebar_label: OCR
 tags:

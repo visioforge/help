@@ -1,6 +1,6 @@
 ---
-title: Grabar pantalla a MP4 en C# — tutorial, GPU, multimonitor
-description: Grabación pantalla completa, región y multi-monitor. Codificación GPU (NVENC/QSV/AMF), audio loopback, resaltado de cursor. Ejemplos API legacy y moderna.
+title: Captura de pantalla a MP4 en C# — GPU y multimonitor
+description: Captura de pantalla completa, de región y multimonitor. Codificación GPU (NVENC/QSV/AMF), audio loopback, resaltado de cursor. Ejemplos API legacy y moderna.
 sidebar_label: Captura de pantalla a MP4
 tags:
   - Video Capture SDK

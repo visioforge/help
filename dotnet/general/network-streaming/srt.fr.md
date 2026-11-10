@@ -250,15 +250,15 @@ var sinkSettings = new SRTSinkSettings
 
 ### Récepteur (chiffré)
 
-`SRTSourceSettings.CreateAsync` ouvre le flux avec la seule URI pour lire ses pistes avant de rendre la main ; si vous l'utilisez pour un flux chiffré, placez donc la phrase secrète dans l'URI, sous forme de paramètres de requête `passphrase` et `pbkeylen`. Une phrase secrète occupe de 10 à 79 octets en UTF-8, soit de 10 à 79 caractères pour des lettres latines et des chiffres ; dans une URI, utilisez des lettres, des chiffres, `-`, `_`, `.` et `~` :
+`SRTSourceSettings.CreateAsync` ouvre le flux pour lire ses pistes avant de rendre la main ; pour un flux chiffré, passez-lui donc la phrase secrète et la longueur de clé. Une phrase secrète occupe de 10 à 79 octets en UTF-8 et peut contenir n'importe quel caractère :
 
 ```csharp
-// CreateAsync lit le flux avec la seule URI, la phrase secrète et la longueur de clé vont donc dans la requête
+// CreateAsync lit les pistes avec la phrase secrète ; les paramètres renvoyés la conservent
 var sourceSettings = await SRTSourceSettings.CreateAsync(
-    new Uri("srt://192.168.1.100:8888?passphrase=my-secret-passphrase&pbkeylen=32"));
+    new Uri("srt://192.168.1.100:8888"), "my secret passphrase!", SRTKeyLength.Length32);
 ```
 
-Avec Media Blocks SDK .NET, vous pouvez vous passer de `CreateAsync` et définir la phrase secrète comme propriété. Elle ne figure alors pas dans l'URI et peut contenir n'importe quel caractère. `SRTSourceBlock` ne connaît pas les pistes à l'avance et crée donc une sortie vidéo et une sortie audio :
+Avec Media Blocks SDK .NET, vous pouvez aussi vous passer de `CreateAsync` et définir la phrase secrète comme propriété. `SRTSourceBlock` ne connaît pas les pistes à l'avance et crée donc une sortie vidéo et une sortie audio :
 
 ```csharp
 var sourceSettings = new SRTSourceSettings
@@ -386,7 +386,7 @@ Le **listener** se lie à un port et attend les connexions entrantes — il agit
 
 ### Comment chiffrer un flux SRT ?
 
-Côté émetteur, définissez `Passphrase` (de 10 à 79 octets en UTF-8) et `PbKeyLen` sur `SRTSinkSettings`. Côté récepteur, passez les mêmes valeurs dans l'URI donnée à `SRTSourceSettings.CreateAsync` (`srt://host:8888?passphrase=...&pbkeylen=32`), car `CreateAsync` ouvre le flux avec la seule URI ; dans une URI, utilisez des lettres, des chiffres, `-`, `_`, `.` et `~`. Avec Media Blocks SDK .NET, vous pouvez à la place définir `Passphrase` et `PbKeyLen` sur un nouveau `SRTSourceSettings` et vous passer de `CreateAsync`. Les deux côtés doivent utiliser des valeurs identiques. Longueurs de clé disponibles : 128 bits (`Length16`), 192 bits (`Length24`) et 256 bits (`Length32`). Voir la section [Chiffrement](#chiffrement) pour des exemples de code.
+Côté émetteur, définissez `Passphrase` (de 10 à 79 octets en UTF-8) et `PbKeyLen` sur `SRTSinkSettings`. Côté récepteur, passez les mêmes valeurs à `SRTSourceSettings.CreateAsync(uri, passphrase, keyLength)`, qui ouvre le flux avec elles pour lire ses pistes. Avec Media Blocks SDK .NET, vous pouvez à la place définir `Passphrase` et `PbKeyLen` sur un nouveau `SRTSourceSettings` et vous passer de `CreateAsync`. Les deux côtés doivent utiliser des valeurs identiques. Longueurs de clé disponibles : 128 bits (`Length16`), 192 bits (`Length24`) et 256 bits (`Length32`). Voir la section [Chiffrement](#chiffrement) pour des exemples de code.
 
 ### Comment recevoir et lire un flux SRT en C# ?
 

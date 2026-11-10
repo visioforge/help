@@ -1564,7 +1564,7 @@ El `SRTSourceBlock` está configurado usando `SRTSourceSettings`. Proporciona op
 - `PollTimeout` (`TimeSpan`): Tiempo de espera de polling usado cuando se inicia un poll SRT. Predeterminado 1000 milisegundos.
 - `WaitForConnection` (bool): Si `true` (predeterminado), bloquea el stream hasta que un cliente se conecte (en modo listener).
 
-El `SRTSourceSettings` puede inicializarse usando `await SRTSourceSettings.CreateAsync(string uri, bool ignoreMediaInfoReader = false)`. Establecer `ignoreMediaInfoReader` en `true` puede ser útil si la lectura de información de medios falla para un stream en vivo.
+El `SRTSourceSettings` puede inicializarse usando `await SRTSourceSettings.CreateAsync(Uri uri, bool ignoreMediaInfoReader = false)`. Establecer `ignoreMediaInfoReader` en `true` puede ser útil si la lectura de información de medios falla para un stream en vivo. Para un stream cifrado, use `SRTSourceSettings.CreateAsync(Uri uri, string passphrase, SRTKeyLength keyLength, bool ignoreMediaInfoReader = false)`: la información de medios se lee con la contraseña, que puede contener cualquier carácter.
 
 ##### Enum `SRTConnectionMode`
 
