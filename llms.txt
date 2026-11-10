@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-11-10 18:02:14 UTC (7d55e3d7943)
+**Generated:** 2026-11-10 18:35:16 UTC (f618ef4f591)
 
 ## MCP Server (for AI coding agents)
 
@@ -206,6 +206,7 @@ The following products from the old price list are no longer sold:
 - [Pay by Invoice or Purchase Order | VisioForge](https://www.visioforge.com/buy/invoice-request)
 - [Cookie Policy (EU) — Privacy & Data Controls | VisioForge](https://www.visioforge.com/cookie-policy-eu)
 - [Detect Pirated Video — Automated Piracy Detection SDK](https://www.visioforge.com/detecting-pirated-video-content)
+- [DirectShow Filters — Source, Encoder and Video Effects](https://www.visioforge.com/directshow-filters)
 - [GStreamer Metal Plugin — 15 GPU Video Effects on macOS/iOS](https://www.visioforge.com/gstreamer-metal)
 - [Register Your VisioForge SDK License — Activation Guide](https://www.visioforge.com/how-to-register-purchased-product)
 - [Legal Information — Privacy, Terms & Refund | VisioForge](https://www.visioforge.com/legal-information)
@@ -461,7 +462,7 @@ The following products from the old price list are no longer sold:
 - [DirectShow Encoding Filters — H.264, H.265, NVENC & More](https://www.visioforge.com/help/docs/directshow/filters-enc/): DirectShow video/audio encoders with H.264, H.265, VP8, VP9, AAC, MP3, and GPU acceleration (NVENC, QuickSync, AMF) for Windows apps.
 - [DirectShow Muxer and Container Format Reference Guide](https://www.visioforge.com/help/docs/directshow/filters-enc/muxers-reference/): Container format reference for VisioForge DirectShow muxers — MP4, MKV, WebM, MPEG-TS, AVI with codec compatibility and streaming configuration.
 - [Register DirectShow Filters in C++, C#, and Delphi](https://www.visioforge.com/help/docs/directshow/how-to-register/): Register DirectShow filters and SDKs in C++, C#, and Delphi with IVFRegister interface and alternative registration code examples.
-- [DirectShow Filters for Video Playback, Encoding & Effects](https://www.visioforge.com/help/docs/directshow/): DirectShow filters for FFmpeg/VLC playback, H.264/H.265/NVENC encoding, 35+ video effects, chroma key, virtual camera, and AES-256 encryption.
+- [DirectShow Documentation — Filter Guides and API Reference](https://www.visioforge.com/help/docs/directshow/): DirectShow filters for FFmpeg/VLC playback, H.264/H.265/NVENC encoding, 35+ video effects, chroma key, virtual camera, and AES-256 encryption.
 - [DirectShow Video Effects Reference - 35+ Filters Guide](https://www.visioforge.com/help/docs/directshow/proc-filters/effects-reference/): Complete reference for 35+ DirectShow video effects including color filters, deinterlacing, denoising, and artistic effects.
 - [DirectShow Video Effects, Mixer, and Chroma Key Examples](https://www.visioforge.com/help/docs/directshow/proc-filters/examples/): Code examples for Video Effects, Video Mixer, and Chroma Key filters in C++, C#, and VB.NET with DirectShow integration.
 - [Real-Time Video Processing Filters for DirectShow Apps](https://www.visioforge.com/help/docs/directshow/proc-filters/): Add 35+ real-time video effects, multi-source video mixer (2-16 inputs), chroma key, deinterlacing, and noise reduction to Windows apps. VisioForge COM filters.
@@ -478,7 +479,7 @@ The following products from the old price list are no longer sold:
 - [FFMPEG Source DirectShow Filter — décode 100+ formats](https://www.visioforge.com/help/fr/docs/directshow/ffmpeg-source-filters/): Filtre source DirectShow basé sur FFmpeg pour décoder MP4, MKV, H.265 et plus de 100 formats avec accélération matérielle. Interface COM pour C++, C# et Delphi.
 - [Filtres d'encodage DirectShow — H.264, H.265, NVENC et plus](https://www.visioforge.com/help/fr/docs/directshow/filters-enc/): Encodeurs DirectShow vidéo/audio avec H.264, H.265, VP8, VP9, AAC, MP3 et accélération GPU (NVENC, QuickSync, AMF) pour applications Windows.
 - [Enregistrer les filtres DirectShow en C++, C# et Delphi](https://www.visioforge.com/help/fr/docs/directshow/how-to-register/): Enregistrez les filtres et SDK DirectShow en C++, C# et Delphi avec l'interface IVFRegister et des exemples de code d'enregistrement alternatifs.
-- [Filtres DirectShow pour lecture, encodage et effets vidéo](https://www.visioforge.com/help/fr/docs/directshow/): Filtres DirectShow pour lecture FFmpeg/VLC, encodage H.264/H.265/NVENC, plus de 35 effets vidéo, incrustation chroma, caméra virtuelle et chiffrement AES-256.
+- [Documentation DirectShow — guides et référence des filtres](https://www.visioforge.com/help/fr/docs/directshow/): Filtres DirectShow pour lecture FFmpeg/VLC, encodage H.264/H.265/NVENC, plus de 35 effets vidéo, incrustation chroma, caméra virtuelle et chiffrement AES-256.
 - [Filtres de traitement vidéo temps réel pour DirectShow](https://www.visioforge.com/help/fr/docs/directshow/proc-filters/): Plus de 35 effets vidéo temps réel, mélangeur multi-source (2-16 entrées), chroma key, désentrelacement et débruitage. Filtres COM VisioForge.
 - [Chiffrement vidéo AES-256 via les filtres COM DirectShow](https://www.visioforge.com/help/fr/docs/directshow/video-encryption-sdk/): Chiffrez la vidéo H.264/AAC MP4 en AES-256 via les filtres DirectShow. SDK VisioForge avec modes mot de passe et clé binaire pour C++, C# et Delphi.
 - [Virtual Camera SDK Windows — DirectShow, Zoom, OBS](https://www.visioforge.com/help/fr/docs/directshow/virtual-camera-sdk/): Créez des webcams virtuelles pour Zoom, OBS et navigateurs. Le SDK DirectShow VisioForge diffuse toute source vidéo avec audio.
@@ -545,7 +546,7 @@ The following products from the old price list are no longer sold:
 - [Media Blocks SDK vs TVideoGrabber — .NET Comparison](https://www.visioforge.com/compare/media-blocks-vs-tvideograbber)
 - [Media Player SDK vs FFmpeg — .NET Playback Comparison](https://www.visioforge.com/compare/media-player-vs-ffmpeg)
 - [Media Player SDK vs LEADTOOLS — .NET Playback Comparison](https://www.visioforge.com/compare/media-player-vs-leadtools)
-- [Media Player SDK vs LibVLCSharp — Feature Comparison](https://www.visioforge.com/compare/media-player-vs-libvlcsharp)
+- [LibVLCSharp Alternative for C# .NET — Media Player SDK](https://www.visioforge.com/compare/media-player-vs-libvlcsharp)
 - [Media Player SDK vs MFormats — .NET Playback Comparison](https://www.visioforge.com/compare/media-player-vs-mformats)
 - [Media Player SDK vs TVideoGrabber — .NET Comparison](https://www.visioforge.com/compare/media-player-vs-tvideograbber)
 - [Media Player SDK vs Viscomsoft — .NET Playback Comparison](https://www.visioforge.com/compare/media-player-vs-viscomsoft)

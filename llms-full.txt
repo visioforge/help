@@ -2,9 +2,9 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-10 18:02:17 UTC (7d55e3d7943)
+**Generated:** 2026-11-10 18:35:19 UTC (f618ef4f591)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
-**Content Sources:** 1377 help documentation pages + 70 website pages
+**Content Sources:** 1377 help documentation pages + 71 website pages
 
 ---
 
@@ -146642,7 +146642,9 @@ public partial class Form1 : Form
         camera.Format = cbFormat.Text;
         camera.FrameRate = (VideoFrameRate)cbFrameRate.SelectedItem;
 
-        videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(cbMicrophone.Text);
+        var mic = (string)cbMicrophone.SelectedItem;
+        videoCapture1.Audio_RecordAudio = mic is not null; // no microphone: record video only
+        if (mic is not null) videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(mic);
         videoCapture1.Audio_PlayAudio = false; // record the microphone without playing it back
 
         var mp4 = new MP4HWOutput();
@@ -146702,7 +146704,7 @@ public partial class Form1 : Form
             btStop.Enabled = false;
             await videoCapture1.StopAsync();
             btStart.Enabled = true;
-            Close();
+            BeginInvoke(Close); // close again once this handler has returned
             return;
         }
 
@@ -146715,7 +146717,7 @@ public partial class Form1 : Form
 
 This implementation provides several important capabilities for developers:
 
-1. **Device and Format Selection** - The camera, its format, its frame rate and the microphone are picked from lists filled from the devices themselves
+1. **Device and Format Selection** - The camera, its format, its frame rate and the microphone are picked from lists filled from the devices themselves; with no microphone, `Audio_RecordAudio` is set to `false` and the MP4 holds video only
 2. **Hardware Encoding with a CPU Fallback** - `MP4HWOutput` encodes H.264 on an NVIDIA, Intel or AMD GPU; `HWEncodersAvailable` tells which encoders the PC has, and `MS_H264` runs on the CPU when none is present
 3. **Encoder Settings** - An average of 6000 kbps, peaks up to 9000 kbps, the Main profile and AAC audio at 192 kbps
 4. **Text Overlay** - A fixed text and a clock that shows the current time, added as video effects
@@ -160278,7 +160280,9 @@ public partial class Form1 : Form
         camera.Format = cbFormat.Text;
         camera.FrameRate = (VideoFrameRate)cbFrameRate.SelectedItem;
 
-        videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(cbMicrophone.Text);
+        var mic = (string)cbMicrophone.SelectedItem;
+        videoCapture1.Audio_RecordAudio = mic is not null; // sin micrófono: grabar solo vídeo
+        if (mic is not null) videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(mic);
         videoCapture1.Audio_PlayAudio = false; // grabar el micrófono sin reproducirlo
 
         var mp4 = new MP4HWOutput();
@@ -160338,7 +160342,7 @@ public partial class Form1 : Form
             btStop.Enabled = false;
             await videoCapture1.StopAsync();
             btStart.Enabled = true;
-            Close();
+            BeginInvoke(Close); // volver a cerrar cuando este manejador haya terminado
             return;
         }
 
@@ -160351,7 +160355,7 @@ public partial class Form1 : Form
 
 Esta implementación proporciona varias capacidades importantes para desarrolladores:
 
-1. **Selección de Dispositivo y Formato** - La cámara, su formato, su velocidad de fotogramas y el micrófono se eligen de listas que se rellenan desde los propios dispositivos
+1. **Selección de Dispositivo y Formato** - La cámara, su formato, su velocidad de fotogramas y el micrófono se eligen de listas que se rellenan desde los propios dispositivos; sin micrófono, `Audio_RecordAudio` se pone en `false` y el MP4 contiene solo vídeo
 2. **Codificación por Hardware con Alternativa en la CPU** - `MP4HWOutput` codifica H.264 en una GPU NVIDIA, Intel o AMD; `HWEncodersAvailable` indica qué codificadores tiene el PC, y `MS_H264` funciona en la CPU cuando no hay ninguno
 3. **Ajustes del Codificador** - Una media de 6000 kbps, picos de hasta 9000 kbps, el perfil Main y audio AAC a 192 kbps
 4. **Texto Superpuesto** - Un texto fijo y un reloj que muestra la hora actual, añadidos como efectos de video
@@ -173826,7 +173830,9 @@ public partial class Form1 : Form
         camera.Format = cbFormat.Text;
         camera.FrameRate = (VideoFrameRate)cbFrameRate.SelectedItem;
 
-        videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(cbMicrophone.Text);
+        var mic = (string)cbMicrophone.SelectedItem;
+        videoCapture1.Audio_RecordAudio = mic is not null; // sans micro : enregistrer la vidéo seule
+        if (mic is not null) videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(mic);
         videoCapture1.Audio_PlayAudio = false; // enregistrer le micro sans le lire
 
         var mp4 = new MP4HWOutput();
@@ -173886,7 +173892,7 @@ public partial class Form1 : Form
             btStop.Enabled = false;
             await videoCapture1.StopAsync();
             btStart.Enabled = true;
-            Close();
+            BeginInvoke(Close); // refermer une fois ce gestionnaire terminé
             return;
         }
 
@@ -173899,7 +173905,7 @@ public partial class Form1 : Form
 
 Cette implémentation offre plusieurs capacités importantes pour les développeurs :
 
-1. **Sélection du périphérique et du format** — La caméra, son format, sa fréquence d'images et le micro sont choisis dans des listes remplies à partir des périphériques eux-mêmes
+1. **Sélection du périphérique et du format** — La caméra, son format, sa fréquence d'images et le micro sont choisis dans des listes remplies à partir des périphériques eux-mêmes ; sans micro, `Audio_RecordAudio` passe à `false` et le MP4 ne contient que la vidéo
 2. **Encodage matériel avec repli sur le CPU** — `MP4HWOutput` encode en H.264 sur un GPU NVIDIA, Intel ou AMD ; `HWEncodersAvailable` indique les encodeurs présents sur le PC, et `MS_H264` s'exécute sur le CPU s'il n'y en a aucun
 3. **Paramètres de l'encodeur** — Une moyenne de 6000 kbps, des pointes jusqu'à 9000 kbps, le profil Main et l'audio AAC à 192 kbps
 4. **Superposition de texte** — Un texte fixe et une horloge qui affiche l'heure actuelle, ajoutés comme effets vidéo
@@ -343385,12 +343391,14 @@ type
 ---END OF PAGE---
 
 
-## DirectShow Filters for Video Playback, Encoding & Effects
+## DirectShow Documentation — Filter Guides and API Reference
 **URL:** https://www.visioforge.com/help/docs/directshow/
 **Description:** DirectShow filters for FFmpeg/VLC playback, H.264/H.265/NVENC encoding, 35+ video effects, chroma key, virtual camera, and AES-256 encryption.
 **Tags:** DirectShow, C++, Windows
 
-# DirectShow SDKs and Filters for Video Development
+# DirectShow Filters and SDKs — Documentation
+
+To compare the products, pick one and see the bundle price, go to [DirectShow filters](https://www.visioforge.com/directshow-filters) on the VisioForge site.
 
 ## Introduction to DirectShow Technology
 
@@ -364996,12 +365004,14 @@ type
 ---END OF PAGE---
 
 
-## Filtros DirectShow para reproducción, codificación y efectos
+## Documentación de DirectShow — guías y referencia de filtros
 **URL:** https://www.visioforge.com/help/es/docs/directshow/
 **Description:** Filtros DirectShow para reproducción FFmpeg/VLC, codificación H.264/H.265/NVENC, 35+ efectos de video, chroma key, cámara virtual y cifrado AES-256.
 **Tags:** DirectShow, C++, Windows
 
-# SDKs y Filtros DirectShow para desarrollo de video
+# Filtros y SDK DirectShow — documentación
+
+Para comparar los productos, elegir uno y ver el precio del paquete, visite [Filtros DirectShow](https://www.visioforge.com/es/directshow-filters) en el sitio de VisioForge.
 
 ## Introducción a la tecnología DirectShow
 
@@ -386339,11 +386349,13 @@ type
 ---END OF PAGE---
 
 
-## Filtres DirectShow pour lecture, encodage et effets vidéo
+## Documentation DirectShow — guides et référence des filtres
 **URL:** https://www.visioforge.com/help/fr/docs/directshow/
 **Description:** Filtres DirectShow pour lecture FFmpeg/VLC, encodage H.264/H.265/NVENC, plus de 35 effets vidéo, incrustation chroma, caméra virtuelle et chiffrement AES-256.
 
-# SDK et filtres DirectShow pour le développement vidéo
+# Filtres et SDK DirectShow — documentation
+
+Pour comparer les produits, en choisir un et voir le prix du pack, consultez [Filtres DirectShow](https://www.visioforge.com/fr/directshow-filters) sur le site de VisioForge.
 
 ## Introduction à la technologie DirectShow
 
@@ -436956,6 +436968,7 @@ Changes and updates for all .NET SDKs.
 ## 2026.11.10
 
 - [Demos] Added: the `webcam-mp4-wpf` Video Capture SDK sample, the code of the WPF webcam-to-MP4 video tutorial.
+- [Demos] Fixed: on a PC without a microphone, the `webcam-mp4-winforms` Video Capture SDK sample showed "The audio source is not configured. Audio playback and recording will be disabled." in its title on every Start, although it recorded video only. It now records video only without the error.
 - [Core] Added: `SRTSourceSettings.CreateAsync(uri, passphrase, keyLength)` reads the tracks of an encrypted SRT stream with the given passphrase and key length and returns settings that carry them. The passphrase no longer has to go in the URI query, so it can contain any characters. Video Capture SDK .NET (`VideoCaptureCoreX`) can now receive an encrypted SRT stream whose passphrase has characters other than letters, digits, `-`, `_`, `.` and `~`.
 - [Core] Fixed: `SRTSourceSettings.ReadInfoAsync` read the tracks with the URI alone, ignoring the `StreamId`, `Passphrase`, `PbKeyLen`, `Latency`, `Mode`, `LocalAddress`, `LocalPort`, `PreResolveHostname` and the other connection settings, so a server that admits readers by stream ID (for example MediaMTX with `read:<path>`) or an encrypted sender refused it and no stream was reported, although `SRTSourceBlock` would have connected. `MediaPlayerCoreX` reading the tracks of an SRT source was affected too. The track read now connects with the same settings as the block.
 - [Core] Fixed: `VisioForgeX.DestroySDK` or `VisioForgeX.StopMainLoop` called while an SDK initialization was running on another thread could leave the GStreamer log callback registered (a crash in Unity or after an AppDomain unload) or leave `InitSDK` reporting the SDK as initialized with no GStreamer main loop. Teardown now waits for that initialization. The folders the DirectShow engines, the VLC, NDI and Allied Vision setup and `CustomRedist_Path` add to `PATH` are no longer lost when GStreamer initializes at the same time. An `InitSDK` call that waited for a failed initialization on another thread now retries it and throws its own exception.
@@ -440996,6 +441009,7 @@ Changes and updates for all .NET SDKs.
 ## 2026.11.10
 
 - [Demos] Added: the `webcam-mp4-wpf` Video Capture SDK sample, the code of the WPF webcam-to-MP4 video tutorial.
+- [Demos] Fixed: on a PC without a microphone, the `webcam-mp4-winforms` Video Capture SDK sample showed "The audio source is not configured. Audio playback and recording will be disabled." in its title on every Start, although it recorded video only. It now records video only without the error.
 - [Core] Added: `SRTSourceSettings.CreateAsync(uri, passphrase, keyLength)` reads the tracks of an encrypted SRT stream with the given passphrase and key length and returns settings that carry them. The passphrase no longer has to go in the URI query, so it can contain any characters. Video Capture SDK .NET (`VideoCaptureCoreX`) can now receive an encrypted SRT stream whose passphrase has characters other than letters, digits, `-`, `_`, `.` and `~`.
 - [Core] Fixed: `SRTSourceSettings.ReadInfoAsync` read the tracks with the URI alone, ignoring the `StreamId`, `Passphrase`, `PbKeyLen`, `Latency`, `Mode`, `LocalAddress`, `LocalPort`, `PreResolveHostname` and the other connection settings, so a server that admits readers by stream ID (for example MediaMTX with `read:<path>`) or an encrypted sender refused it and no stream was reported, although `SRTSourceBlock` would have connected. `MediaPlayerCoreX` reading the tracks of an SRT source was affected too. The track read now connects with the same settings as the block.
 - [Core] Fixed: `VisioForgeX.DestroySDK` or `VisioForgeX.StopMainLoop` called while an SDK initialization was running on another thread could leave the GStreamer log callback registered (a crash in Unity or after an AppDomain unload) or leave `InitSDK` reporting the SDK as initialized with no GStreamer main loop. Teardown now waits for that initialization. The folders the DirectShow engines, the VLC, NDI and Allied Vision setup and `CustomRedist_Path` add to `PATH` are no longer lost when GStreamer initializes at the same time. An `InitSDK` call that waited for a failed initialization on another thread now retries it and throws its own exception.
@@ -445134,6 +445148,7 @@ Changes and updates for all .NET SDKs.
 ## 2026.11.10
 
 - [Demos] Added: the `webcam-mp4-wpf` Video Capture SDK sample, the code of the WPF webcam-to-MP4 video tutorial.
+- [Demos] Fixed: on a PC without a microphone, the `webcam-mp4-winforms` Video Capture SDK sample showed "The audio source is not configured. Audio playback and recording will be disabled." in its title on every Start, although it recorded video only. It now records video only without the error.
 - [Core] Added: `SRTSourceSettings.CreateAsync(uri, passphrase, keyLength)` reads the tracks of an encrypted SRT stream with the given passphrase and key length and returns settings that carry them. The passphrase no longer has to go in the URI query, so it can contain any characters. Video Capture SDK .NET (`VideoCaptureCoreX`) can now receive an encrypted SRT stream whose passphrase has characters other than letters, digits, `-`, `_`, `.` and `~`.
 - [Core] Fixed: `SRTSourceSettings.ReadInfoAsync` read the tracks with the URI alone, ignoring the `StreamId`, `Passphrase`, `PbKeyLen`, `Latency`, `Mode`, `LocalAddress`, `LocalPort`, `PreResolveHostname` and the other connection settings, so a server that admits readers by stream ID (for example MediaMTX with `read:<path>`) or an encrypted sender refused it and no stream was reported, although `SRTSourceBlock` would have connected. `MediaPlayerCoreX` reading the tracks of an SRT source was affected too. The track read now connects with the same settings as the block.
 - [Core] Fixed: `VisioForgeX.DestroySDK` or `VisioForgeX.StopMainLoop` called while an SDK initialization was running on another thread could leave the GStreamer log callback registered (a crash in Unity or after an AppDomain unload) or leave `InitSDK` reporting the SDK as initialized with no GStreamer main loop. Teardown now waits for that initialization. The folders the DirectShow engines, the VLC, NDI and Allied Vision setup and `CustomRedist_Path` add to `PATH` are no longer lost when GStreamer initializes at the same time. An `InitSDK` call that waited for a failed initialization on another thread now retries it and throws its own exception.
@@ -458061,6 +458076,169 @@ Unlike products that attempt to provide a similar capability, our technology all
 ---END OF PAGE---
 
 
+## DirectShow Filters — Source, Encoder and Video Effects
+**URL:** https://www.visioforge.com/directshow-filters
+
+# DirectShow filters for Windows apps
+
+VisioForge makes six DirectShow products for Windows: two source filters, built on FFmpeg and on libVLC, that play files and network streams; a pack of encoder and muxer filters; a pack of video and audio processing filters; a virtual webcam and microphone; and filters that encrypt video. They work in any DirectShow application or filter graph, ship as x86 and x64 builds, and have C++, C# and Delphi APIs.
+
+[Which filter do I need?](https://www.visioforge.com/directshow-filters#choose)[DirectShow bundle](https://www.visioforge.com/directshow-filters#bundle)
+
+## What is a DirectShow filter?
+
+A DirectShow filter is a COM component that does one step of media processing on Windows. An application connects filters into a filter graph: a source filter reads a file, a stream or a device, transform filters decode, process or encode the data, and a renderer or a file writer at the end shows or saves it. Filters ship as .ax files and are registered with Windows by an installer or regsvr32. A 32-bit application loads only x86 filters and a 64-bit application only x64 filters, so register the build that matches your app.
+
+## Which filter do I need?
+
+| I need to | Use |
+| --- | --- |
+| Play MP4, MKV, WebM, MPEG-TS and AVI files and RTSP, RTMP and HLS streams, with GPU decoding on NVIDIA, Intel and AMD | [FFmpeg Source DirectShow Filter](/ffmpeg-source-directshow-filter) |
+| Play files and RTSP, HLS, SRT and HTTP streams through libVLC, including HEVC, VP9 and AV1 with DXVA2 or D3D11 decoding | [VLC Source DirectShow Filter](/vlc-source-directshow-filter) |
+| Encode H.264, HEVC, VP8, VP9, AAC, MP3 or Vorbis into MP4, MKV, MPEG-TS or WebM, with GPU H.264 and HEVC | [DirectShow Encoding Filters Pack](/encoding-filters-pack) |
+| Add text and image overlays, color adjustment, deinterlacing, denoising, chroma key, motion detection, resize, crop or rotation, an audio equalizer or a volume booster | [DirectShow Processing Filters Pack](/processing-filters-pack) |
+| Send video and audio from my app to Zoom, OBS Studio or a Chromium-based browser as a webcam and a microphone | [Virtual Camera SDK](/virtual-camera-sdk) |
+| Record video to MP4 encrypted with AES-128 or AES-256 and play it back only with the key | [Video Encryption SDK](/video-encryption-sdk) |
+
+## The six DirectShow products
+
+Source filter
+
+### FFmpeg Source DirectShow Filter
+
+Decodes media with FFmpeg in any DirectShow app: MP4, MKV, WebM, MPEG-TS and AVI files, RTSP, RTMP and HLS streams, GPU decoding on NVIDIA, Intel and AMD cards.
+
+[Product page](/ffmpeg-source-directshow-filter) [Documentation](/help/docs/directshow/ffmpeg-source-filters/)
+
+Source filter
+
+### VLC Source DirectShow Filter
+
+Plays media through bundled libVLC: MKV, MP4 and MPEG-TS files, RTSP, HLS, SRT and HTTP streams, HEVC, VP9 and AV1 with DXVA2 or D3D11.
+
+[Product page](/vlc-source-directshow-filter) [Documentation](/help/docs/directshow/vlc-source-filter/)
+
+Encoder and muxer filters
+
+### DirectShow Encoding Filters Pack
+
+Encodes H.264, HEVC, VP8, VP9, AAC, MP3 and Vorbis into MP4, MKV, MPEG-TS and WebM, with GPU H.264 and HEVC on NVIDIA, Intel and AMD.
+
+[Product page](/encoding-filters-pack) [Documentation](/help/docs/directshow/filters-enc/)
+
+Transform filters
+
+### DirectShow Processing Filters Pack
+
+Text and image overlays, color adjustment, deinterlacing, denoising, chroma key, motion detection, resize, crop and rotation, plus an audio equalizer and volume booster.
+
+[Product page](/processing-filters-pack) [Documentation](/help/docs/directshow/proc-filters/)
+
+Virtual devices
+
+### Virtual Camera SDK
+
+Adds one virtual webcam and one virtual microphone to Windows. Zoom, OBS Studio, Chromium-based browsers and other DirectShow applications list them next to physical devices; apps that use only Media Foundation, such as the Windows Camera app, do not.
+
+[Product page](/virtual-camera-sdk) [Documentation](/help/docs/directshow/virtual-camera-sdk/)
+
+Encryption filters
+
+### Video Encryption SDK
+
+Encodes video to MP4 (H.264/AAC) and encrypts it with AES-128 or AES-256, keyed by a password or binary data. A matching decryptor filter plays the protected files.
+
+[Product page](/video-encryption-sdk) [Documentation](/help/docs/directshow/video-encryption-sdk/)
+
+## The filters work together in one graph
+
+Each product is a set of ordinary DirectShow filters, so they connect to each other and to the filters Windows already has. For example, to convert a stream to MP4 with an overlay, the source filter decodes it, a processing filter draws the overlay, and the encoding pack compresses and writes the file.
+
+FFmpeg Source
+
+Video effects
+
+H.264 encoder
+
+MP4 muxer
+
+## DirectShow All-In-One Bundle
+
+One license for the products below.
+
+-   [FFmpeg Source DirectShow Filter](/ffmpeg-source-directshow-filter)
+-   [VLC Source DirectShow Filter](/vlc-source-directshow-filter)
+-   [DirectShow Processing Filters Pack](/processing-filters-pack)
+-   [DirectShow Encoding Filters Pack](/encoding-filters-pack)
+-   [Virtual Camera SDK](/virtual-camera-sdk)
+
+€1,000/year·€2,500 lifetime
+
+vs €1,950/year and €5,800 lifetime buying them separately
+
+[See it on the pricing page](/buy)
+
+## Frequently Asked Questions
+
+What is the difference between the FFmpeg and VLC source filters?▼
+
+Both are DirectShow source filters that open files and network streams, and they use different engines. FFmpeg Source decodes with FFmpeg, with GPU decoding on NVIDIA, Intel and AMD cards. VLC Source plays through a bundled libVLC with DXVA2 or D3D11 decoding. Try both with your own files and streams during the trial.
+
+Can I use the filters from C# and .NET?▼
+
+Yes. The VisioForge.DirectShowAPI NuGet package provides .NET wrappers for the filter interfaces, and the samples cover C#, C++ and Delphi. Any language that can build a DirectShow filter graph can use the filters.
+
+How do I register the filters on a user's machine?▼
+
+Each product has an installer that registers its filters. To deploy with your own installer, register the .ax files with regsvr32 or from code, using the x86 build for 32-bit applications and the x64 build for 64-bit ones. The filter registration guide lists the file names.
+
+Can I test the filters without writing code?▼
+
+Yes. GraphEdit and GraphStudioNext list the registered filters, so you can build a graph by hand, connect the pins and play it before you write any code.
+
+Which Windows versions are supported?▼
+
+The filters run on Windows 10 and Windows 11; most products also support Windows 7, 8 and 8.1 and Windows Server. The exact list for each product is on its page. DirectShow itself is part of every desktop version of Windows.
+
+Can I redistribute the filters with my application?▼
+
+Yes. All six products are distributed royalty-free with your application under a purchased license. The terms for each product are on its page.
+
+Is there a trial?▼
+
+Yes. Every product page has a free trial download. The trial is fully functional; depending on the product and the output, it shows a watermark or an evaluation notice.
+
+## Documentation
+
+[
+
+### DirectShow documentation
+
+Guides and interface references for every DirectShow filter and SDK.
+
+](/help/docs/directshow/)[
+
+### Filter registration guide
+
+Register the filters with an installer, regsvr32 or from code, with the x86 and x64 file names.
+
+](/help/docs/directshow/deployment/filter-registration/)[
+
+### Deployment
+
+What to ship with your application and how to include the filters in your installer.
+
+](/help/docs/directshow/deployment/)[
+
+### VisioForge.DirectShowAPI on NuGet
+
+.NET wrappers for the filter interfaces.
+
+](https://www.nuget.org/packages/VisioForge.DirectShowAPI)
+
+---END OF PAGE---
+
+
 ## GStreamer Metal Plugin — 15 GPU Video Effects on macOS/iOS
 **URL:** https://www.visioforge.com/gstreamer-metal
 
@@ -461223,10 +461401,10 @@ Media Blocks SDK .NET is a commercial SDK with royalty-free distribution, while 
 | Individual License | €500·year (1 developer) | Free (LGPL 2.1+) |
 | Lifetime·Team | €1,500 one-time (organization team, one city) | Free (LGPL 2.1+) |
 | Non-Commercial Use | Free (full features, requires key) | Free |
-| Distribution | Royalty-free, no per-install fees | Must allow DLL replacement (LGPL) |
+| Distribution | Royalty-free, no per-install fees; bundled GStreamer libraries must stay replaceable (LGPL) | Must allow DLL replacement (LGPL) |
 | Support | Email support included | Community (Discord/StackOverflow) |
 | Updates | 12 months (annual) or lifetime (team) | Open-source updates |
-| Static Linking | Allowed | Restricted by LGPL relinking terms |
+| Static Linking | Bundled GStreamer: LGPL relinking terms | Restricted by LGPL relinking terms |
 | Commercial Consulting | Email support included | Videolabs: commercial licence $800·year, Production Support $5,000·year |
 
 ### Cost Comparison for Commercial Projects
@@ -461234,11 +461412,11 @@ Media Blocks SDK .NET is a commercial SDK with royalty-free distribution, while 
 | Factor | Media Blocks SDK .NET | LibVLCSharp |
 | --- | --- | --- |
 | License cost | €500·year or €1,500 lifetime | €0 (LGPL) or $800·year (Videolabs) |
-| LGPL compliance cost | None | Legal review + relinking compliance |
+| LGPL compliance cost | LGPL compliance for bundled GStreamer: replaceable libraries, license notice | Legal review + relinking compliance |
 | Support cost | Included | Community-dependent or paid Videolabs support |
-| Commercial flexibility | Full — closed-source OK | Must comply with LGPL requirements |
+| Commercial flexibility | Closed-source OK; LGPL terms apply to bundled GStreamer | Must comply with LGPL requirements |
 
-LibVLCSharp is free but requires LGPL compliance (DLL replacement), or a Videolabs commercial licence at $800 per year that does not cover LibVLC itself. Media Blocks SDK costs more but provides clear commercial licensing without LGPL restrictions and includes email support.
+LibVLCSharp is free but requires LGPL compliance (DLL replacement), or a Videolabs commercial licence at $800 per year that does not cover LibVLC itself. Media Blocks SDK costs more but provides clear commercial licensing for the SDK itself and includes email support.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -461381,7 +461559,7 @@ LibVLCSharp provides basic VLC filters accessible via string-based options, but 
 
 How much does Media Blocks SDK cost compared to LibVLCSharp?▼
 
-LibVLCSharp is free under the LGPL 2.1+ license (users must be able to replace the DLLs), and Videolabs sells a commercial licence at $800 per year. Media Blocks SDK costs €500·year per developer or €1,500 one-time for a Lifetime·Team license covering all developers in the purchasing organization at one location in one city with royalty-free distribution and no LGPL restrictions.
+LibVLCSharp is free under the LGPL 2.1+ license (users must be able to replace the DLLs), and Videolabs sells a commercial licence at $800 per year. Media Blocks SDK costs €500·year per developer or €1,500 one-time for a Lifetime·Team license covering all developers in the purchasing organization at one location in one city with royalty-free distribution.
 
 Does Media Blocks SDK support RTSP IP cameras and NDI?▼
 
@@ -463621,7 +463799,7 @@ LEADTOOLS prices as shown on componentsource.com/product/leadtools-multimedia/pr
 ---END OF PAGE---
 
 
-## Media Player SDK vs LibVLCSharp — Feature Comparison
+## LibVLCSharp Alternative for C# .NET — Media Player SDK
 **URL:** https://www.visioforge.com/compare/media-player-vs-libvlcsharp
 
 Last updated: November 2026
@@ -463846,7 +464024,7 @@ LibVLCSharp and libvlc are licensed under LGPL 2.1. This means you can use them 
 -   ⚠Cannot modify and close-source VLC code
 -   ⚠Videolabs sells a commercial licence for the LibVLCSharp packages; LibVLC itself stays under its open-source license
 
-While LGPL is more permissive than GPL, compliance still requires careful attention to linking and distribution requirements. Media Player SDK offers royalty-free distribution without LGPL dynamic-linking constraints.
+While LGPL is more permissive than GPL, compliance still requires careful attention to linking and distribution requirements. Media Player SDK itself is commercially licensed with royalty-free distribution; the open-source libraries it bundles, such as GStreamer, keep their own licenses; GStreamer is LGPL, so the same linking and distribution requirements apply to it.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-player-sdk-net#pricing)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -464192,7 +464370,6 @@ mediaPlayer.Play(
 -   ✓Xcopy deployment supported
 -   ✓Royalty-free distribution with commercial license
 -   ✓No runtime fees
--   ✓No LGPL obligations — safe for proprietary software
 -   ✓App size impact: ~50-100 MB
 
 ### LibVLCSharp Deployment
@@ -464227,7 +464404,7 @@ mediaPlayer.Play(
 
 ### Media Player SDK .NET
 
-Choose Media Player SDK when you need DVD playback with full menu navigation, virtual camera output feeding Zoom/Teams/OBS, face and motion detection, 40+ real-time audio effects across both engines, NDI output for broadcast, picture-in-picture compositing, frame-accurate seeking and reverse playback, professional VU meter with FFT spectrum, chroma key and AI video upscaling, multi-screen display, and royalty-free distribution without LGPL constraints. Annual licensing starts from EUR 250·year with one-time lifetime options available.
+Choose Media Player SDK when you need DVD playback with full menu navigation, virtual camera output feeding Zoom/Teams/OBS, face and motion detection, 40+ real-time audio effects across both engines, NDI output for broadcast, picture-in-picture compositing, frame-accurate seeking and reverse playback, professional VU meter with FFT spectrum, chroma key and AI video upscaling, multi-screen display, and royalty-free distribution under a commercial license. Annual licensing starts from EUR 250·year with one-time lifetime options available.
 
 ### LibVLCSharp
 
@@ -464257,7 +464434,7 @@ Yes. Media Player SDK .NET can output playback to a virtual camera device, makin
 
 How much does Media Player SDK cost compared to LibVLCSharp?
 
-LibVLCSharp is free under LGPL 2.1+ (DLL replacement must stay possible), and Videolabs sells a commercial licence at $800·year. Media Player SDK costs EUR 250-500·year per developer or EUR 750-1,500 one-time for a Lifetime·Team license covering all developers in the purchasing organization at one location in one city with royalty-free distribution and no LGPL restrictions. For commercial applications needing audio effects, DVD navigation, and virtual camera output, Media Player SDK provides features that would require extensive custom development on top of LibVLCSharp.
+LibVLCSharp is free under LGPL 2.1+ (DLL replacement must stay possible), and Videolabs sells a commercial licence at $800·year. Media Player SDK costs EUR 250-500·year per developer or EUR 750-1,500 one-time for a Lifetime·Team license covering all developers in the purchasing organization at one location in one city with royalty-free distribution. For commercial applications needing audio effects, DVD navigation, and virtual camera output, Media Player SDK provides features that would require extensive custom development on top of LibVLCSharp.
 
 What is the difference between Media Player SDK and LibVLCSharp?
 
@@ -468960,7 +469137,7 @@ LibVLCSharp and libvlc are licensed under LGPL 2.1. This means you can use them 
 -   ⚠If you modify libvlc itself, you must release those modifications under LGPL
 -   ⚠Videolabs sells a commercial licence for the LibVLCSharp packages; LibVLC itself stays under its open-source license
 
-While LGPL is more permissive than GPL, compliance still requires careful attention to linking and distribution requirements. Some enterprise legal teams require commercial licensing to avoid any open-source compliance risk.
+While LGPL is more permissive than GPL, compliance still requires careful attention to linking and distribution requirements. Video Capture SDK itself is commercially licensed, but the open-source libraries it bundles, such as GStreamer, keep their own licenses; GStreamer is LGPL, so the same linking and distribution requirements apply to it.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/video-capture-sdk-net#pricing)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -469396,7 +469573,6 @@ foreach (var url in cameraUrls)
 -   ✓Royalty-free redistribution with commercial license
 -   ✓xcopy / MSIX / ClickOnce deployment supported
 -   ✓Console and Windows service apps supported
--   ✓No LGPL obligations — safe for proprietary software
 
 ### LibVLCSharp Deployment
 
@@ -469428,7 +469604,7 @@ foreach (var url in cameraUrls)
 
 ### Video Capture SDK .NET
 
-The Video Capture SDK is a purpose-built capture engine that excels at professional video capture workflows. Its typed .NET API, built-in effects pipeline, multi-output architecture, detection capabilities, and professional hardware support make it the clear choice for applications where capture quality and features matter. The commercial license ensures clean IP for enterprise distribution.
+The Video Capture SDK is a purpose-built capture engine that excels at professional video capture workflows. Its typed .NET API, built-in effects pipeline, multi-output architecture, detection capabilities, and professional hardware support make it the clear choice for applications where capture quality and features matter. The commercial license covers the SDK itself; the bundled GStreamer stays under LGPL.
 
 ### LibVLCSharp
 

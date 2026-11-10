@@ -147,7 +147,9 @@ public partial class Form1 : Form
         camera.Format = cbFormat.Text;
         camera.FrameRate = (VideoFrameRate)cbFrameRate.SelectedItem;
 
-        videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(cbMicrophone.Text);
+        var mic = (string)cbMicrophone.SelectedItem;
+        videoCapture1.Audio_RecordAudio = mic is not null; // sin micrófono: grabar solo vídeo
+        if (mic is not null) videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(mic);
         videoCapture1.Audio_PlayAudio = false; // grabar el micrófono sin reproducirlo
 
         var mp4 = new MP4HWOutput();
@@ -207,7 +209,7 @@ public partial class Form1 : Form
             btStop.Enabled = false;
             await videoCapture1.StopAsync();
             btStart.Enabled = true;
-            Close();
+            BeginInvoke(Close); // volver a cerrar cuando este manejador haya terminado
             return;
         }
 
@@ -220,7 +222,7 @@ public partial class Form1 : Form
 
 Esta implementación proporciona varias capacidades importantes para desarrolladores:
 
-1. **Selección de Dispositivo y Formato** - La cámara, su formato, su velocidad de fotogramas y el micrófono se eligen de listas que se rellenan desde los propios dispositivos
+1. **Selección de Dispositivo y Formato** - La cámara, su formato, su velocidad de fotogramas y el micrófono se eligen de listas que se rellenan desde los propios dispositivos; sin micrófono, `Audio_RecordAudio` se pone en `false` y el MP4 contiene solo vídeo
 2. **Codificación por Hardware con Alternativa en la CPU** - `MP4HWOutput` codifica H.264 en una GPU NVIDIA, Intel o AMD; `HWEncodersAvailable` indica qué codificadores tiene el PC, y `MS_H264` funciona en la CPU cuando no hay ninguno
 3. **Ajustes del Codificador** - Una media de 6000 kbps, picos de hasta 9000 kbps, el perfil Main y audio AAC a 192 kbps
 4. **Texto Superpuesto** - Un texto fijo y un reloj que muestra la hora actual, añadidos como efectos de video

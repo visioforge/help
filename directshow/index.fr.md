@@ -1,5 +1,5 @@
 ---
-title: Filtres DirectShow pour lecture, encodage et effets vidéo
+title: Documentation DirectShow — guides et référence des filtres
 description: Filtres DirectShow pour lecture FFmpeg/VLC, encodage H.264/H.265/NVENC, plus de 35 effets vidéo, incrustation chroma, caméra virtuelle et chiffrement AES-256.
 sidebar_label: SDK et filtres DirectShow
 order: 19
@@ -10,7 +10,9 @@ tags:
 
 ---
 
-# SDK et filtres DirectShow pour le développement vidéo
+# Filtres et SDK DirectShow — documentation
+
+Pour comparer les produits, en choisir un et voir le prix du pack, consultez [Filtres DirectShow](https://www.visioforge.com/fr/directshow-filters) sur le site de VisioForge.
 
 ## Introduction à la technologie DirectShow
 

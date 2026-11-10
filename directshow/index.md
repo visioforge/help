@@ -1,5 +1,5 @@
 ---
-title: DirectShow Filters for Video Playback, Encoding & Effects
+title: DirectShow Documentation — Filter Guides and API Reference
 description: DirectShow filters for FFmpeg/VLC playback, H.264/H.265/NVENC encoding, 35+ video effects, chroma key, virtual camera, and AES-256 encryption.
 sidebar_label: DirectShow SDKs and filters
 order: 19
@@ -10,7 +10,9 @@ tags:
 
 ---
 
-# DirectShow SDKs and Filters for Video Development
+# DirectShow Filters and SDKs — Documentation
+
+To compare the products, pick one and see the bundle price, go to [DirectShow filters](https://www.visioforge.com/directshow-filters) on the VisioForge site.
 
 ## Introduction to DirectShow Technology
 

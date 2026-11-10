@@ -1,5 +1,5 @@
 ---
-title: Filtros DirectShow para reproducción, codificación y efectos
+title: Documentación de DirectShow — guías y referencia de filtros
 description: Filtros DirectShow para reproducción FFmpeg/VLC, codificación H.264/H.265/NVENC, 35+ efectos de video, chroma key, cámara virtual y cifrado AES-256.
 tags:
   - DirectShow
@@ -10,7 +10,9 @@ order: 19
 sidebar_label: DirectShow SDKs and filters
 ---
 
-# SDKs y Filtros DirectShow para desarrollo de video
+# Filtros y SDK DirectShow — documentación
+
+Para comparar los productos, elegir uno y ver el precio del paquete, visite [Filtros DirectShow](https://www.visioforge.com/es/directshow-filters) en el sitio de VisioForge.
 
 ## Introducción a la tecnología DirectShow
 

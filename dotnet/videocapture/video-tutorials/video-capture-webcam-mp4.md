@@ -147,7 +147,9 @@ public partial class Form1 : Form
         camera.Format = cbFormat.Text;
         camera.FrameRate = (VideoFrameRate)cbFrameRate.SelectedItem;
 
-        videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(cbMicrophone.Text);
+        var mic = (string)cbMicrophone.SelectedItem;
+        videoCapture1.Audio_RecordAudio = mic is not null; // no microphone: record video only
+        if (mic is not null) videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(mic);
         videoCapture1.Audio_PlayAudio = false; // record the microphone without playing it back
 
         var mp4 = new MP4HWOutput();
@@ -207,7 +209,7 @@ public partial class Form1 : Form
             btStop.Enabled = false;
             await videoCapture1.StopAsync();
             btStart.Enabled = true;
-            Close();
+            BeginInvoke(Close); // close again once this handler has returned
             return;
         }
 
@@ -220,7 +222,7 @@ public partial class Form1 : Form
 
 This implementation provides several important capabilities for developers:
 
-1. **Device and Format Selection** - The camera, its format, its frame rate and the microphone are picked from lists filled from the devices themselves
+1. **Device and Format Selection** - The camera, its format, its frame rate and the microphone are picked from lists filled from the devices themselves; with no microphone, `Audio_RecordAudio` is set to `false` and the MP4 holds video only
 2. **Hardware Encoding with a CPU Fallback** - `MP4HWOutput` encodes H.264 on an NVIDIA, Intel or AMD GPU; `HWEncodersAvailable` tells which encoders the PC has, and `MS_H264` runs on the CPU when none is present
 3. **Encoder Settings** - An average of 6000 kbps, peaks up to 9000 kbps, the Main profile and AAC audio at 192 kbps
 4. **Text Overlay** - A fixed text and a clock that shows the current time, added as video effects

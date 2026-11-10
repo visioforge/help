@@ -147,7 +147,9 @@ public partial class Form1 : Form
         camera.Format = cbFormat.Text;
         camera.FrameRate = (VideoFrameRate)cbFrameRate.SelectedItem;
 
-        videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(cbMicrophone.Text);
+        var mic = (string)cbMicrophone.SelectedItem;
+        videoCapture1.Audio_RecordAudio = mic is not null; // sans micro : enregistrer la vidéo seule
+        if (mic is not null) videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(mic);
         videoCapture1.Audio_PlayAudio = false; // enregistrer le micro sans le lire
 
         var mp4 = new MP4HWOutput();
@@ -207,7 +209,7 @@ public partial class Form1 : Form
             btStop.Enabled = false;
             await videoCapture1.StopAsync();
             btStart.Enabled = true;
-            Close();
+            BeginInvoke(Close); // refermer une fois ce gestionnaire terminé
             return;
         }
 
@@ -220,7 +222,7 @@ public partial class Form1 : Form
 
 Cette implémentation offre plusieurs capacités importantes pour les développeurs :
 
-1. **Sélection du périphérique et du format** — La caméra, son format, sa fréquence d'images et le micro sont choisis dans des listes remplies à partir des périphériques eux-mêmes
+1. **Sélection du périphérique et du format** — La caméra, son format, sa fréquence d'images et le micro sont choisis dans des listes remplies à partir des périphériques eux-mêmes ; sans micro, `Audio_RecordAudio` passe à `false` et le MP4 ne contient que la vidéo
 2. **Encodage matériel avec repli sur le CPU** — `MP4HWOutput` encode en H.264 sur un GPU NVIDIA, Intel ou AMD ; `HWEncodersAvailable` indique les encodeurs présents sur le PC, et `MS_H264` s'exécute sur le CPU s'il n'y en a aucun
 3. **Paramètres de l'encodeur** — Une moyenne de 6000 kbps, des pointes jusqu'à 9000 kbps, le profil Main et l'audio AAC à 192 kbps
 4. **Superposition de texte** — Un texte fixe et une horloge qui affiche l'heure actuelle, ajoutés comme effets vidéo
