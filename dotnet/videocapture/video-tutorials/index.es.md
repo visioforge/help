@@ -40,6 +40,7 @@ Integre funcionalidad de webcam en sus aplicaciones para videoconferencia, recon
 
 * [**Grabación de Video de Webcam a AVI**](video-capture-camera-avi.md) - Integre grabación de webcam con formato de salida AVI y compatibilidad DirectShow
 * [**Captura de Webcam a Archivos MP4**](video-capture-webcam-mp4.md) - Implemente grabación de webcam de alta calidad con compresión H.264 para tamaño de archivo óptimo
+* [**Webcam a MP4 en WPF**](video-capture-webcam-mp4-wpf.md) - La misma grabadora de webcam en una ventana WPF definida en XAML
 * [**Grabación de Webcam con Salida WMV**](video-capture-webcam-wmv.md) - Cree grabaciones en formato WMV eficientes desde entrada de webcam con compatibilidad Windows Media
 * [**Superposición de Texto en Grabaciones de Webcam**](webcam-capture-text-overlay.md) - Aprenda a agregar texto dinámico, marcas de tiempo y marcas de agua al metraje de webcam con fuentes y posicionamiento personalizables
 

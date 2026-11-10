@@ -108,6 +108,7 @@ le vecteur `Embedding` brut normalisé L2.
 | `MaxFaces` | `20` | Nombre maximal de visages détectés par image. |
 | `RecognitionThreshold` | `0.36` | Similarité cosinus minimale pour signaler une identité connue (seuil de même identité de SFace). |
 | `DrawResults` / `DrawLandmarks` | `true` / `false` | Dessine les cadres, les étiquettes et, en option, les cinq points de repère faciaux. |
+| `DrawUnknownLabel` | `true` | Dessine l'étiquette `Unknown` au-dessus d'un visage qui ne correspond à aucune identité inscrite. `false` conserve le cadre et omet ce mot. Les visages reconnus affichent toujours le nom et la similarité. |
 | `BoxColor` / `BoxThickness` / `LabelFontSize` | Vert citron / `2` / `0` | Style de la superposition ; `LabelFontSize = 0` s'adapte automatiquement à la hauteur de l'image. |
 
 ## FaceGallery

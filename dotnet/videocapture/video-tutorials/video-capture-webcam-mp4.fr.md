@@ -298,6 +298,7 @@ Ensuite, nous créerons la même application en WPF. Il existe aussi des guides 
 
 ## Voir aussi
 
+- [Webcam vers MP4 en WPF](video-capture-webcam-mp4-wpf.md) — la même application sous forme de projet WPF, avec la fenêtre en XAML
 - [Enregistrement pré-événement](../guides/pre-event-recording.md) — enregistrement avec tampon circulaire et déclencheurs de détection de mouvement pour webcams et caméras IP
 - [Aperçu vidéo de caméra](camera-video-preview.md) — afficher la vidéo de caméra en direct avec capture d'images
 

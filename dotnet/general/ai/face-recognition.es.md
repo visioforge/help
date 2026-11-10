@@ -108,6 +108,7 @@ Cada `FaceRecognitionResult` incluye la `Identity` encontrada (`null` cuando es 
 | `MaxFaces` | `20` | Número máximo de rostros detectados por fotograma. |
 | `RecognitionThreshold` | `0.36` | Similitud de coseno mínima para reportar una identidad conocida (el umbral de misma identidad de SFace). |
 | `DrawResults` / `DrawLandmarks` | `true` / `false` | Dibuja cuadros, etiquetas y, opcionalmente, los cinco puntos de referencia faciales. |
+| `DrawUnknownLabel` | `true` | Dibuja la etiqueta `Unknown` sobre un rostro que no coincidió con ninguna identidad registrada. `false` conserva el cuadro y omite esa palabra. Los rostros reconocidos siguen mostrando el nombre y la similitud. |
 | `BoxColor` / `BoxThickness` / `LabelFontSize` | LimeGreen / `2` / `0` | Estilo de la superposición; `LabelFontSize = 0` ajusta la escala automáticamente según la altura del fotograma. |
 
 ## FaceGallery

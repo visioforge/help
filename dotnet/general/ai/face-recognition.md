@@ -105,6 +105,7 @@ box-corner `Polygon`, the five facial `Landmarks`, and the raw L2-normalized `Em
 | `MaxFaces` | `20` | Maximum faces detected per frame. |
 | `RecognitionThreshold` | `0.36` | Minimum cosine similarity for reporting a known identity (the SFace same-identity threshold). |
 | `DrawResults` / `DrawLandmarks` | `true` / `false` | Draw boxes, labels, and optionally the five facial landmarks. |
+| `DrawUnknownLabel` | `true` | Draw the `Unknown` label above a face that matched nobody in the gallery. `false` keeps the box and omits that word. Recognized faces still show the name and the similarity. |
 | `BoxColor` / `BoxThickness` / `LabelFontSize` | LimeGreen / `2` / `0` | Overlay styling; `LabelFontSize = 0` auto-scales to frame height. |
 
 ## FaceGallery
