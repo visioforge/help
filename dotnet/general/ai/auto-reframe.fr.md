@@ -1,6 +1,6 @@
 ---
-title: SDK .NET de recadrage automatique par IA — AutoReframeBlock
-description: SDK de recadrage automatique par IA pour .NET — convertissez la vidéo horizontale en verticale 9:16 pour Shorts/Reels/TikTok qui suit le sujet, avec ONNX YOLO.
+title: AutoReframeBlock — recadrage automatique par IA en .NET
+description: AutoReframeBlock pour .NET — convertissez la vidéo horizontale en verticale 9:16 pour Shorts/Reels/TikTok qui suit le sujet, avec ONNX YOLO.
 sidebar_label: Recadrage automatique
 tags:
   - .NET

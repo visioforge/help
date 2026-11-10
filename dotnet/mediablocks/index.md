@@ -119,7 +119,7 @@ On-device AI blocks (ONNX / Whisper) that drop straight into a Media Blocks pipe
 - [PII Redaction](../general/ai/pii-redaction.md) — blur or pixelate faces, license plates, and on-screen text
 - [Background Removal](../general/ai/background-removal.md) — replace, blur, or make the background transparent
 - [Auto Reframe](../general/ai/auto-reframe.md) — reframe landscape footage into subject-following vertical 9:16 video
-- [Speech-to-Text](../general/ai/speech-to-text.md) — transcribe audio and generate live subtitles with Whisper
+- [Speech-to-Text](../general/ai/speech-to-text.md) — SpeechToTextBlock reference: settings, Silero VAD, model sizes, SRT/VTT
 - [Generic ONNX Inference](../general/ai/onnx-inference.md) — run a custom ONNX model and receive raw tensors
 
 ### Audio Processing
@@ -168,6 +168,7 @@ Additional getting started tutorials:
 - [Pre-Event Recording](Guides/pre-event-recording.md)
 - [Audio Metadata Tags](Guides/audio-metadata-tags.md)
 - [Custom Video Effects and OpenGL Shaders](Guides/custom-video-effects-csharp.md)
+- [Live Subtitles (Whisper)](Guides/live-subtitles-whisper-csharp.md)
 
 ## Developer Resources
 

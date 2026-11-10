@@ -1,13 +1,12 @@
 ---
-title: Suppression d'arrière-plan SDK .NET — BackgroundRemovalBlock
-description: Suppression d'arrière-plan SDK .NET — floutez, remplacez ou rendez transparent le fond vidéo sur l'appareil avec BackgroundRemovalBlock et des modèles ONNX.
+title: BackgroundRemovalBlock — suppression d'arrière-plan .NET
+description: Suppression d'arrière-plan en .NET — floutez, remplacez ou rendez transparent le fond vidéo sur l'appareil avec BackgroundRemovalBlock et des modèles ONNX.
 sidebar_label: Suppression de l'arrière-plan
 tags:
   - .NET
   - AI
   - ONNX
   - Background Removal
-  - Background Removal SDK
   - Virtual Background
   - Matting
   - Green Screen

@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-09 19:39:47 UTC (3cf3450d82f)
+**Generated:** 2026-11-10 10:46:39 UTC (5064d52fd46)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 1374 help documentation pages + 69 website pages
 
@@ -1761,6 +1761,8 @@ var password = "YourPassword";
 
 For sub-stream access, add `?resolution=640x480` parameter.
 
+To preview and record Axis cameras to MP4 from a C# app, [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) takes the RTSP URL above and handles decoding and recording in one pipeline, with no separate RTSP client library.
+
 ### ONVIF Discovery
 
 Axis was a founding member of ONVIF and has industry-leading ONVIF compliance. See the [ONVIF integration guide](../../mediablocks/Sources/) for discovery code examples.
@@ -2689,6 +2691,8 @@ var password = "YourPassword";
 ```
 
 For sub-stream access, use `subtype=1` instead of `subtype=0`.
+
+To preview and record CP Plus cameras to MP4 from a C# app, [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) takes the RTSP URL above and handles decoding and recording in one pipeline, with no separate RTSP client library.
 
 ## Snapshot and MJPEG URLs
 
@@ -3680,6 +3684,8 @@ var password = "ABCDEF"; // verification code from camera label
 ```
 
 For sub-stream access, use `/h264/ch1/sub/av_stream` instead.
+
+To preview and record RTSP-enabled EZVIZ cameras to MP4 from a C# app, [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) takes the RTSP URL above and handles decoding and recording in one pipeline, with no separate RTSP client library.
 
 ## Snapshot URLs
 
@@ -4952,6 +4958,8 @@ var password = "YourPassword";
 ```
 
 For sub-stream access, use `subtype=1` instead of `subtype=0`.
+
+To preview and record Imou cameras to MP4 from a C# app, [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) takes the RTSP URL above and handles decoding and recording in one pipeline, with no separate RTSP client library.
 
 ## Snapshot and MJPEG URLs
 
@@ -8726,6 +8734,8 @@ var password = "YourPassword";
 
 For sub-stream access, use `subtype=1` instead of `subtype=0`.
 
+To preview and record Tiandy cameras to MP4 from a C# app, [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) takes the RTSP URL above and handles decoding and recording in one pipeline, with no separate RTSP client library.
+
 ## Snapshot and MJPEG URLs
 
 | Type | URL Pattern | Notes |
@@ -10530,6 +10540,16 @@ The `VisioForge.CrossPlatform.Core.Android` package carries the native libraries
 - `libusb1.0.so` - libusb 1.0.30, dynamically linked and licensed under the LGPL v2.1 or later.
 
 The full notices, including both licence texts, ship with the package as `THIRD-PARTY-NOTICES.txt`.
+
+### Computer vision with OpenCV
+
+For the OpenCV blocks (`VisioForge.Core.MediaBlocks.OpenCV`, `VideoStabilizationBlock` among them), also add [VisioForge.CrossPlatform.OpenCV.Android](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Android):
+
+```
+<PackageReference Include="VisioForge.CrossPlatform.OpenCV.Android" Version="2026.*" />
+```
+
+The package adds one GStreamer plugin with OpenCV linked inside for `arm64-v8a` and `x86_64`, plus the Haar cascade files that `CVFaceDetectBlock`, `CVFaceBlurBlock` and `CVHandDetectBlock` load by default; the SDK loads the plugin during initialization and extracts the cascades to the app's code cache directory on first use. A bare file name is looked up in the app's `opencv/` assets, where the package puts its cascades; any other cascade is set as a full file path, for example one your app has copied into its files directory. On `armeabi-v7a` and `x86` devices, and without the package, each OpenCV block's `IsAvailable()` returns `false`.
 
 ### USB camera permissions
 
@@ -12645,7 +12665,7 @@ Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get
 ---END OF PAGE---
 
 
-## Audio Event Detection SDK for .NET — YAMNet AudioSet
+## AudioEventDetectorBlock — Audio Event Detection in .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/audio-event-detection/
 **Description:** Detect real-world sounds — siren, dog bark, glass break, alarm, music, speech — in live or file audio on-device with a YAMNet AudioSet classifier.
 **Tags:** .NET, AI, YAMNet, AudioSet, Audio Event Detection, Sound Classification, Sound Recognition, Surveillance, VideoCaptureCoreX, MediaPlayerCoreX
@@ -12824,9 +12844,9 @@ The `Audio Event Detection Demo` (WPF Media Blocks — model download with SHA-2
 ---END OF PAGE---
 
 
-## AI Video Auto-Reframe SDK for .NET — AutoReframeBlock
+## AutoReframeBlock — AI Video Auto-Reframe in C# and .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/auto-reframe/
-**Description:** AI auto-reframe SDK for .NET — turn landscape footage into vertical 9:16 Shorts/Reels/TikTok video that follows the subject, on-device with ONNX YOLO.
+**Description:** AutoReframeBlock for .NET — turn landscape footage into vertical 9:16 Shorts/Reels/TikTok video that follows the subject, on-device with ONNX YOLO.
 **Tags:** .NET, AI, ONNX, Auto Reframe, Vertical Video, Reframe, YOLO, Shorts, Reels, Media Blocks SDK
 **API:** AutoReframeBlock, AutoReframeSettings, AutoReframeTargetSelection, ReframeEventArgs
 
@@ -12967,10 +12987,10 @@ Use it to drive an on-screen overlay of the crop region, to log which subject is
 ---END OF PAGE---
 
 
-## Background Removal SDK for .NET — BackgroundRemovalBlock
+## BackgroundRemovalBlock — Background Removal for .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/background-removal/
-**Description:** Background removal SDK for .NET — blur, replace, or make video backgrounds transparent on-device with BackgroundRemovalBlock and ONNX matting models.
-**Tags:** .NET, AI, ONNX, Background Removal, Background Removal SDK, Virtual Background, Matting, Green Screen, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** Background removal in .NET — blur, replace, or make video backgrounds transparent on-device with BackgroundRemovalBlock and ONNX matting models.
+**Tags:** .NET, AI, ONNX, Background Removal, Virtual Background, Matting, Green Screen, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** BackgroundRemovalBlock, BackgroundRemovalSettings, BackgroundRemovalModel, BackgroundReplacementMode
 
 # AI Background Removal (Matting) — BackgroundRemovalBlock
@@ -13130,15 +13150,15 @@ Yes — set `ReplacementMode = BackgroundReplacementMode.Transparent`. The block
 ---END OF PAGE---
 
 
-## Face Recognition SDK for .NET and C# — FaceRecognitionBlock
+## FaceRecognitionBlock — Face Recognition in .NET and C#
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/face-recognition/
-**Description:** Face Recognition SDK for .NET and C# — FaceRecognitionBlock detects and identifies faces on-device (YuNet + SFace/ArcFace ONNX), cross-platform, no cloud.
-**Tags:** .NET, AI, ONNX, Face Recognition, Face Recognition SDK, Face Detection, Facial Recognition, YuNet, SFace, Biometrics, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** Face recognition in .NET and C# — FaceRecognitionBlock detects and identifies faces on-device (YuNet + SFace/ArcFace ONNX), cross-platform, no cloud.
+**Tags:** .NET, AI, ONNX, Face Recognition, Face Detection, Facial Recognition, YuNet, SFace, Biometrics, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** FaceRecognitionBlock, FaceRecognitionSettings, FaceGallery, FaceEmbeddingModel, FaceRecognitionResult
 
-# Face Recognition SDK for .NET — FaceRecognitionBlock
+# Face Recognition for .NET — FaceRecognitionBlock
 
-`FaceRecognitionBlock` is the face recognition SDK component of VisioForge's .NET AI packages — it recognizes **who** is in the frame, on-device, with no cloud API. It runs a two-stage pipeline: a YuNet detector finds faces and their five landmarks, each face is aligned to a canonical 112x112 crop and turned into an embedding (SFace or ArcFace), and the embedding is matched 1:N against an enrolled `FaceGallery` by cosine similarity. Recognition runs on a background thread, so live video never stalls; the streaming thread only draws the most recent results.
+`FaceRecognitionBlock` is the face recognition component of VisioForge's .NET AI packages — it recognizes **who** is in the frame, on-device, with no cloud API. It runs a two-stage pipeline: a YuNet detector finds faces and their five landmarks, each face is aligned to a canonical 112x112 crop and turned into an embedding (SFace or ArcFace), and the embedding is matched 1:N against an enrolled `FaceGallery` by cosine similarity. Recognition runs on a background thread, so live video never stalls; the streaming thread only draws the most recent results.
 
 ```
 graph LR;
@@ -13259,21 +13279,21 @@ See [Using AI blocks with VideoCaptureCoreX and MediaPlayerCoreX](../x-engines/)
 
 ## Frequently Asked Questions
 
-### Is this face recognition SDK cloud-based or on-device?
+### Is FaceRecognitionBlock cloud-based or on-device?
 
 Fully on-device. `FaceRecognitionBlock` runs YuNet detection and SFace/ArcFace embedding through local ONNX Runtime inference — no frame or embedding is sent to an external service.
 
-### Can I use this face recognition SDK from C#?
+### Can I use FaceRecognitionBlock from C#?
 
-Yes — the entire SDK, including `FaceRecognitionBlock`, `FaceRecognitionSettings`, and `FaceGallery`, is a native C#/.NET API (`VisioForge.DotNet.Core.AI`), usable from any .NET application on Windows, macOS, Linux, Android, or iOS.
+Yes — `FaceRecognitionBlock`, `FaceRecognitionSettings`, and `FaceGallery` are part of the native C#/.NET API (`VisioForge.DotNet.Core.AI`), usable from any .NET application on Windows, macOS, Linux, Android, or iOS.
 
 ### How do I enroll a new person?
 
 Call `FaceRecognitionBlock.Enroll(name, imagePath)` or `Enroll(name, SKBitmap)` with one or more clear photos of the person; the block computes the embedding and adds it to `Gallery` for you. Persist the gallery with `FaceGallery.Save(path)` and restore it later with `FaceGallery.Load(path)`.
 
-### Does the SDK include face detection without recognition?
+### Does FaceRecognitionBlock include face detection without recognition?
 
-Yes, indirectly — `FaceRecognitionResult` reports `DetectionScore` and `BoundingBox` for every detected face, whether or not it matches a gallery entry. Leave `Gallery` empty to use the block as a pure face detector.
+Not as a separate mode. `FaceRecognitionResult` reports `DetectionScore` and `BoundingBox` for every detected face, whether or not it matches a gallery entry, but an empty `Gallery` only skips the matching: the embedding model is still required and still runs on every face. A lighter detector is the [CV Face Detect block](../../../mediablocks/OpenCV/#cv-face-detect-block): it uses Haar cascades, is less accurate than YuNet, and is not available on Android.
 
 ### Is SFace or ArcFace better?
 
@@ -13290,10 +13310,10 @@ Dedicated `VideoCaptureCoreX`/`MediaPlayerCoreX` face-recognition demos (`Captur
 ---END OF PAGE---
 
 
-## AI SDK for .NET — On-Device Video AI and Speech-to-Text
+## On-Device AI for .NET — Video and Speech AI Blocks
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/
-**Description:** On-device AI SDK for .NET — OCR, object detection, face recognition, ANPR, background removal, and Whisper speech-to-text. Cross-platform, no cloud.
-**Tags:** .NET, AI, AI SDK, Computer Vision, ONNX, Whisper, Media Blocks, VideoCaptureCoreX, MediaPlayerCoreX, Windows, macOS, Linux, Android, iOS
+**Description:** On-device AI blocks for .NET — OCR, object detection, face recognition, ANPR, background removal, and Whisper speech-to-text. Cross-platform, no cloud.
+**Tags:** .NET, AI, Computer Vision, ONNX, Whisper, Media Blocks, VideoCaptureCoreX, MediaPlayerCoreX, Windows, macOS, Linux, Android, iOS
 **API:** OcrBlock, YOLOObjectDetectorBlock, ObjectAnalyticsBlock, FaceRecognitionBlock, LicensePlateRecognizerBlock, PIIRedactionBlock, OpenVocabularyDetectorBlock, VLMBlock, VideoEmbeddingBlock, BackgroundRemovalBlock, AutoReframeBlock, OnnxInferenceBlock, SpeechToTextBlock
 
 # AI in VisioForge .NET SDK
@@ -13410,7 +13430,8 @@ Video AI blocks (`VisioForge.DotNet.Core.AI`):
 
 Speech-to-text (`VisioForge.DotNet.Core.AI.Whisper`):
 
-- [Speech-to-text and live subtitles](speech-to-text/)
+- [SpeechToTextBlock reference](speech-to-text/)
+- [Live Subtitles (Whisper)](../../mediablocks/Guides/live-subtitles-whisper-csharp/)
 
 Engine integration:
 
@@ -13445,15 +13466,15 @@ Yes. Chain multiple video blocks (for example `OcrBlock` then `BackgroundRemoval
 ---END OF PAGE---
 
 
-## ANPR/LPR SDK for .NET — LicensePlateRecognizerBlock
+## LicensePlateRecognizerBlock — ANPR/LPR Reference for .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/license-plate-recognition/
-**Description:** ANPR/LPR SDK for .NET — read vehicle license plates with LicensePlateRecognizerBlock (FastALPR detector + plate-OCR ONNX models), on-device, cross-platform.
-**Tags:** .NET, AI, ONNX, ANPR, ANPR SDK, LPR, License Plate Recognition, Vehicle Recognition, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** LicensePlateRecognizerBlock reference — models, regional heads, settings and troubleshooting for license plate recognition in C# with ONNX Runtime, on-device.
+**Tags:** .NET, AI, ONNX, ANPR, LPR, License Plate Recognition, Vehicle Recognition, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** LicensePlateRecognizerBlock, LicensePlateRecognizerSettings, LicensePlateResult
 
 # License Plate Recognition (ANPR) — LicensePlateRecognizerBlock
 
-`LicensePlateRecognizerBlock` reads vehicle license plates with a specialized two-stage pipeline: a dedicated license-plate detector (YOLO) locates plates in the frame, then a plate-specific OCR model reads the characters of each cropped plate. Both models come from the FastALPR family (MIT): a YOLOv9-T plate detector and a `fast-plate-ocr` recognition head. A global head covers the USA and 90+ countries; a European head is tuned for EU plates. The recognition model's geometry and alphabet are read from the model itself, so selecting a region is simply a matter of pointing `RecognitionModelPath` at that head.
+`LicensePlateRecognizerBlock` reads vehicle license plates with a specialized two-stage pipeline: a dedicated license-plate detector (YOLO) locates plates in the frame, then a plate-specific OCR model reads the characters of each cropped plate. Both models come from the FastALPR family (MIT): a YOLOv9-T plate detector and a `fast-plate-ocr` recognition head. A global head covers the USA and 90+ countries; a European head is tuned for EU plates. Both heads read Latin characters (digits and A–Z) and the recognition model's input size is read from the model itself, so selecting a region is simply a matter of pointing `RecognitionModelPath` at that head; a head trained on another alphabet is not supported.
 
 ```
 graph LR;
@@ -13461,6 +13482,8 @@ graph LR;
     LicensePlateRecognizerBlock-->VideoRendererBlock;
     LicensePlateRecognizerBlock-. OnPlateRecognized .->App[Your app];
 ```
+
+For an overview of license plate recognition in .NET — use cases, a gate-camera logger, an IP-camera-to-MP4 example and the trial download — see [License plate recognition (ANPR/LPR) in C# and .NET](https://www.visioforge.com/solutions/license-plate-recognition-dotnet).
 
 ## Usage
 
@@ -13503,7 +13526,7 @@ Each `LicensePlateResult` carries the recognized `Text` (normalized: uppercased,
 | `RecognitionModelPath` | — | Plate-OCR ONNX model (FastALPR `fast-plate-ocr` head, global or EU). Required. |
 | `Provider` / `DeviceId` | `Auto` / `0` | ONNX execution provider and hardware device index. |
 | `FramesToSkip` | `0` | Skip frames between recognition runs on live video. |
-| `DetectionInputSize` | `640` | Square input size for the detection model (dynamic-shape models). |
+| `DetectionInputSize` | `640` | Square input size for the detection model (dynamic-shape models only; a fixed-size model such as the 640 detector uses its own size). |
 | `DetectionConfidenceThreshold` | `0.35` | Minimum detector score a plate box must reach. |
 | `OcrConfidenceThreshold` | `0.3` | Minimum mean OCR confidence a recognized plate must reach to be reported. |
 | `MaxDetections` | `10` | Maximum plates detected per frame. |
@@ -13540,14 +13563,14 @@ See [Using AI blocks with VideoCaptureCoreX and MediaPlayerCoreX](../x-engines/)
 
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
-| Plates aren't detected at all | `DetectionConfidenceThreshold` too high, or plate too small relative to `DetectionInputSize` | Lower `DetectionConfidenceThreshold`; raise `DetectionInputSize` for distant/small plates, or crop closer to the vehicle upstream. |
+| Plates aren't detected at all | `DetectionConfidenceThreshold` too high, or plate too small in the frame | Lower `DetectionConfidenceThreshold`; for distant/small plates give the camera a closer view or crop closer to the vehicle upstream. |
 | Plate detected but text is wrong/empty | `OcrConfidenceThreshold` too high, or wrong regional recognition head | Lower `OcrConfidenceThreshold`; confirm `RecognitionModelPath` matches your region (global vs. EU head). |
 | Only some plates in a busy scene are reported | `MaxDetections` reached | Raise `MaxDetections` if you expect more than 10 plates per frame. |
 | Plate text includes stray characters | Read directly from `LicensePlateResult.Text`, expecting raw OCR | `Text` is already normalized (uppercased, non-alphanumeric characters stripped) — if you still see noise, check that the correct regional recognition head is loaded. |
 
 ## Frequently Asked Questions
 
-### Does this ANPR SDK work outside the USA and Europe?
+### Does LicensePlateRecognizerBlock work outside the USA and Europe?
 
 The FastALPR global recognition head covers the USA and 90+ countries; a separate European head is tuned for EU plates. Point `RecognitionModelPath` at whichever head matches your target region.
 
@@ -13570,10 +13593,10 @@ License plates are commonly treated as personal data under privacy regulations (
 ---END OF PAGE---
 
 
-## Object Tracking SDK for .NET — ObjectAnalyticsBlock
+## ObjectAnalyticsBlock — Object Tracking in C# and .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/object-analytics/
-**Description:** Object tracking SDK for .NET — ByteTrack multi-object tracking, line-crossing tripwires, and polygon-zone occupancy with ObjectAnalyticsBlock.
-**Tags:** .NET, AI, ONNX, Object Tracking, Object Tracking SDK, ByteTrack, Tripwire, Polygon Zone, People Counting, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** Object tracking in .NET — ByteTrack multi-object tracking, line-crossing tripwires, and polygon-zone occupancy with ObjectAnalyticsBlock.
+**Tags:** .NET, AI, ONNX, Object Tracking, ByteTrack, Tripwire, Polygon Zone, People Counting, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** ObjectAnalyticsBlock, ObjectAnalyticsSettings, ByteTrackerSettings, DetectionFilterSettings, ObjectAnalyticsOverlaySettings, LineZoneSettings, PolygonZoneSettings, LineCrossingResult, PolygonZoneSnapshot
 
 # Object Analytics — Multi-Object Tracking, Tripwires, and Polygon Zones
@@ -13817,10 +13840,10 @@ There's no fixed limit in the API — `ObjectAnalyticsSettings.Lines` and `.Zone
 ---END OF PAGE---
 
 
-## Object Detection SDK for .NET — YOLOObjectDetectorBlock
+## YOLOObjectDetectorBlock — Object Detection for .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/object-detection/
-**Description:** Object detection SDK for .NET — detect objects in video with YOLOObjectDetectorBlock. YOLOv8, YOLOX, and RT-DETR ONNX models, cross-platform, CPU or GPU.
-**Tags:** .NET, AI, ONNX, YOLO, Object Detection, Object Detection SDK, Computer Vision, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** Object detection in .NET — detect objects in video with YOLOObjectDetectorBlock. YOLOv8, YOLOX, and RT-DETR ONNX models, cross-platform, CPU or GPU.
+**Tags:** .NET, AI, ONNX, YOLO, Object Detection, Computer Vision, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** YOLOObjectDetectorBlock, YoloDetectorSettings, ObjectDetectorModel, OnnxDetection
 
 # Object Detection — YOLOObjectDetectorBlock
@@ -13982,10 +14005,10 @@ Dedicated `VideoCaptureCoreX`/`MediaPlayerCoreX` object-detection demos (`Captur
 ---END OF PAGE---
 
 
-## OCR SDK for .NET — OcrBlock Text Recognition (PaddleOCR)
+## C# OCR for Video and Images — OcrBlock with PaddleOCR
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/ocr/
-**Description:** OCR SDK for .NET — recognize text in video and images with OcrBlock (ONNX Runtime + PaddleOCR). Cross-platform C# on Windows, macOS, Linux, Android, iOS.
-**Tags:** .NET, AI, OCR, OCR SDK, ONNX, PaddleOCR, Text Recognition, Computer Vision, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** OcrBlock reference — models, settings and troubleshooting for text recognition in video and images with ONNX Runtime and PaddleOCR in C#, cross-platform.
+**Tags:** .NET, AI, OCR, ONNX, PaddleOCR, Text Recognition, Computer Vision, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** OcrBlock, OcrSettings, OcrTextRegion, OcrPoint
 
 # OCR Text Recognition — OcrBlock
@@ -13998,6 +14021,8 @@ graph LR;
     OcrBlock-->VideoRendererBlock;
     OcrBlock-. OnTextDetected .->App[Your app];
 ```
+
+For an overview of OCR on video streams — use cases, an RTSP-to-MP4 example and the trial download — see [On-device OCR for video streams in .NET](https://www.visioforge.com/solutions/video-ocr-dotnet).
 
 ## Usage
 
@@ -14131,7 +14156,7 @@ Dedicated `VideoCaptureCoreX`/`MediaPlayerCoreX` OCR demos (`Capture OCR X`, `Ca
 ---END OF PAGE---
 
 
-## ONNX Runtime SDK for .NET — OnnxInferenceBlock Guide
+## OnnxInferenceBlock — Custom ONNX Runtime Models in .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/onnx-inference/
 **Description:** Run any custom ONNX Runtime model over live video frames in .NET with OnnxInferenceBlock and get raw tensor outputs for your own post-processing.
 **Tags:** .NET, AI, ONNX, ONNX Runtime, Inference, Custom Model, VideoCaptureCoreX, MediaPlayerCoreX
@@ -14548,7 +14573,7 @@ Dedicated demos built on Media Blocks, `VideoCaptureCoreX`, and `MediaPlayerCore
 ---END OF PAGE---
 
 
-## PII Redaction SDK for .NET — Blur Faces & License Plates
+## PIIRedactionBlock — Blur Faces and License Plates in .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/pii-redaction/
 **Description:** Redact PII in video on-device with PIIRedactionBlock — blur or pixelate faces, license plates, and on-screen text. GDPR/CCPA/BIPA-friendly, no cloud.
 **Tags:** .NET, AI, ONNX, PII Redaction, Video Anonymization, Face Blur, License Plate Redaction, GDPR, Privacy, VideoCaptureCoreX, MediaPlayerCoreX
@@ -14823,7 +14848,7 @@ No. Redaction overwrites the pixels in each region directly in the frame, so the
 ---END OF PAGE---
 
 
-## PTZ Auto-Tracking SDK for .NET — ONVIF Camera Control
+## PTZ Auto-Tracking in C# and .NET — ONVIF Camera Control
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/ptz-auto-tracking/
 **Description:** PTZ auto-tracking for .NET: make an ONVIF PTZ camera follow a detected object with proportional pan/tilt/zoom, a dead zone, and sticky tracking.
 **Tags:** .NET, AI, ONVIF, PTZ, Auto-Tracking, Object Tracking, ObjectAnalyticsBlock, VideoCaptureCoreX, MediaBlocksPipeline
@@ -15383,10 +15408,10 @@ Dedicated demos built on Media Blocks and `MediaPlayerCoreX` (`Semantic Video Se
 ---END OF PAGE---
 
 
-## Speaker Diarization SDK for .NET — SpeakerDiarizationBlock
+## SpeakerDiarizationBlock — Speaker Diarization for .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/speaker-diarization/
 **Description:** On-device speaker diarization for .NET — find
-**Tags:** .NET, AI, Speaker Diarization, Diarization SDK, Who Spoke When, Speaker Segmentation, Speaker Embedding, VideoCaptureCoreX, MediaPlayerCoreX
+**Tags:** .NET, AI, Speaker Diarization, Who Spoke When, Speaker Segmentation, Speaker Embedding, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** SpeakerDiarizationBlock, SpeakerDiarizationSettings, SpeakerSegment, SpeakerSegmentEventArgs, DiarizedTranscriptBuilder, DiarizedTranscriptSegment
 
 # Speaker Diarization — SpeakerDiarizationBlock
@@ -15649,13 +15674,13 @@ The segmentation model is language-independent, so it works with any language ou
 ---END OF PAGE---
 
 
-## Speech-to-Text SDK for .NET — SpeechToTextBlock (Whisper)
+## SpeechToTextBlock — Speech-to-Text Reference for .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/ai/speech-to-text/
-**Description:** Speech-to-text SDK for .NET — transcribe live or file audio on-device with Whisper ASR and Silero VAD, plus SRT/VTT and live subtitle helpers.
-**Tags:** .NET, AI, Whisper, Speech-to-Text, Speech-to-Text SDK, Speech Recognition, Live Subtitles, Transcription, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** SpeechToTextBlock reference — transcribe audio on-device with Whisper in C#; settings, Silero VAD, model sizes, SRT/VTT, subtitles, troubleshooting.
+**Tags:** .NET, AI, Whisper, Speech-to-Text, Speech Recognition, Transcription, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** SpeechToTextBlock, SpeechToTextSettings, SileroVadSettings, SpeechSegment, SubtitleWriter, SubtitleRenderer, SubtitleStyle
 
-# Speech-to-Text and Live Subtitles — SpeechToTextBlock
+# Speech-to-Text Reference — SpeechToTextBlock
 
 `SpeechToTextBlock` is an audio-only Media Block from `VisioForge.DotNet.Core.AI.Whisper`. It taps the audio stream, segments speech with Silero VAD, transcribes it with Whisper (Whisper.net / GGML), and raises `OnSpeechRecognized`. Audio passes through unchanged. The block implements `IAudioProcessingBlock`, so it can be inserted into a manual pipeline or registered directly on `VideoCaptureCoreX`/`MediaPlayerCoreX`.
 
@@ -15663,6 +15688,8 @@ The segmentation model is language-independent, so it works with any language ou
 using VisioForge.Core.MediaBlocks.AI;
 using VisioForge.Core.Types.X.AI;
 ```
+
+For a step-by-step tutorial — transcribe a file, caption a live source and render subtitles on video — see [Live Subtitles and Speech-to-Text in C# .NET (Whisper)](../../../mediablocks/Guides/live-subtitles-whisper-csharp/).
 
 ## Basic block setup
 
@@ -15923,7 +15950,7 @@ Yes — set `SpeechToTextSettings.Task = SpeechToTextTask.Translate`.
 
 ### How do I get live on-screen subtitles instead of just an event?
 
-Wire `SubtitleRenderer.OnSpeechRecognized` as the block's event handler against an `OverlayManagerBlock` — see [SubtitleRenderer — on-screen captions](#subtitlerenderer-on-screen-captions). If you only need SRT/VTT files, set `OutputSrtPath`/`OutputVttPath` instead.
+Wire `SubtitleRenderer.OnSpeechRecognized` as the block's event handler against an `OverlayManagerBlock` — see [SubtitleRenderer — on-screen captions](#subtitlerenderer-on-screen-captions). If you only need SRT/VTT files, set `OutputSrtPath`/`OutputVttPath` instead. For an end-to-end walkthrough, see the [live subtitles tutorial](../../../mediablocks/Guides/live-subtitles-whisper-csharp/).
 
 ### Which Whisper model size should I use?
 
@@ -31317,6 +31344,8 @@ Our SDKs integrate RTSP with industry-standard codecs like **H.264 (AVC)** for v
 
 This guide delves into the specifics of implementing RTSP streaming using VisioForge SDKs, covering both modern cross-platform approaches and legacy Windows-specific methods.
 
+Receiving video from an RTSP camera rather than serving a stream? [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) connects to RTSP and ONVIF IP cameras and records them to MP4 in the same pipeline — see the [RTSP camera source guide](../../../videocapture/video-sources/ip-cameras/rtsp/).
+
 ## Cross-Platform RTSP Output (Recommended)
 
 [VideoCaptureCoreX](#) [MediaBlocksPipeline](#)
@@ -31614,7 +31643,7 @@ SRT (Secure Reliable Transport) is a streaming protocol designed for low-latency
 - Secure point-to-point video transport
 - Cloud-based video ingest and distribution
 
-The VisioForge .NET SDKs support both sending and receiving SRT streams across Windows, macOS, and Linux. SRT streams use MPEG-TS multiplexing to carry video and audio together.
+The VisioForge .NET SDKs support both sending and receiving SRT streams on Windows, macOS, Mac Catalyst, Linux, iOS and Android. SRT streams use MPEG-TS multiplexing to carry video and audio together.
 
 You can check SRT availability at runtime:
 
@@ -31622,6 +31651,8 @@ You can check SRT availability at runtime:
 bool srtAvailable = SRTSinkBlock.IsAvailable(); // for sending
 bool srtSourceAvailable = SRTSourceBlock.IsAvailable(); // for receiving
 ```
+
+On Windows, macOS and Mac Catalyst, the SRT plugin ships in the `Adds` runtime package, not in the main one: `VisioForge.CrossPlatform.Core.Windows.Adds.x64` (or its x86 and arm64 variants), `VisioForge.CrossPlatform.Core.macOS.Adds` or `VisioForge.CrossPlatform.Core.macCatalyst.Adds`. Add it next to the main runtime package, or `IsAvailable()` returns `false`. The iOS and Android runtime packages include SRT. On Linux the SDK uses the system GStreamer; on Ubuntu and Debian, SRT is part of `gstreamer1.0-plugins-bad`.
 
 ## SRT Connection Modes
 
@@ -31652,10 +31683,12 @@ var sinkSettings = new SRTSinkSettings
 The caller connects to a remote SRT listener:
 
 ```
-// SRTSourceSettings has a private ctor — use the CreateAsync factory. Uri is System.Uri, not string.
+// CreateAsync reads the stream's tracks before it returns, so the sender must be running. Uri is System.Uri, not string.
 var sourceSettings = await SRTSourceSettings.CreateAsync(new Uri("srt://192.168.1.100:8888"));
 sourceSettings.Mode = SRTConnectionMode.Caller;
 ```
+
+`CreateAsync` connects with the URI alone, so whatever that first connection needs goes in the URI query: a receiver in listener mode uses `srt://0.0.0.0:8888?mode=listener`, and a server that requires a stream ID gets `?streamid=...`.
 
 ### Rendezvous Mode
 
@@ -31681,6 +31714,8 @@ var srtOutput = new SRTOutput("srt://streaming-server:1234");
 // Add the configured SRT output to your capture engine
 videoCapture.Outputs_Add(srtOutput, true);  // videoCapture is a VideoCaptureCoreX instance
 ```
+
+In Video Capture SDK .NET, `SRTOutput` requires the Premium edition, and an SRT stream used as `Video_Source` requires the Professional edition.
 
 ### Media Blocks SDK
 
@@ -31804,20 +31839,34 @@ var sinkSettings = new SRTSinkSettings
 {
     Uri = "srt://:8888",
     Mode = SRTConnectionMode.Listener,
-    Passphrase = "my-secret-passphrase",  // minimum 10 characters
+    Passphrase = "my-secret-passphrase",  // 10 to 79 bytes in UTF-8
     PbKeyLen = SRTKeyLength.Length32       // 256-bit AES
 };
 ```
 
 ### Receiver (Encrypted)
 
+`SRTSourceSettings.CreateAsync` opens the stream with the URI alone to read its tracks before it returns, so when you use it for an encrypted stream, put the passphrase in the URI as `passphrase` and `pbkeylen` query parameters. A passphrase is 10 to 79 bytes in UTF-8, which is 10 to 79 characters for Latin letters and digits; in a URI, use letters, digits, `-`, `_`, `.` and `~`:
+
 ```
-// Use the async factory — SRTSourceSettings has a private ctor; Uri is System.Uri, not string.
-var sourceSettings = await SRTSourceSettings.CreateAsync(new Uri("srt://192.168.1.100:8888"));
-sourceSettings.Mode = SRTConnectionMode.Caller;
-sourceSettings.Passphrase = "my-secret-passphrase";
-sourceSettings.PbKeyLen = SRTKeyLength.Length32;
+// CreateAsync reads the stream with the URI alone, so the passphrase and key length go in the query
+var sourceSettings = await SRTSourceSettings.CreateAsync(
+    new Uri("srt://192.168.1.100:8888?passphrase=my-secret-passphrase&pbkeylen=32"));
 ```
+
+With Media Blocks SDK .NET you can skip `CreateAsync` and set the passphrase as a property instead. It then stays out of the URI, so it can contain any characters. `SRTSourceBlock` does not know the tracks in advance, so it creates both a video and an audio output:
+
+```
+var sourceSettings = new SRTSourceSettings
+{
+    Uri = new Uri("srt://192.168.1.100:8888"),
+    Passphrase = "my secret passphrase!",
+    PbKeyLen = SRTKeyLength.Length32
+};
+var srtSource = new SRTSourceBlock(sourceSettings);
+```
+
+For a video-only stream, pass `renderAudio: false`.
 
 Available key lengths: `SRTKeyLength.NoKey` (disabled), `Length16` (128-bit), `Length24` (192-bit), `Length32` (256-bit).
 
@@ -31916,6 +31965,15 @@ By default the SDK uses AVENC AAC on every platform.
 - Verify GPU drivers are up to date for hardware encoders
 - Fall back to OpenH264 as a universal software encoder
 
+### Stopping Hangs After the Other Side Disconnects
+
+**Symptom:** `StopAsync` does not return after the remote peer has become unreachable.
+
+**Solutions:**
+
+- On Windows, macOS, Mac Catalyst, iOS and Android, use the VisioForge packages (on Windows, macOS and Mac Catalyst, the `Adds` package): they ship a patched SRT plugin that re-reads its `auto-reconnect` property before each reconnect attempt. The SDK clears that property when you stop, so stopping returns even when the peer is gone
+- On Linux the SDK uses the distribution's SRT plugin, which does not carry this patch. If a stop hangs there, set `AutoReconnect = false` on the settings: a lost peer then ends the stream with an error instead of a reconnect loop
+
 ## Frequently Asked Questions
 
 ### What is the difference between SRT caller and listener mode?
@@ -31924,7 +31982,7 @@ The **listener** binds to a port and waits for incoming connections — it acts 
 
 ### How do I encrypt an SRT stream?
 
-Set the `Passphrase` property (minimum 10 characters) and `PbKeyLen` on both `SRTSinkSettings` and `SRTSourceSettings`. Both sender and receiver must use identical values. Available key lengths are 128-bit (`Length16`), 192-bit (`Length24`), and 256-bit (`Length32`). See the [Encryption](#encryption) section for code examples.
+On the sender, set `Passphrase` (10 to 79 bytes in UTF-8) and `PbKeyLen` on `SRTSinkSettings`. On the receiver, pass the same values in the URI given to `SRTSourceSettings.CreateAsync` (`srt://host:8888?passphrase=...&pbkeylen=32`), because `CreateAsync` opens the stream with the URI alone; in a URI, use letters, digits, `-`, `_`, `.` and `~`. With Media Blocks SDK .NET you can instead set `Passphrase` and `PbKeyLen` on a new `SRTSourceSettings` and skip `CreateAsync`. Both sides must use identical values. Available key lengths are 128-bit (`Length16`), 192-bit (`Length24`), and 256-bit (`Length32`). See the [Encryption](#encryption) section for code examples.
 
 ### How do I receive and play an SRT stream in C#?
 
@@ -46328,6 +46386,8 @@ var password = "YourPassword";
 
 Para acceder al subflujo, agregue el parámetro `?resolution=640x480`.
 
+Para previsualizar y grabar cámaras Axis en MP4 desde una aplicación C#, [Video Capture SDK .NET](https://www.visioforge.com/es/video-capture-sdk-net) usa la URL RTSP anterior y se encarga de la decodificación y la grabación en un solo pipeline, sin una biblioteca cliente RTSP aparte.
+
 ### Descubrimiento ONVIF
 
 Axis fue miembro fundador de ONVIF y tiene cumplimiento ONVIF líder en la industria. Consulte la [guía de integración ONVIF](../../mediablocks/Sources/) para ejemplos de código de descubrimiento.
@@ -47256,6 +47316,8 @@ var password = "YourPassword";
 ```
 
 Para acceder al subflujo, use `subtype=1` en lugar de `subtype=0`.
+
+Para previsualizar y grabar cámaras CP Plus en MP4 desde una aplicación C#, [Video Capture SDK .NET](https://www.visioforge.com/es/video-capture-sdk-net) usa la URL RTSP anterior y se encarga de la decodificación y la grabación en un solo pipeline, sin una biblioteca cliente RTSP aparte.
 
 ## URLs de Captura y MJPEG
 
@@ -48247,6 +48309,8 @@ var password = "ABCDEF"; // verification code from camera label
 ```
 
 Para acceso al subflujo, use `/h264/ch1/sub/av_stream` en su lugar.
+
+Para previsualizar y grabar cámaras EZVIZ con RTSP activado en MP4 desde una aplicación C#, [Video Capture SDK .NET](https://www.visioforge.com/es/video-capture-sdk-net) usa la URL RTSP anterior y se encarga de la decodificación y la grabación en un solo pipeline, sin una biblioteca cliente RTSP aparte.
 
 ## URLs de Captura
 
@@ -49519,6 +49583,8 @@ var password = "YourPassword";
 ```
 
 Para acceso al subflujo, use `subtype=1` en lugar de `subtype=0`.
+
+Para previsualizar y grabar cámaras Imou en MP4 desde una aplicación C#, [Video Capture SDK .NET](https://www.visioforge.com/es/video-capture-sdk-net) usa la URL RTSP anterior y se encarga de la decodificación y la grabación en un solo pipeline, sin una biblioteca cliente RTSP aparte.
 
 ## URLs de Captura y MJPEG
 
@@ -53293,6 +53359,8 @@ var password = "YourPassword";
 
 Para acceso al subflujo, use `subtype=1` en lugar de `subtype=0`.
 
+Para previsualizar y grabar cámaras Tiandy en MP4 desde una aplicación C#, [Video Capture SDK .NET](https://www.visioforge.com/es/video-capture-sdk-net) usa la URL RTSP anterior y se encarga de la decodificación y la grabación en un solo pipeline, sin una biblioteca cliente RTSP aparte.
+
 ## URLs de Captura y MJPEG
 
 | Tipo | Patrón de URL | Notas |
@@ -55097,6 +55165,16 @@ El paquete `VisioForge.CrossPlatform.Core.Android` incluye las bibliotecas nativ
 - `libusb1.0.so` - libusb 1.0.30, enlazado dinámicamente y con licencia LGPL v2.1 o posterior.
 
 Los avisos completos, incluidos ambos textos de licencia, se distribuyen con el paquete en `THIRD-PARTY-NOTICES.txt`.
+
+### Visión por computadora con OpenCV
+
+Para los bloques OpenCV (`VisioForge.Core.MediaBlocks.OpenCV`, entre ellos `VideoStabilizationBlock`), añada también [VisioForge.CrossPlatform.OpenCV.Android](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Android):
+
+```
+<PackageReference Include="VisioForge.CrossPlatform.OpenCV.Android" Version="2026.*" />
+```
+
+El paquete añade un plugin de GStreamer con OpenCV enlazado dentro para `arm64-v8a` y `x86_64`, además de los archivos de cascada Haar que `CVFaceDetectBlock`, `CVFaceBlurBlock` y `CVHandDetectBlock` cargan por defecto; el SDK carga el plugin durante la inicialización y extrae las cascadas al directorio de caché de código de la aplicación la primera vez que se usan. Un nombre de archivo sin ruta se busca en los recursos `opencv/` de la aplicación, donde el paquete coloca sus cascadas; cualquier otra cascada se indica con la ruta completa del archivo, por ejemplo una que la aplicación haya copiado a su directorio de archivos. En dispositivos `armeabi-v7a` y `x86`, y sin el paquete, el método `IsAvailable()` de cada bloque OpenCV devuelve `false`.
 
 ### Permisos para la cámara USB
 
@@ -57202,7 +57280,7 @@ Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samp
 ---END OF PAGE---
 
 
-## Detección de eventos de audio en .NET — YAMNet AudioSet
+## AudioEventDetectorBlock — detección de eventos de audio .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/audio-event-detection/
 **Description:** Detecte sonidos reales — sirena, ladrido, rotura de cristal, alarma, música, voz — en audio en vivo o de archivo con YAMNet de AudioSet, en el dispositivo.
 **Tags:** .NET, AI, YAMNet, AudioSet, Audio Event Detection, Sound Classification, Sound Recognition, Surveillance, VideoCaptureCoreX, MediaPlayerCoreX
@@ -57381,13 +57459,13 @@ La demo `Audio Event Detection Demo` (Media Blocks para WPF — descarga del mod
 ---END OF PAGE---
 
 
-## SDK de Auto-Reencuadre con IA para .NET — AutoReframeBlock
+## AutoReframeBlock — auto-reencuadre con IA para .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/auto-reframe/
-**Description:** SDK de auto-reencuadre con IA para .NET — convierta video horizontal en vertical 9:16 para Shorts/Reels/TikTok que sigue al sujeto, con ONNX YOLO.
+**Description:** Auto-reencuadre con IA para .NET con AutoReframeBlock — convierta video horizontal en vertical 9:16 para Shorts/Reels/TikTok que sigue al sujeto, con ONNX YOLO.
 **Tags:** .NET, AI, ONNX, Auto Reframe, Vertical Video, Reframe, YOLO, Shorts, Reels, Media Blocks SDK
 **API:** AutoReframeBlock, AutoReframeSettings, AutoReframeTargetSelection, ReframeEventArgs
 
-# Auto-Reencuadre con IA (video vertical que sigue al sujeto) — AutoReframeBlock
+# Auto-reencuadre con IA (video vertical que sigue al sujeto) — AutoReframeBlock
 
 `AutoReframeBlock` convierte metraje horizontal en una relación de aspecto de salida fija — normalmente vertical 9:16 para Shorts, Reels y TikTok — recortando dinámicamente alrededor de un sujeto detectado y escalando el recorte a la resolución de salida configurada. Ejecuta la detección de objetos sobre un flujo muestreado, sigue al sujeto seleccionado, suaviza la posición del recorte a lo largo del tiempo para que se deslice en lugar de temblar, y regresa suavemente al centro del fotograma cuando no hay ningún sujeto.
 
@@ -57524,10 +57602,10 @@ await pipeline.DisposeAsync();
 ---END OF PAGE---
 
 
-## SDK de eliminación de fondo .NET — BackgroundRemovalBlock
+## BackgroundRemovalBlock — eliminación de fondo en .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/background-removal/
-**Description:** SDK de eliminación de fondo para .NET — difumine, reemplace o haga transparente el fondo del video con BackgroundRemovalBlock y modelos ONNX de matting.
-**Tags:** .NET, AI, ONNX, Background Removal, Background Removal SDK, Virtual Background, Matting, Green Screen, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** Eliminación de fondo en .NET — difumine, reemplace o haga transparente el fondo del video con BackgroundRemovalBlock y modelos ONNX de matting.
+**Tags:** .NET, AI, ONNX, Background Removal, Virtual Background, Matting, Green Screen, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** BackgroundRemovalBlock, BackgroundRemovalSettings, BackgroundRemovalModel, BackgroundReplacementMode
 
 # Eliminación de fondo con IA (Matting) — BackgroundRemovalBlock
@@ -57687,13 +57765,13 @@ Sí — configure `ReplacementMode = BackgroundReplacementMode.Transparent`. El 
 ---END OF PAGE---
 
 
-## Reconocimiento Facial para .NET — FaceRecognitionBlock
+## FaceRecognitionBlock — reconocimiento facial en .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/face-recognition/
-**Description:** SDK de reconocimiento facial .NET — FaceRecognitionBlock detecta e identifica rostros en el dispositivo (YuNet + SFace/ArcFace ONNX), sin nube.
-**Tags:** .NET, AI, ONNX, Face Recognition, Face Recognition SDK, Face Detection, Facial Recognition, YuNet, SFace, Biometrics, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** Reconocimiento facial en .NET — FaceRecognitionBlock detecta e identifica rostros en el dispositivo (YuNet + SFace/ArcFace ONNX), sin nube.
+**Tags:** .NET, AI, ONNX, Face Recognition, Face Detection, Facial Recognition, YuNet, SFace, Biometrics, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** FaceRecognitionBlock, FaceRecognitionSettings, FaceGallery, FaceEmbeddingModel, FaceRecognitionResult
 
-# SDK de reconocimiento facial para .NET — FaceRecognitionBlock
+# Reconocimiento facial para .NET — FaceRecognitionBlock
 
 `FaceRecognitionBlock` es el componente de reconocimiento facial de los paquetes de IA .NET de VisioForge — reconoce **quién** aparece en el fotograma, en el dispositivo, sin API en la nube. Ejecuta un pipeline de dos etapas: un detector YuNet localiza los rostros y sus cinco puntos de referencia, cada rostro se alinea a un recorte canónico de 112x112 y se convierte en un embedding (SFace o ArcFace), y el embedding se compara 1:N contra una `FaceGallery` registrada mediante similitud de coseno. El reconocimiento se ejecuta en un hilo en segundo plano, de modo que el video en vivo nunca se detiene; el hilo de streaming solo dibuja los resultados más recientes.
 
@@ -57816,21 +57894,21 @@ Consulte [Uso de bloques de IA con VideoCaptureCoreX y MediaPlayerCoreX](../x-en
 
 ## Preguntas frecuentes
 
-### ¿Este SDK de reconocimiento facial funciona en la nube o en el dispositivo?
+### ¿FaceRecognitionBlock funciona en la nube o en el dispositivo?
 
 Totalmente en el dispositivo. `FaceRecognitionBlock` ejecuta la detección YuNet y el embedding SFace/ArcFace mediante inferencia local con ONNX Runtime — ningún fotograma ni embedding se envía a un servicio externo.
 
-### ¿Puede usar este SDK de reconocimiento facial desde C#?
+### ¿Puedo usar FaceRecognitionBlock desde C#?
 
-Sí — todo el SDK, incluyendo `FaceRecognitionBlock`, `FaceRecognitionSettings` y `FaceGallery`, es una API nativa de C#/.NET (`VisioForge.DotNet.Core.AI`), utilizable desde cualquier aplicación .NET en Windows, macOS, Linux, Android o iOS.
+Sí — `FaceRecognitionBlock`, `FaceRecognitionSettings` y `FaceGallery` forman parte de la API nativa de C#/.NET (`VisioForge.DotNet.Core.AI`), utilizable desde cualquier aplicación .NET en Windows, macOS, Linux, Android o iOS.
 
 ### ¿Cómo registro a una nueva persona?
 
 Llame a `FaceRecognitionBlock.Enroll(name, imagePath)` o `Enroll(name, SKBitmap)` con una o más fotos claras de la persona; el bloque calcula el embedding y lo añade a `Gallery` por usted. Guarde la galería con `FaceGallery.Save(path)` y restáurela más tarde con `FaceGallery.Load(path)`.
 
-### ¿El SDK incluye detección facial sin reconocimiento?
+### ¿FaceRecognitionBlock incluye detección facial sin reconocimiento?
 
-Sí, de forma indirecta — `FaceRecognitionResult` reporta `DetectionScore` y `BoundingBox` para cada rostro detectado, coincida o no con una entrada de la galería. Deje `Gallery` vacía para usar el bloque como un detector de rostros puro.
+No como un modo aparte. `FaceRecognitionResult` reporta `DetectionScore` y `BoundingBox` para cada rostro detectado, coincida o no con una entrada de la galería, pero una `Gallery` vacía solo omite la comparación: el modelo de embedding sigue siendo obligatorio y se ejecuta para cada rostro. Un detector más ligero es el [bloque CV Face Detect](../../../mediablocks/OpenCV/#bloque-cv-face-detect): usa cascadas Haar, es menos preciso que YuNet y no está disponible en Android.
 
 ### ¿Es mejor SFace o ArcFace?
 
@@ -57847,10 +57925,10 @@ Los demos dedicados de reconocimiento facial para `VideoCaptureCoreX`/`MediaPlay
 ---END OF PAGE---
 
 
-## SDK de IA para .NET — IA de Vídeo y Voz en el Dispositivo
+## IA en el dispositivo para .NET — bloques de vídeo y voz
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/
-**Description:** SDK de IA en el dispositivo para .NET — OCR, detección de objetos, reconocimiento facial, ANPR, eliminación de fondo y voz a texto con Whisper.
-**Tags:** .NET, AI, AI SDK, Computer Vision, ONNX, Whisper, Media Blocks, VideoCaptureCoreX, MediaPlayerCoreX, Windows, macOS, Linux, Android, iOS
+**Description:** Bloques de IA en el dispositivo para .NET — OCR, detección de objetos, reconocimiento facial, ANPR, eliminación de fondo y voz a texto con Whisper.
+**Tags:** .NET, AI, Computer Vision, ONNX, Whisper, Media Blocks, VideoCaptureCoreX, MediaPlayerCoreX, Windows, macOS, Linux, Android, iOS
 **API:** OcrBlock, YOLOObjectDetectorBlock, ObjectAnalyticsBlock, FaceRecognitionBlock, LicensePlateRecognizerBlock, PIIRedactionBlock, OpenVocabularyDetectorBlock, VLMBlock, VideoEmbeddingBlock, BackgroundRemovalBlock, AutoReframeBlock, OnnxInferenceBlock, SpeechToTextBlock
 
 # IA en VisioForge .NET SDK
@@ -57967,7 +58045,8 @@ Bloques de IA de vídeo (`VisioForge.DotNet.Core.AI`):
 
 Voz a texto (`VisioForge.DotNet.Core.AI.Whisper`):
 
-- [Voz a texto y subtítulos en vivo](speech-to-text/)
+- [Referencia de SpeechToTextBlock](speech-to-text/)
+- [Subtítulos en vivo (Whisper)](../../mediablocks/Guides/live-subtitles-whisper-csharp/)
 
 Integración con motores:
 
@@ -58002,15 +58081,15 @@ Sí. Encadene varios bloques de vídeo (por ejemplo, `OcrBlock` seguido de `Back
 ---END OF PAGE---
 
 
-## SDK ANPR/LPR para .NET — LicensePlateRecognizerBlock
+## LicensePlateRecognizerBlock — Referencia ANPR/LPR para .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/license-plate-recognition/
-**Description:** SDK ANPR/LPR para .NET — lee matrículas con LicensePlateRecognizerBlock (detector FastALPR + modelos OCR ONNX), en el dispositivo, multiplataforma.
-**Tags:** .NET, AI, ONNX, ANPR, ANPR SDK, LPR, License Plate Recognition, Vehicle Recognition, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** Referencia de LicensePlateRecognizerBlock — modelos, cabezas regionales, ajustes y solución de problemas para leer matrículas en C# con ONNX Runtime, local.
+**Tags:** .NET, AI, ONNX, ANPR, LPR, License Plate Recognition, Vehicle Recognition, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** LicensePlateRecognizerBlock, LicensePlateRecognizerSettings, LicensePlateResult
 
 # Reconocimiento de matrículas (ANPR) — LicensePlateRecognizerBlock
 
-`LicensePlateRecognizerBlock` lee matrículas de vehículos mediante una canalización especializada de dos etapas: un detector de matrículas dedicado (YOLO) localiza las matrículas en el fotograma, y luego un modelo OCR específico para matrículas lee los caracteres de cada matrícula recortada. Ambos modelos provienen de la familia FastALPR (MIT): un detector de matrículas YOLOv9-T y una cabeza de reconocimiento `fast-plate-ocr`. Una cabeza global cubre EE. UU. y más de 90 países; una cabeza europea está ajustada para matrículas de la UE. La geometría y el alfabeto del modelo de reconocimiento se leen del propio modelo, por lo que seleccionar una región es simplemente apuntar `RecognitionModelPath` a esa cabeza.
+`LicensePlateRecognizerBlock` lee matrículas de vehículos mediante una canalización especializada de dos etapas: un detector de matrículas dedicado (YOLO) localiza las matrículas en el fotograma, y luego un modelo OCR específico para matrículas lee los caracteres de cada matrícula recortada. Ambos modelos provienen de la familia FastALPR (MIT): un detector de matrículas YOLOv9-T y una cabeza de reconocimiento `fast-plate-ocr`. Una cabeza global cubre EE. UU. y más de 90 países; una cabeza europea está ajustada para matrículas de la UE. Ambas cabezas leen caracteres latinos (dígitos y A–Z) y el tamaño de entrada del modelo de reconocimiento se lee del propio modelo, por lo que seleccionar una región es simplemente apuntar `RecognitionModelPath` a esa cabeza; no se admite una cabeza entrenada con otro alfabeto.
 
 ```
 graph LR;
@@ -58018,6 +58097,8 @@ graph LR;
     LicensePlateRecognizerBlock-->VideoRendererBlock;
     LicensePlateRecognizerBlock-. OnPlateRecognized .->App[Su app];
 ```
+
+Para una visión general del reconocimiento de matrículas en .NET — casos de uso, un registro de cámara de acceso, un ejemplo de cámara IP a MP4 y la descarga de prueba — consulte [Reconocimiento de matrículas (ANPR/LPR) en C# y .NET](https://www.visioforge.com/es/solutions/license-plate-recognition-dotnet).
 
 ## Uso
 
@@ -58060,7 +58141,7 @@ Cada `LicensePlateResult` incluye el `Text` reconocido (normalizado: en mayúscu
 | `RecognitionModelPath` | — | Modelo ONNX de OCR de matrículas (cabeza `fast-plate-ocr` de FastALPR, global o UE). Obligatorio. |
 | `Provider` / `DeviceId` | `Auto` / `0` | Proveedor de ejecución ONNX e índice del dispositivo de hardware. |
 | `FramesToSkip` | `0` | Omite fotogramas entre ejecuciones de reconocimiento en vídeo en directo. |
-| `DetectionInputSize` | `640` | Tamaño de entrada cuadrado para el modelo de detección (modelos de forma dinámica). |
+| `DetectionInputSize` | `640` | Tamaño de entrada cuadrado para el modelo de detección (solo modelos de forma dinámica; un modelo de tamaño fijo, como el detector de 640, usa su propio tamaño). |
 | `DetectionConfidenceThreshold` | `0.35` | Puntuación mínima del detector que debe alcanzar un cuadro de matrícula. |
 | `OcrConfidenceThreshold` | `0.3` | Confianza media mínima del OCR que debe alcanzar una matrícula reconocida para ser reportada. |
 | `MaxDetections` | `10` | Número máximo de matrículas detectadas por fotograma. |
@@ -58097,14 +58178,14 @@ Consulte [Uso de bloques de IA con VideoCaptureCoreX y MediaPlayerCoreX](../x-en
 
 | Síntoma | Causa probable | Solución |
 | --- | --- | --- |
-| No se detecta ninguna matrícula | `DetectionConfidenceThreshold` demasiado alto, o la matrícula es demasiado pequeña respecto a `DetectionInputSize` | Reduzca `DetectionConfidenceThreshold`; aumente `DetectionInputSize` para matrículas distantes o pequeñas, o recorte más cerca del vehículo antes en la canalización. |
+| No se detecta ninguna matrícula | `DetectionConfidenceThreshold` demasiado alto, o la matrícula es demasiado pequeña en el fotograma | Reduzca `DetectionConfidenceThreshold`; para matrículas distantes o pequeñas, acerque la cámara o recorte más cerca del vehículo antes en la canalización. |
 | Se detecta la matrícula pero el texto es incorrecto o está vacío | `OcrConfidenceThreshold` demasiado alto, o cabeza de reconocimiento regional incorrecta | Reduzca `OcrConfidenceThreshold`; confirme que `RecognitionModelPath` corresponde a su región (cabeza global o UE). |
 | Solo se reportan algunas matrículas en una escena concurrida | Se alcanzó `MaxDetections` | Aumente `MaxDetections` si espera más de 10 matrículas por fotograma. |
 | El texto de la matrícula incluye caracteres extraños | Se lee directamente de `LicensePlateResult.Text` esperando el OCR sin procesar | `Text` ya está normalizado (mayúsculas, sin caracteres no alfanuméricos) — si aún ve ruido, compruebe que se cargó la cabeza de reconocimiento regional correcta. |
 
 ## Preguntas frecuentes
 
-### ¿Este SDK ANPR funciona fuera de EE. UU. y Europa?
+### ¿LicensePlateRecognizerBlock funciona fuera de EE. UU. y Europa?
 
 La cabeza de reconocimiento global de FastALPR cubre EE. UU. y más de 90 países; existe una cabeza europea independiente ajustada para matrículas de la UE. Apunte `RecognitionModelPath` a la cabeza que corresponda a su región objetivo.
 
@@ -58127,10 +58208,10 @@ Las matrículas suelen tratarse como datos personales bajo las regulaciones de p
 ---END OF PAGE---
 
 
-## SDK de seguimiento de objetos .NET — ObjectAnalyticsBlock
+## ObjectAnalyticsBlock — seguimiento de objetos en .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/object-analytics/
-**Description:** SDK de seguimiento de objetos .NET — seguimiento multiobjeto ByteTrack, líneas de conteo y ocupación de zonas poligonales con ObjectAnalyticsBlock.
-**Tags:** .NET, AI, ONNX, Object Tracking, Object Tracking SDK, ByteTrack, Tripwire, Polygon Zone, People Counting, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** Seguimiento de objetos en .NET — seguimiento multiobjeto ByteTrack, líneas de conteo y ocupación de zonas poligonales con ObjectAnalyticsBlock.
+**Tags:** .NET, AI, ONNX, Object Tracking, ByteTrack, Tripwire, Polygon Zone, People Counting, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** ObjectAnalyticsBlock, ObjectAnalyticsSettings, ByteTrackerSettings, DetectionFilterSettings, ObjectAnalyticsOverlaySettings, LineZoneSettings, PolygonZoneSettings, LineCrossingResult, PolygonZoneSnapshot
 
 # Análisis de objetos — seguimiento multiobjeto, líneas de conteo y zonas poligonales
@@ -58374,10 +58455,10 @@ No hay un límite fijo en la API — `ObjectAnalyticsSettings.Lines` y `.Zones` 
 ---END OF PAGE---
 
 
-## Detección de Objetos .NET — YOLOObjectDetectorBlock
+## YOLOObjectDetectorBlock — detección de objetos en .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/object-detection/
-**Description:** SDK de detección de objetos para .NET con YOLOObjectDetectorBlock. Modelos ONNX YOLOv8, YOLOX y RT-DETR, multiplataforma, CPU o GPU.
-**Tags:** .NET, AI, ONNX, YOLO, Object Detection, Object Detection SDK, Computer Vision, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** Detección de objetos en video para .NET con YOLOObjectDetectorBlock. Modelos ONNX YOLOv8, YOLOX y RT-DETR, multiplataforma, CPU o GPU.
+**Tags:** .NET, AI, ONNX, YOLO, Object Detection, Computer Vision, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** YOLOObjectDetectorBlock, YoloDetectorSettings, ObjectDetectorModel, OnnxDetection
 
 # Detección de objetos — YOLOObjectDetectorBlock
@@ -58539,10 +58620,10 @@ Las demos dedicadas de detección de objetos para `VideoCaptureCoreX`/`MediaPlay
 ---END OF PAGE---
 
 
-## SDK de OCR para .NET — OcrBlock y Reconocimiento de Texto
+## OCR en C# para video e imágenes — OcrBlock con PaddleOCR
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/ocr/
-**Description:** SDK de OCR para .NET — reconoce texto en video e imágenes con OcrBlock (ONNX Runtime + PaddleOCR). C# multiplataforma en Windows, macOS, Linux, Android, iOS.
-**Tags:** .NET, AI, OCR, OCR SDK, ONNX, PaddleOCR, Text Recognition, Computer Vision, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** Referencia de OcrBlock — modelos, ajustes y solución de problemas para reconocer texto en video e imágenes con ONNX Runtime y PaddleOCR en C#, multiplataforma.
+**Tags:** .NET, AI, OCR, ONNX, PaddleOCR, Text Recognition, Computer Vision, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** OcrBlock, OcrSettings, OcrTextRegion, OcrPoint
 
 # Reconocimiento de texto OCR — OcrBlock
@@ -58555,6 +58636,8 @@ graph LR;
     OcrBlock-->VideoRendererBlock;
     OcrBlock-. OnTextDetected .->App[Su aplicación];
 ```
+
+Para una visión general del OCR en flujos de video — casos de uso, un ejemplo de RTSP a MP4 y la descarga de prueba — consulte [OCR en el dispositivo para flujos de video en .NET](https://www.visioforge.com/es/solutions/video-ocr-dotnet).
 
 ## Uso
 
@@ -58688,7 +58771,7 @@ Las demos dedicadas de OCR para `VideoCaptureCoreX`/`MediaPlayerCoreX` (`Capture
 ---END OF PAGE---
 
 
-## SDK ONNX Runtime para .NET — Guía de OnnxInferenceBlock
+## OnnxInferenceBlock — modelos ONNX Runtime propios en .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/onnx-inference/
 **Description:** Ejecute cualquier modelo ONNX Runtime personalizado sobre video en vivo en .NET con OnnxInferenceBlock y obtenga tensores en bruto.
 **Tags:** .NET, AI, ONNX, ONNX Runtime, Inference, Custom Model, VideoCaptureCoreX, MediaPlayerCoreX
@@ -59105,7 +59188,7 @@ Las demos dedicadas construidas sobre Media Blocks, `VideoCaptureCoreX` y `Media
 ---END OF PAGE---
 
 
-## SDK de Redacción de PII para .NET — PIIRedactionBlock
+## PIIRedactionBlock — redacción de PII en vídeo para .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/pii-redaction/
 **Description:** Redacte PII en vídeo en el dispositivo con PIIRedactionBlock: difumine o pixele rostros, matrículas y texto. Compatible con RGPD/CCPA/BIPA, sin nube.
 **Tags:** .NET, AI, ONNX, PII Redaction, Video Anonymization, Face Blur, License Plate Redaction, GDPR, Privacy, VideoCaptureCoreX, MediaPlayerCoreX
@@ -59381,7 +59464,7 @@ No. La redacción sobrescribe los píxeles de cada región directamente en el fo
 ---END OF PAGE---
 
 
-## SDK de auto-seguimiento PTZ para .NET — cámara ONVIF
+## Auto-seguimiento PTZ en C# y .NET — control de cámara ONVIF
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/ptz-auto-tracking/
 **Description:** Auto-seguimiento PTZ para .NET: una cámara PTZ ONVIF sigue un objeto detectado. Control proporcional paneo/inclinación/zoom con zona muerta y seguimiento fijo.
 **Tags:** .NET, AI, ONVIF, PTZ, Auto-Tracking, Object Tracking, ObjectAnalyticsBlock, VideoCaptureCoreX, MediaBlocksPipeline
@@ -59941,10 +60024,10 @@ Las demos dedicadas construidas sobre Media Blocks y `MediaPlayerCoreX` (`Semant
 ---END OF PAGE---
 
 
-## Diarización de hablantes .NET — SpeakerDiarizationBlock
+## SpeakerDiarizationBlock — diarización de hablantes .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/speaker-diarization/
 **Description:** Diarización de hablantes en el dispositivo para .NET — «quién habló y cuándo» en audio grabado con pyannote, embeddings WeSpeaker y transcripciones diarizadas.
-**Tags:** .NET, AI, Speaker Diarization, Diarization SDK, Who Spoke When, Speaker Segmentation, Speaker Embedding, VideoCaptureCoreX, MediaPlayerCoreX
+**Tags:** .NET, AI, Speaker Diarization, Who Spoke When, Speaker Segmentation, Speaker Embedding, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** SpeakerDiarizationBlock, SpeakerDiarizationSettings, SpeakerSegment, SpeakerSegmentEventArgs, DiarizedTranscriptBuilder, DiarizedTranscriptSegment
 
 # Diarización de hablantes — SpeakerDiarizationBlock
@@ -60207,13 +60290,13 @@ El modelo de segmentación es independiente del idioma, así que funciona con cu
 ---END OF PAGE---
 
 
-## SDK de voz a texto para .NET — SpeechToTextBlock (Whisper)
+## SpeechToTextBlock — Referencia de voz a texto para .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/general/ai/speech-to-text/
-**Description:** SDK de voz a texto para .NET — transcribe audio en vivo o de archivo en el dispositivo con Whisper ASR y Silero VAD, con SRT/VTT y subtítulos en vivo.
-**Tags:** .NET, AI, Whisper, Speech-to-Text, Speech-to-Text SDK, Speech Recognition, Live Subtitles, Transcription, VideoCaptureCoreX, MediaPlayerCoreX
+**Description:** Referencia de SpeechToTextBlock — transcriba audio en el dispositivo con Whisper en C#; ajustes, Silero VAD, modelos, SRT/VTT y solución de problemas.
+**Tags:** .NET, AI, Whisper, Speech-to-Text, Speech Recognition, Transcription, VideoCaptureCoreX, MediaPlayerCoreX
 **API:** SpeechToTextBlock, SpeechToTextSettings, SileroVadSettings, SpeechSegment, SubtitleWriter, SubtitleRenderer, SubtitleStyle
 
-# Voz a texto y subtítulos en vivo — SpeechToTextBlock
+# Referencia de voz a texto — SpeechToTextBlock
 
 `SpeechToTextBlock` es un Media Block exclusivamente de audio de `VisioForge.DotNet.Core.AI.Whisper`. Intercepta el flujo de audio, segmenta la voz con Silero VAD, la transcribe con Whisper (Whisper.net / GGML) y dispara `OnSpeechRecognized`. El audio pasa sin cambios. El bloque implementa `IAudioProcessingBlock`, por lo que puede insertarse en un pipeline manual o registrarse directamente en `VideoCaptureCoreX`/`MediaPlayerCoreX`.
 
@@ -60221,6 +60304,8 @@ El modelo de segmentación es independiente del idioma, así que funciona con cu
 using VisioForge.Core.MediaBlocks.AI;
 using VisioForge.Core.Types.X.AI;
 ```
+
+Para un tutorial paso a paso — transcribir un archivo, subtitular una fuente en vivo y mostrar subtítulos sobre el video — consulte [Subtítulos en vivo y voz a texto en C# .NET (Whisper)](../../../mediablocks/Guides/live-subtitles-whisper-csharp/).
 
 ## Configuración básica del bloque
 
@@ -60481,7 +60566,7 @@ Sí — establezca `SpeechToTextSettings.Task = SpeechToTextTask.Translate`.
 
 ### ¿Cómo obtengo subtítulos en pantalla en vivo en lugar de solo un evento?
 
-Conecte `SubtitleRenderer.OnSpeechRecognized` como el manejador de eventos del bloque contra un `OverlayManagerBlock` — consulte [SubtitleRenderer — subtítulos en pantalla](#subtitlerenderer-subtitulos-en-pantalla). Si solo necesita archivos SRT/VTT, establezca `OutputSrtPath`/`OutputVttPath` en su lugar.
+Conecte `SubtitleRenderer.OnSpeechRecognized` como el manejador de eventos del bloque contra un `OverlayManagerBlock` — consulte [SubtitleRenderer — subtítulos en pantalla](#subtitlerenderer-subtitulos-en-pantalla). Si solo necesita archivos SRT/VTT, establezca `OutputSrtPath`/`OutputVttPath` en su lugar. Para un recorrido completo, consulte el [tutorial de subtítulos en vivo](../../../mediablocks/Guides/live-subtitles-whisper-csharp/).
 
 ### ¿Qué tamaño de modelo Whisper debería usar?
 
@@ -75878,6 +75963,8 @@ Nuestros SDKs integran RTSP con códecs estándar de la industria como **H.264 (
 
 Esta guía profundiza en los detalles de la implementación de la transmisión RTSP utilizando los SDKs de VisioForge, cubriendo tanto enfoques modernos multiplataforma como métodos heredados específicos de Windows.
 
+¿Necesita recibir vídeo de una cámara RTSP en lugar de servir un flujo? [Video Capture SDK .NET](https://www.visioforge.com/es/video-capture-sdk-net) se conecta a cámaras IP RTSP y ONVIF y las graba en MP4 en el mismo pipeline; consulte la [guía de fuentes de cámaras RTSP](../../../videocapture/video-sources/ip-cameras/rtsp/).
+
 ## Salida RTSP multiplataforma (recomendado)
 
 [VideoCaptureCoreX](#) [MediaBlocksPipeline](#)
@@ -76175,7 +76262,7 @@ SRT (Secure Reliable Transport) es un protocolo de transmisión diseñado para e
 - Transporte de video seguro punto a punto
 - Ingesta y distribución de video basada en la nube
 
-Los SDK de VisioForge .NET soportan tanto el envío como la recepción de flujos SRT en Windows, macOS y Linux. Los flujos SRT usan multiplexación MPEG-TS para transportar video y audio juntos.
+Los SDK de VisioForge .NET soportan tanto el envío como la recepción de flujos SRT en Windows, macOS, Mac Catalyst, Linux, iOS y Android. Los flujos SRT usan multiplexación MPEG-TS para transportar video y audio juntos.
 
 Puede verificar la disponibilidad de SRT en tiempo de ejecución:
 
@@ -76183,6 +76270,8 @@ Puede verificar la disponibilidad de SRT en tiempo de ejecución:
 bool srtAvailable = SRTSinkBlock.IsAvailable(); // para enviar
 bool srtSourceAvailable = SRTSourceBlock.IsAvailable(); // para recibir
 ```
+
+En Windows, macOS y Mac Catalyst, el plugin SRT se distribuye en el paquete de runtime `Adds`, no en el principal: `VisioForge.CrossPlatform.Core.Windows.Adds.x64` (o sus variantes x86 y arm64), `VisioForge.CrossPlatform.Core.macOS.Adds` o `VisioForge.CrossPlatform.Core.macCatalyst.Adds`. Agréguelo junto al paquete de runtime principal, o `IsAvailable()` devolverá `false`. Los paquetes de runtime de iOS y Android incluyen SRT. En Linux el SDK usa el GStreamer del sistema; en Ubuntu y Debian, SRT forma parte de `gstreamer1.0-plugins-bad`.
 
 ## Modos de conexión SRT
 
@@ -76213,10 +76302,12 @@ var sinkSettings = new SRTSinkSettings
 El caller se conecta a un listener SRT remoto:
 
 ```
-// SRTSourceSettings tiene un ctor privado — use la factoría CreateAsync. Uri es System.Uri, no string.
+// CreateAsync lee las pistas del flujo antes de retornar, así que el emisor debe estar en marcha. Uri es System.Uri, no string.
 var sourceSettings = await SRTSourceSettings.CreateAsync(new Uri("srt://192.168.1.100:8888"));
 sourceSettings.Mode = SRTConnectionMode.Caller;
 ```
+
+`CreateAsync` se conecta solo con la URI, así que lo que necesite esa primera conexión va en la consulta de la URI: un receptor en modo listener usa `srt://0.0.0.0:8888?mode=listener`, y un servidor que exige un stream ID recibe `?streamid=...`.
 
 ### Modo Rendezvous
 
@@ -76242,6 +76333,8 @@ var srtOutput = new SRTOutput("srt://streaming-server:1234");
 // Agregar la salida SRT configurada a su motor de captura
 videoCapture.Outputs_Add(srtOutput, true);  // videoCapture es una instancia de VideoCaptureCoreX
 ```
+
+En Video Capture SDK .NET, `SRTOutput` requiere la edición Premium, y un flujo SRT usado como `Video_Source` requiere la edición Professional.
 
 ### Media Blocks SDK
 
@@ -76365,20 +76458,34 @@ var sinkSettings = new SRTSinkSettings
 {
     Uri = "srt://:8888",
     Mode = SRTConnectionMode.Listener,
-    Passphrase = "my-secret-passphrase",  // mínimo 10 caracteres
+    Passphrase = "my-secret-passphrase",  // de 10 a 79 bytes en UTF-8
     PbKeyLen = SRTKeyLength.Length32       // AES de 256 bits
 };
 ```
 
 ### Receptor (cifrado)
 
+`SRTSourceSettings.CreateAsync` abre el flujo solo con la URI para leer sus pistas antes de retornar, así que si lo usa con un flujo cifrado, ponga la contraseña en la URI como parámetros de consulta `passphrase` y `pbkeylen`. Una contraseña ocupa de 10 a 79 bytes en UTF-8, es decir, de 10 a 79 caracteres si son letras latinas y dígitos; en una URI, use letras, dígitos, `-`, `_`, `.` y `~`:
+
 ```
-// Use la factoría async — SRTSourceSettings tiene un ctor privado; Uri es System.Uri, no string.
-var sourceSettings = await SRTSourceSettings.CreateAsync(new Uri("srt://192.168.1.100:8888"));
-sourceSettings.Mode = SRTConnectionMode.Caller;
-sourceSettings.Passphrase = "my-secret-passphrase";
-sourceSettings.PbKeyLen = SRTKeyLength.Length32;
+// CreateAsync lee el flujo solo con la URI, así que la contraseña y la longitud de clave van en la consulta
+var sourceSettings = await SRTSourceSettings.CreateAsync(
+    new Uri("srt://192.168.1.100:8888?passphrase=my-secret-passphrase&pbkeylen=32"));
 ```
+
+Con Media Blocks SDK .NET puede omitir `CreateAsync` y establecer la contraseña como propiedad. Así no aparece en la URI y puede contener cualquier carácter. `SRTSourceBlock` no conoce las pistas de antemano, así que crea una salida de video y otra de audio:
+
+```
+var sourceSettings = new SRTSourceSettings
+{
+    Uri = new Uri("srt://192.168.1.100:8888"),
+    Passphrase = "my secret passphrase!",
+    PbKeyLen = SRTKeyLength.Length32
+};
+var srtSource = new SRTSourceBlock(sourceSettings);
+```
+
+Para un flujo solo de video, pase `renderAudio: false`.
 
 Longitudes de clave disponibles: `SRTKeyLength.NoKey` (deshabilitado), `Length16` (128 bits), `Length24` (192 bits), `Length32` (256 bits).
 
@@ -76477,6 +76584,15 @@ De forma predeterminada, el SDK usa AVENC AAC en todas las plataformas.
 - Verifique que los controladores de GPU estén actualizados para codificadores de hardware
 - Retroceda a OpenH264 como codificador de software universal
 
+### La detención se bloquea después de que el otro lado se desconecta
+
+**Síntoma:** `StopAsync` no retorna después de que el par remoto deja de estar accesible.
+
+**Soluciones:**
+
+- En Windows, macOS, Mac Catalyst, iOS y Android, use los paquetes de VisioForge (en Windows, macOS y Mac Catalyst, el paquete `Adds`): incluyen un plugin SRT parcheado que vuelve a leer su propiedad `auto-reconnect` antes de cada intento de reconexión. El SDK desactiva esa propiedad al detener, así que la detención retorna aunque el par haya desaparecido
+- En Linux el SDK usa el plugin SRT de la distribución, que no incluye este parche. Si la detención se bloquea allí, establezca `AutoReconnect = false` en la configuración: la pérdida del par termina entonces el flujo con un error en lugar de un bucle de reconexión
+
 ## Preguntas frecuentes
 
 ### ¿Cuál es la diferencia entre los modos caller y listener de SRT?
@@ -76485,7 +76601,7 @@ El **listener** se vincula a un puerto y espera conexiones entrantes — actúa 
 
 ### ¿Cómo cifro un flujo SRT?
 
-Establezca la propiedad `Passphrase` (mínimo 10 caracteres) y `PbKeyLen` tanto en `SRTSinkSettings` como en `SRTSourceSettings`. Tanto el emisor como el receptor deben usar valores idénticos. Las longitudes de clave disponibles son 128 bits (`Length16`), 192 bits (`Length24`) y 256 bits (`Length32`). Consulte la sección [Cifrado](#cifrado) para ejemplos de código.
+En el emisor, establezca `Passphrase` (de 10 a 79 bytes en UTF-8) y `PbKeyLen` en `SRTSinkSettings`. En el receptor, pase los mismos valores en la URI que recibe `SRTSourceSettings.CreateAsync` (`srt://host:8888?passphrase=...&pbkeylen=32`), porque `CreateAsync` abre el flujo solo con la URI; en una URI, use letras, dígitos, `-`, `_`, `.` y `~`. Con Media Blocks SDK .NET puede, en cambio, establecer `Passphrase` y `PbKeyLen` en un nuevo `SRTSourceSettings` y omitir `CreateAsync`. Ambos lados deben usar valores idénticos. Las longitudes de clave disponibles son 128 bits (`Length16`), 192 bits (`Length24`) y 256 bits (`Length32`). Consulte la sección [Cifrado](#cifrado) para ejemplos de código.
 
 ### ¿Cómo recibo y reproduzco un flujo SRT en C#?
 
@@ -90866,6 +90982,8 @@ var password = "YourPassword";
 
 Pour accéder au sous-flux, ajoutez le paramètre `?resolution=640x480`.
 
+Pour prévisualiser et enregistrer des caméras Axis en MP4 depuis une application C#, [Video Capture SDK .NET](https://www.visioforge.com/fr/video-capture-sdk-net) prend l'URL RTSP ci-dessus et gère le décodage et l'enregistrement dans un seul pipeline, sans bibliothèque cliente RTSP séparée.
+
 ### Découverte ONVIF
 
 Axis était membre fondateur d'ONVIF et possède une conformité ONVIF de référence dans l'industrie. Consultez le [guide d'intégration ONVIF](../../mediablocks/Sources/) pour des exemples de code de découverte.
@@ -91788,6 +91906,8 @@ var password = "YourPassword";
 ```
 
 Pour accéder au sous-flux, utilisez `subtype=1` au lieu de `subtype=0`.
+
+Pour prévisualiser et enregistrer des caméras CP Plus en MP4 depuis une application C#, [Video Capture SDK .NET](https://www.visioforge.com/fr/video-capture-sdk-net) prend l'URL RTSP ci-dessus et gère le décodage et l'enregistrement dans un seul pipeline, sans bibliothèque cliente RTSP séparée.
 
 ## URL de capture instantanée et MJPEG
 
@@ -92773,6 +92893,8 @@ var password = "ABCDEF"; // code de vérification depuis l'étiquette de la cam�
 ```
 
 Pour accéder au sous-flux, utilisez `/h264/ch1/sub/av_stream` à la place.
+
+Pour prévisualiser et enregistrer des caméras EZVIZ dont le RTSP est activé en MP4 depuis une application C#, [Video Capture SDK .NET](https://www.visioforge.com/fr/video-capture-sdk-net) prend l'URL RTSP ci-dessus et gère le décodage et l'enregistrement dans un seul pipeline, sans bibliothèque cliente RTSP séparée.
 
 ## URL de capture
 
@@ -94036,6 +94158,8 @@ var password = "YourPassword";
 ```
 
 Pour accéder au sous-flux, utilisez `subtype=1` au lieu de `subtype=0`.
+
+Pour prévisualiser et enregistrer des caméras Imou en MP4 depuis une application C#, [Video Capture SDK .NET](https://www.visioforge.com/fr/video-capture-sdk-net) prend l'URL RTSP ci-dessus et gère le décodage et l'enregistrement dans un seul pipeline, sans bibliothèque cliente RTSP séparée.
 
 ## URL de capture instantanée et MJPEG
 
@@ -97786,6 +97910,8 @@ var password = "YourPassword";
 
 Pour accéder au sous-flux, utilisez `subtype=1` à la place de `subtype=0`.
 
+Pour prévisualiser et enregistrer des caméras Tiandy en MP4 depuis une application C#, [Video Capture SDK .NET](https://www.visioforge.com/fr/video-capture-sdk-net) prend l'URL RTSP ci-dessus et gère le décodage et l'enregistrement dans un seul pipeline, sans bibliothèque cliente RTSP séparée.
+
 ## URL de capture instantanée et MJPEG
 
 | Type | Modèle d'URL | Notes |
@@ -99577,6 +99703,16 @@ Le paquet `VisioForge.CrossPlatform.Core.Android` embarque les bibliothèques na
 - `libusb1.0.so` — libusb 1.0.30, lié dynamiquement et distribué sous licence LGPL v2.1 ou ultérieure.
 
 Les mentions légales complètes, y compris les deux textes de licence, sont fournies avec le paquet dans `THIRD-PARTY-NOTICES.txt`.
+
+### Vision par ordinateur avec OpenCV
+
+Pour les blocs OpenCV (`VisioForge.Core.MediaBlocks.OpenCV`, dont `VideoStabilizationBlock`), ajoutez aussi [VisioForge.CrossPlatform.OpenCV.Android](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Android) :
+
+```
+<PackageReference Include="VisioForge.CrossPlatform.OpenCV.Android" Version="2026.*" />
+```
+
+Le paquet ajoute un plugin GStreamer dans lequel OpenCV est lié, pour `arm64-v8a` et `x86_64`, ainsi que les fichiers de cascade Haar que `CVFaceDetectBlock`, `CVFaceBlurBlock` et `CVHandDetectBlock` chargent par défaut ; le SDK charge le plugin à l'initialisation et extrait les cascades dans le répertoire de cache de code de l'application à la première utilisation. Un nom de fichier seul est cherché dans les ressources `opencv/` de l'application, où le paquet place ses cascades ; toute autre cascade s'indique par le chemin complet du fichier, par exemple un fichier que l'application a copié dans son répertoire de fichiers. Sur les appareils `armeabi-v7a` et `x86`, et sans le paquet, la méthode `IsAvailable()` de chaque bloc OpenCV renvoie `false`.
 
 ### Autorisations pour les caméras USB
 
@@ -101679,7 +101815,7 @@ Visitez notre page [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) po
 ---END OF PAGE---
 
 
-## Détection d'événements audio en .NET — YAMNet AudioSet
+## AudioEventDetectorBlock — détection d'événements audio .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/audio-event-detection/
 **Description:** Détectez des sons réels — sirène, aboiement, bris de verre, alarme, musique, parole — dans l'audio en direct ou fichier avec YAMNet AudioSet, sur l'appareil.
 
@@ -101856,9 +101992,9 @@ La démo `Audio Event Detection Demo` (Media Blocks pour WPF — téléchargemen
 ---END OF PAGE---
 
 
-## SDK .NET de recadrage automatique par IA — AutoReframeBlock
+## AutoReframeBlock — recadrage automatique par IA en .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/auto-reframe/
-**Description:** SDK de recadrage automatique par IA pour .NET — convertissez la vidéo horizontale en verticale 9:16 pour Shorts/Reels/TikTok qui suit le sujet, avec ONNX YOLO.
+**Description:** AutoReframeBlock pour .NET — convertissez la vidéo horizontale en verticale 9:16 pour Shorts/Reels/TikTok qui suit le sujet, avec ONNX YOLO.
 
 # Recadrage automatique par IA (vidéo verticale qui suit le sujet) — AutoReframeBlock
 
@@ -101997,9 +102133,9 @@ Utilisez-le pour piloter une superposition à l'écran de la zone de recadrage, 
 ---END OF PAGE---
 
 
-## Suppression d'arrière-plan SDK .NET — BackgroundRemovalBlock
+## BackgroundRemovalBlock — suppression d'arrière-plan .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/background-removal/
-**Description:** Suppression d'arrière-plan SDK .NET — floutez, remplacez ou rendez transparent le fond vidéo sur l'appareil avec BackgroundRemovalBlock et des modèles ONNX.
+**Description:** Suppression d'arrière-plan en .NET — floutez, remplacez ou rendez transparent le fond vidéo sur l'appareil avec BackgroundRemovalBlock et des modèles ONNX.
 
 # Suppression d'arrière-plan par IA (matting) — BackgroundRemovalBlock
 
@@ -102158,11 +102294,11 @@ Oui — définissez `ReplacementMode = BackgroundReplacementMode.Transparent`. L
 ---END OF PAGE---
 
 
-## SDK de reconnaissance faciale .NET — FaceRecognitionBlock
+## FaceRecognitionBlock — reconnaissance faciale en .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/face-recognition/
-**Description:** SDK de reconnaissance faciale .NET — FaceRecognitionBlock détecte et identifie les visages en local (YuNet + SFace/ArcFace ONNX), multiplateforme, sans cloud.
+**Description:** Reconnaissance faciale en .NET — FaceRecognitionBlock détecte et identifie les visages en local (YuNet + SFace/ArcFace ONNX), multiplateforme, sans cloud.
 
-# SDK de reconnaissance faciale pour .NET — FaceRecognitionBlock
+# Reconnaissance faciale pour .NET — FaceRecognitionBlock
 
 `FaceRecognitionBlock` est le composant de reconnaissance faciale des paquets IA .NET de VisioForge — il reconnaît **qui** se trouve dans l'image, en local, sans API cloud. Il exécute un pipeline en deux étapes : un détecteur YuNet localise les visages et leurs cinq points de repère, chaque visage est aligné sur un recadrage canonique de 112x112 puis transformé en embedding (SFace ou ArcFace), et l'embedding est comparé 1:N à une `FaceGallery` inscrite par similarité cosinus. La reconnaissance s'exécute sur un thread d'arrière-plan, si bien que la vidéo en direct ne se bloque jamais ; le thread de diffusion se contente de dessiner les résultats les plus récents.
 
@@ -102285,21 +102421,21 @@ Consultez [Utiliser les blocs IA avec VideoCaptureCoreX et MediaPlayerCoreX](../
 
 ## Foire aux questions
 
-### Ce SDK de reconnaissance faciale est-il basé sur le cloud ou local ?
+### FaceRecognitionBlock est-il basé sur le cloud ou local ?
 
 Entièrement local. `FaceRecognitionBlock` exécute la détection YuNet et l'embedding SFace/ArcFace via une inférence ONNX Runtime locale — aucune image ni aucun embedding n'est envoyé à un service externe.
 
-### Puis-je utiliser ce SDK de reconnaissance faciale depuis C# ?
+### Puis-je utiliser FaceRecognitionBlock depuis C# ?
 
-Oui — l'ensemble du SDK, y compris `FaceRecognitionBlock`, `FaceRecognitionSettings` et `FaceGallery`, est une API C#/.NET native (`VisioForge.DotNet.Core.AI`), utilisable depuis n'importe quelle application .NET sous Windows, macOS, Linux, Android ou iOS.
+Oui — `FaceRecognitionBlock`, `FaceRecognitionSettings` et `FaceGallery` font partie de l'API C#/.NET native (`VisioForge.DotNet.Core.AI`), utilisable depuis n'importe quelle application .NET sous Windows, macOS, Linux, Android ou iOS.
 
 ### Comment inscrire une nouvelle personne ?
 
 Appelez `FaceRecognitionBlock.Enroll(name, imagePath)` ou `Enroll(name, SKBitmap)` avec une ou plusieurs photos nettes de la personne ; le bloc calcule l'embedding et l'ajoute à `Gallery` pour vous. Persistez la galerie avec `FaceGallery.Save(path)` et restaurez-la plus tard avec `FaceGallery.Load(path)`.
 
-### Le SDK inclut-il la détection de visages sans reconnaissance ?
+### FaceRecognitionBlock inclut-il la détection de visages sans reconnaissance ?
 
-Oui, indirectement — `FaceRecognitionResult` renvoie `DetectionScore` et `BoundingBox` pour chaque visage détecté, qu'il corresponde ou non à une entrée de la galerie. Laissez `Gallery` vide pour utiliser le bloc comme un simple détecteur de visages.
+Pas comme un mode à part. `FaceRecognitionResult` renvoie `DetectionScore` et `BoundingBox` pour chaque visage détecté, qu'il corresponde ou non à une entrée de la galerie, mais une `Gallery` vide ne fait que sauter la comparaison : le modèle d'embedding reste obligatoire et s'exécute pour chaque visage. Un détecteur plus léger est le [bloc CV Face Detect](../../../mediablocks/OpenCV/#bloc-cv-face-detect) : il utilise des cascades de Haar, est moins précis que YuNet et n'est pas disponible sur Android.
 
 ### SFace ou ArcFace, lequel est le meilleur ?
 
@@ -102316,9 +102452,9 @@ Des démos dédiées `VideoCaptureCoreX`/`MediaPlayerCoreX` pour la reconnaissan
 ---END OF PAGE---
 
 
-## SDK IA pour .NET — vidéo et Speech-to-Text embarqués
+## IA embarquée pour .NET — blocs vidéo et Speech-to-Text
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/
-**Description:** SDK IA embarqué pour .NET — OCR, détection d'objets, reconnaissance faciale, ANPR, suppression d'arrière-plan et Whisper. Multiplateforme, sans cloud.
+**Description:** Blocs d'IA embarqués pour .NET — OCR, détection d'objets, reconnaissance faciale, ANPR, suppression d'arrière-plan et Whisper. Multiplateforme, sans cloud.
 
 # IA dans VisioForge .NET SDK
 
@@ -102361,7 +102497,7 @@ Les deux paquets référencent les types du SDK principal. Ajoutez les mêmes pa
 | `BackgroundRemovalBlock` | Vidéo | aucun | Remplacer, flouter ou rendre transparent l'arrière-plan. | [Suppression d'arrière-plan](background-removal/) |
 | `AutoReframeBlock` | Vidéo | `OnReframeUpdated` | Recadrer des séquences horizontales en vidéo verticale 9:16 qui suit le sujet. | [Recadrage automatique](auto-reframe/) |
 | `OnnxInferenceBlock` | Vidéo | `OnInference` | Exécuter un modèle ONNX personnalisé et recevoir les tenseurs de sortie bruts. | [Inférence ONNX](onnx-inference/) |
-| `SpeechToTextBlock` | Audio | `OnSpeechRecognized` | Transcrire l'audio en direct ou depuis un fichier avec Whisper. | [Speech-to-text](speech-to-text/) |
+| `SpeechToTextBlock` | Audio | `OnSpeechRecognized` | Transcrire l'audio en direct ou depuis un fichier avec Whisper. | [Reconnaissance vocale](speech-to-text/) |
 
 ## Compréhension et recherche vidéo
 
@@ -102432,9 +102568,10 @@ Blocs IA vidéo (`VisioForge.DotNet.Core.AI`) :
 - [Recadrage automatique — vidéo verticale qui suit le sujet](auto-reframe/)
 - [Inférence ONNX générique](onnx-inference/)
 
-Speech-to-text (`VisioForge.DotNet.Core.AI.Whisper`) :
+Reconnaissance vocale (`VisioForge.DotNet.Core.AI.Whisper`) :
 
-- [Speech-to-text et sous-titres en direct](speech-to-text/)
+- [Référence SpeechToTextBlock](speech-to-text/)
+- [Sous-titres en direct (Whisper)](../../mediablocks/Guides/live-subtitles-whisper-csharp/)
 
 Intégration au moteur :
 
@@ -102469,13 +102606,13 @@ Oui. Enchaînez plusieurs blocs vidéo (par exemple `OcrBlock` puis `BackgroundR
 ---END OF PAGE---
 
 
-## SDK ANPR/LPR pour .NET — LicensePlateRecognizerBlock
+## LicensePlateRecognizerBlock — Référence ANPR/LPR pour .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/license-plate-recognition/
-**Description:** SDK ANPR/LPR pour .NET — lisez les plaques avec LicensePlateRecognizerBlock (détecteur FastALPR + OCR ONNX de plaques), sur l'appareil, multiplateforme.
+**Description:** Référence LicensePlateRecognizerBlock — modèles, têtes régionales, paramètres et dépannage pour lire les plaques en C# avec ONNX Runtime, sur l'appareil.
 
 # Reconnaissance de plaques d'immatriculation (ANPR) — LicensePlateRecognizerBlock
 
-`LicensePlateRecognizerBlock` lit les plaques d'immatriculation des véhicules grâce à un pipeline spécialisé en deux étapes : un détecteur de plaques dédié (YOLO) localise les plaques dans l'image, puis un modèle OCR spécifique aux plaques lit les caractères de chaque plaque recadrée. Les deux modèles proviennent de la famille FastALPR (MIT) : un détecteur de plaques YOLOv9-T et une tête de reconnaissance `fast-plate-ocr`. Une tête globale couvre les États-Unis et plus de 90 pays ; une tête européenne est optimisée pour les plaques de l'UE. La géométrie et l'alphabet du modèle de reconnaissance sont lus directement dans le modèle, si bien que sélectionner une région consiste simplement à pointer `RecognitionModelPath` vers cette tête.
+`LicensePlateRecognizerBlock` lit les plaques d'immatriculation des véhicules grâce à un pipeline spécialisé en deux étapes : un détecteur de plaques dédié (YOLO) localise les plaques dans l'image, puis un modèle OCR spécifique aux plaques lit les caractères de chaque plaque recadrée. Les deux modèles proviennent de la famille FastALPR (MIT) : un détecteur de plaques YOLOv9-T et une tête de reconnaissance `fast-plate-ocr`. Une tête globale couvre les États-Unis et plus de 90 pays ; une tête européenne est optimisée pour les plaques de l'UE. Les deux têtes lisent les caractères latins (chiffres et A–Z) et la taille d'entrée du modèle de reconnaissance est lue directement dans le modèle, si bien que sélectionner une région consiste simplement à pointer `RecognitionModelPath` vers cette tête ; une tête entraînée sur un autre alphabet n'est pas prise en charge.
 
 ```
 graph LR;
@@ -102483,6 +102620,8 @@ graph LR;
     LicensePlateRecognizerBlock-->VideoRendererBlock;
     LicensePlateRecognizerBlock-. OnPlateRecognized .->App[Votre application];
 ```
+
+Pour une vue d'ensemble de la reconnaissance de plaques en .NET — cas d'usage, un journal de caméra d'accès, un exemple de caméra IP vers MP4 et le téléchargement de la version d'essai — consultez [Reconnaissance de plaques (ANPR/LPR) en C# et .NET](https://www.visioforge.com/fr/solutions/license-plate-recognition-dotnet).
 
 ## Utilisation
 
@@ -102525,7 +102664,7 @@ Chaque `LicensePlateResult` transporte le `Text` reconnu (normalisé : mis en ma
 | `RecognitionModelPath` | — | Modèle ONNX d'OCR de plaques (tête FastALPR `fast-plate-ocr`, globale ou UE). Obligatoire. |
 | `Provider` / `DeviceId` | `Auto` / `0` | Fournisseur d'exécution ONNX et index du périphérique matériel. |
 | `FramesToSkip` | `0` | Nombre d'images ignorées entre deux passes de reconnaissance sur une vidéo en direct. |
-| `DetectionInputSize` | `640` | Taille d'entrée carrée pour le modèle de détection (modèles à forme dynamique). |
+| `DetectionInputSize` | `640` | Taille d'entrée carrée pour le modèle de détection (modèles à forme dynamique uniquement ; un modèle de taille fixe, comme le détecteur 640, utilise sa propre taille). |
 | `DetectionConfidenceThreshold` | `0.35` | Score minimal du détecteur qu'une boîte de plaque doit atteindre. |
 | `OcrConfidenceThreshold` | `0.3` | Confiance OCR moyenne minimale qu'une plaque reconnue doit atteindre pour être signalée. |
 | `MaxDetections` | `10` | Nombre maximal de plaques détectées par image. |
@@ -102562,14 +102701,14 @@ Consultez [Utiliser les blocs IA avec VideoCaptureCoreX et MediaPlayerCoreX](../
 
 | Symptôme | Cause probable | Solution |
 | --- | --- | --- |
-| Aucune plaque n'est détectée | `DetectionConfidenceThreshold` trop élevé, ou plaque trop petite par rapport à `DetectionInputSize` | Abaissez `DetectionConfidenceThreshold` ; augmentez `DetectionInputSize` pour les plaques petites/éloignées, ou recadrez plus près du véhicule en amont. |
+| Aucune plaque n'est détectée | `DetectionConfidenceThreshold` trop élevé, ou plaque trop petite dans l'image | Abaissez `DetectionConfidenceThreshold` ; pour les plaques petites/éloignées, rapprochez la caméra ou recadrez plus près du véhicule en amont. |
 | Plaque détectée mais texte erroné/vide | `OcrConfidenceThreshold` trop élevé, ou mauvaise tête de reconnaissance régionale | Abaissez `OcrConfidenceThreshold` ; vérifiez que `RecognitionModelPath` correspond à votre région (tête globale ou UE). |
 | Seules certaines plaques d'une scène chargée sont signalées | `MaxDetections` atteint | Augmentez `MaxDetections` si vous attendez plus de 10 plaques par image. |
 | Le texte de la plaque contient des caractères indésirables | Lecture directe de `LicensePlateResult.Text`, en attendant un OCR brut | `Text` est déjà normalisé (mis en majuscules, caractères non alphanumériques supprimés) — si le bruit persiste, vérifiez que la bonne tête de reconnaissance régionale est chargée. |
 
 ## Foire aux questions
 
-### Ce SDK ANPR fonctionne-t-il en dehors des États-Unis et de l'Europe ?
+### LicensePlateRecognizerBlock fonctionne-t-il en dehors des États-Unis et de l'Europe ?
 
 La tête de reconnaissance globale FastALPR couvre les États-Unis et plus de 90 pays ; une tête européenne distincte est optimisée pour les plaques de l'UE. Pointez `RecognitionModelPath` vers la tête correspondant à votre région cible.
 
@@ -102592,9 +102731,9 @@ Les plaques d'immatriculation sont généralement traitées comme des données p
 ---END OF PAGE---
 
 
-## SDK de suivi d'objets pour .NET — ObjectAnalyticsBlock
+## ObjectAnalyticsBlock — suivi d'objets en C# et .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/object-analytics/
-**Description:** SDK de suivi d'objets pour .NET — suivi multi-objets ByteTrack, lignes de comptage directionnelles et zones polygonales avec ObjectAnalyticsBlock.
+**Description:** Suivi d'objets pour .NET — suivi multi-objets ByteTrack, lignes de comptage directionnelles et zones polygonales avec ObjectAnalyticsBlock.
 
 # Analyse d'objets — suivi multi-objets, lignes de comptage et zones polygonales
 
@@ -102837,7 +102976,7 @@ L'API n'impose aucune limite fixe — `ObjectAnalyticsSettings.Lines` et `.Zones
 ---END OF PAGE---
 
 
-## SDK de détection d'objets .NET — YOLOObjectDetectorBlock
+## YOLOObjectDetectorBlock — détection d'objets en .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/object-detection/
 **Description:** Détection d'objets .NET — détectez des objets dans la vidéo avec YOLOObjectDetectorBlock. Modèles ONNX YOLOv8, YOLOX et RT-DETR, multiplateforme, CPU ou GPU.
 
@@ -103000,9 +103139,9 @@ Des démos dédiées de détection d'objets `VideoCaptureCoreX`/`MediaPlayerCore
 ---END OF PAGE---
 
 
-## OCR SDK .NET — Reconnaissance de texte OcrBlock (PaddleOCR)
+## OCR en C# pour vidéos et images — OcrBlock avec PaddleOCR
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/ocr/
-**Description:** OCR SDK .NET — reconnaissez du texte dans vidéos et images avec OcrBlock (ONNX Runtime + PaddleOCR). C# multiplateforme sur Windows, macOS, Linux, Android, iOS.
+**Description:** Référence OcrBlock — modèles, paramètres et dépannage pour reconnaître du texte dans vidéos et images avec ONNX Runtime et PaddleOCR en C#, multiplateforme.
 
 # Reconnaissance de texte OCR — OcrBlock
 
@@ -103014,6 +103153,8 @@ graph LR;
     OcrBlock-->VideoRendererBlock;
     OcrBlock-. OnTextDetected .->App[Votre application];
 ```
+
+Pour une vue d'ensemble de l'OCR sur des flux vidéo — cas d'usage, un exemple RTSP vers MP4 et le téléchargement de la version d'essai — consultez [OCR sur l'appareil pour les flux vidéo en .NET](https://www.visioforge.com/fr/solutions/video-ocr-dotnet).
 
 ## Utilisation
 
@@ -103147,7 +103288,7 @@ Les démos OCR dédiées `VideoCaptureCoreX`/`MediaPlayerCoreX` (`Capture OCR X`
 ---END OF PAGE---
 
 
-## SDK ONNX Runtime pour .NET — Guide OnnxInferenceBlock
+## OnnxInferenceBlock — modèles ONNX Runtime sur mesure .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/onnx-inference/
 **Description:** Exécutez tout modèle ONNX Runtime personnalisé sur des images vidéo en direct en .NET avec OnnxInferenceBlock et récupérez des tenseurs bruts.
 
@@ -103560,7 +103701,7 @@ Des démos dédiées construites sur Media Blocks, `VideoCaptureCoreX` et `Media
 ---END OF PAGE---
 
 
-## SDK de masquage PII .NET — flouter visages et plaques
+## PIIRedactionBlock — flouter visages et plaques en .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/pii-redaction/
 **Description:** Masquez les données personnelles dans la vidéo en local avec PIIRedactionBlock : floutez visages, plaques et texte à l'écran. RGPD/CCPA/BIPA, sans cloud.
 
@@ -103833,7 +103974,7 @@ Non. Le masquage écrase les pixels de chaque région directement dans l'image, 
 ---END OF PAGE---
 
 
-## SDK de suivi automatique PTZ pour .NET — caméra ONVIF
+## Suivi automatique PTZ en C# et .NET — contrôle caméra ONVIF
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/ptz-auto-tracking/
 **Description:** Suivi automatique PTZ pour .NET : une caméra PTZ ONVIF suit un objet détecté. Contrôle proportionnel panoramique/inclinaison/zoom et zone morte.
 
@@ -104389,7 +104530,7 @@ Des démos dédiées construites sur Media Blocks et `MediaPlayerCoreX` (`Semant
 ---END OF PAGE---
 
 
-## Diarisation des locuteurs .NET — SpeakerDiarizationBlock
+## SpeakerDiarizationBlock — diarisation des locuteurs .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/speaker-diarization/
 **Description:** Diarisation des locuteurs sur l'appareil pour .NET — « qui a parlé et quand » avec pyannote, embeddings WeSpeaker et transcriptions diarisées.
 
@@ -104653,11 +104794,11 @@ Le modèle de segmentation est indépendant de la langue, il fonctionne donc d'e
 ---END OF PAGE---
 
 
-## SDK reconnaissance vocale .NET — SpeechToTextBlock
+## SpeechToTextBlock — Référence de transcription pour .NET
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/general/ai/speech-to-text/
-**Description:** SDK de reconnaissance vocale .NET — transcrivez de l'audio en direct ou en fichier en local avec Whisper ASR et Silero VAD, plus sous-titres SRT/VTT.
+**Description:** Référence SpeechToTextBlock — transcrivez l'audio sur l'appareil avec Whisper en C# ; paramètres, Silero VAD, modèles, SRT/VTT et dépannage.
 
-# Reconnaissance vocale et sous-titres en direct — SpeechToTextBlock
+# Référence de reconnaissance vocale — SpeechToTextBlock
 
 `SpeechToTextBlock` est un bloc média audio uniquement issu de `VisioForge.DotNet.Core.AI.Whisper`. Il capte le flux audio, segmente la parole avec Silero VAD, la transcrit avec Whisper (Whisper.net / GGML), et déclenche `OnSpeechRecognized`. L'audio traverse le bloc sans modification. Le bloc implémente `IAudioProcessingBlock`, il peut donc être inséré dans un pipeline manuel ou enregistré directement sur `VideoCaptureCoreX`/`MediaPlayerCoreX`.
 
@@ -104665,6 +104806,8 @@ Le modèle de segmentation est indépendant de la langue, il fonctionne donc d'e
 using VisioForge.Core.MediaBlocks.AI;
 using VisioForge.Core.Types.X.AI;
 ```
+
+Pour un tutoriel pas à pas — transcrire un fichier, sous-titrer une source en direct et afficher les sous-titres sur la vidéo — consultez [Sous-titres en direct et reconnaissance vocale (Whisper)](../../../mediablocks/Guides/live-subtitles-whisper-csharp/).
 
 ## Configuration de base du bloc
 
@@ -104925,7 +105068,7 @@ Oui — définissez `SpeechToTextSettings.Task = SpeechToTextTask.Translate`.
 
 ### Comment obtenir des sous-titres en direct à l'écran plutôt qu'un simple événement ?
 
-Connectez `SubtitleRenderer.OnSpeechRecognized` comme gestionnaire d'événements du bloc, avec un `OverlayManagerBlock` — voir [SubtitleRenderer — sous-titres à l'écran](#subtitlerenderer-sous-titres-a-lecran). Si vous avez seulement besoin de fichiers SRT/VTT, définissez plutôt `OutputSrtPath`/`OutputVttPath`.
+Connectez `SubtitleRenderer.OnSpeechRecognized` comme gestionnaire d'événements du bloc, avec un `OverlayManagerBlock` — voir [SubtitleRenderer — sous-titres à l'écran](#subtitlerenderer-sous-titres-a-lecran). Si vous avez seulement besoin de fichiers SRT/VTT, définissez plutôt `OutputSrtPath`/`OutputVttPath`. Pour un exemple complet, consultez le [tutoriel sur les sous-titres en direct](../../../mediablocks/Guides/live-subtitles-whisper-csharp/).
 
 ### Quelle taille de modèle Whisper dois-je utiliser ?
 
@@ -105376,7 +105519,7 @@ Oui — enregistrez un ou plusieurs `IVideoProcessingBlock` avec `Video_Processi
 
 ## Démos
 
-Chaque bloc couvert sur cette page dispose également de démos de pipeline Media Blocks dédiées — consultez la section **Démos** de la page propre à chaque bloc ([OCR](../ocr/#demos), [Détection d'objets](../object-detection/#demos), [Analytique d'objets](../object-analytics/#demos), [Reconnaissance faciale](../face-recognition/#demos), [Reconnaissance de plaques d'immatriculation](../license-plate-recognition/#demos), [Suppression d'arrière-plan](../background-removal/#demo), [Transcription vocale](../speech-to-text/#demos)).
+Chaque bloc couvert sur cette page dispose également de démos de pipeline Media Blocks dédiées — consultez la section **Démos** de la page propre à chaque bloc ([OCR](../ocr/#demos), [Détection d'objets](../object-detection/#demos), [Analytique d'objets](../object-analytics/#demos), [Reconnaissance faciale](../face-recognition/#demos), [Reconnaissance de plaques d'immatriculation](../license-plate-recognition/#demos), [Suppression d'arrière-plan](../background-removal/#demo), [Reconnaissance vocale](../speech-to-text/#demos)).
 
 L'ensemble de démos du SDK propose en outre 16 démos construites directement sur `VideoCaptureCoreX` / `MediaPlayerCoreX` avec l'API présentée sur cette page — Détection d'objets, OCR, Reconnaissance faciale et Sous-titres en direct, chacune pour WPF et MAUI, sur les moteurs de capture et de lecture (`Capture Object Detection X`, `Capture Object Detection X WPF`, `Capture OCR X`, `Capture OCR X WPF`, `Capture Face Recognition X`, `Capture Face Recognition X WPF`, `Capture Live Subtitles X`, `Capture Live Subtitles X WPF`, `Player Object Detection X`, `Player Object Detection X WPF`, `Player OCR X`, `Player OCR X WPF`, `Player Face Recognition X`, `Player Face Recognition X WPF`, `Player Live Subtitles X`, `Player Live Subtitles X WPF`). Les liens GitHub seront ajoutés ici une fois ces démos publiées dans le dépôt d'exemples public.
 
@@ -120223,6 +120366,8 @@ Nos SDK intègrent le RTSP avec des codecs standards de l'industrie comme **H.26
 
 Ce guide explore en détail l'implémentation de la diffusion RTSP avec les SDK VisioForge, couvrant à la fois les approches multiplateformes modernes et les méthodes héritées spécifiques à Windows.
 
+Vous devez recevoir la vidéo d'une caméra RTSP plutôt que diffuser un flux ? [Video Capture SDK .NET](https://www.visioforge.com/fr/video-capture-sdk-net) se connecte aux caméras IP RTSP et ONVIF et les enregistre en MP4 dans le même pipeline : consultez le [guide des sources de caméras RTSP](../../../videocapture/video-sources/ip-cameras/rtsp/).
+
 ## Sortie RTSP multiplateforme (recommandé)
 
 [VideoCaptureCoreX](#) [MediaBlocksPipeline](#)
@@ -120518,7 +120663,7 @@ SRT (Secure Reliable Transport) est un protocole de streaming conçu pour la liv
 - Le transport vidéo sécurisé point à point
 - L'ingestion et la distribution vidéo dans le cloud
 
-Les SDK .NET de VisioForge prennent en charge l'envoi et la réception de flux SRT sur Windows, macOS et Linux. Les flux SRT utilisent le multiplexage MPEG-TS pour transporter ensemble la vidéo et l'audio.
+Les SDK .NET de VisioForge prennent en charge l'envoi et la réception de flux SRT sur Windows, macOS, Mac Catalyst, Linux, iOS et Android. Les flux SRT utilisent le multiplexage MPEG-TS pour transporter ensemble la vidéo et l'audio.
 
 Vous pouvez vérifier la disponibilité de SRT à l'exécution :
 
@@ -120526,6 +120671,8 @@ Vous pouvez vérifier la disponibilité de SRT à l'exécution :
 bool srtAvailable = SRTSinkBlock.IsAvailable(); // pour l'envoi
 bool srtSourceAvailable = SRTSourceBlock.IsAvailable(); // pour la réception
 ```
+
+Sous Windows, macOS et Mac Catalyst, le plugin SRT est fourni dans le paquet de runtime `Adds`, et non dans le paquet principal : `VisioForge.CrossPlatform.Core.Windows.Adds.x64` (ou ses variantes x86 et arm64), `VisioForge.CrossPlatform.Core.macOS.Adds` ou `VisioForge.CrossPlatform.Core.macCatalyst.Adds`. Ajoutez-le à côté du paquet de runtime principal, sinon `IsAvailable()` renvoie `false`. Les paquets de runtime iOS et Android incluent SRT. Sous Linux, le SDK utilise le GStreamer du système ; sous Ubuntu et Debian, SRT fait partie de `gstreamer1.0-plugins-bad`.
 
 ## Modes de connexion SRT
 
@@ -120556,10 +120703,12 @@ var sinkSettings = new SRTSinkSettings
 Le caller se connecte à un listener SRT distant :
 
 ```
-// SRTSourceSettings a un constructeur privé — utilisez la fabrique CreateAsync. Uri est System.Uri, pas une chaîne.
+// CreateAsync lit les pistes du flux avant de rendre la main, l'émetteur doit donc être en marche. Uri est System.Uri, pas une chaîne.
 var sourceSettings = await SRTSourceSettings.CreateAsync(new Uri("srt://192.168.1.100:8888"));
 sourceSettings.Mode = SRTConnectionMode.Caller;
 ```
+
+`CreateAsync` se connecte avec la seule URI ; ce dont cette première connexion a besoin va donc dans la requête de l'URI : un récepteur en mode listener utilise `srt://0.0.0.0:8888?mode=listener`, et un serveur qui exige un stream ID reçoit `?streamid=...`.
 
 ### Mode Rendezvous
 
@@ -120585,6 +120734,8 @@ var srtOutput = new SRTOutput("srt://streaming-server:1234");
 // Ajouter la sortie SRT configurée à votre moteur de capture
 videoCapture.Outputs_Add(srtOutput, true);  // videoCapture est une instance VideoCaptureCoreX
 ```
+
+Dans Video Capture SDK .NET, `SRTOutput` nécessite l'édition Premium, et un flux SRT utilisé comme `Video_Source` nécessite l'édition Professional.
 
 ### Media Blocks SDK
 
@@ -120708,20 +120859,34 @@ var sinkSettings = new SRTSinkSettings
 {
     Uri = "srt://:8888",
     Mode = SRTConnectionMode.Listener,
-    Passphrase = "my-secret-passphrase",  // 10 caractères minimum
+    Passphrase = "my-secret-passphrase",  // de 10 à 79 octets en UTF-8
     PbKeyLen = SRTKeyLength.Length32       // AES 256 bits
 };
 ```
 
 ### Récepteur (chiffré)
 
+`SRTSourceSettings.CreateAsync` ouvre le flux avec la seule URI pour lire ses pistes avant de rendre la main ; si vous l'utilisez pour un flux chiffré, placez donc la phrase secrète dans l'URI, sous forme de paramètres de requête `passphrase` et `pbkeylen`. Une phrase secrète occupe de 10 à 79 octets en UTF-8, soit de 10 à 79 caractères pour des lettres latines et des chiffres ; dans une URI, utilisez des lettres, des chiffres, `-`, `_`, `.` et `~` :
+
 ```
-// Utiliser la fabrique asynchrone — SRTSourceSettings a un constructeur privé ; Uri est System.Uri, pas une chaîne.
-var sourceSettings = await SRTSourceSettings.CreateAsync(new Uri("srt://192.168.1.100:8888"));
-sourceSettings.Mode = SRTConnectionMode.Caller;
-sourceSettings.Passphrase = "my-secret-passphrase";
-sourceSettings.PbKeyLen = SRTKeyLength.Length32;
+// CreateAsync lit le flux avec la seule URI, la phrase secrète et la longueur de clé vont donc dans la requête
+var sourceSettings = await SRTSourceSettings.CreateAsync(
+    new Uri("srt://192.168.1.100:8888?passphrase=my-secret-passphrase&pbkeylen=32"));
 ```
+
+Avec Media Blocks SDK .NET, vous pouvez vous passer de `CreateAsync` et définir la phrase secrète comme propriété. Elle ne figure alors pas dans l'URI et peut contenir n'importe quel caractère. `SRTSourceBlock` ne connaît pas les pistes à l'avance et crée donc une sortie vidéo et une sortie audio :
+
+```
+var sourceSettings = new SRTSourceSettings
+{
+    Uri = new Uri("srt://192.168.1.100:8888"),
+    Passphrase = "my secret passphrase!",
+    PbKeyLen = SRTKeyLength.Length32
+};
+var srtSource = new SRTSourceBlock(sourceSettings);
+```
+
+Pour un flux vidéo seul, passez `renderAudio: false`.
 
 Longueurs de clé disponibles : `SRTKeyLength.NoKey` (désactivé), `Length16` (128 bits), `Length24` (192 bits), `Length32` (256 bits).
 
@@ -120820,6 +120985,15 @@ Par défaut, le SDK utilise AVENC AAC sur toutes les plateformes.
 - Vérifiez que les pilotes GPU sont à jour pour les encodeurs matériels
 - Rabattez-vous sur OpenH264 comme encodeur logiciel universel
 
+### L'arrêt se bloque après la déconnexion de l'autre côté
+
+**Symptôme :** `StopAsync` ne rend pas la main après que le pair distant est devenu injoignable.
+
+**Solutions :**
+
+- Sous Windows, macOS, Mac Catalyst, iOS et Android, utilisez les paquets VisioForge (sous Windows, macOS et Mac Catalyst, le paquet `Adds`) : ils fournissent un plugin SRT corrigé qui relit sa propriété `auto-reconnect` avant chaque tentative de reconnexion. Le SDK désactive cette propriété à l'arrêt, de sorte que l'arrêt rend la main même si le pair a disparu
+- Sous Linux, le SDK utilise le plugin SRT de la distribution, qui n'inclut pas ce correctif. Si l'arrêt s'y bloque, définissez `AutoReconnect = false` dans les paramètres : la perte du pair termine alors le flux par une erreur au lieu d'une boucle de reconnexion
+
 ## Questions fréquentes
 
 ### Quelle est la différence entre les modes caller et listener SRT ?
@@ -120828,7 +121002,7 @@ Le **listener** se lie à un port et attend les connexions entrantes — il agit
 
 ### Comment chiffrer un flux SRT ?
 
-Définissez la propriété `Passphrase` (10 caractères minimum) et `PbKeyLen` sur `SRTSinkSettings` et `SRTSourceSettings`. L'émetteur et le récepteur doivent utiliser des valeurs identiques. Longueurs de clé disponibles : 128 bits (`Length16`), 192 bits (`Length24`) et 256 bits (`Length32`). Voir la section [Chiffrement](#chiffrement) pour des exemples de code.
+Côté émetteur, définissez `Passphrase` (de 10 à 79 octets en UTF-8) et `PbKeyLen` sur `SRTSinkSettings`. Côté récepteur, passez les mêmes valeurs dans l'URI donnée à `SRTSourceSettings.CreateAsync` (`srt://host:8888?passphrase=...&pbkeylen=32`), car `CreateAsync` ouvre le flux avec la seule URI ; dans une URI, utilisez des lettres, des chiffres, `-`, `_`, `.` et `~`. Avec Media Blocks SDK .NET, vous pouvez à la place définir `Passphrase` et `PbKeyLen` sur un nouveau `SRTSourceSettings` et vous passer de `CreateAsync`. Les deux côtés doivent utiliser des valeurs identiques. Longueurs de clé disponibles : 128 bits (`Length16`), 192 bits (`Length24`) et 256 bits (`Length32`). Voir la section [Chiffrement](#chiffrement) pour des exemples de code.
 
 ### Comment recevoir et lire un flux SRT en C# ?
 
@@ -136997,6 +137171,7 @@ Yes. Create `VideoCaptureCoreX` without a `VideoView` parameter: `VideoCapture1 
 - [Save Webcam Video in C#](../save-webcam-video/) — same webcam capture functionality with C# code examples
 - [Build a Video Player in VB.NET](../../../mediaplayer/guides/video-player-vb-net/) — VB.NET media player with playback controls
 - [Pre-Event Recording](../pre-event-recording/) — circular buffer recording that captures footage before the trigger event
+- [Cross-platform screen recording in C#](https://www.visioforge.com/solutions/screen-recording-csharp) — capture API per platform, a .NET MAUI recorder and the trial download
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — product page and downloads
 
 ---END OF PAGE---
@@ -143084,6 +143259,7 @@ Yes. Use `DisplayIndex` (VideoCaptureCore) or `MonitorIndex` (VideoCaptureCoreX)
 - [Screen Capture to MP4 Tutorial](../../video-tutorials/screen-capture-mp4/) — C# tutorial for recording desktop to MP4 with video walkthrough
 - [Save Webcam Video in C#](../../guides/save-webcam-video/) — capture from webcam instead of screen
 - [IP Camera Capture](../ip-cameras/) — record from network cameras using RTSP
+- [Cross-platform screen recording in C#](https://www.visioforge.com/solutions/screen-recording-csharp) — capture API per platform, a .NET MAUI recorder and the trial download
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — product page and downloads
 
 ---END OF PAGE---
@@ -145556,7 +145732,7 @@ Choose AVI when you need frame-independent access for video editing (MJPEG allow
 ---END OF PAGE---
 
 
-## Screen Recording in C# .NET — MP4, GPU, Multi-Monitor
+## Screen Capture to MP4 in C# — Tutorial, GPU, Multi-Monitor
 **URL:** https://www.visioforge.com/help/docs/dotnet/videocapture/video-tutorials/screen-capture-mp4/
 **Description:** Record full screen, region, or multi-monitor to MP4 using VisioForge Video Capture SDK. GPU encoding (NVENC/QSV/AMF), audio loopback, and C# examples.
 **Tags:** Video Capture SDK, .NET, DirectShow, MediaBlocksPipeline, VideoCaptureCoreX, Windows, WinForms, GStreamer, Capture, Encoding, Webcam, Screen Capture, MP4, AVI, H.264, H.265, C#, NuGet
@@ -145902,6 +146078,8 @@ var screenSource = new ScreenCaptureD3D11SourceSettings
 };
 ```
 
+For Android and iOS, and a .NET MAUI recorder that runs on Windows, Mac Catalyst, Android and iOS, see [Cross-platform screen recording in C# and .NET](https://www.visioforge.com/solutions/screen-recording-csharp).
+
 ## How It Works — Legacy API
 
 This Windows Forms application demonstrates screen capture functionality with and without audio using VisioForge Video Capture SDK:
@@ -146043,6 +146221,7 @@ The default frame rate is 10 FPS. Use 15 FPS for presentations, slides, and most
 - [Screen Source Configuration](../../video-sources/screen/) — full reference for capture region, multi-monitor, cursor, and frame rate settings
 - [Save Webcam Video](../../guides/save-webcam-video/) — webcam capture to MP4 with audio configuration
 - [Code Samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — additional screen capture code snippets on GitHub
+- [Cross-platform screen recording in C#](https://www.visioforge.com/solutions/screen-recording-csharp) — capture API per platform, a .NET MAUI recorder and the trial download
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — product page and downloads
 
 ---END OF PAGE---
@@ -146357,6 +146536,8 @@ When implementing webcam recording capabilities, developers need to consider:
 - Configuring video and audio compression settings
 - Managing the capture lifecycle (initialization, start, stop)
 - Handling output file creation and management
+
+This tutorial uses the Windows-only VideoCaptureCore engine. [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) also records webcams to MP4 on macOS, Linux, Android and iOS with VideoCaptureCoreX — see [Save Webcam Video in C#](../../guides/save-webcam-video/) and the [Android](../../../deployment-x/Android/) and [iOS](../../../deployment-x/iOS/) deployment guides.
 
 ## Video Implementation Tutorial
 
@@ -150304,6 +150485,7 @@ Sí. Cree `VideoCaptureCoreX` sin un parámetro `VideoView`: `VideoCapture1 = Ne
 - [Guardar video de webcam en C#](../save-webcam-video/) — misma funcionalidad de captura de webcam con ejemplos de código en C#
 - [Crear un reproductor de video en VB.NET](../../../mediaplayer/guides/video-player-vb-net/) — reproductor multimedia VB.NET con controles de reproducción
 - [Grabación pre-evento](../pre-event-recording/) — grabación de búfer circular que captura material antes del evento desencadenante
+- [Grabación de pantalla multiplataforma en C#](https://www.visioforge.com/es/solutions/screen-recording-csharp) — API de captura por plataforma, un grabador en .NET MAUI y la descarga de la versión de prueba
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas
 
 ---END OF PAGE---
@@ -156392,6 +156574,7 @@ Sí. Use `DisplayIndex` (VideoCaptureCore) o `MonitorIndex` (VideoCaptureCoreX) 
 - [Tutorial de Captura de Pantalla a MP4](../../video-tutorials/screen-capture-mp4/) — tutorial de C# para grabar escritorio a MP4 con video explicativo
 - [Guardar Video de Webcam en C#](../../guides/save-webcam-video/) — capturar desde webcam en lugar de pantalla
 - [Captura de Cámaras IP](../ip-cameras/) — grabar desde cámaras de red usando RTSP
+- [Grabación de pantalla multiplataforma en C#](https://www.visioforge.com/es/solutions/screen-recording-csharp) — API de captura por plataforma, un grabador en .NET MAUI y la descarga de la versión de prueba
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas
 
 ---END OF PAGE---
@@ -158863,7 +159046,7 @@ Elija AVI cuando necesite acceso independiente a fotogramas para edición de vid
 ---END OF PAGE---
 
 
-## Grabación de pantalla en C# .NET — MP4, GPU, Multi-Monitor
+## Grabar pantalla a MP4 en C# — tutorial, GPU, multimonitor
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/videocapture/video-tutorials/screen-capture-mp4/
 **Description:** Grabación pantalla completa, región y multi-monitor. Codificación GPU (NVENC/QSV/AMF), audio loopback, resaltado de cursor. Ejemplos API legacy y moderna.
 **Tags:** Video Capture SDK, .NET, DirectShow, MediaBlocksPipeline, VideoCaptureCoreX, Windows, WinForms, GStreamer, Capture, Encoding, Webcam, Screen Capture, MP4, AVI, H.264, H.265, C#, NuGet
@@ -159085,6 +159268,8 @@ var screenSource = new ScreenCaptureD3D11SourceSettings
     API = D3D11ScreenCaptureAPI.DXGI  // Forzar Desktop Duplication en lugar de WGC
 };
 ```
+
+Para Android e iOS, y un grabador en .NET MAUI que funciona en Windows, Mac Catalyst, Android e iOS, consulte [Grabación de pantalla multiplataforma en C# y .NET](https://www.visioforge.com/es/solutions/screen-recording-csharp).
 
 ## API legada — Video Capture SDK
 
@@ -159350,6 +159535,7 @@ La tasa de fotogramas predeterminada es 10 FPS. Use 15 FPS para presentaciones, 
 - [Configuración de Fuente de Pantalla](../../video-sources/screen/) — referencia completa para región de captura, multi-monitor, cursor y configuración de tasa de fotogramas
 - [Guardar Video de Webcam](../../guides/save-webcam-video/) — captura de webcam a MP4 con configuración de audio
 - [Ejemplos de Código](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — ejemplos adicionales de captura de pantalla en GitHub
+- [Grabación de pantalla multiplataforma en C#](https://www.visioforge.com/es/solutions/screen-recording-csharp) — API de captura por plataforma, un grabador en .NET MAUI y la descarga de la versión de prueba
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas
 
 ---END OF PAGE---
@@ -159664,6 +159850,8 @@ Al implementar capacidades de grabación de webcam, los desarrolladores necesita
 - Configurar ajustes de compresión de video y audio
 - Gestionar el ciclo de vida de captura (inicialización, inicio, detención)
 - Manejar la creación y gestión del archivo de salida
+
+Este tutorial usa el motor VideoCaptureCore, solo para Windows. [Video Capture SDK .NET](https://www.visioforge.com/es/video-capture-sdk-net) también graba webcams en MP4 en macOS, Linux, Android e iOS con VideoCaptureCoreX; consulte [Guardar vídeo de webcam en C#](../../guides/save-webcam-video/) y las guías de implementación para [Android](../../../deployment-x/Android/) e [iOS](../../../deployment-x/iOS/).
 
 ## Tutorial de Implementación en Video
 
@@ -163592,6 +163780,7 @@ Oui. Créez `VideoCaptureCoreX` sans paramètre `VideoView` : `VideoCapture1 = N
 - [Enregistrer une vidéo webcam en C#](../save-webcam-video/) — même fonctionnalité de capture webcam avec exemples C#
 - [Créer un lecteur vidéo en VB.NET](../../../mediaplayer/guides/video-player-vb-net/) — lecteur multimédia VB.NET avec contrôles de lecture
 - [Enregistrement pré-événement](../pre-event-recording/) — enregistrement par tampon circulaire qui capture les images avant l'événement déclencheur
+- [Enregistrement d'écran multiplateforme en C#](https://www.visioforge.com/fr/solutions/screen-recording-csharp) — API de capture par plateforme, un enregistreur .NET MAUI et la version d'essai
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements
 
 ---END OF PAGE---
@@ -169640,6 +169829,7 @@ Oui. Utilisez `DisplayIndex` (VideoCaptureCore) ou `MonitorIndex` (VideoCaptureC
 - [Tutoriel capture d'écran vers MP4](../../video-tutorials/screen-capture-mp4/) — tutoriel C# pour enregistrer le bureau vers MP4 avec vidéo explicative
 - [Enregistrer la vidéo d'une webcam en C#](../../guides/save-webcam-video/) — capturer depuis une webcam au lieu de l'écran
 - [Capture caméra IP](../ip-cameras/) — enregistrer depuis des caméras réseau via RTSP
+- [Enregistrement d'écran multiplateforme en C#](https://www.visioforge.com/fr/solutions/screen-recording-csharp) — API de capture par plateforme, un enregistreur .NET MAUI et la version d'essai
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements
 
 ---END OF PAGE---
@@ -172090,7 +172280,7 @@ Choisissez AVI lorsque vous avez besoin d'un accès indépendant aux images pour
 ---END OF PAGE---
 
 
-## Enregistrement d'écran en C# .NET — MP4, GPU, multi-écrans
+## Capture d'écran vers MP4 en C# — tutoriel, GPU, multi-écrans
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/videocapture/video-tutorials/screen-capture-mp4/
 **Description:** Enregistrez plein écran, région ou multi-écrans en MP4. Encodage GPU (NVENC/QSV/AMF), audio loopback, surbrillance du curseur, exemples C# legacy et modernes.
 
@@ -172434,6 +172624,8 @@ var screenSource = new ScreenCaptureD3D11SourceSettings
 };
 ```
 
+Pour Android et iOS, ainsi qu'un enregistreur .NET MAUI qui fonctionne sous Windows, Mac Catalyst, Android et iOS, consultez [Enregistrement d'écran multiplateforme en C# et .NET](https://www.visioforge.com/fr/solutions/screen-recording-csharp).
+
 ## Comment ça fonctionne — API héritée
 
 Cette application Windows Forms montre la fonctionnalité de capture d'écran avec et sans audio à l'aide de VisioForge Video Capture SDK :
@@ -172575,6 +172767,7 @@ La fréquence d'images par défaut est de 10 FPS. Utilisez 15 FPS pour les prés
 - [Configuration de source écran](../../video-sources/screen/) — référence complète pour la région de capture, le multi-écrans, le curseur et la fréquence d'images
 - [Enregistrer la vidéo de webcam](../../guides/save-webcam-video/) — capture de webcam en MP4 avec configuration audio
 - [Exemples de code](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — extraits de code supplémentaires de capture d'écran sur GitHub
+- [Enregistrement d'écran multiplateforme en C#](https://www.visioforge.com/fr/solutions/screen-recording-csharp) — API de capture par plateforme, un enregistreur .NET MAUI et la version d'essai
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements
 
 ---END OF PAGE---
@@ -172883,6 +173076,8 @@ Lors de l'implémentation des capacités d'enregistrement de webcam, les dévelo
 - La configuration des paramètres de compression vidéo et audio
 - La gestion du cycle de vie de la capture (initialisation, démarrage, arrêt)
 - La gestion de la création et de l'organisation du fichier de sortie
+
+Ce tutoriel utilise le moteur VideoCaptureCore, réservé à Windows. [Video Capture SDK .NET](https://www.visioforge.com/fr/video-capture-sdk-net) enregistre aussi les webcams en MP4 sous macOS, Linux, Android et iOS avec VideoCaptureCoreX : consultez [Enregistrer la vidéo d'une webcam en C#](../../guides/save-webcam-video/) et les guides de déploiement [Android](../../../deployment-x/Android/) et [iOS](../../../deployment-x/iOS/).
 
 ## Tutoriel vidéo d'implémentation
 
@@ -208780,7 +208975,7 @@ Subscribe to `VideoCaptureCore.OnDataFrameBuffer` and filter for `DataFrameType.
 ## Live Subtitles and Speech-to-Text in C# .NET (Whisper)
 **URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Guides/live-subtitles-whisper-csharp/
 **Description:** Transcribe audio and video to text or live subtitles in C# with the Media Blocks SDK .NET using a local Whisper model and Silero VAD — no cloud, fully offline.
-**Tags:** Media Blocks SDK, .NET, Whisper, Speech-to-Text, Subtitles, VAD, C#
+**Tags:** Media Blocks SDK, .NET, Whisper, Speech-to-Text, Subtitles, Live Subtitles, VAD, C#
 **API:** SpeechToTextBlock, SpeechToTextSettings, SileroVadSettings, SubtitleRenderer, SubtitleStyle, CaptionTimeline, SubtitleWriter, SubtitleFormat, SpeechRecognizedEventArgs
 
 # Live Subtitles and Speech-to-Text in C# .NET
@@ -209142,6 +209337,7 @@ Each demo carries a **Real-time playback** switch that toggles between the two r
 
 ## See also
 
+- [Speech-to-Text Reference — SpeechToTextBlock](../../../general/ai/speech-to-text/)
 - [AI in VisioForge .NET SDK](../../../general/ai/)
 - [ElevenLabs Text-to-Speech and Voice Cloning](../../ElevenLabs/)
 
@@ -212349,7 +212545,7 @@ On-device AI blocks (ONNX / Whisper) that drop straight into a Media Blocks pipe
 - [PII Redaction](../general/ai/pii-redaction/) — blur or pixelate faces, license plates, and on-screen text
 - [Background Removal](../general/ai/background-removal/) — replace, blur, or make the background transparent
 - [Auto Reframe](../general/ai/auto-reframe/) — reframe landscape footage into subject-following vertical 9:16 video
-- [Speech-to-Text](../general/ai/speech-to-text/) — transcribe audio and generate live subtitles with Whisper
+- [Speech-to-Text](../general/ai/speech-to-text/) — SpeechToTextBlock reference: settings, Silero VAD, model sizes, SRT/VTT
 - [Generic ONNX Inference](../general/ai/onnx-inference/) — run a custom ONNX model and receive raw tensors
 
 ### Audio Processing
@@ -212398,6 +212594,7 @@ Additional getting started tutorials:
 - [Pre-Event Recording](Guides/pre-event-recording/)
 - [Audio Metadata Tags](Guides/audio-metadata-tags/)
 - [Custom Video Effects and OpenGL Shaders](Guides/custom-video-effects-csharp/)
+- [Live Subtitles (Whisper)](Guides/live-subtitles-whisper-csharp/)
 
 ## Developer Resources
 
@@ -213151,7 +213348,7 @@ Linux (Requires Nvidia DeepStream SDK, Jetson or compatible GPU).
 
 ## OpenCV Computer Vision Blocks for Video Pipeline in C# .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/OpenCV/
-**Description:** OpenCV blocks in Media Blocks SDK .NET: face, hand and motion detection, tracking, template matching, image filters. Windows, Linux, macOS, Mac Catalyst, iOS.
+**Description:** OpenCV blocks in Media Blocks SDK .NET: face, hand and motion detection, tracking, templates, filters. Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 **Tags:** Media Blocks SDK, .NET, Windows, macOS, iOS
 **API:** SystemVideoSourceBlock, VideoRendererBlock, MediaBlocksPipeline, CVHandDetectBlock, CVDewarpBlock
 
@@ -213161,7 +213358,7 @@ Linux (Requires Nvidia DeepStream SDK, Jetson or compatible GPU).
 
 OpenCV (Open Source Computer Vision Library) blocks provide powerful video processing capabilities within the VisioForge Media Blocks SDK .NET. These blocks enable a wide range of computer vision tasks, from basic image manipulation to complex object detection and tracking.
 
-To use OpenCV blocks, add the redistributable NuGet package for your platform: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 and later, with the distribution's GStreamer 1.22 or later), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS and Mac Catalyst) or `VisioForge.CrossPlatform.OpenCV.iOS` (iOS devices and arm64 simulators). These are the platforms the OpenCV GStreamer plugin currently ships for; on any other platform each block's `IsAvailable()` returns `false`.
+To use OpenCV blocks, add the redistributable NuGet package for your platform: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 and later, with the distribution's GStreamer 1.22 or later), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS and Mac Catalyst), `VisioForge.CrossPlatform.OpenCV.iOS` (iOS devices and arm64 simulators) or `VisioForge.CrossPlatform.OpenCV.Android` (`arm64-v8a` and `x86_64`; the 32-bit ABIs are not covered). These are the platforms the OpenCV GStreamer plugin currently ships for; on any other platform each block's `IsAvailable()` returns `false`.
 
 Most OpenCV blocks typically require a `videoconvert` element before them to ensure the input video stream is in a compatible format. The SDK handles this internally when you initialize the block.
 
@@ -213231,7 +213428,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -213283,7 +213480,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -213348,7 +213545,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -213400,7 +213597,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -213452,7 +213649,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -213522,7 +213719,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -213619,7 +213816,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -213703,7 +213900,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -213768,7 +213965,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -213871,7 +214068,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -213941,7 +214138,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -214006,7 +214203,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -214085,7 +214282,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -214156,7 +214353,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -214229,7 +214426,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -244397,7 +244594,7 @@ Suscríbase a `VideoCaptureCore.OnDataFrameBuffer` y filtre por `DataFrameType.K
 ## Subtítulos en vivo y voz a texto en C# .NET (Whisper)
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/mediablocks/Guides/live-subtitles-whisper-csharp/
 **Description:** Transcriba audio y video a texto o subtítulos en vivo en C# con Media Blocks SDK .NET mediante un modelo Whisper local y Silero VAD, sin nube.
-**Tags:** Media Blocks SDK, .NET, Whisper, Speech-to-Text, Subtitles, VAD, C#
+**Tags:** Media Blocks SDK, .NET, Whisper, Speech-to-Text, Subtitles, Live Subtitles, VAD, C#
 **API:** SpeechToTextBlock, SpeechToTextSettings, SileroVadSettings, SubtitleRenderer, SubtitleStyle, CaptionTimeline, SubtitleWriter, SubtitleFormat, SpeechRecognizedEventArgs
 
 # Subtítulos en vivo y voz a texto en C# .NET
@@ -244760,6 +244957,7 @@ Cada demo incluye un interruptor **Real-time playback** que alterna entre las do
 
 ## Véase también
 
+- [Referencia de voz a texto — SpeechToTextBlock](../../../general/ai/speech-to-text/)
 - [IA en VisioForge .NET SDK](../../../general/ai/)
 - [ElevenLabs: texto a voz y clonación de voz](../../ElevenLabs/)
 
@@ -247966,7 +248164,7 @@ Bloques de IA en el dispositivo (ONNX / Whisper) que se insertan directamente en
 - [Ocultación de PII](../general/ai/pii-redaction/) — difuminar o pixelar rostros, matrículas y texto en pantalla
 - [Eliminación de fondo](../general/ai/background-removal/) — sustituir, difuminar o hacer transparente el fondo
 - [Auto-reencuadre](../general/ai/auto-reframe/) — reencuadrar metraje horizontal en vídeo vertical 9:16 que sigue al sujeto
-- [Voz a texto](../general/ai/speech-to-text/) — transcribir audio y generar subtítulos en vivo con Whisper
+- [Voz a texto](../general/ai/speech-to-text/) — referencia de SpeechToTextBlock: ajustes, Silero VAD, tamaños de modelo, SRT/VTT
 - [Inferencia ONNX genérica](../general/ai/onnx-inference/) — ejecutar un modelo ONNX personalizado y recibir los tensores en bruto
 
 ### Procesamiento de Audio
@@ -248015,6 +248213,7 @@ Tutoriales adicionales de inicio:
 - [Grabación Pre-Evento](Guides/pre-event-recording/)
 - [Etiquetas de Metadatos de Audio](Guides/audio-metadata-tags/)
 - [Efectos de Video Personalizados y Shaders OpenGL](Guides/custom-video-effects-csharp/)
+- [Subtítulos en vivo (Whisper)](Guides/live-subtitles-whisper-csharp/)
 
 ## Recursos para Desarrolladores
 
@@ -248767,7 +248966,7 @@ Linux (Requiere SDK DeepStream de Nvidia, Jetson o GPU compatible).
 
 ## Bloques de Procesamiento de Video OpenCV en C# .NET
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/mediablocks/OpenCV/
-**Description:** Bloques OpenCV en Media Blocks SDK .NET: detección de rostros, manos y movimiento, seguimiento, plantillas y filtros. Windows, Linux, macOS, Mac Catalyst, iOS.
+**Description:** Bloques OpenCV en Media Blocks SDK .NET: rostros, manos y movimiento, seguimiento, plantillas y filtros. Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 **Tags:** Media Blocks SDK, .NET, Windows, macOS, iOS
 **API:** SystemVideoSourceBlock, VideoRendererBlock, MediaBlocksPipeline, CVHandDetectBlock, CVDewarpBlock
 
@@ -248777,7 +248976,7 @@ Linux (Requiere SDK DeepStream de Nvidia, Jetson o GPU compatible).
 
 Los bloques OpenCV (Open Source Computer Vision Library) proporcionan potentes capacidades de procesamiento de video dentro del VisioForge Media Blocks SDK .NET. Estos bloques permiten una amplia gama de tareas de visión por computadora, desde manipulación básica de imágenes hasta detección y seguimiento de objetos complejos.
 
-Para usar los bloques OpenCV, añada el paquete NuGet redistribuible para su plataforma: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 y posteriores, con GStreamer 1.22 o posterior de la distribución), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS y Mac Catalyst) o `VisioForge.CrossPlatform.OpenCV.iOS` (dispositivos iOS y simuladores arm64). Estas son las plataformas para las que actualmente se distribuye el plugin OpenCV de GStreamer; en cualquier otra plataforma el método `IsAvailable()` de cada bloque devuelve `false`.
+Para usar los bloques OpenCV, añada el paquete NuGet redistribuible para su plataforma: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 y posteriores, con GStreamer 1.22 o posterior de la distribución), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS y Mac Catalyst), `VisioForge.CrossPlatform.OpenCV.iOS` (dispositivos iOS y simuladores arm64) o `VisioForge.CrossPlatform.OpenCV.Android` (`arm64-v8a` y `x86_64`; las ABI de 32 bits no están incluidas). Estas son las plataformas para las que actualmente se distribuye el plugin OpenCV de GStreamer; en cualquier otra plataforma el método `IsAvailable()` de cada bloque devuelve `false`.
 
 La mayoría de los bloques OpenCV típicamente requieren un elemento `videoconvert` antes de ellos para asegurar que el flujo de video de entrada esté en un formato compatible. El SDK maneja esto internamente cuando inicializa el bloque.
 
@@ -248847,7 +249046,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -248899,7 +249098,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -248964,7 +249163,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249016,7 +249215,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249068,7 +249267,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249138,7 +249337,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249235,7 +249434,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249319,7 +249518,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249384,7 +249583,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249487,7 +249686,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249557,7 +249756,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249622,7 +249821,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249701,7 +249900,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249772,7 +249971,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -249845,7 +250044,7 @@ await pipeline.StartAsync();
 
 ### Plataformas
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Observaciones
 
@@ -280329,6 +280528,7 @@ Chaque démo comporte un interrupteur **Real-time playback** qui bascule entre l
 
 ## Voir aussi
 
+- [Référence de reconnaissance vocale — SpeechToTextBlock](../../../general/ai/speech-to-text/)
 - [IA dans VisioForge .NET SDK](../../../general/ai/)
 - [ElevenLabs : synthèse vocale et clonage de voix](../../ElevenLabs/)
 
@@ -283517,7 +283717,7 @@ Des blocs d'IA sur l'appareil (ONNX / Whisper) qui s'insèrent directement dans 
 - [Masquage des PII](../general/ai/pii-redaction/) — flouter ou pixelliser les visages, les plaques et le texte à l'écran
 - [Suppression d'arrière-plan](../general/ai/background-removal/) — remplacer, flouter ou rendre transparent l'arrière-plan
 - [Recadrage automatique](../general/ai/auto-reframe/) — recadrer des séquences horizontales en vidéo verticale 9:16 qui suit le sujet
-- [Reconnaissance vocale](../general/ai/speech-to-text/) — transcrire l'audio et générer des sous-titres en direct avec Whisper
+- [Reconnaissance vocale](../general/ai/speech-to-text/) — référence SpeechToTextBlock : paramètres, Silero VAD, tailles de modèle, SRT/VTT
 - [Inférence ONNX générique](../general/ai/onnx-inference/) — exécuter un modèle ONNX personnalisé et recevoir des tenseurs bruts
 
 ### Traitement audio
@@ -283566,6 +283766,7 @@ Tutoriels supplémentaires de prise en main :
 - [Enregistrement pré-événement](Guides/pre-event-recording/)
 - [Étiquettes de métadonnées audio](Guides/audio-metadata-tags/)
 - [Effets vidéo personnalisés et shaders OpenGL](Guides/custom-video-effects-csharp/)
+- [Sous-titres en direct (Whisper)](Guides/live-subtitles-whisper-csharp/)
 
 ## Ressources pour développeurs
 
@@ -284315,7 +284516,7 @@ Linux (nécessite le SDK Nvidia DeepStream, un GPU Jetson ou compatible).
 
 ## Blocs OpenCV pour pipeline vidéo en C# .NET — vision SDK
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/mediablocks/OpenCV/
-**Description:** Blocs OpenCV du Media Blocks SDK .NET : détection de visages, mains, mouvement, suivi, recherche de modèles, filtres. Windows, Linux, macOS, Mac Catalyst, iOS.
+**Description:** Blocs OpenCV du Media Blocks SDK .NET : visages, mains, mouvement, suivi, recherche de modèles, filtres. Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 # Blocs OpenCV - VisioForge Media Blocks SDK .NET
 
@@ -284323,7 +284524,7 @@ Linux (nécessite le SDK Nvidia DeepStream, un GPU Jetson ou compatible).
 
 Les blocs OpenCV (Open Source Computer Vision Library) offrent de puissantes capacités de traitement vidéo dans le VisioForge Media Blocks SDK .NET. Ces blocs permettent un large éventail de tâches de vision par ordinateur, de la manipulation d'image basique à la détection et au suivi d'objets complexes.
 
-Pour utiliser les blocs OpenCV, ajoutez le paquet NuGet redistribuable correspondant à votre plateforme : `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 et versions ultérieures, avec le GStreamer 1.22 ou ultérieur de la distribution), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS et Mac Catalyst) ou `VisioForge.CrossPlatform.OpenCV.iOS` (appareils iOS et simulateurs arm64). Ce sont les plateformes pour lesquelles le plugin OpenCV de GStreamer est actuellement distribué ; sur toute autre plateforme, la méthode `IsAvailable()` de chaque bloc renvoie `false`.
+Pour utiliser les blocs OpenCV, ajoutez le paquet NuGet redistribuable correspondant à votre plateforme : `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 et versions ultérieures, avec le GStreamer 1.22 ou ultérieur de la distribution), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS et Mac Catalyst), `VisioForge.CrossPlatform.OpenCV.iOS` (appareils iOS et simulateurs arm64) ou `VisioForge.CrossPlatform.OpenCV.Android` (`arm64-v8a` et `x86_64` ; les ABI 32 bits ne sont pas couvertes). Ce sont les plateformes pour lesquelles le plugin OpenCV de GStreamer est actuellement distribué ; sur toute autre plateforme, la méthode `IsAvailable()` de chaque bloc renvoie `false`.
 
 La plupart des blocs OpenCV nécessitent généralement un élément `videoconvert` en amont pour garantir que le flux vidéo d'entrée est dans un format compatible. Le SDK gère cela en interne lors de l'initialisation du bloc.
 
@@ -284393,7 +284594,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -284445,7 +284646,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -284510,7 +284711,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -284562,7 +284763,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -284614,7 +284815,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -284684,7 +284885,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -284781,7 +284982,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -284865,7 +285066,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -284930,7 +285131,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -285033,7 +285234,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -285103,7 +285304,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -285168,7 +285369,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -285247,7 +285448,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -285318,7 +285519,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -285391,7 +285592,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -435778,15 +435979,48 @@ VisioForge already exposes three other AI-agent surfaces — Agent Skills is the
 ## VisioForge .NET SDKs — Changelog and Release Notes
 **URL:** https://www.visioforge.com/help/docs/dotnet/changelog/
 **Description:** Version history for Video Capture, Media Player, Video Edit, and Media Blocks SDKs. New features, bug fixes, API changes, and platform updates.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, DirectShow, Windows, Capture, Playback, Streaming, Editing
+**API:** VideoCaptureCore, VideoCaptureCoreX, VideoView, MediaPlayerCoreX, DeviceEnumerator
 
 # Changelog
 
 Changes and updates for all .NET SDKs.
 
+## 2026.11.10
+
+- [Windows] Fixed: `MediaInfoReader` reading a Blu-ray that LAV Splitter cannot load crashed the process with an access violation; the load error is now reported instead.
+- [Windows] Fixed: `MediaInfoReader` reading a Blu-ray reported a `NullReferenceException` after the error that the LAV Video Decoder could not be created; it no longer does, and the audio streams are still listed.
+- [Windows] Fixed: `MediaInfoReader` reading a Blu-ray reported a `NullReferenceException` after the error that the LAV Audio Decoder could not be created; it now lists the audio streams without that decoder.
+- [Windows] Fixed: `MediaInfoReader` listed a Blu-ray video stream whose format could not be read as 0x0; it now reports an error instead.
+- [Windows] Fixed: `MediaInfoReader.ReadFileInfo` on a file DirectShow could not open reported no error; it now reports `Unable to add source file`.
+- [Windows] Fixed: `MediaInfoReader` set `Audio_Streams_AllInOne` and rebuilt the stream lists for a file whose splitter lists editions or titles beside its streams.
+- [Windows] Fixed: `VideoCaptureCore` with a local file as the `IP_Camera_Source.URL` (for example `new Uri(@"C:\clip.mp4")` or `file:///C:/clip.mp4`): the VLC engine started without an error but delivered no video frames to the preview, `OnVideoFrameBuffer` or the barcode reader, and the LAV and FFMPEG engines and DirectCapture recording failed to open the file
+- [Windows] Fixed: `VideoCaptureCore` in audio capture mode (`VideoCaptureMode.AudioCapture`) recording to OGG Vorbis could hang in `StopAsync` (in a measured loop, about one stop in three) with a thread spinning at full CPU and memory growing. The stop now ends the audio capture before it finalizes the file; Speex and MP3 output in audio capture mode, which finalize the same way, get the same change.
+- [Video Edit SDK .NET] Fixed: `VideoEditCore` preview of a timeline with no audio (for example images only) did not start when `Virtual_Camera_Output_Enabled` was set, failing with `Unable to connect virtual audio card sink to audio output pin`. The virtual camera now receives the video alone. With NDI streaming and `Network_Streaming_Audio_Enabled`, such a timeline no longer reports `Unable to connect audio null renderer`; NDI streams the video alone.
+- [Media Blocks SDK .Net] Fixed: `ConnectLive` refused an output of `UniversalSourceBlockV2`, `NDISourceBlock`, `NDISourceXBlock`, `RTMPSourceBlock`, `FallbackSwitchSourceBlock` or a demuxer block that had been connected and was no longer connected when `MediaBlocksPipeline` started (for example a `VideoMixerBlock` live input dropped on a stop, or an input removed with `Disconnect`, `VideoMixerBlock.RemoveInputPadLive`, `AudioMixerBlock.RemoveInputLive` or `RemoveBlockLive`), with an error saying that `OnDemandConnect` had to be set. Such an output can now be connected with `ConnectLive`, for example to a new `VideoMixerBlock.AddInputPadLive` input after a restart; until then its data is dropped.
+- [Media Blocks SDK .Net] Fixed: `CVDilateBlock`, `CVErodeBlock`, `CVSmoothBlock` and the other OpenCV blocks that filter with a border could read past the end of the video frame and crash the application (seen on Android with `CVSmoothBlock` → `CVEdgeDetectBlock` → `CVDilateBlock` at 1280x720). Requires `VisioForge.CrossPlatform.OpenCV.*` 2026.11.10.5 or later.
+- [Media Blocks SDK .Net] Fixed: the OpenCV blocks processed RGB and grayscale video whose width is not a multiple of 4 (for example 1366-pixel screen capture) as if every row were shifted by a few bytes, smearing their output diagonally. Requires `VisioForge.CrossPlatform.OpenCV.*` 2026.11.10.5 or later.
+- [Media Blocks SDK .Net] Fixed: the OpenCV `disparity` element shifted RGB rows when the width is not a multiple of 4, could terminate the application on a buffer smaller than the negotiated frame (it now reports an error), leaked the left frame of every stereo pair, dropped the last pair at the end of the stream, could stop the pipeline with "Internal data stream error" on a flushing seek, and paired the first frame after a stop or seek with a stale one. Requires `VisioForge.CrossPlatform.OpenCV.*` 2026.11.10.5 or later.
+- [Media Blocks SDK .Net] Fixed (macOS, Mac Catalyst): the earlier Windows-only OpenCV fixes now reach macOS and Mac Catalyst too - an OpenCV error, a rejected `disparity` stereo pair or an unusable cascade file no longer terminates the application, changing a cascade file while the pipeline runs no longer crashes it, and `CVHandDetectBlock` no longer reports the wrong hand or crashes with several hands in view. Requires `VisioForge.CrossPlatform.OpenCV.macOS` 2026.11.10.5 with `VisioForge.CrossPlatform.Core.macOS` / `.macCatalyst` 2026.10.20 or later.
+- [Core] Fixed: the Android `VideoView` and the MAUI `SkiaVideoView` on Windows kept showing the last video frame after a player, capture or Media Blocks pipeline stopped. They now clear to black (the `SkiaVideoView` to its background color) on stop, and show video again on the next start. On Android this covers the view of the first video renderer; with several renderers, the others still keep the last frame.
+
 ## 2026.11.9
 
+- [Core] Fixed: on iOS, every stop of an engine or Media Blocks pipeline rendering to `VideoViewGL` left another full-size GL view inside it, never released and laid out again on every resize or rotation; the stop also held the calling thread for half a second and the UI thread for a tenth of a second, and creating the view held the UI thread for a tenth of a second too. The view now keeps a single GL view, and neither the stop nor the view's creation pauses any more.
+- [Windows] Fixed: `BarcodeEventArgs.Timestamp` in `OnBarcodeDetected` of `MediaPlayerCore`, `VideoCaptureCore`, `VideoEditCore` and `MediaPlayerCoreX` held the decode's wall-clock date and time (about 739,000 days), not the frame the code was read from; it now carries that frame's timestamp, the same value the engine's video frame events report.
+- [Media Blocks SDK .Net] Fixed: the passphrase, key length, latency, stream ID, local address and port, poll timeout and Listener or Rendezvous mode set in `SRTSinkSettings` or `SRTSourceSettings` were ignored, so a sender with a `Passphrase` streamed unencrypted and a receiver with one could not connect to an encrypted sender. This affected `SRTSinkBlock`, `SRTMPEGTSSinkBlock`, `SRTSourceBlock`, `SRTRAWSourceBlock`, `FallbackSwitchSourceBlock` with an SRT main source, and SRT outputs and sources of the X engines. The settings now apply. A value given in the URI query (`srt://host:port?latency=500`) is kept unless the same setting is changed from its default. A Listener or Rendezvous with the default `LocalPort` binds the port of the URI. A Rendezvous without `LocalAddress`, set in the settings or as `?mode=rendezvous` in the URI, binds all local addresses (`0.0.0.0`, or `::` for an IPv6 peer) instead of the peer's address. A passphrase SRT rejects (outside 10 to 79 bytes in UTF-8) is now reported as an error, and the connection does not open. `SRTSinkSettings.PollTimeout = null` keeps the default of 1000 ms. `UniversalSourceBlockV2` now keeps a `?latency=` given in an SRT URI.
+- [Windows] Fixed: `MediaPlayerCore`, `VideoCaptureCore` and `VideoEditCore` `OnBarcodeDetected` handlers subscribed after `Play` or `Start` received no barcodes, and with no handler subscribed at `Play` or `Start` no event was raised for the whole session. `MediaPlayerCore` (DVD playback included) with `Barcode_Reader_Enabled` and no other frame processing (video effects, motion detection, a frame event) detected no barcodes at all; `VideoCaptureCore` likewise with `Video_Sample_Grabber_Enabled` turned off. Barcodes were never detected in video whose width times 3 is not a multiple of 4 (for example 1366-pixel screen capture).
+- [Windows] Changed: `MediaPlayerCore`, `VideoCaptureCore` and `VideoEditCore` now raise `OnBarcodeDetected` with the engine as `sender`, like their other events, and no longer decode barcodes while no `OnBarcodeDetected` handler is subscribed. `Barcode_Reader_Enabled` and `Barcode_Reader_Type` changed after `Start` now take effect in `VideoEditCore` and in `VideoCaptureCore` (with `Video_Sample_Grabber_Enabled`, the default); in `MediaPlayerCore` when the playback already processes frames (video effects, a frame event, motion detection).
+- [X-engines] Fixed: `MediaPlayerCoreX.Video_Renderer_IsSync = false` had no effect when no `VideoView` was set, so a video processed without a view (for example AI indexing) still played in real time. It now decodes at full speed when audio is off (`Audio_Play = false`) or not clock-synced either. With no view and `Video_Renderer_IsSync` unset, a live source now renders unsynced, as it already did with a view.
+- [X-engines] Added `MediaPlayerCoreX.Audio_Renderer_IsSync`: set it to `false` before `OpenAsync` to render audio without waiting for the pipeline clock (on Windows, macOS and Linux it applies when `Audio_OutputDevice` is set). `null` (default) keeps the current behavior: audio stays synchronized to the clock, also for live sources (`VideoCaptureCoreX.Audio_Renderer_IsSync` defaults to `false` instead).
+- [Video Capture SDK .NET] Fixed: `VideoCaptureCoreX.Dispose()` or `DisposeAsync()` called from a handler raised during a stop, such as `OnOutputStopped` or `OnError`, closed the capture in the middle of that stop. The same happened to a `Dispose()` on the UI thread while a `Stop` or `StopAsync` was running, including one marshaled there from such a handler. The disposed capture then got an `OnStop` event, and after `StopCapture(index)` the output's recording could stay unfinalized. The capture now closes once the stop has finished, and a `Stop` raises no `OnStop` once a dispose has begun.
+- [Media Blocks SDK .Net] Fixed: `MediaBlocksPipeline.StartAsync` failed with "Internal data stream error" when a block had an output connected to nothing, or when another output was connected to the same input with `Connect`; the first output could then also be linked instead of the second. The input now takes the output connected last, and an output connected to nothing drops its data while the rest of the pipeline runs. A warning is logged when another output took its input, or when no output of the block is connected at all.
+- [Video Capture SDK .NET] Fixed: recording to `MKVv1Output` failed with `Unable to build MKVv1 graph` when the Matroska muxer came only from the redist package and was not registered on the machine. The muxer is now loaded from the redist.
+- [Video Edit SDK .NET] Fixed: `FastEncrypt_Start` with an MP4 source never finished when LAV Filters were deployed only from the redist package and not registered on the machine. The LAV Splitter is now loaded from the redist.
+- [Media Player SDK .NET] Fixed: Blu-ray playback and Blu-ray media info needed LAV Filters registered on the machine; they now load LAV from the redist package too.
 - [Media Blocks SDK .Net] Fixed: in a pipeline with several video renderers, mouse moves and clicks over any renderer's window raised `OnMouseMoved`, `OnMouseButtonDown` and `OnMouseButtonUp` on the first renderer's view. They are now raised on the view of the renderer whose window they came from. A `GLVideoRendererBlock` view on Windows, Linux and Mac Catalyst now raises them too. Mouse events from a window no renderer block draws into, such as a video sink in a `CustomMediaBlock`, are no longer raised on any view.
 - [Core] Fixed: an SDK call that reached GStreamer before `VisioForgeX.InitSDK` (for example creating a `VideoSampleGrabber`) left the SDK unusable until the application restarted: `InitSDK` then failed with `TypeInitializationException`. The early call still fails, and `InitSDK` now works after it. With the redist on `PATH`, creating an SDK element such as `VideoSampleGrabber` before `InitSDK` hung or crashed the application; it now throws `InvalidOperationException` that says to call `InitSDK` first. `GstInitializer.InitGES` called before `InitSDK` now throws the same exception instead of leaving the video editing types unregistered for the rest of the process.
+- [Core] Fixed: two pipelines or X engines created at the same time on different threads, before GStreamer had been initialized, could both run the whole GStreamer initialization. It now runs once, and the second caller waits for it. The same holds for two concurrent first calls to `GstInitializer.InitGES`.
 - [X-engines] Fixed: setting `BackgroundImage_Source` or `BackgroundImage_Stretch` on the WPF `VideoView` while an X engine or a Media Blocks pipeline was playing replaced the video for the rest of playback. The video now stays on screen and the image is shown when playback stops.
 - [Media Blocks SDK .Net] Fixed: in a pipeline with several `VideoRendererBlock`s, a WPF `VideoView` on any renderer but the first showed no video in the native rendering mode.
 - [Video Capture SDK .NET] Changed: `new VideoCaptureSource(VideoCaptureDeviceInfo)` and `VideoCaptureCore.Video_CaptureDevice_SetDefault()` now pick the same format as `Format_UseBest`: the highest resolution up to 1920x1080, so a 4K camera starts at 1080p. To capture in 4K, set `Format` and turn `Format_UseBest` off. `new VideoCaptureSource(MediaFoundationCaptureDevice)` follows the same rule: a camera listing only sizes above 1920x1080 is no longer opened at its largest size by default; set `Format` to one of its sizes.
@@ -435807,9 +436041,12 @@ Changes and updates for all .NET SDKs.
 - [Media Blocks SDK .Net] Fixed: `GLVideoMixerBlock` raised the same letterbox error for an input on every `SetSettings` and `Input_Update`. It is now raised once, until the input's state changes.
 - [Media Blocks SDK .Net] Fixed: `GLVideoMixerBlock.SetSettings` that put a `VideoMixerStream` in place of a `GLVideoMixerStream` left the new input with the old crop and blend settings. The plain input now gets no crop and the default blend.
 - [Media Blocks SDK .Net] Added (Linux): the OpenCV blocks (`CVFaceDetectBlock`, `CVSobelBlock`, `VideoStabilizationBlock` and the rest of `VisioForge.Core.MediaBlocks.OpenCV`) now run on Linux x64 and arm64 with the new `VisioForge.CrossPlatform.OpenCV.Linux.x64` and `VisioForge.CrossPlatform.OpenCV.Linux.arm64` packages, on the distribution's GStreamer 1.22 or later (Debian 12, Ubuntu 24.04 and later).
+- [Media Blocks SDK .Net] Added (Android): the OpenCV blocks now run on Android `arm64-v8a` and `x86_64` devices with the new `VisioForge.CrossPlatform.OpenCV.Android` package.
+- [Core] Fixed (Android): reading a GStreamer list, fraction or range field through `GLib.Value.Val` threw "Unknown type".
 - [Media Blocks SDK .Net] Fixed: `VideoEffectsBlock.AddOrUpdateAsync` on a paused pipeline, replacing an effect with one of another type or a `CustomVideoSampleGrabberEffect` with one of another `Format` or `AllowFrameModification`, could leave the pipeline stuck in Paused after it was resumed, and the call reported an error after 30 seconds. The replacement now waits for playback to resume, and the previous effect stays in place until then; if the pause lasts longer than 30 seconds, the previous effect stays until the pipeline stops and the new one applies from the next start.
 - [Media Blocks SDK .Net] Fixed: `VideoEffectsBlock.Remove` and `Clear` on a paused pipeline could leave it stuck in Paused after it was resumed. The effect is now gone from `Get` at once, and its filter leaves the pipeline when playback resumes.
 - [Media Blocks SDK .Net] Fixed: replacing or removing a `CustomVideoSampleGrabberEffect` in a running `VideoEffectsBlock` left its color converters in the pipeline until it was stopped, so every frame went through extra conversions.
+- [Demos] Fixed: in the iOS Media Blocks ScreenCapture demo, the broadcast upload extension crashed as soon as screen sharing started, so the app never received a frame.
 
 ## 2026.11.8
 
@@ -439753,15 +439990,48 @@ VisioForge ya expone tres superficies para agentes de IA — Agent Skills es la 
 ## VisioForge .NET SDKs — Changelog and Release Notes
 **URL:** https://www.visioforge.com/help/docs/dotnet/changelog/
 **Description:** Version history for Video Capture, Media Player, Video Edit, and Media Blocks SDKs. New features, bug fixes, API changes, and platform updates.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, DirectShow, Windows, Capture, Playback, Streaming, Editing
+**API:** VideoCaptureCore, VideoCaptureCoreX, VideoView, MediaPlayerCoreX, DeviceEnumerator
 
 # Changelog
 
 Changes and updates for all .NET SDKs.
 
+## 2026.11.10
+
+- [Windows] Fixed: `MediaInfoReader` reading a Blu-ray that LAV Splitter cannot load crashed the process with an access violation; the load error is now reported instead.
+- [Windows] Fixed: `MediaInfoReader` reading a Blu-ray reported a `NullReferenceException` after the error that the LAV Video Decoder could not be created; it no longer does, and the audio streams are still listed.
+- [Windows] Fixed: `MediaInfoReader` reading a Blu-ray reported a `NullReferenceException` after the error that the LAV Audio Decoder could not be created; it now lists the audio streams without that decoder.
+- [Windows] Fixed: `MediaInfoReader` listed a Blu-ray video stream whose format could not be read as 0x0; it now reports an error instead.
+- [Windows] Fixed: `MediaInfoReader.ReadFileInfo` on a file DirectShow could not open reported no error; it now reports `Unable to add source file`.
+- [Windows] Fixed: `MediaInfoReader` set `Audio_Streams_AllInOne` and rebuilt the stream lists for a file whose splitter lists editions or titles beside its streams.
+- [Windows] Fixed: `VideoCaptureCore` with a local file as the `IP_Camera_Source.URL` (for example `new Uri(@"C:\clip.mp4")` or `file:///C:/clip.mp4`): the VLC engine started without an error but delivered no video frames to the preview, `OnVideoFrameBuffer` or the barcode reader, and the LAV and FFMPEG engines and DirectCapture recording failed to open the file
+- [Windows] Fixed: `VideoCaptureCore` in audio capture mode (`VideoCaptureMode.AudioCapture`) recording to OGG Vorbis could hang in `StopAsync` (in a measured loop, about one stop in three) with a thread spinning at full CPU and memory growing. The stop now ends the audio capture before it finalizes the file; Speex and MP3 output in audio capture mode, which finalize the same way, get the same change.
+- [Video Edit SDK .NET] Fixed: `VideoEditCore` preview of a timeline with no audio (for example images only) did not start when `Virtual_Camera_Output_Enabled` was set, failing with `Unable to connect virtual audio card sink to audio output pin`. The virtual camera now receives the video alone. With NDI streaming and `Network_Streaming_Audio_Enabled`, such a timeline no longer reports `Unable to connect audio null renderer`; NDI streams the video alone.
+- [Media Blocks SDK .Net] Fixed: `ConnectLive` refused an output of `UniversalSourceBlockV2`, `NDISourceBlock`, `NDISourceXBlock`, `RTMPSourceBlock`, `FallbackSwitchSourceBlock` or a demuxer block that had been connected and was no longer connected when `MediaBlocksPipeline` started (for example a `VideoMixerBlock` live input dropped on a stop, or an input removed with `Disconnect`, `VideoMixerBlock.RemoveInputPadLive`, `AudioMixerBlock.RemoveInputLive` or `RemoveBlockLive`), with an error saying that `OnDemandConnect` had to be set. Such an output can now be connected with `ConnectLive`, for example to a new `VideoMixerBlock.AddInputPadLive` input after a restart; until then its data is dropped.
+- [Media Blocks SDK .Net] Fixed: `CVDilateBlock`, `CVErodeBlock`, `CVSmoothBlock` and the other OpenCV blocks that filter with a border could read past the end of the video frame and crash the application (seen on Android with `CVSmoothBlock` → `CVEdgeDetectBlock` → `CVDilateBlock` at 1280x720). Requires `VisioForge.CrossPlatform.OpenCV.*` 2026.11.10.5 or later.
+- [Media Blocks SDK .Net] Fixed: the OpenCV blocks processed RGB and grayscale video whose width is not a multiple of 4 (for example 1366-pixel screen capture) as if every row were shifted by a few bytes, smearing their output diagonally. Requires `VisioForge.CrossPlatform.OpenCV.*` 2026.11.10.5 or later.
+- [Media Blocks SDK .Net] Fixed: the OpenCV `disparity` element shifted RGB rows when the width is not a multiple of 4, could terminate the application on a buffer smaller than the negotiated frame (it now reports an error), leaked the left frame of every stereo pair, dropped the last pair at the end of the stream, could stop the pipeline with "Internal data stream error" on a flushing seek, and paired the first frame after a stop or seek with a stale one. Requires `VisioForge.CrossPlatform.OpenCV.*` 2026.11.10.5 or later.
+- [Media Blocks SDK .Net] Fixed (macOS, Mac Catalyst): the earlier Windows-only OpenCV fixes now reach macOS and Mac Catalyst too - an OpenCV error, a rejected `disparity` stereo pair or an unusable cascade file no longer terminates the application, changing a cascade file while the pipeline runs no longer crashes it, and `CVHandDetectBlock` no longer reports the wrong hand or crashes with several hands in view. Requires `VisioForge.CrossPlatform.OpenCV.macOS` 2026.11.10.5 with `VisioForge.CrossPlatform.Core.macOS` / `.macCatalyst` 2026.10.20 or later.
+- [Core] Fixed: the Android `VideoView` and the MAUI `SkiaVideoView` on Windows kept showing the last video frame after a player, capture or Media Blocks pipeline stopped. They now clear to black (the `SkiaVideoView` to its background color) on stop, and show video again on the next start. On Android this covers the view of the first video renderer; with several renderers, the others still keep the last frame.
+
 ## 2026.11.9
 
+- [Core] Fixed: on iOS, every stop of an engine or Media Blocks pipeline rendering to `VideoViewGL` left another full-size GL view inside it, never released and laid out again on every resize or rotation; the stop also held the calling thread for half a second and the UI thread for a tenth of a second, and creating the view held the UI thread for a tenth of a second too. The view now keeps a single GL view, and neither the stop nor the view's creation pauses any more.
+- [Windows] Fixed: `BarcodeEventArgs.Timestamp` in `OnBarcodeDetected` of `MediaPlayerCore`, `VideoCaptureCore`, `VideoEditCore` and `MediaPlayerCoreX` held the decode's wall-clock date and time (about 739,000 days), not the frame the code was read from; it now carries that frame's timestamp, the same value the engine's video frame events report.
+- [Media Blocks SDK .Net] Fixed: the passphrase, key length, latency, stream ID, local address and port, poll timeout and Listener or Rendezvous mode set in `SRTSinkSettings` or `SRTSourceSettings` were ignored, so a sender with a `Passphrase` streamed unencrypted and a receiver with one could not connect to an encrypted sender. This affected `SRTSinkBlock`, `SRTMPEGTSSinkBlock`, `SRTSourceBlock`, `SRTRAWSourceBlock`, `FallbackSwitchSourceBlock` with an SRT main source, and SRT outputs and sources of the X engines. The settings now apply. A value given in the URI query (`srt://host:port?latency=500`) is kept unless the same setting is changed from its default. A Listener or Rendezvous with the default `LocalPort` binds the port of the URI. A Rendezvous without `LocalAddress`, set in the settings or as `?mode=rendezvous` in the URI, binds all local addresses (`0.0.0.0`, or `::` for an IPv6 peer) instead of the peer's address. A passphrase SRT rejects (outside 10 to 79 bytes in UTF-8) is now reported as an error, and the connection does not open. `SRTSinkSettings.PollTimeout = null` keeps the default of 1000 ms. `UniversalSourceBlockV2` now keeps a `?latency=` given in an SRT URI.
+- [Windows] Fixed: `MediaPlayerCore`, `VideoCaptureCore` and `VideoEditCore` `OnBarcodeDetected` handlers subscribed after `Play` or `Start` received no barcodes, and with no handler subscribed at `Play` or `Start` no event was raised for the whole session. `MediaPlayerCore` (DVD playback included) with `Barcode_Reader_Enabled` and no other frame processing (video effects, motion detection, a frame event) detected no barcodes at all; `VideoCaptureCore` likewise with `Video_Sample_Grabber_Enabled` turned off. Barcodes were never detected in video whose width times 3 is not a multiple of 4 (for example 1366-pixel screen capture).
+- [Windows] Changed: `MediaPlayerCore`, `VideoCaptureCore` and `VideoEditCore` now raise `OnBarcodeDetected` with the engine as `sender`, like their other events, and no longer decode barcodes while no `OnBarcodeDetected` handler is subscribed. `Barcode_Reader_Enabled` and `Barcode_Reader_Type` changed after `Start` now take effect in `VideoEditCore` and in `VideoCaptureCore` (with `Video_Sample_Grabber_Enabled`, the default); in `MediaPlayerCore` when the playback already processes frames (video effects, a frame event, motion detection).
+- [X-engines] Fixed: `MediaPlayerCoreX.Video_Renderer_IsSync = false` had no effect when no `VideoView` was set, so a video processed without a view (for example AI indexing) still played in real time. It now decodes at full speed when audio is off (`Audio_Play = false`) or not clock-synced either. With no view and `Video_Renderer_IsSync` unset, a live source now renders unsynced, as it already did with a view.
+- [X-engines] Added `MediaPlayerCoreX.Audio_Renderer_IsSync`: set it to `false` before `OpenAsync` to render audio without waiting for the pipeline clock (on Windows, macOS and Linux it applies when `Audio_OutputDevice` is set). `null` (default) keeps the current behavior: audio stays synchronized to the clock, also for live sources (`VideoCaptureCoreX.Audio_Renderer_IsSync` defaults to `false` instead).
+- [Video Capture SDK .NET] Fixed: `VideoCaptureCoreX.Dispose()` or `DisposeAsync()` called from a handler raised during a stop, such as `OnOutputStopped` or `OnError`, closed the capture in the middle of that stop. The same happened to a `Dispose()` on the UI thread while a `Stop` or `StopAsync` was running, including one marshaled there from such a handler. The disposed capture then got an `OnStop` event, and after `StopCapture(index)` the output's recording could stay unfinalized. The capture now closes once the stop has finished, and a `Stop` raises no `OnStop` once a dispose has begun.
+- [Media Blocks SDK .Net] Fixed: `MediaBlocksPipeline.StartAsync` failed with "Internal data stream error" when a block had an output connected to nothing, or when another output was connected to the same input with `Connect`; the first output could then also be linked instead of the second. The input now takes the output connected last, and an output connected to nothing drops its data while the rest of the pipeline runs. A warning is logged when another output took its input, or when no output of the block is connected at all.
+- [Video Capture SDK .NET] Fixed: recording to `MKVv1Output` failed with `Unable to build MKVv1 graph` when the Matroska muxer came only from the redist package and was not registered on the machine. The muxer is now loaded from the redist.
+- [Video Edit SDK .NET] Fixed: `FastEncrypt_Start` with an MP4 source never finished when LAV Filters were deployed only from the redist package and not registered on the machine. The LAV Splitter is now loaded from the redist.
+- [Media Player SDK .NET] Fixed: Blu-ray playback and Blu-ray media info needed LAV Filters registered on the machine; they now load LAV from the redist package too.
 - [Media Blocks SDK .Net] Fixed: in a pipeline with several video renderers, mouse moves and clicks over any renderer's window raised `OnMouseMoved`, `OnMouseButtonDown` and `OnMouseButtonUp` on the first renderer's view. They are now raised on the view of the renderer whose window they came from. A `GLVideoRendererBlock` view on Windows, Linux and Mac Catalyst now raises them too. Mouse events from a window no renderer block draws into, such as a video sink in a `CustomMediaBlock`, are no longer raised on any view.
 - [Core] Fixed: an SDK call that reached GStreamer before `VisioForgeX.InitSDK` (for example creating a `VideoSampleGrabber`) left the SDK unusable until the application restarted: `InitSDK` then failed with `TypeInitializationException`. The early call still fails, and `InitSDK` now works after it. With the redist on `PATH`, creating an SDK element such as `VideoSampleGrabber` before `InitSDK` hung or crashed the application; it now throws `InvalidOperationException` that says to call `InitSDK` first. `GstInitializer.InitGES` called before `InitSDK` now throws the same exception instead of leaving the video editing types unregistered for the rest of the process.
+- [Core] Fixed: two pipelines or X engines created at the same time on different threads, before GStreamer had been initialized, could both run the whole GStreamer initialization. It now runs once, and the second caller waits for it. The same holds for two concurrent first calls to `GstInitializer.InitGES`.
 - [X-engines] Fixed: setting `BackgroundImage_Source` or `BackgroundImage_Stretch` on the WPF `VideoView` while an X engine or a Media Blocks pipeline was playing replaced the video for the rest of playback. The video now stays on screen and the image is shown when playback stops.
 - [Media Blocks SDK .Net] Fixed: in a pipeline with several `VideoRendererBlock`s, a WPF `VideoView` on any renderer but the first showed no video in the native rendering mode.
 - [Video Capture SDK .NET] Changed: `new VideoCaptureSource(VideoCaptureDeviceInfo)` and `VideoCaptureCore.Video_CaptureDevice_SetDefault()` now pick the same format as `Format_UseBest`: the highest resolution up to 1920x1080, so a 4K camera starts at 1080p. To capture in 4K, set `Format` and turn `Format_UseBest` off. `new VideoCaptureSource(MediaFoundationCaptureDevice)` follows the same rule: a camera listing only sizes above 1920x1080 is no longer opened at its largest size by default; set `Format` to one of its sizes.
@@ -439782,9 +440052,12 @@ Changes and updates for all .NET SDKs.
 - [Media Blocks SDK .Net] Fixed: `GLVideoMixerBlock` raised the same letterbox error for an input on every `SetSettings` and `Input_Update`. It is now raised once, until the input's state changes.
 - [Media Blocks SDK .Net] Fixed: `GLVideoMixerBlock.SetSettings` that put a `VideoMixerStream` in place of a `GLVideoMixerStream` left the new input with the old crop and blend settings. The plain input now gets no crop and the default blend.
 - [Media Blocks SDK .Net] Added (Linux): the OpenCV blocks (`CVFaceDetectBlock`, `CVSobelBlock`, `VideoStabilizationBlock` and the rest of `VisioForge.Core.MediaBlocks.OpenCV`) now run on Linux x64 and arm64 with the new `VisioForge.CrossPlatform.OpenCV.Linux.x64` and `VisioForge.CrossPlatform.OpenCV.Linux.arm64` packages, on the distribution's GStreamer 1.22 or later (Debian 12, Ubuntu 24.04 and later).
+- [Media Blocks SDK .Net] Added (Android): the OpenCV blocks now run on Android `arm64-v8a` and `x86_64` devices with the new `VisioForge.CrossPlatform.OpenCV.Android` package.
+- [Core] Fixed (Android): reading a GStreamer list, fraction or range field through `GLib.Value.Val` threw "Unknown type".
 - [Media Blocks SDK .Net] Fixed: `VideoEffectsBlock.AddOrUpdateAsync` on a paused pipeline, replacing an effect with one of another type or a `CustomVideoSampleGrabberEffect` with one of another `Format` or `AllowFrameModification`, could leave the pipeline stuck in Paused after it was resumed, and the call reported an error after 30 seconds. The replacement now waits for playback to resume, and the previous effect stays in place until then; if the pause lasts longer than 30 seconds, the previous effect stays until the pipeline stops and the new one applies from the next start.
 - [Media Blocks SDK .Net] Fixed: `VideoEffectsBlock.Remove` and `Clear` on a paused pipeline could leave it stuck in Paused after it was resumed. The effect is now gone from `Get` at once, and its filter leaves the pipeline when playback resumes.
 - [Media Blocks SDK .Net] Fixed: replacing or removing a `CustomVideoSampleGrabberEffect` in a running `VideoEffectsBlock` left its color converters in the pipeline until it was stopped, so every frame went through extra conversions.
+- [Demos] Fixed: in the iOS Media Blocks ScreenCapture demo, the broadcast upload extension crashed as soon as screen sharing started, so the app never received a frame.
 
 ## 2026.11.8
 
@@ -443826,15 +444099,48 @@ VisioForge expose déjà trois autres surfaces destinées aux agents IA — Agen
 ## VisioForge .NET SDKs — Changelog and Release Notes
 **URL:** https://www.visioforge.com/help/docs/dotnet/changelog/
 **Description:** Version history for Video Capture, Media Player, Video Edit, and Media Blocks SDKs. New features, bug fixes, API changes, and platform updates.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, DirectShow, Windows, Capture, Playback, Streaming, Editing
+**API:** VideoCaptureCore, VideoCaptureCoreX, VideoView, MediaPlayerCoreX, DeviceEnumerator
 
 # Changelog
 
 Changes and updates for all .NET SDKs.
 
+## 2026.11.10
+
+- [Windows] Fixed: `MediaInfoReader` reading a Blu-ray that LAV Splitter cannot load crashed the process with an access violation; the load error is now reported instead.
+- [Windows] Fixed: `MediaInfoReader` reading a Blu-ray reported a `NullReferenceException` after the error that the LAV Video Decoder could not be created; it no longer does, and the audio streams are still listed.
+- [Windows] Fixed: `MediaInfoReader` reading a Blu-ray reported a `NullReferenceException` after the error that the LAV Audio Decoder could not be created; it now lists the audio streams without that decoder.
+- [Windows] Fixed: `MediaInfoReader` listed a Blu-ray video stream whose format could not be read as 0x0; it now reports an error instead.
+- [Windows] Fixed: `MediaInfoReader.ReadFileInfo` on a file DirectShow could not open reported no error; it now reports `Unable to add source file`.
+- [Windows] Fixed: `MediaInfoReader` set `Audio_Streams_AllInOne` and rebuilt the stream lists for a file whose splitter lists editions or titles beside its streams.
+- [Windows] Fixed: `VideoCaptureCore` with a local file as the `IP_Camera_Source.URL` (for example `new Uri(@"C:\clip.mp4")` or `file:///C:/clip.mp4`): the VLC engine started without an error but delivered no video frames to the preview, `OnVideoFrameBuffer` or the barcode reader, and the LAV and FFMPEG engines and DirectCapture recording failed to open the file
+- [Windows] Fixed: `VideoCaptureCore` in audio capture mode (`VideoCaptureMode.AudioCapture`) recording to OGG Vorbis could hang in `StopAsync` (in a measured loop, about one stop in three) with a thread spinning at full CPU and memory growing. The stop now ends the audio capture before it finalizes the file; Speex and MP3 output in audio capture mode, which finalize the same way, get the same change.
+- [Video Edit SDK .NET] Fixed: `VideoEditCore` preview of a timeline with no audio (for example images only) did not start when `Virtual_Camera_Output_Enabled` was set, failing with `Unable to connect virtual audio card sink to audio output pin`. The virtual camera now receives the video alone. With NDI streaming and `Network_Streaming_Audio_Enabled`, such a timeline no longer reports `Unable to connect audio null renderer`; NDI streams the video alone.
+- [Media Blocks SDK .Net] Fixed: `ConnectLive` refused an output of `UniversalSourceBlockV2`, `NDISourceBlock`, `NDISourceXBlock`, `RTMPSourceBlock`, `FallbackSwitchSourceBlock` or a demuxer block that had been connected and was no longer connected when `MediaBlocksPipeline` started (for example a `VideoMixerBlock` live input dropped on a stop, or an input removed with `Disconnect`, `VideoMixerBlock.RemoveInputPadLive`, `AudioMixerBlock.RemoveInputLive` or `RemoveBlockLive`), with an error saying that `OnDemandConnect` had to be set. Such an output can now be connected with `ConnectLive`, for example to a new `VideoMixerBlock.AddInputPadLive` input after a restart; until then its data is dropped.
+- [Media Blocks SDK .Net] Fixed: `CVDilateBlock`, `CVErodeBlock`, `CVSmoothBlock` and the other OpenCV blocks that filter with a border could read past the end of the video frame and crash the application (seen on Android with `CVSmoothBlock` → `CVEdgeDetectBlock` → `CVDilateBlock` at 1280x720). Requires `VisioForge.CrossPlatform.OpenCV.*` 2026.11.10.5 or later.
+- [Media Blocks SDK .Net] Fixed: the OpenCV blocks processed RGB and grayscale video whose width is not a multiple of 4 (for example 1366-pixel screen capture) as if every row were shifted by a few bytes, smearing their output diagonally. Requires `VisioForge.CrossPlatform.OpenCV.*` 2026.11.10.5 or later.
+- [Media Blocks SDK .Net] Fixed: the OpenCV `disparity` element shifted RGB rows when the width is not a multiple of 4, could terminate the application on a buffer smaller than the negotiated frame (it now reports an error), leaked the left frame of every stereo pair, dropped the last pair at the end of the stream, could stop the pipeline with "Internal data stream error" on a flushing seek, and paired the first frame after a stop or seek with a stale one. Requires `VisioForge.CrossPlatform.OpenCV.*` 2026.11.10.5 or later.
+- [Media Blocks SDK .Net] Fixed (macOS, Mac Catalyst): the earlier Windows-only OpenCV fixes now reach macOS and Mac Catalyst too - an OpenCV error, a rejected `disparity` stereo pair or an unusable cascade file no longer terminates the application, changing a cascade file while the pipeline runs no longer crashes it, and `CVHandDetectBlock` no longer reports the wrong hand or crashes with several hands in view. Requires `VisioForge.CrossPlatform.OpenCV.macOS` 2026.11.10.5 with `VisioForge.CrossPlatform.Core.macOS` / `.macCatalyst` 2026.10.20 or later.
+- [Core] Fixed: the Android `VideoView` and the MAUI `SkiaVideoView` on Windows kept showing the last video frame after a player, capture or Media Blocks pipeline stopped. They now clear to black (the `SkiaVideoView` to its background color) on stop, and show video again on the next start. On Android this covers the view of the first video renderer; with several renderers, the others still keep the last frame.
+
 ## 2026.11.9
 
+- [Core] Fixed: on iOS, every stop of an engine or Media Blocks pipeline rendering to `VideoViewGL` left another full-size GL view inside it, never released and laid out again on every resize or rotation; the stop also held the calling thread for half a second and the UI thread for a tenth of a second, and creating the view held the UI thread for a tenth of a second too. The view now keeps a single GL view, and neither the stop nor the view's creation pauses any more.
+- [Windows] Fixed: `BarcodeEventArgs.Timestamp` in `OnBarcodeDetected` of `MediaPlayerCore`, `VideoCaptureCore`, `VideoEditCore` and `MediaPlayerCoreX` held the decode's wall-clock date and time (about 739,000 days), not the frame the code was read from; it now carries that frame's timestamp, the same value the engine's video frame events report.
+- [Media Blocks SDK .Net] Fixed: the passphrase, key length, latency, stream ID, local address and port, poll timeout and Listener or Rendezvous mode set in `SRTSinkSettings` or `SRTSourceSettings` were ignored, so a sender with a `Passphrase` streamed unencrypted and a receiver with one could not connect to an encrypted sender. This affected `SRTSinkBlock`, `SRTMPEGTSSinkBlock`, `SRTSourceBlock`, `SRTRAWSourceBlock`, `FallbackSwitchSourceBlock` with an SRT main source, and SRT outputs and sources of the X engines. The settings now apply. A value given in the URI query (`srt://host:port?latency=500`) is kept unless the same setting is changed from its default. A Listener or Rendezvous with the default `LocalPort` binds the port of the URI. A Rendezvous without `LocalAddress`, set in the settings or as `?mode=rendezvous` in the URI, binds all local addresses (`0.0.0.0`, or `::` for an IPv6 peer) instead of the peer's address. A passphrase SRT rejects (outside 10 to 79 bytes in UTF-8) is now reported as an error, and the connection does not open. `SRTSinkSettings.PollTimeout = null` keeps the default of 1000 ms. `UniversalSourceBlockV2` now keeps a `?latency=` given in an SRT URI.
+- [Windows] Fixed: `MediaPlayerCore`, `VideoCaptureCore` and `VideoEditCore` `OnBarcodeDetected` handlers subscribed after `Play` or `Start` received no barcodes, and with no handler subscribed at `Play` or `Start` no event was raised for the whole session. `MediaPlayerCore` (DVD playback included) with `Barcode_Reader_Enabled` and no other frame processing (video effects, motion detection, a frame event) detected no barcodes at all; `VideoCaptureCore` likewise with `Video_Sample_Grabber_Enabled` turned off. Barcodes were never detected in video whose width times 3 is not a multiple of 4 (for example 1366-pixel screen capture).
+- [Windows] Changed: `MediaPlayerCore`, `VideoCaptureCore` and `VideoEditCore` now raise `OnBarcodeDetected` with the engine as `sender`, like their other events, and no longer decode barcodes while no `OnBarcodeDetected` handler is subscribed. `Barcode_Reader_Enabled` and `Barcode_Reader_Type` changed after `Start` now take effect in `VideoEditCore` and in `VideoCaptureCore` (with `Video_Sample_Grabber_Enabled`, the default); in `MediaPlayerCore` when the playback already processes frames (video effects, a frame event, motion detection).
+- [X-engines] Fixed: `MediaPlayerCoreX.Video_Renderer_IsSync = false` had no effect when no `VideoView` was set, so a video processed without a view (for example AI indexing) still played in real time. It now decodes at full speed when audio is off (`Audio_Play = false`) or not clock-synced either. With no view and `Video_Renderer_IsSync` unset, a live source now renders unsynced, as it already did with a view.
+- [X-engines] Added `MediaPlayerCoreX.Audio_Renderer_IsSync`: set it to `false` before `OpenAsync` to render audio without waiting for the pipeline clock (on Windows, macOS and Linux it applies when `Audio_OutputDevice` is set). `null` (default) keeps the current behavior: audio stays synchronized to the clock, also for live sources (`VideoCaptureCoreX.Audio_Renderer_IsSync` defaults to `false` instead).
+- [Video Capture SDK .NET] Fixed: `VideoCaptureCoreX.Dispose()` or `DisposeAsync()` called from a handler raised during a stop, such as `OnOutputStopped` or `OnError`, closed the capture in the middle of that stop. The same happened to a `Dispose()` on the UI thread while a `Stop` or `StopAsync` was running, including one marshaled there from such a handler. The disposed capture then got an `OnStop` event, and after `StopCapture(index)` the output's recording could stay unfinalized. The capture now closes once the stop has finished, and a `Stop` raises no `OnStop` once a dispose has begun.
+- [Media Blocks SDK .Net] Fixed: `MediaBlocksPipeline.StartAsync` failed with "Internal data stream error" when a block had an output connected to nothing, or when another output was connected to the same input with `Connect`; the first output could then also be linked instead of the second. The input now takes the output connected last, and an output connected to nothing drops its data while the rest of the pipeline runs. A warning is logged when another output took its input, or when no output of the block is connected at all.
+- [Video Capture SDK .NET] Fixed: recording to `MKVv1Output` failed with `Unable to build MKVv1 graph` when the Matroska muxer came only from the redist package and was not registered on the machine. The muxer is now loaded from the redist.
+- [Video Edit SDK .NET] Fixed: `FastEncrypt_Start` with an MP4 source never finished when LAV Filters were deployed only from the redist package and not registered on the machine. The LAV Splitter is now loaded from the redist.
+- [Media Player SDK .NET] Fixed: Blu-ray playback and Blu-ray media info needed LAV Filters registered on the machine; they now load LAV from the redist package too.
 - [Media Blocks SDK .Net] Fixed: in a pipeline with several video renderers, mouse moves and clicks over any renderer's window raised `OnMouseMoved`, `OnMouseButtonDown` and `OnMouseButtonUp` on the first renderer's view. They are now raised on the view of the renderer whose window they came from. A `GLVideoRendererBlock` view on Windows, Linux and Mac Catalyst now raises them too. Mouse events from a window no renderer block draws into, such as a video sink in a `CustomMediaBlock`, are no longer raised on any view.
 - [Core] Fixed: an SDK call that reached GStreamer before `VisioForgeX.InitSDK` (for example creating a `VideoSampleGrabber`) left the SDK unusable until the application restarted: `InitSDK` then failed with `TypeInitializationException`. The early call still fails, and `InitSDK` now works after it. With the redist on `PATH`, creating an SDK element such as `VideoSampleGrabber` before `InitSDK` hung or crashed the application; it now throws `InvalidOperationException` that says to call `InitSDK` first. `GstInitializer.InitGES` called before `InitSDK` now throws the same exception instead of leaving the video editing types unregistered for the rest of the process.
+- [Core] Fixed: two pipelines or X engines created at the same time on different threads, before GStreamer had been initialized, could both run the whole GStreamer initialization. It now runs once, and the second caller waits for it. The same holds for two concurrent first calls to `GstInitializer.InitGES`.
 - [X-engines] Fixed: setting `BackgroundImage_Source` or `BackgroundImage_Stretch` on the WPF `VideoView` while an X engine or a Media Blocks pipeline was playing replaced the video for the rest of playback. The video now stays on screen and the image is shown when playback stops.
 - [Media Blocks SDK .Net] Fixed: in a pipeline with several `VideoRendererBlock`s, a WPF `VideoView` on any renderer but the first showed no video in the native rendering mode.
 - [Video Capture SDK .NET] Changed: `new VideoCaptureSource(VideoCaptureDeviceInfo)` and `VideoCaptureCore.Video_CaptureDevice_SetDefault()` now pick the same format as `Format_UseBest`: the highest resolution up to 1920x1080, so a 4K camera starts at 1080p. To capture in 4K, set `Format` and turn `Format_UseBest` off. `new VideoCaptureSource(MediaFoundationCaptureDevice)` follows the same rule: a camera listing only sizes above 1920x1080 is no longer opened at its largest size by default; set `Format` to one of its sizes.
@@ -443855,9 +444161,12 @@ Changes and updates for all .NET SDKs.
 - [Media Blocks SDK .Net] Fixed: `GLVideoMixerBlock` raised the same letterbox error for an input on every `SetSettings` and `Input_Update`. It is now raised once, until the input's state changes.
 - [Media Blocks SDK .Net] Fixed: `GLVideoMixerBlock.SetSettings` that put a `VideoMixerStream` in place of a `GLVideoMixerStream` left the new input with the old crop and blend settings. The plain input now gets no crop and the default blend.
 - [Media Blocks SDK .Net] Added (Linux): the OpenCV blocks (`CVFaceDetectBlock`, `CVSobelBlock`, `VideoStabilizationBlock` and the rest of `VisioForge.Core.MediaBlocks.OpenCV`) now run on Linux x64 and arm64 with the new `VisioForge.CrossPlatform.OpenCV.Linux.x64` and `VisioForge.CrossPlatform.OpenCV.Linux.arm64` packages, on the distribution's GStreamer 1.22 or later (Debian 12, Ubuntu 24.04 and later).
+- [Media Blocks SDK .Net] Added (Android): the OpenCV blocks now run on Android `arm64-v8a` and `x86_64` devices with the new `VisioForge.CrossPlatform.OpenCV.Android` package.
+- [Core] Fixed (Android): reading a GStreamer list, fraction or range field through `GLib.Value.Val` threw "Unknown type".
 - [Media Blocks SDK .Net] Fixed: `VideoEffectsBlock.AddOrUpdateAsync` on a paused pipeline, replacing an effect with one of another type or a `CustomVideoSampleGrabberEffect` with one of another `Format` or `AllowFrameModification`, could leave the pipeline stuck in Paused after it was resumed, and the call reported an error after 30 seconds. The replacement now waits for playback to resume, and the previous effect stays in place until then; if the pause lasts longer than 30 seconds, the previous effect stays until the pipeline stops and the new one applies from the next start.
 - [Media Blocks SDK .Net] Fixed: `VideoEffectsBlock.Remove` and `Clear` on a paused pipeline could leave it stuck in Paused after it was resumed. The effect is now gone from `Get` at once, and its filter leaves the pipeline when playback resumes.
 - [Media Blocks SDK .Net] Fixed: replacing or removing a `CustomVideoSampleGrabberEffect` in a running `VideoEffectsBlock` left its color converters in the pipeline until it was stopped, so every frame went through extra conversions.
+- [Demos] Fixed: in the iOS Media Blocks ScreenCapture demo, the broadcast upload extension crashed as soon as screen sharing started, so the app never received a frame.
 
 ## 2026.11.8
 
@@ -447895,6 +448204,8 @@ Powerful video editing capabilities including trimming, effects, overlays, mixin
 
 A video SDK helps developers integrate multi-source video recording into custom apps efficiently. It simplifies capturing from webcams, screens, or IP cameras, providing reliable performance and reducing development time across various multimedia application types.
 
+Not sure which SDK fits your project? Compare them in the [SDK Selection Guide](/which-dotnet-sdk).
+
 ## Frequently Asked Questions
 
 What platforms do VisioForge SDKs support?
@@ -448403,9 +448714,9 @@ Broadcast to multiple platforms, professional streaming with overlays and effect
 
 Professional video capture, multi-camera recording, chroma key processing
 
-## Easy to Integrate
+## Record a Webcam to MP4 in C#
 
-Get started with just a few lines of code
+Recording a webcam to MP4 in C# takes about a dozen lines with Video Capture SDK .NET. Install the VisioForge.DotNet.VideoCapture NuGet package and call VisioForgeX.InitSDKAsync() once at startup. Create a VideoCaptureCoreX bound to a VideoView, take a camera from Video\_SourcesAsync() and assign it to Video\_Source as VideoCaptureDeviceSourceSettings; a fixed resolution and frame rate come from the camera's VideoFormats list. Pass new MP4Output("output.mp4") to Outputs\_Add, assign a microphone from Audio\_SourcesAsync() to Audio\_Source via CreateSourceSettingsVC() with Audio\_Record set to true, and call StartAsync(); StopAsync() closes the file. On Windows the video is encoded to H.264 on the GPU encoder the SDK finds (NVIDIA NVENC, Intel Quick Sync or AMD AMF), or with OpenH264 when there is none, and the audio to AAC. The preview keeps running in the same VideoView while the file is written, in WPF, WinForms, MAUI and Avalonia apps alike. The [save webcam video guide](/help/docs/dotnet/videocapture/guides/save-webcam-video/) adds WebM output, snapshots and the redistributable packages for each platform.
 
 ## Code Samples
 
@@ -448597,9 +448908,9 @@ await videoCapture1.Video_Effects_AddOrUpdateAsync(new TextOverlayVideoEffect() 
 await videoCapture1.StartAsync();
 ```
 
-## Advanced video recording for apps
+## Connect to an RTSP or ONVIF IP Camera in C#
 
-Video recording enhances software by enabling users to capture, store, and review footage from webcams, IP cameras, or desktop activity. This functionality supports analysis, archiving, and content sharing, giving applications greater versatility in handling live visual data across different environments.
+Video Capture SDK .NET connects to an RTSP or ONVIF IP camera with one call: RTSPSourceSettings.CreateAsync(uri, login, password, audioEnabled) probes the stream, reads its format and returns a source for Video\_Source. Protocol-level RTSP libraries such as RtspClientSharp and SharpRTSP hand over encoded frames, leaving decoding, display and file writing to your code; here one VideoCaptureCoreX instance previews the camera and, with Outputs\_Add(new MP4Output("camera.mp4")), records it as well. UseGPUDecoder moves decoding to the graphics card, and LowLatencyMode cuts the default 500 ms latency buffer to 150 ms for live monitoring. FallbackSwitch shows a still image or text when the stream fails; it decodes the stream itself, so UseGPUDecoder does not apply alongside it. To find cameras without typing addresses, DeviceEnumerator.Shared.ONVIF\_ListSourcesAsync discovers ONVIF devices on the local network. The [RTSP camera guide](/help/docs/dotnet/videocapture/video-sources/ip-cameras/rtsp/) covers low-latency and troubleshooting settings, and the [camera directory](/help/docs/dotnet/camera-brands/) lists RTSP URL formats for Hikvision, Dahua, Axis and more than 50 other brands.
 
 ## Choose Your License
 

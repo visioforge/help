@@ -1,12 +1,11 @@
 ---
-title: Speaker Diarization SDK for .NET — SpeakerDiarizationBlock
+title: SpeakerDiarizationBlock — Speaker Diarization for .NET
 description: On-device speaker diarization for .NET — find "who spoke when" in recorded audio with pyannote segmentation, WeSpeaker embeddings and diarized transcripts.
 sidebar_label: Speaker Diarization
 tags:
   - .NET
   - AI
   - Speaker Diarization
-  - Diarization SDK
   - Who Spoke When
   - Speaker Segmentation
   - Speaker Embedding

@@ -1,5 +1,5 @@
 ---
-title: PTZ Auto-Tracking SDK for .NET — ONVIF Camera Control
+title: PTZ Auto-Tracking in C# and .NET — ONVIF Camera Control
 description: "PTZ auto-tracking for .NET: make an ONVIF PTZ camera follow a detected object with proportional pan/tilt/zoom, a dead zone, and sticky tracking."
 sidebar_label: PTZ Auto-Tracking
 tags:

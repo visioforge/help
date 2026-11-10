@@ -113,6 +113,8 @@ var password = "ABCDEF"; // verification code from camera label
 
 For sub-stream access, use `/h264/ch1/sub/av_stream` instead.
 
+To preview and record RTSP-enabled EZVIZ cameras to MP4 from a C# app, [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) takes the RTSP URL above and handles decoding and recording in one pipeline, with no separate RTSP client library.
+
 ## Snapshot URLs
 
 | Type | URL Pattern | Notes |

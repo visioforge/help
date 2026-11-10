@@ -1,5 +1,5 @@
 ---
-title: SDK de Redacción de PII para .NET — PIIRedactionBlock
+title: PIIRedactionBlock — redacción de PII en vídeo para .NET
 description: "Redacte PII en vídeo en el dispositivo con PIIRedactionBlock: difumine o pixele rostros, matrículas y texto. Compatible con RGPD/CCPA/BIPA, sin nube."
 sidebar_label: Redacción de PII
 tags:

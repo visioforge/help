@@ -110,6 +110,8 @@ var password = "YourPassword";
 
 For sub-stream access, add `?resolution=640x480` parameter.
 
+To preview and record Axis cameras to MP4 from a C# app, [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) takes the RTSP URL above and handles decoding and recording in one pipeline, with no separate RTSP client library.
+
 ### ONVIF Discovery
 
 Axis was a founding member of ONVIF and has industry-leading ONVIF compliance. See the [ONVIF integration guide](../mediablocks/Sources/index.md) for discovery code examples.

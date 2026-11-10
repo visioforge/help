@@ -42,6 +42,8 @@ Lors de l'implémentation des capacités d'enregistrement de webcam, les dévelo
 - La gestion du cycle de vie de la capture (initialisation, démarrage, arrêt)
 - La gestion de la création et de l'organisation du fichier de sortie
 
+Ce tutoriel utilise le moteur VideoCaptureCore, réservé à Windows. [Video Capture SDK .NET](https://www.visioforge.com/fr/video-capture-sdk-net) enregistre aussi les webcams en MP4 sous macOS, Linux, Android et iOS avec VideoCaptureCoreX : consultez [Enregistrer la vidéo d'une webcam en C#](../guides/save-webcam-video.md) et les guides de déploiement [Android](../../deployment-x/Android.md) et [iOS](../../deployment-x/iOS.md).
+
 ## Tutoriel vidéo d'implémentation
 
 La vidéo suivante illustre le processus complet de mise en place d'une application de capture de webcam :

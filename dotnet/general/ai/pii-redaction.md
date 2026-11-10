@@ -1,5 +1,5 @@
 ---
-title: PII Redaction SDK for .NET — Blur Faces & License Plates
+title: PIIRedactionBlock — Blur Faces and License Plates in .NET
 description: Redact PII in video on-device with PIIRedactionBlock — blur or pixelate faces, license plates, and on-screen text. GDPR/CCPA/BIPA-friendly, no cloud.
 sidebar_label: PII Redaction
 tags:

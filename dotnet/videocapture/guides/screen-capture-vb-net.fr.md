@@ -322,4 +322,5 @@ Oui. Créez `VideoCaptureCoreX` sans paramètre `VideoView` : `VideoCapture1 = N
 - [Enregistrer une vidéo webcam en C#](save-webcam-video.md) — même fonctionnalité de capture webcam avec exemples C#
 - [Créer un lecteur vidéo en VB.NET](../../mediaplayer/guides/video-player-vb-net.md) — lecteur multimédia VB.NET avec contrôles de lecture
 - [Enregistrement pré-événement](pre-event-recording.md) — enregistrement par tampon circulaire qui capture les images avant l'événement déclencheur
+- [Enregistrement d'écran multiplateforme en C#](https://www.visioforge.com/fr/solutions/screen-recording-csharp) — API de capture par plateforme, un enregistreur .NET MAUI et la version d'essai
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements

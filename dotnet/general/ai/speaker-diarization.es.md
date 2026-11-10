@@ -1,12 +1,11 @@
 ---
-title: Diarización de hablantes .NET — SpeakerDiarizationBlock
+title: SpeakerDiarizationBlock — diarización de hablantes .NET
 description: Diarización de hablantes en el dispositivo para .NET — «quién habló y cuándo» en audio grabado con pyannote, embeddings WeSpeaker y transcripciones diarizadas.
 sidebar_label: Diarización de hablantes
 tags:
   - .NET
   - AI
   - Speaker Diarization
-  - Diarization SDK
   - Who Spoke When
   - Speaker Segmentation
   - Speaker Embedding

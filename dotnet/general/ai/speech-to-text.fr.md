@@ -1,15 +1,13 @@
 ---
-title: SDK reconnaissance vocale .NET — SpeechToTextBlock
-description: SDK de reconnaissance vocale .NET — transcrivez de l'audio en direct ou en fichier en local avec Whisper ASR et Silero VAD, plus sous-titres SRT/VTT.
+title: SpeechToTextBlock — Référence de transcription pour .NET
+description: Référence SpeechToTextBlock — transcrivez l'audio sur l'appareil avec Whisper en C# ; paramètres, Silero VAD, modèles, SRT/VTT et dépannage.
 sidebar_label: Reconnaissance vocale
 tags:
   - .NET
   - AI
   - Whisper
   - Speech-to-Text
-  - Speech-to-Text SDK
   - Speech Recognition
-  - Live Subtitles
   - Transcription
   - VideoCaptureCoreX
   - MediaPlayerCoreX
@@ -23,7 +21,7 @@ primary_api_classes:
   - SubtitleStyle
 ---
 
-# Reconnaissance vocale et sous-titres en direct — SpeechToTextBlock
+# Référence de reconnaissance vocale — SpeechToTextBlock
 
 `SpeechToTextBlock` est un bloc média audio uniquement issu de `VisioForge.DotNet.Core.AI.Whisper`. Il
 capte le flux audio, segmente la parole avec Silero VAD, la transcrit avec Whisper (Whisper.net /
@@ -35,6 +33,9 @@ directement sur `VideoCaptureCoreX`/`MediaPlayerCoreX`.
 using VisioForge.Core.MediaBlocks.AI;
 using VisioForge.Core.Types.X.AI;
 ```
+
+Pour un tutoriel pas à pas — transcrire un fichier, sous-titrer une source en direct et afficher les sous-titres sur la vidéo — consultez
+[Sous-titres en direct et reconnaissance vocale (Whisper)](../../mediablocks/Guides/live-subtitles-whisper-csharp.md).
 
 ## Configuration de base du bloc
 
@@ -353,6 +354,7 @@ Connectez `SubtitleRenderer.OnSpeechRecognized` comme gestionnaire d'événement
 `OverlayManagerBlock` — voir [SubtitleRenderer — sous-titres à l'écran](#subtitlerenderer-sous-titres-a-lecran).
 Si vous avez seulement besoin de fichiers SRT/VTT, définissez plutôt
 `OutputSrtPath`/`OutputVttPath`.
+Pour un exemple complet, consultez le [tutoriel sur les sous-titres en direct](../../mediablocks/Guides/live-subtitles-whisper-csharp.md).
 
 ### Quelle taille de modèle Whisper dois-je utiliser ?
 

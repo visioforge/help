@@ -1,15 +1,13 @@
 ---
-title: Speech-to-Text SDK for .NET — SpeechToTextBlock (Whisper)
-description: Speech-to-text SDK for .NET — transcribe live or file audio on-device with Whisper ASR and Silero VAD, plus SRT/VTT and live subtitle helpers.
+title: SpeechToTextBlock — Speech-to-Text Reference for .NET
+description: SpeechToTextBlock reference — transcribe audio on-device with Whisper in C#; settings, Silero VAD, model sizes, SRT/VTT, subtitles, troubleshooting.
 sidebar_label: Speech-to-Text
 tags:
   - .NET
   - AI
   - Whisper
   - Speech-to-Text
-  - Speech-to-Text SDK
   - Speech Recognition
-  - Live Subtitles
   - Transcription
   - VideoCaptureCoreX
   - MediaPlayerCoreX
@@ -23,7 +21,7 @@ primary_api_classes:
   - SubtitleStyle
 ---
 
-# Speech-to-Text and Live Subtitles — SpeechToTextBlock
+# Speech-to-Text Reference — SpeechToTextBlock
 
 `SpeechToTextBlock` is an audio-only Media Block from `VisioForge.DotNet.Core.AI.Whisper`. It taps the
 audio stream, segments speech with Silero VAD, transcribes it with Whisper (Whisper.net / GGML), and
@@ -35,6 +33,9 @@ raises `OnSpeechRecognized`. Audio passes through unchanged. The block implement
 using VisioForge.Core.MediaBlocks.AI;
 using VisioForge.Core.Types.X.AI;
 ```
+
+For a step-by-step tutorial — transcribe a file, caption a live source and render subtitles on video — see
+[Live Subtitles and Speech-to-Text in C# .NET (Whisper)](../../mediablocks/Guides/live-subtitles-whisper-csharp.md).
 
 ## Basic block setup
 
@@ -341,6 +342,7 @@ Yes — set `SpeechToTextSettings.Task = SpeechToTextTask.Translate`.
 Wire `SubtitleRenderer.OnSpeechRecognized` as the block's event handler against an
 `OverlayManagerBlock` — see [SubtitleRenderer — on-screen captions](#subtitlerenderer-on-screen-captions).
 If you only need SRT/VTT files, set `OutputSrtPath`/`OutputVttPath` instead.
+For an end-to-end walkthrough, see the [live subtitles tutorial](../../mediablocks/Guides/live-subtitles-whisper-csharp.md).
 
 ### Which Whisper model size should I use?
 

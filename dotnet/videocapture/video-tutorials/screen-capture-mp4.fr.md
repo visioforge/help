@@ -1,5 +1,5 @@
 ---
-title: Enregistrement d'écran en C# .NET — MP4, GPU, multi-écrans
+title: Capture d'écran vers MP4 en C# — tutoriel, GPU, multi-écrans
 description: Enregistrez plein écran, région ou multi-écrans en MP4. Encodage GPU (NVENC/QSV/AMF), audio loopback, surbrillance du curseur, exemples C# legacy et modernes.
 sidebar_label: Capture d'écran en MP4
 tags:
@@ -383,6 +383,8 @@ var screenSource = new ScreenCaptureD3D11SourceSettings
 };
 ```
 
+Pour Android et iOS, ainsi qu'un enregistreur .NET MAUI qui fonctionne sous Windows, Mac Catalyst, Android et iOS, consultez [Enregistrement d'écran multiplateforme en C# et .NET](https://www.visioforge.com/fr/solutions/screen-recording-csharp).
+
 ## Comment ça fonctionne — API héritée
 
 Cette application Windows Forms montre la fonctionnalité de capture d'écran avec et sans audio à l'aide de VisioForge Video Capture SDK :
@@ -527,4 +529,5 @@ La fréquence d'images par défaut est de 10 FPS. Utilisez 15 FPS pour les prés
 - [Configuration de source écran](../video-sources/screen.md) — référence complète pour la région de capture, le multi-écrans, le curseur et la fréquence d'images
 - [Enregistrer la vidéo de webcam](../guides/save-webcam-video.md) — capture de webcam en MP4 avec configuration audio
 - [Exemples de code](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — extraits de code supplémentaires de capture d'écran sur GitHub
+- [Enregistrement d'écran multiplateforme en C#](https://www.visioforge.com/fr/solutions/screen-recording-csharp) — API de capture par plateforme, un enregistreur .NET MAUI et la version d'essai
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements

@@ -1,6 +1,6 @@
 ---
 title: Blocs OpenCV pour pipeline vidéo en C# .NET — vision SDK
-description: "Blocs OpenCV du Media Blocks SDK .NET : détection de visages, mains, mouvement, suivi, recherche de modèles, filtres. Windows, Linux, macOS, Mac Catalyst, iOS."
+description: "Blocs OpenCV du Media Blocks SDK .NET : visages, mains, mouvement, suivi, recherche de modèles, filtres. Windows, Linux, macOS, Mac Catalyst, iOS, Android."
 sidebar_label: OpenCV
 tags:
   - Media Blocks SDK
@@ -23,7 +23,7 @@ primary_api_classes:
 
 Les blocs OpenCV (Open Source Computer Vision Library) offrent de puissantes capacités de traitement vidéo dans le VisioForge Media Blocks SDK .NET. Ces blocs permettent un large éventail de tâches de vision par ordinateur, de la manipulation d'image basique à la détection et au suivi d'objets complexes.
 
-Pour utiliser les blocs OpenCV, ajoutez le paquet NuGet redistribuable correspondant à votre plateforme : `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 et versions ultérieures, avec le GStreamer 1.22 ou ultérieur de la distribution), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS et Mac Catalyst) ou `VisioForge.CrossPlatform.OpenCV.iOS` (appareils iOS et simulateurs arm64). Ce sont les plateformes pour lesquelles le plugin OpenCV de GStreamer est actuellement distribué ; sur toute autre plateforme, la méthode `IsAvailable()` de chaque bloc renvoie `false`.
+Pour utiliser les blocs OpenCV, ajoutez le paquet NuGet redistribuable correspondant à votre plateforme : `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 et versions ultérieures, avec le GStreamer 1.22 ou ultérieur de la distribution), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS et Mac Catalyst), `VisioForge.CrossPlatform.OpenCV.iOS` (appareils iOS et simulateurs arm64) ou `VisioForge.CrossPlatform.OpenCV.Android` (`arm64-v8a` et `x86_64` ; les ABI 32 bits ne sont pas couvertes). Ce sont les plateformes pour lesquelles le plugin OpenCV de GStreamer est actuellement distribué ; sur toute autre plateforme, la méthode `IsAvailable()` de chaque bloc renvoie `false`.
 
 La plupart des blocs OpenCV nécessitent généralement un élément `videoconvert` en amont pour garantir que le flux vidéo d'entrée est dans un format compatible. Le SDK gère cela en interne lors de l'initialisation du bloc.
 
@@ -93,7 +93,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -145,7 +145,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -210,7 +210,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -262,7 +262,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -314,7 +314,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -384,7 +384,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -481,7 +481,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -565,7 +565,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -630,7 +630,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -733,7 +733,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -803,7 +803,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -868,7 +868,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -947,7 +947,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -1018,7 +1018,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 
@@ -1091,7 +1091,7 @@ await pipeline.StartAsync();
 
 ### Plateformes
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarques
 

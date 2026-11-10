@@ -1,12 +1,11 @@
 ---
-title: OCR SDK .NET — Reconnaissance de texte OcrBlock (PaddleOCR)
-description: OCR SDK .NET — reconnaissez du texte dans vidéos et images avec OcrBlock (ONNX Runtime + PaddleOCR). C# multiplateforme sur Windows, macOS, Linux, Android, iOS.
+title: OCR en C# pour vidéos et images — OcrBlock avec PaddleOCR
+description: Référence OcrBlock — modèles, paramètres et dépannage pour reconnaître du texte dans vidéos et images avec ONNX Runtime et PaddleOCR en C#, multiplateforme.
 sidebar_label: OCR
 tags:
   - .NET
   - AI
   - OCR
-  - OCR SDK
   - ONNX
   - PaddleOCR
   - Text Recognition
@@ -35,6 +34,9 @@ graph LR;
     OcrBlock-->VideoRendererBlock;
     OcrBlock-. OnTextDetected .->App[Votre application];
 ```
+
+Pour une vue d'ensemble de l'OCR sur des flux vidéo — cas d'usage, un exemple RTSP vers MP4 et le téléchargement
+de la version d'essai — consultez [OCR sur l'appareil pour les flux vidéo en .NET](https://www.visioforge.com/fr/solutions/video-ocr-dotnet).
 
 ## Utilisation
 

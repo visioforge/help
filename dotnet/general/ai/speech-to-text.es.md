@@ -1,15 +1,13 @@
 ---
-title: SDK de voz a texto para .NET — SpeechToTextBlock (Whisper)
-description: SDK de voz a texto para .NET — transcribe audio en vivo o de archivo en el dispositivo con Whisper ASR y Silero VAD, con SRT/VTT y subtítulos en vivo.
-sidebar_label: Voz a Texto
+title: SpeechToTextBlock — Referencia de voz a texto para .NET
+description: Referencia de SpeechToTextBlock — transcriba audio en el dispositivo con Whisper en C#; ajustes, Silero VAD, modelos, SRT/VTT y solución de problemas.
+sidebar_label: Voz a texto
 tags:
   - .NET
   - AI
   - Whisper
   - Speech-to-Text
-  - Speech-to-Text SDK
   - Speech Recognition
-  - Live Subtitles
   - Transcription
   - VideoCaptureCoreX
   - MediaPlayerCoreX
@@ -23,7 +21,7 @@ primary_api_classes:
   - SubtitleStyle
 ---
 
-# Voz a texto y subtítulos en vivo — SpeechToTextBlock
+# Referencia de voz a texto — SpeechToTextBlock
 
 `SpeechToTextBlock` es un Media Block exclusivamente de audio de `VisioForge.DotNet.Core.AI.Whisper`.
 Intercepta el flujo de audio, segmenta la voz con Silero VAD, la transcribe con Whisper (Whisper.net /
@@ -35,6 +33,9 @@ en `VideoCaptureCoreX`/`MediaPlayerCoreX`.
 using VisioForge.Core.MediaBlocks.AI;
 using VisioForge.Core.Types.X.AI;
 ```
+
+Para un tutorial paso a paso — transcribir un archivo, subtitular una fuente en vivo y mostrar subtítulos sobre el video — consulte
+[Subtítulos en vivo y voz a texto en C# .NET (Whisper)](../../mediablocks/Guides/live-subtitles-whisper-csharp.md).
 
 ## Configuración básica del bloque
 
@@ -350,6 +351,7 @@ Sí — establezca `SpeechToTextSettings.Task = SpeechToTextTask.Translate`.
 Conecte `SubtitleRenderer.OnSpeechRecognized` como el manejador de eventos del bloque contra un
 `OverlayManagerBlock` — consulte [SubtitleRenderer — subtítulos en pantalla](#subtitlerenderer-subtitulos-en-pantalla).
 Si solo necesita archivos SRT/VTT, establezca `OutputSrtPath`/`OutputVttPath` en su lugar.
+Para un recorrido completo, consulte el [tutorial de subtítulos en vivo](../../mediablocks/Guides/live-subtitles-whisper-csharp.md).
 
 ### ¿Qué tamaño de modelo Whisper debería usar?
 

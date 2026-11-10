@@ -1,13 +1,12 @@
 ---
-title: Reconocimiento Facial para .NET — FaceRecognitionBlock
-description: SDK de reconocimiento facial .NET — FaceRecognitionBlock detecta e identifica rostros en el dispositivo (YuNet + SFace/ArcFace ONNX), sin nube.
-sidebar_label: Reconocimiento Facial
+title: FaceRecognitionBlock — reconocimiento facial en .NET
+description: Reconocimiento facial en .NET — FaceRecognitionBlock detecta e identifica rostros en el dispositivo (YuNet + SFace/ArcFace ONNX), sin nube.
+sidebar_label: Reconocimiento facial
 tags:
   - .NET
   - AI
   - ONNX
   - Face Recognition
-  - Face Recognition SDK
   - Face Detection
   - Facial Recognition
   - YuNet
@@ -23,7 +22,7 @@ primary_api_classes:
   - FaceRecognitionResult
 ---
 
-# SDK de reconocimiento facial para .NET — FaceRecognitionBlock
+# Reconocimiento facial para .NET — FaceRecognitionBlock
 
 `FaceRecognitionBlock` es el componente de reconocimiento facial de los paquetes de IA .NET de
 VisioForge — reconoce **quién** aparece en el fotograma, en el dispositivo, sin API en la nube.
@@ -180,16 +179,16 @@ pagos).
 
 ## Preguntas frecuentes
 
-### ¿Este SDK de reconocimiento facial funciona en la nube o en el dispositivo?
+### ¿FaceRecognitionBlock funciona en la nube o en el dispositivo?
 
 Totalmente en el dispositivo. `FaceRecognitionBlock` ejecuta la detección YuNet y el embedding
 SFace/ArcFace mediante inferencia local con ONNX Runtime — ningún fotograma ni embedding se envía a
 un servicio externo.
 
-### ¿Puede usar este SDK de reconocimiento facial desde C#?
+### ¿Puedo usar FaceRecognitionBlock desde C#?
 
-Sí — todo el SDK, incluyendo `FaceRecognitionBlock`, `FaceRecognitionSettings` y `FaceGallery`, es
-una API nativa de C#/.NET (`VisioForge.DotNet.Core.AI`), utilizable desde cualquier aplicación .NET
+Sí — `FaceRecognitionBlock`, `FaceRecognitionSettings` y `FaceGallery` forman
+parte de la API nativa de C#/.NET (`VisioForge.DotNet.Core.AI`), utilizable desde cualquier aplicación .NET
 en Windows, macOS, Linux, Android o iOS.
 
 ### ¿Cómo registro a una nueva persona?
@@ -198,11 +197,13 @@ Llame a `FaceRecognitionBlock.Enroll(name, imagePath)` o `Enroll(name, SKBitmap)
 fotos claras de la persona; el bloque calcula el embedding y lo añade a `Gallery` por usted. Guarde
 la galería con `FaceGallery.Save(path)` y restáurela más tarde con `FaceGallery.Load(path)`.
 
-### ¿El SDK incluye detección facial sin reconocimiento?
+### ¿FaceRecognitionBlock incluye detección facial sin reconocimiento?
 
-Sí, de forma indirecta — `FaceRecognitionResult` reporta `DetectionScore` y `BoundingBox` para cada
-rostro detectado, coincida o no con una entrada de la galería. Deje `Gallery` vacía para usar el
-bloque como un detector de rostros puro.
+No como un modo aparte. `FaceRecognitionResult` reporta `DetectionScore` y `BoundingBox` para cada
+rostro detectado, coincida o no con una entrada de la galería, pero una `Gallery` vacía solo omite la
+comparación: el modelo de embedding sigue siendo obligatorio y se ejecuta para cada rostro. Un
+detector más ligero es el [bloque CV Face Detect](../../mediablocks/OpenCV/index.md#bloque-cv-face-detect):
+usa cascadas Haar, es menos preciso que YuNet y no está disponible en Android.
 
 ### ¿Es mejor SFace o ArcFace?
 

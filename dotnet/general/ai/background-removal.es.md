@@ -1,13 +1,12 @@
 ---
-title: SDK de eliminación de fondo .NET — BackgroundRemovalBlock
-description: SDK de eliminación de fondo para .NET — difumine, reemplace o haga transparente el fondo del video con BackgroundRemovalBlock y modelos ONNX de matting.
-sidebar_label: Eliminación de Fondo
+title: BackgroundRemovalBlock — eliminación de fondo en .NET
+description: Eliminación de fondo en .NET — difumine, reemplace o haga transparente el fondo del video con BackgroundRemovalBlock y modelos ONNX de matting.
+sidebar_label: Eliminación de fondo
 tags:
   - .NET
   - AI
   - ONNX
   - Background Removal
-  - Background Removal SDK
   - Virtual Background
   - Matting
   - Green Screen

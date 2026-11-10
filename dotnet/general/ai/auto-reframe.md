@@ -1,6 +1,6 @@
 ---
-title: AI Video Auto-Reframe SDK for .NET — AutoReframeBlock
-description: AI auto-reframe SDK for .NET — turn landscape footage into vertical 9:16 Shorts/Reels/TikTok video that follows the subject, on-device with ONNX YOLO.
+title: AutoReframeBlock — AI Video Auto-Reframe in C# and .NET
+description: AutoReframeBlock for .NET — turn landscape footage into vertical 9:16 Shorts/Reels/TikTok video that follows the subject, on-device with ONNX YOLO.
 sidebar_label: Auto Reframe
 tags:
   - .NET

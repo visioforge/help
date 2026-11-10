@@ -1,5 +1,5 @@
 ---
-title: Detección de eventos de audio en .NET — YAMNet AudioSet
+title: AudioEventDetectorBlock — detección de eventos de audio .NET
 description: Detecte sonidos reales — sirena, ladrido, rotura de cristal, alarma, música, voz — en audio en vivo o de archivo con YAMNet de AudioSet, en el dispositivo.
 sidebar_label: Detección de eventos de audio
 tags:

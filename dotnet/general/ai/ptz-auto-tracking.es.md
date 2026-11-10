@@ -1,5 +1,5 @@
 ---
-title: SDK de auto-seguimiento PTZ para .NET — cámara ONVIF
+title: Auto-seguimiento PTZ en C# y .NET — control de cámara ONVIF
 description: "Auto-seguimiento PTZ para .NET: una cámara PTZ ONVIF sigue un objeto detectado. Control proporcional paneo/inclinación/zoom con zona muerta y seguimiento fijo."
 sidebar_label: Auto-seguimiento PTZ
 tags:

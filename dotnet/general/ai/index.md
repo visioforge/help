@@ -1,11 +1,10 @@
 ---
-title: AI SDK for .NET — On-Device Video AI and Speech-to-Text
-description: On-device AI SDK for .NET — OCR, object detection, face recognition, ANPR, background removal, and Whisper speech-to-text. Cross-platform, no cloud.
+title: On-Device AI for .NET — Video and Speech AI Blocks
+description: On-device AI blocks for .NET — OCR, object detection, face recognition, ANPR, background removal, and Whisper speech-to-text. Cross-platform, no cloud.
 sidebar_label: AI
 tags:
   - .NET
   - AI
-  - AI SDK
   - Computer Vision
   - ONNX
   - Whisper
@@ -200,7 +199,8 @@ Video AI blocks (`VisioForge.DotNet.Core.AI`):
 
 Speech-to-text (`VisioForge.DotNet.Core.AI.Whisper`):
 
-- [Speech-to-text and live subtitles](speech-to-text.md)
+- [SpeechToTextBlock reference](speech-to-text.md)
+- [Live Subtitles (Whisper)](../../mediablocks/Guides/live-subtitles-whisper-csharp.md)
 
 Engine integration:
 

@@ -1,13 +1,12 @@
 ---
-title: SDK de seguimiento de objetos .NET — ObjectAnalyticsBlock
-description: SDK de seguimiento de objetos .NET — seguimiento multiobjeto ByteTrack, líneas de conteo y ocupación de zonas poligonales con ObjectAnalyticsBlock.
-sidebar_label: Análisis de Objetos
+title: ObjectAnalyticsBlock — seguimiento de objetos en .NET
+description: Seguimiento de objetos en .NET — seguimiento multiobjeto ByteTrack, líneas de conteo y ocupación de zonas poligonales con ObjectAnalyticsBlock.
+sidebar_label: Análisis de objetos
 tags:
   - .NET
   - AI
   - ONNX
   - Object Tracking
-  - Object Tracking SDK
   - ByteTrack
   - Tripwire
   - Polygon Zone

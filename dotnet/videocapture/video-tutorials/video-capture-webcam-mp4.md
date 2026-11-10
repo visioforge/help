@@ -42,6 +42,8 @@ When implementing webcam recording capabilities, developers need to consider:
 - Managing the capture lifecycle (initialization, start, stop)
 - Handling output file creation and management
 
+This tutorial uses the Windows-only VideoCaptureCore engine. [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) also records webcams to MP4 on macOS, Linux, Android and iOS with VideoCaptureCoreX — see [Save Webcam Video in C#](../guides/save-webcam-video.md) and the [Android](../../deployment-x/Android.md) and [iOS](../../deployment-x/iOS.md) deployment guides.
+
 ## Video Implementation Tutorial
 
 The following video demonstrates the complete process of setting up a webcam capture application:

@@ -1,7 +1,7 @@
 ---
-title: SDK de Auto-Reencuadre con IA para .NET — AutoReframeBlock
-description: SDK de auto-reencuadre con IA para .NET — convierta video horizontal en vertical 9:16 para Shorts/Reels/TikTok que sigue al sujeto, con ONNX YOLO.
-sidebar_label: Auto-Reencuadre
+title: AutoReframeBlock — auto-reencuadre con IA para .NET
+description: Auto-reencuadre con IA para .NET con AutoReframeBlock — convierta video horizontal en vertical 9:16 para Shorts/Reels/TikTok que sigue al sujeto, con ONNX YOLO.
+sidebar_label: Auto-reencuadre
 tags:
   - .NET
   - AI
@@ -20,7 +20,7 @@ primary_api_classes:
   - ReframeEventArgs
 ---
 
-# Auto-Reencuadre con IA (video vertical que sigue al sujeto) — AutoReframeBlock
+# Auto-reencuadre con IA (video vertical que sigue al sujeto) — AutoReframeBlock
 
 `AutoReframeBlock` convierte metraje horizontal en una relación de aspecto de salida fija — normalmente
 vertical 9:16 para Shorts, Reels y TikTok — recortando dinámicamente alrededor de un sujeto detectado y

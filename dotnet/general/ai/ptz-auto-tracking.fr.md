@@ -1,5 +1,5 @@
 ---
-title: SDK de suivi automatique PTZ pour .NET — caméra ONVIF
+title: Suivi automatique PTZ en C# et .NET — contrôle caméra ONVIF
 description: "Suivi automatique PTZ pour .NET : une caméra PTZ ONVIF suit un objet détecté. Contrôle proportionnel panoramique/inclinaison/zoom et zone morte."
 sidebar_label: Suivi automatique PTZ
 tags:

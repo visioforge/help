@@ -1,11 +1,10 @@
 ---
-title: SDK IA pour .NET — vidéo et Speech-to-Text embarqués
-description: SDK IA embarqué pour .NET — OCR, détection d'objets, reconnaissance faciale, ANPR, suppression d'arrière-plan et Whisper. Multiplateforme, sans cloud.
+title: IA embarquée pour .NET — blocs vidéo et Speech-to-Text
+description: Blocs d'IA embarqués pour .NET — OCR, détection d'objets, reconnaissance faciale, ANPR, suppression d'arrière-plan et Whisper. Multiplateforme, sans cloud.
 sidebar_label: IA
 tags:
   - .NET
   - AI
-  - AI SDK
   - Computer Vision
   - ONNX
   - Whisper
@@ -98,7 +97,7 @@ pour Media Blocks, Video Capture X ou Media Player X.
 | `BackgroundRemovalBlock` | Vidéo | aucun | Remplacer, flouter ou rendre transparent l'arrière-plan. | [Suppression d'arrière-plan](background-removal.md) |
 | `AutoReframeBlock` | Vidéo | `OnReframeUpdated` | Recadrer des séquences horizontales en vidéo verticale 9:16 qui suit le sujet. | [Recadrage automatique](auto-reframe.md) |
 | `OnnxInferenceBlock` | Vidéo | `OnInference` | Exécuter un modèle ONNX personnalisé et recevoir les tenseurs de sortie bruts. | [Inférence ONNX](onnx-inference.md) |
-| `SpeechToTextBlock` | Audio | `OnSpeechRecognized` | Transcrire l'audio en direct ou depuis un fichier avec Whisper. | [Speech-to-text](speech-to-text.md) |
+| `SpeechToTextBlock` | Audio | `OnSpeechRecognized` | Transcrire l'audio en direct ou depuis un fichier avec Whisper. | [Reconnaissance vocale](speech-to-text.md) |
 
 ## Compréhension et recherche vidéo
 
@@ -227,9 +226,10 @@ Blocs IA vidéo (`VisioForge.DotNet.Core.AI`) :
 - [Recadrage automatique — vidéo verticale qui suit le sujet](auto-reframe.md)
 - [Inférence ONNX générique](onnx-inference.md)
 
-Speech-to-text (`VisioForge.DotNet.Core.AI.Whisper`) :
+Reconnaissance vocale (`VisioForge.DotNet.Core.AI.Whisper`) :
 
-- [Speech-to-text et sous-titres en direct](speech-to-text.md)
+- [Référence SpeechToTextBlock](speech-to-text.md)
+- [Sous-titres en direct (Whisper)](../../mediablocks/Guides/live-subtitles-whisper-csharp.md)
 
 Intégration au moteur :
 

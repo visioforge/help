@@ -119,7 +119,7 @@ Bloques de IA en el dispositivo (ONNX / Whisper) que se insertan directamente en
 - [Ocultación de PII](../general/ai/pii-redaction.md) — difuminar o pixelar rostros, matrículas y texto en pantalla
 - [Eliminación de fondo](../general/ai/background-removal.md) — sustituir, difuminar o hacer transparente el fondo
 - [Auto-reencuadre](../general/ai/auto-reframe.md) — reencuadrar metraje horizontal en vídeo vertical 9:16 que sigue al sujeto
-- [Voz a texto](../general/ai/speech-to-text.md) — transcribir audio y generar subtítulos en vivo con Whisper
+- [Voz a texto](../general/ai/speech-to-text.md) — referencia de SpeechToTextBlock: ajustes, Silero VAD, tamaños de modelo, SRT/VTT
 - [Inferencia ONNX genérica](../general/ai/onnx-inference.md) — ejecutar un modelo ONNX personalizado y recibir los tensores en bruto
 
 ### Procesamiento de Audio
@@ -168,6 +168,7 @@ Tutoriales adicionales de inicio:
 - [Grabación Pre-Evento](Guides/pre-event-recording.md)
 - [Etiquetas de Metadatos de Audio](Guides/audio-metadata-tags.md)
 - [Efectos de Video Personalizados y Shaders OpenGL](Guides/custom-video-effects-csharp.md)
+- [Subtítulos en vivo (Whisper)](Guides/live-subtitles-whisper-csharp.md)
 
 ## Recursos para Desarrolladores
 

@@ -1,13 +1,12 @@
 ---
-title: SDK ANPR/LPR para .NET — LicensePlateRecognizerBlock
-description: SDK ANPR/LPR para .NET — lee matrículas con LicensePlateRecognizerBlock (detector FastALPR + modelos OCR ONNX), en el dispositivo, multiplataforma.
-sidebar_label: Reconocimiento de Matrículas
+title: LicensePlateRecognizerBlock — Referencia ANPR/LPR para .NET
+description: Referencia de LicensePlateRecognizerBlock — modelos, cabezas regionales, ajustes y solución de problemas para leer matrículas en C# con ONNX Runtime, local.
+sidebar_label: Reconocimiento de matrículas
 tags:
   - .NET
   - AI
   - ONNX
   - ANPR
-  - ANPR SDK
   - LPR
   - License Plate Recognition
   - Vehicle Recognition
@@ -26,8 +25,9 @@ dos etapas: un detector de matrículas dedicado (YOLO) localiza las matrículas 
 modelo OCR específico para matrículas lee los caracteres de cada matrícula recortada. Ambos modelos
 provienen de la familia FastALPR (MIT): un detector de matrículas YOLOv9-T y una cabeza de reconocimiento
 `fast-plate-ocr`. Una cabeza global cubre EE. UU. y más de 90 países; una cabeza europea está ajustada
-para matrículas de la UE. La geometría y el alfabeto del modelo de reconocimiento se leen del propio
-modelo, por lo que seleccionar una región es simplemente apuntar `RecognitionModelPath` a esa cabeza.
+para matrículas de la UE. Ambas cabezas leen caracteres latinos (dígitos y A–Z) y el tamaño de entrada del modelo de
+reconocimiento se lee del propio modelo, por lo que seleccionar una región es simplemente apuntar
+`RecognitionModelPath` a esa cabeza; no se admite una cabeza entrenada con otro alfabeto.
 
 ```mermaid
 graph LR;
@@ -35,6 +35,9 @@ graph LR;
     LicensePlateRecognizerBlock-->VideoRendererBlock;
     LicensePlateRecognizerBlock-. OnPlateRecognized .->App[Su app];
 ```
+
+Para una visión general del reconocimiento de matrículas en .NET — casos de uso, un registro de cámara de acceso, un ejemplo de cámara IP a MP4 y la
+descarga de prueba — consulte [Reconocimiento de matrículas (ANPR/LPR) en C# y .NET](https://www.visioforge.com/es/solutions/license-plate-recognition-dotnet).
 
 ## Uso
 
@@ -79,7 +82,7 @@ detección (cuatro vértices `OcrPoint`), todo en píxeles del fotograma de orig
 | `RecognitionModelPath` | — | Modelo ONNX de OCR de matrículas (cabeza `fast-plate-ocr` de FastALPR, global o UE). Obligatorio. |
 | `Provider` / `DeviceId` | `Auto` / `0` | Proveedor de ejecución ONNX e índice del dispositivo de hardware. |
 | `FramesToSkip` | `0` | Omite fotogramas entre ejecuciones de reconocimiento en vídeo en directo. |
-| `DetectionInputSize` | `640` | Tamaño de entrada cuadrado para el modelo de detección (modelos de forma dinámica). |
+| `DetectionInputSize` | `640` | Tamaño de entrada cuadrado para el modelo de detección (solo modelos de forma dinámica; un modelo de tamaño fijo, como el detector de 640, usa su propio tamaño). |
 | `DetectionConfidenceThreshold` | `0.35` | Puntuación mínima del detector que debe alcanzar un cuadro de matrícula. |
 | `OcrConfidenceThreshold` | `0.3` | Confianza media mínima del OCR que debe alcanzar una matrícula reconocida para ser reportada. |
 | `MaxDetections` | `10` | Número máximo de matrículas detectadas por fotograma. |
@@ -126,14 +129,14 @@ compartidas por todos los bloques de IA de vídeo.
 
 | Síntoma | Causa probable | Solución |
 | --- | --- | --- |
-| No se detecta ninguna matrícula | `DetectionConfidenceThreshold` demasiado alto, o la matrícula es demasiado pequeña respecto a `DetectionInputSize` | Reduzca `DetectionConfidenceThreshold`; aumente `DetectionInputSize` para matrículas distantes o pequeñas, o recorte más cerca del vehículo antes en la canalización. |
+| No se detecta ninguna matrícula | `DetectionConfidenceThreshold` demasiado alto, o la matrícula es demasiado pequeña en el fotograma | Reduzca `DetectionConfidenceThreshold`; para matrículas distantes o pequeñas, acerque la cámara o recorte más cerca del vehículo antes en la canalización. |
 | Se detecta la matrícula pero el texto es incorrecto o está vacío | `OcrConfidenceThreshold` demasiado alto, o cabeza de reconocimiento regional incorrecta | Reduzca `OcrConfidenceThreshold`; confirme que `RecognitionModelPath` corresponde a su región (cabeza global o UE). |
 | Solo se reportan algunas matrículas en una escena concurrida | Se alcanzó `MaxDetections` | Aumente `MaxDetections` si espera más de 10 matrículas por fotograma. |
 | El texto de la matrícula incluye caracteres extraños | Se lee directamente de `LicensePlateResult.Text` esperando el OCR sin procesar | `Text` ya está normalizado (mayúsculas, sin caracteres no alfanuméricos) — si aún ve ruido, compruebe que se cargó la cabeza de reconocimiento regional correcta. |
 
 ## Preguntas frecuentes
 
-### ¿Este SDK ANPR funciona fuera de EE. UU. y Europa?
+### ¿LicensePlateRecognizerBlock funciona fuera de EE. UU. y Europa?
 
 La cabeza de reconocimiento global de FastALPR cubre EE. UU. y más de 90 países; existe una cabeza
 europea independiente ajustada para matrículas de la UE. Apunte `RecognitionModelPath` a la cabeza que

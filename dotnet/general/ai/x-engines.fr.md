@@ -237,7 +237,7 @@ consultez la section **Démos** de la page propre à chaque bloc ([OCR](ocr.md#d
 [Reconnaissance faciale](face-recognition.md#demos),
 [Reconnaissance de plaques d'immatriculation](license-plate-recognition.md#demos),
 [Suppression d'arrière-plan](background-removal.md#demo),
-[Transcription vocale](speech-to-text.md#demos)).
+[Reconnaissance vocale](speech-to-text.md#demos)).
 
 L'ensemble de démos du SDK propose en outre 16 démos construites directement sur
 `VideoCaptureCoreX` / `MediaPlayerCoreX` avec l'API présentée sur cette page — Détection d'objets,

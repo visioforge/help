@@ -1,13 +1,12 @@
 ---
-title: Object Tracking SDK for .NET — ObjectAnalyticsBlock
-description: Object tracking SDK for .NET — ByteTrack multi-object tracking, line-crossing tripwires, and polygon-zone occupancy with ObjectAnalyticsBlock.
+title: ObjectAnalyticsBlock — Object Tracking in C# and .NET
+description: Object tracking in .NET — ByteTrack multi-object tracking, line-crossing tripwires, and polygon-zone occupancy with ObjectAnalyticsBlock.
 sidebar_label: Object Analytics
 tags:
   - .NET
   - AI
   - ONNX
   - Object Tracking
-  - Object Tracking SDK
   - ByteTrack
   - Tripwire
   - Polygon Zone

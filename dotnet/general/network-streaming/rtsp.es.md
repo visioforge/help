@@ -68,6 +68,8 @@ Nuestros SDKs integran RTSP con códecs estándar de la industria como **H.264 (
 
 Esta guía profundiza en los detalles de la implementación de la transmisión RTSP utilizando los SDKs de VisioForge, cubriendo tanto enfoques modernos multiplataforma como métodos heredados específicos de Windows.
 
+¿Necesita recibir vídeo de una cámara RTSP en lugar de servir un flujo? [Video Capture SDK .NET](https://www.visioforge.com/es/video-capture-sdk-net) se conecta a cámaras IP RTSP y ONVIF y las graba en MP4 en el mismo pipeline; consulte la [guía de fuentes de cámaras RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md).
+
 ## Salida RTSP multiplataforma (recomendado)
 
 [VideoCaptureCoreX](#){ .md-button } [MediaBlocksPipeline](#){ .md-button }

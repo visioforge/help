@@ -1,6 +1,6 @@
 ---
 title: OpenCV Computer Vision Blocks for Video Pipeline in C# .NET
-description: "OpenCV blocks in Media Blocks SDK .NET: face, hand and motion detection, tracking, template matching, image filters. Windows, Linux, macOS, Mac Catalyst, iOS."
+description: "OpenCV blocks in Media Blocks SDK .NET: face, hand and motion detection, tracking, templates, filters. Windows, Linux, macOS, Mac Catalyst, iOS, Android."
 sidebar_label: OpenCV
 tags:
   - Media Blocks SDK
@@ -23,7 +23,7 @@ primary_api_classes:
 
 OpenCV (Open Source Computer Vision Library) blocks provide powerful video processing capabilities within the VisioForge Media Blocks SDK .NET. These blocks enable a wide range of computer vision tasks, from basic image manipulation to complex object detection and tracking.
 
-To use OpenCV blocks, add the redistributable NuGet package for your platform: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 and later, with the distribution's GStreamer 1.22 or later), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS and Mac Catalyst) or `VisioForge.CrossPlatform.OpenCV.iOS` (iOS devices and arm64 simulators). These are the platforms the OpenCV GStreamer plugin currently ships for; on any other platform each block's `IsAvailable()` returns `false`.
+To use OpenCV blocks, add the redistributable NuGet package for your platform: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 and later, with the distribution's GStreamer 1.22 or later), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS and Mac Catalyst), `VisioForge.CrossPlatform.OpenCV.iOS` (iOS devices and arm64 simulators) or `VisioForge.CrossPlatform.OpenCV.Android` (`arm64-v8a` and `x86_64`; the 32-bit ABIs are not covered). These are the platforms the OpenCV GStreamer plugin currently ships for; on any other platform each block's `IsAvailable()` returns `false`.
 
 Most OpenCV blocks typically require a `videoconvert` element before them to ensure the input video stream is in a compatible format. The SDK handles this internally when you initialize the block.
 
@@ -93,7 +93,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -145,7 +145,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -210,7 +210,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -262,7 +262,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -314,7 +314,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -384,7 +384,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -481,7 +481,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -565,7 +565,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -630,7 +630,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -733,7 +733,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -803,7 +803,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -868,7 +868,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -947,7 +947,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -1018,7 +1018,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 
@@ -1091,7 +1091,7 @@ await pipeline.StartAsync();
 
 ### Platforms
 
-Windows, Linux, macOS, Mac Catalyst, iOS.
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 
 ### Remarks
 

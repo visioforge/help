@@ -1,14 +1,13 @@
 ---
-title: Detección de Objetos .NET — YOLOObjectDetectorBlock
-description: SDK de detección de objetos para .NET con YOLOObjectDetectorBlock. Modelos ONNX YOLOv8, YOLOX y RT-DETR, multiplataforma, CPU o GPU.
-sidebar_label: Detección de Objetos
+title: YOLOObjectDetectorBlock — detección de objetos en .NET
+description: Detección de objetos en video para .NET con YOLOObjectDetectorBlock. Modelos ONNX YOLOv8, YOLOX y RT-DETR, multiplataforma, CPU o GPU.
+sidebar_label: Detección de objetos
 tags:
   - .NET
   - AI
   - ONNX
   - YOLO
   - Object Detection
-  - Object Detection SDK
   - Computer Vision
   - VideoCaptureCoreX
   - MediaPlayerCoreX

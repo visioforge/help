@@ -100,6 +100,16 @@ El paquete `VisioForge.CrossPlatform.Core.Android` incluye las bibliotecas nativ
 
 Los avisos completos, incluidos ambos textos de licencia, se distribuyen con el paquete en `THIRD-PARTY-NOTICES.txt`.
 
+### Visión por computadora con OpenCV
+
+Para los bloques OpenCV (`VisioForge.Core.MediaBlocks.OpenCV`, entre ellos `VideoStabilizationBlock`), añada también [VisioForge.CrossPlatform.OpenCV.Android](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Android):
+
+```xml
+<PackageReference Include="VisioForge.CrossPlatform.OpenCV.Android" Version="2026.*" />
+```
+
+El paquete añade un plugin de GStreamer con OpenCV enlazado dentro para `arm64-v8a` y `x86_64`, además de los archivos de cascada Haar que `CVFaceDetectBlock`, `CVFaceBlurBlock` y `CVHandDetectBlock` cargan por defecto; el SDK carga el plugin durante la inicialización y extrae las cascadas al directorio de caché de código de la aplicación la primera vez que se usan. Un nombre de archivo sin ruta se busca en los recursos `opencv/` de la aplicación, donde el paquete coloca sus cascadas; cualquier otra cascada se indica con la ruta completa del archivo, por ejemplo una que la aplicación haya copiado a su directorio de archivos. En dispositivos `armeabi-v7a` y `x86`, y sin el paquete, el método `IsAvailable()` de cada bloque OpenCV devuelve `false`.
+
 ### Permisos para la cámara USB
 
 La captura desde una cámara USB (UVC) conectada por OTG necesita sus propias entradas en el manifiesto, además de los paquetes anteriores:

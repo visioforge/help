@@ -98,6 +98,8 @@ var password = "YourPassword";
 
 For sub-stream access, use `subtype=1` instead of `subtype=0`.
 
+To preview and record Imou cameras to MP4 from a C# app, [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) takes the RTSP URL above and handles decoding and recording in one pipeline, with no separate RTSP client library.
+
 ## Snapshot and MJPEG URLs
 
 | Type | URL Pattern | Notes |

@@ -110,6 +110,8 @@ var password = "YourPassword";
 
 Para acceder al subflujo, agregue el parámetro `?resolution=640x480`.
 
+Para previsualizar y grabar cámaras Axis en MP4 desde una aplicación C#, [Video Capture SDK .NET](https://www.visioforge.com/es/video-capture-sdk-net) usa la URL RTSP anterior y se encarga de la decodificación y la grabación en un solo pipeline, sin una biblioteca cliente RTSP aparte.
+
 ### Descubrimiento ONVIF
 
 Axis fue miembro fundador de ONVIF y tiene cumplimiento ONVIF líder en la industria. Consulte la [guía de integración ONVIF](../mediablocks/Sources/index.md) para ejemplos de código de descubrimiento.

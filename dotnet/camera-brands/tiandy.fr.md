@@ -108,6 +108,8 @@ var password = "YourPassword";
 
 Pour accéder au sous-flux, utilisez `subtype=1` à la place de `subtype=0`.
 
+Pour prévisualiser et enregistrer des caméras Tiandy en MP4 depuis une application C#, [Video Capture SDK .NET](https://www.visioforge.com/fr/video-capture-sdk-net) prend l'URL RTSP ci-dessus et gère le décodage et l'enregistrement dans un seul pipeline, sans bibliothèque cliente RTSP séparée.
+
 ## URL de capture instantanée et MJPEG
 
 | Type | Modèle d'URL | Notes |

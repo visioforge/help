@@ -424,4 +424,5 @@ Oui. Utilisez `DisplayIndex` (VideoCaptureCore) ou `MonitorIndex` (VideoCaptureC
 - [Tutoriel capture d'écran vers MP4](../video-tutorials/screen-capture-mp4.md) — tutoriel C# pour enregistrer le bureau vers MP4 avec vidéo explicative
 - [Enregistrer la vidéo d'une webcam en C#](../guides/save-webcam-video.md) — capturer depuis une webcam au lieu de l'écran
 - [Capture caméra IP](ip-cameras/index.md) — enregistrer depuis des caméras réseau via RTSP
+- [Enregistrement d'écran multiplateforme en C#](https://www.visioforge.com/fr/solutions/screen-recording-csharp) — API de capture par plateforme, un enregistreur .NET MAUI et la version d'essai
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — page produit et téléchargements

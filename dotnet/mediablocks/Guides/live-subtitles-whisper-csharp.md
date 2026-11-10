@@ -1,13 +1,14 @@
 ---
 title: Live Subtitles and Speech-to-Text in C# .NET (Whisper)
 description: Transcribe audio and video to text or live subtitles in C# with the Media Blocks SDK .NET using a local Whisper model and Silero VAD — no cloud, fully offline.
-sidebar_label: Speech-to-Text (Whisper)
+sidebar_label: Live Subtitles (Whisper)
 tags:
   - Media Blocks SDK
   - .NET
   - Whisper
   - Speech-to-Text
   - Subtitles
+  - Live Subtitles
   - VAD
   - C#
 primary_api_classes:
@@ -440,5 +441,6 @@ Each demo carries a **Real-time playback** switch that toggles between the two r
 
 ## See also
 
+- [Speech-to-Text Reference — SpeechToTextBlock](../../general/ai/speech-to-text.md)
 - [AI in VisioForge .NET SDK](../../general/ai/index.md)
 - [ElevenLabs Text-to-Speech and Voice Cloning](../ElevenLabs/index.md)

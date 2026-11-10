@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-11-09 19:39:44 UTC (3cf3450d82f)
+**Generated:** 2026-11-10 10:46:36 UTC (5064d52fd46)
 
 ## MCP Server (for AI coding agents)
 
@@ -300,7 +300,7 @@ The following products from the old price list are no longer sold:
 - [Deploy .NET Apps on Ubuntu with GStreamer and VisioForge SDK](https://www.visioforge.com/help/docs/dotnet/deployment-x/Ubuntu/): Deploy .NET multimedia apps on Ubuntu Linux with GStreamer setup, hardware configuration, and cross-platform performance optimization.
 - [Uno Platform Deployment Guide for VisioForge .NET SDKs](https://www.visioforge.com/help/docs/dotnet/deployment-x/uno/): VisioForge .NET SDK Uno Platform deployment with VideoView integration, multi-platform support for Windows, Android, iOS, macOS, and Linux.
 - [Windows Deployment Guide for VisioForge Cross-Platform SDK](https://www.visioforge.com/help/docs/dotnet/deployment-x/Windows/): VisioForge SDK .NET deployment for Windows with NuGet packages, dependencies, and x86/x64 architecture configuration for multimedia apps.
-- [AI SDK for .NET — On-Device Video AI and Speech-to-Text](https://www.visioforge.com/help/docs/dotnet/general/ai/): On-device AI SDK for .NET — OCR, object detection, face recognition, ANPR, background removal, and Whisper speech-to-text. Cross-platform, no cloud.
+- [On-Device AI for .NET — Video and Speech AI Blocks](https://www.visioforge.com/help/docs/dotnet/general/ai/): On-device AI blocks for .NET — OCR, object detection, face recognition, ANPR, background removal, and Whisper speech-to-text. Cross-platform, no cloud.
 - [Audio Effects in C# and .NET - EQ, Reverb, Filters, and More](https://www.visioforge.com/help/docs/dotnet/general/audio-effects/): Apply real-time audio effects in C# and .NET with VisioForge SDKs. Equalizer, reverb, echo, noise reduction, pitch shift, and 30+ effects.
 - [Audio Encoders for .NET — AAC, FLAC, MP3, Opus Guide](https://www.visioforge.com/help/docs/dotnet/general/audio-encoders/): Implement AAC, FLAC, MP3, Opus, and other audio encoders in .NET with optimal settings, performance tips, and best practices.
 - [Essential .NET SDK Code Samples for Media Developers](https://www.visioforge.com/help/docs/dotnet/general/code-samples/): Implementation examples for DirectShow filters, audio/video processing, rendering, and media manipulation in .NET SDK applications.
@@ -383,7 +383,7 @@ The following products from the old price list are no longer sold:
 - [Modular Multimedia Processing Pipeline API for C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/): Build custom multimedia pipelines in C# with VisioForge Media Blocks SDK. Connect source, processing, and output blocks for transcoding, capture, and streaming.
 - [Live Video Compositor for Real-Time Mixing in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/LiveVideoCompositor/): Mix multiple live video and audio sources in real-time using VisioForge Media Blocks SDK. Dynamic source switching for streaming and recording in C#.
 - [NVIDIA CUDA GPU Video Processing Blocks in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/Nvidia/): Accelerate video conversion, resizing, and data transfer with Nvidia CUDA GPU blocks in VisioForge Media Blocks SDK pipelines for .NET.
-- [OpenCV Computer Vision Blocks for Video Pipeline in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/OpenCV/): OpenCV blocks in Media Blocks SDK .NET: face, hand and motion detection, tracking, template matching, image filters. Windows, Linux, macOS, Mac Catalyst, iOS.
+- [OpenCV Computer Vision Blocks for Video Pipeline in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/OpenCV/): OpenCV blocks in Media Blocks SDK .NET: face, hand and motion detection, tracking, templates, filters. Windows, Linux, macOS, Mac Catalyst, iOS, Android.
 - [GPU-Accelerated OpenGL Video Effects and Shaders in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/OpenGL/): Apply GPU-accelerated OpenGL video effects like blur, color correction, and shaders in real-time using VisioForge Media Blocks SDK pipelines.
 - [Media Output Blocks in C# .NET - MP4, MKV, WebM, RTMP](https://www.visioforge.com/help/docs/dotnet/mediablocks/Outputs/): Save video to MP4, AVI, MKV, WebM files or stream via RTMP and HLS using VisioForge Media Blocks SDK output blocks with C# code examples.
 - [Stream Parser Blocks - H.264, HEVC, AV1 Pipelines in C#](https://www.visioforge.com/help/docs/dotnet/mediablocks/Parsers/): Parse elementary video and audio streams to extract metadata and prepare content for decoding and multiplexing in VisioForge Media Blocks SDK.

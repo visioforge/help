@@ -47,7 +47,7 @@ SRT (Secure Reliable Transport) es un protocolo de transmisión diseñado para e
 - Transporte de video seguro punto a punto
 - Ingesta y distribución de video basada en la nube
 
-Los SDK de VisioForge .NET soportan tanto el envío como la recepción de flujos SRT en Windows, macOS y Linux. Los flujos SRT usan multiplexación MPEG-TS para transportar video y audio juntos.
+Los SDK de VisioForge .NET soportan tanto el envío como la recepción de flujos SRT en Windows, macOS, Mac Catalyst, Linux, iOS y Android. Los flujos SRT usan multiplexación MPEG-TS para transportar video y audio juntos.
 
 Puede verificar la disponibilidad de SRT en tiempo de ejecución:
 
@@ -55,6 +55,8 @@ Puede verificar la disponibilidad de SRT en tiempo de ejecución:
 bool srtAvailable = SRTSinkBlock.IsAvailable(); // para enviar
 bool srtSourceAvailable = SRTSourceBlock.IsAvailable(); // para recibir
 ```
+
+En Windows, macOS y Mac Catalyst, el plugin SRT se distribuye en el paquete de runtime `Adds`, no en el principal: `VisioForge.CrossPlatform.Core.Windows.Adds.x64` (o sus variantes x86 y arm64), `VisioForge.CrossPlatform.Core.macOS.Adds` o `VisioForge.CrossPlatform.Core.macCatalyst.Adds`. Agréguelo junto al paquete de runtime principal, o `IsAvailable()` devolverá `false`. Los paquetes de runtime de iOS y Android incluyen SRT. En Linux el SDK usa el GStreamer del sistema; en Ubuntu y Debian, SRT forma parte de `gstreamer1.0-plugins-bad`.
 
 ## Modos de conexión SRT
 
@@ -85,10 +87,12 @@ var sinkSettings = new SRTSinkSettings
 El caller se conecta a un listener SRT remoto:
 
 ```csharp
-// SRTSourceSettings tiene un ctor privado — use la factoría CreateAsync. Uri es System.Uri, no string.
+// CreateAsync lee las pistas del flujo antes de retornar, así que el emisor debe estar en marcha. Uri es System.Uri, no string.
 var sourceSettings = await SRTSourceSettings.CreateAsync(new Uri("srt://192.168.1.100:8888"));
 sourceSettings.Mode = SRTConnectionMode.Caller;
 ```
+
+`CreateAsync` se conecta solo con la URI, así que lo que necesite esa primera conexión va en la consulta de la URI: un receptor en modo listener usa `srt://0.0.0.0:8888?mode=listener`, y un servidor que exige un stream ID recibe `?streamid=...`.
 
 ### Modo Rendezvous
 
@@ -114,6 +118,8 @@ var srtOutput = new SRTOutput("srt://streaming-server:1234");
 // Agregar la salida SRT configurada a su motor de captura
 videoCapture.Outputs_Add(srtOutput, true);  // videoCapture es una instancia de VideoCaptureCoreX
 ```
+
+En Video Capture SDK .NET, `SRTOutput` requiere la edición Premium, y un flujo SRT usado como `Video_Source` requiere la edición Professional.
 
 ### Media Blocks SDK
 
@@ -237,20 +243,34 @@ var sinkSettings = new SRTSinkSettings
 {
     Uri = "srt://:8888",
     Mode = SRTConnectionMode.Listener,
-    Passphrase = "my-secret-passphrase",  // mínimo 10 caracteres
+    Passphrase = "my-secret-passphrase",  // de 10 a 79 bytes en UTF-8
     PbKeyLen = SRTKeyLength.Length32       // AES de 256 bits
 };
 ```
 
 ### Receptor (cifrado)
 
+`SRTSourceSettings.CreateAsync` abre el flujo solo con la URI para leer sus pistas antes de retornar, así que si lo usa con un flujo cifrado, ponga la contraseña en la URI como parámetros de consulta `passphrase` y `pbkeylen`. Una contraseña ocupa de 10 a 79 bytes en UTF-8, es decir, de 10 a 79 caracteres si son letras latinas y dígitos; en una URI, use letras, dígitos, `-`, `_`, `.` y `~`:
+
 ```csharp
-// Use la factoría async — SRTSourceSettings tiene un ctor privado; Uri es System.Uri, no string.
-var sourceSettings = await SRTSourceSettings.CreateAsync(new Uri("srt://192.168.1.100:8888"));
-sourceSettings.Mode = SRTConnectionMode.Caller;
-sourceSettings.Passphrase = "my-secret-passphrase";
-sourceSettings.PbKeyLen = SRTKeyLength.Length32;
+// CreateAsync lee el flujo solo con la URI, así que la contraseña y la longitud de clave van en la consulta
+var sourceSettings = await SRTSourceSettings.CreateAsync(
+    new Uri("srt://192.168.1.100:8888?passphrase=my-secret-passphrase&pbkeylen=32"));
 ```
+
+Con Media Blocks SDK .NET puede omitir `CreateAsync` y establecer la contraseña como propiedad. Así no aparece en la URI y puede contener cualquier carácter. `SRTSourceBlock` no conoce las pistas de antemano, así que crea una salida de video y otra de audio:
+
+```csharp
+var sourceSettings = new SRTSourceSettings
+{
+    Uri = new Uri("srt://192.168.1.100:8888"),
+    Passphrase = "my secret passphrase!",
+    PbKeyLen = SRTKeyLength.Length32
+};
+var srtSource = new SRTSourceBlock(sourceSettings);
+```
+
+Para un flujo solo de video, pase `renderAudio: false`.
 
 Longitudes de clave disponibles: `SRTKeyLength.NoKey` (deshabilitado), `Length16` (128 bits), `Length24` (192 bits), `Length32` (256 bits).
 
@@ -349,6 +369,15 @@ De forma predeterminada, el SDK usa AVENC AAC en todas las plataformas.
 - Verifique que los controladores de GPU estén actualizados para codificadores de hardware
 - Retroceda a OpenH264 como codificador de software universal
 
+### La detención se bloquea después de que el otro lado se desconecta
+
+**Síntoma:** `StopAsync` no retorna después de que el par remoto deja de estar accesible.
+
+**Soluciones:**
+
+- En Windows, macOS, Mac Catalyst, iOS y Android, use los paquetes de VisioForge (en Windows, macOS y Mac Catalyst, el paquete `Adds`): incluyen un plugin SRT parcheado que vuelve a leer su propiedad `auto-reconnect` antes de cada intento de reconexión. El SDK desactiva esa propiedad al detener, así que la detención retorna aunque el par haya desaparecido
+- En Linux el SDK usa el plugin SRT de la distribución, que no incluye este parche. Si la detención se bloquea allí, establezca `AutoReconnect = false` en la configuración: la pérdida del par termina entonces el flujo con un error en lugar de un bucle de reconexión
+
 ## Preguntas frecuentes
 
 ### ¿Cuál es la diferencia entre los modos caller y listener de SRT?
@@ -357,7 +386,7 @@ El **listener** se vincula a un puerto y espera conexiones entrantes — actúa 
 
 ### ¿Cómo cifro un flujo SRT?
 
-Establezca la propiedad `Passphrase` (mínimo 10 caracteres) y `PbKeyLen` tanto en `SRTSinkSettings` como en `SRTSourceSettings`. Tanto el emisor como el receptor deben usar valores idénticos. Las longitudes de clave disponibles son 128 bits (`Length16`), 192 bits (`Length24`) y 256 bits (`Length32`). Consulte la sección [Cifrado](#cifrado) para ejemplos de código.
+En el emisor, establezca `Passphrase` (de 10 a 79 bytes en UTF-8) y `PbKeyLen` en `SRTSinkSettings`. En el receptor, pase los mismos valores en la URI que recibe `SRTSourceSettings.CreateAsync` (`srt://host:8888?passphrase=...&pbkeylen=32`), porque `CreateAsync` abre el flujo solo con la URI; en una URI, use letras, dígitos, `-`, `_`, `.` y `~`. Con Media Blocks SDK .NET puede, en cambio, establecer `Passphrase` y `PbKeyLen` en un nuevo `SRTSourceSettings` y omitir `CreateAsync`. Ambos lados deben usar valores idénticos. Las longitudes de clave disponibles son 128 bits (`Length16`), 192 bits (`Length24`) y 256 bits (`Length32`). Consulte la sección [Cifrado](#cifrado) para ejemplos de código.
 
 ### ¿Cómo recibo y reproduzco un flujo SRT en C#?
 

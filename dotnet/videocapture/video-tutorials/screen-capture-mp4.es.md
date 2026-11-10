@@ -1,5 +1,5 @@
 ---
-title: Grabación de pantalla en C# .NET — MP4, GPU, Multi-Monitor
+title: Grabar pantalla a MP4 en C# — tutorial, GPU, multimonitor
 description: Grabación pantalla completa, región y multi-monitor. Codificación GPU (NVENC/QSV/AMF), audio loopback, resaltado de cursor. Ejemplos API legacy y moderna.
 sidebar_label: Captura de pantalla a MP4
 tags:
@@ -259,6 +259,8 @@ var screenSource = new ScreenCaptureD3D11SourceSettings
     API = D3D11ScreenCaptureAPI.DXGI  // Forzar Desktop Duplication en lugar de WGC
 };
 ```
+
+Para Android e iOS, y un grabador en .NET MAUI que funciona en Windows, Mac Catalyst, Android e iOS, consulte [Grabación de pantalla multiplataforma en C# y .NET](https://www.visioforge.com/es/solutions/screen-recording-csharp).
 
 ## API legada — Video Capture SDK
 
@@ -527,4 +529,5 @@ La tasa de fotogramas predeterminada es 10 FPS. Use 15 FPS para presentaciones, 
 - [Configuración de Fuente de Pantalla](../video-sources/screen.md) — referencia completa para región de captura, multi-monitor, cursor y configuración de tasa de fotogramas
 - [Guardar Video de Webcam](../guides/save-webcam-video.md) — captura de webcam a MP4 con configuración de audio
 - [Ejemplos de Código](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets) — ejemplos adicionales de captura de pantalla en GitHub
+- [Grabación de pantalla multiplataforma en C#](https://www.visioforge.com/es/solutions/screen-recording-csharp) — API de captura por plataforma, un grabador en .NET MAUI y la descarga de la versión de prueba
 - [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) — página del producto y descargas

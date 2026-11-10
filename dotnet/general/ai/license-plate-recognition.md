@@ -1,13 +1,12 @@
 ---
-title: ANPR/LPR SDK for .NET — LicensePlateRecognizerBlock
-description: ANPR/LPR SDK for .NET — read vehicle license plates with LicensePlateRecognizerBlock (FastALPR detector + plate-OCR ONNX models), on-device, cross-platform.
+title: LicensePlateRecognizerBlock — ANPR/LPR Reference for .NET
+description: LicensePlateRecognizerBlock reference — models, regional heads, settings and troubleshooting for license plate recognition in C# with ONNX Runtime, on-device.
 sidebar_label: License Plate Recognition
 tags:
   - .NET
   - AI
   - ONNX
   - ANPR
-  - ANPR SDK
   - LPR
   - License Plate Recognition
   - Vehicle Recognition
@@ -25,9 +24,9 @@ primary_api_classes:
 dedicated license-plate detector (YOLO) locates plates in the frame, then a plate-specific OCR model
 reads the characters of each cropped plate. Both models come from the FastALPR family (MIT): a
 YOLOv9-T plate detector and a `fast-plate-ocr` recognition head. A global head covers the USA and
-90+ countries; a European head is tuned for EU plates. The recognition model's geometry and alphabet
-are read from the model itself, so selecting a region is simply a matter of pointing
-`RecognitionModelPath` at that head.
+90+ countries; a European head is tuned for EU plates. Both heads read Latin characters (digits and A–Z) and the recognition model's input size is read
+from the model itself, so selecting a region is simply a matter of pointing `RecognitionModelPath`
+at that head; a head trained on another alphabet is not supported.
 
 ```mermaid
 graph LR;
@@ -35,6 +34,9 @@ graph LR;
     LicensePlateRecognizerBlock-->VideoRendererBlock;
     LicensePlateRecognizerBlock-. OnPlateRecognized .->App[Your app];
 ```
+
+For an overview of license plate recognition in .NET — use cases, a gate-camera logger, an IP-camera-to-MP4 example and the trial download — see
+[License plate recognition (ANPR/LPR) in C# and .NET](https://www.visioforge.com/solutions/license-plate-recognition-dotnet).
 
 ## Usage
 
@@ -79,7 +81,7 @@ characters stripped), the mean `Confidence` (0..1), the axis-aligned `BoundingBo
 | `RecognitionModelPath` | — | Plate-OCR ONNX model (FastALPR `fast-plate-ocr` head, global or EU). Required. |
 | `Provider` / `DeviceId` | `Auto` / `0` | ONNX execution provider and hardware device index. |
 | `FramesToSkip` | `0` | Skip frames between recognition runs on live video. |
-| `DetectionInputSize` | `640` | Square input size for the detection model (dynamic-shape models). |
+| `DetectionInputSize` | `640` | Square input size for the detection model (dynamic-shape models only; a fixed-size model such as the 640 detector uses its own size). |
 | `DetectionConfidenceThreshold` | `0.35` | Minimum detector score a plate box must reach. |
 | `OcrConfidenceThreshold` | `0.3` | Minimum mean OCR confidence a recognized plate must reach to be reported. |
 | `MaxDetections` | `10` | Maximum plates detected per frame. |
@@ -122,14 +124,14 @@ processing-block API, insertion order, and lifecycle rules shared by every video
 
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
-| Plates aren't detected at all | `DetectionConfidenceThreshold` too high, or plate too small relative to `DetectionInputSize` | Lower `DetectionConfidenceThreshold`; raise `DetectionInputSize` for distant/small plates, or crop closer to the vehicle upstream. |
+| Plates aren't detected at all | `DetectionConfidenceThreshold` too high, or plate too small in the frame | Lower `DetectionConfidenceThreshold`; for distant/small plates give the camera a closer view or crop closer to the vehicle upstream. |
 | Plate detected but text is wrong/empty | `OcrConfidenceThreshold` too high, or wrong regional recognition head | Lower `OcrConfidenceThreshold`; confirm `RecognitionModelPath` matches your region (global vs. EU head). |
 | Only some plates in a busy scene are reported | `MaxDetections` reached | Raise `MaxDetections` if you expect more than 10 plates per frame. |
 | Plate text includes stray characters | Read directly from `LicensePlateResult.Text`, expecting raw OCR | `Text` is already normalized (uppercased, non-alphanumeric characters stripped) — if you still see noise, check that the correct regional recognition head is loaded. |
 
 ## Frequently Asked Questions
 
-### Does this ANPR SDK work outside the USA and Europe?
+### Does LicensePlateRecognizerBlock work outside the USA and Europe?
 
 The FastALPR global recognition head covers the USA and 90+ countries; a separate European head is
 tuned for EU plates. Point `RecognitionModelPath` at whichever head matches your target region.

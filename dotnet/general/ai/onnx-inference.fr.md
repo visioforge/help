@@ -1,5 +1,5 @@
 ---
-title: SDK ONNX Runtime pour .NET — Guide OnnxInferenceBlock
+title: OnnxInferenceBlock — modèles ONNX Runtime sur mesure .NET
 description: Exécutez tout modèle ONNX Runtime personnalisé sur des images vidéo en direct en .NET avec OnnxInferenceBlock et récupérez des tenseurs bruts.
 sidebar_label: Inférence ONNX générique
 tags:

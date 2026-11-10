@@ -1,11 +1,10 @@
 ---
-title: SDK de IA para .NET — IA de Vídeo y Voz en el Dispositivo
-description: SDK de IA en el dispositivo para .NET — OCR, detección de objetos, reconocimiento facial, ANPR, eliminación de fondo y voz a texto con Whisper.
+title: IA en el dispositivo para .NET — bloques de vídeo y voz
+description: Bloques de IA en el dispositivo para .NET — OCR, detección de objetos, reconocimiento facial, ANPR, eliminación de fondo y voz a texto con Whisper.
 sidebar_label: IA
 tags:
   - .NET
   - AI
-  - AI SDK
   - Computer Vision
   - ONNX
   - Whisper
@@ -229,7 +228,8 @@ Bloques de IA de vídeo (`VisioForge.DotNet.Core.AI`):
 
 Voz a texto (`VisioForge.DotNet.Core.AI.Whisper`):
 
-- [Voz a texto y subtítulos en vivo](speech-to-text.md)
+- [Referencia de SpeechToTextBlock](speech-to-text.md)
+- [Subtítulos en vivo (Whisper)](../../mediablocks/Guides/live-subtitles-whisper-csharp.md)
 
 Integración con motores:
 

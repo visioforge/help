@@ -113,6 +113,8 @@ var password = "ABCDEF"; // code de vérification depuis l'étiquette de la cam�
 
 Pour accéder au sous-flux, utilisez `/h264/ch1/sub/av_stream` à la place.
 
+Pour prévisualiser et enregistrer des caméras EZVIZ dont le RTSP est activé en MP4 depuis une application C#, [Video Capture SDK .NET](https://www.visioforge.com/fr/video-capture-sdk-net) prend l'URL RTSP ci-dessus et gère le décodage et l'enregistrement dans un seul pipeline, sans bibliothèque cliente RTSP séparée.
+
 ## URL de capture
 
 | Type | Modèle d'URL | Notes |

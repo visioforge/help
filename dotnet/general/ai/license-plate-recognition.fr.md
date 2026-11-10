@@ -1,13 +1,12 @@
 ---
-title: SDK ANPR/LPR pour .NET — LicensePlateRecognizerBlock
-description: SDK ANPR/LPR pour .NET — lisez les plaques avec LicensePlateRecognizerBlock (détecteur FastALPR + OCR ONNX de plaques), sur l'appareil, multiplateforme.
+title: LicensePlateRecognizerBlock — Référence ANPR/LPR pour .NET
+description: Référence LicensePlateRecognizerBlock — modèles, têtes régionales, paramètres et dépannage pour lire les plaques en C# avec ONNX Runtime, sur l'appareil.
 sidebar_label: Reconnaissance de plaques
 tags:
   - .NET
   - AI
   - ONNX
   - ANPR
-  - ANPR SDK
   - LPR
   - License Plate Recognition
   - Vehicle Recognition
@@ -26,9 +25,10 @@ spécialisé en deux étapes : un détecteur de plaques dédié (YOLO) localise 
 puis un modèle OCR spécifique aux plaques lit les caractères de chaque plaque recadrée. Les deux
 modèles proviennent de la famille FastALPR (MIT) : un détecteur de plaques YOLOv9-T et une tête de
 reconnaissance `fast-plate-ocr`. Une tête globale couvre les États-Unis et plus de 90 pays ; une tête
-européenne est optimisée pour les plaques de l'UE. La géométrie et l'alphabet du modèle de
-reconnaissance sont lus directement dans le modèle, si bien que sélectionner une région consiste
-simplement à pointer `RecognitionModelPath` vers cette tête.
+européenne est optimisée pour les plaques de l'UE. Les deux têtes lisent les caractères latins (chiffres et A–Z) et la taille
+d'entrée du modèle de reconnaissance est lue directement dans le modèle, si bien que sélectionner une
+région consiste simplement à pointer `RecognitionModelPath` vers cette tête ; une tête entraînée sur
+un autre alphabet n'est pas prise en charge.
 
 ```mermaid
 graph LR;
@@ -36,6 +36,9 @@ graph LR;
     LicensePlateRecognizerBlock-->VideoRendererBlock;
     LicensePlateRecognizerBlock-. OnPlateRecognized .->App[Votre application];
 ```
+
+Pour une vue d'ensemble de la reconnaissance de plaques en .NET — cas d'usage, un journal de caméra d'accès, un exemple de caméra IP vers MP4 et le
+téléchargement de la version d'essai — consultez [Reconnaissance de plaques (ANPR/LPR) en C# et .NET](https://www.visioforge.com/fr/solutions/license-plate-recognition-dotnet).
 
 ## Utilisation
 
@@ -80,7 +83,7 @@ et le `Polygon` de détection (quatre sommets `OcrPoint`), tous exprimés en pix
 | `RecognitionModelPath` | — | Modèle ONNX d'OCR de plaques (tête FastALPR `fast-plate-ocr`, globale ou UE). Obligatoire. |
 | `Provider` / `DeviceId` | `Auto` / `0` | Fournisseur d'exécution ONNX et index du périphérique matériel. |
 | `FramesToSkip` | `0` | Nombre d'images ignorées entre deux passes de reconnaissance sur une vidéo en direct. |
-| `DetectionInputSize` | `640` | Taille d'entrée carrée pour le modèle de détection (modèles à forme dynamique). |
+| `DetectionInputSize` | `640` | Taille d'entrée carrée pour le modèle de détection (modèles à forme dynamique uniquement ; un modèle de taille fixe, comme le détecteur 640, utilise sa propre taille). |
 | `DetectionConfidenceThreshold` | `0.35` | Score minimal du détecteur qu'une boîte de plaque doit atteindre. |
 | `OcrConfidenceThreshold` | `0.3` | Confiance OCR moyenne minimale qu'une plaque reconnue doit atteindre pour être signalée. |
 | `MaxDetections` | `10` | Nombre maximal de plaques détectées par image. |
@@ -129,14 +132,14 @@ tous les blocs vidéo IA.
 
 | Symptôme | Cause probable | Solution |
 | --- | --- | --- |
-| Aucune plaque n'est détectée | `DetectionConfidenceThreshold` trop élevé, ou plaque trop petite par rapport à `DetectionInputSize` | Abaissez `DetectionConfidenceThreshold` ; augmentez `DetectionInputSize` pour les plaques petites/éloignées, ou recadrez plus près du véhicule en amont. |
+| Aucune plaque n'est détectée | `DetectionConfidenceThreshold` trop élevé, ou plaque trop petite dans l'image | Abaissez `DetectionConfidenceThreshold` ; pour les plaques petites/éloignées, rapprochez la caméra ou recadrez plus près du véhicule en amont. |
 | Plaque détectée mais texte erroné/vide | `OcrConfidenceThreshold` trop élevé, ou mauvaise tête de reconnaissance régionale | Abaissez `OcrConfidenceThreshold` ; vérifiez que `RecognitionModelPath` correspond à votre région (tête globale ou UE). |
 | Seules certaines plaques d'une scène chargée sont signalées | `MaxDetections` atteint | Augmentez `MaxDetections` si vous attendez plus de 10 plaques par image. |
 | Le texte de la plaque contient des caractères indésirables | Lecture directe de `LicensePlateResult.Text`, en attendant un OCR brut | `Text` est déjà normalisé (mis en majuscules, caractères non alphanumériques supprimés) — si le bruit persiste, vérifiez que la bonne tête de reconnaissance régionale est chargée. |
 
 ## Foire aux questions
 
-### Ce SDK ANPR fonctionne-t-il en dehors des États-Unis et de l'Europe ?
+### LicensePlateRecognizerBlock fonctionne-t-il en dehors des États-Unis et de l'Europe ?
 
 La tête de reconnaissance globale FastALPR couvre les États-Unis et plus de 90 pays ; une tête
 européenne distincte est optimisée pour les plaques de l'UE. Pointez `RecognitionModelPath` vers la

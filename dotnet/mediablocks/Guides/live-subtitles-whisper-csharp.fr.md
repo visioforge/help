@@ -1,13 +1,14 @@
 ---
 title: "Sous-titres en direct et reconnaissance vocale (Whisper)"
 description: Transcrivez audio et vidéo en texte ou sous-titres en direct en C# avec Media Blocks SDK .NET via un modèle Whisper local et Silero VAD, sans cloud.
-sidebar_label: Reconnaissance vocale (Whisper)
+sidebar_label: Sous-titres en direct (Whisper)
 tags:
   - Media Blocks SDK
   - .NET
   - Whisper
   - Speech-to-Text
   - Subtitles
+  - Live Subtitles
   - VAD
   - C#
 primary_api_classes:
@@ -444,5 +445,6 @@ Chaque démo comporte un interrupteur **Real-time playback** qui bascule entre l
 
 ## Voir aussi
 
+- [Référence de reconnaissance vocale — SpeechToTextBlock](../../general/ai/speech-to-text.md)
 - [IA dans VisioForge .NET SDK](../../general/ai/index.md)
 - [ElevenLabs : synthèse vocale et clonage de voix](../ElevenLabs/index.md)

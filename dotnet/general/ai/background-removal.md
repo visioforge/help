@@ -1,13 +1,12 @@
 ---
-title: Background Removal SDK for .NET — BackgroundRemovalBlock
-description: Background removal SDK for .NET — blur, replace, or make video backgrounds transparent on-device with BackgroundRemovalBlock and ONNX matting models.
+title: BackgroundRemovalBlock — Background Removal for .NET
+description: Background removal in .NET — blur, replace, or make video backgrounds transparent on-device with BackgroundRemovalBlock and ONNX matting models.
 sidebar_label: Background Removal
 tags:
   - .NET
   - AI
   - ONNX
   - Background Removal
-  - Background Removal SDK
   - Virtual Background
   - Matting
   - Green Screen

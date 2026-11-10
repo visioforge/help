@@ -1,5 +1,5 @@
 ---
-title: Audio Event Detection SDK for .NET — YAMNet AudioSet
+title: AudioEventDetectorBlock — Audio Event Detection in .NET
 description: Detect real-world sounds — siren, dog bark, glass break, alarm, music, speech — in live or file audio on-device with a YAMNet AudioSet classifier.
 sidebar_label: Audio Event Detection
 tags:

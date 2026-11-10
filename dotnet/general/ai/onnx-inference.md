@@ -1,5 +1,5 @@
 ---
-title: ONNX Runtime SDK for .NET — OnnxInferenceBlock Guide
+title: OnnxInferenceBlock — Custom ONNX Runtime Models in .NET
 description: Run any custom ONNX Runtime model over live video frames in .NET with OnnxInferenceBlock and get raw tensor outputs for your own post-processing.
 sidebar_label: Generic ONNX Inference
 tags:
