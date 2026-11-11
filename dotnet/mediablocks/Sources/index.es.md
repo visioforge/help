@@ -91,7 +91,10 @@ if (device != null)
         };
 
         // seleccionar la primera tasa de frames
-        videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        if (formatItem.FrameRateList.Count > 0)
+        {
+            videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        }
     }
 }
 
@@ -2802,7 +2805,10 @@ if (device != null)
         {
             Format = formatItem.ToFormat()
         };
-        videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        if (formatItem.FrameRateList.Count > 0)
+        {
+            videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        }
     }
 }
 

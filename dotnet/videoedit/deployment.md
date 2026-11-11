@@ -76,6 +76,8 @@ NuGet packages offer the simplest deployment method, requiring no administrative
 - FFMPEG (File output/network streaming): [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/)
 - LAV Filters: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
 
+> **Input files without registered LAV Filters:** `VideoEditCore` opens input files through DirectShow Editing Services, which uses only filters registered on the machine. When LAV Filters are not registered, as in an app deployed with NuGet packages only, `VideoEditCore` opens its input files, video and audio alike (MP4, MKV, AVI, M4A, FLAC and others), with the FFMPEG Source filter from the FFMPEG package, so add that package. WMV, ASF, WMA, WAV and MP3 files still open through the Windows filters.
+
 > **Windows ARM64:** LAV Filters exist for x86 and x64 only. There is no upstream ARM64 build, so the SDK has no ARM64 LAV package, and most other DirectShow filters of the classic engines have no ARM64 build yet either. An app running as an ARM64 process cannot load them. AnyCPU apps usually run as ARM64 there too. On Windows ARM64, use `VideoEditCoreX` or Media Blocks SDK .NET, or build the app for x64 (`PlatformTarget` set to `x64`; it runs under emulation).
 
 Implementation is straightforward: add the required packages to your application project, and after building, the necessary redistributable files will be automatically included in your application folder.

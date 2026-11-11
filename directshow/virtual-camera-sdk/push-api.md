@@ -36,8 +36,9 @@ imports `VisioForge.Core.VirtualCamera.Push` qualifies `VirtualVideoWriter` and 
 <PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.6]" />
 ```
 
-`Redist.VirtualCamera.x64` fits whatever your application's architecture: the consumer application loads the filter,
-and Zoom, OBS and browsers are 64-bit (see below for other consumers). Each `Redist.VirtualCamera` package
+`Redist.VirtualCamera.x64` carries the filters Zoom, OBS and browsers load: the consumer application loads the filter,
+and those applications are 64-bit (see below for other consumers). Build your application for x64 or ARM64 so they
+see its frames: a 32-bit process pushes to a stream that only 32-bit consumers read. Each `Redist.VirtualCamera` package
 brings the `Redist.Shared` package of its architecture, with the `VisioForge_MFP*.dll` and `VisioForge_MFPX*.dll` its
 filters load (and `vcomp140.dll` on x64). An application that is not x64 and calls `PushFrameBgra` or `PushFrameBgr24`
 also references `Redist.Shared` of its own architecture (`.x86` or `.arm64`) for the color conversion.
@@ -73,8 +74,9 @@ using (var process = Process.Start(info))
 }
 ```
 
-The consumer application loads the filter build that matches its own bitness, whatever the bitness of the application
-that pushes the frames. The x64 filters above serve 64-bit Zoom, OBS and browsers. For 32-bit consumers, also
+The consumer application loads the filter build that matches its own bitness and sees the frames of a pushing
+application of the same bitness: an x64 or ARM64 application feeds 64-bit consumers, an x86 one feeds 32-bit consumers.
+The x64 filters above serve 64-bit Zoom, OBS and browsers. For 32-bit consumers, also
 register `VisioForge_Virtual_Camera.ax` and `VisioForge_Virtual_Audio_Card.ax` from the `.x86` redist; for ARM64-native
 consumers, `VisioForge_Virtual_Camera_arm64.ax` and `VisioForge_Virtual_Audio_Card_arm64.ax` from the `arm64` subfolder
 that the `.arm64` redist creates in the application folder.
@@ -109,8 +111,18 @@ using (var video = new VirtualVideoWriter(width, height, 30, "VideoStream1", nul
 | `PushFrame(data)` | YUY2, exactly `width * height * 2` bytes | your own encoder or converter |
 
 The width must be even. `PushFrameBgra` and `PushFrameBgr24` convert to YUY2 natively in `VisioForge_MFPX64.dll`
-(`VisioForge_MFPX.dll` on x86, `VisioForge_MFPX_ARM64.dll` on ARM64). Each push returns `false` when no buffer is free, so a slow consumer drops a frame rather
-than blocking your thread.
+(`VisioForge_MFPX.dll` on x86, `VisioForge_MFPX_ARM64.dll` on ARM64). When the consumer falls behind, a push overwrites
+the oldest unread frame instead of waiting for it to be read. A push returns `false` when the frame could not be
+written, for example when every buffer is busy; that frame is dropped.
+
+An earlier writer keeps the stream's shared memory, and its frame size, until it is disposed (`Stop` keeps it). While
+it exists, a new writer on the same stream name takes over only with that frame size; with another size, `Start`
+throws `InvalidOperationException`. Another frame rate is accepted, but an application already reading the camera
+keeps reporting the rate it opened it with. To change the size, dispose the earlier writer: an application reading the
+camera lets go of the stream within a frame or so and then picks up the new size, so if `Start` still throws right
+after, call it again a moment later. `VirtualAudioWriter` is refused the same way when the sample rate, channel count or
+sample size differ, but an application reading the microphone keeps the format it opened it with: close the microphone
+in that application before you start a writer with another format.
 
 ## Push Audio
 
@@ -128,6 +140,15 @@ using (var audio = new VirtualAudioWriter(48000, 2, 16, "AudioStream1", null))
 
 Timestamps come from the number of bytes pushed, so push audio at the rate it is played.
 
+## Push from C++
+
+The package is .NET only, but the camera reads its frames from named shared memory, so a C++ application can write
+them directly. The **PushDemo** console sample in the
+[DirectShow samples repository](https://github.com/visioforge/directshow-samples/tree/main/Virtual%20Camera%20SDK/cpp/PushDemo)
+does this in one `main.cpp` with no dependency beyond the Windows SDK: it pushes 1280x720 YUY2 color bars at 30 fps
+and takes the license key as its argument. The bitness of the writer selects the stream: a 64-bit build feeds 64-bit
+consumers such as Zoom, OBS and browsers, and a 32-bit build feeds 32-bit consumers only.
+
 ## Logging
 
 The writers take a `BaseContext` for their warnings and errors; `null` sends them to `System.Diagnostics.Trace`. To
@@ -141,7 +162,7 @@ Virtual Camera SDK purchase to the `VirtualVideoWriter` constructor; the key in
 
 ## Demo
 
-The **Virtual Camera Push Demo** (WPF, C#) in the [SDK samples repository](https://github.com/visioforge/.Net-SDK-s-samples)
+The **Virtual Camera Push Demo** (WPF, C#) in the [SDK samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Virtual%20Camera%20SDK/WPF/CSharp/Virtual%20Camera%20Push%20Demo)
 draws a moving picture with WPF, pushes it with `PushFrameBgra`, sends a 440 Hz tone to the virtual microphone and
 registers the filters from a button.
 

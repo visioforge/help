@@ -1,6 +1,6 @@
 ---
-title: Instalar VisioForge SDK en Visual Studio — NuGet .NET
-description: Agregue VisioForge .NET SDKs a proyectos de Visual Studio 2022+ vía NuGet. Plantillas WinForms/WPF/MAUI/consola. Dependencias nativas y licencia.
+title: Cómo instalar los SDK .NET de VisioForge en Visual Studio
+description: "Instale los SDK .NET de VisioForge en Visual Studio desde NuGet, en proyectos WinForms, WPF, MAUI y de consola: los paquetes, VideoView y un vídeo."
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -9,221 +9,255 @@ tags:
   - .NET
   - Windows
   - macOS
-  - Linux
   - Android
   - iOS
+  - WinForms
   - WPF
-  - Avalonia
+  - MAUI
   - NuGet
 primary_api_classes:
   - VideoView
+  - VisioForgeX
+video:
+  id: o6wL9r6t6Lk
+  upload_date: 2026-11-11T07:53:04Z
+  duration: PT8M13S
 
 ---
 
-# Guía completa para integrar SDKs .NET con Visual Studio
+# Instalar los SDK .NET de VisioForge en Visual Studio
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Introducción a los SDKs .NET de VisioForge
+Esta guía instala los SDK .NET de VisioForge en Visual Studio desde NuGet, en cuatro tipos de proyecto: WinForms, WPF, .NET MAUI y una aplicación de consola. Cada parte termina con un proyecto vacío que se compila y se ejecuta.
 
-VisioForge ofrece una potente suite de SDKs multimedia para desarrolladores .NET, permitiéndole construir aplicaciones ricas en características con capacidades avanzadas de captura, edición, reproducción y procesamiento de video. Esta guía completa le llevará a través del proceso de integración de estos SDKs en sus proyectos de Visual Studio, asegurando una experiencia de desarrollo fluida.
+Los cuatro SDK — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET y Media Blocks SDK .NET — vienen en un solo paquete NuGet, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). Junto a él va un paquete redist, el motor nativo de la plataforma. En Windows x64 es [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64). Una aplicación MAUI añade también [VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI).
 
-Para desarrolladores profesionales que trabajan en aplicaciones multimedia, integrar correctamente estos SDKs es crucial para un rendimiento y funcionalidad óptimos. Nuestro enfoque recomendado es usar paquetes NuGet, lo que simplifica la gestión de dependencias y asegura que siempre esté usando las últimas características y correcciones de errores.
+## Tutorial en vídeo
 
-## Descripción general de métodos de instalación
+El vídeo muestra los cuatro tipos de proyecto en Visual Studio 2026:
 
-Hay dos métodos principales para instalar los SDKs .NET de VisioForge:
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/o6wL9r6t6Lk?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
-1. **Instalación de Paquetes NuGet** (Recomendado): El enfoque moderno y simplificado que maneja las dependencias automáticamente y simplifica las actualizaciones.
-2. **Instalación Manual**: Un enfoque tradicional para escenarios especializados, aunque generalmente no se recomienda para la mayoría de los proyectos.
+## Requisitos
 
-Cubriremos ambos métodos en detalle, pero recomendamos encarecidamente el enfoque NuGet para la mayoría de los escenarios de desarrollo.
+- Windows 10 u 11
+- Visual Studio 2026, o Visual Studio 2022 para proyectos de .NET 8 y .NET 9
+- La carga de trabajo **.NET desktop development** para WinForms, WPF y consola, y la carga de trabajo **.NET Multi-platform App UI development** para MAUI
 
-## Instalación de paquetes NuGet (método recomendado)
+## Los paquetes
 
-NuGet es el gestor de paquetes para .NET, proporcionando una forma centralizada de incorporar bibliotecas en sus proyectos sin la molestia de la gestión manual de archivos. Aquí hay un recorrido detallado de la integración de SDKs de VisioForge usando NuGet.
+| Proyecto | Paquetes |
+|---|---|
+| WinForms, WPF, consola (Windows x64) | `VisioForge.DotNet.Core`, `VisioForge.CrossPlatform.Core.Windows.x64` |
+| .NET MAUI | `VisioForge.DotNet.Core`, `VisioForge.DotNet.Core.UI.MAUI`, más un redist por plataforma en el archivo de proyecto |
 
-### Paso 1: crear o abrir su proyecto .NET
+Fuera de Visual Studio, `dotnet add package` instala los mismos paquetes desde la línea de comandos:
 
-Primero, necesitará un proyecto WinForms, WPF u otro proyecto .NET. Recomendamos usar el formato de proyecto moderno estilo SDK para compatibilidad óptima.
-
-#### Crear un nuevo proyecto
-
-1. Lanza Visual Studio (2019 o 2022 recomendado)
-2. Seleccione "Create a new project"
-3. Filtra plantillas por "C#" y ya sea "WPF" o "Windows Forms"
-4. Elija "WPF Application" o "Windows Forms Application" con el framework .NET Core/5/6+
-5. Asegúrese de seleccionar el formato de proyecto moderno estilo SDK (este es el predeterminado en versiones más recientes de Visual Studio)
-
-![Creando un nuevo proyecto WPF con formato de proyecto SDK moderno](vs1.webp)
-
-#### Configurar el proyecto
-
-Después de crear un nuevo proyecto, necesitará configurar los ajustes básicos:
-
-1. Ingrese el nombre de su proyecto (use un nombre descriptivo relevante para su aplicación)
-2. Elija una ubicación apropiada y nombre de solución
-3. Seleccione su framework objetivo (.NET 6 o más reciente recomendado para mejor rendimiento y características)
-4. Haga clic en "Create" para generar la estructura del proyecto
-
-![Seleccionando nombre del proyecto y opciones de configuración](vs2.webp)
-
-### Paso 2: acceder al gestor de paquetes NuGet
-
-Una vez que su proyecto esté abierto en Visual Studio:
-
-1. Haga clic derecho en su proyecto en el Solution Explorer
-2. Seleccione "Manage NuGet Packages..." del menú contextual
-3. El NuGet Package Manager se abrirá en el panel central
-
-Esta interfaz proporciona funcionalidad de búsqueda y navegación de paquetes para encontrar e instalar fácilmente los componentes de VisioForge que necesita.
-
-![Accediendo al NuGet Package Manager](vs3.webp)
-
-### Paso 3: instalar el paquete de UI para su framework
-
-Los SDKs de VisioForge ofrecen componentes de UI especializados para diferentes frameworks .NET. Necesitará seleccionar el paquete de UI apropiado según su tipo de proyecto.
-
-1. En el NuGet Package Manager, cambie a la pestaña "Browse"
-2. Busque "VisioForge.DotNet.Core.UI"
-3. Seleccione el paquete de UI apropiado para su tipo de proyecto de los resultados de búsqueda
-
-![Agregando el paquete de UI WPF a través de NuGet](vs4.webp)
-
-#### Paquetes de UI disponibles
-
-VisioForge soporta una amplia gama de frameworks de UI. Elija el que coincida con su proyecto:
-
-- **[VisioForge.DotNet.Core.UI.WinUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.WinUI)**: Para aplicaciones modernas de Windows UI
-- **[VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI)**: Para aplicaciones multiplataforma usando .NET MAUI
-- **[VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia)**: Para aplicaciones de escritorio multiplataforma usando Avalonia UI
-
-Estos paquetes de UI proporcionan los controles y componentes necesarios diseñados específicamente para renderizado de video e interacción dentro de su framework elegido.
-
-### Paso 4: instalar el paquete principal del SDK
-
-Después de instalar el paquete de UI, necesitará agregar el paquete principal del SDK para sus necesidades multimedia específicas:
-
-1. Regresa a la pestaña "Browse" del NuGet Package Manager
-2. Busque el SDK específico de VisioForge que necesita (por ejemplo, "VisioForge.DotNet.VideoCapture")
-3. Haga clic en "Install" en el paquete apropiado
-
-![Instalando el paquete principal del SDK](vs5.webp)
-
-#### Paquetes principales del SDK disponibles
-
-Elija el SDK que se alinee con los requisitos de su aplicación:
-
-- **[VisioForge.DotNet.VideoCapture](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture)**: Para aplicaciones que necesitan capturar video de cámaras, grabación de pantalla u otras fuentes
-- **[VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit)**: Para aplicaciones de edición, procesamiento y conversión de video
-- **[VisioForge.DotNet.MediaPlayer](https://www.nuget.org/packages/VisioForge.DotNet.MediaPlayer)**: Para crear reproductores de medios con controles de reproducción avanzados
-- **[VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks)**: Para construir pipelines de procesamiento de medios complejos
-
-Cada paquete incluye documentación completa, y puede instalar múltiples paquetes si su aplicación requiere diferentes capacidades multimedia.
-
-### Paso 5: implementar el control VideoView (opcional)
-
-El control VideoView es crucial para aplicaciones que necesitan mostrar contenido de video. Puede agregarlo a su UI usando XAML (para WPF) o a través del diseñador (para WinForms).
-
-#### Para aplicaciones WPF
-
-Agregue el espacio de nombres requerido a su archivo XAML:
-
-```xml
-xmlns:wpf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"
+```bash
+dotnet add package VisioForge.DotNet.Core
+dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
 ```
 
-Luego agregue el control VideoView a su diseño:
+También se publican paquetes por producto, como `VisioForge.DotNet.VideoCapture`; hacen referencia a `VisioForge.DotNet.Core`, que es todo lo que un proyecto necesita.
+
+## WinForms
+
+1. En la ventana de inicio, haga clic en **Create a new project**, busque *Windows Forms* y elija **Windows Forms App** para C#.
+2. Asigne un nombre al proyecto, elija **.NET 10** y haga clic en **Create**.
+3. Haga clic derecho en el proyecto en el **Solution Explorer** y abra **Manage NuGet Packages**, en la pestaña **Browse**.
+4. Busque `VisioForge.DotNet.Core` e instálelo. Visual Studio muestra los cambios y la licencia: acéptelos.
+5. Instale `VisioForge.CrossPlatform.Core.Windows.x64` de la misma forma. Ahora ambos paquetes están en la pestaña **Installed**.
+
+![El administrador de paquetes NuGet con VisioForge.DotNet.Core](vs-nuget.webp)
+
+El paquete también pone `VideoView` en el **Toolbox**, bajo **VisioForge**. Búsquelo y dibújelo en el formulario: aquí es donde el SDK muestra el vídeo. Inicie la aplicación sin depurar (Ctrl+F5) y el formulario se abre con el `VideoView`, en negro hasta que un motor dibuje en él.
+
+![VideoView en el Toolbox, dibujado en el formulario](vs-winforms-videoview.webp)
+
+## WPF
+
+Cree una **WPF Application** para C# con .NET 10 e instale los mismos dos paquetes. Después arrastre `VideoView` desde el **Toolbox** al `Grid` de `MainWindow.xaml`. Visual Studio escribe la etiqueta y, con ella, el espacio de nombres:
 
 ```xml
-<wpf:VideoView 
-    Width="640" 
-    Height="480" 
-    Margin="10,10,0,0" 
-    HorizontalAlignment="Left" 
-    VerticalAlignment="Top"/>
+<Window xmlns:WPF="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core" x:Class="VisioForgeWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VisioForgeWpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <WPF:VideoView />
+    </Grid>
+</Window>
 ```
 
-![Código XAML para agregar VideoView](vs6.webp)
+El espacio de nombres es `VisioForge.Core.UI.WPF`, en el ensamblado `VisioForge.Core`. El prefijo lo elige usted: el Toolbox escribe `WPF`, y `vf` es más corto.
 
-El control VideoView aparecerá en su diseñador:
+![VideoView colocado en MainWindow.xaml](vs-wpf-xaml.webp)
 
-![Control VideoView en la ventana de la aplicación](vs7.webp)
+## .NET MAUI
 
-#### Para aplicaciones WinForms
+Un proyecto .NET MAUI App compila para Windows, Mac Catalyst, Android e iOS. Desde NuGet, instale `VisioForge.DotNet.Core` y `VisioForge.DotNet.Core.UI.MAUI`, que contiene el `VideoView` de MAUI.
 
-1. Abra el formulario en modo diseñador
-2. Localice los controles de VisioForge en la caja de herramientas (si no aparecen, haga clic derecho en la caja de herramientas y seleccione "Choose Items...")
-3. Arrastre y suelte el control VideoView en su formulario
-4. Ajuste las propiedades de tamaño y posición según sea necesario
+Los motores nativos van, en cambio, en el archivo de proyecto, cada uno bajo la condición de su plataforma, de modo que cada destino incluye solo el motor de su propia plataforma. Abra **Edit Project File** y añádalos al final:
 
-### Paso 6: instalar paquetes de redistribución requeridos
+```xml
+<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.3" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.11.5" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.5" />
+</ItemGroup>
+```
 
-Dependiendo de su implementación específica, puede necesitar paquetes de redistribución adicionales:
+En un Mac, Mac Catalyst compila para el procesador del propio Mac:
 
-1. Regrese al NuGet Package Manager
-2. Busque "VisioForge.DotNet.Core.Redist" para ver los paquetes de redistribución disponibles
-3. Instale los relevantes para su plataforma y elección de SDK
+```xml
+<!-- Mac Catalyst: compilar para la CPU del propio Mac -->
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-x64</RuntimeIdentifier>
+</PropertyGroup>
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
+</PropertyGroup>
+```
 
-![Instalando paquetes de redistribución](vs8.webp)
+Dos plataformas necesitan algo más:
 
-Los paquetes de redistribución requeridos varían según:
+- **Android** añade además el proyecto de enlace de VisioForge para Android de la [carpeta AndroidDependency](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency), y los permisos de cámara y micrófono en su manifiesto.
+- **iOS y Mac Catalyst** necesitan descripciones de uso (`NSCameraUsageDescription`, `NSMicrophoneUsageDescription`) en `Info.plist`. iOS se prueba en un dispositivo, no en el simulador.
 
-- Sistema operativo objetivo (Windows, macOS, Linux)
-- Requisitos de aceleración de hardware
-- Codecs y formatos específicos que su aplicación usará
-- Configuración del motor backend
+La [guía de instalación de MAUI](maui.md) cubre ambos casos en detalle.
 
-Consulte la página de documentación de Despliegue específica para su producto seleccionado para determinar qué paquetes de redistribución son necesarios para su aplicación.
+En `MauiProgram.cs`, añada dos usings y luego `UseSkiaSharp` y los handlers de VisioForge al builder. `UseSkiaSharp` activa SkiaSharp, que usan las vistas de VisioForge, y `AddVisioForgeHandlers` registra sus handlers de plataforma:
 
-## Instalación manual (método alternativo)
+```csharp
+using SkiaSharp.Views.Maui.Controls.Hosting;
+using VisioForge.Core.UI.MAUI;
 
-Aunque generalmente no recomendamos la instalación manual debido a su complejidad y potencial de problemas de configuración, hay escenarios específicos donde podría ser necesaria. Siga estos pasos si NuGet no es una opción para su proyecto:
+var builder = MauiApp.CreateBuilder();
+builder
+    .UseMauiApp<App>()
+    .UseSkiaSharp()
+    .ConfigureMauiHandlers(handlers => handlers.AddVisioForgeHandlers())
+    .ConfigureFonts(fonts =>
+    {
+        fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+        fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+    });
+```
 
-1. Descargue el [instalador completo del SDK](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe) de nuestro sitio web
-2. Ejecute el instalador con privilegios de administrador y siga las instrucciones en pantalla
-3. Cree su proyecto WinForms o WPF en Visual Studio
-4. Agregue referencias a las bibliotecas del SDK instaladas:
-   - Haga clic derecho en "References" en el Solution Explorer
-   - Seleccione "Add Reference"
-   - Navegue a la ubicación de instalación del SDK
-   - Seleccione los archivos DLL requeridos
-5. Configure la Caja de Herramientas de Visual Studio:
-   - Haga clic derecho en la Caja de Herramientas y seleccione "Add Tab"
-   - Nombra la nueva pestaña "VisioForge"
-   - Haga clic derecho en la pestaña y seleccione "Choose Items..."
-   - Navegue al directorio de instalación del SDK
-   - Seleccione `VisioForge.Core.dll`
-6. Arrastre y suelte el control VideoView en su formulario o ventana
+En `MainPage.xaml`, declare el espacio de nombres de VisioForge — `VisioForge.Core.UI.MAUI`, en el ensamblado `VisioForge.Core.UI.MAUI` — y ponga un `VideoView` en la página:
 
-Este enfoque manual requiere configuración adicional para el despliegue y las actualizaciones deben gestionarse manualmente.
+```xml
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vf="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI"
+             x:Class="VisioForgeMaui.MainPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="30,0" Spacing="25">
+            <vf:VideoView HeightRequest="300" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+```
 
-## Configuración avanzada y mejores prácticas
+Ejecútelo en **Windows Machine**, y el `VideoView` queda encima del contenido de la plantilla.
 
-Para aplicaciones de producción, considere estos detalles de implementación adicionales:
+![La aplicación MAUI en ejecución en Windows](vs-maui-running.webp)
 
-- **Gestión de Licencias**: Implemente validación de licencia adecuada al inicio de la aplicación
-- **Manejo de Errores**: Agregue manejo de errores completo alrededor de la inicialización y operación del SDK
-- **Optimización de Rendimiento**: Configure la aceleración de hardware y threading según sus dispositivos objetivo
-- **Gestión de Recursos**: Implemente eliminación adecuada de recursos del SDK para prevenir fugas de memoria
+## Aplicación de consola
 
-## Solución de problemas comunes
+Cree una **Console App** para C# e instale los mismos dos paquetes que para WinForms. Una aplicación de consola necesita un paso más: su plantilla apunta a `net10.0`, y esa compilación del SDK es la de Linux. Sin `-windows`, la aplicación busca la biblioteca GStreamer de Linux y falla con una `DllNotFoundException`. Abra **Edit Project File** y añada `-windows` al framework de destino:
 
-Si encuentra problemas durante la instalación o implementación:
+```xml
+<PropertyGroup>
+  <OutputType>Exe</OutputType>
+  <!-- net10.0 es la compilación del SDK para Linux: en Windows, añada -windows -->
+  <TargetFramework>net10.0-windows</TargetFramework>
+</PropertyGroup>
+```
 
-- Verifique que su proyecto tenga como objetivo una versión .NET soportada
-- Asegúrese de que todos los paquetes redistributables requeridos estén instalados
-- Verifique la compatibilidad de versiones de paquetes NuGet
-- Revise la documentación del SDK para requisitos específicos de plataforma
+Los proyectos WinForms y WPF ya apuntan a `net10.0-windows`.
 
-## Conclusión y próximos pasos
+`Program.cs` inicializa el SDK, muestra si está listo y lo libera de nuevo:
 
-Con los SDKs .NET de VisioForge correctamente instalados en su proyecto de Visual Studio, ahora está listo para aprovechar sus potentes capacidades multimedia. El método de instalación NuGet asegura que tenga las dependencias correctas y simplifica las actualizaciones futuras.
+```csharp
+using VisioForge.Core;
 
-Para profundizar su comprensión y maximizar el potencial de estos SDKs:
+await VisioForgeX.InitSDKAsync();
+Console.WriteLine($"VisioForge SDK initialized: {VisioForgeX.IsSDKInitialized}");
+VisioForgeX.DestroySDK();
+```
 
-- Explora nuestros [ejemplos de código completos en GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-- Revise la documentación específica del producto para características avanzadas
-- Únete a nuestros foros de la comunidad de desarrolladores para soporte y mejores prácticas
+La última línea de la salida informa de que el SDK se inicializó.
 
-Siguiendo esta guía, ha establecido una base sólida para desarrollar aplicaciones multimedia sofisticadas con VisioForge y Visual Studio.
+![La aplicación de consola informa de que el SDK se inicializó](vs-console.webp)
+
+## Otros paquetes
+
+- **Motores solo para Windows.** `VideoCaptureCore`, `MediaPlayerCore` y `VideoEditCore` usan en su lugar los redist clásicos: `VisioForge.DotNet.Core.Redist.VideoCapture.x64`, `…MediaPlayer.x64` o `…VideoEdit.x64`. Consulte las páginas de implementación de [Video Capture SDK .NET](../videocapture/deployment.md), [Media Player SDK .NET](../mediaplayer/deployment.md) y [Video Edit SDK .NET](../videoedit/deployment.md).
+- **x86 y ARM64.** Una aplicación compilada para otra CPU usa el redist de esa CPU, como `VisioForge.CrossPlatform.Core.Windows.x86` o `VisioForge.CrossPlatform.Core.Windows.arm64`.
+- **Otros frameworks de interfaz.** WinUI, Avalonia y Uno tienen cada uno su propio paquete de interfaz: `VisioForge.DotNet.Core.UI.WinUI`, `VisioForge.DotNet.Core.UI.Avalonia` y `VisioForge.DotNet.Core.UI.Uno`.
+
+La [guía de implementación](../deployment-x/index.md) enumera los paquetes redist de cada plataforma.
+
+## Instalación manual
+
+Cuando NuGet no es una opción, el SDK también se distribuye como instalador:
+
+1. Descargue el [instalador del SDK](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe) y ejecútelo.
+2. En su proyecto, añada una referencia al `VisioForge.Core.dll` instalado.
+3. Para tener `VideoView` en el Toolbox, haga clic derecho en el Toolbox, seleccione **Choose Items...** y busque `VisioForge.Core.dll`.
+
+NuGet es la forma recomendada: trae el motor nativo con el paquete y se actualiza con un clic.
+
+## Transcripción del vídeo
+
+### Introducción
+
+Instalemos los SDK .NET de VisioForge en Visual Studio, en cuatro tipos de proyecto: WinForms, WPF, MAUI y una aplicación de consola. Los cuatro SDK .NET de VisioForge vienen en un solo paquete NuGet, VisioForge.DotNet.Core: Video Capture, Media Player, Video Edit y Media Blocks. Junto a él va un paquete redist, el motor nativo de la plataforma. En Windows x64, es VisioForge.CrossPlatform.Core.Windows.x64. Una aplicación MAUI añade también el paquete de interfaz de MAUI. Necesita Windows 10 u 11, y Visual Studio 2026, o 2022 para proyectos de .NET 8 y 9. Las aplicaciones WinForms, WPF y de consola necesitan la carga de trabajo .NET desktop development, y MAUI necesita la carga de trabajo .NET Multi-platform App UI. Este video usa Visual Studio 2026 y .NET 10.
+
+### WinForms
+
+Empiece con WinForms. En la ventana de inicio, haga clic en Create a new project, busque Windows Forms y elija Windows Forms App para C#. Asigne un nombre al proyecto, aquí VisioForgeWinForms, elija .NET 10 y haga clic en Create. Haga clic derecho en el proyecto en el Solution Explorer y abra Manage NuGet Packages, en la pestaña Browse. Busque VisioForge.DotNet.Core e instálelo. Visual Studio muestra los cambios y la licencia: acéptelos. Después instale VisioForge.CrossPlatform.Core.Windows.x64, el motor nativo para Windows x64. Ahora ambos paquetes están en la pestaña Installed. El paquete también pone VideoView en el Toolbox, bajo VisioForge. Búsquelo y dibújelo en el formulario. Aquí es donde el SDK muestra el video. Inícielo sin depurar. El formulario se abre con el VideoView, en negro hasta que un motor dibuje en él.
+
+### WPF
+
+WPF sigue los mismos pasos. Cree una WPF Application para C#, aquí VisioForgeWpf, con .NET 10. Instale los mismos dos paquetes desde NuGet: VisioForge.DotNet.Core y el redist de Windows x64. Arrastre VideoView desde el Toolbox al Grid de MainWindow.xaml. Visual Studio escribe la etiqueta y, con ella, el espacio de nombres. El espacio de nombres es VisioForge.Core.UI.WPF, en el ensamblado VisioForge.Core. El prefijo lo elige usted: el Toolbox escribe WPF, y vf es más corto. Ejecútelo, y la ventana muestra el VideoView.
+
+### MAUI
+
+Ahora MAUI. Cree una .NET MAUI App, aquí VisioForgeMaui. Un solo proyecto compila para Windows, Mac Catalyst, Android e iOS. Desde NuGet, instale VisioForge.DotNet.Core y VisioForge.DotNet.Core.UI.MAUI, que contiene el VideoView de MAUI. Los motores nativos van, en cambio, en el archivo de proyecto, cada uno bajo la condición de su plataforma. Abra Edit Project File y añádalos al final. El destino Windows lleva el redist de Windows x64, y Mac Catalyst, Android e iOS llevan cada uno el suyo. Cada destino incluye solo el motor nativo de su plataforma. En un Mac, Mac Catalyst compila para el procesador del propio Mac: Intel o Apple silicon elige su RuntimeIdentifier. Dos plataformas necesitan algo más. Android añade además el proyecto de enlace de VisioForge para Android, de la carpeta AndroidDependency en GitHub, y los permisos de cámara y micrófono en su manifiesto. iOS y Mac Catalyst necesitan descripciones de uso en Info.plist, e iOS se prueba en un dispositivo, no en el simulador. En MauiProgram.cs, añada dos usings y luego UseSkiaSharp y los handlers de VisioForge al builder. UseSkiaSharp activa SkiaSharp, que usan las vistas de VisioForge, y AddVisioForgeHandlers registra sus handlers de plataforma. En MainPage.xaml, declare el espacio de nombres de VisioForge y ponga un VideoView en la parte superior de la página. En MAUI, el espacio de nombres es VisioForge.Core.UI.MAUI, en el ensamblado VisioForge.Core.UI.MAUI. Ejecútelo en Windows Machine. El VideoView queda encima del contenido de la plantilla.
+
+### Consola
+
+Por último, una aplicación de consola. Cree una Console App para C#, aquí VisioForgeConsole. Instale los mismos dos paquetes que para WinForms. Un paso más para una aplicación de consola. Su plantilla apunta a net10.0, y esa compilación del SDK es la de Linux. Añada -windows al framework de destino. Sin eso, la aplicación busca la biblioteca GStreamer de Linux y falla con una DllNotFoundException. WinForms y WPF ya apuntan a net10.0-windows. Program.cs inicializa el SDK, muestra si está listo y lo libera de nuevo. Ejecútelo. La última línea informa de que el SDK se inicializó.
+
+### Otros paquetes
+
+Algunos paquetes más. Los motores solo para Windows, VideoCaptureCore, MediaPlayerCore y VideoEditCore, usan los redist clásicos: Redist.VideoCapture, MediaPlayer o VideoEdit. Las aplicaciones x86 y ARM64 usan el redist de su CPU. Y WinUI, Avalonia y Uno tienen cada uno su propio paquete de interfaz. Fuera de Visual Studio, dotnet add package instala los mismos dos paquetes desde la línea de comandos.
+
+### Próximos pasos
+
+A continuación, grabe una webcam en MP4 en el tutorial de WinForms o WPF. Las guías de despliegue enumeran los paquetes redist de cada plataforma, y hay guías de instalación para Rider, Avalonia, Uno y Unity. La documentación está en visioforge.com/help. Gracias por ver el video.
+
+## Consulte también
+
+- [Webcam a MP4 en WinForms](../videocapture/video-tutorials/video-capture-webcam-mp4.md) y [en WPF](../videocapture/video-tutorials/video-capture-webcam-mp4-wpf.md) — el siguiente paso tras la instalación
+- [Inicialización del SDK](../init.md) — `InitSDKAsync` y `DestroySDK` en detalle
+- Guías de instalación para [MAUI](maui.md), [Rider](rider.md), [Avalonia](avalonia.md), [Uno](uno.md) y [Unity](unity.md)
+
+---
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.

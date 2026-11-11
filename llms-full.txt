@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-10 18:35:19 UTC (f618ef4f591)
+**Generated:** 2026-11-11 17:09:54 UTC (ffe7143dca8)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 1377 help documentation pages + 71 website pages
 
@@ -44459,203 +44459,235 @@ See the [Uno Platform Deployment Guide](../../deployment-x/uno/).
 ---END OF PAGE---
 
 
-## Install VisioForge SDK in Visual Studio — .NET NuGet Setup
+## How to Install VisioForge .NET SDKs in Visual Studio
 **URL:** https://www.visioforge.com/help/docs/dotnet/install/visual-studio/
-**Description:** Add VisioForge .NET SDKs to Visual Studio 2022+ projects via NuGet. WinForms/WPF/MAUI/console templates. Native dependencies and license setup.
-**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Linux, Android, iOS, WPF, Avalonia, NuGet
-**API:** VideoView
+**Description:** Install the VisioForge .NET SDKs in Visual Studio from NuGet, in WinForms, WPF, MAUI and console projects: the packages, VideoView and a video.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Android, iOS, WinForms, WPF, MAUI, NuGet
+**API:** VideoView, VisioForgeX
 
-# Comprehensive Guide to Integrating .NET SDKs with Visual Studio
+# Install the VisioForge .NET SDKs in Visual Studio
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
 
-## Introduction to VisioForge .NET SDKs
+This guide installs the VisioForge .NET SDKs in Visual Studio from NuGet, in four kinds of project: WinForms, WPF, .NET MAUI and a console app. Each part ends with an empty project that builds and runs.
 
-VisioForge offers a powerful suite of multimedia SDKs for .NET developers, enabling you to build feature-rich applications with advanced video capture, editing, playback, and media processing capabilities. This comprehensive guide will walk you through the process of integrating these SDKs into your Visual Studio projects, ensuring a smooth development experience.
+All four SDKs — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET and Media Blocks SDK .NET — come in one NuGet package, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). Next to it goes a redist package, the native engine for the platform. On Windows x64 that is [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64). A MAUI app also takes [VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI).
 
-For professional developers working on multimedia applications, properly integrating these SDKs is crucial for optimal performance and functionality. Our recommended approach is to use NuGet packages, which simplifies dependency management and ensures you're always using the latest features and bug fixes.
+## Video tutorial
 
-## Installation Methods Overview
+The video shows all four project types in Visual Studio 2026:
 
-There are two primary methods to install VisioForge .NET SDKs:
+## Requirements
 
-1. **NuGet Package Installation** (Recommended): The modern, streamlined approach that handles dependencies automatically and simplifies updates.
-2. **Manual Installation**: A traditional approach for specialized scenarios, though generally not recommended for most projects.
+- Windows 10 or 11
+- Visual Studio 2026, or Visual Studio 2022 for .NET 8 and .NET 9 projects
+- The **.NET desktop development** workload for WinForms, WPF and console apps, and the **.NET Multi-platform App UI development** workload for MAUI
 
-We'll cover both methods in detail, but strongly encourage the NuGet approach for most development scenarios.
+## The packages
 
-## NuGet Package Installation (Recommended Method)
+| Project | Packages |
+| --- | --- |
+| WinForms, WPF, console (Windows x64) | `VisioForge.DotNet.Core`, `VisioForge.CrossPlatform.Core.Windows.x64` |
+| .NET MAUI | `VisioForge.DotNet.Core`, `VisioForge.DotNet.Core.UI.MAUI`, plus one redist per platform in the project file |
 
-NuGet is the package manager for .NET, providing a centralized way to incorporate libraries into your projects without the hassle of manual file management. Here's a detailed walkthrough of integrating VisioForge SDKs using NuGet.
-
-### Step 1: Create or Open Your .NET Project
-
-First, you'll need a WinForms, WPF, or other .NET project. We recommend using the modern SDK-style project format for optimal compatibility.
-
-#### Creating a New Project
-
-1. Launch Visual Studio (2019 or 2022 recommended)
-2. Select "Create a new project"
-3. Filter templates by "C#" and either "WPF" or "Windows Forms"
-4. Choose "WPF Application" or "Windows Forms Application" with the .NET Core/5/6+ framework
-5. Ensure you select the modern SDK-style project format (this is the default in newer Visual Studio versions)
-
-#### Configuring the Project
-
-After creating a new project, you'll need to configure basic settings:
-
-1. Enter your project name (use a descriptive name relevant to your application)
-2. Choose an appropriate location and solution name
-3. Select your target framework (.NET 6 or newer recommended for best performance and features)
-4. Click "Create" to generate the project structure
-
-### Step 2: Access NuGet Package Manager
-
-Once your project is open in Visual Studio:
-
-1. Right-click on your project in Solution Explorer
-2. Select "Manage NuGet Packages..." from the context menu
-3. The NuGet Package Manager will open in the center pane
-
-This interface provides search functionality and package browsing to easily find and install the VisioForge components you need.
-
-### Step 3: Install the UI Package for Your Framework
-
-VisioForge SDKs offer specialized UI components for different .NET frameworks. You'll need to select the appropriate UI package based on your project type.
-
-1. In the NuGet Package Manager, switch to the "Browse" tab
-2. Search for "VisioForge.DotNet.Core.UI"
-3. Select the appropriate UI package for your project type from the search results
-
-#### Available UI Packages
-
-VisioForge supports a wide range of UI frameworks. Choose the one that matches your project:
-
-- **[VisioForge.DotNet.Core.UI.WinUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.WinUI)**: For modern Windows UI applications
-- **[VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI)**: For cross-platform applications using .NET MAUI
-- **[VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia)**: For cross-platform desktop applications using Avalonia UI
-
-These UI packages provide the necessary controls and components specifically designed for video rendering and interaction within your chosen framework.
-
-### Step 4: Install the Core SDK Package
-
-After installing the UI package, you'll need to add the main SDK package for your specific multimedia needs:
-
-1. Return to the NuGet Package Manager "Browse" tab
-2. Search for the specific VisioForge SDK you need (e.g., "VisioForge.DotNet.VideoCapture")
-3. Click "Install" on the appropriate package
-
-#### Available Core SDK Packages
-
-Choose the SDK that aligns with your application's requirements:
-
-- **[VisioForge.DotNet.VideoCapture](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture)**: For applications that need to capture video from cameras, screen recording, or other sources
-- **[VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit)**: For video editing, processing, and conversion applications
-- **[VisioForge.DotNet.MediaPlayer](https://www.nuget.org/packages/VisioForge.DotNet.MediaPlayer)**: For creating media players with advanced playback controls
-- **[VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks)**: For building complex media processing pipelines
-
-Each package includes comprehensive documentation, and you can install multiple packages if your application requires different multimedia capabilities.
-
-### Step 5: Implementing the VideoView Control (Optional)
-
-The VideoView control is crucial for applications that need to display video content. You can add it to your UI using XAML (for WPF) or through the designer (for WinForms).
-
-#### For WPF Applications
-
-Add the required namespace to your XAML file:
+Outside Visual Studio, `dotnet add package` installs the same packages from the command line:
 
 ```
-xmlns:wpf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"
+dotnet add package VisioForge.DotNet.Core
+dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
 ```
 
-Then add the VideoView control to your layout:
+Per-product packages such as `VisioForge.DotNet.VideoCapture` are also published; they reference `VisioForge.DotNet.Core`, which is all a project needs.
+
+## WinForms
+
+1. On the start window, click **Create a new project**, search for *Windows Forms*, and pick **Windows Forms App** for C#.
+2. Name the project, choose **.NET 10**, and click **Create**.
+3. Right-click the project in **Solution Explorer** and open **Manage NuGet Packages**, on the **Browse** tab.
+4. Search for `VisioForge.DotNet.Core` and install it. Visual Studio shows the changes and the license: accept them.
+5. Install `VisioForge.CrossPlatform.Core.Windows.x64` the same way. Both packages are now on the **Installed** tab.
+
+The package also puts `VideoView` in the **Toolbox**, under **VisioForge**. Search for it and draw it on the form: this is where the SDK shows video. Start the app without debugging (Ctrl+F5), and the form opens with the `VideoView`, black until an engine draws into it.
+
+## WPF
+
+Create a **WPF Application** for C# on .NET 10 and install the same two packages. Then drag `VideoView` from the **Toolbox** into the `Grid` of `MainWindow.xaml`. Visual Studio writes the tag and the namespace with it:
 
 ```
-<wpf:VideoView
-    Width="640"
-    Height="480"
-    Margin="10,10,0,0"
-    HorizontalAlignment="Left"
-    VerticalAlignment="Top"/>
+<Window xmlns:WPF="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core" x:Class="VisioForgeWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VisioForgeWpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <WPF:VideoView />
+    </Grid>
+</Window>
 ```
 
-The VideoView control will appear in your designer:
+The namespace is `VisioForge.Core.UI.WPF`, in the `VisioForge.Core` assembly. The prefix is yours to pick: the Toolbox writes `WPF`, and `vf` is shorter.
 
-#### For WinForms Applications
+## .NET MAUI
 
-1. Open the form in designer mode
-2. Locate the VisioForge controls in the toolbox (if they don't appear, right-click the toolbox and select "Choose Items...")
-3. Drag and drop the VideoView control onto your form
-4. Adjust the size and position properties as needed
+A .NET MAUI App project builds for Windows, Mac Catalyst, Android and iOS. From NuGet, install `VisioForge.DotNet.Core` and `VisioForge.DotNet.Core.UI.MAUI`, which holds the MAUI `VideoView`.
 
-### Step 6: Install Required Redistribution Packages
+The native engines go into the project file instead, each under the condition of its platform, so every head ships only the engine of its own platform. Open **Edit Project File** and add them at the end:
 
-Depending on your specific implementation, you may need additional redistribution packages:
+```
+<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.3" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.11.5" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.5" />
+</ItemGroup>
+```
 
-1. Return to the NuGet Package Manager
-2. Search for "VisioForge.DotNet.Core.Redist" to see available redistribution packages
-3. Install the ones relevant to your platform and SDK choice
+On a Mac, Mac Catalyst builds for the Mac's own processor:
 
-The required redistribution packages vary based on:
+```
+<!-- Mac Catalyst: build for the Mac's own CPU -->
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-x64</RuntimeIdentifier>
+</PropertyGroup>
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
+</PropertyGroup>
+```
 
-- Target operating system (Windows, macOS, Linux)
-- Hardware acceleration requirements
-- Specific codecs and formats your application will use
-- Backend engine configuration
+Two platforms need a little more:
 
-Consult the specific Deployment documentation page for your selected product to determine which redistribution packages are necessary for your application.
+- **Android** also takes the VisioForge Android binding project from the [AndroidDependency folder](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency), and the camera and microphone permissions in its manifest.
+- **iOS and Mac Catalyst** need usage descriptions (`NSCameraUsageDescription`, `NSMicrophoneUsageDescription`) in `Info.plist`. iOS is tested on a device, not the simulator.
 
-## Manual Installation (Alternative Method)
+The [MAUI install guide](../maui/) covers both in detail.
 
-While we generally don't recommend manual installation due to its complexity and potential for configuration issues, there are specific scenarios where it might be necessary. Follow these steps if NuGet isn't an option for your project:
+In `MauiProgram.cs`, add two usings, then `UseSkiaSharp` and the VisioForge handlers to the builder. `UseSkiaSharp` turns on SkiaSharp, which the VisioForge views use, and `AddVisioForgeHandlers` registers their platform handlers:
 
-1. Download the [complete SDK installer](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe) from our website
-2. Run the installer with administrator privileges and follow the on-screen instructions
-3. Create your WinForms or WPF project in Visual Studio
-4. Add references to the installed SDK libraries:
-5. Right-click "References" in Solution Explorer
-6. Select "Add Reference"
-7. Navigate to the installed SDK location
-8. Select the required DLL files
-9. Configure the Visual Studio Toolbox:
-10. Right-click the Toolbox and select "Add Tab"
-11. Name the new tab "VisioForge"
-12. Right-click the tab and select "Choose Items..."
-13. Browse to the SDK installation directory
-14. Select `VisioForge.Core.dll`
-15. Drag and drop the VideoView control onto your form or window
+```
+using SkiaSharp.Views.Maui.Controls.Hosting;
+using VisioForge.Core.UI.MAUI;
 
-This manual approach requires additional configuration for deployment and updates must be managed manually.
+var builder = MauiApp.CreateBuilder();
+builder
+    .UseMauiApp<App>()
+    .UseSkiaSharp()
+    .ConfigureMauiHandlers(handlers => handlers.AddVisioForgeHandlers())
+    .ConfigureFonts(fonts =>
+    {
+        fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+        fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+    });
+```
 
-## Advanced Configuration and Best Practices
+In `MainPage.xaml`, map the VisioForge namespace — `VisioForge.Core.UI.MAUI`, in the `VisioForge.Core.UI.MAUI` assembly — and put a `VideoView` on the page:
 
-For production applications, consider these additional implementation details:
+```
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vf="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI"
+             x:Class="VisioForgeMaui.MainPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="30,0" Spacing="25">
+            <vf:VideoView HeightRequest="300" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+```
 
-- **License Management**: Implement proper license validation at application startup
-- **Error Handling**: Add comprehensive error handling around SDK initialization and operation
-- **Performance Optimization**: Configure hardware acceleration and threading based on your target devices
-- **Resource Management**: Implement proper disposal of SDK resources to prevent memory leaks
+Run it on **Windows Machine**, and the `VideoView` sits above the template's content.
 
-## Troubleshooting Common Issues
+## Console app
 
-If you encounter problems during installation or implementation:
+Create a **Console App** for C# and install the same two packages as for WinForms. A console app needs one more step: its template targets `net10.0`, and that build of the SDK is the Linux one. Without `-windows`, the app looks for the Linux GStreamer library and fails with a `DllNotFoundException`. Open **Edit Project File** and add `-windows` to the target framework:
 
-- Verify your project targets a supported .NET version
-- Ensure all required redistributable packages are installed
-- Check for NuGet package version compatibility
-- Review the SDK documentation for platform-specific requirements
+```
+<PropertyGroup>
+  <OutputType>Exe</OutputType>
+  <!-- net10.0 is the Linux build of the SDK: on Windows, add -windows -->
+  <TargetFramework>net10.0-windows</TargetFramework>
+</PropertyGroup>
+```
 
-## Conclusion and Next Steps
+WinForms and WPF projects already target `net10.0-windows`.
 
-With the VisioForge .NET SDKs properly installed in your Visual Studio project, you're now ready to leverage their powerful multimedia capabilities. The NuGet installation method ensures you have the correct dependencies and simplifies future updates.
+`Program.cs` initializes the SDK, prints whether it is ready, and releases it again:
 
-To deepen your understanding and maximize the potential of these SDKs:
+```
+using VisioForge.Core;
 
-- Explore our [comprehensive code samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-- Review the product-specific documentation for advanced features
-- Join our developer community forums for support and best practices
+await VisioForgeX.InitSDKAsync();
+Console.WriteLine($"VisioForge SDK initialized: {VisioForgeX.IsSDKInitialized}");
+VisioForgeX.DestroySDK();
+```
 
-By following this guide, you've established a solid foundation for developing sophisticated multimedia applications with VisioForge and Visual Studio.
+The last line of the output reports that the SDK initialized.
+
+## Other packages
+
+- **Windows-only engines.** `VideoCaptureCore`, `MediaPlayerCore` and `VideoEditCore` take the classic redists instead: `VisioForge.DotNet.Core.Redist.VideoCapture.x64`, `…MediaPlayer.x64` or `…VideoEdit.x64`. See the deployment pages of [Video Capture SDK .NET](../../videocapture/deployment/), [Media Player SDK .NET](../../mediaplayer/deployment/) and [Video Edit SDK .NET](../../videoedit/deployment/).
+- **x86 and ARM64.** An app built for another CPU takes the redist for that CPU, such as `VisioForge.CrossPlatform.Core.Windows.x86` or `VisioForge.CrossPlatform.Core.Windows.arm64`.
+- **Other UI frameworks.** WinUI, Avalonia and Uno each have their own UI package: `VisioForge.DotNet.Core.UI.WinUI`, `VisioForge.DotNet.Core.UI.Avalonia` and `VisioForge.DotNet.Core.UI.Uno`.
+
+The [deployment guide](../../deployment-x/) lists the redist packages for every platform.
+
+## Manual installation
+
+Where NuGet is not an option, the SDK also ships as an installer:
+
+1. Download the [SDK installer](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe) and run it.
+2. In your project, add a reference to the installed `VisioForge.Core.dll`.
+3. To get `VideoView` in the Toolbox, right-click the Toolbox, select **Choose Items...**, and browse to `VisioForge.Core.dll`.
+
+NuGet is the recommended way: it brings the native engine with the package and updates with one click.
+
+## Video Transcript
+
+### Overview
+
+Let's install the VisioForge .NET SDKs in Visual Studio, in four kinds of project: WinForms, WPF, MAUI and a console app. All four VisioForge .NET SDKs come in one NuGet package, VisioForge.DotNet.Core: Video Capture, Media Player, Video Edit and Media Blocks. Next to it goes a redist package, the native engine for the platform. On Windows x64, that is VisioForge.CrossPlatform.Core.Windows.x64. A MAUI app also takes the MAUI UI package. You need Windows 10 or 11, and Visual Studio 2026, or 2022 for .NET 8 and 9 projects. WinForms, WPF and console apps need the .NET desktop development workload, and MAUI needs the .NET Multi-platform App UI workload. This video uses Visual Studio 2026 and .NET 10.
+
+### WinForms
+
+Start with WinForms. On the start window, click Create a new project, search for Windows Forms, and pick Windows Forms App for C#. Name the project, here VisioForgeWinForms, choose .NET 10, and click Create. Right-click the project in Solution Explorer, and open Manage NuGet Packages, on the Browse tab. Search for VisioForge.DotNet.Core and install it. Visual Studio shows the changes and the license: accept them. Then install VisioForge.CrossPlatform.Core.Windows.x64, the native engine for Windows x64. Both packages are now on the Installed tab. The package also puts VideoView in the Toolbox, under VisioForge. Search for it, and draw it on the form. This is where the SDK shows video. Start it without debugging. The form opens with the VideoView, black until an engine draws into it.
+
+### WPF
+
+WPF takes the same steps. Create a WPF Application for C#, here VisioForgeWpf, on .NET 10. Install the same two packages from NuGet: VisioForge.DotNet.Core and the Windows x64 redist. Drag VideoView from the Toolbox into the Grid of MainWindow.xaml. Visual Studio writes the tag, and the namespace with it. The namespace is VisioForge.Core.UI.WPF, in the VisioForge.Core assembly. The prefix is yours to pick: the Toolbox writes WPF, and vf is shorter. Run it, and the window shows the VideoView.
+
+### MAUI
+
+Now MAUI. Create a .NET MAUI App, here VisioForgeMaui. One project builds for Windows, Mac Catalyst, Android and iOS. From NuGet, install VisioForge.DotNet.Core and VisioForge.DotNet.Core.UI.MAUI, which holds the MAUI VideoView. The native engines go into the project file instead, each under the condition of its platform. Open Edit Project File and add them at the end. The Windows head takes the Windows x64 redist, and Mac Catalyst, Android and iOS each take their own. Every head ships only the native engine of its platform. On a Mac, Mac Catalyst builds for the Mac's own processor: Intel or Apple silicon picks its RuntimeIdentifier. Two platforms need a little more. Android also takes the VisioForge Android binding project, from the AndroidDependency folder on GitHub, and the camera and microphone permissions in its manifest. iOS and Mac Catalyst need usage descriptions in Info.plist, and iOS is tested on a device, not the simulator. In MauiProgram.cs, add two usings, then UseSkiaSharp and the VisioForge handlers to the builder. UseSkiaSharp turns on SkiaSharp, which the VisioForge views use, and AddVisioForgeHandlers registers their platform handlers. In MainPage.xaml, map the VisioForge namespace, and put a VideoView at the top of the page. In MAUI, the namespace is VisioForge.Core.UI.MAUI, in the VisioForge.Core.UI.MAUI assembly. Run it on Windows Machine. The VideoView sits above the template's content.
+
+### Console
+
+Last, a console app. Create a Console App for C#, here VisioForgeConsole. Install the same two packages as for WinForms. One more step for a console app. Its template targets net10.0, and that build of the SDK is the Linux one. Add dash windows to the target framework. Without it, the app looks for the Linux GStreamer library, and fails with a DllNotFoundException. WinForms and WPF already target net10.0-windows. Program.cs initializes the SDK, prints whether it is ready, and releases it again. Run it. The last line reports that the SDK initialized.
+
+### Other packages
+
+A few more packages. The Windows-only engines, VideoCaptureCore, MediaPlayerCore and VideoEditCore, take the classic redists: Redist.VideoCapture, MediaPlayer or VideoEdit. x86 and ARM64 apps take the redist for their CPU. And WinUI, Avalonia and Uno each have their own UI package. Outside Visual Studio, dotnet add package installs the same two packages from the command line.
+
+### Next steps
+
+Next, record a webcam to MP4 in the WinForms or WPF tutorial. The deployment guides list the redist packages for each platform, and there are install guides for Rider, Avalonia, Uno and Unity. The docs are at visioforge.com/help. Thanks for watching.
+
+## See also
+
+- [Webcam to MP4 in WinForms](../../videocapture/video-tutorials/video-capture-webcam-mp4/) and [in WPF](../../videocapture/video-tutorials/video-capture-webcam-mp4-wpf/) — the next step after installing
+- [SDK initialization](../../init/) — `InitSDKAsync` and `DestroySDK` in detail
+- Install guides for [MAUI](../maui/), [Rider](../rider/), [Avalonia](../avalonia/), [Uno](../uno/) and [Unity](../unity/)
+
+---
+
+Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and implementation examples.
 
 ---END OF PAGE---
 
@@ -89068,203 +89100,235 @@ Consulte la [Guía de Despliegue de Uno Platform](../../deployment-x/uno/).
 ---END OF PAGE---
 
 
-## Instalar VisioForge SDK en Visual Studio — NuGet .NET
+## Cómo instalar los SDK .NET de VisioForge en Visual Studio
 **URL:** https://www.visioforge.com/help/es/docs/dotnet/install/visual-studio/
-**Description:** Agregue VisioForge .NET SDKs a proyectos de Visual Studio 2022+ vía NuGet. Plantillas WinForms/WPF/MAUI/consola. Dependencias nativas y licencia.
-**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Linux, Android, iOS, WPF, Avalonia, NuGet
-**API:** VideoView
+**Description:** Instale los SDK .NET de VisioForge en Visual Studio desde NuGet, en proyectos WinForms, WPF, MAUI y de consola: los paquetes, VideoView y un vídeo.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Android, iOS, WinForms, WPF, MAUI, NuGet
+**API:** VideoView, VisioForgeX
 
-# Guía completa para integrar SDKs .NET con Visual Studio
+# Instalar los SDK .NET de VisioForge en Visual Studio
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
 
-## Introducción a los SDKs .NET de VisioForge
+Esta guía instala los SDK .NET de VisioForge en Visual Studio desde NuGet, en cuatro tipos de proyecto: WinForms, WPF, .NET MAUI y una aplicación de consola. Cada parte termina con un proyecto vacío que se compila y se ejecuta.
 
-VisioForge ofrece una potente suite de SDKs multimedia para desarrolladores .NET, permitiéndole construir aplicaciones ricas en características con capacidades avanzadas de captura, edición, reproducción y procesamiento de video. Esta guía completa le llevará a través del proceso de integración de estos SDKs en sus proyectos de Visual Studio, asegurando una experiencia de desarrollo fluida.
+Los cuatro SDK — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET y Media Blocks SDK .NET — vienen en un solo paquete NuGet, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). Junto a él va un paquete redist, el motor nativo de la plataforma. En Windows x64 es [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64). Una aplicación MAUI añade también [VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI).
 
-Para desarrolladores profesionales que trabajan en aplicaciones multimedia, integrar correctamente estos SDKs es crucial para un rendimiento y funcionalidad óptimos. Nuestro enfoque recomendado es usar paquetes NuGet, lo que simplifica la gestión de dependencias y asegura que siempre esté usando las últimas características y correcciones de errores.
+## Tutorial en vídeo
 
-## Descripción general de métodos de instalación
+El vídeo muestra los cuatro tipos de proyecto en Visual Studio 2026:
 
-Hay dos métodos principales para instalar los SDKs .NET de VisioForge:
+## Requisitos
 
-1. **Instalación de Paquetes NuGet** (Recomendado): El enfoque moderno y simplificado que maneja las dependencias automáticamente y simplifica las actualizaciones.
-2. **Instalación Manual**: Un enfoque tradicional para escenarios especializados, aunque generalmente no se recomienda para la mayoría de los proyectos.
+- Windows 10 u 11
+- Visual Studio 2026, o Visual Studio 2022 para proyectos de .NET 8 y .NET 9
+- La carga de trabajo **.NET desktop development** para WinForms, WPF y consola, y la carga de trabajo **.NET Multi-platform App UI development** para MAUI
 
-Cubriremos ambos métodos en detalle, pero recomendamos encarecidamente el enfoque NuGet para la mayoría de los escenarios de desarrollo.
+## Los paquetes
 
-## Instalación de paquetes NuGet (método recomendado)
+| Proyecto | Paquetes |
+| --- | --- |
+| WinForms, WPF, consola (Windows x64) | `VisioForge.DotNet.Core`, `VisioForge.CrossPlatform.Core.Windows.x64` |
+| .NET MAUI | `VisioForge.DotNet.Core`, `VisioForge.DotNet.Core.UI.MAUI`, más un redist por plataforma en el archivo de proyecto |
 
-NuGet es el gestor de paquetes para .NET, proporcionando una forma centralizada de incorporar bibliotecas en sus proyectos sin la molestia de la gestión manual de archivos. Aquí hay un recorrido detallado de la integración de SDKs de VisioForge usando NuGet.
-
-### Paso 1: crear o abrir su proyecto .NET
-
-Primero, necesitará un proyecto WinForms, WPF u otro proyecto .NET. Recomendamos usar el formato de proyecto moderno estilo SDK para compatibilidad óptima.
-
-#### Crear un nuevo proyecto
-
-1. Lanza Visual Studio (2019 o 2022 recomendado)
-2. Seleccione "Create a new project"
-3. Filtra plantillas por "C#" y ya sea "WPF" o "Windows Forms"
-4. Elija "WPF Application" o "Windows Forms Application" con el framework .NET Core/5/6+
-5. Asegúrese de seleccionar el formato de proyecto moderno estilo SDK (este es el predeterminado en versiones más recientes de Visual Studio)
-
-#### Configurar el proyecto
-
-Después de crear un nuevo proyecto, necesitará configurar los ajustes básicos:
-
-1. Ingrese el nombre de su proyecto (use un nombre descriptivo relevante para su aplicación)
-2. Elija una ubicación apropiada y nombre de solución
-3. Seleccione su framework objetivo (.NET 6 o más reciente recomendado para mejor rendimiento y características)
-4. Haga clic en "Create" para generar la estructura del proyecto
-
-### Paso 2: acceder al gestor de paquetes NuGet
-
-Una vez que su proyecto esté abierto en Visual Studio:
-
-1. Haga clic derecho en su proyecto en el Solution Explorer
-2. Seleccione "Manage NuGet Packages..." del menú contextual
-3. El NuGet Package Manager se abrirá en el panel central
-
-Esta interfaz proporciona funcionalidad de búsqueda y navegación de paquetes para encontrar e instalar fácilmente los componentes de VisioForge que necesita.
-
-### Paso 3: instalar el paquete de UI para su framework
-
-Los SDKs de VisioForge ofrecen componentes de UI especializados para diferentes frameworks .NET. Necesitará seleccionar el paquete de UI apropiado según su tipo de proyecto.
-
-1. En el NuGet Package Manager, cambie a la pestaña "Browse"
-2. Busque "VisioForge.DotNet.Core.UI"
-3. Seleccione el paquete de UI apropiado para su tipo de proyecto de los resultados de búsqueda
-
-#### Paquetes de UI disponibles
-
-VisioForge soporta una amplia gama de frameworks de UI. Elija el que coincida con su proyecto:
-
-- **[VisioForge.DotNet.Core.UI.WinUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.WinUI)**: Para aplicaciones modernas de Windows UI
-- **[VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI)**: Para aplicaciones multiplataforma usando .NET MAUI
-- **[VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia)**: Para aplicaciones de escritorio multiplataforma usando Avalonia UI
-
-Estos paquetes de UI proporcionan los controles y componentes necesarios diseñados específicamente para renderizado de video e interacción dentro de su framework elegido.
-
-### Paso 4: instalar el paquete principal del SDK
-
-Después de instalar el paquete de UI, necesitará agregar el paquete principal del SDK para sus necesidades multimedia específicas:
-
-1. Regresa a la pestaña "Browse" del NuGet Package Manager
-2. Busque el SDK específico de VisioForge que necesita (por ejemplo, "VisioForge.DotNet.VideoCapture")
-3. Haga clic en "Install" en el paquete apropiado
-
-#### Paquetes principales del SDK disponibles
-
-Elija el SDK que se alinee con los requisitos de su aplicación:
-
-- **[VisioForge.DotNet.VideoCapture](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture)**: Para aplicaciones que necesitan capturar video de cámaras, grabación de pantalla u otras fuentes
-- **[VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit)**: Para aplicaciones de edición, procesamiento y conversión de video
-- **[VisioForge.DotNet.MediaPlayer](https://www.nuget.org/packages/VisioForge.DotNet.MediaPlayer)**: Para crear reproductores de medios con controles de reproducción avanzados
-- **[VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks)**: Para construir pipelines de procesamiento de medios complejos
-
-Cada paquete incluye documentación completa, y puede instalar múltiples paquetes si su aplicación requiere diferentes capacidades multimedia.
-
-### Paso 5: implementar el control VideoView (opcional)
-
-El control VideoView es crucial para aplicaciones que necesitan mostrar contenido de video. Puede agregarlo a su UI usando XAML (para WPF) o a través del diseñador (para WinForms).
-
-#### Para aplicaciones WPF
-
-Agregue el espacio de nombres requerido a su archivo XAML:
+Fuera de Visual Studio, `dotnet add package` instala los mismos paquetes desde la línea de comandos:
 
 ```
-xmlns:wpf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"
+dotnet add package VisioForge.DotNet.Core
+dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
 ```
 
-Luego agregue el control VideoView a su diseño:
+También se publican paquetes por producto, como `VisioForge.DotNet.VideoCapture`; hacen referencia a `VisioForge.DotNet.Core`, que es todo lo que un proyecto necesita.
+
+## WinForms
+
+1. En la ventana de inicio, haga clic en **Create a new project**, busque *Windows Forms* y elija **Windows Forms App** para C#.
+2. Asigne un nombre al proyecto, elija **.NET 10** y haga clic en **Create**.
+3. Haga clic derecho en el proyecto en el **Solution Explorer** y abra **Manage NuGet Packages**, en la pestaña **Browse**.
+4. Busque `VisioForge.DotNet.Core` e instálelo. Visual Studio muestra los cambios y la licencia: acéptelos.
+5. Instale `VisioForge.CrossPlatform.Core.Windows.x64` de la misma forma. Ahora ambos paquetes están en la pestaña **Installed**.
+
+El paquete también pone `VideoView` en el **Toolbox**, bajo **VisioForge**. Búsquelo y dibújelo en el formulario: aquí es donde el SDK muestra el vídeo. Inicie la aplicación sin depurar (Ctrl+F5) y el formulario se abre con el `VideoView`, en negro hasta que un motor dibuje en él.
+
+## WPF
+
+Cree una **WPF Application** para C# con .NET 10 e instale los mismos dos paquetes. Después arrastre `VideoView` desde el **Toolbox** al `Grid` de `MainWindow.xaml`. Visual Studio escribe la etiqueta y, con ella, el espacio de nombres:
 
 ```
-<wpf:VideoView
-    Width="640"
-    Height="480"
-    Margin="10,10,0,0"
-    HorizontalAlignment="Left"
-    VerticalAlignment="Top"/>
+<Window xmlns:WPF="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core" x:Class="VisioForgeWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VisioForgeWpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <WPF:VideoView />
+    </Grid>
+</Window>
 ```
 
-El control VideoView aparecerá en su diseñador:
+El espacio de nombres es `VisioForge.Core.UI.WPF`, en el ensamblado `VisioForge.Core`. El prefijo lo elige usted: el Toolbox escribe `WPF`, y `vf` es más corto.
 
-#### Para aplicaciones WinForms
+## .NET MAUI
 
-1. Abra el formulario en modo diseñador
-2. Localice los controles de VisioForge en la caja de herramientas (si no aparecen, haga clic derecho en la caja de herramientas y seleccione "Choose Items...")
-3. Arrastre y suelte el control VideoView en su formulario
-4. Ajuste las propiedades de tamaño y posición según sea necesario
+Un proyecto .NET MAUI App compila para Windows, Mac Catalyst, Android e iOS. Desde NuGet, instale `VisioForge.DotNet.Core` y `VisioForge.DotNet.Core.UI.MAUI`, que contiene el `VideoView` de MAUI.
 
-### Paso 6: instalar paquetes de redistribución requeridos
+Los motores nativos van, en cambio, en el archivo de proyecto, cada uno bajo la condición de su plataforma, de modo que cada destino incluye solo el motor de su propia plataforma. Abra **Edit Project File** y añádalos al final:
 
-Dependiendo de su implementación específica, puede necesitar paquetes de redistribución adicionales:
+```
+<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.3" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.11.5" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.5" />
+</ItemGroup>
+```
 
-1. Regrese al NuGet Package Manager
-2. Busque "VisioForge.DotNet.Core.Redist" para ver los paquetes de redistribución disponibles
-3. Instale los relevantes para su plataforma y elección de SDK
+En un Mac, Mac Catalyst compila para el procesador del propio Mac:
 
-Los paquetes de redistribución requeridos varían según:
+```
+<!-- Mac Catalyst: compilar para la CPU del propio Mac -->
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-x64</RuntimeIdentifier>
+</PropertyGroup>
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
+</PropertyGroup>
+```
 
-- Sistema operativo objetivo (Windows, macOS, Linux)
-- Requisitos de aceleración de hardware
-- Codecs y formatos específicos que su aplicación usará
-- Configuración del motor backend
+Dos plataformas necesitan algo más:
 
-Consulte la página de documentación de Despliegue específica para su producto seleccionado para determinar qué paquetes de redistribución son necesarios para su aplicación.
+- **Android** añade además el proyecto de enlace de VisioForge para Android de la [carpeta AndroidDependency](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency), y los permisos de cámara y micrófono en su manifiesto.
+- **iOS y Mac Catalyst** necesitan descripciones de uso (`NSCameraUsageDescription`, `NSMicrophoneUsageDescription`) en `Info.plist`. iOS se prueba en un dispositivo, no en el simulador.
 
-## Instalación manual (método alternativo)
+La [guía de instalación de MAUI](../maui/) cubre ambos casos en detalle.
 
-Aunque generalmente no recomendamos la instalación manual debido a su complejidad y potencial de problemas de configuración, hay escenarios específicos donde podría ser necesaria. Siga estos pasos si NuGet no es una opción para su proyecto:
+En `MauiProgram.cs`, añada dos usings y luego `UseSkiaSharp` y los handlers de VisioForge al builder. `UseSkiaSharp` activa SkiaSharp, que usan las vistas de VisioForge, y `AddVisioForgeHandlers` registra sus handlers de plataforma:
 
-1. Descargue el [instalador completo del SDK](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe) de nuestro sitio web
-2. Ejecute el instalador con privilegios de administrador y siga las instrucciones en pantalla
-3. Cree su proyecto WinForms o WPF en Visual Studio
-4. Agregue referencias a las bibliotecas del SDK instaladas:
-5. Haga clic derecho en "References" en el Solution Explorer
-6. Seleccione "Add Reference"
-7. Navegue a la ubicación de instalación del SDK
-8. Seleccione los archivos DLL requeridos
-9. Configure la Caja de Herramientas de Visual Studio:
-10. Haga clic derecho en la Caja de Herramientas y seleccione "Add Tab"
-11. Nombra la nueva pestaña "VisioForge"
-12. Haga clic derecho en la pestaña y seleccione "Choose Items..."
-13. Navegue al directorio de instalación del SDK
-14. Seleccione `VisioForge.Core.dll`
-15. Arrastre y suelte el control VideoView en su formulario o ventana
+```
+using SkiaSharp.Views.Maui.Controls.Hosting;
+using VisioForge.Core.UI.MAUI;
 
-Este enfoque manual requiere configuración adicional para el despliegue y las actualizaciones deben gestionarse manualmente.
+var builder = MauiApp.CreateBuilder();
+builder
+    .UseMauiApp<App>()
+    .UseSkiaSharp()
+    .ConfigureMauiHandlers(handlers => handlers.AddVisioForgeHandlers())
+    .ConfigureFonts(fonts =>
+    {
+        fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+        fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+    });
+```
 
-## Configuración avanzada y mejores prácticas
+En `MainPage.xaml`, declare el espacio de nombres de VisioForge — `VisioForge.Core.UI.MAUI`, en el ensamblado `VisioForge.Core.UI.MAUI` — y ponga un `VideoView` en la página:
 
-Para aplicaciones de producción, considere estos detalles de implementación adicionales:
+```
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vf="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI"
+             x:Class="VisioForgeMaui.MainPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="30,0" Spacing="25">
+            <vf:VideoView HeightRequest="300" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+```
 
-- **Gestión de Licencias**: Implemente validación de licencia adecuada al inicio de la aplicación
-- **Manejo de Errores**: Agregue manejo de errores completo alrededor de la inicialización y operación del SDK
-- **Optimización de Rendimiento**: Configure la aceleración de hardware y threading según sus dispositivos objetivo
-- **Gestión de Recursos**: Implemente eliminación adecuada de recursos del SDK para prevenir fugas de memoria
+Ejecútelo en **Windows Machine**, y el `VideoView` queda encima del contenido de la plantilla.
 
-## Solución de problemas comunes
+## Aplicación de consola
 
-Si encuentra problemas durante la instalación o implementación:
+Cree una **Console App** para C# e instale los mismos dos paquetes que para WinForms. Una aplicación de consola necesita un paso más: su plantilla apunta a `net10.0`, y esa compilación del SDK es la de Linux. Sin `-windows`, la aplicación busca la biblioteca GStreamer de Linux y falla con una `DllNotFoundException`. Abra **Edit Project File** y añada `-windows` al framework de destino:
 
-- Verifique que su proyecto tenga como objetivo una versión .NET soportada
-- Asegúrese de que todos los paquetes redistributables requeridos estén instalados
-- Verifique la compatibilidad de versiones de paquetes NuGet
-- Revise la documentación del SDK para requisitos específicos de plataforma
+```
+<PropertyGroup>
+  <OutputType>Exe</OutputType>
+  <!-- net10.0 es la compilación del SDK para Linux: en Windows, añada -windows -->
+  <TargetFramework>net10.0-windows</TargetFramework>
+</PropertyGroup>
+```
 
-## Conclusión y próximos pasos
+Los proyectos WinForms y WPF ya apuntan a `net10.0-windows`.
 
-Con los SDKs .NET de VisioForge correctamente instalados en su proyecto de Visual Studio, ahora está listo para aprovechar sus potentes capacidades multimedia. El método de instalación NuGet asegura que tenga las dependencias correctas y simplifica las actualizaciones futuras.
+`Program.cs` inicializa el SDK, muestra si está listo y lo libera de nuevo:
 
-Para profundizar su comprensión y maximizar el potencial de estos SDKs:
+```
+using VisioForge.Core;
 
-- Explora nuestros [ejemplos de código completos en GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-- Revise la documentación específica del producto para características avanzadas
-- Únete a nuestros foros de la comunidad de desarrolladores para soporte y mejores prácticas
+await VisioForgeX.InitSDKAsync();
+Console.WriteLine($"VisioForge SDK initialized: {VisioForgeX.IsSDKInitialized}");
+VisioForgeX.DestroySDK();
+```
 
-Siguiendo esta guía, ha establecido una base sólida para desarrollar aplicaciones multimedia sofisticadas con VisioForge y Visual Studio.
+La última línea de la salida informa de que el SDK se inicializó.
+
+## Otros paquetes
+
+- **Motores solo para Windows.** `VideoCaptureCore`, `MediaPlayerCore` y `VideoEditCore` usan en su lugar los redist clásicos: `VisioForge.DotNet.Core.Redist.VideoCapture.x64`, `…MediaPlayer.x64` o `…VideoEdit.x64`. Consulte las páginas de implementación de [Video Capture SDK .NET](../../videocapture/deployment/), [Media Player SDK .NET](../../mediaplayer/deployment/) y [Video Edit SDK .NET](../../videoedit/deployment/).
+- **x86 y ARM64.** Una aplicación compilada para otra CPU usa el redist de esa CPU, como `VisioForge.CrossPlatform.Core.Windows.x86` o `VisioForge.CrossPlatform.Core.Windows.arm64`.
+- **Otros frameworks de interfaz.** WinUI, Avalonia y Uno tienen cada uno su propio paquete de interfaz: `VisioForge.DotNet.Core.UI.WinUI`, `VisioForge.DotNet.Core.UI.Avalonia` y `VisioForge.DotNet.Core.UI.Uno`.
+
+La [guía de implementación](../../deployment-x/) enumera los paquetes redist de cada plataforma.
+
+## Instalación manual
+
+Cuando NuGet no es una opción, el SDK también se distribuye como instalador:
+
+1. Descargue el [instalador del SDK](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe) y ejecútelo.
+2. En su proyecto, añada una referencia al `VisioForge.Core.dll` instalado.
+3. Para tener `VideoView` en el Toolbox, haga clic derecho en el Toolbox, seleccione **Choose Items...** y busque `VisioForge.Core.dll`.
+
+NuGet es la forma recomendada: trae el motor nativo con el paquete y se actualiza con un clic.
+
+## Transcripción del vídeo
+
+### Introducción
+
+Instalemos los SDK .NET de VisioForge en Visual Studio, en cuatro tipos de proyecto: WinForms, WPF, MAUI y una aplicación de consola. Los cuatro SDK .NET de VisioForge vienen en un solo paquete NuGet, VisioForge.DotNet.Core: Video Capture, Media Player, Video Edit y Media Blocks. Junto a él va un paquete redist, el motor nativo de la plataforma. En Windows x64, es VisioForge.CrossPlatform.Core.Windows.x64. Una aplicación MAUI añade también el paquete de interfaz de MAUI. Necesita Windows 10 u 11, y Visual Studio 2026, o 2022 para proyectos de .NET 8 y 9. Las aplicaciones WinForms, WPF y de consola necesitan la carga de trabajo .NET desktop development, y MAUI necesita la carga de trabajo .NET Multi-platform App UI. Este video usa Visual Studio 2026 y .NET 10.
+
+### WinForms
+
+Empiece con WinForms. En la ventana de inicio, haga clic en Create a new project, busque Windows Forms y elija Windows Forms App para C#. Asigne un nombre al proyecto, aquí VisioForgeWinForms, elija .NET 10 y haga clic en Create. Haga clic derecho en el proyecto en el Solution Explorer y abra Manage NuGet Packages, en la pestaña Browse. Busque VisioForge.DotNet.Core e instálelo. Visual Studio muestra los cambios y la licencia: acéptelos. Después instale VisioForge.CrossPlatform.Core.Windows.x64, el motor nativo para Windows x64. Ahora ambos paquetes están en la pestaña Installed. El paquete también pone VideoView en el Toolbox, bajo VisioForge. Búsquelo y dibújelo en el formulario. Aquí es donde el SDK muestra el video. Inícielo sin depurar. El formulario se abre con el VideoView, en negro hasta que un motor dibuje en él.
+
+### WPF
+
+WPF sigue los mismos pasos. Cree una WPF Application para C#, aquí VisioForgeWpf, con .NET 10. Instale los mismos dos paquetes desde NuGet: VisioForge.DotNet.Core y el redist de Windows x64. Arrastre VideoView desde el Toolbox al Grid de MainWindow.xaml. Visual Studio escribe la etiqueta y, con ella, el espacio de nombres. El espacio de nombres es VisioForge.Core.UI.WPF, en el ensamblado VisioForge.Core. El prefijo lo elige usted: el Toolbox escribe WPF, y vf es más corto. Ejecútelo, y la ventana muestra el VideoView.
+
+### MAUI
+
+Ahora MAUI. Cree una .NET MAUI App, aquí VisioForgeMaui. Un solo proyecto compila para Windows, Mac Catalyst, Android e iOS. Desde NuGet, instale VisioForge.DotNet.Core y VisioForge.DotNet.Core.UI.MAUI, que contiene el VideoView de MAUI. Los motores nativos van, en cambio, en el archivo de proyecto, cada uno bajo la condición de su plataforma. Abra Edit Project File y añádalos al final. El destino Windows lleva el redist de Windows x64, y Mac Catalyst, Android e iOS llevan cada uno el suyo. Cada destino incluye solo el motor nativo de su plataforma. En un Mac, Mac Catalyst compila para el procesador del propio Mac: Intel o Apple silicon elige su RuntimeIdentifier. Dos plataformas necesitan algo más. Android añade además el proyecto de enlace de VisioForge para Android, de la carpeta AndroidDependency en GitHub, y los permisos de cámara y micrófono en su manifiesto. iOS y Mac Catalyst necesitan descripciones de uso en Info.plist, e iOS se prueba en un dispositivo, no en el simulador. En MauiProgram.cs, añada dos usings y luego UseSkiaSharp y los handlers de VisioForge al builder. UseSkiaSharp activa SkiaSharp, que usan las vistas de VisioForge, y AddVisioForgeHandlers registra sus handlers de plataforma. En MainPage.xaml, declare el espacio de nombres de VisioForge y ponga un VideoView en la parte superior de la página. En MAUI, el espacio de nombres es VisioForge.Core.UI.MAUI, en el ensamblado VisioForge.Core.UI.MAUI. Ejecútelo en Windows Machine. El VideoView queda encima del contenido de la plantilla.
+
+### Consola
+
+Por último, una aplicación de consola. Cree una Console App para C#, aquí VisioForgeConsole. Instale los mismos dos paquetes que para WinForms. Un paso más para una aplicación de consola. Su plantilla apunta a net10.0, y esa compilación del SDK es la de Linux. Añada -windows al framework de destino. Sin eso, la aplicación busca la biblioteca GStreamer de Linux y falla con una DllNotFoundException. WinForms y WPF ya apuntan a net10.0-windows. Program.cs inicializa el SDK, muestra si está listo y lo libera de nuevo. Ejecútelo. La última línea informa de que el SDK se inicializó.
+
+### Otros paquetes
+
+Algunos paquetes más. Los motores solo para Windows, VideoCaptureCore, MediaPlayerCore y VideoEditCore, usan los redist clásicos: Redist.VideoCapture, MediaPlayer o VideoEdit. Las aplicaciones x86 y ARM64 usan el redist de su CPU. Y WinUI, Avalonia y Uno tienen cada uno su propio paquete de interfaz. Fuera de Visual Studio, dotnet add package instala los mismos dos paquetes desde la línea de comandos.
+
+### Próximos pasos
+
+A continuación, grabe una webcam en MP4 en el tutorial de WinForms o WPF. Las guías de despliegue enumeran los paquetes redist de cada plataforma, y hay guías de instalación para Rider, Avalonia, Uno y Unity. La documentación está en visioforge.com/help. Gracias por ver el video.
+
+## Consulte también
+
+- [Webcam a MP4 en WinForms](../../videocapture/video-tutorials/video-capture-webcam-mp4/) y [en WPF](../../videocapture/video-tutorials/video-capture-webcam-mp4-wpf/) — el siguiente paso tras la instalación
+- [Inicialización del SDK](../../init/) — `InitSDKAsync` y `DestroySDK` en detalle
+- Guías de instalación para [MAUI](../maui/), [Rider](../rider/), [Avalonia](../avalonia/), [Uno](../uno/) y [Unity](../unity/)
+
+---
+
+Visite nuestra página de [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) para obtener más ejemplos de código.
 
 ---END OF PAGE---
 
@@ -133385,201 +133449,233 @@ Consultez le [Guide de déploiement Uno Platform](../../deployment-x/uno/).
 ---END OF PAGE---
 
 
-## Installer le SDK VisioForge dans Visual Studio — NuGet
+## Installer les SDK .NET VisioForge dans Visual Studio
 **URL:** https://www.visioforge.com/help/fr/docs/dotnet/install/visual-studio/
-**Description:** Ajoutez les SDK VisioForge .NET aux projets Visual Studio 2022+ via NuGet. Modèles WinForms/WPF/MAUI/console. Dépendances natives et configuration de licence.
+**Description:** Installez les SDK .NET VisioForge dans Visual Studio depuis NuGet, en projets WinForms, WPF, MAUI et console : les paquets, VideoView et une vidéo.
 
-# Guide complet d'intégration des SDK .NET avec Visual Studio
+# Installer les SDK .NET VisioForge dans Visual Studio
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
 
-## Introduction aux SDK VisioForge .NET
+Ce guide installe les SDK .NET VisioForge dans Visual Studio depuis NuGet, dans quatre types de projet : WinForms, WPF, .NET MAUI et une application console. Chaque partie se termine par un projet vide qui se compile et se lance.
 
-VisioForge propose une suite puissante de SDK multimédias pour les développeurs .NET, qui permet de créer des applications riches en fonctionnalités avec des capacités avancées de capture vidéo, d'édition, de lecture et de traitement multimédia. Ce guide complet vous accompagne tout au long du processus d'intégration de ces SDK dans vos projets Visual Studio, pour une expérience de développement fluide.
+Les quatre SDK — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET et Media Blocks SDK .NET — tiennent dans un seul paquet NuGet, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). À côté vient un paquet redist, le moteur natif de la plateforme. Sous Windows x64, c'est [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64). Une application MAUI prend aussi [VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI).
 
-Pour les développeurs professionnels travaillant sur des applications multimédias, une intégration correcte de ces SDK est cruciale pour des performances et des fonctionnalités optimales. Notre approche recommandée consiste à utiliser les paquets NuGet, qui simplifient la gestion des dépendances et garantissent l'accès aux dernières fonctionnalités et corrections de bugs.
+## Tutoriel vidéo
 
-## Aperçu des méthodes d'installation
+La vidéo montre les quatre types de projet dans Visual Studio 2026 :
 
-Il existe deux méthodes principales pour installer les SDK VisioForge .NET :
+## Prérequis
 
-1. **Installation par paquet NuGet** (recommandée) : approche moderne et rationalisée qui gère automatiquement les dépendances et simplifie les mises à jour.
-2. **Installation manuelle** : approche traditionnelle pour des scénarios spécialisés, généralement non recommandée pour la plupart des projets.
+- Windows 10 ou 11
+- Visual Studio 2026, ou Visual Studio 2022 pour les projets .NET 8 et .NET 9
+- La charge de travail **.NET desktop development** pour WinForms, WPF et console, et la charge de travail **.NET Multi-platform App UI development** pour MAUI
 
-Nous couvrirons les deux méthodes en détail, mais nous encourageons fortement l'approche NuGet pour la plupart des scénarios de développement.
+## Les paquets
 
-## Installation par paquet NuGet (méthode recommandée)
+| Projet | Paquets |
+| --- | --- |
+| WinForms, WPF, console (Windows x64) | `VisioForge.DotNet.Core`, `VisioForge.CrossPlatform.Core.Windows.x64` |
+| .NET MAUI | `VisioForge.DotNet.Core`, `VisioForge.DotNet.Core.UI.MAUI`, plus un redist par plateforme dans le fichier projet |
 
-NuGet est le gestionnaire de paquets pour .NET ; il offre un moyen centralisé d'intégrer des bibliothèques à vos projets sans la complexité de la gestion manuelle des fichiers. Voici un guide détaillé pour intégrer les SDK VisioForge via NuGet.
-
-### Étape 1 : créer ou ouvrir votre projet .NET
-
-Tout d'abord, vous aurez besoin d'un projet WinForms, WPF ou autre projet .NET. Nous recommandons d'utiliser le format de projet moderne de type SDK pour une compatibilité optimale.
-
-#### Création d'un nouveau projet
-
-1. Lancez Visual Studio (2019 ou 2022 recommandé)
-2. Sélectionnez « Create a new project »
-3. Filtrez les modèles par « C# » et soit « WPF », soit « Windows Forms »
-4. Choisissez « WPF Application » ou « Windows Forms Application » avec le framework .NET Core/5/6+
-5. Veillez à sélectionner le format de projet moderne de type SDK (c'est le format par défaut dans les versions récentes de Visual Studio)
-
-#### Configuration du projet
-
-Après avoir créé un nouveau projet, vous devrez configurer les paramètres de base :
-
-1. Saisissez le nom de votre projet (utilisez un nom descriptif pertinent pour votre application)
-2. Choisissez un emplacement approprié et un nom de solution
-3. Sélectionnez votre framework cible (.NET 6 ou plus récent recommandé pour de meilleures performances et fonctionnalités)
-4. Cliquez sur « Create » pour générer la structure du projet
-
-### Étape 2 : accéder au gestionnaire de paquets NuGet
-
-Une fois votre projet ouvert dans Visual Studio :
-
-1. Faites un clic droit sur votre projet dans l'Explorateur de solutions
-2. Sélectionnez « Manage NuGet Packages... » dans le menu contextuel
-3. Le gestionnaire de paquets NuGet s'ouvrira dans le volet central
-
-Cette interface propose des fonctions de recherche et de navigation pour trouver et installer facilement les composants VisioForge dont vous avez besoin.
-
-### Étape 3 : installer le paquet d'interface utilisateur pour votre framework
-
-Les SDK VisioForge proposent des composants d'interface utilisateur spécialisés pour différents frameworks .NET. Vous devrez sélectionner le paquet d'interface utilisateur approprié en fonction de votre type de projet.
-
-1. Dans le gestionnaire de paquets NuGet, passez à l'onglet « Browse »
-2. Recherchez « VisioForge.DotNet.Core.UI »
-3. Sélectionnez le paquet d'interface utilisateur approprié pour votre type de projet parmi les résultats de la recherche
-
-#### Paquets d'interface utilisateur disponibles
-
-VisioForge prend en charge un large éventail de frameworks d'interface utilisateur. Choisissez celui qui correspond à votre projet :
-
-- **[VisioForge.DotNet.Core.UI.WinUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.WinUI)** : pour les applications d'interface utilisateur Windows modernes
-- **[VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI)** : pour les applications multiplateformes utilisant .NET MAUI
-- **[VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia)** : pour les applications de bureau multiplateformes utilisant Avalonia UI
-
-Ces paquets d'interface utilisateur fournissent les contrôles et composants nécessaires, spécialement conçus pour le rendu vidéo et l'interaction au sein de votre framework choisi.
-
-### Étape 4 : installer le paquet SDK principal
-
-Après avoir installé le paquet d'interface utilisateur, vous devrez ajouter le paquet SDK principal correspondant à vos besoins multimédias spécifiques :
-
-1. Revenez à l'onglet « Browse » du gestionnaire de paquets NuGet
-2. Recherchez le SDK VisioForge spécifique dont vous avez besoin (par exemple « VisioForge.DotNet.VideoCapture »)
-3. Cliquez sur « Install » sur le paquet approprié
-
-#### Paquets SDK principaux disponibles
-
-Choisissez le SDK qui correspond aux exigences de votre application :
-
-- **[VisioForge.DotNet.VideoCapture](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture)** : pour les applications devant capturer la vidéo depuis des caméras, enregistrer l'écran ou utiliser d'autres sources
-- **[VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit)** : pour les applications d'édition, de traitement et de conversion vidéo
-- **[VisioForge.DotNet.MediaPlayer](https://www.nuget.org/packages/VisioForge.DotNet.MediaPlayer)** : pour créer des lecteurs multimédias avec des contrôles de lecture avancés
-- **[VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks)** : pour construire des pipelines complexes de traitement multimédia
-
-Chaque paquet inclut une documentation complète, et vous pouvez installer plusieurs paquets si votre application nécessite des capacités multimédias variées.
-
-### Étape 5 : implémenter le contrôle VideoView (optionnel)
-
-Le contrôle VideoView est essentiel pour les applications qui doivent afficher du contenu vidéo. Vous pouvez l'ajouter à votre interface utilisateur via XAML (pour WPF) ou via le concepteur (pour WinForms).
-
-#### Pour les applications WPF
-
-Ajoutez l'espace de noms requis à votre fichier XAML :
+Hors de Visual Studio, `dotnet add package` installe les mêmes paquets en ligne de commande :
 
 ```
-xmlns:wpf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"
+dotnet add package VisioForge.DotNet.Core
+dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
 ```
 
-Ajoutez ensuite le contrôle VideoView à votre disposition :
+Des paquets par produit, comme `VisioForge.DotNet.VideoCapture`, sont aussi publiés ; ils référencent `VisioForge.DotNet.Core`, qui suffit à un projet.
+
+## WinForms
+
+1. Dans la fenêtre de démarrage, cliquez sur **Create a new project**, cherchez *Windows Forms* et choisissez **Windows Forms App** pour C#.
+2. Nommez le projet, choisissez **.NET 10** et cliquez sur **Create**.
+3. Faites un clic droit sur le projet dans le **Solution Explorer** et ouvrez **Manage NuGet Packages**, sur l'onglet **Browse**.
+4. Cherchez `VisioForge.DotNet.Core` et installez-le. Visual Studio affiche les modifications et la licence : acceptez-les.
+5. Installez `VisioForge.CrossPlatform.Core.Windows.x64` de la même façon. Les deux paquets figurent maintenant dans l'onglet **Installed**.
+
+Le paquet ajoute aussi `VideoView` à la **Toolbox**, sous **VisioForge**. Cherchez-le et dessinez-le sur le formulaire : c'est là que le SDK affiche la vidéo. Lancez l'application sans débogage (Ctrl+F5), et le formulaire s'ouvre avec le `VideoView`, noir tant qu'aucun moteur n'y dessine.
+
+## WPF
+
+Créez une **WPF Application** pour C# sur .NET 10 et installez les deux mêmes paquets. Faites ensuite glisser `VideoView` de la **Toolbox** dans le `Grid` de `MainWindow.xaml`. Visual Studio écrit la balise, et l'espace de noms avec :
 
 ```
-<wpf:VideoView
-    Width="640"
-    Height="480"
-    Margin="10,10,0,0"
-    HorizontalAlignment="Left"
-    VerticalAlignment="Top"/>
+<Window xmlns:WPF="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core" x:Class="VisioForgeWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VisioForgeWpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <WPF:VideoView />
+    </Grid>
+</Window>
 ```
 
-Le contrôle VideoView apparaîtra dans votre concepteur :
+L'espace de noms est `VisioForge.Core.UI.WPF`, dans l'assembly `VisioForge.Core`. Le préfixe est à vous : la Toolbox écrit `WPF`, et `vf` est plus court.
 
-#### Pour les applications WinForms
+## .NET MAUI
 
-1. Ouvrez le formulaire en mode concepteur
-2. Localisez les contrôles VisioForge dans la boîte à outils (s'ils n'apparaissent pas, faites un clic droit sur la boîte à outils et sélectionnez « Choose Items... »)
-3. Glissez-déposez le contrôle VideoView sur votre formulaire
-4. Ajustez les propriétés de taille et de position selon les besoins
+Un projet .NET MAUI App compile pour Windows, Mac Catalyst, Android et iOS. Depuis NuGet, installez `VisioForge.DotNet.Core` et `VisioForge.DotNet.Core.UI.MAUI`, qui contient le `VideoView` de MAUI.
 
-### Étape 6 : installer les paquets de redistribution requis
+Les moteurs natifs vont, eux, dans le fichier projet, chacun sous la condition de sa plateforme, si bien que chaque cible n'embarque que le moteur de sa propre plateforme. Ouvrez **Edit Project File** et ajoutez-les à la fin :
 
-Selon votre implémentation spécifique, vous pourrez avoir besoin de paquets de redistribution supplémentaires :
+```
+<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.3" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.11.5" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.5" />
+</ItemGroup>
+```
 
-1. Revenez au gestionnaire de paquets NuGet
-2. Recherchez « VisioForge.DotNet.Core.Redist » pour voir les paquets de redistribution disponibles
-3. Installez ceux qui sont pertinents pour votre plateforme et votre SDK
+Sur un Mac, Mac Catalyst compile pour le processeur du Mac lui-même :
 
-Les paquets de redistribution requis varient selon :
+```
+<!-- Mac Catalyst : compiler pour le processeur du Mac lui-même -->
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-x64</RuntimeIdentifier>
+</PropertyGroup>
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
+</PropertyGroup>
+```
 
-- Le système d'exploitation cible (Windows, macOS, Linux)
-- Les besoins en accélération matérielle
-- Les codecs et formats spécifiques que votre application utilisera
-- La configuration du moteur backend
+Deux plateformes demandent un peu plus :
 
-Consultez la page de documentation Déploiement pour le produit sélectionné afin de déterminer les paquets de redistribution nécessaires à votre application.
+- **Android** prend aussi le projet de liaison VisioForge pour Android du [dossier AndroidDependency](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency), et les autorisations caméra et micro dans son manifeste.
+- **iOS et Mac Catalyst** demandent des descriptions d'usage (`NSCameraUsageDescription`, `NSMicrophoneUsageDescription`) dans `Info.plist`. iOS se teste sur un appareil, pas sur le simulateur.
 
-## Installation manuelle (méthode alternative)
+Le [guide d'installation MAUI](../maui/) détaille les deux.
 
-Bien que nous ne recommandions généralement pas l'installation manuelle en raison de sa complexité et des risques de configuration, certains scénarios spécifiques peuvent l'exiger. Suivez ces étapes si NuGet n'est pas une option pour votre projet :
+Dans `MauiProgram.cs`, ajoutez deux usings, puis `UseSkiaSharp` et les handlers VisioForge au builder. `UseSkiaSharp` active SkiaSharp, qu'utilisent les vues VisioForge, et `AddVisioForgeHandlers` enregistre leurs handlers de plateforme :
 
-1. Téléchargez le [programme d'installation complet du SDK](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe) depuis notre site web
-2. Exécutez le programme d'installation avec des privilèges administrateur et suivez les instructions à l'écran
-3. Créez votre projet WinForms ou WPF dans Visual Studio
-4. Ajoutez les références aux bibliothèques SDK installées :
-5. Faites un clic droit sur « References » dans l'Explorateur de solutions
-6. Sélectionnez « Add Reference »
-7. Naviguez vers l'emplacement d'installation du SDK
-8. Sélectionnez les fichiers DLL requis
-9. Configurez la boîte à outils Visual Studio :
-10. Faites un clic droit sur la boîte à outils et sélectionnez « Add Tab »
-11. Nommez le nouvel onglet « VisioForge »
-12. Faites un clic droit sur l'onglet et sélectionnez « Choose Items... »
-13. Parcourez jusqu'au répertoire d'installation du SDK
-14. Sélectionnez `VisioForge.Core.dll`
-15. Glissez-déposez le contrôle VideoView sur votre formulaire ou fenêtre
+```
+using SkiaSharp.Views.Maui.Controls.Hosting;
+using VisioForge.Core.UI.MAUI;
 
-Cette approche manuelle nécessite une configuration supplémentaire pour le déploiement et les mises à jour doivent être gérées manuellement.
+var builder = MauiApp.CreateBuilder();
+builder
+    .UseMauiApp<App>()
+    .UseSkiaSharp()
+    .ConfigureMauiHandlers(handlers => handlers.AddVisioForgeHandlers())
+    .ConfigureFonts(fonts =>
+    {
+        fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+        fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+    });
+```
 
-## Configuration avancée et bonnes pratiques
+Dans `MainPage.xaml`, déclarez l'espace de noms VisioForge — `VisioForge.Core.UI.MAUI`, dans l'assembly `VisioForge.Core.UI.MAUI` — et placez un `VideoView` sur la page :
 
-Pour les applications de production, prenez en compte ces détails d'implémentation supplémentaires :
+```
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vf="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI"
+             x:Class="VisioForgeMaui.MainPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="30,0" Spacing="25">
+            <vf:VideoView HeightRequest="300" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+```
 
-- **Gestion des licences** : mettez en œuvre une validation correcte de la licence au démarrage de l'application
-- **Gestion des erreurs** : ajoutez une gestion complète des erreurs autour de l'initialisation et de l'utilisation du SDK
-- **Optimisation des performances** : configurez l'accélération matérielle et le threading en fonction de vos appareils cibles
-- **Gestion des ressources** : implémentez une libération correcte des ressources du SDK pour éviter les fuites mémoire
+Lancez-la sur **Windows Machine**, et le `VideoView` se place au-dessus du contenu du modèle.
 
-## Résolution des problèmes courants
+## Application console
 
-Si vous rencontrez des problèmes lors de l'installation ou de l'implémentation :
+Créez une **Console App** pour C# et installez les deux mêmes paquets que pour WinForms. Une application console demande une étape de plus : son modèle cible `net10.0`, et cette version du SDK est celle de Linux. Sans `-windows`, l'application cherche la bibliothèque GStreamer de Linux et échoue avec une `DllNotFoundException`. Ouvrez **Edit Project File** et ajoutez `-windows` au framework cible :
 
-- Vérifiez que votre projet cible une version .NET prise en charge
-- Assurez-vous que tous les paquets redistribuables requis sont installés
-- Vérifiez la compatibilité des versions des paquets NuGet
-- Consultez la documentation du SDK pour connaître les exigences spécifiques à la plateforme
+```
+<PropertyGroup>
+  <OutputType>Exe</OutputType>
+  <!-- net10.0 est la version Linux du SDK : sous Windows, ajoutez -windows -->
+  <TargetFramework>net10.0-windows</TargetFramework>
+</PropertyGroup>
+```
 
-## Conclusion et étapes suivantes
+Les projets WinForms et WPF ciblent déjà `net10.0-windows`.
 
-Avec les SDK VisioForge .NET correctement installés dans votre projet Visual Studio, vous êtes maintenant prêt à tirer parti de leurs puissantes capacités multimédias. La méthode d'installation par NuGet garantit la présence des bonnes dépendances et simplifie les mises à jour ultérieures.
+`Program.cs` initialise le SDK, affiche s'il est prêt, puis le libère :
 
-Pour approfondir vos connaissances et maximiser le potentiel de ces SDK :
+```
+using VisioForge.Core;
 
-- Explorez nos [exemples de code complets sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-- Consultez la documentation spécifique à chaque produit pour les fonctionnalités avancées
-- Rejoignez nos forums de la communauté des développeurs pour obtenir du support et partager les bonnes pratiques
+await VisioForgeX.InitSDKAsync();
+Console.WriteLine($"VisioForge SDK initialized: {VisioForgeX.IsSDKInitialized}");
+VisioForgeX.DestroySDK();
+```
 
-En suivant ce guide, vous avez établi une base solide pour développer des applications multimédias sophistiquées avec VisioForge et Visual Studio.
+La dernière ligne de la sortie indique que le SDK s'est initialisé.
+
+## Autres paquets
+
+- **Moteurs réservés à Windows.** `VideoCaptureCore`, `MediaPlayerCore` et `VideoEditCore` prennent à la place les redist classiques : `VisioForge.DotNet.Core.Redist.VideoCapture.x64`, `…MediaPlayer.x64` ou `…VideoEdit.x64`. Voir les pages de déploiement de [Video Capture SDK .NET](../../videocapture/deployment/), [Media Player SDK .NET](../../mediaplayer/deployment/) et [Video Edit SDK .NET](../../videoedit/deployment/).
+- **x86 et ARM64.** Une application compilée pour un autre processeur prend le redist de ce processeur, comme `VisioForge.CrossPlatform.Core.Windows.x86` ou `VisioForge.CrossPlatform.Core.Windows.arm64`.
+- **Autres frameworks d'interface.** WinUI, Avalonia et Uno ont chacun leur propre paquet d'interface : `VisioForge.DotNet.Core.UI.WinUI`, `VisioForge.DotNet.Core.UI.Avalonia` et `VisioForge.DotNet.Core.UI.Uno`.
+
+Le [guide de déploiement](../../deployment-x/) liste les paquets redist de chaque plateforme.
+
+## Installation manuelle
+
+Quand NuGet n'est pas envisageable, le SDK est aussi fourni sous forme d'installateur :
+
+1. Téléchargez l'[installateur du SDK](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe) et lancez-le.
+2. Dans votre projet, ajoutez une référence au `VisioForge.Core.dll` installé.
+3. Pour avoir `VideoView` dans la Toolbox, faites un clic droit sur la Toolbox, choisissez **Choose Items...** et sélectionnez `VisioForge.Core.dll`.
+
+NuGet reste la voie recommandée : il apporte le moteur natif avec le paquet et se met à jour en un clic.
+
+## Transcription de la vidéo
+
+### Présentation
+
+Installons les SDK .NET de VisioForge dans Visual Studio, dans quatre types de projet : WinForms, WPF, MAUI et une application console. Les quatre SDK .NET de VisioForge tiennent dans un seul paquet NuGet, VisioForge.DotNet.Core : Video Capture, Media Player, Video Edit et Media Blocks. À côté vient un paquet redist, le moteur natif de la plateforme. Sous Windows x64, c'est VisioForge.CrossPlatform.Core.Windows.x64. Une application MAUI prend aussi le paquet d'interface MAUI. Il vous faut Windows 10 ou 11, et Visual Studio 2026, ou 2022 pour les projets .NET 8 et 9. Les applications WinForms, WPF et console demandent la charge de travail .NET desktop development, et MAUI la charge de travail .NET Multi-platform App UI. Cette vidéo utilise Visual Studio 2026 et .NET 10.
+
+### WinForms
+
+Commencez par WinForms. Dans la fenêtre de démarrage, cliquez sur Create a new project, cherchez Windows Forms et choisissez Windows Forms App pour C#. Nommez le projet, ici VisioForgeWinForms, choisissez .NET 10 et cliquez sur Create. Faites un clic droit sur le projet dans le Solution Explorer et ouvrez Manage NuGet Packages, sur l'onglet Browse. Cherchez VisioForge.DotNet.Core et installez-le. Visual Studio affiche les modifications et la licence : acceptez-les. Installez ensuite VisioForge.CrossPlatform.Core.Windows.x64, le moteur natif pour Windows x64. Les deux paquets figurent maintenant dans l'onglet Installed. Le paquet ajoute aussi VideoView à la Toolbox, sous VisioForge. Cherchez-le et dessinez-le sur le formulaire. C'est là que le SDK affiche la vidéo. Lancez-le sans débogage. Le formulaire s'ouvre avec le VideoView, noir tant qu'aucun moteur n'y dessine.
+
+### WPF
+
+WPF suit les mêmes étapes. Créez une WPF Application pour C#, ici VisioForgeWpf, sur .NET 10. Installez les deux mêmes paquets depuis NuGet : VisioForge.DotNet.Core et le redist Windows x64. Faites glisser VideoView de la Toolbox dans le Grid de MainWindow.xaml. Visual Studio écrit la balise, et l'espace de noms avec. L'espace de noms est VisioForge.Core.UI.WPF, dans l'assembly VisioForge.Core. Le préfixe est à vous : la Toolbox écrit WPF, et vf est plus court. Lancez-le, et la fenêtre affiche le VideoView.
+
+### MAUI
+
+Passons à MAUI. Créez une .NET MAUI App, ici VisioForgeMaui. Un seul projet compile pour Windows, Mac Catalyst, Android et iOS. Depuis NuGet, installez VisioForge.DotNet.Core et VisioForge.DotNet.Core.UI.MAUI, qui contient le VideoView de MAUI. Les moteurs natifs vont, eux, dans le fichier projet, chacun sous la condition de sa plateforme. Ouvrez Edit Project File et ajoutez-les à la fin. La cible Windows prend le redist Windows x64, et Mac Catalyst, Android et iOS prennent chacun le leur. Chaque cible n'embarque que le moteur natif de sa plateforme. Sur un Mac, Mac Catalyst compile pour le processeur du Mac lui-même : Intel ou Apple silicon choisit son RuntimeIdentifier. Deux plateformes demandent un peu plus. Android prend aussi le projet de liaison VisioForge pour Android, depuis le dossier AndroidDependency sur GitHub, et les autorisations caméra et micro dans son manifeste. iOS et Mac Catalyst demandent des descriptions d'usage dans Info.plist, et iOS se teste sur un appareil, pas sur le simulateur. Dans MauiProgram.cs, ajoutez deux usings, puis UseSkiaSharp et les handlers VisioForge au builder. UseSkiaSharp active SkiaSharp, qu'utilisent les vues VisioForge, et AddVisioForgeHandlers enregistre leurs handlers de plateforme. Dans MainPage.xaml, déclarez l'espace de noms VisioForge et placez un VideoView en haut de la page. Dans MAUI, l'espace de noms est VisioForge.Core.UI.MAUI, dans l'assembly VisioForge.Core.UI.MAUI. Lancez-le sur Windows Machine. Le VideoView se place au-dessus du contenu du modèle.
+
+### Console
+
+Pour finir, une application console. Créez une Console App pour C#, ici VisioForgeConsole. Installez les deux mêmes paquets que pour WinForms. Une étape de plus pour une application console. Son modèle cible net10.0, et cette version du SDK est celle de Linux. Ajoutez -windows au framework cible. Sans cela, l'application cherche la bibliothèque GStreamer de Linux et échoue avec une DllNotFoundException. WinForms et WPF ciblent déjà net10.0-windows. Program.cs initialise le SDK, affiche s'il est prêt, puis le libère. Lancez-le. La dernière ligne indique que le SDK s'est initialisé.
+
+### Autres paquets
+
+Encore quelques paquets. Les moteurs réservés à Windows, VideoCaptureCore, MediaPlayerCore et VideoEditCore, prennent les redist classiques : Redist.VideoCapture, MediaPlayer ou VideoEdit. Les applications x86 et ARM64 prennent le redist de leur processeur. Et WinUI, Avalonia et Uno ont chacun leur propre paquet d'interface. Hors de Visual Studio, dotnet add package installe les deux mêmes paquets en ligne de commande.
+
+### Étapes suivantes
+
+Ensuite, enregistrez une webcam en MP4 dans le tutoriel WinForms ou WPF. Les guides de déploiement listent les paquets redist de chaque plateforme, et il existe des guides d'installation pour Rider, Avalonia, Uno et Unity. La documentation se trouve sur visioforge.com/help. Merci de votre attention.
+
+## Voir aussi
+
+- [Webcam vers MP4 en WinForms](../../videocapture/video-tutorials/video-capture-webcam-mp4/) et [en WPF](../../videocapture/video-tutorials/video-capture-webcam-mp4-wpf/) — l'étape suivante après l'installation
+- [Initialisation du SDK](../../init/) — `InitSDKAsync` et `DestroySDK` en détail
+- Guides d'installation pour [MAUI](../maui/), [Rider](../rider/), [Avalonia](../avalonia/), [Uno](../uno/) et [Unity](../unity/)
+
+---
+
+Consultez notre page [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) pour plus d'exemples de code.
 
 ---END OF PAGE---
 
@@ -191896,6 +191992,8 @@ NuGet packages offer the simplest deployment method, requiring no administrative
 - FFMPEG (File output/network streaming): [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/)
 - LAV Filters: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
 
+> **Input files without registered LAV Filters:** `VideoEditCore` opens input files through DirectShow Editing Services, which uses only filters registered on the machine. When LAV Filters are not registered, as in an app deployed with NuGet packages only, `VideoEditCore` opens its input files, video and audio alike (MP4, MKV, AVI, M4A, FLAC and others), with the FFMPEG Source filter from the FFMPEG package, so add that package. WMV, ASF, WMA, WAV and MP3 files still open through the Windows filters.
+>
 > **Windows ARM64:** LAV Filters exist for x86 and x64 only. There is no upstream ARM64 build, so the SDK has no ARM64 LAV package, and most other DirectShow filters of the classic engines have no ARM64 build yet either. An app running as an ARM64 process cannot load them. AnyCPU apps usually run as ARM64 there too. On Windows ARM64, use `VideoEditCoreX` or Media Blocks SDK .NET, or build the app for x64 (`PlatformTarget` set to `x64`; it runs under emulation).
 
 Implementation is straightforward: add the required packages to your application project, and after building, the necessary redistributable files will be automatically included in your application folder.
@@ -195143,6 +195241,8 @@ Los paquetes NuGet ofrecen el método de despliegue más simple, sin requerir pr
 - FFMPEG (Salida de archivo/streaming en red): [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/)
 - Filtros LAV: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
 
+> **Archivos de entrada sin filtros LAV registrados:** `VideoEditCore` abre los archivos de entrada mediante DirectShow Editing Services, que solo utiliza los filtros registrados en el equipo. Cuando los filtros LAV no están registrados, como en una aplicación implementada solo con paquetes NuGet, `VideoEditCore` abre sus archivos de entrada, tanto de video como de audio (MP4, MKV, AVI, M4A, FLAC y otros), con el filtro FFMPEG Source del paquete FFMPEG, por lo que debe agregar ese paquete. Los archivos WMV, ASF, WMA, WAV y MP3 se siguen abriendo con los filtros de Windows.
+>
 > **Windows ARM64:** los filtros LAV existen solo para x86 y x64. No hay una versión ARM64 oficial, por lo que el SDK no incluye un paquete LAV para ARM64, y la mayoría de los demás filtros DirectShow de los motores clásicos tampoco tienen aún una versión ARM64. Una aplicación que se ejecuta como proceso ARM64 no puede cargarlos. Las aplicaciones AnyCPU también suelen ejecutarse allí como ARM64. En Windows ARM64, use `VideoEditCoreX` o Media Blocks SDK .NET, o compile la aplicación para x64 (`PlatformTarget` con el valor `x64`; se ejecuta en emulación).
 
 La implementación es directa: añada los paquetes requeridos a su proyecto de aplicación, y después de compilar, los archivos redistribuibles necesarios se incluirán automáticamente en la carpeta de su aplicación.
@@ -198363,6 +198463,8 @@ Les paquets NuGet offrent la méthode de déploiement la plus simple, ne nécess
 - FFMPEG (sortie fichier / diffusion réseau) : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/)
 - Filtres LAV : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
 
+> **Fichiers d'entrée sans filtres LAV enregistrés :** `VideoEditCore` ouvre les fichiers d'entrée via DirectShow Editing Services, qui n'utilise que les filtres enregistrés sur la machine. Lorsque les filtres LAV ne sont pas enregistrés, comme dans une application déployée uniquement avec des paquets NuGet, `VideoEditCore` ouvre ses fichiers d'entrée, vidéo comme audio (MP4, MKV, AVI, M4A, FLAC et autres), avec le filtre FFMPEG Source du paquet FFMPEG : ajoutez donc ce paquet. Les fichiers WMV, ASF, WMA, WAV et MP3 s'ouvrent toujours avec les filtres de Windows.
+>
 > **Windows ARM64 :** les filtres LAV existent uniquement en x86 et x64. Il n'en existe aucune version ARM64 en amont, le SDK ne fournit donc pas de paquet LAV ARM64, et la plupart des autres filtres DirectShow des moteurs classiques n'ont pas encore de version ARM64 non plus. Une application exécutée en tant que processus ARM64 ne peut pas les charger. Les applications AnyCPU s'y exécutent généralement aussi en ARM64. Sous Windows ARM64, utilisez `VideoEditCoreX` ou Media Blocks SDK .NET, ou compilez l'application pour x64 (`PlatformTarget` défini sur `x64` ; elle s'exécute alors en émulation).
 
 La mise en œuvre est simple : ajoutez les paquets requis à votre projet d'application, et après la compilation, les fichiers redistribuables nécessaires seront automatiquement inclus dans le dossier de votre application.
@@ -220940,7 +221042,10 @@ if (device != null)
         };
 
         // select the first frame rate
-        videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        if (formatItem.FrameRateList.Count > 0)
+        {
+            videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        }
     }
 }
 
@@ -223635,7 +223740,10 @@ if (device != null)
         {
             Format = formatItem.ToFormat()
         };
-        videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        if (formatItem.FrameRateList.Count > 0)
+        {
+            videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        }
     }
 }
 
@@ -256588,7 +256696,10 @@ if (device != null)
         };
 
         // seleccionar la primera tasa de frames
-        videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        if (formatItem.FrameRateList.Count > 0)
+        {
+            videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        }
     }
 }
 
@@ -259278,7 +259389,10 @@ if (device != null)
         {
             Format = formatItem.ToFormat()
         };
-        videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        if (formatItem.FrameRateList.Count > 0)
+        {
+            videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        }
     }
 }
 
@@ -292090,7 +292204,10 @@ if (device != null)
         };
 
         // sélectionner la première fréquence d'images
-        videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        if (formatItem.FrameRateList.Count > 0)
+        {
+            videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        }
     }
 }
 
@@ -294783,7 +294900,10 @@ if (device != null)
         {
             Format = formatItem.ToFormat()
         };
-        videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        if (formatItem.FrameRateList.Count > 0)
+        {
+            videoSourceSettings.Format.FrameRate = formatItem.FrameRateList[0];
+        }
     }
 }
 
@@ -349587,7 +349707,7 @@ The package has no dependency on the rest of the VisioForge SDK. It targets .NET
 <PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.6]" />
 ```
 
-`Redist.VirtualCamera.x64` fits whatever your application's architecture: the consumer application loads the filter, and Zoom, OBS and browsers are 64-bit (see below for other consumers). Each `Redist.VirtualCamera` package brings the `Redist.Shared` package of its architecture, with the `VisioForge_MFP*.dll` and `VisioForge_MFPX*.dll` its filters load (and `vcomp140.dll` on x64). An application that is not x64 and calls `PushFrameBgra` or `PushFrameBgr24` also references `Redist.Shared` of its own architecture (`.x86` or `.arm64`) for the color conversion.
+`Redist.VirtualCamera.x64` carries the filters Zoom, OBS and browsers load: the consumer application loads the filter, and those applications are 64-bit (see below for other consumers). Build your application for x64 or ARM64 so they see its frames: a 32-bit process pushes to a stream that only 32-bit consumers read. Each `Redist.VirtualCamera` package brings the `Redist.Shared` package of its architecture, with the `VisioForge_MFP*.dll` and `VisioForge_MFPX*.dll` its filters load (and `vcomp140.dll` on x64). An application that is not x64 and calls `PushFrameBgra` or `PushFrameBgr24` also references `Redist.Shared` of its own architecture (`.x86` or `.arm64`) for the color conversion.
 
 ## Register the Filters
 
@@ -349619,7 +349739,7 @@ using (var process = Process.Start(info))
 }
 ```
 
-The consumer application loads the filter build that matches its own bitness, whatever the bitness of the application that pushes the frames. The x64 filters above serve 64-bit Zoom, OBS and browsers. For 32-bit consumers, also register `VisioForge_Virtual_Camera.ax` and `VisioForge_Virtual_Audio_Card.ax` from the `.x86` redist; for ARM64-native consumers, `VisioForge_Virtual_Camera_arm64.ax` and `VisioForge_Virtual_Audio_Card_arm64.ax` from the `arm64` subfolder that the `.arm64` redist creates in the application folder.
+The consumer application loads the filter build that matches its own bitness and sees the frames of a pushing application of the same bitness: an x64 or ARM64 application feeds 64-bit consumers, an x86 one feeds 32-bit consumers. The x64 filters above serve 64-bit Zoom, OBS and browsers. For 32-bit consumers, also register `VisioForge_Virtual_Camera.ax` and `VisioForge_Virtual_Audio_Card.ax` from the `.x86` redist; for ARM64-native consumers, `VisioForge_Virtual_Camera_arm64.ax` and `VisioForge_Virtual_Audio_Card_arm64.ax` from the `arm64` subfolder that the `.arm64` redist creates in the application folder.
 
 An installer can register the same files instead; see [Filter Registration](../../deployment/filter-registration/).
 
@@ -349650,7 +349770,9 @@ using (var video = new VirtualVideoWriter(width, height, 30, "VideoStream1", nul
 | `PushFrameBgr24(data, stride)` | B, G, R per pixel, rows top to bottom | WPF `Bgr24`, GDI+ `Format24bppRgb`, OpenCV `CV_8UC3` |
 | `PushFrame(data)` | YUY2, exactly `width * height * 2` bytes | your own encoder or converter |
 
-The width must be even. `PushFrameBgra` and `PushFrameBgr24` convert to YUY2 natively in `VisioForge_MFPX64.dll` (`VisioForge_MFPX.dll` on x86, `VisioForge_MFPX_ARM64.dll` on ARM64). Each push returns `false` when no buffer is free, so a slow consumer drops a frame rather than blocking your thread.
+The width must be even. `PushFrameBgra` and `PushFrameBgr24` convert to YUY2 natively in `VisioForge_MFPX64.dll` (`VisioForge_MFPX.dll` on x86, `VisioForge_MFPX_ARM64.dll` on ARM64). When the consumer falls behind, a push overwrites the oldest unread frame instead of waiting for it to be read. A push returns `false` when the frame could not be written, for example when every buffer is busy; that frame is dropped.
+
+An earlier writer keeps the stream's shared memory, and its frame size, until it is disposed (`Stop` keeps it). While it exists, a new writer on the same stream name takes over only with that frame size; with another size, `Start` throws `InvalidOperationException`. Another frame rate is accepted, but an application already reading the camera keeps reporting the rate it opened it with. To change the size, dispose the earlier writer: an application reading the camera lets go of the stream within a frame or so and then picks up the new size, so if `Start` still throws right after, call it again a moment later. `VirtualAudioWriter` is refused the same way when the sample rate, channel count or sample size differ, but an application reading the microphone keeps the format it opened it with: close the microphone in that application before you start a writer with another format.
 
 ## Push Audio
 
@@ -349668,6 +349790,10 @@ using (var audio = new VirtualAudioWriter(48000, 2, 16, "AudioStream1", null))
 
 Timestamps come from the number of bytes pushed, so push audio at the rate it is played.
 
+## Push from C++
+
+The package is .NET only, but the camera reads its frames from named shared memory, so a C++ application can write them directly. The **PushDemo** console sample in the [DirectShow samples repository](https://github.com/visioforge/directshow-samples/tree/main/Virtual%20Camera%20SDK/cpp/PushDemo) does this in one `main.cpp` with no dependency beyond the Windows SDK: it pushes 1280x720 YUY2 color bars at 30 fps and takes the license key as its argument. The bitness of the writer selects the stream: a 64-bit build feeds 64-bit consumers such as Zoom, OBS and browsers, and a 32-bit build feeds 32-bit consumers only.
+
 ## Logging
 
 The writers take a `BaseContext` for their warnings and errors; `null` sends them to `System.Diagnostics.Trace`. To route them elsewhere, derive from `BaseContext` and override `Error` and `Warning`.
@@ -349678,7 +349804,7 @@ Without a license key the virtual camera draws a TRIAL strip across the picture.
 
 ## Demo
 
-The **Virtual Camera Push Demo** (WPF, C#) in the [SDK samples repository](https://github.com/visioforge/.Net-SDK-s-samples) draws a moving picture with WPF, pushes it with `PushFrameBgra`, sends a 440 Hz tone to the virtual microphone and registers the filters from a button.
+The **Virtual Camera Push Demo** (WPF, C#) in the [SDK samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Virtual%20Camera%20SDK/WPF/CSharp/Virtual%20Camera%20Push%20Demo) draws a moving picture with WPF, pushes it with `PushFrameBgra`, sends a 440 Hz tone to the virtual microphone and registers the filters from a button.
 
 ## See Also
 
@@ -371204,7 +371330,7 @@ El paquete no depende del resto del SDK de VisioForge. Está disponible para .NE
 <PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.6]" />
 ```
 
-`Redist.VirtualCamera.x64` sirve sea cual sea la arquitectura de su aplicación: el filtro lo carga la aplicación consumidora, y Zoom, OBS y los navegadores son de 64 bits (más abajo se indican otros consumidores). Cada paquete `Redist.VirtualCamera` incluye el paquete `Redist.Shared` de su arquitectura, con las `VisioForge_MFP*.dll` y `VisioForge_MFPX*.dll` que cargan sus filtros (y `vcomp140.dll` en x64). Una aplicación que no es x64 y llama a `PushFrameBgra` o `PushFrameBgr24` referencia además el `Redist.Shared` de su propia arquitectura (`.x86` o `.arm64`) para la conversión de color.
+`Redist.VirtualCamera.x64` contiene los filtros que cargan Zoom, OBS y los navegadores: el filtro lo carga la aplicación consumidora, y esas aplicaciones son de 64 bits (más abajo se indican otros consumidores). Compile su aplicación para x64 o ARM64 para que vean sus fotogramas: un proceso de 32 bits envía a un flujo que solo leen los consumidores de 32 bits. Cada paquete `Redist.VirtualCamera` incluye el paquete `Redist.Shared` de su arquitectura, con las `VisioForge_MFP*.dll` y `VisioForge_MFPX*.dll` que cargan sus filtros (y `vcomp140.dll` en x64). Una aplicación que no es x64 y llama a `PushFrameBgra` o `PushFrameBgr24` referencia además el `Redist.Shared` de su propia arquitectura (`.x86` o `.arm64`) para la conversión de color.
 
 ## Registro de los filtros
 
@@ -371236,7 +371362,7 @@ using (var process = Process.Start(info))
 }
 ```
 
-La aplicación consumidora carga la versión del filtro que coincide con su propia arquitectura, sea cual sea la de la aplicación que envía los fotogramas. Los filtros x64 anteriores sirven a Zoom, OBS y los navegadores de 64 bits. Para consumidores de 32 bits, registre también `VisioForge_Virtual_Camera.ax` y `VisioForge_Virtual_Audio_Card.ax` del redist `.x86`; para consumidores ARM64 nativos, `VisioForge_Virtual_Camera_arm64.ax` y `VisioForge_Virtual_Audio_Card_arm64.ax` de la subcarpeta `arm64` que el redist `.arm64` crea en la carpeta de la aplicación.
+La aplicación consumidora carga la versión del filtro que coincide con su propia arquitectura y ve los fotogramas de una aplicación emisora de la misma arquitectura: una aplicación x64 o ARM64 alimenta a los consumidores de 64 bits, y una x86 a los de 32 bits. Los filtros x64 anteriores sirven a Zoom, OBS y los navegadores de 64 bits. Para consumidores de 32 bits, registre también `VisioForge_Virtual_Camera.ax` y `VisioForge_Virtual_Audio_Card.ax` del redist `.x86`; para consumidores ARM64 nativos, `VisioForge_Virtual_Camera_arm64.ax` y `VisioForge_Virtual_Audio_Card_arm64.ax` de la subcarpeta `arm64` que el redist `.arm64` crea en la carpeta de la aplicación.
 
 Un instalador puede registrar los mismos archivos; consulte [Registro de filtros](../../deployment/filter-registration/).
 
@@ -371267,7 +371393,9 @@ using (var video = new VirtualVideoWriter(width, height, 30, "VideoStream1", nul
 | `PushFrameBgr24(data, stride)` | B, G, R por píxel, filas de arriba abajo | WPF `Bgr24`, GDI+ `Format24bppRgb`, OpenCV `CV_8UC3` |
 | `PushFrame(data)` | YUY2, exactamente `width * height * 2` bytes | su propio codificador o convertidor |
 
-El ancho debe ser par. `PushFrameBgra` y `PushFrameBgr24` convierten a YUY2 de forma nativa en `VisioForge_MFPX64.dll` (`VisioForge_MFPX.dll` en x86, `VisioForge_MFPX_ARM64.dll` en ARM64). Cada envío devuelve `false` cuando no hay ningún búfer libre, de modo que un consumidor lento descarta un fotograma en lugar de bloquear su hilo.
+El ancho debe ser par. `PushFrameBgra` y `PushFrameBgr24` convierten a YUY2 de forma nativa en `VisioForge_MFPX64.dll` (`VisioForge_MFPX.dll` en x86, `VisioForge_MFPX_ARM64.dll` en ARM64). Cuando el consumidor se retrasa, un envío sobrescribe el fotograma no leído más antiguo en lugar de esperar a que se lea. Un envío devuelve `false` cuando el fotograma no se pudo escribir, por ejemplo cuando todos los búferes están ocupados; ese fotograma se descarta.
+
+Un escritor anterior conserva la memoria compartida del flujo, y su tamaño de fotograma, hasta que se libera (`Dispose`; `Stop` la conserva). Mientras exista, un nuevo escritor con el mismo nombre de flujo solo toma el relevo con ese tamaño; con otro tamaño, `Start` lanza `InvalidOperationException`. Se acepta otra velocidad de fotogramas, pero una aplicación que ya lee la cámara sigue indicando la velocidad con la que la abrió. Para cambiar el tamaño, libere el escritor anterior: una aplicación que lee la cámara suelta el flujo en aproximadamente un fotograma y luego adopta el nuevo tamaño, así que si `Start` todavía lanza la excepción justo después, vuelva a llamarlo un momento más tarde. `VirtualAudioWriter` se rechaza del mismo modo cuando difieren la frecuencia de muestreo, el número de canales o el tamaño de muestra, pero una aplicación que lee el micrófono conserva el formato con el que lo abrió: cierre el micrófono en esa aplicación antes de iniciar un escritor con otro formato.
 
 ## Envío de audio
 
@@ -371285,6 +371413,10 @@ using (var audio = new VirtualAudioWriter(48000, 2, 16, "AudioStream1", null))
 
 Las marcas de tiempo se calculan a partir de los bytes enviados, así que envíe el audio al ritmo al que se reproduce.
 
+## Envío desde C++
+
+El paquete es solo para .NET, pero la cámara lee sus fotogramas de una memoria compartida con nombre, así que una aplicación C++ puede escribirlos directamente. El ejemplo de consola **PushDemo** del [repositorio de ejemplos DirectShow](https://github.com/visioforge/directshow-samples/tree/main/Virtual%20Camera%20SDK/cpp/PushDemo) lo hace en un único `main.cpp`, sin más dependencias que el Windows SDK: envía barras de color YUY2 de 1280x720 a 30 fps y recibe la clave de licencia como argumento. La arquitectura del emisor determina el flujo: una compilación de 64 bits alimenta a los consumidores de 64 bits, como Zoom, OBS y los navegadores, y una de 32 bits solo a los de 32 bits.
+
 ## Registro de mensajes
 
 Los escritores reciben un `BaseContext` para sus advertencias y errores; con `null` van a `System.Diagnostics.Trace`. Para enviarlos a otro lugar, derive de `BaseContext` y sobrescriba `Error` y `Warning`.
@@ -371295,7 +371427,7 @@ Sin clave de licencia, la cámara virtual dibuja una franja TRIAL sobre la image
 
 ## Demo
 
-**Virtual Camera Push Demo** (WPF, C#), en el [repositorio de ejemplos del SDK](https://github.com/visioforge/.Net-SDK-s-samples), dibuja una imagen en movimiento con WPF, la envía con `PushFrameBgra`, manda un tono de 440 Hz al micrófono virtual y registra los filtros con un botón.
+**Virtual Camera Push Demo** (WPF, C#), en el [repositorio de ejemplos del SDK](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Virtual%20Camera%20SDK/WPF/CSharp/Virtual%20Camera%20Push%20Demo), dibuja una imagen en movimiento con WPF, la envía con `PushFrameBgra`, manda un tono de 440 Hz al micrófono virtual y registra los filtros con un botón.
 
 ## Consulte también
 
@@ -392522,7 +392654,7 @@ Le paquet ne dépend pas du reste du SDK VisioForge. Il cible .NET Framework 4.7
 <PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.6]" />
 ```
 
-`Redist.VirtualCamera.x64` convient quelle que soit l'architecture de votre application : c'est l'application consommatrice qui charge le filtre, et Zoom, OBS et les navigateurs sont en 64 bits (voir plus bas pour les autres consommateurs). Chaque package `Redist.VirtualCamera` apporte le package `Redist.Shared` de son architecture, avec les `VisioForge_MFP*.dll` et `VisioForge_MFPX*.dll` que chargent ses filtres (et `vcomp140.dll` en x64). Une application qui n'est pas x64 et appelle `PushFrameBgra` ou `PushFrameBgr24` référence aussi le `Redist.Shared` de sa propre architecture (`.x86` ou `.arm64`) pour la conversion des couleurs.
+`Redist.VirtualCamera.x64` contient les filtres que chargent Zoom, OBS et les navigateurs : c'est l'application consommatrice qui charge le filtre, et ces applications sont en 64 bits (voir plus bas pour les autres consommateurs). Compilez votre application pour x64 ou ARM64 afin qu'elles voient ses images : un processus 32 bits envoie vers un flux que seuls les consommateurs 32 bits lisent. Chaque package `Redist.VirtualCamera` apporte le package `Redist.Shared` de son architecture, avec les `VisioForge_MFP*.dll` et `VisioForge_MFPX*.dll` que chargent ses filtres (et `vcomp140.dll` en x64). Une application qui n'est pas x64 et appelle `PushFrameBgra` ou `PushFrameBgr24` référence aussi le `Redist.Shared` de sa propre architecture (`.x86` ou `.arm64`) pour la conversion des couleurs.
 
 ## Enregistrement des filtres
 
@@ -392554,7 +392686,7 @@ using (var process = Process.Start(info))
 }
 ```
 
-L'application consommatrice charge la version du filtre qui correspond à sa propre architecture, quelle que soit celle de l'application qui envoie les images. Les filtres x64 ci-dessus servent Zoom, OBS et les navigateurs 64 bits. Pour les consommateurs 32 bits, enregistrez aussi `VisioForge_Virtual_Camera.ax` et `VisioForge_Virtual_Audio_Card.ax` du redist `.x86` ; pour les consommateurs ARM64 natifs, `VisioForge_Virtual_Camera_arm64.ax` et `VisioForge_Virtual_Audio_Card_arm64.ax` du sous-dossier `arm64` que le redist `.arm64` crée dans le dossier de l'application.
+L'application consommatrice charge la version du filtre qui correspond à sa propre architecture et voit les images d'une application émettrice de la même architecture : une application x64 ou ARM64 alimente les consommateurs 64 bits, une application x86 les consommateurs 32 bits. Les filtres x64 ci-dessus servent Zoom, OBS et les navigateurs 64 bits. Pour les consommateurs 32 bits, enregistrez aussi `VisioForge_Virtual_Camera.ax` et `VisioForge_Virtual_Audio_Card.ax` du redist `.x86` ; pour les consommateurs ARM64 natifs, `VisioForge_Virtual_Camera_arm64.ax` et `VisioForge_Virtual_Audio_Card_arm64.ax` du sous-dossier `arm64` que le redist `.arm64` crée dans le dossier de l'application.
 
 Un programme d'installation peut enregistrer les mêmes fichiers ; voir [Enregistrement des filtres](../../deployment/filter-registration/).
 
@@ -392585,7 +392717,9 @@ using (var video = new VirtualVideoWriter(width, height, 30, "VideoStream1", nul
 | `PushFrameBgr24(data, stride)` | B, G, R par pixel, lignes de haut en bas | WPF `Bgr24`, GDI+ `Format24bppRgb`, OpenCV `CV_8UC3` |
 | `PushFrame(data)` | YUY2, exactement `width * height * 2` octets | votre propre encodeur ou convertisseur |
 
-La largeur doit être paire. `PushFrameBgra` et `PushFrameBgr24` convertissent en YUY2 en natif dans `VisioForge_MFPX64.dll` (`VisioForge_MFPX.dll` sur x86, `VisioForge_MFPX_ARM64.dll` sur ARM64). Chaque envoi renvoie `false` lorsqu'aucun tampon n'est libre : un consommateur lent perd une image au lieu de bloquer votre thread.
+La largeur doit être paire. `PushFrameBgra` et `PushFrameBgr24` convertissent en YUY2 en natif dans `VisioForge_MFPX64.dll` (`VisioForge_MFPX.dll` sur x86, `VisioForge_MFPX_ARM64.dll` sur ARM64). Quand le consommateur prend du retard, un envoi écrase l'image non lue la plus ancienne au lieu d'attendre qu'elle soit lue. Un envoi renvoie `false` lorsque l'image n'a pas pu être écrite, par exemple lorsque tous les tampons sont occupés ; cette image est perdue.
+
+Un writer précédent conserve la mémoire partagée du flux, et sa taille d'image, jusqu'à sa libération (`Dispose` ; `Stop` la conserve). Tant qu'il existe, un nouveau writer sur le même nom de flux ne prend le relais qu'avec cette taille ; avec une autre taille, `Start` lève `InvalidOperationException`. Une autre fréquence d'images est acceptée, mais une application qui lit déjà la caméra continue d'annoncer celle avec laquelle elle l'a ouverte. Pour changer de taille, libérez le writer précédent : une application qui lit la caméra relâche le flux en une image environ, puis adopte la nouvelle taille ; si `Start` lève encore l'exception juste après, rappelez-le un instant plus tard. `VirtualAudioWriter` est refusé de la même façon lorsque la fréquence d'échantillonnage, le nombre de canaux ou la taille d'échantillon diffèrent, mais une application qui lit le micro conserve le format avec lequel elle l'a ouvert : fermez le micro dans cette application avant de démarrer un writer avec un autre format.
 
 ## Envoi de l'audio
 
@@ -392603,6 +392737,10 @@ using (var audio = new VirtualAudioWriter(48000, 2, 16, "AudioStream1", null))
 
 Les horodatages sont calculés à partir du nombre d'octets envoyés : envoyez l'audio au rythme de sa lecture.
 
+## Envoi depuis C++
+
+Le paquet est réservé à .NET, mais la caméra lit ses images dans une mémoire partagée nommée : une application C++ peut donc les y écrire directement. L'exemple console **PushDemo** du [dépôt d'exemples DirectShow](https://github.com/visioforge/directshow-samples/tree/main/Virtual%20Camera%20SDK/cpp/PushDemo) le fait dans un seul `main.cpp`, sans autre dépendance que le Windows SDK : il envoie des barres de couleur YUY2 en 1280x720 à 30 i/s et prend la clé de licence en argument. L'architecture de l'émetteur détermine le flux : une version 64 bits alimente les applications 64 bits comme Zoom, OBS et les navigateurs, une version 32 bits uniquement les applications 32 bits.
+
 ## Journalisation
 
 Les writers reçoivent un `BaseContext` pour leurs avertissements et erreurs ; avec `null`, ils vont vers `System.Diagnostics.Trace`. Pour les rediriger, dérivez de `BaseContext` et redéfinissez `Error` et `Warning`.
@@ -392613,7 +392751,7 @@ Sans clé de licence, la caméra virtuelle dessine une bande TRIAL sur l'image. 
 
 ## Démo
 
-**Virtual Camera Push Demo** (WPF, C#), dans le [dépôt d'exemples du SDK](https://github.com/visioforge/.Net-SDK-s-samples), dessine une image animée avec WPF, l'envoie avec `PushFrameBgra`, envoie une tonalité de 440 Hz au micro virtuel et enregistre les filtres à l'aide d'un bouton.
+**Virtual Camera Push Demo** (WPF, C#), dans le [dépôt d'exemples du SDK](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Virtual%20Camera%20SDK/WPF/CSharp/Virtual%20Camera%20Push%20Demo), dessine une image animée avec WPF, l'envoie avec `PushFrameBgra`, envoie une tonalité de 440 Hz au micro virtuel et enregistre les filtres à l'aide d'un bouton.
 
 ## Voir aussi
 
@@ -436965,8 +437103,27 @@ VisioForge already exposes three other AI-agent surfaces — Agent Skills is the
 
 Changes and updates for all .NET SDKs.
 
+## 2026.11.11
+
+- [Core] Fixed: a text or subtitle overlay whose font name is not in the SDK font list was drawn in Arial at 22 pt, and the requested size and face were ignored. The requested size and face are kept, and the error log names the font string used and where to read the valid names.
+- [Media Blocks SDK .NET] Changed: `VideoCaptureDeviceInfo.GetHDOrAnyVideoFormatAndFrameRate`, and with it the default format of `new VideoCaptureDeviceSourceSettings(device)` and `new AndroidCamera2SourceSettings(device)`, now picks 1920×1080 (or 1080×1920 in portrait) when the camera offers that resolution at 25 fps or more, otherwise 1280×720 and then any format from 640×480 up, preferring at both of those steps a format at 25 fps or more. A format whose rate the camera does not list counts as usable, and a 1920×1080 offered only below 25 fps no longer wins over a smaller 25 fps format.
+- [Media Blocks SDK .NET] Fixed: `VideoCaptureDeviceInfo.GetVideoFormatAndFrameRate` left the frame rate of a format it had rejected in its `out` parameter when it found no format at all, and `new VideoCaptureDeviceSourceSettings(device)` then set that rate on the first format in the list, so the camera failed to start on a rate it does not offer.
+- [Core] Fixed: on Windows, the Avalonia `VideoView` with `VideoRendererMode.VideoRenderer` (Video Capture, Media Player and Video Edit SDKs) kept parts of an old frame in the black bars around the picture after the view was resized; the bars are now black.
+- [Media Blocks SDK .NET] Fixed: a `VideoRendererBlock` created with a window handle opened a window of its own on Linux, and on macOS without `MetalVideoRendererSettings`, instead of drawing into the given window. The same applied to `OverlayManagerVideo`, `OverlayManagerNDIVideo` and `OverlayManagerDecklinkVideo` layers shown in a video view.
+- [Windows] Fixed: the VLC source (`File_VLC` playback and the VLC Source DirectShow filter) played the frames a local MP4 file's edit list cuts off at its start, so such a file delivered extra frames and its picture started late against the sound.
+- [Media Blocks SDK .NET] Fixed: on Linux, the raw Bayer formats of a V4L2 camera (`bggr`, `rggb`, `grbg`, `gbrg` and their high-bit-depth variants, where the system GStreamer's `bayer2rgb` supports them) listed in `VideoCaptureDeviceInfo.VideoFormats` failed in `SystemVideoSourceBlock` and `VideoCaptureCoreX` with "Elements could not be linked". They now capture and are converted to RGB.
+- [Media Blocks SDK .NET] Fixed: a camera format taken with `VideoCaptureDeviceFormatInfo.ToFormat()` could fail to start with a negotiation error, because its frame rate was requested as an inexact fraction (24000/1001 as 10000000/417083; on Linux, macOS, iOS and Android also 60/1 as 5000000/83333, 24/1 as 5000000/208333 and 15/1 as 5000000/333333). It is now the rate the camera lists. `VideoFrameRate(double)` returns whole, half and exact NTSC rates (60, 15, 7.5, 30000/1001) as exact fractions, and a frame-rate range in `FrameRateList` no longer starts below the camera's minimum (it lists the whole rates up to 1000 fps plus the range's own ends; an unbounded range lists none and leaves the rate to the device).
+- [Media Blocks SDK .NET] Fixed: `new VideoCaptureDeviceSourceSettings(device)` and the `VideoCaptureDeviceInfo.GetVideoFormatAndFrameRate` family threw `InvalidOperationException` when a camera format listed no frame rate; such a format is now chosen with the rate left to the camera.
+- [Media Blocks SDK .Net] Fixed: `MediaBlocksPipeline.Position_Set`, `Position_SetRange` and their `Async` forms called right after `StartAsync`, before the source had opened the file, failed with `Could not set new position` or `Seek failed`, or did nothing, so playback started from the beginning. This happened on the first start and after a stop and restart of the same pipeline. The seek is now applied as soon as the pipeline is ready. A seek on a pipeline parked by `PauseOnStop` at the end of the file no longer fails: the next start plays from the new position.
+- [Virtual Camera SDK] Fixed: `VirtualVideoWriter` and `VirtualAudioWriter` could stop delivering for good after an application reading the virtual camera or microphone (Zoom, OBS, a browser) was briefly slow: every `PushFrame*` or `PushSamples` call returned `false` and the camera kept showing its last frame until the writer was recreated. A reading application that hung could also hang the thread calling `PushFrame*`, `PushSamples`, `Stop` or `Dispose`. A push now drops the frame and returns `false` while the reader is stuck, and delivers again as soon as it recovers; `Start` throws `InvalidOperationException` instead of waiting for a stuck reader, and can be called again. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+- [Virtual Camera SDK] Fixed: every `Start` after a `Stop` of a `VirtualVideoWriter` or `VirtualAudioWriter` leaked the previous frame buffers and several system handles, so an application that turned the camera on and off grew without bound.
+- [Virtual Camera SDK] Fixed: a `VirtualVideoWriter` started with a larger frame size than an earlier writer of the same stream (or a `VirtualAudioWriter` with a higher sample rate, more channels or more bits per sample) crashed the application with `AccessViolationException` while another application still had the virtual camera or microphone open; a writer with a smaller or otherwise different format showed that application a corrupted picture or sound. `Start` now throws `InvalidOperationException` naming the stream; a writer of the same format, or of the same frame size with another frame rate, still takes the stream over. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+- [Virtual Camera SDK] Fixed: when a `VirtualVideoWriter` or `VirtualAudioWriter` took a stream over from an earlier, stopped writer of the same format, disposing the earlier writer ended the stream for the application reading it: the virtual camera dropped to its background picture and the virtual microphone stopped for good. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+- [Virtual Camera SDK] Fixed: `Start` after `Stop` on a `VirtualVideoWriter` or `VirtualAudioWriter` could briefly show the stream as ended to the application reading it, which then dropped the virtual camera to its background picture or stopped the virtual microphone for good. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+
 ## 2026.11.10
 
+- [Video Edit SDK .NET] Fixed: `VideoEditCore` could not open MP4 and other input files that need LAV Filters when LAV Filters were not registered on the machine, as in an app deployed with NuGet packages only: the start failed with `Unable to connect frontend (0x80040217)`. It now opens them with the FFMPEG Source filter from the `VisioForge.DotNet.Core.Redist.FFMPEG` package; WMV, ASF, WMA, WAV and MP3 files still open through the Windows filters.
 - [Demos] Added: the `webcam-mp4-wpf` Video Capture SDK sample, the code of the WPF webcam-to-MP4 video tutorial.
 - [Demos] Fixed: on a PC without a microphone, the `webcam-mp4-winforms` Video Capture SDK sample showed "The audio source is not configured. Audio playback and recording will be disabled." in its title on every Start, although it recorded video only. It now records video only without the error.
 - [Core] Added: `SRTSourceSettings.CreateAsync(uri, passphrase, keyLength)` reads the tracks of an encrypted SRT stream with the given passphrase and key length and returns settings that carry them. The passphrase no longer has to go in the URI query, so it can contain any characters. Video Capture SDK .NET (`VideoCaptureCoreX`) can now receive an encrypted SRT stream whose passphrase has characters other than letters, digits, `-`, `_`, `.` and `~`.
@@ -436975,6 +437132,7 @@ Changes and updates for all .NET SDKs.
 - [Core] Fixed: `VisioForgeX.StopMainLoop` called from a GStreamer bus or message handler, or while another thread was running `DestroySDK` or `StopMainLoop`, could leave the GStreamer log callback, or the `Debug_NativeCriticals` GLib log handlers, registered again by code the handler ran afterwards (a crash in Unity after a script reload), and a call made on another thread at the same time could return before the main loop had stopped. A call made outside a GStreamer handler now returns once the main loop thread has exited; a call from a handler still only stops the loop.
 - [Core] Fixed: Allied Vision cameras could fail to load the Vimba X API when `PATH` already held a folder whose name begins with `<VIMBA_X_HOME>\api\bin` (for example `api\bin64`). The VLC, NDI and custom redist folders are no longer added to `PATH` a second time when it already holds them in another letter case or with a trailing backslash.
 - [Media Blocks SDK .NET] Fixed: a custom logger set on the pipeline's context through `SetLogger` could deadlock the application when its sink waited on another thread (for example `Dispatcher.Invoke` to the UI thread) while that thread called `AddBlock`, `AddBlockLive`, `GetBlock`, `ClearBlocks`, `Start` or `StartAsync` during the start's block build, the block clean-up of a stop or dispose, an `AddBlock`/`AddBlockLive` call, or a refused `Start`, `StartAsync`, `AddBlock` or `ClearBlocks`.
+- [Core] Changed: the log lines of a pipeline or engine reach a custom logger set through `SetLogger` from a background thread, in the order they were logged, instead of on the thread that logged them, so no SDK lock is held while the sink runs. This also fixes the deadlock above when the thread the sink waited on called `Stop`, `StopAsync`, `Close` or `Dispose` while a Media Blocks pipeline was stopping. `Dispose`, an engine's stop and a `Debug_*` change that replaces the logger wait up to a second for the lines still queued, so a logger closed after `Dispose` normally gets them; a sink slower than that, or one that waits on the thread calling `Dispose`, gets them after `Dispose` returns. Lines still queued when the process ends are lost, more than 10,000 lines waiting for a sink that does not keep up are dropped, and a thread id the sink records is the background thread's. The SDK's own debug log (`Debug_Mode`) and telemetry are written as before.
 - [Windows] Fixed: HLS output (`NetworkStreamingFormat.HLS` in `VideoCaptureCore` and `VideoEditCore`) crashed the process with an access violation as soon as the stream started.
 - [Windows] Fixed: in HLS output only the first segment could be decoded on its own, so a player joining a live stream got no picture; every segment now starts with a keyframe and its decoder parameters.
 - [Windows] Fixed: in HLS output with audio, the audio of the first seconds went into the first segment and the following segments had little or none; each segment now carries the audio of its own time span.
@@ -437001,6 +437159,7 @@ Changes and updates for all .NET SDKs.
 - [Windows] Fixed: the VLC source (`Auto_VLC` IP cameras, `File_VLC` playback and the VLC Source DirectShow filter) restarted its video timestamps from zero every 7 minutes 9 seconds, so longer playback and recordings dropped frames or broke.
 - [Windows] Fixed: the VLC source failed to open some MPEG-2 `.m2ts` files and paths written with forward slashes (`C:/video.mp4`).
 - [Windows] Fixed: the VLC source played a few seconds of sound on the default speakers while opening an `Auto_VLC` IP camera, another network URL or a `.ts` / `.m2ts` file.
+- [Windows] Fixed: the VLC source (`File_VLC` playback and the VLC Source DirectShow filter) dropped frames of a file below 16 fps where the picture stays still, so the video ran ahead of the sound.
 - [Windows] Fixed: `VideoCaptureCore` in audio capture mode (`VideoCaptureMode.AudioCapture`) recording to OGG Vorbis could hang in `StopAsync` (in a measured loop, about one stop in three) with a thread spinning at full CPU and memory growing. The stop now ends the audio capture before it finalizes the file; Speex and MP3 output in audio capture mode, which finalize the same way, get the same change.
 - [Video Edit SDK .NET] Fixed: `VideoEditCore` preview of a timeline with no audio (for example images only) did not start when `Virtual_Camera_Output_Enabled` was set, failing with `Unable to connect virtual audio card sink to audio output pin`. The virtual camera now receives the video alone. With NDI streaming and `Network_Streaming_Audio_Enabled`, such a timeline no longer reports `Unable to connect audio null renderer`; NDI streams the video alone.
 - [Media Blocks SDK .NET] Fixed: `ConnectLive` refused an output of `UniversalSourceBlockV2`, `NDISourceBlock`, `NDISourceXBlock`, `RTMPSourceBlock`, `FallbackSwitchSourceBlock` or a demuxer block that had been connected and was no longer connected when `MediaBlocksPipeline` started (for example a `VideoMixerBlock` live input dropped on a stop, or an input removed with `Disconnect`, `VideoMixerBlock.RemoveInputPadLive`, `AudioMixerBlock.RemoveInputLive` or `RemoveBlockLive`), with an error saying that `OnDemandConnect` had to be set. Such an output can now be connected with `ConnectLive`, for example to a new `VideoMixerBlock.AddInputPadLive` input after a restart; until then its data is dropped.
@@ -441006,8 +441165,27 @@ VisioForge ya expone tres superficies para agentes de IA — Agent Skills es la 
 
 Changes and updates for all .NET SDKs.
 
+## 2026.11.11
+
+- [Core] Fixed: a text or subtitle overlay whose font name is not in the SDK font list was drawn in Arial at 22 pt, and the requested size and face were ignored. The requested size and face are kept, and the error log names the font string used and where to read the valid names.
+- [Media Blocks SDK .NET] Changed: `VideoCaptureDeviceInfo.GetHDOrAnyVideoFormatAndFrameRate`, and with it the default format of `new VideoCaptureDeviceSourceSettings(device)` and `new AndroidCamera2SourceSettings(device)`, now picks 1920×1080 (or 1080×1920 in portrait) when the camera offers that resolution at 25 fps or more, otherwise 1280×720 and then any format from 640×480 up, preferring at both of those steps a format at 25 fps or more. A format whose rate the camera does not list counts as usable, and a 1920×1080 offered only below 25 fps no longer wins over a smaller 25 fps format.
+- [Media Blocks SDK .NET] Fixed: `VideoCaptureDeviceInfo.GetVideoFormatAndFrameRate` left the frame rate of a format it had rejected in its `out` parameter when it found no format at all, and `new VideoCaptureDeviceSourceSettings(device)` then set that rate on the first format in the list, so the camera failed to start on a rate it does not offer.
+- [Core] Fixed: on Windows, the Avalonia `VideoView` with `VideoRendererMode.VideoRenderer` (Video Capture, Media Player and Video Edit SDKs) kept parts of an old frame in the black bars around the picture after the view was resized; the bars are now black.
+- [Media Blocks SDK .NET] Fixed: a `VideoRendererBlock` created with a window handle opened a window of its own on Linux, and on macOS without `MetalVideoRendererSettings`, instead of drawing into the given window. The same applied to `OverlayManagerVideo`, `OverlayManagerNDIVideo` and `OverlayManagerDecklinkVideo` layers shown in a video view.
+- [Windows] Fixed: the VLC source (`File_VLC` playback and the VLC Source DirectShow filter) played the frames a local MP4 file's edit list cuts off at its start, so such a file delivered extra frames and its picture started late against the sound.
+- [Media Blocks SDK .NET] Fixed: on Linux, the raw Bayer formats of a V4L2 camera (`bggr`, `rggb`, `grbg`, `gbrg` and their high-bit-depth variants, where the system GStreamer's `bayer2rgb` supports them) listed in `VideoCaptureDeviceInfo.VideoFormats` failed in `SystemVideoSourceBlock` and `VideoCaptureCoreX` with "Elements could not be linked". They now capture and are converted to RGB.
+- [Media Blocks SDK .NET] Fixed: a camera format taken with `VideoCaptureDeviceFormatInfo.ToFormat()` could fail to start with a negotiation error, because its frame rate was requested as an inexact fraction (24000/1001 as 10000000/417083; on Linux, macOS, iOS and Android also 60/1 as 5000000/83333, 24/1 as 5000000/208333 and 15/1 as 5000000/333333). It is now the rate the camera lists. `VideoFrameRate(double)` returns whole, half and exact NTSC rates (60, 15, 7.5, 30000/1001) as exact fractions, and a frame-rate range in `FrameRateList` no longer starts below the camera's minimum (it lists the whole rates up to 1000 fps plus the range's own ends; an unbounded range lists none and leaves the rate to the device).
+- [Media Blocks SDK .NET] Fixed: `new VideoCaptureDeviceSourceSettings(device)` and the `VideoCaptureDeviceInfo.GetVideoFormatAndFrameRate` family threw `InvalidOperationException` when a camera format listed no frame rate; such a format is now chosen with the rate left to the camera.
+- [Media Blocks SDK .Net] Fixed: `MediaBlocksPipeline.Position_Set`, `Position_SetRange` and their `Async` forms called right after `StartAsync`, before the source had opened the file, failed with `Could not set new position` or `Seek failed`, or did nothing, so playback started from the beginning. This happened on the first start and after a stop and restart of the same pipeline. The seek is now applied as soon as the pipeline is ready. A seek on a pipeline parked by `PauseOnStop` at the end of the file no longer fails: the next start plays from the new position.
+- [Virtual Camera SDK] Fixed: `VirtualVideoWriter` and `VirtualAudioWriter` could stop delivering for good after an application reading the virtual camera or microphone (Zoom, OBS, a browser) was briefly slow: every `PushFrame*` or `PushSamples` call returned `false` and the camera kept showing its last frame until the writer was recreated. A reading application that hung could also hang the thread calling `PushFrame*`, `PushSamples`, `Stop` or `Dispose`. A push now drops the frame and returns `false` while the reader is stuck, and delivers again as soon as it recovers; `Start` throws `InvalidOperationException` instead of waiting for a stuck reader, and can be called again. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+- [Virtual Camera SDK] Fixed: every `Start` after a `Stop` of a `VirtualVideoWriter` or `VirtualAudioWriter` leaked the previous frame buffers and several system handles, so an application that turned the camera on and off grew without bound.
+- [Virtual Camera SDK] Fixed: a `VirtualVideoWriter` started with a larger frame size than an earlier writer of the same stream (or a `VirtualAudioWriter` with a higher sample rate, more channels or more bits per sample) crashed the application with `AccessViolationException` while another application still had the virtual camera or microphone open; a writer with a smaller or otherwise different format showed that application a corrupted picture or sound. `Start` now throws `InvalidOperationException` naming the stream; a writer of the same format, or of the same frame size with another frame rate, still takes the stream over. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+- [Virtual Camera SDK] Fixed: when a `VirtualVideoWriter` or `VirtualAudioWriter` took a stream over from an earlier, stopped writer of the same format, disposing the earlier writer ended the stream for the application reading it: the virtual camera dropped to its background picture and the virtual microphone stopped for good. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+- [Virtual Camera SDK] Fixed: `Start` after `Stop` on a `VirtualVideoWriter` or `VirtualAudioWriter` could briefly show the stream as ended to the application reading it, which then dropped the virtual camera to its background picture or stopped the virtual microphone for good. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+
 ## 2026.11.10
 
+- [Video Edit SDK .NET] Fixed: `VideoEditCore` could not open MP4 and other input files that need LAV Filters when LAV Filters were not registered on the machine, as in an app deployed with NuGet packages only: the start failed with `Unable to connect frontend (0x80040217)`. It now opens them with the FFMPEG Source filter from the `VisioForge.DotNet.Core.Redist.FFMPEG` package; WMV, ASF, WMA, WAV and MP3 files still open through the Windows filters.
 - [Demos] Added: the `webcam-mp4-wpf` Video Capture SDK sample, the code of the WPF webcam-to-MP4 video tutorial.
 - [Demos] Fixed: on a PC without a microphone, the `webcam-mp4-winforms` Video Capture SDK sample showed "The audio source is not configured. Audio playback and recording will be disabled." in its title on every Start, although it recorded video only. It now records video only without the error.
 - [Core] Added: `SRTSourceSettings.CreateAsync(uri, passphrase, keyLength)` reads the tracks of an encrypted SRT stream with the given passphrase and key length and returns settings that carry them. The passphrase no longer has to go in the URI query, so it can contain any characters. Video Capture SDK .NET (`VideoCaptureCoreX`) can now receive an encrypted SRT stream whose passphrase has characters other than letters, digits, `-`, `_`, `.` and `~`.
@@ -441016,6 +441194,7 @@ Changes and updates for all .NET SDKs.
 - [Core] Fixed: `VisioForgeX.StopMainLoop` called from a GStreamer bus or message handler, or while another thread was running `DestroySDK` or `StopMainLoop`, could leave the GStreamer log callback, or the `Debug_NativeCriticals` GLib log handlers, registered again by code the handler ran afterwards (a crash in Unity after a script reload), and a call made on another thread at the same time could return before the main loop had stopped. A call made outside a GStreamer handler now returns once the main loop thread has exited; a call from a handler still only stops the loop.
 - [Core] Fixed: Allied Vision cameras could fail to load the Vimba X API when `PATH` already held a folder whose name begins with `<VIMBA_X_HOME>\api\bin` (for example `api\bin64`). The VLC, NDI and custom redist folders are no longer added to `PATH` a second time when it already holds them in another letter case or with a trailing backslash.
 - [Media Blocks SDK .NET] Fixed: a custom logger set on the pipeline's context through `SetLogger` could deadlock the application when its sink waited on another thread (for example `Dispatcher.Invoke` to the UI thread) while that thread called `AddBlock`, `AddBlockLive`, `GetBlock`, `ClearBlocks`, `Start` or `StartAsync` during the start's block build, the block clean-up of a stop or dispose, an `AddBlock`/`AddBlockLive` call, or a refused `Start`, `StartAsync`, `AddBlock` or `ClearBlocks`.
+- [Core] Changed: the log lines of a pipeline or engine reach a custom logger set through `SetLogger` from a background thread, in the order they were logged, instead of on the thread that logged them, so no SDK lock is held while the sink runs. This also fixes the deadlock above when the thread the sink waited on called `Stop`, `StopAsync`, `Close` or `Dispose` while a Media Blocks pipeline was stopping. `Dispose`, an engine's stop and a `Debug_*` change that replaces the logger wait up to a second for the lines still queued, so a logger closed after `Dispose` normally gets them; a sink slower than that, or one that waits on the thread calling `Dispose`, gets them after `Dispose` returns. Lines still queued when the process ends are lost, more than 10,000 lines waiting for a sink that does not keep up are dropped, and a thread id the sink records is the background thread's. The SDK's own debug log (`Debug_Mode`) and telemetry are written as before.
 - [Windows] Fixed: HLS output (`NetworkStreamingFormat.HLS` in `VideoCaptureCore` and `VideoEditCore`) crashed the process with an access violation as soon as the stream started.
 - [Windows] Fixed: in HLS output only the first segment could be decoded on its own, so a player joining a live stream got no picture; every segment now starts with a keyframe and its decoder parameters.
 - [Windows] Fixed: in HLS output with audio, the audio of the first seconds went into the first segment and the following segments had little or none; each segment now carries the audio of its own time span.
@@ -441042,6 +441221,7 @@ Changes and updates for all .NET SDKs.
 - [Windows] Fixed: the VLC source (`Auto_VLC` IP cameras, `File_VLC` playback and the VLC Source DirectShow filter) restarted its video timestamps from zero every 7 minutes 9 seconds, so longer playback and recordings dropped frames or broke.
 - [Windows] Fixed: the VLC source failed to open some MPEG-2 `.m2ts` files and paths written with forward slashes (`C:/video.mp4`).
 - [Windows] Fixed: the VLC source played a few seconds of sound on the default speakers while opening an `Auto_VLC` IP camera, another network URL or a `.ts` / `.m2ts` file.
+- [Windows] Fixed: the VLC source (`File_VLC` playback and the VLC Source DirectShow filter) dropped frames of a file below 16 fps where the picture stays still, so the video ran ahead of the sound.
 - [Windows] Fixed: `VideoCaptureCore` in audio capture mode (`VideoCaptureMode.AudioCapture`) recording to OGG Vorbis could hang in `StopAsync` (in a measured loop, about one stop in three) with a thread spinning at full CPU and memory growing. The stop now ends the audio capture before it finalizes the file; Speex and MP3 output in audio capture mode, which finalize the same way, get the same change.
 - [Video Edit SDK .NET] Fixed: `VideoEditCore` preview of a timeline with no audio (for example images only) did not start when `Virtual_Camera_Output_Enabled` was set, failing with `Unable to connect virtual audio card sink to audio output pin`. The virtual camera now receives the video alone. With NDI streaming and `Network_Streaming_Audio_Enabled`, such a timeline no longer reports `Unable to connect audio null renderer`; NDI streams the video alone.
 - [Media Blocks SDK .NET] Fixed: `ConnectLive` refused an output of `UniversalSourceBlockV2`, `NDISourceBlock`, `NDISourceXBlock`, `RTMPSourceBlock`, `FallbackSwitchSourceBlock` or a demuxer block that had been connected and was no longer connected when `MediaBlocksPipeline` started (for example a `VideoMixerBlock` live input dropped on a stop, or an input removed with `Disconnect`, `VideoMixerBlock.RemoveInputPadLive`, `AudioMixerBlock.RemoveInputLive` or `RemoveBlockLive`), with an error saying that `OnDemandConnect` had to be set. Such an output can now be connected with `ConnectLive`, for example to a new `VideoMixerBlock.AddInputPadLive` input after a restart; until then its data is dropped.
@@ -445145,8 +445325,27 @@ VisioForge expose déjà trois autres surfaces destinées aux agents IA — Agen
 
 Changes and updates for all .NET SDKs.
 
+## 2026.11.11
+
+- [Core] Fixed: a text or subtitle overlay whose font name is not in the SDK font list was drawn in Arial at 22 pt, and the requested size and face were ignored. The requested size and face are kept, and the error log names the font string used and where to read the valid names.
+- [Media Blocks SDK .NET] Changed: `VideoCaptureDeviceInfo.GetHDOrAnyVideoFormatAndFrameRate`, and with it the default format of `new VideoCaptureDeviceSourceSettings(device)` and `new AndroidCamera2SourceSettings(device)`, now picks 1920×1080 (or 1080×1920 in portrait) when the camera offers that resolution at 25 fps or more, otherwise 1280×720 and then any format from 640×480 up, preferring at both of those steps a format at 25 fps or more. A format whose rate the camera does not list counts as usable, and a 1920×1080 offered only below 25 fps no longer wins over a smaller 25 fps format.
+- [Media Blocks SDK .NET] Fixed: `VideoCaptureDeviceInfo.GetVideoFormatAndFrameRate` left the frame rate of a format it had rejected in its `out` parameter when it found no format at all, and `new VideoCaptureDeviceSourceSettings(device)` then set that rate on the first format in the list, so the camera failed to start on a rate it does not offer.
+- [Core] Fixed: on Windows, the Avalonia `VideoView` with `VideoRendererMode.VideoRenderer` (Video Capture, Media Player and Video Edit SDKs) kept parts of an old frame in the black bars around the picture after the view was resized; the bars are now black.
+- [Media Blocks SDK .NET] Fixed: a `VideoRendererBlock` created with a window handle opened a window of its own on Linux, and on macOS without `MetalVideoRendererSettings`, instead of drawing into the given window. The same applied to `OverlayManagerVideo`, `OverlayManagerNDIVideo` and `OverlayManagerDecklinkVideo` layers shown in a video view.
+- [Windows] Fixed: the VLC source (`File_VLC` playback and the VLC Source DirectShow filter) played the frames a local MP4 file's edit list cuts off at its start, so such a file delivered extra frames and its picture started late against the sound.
+- [Media Blocks SDK .NET] Fixed: on Linux, the raw Bayer formats of a V4L2 camera (`bggr`, `rggb`, `grbg`, `gbrg` and their high-bit-depth variants, where the system GStreamer's `bayer2rgb` supports them) listed in `VideoCaptureDeviceInfo.VideoFormats` failed in `SystemVideoSourceBlock` and `VideoCaptureCoreX` with "Elements could not be linked". They now capture and are converted to RGB.
+- [Media Blocks SDK .NET] Fixed: a camera format taken with `VideoCaptureDeviceFormatInfo.ToFormat()` could fail to start with a negotiation error, because its frame rate was requested as an inexact fraction (24000/1001 as 10000000/417083; on Linux, macOS, iOS and Android also 60/1 as 5000000/83333, 24/1 as 5000000/208333 and 15/1 as 5000000/333333). It is now the rate the camera lists. `VideoFrameRate(double)` returns whole, half and exact NTSC rates (60, 15, 7.5, 30000/1001) as exact fractions, and a frame-rate range in `FrameRateList` no longer starts below the camera's minimum (it lists the whole rates up to 1000 fps plus the range's own ends; an unbounded range lists none and leaves the rate to the device).
+- [Media Blocks SDK .NET] Fixed: `new VideoCaptureDeviceSourceSettings(device)` and the `VideoCaptureDeviceInfo.GetVideoFormatAndFrameRate` family threw `InvalidOperationException` when a camera format listed no frame rate; such a format is now chosen with the rate left to the camera.
+- [Media Blocks SDK .Net] Fixed: `MediaBlocksPipeline.Position_Set`, `Position_SetRange` and their `Async` forms called right after `StartAsync`, before the source had opened the file, failed with `Could not set new position` or `Seek failed`, or did nothing, so playback started from the beginning. This happened on the first start and after a stop and restart of the same pipeline. The seek is now applied as soon as the pipeline is ready. A seek on a pipeline parked by `PauseOnStop` at the end of the file no longer fails: the next start plays from the new position.
+- [Virtual Camera SDK] Fixed: `VirtualVideoWriter` and `VirtualAudioWriter` could stop delivering for good after an application reading the virtual camera or microphone (Zoom, OBS, a browser) was briefly slow: every `PushFrame*` or `PushSamples` call returned `false` and the camera kept showing its last frame until the writer was recreated. A reading application that hung could also hang the thread calling `PushFrame*`, `PushSamples`, `Stop` or `Dispose`. A push now drops the frame and returns `false` while the reader is stuck, and delivers again as soon as it recovers; `Start` throws `InvalidOperationException` instead of waiting for a stuck reader, and can be called again. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+- [Virtual Camera SDK] Fixed: every `Start` after a `Stop` of a `VirtualVideoWriter` or `VirtualAudioWriter` leaked the previous frame buffers and several system handles, so an application that turned the camera on and off grew without bound.
+- [Virtual Camera SDK] Fixed: a `VirtualVideoWriter` started with a larger frame size than an earlier writer of the same stream (or a `VirtualAudioWriter` with a higher sample rate, more channels or more bits per sample) crashed the application with `AccessViolationException` while another application still had the virtual camera or microphone open; a writer with a smaller or otherwise different format showed that application a corrupted picture or sound. `Start` now throws `InvalidOperationException` naming the stream; a writer of the same format, or of the same frame size with another frame rate, still takes the stream over. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+- [Virtual Camera SDK] Fixed: when a `VirtualVideoWriter` or `VirtualAudioWriter` took a stream over from an earlier, stopped writer of the same format, disposing the earlier writer ended the stream for the application reading it: the virtual camera dropped to its background picture and the virtual microphone stopped for good. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+- [Virtual Camera SDK] Fixed: `Start` after `Stop` on a `VirtualVideoWriter` or `VirtualAudioWriter` could briefly show the stream as ended to the application reading it, which then dropped the virtual camera to its background picture or stopped the virtual microphone for good. Applies to `VisioForge.DotNet.Core` and `VisioForge.DotNet.VirtualCamera`.
+
 ## 2026.11.10
 
+- [Video Edit SDK .NET] Fixed: `VideoEditCore` could not open MP4 and other input files that need LAV Filters when LAV Filters were not registered on the machine, as in an app deployed with NuGet packages only: the start failed with `Unable to connect frontend (0x80040217)`. It now opens them with the FFMPEG Source filter from the `VisioForge.DotNet.Core.Redist.FFMPEG` package; WMV, ASF, WMA, WAV and MP3 files still open through the Windows filters.
 - [Demos] Added: the `webcam-mp4-wpf` Video Capture SDK sample, the code of the WPF webcam-to-MP4 video tutorial.
 - [Demos] Fixed: on a PC without a microphone, the `webcam-mp4-winforms` Video Capture SDK sample showed "The audio source is not configured. Audio playback and recording will be disabled." in its title on every Start, although it recorded video only. It now records video only without the error.
 - [Core] Added: `SRTSourceSettings.CreateAsync(uri, passphrase, keyLength)` reads the tracks of an encrypted SRT stream with the given passphrase and key length and returns settings that carry them. The passphrase no longer has to go in the URI query, so it can contain any characters. Video Capture SDK .NET (`VideoCaptureCoreX`) can now receive an encrypted SRT stream whose passphrase has characters other than letters, digits, `-`, `_`, `.` and `~`.
@@ -445155,6 +445354,7 @@ Changes and updates for all .NET SDKs.
 - [Core] Fixed: `VisioForgeX.StopMainLoop` called from a GStreamer bus or message handler, or while another thread was running `DestroySDK` or `StopMainLoop`, could leave the GStreamer log callback, or the `Debug_NativeCriticals` GLib log handlers, registered again by code the handler ran afterwards (a crash in Unity after a script reload), and a call made on another thread at the same time could return before the main loop had stopped. A call made outside a GStreamer handler now returns once the main loop thread has exited; a call from a handler still only stops the loop.
 - [Core] Fixed: Allied Vision cameras could fail to load the Vimba X API when `PATH` already held a folder whose name begins with `<VIMBA_X_HOME>\api\bin` (for example `api\bin64`). The VLC, NDI and custom redist folders are no longer added to `PATH` a second time when it already holds them in another letter case or with a trailing backslash.
 - [Media Blocks SDK .NET] Fixed: a custom logger set on the pipeline's context through `SetLogger` could deadlock the application when its sink waited on another thread (for example `Dispatcher.Invoke` to the UI thread) while that thread called `AddBlock`, `AddBlockLive`, `GetBlock`, `ClearBlocks`, `Start` or `StartAsync` during the start's block build, the block clean-up of a stop or dispose, an `AddBlock`/`AddBlockLive` call, or a refused `Start`, `StartAsync`, `AddBlock` or `ClearBlocks`.
+- [Core] Changed: the log lines of a pipeline or engine reach a custom logger set through `SetLogger` from a background thread, in the order they were logged, instead of on the thread that logged them, so no SDK lock is held while the sink runs. This also fixes the deadlock above when the thread the sink waited on called `Stop`, `StopAsync`, `Close` or `Dispose` while a Media Blocks pipeline was stopping. `Dispose`, an engine's stop and a `Debug_*` change that replaces the logger wait up to a second for the lines still queued, so a logger closed after `Dispose` normally gets them; a sink slower than that, or one that waits on the thread calling `Dispose`, gets them after `Dispose` returns. Lines still queued when the process ends are lost, more than 10,000 lines waiting for a sink that does not keep up are dropped, and a thread id the sink records is the background thread's. The SDK's own debug log (`Debug_Mode`) and telemetry are written as before.
 - [Windows] Fixed: HLS output (`NetworkStreamingFormat.HLS` in `VideoCaptureCore` and `VideoEditCore`) crashed the process with an access violation as soon as the stream started.
 - [Windows] Fixed: in HLS output only the first segment could be decoded on its own, so a player joining a live stream got no picture; every segment now starts with a keyframe and its decoder parameters.
 - [Windows] Fixed: in HLS output with audio, the audio of the first seconds went into the first segment and the following segments had little or none; each segment now carries the audio of its own time span.
@@ -445181,6 +445381,7 @@ Changes and updates for all .NET SDKs.
 - [Windows] Fixed: the VLC source (`Auto_VLC` IP cameras, `File_VLC` playback and the VLC Source DirectShow filter) restarted its video timestamps from zero every 7 minutes 9 seconds, so longer playback and recordings dropped frames or broke.
 - [Windows] Fixed: the VLC source failed to open some MPEG-2 `.m2ts` files and paths written with forward slashes (`C:/video.mp4`).
 - [Windows] Fixed: the VLC source played a few seconds of sound on the default speakers while opening an `Auto_VLC` IP camera, another network URL or a `.ts` / `.m2ts` file.
+- [Windows] Fixed: the VLC source (`File_VLC` playback and the VLC Source DirectShow filter) dropped frames of a file below 16 fps where the picture stays still, so the video ran ahead of the sound.
 - [Windows] Fixed: `VideoCaptureCore` in audio capture mode (`VideoCaptureMode.AudioCapture`) recording to OGG Vorbis could hang in `StopAsync` (in a measured loop, about one stop in three) with a thread spinning at full CPU and memory growing. The stop now ends the audio capture before it finalizes the file; Speex and MP3 output in audio capture mode, which finalize the same way, get the same change.
 - [Video Edit SDK .NET] Fixed: `VideoEditCore` preview of a timeline with no audio (for example images only) did not start when `Virtual_Camera_Output_Enabled` was set, failing with `Unable to connect virtual audio card sink to audio output pin`. The virtual camera now receives the video alone. With NDI streaming and `Network_Streaming_Audio_Enabled`, such a timeline no longer reports `Unable to connect audio null renderer`; NDI streams the video alone.
 - [Media Blocks SDK .NET] Fixed: `ConnectLive` refused an output of `UniversalSourceBlockV2`, `NDISourceBlock`, `NDISourceXBlock`, `RTMPSourceBlock`, `FallbackSwitchSourceBlock` or a demuxer block that had been connected and was no longer connected when `MediaBlocksPipeline` started (for example a `VideoMixerBlock` live input dropped on a stop, or an input removed with `Disconnect`, `VideoMixerBlock.RemoveInputPadLive`, `AudioMixerBlock.RemoveInputLive` or `RemoveBlockLive`), with an error saying that `OnDemandConnect` had to be set. Such an output can now be connected with `ConnectLive`, for example to a new `VideoMixerBlock.AddInputPadLive` input after a restart; until then its data is dropped.
@@ -449783,9 +449984,9 @@ Broadcast to multiple platforms, professional streaming with overlays and effect
 
 Professional video capture, multi-camera recording, chroma key processing
 
-## Record a Webcam to MP4 in C#
+## Video Capture in C#
 
-Recording a webcam to MP4 in C# takes about a dozen lines with Video Capture SDK .NET. Install the VisioForge.DotNet.VideoCapture NuGet package and call VisioForgeX.InitSDKAsync() once at startup. Create a VideoCaptureCoreX bound to a VideoView, take a camera from Video\_SourcesAsync() and assign it to Video\_Source as VideoCaptureDeviceSourceSettings; a fixed resolution and frame rate come from the camera's VideoFormats list. Pass new MP4Output("output.mp4") to Outputs\_Add, assign a microphone from Audio\_SourcesAsync() to Audio\_Source via CreateSourceSettingsVC() with Audio\_Record set to true, and call StartAsync(); StopAsync() closes the file. On Windows the video is encoded to H.264 on the GPU encoder the SDK finds (NVIDIA NVENC, Intel Quick Sync or AMD AMF), or with OpenH264 when there is none, and the audio to AAC. The preview keeps running in the same VideoView while the file is written, in WPF, WinForms, MAUI and Avalonia apps alike. The [save webcam video guide](/help/docs/dotnet/videocapture/guides/save-webcam-video/) adds WebM output, snapshots and the redistributable packages for each platform.
+Video capture in C# takes about a dozen lines with Video Capture SDK .NET; recording a webcam to MP4 shows the whole path. Install the VisioForge.DotNet.VideoCapture NuGet package and call VisioForgeX.InitSDKAsync() once at startup. Create a VideoCaptureCoreX bound to a VideoView, take a camera from Video\_SourcesAsync() and assign it to Video\_Source as VideoCaptureDeviceSourceSettings; a fixed resolution and frame rate come from the camera's VideoFormats list. Pass new MP4Output("output.mp4") to Outputs\_Add, assign a microphone from Audio\_SourcesAsync() to Audio\_Source via CreateSourceSettingsVC() with Audio\_Record set to true, and call StartAsync(); StopAsync() closes the file. On Windows the video is encoded to H.264 on the GPU encoder the SDK finds (NVIDIA NVENC, Intel Quick Sync or AMD AMF), or with OpenH264 when there is none, and the audio to AAC. The preview keeps running in the same VideoView while the file is written, in WPF, WinForms, MAUI and Avalonia apps alike. The [save webcam video guide](/help/docs/dotnet/videocapture/guides/save-webcam-video/) adds WebM output, snapshots and the redistributable packages for each platform.
 
 ## Code Samples
 
@@ -460048,7 +460249,7 @@ The .Net SDKs version 15.8 brings significant enhancements in cross-platform sup
 
 Side-by-side comparisons to help you choose the right .NET multimedia SDK for your project
 
-VisioForge is a developer of .NET media SDKs, and four of them cover the jobs compared on this page. Video Capture SDK records USB webcams, IP cameras over RTSP and ONVIF, desktop screens and capture cards to MP4 or AVI. Media Player SDK plays local files and network streams such as RTSP, HLS and DASH, with GPU decoding. Video Edit SDK cuts, merges and transcodes video on a timeline with transitions, effects and titles. Media Blocks SDK builds custom pipelines from more than 200 blocks when a ready-made SDK does not fit. The cross-platform engines run on Windows, macOS, Linux, Android and iOS from one C# codebase. Additionally, the SDKs share video views for WPF, WinForms, MAUI, Avalonia and Uno Platform. One free trial installer covers all four SDKs. The comparisons below set each SDK against the libraries developers most often weigh it against, for example FFmpeg wrappers, LEADTOOLS, LibVLCSharp and MFormats.
+VisioForge is a developer of .NET media SDKs, and four of them cover the jobs compared on this page. Video Capture SDK records USB webcams, IP cameras over RTSP and ONVIF, desktop screens and capture cards to MP4 or AVI. Media Player SDK plays local files and network streams such as RTSP, HLS and DASH, with GPU decoding. Video Edit SDK cuts, merges and transcodes video on a timeline with transitions, effects and titles. Media Blocks SDK builds custom pipelines from more than 400 blocks when a ready-made SDK does not fit. The cross-platform engines run on Windows, macOS, Linux, Android and iOS from one C# codebase. Additionally, the SDKs share video views for WPF, WinForms, MAUI, Avalonia and Uno Platform. One free trial installer covers all four SDKs. The comparisons below set each SDK against the libraries developers most often weigh it against, for example FFmpeg wrappers, LEADTOOLS, LibVLCSharp and MFormats.
 
 ## SDK Comparisons
 
@@ -461111,7 +461312,7 @@ Media Blocks SDK .NET and LibVLCSharp serve different purposes in the .NET multi
 | --- | --- | --- |
 | Primary Purpose | Custom media pipeline construction | Media playback and streaming |
 | Architecture | Modular blocks (400+) | Monolithic player API |
-| Pricing | €500·year or €1,500 Lifetime·Team | Free (LGPL), or $800·year Videolabs commercial licence |
+| Pricing | €500·year or €1,500 Lifetime·Team | Free (LGPL), or $800·year Videolabs commercial license |
 | Best For | Professional media apps, custom workflows | Media players, simple streaming |
 | Learning Curve | Moderate (flexible but more complex) | Easy (straightforward API) |
 
@@ -461143,9 +461344,9 @@ Media Blocks SDK .NET and LibVLCSharp serve different purposes in the .NET multi
 | IP cameras (RTSP/ONVIF) | Advanced (PTZ, ONVIF API) | Basic playback | Media Blocks SDK |
 | Industrial cameras | Basler, FLIR, Allied Vision | No | Media Blocks SDK |
 | Blackmagic DeckLink | Input & Output | No | Media Blocks SDK |
-| Screen capture | Advanced (window, region) | No | Media Blocks SDK |
+| Screen capture | Advanced (window, region) | Basic (screen://) | Media Blocks SDK |
 | NDI sources | Yes | No | Media Blocks SDK |
-| Effects (blur, edge, etc.) | 130+ effects (CPU + OpenGL) | Basic filters | Media Blocks SDK |
+| Effects (blur, edge, etc.) | 100+ effects (CPU + OpenGL) | Basic filters | Media Blocks SDK |
 | Overlays (text, image, logo) | Multiple types | Limited | Media Blocks SDK |
 | Chroma key (green screen) | Yes | No | Media Blocks SDK |
 | Color grading (LUT) | Yes | No | Media Blocks SDK |
@@ -461155,8 +461356,8 @@ Media Blocks SDK .NET and LibVLCSharp serve different purposes in the .NET multi
 | Format support | Wide | Widest (VLC) | LibVLCSharp |
 | Subtitles | Basic | Full support | LibVLCSharp |
 | DVD/Blu-ray menus | No | Yes | LibVLCSharp |
-| 360° video | Yes | Yes | LibVLCSharp |
-| HDR playback | Yes | Yes (with tonemap) | LibVLCSharp |
+| 360° video | Yes | Yes | Tie |
+| HDR playback | HDR passthrough (HEVC/AV1) | Yes (with tonemap) | LibVLCSharp |
 | File output formats | 15+ (MP4, MKV, AVI, etc.) | Limited | Media Blocks SDK |
 | Live streaming | RTMP, RTSP, SRT, HLS, DASH | Basic streaming | Media Blocks SDK |
 | Multiple simultaneous outputs | Yes (Tee blocks) | Via sout chain | Media Blocks SDK |
@@ -461177,7 +461378,7 @@ Media Blocks SDK .NET and LibVLCSharp serve different purposes in the .NET multi
 | --- | --- | --- | --- |
 | Windows | 10/11, Server | Yes | Both excellent |
 | macOS | 12+ | Yes | Both supported |
-| Linux | Ubuntu, Debian, CentOS | Most distros | Both excellent |
+| Linux | Ubuntu, Debian, Fedora/RHEL | Most distros | Both excellent |
 | Android | 9+ | Yes | Both supported |
 | iOS | 16.4+ | Yes | Both supported |
 | tvOS | No | Yes | LibVLCSharp advantage |
@@ -461195,7 +461396,7 @@ Both SDKs support major .NET UI frameworks, with varying levels of native integr
 | .NET MAUI | Native support | Official package (LibVLCSharp.MAUI) |
 | Avalonia | Native support | Native support |
 | Uno Platform | Native support | Official package |
-| Xamarin.Forms | Via MAUI | Legacy support |
+| Xamarin.Forms | No (use .NET MAUI) | Legacy support |
 
 ## When to Choose Each Solution
 
@@ -461333,7 +461534,7 @@ var mediaPlayer = new MediaPlayer(libVLC);
 // Text overlay: requires VLC string options, limited control
 var media = new Media(libVLC,
     "rtsp://camera/stream", FromType.FromLocation);
-media.AddOption(":sub-filter=marq");
+media.AddOption(":sub-source=marq");
 media.AddOption(":marq-marquee=Camera 1 - Live");
 media.AddOption(":marq-position=1");
 
@@ -461358,12 +461559,15 @@ Copy
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 var camera = new SystemVideoSourceBlock(videoSourceSettings);
+var background = new ImageVideoSourceBlock(
+    new ImageVideoSourceSettings("background.jpg"));
 var effect1 = new ChromaKeyBlock(chromaSettings);
 var effect2 = new TextOverlayBlock(textSettings);
 var encoder = new H264EncoderBlock();
 var output = new RTMPSinkBlock(streamSettings);
 
-pipeline.Connect(camera.Output, effect1.Input);
+pipeline.Connect(camera.Output, effect1.ChromaInput);
+pipeline.Connect(background.Output, effect1.BackgroundInput);
 pipeline.Connect(effect1.Output, effect2.Input);
 pipeline.Connect(effect2.Output, encoder.Input);
 pipeline.Connect(encoder.Output,
@@ -461394,29 +461598,29 @@ mediaPlayer.Play(new Media(libVLC,
 
 ## Pricing and Licensing
 
-Media Blocks SDK .NET is a commercial SDK with royalty-free distribution, while LibVLCSharp is free under the LGPL license with specific compliance requirements. Videolabs also sells a commercial LibVLCSharp licence.
+Media Blocks SDK .NET is a commercial SDK priced from €500 per year: the license covers the VisioForge code and allows royalty-free distribution, while the GStreamer libraries it bundles stay under the LGPL. LibVLCSharp is free under the LGPL 2.1+, and Videolabs sells a commercial LibVLCSharp license at $800 per year that does not cover LibVLC. Both options therefore carry LGPL terms for their native libraries.
 
 | Aspect | Media Blocks SDK .NET | LibVLCSharp |
 | --- | --- | --- |
 | Individual License | €500·year (1 developer) | Free (LGPL 2.1+) |
 | Lifetime·Team | €1,500 one-time (organization team, one city) | Free (LGPL 2.1+) |
 | Non-Commercial Use | Free (full features, requires key) | Free |
-| Distribution | Royalty-free, no per-install fees; bundled GStreamer libraries must stay replaceable (LGPL) | Must allow DLL replacement (LGPL) |
+| Distribution | Royalty-free, no per-install fees; bundled GStreamer libraries must stay replaceable (LGPL) | Must keep LibVLC replaceable (LGPL) |
 | Support | Email support included | Community (Discord/StackOverflow) |
 | Updates | 12 months (annual) or lifetime (team) | Open-source updates |
 | Static Linking | Bundled GStreamer: LGPL relinking terms | Restricted by LGPL relinking terms |
-| Commercial Consulting | Email support included | Videolabs: commercial licence $800·year, Production Support $5,000·year |
+| Commercial Consulting | Email support included | Videolabs: commercial license $800·year, Production Support $5,000·year |
 
 ### Cost Comparison for Commercial Projects
 
 | Factor | Media Blocks SDK .NET | LibVLCSharp |
 | --- | --- | --- |
 | License cost | €500·year or €1,500 lifetime | €0 (LGPL) or $800·year (Videolabs) |
-| LGPL compliance cost | LGPL compliance for bundled GStreamer: replaceable libraries, license notice | Legal review + relinking compliance |
+| LGPL compliance cost | LGPL compliance for bundled GStreamer: replaceable libraries, license notice | LGPL compliance for bundled LibVLC: replaceable libraries, license notice |
 | Support cost | Included | Community-dependent or paid Videolabs support |
 | Commercial flexibility | Closed-source OK; LGPL terms apply to bundled GStreamer | Must comply with LGPL requirements |
 
-LibVLCSharp is free but requires LGPL compliance (DLL replacement), or a Videolabs commercial licence at $800 per year that does not cover LibVLC itself. Media Blocks SDK costs more but provides clear commercial licensing for the SDK itself and includes email support.
+Both options leave an LGPL duty for the native libraries they ship — GStreamer with Media Blocks SDK, LibVLC with LibVLCSharp: keep them replaceable and include the license notice. LibVLCSharp is free, or $800 per year for a Videolabs commercial license that does not cover LibVLC itself. Media Blocks SDK costs more; what it adds is a commercial license for the SDK code, royalty-free distribution and email support from one vendor.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -461483,6 +461687,7 @@ Verdict: Media Blocks SDK provides more flexible and reliable streaming.
 -   ⚠Requires purchase for commercial use
 -   ⚠Annual cost or upfront lifetime investment
 -   ⚠Smaller community for peer help compared to VLC
+-   ⚠Bundled GStreamer libraries are LGPL: they must stay replaceable and ship with the license notice
 
 ### LibVLCSharp Limitations
 
@@ -461492,7 +461697,7 @@ Verdict: Media Blocks SDK provides more flexible and reliable streaming.
 -   ⚠Limited control over encoding parameters
 -   ⚠No multi-source mixing or compositing
 -   ⚠LGPL licensing restricts static linking — users must be able to relink or replace the library
--   ⚠Must allow users to replace LibVLC DLLs in your application
+-   ⚠Must allow users to replace the LibVLC libraries in your application
 -   ⚠Community support only unless you buy Videolabs Production Support
 
 ## Decision Matrix
@@ -461539,7 +461744,7 @@ Media Blocks SDK .NET and LibVLCSharp serve different purposes in the .NET multi
 
 ### Media Blocks SDK .NET
 
-Choose Media Blocks SDK for modular, customizable video pipelines with 400+ blocks, professional hardware support (DeckLink, industrial cameras, NDI), advanced video processing with 130+ effects, complete control over encoding and live streaming, multi-camera workflows with video mixing, and commercial support with royalty-free distribution.
+Choose Media Blocks SDK for modular, customizable video pipelines with 400+ blocks, professional hardware support (DeckLink, industrial cameras, NDI), advanced video processing with 100+ effects, complete control over encoding and live streaming, multi-camera workflows with video mixing, and commercial support with royalty-free distribution.
 
 ### LibVLCSharp
 
@@ -461551,15 +461756,15 @@ For most capture, processing, and streaming apps, Media Blocks SDK is the right 
 
 What is the best LibVLCSharp alternative for .NET video processing?▼
 
-VisioForge Media Blocks SDK .NET is the most feature-complete LibVLCSharp alternative for video processing, capture, and streaming. It provides 400+ modular blocks, 130+ video effects, chroma key, multi-output streaming, and professional hardware support (DeckLink, NDI, industrial cameras). LibVLCSharp remains the better choice for simple media playback with minimal code.
+VisioForge Media Blocks SDK .NET is the most feature-complete LibVLCSharp alternative for video processing, capture, and streaming. It provides 400+ modular blocks, 100+ video effects, chroma key, multi-output streaming, and professional hardware support (DeckLink, NDI, industrial cameras). LibVLCSharp remains the better choice for simple media playback with minimal code.
 
 Can LibVLCSharp do video processing and effects in C#?▼
 
-LibVLCSharp provides basic VLC filters accessible via string-based options, but it has no modular effects pipeline, no chroma key, no color grading, and no video mixing. For real-time video processing with GPU-accelerated effects, overlays, and compositing, use Media Blocks SDK .NET which provides 130+ effects blocks that can be chained into custom pipelines.
+LibVLCSharp provides basic VLC filters accessible via string-based options, but it has no modular effects pipeline, no chroma key, no color grading, and no video mixing. For real-time video processing with GPU-accelerated effects, overlays, and compositing, use Media Blocks SDK .NET which provides 100+ effects that can be chained into custom pipelines.
 
 How much does Media Blocks SDK cost compared to LibVLCSharp?▼
 
-LibVLCSharp is free under the LGPL 2.1+ license (users must be able to replace the DLLs), and Videolabs sells a commercial licence at $800 per year. Media Blocks SDK costs €500·year per developer or €1,500 one-time for a Lifetime·Team license covering all developers in the purchasing organization at one location in one city with royalty-free distribution.
+LibVLCSharp is free under the LGPL 2.1+ license (users must be able to replace the LibVLC libraries), and Videolabs sells a commercial license at $800 per year. Media Blocks SDK costs €500·year per developer or €1,500 one-time for a Lifetime·Team license covering all developers in the purchasing organization at one location in one city with royalty-free distribution. The GStreamer libraries Media Blocks SDK bundles stay under the LGPL, so they must stay replaceable as well.
 
 Does Media Blocks SDK support RTSP IP cameras and NDI?▼
 
@@ -461577,7 +461782,7 @@ Media Blocks SDK is a modular pipeline framework with 400+ processing blocks for
 
 [Installation guide](/help/docs/dotnet/install/)[Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)[Visit product page](/media-blocks-sdk-net)
 
-LibVLCSharp is open source; Videolabs commercial licence pricing at videolabs.io/store/libvlcsharp/, verified 2026-11-02. Prices may change without notice.
+LibVLCSharp is open source; Videolabs commercial license pricing at videolabs.io/store/libvlcsharp/, verified 2026-11-02. Prices may change without notice.
 
 ## Related Comparisons
 
@@ -463820,7 +464025,7 @@ From €250/year · Lifetime from €750
 | --- | --- | --- |
 | Architecture | Dual engine (DirectShow + GStreamer) | Monolithic VLC engine via libvlc C interop |
 | Engines | MediaPlayerCore (Windows) + MediaPlayerCoreX (cross-platform) | Single LibVLC core |
-| Pricing | EUR 250-500·year or EUR 750-1,500 lifetime | Free (LGPL), or $800·year Videolabs commercial licence |
+| Pricing | EUR 250-500·year or EUR 750-1,500 lifetime | Free (LGPL), or $800·year Videolabs commercial license |
 | Best For | Professional apps, DVD, effects, broadcast | Simple playback, widest format support |
 | Learning Curve | Moderate (two engines, rich API) | Easy (minimal API) |
 
@@ -463912,7 +464117,7 @@ LibVLCSharp wraps LibVLC (the VLC media player engine) providing a single unifie
 | --- | --- | --- |
 | Face Detection | ✅ | ❌ |
 | Motion Detection | ✅ | ❌ |
-| AI Object Detection | ❌ | ❌ |
+| AI Object Detection (MediaPlayerCoreX + VisioForge.DotNet.Core.AI, YOLO) | ✅ | ❌ |
 | Barcode / QR Scanning | ✅ | ❌ |
 
 ### Playback Control
@@ -463982,7 +464187,7 @@ Professional (Annual)EUR 350·year
 
 Premium (Annual)EUR 500·year
 
-1 developer — + VR/360 video
+1 developer — + VR/360 video, Blu-ray playback, chroma key
 
 Standard (Lifetime·Team)EUR 750
 
@@ -464008,21 +464213,21 @@ all developers in the purchasing organization at one location in one city, perpe
 
 LibVLCSharpFree
 
-LGPL 2.1+ license, DLL replacement must stay possible
+LGPL 2.1+ license, LibVLC must stay replaceable
 
-Videolabs Commercial Licence$800·year
+Videolabs Commercial License$800·year
 
 LibVLCSharp packages under commercial terms; Production Support is $5,000·year
 
 ### LGPL Compliance Considerations
 
-LibVLCSharp and libvlc are licensed under LGPL 2.1. This means you can use them in commercial proprietary software as long as you comply with the LGPL terms. Key requirements include:
+LibVLCSharp and libvlc are licensed under LGPL 2.1+. This means you can use them in commercial proprietary software as long as you comply with the LGPL terms. Key requirements include:
 
 -   ⚠Static linking is restricted by LGPL relinking terms
--   ⚠Must allow users to replace LibVLC DLLs with modified versions
+-   ⚠Must allow users to replace LibVLC libraries with modified versions
 -   ⚠Must include a copy of the LGPL license and mention use of libvlc
 -   ⚠Cannot modify and close-source VLC code
--   ⚠Videolabs sells a commercial licence for the LibVLCSharp packages; LibVLC itself stays under its open-source license
+-   ⚠Videolabs sells a commercial license for the LibVLCSharp packages; LibVLC itself stays under its open-source license
 
 While LGPL is more permissive than GPL, compliance still requires careful attention to linking and distribution requirements. Media Player SDK itself is commercially licensed with royalty-free distribution; the open-source libraries it bundles, such as GStreamer, keep their own licenses; GStreamer is LGPL, so the same linking and distribution requirements apply to it.
 
@@ -464166,6 +464371,12 @@ player.Audio_Effects_Add(-1,
     AudioEffectType.DMOCompressor, "comp",
     true, TimeSpan.Zero, TimeSpan.Zero);
 
+// Monitor peak levels via VU meter event
+player.Audio_VUMeter_Enabled = true;
+player.OnAudioVUMeter += (s, e) =>
+    Console.WriteLine(
+        $"L: {e.MeterData[0]}, R: {e.MeterData[1]}");
+
 await player.PlayAsync();
 
 // Custom per-band EQ values (dB, integer)
@@ -464181,12 +464392,6 @@ for (int i = 0; i < bands.Length; i++)
 player.Audio_Effects_DS_Compressor(
     -1, "comp",
     10f, 5f, 0f, 4f, 200f, -20f);
-
-// Monitor peak levels via VU meter event
-player.Audio_VUMeter_Enabled = true;
-player.OnAudioVUMeter += (s, e) =>
-    Console.WriteLine(
-        $"L: {e.MeterData[0]}, R: {e.MeterData[1]}");
 ```
 
 ### LibVLCSharp
@@ -464238,15 +464443,6 @@ player.NDI_Output = new NDIOutput
     Name = "Studio Feed"
 };
 
-// Add OSD overlay
-player.OSD_Enabled = true;
-player.OSD_Layers_Create(
-    0, 0, 1920, 1080, true);
-player.OSD_Layers_Draw_Text(
-    0, 10, 10, "LIVE",
-    new Font("Arial", 36), Color.Red);
-player.OSD_Layers_Render();
-
 await player.PlayAsync();
 ```
 
@@ -464261,7 +464457,6 @@ Copy
 ```csharp
 // Virtual camera output: NOT AVAILABLE
 // NDI output: NOT AVAILABLE
-// OSD overlay: Limited to VLC marquee
 
 Core.Initialize();
 var libVLC = new LibVLC();
@@ -464269,16 +464464,13 @@ var mediaPlayer = new MediaPlayer(libVLC);
 var media = new Media(libVLC,
     "presentation.mp4",
     FromType.FromPath);
-media.AddOption(":sub-filter=marq");
-media.AddOption(":marq-marquee=LIVE");
 mediaPlayer.Play(media);
 
 // No virtual camera
 // No NDI
-// No rich OSD layers
 ```
 
-### Example 5: Motion and Face Detection
+### Example 5: Face Detection
 
 ### Media Player SDK (MediaPlayerCore)
 
@@ -464366,20 +464558,19 @@ mediaPlayer.Play(
 
 ### Media Player SDK Deployment
 
--   ✓NuGet package includes all dependencies
+-   ✓NuGet: the SDK package plus per-platform redist packages
 -   ✓Xcopy deployment supported
 -   ✓Royalty-free distribution with commercial license
 -   ✓No runtime fees
--   ✓App size impact: ~50-100 MB
+-   ✓Bundled open-source libraries such as GStreamer stay LGPL: keep them replaceable and include the license notice
 
 ### LibVLCSharp Deployment
 
 -   ⚠NuGet packages available (LibVLCSharp + VideoLAN.LibVLC platform packages)
--   ⚠Must include LibVLC DLLs per platform
--   ⚠LGPL requires dynamic linking — users must be able to replace VLC DLLs
+-   ⚠Must include LibVLC libraries per platform
+-   ⚠LGPL: users must be able to replace or relink the VLC libraries
 -   ⚠Must include LGPL license notice
 -   ⚠Platform packages handle native library distribution
--   ⚠App size impact: ~40-80 MB
 
 ## Decision Matrix
 
@@ -464418,7 +464609,7 @@ For straightforward media players, streaming clients, and IPTV applications, Lib
 
 What is the best LibVLCSharp alternative for .NET video playback?
 
-When your project outgrows LibVLCSharp's playback-only scope, VisioForge Media Player SDK .NET is the professional upgrade. It adds real-time audio effects, virtual camera output, face and motion detection, and full DVD menu navigation while supporting the same platforms (WPF, WinForms, MAUI, Avalonia). LibVLCSharp remains a strong choice for straightforward playback where those features are unnecessary.
+When your project outgrows LibVLCSharp's playback-only scope, VisioForge Media Player SDK .NET is the professional upgrade. It adds real-time audio effects, virtual camera output, face and motion detection, and full DVD menu navigation while supporting the same UI frameworks (WPF, WinForms, MAUI, Avalonia). LibVLCSharp remains a strong choice for straightforward playback where those features are unnecessary.
 
 Can LibVLCSharp play DVD menus in C#?
 
@@ -464430,11 +464621,11 @@ VisioForge Media Player SDK .NET exposes a fully typed C# API for 40+ audio effe
 
 Does Media Player SDK support virtual camera output?
 
-Yes. Media Player SDK .NET can output playback to a virtual camera device, making video available to Zoom, Teams, OBS, and other applications. It also supports NDI output and multi-screen display. LibVLCSharp does not provide virtual camera or NDI output capabilities.
+Yes. Media Player SDK .NET can output playback to a virtual camera device, making video available to Zoom, Teams, OBS, and other applications. It also supports NDI output and multi-screen display. LibVLCSharp does not provide virtual camera or NDI output capabilities. Virtual camera output requires the VisioForge Virtual Camera SDK to be installed and licensed.
 
 How much does Media Player SDK cost compared to LibVLCSharp?
 
-LibVLCSharp is free under LGPL 2.1+ (DLL replacement must stay possible), and Videolabs sells a commercial licence at $800·year. Media Player SDK costs EUR 250-500·year per developer or EUR 750-1,500 one-time for a Lifetime·Team license covering all developers in the purchasing organization at one location in one city with royalty-free distribution. For commercial applications needing audio effects, DVD navigation, and virtual camera output, Media Player SDK provides features that would require extensive custom development on top of LibVLCSharp.
+LibVLCSharp is free under LGPL 2.1+ (LibVLC must stay replaceable), and Videolabs sells a commercial license at $800·year. Media Player SDK costs EUR 250-500·year per developer or EUR 750-1,500 one-time for a Lifetime·Team license covering all developers in the purchasing organization at one location in one city with royalty-free distribution. For commercial applications needing audio effects, DVD navigation, and virtual camera output, Media Player SDK provides features that would require extensive custom development on top of LibVLCSharp. The open-source libraries the SDK bundles, such as GStreamer, stay under the LGPL.
 
 What is the difference between Media Player SDK and LibVLCSharp?
 
@@ -464468,7 +464659,7 @@ Custom licensing, volume pricing, and enterprise terms
 
 ](mailto:sales@visioforge.com)
 
-LibVLCSharp is open source; Videolabs commercial licence pricing at videolabs.io/store/libvlcsharp/, verified 2026-11-02. Prices may change without notice.
+LibVLCSharp is open source; Videolabs commercial license pricing at videolabs.io/store/libvlcsharp/, verified 2026-11-02. Prices may change without notice.
 
 ## Related Comparisons
 
@@ -468919,28 +469110,28 @@ From €250/year · Lifetime from €750
 
 | Aspect | Video Capture SDK .NET | LibVLCSharp |
 | --- | --- | --- |
-| Architecture | Dual engine: native DirectShow/Media Foundation + embedded GStreamer pipelines | Monolithic VLC media engine via libvlc C interop |
+| Architecture | Two engines: VideoCaptureCore (DirectShow/Media Foundation, Windows) and VideoCaptureCoreX (GStreamer, cross-platform) | Monolithic VLC media engine via libvlc C interop |
 | Primary Purpose | Professional video capture, recording, streaming, and processing | Media playback library with basic capture device access |
 | Capture Sources | Webcams, screens, IP cameras, capture cards, TV tuners, NDI, industrial cameras | Webcams via dshow://, screens via screen://, IP cameras via URL |
 | Live Preview | Built-in GPU-accelerated preview with overlays and effects | Built-in video surface rendering (playback-oriented) |
 | Recording Formats | MP4, MKV, WebM, AVI, WMV, MOV, TS, GIF and more with typed output classes | Via sout transcode chain — string-based configuration |
-| Multi-Output | Native Outputs\_Add API for simultaneous record + stream + preview | Via sout duplicate directive — fragile string syntax |
+| Multi-Output | Typed outputs for simultaneous record + stream + preview: Outputs\_Add (VideoCaptureCoreX), Output\_Format + Network\_Streaming (VideoCaptureCore) | Via sout duplicate directive — fragile string syntax |
 | Video Effects | 40+ CPU and GPU-accelerated effects during capture | Effects only through VLC filter strings in the sout chain |
 | Detection | Motion, face, barcode/QR detection built-in | No detection capabilities |
-| Licensing | Commercial per-developer license (subscription or perpetual) | LGPL 2.1 — free for dynamic linking |
-| Pricing | From EUR 250 (subscription) to EUR 1,500 (Lifetime·Team) | Free (LGPL), or $800·year Videolabs commercial licence |
+| Licensing | Commercial per-developer license (subscription or perpetual); bundled open-source libraries such as GStreamer stay LGPL | LGPL 2.1+ — free; LibVLC must stay replaceable |
+| Pricing | From EUR 250 (subscription) to EUR 1,500 (Lifetime·Team) | Free (LGPL), or $800·year Videolabs commercial license |
 
 ## Architecture Deep Dive
 
 ### Video Capture SDK .NET Architecture
 
-The Video Capture SDK uses a dual-engine design. The primary engine wraps DirectShow and Media Foundation on Windows, giving native access to every capture device exposed by the OS. A secondary embedded GStreamer pipeline handles cross-platform capture, advanced codec operations, and IP camera ingestion. Each engine has its own class: VideoCaptureCore on Windows and VideoCaptureCoreX across platforms, so moving between them means rewriting the capture code.
+The Video Capture SDK ships two engines, each with its own class. VideoCaptureCore wraps DirectShow and Media Foundation on Windows, giving native access to every capture device the OS exposes, and reads IP cameras through FFmpeg, VLC, LAV or low-latency RTSP back-ends. VideoCaptureCoreX is built on GStreamer and runs on Windows, macOS, Linux, iOS and Android. Moving between the two engines means rewriting the capture code.
 
 -   ▶Native Windows capture via DirectShow and Media Foundation filter graphs
--   ▶Cross-platform GStreamer engine for macOS, Linux, iOS, and Android
+-   ▶Cross-platform GStreamer engine for Windows, macOS, Linux, iOS, and Android
 -   ▶GPU-accelerated preview via Direct3D / OpenGL renderers
 -   ▶Event-driven architecture with .NET async/await support
--   ▶Single-process model — no child process management required
+-   ▶In-process capture pipeline; only the FFMPEG\_EXE outputs launch an external vfffmpeg.exe (vfffmpeg64.exe in 64-bit processes)
 -   ▶Typed output classes for recording and streaming configuration
 
 ### LibVLCSharp Architecture
@@ -468962,7 +469153,7 @@ LibVLCSharp is the official .NET binding for libvlc, the core engine behind the 
 | Device Discovery | Native OS enumeration APIs with full device metadata | Manual dshow:// or v4l2:// URL construction |
 | Recording Config | Typed .NET output classes (MP4Output, OpenH264EncoderSettings) | String-based sout transcode chains |
 | Error Handling | .NET exceptions and event-based errors | VLC log callbacks and event subscriptions |
-| Multi-Output | Native Outputs\_Add API — managed and type-safe | sout duplicate directive — fragile string parsing |
+| Multi-Output | Typed output API — Outputs\_Add (VideoCaptureCoreX) or Output\_Format + Network\_Streaming (VideoCaptureCore) | sout duplicate directive — fragile string parsing |
 | Effects Pipeline | Built-in CPU + GPU effect chain during capture | VLC filter strings in the sout chain |
 
 ## Feature-by-Feature Comparison
@@ -469013,7 +469204,7 @@ LibVLCSharp is the official .NET binding for libvlc, the core engine behind the 
 | --- | --- | --- |
 | Simultaneous Record + Stream | ✅ | ⚠️(Via sout duplicate — fragile) |
 | Multiple Recording Outputs | ✅ | ⚠️(Via sout duplicate — fragile) |
-| Native Outputs\_Add API | ✅ | ❌ |
+| Typed multi-output API (Outputs\_Add / Network\_Streaming) | ✅ | ❌ |
 | Independent Output Control | ✅ | ❌ |
 | Snapshot During Recording | ✅ | ⚠️(TakeSnapshot available but limited) |
 
@@ -469096,7 +469287,7 @@ LibVLCSharp is the official .NET binding for libvlc, the core engine behind the 
 | Avalonia UI | ✅ | ✅(VideoView control) |
 | Console / Service | ✅ | ✅ |
 | ASP.NET Core (Background Service) | ✅ | ⚠️(Playback-oriented design) |
-| Blazor (Server-Side Processing) | ✅ | ⚠️(Limited server-side capture) |
+| Blazor (Server-Side Processing) | ⚠️ | ⚠️(Limited server-side capture) |
 
 ## Pricing Comparison
 
@@ -469121,21 +469312,21 @@ Purchasing organization's developers at one location in one city, perpetual use 
 
 LibVLCSharpFree
 
-LGPL 2.1+ license, DLL replacement must stay possible
+LGPL 2.1+ license, LibVLC must stay replaceable
 
-LibVLCSharp Commercial Licence (Videolabs)$800·year
+LibVLCSharp Commercial License (Videolabs)$800·year
 
 LibVLCSharp packages under commercial terms; Production Support is $5,000·year
 
 ### LGPL Compliance Considerations
 
-LibVLCSharp and libvlc are licensed under LGPL 2.1. This means you can use them in commercial proprietary software as long as you comply with the LGPL terms. Key requirements include:
+LibVLCSharp and libvlc are licensed under LGPL 2.1+. This means you can use them in commercial proprietary software as long as you comply with the LGPL terms. Key requirements include:
 
 -   ⚠Static linking is restricted by LGPL relinking terms
 -   ⚠You must provide the ability for users to replace the LGPL-licensed library with a modified version
 -   ⚠You must include a copy of the LGPL license and prominently mention the use of libvlc
 -   ⚠If you modify libvlc itself, you must release those modifications under LGPL
--   ⚠Videolabs sells a commercial licence for the LibVLCSharp packages; LibVLC itself stays under its open-source license
+-   ⚠Videolabs sells a commercial license for the LibVLCSharp packages; LibVLC itself stays under its open-source license
 
 While LGPL is more permissive than GPL, compliance still requires careful attention to linking and distribution requirements. Video Capture SDK itself is commercially licensed, but the open-source libraries it bundles, such as GStreamer, keep their own licenses; GStreamer is LGPL, so the same linking and distribution requirements apply to it.
 
@@ -469227,7 +469418,7 @@ media.AddOption(
 mediaPlayer.Play(media);
 
 // To stop: mediaPlayer.Stop();
-// No progress events, no state machine
+// No typed recording or progress API
 ```
 
 ### Example 2: Screen Recording with Overlay + Streaming
@@ -469243,6 +469434,7 @@ Copy
 ```csharp
 using VisioForge.Core.VideoCapture;
 using VisioForge.Core.Types;
+using VisioForge.Core.Types.FFMPEGEXE;
 using VisioForge.Core.Types.Output;
 using VisioForge.Core.Types.VideoCapture;
 using VisioForge.Core.Types.VideoEffects;
@@ -469286,6 +469478,10 @@ capture.Mode = VideoCaptureMode.ScreenCapture;
 // Also stream via RTMP (secondary output)
 capture.Network_Streaming_Enabled = true;
 capture.Network_Streaming_Format = NetworkStreamingFormat.RTMP_FFMPEG_EXE;
+var rtmp = new FFMPEGEXEOutput();
+rtmp.FillDefaults(DefaultsProfile.MP4_H264_AAC, true);
+rtmp.OutputMuxer = OutputMuxer.FLV;
+capture.Network_Streaming_Output = rtmp;
 capture.Network_Streaming_URL = "rtmp://streaming-server/live/key";
 
 await capture.StartAsync();
@@ -469345,6 +469541,7 @@ Copy
 ```csharp
 using VisioForge.Core.VideoCapture;
 using VisioForge.Core.Types;
+using VisioForge.Core.Types.FFMPEGEXE;
 using VisioForge.Core.Types.Output;
 using VisioForge.Core.Types.VideoCapture;
 
@@ -469363,7 +469560,12 @@ capture.Output_Filename = "recording.mp4";
 
 // Second output: RTMP stream
 capture.Network_Streaming_Enabled = true;
+capture.Network_Streaming_Audio_Enabled = true;
 capture.Network_Streaming_Format = NetworkStreamingFormat.RTMP_FFMPEG_EXE;
+var rtmp = new FFMPEGEXEOutput();
+rtmp.FillDefaults(DefaultsProfile.MP4_H264_AAC, true);
+rtmp.OutputMuxer = OutputMuxer.FLV;
+capture.Network_Streaming_Output = rtmp;
 capture.Network_Streaming_URL = "rtmp://live.server/app/stream_key";
 
 // Set mode and start — preview + recording + stream run simultaneously
@@ -469556,11 +469758,10 @@ foreach (var url in cameraUrls)
 ### Choose LibVLCSharp When You Need
 
 -   ✓Media playback with basic capture device access
--   ✓Zero-budget projects where LGPL compliance is acceptable
+-   ✓Zero-budget projects (no license fee)
 -   ✓Simple webcam recording without effects or detection
 -   ✓Cross-platform media playback in .NET MAUI applications
 -   ✓Projects already using VLC infrastructure and workflows
--   ✓Open-source projects compatible with LGPL licensing
 -   ✓Quick prototypes for basic video capture functionality
 -   ✓Applications where playback is primary and capture is secondary
 
@@ -469568,20 +469769,21 @@ foreach (var url in cameraUrls)
 
 ### Video Capture SDK Deployment
 
--   ✓NuGet packages include all native dependencies
--   ✓NuGet references only — no external tools to install
+-   ✓NuGet packages ship the native dependencies on Windows, macOS, iOS and Android; on Linux, GStreamer comes from the distribution packages
+-   ✓No external tools to install, apart from the GStreamer packages on Linux
 -   ✓Royalty-free redistribution with commercial license
+-   ✓Bundled open-source libraries such as GStreamer stay LGPL: keep them replaceable and include the license notice
 -   ✓xcopy / MSIX / ClickOnce deployment supported
 -   ✓Console and Windows service apps supported
 
 ### LibVLCSharp Deployment
 
 -   ⚠NuGet packages available (LibVLCSharp + VideoLAN.LibVLC platform packages)
--   ⚠Must bundle platform-specific VLC native libraries (~80-150 MB)
+-   ⚠Must bundle platform-specific VLC native libraries
 -   ⚠LGPL compliance requires relinking rights and a license notice
 -   ⚠Must provide mechanism for users to replace libvlc library
 -   ⚠Platform packages handle native library distribution
--   ⚠Videolabs sells a commercial licence for the LibVLCSharp packages
+-   ⚠Videolabs sells a commercial license for the LibVLCSharp packages
 
 ## Decision Matrix
 
@@ -469598,7 +469800,6 @@ foreach (var url in cameraUrls)
 | Screen recording with overlays |  |  | Video Capture SDK |
 | Budget is $0 (open source) |  |  | LibVLCSharp |
 | Simple webcam recording |  |  | LibVLCSharp |
-| LGPL-compatible project |  |  | LibVLCSharp |
 
 ## Conclusion
 
@@ -469638,7 +469839,7 @@ Yes. The Video Capture SDK provides managed RTSP/ONVIF IP camera support with au
 
 What is the difference between Video Capture SDK and LibVLCSharp?
 
-Video Capture SDK is a purpose-built .NET video capture engine with typed APIs, real-time effects, multi-output recording, detection (motion, face, barcode), and professional hardware support. LibVLCSharp is the .NET binding for VLC's media engine, primarily designed for playback with basic capture capabilities via string-based sout configuration. The SDK is commercial (from EUR 250·year), while LibVLCSharp is free under LGPL 2.1.
+Video Capture SDK is a purpose-built .NET video capture engine with typed APIs, real-time effects, multi-output recording, detection (motion, face, barcode), and professional hardware support. LibVLCSharp is the .NET binding for VLC's media engine, primarily designed for playback with basic capture capabilities via string-based sout configuration. The SDK is commercial (from EUR 250·year), while LibVLCSharp is free under LGPL 2.1+. The open-source libraries the SDK bundles, such as GStreamer, are LGPL-licensed as well.
 
 ## Get Started
 
@@ -469668,7 +469869,7 @@ Custom licensing, volume pricing, and enterprise terms
 
 ](mailto:sales@visioforge.com)
 
-LibVLCSharp is open source; Videolabs commercial licence pricing at videolabs.io/store/libvlcsharp/, verified 2026-11-02. Prices may change without notice.
+LibVLCSharp is open source; Videolabs commercial license pricing at videolabs.io/store/libvlcsharp/, verified 2026-11-02. Prices may change without notice.
 
 ## Related Comparisons
 
@@ -472732,7 +472933,7 @@ LEADTOOLS prices as shown on componentsource.com/product/leadtools-multimedia/pr
 ---END OF PAGE---
 
 
-## Video Edit SDK .NET vs LibVLCSharp
+## Video Edit SDK .NET vs LibVLCSharp — Editing vs Playback
 **URL:** https://www.visioforge.com/compare/video-edit-vs-libvlcsharp
 
 # Video Edit SDK .NET vs LibVLCSharp — Video Editing and Playback
@@ -472750,17 +472951,17 @@ From €250/year · Lifetime from €750
 | Capability | Video Edit SDK .NET | LibVLCSharp |
 | --- | --- | --- |
 | Built-in multi-clip timeline | Yes — add, trim and arrange video and audio clips | No documented built-in editing timeline |
-| Transitions and effects | Yes — video transitions and video/audio effects | No documented built-in multi-clip editing API |
+| Transitions and effects | Yes — video transitions and video/audio effects | No built-in transitions; basic video filters through string options |
 | Preview and playback | Yes — preview a timeline or render it | Yes — media playback and seeking |
 | Render an edited file | Yes — configured file output, including MP4, WebM, AVI and MKV | No documented multi-clip edit-render API |
 
 ## Pricing and licensing
 
-Commercial SDK: annual Standard, Professional and Premium tiers start at €250; Lifetime·Team starts at €750.
+Commercial SDK: annual Standard, Professional and Premium tiers start at €250; Lifetime·Team starts at €750. Bundled open-source libraries such as GStreamer stay LGPL.
 
 ## LibVLCSharp
 
-LGPL-2.1 open-source option; a commercial license is also available.
+LGPL 2.1+ open source; Videolabs sells a commercial license for the LibVLCSharp packages, which does not cover LibVLC.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/video-edit-sdk-net#pricing)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -472774,13 +472975,13 @@ Choose Video Edit SDK .NET when your application needs a built-in editing timeli
 
 ### Can LibVLCSharp edit video?
 
-LibVLCSharp documents media playback, seeking, audio output, rendering, encoding and streaming APIs. Its official source does not document a built-in timeline, transition or multi-clip render API.
+LibVLCSharp documents media playback, seeking, audio output, and sout-based transcoding and streaming. Its official source does not document a built-in timeline, transition or multi-clip render API.
 
 ### What does Video Edit SDK .NET provide?
 
-VideoEditCoreX can add video and audio clips with timeline positions, apply transitions and effects, preview a timeline, or render to a configured file output.
+Both engines, VideoEditCoreX (cross-platform) and VideoEditCore (Windows), can add video and audio clips with timeline positions, apply transitions and effects, preview a timeline, or render to a configured file output.
 
-LibVLCSharp is open source; Videolabs commercial licence pricing at videolabs.io/store/libvlcsharp/, verified 2026-11-04. Prices may change without notice.
+LibVLCSharp is open source; Videolabs commercial license pricing at videolabs.io/store/libvlcsharp/, verified 2026-11-04. Prices may change without notice.
 
 [View Video Edit SDK pricing](/video-edit-sdk-net)
 

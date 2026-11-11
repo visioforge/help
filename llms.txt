@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-11-10 18:35:16 UTC (f618ef4f591)
+**Generated:** 2026-11-11 17:09:49 UTC (ffe7143dca8)
 
 ## MCP Server (for AI coding agents)
 
@@ -321,7 +321,7 @@ The following products from the old price list are no longer sold:
 - [Install VisioForge SDK in JetBrains Rider — NuGet Setup](https://www.visioforge.com/help/docs/dotnet/install/rider/): Add VisioForge .NET SDKs to Rider projects via NuGet. .NET 6/7/8/9, macOS/Windows/Linux. Package references, native dependencies, troubleshooting.
 - [Install VisioForge media SDKs in Unity 6 — Setup Guide](https://www.visioforge.com/help/docs/dotnet/install/unity/): Set up VisioForge media SDKs in Unity 6 — one cumulative .unitypackage for video playback, capture and editing on Windows, Android, macOS, iOS.
 - [Set Up Video SDKs for Uno Platform Cross-Platform .NET](https://www.visioforge.com/help/docs/dotnet/install/uno/): Add video capture, playback, and editing to Uno Platform apps. NuGet setup, VideoView integration for Windows, Android, iOS, macOS, and Linux.
-- [Install VisioForge SDK in Visual Studio — .NET NuGet Setup](https://www.visioforge.com/help/docs/dotnet/install/visual-studio/): Add VisioForge .NET SDKs to Visual Studio 2022+ projects via NuGet. WinForms/WPF/MAUI/console templates. Native dependencies and license setup.
+- [How to Install VisioForge .NET SDKs in Visual Studio](https://www.visioforge.com/help/docs/dotnet/install/visual-studio/): Install the VisioForge .NET SDKs in Visual Studio from NuGet, in WinForms, WPF, MAUI and console projects: the packages, VideoView and a video.
 - [Install VisioForge .NET SDKs in Visual Studio for Mac](https://www.visioforge.com/help/docs/dotnet/install/visual-studio-mac/): Install and configure VisioForge .NET SDKs in Visual Studio for Mac for multimedia macOS and iOS application development.
 - [URL RTSP de caméras IP — Annuaire 62 marques en C# .NET](https://www.visioforge.com/help/fr/docs/dotnet/camera-brands/): Annuaire d'URL RTSP pour 62 marques de caméras IP. Connectez Hikvision, Dahua, Axis, Uniview, EZVIZ, Arlo et plus avec VisioForge .NET.
 - [Guide de déploiement multiplateforme du SDK VisioForge .NET](https://www.visioforge.com/help/fr/docs/dotnet/deployment-x/): Déployez des applications .NET sur Windows, macOS, iOS, Android et Linux avec les bibliothèques natives, les dépendances et l'intégration des frameworks UI.
@@ -562,7 +562,7 @@ The following products from the old price list are no longer sold:
 - [Video Capture SDK vs Viscomsoft — .NET Capture Comparison](https://www.visioforge.com/compare/video-capture-vs-viscomsoft)
 - [Video Edit SDK vs FFmpeg — .NET Editing Comparison](https://www.visioforge.com/compare/video-edit-vs-ffmpeg)
 - [Video Edit SDK vs LEADTOOLS — .NET Editing Comparison](https://www.visioforge.com/compare/video-edit-vs-leadtools)
-- [Video Edit SDK .NET vs LibVLCSharp](https://www.visioforge.com/compare/video-edit-vs-libvlcsharp)
+- [Video Edit SDK .NET vs LibVLCSharp — Editing vs Playback](https://www.visioforge.com/compare/video-edit-vs-libvlcsharp)
 - [Video Edit SDK vs MFormats — .NET Editing Comparison](https://www.visioforge.com/compare/video-edit-vs-mformats)
 - [Video Edit SDK vs Viscomsoft — .NET Editing Comparison](https://www.visioforge.com/compare/video-edit-vs-viscomsoft)
 
