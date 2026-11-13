@@ -62,22 +62,22 @@ Media Blocks SDK is the most flexible VisioForge .NET SDK — build arbitrary me
 Main SDK package (all platforms):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.6]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.12]"/>
 ```
 
 Windows x64 runtime (pick x86 for 32-bit apps):
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
 <!-- Optional: extra decoders/encoders via Libav -->
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.12]"/>
 ```
 
 Windows x86:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.3]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="[2026.11.12]"/>
 ```
 
 macOS (native and MAUI / macCatalyst):
@@ -103,8 +103,8 @@ Android and iOS:
 UI integration packages (optional, per framework):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.6]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.6]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.12]"/>
 ```
 
 Full install walkthrough: [install/index.md](../install/index.md).

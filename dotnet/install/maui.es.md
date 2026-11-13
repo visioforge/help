@@ -148,8 +148,8 @@ Android requiere pasos de configuración adicionales para asegurar el funcionami
 
 El SDK de VisioForge depende de funcionalidad nativa de Android que requiere una biblioteca de bindings Java personalizada:
 
-1. Clona la biblioteca de binding de nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency)
-2. Elija el proyecto de binding que coincida con la versión de .NET con la que compila - la carpeta incluye un `VisioForge.Core.Android.X{N}.csproj` por cada versión de .NET soportada (por ejemplo, `VisioForge.Core.Android.X9.csproj` para .NET 9, `VisioForge.Core.Android.X10.csproj` para .NET 10). Si su versión de .NET no aparece en la lista, elija la más cercana disponible.
+1. Clone la biblioteca de binding de nuestro [repositorio de GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency)
+2. Use `VisioForge.Core.Android.X10.csproj` de esa carpeta. Su destino es `net10.0-android`, y una aplicación `net11.0-android` también puede referenciarlo.
 3. Agregue la referencia a su archivo de proyecto:
 
 ```xml
@@ -196,6 +196,7 @@ Agregue el paquete específico de iOS a su proyecto:
 
 #### 2. Notas importantes para desarrollo iOS
 
+- **Versión mínima de iOS**: establezca `<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">18.0</SupportedOSPlatformVersion>` en el proyecto. Las bibliotecas nativas de iOS están compiladas para iOS 18.0, y la plantilla de MAUI usa 15.0 por defecto.
 - **Use dispositivos físicos**: El SDK requiere pruebas en dispositivos iOS físicos en lugar de simuladores para funcionalidad completa.
 - **Descripciones de privacidad**: Agregue las cadenas de descripción de uso necesarias en su archivo Info.plist para acceso a cámara y micrófono:
   - `NSCameraUsageDescription`

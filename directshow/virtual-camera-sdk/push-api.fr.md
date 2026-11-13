@@ -31,9 +31,9 @@ qui importe `VisioForge.Core` qualifie `BaseContext` ; un alias `using` convient
 ## Installation
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.6]" />
+<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.12]" />
 <!-- The virtual camera and virtual audio card filters -->
-<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.6]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.12]" />
 ```
 
 `Redist.VirtualCamera.x64` contient les filtres que chargent Zoom, OBS et les navigateurs : c'est l'application
@@ -141,7 +141,17 @@ using (var audio = new VirtualAudioWriter(48000, 2, 16, "AudioStream1", null))
 }
 ```
 
-Les horodatages sont calculés à partir du nombre d'octets envoyés : envoyez l'audio au rythme de sa lecture.
+Les horodatages sont calculés à partir du nombre d'octets envoyés : envoyez l'audio au rythme de sa lecture. Les échantillons sont sur 16 bits : toute autre
+valeur de `bitsPerSample` fait lever `ArgumentOutOfRangeException` au constructeur. La carte conserve six tampons d'une seconde
+au plus. Tant qu'une application a ouvert le microphone, un appel s'ajoute au tampon le plus récent que la carte n'a pas
+encore lu s'il y tient, donc les petits appels partagent un tampon ; sinon il occupe ses propres tampons, un par seconde
+entamée du bloc, donc un appel de 2,5 s en occupe trois. Quand aucun tampon n'est libre, le suivant remplace le plus
+ancien tampon que la carte n'a pas encore lu, de cet appel ou d'un appel précédent. L'audio envoyé en avance sur le
+temps réel attend dans ces tampons et parvient à l'application avec autant de retard : envoyez une source en direct en
+temps réel.
+`PushSamples` renvoie `false` quand un tampon n'a pas pu être écrit ; la partie du bloc qui le précède reste en file et
+est comptée dans `BytesWritten`. Pour renvoyer la suite, envoyez le bloc à partir du décalage dont `BytesWritten` a
+augmenté pendant l'appel.
 
 ## Envoi depuis C++
 

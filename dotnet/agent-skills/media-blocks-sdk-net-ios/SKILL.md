@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a native .NET for iOS ap
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a **native .NET for iOS** application (`net10.0-ios` TFM, UIKit, no MAUI/Xamarin shell). Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `SystemAudioSourceBlock`, `H264EncoderBlock`, `AACEncoderBlock`, `MP4SinkBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. Compared to the higher-level Video Capture SDK X (a single `VideoCaptureCoreX` god-object), Media Blocks gives you full control over the topology — splitting streams with tees, mixing sources, transcoding without preview, swapping sinks at runtime — at the cost of having to wire every edge yourself.
 
-Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaBlocks` 2026.11.6**, native iOS redist at the version shown in the csproj below (matches the [official Simple Video Capture MB iOS sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/iOS/SimpleVideoCapture)). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaBlocks` 2026.11.12**, native iOS redist at the version shown in the csproj below (matches the [official Simple Video Capture MB iOS sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/iOS/SimpleVideoCapture)). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -28,7 +28,7 @@ Pinned NuGet versions: wrapper **`VisioForge.DotNet.MediaBlocks` 2026.11.6**, na
 
 ### Target framework
 
-Use `net10.0-ios` with `<SupportedOSPlatformVersion>16.4</SupportedOSPlatformVersion>` — VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older (the .NET 10 iOS workload itself refuses anything below 15.0), and the upstream sample csproj is at 16.4 as well.
+Use `net10.0-ios` with `<SupportedOSPlatformVersion>18.0</SupportedOSPlatformVersion>` — VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 18.0 and do not load on anything older (the .NET 10 iOS workload itself refuses anything below 15.0), and the upstream sample csproj is at 18.0 as well.
 
 Set `<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>` for device builds. The redist NuGet bundles both Apple Silicon device and simulator slices in one package, but the simulator slice is intended for non-camera UI work only — see "No camera devices" below.
 
@@ -38,7 +38,7 @@ Two packages — the .NET wrapper plus the iOS native redist. The redist is **no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.6]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.12]"/>
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>

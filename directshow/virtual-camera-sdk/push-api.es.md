@@ -31,9 +31,9 @@ importe `VisioForge.Core` debe calificar `BaseContext`; un alias con `using` tam
 ## Instalación
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.6]" />
+<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.12]" />
 <!-- The virtual camera and virtual audio card filters -->
-<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.6]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.12]" />
 ```
 
 `Redist.VirtualCamera.x64` contiene los filtros que cargan Zoom, OBS y los navegadores: el filtro lo carga la aplicación
@@ -141,7 +141,17 @@ using (var audio = new VirtualAudioWriter(48000, 2, 16, "AudioStream1", null))
 }
 ```
 
-Las marcas de tiempo se calculan a partir de los bytes enviados, así que envíe el audio al ritmo al que se reproduce.
+Las marcas de tiempo se calculan a partir de los bytes enviados, así que envíe el audio al ritmo al que se reproduce. Las muestras son de 16 bits: con cualquier otro
+valor de `bitsPerSample`, el constructor lanza `ArgumentOutOfRangeException`. La tarjeta guarda seis búferes de hasta un
+segundo cada uno. Mientras una aplicación tiene abierto el micrófono, una llamada se añade al búfer más reciente que la
+tarjeta aún no ha leído si cabe en él, así que las llamadas pequeñas comparten búfer; si no, ocupa búferes propios, uno
+por cada segundo empezado del bloque, así que una llamada de 2,5 s ocupa tres. Cuando no queda ningún búfer libre, el
+siguiente sustituye al búfer más antiguo que la tarjeta aún no ha leído, de esta llamada o de una anterior. El audio
+enviado por delante del tiempo real espera en estos búferes y llega a la aplicación con ese mismo retraso, así que envíe
+una fuente en directo a tiempo real.
+`PushSamples` devuelve `false` cuando un búfer no se pudo escribir; la parte del bloque anterior a él queda en cola y se
+cuenta en `BytesWritten`. Para reenviar el resto, envíe el bloque desde el desplazamiento en que creció `BytesWritten`
+durante la llamada.
 
 ## Envío desde C++
 

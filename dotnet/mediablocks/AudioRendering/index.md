@@ -339,10 +339,10 @@ await pipeline.StopAsync();
 The Audio Renderer Block is designed for cross-platform operation, supporting:
 
 - Windows 10 and later
-- macOS 10.13 and later
+- macOS 12 and later
 - Linux (Ubuntu, Debian, Fedora)
-- iOS 12.0 and later
-- Android 8.0 and later
+- iOS 18.0 and later
+- Android 7.0 and later
 
 This wide platform support enables developers to create consistent audio experiences across different operating systems and devices.
 

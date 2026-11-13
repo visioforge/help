@@ -124,7 +124,7 @@ Chaque système d'exploitation requiert des paramètres de framework cible spéc
 Les applications Windows doivent utiliser le suffixe de framework cible `-windows` :
 
 ```xml
-<TargetFramework>net8.0-windows</TargetFramework>
+<TargetFramework>net10.0-windows</TargetFramework>
 ```
 
 Cela permet d'accéder aux API spécifiques à Windows et aux frameworks d'interface utilisateur comme WPF et Windows Forms.
@@ -134,7 +134,7 @@ Cela permet d'accéder aux API spécifiques à Windows et aux frameworks d'inter
 Les projets Android nécessitent le suffixe de framework `-android` :
 
 ```xml
-<TargetFramework>net8.0-android</TargetFramework>
+<TargetFramework>net10.0-android</TargetFramework>
 ```
 
 Assurez-vous que les workloads Android sont installées dans votre environnement de développement :
@@ -148,7 +148,7 @@ dotnet workload install android
 Les applications iOS doivent utiliser le framework cible `-ios` :
 
 ```xml
-<TargetFramework>net8.0-ios</TargetFramework>
+<TargetFramework>net10.0-ios</TargetFramework>
 ```
 
 Le développement iOS requiert un Mac avec Xcode installé, même lorsque vous utilisez Visual Studio sur Windows.
@@ -158,13 +158,13 @@ Le développement iOS requiert un Mac avec Xcode installé, même lorsque vous u
 Les applications natives macOS utilisent le framework `-macos` ou `-maccatalyst` :
 
 ```xml
-<TargetFramework>net8.0-macos</TargetFramework>
+<TargetFramework>net10.0-macos</TargetFramework>
 ```
 
 Pour les applications .NET MAUI ciblant macOS, utilisez :
 
 ```xml
-<TargetFramework>net8.0-maccatalyst</TargetFramework>
+<TargetFramework>net10.0-maccatalyst</TargetFramework>
 ```
 
 #### Développement Linux
@@ -172,7 +172,7 @@ Pour les applications .NET MAUI ciblant macOS, utilisez :
 Les applications Linux utilisent le framework cible standard sans suffixe de plateforme :
 
 ```xml
-<TargetFramework>net8.0</TargetFramework>
+<TargetFramework>net10.0</TargetFramework>
 ```
 
 Assurez-vous que les workloads .NET requises sont installées :

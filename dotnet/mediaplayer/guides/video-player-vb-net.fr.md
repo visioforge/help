@@ -55,9 +55,9 @@ Ce guide vous accompagne dans la construction d'une application de lecteur vidé
 ## Paquets NuGet requis
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.6]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
 ```
 
 ## Exemple complet de lecteur vidéo VB.NET

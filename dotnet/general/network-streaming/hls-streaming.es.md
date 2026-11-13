@@ -296,7 +296,7 @@ Nuestros SDK también soportan integración con aplicaciones móviles a través 
 
 - Reproducción nativa iOS usando AVPlayer
 - Reproducción Android vía ExoPlayer
-- Opciones multiplataforma como Xamarin o MAUI
+- Opciones multiplataforma como .NET MAUI, Avalonia o Uno Platform
 
 ## Solución de Problemas Comunes
 

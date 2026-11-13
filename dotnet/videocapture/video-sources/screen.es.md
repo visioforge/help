@@ -142,7 +142,7 @@ Capturar ya sea una pantalla completa o una región de pantalla definida es un r
     var source = new ScreenCaptureD3D11SourceSettings(); 
     
     // Establecer la API de captura
-    source.API = D3D11ScreenCaptureAPI.WGC; 
+    source.API = D3D11ScreenCaptureAPI.DXGI; 
     
     // Establecer la tasa de fotogramas
     source.FrameRate = new VideoFrameRate(25);
@@ -150,14 +150,8 @@ Capturar ya sea una pantalla completa o una región de pantalla definida es un r
     // Establecer el área de pantalla o modo de pantalla completa
     if (fullscreen)
     {
-        // Enumerar todas las pantallas y establecer el área de pantalla
-        for (int i = 0; i < System.Windows.Forms.Screen.AllScreens.Length; i++)
-        {
-            if (i == screenID)
-            {
-                source.Rectangle = new VisioForge.Core.Types.Rect(System.Windows.Forms.Screen.AllScreens[i].Bounds);
-            }
-        }
+        // Un rectángulo vacío captura todo el monitor a su resolución nativa
+        source.Rectangle = new VisioForge.Core.Types.Rect();
     }
     else
     {
@@ -168,14 +162,14 @@ Capturar ya sea una pantalla completa o una región de pantalla definida es un r
     // Establecer a true para capturar el cursor del ratón
     source.CaptureCursor = true; 
     
-    // Establecer el índice del monitor
+    // Establecer el índice del monitor (0 para el primer monitor, -1 para el monitor principal)
     source.MonitorIndex = screenID; 
     
     // Establecer la fuente de captura de pantalla
     VideoCapture1.Video_Source = source; 
     ```
     
-    La opción de API Windows Graphics Capture (WGC) proporciona excelente rendimiento en Windows 10 y superior. Este enfoque también demuestra el uso de `System.Windows.Forms.Screen.AllScreens` para determinar programáticamente los límites de las pantallas disponibles.
+    Desktop Duplication (`D3D11ScreenCaptureAPI.DXGI`, el valor predeterminado) arranca al instante, incluso cuando nada se mueve en la pantalla. Windows Graphics Capture (`D3D11ScreenCaptureAPI.WGC`) también arranca al instante y repite el último fotograma mientras nada cambia. Una ventana minimizada al iniciar la captura no da ningún fotograma hasta que se restaura. Desktop Duplication limita el número de sesiones por pantalla entre todas las aplicaciones: si el arranque falla con «Failed to prepare capture object with given configuration» y el registro de depuración de GStreamer indica «Hit the max allowed number of Desktop Duplication session», use WGC. El rectángulo se expresa en píxeles del monitor capturado, y un rectángulo vacío captura ese monitor completo, a su resolución nativa.
     
 
 
@@ -404,7 +398,7 @@ Aprovechando las opciones de configuración apropiadas para sus requisitos espec
 
 ### ¿Cuál es la diferencia entre la captura de pantalla con DirectX 9 y DirectX 11/12?
 
-DirectX 11/12 utiliza la API de Duplicación de Escritorio acelerada por GPU o Windows Graphics Capture (WGC), ofreciendo tasas de fotogramas más altas y menor uso de CPU que el enfoque basado en GDI de DirectX 9. DirectX 9 solo es necesario para sistemas antiguos con Windows 7 o anterior. Para todas las aplicaciones modernas de Windows 10/11, use `ScreenCaptureD3D11SourceSettings` con `D3D11ScreenCaptureAPI.WGC` para obtener el mejor rendimiento.
+DirectX 11/12 utiliza la API de Duplicación de Escritorio acelerada por GPU o Windows Graphics Capture (WGC), ofreciendo tasas de fotogramas más altas y menor uso de CPU que el enfoque basado en GDI de DirectX 9. DirectX 9 solo es necesario para sistemas antiguos con Windows 7 o anterior. Para todas las aplicaciones modernas de Windows 10/11, use `ScreenCaptureD3D11SourceSettings`: su valor predeterminado, Desktop Duplication (`D3D11ScreenCaptureAPI.DXGI`), arranca al instante incluso en una pantalla inmóvil, y la captura de ventanas usa WGC.
 
 ### ¿Puedo capturar una ventana específica en lugar de la pantalla completa en C#?
 

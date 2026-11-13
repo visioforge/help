@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a .NET MAUI application that targets **Windows, Android, iOS, and Mac Catalyst** from a single codebase. The X SDK shares its native runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) that mirrors the legacy `VideoCaptureCore` API but runs on the cross-platform engine. Same C# code targets every OS — only the platform handler glue and per-OS redist NuGets change between TFMs.
 
-Pinned NuGet versions: wrapper **`2026.11.6`**, MAUI handlers **`2026.11.6`**, plus per-OS native redists at the versions shown in the csproj below — these match the official [Video Capture X MAUI samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/MAUI). Moving to a newer 2026.x.x release means moving the wrapper pair to that version and re-checking each redist against it; keep `VisioForge.DotNet.VideoCapture` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same wrapper version. Native redists are pinned to the versions shown in the csproj below. The `VisioForge.CrossPlatform.*` packages are built on their own cadence, so pin each to the newest version published **at or before** the wrapper's release rather than assuming the wrapper's number exists for it; the upstream csproj is a starting point and can itself lag.
+Pinned NuGet versions: wrapper **`2026.11.12`**, MAUI handlers **`2026.11.12`**, plus per-OS native redists at the versions shown in the csproj below — these match the official [Video Capture X MAUI samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/MAUI). Moving to a newer 2026.x.x release means moving the wrapper pair to that version and re-checking each redist against it; keep `VisioForge.DotNet.VideoCapture` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same wrapper version. Native redists are pinned to the versions shown in the csproj below. The `VisioForge.CrossPlatform.*` packages are built on their own cadence, so pin each to the newest version published **at or before** the wrapper's release rather than assuming the wrapper's number exists for it; the upstream csproj is a starting point and can itself lag.
 
 ## When to use this skill
 
@@ -76,13 +76,13 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.6]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.6]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.12]"/>
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
@@ -133,7 +133,7 @@ public class SceneDelegate : MauiUISceneDelegate
 }
 ```
 
-Keep `__MAUI_DEFAULT_SCENE_CONFIGURATION__` verbatim (it must match MAUI's own configuration name) and the `[Register]` name equal to `UISceneDelegateClassName`. The same SDKs refuse a `SupportedOSPlatformVersion` below 15.0 for iOS and 17.0 for Mac Catalyst, and VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older; `references/Sample.csproj` uses 16.4 for iOS and 17.0 for Mac Catalyst.
+Keep `__MAUI_DEFAULT_SCENE_CONFIGURATION__` verbatim (it must match MAUI's own configuration name) and the `[Register]` name equal to `UISceneDelegateClassName`. The same SDKs refuse a `SupportedOSPlatformVersion` below 15.0 for iOS and 17.0 for Mac Catalyst, and VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 18.0 and do not load on anything older; `references/Sample.csproj` uses 18.0 for iOS and 17.0 for Mac Catalyst.
 
 ### MauiProgram registration
 

@@ -67,9 +67,9 @@ Before beginning your Uno Platform implementation, ensure your development envir
 - Java Development Kit (JDK) 11 or later
 
 #### iOS/macOS
-- Mac computer with Xcode 15+ installed (for iOS/macOS builds)
+- Mac computer with Xcode 26 or later for iOS/macOS builds (Xcode 27.2 or later for .NET 11)
 - Apple Developer account (for device deployment)
-- iOS 15.0 or later / macOS 10.15 or later
+- iOS 18.0 or later / macOS 12 or later
 
 #### Linux
 - GStreamer runtime installed
@@ -107,8 +107,8 @@ Add the following packages to your project:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.6]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.6]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.12]"/>
 </ItemGroup>
 ```
 
@@ -120,9 +120,9 @@ Add platform-specific redistributable packages to your project:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
+  <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
 </ItemGroup>
 ```
 
@@ -217,15 +217,15 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
   
   <!-- VisioForge Core References -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.6]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.6]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.12]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.12]"/>
   </ItemGroup>
   
   <!-- Windows Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
   </ItemGroup>
   
   <!-- Android Platform -->

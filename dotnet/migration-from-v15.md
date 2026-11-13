@@ -48,6 +48,7 @@ The following table shows supported target frameworks in v2026:
 | .NET 8.0 | Supported | Supported |
 | .NET 9.0 | Supported | Supported |
 | .NET 10.0 | Supported | Supported |
+| .NET 11.0 | Supported | Supported |
 
 > **Note:** DirectShow classes require a Windows TFM (e.g., `net10.0-windows`) or .NET Framework. For X-engines, platform-specific TFMs control the target: `net10.0-windows` for Windows, `net10.0-macos` for macOS, `net10.0-ios` for iOS, `net10.0-android` for Android. Plain `net10.0` (no platform suffix) targets Linux only.
 

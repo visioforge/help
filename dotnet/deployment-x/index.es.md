@@ -124,8 +124,8 @@ Uno Platform simplifica el desarrollo multiplataforma mientras aprovecha las cap
 Los dispositivos objetivo deben cumplir estos requisitos mínimos:
 
 - **Windows**: Windows 7 o posterior (x86 o x64)
-- **macOS**: macOS 10.15 (Catalina) o posterior (x64 o ARM64)
-- **iOS**: iOS 14.0 o posterior (ARM64)
+- **macOS**: macOS 12 (Monterey) o posterior (x64 o ARM64)
+- **iOS**: iOS 18.0 o posterior (ARM64)
 - **Android**: Android 7.0 (nivel de API 24) o posterior
 - **Linux**: Ubuntu 20.04 LTS o posterior (x64 o ARM64)
 

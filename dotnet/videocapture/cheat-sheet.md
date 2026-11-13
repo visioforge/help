@@ -73,12 +73,12 @@ Platform-specific native runtimes — add the ones you target:
 
 ```xml
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
 
 <!-- Windows x86 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.3]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.11.12]"/>
 
 <!-- macOS / macCatalyst -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.5]"/>

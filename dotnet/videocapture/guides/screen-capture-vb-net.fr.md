@@ -50,9 +50,9 @@ L'enregistrement de l'écran du bureau dans les applications VB.NET (Visual Basi
 Ajoutez les paquets suivants à votre projet VB.NET :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.6]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
 ```
 
 ## Exemple complet d'enregistrement d'écran en VB.NET

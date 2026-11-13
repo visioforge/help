@@ -337,10 +337,10 @@ await pipeline.StopAsync();
 Le bloc moteur de rendu audio est conçu pour un fonctionnement multiplateforme, prenant en charge :
 
 - Windows 10 et versions ultérieures
-- macOS 10.13 et versions ultérieures
+- macOS 12 et versions ultérieures
 - Linux (Ubuntu, Debian, Fedora)
-- iOS 12.0 et versions ultérieures
-- Android 8.0 et versions ultérieures
+- iOS 18.0 et versions ultérieures
+- Android 7.0 et versions ultérieures
 
 Cette large prise en charge des plateformes permet aux développeurs de créer des expériences audio cohérentes sur différents systèmes d'exploitation et appareils.
 

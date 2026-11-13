@@ -122,11 +122,16 @@ La tabla a continuación muestra el soporte para dispositivos de captura en cada
 | Cámaras IP y NVR (incluyendo ONVIF)             | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | Pantalla                                        | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | Blackmagic Decklink (entrada y salida)          | &#x2714; | &#x2714; | &#x2714;| &#x2718; | &#x2718; |
-| Videocámaras                                    | &#x2714; | &#x2714; | &#x2714;| &#x2718; | &#x2718; |
+| Videocámaras                                    | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
+| Sintonizadores de TV y DVB                      | &#x2714; | &#x2714; | &#x2718;| &#x2718; | &#x2718; |
 | Cámaras USB3/GigE soportadas por GenICam        | &#x2714; | &#x2714; | &#x2714;| &#x2718; | &#x2718; |
 | Cámaras GigE/USB3 Teledyne/FLIR                 | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
 | Cámaras GigE/USB3 Basler                        | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
 | Cámaras GigE/USB3 Allied Vision                 | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
+
+Las videocámaras (DV/HDV) solo son compatibles con el motor clásico `VideoCaptureCore` en Windows ([DV](videocapture/video-capture/dv.md), [HDV](videocapture/video-capture/mpeg2-camcorder.md)).
+
+Sintonizadores de TV: en Windows, sintonizadores analógicos y DVB (BDA) mediante el motor clásico `VideoCaptureCore` ([guía](videocapture/video-sources/tv-tuner.md)); en Linux, adaptadores DVB mediante `DVBSourceBlock` de Media Blocks SDK .NET ([DVB Source Block](mediablocks/Sources/index.md#dvb-source-block)).
 
 ## Protocolos de red
 

@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Media Player SDK X** — the cross-platfor
 
 `MediaPlayerCoreX` is the high-level open/play/seek god-object — same API as on the WPF/MAUI/WinUI hosts, just bound to Uno's `VideoView`. Under the hood it shares the GStreamer-backed engine with Media Blocks. It opens local files, HTTP(S)/HLS/DASH/RTSP streams, and any other URL the underlying engine can demux.
 
-Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Player sample): wrapper **`2026.11.6`**, Uno UI **`2026.11.6`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Player sample): wrapper **`2026.11.12`**, Uno UI **`2026.11.12`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -69,13 +69,14 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net10.0-windows10.0.19041;net10.0-android</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net10.0-maccatalyst;net10.0-android</TargetFrameworks>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">17.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
     <UnoSingleProject>true</UnoSingleProject>
     <RunAOTCompilation>false</RunAOTCompilation>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.6]"/>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.6]"/>
+    <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.12]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.12]"/>
   </ItemGroup>
 </Project>
 ```
@@ -136,7 +137,7 @@ public class SceneDelegate : UIWindowSceneDelegate
 }
 ```
 
-The same SDKs refuse a `SupportedOSPlatformVersion` below 17.0 for Mac Catalyst and 15.0 for iOS, VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older, and `Uno.Sdk` 6.x defaults to 15.0 for iOS and 14.2 for Mac Catalyst, so set them explicitly; `references/Sample.csproj` sets 17.0 for Mac Catalyst and already carries 16.4 for iOS, which takes effect once you add `net10.0-ios` to its `TargetFrameworks`.
+The same SDKs refuse a `SupportedOSPlatformVersion` below 17.0 for Mac Catalyst and 15.0 for iOS, VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 18.0 and do not load on anything older, and `Uno.Sdk` 6.x defaults to 15.0 for iOS and 14.2 for Mac Catalyst, so set them explicitly; `references/Sample.csproj` sets 17.0 for Mac Catalyst and already carries 18.0 for iOS, which takes effect once you add `net10.0-ios` to its `TargetFrameworks`.
 
 ### Uno "single project" structure
 

@@ -1,6 +1,6 @@
 ---
 title: VisioForge .NET SDKs — Requisitos del sistema y plataformas
-description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 16.4+, Android 9+. .NET 6–9, ARM64, requisitos de memoria 4K. Compatible con WPF, WinForms, MAUI y Avalonia.
+description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 26+, Android 7+. .NET Framework 4.6.1+, .NET Core 3.1, .NET 5–11, ARM64. WPF, WinForms, MAUI y Avalonia.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -23,7 +23,7 @@ Esta guía detalla los requisitos del sistema y compatibilidad de plataformas pa
 
 ## Descripción general
 
-Desbloquea potentes capacidades de video multiplataforma con los SDKs .NET de VisioForge, totalmente compatibles con Windows, Linux, macOS, Android e iOS. Nuestros SDKs proporcionan soporte robusto para .NET Framework, .NET Core y .NET 5+ moderno (incluyendo .NET 8 LTS y .NET 9), permitiendo una integración perfecta con WinForms, WPF, WinUI 3, Avalonia, .NET MAUI y Xamarin. Desarrolla aplicaciones de video de alto rendimiento con paradigmas familiares de C# en todos los sistemas operativos principales y frameworks de UI.
+Desbloquee potentes capacidades de video multiplataforma con los SDKs .NET de VisioForge, totalmente compatibles con Windows, Linux, macOS, Android e iOS. Nuestros SDKs proporcionan soporte robusto para .NET Framework, .NET Core y .NET 5+ moderno (incluyendo .NET 8 LTS, .NET 9, .NET 10 LTS y .NET 11), permitiendo una integración perfecta con WinForms, WPF, WinUI 3, Avalonia y .NET MAUI. Desarrolle aplicaciones de video de alto rendimiento con paradigmas familiares de C# en todos los sistemas operativos principales y frameworks de UI.
 
 > **Nota Importante**: Mientras que los usuarios de Windows se benefician de nuestro paquete instalador dedicado, los desarrolladores que trabajan en otras plataformas deben utilizar el método de distribución de paquetes NuGet para la implementación.
 
@@ -90,16 +90,18 @@ Nuestros SDKs pueden desplegarse en una variedad de plataformas, permitiendo una
 
 #### Android
 
-* Android 9 (nivel de API 28) o más reciente
-* Arquitecturas ARM, ARM64 y x86 soportadas
+* Android 7.0 (nivel de API 24) o más reciente
+* La captura desde cámara USB (UVC) requiere Android 9 (nivel de API 28) o más reciente, consulte [Captura desde cámara USB en Android](general/guides/android-usb-camera.md)
+* La captura de la reproducción de audio requiere Android 10 (nivel de API 29) o más reciente, consulte [Captura de la reproducción de audio en Android](general/guides/android-audio-playback-capture.md)
+* Arquitecturas ARM, ARM64, x86 y x86_64 soportadas
 * Compatible con Google Play Store
 * Renderizado acelerado por hardware recomendado
 
 #### iOS
 
-* iOS 16.4 o versiones más recientes
-* Compatible con iPhone, iPad e iPod Touch
-* Soporta arquitecturas ARMv7 y ARM64
+* iOS 18.0 o versiones más recientes
+* Compatible con iPhone e iPad
+* Dispositivos ARM64
 * Compatible con distribución en App Store
 
 ## Compatibilidad con .NET Framework
@@ -121,12 +123,8 @@ Nuestros SDKs proporcionan amplia compatibilidad con varias implementaciones de 
 * .NET 7.0
 * .NET 8.0 (LTS)
 * .NET 9.0
-
-### Xamarin (legacy)
-
-* Xamarin.iOS 12.0+
-* Xamarin.Android 9.0+
-* Xamarin.Mac 5.0+
+* .NET 10.0 (LTS)
+* .NET 11.0
 
 ## Integración con frameworks de UI
 

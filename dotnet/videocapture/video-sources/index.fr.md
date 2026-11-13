@@ -174,7 +174,7 @@ Pour les scénarios nécessitant l'enregistrement d'écran ou la capture d'appli
 
 ### Intégration de caméscope DV
 
-Le SDK maintient la prise en charge des caméras au format Digital Video (DV) :
+Sous Windows, le moteur classique `VideoCaptureCore` prend en charge les caméras au format Digital Video (DV) ([capture DV](../video-capture/dv.md), [capture HDV](../video-capture/mpeg2-camcorder.md), [contrôle de l'appareil](dv-camcorder-control.md)) :
 
 - Prise en charge de la connectivité FireWire/IEEE 1394
 - Compatibilité avec les formats standards DV, DVCAM et HDV

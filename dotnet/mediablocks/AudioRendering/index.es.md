@@ -337,10 +337,10 @@ await pipeline.StopAsync();
 El Bloque de Renderizado de Audio está diseñado para operación multiplataforma, soportando:
 
 - Windows 10 y posteriores
-- macOS 10.13 y posteriores
+- macOS 12 y posteriores
 - Linux (Ubuntu, Debian, Fedora)
-- iOS 12.0 y posteriores
-- Android 8.0 y posteriores
+- iOS 18.0 y posteriores
+- Android 7.0 y posteriores
 
 Este amplio soporte de plataformas permite a los desarrolladores crear experiencias de audio consistentes en diferentes sistemas operativos y dispositivos.
 

@@ -34,18 +34,18 @@ Before beginning your Android implementation and deployment process, ensure your
 
 ### Device Requirements
 
-- Android device running Android 9.0 (API level 28) or later
-- ARM or ARM64 processor architecture
+- Android device running Android 7.0 (API level 24) or later
+- ARM, ARM64, x86 or x86_64 processor architecture
 - Sufficient storage space for application assets and media processing
 - Camera and microphone hardware (if using video/audio capture features)
 
 ### Development Environment Requirements
 
 - Windows, Linux, or macOS computer
-- Visual Studio with .NET MAUI or Xamarin workloads installed, JetBrains Rider, or Visual Studio Code
-- .NET 8.0 SDK or later (latest stable version recommended)
+- Visual Studio with the .NET MAUI or .NET for Android workload installed, JetBrains Rider, or Visual Studio Code
+- .NET 10 SDK or later (latest stable version recommended)
 - Android SDK with appropriate API levels installed
-- Java Development Kit (JDK) 11 or later
+- Java Development Kit (JDK) 17 or later (JDK 21 or later for .NET 11)
 - Basic knowledge of .NET development for Android
 
 ## Architecture Support
@@ -156,7 +156,7 @@ Android applications using VisioForge SDK require a custom Java Bindings Library
 Follow these detailed steps to integrate it:
 
 1. Clone the binding-library repository from [GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency).
-2. Pick the binding project that matches the .NET target you build against — the folder ships one `VisioForge.Core.Android.X{N}.csproj` per supported .NET version (e.g., `VisioForge.Core.Android.X9.csproj` for .NET 9, `VisioForge.Core.Android.X10.csproj` for .NET 10). If your .NET target isn't listed, pick the closest supported one.
+2. Use `VisioForge.Core.Android.X10.csproj` from that folder. It targets `net10.0-android`, and a `net11.0-android` app references it as well.
 3. Add a reference to the binding project from your app's .csproj:
 
 ```xml
@@ -253,7 +253,7 @@ android {
 }
 ```
 
-For .NET MAUI or Xamarin.Android projects, configure signing in your .csproj file:
+For .NET MAUI or .NET for Android projects, configure signing in your .csproj file:
 
 ```xml
 <PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
@@ -270,7 +270,7 @@ For .NET MAUI or Xamarin.Android projects, configure signing in your .csproj fil
 1. Generate an AAB (Android App Bundle) for distribution:
 
 ```bash
-dotnet build -f net8.0-android -c Release /p:AndroidPackageFormat=aab
+dotnet build -f net10.0-android -c Release /p:AndroidPackageFormat=aab
 ```
 
 2. Create a developer account on the Google Play Console if you don't already have one.

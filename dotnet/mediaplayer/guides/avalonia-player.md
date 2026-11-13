@@ -128,6 +128,7 @@ The main project, `SimplePlayerMVVM.csproj`, targets multiple platforms. Key pac
   <Nullable>enable</Nullable>
   <LangVersion>latest</LangVersion>
   <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
  </PropertyGroup>
  <ItemGroup>
   <AvaloniaResource Include="Assets\**" />
@@ -156,8 +157,8 @@ The main project, `SimplePlayerMVVM.csproj`, targets multiple platforms. Key pac
   <PackageReference Include="Avalonia.Android" Version="12.0.5" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.6]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.6]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.12]"/>
  </ItemGroup>
 </Project>
 ```
@@ -179,8 +180,8 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.3]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.12]"/>
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
     <TargetFramework>net10.0-macos</TargetFramework>
@@ -199,13 +200,14 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
 
 * References `Avalonia.Android`.
 * Includes Android-specific VisioForge libraries and dependencies like `VisioForge.CrossPlatform.Core.Android`.
+* Pins Android 9 (API level 28), the demo's own choice; the SDK itself needs Android 7.0 (API level 24).
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0-android</TargetFramework>
-    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <ApplicationId>com.CompanyName.Simple_Player_MVVM</ApplicationId>
     <ApplicationVersion>1</ApplicationVersion>
@@ -234,7 +236,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0-ios</TargetFramework>
-    <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion>18.0</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>Simple_Player_MVVM.iOS</RootNamespace>
     <ApplicationId>com.visioforge.avaloniaplayer</ApplicationId>
@@ -1122,8 +1124,8 @@ To abstract platform-specific functionality, interfaces are defined in the core 
 
         ```xml
         <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-          <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-          <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.3]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.12]"/>
         </ItemGroup>
         <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
           <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.5]"/>

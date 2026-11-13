@@ -2303,7 +2303,7 @@ Name: VirtualCameraSinkBlock.
 | `VideoStreamName` | `string` | `"VideoStream1"` | Shared-memory stream name; must match the virtual camera source filter |
 | `AudioSampleRate` | `int` | `48000` | Audio sample rate in Hz |
 | `AudioChannels` | `int` | `2` | Audio channel count (1 = mono, 2 = stereo) |
-| `AudioBitsPerSample` | `int` | `16` | Audio bits per sample |
+| `AudioBitsPerSample` | `int` | `16` | Audio bits per sample. Only 16 is supported; any other value fails the pipeline build when an audio input is connected |
 | `AudioStreamName` | `string` | `"AudioStream1"` | Shared-memory stream name; must match the virtual audio card source filter |
 | `CustomVideoProcessor` | `MediaBlock` | `null` | Optional custom video processor block |
 | `CustomAudioProcessor` | `MediaBlock` | `null` | Optional custom audio processor block |

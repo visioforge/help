@@ -51,8 +51,8 @@ The full sample is on [GitHub](https://github.com/visioforge/.Net-SDK-s-samples/
 Two packages: the SDK itself and the MAUI `VideoView` control.
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.6]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.6]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.12]"/>
 ```
 
 `VisioForge.DotNet.Core.UI.MAUI` only supplies the `VideoView` control — on its own it cannot
@@ -79,8 +79,8 @@ Android Java bindings project reference, which Android builds require.
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
 </ItemGroup>
 ```
 

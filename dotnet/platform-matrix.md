@@ -120,11 +120,16 @@ The table below shows the support for capture devices for each platform.
 | IP cameras and NVR (including ONVIF)    | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | Screen                                  | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | Blackmagic Decklink (input and output)  | &#x2714; | &#x2714; | &#x2714;| &#x2718; | &#x2718; |
-| Camcorders                              | &#x2714; | &#x2714; | &#x2714;| &#x2718; | &#x2718; |
+| Camcorders                              | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
+| TV tuners and DVB                       | &#x2714; | &#x2714; | &#x2718;| &#x2718; | &#x2718; |
 | GenICam-supported USB3/GigE cameras     | &#x2714; | &#x2714; | &#x2714;| &#x2718; | &#x2718; |
 | Teledyne/FLIR GigE/USB3 cameras         | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
 | Basler GigE/USB3 cameras                | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
 | Allied Vision GigE/USB3 cameras         | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
+
+Camcorders (DV/HDV) are supported only by the classic `VideoCaptureCore` engine on Windows ([DV](videocapture/video-capture/dv.md), [HDV](videocapture/video-capture/mpeg2-camcorder.md)).
+
+TV tuners: on Windows, analog and DVB (BDA) tuners through the classic `VideoCaptureCore` engine ([guide](videocapture/video-sources/tv-tuner.md)); on Linux, DVB adapters through `DVBSourceBlock` of Media Blocks SDK .NET ([DVB Source Block](mediablocks/Sources/index.md#dvb-source-block)).
 
 ## Network protocols
 

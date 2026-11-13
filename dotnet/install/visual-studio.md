@@ -108,16 +108,16 @@ The native engines go into the project file instead, each under the condition of
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.3" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="2026.11.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.11.5]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.5" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]" />
 </ItemGroup>
 ```
 

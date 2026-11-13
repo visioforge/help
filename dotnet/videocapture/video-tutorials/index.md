@@ -42,7 +42,7 @@ Integrate webcam functionality into your applications for video conferencing, fa
 * [**Webcam Capture to MP4 Files**](video-capture-webcam-mp4.md) - Implement high-quality webcam recording with H.264 compression for optimal file size
 * [**Webcam to MP4 in WPF**](video-capture-webcam-mp4-wpf.md) - The same webcam recorder in a WPF window laid out in XAML
 * [**Webcam Recording with WMV Output**](video-capture-webcam-wmv.md) - Create efficient WMV format recordings from webcam input with Windows Media compatibility
-* [**Text Overlay on Webcam Recordings**](webcam-capture-text-overlay.md) - Learn to add dynamic text, timestamps, and watermarks to webcam footage with customizable fonts and positioning
+* [**Text Overlay on Webcam Recordings**](webcam-capture-text-overlay.md) - Draw a caption you can change while recording, the date and time, the frame number and the recording time over a webcam MP4
 
 Our SDK supports a wide range of webcam resolutions, frame rates, and special features like autofocus and low-light enhancement.
 

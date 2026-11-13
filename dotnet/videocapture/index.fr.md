@@ -45,8 +45,8 @@ Ajoutez les dépendances natives spécifiques à la plateforme :
 
 ```xml
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
 
 <!-- macOS -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.5]"/>
@@ -195,9 +195,9 @@ Consultez : [Capture photo webcam](guides/make-photo-using-webcam.md)
 ### Caméras et matériel de capture
 
 * Webcams USB et périphériques de capture (jusqu'à 4K)
-* Caméscopes DV et HDV MPEG-2
+* Caméscopes DV et HDV MPEG-2 (Windows, moteur classique `VideoCaptureCore`)
 * Cartes de capture PCI professionnelles
-* Tuners TV (avec ou sans encodeur MPEG)
+* Tuners TV avec ou sans encodeur MPEG (Windows, moteur classique `VideoCaptureCore`, [guide](video-sources/tv-tuner.md))
 
 ### Caméras réseau et IP
 

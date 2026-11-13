@@ -124,8 +124,8 @@ Uno Platform simplifies multi-platform development while leveraging native capab
 Target devices must meet these minimum requirements:
 
 - **Windows**: Windows 7 or later (x86 or x64)
-- **macOS**: macOS 10.15 (Catalina) or later (x64 or ARM64)
-- **iOS**: iOS 14.0 or later (ARM64)
+- **macOS**: macOS 12 (Monterey) or later (x64 or ARM64)
+- **iOS**: iOS 18.0 or later (ARM64)
 - **Android**: Android 7.0 (API level 24) or later
 - **Linux**: Ubuntu 20.04 LTS or later (x64 or ARM64)
 

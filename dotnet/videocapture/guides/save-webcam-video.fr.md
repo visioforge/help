@@ -236,7 +236,7 @@ Video Capture SDK .NET s'appuie sur des bibliothèques natives pour accéder aux
 Paquet principal du SDK :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.6]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.12]"/>
 ```
 
 ### Paquets redistribuables spécifiques aux plateformes
@@ -244,8 +244,8 @@ Paquet principal du SDK :
 Windows x64 :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
 ```
 
 Pour les autres plateformes :

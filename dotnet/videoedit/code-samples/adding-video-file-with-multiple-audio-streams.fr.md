@@ -89,7 +89,8 @@ Utilisez la méthode `DirectShow_Filters_Blacklist_Add` pour exclure les splitte
 
 ```csharp
 // Exemple : exclure LAV Splitter pour forcer l'utilisation des splitters natifs
-videoEdit.DirectShow_Filters_Blacklist_Add("{B98D13E7-55DB-4385-A33D-09FD1BA26338}");
+videoEdit.DirectShow_Filters_Blacklist_Add("LAV Splitter Source");
+videoEdit.DirectShow_Filters_Blacklist_Add("LAV Splitter");
 ```
 
 Pour des exemples d'implémentation plus détaillés, consultez la [documentation API sur le travail avec plusieurs sources](output-file-from-multiple-sources.md).

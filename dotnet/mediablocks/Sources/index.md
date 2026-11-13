@@ -3010,7 +3010,7 @@ var pipeline = new MediaBlocksPipeline();
 var settings = new DVBSourceSettings
 {
     AdapterID = 0,
-    DeliverySystem = DVBDeliverySystem.DVBT,
+    DeliverySystem = DVBDeliverySystem.DVB_T,
     Frequency = 506000000,
     BandwidthHZ = 8000000
 };
@@ -3020,7 +3020,7 @@ dvb.TuningDone += (s, e) => Console.WriteLine("Tuning complete");
 
 // Decode the MPEG-TS stream
 var decoder = new DecodeBinBlock();
-pipeline.Connect(dvb.VideoOutput, decoder.Input);
+pipeline.Connect(dvb.Output, decoder.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(decoder.VideoOutput, videoRenderer.Input);
@@ -3036,7 +3036,7 @@ bool available = DVBSourceBlock.IsAvailable();
 
 #### Platforms
 
-Windows, Linux.
+Linux. On Windows, DVB tuners are supported through BDA by the classic `VideoCaptureCore` engine of Video Capture SDK .NET (the `BDA_Source` property).
 
 ---
 

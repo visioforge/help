@@ -31,9 +31,9 @@ imports `VisioForge.Core.VirtualCamera.Push` qualifies `VirtualVideoWriter` and 
 ## Install
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.6]" />
+<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.12]" />
 <!-- The virtual camera and virtual audio card filters -->
-<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.6]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.12]" />
 ```
 
 `Redist.VirtualCamera.x64` carries the filters Zoom, OBS and browsers load: the consumer application loads the filter,
@@ -138,7 +138,14 @@ using (var audio = new VirtualAudioWriter(48000, 2, 16, "AudioStream1", null))
 }
 ```
 
-Timestamps come from the number of bytes pushed, so push audio at the rate it is played.
+Timestamps come from the number of bytes pushed, so push audio at the rate it is played. Samples are 16-bit: any other
+`bitsPerSample` makes the constructor throw `ArgumentOutOfRangeException`. The card holds six buffers of up to one second
+each. While an application has the microphone open, a call is added to the newest buffer the card has not read yet if
+it fits there, so small calls share a buffer; otherwise it takes a buffer of its own, one per started second of the
+chunk, so a 2.5 s call takes three. When no buffer is free, the next one replaces the oldest buffer the card has not
+read, from this call or an earlier one. Audio pushed ahead of real time waits in these buffers and reaches the
+application that much later, so push a live source in real time. `PushSamples` returns `false` when a buffer could not be written; the part of the chunk before it stays queued and is counted in `BytesWritten`. To
+resend the rest, push the chunk from the offset by which `BytesWritten` grew during the call.
 
 ## Push from C++
 

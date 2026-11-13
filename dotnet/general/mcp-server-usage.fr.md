@@ -284,7 +284,7 @@ Obtient le code de configuration de copie de fichiers / de build propre à la pl
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.6]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.12]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>

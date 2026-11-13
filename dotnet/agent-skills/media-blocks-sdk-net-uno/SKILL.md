@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Media Blocks SDK .NET** — the graph-base
 
 The same C# pipeline code runs unchanged on every Uno target; what differs is the per-OS native redist NuGet, the permission paperwork, and the `Uno.Sdk` MSBuild SDK plus the `VisioForge.DotNet.Core.UI.Uno` `VideoView` control. Under the hood the engine is GStreamer-based and shared with `VideoCaptureCoreX`.
 
-Pinned NuGet versions (match the bundled `references/Sample.csproj` and the upstream Uno `VideoCaptureUnoX` sample): wrapper **`2026.11.6`**, Uno UI **`2026.11.6`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. A redist ahead of the wrapper is undefined behaviour and surfaces as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
+Pinned NuGet versions (match the bundled `references/Sample.csproj` and the upstream Uno `VideoCaptureUnoX` sample): wrapper **`2026.11.12`**, Uno UI **`2026.11.12`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. A redist ahead of the wrapper is undefined behaviour and surfaces as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
 ## When to use this skill
 
@@ -62,7 +62,7 @@ Without the matching workload, `dotnet build -f net10.0-android` (etc.) fails wi
 
 The csproj declares target frameworks **conditionally per host OS**: Android always; Mac Catalyst only on macOS hosts; Windows only on Windows hosts. iOS is intentionally absent from the upstream Uno sample (Uno's iOS head usually lives in a separate solution; if you do need it, add `net10.0-ios` to the macOS condition and reference `VisioForge.CrossPlatform.Core.iOS`). That keeps `dotnet build` working on any developer machine.
 
-The full minimal csproj is in `references/Sample.csproj`. Highlights: `<Project Sdk="Uno.Sdk">`, `<UnoSingleProject>true</UnoSingleProject>`, `<RunAOTCompilation>false</RunAOTCompilation>`, conditional `<TargetFrameworks>` per host OS, and conditional `<ItemGroup>` blocks pulling in the right per-OS native redists.
+The full minimal csproj is in `references/Sample.csproj`. Highlights: `<Project Sdk="Uno.Sdk">`, `<UnoSingleProject>true</UnoSingleProject>`, `<RunAOTCompilation>false</RunAOTCompilation>`, conditional `<TargetFrameworks>` per host OS, `<SupportedOSPlatformVersion>` 24.0 for Android (Uno.Sdk would otherwise apply 21, below the API 24 the native libraries are built for), and conditional `<ItemGroup>` blocks pulling in the right per-OS native redists.
 
 The Mac Catalyst target additionally needs an `AfterTargets="Build"` step (`CopyNativeLibrariesToMonoBundle`) that copies `.dylib` / `.so` files into the `.app/Contents/MonoBundle/` folder. This is included verbatim in `references/Sample.csproj`. Without it, the bundled `.app` cannot find the native runtime at launch and crashes with a `dlopen` failure.
 
@@ -118,7 +118,7 @@ public class SceneDelegate : UIWindowSceneDelegate
 }
 ```
 
-The same SDKs refuse a `SupportedOSPlatformVersion` below 17.0 for Mac Catalyst and 15.0 for iOS, VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older, and `Uno.Sdk` 6.x defaults to 15.0 for iOS and 14.2 for Mac Catalyst, so set them explicitly; `references/Sample.csproj` sets 17.0 for Mac Catalyst and already carries 16.4 for iOS, which takes effect once you add `net10.0-ios` to its `TargetFrameworks`.
+The same SDKs refuse a `SupportedOSPlatformVersion` below 17.0 for Mac Catalyst and 15.0 for iOS, VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 18.0 and do not load on anything older, and `Uno.Sdk` 6.x defaults to 15.0 for iOS and 14.2 for Mac Catalyst, so set them explicitly; `references/Sample.csproj` sets 17.0 for Mac Catalyst and already carries 18.0 for iOS, which takes effect once you add `net10.0-ios` to its `TargetFrameworks`.
 
 ### Uno "single project" structure
 

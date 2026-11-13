@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a **native .NET for iOS** application (`net10.0-ios` TFM, UIKit, no MAUI/Xamarin shell). The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes the high-level `VideoCaptureCoreX` god-object that mirrors the legacy `VideoCaptureCore` API. Same C# capture/recording code ports to Windows / macOS / Android / MAUI / Avalonia / Uno — only the UI host changes.
 
-Pinned NuGet versions: wrapper **`VisioForge.DotNet.VideoCapture` 2026.11.6**, native iOS redist at the version shown in the csproj below (matches the [official Simple Video Capture X iOS sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/iOS/SimpleVideoCapture)). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`VisioForge.DotNet.VideoCapture` 2026.11.12**, native iOS redist at the version shown in the csproj below (matches the [official Simple Video Capture X iOS sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/iOS/SimpleVideoCapture)). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -27,7 +27,7 @@ Pinned NuGet versions: wrapper **`VisioForge.DotNet.VideoCapture` 2026.11.6**, n
 
 ### Target framework
 
-Use `net10.0-ios` with `<SupportedOSPlatformVersion>16.4</SupportedOSPlatformVersion>` — VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 16.4 and do not load on anything older (the .NET 10 iOS workload itself refuses anything below 15.0), and the upstream sample csproj is at 16.4 as well.
+Use `net10.0-ios` with `<SupportedOSPlatformVersion>18.0</SupportedOSPlatformVersion>` — VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 18.0 and do not load on anything older (the .NET 10 iOS workload itself refuses anything below 15.0), and the upstream sample csproj is at 18.0 as well.
 
 ### NuGet packages
 
@@ -35,7 +35,7 @@ Two packages — the .NET wrapper plus the iOS native redist. The redist is **no
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.6]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.12]"/>
 </ItemGroup>
 <ItemGroup>
   <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>

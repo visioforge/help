@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a native .NET for Androi
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a **native .NET for Android** application (TFM `net10.0-android`, Activity-based, NOT MAUI and NOT classic Xamarin.Android). Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. The same C# block code runs unchanged on WPF / MAUI / Avalonia / Uno / iOS / macOS — only the UI host swaps (`VideoViewGL` here, `<my:VideoView />` on MAUI, etc.) and the per-OS native redist NuGet.
 
-Pinned NuGet versions: wrapper **`2026.11.6`**, Android redist at the version shown in the csproj below (the [official Simple Video Capture Android sample for Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Android/Simple%20Video%20Capture) is the reference for the project layout, not for the version to pin — it can lag a release). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.12`**, Android redist at the version shown in the csproj below (the [official Simple Video Capture Android sample for Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Android/Simple%20Video%20Capture) is the reference for the project layout, not for the version to pin — it can lag a release). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -20,7 +20,7 @@ Pinned NuGet versions: wrapper **`2026.11.6`**, Android redist at the version sh
 
 - **Plain webcam capture** (preview + record to MP4, no custom topology) on Android: `video-capture-sdk-x-android` is dramatically less code (`VideoCaptureCoreX` is the high-level wrapper around the same engine).
 - **MAUI app that targets Android + other OSes from one codebase**: use `media-blocks-sdk-net-maui` — the conditional multi-target csproj and `AddVisioForgeHandlers()` registration are MAUI-specific.
-- **Classic Xamarin.Android** (`MonoAndroid12.0` TFM, not `net10.0-android`): unsupported — Xamarin.Android went out of support in May 2024, migrate to `net8.0-android` or newer first.
+- **Classic Xamarin.Android** (`MonoAndroid12.0` TFM, not `net10.0-android`): unsupported — Xamarin.Android went out of support in May 2024, migrate to `net10.0-android` or newer first.
 - **Playback only** (play files / streams without capturing or custom graph): `media-player-sdk-x-android`.
 - **iOS / macOS host instead of Android**: same SDK, different host → `media-blocks-sdk-net-ios` / `media-blocks-sdk-net-maui`.
 
@@ -28,7 +28,7 @@ Pinned NuGet versions: wrapper **`2026.11.6`**, Android redist at the version sh
 
 ### Target framework
 
-Media Blocks SDK 2026.x supports `net8.0-android`, `net9.0-android`, and `net10.0-android` for the native Android host. The upstream Simple Video Capture sample pins **`net10.0-android`** with `<SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>` (Android 9.0 / API level 28 minimum) — match these unless you have a reason not to. API 28 is the floor because the underlying GStreamer redist drops below that level.
+Media Blocks SDK releases after 2026.11.12 support `net10.0-android` and `net11.0-android` for the native Android host; 2026.11.6 ships `net9.0-android` and `net10.0-android`, with no `net11.0-android` target. The upstream Simple Video Capture sample pins **`net10.0-android`** with `<SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>` (Android 9.0 / API level 28 minimum) — match these unless you have a reason not to. The SDK itself needs Android 7.0 (API level 24): its native GStreamer libraries are built for API 24, so 24 is the lowest `SupportedOSPlatformVersion` that works, and the sample pins 28 by its own choice. Two features need more: USB (UVC) camera capture needs API 28, and audio playback capture needs API 29.
 
 ### NuGet packages + AndroidDependency
 
@@ -36,7 +36,7 @@ A native Android Media Blocks project needs **two NuGet packages plus one Projec
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.6]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.12]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
   <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
 </ItemGroup>
@@ -47,7 +47,7 @@ A native Android Media Blocks project needs **two NuGet packages plus one Projec
 
 The Android redist (`VisioForge.CrossPlatform.Core.Android`) is the **single** redist needed — unlike the WPF host (which needs Core + Libav redists separately), the Android redist bundles everything into one package. There is no `Libav.Android` to add.
 
-The `AndroidDependency` project is **not on NuGet** — it's a small companion csproj (`VisioForge.Core.Android.X10.csproj` for `net10.0-android`, or `X9.csproj` for `net9.0-android`) that ships in the samples repo and binds the underlying `.aar` plus a handful of Java callback classes (`GStreamer.java`, `GstAhcCallback.java`, `GstAhsCallback.java`, `GstAmcOnFrameAvailableListener.java`). Copy the entire `AndroidDependency/` folder from `https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency` next to your app and adjust the relative path in `<ProjectReference Include="...">`. The package alone is **not** enough — without the project reference, builds succeed but `MediaBlocksPipeline` aborts at first block construction with a missing-Java-class error.
+The `AndroidDependency` project is **not on NuGet** — it's a small companion csproj (`VisioForge.Core.Android.X10.csproj` for `net10.0-android`) that ships in the samples repo and binds the underlying `.aar` plus a handful of Java callback classes (`GStreamer.java`, `GstAhcCallback.java`, `GstAhsCallback.java`, `GstAmcOnFrameAvailableListener.java`). Copy the entire `AndroidDependency/` folder from `https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency` next to your app and adjust the relative path in `<ProjectReference Include="...">`. The package alone is **not** enough — without the project reference, builds succeed but `MediaBlocksPipeline` aborts at first block construction with a missing-Java-class error.
 
 `Xamarin.Essentials 1.8.1` is used by the upstream sample for the `OnRequestPermissionsResult` plumbing. On `net10.0-android` you can substitute the built-in `AndroidX` permissions API if you prefer fewer dependencies — the SDK itself does not require Xamarin.Essentials.
 
@@ -400,7 +400,7 @@ These are the five most common production issues — flag any of them on first r
 
 **Cause**: the `AndroidDependency` `<ProjectReference>` is missing from the csproj. The `VisioForge.CrossPlatform.Core.Android` NuGet ships the native `.so` files but **not** the four Java glue classes (`GStreamer.java`, `GstAhcCallback.java`, `GstAhsCallback.java`, `GstAmcOnFrameAvailableListener.java`) — those live in the companion `AndroidDependency` project, which is `<AndroidJavaSource>`-compiled into your APK.
 
-**Fix**: copy the `AndroidDependency/` folder from the samples repo (`https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency`) next to your app, add `<ProjectReference Include="...\AndroidDependency\VisioForge.Core.Android.X10.csproj" />` (or `X9.csproj` if you target `net9.0-android`), and rebuild. `dotnet build` regenerates the binding stubs from the Java sources automatically.
+**Fix**: copy the `AndroidDependency/` folder from the samples repo (`https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency`) next to your app, add `<ProjectReference Include="...\AndroidDependency\VisioForge.Core.Android.X10.csproj" />`, and rebuild. `dotnet build` regenerates the binding stubs from the Java sources automatically.
 
 ### 3. AAB upload to Play Console fails / device install errors out with missing-`.so` for an ABI
 

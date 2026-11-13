@@ -52,8 +52,8 @@ L'exemple complet se trouve sur [GitHub](https://github.com/visioforge/.Net-SDK-
 Deux paquets : le SDK lui-même et le contrôle `VideoView` de MAUI.
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.6]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.6]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.12]"/>
 ```
 
 `VisioForge.DotNet.Core.UI.MAUI` ne fournit que le contrôle `VideoView` — à lui seul, il ne peut
@@ -82,8 +82,8 @@ builds Android.
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.3]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.3]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
 </ItemGroup>
 ```
 

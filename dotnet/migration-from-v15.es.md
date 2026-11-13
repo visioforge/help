@@ -48,6 +48,7 @@ La siguiente tabla muestra los frameworks objetivo compatibles en v2026:
 | .NET 8.0 | Compatible | Compatible |
 | .NET 9.0 | Compatible | Compatible |
 | .NET 10.0 | Compatible | Compatible |
+| .NET 11.0 | Compatible | Compatible |
 
 > **Nota:** Las clases DirectShow requieren un TFM de Windows (por ejemplo, `net10.0-windows`) o .NET Framework. Para X-engines, los TFMs específicos de plataforma controlan el objetivo: `net10.0-windows` para Windows, `net10.0-macos` para macOS, `net10.0-ios` para iOS, `net10.0-android` para Android. `net10.0` sin sufijo de plataforma es solo para Linux.
 

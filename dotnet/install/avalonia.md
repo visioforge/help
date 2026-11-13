@@ -182,7 +182,7 @@ Android implementation requires additional steps unique to Avalonia's Android in
 The VisioForge Android implementation requires a binding bridge between .NET and Android native APIs:
 
 1. Obtain the Java binding project from the [VisioForge samples repository](https://github.com/visioforge/.Net-SDK-s-samples) in the `AndroidDependency` directory
-2. Pick the binding project that matches the .NET target you build against - the folder ships one `VisioForge.Core.Android.X{N}.csproj` per supported .NET version (e.g., `VisioForge.Core.Android.X9.csproj` for .NET 9, `VisioForge.Core.Android.X10.csproj` for .NET 10). If your .NET target isn't listed, pick the closest supported one.
+2. Use `VisioForge.Core.Android.X10.csproj` from that folder. It targets `net10.0-android`, and a `net11.0-android` app references it as well.
 3. Reference this project in your Android head project:
 
 ```xml
@@ -230,6 +230,7 @@ Add the iOS-specific redistributable to your iOS head project:
 
 #### Important Implementation Notes
 
+- Set `<SupportedOSPlatformVersion>18.0</SupportedOSPlatformVersion>` in the iOS head project: the native iOS libraries are built for iOS 18.0
 - Physical device testing is essential, as simulator support is limited
 - Update your `Info.plist` with privacy descriptions:
   - `NSCameraUsageDescription` for camera access

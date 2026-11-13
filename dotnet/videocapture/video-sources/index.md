@@ -174,7 +174,7 @@ For scenarios requiring screen recording or application capture:
 
 ### DV Camcorder Integration
 
-The SDK maintains support for Digital Video (DV) format cameras:
+On Windows, the classic `VideoCaptureCore` engine supports Digital Video (DV) format cameras ([DV capture](../video-capture/dv.md), [HDV capture](../video-capture/mpeg2-camcorder.md), [device control](dv-camcorder-control.md)):
 
 - FireWire/IEEE 1394 connectivity support
 - Compatibility with standard DV, DVCAM, and HDV formats

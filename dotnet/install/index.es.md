@@ -124,7 +124,7 @@ Cada sistema operativo requiere configuraciones específicas de framework objeti
 Las aplicaciones Windows deben usar el sufijo de framework objetivo `-windows`:
 
 ```xml
-<TargetFramework>net8.0-windows</TargetFramework>
+<TargetFramework>net10.0-windows</TargetFramework>
 ```
 
 Esto permite acceso a APIs específicas de Windows y frameworks de UI como WPF y Windows Forms.
@@ -134,7 +134,7 @@ Esto permite acceso a APIs específicas de Windows y frameworks de UI como WPF y
 Los proyectos Android requieren el sufijo de framework `-android`:
 
 ```xml
-<TargetFramework>net8.0-android</TargetFramework>
+<TargetFramework>net10.0-android</TargetFramework>
 ```
 
 Asegúrese de que las cargas de trabajo de Android estén instaladas en su entorno de desarrollo:
@@ -148,7 +148,7 @@ dotnet workload install android
 Las aplicaciones iOS deben usar el framework objetivo `-ios`:
 
 ```xml
-<TargetFramework>net8.0-ios</TargetFramework>
+<TargetFramework>net10.0-ios</TargetFramework>
 ```
 
 El desarrollo iOS requiere un Mac con Xcode instalado, incluso cuando se usa Visual Studio en Windows.
@@ -158,13 +158,13 @@ El desarrollo iOS requiere un Mac con Xcode instalado, incluso cuando se usa Vis
 Las aplicaciones nativas de macOS usan el framework `-macos` o `-maccatalyst`:
 
 ```xml
-<TargetFramework>net8.0-macos</TargetFramework>
+<TargetFramework>net10.0-macos</TargetFramework>
 ```
 
 Para aplicaciones .NET MAUI dirigidas a macOS, use:
 
 ```xml
-<TargetFramework>net8.0-maccatalyst</TargetFramework>
+<TargetFramework>net10.0-maccatalyst</TargetFramework>
 ```
 
 #### Desarrollo Linux
@@ -172,7 +172,7 @@ Para aplicaciones .NET MAUI dirigidas a macOS, use:
 Las aplicaciones Linux usan el framework objetivo estándar sin sufijo de plataforma:
 
 ```xml
-<TargetFramework>net8.0</TargetFramework>
+<TargetFramework>net10.0</TargetFramework>
 ```
 
 Asegúrese de que las cargas de trabajo .NET requeridas estén instaladas:

@@ -182,7 +182,7 @@ L'implémentation Android nécessite des étapes supplémentaires propres au mod
 L'implémentation Android de VisioForge requiert un pont de bindings entre .NET et les API natives d'Android :
 
 1. Obtenez le projet de bindings Java depuis le [dépôt d'exemples VisioForge](https://github.com/visioforge/.Net-SDK-s-samples) dans le répertoire `AndroidDependency`
-2. Choisissez le projet de bindings correspondant à la version de .NET que vous ciblez - le dossier fournit un `VisioForge.Core.Android.X{N}.csproj` par version de .NET prise en charge (par exemple `VisioForge.Core.Android.X9.csproj` pour .NET 9, `VisioForge.Core.Android.X10.csproj` pour .NET 10). Si votre version de .NET n'est pas listée, choisissez la plus proche disponible.
+2. Utilisez `VisioForge.Core.Android.X10.csproj` de ce dossier. Il cible `net10.0-android`, et une application `net11.0-android` peut aussi le référencer.
 3. Référencez ce projet dans votre projet principal Android :
 
 ```xml
@@ -230,6 +230,7 @@ Ajoutez le redistribuable spécifique à iOS à votre projet principal iOS :
 
 #### Notes d'implémentation importantes
 
+- Définissez `<SupportedOSPlatformVersion>18.0</SupportedOSPlatformVersion>` dans le projet principal iOS : les bibliothèques natives iOS sont compilées pour iOS 18.0
 - Les tests sur appareil physique sont essentiels, car la prise en charge du simulateur est limitée
 - Mettez à jour votre `Info.plist` avec les descriptions de confidentialité :
   - `NSCameraUsageDescription` pour l'accès à la caméra

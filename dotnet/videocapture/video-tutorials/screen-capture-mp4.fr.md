@@ -10,6 +10,7 @@ tags:
   - VideoCaptureCoreX
   - Windows
   - WinForms
+  - WPF
   - GStreamer
   - Capture
   - Encoding
@@ -22,11 +23,18 @@ tags:
   - C#
   - NuGet
 primary_api_classes:
+  - VideoCaptureCoreX
   - MP4Output
   - ScreenCaptureSourceSettings
   - ScreenCaptureD3D11SourceSettings
   - VideoCaptureCore
   - AudioCaptureSource
+  - LoopbackAudioCaptureDeviceSourceSettings
+  - VideoView
+video:
+  id: 17eaRlDqM_I
+  upload_date: 2026-11-11T19:35:01Z
+  duration: PT8M51S
 
 ---
 
@@ -34,20 +42,183 @@ primary_api_classes:
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
+Ce tutoriel enregistre l'écran et le son du système dans un fichier MP4 depuis une application WPF. Le moteur `VideoCaptureCoreX` capture l'écran principal via Direct3D 11, affiche un aperçu en direct dans un `VideoView` et encode le H.264 sur le GPU lorsque le PC dispose d'un encodeur matériel, avec un audio AAC. Le son joué sur les haut-parleurs est enregistré via WASAPI loopback.
+
+Le moteur classique `VideoCaptureCore` enregistre aussi l'écran ; sa version de l'application se trouve [plus bas sur cette page](#deuxieme-option-videocapturecore).
+
 ## Tutoriel YouTube
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/fPJEoOz6lIM?controls=1" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/17eaRlDqM_I?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
+
+[Code source sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/screen-capture-mp4-wpf)
+
+## Paquets NuGet requis
+
+- [VisioForge.DotNet.VideoCapture](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture/) — le SDK ; le `VideoView` WPF y est inclus
+- [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — le runtime GStreamer sur lequel fonctionne le moteur X
+- [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — l'encodeur audio AAC
+
+Ce sont les paquets x64 : le projet définit donc `<PlatformTarget>x64</PlatformTarget>` ; une application 32 bits utilise les paquets `.x86`. Consultez [Déploiement sous Windows](../../deployment-x/Windows.md) pour la liste complète.
+
+## La fenêtre en XAML
+
+Le préfixe `vf` associe l'espace de noms `VisioForge.Core.UI.WPF` de l'assembly `VisioForge.Core`. La colonne de gauche contient la liste des haut-parleurs, la case du son et les boutons ; la colonne de droite, le `VideoView` où l'aperçu en direct est affiché. Start reste désactivé tant que le SDK n'est pas chargé.
+
+```xml
+<Window x:Class="ScreenCaptureMp4Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"
+        Title="Screen to MP4" Height="560" Width="1000"
+        Loaded="Window_Loaded" Closing="Window_Closing">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+            <Label Content="Speakers" />
+            <ComboBox x:Name="cbSpeakers" />
+            <CheckBox x:Name="cbRecordSound" Content="Record system sound" IsChecked="True"
+                      Margin="0,10,0,0" />
+
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                <Button x:Name="btStart" Content="Start" Width="100" IsEnabled="False"
+                        Click="btStart_Click" />
+                <Button x:Name="btStop" Content="Stop" Width="100" Margin="10,0,0,0"
+                        IsEnabled="False" Click="btStop_Click" />
+            </StackPanel>
+        </StackPanel>
+
+        <vf:VideoView x:Name="VideoView1" Grid.Column="1" Background="Black" />
+    </Grid>
+</Window>
+```
+
+## Le code de la fenêtre
+
+```csharp
+using System.ComponentModel;
+using System.IO;
+using System.Windows;
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+namespace ScreenCaptureMp4Wpf;
+
+public partial class MainWindow : Window
+{
+    private VideoCaptureCoreX videoCapture1;
+
+    private AudioOutputDeviceInfo[] speakers;
+
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        await VisioForgeX.InitSDKAsync();
+
+        videoCapture1 = new VideoCaptureCoreX(VideoView1);
+
+        // Affiche les erreurs du SDK dans la barre de titre
+        videoCapture1.OnError += (_, args) => Dispatcher.InvokeAsync(() => Title = args.Message);
+
+        // Le son de ces sorties est enregistré via WASAPI loopback
+        speakers = await DeviceEnumerator.Shared.AudioOutputsAsync(AudioOutputDeviceAPI.WASAPI2);
+        foreach (var device in speakers)
+            cbSpeakers.Items.Add(device.Name);
+
+        if (cbSpeakers.Items.Count > 0) cbSpeakers.SelectedIndex = 0;
+
+        btStart.IsEnabled = true;
+    }
+
+    private async void btStart_Click(object sender, RoutedEventArgs e)
+    {
+        // Tout l'écran principal, avec le curseur de la souris
+        videoCapture1.Video_Source = new ScreenCaptureD3D11SourceSettings
+        {
+            FrameRate = new VideoFrameRate(30)
+        };
+
+        var recordSound = cbRecordSound.IsChecked == true && cbSpeakers.SelectedIndex >= 0;
+        videoCapture1.Audio_Source = recordSound
+            ? new LoopbackAudioCaptureDeviceSourceSettings(speakers[cbSpeakers.SelectedIndex])
+            : null;
+        videoCapture1.Audio_Record = recordSound;
+        videoCapture1.Audio_Play = false; // ne jamais rejouer le son capturé dans les haut-parleurs
+
+        // H.264 sur l'encodeur GPU s'il existe, OpenH264 sinon ; audio AAC
+        videoCapture1.Outputs_Clear();
+        videoCapture1.Outputs_Add(new MP4Output(Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), $"screen_{DateTime.Now:yyyyMMdd_HHmmss}.mp4")));
+
+        btStart.IsEnabled = false;
+        var started = await videoCapture1.StartAsync();
+        btStop.IsEnabled = started;
+        btStart.IsEnabled = !started;
+    }
+
+    private async void btStop_Click(object sender, RoutedEventArgs e)
+    {
+        btStop.IsEnabled = false;
+        await videoCapture1.StopAsync();
+        btStart.IsEnabled = true;
+    }
+
+    private async void Window_Closing(object sender, CancelEventArgs e)
+    {
+        if (btStart.IsEnabled)
+        {
+            videoCapture1.Dispose();
+            VisioForgeX.DestroySDK();
+            return;
+        }
+
+        e.Cancel = true; // encore en chargement ou en enregistrement : finaliser d'abord le MP4
+        if (!btStop.IsEnabled) return; // déjà en chargement, en démarrage ou en arrêt
+        btStop.IsEnabled = false;
+        await videoCapture1.StopAsync();
+        btStart.IsEnabled = true;
+        await Dispatcher.InvokeAsync(Close); // pas Close() : WPF lève une exception dans Closing
+    }
+}
+```
+
+## Fonctionnement
+
+1. **Initialisation du SDK** — `VisioForgeX.InitSDKAsync` s'exécute une fois, au chargement de la fenêtre. Le premier lancement sur un PC est plus long, c'est pourquoi Start n'est activé qu'une fois l'appel terminé. `VisioForgeX.DestroySDK` le libère à la fermeture de la fenêtre.
+2. **Source écran** — `ScreenCaptureD3D11SourceSettings` capture par défaut tout l'écran principal avec le curseur de la souris. Il utilise DXGI Desktop Duplication, qui démarre immédiatement même sur un écran immobile, et se rabat sur Windows Graphics Capture lorsque Desktop Duplication n'est pas pris en charge. La fréquence par défaut est de 10 i/s, c'est pourquoi le code fixe 30.
+3. **Son du système** — `AudioOutputsAsync(AudioOutputDeviceAPI.WASAPI2)` liste les haut-parleurs et les casques, et `LoopbackAudioCaptureDeviceSourceSettings` enregistre ce qui est joué sur celui choisi. `Audio_Play` vaut `false`, le son enregistré n'est donc pas rejoué.
+4. **Sortie MP4** — `MP4Output` sans paramètres d'encodeur choisit NVIDIA NVENC, puis AMD AMF, puis Intel Quick Sync, et OpenH264 sur le CPU si aucun n'est présent. L'audio est en AAC. Une sortie reste dans le moteur après un enregistrement, c'est pourquoi `Outputs_Clear` s'exécute avant chaque nouvel enregistrement.
+5. **Démarrer, arrêter et fermer** — `StartAsync` indique si la capture a démarré, et `StopAsync` finalise le fichier MP4. Fermer la fenêtre pendant un enregistrement annule la fermeture, attend `StopAsync` et referme la fenêtre.
+
+## Remarques
+
+- Un projet WPF exclut `System.IO` de ses usings implicites, le fichier l'ajoute donc pour `Path`.
+- L'aperçu montre l'écran enregistré : la fenêtre de l'application apparaît donc en elle-même, dans l'aperçu et dans le fichier. Sur un PC à deux écrans, déplacez la fenêtre sur celui qui n'est pas enregistré ; avec un seul écran, réduisez-la après Start et restaurez-la pour arrêter.
+- Avec **Record system sound** décochée, ou sans haut-parleurs dans la liste, le MP4 ne contient que la vidéo.
+- `MP4Output` choisit un encodeur GPU parce que son élément GStreamer existe, ce qui ne prouve pas qu'il puisse encoder à ce moment-là. `H264EncoderBlock.CanEncodeAsync` encode quelques images de test pour le vérifier ; pour rester sur le CPU, passez `new OpenH264EncoderSettings()` au constructeur de `MP4Output`.
+
+## Deuxième option : VideoCaptureCore
+
+Le moteur Windows classique, `VideoCaptureCore`, enregistre l'écran en MP4 dans une application WinForms, avec ou sans microphone.
 
 [Code source sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/screen-capture-mp4)
 
-## Redistribuables requis
+### Redistribuables requis
 
 - Redistribuables de capture vidéo [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
 - Redistribuables MP4 [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
-
-## API héritée — Video Capture SDK
 
 ### Exemple de code
 
@@ -170,18 +341,123 @@ namespace screen_capture_mp4
 }
 ```
 
-## API moderne — Video Capture SDK X
+### Fonctionnement — VideoCaptureCore
 
-L'API moderne multiplateforme utilise `VideoCaptureCoreX` avec la capture d'écran Direct3D 11 et Windows Graphics Capture (WGC). Cette application console enregistre tout l'écran en MP4 avec l'audio système optionnel.
+Cette application Windows Forms montre la fonctionnalité de capture d'écran avec et sans audio à l'aide de VisioForge Video Capture SDK :
 
-### Paquets NuGet requis
+1. **Configuration** : L'objet `VideoCaptureCore` est initialisé lors de l'événement de chargement du formulaire, en le connectant à un composant de vue vidéo.
 
-```bash
-dotnet add package VisioForge.DotNet.Core
-dotnet add package VisioForge.DotNet.VideoCapture
+2. **Capture avec audio** :
+   - Configure la capture d'écran en mode plein écran
+   - Sélectionne le premier périphérique audio disponible pour l'enregistrement
+   - Désactive la lecture audio mais active l'enregistrement audio
+   - Définit le fichier de sortie au format MP4 dans le dossier Vidéos de l'utilisateur
+   - Utilise une méthode asynchrone pour démarrer la capture
+
+3. **Capture sans audio** :
+   - Similaire à ci-dessus mais désactive à la fois la lecture et l'enregistrement audio
+   - Utilise le même format de sortie MP4 et le même mode de capture
+
+4. **Arrêt de la capture** :
+   - Fournit une méthode simple d'arrêt qui stoppe l'enregistrement de manière asynchrone
+
+L'application montre comment configurer différents scénarios de capture avec un minimum de code en utilisant l'interface fluide du SDK et les motifs asynchrones.
+
+#### Configuration audio
+
+L'exemple de code ci-dessus capture l'audio du microphone en sélectionnant le premier périphérique disponible. Vous pouvez sélectionner un périphérique audio spécifique par son nom, y compris les périphériques audio système (loopback) pour capturer le son du bureau :
+
+```csharp
+// Sélectionner un périphérique loopback (par ex., « Stereo Mix ») pour la capture audio système
+var devices = videoCapture1.Audio_CaptureDevices();
+var loopbackDevice = devices.FirstOrDefault(d => d.Name.Contains("Stereo Mix"));
+
+if (loopbackDevice != null)
+{
+    videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(loopbackDevice.Name);
+}
+else
+{
+    // Solution de repli : utiliser le premier périphérique audio disponible
+    videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(devices[0].Name);
+}
+
+// Activer l'enregistrement, désactiver la lecture pour éviter le retour
+videoCapture1.Audio_RecordAudio = true;
+videoCapture1.Audio_PlayAudio = false;
 ```
 
-Ajoutez le [paquet redistribuable](../../deployment-x/index.md) pour votre plateforme (par exemple, `VisioForge.DotNet.Core.Redist.Base.x64`).
+Pour créer un enregistrement silencieux sans piste audio, désactivez les deux propriétés audio :
+
+```csharp
+videoCapture1.Audio_PlayAudio = false;
+videoCapture1.Audio_RecordAudio = false;
+```
+
+#### Capture d'une région
+
+Au lieu d'enregistrer tout l'écran, capturez une zone rectangulaire spécifique en définissant `FullScreen = false` et en fournissant des coordonnées en pixels :
+
+```csharp
+videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
+{
+    FullScreen = false,
+    Left = 100,
+    Top = 100,
+    Right = 1380,
+    Bottom = 820
+};
+```
+
+Les coordonnées définissent le rectangle de capture en pixels d'écran. C'est utile pour enregistrer une fenêtre d'application spécifique ou une portion du bureau.
+
+#### Enregistrement multi-écrans
+
+Sélectionnez l'écran à enregistrer à l'aide de la propriété `DisplayIndex`. L'écran principal porte l'index `0`, le secondaire `1`, et ainsi de suite :
+
+```csharp
+videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
+{
+    FullScreen = true,
+    DisplayIndex = 1  // Enregistrer l'écran secondaire
+};
+```
+
+#### Paramètres de qualité d'enregistrement
+
+Personnalisez la sortie MP4 en configurant l'encodeur H.264. Le débit binaire par défaut est de 3500 kbps, ce qui produit environ 25 Mo par minute en 1080p :
+
+```csharp
+var mp4Output = new MP4Output();
+mp4Output.Video.Bitrate = 5000;                          // Qualité supérieure (kbps)
+mp4Output.Video.Profile = H264Profile.ProfileMain;       // Meilleure compression que Baseline
+mp4Output.Video.RateControl = H264RateControl.VBR;       // Débit variable
+videoCapture1.Output_Format = mp4Output;
+```
+
+#### Options du curseur de la souris
+
+Incluez le curseur de la souris dans l'enregistrement et ajoutez éventuellement un effet de surbrillance pour les captures d'écran de type tutoriel :
+
+```csharp
+videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
+{
+    FullScreen = true,
+    GrabMouseCursor = true,
+    MouseHighlight = true,
+    MouseHighlightColor = System.Drawing.Color.Yellow,
+    MouseHighlightRadius = 40,
+    MouseHighlightOpacity = 0.4
+};
+```
+
+La surbrillance dessine un cercle translucide autour du curseur, ce qui facilite le suivi des mouvements de la souris par les spectateurs.
+
+## Application console — VideoCaptureCoreX { #api-moderne-video-capture-sdk-x }
+
+Le moteur multiplateforme `VideoCaptureCoreX` fonctionne aussi sans fenêtre, avec la capture d'écran Direct3D 11 (Desktop Duplication). Cette application console enregistre tout l'écran en MP4 avec l'audio système optionnel.
+
+Elle utilise les mêmes paquets que l'application WPF : consultez [Paquets NuGet requis](#paquets-nuget-requis).
 
 Les mêmes paquets sont utilisés pour l’essai de 30 jours et les applications sous licence. Consultez la [page de licence VisioForge](https://www.visioforge.com/licensing) pour les conditions d’essai et l’activation avec `.vflicense`.
 
@@ -208,7 +484,7 @@ class Program
 
         try
         {
-            // Configurer la capture d'écran Direct3D 11 avec WGC
+            // Configurer la capture d'écran Direct3D 11 (Desktop Duplication par défaut)
             var screenSource = new ScreenCaptureD3D11SourceSettings
             {
                 FrameRate = new VideoFrameRate(25, 1),
@@ -374,130 +650,16 @@ Le SDK prend en charge la capture d'écran sur Windows, macOS et Linux avec des 
 | macOS | AVFoundation | `ScreenCaptureMacOSSourceSettings` | macOS 10.15+ (autorisation d'enregistrement d'écran) |
 | Linux | X11 / XDisplay | `ScreenCaptureXDisplaySourceSettings` | Serveur X11 |
 
-Sous Windows, le SDK sélectionne automatiquement WGC lorsqu'il est disponible, en se rabattant sur DXGI Desktop Duplication sur les systèmes plus anciens. Vous pouvez forcer une API spécifique :
+Sous Windows, le SDK utilise DXGI Desktop Duplication par défaut : la capture démarre immédiatement, même sur un écran immobile, et se rabat sur WGC lorsque Desktop Duplication n'est pas pris en charge. La capture de fenêtre utilise toujours WGC. Vous pouvez aussi choisir WGC pour un écran ; lui aussi démarre immédiatement sur un écran immobile :
 
 ```csharp
 var screenSource = new ScreenCaptureD3D11SourceSettings
 {
-    API = D3D11ScreenCaptureAPI.DXGI  // Forcer Desktop Duplication au lieu de WGC
+    API = D3D11ScreenCaptureAPI.WGC  // Windows Graphics Capture au lieu de Desktop Duplication
 };
 ```
 
 Pour Android et iOS, ainsi qu'un enregistreur .NET MAUI qui fonctionne sous Windows, Mac Catalyst, Android et iOS, consultez [Enregistrement d'écran multiplateforme en C# et .NET](https://www.visioforge.com/fr/solutions/screen-recording-csharp).
-
-## Comment ça fonctionne — API héritée
-
-Cette application Windows Forms montre la fonctionnalité de capture d'écran avec et sans audio à l'aide de VisioForge Video Capture SDK :
-
-1. **Configuration** : L'objet `VideoCaptureCore` est initialisé lors de l'événement de chargement du formulaire, en le connectant à un composant de vue vidéo.
-
-2. **Capture avec audio** :
-   - Configure la capture d'écran en mode plein écran
-   - Sélectionne le premier périphérique audio disponible pour l'enregistrement
-   - Désactive la lecture audio mais active l'enregistrement audio
-   - Définit le fichier de sortie au format MP4 dans le dossier Vidéos de l'utilisateur
-   - Utilise une méthode asynchrone pour démarrer la capture
-
-3. **Capture sans audio** :
-   - Similaire à ci-dessus mais désactive à la fois la lecture et l'enregistrement audio
-   - Utilise le même format de sortie MP4 et le même mode de capture
-
-4. **Arrêt de la capture** :
-   - Fournit une méthode simple d'arrêt qui stoppe l'enregistrement de manière asynchrone
-
-L'application montre comment configurer différents scénarios de capture avec un minimum de code en utilisant l'interface fluide du SDK et les motifs asynchrones.
-
-### Configuration audio
-
-L'exemple de code ci-dessus capture l'audio du microphone en sélectionnant le premier périphérique disponible. Vous pouvez sélectionner un périphérique audio spécifique par son nom, y compris les périphériques audio système (loopback) pour capturer le son du bureau :
-
-```csharp
-// Sélectionner un périphérique loopback (par ex., « Stereo Mix ») pour la capture audio système
-var devices = videoCapture1.Audio_CaptureDevices();
-var loopbackDevice = devices.FirstOrDefault(d => d.Name.Contains("Stereo Mix"));
-
-if (loopbackDevice != null)
-{
-    videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(loopbackDevice.Name);
-}
-else
-{
-    // Solution de repli : utiliser le premier périphérique audio disponible
-    videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(devices[0].Name);
-}
-
-// Activer l'enregistrement, désactiver la lecture pour éviter le retour
-videoCapture1.Audio_RecordAudio = true;
-videoCapture1.Audio_PlayAudio = false;
-```
-
-Pour créer un enregistrement silencieux sans piste audio, désactivez les deux propriétés audio :
-
-```csharp
-videoCapture1.Audio_PlayAudio = false;
-videoCapture1.Audio_RecordAudio = false;
-```
-
-### Capture d'une région
-
-Au lieu d'enregistrer tout l'écran, capturez une zone rectangulaire spécifique en définissant `FullScreen = false` et en fournissant des coordonnées en pixels :
-
-```csharp
-videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
-{
-    FullScreen = false,
-    Left = 100,
-    Top = 100,
-    Right = 1380,
-    Bottom = 820
-};
-```
-
-Les coordonnées définissent le rectangle de capture en pixels d'écran. C'est utile pour enregistrer une fenêtre d'application spécifique ou une portion du bureau.
-
-### Enregistrement multi-écrans
-
-Sélectionnez l'écran à enregistrer à l'aide de la propriété `DisplayIndex`. L'écran principal porte l'index `0`, le secondaire `1`, et ainsi de suite :
-
-```csharp
-videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
-{
-    FullScreen = true,
-    DisplayIndex = 1  // Enregistrer l'écran secondaire
-};
-```
-
-### Paramètres de qualité d'enregistrement
-
-Personnalisez la sortie MP4 en configurant l'encodeur H.264. Le débit binaire par défaut est de 3500 kbps, ce qui produit environ 25 Mo par minute en 1080p :
-
-```csharp
-var mp4Output = new MP4Output();
-mp4Output.Video.Bitrate = 5000;                          // Qualité supérieure (kbps)
-mp4Output.Video.Profile = H264Profile.ProfileMain;       // Meilleure compression que Baseline
-mp4Output.Video.RateControl = H264RateControl.VBR;       // Débit variable
-videoCapture1.Output_Format = mp4Output;
-```
-
-Pour l'encodage accéléré par GPU, consultez la section [Encodage accéléré par GPU](#encodage-accelere-par-gpu) ci-dessus.
-
-### Options du curseur de la souris
-
-Incluez le curseur de la souris dans l'enregistrement et ajoutez éventuellement un effet de surbrillance pour les captures d'écran de type tutoriel :
-
-```csharp
-videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
-{
-    FullScreen = true,
-    GrabMouseCursor = true,
-    MouseHighlight = true,
-    MouseHighlightColor = System.Drawing.Color.Yellow,
-    MouseHighlightRadius = 40,
-    MouseHighlightOpacity = 0.4
-};
-```
-
-La surbrillance dessine un cercle translucide autour du curseur, ce qui facilite le suivi des mouvements de la souris par les spectateurs.
 
 ## Questions fréquentes
 
@@ -511,15 +673,73 @@ Configurez le débit binaire vidéo de `MP4Output` pour équilibrer qualité et 
 
 ### Puis-je capturer l'audio système (son du bureau) au lieu de l'entrée microphone ?
 
-Oui. Appelez `Audio_CaptureDevices()` pour énumérer tous les périphériques audio disponibles, puis sélectionnez un périphérique loopback ou audio système (comme « Stereo Mix » ou « What U Hear ») par son nom. Définissez `Audio_RecordAudio = true` et `Audio_PlayAudio = false`. Les noms des périphériques loopback disponibles dépendent de votre matériel audio et de vos pilotes. Vous pouvez enregistrer simultanément le microphone et l'audio système en configurant des sources audio supplémentaires.
+Oui. Avec `VideoCaptureCoreX`, passez un haut-parleur de `DeviceEnumerator.Shared.AudioOutputsAsync(AudioOutputDeviceAPI.WASAPI2)` à `LoopbackAudioCaptureDeviceSourceSettings`, comme le fait l'application WPF ci-dessus : il enregistre ce qui est joué sur ce périphérique, sans pilote particulier. Avec `VideoCaptureCore`, appelez `Audio_CaptureDevices()` pour énumérer tous les périphériques audio disponibles, puis sélectionnez un périphérique loopback ou audio système (comme « Stereo Mix » ou « What U Hear ») par son nom. Définissez `Audio_RecordAudio = true` et `Audio_PlayAudio = false`. Les noms des périphériques loopback disponibles dépendent de votre matériel audio et de vos pilotes. Vous pouvez enregistrer simultanément le microphone et l'audio système en configurant des sources audio supplémentaires.
 
 ### Comment enregistrer un écran spécifique dans une configuration multi-écrans ?
 
-Définissez la propriété `DisplayIndex` sur `ScreenCaptureSourceSettings` — utilisez `0` pour l'écran principal, `1` pour le secondaire, et ainsi de suite. Combinez avec `FullScreen = true` pour capturer tout l'écran sélectionné. Vous pouvez également définir `FullScreen = false` avec les coordonnées `Left/Top/Right/Bottom` pour capturer une région spécifique sur l'écran choisi.
+Avec `VideoCaptureCoreX`, définissez `MonitorIndex` sur `ScreenCaptureD3D11SourceSettings` (`0` est le premier écran, `-1` l'écran principal) et donnez à `Rectangle` la taille de cet écran. Avec `VideoCaptureCore`, définissez la propriété `DisplayIndex` sur `ScreenCaptureSourceSettings` — utilisez `0` pour l'écran principal, `1` pour le secondaire, et ainsi de suite. Combinez avec `FullScreen = true` pour capturer tout l'écran sélectionné. Vous pouvez également définir `FullScreen = false` avec les coordonnées `Left/Top/Right/Bottom` pour capturer une région spécifique sur l'écran choisi.
 
 ### Quelle fréquence d'images dois-je utiliser pour l'enregistrement d'écran ?
 
-La fréquence d'images par défaut est de 10 FPS. Utilisez 15 FPS pour les présentations, les diapositives et le contenu majoritairement statique. Utilisez 25–30 FPS pour les tutoriels logiciels et les démonstrations d'interface où le mouvement fluide de la souris importe. Utilisez 60 FPS pour l'enregistrement de jeux ou le contenu très animé. Des fréquences d'images plus élevées augmentent proportionnellement la taille du fichier et l'utilisation du CPU. Définissez la fréquence d'images via `ScreenCaptureSourceSettings.FrameRate`.
+La fréquence d'images par défaut est de 10 FPS. Utilisez 15 FPS pour les présentations, les diapositives et le contenu majoritairement statique. Utilisez 25–30 FPS pour les tutoriels logiciels et les démonstrations d'interface où le mouvement fluide de la souris importe. Utilisez 60 FPS pour l'enregistrement de jeux ou le contenu très animé. Des fréquences d'images plus élevées augmentent proportionnellement la taille du fichier et l'utilisation du CPU. Définissez la fréquence d'images via `ScreenCaptureD3D11SourceSettings.FrameRate` avec `VideoCaptureCoreX`, ou `ScreenCaptureSourceSettings.FrameRate` avec `VideoCaptureCore`.
+
+## Transcription de la vidéo
+
+### Ce que nous construisons
+
+Enregistrons l'écran et le son du système dans un fichier MP4 depuis une application C# WPF avec le VisioForge Video Capture SDK. Voici ce que nous construisons. L'application enregistre tout l'écran principal, avec le curseur de la souris, et le son joué sur les haut-parleurs. Elle écrit du MP4, avec du H.264 encodé sur le GPU lorsque le PC dispose d'un encodeur matériel, et un audio AAC. Un VideoView affiche un aperçu en direct, et la fenêtre est décrite en XAML. Le code de la fenêtre tient en une quatre-vingt-dizaine de lignes de C#. Voici l'application terminée, en train d'enregistrer. L'aperçu montre l'écran, et l'écran contient l'aperçu : l'image se répète comme entre deux miroirs face à face.
+
+### Prérequis
+
+Il vous faut Windows 10 ou 11, et Visual Studio 2022 ou 2026 avec la charge de travail Développement .NET Desktop. Le projet cible .NET 8 ou une version ultérieure. Le guide écrit présente aussi l'enregistrement d'écran avec le moteur classique VideoCaptureCore.
+
+### Créer un projet WPF
+
+Dans Visual Studio, créez un nouveau projet. Recherchez WPF et choisissez WPF Application pour C#. Nommez le projet ScreenCaptureMp4Wpf. Choisissez .NET 10 et cliquez sur Create. Visual Studio ouvre MainWindow.xaml, avec le concepteur en haut et le XAML en bas.
+
+### Ajouter les paquets NuGet
+
+Ajoutez maintenant trois paquets NuGet. Le Video Capture SDK lui-même. CrossPlatform Core, le runtime GStreamer sur lequel fonctionne le moteur X. Et CrossPlatform Libav, qui contient l'encodeur AAC. Ou utilisez le NuGet Package Manager : clic droit sur le projet, Manage NuGet Packages, puis installez VisioForge.DotNet.VideoCapture depuis l'onglet Browse. Installez ensuite les paquets Core et Libav pour Windows x64. L'onglet Installed affiche les trois. Ce sont les paquets x64 : définissez donc PlatformTarget sur x64 dans le fichier de projet. Une application 32 bits utilise plutôt les paquets x86.
+
+### Construire la fenêtre en XAML
+
+La fenêtre s'écrit en XAML. D'abord la fenêtre elle-même, avec une grille à deux colonnes et un VideoView, et le concepteur la dessine aussitôt. Associez l'espace de noms VisioForge.Core.UI.WPF à un préfixe, ici vf. Le VideoView va dans la colonne de droite : c'est là que l'aperçu en direct est dessiné. La fenêtre nomme aussi ses gestionnaires Loaded et Closing. Ensuite, la liste des haut-parleurs et une case à cocher pour le son. La colonne de gauche est un StackPanel avec une étiquette, une liste déroulante pour les haut-parleurs et une case qui active ou désactive le son. Elle est cochée au départ. Enfin, les boutons Start et Stop. Chaque bouton nomme un gestionnaire Click. Les deux sont désactivés au départ : Start jusqu'au chargement du SDK, et Stop tant qu'aucun enregistrement n'est en cours. Chaque gestionnaire nommé par le XAML va dans MainWindow.xaml.cs, et les chapitres suivants les écrivent.
+
+### Initialiser le SDK
+
+MainWindow.xaml.cs commence par ces usings. Un projet WPF exclut System.IO de ses usings implicites : ajoutez-le pour Path. Au chargement de la fenêtre, attendez VisioForgeX.InitSDKAsync une seule fois. Créez ensuite le moteur VideoCaptureCoreX et passez-lui le VideoView, où l'aperçu est dessiné. Les erreurs du moteur arrivent dans l'événement OnError ; ici, elles vont dans la barre de titre.
+
+### Lister les haut-parleurs
+
+AudioOutputsAsync avec WASAPI2 liste les haut-parleurs et les casques. Leurs noms remplissent la liste, et le premier est sélectionné. Start n'est activé que maintenant, une fois le SDK chargé. WASAPI loopback enregistre tout ce qui est joué sur un périphérique de sortie. Il ne faut ni Stereo Mix ni câble virtuel. Choisissez le périphérique sur lequel le son est réellement joué, car loopback n'enregistre que celui-là.
+
+### Capturer l'écran
+
+Dans le gestionnaire de Start, définissez la source vidéo sur ScreenCaptureD3D11SourceSettings. Par défaut, elle capture tout l'écran principal avec le curseur de la souris. La fréquence par défaut est de dix images par seconde, réglez-la donc à trente. La source utilise Windows Graphics Capture sous Windows 10 version 1803 et ultérieures, et DXGI Desktop Duplication sur les systèmes plus anciens. MonitorIndex choisit un autre écran, et CaptureCursor à false laisse le curseur de côté.
+
+### Enregistrer le son du système
+
+Lorsque la case est cochée et qu'un périphérique est sélectionné, la source audio est LoopbackAudioCaptureDeviceSourceSettings pour ce périphérique, et Audio_Record est activé. Sinon, il n'y a pas de source audio, et le MP4 ne contient que la vidéo. Audio_Play vaut false : le son enregistré n'est donc pas rejoué dans les haut-parleurs.
+
+### Écrire le MP4
+
+Ajoutez un MP4Output qui écrit dans le dossier Vidéos, avec la date et l'heure dans le nom du fichier, pour qu'un deuxième enregistrement n'écrase jamais le premier. Une sortie reste dans le moteur après un enregistrement, c'est pourquoi Outputs_Clear s'exécute avant chaque nouvel enregistrement. Sans paramètres d'encodeur, MP4Output choisit NVIDIA NVENC, puis AMD AMF, puis Intel Quick Sync, et OpenH264 sur le CPU si le PC n'en a aucun. L'audio est en AAC. H264EncoderBlock.CanEncodeAsync encode quelques images de test lorsque vous devez savoir si un encodeur GPU fonctionne vraiment.
+
+### Démarrer et arrêter
+
+StartAsync indique si la capture a démarré, et les boutons suivent. StopAsync finalise le fichier MP4. Si la fenêtre se ferme pendant un enregistrement, annulez la fermeture, attendez StopAsync et refermez. Lors de ce second passage, le moteur et le SDK sont libérés : le fichier est toujours complet.
+
+### Lancer l'application
+
+Lancez l'application depuis Visual Studio. Une fois le SDK chargé, la liste des haut-parleurs se remplit et Start est activé. Cliquez sur Start. L'aperçu montre l'écran avec l'application à l'intérieur, encore et encore. Le son d'alarme joué pendant ce temps entre dans le fichier par loopback. Stop finalise le MP4. Fermez ensuite la fenêtre. Le fichier arrive dans Vidéos : en 4K à trente images par seconde, avec le son du système.
+
+### Erreurs fréquentes
+
+Quelques erreurs fréquentes. Oublier le paquet Libav, qui contient l'encodeur AAC. Mélanger des paquets x86 et x64, ou lancer une application x86 avec les paquets x64. Oublier que chaque fenêtre de l'écran enregistré finit dans la vidéo, y compris celle de l'application : sur un PC à deux écrans, déplacez-la sur celui qui n'est pas enregistré. Et le loopback sur un périphérique où le son n'est pas joué. Les erreurs du moteur arrivent dans l'événement OnError.
+
+### Étapes suivantes
+
+Des guides couvrent aussi l'enregistrement d'une région ou d'une seule fenêtre, l'ajout d'un microphone, l'enregistrement d'une webcam et la diffusion réseau. Le code source complet est sur GitHub, et la documentation sur visioforge.com/help. Merci de votre attention.
 
 ## Voir aussi
 

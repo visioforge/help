@@ -124,7 +124,7 @@ Each operating system requires specific target framework settings for optimal co
 Windows applications must use the `-windows` target framework suffix:
 
 ```xml
-<TargetFramework>net8.0-windows</TargetFramework>
+<TargetFramework>net10.0-windows</TargetFramework>
 ```
 
 This enables access to Windows-specific APIs and UI frameworks like WPF and Windows Forms.
@@ -134,7 +134,7 @@ This enables access to Windows-specific APIs and UI frameworks like WPF and Wind
 Android projects require the `-android` framework suffix:
 
 ```xml
-<TargetFramework>net8.0-android</TargetFramework>
+<TargetFramework>net10.0-android</TargetFramework>
 ```
 
 Ensure that Android workloads are installed in your development environment:
@@ -148,7 +148,7 @@ dotnet workload install android
 iOS applications must use the `-ios` target framework:
 
 ```xml
-<TargetFramework>net8.0-ios</TargetFramework>
+<TargetFramework>net10.0-ios</TargetFramework>
 ```
 
 iOS development requires a Mac with Xcode installed, even when using Visual Studio on Windows.
@@ -158,13 +158,13 @@ iOS development requires a Mac with Xcode installed, even when using Visual Stud
 macOS native applications use either the `-macos` or `-maccatalyst` framework:
 
 ```xml
-<TargetFramework>net8.0-macos</TargetFramework>
+<TargetFramework>net10.0-macos</TargetFramework>
 ```
 
 For .NET MAUI applications targeting macOS, use:
 
 ```xml
-<TargetFramework>net8.0-maccatalyst</TargetFramework>
+<TargetFramework>net10.0-maccatalyst</TargetFramework>
 ```
 
 #### Linux Development
@@ -172,7 +172,7 @@ For .NET MAUI applications targeting macOS, use:
 Linux applications use the standard target framework without a platform suffix:
 
 ```xml
-<TargetFramework>net8.0</TargetFramework>
+<TargetFramework>net10.0</TargetFramework>
 ```
 
 Ensure required .NET workloads are installed:

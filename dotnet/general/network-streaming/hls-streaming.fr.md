@@ -295,7 +295,7 @@ Nos SDK prennent également en charge l'intégration aux applications mobiles vi
 
 - Lecture iOS native via AVPlayer
 - Lecture Android via ExoPlayer
-- Options multiplateformes comme Xamarin ou MAUI
+- Options multiplateformes comme .NET MAUI, Avalonia ou Uno Platform
 
 ## Résolution des problèmes courants
 

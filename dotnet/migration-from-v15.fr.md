@@ -48,6 +48,7 @@ Le tableau suivant présente les frameworks cibles pris en charge dans v2026 :
 | .NET 8.0 | Pris en charge | Pris en charge |
 | .NET 9.0 | Pris en charge | Pris en charge |
 | .NET 10.0 | Pris en charge | Pris en charge |
+| .NET 11.0 | Pris en charge | Pris en charge |
 
 > **Note :** Les classes DirectShow nécessitent un TFM Windows (par exemple `net10.0-windows`) ou .NET Framework. Pour les moteurs X, des TFM spécifiques à la plateforme contrôlent la cible : `net10.0-windows` pour Windows, `net10.0-macos` pour macOS, `net10.0-ios` pour iOS, `net10.0-android` pour Android. Le simple `net10.0` (sans suffixe de plateforme) cible uniquement Linux.
 

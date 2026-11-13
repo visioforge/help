@@ -122,11 +122,16 @@ Le tableau ci-dessous présente la prise en charge des périphériques de captur
 | Caméras IP et NVR (y compris ONVIF)    | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | Écran                                  | &#x2714; | &#x2714; | &#x2714;| &#x2714; | &#x2714; |
 | Blackmagic Decklink (entrée et sortie)  | &#x2714; | &#x2714; | &#x2714;| &#x2718; | &#x2718; |
-| Caméscopes                              | &#x2714; | &#x2714; | &#x2714;| &#x2718; | &#x2718; |
+| Caméscopes                              | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
+| Tuners TV et DVB                        | &#x2714; | &#x2714; | &#x2718;| &#x2718; | &#x2718; |
 | Caméras USB3/GigE compatibles GenICam   | &#x2714; | &#x2714; | &#x2714;| &#x2718; | &#x2718; |
 | Caméras GigE/USB3 Teledyne/FLIR         | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
 | Caméras GigE/USB3 Basler                | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
 | Caméras GigE/USB3 Allied Vision         | &#x2714; | &#x2718; | &#x2718;| &#x2718; | &#x2718; |
+
+Les caméscopes (DV/HDV) ne sont pris en charge que par le moteur classique `VideoCaptureCore` sous Windows ([DV](videocapture/video-capture/dv.md), [HDV](videocapture/video-capture/mpeg2-camcorder.md)).
+
+Tuners TV : sous Windows, tuners analogiques et DVB (BDA) via le moteur classique `VideoCaptureCore` ([guide](videocapture/video-sources/tv-tuner.md)) ; sous Linux, adaptateurs DVB via `DVBSourceBlock` de Media Blocks SDK .NET ([bloc source DVB](mediablocks/Sources/index.md#bloc-source-dvb)).
 
 ## Protocoles réseau
 

@@ -44,9 +44,9 @@ Antes de comenzar su proceso de despliegue en iOS, asegúrese de que su entorno 
 
 ### Requisitos de software
 
-- Dispositivo Apple iOS con iOS 16.4 o posterior (el mínimo de las bibliotecas nativas `VisioForge.CrossPlatform.Core.iOS`)
-- SDK de .NET 9 o .NET 10 con la carga de trabajo de iOS (`dotnet workload install ios`); el SDK se dirige a `net9.0-ios` y `net10.0-ios`
-- La versión de Xcode que exige su carga de trabajo de iOS (Xcode 26 o posterior para .NET 10)
+- Dispositivo Apple iOS con iOS 18.0 o posterior
+- SDK de .NET 10 o .NET 11 con la carga de trabajo de iOS (`dotnet workload install ios`); el SDK se dirige a `net10.0-ios` y `net11.0-ios`
+- La versión de Xcode que exige su carga de trabajo de iOS (Xcode 26 o posterior para .NET 10, Xcode 27.2 o posterior para .NET 11)
 - Cuenta de desarrollador Apple (requerida para firma y distribución de apps)
 - JetBrains Rider o Visual Studio Code (Visual Studio para Mac se retiró en 2024)
 
@@ -116,7 +116,7 @@ El paquete enlaza en su aplicación una biblioteca estática con OpenCV incluido
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.OpenCV.iOS" Version="[2026.11.8]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.OpenCV.iOS" Version="[2026.11.12.2]"/>
 </ItemGroup>
 ```
 

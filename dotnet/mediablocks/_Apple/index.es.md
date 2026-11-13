@@ -23,7 +23,7 @@ primary_api_classes:
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Esta sección cubre los MediaBlocks específicamente optimizados para plataformas Apple (iOS, macOS, tvOS).
+Esta sección cubre los MediaBlocks específicamente optimizados para plataformas Apple (iOS, macOS).
 
 ## Bloques disponibles
 
@@ -515,9 +515,8 @@ macOS, iOS. En iOS, los elementos Metal forman parte únicamente del runtime del
 
 ## Requisitos de plataforma
 
-- **iOS**: iOS 12.0 o superior
-- **macOS**: macOS 10.13 o superior
-- **tvOS**: tvOS 12.0 o superior
+- **iOS**: iOS 18.0 o superior
+- **macOS**: macOS 12 o superior
 
 ## Características
 
@@ -585,7 +584,7 @@ await pipeline.StartAsync();
 
 ## Plataformas
 
-iOS, macOS, tvOS.
+iOS, macOS.
 
 ## Documentación relacionada
 
