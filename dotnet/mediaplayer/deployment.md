@@ -79,6 +79,7 @@ NuGet packages provide the simplest deployment method, automatically handling th
 * **MP4 Output Package**:
   * [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/)
   * [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
+  * [ARM64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.arm64/)
 * **WebM Output Package**:
   * [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.WebM.x86/)
 

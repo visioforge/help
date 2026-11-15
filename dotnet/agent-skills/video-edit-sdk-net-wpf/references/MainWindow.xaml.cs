@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Windows;
 using VisioForge.Core.Types.Events;
-using VisioForge.Core.Types.VideoEdit;
 using VisioForge.Core.VideoEdit;
 
 namespace Cut_Video_File
@@ -92,18 +91,11 @@ namespace Cut_Video_File
 
             try
             {
-                // Use input-side seeking for transport streams so a cut near the end of a
-                // large file does not require reading the input from the beginning.
-                var seekMode = IsTransportStreamFile(edSourceVideoFile.Text)
-                    ? FastEditSeekMode.Input
-                    : FastEditSeekMode.Output;
-
                 await _core.FastEdit_CutFileAsync(
                     edSourceVideoFile.Text,
                     TimeSpan.FromSeconds(startTime),
                     TimeSpan.FromSeconds(stopTime),
-                    edOutputVideoFile.Text,
-                    seekMode);
+                    edOutputVideoFile.Text);
             }
             catch (Exception ex)
             {
@@ -147,14 +139,6 @@ namespace Cut_Video_File
             //   await _core.SetLicenseCertificateAsync(cert);
             // This must run after the constructor and before the first StartAsync /
             // FastEdit_*Async call. Without it, the SDK runs in 30-day trial mode.
-        }
-
-        private static bool IsTransportStreamFile(string fileName)
-        {
-            var extension = Path.GetExtension(fileName);
-            return string.Equals(extension, ".ts", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(extension, ".m2ts", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(extension, ".mts", StringComparison.OrdinalIgnoreCase);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

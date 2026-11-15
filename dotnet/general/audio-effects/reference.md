@@ -1064,6 +1064,8 @@ videoCaptureCore.Audio_Effects_DS_Gargle(0, "gargle",
 
 Professional reverb with environmental modeling.
 
+**Availability**: Windows 11 may not register the I3DL2 reverb DMO. Then the effect is skipped, `OnError` names it, and the other audio effects keep working; use DS Waves Reverb instead.
+
 **Properties**:
 
 - **Room** (int): Room effect level (-10000 to 0 mB)

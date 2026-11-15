@@ -1,6 +1,6 @@
 ---
 title: SCTE-35 Ad Markers in MPEG-TS and HLS with C# .NET
-description: Read SCTE-35 splice_insert and time_signal ad markers from MPEG-TS and HLS, pass them through a remux, and insert them into TS output in C#.
+description: Read SCTE-35 ad markers from MPEG-TS and HLS, keep them through a remux, and insert them into TS files and UDP, SRT or RIST streams in C#.
 sidebar_label: SCTE-35 Splice Events
 tags:
   - Media Blocks SDK
@@ -8,12 +8,19 @@ tags:
   - MPEG-TS
   - HLS
   - SCTE-35
+  - SRT
+  - UDP
+  - RIST
   - Ad insertion
   - C#
 primary_api_classes:
   - MPEGTSDemuxBlock
   - UniversalSourceBlock
   - MPEGTSSinkBlock
+  - UDPMPEGTSSinkBlock
+  - SRTMPEGTSSinkBlock
+  - RISTMPEGTSSinkBlock
+  - VideoCaptureCoreX
   - SpliceEventArgs
 ---
 
@@ -31,7 +38,8 @@ Media Blocks SDK .NET lets you:
    decoded by `UniversalSourceBlock`, as an `OnSpliceEvent` event.
 2. **Keep** them through a remux: a TS read with SCTE-35 enabled and written by `MPEGTSSinkBlock` with a
    SCTE-35 PID carries the same splice commands in its output.
-3. **Insert** your own splice_insert commands into an MPEG-TS output.
+3. **Insert** your own splice_insert commands into an MPEG-TS file, or into an MPEG-TS stream sent over
+   UDP, SRT or RIST - from a Media Blocks pipeline or from `VideoCaptureCoreX`.
 
 SCTE-35 is off by default: without `EnableSCTE35` the demuxer drops the SCTE-35 PID.
 
@@ -131,11 +139,96 @@ sink.InsertSpliceIn(eventId: 1, spliceTime: TimeSpan.FromSeconds(40));
 - Send each splice a few seconds before its own point, not the whole break at once. The muxer keeps one
   pending section until its next packet: a second call before then replaces the first, and both return
   `true`.
-- Use a PID that no other stream in the output uses.
+- Use a PID from 0x50 to 0x1FFE that no other stream in the output uses (500 in the samples). Lower PIDs
+  are taken by the tables and by the muxer's own streams; a PID outside that range is reported through
+  `OnError`. A clash with another stream inside the range is not detected.
+
+## Insert splice events into a UDP, SRT or RIST stream
+
+The network MPEG-TS sinks take the same `SCTE35PID` setting and the same `InsertSpliceOut` /
+`InsertSpliceIn` methods as `MPEGTSSinkBlock`. Use them when the channel goes out live - to a headend,
+a cloud packager or an ad-insertion server that reads SCTE-35 from the transport stream - rather than
+into a file.
+
+| Sink block | Settings class carrying `SCTE35PID` |
+|------------|-------------------------------------|
+| `UDPMPEGTSSinkBlock` | `UDPSinkSettings` |
+| `MultiUDPMPEGTSSinkBlock` | `MultiUDPSinkSettings` |
+| `SRTMPEGTSSinkBlock` | `SRTSinkSettings` |
+| `RISTMPEGTSSinkBlock` | `RISTSinkSettings` |
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var video = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
+var encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+pipeline.Connect(video.Output, encoder.Input);
+
+var srt = new SRTMPEGTSSinkBlock(new SRTSinkSettings
+{
+    Uri = "srt://ingest.example.com:9000",
+    Mode = SRTConnectionMode.Caller,
+    SCTE35PID = 500,
+});
+pipeline.Connect(encoder.Output, srt.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+
+// A 30-second break at 60 s of running time, announced 5 seconds ahead.
+await Task.Delay(TimeSpan.FromSeconds(55));
+srt.InsertSpliceOut(eventId: 7, spliceTime: TimeSpan.FromSeconds(60), duration: TimeSpan.FromSeconds(30));
+
+// The return, announced near the end of the break.
+await Task.Delay(TimeSpan.FromSeconds(30));
+srt.InsertSpliceIn(eventId: 7, spliceTime: TimeSpan.FromSeconds(90));
+```
+
+The rules of the previous section apply unchanged: running-time splice points, a few seconds of notice,
+and one pending section in the muxer. Set `SCTE35PID` before the pipeline starts - a PID set later never
+reaches the muxer, and the insert methods return `false`. Splices read by an upstream `MPEGTSDemuxBlock`
+with `EnableSCTE35` pass through these sinks too, as they do through `MPEGTSSinkBlock`.
+
+A file input needs no pacing. When the input is not live, the UDP, multi-destination UDP and SRT MPEG-TS
+sinks send each packet at its timestamp, so a file goes out in real time and the sink drops nothing; a stalled
+SRT connection holds the file back until it recovers. With a live source they send each packet as it arrives,
+and drop the oldest ones if the network stalls, so the rest of the pipeline - a preview, a recording - keeps
+running. The input counts as live when any of its sources is live. A push source is live when `IsLive` is set on
+its settings: `PushVideoSourceSettings`, `PushAudioSourceSettings` and `PushJPEGSourceSettings` default to `true`,
+`PushDataSourceSettings` to `false`.
+
+`UDPSinkBlock`, `MultiUDPSinkBlock` and `SRTSinkBlock` send an already-muxed stream unchanged and ignore
+`SCTE35PID`.
+
+## Insert splice events from Video Capture SDK .NET
+
+`VideoCaptureCoreX` builds its `SRTOutput`, `RISTOutput` and `MPEGTSOutput` on the same sinks. Set the
+PID on the output's `Sink` settings, and insert by the output's index:
+
+```csharp
+var capture = new VideoCaptureCoreX(videoView);
+capture.Video_Source = videoSourceSettings;
+
+var srt = new SRTOutput("srt://ingest.example.com:9000");
+srt.Video = new OpenH264EncoderSettings();
+srt.Sink.SCTE35PID = 500;
+capture.Outputs_Add(srt);
+
+await capture.StartAsync();
+
+// Index 0: the first output added. Times are the output's running time - the clock Outputs_GetDuration reports.
+capture.Outputs_InsertSpliceOut(0, eventId: 7, spliceTime: TimeSpan.FromSeconds(60), duration: TimeSpan.FromSeconds(30));
+// ... near the end of the break:
+capture.Outputs_InsertSpliceIn(0, eventId: 7, spliceTime: TimeSpan.FromSeconds(90));
+```
+
+Both methods return `false` and raise `OnError` when the output has not started or was stopped, was started
+without a PID, or is not an MPEG-TS output - one of these three, or a `CustomBlocksOutputSettings` whose `Sink`
+is any MPEG-TS sink block, `UDPMPEGTSSinkBlock` and `MultiUDPMPEGTSSinkBlock` included.
 
 ## Platforms
 
-Reading and inserting work on Windows, macOS, Linux and iOS. Android is not supported: its GStreamer
+Reading and inserting - into files and into UDP, SRT and RIST streams - work on Windows, macOS, Linux and
+iOS, wherever the sink block itself is available (`IsAvailable()`). Android is not supported: its GStreamer
 build does not export the MPEG-TS section library, so `OnSpliceEvent` never fires there (the pipeline reports one error when the first section arrives) and the insert
 methods return `false` with an error in the log.
 

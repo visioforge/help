@@ -405,6 +405,7 @@ Baje la propiedad `Latency` tanto en la configuración del emisor como del recep
 - [Integración de Transmisión NDI](ndi.md) — transmisión de video sobre IP con NDI
 - [Visor de Streams RTSP y Reproductor de Cámaras IP](../../mediablocks/Guides/rtsp-player-csharp.md) — guía de streaming de cámaras RTSP
 - [Formato de Salida MPEG-TS](../output-formats/mpegts.md) — configuración del contenedor MPEG-TS
+- [Eventos de empalme SCTE-35](../../mediablocks/Guides/scte35-splice-events-mpegts-csharp.md) — inserte marcadores publicitarios en un flujo SRT MPEG-TS
 - [Guía de Despliegue](../../deployment-x/index.md) — paquetes de runtime específicos de plataforma
 - [Ejemplos de Código en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — demo de fuente SRT
 - [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — página del producto y descargas

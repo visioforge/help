@@ -489,7 +489,7 @@ class Program
             {
                 FrameRate = new VideoFrameRate(25, 1),
                 CaptureCursor = true,
-                MonitorIndex = 0  // Primary monitor (-1 also selects primary)
+                MonitorIndex = -1  // Primary monitor (0 is the first monitor)
             };
 
             videoCapture.Video_Source = screenSource;
@@ -676,7 +676,7 @@ Yes. With `VideoCaptureCoreX`, pass a speaker from `DeviceEnumerator.Shared.Audi
 
 ### How do I record a specific monitor in a multi-monitor setup?
 
-With `VideoCaptureCoreX`, set `MonitorIndex` on `ScreenCaptureD3D11SourceSettings` (`0` is the first monitor, `-1` the primary) and set `Rectangle` to that monitor's size. With `VideoCaptureCore`, set `DisplayIndex` on `ScreenCaptureSourceSettings`. `0` is the primary monitor. A positive value is the number in that monitor's device name (`\\.\DISPLAY2` is `2`), which `Screen.AllScreens[i].DeviceName` gives; it is not `i`. Combine with `FullScreen = true` to capture the entire selected display. You can also set `FullScreen = false` with `Left/Top/Right/Bottom` coordinates to capture a specific region on the chosen monitor.
+With `VideoCaptureCoreX`, set `MonitorIndex` on `ScreenCaptureD3D11SourceSettings` (`0` is the first monitor, `-1` the primary) and leave `Rectangle` empty, as it is by default, to capture that monitor whole at its native resolution. With `VideoCaptureCore`, set `DisplayIndex` on `ScreenCaptureSourceSettings`. `0` is the primary monitor. A positive value is the number in that monitor's device name (`\\.\DISPLAY2` is `2`), which `Screen.AllScreens[i].DeviceName` gives; it is not `i`. Combine with `FullScreen = true` to capture the entire selected display. You can also set `FullScreen = false` with `Left/Top/Right/Bottom` coordinates to capture a specific region on the chosen monitor.
 
 ### What frame rate should I use for screen recording?
 
@@ -714,7 +714,7 @@ AudioOutputsAsync with WASAPI2 lists the speakers and headphones. Their names fi
 
 ### Capture the screen
 
-In the Start handler, set the video source to ScreenCaptureD3D11SourceSettings. Out of the box it captures the whole primary monitor with the mouse cursor. The default frame rate is ten, so set thirty. The source uses Windows Graphics Capture on Windows 10 version 1803 and later, and DXGI Desktop Duplication on older systems. MonitorIndex picks another monitor, and CaptureCursor set to false leaves the cursor out.
+In the Start handler, set the video source to ScreenCaptureD3D11SourceSettings. Out of the box it captures the whole primary monitor with the mouse cursor. The default frame rate is ten, so set thirty. The source uses DXGI Desktop Duplication, and Windows Graphics Capture where Desktop Duplication is not supported. MonitorIndex picks another monitor, and CaptureCursor set to false leaves the cursor out.
 
 ### Record the system sound
 

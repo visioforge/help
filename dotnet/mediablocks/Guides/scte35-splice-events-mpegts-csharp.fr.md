@@ -1,6 +1,6 @@
 ---
 title: Marqueurs SCTE-35 dans les flux MPEG-TS et HLS en C# .NET
-description: Lisez les marqueurs publicitaires SCTE-35 splice_insert et time_signal de MPEG-TS et HLS, gardez-les au remux et insérez-les dans une sortie TS en C#.
+description: Lisez les marqueurs SCTE-35 de MPEG-TS et HLS, gardez-les au remux et insérez-les dans des fichiers TS et flux UDP, SRT ou RIST en C#.
 sidebar_label: Événements de raccord SCTE-35
 tags:
   - Media Blocks SDK
@@ -8,12 +8,19 @@ tags:
   - MPEG-TS
   - HLS
   - SCTE-35
+  - SRT
+  - UDP
+  - RIST
   - Ad insertion
   - C#
 primary_api_classes:
   - MPEGTSDemuxBlock
   - UniversalSourceBlock
   - MPEGTSSinkBlock
+  - UDPMPEGTSSinkBlock
+  - SRTMPEGTSSinkBlock
+  - RISTMPEGTSSinkBlock
+  - VideoCaptureCoreX
   - SpliceEventArgs
 ---
 
@@ -31,7 +38,8 @@ de flux 0x86). Media Blocks SDK .NET vous permet de :
    décodée par `UniversalSourceBlock`, sous forme d'événement `OnSpliceEvent`.
 2. **Les conserver** lors d'un remux : un TS lu avec SCTE-35 activé et écrit par `MPEGTSSinkBlock` avec un PID
    SCTE-35 porte les mêmes commandes de raccord dans sa sortie.
-3. **Insérer** vos propres commandes splice_insert dans une sortie MPEG-TS.
+3. **Insérer** vos propres commandes splice_insert dans un fichier MPEG-TS, ou dans un flux MPEG-TS envoyé en
+   UDP, SRT ou RIST, depuis un pipeline Media Blocks ou depuis `VideoCaptureCoreX`.
 
 SCTE-35 est désactivé par défaut : sans `EnableSCTE35`, le démultiplexeur ignore le PID SCTE-35.
 
@@ -133,11 +141,98 @@ sink.InsertSpliceIn(eventId: 1, spliceTime: TimeSpan.FromSeconds(40));
 - Envoyez chaque raccord quelques secondes avant son propre point, pas toute la coupure d'un coup. Le
   multiplexeur ne garde qu'une section en attente jusqu'à son paquet suivant : un second appel avant ce
   moment remplace le premier, et les deux renvoient `true`.
-- Utilisez un PID qu'aucun autre flux de la sortie n'utilise.
+- Utilisez un PID de 0x50 à 0x1FFE qu'aucun autre flux de la sortie n'utilise (500 dans les exemples). Les PID
+  inférieurs sont pris par les tables et par les propres flux du multiplexeur ; un PID hors de cette plage est
+  signalé via `OnError`. Un conflit avec un autre flux dans la plage n'est pas détecté.
+
+## Insérer des événements de raccord dans un flux UDP, SRT ou RIST
+
+Les blocs sink MPEG-TS réseau acceptent la même propriété `SCTE35PID` et les mêmes méthodes `InsertSpliceOut` /
+`InsertSpliceIn` que `MPEGTSSinkBlock`. Utilisez-les lorsque la chaîne part en direct, vers une tête de réseau,
+un packager cloud ou un serveur d'insertion publicitaire qui lit le SCTE-35 dans le flux de transport, plutôt que
+vers un fichier.
+
+| Bloc sink | Classe de paramètres portant `SCTE35PID` |
+|-----------|------------------------------------------|
+| `UDPMPEGTSSinkBlock` | `UDPSinkSettings` |
+| `MultiUDPMPEGTSSinkBlock` | `MultiUDPSinkSettings` |
+| `SRTMPEGTSSinkBlock` | `SRTSinkSettings` |
+| `RISTMPEGTSSinkBlock` | `RISTSinkSettings` |
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var video = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
+var encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
+pipeline.Connect(video.Output, encoder.Input);
+
+var srt = new SRTMPEGTSSinkBlock(new SRTSinkSettings
+{
+    Uri = "srt://ingest.example.com:9000",
+    Mode = SRTConnectionMode.Caller,
+    SCTE35PID = 500,
+});
+pipeline.Connect(encoder.Output, srt.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+
+// Une coupure de 30 secondes à 60 s de temps d'exécution, annoncée 5 secondes à l'avance.
+await Task.Delay(TimeSpan.FromSeconds(55));
+srt.InsertSpliceOut(eventId: 7, spliceTime: TimeSpan.FromSeconds(60), duration: TimeSpan.FromSeconds(30));
+
+// Le retour, annoncé vers la fin de la coupure.
+await Task.Delay(TimeSpan.FromSeconds(30));
+srt.InsertSpliceIn(eventId: 7, spliceTime: TimeSpan.FromSeconds(90));
+```
+
+Les règles de la section précédente s'appliquent telles quelles : points de raccord en temps d'exécution, quelques
+secondes de préavis et une seule section en attente dans le multiplexeur. Définissez `SCTE35PID` avant de démarrer
+le pipeline : un PID défini plus tard n'atteint jamais le multiplexeur, et les méthodes d'insertion renvoient
+`false`. Les sections de raccord lues par un `MPEGTSDemuxBlock` en amont avec `EnableSCTE35` traversent aussi ces
+sinks, comme elles traversent `MPEGTSSinkBlock`.
+
+Une entrée fichier n'a pas besoin d'être cadencée. Quand l'entrée n'est pas en direct, les sinks MPEG-TS UDP,
+UDP multi-destination et SRT envoient chaque paquet à son horodatage : un fichier part en temps réel et le sink
+n'abandonne rien ; une connexion SRT bloquée retient le fichier jusqu'à ce qu'elle reprenne. Avec une source en
+direct, ils envoient chaque paquet dès son arrivée et abandonnent les plus anciens si le réseau se bloque, pour
+que le reste du pipeline - un aperçu, un enregistrement - continue. L'entrée compte comme en direct dès
+qu'une de ses sources l'est. Une source push est en direct quand `IsLive` est activé dans ses paramètres :
+`PushVideoSourceSettings`, `PushAudioSourceSettings` et `PushJPEGSourceSettings` valent `true` par défaut,
+`PushDataSourceSettings` vaut `false`.
+
+`UDPSinkBlock`, `MultiUDPSinkBlock` et `SRTSinkBlock` envoient tel quel un flux déjà multiplexé et ignorent
+`SCTE35PID`.
+
+## Insérer des événements de raccord depuis Video Capture SDK .NET
+
+`VideoCaptureCoreX` construit ses sorties `SRTOutput`, `RISTOutput` et `MPEGTSOutput` sur les mêmes sinks.
+Définissez le PID dans les paramètres `Sink` de la sortie, et insérez par l'index de la sortie :
+
+```csharp
+var capture = new VideoCaptureCoreX(videoView);
+capture.Video_Source = videoSourceSettings;
+
+var srt = new SRTOutput("srt://ingest.example.com:9000");
+srt.Video = new OpenH264EncoderSettings();
+srt.Sink.SCTE35PID = 500;
+capture.Outputs_Add(srt);
+
+await capture.StartAsync();
+
+// Index 0 : la première sortie ajoutée. Les temps sont le temps d'exécution de la sortie, l'horloge que renvoie Outputs_GetDuration.
+capture.Outputs_InsertSpliceOut(0, eventId: 7, spliceTime: TimeSpan.FromSeconds(60), duration: TimeSpan.FromSeconds(30));
+// ... vers la fin de la coupure :
+capture.Outputs_InsertSpliceIn(0, eventId: 7, spliceTime: TimeSpan.FromSeconds(90));
+```
+
+Les deux méthodes renvoient `false` et déclenchent `OnError` lorsque la sortie n'a pas démarré ou a été arrêtée,
+a été démarrée sans PID, ou n'est pas une sortie MPEG-TS : l'une de ces trois, ou un `CustomBlocksOutputSettings`
+dont le `Sink` est n'importe quel bloc sink MPEG-TS, `UDPMPEGTSSinkBlock` et `MultiUDPMPEGTSSinkBlock` compris.
 
 ## Plateformes
 
-La lecture et l'insertion fonctionnent sous Windows, macOS, Linux et iOS. Android n'est pas pris en charge : sa
+La lecture et l'insertion, dans des fichiers et dans des flux UDP, SRT et RIST, fonctionnent sous Windows, macOS,
+Linux et iOS, là où le bloc sink lui-même est disponible (`IsAvailable()`). Android n'est pas pris en charge : sa
 version de GStreamer n'exporte pas la bibliothèque de sections MPEG-TS, donc `OnSpliceEvent` n'y est jamais
 déclenché (le pipeline signale une erreur à l'arrivée de la première section) et les méthodes d'insertion renvoient `false` avec une erreur dans le journal.
 

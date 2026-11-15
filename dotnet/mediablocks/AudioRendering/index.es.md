@@ -69,6 +69,39 @@ El `AudioRendererBlock` soporta varias tecnologías de renderizado de audio espe
   - Salida de audio de baja latencia
   - Aceleración de hardware cuando está disponible
 
+## ASIOSinkBlock: Salida de Audio ASIO
+
+`ASIOSinkBlock` reproduce audio a través de un dispositivo Steinberg ASIO en Windows, en un conjunto elegido de canales de salida.
+
+Úselo cuando la salida debe llegar a una interfaz de audio profesional con baja latencia o por salidas concretas, por ejemplo una mezcla de monitoreo en las salidas 3 y 4. Para reproducir en una tarjeta de sonido común, `AudioRendererBlock` es más sencillo y no necesita un driver adicional.
+
+### Configuraciones: `ASIOSinkSettings`
+
+- `Channels`: índices de canales de salida basados en cero, en orden ascendente; `null` o vacío reproduce en todos los canales. Un índice que el dispositivo no tiene detiene el inicio con un error.
+- `BufferSize`: el tamaño del búfer ASIO en muestras; 0 usa el tamaño preferido del driver. Un tamaño fuera del rango o de la granularidad del driver detiene el inicio con un error.
+
+`ASIOSinkBlock.GetDevicesAsync()` devuelve las salidas ASIO, la misma lista que `DeviceEnumerator.Shared.AudioOutputsAsync(AudioOutputDeviceAPI.ASIO)`, y `ASIOSinkBlock.IsAvailable()` indica si el plugin ASIO está presente. Una salida ASIO también puede pasarse a `AudioRendererBlock` como un dispositivo normal.
+
+### Ejemplo de Integración
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("music.wav", renderVideo: false));
+
+var device = (await ASIOSinkBlock.GetDevicesAsync())[0];
+var sink = new ASIOSinkBlock(new ASIOSinkSettings(device)
+{
+    Channels = new[] { 0, 1 }, // zero-based; null or empty plays on every channel
+});
+
+pipeline.Connect(source.AudioOutput, sink.Input);
+
+await pipeline.StartAsync();
+```
+
+ASIO requiere el paquete `VisioForge.CrossPlatform.Core.Windows.Adds.x64` y un driver ASIO instalado.
+
 ## OSXAudioSinkBlock: Salida de Audio Directa de macOS
 
 El `OSXAudioSinkBlock` es un bloque de medios específico de plataforma diseñado para escenarios avanzados donde se requiere interacción directa con el sink de audio GStreamer de macOS. Este bloque es útil para desarrolladores que necesitan control de bajo nivel sobre la salida de audio en dispositivos macOS, como selección de dispositivo personalizada o integración con otros componentes nativos.

@@ -229,6 +229,61 @@ On Windows, WASAPI (1) capture endpoints (`wasapisrc`) are left out of the devic
 
 Windows, macOS, Linux, iOS, Android.
 
+### ASIO Source Block
+
+`ASIOSourceBlock` captures audio from a Steinberg ASIO device with a selected set of input channels and buffer size.
+
+Use it for professional and multi-input audio interfaces: ASIO reaches the driver directly, with a buffer size you choose for low latency, and lets you take individual inputs - for example only the microphone on input 3 - instead of the stereo pair Windows exposes. For an ordinary sound card or a USB headset, `SystemAudioSourceBlock` with WASAPI is simpler and needs no extra driver.
+
+#### Block info
+
+Name: ASIOSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output audio | uncompressed audio | 1 |
+
+#### Enumerate available devices
+
+`ASIOSourceBlock.GetDevicesAsync()` returns the ASIO inputs - the same list as `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.ASIO)`. `ASIOSourceBlock.IsAvailable()` reports whether the ASIO plugin is present.
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// ASIO inputs come from the regular device enumerator, filtered by API
+var device = (await ASIOSourceBlock.GetDevicesAsync())[0];
+
+var source = new ASIOSourceBlock(new ASIOSourceSettings(device)
+{
+    Channels = new[] { 0, 1 }, // zero-based; null or empty opens every channel
+    BufferSize = 0,             // 0 = the driver's preferred buffer size
+});
+
+var renderer = new AudioRendererBlock();
+pipeline.Connect(source.Output, renderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Remarks
+
+- `Channels` takes zero-based input channel indices in ascending order. An index the device does not have stops the start with an error instead of silently opening every channel.
+- `BufferSize` is in samples; 0 uses the driver's preferred size. A size outside the driver's range or granularity stops the start with an error.
+- An ASIO device can also be passed to `SystemAudioSourceBlock` through `device.CreateSourceSettings(format)`, and to Video Capture SDK .Net (`VideoCaptureCoreX`):
+
+```csharp
+var device = (await DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.ASIO))[0];
+videoCapture.Audio_Source = device.CreateSourceSettingsVC();
+```
+
+- The device opens at the rate and sample format its driver runs at; the SDK converts them for the next block.
+
+#### Platforms
+
+Windows. Requires the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package and an installed ASIO driver.
+
 ### Basler Source Block
 
 The Basler source block supports Basler USB3 Vision and GigE cameras.

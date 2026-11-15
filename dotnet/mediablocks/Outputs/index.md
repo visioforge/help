@@ -136,7 +136,8 @@ The `FacebookLiveOutputBlock` is configured using `FacebookLiveSinkSettings`, `I
 
 Key `FacebookLiveSinkSettings` properties:
 
-- `Url` (string): The RTMP URL provided by Facebook Live for streaming.
+- `Key` (string): The Facebook Live stream key. The block streams to `rtmps://live-api-s.facebook.com:443/rtmp/`.
+- `TLSValidationFlags` (`RTMPTLSCertificateFlags`): Which problems with the ingest certificate fail the connection. Default `VALIDATE_ALL`; `NONE` accepts any certificate.
 
 Constructor:
 
@@ -1150,7 +1151,8 @@ The `YouTubeOutputBlock` is configured using `YouTubeSinkSettings`, `IH264Encode
 
 Key `YouTubeSinkSettings` properties:
 
-- `Url` (string): The RTMP URL provided by YouTube Live for streaming (e.g., "rtmp://a.rtmp.youtube.com/live2/YOUR-STREAM-KEY").
+- `Key` (string): The YouTube Live stream key. The block streams to `rtmps://a.rtmps.youtube.com/live2/` on port 443.
+- `TLSValidationFlags` (`RTMPTLSCertificateFlags`): Which problems with the ingest certificate fail the connection. Default `VALIDATE_ALL`; `NONE` accepts any certificate.
 
 Constructor:
 

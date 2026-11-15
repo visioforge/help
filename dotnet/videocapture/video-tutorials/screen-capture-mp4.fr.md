@@ -489,7 +489,7 @@ class Program
             {
                 FrameRate = new VideoFrameRate(25, 1),
                 CaptureCursor = true,
-                MonitorIndex = 0  // Écran principal (-1 sélectionne aussi le principal)
+                MonitorIndex = -1  // Écran principal (0 est le premier écran)
             };
 
             videoCapture.Video_Source = screenSource;
@@ -677,7 +677,7 @@ Oui. Avec `VideoCaptureCoreX`, passez un haut-parleur de `DeviceEnumerator.Share
 
 ### Comment enregistrer un écran spécifique dans une configuration multi-écrans ?
 
-Avec `VideoCaptureCoreX`, définissez `MonitorIndex` sur `ScreenCaptureD3D11SourceSettings` (`0` est le premier écran, `-1` l'écran principal) et donnez à `Rectangle` la taille de cet écran. Avec `VideoCaptureCore`, définissez `DisplayIndex` sur `ScreenCaptureSourceSettings`. `0` est l'écran principal. Une valeur positive est le numéro dans le nom d'appareil de cet écran (`\\.\DISPLAY2` vaut `2`), celui que donne `Screen.AllScreens[i].DeviceName` ; ce n'est pas `i`. Combinez avec `FullScreen = true` pour capturer tout l'écran sélectionné. Vous pouvez également définir `FullScreen = false` avec les coordonnées `Left/Top/Right/Bottom` pour capturer une région spécifique sur l'écran choisi.
+Avec `VideoCaptureCoreX`, définissez `MonitorIndex` sur `ScreenCaptureD3D11SourceSettings` (`0` est le premier écran, `-1` l'écran principal) et laissez `Rectangle` vide, comme par défaut, pour capturer cet écran entier à sa résolution native. Avec `VideoCaptureCore`, définissez `DisplayIndex` sur `ScreenCaptureSourceSettings`. `0` est l'écran principal. Une valeur positive est le numéro dans le nom d'appareil de cet écran (`\\.\DISPLAY2` vaut `2`), celui que donne `Screen.AllScreens[i].DeviceName` ; ce n'est pas `i`. Combinez avec `FullScreen = true` pour capturer tout l'écran sélectionné. Vous pouvez également définir `FullScreen = false` avec les coordonnées `Left/Top/Right/Bottom` pour capturer une région spécifique sur l'écran choisi.
 
 ### Quelle fréquence d'images dois-je utiliser pour l'enregistrement d'écran ?
 
@@ -715,7 +715,7 @@ AudioOutputsAsync avec WASAPI2 liste les haut-parleurs et les casques. Leurs nom
 
 ### Capturer l'écran
 
-Dans le gestionnaire de Start, définissez la source vidéo sur ScreenCaptureD3D11SourceSettings. Par défaut, elle capture tout l'écran principal avec le curseur de la souris. La fréquence par défaut est de dix images par seconde, réglez-la donc à trente. La source utilise Windows Graphics Capture sous Windows 10 version 1803 et ultérieures, et DXGI Desktop Duplication sur les systèmes plus anciens. MonitorIndex choisit un autre écran, et CaptureCursor à false laisse le curseur de côté.
+Dans le gestionnaire de Start, définissez la source vidéo sur ScreenCaptureD3D11SourceSettings. Par défaut, elle capture tout l'écran principal avec le curseur de la souris. La fréquence par défaut est de dix images par seconde, réglez-la donc à trente. La source utilise DXGI Desktop Duplication, et Windows Graphics Capture là où Desktop Duplication n'est pas pris en charge. MonitorIndex choisit un autre écran, et CaptureCursor à false laisse le curseur de côté.
 
 ### Enregistrer le son du système
 

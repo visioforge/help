@@ -188,7 +188,7 @@ try
     };
 
     // Faire tourner la clé de stream YouTube ou changer la destination du puits en remplaçant l'objet Sink.
-    // YouTubeSinkSettings expose uniquement la clé Key du stream (les autres propriétés sont internes).
+    // YouTubeSinkSettings prend la clé Key du stream ; TLSValidationFlags (par défaut RTMPTLSCertificateFlags.VALIDATE_ALL, NONE la désactive) contrôle la vérification du certificat d'ingestion.
     // youtubeOutput.Sink = new YouTubeSinkSettings("new-stream-key");
     
     // Ajouter la sortie à l'instance de capture vidéo

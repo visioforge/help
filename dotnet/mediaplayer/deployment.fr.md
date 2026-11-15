@@ -79,6 +79,7 @@ Les paquets NuGet fournissent la méthode de déploiement la plus simple, géran
 * **Paquet de sortie MP4** :
   * [Version x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/)
   * [Version x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
+  * [Version ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.arm64/)
 * **Paquet de sortie WebM** :
   * [Version x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.WebM.x86/)
 

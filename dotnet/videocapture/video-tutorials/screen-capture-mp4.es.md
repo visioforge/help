@@ -489,7 +489,7 @@ class Program
             {
                 FrameRate = new VideoFrameRate(25, 1),
                 CaptureCursor = true,
-                MonitorIndex = 0  // Monitor principal (-1 también selecciona el principal)
+                MonitorIndex = -1  // Monitor principal (0 es el primer monitor)
             };
 
             videoCapture.Video_Source = screenSource;
@@ -677,7 +677,7 @@ Sí. Con `VideoCaptureCoreX`, pase un altavoz de `DeviceEnumerator.Shared.AudioO
 
 ### ¿Cómo grabo un monitor específico en una configuración multi-monitor?
 
-Con `VideoCaptureCoreX`, establezca `MonitorIndex` en `ScreenCaptureD3D11SourceSettings` (`0` es el primer monitor, `-1` el principal) y ajuste `Rectangle` al tamaño de ese monitor. Con `VideoCaptureCore`, establezca `DisplayIndex` en `ScreenCaptureSourceSettings`. `0` es el monitor principal. Un valor positivo es el número en el nombre de dispositivo de ese monitor (`\\.\DISPLAY2` es `2`), el que da `Screen.AllScreens[i].DeviceName`; no es `i`. Combine con `FullScreen = true` para capturar toda la pantalla seleccionada. También puede establecer `FullScreen = false` con coordenadas `Left/Top/Right/Bottom` para capturar una región específica en el monitor elegido.
+Con `VideoCaptureCoreX`, establezca `MonitorIndex` en `ScreenCaptureD3D11SourceSettings` (`0` es el primer monitor, `-1` el principal) y deje `Rectangle` vacío, como por defecto, para capturar ese monitor completo a su resolución nativa. Con `VideoCaptureCore`, establezca `DisplayIndex` en `ScreenCaptureSourceSettings`. `0` es el monitor principal. Un valor positivo es el número en el nombre de dispositivo de ese monitor (`\\.\DISPLAY2` es `2`), el que da `Screen.AllScreens[i].DeviceName`; no es `i`. Combine con `FullScreen = true` para capturar toda la pantalla seleccionada. También puede establecer `FullScreen = false` con coordenadas `Left/Top/Right/Bottom` para capturar una región específica en el monitor elegido.
 
 ### ¿Qué tasa de fotogramas debo usar para la grabación de pantalla?
 
@@ -715,7 +715,7 @@ AudioOutputsAsync con WASAPI2 enumera los altavoces y auriculares. Sus nombres l
 
 ### Capturar la pantalla
 
-En el manejador de Start, asigne a la fuente de vídeo ScreenCaptureD3D11SourceSettings. Por defecto captura todo el monitor principal con el cursor del ratón. La velocidad por defecto es de diez fotogramas por segundo, así que fije treinta. La fuente usa Windows Graphics Capture en Windows 10 versión 1803 y posteriores, y DXGI Desktop Duplication en sistemas más antiguos. MonitorIndex elige otro monitor, y CaptureCursor en false deja fuera el cursor.
+En el manejador de Start, asigne a la fuente de vídeo ScreenCaptureD3D11SourceSettings. Por defecto captura todo el monitor principal con el cursor del ratón. La velocidad por defecto es de diez fotogramas por segundo, así que fije treinta. La fuente usa DXGI Desktop Duplication, y Windows Graphics Capture donde Desktop Duplication no es compatible. MonitorIndex elige otro monitor, y CaptureCursor en false deja fuera el cursor.
 
 ### Grabar el sonido del sistema
 

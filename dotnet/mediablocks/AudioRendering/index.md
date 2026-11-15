@@ -69,6 +69,39 @@ The `AudioRendererBlock` supports various platform-specific audio rendering tech
   - Low-latency audio output
   - Hardware acceleration when available
 
+## ASIOSinkBlock: ASIO Audio Output
+
+`ASIOSinkBlock` plays audio through a Steinberg ASIO device on Windows, on a selected set of output channels.
+
+Use it when the output has to reach a professional audio interface with low latency or on specific outputs - for example a cue mix on outputs 3 and 4. For playback on an ordinary sound card, `AudioRendererBlock` is simpler and needs no extra driver.
+
+### Settings: `ASIOSinkSettings`
+
+- `Channels`: zero-based output channel indices in ascending order; `null` or empty plays on every channel. An index the device does not have stops the start with an error.
+- `BufferSize`: the ASIO buffer size in samples; 0 uses the driver's preferred size. A size outside the driver's range or granularity stops the start with an error.
+
+`ASIOSinkBlock.GetDevicesAsync()` returns the ASIO outputs - the same list as `DeviceEnumerator.Shared.AudioOutputsAsync(AudioOutputDeviceAPI.ASIO)` - and `ASIOSinkBlock.IsAvailable()` reports whether the ASIO plugin is present. An ASIO output can also be passed to `AudioRendererBlock` as a plain device.
+
+### Integration Example
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("music.wav", renderVideo: false));
+
+var device = (await ASIOSinkBlock.GetDevicesAsync())[0];
+var sink = new ASIOSinkBlock(new ASIOSinkSettings(device)
+{
+    Channels = new[] { 0, 1 }, // zero-based; null or empty plays on every channel
+});
+
+pipeline.Connect(source.AudioOutput, sink.Input);
+
+await pipeline.StartAsync();
+```
+
+ASIO requires the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package and an installed ASIO driver.
+
 ## OSXAudioSinkBlock: Direct macOS Audio Output
 
 The `OSXAudioSinkBlock` is a platform-specific media block designed for advanced scenarios where direct interaction with the macOS GStreamer audio sink is required. This block is useful for developers who need low-level control over audio output on macOS devices, such as custom device selection or integration with other native components.

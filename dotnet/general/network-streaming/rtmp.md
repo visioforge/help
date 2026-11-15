@@ -228,6 +228,22 @@ rtmpOutput.Sink = new RTMPSinkSettings
 };
 ```
 
+### Server Certificate Validation (rtmps)
+
+`RTMPSinkBlock` accepts any server certificate on an `rtmps://` URL by default, so a server with a self-signed or private-CA certificate connects without extra setup. To refuse a server whose certificate cannot be validated, set `TLSValidationFlags`:
+
+```csharp
+var rtmpSink = new RTMPSinkBlock(new RTMPSinkSettings
+{
+    Location = "rtmps://streaming-server:443/live/stream-key",
+    TLSValidationFlags = RTMPTLSCertificateFlags.VALIDATE_ALL
+});
+```
+
+With validation on, an untrusted certificate stops the connection and the pipeline raises `OnError` with `Unacceptable TLS certificate`. Use `VALIDATE_ALL` or `NONE` rather than a subset of flags: when a certificate is invalid, only one of its problems is guaranteed to be reported, so leaving out a single flag can accept a certificate that has other problems too.
+
+`YouTubeSinkBlock` (over `rtmps://a.rtmps.youtube.com`) and `FacebookLiveSinkBlock` validate the ingest certificate by default; `TLSValidationFlags` set to `RTMPTLSCertificateFlags.NONE` in `YouTubeSinkSettings` or `FacebookLiveSinkSettings` turns that off.
+
 ## Windows-Specific RTMP Implementation
 
 [VideoCaptureCore](#){ .md-button } [VideoEditCore](#){ .md-button }

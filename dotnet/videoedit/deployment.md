@@ -67,7 +67,7 @@ NuGet packages offer the simplest deployment method, requiring no administrative
 
 **Format-Specific Components**:
 
-- MP4 Output: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
+- MP4 Output: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/) | [ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.arm64/)
 - WebM Output: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.WebM.x86/)
 - XIPH Formats (Ogg, Vorbis, FLAC): [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x64/)
 

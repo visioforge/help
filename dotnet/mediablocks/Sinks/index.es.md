@@ -534,7 +534,7 @@ MPEG-TS (MPEG Transport Stream) es un formato contenedor digital estándar para 
 
 Use la clase `MPEGTSSinkSettings` para establecer los parámetros.
 
-Establezca `SCTE35PID` en un PID distinto de cero para escribir un flujo SCTE-35: las secciones de empalme leídas por un `MPEGTSDemuxBlock` con `EnableSCTE35` pasan a la salida, e `InsertSpliceOut` / `InsertSpliceIn` añaden las suyas. Consulte [Eventos de empalme SCTE-35](../Guides/scte35-splice-events-mpegts-csharp.md).
+Establezca `SCTE35PID` en un PID de 0x50 a 0x1FFE para escribir un flujo SCTE-35: las secciones de empalme leídas por un `MPEGTSDemuxBlock` con `EnableSCTE35` pasan a la salida, e `InsertSpliceOut` / `InsertSpliceIn` añaden las suyas. Consulte [Eventos de empalme SCTE-35](../Guides/scte35-splice-events-mpegts-csharp.md).
 
 #### Información del bloque
 
@@ -964,7 +964,7 @@ var aacEncoder = new AACEncoderBlock();
 pipeline.Connect(videoSource.Output, h264Encoder.Input);
 pipeline.Connect(audioSource.Output, aacEncoder.Input);
 
-// Sink de Facebook Live — FacebookLiveSinkSettings recibe solo la CLAVE de stream.
+// Sink de Facebook Live — FacebookLiveSinkSettings recibe la CLAVE de stream, no una URL; el certificado de ingesta se valida de forma predeterminada (TLSValidationFlags = RTMPTLSCertificateFlags.NONE la desactiva).
 var sink = new FacebookLiveSinkBlock(new FacebookLiveSinkSettings("tu_clave_de_stream"));
 pipeline.Connect(h264Encoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Video));
 pipeline.Connect(aacEncoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Audio));
@@ -1330,7 +1330,11 @@ Nombre: SRTSinkBlock.
 
 ```mermaid
 graph LR;
-    UniversalSourceBlock-->SRTSinkBlock;
+    UniversalSourceBlock-->AACEncoderBlock;
+    UniversalSourceBlock-->H264EncoderBlock;
+    AACEncoderBlock-->MPEGTSSinkBlock;
+    H264EncoderBlock-->MPEGTSSinkBlock;
+    MPEGTSSinkBlock-->SRTSinkBlock;
 ```
 
 #### Código de ejemplo
@@ -1341,20 +1345,29 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
+var audioEncoderBlock = new AACEncoderBlock(AACEncoderBlock.GetDefaultSettings());
+pipeline.Connect(fileSource.AudioOutput, audioEncoderBlock.Input);
+
+var videoEncoderBlock = new H264EncoderBlock(new OpenH264EncoderSettings());
+pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
+
+// SRTSinkBlock envía un único flujo ya multiplexado: codifique y multiplexe a MPEG-TS primero.
+// Para prescindir del multiplexor, use SRTMPEGTSSinkBlock (abajo).
+var muxer = new MPEGTSSinkBlock(new MPEGTSSinkSettings(string.Empty) { FileOutput = false });
+pipeline.Connect(audioEncoderBlock.Output, muxer.CreateNewInput(MediaBlockPadMediaType.Audio));
+pipeline.Connect(videoEncoderBlock.Output, muxer.CreateNewInput(MediaBlockPadMediaType.Video));
+
 // Crear sink SRT en modo caller (conectándose a un listener).
-// SRTSinkBlock lleva MPEG-TS internamente — conecta flujos elementales codificados directamente.
 var srtSettings = new SRTSinkSettings
 {
-    Host = "servidor-srt.ejemplo.com",
-    Port = 1234,
-    Mode = SRTMode.Caller,
-    Latency = 200, // milisegundos
+    Uri = "srt://servidor-srt.ejemplo.com:1234",
+    Mode = SRTConnectionMode.Caller,
+    Latency = TimeSpan.FromMilliseconds(200),
     Passphrase = "frase-de-cifrado-opcional"
 };
 
 var srtSink = new SRTSinkBlock(srtSettings);
-pipeline.Connect(fileSource.AudioOutput, srtSink.CreateNewInput(MediaBlockPadMediaType.Audio));
-pipeline.Connect(fileSource.VideoOutput, srtSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(muxer.Output, srtSink.Input);
 
 await pipeline.StartAsync();
 ```
@@ -1367,7 +1380,9 @@ Windows, macOS, Linux, iOS, Android.
 
 SRT MPEG-TS es una combinación del protocolo de transporte SRT con el formato contenedor MPEG-TS. Esto permite transporte seguro y confiable de flujos MPEG-TS sobre redes públicas, lo cual es útil para transmisión y flujos de trabajo de video profesional.
 
-Use la clase `SRTMPEGTSSinkSettings` para establecer los parámetros.
+Use la clase `SRTSinkSettings` para establecer los parámetros.
+
+Establezca `SCTE35PID` en la configuración en un PID de 0x50 a 0x1FFE para transportar marcadores publicitarios SCTE-35: `InsertSpliceOut` / `InsertSpliceIn` los añaden mientras se transmite, y las secciones de empalme leídas por un `MPEGTSDemuxBlock` con `EnableSCTE35` pasan al flujo. Consulte [Eventos de empalme SCTE-35](../Guides/scte35-splice-events-mpegts-csharp.md).
 
 #### Información del bloque
 
@@ -1414,12 +1429,11 @@ var videoEncoderBlock = new H264EncoderBlock(new OpenH264EncoderSettings());
 pipeline.Connect(fileSource.VideoOutput, videoEncoderBlock.Input);
 
 // Configurar sink SRT MPEG-TS
-var srtMpegtsSinkSettings = new SRTMPEGTSSinkSettings
+var srtMpegtsSinkSettings = new SRTSinkSettings
 {
-    Host = "servidor-srt.ejemplo.com",
-    Port = 1234,
-    Mode = SRTMode.Caller,
-    Latency = 200,
+    Uri = "srt://servidor-srt.ejemplo.com:1234",
+    Mode = SRTConnectionMode.Caller,
+    Latency = TimeSpan.FromMilliseconds(200),
     Passphrase = "frase-de-cifrado-opcional"
 };
 
@@ -1503,7 +1517,7 @@ var aacEncoder = new AACEncoderBlock(aacSettings);
 pipeline.Connect(videoSource.Output, h264Encoder.Input);
 pipeline.Connect(audioSource.Output, aacEncoder.Input);
 
-// Sink de YouTube Live — YouTubeSinkSettings recibe solo la CLAVE de stream.
+// Sink de YouTube Live — YouTubeSinkSettings recibe la CLAVE de stream, no una URL; el certificado de ingesta se valida de forma predeterminada (TLSValidationFlags = RTMPTLSCertificateFlags.NONE la desactiva).
 var sink = new YouTubeSinkBlock(new YouTubeSinkSettings("tu_clave_de_stream_youtube"));
 pipeline.Connect(h264Encoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Video));
 pipeline.Connect(aacEncoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Audio));
@@ -1783,6 +1797,8 @@ El `RISTMPEGTSSinkBlock` multiplexa flujos de audio y video en MPEG-TS, encapsul
 
 Se admiten múltiples pines de entrada de audio y video. Llame a `CreateNewInput(MediaBlockPadMediaType.Video)` y `CreateNewInput(MediaBlockPadMediaType.Audio)` para obtener los pines antes de conectar los codificadores.
 
+Establezca `SCTE35PID` en la configuración en un PID de 0x50 a 0x1FFE para transportar marcadores publicitarios SCTE-35: `InsertSpliceOut` / `InsertSpliceIn` los añaden mientras se transmite, y las secciones de empalme leídas por un `MPEGTSDemuxBlock` con `EnableSCTE35` pasan al flujo. Consulte [Eventos de empalme SCTE-35](../Guides/scte35-splice-events-mpegts-csharp.md).
+
 #### Información del bloque
 
 Nombre: RISTMPEGTSSinkBlock.
@@ -1906,6 +1922,8 @@ Windows, macOS, Linux, iOS, Android.
 UDP MPEG-TS combina el multiplexado MPEG-TS con el transporte UDP. Esto permite la entrega de baja latencia de streams de audio y video multiplexados sobre UDP, ampliamente utilizado en broadcast, IPTV y flujos de videovigilancia.
 
 Use la clase `UDPSinkSettings` para configurar los parámetros.
+
+Establezca `SCTE35PID` en la configuración en un PID de 0x50 a 0x1FFE para transportar marcadores publicitarios SCTE-35: `InsertSpliceOut` / `InsertSpliceIn` los añaden mientras se transmite, y las secciones de empalme leídas por un `MPEGTSDemuxBlock` con `EnableSCTE35` pasan al flujo. Consulte [Eventos de empalme SCTE-35](../Guides/scte35-splice-events-mpegts-csharp.md).
 
 #### Información del bloque
 
@@ -2043,6 +2061,8 @@ El `MultiUDPMPEGTSSinkBlock` multiplexa streams de audio y video en MPEG-TS y en
 
 Se admiten varios pads de entrada de audio y video. Llame a `CreateNewInput(MediaBlockPadMediaType.Video)` y `CreateNewInput(MediaBlockPadMediaType.Audio)` para obtener pads antes de conectar los codificadores.
 
+Establezca `SCTE35PID` en la configuración en un PID de 0x50 a 0x1FFE para transportar marcadores publicitarios SCTE-35: `InsertSpliceOut` / `InsertSpliceIn` los añaden mientras se transmite, y las secciones de empalme leídas por un `MPEGTSDemuxBlock` con `EnableSCTE35` pasan al flujo. Consulte [Eventos de empalme SCTE-35](../Guides/scte35-splice-events-mpegts-csharp.md).
+
 #### Información del bloque
 
 Nombre: MultiUDPMPEGTSSinkBlock.
@@ -2169,7 +2189,7 @@ El `FDSinkBlock` escribe datos multimedia en un descriptor de archivo Unix (un m
 
 Pase `addQueue: true` (predeterminado) para añadir una cola de búfer que evita que el pipeline se bloquee en escrituras lentas al descriptor.
 
-El descriptor debe estar abierto y ser escribible antes de que el pipeline inicie. El bloque no lo cierra cuando el pipeline se detiene.
+El descriptor debe estar abierto y ser escribible antes de que el pipeline inicie. El bloque no lo cierra cuando el pipeline se detiene. En Windows el bloque escribe a través de su propia copia del descriptor, creada al construir el pipeline y cerrada al detenerlo, por lo que cerrar su descriptor mientras el pipeline graba no detiene la grabación ni cierra la aplicación. La copia mantiene abiertos el archivo o la tubería hasta la detención, así que, tras cerrar su descriptor, un lector en el otro extremo de una tubería solo ve el final del flujo al detenerse el pipeline. Un reinicio crea una copia nueva: para entonces el descriptor debe volver a estar abierto, o su número puede pertenecer ya a otro archivo.
 
 #### Información del bloque
 

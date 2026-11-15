@@ -478,8 +478,7 @@ La classe `MPEGTSOutput` s'initialise avec ces paramètres par défaut :
 ### Redists requis  
 
 - Video Capture SDK redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
-- Video Edit SDK redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
-- MP4 redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
+- MP4 redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/) [ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.arm64/) (ARM64 : uniquement `MPEGTSOutput` et les autres sorties Media Foundation avec les encodeurs Microsoft ; pas d'encodeurs Intel Quick Sync, NVIDIA ni des anciens encodeurs MP4 DirectShow)
 
 ---
 Consultez notre page [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) pour obtenir davantage d'exemples de code.

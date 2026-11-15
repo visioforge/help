@@ -1064,6 +1064,8 @@ videoCaptureCore.Audio_Effects_DS_Gargle(0, "gargle",
 
 Réverbération professionnelle avec modélisation environnementale.
 
+**Disponibilité** : Windows 11 peut ne pas enregistrer le DMO de réverbération I3DL2. L'effet est alors ignoré, `OnError` le signale et les autres effets audio continuent de fonctionner ; utilisez DS Waves Reverb à la place.
+
 **Propriétés** :
 
 - **Room** (int) : niveau d'effet de pièce (-10000 à 0 mB)

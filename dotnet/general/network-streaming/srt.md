@@ -405,6 +405,7 @@ Lower the `Latency` property on both sender and receiver settings (default is 12
 - [NDI Streaming Integration](ndi.md) — NDI video-over-IP streaming
 - [RTSP Stream Viewer and IP Camera Player](../../mediablocks/Guides/rtsp-player-csharp.md) — RTSP camera streaming guide
 - [MPEG-TS Output Format](../output-formats/mpegts.md) — MPEG-TS container configuration
+- [SCTE-35 Splice Events](../../mediablocks/Guides/scte35-splice-events-mpegts-csharp.md) — insert ad markers into an SRT MPEG-TS stream
 - [Deployment Guide](../../deployment-x/index.md) — platform-specific runtime packages
 - [Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — SRT source demo
 - [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads

@@ -55,7 +55,7 @@ Use AnyCPU (the default — no `<Platform>` or `<PlatformTarget>` element requir
 
 `VideoEditCore` exposes two distinct editing paths:
 
-**1. Fast-edit (stream-copy, no re-encode)** — `FastEdit_CutFileAsync(source, start, stop, output)`. Stream-copies a single segment of an MP4/MOV/M4A or compatible MPEG-TS-family file (`.ts`, `.m2ts`, or `.mts`) without touching the codec. Fast (I/O-bound) and lossless, but limited to one input. Use the overload with `FastEditSeekMode.Input` as the fifth argument for input-side seeking in large transport-stream files; the default `FastEditSeekMode.Output` preserves the existing behavior. Input-side seeking remains keyframe-dependent and may not be frame-accurate. Used by the bundled `references/MainWindow.xaml.cs`.
+**1. Fast-edit (stream-copy, no re-encode)** — `FastEdit_CutFileAsync(source, start, stop, output)`. Stream-copies a single segment of an MP4/MOV/M4A or compatible MPEG-TS-family file (`.ts`, `.m2ts`, or `.mts`) without touching the codec. Fast (I/O-bound) and lossless, but limited to one input. The default seek mode is `FastEditSeekMode.Input`: the cut starts on the keyframe at or before the start position, so it may begin slightly earlier than requested. Pass `FastEditSeekMode.Output` as the fifth argument for output-side seeking - with stream copy it drops video up to the first keyframe after the start, so a cut shorter than one GOP can come out without video. With the default mode a zero `stop` cuts from `start` to the end of the file; with `FastEditSeekMode.Output` it copies the whole file. Used by the bundled `references/MainWindow.xaml.cs`.
 
 **2. Timeline (decode → re-encode)** — multiple `Input_Add*FileAsync` calls populate an ordered list of input segments (video, audio, image), each with an in/out `TimeSpan` for sub-clipping. The engine concatenates them into a single output stream that re-encodes through the format set in `Output_Format`. This is the path for merging multiple files, transcoding, applying effects, or building a slideshow.
 
@@ -125,7 +125,7 @@ Note `Window_Loaded` becomes `async void` — keep it `async void` only for even
 
 ## Hello-World cut
 
-`references/MainWindow.xaml.cs` is the full hello-world: load a source file, set start / stop seconds, click Start, and the SDK stream-copies the segment without re-encoding via `FastEdit_CutFileAsync`. The sample automatically selects `FastEditSeekMode.Input` for `.ts`, `.m2ts`, and `.mts` inputs, and keeps `FastEditSeekMode.Output` for other files. No `VideoView` is needed for this path (no preview is shown — the engine writes the output file directly and fires `OnProgress` + `OnStop`).
+`references/MainWindow.xaml.cs` is the full hello-world: load a source file, set start / stop seconds, click Start, and the SDK stream-copies the segment without re-encoding via `FastEdit_CutFileAsync`. The sample uses the default seek mode, `FastEditSeekMode.Input`, so the cut starts on the keyframe at or before the start time. No `VideoView` is needed for this path (no preview is shown — the engine writes the output file directly and fires `OnProgress` + `OnStop`).
 
 For a hello-world that exercises the timeline model and previews the result, copy the merge snippet from "Timeline model" above into a `Window_Loaded`-driven button click in a fresh WPF window with a `<wpf:VideoView x:Name="VideoView1" />` element (declare `xmlns:wpf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"` on the `<Window>` root) and pass the `VideoView1` to the `VideoEditCore` constructor.
 

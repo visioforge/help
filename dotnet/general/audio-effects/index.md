@@ -125,7 +125,7 @@ For detailed parameters and properties of each effect, see [Audio Effects Refere
 - **DS Chorus** — Multiple delayed and modulated copies
 - **DS Distortion** — Audio distortion/overdrive
 - **DS Gargle** — Gargling/tremolo modulation
-- **DS Reverb (I3DL2)** — Professional reverb with environmental modeling
+- **DS Reverb (I3DL2)** — Professional reverb with environmental modeling (may be missing on Windows 11; DS Waves Reverb is the alternative)
 - **DS Waves Reverb** — Simplified reverb
 
 ## GStreamer Elements

@@ -225,6 +225,61 @@ Vous pouvez spécifier une API à utiliser lors de l'énumération des périphé
 
 Windows, macOS, Linux, iOS, Android.
 
+### Bloc source ASIO { #asio-source-block }
+
+`ASIOSourceBlock` capture l'audio d'un périphérique Steinberg ASIO avec un ensemble choisi de canaux d'entrée et une taille de tampon.
+
+Utilisez-le avec les interfaces audio professionnelles et multi-entrées : ASIO accède directement au pilote, avec une taille de tampon choisie pour une faible latence, et permet de prendre des entrées individuelles (par exemple seulement le micro de l'entrée 3) au lieu de la paire stéréo exposée par Windows. Pour une carte son ordinaire ou un casque USB, `SystemAudioSourceBlock` avec WASAPI est plus simple et ne demande aucun pilote supplémentaire.
+
+#### Informations sur le bloc
+
+Nom : ASIOSourceBlock.
+
+| Direction du pin | Type de média | Nombre de pins |
+| --- | :---: | :---: |
+| Sortie audio | audio non compressé | 1 |
+
+#### Énumération des périphériques disponibles
+
+`ASIOSourceBlock.GetDevicesAsync()` renvoie les entrées ASIO, la même liste que `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.ASIO)`. `ASIOSourceBlock.IsAvailable()` indique si le plugin ASIO est présent.
+
+#### Exemple de code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// ASIO inputs come from the regular device enumerator, filtered by API
+var device = (await ASIOSourceBlock.GetDevicesAsync())[0];
+
+var source = new ASIOSourceBlock(new ASIOSourceSettings(device)
+{
+    Channels = new[] { 0, 1 }, // zero-based; null or empty opens every channel
+    BufferSize = 0,             // 0 = the driver's preferred buffer size
+});
+
+var renderer = new AudioRendererBlock();
+pipeline.Connect(source.Output, renderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Remarques
+
+- `Channels` prend des indices de canaux d'entrée à partir de zéro, dans l'ordre croissant. Un indice que le périphérique n'a pas arrête le démarrage avec une erreur au lieu d'ouvrir silencieusement tous les canaux.
+- `BufferSize` est exprimé en échantillons ; 0 utilise la taille préférée du pilote. Une taille hors de la plage ou de la granularité du pilote arrête le démarrage avec une erreur.
+- Un périphérique ASIO peut aussi être passé à `SystemAudioSourceBlock` via `device.CreateSourceSettings(format)`, et à Video Capture SDK .Net (`VideoCaptureCoreX`) :
+
+```csharp
+var device = (await DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.ASIO))[0];
+videoCapture.Audio_Source = device.CreateSourceSettingsVC();
+```
+
+- Le périphérique s'ouvre à la fréquence et au format d'échantillon de son pilote ; le SDK les convertit pour le bloc suivant.
+
+#### Plateformes
+
+Windows. Nécessite le paquet `VisioForge.CrossPlatform.Core.Windows.Adds.x64` et un pilote ASIO installé.
+
 ### Bloc source Basler
 
 Le bloc source Basler prend en charge les caméras Basler USB3 Vision et GigE.

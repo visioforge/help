@@ -405,6 +405,7 @@ Abaissez la propriété `Latency` sur les paramètres de l'émetteur et du réce
 - [Intégration de la diffusion NDI](ndi.md) — diffusion vidéo NDI sur IP
 - [Visionneuse de flux RTSP et lecteur de caméra IP](../../mediablocks/Guides/rtsp-player-csharp.md) — guide de diffusion caméra RTSP
 - [Format de sortie MPEG-TS](../output-formats/mpegts.md) — configuration du conteneur MPEG-TS
+- [Événements de raccord SCTE-35](../../mediablocks/Guides/scte35-splice-events-mpegts-csharp.md) — insérez des marqueurs publicitaires dans un flux SRT MPEG-TS
 - [Guide de déploiement](../../deployment-x/index.md) — paquets d'exécution spécifiques aux plateformes
 - [Exemples de code sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) — démo source SRT
 - [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — page produit et téléchargements

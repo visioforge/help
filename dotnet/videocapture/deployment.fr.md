@@ -58,7 +58,7 @@ Ajoutez les paquets NuGet requis à votre projet d'application : après la compi
 **Paquets spécifiques à certaines fonctionnalités :**
 
 - Intégration FFMPEG (pour la sortie fichier / le streaming réseau) : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64)
-- Prise en charge de la sortie MP4 : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64)
+- Prise en charge de la sortie MP4 : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64) | [ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.arm64) (`MP4HWOutput` et les autres sorties Media Foundation avec les encodeurs Microsoft, ainsi que la source RTSP à faible latence)
 - Intégration source VLC (pour les sources fichier / caméra IP) : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.x64) | [ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VLC.arm64)
 - Format de sortie WebM : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.WebM.x86)
 - Prise en charge des formats XIPH (Ogg, Vorbis, FLAC) : [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x86) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x64)
@@ -129,7 +129,7 @@ Pour un contrôle complet sur le processus de déploiement ou dans les environne
 
 - Version héritée : VisioForge_AAC_Encoder.ax, VisioForge_H264_Encoder_XP.ax, VisioForge_MP4_Muxer.ax avec bibliothèques de support
 - Version 10 : VisioForge_AAC_Encoder_v10.ax, VisioForge_H264_Encoder.ax, VisioForge_MP4_Muxer_v10.ax avec bibliothèques de support
-- Version 11 / Encodage matériel : VisioForge_MFT.dll, VisioForge_MF_Mux.ax (avec variantes x64)
+- Version 11 / Encodage matériel : VisioForge_MFT.dll, VisioForge_MF_Mux.ax (avec variantes x64) ; sous Windows ARM64, VisioForge_MFT_ARM64.dll et VisioForge_MF_Mux_ARM64.ax dans le dossier `arm64` de l'application, sans les encodeurs Intel Quick Sync et NVIDIA
 
 **Sortie WebM :**
 

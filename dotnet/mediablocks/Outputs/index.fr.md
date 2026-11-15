@@ -136,7 +136,8 @@ Le `FacebookLiveOutputBlock` est configuré à l'aide de `FacebookLiveSinkSettin
 
 Propriétés clés de `FacebookLiveSinkSettings` :
 
-- `Url` (string) : l'URL RTMP fournie par Facebook Live pour le streaming.
+- `Key` (string) : la clé de flux Facebook Live. Le bloc diffuse vers `rtmps://live-api-s.facebook.com:443/rtmp/`.
+- `TLSValidationFlags` (`RTMPTLSCertificateFlags`) : les problèmes du certificat du serveur d'ingestion qui font échouer la connexion. Par défaut `VALIDATE_ALL` ; `NONE` accepte n'importe quel certificat.
 
 Constructeur :
 
@@ -1150,7 +1151,8 @@ Le `YouTubeOutputBlock` est configuré à l'aide de `YouTubeSinkSettings`, `IH26
 
 Propriétés clés de `YouTubeSinkSettings` :
 
-- `Url` (string) : l'URL RTMP fournie par YouTube Live pour le streaming (par ex. « rtmp://a.rtmp.youtube.com/live2/YOUR-STREAM-KEY »).
+- `Key` (string) : la clé de flux YouTube Live. Le bloc diffuse vers `rtmps://a.rtmps.youtube.com/live2/` sur le port 443.
+- `TLSValidationFlags` (`RTMPTLSCertificateFlags`) : les problèmes du certificat du serveur d'ingestion qui font échouer la connexion. Par défaut `VALIDATE_ALL` ; `NONE` accepte n'importe quel certificat.
 
 Constructeur :
 
