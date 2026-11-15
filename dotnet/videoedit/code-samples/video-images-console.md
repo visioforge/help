@@ -254,6 +254,6 @@ There are also guides for transitions between video clips, for text and image ov
 - [Transition between clips](transition-video.md) — transitions between video files on the timeline
 - [Add a text overlay](add-text-overlay.md) — titles and captions over the video
 - [Add an image overlay](add-image-overlay.md) — a logo or a picture over the video
-- [Join several sources into one file](output-file-from-multiple-sources.md) — video and audio files joined on one timeline
+- [Merge video and audio without re-encoding](output-file-from-multiple-sources.md) — the video of one file and the audio of another, copied into one MP4
 - [Cross-platform deployment](../../deployment-x/index.md) — the native packages `VideoEditCoreX` needs on each platform
 - [Video Edit SDK .NET Product Page](https://www.visioforge.com/video-edit-sdk-net)

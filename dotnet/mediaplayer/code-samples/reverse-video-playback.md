@@ -1,10 +1,12 @@
 ---
-title: Reverse Video Playback in .NET with C# Code Examples
-description: Implement reverse video playback with frame-by-frame navigation using VisioForge Media Player SDK .NET on Windows and cross-platform targets.
+title: Reverse Video Playback and Frame Stepping in C# .NET
+description: Play video backwards in C# with a negative playback rate and step frame by frame in reverse, using MediaPlayerCoreX or a Media Blocks pipeline.
 tags:
   - Media Player SDK
+  - Media Blocks SDK
   - .NET
   - MediaPlayerCoreX
+  - MediaBlocksPipeline
   - Windows
   - macOS
   - Linux
@@ -15,235 +17,274 @@ tags:
   - C#
 primary_api_classes:
   - MediaPlayerCoreX
-  - MediaPlayerCore
-  - PlaybackState
+  - MediaBlocksPipeline
+  - UniversalSourceBlock
   - UniversalSourceSettings
+  - MediaPlayerCore
 
 ---
 
-# Implementing Reverse Video Playback in .NET Applications
+# Reverse Video Playback in C# and .NET
 
-Playing video in reverse is a powerful feature for media applications, allowing users to review content, create unique visual effects, or enhance the user experience with non-linear playback options. This guide provides complete implementations for reverse playback in .NET applications, focusing on both cross-platform and Windows-specific solutions.
+Reverse playback in Media Player SDK .NET and Media Blocks SDK .NET is a negative playback rate. `Rate_SetAsync(-1.0)` plays the file backwards from the current position to its start at normal speed; `-2.0` plays it backwards twice as fast, `-0.5` at half speed. The same call works on `MediaPlayerCoreX` and on a `MediaBlocksPipeline`. The UI snippets below use WPF.
 
-## Understanding Reverse Playback Mechanisms
+Reverse playback needs a seekable source: a media file, not a live stream such as a camera or RTSP.
 
-Reverse video playback can be achieved through several techniques, each with distinct advantages depending on your application's requirements:
+## Reverse Playback with MediaPlayerCoreX
 
-1. **Rate-based reverse playback** - Setting a negative playback rate to reverse the video stream
-2. **Frame-by-frame backward navigation** - Manually stepping backward through cached video frames
-3. **Buffer-based approaches** - Creating a frame buffer to enable smooth reverse navigation
-
-Let's explore how to implement each approach using the Media Player SDK for .NET.
-
-## Cross-Platform Reverse Playback with MediaPlayerCoreX
-
-The MediaPlayerCoreX engine provides cross-platform support for reverse video playback with a straightforward implementation. This approach works across Windows, macOS, and other supported platforms.
-
-### Basic Implementation
-
-The simplest method for reverse playback involves setting a negative rate value:
+### Open, Play, Then Reverse
 
 ```cs
-// Create new instance of MediaPlayerCoreX
-MediaPlayerCoreX MediaPlayer1 = new MediaPlayerCoreX(VideoView1);
+using System.Diagnostics;
+using VisioForge.Core;
+using VisioForge.Core.MediaPlayerX;
 
-// Set the source file
-var fileSource = await UniversalSourceSettings.CreateAsync("video.mp4");
-await MediaPlayer1.OpenAsync(fileSource);
+// A field of the window
+private MediaPlayerCoreX player;
 
-// Start normal playback first
-await MediaPlayer1.PlayAsync();
+// In the window's Loaded handler
+await VisioForgeX.InitSDKAsync(); // once per application
 
-// Change to reverse playback with normal speed
-MediaPlayer1.Rate_Set(-1.0);
+player = new MediaPlayerCoreX(VideoView1);
+player.OnError += (_, e) => Debug.WriteLine(e.Message);
+
+await player.OpenAsync(@"C:\Videos\sample.mp4");
+await player.PlayAsync();
 ```
 
-### Controlling Reverse Playback Speed
-
-You can control the reverse playback speed by adjusting the negative rate value:
+Switch to reverse while the file is playing, for example from a button:
 
 ```cs
-// Double-speed reverse playback
-MediaPlayer1.Rate_Set(-2.0);
-
-// Half-speed reverse playback (slow motion in reverse)
-MediaPlayer1.Rate_Set(-0.5);
-
-// Quarter-speed reverse playback (very slow motion in reverse)
-MediaPlayer1.Rate_Set(-0.25);
-```
-
-### Tracking Position During Reverse Playback
-
-`MediaPlayerCoreX` does not raise a position-changed event; poll the position on a timer instead:
-
-```cs
-// Poll the player position every 100 ms and update the UI
-var positionTimer = new System.Threading.Timer(_ =>
+private async void btReverse_Click(object sender, RoutedEventArgs e)
 {
-    TimeSpan currentPosition = MediaPlayer1.Position_Get();
-    UpdatePositionUI(currentPosition);
-
-    // Detect reaching the start while playing backwards
-    if (MediaPlayer1.Rate_Get() < 0 && currentPosition <= TimeSpan.FromMilliseconds(100))
-    {
-        // Switch to forward playback (or pause)
-        MediaPlayer1.Rate_Set(1.0);
-    }
-}, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
-```
-
-## Windows-Specific Frame-by-Frame Reverse Navigation
-
-The classic `MediaPlayerCore` engine (Windows-only) provides enhanced frame-by-frame control with its frame caching system, allowing precise backward navigation even with codecs that don't natively support it. Declare a separate classic-engine instance — the `ReversePlayback_*` API lives on `MediaPlayerCore` and is **not** available on `MediaPlayerCoreX`.
-
-### Setting Up Frame Caching
-
-Before starting playback, configure the reverse playback cache:
-
-```cs
-// Classic Windows engine — different type from MediaPlayerCoreX above
-MediaPlayerCore classicPlayer = new MediaPlayerCore(VideoView1);
-
-// Configure reverse playback before starting
-classicPlayer.ReversePlayback_CacheSize = 100; // Cache 100 frames
-classicPlayer.ReversePlayback_Enabled = true;  // Enable the feature
-
-// Start playback
-await classicPlayer.PlayAsync();
-```
-
-### Navigating Frame by Frame
-
-With the cache configured, you can navigate to previous frames:
-
-```cs
-// Navigate to the previous frame
-classicPlayer.ReversePlayback_PreviousFrame();
-
-// Navigate backward multiple frames
-for(int i = 0; i < 5; i++)
-{
-    classicPlayer.ReversePlayback_PreviousFrame();
-    // Optional: add delay between frames for controlled playback
-    await Task.Delay(40); // ~25fps equivalent timing
+    // Plays backwards from the current position to the start of the file
+    await player.Rate_SetAsync(-1.0);
 }
 ```
 
-### Advanced Frame Cache Configuration
+`Rate_SetAsync` returns `false` and raises `OnError` when the rate cannot be applied. Three rules come from the SDK:
 
-For applications with specific memory or performance requirements, you can fine-tune the cache:
+- **Reverse is set once playback has started.** While the file is not playing (after `OpenAsync` and before `PlayAsync`, or paused at the end by `PauseOnStop`), a negative rate is refused; only a positive rate is stored for the next start.
+- **The rate seek needs a position.** Right after `PlayAsync` the pipeline may not report one yet, so call it once playback is running, not on the line after `PlayAsync`.
+- **Each file starts at 1.0.** After `StopAsync`, or the end of the file without `PauseOnStop`, every rate is refused until the next `OpenAsync`; set the rate again after it.
 
-```cs
-// For high-resolution videos, you might need fewer frames to manage memory
-classicPlayer.ReversePlayback_CacheSize = 50; // Reduce cache size
+### Play the Whole File Backwards from the End
 
-// For applications that need extensive backward navigation
-classicPlayer.ReversePlayback_CacheSize = 250; // Increase cache size
-```
-
-## Implementing UI Controls for Reverse Playback
-
-A complete reverse playback implementation typically includes dedicated UI controls:
+Reverse plays from the current position. To play the whole file backwards, turn the reverse rate on and then seek to the end. A seek made while the rate is negative plays from that position back to the start. Seek only when the rate was applied; otherwise the seek goes forward to the end and playback ends at once:
 
 ```cs
-// Button click handler for reverse playback
-private async void ReversePlaybackButton_Click(object sender, EventArgs e)
+if (await player.Rate_SetAsync(-1.0))
 {
-    if(MediaPlayer1.State == PlaybackState.Play)
-    {
-        // Toggle between forward and reverse
-        if(MediaPlayer1.Rate_Get() > 0)
-        {
-            MediaPlayer1.Rate_Set(-1.0);
-            UpdateUIForReverseMode(true);
-        }
-        else
-        {
-            MediaPlayer1.Rate_Set(1.0);
-            UpdateUIForReverseMode(false);
-        }
-    }
-    else
-    {
-        // Start playback in reverse
-        await MediaPlayer1.PlayAsync();
-        MediaPlayer1.Rate_Set(-1.0);
-        UpdateUIForReverseMode(true);
-    }
-}
-
-// Button click handler for frame-by-frame backward navigation
-// (assumes the Windows-only classic engine `classicPlayer` declared above)
-private async void PreviousFrameButton_Click(object sender, EventArgs e)
-{
-    // Ensure we're paused first — classic MediaPlayerCore exposes State() as a method (X is a property).
-    if (classicPlayer.State() == PlaybackState.Play)
-    {
-        await classicPlayer.PauseAsync();
-    }
-    
-    // Navigate to previous frame
-    classicPlayer.ReversePlayback_PreviousFrame();
-    UpdateFrameCountDisplay();
+    await player.Position_SetAsync(await player.DurationAsync());
 }
 ```
 
-## Performance Considerations
-
-Reverse playback can be resource-intensive, especially with high-resolution videos. Consider these optimization techniques:
-
-1. **Limit cache size** for devices with memory constraints
-2. **Use hardware acceleration** when available
-3. **Monitor performance** during reverse playback with debugging tools
-4. **Provide fallback options** for devices that struggle with full-speed reverse playback
+### Reverse Speed and Back to Forward
 
 ```cs
-// Example of performance monitoring during reverse playback.
-// Rate tracking lives on MediaPlayerCoreX (`MediaPlayer1`);
-// cache adjustment targets the classic MediaPlayerCore (`classicPlayer`).
-private void MonitorPerformance()
-{
-    Timer performanceTimer = new Timer(1000);
-    performanceTimer.Elapsed += (s, e) => 
-    {
-        if(MediaPlayer1.Rate_Get() < 0)
-        {
-            // Log or display current memory usage, frame rate, etc.
-            LogPerformanceMetrics();
-        }
+// Twice as fast, backwards
+await player.Rate_SetAsync(-2.0);
 
-        // Adjust classic-engine frame cache if memory pressure is high
-        if(IsMemoryUsageHigh())
-        {
-            classicPlayer.ReversePlayback_CacheSize = 
-                Math.Max(10, classicPlayer.ReversePlayback_CacheSize / 2);
-        }
-    };
-    performanceTimer.Start();
+// Half speed, backwards (slow motion)
+await player.Rate_SetAsync(-0.5);
+
+// Back to normal forward playback from the current position
+await player.Rate_SetAsync(1.0);
+
+// Which direction is playing now
+bool isReverse = await player.Rate_GetAsync() < 0;
+```
+
+A rate of `0` is rejected; use `PauseAsync` to stop the picture.
+
+### Position and the Start of the File
+
+`MediaPlayerCoreX` raises no position event. Read the position on a timer, as for forward playback:
+
+```cs
+// A field of the window
+private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromMilliseconds(500) };
+
+// In the window constructor or its Loaded handler
+_timer.Tick += async (_, _) =>
+{
+    var position = await player.Position_GetAsync();
+    var duration = await player.DurationAsync();
+    lbTime.Text = $"{position:hh\\:mm\\:ss} / {duration:hh\\:mm\\:ss}";
+};
+```
+
+Call `_timer.Start()` after `PlayAsync`. When reverse playback reaches the start of the file, playback ends the same way it does at the end of a forward run, and `OnStop` is raised:
+
+```cs
+player.OnStop += (_, _) => Dispatcher.InvokeAsync(() =>
+{
+    _timer.Stop();
+    btPlay.IsEnabled = true;
+});
+```
+
+With `PauseOnStop = true` the player pauses on the first frame instead of stopping, and raises `OnPause` instead of `OnStop`. Call `ResumeAsync` to play the file again; `PlayAsync` would close the file instead.
+
+### Step Frame by Frame in Reverse
+
+Two methods move by exactly one frame. Both pause playback first and work with files only:
+
+| Method | Forward playback | Reverse playback |
+| --- | --- | --- |
+| `NextFrame()` | one frame forward | one frame **back**, the reverse rate is kept |
+| `PrevFrame()` | one frame **back**, the rate is set to 1.0 | one frame forward, the reverse rate is kept |
+
+```cs
+// One frame back while the file plays forward
+player.PrevFrame();
+
+// Keep stepping backwards: set the reverse rate once, then step
+await player.Rate_SetAsync(-1.0);
+player.NextFrame();
+player.NextFrame();
+
+// Stepping leaves playback paused; resume it to play on
+await player.ResumeAsync();
+```
+
+`NextFrame` needs a video renderer (a `VideoView`). `PrevFrame` seeks to the previous frame and waits for the seek on the calling thread, up to a second, so it is slower, and its precision depends on the codec and the distance between keyframes. From a button handler, call it as `await Task.Run(player.PrevFrame);` to keep the window responsive.
+
+## Reverse Playback with Media Blocks
+
+A `MediaBlocksPipeline` takes the same rate calls. Build a player pipeline, start it, and set a negative rate while it runs:
+
+```mermaid
+graph LR
+    UniversalSourceBlock -- video --> VideoRendererBlock
+    UniversalSourceBlock -. audio .-> AudioRendererBlock
+```
+
+```cs
+using System.Diagnostics;
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.AudioRendering;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types.X.Sources;
+
+// A field of the window
+private MediaBlocksPipeline pipeline;
+
+// In the window's Loaded handler
+await VisioForgeX.InitSDKAsync(); // once per application
+
+pipeline = new MediaBlocksPipeline();
+pipeline.OnError += (_, e) => Debug.WriteLine(e.Message);
+pipeline.OnStop += (_, _) => Debug.WriteLine("Reached the start of the file");
+
+var sourceSettings = await UniversalSourceSettings.CreateAsync(@"C:\Videos\sample.mp4");
+var fileSource = new UniversalSourceBlock(sourceSettings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(fileSource.VideoOutput, videoRenderer.Input);
+
+// A file without audio has no AudioOutput
+if (fileSource.AudioOutput != null)
+{
+    var audioRenderer = new AudioRendererBlock();
+    pipeline.Connect(fileSource.AudioOutput, audioRenderer.Input);
+}
+
+await pipeline.StartAsync();
+```
+
+Then, once it plays (for example from a button, not on the line after `StartAsync`):
+
+```cs
+// Backwards from the current position
+await pipeline.Rate_SetAsync(-1.0);
+```
+
+To play the whole file backwards instead, seek to the end once the reverse rate is on:
+
+```cs
+if (await pipeline.Rate_SetAsync(-1.0))
+{
+    await pipeline.Position_SetAsync(await pipeline.DurationAsync());
 }
 ```
 
-## Required Dependencies
+Step and go forward again:
 
-To ensure proper functionality of reverse playback features, include these dependencies:
+```cs
+// One frame back during reverse playback (pauses first)
+pipeline.NextFrame();
 
-- Base redistributable package
-- SDK redistributable package
+// Forward again: the step left the pipeline paused, so resume it
+await pipeline.Rate_SetAsync(1.0);
+await pipeline.ResumeAsync();
+```
 
-These packages contain the necessary codecs and media processing components to enable smooth reverse playback across different video formats.
+As with `MediaPlayerCoreX`, the negative rate is set after `StartAsync` and the seek to the end runs only once it was applied, `OnStop` is raised at the start of the file, and `NextFrame` needs the `VideoRendererBlock`. Unlike the player, a positive rate set after a stop is applied at the next `StartAsync`. The pipeline has no `PrevFrame`; it belongs to `MediaPlayerCoreX`.
 
-## Additional Resources and Advanced Techniques
+When the window closes, release the engine and then the SDK:
 
-For complex media applications requiring advanced reverse playback features, consider exploring:
+```cs
+// MediaPlayerCoreX: Dispose stops playback first
+player.Dispose();
 
-- Frame extraction and manual rendering for custom effects
-- Keyframe analysis for optimized navigation
-- Buffering strategies for smoother reverse playback
+// MediaBlocksPipeline
+await pipeline.StopAsync();
+await pipeline.DisposeAsync();
 
-## Conclusion
+// Once per application, after the last engine is released
+VisioForgeX.DestroySDK();
+```
 
-Implementing reverse video playback adds significant value to media applications, providing users with enhanced control over content navigation. By following the implementation patterns in this guide, developers can create robust, performant reverse playback experiences in .NET applications.
+## Windows: Reverse Frames with MediaPlayerCore
 
----
-Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page for more complete code samples and implementation examples.
+The Windows `MediaPlayerCore` engine (DirectShow) steps backwards through a cache of decoded frames instead of a negative rate. While reverse playback is enabled, the frames that play are kept in the cache; the feature requires the Professional edition.
+
+```cs
+using VisioForge.Core.MediaPlayer;
+
+// MediaPlayer1 is a MediaPlayerCore; number of decoded frames kept for stepping back
+MediaPlayer1.ReversePlayback_CacheSize = 100;
+MediaPlayer1.ReversePlayback_Enabled = true;
+```
+
+Once some frames have played, step through the cache. Each call pauses playback first:
+
+```cs
+MediaPlayer1.ReversePlayback_PreviousFrame();
+MediaPlayer1.ReversePlayback_NextFrame();
+
+// Jump to a cached frame; 0 is the oldest one
+MediaPlayer1.ReversePlayback_GoToFrame(50);
+
+// Back to normal playback: frees the cache and resumes if paused
+MediaPlayer1.ReversePlayback_Enabled = false;
+```
+
+A larger cache lets you go further back and uses more memory, which grows with the video resolution.
+
+## Required Packages
+
+For a Windows x64 app:
+
+```xml
+<!-- MediaPlayerCoreX; for Media Blocks use VisioForge.DotNet.MediaBlocks instead -->
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.13]" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]" />
+
+<!-- MediaPlayerCore -->
+<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.13]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.13]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.13]" />
+```
+
+Other platforms take their own redistributables: see [Cross-platform deployment](../../deployment-x/index.md) and [Media Player SDK deployment](../deployment.md).
+
+## Sample Applications
+
+- **[Simple Media Player (Media Player SDK X, Avalonia)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/Simple%20Media%20Player)** — `MediaPlayerCoreX` with playback rate and frame stepping.
+- **[Simple Player Demo WPF (Media Blocks SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Player%20Demo%20WPF)** — a player pipeline built from blocks.
+- **[Main Demo (Media Player SDK, WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WPF/CSharp/Main%20Demo)** — `MediaPlayerCore` with the reverse frame cache.

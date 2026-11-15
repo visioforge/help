@@ -30,7 +30,7 @@ Cette page rassemble des recettes C# prêtes à l'emploi pour les scénarios d'�
 
 ### Composition vidéo
 
-- [**Créer des vidéos à partir de plusieurs sources**](output-file-from-multiple-sources.md) — Combinez divers fichiers d'entrée en une seule sortie
+- [**Fusionner vidéo et audio sans réencodage**](output-file-from-multiple-sources.md) — La vidéo d'un fichier et l'audio d'un autre, copiés dans un MP4
 - [**Travailler avec des segments vidéo**](several-segments.md) — Extrayez et utilisez plusieurs segments du même fichier source
 - [**Effets de transition entre fragments vidéo**](transition-video.md) — Mise en œuvre de transitions fluides entre clips
 - [**Générer des vidéos à partir de séquences d'images**](video-images-console.md) — Exemple d'application console pour la conversion image vers vidéo

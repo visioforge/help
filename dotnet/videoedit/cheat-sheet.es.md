@@ -155,7 +155,8 @@ Para recortar, utilice `Input_AddVideoFile` con un `VideoFileSource(filename, st
     - [Guía de primeros pasos](./getting-started.md) — recorrido completo para ambos motores.
     - [Índice de ejemplos de código](./code-samples/index.md) — superposiciones, transiciones, audio, composición.
 - **Tareas específicas**
-    - Fusionar / concatenar clips → [output-file-from-multiple-sources.md](./code-samples/output-file-from-multiple-sources.md)
+    - Fusionar / concatenar clips → [getting-started.md](./getting-started.md)
+    - Video de un archivo + audio de otro, sin recodificar → [output-file-from-multiple-sources.md](./code-samples/output-file-from-multiple-sources.md)
     - Recortar / multisegmento desde un único archivo → [several-segments.md](./code-samples/several-segments.md)
     - Transiciones entre clips → [transition-video.md](./code-samples/transition-video.md), [referencia de transiciones](./transitions.md)
     - Superposición de texto → [add-text-overlay.md](./code-samples/add-text-overlay.md)

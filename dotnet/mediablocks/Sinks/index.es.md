@@ -534,6 +534,8 @@ MPEG-TS (MPEG Transport Stream) es un formato contenedor digital estándar para 
 
 Use la clase `MPEGTSSinkSettings` para establecer los parámetros.
 
+Establezca `SCTE35PID` en un PID distinto de cero para escribir un flujo SCTE-35: las secciones de empalme leídas por un `MPEGTSDemuxBlock` con `EnableSCTE35` pasan a la salida, e `InsertSpliceOut` / `InsertSpliceIn` añaden las suyas. Consulte [Eventos de empalme SCTE-35](../Guides/scte35-splice-events-mpegts-csharp.md).
+
 #### Información del bloque
 
 Nombre: MPEGTSSinkBlock.
@@ -1769,7 +1771,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-Verificar disponibilidad usando `WHIPSinkBlock.IsAvailable()`. Requiere el plugin `webrtc` de GStreamer y el paquete de redistribución SDK correcto.
+Verificar disponibilidad usando `WHIPSinkBlock.IsAvailable()`. Requiere el plugin `rswebrtc` de GStreamer (`whipclientsink`, de gst-plugins-rs), `capssetter` (gst-plugins-good) y el paquete de redistribución SDK correcto.
 
 #### Plataformas
 

@@ -82,7 +82,7 @@ Pour le guide d'implémentation complet avec gestion d'événements, sources aud
 
 Fusionnez plusieurs clips vidéo dans un seul fichier de sortie. Ajoutez les fichiers à la timeline dans l'ordre, définissez le format de sortie et lancez le rendu. Prend en charge le mélange de formats source différents — combinez des fichiers MP4, AVI et MOV dans une seule sortie.
 
-Voir : [Créer des vidéos à partir de plusieurs sources](code-samples/output-file-from-multiple-sources.md)
+Voir : [Guide de prise en main](getting-started.md). Les fichiers de même format s'assemblent sans réencodage avec `VideoEditCore.FastEdit_JoinFilesAsync`.
 
 ### Rogner et couper des segments vidéo
 

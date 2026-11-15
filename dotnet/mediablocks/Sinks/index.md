@@ -514,6 +514,8 @@ MPEG-TS (MPEG Transport Stream) is a standard digital container format for trans
 
 Use the `MPEGTSSinkSettings` class to set the parameters.
 
+Set `SCTE35PID` to a non-zero PID to write a SCTE-35 stream: splice sections read by an `MPEGTSDemuxBlock` with `EnableSCTE35` pass through, and `InsertSpliceOut` / `InsertSpliceIn` add your own. See [SCTE-35 Splice Events](../Guides/scte35-splice-events-mpegts-csharp.md).
+
 #### Block info
 
 Name: MPEGTSSinkBlock.
@@ -1736,7 +1738,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `WHIPSinkBlock.IsAvailable()`. Requires the GStreamer `webrtc` plugin and the correct VisioForge SDK redistribution package.
+Check availability using `WHIPSinkBlock.IsAvailable()`. Requires the GStreamer `rswebrtc` plugin (`whipclientsink`, from gst-plugins-rs), `capssetter` (gst-plugins-good) and the correct VisioForge SDK redistribution package.
 
 #### Platforms
 

@@ -82,7 +82,7 @@ Para la guía de implementación completa con manejo de eventos, fuentes de audi
 
 Fusione múltiples clips de video en un solo archivo de salida. Agregue archivos a la línea de tiempo en secuencia, establezca el formato de salida y renderice. Soporta mezclar diferentes formatos de origen — combine archivos MP4, AVI y MOV en una sola salida.
 
-Ver: [Crear Videos desde Múltiples Fuentes](code-samples/output-file-from-multiple-sources.md)
+Ver: [Guía de Inicio Rápido](getting-started.md). Los archivos del mismo formato se unen sin recodificar con `VideoEditCore.FastEdit_JoinFilesAsync`.
 
 ### Recortar y Cortar Segmentos de Video
 

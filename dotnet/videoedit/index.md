@@ -82,7 +82,7 @@ For the complete implementation guide with event handling, audio sources, image 
 
 Merge multiple video clips into a single output file. Add files to the timeline in sequence, set the output format, and render. Supports mixing different source formats — combine MP4, AVI, and MOV files into one output.
 
-See: [Creating Videos from Multiple Sources](code-samples/output-file-from-multiple-sources.md)
+See: [Getting Started Guide](getting-started.md). Files of the same format join without re-encoding with `VideoEditCore.FastEdit_JoinFilesAsync`.
 
 ### Trim and Cut Video Segments
 

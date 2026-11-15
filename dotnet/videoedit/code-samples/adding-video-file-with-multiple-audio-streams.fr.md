@@ -93,7 +93,7 @@ videoEdit.DirectShow_Filters_Blacklist_Add("LAV Splitter Source");
 videoEdit.DirectShow_Filters_Blacklist_Add("LAV Splitter");
 ```
 
-Pour des exemples d'implémentation plus détaillés, consultez la [documentation API sur le travail avec plusieurs sources](output-file-from-multiple-sources.md).
+Pour des exemples d'implémentation plus détaillés, consultez le tutoriel [Fusionner vidéo et audio sans réencodage](output-file-from-multiple-sources.md).
 
 ## Considérations de performance
 

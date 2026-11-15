@@ -43,6 +43,7 @@ Integre funcionalidad de webcam en sus aplicaciones para videoconferencia, recon
 * [**Webcam a MP4 en WPF**](video-capture-webcam-mp4-wpf.md) - La misma grabadora de webcam en una ventana WPF definida en XAML
 * [**Grabación de Webcam con Salida WMV**](video-capture-webcam-wmv.md) - Cree grabaciones en formato WMV eficientes desde entrada de webcam con compatibilidad Windows Media
 * [**Superposición de Texto en Grabaciones de Webcam**](webcam-capture-text-overlay.md) - Dibuje un rótulo que se puede cambiar durante la grabación, la fecha y hora, el número de fotograma y el tiempo de grabación sobre un MP4 de webcam
+* [**Vista previa de webcam y captura de fotogramas**](camera-video-preview.md) - Muestre la vista previa en directo de una webcam y guarde el fotograma actual en un archivo JPEG
 
 Nuestro SDK soporta una amplia gama de resoluciones de webcam, tasas de cuadros y características especiales como enfoque automático y mejora de luz baja.
 

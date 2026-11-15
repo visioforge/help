@@ -254,6 +254,6 @@ También hay guías sobre transiciones entre clips de video, superposiciones de 
 - [Transición entre clips](transition-video.md): transiciones entre archivos de video en la línea de tiempo
 - [Añadir una superposición de texto](add-text-overlay.md): títulos y subtítulos sobre el video
 - [Añadir una superposición de imagen](add-image-overlay.md): un logotipo o una imagen sobre el video
-- [Unir varias fuentes en un archivo](output-file-from-multiple-sources.md): archivos de video y audio unidos en una línea de tiempo
+- [Unir video y audio sin recodificar](output-file-from-multiple-sources.md): el video de un archivo y el audio de otro, copiados en un MP4
 - [Despliegue multiplataforma](../../deployment-x/index.md): los paquetes nativos que `VideoEditCoreX` necesita en cada plataforma
 - [Página del producto Video Edit SDK .NET](https://www.visioforge.com/es/video-edit-sdk-net)

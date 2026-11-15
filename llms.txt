@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-11-15 06:11:30 UTC (ab5518f28a5)
+**Generated:** 2026-11-15 16:17:46 UTC (5ec26819171)
 
 ## MCP Server (for AI coding agents)
 
@@ -201,6 +201,7 @@ The following products from the old price list are no longer sold:
 - **Workgroup licenses** cover three named developers in one organization at the price of two Developer licenses; updates, support and renewal work as for the Developer license
 - **Lifetime·Team licenses** cover all developers in the purchasing organization at one location in one city and include perpetual use, lifetime minor and major updates, and email support
 - After an Annual subscription ends, the last SDK version covered by the subscription continues to function, but newer updates are not available
+- **Source code** of the main .NET SDKs (Video Capture, Media Player, Video Edit, Video Edit FFmpeg, Media Blocks) is licensed separately from €10,000, quoted on request; Virtual Camera SDK and VLC Source DirectShow Filter list their source price in the tables above
 - A free community license (one developer, no revenue: open-source, free apps, education, research, non-profit; the SDK keeps the trial watermark and adds the VisioForge logo) can be requested at [www.visioforge.com/community-license](https://www.visioforge.com/community-license)
 - All prices are in **Euros (€)**
 - Any product can be purchased on the product page at [www.visioforge.com](https://www.visioforge.com)

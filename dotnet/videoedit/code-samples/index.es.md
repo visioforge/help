@@ -30,7 +30,7 @@ Esta página recopila recetas en C# listas para usar para los escenarios de edic
 
 ### Composición de video
 
-- [**Crear videos desde múltiples fuentes**](output-file-from-multiple-sources.md) — Combine varios archivos de entrada en una sola salida
+- [**Unir video y audio sin recodificar**](output-file-from-multiple-sources.md) — El video de un archivo y el audio de otro, copiados en un MP4
 - [**Trabajar con segmentos de video**](several-segments.md) — Extraiga y use varios segmentos del mismo archivo fuente
 - [**Efectos de transición entre fragmentos de video**](transition-video.md) — Implementación de transiciones suaves entre clips
 - [**Generar videos a partir de secuencias de imágenes**](video-images-console.md) — Ejemplo de aplicación de consola para conversión imagen-a-video

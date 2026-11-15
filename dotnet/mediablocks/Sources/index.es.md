@@ -772,6 +772,12 @@ pipeline.Connect(imageSource.Output, videoRenderer.Input);
 await pipeline.StartAsync();
 ```
 
+#### Bucle y búsqueda
+
+`MediaBlocksPipeline.Loop` reproduce la secuencia de nuevo. `Position_Set`, `StartPosition` y `StopPosition` saltan a la imagen de esa posición, contada desde la primera imagen de la secuencia a la tasa de fotogramas configurada. `NumBuffers` cuenta las imágenes desde donde empieza la reproducción: el inicio, cada pasada de Loop y cada búsqueda. Una búsqueda más allá de la última imagen, o a un rango vacío, no lee ninguna imagen y no genera error: sin `Loop` termina la reproducción, con `Loop` empieza la siguiente pasada.
+
+Con `Loop` activado, mantenga `StartPosition` (o el inicio de `Position_SetRange`) dentro de la secuencia y en una imagen legible: una pasada que empieza más allá de la última imagen, o en una imagen que no se puede leer, no lee nada. El pipeline entonces termina la reproducción con `OnStop` después de un `OnLoop` y registra una advertencia.
+
 #### Disponibilidad
 
 `ImageSequenceSourceBlock.IsAvailable(settings)` devuelve `true` si el elemento GStreamer de secuencia de imágenes está disponible.

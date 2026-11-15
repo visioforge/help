@@ -254,6 +254,6 @@ Il existe aussi des guides sur les transitions entre clips vidéo, les incrustat
 - [Transition entre clips](transition-video.md) : transitions entre fichiers vidéo sur la timeline
 - [Ajouter une incrustation de texte](add-text-overlay.md) : titres et légendes sur la vidéo
 - [Ajouter une incrustation d'image](add-image-overlay.md) : un logo ou une image sur la vidéo
-- [Réunir plusieurs sources dans un fichier](output-file-from-multiple-sources.md) : fichiers vidéo et audio réunis sur une timeline
+- [Fusionner vidéo et audio sans réencodage](output-file-from-multiple-sources.md) : la vidéo d'un fichier et l'audio d'un autre, copiés dans un MP4
 - [Déploiement multiplateforme](../../deployment-x/index.md) : les paquets natifs dont `VideoEditCoreX` a besoin sur chaque plateforme
 - [Page produit Video Edit SDK .NET](https://www.visioforge.com/fr/video-edit-sdk-net)

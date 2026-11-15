@@ -54,6 +54,7 @@ Key properties of `MPEGTSDemuxSettings`:
 - `Latency` (`TimeSpan`): Gets or sets the latency. Default is 700 milliseconds.
 - `ProgramNumber` (int): Gets or sets the program number. Use -1 for default/automatic selection.
 - `SkewCorrections` (bool): Gets or sets whether the demuxer continuously corrects the output timestamps of a pushed live feed. Default is `true`, which keeps a live feed in synchronization. Set it to `false` when the input timestamps are already clock-corrected, or when the pipeline should keep the input timeline instead of correcting it. Needs GStreamer 1.28 or newer; on an older runtime the setting is not applied and the SDK log carries a warning.
+- `EnableSCTE35` (bool): Gets or sets whether SCTE-35 splice sections are read and raised as `OnSpliceEvent`. Default is `false`, which drops the SCTE-35 PID. See [SCTE-35 Splice Events](../Guides/scte35-splice-events-mpegts-csharp.md).
 
 ### The sample pipeline
 
@@ -255,7 +256,7 @@ The `UniversalDemuxBlock` is configured using an implementation of `IUniversalDe
   - `MKVDemuxSettings`
   - `MP4DemuxSettings`
   - `MPEGPSDemuxSettings`
-  - `MPEGTSDemuxSettings` (includes `Latency`, `ProgramNumber` and `SkewCorrections` properties)
+  - `MPEGTSDemuxSettings` (includes `Latency`, `ProgramNumber`, `SkewCorrections` and `EnableSCTE35` properties)
   - `OGGDemuxSettings`
   - `WebMDemuxSettings`
   - `UniversalDemuxSettings` (for `Auto` type)
