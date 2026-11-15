@@ -81,7 +81,7 @@ La vidéo crée le projet en .NET 10, qui nécessite Visual Studio 2026 ; dans V
 - [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — les codecs FFmpeg (libav) par lesquels de nombreux formats sont décodés
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.13]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
 ```

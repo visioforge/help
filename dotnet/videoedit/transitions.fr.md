@@ -14,6 +14,9 @@ tags:
 
 La transition SMPTE Wipe produit l'un des balayages standard définis par la Society of Motion Picture and Television Engineers (SMPTE) dans le document SMPTE 258M-1993, à l'exception du quad split.
 
+!!! note "VideoEditCore (DirectShow)"
+    `VideoEditCore` dessine chaque code SMPTE avec la transition DirectX intégrée la plus proche (barre, portes de grange, iris, horloge, roue, bandes, stores, spirale, zigzag ou fondu). Le rendu est proche du motif SMPTE, sans être identique, et les propriétés de bordure, de décalage, de répétition et d'échelle sont sans effet.
+
 ## Propriétés
 
 | Propriété | Type | Valeur par défaut | Description |

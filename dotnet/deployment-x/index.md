@@ -112,7 +112,7 @@ Linux deployment often involves distribution-specific package management. The [U
 Uno Platform enables deploying applications from a single codebase to multiple platforms:
 
 - **Package Distribution**: Core components available via NuGet with platform-specific redistributables
-- **Supported Platforms**: Windows, Android, iOS, macOS (Catalyst), WebAssembly, and Linux Desktop
+- **Supported Platforms**: Windows, Android, iOS, macOS (Catalyst), and Linux Desktop
 - **Architecture Support**: Varies by target platform
 - **Native Libraries**: Platform-specific redistributables required for each target
 - **UI Integration**: Uno-specific VideoView control adapts to each platform

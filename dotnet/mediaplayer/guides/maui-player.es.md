@@ -56,16 +56,16 @@ primary_api_classes:
 ## Paquetes NuGet
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.12]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.13]"/>
 
 <!-- Redists de plataforma — incluya solo los targets para los que compila -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64"
                   Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.12]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64"
                   Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.12]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst"
-                  Condition="$(TargetFramework.Contains('maccatalyst'))" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS"
+                  Condition="$(TargetFramework.Contains('maccatalyst'))" Version="[2026.11.13]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android"
                   Condition="$(TargetFramework.Contains('android'))" Version="[2026.11.5]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS"
@@ -289,7 +289,7 @@ private void Player_OnStop(object sender, StopEventArgs e)
 
 - **iOS** — agregue las excepciones de [App Transport Security](../../install/maui.md) para streams HTTP (no HTTPS) y las descripciones de uso de micrófono / biblioteca de fotos que necesite. `_player.Audio_OutputDevicesAsync()` no está disponible en iOS — el renderizador selecciona la salida activa automáticamente.
 - **Android** — declare el permiso `INTERNET` para streams de red; para archivos locales en API 33+ necesita `READ_MEDIA_VIDEO` o una URI otorgada por el usuario vía `FilePicker`.
-- **macCatalyst** — use `VisioForge.CrossPlatform.Core.macCatalyst`; la decodificación por hardware se enruta por `VideoToolbox`.
+- **macCatalyst** — use `VisioForge.CrossPlatform.Core.macOS`; la decodificación por hardware se enruta por `VideoToolbox`.
 - **Windows (WinUI)** — use los redists `Windows.x64` + `Libav.Windows.x64`; la decodificación por hardware va por `d3d11va` / `nvdec` / `qsv` según la GPU.
 
 El cableado específico por plataforma (entitlements, manifiestos, provisioning) está en la [guía de instalación de MAUI](../../install/maui.md).

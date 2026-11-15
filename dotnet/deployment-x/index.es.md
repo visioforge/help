@@ -112,7 +112,7 @@ El despliegue en Linux a menudo involucra gestión de paquetes específica de la
 Uno Platform permite desplegar aplicaciones desde una única base de código a múltiples plataformas:
 
 - **Distribución de paquetes**: Componentes principales disponibles vía NuGet con redistribuibles específicos de plataforma
-- **Plataformas soportadas**: Windows, Android, iOS, macOS (Catalyst), WebAssembly y Linux Desktop
+- **Plataformas soportadas**: Windows, Android, iOS, macOS (Catalyst) y Linux Desktop
 - **Soporte de arquitectura**: Varía según la plataforma objetivo
 - **Bibliotecas nativas**: Redistribuibles específicos de plataforma requeridos para cada objetivo
 - **Integración de UI**: Control VideoView específico de Uno que se adapta a cada plataforma

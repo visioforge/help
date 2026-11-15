@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Media Player SDK X exposes a high-level playback god-object (`MediaPlayerCoreX`) — local files, HTTP(S), HLS, RTSP, RTMP, MMS, image sequences — with seek, pause/resume, rate control, volume, audio-device selection, frame-stepping, tag reading, and `MediaInfoReaderX` stream introspection. Same C# code targets all three desktop OSes — only the UI host (Avalonia here) and the per-OS native redist NuGet package change between platforms.
 
-Pinned NuGet versions: wrapper **`2026.11.12`**, Windows and macOS native redists at the versions shown in the csproj below (matches the [official Simple Media Player Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.13`**, Windows and macOS native redists at the versions shown in the csproj below (matches the [official Simple Media Player Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -77,7 +77,7 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <OutputType>Exe</OutputType>
 </PropertyGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 </ItemGroup>
 
 <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
@@ -86,7 +86,7 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
 </PropertyGroup>
 ```
 
-The Avalonia base packages (`Avalonia`, `Avalonia.Desktop`, `Avalonia.Themes.Fluent`, `Avalonia.Fonts.Inter`, `System.Reactive`) are unconditional — they ship managed-only and resolve their per-OS native bits at runtime. The VisioForge wrapper + Avalonia UI packages (`VisioForge.DotNet.MediaBlocks`, `VisioForge.DotNet.Core.UI.Avalonia`) are also unconditional.
+The Avalonia base packages (`Avalonia`, `Avalonia.Desktop`, `Avalonia.Themes.Fluent`, `Avalonia.Fonts.Inter`) are unconditional — they ship managed-only and resolve their per-OS native bits at runtime. `System.Reactive` is this sample's own dependency (the `Subscribe(value => ...)` lambdas on the slider `GetObservable` streams), not something Avalonia needs. The VisioForge wrapper + Avalonia UI packages (`VisioForge.DotNet.MediaBlocks`, `VisioForge.DotNet.Core.UI.Avalonia`) are also unconditional.
 
 For 32-bit Windows deployment, swap `.x64` for `.x86` on both Windows redists. To support both Windows architectures from a single AnyCPU build, reference both `.x64` and `.x86` and drop `<PlatformTarget>` from the csproj.
 

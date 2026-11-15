@@ -45,27 +45,27 @@ Ces capacités permettent aux développeurs de créer des applications avec une 
 
 ### Implémentation spécifique à la plateforme
 
-L'`AudioRendererBlock` prend en charge diverses technologies de rendu audio spécifiques à la plateforme. Il peut être configuré pour utiliser un périphérique audio et une API spécifiques (voir la section Gestion des périphériques). Lorsqu'il est instancié à l'aide de son constructeur par défaut (par ex. `new AudioRendererBlock()`), il tente de sélectionner une API audio par défaut appropriée en fonction du système d'exploitation :
+L'`AudioRendererBlock` prend en charge diverses technologies de rendu audio spécifiques à la plateforme. Il peut être configuré pour utiliser un périphérique audio et une API spécifiques (voir la section Gestion des périphériques). Lorsqu'il est instancié à l'aide de son constructeur par défaut (par ex. `new AudioRendererBlock()`), il lit le son sur le périphérique de sortie par défaut du système : l'élément `autoaudiosink` de GStreamer choisit le puits de la plateforme et suit la sortie par défaut du système d'exploitation, et `Settings` reste `null`. Si aucune sortie ne peut être ouverte, l'audio part vers un puits factice et un avertissement est journalisé. Les technologies audio prises en charge par système d'exploitation :
 
-- **Windows** : le constructeur par défaut utilise généralement DirectSound. Le bloc prend en charge plusieurs API audio, notamment :
+- **Windows** : le bloc prend en charge plusieurs API audio, notamment :
   - DirectSound : fournit une sortie à faible latence avec une large compatibilité
   - WASAPI (Windows Audio Session API) : offre un mode exclusif pour la plus haute qualité
   - ASIO (Audio Stream Input/Output) : audio de qualité professionnelle avec une latence minimale pour le matériel spécialisé
-- **macOS** : utilise le framework CoreAudio. Le constructeur par défaut sélectionnera généralement un périphérique basé sur CoreAudio pour :
+- **macOS** : utilise le framework CoreAudio pour :
   - Une sortie audio haute résolution
   - Une intégration native avec le sous-système audio de macOS
   - La prise en charge des audio units et du matériel professionnel
   (Remarque : de même pour macOS, un `OSXAudioSinkBlock` est disponible pour interagir directement avec le puits GStreamer spécifique à la plateforme si nécessaire pour des scénarios spécialisés.)
-- **Linux** : implémente ALSA (Advanced Linux Sound Architecture). Le constructeur par défaut sélectionnera généralement un périphérique basé sur ALSA pour :
+- **Linux** : implémente ALSA (Advanced Linux Sound Architecture) pour un périphérique sélectionné ; sans périphérique, le constructeur par défaut lit le son via le puits de plus haut rang qui s'ouvre : PulseAudio (y compris sur les systèmes PipeWire, via sa couche PulseAudio) ou ALSA. ALSA fournit :
   - Un accès matériel direct
   - Une prise en charge complète des périphériques
   - Une intégration avec la pile audio Linux
-- **iOS** : utilise CoreAudio, optimisé pour le mobile. Le constructeur par défaut sélectionnera généralement un périphérique basé sur CoreAudio, permettant des fonctionnalités telles que :
+- **iOS** : utilise CoreAudio, optimisé pour le mobile, permettant des fonctionnalités telles que :
   - Un rendu économe en énergie
   - Des capacités audio en arrière-plan
   - L'intégration avec la gestion des sessions audio iOS
   (Remarque : pour les développeurs nécessitant un contrôle plus direct sur le puits GStreamer spécifique à iOS ou ayant des cas d'usage avancés, le SDK fournit également `IOSAudioSinkBlock` comme bloc multimédia distinct.)
-- **Android** : utilise par défaut OpenSL ES pour fournir :
+- **Android** : utilise OpenSL ES pour fournir :
   - Une sortie audio à faible latence
   - L'accélération matérielle lorsqu'elle est disponible
 
@@ -228,24 +228,18 @@ var audioRenderer = new AudioRendererBlock(availableDevices[0]);
 
 ### Gestion du périphérique par défaut
 
-Lorsqu'aucun périphérique spécifique n'est sélectionné, le bloc dirige automatiquement l'audio vers le périphérique de sortie par défaut du système. Le constructeur sans paramètre tente de sélectionner un périphérique par défaut approprié en fonction de la plateforme :
+Lorsqu'aucun périphérique spécifique n'est sélectionné, le bloc dirige automatiquement l'audio vers le périphérique de sortie par défaut du système. Le constructeur sans paramètre le fait via l'élément `autoaudiosink` de GStreamer, qui suit la sortie par défaut du système d'exploitation ; `Settings` reste `null` :
 
 ```csharp
 // Créer avec le périphérique par défaut
 var audioRenderer = new AudioRendererBlock();
 ```
 
-Le bloc surveille également l'état des périphériques, gérant des scénarios tels que :
-
-- La déconnexion du périphérique pendant la lecture
-- Les changements de périphérique par défaut par l'utilisateur
-- Les changements de format de point de terminaison audio
-
 ## Considérations de performance
 
 ### Gestion de la latence
 
-La latence du rendu audio est critique pour de nombreuses applications. Le bloc fournit des options de configuration via la propriété `Settings` et un contrôle de synchronisation via la propriété `IsSync` :
+La latence du rendu audio est critique pour de nombreuses applications. Le bloc prend sa configuration dans les paramètres passés à son constructeur (exposés par la propriété `Settings`, `null` pour le constructeur sans paramètre) et fournit un contrôle de synchronisation via la propriété `IsSync` :
 
 ```csharp
 // Contrôler le comportement de synchronisation

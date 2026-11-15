@@ -146,19 +146,19 @@ The main project, `SimplePlayerMVVM.csproj`, targets multiple platforms. Key pac
   <AvaloniaResource Include="Assets\**" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="Avalonia" Version="12.0.5" />
-  <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.5" />
-  <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.5" />
+  <PackageReference Include="Avalonia" Version="12.1.6" />
+  <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.6" />
+  <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.6" />
   <!--Condition below is needed to remove AvaloniaUI.DiagnosticsSupport package from build output in Release configuration.-->
   <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
-  <PackageReference Include="ReactiveUI.Avalonia" Version="12.0.3" />
+  <PackageReference Include="ReactiveUI.Avalonia" Version="12.1.6" />
  </ItemGroup>
  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
-  <PackageReference Include="Avalonia.Android" Version="12.0.5" />
+  <PackageReference Include="Avalonia.Android" Version="12.1.6" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.12]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.13]"/>
  </ItemGroup>
 </Project>
 ```
@@ -188,7 +188,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.5]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
     <TargetFramework>net10.0</TargetFramework>
@@ -243,7 +243,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
   </PropertyGroup>
   <!-- ... other items ... -->
   <ItemGroup>
-    <PackageReference Include="Avalonia.iOS" Version="12.0.5" />
+    <PackageReference Include="Avalonia.iOS" Version="12.1.6" />
     <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
   </ItemGroup>
   <ItemGroup>
@@ -449,6 +449,9 @@ ReactiveUI `ReactiveCommand` instances are used to handle actions triggered by U
 * **`WindowClosingCommand`:** Handles cleanup when the application window is closing.
 
 ```csharp
+using ReactiveUI;
+using ReactiveUI.Primitives;
+
 // Constructor - Command initialization
 public MainViewModel()
 {
@@ -923,6 +926,7 @@ The code-behind for `MainWindow` primarily handles two things:
 
 ```csharp
 using Avalonia.Controls;
+using ReactiveUI.Primitives;
 using Simple_Player_MVVM.ViewModels;
 using System;
 using VisioForge.Core.Types;
@@ -1050,7 +1054,7 @@ To abstract platform-specific functionality, interfaces are defined in the core 
 
             return base.CustomizeAppBuilder(builder)
                 .WithInterFont()
-                .UseReactiveUI();
+                .UseReactiveUI(_ => { });
         }
         ```
 
@@ -1088,6 +1092,16 @@ To abstract platform-specific functionality, interfaces are defined in the core 
         <string>Photo library used to play files</string>
         ```
 
+  * It declares the UIKit scene lifecycle, which an app built with the iOS 27 SDK must use (the build stops with `MT7199` otherwise). Avalonia 12.1's app delegate supplies the scene configuration, so an empty manifest is enough:
+
+        ```xml
+        <key>UIApplicationSceneManifest</key>
+        <dict>
+            <key>UIApplicationSupportsMultipleScenes</key>
+            <false/>
+        </dict>
+        ```
+
   * It also defines bundle identifiers, version numbers, supported orientations, etc.
 
 * **Project File (`SimplePlayerMVVM.iOS.csproj`):** Configures the iOS-specific build, target OS version, and includes VisioForge iOS libraries.
@@ -1110,7 +1124,7 @@ To abstract platform-specific functionality, interfaces are defined in the core 
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .WithInterFont()
-                .UseReactiveUI()
+                .UseReactiveUI(_ => { })
                 .LogToTrace();
     }
     ```
@@ -1128,7 +1142,7 @@ To abstract platform-specific functionality, interfaces are defined in the core 
           <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.12]"/>
         </ItemGroup>
         <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-          <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.5]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
         </ItemGroup>
         ```
 

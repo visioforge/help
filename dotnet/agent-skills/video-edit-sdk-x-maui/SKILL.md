@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK X (cross-platform edition) into
 
 This skill helps you add **VisioForge Video Edit SDK X** — the cross-platform "X" edition of the editing SDK — to a .NET MAUI application targeting **Windows, Android, iOS, and Mac Catalyst** from a single codebase. `VideoEditCoreX` is a timeline engine on the GStreamer backend: you append clips, images and audio tracks, optionally add effects and transitions, then either preview the timeline into a `VideoView` or render it to a file. The same C# runs on every OS — only the per-TFM redist NuGets change.
 
-Pinned NuGet versions: wrapper **`2026.11.12`**, MAUI handlers **`2026.11.12`**, plus the five native redists at the versions shown in the csproj below. `VisioForge.DotNet.VideoEdit` and `VisioForge.DotNet.Core.UI.MAUI` always move together and must carry the same version. The `VisioForge.CrossPlatform.*` redists are built on their own cadence: for each one, pin the newest version published **at or before** the wrapper's release. That may trail the wrapper by several releases — `Core.iOS` has a handful of published versions where the wrapper has dozens — and it must never run ahead of it, which is undefined behaviour. The [official Video Edit X MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/MAUI/SimpleEdit) is the reference for the project layout, not for the version to pin — it can lag a release.
+Pinned NuGet versions: wrapper **`2026.11.13`**, MAUI handlers **`2026.11.13`**, plus the five native redists at the versions shown in the csproj below. `VisioForge.DotNet.VideoEdit` and `VisioForge.DotNet.Core.UI.MAUI` always move together and must carry the same version. The `VisioForge.CrossPlatform.*` redists are built on their own cadence: for each one, pin the newest version published **at or before** the wrapper's release. That may trail the wrapper by several releases — `Core.iOS` has a handful of published versions where the wrapper has dozens — and it must never run ahead of it, which is undefined behaviour. The [official Video Edit X MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/MAUI/SimpleEdit) is the reference for the project layout, not for the version to pin — it can lag a release.
 
 ## When to use this skill
 
@@ -36,7 +36,7 @@ Video Edit X for MAUI is **not** a single meta-package. You add the SDK, the MAU
 | `VisioForge.CrossPlatform.Libav.Windows.x64` | FFmpeg/libav muxers + encoders on Windows | `-windows` |
 | `VisioForge.CrossPlatform.Core.Android` + AndroidDependency project ref | Native runtime on Android (the `.aar` ships through a small bundled csproj) | `-android` |
 | `VisioForge.CrossPlatform.Core.iOS` | Native runtime on iOS | `-ios` |
-| `VisioForge.CrossPlatform.Core.macCatalyst` | Native runtime on Mac Catalyst | `-maccatalyst` |
+| `VisioForge.CrossPlatform.Core.macOS` | Native runtime on Mac Catalyst (the macOS package serves both) | `-maccatalyst` |
 
 `VisioForge.DotNet.Core.UI.MAUI` supplies only the `VideoView` control. On its own it cannot compile `VideoEditCoreX` — `VisioForge.DotNet.VideoEdit` is what brings the engine in. Adding the UI package alone is a common mistake that produces a project that builds the XAML but not the code-behind.
 
@@ -74,8 +74,8 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.12]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.13]"/>
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
@@ -90,7 +90,7 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
   <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 </ItemGroup>
 ```
 

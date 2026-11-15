@@ -62,7 +62,7 @@ El Media Blocks SDK es el SDK .NET más flexible de VisioForge — permite const
 Paquete principal del SDK (todas las plataformas):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.13]"/>
 ```
 
 Runtime de Windows x64 (elija x86 para aplicaciones de 32 bits):
@@ -83,8 +83,7 @@ Windows x86:
 macOS (nativo y MAUI / macCatalyst):
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.5]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 ```
 
 Linux x64 (también requiere GStreamer 1.22+ instalado en el sistema):
@@ -103,8 +102,8 @@ Android e iOS:
 Paquetes de integración de UI (opcionales, por framework):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.12]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.12]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.13]"/>
 ```
 
 Guía completa de instalación: [install/index.md](../install/index.md).

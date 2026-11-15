@@ -102,7 +102,7 @@ var wmvOutput = new WMVOutput
     Custom_Audio_Codec = "Windows Media Audio 9.2",
     Custom_Audio_Mode = WMVStreamMode.VBRQuality,
     Custom_Audio_Quality = 90,
-    Custom_Audio_Format = "48kHz 16bit Stereo"
+    Custom_Audio_Format = "VBR Quality 90, 48000 Hz, Stereo, 16 bit"
 };
 
 var captureCore = new VideoCaptureCore();
@@ -157,7 +157,6 @@ var wmvOutput = new WMVOutput
     Custom_Audio_StreamPresent = true,
     Custom_Audio_Mode = WMVStreamMode.VBRQuality,
     Custom_Audio_Quality = 98,
-    Custom_Audio_PeakBitrate = 192000,
     Custom_Audio_PeakBufferSize = 3,
     
     // Configuración de idioma opcional
@@ -171,7 +170,7 @@ Usando un perfil interno:
 var profileWmvOutput = new WMVOutput
 {
     Mode = WMVMode.InternalProfile,
-    Internal_Profile_Name = "Windows Media Video 9 for Local Network (768 kbps)"
+    Internal_Profile_Name = "Windows Media Video 9 High (2.5 Mbps)"
 };
 ```
 
@@ -198,15 +197,15 @@ Antes de sumergirse en los ejemplos, es importante entender las propiedades clav
 - `Custom_Video_StreamPresent` (bool): Habilita el flujo de video en la salida
 - `Custom_Video_Codec` (string): Especifica el códec de video (ej., "Windows Media Video 9")
 - `Custom_Video_Mode` (WMVStreamMode): Modo de control de tasa (CBR, VBRQuality, VBRBitrate, VBRPeakBitrate)
-- `Custom_Video_Bitrate` (int): Tasa de bits objetivo en bits por segundo
+- `Custom_Video_Bitrate` (int): Tasa de bits objetivo en kbps
 - `Custom_Video_Quality` (byte): Nivel de calidad (0-100) para modo de calidad VBR
 - `Custom_Video_Width` (int): Ancho de video de salida en píxeles
 - `Custom_Video_Height` (int): Altura de video de salida en píxeles
 - `Custom_Video_SizeSameAsInput` (bool): Usar dimensiones de video de entrada
 - `Custom_Video_FrameRate` (double): Tasa de cuadros de salida
-- `Custom_Video_KeyFrameInterval` (byte): Número de cuadros entre cuadros clave
+- `Custom_Video_KeyFrameInterval` (byte): Segundos entre cuadros clave
 - `Custom_Video_Smoothness` (byte): Nivel de suavidad (0-100)
-- `Custom_Video_Peak_BitRate` (int): Tasa de bits pico para modo pico VBR
+- `Custom_Video_Peak_BitRate` (int): Tasa de bits pico en kbps para modo pico VBR
 - `Custom_Video_Peak_BufferSizeSeconds` (byte): Ventana de búfer pico en segundos
 - `Custom_Video_Buffer_Size` (int): Tamaño de búfer en milisegundos
 - `Custom_Video_Buffer_UseDefault` (bool): Usar configuración de búfer predeterminada
@@ -215,10 +214,10 @@ Antes de sumergirse en los ejemplos, es importante entender las propiedades clav
 **Propiedades de Audio:**
 - `Custom_Audio_StreamPresent` (bool): Habilita el flujo de audio en la salida
 - `Custom_Audio_Codec` (string): Especifica el códec de audio (ej., "Windows Media Audio 9.2")
-- `Custom_Audio_Format` (string): Especificación de formato (ej., "48kHz 16bit Stereo")
+- `Custom_Audio_Format` (string): Uno de los nombres que devuelve `WMV_CustomProfile_AudioFormats` para el códec y el modo (ej., "CBR 128 kbps, 48000 Hz, Stereo, 16 bit")
 - `Custom_Audio_Mode` (WMVStreamMode): Modo de control de tasa
 - `Custom_Audio_Quality` (byte): Nivel de calidad (0-100) para modo de calidad VBR
-- `Custom_Audio_PeakBitrate` (int): Tasa de bits pico en bits por segundo
+- `Custom_Audio_PeakBitrate` (int): Tasa de bits pico en kbps, solo en modo VBRPeakBitrate
 - `Custom_Audio_PeakBufferSize` (byte): Ventana de búfer pico en segundos
 - `Custom_Audio_LanguageID` (string): Identificador de idioma (ej., "en-US")
 
@@ -254,8 +253,7 @@ var highQualityConfig = new WMVOutput
     Custom_Audio_Codec = "Windows Media Audio 9.2",
     Custom_Audio_Mode = WMVStreamMode.VBRQuality,
     Custom_Audio_Quality = 98,
-    Custom_Audio_Format = "48kHz 16bit Stereo",
-    Custom_Audio_PeakBitrate = 320000,
+    Custom_Audio_Format = "VBR Quality 98, 48000 Hz, Stereo, 16 bit",
     Custom_Audio_PeakBufferSize = 3,
     
     // Metadatos de perfil
@@ -288,7 +286,7 @@ var mobileLowBandwidthConfig = new WMVOutput
     Custom_Video_StreamPresent = true,
     Custom_Video_Codec = "Windows Media Video 9",
     Custom_Video_Mode = WMVStreamMode.CBR,
-    Custom_Video_Bitrate = 800000, // 800 kbps
+    Custom_Video_Bitrate = 800, // 800 kbps
     Custom_Video_Width = 854,
     Custom_Video_Height = 480,
     Custom_Video_FrameRate = 24.0,
@@ -300,8 +298,7 @@ var mobileLowBandwidthConfig = new WMVOutput
     Custom_Audio_StreamPresent = true,
     Custom_Audio_Codec = "Windows Media Audio 9.2",
     Custom_Audio_Mode = WMVStreamMode.CBR,
-    Custom_Audio_PeakBitrate = 64000, // 64 kbps
-    Custom_Audio_Format = "44kHz 16bit Mono",
+    Custom_Audio_Format = "CBR 48 kbps, 44100 Hz, Mono, 16 bit",
     Custom_Audio_LanguageID = "en-US",
     
     Custom_Profile_Name = "Mobile Low Bandwidth",
@@ -325,11 +322,10 @@ var audioFocusedConfig = new WMVOutput
     
     // Configuración de audio de alta calidad
     Custom_Audio_StreamPresent = true,
-    Custom_Audio_Codec = "Windows Media Audio 9.2 Professional",
+    Custom_Audio_Codec = "Windows Media Audio 10 Professional",
     Custom_Audio_Mode = WMVStreamMode.VBRQuality,
-    Custom_Audio_Quality = 99,
-    Custom_Audio_Format = "96kHz 24bit Stereo",
-    Custom_Audio_PeakBitrate = 512000,
+    Custom_Audio_Quality = 98,
+    Custom_Audio_Format = "VBR Quality 98, 96000 Hz, Stereo, 24 bit",
     Custom_Audio_PeakBufferSize = 4,
     Custom_Audio_LanguageID = "en-US",
     
@@ -337,7 +333,7 @@ var audioFocusedConfig = new WMVOutput
     Custom_Video_StreamPresent = true,
     Custom_Video_Codec = "Windows Media Video 9",
     Custom_Video_Mode = WMVStreamMode.VBRBitrate,
-    Custom_Video_Bitrate = 500000,
+    Custom_Video_Bitrate = 500,
     Custom_Video_Width = 1280,
     Custom_Video_Height = 720,
     Custom_Video_FrameRate = 25.0,
@@ -367,7 +363,7 @@ var cbrStreamingConfig = new WMVOutput
     Custom_Video_StreamPresent = true,
     Custom_Video_Codec = "Windows Media Video 9",
     Custom_Video_Mode = WMVStreamMode.CBR,
-    Custom_Video_Bitrate = 2000000, // 2 Mbps constante
+    Custom_Video_Bitrate = 2000, // 2 Mbps constante
     Custom_Video_Width = 1280,
     Custom_Video_Height = 720,
     Custom_Video_FrameRate = 30.0,
@@ -379,8 +375,7 @@ var cbrStreamingConfig = new WMVOutput
     Custom_Audio_StreamPresent = true,
     Custom_Audio_Codec = "Windows Media Audio 9.2",
     Custom_Audio_Mode = WMVStreamMode.CBR,
-    Custom_Audio_PeakBitrate = 128000, // 128 kbps constante
-    Custom_Audio_Format = "48kHz 16bit Stereo",
+    Custom_Audio_Format = "CBR 128 kbps, 48000 Hz, Stereo, 16 bit",
     
     // Configuración de transmisión en red
     Network_Streaming_WMV_Maximum_Clients = 50,
@@ -407,8 +402,8 @@ var vbrPeakConfig = new WMVOutput
     Custom_Video_StreamPresent = true,
     Custom_Video_Codec = "Windows Media Video 9 Advanced Profile",
     Custom_Video_Mode = WMVStreamMode.VBRPeakBitrate,
-    Custom_Video_Bitrate = 3000000, // 3 Mbps promedio
-    Custom_Video_Peak_BitRate = 5000000, // 5 Mbps pico
+    Custom_Video_Bitrate = 3000, // 3 Mbps promedio
+    Custom_Video_Peak_BitRate = 5000, // 5 Mbps pico
     Custom_Video_Peak_BufferSizeSeconds = 3,
     Custom_Video_Width = 1920,
     Custom_Video_Height = 1080,
@@ -420,9 +415,9 @@ var vbrPeakConfig = new WMVOutput
     Custom_Audio_StreamPresent = true,
     Custom_Audio_Codec = "Windows Media Audio 9.2",
     Custom_Audio_Mode = WMVStreamMode.VBRPeakBitrate,
-    Custom_Audio_PeakBitrate = 256000,
+    Custom_Audio_PeakBitrate = 256, // kbps
     Custom_Audio_PeakBufferSize = 2,
-    Custom_Audio_Format = "48kHz 16bit Stereo",
+    Custom_Audio_Format = "VBR 128 kbps, 48000 Hz, Stereo, 16 bit",
     
     Custom_Profile_Name = "VBR Peak Control",
     Custom_Profile_Description = "Variable bitrate with peak constraints for quality and bandwidth balance"
@@ -457,8 +452,8 @@ var screenRecordingConfig = new WMVOutput
     Custom_Audio_StreamPresent = true,
     Custom_Audio_Codec = "Windows Media Audio 9.2",
     Custom_Audio_Mode = WMVStreamMode.VBRQuality,
-    Custom_Audio_Quality = 85,
-    Custom_Audio_Format = "44kHz 16bit Mono", // Mono para voz
+    Custom_Audio_Quality = 75,
+    Custom_Audio_Format = "VBR Quality 75, 44100 Hz, Stereo, 16 bit",
     Custom_Audio_LanguageID = "en-US",
     
     Custom_Profile_Name = "Screen Recording",
@@ -487,7 +482,7 @@ var archivalConfig = new WMVOutput
     Custom_Video_Width = 1920,
     Custom_Video_Height = 1080,
     Custom_Video_FrameRate = 30.0,
-    Custom_Video_KeyFrameInterval = 1, // Cada cuadro es un cuadro clave
+    Custom_Video_KeyFrameInterval = 1, // Un fotograma clave por segundo
     Custom_Video_Smoothness = 100,
     Custom_Video_Buffer_Size = 8000,
     Custom_Video_Buffer_UseDefault = false,
@@ -497,7 +492,7 @@ var archivalConfig = new WMVOutput
     Custom_Audio_Codec = "Windows Media Audio 9.2 Lossless",
     Custom_Audio_Mode = WMVStreamMode.VBRQuality,
     Custom_Audio_Quality = 100,
-    Custom_Audio_Format = "96kHz 24bit Stereo",
+    Custom_Audio_Format = "VBR Quality 100, 96000 Hz, Stereo, 24 bit",
     Custom_Audio_LanguageID = "en-US",
     
     Custom_Profile_Name = "Archival Quality",
@@ -516,36 +511,42 @@ Los perfiles internos proporcionan configuraciones preconfiguradas optimizadas p
 
 #### Códecs y Formatos Disponibles
 
-Antes de configurar ajustes personalizados, es útil entender los códecs y formatos disponibles:
+Los nombres de códecs y formatos dependen de los componentes de Windows Media instalados en el equipo, así que léalos del SDK en lugar de escribirlos a mano. `VideoCaptureCore` y `VideoEditCore` los enumeran para un modo de control de tasa:
 
-**Códecs de Video:**
-- "Windows Media Video 9" - Códec WMV9 estándar
-- "Windows Media Video 9 Advanced Profile" - Soporte de características avanzadas
-- "Windows Media Video 9 Screen" - Optimizado para contenido de pantalla
-- "Windows Media Video 8" - Códec WMV8 heredado
+```csharp
+var core = new VideoCaptureCore(); // o VideoEditCore
+
+var videoCodecs = core.WMV_CustomProfile_VideoCodecs(WMVStreamMode.CBR);
+var audioCodecs = core.WMV_CustomProfile_AudioCodecs(WMVStreamMode.CBR);
+var audioFormats = core.WMV_CustomProfile_AudioFormats("Windows Media Audio 9.2", WMVStreamMode.CBR);
+var internalProfiles = core.WMV_Internal_Profiles();
+```
+
+En Windows 11 devuelven:
+
+**Códecs de Video:** "Windows Media Video 9", "Windows Media Video 9 Advanced Profile", "Windows Media Video 9 Screen", "Windows Media Video V8", "Windows Media Video V7", "Windows Media Video 9 Image", "Windows Media Video 9.1 Image"
 
 **Códecs de Audio:**
-- "Windows Media Audio 9.2" - Códec WMA estándar
-- "Windows Media Audio 9.2 Professional" - Audio de alta calidad
-- "Windows Media Audio 9.2 Lossless" - Compresión sin pérdida
-- "Windows Media Audio Voice 9" - Optimizado para voz
+- "Windows Media Audio 9.2" - Códec WMA estándar, hasta 48 kHz estéreo
+- "Windows Media Audio 10 Professional" - Audio de 24 bits, hasta 96 kHz, 5.1 y 7.1 canales
+- "Windows Media Audio 9.2 Lossless" - Compresión sin pérdida, solo en modo VBRQuality
 
 **Formatos de Audio:**
-Cadenas de formato comunes para la propiedad `Custom_Audio_Format`:
-- "48kHz 16bit Stereo" - Estéreo calidad CD
-- "44kHz 16bit Stereo" - Estéreo calidad estándar
-- "44kHz 16bit Mono" - Mono calidad estándar
-- "96kHz 24bit Stereo" - Audio de alta resolución
-- "22kHz 16bit Mono" - Calidad de grabación de voz
+`Custom_Audio_Format` acepta uno de los nombres que devuelve `WMV_CustomProfile_AudioFormats` para el códec y el `Custom_Audio_Mode` elegidos. Un nombre que no está en esa lista no añade flujo de audio, y una captura con fuente de audio entonces no se inicia. Ejemplos:
+- "CBR 128 kbps, 48000 Hz, Stereo, 16 bit" - Windows Media Audio 9.2, CBR
+- "VBR Quality 90, 44100 Hz, Stereo, 16 bit" - Windows Media Audio 9.2, VBRQuality
+- "VBR 128 kbps, 48000 Hz, Stereo, 16 bit" - Windows Media Audio 9.2, VBRBitrate y VBRPeakBitrate
+- "VBR Quality 100, 96000 Hz, Stereo, 24 bit" - Windows Media Audio 9.2 Lossless, VBRQuality
 
-Perfil de calidad de transmisión estándar:
+El perfil interno predeterminado es "Windows Media Video 9 High (2.5 Mbps)". "Windows Media Video 9 1080p (6 Mbps)" también está incluido. Los nombres antiguos, incluidos los perfiles de módem y Pocket PC y "Windows Media Video 9 for Local Network (768 kbps)", siguen funcionando si se asignan a `Internal_Profile_Name`. Módem y Pocket PC ya no aparecen en `WMV_Internal_Profiles`. El tamaño de cuadro de un perfil interno sigue la fuente.
+
+Perfil de red local (768 kbps):
 
 ```csharp
 var broadcastProfile = new WMVOutput
 {
     Mode = WMVMode.InternalProfile,
-    Internal_Profile_Name = "Windows Media Video 9 Advanced Profile",
-    Custom_Video_TVSystem = WMVTVSystem.NTSC  // Anulación opcional de sistema de TV
+    Internal_Profile_Name = "Windows Media Video 9 for Local Network (768 kbps)"
 };
 
 var captureCore = new VideoCaptureCore();
@@ -553,13 +554,13 @@ captureCore.Output_Format = broadcastProfile;
 captureCore.Output_Filename = "broadcast_output.wmv";
 ```
 
-Perfil de transmisión web:
+Perfil de transmisión por banda ancha (100 a 768 kbps):
 
 ```csharp
 var webStreamingProfile = new WMVOutput
 {
     Mode = WMVMode.InternalProfile,
-    Internal_Profile_Name = "Windows Media Video 9 for Broadband (2 Mbps)",
+    Internal_Profile_Name = "Windows Media Video 9 for LAN,Cable Modem, or xDSL  (100 to 768kbps)",
     Network_Streaming_WMV_Maximum_Clients = 100  // Anulación opcional de transmisión
 };
 
@@ -568,13 +569,13 @@ captureCore.Output_Format = webStreamingProfile;
 captureCore.Output_Filename = "web_stream.wmv";
 ```
 
-Perfil de baja latencia para transmisión en vivo:
+Perfil de transmisión de baja tasa de bits (384 kbps):
 
 ```csharp
 var liveStreamingProfile = new WMVOutput
 {
     Mode = WMVMode.InternalProfile,
-    Internal_Profile_Name = "Windows Media Video 9 Screen (Low Rate)",
+    Internal_Profile_Name = "Windows Media Video 9 for Local Network (384 kbps)",
     Network_Streaming_WMV_Maximum_Clients = 50
 };
 
@@ -659,7 +660,7 @@ Usando perfil Windows Media 8:
 var wmv8Profile = new WMVOutput
 {
     Mode = WMVMode.V8SystemProfile,
-    V8ProfileName = "Windows Media Video 8 for Dial-up Access (28.8 Kbps)",
+    V8ProfileName = "Windows Media Video 8 for Dial-up Modems (28.8 Kbps)",
 };
 ```
 
@@ -670,8 +671,7 @@ var wmv8StreamingProfile = new WMVOutput
 {
     Mode = WMVMode.V8SystemProfile,
     V8ProfileName = "Windows Media Video 8 for Local Area Network (384 Kbps)",
-    Network_Streaming_WMV_Maximum_Clients = 25,
-    Custom_Video_TVSystem = WMVTVSystem.PAL  // Anulación opcional de sistema de TV
+    Network_Streaming_WMV_Maximum_Clients = 25
 };
 ```
 
@@ -744,7 +744,7 @@ namespace WMVCaptureExample
                     Custom_Audio_Codec = "Windows Media Audio 9.2",
                     Custom_Audio_Mode = WMVStreamMode.VBRQuality,
                     Custom_Audio_Quality = 90,
-                    Custom_Audio_Format = "48kHz 16bit Stereo",
+                    Custom_Audio_Format = "VBR Quality 90, 48000 Hz, Stereo, 16 bit",
                     
                     Custom_Profile_Name = "Standard Capture",
                     Custom_Profile_Description = "Standard quality capture profile"
@@ -825,8 +825,8 @@ namespace WMVEditExample
                     Custom_Video_StreamPresent = true,
                     Custom_Video_Codec = "Windows Media Video 9 Advanced Profile",
                     Custom_Video_Mode = WMVStreamMode.VBRPeakBitrate,
-                    Custom_Video_Bitrate = 4000000, // 4 Mbps promedio
-                    Custom_Video_Peak_BitRate = 6000000, // 6 Mbps pico
+                    Custom_Video_Bitrate = 4000, // 4 Mbps promedio
+                    Custom_Video_Peak_BitRate = 6000, // 6 Mbps pico
                     Custom_Video_Peak_BufferSizeSeconds = 3,
                     Custom_Video_Width = 1920,
                     Custom_Video_Height = 1080,
@@ -836,10 +836,10 @@ namespace WMVEditExample
                     
                     // Configuración de audio de alta calidad
                     Custom_Audio_StreamPresent = true,
-                    Custom_Audio_Codec = "Windows Media Audio 9.2 Professional",
+                    Custom_Audio_Codec = "Windows Media Audio 10 Professional",
                     Custom_Audio_Mode = WMVStreamMode.VBRQuality,
-                    Custom_Audio_Quality = 95,
-                    Custom_Audio_Format = "48kHz 16bit Stereo",
+                    Custom_Audio_Quality = 98,
+                    Custom_Audio_Format = "VBR Quality 98, 48000 Hz, Stereo, 24 bit",
                     
                     Custom_Profile_Name = "High Quality Edit",
                     Custom_Profile_Description = "High quality output for edited videos"
@@ -1013,8 +1013,14 @@ wmvOutput.Audio = new WMAEncoderSettings
     Channels = 2
 };
 
-// Configuración del codificador de video (usa codificador WMV1 predeterminado)
-wmvOutput.Video = new WMVEncoderSettings();
+// Ajustes de vídeo. El predeterminado es WMV8 a 4000 kbps.
+wmvOutput.Video = new WMVEncoderSettings
+{
+    Bitrate = 6000,
+    KeyframeInterval = 60
+};
+// O bien: wmvOutput.Video = WMVEncoderSettings.For1080p();
+// WMV7: wmvOutput.Video = new WMVEncoderSettings { Version = WMVEncoderVersion.Wmv7 };
 
 // Verificar si se necesita procesador de video personalizado
 // wmvOutput.CustomVideoProcessor = myCustomProcessor;
@@ -1236,7 +1242,7 @@ var streamingConfig = new WMVOutput
     Custom_Video_StreamPresent = true,
     Custom_Video_Codec = "Windows Media Video 9",
     Custom_Video_Mode = WMVStreamMode.CBR,
-    Custom_Video_Bitrate = 1500000, // 1.5 Mbps
+    Custom_Video_Bitrate = 1500, // 1.5 Mbps
     Custom_Video_Width = 1280,
     Custom_Video_Height = 720,
     Custom_Video_FrameRate = 30.0,
@@ -1248,8 +1254,7 @@ var streamingConfig = new WMVOutput
     Custom_Audio_StreamPresent = true,
     Custom_Audio_Codec = "Windows Media Audio 9.2",
     Custom_Audio_Mode = WMVStreamMode.CBR,
-    Custom_Audio_PeakBitrate = 128000,
-    Custom_Audio_Format = "48kHz 16bit Stereo",
+    Custom_Audio_Format = "CBR 128 kbps, 48000 Hz, Stereo, 16 bit",
     
     // Configuración de transmisión en red
     Network_Streaming_WMV_Maximum_Clients = 100,

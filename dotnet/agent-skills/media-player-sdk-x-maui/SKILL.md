@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to a .NET MAUI application that targets **Windows, Android, iOS, and Mac Catalyst** from a single codebase. The X SDK shares its native runtime with Video Capture X and Media Blocks (GStreamer-backed under the hood) and exposes a high-level playback god-object (`MediaPlayerCoreX`) that mirrors the legacy `MediaPlayerCore` API but runs on the cross-platform engine. Same C# code targets every OS — only the platform handler glue and per-OS redist NuGets change between TFMs.
 
-Pinned NuGet versions: wrapper **`2026.11.12`**, MAUI handlers **`2026.11.12`**, plus per-OS native redists at the versions shown in the csproj below — these match the official [Media Player X MAUI samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/MAUI). Moving to a newer 2026.x.x release means moving the wrapper pair to that version and re-checking each redist against it; keep `VisioForge.DotNet.MediaPlayer` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same wrapper version. Native redists are pinned to the versions shown in the csproj below. The `VisioForge.CrossPlatform.*` packages are built on their own cadence, so pin each to the newest version published **at or before** the wrapper's release rather than assuming the wrapper's number exists for it; the upstream csproj is a starting point and can itself lag.
+Pinned NuGet versions: wrapper **`2026.11.13`**, MAUI handlers **`2026.11.13`**, plus per-OS native redists at the versions shown in the csproj below — these match the official [Media Player X MAUI samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/MAUI). Moving to a newer 2026.x.x release means moving the wrapper pair to that version and re-checking each redist against it; keep `VisioForge.DotNet.MediaPlayer` and `VisioForge.DotNet.Core.UI.MAUI` pinned to the same wrapper version. Native redists are pinned to the versions shown in the csproj below. The `VisioForge.CrossPlatform.*` packages are built on their own cadence, so pin each to the newest version published **at or before** the wrapper's release rather than assuming the wrapper's number exists for it; the upstream csproj is a starting point and can itself lag.
 
 ## When to use this skill
 
@@ -36,7 +36,7 @@ Media Player X for MAUI is **not** a single meta-package. You add the SDK plus t
 | `VisioForge.CrossPlatform.Libav.Windows.x64` | FFmpeg/libav demuxers + decoders on Windows | `-windows` |
 | `VisioForge.CrossPlatform.Core.Android` + AndroidDependency project ref | Native runtime on Android (the `.aar` ships through a small bundled csproj) | `-android` |
 | `VisioForge.CrossPlatform.Core.iOS` | Native runtime on iOS | `-ios` |
-| `VisioForge.CrossPlatform.Core.macCatalyst` | Native runtime on Mac Catalyst | `-maccatalyst` |
+| `VisioForge.CrossPlatform.Core.macOS` | Native runtime on Mac Catalyst (the macOS package serves both) | `-maccatalyst` |
 
 `VisioForge.DotNet.MediaPlayer` is the **same wrapper package** the legacy SDK uses — both `MediaPlayerCore` (legacy, Windows-only) and `MediaPlayerCoreX` (cross-platform) ship in it. What switches you to the X engine is the redist set plus the MAUI handler registration below.
 
@@ -76,8 +76,8 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.12]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.13]"/>
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
@@ -92,7 +92,7 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
   <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 </ItemGroup>
 ```
 

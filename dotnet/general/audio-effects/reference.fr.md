@@ -349,6 +349,7 @@ var effect = new BandPassAudioEffect(5000, 300); // Autoriser 300-5000 Hz
 - `CutOff` (uint) : fréquence centrale à supprimer en Hz
     - Dans les SDK multiplateformes, le filtre supprime 10 % de cette fréquence de chaque côté, si bien que la bande s'élargit quand la fréquence augmente : de 7200 à 8800 Hz pour 8000 Hz
     - Le bord inférieur de cette bande doit rester inférieur à la moitié de la fréquence d'échantillonnage. Au-delà, le son passe sans filtrage et un `OnError` est déclenché
+    - Dans les SDK classiques, la coupure est une encoche plus étroite : pour 1000 Hz, 950 et 1050 Hz gardent environ la moitié de leur niveau, et 900 et 1100 Hz environ 70 %, et vers la moitié de la fréquence d'échantillonnage l'encoche devient encore plus étroite. La fréquence peut aller jusqu'à juste en dessous de la moitié de la fréquence d'échantillonnage ; une valeur supérieure y est ramenée, sans erreur
     - Typique : 50/60 Hz pour suppression du ronflement
 
 **Utilisation** :
@@ -629,10 +630,12 @@ effect.Level = 0.4f;
 
 **Paramètres** :
 
-- `StartVolume` (uint) : volume à l'heure de début
-- `StopVolume` (uint) : volume à l'heure d'arrêt
+- `StartVolume` (uint) : volume à l'heure de début, en pourcentage de 0 à 100 (100 = le volume d'origine)
+- `StopVolume` (uint) : volume à l'heure d'arrêt, en pourcentage de 0 à 100
 - `StartTime` (TimeSpan) : moment où le fondu commence. Avant, l'audio est lu à `StartVolume`
 - `StopTime` (TimeSpan) : moment où le fondu se termine. Après, l'audio est lu à `StopVolume`
+
+Un volume de début ou de fin supérieur à 100 est joué à 100 et déclenche `OnError`. Un `StopTime` antérieur à `StartTime` laisse l'audio inchangé et déclenche également `OnError`.
 
 **Utilisation** :
 

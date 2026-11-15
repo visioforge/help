@@ -349,6 +349,7 @@ var effect = new BandPassAudioEffect(5000, 300); // Permitir 300-5000 Hz
 - `CutOff` (uint): Frecuencia central a eliminar en Hz
     - En los SDK multiplataforma el filtro elimina un 10 % de esta frecuencia a cada lado, por lo que la banda se ensancha al subir la frecuencia: de 7200 a 8800 Hz con 8000 Hz
     - El borde inferior de esa banda debe ser inferior a la mitad de la frecuencia de muestreo. A partir de ese valor el sonido pasa sin filtrar y se genera un `OnError`
+    - En los SDK Classic el corte es una muesca más estrecha: con 1000 Hz, 950 y 1050 Hz conservan cerca de la mitad de su nivel y 900 y 1100 Hz cerca del 70 %, y hacia la mitad de la frecuencia de muestreo la muesca se estrecha aún más. La frecuencia puede llegar justo por debajo de la mitad de la frecuencia de muestreo; una superior se reduce a ese valor, sin error
     - Típico: 50/60 Hz para eliminación de zumbido
 
 **Uso**:
@@ -629,10 +630,12 @@ effect.Level = 0.4f;
 
 **Parámetros**:
 
-- `StartVolume` (uint): Volumen en el tiempo de inicio
-- `StopVolume` (uint): Volumen en el tiempo de fin
+- `StartVolume` (uint): Volumen en el tiempo de inicio, en porcentaje de 0 a 100 (100 = el volumen original)
+- `StopVolume` (uint): Volumen en el tiempo de fin, en porcentaje de 0 a 100
 - `StartTime` (TimeSpan): Cuándo comienza el fundido. Antes, el audio se reproduce a `StartVolume`
 - `StopTime` (TimeSpan): Cuándo se completa el fundido. Después, el audio se reproduce a `StopVolume`
+
+Un volumen inicial o final superior a 100 se reproduce a 100 y genera `OnError`. Un `StopTime` anterior a `StartTime` deja el audio sin cambios y también genera `OnError`.
 
 **Uso**:
 

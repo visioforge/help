@@ -180,7 +180,9 @@ Para comenzar a desarrollar aplicaciones nativas macOS con SDKs de VisioForge:
 
 Para aplicaciones MacCatalyst (incluyendo proyectos MAUI) apuntando al framework `netX.0-maccatalyst`, use:
 
-- [VisioForge.CrossPlatform.Core.macCatalyst](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macCatalyst)
+- [VisioForge.CrossPlatform.Core.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS)
+
+Es el mismo paquete que usan las aplicaciones macOS: a partir de 2026.11.13 también sirve para Mac Catalyst (igual que `VisioForge.CrossPlatform.Core.macOS.Adds`). Los antiguos paquetes `VisioForge.CrossPlatform.Core.macCatalyst` y `.macCatalyst.Adds` están descontinuados; sustitúyalos por los de macOS.
 
 Para los bloques OpenCV (`VisioForge.Core.MediaBlocks.OpenCV`, incluido `VideoStabilizationBlock`), agregue también [VisioForge.CrossPlatform.OpenCV.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.macOS), el mismo paquete que usa macOS: su plugin funciona en Mac Catalyst sin cambios. En un proyecto MAUI con varios destinos, manténgalo dentro de la condición `-maccatalyst`, como en el fragmento de abajo, para que no se copie en las compilaciones de iOS y Android.
 
@@ -190,8 +192,8 @@ Para proyectos MAUI apuntando a macOS (a través de MacCatalyst), agregue estos 
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.11.5]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.13]"/>
   <!-- Solo para los bloques OpenCV -->
   <PackageReference Include="VisioForge.CrossPlatform.OpenCV.macOS" Version="[2026.11.12.2]"/>
 </ItemGroup>

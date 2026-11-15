@@ -59,11 +59,11 @@ Actualmente, los codificadores AV1 están soportados en los motores multiplatafo
 5. [Codificador RAV1E](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.RAV1EEncoderSettings.html)
 6. [Codificador SVT-AV1](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.SVTAV1EncoderSettings.html)
 
-El codificador SVT-AV1 se distribuye en el paquete de runtime adicional de su plataforma - el paquete `VisioForge.CrossPlatform.Core.Windows.Adds.*` de su arquitectura, `VisioForge.CrossPlatform.Core.macOS.Adds` (2026.8.25 o posterior) o `VisioForge.CrossPlatform.Core.macCatalyst.Adds` (2026.8.26 o posterior) - que se referencia junto al paquete principal. Sin él, `AV1EncoderBlock.IsAvailable(new SVTAV1EncoderSettings())` devuelve `false`.
+El codificador SVT-AV1 se distribuye en el paquete de runtime adicional de su plataforma - el paquete `VisioForge.CrossPlatform.Core.Windows.Adds.*` de su arquitectura, `VisioForge.CrossPlatform.Core.macOS.Adds` (2026.8.25 o posterior; 2026.11.13 o posterior en Mac Catalyst) - que se referencia junto al paquete principal. Sin él, `AV1EncoderBlock.IsAvailable(new SVTAV1EncoderSettings())` devuelve `false`.
 
 El codificador AOM AV1 está disponible en macOS, macCatalyst y Linux. Es un codificador por software orientado a la calidad y pensado para codificación offline; para el flujo de trabajo habitual por software prefiera SVT-AV1, que es bastante más rápido y escala mejor entre núcleos.
 
-Los paquetes `VisioForge.CrossPlatform.Core.macOS.Adds` y `VisioForge.CrossPlatform.Core.macCatalyst.Adds` incluyen el runtime AOM necesario a partir de la versión 2026.8.30. En Linux, instale un runtime de GStreamer que proporcione el elemento `av1enc`; use `AOMAV1EncoderSettings.IsAvailable()` para comprobar el runtime activo.
+El paquete `VisioForge.CrossPlatform.Core.macOS.Adds` incluye el runtime AOM necesario a partir de la versión 2026.8.30 (2026.11.13 o posterior en Mac Catalyst). En Linux, instale un runtime de GStreamer que proporcione el elemento `av1enc`; use `AOMAV1EncoderSettings.IsAvailable()` para comprobar el runtime activo.
 
 Puede usar el codificador AV1 con [salida WebM](../output-formats/webm.md) o para streaming de red.
 

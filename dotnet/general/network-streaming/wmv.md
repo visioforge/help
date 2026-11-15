@@ -103,8 +103,8 @@ VideoCapture1.Network_Streaming_Format = NetworkStreamingFormat.WMV;
 Create and configure a WMV output object with appropriate settings:
 
 ```cs
-// Create WMV output. Default ctor picks the "Windows Media Video 9 for Local Network
-// (768 kbps)" internal profile with Mode = WMVMode.InternalProfile.
+// Create WMV output. Default ctor picks the "Windows Media Video 9 High (2.5 Mbps)"
+// internal profile with Mode = WMVMode.InternalProfile.
 var wmvOutput = new WMVOutput();
 
 // Option A: pick a different built-in profile

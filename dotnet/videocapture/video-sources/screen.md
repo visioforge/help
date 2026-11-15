@@ -65,7 +65,7 @@ DirectX 11 is particularly recommended for window capture scenarios due to its i
     The VideoCaptureCore implementation provides straightforward configuration options to control the capture process:
     
     - `GrabMouseCursor`: Enable or disable cursor visibility in the captured content
-    - `DisplayIndex`: Select which display to capture in multi-monitor setups (zero-indexed)
+    - `DisplayIndex`: which monitor to capture. `0` is the primary monitor. A positive value is the number in the monitor's device name (`\\.\DISPLAY2` is `2`), not its position in the monitor list
     - `ScreenPreview` / `ScreenCapture`: Set the operational mode for viewing or recording
     
 
@@ -78,6 +78,8 @@ DirectX 11 is particularly recommended for window capture scenarios due to its i
     
     - `ScreenCaptureDX9SourceSettings`: Configure DirectX 9 based capture
     - `ScreenCaptureD3D11SourceSettings`: Configure DirectX 11 based capture with enhanced performance
+
+    `ScreenCaptureGDISourceSettings` and `ScreenCaptureDX9SourceSettings` are obsolete. Use `ScreenCaptureD3D11SourceSettings`. `UpdateLiveSettings` on a running GDI or DX9 capture only stores the new position and cursor; they apply the next time capture starts.
     
 
 
@@ -124,7 +126,7 @@ Capturing either a complete screen or a defined screen region is a common requir
     
     When `FullScreen` is set to `true`, the `Left`, `Top`, `Right`, and `Bottom` properties are ignored, and the entire screen specified by `DisplayIndex` is captured. Note the rectangle is specified as absolute pixel corner coordinates — `Right` and `Bottom` are the far-corner coordinates, not the width/height of the region.
     
-    For multi-monitor setups, the `DisplayIndex` property identifies which monitor to capture, with 0 representing the primary display.
+    For multi-monitor setups, `DisplayIndex` `0` is the primary monitor. A positive value is the number in that monitor's device name (`\\.\DISPLAY2` is `2`), not its position in the monitor list.
     
 
 === "VideoCaptureCoreX"
@@ -169,7 +171,7 @@ Capturing either a complete screen or a defined screen region is a common requir
     VideoCapture1.Video_Source = source; 
     ```
     
-    Desktop Duplication (`D3D11ScreenCaptureAPI.DXGI`, the default) starts at once, even when nothing on the screen moves. Windows Graphics Capture (`D3D11ScreenCaptureAPI.WGC`) starts at once too, and repeats the last frame while nothing changes. A window that is minimized when the capture starts gives no frame until it is restored. Desktop Duplication allows a limited number of sessions per monitor across all applications: when the start fails with "Failed to prepare capture object with given configuration" and the GStreamer debug log says "Hit the max allowed number of Desktop Duplication session", use WGC. The rectangle is in pixels of the captured monitor, and an empty one captures that monitor whole, at its native resolution.
+    Desktop Duplication (`D3D11ScreenCaptureAPI.DXGI`, the default) starts at once, even when nothing on the screen moves. Windows Graphics Capture (`D3D11ScreenCaptureAPI.WGC`) starts at once too, and repeats the last frame while nothing changes. A minimized window gives no frame, so `StartAsync` called on a minimized window returns `false` with an error naming the window: restore it before starting. Desktop Duplication allows a limited number of sessions per monitor across all applications: when the start fails with "Failed to prepare capture object with given configuration" and the GStreamer debug log says "Hit the max allowed number of Desktop Duplication session", use WGC. The rectangle is in pixels of the captured monitor, and an empty one captures that monitor whole, at its native resolution.
     
 
 
@@ -292,7 +294,10 @@ for (int i = 0; i < screens.Length; i++)
     screenOptions.Add($"Monitor {i+1}: {screens[i].Bounds.Width} x {screens[i].Bounds.Height}");
 }
 
-// Once a selection is made, set the appropriate DisplayIndex/MonitorIndex
+// VideoCaptureCore: DisplayIndex is 0 for the primary monitor, or the number in
+// screens[i].DeviceName (\\.\DISPLAY2 is 2). It is not i.
+// VideoCaptureCoreX: set MonitorHandle from MonitorFromPoint on a point inside
+// screens[i].Bounds. MonitorIndex counts DXGI outputs, not this list (-1 is the primary).
 ```
 
 ### Application Window Selection
@@ -410,7 +415,7 @@ Set `GrabMouseCursor = true` in `ScreenCaptureSourceSettings` (VideoCaptureCore)
 
 ### Does the screen capture SDK work on multiple monitors?
 
-Yes. Use `DisplayIndex` (VideoCaptureCore) or `MonitorIndex` (VideoCaptureCoreX) to select which monitor to capture. Enumerate available monitors with `System.Windows.Forms.Screen.AllScreens` and present the list to the user. Each monitor is captured independently — to record all monitors simultaneously, create separate capture instances for each display.
+Yes. Enumerate monitors with `System.Windows.Forms.Screen.AllScreens`. For VideoCaptureCore, `DisplayIndex` `0` is the primary monitor and a positive value is the number in `Screen.DeviceName` (`\\.\DISPLAY2` is `2`), not the position in `AllScreens`. For VideoCaptureCoreX, set `MonitorHandle` to the `HMONITOR` of the chosen screen (`MonitorFromPoint` on a point inside `Screen.Bounds`). `MonitorIndex` counts DXGI outputs, not `AllScreens` (`-1` is the primary monitor). Each monitor is captured independently — to record all monitors simultaneously, create separate capture instances for each display.
 
 ## See Also
 

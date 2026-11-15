@@ -45,27 +45,27 @@ These capabilities allow developers to create applications with professional-gra
 
 ### Platform-Specific Implementation
 
-The `AudioRendererBlock` supports various platform-specific audio rendering technologies. It can be configured to use a specific audio device and API (see Device Management section). When instantiated using its default constructor (e.g., `new AudioRendererBlock()`), it attempts to select a suitable default audio API based on the operating system:
+The `AudioRendererBlock` supports various platform-specific audio rendering technologies. It can be configured to use a specific audio device and API (see Device Management section). When instantiated using its default constructor (e.g., `new AudioRendererBlock()`), it plays through the system default output device: GStreamer's `autoaudiosink` picks the platform's sink and follows the OS default, and `Settings` stays `null`. If no output can be opened, the audio goes to a fake sink and a warning is logged. The supported audio technologies per operating system:
 
-- **Windows**: The default constructor typically uses DirectSound. The block supports multiple audio APIs including:
+- **Windows**: The block supports multiple audio APIs including:
   - DirectSound: Provides low-latency output with broad compatibility
   - WASAPI (Windows Audio Session API): Offers exclusive mode for highest quality
   - ASIO (Audio Stream Input/Output): Professional-grade audio with minimal latency for specialized hardware
-- **macOS**: Utilizes the CoreAudio framework. The default constructor will typically select a CoreAudio-based device for:
+- **macOS**: Utilizes the CoreAudio framework for:
   - High-resolution audio output
   - Native integration with macOS audio subsystem
   - Support for audio units and professional equipment
   (Note: Similarly for macOS, an `OSXAudioSinkBlock` is available for direct interaction with the platform-specific GStreamer sink if needed for specialized scenarios.)
-- **Linux**: Implements ALSA (Advanced Linux Sound Architecture). The default constructor will typically select an ALSA-based device for:
+- **Linux**: Implements ALSA (Advanced Linux Sound Architecture) for a selected device; without one, the default constructor plays through the highest-ranked sink that opens: PulseAudio (also on PipeWire systems, through its PulseAudio layer) or ALSA. ALSA provides:
   - Direct hardware access
   - Comprehensive device support
   - Integration with the Linux audio stack
-- **iOS**: Employs CoreAudio, optimized for mobile. The default constructor will typically select a CoreAudio-based device, enabling features like:
+- **iOS**: Employs CoreAudio, optimized for mobile, enabling features like:
   - Power-efficient rendering
   - Background audio capabilities
   - Integration with iOS audio session management
   (Note: For developers requiring more direct control over the iOS-specific GStreamer sink or having advanced use cases, the SDK also provides `IOSAudioSinkBlock` as a distinct media block.)
-- **Android**: Defaults to using OpenSL ES to provide:
+- **Android**: Uses OpenSL ES to provide:
   - Low-latency audio output
   - Hardware acceleration when available
 
@@ -230,24 +230,18 @@ On Windows the WASAPI (1) endpoints (`wasapisink`, `AudioOutputDeviceAPI.WASAPI`
 
 ### Default Device Handling
 
-When no specific device is selected, the block automatically routes audio to the system's default output device. The no-parameter constructor attempts to select an appropriate default device based on the platform:
+When no specific device is selected, the block automatically routes audio to the system's default output device. The no-parameter constructor does this through GStreamer's `autoaudiosink`, which follows the OS default output; `Settings` stays `null`:
 
 ```csharp
 // Create with default device
 var audioRenderer = new AudioRendererBlock();
 ```
 
-The block also monitors device status, handling scenarios such as:
-
-- Device disconnection during playback
-- Default device changes by the user
-- Audio endpoint format changes
-
 ## Performance Considerations
 
 ### Latency Management
 
-Audio rendering latency is critical for many applications. The block provides configuration options through the `Settings` property and synchronization control via the `IsSync` property:
+Audio rendering latency is critical for many applications. The block takes its configuration from the settings passed to its constructor (exposed as the `Settings` property, `null` for the no-parameter constructor) and provides synchronization control via the `IsSync` property:
 
 ```csharp
 // Control synchronization behavior

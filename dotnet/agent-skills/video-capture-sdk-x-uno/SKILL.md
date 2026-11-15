@@ -1,6 +1,6 @@
 ---
 name: video-capture-sdk-x-uno
-description: Integrate VisioForge Video Capture SDK X (cross-platform edition) into an Uno Platform application. Covers the Uno-specific VideoView control, multi-target NuGet packages (per-OS native dependencies), license registration, and the most common cross-platform pitfalls (camera permissions per OS, WebAssembly limitations, missing native libs, trial-period expiry / unlicensed build). Use for Uno cross-OS apps (Windows, Android, iOS, macOS, WebAssembly) — for MAUI use video-capture-sdk-x-maui, for Avalonia use video-capture-sdk-x-avalonia.
+description: Integrate VisioForge Video Capture SDK X (cross-platform edition) into an Uno Platform application. Covers the Uno-specific VideoView control, multi-target NuGet packages (per-OS native dependencies), license registration, and the most common cross-platform pitfalls (camera permissions per OS, WebAssembly limitations, missing native libs, trial-period expiry / unlicensed build). Use for Uno cross-OS apps (Windows, Android, iOS, macOS, Linux) — for MAUI use video-capture-sdk-x-maui, for Avalonia use video-capture-sdk-x-avalonia.
 ---
 
 # Video Capture SDK X — Uno Platform integration
@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Video Capture SDK X** — the cross-platfo
 
 `VideoCaptureCoreX` is the high-level capture-and-record god-object — same API as on the WPF/MAUI/WinUI hosts, just bound to Uno's `VideoView`. Under the hood it shares the GStreamer-backed engine with Media Blocks.
 
-Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Capture sample): wrapper **`2026.11.12`**, Uno UI **`2026.11.12`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Capture sample): wrapper **`2026.11.13`**, Uno UI **`2026.11.13`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -40,7 +40,7 @@ Two managed packages always, plus per-OS native redists conditionally. The condi
 | `VisioForge.CrossPlatform.Libav.Windows.x64` | FFmpeg/libav muxers + encoders on Windows | `-windows` |
 | `VisioForge.CrossPlatform.Core.Android` + AndroidDependency project ref | Native runtime on Android (the `.aar` is bound through a small companion csproj) | `-android` |
 | `VisioForge.CrossPlatform.Core.iOS` | Native runtime on iOS | `-ios` |
-| `VisioForge.CrossPlatform.Core.macCatalyst` | Native runtime on Mac Catalyst | `-maccatalyst` |
+| `VisioForge.CrossPlatform.Core.macOS` | Native runtime on Mac Catalyst (the macOS package serves both) | `-maccatalyst` |
 
 The Android target additionally needs a `<ProjectReference>` to `VisioForge.Core.Android.X10.csproj` (a small companion project that ships in the samples repo under `AndroidDependency/`) — that's how the `.aar` is bound. Copy that folder into your repo and reference it as shown in the bundled csproj. There's no NuGet equivalent today.
 
@@ -76,8 +76,8 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.12]"/>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.12]"/>
+    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.13]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.13]"/>
   </ItemGroup>
 </Project>
 ```
@@ -342,7 +342,7 @@ public sealed partial class MainPage : Page
 
 **Cause**: WebAssembly is not a supported target for the X engine. There is no WASM build of the GStreamer-based native runtime, so `InitSDKAsync` cannot find `libgstcore` (or its WASM equivalent) and throws `DllNotFoundException`.
 
-**Fix**: split the WebAssembly UI off into a separate Uno head that does **not** reference `VisioForge.DotNet.VideoCapture` / `VisioForge.DotNet.Core.UI.Uno`. The capture project should multi-target only `-windows`, `-android`, `-ios`, and `-maccatalyst`. If you accidentally added `net10.0-browserwasm` to `<TargetFrameworks>`, remove it.
+**Fix**: split the WebAssembly UI off into a separate Uno head that does **not** reference `VisioForge.DotNet.VideoCapture` / `VisioForge.DotNet.Core.UI.Uno`. The capture project should multi-target only `-windows`, `-android`, `-ios`, `-maccatalyst`, and `-desktop` (Linux). If you accidentally added `net10.0-browserwasm` to `<TargetFrameworks>`, remove it.
 
 ### 4. Trial-mode message or "SDK TRIAL period (30 days) is over" on app start
 

@@ -65,7 +65,7 @@ DirectX 11 est particulièrement recommandé pour les scénarios de capture de f
     L'implémentation VideoCaptureCore offre des options de configuration simples pour contrôler le processus de capture :
     
     - `GrabMouseCursor` : activer ou désactiver la visibilité du curseur dans le contenu capturé
-    - `DisplayIndex` : sélectionner quel affichage capturer dans une configuration multi-moniteurs (indexé à zéro)
+    - `DisplayIndex` : quel écran capturer. `0` est l'écran principal. Une valeur positive est le numéro dans le nom d'appareil de l'écran (`\\.\DISPLAY2` vaut `2`), pas sa position dans la liste des écrans
     - `ScreenPreview` / `ScreenCapture` : définir le mode opérationnel pour la visualisation ou l'enregistrement
     
 
@@ -78,6 +78,8 @@ DirectX 11 est particulièrement recommandé pour les scénarios de capture de f
     
     - `ScreenCaptureDX9SourceSettings` : configurer une capture basée sur DirectX 9
     - `ScreenCaptureD3D11SourceSettings` : configurer une capture basée sur DirectX 11 avec des performances améliorées
+
+    `ScreenCaptureGDISourceSettings` et `ScreenCaptureDX9SourceSettings` sont obsolètes. Utilisez `ScreenCaptureD3D11SourceSettings`. Sur une capture GDI ou DX9 déjà en cours, `UpdateLiveSettings` mémorise seulement la nouvelle position et le curseur ; ils s'appliquent au prochain démarrage.
     
 
 
@@ -124,7 +126,7 @@ La capture d'un écran complet ou d'une région d'écran définie est une exigen
     
     Lorsque `FullScreen` est défini sur `true`, les propriétés `Left`, `Top`, `Right` et `Bottom` sont ignorées, et tout l'écran spécifié par `DisplayIndex` est capturé. Notez que le rectangle est spécifié en coordonnées absolues de coins en pixels — `Right` et `Bottom` sont les coordonnées du coin opposé, et non la largeur/hauteur de la région.
     
-    Pour les configurations multi-moniteurs, la propriété `DisplayIndex` identifie quel moniteur capturer, 0 représentant l'affichage principal.
+    Pour les configurations multi-moniteurs, `DisplayIndex` `0` est l'écran principal. Une valeur positive est le numéro dans le nom d'appareil de cet écran (`\\.\DISPLAY2` vaut `2`), pas sa position dans la liste des écrans.
     
 
 === "VideoCaptureCoreX"
@@ -292,7 +294,10 @@ for (int i = 0; i < screens.Length; i++)
     screenOptions.Add($"Monitor {i+1}: {screens[i].Bounds.Width} x {screens[i].Bounds.Height}");
 }
 
-// Une fois la sélection effectuée, définir le DisplayIndex/MonitorIndex approprié
+// VideoCaptureCore : DisplayIndex vaut 0 pour l'écran principal, ou le numéro dans
+// screens[i].DeviceName (\\.\DISPLAY2 vaut 2). Ce n'est pas i.
+// VideoCaptureCoreX : affectez MonitorHandle via MonitorFromPoint sur un point à l'intérieur de
+// screens[i].Bounds. MonitorIndex compte les sorties DXGI, pas cette liste (-1 est l'écran principal).
 ```
 
 ### Sélection de fenêtre d'application
@@ -410,7 +415,7 @@ Définissez `GrabMouseCursor = true` dans `ScreenCaptureSourceSettings` (VideoCa
 
 ### Le Video Capture SDK fonctionne-t-il sur plusieurs moniteurs ?
 
-Oui. Utilisez `DisplayIndex` (VideoCaptureCore) ou `MonitorIndex` (VideoCaptureCoreX) pour sélectionner le moniteur à capturer. Énumérez les moniteurs disponibles avec `System.Windows.Forms.Screen.AllScreens` et présentez la liste à l'utilisateur. Chaque moniteur est capturé indépendamment — pour enregistrer tous les moniteurs simultanément, créez des instances de capture distinctes pour chaque affichage.
+Oui. Énumérez les moniteurs avec `System.Windows.Forms.Screen.AllScreens`. Pour VideoCaptureCore, `DisplayIndex` `0` est l'écran principal et une valeur positive est le numéro dans `Screen.DeviceName` (`\\.\DISPLAY2` vaut `2`), pas la position dans `AllScreens`. Pour VideoCaptureCoreX, affectez à `MonitorHandle` le `HMONITOR` de l'écran choisi (`MonitorFromPoint` sur un point à l'intérieur de `Screen.Bounds`). `MonitorIndex` compte les sorties DXGI, pas `AllScreens` (`-1` est l'écran principal). Chaque moniteur est capturé indépendamment — pour enregistrer tous les moniteurs simultanément, créez des instances de capture distinctes pour chaque affichage.
 
 ## Voir aussi
 

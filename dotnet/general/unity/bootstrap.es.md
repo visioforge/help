@@ -96,8 +96,9 @@ de su cargador nativo.
        limpieza del `PATH` de Windows.
     3. Establece `GST_PLUGIN_PATH` / `GST_PLUGIN_SYSTEM_PATH` a la carpeta de nativos para que
        GStreamer pueda enumerar los plugins incluidos.
-    4. Establece `GIO_MODULE_DIR` para que GIO encuentre `libgioopenssl.so` (el backend TLS por
-       el que RTSPS / HTTPS verifican pares).
+    4. Deja `GIO_MODULE_DIR` sin definir. `InitSDK` carga `libgioopenssl.so` por nombre de
+       archivo desde la carpeta de nativos. Apuntar `GIO_MODULE_DIR` a esa carpeta haría que
+       GLib abriera cada biblioteca.
     5. Establece `SSL_CERT_FILE` y `CA_CERTIFICATES` al paquete CA incluido.
 
     Cada `.dylib` incluido tiene su `@rpath` / `@loader_path` precocido por el NuGet pack, así

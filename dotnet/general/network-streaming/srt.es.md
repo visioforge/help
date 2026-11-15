@@ -56,7 +56,7 @@ bool srtAvailable = SRTSinkBlock.IsAvailable(); // para enviar
 bool srtSourceAvailable = SRTSourceBlock.IsAvailable(); // para recibir
 ```
 
-En Windows, macOS y Mac Catalyst, el plugin SRT se distribuye en el paquete de runtime `Adds`, no en el principal: `VisioForge.CrossPlatform.Core.Windows.Adds.x64` (o sus variantes x86 y arm64), `VisioForge.CrossPlatform.Core.macOS.Adds` o `VisioForge.CrossPlatform.Core.macCatalyst.Adds`. Agréguelo junto al paquete de runtime principal, o `IsAvailable()` devolverá `false`. Los paquetes de runtime de iOS y Android incluyen SRT. En Linux el SDK usa el GStreamer del sistema; en Ubuntu y Debian, SRT forma parte de `gstreamer1.0-plugins-bad`.
+En Windows, macOS y Mac Catalyst, el plugin SRT se distribuye en el paquete de runtime `Adds`, no en el principal: `VisioForge.CrossPlatform.Core.Windows.Adds.x64` (o sus variantes x86 y arm64), `VisioForge.CrossPlatform.Core.macOS.Adds` (macOS y Mac Catalyst). Agréguelo junto al paquete de runtime principal, o `IsAvailable()` devolverá `false`. Los paquetes de runtime de iOS y Android incluyen SRT. En Linux el SDK usa el GStreamer del sistema; en Ubuntu y Debian, SRT forma parte de `gstreamer1.0-plugins-bad`.
 
 ## Modos de conexión SRT
 

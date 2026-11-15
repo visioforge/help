@@ -58,11 +58,11 @@ Currently, AV1 encoder are supported in the cross-platform engines: `VideoCaptur
 5. [RAV1E Encoder](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.RAV1EEncoderSettings.html)
 6. [SVT-AV1 Encoder](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.SVTAV1EncoderSettings.html)
 
-The SVT-AV1 encoder is delivered in the additional runtime package for your platform - the `VisioForge.CrossPlatform.Core.Windows.Adds.*` package for your architecture, `VisioForge.CrossPlatform.Core.macOS.Adds` (2026.8.25 or newer) or `VisioForge.CrossPlatform.Core.macCatalyst.Adds` (2026.8.26 or newer) - which is referenced beside the core package. Without it `AV1EncoderBlock.IsAvailable(new SVTAV1EncoderSettings())` returns `false`.
+The SVT-AV1 encoder is delivered in the additional runtime package for your platform - the `VisioForge.CrossPlatform.Core.Windows.Adds.*` package for your architecture, `VisioForge.CrossPlatform.Core.macOS.Adds` (2026.8.25 or newer; 2026.11.13 or newer on Mac Catalyst) - which is referenced beside the core package. Without it `AV1EncoderBlock.IsAvailable(new SVTAV1EncoderSettings())` returns `false`.
 
 The AOM AV1 encoder is available on macOS, macCatalyst, and Linux. It is a quality-first software encoder intended for offline encoding; for the usual software AV1 workflow, prefer SVT-AV1 because it is substantially faster and scales better across CPU cores.
 
-The `VisioForge.CrossPlatform.Core.macOS.Adds` and `VisioForge.CrossPlatform.Core.macCatalyst.Adds` packages include the required AOM runtime from 2026.8.30 onwards. On Linux, install a GStreamer runtime that provides the `av1enc` element; use `AOMAV1EncoderSettings.IsAvailable()` to check the active runtime.
+The `VisioForge.CrossPlatform.Core.macOS.Adds` package includes the required AOM runtime from 2026.8.30 onwards (2026.11.13 or newer on Mac Catalyst). On Linux, install a GStreamer runtime that provides the `av1enc` element; use `AOMAV1EncoderSettings.IsAvailable()` to check the active runtime.
 
 You can use AV1 encoder with [WebM output](../output-formats/webm.md) or for network streaming.
 

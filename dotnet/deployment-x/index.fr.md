@@ -112,7 +112,7 @@ Le déploiement Linux implique souvent une gestion des paquets spécifique à la
 Uno Platform permet de déployer des applications à partir d'un code source unique vers plusieurs plateformes :
 
 - **Distribution des paquets** : composants principaux disponibles via NuGet avec des redistribuables spécifiques à chaque plateforme
-- **Plateformes prises en charge** : Windows, Android, iOS, macOS (Catalyst), WebAssembly et Linux Desktop
+- **Plateformes prises en charge** : Windows, Android, iOS, macOS (Catalyst) et Linux Desktop
 - **Prise en charge des architectures** : varie selon la plateforme cible
 - **Bibliothèques natives** : redistribuables spécifiques à chaque plateforme requis pour chaque cible
 - **Intégration UI** : le contrôle `VideoView` spécifique à Uno s'adapte à chaque plateforme

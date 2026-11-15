@@ -178,7 +178,7 @@ public partial class Form1 : Form
             TimeStampMask = @"hh\:mm\:ss\.fff",
             Text = "Rec ",
             Left = 20,
-            Top = 140 // the text size follows the Windows display scale
+            Top = 140 // room between the rows
         });
     }
 
@@ -258,7 +258,7 @@ public partial class Form1 : Form
 3. **Modes** - `Mode` picks what an overlay shows: `Text` draws the `Text` property, `DateTime` the PC clock formatted by `DateTimeMask`, `Timestamp` the time since the recording started formatted by `TimeStampMask` (a `TimeSpan` format, so `:` and `.` need a backslash), and `FrameNumber` the number of the frame. In the last three, `Text` is drawn in front of the value, and its default is `Hello!!!`, so set it to an empty string or to your own prefix
 4. **Changing an overlay while recording** - `Video_Effects_Get` returns the overlay with that name, or `null`. Change its properties and call `Update()`: the engine redraws it from the next frame, and the recording keeps the change from that frame on. Without `Update()`, the old text stays
 5. **Fonts** - the `Font` setter keeps its own copy of the font, so the one you pass can be disposed right away
-6. **Text size and the display scale** - a font size in points is drawn at the screen's DPI, so it grows with the Windows display scale and does not shrink with the frame: at 200 percent, a line of Arial 36 is about 110 pixels tall whatever the frame size. This sample leaves room for that with `Top = 140`, which fits up to 200 percent. For the same size on every PC, create the font in pixels: `new Font("Arial", 36, GraphicsUnit.Pixel)`
+6. **Text size and the display scale** - since SDK 2026.11.13 a font size in points is drawn at 96 DPI, so a line of Arial 36 is about 55 pixels tall on every PC, whatever the Windows display scale, and it does not shrink with the frame. Earlier versions drew it at the screen's DPI, so it grew with the display scale: about 110 pixels at 200 percent. `Top = 140` in this sample leaves room for that up to 200 percent. A font in pixels has the same size on every version: `new Font("Arial", 36, GraphicsUnit.Pixel)`
 7. **Cost** - an overlay whose text changes (the clock, the frame number, the recording time, or a caption after `Update()`) is redrawn on every frame; keep such overlays few
 
 ## Check the File with ffprobe

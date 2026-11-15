@@ -97,8 +97,9 @@ son chargeur natif.
        `/usr/local/lib`) — même mode de défaillance double-init que le nettoyage `PATH` Windows.
     3. Définit `GST_PLUGIN_PATH` / `GST_PLUGIN_SYSTEM_PATH` au dossier des natifs pour que
        GStreamer puisse énumérer les plugins fournis.
-    4. Définit `GIO_MODULE_DIR` pour que GIO trouve `libgioopenssl.so` (le backend TLS via
-       lequel RTSPS / HTTPS vérifient les pairs).
+    4. Laisse `GIO_MODULE_DIR` non défini. `InitSDK` charge `libgioopenssl.so` par nom de
+       fichier depuis le dossier des natifs. Pointer `GIO_MODULE_DIR` vers ce dossier ferait
+       ouvrir chaque bibliothèque par GLib.
     5. Définit `SSL_CERT_FILE` et `CA_CERTIFICATES` au bundle CA fourni.
 
     Chaque `.dylib` fourni a son `@rpath` / `@loader_path` précuit par le NuGet pack, donc une

@@ -108,7 +108,7 @@ dotnet add package VisioForge.CrossPlatform.Core.Android
 dotnet add package VisioForge.CrossPlatform.Core.iOS
 
 # For macOS applications
-dotnet add package VisioForge.CrossPlatform.Core.macCatalyst
+dotnet add package VisioForge.CrossPlatform.Core.macOS
 ```
 
 Add the required namespaces to your code:

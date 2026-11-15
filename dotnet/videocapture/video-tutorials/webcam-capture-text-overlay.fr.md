@@ -178,7 +178,7 @@ public partial class Form1 : Form
             TimeStampMask = @"hh\:mm\:ss\.fff",
             Text = "Rec ",
             Left = 20,
-            Top = 140 // la taille du texte suit la mise à l'échelle de Windows
+            Top = 140 // de la place entre les lignes
         });
     }
 
@@ -258,7 +258,7 @@ public partial class Form1 : Form
 3. **Modes** - `Mode` choisit ce qu'affiche une incrustation : `Text` dessine la propriété `Text`, `DateTime` l'horloge du PC au format de `DateTimeMask`, `Timestamp` le temps écoulé depuis le début de l'enregistrement au format de `TimeStampMask` (un format `TimeSpan`, donc `:` et `.` doivent être précédés d'une barre oblique inverse), et `FrameNumber` le numéro de l'image. Dans les trois derniers, `Text` est dessiné devant la valeur, et vaut `Hello!!!` par défaut : réglez-le sur une chaîne vide ou sur votre propre préfixe
 4. **Modifier une incrustation pendant l'enregistrement** - `Video_Effects_Get` renvoie l'incrustation de ce nom, ou `null`. Modifiez ses propriétés et appelez `Update()` : le moteur la redessine à partir de l'image suivante, et l'enregistrement garde la modification à partir de cette image. Sans `Update()`, l'ancien texte reste
 5. **Polices** - le setter de `Font` garde sa propre copie de la police : celle que vous passez peut être libérée aussitôt
-6. **Taille du texte et mise à l'échelle de l'affichage** - une taille de police en points est dessinée à la résolution (DPI) de l'écran : elle grandit donc avec la mise à l'échelle de Windows et ne diminue pas avec l'image. À 200 %, une ligne d'Arial 36 mesure environ 110 pixels de haut, quelle que soit la taille de l'image. Cet exemple laisse cette place avec `Top = 140`, ce qui suffit jusqu'à 200 %. Pour obtenir la même taille sur tous les PC, créez la police en pixels : `new Font("Arial", 36, GraphicsUnit.Pixel)`
+6. **Taille du texte et mise à l'échelle de l'affichage** - depuis le SDK 2026.11.13, une taille de police en points est dessinée à 96 DPI : une ligne d'Arial 36 mesure donc environ 55 pixels de haut sur tous les PC, quelle que soit la mise à l'échelle de Windows, et ne diminue pas avec l'image. Les versions précédentes la dessinaient à la résolution (DPI) de l'écran : elle grandissait donc avec la mise à l'échelle, environ 110 pixels à 200 %. Dans cet exemple, `Top = 140` laisse cette place jusqu'à 200 %. Une police en pixels a la même taille dans toutes les versions : `new Font("Arial", 36, GraphicsUnit.Pixel)`
 7. **Coût** - une incrustation dont le texte change (l'horloge, le numéro d'image, la durée d'enregistrement ou une légende après `Update()`) est redessinée à chaque image ; gardez-en peu
 
 ## Vérifier le fichier avec ffprobe

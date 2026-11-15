@@ -14,6 +14,9 @@ tags:
 
 The SMPTE Wipe transition produces any of the standard wipes defined by the Society of Motion Picture and Television Engineers (SMPTE) in SMPTE document 258M-1993, except for the quad split.
 
+!!! note "VideoEditCore (DirectShow)"
+    `VideoEditCore` draws each SMPTE code with the closest built-in DirectX transition (bar, barn door, iris, clock, wheel, strips, blinds, spiral, zigzag or dissolve). The look is close to the SMPTE pattern, not identical, and the border, offset, replicate and scale properties have no effect.
+
 ## Properties
 
 | Property        | Type          | Default | Description |

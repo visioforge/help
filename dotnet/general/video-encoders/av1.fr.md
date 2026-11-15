@@ -59,11 +59,11 @@ Actuellement, les encodeurs AV1 sont pris en charge dans les moteurs multiplatef
 5. [Encodeur RAV1E](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.RAV1EEncoderSettings.html)
 6. [Encodeur SVT-AV1](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.SVTAV1EncoderSettings.html)
 
-L'encodeur SVT-AV1 est livré dans le paquet de runtime supplémentaire de votre plateforme - le paquet `VisioForge.CrossPlatform.Core.Windows.Adds.*` correspondant à votre architecture, `VisioForge.CrossPlatform.Core.macOS.Adds` (2026.8.25 ou plus récent) ou `VisioForge.CrossPlatform.Core.macCatalyst.Adds` (2026.8.26 ou plus récent) - référencé à côté du paquet principal. Sans lui, `AV1EncoderBlock.IsAvailable(new SVTAV1EncoderSettings())` renvoie `false`.
+L'encodeur SVT-AV1 est livré dans le paquet de runtime supplémentaire de votre plateforme - le paquet `VisioForge.CrossPlatform.Core.Windows.Adds.*` correspondant à votre architecture, `VisioForge.CrossPlatform.Core.macOS.Adds` (2026.8.25 ou plus récent ; 2026.11.13 ou plus récent sous Mac Catalyst) - référencé à côté du paquet principal. Sans lui, `AV1EncoderBlock.IsAvailable(new SVTAV1EncoderSettings())` renvoie `false`.
 
 L'encodeur AOM AV1 est disponible sur macOS, macCatalyst et Linux. C'est un encodeur logiciel orienté qualité, destiné à l'encodage hors ligne ; pour le flux de travail logiciel habituel, préférez SVT-AV1, nettement plus rapide et qui passe mieux à l'échelle sur plusieurs cœurs.
 
-Les paquets `VisioForge.CrossPlatform.Core.macOS.Adds` et `VisioForge.CrossPlatform.Core.macCatalyst.Adds` contiennent le runtime AOM nécessaire à partir de la version 2026.8.30. Sous Linux, installez un runtime GStreamer fournissant l'élément `av1enc` ; utilisez `AOMAV1EncoderSettings.IsAvailable()` pour vérifier le runtime actif.
+Le paquet `VisioForge.CrossPlatform.Core.macOS.Adds` contient le runtime AOM nécessaire à partir de la version 2026.8.30 (2026.11.13 ou plus récent sous Mac Catalyst). Sous Linux, installez un runtime GStreamer fournissant l'élément `av1enc` ; utilisez `AOMAV1EncoderSettings.IsAvailable()` pour vérifier le runtime actif.
 
 Vous pouvez utiliser l'encodeur AV1 avec une [sortie WebM](../output-formats/webm.md) ou pour le streaming réseau.
 

@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Media Blocks SDK .NET** — the graph-base
 
 The same C# pipeline code runs unchanged on every Uno target; what differs is the per-OS native redist NuGet, the permission paperwork, and the `Uno.Sdk` MSBuild SDK plus the `VisioForge.DotNet.Core.UI.Uno` `VideoView` control. Under the hood the engine is GStreamer-based and shared with `VideoCaptureCoreX`.
 
-Pinned NuGet versions (match the bundled `references/Sample.csproj` and the upstream Uno `VideoCaptureUnoX` sample): wrapper **`2026.11.12`**, Uno UI **`2026.11.12`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. A redist ahead of the wrapper is undefined behaviour and surfaces as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
+Pinned NuGet versions (match the bundled `references/Sample.csproj` and the upstream Uno `VideoCaptureUnoX` sample): wrapper **`2026.11.13`**, Uno UI **`2026.11.13`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. A redist ahead of the wrapper is undefined behaviour and surfaces as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
 ## When to use this skill
 
@@ -39,7 +39,7 @@ Two managed packages always, plus per-OS native redists conditionally. The condi
 | `VisioForge.CrossPlatform.Libav.Windows.x64` | FFmpeg/libav muxers + encoders on Windows | `-windows` |
 | `VisioForge.CrossPlatform.Core.Android` + AndroidDependency project ref | Native runtime on Android (the `.aar` is bound through a small companion csproj) | `-android` |
 | `VisioForge.CrossPlatform.Core.iOS` | Native runtime on iOS | `-ios` |
-| `VisioForge.CrossPlatform.Core.macCatalyst` | Native runtime on Mac Catalyst | `-maccatalyst` |
+| `VisioForge.CrossPlatform.Core.macOS` | Native runtime on Mac Catalyst (the macOS package serves both) | `-maccatalyst` |
 
 Unlike the WPF Media Blocks layout (where `VisioForge.CrossPlatform.Libav.Windows.x64.UPX` ships compressed binaries), the Uno sample uses the un-UPX'd `VisioForge.CrossPlatform.Libav.Windows.x64`. UPX-compressed natives interact badly with some MSIX packaging flows on the WinAppSDK head — keep the non-UPX variant for Uno.
 
@@ -288,7 +288,7 @@ private async void StartButton_Click(object sender, RoutedEventArgs e)
 
 **Cause**: WebAssembly is not a supported target for the Media Blocks engine. There is no WASM build of the GStreamer-based native runtime, so `InitSDK` cannot find `libgstcore` (or its WASM equivalent) and throws `DllNotFoundException`.
 
-**Fix**: split the WebAssembly UI off into a separate Uno head that does **not** reference `VisioForge.DotNet.MediaBlocks` / `VisioForge.DotNet.Core.UI.Uno`. The pipeline project should multi-target only `-windows`, `-android`, `-ios`, and `-maccatalyst`. If you accidentally added `net10.0-browserwasm` to `<TargetFrameworks>`, remove it.
+**Fix**: split the WebAssembly UI off into a separate Uno head that does **not** reference `VisioForge.DotNet.MediaBlocks` / `VisioForge.DotNet.Core.UI.Uno`. The pipeline project should multi-target only `-windows`, `-android`, `-ios`, `-maccatalyst`, and `-desktop` (Linux). If you accidentally added `net10.0-browserwasm` to `<TargetFrameworks>`, remove it.
 
 ### 4. Trial-mode message or "SDK TRIAL period (30 days) is over" on app start
 

@@ -67,7 +67,8 @@ VFPAnalyzer.SetLicenseKey(Environment.GetEnvironmentVariable("VFP_LICENSE_KEY"))
 ### Q : Puis-je utiliser une licence sur plusieurs machines ?
 
 **R :** Les conditions de licence dépendent de votre achat :
-- **One Developer Annual** : un développeur désigné ; les licences sont comptées par développeur, et non par poste de travail
+- **Developer (annuel)** : un développeur désigné ; les licences sont comptées par développeur, et non par poste de travail
+- **Workgroup (annuel)** : trois développeurs désignés au sein d'une même organisation
 - **Lifetime·Team** : tous les développeurs de l'organisation acheteuse sur un même site dans une seule ville
 - **Licences personnalisées et en volume** : disponibles auprès du service commercial pour les organisations qui ont besoin de conditions différentes
 

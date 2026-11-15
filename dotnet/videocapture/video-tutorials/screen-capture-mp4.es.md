@@ -413,13 +413,13 @@ Las coordenadas definen el rectángulo de captura en píxeles de pantalla. Esto 
 
 #### Grabación multi-monitor
 
-Seleccione qué pantalla grabar usando la propiedad `DisplayIndex`. El monitor principal es el índice `0`, el secundario es `1`, y así sucesivamente:
+Seleccione qué pantalla grabar con la propiedad `DisplayIndex`. `0` es el monitor principal. Un valor positivo es el número de Windows de ese monitor, los dígitos de su nombre de dispositivo: `\\.\DISPLAY2` es `2`. Es el mismo número que las muestras de captura de pantalla muestran en la lista de monitores, no la posición del monitor en esa lista: `1` no es «el monitor secundario» (en la mayoría de los PC el monitor principal es `\\.\DISPLAY1`).
 
 ```csharp
 videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
 {
     FullScreen = true,
-    DisplayIndex = 1  // Grabar el monitor secundario
+    DisplayIndex = 0  // El monitor principal
 };
 ```
 
@@ -677,7 +677,7 @@ Sí. Con `VideoCaptureCoreX`, pase un altavoz de `DeviceEnumerator.Shared.AudioO
 
 ### ¿Cómo grabo un monitor específico en una configuración multi-monitor?
 
-Con `VideoCaptureCoreX`, establezca `MonitorIndex` en `ScreenCaptureD3D11SourceSettings` (`0` es el primer monitor, `-1` el principal) y ajuste `Rectangle` al tamaño de ese monitor. Con `VideoCaptureCore`, establezca la propiedad `DisplayIndex` en `ScreenCaptureSourceSettings` — use `0` para el monitor principal, `1` para el secundario, y así sucesivamente. Combine con `FullScreen = true` para capturar toda la pantalla seleccionada. También puede establecer `FullScreen = false` con coordenadas `Left/Top/Right/Bottom` para capturar una región específica en el monitor elegido.
+Con `VideoCaptureCoreX`, establezca `MonitorIndex` en `ScreenCaptureD3D11SourceSettings` (`0` es el primer monitor, `-1` el principal) y ajuste `Rectangle` al tamaño de ese monitor. Con `VideoCaptureCore`, establezca `DisplayIndex` en `ScreenCaptureSourceSettings`. `0` es el monitor principal. Un valor positivo es el número en el nombre de dispositivo de ese monitor (`\\.\DISPLAY2` es `2`), el que da `Screen.AllScreens[i].DeviceName`; no es `i`. Combine con `FullScreen = true` para capturar toda la pantalla seleccionada. También puede establecer `FullScreen = false` con coordenadas `Left/Top/Right/Bottom` para capturar una región específica en el monitor elegido.
 
 ### ¿Qué tasa de fotogramas debo usar para la grabación de pantalla?
 

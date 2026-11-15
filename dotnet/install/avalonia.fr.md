@@ -1,318 +1,279 @@
 ---
-title: Installer les SDK VisioForge dans des applis Avalonia .NET
-description: Créez des applications Avalonia multiplateformes avec des capacités multimédias pour Windows, macOS, Linux, Android et iOS grâce aux SDK vidéo VisioForge.
+title: Installer les SDK .NET VisioForge dans Avalonia 12.1
+description: "Installez les SDK .NET VisioForge dans une appli Avalonia 12.1 pour Desktop, Android et iOS : NuGet, redists, AndroidDependency, VideoView, vidéo."
 tags:
   - Video Capture SDK
   - Media Player SDK
   - Media Blocks SDK
   - Video Edit SDK
   - .NET
-  - C++
   - Windows
   - macOS
   - Linux
   - Android
   - iOS
   - Avalonia
+  - GStreamer
   - C#
   - NuGet
 primary_api_classes:
   - VideoView
+  - VisioForgeX
+video:
+  id: AOelvS3yVsw
+  upload_date: 2026-11-14T13:01:15Z
+  duration: PT8M26S
 
 ---
 
-# Créer des applications Avalonia riches en médias avec VisioForge
-
-## Vue d'ensemble du framework
-
-Avalonia UI se distingue comme un framework d'interface utilisateur .NET polyvalent et véritablement multiplateforme, avec une prise en charge couvrant les environnements de bureau (Windows, macOS, Linux) et les plateformes mobiles (iOS et Android). VisioForge enrichit cet écosystème via le paquet spécialisé `VisioForge.DotNet.Core.UI.Avalonia`, qui fournit des contrôles multimédias hautes performances adaptés à l'architecture d'Avalonia.
-
-Notre suite de SDK donne aux développeurs Avalonia accès à de larges capacités multimédias :
+# Installer les SDK .NET VisioForge dans une application Avalonia
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-## Installation et configuration
+Ce guide installe les SDK .NET VisioForge dans une application Avalonia 12.1 avec des cibles Desktop, Android et iOS, et place un `VideoView` dans sa vue principale. Il se termine par une application qui se compile et se lance sur la cible Desktop sous Windows.
 
-### Installation des paquets essentiels
+Les quatre SDK — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET et Media Blocks SDK .NET — sont fournis dans un seul paquet NuGet, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). Le `VideoView` d'Avalonia se trouve dans [VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia). Chaque plateforme prend en plus un paquet redist, son moteur natif, et Android prend le projet de liaison VisioForge, `AndroidDependency`, depuis GitHub.
 
-La création d'une application Avalonia dotée des capacités multimédias de VisioForge nécessite l'installation de plusieurs composants NuGet clés :
+## Tutoriel vidéo
 
-1. Couche d'interface utilisateur spécifique à Avalonia : `VisioForge.DotNet.Core.UI.Avalonia`
-2. Paquet de fonctionnalité principal : `VisioForge.DotNet.Core` (ou variante de SDK spécialisée)
-3. Bindings natifs spécifiques à chaque plateforme (détaillés dans les sections suivantes)
+La vidéo crée l'application, installe les paquets dans Visual Studio 2026 et la lance :
 
-Ajoutez-les au manifeste de votre projet (`.csproj`) :
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/AOelvS3yVsw?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+## Prérequis
+
+- Windows 10 ou 11, x64
+- Visual Studio 2026 et le SDK .NET 10, avec les charges de travail Android et iOS pour compiler ces cibles
+- Git
+- Un Mac avec Xcode, couplé à Visual Studio, pour compiler la cible iOS
+- Un Mac avec Xcode et la charge de travail macOS de .NET pour compiler la cible Desktop pour macOS
+- Sous Linux, GStreamer installé depuis les paquets de la distribution ; voir le [déploiement sous Ubuntu](../deployment-x/Ubuntu.md)
+
+`VisioForge.DotNet.Core.UI.Avalonia` est compilé pour Avalonia 12.1 : l'application est donc créée à partir des modèles Avalonia 12.1.6.
+
+## Créer l'application
+
+Dans Developer PowerShell, installez les modèles Avalonia, créez l'application, retirez sa cible Browser et récupérez le projet de liaison Android :
+
+```powershell
+cd $HOME\source\repos
+dotnet new install Avalonia.Templates@12.1.6
+dotnet new avalonia.xplat -o VisioForgeAvalonia
+cd VisioForgeAvalonia
+dotnet sln remove VisioForgeAvalonia.Browser\VisioForgeAvalonia.Browser.csproj
+git clone --depth 1 --filter=blob:none --sparse https://github.com/visioforge/.Net-SDK-s-samples.git samples
+git -C samples sparse-checkout set AndroidDependency
+dotnet sln add samples\AndroidDependency\VisioForge.Core.Android.X10.csproj
+devenv VisioForgeAvalonia.slnx
+```
+
+`avalonia.xplat` crée un projet partagé pour les vues (`VisioForgeAvalonia`) et un projet cible pour chaque plateforme : Desktop, Android, iOS et Browser. Le SDK n'a pas de moteur pour le navigateur : la cible Browser quitte donc la solution. Le clone clairsemé n'extrait qu'`AndroidDependency` du [dépôt d'exemples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency), et `dotnet sln add` l'ajoute à la solution, pour que Visual Studio le restaure avec l'application.
+
+Visual Studio peut vous demander d'accepter la licence du SDK Android au chargement de la solution. L'accepter installe le SDK Android, dont la cible Android a besoin pour compiler.
+
+## Installer les paquets
+
+Faites un clic droit sur le projet partagé, `VisioForgeAvalonia`, ouvrez **Manage NuGet Packages**, puis l'onglet **Browse**. Installez `VisioForge.DotNet.Core`, puis `VisioForge.DotNet.Core.UI.Avalonia`, et acceptez la licence.
+
+Le modèle Avalonia utilise la gestion centralisée des paquets : NuGet écrit donc les versions dans `Directory.Packages.props`, et le fichier de projet reçoit des références sans version. Le modèle laisse `Directory.Packages.props` hors de la solution : ouvrez-le avec **File > Open > File** et ajoutez une version pour chaque redist sous les deux paquets VisioForge :
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.*" />
-  <PackageReference Include="VisioForge.DotNet.Core" Version="2026.*" />
-  <!-- Les paquets spécifiques à la plateforme seront ajoutés dans des ItemGroups conditionnels -->
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.13" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.11.13" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.12" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.11.12" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.11.13" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.5" />
 </ItemGroup>
 ```
 
-### Architecture d'initialisation Avalonia
+Prenez les dernières versions sur [nuget.org](https://www.nuget.org/profiles/visioforge). Les redists Android et iOS sont publiés à leur propre rythme : leurs versions diffèrent donc de celles du SDK. Windows prend deux redists, le moteur natif et les codecs Libav (`.UPX` est la version de taille réduite) ; macOS, Android et iOS en prennent un chacun.
 
-Un avantage clé de l'intégration de VisioForge avec Avalonia réside dans son modèle d'initialisation fluide. Contrairement à certains frameworks qui exigent une configuration globale explicite, les contrôles Avalonia deviennent disponibles dès que le paquet principal est référencé.
+## La cible Desktop
 
-Votre code d'amorçage Avalonia standard dans `Program.cs` reste inchangé :
+Chaque cible prend son redist dans son propre fichier de projet. Faites un clic droit sur `VisioForgeAvalonia.Desktop`, sélectionnez **Edit Project File** et ajoutez ces blocs à la fin, avant `</Project>` :
+
+```xml
+<PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
+  <TargetFramework>net10.0-windows</TargetFramework>
+</PropertyGroup>
+<PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
+  <TargetFramework>net10.0-macos</TargetFramework>
+  <ApplicationId>com.companyname.visioforgeavalonia</ApplicationId>
+  <OutputType>Exe</OutputType>
+</PropertyGroup>
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" />
+</ItemGroup>
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" />
+</ItemGroup>
+```
+
+Le modèle compile la cible Desktop pour `net10.0` tout court, et les moteurs Windows et macOS du SDK ont besoin du framework propre au système d'exploitation. Les propriétés placées après remplacent celles du modèle : `net10.0-windows` sous Windows, et `net10.0-macos` sur un Mac, un bundle d'application, qui a besoin d'un identifiant d'application. Linux garde `net10.0` et ne prend pas de redist : le SDK y utilise le GStreamer installé sur le système, voir le [déploiement sous Ubuntu](../deployment-x/Ubuntu.md). Les références ne portent pas de version : celles-ci viennent de `Directory.Packages.props`.
+
+## La cible Android
+
+Ouvrez **Edit Project File** sur `VisioForgeAvalonia.Android`. Dans le premier `PropertyGroup` du modèle, passez la ligne `SupportedOSPlatformVersion` à 24 :
+
+```xml
+<SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
+```
+
+Ajoutez ensuite le redist et `AndroidDependency` à la fin du fichier, avant `</Project>` :
+
+```xml
+<ItemGroup>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" />
+  <ProjectReference Include="..\samples\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
+</ItemGroup>
+```
+
+Android 7 (niveau d'API 24) est le minimum du SDK sous Android. `VisioForge.Core.Android.X10.csproj` cible `net10.0-android`, et une application `net11.0-android` le référence aussi.
+
+## La cible iOS
+
+Ouvrez **Edit Project File** sur `VisioForgeAvalonia.iOS`. Dans le premier `PropertyGroup` du modèle, passez la ligne `SupportedOSPlatformVersion` à 18.0 :
+
+```xml
+<SupportedOSPlatformVersion>18.0</SupportedOSPlatformVersion>
+```
+
+Ajoutez ensuite le redist à la fin du fichier, avant `</Project>` :
+
+```xml
+<ItemGroup>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" />
+</ItemGroup>
+```
+
+iOS 18.0 est le minimum des bibliothèques natives iOS. Faites ensuite un clic droit sur le `Info.plist` de la cible iOS, choisissez **Open With** et **XML (Text) Editor**, remplacez la valeur sous la clé `MinimumOSVersion` du modèle par `<string>18.0</string>`, la même version. Ajoutez ensuite un manifeste de scènes, la seule clé nouvelle, au-dessus de `UIRequiredDeviceCapabilities` :
+
+```xml
+<key>UIApplicationSceneManifest</key>
+<dict>
+  <key>UIApplicationSupportsMultipleScenes</key>
+  <false/>
+</dict>
+```
+
+Une application compilée avec le SDK iOS 27 doit utiliser le cycle de vie des scènes UIKit (sinon la compilation s'arrête avec `MT7199`). Une seule scène suffit : le délégué d'application d'Avalonia 12.1 fournit lui-même la configuration de la scène.
+
+Compilez la cible iOS avec le SDK .NET 10. Le SDK .NET 11 associe `net10.0-ios` à iOS 26.0, en dessous des ressources iOS de SkiaSharp 3.119.4 (`net10.0-ios26.2`), et l'application s'arrête alors au lancement avec `DllNotFoundException: libSkiaSharp`. Fixez le SDK avec un `global.json` si les deux sont installés.
+
+## Ajouter VideoView à la vue
+
+Dans le projet partagé, ouvrez `Views/MainView.axaml`. Associez l'espace de noms VisioForge à un préfixe, ici `vf`, à côté des espaces de noms du modèle, et remplacez le `TextBox` du modèle par un `StackPanel` qui contient un `VideoView` au-dessus du même `TextBox` :
+
+Le fichier complet après la modification :
+
+```xml
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:VisioForgeAvalonia.ViewModels"
+             xmlns:vf="using:VisioForge.Core.UI.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="VisioForgeAvalonia.Views.MainView"
+             x:DataType="vm:MainViewModel">
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12">
+        <vf:VideoView Width="640" Height="360" Background="Black" />
+        <TextBox Text="{Binding Greeting}" />
+    </StackPanel>
+</UserControl>
+```
+
+L'espace de noms est `VisioForge.Core.UI.Avalonia`, du paquet `VisioForge.DotNet.Core.UI.Avalonia`. La taille ne sert qu'à cette démo ; donnez un `x:Name` au `VideoView` pour y accéder depuis le code.
+
+## Lancement
+
+Faites un clic droit sur `VisioForgeAvalonia.Desktop`, sélectionnez **Set as Startup Project** et lancez l'application sans débogage (Ctrl+F5). Visual Studio compile la cible Desktop pour Windows avec les redists Windows. L'application s'ouvre avec le `VideoView` au-dessus de *Welcome to Avalonia!*, noir tant qu'un moteur du SDK n'y dessine pas.
+
+![L'application Avalonia sur la cible Desktop avec un VideoView vide](avalonia-videoview.webp)
+
+## Initialiser le SDK
+
+Avant le premier moteur, initialisez le SDK, et libérez-le à la fermeture. Dans le `App.axaml.cs` du projet partagé, ajoutez `using VisioForge.Core;` et deux lignes dans le `OnFrameworkInitializationCompleted` du modèle :
 
 ```csharp
-using Avalonia;
-using System;
-
-namespace YourAppNamespace;
-
-class Program
+public override void OnFrameworkInitializationCompleted()
 {
-    [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    VisioForgeX.InitSDK();
 
-    public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .LogToTrace();
+    if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+    {
+        desktop.Exit += (_, _) => VisioForgeX.DestroySDK();
+        // ... le code du modèle
+    }
+    // ... les autres branches du modèle et l'appel à base
 }
 ```
 
-### Implémentation du composant VideoView
+`InitSDK` s'exécute une fois sur chaque cible ; `Exit` est déclenché sur la cible Desktop. Pour initialiser sans bloquer le thread d'interface, appelez plutôt `await VisioForgeX.InitSDKAsync()` depuis un gestionnaire d'événements `async`, comme le `Loaded` de la fenêtre principale.
 
-Le contrôle `VideoView` sert d'élément central de rendu. Intégrez-le dans vos fichiers `.axaml` de la manière suivante :
+Android a besoin des autorisations de caméra et de microphone dans `AndroidManifest.xml`, et iOS et macOS des descriptions d'utilisation dans `Info.plist` (`NSCameraUsageDescription`, `NSMicrophoneUsageDescription`). Les guides de déploiement pour [Windows](../deployment-x/Windows.md), [macOS](../deployment-x/macOS.md), [Ubuntu](../deployment-x/Ubuntu.md), [Android](../deployment-x/Android.md) et [iOS](../deployment-x/iOS.md) les décrivent, avec les dépendances natives et le dépannage. L'[initialisation du SDK](../init.md) détaille `InitSDKAsync` et `DestroySDK`.
 
-1. Tout d'abord, déclarez l'espace de noms VisioForge :
+## Applications d'exemple
 
-```xml
-xmlns:vf="clr-namespace:VisioForge.Core.UI.Avalonia;assembly=VisioForge.Core.UI.Avalonia"
-```
+Des applications Avalonia complètes avec un projet partagé et des cibles Desktop, Android et iOS, comme l'application de ce guide :
 
-2. Ensuite, implémentez le contrôle dans la structure de votre disposition :
+- [Media Player SDK X/Avalonia/SimplePlayerMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayerMVVM)
+- [Media Blocks SDK/Avalonia/SimplePlayerMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/SimplePlayerMVVM)
+- [Media Blocks SDK/Avalonia/SimpleVideoCaptureMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/SimpleVideoCaptureMVVM)
+- [Media Blocks SDK/Avalonia/VideoMixerMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/VideoMixerMVVM)
 
-```xml
-<vf:VideoView 
-    Grid.Row="0"               
-    HorizontalAlignment="Stretch"
-    VerticalAlignment="Stretch"
-    x:Name="videoView"
-    Background="Black"/>
-```
+Les autres exemples Avalonia sont des applications de bureau : [Media Player SDK X/Avalonia](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia), [Video Capture SDK X/Avalonia](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Avalonia) et [Media Blocks SDK/Avalonia](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia).
 
-Ce contrôle s'adapte automatiquement au pipeline de rendu spécifique à chaque plateforme tout en exposant une surface d'API cohérente.
+## Transcription de la vidéo
 
-## Intégration aux plateformes de bureau
+### Présentation
 
-### Guide d'implémentation Windows
+Installons les SDK .NET VisioForge dans une application Avalonia, avec des cibles Desktop, Android et iOS, et plaçons un VideoView dans sa vue principale. Les quatre SDK .NET VisioForge sont livrés dans un seul paquet NuGet, VisioForge.DotNet.Core. Le VideoView d'Avalonia se trouve dans VisioForge.DotNet.Core.UI.Avalonia. Chaque plateforme prend aussi un paquet redist, son moteur natif, et Android prend le projet de liaison VisioForge, AndroidDependency, depuis GitHub. Il vous faut Windows 10 ou 11, Visual Studio 2026 et le SDK .NET 10, avec les charges de travail Android et iOS pour compiler ces cibles, ainsi que Git. Le paquet Avalonia de VisioForge est compilé pour Avalonia 12.1 : cette vidéo crée donc l'application à partir des modèles Avalonia 12.1.6.
 
-Le déploiement sur Windows requiert des composants natifs spécifiques, fournis sous forme de références NuGet.
+### Créer l'application
 
-#### Composants Windows principaux
+Ouvrez Developer PowerShell depuis le menu Démarrer, puis allez dans votre dossier de projets. Installez les modèles Avalonia, version 12.1.6. Créez l'application avec dotnet new avalonia.xplat. Il crée un projet partagé pour les vues, et un projet cible pour chaque plateforme : Desktop, Android, iOS et Browser. Le SDK n'a pas de moteur pour le navigateur : retirez donc la cible Browser de la solution avec dotnet sln remove. Dans le dossier de la solution, clonez le dépôt d'exemples VisioForge en mode clairsemé, n'extrayez qu'AndroidDependency, le projet de liaison Android, et ajoutez-le à la solution avec dotnet sln add. Ouvrez ensuite la solution dans Visual Studio. Voici toutes les commandes. Visual Studio peut vous demander d'accepter la licence du SDK Android au chargement de la solution : cela installe le SDK Android, dont la cible Android a besoin pour compiler.
 
-Ajoutez les paquets spécifiques à Windows suivants à votre projet de bureau :
+### NuGet
 
-```xml
-<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.*" />
-</ItemGroup>
-```
+Passons à NuGet. Faites un clic droit sur le projet partagé, VisioForgeAvalonia, ouvrez Manage NuGet Packages, puis l'onglet Browse. Recherchez VisioForge.DotNet.Core et installez-le. Visual Studio affiche les modifications et la licence : acceptez-les. Installez ensuite VisioForge.DotNet.Core.UI.Avalonia, qui contient le VideoView d'Avalonia. Les deux figurent dans l'onglet Installed. Le modèle utilise la gestion centralisée des paquets : leurs versions ont donc été écrites dans Directory.Packages.props.
 
-#### Prise en charge avancée des formats multimédias
+### Redists
 
-Pour une compatibilité étendue avec les codecs, incluez la variante UPX optimisée en taille des bibliothèques libAV :
+Viennent ensuite les redists. Le modèle laisse Directory.Packages.props hors de la solution : ouvrez-le avec File, Open, et ajoutez une version pour chaque redist sous les deux paquets VisioForge. Windows en prend deux, le moteur natif et les codecs Libav. macOS, Android et iOS en prennent un chacun. Voici la liste complète : les deux paquets de NuGet et les cinq redists. Prenez les dernières versions sur nuget.org.
 
-```xml
-<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.*" />
-</ItemGroup>
-```
+### Cible Desktop
 
-La variante UPX offre une optimisation significative de la taille tout en conservant une compatibilité complète avec les codecs.
+Chaque cible prend son redist dans son propre fichier de projet. Faites un clic droit sur la cible Desktop et ouvrez Edit Project File. Ajoutez les blocs à la fin du fichier, chacun sous la condition du système d'exploitation qui le compile, puis enregistrez. Le modèle compile la cible Desktop pour net10.0 tout court, et les moteurs Windows et macOS du SDK ont besoin du framework propre au système d'exploitation. Sous Windows, c'est net10.0-windows. Sur un Mac, c'est net10.0-macos, un bundle d'application, qui a besoin d'un identifiant d'application. Linux garde net10.0. Windows prend le moteur et Libav, et macOS son moteur. Les références ne portent pas de version : celles-ci viennent de Directory.Packages.props. Sous Linux, le SDK utilise le GStreamer installé sur le système.
 
-### Intégration macOS
+### Android et iOS
 
-Pour le déploiement sur macOS :
+Passons à la cible Android : de nouveau Edit Project File. Relevez le minimum à Android 7, niveau d'API 24, le minimum du SDK sous Android. Ajoutez ensuite le redist Android, et une référence au projet AndroidDependency du dossier samples. La version minimale remplace la ligne du modèle. Le reste va à la fin du fichier. Vient ensuite la cible iOS. Relevez son minimum à iOS 18, le minimum du SDK sous iOS, et ajoutez le redist iOS. Les deux mêmes modifications que pour Android : la version minimale, et la référence au redist à la fin. La cible iOS a un fichier de plus, Info.plist. Faites un clic droit dessus, choisissez Open With, puis l'éditeur de texte XML. Réglez MinimumOSVersion sur 18.0, comme le projet, et ajoutez un manifeste de scènes au-dessus des capacités de l'appareil. Le SDK iOS 27 refuse une application sans manifeste de scènes. Une seule scène suffit, et Avalonia fournit sa configuration.
 
-#### Paquet de bindings natifs
+### VideoView
 
-Incluez les composants natifs spécifiques à macOS :
+Passons à la vue. Dans le projet partagé, ouvrez MainView.axaml depuis le dossier Views. Associez l'espace de noms VisioForge à un préfixe, ici vf, à côté des espaces de noms du modèle. Et remplacez le TextBox du modèle par un StackPanel qui contient un VideoView au-dessus du même TextBox. Puis enregistrez. Dans Avalonia, l'espace de noms est VisioForge.Core.UI.Avalonia, du paquet VisioForge.DotNet.Core.UI.Avalonia. La taille ne sert qu'à cette démonstration.
 
-```xml
-<ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.*" />
-</ItemGroup>
-```
+### Lancement
 
-#### Configuration du framework
+Définissez la cible Desktop comme projet de démarrage. Et lancez-la sans débogage. Visual Studio compile la cible Desktop pour Windows, avec les redists Windows. L'application s'ouvre, avec le VideoView au-dessus du message d'accueil. Il reste noir tant qu'aucun moteur du SDK n'y dessine.
 
-Configurez votre projet avec la cible de framework macOS appropriée :
+### Étapes suivantes
 
-```xml
-<PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-  <TargetFramework>net10.0-macos</TargetFramework>
-  <OutputType>Exe</OutputType>
-</PropertyGroup>
-```
+Avant le premier moteur, initialisez le SDK avec VisioForgeX.InitSDKAsync et libérez-le avec DestroySDK à la fermeture. Android a besoin des autorisations de caméra et de microphone dans son manifeste, et iOS et macOS des descriptions d'utilisation dans Info.plist. Le déploiement de chaque plateforme est décrit sur le site d'aide.
 
-### Déploiement Linux
+## Voir aussi
 
-La prise en charge de Linux inclut :
-
-#### Configuration du framework
-
-Définissez le framework cible approprié pour les environnements Linux :
-
-```xml
-<PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
-  <TargetFramework>net10.0</TargetFramework>
-  <OutputType>Exe</OutputType>
-</PropertyGroup>
-```
-
-#### Dépendances système
-
-Pour le déploiement sous Linux, assurez-vous que les bibliothèques système requises sont disponibles sur le système cible. Contrairement à Windows et macOS qui utilisent des paquets NuGet, Linux peut exiger des dépendances au niveau système. Consultez la documentation Linux de VisioForge pour connaître les exigences spécifiques à la plateforme.
-
-## Développement mobile
-
-### Configuration Android
-
-L'implémentation Android nécessite des étapes supplémentaires propres au modèle d'intégration d'Avalonia avec Android :
-
-#### Couche d'interopérabilité Java
-
-L'implémentation Android de VisioForge requiert un pont de bindings entre .NET et les API natives d'Android :
-
-1. Obtenez le projet de bindings Java depuis le [dépôt d'exemples VisioForge](https://github.com/visioforge/.Net-SDK-s-samples) dans le répertoire `AndroidDependency`
-2. Utilisez `VisioForge.Core.Android.X10.csproj` de ce dossier. Il cible `net10.0-android`, et une application `net11.0-android` peut aussi le référencer.
-3. Référencez ce projet dans votre projet principal Android :
-
-```xml
-<ItemGroup>
-  <ProjectReference Include="..\..\path\to\VisioForge.Core.Android.X10.csproj" />
-</ItemGroup>
-```
-
-#### Paquet spécifique à Android
-
-Ajoutez le paquet redistribuable Android :
-
-```xml
-<ItemGroup>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.*" />
-</ItemGroup>
-```
-
-#### Permissions d'exécution
-
-Configurez `AndroidManifest.xml` avec les permissions appropriées :
-
-- `android.permission.CAMERA`
-- `android.permission.RECORD_AUDIO`
-- `android.permission.READ_EXTERNAL_STORAGE`
-- `android.permission.WRITE_EXTERNAL_STORAGE`
-- `android.permission.INTERNET`
-
-### Développement iOS
-
-L'intégration iOS avec Avalonia requiert :
-
-#### Composants natifs
-
-Ajoutez le redistribuable spécifique à iOS à votre projet principal iOS :
-
-```xml
-<ItemGroup>
-  <!-- La version du redistribuable iOS est volontairement en retard sur celle du SDK - elle suit
-       le rythme de reconstruction de GStreamer-iOS, pas celui du wrapper. Ne l'alignez pas sur
-       VisioForge.DotNet.* ; il n'existe pas de version 2026.x sur nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
-</ItemGroup>
-```
-
-#### Notes d'implémentation importantes
-
-- Définissez `<SupportedOSPlatformVersion>18.0</SupportedOSPlatformVersion>` dans le projet principal iOS : les bibliothèques natives iOS sont compilées pour iOS 18.0
-- Les tests sur appareil physique sont essentiels, car la prise en charge du simulateur est limitée
-- Mettez à jour votre `Info.plist` avec les descriptions de confidentialité :
-  - `NSCameraUsageDescription` pour l'accès à la caméra
-  - `NSMicrophoneUsageDescription` pour l'enregistrement audio
-
-## Optimisation des performances
-
-Maximisez les performances de votre application grâce à ces optimisations spécifiques à Avalonia :
-
-1. Activez l'accélération matérielle lorsqu'elle est prise en charge par la plateforme sous-jacente
-2. Mettez en œuvre une mise à l'échelle adaptative de la résolution en fonction des capacités de l'appareil
-3. Optimisez les schémas d'utilisation de la mémoire, en particulier pour les cibles mobiles
-4. Tirez parti efficacement du modèle de composition d'Avalonia en minimisant la complexité de l'arbre visuel autour du `VideoView`
-
-## Guide de dépannage
-
-### Problèmes de format multimédia
-
-- **Échecs de lecture** :
-  - Vérifiez que tous les paquets de plateforme sont correctement référencés
-  - Vérifiez la disponibilité du codec pour le format multimédia cible
-  - Vérifiez les restrictions de format spécifiques à la plateforme
-
-### Problèmes de performance
-
-- **Lecture ou rendu lent** :
-  - Activez l'accélération matérielle lorsqu'elle est disponible
-  - Réduisez la résolution de traitement lorsque c'est approprié
-  - Utilisez correctement le modèle de threading d'Avalonia
-
-### Difficultés de déploiement
-
-- **Erreurs d'exécution spécifiques à la plateforme** :
-  - Validez les spécifications du framework cible
-  - Vérifiez la disponibilité des dépendances natives
-  - Assurez un provisionnement adéquat pour les cibles mobiles
-
-## Architecture de projet multiplateforme
-
-L'intégration de VisioForge avec Avalonia s'épanouit dans une structure de projet spécialisée à têtes multiples. L'exemple `SimplePlayerMVVM` illustre cette architecture :
-
-- **Projet partagé principal** (`SimplePlayerMVVM.csproj`) : contient les vues multiplateformes, les view models et la logique partagée, avec un multi-ciblage conditionnel :
-
-    ```xml
-    <Project Sdk="Microsoft.NET.Sdk">
-      <PropertyGroup>
-        <Nullable>enable</Nullable>
-        <LangVersion>latest</LangVersion>
-        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-      </PropertyGroup>
-      <ItemGroup>
-        <AvaloniaResource Include="Assets\**" />
-      </ItemGroup>
-      <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-        <TargetFrameworks>net10.0-android;net10.0-ios;net10.0-windows</TargetFrameworks>
-      </PropertyGroup>
-      <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-        <TargetFrameworks>net10.0-android;net10.0-ios;net10.0-macos</TargetFrameworks>
-      </PropertyGroup>
-      <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
-        <TargetFrameworks>net10.0-android;net10.0</TargetFrameworks>
-      </PropertyGroup>
-      <ItemGroup>
-        <PackageReference Include="Avalonia" Version="12.0.5" />
-        <!-- Références Avalonia supplémentaires -->
-      </ItemGroup>
-      <ItemGroup>
-        <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.*" />
-        <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.*" />
-      </ItemGroup>
-    </Project>
-    ```
-
-- **Projets principaux spécifiques à chaque plateforme** :
-  - `SimplePlayerMVVM.Android.csproj` : contient la configuration spécifique à Android et les références de bindings
-  - `SimplePlayerMVVM.iOS.csproj` : gère l'initialisation et les dépendances iOS
-  - `SimplePlayerMVVM.Desktop.csproj` : gère la détection de la plateforme de bureau et le chargement des redistribuables appropriés
-
-Pour des applications de bureau plus simples, `SimpleVideoCaptureA.csproj` propose un modèle allégé où la détection de la plateforme se fait au sein d'un seul fichier projet.
-
-## Conclusion
-
-L'intégration de VisioForge avec Avalonia propose une approche sophistiquée du développement multimédia multiplateforme qui exploite les avantages architecturaux propres à Avalonia. Grâce à des composants spécifiques à chaque plateforme soigneusement structurés et à une API unifiée, les développeurs peuvent créer des applications multimédias riches couvrant à la fois le bureau et le mobile, sans compromis sur les performances ni les capacités.
-
-Pour des exemples de code complets et des applications de démonstration, consultez notre [dépôt GitHub](https://github.com/visioforge/.Net-SDK-s-samples), qui contient des démonstrations Avalonia spécialisées dans les sections Video Capture SDK X et Media Player SDK X.
+- [Initialisation du SDK](../init.md) — `InitSDKAsync` et `DestroySDK` en détail
+- Guides d'installation pour [Visual Studio](visual-studio.md), [MAUI](maui.md), [Uno Platform](uno.md) et [Rider](rider.md)
+- Déploiement sous [Windows](../deployment-x/Windows.md), [macOS](../deployment-x/macOS.md), [Ubuntu](../deployment-x/Ubuntu.md), [Android](../deployment-x/Android.md) et [iOS](../deployment-x/iOS.md)

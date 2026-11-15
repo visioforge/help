@@ -685,6 +685,12 @@ if (streamOverlay.Initialize(autoStart: true))
 }
 ```
 
+**Transparent video**
+
+A VP8 or VP9 WebM with an alpha channel (`yuva420p`) is drawn with that alpha, including soft edges and fades. H.264 in an MP4 has no alpha channel, so it stays opaque.
+
+Remotion writes that file with `--image-format=png --pixel-format=yuva420p --codec=vp8` (or `--codec=vp9`).
+
 #### OverlayManagerDecklinkVideo
 
 Captures and displays video from Blackmagic Decklink capture cards.

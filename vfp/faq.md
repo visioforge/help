@@ -67,7 +67,8 @@ VFPAnalyzer.SetLicenseKey(Environment.GetEnvironmentVariable("VFP_LICENSE_KEY"))
 ### Q: Can I use one license on multiple machines?
 
 **A:** License terms depend on your purchase:
-- **One Developer Annual**: One named developer; licenses are counted by developer, not by workstation
+- **Developer (annual)**: One named developer; licenses are counted by developer, not by workstation
+- **Workgroup (annual)**: Three named developers in one organization
 - **Lifetime·Team**: All developers in the purchasing organization at one location within one city
 - **Custom and volume licensing**: Available through sales for organizations that need different terms
 

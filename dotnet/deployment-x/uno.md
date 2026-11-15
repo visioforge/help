@@ -107,8 +107,8 @@ Add the following packages to your project:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.12]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.13]"/>
 </ItemGroup>
 ```
 
@@ -154,7 +154,7 @@ Additionally, you'll need to add the Java Bindings Library. Clone it from our [G
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 </ItemGroup>
 ```
 
@@ -196,6 +196,7 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
     <!-- Target frameworks based on build OS -->
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net10.0-windows10.0.19041;net10.0-android</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net10.0-maccatalyst;net10.0-ios;net10.0-android</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('linux'))">net10.0-desktop</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>
     <UseCurrentXcodeSDKVersion>true</UseCurrentXcodeSDKVersion>
@@ -217,8 +218,8 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
   
   <!-- VisioForge Core References -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.12]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.12]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.13]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.13]"/>
   </ItemGroup>
   
   <!-- Windows Platform -->
@@ -241,7 +242,7 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
   
   <!-- macOS Catalyst Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macCatalyst" Version="[2026.11.5]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
   </ItemGroup>
   
   <!-- macOS: Copy native libraries to app bundle -->

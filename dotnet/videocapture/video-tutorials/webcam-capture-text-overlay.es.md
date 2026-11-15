@@ -178,7 +178,7 @@ public partial class Form1 : Form
             TimeStampMask = @"hh\:mm\:ss\.fff",
             Text = "Rec ",
             Left = 20,
-            Top = 140 // el tamaño del texto sigue la escala de pantalla de Windows
+            Top = 140 // espacio entre las filas
         });
     }
 
@@ -258,7 +258,7 @@ public partial class Form1 : Form
 3. **Modos** - `Mode` elige lo que muestra una superposición: `Text` dibuja la propiedad `Text`, `DateTime` el reloj del PC con el formato de `DateTimeMask`, `Timestamp` el tiempo desde el inicio de la grabación con el formato de `TimeStampMask` (un formato de `TimeSpan`, así que `:` y `.` necesitan una barra invertida), y `FrameNumber` el número del fotograma. En los tres últimos, `Text` se dibuja delante del valor, y su valor por defecto es `Hello!!!`, así que establézcalo en una cadena vacía o en su propio prefijo
 4. **Cambiar una superposición durante la grabación** - `Video_Effects_Get` devuelve la superposición con ese nombre, o `null`. Cambie sus propiedades y llame a `Update()`: el motor la vuelve a dibujar desde el siguiente fotograma, y la grabación conserva el cambio desde ese fotograma. Sin `Update()`, el texto anterior se queda
 5. **Fuentes** - el setter de `Font` guarda su propia copia de la fuente, así que la que usted pasa puede liberarse enseguida
-6. **Tamaño del texto y escala de pantalla** - un tamaño de fuente en puntos se dibuja con los DPI de la pantalla, así que crece con la escala de pantalla de Windows y no se reduce con el fotograma: al 200 por ciento, una línea de Arial 36 mide unos 110 píxeles de alto sea cual sea el tamaño del fotograma. Este ejemplo deja espacio para ello con `Top = 140`, que basta hasta el 200 por ciento. Para obtener el mismo tamaño en todos los PC, cree la fuente en píxeles: `new Font("Arial", 36, GraphicsUnit.Pixel)`
+6. **Tamaño del texto y escala de pantalla** - desde el SDK 2026.11.13, un tamaño de fuente en puntos se dibuja a 96 DPI, así que una línea de Arial 36 mide unos 55 píxeles de alto en todos los PC, sea cual sea la escala de pantalla de Windows, y no se reduce con el fotograma. Las versiones anteriores la dibujaban con los DPI de la pantalla, así que crecía con la escala de pantalla: unos 110 píxeles al 200 por ciento. `Top = 140` en este ejemplo deja espacio para ello hasta el 200 por ciento. Una fuente en píxeles tiene el mismo tamaño en todas las versiones: `new Font("Arial", 36, GraphicsUnit.Pixel)`
 7. **Coste** - una superposición cuyo texto cambia (el reloj, el número de fotograma, el tiempo de grabación o un rótulo después de `Update()`) se vuelve a dibujar en cada fotograma; mantenga pocas superposiciones de este tipo
 
 ## Comprobar el archivo con ffprobe

@@ -413,13 +413,13 @@ The coordinates define the capture rectangle in screen pixels. This is useful fo
 
 #### Multi-Monitor Recording
 
-Select which display to record using the `DisplayIndex` property. The primary monitor is index `0`, the secondary is `1`, and so on:
+Select which display to record using the `DisplayIndex` property. `0` is the primary monitor. A positive value is that monitor's Windows number, the digits in its device name: `\\.\DISPLAY2` is `2`. It is the same number the screen-capture samples show in the monitor list, not the monitor's position in that list, so `1` is not "the secondary monitor" (on most PCs the primary monitor is `\\.\DISPLAY1`).
 
 ```csharp
 videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
 {
     FullScreen = true,
-    DisplayIndex = 1  // Record the secondary monitor
+    DisplayIndex = 0  // The primary monitor
 };
 ```
 
@@ -676,7 +676,7 @@ Yes. With `VideoCaptureCoreX`, pass a speaker from `DeviceEnumerator.Shared.Audi
 
 ### How do I record a specific monitor in a multi-monitor setup?
 
-With `VideoCaptureCoreX`, set `MonitorIndex` on `ScreenCaptureD3D11SourceSettings` (`0` is the first monitor, `-1` the primary) and set `Rectangle` to that monitor's size. With `VideoCaptureCore`, set the `DisplayIndex` property on `ScreenCaptureSourceSettings` — use `0` for the primary monitor, `1` for the secondary, and so on. Combine with `FullScreen = true` to capture the entire selected display. You can also set `FullScreen = false` with `Left/Top/Right/Bottom` coordinates to capture a specific region on the chosen monitor.
+With `VideoCaptureCoreX`, set `MonitorIndex` on `ScreenCaptureD3D11SourceSettings` (`0` is the first monitor, `-1` the primary) and set `Rectangle` to that monitor's size. With `VideoCaptureCore`, set `DisplayIndex` on `ScreenCaptureSourceSettings`. `0` is the primary monitor. A positive value is the number in that monitor's device name (`\\.\DISPLAY2` is `2`), which `Screen.AllScreens[i].DeviceName` gives; it is not `i`. Combine with `FullScreen = true` to capture the entire selected display. You can also set `FullScreen = false` with `Left/Top/Right/Bottom` coordinates to capture a specific region on the chosen monitor.
 
 ### What frame rate should I use for screen recording?
 

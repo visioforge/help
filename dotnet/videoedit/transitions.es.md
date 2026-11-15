@@ -14,6 +14,9 @@ tags:
 
 La transición de Barrido SMPTE produce cualquiera de los barridos estándar definidos por la Sociedad de Ingenieros de Cine y Televisión (SMPTE) en el documento SMPTE 258M-1993, excepto el quad split.
 
+!!! note "VideoEditCore (DirectShow)"
+    `VideoEditCore` dibuja cada código SMPTE con la transición DirectX integrada más cercana (barra, puertas de granero, iris, reloj, rueda, franjas, persianas, espiral, zigzag o disolución). El aspecto es parecido al patrón SMPTE, no idéntico, y las propiedades de borde, desplazamiento, repetición y escala no tienen efecto.
+
 ## Propiedades
 
 | Propiedad       | Tipo          | Predeterminado | Descripción |

@@ -108,7 +108,7 @@ dotnet add package VisioForge.CrossPlatform.Core.Android
 dotnet add package VisioForge.CrossPlatform.Core.iOS
 
 # Para aplicaciones macOS
-dotnet add package VisioForge.CrossPlatform.Core.macCatalyst
+dotnet add package VisioForge.CrossPlatform.Core.macOS
 ```
 
 Agregue los espacios de nombres requeridos a su código:

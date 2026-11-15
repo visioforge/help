@@ -90,8 +90,9 @@ roots, and resolve the rest of the bundled runtime via its native loader.
        `/usr/local/lib`) — same double-init failure mode as the Windows `PATH` prune.
     3. Set `GST_PLUGIN_PATH` / `GST_PLUGIN_SYSTEM_PATH` to the natives folder so GStreamer can
        enumerate the bundled plugins.
-    4. Set `GIO_MODULE_DIR` so GIO finds `libgioopenssl.so` (the TLS backend that RTSPS / HTTPS
-       verify peers through).
+    4. Leave `GIO_MODULE_DIR` unset. `InitSDK` loads `libgioopenssl.so` by filename from the
+       natives folder. Pointing `GIO_MODULE_DIR` at that folder would make GLib open every
+       library there.
     5. Set `SSL_CERT_FILE` and `CA_CERTIFICATES` to the bundled CA bundle.
 
     Each bundled `.dylib` has its `@rpath` / `@loader_path` baked in by the NuGet pack, so once

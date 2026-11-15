@@ -349,6 +349,7 @@ var effect = new BandPassAudioEffect(5000, 300); // Allow 300-5000 Hz
 - `CutOff` (uint): Center frequency to remove in Hz
     - In the cross-platform SDKs the filter removes 10% of this frequency to either side of it, so the band gets wider as the frequency goes up: 7200 to 8800 Hz at 8000 Hz
     - The lower edge of that band has to be below half the sample rate. At or above it the sound passes unfiltered, and one `OnError` is raised
+    - In the Classic SDKs the cut is a narrower notch: at 1000 Hz, 950 and 1050 Hz keep about half their level and 900 and 1100 Hz about 70%, and toward half the sample rate the notch gets narrower still. The frequency can go up to just below half the sample rate; a higher one is lowered to that, with no error
     - Typical: 50/60 Hz for hum removal
 
 **Usage**:
@@ -629,10 +630,12 @@ effect.Level = 0.4f;
 
 **Parameters**:
 
-- `StartVolume` (uint): Volume at start time
-- `StopVolume` (uint): Volume at stop time
+- `StartVolume` (uint): Volume at start time, in percent from 0 to 100 (100 = the original volume)
+- `StopVolume` (uint): Volume at stop time, in percent from 0 to 100
 - `StartTime` (TimeSpan): When fade begins. Before it the audio plays at `StartVolume`
 - `StopTime` (TimeSpan): When fade completes. After it the audio plays at `StopVolume`
+
+A start or stop volume above 100 plays at 100 and raises `OnError`. A `StopTime` before `StartTime` leaves the audio unchanged and also raises `OnError`.
 
 **Usage**:
 

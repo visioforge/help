@@ -45,27 +45,27 @@ Estas capacidades permiten a los desarrolladores crear aplicaciones con salida d
 
 ### Implementación Específica de Plataforma
 
-El `AudioRendererBlock` soporta varias tecnologías de renderizado de audio específicas de plataforma. Puede configurarse para usar un dispositivo de audio y API específicos (ver sección de Gestión de Dispositivos). Cuando se instancia usando su constructor predeterminado (ej., `new AudioRendererBlock()`), intenta seleccionar una API de audio predeterminada adecuada basada en el sistema operativo:
+El `AudioRendererBlock` soporta varias tecnologías de renderizado de audio específicas de plataforma. Puede configurarse para usar un dispositivo de audio y API específicos (ver sección de Gestión de Dispositivos). Cuando se instancia usando su constructor predeterminado (ej., `new AudioRendererBlock()`), reproduce a través del dispositivo de salida predeterminado del sistema: `autoaudiosink` de GStreamer elige el sink de la plataforma y sigue el valor predeterminado del sistema operativo, y `Settings` queda en `null`. Si no se puede abrir ninguna salida, el audio va a un sink falso y se registra una advertencia. Las tecnologías de audio soportadas por sistema operativo:
 
-- **Windows**: El constructor predeterminado típicamente usa DirectSound. El bloque soporta múltiples APIs de audio incluyendo:
+- **Windows**: El bloque soporta múltiples APIs de audio incluyendo:
   - DirectSound: Proporciona salida de baja latencia con amplia compatibilidad
   - WASAPI (Windows Audio Session API): Ofrece modo exclusivo para la más alta calidad
   - ASIO (Audio Stream Input/Output): Audio de grado profesional con latencia mínima para hardware especializado
-- **macOS**: Utiliza el framework CoreAudio. El constructor predeterminado típicamente seleccionará un dispositivo basado en CoreAudio para:
+- **macOS**: Utiliza el framework CoreAudio para:
   - Salida de audio de alta resolución
   - Integración nativa con el subsistema de audio de macOS
   - Soporte para unidades de audio y equipamiento profesional
   (Nota: De manera similar para macOS, `OSXAudioSinkBlock` está disponible para interacción directa con el sink GStreamer específico de plataforma si es necesario para escenarios especializados.)
-- **Linux**: Implementa ALSA (Advanced Linux Sound Architecture). El constructor predeterminado típicamente seleccionará un dispositivo basado en ALSA para:
+- **Linux**: Implementa ALSA (Advanced Linux Sound Architecture) para un dispositivo seleccionado; sin él, el constructor predeterminado reproduce a través del sink de mayor rango que se abra: PulseAudio (también en sistemas PipeWire, mediante su capa PulseAudio) o ALSA. ALSA proporciona:
   - Acceso directo al hardware
   - Soporte completo de dispositivos
   - Integración con la pila de audio de Linux
-- **iOS**: Emplea CoreAudio, optimizado para móvil. El constructor predeterminado típicamente seleccionará un dispositivo basado en CoreAudio, habilitando características como:
+- **iOS**: Emplea CoreAudio, optimizado para móvil, habilitando características como:
   - Renderizado eficiente en energía
   - Capacidades de audio en segundo plano
   - Integración con la gestión de sesión de audio de iOS
   (Nota: Para desarrolladores que requieren más control directo sobre el sink GStreamer específico de iOS o que tienen casos de uso avanzados, el SDK también proporciona `IOSAudioSinkBlock` como un bloque de medios distinto.)
-- **Android**: Por defecto usa OpenSL ES para proporcionar:
+- **Android**: Usa OpenSL ES para proporcionar:
   - Salida de audio de baja latencia
   - Aceleración de hardware cuando está disponible
 
@@ -228,24 +228,18 @@ var audioRenderer = new AudioRendererBlock(availableDevices[0]);
 
 ### Manejo del Dispositivo Predeterminado
 
-Cuando no se selecciona un dispositivo específico, el bloque automáticamente enruta el audio al dispositivo de salida predeterminado del sistema. El constructor sin parámetros intenta seleccionar un dispositivo predeterminado apropiado basado en la plataforma:
+Cuando no se selecciona un dispositivo específico, el bloque automáticamente enruta el audio al dispositivo de salida predeterminado del sistema. El constructor sin parámetros lo hace mediante `autoaudiosink` de GStreamer, que sigue la salida predeterminada del sistema operativo; `Settings` queda en `null`:
 
 ```csharp
 // Crear con dispositivo predeterminado
 var audioRenderer = new AudioRendererBlock();
 ```
 
-El bloque también monitorea el estado del dispositivo, manejando escenarios como:
-
-- Desconexión del dispositivo durante la reproducción
-- Cambios del dispositivo predeterminado por el usuario
-- Cambios de formato del endpoint de audio
-
 ## Consideraciones de Rendimiento
 
 ### Gestión de Latencia
 
-La latencia del renderizado de audio es crítica para muchas aplicaciones. El bloque proporciona opciones de configuración a través de la propiedad `Settings` y control de sincronización vía la propiedad `IsSync`:
+La latencia del renderizado de audio es crítica para muchas aplicaciones. El bloque toma su configuración de los ajustes pasados a su constructor (expuestos como la propiedad `Settings`, `null` para el constructor sin parámetros) y proporciona control de sincronización vía la propiedad `IsSync`:
 
 ```csharp
 // Controlar comportamiento de sincronización

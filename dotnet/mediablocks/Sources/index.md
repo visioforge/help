@@ -1202,6 +1202,10 @@ pipeline.Connect(audioDecoder.Output, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
+#### Sample applications
+
+- [RTMP Source Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTMP%20Source%20Demo)
+
 #### Platforms
 
 Windows, macOS, Linux.
@@ -1691,6 +1695,8 @@ The `ScreenSourceBlock` uses platform-specific settings classes. The choice of s
 - `ScreenCaptureDX9SourceSettings` - Use `DirectX 9` for screen recording. (`ScreenCaptureSourceType.DX9`)
 - `ScreenCaptureD3D11SourceSettings` - Use `Direct3D 11` Desktop Duplication for screen recording. Allows specific window capture. (`ScreenCaptureSourceType.D3D11DesktopDuplication`)
 - `ScreenCaptureGDISourceSettings` - Use `GDI` for screen recording. (`ScreenCaptureSourceType.GDI`)
+
+`ScreenCaptureGDISourceSettings` and `ScreenCaptureDX9SourceSettings` are obsolete. Use `ScreenCaptureD3D11SourceSettings`. `UpdateLiveSettings` on a running GDI or DX9 capture only stores the new position and cursor; they apply the next time capture starts.
 
 ##### macOS
 

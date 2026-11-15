@@ -413,13 +413,13 @@ Les coordonnées définissent le rectangle de capture en pixels d'écran. C'est 
 
 #### Enregistrement multi-écrans
 
-Sélectionnez l'écran à enregistrer à l'aide de la propriété `DisplayIndex`. L'écran principal porte l'index `0`, le secondaire `1`, et ainsi de suite :
+Sélectionnez l'écran à enregistrer avec la propriété `DisplayIndex`. `0` est l'écran principal. Une valeur positive est le numéro Windows de cet écran, les chiffres de son nom d'appareil : `\\.\DISPLAY2` vaut `2`. C'est le même numéro que les exemples de capture d'écran mettent dans la liste des écrans, pas la position de l'écran dans cette liste : `1` n'est pas « l'écran secondaire » (sur la plupart des PC, l'écran principal est `\\.\DISPLAY1`).
 
 ```csharp
 videoCapture1.Screen_Capture_Source = new ScreenCaptureSourceSettings()
 {
     FullScreen = true,
-    DisplayIndex = 1  // Enregistrer l'écran secondaire
+    DisplayIndex = 0  // L'écran principal
 };
 ```
 
@@ -677,7 +677,7 @@ Oui. Avec `VideoCaptureCoreX`, passez un haut-parleur de `DeviceEnumerator.Share
 
 ### Comment enregistrer un écran spécifique dans une configuration multi-écrans ?
 
-Avec `VideoCaptureCoreX`, définissez `MonitorIndex` sur `ScreenCaptureD3D11SourceSettings` (`0` est le premier écran, `-1` l'écran principal) et donnez à `Rectangle` la taille de cet écran. Avec `VideoCaptureCore`, définissez la propriété `DisplayIndex` sur `ScreenCaptureSourceSettings` — utilisez `0` pour l'écran principal, `1` pour le secondaire, et ainsi de suite. Combinez avec `FullScreen = true` pour capturer tout l'écran sélectionné. Vous pouvez également définir `FullScreen = false` avec les coordonnées `Left/Top/Right/Bottom` pour capturer une région spécifique sur l'écran choisi.
+Avec `VideoCaptureCoreX`, définissez `MonitorIndex` sur `ScreenCaptureD3D11SourceSettings` (`0` est le premier écran, `-1` l'écran principal) et donnez à `Rectangle` la taille de cet écran. Avec `VideoCaptureCore`, définissez `DisplayIndex` sur `ScreenCaptureSourceSettings`. `0` est l'écran principal. Une valeur positive est le numéro dans le nom d'appareil de cet écran (`\\.\DISPLAY2` vaut `2`), celui que donne `Screen.AllScreens[i].DeviceName` ; ce n'est pas `i`. Combinez avec `FullScreen = true` pour capturer tout l'écran sélectionné. Vous pouvez également définir `FullScreen = false` avec les coordonnées `Left/Top/Right/Bottom` pour capturer une région spécifique sur l'écran choisi.
 
 ### Quelle fréquence d'images dois-je utiliser pour l'enregistrement d'écran ?
 

@@ -113,6 +113,7 @@ Pour un contrôle complet sur le processus de déploiement ou dans les environne
 - Filtres de base : VisioForge_BaseFilters.ax / VisioForge_BaseFilters_x64.ax
 - Effets vidéo : VisioForge_Video_Effects_Pro.ax / VisioForge_Video_Effects_Pro_x64.ax
 - Traitement audio : VisioForge_MP3_Splitter.ax / VisioForge_MP3_Splitter_x64.ax, VisioForge_Audio_Mixer.ax / VisioForge_Audio_Mixer_x64.ax
+- Pont audio et vidéo (sources de caméra IP VLC et FFmpeg avec `ForcedFramerate`, sortie MP4 avec `UseSpecialSyncMode`, capture séparée avec `SeparateCapture_GMFMode` désactivé) : VisioForge_Bridge_Audio.ax / VisioForge_Bridge_Audio_x64.ax, VisioForge_Bridge_Video.ax / VisioForge_Bridge_Video_x64.ax ; sous Windows ARM64, où seuls la source VLC et la capture séparée les utilisent, VisioForge_Bridge_Audio_arm64.ax, VisioForge_Bridge_Video_arm64.ax dans le dossier `arm64` de l'application. Le pont vidéo a aussi besoin de la DLL `VisioForge_MFPX` de son architecture et, en x64, de `vcomp140.dll` du dossier `Redist\Filters`
 
 **Effets audio hérités :**
 
@@ -182,7 +183,7 @@ Pour un contrôle complet sur le processus de déploiement ou dans les environne
 
 - VisioForge_Virtual_Camera.ax / VisioForge_Virtual_Camera_x64.ax
 - VisioForge_Virtual_Audio_Card.ax / VisioForge_Virtual_Audio_Card_x64.ax
-- Windows ARM64 : VisioForge_Virtual_Camera_arm64.ax et VisioForge_Virtual_Audio_Card_arm64.ax, dans le dossier `arm64` de l'application (avec VisioForge_Bridge_Video_arm64.ax et VisioForge_Bridge_Audio_arm64.ax, nécessaires à la capture séparée et aux sources de caméra IP avec `ForcedFramerate`)
+- Windows ARM64 : VisioForge_Virtual_Camera_arm64.ax et VisioForge_Virtual_Audio_Card_arm64.ax, dans le dossier `arm64` de l'application
 
 **Traitement vidéo :**
 
