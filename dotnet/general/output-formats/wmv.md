@@ -432,6 +432,9 @@ editCore.Output_Filename = "output_vbr_peak.wmv";
 
 Optimized for screen capture with efficient encoding of static content:
 
+!!! warning "Frames up to 2048x2048"
+    Windows Media Video 9 Screen encodes frames up to 2048 pixels wide and 2048 pixels tall. Recording with a larger frame does not start, and `OnError` reports the limit and the frame size: a 2560x1440 or 3840x2160 screen with `Custom_Video_SizeSameAsInput = true`, a `Custom_Video_Width` or `Custom_Video_Height` above 2048, or a `VideoEditCore` source larger than that with `Custom_Video_Width` or `Custom_Video_Height` left at 0. The codec does not resize well, so capture a region of at most 2048x2048, or use "Windows Media Video 9" for larger video.
+
 ```csharp
 var screenRecordingConfig = new WMVOutput
 {

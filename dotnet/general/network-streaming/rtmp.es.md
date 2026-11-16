@@ -269,6 +269,9 @@ VideoCapture1.Network_Streaming_Output = ffmpegOutput;
 VideoCapture1.Network_Streaming_Audio_Enabled = true;
 ```
 
+!!! note "Implementación con NuGet: registrar los filtros Network Streamer"
+    FFmpeg se ejecuta como un proceso independiente y lee la transmisión a través de los filtros DirectShow VisioForge Network Streamer, por lo que deben estar registrados. El instalador del SDK los registra. Una aplicación implementada con los redistribuibles de NuGet llama a `CustomRedist_NetworkStreamerRegister()` una vez, en `VideoCaptureCore` o `VideoEditCore`; requiere derechos de administrador y, sin ellos, muestra un aviso de UAC. Sin el registro, el inicio falla con un error que indica esta llamada. `VideoCaptureCore` con `UsePipe = true` alimenta FFmpeg mediante una canalización y no necesita estos filtros.
+
 ## Transmisión a Plataformas Populares
 
 ### YouTube Live

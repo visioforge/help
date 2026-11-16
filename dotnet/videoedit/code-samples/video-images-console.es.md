@@ -59,8 +59,8 @@ El video crea el proyecto en .NET 10, que requiere Visual Studio 2026; en Visual
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/): GStreamer y las bibliotecas nativas con las que funciona el motor, entre ellas el codificador H.264
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.13]" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.16]" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
 ```
 
 ## El archivo de proyecto

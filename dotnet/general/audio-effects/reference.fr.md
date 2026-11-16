@@ -169,6 +169,8 @@ var effect = new DynamicAmplifyAudioEffect(50, 20000, TimeSpan.FromMilliseconds(
 - `Levels` (double[]) : gain de chaque bande en dB
     - Plage par bande : -24 à +12 dB
     - Le tableau doit contenir exactement 10 valeurs
+    - Affecter un nouveau tableau l'applique pendant la lecture ; modifier un seul de ses éléments, non
+- `SetLevel(band, level)` : définit le gain d'une bande (0 à 9) et l'applique pendant la lecture
 
 **Utilisation** :
 
@@ -542,7 +544,8 @@ effect.InterpolationSteps = 16; // Qualité supérieure
     - Ne doit pas dépasser MaxDelay
 - `MaxDelay` (TimeSpan) : tampon de delay maximum
     - Doit être >= Delay
-    - À définir avant de démarrer la lecture
+    - Par défaut : le délai passé au constructeur plus une seconde
+    - Lu à l'ajout de l'effet, y compris pendant la lecture : définissez-le avant d'ajouter l'effet. Pendant que l'écho joue, un `Delay` plus long est ramené à cette valeur
 - `Intensity` (float) : volume de l'écho
     - Plage : 0.0 à 1.0
     - Par défaut : 1.0
@@ -612,6 +615,8 @@ effect.Feedback = 0.3;
     - Plage : 0.0 à 1.0
     - Par défaut : 1.0
     - 0 = mono, 1 = stéréo complète
+
+Chaque modification de propriété s'applique immédiatement à un effet en cours de lecture.
 
 **Utilisation** :
 

@@ -432,6 +432,9 @@ editCore.Output_Filename = "output_vbr_peak.wmv";
 
 Optimizado para captura de pantalla con codificación eficiente de contenido estático:
 
+!!! warning "Fotogramas de hasta 2048x2048"
+    Windows Media Video 9 Screen codifica fotogramas de hasta 2048 píxeles de ancho y 2048 píxeles de alto. Con un fotograma mayor la grabación no se inicia, y `OnError` informa del límite y del tamaño del fotograma: una pantalla de 2560x1440 o 3840x2160 con `Custom_Video_SizeSameAsInput = true`, un `Custom_Video_Width` o `Custom_Video_Height` mayor que 2048, o un origen de `VideoEditCore` mayor con `Custom_Video_Width` o `Custom_Video_Height` en 0. El códec no escala bien, así que capture una región de 2048x2048 como máximo o use "Windows Media Video 9" para vídeo más grande.
+
 ```csharp
 var screenRecordingConfig = new WMVOutput
 {

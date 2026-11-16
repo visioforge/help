@@ -60,6 +60,7 @@ The following network streaming sinks are available:
 - [RTMP](#rtmp)
 - [Shoutcast](#shoutcast)
 - [WHIP](#whip)
+- [WebRTC](#webrtc)
 - [YouTube Live](#youtube-live)
 - [RIST MPEG-TS](#rist-mpeg-ts)
 
@@ -1758,6 +1759,85 @@ Check availability using `WHIPSinkBlock.IsAvailable()`. Requires the GStreamer `
 
 Windows, macOS, Linux.
 
+### WebRTC
+
+The `WebRTCSinkBlock` streams audio and video straight to web browsers over WebRTC, with sub-second latency and no media server. The block runs its own WebSocket signalling server and, optionally, an HTTP server for the viewer page. Every browser that connects gets its own WebRTC session, encoder and congestion control, so a viewer on a slow network does not lower the quality for the others.
+
+Inputs take raw video and audio — the block encodes them for each viewer, video to VP8 and audio to Opus — or already encoded VP8 video and Opus audio, which it sends without re-encoding.
+
+#### Block info
+
+Name: WebRTCSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input video | uncompressed video, VP8 | one or more |
+| Input audio | uncompressed audio, Opus | one or more |
+
+#### Settings
+
+Use `WebRTCSinkSettings` to configure the servers and the bitrate:
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `SignallingServerHost` | `string` | `127.0.0.1` | Address the signalling server listens on; the default accepts viewers on this machine only, `0.0.0.0` accepts viewers from other machines |
+| `SignallingServerPort` | `int` | `8443` | Port of the signalling server |
+| `WebServerDirectory` | `string` | `null` | Folder with the viewer page served over HTTP; `null` runs no web server |
+| `WebServerAddress` | `string` | `http://127.0.0.1:8080/` | Address the web server listens on |
+| `StunServer` | `string` | `null` | STUN server (`stun://hostname:port`); `null` keeps `stun://stun.l.google.com:19302` |
+| `TurnServers` | `string[]` | `null` | TURN servers (`turn(s)://username:password@host:port`) |
+| `CongestionControl` | `WebRTCSinkCongestionControl` | `GCC` | `Disabled`, `Homegrown` or `GCC` (Google Congestion Control) |
+| `StartBitrate` | `uint` | `2048000` | Bitrate each viewer starts at, in bits per second |
+| `MaxBitrate` | `uint` | `8192000` | Highest bitrate congestion control may reach, in bits per second |
+
+The `ConsumerAdded` and `ConsumerRemoved` events report each viewer that connects and leaves, with its signalling peer ID. They are raised on a GStreamer thread. `ConsumerRemoved` is not raised for viewers still connected when the pipeline stops — their sessions end with it.
+
+The web server takes `http://` addresses only. `Build` fails, with an `OnError` message, when `SignallingServerHost` is empty, `SignallingServerPort` is outside 1–65535, `StartBitrate` is below 1000 or above `MaxBitrate`, a `TurnServers` entry is empty, `WebServerAddress` is not an `http://` address with a port in 1–65535, or its port is already in use.
+
+#### The viewer page
+
+The browser speaks the signalling protocol of the GStreamer `webrtcsink` element (JSON over WebSocket). The WebRTC Browser Streamer Demo in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples) ships a single-file `index.html` that does it in about 100 lines of JavaScript: point `WebServerDirectory` at its folder and open `http://<host>:8080/?signalling=8443`. Receiving WebRTC needs no HTTPS, so viewers on the local network can use plain `http://`.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    SystemVideoSourceBlock -- Raw Video --> WebRTCSinkBlock;
+    SystemAudioSourceBlock -- Raw Audio --> WebRTCSinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var webrtcSink = new WebRTCSinkBlock(new WebRTCSinkSettings
+{
+    SignallingServerHost = "0.0.0.0",
+    SignallingServerPort = 8443,
+    WebServerDirectory = Path.Combine(AppContext.BaseDirectory, "wwwroot"),
+    WebServerAddress = "http://0.0.0.0:8080/"
+});
+
+webrtcSink.ConsumerAdded += (s, e) => Console.WriteLine($"Viewer connected: {e.PeerId}");
+
+var videoSource = new SystemVideoSourceBlock(videoSourceSettings);
+var audioSource = new SystemAudioSourceBlock(audioSourceSettings);
+
+pipeline.Connect(videoSource.Output, webrtcSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(audioSource.Output, webrtcSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+#### Availability
+
+Check availability using `WebRTCSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin from the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package.
+
+#### Platforms
+
+Windows.
+
 ### RIST MPEG-TS
 
 The `RISTMPEGTSSinkBlock` multiplexes audio and video streams into MPEG-TS, wraps the transport in RTP, and sends it over RIST (Reliable Internet Stream Transport). RIST adds ARQ-based retransmission over UDP, providing reliable low-latency media delivery without the overhead of TCP.
@@ -2156,7 +2236,7 @@ The `FDSinkBlock` writes media data to a Unix file descriptor (an integer handle
 
 Pass `addQueue: true` (default) to add a buffering queue that prevents the pipeline from blocking on slow descriptor writes.
 
-The descriptor must be open and writable before the pipeline starts. The block does not close it when the pipeline stops. On Windows the block writes through its own copy of the descriptor, made when the pipeline is built and closed when it stops, so closing your descriptor while the pipeline records neither stops the recording nor ends the application. The copy keeps the file or pipe open until the stop, so after you close your descriptor a reader at the other end of a pipe sees the end of the stream only at the stop. A restart makes a new copy: the descriptor must be open again by then, or its number may already belong to another file.
+The descriptor must be open and writable before the pipeline starts. The block does not close it when the pipeline stops. The block writes through its own copy of the descriptor, made when the pipeline is built and closed when it stops, so closing your descriptor while the pipeline records neither stops the recording nor ends the application, and a file you open after that close, which may get the same number, receives none of the stream. The copy keeps the file or pipe open until the stop, so after you close your descriptor a reader at the other end of a pipe sees the end of the stream only at the stop. A restart makes a new copy: the descriptor must be open again by then, or its number may already belong to another file.
 
 #### Block info
 

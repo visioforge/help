@@ -169,6 +169,8 @@ var effect = new DynamicAmplifyAudioEffect(50, 20000, TimeSpan.FromMilliseconds(
 - `Levels` (double[]): Ganancia para cada banda en dB
     - Rango por banda: -24 a +12 dB
     - El array debe contener exactamente 10 valores
+    - Asignar un array nuevo lo aplica durante la reproducción; escribir un elemento del array no
+- `SetLevel(band, level)`: establece la ganancia de una banda (0 a 9) y la aplica durante la reproducción
 
 **Uso**:
 
@@ -542,7 +544,8 @@ effect.InterpolationSteps = 16; // Mayor calidad
     - No debe exceder MaxDelay
 - `MaxDelay` (TimeSpan): Buffer máximo de retardo
     - Debe ser >= Delay
-    - Establecer antes de iniciar la reproducción
+    - Valor predeterminado: el retardo pasado al constructor más un segundo
+    - Se lee al añadir el efecto, también durante la reproducción: establézcalo antes de añadirlo. Mientras el eco suena, un `Delay` mayor se recorta a este valor
 - `Intensity` (float): Volumen del eco
     - Rango: 0.0 a 1.0
     - Predeterminado: 1.0
@@ -612,6 +615,8 @@ effect.Feedback = 0.3;
     - Rango: 0.0 a 1.0
     - Predeterminado: 1.0
     - 0 = mono, 1 = estéreo completo
+
+Cada cambio de propiedad se aplica de inmediato a un efecto en reproducción.
 
 **Uso**:
 

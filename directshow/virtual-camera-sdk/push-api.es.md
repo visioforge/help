@@ -31,9 +31,9 @@ importe `VisioForge.Core` debe calificar `BaseContext`; un alias con `using` tam
 ## Instalación
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.13]" />
+<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.16]" />
 <!-- The virtual camera and virtual audio card filters -->
-<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.13]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.16]" />
 ```
 
 `Redist.VirtualCamera.x64` contiene los filtros que cargan Zoom, OBS y los navegadores: el filtro lo carga la aplicación

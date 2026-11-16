@@ -59,10 +59,10 @@ Le contrôle construit et gère ce pipeline pour vous via `HlsStreamManager`. Il
 
 <ItemGroup>
   <Reference Include="System.Web" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.WebForms" Version="[2026.11.13]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.13]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.WebForms" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
 </ItemGroup>
 ```
 

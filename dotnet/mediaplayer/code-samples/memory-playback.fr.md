@@ -60,9 +60,9 @@ La vidéo crée le projet en .NET 10, qui nécessite Visual Studio 2026 ; dans V
 - [VisioForge.DotNet.Core.Redist.LAV.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/) — le séparateur et les décodeurs LAV, qui trouvent les pistes vidéo et audio dans le flux et les décodent
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.13]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.13]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.13]" />
+<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.16]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.16]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.16]" />
 ```
 
 Ce sont les paquets x64 : le projet définit donc `<PlatformTarget>x64</PlatformTarget>` ; une application 32 bits prend les paquets `.x86`. Consultez le [guide de déploiement](../deployment.md) pour la liste complète.

@@ -169,6 +169,8 @@ var effect = new DynamicAmplifyAudioEffect(50, 20000, TimeSpan.FromMilliseconds(
 - `Levels` (double[]): Gain for each band in dB
     - Range per band: -24 to +12 dB
     - Array must contain exactly 10 values
+    - Assigning a new array applies it during playback; writing one element of it does not
+- `SetLevel(band, level)`: sets the gain of one band (0 to 9) and applies it during playback
 
 **Usage**:
 
@@ -542,7 +544,8 @@ effect.InterpolationSteps = 16; // Higher quality
     - Must not exceed MaxDelay
 - `MaxDelay` (TimeSpan): Maximum delay buffer
     - Must be >= Delay
-    - Set before starting playback
+    - Default: the delay passed to the constructor plus one second
+    - Read when the effect is added, also during playback: set it before adding the effect. While the echo plays, a longer `Delay` is cut to it
 - `Intensity` (float): Echo volume
     - Range: 0.0 to 1.0
     - Default: 1.0
@@ -612,6 +615,8 @@ effect.Feedback = 0.3;
     - Range: 0.0 to 1.0
     - Default: 1.0
     - 0 = mono, 1 = full stereo
+
+Each property change applies to a playing effect at once.
 
 **Usage**:
 

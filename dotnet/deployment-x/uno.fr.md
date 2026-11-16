@@ -107,8 +107,8 @@ Ajoutez les paquets suivants à votre projet :
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.13]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.16]"/>
 </ItemGroup>
 ```
 
@@ -121,8 +121,8 @@ Ajoutez les paquets redistribuables spécifiques à chaque plateforme à votre p
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
   <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 </ItemGroup>
 ```
 
@@ -218,15 +218,15 @@ Voici un exemple complet de fichier `.csproj` pour une application Uno Platform 
   
   <!-- Références principales VisioForge -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.13]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.13]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.16]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.16]"/>
   </ItemGroup>
   
   <!-- Plateforme Windows -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
   </ItemGroup>
   
   <!-- Plateforme Android -->

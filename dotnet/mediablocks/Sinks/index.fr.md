@@ -60,6 +60,7 @@ Les puits de streaming réseau suivants sont disponibles :
 - [RTMP](#rtmp)
 - [Shoutcast](#shoutcast)
 - [WHIP](#whip)
+- [WebRTC](#webrtc)
 - [YouTube Live](#youtube-live)
 - [RIST MPEG-TS](#rist-mpeg-ts)
 
@@ -1758,6 +1759,85 @@ Vérifiez la disponibilité avec `WHIPSinkBlock.IsAvailable()`. Nécessite le pl
 
 Windows, macOS, Linux.
 
+### WebRTC
+
+Le `WebRTCSinkBlock` diffuse l'audio et la vidéo directement vers les navigateurs web en WebRTC, avec une latence inférieure à une seconde et sans serveur multimédia. Le bloc exécute son propre serveur de signalisation WebSocket et, en option, un serveur HTTP pour la page de visionnage. Chaque navigateur connecté obtient sa propre session WebRTC, son encodeur et son contrôle de congestion : un spectateur sur un réseau lent ne dégrade pas la qualité des autres.
+
+Les entrées acceptent la vidéo et l'audio bruts — le bloc les encode pour chaque spectateur, la vidéo en VP8 et l'audio en Opus — ou de la vidéo déjà encodée en VP8 et de l'audio Opus, envoyés sans réencodage.
+
+#### Informations sur le bloc
+
+Nom : WebRTCSinkBlock.
+
+| Direction du pin | Type de média | Nombre de pins |
+| --- | :---: | :---: |
+| Vidéo en entrée | vidéo non compressée, VP8 | un ou plusieurs |
+| Audio en entrée | audio non compressé, Opus | un ou plusieurs |
+
+#### Paramètres
+
+Utilisez `WebRTCSinkSettings` pour configurer les serveurs et le débit :
+
+| Propriété | Type | Par défaut | Description |
+| --- | --- | --- | --- |
+| `SignallingServerHost` | `string` | `127.0.0.1` | Adresse d'écoute du serveur de signalisation ; la valeur par défaut n'accepte que les spectateurs de cette machine, `0.0.0.0` accepte ceux d'autres machines |
+| `SignallingServerPort` | `int` | `8443` | Port du serveur de signalisation |
+| `WebServerDirectory` | `string` | `null` | Dossier de la page de visionnage servie en HTTP ; `null` ne lance aucun serveur web |
+| `WebServerAddress` | `string` | `http://127.0.0.1:8080/` | Adresse d'écoute du serveur web |
+| `StunServer` | `string` | `null` | Serveur STUN (`stun://hostname:port`) ; `null` conserve `stun://stun.l.google.com:19302` |
+| `TurnServers` | `string[]` | `null` | Serveurs TURN (`turn(s)://username:password@host:port`) |
+| `CongestionControl` | `WebRTCSinkCongestionControl` | `GCC` | `Disabled`, `Homegrown` ou `GCC` (Google Congestion Control) |
+| `StartBitrate` | `uint` | `2048000` | Débit initial de chaque spectateur, en bits par seconde |
+| `MaxBitrate` | `uint` | `8192000` | Débit maximal que le contrôle de congestion peut atteindre, en bits par seconde |
+
+Les événements `ConsumerAdded` et `ConsumerRemoved` signalent chaque spectateur qui se connecte et se déconnecte, avec son identifiant de pair de signalisation. Ils sont déclenchés sur un thread GStreamer. `ConsumerRemoved` n'est pas déclenché pour les spectateurs encore connectés à l'arrêt du pipeline : leurs sessions se terminent avec lui.
+
+Le serveur web n'accepte que des adresses `http://`. `Build` échoue, avec un message `OnError`, si `SignallingServerHost` est vide, si `SignallingServerPort` est hors de la plage 1–65535, si `StartBitrate` est inférieur à 1000 ou dépasse `MaxBitrate`, si une entrée de `TurnServers` est vide, si `WebServerAddress` n'est pas une adresse `http://` avec un port dans la plage 1–65535 ou si son port est déjà utilisé.
+
+#### La page de visionnage
+
+Le navigateur parle le protocole de signalisation de l'élément GStreamer `webrtcsink` (JSON sur WebSocket). La démo WebRTC Browser Streamer Demo du [dépôt d'exemples](https://github.com/visioforge/.Net-SDK-s-samples) fournit un fichier `index.html` unique qui le fait en une centaine de lignes de JavaScript : pointez `WebServerDirectory` vers son dossier et ouvrez `http://<host>:8080/?signalling=8443`. Recevoir du WebRTC ne nécessite pas HTTPS : les spectateurs du réseau local peuvent utiliser un simple `http://`.
+
+#### Le pipeline d'exemple
+
+```mermaid
+graph LR;
+    SystemVideoSourceBlock -- Vidéo brute --> WebRTCSinkBlock;
+    SystemAudioSourceBlock -- Audio brut --> WebRTCSinkBlock;
+```
+
+#### Exemple de code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var webrtcSink = new WebRTCSinkBlock(new WebRTCSinkSettings
+{
+    SignallingServerHost = "0.0.0.0",
+    SignallingServerPort = 8443,
+    WebServerDirectory = Path.Combine(AppContext.BaseDirectory, "wwwroot"),
+    WebServerAddress = "http://0.0.0.0:8080/"
+});
+
+webrtcSink.ConsumerAdded += (s, e) => Console.WriteLine($"Viewer connected: {e.PeerId}");
+
+var videoSource = new SystemVideoSourceBlock(videoSourceSettings);
+var audioSource = new SystemAudioSourceBlock(audioSourceSettings);
+
+pipeline.Connect(videoSource.Output, webrtcSink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(audioSource.Output, webrtcSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+await pipeline.StartAsync();
+```
+
+#### Disponibilité
+
+Vérifiez la disponibilité avec `WebRTCSinkBlock.IsAvailable()`. Nécessite le plugin GStreamer `rswebrtc` du paquet `VisioForge.CrossPlatform.Core.Windows.Adds.x64`.
+
+#### Plateformes
+
+Windows.
+
 ### RIST MPEG-TS
 
 Le `RISTMPEGTSSinkBlock` multiplexe les flux audio et vidéo en MPEG-TS, encapsule le transport dans RTP et l'envoie via RIST (Reliable Internet Stream Transport). RIST ajoute une retransmission basée sur ARQ sur UDP, offrant une livraison de médias fiable à faible latence sans la surcharge de TCP.
@@ -2156,7 +2236,7 @@ Le `FDSinkBlock` écrit des données multimédias vers un descripteur de fichier
 
 Passez `addQueue: true` (par défaut) pour ajouter une file d'attente de mise en tampon qui empêche le pipeline de bloquer sur des écritures lentes du descripteur.
 
-Le descripteur doit être ouvert et accessible en écriture avant le démarrage du pipeline. Le bloc ne le ferme pas lorsque le pipeline s'arrête. Sous Windows, le bloc écrit via sa propre copie du descripteur, créée à la construction du pipeline et fermée à son arrêt : fermer votre descripteur pendant l'enregistrement n'arrête donc pas l'enregistrement et ne met pas fin à l'application. La copie garde le fichier ou le tube ouvert jusqu'à l'arrêt : une fois votre descripteur fermé, un lecteur à l'autre bout d'un tube ne voit la fin du flux qu'à l'arrêt du pipeline. Un redémarrage crée une nouvelle copie : le descripteur doit alors être de nouveau ouvert, sinon son numéro peut déjà appartenir à un autre fichier.
+Le descripteur doit être ouvert et accessible en écriture avant le démarrage du pipeline. Le bloc ne le ferme pas lorsque le pipeline s'arrête. Le bloc écrit via sa propre copie du descripteur, créée à la construction du pipeline et fermée à son arrêt : fermer votre descripteur pendant l'enregistrement n'arrête donc pas l'enregistrement et ne met pas fin à l'application, et un fichier ouvert après cette fermeture, qui peut recevoir le même numéro, ne reçoit rien du flux. La copie garde le fichier ou le tube ouvert jusqu'à l'arrêt : une fois votre descripteur fermé, un lecteur à l'autre bout d'un tube ne voit la fin du flux qu'à l'arrêt du pipeline. Un redémarrage crée une nouvelle copie : le descripteur doit alors être de nouveau ouvert, sinon son numéro peut déjà appartenir à un autre fichier.
 
 #### Informations sur le bloc
 

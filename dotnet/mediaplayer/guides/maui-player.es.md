@@ -56,14 +56,14 @@ primary_api_classes:
 ## Paquetes NuGet
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.13]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.16]"/>
 
 <!-- Redists de plataforma — incluya solo los targets para los que compila -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64"
-                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.12]"/>
+                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64"
-                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.12]"/>
+                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS"
                   Condition="$(TargetFramework.Contains('maccatalyst'))" Version="[2026.11.13]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android"

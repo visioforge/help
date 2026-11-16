@@ -176,6 +176,9 @@ Este código:
 3. Especifica MPEG-TS como formato de contenedor
 4. Asigna esta configuración a la salida de transmisión
 
+!!! note "Implementación con NuGet: registrar los filtros Network Streamer"
+    FFmpeg se ejecuta como un proceso independiente y lee la transmisión a través de los filtros DirectShow VisioForge Network Streamer, por lo que deben estar registrados. El instalador del SDK los registra. Una aplicación implementada con los redistribuibles de NuGet llama a `CustomRedist_NetworkStreamerRegister()` una vez, en `VideoCaptureCore` o `VideoEditCore`; requiere derechos de administrador y, sin ellos, muestra un aviso de UAC. Sin el registro, el inicio falla con un error que indica esta llamada. `VideoCaptureCore` con `UsePipe = true` alimenta FFmpeg mediante una canalización y no necesita estos filtros.
+
 ## Salida UDP multiplataforma con Media Blocks
 
 [MediaBlocksPipeline](#){ .md-button }

@@ -267,7 +267,7 @@ await pipeline.StartAsync();
 
 - `Channels` prend des indices de canaux d'entrée à partir de zéro, dans l'ordre croissant. Un indice que le périphérique n'a pas arrête le démarrage avec une erreur au lieu d'ouvrir silencieusement tous les canaux.
 - `BufferSize` est exprimé en échantillons ; 0 utilise la taille préférée du pilote. Une taille hors de la plage ou de la granularité du pilote arrête le démarrage avec une erreur.
-- Un périphérique ASIO peut aussi être passé à `SystemAudioSourceBlock` via `device.CreateSourceSettings(format)`, et à Video Capture SDK .Net (`VideoCaptureCoreX`) :
+- Un périphérique ASIO peut aussi être passé à `SystemAudioSourceBlock` via `device.CreateSourceSettings(format)`, et à Video Capture SDK .NET (`VideoCaptureCoreX`) :
 
 ```csharp
 var device = (await DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.ASIO))[0];
@@ -1736,6 +1736,71 @@ await pipeline.StartAsync();
 #### Plateformes
 
 Windows, macOS, Linux, iOS, Android.
+
+### Bloc source WHEP
+
+Le `WHEPSourceBlock` lit un flux qu'un serveur WebRTC publie via WHEP (WebRTC-HTTP Egress Protocol) — MediaMTX, Janus, Cloudflare Stream et d'autres points de terminaison WHEP. Utilisez-le lorsque vous avez besoin d'une latence inférieure à la seconde depuis un serveur WebRTC, par exemple pour surveiller un flux publié par un navigateur ou par le `WHIPSinkBlock`. Pour les serveurs RTSP, SRT ou RTMP, utilisez leurs propres blocs de sources.
+
+Le bloc fournit la vidéo et l'audio décodés. Leurs formats sont ceux obtenus en décodant les flux du serveur (la taille d'image, le format de pixel, la fréquence d'échantillonnage et le nombre de canaux viennent du flux, pas du bloc).
+
+#### Informations sur le bloc
+
+Nom : WHEPSourceBlock.
+
+| Direction du pin | Type de média | Nombre de pins |
+| --- | :---: | :---: |
+| Vidéo en sortie | Non compressé | 0 ou 1 |
+| Audio en sortie | Non compressé | 0 ou 1 |
+
+#### Paramètres
+
+Le `WHEPSourceBlock` se configure via `WHEPSourceSettings` :
+
+- `Location` (string) : l'URL du point de terminaison WHEP, par exemple `http://server:8889/stream/whep` sur MediaMTX.
+- `AuthToken` (string) : un jeton envoyé comme `Authorization: Bearer` avec la requête WHEP.
+- `StunServer` (string) : un serveur STUN, `stun://host:port`. S'il n'est pas défini, aucun serveur STUN n'est utilisé.
+- `TurnServer` (string) : un serveur TURN, `turn(s)://username:password@host:port`.
+- `UseLinkHeaders` (bool) : utiliser les serveurs ICE que le serveur WHEP annonce dans ses en-têtes `Link`. Par défaut `true`.
+- `Timeout` (`TimeSpan`) : le délai d'attente des requêtes HTTP WHEP, arrondi à la seconde supérieure et plafonné à une heure ; `TimeSpan.Zero`, une valeur négative ou `Timeout.InfiniteTimeSpan` donnent ce maximum d'une heure, si bien qu'un arrêt n'attend jamais indéfiniment un serveur qui ne répond plus. Par défaut 15 secondes.
+- `VideoEnabled` (bool) : créer le pin `VideoOutput`. Par défaut `true`.
+- `AudioEnabled` (bool) : créer le pin `AudioOutput`. Par défaut `true`. Au moins l'une des deux doit être activée : sinon, le constructeur de `WHEPSourceBlock` lève `ArgumentException`.
+
+Une session WebRTC n'est décrite qu'au moment où le serveur répond ; les sorties sont donc déclarées par `VideoEnabled` et `AudioEnabled`. Un flux envoyé par le serveur sans sortie correspondante est ignoré. Une sortie dont le serveur n'envoie pas le flux reste vide — désactivez-la pour un flux uniquement vidéo ou uniquement audio, afin qu'un multiplexeur en aval ne l'attende pas.
+
+Un échec de connexion, par exemple `404` pour un chemin sur lequel rien n'est publié, est signalé par l'événement `OnError` du pipeline. Exception : un `TurnServer` dont le nom d'hôte ne se résout pas fait attendre la connexion sans erreur ; vérifiez donc d'abord l'adresse TURN si aucune image ni aucune erreur n'arrive.
+
+#### Exemple de pipeline
+
+```mermaid
+graph LR;
+    WHEPSourceBlock-->VideoRendererBlock;
+    WHEPSourceBlock-->AudioRendererBlock;
+```
+
+#### Exemple de code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var source = new WHEPSourceBlock(new WHEPSourceSettings
+{
+    Location = "http://192.168.1.10:8889/mystream/whep"
+});
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+var audioRenderer = new AudioRendererBlock();
+
+pipeline.Connect(source.VideoOutput, videoRenderer.Input);
+pipeline.Connect(source.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+Appelez `WHEPSourceBlock.IsAvailable()` avant de construire le pipeline : la méthode indique si le plugin GStreamer `rswebrtc` (`whepclientsrc`, issu de gst-plugins-rs) est présent. Sous Windows et macOS, le package de redistribution du SDK VisioForge le fournit. Sous Linux, le SDK utilise le GStreamer du système, qui doit être en version 1.28 ou ultérieure avec le plugin `rswebrtc` de gst-plugins-rs installé ; sans lui (par exemple avec le GStreamer 1.24 fourni par Ubuntu 24.04), `IsAvailable()` renvoie `false`.
+
+#### Plateformes
+
+Windows, macOS, Linux.
 
 ## Autres blocs de sources
 

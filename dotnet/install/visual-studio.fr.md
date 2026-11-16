@@ -108,7 +108,7 @@ Les moteurs natifs vont, eux, dans le fichier projet, chacun sous la condition d
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]" />

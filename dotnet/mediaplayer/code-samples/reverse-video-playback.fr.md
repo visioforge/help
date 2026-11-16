@@ -21,6 +21,10 @@ primary_api_classes:
   - UniversalSourceBlock
   - UniversalSourceSettings
   - MediaPlayerCore
+video:
+  id: 70NC7wAvehw
+  upload_date: 2026-11-16T19:09:43Z
+  duration: PT12M59S
 
 ---
 
@@ -29,6 +33,18 @@ primary_api_classes:
 Dans Media Player SDK .NET et Media Blocks SDK .NET, la lecture inversée est une vitesse de lecture négative. `Rate_SetAsync(-1.0)` lit le fichier à l'envers depuis la position actuelle jusqu'à son début, à vitesse normale ; `-2.0` le lit à l'envers deux fois plus vite, `-0.5` à mi-vitesse. Le même appel fonctionne sur `MediaPlayerCoreX` et sur un `MediaBlocksPipeline`. Les extraits d'interface ci-dessous utilisent WPF.
 
 La lecture inversée nécessite une source où l'on peut se déplacer : un fichier multimédia, pas un flux en direct comme une caméra ou du RTSP.
+
+## Tutoriel YouTube
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/70NC7wAvehw?controls=1" title="Lire une vidéo à l'envers en C# WPF - tutoriel YouTube" frameborder="0" allowfullscreen></iframe>
+</div>
+
+[Code source sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/reverse-playback-csharp-wpf)
+
+Le film de la vidéo est [Big Buck Bunny](https://peach.blender.org/) (c) Blender Foundation, sous licence [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+
+La vidéo crée le projet en .NET 10, qui nécessite Visual Studio 2026 ; dans Visual Studio 2022, choisissez .NET 8 ou .NET 9.
 
 ## Lecture inversée avec MediaPlayerCoreX
 
@@ -271,20 +287,91 @@ Pour une application Windows x64 :
 
 ```xml
 <!-- MediaPlayerCoreX; for Media Blocks use VisioForge.DotNet.MediaBlocks instead -->
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.13]" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.12]" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.12]" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.16]" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]" />
 
 <!-- MediaPlayerCore -->
-<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.13]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.13]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.13]" />
+<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.16]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.16]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.16]" />
 ```
 
 Les autres plateformes utilisent leurs propres redistribuables : voir [Déploiement multiplateforme](../../deployment-x/index.md) et [Déploiement de Media Player SDK](../deployment.md).
 
 ## Applications d'exemple
 
+- **[Exemple du tutoriel de lecture inversée (Media Player SDK X, WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/reverse-playback-csharp-wpf)** — l'application de la vidéo : lecture inversée depuis n'importe quel point ou depuis la fin, un curseur de vitesse pour les deux sens et l'avance image par image.
 - **[Simple Media Player (Media Player SDK X, Avalonia)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/Simple%20Media%20Player)** — `MediaPlayerCoreX` avec vitesse de lecture et avance image par image.
 - **[Simple Player Demo WPF (Media Blocks SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Player%20Demo%20WPF)** — un pipeline de lecture construit à partir de blocs.
 - **[Main Demo (Media Player SDK, WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WPF/CSharp/Main%20Demo)** — `MediaPlayerCore` avec le cache d'images pour la lecture inversée.
+
+## Transcription de la vidéo
+
+### Ce que nous construisons
+
+Lisons une vidéo à l'envers dans une application C# WPF, avec le VisioForge Media Player SDK. Voici ce que nous construisons. Dans ce SDK, la lecture inversée est une vitesse de lecture négative. Le lecteur lit à rebours depuis le point actuel, ou tout le fichier depuis sa fin. Un curseur de vitesse change la rapidité de lecture, dans les deux sens. Et un bouton recule d'une image à la fois. Voici le lecteur terminé, qui lit à rebours à vitesse normale. Le film est Big Buck Bunny, de la Blender Foundation, sous licence Creative Commons Attribution.
+
+### Prérequis
+
+Il vous faut Windows 10 ou 11, et Visual Studio 2026 avec la charge de travail Développement .NET Desktop. Le projet est une application WPF sur .NET 10 ; dans Visual Studio 2022, choisissez .NET 8 ou .NET 9. Et un fichier vidéo, car la lecture inversée exige une source dans laquelle on peut se déplacer : un fichier, pas un flux en direct. Le lecteur est MediaPlayerCoreX, qui fonctionne aussi sous macOS, Linux, Android et iOS.
+
+### Créer un projet WPF
+
+Dans Visual Studio, créez un nouveau projet. Cherchez WPF, et choisissez WPF Application pour C#. Nommez le projet ReversePlaybackWpf. Choisissez .NET 10 et cliquez sur Create. Visual Studio ouvre MainWindow.xaml, avec le concepteur en haut et le XAML en bas.
+
+### Ajouter les paquets NuGet
+
+Ajoutez maintenant trois paquets NuGet. Le Media Player SDK lui-même. CrossPlatform Core, le runtime GStreamer sur lequel le lecteur est construit. Et CrossPlatform Libav, avec les codecs FFmpeg qui décodent la plupart des fichiers vidéo. Ou utilisez le NuGet Package Manager : clic droit sur le projet, Manage NuGet Packages, puis installez VisioForge.DotNet.MediaPlayer depuis l'onglet Browse. Installez ensuite les paquets Core et Libav pour Windows x64. L'onglet Installed liste les trois. Ce sont les paquets x64, donc réglez PlatformTarget sur x64 dans le fichier du projet.
+
+### Construire la fenêtre en XAML
+
+La fenêtre s'écrit en XAML. D'abord la fenêtre elle-même, avec une grille et un VideoView, et le concepteur la dessine tout de suite. Associez l'espace de noms VisioForge.Core.UI.WPF à un préfixe, ici vf. La grille a deux colonnes, la vidéo et une colonne de réglages de 260 pixels, et quatre lignes : la vidéo, le temps, les boutons de lecture et les boutons inversés. Le VideoView remplit la première cellule. La fenêtre nomme aussi ses gestionnaires Loaded et Closing. Sous la vidéo viennent le temps et le sens. Deux blocs de texte. La position et la durée à gauche, avec les centièmes de seconde, pour qu'un pas d'une seule image se voie. Le sens et la vitesse à droite. Puis les boutons de lecture. Play, Pause, Resume et Stop, chacun avec un gestionnaire Click. Ils démarrent tous désactivés : Play jusqu'au chargement du SDK, les autres jusqu'à la lecture d'un fichier. La deuxième ligne contient les boutons inversés. Reverse lit à rebours depuis l'endroit où se trouve le film. Forward reprend vers l'avant. From the end lit tout le fichier à rebours. Et Frame back recule d'une image. Enfin, la colonne de réglages à droite. Elle contient le nom du fichier avec un bouton de parcours, un curseur de vitesse de 0.5 à 2 par pas de 0.25, et une zone de texte en lecture seule pour le journal des erreurs. Chaque gestionnaire que nomme le XAML va dans MainWindow.xaml.cs, et les prochains chapitres les écrivent.
+
+### Initialiser le SDK
+
+MainWindow.xaml.cs commence par ces usings : les espaces de noms WPF pour la fenêtre et le minuteur, Microsoft.Win32 pour la boîte de dialogue de fichier, et les espaces de noms VisioForge. La fenêtre garde le lecteur et un minuteur qui se déclenche quatre fois par seconde. Au chargement de la fenêtre, faites await VisioForgeX.InitSDKAsync une seule fois. Créez ensuite MediaPlayerCoreX et passez-lui le VideoView, où la vidéo est dessinée. Les erreurs arrivent dans l'événement OnError, sur un autre thread, donc le gestionnaire revient sur le thread de l'interface et les ajoute au journal. OnStop se déclenche après StopAsync, et quand la lecture arrive au bout du fichier : à sa fin en avançant, et à son début en reculant. Le gestionnaire n'agit que tant que Stop est activé et que State est Free. Ensuite Window_Loaded configure le minuteur et active Play. Le bouton de parcours affiche un OpenFileDialog filtré sur les fichiers vidéo, et met le chemin choisi dans la zone du nom de fichier.
+
+### Ouvrir et lire
+
+Le gestionnaire de Play désactive les boutons et efface le journal. OpenAsync ouvre le fichier, et PlayAsync le lit vers l'avant à vitesse normale. Reverse vient plus tard, depuis son propre bouton : une vitesse négative n'est acceptée qu'une fois le fichier en lecture. State Free signifie que le fichier ne s'est pas ouvert ou n'a pas été lu, et la fenêtre revient à l'état arrêté. Sinon les boutons passent en lecture, et le minuteur démarre.
+
+### Lire à l'envers
+
+C'est toute la lecture inversée. Rate_SetAsync avec une vitesse négative lit le fichier à rebours, de la position actuelle jusqu'au début. Moins un est la vitesse normale, moins deux deux fois plus vite. Forward règle la même vitesse, en positif, et le film continue vers l'avant depuis le même point. Quand le curseur de vitesse bouge pendant la lecture, Rate_GetAsync indique dans quel sens le film est lu. Une vitesse négative signifie à rebours, donc la nouvelle vitesse est aussi réglée en négatif, et le sens reste le même. Pour lire tout le fichier à rebours, activez d'abord la vitesse inversée, puis déplacez-vous à la fin avec Position_SetAsync et la durée. Un déplacement fait pendant que la vitesse est négative lit depuis ce point jusqu'au début. Ne vous déplacez que lorsque la vitesse est appliquée : sinon le déplacement va vers l'avant jusqu'à la fin, et la lecture s'arrête aussitôt.
+
+### Image par image
+
+Deux méthodes se déplacent d'une image, et toutes deux laissent l'image en pause. NextFrame avance dans le sens de la lecture, donc quand le film est lu à rebours, elle recule d'une image. PrevFrame avance contre le sens, donc en lecture vers l'avant, c'est elle qui recule. PrevFrame se déplace et attend la fin du déplacement, donc elle s'exécute sur un thread de travail avec Task.Run. Elle remet aussi une vitesse vers l'avant à un, donc le gestionnaire règle de nouveau la vitesse choisie.
+
+### Pause, reprise et arrêt
+
+Pause et Resume sont un appel chacun, et Resume continue dans le même sens. Stop arrête le minuteur, désactive les boutons pendant son travail, attend StopAsync et réinitialise la fenêtre. De petites méthodes d'aide règlent les boutons : ShowBusy les désactive tous, et ShowPlaying active soit Play, soit tous les boutons de lecture et inversés. Stopped remet la fenêtre en état : les boutons, le temps et le sens.
+
+### Afficher la position et le sens
+
+Le lecteur ne lève aucun événement de position, donc le minuteur la lit. Chaque tick lit Position_GetAsync, la durée et la vitesse. Si la lecture s'est arrêtée entre-temps, il laisse les libellés tels quels. Sinon il affiche la position avec les centièmes de seconde, et le sens et la vitesse d'après le signe et la valeur de la vitesse. En lecture à rebours, la position décompte.
+
+### Fermer la fenêtre
+
+Quand la fenêtre se ferme, Dispose arrête la lecture et libère le lecteur, et DestroySDK libère le SDK. Tant que le SDK se charge encore, ou qu'un fichier s'ouvre ou s'arrête, la fenêtre ne se ferme pas encore.
+
+### Lancer l'application
+
+Lancez l'application depuis Visual Studio. Une fois le SDK chargé, Play est activé. Cliquez sur le bouton de parcours et choisissez le fichier vidéo. Cliquez sur Play. Le film est lu vers l'avant à vitesse normale, et le libellé à droite l'indique. Faites glisser la vitesse sur deux. Il est maintenant lu vers l'avant deux fois plus vite ; ici il est encore accéléré, pour entrer dans le film. Cliquez sur Reverse. Le film est lu à rebours depuis l'endroit où il était, à double vitesse, et le temps décompte. Ramenez la vitesse sur un. Le sens reste : à rebours, à vitesse normale. Forward reprend vers l'avant depuis le même point. Frame back recule d'une image à chaque clic, et l'image reste en pause. Regardez les centièmes. Resume reprend la lecture. From the end saute à la fin du fichier et la lit à rebours, vers le début. Frame back fonctionne aussi pendant que le film est lu à rebours, et Resume continue à rebours. Stop réinitialise la fenêtre. Puis fermez-la.
+
+### Erreurs fréquentes
+
+Quelques erreurs fréquentes. Régler une vitesse négative avant la lecture du fichier : le lecteur la refuse, donc réglez-la une fois la lecture démarrée. Se déplacer à la fin avant d'activer la vitesse inversée : le fichier se termine aussitôt. Essayer la lecture inversée sur un flux en direct, comme une caméra : il faut un fichier dans lequel on peut se déplacer. Appeler PrevFrame sur le thread de l'interface, ce qui fige la fenêtre pendant le déplacement. Et oublier le paquet Libav, de sorte que beaucoup de formats ne se décodent pas.
+
+### Étapes suivantes
+
+Il existe aussi des guides pour un lecteur vidéo complet avec barre de temps et volume, pour la même lecture inversée dans un pipeline Media Blocks, pour lire seulement un fragment d'un fichier, et pour déployer les redists avec votre application. Le code source complet est sur GitHub, et la documentation est sur visioforge.com/help. Merci de votre attention.
+
+## Voir aussi
+
+- [Créer un lecteur vidéo en C#](../guides/video-player-csharp.md) — un lecteur complet avec chronologie, volume et vitesse
+- [Lecture inversée avec Media Blocks](#lecture-inversee-avec-media-blocks) — la même vitesse négative dans un pipeline Media Blocks
+- [Lire un fragment de fichier](play-fragment-file.md) — lire seulement une plage d'un fichier multimédia
+- [Déploiement multiplateforme](../../deployment-x/index.md) — les redistribuables dont l'application a besoin sur chaque plateforme
+- [Page produit Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
