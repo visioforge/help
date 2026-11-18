@@ -90,7 +90,7 @@ Nos SDK s'intègrent parfaitement aux environnements de développement .NET les 
 - Prise en charge du concepteur pour les contrôles visuels
 - Gestion des paquets NuGet
 
-Pour des instructions détaillées de configuration de Visual Studio, consultez notre [guide d'intégration Visual Studio](visual-studio.md).
+Pour des instructions détaillées de configuration de Visual Studio, consultez notre [guide d'intégration Visual Studio](visual-studio.md). Pour partir d'une application qui fonctionne, utilisez les [modèles de projet VisioForge](project-templates.md) pour Visual Studio 2026 et `dotnet new`.
 
 ### Intégration avec JetBrains Rider
 

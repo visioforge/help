@@ -32,7 +32,7 @@ video:
 
 Ce guide installe les SDK .NET VisioForge dans une application Avalonia 12.1 avec des cibles Desktop, Android et iOS, et place un `VideoView` dans sa vue principale. Il se termine par une application qui se compile et se lance sur la cible Desktop sous Windows.
 
-Les quatre SDK — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET et Media Blocks SDK .NET — sont fournis dans un seul paquet NuGet, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). Le `VideoView` d'Avalonia se trouve dans [VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia). Chaque plateforme prend en plus un paquet redist, son moteur natif, et Android prend le projet de liaison VisioForge, `AndroidDependency`, depuis GitHub.
+Les quatre SDK — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET et Media Blocks SDK .NET — sont fournis dans un seul paquet NuGet, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). Le `VideoView` d'Avalonia se trouve dans [VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia). Chaque plateforme prend en plus un paquet redist, son moteur natif (sous Linux, uniquement les bibliothèques propres au SDK ; GStreamer vient du système), et Android prend le projet de liaison VisioForge, `AndroidDependency`, depuis GitHub.
 
 ## Tutoriel vidéo
 
@@ -88,10 +88,12 @@ Le modèle Avalonia utilise la gestion centralisée des paquets : NuGet écrit d
   <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" />
 </ItemGroup>
 ```
 
-Prenez les dernières versions sur [nuget.org](https://www.nuget.org/profiles/visioforge). Les redists Android et iOS sont publiés à leur propre rythme : leurs versions diffèrent donc de celles du SDK. Windows prend deux redists, le moteur natif et les codecs Libav (`.UPX` est la version de taille réduite) ; macOS, Android et iOS en prennent un chacun.
+Prenez les dernières versions sur [nuget.org](https://www.nuget.org/profiles/visioforge). Les redists macOS, Android, iOS et Linux sont publiés à leur propre rythme : leurs versions diffèrent donc de celles du SDK. Windows prend deux redists, le moteur natif et les codecs Libav (`.UPX` est la version de taille réduite) ; macOS, Android et iOS en prennent un chacun, et Linux prend le paquet core de son architecture, qui ne contient pas GStreamer. La vidéo a été enregistrée avant l'ajout des lignes du paquet core Linux, ici et dans la cible Desktop : elle ne les montre donc pas.
 
 ## La cible Desktop
 
@@ -113,9 +115,13 @@ Chaque cible prend son redist dans son propre fichier de projet. Faites un clic 
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" />
 </ItemGroup>
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))" />
+</ItemGroup>
 ```
 
-Le modèle compile la cible Desktop pour `net10.0` tout court, et les moteurs Windows et macOS du SDK ont besoin du framework propre au système d'exploitation. Les propriétés placées après remplacent celles du modèle : `net10.0-windows` sous Windows, et `net10.0-macos` sur un Mac, un bundle d'application, qui a besoin d'un identifiant d'application. Linux garde `net10.0` et ne prend pas de redist : le SDK y utilise le GStreamer installé sur le système, voir le [déploiement sous Ubuntu](../deployment-x/Ubuntu.md). Les références ne portent pas de version : celles-ci viennent de `Directory.Packages.props`.
+Le modèle compile la cible Desktop pour `net10.0` tout court, et les moteurs Windows et macOS du SDK ont besoin du framework propre au système d'exploitation. Les propriétés placées après remplacent celles du modèle : `net10.0-windows` sous Windows, et `net10.0-macos` sur un Mac, un bundle d'application, qui a besoin d'un identifiant d'application. Linux garde `net10.0` et utilise le GStreamer installé sur le système, voir le [déploiement sous Ubuntu](../deployment-x/Ubuntu.md) ; le dernier bloc, appliqué lorsque la cible est compilée sous Linux (une publication pour Linux depuis Windows ou macOS l'ignore), lui ajoute le paquet core de son architecture, qui contient les bibliothèques natives propres au SDK. Les références ne portent pas de version : celles-ci viennent de `Directory.Packages.props`.
 
 ## La cible Android
 

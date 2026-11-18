@@ -101,7 +101,7 @@ Pour les paramètres et propriétés détaillés de chaque effet, consultez la [
 ### Hauteur et tempo
 
 - **PitchShiftAudioEffect** — Décalage de hauteur sans changement de tempo
-- **ScaleTempoAudioEffect** — Changement de tempo sans décalage de hauteur
+- **ScaleTempoAudioEffect** — Garde la hauteur quand la vitesse de lecture change
 
 ### Effets spéciaux
 

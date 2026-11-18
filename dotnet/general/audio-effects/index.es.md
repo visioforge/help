@@ -101,7 +101,7 @@ Para parámetros detallados y propiedades de cada efecto, consulte la [Referenci
 ### Tono y Tempo
 
 - **PitchShiftAudioEffect** — Cambio de tono sin cambio de tempo
-- **ScaleTempoAudioEffect** — Cambio de tempo sin cambio de tono
+- **ScaleTempoAudioEffect** — Conserva el tono cuando cambia la tasa de reproducción
 
 ### Efectos Especiales
 

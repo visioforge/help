@@ -105,8 +105,8 @@ vfp_search -f "comercial.vsigx" -m "transmision.vsigx"
 - Usa huellas tipo "search" para fragmentos (`-t search` en vfp_gen)
 - Use también huellas tipo "search" para los videos principales (`-t search` en vfp_gen): la búsqueda lee ambos archivos como huellas de búsqueda
 - Los fragmentos deben tener al menos 5-10 segundos para detección confiable
-- Umbrales de diferencia más bajos (< 100) para coincidencias exactas
-- Umbrales más altos (100-500) para contenido similar con modificaciones
+- Empiece con el valor por defecto de 500; bájelo (hasta unos 200) para coincidencias más estrictas
+- Súbalo (hasta unos 1000) para contenido con modificaciones; MMT Live usa 1100 para transmisiones en vivo
 
 ## Notas de Rendimiento
 

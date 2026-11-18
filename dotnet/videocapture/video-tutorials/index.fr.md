@@ -42,6 +42,8 @@ Intégrez la fonctionnalité webcam dans vos applications pour la visioconféren
 * [**Capture webcam en fichiers MP4**](video-capture-webcam-mp4.md) — Implémentez l'enregistrement webcam de haute qualité avec compression H.264 pour une taille de fichier optimale
 * [**Webcam vers MP4 en WPF**](video-capture-webcam-mp4-wpf.md) — Le même enregistreur webcam dans une fenêtre WPF décrite en XAML
 * [**Enregistrement webcam avec sortie WMV**](video-capture-webcam-wmv.md) — Créez des enregistrements webcam efficaces au format WMV avec la compatibilité Windows Media
+* [**Webcam vers MP4 et WebM avec FFmpeg**](../../general/output-formats/ffmpeg-exe.md) — Enregistrez une webcam en MP4 avec H.264 ou HEVC, ou en WebM avec VP9 et Opus, via `FFMPEGEXEOutput`
+* [**Diffusion d'une webcam en RTMP en WPF**](../network-streaming/index.md) — Affichez l'aperçu d'une webcam et diffusez-la avec le microphone en RTMP, H.264 et AAC, vers MediaMTX, YouTube Live ou tout serveur RTMP
 * [**Superposition de texte sur les enregistrements webcam**](webcam-capture-text-overlay.md) — Incrustez une légende modifiable pendant l'enregistrement, la date et l'heure, le numéro d'image et la durée d'enregistrement dans un MP4 de webcam
 * [**Aperçu webcam et capture d'image**](camera-video-preview.md) — Affichez l'aperçu en direct d'une webcam et enregistrez l'image courante dans un fichier JPEG
 

@@ -440,7 +440,7 @@ class VideoComparisonDemo
             int difference = VFPAnalyzer.Compare(
                 fp1, 
                 fp2, 
-                TimeSpan.FromMilliseconds(500)
+                TimeSpan.FromSeconds(1)
             );
             
             Console.WriteLine($"\nComparison Results:");
@@ -449,13 +449,6 @@ class VideoComparisonDemo
             // Interpret the results
             string interpretation = GetInterpretation(difference);
             Console.WriteLine($"  Interpretation: {interpretation}");
-            
-            // Provide detailed analysis
-            if (difference < 100)
-            {
-                double similarity = Math.Max(0, 100 - (difference / 3.0));
-                Console.WriteLine($"  Similarity: {similarity:F1}%");
-            }
         }
         else
         {
@@ -465,18 +458,8 @@ class VideoComparisonDemo
     
     static string GetInterpretation(int difference)
     {
-        if (difference < 5)
-            return "IDENTICAL - Same video, possibly different encoding";
-        else if (difference < 15)
-            return "NEARLY IDENTICAL - Same video with minor quality differences";
-        else if (difference < 30)
+        if (difference < 300) // Default of the DVS demo and vfp_compare
             return "VERY SIMILAR - Same content with slight modifications";
-        else if (difference < 50)
-            return "SIMILAR - Same content with noticeable changes (watermark, logo, etc.)";
-        else if (difference < 100)
-            return "RELATED - Significant similarities, likely same source material";
-        else if (difference < 300)
-            return "SOMEWHAT RELATED - Some common scenes or content";
         else
             return "DIFFERENT - Completely different videos";
     }
@@ -592,17 +575,8 @@ class FingerprintCache
 // Solution 1: Adjust comparison parameters
 static int CompareWithTolerance(VFPFingerPrint fp1, VFPFingerPrint fp2)
 {
-    // Try different time shifts
-    int[] shifts = { 100, 500, 1000, 2000 }; // milliseconds
-    int minDifference = int.MaxValue;
-    
-    foreach (int shift in shifts)
-    {
-        int diff = VFPAnalyzer.Compare(fp1, fp2, TimeSpan.FromMilliseconds(shift));
-        minDifference = Math.Min(minDifference, diff);
-    }
-    
-    return minDifference;
+    // Compare searches every alignment up to the maximum shift and returns the best one
+    return VFPAnalyzer.Compare(fp1, fp2, TimeSpan.FromSeconds(5));
 }
 
 // Solution 2: Handle videos with different aspect ratios.
@@ -827,18 +801,12 @@ namespace VideoFingerprintingDemo
             
             if (fp1 != null && fp2 != null)
             {
-                int difference = VFPAnalyzer.Compare(fp1, fp2, TimeSpan.FromMilliseconds(500));
+                int difference = VFPAnalyzer.Compare(fp1, fp2, TimeSpan.FromSeconds(1));
                 
                 Console.WriteLine($"\nDifference Score: {difference}");
                 
-                if (difference < 5)
-                    Console.WriteLine("✓ Videos are IDENTICAL");
-                else if (difference < 30)
+                if (difference < 300) // Default of the DVS demo and vfp_compare
                     Console.WriteLine("✓ Videos are VERY SIMILAR");
-                else if (difference < 100)
-                    Console.WriteLine("✓ Videos are SIMILAR");
-                else if (difference < 300)
-                    Console.WriteLine("⚠ Videos have SOME SIMILARITIES");
                 else
                     Console.WriteLine("✗ Videos are DIFFERENT");
             }
@@ -874,7 +842,7 @@ namespace VideoFingerprintingDemo
             {
                 Console.WriteLine("\n\nSearching...");
                 var positions = await VFPAnalyzer.SearchAsync(
-                    fragmentFp, fullFp, fragmentFp.Duration, 50, true
+                    fragmentFp, fullFp, fragmentFp.Duration, 500, true
                 );
                 
                 if (positions.Count > 0)
@@ -948,9 +916,9 @@ namespace VideoFingerprintingDemo
                 return;
             }
             
-            Console.Write("Enter similarity threshold (default 30): ");
+            Console.Write("Enter difference threshold (default 300): ");
             if (!int.TryParse(Console.ReadLine(), out int threshold))
-                threshold = 30;
+                threshold = 300;
             
             Console.WriteLine("Generating query fingerprint...");
             var queryFp = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(
@@ -965,7 +933,7 @@ namespace VideoFingerprintingDemo
             
             foreach (var entry in database)
             {
-                int score = VFPAnalyzer.Compare(queryFp, entry.Value, TimeSpan.FromMilliseconds(500));
+                int score = VFPAnalyzer.Compare(queryFp, entry.Value, TimeSpan.FromSeconds(1));
                 if (score < threshold)
                 {
                     matches.Add((entry.Key, score));

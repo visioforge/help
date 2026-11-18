@@ -55,7 +55,7 @@ Video Capture SDK .NET captures from webcams, IP cameras (RTSP/ONVIF), and scree
 
 - **Windows x64 / x86** — WinForms, WPF, MAUI, Avalonia, Console. Full DirectShow sources + NVENC / AMF / Intel Quick Sync hardware encoding.
 - **macOS / macCatalyst** — MAUI, Avalonia, Console. AVFoundation camera sources + VideoToolbox hardware encoding.
-- **Linux x64** — Avalonia, Console. V4L2 camera sources + NVENC / VA-API hardware encoding.
+- **Linux x64 / ARM64** — Avalonia, Console. V4L2 camera sources; NVENC / VA-API hardware encoding on x64.
 - **Android** — MAUI. Native camera sources + MediaCodec hardware encoding.
 - **iOS** — MAUI. AVFoundation camera sources + VideoToolbox hardware encoding.
 
@@ -90,6 +90,8 @@ Platform-specific native runtimes — add the ones you target:
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
 ```
+
+On Linux ARM64, `VisioForge.CrossPlatform.Core.Linux.arm64` replaces the `.Linux.x64` package; see [Ubuntu deployment](../deployment-x/Ubuntu.md) for a project fragment that picks one by runtime identifier.
 
 UI integration (pick the one that matches your UI stack):
 

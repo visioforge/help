@@ -224,26 +224,22 @@ var source = new VFPFingerprintSource(localCapturePath)
 **A:** Threshold recommendations based on use case:
 
 ```csharp
-public enum MatchingThreshold
-{
-    Identical = 5,        // Same file, different encoding
-    NearDuplicate = 15,   // Minor quality differences
-    Similar = 30,         // Same content, some modifications
-    Related = 50,         // Significant modifications (watermarks, etc.)
-    PossiblyRelated = 100 // Heavy transformations
-}
+// VFPAnalyzer.Compare: a match is a difference below the threshold
+const int CompareThreshold = 300; // DVS demo and vfp_compare default; CompareVideoFilesAsync uses 500
 
-public bool IsMatch(int difference, MatchingThreshold threshold)
+// VFPAnalyzer.Search / SearchAsync (maxDifference)
+const int SearchThreshold = 500;  // MMT demo default; MMT Live uses 1100
+
+public bool IsMatch(int difference, int threshold)
 {
-    return difference <= (int)threshold;
+    return difference < threshold;
 }
 ```
 
 Use cases:
-- **Copyright detection**: Use `Similar` (30) or stricter
-- **Duplicate finding**: Use `NearDuplicate` (15)
-- **Content monitoring**: Use `Related` (50) for flexibility
-- **Scene detection**: Use `PossiblyRelated` (100)
+- **Copyright detection and duplicate finding** (`Compare`): start at 300; raise it toward 500 if re-encoded copies are missed, lower it if unrelated videos match
+- **Finding clips or ads in a longer video** (`Search`): start at 500; the MMT demo slider covers 200-1000, and MMT Live uses 1100 for live streams
+- The score is not a percentage, so tune the threshold on your own content
 
 ### Q: Can the SDK detect partial matches?
 
@@ -262,10 +258,10 @@ var mainFp = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(
 // VFPAnalyzer.SearchAsync requires the full 5-arg form; the result is List<TimeSpan>,
 // each entry is the match start time within mainFp.
 var results = await VFPAnalyzer.SearchAsync(
-    mainFp,
     searchFp,
+    mainFp,
     searchFp.Duration,
-    maxDifference: 25,
+    maxDifference: 500,
     allowMultipleFragments: true);
 
 foreach (var matchStart in results)
@@ -298,9 +294,9 @@ var croppedSource = new VFPFingerprintSource(videoPath)
 ### Q: Can it detect mirrored or rotated videos?
 
 **A:** The SDK can detect:
-- ✅ Horizontal mirroring (with preprocessing)
+- ✅ Horizontal and vertical mirroring, and 180 degree rotation (`Compare` and `Search` check these orientations automatically)
 - ✅ Minor rotations (< 5 degrees)
-- ⚠️ 90/180/270 degree rotations (requires manual preprocessing)
+- ⚠️ 90 and 270 degree rotations (requires manual preprocessing)
 
 ```csharp
 // For mirrored video detection
@@ -309,14 +305,8 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
     var fp1 = await GenerateFingerprint(video1);
     var fp2 = await GenerateFingerprint(video2);
     
-    // Check normal orientation
-    int normalDiff = VFPAnalyzer.Compare(fp1, fp2);
-    if (normalDiff < 30) return true;
-    
-    // VFPSearch.SearchMirror compares fp1 against the horizontally-mirrored
-    // version of fp2 in a single call (no need to regenerate the fingerprint).
-    var mirrorResult = VFPSearch.SearchMirror(fp1, fp2);
-    return mirrorResult != null && mirrorResult.Difference < 30;
+    // VFPAnalyzer.Compare also checks the mirrored orientations of fp2
+    return VFPAnalyzer.Compare(fp1, fp2, TimeSpan.FromSeconds(5)) < 300;
 }
 ```
 

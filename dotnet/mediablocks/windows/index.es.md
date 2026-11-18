@@ -109,7 +109,7 @@ Consulte la [documentación de bloques especiales](../Special/index.md)
 
 ## Requisitos de plataforma
 
-- **Windows**: Windows 7 SP1 o superior
+- **Windows**: Windows 10 o superior
 - **Direct3D 11**: GPU compatible con D3D11
 - **Decodificación por hardware**: GPU con soporte de decodificación de video por hardware
 
@@ -314,7 +314,7 @@ else
 
 ## Plataformas
 
-Windows 7 SP1 o superior (Windows 10/11 recomendado para mejor soporte de hardware).
+Windows 10 o superior (Windows 11 recomendado para mejor soporte de hardware).
 
 ## Documentación relacionada
 

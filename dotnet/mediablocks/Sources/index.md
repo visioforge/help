@@ -482,6 +482,71 @@ await pipeline.StartAsync();
 
 Windows (x64). Windows on Arm and 32-bit (x86) apps are not supported: on Windows, Allied Vision Vimba X SDK supports x64 only. On Linux and macOS the SDK can load an installed Vimba X, but this is not tested and no `vmbsrc` plugin ships there; use the [GenICam Source Block](#genicam-source-block).
 
+### Intel RealSense Source Block
+
+The Intel RealSense Source Block captures the colour, depth and infrared streams of an Intel RealSense depth camera (D400 series, such as the D435) through librealsense. Each enabled stream gets its own output pad. Depth is delivered as a colourized RGB image, ready to display or encode, or as raw 16-bit values (`GRAY16_LE`); `AlignDepthToColor` maps depth onto the colour image so that the same pixel shows the same point in both. `GetDistance(x, y)` returns the distance in metres at a pixel of the latest depth frame.
+
+#### Block info
+
+Name: RealSenseSourceBlock.
+
+| Pin direction | Media type | Pins count |
+|---------------|:----------:|:----------:|
+| Output video (colour) | Uncompressed video, RGB | 0 or 1 |
+| Output video (depth) | Uncompressed video, RGB or GRAY16_LE | 0 or 1 |
+| Output video (infrared) | Uncompressed video, GRAY8 | 0 or 1 |
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    RealSenseSourceBlock-- colour -->VideoRendererBlock1;
+    RealSenseSourceBlock-- depth -->VideoRendererBlock2;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Find the connected cameras and the modes they report.
+var cameras = await RealSenseSourceBlock.EnumerateDevicesAsync();
+var camera = cameras[0];
+
+// Open colour, depth and the left infrared imager at 640x480, 30 fps.
+var settings = new RealSenseSourceSettings(camera.SerialNumber)
+{
+    Color = camera.FindProfile(RealSenseStreamType.Color, 640, 480, 30),
+    Depth = camera.FindProfile(RealSenseStreamType.Depth, 640, 480, 30),
+    Infrared = camera.FindProfile(RealSenseStreamType.Infrared, 640, 480, 30, 1),
+    AlignDepthToColor = true,
+    DepthMode = RealSenseDepthMode.Colorized,
+};
+
+var realSense = new RealSenseSourceBlock(settings);
+
+// Show colour and the colourized depth.
+pipeline.Connect(realSense.ColorOutput, new VideoRendererBlock(pipeline, VideoView1).Input);
+pipeline.Connect(realSense.DepthOutput, new VideoRendererBlock(pipeline, VideoView2).Input);
+
+await pipeline.StartAsync();
+
+// Later, while frames flow (a timer, an event): the distance in metres at the centre of the aligned depth frame.
+// It reads 0 until the first depth frame has arrived.
+float metres = realSense.GetDistance(320, 240);
+```
+
+The stream modes come from the camera: `RealSenseDeviceInfo.Profiles` lists every colour, depth and infrared mode it reports, and `FindProfile` returns null for a mode it does not support. With `DepthMode = RealSenseDepthMode.Raw`, multiply a depth value by `DepthScale` to get metres. An output that is not connected is discarded.
+
+#### Requirements
+
+- The `VisioForge.CrossPlatform.RealSense.Windows.x64` NuGet package (librealsense 2.58.1).
+- No RealSense driver: Windows 10 and 11 open the camera with the built-in USB video driver.
+
+#### Platforms
+
+Windows (x64).
+
 ### Blackmagic Decklink Source Block
 
 For information about Decklink sources, see [Decklink](../Decklink/index.md).
@@ -1822,7 +1887,7 @@ The `ScreenSourceBlock` uses platform-specific settings classes. The choice of s
 - `ScreenCaptureD3D11SourceSettings` - Use `Direct3D 11` Desktop Duplication for screen recording. Allows specific window capture. (`ScreenCaptureSourceType.D3D11DesktopDuplication`)
 - `ScreenCaptureGDISourceSettings` - Use `GDI` for screen recording. (`ScreenCaptureSourceType.GDI`)
 
-`ScreenCaptureGDISourceSettings` and `ScreenCaptureDX9SourceSettings` are obsolete. Use `ScreenCaptureD3D11SourceSettings`. `UpdateLiveSettings` on a running GDI or DX9 capture only stores the new position and cursor; they apply the next time capture starts.
+`ScreenCaptureGDISourceSettings` and `ScreenCaptureDX9SourceSettings` are obsolete. Use `ScreenCaptureD3D11SourceSettings`. `UpdateLiveSettings` on a running GDI or DX9 capture only stores the new position and cursor; they apply the next time capture starts. The default, empty `Rectangle` captures the whole monitor that `Monitor` selects, and `UpdateLiveSettings` does not move it: set `Rectangle` to the area to move.
 
 ##### macOS
 

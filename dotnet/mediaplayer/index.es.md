@@ -53,6 +53,8 @@ Agrega dependencias nativas específicas de plataforma:
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
 
+En Linux ARM64, `VisioForge.CrossPlatform.Core.Linux.arm64` sustituye al paquete `.Linux.x64`; consulte la [implementación en Ubuntu](../deployment-x/Ubuntu.md) para un fragmento de proyecto que elige uno según el identificador de runtime.
+
 Para la lista completa de paquetes y soporte de frameworks de UI (WinForms, WPF, MAUI, Avalonia), consulte la [Guía de Instalación](../install/index.md).
 
 ### 2. Inicializar el SDK
@@ -212,7 +214,7 @@ Ver: [Modo Bucle y Reproducción por Rango de Posición](guides/loop-and-positio
 | ---------- | ---------------- | ----- |
 | Windows x64 | WinForms, WPF, WinUI, MAUI, Avalonia, Consola | Conjunto completo de características incluyendo motor DirectShow |
 | macOS | MAUI, Avalonia, Consola | Renderizado basado en AVFoundation |
-| Linux x64 | Avalonia, Consola | Decodificación basada en GStreamer |
+| Linux x64, ARM64 | Avalonia, Consola | Decodificación basada en GStreamer |
 | Android | MAUI | Via integración MAUI |
 | iOS | MAUI | Via integración MAUI |
 

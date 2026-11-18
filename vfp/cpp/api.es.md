@@ -279,6 +279,19 @@ extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search(
 
 Búsqueda de bajo nivel usando datos de huella sin procesar. Retorna la posición en segundos.
 
+#### VFPSearch_SearchRange
+
+```cpp
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_SearchRange(
+    const char* pData1, int iLen1,
+    const char* pData2, int iLen2,
+    int iStart, int iEnd,
+    double* pDiff, int maxDiff,
+    bool checkMirror, int* pMirrorMode);
+```
+
+Busca en datos de huella sin procesar la mejor posición del fragmento completo `pData1` dentro de `pData2` cuya muestra inicial esté entre `iStart` e `iEnd` (10 muestras por segundo). Nada puede sobrepasar el inicio de `pData2`; hasta 9 muestras (0,9 s, nunca más de una décima parte del fragmento) pueden sobrepasar su final, porque una huella de búsqueda descarta el último segundo incompleto de su vídeo, y `iEnd` se limita en consecuencia. Entre posiciones igual de buenas gana la más temprana. Retorna la muestra inicial de la coincidencia, o -1 si ninguna posición queda por debajo de `maxDiff`. `checkMirror` también prueba las orientaciones reflejadas; `*pMirrorMode` recibe la que coincidió (0 si ninguna). Para encontrar todas las ocurrencias, busque en todo el rango y después en los rangos anteriores y posteriores a cada coincidencia.
+
 #### VFPSearch_Clear
 
 ```cpp

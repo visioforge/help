@@ -536,7 +536,7 @@ La clase `VideoFingerprintDB` usa MongoDB GridFS para almacenamiento eficiente d
   "difference_score": 12,
   "similarity_percentage": 98.5,
   "is_match": true,
-  "threshold_used": 20,
+  "threshold_used": 300,
   "compared_at": ISODate("2024-01-15T11:00:00Z"),
   "comparison_time": 0.045 // segundos
 }
@@ -743,8 +743,8 @@ public class MongoDBFingerprintRepository
             Fingerprint2Id = fp2Id,
             DifferenceScore = difference,
             SimilarityPercentage = similarity,
-            IsMatch = difference < 20,
-            ThresholdUsed = 20,
+            IsMatch = difference < 300,
+            ThresholdUsed = 300,
             ComparedAt = DateTime.UtcNow
         };
         
@@ -767,7 +767,7 @@ public class MongoDBFingerprintRepository
     }
 
     public async Task<List<FingerprintDocument>> FindDuplicatesAsync(
-        Guid fingerprintId, int threshold = 20)
+        Guid fingerprintId, int threshold = 300)
     {
         // Obtener historial de comparación
         var comparisons = await GetComparisonHistoryAsync(fingerprintId, 1000);
@@ -1261,14 +1261,14 @@ public class SqlServerFingerprintRepository
             Fp2Id = fp2Id,
             Difference = difference,
             Similarity = similarity,
-            IsMatch = difference < 20,
-            Threshold = 20,
+            IsMatch = difference < 300,
+            Threshold = 300,
             Time = 0.045
         });
     }
 
     public async Task<IEnumerable<dynamic>> FindDuplicatesAsync(
-        Guid fingerprintId, int threshold = 20)
+        Guid fingerprintId, int threshold = 300)
     {
         using var connection = new SqlConnection(_connectionString);
         

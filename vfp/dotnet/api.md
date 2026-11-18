@@ -218,21 +218,9 @@ var fp2 = VFPFingerPrint.Load(@"C:\Fingerprints\video2.vsigx");
 int difference = VFPAnalyzer.Compare(fp1, fp2, TimeSpan.FromSeconds(5));
 
 // Interpret results
-if (difference < 5)
-{
-    Console.WriteLine("Videos are nearly identical");
-}
-else if (difference < 15)
+if (difference < 300) // Default of the DVS demo and vfp_compare
 {
     Console.WriteLine("Videos are very similar");
-}
-else if (difference < 30)
-{
-    Console.WriteLine("Videos have similar content with differences");
-}
-else if (difference < 100)
-{
-    Console.WriteLine("Videos are related but significantly different");
 }
 else
 {
@@ -279,10 +267,10 @@ public static Task<List<TimeSpan>> SearchAsync(
 - `fp1` (VFPFingerPrint): Fragment fingerprint (needle)
 - `fp2` (VFPFingerPrint): Video to search within (haystack)
 - `duration` (TimeSpan): Fragment duration (prevents overlapping matches)
-- `maxDifference` (int): Maximum allowed difference (typical: 5-20)
-- `allowMultipleFragments` (bool): Find all occurrences vs. first match only
+- `maxDifference` (int): Maximum allowed difference score; a match is reported only below it. Not a percentage: the SDK demos use 200-2000 (MMT: 200-1000, default 500; MMT Live: 200-2000, default 1100)
+- `allowMultipleFragments` (bool): Find all occurrences, in time order and without overlaps, vs. the best match only
 
-**Returns:** `List<TimeSpan>` - Timestamps where matches were found
+**Returns:** `List<TimeSpan>` - Start positions of the matches, to 100 ms. Only positions where the whole fragment lies inside the video are considered, except that up to 0.9 s of it, never more than a tenth, may run past the end (a search fingerprint drops the last partial second of the video).
 
 **Example:**
 
@@ -296,7 +284,7 @@ var matches = await VFPAnalyzer.SearchAsync(
     commercialFp,
     recordingFp,
     TimeSpan.FromSeconds(30), // Commercial duration
-    maxDifference: 10,
+    maxDifference: 500,
     allowMultipleFragments: true);
 
 foreach (var timestamp in matches)
@@ -304,17 +292,17 @@ foreach (var timestamp in matches)
     Console.WriteLine($"Commercial found at: {timestamp:hh\\:mm\\:ss}");
 }
 
-// Find first occurrence only
+// Find the best match only
 var firstMatch = VFPAnalyzer.Search(
     commercialFp,
     recordingFp,
     TimeSpan.FromSeconds(30),
-    maxDifference: 15,
+    maxDifference: 500,
     allowMultipleFragments: false);
 
 if (firstMatch.Any())
 {
-    Console.WriteLine($"First occurrence at: {firstMatch[0]}");
+    Console.WriteLine($"Best match at: {firstMatch[0]}");
 }
 
 // Search with stricter matching
@@ -322,7 +310,7 @@ var exactMatches = VFPAnalyzer.Search(
     commercialFp,
     recordingFp,
     TimeSpan.FromSeconds(30),
-    maxDifference: 5, // Very strict
+    maxDifference: 300, // Stricter than the MMT demo default of 500
     allowMultipleFragments: true);
 ```
 
@@ -361,7 +349,7 @@ bool areIdentical = await VFPAnalyzer.CompareVideoFilesAsync(
     file2,
     TimeSpan.FromSeconds(5),
     error => Console.WriteLine($"Error: {error}"),
-    threshold: 20);
+    threshold: 300);
 
 if (areIdentical)
 {
@@ -388,7 +376,7 @@ bool match = await VFPAnalyzer.CompareVideoFilesAsync(
     source2,
     TimeSpan.FromSeconds(3),
     null,
-    threshold: 50);
+    threshold: 500);
 ```
 
 ## VFPFingerPrint Class
@@ -685,9 +673,9 @@ public static double Compare(
 
 - `fp1` (VFPFingerPrint): First fingerprint
 - `fp2` (VFPFingerPrint): Second fingerprint
-- `maxDifference` (int): Maximum allowed difference
+- `maxDifference` (int): Maximum time shift, in seconds, searched for the best alignment. Despite its name, it is not a difference limit
 
-**Returns:** `double` - Similarity score (0-100, higher = more similar)
+**Returns:** `double` - Difference score: 0 for identical content, higher for greater differences (lower = more similar)
 
 **Example:**
 
@@ -695,16 +683,14 @@ public static double Compare(
 var fp1 = VFPFingerPrint.Load(@"C:\Fingerprints\video1.vsigx");
 var fp2 = VFPFingerPrint.Load(@"C:\Fingerprints\video2.vsigx");
 
-double similarity = VFPCompare.Compare(fp1, fp2, maxDifference: 50);
-Console.WriteLine($"Similarity: {similarity:F2}%");
+// Search up to 3 seconds of time shift for the best alignment
+double difference = VFPCompare.Compare(fp1, fp2, maxDifference: 3);
+Console.WriteLine($"Difference: {difference:F0}");
 
-if (similarity > 90)
+// Lower is more similar; CompareVideoFilesAsync reports a match below 500 by default
+if (difference < 500)
 {
-    Console.WriteLine("Videos are very similar");
-}
-else if (similarity > 70)
-{
-    Console.WriteLine("Videos have significant similarities");
+    Console.WriteLine("Videos match");
 }
 else
 {
@@ -785,11 +771,11 @@ public static int Search(
 **Parameters:**
 
 - `fp1` (VFPFingerPrint): Fragment fingerprint
-- `skip1` (int): Frames to skip at the start of `fp1`
+- `skip1` (int): Samples to skip at the start of `fp1`, 10 per second (usually 0)
 - `fp2` (VFPFingerPrint): Main video fingerprint
-- `skip2` (int): Frames to skip at the start of `fp2`
+- `skip2` (int): Second of `fp2` to search from; the search window opens half a fragment earlier, so to continue after a match pass its position plus the fragment duration rounded up plus one second
 - `difference` (out double): Match difference score
-- `maxDiff` (int): Maximum allowed difference
+- `maxDiff` (int): Maximum allowed difference score, on the same scale as `VFPAnalyzer.Search` (`maxDifference`); the SDK demos use 200-2000
 
 **Returns:** `int` - Position where found (seconds) or Int32.MaxValue if not found
 
@@ -806,26 +792,26 @@ int position = VFPSearch.Search(
     videoFp,
     skip2: 0,
     out double matchDifference,
-    maxDiff: 20);
+    maxDiff: 500);
 
 if (position != Int32.MaxValue)
 {
     Console.WriteLine($"Fragment found at {position} seconds");
     Console.WriteLine($"Match quality: {matchDifference}");
+
+    // Search from specific position
+    int nextPosition = VFPSearch.Search(
+        fragmentFp,
+        0,
+        videoFp,
+        position + (int)Math.Ceiling(fragmentFp.Duration.TotalSeconds) + 1, // Skip past first match
+        out matchDifference,
+        maxDiff: 500);
 }
 else
 {
     Console.WriteLine("Fragment not found");
 }
-
-// Search from specific position
-int nextPosition = VFPSearch.Search(
-    fragmentFp,
-    0,
-    videoFp,
-    position + 30, // Skip past first match
-    out matchDifference,
-    maxDifference: 20);
 ```
 
 ## VFPFingerPrintDB Class

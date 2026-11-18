@@ -1153,7 +1153,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Scale/Tempo
 
-El bloque Scale/Tempo le permite cambiar el tempo y el tono del flujo de audio.
+El bloque Scale/Tempo conserva el tono del flujo de audio cuando la canalización reproduce a otra velocidad. La velocidad la marca `MediaBlocksPipeline.Rate_SetAsync`; a 1.0 el audio pasa sin cambios.
 
 #### Información del bloque
 
@@ -1168,12 +1168,11 @@ Salida | Audio sin comprimir | 1
 
 | Propiedad | Tipo | Predeterminado | Descripción |
 |----------|------|---------|-------------|
-| `Rate` | `double` | `1.0` | Multiplicador de velocidad de reproducción (0.5 = mitad de velocidad, 1.0 = normal, 2.0 = doble velocidad). Se preserva el tono |
 | `Overlap` | `double` | `0.2` | Porcentaje de stride a superponer (0.0–1.0). Valores más altos mejoran la calidad a costa de CPU |
-| `Search` | `TimeSpan` | `14 ms` | Longitud de la ventana de búsqueda para la mejor posición de superposición |
-| `Stride` | `TimeSpan` | `30 ms` | Longitud del stride de audio de salida |
+| `Search` | `TimeSpan` | `14 ms` | Longitud de la ventana de búsqueda para la mejor posición de superposición, de 0 a 500 ms |
+| `Stride` | `TimeSpan` | `30 ms` | Longitud del stride de audio de salida, de 1 a 5000 ms |
 
-El constructor no tiene parámetros; establece `Rate` vía propiedad (el `SetRate` subyacente se invoca internamente al asignar `Rate`).
+El constructor no tiene parámetros; la velocidad de reproducción se establece en la canalización con `Rate_SetAsync`, no en el bloque.
 
 **Elemento GStreamer**: `scaletempo`
 
@@ -1193,16 +1192,17 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
-// Scale tempo by factor (1.0 is normal, 0.5 is half-speed, 2.0 is double-speed)
-// ScaleTempoBlock tiene constructor sin parámetros; establece Rate vía propiedad.
-// 1.0 = normal, 0.5 = mitad de velocidad, 2.0 = doble velocidad; el pitch se preserva.
-var scaleTempo = new ScaleTempoBlock { Rate = 1.5 };
+// ScaleTempoBlock conserva el tono mientras la canalización reproduce más rápido o más lento.
+var scaleTempo = new ScaleTempoBlock();
 pipeline.Connect(fileSource.AudioOutput, scaleTempo.Input);
 
 var audioRenderer = new AudioRendererBlock();
 pipeline.Connect(scaleTempo.Output, audioRenderer.Input);
 
 await pipeline.StartAsync();
+
+// 1.0 = normal, 0.5 = mitad de velocidad, 2.0 = doble velocidad.
+await pipeline.Rate_SetAsync(1.5);
 ```
 
 #### Plataformas

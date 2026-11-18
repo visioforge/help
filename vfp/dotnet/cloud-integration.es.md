@@ -93,7 +93,7 @@ foreach (var candidate in db.Items)
         fingerprint,
         candidate,
         candidate.Duration,
-        maxDifference: 20,
+        maxDifference: 500,
         allowMultipleFragments: true);
     // ... inspeccionar matches (List<TimeSpan>) ...
 }
@@ -153,7 +153,7 @@ public class CloudFingerprintService
     /// Buscar la colección en memoria (db.Items) por huellas similares.
     /// </summary>
     public async Task<List<(string Id, double Difference)>> FindSimilarVideosAsync(
-        string videoPath, int maxDiff = 20)
+        string videoPath, int maxDiff = 500)
     {
         var src = new VFPFingerprintSource(videoPath);
         var searchFp = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(src);

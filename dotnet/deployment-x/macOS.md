@@ -43,7 +43,7 @@ Before starting the installation and deployment process, ensure your development
 
 ### Software Requirements
 
-- macOS 10.15 (Catalina) or later (latest version recommended)
+- macOS 12 (Monterey) or later (latest version recommended)
   - macOS Monterey (12.x)
   - macOS Ventura (13.x)
   - macOS Sonoma (14.x)
@@ -133,6 +133,7 @@ For native macOS applications, add these core packages:
 
 3. **Platform Redistributable**:
    - `VisioForge.CrossPlatform.Core.macOS` for native libraries and dependencies
+   - `VisioForge.CrossPlatform.Core.macOS.Adds` for additional GStreamer plugins such as SRT and WebRTC, when your application uses them
 
 ### macOS Applications
 

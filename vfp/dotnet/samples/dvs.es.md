@@ -48,24 +48,24 @@ DVS (Duplicate Video Scanner / Escáner de Videos Duplicados) es una aplicación
 ### Flujo de Trabajo Básico
 
 1. **Agregar Carpetas**:
-   - Haz clic en el botón "Add" para seleccionar carpetas que contienen videos
-   - Agrega múltiples carpetas para un escaneo completo
-   - Usa "Remove" para eliminar carpetas de la lista
+   - Haga clic en el botón "Add" para seleccionar carpetas que contienen videos
+   - Agregue múltiples carpetas para un escaneo completo
+   - Use "Remove" para eliminar carpetas de la lista
 
 2. **Configurar Ajustes**:
-   - Selecciona formatos de video a incluir en el escaneo
-   - Establece la sensibilidad de comparación (1-100%)
-   - Elige opciones de procesamiento
+   - Seleccione formatos de video a incluir en el escaneo
+   - Establezca la sensibilidad (0-100, por defecto 30); se multiplica por 10 para obtener el umbral de diferencia, así que un valor menor es más estricto
+   - Elija opciones de procesamiento
 
 3. **Iniciar Escaneo**:
-   - Haz clic en "Process" para comenzar el escaneo
+   - Haga clic en "Process" para comenzar el escaneo
    - DVS genera huellas para todos los videos
    - Los videos se comparan por pares para encontrar duplicados
 
 4. **Revisar Resultados**:
    - Los grupos de duplicados aparecen en el panel de resultados
-   - Haz clic en videos para previsualizarlos
-   - Usa el menú contextual para operaciones de archivos
+   - Haga clic en videos para previsualizarlos
+   - Use el menú contextual para operaciones de archivos
 
 ### Opciones de Configuración
 
@@ -95,7 +95,7 @@ DVS agrupa duplicados por similitud:
 
 1. **Limpieza de Almacenamiento**: Encuentra y elimina videos duplicados para liberar espacio
 2. **Organización de Medios**: Identifica múltiples copias en diferentes carpetas
-3. **Gestión de Calidad**: Mantén la versión de mayor calidad de los duplicados
+3. **Gestión de Calidad**: Mantenga la versión de mayor calidad de los duplicados
 4. **Mantenimiento de Archivo**: Asegura que no haya copias duplicadas en respaldos
 5. **Verificación de Contenido**: Comprueba si los videos son realmente diferentes
 
@@ -104,19 +104,19 @@ DVS agrupa duplicados por similitud:
 ### Caché de Huellas
 
 - DVS puede guardar huellas para escaneos posteriores más rápidos
-- Habilita la opción "Save signatures"
+- Habilite la opción "Save signatures"
 - Las huellas en caché se almacenan con los videos
 
 ### Operaciones por Lotes
 
-- Selecciona múltiples videos para acciones masivas
-- Elimina duplicados manteniendo una copia
-- Mueve duplicados a una carpeta separada
-- Exporta listas de archivos para procesamiento externo
+- Seleccione múltiples videos para acciones masivas
+- Elimine duplicados manteniendo una copia
+- Mueva duplicados a una carpeta separada
+- Exporte listas de archivos para procesamiento externo
 
 ### Áreas de Ignorar Personalizadas
 
-- Define regiones a ignorar (logos, marcas de tiempo)
+- Defina regiones a ignorar (logos, marcas de tiempo)
 - Útil para grabaciones de transmisiones
 - Mejora la precisión para contenido con marcas de agua
 
@@ -124,27 +124,27 @@ DVS agrupa duplicados por similitud:
 
 1. **Escaneo Inicial**: El primer escaneo es el más lento (genera todas las huellas)
 2. **Escaneos Posteriores**: Mucho más rápidos con huellas en caché
-3. **Bibliotecas Grandes**: Procesa en lotes para mejor uso de memoria
-4. **Unidades de Red**: Copia a unidad local para procesamiento más rápido
+3. **Bibliotecas Grandes**: Procese en lotes para mejor uso de memoria
+4. **Unidades de Red**: Copie a unidad local para procesamiento más rápido
 
 ## Solución de Problemas
 
 ### Problemas Comunes
 
 1. **No Se Encuentran Duplicados**:
-   - Verifica la configuración del umbral (intenta aumentarlo)
-   - Verifica que los formatos de video estén seleccionados
-   - Asegúrate de que las carpetas contengan archivos de video
+   - Verifique la configuración del umbral (intente aumentarlo)
+   - Verifique que los formatos de video estén seleccionados
+   - Asegúrese de que las carpetas contengan archivos de video
 
 2. **Demasiados Falsos Positivos**:
-   - Disminuye el umbral de comparación
-   - Verifica si los videos tienen intros/outros comunes
-   - Usa áreas de ignorar para logos
+   - Disminuya el umbral de comparación
+   - Verifique si los videos tienen intros/outros comunes
+   - Use áreas de ignorar para logos
 
 3. **Rendimiento Lento**:
-   - Procesa menos archivos a la vez
-   - Verifica el espacio disponible en disco
-   - Cierra otras aplicaciones
+   - Procese menos archivos a la vez
+   - Verifique el espacio disponible en disco
+   - Cierre otras aplicaciones
 
 ## Requisitos del Sistema
 
@@ -157,23 +157,23 @@ DVS agrupa duplicados por similitud:
 
 ### Eliminación Segura de Duplicados
 
-1. Siempre previsualiza antes de eliminar
-2. Mantén la versión de mayor calidad
-3. Considera mantener diferentes formatos
-4. Usa "Move to folder" en lugar de eliminar
+1. Siempre previsualice antes de eliminar
+2. Mantenga la versión de mayor calidad
+3. Considere mantener diferentes formatos
+4. Use "Move to folder" en lugar de eliminar
 
 ### Organizando Resultados
 
-- Ordena por tamaño de archivo para encontrar ahorros de espacio
-- Ordena por similitud para revisar las coincidencias más cercanas
-- Agrupa por carpeta para ver la distribución
+- Ordene por tamaño de archivo para encontrar ahorros de espacio
+- Ordene por similitud para revisar las coincidencias más cercanas
+- Agrupe por carpeta para ver la distribución
 
 ## Mejores Prácticas
 
-1. **Prueba Primero**: Ejecuta en una carpeta pequeña para verificar configuraciones
-2. **Respalda Archivos Importantes**: Antes de eliminaciones masivas
-3. **Revisa Cuidadosamente**: Algunos "duplicados" pueden ser intencionales
-4. **Usa Umbrales Apropiados**: Ajusta según el tipo de contenido
+1. **Pruebe Primero**: Ejecute en una carpeta pequeña para verificar configuraciones
+2. **Respalde Archivos Importantes**: Antes de eliminaciones masivas
+3. **Revise Cuidadosamente**: Algunos "duplicados" pueden ser intencionales
+4. **Use Umbrales Apropiados**: Ajuste según el tipo de contenido
 5. **Escaneos Regulares**: Escaneos periódicos previenen acumulación de duplicados
 
 ## Herramientas Relacionadas

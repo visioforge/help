@@ -915,7 +915,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ## Barcode Detector
 
-El bloque BarcodeDetector detecta y decodifica diversos formatos de códigos de barras (códigos QR, DataMatrix, Code128, EAN-13, y más) en streams de video en tiempo real.
+El bloque BarcodeDetector detecta y decodifica diversos formatos de códigos de barras (códigos QR, Code128, EAN-13, y más) en streams de video en tiempo real. Data Matrix lo lee el bloque [DataMatrix Decoder](#datamatrix-decoder) más abajo.
 
 Para una guía completa con ejemplos multiplataforma, consulte la [Guía de Escáner de Códigos de Barras y QR](../Guides/barcode-qr-reader-guide.md).
 

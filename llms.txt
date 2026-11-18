@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-11-15 22:28:14 UTC (8691c17b443)
+**Generated:** 2026-11-18 11:02:25 UTC (97a421a1480)
 
 ## MCP Server (for AI coding agents)
 
@@ -270,7 +270,7 @@ The following products from the old price list are no longer sold:
 - [Dahua IP Camera RTSP URL Patterns and C# .NET Guide](https://www.visioforge.com/help/docs/dotnet/camera-brands/dahua/): Integrate Dahua IPC-HDW, IPC-HFW, NVR, and DVR cameras into C# .NET apps. RTSP URL format, ONVIF auto-discovery, and VisioForge SDK code included.
 - [D-Link DCS IP Camera RTSP URLs and C# .NET Code Samples](https://www.visioforge.com/help/docs/dotnet/camera-brands/dlink/): D-Link DCS camera RTSP URL patterns for C# .NET integration. Covers DCS-930, DCS-2130, DCS-5222 with VisioForge SDK code and authentication setup.
 - [Edimax IP Camera RTSP URL and C# .NET Connection Guide](https://www.visioforge.com/help/docs/dotnet/camera-brands/edimax/): Learn how to connect to Edimax IP cameras using C# .NET with RTSP URL patterns, authentication tips, and code samples for IC, IR, PT, and VS series models.
-- [Eufy RTSP Stream URL, Model Support and Setup in C# .NET](https://www.visioforge.com/help/docs/dotnet/camera-brands/eufy/): Which eufyCam, SoloCam and Indoor Cam models support RTSP, how to enable it in the app, live0/live1 stream URLs and port 554, with C# .NET samples.
+- [Eufy RTSP and ONVIF Support by Model, Stream URL and Setup](https://www.visioforge.com/help/docs/dotnet/camera-brands/eufy/): Do Eufy cameras support RTSP or ONVIF? Model table for eufyCam, SoloCam and Indoor Cam, enabling RTSP in the app, live0/live1 URLs on port 554, C# samples.
 - [EverFocus IP Camera RTSP URL Connection Guide for C# .NET](https://www.visioforge.com/help/docs/dotnet/camera-brands/everfocus/): EverFocus EAN, EHN, EMN, EPN, and EQN series RTSP URL patterns for C# .NET. Stream and record using VisioForge Video Capture SDK integration.
 - [EZVIZ IP Camera RTSP URL and Connection Guide for C# .NET](https://www.visioforge.com/help/docs/dotnet/camera-brands/ezviz/): Connect to EZVIZ cameras in C# .NET with RTSP URL patterns for C1C, C3W, C6N, BC1C and other models. Enable RTSP on cloud-first cameras.
 - [FLIR IP Camera RTSP Connection Guide in C# .NET SDK](https://www.visioforge.com/help/docs/dotnet/camera-brands/flir/): FLIR Quasar, Saros, and Elara thermal camera RTSP URL patterns for C# .NET. Teledyne FLIR integration with VisioForge Video Capture SDK code.
@@ -305,7 +305,7 @@ The following products from the old price list are no longer sold:
 - [Tenda IP Camera RTSP URL and C# .NET Connection Guide](https://www.visioforge.com/help/docs/dotnet/camera-brands/tenda/): Tenda CP, CT, IT series and pan/tilt camera RTSP URL patterns for C# .NET. Stream and record using VisioForge Video Capture SDK integration code.
 - [Tiandy IP Camera in C# .NET — RTSP, ONVIF Setup Guide](https://www.visioforge.com/help/docs/dotnet/camera-brands/tiandy/): Connect Tiandy IP cameras (TC-C, TC-NC, TC-A, TC-R NVR) to C# / .NET apps via RTSP and ONVIF. Default stream URLs, credentials, H.265 configs. Code sample.
 - [Toshiba IP Camera RTSP URL and Streaming in C# .NET](https://www.visioforge.com/help/docs/dotnet/camera-brands/toshiba/): Toshiba IK-WB, IK-WD, IK-WR, and IK-WP camera RTSP URL patterns for C# .NET. Stream and record with VisioForge Video Capture SDK integration.
-- [Tapo and TP-Link RTSP URL, Port 554 and Login in C# .NET](https://www.visioforge.com/help/docs/dotnet/camera-brands/tp-link/): Tapo C and TL-SC RTSP stream URLs (stream1/stream2), port 554, credentials by product line, plus snapshot and MJPEG paths with C# .NET samples.
+- [TP-Link Tapo RTSP URL: rtsp://IP:554/stream1 and stream2](https://www.visioforge.com/help/docs/dotnet/camera-brands/tp-link/): Tapo RTSP URL: rtsp://username:password@IP:554/stream1 for the main stream, stream2 for the sub stream. Create a Camera Account in the Tapo app first. C# code.
 - [How to Connect to Ubiquiti (UniFi) IP Camera in C# .NET](https://www.visioforge.com/help/docs/dotnet/camera-brands/ubiquiti/): Ubiquiti UniFi Protect G3, G4, G5, and AI series RTSP URL patterns for C# .NET. Enable RTSP in UniFi and integrate with VisioForge SDK code.
 - [How to Connect to Uniview (UNV) IP Camera in C# .NET](https://www.visioforge.com/help/docs/dotnet/camera-brands/uniview/): Uniview IPC-B, IPC-T, IPC-D, IPC-E, and NVR RTSP URL patterns for C# .NET. ONVIF-compatible integration with VisioForge SDK code samples.
 - [Verkada camera RTSP URL and live streaming in C# .NET](https://www.visioforge.com/help/docs/dotnet/camera-brands/verkada/): Verkada RTSP URL format rtsp://IP:8554/standard for C# .NET. Enable RTSP in Verkada Command, connect from Media Blocks SDK, and the model limits that apply.
@@ -338,6 +338,7 @@ The following products from the old price list are no longer sold:
 - [Install VisioForge .NET SDKs in an Avalonia 12.1 App](https://www.visioforge.com/help/docs/dotnet/install/avalonia/): Install the VisioForge .NET SDKs in an Avalonia 12.1 app for Desktop, Android and iOS: NuGet, redists, AndroidDependency, VideoView and a video.
 - [Install VisioForge .NET SDKs — NuGet, Visual Studio, Rider](https://www.visioforge.com/help/docs/dotnet/install/): Setup files or NuGet packages. Target frameworks for Windows, macOS, iOS, Android, and Linux. SDK initialization, VideoView controls, and native dependencies.
 - [Install VisioForge .NET SDKs in MAUI Apps via NuGet](https://www.visioforge.com/help/docs/dotnet/install/maui/): Add video capture, playback, and editing to .NET MAUI apps. NuGet setup for Windows, Android, iOS, and macOS with VisioForge VideoView controls.
+- [VisioForge Project Templates for Visual Studio 2026](https://www.visioforge.com/help/docs/dotnet/install/project-templates/): Start a VisioForge .NET app from a template: camera preview, media player or Media Blocks player for WPF, WinForms, Avalonia and .NET MAUI.
 - [Install VisioForge SDK in JetBrains Rider — NuGet Setup](https://www.visioforge.com/help/docs/dotnet/install/rider/): Add VisioForge .NET SDKs to Rider projects via NuGet. .NET 6/7/8/9, macOS/Windows/Linux. Package references, native dependencies, troubleshooting.
 - [Install VisioForge media SDKs in Unity 6 — Setup Guide](https://www.visioforge.com/help/docs/dotnet/install/unity/): Set up VisioForge media SDKs in Unity 6 — one cumulative .unitypackage for video playback, capture and editing on Windows, Android, macOS, iOS.
 - [Install VisioForge .NET SDKs in an Uno Platform App](https://www.visioforge.com/help/docs/dotnet/install/uno/): Install the VisioForge .NET SDKs in an Uno Platform 6.5 app for Windows, Android and iOS: NuGet, redists, AndroidDependency, VideoView and a video.

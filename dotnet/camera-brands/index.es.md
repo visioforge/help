@@ -269,7 +269,7 @@ La mayoría de las cámaras IP modernas soportan **ONVIF (Open Network Video Int
     ```
 
     Sustituya el segundo paquete por el runtime nativo de su sistema operativo:
-    `VisioForge.CrossPlatform.Core.Linux.x64`, `.macOS`, `.Android` o `.iOS`.
+    `VisioForge.CrossPlatform.Core.Linux.x64` (`.Linux.arm64` en ARM64), `.macOS`, `.Android` o `.iOS`.
 
 === "Solo Windows (motor heredado DirectShow)"
 
@@ -282,8 +282,8 @@ La mayoría de las cámaras IP modernas soportan **ONVIF (Open Network Video Int
 
 Ejemplos funcionales completos para integración de cámaras IP:
 
-- [Vista Previa de Cámara IP (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-preview) — Vista en vivo de la cámara
-- [Grabación de Cámara IP a MP4](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-capture-mp4) — Grabar flujos a archivo
+- [Vista Previa de Cámara IP (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_VideoTutorials/ip-camera-preview-winforms) — Vista en vivo de la cámara
+- [Grabación de Cámara IP a MP4](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/ip-camera-capture-mp4-winforms) — Grabar flujos a archivo
 - [Todos los Ejemplos del SDK .NET](https://github.com/visioforge/.Net-SDK-s-samples) — Repositorio completo de ejemplos
 
 ## Recursos relacionados

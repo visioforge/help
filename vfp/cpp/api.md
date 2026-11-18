@@ -279,6 +279,19 @@ extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search(
 
 Low-level search using raw fingerprint data. Returns position in seconds.
 
+#### VFPSearch_SearchRange
+
+```cpp
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_SearchRange(
+    const char* pData1, int iLen1,
+    const char* pData2, int iLen2,
+    int iStart, int iEnd,
+    double* pDiff, int maxDiff,
+    bool checkMirror, int* pMirrorMode);
+```
+
+Searches raw fingerprint data for the best position of the whole fragment `pData1` inside `pData2` whose start sample lies between `iStart` and `iEnd` (10 samples per second). Nothing may run past the start of `pData2`; up to 9 samples (0.9 s, never more than a tenth of the fragment) may run past its end, because a search fingerprint drops the last partial second of its video, and `iEnd` is limited accordingly. Of equally good positions, the earliest wins. Returns the start sample of the match, or -1 when no position scores below `maxDiff`. `checkMirror` also tries the mirrored orientations; `*pMirrorMode` receives the one that matched (0 for none). To find every occurrence, search the whole range, then the ranges before and after each match.
+
 #### VFPSearch_Clear
 
 ```cpp

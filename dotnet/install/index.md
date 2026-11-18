@@ -90,7 +90,7 @@ Our SDKs seamlessly integrate with popular .NET development environments:
 - Designer support for visual controls
 - NuGet package management
 
-For detailed Visual Studio setup instructions, see our [Visual Studio integration guide](visual-studio.md).
+For detailed Visual Studio setup instructions, see our [Visual Studio integration guide](visual-studio.md). To start from a working app, use the [VisioForge project templates](project-templates.md) for Visual Studio 2026 and `dotnet new`.
 
 ### JetBrains Rider Integration
 

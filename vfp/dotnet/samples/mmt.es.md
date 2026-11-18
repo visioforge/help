@@ -70,7 +70,7 @@ MMT (Media Monitoring Tool / Herramienta de Monitoreo de Medios) es una aplicaci
 
 5. **Revisar Resultados**:
    - Ve las detecciones en la pestaña Results
-   - Observa marcas de tiempo y puntuaciones de confianza
+   - Consulte el archivo del anuncio, el archivo de transmisión y la posición de cada coincidencia
    - Previsualiza coincidencias en el reproductor de medios
 
 ## Casos de Uso
@@ -103,17 +103,14 @@ MMT (Media Monitoring Tool / Herramienta de Monitoreo de Medios) es una aplicaci
 
 ### Parámetros de Detección
 
-- **Sensibilidad**: Ajusta el umbral de coincidencia (1-100)
-  - Mayor = Coincidencia más estricta (menos falsos positivos)
-  - Menor = Coincidencia más flexible (puede omitir variaciones)
+- **Nivel de diferencia**: Puntuación de diferencia máxima para una coincidencia (control deslizante 200-1000, por defecto 500)
+  - Menor = Coincidencia más estricta (menos falsos positivos)
+  - Mayor = Coincidencia más flexible (encuentra más copias modificadas)
 
-- **Desplazamiento de Tiempo**: Máximo desplazamiento temporal permitido
 - **Áreas de Ignorar**: Define regiones a excluir (logos, tickers)
 
 ### Opciones de Procesamiento
 
-- **Multi-threading**: Usa múltiples núcleos de CPU
-- **Límite de Memoria**: Controla el uso de RAM
 - **Caché de Huellas**: Guarda para reprocesamiento más rápido
 
 ## Entendiendo los Resultados
@@ -122,18 +119,11 @@ MMT (Media Monitoring Tool / Herramienta de Monitoreo de Medios) es una aplicaci
 
 Cada detección muestra:
 
-- **Nombre del Fragmento**: Qué clip fue encontrado
-- **Archivo de Transmisión**: Dónde fue encontrado
-- **Marca de Tiempo**: Posición exacta (HH:MM:SS)
-- **Duración**: Longitud de la coincidencia
-- **Confianza**: Calidad de la coincidencia (porcentaje)
+- **Archivo del anuncio**: Qué clip fue encontrado
+- **Archivo de transmisión**: Dónde fue encontrado
+- **Posición**: Inicio de la coincidencia en la transmisión (minutos totales:segundos, por ejemplo 75:3)
 
-### Puntuaciones de Confianza
-
-- **95-100%**: Coincidencia exacta
-- **85-95%**: Alta confianza (diferencias menores)
-- **70-85%**: Coincidencia probable (algunas modificaciones)
-- **Menor de 70%**: Posible coincidencia (requiere revisión)
+La demo no informa ninguna confianza ni porcentaje: una coincidencia es cualquier posición cuya puntuación de diferencia está por debajo del nivel de diferencia.
 
 ## Características Avanzadas
 
@@ -155,8 +145,6 @@ Los resultados pueden exportarse con:
 
 - Marcas de tiempo de detección
 - Rutas de archivos
-- Puntuaciones de confianza
-- Detalles del fragmento
 
 ## Mejores Prácticas
 
@@ -186,12 +174,12 @@ Los resultados pueden exportarse con:
 
 - Verifica la calidad y longitud del fragmento
 - Verifica que la transmisión contenga el fragmento
-- Ajusta la configuración de sensibilidad
+- Aumente el nivel de diferencia
 - Asegura el rango de tiempo correcto
 
 ### Demasiados Falsos Positivos
 
-- Aumenta el umbral de sensibilidad
+- Reduzca el nivel de diferencia
 - Verifica elementos comunes (fotogramas negros)
 - Usa fragmentos más largos
 - Define áreas de ignorar

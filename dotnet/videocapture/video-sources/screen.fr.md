@@ -79,7 +79,7 @@ DirectX 11 est particulièrement recommandé pour les scénarios de capture de f
     - `ScreenCaptureDX9SourceSettings` : configurer une capture basée sur DirectX 9
     - `ScreenCaptureD3D11SourceSettings` : configurer une capture basée sur DirectX 11 avec des performances améliorées
 
-    `ScreenCaptureGDISourceSettings` et `ScreenCaptureDX9SourceSettings` sont obsolètes. Utilisez `ScreenCaptureD3D11SourceSettings`. Sur une capture GDI ou DX9 déjà en cours, `UpdateLiveSettings` mémorise seulement la nouvelle position et le curseur ; ils s'appliquent au prochain démarrage.
+    `ScreenCaptureGDISourceSettings` et `ScreenCaptureDX9SourceSettings` sont obsolètes. Utilisez `ScreenCaptureD3D11SourceSettings`. Sur une capture GDI ou DX9 déjà en cours, `UpdateLiveSettings` mémorise seulement la nouvelle position et le curseur ; ils s'appliquent au prochain démarrage. Le `Rectangle` vide par défaut capture tout le moniteur sélectionné par `Monitor`, et `UpdateLiveSettings` ne le déplace pas : affectez à `Rectangle` la zone à déplacer.
     
 
 

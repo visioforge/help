@@ -91,6 +91,8 @@ Linux x64 (plus GStreamer 1.22+ du système) :
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
 
+Sous Linux ARM64, `VisioForge.CrossPlatform.Core.Linux.arm64` remplace le paquet `.Linux.x64` ; voir le [déploiement sous Ubuntu](../deployment-x/Ubuntu.md) pour un fragment de projet qui choisit l'un ou l'autre selon l'identifiant de runtime.
+
 Android et iOS :
 
 ```xml
@@ -218,7 +220,7 @@ Oui. Passez un URI `rtsp://` à `UniversalSourceSettings.CreateAsync(...)` et ap
 
 ### Quelles plateformes nécessitent l'installation de GStreamer au niveau système ?
 
-Linux. Sur Linux x64, le paquet NuGet `VisioForge.CrossPlatform.Core.Linux.x64` s'appuie sur un runtime GStreamer 1.22+ installé sur le système. Windows, macOS, Android et iOS regroupent tout via leurs redistribuables NuGet — pas d'installation système requise.
+Linux. Sur Linux, GStreamer 1.22+ doit être installé depuis les paquets système ; le paquet NuGet `VisioForge.CrossPlatform.Core.Linux.x64` (ou `.Linux.arm64` sur ARM64) ajoute les bibliothèques natives propres au SDK et ne contient pas GStreamer. Windows, macOS, Android et iOS regroupent tout via leurs redistribuables NuGet — pas d'installation système requise.
 
 ### Quelle est la différence entre `MediaPlayerCoreX` et `MediaPlayerCore` ?
 

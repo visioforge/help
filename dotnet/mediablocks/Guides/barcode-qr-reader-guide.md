@@ -48,28 +48,30 @@ This guide walks you through building a cross-platform C# barcode reader and QR 
 - **Cross-platform .NET support**: Single codebase for Windows, Android, iOS, macOS, and Linux with MAUI, Avalonia, WPF, WinForms, Blazor, and console apps
 - **Pipeline architecture**: Combine barcode detection with video preview, recording, and other processing in one pipeline
 - **Multiple input sources**: Scan from cameras, video files, screen capture, or [network streams](../../general/network-streaming/rtsp.md)
-- **Comprehensive format support**: QR codes, DataMatrix, Code128, Code39, EAN-13, UPC-A, PDF417, Aztec, and many other 1D/2D barcode formats
+- **Comprehensive format support**: QR codes and the common 1D formats (Code 128, Code 39, EAN-13, UPC-A and more) through `BarcodeDetectorBlock`, and Data Matrix through `DataMatrixDecoderBlock`
 - **Event-driven API**: Simple `OnBarcodeDetected` event delivers barcode type, value, and timestamp
 
 ## Supported Barcode and QR Code Formats
 
-The C# barcode scanner supports a wide range of 1D and 2D barcode formats:
+The C# barcode scanner supports a wide range of 1D and 2D barcode formats. Next to each `BarcodeDetectorBlock` format is the exact `BarcodeType` string that `OnBarcodeDetected` carries:
 
 ### 2D Barcodes
 
-- **QR Code**: Most popular 2D barcode format, widely used in mobile applications
-- **DataMatrix**: Compact format ideal for small items
-- **PDF417**: Used in driver's licenses and boarding passes
-- **Aztec**: Compact format used in transportation tickets
+- **QR Code**: Most popular 2D barcode format, widely used in mobile applications — `BarcodeType`: `"QR-Code"`
+- **Data Matrix**: Compact format ideal for small items, read by the separate [`DataMatrixDecoderBlock`](../Special/index.md#datamatrix-decoder); it has no `BarcodeType` string and arrives through `DataMatrixDecoderBlock.OnDataMatrixDetected`
+
+PDF417 and Aztec are not read by `BarcodeDetectorBlock`; on Windows, the classic engines `VideoCaptureCore`, `MediaPlayerCore` and `VideoEditCore` read them through `Barcode_Reader_Enabled` and `Barcode_Reader_Type` (an enum: `BarcodeType.PDF417`, `BarcodeType.Aztec`), and `MediaPlayerCoreX` through its `Barcode_Reader` settings.
 
 ### 1D Barcodes
 
-- **Code 128**: High-density format for alphanumeric data
-- **Code 39**: Simple alphanumeric format
-- **EAN-13/EAN-8**: European Article Number for retail products
-- **UPC-A/UPC-E**: Universal Product Code for retail
-- **Codabar**: Used in libraries and blood banks
-- **ITF**: Interleaved 2 of 5 for shipping and distribution
+- **Code 128**: High-density format for alphanumeric data — `BarcodeType`: `"CODE-128"`
+- **Code 39**: Simple alphanumeric format — `BarcodeType`: `"CODE-39"`
+- **Code 93**: Higher-density successor of Code 39 — `BarcodeType`: `"CODE-93"`
+- **EAN-13/EAN-8**: European Article Number for retail products — `BarcodeType`: `"EAN-13"`, `"EAN-8"`
+- **UPC-A/UPC-E**: Universal Product Code for retail; reported as `"EAN-13"`, with the value in the 13-digit form (UPC-A gains a leading 0)
+- **Codabar**: Used in libraries and blood banks — `BarcodeType`: `"Codabar"`
+- **ITF**: Interleaved 2 of 5 for shipping and distribution — `BarcodeType`: `"I2/5"`
+- **GS1 DataBar (RSS-14)**: Compact retail format for small items and fresh produce — `BarcodeType`: `"DataBar"` (expanded: `"DataBar-Exp"`)
 
 ## Barcode Scanner Pipeline Architecture
 
@@ -654,7 +656,7 @@ These samples demonstrate:
 
 ### What barcode formats can I scan from a camera in C#?
 
-The SDK supports all major 1D and 2D barcode formats including QR Code, DataMatrix, PDF417, Aztec, Code 128, Code 39, EAN-13, EAN-8, UPC-A, UPC-E, Codabar, and ITF. All formats can be scanned in real time from any video source — webcam, IP camera, RTSP stream, or video file.
+`BarcodeDetectorBlock` reads QR Code, EAN-13, EAN-8, UPC-A, UPC-E, Code 128, Code 39, Code 93, Codabar, ITF (Interleaved 2 of 5) and GS1 DataBar (RSS-14); UPC-A and UPC-E are reported as EAN-13, with the value in the 13-digit form. Data Matrix is read by the separate `DataMatrixDecoderBlock`. All of them can be scanned in real time from any video source — webcam, IP camera, RTSP stream, or video file.
 
 ### Can I scan QR codes from an IP camera or RTSP stream?
 

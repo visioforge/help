@@ -18,7 +18,7 @@ La evolución hacia la computación de 64 bits representa un avance significativ
 
 Sin embargo, esta progresión tecnológica introduce un conjunto distintivo de complejidades, particularmente con respecto a la instalación y gestión de paquetes de componentes (archivos `.bpl`). Muchos desarrolladores de Delphi encuentran obstáculos desconcertantes al intentar integrar paquetes de 64 bits en su flujo de trabajo de desarrollo, lo que lleva a la frustración y la pérdida de productividad.
 
-Esta guía detallada explora estos desafíos a fondo y proporciona soluciones meticulosamente detalladas y accionables. El problema fundamental se origina en una característica arquitectónica crítica: **el Entorno de Desarrollo Integrado (IDE) de Delphi sigue siendo una aplicación de 32 bits**, incluso en las versiones más recientes. Esta discrepancia arquitectónica entre el IDE de 32 bits y el objetivo de compilación de 64 bits crea numerosos malentendidos y dificultades técnicas relacionadas con la gestión de paquetes.
+Esta guía detallada explora estos desafíos a fondo y proporciona soluciones meticulosamente detalladas y accionables. El problema fundamental se origina en una característica arquitectónica crítica: **el Entorno de Desarrollo Integrado (IDE) clásico de Delphi, `bin\bds.exe`, es una aplicación de 32 bits**. RAD Studio 12.3 Athens añadió un IDE opcional de 64 bits que se instala junto a él (el IDE de 32 bits sigue siendo el predeterminado en 12.3), y RAD Studio 13 Florence también incluye el IDE de 64 bits. Esta guía describe el IDE de 32 bits; en el IDE de 64 bits la regla de los paquetes se invierte, consulte [Uso del IDE de 64 bits](#64-bit-ide). Esta discrepancia arquitectónica entre el IDE de 32 bits y el objetivo de compilación de 64 bits crea numerosos malentendidos y dificultades técnicas relacionadas con la gestión de paquetes.
 
 Comprender esta limitación arquitectónica constituye el primer paso esencial para establecer una experiencia de desarrollo fluida. Examinaremos a fondo por qué el IDE de 32 bits requiere paquetes de tiempo de diseño de 32 bits, exploraremos las técnicas adecuadas de configuración de proyectos para objetivos tanto de 32 bits como de 64 bits, aclararemos la función crítica de los paquetes en tiempo de ejecución y describiremos metodologías de prueba extensas para asegurar que sus aplicaciones funcionen perfectamente en ambos entornos arquitectónicos.
 
@@ -28,7 +28,7 @@ Comprender esta limitación arquitectónica constituye el primer paso esencial p
 
 El IDE de Delphi sirve como el entorno principal para el diseño visual de componentes, edición de código, operaciones de depuración y gestión integral de proyectos. Cuando los diseñadores colocan componentes en formularios utilizando el Diseñador de Formularios, modifican propiedades a través del Inspector de Objetos o utilizan editores de componentes especializados, el IDE debe cargar y ejecutar el código contenido dentro del paquete de tiempo de diseño del componente.
 
-Debido a que `bds.exe` (el ejecutable del IDE de Delphi) opera como un proceso de 32 bits, funciona exclusivamente dentro del espacio de direcciones de memoria de 32 bits y debe adherirse a las restricciones de los entornos de ejecución de 32 bits. El IDE físicamente no puede cargar ni ejecutar código de 64 bits directamente; esto representa una limitación de hardware y sistema operativo, no simplemente una restricción de software. Cualquier intento de cargar una DLL de 64 bits (o en terminología de Delphi, un paquete `.bpl` de 64 bits) en un proceso de 32 bits resultará en una falla inmediata, manifestándose típicamente como mensajes de error como "Can't load package %s" o códigos de error oscuros del sistema operativo.
+Debido a que el clásico `bin\bds.exe` (el ejecutable del IDE de Delphi de 32 bits) opera como un proceso de 32 bits, funciona exclusivamente dentro del espacio de direcciones de memoria de 32 bits y debe adherirse a las restricciones de los entornos de ejecución de 32 bits. El IDE físicamente no puede cargar ni ejecutar código de 64 bits directamente; esto representa una limitación de hardware y sistema operativo, no simplemente una restricción de software. Cualquier intento de cargar una DLL de 64 bits (o en terminología de Delphi, un paquete `.bpl` de 64 bits) en un proceso de 32 bits resultará en una falla inmediata, manifestándose típicamente como mensajes de error como "Can't load package %s" o códigos de error oscuros del sistema operativo.
 
 ### Requisitos Críticos de Tiempo de Diseño
 
@@ -40,7 +40,7 @@ Esta limitación arquitectónica frecuentemente lleva a confusión entre los des
 
 ### Primer Paso Esencial: Instalación de Componentes de 32 bits
 
-Basado en la explicación arquitectónica anterior, el paso inicial obligatorio siempre implica instalar la versión de 32 bits de los paquetes de componentes en el IDE de Delphi. Este proceso establece la base para todas las actividades de desarrollo posteriores.
+Basado en la explicación arquitectónica anterior, el paso inicial obligatorio en el IDE de 32 bits siempre implica instalar la versión de 32 bits de los paquetes de componentes. Para el IDE de 64 bits, consulte [Uso del IDE de 64 bits](#64-bit-ide). Este proceso establece la base para todas las actividades de desarrollo posteriores.
 
 1. **Adquirir Archivos de Paquete Necesarios:** Asegúrese de poseer archivos de paquete compilados tanto de 32 bits como de 64 bits (`.bpl` y `.dcp`). Los archivos de 32 bits típicamente llevan sufijos identificadores como `_x86`, `_Win32`, o pueden carecer de especificadores de plataforma en versiones anteriores de Delphi. Por el contrario, los paquetes de 64 bits normalmente incluyen designaciones `_x64` o `_Win64`. Estos archivos generalmente se generan automáticamente al construir proyectos de bibliotecas de componentes dirigidos a plataformas Win32 y Win64. Al usar componentes de terceros, los proveedores de confianza deben suministrar ambas versiones arquitectónicas.
 
@@ -58,7 +58,23 @@ Basado en la explicación arquitectónica anterior, el paso inicial obligatorio 
 
 El IDE intentará cargar el paquete de 32 bits. Cuando tenga éxito, sus componentes deberían aparecer en la Paleta de Herramientas, permitiendo su uso inmediato en el Diseñador de Formularios. Si el IDE no logra cargar el paquete, verifique que seleccionó el archivo `.bpl` de 32 bits correcto y asegúrese de que todos los paquetes de dependencia requeridos por su paquete objetivo estén correctamente instalados y accesibles.
 
-**Advertencia Crítica:** Nunca intente instalar archivos `.bpl` de 64 bits utilizando la opción de menú `Component > Install Packages...`. Tales intentos fallarán invariablemente porque la arquitectura del IDE de 32 bits no puede cargar módulos de código de 64 bits.
+**Advertencia Crítica:** En el IDE de 32 bits, nunca intente instalar archivos `.bpl` de 64 bits utilizando la opción de menú `Component > Install Packages...`. Tales intentos fallarán invariablemente porque la arquitectura del IDE de 32 bits no puede cargar módulos de código de 64 bits.
+
+## Uso del IDE de 64 bits (RAD Studio 12.3 y posteriores) { #64-bit-ide }
+
+RAD Studio 12.3 Athens introdujo un IDE de 64 bits como "Initial Release" opcional: se añade en el cuadro de diálogo Manage Platforms y se inicia desde el acceso directo "RAD Studio (64-bit Initial Release)" del menú Inicio. Se ejecuta desde `bin64\bds.exe` y se instala junto al IDE de 32 bits, que sigue siendo el predeterminado en 12.3. RAD Studio 13 Florence también incluye el IDE de 64 bits. El IDE de 64 bits tiene la restricción opuesta a la descrita anteriormente:
+
+- **Sus paquetes de tiempo de diseño son de 64 bits.** El IDE de 64 bits no puede cargar un `.bpl` de 32 bits, por lo que un paquete de 32 bits no aparece en su paleta. Instale allí el paquete de **64 bits**.
+- **Solo compila para Win64.** Compila y depura proyectos Delphi Win64 (y C++ Win64 Modern). Al abrir un proyecto, añade y activa la plataforma Win64 si falta y oculta las demás plataformas sin eliminarlas. Compile los destinos Win32 en el IDE de 32 bits.
+- **Cada IDE mantiene su propia lista de paquetes.** Los paquetes conocidos se almacenan por separado para el IDE de 32 bits y el de 64 bits, por lo que un paquete instalado en uno no aparece en el otro. Instale el paquete correspondiente en cada IDE que utilice.
+
+Para instalar los componentes de VisioForge en el IDE de 64 bits:
+
+1. Abra el proyecto del paquete (`.dproj` o `.dpk`) desde la carpeta de paquetes x64 de su versión de Delphi, por ejemplo `Packages\Delphi 13 x64`.
+2. En el Project Manager, haga clic derecho en el paquete y seleccione `Compile`.
+3. Cuando compile correctamente, vuelva a hacer clic derecho y seleccione `Install`.
+
+Mantenga los paquetes de 64 bits en su propia carpeta, separados de los de 32 bits, y no los copie en la carpeta `bin64` del IDE. La página [64-bit IDE](https://docwiki.embarcadero.com/RADStudio/en/64-bit_IDE) de Embarcadero contiene todos los detalles.
 
 ## Configuración Avanzada: Estableciendo Rutas de Biblioteca del Proyecto para Desarrollo de Doble Plataforma
 
@@ -150,7 +166,7 @@ Cualquier discrepancia o error encontrado durante el tiempo de ejecución en una
 
 * **"Package XYZ.bpl can't be installed because it is not a design time package."**: Este error típicamente indica un intento de instalar un paquete a través de `Component > Install Packages` que carece de los registros de tiempo de diseño o banderas de configuración necesarios. Verifique que el proyecto del paquete esté configurado correctamente como un paquete de tiempo de diseño o un paquete combinado de tiempo de diseño y ejecución.
 
-* **"Can't load package XYZ.bpl. %1 is not a valid Windows application." / "The specified module could not be found."**: Esto casi con certeza indica un intento de instalar un BPL de **64 bits** en el IDE de 32 bits a través de `Component > Install Packages`. Recuerde instalar solo archivos BPL de 32 bits a través de esta interfaz. La variante "module not found" también puede ocurrir si el paquete tiene dependencias que no están instaladas correctamente o no se pueden localizar.
+* **"Can't load package XYZ.bpl. %1 is not a valid Windows application." / "The specified module could not be found."**: Esto casi con certeza indica un intento de instalar un BPL de **64 bits** en el IDE de 32 bits a través de `Component > Install Packages`. Recuerde instalar solo archivos BPL de 32 bits a través de esta interfaz en el IDE de 32 bits; el IDE de 64 bits necesita el BPL de 64 bits (consulte [Uso del IDE de 64 bits](#64-bit-ide)). La variante "module not found" también puede ocurrir si el paquete tiene dependencias que no están instaladas correctamente o no se pueden localizar.
 
 * **[Compiler Error] F1026 File not found: 'ComponentUnit.dcu'**: Este error ocurre durante la compilación (no en tiempo de diseño). Indica que el compilador no puede localizar el archivo `.dcu` requerido para la plataforma objetivo seleccionada actualmente. Revise cuidadosamente sus configuraciones de `Project Options > Delphi Compiler > Library > Library path` para la *plataforma específica* que está compilando actualmente (Paso 2). Asegúrese de que la ruta haga referencia correctamente al directorio apropiado (32 bits o 64 bits) que contiene los archivos `.dcu` necesarios.
 
@@ -182,7 +198,7 @@ Si se proporciona un instalador, utilícelo como su primer enfoque. Sin embargo,
 
 ### Estrategias Clave de Implementación
 
-Gestionar con éxito los paquetes de Delphi para el desarrollo tanto de 32 bits como de 64 bits depende fundamentalmente de comprender la naturaleza de 32 bits del IDE y configurar meticulosamente las opciones del proyecto para cada plataforma objetivo de forma independiente. Siempre instale el paquete de 32 bits para uso en tiempo de diseño, luego establezca cuidadosamente las Rutas de Biblioteca específicas de la plataforma y la configuración de Paquetes en Tiempo de Ejecución para asegurar que el compilador y su aplicación final puedan localizar y utilizar los archivos correctos para la arquitectura objetivo.
+Gestionar con éxito los paquetes de Delphi para el desarrollo tanto de 32 bits como de 64 bits depende fundamentalmente de conocer la arquitectura del IDE en el que diseña y configurar meticulosamente las opciones del proyecto para cada plataforma objetivo de forma independiente. Instale el paquete de tiempo de diseño que corresponde al IDE (de 32 bits para el IDE clásico, de 64 bits para el IDE de 64 bits), luego establezca cuidadosamente las Rutas de Biblioteca específicas de la plataforma y la configuración de Paquetes en Tiempo de Ejecución para asegurar que el compilador y su aplicación final puedan localizar y utilizar los archivos correctos para la arquitectura objetivo.
 
 Si bien este enfoque introduce una complejidad adicional en comparación con el desarrollo puramente de 32 bits, la metodología estructurada le permite aprovechar los beneficios sustanciales de la compilación de 64 bits mientras mantiene una experiencia de tiempo de diseño completamente funcional dentro del entorno familiar del IDE de Delphi. Las pruebas consistentes en ambas plataformas representan el paso de verificación final y crucial para garantizar aplicaciones robustas y confiables que funcionen de manera óptima en entornos tanto de 32 bits como de 64 bits.
 

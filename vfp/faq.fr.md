@@ -226,26 +226,22 @@ var source = new VFPFingerprintSource(localCapturePath)
 **R :** Recommandations de seuil selon le cas d'usage :
 
 ```csharp
-public enum MatchingThreshold
-{
-    Identical = 5,        // Même fichier, encodage différent
-    NearDuplicate = 15,   // Différences de qualité mineures
-    Similar = 30,         // Même contenu, quelques modifications
-    Related = 50,         // Modifications significatives (filigranes, etc.)
-    PossiblyRelated = 100 // Transformations lourdes
-}
+// VFPAnalyzer.Compare : correspondance quand la différence est inférieure au seuil
+const int CompareThreshold = 300; // Valeur par défaut de la démo DVS et de vfp_compare ; CompareVideoFilesAsync utilise 500
 
-public bool IsMatch(int difference, MatchingThreshold threshold)
+// VFPAnalyzer.Search / SearchAsync (maxDifference)
+const int SearchThreshold = 500;  // Valeur par défaut de la démo MMT ; MMT Live utilise 1100
+
+public bool IsMatch(int difference, int threshold)
 {
-    return difference <= (int)threshold;
+    return difference < threshold;
 }
 ```
 
 Cas d'usage :
-- **Détection de droits d'auteur** : utiliser `Similar` (30) ou plus strict
-- **Recherche de doublons** : utiliser `NearDuplicate` (15)
-- **Surveillance de contenu** : utiliser `Related` (50) pour plus de flexibilité
-- **Détection de scènes** : utiliser `PossiblyRelated` (100)
+- **Détection de droits d'auteur et recherche de doublons** (`Compare`) : commencez à 300 ; augmentez vers 500 si des copies réencodées sont manquées, baissez si des vidéos sans rapport correspondent
+- **Recherche de clips ou de publicités dans une vidéo plus longue** (`Search`) : commencez à 500 ; le curseur de la démo MMT couvre 200-1000 et MMT Live utilise 1100 pour les flux en direct
+- Le score n'est pas un pourcentage : ajustez le seuil sur votre propre contenu
 
 ### Q : Le SDK peut-il détecter des correspondances partielles ?
 
@@ -264,10 +260,10 @@ var mainFp = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(
 // VFPAnalyzer.SearchAsync nécessite la forme complète à 5 arguments ; le résultat est List<TimeSpan>,
 // chaque entrée correspond au temps de début de la correspondance dans mainFp.
 var results = await VFPAnalyzer.SearchAsync(
-    mainFp,
     searchFp,
+    mainFp,
     searchFp.Duration,
-    maxDifference: 25,
+    maxDifference: 500,
     allowMultipleFragments: true);
 
 foreach (var matchStart in results)
@@ -300,9 +296,9 @@ var croppedSource = new VFPFingerprintSource(videoPath)
 ### Q : Peut-il détecter des vidéos mises en miroir ou pivotées ?
 
 **R :** Le SDK peut détecter :
-- ✅ Miroir horizontal (avec prétraitement)
+- ✅ Miroir horizontal et vertical, et rotation de 180 degrés (`Compare` et `Search` vérifient ces orientations automatiquement)
 - ✅ Rotations mineures (< 5 degrés)
-- ⚠️ Rotations de 90/180/270 degrés (nécessite un prétraitement manuel)
+- ⚠️ Rotations de 90 et 270 degrés (nécessitent un prétraitement manuel)
 
 ```csharp
 // Pour la détection de vidéo en miroir
@@ -311,14 +307,8 @@ public async Task<bool> CheckMirroredMatch(string video1, string video2)
     var fp1 = await GenerateFingerprint(video1);
     var fp2 = await GenerateFingerprint(video2);
     
-    // Vérifier l'orientation normale
-    int normalDiff = VFPAnalyzer.Compare(fp1, fp2);
-    if (normalDiff < 30) return true;
-    
-    // VFPSearch.SearchMirror compare fp1 contre la version horizontalement
-    // mise en miroir de fp2 en un seul appel (pas besoin de regénérer l'empreinte).
-    var mirrorResult = VFPSearch.SearchMirror(fp1, fp2);
-    return mirrorResult != null && mirrorResult.Difference < 30;
+    // VFPAnalyzer.Compare vérifie aussi les orientations en miroir de fp2
+    return VFPAnalyzer.Compare(fp1, fp2, TimeSpan.FromSeconds(5)) < 300;
 }
 ```
 

@@ -66,7 +66,7 @@ Once both fingerprints are generated, you can compare them to determine the simi
 
 ```csharp
 // compare first and second fingerprints
-var res = VFPCompare.Compare(fp1, fp2, 500);
+var res = VFPCompare.Compare(fp1, fp2, 5); // max time shift in seconds
 
 // check the result
 if (res < 300)

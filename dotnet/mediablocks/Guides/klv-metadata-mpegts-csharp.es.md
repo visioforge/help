@@ -170,6 +170,7 @@ en vivo a medida que llegan. Consulte el code snippet `ip-camera-klv-mpegts-reco
 
 ## Véase también
 
+- [SDK de metadatos KLV / MISB para .NET](https://www.visioforge.com/es/solutions/klv-misb-metadata) — qué hace el SDK con KLV en MPEG-TS, la decodificación de MISB ST 0601 y la descarga de la versión de prueba
 - [MPEG-TS Stream Analyzer Block](../Special/TSAnalyzerBlock.md) — PAT/PMT/PCR, tasa de bits por PID y conformidad TR 101 290.
 - [Grabar un flujo UDP MPEG-TS sin recodificar](udp-mpegts-record-without-reencoding.md)
 - [Bloques demultiplexores de medios](../Demuxers/index.md)

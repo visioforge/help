@@ -748,29 +748,43 @@ var effect = new PitchShiftAudioEffect(1.5f); // Hausser d'une quinte
 
 ### ScaleTempoAudioEffect
 
-**Élément GStreamer** : `scaletempo`
+**Élément GStreamer** : `scaletempo` ; `pitch` (SoundTouch) pour `Rate` dans `VideoEditCoreX`
 
-**Objectif** : changer le tempo sans changer la hauteur (algorithme WSOLA).
+**Objectif** : garder la hauteur quand la vitesse de lecture change (algorithme WSOLA), ou changer le tempo d'un rendu `VideoEditCoreX`.
 
 **Paramètres** :
 
-- `Rate` (double) : vitesse de lecture
-    - 1.0 = normale
-    - 2.0 = double vitesse
-    - 0.5 = demi-vitesse
+- `Rate` (double) : multiplicateur de tempo
     - Par défaut : 1.0
+    - Plage : 0.1 à 10
+    - `VideoEditCoreX` : chaque clip auquel l'effet s'applique est lu à ce tempo en gardant sa hauteur, et sa vidéo à la même vitesse. 1.5 rend 6 s de source en 4 s, et les clips suivants se décalent pour le suivre. Seuls les clips avec audio changent : un clip vidéo seule, par exemple associé à un fichier audio séparé, garde sa vitesse ; utilisez un fichier qui contient les deux pour une image synchronisée. Un clip du même calque qui commence à l'intérieur de celui qui a changé, un chevauchement prévu pour une transition, se décale avec sa fin, donc le chevauchement est conservé ; un chevauchement qui ne tient pas dans la nouvelle durée lève `OnError`, et ce clip est lu à sa vitesse d'origine. `Stride`, `Overlap` et `Search` ne s'appliquent pas à une vitesse autre que 1.0. Une valeur hors plage lève `OnError` et l'effet n'est pas appliqué
+    - Media Blocks, `MediaPlayerCoreX` et `VideoCaptureCoreX` : ignoré. La vitesse vient de la vitesse de lecture, `MediaBlocksPipeline.Rate_SetAsync` ou `MediaPlayerCoreX.Rate_SetAsync`, et l'effet garde la hauteur à cette vitesse. `VideoCaptureCoreX` n'a pas de vitesse de lecture, l'audio y passe donc sans changement
 - `Stride` (TimeSpan) : pas de traitement
     - Par défaut : 30 ms
+    - Plage : 1 à 5000 ms
 - `Overlap` (double) : pourcentage de recouvrement
     - Plage : 0.0 à 1.0
     - Par défaut : 0.2
 - `Search` (TimeSpan) : fenêtre de recherche
     - Par défaut : 14 ms
+    - Plage : 0 à 500 ms
+
+`Stride`, `Overlap` et `Search` ne changent le son que lorsque la vitesse de lecture n'est pas 1.0 ; à 1.0 l'audio passe sans changement
 
 **Utilisation** :
 
 ```csharp
-var effect = new ScaleTempoAudioEffect(1.5); // Vitesse 1,5x
+// mediaPlayer est un MediaPlayerCoreX.
+var effect = new ScaleTempoAudioEffect { Stride = TimeSpan.FromMilliseconds(20), Overlap = 0.3 };
+mediaPlayer.Audio_Effects_AddOrUpdate(effect);
+
+// L'effet garde la hauteur pendant que le lecteur lit à 1,5x.
+await mediaPlayer.Rate_SetAsync(1.5);
+```
+
+```csharp
+// videoEdit est un VideoEditCoreX : le rendu lit ses clips à 1,5x en gardant la hauteur.
+videoEdit.Audio_Effects.Add(new ScaleTempoAudioEffect(1.5));
 ```
 
 ---

@@ -269,7 +269,7 @@ Most modern IP cameras support **ONVIF (Open Network Video Interface Forum)**, w
     ```
 
     Swap the second package for the native runtime of your target OS —
-    `VisioForge.CrossPlatform.Core.Linux.x64`, `.macOS`, `.Android` or `.iOS`.
+    `VisioForge.CrossPlatform.Core.Linux.x64` (`.Linux.arm64` on ARM64), `.macOS`, `.Android` or `.iOS`.
 
 === "Windows-only (legacy DirectShow engine)"
 
@@ -282,8 +282,8 @@ Most modern IP cameras support **ONVIF (Open Network Video Interface Forum)**, w
 
 Complete working examples for IP camera integration:
 
-- [IP Camera Preview (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-preview) — Live camera view
-- [IP Camera Recording to MP4](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-capture-mp4) — Record streams to file
+- [IP Camera Preview (WinForms)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_VideoTutorials/ip-camera-preview-winforms) — Live camera view
+- [IP Camera Recording to MP4](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/ip-camera-capture-mp4-winforms) — Record streams to file
 - [All .NET SDK Samples](https://github.com/visioforge/.Net-SDK-s-samples) — Full sample repository
 
 ## Related Resources

@@ -48,28 +48,30 @@ Esta guía le muestra cómo construir un lector de códigos de barras y escáner
 - **Soporte .NET multiplataforma**: Un solo código fuente para Windows, Android, iOS, macOS y Linux con MAUI, Avalonia, WPF, WinForms, Blazor y aplicaciones de consola
 - **Arquitectura de pipeline**: Combinar detección de códigos de barras con vista previa de video, grabación y otro procesamiento en un solo pipeline
 - **Múltiples fuentes de entrada**: Escanear desde cámaras, archivos de video, captura de pantalla o [streams de red](../../general/network-streaming/rtsp.md)
-- **Soporte completo de formatos**: Códigos QR, DataMatrix, Code128, Code39, EAN-13, UPC-A, PDF417, Aztec y muchos otros formatos de códigos de barras 1D/2D
+- **Soporte completo de formatos**: Códigos QR y los formatos 1D habituales (Code 128, Code 39, EAN-13, UPC-A y más) mediante `BarcodeDetectorBlock`, y Data Matrix mediante `DataMatrixDecoderBlock`
 - **API basada en eventos**: Evento simple `OnBarcodeDetected` que entrega tipo de código de barras, valor y marca de tiempo
 
 ## Formatos de Códigos de Barras y QR Soportados
 
-El escáner de códigos de barras en C# soporta una amplia gama de formatos de códigos de barras 1D y 2D:
+El escáner de códigos de barras en C# soporta una amplia gama de formatos de códigos de barras 1D y 2D. Junto a cada formato de `BarcodeDetectorBlock` figura la cadena `BarcodeType` exacta que lleva `OnBarcodeDetected`:
 
 ### Códigos de Barras 2D
 
-- **QR Code**: Formato de código de barras 2D más popular, ampliamente usado en aplicaciones móviles
-- **DataMatrix**: Formato compacto ideal para artículos pequeños
-- **PDF417**: Usado en licencias de conducir y tarjetas de embarque
-- **Aztec**: Formato compacto usado en boletos de transporte
+- **QR Code**: Formato de código de barras 2D más popular, ampliamente usado en aplicaciones móviles — `BarcodeType`: `"QR-Code"`
+- **Data Matrix**: Formato compacto ideal para artículos pequeños, leído por el bloque independiente [`DataMatrixDecoderBlock`](../Special/index.md#datamatrix-decoder); no tiene cadena `BarcodeType` y llega a través de `DataMatrixDecoderBlock.OnDataMatrixDetected`
+
+`BarcodeDetectorBlock` no lee PDF417 ni Aztec; en Windows, los leen los motores clásicos `VideoCaptureCore`, `MediaPlayerCore` y `VideoEditCore` mediante `Barcode_Reader_Enabled` y `Barcode_Reader_Type` (un enum: `BarcodeType.PDF417`, `BarcodeType.Aztec`), y `MediaPlayerCoreX` mediante sus ajustes `Barcode_Reader`.
 
 ### Códigos de Barras 1D
 
-- **Code 128**: Formato de alta densidad para datos alfanuméricos
-- **Code 39**: Formato alfanumérico simple
-- **EAN-13/EAN-8**: Número de Artículo Europeo para productos minoristas
-- **UPC-A/UPC-E**: Código Universal de Producto para minoristas
-- **Codabar**: Usado en bibliotecas y bancos de sangre
-- **ITF**: Intercalado 2 de 5 para envío y distribución
+- **Code 128**: Formato de alta densidad para datos alfanuméricos — `BarcodeType`: `"CODE-128"`
+- **Code 39**: Formato alfanumérico simple — `BarcodeType`: `"CODE-39"`
+- **Code 93**: Sucesor de mayor densidad de Code 39 — `BarcodeType`: `"CODE-93"`
+- **EAN-13/EAN-8**: Número de Artículo Europeo para productos minoristas — `BarcodeType`: `"EAN-13"`, `"EAN-8"`
+- **UPC-A/UPC-E**: Código Universal de Producto para minoristas; se informan como `"EAN-13"`, con el valor en su forma de 13 dígitos (UPC-A recibe un 0 inicial)
+- **Codabar**: Usado en bibliotecas y bancos de sangre — `BarcodeType`: `"Codabar"`
+- **ITF**: Intercalado 2 de 5 para envío y distribución — `BarcodeType`: `"I2/5"`
+- **GS1 DataBar (RSS-14)**: Formato compacto para comercio minorista, usado en artículos pequeños y productos frescos — `BarcodeType`: `"DataBar"` (expandido: `"DataBar-Exp"`)
 
 ## Arquitectura del Pipeline del Escáner de Códigos de Barras
 
@@ -654,7 +656,7 @@ Estos ejemplos demuestran:
 
 ### ¿Qué formatos de códigos de barras puedo escanear desde una cámara en C#?
 
-El SDK soporta todos los formatos principales de códigos de barras 1D y 2D incluyendo QR Code, DataMatrix, PDF417, Aztec, Code 128, Code 39, EAN-13, EAN-8, UPC-A, UPC-E, Codabar e ITF. Todos los formatos pueden escanearse en tiempo real desde cualquier fuente de video — webcam, cámara IP, stream RTSP o archivo de video.
+`BarcodeDetectorBlock` lee QR Code, EAN-13, EAN-8, UPC-A, UPC-E, Code 128, Code 39, Code 93, Codabar, ITF (Interleaved 2 of 5) y GS1 DataBar (RSS-14); UPC-A y UPC-E se informan como EAN-13, con el valor en su forma de 13 dígitos. Data Matrix lo lee el bloque independiente `DataMatrixDecoderBlock`. Todos pueden escanearse en tiempo real desde cualquier fuente de video — webcam, cámara IP, stream RTSP o archivo de video.
 
 ### ¿Puedo escanear códigos QR desde una cámara IP o stream RTSP?
 

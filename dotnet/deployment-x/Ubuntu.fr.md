@@ -50,6 +50,7 @@ Installez les paquets GStreamer suivants à l'aide d'apt-get. Nous exigeons la v
 - `gstreamer1.0-plugins-base` : plugins de base essentiels
 - `gstreamer1.0-plugins-good` : plugins de haute qualité, bien testés
 - `gstreamer1.0-plugins-bad` : plugins plus récents de qualité variable
+- `gstreamer1.0-plugins-ugly` : démultiplexeur ASF/WMV et autres plugins de formats soumis à des restrictions de licence
 - `gstreamer1.0-alsa` : prise en charge audio ALSA
 - `gstreamer1.0-gl` : prise en charge du rendu OpenGL
 - `gstreamer1.0-pulseaudio` : intégration PulseAudio
@@ -65,7 +66,7 @@ sudo apt update
 ```
 
 ```bash
-sudo apt install gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-pulseaudio gstreamer1.0-libav libges-1.0-0
+sudo apt install gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-pulseaudio gstreamer1.0-libav libges-1.0-0
 ```
 
 ### Exigences supplémentaires pour Raspberry Pi
@@ -92,7 +93,7 @@ Lors du déploiement de votre application .NET sur Ubuntu, vous devez inclure de
 
 ### Paquet Linux principal supplémentaire
 
-Le paquet [VisioForge.CrossPlatform.Core.Linux.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Linux.x64) contient les bibliothèques natives et les bindings essentiels pour la plateforme Linux .NET. Ce paquet est obligatoire pour tous les déploiements de SDK VisioForge sur Ubuntu.
+Ajoutez le paquet [VisioForge.CrossPlatform.Core.Linux.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Linux.x64), ou [VisioForge.CrossPlatform.Core.Linux.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Linux.arm64) sur ARM64, à toute application Linux. Il contient les bibliothèques natives propres au SDK (la conversion de couleur utilisée par les captures d'image, la conversion d'images vidéo en bitmaps et les superpositions, l'effet LUT 3D, Data Matrix) et aucun GStreamer, qui provient des paquets système installés plus haut. Ne référencez que celui de votre architecture cible.
 
 ### Vision par ordinateur avec OpenCV
 
@@ -124,6 +125,17 @@ Pour des déploiements plus légers lorsque la machine cible a déjà .NET insta
 ```bash
 dotnet publish -c Release -r linux-x64 --self-contained false
 ```
+
+Sur ARM64, utilisez `-r linux-arm64` dans les deux commandes ; les deux paquets core contiennent les mêmes noms de fichiers, donc un projet en référence exactement un, et ce fragment le choisit selon l'identifiant de runtime, y compris celui d'un profil de publication, ou selon l'architecture de la machine de compilation lorsqu'aucun n'est indiqué :
+
+```xml
+<ItemGroup>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
+</ItemGroup>
+```
+
+Ce fragment est destiné à un projet qui cible uniquement Linux et conserve les versions des paquets dans le fichier de projet. Un projet qui se compile aussi pour Windows ou macOS, ou qui utilise la gestion centralisée des paquets, prend la variante de l'[installation d'Avalonia](../install/avalonia.md).
 
 ### Structure de déploiement
 

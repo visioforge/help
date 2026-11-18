@@ -140,6 +140,8 @@ The VideoView control adapts to the native rendering capabilities of each platfo
 
 ## Platform-Specific Configuration
 
+On iOS and Mac Catalyst, leave `PublishTrimmed` unset: the .NET SDK decides when those targets are trimmed, and a project that targets `net11.0-ios` or `net11.0-maccatalyst` fails to build when the property is set (unless `PublishAot` is enabled); control trimming with `MtouchLink` instead. If you added it following an earlier version of this page, remove it.
+
 ### Android Implementation
 
 Android requires additional configuration steps to ensure proper operation:
@@ -197,6 +199,7 @@ Add the iOS-specific package to your project:
 #### 2. Important Notes for iOS Development
 
 - **Minimum iOS version**: set `<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">18.0</SupportedOSPlatformVersion>` in the project. The native iOS libraries are built for iOS 18.0, and the MAUI template defaults to 15.0.
+- **Interpreter for XAML (`net10.0-ios` and earlier target frameworks)**: set `<UseInterpreter Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">true</UseInterpreter>` in the project. Without it, the app can stop at startup with an `aot-only mode` JIT error inside XAML code. This depends on the target framework, not on the installed SDK: a `net11.0-ios` app runs on CoreCLR, where the SDK warns that the property has no effect, so remove it there.
 - **Use physical devices**: The SDK requires testing on physical iOS devices rather than simulators for full functionality.
 - **Privacy descriptions**: Add the necessary usage description strings in your Info.plist file for camera and microphone access:
   - `NSCameraUsageDescription`
@@ -226,12 +229,14 @@ To ensure your application works correctly on both Intel and Apple Silicon Macs,
 </PropertyGroup>
 ```
 
-#### 3. Enable Trimming
+#### 3. Interpreter for XAML
 
-For optimal performance on macOS, enable the PublishTrimmed option:
+For `net10.0-maccatalyst` and earlier target frameworks, enable the interpreter for the same reason as on iOS (see the iOS notes above). Leave it out for `net11.0-maccatalyst`:
 
 ```xml
-<PublishTrimmed Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">true</PublishTrimmed>
+<PropertyGroup>
+  <UseInterpreter Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">true</UseInterpreter>
+</PropertyGroup>
 ```
 
 For more detailed information about macOS deployment, refer to our [macOS](../deployment-x/macOS.md) documentation page.

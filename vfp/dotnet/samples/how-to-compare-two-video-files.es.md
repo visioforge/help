@@ -66,7 +66,7 @@ Una vez que ambas huellas están generadas, puede compararlas para determinar la
 
 ```csharp
 // comparar primera y segunda huellas
-var res = VFPCompare.Compare(fp1, fp2, 500);
+var res = VFPCompare.Compare(fp1, fp2, 5); // desplazamiento máximo en segundos
 
 // verificar el resultado
 if (res < 300)

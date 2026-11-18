@@ -291,15 +291,13 @@ public class RealTimeFingerprintProcessor
         foreach (var referenceFingerprint in _referenceFingerprints)
         {
             // Rechercher les correspondances avec un seuil de différence configurable.
-            // VFPAnalyzer.SearchAsync retourne Task<List<TimeSpan>>. La contrepartie
-            // synchrone est VFPSearch.Search (note : VFPSearch.SearchAsync n'existe PAS —
-            // l'asynchrone vit sur VFPAnalyzer). Noms réels des paramètres :
-            // maxDifference, allowMultipleFragments.
-            var matches = await VFPAnalyzer.SearchAsync(
+            // VFPAnalyzer.Search est la forme synchrone de VFPAnalyzer.SearchAsync
+            // (mêmes paramètres) et s'exécute sur le thread appelant.
+            var matches = VFPAnalyzer.Search(
                 referenceFingerprint,            // Empreinte de référence
                 liveFingerprint,                 // Empreinte en direct à rechercher
                 referenceFingerprint.Duration,   // Durée de la recherche
-                maxDifference: 10,               // Seuil de similarité (0-100)
+                maxDifference: 1100,             // Valeur par défaut de MMT Live pour les flux en direct (démos : 200-2000)
                 allowMultipleFragments: true);   // Trouver toutes les correspondances
             
             if (matches.Count > 0)
@@ -313,8 +311,7 @@ public class RealTimeFingerprintProcessor
                     {
                         ReferenceFile = referenceFingerprint.OriginalFilename,
                         Timestamp = matchTime,
-                        Position = match,
-                        Confidence = CalculateConfidence(maxDifference: 10)
+                        Position = match
                     });
                 }
             }
@@ -386,11 +383,6 @@ public class RealTimeFingerprintProcessor
         return new List<string> { "ad1.mp4", "ad2.mp4", "copyrighted_content.mp4" };
     }
 
-    private double CalculateConfidence(int maxDifference)
-    {
-        return (100.0 - maxDifference) / 100.0;
-    }
-
     private void OnMatchFound(MatchResult result)
     {
         Console.WriteLine($"Correspondance trouvée : {result.ReferenceFile} à {result.Timestamp:HH:mm:ss.fff}");
@@ -406,7 +398,6 @@ public class MatchResult
     public string ReferenceFile { get; set; }
     public DateTime Timestamp { get; set; }
     public TimeSpan Position { get; set; }
-    public double Confidence { get; set; }
 }
 ```
 

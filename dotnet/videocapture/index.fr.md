@@ -55,6 +55,8 @@ Ajoutez les dépendances natives spécifiques à la plateforme :
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
 
+Sous Linux ARM64, `VisioForge.CrossPlatform.Core.Linux.arm64` remplace le paquet `.Linux.x64` ; voir le [déploiement sous Ubuntu](../deployment-x/Ubuntu.md) pour un fragment de projet qui choisit l'un ou l'autre selon l'identifiant de runtime.
+
 Pour la liste complète des paquets et la prise en charge des frameworks UI (WinForms, WPF, MAUI, Avalonia), consultez le [Guide d'installation](../install/index.md).
 
 ### 2. Initialiser le SDK
@@ -240,7 +242,7 @@ Pour la configuration détaillée des codecs, consultez [Formats de sortie](../g
 | -------- | ------------- | ----- |
 | Windows x64 | WinForms, WPF, MAUI, Avalonia, Console | Jeu de fonctionnalités complet incluant les sources DirectShow |
 | macOS | MAUI, Avalonia, Console | Accès caméra AVFoundation |
-| Linux x64 | Avalonia, Console | Accès caméra V4L2 |
+| Linux x64, ARM64 | Avalonia, Console | Accès caméra V4L2 |
 | Android | MAUI | Via l'intégration caméra MAUI |
 | iOS | MAUI | Via l'intégration caméra MAUI |
 

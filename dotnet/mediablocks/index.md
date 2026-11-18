@@ -86,7 +86,7 @@ See: [Pre-Event Recording Guide](Guides/pre-event-recording.md)
 | -------- | ------------- | ----- |
 | Windows x64 | WinForms, WPF, MAUI, Avalonia, Console | Full feature set including DirectShow bridges |
 | macOS | MAUI, Avalonia, Console | AVFoundation camera access |
-| Linux x64 | Avalonia, Console | V4L2 camera, GStreamer-based processing |
+| Linux x64, ARM64 | Avalonia, Console | V4L2 camera, GStreamer-based processing |
 | Android | MAUI | Via MAUI integration |
 | iOS | MAUI | Via MAUI integration |
 

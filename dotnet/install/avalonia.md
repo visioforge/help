@@ -32,7 +32,7 @@ video:
 
 This guide installs the VisioForge .NET SDKs in an Avalonia 12.1 app with Desktop, Android and iOS heads, and puts a `VideoView` on its main view. It ends with an app that builds and runs on the Desktop head on Windows.
 
-All four SDKs — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET and Media Blocks SDK .NET — come in one NuGet package, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). The Avalonia `VideoView` is in [VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia). Each platform also takes a redist package, its native engine, and Android takes the VisioForge binding project, `AndroidDependency`, from GitHub.
+All four SDKs — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET and Media Blocks SDK .NET — come in one NuGet package, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). The Avalonia `VideoView` is in [VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia). Each platform also takes a redist package, its native engine (on Linux only the SDK's own libraries; GStreamer comes from the system), and Android takes the VisioForge binding project, `AndroidDependency`, from GitHub.
 
 ## Video tutorial
 
@@ -88,10 +88,12 @@ The Avalonia template uses central package management, so NuGet writes the versi
   <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" />
 </ItemGroup>
 ```
 
-Take the latest versions from [nuget.org](https://www.nuget.org/profiles/visioforge). The Android and iOS redists are released on their own schedule, so their versions differ from the SDK's. Windows takes two redists, the native engine and the Libav codecs (`.UPX` is the size-optimized build); macOS, Android and iOS take one each.
+Take the latest versions from [nuget.org](https://www.nuget.org/profiles/visioforge). The macOS, Android, iOS and Linux redists are released on their own schedule, so their versions differ from the SDK's. Windows takes two redists, the native engine and the Libav codecs (`.UPX` is the size-optimized build); macOS, Android and iOS take one each, and Linux takes the core package for its architecture, which has no GStreamer inside. The video was recorded before the Linux core package lines were added here and in the Desktop head, so it does not show them.
 
 ## The Desktop head
 
@@ -113,9 +115,13 @@ Each head takes its redist in its own project file. Right-click `VisioForgeAvalo
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" />
 </ItemGroup>
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))" />
+</ItemGroup>
 ```
 
-The template builds the Desktop head for plain `net10.0`, and the SDK's Windows and macOS engines need the operating system's own framework. The later properties replace the template's: `net10.0-windows` on Windows, and `net10.0-macos` on a Mac, an app bundle, which needs an application ID. Linux keeps `net10.0` and takes no redist: there the SDK uses the GStreamer installed on the system, see [Ubuntu deployment](../deployment-x/Ubuntu.md). The references carry no versions: those come from `Directory.Packages.props`.
+The template builds the Desktop head for plain `net10.0`, and the SDK's Windows and macOS engines need the operating system's own framework. The later properties replace the template's: `net10.0-windows` on Windows, and `net10.0-macos` on a Mac, an app bundle, which needs an application ID. Linux keeps `net10.0` and uses the GStreamer installed on the system, see [Ubuntu deployment](../deployment-x/Ubuntu.md); the last block, applied when the head is built on Linux (publishing for Linux from Windows or macOS skips it), gives it the core package for its architecture, which holds the SDK's own native libraries. The references carry no versions: those come from `Directory.Packages.props`.
 
 ## The Android head
 

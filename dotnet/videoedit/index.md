@@ -135,7 +135,7 @@ See: [Picture-In-Picture Effects](code-samples/picture-in-picture.md)
 | -------- | ------------- | ------ | ----- |
 | Windows x64 | WinForms, WPF, MAUI, Avalonia, Console | VideoEditCore, VideoEditCoreX | Full feature set including DirectShow bridges |
 | macOS | MAUI, Avalonia, Console | VideoEditCoreX | Intel and Apple Silicon |
-| Linux x64 | Avalonia, Console | VideoEditCoreX | Ubuntu, Debian, CentOS |
+| Linux x64, ARM64 | Avalonia, Console | VideoEditCoreX | Ubuntu, Debian, CentOS |
 | Android | MAUI | VideoEditCoreX | See [Video editing in .NET MAUI](maui/video-editing-maui.md) |
 | iOS | MAUI | VideoEditCoreX | See [Video editing in .NET MAUI](maui/video-editing-maui.md) |
 

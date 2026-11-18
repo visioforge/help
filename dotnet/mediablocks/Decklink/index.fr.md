@@ -229,7 +229,7 @@ La classe `DecklinkVideoSinkSettings` inclut des propriétés telles que :
 - `DeviceNumber` : instance du périphérique de sortie à utiliser (lecture seule, défini via le constructeur).
 - `Mode` : spécifie la résolution vidéo et la fréquence d'images (par ex. `DecklinkMode.HD1080i60`, `HD720p60`). **Requis** — doit être spécifié dans le constructeur.
 - `VideoFormat` : définit le format de pixel à l'aide de l'énumération `DecklinkVideoFormat` (par ex. `DecklinkVideoFormat.YUV_8bit`, `YUV_10bit`). Par défaut `YUV_8bit`.
-- `KeyerMode` : contrôle les options de keying/composition via `DecklinkKeyerMode` (si pris en charge par le périphérique). Par défaut `Off`.
+- `KeyerMode` : contrôle les options de keying/composition via `DecklinkKeyerMode`. Par défaut `Off`. Le keying exige une carte et un profil qui le prennent en charge : sur les cartes à plusieurs connecteurs comme la DeckLink Duo 2, c'est un profil full duplex (`Profile = DecklinkProfileID.OneSubDeviceFull`). Un profil s'applique à tout le groupe de connecteurs et reste actif dans le pilote après la fermeture de l'application : en `OneSubDeviceFull`, les autres sous-périphériques du groupe deviennent inactifs (sur la DeckLink Duo 2, l'autre connecteur de la paire). Sous Windows, un démarrage en `Internal` ou `External` sur un périphérique qui ne peut pas faire de keying dans le profil choisi échoue, et `OnError` indique le périphérique, le mode et le profil.
 - `KeyerLevel` : définit le niveau du keyer (0-255). Par défaut `255`.
 - `Profile` : spécifie le profil Decklink à utiliser via `DecklinkProfileID`.
 - `TimecodeFormat` : spécifie le format de timecode pour la lecture via `DecklinkTimecodeFormat`. Par défaut `RP188Any`.

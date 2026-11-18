@@ -532,19 +532,21 @@ if (cryptoConfig != null)
 
 ---
 ## Filter CLSIDs
+These are the version 9 filters, which use AES-256. The version 8 filters, which write and read AES-128 files, are `{F1D3727A-88DE-49ab-A635-280BEFEFF902}` (encryptor) and `{D2C761F0-9988-4f79-9B0E-FB2B79C65851}` (decryptor); in C#, `Consts.CLSID_VFVideoEncryptor8` and `Consts.CLSID_VFVideoDecryptor8`. `Consts` is in the `VisioForge.DirectShowAPI` namespace of the [VisioForge.DirectShowAPI](https://www.nuget.org/packages/VisioForge.DirectShowAPI) NuGet package.
+
 ### Encrypt Muxer Filter
 Muxes video and audio streams into encrypted format.
 **CLSID**:
 ```cpp
-// {F1D3727A-88DE-49ab-A635-280BEFEFF902}
-DEFINE_GUID(CLSID_EncryptMuxer,
-    0xf1d3727a, 0x88de, 0x49ab, 0xa6, 0x35, 0x28, 0xb, 0xef, 0xef, 0xf9, 0x2);
+// {86D83D2E-70D2-4A32-B7BE-E94A08AA7BAA}
+DEFINE_GUID(CLSID_EncryptMuxer9,
+    0x86d83d2e, 0x70d2, 0x4a32, 0xb7, 0xbe, 0xe9, 0x4a, 0x08, 0xaa, 0x7b, 0xaa);
 ```
 **Usage (C++)**:
 ```cpp
 IBaseFilter* pMuxer = nullptr;
 hr = CoCreateInstance(
-    CLSID_EncryptMuxer,
+    CLSID_EncryptMuxer9,
     NULL,
     CLSCTX_INPROC_SERVER,
     IID_IBaseFilter,
@@ -553,8 +555,11 @@ hr = CoCreateInstance(
 ```
 **Usage (C#)**:
 ```csharp
+using VisioForge.DirectShowAPI;
+using VisioForge.DirectShowLib;
+
 var muxerFilter = (IBaseFilter)Activator.CreateInstance(
-    Type.GetTypeFromCLSID(new Guid("F1D3727A-88DE-49ab-A635-280BEFEFF902"))
+    Type.GetTypeFromCLSID(new Guid(Consts.CLSID_VFVideoEncryptor9))
 );
 ```
 ---
@@ -565,16 +570,16 @@ Demuxes and decrypts encrypted files.
 
 **CLSID**:
 ```cpp
-// {D2C761F0-9988-4f79-9B0E-FB2B79C65851}
-DEFINE_GUID(CLSID_EncryptDemuxer,
-    0xd2c761f0, 0x9988, 0x4f79, 0x9b, 0xe, 0xfb, 0x2b, 0x79, 0xc6, 0x58, 0x51);
+// {4B89F5E2-2BA9-4C8F-A78A-EA2701AB582C}
+DEFINE_GUID(CLSID_EncryptDemuxer9,
+    0x4b89f5e2, 0x2ba9, 0x4c8f, 0xa7, 0x8a, 0xea, 0x27, 0x01, 0xab, 0x58, 0x2c);
 ```
 
 **Usage (C++)**:
 ```cpp
 IBaseFilter* pDemuxer = nullptr;
 hr = CoCreateInstance(
-    CLSID_EncryptDemuxer,
+    CLSID_EncryptDemuxer9,
     NULL,
     CLSCTX_INPROC_SERVER,
     IID_IBaseFilter,
@@ -584,8 +589,11 @@ hr = CoCreateInstance(
 
 **Usage (C#)**:
 ```csharp
+using VisioForge.DirectShowAPI;
+using VisioForge.DirectShowLib;
+
 var demuxerFilter = (IBaseFilter)Activator.CreateInstance(
-    Type.GetTypeFromCLSID(new Guid("D2C761F0-9988-4f79-9B0E-FB2B79C65851"))
+    Type.GetTypeFromCLSID(new Guid(Consts.CLSID_VFVideoDecryptor9))
 );
 ```
 

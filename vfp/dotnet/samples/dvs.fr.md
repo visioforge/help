@@ -54,7 +54,7 @@ DVS (Duplicate Video Scanner) est une application de bureau Windows qui analyse 
 
 2. **Configurer les paramètres** :
    - Sélectionnez les formats vidéo à inclure dans l'analyse
-   - Définissez la sensibilité de comparaison (1 à 100 %)
+   - Définissez la sensibilité (0 à 100, 30 par défaut) ; elle est multipliée par 10 pour donner le seuil de différence, donc une valeur plus basse est plus stricte
    - Choisissez les options de traitement
 
 3. **Démarrer l'analyse** :

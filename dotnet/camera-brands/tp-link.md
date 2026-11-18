@@ -1,6 +1,6 @@
 ---
-title: Tapo and TP-Link RTSP URL, Port 554 and Login in C# .NET
-description: Tapo C and TL-SC RTSP stream URLs (stream1/stream2), port 554, credentials by product line, plus snapshot and MJPEG paths with C# .NET samples.
+title: "TP-Link Tapo RTSP URL: rtsp://IP:554/stream1 and stream2"
+description: "Tapo RTSP URL: rtsp://username:password@IP:554/stream1 for the main stream, stream2 for the sub stream. Create a Camera Account in the Tapo app first. C# code."
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -106,7 +106,7 @@ Use your TP-Link camera's RTSP URL with any of the three SDK approaches shown in
 ```csharp
 // TP-Link Tapo C200, main stream
 var uri = new Uri("rtsp://192.168.1.100:554/stream1");
-var username = "admin";
+var username = "rtsp_user"; // Camera Account created in the Tapo app
 var password = "YourPassword";
 ```
 

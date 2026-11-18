@@ -68,9 +68,7 @@ MMT Live is a real-time version of the Media Monitoring Tool that can detect vid
    - Device: Select capture device
 
 3. **Set Detection Parameters**:
-   - Sensitivity threshold
-   - Minimum match duration
-   - Alert preferences
+   - Difference level (200-2000, default 1100)
 
 4. **Start Monitoring**:
    - Click "Start" to begin
@@ -140,10 +138,8 @@ http://server.com/live.mjpeg
 
 ### Detection Settings
 
-- **Buffer Size**: Video history (5-60 seconds)
-- **Check Interval**: How often to analyze (1-5 seconds)
-- **Confidence Threshold**: Match quality (70-95%)
-- **Fragment Priority**: Which fragments to check first
+- **Difference level**: Maximum difference score for a match (slider 200-2000, default 1100). Lower is stricter. It is not a percentage.
+- **Fragment duration**: Length of live video split off for each analysis, in seconds. 60 seconds or more works best; the minimum is the longest ad plus 10 seconds, and 0 calculates it automatically.
 
 ## Performance Optimization
 

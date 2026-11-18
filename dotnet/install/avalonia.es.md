@@ -32,7 +32,7 @@ video:
 
 Esta guía instala los SDK .NET de VisioForge en una aplicación Avalonia 12.1 con destinos Desktop, Android e iOS, y pone un `VideoView` en su vista principal. Termina con una aplicación que compila y se ejecuta en el destino Desktop en Windows.
 
-Los cuatro SDK — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET y Media Blocks SDK .NET — vienen en un solo paquete NuGet, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). El `VideoView` de Avalonia está en [VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia). Cada plataforma lleva además un paquete redist, su motor nativo, y Android lleva el proyecto de enlace de VisioForge, `AndroidDependency`, desde GitHub.
+Los cuatro SDK — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET y Media Blocks SDK .NET — vienen en un solo paquete NuGet, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). El `VideoView` de Avalonia está en [VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia). Cada plataforma lleva además un paquete redist, su motor nativo (en Linux solo las bibliotecas propias del SDK; GStreamer viene del sistema), y Android lleva el proyecto de enlace de VisioForge, `AndroidDependency`, desde GitHub.
 
 ## Tutorial en vídeo
 
@@ -88,10 +88,12 @@ La plantilla de Avalonia usa la administración central de paquetes, así que Nu
   <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" />
 </ItemGroup>
 ```
 
-Tome las últimas versiones de [nuget.org](https://www.nuget.org/profiles/visioforge). Los redists de Android e iOS se publican con su propio calendario, por eso sus versiones difieren de las del SDK. Windows lleva dos redists, el motor nativo y los códecs Libav (`.UPX` es la compilación de tamaño reducido); macOS, Android e iOS llevan uno cada uno.
+Tome las últimas versiones de [nuget.org](https://www.nuget.org/profiles/visioforge). Los redists de macOS, Android, iOS y Linux se publican con su propio calendario, por eso sus versiones difieren de las del SDK. Windows lleva dos redists, el motor nativo y los códecs Libav (`.UPX` es la compilación de tamaño reducido); macOS, Android e iOS llevan uno cada uno, y Linux lleva el paquete core de su arquitectura, que no contiene GStreamer. El video se grabó antes de añadir las líneas del paquete core de Linux, aquí y en el destino Desktop, por eso no aparecen en él.
 
 ## El destino Desktop
 
@@ -113,9 +115,13 @@ Cada destino lleva su redist en su propio archivo de proyecto. Haga clic derecho
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" />
 </ItemGroup>
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))" />
+</ItemGroup>
 ```
 
-La plantilla compila el destino Desktop para `net10.0` sin más, y los motores de Windows y macOS del SDK necesitan el framework propio del sistema operativo. Las propiedades posteriores sustituyen a las de la plantilla: `net10.0-windows` en Windows, y `net10.0-macos` en un Mac, un paquete de aplicación, que necesita un identificador de aplicación. Linux mantiene `net10.0` y no lleva redist: allí el SDK usa el GStreamer instalado en el sistema, consulte la [implementación en Ubuntu](../deployment-x/Ubuntu.md). Las referencias no llevan versiones: estas vienen de `Directory.Packages.props`.
+La plantilla compila el destino Desktop para `net10.0` sin más, y los motores de Windows y macOS del SDK necesitan el framework propio del sistema operativo. Las propiedades posteriores sustituyen a las de la plantilla: `net10.0-windows` en Windows, y `net10.0-macos` en un Mac, un paquete de aplicación, que necesita un identificador de aplicación. Linux mantiene `net10.0` y usa el GStreamer instalado en el sistema, consulte la [implementación en Ubuntu](../deployment-x/Ubuntu.md); el último bloque, que se aplica cuando el destino se compila en Linux (publicar para Linux desde Windows o macOS lo omite), le añade el paquete core de su arquitectura, que contiene las bibliotecas nativas propias del SDK. Las referencias no llevan versiones: estas vienen de `Directory.Packages.props`.
 
 ## El destino Android
 

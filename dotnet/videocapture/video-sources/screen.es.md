@@ -79,7 +79,7 @@ DirectX 11 es particularmente recomendado para escenarios de captura de ventanas
     - `ScreenCaptureDX9SourceSettings`: Configurar captura basada en DirectX 9
     - `ScreenCaptureD3D11SourceSettings`: Configurar captura basada en DirectX 11 con rendimiento mejorado
 
-    `ScreenCaptureGDISourceSettings` y `ScreenCaptureDX9SourceSettings` están obsoletos. Use `ScreenCaptureD3D11SourceSettings`. En una captura GDI o DX9 ya en curso, `UpdateLiveSettings` solo guarda la nueva posición y el cursor; se aplican en el siguiente inicio.
+    `ScreenCaptureGDISourceSettings` y `ScreenCaptureDX9SourceSettings` están obsoletos. Use `ScreenCaptureD3D11SourceSettings`. En una captura GDI o DX9 ya en curso, `UpdateLiveSettings` solo guarda la nueva posición y el cursor; se aplican en el siguiente inicio. El `Rectangle` vacío predeterminado captura todo el monitor que selecciona `Monitor`, y `UpdateLiveSettings` no lo mueve: asigne a `Rectangle` el área que desea mover.
     
 
 

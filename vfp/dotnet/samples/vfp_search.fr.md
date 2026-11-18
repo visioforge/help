@@ -105,8 +105,8 @@ vfp_search -f "commercial.vsigx" -m "broadcast.vsigx"
 - Utilisez des empreintes de type « search » pour les fragments (`-t search` dans vfp_gen)
 - Utilisez aussi des empreintes de type « search » pour les vidéos principales (`-t search` dans vfp_gen) : la recherche lit les deux fichiers comme des empreintes de recherche
 - Les fragments doivent durer au moins 5 à 10 secondes pour une détection fiable
-- Seuils de différence plus bas (< 100) pour des correspondances exactes
-- Seuils plus élevés (100 à 500) pour du contenu similaire avec modifications
+- Commencez avec la valeur par défaut de 500 ; baissez-la (jusqu'à environ 200) pour des correspondances plus strictes
+- Augmentez-la (jusqu'à environ 1000) pour du contenu modifié ; MMT Live utilise 1100 pour les flux en direct
 
 ## Notes de performance
 

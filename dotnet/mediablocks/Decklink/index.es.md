@@ -229,7 +229,7 @@ La clase `DecklinkVideoSinkSettings` incluye propiedades como:
 - `DeviceNumber`: La instancia del dispositivo de salida a usar (solo lectura, se establece via constructor).
 - `Mode`: Especifica la resolución de video y tasa de frames (ej., `DecklinkMode.HD1080i60`, `HD720p60`). **Requerido** - debe especificarse en el constructor.
 - `VideoFormat`: Define el formato de píxel usando enum `DecklinkVideoFormat` (ej., `DecklinkVideoFormat.YUV_8bit`, `YUV_10bit`). Predeterminado `YUV_8bit`.
-- `KeyerMode`: Controla opciones de keying/composición usando `DecklinkKeyerMode` (si es soportado por el dispositivo). Predeterminado `Off`.
+- `KeyerMode`: Controla opciones de keying/composición usando `DecklinkKeyerMode`. Predeterminado `Off`. El keying requiere una tarjeta y un perfil que lo admitan: en tarjetas con varios conectores, como la DeckLink Duo 2, es un perfil full duplex (`Profile = DecklinkProfileID.OneSubDeviceFull`). Un perfil se aplica a todo el grupo de conectores y sigue activo en el controlador después de cerrar la aplicación: en `OneSubDeviceFull`, los demás subdispositivos del grupo quedan inactivos (en la DeckLink Duo 2, el otro conector del par). En Windows, un inicio con `Internal` o `External` en un dispositivo que no puede hacer keying en el perfil elegido falla, y `OnError` indica el dispositivo, el modo y el perfil.
 - `KeyerLevel`: Establece el nivel de keyer (0-255). Predeterminado `255`.
 - `Profile`: Especifica el perfil Decklink a usar con `DecklinkProfileID`.
 - `TimecodeFormat`: Especifica el formato de timecode para reproducción usando `DecklinkTimecodeFormat`. Predeterminado `RP188Any`.

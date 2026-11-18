@@ -54,13 +54,12 @@ using VisioForge.DirectShowAPI;
 using VisioForge.DirectShowLib;
 ```
 **Paquetes NuGet Requeridos**:
-- VisioForge.DirectShowAPI
-- VisioForge.DirectShowLib
+- VisioForge.DirectShowAPI (también contiene el espacio de nombres `VisioForge.DirectShowLib`)
 ### Proyectos Delphi
 ```delphi
 uses
-  DirectShow9,
-  EncryptorIntf;
+  ENCDirectShow9,
+  encryptor_intf;
 ```
 ---
 
@@ -98,20 +97,20 @@ public class BasicVideoEncryption
             // Añadir codificador de video (H.264)
             var videoEncoder = FilterGraphTools.AddFilterFromClsid(
                 filterGraph,
-                Consts.CLSID_VFH264Encoder,
+                DSFilterInitInfoConsts.VFH264EncoderV10.CLSID,
                 "H.264 Encoder"
             );
 
             // Añadir codificador de audio (AAC)
             var audioEncoder = FilterGraphTools.AddFilterFromClsid(
                 filterGraph,
-                Consts.CLSID_VFAACEncoder,
+                DSFilterInitInfoConsts.VFAACEncoderV10.CLSID,
                 "AAC Encoder"
             );
 
             // Añadir muxer de encriptación
             var encryptMuxer = (IBaseFilter)Activator.CreateInstance(
-                Type.GetTypeFromCLSID(new Guid("F1D3727A-88DE-49ab-A635-280BEFEFF902"))
+                Type.GetTypeFromCLSID(new Guid(Consts.CLSID_VFVideoEncryptor9))
             );
 
             hr = filterGraph.AddFilter(encryptMuxer, "Encrypt Muxer");
@@ -139,12 +138,11 @@ public class BasicVideoEncryption
             }
 
             // Establecer archivo de salida
-            var fileSink = encryptMuxer as IFileSinkFilter;
-            if (fileSink != null)
-            {
-                hr = fileSink.SetFileName(outputFile, null);
-                DsError.ThrowExceptionForHR(hr);
-            }
+            var fileWriter = (IBaseFilter)new FileWriter();
+            hr = filterGraph.AddFilter(fileWriter, "File Writer");
+            DsError.ThrowExceptionForHR(hr);
+            hr = ((IFileSinkFilter)fileWriter).SetFileName(outputFile, null);
+            DsError.ThrowExceptionForHR(hr);
 
             // Construir conexiones del grafo de filtros
             ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
@@ -169,6 +167,9 @@ public class BasicVideoEncryption
                 audioEncoder,
                 encryptMuxer
             );
+            // Sin comprobar: un archivo sin audio no tiene nada que conectar aquí
+
+            hr = captureGraph.RenderStream(null, null, encryptMuxer, null, fileWriter);
             DsError.ThrowExceptionForHR(hr);
 
             Console.WriteLine("Grafo de filtros construido exitosamente");
@@ -184,7 +185,10 @@ public class BasicVideoEncryption
             {
                 hr = mediaEvent.WaitForCompletion(1000, out eventCode);
             }
-            while (eventCode == 0);
+            while (hr == DSErrorCodes.E_ABORT);
+            DsError.ThrowExceptionForHR(hr);
+            if (eventCode != EventCode.Complete)
+                throw new InvalidOperationException($"Encoding stopped with event {eventCode}");
 
             Console.WriteLine("¡Encriptación completada exitosamente!");
 
@@ -232,6 +236,16 @@ public class BasicVideoEncryption
 #include <streams.h>
 #include "encryptor_intf.h"
 
+// Version 9 encryptor (AES-256); encryptor_intf.h names only the version 8 one
+DEFINE_GUID(CLSID_EncryptMuxer9,
+    0x86d83d2e, 0x70d2, 0x4a32, 0xb7, 0xbe, 0xe9, 0x4a, 0x08, 0xaa, 0x7b, 0xaa);
+
+// VisioForge H264 Encoder v10 and AAC Encoder v10
+DEFINE_GUID(CLSID_VFH264EncoderV10,
+    0xea1fed6b, 0xb876, 0x4db0, 0xb7, 0xb1, 0x77, 0x84, 0x63, 0xe5, 0x99, 0x78);
+DEFINE_GUID(CLSID_VFAACEncoderV10,
+    0x763cac70, 0x373c, 0x4892, 0x89, 0x8b, 0xac, 0x80, 0x66, 0x1b, 0x15, 0xf3);
+
 class BasicVideoEncryption
 {
 private:
@@ -245,6 +259,14 @@ public:
     HRESULT EncryptVideo(LPCWSTR inputFile, LPCWSTR outputFile, LPCWSTR password)
     {
         HRESULT hr;
+        IBaseFilter* pSource = NULL;
+        IBaseFilter* pVideoEncoder = NULL;
+        IBaseFilter* pAudioEncoder = NULL;
+        IBaseFilter* pMuxer = NULL;
+        ICryptoConfig* pCrypto = NULL;
+        IBaseFilter* pFileWriter = NULL;
+        IFileSinkFilter* pFileSink = NULL;
+        ICaptureGraphBuilder2* pBuilder = NULL;
 
         // Crear grafo de filtros
         hr = CoCreateInstance(
@@ -261,14 +283,12 @@ public:
         pGraph->QueryInterface(IID_IMediaEvent, (void**)&pEvent);
 
         // Añadir filtro fuente
-        IBaseFilter* pSource = NULL;
         hr = pGraph->AddSourceFilter(inputFile, L"Source", &pSource);
         if (FAILED(hr)) goto cleanup;
 
         // Añadir codificador de video (H.264)
-        IBaseFilter* pVideoEncoder = NULL;
         hr = CoCreateInstance(
-            CLSID_VFH264Encoder,
+            CLSID_VFH264EncoderV10,
             NULL,
             CLSCTX_INPROC_SERVER,
             IID_IBaseFilter,
@@ -276,11 +296,11 @@ public:
         );
         if (FAILED(hr)) goto cleanup;
         hr = pGraph->AddFilter(pVideoEncoder, L"H.264 Encoder");
+        if (FAILED(hr)) goto cleanup;
 
         // Añadir codificador de audio (AAC)
-        IBaseFilter* pAudioEncoder = NULL;
         hr = CoCreateInstance(
-            CLSID_VFAACEncoder,
+            CLSID_VFAACEncoderV10,
             NULL,
             CLSCTX_INPROC_SERVER,
             IID_IBaseFilter,
@@ -288,11 +308,11 @@ public:
         );
         if (FAILED(hr)) goto cleanup;
         hr = pGraph->AddFilter(pAudioEncoder, L"AAC Encoder");
+        if (FAILED(hr)) goto cleanup;
 
         // Añadir muxer de encriptación
-        IBaseFilter* pMuxer = NULL;
         hr = CoCreateInstance(
-            CLSID_EncryptMuxer,
+            CLSID_EncryptMuxer9,
             NULL,
             CLSCTX_INPROC_SERVER,
             IID_IBaseFilter,
@@ -300,9 +320,9 @@ public:
         );
         if (FAILED(hr)) goto cleanup;
         hr = pGraph->AddFilter(pMuxer, L"Encrypt Muxer");
+        if (FAILED(hr)) goto cleanup;
 
         // Configurar encriptación
-        ICryptoConfig* pCrypto = NULL;
         hr = pMuxer->QueryInterface(IID_ICryptoConfig, (void**)&pCrypto);
         if (SUCCEEDED(hr))
         {
@@ -323,23 +343,35 @@ public:
                 else
                 {
                     wprintf(L"ADVERTENCIA: Contraseña no establecida\n");
+                    hr = E_FAIL;
                 }
             }
 
             pCrypto->Release();
         }
+        if (FAILED(hr)) goto cleanup;
 
         // Establecer archivo de salida
-        IFileSinkFilter* pFileSink = NULL;
-        hr = pMuxer->QueryInterface(IID_IFileSinkFilter, (void**)&pFileSink);
+        hr = CoCreateInstance(
+            CLSID_FileWriter,
+            NULL,
+            CLSCTX_INPROC_SERVER,
+            IID_IBaseFilter,
+            (void**)&pFileWriter
+        );
+        if (FAILED(hr)) goto cleanup;
+        hr = pGraph->AddFilter(pFileWriter, L"File Writer");
+        if (FAILED(hr)) goto cleanup;
+
+        hr = pFileWriter->QueryInterface(IID_IFileSinkFilter, (void**)&pFileSink);
         if (SUCCEEDED(hr))
         {
             hr = pFileSink->SetFileName(outputFile, NULL);
             pFileSink->Release();
         }
+        if (FAILED(hr)) goto cleanup;
 
         // Construir grafo usando Intelligent Connect
-        ICaptureGraphBuilder2* pBuilder = NULL;
         hr = CoCreateInstance(
             CLSID_CaptureGraphBuilder2,
             NULL,
@@ -349,10 +381,10 @@ public:
         );
         if (SUCCEEDED(hr))
         {
-            pBuilder->SetFiltergraph(pGraph);
+            hr = pBuilder->SetFiltergraph(pGraph);
 
             // Conectar ruta de video
-            pBuilder->RenderStream(
+            if (SUCCEEDED(hr)) hr = pBuilder->RenderStream(
                 NULL,
                 &MEDIATYPE_Video,
                 pSource,
@@ -361,6 +393,7 @@ public:
             );
 
             // Conectar ruta de audio
+            // Sin comprobar: un archivo sin audio no tiene nada que conectar aquí
             pBuilder->RenderStream(
                 NULL,
                 &MEDIATYPE_Audio,
@@ -369,8 +402,11 @@ public:
                 pMuxer
             );
 
+            if (SUCCEEDED(hr)) hr = pBuilder->RenderStream(NULL, NULL, pMuxer, NULL, pFileWriter);
+
             pBuilder->Release();
         }
+        if (FAILED(hr)) goto cleanup;
 
         wprintf(L"Iniciando encriptación...\n");
 
@@ -380,11 +416,18 @@ public:
 
         // Esperar finalización
         long evCode;
-        pEvent->WaitForCompletion(INFINITE, &evCode);
+        hr = pEvent->WaitForCompletion(INFINITE, &evCode);
+        if (FAILED(hr)) goto cleanup;
+        if (evCode != EC_COMPLETE)
+        {
+            hr = E_FAIL;
+            goto cleanup;
+        }
 
         wprintf(L"¡Encriptación completada exitosamente!\n");
 
 cleanup:
+        if (pFileWriter) pFileWriter->Release();
         if (pMuxer) pMuxer->Release();
         if (pVideoEncoder) pVideoEncoder->Release();
         if (pAudioEncoder) pAudioEncoder->Release();
@@ -421,9 +464,11 @@ cleanup:
 
 ```delphi
 uses
-  DirectShow9,
+  Windows,
+  SysUtils,
+  ENCDirectShow9,
   ActiveX,
-  EncryptorIntf;
+  encryptor_intf;
 
 type
   TBasicVideoEncryption = class
@@ -436,12 +481,16 @@ type
     procedure Stop;
   end;
 
+const
+  CLSID_VFEncryptor9: TGUID = '{86D83D2E-70D2-4A32-B7BE-E94A08AA7BAA}';
+
 function TBasicVideoEncryption.EncryptVideo(const InputFile, OutputFile, Password: WideString): HRESULT;
 var
   SourceFilter: IBaseFilter;
   VideoEncoder: IBaseFilter;
   AudioEncoder: IBaseFilter;
   EncryptMuxer: IBaseFilter;
+  FileWriter: IBaseFilter;
   CryptoConfig: IVFCryptoConfig;
   FileSink: IFileSinkFilter;
   CaptureGraph: ICaptureGraphBuilder2;
@@ -464,24 +513,28 @@ begin
     if Failed(Result) then Exit;
 
     // Añadir codificador de video (H.264)
-    Result := CoCreateInstance(CLSID_VFH264Encoder, nil, CLSCTX_INPROC_SERVER,
+    Result := CoCreateInstance(CLSID_VFH264EncoderV10, nil, CLSCTX_INPROC_SERVER,
                                IID_IBaseFilter, VideoEncoder);
-    if Succeeded(Result) then
-      FFilterGraph.AddFilter(VideoEncoder, 'H.264 Encoder');
+    if Failed(Result) then Exit;
+    Result := FFilterGraph.AddFilter(VideoEncoder, 'H.264 Encoder');
+    if Failed(Result) then Exit;
 
     // Añadir codificador de audio (AAC)
-    Result := CoCreateInstance(CLSID_VFAACEncoder, nil, CLSCTX_INPROC_SERVER,
+    Result := CoCreateInstance(CLSID_VFAACEncoderV10, nil, CLSCTX_INPROC_SERVER,
                                IID_IBaseFilter, AudioEncoder);
-    if Succeeded(Result) then
-      FFilterGraph.AddFilter(AudioEncoder, 'AAC Encoder');
+    if Failed(Result) then Exit;
+    Result := FFilterGraph.AddFilter(AudioEncoder, 'AAC Encoder');
+    if Failed(Result) then Exit;
 
     // Añadir muxer de encriptación
-    Result := CoCreateInstance(CLSID_EncryptMuxer, nil, CLSCTX_INPROC_SERVER,
+    Result := CoCreateInstance(CLSID_VFEncryptor9, nil, CLSCTX_INPROC_SERVER,
                                IID_IBaseFilter, EncryptMuxer);
     if Failed(Result) then Exit;
-    FFilterGraph.AddFilter(EncryptMuxer, 'Encrypt Muxer');
+    Result := FFilterGraph.AddFilter(EncryptMuxer, 'Encrypt Muxer');
+    if Failed(Result) then Exit;
 
     // Configurar encriptación
+    Result := E_NOINTERFACE;
     if Supports(EncryptMuxer, IVFCryptoConfig, CryptoConfig) then
     begin
       // Establecer contraseña
@@ -496,29 +549,46 @@ begin
         if CryptoConfig.HavePassword = S_OK then
           WriteLn('Contraseña de encriptación configurada exitosamente')
         else
+        begin
           WriteLn('ADVERTENCIA: Contraseña no establecida');
+          Result := E_FAIL;
+        end;
       end;
     end;
+    if Failed(Result) then Exit;
 
     // Establecer archivo de salida
-    if Supports(EncryptMuxer, IFileSinkFilter, FileSink) then
-      FileSink.SetFileName(PWideChar(OutputFile), nil);
+    Result := CoCreateInstance(CLSID_FileWriter, nil, CLSCTX_INPROC_SERVER,
+                               IID_IBaseFilter, FileWriter);
+    if Failed(Result) then Exit;
+    Result := FFilterGraph.AddFilter(FileWriter, 'File Writer');
+    if Failed(Result) then Exit;
+    Result := E_NOINTERFACE;
+    if not Supports(FileWriter, IFileSinkFilter, FileSink) then Exit;
+    Result := FileSink.SetFileName(PWideChar(OutputFile), nil);
+    if Failed(Result) then Exit;
 
     // Construir conexiones del grafo
     Result := CoCreateInstance(CLSID_CaptureGraphBuilder2, nil, CLSCTX_INPROC_SERVER,
                                IID_ICaptureGraphBuilder2, CaptureGraph);
     if Succeeded(Result) then
     begin
-      CaptureGraph.SetFiltergraph(FFilterGraph);
+      Result := CaptureGraph.SetFiltergraph(FFilterGraph);
 
       // Conectar ruta de video
-      CaptureGraph.RenderStream(nil, @MEDIATYPE_Video, SourceFilter,
-                                VideoEncoder, EncryptMuxer);
+      if Succeeded(Result) then
+        Result := CaptureGraph.RenderStream(nil, @MEDIATYPE_Video, SourceFilter,
+                                            VideoEncoder, EncryptMuxer);
 
       // Conectar ruta de audio
+      // Sin comprobar: un archivo sin audio no tiene nada que conectar aquí
       CaptureGraph.RenderStream(nil, @MEDIATYPE_Audio, SourceFilter,
                                 AudioEncoder, EncryptMuxer);
+
+      if Succeeded(Result) then
+        Result := CaptureGraph.RenderStream(nil, nil, EncryptMuxer, nil, FileWriter);
     end;
+    if Failed(Result) then Exit;
 
     WriteLn('Iniciando encriptación...');
 
@@ -528,8 +598,14 @@ begin
 
     // Esperar finalización
     repeat
-      FMediaEvent.WaitForCompletion(1000, EventCode);
-    until EventCode <> 0;
+      Result := FMediaEvent.WaitForCompletion(1000, EventCode);
+    until Result <> E_ABORT;
+    if Failed(Result) then Exit;
+    if EventCode <> EC_COMPLETE then
+    begin
+      Result := E_FAIL;
+      Exit;
+    end;
 
     WriteLn('¡Encriptación completada exitosamente!');
 
@@ -583,7 +659,7 @@ public class VideoDecryption
             videoWindow = (IVideoWindow)filterGraph;
             // Añadir filtro demuxer de desencriptación
             var decryptDemuxer = (IBaseFilter)Activator.CreateInstance(
-                Type.GetTypeFromCLSID(new Guid("D2C761F0-9988-4f79-9B0E-FB2B79C65851"))
+                Type.GetTypeFromCLSID(new Guid(Consts.CLSID_VFVideoDecryptor9))
             );
             int hr = filterGraph.AddFilter(decryptDemuxer, "Decrypt Demuxer");
             DsError.ThrowExceptionForHR(hr);
@@ -606,15 +682,16 @@ public class VideoDecryption
                 throw new Exception("Interfaz IVFCryptoConfig no disponible");
             }
             // Cargar archivo encriptado
-            var fileSource = decryptDemuxer as IFileSourceFilter;
-            if (fileSource != null)
-            {
-                hr = fileSource.Load(encryptedFile, null);
-                DsError.ThrowExceptionForHR(hr);
-            }
+            var fileSourceFilter = (IBaseFilter)new AsyncReader();
+            hr = filterGraph.AddFilter(fileSourceFilter, "File Source");
+            DsError.ThrowExceptionForHR(hr);
+            hr = ((IFileSourceFilter)fileSourceFilter).Load(encryptedFile, null);
+            DsError.ThrowExceptionForHR(hr);
             // Construir grafo - renderizar salidas de video y audio
             ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
             hr = captureGraph.SetFiltergraph(filterGraph);
+            DsError.ThrowExceptionForHR(hr);
+            hr = captureGraph.RenderStream(null, null, fileSourceFilter, null, decryptDemuxer);
             DsError.ThrowExceptionForHR(hr);
             // Renderizar salida de video
             hr = captureGraph.RenderStream(
@@ -706,27 +783,24 @@ public class FileKeyEncryption
 
             // Añadir muxer de encriptación
             var encryptMuxer = (IBaseFilter)Activator.CreateInstance(
-                Type.GetTypeFromCLSID(new Guid("F1D3727A-88DE-49ab-A635-280BEFEFF902"))
+                Type.GetTypeFromCLSID(new Guid(Consts.CLSID_VFVideoEncryptor9))
             );
-            filterGraph.AddFilter(encryptMuxer, "Encrypt Muxer");
+            DsError.ThrowExceptionForHR(filterGraph.AddFilter(encryptMuxer, "Encrypt Muxer"));
 
             // Configurar encriptación usando archivo como clave
             var cryptoConfig = encryptMuxer as IVFCryptoConfig;
-            if (cryptoConfig != null)
-            {
-                // Usar contenido del archivo como clave de encriptación (hash SHA-256 del archivo)
-                cryptoConfig.ApplyFile(keyFile);
+            if (cryptoConfig == null)
+                throw new InvalidOperationException("IVFCryptoConfig is not available");
+            // Usar contenido del archivo como clave de encriptación (hash SHA-256 del archivo)
+            cryptoConfig.ApplyFile(keyFile);
 
-                Console.WriteLine($"Usando archivo de clave: {keyFile}");
-                Console.WriteLine("Contenido del archivo hasheado con SHA-256 para encriptación");
+            Console.WriteLine($"Usando archivo de clave: {keyFile}");
+            Console.WriteLine("Contenido del archivo hasheado con SHA-256 para encriptación");
 
-                // Verificar
-                int hr = cryptoConfig.HavePassword();
-                if (hr == 0)
-                {
-                    Console.WriteLine("Clave de encriptación configurada exitosamente");
-                }
-            }
+            // Verificar
+            if (cryptoConfig.HavePassword() != 0)
+                throw new InvalidOperationException("Password not set");
+            Console.WriteLine("Clave de encriptación configurada exitosamente");
 
             // Continuar con la configuración del grafo de filtros y codificación...
         }
@@ -744,19 +818,20 @@ public class FileKeyEncryption
         {
             // Añadir demuxer de desencriptación
             var decryptDemuxer = (IBaseFilter)Activator.CreateInstance(
-                Type.GetTypeFromCLSID(new Guid("D2C761F0-9988-4f79-9B0E-FB2B79C65851"))
+                Type.GetTypeFromCLSID(new Guid(Consts.CLSID_VFVideoDecryptor9))
             );
-            filterGraph.AddFilter(decryptDemuxer, "Decrypt Demuxer");
+            DsError.ThrowExceptionForHR(filterGraph.AddFilter(decryptDemuxer, "Decrypt Demuxer"));
 
             // Configurar desencriptación usando el mismo archivo de clave
             var cryptoConfig = decryptDemuxer as IVFCryptoConfig;
-            if (cryptoConfig != null)
-            {
-                // DEBE usar el mismo archivo de clave que la encriptación
-                cryptoConfig.ApplyFile(keyFile);
+            if (cryptoConfig == null)
+                throw new InvalidOperationException("IVFCryptoConfig is not available");
+            // DEBE usar el mismo archivo de clave que la encriptación
+            cryptoConfig.ApplyFile(keyFile);
+            if (cryptoConfig.HavePassword() != 0)
+                throw new InvalidOperationException("Password not set");
 
-                Console.WriteLine($"Usando archivo de clave para desencriptación: {keyFile}");
-            }
+            Console.WriteLine($"Usando archivo de clave para desencriptación: {keyFile}");
 
             // Continuar con la configuración de reproducción...
         }
@@ -808,23 +883,20 @@ public class BinaryKeyEncryption
         {
             // Configurar grafo de filtros y añadir muxer de encriptación
             var encryptMuxer = (IBaseFilter)Activator.CreateInstance(
-                Type.GetTypeFromCLSID(new Guid("F1D3727A-88DE-49ab-A635-280BEFEFF902"))
+                Type.GetTypeFromCLSID(new Guid(Consts.CLSID_VFVideoEncryptor9))
             );
-            filterGraph.AddFilter(encryptMuxer, "Encrypt Muxer");
+            DsError.ThrowExceptionForHR(filterGraph.AddFilter(encryptMuxer, "Encrypt Muxer"));
             // Configurar encriptación con clave binaria
             var cryptoConfig = encryptMuxer as IVFCryptoConfig;
-            if (cryptoConfig != null)
-            {
-                // Aplicar clave binaria (será hasheada con SHA-256)
-                cryptoConfig.ApplyBinary(keyData);
-                Console.WriteLine($"Clave binaria aplicada (longitud: {keyData.Length} bytes)");
-                // Verificar
-                int hr = cryptoConfig.HavePassword();
-                if (hr == 0)
-                {
-                    Console.WriteLine("Clave de encriptación configurada exitosamente");
-                }
-            }
+            if (cryptoConfig == null)
+                throw new InvalidOperationException("IVFCryptoConfig is not available");
+            // Aplicar clave binaria (será hasheada con SHA-256)
+            cryptoConfig.ApplyBinary(keyData);
+            Console.WriteLine($"Clave binaria aplicada (longitud: {keyData.Length} bytes)");
+            // Verificar
+            if (cryptoConfig.HavePassword() != 0)
+                throw new InvalidOperationException("Password not set");
+            Console.WriteLine("Clave de encriptación configurada exitosamente");
             // Continuar con la codificación...
         }
         finally
@@ -882,12 +954,12 @@ public class CustomEncodingEncryption
         try
         {
             // Añadir fuente
-            filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter);
+            DsError.ThrowExceptionForHR(filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter));
 
             // Añadir y configurar codificador H.264
             var videoEncoder = FilterGraphTools.AddFilterFromClsid(
                 filterGraph,
-                Consts.CLSID_VFH264Encoder,
+                DSFilterInitInfoConsts.VFH264EncoderV10.CLSID,
                 "H.264 Encoder"
             );
 
@@ -899,7 +971,6 @@ public class CustomEncodingEncryption
                 h264Config.put_Profile(77); // Perfil Main
                 h264Config.put_Level(41);   // Nivel 4.1 (1080p)
                 h264Config.put_RateControl(1); // CBR
-                h264Config.put_GOP(60);     // 2 segundos a 30fps
 
                 Console.WriteLine($"H.264 configurado: {videoBitrate / 1000000.0} Mbps, Perfil Main, Nivel 4.1");
             }
@@ -907,7 +978,7 @@ public class CustomEncodingEncryption
             // Añadir y configurar codificador AAC
             var audioEncoder = FilterGraphTools.AddFilterFromClsid(
                 filterGraph,
-                Consts.CLSID_VFAACEncoder,
+                DSFilterInitInfoConsts.VFAACEncoderV10.CLSID,
                 "AAC Encoder"
             );
 
@@ -915,7 +986,7 @@ public class CustomEncodingEncryption
             var aacConfig = audioEncoder as IVFAACEncoder;
             if (aacConfig != null)
             {
-                aacConfig.SetBitrate((uint)audioBitrate);
+                aacConfig.SetBitRate((uint)audioBitrate);
                 aacConfig.SetProfile(2); // AAC-LC
                 aacConfig.SetOutputFormat(0); // Raw AAC para MP4
 
@@ -924,28 +995,32 @@ public class CustomEncodingEncryption
 
             // Añadir muxer de encriptación
             var encryptMuxer = (IBaseFilter)Activator.CreateInstance(
-                Type.GetTypeFromCLSID(new Guid("F1D3727A-88DE-49ab-A635-280BEFEFF902"))
+                Type.GetTypeFromCLSID(new Guid(Consts.CLSID_VFVideoEncryptor9))
             );
-            filterGraph.AddFilter(encryptMuxer, "Encrypt Muxer");
+            DsError.ThrowExceptionForHR(filterGraph.AddFilter(encryptMuxer, "Encrypt Muxer"));
 
             // Configurar encriptación
             var cryptoConfig = encryptMuxer as IVFCryptoConfig;
-            if (cryptoConfig != null)
-            {
-                cryptoConfig.ApplyString(password);
-                Console.WriteLine("Encriptación configurada");
-            }
+            if (cryptoConfig == null)
+                throw new InvalidOperationException("IVFCryptoConfig is not available");
+            cryptoConfig.ApplyString(password);
+            if (cryptoConfig.HavePassword() != 0)
+                throw new InvalidOperationException("Password not set");
+            Console.WriteLine("Encriptación configurada");
 
             // Establecer archivo de salida
-            var fileSink = encryptMuxer as IFileSinkFilter;
-            fileSink?.SetFileName(outputFile, null);
+            var fileWriter = (IBaseFilter)new FileWriter();
+            DsError.ThrowExceptionForHR(filterGraph.AddFilter(fileWriter, "File Writer"));
+            DsError.ThrowExceptionForHR(((IFileSinkFilter)fileWriter).SetFileName(outputFile, null));
 
             // Construir conexiones
             ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
-            captureGraph.SetFiltergraph(filterGraph);
+            DsError.ThrowExceptionForHR(captureGraph.SetFiltergraph(filterGraph));
 
-            captureGraph.RenderStream(null, MediaType.Video, sourceFilter, videoEncoder, encryptMuxer);
+            DsError.ThrowExceptionForHR(captureGraph.RenderStream(null, MediaType.Video, sourceFilter, videoEncoder, encryptMuxer));
+            // Sin comprobar: un archivo sin audio no tiene nada que conectar aquí
             captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, audioEncoder, encryptMuxer);
+            DsError.ThrowExceptionForHR(captureGraph.RenderStream(null, null, encryptMuxer, null, fileWriter));
 
             Console.WriteLine("Iniciando codificación con configuración personalizada...");
 
@@ -960,7 +1035,10 @@ public class CustomEncodingEncryption
             {
                 hr = mediaEvent.WaitForCompletion(1000, out eventCode);
             }
-            while (eventCode == 0);
+            while (hr == DSErrorCodes.E_ABORT);
+            DsError.ThrowExceptionForHR(hr);
+            if (eventCode != EventCode.Complete)
+                throw new InvalidOperationException($"Encoding stopped with event {eventCode}");
 
             Console.WriteLine("¡Codificación y encriptación completadas!");
 
@@ -1051,7 +1129,7 @@ public class RobustEncryption
             // Añadir codificadores
             var videoEncoder = FilterGraphTools.AddFilterFromClsid(
                 filterGraph,
-                Consts.CLSID_VFH264Encoder,
+                DSFilterInitInfoConsts.VFH264EncoderV10.CLSID,
                 "H.264 Encoder"
             );
             if (videoEncoder == null)
@@ -1061,12 +1139,12 @@ public class RobustEncryption
             }
             var audioEncoder = FilterGraphTools.AddFilterFromClsid(
                 filterGraph,
-                Consts.CLSID_VFAACEncoder,
+                DSFilterInitInfoConsts.VFAACEncoderV10.CLSID,
                 "AAC Encoder"
             );
             // Añadir muxer de encriptación
             var encryptMuxer = (IBaseFilter)Activator.CreateInstance(
-                Type.GetTypeFromCLSID(new Guid("F1D3727A-88DE-49ab-A635-280BEFEFF902"))
+                Type.GetTypeFromCLSID(new Guid(Consts.CLSID_VFVideoEncryptor9))
             );
             if (encryptMuxer == null)
             {
@@ -1086,15 +1164,7 @@ public class RobustEncryption
                 Console.WriteLine("ERROR: Interfaz IVFCryptoConfig no disponible");
                 return EncryptionResult.InterfaceNotAvailable;
             }
-            try
-            {
-                cryptoConfig.ApplyString(password);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"ERROR: Fallo al aplicar contraseña: {ex.Message}");
-                return EncryptionResult.InvalidPassword;
-            }
+            cryptoConfig.ApplyString(password);
             // Verificar que la contraseña esté establecida
             hr = cryptoConfig.HavePassword();
             if (hr != 0)
@@ -1104,26 +1174,35 @@ public class RobustEncryption
             }
             Console.WriteLine("Contraseña de encriptación configurada exitosamente");
             // Establecer archivo de salida
-            var fileSink = encryptMuxer as IFileSinkFilter;
-            if (fileSink != null)
+            var fileWriter = (IBaseFilter)new FileWriter();
+            hr = filterGraph.AddFilter(fileWriter, "File Writer");
+            if (hr >= 0)
             {
-                hr = fileSink.SetFileName(outputFile, null);
-                if (hr != 0)
-                {
-                    Console.WriteLine($"ERROR: Fallo al establecer archivo de salida (HRESULT: 0x{hr:X8})");
-                    return EncryptionResult.FilterGraphError;
-                }
+                hr = ((IFileSinkFilter)fileWriter).SetFileName(outputFile, null);
+            }
+            if (hr < 0)
+            {
+                Console.WriteLine($"ERROR: Fallo al establecer archivo de salida (HRESULT: 0x{hr:X8})");
+                return EncryptionResult.FilterGraphError;
             }
             // Construir grafo de filtros
             ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
             hr = captureGraph.SetFiltergraph(filterGraph);
+            if (hr < 0)
+            {
+                Console.WriteLine($"ERROR: SetFiltergraph failed (HRESULT: 0x{hr:X8})");
+                Marshal.ReleaseComObject(captureGraph);
+                return EncryptionResult.FilterGraphError;
+            }
             hr = captureGraph.RenderStream(
                 null, MediaType.Video,
                 sourceFilter, videoEncoder, encryptMuxer
             );
-            if (hr != 0)
+            if (hr < 0)
             {
-                Console.WriteLine($"ADVERTENCIA: Conexión de video fallida (HRESULT: 0x{hr:X8})");
+                Console.WriteLine($"ERROR: Video connection failed (HRESULT: 0x{hr:X8})");
+                Marshal.ReleaseComObject(captureGraph);
+                return EncryptionResult.FilterGraphError;
             }
             hr = captureGraph.RenderStream(
                 null, MediaType.Audio,
@@ -1133,11 +1212,17 @@ public class RobustEncryption
             {
                 Console.WriteLine($"ADVERTENCIA: Conexión de audio fallida (HRESULT: 0x{hr:X8}) - continuando sin audio");
             }
+            hr = captureGraph.RenderStream(null, null, encryptMuxer, null, fileWriter);
+            if (hr < 0)
+            {
+                Console.WriteLine($"ERROR: Fallo al conectar File Writer (HRESULT: 0x{hr:X8})");
+                return EncryptionResult.FilterGraphError;
+            }
             Console.WriteLine("Grafo de filtros construido exitosamente");
             Console.WriteLine("Iniciando encriptación...");
             // Iniciar codificación
             hr = mediaControl.Run();
-            if (hr != 0)
+            if (hr < 0)
             {
                 Console.WriteLine($"ERROR: Fallo al iniciar codificación (HRESULT: 0x{hr:X8})");
                 return EncryptionResult.EncodingError;
@@ -1145,7 +1230,7 @@ public class RobustEncryption
             // Monitorizar progreso
             var mediaEvent = (IMediaEventEx)filterGraph;
             EventCode eventCode;
-            long param1, param2;
+            IntPtr param1, param2;
             do
             {
                 hr = mediaEvent.GetEvent(out eventCode, out param1, out param2, 1000);
@@ -1156,11 +1241,16 @@ public class RobustEncryption
                     {
                         break;
                     }
-                    else if (eventCode == EventCode.ErrorAbort)
+                    else if (eventCode == EventCode.ErrorAbort || eventCode == EventCode.UserAbort || eventCode == EventCode.ErrorAbortEx)
                     {
                         Console.WriteLine($"ERROR: Codificación abortada (código de evento: {eventCode})");
                         return EncryptionResult.EncodingError;
                     }
+                }
+                else if (hr != DSErrorCodes.E_ABORT)
+                {
+                    Console.WriteLine($"ERROR: GetEvent failed (HRESULT: 0x{hr:X8})");
+                    return EncryptionResult.EncodingError;
                 }
             }
             while (true);
@@ -1389,6 +1479,7 @@ regsvr32 "C:\Ruta\A\DecryptDemuxer.ax"
 **Problema**: La codificación falló silenciosamente
 
 **Solución**:
+- Conecte la salida del cifrador a un File Writer y establezca el nombre de archivo en el File Writer: el cifrador no implementa `IFileSinkFilter`
 - Compruebe que todos los filtros codificadores estén conectados correctamente
 - Verifique que las configuraciones del codificador sean válidas
 - Monitorice IMediaEventEx para eventos de error

@@ -1,6 +1,6 @@
 ---
-title: URL RTSP Eufy — modelos compatibles y configuración en C#
-description: Qué modelos eufyCam, SoloCam e Indoor Cam admiten RTSP, cómo activarlo en la app, URLs live0/live1 y puerto 554, con ejemplos de código C# .NET.
+title: "Soporte RTSP y ONVIF de Eufy por modelo, URL y ajustes"
+description: "¿Las cámaras Eufy admiten RTSP u ONVIF? Tabla de modelos eufyCam, SoloCam e Indoor Cam, cómo activar RTSP, URLs live0/live1 en el puerto 554 y código C#."
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -25,34 +25,34 @@ tags:
 
 ## Descripción de la Marca
 
-**Eufy Security** es una marca de seguridad para el hogar inteligente propiedad de **Anker Innovations**, con sede en Changsha, China. Eufy es conocida por almacenamiento local (sin suscripción obligatoria a la nube), detección impulsada por IA y una amplia gama de cámaras interiores, exteriores, con batería y timbre. El soporte RTSP y ONVIF varía significativamente según el modelo y la versión de firmware.
+**Eufy Security** es una marca de seguridad para el hogar inteligente propiedad de **Anker Innovations**, con sede en Changsha, China. Eufy es conocida por almacenamiento local (sin suscripción obligatoria a la nube), detección impulsada por IA y una amplia gama de cámaras interiores, exteriores, con batería y timbre. El soporte RTSP varía significativamente según el modelo y la versión de firmware, y las páginas de soporte de Eufy descartan ONVIF en sus SoloCam, sus cámaras de foco, el Video Doorbell Dual (Wired) y el Video Doorbell 2E.
 
 **Datos clave:**
 
 - **Líneas de productos:** eufyCam (batería), SoloCam (independiente), Indoor Cam, Floodlight Cam, Video Doorbell, HomeBase
-- **Soporte de protocolos:** RTSP (modelos selectos, debe habilitarse), ONVIF (firmware más reciente), aplicación Eufy Security
+- **Soporte de protocolos:** RTSP (modelos selectos, debe habilitarse), aplicación Eufy Security
 - **Puerto RTSP predeterminado:** 554
 - **Credenciales predeterminadas:** Sin valores predeterminados estándar — se establecen durante la habilitación de RTSP
-- **Soporte ONVIF:** Añadido en actualizaciones de firmware recientes para muchos modelos
+- **Soporte ONVIF:** No en SoloCam, cámaras de foco, Video Doorbell Dual (Wired) y Video Doorbell 2E (páginas de soporte de Eufy); no documentado para eufyCam e Indoor Cam
 - **Códecs de vídeo:** H.264, H.265 (modelos selectos)
 - **Almacenamiento local:** Sí — HomeBase o microSD de la cámara (no requiere nube para grabación)
 
-!!! info "El Soporte RTSP/ONVIF Varía Según el Modelo"
-    Eufy ha ido añadiendo gradualmente soporte RTSP y ONVIF en toda su línea de productos mediante actualizaciones de firmware. No todos los modelos soportan estas funciones. Verifique la configuración de la aplicación Eufy Security para su cámara específica para ver si RTSP está disponible.
+!!! info "El soporte RTSP varía según el modelo"
+    Eufy ha ido añadiendo gradualmente soporte RTSP en toda su línea de productos mediante actualizaciones de firmware. No todos los modelos lo soportan, y no hemos encontrado ninguna página de Eufy que confirme ONVIF para algún modelo. Verifique la configuración de la aplicación Eufy Security para su cámara específica para ver si RTSP está disponible.
 
-## Soporte RTSP por Modelo
+## Soporte RTSP y ONVIF por modelo { #soporte-rtsp-por-modelo }
 
 | Modelo | RTSP | ONVIF | Notas |
 |--------|------|-------|-------|
-| eufyCam 2 / 2 Pro | Sí (vía HomeBase) | Sí | Requiere HomeBase 2 |
-| eufyCam 2C / 2C Pro | Sí (vía HomeBase) | Sí | Requiere HomeBase 2 |
-| eufyCam 3 / 3C | Sí (vía HomeBase 3) | Sí | Requiere HomeBase 3 |
-| eufyCam S330 | Sí (vía HomeBase 3) | Sí | Modelo 4K |
-| SoloCam S340 | Sí | Sí | Doble lente, RTSP independiente |
-| SoloCam C210 | Sí | Sí | Independiente con RTSP |
-| Indoor Cam 2K | Sí | Sí | WiFi, depende del firmware |
-| Indoor Cam Pan & Tilt | Sí | Sí | WiFi, depende del firmware |
-| Floodlight Cam 2 Pro | Sí | Sí | Con cable |
+| eufyCam 2 / 2 Pro | Sí (vía HomeBase) | No documentado | Requiere HomeBase 2 |
+| eufyCam 2C / 2C Pro | Sí (vía HomeBase) | No documentado | Requiere HomeBase 2 |
+| eufyCam 3 / 3C | Sí (vía HomeBase 3) | No documentado | Requiere HomeBase 3 |
+| eufyCam S330 | Sí (vía HomeBase 3) | No documentado | Modelo 4K |
+| SoloCam S340 | Sí | No | Doble lente, RTSP independiente |
+| SoloCam C210 | Sí | No | Independiente con RTSP |
+| Indoor Cam 2K | Sí | No documentado | WiFi, depende del firmware |
+| Indoor Cam Pan & Tilt | Sí | No documentado | WiFi, depende del firmware |
+| Floodlight Cam 2 Pro | Sí | No | Con cable |
 | Video Doorbell 2K | Limitado | No | Solo vía HomeBase |
 | Video Doorbell Dual | Limitado | No | Solo vía HomeBase |
 
@@ -136,17 +136,21 @@ Los modelos eufyCam con batería pueden dejar de transmitir RTSP cuando están e
 
 ### Descubrimiento ONVIF
 
-El firmware más reciente de Eufy soporta descubrimiento ONVIF. Use ONVIF para encontrar automáticamente cámaras en su red en lugar de configurar manualmente las URLs RTSP.
+Eufy indica que sus SoloCam, cámaras de foco y los Video Doorbell Dual (Wired) y 2E no admiten ONVIF, y ONVIF no está documentado para ningún otro modelo, así que no confíe en el descubrimiento ONVIF para encontrarlas. Active RTSP en la aplicación Eufy Security y use directamente la URL RTSP.
 
 ### Inconsistencias de firmware
 
-Eufy ha implementado el soporte RTSP/ONVIF gradualmente. Diferentes cámaras en su configuración pueden tener diferentes capacidades dependiendo de su versión de firmware. Actualice siempre todos los dispositivos al firmware más reciente.
+Eufy ha implementado el soporte RTSP gradualmente. Diferentes cámaras en su configuración pueden tener diferentes capacidades dependiendo de su versión de firmware. Actualice siempre todos los dispositivos al firmware más reciente.
 
 ## Preguntas Frecuentes
 
 **¿Las cámaras Eufy soportan RTSP?**
 
 Muchas cámaras Eufy ahora soportan RTSP, pero debe habilitarse en la aplicación Eufy Security y varía según el modelo. Las cámaras conectadas a HomeBase transmiten RTSP a través del HomeBase, mientras que las cámaras independientes transmiten directamente. Verifique las capacidades de su modelo específico en la configuración de la aplicación.
+
+**¿Las cámaras Eufy soportan ONVIF?**
+
+No, según la documentación de Eufy. Sus páginas de soporte indican que las SoloCam, las cámaras de foco, el Video Doorbell Dual (Wired) y el 2E no admiten ONVIF, y no hemos encontrado ninguna página de Eufy que confirme ONVIF en los modelos eufyCam o Indoor Cam. Use RTSP en su lugar: actívelo en la aplicación Eufy Security y conéctese con la URL que muestra la aplicación.
 
 **¿Las cámaras Eufy requieren suscripción a la nube para RTSP?**
 

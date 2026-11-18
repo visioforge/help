@@ -54,7 +54,7 @@ DVS (Duplicate Video Scanner) is a Windows desktop application that scans folder
 
 2. **Configure Settings**:
    - Select video formats to include in scan
-   - Set comparison sensitivity (1-100%)
+   - Set the sensitivity (0-100, default 30); it is multiplied by 10 into the difference threshold, so lower is stricter
    - Choose processing options
 
 3. **Start Scan**:

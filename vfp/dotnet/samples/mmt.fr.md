@@ -70,7 +70,7 @@ MMT (Media Monitoring Tool) est une application de bureau Windows conçue pour t
 
 5. **Examiner les résultats** :
    - Voir les détections dans l'onglet Résultats
-   - Consulter horodatages et scores de confiance
+   - Consulter le fichier publicitaire, le fichier de diffusion et la position de chaque correspondance
    - Prévisualiser les correspondances dans le lecteur
 
 ## Cas d'usage
@@ -103,17 +103,14 @@ MMT (Media Monitoring Tool) est une application de bureau Windows conçue pour t
 
 ### Paramètres de détection
 
-- **Sensibilité** : ajuster le seuil de correspondance (1 à 100)
-  - Plus élevé = correspondance plus stricte (moins de faux positifs)
-  - Plus bas = correspondance plus lâche (peut manquer des variations)
+- **Niveau de différence** : score de différence maximal pour une correspondance (curseur 200-1000, 500 par défaut)
+  - Plus bas = correspondance plus stricte (moins de faux positifs)
+  - Plus élevé = correspondance plus lâche (trouve davantage de copies modifiées)
 
-- **Décalage temporel** : déplacement temporel maximum autorisé
 - **Zones d'exclusion** : définir des régions à exclure (logos, bandeaux)
 
 ### Options de traitement
 
-- **Multithreading** : utiliser plusieurs cœurs CPU
-- **Limite de mémoire** : contrôler l'utilisation de la RAM
 - **Mise en cache des empreintes** : enregistrer pour un retraitement plus rapide
 
 ## Comprendre les résultats
@@ -122,18 +119,11 @@ MMT (Media Monitoring Tool) est une application de bureau Windows conçue pour t
 
 Chaque détection affiche :
 
-- **Nom du fragment** : quel clip a été trouvé
+- **Fichier publicitaire** : quel clip a été trouvé
 - **Fichier de diffusion** : où il a été trouvé
-- **Horodatage** : position exacte (HH:MM:SS)
-- **Durée** : longueur de la correspondance
-- **Confiance** : qualité de correspondance (pourcentage)
+- **Position** : début de la correspondance dans la diffusion (minutes totales:secondes, par exemple 75:3)
 
-### Scores de confiance
-
-- **95-100 %** : correspondance exacte
-- **85-95 %** : confiance élevée (différences mineures)
-- **70-85 %** : correspondance probable (quelques modifications)
-- **Inférieur à 70 %** : correspondance possible (examen nécessaire)
+La démo n'indique ni confiance ni pourcentage : une correspondance est toute position dont le score de différence est inférieur au niveau de différence.
 
 ## Fonctionnalités avancées
 
@@ -155,8 +145,6 @@ Les résultats peuvent être exportés avec :
 
 - Horodatages de détection
 - Chemins de fichiers
-- Scores de confiance
-- Détails des fragments
 
 ## Bonnes pratiques
 
@@ -186,12 +174,12 @@ Les résultats peuvent être exportés avec :
 
 - Vérifier la qualité et la longueur du fragment
 - Vérifier que la diffusion contient le fragment
-- Ajuster les paramètres de sensibilité
+- Augmenter le niveau de différence
 - Assurer la plage temporelle appropriée
 
 ### Trop de faux positifs
 
-- Augmenter le seuil de sensibilité
+- Réduire le niveau de différence
 - Vérifier les éléments communs (images noires)
 - Utiliser des fragments plus longs
 - Définir des zones d'exclusion

@@ -101,7 +101,7 @@ For detailed parameters and properties of each effect, see [Audio Effects Refere
 ### Pitch and Tempo
 
 - **PitchShiftAudioEffect** — Pitch shifting without tempo change
-- **ScaleTempoAudioEffect** — Tempo change without pitch shift
+- **ScaleTempoAudioEffect** — Keeps the pitch when the playback rate changes
 
 ### Special Effects
 

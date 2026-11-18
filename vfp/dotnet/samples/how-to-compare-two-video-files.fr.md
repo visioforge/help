@@ -66,7 +66,7 @@ Une fois les deux empreintes générées, vous pouvez les comparer pour détermi
 
 ```csharp
 // comparer la première et la seconde empreinte
-var res = VFPCompare.Compare(fp1, fp2, 500);
+var res = VFPCompare.Compare(fp1, fp2, 5); // décalage maximal en secondes
 
 // vérifier le résultat
 if (res < 300)

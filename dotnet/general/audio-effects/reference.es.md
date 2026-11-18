@@ -748,29 +748,43 @@ var effect = new PitchShiftAudioEffect(1.5f); // Subir una quinta
 
 ### ScaleTempoAudioEffect
 
-**Elemento GStreamer**: `scaletempo`
+**Elemento GStreamer**: `scaletempo`; `pitch` (SoundTouch) para `Rate` en `VideoEditCoreX`
 
-**Propósito**: Cambiar el tempo sin cambiar el tono (algoritmo WSOLA).
+**Propósito**: Conservar el tono cuando cambia la tasa de reproducción (algoritmo WSOLA), o cambiar el tempo de un render de `VideoEditCoreX`.
 
 **Parámetros**:
 
-- `Rate` (double): Velocidad de reproducción
-    - 1.0 = normal
-    - 2.0 = doble velocidad
-    - 0.5 = mitad de velocidad
+- `Rate` (double): Multiplicador de tempo
     - Predeterminado: 1.0
+    - Rango: 0.1 a 10
+    - `VideoEditCoreX`: cada clip al que se aplica el efecto se reproduce a este tempo conservando el tono, y su vídeo a la misma velocidad. 1.5 renderiza 6 s de origen en 4 s, y los clips siguientes se desplazan para seguirlo. Solo cambian los clips con audio: un clip solo de vídeo, como uno emparejado con un archivo de audio aparte, conserva su velocidad, así que use un archivo con ambos para que la imagen vaya sincronizada. Un clip de la misma capa que empieza dentro del que cambió, un solapamiento para una transición, se desplaza con su final, así que el solapamiento se conserva; un solapamiento que no cabe en la nueva duración genera `OnError`, y ese clip se reproduce a su velocidad original. `Stride`, `Overlap` y `Search` no se aplican con una tasa distinta de 1.0. Un valor fuera de rango genera `OnError` y el efecto no se aplica
+    - Media Blocks, `MediaPlayerCoreX` y `VideoCaptureCoreX`: se ignora. La velocidad la marca la tasa de reproducción, `MediaBlocksPipeline.Rate_SetAsync` o `MediaPlayerCoreX.Rate_SetAsync`, y el efecto conserva el tono a esa tasa. `VideoCaptureCoreX` no tiene tasa de reproducción, así que en él el audio pasa sin cambios
 - `Stride` (TimeSpan): Paso de procesamiento
     - Predeterminado: 30 ms
+    - Rango: 1 a 5000 ms
 - `Overlap` (double): Porcentaje de superposición
     - Rango: 0.0 a 1.0
     - Predeterminado: 0.2
 - `Search` (TimeSpan): Ventana de búsqueda
     - Predeterminado: 14 ms
+    - Rango: 0 a 500 ms
+
+`Stride`, `Overlap` y `Search` cambian el sonido solo cuando la tasa de reproducción no es 1.0; a 1.0 el audio pasa sin cambios
 
 **Uso**:
 
 ```csharp
-var effect = new ScaleTempoAudioEffect(1.5); // Velocidad 1.5x
+// mediaPlayer es un MediaPlayerCoreX.
+var effect = new ScaleTempoAudioEffect { Stride = TimeSpan.FromMilliseconds(20), Overlap = 0.3 };
+mediaPlayer.Audio_Effects_AddOrUpdate(effect);
+
+// El efecto conserva el tono mientras el reproductor reproduce a 1.5x.
+await mediaPlayer.Rate_SetAsync(1.5);
+```
+
+```csharp
+// videoEdit es un VideoEditCoreX: el render reproduce sus clips a 1.5x conservando el tono.
+videoEdit.Audio_Effects.Add(new ScaleTempoAudioEffect(1.5));
 ```
 
 ---

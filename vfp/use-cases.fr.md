@@ -65,7 +65,7 @@ public class CopyrightProtectionSystem
 {
     private Dictionary<string, CopyrightedContent> _copyrightDatabase;
     private readonly string _databasePath;
-    private readonly int _violationThreshold = 30; // Seuil de similarité
+    private readonly int _violationThreshold = 500; // Seuil de différence de Compare (valeur par défaut de CompareVideoFilesAsync)
     
     public class CopyrightedContent
     {
@@ -83,8 +83,6 @@ public class CopyrightProtectionSystem
         public CopyrightedContent OriginalContent { get; set; }
         public int SimilarityScore { get; set; }
         public DateTime DetectedAt { get; set; }
-        public TimeSpan MatchedDuration { get; set; }
-        public List<TimeSpan> MatchPositions { get; set; }
     }
     
     public CopyrightProtectionSystem(string databasePath)
@@ -179,29 +177,13 @@ public class CopyrightProtectionSystem
             
             if (similarity < _violationThreshold)
             {
-                // Infraction potentielle détectée, vérifier les correspondances partielles
-                var searchFp = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(source);
-                
-                var matchPositions = await VFPAnalyzer.SearchAsync(
-                    searchFp,
-                    copyrighted.Fingerprint,
-                    uploadedFp.Duration,
-                    _violationThreshold,
-                    true
-                );
-                
-                if (matchPositions.Count > 0)
+                violations.Add(new ViolationReport
                 {
-                    violations.Add(new ViolationReport
-                    {
-                        ViolatingFile = uploadedVideoPath,
-                        OriginalContent = copyrighted,
-                        SimilarityScore = similarity,
-                        DetectedAt = DateTime.UtcNow,
-                        MatchedDuration = uploadedFp.Duration,
-                        MatchPositions = matchPositions
-                    });
-                }
+                    ViolatingFile = uploadedVideoPath,
+                    OriginalContent = copyrighted,
+                    SimilarityScore = similarity,
+                    DetectedAt = DateTime.UtcNow
+                });
             }
         }
         
@@ -232,8 +214,6 @@ MATÉRIEL CONTREFAISANT :
 Fichier : {Path.GetFileName(violation.ViolatingFile)}
 Détecté : {violation.DetectedAt:yyyy-MM-dd HH:mm:ss} UTC
 Score de similarité : {violation.SimilarityScore} (Seuil : {_violationThreshold})
-Durée correspondante : {violation.MatchedDuration}
-Positions de correspondance : {string.Join(", ", violation.MatchPositions.Select(p => p.ToString(@"hh\:mm\:ss")))}
 
 DÉCLARATION :
 Je crois de bonne foi que l'utilisation des matériaux protégés par droits d'auteur décrits ci-dessus
@@ -321,7 +301,6 @@ class Program
             Console.WriteLine($"\n⚠ INFRACTION AUX DROITS D'AUTEUR DÉTECTÉE !");
             Console.WriteLine($"  Original : {violation.OriginalContent.Title}");
             Console.WriteLine($"  Similarité : {violation.SimilarityScore}");
-            Console.WriteLine($"  Correspondances à : {string.Join(", ", violation.MatchPositions)}");
             
             // Générer la notification DMCA
             string notice = copyrightSystem.GenerateDMCANotice(violation);
@@ -398,7 +377,7 @@ public class BroadcastMonitoringSystem
     {
         // Générer l'empreinte pour le segment
         var source = new VFPFingerprintSource(segmentFile);
-        var segmentFp = await VFPAnalyzer.GetComparingFingerprintForVideoFileAsync(source);
+        var segmentFp = await VFPAnalyzer.GetSearchFingerprintForVideoFileAsync(source);
         
         if (segmentFp == null) return;
         
@@ -410,7 +389,7 @@ public class BroadcastMonitoringSystem
                 commercial.Fingerprint,
                 segmentFp,
                 commercial.Duration,
-                50, // Seuil pour les variations de qualité de diffusion
+                500, // Seuil pour les variations de qualité de diffusion
                 false
             );
             
@@ -584,10 +563,10 @@ public class MediaArchiveDeduplicator
                 int similarity = VFPAnalyzer.Compare(
                     fingerprints[file1],
                     fingerprints[file2],
-                    TimeSpan.FromMilliseconds(500)
+                    TimeSpan.FromSeconds(1)
                 );
                 
-                if (similarity < 30) // Seuil de doublon
+                if (similarity < 300) // Seuil de doublon
                 {
                     var fileInfo = new FileInfo(file2);
                     group.Duplicates.Add(new DuplicateFile
@@ -753,7 +732,7 @@ public class SocialMediaModerationSystem
                 result.IsAllowed = false;
                 result.Reason = $"Contenu banni détecté : {banned.Reason}";
                 result.Action = banned.Action;
-                result.ConfidenceScore = 1.0 - (similarity / 100.0);
+                result.ConfidenceScore = 1.0 - (double)similarity / banned.Threshold;
                 
                 // Journaliser l'infraction
                 await LogContentViolation(userId, videoPath, banned);
@@ -807,14 +786,14 @@ public class SocialMediaModerationSystem
         
         foreach (var banned in userBannedContent)
         {
-            // Vérifier avec un seuil plus strict pour le contournement de bannissement
+            // Vérifier avec un seuil plus souple : les re-téléversements pour contourner un bannissement sont souvent modifiés
             int similarity = VFPAnalyzer.Compare(
                 fingerprint, 
                 banned.Fingerprint, 
-                TimeSpan.FromMilliseconds(500)
+                TimeSpan.FromSeconds(1)
             );
             
-            if (similarity < 50) // Plus indulgent pour les rechargements modifiés
+            if (similarity < 500) // Plus indulgent pour les rechargements modifiés
             {
                 // L'utilisateur tente de recharger un contenu banni
                 await HandleBanEvasion(userId, videoPath, banned);
@@ -836,7 +815,7 @@ public class SocialMediaModerationSystem
         {
             int similarity = VFPAnalyzer.Compare(fingerprint, trusted.Fingerprint, TimeSpan.FromSeconds(2));
             
-            if (similarity < 30)
+            if (similarity < 300)
             {
                 // Le contenu correspond à une source de confiance
                 trustScore = Math.Max(trustScore, trusted.TrustLevel);

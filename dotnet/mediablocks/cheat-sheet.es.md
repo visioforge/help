@@ -52,7 +52,7 @@ El Media Blocks SDK es el SDK .NET más flexible de VisioForge — permite const
 
 ## Soporte de plataformas
 
-- Se ejecuta en Windows (x64 / x86), macOS, Linux x64, Android e iOS.
+- Se ejecuta en Windows (x64 / x86), macOS, Linux (x64 / ARM64), Android e iOS.
 - Frameworks de UI: WinForms, WPF, MAUI, Avalonia, Uno, además de consola.
 - El procesamiento multiplataforma se apoya en un backend GStreamer empaquetado en macOS/Android/iOS y en la instalación del sistema de GStreamer 1.22+ en Linux.
 - Para la matriz completa de códecs × plataformas, consulte [platform-matrix.md](../platform-matrix.md).
@@ -91,6 +91,8 @@ Linux x64 (también requiere GStreamer 1.22+ instalado en el sistema):
 ```xml
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
+
+En Linux ARM64, `VisioForge.CrossPlatform.Core.Linux.arm64` sustituye al paquete `.Linux.x64`; consulte la [implementación en Ubuntu](../deployment-x/Ubuntu.md) para un fragmento de proyecto que elige uno según el identificador de runtime.
 
 Android e iOS:
 
@@ -184,7 +186,7 @@ Sustituya `UniversalSourceBlock` por `SystemVideoSourceBlock` (cámara) o `RTSPS
 - **No hay flujo de datos implícito.** Los bloques deben cablearse explícitamente con `pipeline.Connect(output, input)`; añadir un bloque al pipeline no basta para que los medios circulen a través de él.
 - **Orden de overlays / entradas dinámicas.** Los overlays en `OverlayManagerBlock` y los pads dinámicos en los sinks (`MP4SinkBlock` mediante `IMediaBlockDynamicInputs.CreateNewInput`) deben añadirse antes de arrancar el pipeline — añadirlos después de `StartAsync` falla silenciosamente o lanza una excepción.
 - **Enumeración solo con await.** `DeviceEnumerator.Shared.VideoSourcesAsync()` / `AudioOutputsAsync()` deben usarse con await — no existe una variante síncrona. Usar `.Result` desde el hilo de UI puede provocar un deadlock.
-- **Linux necesita GStreamer del sistema.** `VisioForge.CrossPlatform.Core.Linux.x64` espera que GStreamer 1.22+ ya esté instalado (`apt install gstreamer1.0-*`); el NuGet de Libav es complementario, no un sustituto. Consulte [deployment-x/Ubuntu.md](../deployment-x/Ubuntu.md).
+- **Linux necesita GStreamer del sistema.** GStreamer 1.22+ procede de los paquetes del sistema (`apt install gstreamer1.0-*`); `VisioForge.CrossPlatform.Core.Linux.x64` (o `.Linux.arm64` en ARM64) añade las bibliotecas nativas propias del SDK y no contiene GStreamer; los códecs basados en FFmpeg proceden del paquete del sistema `gstreamer1.0-libav`. Consulte [deployment-x/Ubuntu.md](../deployment-x/Ubuntu.md).
 - **Higiene del ciclo de vida.** Siempre haga `await pipeline.StopAsync()` y `await pipeline.DisposeAsync()` antes de crear otro pipeline en el mismo motor. Omitir el dispose provoca fugas de handles nativos y puede causar cuelgues al cerrar.
 
 ## Véase también
@@ -215,7 +217,7 @@ El Media Player SDK es un reproductor de alto nivel con una sola clase (`MediaPl
 
 ### ¿Puedo ejecutarlo en Linux sin GStreamer?
 
-No. El NuGet del runtime de Linux x64 es un puente fino al stack de GStreamer 1.22+ del sistema. Instale `gstreamer1.0-plugins-base`, `-good`, `-bad`, `-ugly` y `-libav` desde su distribución. Consulte [deployment-x/Ubuntu.md](../deployment-x/Ubuntu.md) para la lista completa de paquetes. macOS / Android / iOS sí incluyen un GStreamer empaquetado a través del NuGet de plataforma.
+No. El NuGet del runtime de Linux (x64 o ARM64) añade las bibliotecas nativas propias del SDK y no contiene GStreamer: el SDK usa el stack de GStreamer 1.22+ del sistema. Instale `gstreamer1.0-plugins-base`, `-good`, `-bad`, `-ugly` y `-libav` desde su distribución. Consulte [deployment-x/Ubuntu.md](../deployment-x/Ubuntu.md) para la lista completa de paquetes. macOS / Android / iOS sí incluyen un GStreamer empaquetado a través del NuGet de plataforma.
 
 ### ¿Cómo añado un efecto de video personalizado?
 

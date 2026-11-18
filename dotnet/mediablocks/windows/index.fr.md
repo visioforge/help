@@ -109,7 +109,7 @@ Voir la [documentation des blocs spéciaux](../Special/index.md)
 
 ## Exigences de plateforme
 
-- **Windows** : Windows 7 SP1 ou ultérieur
+- **Windows** : Windows 10 ou ultérieur
 - **Direct3D 11** : GPU prenant en charge D3D11
 - **Décodage matériel** : GPU prenant en charge le décodage vidéo matériel
 
@@ -314,7 +314,7 @@ else
 
 ## Plateformes
 
-Windows 7 SP1 ou ultérieur (Windows 10/11 recommandé pour la meilleure prise en charge matérielle).
+Windows 10 ou ultérieur (Windows 11 recommandé pour la meilleure prise en charge matérielle).
 
 ## Documentation connexe
 

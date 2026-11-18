@@ -105,8 +105,8 @@ vfp_search -f "commercial.vsigx" -m "broadcast.vsigx"
 - Use "search" type fingerprints for fragments (`-t search` in vfp_gen)
 - Use "search" type fingerprints for main videos too (`-t search` in vfp_gen) — the search reads both files as search fingerprints
 - Fragments should be at least 5-10 seconds for reliable detection
-- Lower difference thresholds (< 100) for exact matches
-- Higher thresholds (100-500) for similar content with modifications
+- Start with the default of 500; lower it (down to about 200) for stricter matches
+- Raise it (up to about 1000) for content with modifications; MMT Live uses 1100 for live streams
 
 ## Performance Notes
 

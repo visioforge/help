@@ -1153,7 +1153,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Scale/Tempo
 
-The scale/tempo block allows you to change the tempo and pitch of the audio stream.
+The scale/tempo block keeps the pitch of the audio stream when the pipeline plays at a different rate. The speed itself comes from `MediaBlocksPipeline.Rate_SetAsync`; at a rate of 1.0 the audio passes through unchanged.
 
 #### Block info
 
@@ -1168,12 +1168,11 @@ Output | Uncompressed audio | 1
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `Rate` | `double` | `1.0` | Playback rate multiplier (0.5 = half speed, 1.0 = normal, 2.0 = double speed). Pitch is preserved |
 | `Overlap` | `double` | `0.2` | Percentage of stride to overlap (0.0–1.0). Higher values improve quality at CPU cost |
-| `Search` | `TimeSpan` | `14 ms` | Length of search window for best overlap position |
-| `Stride` | `TimeSpan` | `30 ms` | Length of output audio stride |
+| `Search` | `TimeSpan` | `14 ms` | Length of search window for best overlap position, 0 to 500 ms |
+| `Stride` | `TimeSpan` | `30 ms` | Length of output audio stride, 1 to 5000 ms |
 
-Constructor is parameterless; set `Rate` via the property (or the underlying `SetRate` accessor is called internally when `Rate` is assigned).
+Constructor is parameterless; the playback speed is set on the pipeline with `Rate_SetAsync`, not on the block.
 
 **GStreamer Element**: `scaletempo`
 
@@ -1193,15 +1192,17 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
-// ScaleTempoBlock has a parameterless constructor; set Rate via property.
-// 1.0 = normal, 0.5 = half-speed, 2.0 = double-speed; pitch is preserved.
-var scaleTempo = new ScaleTempoBlock { Rate = 1.5 };
+// ScaleTempoBlock keeps the pitch while the pipeline plays faster or slower.
+var scaleTempo = new ScaleTempoBlock();
 pipeline.Connect(fileSource.AudioOutput, scaleTempo.Input);
 
 var audioRenderer = new AudioRendererBlock();
 pipeline.Connect(scaleTempo.Output, audioRenderer.Input);
 
 await pipeline.StartAsync();
+
+// 1.0 = normal, 0.5 = half-speed, 2.0 = double-speed.
+await pipeline.Rate_SetAsync(1.5);
 ```
 
 #### Platforms

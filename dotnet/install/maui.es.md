@@ -140,6 +140,8 @@ El control VideoView se adapta a las capacidades de renderizado nativas de cada 
 
 ## Configuración específica de plataforma
 
+En iOS y Mac Catalyst, no establezca `PublishTrimmed`: el SDK de .NET decide cuándo se recortan esos destinos, y un proyecto que tiene como destino `net11.0-ios` o `net11.0-maccatalyst` no compila si la propiedad está establecida (salvo con `PublishAot` habilitado); controle el recorte con `MtouchLink` en su lugar. Si la añadió siguiendo una versión anterior de esta página, elimínela.
+
 ### Implementación en Android
 
 Android requiere pasos de configuración adicionales para asegurar el funcionamiento adecuado:
@@ -197,6 +199,7 @@ Agregue el paquete específico de iOS a su proyecto:
 #### 2. Notas importantes para desarrollo iOS
 
 - **Versión mínima de iOS**: establezca `<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">18.0</SupportedOSPlatformVersion>` en el proyecto. Las bibliotecas nativas de iOS están compiladas para iOS 18.0, y la plantilla de MAUI usa 15.0 por defecto.
+- **Intérprete para XAML (`net10.0-ios` y marcos de destino anteriores)**: establezca `<UseInterpreter Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">true</UseInterpreter>` en el proyecto. Sin ella, la aplicación puede detenerse al iniciar con un error de JIT `aot-only mode` dentro del código XAML. Depende del marco de destino, no del SDK instalado: una aplicación `net11.0-ios` se ejecuta sobre CoreCLR, donde el SDK advierte que la propiedad no tiene efecto, así que elimínela allí.
 - **Use dispositivos físicos**: El SDK requiere pruebas en dispositivos iOS físicos en lugar de simuladores para funcionalidad completa.
 - **Descripciones de privacidad**: Agregue las cadenas de descripción de uso necesarias en su archivo Info.plist para acceso a cámara y micrófono:
   - `NSCameraUsageDescription`
@@ -226,12 +229,14 @@ Para asegurar que su aplicación funcione correctamente tanto en Macs Intel como
 </PropertyGroup>
 ```
 
-#### 3. Habilitar recorte
+#### 3. Intérprete para XAML
 
-Para rendimiento óptimo en macOS, habilita la opción PublishTrimmed:
+Para `net10.0-maccatalyst` y marcos de destino anteriores, habilite el intérprete por el mismo motivo que en iOS (consulte las notas de iOS anteriores). Omítalo para `net11.0-maccatalyst`:
 
 ```xml
-<PublishTrimmed Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">true</PublishTrimmed>
+<PropertyGroup>
+  <UseInterpreter Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">true</UseInterpreter>
+</PropertyGroup>
 ```
 
 Para información más detallada sobre el despliegue en macOS, consulte nuestra página de documentación de [macOS](../deployment-x/macOS.md).

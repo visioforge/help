@@ -70,7 +70,7 @@ MMT (Media Monitoring Tool) is a Windows desktop application designed to find vi
 
 5. **Review Results**:
    - View detections in the Results tab
-   - See timestamps and confidence scores
+   - See the ad file, broadcast file and position of each match
    - Preview matches in the media player
 
 ## Use Cases
@@ -103,17 +103,14 @@ MMT (Media Monitoring Tool) is a Windows desktop application designed to find vi
 
 ### Detection Parameters
 
-- **Sensitivity**: Adjust match threshold (1-100)
-  - Higher = Stricter matching (fewer false positives)
-  - Lower = Looser matching (may miss variations)
+- **Difference level**: Maximum difference score for a match (slider 200-1000, default 500)
+  - Lower = Stricter matching (fewer false positives)
+  - Higher = Looser matching (finds more modified copies)
 
-- **Time Shift**: Maximum temporal displacement allowed
 - **Ignore Areas**: Define regions to exclude (logos, tickers)
 
 ### Processing Options
 
-- **Multi-threading**: Use multiple CPU cores
-- **Memory Limit**: Control RAM usage
 - **Fingerprint Caching**: Save for faster re-processing
 
 ## Understanding Results
@@ -122,18 +119,11 @@ MMT (Media Monitoring Tool) is a Windows desktop application designed to find vi
 
 Each detection shows:
 
-- **Fragment Name**: Which clip was found
-- **Broadcast File**: Where it was found
-- **Timestamp**: Exact position (HH:MM:SS)
-- **Duration**: Length of the match
-- **Confidence**: Match quality (percentage)
+- **Ad file**: Which clip was found
+- **Broadcast file**: Where it was found
+- **Position**: Start of the match in the broadcast (total minutes:seconds, for example 75:3)
 
-### Confidence Scores
-
-- **95-100%**: Exact match
-- **85-95%**: High confidence (minor differences)
-- **70-85%**: Likely match (some modifications)
-- **Below 70%**: Possible match (review needed)
+The demo reports no confidence or percentage: a match is any position whose difference score is below the difference level.
 
 ## Advanced Features
 
@@ -155,8 +145,6 @@ Results can be exported with:
 
 - Detection timestamps
 - File paths
-- Confidence scores
-- Fragment details
 
 ## Best Practices
 
@@ -186,12 +174,12 @@ Results can be exported with:
 
 - Check fragment quality and length
 - Verify broadcast contains the fragment
-- Adjust sensitivity settings
+- Raise the difference level
 - Ensure proper time range
 
 ### Too Many False Positives
 
-- Increase sensitivity threshold
+- Lower the difference level
 - Check for common elements (black frames)
 - Use longer fragments
 - Define ignore areas

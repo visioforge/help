@@ -1153,7 +1153,7 @@ Windows, macOS, Linux, iOS, Android.
 
 ### Échelle/Tempo
 
-Le bloc échelle/tempo vous permet de modifier le tempo et la hauteur du flux audio.
+Le bloc échelle/tempo garde la hauteur du flux audio lorsque le pipeline lit à une autre vitesse. La vitesse elle-même vient de `MediaBlocksPipeline.Rate_SetAsync` ; à 1.0 l'audio passe sans changement.
 
 #### Informations sur le bloc
 
@@ -1168,12 +1168,11 @@ Sortie | Audio non compressé | 1
 
 | Propriété | Type | Par défaut | Description |
 |----------|------|---------|-------------|
-| `Rate` | `double` | `1.0` | Multiplicateur de vitesse de lecture (0.5 = demi-vitesse, 1.0 = normal, 2.0 = vitesse double). La hauteur est préservée |
 | `Overlap` | `double` | `0.2` | Pourcentage de chevauchement (0.0–1.0). Valeurs plus élevées améliorent la qualité au coût du CPU |
-| `Search` | `TimeSpan` | `14 ms` | Longueur de la fenêtre de recherche pour la meilleure position de chevauchement |
-| `Stride` | `TimeSpan` | `30 ms` | Longueur du pas audio de sortie |
+| `Search` | `TimeSpan` | `14 ms` | Longueur de la fenêtre de recherche pour la meilleure position de chevauchement, de 0 à 500 ms |
+| `Stride` | `TimeSpan` | `30 ms` | Longueur du pas audio de sortie, de 1 à 5000 ms |
 
-Le constructeur est sans paramètre ; définissez `Rate` via la propriété (ou l'accesseur sous-jacent `SetRate` est appelé en interne lorsque `Rate` est assigné).
+Le constructeur est sans paramètre ; la vitesse de lecture se règle sur le pipeline avec `Rate_SetAsync`, pas sur le bloc.
 
 **Élément GStreamer** : `scaletempo`
 
@@ -1193,15 +1192,17 @@ var pipeline = new MediaBlocksPipeline();
 var filename = "test.mp3";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
-// ScaleTempoBlock a un constructeur sans paramètre ; définissez Rate via la propriété.
-// 1.0 = normal, 0.5 = demi-vitesse, 2.0 = vitesse double ; la hauteur est préservée.
-var scaleTempo = new ScaleTempoBlock { Rate = 1.5 };
+// ScaleTempoBlock garde la hauteur pendant que le pipeline lit plus vite ou plus lentement.
+var scaleTempo = new ScaleTempoBlock();
 pipeline.Connect(fileSource.AudioOutput, scaleTempo.Input);
 
 var audioRenderer = new AudioRendererBlock();
 pipeline.Connect(scaleTempo.Output, audioRenderer.Input);
 
 await pipeline.StartAsync();
+
+// 1.0 = normal, 0.5 = demi-vitesse, 2.0 = vitesse double.
+await pipeline.Rate_SetAsync(1.5);
 ```
 
 #### Plateformes

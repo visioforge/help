@@ -53,7 +53,7 @@ Before beginning the deployment process, consider these critical factors:
 Windows deployment is the most straightforward, with comprehensive NuGet package support covering all dependencies:
 
 - **Package Distribution**: All components available via NuGet
-- **Architecture Support**: Both x86 and x64 architectures fully supported
+- **Architecture Support**: Both x86 and x64 architectures fully supported; ARM64 (Windows on Arm) too, where MP3 playback needs `VisioForge.CrossPlatform.Libav.Windows.arm64` and NDI is not available
 - **Native Libraries**: Automatically deployed alongside your application
 - **UI Framework Options**: Windows Forms, WPF, WinUI, Avalonia, Uno, and MAUI supported
 
@@ -73,9 +73,9 @@ Android applications use a single native library that must be correctly deployed
 
 ### macOS Deployment
 
-macOS deployment requires additional GStreamer library installation:
+On macOS the native libraries, GStreamer included, come in a NuGet package:
 
-- **Package Distribution**: Core components available via NuGet, GStreamer requires manual installation
+- **Package Distribution**: Core components and the GStreamer libraries available via NuGet (`VisioForge.CrossPlatform.Core.macOS`, plus `VisioForge.CrossPlatform.Core.macOS.Adds` for additional plugins such as SRT); no separate GStreamer installation is needed
 - **Architecture Support**: Intel (x64) and Apple Silicon (ARM64) architectures supported
 - **Native Libraries**: Multiple unmanaged libraries required
 - **Framework Options**: Native macOS, MAUI, and Avalonia supported
@@ -99,8 +99,8 @@ iOS applications require proper provisioning profiles and entitlements. The [iOS
 
 Linux deployment requires manual installation of GStreamer dependencies:
 
-- **Package Distribution**: Core components available via NuGet, GStreamer requires system packages
-- **Architecture Support**: x64 architecture primarily supported
+- **Package Distribution**: Core components available via NuGet (`VisioForge.CrossPlatform.Core.Linux.x64` or `VisioForge.CrossPlatform.Core.Linux.arm64`), GStreamer requires system packages
+- **Architecture Support**: x64 and ARM64 architectures supported
 - **System Dependencies**: Required packages must be installed on the target system
 - **Distribution Considerations**: Different Linux distributions may require different dependency packages
 - **UI Options**: Primarily Avalonia UI framework supported
@@ -123,7 +123,7 @@ Uno Platform simplifies multi-platform development while leveraging native capab
 
 Target devices must meet these minimum requirements:
 
-- **Windows**: Windows 7 or later (x86 or x64)
+- **Windows**: Windows 10 or later (x86 or x64), and Windows on Arm (ARM64)
 - **macOS**: macOS 12 (Monterey) or later (x64 or ARM64)
 - **iOS**: iOS 18.0 or later (ARM64)
 - **Android**: Android 7.0 (API level 24) or later

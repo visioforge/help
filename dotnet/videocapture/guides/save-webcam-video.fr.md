@@ -258,6 +258,8 @@ Pour les autres plateformes :
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
 
+Sous Linux ARM64, `VisioForge.CrossPlatform.Core.Linux.arm64` remplace le paquet `.Linux.x64` ; voir le [déploiement sous Ubuntu](../../deployment-x/Ubuntu.md) pour un fragment de projet qui choisit l'un ou l'autre selon l'identifiant de runtime.
+
 ## Compatibilité multiplateforme
 
 Video Capture SDK .NET est conçu en pensant à la compatibilité multiplateforme, ce qui en fait un choix idéal pour les développeurs travaillant sur des applications devant fonctionner sur plusieurs systèmes d'exploitation.
@@ -301,7 +303,7 @@ Définissez la propriété `Audio_Source` sur un microphone ou un autre périph�
 
 ### L'enregistrement webcam fonctionne-t-il sur macOS et Linux ?
 
-Oui. Le SDK est entièrement multiplateforme. Ajoutez les paquets NuGet redistribuables spécifiques à chaque plateforme (macOS, Linux x64) aux côtés du paquet principal `VisioForge.DotNet.VideoCapture`. Le même code C# fonctionne sur Windows, macOS et Linux, et le SDK prend également en charge .NET MAUI pour le déploiement mobile et multiplateforme sur ordinateur de bureau.
+Oui. Le SDK est entièrement multiplateforme. Ajoutez les paquets NuGet redistribuables spécifiques à chaque plateforme (macOS, Linux x64 ou ARM64) aux côtés du paquet principal `VisioForge.DotNet.VideoCapture`. Le même code C# fonctionne sur Windows, macOS et Linux, et le SDK prend également en charge .NET MAUI pour le déploiement mobile et multiplateforme sur ordinateur de bureau.
 
 ## Prise en charge de VB.NET
 

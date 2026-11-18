@@ -68,9 +68,7 @@ MMT Live est une version en temps réel de Media Monitoring Tool capable de dét
    - Périphérique : sélectionner un périphérique de capture
 
 3. **Définir les paramètres de détection** :
-   - Seuil de sensibilité
-   - Durée minimale de correspondance
-   - Préférences d'alerte
+   - Niveau de différence (200-2000, 1100 par défaut)
 
 4. **Démarrer la surveillance** :
    - Cliquer sur « Start » pour commencer
@@ -140,10 +138,8 @@ http://server.com/live.mjpeg
 
 ### Paramètres de détection
 
-- **Taille du tampon** : historique vidéo (5 à 60 secondes)
-- **Intervalle de vérification** : fréquence d'analyse (1 à 5 secondes)
-- **Seuil de confiance** : qualité de correspondance (70 à 95 %)
-- **Priorité des fragments** : quels fragments vérifier en premier
+- **Niveau de différence** : score de différence maximal pour une correspondance (curseur 200-2000, 1100 par défaut). Plus bas est plus strict. Ce n'est pas un pourcentage.
+- **Durée du fragment** : durée de vidéo en direct découpée pour chaque analyse, en secondes. 60 secondes ou plus donnent les meilleurs résultats ; le minimum est la publicité la plus longue plus 10 secondes, et 0 la calcule automatiquement.
 
 ## Optimisation des performances
 

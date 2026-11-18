@@ -43,7 +43,7 @@ Avant de commencer le processus d'installation et de déploiement, assurez-vous 
 
 ### Exigences logicielles
 
-- macOS 10.15 (Catalina) ou ultérieur (dernière version recommandée)
+- macOS 12 (Monterey) ou ultérieur (dernière version recommandée)
   - macOS Monterey (12.x)
   - macOS Ventura (13.x)
   - macOS Sonoma (14.x)
@@ -133,6 +133,7 @@ Pour les applications macOS natives, ajoutez ces paquets de base :
 
 3. **Redistribuable de plateforme** :
    - `VisioForge.CrossPlatform.Core.macOS` pour les bibliothèques natives et les dépendances
+   - `VisioForge.CrossPlatform.Core.macOS.Adds` pour des plugins GStreamer supplémentaires comme SRT et WebRTC, lorsque votre application les utilise
 
 ### Applications macOS
 

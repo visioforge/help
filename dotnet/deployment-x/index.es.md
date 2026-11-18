@@ -53,7 +53,7 @@ Antes de comenzar el proceso de despliegue, considere estos factores críticos:
 El despliegue en Windows es el más directo, con soporte completo de paquetes NuGet cubriendo todas las dependencias:
 
 - **Distribución de paquetes**: Todos los componentes disponibles vía NuGet
-- **Soporte de arquitectura**: Arquitecturas x86 y x64 completamente soportadas
+- **Soporte de arquitectura**: Arquitecturas x86 y x64 completamente soportadas; también ARM64 (Windows on Arm), donde la reproducción de MP3 requiere `VisioForge.CrossPlatform.Libav.Windows.arm64` y NDI no está disponible
 - **Bibliotecas nativas**: Desplegadas automáticamente junto con su aplicación
 - **Opciones de framework de UI**: Windows Forms, WPF, WinUI, Avalonia, Uno y MAUI soportados
 
@@ -73,9 +73,9 @@ Las aplicaciones Android usan una sola biblioteca nativa que debe desplegarse co
 
 ### Despliegue en macOS
 
-El despliegue en macOS requiere instalación adicional de la biblioteca GStreamer:
+En macOS las bibliotecas nativas, GStreamer incluido, llegan en un paquete NuGet:
 
-- **Distribución de paquetes**: Componentes principales disponibles vía NuGet, GStreamer requiere instalación manual
+- **Distribución de paquetes**: Componentes principales y bibliotecas de GStreamer disponibles vía NuGet (`VisioForge.CrossPlatform.Core.macOS`, más `VisioForge.CrossPlatform.Core.macOS.Adds` para plugins adicionales como SRT); no hace falta instalar GStreamer por separado
 - **Soporte de arquitectura**: Arquitecturas Intel (x64) y Apple Silicon (ARM64) soportadas
 - **Bibliotecas nativas**: Múltiples bibliotecas no administradas requeridas
 - **Opciones de framework**: macOS nativo, MAUI y Avalonia soportados
@@ -99,8 +99,8 @@ Las aplicaciones iOS requieren perfiles de aprovisionamiento y entitlements adec
 
 El despliegue en Linux requiere instalación manual de dependencias de GStreamer:
 
-- **Distribución de paquetes**: Componentes principales disponibles vía NuGet, GStreamer requiere paquetes del sistema
-- **Soporte de arquitectura**: Arquitectura x64 principalmente soportada
+- **Distribución de paquetes**: Componentes principales disponibles vía NuGet (`VisioForge.CrossPlatform.Core.Linux.x64` o `VisioForge.CrossPlatform.Core.Linux.arm64`), GStreamer requiere paquetes del sistema
+- **Soporte de arquitectura**: Arquitecturas x64 y ARM64 soportadas
 - **Dependencias del sistema**: Paquetes requeridos deben instalarse en el sistema objetivo
 - **Consideraciones de distribución**: Diferentes distribuciones de Linux pueden requerir diferentes paquetes de dependencias
 - **Opciones de UI**: Principalmente framework de UI Avalonia soportado
@@ -123,7 +123,7 @@ Uno Platform simplifica el desarrollo multiplataforma mientras aprovecha las cap
 
 Los dispositivos objetivo deben cumplir estos requisitos mínimos:
 
-- **Windows**: Windows 7 o posterior (x86 o x64)
+- **Windows**: Windows 10 o posterior (x86 o x64), y Windows on Arm (ARM64)
 - **macOS**: macOS 12 (Monterey) o posterior (x64 o ARM64)
 - **iOS**: iOS 18.0 o posterior (ARM64)
 - **Android**: Android 7.0 (nivel de API 24) o posterior

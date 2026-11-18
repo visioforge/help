@@ -248,7 +248,7 @@ public class VideoFragmentSearcher
         );
         
         // Search for all occurrences
-        const int MAX_DIFFERENCE = 20; // Adjust based on quality requirements
+        const int MAX_DIFFERENCE = 500; // MMT demo default; the demos use 200-2000
         var occurrences = await VFPAnalyzer.SearchAsync(
             fragmentFp,
             targetFp,
@@ -576,7 +576,7 @@ public class FragmentSearchService
 
 public class SearchOptions
 {
-    public int MaxDifference { get; set; } = 20;
+    public int MaxDifference { get; set; } = 500;
     public bool FindAllOccurrences { get; set; } = true;
     public bool UseCache { get; set; } = true;
     public bool UsePersistentCache { get; set; } = true;
@@ -710,7 +710,7 @@ Fragment search performance (5-minute fragment in various video lengths):
        
        return new QualityReport
        {
-           ContentMatch = difference < 100,
+           ContentMatch = difference < 300,
            QualityScore = 100 - (difference / 10),
            Details = AnalyzeDifferences(fp1, fp2)
        };
@@ -737,7 +737,7 @@ Fragment search performance (5-minute fragment in various video lengths):
                commercialFp,
                recordingFp,
                TimeSpan.FromSeconds(30),
-               maxDifference: 15,
+               maxDifference: 500,
                allowMultipleFragments: true
            );
            
@@ -770,7 +770,7 @@ Fragment search performance (5-minute fragment in various video lengths):
                    prohibited,
                    streamFp,
                    prohibited.Duration,
-                   maxDifference: 25,
+                   maxDifference: 500,
                    allowMultipleFragments: false
                );
                
@@ -827,14 +827,13 @@ Fragment search performance (5-minute fragment in various video lengths):
 3. **Incorrect Threshold Values**
 
    ```csharp
-   // ❌ WRONG: Using same threshold for different types
-   const int THRESHOLD = 100;
-   var compareResult = VFPAnalyzer.Compare(fp1, fp2, shift); // May be too strict
-   var searchResult = VFPSearch.Search(fp1, 0, fp2, 0, out diff, THRESHOLD); // May be too loose
+   // ❌ WRONG: A search threshold on a 0-100 scale
+   const int THRESHOLD = 20;
+   var searchResult = VFPSearch.Search(fp1, 0, fp2, 0, out diff, THRESHOLD); // Far below the 200-2000 range the demos use
    
-   // ✅ CORRECT: Type-specific thresholds
-   const int COMPARE_THRESHOLD = 500; // More tolerant for full comparison
-   const int SEARCH_THRESHOLD = 20;   // Stricter for fragment matching
+   // ✅ CORRECT: The scale each API uses
+   const int COMPARE_THRESHOLD = 300; // DVS demo and vfp_compare default (CompareVideoFilesAsync: 500)
+   const int SEARCH_THRESHOLD = 500;  // MMT demo default (slider 200-1000)
    ```
 
 ### Optimization Tips

@@ -748,29 +748,43 @@ var effect = new PitchShiftAudioEffect(1.5f); // Up by a fifth
 
 ### ScaleTempoAudioEffect
 
-**GStreamer Element**: `scaletempo`
+**GStreamer Element**: `scaletempo`; `pitch` (SoundTouch) for `Rate` in `VideoEditCoreX`
 
-**Purpose**: Change tempo without changing pitch (WSOLA algorithm).
+**Purpose**: Keep the pitch when the playback rate changes (WSOLA algorithm), or change the tempo of a `VideoEditCoreX` render.
 
 **Parameters**:
 
-- `Rate` (double): Playback speed
-    - 1.0 = normal
-    - 2.0 = double speed
-    - 0.5 = half speed
+- `Rate` (double): Tempo multiplier
     - Default: 1.0
+    - Range: 0.1 to 10
+    - `VideoEditCoreX`: each clip the effect applies to plays at this tempo with its pitch kept, and its video at the same speed. 1.5 renders 6 s of source in 4 s, and the clips after it move to follow. Only clips with audio change: a video-only clip, such as one paired with a separate audio file, keeps its speed, so use a file with both for picture in step. A clip on the same layer that starts inside the one that changed, an overlap for a transition, moves with its end, so the overlap is kept; an overlap that does not fit in the new duration raises `OnError`, and that clip plays at its original speed. `Stride`, `Overlap` and `Search` do not apply at a rate other than 1.0. A value out of range raises `OnError` and the effect is left out
+    - Media Blocks, `MediaPlayerCoreX` and `VideoCaptureCoreX`: ignored. The speed comes from the playback rate, `MediaBlocksPipeline.Rate_SetAsync` or `MediaPlayerCoreX.Rate_SetAsync`, and the effect keeps the pitch at that rate. `VideoCaptureCoreX` has no playback rate, so there the audio passes through unchanged
 - `Stride` (TimeSpan): Processing stride
     - Default: 30 ms
+    - Range: 1 to 5000 ms
 - `Overlap` (double): Overlap percentage
     - Range: 0.0 to 1.0
     - Default: 0.2
 - `Search` (TimeSpan): Search window
     - Default: 14 ms
+    - Range: 0 to 500 ms
+
+`Stride`, `Overlap` and `Search` change the sound only when the playback rate is not 1.0; at 1.0 the audio passes through unchanged
 
 **Usage**:
 
 ```csharp
-var effect = new ScaleTempoAudioEffect(1.5); // 1.5x speed
+// mediaPlayer is a MediaPlayerCoreX.
+var effect = new ScaleTempoAudioEffect { Stride = TimeSpan.FromMilliseconds(20), Overlap = 0.3 };
+mediaPlayer.Audio_Effects_AddOrUpdate(effect);
+
+// The effect keeps the pitch while the player plays at 1.5x.
+await mediaPlayer.Rate_SetAsync(1.5);
+```
+
+```csharp
+// videoEdit is a VideoEditCoreX: the render plays its clips at 1.5x with the pitch kept.
+videoEdit.Audio_Effects.Add(new ScaleTempoAudioEffect(1.5));
 ```
 
 ---

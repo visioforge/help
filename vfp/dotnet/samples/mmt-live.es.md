@@ -68,9 +68,7 @@ MMT Live es una versión en tiempo real de la Herramienta de Monitoreo de Medios
    - Dispositivo: Selecciona dispositivo de captura
 
 3. **Establecer Parámetros de Detección**:
-   - Umbral de sensibilidad
-   - Duración mínima de coincidencia
-   - Preferencias de alerta
+   - Nivel de diferencia (200-2000, por defecto 1100)
 
 4. **Iniciar Monitoreo**:
    - Haz clic en "Start" para comenzar
@@ -140,10 +138,8 @@ http://servidor.com/live.mjpeg
 
 ### Configuración de Detección
 
-- **Tamaño de Buffer**: Historial de video (5-60 segundos)
-- **Intervalo de Verificación**: Con qué frecuencia analizar (1-5 segundos)
-- **Umbral de Confianza**: Calidad de coincidencia (70-95%)
-- **Prioridad de Fragmento**: Qué fragmentos verificar primero
+- **Nivel de diferencia**: Puntuación de diferencia máxima para una coincidencia (control deslizante 200-2000, por defecto 1100). Menor es más estricto. No es un porcentaje.
+- **Duración del fragmento**: Duración del video en vivo que se separa para cada análisis, en segundos. Funciona mejor con 60 segundos o más; el mínimo es el anuncio más largo más 10 segundos, y 0 la calcula automáticamente.
 
 ## Optimización de Rendimiento
 

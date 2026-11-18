@@ -109,7 +109,7 @@ See [Special Blocks Documentation](../Special/index.md)
 
 ## Platform Requirements
 
-- **Windows**: Windows 7 SP1 or later
+- **Windows**: Windows 10 or later
 - **Direct3D 11**: GPU with D3D11 support
 - **Hardware Decode**: GPU with hardware video decode support
 
@@ -314,7 +314,7 @@ else
 
 ## Platforms
 
-Windows 7 SP1 or later (Windows 10/11 recommended for best hardware support).
+Windows 10 or later (Windows 11 recommended for best hardware support).
 
 ## Related Documentation
 

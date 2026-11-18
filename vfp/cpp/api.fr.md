@@ -279,6 +279,19 @@ extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_Search(
 
 Recherche bas niveau utilisant des données d'empreinte brutes. Retourne la position en secondes.
 
+#### VFPSearch_SearchRange
+
+```cpp
+extern "C" VFP_EXPORT int VFP_EXPORT_CALL VFPSearch_SearchRange(
+    const char* pData1, int iLen1,
+    const char* pData2, int iLen2,
+    int iStart, int iEnd,
+    double* pDiff, int maxDiff,
+    bool checkMirror, int* pMirrorMode);
+```
+
+Recherche dans des données d'empreinte brutes la meilleure position du fragment entier `pData1` dans `pData2` dont l'échantillon de début se situe entre `iStart` et `iEnd` (10 échantillons par seconde). Rien ne peut dépasser le début de `pData2` ; jusqu'à 9 échantillons (0,9 s, jamais plus du dixième du fragment) peuvent dépasser sa fin, car une empreinte de recherche ignore la dernière seconde incomplète de sa vidéo, et `iEnd` est limité en conséquence. Entre des positions aussi bonnes, la plus précoce l'emporte. Retourne l'échantillon de début de la correspondance, ou -1 si aucune position n'obtient un score inférieur à `maxDiff`. `checkMirror` essaie aussi les orientations en miroir ; `*pMirrorMode` reçoit celle qui correspond (0 si aucune). Pour trouver toutes les occurrences, recherchez dans toute la plage, puis dans les plages avant et après chaque correspondance.
+
 #### VFPSearch_Clear
 
 ```cpp

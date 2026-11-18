@@ -1744,7 +1744,7 @@ Use `WHIPSinkSettings` para configurar el endpoint WHIP:
 | `StunServer` | `string` | `null` | URL del servidor STUN (formato: `stun://hostname:port`) |
 | `TurnServer` | `string` | `null` | URL del servidor TURN (formato: `turn(s)://usuario:contraseña@host:port`) |
 | `UseLinkHeaders` | `bool` | `true` | Configurar automáticamente servidores ICE desde encabezados `Link` de respuesta del servidor WHIP |
-| `Timeout` | `TimeSpan` | 15 s | Tiempo de espera para solicitudes HTTP WHIP |
+| `Timeout` | `TimeSpan` | 15 s | Tiempo de espera para solicitudes HTTP WHIP, redondeado hacia arriba a segundos enteros y limitado a una hora; `TimeSpan.Zero`, un valor negativo o `Timeout.InfiniteTimeSpan` dan ese máximo de una hora, de modo que una detención nunca espera indefinidamente a un servidor que dejó de responder |
 | `IceTransportPolicy` | `WHIPIceTransportPolicy` | `All` | `All` = usar STUN y TURN; `Relay` = solo relay TURN |
 
 Los pines de entrada se crean dinámicamente: llame a `whipSink.CreateNewInput(MediaBlockPadMediaType.Video)` y `whipSink.CreateNewInput(MediaBlockPadMediaType.Audio)` para obtener los pines, luego conecte sus codificadores.

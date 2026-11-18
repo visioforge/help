@@ -1711,7 +1711,7 @@ Use `WHIPSinkSettings` to configure the WHIP endpoint:
 | `StunServer` | `string` | `null` | STUN server URL (format: `stun://hostname:port`) |
 | `TurnServer` | `string` | `null` | TURN server URL (format: `turn(s)://username:password@host:port`) |
 | `UseLinkHeaders` | `bool` | `true` | Auto-configure ICE servers from WHIP server response `Link` headers |
-| `Timeout` | `TimeSpan` | 15 s | Timeout for WHIP HTTP requests |
+| `Timeout` | `TimeSpan` | 15 s | Timeout for WHIP HTTP requests, rounded up to whole seconds and capped at one hour; `TimeSpan.Zero`, a negative value or `Timeout.InfiniteTimeSpan` gives that one-hour maximum, so a stop never waits forever on a server that stopped answering |
 | `IceTransportPolicy` | `WHIPIceTransportPolicy` | `All` | `All` = use STUN and TURN; `Relay` = TURN relay only |
 
 Input pads are created dynamically: call `whipSink.CreateNewInput(MediaBlockPadMediaType.Video)` and `whipSink.CreateNewInput(MediaBlockPadMediaType.Audio)` to obtain pads, then connect your encoders.
