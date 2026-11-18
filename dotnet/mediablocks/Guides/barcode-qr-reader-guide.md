@@ -68,7 +68,7 @@ PDF417 and Aztec are not read by `BarcodeDetectorBlock`; on Windows, the classic
 - **Code 39**: Simple alphanumeric format — `BarcodeType`: `"CODE-39"`
 - **Code 93**: Higher-density successor of Code 39 — `BarcodeType`: `"CODE-93"`
 - **EAN-13/EAN-8**: European Article Number for retail products — `BarcodeType`: `"EAN-13"`, `"EAN-8"`
-- **UPC-A/UPC-E**: Universal Product Code for retail; reported as `"EAN-13"`, with the value in the 13-digit form (UPC-A gains a leading 0)
+- **UPC-A/UPC-E**: Universal Product Code for retail — `BarcodeType`: `"UPC-A"` with the 12-digit value. A UPC-A is an EAN-13 whose value begins with 0, so every zero-prefixed EAN-13 is reported that way; a UPC-E is reported as the UPC-A it expands to
 - **Codabar**: Used in libraries and blood banks — `BarcodeType`: `"Codabar"`
 - **ITF**: Interleaved 2 of 5 for shipping and distribution — `BarcodeType`: `"I2/5"`
 - **GS1 DataBar (RSS-14)**: Compact retail format for small items and fresh produce — `BarcodeType`: `"DataBar"` (expanded: `"DataBar-Exp"`)
@@ -656,7 +656,7 @@ These samples demonstrate:
 
 ### What barcode formats can I scan from a camera in C#?
 
-`BarcodeDetectorBlock` reads QR Code, EAN-13, EAN-8, UPC-A, UPC-E, Code 128, Code 39, Code 93, Codabar, ITF (Interleaved 2 of 5) and GS1 DataBar (RSS-14); UPC-A and UPC-E are reported as EAN-13, with the value in the 13-digit form. Data Matrix is read by the separate `DataMatrixDecoderBlock`. All of them can be scanned in real time from any video source — webcam, IP camera, RTSP stream, or video file.
+`BarcodeDetectorBlock` reads QR Code, EAN-13, EAN-8, UPC-A, UPC-E, Code 128, Code 39, Code 93, Codabar, ITF (Interleaved 2 of 5) and GS1 DataBar (RSS-14); UPC-A and UPC-E are both reported as `"UPC-A"` with the 12-digit value — a UPC-A being an EAN-13 whose value begins with 0, and a UPC-E reported as the UPC-A it expands to. Data Matrix is read by the separate `DataMatrixDecoderBlock`. All of them can be scanned in real time from any video source — webcam, IP camera, RTSP stream, or video file.
 
 ### Can I scan QR codes from an IP camera or RTSP stream?
 

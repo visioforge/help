@@ -929,6 +929,7 @@ else
 - [Configuración de fuente de cámara RTSP](rtsp.md) — referencia de `IPCameraSourceSettings` y `RTSPSourceSettings` con ajuste UDP/TCP
 - [Inmersión profunda en el protocolo RTSP](../../../general/network-streaming/rtsp.md) — internos del protocolo y arquitectura de streaming
 - [Integración de fuente NDI](ndi.md) — alternativa profesional video-sobre-IP a ONVIF/RTSP
+- [Audio bidireccional (backchannel de audio ONVIF)](two-way-audio.md) — envíe el audio del micrófono al altavoz de la cámara
 - [Tutorial de vista previa en vivo de cámara IP](../../video-tutorials/ip-camera-preview.md) — video explicativo con ejemplo mínimo en C#
 - [Tutorial de grabación RTSP a MP4](../../video-tutorials/ip-camera-capture-mp4.md) — capturar cámaras descubiertas vía ONVIF a archivo
 - [Reproductor RTSP de Media Blocks](../../../mediablocks/Guides/rtsp-player-csharp.md) — reproducción RTSP basada en pipeline

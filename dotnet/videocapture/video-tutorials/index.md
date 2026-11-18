@@ -20,6 +20,7 @@ Are you looking to implement professional-grade video capture capabilities in yo
 Connecting to IP cameras allows you to incorporate security feeds, remote monitoring, and surveillance functionality into your applications.
 
 * [**IP Camera to MP4 Recording Guide**](ip-camera-capture-mp4.md) - Learn how to connect to IP cameras and record high-quality MP4 files with H.264 compression
+* [**IP Camera Two-Way Audio**](ip-camera-two-way-audio.md) - Talk through the camera speaker: the PC microphone goes to the camera over the ONVIF audio backchannel while the app shows and plays the camera
 * [**IP Camera Live Preview Implementation**](ip-camera-preview.md) - Discover how to display real-time IP camera feeds in your application with customizable frame rates
 
 Our tutorials cover RTSP, HTTP, and ONVIF protocols for connecting to a wide range of IP camera models from major manufacturers. Browse our [IP camera brands directory](../../camera-brands/index.md) for brand-specific RTSP URLs.

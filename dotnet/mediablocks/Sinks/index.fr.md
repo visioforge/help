@@ -61,6 +61,7 @@ Les puits de streaming réseau suivants sont disponibles :
 - [Shoutcast](#shoutcast)
 - [WHIP](#whip)
 - [WebRTC](#webrtc)
+- [Serveur WHEP](#serveur-whep)
 - [YouTube Live](#youtube-live)
 - [RIST MPEG-TS](#rist-mpeg-ts)
 
@@ -1833,6 +1834,87 @@ await pipeline.StartAsync();
 #### Disponibilité
 
 Vérifiez la disponibilité avec `WebRTCSinkBlock.IsAvailable()`. Nécessite le plugin GStreamer `rswebrtc` du paquet `VisioForge.CrossPlatform.Core.Windows.Adds.x64`.
+
+#### Plateformes
+
+Windows.
+
+### Serveur WHEP
+
+Le `WHEPServerSinkBlock` affiche une caméra dans les navigateurs web en WebRTC via WHEP (WebRTC-HTTP Egress Protocol). Il exécute un serveur WHEP : un navigateur, ou tout autre lecteur WHEP, envoie son offre au endpoint du bloc et obtient sa propre session WebRTC.
+
+Connectez de la vidéo H.264 déjà encodée, par exemple la sortie de `RTSPRAWSourceBlock` : le bloc envoie le flux de la caméra à chaque spectateur tel qu'il arrive, sans décodage ni encodage, si bien qu'une caméra ne consomme presque pas de CPU, quel que soit le nombre de spectateurs. C'est la réponse à « comment afficher mes caméras RTSP sur une page web » pour les applications de vidéosurveillance et de NVR.
+
+#### Informations sur le bloc
+
+Nom : WHEPServerSinkBlock.
+
+| Direction du pin | Type de média | Nombre de pins |
+| --- | :---: | :---: |
+| Vidéo en entrée | H.264 | un |
+
+#### Paramètres
+
+Utilisez `WHEPServerSinkSettings` pour configurer le serveur :
+
+| Propriété | Type | Par défaut | Description |
+| --- | --- | --- | --- |
+| `ServerAddress` | `string` | `http://127.0.0.1:9090` | Adresse d'écoute du serveur WHEP ; la valeur par défaut n'accepte que les lecteurs de cette machine, `http://0.0.0.0:9090` accepte ceux des autres machines |
+| `StunServer` | `string` | `null` | Serveur STUN (`stun://hostname:port`) ; `null` n'en utilise aucun, ce qui suffit sur un réseau local |
+| `TurnServer` | `string` | `null` | Serveur TURN (`turn(s)://username:password@host:port`) |
+
+Les lecteurs envoient leur offre à `/whep/endpoint` sur le serveur ; la propriété `EndpointUrl` du bloc renvoie cette URL. Utilisez un bloc par caméra, chacun sur son propre port.
+
+Les événements `ConsumerAdded` et `ConsumerRemoved` signalent chaque lecteur qui se connecte et se déconnecte, avec son ID de session. Ils sont déclenchés sur un thread GStreamer. `ConsumerRemoved` n'est pas déclenché pour les lecteurs encore connectés à l'arrêt du pipeline : leurs sessions se terminent avec lui.
+
+Le serveur n'accepte que les adresses `http://`. `Build` échoue, avec un message `OnError`, lorsque `ServerAddress` n'est pas une adresse `http://` avec un port compris entre 1 et 65535, ou lorsque son port est déjà utilisé. L'entrée n'accepte que du H.264 encodé : une vidéo brute ou un autre codec fait échouer le démarrage au lieu d'être encodé pour chaque spectateur.
+
+#### La page web
+
+Le serveur WHEP n'envoie pas d'en-têtes CORS : un navigateur n'accepte donc ses réponses que sur une page servie depuis la même adresse et le même port. Servez la page depuis votre propre serveur HTTP et transférez les requêtes WHEP (`POST`, `PATCH`, `DELETE` sous `/whep/`) au serveur du bloc, dans votre application ou avec un proxy inverse comme nginx ou IIS. Si vous transférez plusieurs caméras sous des chemins différents, réécrivez l'en-tête `Location` de la réponse avec le même chemin.
+
+Côté navigateur, une vingtaine de lignes de JavaScript suffisent : créez un `RTCPeerConnection` avec un transcepteur vidéo en réception seule, envoyez son offre au endpoint avec `Content-Type: application/sdp` et appliquez la réponse. Recevoir du WebRTC ne nécessite pas HTTPS : les spectateurs du réseau local peuvent utiliser `http://`.
+
+Lors de nos tests, les navigateurs basés sur Chromium (Chrome, Edge) ont lu le H.264 1080p en profil Main d'une caméra. La lecture d'un profil dépend du décodeur WebRTC du navigateur : un décodeur qui n'accepte que le constrained baseline n'affiche aucune image pour une caméra en profil Main ou High. Si le navigateur d'un spectateur affiche une vignette vide, ouvrez la page dans Chrome ou Edge, ou passez le flux de la caméra en profil Baseline si la caméra le propose. La plupart des navigateurs ne savent pas lire le H.265 en WebRTC : utilisez le flux H.264 de la caméra.
+
+`WHEPSourceBlock` (l'élément GStreamer `whepclientsrc`) ne propose le H.264 qu'en constrained baseline avec le `profile-level-id` exact `42e016`, et le serveur n'envoie un flux inchangé que si celui de la caméra correspond ; les caméras et les encodeurs écrivent `42c0…` pour le même profil, si bien que `WHEPSourceBlock` ne reçoit aucune image de ce bloc. Utilisez un navigateur ou un autre lecteur qui envoie `level-asymmetry-allowed=1`, comme le font les navigateurs.
+
+Le RTSP WHEP Camera Grid Demo du [dépôt d'exemples](https://github.com/visioforge/.Net-SDK-s-samples) ajoute des caméras par URL RTSP, sert une page avec une grille de toutes les caméras et transfère `/cam/N/whep/...` au bloc de la caméra N.
+
+#### Le pipeline d'exemple
+
+```mermaid
+graph LR;
+    RTSPRAWSourceBlock -- H.264 --> WHEPServerSinkBlock;
+```
+
+#### Exemple de code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// H.264 encodé directement depuis la caméra ; sans audio, les navigateurs utilisent Opus.
+var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.64:554/stream1"), "admin", "password", audioEnabled: false);
+var rtsp = new RTSPRAWSourceBlock(rtspSettings);
+
+var whep = new WHEPServerSinkBlock(new WHEPServerSinkSettings
+{
+    ServerAddress = "http://127.0.0.1:9100"
+});
+
+whep.ConsumerAdded += (s, e) => Console.WriteLine($"Viewer connected: {e.PeerId}");
+
+pipeline.Connect(rtsp.VideoOutput, whep.Input);
+
+await pipeline.StartAsync();
+
+// Transférez les requêtes WHEP de la page vers ce endpoint.
+Console.WriteLine(whep.EndpointUrl); // http://127.0.0.1:9100/whep/endpoint
+```
+
+#### Disponibilité
+
+Vérifiez la disponibilité avec `WHEPServerSinkBlock.IsAvailable()`. Nécessite le plugin GStreamer `rswebrtc` du paquet `VisioForge.CrossPlatform.Core.Windows.Adds.x64`.
 
 #### Plateformes
 

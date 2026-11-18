@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Media Player SDK X exposes a high-level playback god-object (`MediaPlayerCoreX`) — local files, HTTP(S), HLS, RTSP, RTMP, MMS, image sequences — with seek, pause/resume, rate control, volume, audio-device selection, frame-stepping, tag reading, and `MediaInfoReaderX` stream introspection. Same C# code targets all three desktop OSes — only the UI host (Avalonia here) and the per-OS native redist NuGet package change between platforms.
 
-Pinned NuGet versions: wrapper **`2026.11.16`**, Windows and macOS native redists at the versions shown in the csproj below (matches the [official Simple Media Player Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.16`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Media Player Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -36,11 +36,13 @@ Media Player SDK X for Avalonia is **not** a single meta-package. You add the SD
 | `VisioForge.CrossPlatform.Core.Windows.x64` | Native runtime on Windows | `-windows` |
 | `VisioForge.CrossPlatform.Libav.Windows.x64.UPX` | FFmpeg/libav runtime on Windows (UPX-compressed; non-UPX `VisioForge.CrossPlatform.Libav.Windows.x64` is interchangeable) | `-windows` |
 | `VisioForge.CrossPlatform.Core.macOS` | Native runtime on macOS | `-macos` |
-| (none — uses system-wide GStreamer) | Native runtime on Linux | Linux |
+| `VisioForge.CrossPlatform.Core.Linux.x64` / `VisioForge.CrossPlatform.Core.Linux.arm64` | The SDK's own native libraries on Linux (color conversion behind snapshots, frame-to-bitmap conversion and overlays; 3D LUT; Data Matrix) — no GStreamer inside | Linux, one per architecture |
 
 > **Why `VisioForge.DotNet.MediaBlocks` and not `VisioForge.DotNet.MediaPlayer`?** On the WPF host the wrapper package is `VisioForge.DotNet.MediaPlayer` (which contains both the legacy `MediaPlayerCore` and the cross-platform `MediaPlayerCoreX`). The Avalonia host uses `VisioForge.DotNet.MediaBlocks` instead — it ships the same `MediaPlayerCoreX` type but without the WPF-only legacy core, and pulls in the Avalonia-friendly transitive dependencies. **Don't reference `VisioForge.DotNet.MediaPlayer` from an Avalonia csproj** — it pulls Windows-only WPF dependencies that fail to restore on Linux/macOS hosts.
 
-Linux is the odd one out — there is no NuGet redist. The Linux target uses the **system-installed GStreamer** (`gstreamer1.0`, `gstreamer1.0-plugins-base`, `gstreamer1.0-plugins-good`, `gstreamer1.0-plugins-bad`, `gstreamer1.0-plugins-ugly`, `gstreamer1.0-libav` on Debian/Ubuntu; equivalent packages on Fedora/Arch). If GStreamer is not installed system-wide on the Linux target, the app launches but `MediaPlayerCoreX.OpenAsync()` / `PlayAsync()` fail with element-not-found errors.
+On Linux, GStreamer does not come from NuGet: the Linux target uses the **system-installed GStreamer** (`gstreamer1.0`, `gstreamer1.0-plugins-base`, `gstreamer1.0-plugins-good`, `gstreamer1.0-plugins-bad`, `gstreamer1.0-plugins-ugly`, `gstreamer1.0-libav` on Debian/Ubuntu; equivalent packages on Fedora/Arch). If GStreamer is not installed system-wide on the Linux target, the app launches but `MediaPlayerCoreX.OpenAsync()` / `PlayAsync()` fail with element-not-found errors.
+
+The Linux core package is still required: without it the app starts, but every color conversion — snapshots, frame-to-bitmap conversion, overlays — fails at run time with `VisioForge_VAP is not available`. Reference only the package for the target architecture; the conditions in the csproj below pick it from the runtime identifier (`-r linux-arm64`, a publish profile, or the build machine when none is given). The block applies when the app is built on Linux; publishing for Linux from Windows or macOS skips it.
 
 ## Supported input formats
 
@@ -84,6 +86,10 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <TargetFramework>net10.0</TargetFramework>
   <OutputType>Exe</OutputType>
 </PropertyGroup>
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
+</ItemGroup>
 ```
 
 The Avalonia base packages (`Avalonia`, `Avalonia.Desktop`, `Avalonia.Themes.Fluent`, `Avalonia.Fonts.Inter`) are unconditional — they ship managed-only and resolve their per-OS native bits at runtime. `System.Reactive` is this sample's own dependency (the `Subscribe(value => ...)` lambdas on the slider `GetObservable` streams), not something Avalonia needs. The VisioForge wrapper + Avalonia UI packages (`VisioForge.DotNet.MediaBlocks`, `VisioForge.DotNet.Core.UI.Avalonia`) are also unconditional.
@@ -215,7 +221,7 @@ These are the cross-platform pitfalls that bite first.
 
 ### 2. Linux: app launches but `OpenAsync()` / `PlayAsync()` errors with "no element X"
 
-**Cause**: GStreamer is not installed system-wide. There is no NuGet redist for Linux; the Linux build relies on the system package manager.
+**Cause**: GStreamer is not installed system-wide. GStreamer on Linux comes from the system package manager, not from NuGet (the `Core.Linux` package carries only the SDK's own libraries).
 
 **Fix**: install the GStreamer base + plugin packages for the distro:
 
@@ -306,7 +312,7 @@ Run through these after first integration:
 
 The `references/` folder is self-contained — copy all of it into a fresh Avalonia project folder and `dotnet build` succeeds with no extra files needed:
 
-- `references/Sample.csproj` — multi-target Avalonia csproj with all per-OS conditional package references (Windows + macOS NuGet redists; Linux uses system GStreamer).
+- `references/Sample.csproj` — multi-target Avalonia csproj with all per-OS conditional package references (Windows, macOS and Linux NuGet redists; on Linux GStreamer itself comes from the system).
 - `references/Program.cs` — Avalonia entry point (`[STAThread]`, `BuildAvaloniaApp().UsePlatformDetect().StartWithClassicDesktopLifetime`).
 - `references/App.axaml` + `references/App.axaml.cs` — Avalonia `Application` with `<FluentTheme />` and `MainWindow` instantiation.
 - `references/MainWindow.axaml` — Avalonia XAML with file/URL textbox + browse button, debug-mode checkbox, audio-output device combo, play-audio toggle, volume slider, seek slider with timeline label, playback-speed slider, Start / Resume / Pause / Stop / Next-frame buttons, info / log tabs, and the `VideoView` panel. Declares `xmlns:avalonia="clr-namespace:VisioForge.Core.UI.Avalonia;assembly=VisioForge.Core.UI.Avalonia"` for the `VideoView` namespace.

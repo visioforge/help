@@ -74,6 +74,7 @@ Antes de comenzar su implementación de Uno Platform, asegúrese de que su entor
 #### Linux
 - Runtime de GStreamer instalado
 - Servidor de visualización X11 o Wayland
+- El paquete NuGet `VisioForge.CrossPlatform.Core.Linux.x64` (o `.arm64`)
 
 ## Proceso de instalación y configuración
 
@@ -186,6 +187,17 @@ sudo apt-get install gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstream
 sudo dnf install gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-ugly-free
 ```
 
+Después, añada el paquete core de la arquitectura de destino. Contiene las bibliotecas nativas propias del SDK (la conversión de color que usan las capturas de imagen, la conversión de fotogramas a mapas de bits y las superposiciones, el efecto 3D LUT, Data Matrix) y nada de GStreamer. Sin él, la aplicación se inicia, pero esas funciones fallan en tiempo de ejecución con `VisioForge_VAP is not available`:
+
+```xml
+<ItemGroup Condition="$([MSBuild]::IsOSPlatform('linux'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
+</ItemGroup>
+```
+
+El bloque se aplica cuando el proyecto se compila en Linux; una publicación para Linux desde Windows o macOS lo omite. En Linux, las condiciones eligen el paquete según el identificador de runtime: `-r linux-arm64` o un perfil de publicación para ARM64 selecciona el paquete ARM64, y sin identificador de runtime decide la arquitectura de la máquina de compilación.
+
 ### Archivo de proyecto de ejemplo completo
 
 Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Platform con VisioForge SDK:
@@ -243,6 +255,12 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
   <!-- Plataforma macOS Catalyst -->
   <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
     <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+  </ItemGroup>
+  
+  <!-- Plataforma Linux Desktop -->
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('linux'))">
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
   </ItemGroup>
   
   <!-- macOS: Copiar bibliotecas nativas al bundle de la app -->
@@ -361,7 +379,8 @@ Las aplicaciones macOS Catalyst comparten configuración con iOS. Adicionalmente
 Para aplicaciones de escritorio Linux usando Skia:
 
 1. Asegúrese de que GStreamer esté instalado en el sistema objetivo
-2. Establezca las variables de entorno apropiadas si es necesario:
+2. Referencie el paquete core de Linux de su arquitectura de destino, como en el archivo de proyecto anterior
+3. Establezca las variables de entorno apropiadas si es necesario:
 
 ```bash
 export GST_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/gstreamer-1.0

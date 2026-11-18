@@ -1,0 +1,21 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "VisioForge SDK",
+  "description": "Documentation for the VisioForge SDKs: Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET and Media Blocks SDK .NET for video capture, playback, editing, encoding and streaming, plus the DirectShow filters, the Delphi/ActiveX framework and Video Fingerprinting SDK.",
+  "excludeFolders": ["static"],
+  "excludeFiles": [
+    "changelog.md",
+    "changelog.es.md",
+    "changelog.fr.md",
+    "eula.md",
+    "eula.es.md",
+    "llms.txt",
+    "llms-full.txt"
+  ],
+  "rules": [
+    "Both engine families are supported: VideoCaptureCore, MediaPlayerCore and VideoEditCore are Windows-only (DirectShow); VideoCaptureCoreX, MediaPlayerCoreX, VideoEditCoreX and Media Blocks are cross-platform (GStreamer).",
+    "Use the X engines or Media Blocks for new cross-platform projects and the non-X engines for Windows-only apps or existing DirectShow code; neither family is deprecated.",
+    "The engines are asynchronous: await StartAsync() and StopAsync(); never block on them with .Result or .Wait().",
+    "Await StopAsync() before disposing an engine or pipeline so the output file is finalized; never end the process with Environment.Exit while a recording is running."
+  ]
+}

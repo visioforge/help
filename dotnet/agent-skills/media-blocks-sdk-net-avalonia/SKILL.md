@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into an Avalonia UI applicati
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4OutputBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring them with `pipeline.Connect(producer, consumer)`, then calling `await pipeline.StartAsync()`. Compared to the higher-level Video Capture SDK X (a single `VideoCaptureCoreX` god-object), Media Blocks gives you full control over the topology — splitting streams with tees, mixing sources, transcoding without preview, swapping sinks at runtime — at the cost of having to wire every edge yourself.
 
-Pinned NuGet versions: wrapper **`2026.11.16`**, Windows and macOS native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia)). Moving the wrapper to a newer 2026.x.x release means re-checking each redist against it — the csproj below carries the version pinned for each. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.16`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia)). Moving the wrapper to a newer 2026.x.x release means re-checking each redist against it — the csproj below carries the version pinned for each. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -37,9 +37,11 @@ Media Blocks SDK for Avalonia is **not** a single meta-package. You add the SDK 
 | `VisioForge.CrossPlatform.Core.Windows.x64` | Native runtime on Windows | `-windows` |
 | `VisioForge.CrossPlatform.Libav.Windows.x64.UPX` | FFmpeg/libav runtime on Windows (UPX-compressed; non-UPX `VisioForge.CrossPlatform.Libav.Windows.x64` is interchangeable) | `-windows` |
 | `VisioForge.CrossPlatform.Core.macOS` | Native runtime on macOS (libav is bundled inside Core on macOS — no separate libav redist) | `-macos` |
-| (none — uses system-wide GStreamer) | Native runtime on Linux | Linux |
+| `VisioForge.CrossPlatform.Core.Linux.x64` / `VisioForge.CrossPlatform.Core.Linux.arm64` | The SDK's own native libraries on Linux (color conversion behind snapshots, frame-to-bitmap conversion and overlays; 3D LUT; Data Matrix) — no GStreamer inside | Linux, one per architecture |
 
-Linux is the odd one out — there is no NuGet redist. The Linux target uses the **system-installed GStreamer** (`gstreamer1.0`, `gstreamer1.0-plugins-base`, `gstreamer1.0-plugins-good`, `gstreamer1.0-plugins-bad`, `gstreamer1.0-plugins-ugly`, `gstreamer1.0-libav` on Debian/Ubuntu; equivalent packages on Fedora/Arch). If GStreamer is not installed system-wide on the Linux target, the app launches but `pipeline.StartAsync()` errors with `"no element X"` for every block in your graph.
+On Linux, GStreamer does not come from NuGet: the Linux target uses the **system-installed GStreamer** (`gstreamer1.0`, `gstreamer1.0-plugins-base`, `gstreamer1.0-plugins-good`, `gstreamer1.0-plugins-bad`, `gstreamer1.0-plugins-ugly`, `gstreamer1.0-libav` on Debian/Ubuntu; equivalent packages on Fedora/Arch). If GStreamer is not installed system-wide on the Linux target, the app launches but `pipeline.StartAsync()` errors with `"no element X"` for every block in your graph.
+
+The Linux core package is still required: without it the app starts, but every color conversion — snapshots, frame-to-bitmap conversion, overlays — fails at run time with `VisioForge_VAP is not available`. Reference only the package for the target architecture; the conditions in the csproj below pick it from the runtime identifier (`-r linux-arm64`, a publish profile, or the build machine when none is given). The block applies when the app is built on Linux; publishing for Linux from Windows or macOS skips it.
 
 > **Note on Windows redists vs WPF host**: the Avalonia layout requires both Core and Libav redists on Windows for any pipeline that mux es to MP4/MPEG-TS/WebM (most realistic graphs). They're declared explicitly in the conditional `<ItemGroup>` — don't rely on transitive resolution.
 
@@ -73,6 +75,10 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <TargetFramework>net10.0</TargetFramework>
   <OutputType>Exe</OutputType>
 </PropertyGroup>
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
+</ItemGroup>
 ```
 
 Avalonia base packages (`Avalonia`, `Avalonia.Desktop`, `Avalonia.Themes.Fluent`, `Avalonia.Fonts.Inter`) are unconditional — they ship managed-only and resolve their per-OS native bits at runtime. The VisioForge wrapper + Avalonia UI packages (`VisioForge.DotNet.MediaBlocks`, `VisioForge.DotNet.Core.UI.Avalonia`) are also unconditional.
@@ -182,7 +188,7 @@ These are the cross-platform pitfalls that bite first.
 
 ### 2. Linux: app launches but `StartAsync()` errors with "no element X" / "Element 'h264parse' not found"
 
-**Cause**: GStreamer is not installed system-wide, or the specific plugin family the block needs is missing. There is no NuGet redist for Linux; the Linux build relies on the system package manager. `H264EncoderBlock`, `MP4OutputBlock`, `WebMSinkBlock`, etc. each pull from a different plugin set — `gstreamer1.0-libav` is what most "missing element" errors trace back to.
+**Cause**: GStreamer is not installed system-wide, or the specific plugin family the block needs is missing. GStreamer on Linux comes from the system package manager, not from NuGet (the `Core.Linux` package carries only the SDK's own libraries). `H264EncoderBlock`, `MP4OutputBlock`, `WebMSinkBlock`, etc. each pull from a different plugin set — `gstreamer1.0-libav` is what most "missing element" errors trace back to.
 
 **Fix**: install the GStreamer base + plugin packages for the distro:
 
@@ -269,7 +275,7 @@ Run through these after first integration:
 
 The `references/` folder is self-contained — copy all of it into a fresh Avalonia project folder and `dotnet build` succeeds on each host OS with no extra files needed:
 
-- `references/Sample.csproj` — multi-target Avalonia csproj with all per-OS conditional package references (Windows + macOS NuGet redists; Linux uses system GStreamer).
+- `references/Sample.csproj` — multi-target Avalonia csproj with all per-OS conditional package references (Windows, macOS and Linux NuGet redists; on Linux GStreamer itself comes from the system).
 - `references/Program.cs` — Avalonia entry point (`[STAThread]`, `BuildAvaloniaApp().UsePlatformDetect().StartWithClassicDesktopLifetime`).
 - `references/App.axaml` + `references/App.axaml.cs` — Avalonia `Application` with `<FluentTheme />` and `MainWindow` instantiation.
 - `references/MainWindow.axaml` — Avalonia XAML with device / format / frame-rate dropdowns, output-path picker, debug log, Preview/Capture radio toggle, Start/Stop/Pause/Resume buttons, recording-time text, and the `VideoView` preview panel. Declares `xmlns:avalonia="clr-namespace:VisioForge.Core.UI.Avalonia;assembly=VisioForge.Core.UI.Avalonia"` for the `VideoView` namespace.

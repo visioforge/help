@@ -68,7 +68,7 @@ Le lecteur de codes-barres C# prend en charge un large éventail de formats 1D e
 - **Code 39** : format alphanumérique simple — `BarcodeType` : `"CODE-39"`
 - **Code 93** : successeur plus dense de Code 39 — `BarcodeType` : `"CODE-93"`
 - **EAN-13/EAN-8** : European Article Number pour les produits de détail — `BarcodeType` : `"EAN-13"`, `"EAN-8"`
-- **UPC-A/UPC-E** : Universal Product Code pour le retail ; signalés comme `"EAN-13"`, avec la valeur sous sa forme à 13 chiffres (UPC-A reçoit un 0 en tête)
+- **UPC-A/UPC-E** : Universal Product Code pour le retail — `BarcodeType` : `"UPC-A"` avec la valeur à 12 chiffres. Un UPC-A est un EAN-13 dont la valeur commence par 0, donc tout EAN-13 commençant par 0 est signalé ainsi ; l'UPC-E est signalé de la même façon, comme l'UPC-A en lequel il est développé
 - **Codabar** : utilisé dans les bibliothèques et banques de sang — `BarcodeType` : `"Codabar"`
 - **ITF** : Interleaved 2 of 5 pour l'expédition et la distribution — `BarcodeType` : `"I2/5"`
 - **GS1 DataBar (RSS-14)** : format compact du commerce de détail, utilisé pour les petits articles et les produits frais — `BarcodeType` : `"DataBar"` (étendu : `"DataBar-Exp"`)
@@ -656,7 +656,7 @@ Ces exemples illustrent :
 
 ### Quels formats de codes-barres puis-je scanner depuis une caméra en C# ?
 
-`BarcodeDetectorBlock` lit QR Code, EAN-13, EAN-8, UPC-A, UPC-E, Code 128, Code 39, Code 93, Codabar, ITF (Interleaved 2 of 5) et GS1 DataBar (RSS-14) ; UPC-A et UPC-E sont signalés comme EAN-13, avec la valeur sous sa forme à 13 chiffres. Data Matrix est lu par le bloc distinct `DataMatrixDecoderBlock`. Tous peuvent être scannés en temps réel depuis toute source vidéo — webcam, caméra IP, flux RTSP ou fichier vidéo.
+`BarcodeDetectorBlock` lit QR Code, EAN-13, EAN-8, UPC-A, UPC-E, Code 128, Code 39, Code 93, Codabar, ITF (Interleaved 2 of 5) et GS1 DataBar (RSS-14) ; l'UPC-A et l'UPC-E sont tous deux signalés comme `"UPC-A"` avec la valeur à 12 chiffres — un UPC-A étant un EAN-13 dont la valeur commence par 0, et l'UPC-E étant développé en l'UPC-A correspondant. Data Matrix est lu par le bloc distinct `DataMatrixDecoderBlock`. Tous peuvent être scannés en temps réel depuis toute source vidéo — webcam, caméra IP, flux RTSP ou fichier vidéo.
 
 ### Puis-je scanner des QR codes depuis une caméra IP ou un flux RTSP ?
 

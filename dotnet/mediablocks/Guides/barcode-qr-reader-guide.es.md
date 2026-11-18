@@ -68,7 +68,7 @@ El escáner de códigos de barras en C# soporta una amplia gama de formatos de c
 - **Code 39**: Formato alfanumérico simple — `BarcodeType`: `"CODE-39"`
 - **Code 93**: Sucesor de mayor densidad de Code 39 — `BarcodeType`: `"CODE-93"`
 - **EAN-13/EAN-8**: Número de Artículo Europeo para productos minoristas — `BarcodeType`: `"EAN-13"`, `"EAN-8"`
-- **UPC-A/UPC-E**: Código Universal de Producto para minoristas; se informan como `"EAN-13"`, con el valor en su forma de 13 dígitos (UPC-A recibe un 0 inicial)
+- **UPC-A/UPC-E**: Código Universal de Producto para minoristas — `BarcodeType`: `"UPC-A"` con el valor de 12 dígitos. Un UPC-A es un EAN-13 cuyo valor empieza por 0, así que todo EAN-13 que empieza por 0 se informa así; el UPC-E se informa como el UPC-A al que se expande
 - **Codabar**: Usado en bibliotecas y bancos de sangre — `BarcodeType`: `"Codabar"`
 - **ITF**: Intercalado 2 de 5 para envío y distribución — `BarcodeType`: `"I2/5"`
 - **GS1 DataBar (RSS-14)**: Formato compacto para comercio minorista, usado en artículos pequeños y productos frescos — `BarcodeType`: `"DataBar"` (expandido: `"DataBar-Exp"`)
@@ -656,7 +656,7 @@ Estos ejemplos demuestran:
 
 ### ¿Qué formatos de códigos de barras puedo escanear desde una cámara en C#?
 
-`BarcodeDetectorBlock` lee QR Code, EAN-13, EAN-8, UPC-A, UPC-E, Code 128, Code 39, Code 93, Codabar, ITF (Interleaved 2 of 5) y GS1 DataBar (RSS-14); UPC-A y UPC-E se informan como EAN-13, con el valor en su forma de 13 dígitos. Data Matrix lo lee el bloque independiente `DataMatrixDecoderBlock`. Todos pueden escanearse en tiempo real desde cualquier fuente de video — webcam, cámara IP, stream RTSP o archivo de video.
+`BarcodeDetectorBlock` lee QR Code, EAN-13, EAN-8, UPC-A, UPC-E, Code 128, Code 39, Code 93, Codabar, ITF (Interleaved 2 of 5) y GS1 DataBar (RSS-14); el UPC-A y el UPC-E se informan ambos como `"UPC-A"` con el valor de 12 dígitos — un UPC-A es un EAN-13 cuyo valor empieza por 0, y el UPC-E se informa como el UPC-A al que se expande. Data Matrix lo lee el bloque independiente `DataMatrixDecoderBlock`. Todos pueden escanearse en tiempo real desde cualquier fuente de video — webcam, cámara IP, stream RTSP o archivo de video.
 
 ### ¿Puedo escanear códigos QR desde una cámara IP o stream RTSP?
 

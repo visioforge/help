@@ -176,6 +176,7 @@ Cuando trabaja con cámaras RTSP, puede encontrarse con problemas de conectivida
 - [Inmersión profunda en el protocolo RTSP](../../../general/network-streaming/rtsp.md) — cómo funciona RTSP, opciones de transporte y arquitectura de streaming
 - [Integración de cámara IP ONVIF](onvif.md) — WS-Discovery, gestión de perfiles y control PTZ
 - [Integración de fuente NDI](ndi.md) — alternativa profesional de video sobre IP para estudio y broadcast
+- [Audio bidireccional (backchannel de audio ONVIF)](two-way-audio.md) — envíe el audio del micrófono al altavoz de la cámara
 - [Tutorial de vista previa en vivo de cámara IP](../../video-tutorials/ip-camera-preview.md) — video explicativo con ejemplo mínimo en C#
 - [Grabar flujo RTSP a MP4](../../video-tutorials/ip-camera-capture-mp4.md) — capturar cualquier cámara IP a archivo
 - [Reproductor RTSP de Media Blocks](../../../mediablocks/Guides/rtsp-player-csharp.md) — alternativa basada en pipeline con Media Blocks SDK

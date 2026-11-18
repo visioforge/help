@@ -61,6 +61,7 @@ Los siguientes sinks de transmisión en red están disponibles:
 - [Shoutcast](#shoutcast)
 - [WHIP](#whip)
 - [WebRTC](#webrtc)
+- [Servidor WHEP](#servidor-whep)
 - [YouTube Live](#youtube-live)
 - [RIST MPEG-TS](#rist-mpeg-ts)
 
@@ -1866,6 +1867,87 @@ await pipeline.StartAsync();
 #### Disponibilidad
 
 Verifique la disponibilidad con `WebRTCSinkBlock.IsAvailable()`. Requiere el plugin `rswebrtc` de GStreamer del paquete `VisioForge.CrossPlatform.Core.Windows.Adds.x64`.
+
+#### Plataformas
+
+Windows.
+
+### Servidor WHEP
+
+El `WHEPServerSinkBlock` muestra una cámara en navegadores web por WebRTC mediante WHEP (WebRTC-HTTP Egress Protocol). Ejecuta un servidor WHEP: un navegador, o cualquier otro reproductor WHEP, envía su oferta al endpoint del bloque y obtiene su propia sesión WebRTC.
+
+Conecte video H.264 ya codificado, por ejemplo la salida de `RTSPRAWSourceBlock`: el bloque envía el flujo de la cámara a cada espectador tal como llega, sin decodificar ni codificar, de modo que una cámara apenas consume CPU sin importar cuántos espectadores la vean. Esta es la respuesta a «cómo muestro mis cámaras RTSP en una página web» para aplicaciones de videovigilancia y NVR.
+
+#### Información del bloque
+
+Nombre: WHEPServerSinkBlock.
+
+| Dirección del pin | Tipo de medio | Conteo de pines |
+| --- | :---: | :---: |
+| Entrada de video | H.264 | uno |
+
+#### Configuración
+
+Use `WHEPServerSinkSettings` para configurar el servidor:
+
+| Propiedad | Tipo | Predeterminado | Descripción |
+| --- | --- | --- | --- |
+| `ServerAddress` | `string` | `http://127.0.0.1:9090` | Dirección en la que escucha el servidor WHEP; el valor predeterminado acepta reproductores solo en este equipo, `http://0.0.0.0:9090` acepta reproductores de otros equipos |
+| `StunServer` | `string` | `null` | Servidor STUN (`stun://hostname:port`); `null` no usa ninguno, lo que basta en una red local |
+| `TurnServer` | `string` | `null` | Servidor TURN (`turn(s)://username:password@host:port`) |
+
+Los reproductores envían su oferta a `/whep/endpoint` en el servidor; la propiedad `EndpointUrl` del bloque devuelve esa URL. Use un bloque por cámara, cada uno en su propio puerto.
+
+Los eventos `ConsumerAdded` y `ConsumerRemoved` informan de cada reproductor que se conecta y se desconecta, con su ID de sesión. Se generan en un hilo de GStreamer. `ConsumerRemoved` no se genera para los reproductores que siguen conectados cuando el pipeline se detiene: sus sesiones terminan con él.
+
+El servidor solo acepta direcciones `http://`. `Build` falla, con un mensaje `OnError`, cuando `ServerAddress` no es una dirección `http://` con un puerto entre 1 y 65535, o cuando su puerto ya está en uso. La entrada solo acepta H.264 codificado: el vídeo sin comprimir u otro códec hacen fallar el inicio en lugar de codificarse para cada espectador.
+
+#### La página web
+
+El servidor WHEP no envía encabezados CORS, por lo que un navegador acepta sus respuestas solo en una página servida desde la misma dirección y el mismo puerto. Sirva la página desde su propio servidor HTTP y reenvíe las solicitudes WHEP (`POST`, `PATCH`, `DELETE` bajo `/whep/`) al servidor del bloque, en su aplicación o con un proxy inverso como nginx o IIS. Si reenvía varias cámaras bajo rutas distintas, reescriba el encabezado `Location` de la respuesta con la misma ruta.
+
+En el navegador bastan unas 20 líneas de JavaScript: cree un `RTCPeerConnection` con un transceptor de video solo de recepción, envíe su oferta al endpoint con `Content-Type: application/sdp` y aplique la respuesta. Recibir WebRTC no requiere HTTPS, así que los espectadores de la red local pueden usar `http://`.
+
+En nuestras pruebas, los navegadores basados en Chromium (Chrome, Edge) reprodujeron el H.264 1080p de perfil Main de una cámara. Que un navegador reproduzca un perfil depende de su decodificador WebRTC: uno que solo acepta constrained baseline no muestra imagen de una cámara con perfil Main o High. Si el navegador de un espectador muestra un recuadro vacío, abra la página en Chrome o Edge, o cambie el flujo de la cámara al perfil Baseline si la cámara lo ofrece. La mayoría de los navegadores no puede reproducir H.265 por WebRTC: use el flujo H.264 de la cámara.
+
+`WHEPSourceBlock` (el elemento `whepclientsrc` de GStreamer) ofrece H.264 solo como constrained baseline con el `profile-level-id` exacto `42e016`, y el servidor envía un flujo sin modificar solo cuando el de la cámara coincide; las cámaras y los codificadores escriben `42c0…` para el mismo perfil, así que `WHEPSourceBlock` no recibe imagen de este bloque. Use un navegador u otro reproductor que envíe `level-asymmetry-allowed=1`, como hacen los navegadores.
+
+El RTSP WHEP Camera Grid Demo del [repositorio de ejemplos](https://github.com/visioforge/.Net-SDK-s-samples) añade cámaras por URL RTSP, sirve una página con una cuadrícula de todas las cámaras y reenvía `/cam/N/whep/...` al bloque de la cámara N.
+
+#### El pipeline de muestra
+
+```mermaid
+graph LR;
+    RTSPRAWSourceBlock -- H.264 --> WHEPServerSinkBlock;
+```
+
+#### Código de muestra
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// H.264 codificado directamente de la cámara; sin audio, los navegadores usan Opus.
+var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.64:554/stream1"), "admin", "password", audioEnabled: false);
+var rtsp = new RTSPRAWSourceBlock(rtspSettings);
+
+var whep = new WHEPServerSinkBlock(new WHEPServerSinkSettings
+{
+    ServerAddress = "http://127.0.0.1:9100"
+});
+
+whep.ConsumerAdded += (s, e) => Console.WriteLine($"Viewer connected: {e.PeerId}");
+
+pipeline.Connect(rtsp.VideoOutput, whep.Input);
+
+await pipeline.StartAsync();
+
+// Reenvíe las solicitudes WHEP de la página a este endpoint.
+Console.WriteLine(whep.EndpointUrl); // http://127.0.0.1:9100/whep/endpoint
+```
+
+#### Disponibilidad
+
+Verifique la disponibilidad con `WHEPServerSinkBlock.IsAvailable()`. Requiere el plugin `rswebrtc` de GStreamer del paquete `VisioForge.CrossPlatform.Core.Windows.Adds.x64`.
 
 #### Plataformas
 

@@ -61,6 +61,7 @@ The following network streaming sinks are available:
 - [Shoutcast](#shoutcast)
 - [WHIP](#whip)
 - [WebRTC](#webrtc)
+- [WHEP server](#whep-server)
 - [YouTube Live](#youtube-live)
 - [RIST MPEG-TS](#rist-mpeg-ts)
 
@@ -1833,6 +1834,87 @@ await pipeline.StartAsync();
 #### Availability
 
 Check availability using `WebRTCSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin from the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package.
+
+#### Platforms
+
+Windows.
+
+### WHEP server
+
+The `WHEPServerSinkBlock` shows a camera in web browsers over WebRTC through WHEP (WebRTC-HTTP Egress Protocol). It runs a WHEP server: a browser, or any other WHEP player, posts its offer to the block's endpoint and gets its own WebRTC session.
+
+Connect encoded H.264 video, for example the output of `RTSPRAWSourceBlock`: the block sends the camera's stream to every viewer as it arrives, with no decoding or encoding, so a camera costs almost no CPU however many viewers watch it. This is the answer to "how do I show my RTSP cameras on a web page" for surveillance and NVR applications.
+
+#### Block info
+
+Name: WHEPServerSinkBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Input video | H.264 | one |
+
+#### Settings
+
+Use `WHEPServerSinkSettings` to configure the server:
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `ServerAddress` | `string` | `http://127.0.0.1:9090` | Address the WHEP server listens on; the default accepts players on this machine only, `http://0.0.0.0:9090` accepts players from other machines |
+| `StunServer` | `string` | `null` | STUN server (`stun://hostname:port`); `null` uses none, which is enough on a local network |
+| `TurnServer` | `string` | `null` | TURN server (`turn(s)://username:password@host:port`) |
+
+Players post their offer to `/whep/endpoint` on the server; the block's `EndpointUrl` property returns that URL. Run one block per camera, each on its own port.
+
+The `ConsumerAdded` and `ConsumerRemoved` events report each player that connects and leaves, with its session ID. They are raised on a GStreamer thread. `ConsumerRemoved` is not raised for players still connected when the pipeline stops — their sessions end with it.
+
+The server takes `http://` addresses only. `Build` fails, with an `OnError` message, when `ServerAddress` is not an `http://` address with a port in 1–65535, or its port is already in use. The input takes encoded H.264 only: raw video or another codec fails the start instead of being encoded for every viewer.
+
+#### The web page
+
+The WHEP server sends no CORS headers, so a browser accepts its answers only on a page served from the same address and port. Serve the page from your own HTTP server and forward the WHEP requests (`POST`, `PATCH`, `DELETE` under `/whep/`) to the block's server — in your application, or with a reverse proxy such as nginx or IIS. When you forward several cameras under different paths, rewrite the `Location` header of the answer to the same path.
+
+The browser side is about 20 lines of JavaScript: create an `RTCPeerConnection` with a receive-only video transceiver, post its offer to the endpoint with `Content-Type: application/sdp`, and apply the answer. Receiving WebRTC needs no HTTPS, so viewers on the local network can use plain `http://`.
+
+Chromium-based browsers (Chrome, Edge) played a camera's 1080p Main profile H.264 in our tests. Whether a browser plays a profile depends on its WebRTC decoder: one that takes only constrained baseline shows no picture for a Main or High profile camera. When a viewer's browser shows an empty tile, open the page in Chrome or Edge, or switch the camera's stream to the Baseline profile if the camera offers one. Most browsers cannot play H.265 over WebRTC: use the camera's H.264 stream.
+
+`WHEPSourceBlock` (the GStreamer `whepclientsrc` element) offers H.264 only as constrained baseline with the exact `profile-level-id` `42e016`, and the server sends an untouched stream only when the camera's matches it — cameras and encoders write `42c0…` for the same profile, so `WHEPSourceBlock` gets no picture from this block. Use a browser or another player that sends `level-asymmetry-allowed=1`, as browsers do.
+
+The RTSP WHEP Camera Grid Demo in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples) adds cameras by RTSP URL, serves a grid page with every camera, and forwards `/cam/N/whep/...` to camera N's block.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    RTSPRAWSourceBlock -- H.264 --> WHEPServerSinkBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Encoded H.264 straight from the camera; no audio, browsers take Opus.
+var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.64:554/stream1"), "admin", "password", audioEnabled: false);
+var rtsp = new RTSPRAWSourceBlock(rtspSettings);
+
+var whep = new WHEPServerSinkBlock(new WHEPServerSinkSettings
+{
+    ServerAddress = "http://127.0.0.1:9100"
+});
+
+whep.ConsumerAdded += (s, e) => Console.WriteLine($"Viewer connected: {e.PeerId}");
+
+pipeline.Connect(rtsp.VideoOutput, whep.Input);
+
+await pipeline.StartAsync();
+
+// Forward the page's WHEP requests to this endpoint.
+Console.WriteLine(whep.EndpointUrl); // http://127.0.0.1:9100/whep/endpoint
+```
+
+#### Availability
+
+Check availability using `WHEPServerSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin from the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package.
 
 #### Platforms
 

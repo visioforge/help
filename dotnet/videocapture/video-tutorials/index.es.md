@@ -20,6 +20,7 @@ sidebar_label: Video Tutorials With Sample Code
 Conectarse a cámaras IP le permite incorporar feeds de seguridad, monitoreo remoto y funcionalidad de vigilancia en sus aplicaciones.
 
 * [**Guía de Grabación de Cámara IP a MP4**](ip-camera-capture-mp4.md) - Aprenda cómo conectarse a cámaras IP y grabar archivos MP4 de alta calidad con compresión H.264
+* [**Audio bidireccional con cámara IP**](ip-camera-two-way-audio.md) - Hable por el altavoz de la cámara: el micrófono del PC llega a la cámara por el backchannel de audio ONVIF mientras la aplicación muestra y reproduce la cámara
 * [**Implementación de Vista Previa en Vivo de Cámara IP**](ip-camera-preview.md) - Descubra cómo mostrar feeds de cámara IP en tiempo real en su aplicación con tasas de cuadros configurables
 
 Nuestros tutoriales cubren protocolos RTSP, HTTP y ONVIF para conectarse a una amplia gama de modelos de cámaras IP de los principales fabricantes. Consulte nuestro [directorio de marcas de cámaras IP](../../camera-brands/index.md) para URLs RTSP específicas por marca.

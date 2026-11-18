@@ -172,7 +172,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
 **Desktop (`SimplePlayerMVVM.Desktop.csproj`):**
 
 * References `Avalonia.Desktop`.
-* Includes platform-specific VisioForge native libraries (e.g., `VisioForge.CrossPlatform.Core.Windows.x64`, `VisioForge.CrossPlatform.Core.macOS`).
+* Includes platform-specific VisioForge native libraries (e.g., `VisioForge.CrossPlatform.Core.Windows.x64`, `VisioForge.CrossPlatform.Core.macOS`, `VisioForge.CrossPlatform.Core.Linux.x64`).
 
 ```xml
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
@@ -194,6 +194,10 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <TargetFramework>net10.0</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
+  </ItemGroup>
 ```
 
 **Android (`SimplePlayerMVVM.Android.csproj`):**
@@ -1166,7 +1170,7 @@ This application leverages several key components from the VisioForge Media Play
   * **`InitSDK()`:** Initializes the VisioForge SDK. This must be called once at application startup (done in `MainViewModel` constructor in this example, but can also be done in `App.axaml.cs`).
   * **`DestroySDK()`:** Releases all SDK resources. This must be called when the application is closing to prevent resource leaks (done in `MainViewModel.OnWindowClosing`).
 * **Platform-Specific Libraries:**
-  * As detailed in the project setup and platform-specific sections, various NuGet packages like `VisioForge.CrossPlatform.Core.Windows.x64`, `VisioForge.CrossPlatform.Core.macOS`, `VisioForge.CrossPlatform.Core.Android`, and `VisioForge.CrossPlatform.Core.iOS` provide the necessary native binaries and bindings for each platform.
+  * As detailed in the project setup and platform-specific sections, various NuGet packages like `VisioForge.CrossPlatform.Core.Windows.x64`, `VisioForge.CrossPlatform.Core.macOS`, `VisioForge.CrossPlatform.Core.Linux.x64`, `VisioForge.CrossPlatform.Core.Android`, and `VisioForge.CrossPlatform.Core.iOS` provide the necessary native binaries and bindings for each platform.
 * **`VisioForge.Core.UI.Android.FileDialogHelper` (for Android):**
   * Contains helper methods like `GetFilePathFromUri` to work with Android's file system and content URIs.
 
@@ -1211,7 +1215,7 @@ No. The SDK works with any architecture pattern including code-behind. This guid
 
 ### How do I deploy the Avalonia video player to Linux?
 
-Publish with `dotnet publish -r linux-x64` (or `linux-arm64` for ARM). On the target machine, install the GStreamer runtime (`libgstreamer1.0-0` and plugin packages on Ubuntu/Debian, or the equivalent on your distribution). The VisioForge NuGet packages include the native bindings, but GStreamer itself must be present on the system. No X11 or Wayland-specific configuration is needed — Avalonia handles display server selection automatically.
+Publish with `dotnet publish -r linux-x64` (or `linux-arm64` for ARM). On the target machine, install the GStreamer runtime (`libgstreamer1.0-0` and plugin packages on Ubuntu/Debian, or the equivalent on your distribution). Reference `VisioForge.CrossPlatform.Core.Linux.x64` (or `.arm64`) in the Desktop head, as in the project file above, and build it on Linux, where that condition applies: the package carries the SDK's own native libraries, without which snapshots and frame conversions fail at run time with `VisioForge_VAP is not available`. GStreamer itself is not in any NuGet package and must be present on the system. No X11 or Wayland-specific configuration is needed — Avalonia handles display server selection automatically.
 
 ### Does the Avalonia player support GPU-accelerated video rendering?
 

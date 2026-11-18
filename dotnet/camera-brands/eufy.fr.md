@@ -25,7 +25,7 @@ tags:
 
 ## Présentation de la marque
 
-**Eufy Security** est une marque de sécurité de maison connectée détenue par **Anker Innovations**, dont le siège est à Changsha, en Chine. Eufy est réputée pour son stockage local (sans abonnement cloud obligatoire), sa détection basée sur l'IA et une large gamme de caméras intérieures, extérieures, à batterie et sonnettes. La prise en charge RTSP varie considérablement selon le modèle et la version du firmware, et les pages d'assistance Eufy excluent ONVIF pour ses SoloCam, ses caméras projecteur, la Video Doorbell Dual (Wired) et la Video Doorbell 2E.
+**Eufy Security** est une marque de sécurité de maison connectée détenue par **Anker Innovations**, dont le siège est à Changsha, en Chine. Eufy est réputée pour son stockage local (sans abonnement cloud obligatoire), sa détection basée sur l'IA et une large gamme de caméras intérieures, extérieures, à batterie et sonnettes. La prise en charge RTSP varie considérablement selon le modèle et la version du firmware, et les pages d'assistance Eufy excluent ONVIF pour ses SoloCam, ses caméras projecteur et toutes les sonnettes Video Doorbell.
 
 **Faits clés :**
 
@@ -33,12 +33,13 @@ tags:
 - **Prise en charge des protocoles :** RTSP (modèles sélectionnés, doit être activé), application Eufy Security
 - **Port RTSP par défaut :** 554
 - **Identifiants par défaut :** Pas de valeurs par défaut standard — définis lors de l'activation RTSP
-- **Prise en charge ONVIF :** Non pour les SoloCam, caméras projecteur, Video Doorbell Dual (Wired) et Video Doorbell 2E (pages d'assistance Eufy) ; non documentée pour eufyCam et Indoor Cam
+- **Prise en charge ONVIF :** Non pour les SoloCam, caméras projecteur et toutes les sonnettes Video Doorbell (pages d'assistance Eufy) ; non documentée pour eufyCam et Indoor Cam
+- **Sonnettes :** pas de RTSP (FAQ Eufy des sonnettes)
 - **Codecs vidéo :** H.264, H.265 (modèles sélectionnés)
 - **Stockage local :** Oui — HomeBase ou microSD de la caméra (pas de cloud requis pour l'enregistrement)
 
 !!! info "La prise en charge RTSP varie selon le modèle"
-    Eufy a progressivement ajouté la prise en charge RTSP dans sa gamme de produits via des mises à jour de firmware. Tous les modèles ne la proposent pas, et nous n'avons trouvé aucune page Eufy confirmant ONVIF pour un modèle. Vérifiez les paramètres de l'application Eufy Security pour votre caméra spécifique pour voir si RTSP est disponible.
+    Eufy a progressivement ajouté la prise en charge RTSP dans sa gamme de produits via des mises à jour de firmware. Tous les modèles ne la proposent pas, et nous n'avons trouvé aucune page Eufy confirmant ONVIF pour un modèle. Vérifiez les paramètres de l'application Eufy Security pour votre caméra spécifique pour voir si RTSP est disponible. Pour les sonnettes, la réponse vaut pour toute la gamme et non par modèle : la FAQ Eufy des sonnettes exclut RTSP et ONVIF pour toutes, et nous n'avons trouvé aucune page propre aux nouveaux E340, C31 ou C30.
 
 ## Prise en charge RTSP et ONVIF par modèle { #prise-en-charge-rtsp-par-modele }
 
@@ -53,8 +54,8 @@ tags:
 | Indoor Cam 2K | Oui | Non documenté | Wi-Fi, dépend du firmware |
 | Indoor Cam Pan & Tilt | Oui | Non documenté | Wi-Fi, dépend du firmware |
 | Floodlight Cam 2 Pro | Oui | Non | Filaire |
-| Video Doorbell 2K | Limité | Non | Via HomeBase uniquement |
-| Video Doorbell Dual | Limité | Non | Via HomeBase uniquement |
+| Video Doorbell 2K (Wired / Battery-Powered) | Non | Non | Eufy ne documente pas de prise en charge RTSP ou ONVIF pour ses sonnettes |
+| Video Doorbell Dual (Wired / Battery-Powered) | Non | Non | Eufy ne documente pas de prise en charge RTSP ou ONVIF pour ses sonnettes |
 
 ## Activation de RTSP
 
@@ -136,7 +137,7 @@ Les modèles eufyCam alimentés par batterie peuvent arrêter le streaming RTSP 
 
 ### Découverte ONVIF
 
-Eufy indique que ses SoloCam, caméras projecteur et les Video Doorbell Dual (Wired) et 2E ne prennent pas en charge ONVIF, et ONVIF n'est documenté pour aucun autre modèle : ne comptez pas sur la découverte ONVIF pour les trouver. Activez RTSP dans l'application Eufy Security et utilisez directement l'URL RTSP.
+Eufy indique qu'aucune de ses SoloCam, caméras projecteur ou sonnettes Video Doorbell ne prend en charge ONVIF, et ONVIF n'est documenté pour aucune autre caméra : ne comptez pas sur la découverte ONVIF pour les trouver. Activez RTSP dans l'application Eufy Security et utilisez directement l'URL RTSP.
 
 ### Incohérences de firmware
 
@@ -146,11 +147,11 @@ Eufy a déployé la prise en charge RTSP progressivement. Différentes caméras 
 
 **Les caméras Eufy prennent-elles en charge RTSP ?**
 
-De nombreuses caméras Eufy prennent désormais en charge RTSP, mais cela doit être activé dans l'application Eufy Security et varie selon le modèle. Les caméras connectées à HomeBase diffusent RTSP via la HomeBase, tandis que les caméras autonomes diffusent directement. Vérifiez les capacités de votre modèle spécifique dans les paramètres de l'application.
+De nombreuses caméras Eufy prennent désormais en charge RTSP, mais cela doit être activé dans l'application Eufy Security et varie selon le modèle. La FAQ des sonnettes Eufy est catégorique : aucune sonnette Eufy ne prend en charge RTSP. Les caméras connectées à HomeBase diffusent RTSP via la HomeBase, tandis que les caméras autonomes diffusent directement. Vérifiez les capacités de votre modèle spécifique dans les paramètres de l'application.
 
 **Les caméras Eufy prennent-elles en charge ONVIF ?**
 
-Non, d'après la documentation Eufy. Ses pages d'assistance indiquent que les SoloCam, les caméras projecteur, la Video Doorbell Dual (Wired) et la 2E ne prennent pas en charge ONVIF, et nous n'avons trouvé aucune page Eufy confirmant ONVIF pour les modèles eufyCam ou Indoor Cam. Utilisez plutôt RTSP : activez-le dans l'application Eufy Security et connectez-vous avec l'URL affichée dans l'application.
+Non, d'après la documentation Eufy. Ses pages d'assistance excluent ONVIF pour les SoloCam, les caméras projecteur et toutes les sonnettes, et nous n'avons trouvé aucune page Eufy confirmant ONVIF pour les modèles eufyCam ou Indoor Cam. Utilisez plutôt RTSP : activez-le dans l'application Eufy Security et connectez-vous avec l'URL affichée dans l'application.
 
 **Les caméras Eufy nécessitent-elles un abonnement cloud pour RTSP ?**
 

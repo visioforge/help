@@ -536,12 +536,20 @@ Les modes des flux viennent de la caméra : `RealSenseDeviceInfo.Profiles` liste
 
 #### Prérequis
 
-- Le package NuGet `VisioForge.CrossPlatform.RealSense.Windows.x64` (librealsense 2.58.1).
-- Aucun pilote RealSense : Windows 10 et 11 ouvrent la caméra avec le pilote vidéo USB intégré.
+- Windows : le package NuGet `VisioForge.CrossPlatform.RealSense.Windows.x64` (librealsense 2.58.1). Aucun pilote RealSense n'est nécessaire : Windows 10 et 11 ouvrent la caméra avec le pilote vidéo USB intégré.
+- Linux : librealsense 2.58 ou une version 2.x ultérieure, installé depuis le dépôt apt de RealSense. Le bloc charge `librealsense2.so`, fourni par le paquet `librealsense2-dev` ; les paquets installent aussi les règles udev qui donnent à un utilisateur l'accès à la caméra. Les correctifs du noyau `librealsense2-dkms` ne sont pas nécessaires.
+
+```bash
+sudo mkdir -p /etc/apt/keyrings
+curl -sSf https://librealsense.realsenseai.com/Debian/librealsenseai.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/librealsenseai.gpg > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/librealsenseai.gpg] https://librealsense.realsenseai.com/Debian/apt-repo $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/librealsense.list
+sudo apt-get update
+sudo apt-get install librealsense2-dev
+```
 
 #### Plateformes
 
-Windows (x64).
+Windows (x64), Linux (x64).
 
 ### Bloc source Blackmagic Decklink
 

@@ -172,7 +172,7 @@ Chaque projet principal de plateforme (`SimplePlayerMVVM.Android.csproj`, `Simpl
 **Bureau (`SimplePlayerMVVM.Desktop.csproj`) :**
 
 * Référence `Avalonia.Desktop`.
-* Inclut les bibliothèques natives VisioForge spécifiques à la plateforme (par exemple `VisioForge.CrossPlatform.Core.Windows.x64`, `VisioForge.CrossPlatform.Core.macOS`).
+* Inclut les bibliothèques natives VisioForge spécifiques à la plateforme (par exemple `VisioForge.CrossPlatform.Core.Windows.x64`, `VisioForge.CrossPlatform.Core.macOS`, `VisioForge.CrossPlatform.Core.Linux.x64`).
 
 ```xml
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
@@ -194,6 +194,10 @@ Chaque projet principal de plateforme (`SimplePlayerMVVM.Android.csproj`, `Simpl
     <TargetFramework>net10.0</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
+  </ItemGroup>
 ```
 
 **Android (`SimplePlayerMVVM.Android.csproj`) :**
@@ -1166,7 +1170,7 @@ Cette application exploite plusieurs composants clés du VisioForge Media Player
   * **`InitSDK()` :** initialise le SDK VisioForge. Cela doit être appelé une fois au démarrage de l'application (fait dans le constructeur `MainViewModel` dans cet exemple, mais peut aussi être fait dans `App.axaml.cs`).
   * **`DestroySDK()` :** libère toutes les ressources du SDK. Cela doit être appelé à la fermeture de l'application pour empêcher les fuites de ressources (fait dans `MainViewModel.OnWindowClosing`).
 * **Bibliothèques spécifiques aux plateformes :**
-  * Comme détaillé dans la configuration du projet et les sections spécifiques aux plateformes, divers paquets NuGet comme `VisioForge.CrossPlatform.Core.Windows.x64`, `VisioForge.CrossPlatform.Core.macOS`, `VisioForge.CrossPlatform.Core.Android` et `VisioForge.CrossPlatform.Core.iOS` fournissent les binaires natifs et les liaisons nécessaires pour chaque plateforme.
+  * Comme détaillé dans la configuration du projet et les sections spécifiques aux plateformes, divers paquets NuGet comme `VisioForge.CrossPlatform.Core.Windows.x64`, `VisioForge.CrossPlatform.Core.macOS`, `VisioForge.CrossPlatform.Core.Linux.x64`, `VisioForge.CrossPlatform.Core.Android` et `VisioForge.CrossPlatform.Core.iOS` fournissent les binaires natifs et les liaisons nécessaires pour chaque plateforme.
 * **`VisioForge.Core.UI.Android.FileDialogHelper` (pour Android) :**
   * Contient des méthodes helper comme `GetFilePathFromUri` pour travailler avec le système de fichiers Android et les URI de contenu.
 
@@ -1211,7 +1215,7 @@ Non. Le SDK fonctionne avec n'importe quelle architecture, y compris le code-beh
 
 ### Comment déployer le lecteur vidéo Avalonia sur Linux ?
 
-Publiez avec `dotnet publish -r linux-x64` (ou `linux-arm64` pour ARM). Sur la machine cible, installez le runtime GStreamer (`libgstreamer1.0-0` et les paquets de plugins sur Ubuntu/Debian, ou l'équivalent sur votre distribution). Les paquets NuGet VisioForge incluent les liaisons natives, mais GStreamer lui-même doit être présent sur le système. Aucune configuration spécifique X11 ou Wayland n'est nécessaire — Avalonia gère automatiquement la sélection du serveur d'affichage.
+Publiez avec `dotnet publish -r linux-x64` (ou `linux-arm64` pour ARM). Sur la machine cible, installez le runtime GStreamer (`libgstreamer1.0-0` et les paquets de plugins sur Ubuntu/Debian, ou l'équivalent sur votre distribution). Référencez `VisioForge.CrossPlatform.Core.Linux.x64` (ou `.arm64`) dans le projet Desktop, comme dans le fichier de projet ci-dessus, et compilez-le sous Linux, où cette condition s'applique : le paquet contient les bibliothèques natives propres au SDK, sans lesquelles les captures d'image et les conversions d'images vidéo échouent à l'exécution avec `VisioForge_VAP is not available`. GStreamer lui-même ne figure dans aucun paquet NuGet et doit être présent sur le système. Aucune configuration spécifique X11 ou Wayland n'est nécessaire — Avalonia gère automatiquement la sélection du serveur d'affichage.
 
 ### Le lecteur Avalonia prend-il en charge le rendu vidéo accéléré par GPU ?
 

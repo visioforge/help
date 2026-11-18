@@ -33,7 +33,7 @@ The csproj uses **`Microsoft.NET.Sdk.Web`** (ASP.NET Core), not `Microsoft.NET.S
   <TargetFramework Condition="$([MSBuild]::IsOsPlatform('OSX'))">net10.0-macos</TargetFramework>
   <TargetFramework Condition="$([MSBuild]::IsOsPlatform('Windows'))">net10.0-windows</TargetFramework>
   <TargetFramework Condition="$([MSBuild]::IsOsPlatform('Linux'))">net10.0</TargetFramework>
-  <PlatformTarget Condition="!$([MSBuild]::IsOsPlatform('OSX'))">x64</PlatformTarget>
+  <PlatformTarget Condition="$([MSBuild]::IsOsPlatform('Windows'))">x64</PlatformTarget>
   <Nullable>enable</Nullable>
   <ImplicitUsings>enable</ImplicitUsings>
 </PropertyGroup>
@@ -66,11 +66,16 @@ The .NET wrapper is a single package; the native redist is per-OS and **not tran
 <ItemGroup Condition="$(TargetFramework.Contains('-macos'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 </ItemGroup>
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
+  <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.4" />
+</ItemGroup>
 ```
 
 keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. A redist ahead of the wrapper is undefined behaviour and surfaces as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
-For Linux deployment add the matching `VisioForge.CrossPlatform.Core.Linux.x64` package; for ARM64 Linux hosts (Raspberry Pi, ARM Linux) swap `.x64` for the `.arm64` variant. The macOS package `VisioForge.CrossPlatform.Core.macOS` covers both Apple silicon and Intel Macs. See `references/Sample.csproj` for a complete working file.
+On Linux the conditions pick `VisioForge.CrossPlatform.Core.Linux.x64` or `.arm64` (Raspberry Pi, ARM servers) from the runtime identifier, or from the build machine when none is given; the block applies when the app is built on Linux. `PlatformTarget` pins x64 on Windows only, so the Linux build runs on either architecture. Without the Linux package the app starts, but snapshots, frame-to-bitmap conversion and overlays fail with `VisioForge_VAP is not available`. The macOS package `VisioForge.CrossPlatform.Core.macOS` covers both Apple silicon and Intel Macs. See `references/Sample.csproj` for a complete working file.
 
 ## Pipeline model
 

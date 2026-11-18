@@ -20,6 +20,7 @@ Cherchez-vous à implémenter des capacités de capture vidéo de qualité profe
 La connexion aux caméras IP vous permet d'intégrer les flux de sécurité, le monitoring à distance et la vidéosurveillance dans vos applications.
 
 * [**Guide d'enregistrement de caméra IP vers MP4**](ip-camera-capture-mp4.md) — Apprenez à vous connecter à des caméras IP et à enregistrer des fichiers MP4 de haute qualité avec compression H.264
+* [**Audio bidirectionnel avec caméra IP**](ip-camera-two-way-audio.md) — Parlez via le haut-parleur de la caméra : le micro du PC est envoyé à la caméra via le backchannel audio ONVIF pendant que l'application affiche et joue la caméra
 * [**Implémentation d'aperçu en direct de caméra IP**](ip-camera-preview.md) — Découvrez comment afficher en temps réel les flux de caméras IP dans votre application avec des fréquences d'images personnalisables
 
 Nos tutoriels couvrent les protocoles RTSP, HTTP et ONVIF pour la connexion à un large éventail de modèles de caméras IP des principaux fabricants. Parcourez notre [répertoire des marques de caméras IP](../../camera-brands/index.md) pour des URL RTSP spécifiques aux marques.

@@ -176,6 +176,7 @@ Besoin de l'URL RTSP de votre caméra ? Parcourez notre [répertoire des marques
 - [Plongée approfondie dans le protocole RTSP](../../../general/network-streaming/rtsp.md) — fonctionnement du RTSP, options de transport et architecture de streaming
 - [Intégration des caméras IP ONVIF](onvif.md) — WS-Discovery, gestion des profils et contrôle PTZ
 - [Intégration de sources NDI](ndi.md) — alternative vidéo-sur-IP professionnelle pour studio et diffusion
+- [Audio bidirectionnel (backchannel audio ONVIF)](two-way-audio.md) — envoyez le son du micro vers le haut-parleur de la caméra
 - [Tutoriel d'aperçu en direct d'une caméra IP](../../video-tutorials/ip-camera-preview.md) — pas-à-pas vidéo avec un exemple C# minimal
 - [Enregistrer un flux RTSP vers MP4](../../video-tutorials/ip-camera-capture-mp4.md) — capturer n'importe quelle caméra IP dans un fichier
 - [Lecteur RTSP Media Blocks](../../../mediablocks/Guides/rtsp-player-csharp.md) — alternative basée sur pipeline dans Media Blocks SDK

@@ -59,7 +59,7 @@ The X engine itself is cross-platform — to ship a Linux or macOS console worke
 |---|---|---|---|
 | Windows x64 | `net10.0-windows` | `VisioForge.CrossPlatform.Core.Windows.x64` | `VisioForge.CrossPlatform.Libav.Windows.x64` |
 | macOS (arm64 + x64) | `net10.0-macos15.0` | `VisioForge.CrossPlatform.Core.macOS` | (libav bundled in Core on macOS) |
-| Linux x64 | `net10.0` | `VisioForge.CrossPlatform.Core.Linux.x64` | (libav bundled in Core on Linux) |
+| Linux (x64, arm64) | `net10.0` | `VisioForge.CrossPlatform.Core.Linux.x64` (`.arm64` on ARM64) | (none: libav comes from the system's `gstreamer1.0-libav`; the Core package holds only the SDK's own native libraries) |
 
 Linux builds also need `SkiaSharp.NativeAssets.Linux` for diagram/snapshot rendering. The C# code (the `references/Program.cs` body) is identical across platforms apart from the macOS block described below. Everything else that differs per OS lives in the csproj: the TFM, the redist `<ItemGroup>` blocks and the macOS `RunWithOpen` setting, each under `Condition="$([MSBuild]::IsOsPlatform('...'))"` if you want one csproj that builds everywhere. See the upstream Video From Images X CLI csproj for the multi-OS conditional pattern.
 

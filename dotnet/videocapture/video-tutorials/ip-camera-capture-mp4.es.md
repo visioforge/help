@@ -50,6 +50,16 @@ El motor clásico `VideoCaptureCore` también graba cámaras IP: el [tutorial de
   <iframe src="https://www.youtube.com/embed/6CTrBCzHySE?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
+### La versión corta
+
+La misma grabación como aplicación de consola en unas pocas líneas de C#, sin la vista previa ni el sonido. El usuario y la contraseña están escritos en su código: sustituya `admin` y `password` por los de su cámara.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/CUrQcoK86nQ?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Su código: [ip-camera-mp4-short-console en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/ip-camera-mp4-short-console).
+
 ## Repositorio del código fuente
 
 El proyecto completo, con el archivo del diseñador, está en GitHub:
