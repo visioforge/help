@@ -1,6 +1,6 @@
 ---
 title: Install VisioForge .NET SDKs in an Uno Platform App
-description: "Install the VisioForge .NET SDKs in an Uno Platform 6.5 app for Windows, Android and iOS: NuGet, redists, AndroidDependency, VideoView and a video."
+description: "Install the VisioForge .NET SDKs in an Uno Platform 7 app for Windows, Android and iOS: NuGet, redists, AndroidDependency, VideoView and a video."
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -33,13 +33,13 @@ video:
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-This guide installs the VisioForge .NET SDKs in an Uno Platform 6.5 app with Windows, Android and iOS heads, and puts a `VideoView` on its page. It ends with an app that builds and runs on the Windows head.
+This guide installs the VisioForge .NET SDKs in an Uno Platform 7 app with Windows, Android and iOS heads, and puts a `VideoView` on its page. It ends with an app that builds and runs on the Windows head.
 
 All four SDKs — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET and Media Blocks SDK .NET — come in one NuGet package, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). The Uno `VideoView` is in [VisioForge.DotNet.Core.UI.Uno](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Uno). Each platform also takes a redist package, its native engine, and Android takes the VisioForge binding project, `AndroidDependency`, from GitHub.
 
 ## Video tutorial
 
-The video creates the app, installs the packages in Visual Studio 2026 and runs it:
+The video creates the app, installs the packages in Visual Studio 2026 and runs it. It was recorded with Uno Platform 6.5; on Uno Platform 7 the template has no `-renderer` option and the project needs no `WinAppSdkVersion`:
 
 <div class="video-wrapper">
   <iframe src="https://www.youtube.com/embed/76s5ZyFxiUc?controls=1" frameborder="0" allowfullscreen></iframe>
@@ -52,16 +52,16 @@ The video creates the app, installs the packages in Visual Studio 2026 and runs 
 - Git
 - A Mac with Xcode, paired with Visual Studio, to build the iOS head
 
-`VisioForge.DotNet.Core.UI.Uno` is built for Uno Platform 6.5, so the app is created from the Uno 6.5 templates.
+`VisioForge.DotNet.Core.UI.Uno` is built for Uno Platform 7, so the app is created from the Uno 7 templates. Versions up to 2026.11.16 are built for Uno Platform 6.5.
 
 ## Create the app
 
-In Developer PowerShell, install the Uno 6.5 templates, create the app, and fetch the Android binding project:
+In Developer PowerShell, install the Uno 7 templates, create the app, and fetch the Android binding project:
 
 ```powershell
 cd $HOME\source\repos
-dotnet new install Uno.Templates@6.5.31
-dotnet new unoapp -o VisioForgeUno -preset blank -platforms android ios windows -renderer native
+dotnet new install Uno.Templates@7.0.5
+dotnet new unoapp -o VisioForgeUno -preset blank -platforms android ios windows
 cd VisioForgeUno
 git clone --depth 1 --filter=blob:none --sparse https://github.com/visioforge/.Net-SDK-s-samples.git samples
 git -C samples sparse-checkout set AndroidDependency
@@ -69,7 +69,7 @@ dotnet sln add samples\AndroidDependency\VisioForge.Core.Android.X10.csproj
 devenv VisioForgeUno.sln
 ```
 
-The template options pick the blank preset, the three platforms and the native renderer. The sparse clone checks out only `AndroidDependency` from the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency). `dotnet sln add` puts it into the solution: Visual Studio restores only the projects its solution holds, and the app references this one.
+The template options pick the blank preset and the three platforms. The sparse clone checks out only `AndroidDependency` from the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency). `dotnet sln add` puts it into the solution: Visual Studio restores only the projects its solution holds, and the app references this one.
 
 ## Project properties
 
@@ -77,13 +77,12 @@ Right-click the project and select **Edit Project File**. Add these properties t
 
 ```xml
 <PropertyGroup>
-  <WinAppSdkVersion>1.8.260921001</WinAppSdkVersion>
   <SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('-android'))">24.0</SupportedOSPlatformVersion>
   <SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('-ios'))">18.0</SupportedOSPlatformVersion>
 </PropertyGroup>
 ```
 
-`VisioForge.DotNet.Core.UI.Uno` needs Windows App SDK 1.8, and Uno 6.5 brings 1.7: `WinAppSdkVersion` raises it. The Android head targets Android 7 (API level 24), the SDK's minimum on Android. The iOS head targets iOS 18.0, the minimum of the native iOS libraries; the video shows only the first two properties.
+The Android head targets Android 7 (API level 24), the SDK's minimum on Android. The iOS head targets iOS 18.0, the minimum of the native iOS libraries.
 
 ## Install the packages
 

@@ -54,6 +54,16 @@ El motor clásico `VideoCaptureCore` también graba la pantalla; su versión de 
 
 [Código fuente en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/screen-capture-mp4-wpf)
 
+### La versión corta
+
+La misma grabación como aplicación de consola en unas pocas líneas de C#, sin la vista previa ni el sonido del sistema.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/rvWmsuifpRE?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Su código: [screen-mp4-short-console en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/screen-mp4-short-console).
+
 ## Paquetes NuGet requeridos
 
 - [VisioForge.DotNet.VideoCapture](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture/) — el SDK; el `VideoView` de WPF viene incluido

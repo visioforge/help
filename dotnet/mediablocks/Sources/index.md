@@ -484,7 +484,7 @@ Windows (x64). Windows on Arm and 32-bit (x86) apps are not supported: on Window
 
 ### Intel RealSense Source Block
 
-The Intel RealSense Source Block captures the colour, depth and infrared streams of an Intel RealSense depth camera (D400 series, such as the D435) through librealsense. Each enabled stream gets its own output pad. Depth is delivered as a colourized RGB image, ready to display or encode, or as raw 16-bit values (`GRAY16_LE`); `AlignDepthToColor` maps depth onto the colour image so that the same pixel shows the same point in both. `GetDistance(x, y)` returns the distance in metres at a pixel of the latest depth frame.
+The Intel RealSense Source Block captures the color, depth and infrared streams of an Intel RealSense depth camera (D400 series, such as the D435) through librealsense. Each enabled stream gets its own output pad. Depth is delivered as a colorized RGB image, ready to display or encode, or as raw 16-bit values (`GRAY16_LE`); `AlignDepthToColor` maps depth onto the color image so that the same pixel shows the same point in both. `GetDistance(x, y)` returns the distance in meters at a pixel of the latest depth frame.
 
 #### Block info
 
@@ -492,7 +492,7 @@ Name: RealSenseSourceBlock.
 
 | Pin direction | Media type | Pins count |
 |---------------|:----------:|:----------:|
-| Output video (colour) | Uncompressed video, RGB | 0 or 1 |
+| Output video (color) | Uncompressed video, RGB | 0 or 1 |
 | Output video (depth) | Uncompressed video, RGB or GRAY16_LE | 0 or 1 |
 | Output video (infrared) | Uncompressed video, GRAY8 | 0 or 1 |
 
@@ -500,7 +500,7 @@ Name: RealSenseSourceBlock.
 
 ```mermaid
 graph LR;
-    RealSenseSourceBlock-- colour -->VideoRendererBlock1;
+    RealSenseSourceBlock-- color -->VideoRendererBlock1;
     RealSenseSourceBlock-- depth -->VideoRendererBlock2;
 ```
 
@@ -513,7 +513,7 @@ var pipeline = new MediaBlocksPipeline();
 var cameras = await RealSenseSourceBlock.EnumerateDevicesAsync();
 var camera = cameras[0];
 
-// Open colour, depth and the left infrared imager at 640x480, 30 fps.
+// Open color, depth and the left infrared imager at 640x480, 30 fps.
 var settings = new RealSenseSourceSettings(camera.SerialNumber)
 {
     Color = camera.FindProfile(RealSenseStreamType.Color, 640, 480, 30),
@@ -525,18 +525,18 @@ var settings = new RealSenseSourceSettings(camera.SerialNumber)
 
 var realSense = new RealSenseSourceBlock(settings);
 
-// Show colour and the colourized depth.
-pipeline.Connect(realSense.ColorOutput, new VideoRendererBlock(pipeline, VideoView1).Input);
-pipeline.Connect(realSense.DepthOutput, new VideoRendererBlock(pipeline, VideoView2).Input);
+// Show color and the colorized depth.
+pipeline.Connect(realSense.ColorOutput, new VideoRendererBlock(pipeline, VideoView1) { IsSync = false }.Input);
+pipeline.Connect(realSense.DepthOutput, new VideoRendererBlock(pipeline, VideoView2) { IsSync = false }.Input);
 
 await pipeline.StartAsync();
 
-// Later, while frames flow (a timer, an event): the distance in metres at the centre of the aligned depth frame.
+// Later, while frames flow (a timer, an event): the distance in meters at the center of the aligned depth frame.
 // It reads 0 until the first depth frame has arrived.
-float metres = realSense.GetDistance(320, 240);
+float meters = realSense.GetDistance(320, 240);
 ```
 
-The stream modes come from the camera: `RealSenseDeviceInfo.Profiles` lists every colour, depth and infrared mode it reports, and `FindProfile` returns null for a mode it does not support. With `DepthMode = RealSenseDepthMode.Raw`, multiply a depth value by `DepthScale` to get metres. An output that is not connected is discarded.
+The stream modes come from the camera: `RealSenseDeviceInfo.Profiles` lists every color, depth and infrared mode it reports, and `FindProfile` returns null for a mode it does not support. With `DepthMode = RealSenseDepthMode.Raw`, multiply a depth value by `DepthScale` to get meters. An output that is not connected is discarded.
 
 #### Requirements
 
@@ -554,6 +554,8 @@ sudo apt-get install librealsense2-dev
 #### Platforms
 
 Windows (x64), Linux (x64).
+
+Step-by-step guide: [Intel RealSense depth camera in C# .NET](../Guides/realsense-depth-camera-csharp.md) — listing cameras, color and depth preview, distance at a pixel, recording depth to MP4.
 
 ### Blackmagic Decklink Source Block
 

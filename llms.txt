@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-11-18 20:36:36 UTC (78b4b2d3f5e)
+**Generated:** 2026-11-18 21:44:49 UTC (06c1371b610)
 
 ## MCP Server (for AI coding agents)
 
@@ -342,7 +342,7 @@ The following products from the old price list are no longer sold:
 - [VisioForge Project Templates for Visual Studio 2026](https://www.visioforge.com/help/docs/dotnet/install/project-templates/): Start a VisioForge .NET app from a template: camera preview, media player or Media Blocks player for WPF, WinForms, Avalonia and .NET MAUI.
 - [Install VisioForge SDK in JetBrains Rider — NuGet Setup](https://www.visioforge.com/help/docs/dotnet/install/rider/): Add VisioForge .NET SDKs to Rider projects via NuGet. .NET 6/7/8/9, macOS/Windows/Linux. Package references, native dependencies, troubleshooting.
 - [Install VisioForge media SDKs in Unity 6 — Setup Guide](https://www.visioforge.com/help/docs/dotnet/install/unity/): Set up VisioForge media SDKs in Unity 6 — one cumulative .unitypackage for video playback, capture and editing on Windows, Android, macOS, iOS.
-- [Install VisioForge .NET SDKs in an Uno Platform App](https://www.visioforge.com/help/docs/dotnet/install/uno/): Install the VisioForge .NET SDKs in an Uno Platform 6.5 app for Windows, Android and iOS: NuGet, redists, AndroidDependency, VideoView and a video.
+- [Install VisioForge .NET SDKs in an Uno Platform App](https://www.visioforge.com/help/docs/dotnet/install/uno/): Install the VisioForge .NET SDKs in an Uno Platform 7 app for Windows, Android and iOS: NuGet, redists, AndroidDependency, VideoView and a video.
 - [How to Install VisioForge .NET SDKs in Visual Studio](https://www.visioforge.com/help/docs/dotnet/install/visual-studio/): Install the VisioForge .NET SDKs in Visual Studio from NuGet, in WinForms, WPF, MAUI and console projects: the packages, VideoView and a video.
 - [Install VisioForge .NET SDKs in Visual Studio for Mac](https://www.visioforge.com/help/docs/dotnet/install/visual-studio-mac/): Install and configure VisioForge .NET SDKs in Visual Studio for Mac for multimedia macOS and iOS application development.
 

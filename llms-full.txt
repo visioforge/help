@@ -2,9 +2,9 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-18 20:36:39 UTC (78b4b2d3f5e)
+**Generated:** 2026-11-18 21:44:53 UTC (06c1371b610)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
-**Content Sources:** 456 help documentation pages + 74 website pages
+**Content Sources:** 458 help documentation pages + 74 website pages
 
 ---
 
@@ -11926,8 +11926,10 @@ VisioForge SDKs support the following Uno Platform targets:
 | Windows Desktop | net10.0-windows10.0.19041.0 | ✔ Full Support |
 | Android | net10.0-android | ✔ Full Support |
 | iOS | net10.0-ios | ✔ Full Support |
-| macOS (Catalyst) | net10.0-maccatalyst | ✔ Full Support |
+| macOS Desktop (Skia) | net10.0-desktop | ✔ Full Support |
 | Linux Desktop (Skia) | net10.0-desktop | ✔ Full Support |
+
+The targets are those of Uno Platform 7, which has no Mac Catalyst target: macOS apps run on the `net10.0-desktop` head. Uno Platform 7 needs a `VisioForge.DotNet.Core.UI.Uno` package built for it; versions up to 2026.11.16 are built for Uno Platform 6.5.
 
 ## System Requirements
 
@@ -11945,7 +11947,7 @@ Before beginning your Uno Platform implementation, ensure your development envir
 #### Windows
 
 - Windows 10 version 17763 or later
-- Windows App SDK 1.4+
+- Windows App SDK 2.5 or later (Uno Platform 7 brings it)
 
 #### Android
 
@@ -11981,8 +11983,8 @@ dotnet new install Uno.Templates
 # For Android
 dotnet workload install android
 
-# For iOS/macOS
-dotnet workload install ios maccatalyst
+# For iOS
+dotnet workload install ios
 ```
 
 ### 3. Create a New Uno Platform Project
@@ -12010,7 +12012,6 @@ Add platform-specific redistributable packages to your project:
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 </ItemGroup>
@@ -12040,29 +12041,15 @@ Additionally, you'll need to add the Java Bindings Library. Clone it from our [G
 </ItemGroup>
 ```
 
-#### macOS (Catalyst)
+#### macOS
 
 ```
-<ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+<ItemGroup Condition="$(TargetFramework.Contains('-desktop')) and $([MSBuild]::IsOSPlatform('osx'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 </ItemGroup>
 ```
 
-For macOS Catalyst, you also need to add a custom MSBuild target to copy native libraries to the app bundle:
-
-```
-<Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PropertyGroup>
-    <AppBundleDir>$(OutputPath)$(AssemblyName).app</AppBundleDir>
-    <MonoBundleDir>$(AppBundleDir)/Contents/MonoBundle</MonoBundleDir>
-  </PropertyGroup>
-  <MakeDir Directories="$(MonoBundleDir)" Condition="!Exists('$(MonoBundleDir)')" />
-  <Copy SourceFiles="@(None->'%(FullPath)')" DestinationFolder="$(MonoBundleDir)"
-        Condition="'%(Extension)' == '.dylib' Or '%(Extension)' == '.so'">
-    <Output TaskParameter="CopiedFiles" ItemName="CopiedNativeFiles" />
-  </Copy>
-</Target>
-```
+The package applies to the desktop head when the project is built on a Mac. Its build targets copy the native libraries next to the application.
 
 #### Linux Desktop
 
@@ -12096,7 +12083,7 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
   <PropertyGroup>
     <!-- Target frameworks based on build OS -->
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net10.0-windows10.0.19041;net10.0-android</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net10.0-maccatalyst;net10.0-ios;net10.0-android</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net10.0-desktop;net10.0-ios;net10.0-android</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('linux'))">net10.0-desktop</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>
@@ -12125,7 +12112,6 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
 
   <!-- Windows Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
     <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
     <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
   </ItemGroup>
@@ -12141,8 +12127,8 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
     <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
   </ItemGroup>
 
-  <!-- macOS Catalyst Platform -->
-  <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+  <!-- macOS Desktop Platform -->
+  <ItemGroup Condition="$(TargetFramework.Contains('-desktop')) and $([MSBuild]::IsOSPlatform('osx'))">
     <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
   </ItemGroup>
 
@@ -12151,20 +12137,6 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
     <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
     <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
   </ItemGroup>
-
-  <!-- macOS: Copy native libraries to app bundle -->
-  <Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build"
-          Condition="$(TargetFramework.Contains('-maccatalyst'))">
-    <PropertyGroup>
-      <AppBundleDir>$(OutputPath)$(AssemblyName).app</AppBundleDir>
-      <MonoBundleDir>$(AppBundleDir)/Contents/MonoBundle</MonoBundleDir>
-    </PropertyGroup>
-    <MakeDir Directories="$(MonoBundleDir)" Condition="!Exists('$(MonoBundleDir)')" />
-    <Copy SourceFiles="@(None->'%(FullPath)')" DestinationFolder="$(MonoBundleDir)"
-          Condition="'%(Extension)' == '.dylib' Or '%(Extension)' == '.so'">
-      <Output TaskParameter="CopiedFiles" ItemName="CopiedNativeFiles" />
-    </Copy>
-  </Target>
 </Project>
 ```
 
@@ -12250,17 +12222,54 @@ For HTTP streaming sources, configure App Transport Security:
 </dict>
 ```
 
-### macOS (Catalyst) Configuration
+### macOS Desktop Configuration
 
-macOS Catalyst applications share configuration with iOS. Additionally, configure runtime identifiers for both Intel and Apple Silicon:
+On macOS the app runs on the `net10.0-desktop` head, the same target as Linux. `VisioForge.DotNet.Core` selects its macOS build for it at compile time and at run time, so playback needs nothing beyond the macOS package above.
+
+Camera and microphone capture needs the app packaged as an `.app` bundle whose `Info.plist` carries `NSCameraUsageDescription` and `NSMicrophoneUsageDescription`: without them macOS terminates the app the first time it opens the device. The bundle is signed with the hardened runtime, so it also needs the camera and microphone entitlements. Add both files to the project and point the build at them; the files apply to the bundle only, not to `dotnet run`:
 
 ```
-<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' AND $(TargetFramework.Contains('-maccatalyst'))">
-  <RuntimeIdentifier>maccatalyst-x64</RuntimeIdentifier>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Platforms/Desktop/Info.plist: Uno fills in the bundle keys listed with empty values -->
+<plist version="1.0">
+<dict>
+  <key>CFBundleDisplayName</key><string></string>
+  <key>CFBundleExecutable</key><string></string>
+  <key>CFBundleIdentifier</key><string></string>
+  <key>CFBundleName</key><string></string>
+  <key>CFBundleShortVersionString</key><string></string>
+  <key>CFBundleVersion</key><string></string>
+  <key>NSCameraUsageDescription</key><string>Camera access is required to capture video.</string>
+  <key>NSMicrophoneUsageDescription</key><string>Microphone access is required to capture audio.</string>
+</dict>
+</plist>
+```
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Platforms/Desktop/Entitlements.plist: the bundle is signed with the hardened runtime -->
+<plist version="1.0">
+<dict>
+  <key>com.apple.security.cs.allow-jit</key><true/>
+  <key>com.apple.security.device.camera</key><true/>
+  <key>com.apple.security.device.audio-input</key><true/>
+</dict>
+</plist>
+```
+
+```
+<PropertyGroup>
+  <UnoMacOSCustomInfoPlist>Platforms/Desktop/Info.plist</UnoMacOSCustomInfoPlist>
+  <UnoMacOSEntitlements>Platforms/Desktop/Entitlements.plist</UnoMacOSEntitlements>
 </PropertyGroup>
-<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64' AND $(TargetFramework.Contains('-maccatalyst'))">
-  <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
-</PropertyGroup>
+```
+
+```
+# osx-x64 for Intel Macs. Optional: -p:CodesignKey="Developer ID Application: <your team>" signs the bundle
+# with a stable identity, so macOS keeps the camera grant across rebuilds.
+dotnet publish -f net10.0-desktop -r osx-arm64 -p:PackageFormat=app
 ```
 
 ### Linux Desktop Configuration
@@ -12298,7 +12307,7 @@ dotnet build -c Release -f net10.0-ios
 ### macOS
 
 ```
-dotnet build -c Release -f net10.0-maccatalyst
+dotnet build -c Release -f net10.0-desktop
 ```
 
 ### Linux Desktop
@@ -44524,7 +44533,7 @@ Yes — if the package was built with `-IncludeMacOS`. The cumulative variant pu
 
 ## Install VisioForge .NET SDKs in an Uno Platform App
 **URL:** https://www.visioforge.com/help/docs/dotnet/install/uno/
-**Description:** Install the VisioForge .NET SDKs in an Uno Platform 6.5 app for Windows, Android and iOS: NuGet, redists, AndroidDependency, VideoView and a video.
+**Description:** Install the VisioForge .NET SDKs in an Uno Platform 7 app for Windows, Android and iOS: NuGet, redists, AndroidDependency, VideoView and a video.
 **Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, MediaBlocksPipeline, Windows, Android, iOS, Uno, GStreamer, C#, NuGet
 **API:** VideoView, VisioForgeX, UniversalSourceSettings, MediaBlocksPipeline, UniversalSourceBlock, VideoRendererBlock
 
@@ -44532,13 +44541,13 @@ Yes — if the package was built with `-IncludeMacOS`. The cumulative variant pu
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
 
-This guide installs the VisioForge .NET SDKs in an Uno Platform 6.5 app with Windows, Android and iOS heads, and puts a `VideoView` on its page. It ends with an app that builds and runs on the Windows head.
+This guide installs the VisioForge .NET SDKs in an Uno Platform 7 app with Windows, Android and iOS heads, and puts a `VideoView` on its page. It ends with an app that builds and runs on the Windows head.
 
 All four SDKs — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET and Media Blocks SDK .NET — come in one NuGet package, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). The Uno `VideoView` is in [VisioForge.DotNet.Core.UI.Uno](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Uno). Each platform also takes a redist package, its native engine, and Android takes the VisioForge binding project, `AndroidDependency`, from GitHub.
 
 ## Video tutorial
 
-The video creates the app, installs the packages in Visual Studio 2026 and runs it:
+The video creates the app, installs the packages in Visual Studio 2026 and runs it. It was recorded with Uno Platform 6.5; on Uno Platform 7 the template has no `-renderer` option and the project needs no `WinAppSdkVersion`:
 
 ## Requirements
 
@@ -44547,16 +44556,16 @@ The video creates the app, installs the packages in Visual Studio 2026 and runs 
 - Git
 - A Mac with Xcode, paired with Visual Studio, to build the iOS head
 
-`VisioForge.DotNet.Core.UI.Uno` is built for Uno Platform 6.5, so the app is created from the Uno 6.5 templates.
+`VisioForge.DotNet.Core.UI.Uno` is built for Uno Platform 7, so the app is created from the Uno 7 templates. Versions up to 2026.11.16 are built for Uno Platform 6.5.
 
 ## Create the app
 
-In Developer PowerShell, install the Uno 6.5 templates, create the app, and fetch the Android binding project:
+In Developer PowerShell, install the Uno 7 templates, create the app, and fetch the Android binding project:
 
 ```
 cd $HOME\source\repos
-dotnet new install Uno.Templates@6.5.31
-dotnet new unoapp -o VisioForgeUno -preset blank -platforms android ios windows -renderer native
+dotnet new install Uno.Templates@7.0.5
+dotnet new unoapp -o VisioForgeUno -preset blank -platforms android ios windows
 cd VisioForgeUno
 git clone --depth 1 --filter=blob:none --sparse https://github.com/visioforge/.Net-SDK-s-samples.git samples
 git -C samples sparse-checkout set AndroidDependency
@@ -44564,7 +44573,7 @@ dotnet sln add samples\AndroidDependency\VisioForge.Core.Android.X10.csproj
 devenv VisioForgeUno.sln
 ```
 
-The template options pick the blank preset, the three platforms and the native renderer. The sparse clone checks out only `AndroidDependency` from the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency). `dotnet sln add` puts it into the solution: Visual Studio restores only the projects its solution holds, and the app references this one.
+The template options pick the blank preset and the three platforms. The sparse clone checks out only `AndroidDependency` from the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency). `dotnet sln add` puts it into the solution: Visual Studio restores only the projects its solution holds, and the app references this one.
 
 ## Project properties
 
@@ -44572,13 +44581,12 @@ Right-click the project and select **Edit Project File**. Add these properties t
 
 ```
 <PropertyGroup>
-  <WinAppSdkVersion>1.8.260921001</WinAppSdkVersion>
   <SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('-android'))">24.0</SupportedOSPlatformVersion>
   <SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('-ios'))">18.0</SupportedOSPlatformVersion>
 </PropertyGroup>
 ```
 
-`VisioForge.DotNet.Core.UI.Uno` needs Windows App SDK 1.8, and Uno 6.5 brings 1.7: `WinAppSdkVersion` raises it. The Android head targets Android 7 (API level 24), the SDK's minimum on Android. The iOS head targets iOS 18.0, the minimum of the native iOS libraries; the video shows only the first two properties.
+The Android head targets Android 7 (API level 24), the SDK's minimum on Android. The iOS head targets iOS 18.0, the minimum of the native iOS libraries.
 
 ## Install the packages
 
@@ -54602,15 +54610,15 @@ The ONVIF audio backchannel is a `sendonly` audio track in the camera's RTSP des
 ```
 flowchart LR
     Mic[Microphone or other audio source] --> BC["RTSPSourceBlock.BackchannelInput"]
-    BC -->|G.711 mu-law RTP| Cam[IP camera speaker]
+    BC -->|G.711 RTP| Cam[IP camera speaker]
     Cam -->|H.264/H.265 + audio| Src[RTSPSourceBlock outputs]
 ```
 
-- The audio is sent as **G.711 mu-law (PCMU), 8000 Hz, mono** — the backchannel codec ONVIF requires from every camera with an audio output. Any input format is converted.
+- The audio is sent as **G.711 mu-law (PCMU), 8000 Hz, mono** — the backchannel codec ONVIF requires from every camera with an audio output. A camera whose backchannel offers PCMA/8000 but not PCMU/8000 gets **G.711 A-law (PCMA)** instead. Any input format is converted.
 - The camera must offer a backchannel. ONVIF Profile S and Profile T cameras with an audio output do. A camera that does not support the ONVIF `Require` header may refuse the connection, so enable `AudioBackchannel` only for cameras with a speaker.
 - The backchannel needs GStreamer 1.22 or newer. The SDK runtime packages for Windows, macOS, Android and iOS include it; on Linux, where the system GStreamer is used, that means Ubuntu 24.04 or another distribution with 1.22+. On an older runtime the SDK logs an error saying so and sends no audio; video and audio from the camera keep playing.
 - The audio is sent as it is captured: the camera receives it without the receive buffer (`RTSPSourceSettings.Latency`) added on top.
-- If the camera's backchannel does not list PCMU/8000, the SDK logs an error naming the codecs the camera offers, and video and audio from the camera keep playing.
+- If the camera's backchannel lists neither PCMU/8000 nor PCMA/8000, the SDK logs an error naming the codecs the camera offers, and video and audio from the camera keep playing.
 
 ## Video Capture SDK .NET (VideoCaptureCoreX)
 
@@ -54625,6 +54633,11 @@ var rtsp = await RTSPSourceSettings.CreateAsync(
     "admin", "password", audioEnabled: true);
 core.Video_Source = rtsp;
 
+// The camera's own sound, played on the default PC speakers.
+var outputs = await DeviceEnumerator.Shared.AudioOutputsAsync();
+var speakers = outputs.FirstOrDefault(device => device.IsDefault) ?? outputs.FirstOrDefault();
+if (speakers != null) core.Audio_OutputDevice = new AudioRendererSettings(speakers);
+
 // The microphone that talks to the camera speaker.
 var mic = (await DeviceEnumerator.Shared.AudioSourcesAsync())[0];
 core.Audio_BackchannelSource = mic.CreateSourceSettingsVC();
@@ -54632,7 +54645,7 @@ core.Audio_BackchannelSource = mic.CreateSourceSettingsVC();
 await core.StartAsync();
 ```
 
-`Audio_Source` stays independent: when it is `null`, the camera's own microphone is still played and recorded, so you hear the visitor while they hear you.
+`Audio_Source` stays independent: when it is `null`, the camera's own microphone is still played on `Audio_OutputDevice` and recorded by the outputs, so you hear the visitor while they hear you.
 
 ## Media Blocks SDK .NET (RTSPSourceBlock)
 
@@ -54694,6 +54707,7 @@ if (configs?.Length > 0)
 
 ## Related Documentation
 
+- [IP camera two-way audio tutorial](../../../video-tutorials/ip-camera-two-way-audio/) — a complete WPF app: camera preview with its sound, the PC microphone to the camera speaker
 - [RTSP camera streams](../rtsp/) — connection, transport and low-latency settings
 - [ONVIF IP camera integration](../onvif/) — discovery, profiles and PTZ control
 - [IP camera brands directory](../../../../camera-brands/) — RTSP URLs for each brand
@@ -57123,6 +57137,7 @@ Are you looking to implement professional-grade video capture capabilities in yo
 Connecting to IP cameras allows you to incorporate security feeds, remote monitoring, and surveillance functionality into your applications.
 
 - [**IP Camera to MP4 Recording Guide**](ip-camera-capture-mp4/) - Learn how to connect to IP cameras and record high-quality MP4 files with H.264 compression
+- [**IP Camera Two-Way Audio**](ip-camera-two-way-audio/) - Talk through the camera speaker: the PC microphone goes to the camera over the ONVIF audio backchannel while the app shows and plays the camera
 - [**IP Camera Live Preview Implementation**](ip-camera-preview/) - Discover how to display real-time IP camera feeds in your application with customizable frame rates
 
 Our tutorials cover RTSP, HTTP, and ONVIF protocols for connecting to a wide range of IP camera models from major manufacturers. Browse our [IP camera brands directory](../../camera-brands/) for brand-specific RTSP URLs.
@@ -57627,6 +57642,244 @@ Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to exp
 ---END OF PAGE---
 
 
+## IP Camera Two-Way Audio in C# WPF — ONVIF Backchannel
+**URL:** https://www.visioforge.com/help/docs/dotnet/videocapture/video-tutorials/ip-camera-two-way-audio/
+**Description:** Talk through an IP camera speaker from C# WPF - RTSP preview with the camera's sound, PC microphone sent as G.711 over the ONVIF audio backchannel.
+**Tags:** Video Capture SDK, .NET, VideoCaptureCoreX, Windows, WPF, Capture, IP Camera, RTSP, ONVIF, Audio, C#, NuGet
+**API:** VideoCaptureCoreX, RTSPSourceSettings, AudioRendererSettings, DeviceEnumerator, VisioForgeX
+
+# IP Camera Two-Way Audio in C# WPF
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net)
+
+## Overview
+
+This tutorial builds a small intercom in a C# WPF app with the cross-platform `VideoCaptureCoreX` engine:
+
+- the camera's RTSP URL, its login and its password are typed into the window;
+- a `VideoView` shows the camera live, and the camera's own microphone plays on the PC speakers picked in the window;
+- the PC microphone picked in the window plays on the camera speaker, sent over the ONVIF RTSP audio backchannel;
+- Start and Stop open and close both directions at once.
+
+It suits video doorbells, intercom stations and cameras with a speaker or an audio output. How the backchannel works, the Media Blocks version and the speaker volume over ONVIF are on the [two-way audio](../../video-sources/ip-cameras/two-way-audio/) page.
+
+SDK version
+
+`Audio_BackchannelSource` is in the SDK releases after 2026.11.16.
+
+## Source Code Repository
+
+The complete project is on GitHub:
+
+[Source code on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/ip-camera-two-way-audio-wpf)
+
+## Required Packages
+
+- [VisioForge.DotNet.VideoCapture](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture/) — the SDK; the WPF `VideoView` ships in it
+- [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — the GStreamer runtime the X engine runs on, with the RTSP source, the decoders and the G.711 encoder the backchannel uses
+- [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — the AAC decoder, for cameras that send AAC sound
+
+These are the x64 packages, so the project sets `<PlatformTarget>x64</PlatformTarget>`; a 32-bit app takes the `.x86` packages instead. See [Windows deployment](../../../deployment-x/Windows/) for the full list.
+
+```
+dotnet add package VisioForge.DotNet.VideoCapture
+dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
+dotnet add package VisioForge.CrossPlatform.Libav.Windows.x64
+```
+
+## Implementation Example with C# Code
+
+### The window (MainWindow.xaml)
+
+The settings are on the left, the camera on the right. `PasswordBox` shows dots. Start is disabled until the SDK has loaded, and Stop until the camera has started.
+
+```
+<Window x:Class="IpCameraTwoWayAudioWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"
+        Title="IP Camera Two-Way Audio" Height="560" Width="1000"
+        Loaded="Window_Loaded" Closing="Window_Closing">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+            <Label Content="Camera URL" />
+            <TextBox x:Name="edURL" />
+            <Label Content="Login" Margin="0,10,0,0" />
+            <TextBox x:Name="edLogin" />
+            <Label Content="Password" Margin="0,10,0,0" />
+            <PasswordBox x:Name="edPassword" />
+            <Label Content="Microphone (to the camera speaker)" Margin="0,10,0,0" />
+            <ComboBox x:Name="cbMicrophone" />
+            <Label Content="Speakers (the camera's sound)" Margin="0,10,0,0" />
+            <ComboBox x:Name="cbSpeakers" />
+
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                <Button x:Name="btStart" Content="Start" Width="100" IsEnabled="False"
+                        Click="btStart_Click" />
+                <Button x:Name="btStop" Content="Stop" Width="100" Margin="10,0,0,0"
+                        IsEnabled="False" Click="btStop_Click" />
+            </StackPanel>
+        </StackPanel>
+
+        <vf:VideoView x:Name="VideoView1" Grid.Column="1" Background="Black" />
+    </Grid>
+</Window>
+```
+
+### The code (MainWindow.xaml.cs)
+
+```
+using System.ComponentModel;
+using System.Windows;
+using VisioForge.Core;
+using VisioForge.Core.Types.X.AudioRenderers;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+namespace IpCameraTwoWayAudioWpf;
+
+public partial class MainWindow : Window
+{
+    private VideoCaptureCoreX videoCapture1;
+
+    private AudioCaptureDeviceInfo[] microphones;
+
+    private AudioOutputDeviceInfo[] speakers;
+
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        await VisioForgeX.InitSDKAsync();
+
+        videoCapture1 = new VideoCaptureCoreX(VideoView1);
+
+        // Show SDK errors in the title bar
+        videoCapture1.OnError += (_, args) => Dispatcher.InvokeAsync(() => Title = args.Message);
+
+        microphones = await DeviceEnumerator.Shared.AudioSourcesAsync();
+        foreach (var device in microphones)
+            cbMicrophone.Items.Add(device.DisplayName);
+
+        if (cbMicrophone.Items.Count > 0) cbMicrophone.SelectedIndex = 0;
+
+        speakers = await DeviceEnumerator.Shared.AudioOutputsAsync(AudioOutputDeviceAPI.WASAPI2);
+        foreach (var device in speakers)
+            cbSpeakers.Items.Add(device.DisplayName);
+
+        // Preselect the system's default output
+        if (cbSpeakers.Items.Count > 0) cbSpeakers.SelectedIndex = Math.Max(0, Array.FindIndex(speakers, device => device.IsDefault));
+
+        btStart.IsEnabled = true;
+    }
+
+    private async void btStart_Click(object sender, RoutedEventArgs e)
+    {
+        if (!Uri.TryCreate(edURL.Text, UriKind.Absolute, out var url))
+        {
+            Title = "Enter the camera URL";
+            return;
+        }
+
+        if (cbMicrophone.SelectedIndex < 0)
+        {
+            Title = "No microphone";
+            return;
+        }
+
+        Title = "Connecting...";
+        btStart.IsEnabled = false;
+
+        var started = false;
+        try
+        {
+            // The camera's video and its own microphone, played on the chosen speakers
+            videoCapture1.Video_Source = await RTSPSourceSettings.CreateAsync(url, edLogin.Text, edPassword.Password, audioEnabled: true);
+            videoCapture1.Audio_OutputDevice = cbSpeakers.SelectedIndex < 0 ? null : new AudioRendererSettings(speakers[cbSpeakers.SelectedIndex]);
+            videoCapture1.Audio_Play = true;
+
+            // The PC microphone, sent to the camera speaker over the ONVIF audio backchannel
+            videoCapture1.Audio_BackchannelSource = microphones[cbMicrophone.SelectedIndex].CreateSourceSettingsVC();
+
+            started = await videoCapture1.StartAsync();
+        }
+        catch (Exception ex)
+        {
+            Title = ex.Message;
+        }
+
+        // An SDK error posted during the start stays in the title
+        if (Title == "Connecting...") Title = started ? "Talking to the camera" : "The camera did not start";
+        btStop.IsEnabled = started;
+        btStart.IsEnabled = !started;
+    }
+
+    private async void btStop_Click(object sender, RoutedEventArgs e)
+    {
+        btStop.IsEnabled = false;
+        await videoCapture1.StopAsync();
+        Title = "IP Camera Two-Way Audio";
+        btStart.IsEnabled = true;
+    }
+
+    private async void Window_Closing(object sender, CancelEventArgs e)
+    {
+        if (btStart.IsEnabled)
+        {
+            videoCapture1.Dispose();
+            VisioForgeX.DestroySDK();
+            return;
+        }
+
+        e.Cancel = true; // still loading or talking: stop first
+        if (!btStop.IsEnabled) return; // already loading, starting or stopping
+        btStop.IsEnabled = false;
+        await videoCapture1.StopAsync();
+        btStart.IsEnabled = true;
+        await Dispatcher.InvokeAsync(Close); // not Close(): WPF throws inside Closing
+    }
+}
+```
+
+## Key Implementation Features
+
+1. **SDK initialization** - `VisioForgeX.InitSDKAsync` runs once, when the window loads. The first run on a PC takes longer, so Start is enabled only after it returns. `VisioForgeX.DestroySDK` releases it when the window closes
+2. **The camera** - `RTSPSourceSettings.CreateAsync` takes the URL, the login and the password as separate arguments, so the URL does not carry them. With `audioEnabled: true` the camera's own sound is used when its stream has one, and `Audio_Play` plays it on the speakers set in `Audio_OutputDevice`, since `Audio_Source` is left empty. Without `Audio_OutputDevice` the sound is not played. The [IP camera brands directory](../../../camera-brands/) lists the RTSP paths of many cameras
+3. **The backchannel** - `Audio_BackchannelSource` takes the same audio sources as `Audio_Source`; `CreateSourceSettingsVC` turns the chosen microphone into one. At the start the SDK asks the camera for its ONVIF audio backchannel and sends the microphone to it as G.711 mu-law (PCMU), 8000 Hz, the codec ONVIF requires from every camera with an audio output; a camera whose backchannel offers only G.711 A-law (PCMA) gets A-law. The sound leaves the PC as it is captured, without the RTSP receive buffer added on top
+4. **Starting** - a camera that does not answer takes a while to fail, so the title says "Connecting..." and Start is disabled until `StartAsync` returns. An `OnError` message posted during the start stays in the title
+5. **Stopping and closing** - `StopAsync` closes both directions. Closing the window while it runs cancels the close, awaits `StopAsync`, and closes again; while the SDK is loading, or a start or a stop is under way, the close is cancelled: close the window again once it is done
+
+## Troubleshooting
+
+- **The camera refuses the connection** - the path does not match the camera's brand, or the login or password is wrong. Several wrong passwords in a row make many cameras lock the account for a while
+- **No picture at all, with the right URL and password** - asking for the backchannel adds the ONVIF `Require: www.onvif.org/ver20/backchannel` header to the DESCRIBE request and to the backchannel's SETUP, and a camera without a backchannel may refuse either (it answers 551 Option Not Supported): an error then replaces the title, even when the start has already reported success. Leave `Audio_BackchannelSource` empty and start again: if the picture comes, the camera has no backchannel
+- **The picture comes, but the camera speaker is silent** - the camera offers no backchannel, or neither G.711 mu-law nor A-law at 8000 Hz: the SDK names the codecs the camera offers in the window title. Check that two-way audio is on in the camera's web interface, that no vendor app or NVR holds its talk channel, and raise the speaker volume (see [Speaker Volume over ONVIF](../../video-sources/ip-cameras/two-way-audio/#speaker-volume-over-onvif))
+- **You do not hear yourself through the camera's microphone** - this is expected. Cameras with a speaker cancel it in their microphone, so check the speaker by ear, next to the camera
+- **The person at the camera hears an echo** - the PC plays the camera's sound on its speakers while its microphone sends to the camera, so the PC microphone picks the camera's sound up again and sends it back. Use a headset on the PC, or set `Audio_Play` to `false`
+
+## Related Guides
+
+- [Two-way audio with IP cameras](../../video-sources/ip-cameras/two-way-audio/) — how the backchannel works, Media Blocks, speaker volume over ONVIF
+- [Record an IP camera to MP4](../ip-camera-capture-mp4/) — the same camera connection, recorded to a file
+- [RTSP camera source configuration](../../video-sources/ip-cameras/rtsp/) — UDP/TCP transport, low-latency tuning
+- [ONVIF IP camera integration](../../video-sources/ip-cameras/onvif/) — discovery and profile selection
+
+---
+
+Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples. Need the RTSP URL for your camera? Check our [IP camera brands directory](../../../camera-brands/).
+
+---END OF PAGE---
+
+
 ## Record the Screen to AVI in C# WinForms (MJPEG, PCM, MP3)
 **URL:** https://www.visioforge.com/help/docs/dotnet/videocapture/video-tutorials/screen-capture-avi/
 **Description:** Record the screen and the speaker sound to AVI in a C# WinForms app with VideoCaptureCore - pick the monitor, frame rate and codec, check the file with ffprobe.
@@ -57964,6 +58217,12 @@ The classic `VideoCaptureCore` engine records the screen as well; its version of
 ## YouTube tutorial
 
 [Source code on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/screen-capture-mp4-wpf)
+
+### The short version
+
+The same recording as a console app in a few lines of C#, without the preview and the system sound.
+
+Its code: [screen-mp4-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/screen-mp4-short-console).
 
 ## Required NuGet packages
 
@@ -82529,6 +82788,283 @@ pipeline.Connect(rtspSource.VideoOutput, preEventBlock.VideoInput);
 ---END OF PAGE---
 
 
+## Intel RealSense Depth Camera in C# .NET: Capture & Measure
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Guides/realsense-depth-camera-csharp/
+**Description:** Capture color, depth and infrared from an Intel RealSense D435 in C# .NET, measure distance at a pixel and record depth to MP4 on Windows and Linux.
+**Tags:** Media Blocks SDK, .NET, MediaBlocksPipeline, Windows, Linux, WPF, Capture, Recording, MP4, H.264, C#, NuGet
+**API:** RealSenseSourceBlock, RealSenseSourceSettings, RealSenseDeviceInfo, VideoRendererBlock, TeeBlock
+
+# Intel RealSense Depth Camera in C# .NET
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+This guide shows how to use an Intel RealSense depth camera (D400 series, such as the D435) from a C# application with the `RealSenseSourceBlock`: list the cameras and their modes, show color and depth side by side, read the distance at a pixel, and record the depth view to an MP4 file. The same pipeline code runs on Windows x64 and Linux x64.
+
+A RealSense camera's color stream is ordinary UVC video, so any capture source can show it. The depth (16-bit distance per pixel) and infrared streams are not: Windows capture APIs mislabel or reject them. `RealSenseSourceBlock` opens the camera through librealsense instead and gives every stream its own output in a format the rest of the pipeline understands.
+
+## What the Block Delivers
+
+| Output | Format | Enabled by |
+| --- | --- | --- |
+| `ColorOutput` | RGB | `RealSenseSourceSettings.Color` |
+| `DepthOutput` | RGB (colorized, default) or `GRAY16_LE` (raw) | `RealSenseSourceSettings.Depth`, `DepthMode` |
+| `InfraredOutput` | `GRAY8` | `RealSenseSourceSettings.Infrared` |
+
+The streams come from one librealsense pipeline, so their frames are synchronized. With `AlignDepthToColor` the depth image is mapped onto the color image: it gets the color size, and the same pixel shows the same point in both. `GetDistance(x, y)` returns the distance in meters at a pixel of the latest depth frame.
+
+```
+graph LR;
+    RealSenseSourceBlock-- color -->VideoRendererBlock1;
+    RealSenseSourceBlock-- depth -->TeeBlock;
+    TeeBlock-->VideoRendererBlock2;
+    TeeBlock-->H264EncoderBlock;
+    H264EncoderBlock-->MP4SinkBlock;
+```
+
+## Prerequisites
+
+### Windows x64
+
+Add the NuGet packages:
+
+- [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/) — the SDK
+- [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — GStreamer runtime for Windows x64
+- [VisioForge.CrossPlatform.RealSense.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.RealSense.Windows.x64/) — librealsense 2.58.1 (`realsense2.dll`)
+
+No RealSense driver is needed: Windows 10 and 11 open the camera with the built-in USB video driver.
+
+### Linux x64
+
+The block uses the system librealsense, version 2.58 or a later 2.x, from the RealSense apt repository. It loads `librealsense2.so`, which the `librealsense2-dev` package provides; the packages also install the udev rules that let a normal user open the camera. The `librealsense2-dkms` kernel patches are not needed.
+
+```
+sudo mkdir -p /etc/apt/keyrings
+curl -sSf https://librealsense.realsenseai.com/Debian/librealsenseai.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/librealsenseai.gpg > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/librealsenseai.gpg] https://librealsense.realsenseai.com/Debian/apt-repo $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/librealsense.list
+sudo apt-get update
+sudo apt-get install librealsense2-dev
+```
+
+Add [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/) and set up GStreamer as described in the [Ubuntu deployment guide](../../../deployment-x/Ubuntu/). For a desktop UI on Linux, use the Avalonia `VideoView` from [VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia/); the pipeline code below does not change, only UI calls such as `Dispatcher` differ.
+
+## Step 1: List the Cameras and Their Modes
+
+`EnumerateDevicesAsync` returns every connected RealSense camera with the modes it reports. Pick modes from that list rather than typing sizes in: `FindProfile` returns `null` for a mode the camera does not have.
+
+```
+using System.Diagnostics;
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.Special;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+
+var cameras = await RealSenseSourceBlock.EnumerateDevicesAsync();
+foreach (var camera in cameras)
+{
+    // The name, serial number and firmware version.
+    Console.WriteLine($"{camera} firmware {camera.FirmwareVersion}");
+
+    foreach (var profile in camera.Profiles)
+    {
+        Console.WriteLine($"  {profile}");
+    }
+}
+```
+
+When librealsense is missing or older than 2.58, `EnumerateDevicesAsync` throws an exception whose message says what to install (see [Troubleshooting](#troubleshooting)). An empty array means librealsense works but no camera is connected.
+
+## Step 2: Show Color and Depth Side by Side
+
+Call `await VisioForgeX.InitSDKAsync()` once before you build a pipeline, for example in the window's `Loaded` handler. This WPF window has two `VideoView` controls, `VideoViewColor` and `VideoViewDepth`. The depth is aligned to the color image and colorized, so it can go straight to a renderer. The window's code-behind needs the `using` directives from Step 1. `StartAsync` returns `false` when the camera lacks the mode (`FindProfile` returned `null`) or the pipeline does not start; why a pipeline did not start comes in `OnError`.
+
+```
+private MediaBlocksPipeline _pipeline;
+private RealSenseSourceBlock _source;
+private readonly System.Timers.Timer _distanceTimer = new System.Timers.Timer(500);
+
+private async Task<bool> StartAsync(RealSenseDeviceInfo camera)
+{
+    var settings = new RealSenseSourceSettings(camera.SerialNumber)
+    {
+        Color = camera.FindProfile(RealSenseStreamType.Color, 640, 480, 30),
+        Depth = camera.FindProfile(RealSenseStreamType.Depth, 640, 480, 30),
+        AlignDepthToColor = true,
+        DepthMode = RealSenseDepthMode.Colorized,
+    };
+
+    // FindProfile returns null for a mode the camera does not have: pick another one from camera.Profiles.
+    if (settings.Color == null || settings.Depth == null)
+    {
+        return false;
+    }
+
+    _pipeline = new MediaBlocksPipeline();
+    _pipeline.OnError += (s, e) => Debug.WriteLine(e.Message);
+
+    _source = new RealSenseSourceBlock(settings);
+    _pipeline.Connect(_source.ColorOutput, new VideoRendererBlock(_pipeline, VideoViewColor) { IsSync = false }.Input);
+    _pipeline.Connect(_source.DepthOutput, new VideoRendererBlock(_pipeline, VideoViewDepth) { IsSync = false }.Input);
+
+    if (await _pipeline.StartAsync())
+    {
+        return true;
+    }
+
+    // The start failed: dispose the pipeline so that it releases the camera.
+    await StopAsync();
+    return false;
+}
+
+private async Task StopAsync()
+{
+    _distanceTimer.Stop();
+    var pipeline = _pipeline;
+    _pipeline = null;
+    _source = null;
+    if (pipeline == null)
+    {
+        return;
+    }
+
+    try
+    {
+        await pipeline.StopAsync();
+    }
+    finally
+    {
+        await pipeline.DisposeAsync();
+    }
+}
+```
+
+`IsSync = false` shows each frame as soon as it arrives, which is what a live camera preview needs. Leave a stream's profile `null` to keep it off; an output that is enabled but not connected is discarded.
+
+## Step 3: Measure the Distance at a Pixel
+
+`GetDistance(x, y)` reads the latest depth frame. It returns meters, or 0 when the camera has no depth for that pixel (too close, too far, or a surface it cannot see) or before the first frame. With `AlignDepthToColor = true` the coordinates are color-image pixels, so one pixel position works for both images. A mouse position on a `VideoView` is not a frame pixel: the view scales the frame to fit, so convert the position to frame coordinates before you call `GetDistance`.
+
+```
+public MainWindow()
+{
+    InitializeComponent();
+    _distanceTimer.Elapsed += (s, e) => UpdateDistance();
+}
+
+private void UpdateDistance()
+{
+    var source = _source;
+    if (source == null)
+    {
+        return;
+    }
+
+    // With alignment the depth frame has the color size.
+    var profile = source.Settings.AlignDepthToColor ? source.Settings.Color : source.Settings.Depth;
+    float meters;
+    try
+    {
+        meters = source.GetDistance(profile.Width / 2, profile.Height / 2);
+    }
+    catch (Exception ex)
+    {
+        // The timer would swallow it.
+        Debug.WriteLine(ex);
+        return;
+    }
+
+    Dispatcher.BeginInvoke((Action)(() => lbDistance.Text = $"Distance at center: {meters:F2} m"));
+}
+```
+
+Start the timer when `StartAsync` returns `true`; `StopAsync` in Step 2 stops it, and the `Closing` handler in Step 4 disposes it. A pixel outside the depth frame throws `ArgumentOutOfRangeException`; the timer swallows exceptions thrown by its `Elapsed` handler, so catch and log them in `UpdateDistance`.
+
+## Step 4: Record the Depth View to MP4
+
+The colorized depth is a normal RGB video, so it can be encoded like any camera. Split it with a `TeeBlock`: one branch to the screen, one to an H.264 encoder and an MP4 file. In `StartAsync`, these lines replace the Step 2 line that connects `DepthOutput` to the renderer, before `await _pipeline.StartAsync()`; an output connects to one block only.
+
+```
+var tee = new TeeBlock(2, MediaBlockPadMediaType.Video);
+_pipeline.Connect(_source.DepthOutput, tee.Input);
+_pipeline.Connect(tee.Outputs[0], new VideoRendererBlock(_pipeline, VideoViewDepth) { IsSync = false }.Input);
+
+var encoder = new H264EncoderBlock();
+var mp4 = new MP4SinkBlock(new MP4SinkSettings(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos, Environment.SpecialFolderOption.Create), "depth.mp4")));
+_pipeline.Connect(tee.Outputs[1], encoder.Input);
+_pipeline.Connect(encoder.Output, mp4.CreateNewInput(MediaBlockPadMediaType.Video));
+```
+
+`StopAsync` finishes the file, so await it before the window closes and before the application exits. With `Closing="Window_Closing"` on the window, cancel the first close, stop, then close again:
+
+```
+private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+{
+    // Stop the camera first, then close for real once this handler has returned.
+    if (_pipeline != null)
+    {
+        e.Cancel = true;
+        IsEnabled = false;
+        try
+        {
+            await StopAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+
+        Dispatcher.BeginInvoke(new Action(Close));
+        return;
+    }
+
+    _distanceTimer.Dispose();
+
+    // The application's last SDK window: shut the SDK down.
+    VisioForgeX.DestroySDK();
+}
+```
+
+A colorized image is for people to look at: the colors stand for distances, but the exact values are gone. To keep distances, either call `GetDistance` while you capture, or set `DepthMode = RealSenseDepthMode.Raw`. The depth output then carries the camera's 16-bit values (`GRAY16_LE`); multiply a value by `DepthScale` to get meters. `DepthScale` is known once the pipeline has started. Raw depth is for your own processing: the H.264 chain above reduces it to 8 bits, so do not record it that way.
+
+## Infrared
+
+The D400 cameras have two infrared imagers, index 1 (left) and 2 (right). Ask for the one you want with the last argument of `FindProfile` and connect `InfraredOutput`:
+
+```
+settings.Infrared = camera.FindProfile(RealSenseStreamType.Infrared, 640, 480, 30, 1);
+// ...
+_pipeline.Connect(_source.InfraredOutput, new VideoRendererBlock(_pipeline, VideoViewInfrared) { IsSync = false }.Input);
+```
+
+## Troubleshooting
+
+| Message or symptom | Cause | What to do |
+| --- | --- | --- |
+| `librealsense (realsense2) 2.58 or a later 2.x is needed: ... Add the VisioForge.CrossPlatform.RealSense.Windows.x64 NuGet package.` | Windows: `realsense2.dll` is not next to the application. | Add the package to the application project. |
+| `... Install librealsense2-dev (librealsense2.so) from the RealSense apt repository.` | Linux: `librealsense2.so` is not installed. The runtime package alone ships only the versioned `librealsense2.so.2.x`. | `sudo apt-get install librealsense2-dev`. |
+| `... librealsense 2.5x.x was loaded. Install 2.58 or a later 2.x, ...` | An older librealsense comes first on the library search path. | Install 2.58 or later, and remove the older copy. |
+| `EnumerateDevicesAsync` returns no cameras | The camera is not connected, or (Linux) the user cannot open it. | Reconnect the camera. On Linux check that `librealsense2-udev-rules` is installed, then reconnect. |
+| `StartAsync` returns `false`, nothing in `OnError` | The camera has no such mode: `FindProfile` returned `null`. | Take the modes from `RealSenseDeviceInfo.Profiles`. |
+| `StartAsync` returns `false`, a message in `OnError` | The pipeline did not start, for example because another application uses the camera. | The message says what failed; close other camera applications. |
+
+On Linux, `rs-enumerate-devices` from the optional `librealsense2-utils` package lists the cameras librealsense sees and every mode they report.
+
+## Related Documentation
+
+- [Intel RealSense Source Block reference](../../Sources/#intel-realsense-source-block) — the full block description
+- [Video rendering](../../VideoRendering/) — `VideoRendererBlock` options
+- [Tee block](../../Special/#tee) — splitting one stream to several outputs
+- [Ubuntu deployment](../../../deployment-x/Ubuntu/) — running Media Blocks applications on Linux
+
+---END OF PAGE---
+
+
 ## RTSP Stream Viewer and IP Camera Player in C# .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Guides/rtsp-player-csharp/
 **Description:** Build an RTSP stream viewer and IP camera player in C# with VisioForge Media Blocks SDK — live preview, ONVIF discovery, and passthrough recording.
@@ -91958,7 +92494,7 @@ Windows (x64). Windows on Arm and 32-bit (x86) apps are not supported: on Window
 
 ### Intel RealSense Source Block
 
-The Intel RealSense Source Block captures the colour, depth and infrared streams of an Intel RealSense depth camera (D400 series, such as the D435) through librealsense. Each enabled stream gets its own output pad. Depth is delivered as a colourized RGB image, ready to display or encode, or as raw 16-bit values (`GRAY16_LE`); `AlignDepthToColor` maps depth onto the colour image so that the same pixel shows the same point in both. `GetDistance(x, y)` returns the distance in metres at a pixel of the latest depth frame.
+The Intel RealSense Source Block captures the color, depth and infrared streams of an Intel RealSense depth camera (D400 series, such as the D435) through librealsense. Each enabled stream gets its own output pad. Depth is delivered as a colorized RGB image, ready to display or encode, or as raw 16-bit values (`GRAY16_LE`); `AlignDepthToColor` maps depth onto the color image so that the same pixel shows the same point in both. `GetDistance(x, y)` returns the distance in meters at a pixel of the latest depth frame.
 
 #### Block info
 
@@ -91966,7 +92502,7 @@ Name: RealSenseSourceBlock.
 
 | Pin direction | Media type | Pins count |
 | --- | --- | --- |
-| Output video (colour) | Uncompressed video, RGB | 0 or 1 |
+| Output video (color) | Uncompressed video, RGB | 0 or 1 |
 | Output video (depth) | Uncompressed video, RGB or GRAY16\_LE | 0 or 1 |
 | Output video (infrared) | Uncompressed video, GRAY8 | 0 or 1 |
 
@@ -91974,7 +92510,7 @@ Name: RealSenseSourceBlock.
 
 ```
 graph LR;
-    RealSenseSourceBlock-- colour -->VideoRendererBlock1;
+    RealSenseSourceBlock-- color -->VideoRendererBlock1;
     RealSenseSourceBlock-- depth -->VideoRendererBlock2;
 ```
 
@@ -91987,7 +92523,7 @@ var pipeline = new MediaBlocksPipeline();
 var cameras = await RealSenseSourceBlock.EnumerateDevicesAsync();
 var camera = cameras[0];
 
-// Open colour, depth and the left infrared imager at 640x480, 30 fps.
+// Open color, depth and the left infrared imager at 640x480, 30 fps.
 var settings = new RealSenseSourceSettings(camera.SerialNumber)
 {
     Color = camera.FindProfile(RealSenseStreamType.Color, 640, 480, 30),
@@ -91999,18 +92535,18 @@ var settings = new RealSenseSourceSettings(camera.SerialNumber)
 
 var realSense = new RealSenseSourceBlock(settings);
 
-// Show colour and the colourized depth.
-pipeline.Connect(realSense.ColorOutput, new VideoRendererBlock(pipeline, VideoView1).Input);
-pipeline.Connect(realSense.DepthOutput, new VideoRendererBlock(pipeline, VideoView2).Input);
+// Show color and the colorized depth.
+pipeline.Connect(realSense.ColorOutput, new VideoRendererBlock(pipeline, VideoView1) { IsSync = false }.Input);
+pipeline.Connect(realSense.DepthOutput, new VideoRendererBlock(pipeline, VideoView2) { IsSync = false }.Input);
 
 await pipeline.StartAsync();
 
-// Later, while frames flow (a timer, an event): the distance in metres at the centre of the aligned depth frame.
+// Later, while frames flow (a timer, an event): the distance in meters at the center of the aligned depth frame.
 // It reads 0 until the first depth frame has arrived.
-float metres = realSense.GetDistance(320, 240);
+float meters = realSense.GetDistance(320, 240);
 ```
 
-The stream modes come from the camera: `RealSenseDeviceInfo.Profiles` lists every colour, depth and infrared mode it reports, and `FindProfile` returns null for a mode it does not support. With `DepthMode = RealSenseDepthMode.Raw`, multiply a depth value by `DepthScale` to get metres. An output that is not connected is discarded.
+The stream modes come from the camera: `RealSenseDeviceInfo.Profiles` lists every color, depth and infrared mode it reports, and `FindProfile` returns null for a mode it does not support. With `DepthMode = RealSenseDepthMode.Raw`, multiply a depth value by `DepthScale` to get meters. An output that is not connected is discarded.
 
 #### Requirements
 
@@ -92028,6 +92564,8 @@ sudo apt-get install librealsense2-dev
 #### Platforms
 
 Windows (x64), Linux (x64).
+
+Step-by-step guide: [Intel RealSense depth camera in C# .NET](../Guides/realsense-depth-camera-csharp/) — listing cameras, color and depth preview, distance at a pixel, recording depth to MP4.
 
 ### Blackmagic Decklink Source Block
 

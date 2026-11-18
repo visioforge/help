@@ -41,8 +41,10 @@ Los SDKs de VisioForge soportan los siguientes objetivos de Uno Platform:
 | Windows Desktop | net10.0-windows10.0.19041.0 | &#x2714; Soporte completo |
 | Android | net10.0-android | &#x2714; Soporte completo |
 | iOS | net10.0-ios | &#x2714; Soporte completo |
-| macOS (Catalyst) | net10.0-maccatalyst | &#x2714; Soporte completo |
+| macOS Desktop (Skia) | net10.0-desktop | &#x2714; Soporte completo |
 | Linux Desktop (Skia) | net10.0-desktop | &#x2714; Soporte completo |
+
+Estos destinos son los de Uno Platform 7, que ya no tiene destino Mac Catalyst: en macOS la aplicación se ejecuta en el cabezal `net10.0-desktop`. Uno Platform 7 requiere un paquete `VisioForge.DotNet.Core.UI.Uno` compilado para él; las versiones hasta 2026.11.16 están compiladas para Uno Platform 6.5.
 
 ## Requisitos del sistema
 
@@ -59,7 +61,7 @@ Antes de comenzar su implementación de Uno Platform, asegúrese de que su entor
 
 #### Windows
 - Windows 10 versión 17763 o posterior
-- Windows App SDK 1.4+
+- Windows App SDK 2.5 o posterior (lo aporta Uno Platform 7)
 
 #### Android
 - Android SDK con niveles de API apropiados
@@ -92,8 +94,8 @@ dotnet new install Uno.Templates
 # Para Android
 dotnet workload install android
 
-# Para iOS/macOS
-dotnet workload install ios maccatalyst
+# Para iOS
+dotnet workload install ios
 ```
 
 ### 3. Crear un nuevo proyecto Uno Platform
@@ -121,7 +123,6 @@ Agregue paquetes redistributables específicos de plataforma a su proyecto:
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 </ItemGroup>
@@ -151,29 +152,15 @@ Adicionalmente, necesitará agregar la biblioteca de bindings de Java. Clónela 
 </ItemGroup>
 ```
 
-#### macOS (Catalyst)
+#### macOS
 
 ```xml
-<ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+<ItemGroup Condition="$(TargetFramework.Contains('-desktop')) and $([MSBuild]::IsOSPlatform('osx'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 </ItemGroup>
 ```
 
-Para macOS Catalyst, también necesita agregar un target MSBuild personalizado para copiar bibliotecas nativas al bundle de la aplicación:
-
-```xml
-<Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PropertyGroup>
-    <AppBundleDir>$(OutputPath)$(AssemblyName).app</AppBundleDir>
-    <MonoBundleDir>$(AppBundleDir)/Contents/MonoBundle</MonoBundleDir>
-  </PropertyGroup>
-  <MakeDir Directories="$(MonoBundleDir)" Condition="!Exists('$(MonoBundleDir)')" />
-  <Copy SourceFiles="@(None->'%(FullPath)')" DestinationFolder="$(MonoBundleDir)" 
-        Condition="'%(Extension)' == '.dylib' Or '%(Extension)' == '.so'">
-    <Output TaskParameter="CopiedFiles" ItemName="CopiedNativeFiles" />
-  </Copy>
-</Target>
-```
+El paquete se aplica al cabezal desktop cuando el proyecto se compila en un Mac. Sus targets de compilación copian las bibliotecas nativas junto a la aplicación.
 
 #### Linux Desktop
 
@@ -207,7 +194,7 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
   <PropertyGroup>
     <!-- Target frameworks basados en el SO de compilación -->
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net10.0-windows10.0.19041;net10.0-android</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net10.0-maccatalyst;net10.0-ios;net10.0-android</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net10.0-desktop;net10.0-ios;net10.0-android</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('linux'))">net10.0-desktop</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>
@@ -236,7 +223,6 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
   
   <!-- Plataforma Windows -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
     <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
     <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
   </ItemGroup>
@@ -252,8 +238,8 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
     <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
   </ItemGroup>
   
-  <!-- Plataforma macOS Catalyst -->
-  <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+  <!-- Plataforma macOS Desktop -->
+  <ItemGroup Condition="$(TargetFramework.Contains('-desktop')) and $([MSBuild]::IsOSPlatform('osx'))">
     <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
   </ItemGroup>
   
@@ -262,20 +248,6 @@ Aquí hay un ejemplo completo de archivo `.csproj` para una aplicación Uno Plat
     <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
     <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
   </ItemGroup>
-  
-  <!-- macOS: Copiar bibliotecas nativas al bundle de la app -->
-  <Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" 
-          Condition="$(TargetFramework.Contains('-maccatalyst'))">
-    <PropertyGroup>
-      <AppBundleDir>$(OutputPath)$(AssemblyName).app</AppBundleDir>
-      <MonoBundleDir>$(AppBundleDir)/Contents/MonoBundle</MonoBundleDir>
-    </PropertyGroup>
-    <MakeDir Directories="$(MonoBundleDir)" Condition="!Exists('$(MonoBundleDir)')" />
-    <Copy SourceFiles="@(None->'%(FullPath)')" DestinationFolder="$(MonoBundleDir)" 
-          Condition="'%(Extension)' == '.dylib' Or '%(Extension)' == '.so'">
-      <Output TaskParameter="CopiedFiles" ItemName="CopiedNativeFiles" />
-    </Copy>
-  </Target>
 </Project>
 ```
 
@@ -361,17 +333,54 @@ Para fuentes de streaming HTTP, configure App Transport Security:
 </dict>
 ```
 
-### Configuración de macOS (Catalyst)
+### Configuración de macOS Desktop
 
-Las aplicaciones macOS Catalyst comparten configuración con iOS. Adicionalmente, configure identificadores de runtime para Intel y Apple Silicon:
+En macOS la aplicación se ejecuta en el cabezal `net10.0-desktop`, el mismo destino que en Linux. `VisioForge.DotNet.Core` elige para él su compilación de macOS al compilar y al ejecutar, así que la reproducción no necesita nada más que el paquete de macOS anterior.
+
+La captura de cámara y micrófono requiere empaquetar la aplicación como bundle `.app` cuyo `Info.plist` contenga `NSCameraUsageDescription` y `NSMicrophoneUsageDescription`: sin ellas, macOS cierra la aplicación la primera vez que abre el dispositivo. El bundle se firma con el runtime reforzado (hardened runtime), así que también necesita los entitlements de cámara y micrófono. Añada los dos archivos al proyecto e indíquelos a la compilación; solo se aplican al bundle, no a `dotnet run`:
 
 ```xml
-<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' AND $(TargetFramework.Contains('-maccatalyst'))">
-  <RuntimeIdentifier>maccatalyst-x64</RuntimeIdentifier>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Platforms/Desktop/Info.plist: Uno completa las claves del bundle listadas vacías -->
+<plist version="1.0">
+<dict>
+  <key>CFBundleDisplayName</key><string></string>
+  <key>CFBundleExecutable</key><string></string>
+  <key>CFBundleIdentifier</key><string></string>
+  <key>CFBundleName</key><string></string>
+  <key>CFBundleShortVersionString</key><string></string>
+  <key>CFBundleVersion</key><string></string>
+  <key>NSCameraUsageDescription</key><string>Camera access is required to capture video.</string>
+  <key>NSMicrophoneUsageDescription</key><string>Microphone access is required to capture audio.</string>
+</dict>
+</plist>
+```
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Platforms/Desktop/Entitlements.plist: el bundle se firma con el runtime reforzado -->
+<plist version="1.0">
+<dict>
+  <key>com.apple.security.cs.allow-jit</key><true/>
+  <key>com.apple.security.device.camera</key><true/>
+  <key>com.apple.security.device.audio-input</key><true/>
+</dict>
+</plist>
+```
+
+```xml
+<PropertyGroup>
+  <UnoMacOSCustomInfoPlist>Platforms/Desktop/Info.plist</UnoMacOSCustomInfoPlist>
+  <UnoMacOSEntitlements>Platforms/Desktop/Entitlements.plist</UnoMacOSEntitlements>
 </PropertyGroup>
-<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64' AND $(TargetFramework.Contains('-maccatalyst'))">
-  <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
-</PropertyGroup>
+```
+
+```bash
+# osx-x64 para Mac Intel. Opcional: -p:CodesignKey="Developer ID Application: <your team>" firma el bundle
+# con una identidad estable, y macOS conserva el permiso de cámara entre compilaciones.
+dotnet publish -f net10.0-desktop -r osx-arm64 -p:PackageFormat=app
 ```
 
 ### Configuración de Linux Desktop
@@ -409,7 +418,7 @@ dotnet build -c Release -f net10.0-ios
 ### macOS
 
 ```bash
-dotnet build -c Release -f net10.0-maccatalyst
+dotnet build -c Release -f net10.0-desktop
 ```
 
 ### Linux Desktop

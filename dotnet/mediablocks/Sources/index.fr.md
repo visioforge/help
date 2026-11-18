@@ -522,14 +522,14 @@ var settings = new RealSenseSourceSettings(camera.SerialNumber)
 var realSense = new RealSenseSourceBlock(settings);
 
 // Afficher la couleur et la profondeur colorisée.
-pipeline.Connect(realSense.ColorOutput, new VideoRendererBlock(pipeline, VideoView1).Input);
-pipeline.Connect(realSense.DepthOutput, new VideoRendererBlock(pipeline, VideoView2).Input);
+pipeline.Connect(realSense.ColorOutput, new VideoRendererBlock(pipeline, VideoView1) { IsSync = false }.Input);
+pipeline.Connect(realSense.DepthOutput, new VideoRendererBlock(pipeline, VideoView2) { IsSync = false }.Input);
 
 await pipeline.StartAsync();
 
 // Plus tard, pendant que les images arrivent (un minuteur, un événement) : la distance en mètres au centre de l'image de profondeur alignée.
 // Elle vaut 0 tant que la première image de profondeur n'est pas arrivée.
-float metres = realSense.GetDistance(320, 240);
+float meters = realSense.GetDistance(320, 240);
 ```
 
 Les modes des flux viennent de la caméra : `RealSenseDeviceInfo.Profiles` liste tous les modes couleur, profondeur et infrarouge qu'elle annonce, et `FindProfile` renvoie null pour un mode qu'elle ne prend pas en charge. Avec `DepthMode = RealSenseDepthMode.Raw`, multipliez une valeur de profondeur par `DepthScale` pour obtenir des mètres. Une sortie non connectée est ignorée.
@@ -550,6 +550,8 @@ sudo apt-get install librealsense2-dev
 #### Plateformes
 
 Windows (x64), Linux (x64).
+
+Guide pas à pas : [Caméra de profondeur Intel RealSense en C# .NET](../Guides/realsense-depth-camera-csharp.md) — lister les caméras, aperçu couleur et profondeur, distance d'un pixel, enregistrement de la profondeur en MP4.
 
 ### Bloc source Blackmagic Decklink
 

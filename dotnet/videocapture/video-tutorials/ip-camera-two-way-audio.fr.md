@@ -1,6 +1,6 @@
 ---
-title: Audio bidirectionnel caméra IP en C# WPF — Exemple
-description: "Parlez via le haut-parleur d'une caméra IP depuis une app C# WPF : aperçu RTSP avec le son de la caméra et le micro du PC via le backchannel ONVIF."
+title: Audio bidirectionnel caméra IP C# WPF — backchannel ONVIF
+description: "Parlez via le haut-parleur d'une caméra IP en C# WPF : aperçu RTSP avec le son de la caméra et le micro du PC en G.711 via le backchannel ONVIF."
 tags:
   - Video Capture SDK
   - .NET
@@ -228,7 +228,7 @@ public partial class MainWindow : Window
 
 1. **Initialisation du SDK** - `VisioForgeX.InitSDKAsync` s'exécute une fois, au chargement de la fenêtre. Le premier lancement sur un PC est plus long, c'est pourquoi Start n'est activé qu'après son retour. `VisioForgeX.DestroySDK` le libère à la fermeture de la fenêtre
 2. **La caméra** - `RTSPSourceSettings.CreateAsync` reçoit l'URL, l'identifiant et le mot de passe comme arguments séparés, l'URL ne les contient donc pas. Avec `audioEnabled: true`, le son de la caméra est utilisé quand son flux en a un, et `Audio_Play` le joue sur les haut-parleurs indiqués dans `Audio_OutputDevice`, puisque `Audio_Source` reste vide. Sans `Audio_OutputDevice`, le son n'est pas joué. L'[annuaire des marques de caméras IP](../../camera-brands/index.md) donne les chemins RTSP de nombreuses caméras
-3. **Le backchannel** - `Audio_BackchannelSource` accepte les mêmes sources audio que `Audio_Source` ; `CreateSourceSettingsVC` transforme le micro choisi en l'une d'elles. Au démarrage, le SDK demande à la caméra son backchannel audio ONVIF et lui envoie le micro en G.711 mu-law à 8000 Hz, le codec qu'ONVIF impose à toute caméra dotée d'une sortie audio. Le son quitte le PC tel qu'il est capturé, sans y ajouter le tampon de réception RTSP
+3. **Le backchannel** - `Audio_BackchannelSource` accepte les mêmes sources audio que `Audio_Source` ; `CreateSourceSettingsVC` transforme le micro choisi en l'une d'elles. Au démarrage, le SDK demande à la caméra son backchannel audio ONVIF et lui envoie le micro en G.711 mu-law (PCMU) à 8000 Hz, le codec qu'ONVIF impose à toute caméra dotée d'une sortie audio ; une caméra dont le backchannel ne propose que G.711 A-law (PCMA) reçoit de l'A-law. Le son quitte le PC tel qu'il est capturé, sans y ajouter le tampon de réception RTSP
 4. **Le démarrage** - une caméra qui ne répond pas met du temps à échouer, c'est pourquoi le titre affiche « Connecting... » et Start reste désactivé jusqu'au retour de `StartAsync`. Un message `OnError` publié pendant le démarrage reste dans le titre
 5. **Arrêt et fermeture** - `StopAsync` ferme les deux sens. Fermer la fenêtre pendant le fonctionnement annule la fermeture, attend `StopAsync`, puis referme ; pendant le chargement du SDK, ou un démarrage ou un arrêt en cours, la fermeture est annulée : refermez la fenêtre une fois l'opération terminée
 
@@ -236,7 +236,7 @@ public partial class MainWindow : Window
 
 - **La caméra refuse la connexion** - le chemin ne correspond pas à la marque de la caméra, ou l'identifiant ou le mot de passe est incorrect. Plusieurs mots de passe erronés d'affilée font que beaucoup de caméras verrouillent le compte pendant un moment
 - **Aucune image, avec la bonne URL et le bon mot de passe** - demander le backchannel ajoute l'en-tête ONVIF `Require: www.onvif.org/ver20/backchannel` à la requête DESCRIBE et au SETUP du backchannel, et une caméra sans backchannel peut refuser l'une ou l'autre (elle répond 551 Option Not Supported) : une erreur remplace alors le titre, même si le démarrage a déjà indiqué un succès. Laissez `Audio_BackchannelSource` vide et redémarrez : si l'image arrive, la caméra n'a pas de backchannel
-- **L'image arrive, mais le haut-parleur de la caméra reste muet** - la caméra n'offre pas de backchannel, ou pas en G.711 mu-law : le SDK indique dans le titre de la fenêtre les codecs que propose la caméra. Vérifiez que l'audio bidirectionnel est activé dans l'interface web de la caméra, qu'aucune application du fabricant ni aucun NVR n'occupe son canal de conversation, et augmentez le volume du haut-parleur (voir [Volume du haut-parleur via ONVIF](../video-sources/ip-cameras/two-way-audio.md#volume-du-haut-parleur-via-onvif))
+- **L'image arrive, mais le haut-parleur de la caméra reste muet** - la caméra n'offre pas de backchannel, ou ni G.711 mu-law ni A-law à 8000 Hz : le SDK indique dans le titre de la fenêtre les codecs que propose la caméra. Vérifiez que l'audio bidirectionnel est activé dans l'interface web de la caméra, qu'aucune application du fabricant ni aucun NVR n'occupe son canal de conversation, et augmentez le volume du haut-parleur (voir [Volume du haut-parleur via ONVIF](../video-sources/ip-cameras/two-way-audio.md#volume-du-haut-parleur-via-onvif))
 - **Vous ne vous entendez pas dans le micro de la caméra** - c'est normal. Les caméras dotées d'un haut-parleur l'annulent dans leur micro ; vérifiez donc le haut-parleur à l'oreille, près de la caméra
 - **La personne près de la caméra entend un écho** - le PC joue le son de la caméra sur ses haut-parleurs pendant que son micro envoie vers la caméra : le micro du PC capte de nouveau le son de la caméra et le lui renvoie. Utilisez un casque avec micro sur le PC, ou mettez `Audio_Play` à `false`
 

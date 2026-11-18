@@ -1,6 +1,6 @@
 ---
-title: IP Camera Two-Way Audio in C# WPF — Code Sample
-description: Talk through an IP camera speaker from a C# WPF app - RTSP preview with the camera's sound and the PC microphone over the ONVIF audio backchannel.
+title: IP Camera Two-Way Audio in C# WPF — ONVIF Backchannel
+description: Talk through an IP camera speaker from C# WPF - RTSP preview with the camera's sound, PC microphone sent as G.711 over the ONVIF audio backchannel.
 tags:
   - Video Capture SDK
   - .NET
@@ -228,7 +228,7 @@ public partial class MainWindow : Window
 
 1. **SDK initialization** - `VisioForgeX.InitSDKAsync` runs once, when the window loads. The first run on a PC takes longer, so Start is enabled only after it returns. `VisioForgeX.DestroySDK` releases it when the window closes
 2. **The camera** - `RTSPSourceSettings.CreateAsync` takes the URL, the login and the password as separate arguments, so the URL does not carry them. With `audioEnabled: true` the camera's own sound is used when its stream has one, and `Audio_Play` plays it on the speakers set in `Audio_OutputDevice`, since `Audio_Source` is left empty. Without `Audio_OutputDevice` the sound is not played. The [IP camera brands directory](../../camera-brands/index.md) lists the RTSP paths of many cameras
-3. **The backchannel** - `Audio_BackchannelSource` takes the same audio sources as `Audio_Source`; `CreateSourceSettingsVC` turns the chosen microphone into one. At the start the SDK asks the camera for its ONVIF audio backchannel and sends the microphone to it as G.711 mu-law, 8000 Hz, the codec ONVIF requires from every camera with an audio output. The sound leaves the PC as it is captured, without the RTSP receive buffer added on top
+3. **The backchannel** - `Audio_BackchannelSource` takes the same audio sources as `Audio_Source`; `CreateSourceSettingsVC` turns the chosen microphone into one. At the start the SDK asks the camera for its ONVIF audio backchannel and sends the microphone to it as G.711 mu-law (PCMU), 8000 Hz, the codec ONVIF requires from every camera with an audio output; a camera whose backchannel offers only G.711 A-law (PCMA) gets A-law. The sound leaves the PC as it is captured, without the RTSP receive buffer added on top
 4. **Starting** - a camera that does not answer takes a while to fail, so the title says "Connecting..." and Start is disabled until `StartAsync` returns. An `OnError` message posted during the start stays in the title
 5. **Stopping and closing** - `StopAsync` closes both directions. Closing the window while it runs cancels the close, awaits `StopAsync`, and closes again; while the SDK is loading, or a start or a stop is under way, the close is cancelled: close the window again once it is done
 
@@ -236,7 +236,7 @@ public partial class MainWindow : Window
 
 - **The camera refuses the connection** - the path does not match the camera's brand, or the login or password is wrong. Several wrong passwords in a row make many cameras lock the account for a while
 - **No picture at all, with the right URL and password** - asking for the backchannel adds the ONVIF `Require: www.onvif.org/ver20/backchannel` header to the DESCRIBE request and to the backchannel's SETUP, and a camera without a backchannel may refuse either (it answers 551 Option Not Supported): an error then replaces the title, even when the start has already reported success. Leave `Audio_BackchannelSource` empty and start again: if the picture comes, the camera has no backchannel
-- **The picture comes, but the camera speaker is silent** - the camera offers no backchannel, or not in G.711 mu-law: the SDK names the codecs the camera offers in the window title. Check that two-way audio is on in the camera's web interface, that no vendor app or NVR holds its talk channel, and raise the speaker volume (see [Speaker Volume over ONVIF](../video-sources/ip-cameras/two-way-audio.md#speaker-volume-over-onvif))
+- **The picture comes, but the camera speaker is silent** - the camera offers no backchannel, or neither G.711 mu-law nor A-law at 8000 Hz: the SDK names the codecs the camera offers in the window title. Check that two-way audio is on in the camera's web interface, that no vendor app or NVR holds its talk channel, and raise the speaker volume (see [Speaker Volume over ONVIF](../video-sources/ip-cameras/two-way-audio.md#speaker-volume-over-onvif))
 - **You do not hear yourself through the camera's microphone** - this is expected. Cameras with a speaker cancel it in their microphone, so check the speaker by ear, next to the camera
 - **The person at the camera hears an echo** - the PC plays the camera's sound on its speakers while its microphone sends to the camera, so the PC microphone picks the camera's sound up again and sends it back. Use a headset on the PC, or set `Audio_Play` to `false`
 

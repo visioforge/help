@@ -5,7 +5,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 # Video Capture SDK X — Uno Platform integration
 
-This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to an **Uno Platform** application that targets Windows, Android, iOS, and macOS (Mac Catalyst) from a single codebase. The same C# capture/recording code runs unchanged on every target; what differs is the per-OS native redist NuGet, the permission paperwork, and (in Uno's case) the `Uno.Sdk` MSBuild SDK plus the `VisioForge.DotNet.Core.UI.Uno` `VideoView` control.
+This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to an **Uno Platform** application that targets Windows, Android, iOS, and macOS (the `net10.0-desktop` head) from a single codebase. The same C# capture/recording code runs unchanged on every target; what differs is the per-OS native redist NuGet, the permission paperwork, and (in Uno's case) the `Uno.Sdk` MSBuild SDK plus the `VisioForge.DotNet.Core.UI.Uno` `VideoView` control.
 
 `VideoCaptureCoreX` is the high-level capture-and-record god-object — same API as on the WPF/MAUI/WinUI hosts, just bound to Uno's `VideoView`. Under the hood it shares the GStreamer-backed engine with Media Blocks.
 
@@ -13,7 +13,7 @@ Pinned NuGet versions (match the bundled `references/Sample.csproj` and the offi
 
 ## When to use this skill
 
-- Single Uno codebase that runs on **Windows (WinAppSDK / WinUI 3), Android, iOS, and Mac Catalyst** with webcam / IP-camera / screen capture and recording.
+- Single Uno codebase that runs on **Windows (WinAppSDK / WinUI 3), Android, iOS, and macOS** with webcam / IP-camera / screen capture and recording.
 - Recording captured video/audio to MP4 (incl. fragmented), MOV, MPEG-TS, AVI, or WebM from one set of source files.
 - Sharing capture/recording code between an Uno app and other VisioForge X hosts (WPF, MAUI, Avalonia, WinUI) — `VideoCaptureCoreX` is identical across all of them.
 - Uno-specific UX: native `Uno.Sdk` "single-project" head, XAML-based UI, hot-reload via `MainWindow.UseStudio()`.
@@ -35,12 +35,11 @@ Two managed packages always, plus per-OS native redists conditionally. The condi
 |---|---|---|
 | `VisioForge.DotNet.VideoCapture` | Managed wrapper (`VideoCaptureCoreX`, types) | Always |
 | `VisioForge.DotNet.Core.UI.Uno` | Uno `VideoView` control | Always |
-| `Microsoft.WindowsAppSDK` | WinAppSDK runtime for the Windows head | `-windows` |
 | `VisioForge.CrossPlatform.Core.Windows.x64` | Native runtime on Windows | `-windows` |
 | `VisioForge.CrossPlatform.Libav.Windows.x64` | FFmpeg/libav muxers + encoders on Windows | `-windows` |
 | `VisioForge.CrossPlatform.Core.Android` + AndroidDependency project ref | Native runtime on Android (the `.aar` is bound through a small companion csproj) | `-android` |
 | `VisioForge.CrossPlatform.Core.iOS` | Native runtime on iOS | `-ios` |
-| `VisioForge.CrossPlatform.Core.macOS` | Native runtime on Mac Catalyst (the macOS package serves both) | `-maccatalyst` |
+| `VisioForge.CrossPlatform.Core.macOS` | Native runtime on macOS (the desktop head, built on a Mac) | `-desktop` on a macOS host |
 
 The Android target additionally needs a `<ProjectReference>` to `VisioForge.Core.Android.X10.csproj` (a small companion project that ships in the samples repo under `AndroidDependency/`) — that's how the `.aar` is bound. Copy that folder into your repo and reference it as shown in the bundled csproj. There's no NuGet equivalent today.
 
@@ -51,15 +50,15 @@ The Android target additionally needs a `<ProjectReference>` to `VisioForge.Core
 Make sure the Uno templates and workloads are installed. The Uno project type uses `Sdk="Uno.Sdk"` (not `Microsoft.NET.Sdk`), and that SDK pulls in the right per-OS workloads automatically when present. If you're starting fresh:
 
 ```bash
-dotnet workload install android ios maccatalyst maui  # workloads needed for each TFM
-dotnet new install Uno.Templates                        # Uno project templates
+dotnet workload install android ios      # workloads needed for each TFM
+dotnet new install Uno.Templates@7.0.5   # Uno 7 project templates
 ```
 
 Without the matching workload, `dotnet build -f net10.0-android` (etc.) fails with `error NETSDK1147: To build this project, the following workloads must be installed`.
 
 ### Multi-target csproj
 
-The csproj declares target frameworks **conditionally per host OS**: Android always; Mac Catalyst only on macOS hosts; Windows only on Windows hosts. iOS is intentionally absent from the upstream Uno sample (Uno's iOS head usually lives in a separate solution; if you do need it, add `net10.0-ios` to the macOS condition and reference `VisioForge.CrossPlatform.Core.iOS`). That keeps `dotnet build` working on any developer machine.
+The csproj declares target frameworks **conditionally per host OS**: Android always; the macOS desktop head only on macOS hosts; Windows only on Windows hosts. iOS is intentionally absent from the upstream Uno sample (Uno's iOS head usually lives in a separate solution; if you do need it, add `net10.0-ios` to the macOS condition and reference `VisioForge.CrossPlatform.Core.iOS`). That keeps `dotnet build` working on any developer machine.
 
 The full minimal csproj is in `references/Sample.csproj`. Highlights:
 
@@ -68,8 +67,7 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
   <PropertyGroup>
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net10.0-windows10.0.19041;net10.0-android</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net10.0-maccatalyst;net10.0-android</TargetFrameworks>
-    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">17.0</SupportedOSPlatformVersion>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net10.0-desktop;net10.0-android</TargetFrameworks>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
     <UnoSingleProject>true</UnoSingleProject>
     <RunAOTCompilation>false</RunAOTCompilation>
@@ -84,13 +82,13 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
 
 The conditional native-redist `<ItemGroup>` blocks pull in the right per-OS packages — see `references/Sample.csproj` for the full set.
 
-The Mac Catalyst target additionally needs an `AfterTargets="Build"` step (`CopyNativeLibrariesToMonoBundle`) that copies `.dylib` / `.so` files into the `.app/Contents/MonoBundle/` folder. This is included verbatim in `references/Sample.csproj`. Without it, the bundled `.app` cannot find the native runtime at launch and crashes with a `dlopen` failure.
+On a Mac the desktop head takes its native runtime from `VisioForge.CrossPlatform.Core.macOS`, whose build targets copy the libraries next to the application, so the project needs no copy step of its own. The package condition includes the host OS: a macOS app is built on a Mac.
 
 `<RunAOTCompilation>false</RunAOTCompilation>` is required — the native-interop layer is reflection-heavy in places and doesn't survive AOT trimming today. Uno's default for some heads is AOT-on; the upstream sample explicitly turns it off, and so should you.
 
 ### Scene lifecycle and minimum OS versions (iOS 27 SDK)
 
-Apps built with the iOS 27 and Mac Catalyst 27 SDKs must use the UIKit scene lifecycle: without a `UIApplicationSceneManifest` the app is killed at launch, before any UI appears. Uno 6 has no scene delegate of its own and still builds its window in `OnLaunched`, so each Apple head (`Platforms/MacCatalyst`, and `Platforms/iOS` if you add it) needs the manifest in its `Info.plist` and a small `SceneDelegate` that hands that window to the scene. `App` exposes that window as a static `MainWindow` property for it (see `references/App.xaml.cs`):
+Apps built with the iOS 27 SDK must use the UIKit scene lifecycle: without a `UIApplicationSceneManifest` the app is killed at launch, before any UI appears. The Uno 7 template already does this: `Platforms/iOS/Info.plist` carries the manifest, `Platforms/iOS/SceneDelegate.cs` derives from Uno's `UnoUISceneDelegate`, and `Main.iOS.cs` starts the app through `UnoPlatformHostBuilder` with `.UseAppleUIKit()`. A project created from an older Uno template needs all three:
 
 ```xml
 <key>UIApplicationSceneManifest</key>
@@ -113,32 +111,41 @@ Apps built with the iOS 27 and Mac Catalyst 27 SDKs must use the UIKit scene lif
 ```
 
 ```csharp
-// Platforms/MacCatalyst/SceneDelegate.cs (and Platforms/iOS/SceneDelegate.cs)
+// Platforms/iOS/SceneDelegate.cs
 using Foundation;
-using Uno.UI.Xaml;
-using UIKit;
+using Uno.UI.Runtime.AppleUIKit;
 
-// A child of App's namespace, so `App` resolves without a using.
-namespace MyUnoApp.MacCatalyst;
+namespace MyUnoApp.iOS;
 
 [Register("SceneDelegate")]
-public class SceneDelegate : UIWindowSceneDelegate
+public class SceneDelegate : UnoUISceneDelegate
 {
-    public override UIWindow? Window { get; set; }
+}
+```
 
-    public override void WillConnect(UIScene scene, UISceneSession session, UISceneConnectionOptions connectionOptions)
+```csharp
+// Platforms/iOS/Main.iOS.cs
+using Uno.UI.Hosting;
+
+namespace MyUnoApp.iOS;
+
+public class EntryPoint
+{
+    public static void Main(string[] args)
     {
-        if (scene is UIWindowScene windowScene && App.MainWindow is { } window && WindowHelper.GetNativeWindow(window) is UIWindow nativeWindow)
-        {
-            Window = nativeWindow;
-            nativeWindow.WindowScene = windowScene;
-            nativeWindow.MakeKeyAndVisible();
-        }
+        App.InitializeLogging();
+
+        var host = UnoPlatformHostBuilder.Create()
+            .App(() => new App())
+            .UseAppleUIKit()
+            .Build();
+
+        host.Run();
     }
 }
 ```
 
-The same SDKs refuse a `SupportedOSPlatformVersion` below 17.0 for Mac Catalyst and 15.0 for iOS, VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 18.0 and do not load on anything older, and `Uno.Sdk` 6.x defaults to 15.0 for iOS and 14.2 for Mac Catalyst, so set them explicitly; `references/Sample.csproj` sets 17.0 for Mac Catalyst and already carries 18.0 for iOS, which takes effect once you add `net10.0-ios` to its `TargetFrameworks`.
+VisioForge's native iOS libraries (`VisioForge.CrossPlatform.Core.iOS`) are built for iOS 18.0 and do not load on anything older, while `Uno.Sdk` defaults to 15.0, so set `SupportedOSPlatformVersion` explicitly; `references/Sample.csproj` already carries 18.0 for iOS, which takes effect once you add `net10.0-ios` to its `TargetFrameworks`.
 
 ### Uno "single project" structure
 
@@ -146,7 +153,7 @@ Unlike MAUI, an Uno app is conventionally split into multiple **head projects** 
 
 ### App.xaml.cs registration
 
-Uno's `App` class is plain WinUI / WinAppSDK. There is **no MAUI-style handler registration** — the `<vf:VideoView />` control wires itself up through its own `xmlns` declaration in XAML, so `App.xaml.cs` needs no VisioForge registration. The one change from the Uno template is that `MainWindow` is `public static`, for the Apple heads' `SceneDelegate` (see "Scene lifecycle and minimum OS versions" above); `references/App.xaml.cs` has it.
+Uno's `App` class is plain WinUI / WinAppSDK. There is **no MAUI-style handler registration** — the `<vf:VideoView />` control wires itself up through its own `xmlns` declaration in XAML, so `App.xaml.cs` needs no VisioForge registration.
 
 ## Per-platform permissions
 
@@ -179,18 +186,55 @@ Uno does not ship a MAUI-Essentials-style `Permissions.RequestAsync<>` helper. U
 
 Request the runtime permission via `AVCaptureDevice.RequestAccessForMediaTypeAsync` — see the `EnsureApplePermissionsAsync` method in `references/MainPage.xaml.cs`.
 
-### Mac Catalyst
+### macOS
 
-`Platforms/MacCatalyst/Info.plist` needs the same `NSCameraUsageDescription` / `NSMicrophoneUsageDescription` strings as iOS. **Plus** `Platforms/MacCatalyst/Entitlements.plist` must enable the camera/microphone entitlements **and disable the App Sandbox** if you write recordings outside the container (the upstream sample writes to `~/Movies`):
+Camera and microphone access on the desktop head needs the app packaged as an `.app` bundle whose `Info.plist` carries `NSCameraUsageDescription` and `NSMicrophoneUsageDescription`: without them macOS terminates the app the first time it opens the device. The bundle is signed with the hardened runtime, so it also needs the camera and microphone entitlements. Add both files and point the build at them:
 
 ```xml
-<!-- Entitlements.plist -->
-<key>com.apple.security.app-sandbox</key>          <false/>
-<key>com.apple.security.device.camera</key>        <true/>
-<key>com.apple.security.device.audio-input</key>   <true/>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Platforms/Desktop/Info.plist: Uno fills in the bundle keys listed with empty values -->
+<plist version="1.0">
+<dict>
+  <key>CFBundleDisplayName</key><string></string>
+  <key>CFBundleExecutable</key><string></string>
+  <key>CFBundleIdentifier</key><string></string>
+  <key>CFBundleName</key><string></string>
+  <key>CFBundleShortVersionString</key><string></string>
+  <key>CFBundleVersion</key><string></string>
+  <key>NSCameraUsageDescription</key><string>Camera access is required to capture video.</string>
+  <key>NSMicrophoneUsageDescription</key><string>Microphone access is required to capture audio.</string>
+</dict>
+</plist>
 ```
 
-Sandbox-on Mac Catalyst is supported too — just write recordings to `Environment.SpecialFolder.MyVideos` (which lives inside the app container) instead of `~/Movies`.
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Platforms/Desktop/Entitlements.plist: the bundle is signed with the hardened runtime -->
+<plist version="1.0">
+<dict>
+  <key>com.apple.security.cs.allow-jit</key><true/>
+  <key>com.apple.security.device.camera</key><true/>
+  <key>com.apple.security.device.audio-input</key><true/>
+</dict>
+</plist>
+```
+
+```xml
+<PropertyGroup>
+  <UnoMacOSCustomInfoPlist>Platforms/Desktop/Info.plist</UnoMacOSCustomInfoPlist>
+  <UnoMacOSEntitlements>Platforms/Desktop/Entitlements.plist</UnoMacOSEntitlements>
+</PropertyGroup>
+```
+
+```bash
+# osx-x64 for Intel Macs. Optional: -p:CodesignKey="Developer ID Application: <your team>" signs the bundle
+# with a stable identity, so macOS keeps the camera grant across rebuilds.
+dotnet publish -f net10.0-desktop -r osx-arm64 -p:PackageFormat=app
+```
+
+macOS then asks the user for access on first use (**System Settings → Privacy & Security**). Run unbundled (`dotnet run` from a terminal), the files do not apply and macOS asks on behalf of the terminal. Network streams need no extra setting.
 
 ### Windows
 
@@ -244,7 +288,7 @@ var cert = System.IO.File.ReadAllBytes("path/to/your.vflicense");
 await _core.SetLicenseCertificateAsync(cert);
 ```
 
-The certificate-bytes form is the only public licensing API in current 2026.x. The cross-platform wrinkle is **where the bytes come from**: `File.ReadAllBytes` works on Windows / Mac Catalyst (sandbox off), but on iOS / Android the working directory is the app bundle, not your dev machine. The portable approach for an Uno head is to ship the licence as a **`Content`** item with `CopyToOutputDirectory=PreserveNewest` and read it with `Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///license.vflicense"))` — that URI scheme works on every Uno target including Android / iOS. (On the Windows head you can also use `Package.Current.InstalledLocation`.) Where the bytes come from (asset, env var, secrets manager, …) is your application's choice — there is no built-in licence-loader helper class in the SDK.
+The certificate-bytes form is the only public licensing API in current 2026.x. The cross-platform wrinkle is **where the bytes come from**: `File.ReadAllBytes` works on Windows and on the desktop head, but on iOS / Android the working directory is the app bundle, not your dev machine. The portable approach for an Uno head is to ship the licence as a **`Content`** item with `CopyToOutputDirectory=PreserveNewest` and read it with `Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///license.vflicense"))` — that URI scheme works on every Uno target including Android / iOS. (On the Windows head you can also use `Package.Current.InstalledLocation`.) Where the bytes come from (asset, env var, secrets manager, …) is your application's choice — there is no built-in licence-loader helper class in the SDK.
 
 The bundled `references/MainPage.xaml.cs` runs in trial mode by design; add the two lines above into `MainPage_Loaded` right after `_core = new VideoCaptureCoreX(...)` to register a purchased licence.
 
@@ -318,7 +362,7 @@ public sealed partial class MainPage : Page
 }
 ```
 
-`references/MainPage.xaml.cs` extends this with per-OS permission helpers, audio source/output, MP4 recording (`H264EncoderBlock` + `MP3EncoderSettings` → `MP4Output`), per-platform output paths (Android scoped storage, iOS Documents, Mac Catalyst `~/Movies`, Windows `MyVideos`), gallery save on mobile, and `OnError` wiring. Use it as a copy-paste template; trim the branches you don't need.
+`references/MainPage.xaml.cs` extends this with per-OS permission helpers, audio source/output, MP4 recording (`H264EncoderBlock` + `MP3EncoderSettings` → `MP4Output`), per-platform output paths (Android scoped storage, iOS Documents, macOS `~/Movies` (`MyVideos`), Windows `MyVideos`), gallery save on mobile, and `OnError` wiring. Use it as a copy-paste template; trim the branches you don't need.
 
 ## Common cross-platform pitfalls
 
@@ -334,15 +378,15 @@ public sealed partial class MainPage : Page
 
 - Windows head: forgot `VisioForge.CrossPlatform.Core.Windows.x64` (build succeeds but startup fails on first `VideoCaptureCoreX` use).
 - Android head: missing `<ProjectReference Include="...AndroidDependency\VisioForge.Core.Android.X10.csproj" />` — the package alone is not enough.
-- Mac Catalyst head: the `CopyNativeLibrariesToMonoBundle` `<Target>` was deleted, so `.dylib` files never reach `.app/Contents/MonoBundle/`.
+- macOS desktop head: the app was built on Windows or Linux, where the macOS package condition does not apply; build the macOS app on a Mac.
 
-**Fix**: cross-check against `references/Sample.csproj` — every conditional `<ItemGroup>` and the Mac Catalyst `<Target>` matters.
+**Fix**: cross-check against `references/Sample.csproj` — every conditional `<ItemGroup>` matters.
 
 ### 3. `VisioForgeX.InitSDKAsync` works locally but fails in `-browserwasm` head
 
 **Cause**: WebAssembly is not a supported target for the X engine. There is no WASM build of the GStreamer-based native runtime, so `InitSDKAsync` cannot find `libgstcore` (or its WASM equivalent) and throws `DllNotFoundException`.
 
-**Fix**: split the WebAssembly UI off into a separate Uno head that does **not** reference `VisioForge.DotNet.VideoCapture` / `VisioForge.DotNet.Core.UI.Uno`. The capture project should multi-target only `-windows`, `-android`, `-ios`, `-maccatalyst`, and `-desktop` (Linux). If you accidentally added `net10.0-browserwasm` to `<TargetFrameworks>`, remove it.
+**Fix**: split the WebAssembly UI off into a separate Uno head that does **not** reference `VisioForge.DotNet.VideoCapture` / `VisioForge.DotNet.Core.UI.Uno`. The capture project should multi-target only `-windows`, `-android`, `-ios`, and `-desktop` (Linux and macOS). If you accidentally added `net10.0-browserwasm` to `<TargetFrameworks>`, remove it.
 
 ### 4. Trial-mode message or "SDK TRIAL period (30 days) is over" on app start
 
@@ -354,34 +398,28 @@ public sealed partial class MainPage : Page
 
 **Cause**: missing `NSCameraUsageDescription` / `NSMicrophoneUsageDescription` in `Platforms/iOS/Info.plist`. iOS terminates the app process on the first hardware access without a matching usage-description key — there is no exception, no managed crash log entry from your code.
 
-**Fix**: add both keys with non-empty user-facing strings (see "Per-platform permissions"). For Mac Catalyst, also confirm `Entitlements.plist` enables `com.apple.security.device.camera` and `com.apple.security.device.audio-input`.
-
-### 6. Mac Catalyst app launches but `<vf:VideoView />` is empty and `OnError` reports `dlopen` failure
-
-**Cause**: the `CopyNativeLibrariesToMonoBundle` target was deleted from the csproj, or the build configuration has `<UseInterpreter>` off and AOT trimmed the native-interop layer.
-
-**Fix**: keep the `CopyNativeLibrariesToMonoBundle` `<Target>` from `references/Sample.csproj`, and keep `<RunAOTCompilation>false</RunAOTCompilation>` at the project level.
+**Fix**: add both keys with non-empty user-facing strings (see "Per-platform permissions").
 
 ## Verification checklist
 
-- [ ] Uno workloads installed: `dotnet workload list` shows `android`, plus `maccatalyst` on macOS / `wasm-tools` if you have a (separate) WASM head.
+- [ ] Uno workloads installed: `dotnet workload list` shows `android`, plus `ios` on macOS / `wasm-tools` if you have a (separate) WASM head.
 - [ ] On Windows host: `dotnet build -f net10.0-windows10.0.19041` succeeds against the bundled `references/`.
 - [ ] On Windows host: `dotnet build -f net10.0-android` succeeds.
-- [ ] On macOS host: `dotnet build -f net10.0-maccatalyst` succeeds; the `.app/Contents/MonoBundle/` folder contains `.dylib` files after the build.
+- [ ] On macOS host: `dotnet build -f net10.0-desktop` succeeds; for capture, add the two `Platforms/Desktop` plists and the two project properties above (the bundled `references/` do not carry them), and the published `.app` carries the keys and entitlements.
 - [ ] App launches on each target OS and shows the camera preview within ~2 s after permission grant.
 - [ ] If recording: the MP4 is finalised when `StopCaptureAsync` runs to completion before `Dispose` (verify the file plays back in another player).
 - [ ] On clean shutdown, the page's `Unloaded` runs `StopAsync → Dispose → VisioForgeX.DestroySDK()` in that order.
 - [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called on every `VideoCaptureCoreX` instance before its `StartAsync` (otherwise the app runs in 30-day trial mode).
-- [ ] Every Apple head has the `UIApplicationSceneManifest` in `Info.plist` and the `SceneDelegate` that hands `App.MainWindow` to the scene (the iOS 27 SDK kills a scene-less app at launch).
+- [ ] If you add the iOS head: its `Info.plist` has the `UIApplicationSceneManifest` and its `SceneDelegate` derives from `UnoUISceneDelegate` (the iOS 27 SDK kills a scene-less app at launch).
 
 ## Bundled references
 
 The `references/` folder is self-contained — copy all of it into a fresh `Uno.Sdk` project folder, set up `Platforms/` per the standard Uno template, and `dotnet build` succeeds with no extra files needed (apart from the `AndroidDependency/VisioForge.Core.Android.X10.csproj` companion project, which lives a few directory levels up — adjust the `<ProjectReference>` path to match your repo layout).
 
-- `references/Sample.csproj` — multi-target Uno csproj with all per-OS conditional package references and the Mac Catalyst native-copy `<Target>`.
-- `references/App.xaml` + `references/App.xaml.cs` — Uno Application entry point (the Uno template with `MainWindow` made `public static` for the `SceneDelegate`; no VisioForge-specific registration needed).
+- `references/Sample.csproj` — multi-target Uno csproj with all per-OS conditional package references.
+- `references/App.xaml` + `references/App.xaml.cs` — Uno Application entry point (the Uno template; no VisioForge-specific registration needed).
 - `references/MainPage.xaml` — XAML with `<vf:VideoView />` and camera/mic/speaker/preview/capture buttons.
-- `references/MainPage.xaml.cs` — full code-behind: per-OS permission helpers (Android, iOS, Mac Catalyst, Windows), `InitSDKAsync` boot, `DeviceEnumerator` wiring, MP4 recording, per-platform output-path logic (Android scoped storage, iOS Library, Mac Catalyst `~/Movies`, Windows `MyVideos`), gallery save on mobile, and `OnError` wiring. Runs in 30-day trial mode by design — add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence.
+- `references/MainPage.xaml.cs` — full code-behind: per-OS permission helpers (Android, iOS, Windows), `InitSDKAsync` boot, `DeviceEnumerator` wiring, MP4 recording, per-platform output-path logic (Android scoped storage, iOS Library, macOS `~/Movies` (`MyVideos`), Windows `MyVideos`), gallery save on mobile, and `OnError` wiring. Runs in 30-day trial mode by design — add a `SetLicenseCertificateAsync` call yourself when integrating a purchased licence.
 
 ## Related
 
