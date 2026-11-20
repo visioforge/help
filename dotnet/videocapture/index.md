@@ -51,7 +51,7 @@ Add platform-specific native dependencies:
 <!-- macOS -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 
-<!-- Linux x64 (needs system GStreamer 1.22+) -->
+<!-- Linux x64 (needs system GStreamer 1.20+) -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
 
@@ -61,7 +61,7 @@ For the full list of packages and UI framework support (WinForms, WPF, MAUI, Ava
 
 ### 2. Initialize the SDK
 
-Call `InitSDKAsync()` once at application startup before using any capture functionality:
+Call `InitSDKAsync()` once at application startup before using any capture functionality. In a WPF or WinForms app, await it in an `async` handler of the window's `Loaded` event (WPF) or the form's `Load` event (WinForms), before the capture object is created:
 
 ```csharp
 using VisioForge.Core;
@@ -69,7 +69,40 @@ using VisioForge.Core;
 await VisioForgeX.InitSDKAsync();
 ```
 
-### 3. C# Webcam Capture to MP4 (Minimal Example)
+### 3. Add a VideoView
+
+The preview renders into a `VideoView` control named `videoView`. For WPF and WinForms the control is in the `VisioForge.Core` assembly, which `VisioForge.DotNet.VideoCapture` brings in, so no extra UI package is needed.
+
+WPF: in `MainWindow.xaml`, declare the `vf` namespace on the `<Window>` element and place the control:
+
+```xml
+<Window ...
+        xmlns:vf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core">
+    <Grid>
+        <vf:VideoView x:Name="videoView" Background="Black" />
+    </Grid>
+</Window>
+```
+
+WinForms: create the control in the form's code:
+
+```csharp
+// Form1.cs
+private readonly VisioForge.Core.UI.WinForms.VideoView videoView =
+    new VisioForge.Core.UI.WinForms.VideoView { Dock = DockStyle.Fill };
+
+public Form1()
+{
+    InitializeComponent();
+    Controls.Add(videoView); // add this line to the existing constructor
+}
+```
+
+For MAUI, Avalonia, WinUI and Uno, see the [Installation Guide](../install/index.md).
+
+### 4. C# Webcam Capture to MP4 (Minimal Example)
+
+The `using` directives go at the top of the file; the rest runs from an `async` event handler of the window or form, such as the window's `Loaded` event (WPF), the form's `Load` event (WinForms) or a button's `Click` handler. When the stop lines run from another handler (a Stop button), keep `capture` in a field instead of a local variable.
 
 ```csharp
 using VisioForge.Core;
@@ -88,9 +121,12 @@ var audioDevices = await DeviceEnumerator.Shared.AudioSourcesAsync();
 capture.Video_Source = new VideoCaptureDeviceSourceSettings(videoDevices[0]);
 capture.Audio_Source = audioDevices[0].CreateSourceSettingsVC();
 capture.Audio_Record = true;
+capture.Audio_Play = false; // record only, no speaker monitoring
 
 // Add MP4 output (H.264 + AAC, GPU-accelerated when available)
 capture.Outputs_Add(new MP4Output("recording.mp4"));
+
+// With a purchased license, call SetLicenseCertificateAsync here (step 5)
 
 // Start capture
 await capture.StartAsync();
@@ -100,7 +136,20 @@ await capture.StopAsync();
 await capture.DisposeAsync();
 ```
 
-### 4. Cleanup at Shutdown
+### 5. Apply Your License
+
+Without a license the SDK runs as a 30-day trial. A purchase gives you a `.vflicense` certificate file, not a key. Load it into every capture instance before `StartAsync()`; licensing one instance does not license another. The code below reads it from the app's folder: add `your.vflicense` to the project and set its **Copy to Output Directory** property in Visual Studio:
+
+```csharp
+var licensePath = System.IO.Path.Combine(System.AppContext.BaseDirectory, "your.vflicense");
+await capture.SetLicenseCertificateAsync(System.IO.File.ReadAllBytes(licensePath));
+```
+
+See [Licensing](https://www.visioforge.com/licensing) for details.
+
+### 6. Cleanup at Shutdown
+
+Call `VisioForgeX.DestroySDK()` once when the app exits, after every capture instance has been stopped and disposed, for example in the window's `Closed` event (WPF) or the form's `FormClosed` event (WinForms):
 
 ```csharp
 VisioForgeX.DestroySDK();
@@ -175,6 +224,7 @@ Record from a microphone without video:
 capture.Video_Source = null; // disable video for audio-only capture
 capture.Audio_Source = audioDevices[0].CreateSourceSettingsVC();
 capture.Audio_Record = true;
+capture.Audio_Play = false; // record only, no speaker monitoring
 capture.Outputs_Add(new MP4Output("audio.mp4"));
 ```
 

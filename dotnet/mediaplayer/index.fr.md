@@ -49,7 +49,7 @@ Ajoutez les dépendances natives spécifiques à la plateforme :
 <!-- macOS -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 
-<!-- Linux x64 (nécessite GStreamer 1.22+ du système) -->
+<!-- Linux x64 (nécessite GStreamer 1.20+ du système) -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 ```
 

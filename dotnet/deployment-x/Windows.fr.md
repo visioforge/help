@@ -178,7 +178,10 @@ laissé intact, car les applications construites avec cette version y chargent t
 
 Si le dossier du cache ne peut pas être créé, le SDK charge les bibliothèques sur place, depuis le dossier de
 l'application. S'il existe mais n'est pas accessible en écriture, le SDK ne l'utilise que s'il contient déjà
-exactement les bibliothèques de l'application et aucune autre ; sinon il les charge sur place.
+exactement les bibliothèques de l'application et aucune autre ; sinon il les charge sur place. Les bibliothèques se
+chargent aussi sur place lorsque votre application a appelé le SDK avant `InitSDK` et que GStreamer était déjà
+chargé depuis le dossier de l'application, par exemple via `PATH` ; appelez d'abord `VisioForgeX.InitSDK()` pour
+utiliser le cache partagé.
 
 Supprimer `%PUBLIC%\.gstreamer` est sans danger à tout moment ; le démarrage suivant le reconstruit.
 

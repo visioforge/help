@@ -124,9 +124,9 @@ namespace ScreenCaptureMp4Wpf;
 
 public partial class MainWindow : Window
 {
-    private VideoCaptureCoreX videoCapture1;
+    private VideoCaptureCoreX videoCapture1 = null!;
 
-    private AudioOutputDeviceInfo[] speakers;
+    private AudioOutputDeviceInfo[] speakers = null!;
 
     public MainWindow()
     {
@@ -246,7 +246,7 @@ namespace screen_capture_mp4
     public partial class Form1 : Form
     {
         // Componente principal de VideoCapture que maneja todas las operaciones de grabación
-        private VideoCaptureCore videoCapture1;
+        private VideoCaptureCore videoCapture1 = null!;
 
         public Form1()
         {
@@ -548,6 +548,7 @@ if (audioOutputs.Length > 0)
     var loopbackSource = new LoopbackAudioCaptureDeviceSourceSettings(audioOutputs[0]);
     videoCapture.Audio_Source = loopbackSource;
     videoCapture.Audio_Record = true;
+    videoCapture.Audio_Play = false;
 }
 ```
 

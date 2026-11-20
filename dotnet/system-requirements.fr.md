@@ -1,6 +1,6 @@
 ---
 title: SDK .NET VisioForge — configuration requise et plateformes
-description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 26+, Android 7+. .NET Framework 4.6.1+, .NET Core 3.1, .NET 5 à 11, ARM64. WPF, WinForms, MAUI, Avalonia.
+description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 18+, Android 7+. .NET Framework 4.6.1+, .NET Core 3.1, .NET 5 à 11, ARM64. WPF, WinForms, MAUI, Avalonia.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -44,7 +44,7 @@ Le développement d'applications utilisant nos SDK est pris en charge sur les pl
 #### Linux
 
 * Ubuntu 22.04 LTS ou plus récent
-* Debian 11 ou plus récent
+* Debian 12 ou plus récent
 * Les autres distributions disposant de bibliothèques équivalentes peuvent fonctionner mais ne sont pas officiellement prises en charge
 
 #### macOS
@@ -77,7 +77,8 @@ Nos SDK peuvent être déployés sur une variété de plateformes, permettant un
 #### Linux
 
 * Ubuntu 22.04 LTS ou plus récent
-* Les autres distributions requièrent des bibliothèques et dépendances équivalentes
+* Debian 12 ou plus récent
+* Les autres distributions avec GStreamer 1.20 ou ultérieur et des bibliothèques système au moins aussi récentes que celles d'Ubuntu 22.04 (GStreamer 1.22 ou ultérieur pour certaines fonctionnalités)
 * Architectures x64 et ARM64 prises en charge
 
 #### macOS

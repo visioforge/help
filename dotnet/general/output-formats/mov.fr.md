@@ -27,7 +27,7 @@ tags:
 primary_api_classes:
   - MOVOutput
   - NVENCH264EncoderSettings
-  - VOAACEncoderSettings
+  - AVENCAACEncoderSettings
   - VideoCaptureCoreX
   - VideoEditCoreX
 
@@ -152,9 +152,9 @@ Pour les détails de configuration des codecs audio, consultez la [documentation
 | Encodeur | Type | Plateforme | Qualité | Cas d'usage |
 |---------|------|----------|---------|----------|
 | MP3 | Logiciel | Multiplateforme | Bonne | Distribution Web |
-| VO-AAC | Logiciel | Multiplateforme | Excellente | Usage professionnel |
+| VO-AAC | Logiciel | Multiplateforme | Bonne | Hérité — préférez AVENC AAC |
 | AVENC AAC | Logiciel | Multiplateforme | Très bonne | Usage général |
-| MF AAC | Accéléré matériellement | Windows uniquement | Excellente | Applications Windows |
+| MF AAC | Media Foundation | Windows uniquement | Excellente | Applications Windows |
 
 ### Configuration de l'encodeur audio
 
@@ -174,7 +174,7 @@ movOutput.Audio = new MFAACEncoderSettings() {
 };
 
 // Implémentation AAC multiplateforme. La fréquence d'échantillonnage suit la source.
-movOutput.Audio = new VOAACEncoderSettings() {
+movOutput.Audio = new AVENCAACEncoderSettings() {
     Bitrate = 192,
 };
 ```
@@ -188,7 +188,7 @@ Pour gérer élégamment les différences de plateforme, utilisez la compilation
 #if NET_WINDOWS
     movOutput.Audio = new MFAACEncoderSettings();
 #else
-    movOutput.Audio = new VOAACEncoderSettings();
+    movOutput.Audio = new AVENCAACEncoderSettings();
 #endif
 ```
 
@@ -280,7 +280,7 @@ Pour un contrôle direct du pipeline multimédia :
 
 ```csharp
 // Créer les blocs d'encodeur (et non les paramètres bruts — le pipeline consomme des blocs).
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 192 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 192 });
 var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings { Bitrate = 5000 });
 
 // Configurer le puits MOV — MOV et MP4 sont des multiplexeurs différents (qtmux vs mp4mux), utilisez donc MOVSinkBlock.
@@ -299,12 +299,12 @@ Bien que l'implémentation MOV de VisioForge soit multiplateforme, certaines fon
 ### Fonctionnalités spécifiques à Windows
 
 - L'encodeur vidéo MF HEVC fournit un encodage optimisé sur Windows
-- L'encodeur audio MF AAC offre une accélération matérielle sur les systèmes compatibles
+- L'encodeur audio MF AAC est l'implémentation Media Foundation, à préférer pour `VideoEditCoreX` avec les préréglages `EncodingProfile`
 
 ### Fonctionnalités multiplateformes
 
 - Les encodeurs OpenH264, NVENC, QSV et AMF fonctionnent sur l'ensemble des systèmes d'exploitation
-- VO-AAC et AVENC AAC fournissent un encodage audio cohérent partout
+- AVENC AAC fournit un encodage audio cohérent partout
 
 ## Conclusion
 

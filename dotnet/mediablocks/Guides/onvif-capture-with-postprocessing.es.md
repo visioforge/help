@@ -37,13 +37,13 @@ primary_api_classes:
 !!! info "Soporte multiplataforma"
     El Media Blocks SDK funciona en **Windows, macOS, Linux, Android e iOS** a través de GStreamer. Consulte la [matriz de soporte de plataformas](../../platform-matrix.md) para detalles de códecs y aceleración por hardware, y la [guía de despliegue para Linux](../../deployment-x/Ubuntu.md) para Ubuntu / NVIDIA Jetson / Raspberry Pi.
 
-!!!info Ejemplos de demostración
-Para ejemplos de trabajo completos, consulte:
-- [RTSP Preview Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) — muestra vista previa de cámara ONVIF con postprocesamiento
-- [IP Capture Demo (Video Capture SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) — alternativa usando Video Capture SDK
+!!! info "Ejemplos de demostración"
+    Para ejemplos de trabajo completos, consulte:
 
-Para documentación completa de ONVIF, consulte la [Guía de Integración de Cámaras IP ONVIF](../../videocapture/video-sources/ip-cameras/onvif.md).
-!!!
+    - [RTSP Preview Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) — muestra vista previa de cámara ONVIF con postprocesamiento
+    - [IP Capture Demo (Video Capture SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) — alternativa usando Video Capture SDK
+
+    Para documentación completa de ONVIF, consulte la [Guía de Integración de Cámaras IP ONVIF](../../videocapture/video-sources/ip-cameras/onvif.md).
 
 ## Tabla de Contenidos
 
@@ -184,7 +184,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 2000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // Codificador de audio AAC (Bitrate en Kbit/s — 128 = 128 kbps).
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // Sink MP4 — el ctor por nombre de archivo es la ruta más corta a un escritor MP4 válido.
 var mp4Sink = new MP4SinkBlock("output_resized.mp4");
@@ -258,7 +258,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // Salida MP4
 var mp4Sink = new MP4SinkBlock("output_enhanced.mp4");
@@ -322,7 +322,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // Salida MP4
 var mp4Sink = new MP4SinkBlock("output_face_blur.mp4");
@@ -385,7 +385,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // Salida MP4
 var mp4Sink = new MP4SinkBlock("output_watermarked.mp4");

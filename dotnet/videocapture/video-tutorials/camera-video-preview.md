@@ -84,7 +84,7 @@ namespace WebcamPreview;
 
 public partial class Form1 : Form
 {
-    private VideoCaptureCore videoCapture1;
+    private VideoCaptureCore videoCapture1 = null!;
 
     public Form1()
     {

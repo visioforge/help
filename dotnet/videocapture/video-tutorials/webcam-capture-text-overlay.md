@@ -88,7 +88,7 @@ namespace WebcamTextOverlay;
 
 public partial class Form1 : Form
 {
-    private VideoCaptureCore videoCapture1;
+    private VideoCaptureCore videoCapture1 = null!;
 
     public Form1()
     {
@@ -193,7 +193,7 @@ public partial class Form1 : Form
         camera.Format = cbFormat.Text;
         camera.FrameRate = (VideoFrameRate)cbFrameRate.SelectedItem;
 
-        var mic = (string)cbMicrophone.SelectedItem;
+        var mic = cbMicrophone.SelectedItem as string;
         videoCapture1.Audio_RecordAudio = mic is not null; // no microphone: record video only
         if (mic is not null) videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(mic);
         videoCapture1.Audio_PlayAudio = false; // record the microphone without playing it back

@@ -102,8 +102,7 @@ VisioForge proporciona acceso a una amplia gama de codificadores, permitiendo la
         *   `MF HEVC` (Media Foundation HEVC): Codificador H.265/HEVC específico de Windows para compresión de mayor eficiencia.
 *   **Codificadores de Audio:**
     *   **Variantes AAC:**
-        *   `VO-AAC`: Un codificador AAC versátil y multiplataforma.
-        *   `AVENC AAC`: Utiliza el codificador AAC de FFmpeg.
+        *   `AVENC AAC`: Codificador AAC multiplataforma basado en FFmpeg (predeterminado).
         *   `MF AAC`: Codificador AAC de Windows Media Foundation.
     *   **Otros Formatos:**
         *   `MP3`: Ampliamente compatible pero menos eficiente que AAC.
@@ -124,7 +123,7 @@ Esta clase encapsula todos los parámetros necesarios para definir el comportami
     *   `Point` (string): El componente de ruta de la URL RTSP (ej., `/live`, `/stream1`). Los clientes se conectarán a `rtsp://<Address>:<Port><Point>`. El predeterminado es `"/live"`.
 *   **Configuración de Transmisión:**
     *   `VideoEncoder` (IVideoEncoder): Una instancia de `IVideoEncoder` — típicamente un objeto de configuración de codificador (ej., `OpenH264EncoderSettings`) o el resultado de `H264EncoderBlock.GetDefaultSettings()`. Define el códec, tasa de bits (Kbit/s), calidad, etc.
-    *   `AudioEncoder` (IAudioEncoder): Una instancia de `IAudioEncoder` (ej., `VOAACEncoderSettings`). Define parámetros del códec de audio.
+    *   `AudioEncoder` (IAudioEncoder): Una instancia de `IAudioEncoder` (ej., `AVENCAACEncoderSettings`). Define parámetros del códec de audio.
     *   `Latency` (TimeSpan): Controla el retardo de búfer introducido por el servidor para suavizar la fluctuación de la red. El predeterminado es 250 milisegundos. Valores más altos aumentan la estabilidad pero también el retardo.
 *   **Autenticación:**
     *   `Username` (string): Si se establece, los clientes deben proporcionar este nombre de usuario para autenticación básica.
@@ -157,7 +156,7 @@ Al usar el Media Blocks SDK, el `RTSPServerBlock` representa el elemento real ba
 // Usar aceleración por hardware si está disponible, de lo contrario recurrir a software
 var videoEncoder = H264EncoderBlock.GetDefaultSettings();
 
-var audioEncoder = new VOAACEncoderSettings(); // AAC multiplataforma confiable
+var audioEncoder = new AVENCAACEncoderSettings(); // AAC multiplataforma confiable
 
 // 2. Configurar ajustes de red del servidor
 var settings = new RTSPServerSettings(videoEncoder, audioEncoder)
@@ -185,7 +184,7 @@ videoCapture.Outputs_Add(rtspOutput);
 // 1. Crear configuraciones de codificador de video y audio
 var videoEncoder = H264EncoderBlock.GetDefaultSettings();
 
-var audioEncoder = new VOAACEncoderSettings();
+var audioEncoder = new AVENCAACEncoderSettings();
 
 // 2. Crear configuraciones de servidor RTSP con una URL específica
 var serverUri = new Uri("rtsp://192.168.1.50:8554/cam1"); 

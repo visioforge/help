@@ -247,9 +247,11 @@ This example demonstrates a complete camera viewer implementation:
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using VisioForge.Core;
 using VisioForge.Core.MediaBlocks;
 using VisioForge.Core.MediaBlocks.Sources;
 using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types;
 using VisioForge.Core.Types.X.Sources;
 
 public class CameraViewerExample
@@ -280,7 +282,7 @@ public class CameraViewerExample
         if (format != null)
         {
             settings.Format = format.ToFormat();
-            if (frameRate != null && !frameRate.IsEmpty)
+            if (!frameRate.IsEmpty)
             {
                 settings.Format.FrameRate = frameRate;
             }

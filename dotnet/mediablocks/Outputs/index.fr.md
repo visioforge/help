@@ -1274,7 +1274,7 @@ var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
 
 // configurer les encodeurs (vidéo HEVC + audio AAC pour Enhanced FLV)
 var videoSettings = HEVCEncoderBlock.GetDefaultSettings();
-var audioSettings = new VOAACEncoderSettings();
+var audioSettings = new AVENCAACEncoderSettings();
 
 // créer le bloc de sortie Enhanced FLV
 var sinkSettings = new EFLVSinkSettings("output.flv");

@@ -51,7 +51,7 @@ Video Edit SDK assembles timelines, applies transitions/effects/overlays, and ex
 
 ## Platform support
 
-- `VideoEditCoreX` (cross-platform, GStreamer): Windows, macOS (Intel + Apple Silicon), Linux (Ubuntu/Debian/CentOS), Android (via [MAUI](./maui/video-editing-maui.md)), iOS (via [MAUI](./maui/video-editing-maui.md)).
+- `VideoEditCoreX` (cross-platform, GStreamer): Windows, macOS (Intel + Apple Silicon), Linux (x64, ARM64; Ubuntu 22.04+, Debian 12+ or another distribution with the system GStreamer 1.20+), Android (via [MAUI](./maui/video-editing-maui.md)), iOS (via [MAUI](./maui/video-editing-maui.md)).
 - `VideoEditCore` (legacy, DirectShow): Windows x64 only.
 - UI frameworks: WinForms, WPF, MAUI, Avalonia, Uno, Console.
 - Full engine × platform × UI matrix: [platform-matrix.md](../platform-matrix.md).
@@ -61,7 +61,7 @@ Video Edit SDK assembles timelines, applies transitions/effects/overlays, and ex
 One package ships both engines — `VideoEditCoreX` and the legacy `VideoEditCore` live side by side in it, so the engine is a code-level choice, not a packaging one:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.20]"/>
 ```
 
 It pulls in `VisioForge.DotNet.Core` as a dependency; you do not need to reference `Core` separately.
@@ -75,7 +75,7 @@ UI integration (pick the framework you target):
 <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="*" />
 ```
 
-Platform-specific native redistributables follow the same pattern as other VisioForge SDKs (per-OS redist packages pull in the GStreamer natives). See the [installation guide](../install/index.md) for the full list.
+Platform-specific native redistributables follow the same pattern as other VisioForge SDKs (the Windows, macOS, Android and iOS redist packages bring the GStreamer natives; on Linux, `VisioForge.CrossPlatform.Core.Linux.x64` or `.Linux.arm64` adds only the SDK's own native libraries, and GStreamer 1.20+ comes from the distribution). See the [installation guide](../install/index.md) for the full list.
 
 ## Primary API classes
 
@@ -182,7 +182,7 @@ Yes. `VideoEditCoreX` supports 100+ SMPTE wipe transitions between consecutive s
 
 ### Does it run on macOS / Linux?
 
-Yes — `VideoEditCoreX` runs on macOS (Intel + Apple Silicon) and Linux (Ubuntu/Debian/CentOS) via the bundled GStreamer natives. `VideoEditCore` is Windows-only.
+Yes — `VideoEditCoreX` runs on macOS (Intel + Apple Silicon) via the bundled GStreamer natives, and on Linux (Ubuntu 22.04+, Debian 12+) with the system GStreamer 1.20+ from the distribution packages (see [Ubuntu deployment](../deployment-x/Ubuntu.md)). `VideoEditCore` is Windows-only.
 
 ### How do I trim a file without re-adding it multiple times?
 

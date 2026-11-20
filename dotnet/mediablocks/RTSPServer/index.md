@@ -115,7 +115,7 @@ var h264Encoder = new H264EncoderBlock(h264Settings);
 pipeline.Connect(videoSource.Output, h264Encoder.Input);
 
 // Create audio encoder (cross-platform AAC)
-var aacSettings = new VOAACEncoderSettings
+var aacSettings = new AVENCAACEncoderSettings
 {
     Bitrate = 128 // kbps
 };

@@ -163,6 +163,7 @@ Tutoriels supplémentaires de prise en main :
 
 - [Enregistrer un flux RTSP dans un fichier](Guides/rtsp-save-original-stream.md)
 - [Visualisateur de flux RTSP et lecteur de caméras IP](Guides/rtsp-player-csharp.md)
+- [Caméras IP RTSP dans un navigateur web (WHEP)](Guides/rtsp-cameras-in-browser-whep.md)
 - [Capture ONVIF avec post-traitement](Guides/onvif-capture-with-postprocessing.md)
 - [Lecteur de codes-barres et QR codes](Guides/barcode-qr-reader-guide.md)
 - [Enregistrement pré-événement](Guides/pre-event-recording.md)

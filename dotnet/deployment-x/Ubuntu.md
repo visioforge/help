@@ -27,8 +27,8 @@ The VisioForge SDK family works on Ubuntu and other Linux distributions that sup
 
 Before deploying your application, ensure your Ubuntu environment meets these minimum requirements:
 
-- Ubuntu 20.04 LTS or later (22.04 LTS and later recommended)
-- .NET 7.0 or later runtime
+- Ubuntu 22.04 LTS or later (GStreamer 1.20); some features, such as the OpenCV blocks and the ONVIF audio backchannel, need GStreamer 1.22 or later, such as Ubuntu 24.04 or Debian 12
+- .NET 8.0 or later runtime
 - At least 4GB RAM (8GB recommended for video processing)
 - x86_64 or ARM64 architecture
 - Internet connection for package installation
@@ -45,7 +45,7 @@ GStreamer forms the multimedia backbone for VisioForge SDKs on Linux platforms. 
 
 ### Required GStreamer Packages
 
-Install the following GStreamer packages using apt-get. We require v1.22.0 or later, though v1.24.0+ is highly recommended for access to the latest features and optimizations:
+Install the following GStreamer packages using apt-get. We require v1.20.0 or later (v1.22.0 or later for some features, such as the OpenCV blocks and the ONVIF audio backchannel), though v1.24.0+ is highly recommended for access to the latest features and optimizations:
 
 - `gstreamer1.0-plugins-base`: Essential baseline plugins
 - `gstreamer1.0-plugins-good`: High-quality, well-tested plugins
@@ -85,7 +85,7 @@ After installation, verify your GStreamer setup by running:
 gst-inspect-1.0 --version
 ```
 
-This should display the installed GStreamer version. Ensure it meets the minimum requirement (1.22.0+) or ideally shows 1.24.0 or later.
+This should display the installed GStreamer version. Ensure it meets the minimum requirement (1.20.0+, or 1.22.0+ for some features) or ideally shows 1.24.0 or later.
 
 ## Required NuGet Packages
 

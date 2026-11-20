@@ -99,8 +99,7 @@ Los siguientes codificadores de audio son soportados a través de la propiedad `
 
 **[Codificadores AAC](../audio-encoders/aac.md)**
 
-- VO-AAC (Multiplataforma)
-- AVENC AAC
+- AVENC AAC (Multiplataforma)
 - MF AAC (Solo Windows)
   
 **[Codificador MP3](../audio-encoders/mp3.md)**:
@@ -116,7 +115,7 @@ output.Audio = new MFAACEncoderSettings();
 
 ```csharp
 // Para compatibilidad multiplataforma
-output.Audio = new VOAACEncoderSettings();
+output.Audio = new AVENCAACEncoderSettings();
 ```
 
 ```csharp
@@ -287,7 +286,7 @@ output.Sink.Filename = "salida_modificada.ts";
 ### Consideraciones de plataforma
 
 - Algunos codificadores (MF AAC, MF HEVC) solo están disponibles en plataformas Windows
-- Las aplicaciones multiplataforma deben usar codificadores agnósticos de plataforma como VO-AAC para audio
+- Las aplicaciones multiplataforma deben usar codificadores agnósticos de plataforma como AVENC AAC para audio
 
 ### Mejores prácticas
 
@@ -339,7 +338,7 @@ else
 #if NET_WINDOWS
     output.Audio = new MFAACEncoderSettings();
 #else
-    output.Audio = new VOAACEncoderSettings();
+    output.Audio = new AVENCAACEncoderSettings();
 #endif
 
 // Opcional: Agregar procesamiento personalizado

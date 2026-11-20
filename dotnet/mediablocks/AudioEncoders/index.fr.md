@@ -78,9 +78,9 @@ public AACEncoderBlock() // Utilise GetDefaultSettings() en interne
 
 L'`AACEncoderBlock` fonctionne avec toute implémentation de l'interface `IAACEncoderSettings`. Différentes implémentations sont disponibles selon la plateforme :
 
-- `AVENCAACEncoderSettings` — disponible sur Windows et macOS/Linux (à privilégier lorsque possible)
+- `AVENCAACEncoderSettings` — disponible sur Windows, macOS, Linux, Android, iOS et Mac Catalyst (par défaut)
 - `MFAACEncoderSettings` — implémentation Windows Media Foundation (Windows uniquement)
-- `VOAACEncoderSettings` — utilisée sur Android et iOS
+- `VOAACEncoderSettings` — solution de repli héritée, utilisée uniquement là où AVENC AAC n'est pas disponible ; préférez `AVENCAACEncoderSettings`
 
 Vous pouvez recourir à la méthode statique `GetDefaultSettings()` pour obtenir les paramètres d'encodeur optimaux pour la plateforme courante :
 

@@ -92,8 +92,8 @@ The Uno template uses central package management, so NuGet writes the versions t
 
 ```xml
 <ItemGroup>
-  <PackageVersion Include="VisioForge.DotNet.Core" Version="[2026.11.16]" />
-  <PackageVersion Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.16]" />
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="[2026.11.20]" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.20]" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
   <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]" />

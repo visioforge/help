@@ -51,7 +51,7 @@ M4A is a file format used for storing audio data encoded with the Advanced Audio
 The cross-platform capable SDKs (VideoCaptureCoreX, VideoEditCoreX, MediaBlocksPipeline) allow you to utilize several AAC encoder implementations via `M4AOutput`. This guide focuses on three main approaches using dedicated settings objects:
 
 1. [AVENC AAC Encoder](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.AVENCAACEncoderSettings.html) - A feature-rich, cross-platform encoder.
-2. [VO-AAC Encoder](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VOAACEncoderSettings.html) - A streamlined, cross-platform encoder.
+2. [VO-AAC Encoder](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VOAACEncoderSettings.html) - A streamlined, cross-platform encoder, now obsolete — prefer AVENC AAC.
 3. Media Foundation AAC Encoder - A Windows-specific system encoder, accessible on Windows platforms via `MFAACEncoderSettings`.
 4. Apple AAC Encoder - The AudioToolbox encoder built into macOS, accessible on macOS and Mac Catalyst via `AppleAACEncoderSettings`.
 
@@ -293,7 +293,7 @@ core.Output_Format = output;
 #### With Media Blocks SDK
 
 ```csharp
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 var sinkSettings = new MP4SinkSettings("output.m4a");
 var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 ```
@@ -307,7 +307,6 @@ var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 
 2. **VO-AAC Encoder**:
    - Simple constant bitrate control
-   - Recommend for straightforward encoding needs
    - Limited advanced configuration
 
 3. **Media Foundation Encoder**:
@@ -318,7 +317,7 @@ var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 ### Recommendations
 
 - For advanced audio encoding with maximum control, use AVENC AAC Encoder
-- For simple, cross-platform encoding, use VO-AAC Encoder
+- For simple, cross-platform encoding, use the AVENC AAC Encoder (the default on every platform)
 - For Windows-specific, optimized encoding, use Media Foundation Encoder
 
 ### Performance and Quality Considerations
@@ -327,7 +326,7 @@ var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 - **Sample Rate Matching**: Always try to choose sample rates that match your source audio. This avoids unnecessary resampling, which can potentially degrade audio quality.
 - **Encoder Characteristics**:
   - `AVENC AAC Encoder`: Offers the most extensive configuration options, allowing for fine-grained control over quality and performance. Ideal for advanced use cases.
-  - `VO-AAC Encoder`: Provides a good balance of simplicity, cross-platform compatibility, and quality. A solid choice for many common scenarios.
+  - `VO-AAC Encoder`: Obsolete. Kept for existing code; prefer the AVENC AAC Encoder.
   - `Media Foundation AAC Encoder`: Leverages built-in Windows audio processing capabilities. It can be efficient on Windows but offers less configuration flexibility than AVENC.
 - **Channel Configuration (Mono vs. Stereo)**:
   - For voice-only content, using mono encoding (1 channel) can significantly reduce file size without a noticeable loss in quality for speech. Check if your chosen encoder settings (e.g., `AVENCAACEncoderSettings.Channels`) allow explicit channel configuration.

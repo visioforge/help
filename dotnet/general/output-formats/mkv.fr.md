@@ -103,7 +103,7 @@ La qualité audio est tout aussi importante pour la plupart des applications. Le
 ### Codecs audio pris en charge
 
 - **Encodeurs AAC** — Consultez la [documentation de l'encodeur AAC](../audio-encoders/aac.md) :
-  - **VO AAC** : Alternative pour les plateformes non Windows
+  - **VO AAC** : encodeur hérité, obsolète — préférez AVENC AAC
   - **AVENC AAC** : Implémentation AAC FFMPEG (par défaut sur toutes les plateformes)
   - **MF AAC** : Implémentation Windows Media Foundation
   
@@ -119,15 +119,13 @@ La qualité audio est tout aussi importante pour la plupart des applications. Le
 #if NET_WINDOWS
     var aacSettings = new MFAACEncoderSettings
     {
-        Bitrate = 192,
-        SampleRate = 48000
+        Bitrate = 192
     };
     mkvOutput.Audio = aacSettings;
 #else
-    var aacSettings = new VOAACEncoderSettings
+    var aacSettings = new AVENCAACEncoderSettings
     {
-        Bitrate = 192,
-        SampleRate = 44100
+        Bitrate = 192
     };
     mkvOutput.Audio = aacSettings;
 #endif
@@ -239,7 +237,7 @@ var mkvSinkSettings = new MKVSinkSettings("processed.mkv");
 var mkvOutput = new MKVOutputBlock(
     mkvSinkSettings,
     videoSettings: new OpenH264EncoderSettings(),
-    audioSettings: new VOAACEncoderSettings());
+    audioSettings: new AVENCAACEncoderSettings());
 
 // Câbler les pads de la source directement à la sortie MKV — elle gère l'encodage en interne.
 pipeline.Connect(sourceBlock.VideoOutput, mkvOutput.CreateNewInput(MediaBlockPadMediaType.Video));

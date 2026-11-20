@@ -199,6 +199,7 @@ Here's how to implement it:
     IVideoCaptureBaseAudioSourceSettings audioSource = new LoopbackAudioCaptureDeviceSourceSettings(deviceItem);
     
     VideoCapture1.Audio_Source = audioSource;
+    VideoCapture1.Audio_Play = false;
     ```
     
     The WASAPI2 API provides the most reliable loopback functionality on Windows systems, with lower latency and better performance compared to other options.

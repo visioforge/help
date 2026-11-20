@@ -34,14 +34,12 @@ The Media Blocks SDK is built around the `MediaBlocksPipeline` class, which mana
 
 ### Main Block Interfaces
 
-- **IMediaBlock**: Base interface for all blocks. Exposes properties for name, type, input/output pads, and methods for YAML conversion and pipeline context retrieval.
+- **IMediaBlock**: Base interface for all blocks. Exposes properties for name, type, input/output pads, and a method for pipeline context retrieval.
 - **IMediaBlockDynamicInputs**: For blocks (like muxers) that can create new inputs dynamically. Methods: `CreateNewInput(mediaType)` and `GetInput(mediaType)`.
 - **IMediaBlockInternals**: Internal methods for pipeline integration (e.g., `SetContext`, `Build`, `CleanUp`, `GetElement`, `GetCore`).
 - **IMediaBlockInternals2**: For post-connection logic (`PostConnect()`).
 - **IMediaBlockRenderer**: For renderer blocks, exposes `IsSync` property.
 - **IMediaBlockSettings**: For settings/configuration objects that can create a block (`CreateBlock()`).
-- **IMediaBlockSink**: For sink blocks, exposes filename/URL getter/setter.
-- **IMediaBlockSource**: For source blocks (currently only commented-out pad accessors).
 
 ### Pads and Media Types
 

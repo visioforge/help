@@ -35,6 +35,8 @@ video:
 
 Este tutorial graba una webcam y un micrófono en un archivo MP4 desde una aplicación WPF. La ventana se define en XAML, la vista previa en directo se dibuja en un `VideoView` y el motor `VideoCaptureCore` codifica H.264 en la GPU cuando el PC tiene un codificador por hardware, con audio AAC.
 
+La grabación en MP4 requiere la edición Premium de Video Capture SDK .NET; consulte [ediciones y precios](https://www.visioforge.com/es/video-capture-sdk-net#pricing).
+
 Es la misma aplicación que la del [tutorial de webcam a MP4 en WinForms](video-capture-webcam-mp4.md), construida al estilo de WPF:
 
 - La ventana, sus listas y sus botones se escriben en XAML
@@ -128,7 +130,7 @@ namespace WebcamMp4Wpf;
 
 public partial class MainWindow : Window
 {
-    private VideoCaptureCore videoCapture1;
+    private VideoCaptureCore videoCapture1 = null!;
 
     public MainWindow()
     {

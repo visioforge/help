@@ -97,7 +97,7 @@ dotnet restore
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.20]"/>
   <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="[2026.10.29]"/>
   
   <!-- Optionnel : intégration MongoDB -->

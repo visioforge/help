@@ -44,6 +44,8 @@ When implementing webcam recording capabilities, developers need to consider:
 
 This tutorial uses the Windows-only VideoCaptureCore engine. [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) also records webcams to MP4 on macOS, Linux, Android and iOS with VideoCaptureCoreX — see [Save Webcam Video in C#](../guides/save-webcam-video.md) and the [Android](../../deployment-x/Android.md) and [iOS](../../deployment-x/iOS.md) deployment guides.
 
+Recording to MP4 needs the Premium edition of Video Capture SDK .NET — see [editions and pricing](https://www.visioforge.com/video-capture-sdk-net#pricing).
+
 ## Video Implementation Tutorial
 
 The following video demonstrates the complete process of setting up a webcam capture application:
@@ -88,7 +90,7 @@ namespace WebcamMp4;
 
 public partial class Form1 : Form
 {
-    private VideoCaptureCore videoCapture1;
+    private VideoCaptureCore videoCapture1 = null!;
 
     public Form1()
     {
@@ -147,7 +149,7 @@ public partial class Form1 : Form
         camera.Format = cbFormat.Text;
         camera.FrameRate = (VideoFrameRate)cbFrameRate.SelectedItem;
 
-        var mic = (string)cbMicrophone.SelectedItem;
+        var mic = cbMicrophone.SelectedItem as string;
         videoCapture1.Audio_RecordAudio = mic is not null; // no microphone: record video only
         if (mic is not null) videoCapture1.Audio_CaptureDevice = new AudioCaptureSource(mic);
         videoCapture1.Audio_PlayAudio = false; // record the microphone without playing it back

@@ -37,11 +37,10 @@ primary_api_classes:
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-!!!info Exemple de démonstration
-Pour un exemple complet et exécutable, consultez la [démo UDP RAW Capture](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/UDP%20RAW%20Capture%20Demo).
+!!! info "Exemple de démonstration"
+    Pour un exemple complet et exécutable, consultez la [démo UDP RAW Capture](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/UDP%20RAW%20Capture%20Demo).
 
-Pour les fondamentaux du streaming UDP (côté émetteur, conteneur, multicast), consultez le [guide du streaming UDP](../../general/network-streaming/udp.md).
-!!!
+    Pour les fondamentaux du streaming UDP (côté émetteur, conteneur, multicast), consultez le [guide du streaming UDP](../../general/network-streaming/udp.md).
 
 ## Table des matières
 
@@ -99,7 +98,7 @@ graph LR;
 Ajoutez le Media Blocks SDK à votre projet via NuGet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
 ```
 
 Sous Windows, vous avez également besoin des paquets de runtime natif. Pour enregistrer (multiplexer), vous avez besoin du runtime principal ; le paquet Libav fournit les multiplexeurs :

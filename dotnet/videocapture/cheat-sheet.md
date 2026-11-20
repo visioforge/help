@@ -83,7 +83,7 @@ Platform-specific native runtimes — add the ones you target:
 <!-- macOS / macCatalyst -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 
-<!-- Linux x64 (needs system GStreamer 1.22+) -->
+<!-- Linux x64 (needs system GStreamer 1.20+, 1.22+ for some features) -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 
 <!-- Android / iOS -->
@@ -142,6 +142,7 @@ var capture = new VideoCaptureCoreX(videoView);
 capture.Video_Source = new VideoCaptureDeviceSourceSettings(videoDevices[0]);
 capture.Audio_Source = audioDevices[0].CreateSourceSettingsVC();
 capture.Audio_Record = true;
+capture.Audio_Play = false; // record only, no speaker monitoring
 
 // 5. Add the MP4 output BEFORE calling StartAsync.
 capture.Outputs_Add(new MP4Output("recording.mp4"));

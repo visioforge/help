@@ -163,6 +163,7 @@ Additional getting started tutorials:
 
 - [Save RTSP Stream to File](Guides/rtsp-save-original-stream.md)
 - [RTSP Stream Viewer and IP Camera Player](Guides/rtsp-player-csharp.md)
+- [RTSP IP Cameras in a Web Browser (WHEP)](Guides/rtsp-cameras-in-browser-whep.md)
 - [ONVIF Capture with Post-Processing](Guides/onvif-capture-with-postprocessing.md)
 - [Barcode & QR Code Reader](Guides/barcode-qr-reader-guide.md)
 - [Pre-Event Recording](Guides/pre-event-recording.md)

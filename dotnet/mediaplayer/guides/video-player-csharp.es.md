@@ -75,6 +75,16 @@ La película del video es [Big Buck Bunny](https://peach.blender.org/) (c) Blend
 
 El video crea el proyecto con .NET 10, que requiere Visual Studio 2026; en Visual Studio 2022, elija .NET 8 o .NET 9.
 
+### La versión corta
+
+El mismo reproductor como aplicación WPF en unas pocas líneas de C#, sin la línea de tiempo ni los controles:
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/Km4ohzKF24U?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Su código: [video-player-short-wpf en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/video-player-short-wpf).
+
 ## Paquetes NuGet requeridos
 
 - [VisioForge.DotNet.MediaPlayer](https://www.nuget.org/packages/VisioForge.DotNet.MediaPlayer/) — el SDK; los controles `VideoView` de WPF y WinForms vienen incluidos
@@ -82,7 +92,7 @@ El video crea el proyecto con .NET 10, que requiere Visual Studio 2026; en Visua
 - [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — los códecs FFmpeg (libav) con los que se decodifican muchos formatos
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.20]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```
@@ -651,3 +661,4 @@ También hay guías para reproducir un archivo en bucle o solo un fragmento, par
 - [Modo Bucle y Rango de Posición](loop-and-position-range.md) — configure el bucle, repetición A-B y reproducción de segmentos
 - [Reproductor Media Blocks SDK](../../mediablocks/GettingStarted/player.md) — alternativa basada en pipeline con renderizadores explícitos
 - [Página del Producto Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
+

@@ -178,7 +178,7 @@ var hlsOutput = new HLSOutput(settings);
 
 // Créer les encodeurs vidéo et audio avec les paramètres par défaut
 hlsOutput.Video = new OpenH264EncoderSettings();
-hlsOutput.Audio = new VOAACEncoderSettings();
+hlsOutput.Audio = new AVENCAACEncoderSettings();
 
 // Ajouter la sortie HLS à l'objet de capture vidéo
 videoCapture.Outputs_Add(hlsOutput, true);

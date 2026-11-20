@@ -74,6 +74,16 @@ The film in the video is [Big Buck Bunny](https://peach.blender.org/) (c) Blende
 
 The video creates the project on .NET 10, which needs Visual Studio 2026; in Visual Studio 2022, choose .NET 8 or .NET 9.
 
+### The short version
+
+The same player as a WPF app in a few lines of C#, without the timeline and the controls:
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/Km4ohzKF24U?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Its code: [video-player-short-wpf on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/video-player-short-wpf).
+
 ## Required NuGet packages
 
 - [VisioForge.DotNet.MediaPlayer](https://www.nuget.org/packages/VisioForge.DotNet.MediaPlayer/) — the SDK; the WPF and WinForms `VideoView` controls ship in it
@@ -81,7 +91,7 @@ The video creates the project on .NET 10, which needs Visual Studio 2026; in Vis
 - [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — the FFmpeg (libav) codecs that many formats decode through
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.20]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```
@@ -650,3 +660,4 @@ There are also guides for looping a file or playing only a range of it, for the 
 - [Loop Mode and Position Range](loop-and-position-range.md) — configure looping, A-B repeat, and segment playback
 - [Media Blocks SDK Player](../../mediablocks/GettingStarted/player.md) — pipeline-based alternative with explicit renderers
 - [Media Player SDK .NET Product Page](https://www.visioforge.com/media-player-sdk-net)
+

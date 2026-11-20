@@ -110,8 +110,8 @@ Add the following packages to your project:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.16]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.20]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.20]"/>
 </ItemGroup>
 ```
 
@@ -217,8 +217,8 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
   
   <!-- VisioForge Core References -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.16]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.16]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.20]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.20]"/>
   </ItemGroup>
   
   <!-- Windows Platform -->

@@ -60,9 +60,9 @@ The video creates the project on .NET 10, which needs Visual Studio 2026; in Vis
 - [VisioForge.DotNet.Core.Redist.LAV.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/) — the LAV splitter and decoders, which find the video and audio tracks in the stream and decode them
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.16]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.16]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.16]" />
+<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.20]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.20]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.20]" />
 ```
 
 These are the x64 packages, so the project sets `<PlatformTarget>x64</PlatformTarget>`; a 32-bit app takes the `.x86` packages instead. See the [deployment guide](../deployment.md) for the full list.

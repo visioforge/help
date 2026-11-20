@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into an Avalonia UI applicati
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4OutputBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring them with `pipeline.Connect(producer, consumer)`, then calling `await pipeline.StartAsync()`. Compared to the higher-level Video Capture SDK X (a single `VideoCaptureCoreX` god-object), Media Blocks gives you full control over the topology — splitting streams with tees, mixing sources, transcoding without preview, swapping sinks at runtime — at the cost of having to wire every edge yourself.
 
-Pinned NuGet versions: wrapper **`2026.11.16`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia)). Moving the wrapper to a newer 2026.x.x release means re-checking each redist against it — the csproj below carries the version pinned for each. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.20`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia)). Moving the wrapper to a newer 2026.x.x release means re-checking each redist against it — the csproj below carries the version pinned for each. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -196,7 +196,7 @@ These are the cross-platform pitfalls that bite first.
 - Fedora: `sudo dnf install gstreamer1 gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-ugly-free gstreamer1-libav`
 - Arch: `sudo pacman -S gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav`
 
-`gst-inspect-1.0 --version` should print 1.18 or newer. Verify the specific element your graph needs: `gst-inspect-1.0 h264parse`, `gst-inspect-1.0 avenc_aac`, etc.
+`gst-inspect-1.0 --version` should print 1.20 or newer (1.22 or newer for some features, such as the OpenCV blocks, which also need the `VisioForge.CrossPlatform.OpenCV.Linux.x64` or `.Linux.arm64` package referenced next to `VisioForge.CrossPlatform.Core.Linux.*` in the project file). Verify the specific element your graph needs: `gst-inspect-1.0 h264parse`, `gst-inspect-1.0 avenc_aac`, etc.
 
 ### 3. Linux: no devices on Wayland; no audio under PulseAudio container
 
@@ -262,7 +262,7 @@ The same pattern works on Linux (avoids working-directory-vs-binary-directory am
 Run through these after first integration:
 
 - [ ] `dotnet build` succeeds on each target OS with the bundled `references/` files copied into a fresh project folder (no missing-DLL warnings during build).
-- [ ] On Linux: `gst-inspect-1.0 --version` reports 1.18 or newer; the GStreamer base + good + bad + ugly + libav plugin sets are installed; `gst-device-monitor-1.0 Video/Source` lists the camera; the specific elements your graph uses (`gst-inspect-1.0 h264parse`, `gst-inspect-1.0 avenc_aac`) all resolve.
+- [ ] On Linux: `gst-inspect-1.0 --version` reports 1.20 or newer (1.22 or newer with the OpenCV blocks); the GStreamer base + good + bad + ugly + libav plugin sets are installed; `gst-device-monitor-1.0 Video/Source` lists the camera; the specific elements your graph uses (`gst-inspect-1.0 h264parse`, `gst-inspect-1.0 avenc_aac`) all resolve.
 - [ ] On macOS: `Info.plist` contains `NSCameraUsageDescription` (and `NSMicrophoneUsageDescription` if recording audio); first launch shows the permission prompt.
 - [ ] First run on a fresh machine takes 2-5 s during `VisioForgeX.InitSDK()` (registry build); second run is instant.
 - [ ] Webcam preview appears within ~1 s after clicking Start on a machine with a real or virtual webcam.

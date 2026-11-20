@@ -51,7 +51,7 @@ El Video Edit SDK ensambla líneas de tiempo, aplica transiciones/efectos/superp
 
 ## Soporte de plataformas
 
-- `VideoEditCoreX` (multiplataforma, GStreamer): Windows, macOS (Intel + Apple Silicon), Linux (Ubuntu/Debian/CentOS), Android (vía [MAUI](./maui/video-editing-maui.md)), iOS (vía [MAUI](./maui/video-editing-maui.md)).
+- `VideoEditCoreX` (multiplataforma, GStreamer): Windows, macOS (Intel + Apple Silicon), Linux (x64, ARM64; Ubuntu 22.04+, Debian 12+ u otra distribución con GStreamer 1.20+ del sistema), Android (vía [MAUI](./maui/video-editing-maui.md)), iOS (vía [MAUI](./maui/video-editing-maui.md)).
 - `VideoEditCore` (heredado, DirectShow): solo Windows x64.
 - Frameworks de UI: WinForms, WPF, MAUI, Avalonia, Uno, Consola.
 - Matriz completa motor × plataforma × UI: [platform-matrix.md](../platform-matrix.md).
@@ -61,7 +61,7 @@ El Video Edit SDK ensambla líneas de tiempo, aplica transiciones/efectos/superp
 Un solo paquete incluye ambos motores: `VideoEditCoreX` y el heredado `VideoEditCore` conviven en él, así que elegir motor es una decisión de código, no de empaquetado:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.20]"/>
 ```
 
 Arrastra `VisioForge.DotNet.Core` como dependencia; no hace falta referenciar `Core` por separado.
@@ -75,7 +75,7 @@ Integración de UI (elija el framework que utilice):
 <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="*" />
 ```
 
-Los redistribuibles nativos específicos de plataforma siguen el mismo patrón que el resto de SDKs de VisioForge (los paquetes redist por sistema operativo incorporan los binarios nativos de GStreamer). Consulte la [guía de instalación](../install/index.md) para ver la lista completa.
+Los redistribuibles nativos específicos de plataforma siguen el mismo patrón que el resto de SDKs de VisioForge (los paquetes redist de Windows, macOS, Android e iOS incorporan los binarios nativos de GStreamer; en Linux, `VisioForge.CrossPlatform.Core.Linux.x64` o `.Linux.arm64` solo añade las bibliotecas nativas propias del SDK, y GStreamer 1.20+ proviene de la distribución). Consulte la [guía de instalación](../install/index.md) para ver la lista completa.
 
 ## Clases principales de la API
 
@@ -182,7 +182,7 @@ Sí. `VideoEditCoreX` admite más de 100 transiciones de barrido SMPTE entre seg
 
 ### ¿Funciona en macOS / Linux?
 
-Sí — `VideoEditCoreX` funciona en macOS (Intel + Apple Silicon) y Linux (Ubuntu/Debian/CentOS) gracias a los binarios nativos de GStreamer incluidos. `VideoEditCore` es exclusivo de Windows.
+Sí — `VideoEditCoreX` funciona en macOS (Intel + Apple Silicon) gracias a los binarios nativos de GStreamer incluidos, y en Linux (Ubuntu 22.04+, Debian 12+) con GStreamer 1.20+ del sistema, instalado desde los paquetes de la distribución (consulte [despliegue en Ubuntu](../deployment-x/Ubuntu.md)). `VideoEditCore` es exclusivo de Windows.
 
 ### ¿Cómo recorto un archivo sin volver a añadirlo varias veces?
 

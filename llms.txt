@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-11-18 21:44:49 UTC (06c1371b610)
+**Generated:** 2026-11-20 16:15:17 UTC (09e6e7717cd)
 
 ## MCP Server (for AI coding agents)
 
@@ -167,15 +167,15 @@ In the tables below, **Developer (annual)** is a yearly subscription for one nam
 
 | Service | Price | Billing |
 |---------|-------|---------|
-| Priority Support | €1200 | per year |
+| Priority Support | €750 | per year |
 | Engineering Hours, 2 hours | €150 | one-time |
 | Engineering Hours, 5 hours | €375 | one-time |
 | Engineering Hours, 10 hours | €700 | one-time |
 | Engineering Hours, 25 hours | €1500 | one-time |
 
-- **Priority Support** is a yearly subscription: a private channel and a first answer within 2 business days on every question. Developer hours are not included.
-- **Engineering Hours** cover integration help, custom code and samples for your project at €75 per hour; larger packs are discounted. Purchased hours do not expire. Sessions take place Monday to Friday, 9:00–18:00 CET/CEST.
-- Diagnosing a defect of the SDK itself is free and never consumes purchased hours.
+- **Priority Support** is a yearly subscription: a private channel, a first answer within 1 business day on every question, and 5 engineering hours a year for integration help, custom code and samples, in writing, over AnyDesk or in a Teams or Telegram call, by appointment, with time rounded up to the next 15-minute step. On renewal up to 5 unused hours carry over once into the next year; carried-over hours are used first, and any still unused at the end of that year lapse. Extra hours are bought as Engineering Hours packs.
+- **Engineering Hours** cover integration help, custom code and samples for your project at €75 per hour; larger packs are discounted. Purchased hours do not expire. Sessions take place by appointment, Monday to Friday, 9:00–18:00 CET/CEST. Time is rounded up to the next 15-minute step.
+- Diagnosing a defect of the SDK itself is free and never consumes hours, purchased or included.
 - Every license includes e-mail support; see [www.visioforge.com/licensing](https://www.visioforge.com/licensing).
 
 ---
@@ -208,7 +208,7 @@ The following products from the old price list are no longer sold:
 
 ---
 
-**Last Updated:** 2026-11-11
+**Last Updated:** 2026-11-19
 
 ## Website
 
@@ -512,7 +512,7 @@ The following products from the old price list are no longer sold:
 - [VisioForge .NET SDKs — Video Capture, Editing & Playback](https://www.visioforge.com/help/docs/dotnet/): .NET SDKs for video capture, editing, playback, and processing. Cross-platform support for Windows, macOS, Linux, Android, and iOS.
 - [Migration Guide — Upgrade VisioForge .NET SDK v15 to v2026](https://www.visioforge.com/help/docs/dotnet/migration-from-v15/): Step-by-step guide for upgrading from VisioForge .NET SDK v15 to v2026, covering both DirectShow and cross-platform X-engine migration paths.
 - [Cross-Platform Codec and Device Support Matrix for .NET](https://www.visioforge.com/help/docs/dotnet/platform-matrix/): VisioForge .NET SDK cross-platform support matrix for video/audio codecs, hardware acceleration, and capture devices on Windows, Linux, macOS, Android, iOS.
-- [.NET SDKs — System Requirements & Platform Support](https://www.visioforge.com/help/docs/dotnet/system-requirements/): Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 26+, Android 7+. .NET Framework 4.6.1+, .NET Core 3.1, .NET 5–11, ARM64. WPF, WinForms, MAUI, Avalonia.
+- [.NET SDKs — System Requirements & Platform Support](https://www.visioforge.com/help/docs/dotnet/system-requirements/): Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 18+, Android 7+. .NET Framework 4.6.1+, .NET Core 3.1, .NET 5–11, ARM64. WPF, WinForms, MAUI, Avalonia.
 - [SDK License Agreement — Usage Rights and Distribution Terms](https://www.visioforge.com/help/docs/eula/): End User License Agreement for VisioForge SDKs covering usage rights, distribution terms, and legal conditions for developers.
 - [VisioForge SDK Documentation & API Reference](https://www.visioforge.com/help/): Tutorials, API reference, and C# code samples for VisioForge .NET, Delphi, and DirectShow SDKs. 7 platforms, Raspberry Pi + NVIDIA Jetson supported.
 
@@ -556,7 +556,7 @@ The following products from the old price list are no longer sold:
 
 ## Contact
 
-- [Technical Support](mailto:support@visioforge.com): Product and integration support (<24hr response)
+- [Technical Support](mailto:support@visioforge.com): Product and integration support
 - [Legal](mailto:legal@visioforge.com): Licensing and legal inquiries
 - [Privacy](mailto:privacy@visioforge.com): Data protection and privacy requests
 - [Website](https://www.visioforge.com): VisioForge official site

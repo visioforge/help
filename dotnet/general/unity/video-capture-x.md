@@ -80,6 +80,7 @@ The core of the preview + record setup:
 var cameras = await DeviceEnumerator.Shared.VideoSourcesAsync();
 
 _capture = new VideoCaptureCoreX();
+_capture.Audio_Play = false; // Record only, no speaker monitoring
 _capture.Video_Source = new VideoCaptureDeviceSourceSettings(cameras[cameraIndex]);
 
 var audioSources = await DeviceEnumerator.Shared.AudioSourcesAsync();

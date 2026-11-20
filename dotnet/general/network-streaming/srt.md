@@ -184,7 +184,7 @@ var audioSource = new SystemAudioSourceBlock(
 var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings());
 
 // Audio encoder — AAC
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings());
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings());
 
 // SRT output in listener mode on port 8888
 var srtSink = new SRTMPEGTSSinkBlock(new SRTSinkSettings
@@ -330,7 +330,7 @@ else
 
 SRT streams typically use AAC audio. The SDK provides multiple encoders:
 
-- **VO-AAC** — Cross-platform, consistent performance
+- **VO-AAC** — Legacy encoder, obsolete; prefer AVENC AAC
 - **AVENC AAC** — FFmpeg-based with extensive options
 - **MF AAC** — Windows-only, Microsoft Media Foundation
 

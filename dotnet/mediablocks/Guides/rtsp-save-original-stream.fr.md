@@ -35,11 +35,10 @@ primary_api_classes:
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-!!!info Exemple de démo
-Pour un exemple complet et fonctionnel d'enregistrement de flux RTSP sans réencodage, consultez la [démo RTSP MultiView](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/RTSP%20MultiView%20Demo).
+!!! info "Exemple de démo"
+    Pour un exemple complet et fonctionnel d'enregistrement de flux RTSP sans réencodage, consultez la [démo RTSP MultiView](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/RTSP%20MultiView%20Demo).
 
-Pour une documentation spécifique aux caméras ONVIF, consultez le [guide d'intégration ONVIF de caméra IP](../../videocapture/video-sources/ip-cameras/onvif.md).
-!!!
+    Pour une documentation spécifique aux caméras ONVIF, consultez le [guide d'intégration ONVIF de caméra IP](../../videocapture/video-sources/ip-cameras/onvif.md).
 
 ## Table des matières
 
@@ -83,7 +82,7 @@ L'idée principale est de prendre le flux vidéo brut de la source RTSP et de l'
 Vous aurez besoin du VisioForge Media Blocks SDK. Vous pouvez l'ajouter à votre projet .NET via NuGet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
 ```
 
 Selon votre plateforme cible (Windows, macOS, Linux, y compris les systèmes ARM comme Jetson Nano pour les applications de caméras embarquées), vous aurez également besoin des paquets de runtime natifs correspondants. Par exemple, sous Windows pour enregistrer la vidéo :

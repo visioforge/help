@@ -127,7 +127,7 @@ Les appareils cibles doivent satisfaire à ces exigences minimales :
 - **macOS** : macOS 12 (Monterey) ou ultérieur (x64 ou ARM64)
 - **iOS** : iOS 18.0 ou ultérieur (ARM64)
 - **Android** : Android 7.0 (API niveau 24) ou ultérieur
-- **Linux** : Ubuntu 20.04 LTS ou ultérieur (x64 ou ARM64)
+- **Linux** : Ubuntu 22.04 LTS ou ultérieur, Debian 12 ou ultérieur, ou une autre distribution avec GStreamer 1.20 ou ultérieur (x64 ou ARM64) ; certaines fonctionnalités, comme les blocs OpenCV et le canal de retour audio ONVIF, nécessitent GStreamer 1.22 ou ultérieur (Ubuntu 24.04, Debian 12)
 
 ## Difficultés courantes de déploiement
 

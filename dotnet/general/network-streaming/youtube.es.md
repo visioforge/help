@@ -105,7 +105,7 @@ youtubeOutput.Video = videoSettings;
 
 El SDK soporta múltiples codificadores de audio AAC:
 
-- **VO-AAC**: Alternativa para plataformas no Windows
+- **VO-AAC**: Codificador heredado, obsoleto; prefiera AVENC AAC
 - **AVENC AAC**: Opción multiplataforma, predeterminada en todas las plataformas
 - **MF AAC**: Codificador específico de Windows usando Media Foundation
 
@@ -113,8 +113,8 @@ El SDK soporta múltiples codificadores de audio AAC:
 
 ```csharp
 // Ejemplo: Configurar ajustes del codificador de audio.
-// VOAACEncoderSettings expone solo Bitrate (Kbit/s); la tasa de muestreo sigue la fuente upstream.
-var audioSettings = new VOAACEncoderSettings
+// Solo se aplica la tasa de bits (Kbit/s); la tasa de muestreo sigue la fuente upstream.
+var audioSettings = new AVENCAACEncoderSettings
 {
     Bitrate = 128,  // Kbit/s — 128 kbps
 };

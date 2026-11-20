@@ -38,7 +38,7 @@ using VisioForge.Core.Types.X.Output;
 
 // MP4 container: encode audio with AAC.
 var mp4 = new MP4Output("output.mp4");
-mp4.Audio = new VOAACEncoderSettings { Bitrate = 192 };   // 128/192/256 kbps typical
+mp4.Audio = new AVENCAACEncoderSettings { Bitrate = 192 };   // 128/192/256 kbps typical
 
 // MKV container: swap in a different codec on the same Audio slot.
 var mkv = new MKVOutput("output.mkv");

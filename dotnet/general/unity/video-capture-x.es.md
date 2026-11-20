@@ -80,6 +80,7 @@ El núcleo de la configuración de vista previa + grabación:
 var cameras = await DeviceEnumerator.Shared.VideoSourcesAsync();
 
 _capture = new VideoCaptureCoreX();
+_capture.Audio_Play = false; // Solo grabar, sin escucha por los altavoces
 _capture.Video_Source = new VideoCaptureDeviceSourceSettings(cameras[cameraIndex]);
 
 var audioSources = await DeviceEnumerator.Shared.AudioSourcesAsync();

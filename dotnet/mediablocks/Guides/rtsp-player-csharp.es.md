@@ -53,16 +53,15 @@ Esta guía le muestra cómo construir una aplicación de visor de streams RTSP y
 
 Los casos de uso comunes incluyen paneles de vigilancia, aplicaciones NVR (grabador de video en red), herramientas de gestión de cámaras y cualquier proyecto que necesite mostrar o grabar feeds de cámaras IP programáticamente.
 
-!!!info Ejemplos de Demo
+!!! info "Ejemplos de Demo"
     Para ejemplos funcionales completos, vea los [demos RTSP en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK): RTSP Preview Demo, RTSP RAW Capture Demo y RTSP MultiView Demo.
-!!!
 
 ## Requisitos Previos
 
 Agregue el paquete NuGet del Media Blocks SDK a su proyecto:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
 ```
 
 También necesita los paquetes de runtime específicos de la plataforma. Para Windows:

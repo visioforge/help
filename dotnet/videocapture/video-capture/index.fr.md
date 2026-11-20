@@ -42,6 +42,7 @@ var audioDevice = (await DeviceEnumerator.Shared.AudioSourcesAsync()).First();
 videoCapture.Video_Source = new VideoCaptureDeviceSourceSettings(videoDevice);
 videoCapture.Audio_Source = new AudioCaptureDeviceSourceSettings(audioDevice);
 videoCapture.Audio_Record = true;
+videoCapture.Audio_Play = false; // enregistrement seul, sans écoute sur les haut-parleurs
 
 // 4. Ajouter une sortie MP4. Par défaut : H.264 + AAC.
 videoCapture.Outputs_Add(new MP4Output("output.mp4"), true);

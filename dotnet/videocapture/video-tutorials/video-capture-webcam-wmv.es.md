@@ -80,7 +80,7 @@ namespace WebcamWmv;
 
 public partial class Form1 : Form
 {
-    private VideoCaptureCore videoCapture1;
+    private VideoCaptureCore videoCapture1 = null!;
 
     public Form1()
     {
@@ -163,7 +163,7 @@ public partial class Form1 : Form
             return;
         }
 
-        var mic = (string)cbMicrophone.SelectedItem;
+        var mic = cbMicrophone.SelectedItem as string;
         if (mic is not null && cbAudioFormat.SelectedItem is null)
         {
             Text = "No audio format selected";

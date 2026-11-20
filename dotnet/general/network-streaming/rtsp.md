@@ -101,8 +101,7 @@ VisioForge provides access to a wide array of encoders, allowing optimization ba
         *   `MF HEVC` (Media Foundation HEVC): Windows-specific H.265/HEVC encoder for higher efficiency compression.
 *   **Audio Encoders:**
     *   **AAC Variants:**
-        *   `VO-AAC`: A versatile, cross-platform AAC encoder.
-        *   `AVENC AAC`: Utilizes FFmpeg's AAC encoder.
+        *   `AVENC AAC`: Cross-platform, FFmpeg-based AAC encoder (the default).
         *   `MF AAC`: Windows Media Foundation AAC encoder.
     *   **Other Formats:**
         *   `MP3`: Widely compatible but less efficient than AAC.
@@ -123,7 +122,7 @@ This class encapsulates all the parameters needed to define the behavior and pro
     *   `Point` (string): The path component of the RTSP URL (e.g., `/live`, `/stream1`). Clients will connect to `rtsp://<Address>:<Port><Point>`. Default is `"/live"`.
 *   **Stream Configuration:**
     *   `VideoEncoder` (IVideoEncoder): An `IVideoEncoder` instance — typically an encoder-settings object (e.g., `OpenH264EncoderSettings`) or the result of `H264EncoderBlock.GetDefaultSettings()`. Defines codec, bitrate (Kbit/s), quality, etc.
-    *   `AudioEncoder` (IAudioEncoder): An `IAudioEncoder` instance (e.g., `VOAACEncoderSettings`). Defines audio codec parameters.
+    *   `AudioEncoder` (IAudioEncoder): An `IAudioEncoder` instance (e.g., `AVENCAACEncoderSettings`). Defines audio codec parameters.
     *   `Latency` (TimeSpan): Controls the buffering delay introduced by the server to smooth out network jitter. Default is 250 milliseconds. Higher values increase stability but also delay.
 *   **Authentication:**
     *   `Username` (string): If set, clients must provide this username for basic authentication.
@@ -156,7 +155,7 @@ When using the Media Blocks SDK, the `RTSPServerBlock` represents the actual GSt
 // Use hardware acceleration if available, otherwise fallback to software
 var videoEncoder = H264EncoderBlock.GetDefaultSettings();
 
-var audioEncoder = new VOAACEncoderSettings(); // Reliable cross-platform AAC
+var audioEncoder = new AVENCAACEncoderSettings(); // Reliable cross-platform AAC
 
 // 2. Configure server network settings
 var settings = new RTSPServerSettings(videoEncoder, audioEncoder)
@@ -184,7 +183,7 @@ videoCapture.Outputs_Add(rtspOutput);
 // 1. Create video and audio encoder settings
 var videoEncoder = H264EncoderBlock.GetDefaultSettings();
 
-var audioEncoder = new VOAACEncoderSettings();
+var audioEncoder = new AVENCAACEncoderSettings();
 
 // 2. Create RTSP server settings with a specific URL
 var serverUri = new Uri("rtsp://192.168.1.50:8554/cam1"); 

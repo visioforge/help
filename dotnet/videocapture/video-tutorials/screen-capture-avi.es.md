@@ -99,7 +99,7 @@ namespace ScreenCaptureAvi;
 
 public partial class Form1 : Form
 {
-    private VideoCaptureCore videoCapture1;
+    private VideoCaptureCore videoCapture1 = null!;
 
     public Form1()
     {
@@ -120,7 +120,7 @@ public partial class Form1 : Form
         foreach (var screen in Screen.AllScreens)
             cbMonitor.Items.Add(MonitorNumber(screen));
 
-        cbMonitor.SelectedItem = MonitorNumber(Screen.PrimaryScreen);
+        cbMonitor.SelectedItem = MonitorNumber(Screen.PrimaryScreen!);
 
         cbFrameRate.Items.AddRange(new object[] { 5, 10, 15, 25, 30 });
         cbFrameRate.SelectedItem = 10;
@@ -157,9 +157,9 @@ public partial class Form1 : Form
         {
             FullScreen = true,
             AllowDesktopDuplicationEngine = true, // DXGI Desktop Duplication: más rápido que GDI
-            DisplayIndex = (int)cbMonitor.SelectedItem,
+            DisplayIndex = (int)cbMonitor.SelectedItem!,
             GrabMouseCursor = cbCursor.Checked,
-            FrameRate = new VideoFrameRate((int)cbFrameRate.SelectedItem)
+            FrameRate = new VideoFrameRate((int)cbFrameRate.SelectedItem!)
         };
 
         var recordSound = cbRecordSound.Checked && cbSound.SelectedItem is not null;

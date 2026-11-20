@@ -1,5 +1,5 @@
 ---
-title: Audio bidireccional con cámara IP en C# WPF — ONVIF
+title: Audio bidireccional cámara IP en C# WPF — intercomunicador
 description: "Hable por el altavoz de una cámara IP desde C# WPF: vista previa RTSP con el sonido de la cámara y el micrófono del PC en G.711 por el backchannel ONVIF."
 tags:
   - Video Capture SDK
@@ -120,11 +120,11 @@ namespace IpCameraTwoWayAudioWpf;
 
 public partial class MainWindow : Window
 {
-    private VideoCaptureCoreX videoCapture1;
+    private VideoCaptureCoreX videoCapture1 = null!;
 
-    private AudioCaptureDeviceInfo[] microphones;
+    private AudioCaptureDeviceInfo[] microphones = null!;
 
-    private AudioOutputDeviceInfo[] speakers;
+    private AudioOutputDeviceInfo[] speakers = null!;
 
     public MainWindow()
     {
@@ -227,7 +227,7 @@ public partial class MainWindow : Window
 ## Características clave de la implementación
 
 1. **Inicialización del SDK** - `VisioForgeX.InitSDKAsync` se ejecuta una vez, al cargarse la ventana. La primera ejecución en un PC tarda más, por eso Start se activa solo cuando termina. `VisioForgeX.DestroySDK` lo libera al cerrar la ventana
-2. **La cámara** - `RTSPSourceSettings.CreateAsync` recibe la URL, el usuario y la contraseña como argumentos separados, de modo que la URL no los lleva. Con `audioEnabled: true` se usa el propio sonido de la cámara cuando su flujo lo tiene, y `Audio_Play` lo reproduce en los altavoces indicados en `Audio_OutputDevice`, ya que `Audio_Source` se deja vacío. Sin `Audio_OutputDevice` el sonido no se reproduce. El [directorio de marcas de cámaras IP](../../camera-brands/index.md) recoge las rutas RTSP de muchas cámaras
+2. **La cámara** - `RTSPSourceSettings.CreateAsync` recibe la URL, el usuario y la contraseña como argumentos separados, de modo que la URL no los lleva. Con `audioEnabled: true` se usa el propio sonido de la cámara cuando su flujo lo tiene, y `Audio_Play` lo reproduce en los altavoces indicados en `Audio_OutputDevice`, ya que `Audio_Source` se deja vacío. Sin `Audio_OutputDevice` se reproduce en la salida predeterminada del sistema. El [directorio de marcas de cámaras IP](../../camera-brands/index.md) recoge las rutas RTSP de muchas cámaras
 3. **El backchannel** - `Audio_BackchannelSource` acepta las mismas fuentes de audio que `Audio_Source`; `CreateSourceSettingsVC` convierte el micrófono elegido en una de ellas. Al iniciar, el SDK pide a la cámara su backchannel de audio ONVIF y le envía el micrófono en G.711 mu-law (PCMU) a 8000 Hz, el códec que ONVIF exige a toda cámara con salida de audio; a una cámara cuyo backchannel solo ofrece G.711 A-law (PCMA) le envía A-law. El sonido sale del PC tal como se captura, sin añadir el búfer de recepción RTSP
 4. **El inicio** - una cámara que no responde tarda en fallar, por eso el título dice "Connecting..." y Start queda desactivado hasta que `StartAsync` termina. Un mensaje de `OnError` publicado durante el inicio se queda en el título
 5. **Detener y cerrar** - `StopAsync` cierra las dos direcciones. Cerrar la ventana mientras funciona cancela el cierre, espera a `StopAsync` y vuelve a cerrar; mientras el SDK se carga, o hay un inicio o una detención en curso, el cierre se cancela: vuelva a cerrar la ventana cuando termine

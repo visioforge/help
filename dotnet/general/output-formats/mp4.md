@@ -32,7 +32,7 @@ primary_api_classes:
   - MP4Output
   - MP4SplitSinkSettings
   - NVENCH264EncoderSettings
-  - VOAACEncoderSettings
+  - AVENCAACEncoderSettings
   - MP4OutputBlock
 
 ---
@@ -111,10 +111,10 @@ output.Video = new NVENCH264EncoderSettings(); // Use NVIDIA encoder
 
 The `Audio` property allows you to specify the audio encoder. Supported audio encoders include:
 
-- [VOAACEncoderSettings](../audio-encoders/aac.md)
-- [AVENCAACEncoderSettings](../audio-encoders/aac.md)
+- [AVENCAACEncoderSettings](../audio-encoders/aac.md) (recommended)
 - [MFAACEncoderSettings](../audio-encoders/aac.md) (Windows only)
 - [MP3EncoderSettings](../audio-encoders/mp3.md)
+- [VOAACEncoderSettings](../audio-encoders/aac.md) (obsolete, prefer `AVENCAACEncoderSettings`)
 
 Example of setting a custom audio encoder:
 
@@ -144,7 +144,12 @@ core.Output_Format = output;
 Create a Media Blocks MP4 output instance:
 
 ```csharp
-var aac = new VOAACEncoderSettings();
+using VisioForge.Core.MediaBlocks.Sinks;      // MP4OutputBlock
+using VisioForge.Core.Types.X.AudioEncoders;  // AVENCAACEncoderSettings
+using VisioForge.Core.Types.X.Sinks;          // MP4SinkSettings
+using VisioForge.Core.Types.X.VideoEncoders;  // OpenH264EncoderSettings
+
+var aac = new AVENCAACEncoderSettings();
 var h264 = new OpenH264EncoderSettings();
 var mp4SinkSettings = new MP4SinkSettings("output.mp4");
 var mp4Output = new MP4OutputBlock(mp4SinkSettings, h264, aac);
@@ -165,7 +170,7 @@ Split the output when a file reaches a specific size in bytes:
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Create split sink settings with filename pattern
 var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
@@ -186,7 +191,7 @@ Split the output when a file reaches a specific duration:
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Create split sink settings with filename pattern
 var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
@@ -204,7 +209,7 @@ Control the maximum number of files to keep on disk. Once the limit is reached, 
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Create split sink settings
 var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
@@ -225,7 +230,7 @@ Split the output based on timecode difference between first and last frame:
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Create split sink settings
 var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
@@ -248,7 +253,7 @@ You can combine splitting criteria. The file will split when any of the enabled 
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Create split sink settings
 var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");

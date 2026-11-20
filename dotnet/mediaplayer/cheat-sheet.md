@@ -51,7 +51,7 @@ Use VisioForge Media Player SDK .NET when you need to play local files (MP4, MKV
 
 - **Windows** (x64 and x86) — WinForms, WPF, WinUI, MAUI, Avalonia, Console
 - **macOS** (native and MacCatalyst) — MAUI, Avalonia, Console
-- **Linux** (x64) — Avalonia, Console; requires system GStreamer 1.22+
+- **Linux** (x64, ARM64) — Avalonia, Console; requires system GStreamer 1.20+
 - **Android** — via MAUI
 - **iOS** — via MAUI
 
@@ -62,7 +62,7 @@ All cross-platform targets use a GStreamer-backed decoding pipeline with hardwar
 Main SDK package (always required):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.20]"/>
 ```
 
 Windows x64 native runtime:
@@ -85,7 +85,7 @@ macOS (native) and MacCatalyst (MAUI macOS):
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 ```
 
-Linux x64 (plus system GStreamer 1.22+):
+Linux x64 (plus system GStreamer 1.20+):
 
 ```xml
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
@@ -103,8 +103,8 @@ Android and iOS:
 Optional UI framework packages — add whichever you target:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.20]"/>
 ```
 
 Full per-IDE install walkthrough: [install/index.md](../install/index.md).
@@ -191,7 +191,7 @@ public partial class MainForm : Form
 - **SDK init/destroy must bracket all usage.** Forgetting `VisioForgeX.DestroySDK()` at shutdown leaks native handles and can leave GStreamer threads running. Always pair it with `InitSDKAsync()`.
 - **AnyCPU on Windows needs both redistributables.** Deploy BOTH `VisioForge.CrossPlatform.Core.Windows.x86` AND `.x64` (plus the matching Libav packages) or the app will fail at runtime on whichever architecture is missing.
 - **Enumerate audio devices asynchronously before assigning.** `Audio_OutputDevicesAsync(...)` must complete before you construct `AudioRendererSettings` and set `Audio_OutputDevice`; setting it against an uninitialized device list throws.
-- **Linux requires system GStreamer 1.22+.** The Linux NuGet redistributable assumes system-installed GStreamer (`gstreamer1.0-*` packages) — it is NOT a substitute, and the Windows Libav packages do not apply to Linux.
+- **Linux requires system GStreamer 1.20+.** The Linux NuGet redistributable assumes system-installed GStreamer (`gstreamer1.0-*` packages) — it is NOT a substitute, and the Windows Libav packages do not apply to Linux.
 - **`MediaPlayerCoreX` ≠ `MediaPlayerCore`.** `MediaPlayerCoreX` is the cross-platform GStreamer-backed engine used throughout this page. `MediaPlayerCore` (no `X`) is the first-class Windows-only DirectShow engine with different method signatures — both are fully supported; do not mix APIs between them.
 
 ## See also
@@ -220,7 +220,7 @@ Yes. Pass an `rtsp://` URI to `UniversalSourceSettings.CreateAsync(...)` and cal
 
 ### Which platforms require GStreamer to be installed at the system level?
 
-Linux. On Linux, GStreamer 1.22+ must be installed from the system packages; the `VisioForge.CrossPlatform.Core.Linux.x64` (or `.Linux.arm64` on ARM64) NuGet package adds the SDK's own native libraries and contains no GStreamer. Windows, macOS, Android, and iOS bundle everything through their NuGet redistributables — no system install needed.
+Linux. On Linux, GStreamer 1.20+ must be installed from the system packages; the `VisioForge.CrossPlatform.Core.Linux.x64` (or `.Linux.arm64` on ARM64) NuGet package adds the SDK's own native libraries and contains no GStreamer. Windows, macOS, Android, and iOS bundle everything through their NuGet redistributables — no system install needed.
 
 ### What is the difference between `MediaPlayerCoreX` and `MediaPlayerCore`?
 

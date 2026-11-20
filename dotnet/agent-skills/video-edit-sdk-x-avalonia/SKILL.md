@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK X (cross-platform editor editio
 
 This skill helps you add **VisioForge Video Edit SDK X** — the cross-platform "X" edition of the editor SDK — to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Video Edit SDK X exposes a high-level non-linear editor god-object (`VideoEditCoreX`) with a list-of-clips timeline (`Input_AddAudioVideoFile`, `Input_AddImageFile`, `Input_AddAudioFile`) and a single configurable `Output_Format` sink. Same C# code targets all three desktop OSes — only the UI host (Avalonia here) and the per-OS native redist NuGet package change between platforms.
 
-Pinned NuGet versions: wrapper **`2026.11.16`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official VideoJoin Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.20`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official VideoJoin Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -205,7 +205,7 @@ These are the cross-platform pitfalls that bite first.
 - Fedora: `sudo dnf install gstreamer1 gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-ugly-free gstreamer1-libav`
 - Arch: `sudo pacman -S gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav`
 
-`gst-inspect-1.0 --version` should print 1.18 or newer.
+`gst-inspect-1.0 --version` should print 1.20 or newer.
 
 ### 3. Trial-mode message or "SDK TRIAL period (30 days) is over" on `Start()`
 
@@ -240,7 +240,7 @@ The same pattern works on Linux (avoids the working-directory-vs-binary-director
 Run through these after first integration:
 
 - [ ] `dotnet build` succeeds on each target OS with the bundled `references/` files copied into a fresh project folder (no missing-DLL warnings during build).
-- [ ] On Linux: `gst-inspect-1.0 --version` reports 1.18 or newer; the GStreamer base + good + bad + ugly + libav plugin sets are installed.
+- [ ] On Linux: `gst-inspect-1.0 --version` reports 1.20 or newer; the GStreamer base + good + bad + ugly + libav plugin sets are installed.
 - [ ] App launches and the first `Start()` runs to completion with `OnStop.Successful == true` for a two-clip MP4 join on each target OS.
 - [ ] Output file is finalised correctly (verify it plays back in another player) — `Start()` is async, so wait for `OnStop` before reading the file.
 - [ ] `MainWindow_Closing` runs `VideoEdit1.Stop() → DestroyEngine() → VisioForgeX.DestroySDK()` in that order; clean exit on each OS (no zombie process, no native-handle leak warnings).

@@ -32,7 +32,7 @@ primary_api_classes:
   - MP4Output
   - MP4SplitSinkSettings
   - NVENCH264EncoderSettings
-  - VOAACEncoderSettings
+  - AVENCAACEncoderSettings
   - MP4OutputBlock
 
 ---
@@ -111,10 +111,10 @@ output.Video = new NVENCH264EncoderSettings(); // Utiliser l'encodeur NVIDIA
 
 La propriété `Audio` permet de spécifier l'encodeur audio. Les encodeurs audio pris en charge incluent :
 
-- [VOAACEncoderSettings](../audio-encoders/aac.md)
-- [AVENCAACEncoderSettings](../audio-encoders/aac.md)
+- [AVENCAACEncoderSettings](../audio-encoders/aac.md) (recommandé)
 - [MFAACEncoderSettings](../audio-encoders/aac.md) (Windows uniquement)
 - [MP3EncoderSettings](../audio-encoders/mp3.md)
+- [VOAACEncoderSettings](../audio-encoders/aac.md) (obsolète, préférez `AVENCAACEncoderSettings`)
 
 Exemple de définition d'un encodeur audio personnalisé :
 
@@ -144,7 +144,12 @@ core.Output_Format = output;
 Créez une instance de sortie MP4 Media Blocks :
 
 ```csharp
-var aac = new VOAACEncoderSettings();
+using VisioForge.Core.MediaBlocks.Sinks;      // MP4OutputBlock
+using VisioForge.Core.Types.X.AudioEncoders;  // AVENCAACEncoderSettings
+using VisioForge.Core.Types.X.Sinks;          // MP4SinkSettings
+using VisioForge.Core.Types.X.VideoEncoders;  // OpenH264EncoderSettings
+
+var aac = new AVENCAACEncoderSettings();
 var h264 = new OpenH264EncoderSettings();
 var mp4SinkSettings = new MP4SinkSettings("output.mp4");
 var mp4Output = new MP4OutputBlock(mp4SinkSettings, h264, aac);
@@ -165,7 +170,7 @@ Découpez la sortie lorsqu'un fichier atteint une taille spécifique en octets :
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Créer les paramètres de découpe avec un motif de nom de fichier
 var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
@@ -186,7 +191,7 @@ Découpez la sortie lorsqu'un fichier atteint une durée spécifique :
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Créer les paramètres de découpe avec un motif de nom de fichier
 var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
@@ -204,7 +209,7 @@ Contrôlez le nombre maximal de fichiers à conserver sur le disque. Une fois la
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Créer les paramètres de découpe
 var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
@@ -225,7 +230,7 @@ Découpez la sortie en fonction de la différence de timecode entre la première
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Créer les paramètres de découpe
 var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");
@@ -248,7 +253,7 @@ Vous pouvez combiner les critères de découpe. Le fichier est divisé dès que 
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Créer les paramètres de découpe
 var splitSettings = new MP4SplitSinkSettings("recording_%05d.mp4");

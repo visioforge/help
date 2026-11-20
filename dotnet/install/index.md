@@ -61,21 +61,45 @@ For cross-platform development or CI/CD pipelines, our NuGet packages offer flex
 Install the package for the SDK you bought — each one pulls `VisioForge.DotNet.Core` in as a
 dependency, so you never reference `Core` directly:
 
-```cmd
+```powershell
 Install-Package VisioForge.DotNet.VideoCapture   # Video Capture SDK .NET
 Install-Package VisioForge.DotNet.VideoEdit      # Video Edit SDK .NET
 Install-Package VisioForge.DotNet.MediaPlayer    # Media Player SDK .NET
 Install-Package VisioForge.DotNet.MediaBlocks    # Media Blocks SDK .NET
 ```
 
+These packages hold the managed SDK only. The native engine comes in a separate redist package, which you reference next to it:
+
+| Engine | Platform | Redist package |
+|--------|----------|----------------|
+| X engines (`VideoCaptureCoreX`, `MediaPlayerCoreX`, `VideoEditCoreX`, `MediaBlocksPipeline`) | Windows | `VisioForge.CrossPlatform.Core.Windows.x64` (`.x86` or `.arm64` for other CPUs; on ARM64, MP3 playback also needs `VisioForge.CrossPlatform.Libav.Windows.arm64`, and NDI is not available) |
+| X engines | macOS, Mac Catalyst | `VisioForge.CrossPlatform.Core.macOS` |
+| X engines | Android | `VisioForge.CrossPlatform.Core.Android` |
+| X engines | iOS | `VisioForge.CrossPlatform.Core.iOS` |
+| X engines | Linux | `VisioForge.CrossPlatform.Core.Linux.x64` or `VisioForge.CrossPlatform.Core.Linux.arm64`, plus GStreamer 1.20+ from the distribution (1.22+ for some features) |
+| `VideoCaptureCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.VideoCapture.x64` (`.x86` for 32-bit apps) |
+| `MediaPlayerCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.MediaPlayer.x64` and `VisioForge.DotNet.Core.Redist.LAV.x64`. LAV is the default `Source_Mode`, the GPU and Blu-ray modes use LAV too, and so does `GetFileThumbnail`: leave the LAV package out only when the app uses none of them. Add `VisioForge.DotNet.Core.Redist.FFMPEG.x64` when the app uses the FFMPEG mode, and `VisioForge.DotNet.Core.Redist.VLC.x64` for `File_VLC` or `HTTP_RTSP_VLC` (`.x86` of each package for 32-bit apps) |
+| `VideoEditCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.VideoEdit.x64` and `VisioForge.DotNet.Core.Redist.FFMPEG.x64` to open MP4, MKV and other input files (`.x86` for 32-bit apps) |
+
+For example, a Windows x64 app on the X engines adds:
+
+```powershell
+Install-Package VisioForge.CrossPlatform.Core.Windows.x64
+Install-Package VisioForge.CrossPlatform.Libav.Windows.x64   # recommended: FFmpeg (libav) decoders and encoders
+```
+
+Some platforms need a step beyond the package: Android also takes the Java bindings project ([Android deployment](../deployment-x/Android.md)), and Mac Catalyst a build target that copies the native libraries into the app bundle ([macOS deployment](../deployment-x/macOS.md)). With the Windows-only engines, an AnyCPU app deploys both the x86 and the x64 packages. Their engine packages, LAV and FFMPEG have no ARM64 build, so on Windows on Arm, where an AnyCPU app usually runs as ARM64, build the app as x64 or use the X engines. The optional packages are listed in the [deployment guide](../deployment-x/index.md) for the X engines and on the deployment pages of [Video Capture SDK .NET](../videocapture/deployment.md), [Media Player SDK .NET](../mediaplayer/deployment.md) and [Video Edit SDK .NET](../videoedit/deployment.md) for the Windows-only engines.
+
 Additional UI-specific packages may be required depending on your target platform:
 
-```cmd
+```powershell
 Install-Package VisioForge.DotNet.Core.UI.MAUI
 Install-Package VisioForge.DotNet.Core.UI.WinUI
 Install-Package VisioForge.DotNet.Core.UI.Avalonia
 Install-Package VisioForge.DotNet.Core.UI.Uno
 ```
+
+WPF and Windows Forms need no UI package: their `VideoView` is in `VisioForge.Core`, which every SDK package above brings in. The separate `VisioForge.DotNet.Core.UI.WPF` and `VisioForge.DotNet.Core.UI.WinForms` packages are not needed.
 
 ## IDE Integration and Setup
 
@@ -175,11 +199,7 @@ Linux applications use the standard target framework without a platform suffix:
 <TargetFramework>net10.0</TargetFramework>
 ```
 
-Ensure required .NET workloads are installed:
-
-```
-dotnet workload install linux
-```
+Add `VisioForge.CrossPlatform.Core.Linux.x64`, or `VisioForge.CrossPlatform.Core.Linux.arm64` on ARM64. It carries the SDK's own native libraries only: install GStreamer 1.20 or later (1.22 or later for some features, such as the OpenCV blocks and the ONVIF audio backchannel) from the distribution packages, as described in [Ubuntu deployment](../deployment-x/Ubuntu.md).
 
 ## Special Framework Support
 
@@ -257,22 +277,27 @@ Each UI framework requires specific video view controls to display media content
 ### Windows Forms
 
 ```csharp
-// Add reference to VisioForge.DotNet.Core
+// At the top of Form1.cs. The WinForms VideoView is in VisioForge.Core: no extra package
 using VisioForge.Core.UI.WinForms;
 
-// In your form
-videoView = new VideoView();
-this.Controls.Add(videoView);
+// Inside the Form1 class: a field, added to the form in the existing constructor
+private readonly VideoView videoView = new VideoView { Dock = DockStyle.Fill };
+
+public Form1()
+{
+    InitializeComponent();
+    Controls.Add(videoView); // add this line to the existing constructor
+}
 ```
 
 ### WPF Applications
 
-```csharp
-// Add reference to VisioForge.DotNet.Core
-using VisioForge.Core.UI.WPF;
-
-// In your XAML
-<vf:VideoView x:Name="videoView" />
+```xml
+<!-- MainWindow.xaml. The WPF VideoView is in VisioForge.Core: no extra package -->
+<Window ...
+        xmlns:vf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core">
+    <vf:VideoView x:Name="videoView" />
+</Window>
 ```
 
 ### MAUI Applications
@@ -299,10 +324,10 @@ using VisioForge.Core.UI.Avalonia;
 
 Our SDKs leverage native libraries for optimal performance. These dependencies must be properly managed for deployment:
 
-- Windows: Included automatically with setup installation or NuGet packages
-- macOS/iOS: Bundled with NuGet packages but require proper app signing
-- Android: Included in NuGet packages with proper architecture support
-- Linux: May require additional system packages depending on distribution
+- Windows: the setup installer installs them on the development machine. An application you ship takes the redist package for its engine and CPU from the [table above](#using-nuget-packages); its libraries are copied next to the application on build
+- macOS/iOS: `VisioForge.CrossPlatform.Core.macOS` and `VisioForge.CrossPlatform.Core.iOS` carry the native libraries, GStreamer included; the app still needs proper signing, and Mac Catalyst a build target (see [macOS deployment](../deployment-x/macOS.md))
+- Android: `VisioForge.CrossPlatform.Core.Android` carries the native libraries for every Android architecture; the app also takes the Java bindings project (see [Android deployment](../deployment-x/Android.md))
+- Linux: `VisioForge.CrossPlatform.Core.Linux.x64` or `.arm64` carries the SDK's own native libraries only; GStreamer comes from the distribution packages (see [Ubuntu deployment](../deployment-x/Ubuntu.md))
 
 For detailed deployment instructions, see our [deployment guide](../deployment-x/index.md).
 

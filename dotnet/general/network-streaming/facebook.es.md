@@ -74,7 +74,7 @@ var facebookOutput = new FacebookLiveOutput("your_facebook_streaming_key_here");
 captureCore.Outputs_Add(facebookOutput, true);
 ```
 
-Esta configuración mínima usa los codificadores predeterminados, que VisioForge selecciona basado en su plataforma para rendimiento óptimo. Para la mayoría de aplicaciones, estos predeterminados proporcionan resultados excelentes con sobrecarga de configuración mínima.
+Esta configuración mínima usa los codificadores predeterminados: AVENC AAC para audio en todas las plataformas y, para video, el codificador por hardware de la plataforma en Android, iOS y macOS, OpenH264 en Linux y un codificador de GPU en Windows cuando encuentra uno. Para la mayoría de aplicaciones, estos predeterminados proporcionan resultados excelentes con sobrecarga de configuración mínima.
 
 ## Optimizando Codificación de Video para Facebook Live
 
@@ -106,7 +106,7 @@ VisioForge proporciona métodos de utilidad para verificar disponibilidad de cod
 
 ```csharp
 // Selección de codificador de video con opciones de fallback
-IVideoEncoderSettings GetOptimalVideoEncoder()
+IVideoEncoder GetOptimalVideoEncoder()
 {
     // Intentar aceleración GPU NVIDIA primero
     if (NVENCH264EncoderSettings.IsAvailable())
@@ -142,33 +142,29 @@ La calidad de audio impacta significativamente la experiencia del espectador. Vi
 
 ### Codificadores de Audio Soportados
 
-1. **VO-AAC** - Codificador AAC optimizado de VisioForge
-2. **AVENC AAC** - Codificador AAC basado en FFmpeg con amplio soporte de plataforma (predeterminado en todas las plataformas)
-3. **MF AAC** - Codificador AAC de Microsoft Media Foundation (solo Windows, acelerado por hardware)
+1. **AVENC AAC** - Codificador AAC basado en FFmpeg con amplio soporte de plataforma
+2. **MF AAC** - Codificador AAC de Microsoft Media Foundation (solo Windows)
+3. **VO-AAC** - Codificador AAC heredado, obsoleto; prefiera AVENC AAC
 
 ```csharp
-// Selección de codificador de audio específico de plataforma
-IAudioEncoderSettings GetOptimalAudioEncoder()
+// Selección de MF AAC en Windows en lugar del codificador AVENC AAC predeterminado
+IAACEncoderSettings GetAudioEncoder()
 {
-    IAudioEncoderSettings audioEncoder;
+    IAACEncoderSettings audioEncoder;
     
     #if NET_WINDOWS
-        // Usar Media Foundation en Windows
+        // MF AAC es una alternativa solo para Windows al codificador predeterminado
         audioEncoder = new MFAACEncoderSettings();
-        // MFAACEncoderSettings expone solo Bitrate + SampleRate; el número de canales se hereda de la fuente
-        ((MFAACEncoderSettings)audioEncoder).SampleRate = 44100;
     #else
-        // Usar AAC optimizado de VisioForge en otras plataformas
-        audioEncoder = new VOAACEncoderSettings();
-        // VOAACEncoderSettings expone solo Bitrate + SampleRate; el número de canales se hereda de la fuente
-        ((VOAACEncoderSettings)audioEncoder).SampleRate = 44100;
+        // Usar el codificador AVENC AAC en otras plataformas
+        audioEncoder = new AVENCAACEncoderSettings();
     #endif
     
     return audioEncoder;
 }
 
-// Aplicar el codificador de audio óptimo
-facebookOutput.Audio = GetOptimalAudioEncoder();
+// Aplicar el codificador de audio elegido
+facebookOutput.Audio = GetAudioEncoder();
 ```
 
 ## Características Avanzadas de Facebook Live
@@ -196,9 +192,9 @@ facebookOutput.CustomAudioProcessor = volume;
 
 VisioForge aplica automáticamente optimizaciones específicas de plataforma:
 
-- **Windows**: Aprovecha Media Foundation para audio AAC y Aceleración de Video DirectX
+- **Windows**: Usa AVENC AAC para audio (el predeterminado del constructor; Media Foundation AAC es una alternativa explícita) y Aceleración de Video DirectX
 - **macOS**: Usa marcos de medios Apple para codificación acelerada por hardware
-- **Linux**: Emplea VAAPI y otras aceleraciones específicas de plataforma cuando están disponibles
+- **Linux**: OpenH264 por defecto; un codificador VAAPI se puede seleccionar explícitamente cuando la GPU ofrece uno
 
 Estas optimizaciones aseguran que su aplicación logre rendimiento máximo independientemente de la plataforma de despliegue.
 
@@ -234,11 +230,11 @@ public FacebookLiveOutput ConfigureFacebookLiveStream(string streamKey, int vide
             facebookOutput.Video = openH264;
         }
         
-        // Configurar codificador de audio óptimo de plataforma
+        // Elegir MF AAC en Windows; AVENC AAC es el predeterminado en todas las plataformas
         #if NET_WINDOWS
             facebookOutput.Audio = new MFAACEncoderSettings();
         #else
-            facebookOutput.Audio = new VOAACEncoderSettings();
+            facebookOutput.Audio = new AVENCAACEncoderSettings();
         #endif
         
         // Configurar parámetros de flujo adicionales

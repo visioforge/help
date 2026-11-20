@@ -68,7 +68,7 @@ graph LR;
 
 ## Ejemplo de Implementación
 
-!!!info Muestra de Demo
+!!! info "Muestra de Demo"
     Para un proyecto funcional completo con XAML y todas las dependencias, vea la [Demo de Grabación Pre-Evento VideoCaptureCoreX](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/PreEventRecording).
 
 ### Aplicación WPF con Cámara, Detección de Movimiento y Grabación Pre-Evento
@@ -107,6 +107,7 @@ public partial class MainWindow : Window, IDisposable
 
         // Create VideoCaptureCoreX with video preview
         VideoCapture1 = new VideoCaptureCoreX(VideoView1);
+        VideoCapture1.Audio_Play = false; // Solo grabar, sin escucha por los altavoces
         VideoCapture1.OnError += (s, args) => Log($"[Error] {args.Message}");
 
         // Configure video source — camera or RTSP
@@ -156,7 +157,7 @@ public partial class MainWindow : Window, IDisposable
         var preEventOutput = new PreEventRecordingOutput(
             settings: preEventSettings,
             videoEnc: new OpenH264EncoderSettings(),
-            audioEnc: new VOAACEncoderSettings());
+            audioEnc: new AVENCAACEncoderSettings());
         VideoCapture1.Outputs_Add(preEventOutput);
 
         // Subscribe to recording events
@@ -352,7 +353,7 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 **Codificadores de audio:**
 
 - MP3
-- VO-AAC
+- VO-AAC (obsoleto, prefiera AVENC AAC)
 - AVENC AAC
 - MF AAC (solo Windows)
 
@@ -361,7 +362,7 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 Paquete principal del SDK (administrado):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.20]"/>
 ```
 
 Dependencias nativas para Windows x64:

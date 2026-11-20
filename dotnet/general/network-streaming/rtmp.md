@@ -113,7 +113,7 @@ if (NVENCH264EncoderSettings.IsAvailable())
 
 The SDK supports multiple AAC encoder implementations:
 
-- **VO-AAC**: Alternative for non-Windows platforms
+- **VO-AAC**: Legacy encoder, obsolete — prefer AVENC AAC
 - **AVENC AAC**: Cross-platform implementation, the default on every platform
 - **MF AAC**: Alternative for Windows platforms
 
@@ -122,7 +122,7 @@ The SDK supports multiple AAC encoder implementations:
 rtmpOutput.Audio = new MFAACEncoderSettings();
 
 // For macOS or other platforms
-rtmpOutput.Audio = new VOAACEncoderSettings();
+rtmpOutput.Audio = new AVENCAACEncoderSettings();
 ```
 
 ## Platform-Specific Considerations

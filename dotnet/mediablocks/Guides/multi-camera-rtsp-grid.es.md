@@ -64,7 +64,7 @@ Esta guía usa el primer patrón. La topología para 16 cámaras:
 
 **WPF (Windows x64)**:
 
-- [VisioForge.DotNet.Core.UI.WPF](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.WPF/) — control `VideoView` de WPF
+- [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/) — Media Blocks SDK .NET; incluye `VisioForge.Core`, que contiene el control `VideoView` de WPF
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — runtime GStreamer para Windows x64
 
 **MAUI (Windows / Android / iOS / macCatalyst)**:

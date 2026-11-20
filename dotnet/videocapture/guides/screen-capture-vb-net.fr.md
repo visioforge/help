@@ -50,7 +50,7 @@ L'enregistrement de l'écran du bureau dans les applications VB.NET (Visual Basi
 Ajoutez les paquets suivants à votre projet VB.NET :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.20]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```
@@ -191,6 +191,7 @@ Ajoutez l'enregistrement audio du microphone à votre capture d'écran :
     End If
 
     VideoCapture1.Audio_Record = True
+    VideoCapture1.Audio_Play = False ' Enregistrement seul, sans écoute sur les haut-parleurs
 ```
 
 ### Enregistrement avec audio loopback (son système)
@@ -209,6 +210,7 @@ Capturez la sortie audio système (ce que vous entendez par les haut-parleurs) a
     End If
 
     VideoCapture1.Audio_Record = True
+    VideoCapture1.Audio_Play = False
 ```
 
 ### Arrêter l'enregistrement

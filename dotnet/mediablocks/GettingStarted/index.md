@@ -18,6 +18,9 @@ primary_api_classes:
   - MediaBlockPad
   - IMediaBlocksPipeline
   - MediaBlock
+  - SystemVideoSourceBlock
+  - VideoRendererBlock
+  - DeviceEnumerator
 
 ---
 
@@ -37,7 +40,66 @@ The SDK is distributed as a NuGet package for easy integration into your .NET pr
 dotnet add package VisioForge.DotNet.MediaBlocks
 ```
 
-For platform-specific requirements and additional installation details, refer to the [detailed installation guide](../../install/index.md).
+This package holds the managed SDK only. The native engine — GStreamer and its plugin set — comes in a separate redistributable package that you add next to it. An application with the managed package alone builds and then stops at start-up: `VisioForgeX.InitSDKAsync` throws `DllNotFoundException` before any window opens.
+
+For a Windows x64 application:
+
+```bash
+dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
+dotnet add package VisioForge.CrossPlatform.Libav.Windows.x64
+```
+
+The first carries the engine; every application needs it. The second adds the FFmpeg (libav) decoders and encoders and is recommended for every application.
+
+Use the architecture of the running process: `.x86` for a 32-bit build and `.arm64` for a Windows on Arm build (no NDI there) — a redist of another architecture fails to load into the process. An AnyCPU application usually runs as x64 on a 64-bit Windows, and as ARM64 on Windows on Arm.
+
+A redist package must be the newest release at or before your `VisioForge.DotNet.MediaBlocks` release — never newer, and never far behind. Pin it with `--version` when needed: `dotnet add package VisioForge.CrossPlatform.Core.Windows.x64 --version <version>`.
+
+The other platforms take their own redistributable package:
+
+- **macOS, Mac Catalyst** - `VisioForge.CrossPlatform.Core.macOS`; Mac Catalyst also needs a build target that copies the native libraries into the app bundle ([macOS deployment](../../deployment-x/macOS.md))
+- **iOS** - `VisioForge.CrossPlatform.Core.iOS` ([iOS deployment](../../deployment-x/iOS.md))
+- **Android** - `VisioForge.CrossPlatform.Core.Android`, and the Java bindings project ([Android deployment](../../deployment-x/Android.md))
+- **Linux** - `VisioForge.CrossPlatform.Core.Linux.x64` or `.arm64`, and GStreamer 1.20+ from the distribution ([Ubuntu deployment](../../deployment-x/Ubuntu.md))
+
+For the required packages, refer to the [detailed installation guide](../../install/index.md); the optional ones are listed in the [deployment guide](../../deployment-x/index.md).
+
+## Your First Pipeline
+
+The smallest useful pipeline has two blocks: a source and a renderer. This one shows the first camera found on the machine:
+
+```csharp
+using System.Threading.Tasks;
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Sources;
+
+// Call from the UI thread once your window exists.
+async Task<MediaBlocksPipeline> StartCameraAsync(IVideoView videoView)
+{
+    var device = (await DeviceEnumerator.Shared.VideoSourcesAsync())[0];
+
+    var pipeline = new MediaBlocksPipeline();
+    var source = new SystemVideoSourceBlock(new VideoCaptureDeviceSourceSettings(device));
+    var renderer = new VideoRendererBlock(pipeline, videoView);
+
+    pipeline.AddBlock(source);
+    pipeline.AddBlock(renderer);
+    pipeline.Connect(source.Output, renderer.Input);
+
+    await pipeline.StartAsync();
+
+    return pipeline;
+}
+```
+
+- The SDK must be initialized first with `await VisioForgeX.InitSDKAsync();` — see step 1 below.
+- No camera attached? Drop the `device` line and use the test pattern: `var source = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());` in place of `SystemVideoSourceBlock`. The connection and start lines are the same.
+- Store the returned pipeline in a field and stop it when the window closes: `await pipeline.StopAsync(); pipeline.Dispose();`.
+- Device and format selection, snapshots and platform specifics: [Camera Viewer Application Tutorial](camera.md).
 
 ## Core Concepts and Architecture
 
@@ -51,11 +113,9 @@ For platform-specific requirements and additional installation details, refer to
 
 - Each processing unit is a `MediaBlock` (or a derived class), implementing the `IMediaBlock` interface.
 - Key interfaces:
-  - `IMediaBlock`: Base interface for all blocks. Defines properties for `Name`, `Type`, `Input`, `Inputs`, `Output`, `Outputs`, and methods for pipeline context and YAML export.
+  - `IMediaBlock`: Base interface for all blocks. Defines properties for `Name`, `Type`, `Input`, `Inputs`, `Output`, `Outputs`, and a method for the block's pipeline context.
   - `IMediaBlockDynamicInputs`: For blocks that support dynamic input creation (e.g., mixers).
-  - `IMediaBlockInternals`/`IMediaBlockInternals2`: For internal pipeline management, building, and post-connection logic.
   - `IMediaBlockRenderer`: For blocks that render media (e.g., video/audio renderers), with a property to control stream synchronization.
-  - `IMediaBlockSink`/`IMediaBlockSource`: For blocks that act as sinks (outputs) or sources (inputs).
   - `IMediaBlockSettings`: For settings objects that can create blocks.
 
 ### Pads and Media Types
@@ -65,17 +125,18 @@ For platform-specific requirements and additional installation details, refer to
 
 ### Block Types
 
-- The SDK provides a wide range of built-in block types (see `MediaBlockType` enum in the source code) for sources, sinks, renderers, effects, and more.
+- The SDK provides a wide range of built-in block types (listed in the `MediaBlockType` enum) for sources, sinks, renderers, effects, and more.
+- The block catalogue: [Sources](../Sources/index.md), [Video Rendering](../VideoRendering/index.md), [Sinks](../Sinks/index.md), [Video Processing](../VideoProcessing/index.md).
 
 ## Creating and Managing a Pipeline
 
-### 1. Initialize the SDK (if required)
+### 1. Initialize the SDK
 
 ```csharp
 using VisioForge.Core;
 
-// Initialize the SDK at application startup
-VisioForgeX.InitSDK();
+// Initialize the SDK at application startup (await returns once native libraries are loaded)
+await VisioForgeX.InitSDKAsync();
 ```
 
 ### 2. Create a Pipeline and Blocks
@@ -94,6 +155,8 @@ var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // VideoView1 
 pipeline.AddBlock(virtualSource);
 pipeline.AddBlock(videoRenderer);
 ```
+
+`VideoView1` is the `VisioForge.Core.UI.WPF.VideoView` control of a WPF application. Declare it in XAML with `xmlns:WPF="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"` and `<WPF:VideoView x:Name="VideoView1" />`. Windows Forms uses `VisioForge.Core.UI.WinForms.VideoView` from the same assembly; MAUI, Avalonia, WinUI and Uno ship their own `VideoView` in their own UI packages.
 
 ### 3. Connect Blocks
 
@@ -122,7 +185,7 @@ await pipeline.StopAsync();
 pipeline.Dispose();
 ```
 
-### 6. SDK Cleanup (if required)
+### 6. SDK Cleanup
 
 ```csharp
 // Release all SDK resources at application shutdown
@@ -159,35 +222,6 @@ pipeline.OnStop += (sender, args) =>
 - **Segment Playback:** Set `StartPosition` and `StopPosition` properties for partial playback.
 - **Debugging:** Export pipeline graphs for debugging using provided methods.
 
-## Example: Minimal Pipeline Setup
-
-```csharp
-using VisioForge.Core.MediaBlocks;
-
-var pipeline = new MediaBlocksPipeline();
-var source = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
-var renderer = new VideoRendererBlock(pipeline, videoViewControl);
-
-pipeline.AddBlock(source);
-pipeline.AddBlock(renderer);
-pipeline.Connect(source.Output, renderer.Input);
-await pipeline.StartAsync();
-// ...
-await pipeline.StopAsync();
-pipeline.Dispose();
-```
-
-## Reference: Key Interfaces
-
-- `IMediaBlock`: Base interface for all blocks.
-- `IMediaBlockDynamicInputs`: For blocks with dynamic input support.
-- `IMediaBlockInternals`, `IMediaBlockInternals2`: For internal pipeline logic.
-- `IMediaBlockRenderer`: For renderer blocks.
-- `IMediaBlockSink`, `IMediaBlockSource`: For sink/source blocks.
-- `IMediaBlockSettings`: For block settings objects.
-- `IMediaBlocksPipeline`: Main pipeline interface.
-- `MediaBlockPad`, `MediaBlockPadDirection`, `MediaBlockPadMediaType`: For pad management.
-
 ## Further Reading and Samples
 
 - [Complete Pipeline Implementation](pipeline.md)
@@ -195,4 +229,4 @@ pipeline.Dispose();
 - [Camera Viewer Application Tutorial](camera.md)
 - [GitHub repository with code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)
 
-For a full list of block types and advanced usage, consult the SDK API reference and source code.
+For every block property and default, see the [API reference](https://api.visioforge.org/dotnet/api/index.html).

@@ -94,9 +94,9 @@ namespace IpCameraCaptureMp4;
 
 public partial class Form1 : Form
 {
-    private VideoCaptureCoreX videoCapture1;
+    private VideoCaptureCoreX videoCapture1 = null!;
 
-    private string outputFile;
+    private string outputFile = string.Empty;
 
     public Form1()
     {

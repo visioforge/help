@@ -27,8 +27,8 @@ La famille de SDK VisioForge fonctionne sur Ubuntu et d'autres distributions Lin
 
 Avant de déployer votre application, assurez-vous que votre environnement Ubuntu satisfait à ces exigences minimales :
 
-- Ubuntu 20.04 LTS ou ultérieur (22.04 LTS et ultérieur recommandés)
-- Runtime .NET 7.0 ou ultérieur
+- Ubuntu 22.04 LTS ou ultérieur (GStreamer 1.20) ; certaines fonctionnalités, comme les blocs OpenCV et le canal de retour audio ONVIF, nécessitent GStreamer 1.22 ou ultérieur, comme Ubuntu 24.04 ou Debian 12
+- Runtime .NET 8.0 ou ultérieur
 - Au moins 4 Go de RAM (8 Go recommandés pour le traitement vidéo)
 - Architecture x86_64 ou ARM64
 - Connexion Internet pour l'installation des paquets
@@ -45,7 +45,7 @@ GStreamer constitue l'épine dorsale multimédia des SDK VisioForge sur les plat
 
 ### Paquets GStreamer requis
 
-Installez les paquets GStreamer suivants à l'aide d'apt-get. Nous exigeons la v1.22.0 ou ultérieure, mais la v1.24.0+ est fortement recommandée pour accéder aux dernières fonctionnalités et optimisations :
+Installez les paquets GStreamer suivants à l'aide d'apt-get. Nous exigeons la v1.20.0 ou ultérieure (v1.22.0 ou ultérieure pour certaines fonctionnalités, comme les blocs OpenCV et le canal de retour audio ONVIF), mais la v1.24.0+ est fortement recommandée pour accéder aux dernières fonctionnalités et optimisations :
 
 - `gstreamer1.0-plugins-base` : plugins de base essentiels
 - `gstreamer1.0-plugins-good` : plugins de haute qualité, bien testés
@@ -85,7 +85,7 @@ Après installation, vérifiez votre configuration GStreamer en exécutant :
 gst-inspect-1.0 --version
 ```
 
-Cette commande doit afficher la version de GStreamer installée. Assurez-vous qu'elle satisfait à l'exigence minimale (1.22.0+) ou qu'elle affiche idéalement 1.24.0 ou une version plus récente.
+Cette commande doit afficher la version de GStreamer installée. Assurez-vous qu'elle satisfait à l'exigence minimale (1.20.0+, ou 1.22.0+ pour certaines fonctionnalités) ou qu'elle affiche idéalement 1.24.0 ou une version plus récente.
 
 ## Paquets NuGet requis
 

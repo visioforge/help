@@ -50,7 +50,7 @@ Recording your desktop screen in VB.NET (Visual Basic .NET) applications is esse
 Add the following packages to your VB.NET project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.20]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```
@@ -191,6 +191,7 @@ Add microphone audio recording to your screen capture:
     End If
 
     VideoCapture1.Audio_Record = True
+    VideoCapture1.Audio_Play = False ' Record only, no speaker monitoring
 ```
 
 ### Recording with Loopback Audio (System Sound)
@@ -209,6 +210,7 @@ Capture system audio output (what you hear from speakers) instead of microphone 
     End If
 
     VideoCapture1.Audio_Record = True
+    VideoCapture1.Audio_Play = False
 ```
 
 ### Stopping Recording

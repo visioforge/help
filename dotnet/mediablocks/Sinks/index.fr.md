@@ -1881,6 +1881,8 @@ Lors de nos tests, les navigateurs basés sur Chromium (Chrome, Edge) ont lu le 
 
 Le RTSP WHEP Camera Grid Demo du [dépôt d'exemples](https://github.com/visioforge/.Net-SDK-s-samples) ajoute des caméras par URL RTSP, sert une page avec une grille de toutes les caméras et transfère `/cam/N/whep/...` au bloc de la caméra N.
 
+Pour un guide pas à pas, avec le code complet du serveur et du navigateur, plusieurs caméras et les limites à vérifier avant la mise en production, consultez [Caméras IP RTSP dans le navigateur avec WHEP](../Guides/rtsp-cameras-in-browser-whep.md).
+
 #### Le pipeline d'exemple
 
 ```mermaid

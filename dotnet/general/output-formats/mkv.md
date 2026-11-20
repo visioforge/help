@@ -103,7 +103,7 @@ Audio quality is equally important for most applications. VisioForge SDKs provid
 ### Supported Audio Codecs
 
 - **AAC Encoders** - See [AAC encoder documentation](../audio-encoders/aac.md):
-  - **VO AAC**: Alternative for non-Windows platforms
+  - **VO AAC**: Legacy encoder, obsolete — prefer AVENC AAC
   - **AVENC AAC**: FFMPEG AAC implementation (default on every platform)
   - **MF AAC**: Windows Media Foundation implementation
   
@@ -119,15 +119,13 @@ Audio quality is equally important for most applications. VisioForge SDKs provid
 #if NET_WINDOWS
     var aacSettings = new MFAACEncoderSettings
     {
-        Bitrate = 192,
-        SampleRate = 48000
+        Bitrate = 192
     };
     mkvOutput.Audio = aacSettings;
 #else
-    var aacSettings = new VOAACEncoderSettings
+    var aacSettings = new AVENCAACEncoderSettings
     {
-        Bitrate = 192,
-        SampleRate = 44100
+        Bitrate = 192
     };
     mkvOutput.Audio = aacSettings;
 #endif
@@ -239,7 +237,7 @@ var mkvSinkSettings = new MKVSinkSettings("processed.mkv");
 var mkvOutput = new MKVOutputBlock(
     mkvSinkSettings,
     videoSettings: new OpenH264EncoderSettings(),
-    audioSettings: new VOAACEncoderSettings());
+    audioSettings: new AVENCAACEncoderSettings());
 
 // Wire source pads directly to the MKV output — it handles encoding internally.
 pipeline.Connect(sourceBlock.VideoOutput, mkvOutput.CreateNewInput(MediaBlockPadMediaType.Video));

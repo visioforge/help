@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK X (cross-platform edition) in
 
 This skill helps you add **VisioForge Media Player SDK X** — the cross-platform "X" edition of the player SDK — to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Media Player SDK X exposes a high-level playback god-object (`MediaPlayerCoreX`) — local files, HTTP(S), HLS, RTSP, RTMP, MMS, image sequences — with seek, pause/resume, rate control, volume, audio-device selection, frame-stepping, tag reading, and `MediaInfoReaderX` stream introspection. Same C# code targets all three desktop OSes — only the UI host (Avalonia here) and the per-OS native redist NuGet package change between platforms.
 
-Pinned NuGet versions: wrapper **`2026.11.16`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Media Player Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.20`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Media Player Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -229,7 +229,7 @@ These are the cross-platform pitfalls that bite first.
 - Fedora: `sudo dnf install gstreamer1 gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-ugly-free gstreamer1-libav`
 - Arch: `sudo pacman -S gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav`
 
-`gst-inspect-1.0 --version` should print 1.18 or newer.
+`gst-inspect-1.0 --version` should print 1.20 or newer.
 
 ### 3. Linux: video plays but no audio (PulseAudio container, ALSA-only host)
 
@@ -300,7 +300,7 @@ The same pattern works on Linux (avoids working-directory-vs-binary-directory am
 Run through these after first integration:
 
 - [ ] `dotnet build` succeeds on each target OS with the bundled `references/` files copied into a fresh project folder (no missing-DLL warnings during build).
-- [ ] On Linux: `gst-inspect-1.0 --version` reports 1.18 or newer; the GStreamer base + good + bad + ugly + libav plugin sets are installed; `gst-device-monitor-1.0 Audio/Sink` lists at least one output.
+- [ ] On Linux: `gst-inspect-1.0 --version` reports 1.20 or newer; the GStreamer base + good + bad + ugly + libav plugin sets are installed; `gst-device-monitor-1.0 Audio/Sink` lists at least one output.
 - [ ] First run shows the SDK-version suffix in the window title once `Activated` fires.
 - [ ] A short MP4 plays start-to-finish on each OS: `OnStop` fires once, `Position_Get` reaches `Duration`, `VideoView1.Refresh()` clears the last frame.
 - [ ] Seeking via the slider works while playing and while paused (`Position_SetAsync` is awaited; the seek slider doesn't loop-feedback on its own change event — see `_tbTimelineApplyingValue` guard in the reference).

@@ -27,7 +27,7 @@ tags:
 primary_api_classes:
   - MOVOutput
   - NVENCH264EncoderSettings
-  - VOAACEncoderSettings
+  - AVENCAACEncoderSettings
   - VideoCaptureCoreX
   - VideoEditCoreX
 
@@ -152,9 +152,9 @@ For audio codec configuration details, see the [AAC encoder documentation](../au
 | Encoder | Type | Platform | Quality | Use Case |
 |---------|------|----------|---------|----------|
 | MP3 | Software | Cross-platform | Good | Web distribution |
-| VO-AAC | Software | Cross-platform | Excellent | Professional use |
+| VO-AAC | Software | Cross-platform | Good | Legacy — prefer AVENC AAC |
 | AVENC AAC | Software | Cross-platform | Very good | General purpose |
-| MF AAC | Hardware-accelerated | Windows only | Excellent | Windows apps |
+| MF AAC | Media Foundation | Windows only | Excellent | Windows apps |
 
 ### Audio Encoder Configuration
 
@@ -174,7 +174,7 @@ movOutput.Audio = new MFAACEncoderSettings() {
 };
 
 // Cross-platform AAC implementation. Sample rate follows the source.
-movOutput.Audio = new VOAACEncoderSettings() {
+movOutput.Audio = new AVENCAACEncoderSettings() {
     Bitrate = 192,
 };
 ```
@@ -188,7 +188,7 @@ To handle platform differences elegantly, use conditional compilation:
 #if NET_WINDOWS
     movOutput.Audio = new MFAACEncoderSettings();
 #else
-    movOutput.Audio = new VOAACEncoderSettings();
+    movOutput.Audio = new AVENCAACEncoderSettings();
 #endif
 ```
 
@@ -280,7 +280,7 @@ For direct media pipeline control:
 
 ```csharp
 // Create encoder blocks (not raw settings — the pipeline consumes blocks).
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 192 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 192 });
 var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings { Bitrate = 5000 });
 
 // Configure the MOV sink — MOV and MP4 are different muxers (qtmux vs mp4mux), so use MOVSinkBlock.
@@ -299,12 +299,12 @@ While VisioForge's MOV implementation is cross-platform, some features are platf
 ### Windows-Specific Features
 
 - MF HEVC video encoder provides optimized encoding on Windows
-- MF AAC audio encoder offers hardware acceleration on compatible systems
+- MF AAC audio encoder is the Media Foundation implementation, preferred for `VideoEditCoreX` with `EncodingProfile` presets
 
 ### Cross-Platform Features
 
 - OpenH264, NVENC, QSV, and AMF encoders work across operating systems
-- VO-AAC and AVENC AAC provide consistent audio encoding everywhere
+- AVENC AAC provides consistent audio encoding everywhere
 
 ## Conclusion
 

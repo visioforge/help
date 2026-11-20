@@ -74,7 +74,7 @@ var facebookOutput = new FacebookLiveOutput("your_facebook_streaming_key_here");
 captureCore.Outputs_Add(facebookOutput, true);
 ```
 
-This minimal setup uses the default encoders, which VisioForge selects based on your platform for optimal performance. For most applications, these defaults provide excellent results with minimal configuration overhead.
+This minimal setup uses the default encoders — AVENC AAC for audio on every platform, and for video the platform's hardware encoder on Android, iOS and macOS, OpenH264 on Linux, and a GPU encoder on Windows when one is found. For most applications, these defaults provide excellent results with minimal configuration overhead.
 
 ## Optimizing Video Encoding for Facebook Live
 
@@ -106,7 +106,7 @@ VisioForge provides utility methods to check hardware encoder availability befor
 
 ```csharp
 // Video encoder selection with fallback options
-IVideoEncoderSettings GetOptimalVideoEncoder()
+IVideoEncoder GetOptimalVideoEncoder()
 {
     // Try NVIDIA GPU acceleration first
     if (NVENCH264EncoderSettings.IsAvailable())
@@ -142,33 +142,29 @@ Audio quality significantly impacts the viewer experience. VisioForge supports m
 
 ### Supported Audio Encoders
 
-1. **VO-AAC** - VisioForge's optimized AAC encoder
-2. **AVENC AAC** - FFmpeg-based AAC encoder with wide platform support (the default on every platform)
-3. **MF AAC** - Microsoft Media Foundation AAC encoder (Windows-only, hardware-accelerated)
+1. **AVENC AAC** - FFmpeg-based AAC encoder with wide platform support
+2. **MF AAC** - Microsoft Media Foundation AAC encoder (Windows-only)
+3. **VO-AAC** - Legacy AAC encoder, obsolete — prefer AVENC AAC
 
 ```csharp
-// Platform-specific audio encoder selection
-IAudioEncoderSettings GetOptimalAudioEncoder()
+// Selecting MF AAC on Windows instead of the AVENC AAC default
+IAACEncoderSettings GetAudioEncoder()
 {
-    IAudioEncoderSettings audioEncoder;
+    IAACEncoderSettings audioEncoder;
     
     #if NET_WINDOWS
-        // Use Media Foundation on Windows
+        // MF AAC is a Windows-only alternative to the default
         audioEncoder = new MFAACEncoderSettings();
-        // MFAACEncoderSettings exposes Bitrate + SampleRate only; channel count follows the upstream source
-        ((MFAACEncoderSettings)audioEncoder).SampleRate = 44100;
     #else
-        // Use VisioForge optimized AAC on other platforms
-        audioEncoder = new VOAACEncoderSettings();
-        // VOAACEncoderSettings exposes Bitrate + SampleRate only; channel count follows the upstream source
-        ((VOAACEncoderSettings)audioEncoder).SampleRate = 44100;
+        // Use the AVENC AAC encoder on other platforms
+        audioEncoder = new AVENCAACEncoderSettings();
     #endif
     
     return audioEncoder;
 }
 
-// Apply the optimal audio encoder
-facebookOutput.Audio = GetOptimalAudioEncoder();
+// Apply the chosen audio encoder
+facebookOutput.Audio = GetAudioEncoder();
 ```
 
 ## Advanced Facebook Live Features
@@ -196,9 +192,9 @@ facebookOutput.CustomAudioProcessor = volume;
 
 VisioForge automatically applies platform-specific optimizations:
 
-- **Windows**: Leverages Media Foundation for AAC audio and DirectX Video Acceleration
+- **Windows**: Uses AVENC AAC for audio (the constructor default; Media Foundation AAC is an explicit alternative) and DirectX Video Acceleration
 - **macOS**: Uses Apple Media frameworks for hardware-accelerated encoding
-- **Linux**: Employs VAAPI and other platform-specific acceleration when available
+- **Linux**: OpenH264 by default; a VAAPI encoder can be selected explicitly when your GPU provides one
 
 These optimizations ensure your application achieves maximum performance regardless of the deployment platform.
 
@@ -234,11 +230,11 @@ public FacebookLiveOutput ConfigureFacebookLiveStream(string streamKey, int vide
             facebookOutput.Video = openH264;
         }
         
-        // Configure platform-optimal audio encoder
+        // Pick MF AAC on Windows; AVENC AAC is the default on every platform
         #if NET_WINDOWS
             facebookOutput.Audio = new MFAACEncoderSettings();
         #else
-            facebookOutput.Audio = new VOAACEncoderSettings();
+            facebookOutput.Audio = new AVENCAACEncoderSettings();
         #endif
         
         // Set additional stream parameters

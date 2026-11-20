@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Video Capture SDK X exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) — webcam / IP camera / screen / NDI sources, optional MP4 / AVI / MOV / MPEG-TS / WebM recording, snapshots, pause/resume. Same C# code targets all three desktop OSes — only the UI host (Avalonia here) and the per-OS native redist NuGet package change between platforms.
 
-Pinned NuGet versions: wrapper **`2026.11.16`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.20`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -247,7 +247,7 @@ These are the cross-platform pitfalls that bite first.
 - Fedora: `sudo dnf install gstreamer1 gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-bad-free gstreamer1-plugins-ugly-free gstreamer1-libav`
 - Arch: `sudo pacman -S gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav`
 
-`gst-inspect-1.0 --version` should print 1.18 or newer.
+`gst-inspect-1.0 --version` should print 1.20 or newer (1.22 or newer for some features, such as the ONVIF audio backchannel).
 
 ### 3. Linux: no devices on Wayland; no audio under PulseAudio container
 
@@ -308,7 +308,7 @@ The same pattern works on Linux (avoids working-directory-vs-binary-directory am
 Run through these after first integration:
 
 - [ ] `dotnet build` succeeds on each target OS with the bundled `references/` files copied into a fresh project folder (no missing-DLL warnings during build).
-- [ ] On Linux: `gst-inspect-1.0 --version` reports 1.18 or newer; the GStreamer base + good + bad + ugly + libav plugin sets are installed; `gst-device-monitor-1.0 Video/Source` lists the camera.
+- [ ] On Linux: `gst-inspect-1.0 --version` reports 1.20 or newer; the GStreamer base + good + bad + ugly + libav plugin sets are installed; `gst-device-monitor-1.0 Video/Source` lists the camera.
 - [ ] On macOS: `Info.plist` contains `NSCameraUsageDescription` (and `NSMicrophoneUsageDescription` if recording audio); first launch shows the permission prompt.
 - [ ] First run shows the SDK-version suffix in the window title once `Activated` fires; preview appears within ~1 s on subsequent launches (the GStreamer registry was built on the first run).
 - [ ] Stopping and restarting capture from the UI does not leak `VideoCaptureCoreX` (`StopAsync` then re-`StartAsync` works, and `Window_Closing` runs `StopAsync → DestroyEngineAsync → DestroySDK` in that order).

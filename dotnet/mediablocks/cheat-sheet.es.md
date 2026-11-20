@@ -54,7 +54,7 @@ El Media Blocks SDK es el SDK .NET más flexible de VisioForge — permite const
 
 - Se ejecuta en Windows (x64 / x86), macOS, Linux (x64 / ARM64), Android e iOS.
 - Frameworks de UI: WinForms, WPF, MAUI, Avalonia, Uno, además de consola.
-- El procesamiento multiplataforma se apoya en un backend GStreamer empaquetado en macOS/Android/iOS y en la instalación del sistema de GStreamer 1.22+ en Linux.
+- El procesamiento multiplataforma se apoya en un backend GStreamer empaquetado en macOS/Android/iOS y en la instalación del sistema de GStreamer 1.20+ en Linux.
 - Para la matriz completa de códecs × plataformas, consulte [platform-matrix.md](../platform-matrix.md).
 
 ## Paquetes NuGet
@@ -62,7 +62,7 @@ El Media Blocks SDK es el SDK .NET más flexible de VisioForge — permite const
 Paquete principal del SDK (todas las plataformas):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
 ```
 
 Runtime de Windows x64 (elija x86 para aplicaciones de 32 bits):
@@ -86,7 +86,7 @@ macOS (nativo y MAUI / macCatalyst):
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 ```
 
-Linux x64 (también requiere GStreamer 1.22+ instalado en el sistema):
+Linux x64 (también requiere GStreamer 1.20+ instalado en el sistema):
 
 ```xml
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
@@ -104,8 +104,8 @@ Android e iOS:
 Paquetes de integración de UI (opcionales, por framework):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.20]"/>
 ```
 
 Guía completa de instalación: [install/index.md](../install/index.md).
@@ -186,7 +186,7 @@ Sustituya `UniversalSourceBlock` por `SystemVideoSourceBlock` (cámara) o `RTSPS
 - **No hay flujo de datos implícito.** Los bloques deben cablearse explícitamente con `pipeline.Connect(output, input)`; añadir un bloque al pipeline no basta para que los medios circulen a través de él.
 - **Orden de overlays / entradas dinámicas.** Los overlays en `OverlayManagerBlock` y los pads dinámicos en los sinks (`MP4SinkBlock` mediante `IMediaBlockDynamicInputs.CreateNewInput`) deben añadirse antes de arrancar el pipeline — añadirlos después de `StartAsync` falla silenciosamente o lanza una excepción.
 - **Enumeración solo con await.** `DeviceEnumerator.Shared.VideoSourcesAsync()` / `AudioOutputsAsync()` deben usarse con await — no existe una variante síncrona. Usar `.Result` desde el hilo de UI puede provocar un deadlock.
-- **Linux necesita GStreamer del sistema.** GStreamer 1.22+ procede de los paquetes del sistema (`apt install gstreamer1.0-*`); `VisioForge.CrossPlatform.Core.Linux.x64` (o `.Linux.arm64` en ARM64) añade las bibliotecas nativas propias del SDK y no contiene GStreamer; los códecs basados en FFmpeg proceden del paquete del sistema `gstreamer1.0-libav`. Consulte [deployment-x/Ubuntu.md](../deployment-x/Ubuntu.md).
+- **Linux necesita GStreamer del sistema.** GStreamer 1.20+ (1.22+ para algunas funciones, como los bloques OpenCV y el canal de retorno de audio ONVIF) procede de los paquetes del sistema (`apt install gstreamer1.0-*`); `VisioForge.CrossPlatform.Core.Linux.x64` (o `.Linux.arm64` en ARM64) añade las bibliotecas nativas propias del SDK y no contiene GStreamer; los códecs basados en FFmpeg proceden del paquete del sistema `gstreamer1.0-libav`. Consulte [deployment-x/Ubuntu.md](../deployment-x/Ubuntu.md).
 - **Higiene del ciclo de vida.** Siempre haga `await pipeline.StopAsync()` y `await pipeline.DisposeAsync()` antes de crear otro pipeline en el mismo motor. Omitir el dispose provoca fugas de handles nativos y puede causar cuelgues al cerrar.
 
 ## Véase también
@@ -217,7 +217,7 @@ El Media Player SDK es un reproductor de alto nivel con una sola clase (`MediaPl
 
 ### ¿Puedo ejecutarlo en Linux sin GStreamer?
 
-No. El NuGet del runtime de Linux (x64 o ARM64) añade las bibliotecas nativas propias del SDK y no contiene GStreamer: el SDK usa el stack de GStreamer 1.22+ del sistema. Instale `gstreamer1.0-plugins-base`, `-good`, `-bad`, `-ugly` y `-libav` desde su distribución. Consulte [deployment-x/Ubuntu.md](../deployment-x/Ubuntu.md) para la lista completa de paquetes. macOS / Android / iOS sí incluyen un GStreamer empaquetado a través del NuGet de plataforma.
+No. El NuGet del runtime de Linux (x64 o ARM64) añade las bibliotecas nativas propias del SDK y no contiene GStreamer: el SDK usa el stack de GStreamer 1.20+ del sistema. Instale `gstreamer1.0-plugins-base`, `-good`, `-bad`, `-ugly` y `-libav` desde su distribución. Consulte [deployment-x/Ubuntu.md](../deployment-x/Ubuntu.md) para la lista completa de paquetes. macOS / Android / iOS sí incluyen un GStreamer empaquetado a través del NuGet de plataforma.
 
 ### ¿Cómo añado un efecto de video personalizado?
 

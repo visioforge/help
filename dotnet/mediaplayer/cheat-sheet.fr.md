@@ -51,7 +51,7 @@ Utilisez VisioForge Media Player SDK .NET lorsque vous devez lire des fichiers l
 
 - **Windows** (x64 et x86) — WinForms, WPF, WinUI, MAUI, Avalonia, Console
 - **macOS** (natif et MacCatalyst) — MAUI, Avalonia, Console
-- **Linux** (x64) — Avalonia, Console ; nécessite GStreamer 1.22+ du système
+- **Linux** (x64, ARM64) — Avalonia, Console ; nécessite GStreamer 1.20+ du système
 - **Android** — via MAUI
 - **iOS** — via MAUI
 
@@ -62,7 +62,7 @@ Toutes les cibles multiplateformes utilisent un pipeline de décodage basé sur 
 Paquet principal du SDK (toujours requis) :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.20]"/>
 ```
 
 Runtime natif Windows x64 :
@@ -85,7 +85,7 @@ macOS (natif) et MacCatalyst (MAUI macOS) :
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 ```
 
-Linux x64 (plus GStreamer 1.22+ du système) :
+Linux x64 (plus GStreamer 1.20+ du système) :
 
 ```xml
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
@@ -103,8 +103,8 @@ Android et iOS :
 Paquets optionnels du framework UI — ajoutez celui qui correspond à votre cible :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.20]"/>
 ```
 
 Guide d'installation complet par IDE : [install/index.md](../install/index.md).
@@ -191,7 +191,7 @@ public partial class MainForm : Form
 - **L'init/destroy du SDK doit encadrer toute utilisation.** Oublier `VisioForgeX.DestroySDK()` à l'arrêt fuit des handles natifs et peut laisser des threads GStreamer en cours. Toujours l'associer à `InitSDKAsync()`.
 - **AnyCPU sur Windows nécessite les deux redistribuables.** Déployez À LA FOIS `VisioForge.CrossPlatform.Core.Windows.x86` ET `.x64` (plus les paquets Libav correspondants), sinon l'application échouera à l'exécution sur l'architecture manquante.
 - **Énumérez les périphériques audio de façon asynchrone avant l'assignation.** `Audio_OutputDevicesAsync(...)` doit se terminer avant que vous ne construisiez `AudioRendererSettings` et définissiez `Audio_OutputDevice` ; définir celui-ci contre une liste de périphériques non initialisée lève une exception.
-- **Linux nécessite GStreamer 1.22+ du système.** Le redistribuable NuGet Linux suppose un GStreamer installé sur le système (paquets `gstreamer1.0-*`) — il ne le remplace PAS, et les paquets Windows Libav ne s'appliquent pas à Linux.
+- **Linux nécessite GStreamer 1.20+ du système.** Le redistribuable NuGet Linux suppose un GStreamer installé sur le système (paquets `gstreamer1.0-*`) — il ne le remplace PAS, et les paquets Windows Libav ne s'appliquent pas à Linux.
 - **`MediaPlayerCoreX` ≠ `MediaPlayerCore`.** `MediaPlayerCoreX` est le moteur multiplateforme basé sur GStreamer utilisé partout dans cette page. `MediaPlayerCore` (sans `X`) est le moteur DirectShow de premier rang réservé à Windows avec des signatures de méthode différentes — les deux sont entièrement pris en charge ; ne mélangez pas les API entre eux.
 
 ## Voir aussi
@@ -220,7 +220,7 @@ Oui. Passez un URI `rtsp://` à `UniversalSourceSettings.CreateAsync(...)` et ap
 
 ### Quelles plateformes nécessitent l'installation de GStreamer au niveau système ?
 
-Linux. Sur Linux, GStreamer 1.22+ doit être installé depuis les paquets système ; le paquet NuGet `VisioForge.CrossPlatform.Core.Linux.x64` (ou `.Linux.arm64` sur ARM64) ajoute les bibliothèques natives propres au SDK et ne contient pas GStreamer. Windows, macOS, Android et iOS regroupent tout via leurs redistribuables NuGet — pas d'installation système requise.
+Linux. Sur Linux, GStreamer 1.20+ doit être installé depuis les paquets système ; le paquet NuGet `VisioForge.CrossPlatform.Core.Linux.x64` (ou `.Linux.arm64` sur ARM64) ajoute les bibliothèques natives propres au SDK et ne contient pas GStreamer. Windows, macOS, Android et iOS regroupent tout via leurs redistribuables NuGet — pas d'installation système requise.
 
 ### Quelle est la différence entre `MediaPlayerCoreX` et `MediaPlayerCore` ?
 

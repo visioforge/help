@@ -37,13 +37,13 @@ primary_api_classes:
 !!! info "Cross-platform support"
     The Media Blocks SDK runs on **Windows, macOS, Linux, Android, and iOS** via GStreamer. See the [platform support matrix](../../platform-matrix.md) for codec and hardware-acceleration details, and the [Linux deployment guide](../../deployment-x/Ubuntu.md) for Ubuntu / NVIDIA Jetson / Raspberry Pi setup.
 
-!!!info Demo Samples
-For complete working examples, see:
-- [RTSP Preview Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) — Shows ONVIF camera preview with postprocessing
-- [IP Capture Demo (Video Capture SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) — Alternative using Video Capture SDK
+!!! info "Demo Samples"
+    For complete working examples, see:
 
-For comprehensive ONVIF documentation, see the [ONVIF IP Camera Integration Guide](../../videocapture/video-sources/ip-cameras/onvif.md).
-!!!
+    - [RTSP Preview Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) — Shows ONVIF camera preview with postprocessing
+    - [IP Capture Demo (Video Capture SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) — Alternative using Video Capture SDK
+
+    For comprehensive ONVIF documentation, see the [ONVIF IP Camera Integration Guide](../../videocapture/video-sources/ip-cameras/onvif.md).
 
 ## Table of Contents
 
@@ -183,7 +183,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 2000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio encoder (Bitrate is in Kbit/s — 128 = 128 kbps).
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // MP4 sink — file-path ctor is the shortest path to a valid MP4 writer.
 var mp4Sink = new MP4SinkBlock("output_resized.mp4");
@@ -256,7 +256,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // MP4 output
 var mp4Sink = new MP4SinkBlock("output_enhanced.mp4");
@@ -320,7 +320,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // MP4 output
 var mp4Sink = new MP4SinkBlock("output_face_blur.mp4");
@@ -383,7 +383,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // AAC audio
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // MP4 output
 var mp4Sink = new MP4SinkBlock("output_watermarked.mp4");

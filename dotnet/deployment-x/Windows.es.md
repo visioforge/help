@@ -180,7 +180,10 @@ cargando de ella.
 
 Si la carpeta de la caché no se puede crear, el SDK carga las bibliotecas en su sitio, desde la carpeta de la
 aplicación. Si existe pero no se puede escribir en ella, el SDK solo la usa cuando ya contiene exactamente las
-bibliotecas de la aplicación y ninguna otra; en caso contrario las carga en su sitio.
+bibliotecas de la aplicación y ninguna otra; en caso contrario las carga en su sitio. Las bibliotecas también se
+cargan en su sitio cuando su aplicación llamó al SDK antes de `InitSDK` y GStreamer ya se había cargado desde la
+carpeta de la aplicación, por ejemplo a través de `PATH`; llame primero a `VisioForgeX.InitSDK()` para usar la caché
+compartida.
 
 Borrar `%PUBLIC%\.gstreamer` es seguro en cualquier momento; el siguiente inicio la reconstruye.
 

@@ -50,7 +50,7 @@ Grabar la pantalla del escritorio en aplicaciones VB.NET (Visual Basic .NET) es 
 Agregue los siguientes paquetes a su proyecto VB.NET:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.20]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```
@@ -191,6 +191,7 @@ Agregue grabación de audio de micrófono a su captura de pantalla:
     End If
 
     VideoCapture1.Audio_Record = True
+    VideoCapture1.Audio_Play = False ' Solo grabar, sin escucha por los altavoces
 ```
 
 ### Grabación con audio loopback (sonido del sistema)
@@ -209,6 +210,7 @@ Capture la salida de audio del sistema (lo que escucha por los altavoces) en lug
     End If
 
     VideoCapture1.Audio_Record = True
+    VideoCapture1.Audio_Play = False
 ```
 
 ### Detener la grabación

@@ -104,7 +104,7 @@ graph TD;
 Necesitará el Media Blocks SDK .NET. Agréguelo a su proyecto .NET vía NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
 ```
 
 Dependiendo de su plataforma objetivo, agregue el paquete runtime nativo correspondiente. Para Windows x64:
@@ -120,7 +120,7 @@ Para dependencias específicas de plataforma detalladas, vea la [Guía de Despli
 
 El siguiente código C# está basado en la [demo WPF de Grabación Pre-Evento](https://github.com/visioforge/.Net-SDK-s-samples). Demuestra un pipeline completo con una fuente de cámara, detección de movimiento para activación automática, vista previa de video y grabación pre-evento a archivos MP4.
 
-!!!info Muestra de Demo
+!!! info "Muestra de Demo"
     Para un proyecto funcional completo con XAML y todas las dependencias, vea la [Demo de Grabación Pre-Evento Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/PreEventRecording).
 
 ```csharp

@@ -199,6 +199,7 @@ Aquí se explica cómo implementarlo:
     IVideoCaptureBaseAudioSourceSettings audioSource = new LoopbackAudioCaptureDeviceSourceSettings(deviceItem);
     
     VideoCapture1.Audio_Source = audioSource;
+    VideoCapture1.Audio_Play = false;
     ```
     
     La API WASAPI2 proporciona la funcionalidad de bucle invertido más confiable en sistemas Windows, con menor latencia y mejor rendimiento en comparación con otras opciones.

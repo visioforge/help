@@ -106,7 +106,7 @@ youtubeOutput.Video = videoSettings;
 
 The SDK supports multiple AAC audio encoders to ensure optimal audio quality across different platforms:
 
-- **VO-AAC**: Alternative for non-Windows platforms
+- **VO-AAC**: Legacy encoder, obsolete — prefer AVENC AAC
 - **AVENC AAC**: Cross-platform option, the default on every platform
 - **MF AAC**: Windows-specific encoder leveraging Media Foundation
 
@@ -114,8 +114,8 @@ The SDK supports multiple AAC audio encoders to ensure optimal audio quality acr
 
 ```csharp
 // Example: Configure audio encoder settings.
-// VOAACEncoderSettings exposes only Bitrate (Kbit/s); sample rate follows the upstream source.
-var audioSettings = new VOAACEncoderSettings
+// Only the bitrate is applied (Kbit/s); sample rate follows the upstream source.
+var audioSettings = new AVENCAACEncoderSettings
 {
     Bitrate = 128,  // Kbit/s — 128 kbps
 };

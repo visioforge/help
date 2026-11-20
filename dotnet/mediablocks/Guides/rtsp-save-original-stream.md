@@ -35,11 +35,10 @@ primary_api_classes:
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-!!!info Demo Sample
-For a complete working example of recording RTSP streams without re-encoding, see the [RTSP MultiView Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/RTSP%20MultiView%20Demo).
+!!! info "Demo Sample"
+    For a complete working example of recording RTSP streams without re-encoding, see the [RTSP MultiView Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WinForms/CSharp/RTSP%20MultiView%20Demo).
 
-For ONVIF camera-specific documentation, see the [ONVIF IP Camera Integration Guide](../../videocapture/video-sources/ip-cameras/onvif.md).
-!!!
+    For ONVIF camera-specific documentation, see the [ONVIF IP Camera Integration Guide](../../videocapture/video-sources/ip-cameras/onvif.md).
 
 ## Table of Contents
 
@@ -83,7 +82,7 @@ The main idea is to take the raw video stream from the RTSP source and directly 
 You'll need the VisioForge Media Blocks SDK. You can add it to your .NET project via NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
 ```
 
 Depending on your target platform (Windows, macOS, Linux, including ARM-based systems like Jetson Nano for embedded camera applications), you will also need the corresponding native runtime packages. For example, on Windows to record video:

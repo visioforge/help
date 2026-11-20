@@ -99,8 +99,7 @@ The following audio encoders are supported through the `Audio` property:
 
 **[AAC Encoders](../audio-encoders/aac.md)**
 
-- VO-AAC (Cross-platform)
-- AVENC AAC
+- AVENC AAC (Cross-platform)
 - MF AAC (Windows only)
   
 **[MP3 Encoder](../audio-encoders/mp3.md)**:
@@ -116,7 +115,7 @@ output.Audio = new MFAACEncoderSettings();
 
 ```csharp
 // For cross-platform compatibility
-output.Audio = new VOAACEncoderSettings();
+output.Audio = new AVENCAACEncoderSettings();
 ```
 
 ```csharp
@@ -287,7 +286,7 @@ output.Sink.Filename = "modified_output.ts";
 ### Platform Considerations
 
 - Some encoders (MF AAC, MF HEVC) are only available on Windows platforms
-- Cross-platform applications should use platform-agnostic encoders like VO-AAC for audio
+- Cross-platform applications should use platform-agnostic encoders like AVENC AAC for audio
 
 ### Best Practices
 
@@ -339,7 +338,7 @@ else
 #if NET_WINDOWS
     output.Audio = new MFAACEncoderSettings();
 #else
-    output.Audio = new VOAACEncoderSettings();
+    output.Audio = new AVENCAACEncoderSettings();
 #endif
 
 // Optional: Add custom processing

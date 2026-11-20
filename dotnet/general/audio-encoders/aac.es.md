@@ -51,7 +51,7 @@ M4A es un formato de archivo utilizado para almacenar datos de audio codificados
 Los SDK con capacidad multiplataforma (VideoCaptureCoreX, VideoEditCoreX, MediaBlocksPipeline) permiten utilizar varias implementaciones de codificadores AAC a través de `M4AOutput`. Esta guía se centra en tres enfoques principales utilizando objetos de configuración dedicados:
 
 1. [Codificador AVENC AAC](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.AVENCAACEncoderSettings.html) - Un codificador multiplataforma con muchas características.
-2. [Codificador VO-AAC](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VOAACEncoderSettings.html) - Un codificador multiplataforma simplificado.
+2. [Codificador VO-AAC](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VOAACEncoderSettings.html) - Un codificador multiplataforma simplificado, ahora obsoleto; prefiera AVENC AAC.
 3. Codificador AAC de Media Foundation - Un codificador de sistema específico de Windows, accesible en plataformas Windows a través de `MFAACEncoderSettings`.
 4. Codificador Apple AAC - El codificador de AudioToolbox integrado en macOS, accesible en macOS y Mac Catalyst a través de `AppleAACEncoderSettings`.
 
@@ -293,7 +293,7 @@ core.Output_Format = output;
 #### Con Media Blocks SDK
 
 ```csharp
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 var sinkSettings = new MP4SinkSettings("output.m4a");
 var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 ```
@@ -307,7 +307,6 @@ var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 
 2. **Codificador VO-AAC**:
    - Control simple de tasa de bits constante
-   - Recomendado para necesidades de codificación simples
    - Configuración avanzada limitada
 
 3. **Codificador Media Foundation**:
@@ -318,7 +317,7 @@ var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 ### Recomendaciones
 
 - Para codificación de audio avanzada con máximo control, use el codificador AVENC AAC
-- Para codificación simple multiplataforma, use el codificador VO-AAC
+- Para codificación simple multiplataforma, use el codificador AVENC AAC (el predeterminado en todas las plataformas)
 - Para codificación optimizada específica de Windows, use el codificador Media Foundation
 
 ### Consideraciones de rendimiento y calidad
@@ -327,7 +326,7 @@ var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 - **Coincidencia de tasa de muestreo**: Siempre intente elegir tasas de muestreo que coincidan con su audio fuente. Esto evita el remuestreo innecesario, que puede potencialmente degradar la calidad de audio.
 - **Características del codificador**:
   - `Codificador AVENC AAC`: Ofrece las opciones de configuración más extensas, permitiendo control detallado sobre calidad y rendimiento. Ideal para casos de uso avanzados.
-  - `Codificador VO-AAC`: Proporciona un buen balance de simplicidad, compatibilidad multiplataforma y calidad. Una opción sólida para muchos escenarios comunes.
+  - `Codificador VO-AAC`: Obsoleto. Se mantiene para código existente; prefiera el codificador AVENC AAC.
   - `Codificador AAC de Media Foundation`: Aprovecha las capacidades de procesamiento de audio integradas de Windows. Puede ser eficiente en Windows pero ofrece menos flexibilidad de configuración que AVENC.
 - **Configuración de canales (Mono vs. Estéreo)**:
   - Para contenido solo de voz, usar codificación mono (1 canal) puede reducir significativamente el tamaño del archivo sin pérdida notable de calidad para el habla. Verifique si los ajustes de codificador elegidos (ej., `AVENCAACEncoderSettings.Channels`) permiten configuración explícita de canales.

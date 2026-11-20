@@ -1,6 +1,6 @@
 ---
 title: .NET SDKs — System Requirements & Platform Support
-description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 26+, Android 7+. .NET Framework 4.6.1+, .NET Core 3.1, .NET 5–11, ARM64. WPF, WinForms, MAUI, Avalonia.
+description: Windows 10/11, macOS 12+, Ubuntu 22.04+, iOS 18+, Android 7+. .NET Framework 4.6.1+, .NET Core 3.1, .NET 5–11, ARM64. WPF, WinForms, MAUI, Avalonia.
 tags:
   - Video Capture SDK
   - Media Player SDK
@@ -44,7 +44,7 @@ Development of applications using our SDKs is supported on the following platfor
 #### Linux
 
 * Ubuntu 22.04 LTS or newer
-* Debian 11 or newer
+* Debian 12 or newer
 * Other distributions with equivalent libraries may work but are not officially supported
 
 #### macOS
@@ -77,7 +77,8 @@ Our SDKs can be deployed to a variety of platforms, enabling wide-reaching distr
 #### Linux
 
 * Ubuntu 22.04 LTS or newer
-* Other distributions require equivalent libraries and dependencies
+* Debian 12 or newer
+* Other distributions with GStreamer 1.20 or later and system libraries no older than those of Ubuntu 22.04 (GStreamer 1.22 or later for some features)
 * x64 and ARM64 architectures supported
 
 #### macOS

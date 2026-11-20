@@ -29,7 +29,7 @@ tags:
 primary_api_classes:
   - AVIOutput
   - VideoCaptureCoreX
-  - VOAACEncoderSettings
+  - AVENCAACEncoderSettings
   - VideoEditCoreX
   - NVENCH264EncoderSettings
 
@@ -115,7 +115,6 @@ The `Audio` property lets you configure audio encoding settings. For detailed co
 aviOutput.Audio = new MP3EncoderSettings();
 
 // AAC encoding options
-aviOutput.Audio = new VOAACEncoderSettings();
 aviOutput.Audio = new AVENCAACEncoderSettings();
 aviOutput.Audio = new MFAACEncoderSettings(); // Windows only
 ```
@@ -139,7 +138,7 @@ core.Output_Format = aviOutput;
 #### Media Blocks SDK
 
 ```csharp
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 var h264 = new OpenH264EncoderSettings();
 var aviSinkSettings = new AVISinkSettings("output.avi");
 var aviOutput = new AVIOutputBlock(aviSinkSettings, h264, aac);
@@ -169,7 +168,7 @@ var aviOutput = new AVIOutput("high_quality_output.avi");
 aviOutput.Video = new NVENCH264EncoderSettings();
 
 // Configure AAC audio encoding
-aviOutput.Audio = new VOAACEncoderSettings();
+aviOutput.Audio = new AVENCAACEncoderSettings();
 ```
 
 ## Windows-Specific AVI Implementation

@@ -80,6 +80,7 @@ Le cœur de la configuration aperçu + enregistrement :
 var cameras = await DeviceEnumerator.Shared.VideoSourcesAsync();
 
 _capture = new VideoCaptureCoreX();
+_capture.Audio_Play = false; // Enregistrement seul, sans écoute sur les haut-parleurs
 _capture.Video_Source = new VideoCaptureDeviceSourceSettings(cameras[cameraIndex]);
 
 var audioSources = await DeviceEnumerator.Shared.AudioSourcesAsync();

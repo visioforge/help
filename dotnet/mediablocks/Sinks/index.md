@@ -1881,6 +1881,8 @@ Chromium-based browsers (Chrome, Edge) played a camera's 1080p Main profile H.26
 
 The RTSP WHEP Camera Grid Demo in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples) adds cameras by RTSP URL, serves a grid page with every camera, and forwards `/cam/N/whep/...` to camera N's block.
 
+For a step-by-step walkthrough — the complete server and browser code, several cameras, and the limits to check before shipping — see [RTSP IP Cameras in a Web Browser with WHEP](../Guides/rtsp-cameras-in-browser-whep.md).
+
 #### The sample pipeline
 
 ```mermaid

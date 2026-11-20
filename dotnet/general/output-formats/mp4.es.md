@@ -32,7 +32,7 @@ primary_api_classes:
   - MP4Output
   - MP4SplitSinkSettings
   - NVENCH264EncoderSettings
-  - VOAACEncoderSettings
+  - AVENCAACEncoderSettings
   - MP4OutputBlock
 ---
 
@@ -110,10 +110,10 @@ output.Video = new NVENCH264EncoderSettings(); // Usar codificador NVIDIA
 
 La propiedad `Audio` le permite especificar el codificador de audio. Los codificadores de audio soportados incluyen:
 
-- [VOAACEncoderSettings](../audio-encoders/aac.md)
-- [AVENCAACEncoderSettings](../audio-encoders/aac.md)
+- [AVENCAACEncoderSettings](../audio-encoders/aac.md) (recomendado)
 - [MFAACEncoderSettings](../audio-encoders/aac.md) (Solo Windows)
 - [MP3EncoderSettings](../audio-encoders/mp3.md)
+- [VOAACEncoderSettings](../audio-encoders/aac.md) (obsoleto, prefiera `AVENCAACEncoderSettings`)
 
 Ejemplo de configuración de un codificador de audio personalizado:
 
@@ -143,7 +143,12 @@ core.Output_Format = output;
 Crear una instancia de salida MP4 de Media Blocks:
 
 ```csharp
-var aac = new VOAACEncoderSettings();
+using VisioForge.Core.MediaBlocks.Sinks;      // MP4OutputBlock
+using VisioForge.Core.Types.X.AudioEncoders;  // AVENCAACEncoderSettings
+using VisioForge.Core.Types.X.Sinks;          // MP4SinkSettings
+using VisioForge.Core.Types.X.VideoEncoders;  // OpenH264EncoderSettings
+
+var aac = new AVENCAACEncoderSettings();
 var h264 = new OpenH264EncoderSettings();
 var mp4SinkSettings = new MP4SinkSettings("output.mp4");
 var mp4Output = new MP4OutputBlock(mp4SinkSettings, h264, aac);
@@ -164,7 +169,7 @@ Divide la salida cuando un archivo alcanza un tamaño específico en bytes:
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Crear configuración de división con patrón de nombre de archivo
 var splitSettings = new MP4SplitSinkSettings("grabacion_%05d.mp4");
@@ -185,7 +190,7 @@ Divide la salida cuando un archivo alcanza una duración específica:
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Crear configuración de división con patrón de nombre de archivo
 var splitSettings = new MP4SplitSinkSettings("grabacion_%05d.mp4");
@@ -203,7 +208,7 @@ Controla el número máximo de archivos a mantener en disco. Una vez alcanzado e
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Crear configuración de división
 var splitSettings = new MP4SplitSinkSettings("grabacion_%05d.mp4");
@@ -224,7 +229,7 @@ Divide la salida basándose en la diferencia de código de tiempo entre el prime
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Crear configuración de división
 var splitSettings = new MP4SplitSinkSettings("grabacion_%05d.mp4");
@@ -247,7 +252,7 @@ Puede combinar criterios de división. El archivo se dividirá cuando se cumpla 
 
 ```csharp
 var h264 = new OpenH264EncoderSettings();
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 
 // Crear configuración de división
 var splitSettings = new MP4SplitSinkSettings("grabacion_%05d.mp4");

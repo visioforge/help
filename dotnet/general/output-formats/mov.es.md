@@ -27,7 +27,7 @@ tags:
 primary_api_classes:
   - MOVOutput
   - NVENCH264EncoderSettings
-  - VOAACEncoderSettings
+  - AVENCAACEncoderSettings
   - VideoCaptureCoreX
   - VideoEditCoreX
 
@@ -152,9 +152,9 @@ Para detalles de configuración de códecs de audio, consulte la [documentación
 | Codificador | Tipo | Plataforma | Calidad | Caso de uso |
 |-------------|------|------------|---------|-------------|
 | MP3 | Software | Multiplataforma | Buena | Distribución web |
-| VO-AAC | Software | Multiplataforma | Excelente | Uso profesional |
+| VO-AAC | Software | Multiplataforma | Buena | Heredado: prefiera AVENC AAC |
 | AVENC AAC | Software | Multiplataforma | Muy buena | Propósito general |
-| MF AAC | Acelerado por hardware | Solo Windows | Excelente | Aplicaciones Windows |
+| MF AAC | Media Foundation | Solo Windows | Excelente | Aplicaciones Windows |
 
 ### Configuración de codificador de audio
 
@@ -174,7 +174,7 @@ movOutput.Audio = new MFAACEncoderSettings() {
 };
 
 // Implementación AAC multiplataforma. La tasa de muestreo sigue la fuente.
-movOutput.Audio = new VOAACEncoderSettings() {
+movOutput.Audio = new AVENCAACEncoderSettings() {
     Bitrate = 192,
 };
 ```
@@ -188,7 +188,7 @@ Para manejar diferencias de plataforma elegantemente, use compilación condicion
 #if NET_WINDOWS
     movOutput.Audio = new MFAACEncoderSettings();
 #else
-    movOutput.Audio = new VOAACEncoderSettings();
+    movOutput.Audio = new AVENCAACEncoderSettings();
 #endif
 ```
 
@@ -280,7 +280,7 @@ Para control directo del pipeline de medios:
 
 ```csharp
 // Crear bloques de codificador (no settings crudos — el pipeline consume bloques).
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 192 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 192 });
 var h264Encoder = new H264EncoderBlock(new OpenH264EncoderSettings { Bitrate = 5000 });
 
 // Configurar el sink MOV — MOV y MP4 son muxers diferentes (qtmux vs mp4mux), así que usa MOVSinkBlock.
@@ -299,12 +299,12 @@ Mientras que la implementación MOV de VisioForge es multiplataforma, algunas ca
 ### Características específicas de Windows
 
 - El codificador de video MF HEVC proporciona codificación optimizada en Windows
-- El codificador de audio MF AAC ofrece aceleración de hardware en sistemas compatibles
+- El codificador de audio MF AAC es la implementación de Media Foundation, preferida para `VideoEditCoreX` con los ajustes predefinidos de `EncodingProfile`
 
 ### Características multiplataforma
 
 - Los codificadores OpenH264, NVENC, QSV y AMF funcionan en todos los sistemas operativos
-- VO-AAC y AVENC AAC proporcionan codificación de audio consistente en todas partes
+- AVENC AAC proporciona codificación de audio consistente en todas partes
 
 ## Conclusión
 

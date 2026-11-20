@@ -51,7 +51,7 @@ M4A est un format de fichier utilisé pour stocker des données audio encodées 
 Les SDK avec capacités multiplateformes (VideoCaptureCoreX, VideoEditCoreX, MediaBlocksPipeline) permettent d'utiliser plusieurs implémentations d'encodeurs AAC via `M4AOutput`. Ce guide se concentre sur trois approches principales utilisant des objets de paramètres dédiés :
 
 1. [Encodeur AVENC AAC](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.AVENCAACEncoderSettings.html) - Un encodeur multiplateforme riche en fonctionnalités.
-2. [Encodeur VO-AAC](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VOAACEncoderSettings.html) - Un encodeur multiplateforme simplifié.
+2. [Encodeur VO-AAC](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.VOAACEncoderSettings.html) - Un encodeur multiplateforme simplifié, désormais obsolète — préférez AVENC AAC.
 3. Encodeur AAC Media Foundation - Un encodeur système spécifique à Windows, accessible sur les plateformes Windows via `MFAACEncoderSettings`.
 4. Encodeur Apple AAC - L'encodeur AudioToolbox intégré à macOS, accessible sur macOS et Mac Catalyst via `AppleAACEncoderSettings`.
 
@@ -293,7 +293,7 @@ core.Output_Format = output;
 #### Avec Media Blocks SDK
 
 ```csharp
-var aac = new VOAACEncoderSettings();
+var aac = new AVENCAACEncoderSettings();
 var sinkSettings = new MP4SinkSettings("output.m4a");
 var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 ```
@@ -307,7 +307,6 @@ var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 
 2. **Encodeur VO-AAC** :
    - Contrôle simple de débit constant
-   - Recommandé pour les besoins d'encodage simples
    - Configuration avancée limitée
 
 3. **Encodeur Media Foundation** :
@@ -318,7 +317,7 @@ var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 ### Recommandations
 
 - Pour l'encodage audio avancé avec un contrôle maximal, utilisez l'encodeur AVENC AAC
-- Pour un encodage simple et multiplateforme, utilisez l'encodeur VO-AAC
+- Pour un encodage simple et multiplateforme, utilisez l'encodeur AVENC AAC (l'encodeur par défaut sur toutes les plateformes)
 - Pour un encodage optimisé spécifique à Windows, utilisez l'encodeur Media Foundation
 
 ### Considérations de performance et de qualité
@@ -327,7 +326,7 @@ var m4aOutput = new M4AOutputBlock(sinkSettings, aac);
 - **Correspondance de la fréquence d'échantillonnage** : Essayez toujours de choisir des fréquences d'échantillonnage qui correspondent à votre audio source. Cela évite un rééchantillonnage inutile, qui peut potentiellement dégrader la qualité audio.
 - **Caractéristiques des encodeurs** :
   - `Encodeur AVENC AAC` : Offre les options de configuration les plus étendues, permettant un contrôle fin de la qualité et des performances. Idéal pour les cas d'usage avancés.
-  - `Encodeur VO-AAC` : Offre un bon équilibre entre simplicité, compatibilité multiplateforme et qualité. Un choix solide pour de nombreux scénarios courants.
+  - `Encodeur VO-AAC` : Obsolète. Conservé pour le code existant ; préférez l'encodeur AVENC AAC.
   - `Encodeur AAC Media Foundation` : Tire parti des capacités de traitement audio intégrées à Windows. Il peut être efficace sur Windows mais offre moins de flexibilité de configuration qu'AVENC.
 - **Configuration des canaux (mono vs stéréo)** :
   - Pour le contenu vocal uniquement, l'utilisation de l'encodage mono (1 canal) peut réduire significativement la taille du fichier sans perte notable de qualité pour la parole. Vérifiez si les paramètres de l'encodeur choisi (par ex. `AVENCAACEncoderSettings.Channels`) autorisent une configuration explicite des canaux.

@@ -52,16 +52,15 @@ This guide walks you through building an RTSP stream viewer and IP camera player
 
 Common use cases include surveillance dashboards, NVR (network video recorder) applications, camera management tools, and any project that needs to display or record IP camera feeds programmatically.
 
-!!!info Demo Samples
+!!! info "Demo Samples"
     For complete working examples, see the [RTSP demos on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK): RTSP Preview Demo, RTSP RAW Capture Demo, and RTSP MultiView Demo.
-!!!
 
 ## Prerequisites
 
 Add the Media Blocks SDK NuGet package to your project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
 ```
 
 You also need the platform-specific runtime packages. For Windows:

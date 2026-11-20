@@ -99,8 +99,7 @@ Les encodeurs audio suivants sont pris en charge via la propriété `Audio` :
 
 **[Encodeurs AAC](../audio-encoders/aac.md)**
 
-- VO-AAC (multiplateforme)
-- AVENC AAC
+- AVENC AAC (multiplateforme)
 - MF AAC (Windows uniquement)
   
 **[Encodeur MP3](../audio-encoders/mp3.md)** :
@@ -116,7 +115,7 @@ output.Audio = new MFAACEncoderSettings();
 
 ```csharp
 // Pour la compatibilité multiplateforme
-output.Audio = new VOAACEncoderSettings();
+output.Audio = new AVENCAACEncoderSettings();
 ```
 
 ```csharp
@@ -287,7 +286,7 @@ output.Sink.Filename = "modified_output.ts";
 ### Considérations sur les plateformes
 
 - Certains encodeurs (MF AAC, MF HEVC) ne sont disponibles que sur les plateformes Windows
-- Les applications multiplateformes doivent utiliser des encodeurs agnostiques de plateforme comme VO-AAC pour l'audio
+- Les applications multiplateformes doivent utiliser des encodeurs agnostiques de plateforme comme AVENC AAC pour l'audio
 
 ### Bonnes pratiques
 
@@ -339,7 +338,7 @@ else
 #if NET_WINDOWS
     output.Audio = new MFAACEncoderSettings();
 #else
-    output.Audio = new VOAACEncoderSettings();
+    output.Audio = new AVENCAACEncoderSettings();
 #endif
 
 // Optionnel : ajouter un traitement personnalisé

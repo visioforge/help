@@ -52,16 +52,15 @@ Ce guide vous accompagne dans la construction d'une visionneuse de flux RTSP et 
 
 Les cas d'usage courants incluent les tableaux de bord de vidéosurveillance, les applications NVR (Network Video Recorder), les outils de gestion de caméras et tout projet devant afficher ou enregistrer programmatiquement des flux de caméras IP.
 
-!!!info Exemples de démo
+!!! info "Exemples de démo"
     Pour des exemples complets et fonctionnels, consultez les [démos RTSP sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK) : RTSP Preview Demo, RTSP RAW Capture Demo et RTSP MultiView Demo.
-!!!
 
 ## Prérequis
 
 Ajoutez le paquet NuGet du Media Blocks SDK à votre projet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
 ```
 
 Vous avez également besoin des paquets de runtime spécifiques à la plateforme. Pour Windows :

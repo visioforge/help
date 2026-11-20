@@ -37,13 +37,13 @@ primary_api_classes:
 !!! info "Prise en charge multiplateforme"
     Le Media Blocks SDK fonctionne sous **Windows, macOS, Linux, Android et iOS** via GStreamer. Consultez la [matrice de prise en charge des plateformes](../../platform-matrix.md) pour les détails sur les codecs et l'accélération matérielle, ainsi que le [guide de déploiement Linux](../../deployment-x/Ubuntu.md) pour Ubuntu / NVIDIA Jetson / Raspberry Pi.
 
-!!!info Exemples de démo
-Pour des exemples complets et fonctionnels, consultez :
-- [Démo RTSP Preview](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) — Montre l'aperçu caméra ONVIF avec post-traitement
-- [Démo IP Capture (Video Capture SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) — Alternative utilisant le Video Capture SDK
+!!! info "Exemples de démo"
+    Pour des exemples complets et fonctionnels, consultez :
 
-Pour une documentation ONVIF complète, consultez le [guide d'intégration ONVIF IP Camera](../../videocapture/video-sources/ip-cameras/onvif.md).
-!!!
+    - [Démo RTSP Preview](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20Preview%20Demo) — Montre l'aperçu caméra ONVIF avec post-traitement
+    - [Démo IP Capture (Video Capture SDK)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/IP%20Capture) — Alternative utilisant le Video Capture SDK
+
+    Pour une documentation ONVIF complète, consultez le [guide d'intégration ONVIF IP Camera](../../videocapture/video-sources/ip-cameras/onvif.md).
 
 ## Table des matières
 
@@ -183,7 +183,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 2000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // Encodeur audio AAC (Bitrate en Kbit/s — 128 = 128 kbps).
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // Puits MP4 — le ctor avec chemin de fichier est le moyen le plus court d'obtenir un écrivain MP4 valide.
 var mp4Sink = new MP4SinkBlock("output_resized.mp4");
@@ -256,7 +256,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // Audio AAC
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // Sortie MP4
 var mp4Sink = new MP4SinkBlock("output_enhanced.mp4");
@@ -320,7 +320,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // Audio AAC
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // Sortie MP4
 var mp4Sink = new MP4SinkBlock("output_face_blur.mp4");
@@ -383,7 +383,7 @@ var h264Settings = new OpenH264EncoderSettings { Bitrate = 3000 };
 var h264Encoder = new H264EncoderBlock(h264Settings);
 
 // Audio AAC
-var aacEncoder = new AACEncoderBlock(new VOAACEncoderSettings { Bitrate = 128 });
+var aacEncoder = new AACEncoderBlock(new AVENCAACEncoderSettings { Bitrate = 128 });
 
 // Sortie MP4
 var mp4Sink = new MP4SinkBlock("output_watermarked.mp4");

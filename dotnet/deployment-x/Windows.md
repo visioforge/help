@@ -177,7 +177,9 @@ still load from it.
 
 If the cache folder cannot be created, the SDK loads the libraries in place from the application's folder. If
 it exists but cannot be written, the SDK uses it only when it already holds exactly the application's libraries
-and no others; otherwise it loads them in place.
+and no others; otherwise it loads them in place. The libraries also load in place when your application called
+into the SDK before `InitSDK` and GStreamer was already loaded from the application's folder, for example through
+`PATH`; call `VisioForgeX.InitSDK()` first to use the shared cache.
 
 Clearing `%PUBLIC%\.gstreamer` is safe at any time; the next start rebuilds it.
 
