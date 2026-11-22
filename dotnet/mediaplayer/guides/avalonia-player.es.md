@@ -158,8 +158,8 @@ El proyecto principal, `SimplePlayerMVVM.csproj`, apunta a múltiples plataforma
   <PackageReference Include="Avalonia.Android" Version="12.1.6" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.20]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.21]"/>
  </ItemGroup>
 </Project>
 ```
@@ -195,7 +195,7 @@ Cada proyecto principal de plataforma (`SimplePlayerMVVM.Android.csproj`, `Simpl
     <TargetFramework>net10.0</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
-  <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+  <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux')) or $(RuntimeIdentifier.StartsWith('linux-'))">
     <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
     <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
   </ItemGroup>

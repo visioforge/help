@@ -23,7 +23,7 @@ video:
 
 ---
 
-# Créer une vidéo à partir d'images avec transitions en C#
+# Créer une vidéo à partir d'images avec transitions en C\#
 
 [Video Edit SDK .NET](https://www.visioforge.com/fr/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -53,13 +53,23 @@ Les images de la vidéo sont des plans de [Big Buck Bunny](https://peach.blender
 
 La vidéo crée le projet sous .NET 10, qui nécessite Visual Studio 2026 ; dans Visual Studio 2022, choisissez .NET 8 ou .NET 9.
 
+### La version courte
+
+La même tâche en quelques lignes de C#, avec un fondu enchaîné entre les images :
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/_jgqREj_xdo?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Son code : [images-to-video-short-console sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/_VideoTutorials/images-to-video-short-console).
+
 ## Paquets NuGet nécessaires
 
 - [VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit/) : le SDK avec `VideoEditCoreX`
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) : GStreamer et les bibliothèques natives du moteur, dont l'encodeur H.264
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.20]" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.21]" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
 ```
 

@@ -80,7 +80,7 @@ dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
 dotnet add package VisioForge.CrossPlatform.Libav.Windows.x64
 ```
 
-## Exemple d'implémentation en C#
+## Exemple d'implémentation en C\#
 
 Le formulaire contient un `VideoView` nommé `VideoView1`, les zones de texte `edURL`, `edLogin` et `edPassword` (avec `UseSystemPasswordChar`), une case à cocher **Record audio** `cbRecordAudio` et les boutons `btStart` et `btStop`, tous deux désactivés dans le concepteur. Les événements `Load` et `FormClosing` du formulaire sont reliés aux gestionnaires ci-dessous.
 

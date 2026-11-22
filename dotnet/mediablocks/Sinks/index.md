@@ -1164,7 +1164,7 @@ Any type other than Auto fails the start when its element is not available in th
 | `InitLocation` | Init segment pattern for CMAF (e.g., init_%03d.mp4) | HlsCmafSink |
 | `SingleMediaFile` | One media file holding every segment, addressed by byte ranges in the playlist (empty = one file per segment) | HlsSink3, HlsCmafSink |
 | `PlaylistLocation` | Output playlist file path (.m3u8; the master playlist for multivariant) | All |
-| `PlaylistRoot` | Base URL for segments in playlist | All except HlsMultivariantSink |
+| `PlaylistRoot` | Base URL for segments in playlist; null (the default) lists them by file name, relative to the playlist | All except HlsMultivariantSink |
 | `TargetDuration` | Target segment duration (TimeSpan) | All |
 | `PlaylistLength` | Number of segments in playlist (0=unlimited) | All |
 | `MaxFiles` | Maximum files to keep on disk | All |
@@ -1625,7 +1625,7 @@ Use `DASHSinkSettings` to configure the DASH output:
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| `MPDFilename` | `string` | `c:\inetpub\wwwroot\dash\manifest.mpd` | Full path for the MPD manifest file; media segments are written to the same folder |
+| `MPDFilename` | `string` | `VisioForge\dash\manifest.mpd` in the user's Videos folder on Windows (the home folder on a Windows without one); elsewhere in the home folder (the app's Documents folder on iOS) | Full path for the MPD manifest file; media segments are written to the same folder |
 | `MPDBaseURL` | `string` | `""` | Base URL prepended to segment filenames in the manifest |
 | `TargetDuration` | `TimeSpan` | 5 s | Target duration per media segment, rounded up to whole seconds; `TimeSpan.Zero` disables segmenting |
 | `MinBufferTime` | `TimeSpan` | 2 s | Minimum buffer time advertised in the manifest |
@@ -1691,6 +1691,8 @@ Windows, macOS, Linux.
 ### WHIP
 
 The `WHIPSinkBlock` streams media to WebRTC servers using the WHIP (WebRTC-HTTP Ingestion Protocol), enabling low-latency live streaming to services such as MediaMTX, Janus, Cloudflare Stream, and other WHIP-compatible endpoints. Video must be H.264 encoded and audio must be Opus encoded — RTP payloading is handled internally by the block.
+
+For a step-by-step walkthrough — publishing a screen and a microphone to MediaMTX, authentication, STUN and TURN, and the limits to check before shipping — see [Stream a Screen or Camera to Web Browsers over WebRTC, and Publish with WHIP](../Guides/webrtc-whip.md#part-2-publish-to-a-media-server-with-whipsinkblock).
 
 #### Block info
 
@@ -1765,6 +1767,8 @@ Windows, macOS, Linux.
 The `WebRTCSinkBlock` streams audio and video straight to web browsers over WebRTC, with sub-second latency and no media server. The block runs its own WebSocket signalling server and, optionally, an HTTP server for the viewer page. Every browser that connects gets its own WebRTC session, encoder and congestion control, so a viewer on a slow network does not lower the quality for the others.
 
 Inputs take raw video and audio — the block encodes them for each viewer, video to VP8 and audio to Opus — or already encoded VP8 video and Opus audio, which it sends without re-encoding.
+
+For a step-by-step walkthrough — the complete program for a screen, a window or a camera, the viewer page, viewers on other computers, and the limits to check before shipping — see [Stream a Screen or Camera to Web Browsers over WebRTC, and Publish with WHIP](../Guides/webrtc-whip.md).
 
 #### Block info
 
@@ -1916,11 +1920,11 @@ Console.WriteLine(whep.EndpointUrl); // http://127.0.0.1:9100/whep/endpoint
 
 #### Availability
 
-Check availability using `WHEPServerSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin from the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package.
+Check availability using `WHEPServerSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin from the platform's `Adds` package: `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, `VisioForge.CrossPlatform.Core.macOS.Adds` or `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`. On Linux it also needs the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`.
 
 #### Platforms
 
-Windows.
+Windows x64, macOS, Linux x64/arm64.
 
 ### RIST MPEG-TS
 
@@ -2464,7 +2468,7 @@ The `VirtualCameraSinkBlock` exposes the pipeline output as a system virtual cam
 
 Both inputs are optional: create a video input, an audio input, or both. Use `CreateNewInput(MediaBlockPadMediaType.Video)` and `CreateNewInput(MediaBlockPadMediaType.Audio)` to add the pads you need.
 
-This block is **Windows-only**. The Virtual Camera and Virtual Audio Card source filters must be COM-registered on the machine before the virtual devices appear. Use `VirtualCameraSinkBlock.IsCOMRegistered()` to check, and `VirtualCameraSinkBlock.COMRegisterAsAdmin()` to register them with an elevation (UAC) prompt.
+This block is **Windows-only**. The Virtual Camera and Virtual Audio Card source filters must be COM-registered on the machine before the virtual devices appear. Use `VirtualCameraSinkBlock.IsCOMRegistered()` to check, and `VirtualCameraSinkBlock.COMRegisterAsAdmin()` to register them with an elevation (UAC) prompt. A registration that points at a build older than the one in the application folder is replaced; a registration that points at a newer build is never replaced by the application's older build.
 
 Configure the output with `VirtualCameraSinkSettings`.
 
@@ -2530,7 +2534,7 @@ await pipeline.StartAsync();
 
 #### Availability
 
-`VirtualCameraSinkBlock.IsAvailable()` returns `true` if the underlying virtual camera sink is available on this system. `VirtualCameraSinkBlock.IsCOMRegistered()` returns `true` when both the Virtual Camera and Virtual Audio Card source filters are registered. On Windows ARM64 the x64 and ARM64 builds share one registration, so a registration of either build counts.
+`VirtualCameraSinkBlock.IsAvailable()` returns `true` if the underlying virtual camera sink is available on this system. `VirtualCameraSinkBlock.IsCOMRegistered()` returns `true` when both the Virtual Camera and Virtual Audio Card source filters are registered from a build that is not older than the one in the application folder. On Windows ARM64 the x64 and ARM64 builds share one registration, so a registration of either build counts.
 
 #### Platforms
 

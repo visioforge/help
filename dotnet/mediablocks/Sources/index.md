@@ -1875,7 +1875,7 @@ pipeline.Connect(source.AudioOutput, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
-Check `WHEPSourceBlock.IsAvailable()` before you build the pipeline: it reports whether the GStreamer `rswebrtc` plugin (`whepclientsrc`, from gst-plugins-rs) is present. On Windows and macOS the VisioForge SDK redistribution package ships it. On Linux the SDK uses the system GStreamer, which needs GStreamer 1.28 or later with the gst-plugins-rs `rswebrtc` plugin installed; without it (for example on the stock GStreamer 1.24 of Ubuntu 24.04) `IsAvailable()` returns `false`.
+Check `WHEPSourceBlock.IsAvailable()` before you build the pipeline: it reports whether the GStreamer `rswebrtc` plugin (`whepclientsrc`, from gst-plugins-rs) is present. On Windows and macOS it ships in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` and `VisioForge.CrossPlatform.Core.macOS.Adds` packages. On Linux it ships in the `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64` package, and needs GStreamer 1.22 or later (Debian 12, Ubuntu 24.04+) with the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice` packages installed; without them `IsAvailable()` returns `false`.
 
 #### Platforms
 
@@ -1897,7 +1897,7 @@ The `ScreenSourceBlock` uses platform-specific settings classes. The choice of s
 - `ScreenCaptureD3D11SourceSettings` - Use `Direct3D 11` Desktop Duplication for screen recording. Allows specific window capture. (`ScreenCaptureSourceType.D3D11DesktopDuplication`)
 - `ScreenCaptureGDISourceSettings` - Use `GDI` for screen recording. (`ScreenCaptureSourceType.GDI`)
 
-`ScreenCaptureGDISourceSettings` and `ScreenCaptureDX9SourceSettings` are obsolete. Use `ScreenCaptureD3D11SourceSettings`. `UpdateLiveSettings` on a running GDI or DX9 capture only stores the new position and cursor; they apply the next time capture starts. The default, empty `Rectangle` captures the whole monitor that `Monitor` selects, and `UpdateLiveSettings` does not move it: set `Rectangle` to the area to move.
+`ScreenCaptureGDISourceSettings` and `ScreenCaptureDX9SourceSettings` are obsolete. Use `ScreenCaptureD3D11SourceSettings`. `UpdateLiveSettings` on a running GDI or DX9 capture only stores the new position and cursor; they apply the next time capture starts. The default, empty `Rectangle` captures the whole monitor that `Monitor` selects, and `UpdateLiveSettings` does not move it: set `Rectangle` to the area to move. `ScreenCaptureDX9SourceSettings.Monitor` is the Direct3D 9 adapter index, not a position in `Screen.AllScreens`: `ScreenSourceBlock.GetDX9MonitorIndex(Screen.AllScreens[i])` returns the adapter of a display, and `ScreenSourceBlock.GetMonitorSize(Screen.AllScreens[i])` its size in physical pixels. `ScreenCaptureGDISourceSettings.Monitor` is the monitor's position in the `EnumDisplayMonitors` order instead.
 
 ##### macOS
 
@@ -2629,10 +2629,13 @@ pipeline.Connect(videoPushSource.Output, videoRenderer.Input);
 await pipeline.StartAsync();
 
 // Push frames from your application:
-// var frame = new VideoFrameX(...);
+// var frame = new VideoFrameX(pixels, width, height, stride, VideoFormatX.RGB);
 // videoPushSource.PushFrame(frame);
+// frame.Free(); // Release the memory this constructor allocated
 // videoPushSource.ClearQueue(); // Clear buffered frames if needed
 ```
+
+`PushFrame` keeps no reference to the frame, so you can reuse or free it as soon as the call returns. Free a frame whose memory was allocated for you (array constructor, `Alloc`, `Clone`), or it leaks memory; the frame is unusable afterwards. A frame that wraps a buffer owned by you or the SDK, such as one from an `IntPtr` constructor or an `OnVideoFrameBuffer` event, needs no `Free()`: it releases nothing there, and the buffer stays its owner's to free.
 
 #### Platforms
 

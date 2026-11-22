@@ -72,7 +72,7 @@ Les catégories d'effets suivantes sont disponibles dans les implémentations Cl
 * **Saturation et étalonnage colorimétrique** — ajustement de l'intensité des couleurs et corrections colorimétriques
   - Classique : `VideoEffectSaturation` / `GPUVideoEffectSaturation`
   - Multiplateforme : `VideoBalanceVideoEffect`, `ColorEffectsVideoEffect`, `LUTVideoEffect` (sauf iOS)
-* **Clarté** — ajustement de la luminosité basé sur HSL préservant les relations de couleurs
+* **Clarté** — contrôle de luminosité : pousse l'image vers le blanc (0 la laisse inchangée, 255 donne du blanc)
   - Classique : `VideoEffectLightness`
 * **Filtres de couleur** — isoler ou rehausser des canaux de couleur spécifiques (Rouge, Vert, Bleu)
   - Classique : `VideoEffectRed/Green/Blue`, `VideoEffectFilterRed/Green/Blue`
@@ -296,7 +296,7 @@ await videoCaptureX.Video_Effects_AddOrUpdateAsync(balance);
 // Fondu au noir sur 3 secondes (Windows uniquement)
 var fadeOut = new VideoEffectDarkness(
     enabled: true,
-    value: 128,        // Démarrer à la normale
+    value: 0,          // Démarrer sans changement
     valueStop: 255,    // Finir au noir
     name: "FadeOut",
     startTime: TimeSpan.FromSeconds(57),

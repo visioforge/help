@@ -171,6 +171,7 @@ complete `MyGrayscaleBlock` from the
 [`CustomGrayscaleBlock` console sample](#sample-app); read it once, then
 the step-by-step breakdown after it.
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using Gst;

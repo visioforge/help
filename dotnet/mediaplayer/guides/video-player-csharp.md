@@ -79,7 +79,7 @@ The video creates the project on .NET 10, which needs Visual Studio 2026; in Vis
 The same player as a WPF app in a few lines of C#, without the timeline and the controls:
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/Km4ohzKF24U?controls=1" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/Raq4u6aTfzg?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
 Its code: [video-player-short-wpf on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/video-player-short-wpf).
@@ -91,7 +91,7 @@ Its code: [video-player-short-wpf on GitHub](https://github.com/visioforge/.Net-
 - [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — the FFmpeg (libav) codecs that many formats decode through
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```

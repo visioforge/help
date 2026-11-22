@@ -48,7 +48,7 @@ DECLARE_INTERFACE_(IVFRegister, IUnknown)
 };
 ```
 
-### Implementación en C#
+### Implementación en C\#
 
 Para desarrolladores .NET, la interfaz de registro puede importarse usando el siguiente código C#:
 

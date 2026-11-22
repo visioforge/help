@@ -23,6 +23,7 @@ Our Video Capture SDK for .NET equips developers with a powerful, versatile solu
 
 Minimum end-to-end path with `VideoCaptureCoreX` (cross-platform). Swap the `MP4Output` for `MKVOutput` / `WebMOutput` / `MOVOutput` to switch container, or for `RTSPServerOutput` / `RTMPOutput` / `HLSOutput` to stream instead of record — the surrounding wiring stays the same.
 
+<!-- vf-compile -->
 ```csharp
 using VisioForge.Core;
 using VisioForge.Core.Types;
@@ -34,7 +35,8 @@ using VisioForge.Core.VideoCaptureX;
 VisioForgeX.InitSDK();
 
 // 2. Create the engine, bound to an IVideoView for preview (or null for headless).
-var videoCapture = new VideoCaptureCoreX(videoView as IVideoView);
+IVideoView? videoView = null;
+var videoCapture = new VideoCaptureCoreX(videoView);
 
 // 3. Select first enumerated camera + microphone.
 var videoDevice = (await DeviceEnumerator.Shared.VideoSourcesAsync()).First();

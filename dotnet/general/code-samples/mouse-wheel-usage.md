@@ -98,18 +98,19 @@ private double _zoomRatio = 1.0;
 
 private void ZoomIn(double factor)
 {
-    // Zoom is exposed on the renderer (classic engine) or via a ZoomEffect on the X engine,
+    // Zoom is exposed on the renderer (classic engine) or via a PanZoomBlock in a Media Blocks pipeline,
     // not on VideoView. The classic engine uses `videoCapture1.Video_Renderer.Zoom_Ratio`
-    // (and Zoom_ShiftX / Zoom_ShiftY for the centre offset).
+    // (and Zoom_ShiftX / Zoom_ShiftY for the centre offset). Zoom_Ratio is an int percentage
+    // added to 100: 0 shows the whole frame, 100 doubles the scale.
     _zoomRatio = Math.Min(_zoomRatio + factor, 3.0); // Max zoom of 300%
-    videoCapture1.Video_Renderer.Zoom_Ratio = _zoomRatio;
+    videoCapture1.Video_Renderer.Zoom_Ratio = (int)Math.Round((_zoomRatio - 1.0) * 100);
     videoCapture1.Video_Renderer_Update();
 }
 
 private void ZoomOut(double factor)
 {
-    _zoomRatio = Math.Max(_zoomRatio - factor, 0.5); // Min zoom of 50%
-    videoCapture1.Video_Renderer.Zoom_Ratio = _zoomRatio;
+    _zoomRatio = Math.Max(_zoomRatio - factor, 1.0); // Min zoom of 100%: Zoom_Ratio cannot go below 0
+    videoCapture1.Video_Renderer.Zoom_Ratio = (int)Math.Round((_zoomRatio - 1.0) * 100);
     videoCapture1.Video_Renderer_Update();
 }
 ```

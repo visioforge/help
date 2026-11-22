@@ -1,0 +1,94 @@
+---
+title: Preguntas frecuentes de Media Player SDK .NET — WPF
+description: Respuestas sobre Media Player SDK .NET — URL de red, fotogramas tras una búsqueda, velocidad, paso a paso, inicio sincronizado, WPF y karaoke.
+sidebar_label: FAQ
+tags:
+  - Media Player SDK
+  - .NET
+  - DirectShow
+  - MediaPlayerCoreX
+  - Windows
+  - Playback
+  - RTSP
+  - WPF
+  - Troubleshooting
+primary_api_classes:
+  - MediaPlayerCore
+  - MediaPlayerCoreX
+  - CDGSourceSettings
+  - MediaInfoReader
+  - MediaInfoReaderX
+
+---
+
+# Preguntas frecuentes de Media Player SDK .NET
+
+Respuestas a las preguntas que los desarrolladores hacen con más frecuencia sobre Media Player SDK .NET, para los dos motores: `MediaPlayerCore` (Windows, DirectShow) y `MediaPlayerCoreX` (multiplataforma). Los errores de despliegue están reunidos en [Solución de problemas](../general/troubleshooting.md).
+
+## Fuentes de red
+
+### "Unable to load source file or stream": un flujo de red no se abre
+
+`MediaPlayerCore` informa este mensaje, o `Unable to set URL to network VLC source filter` con el modo de fuente `HTTP_RTSP_VLC`, cuando el motor de la fuente no pudo abrir la URL. Compruebe, en este orden:
+
+1. La URL es la dirección del propio flujo (por ejemplo `rtsp://host:554/path` o `http://host/stream.m3u8`), no la de una página web ni solo la dirección IP de la cámara.
+2. La misma URL se abre en VLC en el mismo equipo. Si no se abre, el problema es la URL, la red o un firewall, no el reproductor.
+3. Las credenciales están incluidas: `rtsp://login:password@host:port/path`.
+4. El puerto es accesible desde el equipo que ejecuta la aplicación, no solo desde el equipo de desarrollo.
+
+Para cámaras IP que necesitan algo más que una URL, como el descubrimiento ONVIF o una conexión de baja latencia, consulte las [Preguntas frecuentes de Video Capture SDK](../videocapture/faq.md#camaras-ip).
+
+## Búsqueda, velocidad y fotogramas
+
+### Frame_GetCurrent devuelve el fotograma anterior justo después de una búsqueda
+
+`Position_Set_Time` retorna cuando se solicita la búsqueda, antes de que el nuevo fotograma se haya decodificado y renderizado, así que un `Frame_GetCurrent()` inmediato todavía ve el anterior. Tome en su lugar el fotograma del evento `OnVideoFrameBitmap` después de la búsqueda: active un indicador al buscar y guarde una copia de `e.Frame` (`new Bitmap(e.Frame)`) la primera vez que se ejecute el controlador después de eso; el mapa de bits del propio evento pertenece al SDK. Para leer fotogramas de un archivo sin reproducirlo, consulte [Obtener un fotograma de un archivo de video](code-samples/get-frame-from-video-file.md).
+
+### ¿Cómo reproduzco más rápido o más lento, fotograma a fotograma o hacia atrás?
+
+Con `MediaPlayerCore`:
+
+- `SetSpeedAsync(2.0)` reproduce a doble velocidad; los valores inferiores a 1.0 la reducen.
+- `NextFrame()` y `PreviousFrame()` pausan la reproducción y avanzan o retroceden un fotograma.
+- La reproducción continua hacia atrás usa el modo de reproducción inversa; consulte [Reproducción inversa de video](code-samples/reverse-video-playback.md).
+
+Con `MediaPlayerCoreX`, use `Rate_SetAsync(rate)` y `NextFrame()`.
+
+Retroceder fotograma a fotograma es costoso con formatos que usan fotogramas clave (H.264, HEVC y la mayoría de los demás): el decodificador tiene que volver al fotograma clave anterior y decodificar de nuevo hacia delante. Buscar con `Position_Set_Time` una posición anterior es la forma general de volver atrás.
+
+### ¿Cómo inicio la reproducción en un momento exacto, o varios reproductores a la vez?
+
+Precargue el archivo e inícielo más tarde. `PlayAsync(true)` construye y prepara el grafo de reproducción sin iniciarlo; después, `PlayDelayed()` inicia la reproducción casi sin retraso:
+
+```csharp
+await player1.PlayAsync(true);
+await player2.PlayAsync(true);
+
+// en el momento que necesite
+player1.PlayDelayed();
+player2.PlayDelayed();
+```
+
+Así se sincroniza el video con un reloj externo o una pista de audio en Windows. Media Player SDK .NET admite aplicaciones WinForms, WPF, WinUI 3, MAUI, Avalonia y Uno; las aplicaciones UWP no son compatibles.
+
+## WPF
+
+### ¿Puedo colocar controles WPF sobre el video o capturarlo con un VisualBrush?
+
+Sí. El `VideoView` de WPF es un elemento WPF, no una ventana de WinForms alojada, así que participa en el diseño, las transformaciones y el orden Z de WPF cuando renderiza en un modo componible. Use el renderizador componible D3D11 para renderizar por GPU, o el modo de software. Solo los renderizadores de ventana nativa dibujan por encima de todo; consulte [Superponer controles WPF sobre el video](../general/code-samples/wpf-controls-over-video.md).
+
+## Archivos y formatos
+
+### ¿Cómo reproduzco archivos de karaoke CDG (MP3+G o ZIP) con cambio de tono?
+
+`MediaPlayerCoreX` los abre con `CDGSourceSettings`, para un par de archivos CDG y de audio o para un archivo ZIP que contenga ambos:
+
+```csharp
+var settings = new CDGSourceSettings("song.zip");
+settings.EnablePitchShifting = true;
+settings.PitchSemitones = -2;
+await player.OpenAsync(settings);
+await player.PlayAsync();
+```
+
+`Rate_SetAsync` también cambia el tempo de los archivos de karaoke. La [Karaoke Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinForms/Karaoke%20Demo) muestra un reproductor de karaoke completo.

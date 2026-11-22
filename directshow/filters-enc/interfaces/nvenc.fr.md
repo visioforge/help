@@ -524,8 +524,8 @@ HRESULT GetPreset(GUID *v);
 - Le préréglage affecte : estimation de mouvement, lookahead, mouvement sous-pixel
 **Exemple (C++)** :
 ```cpp
-// Utiliser le preset P4 (equilibre)
-GUID presetP4 = /* GUID pour le preset P4 */;
+// Utiliser le preset P4 (equilibre) : NV_ENC_PRESET_P4_GUID
+GUID presetP4 = { 0x90a7b826, 0xdf06, 0x4862, { 0xb9, 0xd2, 0xcd, 0x6d, 0x73, 0xa0, 0x86, 0x81 } };
 pNVEnc->SetPreset(presetP4);
 ```
 ---
@@ -744,7 +744,7 @@ HRESULT SetLevel(int v);
 HRESULT GetLevel(int *v);
 ```
 **Paramètres** :
-- `v` : valeur de niveau (voir le tableau des niveaux H.264/H.265)
+- `v` : valeur de niveau du codec sélectionné. En H.264, les numéros H.264 (`NV_ENC_LEVEL_H264_*`, les plus courants dans le tableau ci-dessous) ; en HEVC, les valeurs HEVC de NVENC à partir de 2.1 (`NV_ENC_LEVEL_HEVC_*` : 63 = 2.1, 90 = 3, 93 = 3.1, 120 = 4, 123 = 4.1, 150 = 5, 153 = 5.1, 156 = 5.2, 180 = 6, 183 = 6.1, 186 = 6.2). `0` (`NV_ENC_LEVEL_AUTOSELECT`) laisse l'encodeur choisir, tout comme une valeur qui n'est pas un niveau du codec sélectionné ; en HEVC, 30 et 60 compris, qui sont H.264 3.0 et 6.0 autant que HEVC 1 et 2. `GetLevel` renvoie la valeur définie, pas le niveau choisi par l'encodeur
 **Niveaux H.264 courants** :
 - **30** (3.0) — vidéo SD
 - **31** (3.1) — 720p @ 30 fps
@@ -936,12 +936,12 @@ HRESULT ConfigureLowLatencyNVENC(IBaseFilter* pEncoder)
     pNVEnc->SetGOP(60);                 // GOP de 2 secondes (30 fps)
     pNVEnc->SetNumBuffers(4);           // Bufferisation minimale
 
-    // Preset rapide
-    GUID presetP2 = /* GUID de P2 */;
+    // Preset rapide : NV_ENC_PRESET_P2_GUID
+    GUID presetP2 = { 0xf581cfb8, 0x88d6, 0x4381, { 0x93, 0xf0, 0xdf, 0x13, 0xf9, 0xc2, 0x7d, 0xab } };
     pNVEnc->SetPreset(presetP2);
 
-    // Profil/niveau pour 1080p30
-    GUID highProfile = /* GUID du profil High */;
+    // Profil/niveau pour 1080p30 : NV_ENC_H264_PROFILE_HIGH_GUID
+    GUID highProfile = { 0xe7cbc309, 0x4f7a, 0x4b89, { 0xaf, 0x2a, 0xd5, 0x37, 0xc9, 0x2b, 0xe3, 0x10 } };
     pNVEnc->SetProfile(highProfile);
     pNVEnc->SetLevel(40);               // Level 4.0
 
@@ -977,14 +977,14 @@ public class NVENCHighQualityRecording
         nvenc.SetGOP(300);               // GOP de 5 secondes (60 fps)
         nvenc.SetNumBuffers(8);          // Plus de bufferisation pour la qualite
 
-        // Preset qualite
-        Guid presetP6 = /* GUID de P6 */;
+        // Preset qualite : NV_ENC_PRESET_P6_GUID
+        Guid presetP6 = new Guid("8E75C279-6299-4AB6-8302-0B215A335CF5");
         nvenc.SetPreset(presetP6);
 
-        // Profil HEVC Main pour 4K
-        Guid hevcMain = /* GUID HEVC Main */;
+        // Profil HEVC Main pour 4K : NV_ENC_HEVC_PROFILE_MAIN_GUID
+        Guid hevcMain = new Guid("B514C39A-B55B-40FA-878F-F1253B4DFDEC");
         nvenc.SetProfile(hevcMain);
-        nvenc.SetLevel(51);              // Level 5.1 pour 4K60
+        nvenc.SetLevel(0);               // HEVC : sélection automatique (ou une valeur NV_ENC_LEVEL_HEVC_*, p. ex. 153 = 5.1)
 
         // Configuration VBV
         nvenc.SetVbvBitrate(20000000);   // Max 20 Mbps
@@ -1012,12 +1012,12 @@ HRESULT ConfigureBalancedStreaming(IBaseFilter* pEncoder)
     pNVEnc->SetGOP(120);                // GOP de 2 secondes (60 fps)
     pNVEnc->SetNumBuffers(6);           // Bufferisation standard
 
-    // Preset equilibre P4
-    GUID presetP4 = /* GUID de P4 */;
+    // Preset equilibre P4 : NV_ENC_PRESET_P4_GUID
+    GUID presetP4 = { 0x90a7b826, 0xdf06, 0x4862, { 0xb9, 0xd2, 0xcd, 0x6d, 0x73, 0xa0, 0x86, 0x81 } };
     pNVEnc->SetPreset(presetP4);
 
-    // Profil/niveau 1080p60
-    GUID highProfile = /* GUID du profil High */;
+    // Profil/niveau 1080p60 : NV_ENC_H264_PROFILE_HIGH_GUID
+    GUID highProfile = { 0xe7cbc309, 0x4f7a, 0x4b89, { 0xaf, 0x2a, 0xd5, 0x37, 0xc9, 0x2b, 0xe3, 0x10 } };
     pNVEnc->SetProfile(highProfile);
     pNVEnc->SetLevel(41);
 
@@ -1074,7 +1074,8 @@ HRESULT ConfigureBalancedStreaming(IBaseFilter* pEncoder)
 // Augmenter le debit
 pNVEnc->SetBitrate(15000000);  // Debit plus eleve
 
-// Utiliser un meilleur preset
+// Utiliser un meilleur preset : NV_ENC_PRESET_P6_GUID
+GUID presetP6 = { 0x8e75c279, 0x6299, 0x4ab6, { 0x83, 0x02, 0x0b, 0x21, 0x5a, 0x33, 0x5c, 0xf5 } };
 pNVEnc->SetPreset(presetP6);   // Plus lent mais meilleur
 
 // Ajouter des images B
@@ -1088,7 +1089,8 @@ pNVEnc->SetBFrames(3);         // Meilleure compression
 // Desactiver les images B
 pNVEnc->SetBFrames(0);
 
-// Utiliser un preset plus rapide
+// Utiliser un preset plus rapide : NV_ENC_PRESET_P1_GUID
+GUID presetP1 = { 0xfc0a8d3e, 0x45f8, 0x4cf8, { 0x80, 0xc7, 0x29, 0x88, 0x71, 0x59, 0x0e, 0xbf } };
 pNVEnc->SetPreset(presetP1);
 
 // Reduire les tampons

@@ -26,6 +26,10 @@ Nuestro paquete SDK ofrece una solución completa con todas las DLLs necesarias 
 
 Para detalles completos del producto y opciones de licenciamiento, visite la [página del producto](https://www.visioforge.com/vlc-source-directshow-filter).
 
+### Versión de Prueba
+
+Sin licencia, el filtro funciona por completo y marca el vídeo: cada fotograma lleva una franja "TRIAL - VisioForge VLC Source" en el centro. El audio no se ve afectado, y una fuente sin vídeo no lleva ninguna marca. No se muestra ningún cuadro de diálogo, por lo que una versión de prueba puede ejecutarse en un servicio o en un hilo sin interfaz de usuario. Pase su clave de licencia a `IVFRegister.SetLicenseKey` (consulte el [Ejemplo 7](examples.md#ejemplo-7-activacion-de-licencia)) para quitar la franja.
+
 ---
 
 ## Instalación

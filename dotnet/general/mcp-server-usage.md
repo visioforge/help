@@ -1,5 +1,5 @@
 ---
-title: Using the VisioForge MCP Server for AI-Assisted Development
+title: VisioForge MCP Server for AI-Assisted .NET Development
 description: Connect your AI coding assistant to the VisioForge MCP Server for instant access to API documentation, deployment guides, code examples, and SDK knowledge.
 tags:
   - Video Capture SDK
@@ -138,19 +138,32 @@ Add the VisioForge MCP Server to your workspace or user settings:
 
 ### Project-Level Configuration (Any MCP Client)
 
-For project-specific MCP configuration, create `.mcp.json` at your repository root:
+For project-specific MCP configuration, create `.mcp.json` at your repository root. Claude Code reads the `mcpServers` key; Visual Studio reads `servers` from the `.mcp.json` in the solution folder. One file can carry both:
 
 ```json
 {
+  "mcpServers": {
+    "visioforge-sdk": {
+      "type": "http",
+      "url": "https://mcp.visioforge.com/mcp"
+    }
+  },
   "servers": {
     "visioforge-sdk": {
       "type": "http",
-      "url": "https://mcp.visioforge.com/mcp",
-      "description": "VisioForge SDK documentation and deployment guides"
+      "url": "https://mcp.visioforge.com/mcp"
     }
   }
 }
 ```
+
+Projects created from the [VisioForge project templates](../install/project-templates.md) already include this file.
+
+### Context7
+
+The VisioForge documentation is also indexed on [Context7](https://context7.com/visioforge/help) as the library `/visioforge/help`. If your assistant has the Context7 MCP server, ask it to use that library for guides and walkthroughs, and keep the VisioForge MCP server for exact API signatures:
+
+- "Use context7 /visioforge/help: how do I record an RTSP camera to MP4?"
 
 ## Available MCP Tools
 
@@ -284,7 +297,7 @@ Get platform-specific file copying/build configuration code. Returns MSBuild tar
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.20]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.21]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
@@ -385,6 +398,13 @@ Don't hesitate to ask for working code:
 - "Show me a complete example of..."
 - "Generate code for..."
 - "Example implementation of..."
+
+### 5. **Name the Server in Your Prompt**
+
+Assistants pick a server more reliably when you name it:
+
+- "Use visioforge-sdk to find the properties of `RTSPSourceSettings`"
+- "Use visioforge-sdk: which NuGet packages does a MAUI Android capture app need?"
 
 ## Troubleshooting
 

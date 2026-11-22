@@ -55,10 +55,7 @@ Le projet complet, avec le fichier du concepteur, est sur GitHub :
 
 ## Paquets requis
 
-Installez le paquet [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) et le redist de capture vidéo avec ses filtres DirectShow. Un aperçu n'écrit aucun fichier, il n'a donc besoin d'aucun paquet d'encodeur :
-
-- Pour les applications 64 bits : [Redist de capture vidéo x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
-- Pour les applications 32 bits : [Redist de capture vidéo x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
+Installez le paquet [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) et le redist de capture vidéo avec ses filtres DirectShow. Un aperçu n'écrit aucun fichier, il n'a donc besoin d'aucun paquet d'encodeur.
 
 Réglez `PlatformTarget` dans le fichier du projet selon le redist (`x64` ou `x86`).
 
@@ -67,7 +64,11 @@ dotnet add package VisioForge.DotNet.Core
 dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
 ```
 
-## Exemple d'implémentation avec code C#
+Pour une application 32 bits (x86), utilisez plutôt le paquet x86 : `VisioForge.DotNet.Core.Redist.VideoCapture.x86`.
+
+`VisioForge.DotNet.VideoCapture`, le paquet du bloc Try it en haut de cette page, convient aussi : il installe le même `VisioForge.DotNet.Core`. Les paquets redist restent nécessaires dans les deux cas.
+
+## Exemple d'implémentation avec code C\#
 
 Le formulaire contient un `VideoView`, des listes déroulantes pour la caméra, le format et la fréquence d'images, et les boutons Start, Stop et Save Frame ; Stop et Save Frame sont désactivés au départ. Le fichier du concepteur se trouve dans le code source ci-dessus. Le projet cible .NET 10 avec les usings implicites. Sous .NET Framework 4.7.2, le même code se compile dans un projet de style SDK avec `<LangVersion>10</LangVersion>` et `<ImplicitUsings>enable</ImplicitUsings>` ; dans `Program.cs`, remplacez `ApplicationConfiguration.Initialize()`, que .NET Framework ne génère pas, par `Application.EnableVisualStyles()` et `Application.SetCompatibleTextRenderingDefault(false)`, et ajoutez `<dpiAware>true</dpiAware>` dans un `app.manifest` pour garder la prise en charge du DPI système qu'active .NET 10.
 

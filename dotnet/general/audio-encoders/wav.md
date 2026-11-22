@@ -204,7 +204,7 @@ int[] channels = settings.GetSupportedChannelCounts();
 
 ```csharp
 // core is an instance of VideoCaptureCore or VideoEditCore
-foreach (var codec in core.Audio_Codecs)
+foreach (var codec in core.Audio_Codecs())
 {
     cbAudioCodecs.Items.Add(codec);
 }

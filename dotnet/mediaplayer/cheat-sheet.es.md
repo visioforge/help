@@ -62,7 +62,7 @@ Todos los objetivos multiplataforma usan una pipeline de decodificación respald
 Paquete principal del SDK (siempre obligatorio):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]"/>
 ```
 
 Runtime nativo para Windows x64:
@@ -103,8 +103,8 @@ Android e iOS:
 Paquetes opcionales de frameworks de UI — agregue el que corresponda a su objetivo:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.20]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.21]"/>
 ```
 
 Guía completa de instalación por IDE: [install/index.md](../install/index.md).

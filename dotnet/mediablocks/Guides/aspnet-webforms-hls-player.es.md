@@ -22,7 +22,7 @@ primary_api_classes:
 
 ---
 
-# Reproductor de video HLS en ASP.NET Web Forms con C#
+# Reproductor de video HLS en ASP.NET Web Forms con C\#
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -59,8 +59,8 @@ El control construye y administra este pipeline por usted a través de `HlsStrea
 
 <ItemGroup>
   <Reference Include="System.Web" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.WebForms" Version="[2026.11.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.20]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.WebForms" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
 </ItemGroup>

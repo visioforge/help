@@ -120,7 +120,6 @@ public class WmaRecorder
         // Configurer les paramètres de l'encodeur WMA
         wmaOutput.Audio.Bitrate = 192;       // Débit binaire de 192 Kbps
         wmaOutput.Audio.SampleRate = 48000;  // Fréquence d'échantillonnage de 48 kHz
-        wmaOutput.Audio.Channels = 2;        // Enregistrement stéréo
 
         // Ajouter la sortie WMA au pipeline de capture
         _videoCapture.Outputs_Add(wmaOutput, autostart: true);
@@ -237,7 +236,6 @@ class Program
             var wmaOutput = new WMAOutput(outputPath);
             wmaOutput.Audio.Bitrate = 192;
             wmaOutput.Audio.SampleRate = 48000;
-            wmaOutput.Audio.Channels = 2;
 
             videoCapture.Outputs_Add(wmaOutput, autostart: true);
 
@@ -356,7 +354,6 @@ public partial class WmaRecorderForm : Form
         var wmaOutput = new WMAOutput(txtOutputPath.Text);
         wmaOutput.Audio.Bitrate = (int)numBitrate.Value;
         wmaOutput.Audio.SampleRate = 48000;
-        wmaOutput.Audio.Channels = rbStereo.Checked ? 2 : 1;
 
         _videoCapture.Outputs_Add(wmaOutput, autostart: true);
 
@@ -403,13 +400,11 @@ La classe VideoCaptureCoreX prend en charge diverses configurations de capture a
 var wmaOutput = new WMAOutput("high_quality.wma");
 wmaOutput.Audio.Bitrate = 320;       // Débit binaire de qualité maximale
 wmaOutput.Audio.SampleRate = 48000;  // Fréquence d'échantillonnage professionnelle
-wmaOutput.Audio.Channels = 2;        // Stéréo
 
 // Configurer l'enregistrement vocal (taille de fichier réduite)
 var voiceOutput = new WMAOutput("voice_memo.wma");
 voiceOutput.Audio.Bitrate = 128;     // Bon pour la voix
 voiceOutput.Audio.SampleRate = 44100; // Fréquence d'échantillonnage standard
-voiceOutput.Audio.Channels = 1;       // Le mono est suffisant pour la voix
 
 // Vérifier si l'encodeur WMA est disponible sur le système
 if (!WMAEncoderSettings.IsAvailable())
@@ -481,7 +476,6 @@ public class WmaEditor
         var wmaOutput = new WMAOutput(outputPath);
         wmaOutput.Audio.Bitrate = 192;
         wmaOutput.Audio.SampleRate = 48000;
-        wmaOutput.Audio.Channels = 2;
 
         _videoEdit.Output_Format = wmaOutput;
 
@@ -572,7 +566,6 @@ public class WmaMerger
             var wmaOutput = new WMAOutput(outputPath);
             wmaOutput.Audio.Bitrate = 192;
             wmaOutput.Audio.SampleRate = 48000;
-            wmaOutput.Audio.Channels = 2;
 
             videoEdit.Output_Format = wmaOutput;
 
@@ -632,7 +625,6 @@ public async Task TrimWmaFileAsync(
         var wmaOutput = new WMAOutput(outputPath);
         wmaOutput.Audio.Bitrate = 192;
         wmaOutput.Audio.SampleRate = 48000;
-        wmaOutput.Audio.Channels = 2;
 
         videoEdit.Output_Format = wmaOutput;
 
@@ -679,7 +671,6 @@ public async Task ExtractAudioToWmaAsync(
         var wmaOutput = new WMAOutput(wmaOutputPath);
         wmaOutput.Audio.Bitrate = 256;       // Qualité supérieure pour la musique
         wmaOutput.Audio.SampleRate = 48000;
-        wmaOutput.Audio.Channels = 2;
 
         videoEdit.Output_Format = wmaOutput;
 
@@ -751,7 +742,6 @@ public async Task EditWmaWithEffectsAsync(
         var wmaOutput = new WMAOutput(outputPath);
         wmaOutput.Audio.Bitrate = 192;
         wmaOutput.Audio.SampleRate = 48000;
-        wmaOutput.Audio.Channels = 2;
 
         videoEdit.Output_Format = wmaOutput;
 
@@ -782,10 +772,7 @@ var wmaSettings = new WMAEncoderSettings
     Bitrate = 192,
     
     // Fréquence d'échantillonnage en Hz — valeurs prises en charge : 44100, 48000
-    SampleRate = 48000,
-    
-    // Nombre de canaux — valeurs prises en charge : 1 (mono), 2 (stéréo)
-    Channels = 2
+    SampleRate = 48000
 };
 
 // Interroger les configurations prises en charge
@@ -808,24 +795,21 @@ Voici les préréglages recommandés pour différents cas d'usage :
 var musicPreset = new WMAEncoderSettings
 {
     Bitrate = 320,
-    SampleRate = 48000,
-    Channels = 2
+    SampleRate = 48000
 };
 
 // Enregistrement vocal / podcasts
 var voicePreset = new WMAEncoderSettings
 {
     Bitrate = 128,
-    SampleRate = 44100,
-    Channels = 1
+    SampleRate = 44100
 };
 
 // Qualité et taille de fichier équilibrées
 var balancedPreset = new WMAEncoderSettings
 {
     Bitrate = 192,
-    SampleRate = 48000,
-    Channels = 2
+    SampleRate = 48000
 };
 ```
 
@@ -978,7 +962,7 @@ Points clés :
 
 - **Enregistrer des fichiers WMA** : utilisez VideoCaptureCoreX avec WMAOutput pour capturer de l'audio depuis les périphériques système et conservez des paramètres de qualité optimaux pour votre sortie
 - **Éditer des fichiers WMA** : utilisez VideoEditCoreX pour rogner, fusionner et appliquer des effets aux enregistrements audio
-- **Configuration** : la classe WMAEncoderSettings permet un ajustement fin du débit binaire, de la fréquence d'échantillonnage et des canaux
+- **Configuration** : la classe WMAEncoderSettings permet un ajustement fin du débit binaire et de la fréquence d'échantillonnage
 - **Multiplateforme** : tenez compte des exigences propres à chaque plateforme lorsque vous travaillez avec les formats Windows Media
 - **Prise en charge des applications Windows** : créez facilement des applications WinForms, WPF et console
 

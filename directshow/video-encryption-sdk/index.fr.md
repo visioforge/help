@@ -153,7 +153,7 @@ Pour une documentation détaillée des interfaces et des exemples de code, consu
 
 ### Démarrage rapide — chiffrement
 
-#### Exemple C#
+#### Exemple C\#
 
 ```csharp
 using VisioForge.DirectShowAPI;
@@ -196,7 +196,7 @@ if (SUCCEEDED(hr))
 
 ### Déchiffrement
 
-#### Exemple C#
+#### Exemple C\#
 
 ```csharp
 // Obtenir l'interface de configuration crypto depuis le demultiplexeur de dechiffrement
@@ -211,7 +211,7 @@ if (cryptoConfig != null)
 Pour des exemples complets incluant la configuration du graphe de filtres, consultez la [page d'exemples](examples.md).
 
 
-## Chiffrer et lire un fichier en C#
+## Chiffrer et lire un fichier en C\#
 
 Les [démos C#](https://github.com/visioforge/directshow-samples/tree/main/Video%20Encryption%20SDK/dotnet) construisent deux graphes DirectShow : Encryption Demo écrit un fichier chiffré et Player Demo le relit. Ce sont deux applications WinForms sur .NET 8 pour x64, qui accèdent à DirectShow via le paquet NuGet [VisioForge.DirectShowAPI](https://www.nuget.org/packages/VisioForge.DirectShowAPI). Elles lisent les fichiers MP4 via LAV Filters, inclus dans l'installateur de Video Encryption SDK. Le code ci-dessous s'appuie sur les démos.
 

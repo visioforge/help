@@ -52,7 +52,7 @@ DECLARE_INTERFACE_(ICryptoConfig, IUnknown)
 };
 ```
 
-#### Définition C#
+#### Définition C\#
 
 ```csharp
 using System;
@@ -339,7 +339,7 @@ DECLARE_INTERFACE_(IPasswordProvider, IUnknown)
 };
 ```
 
-#### Définition C#
+#### Définition C\#
 
 ```csharp
 [ComImport]
@@ -421,7 +421,7 @@ public class CustomPasswordProvider : IVFPasswordProvider
 ```
 ---
 
-## Méthodes utilitaires C#
+## Méthodes utilitaires C\#
 
 Le SDK fournit des méthodes d'extension pratiques pour les développeurs C# dans la classe `VFCryptoConfigHelper`.
 

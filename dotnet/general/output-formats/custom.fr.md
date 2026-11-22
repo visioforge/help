@@ -78,19 +78,19 @@ Commencez par remplir votre interface utilisateur avec les codecs et filtres dis
 
 ```cs
 // Remplir les options de codec vidéo
-foreach (string codec in VideoCapture1.Video_Codecs)
+foreach (string codec in VideoCapture1.Video_Codecs())
 {
     videoCodecDropdown.Items.Add(codec);
 }
 
 // Remplir les options de codec audio
-foreach (string codec in VideoCapture1.Audio_Codecs)
+foreach (string codec in VideoCapture1.Audio_Codecs())
 {
     audioCodecDropdown.Items.Add(codec);
 }
 
 // Obtenir tous les filtres DirectShow disponibles
-foreach (string filter in VideoCapture1.DirectShow_Filters)
+foreach (string filter in VideoCapture1.DirectShow_Filters())
 {
     directShowAudioFilters.Items.Add(filter);
     directShowVideoFilters.Items.Add(filter);
@@ -157,7 +157,7 @@ L'implémentation est simple :
 
 ```cs
 // Remplir les options de filtre à partir des filtres DirectShow disponibles
-foreach (string filter in VideoCapture1.DirectShow_Filters)
+foreach (string filter in VideoCapture1.DirectShow_Filters())
 {
     filterDropdown.Items.Add(filter);
 }
@@ -180,9 +180,9 @@ Pour une implémentation plus conviviale, VisioForge fournit une boîte de dialo
 ```cs
 // Créer et configurer la boîte de dialogue de paramètres
 CustomFormatSettingsDialog settingsDialog = new CustomFormatSettingsDialog(
-    VideoCapture1.Video_Codecs.ToArray(),
-    VideoCapture1.Audio_Codecs.ToArray(),
-    VideoCapture1.DirectShow_Filters.ToArray());
+    VideoCapture1.Video_Codecs().ToArray(),
+    VideoCapture1.Audio_Codecs().ToArray(),
+    VideoCapture1.DirectShow_Filters().ToArray());
 
 // Appliquer les paramètres à votre instance CustomOutput
 settingsDialog.SaveSettings(ref customOutput);

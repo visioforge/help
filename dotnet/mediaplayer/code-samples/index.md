@@ -39,6 +39,7 @@ This page collects ready-to-use C# recipes for the most common playback scenario
 
 The following class wraps `MediaPlayerCore` with start/stop calls. The constructor receives an `IVideoView` instance (`VideoView` for WPF, `VideoViewWinForms` for WinForms, etc.) that is provided by your UI layer.
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Threading.Tasks;
@@ -84,6 +85,7 @@ public class SimplePlayer
 
 `MediaPlayerCore` exposes `PauseAsync`/`ResumeAsync` for in-flight playback control and a per-output-device volume API (`Audio_OutputDevice_Volume_Set`) that accepts an integer in the 0–100 range.
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Threading.Tasks;
@@ -168,10 +170,12 @@ public async Task PlayRtspAsync(MediaPlayerCore player, string url)
 
 The built-in playlist API tracks the current index for you. `Playlist_PlayNext` advances to the next item; `OnStop` fires on natural end-of-stream, where you can chain the next track.
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Threading.Tasks;
 using VisioForge.Core.MediaPlayer;
+using VisioForge.Core.Types;
 using VisioForge.Core.Types.Events;
 
 public class PlaylistPlayer

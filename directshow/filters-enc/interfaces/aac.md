@@ -109,6 +109,7 @@ public struct AACInfo
 
 #### C# Definition
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Runtime.InteropServices;
@@ -279,6 +280,7 @@ The **IVFAACEncoder** interface provides comprehensive, property-based configura
 **Inherits From**: `IUnknown`
 ### Interface Definitions
 #### C# Definition
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Runtime.InteropServices;

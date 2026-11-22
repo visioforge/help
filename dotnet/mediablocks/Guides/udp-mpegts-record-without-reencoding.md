@@ -98,7 +98,7 @@ graph LR;
 Add the Media Blocks SDK to your project via NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
 ```
 
 On Windows you also need the native runtime packages. For recording (muxing) you need the core runtime; the Libav package supplies the muxers:
@@ -114,6 +114,7 @@ For macOS, Linux, Android, and iOS runtime packages and platform-specific notes,
 
 The `UDPRemuxRecorder` class below encapsulates the whole pipeline. It receives a UDP MPEG-TS stream and remuxes it to an MP4 file, with optional audio passthrough.
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Threading.Tasks;

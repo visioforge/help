@@ -15,7 +15,7 @@ primary_api_classes:
 
 ---
 
-# Lire les informations d'un fichier multimédia en C#
+# Lire les informations d'un fichier multimédia en C\#
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 

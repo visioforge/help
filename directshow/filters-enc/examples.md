@@ -137,7 +137,7 @@ public void EncodeH265(string inputFile, string outputFile)
         nvenc.SetQp(23);                            // QP 23: good balance
         nvenc.SetPreset(NV_ENC_PRESET_HQ_GUID);      // High quality
         nvenc.SetProfile(NV_ENC_HEVC_PROFILE_MAIN_GUID);
-        nvenc.SetLevel(NVENCEncoderLevel.H264_41);   // Level 4.1
+        nvenc.SetLevel(NVENCEncoderLevel.HEVC_41);   // Level 4.1: up to 1080p; Auto for 4K
         nvenc.SetGOP(120);                           // 4 seconds at 30fps
         nvenc.SetBFrames(3);
     }

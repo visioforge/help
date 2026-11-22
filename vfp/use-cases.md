@@ -52,6 +52,7 @@ Video fingerprinting enables automated copyright detection at scale, identifying
 
 ### Implementation Example: Copyright Detection System
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Collections.Generic;

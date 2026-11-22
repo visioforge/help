@@ -20,7 +20,7 @@ video:
 
 ---
 
-# Unir video y audio sin recodificar en C#
+# Unir video y audio sin recodificar en C\#
 
 [Video Edit SDK .NET](https://www.visioforge.com/es/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 
@@ -56,8 +56,8 @@ El video crea el proyecto en .NET 10, que requiere Visual Studio 2026; en Visual
 - [VisioForge.DotNet.Core.Redist.FFMPEG.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/): la herramienta FFmpeg que ejecutan los métodos `FastEdit_`; para una aplicación x86, [VisioForge.DotNet.Core.Redist.FFMPEG.x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.20]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.20]" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.21]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.21]" />
 ```
 
 El redist es x64, así que establezca `PlatformTarget` en `x64` en el archivo de proyecto:

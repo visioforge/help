@@ -115,10 +115,12 @@ Cette classe encapsule tous les paramètres nécessaires pour définir le compor
 
 *   **Configuration réseau :**
     *   `Port` (int) : port TCP sur lequel le serveur écoute les connexions RTSP entrantes. La valeur par défaut est `8554`, alternative courante au port standard (souvent restreint) 554. Assurez-vous que ce port est ouvert dans les pare-feu.
-    *   `Address` (string) : adresse IP à laquelle le serveur se lie.
-        *   `"127.0.0.1"` (par défaut) : n'écoute que les connexions de la machine locale.
-        *   `"0.0.0.0"` : écoute sur toutes les interfaces réseau disponibles (à utiliser pour un accès public).
-        *   IP spécifique (par exemple, `"192.168.1.100"`) : se lie uniquement à cette interface réseau précise.
+    *   `Address` (string) : nom d'hôte ou adresse IP par lesquels les clients joignent le serveur. Elle ne définit que l'hôte de `URL` ; elle ne choisit pas les interfaces sur lesquelles le serveur écoute. Valeur par défaut : `"127.0.0.1"`.
+    *   `ListenAddress` (string) : adresse IP locale sur laquelle le serveur écoute.
+        *   `"0.0.0.0"` (par défaut) : écoute sur toutes les interfaces IPv4, les autres machines du réseau peuvent donc se connecter.
+        *   `"127.0.0.1"` : n'écoute que les connexions de la machine locale.
+        *   IP spécifique (par exemple, `"192.168.1.100"`) : n'écoute que sur cette interface réseau.
+        *   Adresse IPv6 : nécessaire pour les clients IPv6, y compris quand `Address` provient d'un URI IPv6 ; la valeur par défaut n'écoute qu'en IPv4. `"::1"` n'accepte que la machine locale, `"::"` toutes les interfaces IPv6. Sous Windows, une adresse IPv6 n'accepte pas les clients IPv4.
     *   `Point` (string) : composant de chemin de l'URL RTSP (par exemple, `/live`, `/stream1`). Les clients se connectent à `rtsp://<Address>:<Port><Point>`. Valeur par défaut : `"/live"`.
 *   **Configuration du flux :**
     *   `VideoEncoder` (IVideoEncoder) : instance `IVideoEncoder` — généralement un objet de paramètres d'encodeur (par exemple, `OpenH264EncoderSettings`) ou le résultat de `H264EncoderBlock.GetDefaultSettings()`. Définit le codec, le débit binaire (kbit/s), la qualité, etc.
@@ -139,8 +141,8 @@ Avec le Media Blocks SDK, `RTSPServerBlock` représente l'élément réel basé 
 
 **Fonctionnalités :**
 
-*   **Puits multimédia :** agit comme point terminal (puits) dans un pipeline multimédia, recevant les données vidéo et audio encodées.
-*   **Pads d'entrée :** fournit des pads distincts `VideoInput` et `AudioInput` pour connecter les sources/encodeurs vidéo et audio en amont.
+*   **Puits multimédia :** agit comme point terminal (puits) dans un pipeline multimédia, recevant la vidéo et l'audio non compressés qu'il encode avec `VideoEncoder` et `AudioEncoder`.
+*   **Pads d'entrée :** fournit des pads distincts `VideoInput` et `AudioInput` pour connecter les sources vidéo et audio en amont, pas des blocs d'encodeur.
 *   **Intégration GStreamer :** gère le `rtspserver` GStreamer sous-jacent et les éléments associés nécessaires à la gestion des connexions clientes et à la diffusion des paquets RTP.
 *   **Vérification de disponibilité :** la méthode statique `IsAvailable()` permet de vérifier si les plugins GStreamer nécessaires à la diffusion RTSP sont présents sur le système.
 *   **Gestion des ressources :** implémente `IDisposable` pour le nettoyage correct des sockets réseau et des ressources GStreamer lorsque le bloc n'est plus nécessaire.
@@ -161,7 +163,7 @@ var audioEncoder = new AVENCAACEncoderSettings(); // AAC multiplateforme fiable
 var settings = new RTSPServerSettings(videoEncoder, audioEncoder)
 {
     Port = 8554,
-    Address = "0.0.0.0",  // Accessible depuis d'autres machines du réseau
+    ListenAddress = "0.0.0.0",  // Toutes les interfaces (par défaut) : les autres machines du réseau peuvent se connecter
     Point = "/livefeed"
 };
 
@@ -215,7 +217,8 @@ await pipeline.StartAsync();
 var secureSettings = new RTSPServerSettings(videoEncoder, audioEncoder)
 {
     Port = 8555, // Utiliser un port différent
-    Address = "192.168.1.100", // Se lier à une adresse IP interne spécifique
+    Address = "192.168.1.100",       // Hôte utilisé par les clients, l'hôte de URL
+    ListenAddress = "192.168.1.100", // N'écouter que sur cette interface interne
     Point = "/secure",
     Username = "viewer",
     Password = "VerySecretPassword!",
@@ -242,7 +245,7 @@ var secureRtspOutput = new RTSPServerOutput(secureSettings);
     *   **Encodeur AMD :** `AMFH264EncoderSettings` encode avec `Usage = AMFH264EncoderUsage.Transcoding` par défaut. Pour le délai d'encodage le plus faible, définissez `Usage = AMFH264EncoderUsage.UltraLowLatency` (ou `LowLatency`).
 3.  **Configuration réseau :**
     *   **Sécurité d'abord :** implémentez l'authentification `Username` et `Password` pour tout flux non destiné à un accès public anonyme.
-    *   **Adresse de liaison :** utilisez `"0.0.0.0"` avec prudence. Pour une sécurité accrue, liez-vous explicitement à l'interface réseau (`Address`) destinée aux connexions client si possible.
+    *   **Adresse d'écoute :** par défaut, le serveur écoute sur toutes les interfaces (`ListenAddress = "0.0.0.0"`). Pour une sécurité accrue, définissez `ListenAddress` sur l'interface réseau destinée aux connexions client, ou sur `"127.0.0.1"` pour les seuls clients locaux.
     *   **Règles de pare-feu :** configurez méticuleusement les pare-feu système et réseau pour autoriser les connexions TCP entrantes sur le `Port` RTSP choisi. N'oubliez pas non plus que RTP/RTCP (utilisés pour les données multimédias proprement dites) utilisent souvent des ports UDP dynamiques ; les pare-feu peuvent nécessiter des modules d'aide (comme `nf_conntrack_rtsp` sur Linux) ou l'ouverture de larges plages de ports UDP (moins sûr).
 4.  **Gestion des ressources :**
     *   **Pattern Dispose :** les instances de serveur RTSP détiennent des ressources réseau (sockets) et potentiellement des pipelines GStreamer complexes. *Veillez toujours* à les libérer correctement avec des instructions `using` ou des appels explicites à `.Dispose()` dans des blocs `finally` afin d'éviter les fuites de ressources.

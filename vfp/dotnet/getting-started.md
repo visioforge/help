@@ -97,8 +97,8 @@ dotnet restore
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="[2026.10.29]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="[2026.11.17]"/>
   
   <!-- Optional: MongoDB integration -->
   <PackageReference Include="VisioForge.DotNet.VideoFingerprinting.MongoDB" Version="[2025.8.6]"/>
@@ -273,6 +273,7 @@ On Windows, add `-windows` to `<TargetFramework>` in `VideoFingerprintingDemo.cs
 
 ### Step 2: Basic Implementation
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.IO;

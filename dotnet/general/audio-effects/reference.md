@@ -6,6 +6,7 @@ tags:
   - Video Capture SDK
   - Media Blocks SDK
   - Video Edit SDK
+  - Media Player SDK
   - .NET
   - MediaPlayerCoreX
   - VideoCaptureCoreX
@@ -33,7 +34,7 @@ primary_api_classes:
 
 # Audio Effects API Reference
 
-[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 Complete parameter reference for all audio effects available in VisioForge .NET SDKs. Each cross-platform effect wraps a GStreamer element and supports real-time parameter changes from C# code during playback. Cross-platform effects work on Windows, macOS, Linux, iOS, and Android.
 
@@ -593,7 +594,7 @@ effect.Feedback = 0.3;
 
 ### ReverberationAudioEffect
 
-**GStreamer Element**: `freeverb`
+**GStreamer Element**: `freeverb`. On Windows, macOS and Mac Catalyst it ships in the Core Adds package (`VisioForge.CrossPlatform.Core.Windows.Adds.x64`, `.x86` or `.arm64`, `VisioForge.CrossPlatform.Core.macOS.Adds`): add it next to the core package. Android and iOS carry it in the core package; on Linux it comes with the system GStreamer `plugins-bad`.
 
 **Purpose**: Room reverberation simulation.
 
@@ -616,7 +617,7 @@ effect.Feedback = 0.3;
     - Default: 1.0
     - 0 = mono, 1 = full stereo
 
-Each property change applies to a playing effect at once.
+Each property change applies to a playing effect at once in Media Player SDK, Video Capture SDK and Media Blocks SDK. Video Edit SDK reads the properties when it builds the effect: at `Start` for `Audio_Effects`, and when the file is added for the `Effects` of an `AudioFileSource`.
 
 **Usage**:
 
@@ -719,29 +720,39 @@ var effect = new FlangerAudioEffect(
 
 ## Pitch and Tempo Effects
 
-### PitchShiftAudioEffect
+### PitchAudioEffect
 
-**Purpose**: Change pitch without changing speed.
+**GStreamer Element**: `pitch` (SoundTouch)
+
+**Purpose**: Change pitch without changing speed (with `Tempo` and `Rate` left at 1.0).
 
 **Parameters**:
 
-- `Pitch` (float): Pitch shift ratio
+- `PitchSemitones` (double): Pitch shift in semitones
+    - Range: -12 to +12 when set (a value outside it is clamped). Reading it returns the semitones of the current `Pitch`, unclamped: a `Pitch` of 4.0 reads back as about +24
+    - Default: 0 (no change)
+- `Pitch` (float): The same shift as a ratio
     - 1.0 = no change
     - 2.0 = one octave up
     - 0.5 = one octave down
-    - Typical range: 0.5 to 2.0
+- `Tempo` (float): Speed multiplier that keeps the pitch, 1.0 = no change
+- `Rate` (float): Speed multiplier that moves the pitch with it, as a faster or slower tape does, 1.0 = no change
+- `Tempo` and `Rate` change the speed of the audio only, not of the video: leave them at 1.0 when the audio plays with video
+- `Pitch`, `Tempo` and `Rate` take 0.1 to 10: the GStreamer element ignores a value outside that range and keeps the previous one
+
+Each property change applies to a playing effect at once in Media Player SDK, Video Capture SDK and Media Blocks SDK. Video Edit SDK reads the properties when it builds the effect: at `Start` for `Audio_Effects`, and when the file is added for the `Effects` of an `AudioFileSource`. `PitchShiftAudioEffect` is obsolete: use `PitchAudioEffect`.
 
 **Musical Intervals**:
 
-- 0.5 = -12 semitones
-- 1.059 = +1 semitone
-- 1.122 = +2 semitones
-- 2.0 = +12 semitones
+- `PitchSemitones = -12` (`Pitch` 0.5): one octave down
+- `PitchSemitones = 1` (`Pitch` 1.059): one semitone up
+- `PitchSemitones = 7` (`Pitch` 1.498): a fifth up
+- `PitchSemitones = 12` (`Pitch` 2.0): one octave up
 
 **Usage**:
 
 ```csharp
-var effect = new PitchShiftAudioEffect(1.5f); // Up by a fifth
+var effect = new PitchAudioEffect { PitchSemitones = 7 }; // Up by a fifth
 ```
 
 ---

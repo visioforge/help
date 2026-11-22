@@ -36,7 +36,7 @@ Cette page fournit des exemples de code pratiques pour utiliser le pack de filtr
 #include "IVFChromaKey.h"
 #pragma comment(lib, "strmiids.lib")
 ```
-### Projets C#
+### Projets C\#
 ```csharp
 using VisioForge.DirectShowAPI;
 using VisioForge.DirectShowLib;
@@ -54,7 +54,7 @@ using System.Drawing;
 
 Appliquer un effet vidéo unique à une source.
 
-#### Implémentation C#
+#### Implémentation C\#
 
 ```csharp
 using System;
@@ -181,7 +181,7 @@ cleanup:
 ---
 ### Exemple 2 : chaîne d'effets multiples
 Appliquer plusieurs effets simultanément.
-#### Effets multiples en C#
+#### Effets multiples en C\#
 ```csharp
 public class MultipleEffectsExample
 {
@@ -223,7 +223,7 @@ public class MultipleEffectsExample
 
 Ajouter une superposition de texte/logo à la vidéo.
 
-#### Superposition de texte en C#
+#### Superposition de texte en C\#
 
 ```csharp
 public void ApplyTextOverlay(IBaseFilter effectFilter)
@@ -262,7 +262,7 @@ Voir [effects-reference.md](./effects-reference.md) pour la structure complète 
 ---
 ### Exemple 4 : superposition d'image
 Ajouter un filigrane ou logo graphique.
-#### Superposition d'image en C#
+#### Superposition d'image en C\#
 ```csharp
 public void ApplyImageOverlay(IBaseFilter effectFilter, string imagePath)
 {
@@ -294,7 +294,7 @@ Voir [effects-reference.md](./effects-reference.md) pour la structure complète 
 
 Appliquer une réduction de bruit pour une vidéo plus nette.
 
-#### Exemples de débruitage en C#
+#### Exemples de débruitage en C\#
 
 ```csharp
 public void ApplyDenoise(IBaseFilter effectFilter, VideoEffectType denoiseType)
@@ -347,7 +347,7 @@ public void ApplyDenoise(IBaseFilter effectFilter, VideoEffectType denoiseType)
 ---
 ### Exemple 6 : tous les effets disponibles
 Liste complète des effets avec configuration de base.
-#### Référence de tous les effets en C#
+#### Référence de tous les effets en C\#
 ```csharp
 public class AllEffectsExample
 {
@@ -410,7 +410,7 @@ public class AllEffectsExample
 
 Mélanger deux sources vidéo avec une disposition PIP.
 
-#### Image dans l'image en C#
+#### Image dans l'image en C\#
 
 ```csharp
 public class VideoMixerPIPExample
@@ -502,7 +502,7 @@ public class VideoMixerPIPExample
 ---
 ### Exemple 8 : mélange multi-source (4 entrées)
 Créer une disposition en grille 2x2 avec 4 sources vidéo.
-#### Disposition grille 2x2 en C#
+#### Disposition grille 2x2 en C\#
 ```csharp
 public class VideoMixerGridExample
 {
@@ -563,7 +563,7 @@ public class VideoMixerGridExample
 
 Mélanger des sources avec un arrière-plan transparent.
 
-#### Mélangeur avec incrustation chroma en C#
+#### Mélangeur avec incrustation chroma en C\#
 
 ```csharp
 public void CreateMixerWithChromaKey(string backgroundPath, string foregroundPath)
@@ -618,7 +618,7 @@ public void CreateMixerWithChromaKey(string backgroundPath, string foregroundPat
 ## Exemples d'incrustation chroma
 ### Exemple 10 : effet fond vert
 Filtre d'incrustation chroma autonome pour suppression du fond vert.
-#### Filtre d'incrustation chroma en C#
+#### Filtre d'incrustation chroma en C\#
 ```csharp
 public class ChromaKeyExample
 {
@@ -694,7 +694,7 @@ cleanup:
 
 Configurer une incrustation chroma fond bleu avec des paramètres optimaux.
 
-#### Fond bleu en C#
+#### Fond bleu en C\#
 
 ```csharp
 public void ApplyBlueScreen(IBaseFilter chromaFilter)
@@ -716,7 +716,7 @@ public void ApplyBlueScreen(IBaseFilter chromaFilter)
 ---
 ### Exemple 12 : incrustation chroma sur couleur personnalisée
 Utiliser n'importe quelle couleur personnalisée pour l'incrustation.
-#### Couleur personnalisée en C#
+#### Couleur personnalisée en C\#
 ```csharp
 public void ApplyCustomColorKey(IBaseFilter chromaFilter, Color keyColor)
 {
@@ -742,7 +742,7 @@ public void ApplyCustomColorKey(IBaseFilter chromaFilter, Color keyColor)
 
 Exemple complet combinant tous les filtres de traitement.
 
-#### Pipeline complet en C#
+#### Pipeline complet en C\#
 
 ```csharp
 public class CompleteProcessingPipeline

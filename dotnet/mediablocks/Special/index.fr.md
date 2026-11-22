@@ -139,11 +139,11 @@ Paramètres :
 
 - `numOfOutputs` - Nombre initial de pads de sortie à créer (au moins 1).
 - `mediaType` - Type de média que ce tee gérera (Video, Audio ou Auto).
-- `queueSettings` - Paramètres de file d'attente facultatifs pour contrôler le comportement de mise en tampon. Si null, utilise les valeurs par défaut à faible latence.
+- `queueSettings` - Paramètres de file d'attente facultatifs pour contrôler le comportement de mise en tampon. Si null, utilise `TeeQueueSettings.Default()` (200 tampons, 2 secondes, sans limite en octets).
 
 ### Paramètres de file d'attente
 
-La classe `TeeQueueSettings` (espace de noms `VisioForge.Core.Types.X.Special`) contrôle le comportement de mise en tampon de chaque sortie tee. Par défaut, TeeBlock utilise des paramètres à faible latence (1 tampon par file) au lieu des valeurs par défaut GStreamer (200 tampons).
+La classe `TeeQueueSettings` (espace de noms `VisioForge.Core.Types.X.Special`) contrôle le comportement de mise en tampon de chaque sortie tee. Sans paramètres, TeeBlock utilise `TeeQueueSettings.Default()` : 200 tampons, 2 secondes et aucune limite en octets par file. Les valeurs par défaut du tableau ci-dessous sont celles d'une nouvelle instance de `TeeQueueSettings`, identiques à `TeeQueueSettings.LowLatency()` (1 tampon).
 
 #### Propriétés de TeeQueueSettings
 
@@ -169,8 +169,10 @@ La classe `TeeQueueSettings` (espace de noms `VisioForge.Core.Types.X.Special`) 
 
 #### Méthodes fabriques
 
-- `TeeQueueSettings.LowLatency()` - Crée des paramètres optimisés pour une latence minimale (1 tampon, aucune limite d'octets/de temps). C'est le comportement par défaut.
-- `TeeQueueSettings.GStreamerDefaults()` - Crée des paramètres correspondant aux valeurs par défaut GStreamer (200 tampons, 10 Mo, 1 seconde).
+- `TeeQueueSettings.LowLatency()` - Crée des paramètres optimisés pour une latence minimale (1 tampon, aucune limite d'octets/de temps).
+- `TeeQueueSettings.Default()` - Les paramètres qu'un `TeeBlock` utilise lorsqu'aucun ne lui est passé : 200 tampons, aucune limite d'octets, une limite de 2 secondes.
+
+Pour retrouver les valeurs par défaut de l'élément `queue` de GStreamer, construisez-les directement : `new TeeQueueSettings { MaxSizeBuffers = 200, MaxSizeBytes = 10485760, MaxSizeTime = 1000000000 }`.
 
 ### Exemple de code
 
@@ -196,8 +198,13 @@ await pipeline.StartAsync();
 ### Utilisation de paramètres de file d'attente personnalisés
 
 ```csharp
-// Utiliser la mise en tampon par défaut GStreamer (latence plus élevée, davantage de tampons)
-var gstreamerSettings = TeeQueueSettings.GStreamerDefaults();
+// Utiliser les valeurs par défaut de l'élément queue de GStreamer (latence plus élevée, davantage de tampons)
+var gstreamerSettings = new TeeQueueSettings
+{
+    MaxSizeBuffers = 200,
+    MaxSizeBytes = 10485760, // 10 Mo
+    MaxSizeTime = 1000000000 // 1 seconde
+};
 var videoTee = new TeeBlock(2, MediaBlockPadMediaType.Video, gstreamerSettings);
 
 // Ou créer des paramètres personnalisés

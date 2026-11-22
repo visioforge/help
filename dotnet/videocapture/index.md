@@ -170,7 +170,7 @@ Every capture application follows the same pattern:
 
 ## Common C# Video Capture Scenarios
 
-### Record Webcam Video in C#
+### Record Webcam Video in C\#
 
 Record from a USB webcam or built-in camera to MP4 with H.264/AAC:
 
@@ -181,7 +181,7 @@ capture.Outputs_Add(new MP4Output("webcam.mp4"));
 
 See the full tutorial: [Save Webcam Video in C#](guides/save-webcam-video.md)
 
-### Save RTSP Stream to File in C#
+### Save RTSP Stream to File in C\#
 
 Connect to IP cameras and save RTSP streams to MP4 files. Supports RTSP, ONVIF, and HTTP protocols:
 

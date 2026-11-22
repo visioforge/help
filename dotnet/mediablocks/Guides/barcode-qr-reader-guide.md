@@ -90,7 +90,7 @@ This modular approach allows you to:
 - Add additional processing blocks (filters, encoders)
 - Route output to multiple destinations simultaneously
 
-## How to Read Barcodes from Camera in C#
+## How to Read Barcodes from Camera in C\#
 
 Build a barcode scanner that reads from a webcam or camera device in C# step by step.
 

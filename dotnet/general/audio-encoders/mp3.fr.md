@@ -47,7 +47,7 @@ Vous pouvez utiliser l'encodage MP3 pour encoder l'audio dans des conteneurs MP4
 
 La classe [MP3EncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.MP3EncoderSettings.html) offre aux développeurs une approche simplifiée pour configurer l'encodage MP3 dans les projets de capture audio en C#. Cette solution multiplateforme prend en charge divers contrôles de débit et paramètres de qualité, ce qui la rend idéale pour les applications d'enregistrement MP3 en .NET sur différents systèmes d'exploitation.
 
-### Formats et spécifications pris en charge pour l'enregistrement MP3 en C#
+### Formats et spécifications pris en charge pour l'enregistrement MP3 en C\#
 
 - Format d'entrée : S16LE (Signed 16-bit Little Endian)
 - Fréquences d'échantillonnage : 8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000 Hz
@@ -72,7 +72,7 @@ L'encodeur prend en charge trois modes de contrôle de débit :
    - Paramètre de qualité de 0 (meilleur) à 10
    - Plus efficace pour le stockage et meilleur rapport qualité/taille
 
-### Exemples d'encodage MP3 en C#
+### Exemples d'encodage MP3 en C\#
 
 Créer des paramètres de base pour l'encodeur MP3 avec CBR.
 
@@ -236,7 +236,7 @@ L'encodeur prend en charge trois préréglages de qualité qui affectent la vite
 
 ### Scénarios courants
 
-#### Capture musicale de haute qualité en C#
+#### Capture musicale de haute qualité en C\#
 
 ```csharp
 // Configurer les paramètres pour un enregistrement musical de haute qualité

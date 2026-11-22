@@ -89,6 +89,7 @@ int SetHWAccelerationEnabled([MarshalAs(UnmanagedType.Bool)] bool enabled);
 - Debe llamarse **antes** de conectar filtros de video downstream
 - Cuando está habilitado, el filtro intenta usar decodificación por hardware (DXVA, NVDEC, QuickSync, etc.)
 - Retrocede a decodificación por software si la aceleración por hardware no está disponible
+- Un filtro sin licencia (versión de prueba) siempre decodifica por software: active la licencia antes de conectar el filtro
 - La aceleración por hardware mejora significativamente el rendimiento para códecs H.264, H.265, VP9 y AV1
 **Ejemplo (C++)**:
 ```cpp

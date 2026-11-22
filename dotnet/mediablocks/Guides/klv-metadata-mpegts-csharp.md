@@ -136,6 +136,7 @@ var tsSink = new MPEGTSSinkBlock(tsSettings);
     timestamps. This attaches a **static** KLV payload to the output — it does not reconstruct the original
     frame-accurate, PCR/PTS-synchronized metadata track. For applications that need per-frame KLV synchronized
     to the video, drive the KLV from a live source as it is produced rather than re-embedding a flat file.
+    With a split output (`MPEGTSSplitSinkSettings`), the packet is written at the start of every segment file.
 
 ## Record live KLV while capturing (Video Capture SDK)
 

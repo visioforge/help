@@ -23,7 +23,7 @@ video:
 
 ---
 
-# Make a Video from Images with Transitions in C#
+# Make a Video from Images with Transitions in C\#
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -53,13 +53,23 @@ The images in the video are frames of [Big Buck Bunny](https://peach.blender.org
 
 The video creates the project on .NET 10, which needs Visual Studio 2026; in Visual Studio 2022, choose .NET 8 or .NET 9.
 
+### The short version
+
+The same task in a few lines of C#, with a crossfade between the images:
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/_jgqREj_xdo?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Its code: [images-to-video-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/_VideoTutorials/images-to-video-short-console).
+
 ## Required NuGet packages
 
 - [VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit/) — the SDK with `VideoEditCoreX`
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — GStreamer and the native libraries the engine runs on, among them the H.264 encoder
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.20]" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.21]" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
 ```
 

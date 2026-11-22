@@ -54,6 +54,16 @@ The following video demonstrates the complete process of setting up a webcam cap
   <iframe src="https://www.youtube.com/embed/fAt1Bp6qYPc?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
+### The short version
+
+The same recording as a console app in a few lines of C#, without the window and the live preview.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/9QAVaVWdbRQ?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Its code: [webcam-mp4-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/webcam-mp4-short-console).
+
 ## Source Code Repository
 
 For developers who prefer to examine the complete implementation, all source code is available in our GitHub repository:
@@ -62,17 +72,19 @@ For developers who prefer to examine the complete implementation, all source cod
 
 ## Required Redistributable Components
 
-Before implementing the solution, install the [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) package and the necessary redistributable packages:
+Before implementing the solution, install the [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) package and the necessary redistributable packages.
 
-### Video Capture Components
+Set `PlatformTarget` in the project file to match the redists (`x64` or `x86`).
 
-- For 32-bit applications: [x86 Video Capture Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
-- For 64-bit applications: [x64 Video Capture Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
+```bash
+dotnet add package VisioForge.DotNet.Core
+dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
+dotnet add package VisioForge.DotNet.Core.Redist.MP4.x64
+```
 
-### MP4 Encoding Components
+For a 32-bit (x86) application, use the x86 packages instead: `VisioForge.DotNet.Core.Redist.VideoCapture.x86` and `VisioForge.DotNet.Core.Redist.MP4.x86`.
 
-- For 32-bit applications: [x86 MP4 Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/)
-- For 64-bit applications: [x64 MP4 Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
+`VisioForge.DotNet.VideoCapture`, the package in the Try it block at the top of this page, works as well: it installs the same `VisioForge.DotNet.Core`. The redist packages are needed either way.
 
 ## Implementation Example with C# Code
 

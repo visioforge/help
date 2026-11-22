@@ -231,7 +231,7 @@ var audioEncoders = movOutput.GetAudioEncoders();
 // Display available options to users or auto-select
 foreach (var encoder in videoEncoders)
 {
-    Console.WriteLine($"Available encoder: {encoder.Name}");
+    Console.WriteLine($"Available encoder: {encoder.Item1} ({encoder.Item2.Name})");
 }
 ```
 

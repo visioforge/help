@@ -51,6 +51,16 @@ El siguiente vídeo construye la aplicación paso a paso:
   <iframe src="https://www.youtube.com/embed/NNqmz2vJyQc?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
+### La versión corta
+
+La misma grabación como aplicación de consola en unas pocas líneas de C#, sin ventana ni vista previa en directo.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/9QAVaVWdbRQ?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Su código: [webcam-mp4-short-console en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/webcam-mp4-short-console).
+
 ## Repositorio de código fuente
 
 El proyecto completo está disponible en nuestro repositorio de GitHub:
@@ -61,15 +71,17 @@ El proyecto completo está disponible en nuestro repositorio de GitHub:
 
 Instale el paquete [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) y los paquetes redistribuibles siguientes. El `VideoView` de WPF viene en el paquete principal, así que no hace falta ningún paquete de interfaz aparte.
 
-### Componentes de captura de vídeo
+Establezca `PlatformTarget` en el archivo del proyecto según los redists (`x64` o `x86`).
 
-- Para aplicaciones de 32 bits: [Redist de captura de vídeo x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
-- Para aplicaciones de 64 bits: [Redist de captura de vídeo x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
+```bash
+dotnet add package VisioForge.DotNet.Core
+dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
+dotnet add package VisioForge.DotNet.Core.Redist.MP4.x64
+```
 
-### Componentes de codificación MP4
+Para una aplicación de 32 bits (x86), use en su lugar los paquetes x86: `VisioForge.DotNet.Core.Redist.VideoCapture.x86` y `VisioForge.DotNet.Core.Redist.MP4.x86`.
 
-- Para aplicaciones de 32 bits: [Redist MP4 x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/)
-- Para aplicaciones de 64 bits: [Redist MP4 x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
+`VisioForge.DotNet.VideoCapture`, el paquete del bloque Try it al principio de esta página, también sirve: instala el mismo `VisioForge.DotNet.Core`. Los paquetes redist son necesarios en ambos casos.
 
 ## La ventana en XAML
 
@@ -110,7 +122,7 @@ El prefijo `vf` asigna el espacio de nombres `VisioForge.Core.UI.WPF` del ensamb
 </Window>
 ```
 
-## Ejemplo de implementación con código C#
+## Ejemplo de implementación con código C\#
 
 El código de la ventana. El proyecto usa .NET 10 con usings implícitos; un proyecto WPF deja `System.IO` fuera de ellos, por lo que se añade para `Path`.
 

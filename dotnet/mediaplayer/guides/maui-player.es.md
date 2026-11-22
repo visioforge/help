@@ -25,7 +25,7 @@ primary_api_classes:
 
 ---
 
-# Crear un Reproductor de Video .NET MAUI en C#
+# Crear un Reproductor de Video .NET MAUI en C\#
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -56,8 +56,8 @@ primary_api_classes:
 ## Paquetes NuGet
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.20]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
 
 <!-- Redists de plataforma — incluya solo los targets para los que compila -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64"
@@ -131,6 +131,7 @@ Coloque un `VideoView` en su página junto con un slider de búsqueda y botones 
 `VideoView.GetVideoView()` devuelve un puente `IVideoView` que `MediaPlayerCoreX` consume de forma idéntica en cada target de MAUI (WinUI, macCatalyst, AndroidX, UIKit):
 
 ```csharp
+using System.Diagnostics;
 using VisioForge.Core;
 using VisioForge.Core.MediaPlayerX;
 using VisioForge.Core.Types;

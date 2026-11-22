@@ -107,7 +107,7 @@ Les applications .NET modernes doivent souvent fonctionner sur plusieurs platefo
 L'approche la plus courante consiste à extraire les images sous forme d'objets `System.Drawing.Bitmap` :
 
 ```csharp
-using VisioForge.Core.MediaInfo;
+using VisioForge.Core.MediaInfoReaderX;
 
 public void ExtractFrameAsBitmap()
 {
@@ -128,7 +128,7 @@ public void ExtractFrameAsBitmap()
 Pour les applications utilisant SkiaSharp pour le traitement graphique, vous pouvez extraire les images directement sous forme d'objets `SKBitmap` :
 
 ```csharp
-using VisioForge.Core.MediaInfo;
+using VisioForge.Core.MediaInfoReaderX;
 using SkiaSharp;
 
 public void ExtractFrameAsSkiaBitmap()
@@ -151,7 +151,7 @@ public void ExtractFrameAsSkiaBitmap()
 Pour des scénarios plus avancés ou lorsque vous avez besoin d'une manipulation directe des pixels, vous pouvez extraire les images sous forme de tableaux d'octets RGB :
 
 ```csharp
-using VisioForge.Core.MediaInfo;
+using VisioForge.Core.MediaInfoReaderX;
 
 public void ExtractFrameAsRGBArray()
 {

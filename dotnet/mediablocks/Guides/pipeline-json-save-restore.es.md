@@ -24,7 +24,7 @@ primary_api_classes:
   - MediaBlockCatalog
 ---
 
-# Guardar y restaurar un pipeline Media Blocks en JSON con C#
+# Guardar y restaurar un pipeline Media Blocks en JSON con C\#
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 

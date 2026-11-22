@@ -6,6 +6,7 @@ tags:
   - Video Capture SDK
   - Media Blocks SDK
   - Video Edit SDK
+  - Media Player SDK
   - .NET
   - Windows
   - macOS
@@ -23,13 +24,25 @@ primary_api_classes:
   - MediaPlayerCoreX
   - CompressorExpanderAudioEffect
 
+video:
+  id: VsFSrYD80XE
+  upload_date: 2026-11-20T15:10:00Z
+  duration: PT11M57S
 ---
 
 # Efectos de Audio en Tiempo Real para Aplicaciones .NET
 
-[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" } [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 VisioForge Media Framework proporciona más de 30 efectos de audio para el procesamiento de audio en tiempo real en aplicaciones C# y .NET. Construidos sobre GStreamer, los efectos multiplataforma incluyen ecualizadores, reverb, eco, compresión dinámica, filtros, cambio de tono, reducción de ruido basada en IA y más — todo funcionando en Windows, macOS, Linux, iOS y Android.
+
+## Tutorial en video
+
+El video crea el mismo reproductor en Visual Studio: una ventana WPF con un ecualizador de diez bandas, eco, reverberación y tono, cada uno cambiado mientras el archivo se reproduce.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/VsFSrYD80XE?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## SDKs y Plataformas
 
@@ -100,7 +113,7 @@ Para parámetros detallados y propiedades de cada efecto, consulte la [Referenci
 
 ### Tono y Tempo
 
-- **PitchShiftAudioEffect** — Cambio de tono sin cambio de tempo
+- **PitchAudioEffect** — Cambio de tono en semitonos sin cambio de tempo
 - **ScaleTempoAudioEffect** — Conserva el tono cuando cambia la tasa de reproducción
 
 ### Efectos Especiales
@@ -217,6 +230,60 @@ Para el uso basado en pipeline con Media Blocks SDK y bloques de efectos de audi
 
 ???+ "¿Cuál es la diferencia entre los efectos multiplataforma y DirectSound?"
     Los efectos multiplataforma (espacio de nombres `VisioForge.Core.Types.X.AudioEffects`) funcionan en todas las plataformas usando GStreamer. Los efectos DirectSound son solo para Windows y están disponibles en los núcleos de SDK clásicos. Los efectos multiplataforma cubren la misma funcionalidad y más.
+
+## Transcripción del video
+
+### Qué vamos a construir
+
+Vamos a añadir efectos de audio a un reproductor C# WPF con el VisioForge Media Player SDK, y cambiarlos mientras el archivo se reproduce. Esto es lo que vamos a construir. Un reproductor WPF para archivos de video y audio, con cuatro efectos: un ecualizador de diez bandas, eco, reverberación y tono. Una casilla activa o desactiva cada efecto, y sus controles lo cambian, todo mientras el archivo sigue reproduciéndose. El código detrás ocupa unas doscientas cuarenta líneas de C#. Este es el reproductor terminado. El panel de efectos está debajo del video.
+
+### Requisitos previos
+
+Necesita Windows 10 u 11, y Visual Studio 2022 o 2026 con la carga de trabajo de desarrollo de escritorio de .NET. El proyecto tiene como destino .NET 8 o posterior. Y un archivo de música o de video para reproducir. La parte de reproductor de la aplicación es la misma que en nuestro tutorial del reproductor de video, así que este video la repasa rápido.
+
+### Crear un proyecto WPF
+
+En Visual Studio, cree un proyecto nuevo. Busque WPF y elija Aplicación WPF para C#. Ponga al proyecto el nombre AudioEffectsWpf. Elija .NET 10 y haga clic en Crear.
+
+### Añadir los paquetes NuGet
+
+Ahora añada cuatro paquetes NuGet. El Media Player SDK en sí. CrossPlatform Core, el entorno de ejecución de GStreamer sobre el que funciona el motor X. CrossPlatform Core Adds, que incluye más complementos, entre ellos la reverberación. Y CrossPlatform Libav, los códecs de FFmpeg con los que se decodifican muchos formatos. O use el Administrador de paquetes NuGet: haga clic derecho en el proyecto, Administrar paquetes NuGet e instale VisioForge.DotNet.MediaPlayer desde la pestaña Examinar. Después instale los paquetes Core, Core Adds y Libav para Windows x64. La pestaña Instalados muestra los cuatro. Son paquetes x64, así que ponga PlatformTarget en x64 en el archivo del proyecto.
+
+### La ventana del reproductor
+
+La ventana se escribe en XAML, y el diseñador la dibuja enseguida. Primero la parte del reproductor. Asigne al espacio de nombres VisioForge.Core.UI.WPF un prefijo, aquí vf. La cuadrícula tiene dos columnas, el video y una columna de ajustes de 260 píxeles, y cuatro filas: el video, la línea de tiempo, los botones y los efectos. El VideoView ocupa la primera celda. Debajo del video va la línea de tiempo: un control deslizante para la posición, con el tiempo al lado. Luego Reproducir, Pausar, Reanudar y Detener. Todos empiezan deshabilitados: Reproducir hasta que el SDK se ha cargado, y los otros tres hasta que se reproduce un archivo. La columna de ajustes contiene el nombre del archivo con un botón de examinar, y un cuadro combinado para la salida de audio. Después un control deslizante de volumen, y un cuadro de texto de solo lectura para el registro de errores.
+
+### El panel de efectos
+
+Ahora el panel de efectos, en la última fila, debajo de los botones. Un panel de pila horizontal ocupa las dos columnas. Cada efecto tiene un cuadro de grupo con una casilla en su encabezado. El ecualizador va primero, y su casilla asigna un mismo controlador a Checked y a Unchecked. Una cuadrícula uniforme de dos filas y diez columnas contiene las bandas: diez controles deslizantes, y sus frecuencias debajo, de 30 hercios a 15 kilohercios. La etiqueta Tag de cada control es el índice de su banda, así los diez comparten un mismo controlador. Un estilo configura los diez controles: verticales, de menos 12 a más 12 decibelios, y enlazados al mismo controlador ValueChanged. Un segundo estilo centra las etiquetas. El eco tiene un control para el retardo, de 50 a 1000 milisegundos, y otro para la intensidad, de 0 a 1. La reverberación tiene el tamaño de la sala, y un nivel que mezcla el sonido reverberado con el seco. Los dos van de 0 a 1. Y el tono tiene un control, de 12 semitonos abajo a 12 arriba, que se ajusta a semitonos enteros.
+
+### Inicializar el SDK
+
+MainWindow.xaml.cs empieza con estos usings. VisioForge.Core.Types.X.AudioEffects contiene las clases de los efectos. Cada efecto es un objeto, creado una vez y ajustado a los valores iniciales de los controles. Equalizer10AudioEffect recibe los diez niveles de banda en decibelios, todos en cero aquí. EchoAudioEffect recibe el retardo, y después su intensidad y su realimentación. ReverberationAudioEffect recibe una sala grande, y PitchAudioEffect está cuatro semitonos arriba. Cuando se carga la ventana, espere una vez a VisioForgeX.InitSDKAsync. Después cree el motor MediaPlayerCoreX y pásele el VideoView. Los errores llegan al evento OnError en otro hilo, así que el controlador vuelve al hilo de la interfaz y los añade al registro. Audio_OutputDevicesAsync enumera los altavoces y los auriculares, y sus nombres llenan el cuadro combinado. Reproducir se habilita cuando el SDK se ha cargado. El botón de examinar muestra un OpenFileDialog para archivos de video y de audio.
+
+### Reproducir con los efectos
+
+El controlador de Reproducir deshabilita los botones y limpia el registro. Envía el sonido a la salida seleccionada, con el volumen del control. OpenAsync abre el archivo. Después Audio_Effects_AddOrUpdate añade cada efecto cuya casilla está marcada, y PlayAsync inicia la reproducción con ellos. Los efectos duran una reproducción: tras Detener o al final del archivo desaparecen, así que cada Reproducir los añade otra vez. PlaybackState.Free significa que el archivo no se abrió o no se reprodujo, y la ventana vuelve al estado detenido. Si no, los botones pasan a reproduciendo, y el temporizador de la línea de tiempo arranca.
+
+### Cambiar los efectos mientras suena
+
+ApplyEffect sirve a las cuatro casillas. Mientras se reproduce un archivo, marcar una casilla añade su efecto con Audio_Effects_AddOrUpdate, y desmarcarla llama a Audio_Effects_Remove. Cuando no se reproduce nada, no hace nada: Reproducir añade los efectos marcados. La casilla del ecualizador llama a ApplyEffect. Los controles de banda comparten un controlador: lee la banda de la etiqueta Tag del control, y SetLevel fija el nivel de esa banda en decibelios. El ecualizador que está sonando lo toma al instante. Los controles del eco fijan Delay e Intensity en el objeto del efecto. Una propiedad asignada a un efecto que suena se aplica al instante, así que no hace falta añadirlo otra vez. La reverberación funciona igual, con RoomSize y Level. Y el control del tono fija PitchSemitones. El tempo no cambia: solo se mueve el tono.
+
+### El resto del reproductor
+
+El resto es el reproductor del tutorial del reproductor de video. Pausar y Reanudar son una llamada cada uno, y Detener espera a StopAsync y restablece la ventana. Los efectos siguen sonando después de una pausa. ShowBusy deshabilita los cuatro botones, y ShowPlaying habilita o bien Reproducir o bien los otros tres. Stopped devuelve los botones, la etiqueta de tiempo y la línea de tiempo a su sitio. OnStop se produce tras StopAsync y al final del archivo. El controlador actúa solo para el final del archivo, mientras Detener está habilitado y State es Free. Un DispatcherTimer marca dos veces por segundo y mueve la línea de tiempo a la posición, con una marca activada, para que ese movimiento no haga un salto. Un clic en la línea de tiempo salta al instante, y un arrastre salta una vez, al soltar el pulgar. El volumen sigue a su control. Cuando se cierra la ventana, Dispose detiene la reproducción y libera el reproductor, y DestroySDK libera el SDK.
+
+### Ejecutarla
+
+Ejecute la aplicación. Elija un archivo, haga clic en Reproducir y haga clic en la línea de tiempo para avanzar. Primero, escúchelo sin efectos. Marque Ecualizador, y baje las bandas graves y suba las agudas. Desactive el ecualizador y active Eco. Después alargue el retardo. Eco fuera, Reverberación dentro: una sala grande. Después suba el nivel para oír más sala. Reverberación fuera, Tono dentro: cuatro semitonos arriba. Después bájelo. Desmarque Tono, y el sonido vuelve a como era. Después Detener, y cierre la ventana.
+
+### Errores frecuentes
+
+Algunos errores habituales. Dejar fuera el paquete Core Adds, así que la reverberación no se crea. Añadir los efectos una sola vez: Detener o el final del archivo los quita, así que añádalos de nuevo en cada Reproducir. Escribir un elemento del arreglo Levels del ecualizador durante la reproducción, lo que no llega al efecto que suena: use SetLevel. PitchShiftAudioEffect está obsoleto, así que use PitchAudioEffect. Y mezclar paquetes x86 y x64.
+
+### Próximos pasos
+
+La guía escrita enumera más efectos, como un compresor, un flanger y la supresión de ruido. Los mismos efectos funcionan al capturar video, y Media Blocks SDK tiene un bloque por efecto. Y el capturador de muestras de audio le entrega las muestras en su propio código. El código fuente completo está en GitHub, y la documentación en visioforge.com/help. Gracias por ver el video.
 
 ## Ver También
 

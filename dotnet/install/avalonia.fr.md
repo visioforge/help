@@ -81,15 +81,15 @@ Le modèle Avalonia utilise la gestion centralisée des paquets : NuGet écrit d
 
 ```xml
 <ItemGroup>
-  <PackageVersion Include="VisioForge.DotNet.Core" Version="[2026.11.20]" />
-  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.20]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" />
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.21" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.11.21" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.16" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.11.16" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.11.13" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.5" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.10.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="2026.10.26" />
 </ItemGroup>
 ```
 
@@ -115,13 +115,13 @@ Chaque cible prend son redist dans son propre fichier de projet. Faites un clic 
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" />
 </ItemGroup>
-<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux')) or $(RuntimeIdentifier.StartsWith('linux-'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))" />
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))" />
 </ItemGroup>
 ```
 
-Le modèle compile la cible Desktop pour `net10.0` tout court, et les moteurs Windows et macOS du SDK ont besoin du framework propre au système d'exploitation. Les propriétés placées après remplacent celles du modèle : `net10.0-windows` sous Windows, et `net10.0-macos` sur un Mac, un bundle d'application, qui a besoin d'un identifiant d'application. Linux garde `net10.0` et utilise le GStreamer installé sur le système, voir le [déploiement sous Ubuntu](../deployment-x/Ubuntu.md) ; le dernier bloc, appliqué lorsque la cible est compilée sous Linux (une publication pour Linux depuis Windows ou macOS l'ignore), lui ajoute le paquet core de son architecture, qui contient les bibliothèques natives propres au SDK. Les références ne portent pas de version : celles-ci viennent de `Directory.Packages.props`.
+Le modèle compile la cible Desktop pour `net10.0` tout court, et les moteurs Windows et macOS du SDK ont besoin du framework propre au système d'exploitation. Les propriétés placées après remplacent celles du modèle : `net10.0-windows` sous Windows, et `net10.0-macos` sur un Mac, un bundle d'application, qui a besoin d'un identifiant d'application. Linux garde `net10.0` et utilise le GStreamer installé sur le système, voir le [déploiement sous Ubuntu](../deployment-x/Ubuntu.md) ; le dernier bloc, appliqué lorsque la cible est compilée sous Linux ou publiée pour un identificateur de runtime `linux-*`, lui ajoute le paquet core de son architecture, qui contient les bibliothèques natives propres au SDK. Les références ne portent pas de version : celles-ci viennent de `Directory.Packages.props`.
 
 ## La cible Android
 

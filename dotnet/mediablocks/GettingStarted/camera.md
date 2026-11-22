@@ -243,6 +243,7 @@ catch (Exception ex)
 
 This example demonstrates a complete camera viewer implementation:
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Linq;

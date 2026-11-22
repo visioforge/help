@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK X (cross-platform edition) into
 
 This skill helps you add **VisioForge Video Edit SDK X** — the cross-platform "X" edition of the editing SDK — to a .NET MAUI application targeting **Windows, Android, iOS, and Mac Catalyst** from a single codebase. `VideoEditCoreX` is a timeline engine on the GStreamer backend: you append clips, images and audio tracks, optionally add effects and transitions, then either preview the timeline into a `VideoView` or render it to a file. The same C# runs on every OS — only the per-TFM redist NuGets change.
 
-Pinned NuGet versions: wrapper **`2026.11.20`**, MAUI handlers **`2026.11.20`**, plus the five native redists at the versions shown in the csproj below. `VisioForge.DotNet.VideoEdit` and `VisioForge.DotNet.Core.UI.MAUI` always move together and must carry the same version. The `VisioForge.CrossPlatform.*` redists are built on their own cadence: for each one, pin the newest version published **at or before** the wrapper's release. That may trail the wrapper by several releases — `Core.iOS` has a handful of published versions where the wrapper has dozens — and it must never run ahead of it, which is undefined behaviour. The [official Video Edit X MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/MAUI/SimpleEdit) is the reference for the project layout, not for the version to pin — it can lag a release.
+Pinned NuGet versions: wrapper **`2026.11.21`**, MAUI handlers **`2026.11.21`**, plus the five native redists at the versions shown in the csproj below. `VisioForge.DotNet.VideoEdit` and `VisioForge.DotNet.Core.UI.MAUI` always move together and must carry the same version. The `VisioForge.CrossPlatform.*` redists are built on their own cadence: for each one, pin the newest version published **at or before** the wrapper's release. That may trail the wrapper by several releases — `Core.iOS` has a handful of published versions where the wrapper has dozens — and it must never run ahead of it, which is undefined behaviour. The [official Video Edit X MAUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/MAUI/SimpleEdit) is the reference for the project layout, not for the version to pin — it can lag a release.
 
 ## When to use this skill
 
@@ -74,8 +74,8 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.20]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">

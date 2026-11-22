@@ -9,7 +9,7 @@ This skill helps you add **VisioForge Video Capture SDK X** — the cross-platfo
 
 `VideoCaptureCoreX` is the high-level capture-and-record god-object — same API as on the WPF/MAUI/WinUI hosts, just bound to Uno's `VideoView`. Under the hood it shares the GStreamer-backed engine with Media Blocks.
 
-Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Capture sample): wrapper **`2026.11.20`**, Uno UI **`2026.11.20`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions (match the bundled `references/Sample.csproj` and the official Uno Simple Capture sample): wrapper **`2026.11.21`**, Uno UI **`2026.11.21`**, per-OS native redists at the versions shown in the csproj below. Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it — keep the wrapper and `VisioForge.DotNet.Core.UI.Uno` on the same version, and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -74,8 +74,8 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.20]"/>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.20]"/>
+    <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.21]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.21]"/>
   </ItemGroup>
 </Project>
 ```
@@ -314,9 +314,14 @@ A camera-→-preview pipeline on Uno is three lines: init, construct, configure-
 
 ```csharp
 // MainPage.xaml.cs
+using System;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using VisioForge.Core;
 using VisioForge.Core.Types.X.Sources;
 using VisioForge.Core.VideoCaptureX;
+
+namespace YourApp; // must match x:Class="YourApp.MainPage" in the XAML
 
 public sealed partial class MainPage : Page
 {
@@ -346,11 +351,13 @@ public sealed partial class MainPage : Page
 
             var device = devices[0];
             var format = device.GetHDVideoFormatAndFrameRate(out var frameRate);
-            _core!.Video_Source = new VideoCaptureDeviceSourceSettings(device)
+            if (format == null) { /* no 720p-or-better format */ return; }
+            var settings = new VideoCaptureDeviceSourceSettings(device)
             {
                 Format = format.ToFormat()
             };
-            _core.Video_Source.Format.FrameRate = frameRate;
+            settings.Format.FrameRate = frameRate;
+            _core!.Video_Source = settings;
             _core.Audio_Play = false;
             _core.Audio_Record = false;
 

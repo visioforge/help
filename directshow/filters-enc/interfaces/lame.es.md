@@ -31,7 +31,7 @@ Esta interfaz permite la configuración de tasa de bits, calidad, configuracione
 
 ## Definiciones de la Interfaz
 
-### Definición en C#
+### Definición en C\#
 
 ```csharp
 using System;

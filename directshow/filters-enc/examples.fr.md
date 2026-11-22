@@ -47,7 +47,7 @@ Cette page fournit des exemples de code pratiques pour encoder de la vidéo et d
 #include "INVEncConfig.h"  // Interface NVENC
 #pragma comment(lib, "strmiids.lib")
 ```
-### Projets C#
+### Projets C\#
 ```csharp
 using VisioForge.DirectShowAPI;
 using VisioForge.DirectShowLib;
@@ -74,7 +74,7 @@ using System.Runtime.InteropServices;
 
 Encodez de la vidéo avec l'accélération matérielle NVIDIA.
 
-#### Encodage NVENC H.264 en C#
+#### Encodage NVENC H.264 en C\#
 
 ```csharp
 using VisioForge.Core.Types.Output;
@@ -117,7 +117,7 @@ if (SUCCEEDED(hr))
 ---
 ### Exemple 2 : encodage NVENC H.265 (HEVC)
 Encodez avec H.265 pour une meilleure compression.
-#### NVENC H.265 en C#
+#### NVENC H.265 en C\#
 ```csharp
 public void EncodeH265(string inputFile, string outputFile)
 {
@@ -137,7 +137,7 @@ public void EncodeH265(string inputFile, string outputFile)
         nvenc.SetQp(23);                            // QP 23 : bon équilibre
         nvenc.SetPreset(NV_ENC_PRESET_HQ_GUID);      // Haute qualité
         nvenc.SetProfile(NV_ENC_HEVC_PROFILE_MAIN_GUID);
-        nvenc.SetLevel(NVENCEncoderLevel.H264_41);   // Niveau 4.1
+        nvenc.SetLevel(NVENCEncoderLevel.HEVC_41);   // Niveau 4.1 : jusqu'à 1080p ; Auto pour la 4K
         nvenc.SetGOP(120);                           // 4 secondes a 30 fps
         nvenc.SetBFrames(3);
     }
@@ -163,7 +163,7 @@ public void EncodeH265(string inputFile, string outputFile)
 
 Différentes stratégies de contrôle de débit pour divers cas d'usage.
 
-#### Exemples de contrôle de débit en C#
+#### Exemples de contrôle de débit en C\#
 
 ```csharp
 using VisioForge.Core.Types.Output;
@@ -197,7 +197,7 @@ public void ConfigureRateControl(INVEncConfig nvenc, NVENCRateControlMode mode)
 ---
 ### Exemple 4 : préréglages de qualité NVENC
 Équilibre entre vitesse et qualité.
-#### Préréglages de qualité en C#
+#### Préréglages de qualité en C\#
 ```csharp
 public void SetQualityPreset(INVEncConfig nvenc, string useCase)
 {
@@ -234,7 +234,7 @@ public void SetQualityPreset(INVEncConfig nvenc, string useCase)
 
 Utilisez l'encodage H.264 basé sur le CPU.
 
-#### H.264 logiciel en C#
+#### H.264 logiciel en C\#
 
 ```csharp
 public void EncodeSoftwareH264(string inputFile, string outputFile)
@@ -280,7 +280,7 @@ public void EncodeSoftwareH264(string inputFile, string outputFile)
 ## Exemples d'encodage audio
 ### Exemple 6 : encodage audio AAC
 Encodez l'audio au format AAC.
-#### Encodage AAC en C#
+#### Encodage AAC en C\#
 ```csharp
 public void EncodeAACAudio(string inputFile, string outputFile)
 {
@@ -335,7 +335,7 @@ public void EncodeAACAudio(string inputFile, string outputFile)
 
 Prise en charge de différents codecs audio.
 
-#### Sélection de codec audio en C#
+#### Sélection de codec audio en C\#
 
 ```csharp
 public enum AudioCodec
@@ -391,7 +391,7 @@ public IBaseFilter CreateAudioEncoder(IFilterGraph2 filterGraph, AudioCodec code
 ## Exemples de multiplexage de conteneurs
 ### Exemple 8 : conteneur MP4
 Multiplexez vidéo et audio au format MP4.
-#### Multiplexage MP4 en C#
+#### Multiplexage MP4 en C\#
 ```csharp
 public void CreateMP4(string inputFile, string outputFile)
 {
@@ -435,7 +435,7 @@ public void CreateMP4(string inputFile, string outputFile)
 
 Créez des fichiers Matroska (MKV).
 
-#### Multiplexage MKV en C#
+#### Multiplexage MKV en C\#
 
 ```csharp
 public void CreateMKV(string inputFile, string outputFile)
@@ -482,7 +482,7 @@ public void CreateMKV(string inputFile, string outputFile)
 ---
 ### Exemple 10 : conteneur WebM
 Créez des fichiers WebM pour la diffusion web.
-#### Multiplexage WebM en C#
+#### Multiplexage WebM en C\#
 ```csharp
 public void CreateWebM(string inputFile, string outputFile)
 {
@@ -524,7 +524,7 @@ public void CreateWebM(string inputFile, string outputFile)
 
 Application d'encodage complète avec toutes les fonctionnalités.
 
-#### Encodeur complet en C#
+#### Encodeur complet en C\#
 
 ```csharp
 using System;

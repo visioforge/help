@@ -82,7 +82,7 @@ The main idea is to take the raw video stream from the RTSP source and directly 
 You'll need the VisioForge Media Blocks SDK. You can add it to your .NET project via NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
 ```
 
 Depending on your target platform (Windows, macOS, Linux, including ARM-based systems like Jetson Nano for embedded camera applications), you will also need the corresponding native runtime packages. For example, on Windows to record video:
@@ -328,7 +328,7 @@ namespace RTSPCaptureOriginalStream
         - If `rtspSettings.AudioEnabled` is true:
             - A new dynamic input pad for audio is created on the `_muxer`.
             - If `ReencodeAudio` is `true` (recommended for wider file compatibility):
-                - `_decodeBin` is created to decode the incoming audio from the camera. It's configured to only process audio (`audioDisabled: false`).
+                - `_decodeBin` is created to decode the incoming audio from the camera. It's configured to only process audio (`new DecodeBinBlock(renderVideo: false)`).
                 - `_audioEncoder` (e.g., `AACEncoderBlock`) is created.
                 - The pipeline is connected: `_rtspRawSource.AudioOutput` -> `_decodeBin.Input` -> `_decodeBin.AudioOutput` -> `_audioEncoder.Input` -> `_audioEncoder.Output` -> `inputAudioPad` (muxer's audio input).
             - If `ReencodeAudio` is `false`:

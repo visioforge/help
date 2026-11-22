@@ -32,7 +32,7 @@ primary_api_classes:
 
 ---
 
-# How to Implement Pre-Event Recording for IP Cameras in C#
+# How to Implement Pre-Event Recording for IP Cameras in C\#
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -104,7 +104,7 @@ graph TD;
 You'll need the VisioForge Media Blocks SDK. Add it to your .NET project via NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
 ```
 
 Depending on your target platform, add the corresponding native runtime package. For Windows x64:

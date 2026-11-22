@@ -110,8 +110,8 @@ Add the following packages to your project:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.20]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]"/>
 </ItemGroup>
 ```
 
@@ -177,13 +177,13 @@ sudo dnf install gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plug
 Then add the core package for the target architecture. It carries the SDK's own native libraries (the color conversion behind snapshots, frame-to-bitmap conversion and overlays, the 3D LUT effect, Data Matrix) and no GStreamer. Without it the application starts, but those features fail at run time with `VisioForge_VAP is not available`:
 
 ```xml
-<ItemGroup Condition="$([MSBuild]::IsOSPlatform('linux'))">
+<ItemGroup Condition="$([MSBuild]::IsOSPlatform('linux')) or $(RuntimeIdentifier.StartsWith('linux-'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
 </ItemGroup>
 ```
 
-The block applies when the project is built on Linux; publishing for Linux from Windows or macOS skips it. On Linux, the conditions pick the package from the runtime identifier: `-r linux-arm64` or a publish profile for ARM64 selects the ARM64 package, and with no runtime identifier the build machine's architecture decides.
+The block applies when the project is built on Linux or published for a `linux-*` runtime identifier; the target frameworks above are still chosen by the build host, so a Uno Linux build from Windows needs `net10.0-desktop` set explicitly. The conditions pick the package from the runtime identifier: `-r linux-arm64` or a publish profile for ARM64 selects the ARM64 package, and with no runtime identifier the build machine's architecture decides.
 
 ### Complete Sample Project File
 
@@ -217,8 +217,8 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
   
   <!-- VisioForge Core References -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.20]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.20]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.21]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]"/>
   </ItemGroup>
   
   <!-- Windows Platform -->
@@ -244,7 +244,7 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
   </ItemGroup>
   
   <!-- Linux Desktop Platform -->
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('linux'))">
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('linux')) or $(RuntimeIdentifier.StartsWith('linux-'))">
     <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
     <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
   </ItemGroup>

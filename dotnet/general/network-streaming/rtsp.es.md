@@ -116,10 +116,12 @@ Esta clase encapsula todos los parámetros necesarios para definir el comportami
 
 *   **Configuración de Red:**
     *   `Port` (int): El puerto TCP en el que el servidor escucha conexiones RTSP entrantes. El predeterminado es `8554`, una alternativa común al puerto estándar (a menudo restringido) 554. Asegúrese de que este puerto esté abierto en los firewalls.
-    *   `Address` (string): La dirección IP a la que se vincula el servidor.
-        *   `"127.0.0.1"` (Predeterminado): Escucha solo conexiones desde la máquina local.
-        *   `"0.0.0.0"`: Escucha en todas las interfaces de red disponibles (usar para acceso público).
-        *   IP Específica (ej., `"192.168.1.100"`): Se vincula solo a esa interfaz de red específica.
+    *   `Address` (string): El nombre de host o la dirección IP con que los clientes llegan al servidor. Solo define el host de `URL`; no elige las interfaces en las que escucha el servidor. El predeterminado es `"127.0.0.1"`.
+    *   `ListenAddress` (string): La dirección IP local en la que escucha el servidor.
+        *   `"0.0.0.0"` (Predeterminado): Escucha en todas las interfaces IPv4, así que otras máquinas de la red pueden conectarse.
+        *   `"127.0.0.1"`: Escucha solo conexiones desde la máquina local.
+        *   IP Específica (ej., `"192.168.1.100"`): Escucha solo en esa interfaz de red.
+        *   Dirección IPv6: Necesaria para clientes IPv6, también cuando `Address` viene de un URI IPv6; el predeterminado escucha solo en IPv4. `"::1"` acepta solo la máquina local, `"::"` todas las interfaces IPv6. En Windows, una dirección IPv6 no acepta clientes IPv4.
     *   `Point` (string): El componente de ruta de la URL RTSP (ej., `/live`, `/stream1`). Los clientes se conectarán a `rtsp://<Address>:<Port><Point>`. El predeterminado es `"/live"`.
 *   **Configuración de Transmisión:**
     *   `VideoEncoder` (IVideoEncoder): Una instancia de `IVideoEncoder` — típicamente un objeto de configuración de codificador (ej., `OpenH264EncoderSettings`) o el resultado de `H264EncoderBlock.GetDefaultSettings()`. Define el códec, tasa de bits (Kbit/s), calidad, etc.
@@ -140,8 +142,8 @@ Al usar el Media Blocks SDK, el `RTSPServerBlock` representa el elemento real ba
 
 **Funcionalidad:**
 
-*   **Sumidero de Medios:** Actúa como un punto terminal (sumidero) en una tubería de medios, recibiendo datos de video y audio codificados.
-*   **Pads de Entrada:** Proporciona pads `VideoInput` y `AudioInput` distintos para conectar fuentes/codificadores de video y audio aguas arriba.
+*   **Sumidero de Medios:** Actúa como un punto terminal (sumidero) en una tubería de medios, recibiendo video y audio sin comprimir que codifica con `VideoEncoder` y `AudioEncoder`.
+*   **Pads de Entrada:** Proporciona pads `VideoInput` y `AudioInput` distintos para conectar fuentes de video y audio aguas arriba, no bloques codificadores.
 *   **Integración GStreamer:** Gestiona el `rtspserver` de GStreamer subyacente y elementos relacionados necesarios para manejar conexiones de clientes y transmitir paquetes RTP.
 *   **Verificación de Disponibilidad:** El método estático `IsAvailable()` permite verificar si los complementos de GStreamer necesarios para la transmisión RTSP están presentes en el sistema.
 *   **Gestión de Recursos:** Implementa `IDisposable` para la limpieza adecuada de sockets de red y recursos de GStreamer cuando el bloque ya no se necesita.
@@ -162,7 +164,7 @@ var audioEncoder = new AVENCAACEncoderSettings(); // AAC multiplataforma confiab
 var settings = new RTSPServerSettings(videoEncoder, audioEncoder)
 {
     Port = 8554,
-    Address = "0.0.0.0",  // Accesible desde otras máquinas en la red
+    ListenAddress = "0.0.0.0",  // Todas las interfaces (el predeterminado): otras máquinas de la red pueden conectarse
     Point = "/livefeed"
 };
 
@@ -216,7 +218,8 @@ await pipeline.StartAsync();
 var secureSettings = new RTSPServerSettings(videoEncoder, audioEncoder)
 {
     Port = 8555, // Usar un puerto diferente
-    Address = "192.168.1.100", // Vincular a una IP interna específica
+    Address = "192.168.1.100",       // El host que usan los clientes, el host de URL
+    ListenAddress = "192.168.1.100", // Escuchar solo en esta interfaz interna
     Point = "/secure",
     Username = "viewer",
     Password = "VerySecretPassword!",
@@ -243,7 +246,7 @@ var secureRtspOutput = new RTSPServerOutput(secureSettings);
     *   **Codificador AMD:** `AMFH264EncoderSettings` codifica con `Usage = AMFH264EncoderUsage.Transcoding` de forma predeterminada. Para el menor retardo del codificador, establezca `Usage = AMFH264EncoderUsage.UltraLowLatency` (o `LowLatency`).
 3.  **Configuración de Red:**
     *   **Seguridad Primero:** Implemente autenticación de `Username` y `Password` para cualquier transmisión no destinada al acceso público anónimo.
-    *   **Dirección de Vinculación:** Use `"0.0.0.0"` con precaución. Para seguridad mejorada, vincule explícitamente a la interfaz de red (`Address`) destinada a conexiones de clientes si es posible.
+    *   **Dirección de Escucha:** Por defecto el servidor escucha en todas las interfaces (`ListenAddress = "0.0.0.0"`). Para seguridad mejorada, establezca `ListenAddress` en la interfaz de red destinada a conexiones de clientes, o en `"127.0.0.1"` para clientes locales únicamente.
     *   **Reglas de Firewall:** Configure meticulosamente los firewalls del sistema y de red para permitir conexiones TCP entrantes en el `Port` RTSP elegido. Además, recuerde que RTP/RTCP (usado para los datos de medios reales) a menudo usan puertos UDP dinámicos; los firewalls podrían necesitar módulos auxiliares (como `nf_conntrack_rtsp` en Linux) o rangos amplios de puertos UDP abiertos (menos seguro).
 4.  **Gestión de Recursos:**
     *   **Patrón Dispose:** Las instancias del servidor RTSP mantienen recursos de red (sockets) y tuberías GStreamer potencialmente complejas. *Siempre* asegúrese de que se eliminen correctamente usando declaraciones `using` o llamadas explícitas `.Dispose()` en bloques `finally` para prevenir fugas de recursos.

@@ -107,7 +107,7 @@ public struct AACInfo
 
 ### Définitions de l'interface
 
-#### Définition C#
+#### Définition C\#
 
 ```csharp
 using System;
@@ -278,7 +278,7 @@ L'interface **IVFAACEncoder** fournit une configuration complète basée sur les
 **GUID de l'interface** : `{0BEF7533-39E6-42a5-863F-E087FAB5D84F}`
 **Hérite de** : `IUnknown`
 ### Définitions de l'interface
-#### Définition C#
+#### Définition C\#
 ```csharp
 using System;
 using System.Runtime.InteropServices;

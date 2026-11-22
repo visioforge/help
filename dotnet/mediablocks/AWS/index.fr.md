@@ -53,7 +53,6 @@ L'`AWSS3SinkBlock` est configuré au moyen d'`AWSS3SinkSettings`. Propriétés c
 - `ContentDisposition` (string, facultatif) : en-tête Content-Disposition à définir pour l'objet téléversé.
 - `Metadata` (Dictionary&lt;string, string&gt;, facultatif) : table de métadonnées utilisateur à stocker avec l'objet.
 - `ForcePathStyle` (bool, facultatif) : force le client à utiliser l'adressage par chemin pour les compartiments.
-- `UseMultipartUpload` (bool, facultatif, par défaut `true`) : utilise le téléversement multipart pour les fichiers volumineux.
 - `PartSize` (ulong, facultatif, par défaut 5 Mo) : taille en octets d'une partie individuelle utilisée pour le téléversement multipart.
 - `OnError` (S3SinkOnError, facultatif) : comportement en cas d'erreur de téléversement.
 - `RequestTimeout` (TimeSpan, facultatif, par défaut 15 s) : délai d'attente des requêtes S3 (mettre à `TimeSpan.Zero` pour l'infini).

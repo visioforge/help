@@ -172,6 +172,7 @@ La API de lista de reproducción integrada lleva el índice actual por usted. `P
 using System;
 using System.Threading.Tasks;
 using VisioForge.Core.MediaPlayer;
+using VisioForge.Core.Types;
 using VisioForge.Core.Types.Events;
 
 public class PlaylistPlayer

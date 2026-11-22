@@ -32,7 +32,7 @@ primary_api_classes:
 
 ---
 
-# Visionneuse RTSP et lecteur de caméra IP en C#
+# Visionneuse RTSP et lecteur de caméra IP en C\#
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -60,7 +60,7 @@ Les cas d'usage courants incluent les tableaux de bord de vidéosurveillance, le
 Ajoutez le paquet NuGet du Media Blocks SDK à votre projet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
 ```
 
 Vous avez également besoin des paquets de runtime spécifiques à la plateforme. Pour Windows :

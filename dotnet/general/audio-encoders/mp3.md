@@ -236,7 +236,7 @@ The encoder supports three quality presets that affect the encoding speed and CP
 
 ### Common Scenarios
 
-#### High-Quality Music Capture in C#
+#### High-Quality Music Capture in C\#
 
 ```csharp
 // Configure settings for high-quality music recording

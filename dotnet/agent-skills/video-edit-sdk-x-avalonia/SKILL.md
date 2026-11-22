@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK X (cross-platform editor editio
 
 This skill helps you add **VisioForge Video Edit SDK X** — the cross-platform "X" edition of the editor SDK — to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Video Edit SDK X exposes a high-level non-linear editor god-object (`VideoEditCoreX`) with a list-of-clips timeline (`Input_AddAudioVideoFile`, `Input_AddImageFile`, `Input_AddAudioFile`) and a single configurable `Output_Format` sink. Same C# code targets all three desktop OSes — only the UI host (Avalonia here) and the per-OS native redist NuGet package change between platforms.
 
-Pinned NuGet versions: wrapper **`2026.11.20`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official VideoJoin Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.21`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official VideoJoin Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -39,7 +39,7 @@ Video Edit SDK X for Avalonia is **not** a single meta-package. You add the SDK 
 
 On Linux, GStreamer does not come from NuGet: the Linux target uses the **system-installed GStreamer** (`gstreamer1.0`, `gstreamer1.0-plugins-base`, `gstreamer1.0-plugins-good`, `gstreamer1.0-plugins-bad`, `gstreamer1.0-plugins-ugly`, `gstreamer1.0-libav` on Debian/Ubuntu; equivalent packages on Fedora/Arch). If GStreamer is not installed system-wide on the Linux target, the app launches but `VideoEditCoreX` operations fail with element-not-found errors at the first `Start()` call.
 
-The Linux core package is still required: without it the app starts, but every color conversion — snapshots, frame-to-bitmap conversion, overlays — fails at run time with `VisioForge_VAP is not available`. Reference only the package for the target architecture; the conditions in the csproj below pick it from the runtime identifier (`-r linux-arm64`, a publish profile, or the build machine when none is given). The block applies when the app is built on Linux; publishing for Linux from Windows or macOS skips it.
+The Linux core package is still required: without it the app starts, but every color conversion — snapshots, frame-to-bitmap conversion, overlays — fails at run time with `VisioForge_VAP is not available`. Reference only the package for the target architecture; the conditions in the csproj below pick it from the runtime identifier (`-r linux-arm64`, a publish profile, or the build machine when none is given). The block applies when the app is built on Linux and when it is published for a `linux-*` runtime identifier from any host, so a CI image can cross-publish with `-r linux-x64` or `-r linux-arm64`.
 
 ## Project setup
 
@@ -71,7 +71,7 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <TargetFramework>net10.0</TargetFramework>
   <OutputType>Exe</OutputType>
 </PropertyGroup>
-<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux')) or $(RuntimeIdentifier.StartsWith('linux-'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
 </ItemGroup>

@@ -211,7 +211,7 @@ if (cryptoConfig != null)
 For complete examples including filter graph setup, see the [Examples Page](examples.md).
 
 
-## Encrypt and play a file in C#
+## Encrypt and play a file in C\#
 
 The [C# demos](https://github.com/visioforge/directshow-samples/tree/main/Video%20Encryption%20SDK/dotnet) build two DirectShow graphs: the Encryption Demo writes an encrypted file, and the Player Demo plays it back. Both are WinForms apps on .NET 8 for x64, and they reach DirectShow through the [VisioForge.DirectShowAPI](https://www.nuget.org/packages/VisioForge.DirectShowAPI) NuGet package. They read MP4 files through LAV Filters, which the Video Encryption SDK installer includes. The code below is based on the demos.
 

@@ -28,7 +28,7 @@ Les effets vidéo peuvent améliorer significativement la qualité visuelle et l
 
 Lorsque vous travaillez avec le traitement vidéo dans des applications .NET, vous devrez souvent appliquer divers effets pour améliorer ou modifier le contenu vidéo. Les sections suivantes expliquent ce processus étape par étape.
 
-## Implémentation en code C#
+## Implémentation en code C\#
 
 ### Exemple : effet de clarté dans le Media Player SDK
 

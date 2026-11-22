@@ -20,6 +20,7 @@ order: 14
 # Media Blocks SDK para C# .NET — API de Pipeline Multimedia Modular
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
+[Referencia de bloques](https://www.visioforge.com/media-blocks-sdk-net/blocks){ .md-button target="_blank" }
 
 ## Introducción
 

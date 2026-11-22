@@ -163,6 +163,10 @@ La clase [MP4SplitSinkSettings](https://api.visioforge.org/dotnet/api/VisioForge
 - Gestionar el espacio en disco limitando el número de archivos mantenidos en almacenamiento
 - Implementar grabación de búfer rotativo donde solo se conservan los archivos recientes
 
+!!! note "VideoEditCoreX"
+
+    La división la realiza `splitmuxsink`, que usan los bloques de Media Blocks y `VideoCaptureCoreX`. `VideoEditCoreX` renderiza a través de GStreamer Editing Services, cuyo `encodebin` no puede segmentar la salida: rechaza `MP4SplitSinkSettings` al iniciar con un error, en lugar de escribir silenciosamente un solo archivo.
+
 **Dividir por tamaño de archivo**
 
 Divide la salida cuando un archivo alcanza un tamaño específico en bytes:
@@ -464,6 +468,14 @@ mp4Output.Video_NVENC.Bitrate = 2000; // tasa de bits
 
 // parámetros opcionales
 mp4Output.Video_NVENC.RateControl = NVENCRateControlMode.VBR; // control de tasa - CBR o VBR
+```
+
+Para HEVC (H.265), establezca el códec junto con un perfil y un nivel HEVC.
+
+```cs
+mp4Output.Video_NVENC.Codec = NVENCEncoder.HEVC;
+mp4Output.Video_NVENC.Profile = NVENCVideoEncoderProfile.HEVC_Main;
+mp4Output.Video_NVENC.Level = NVENCEncoderLevel.HEVC_41;
 ```
 
 Establezca los parámetros de audio.

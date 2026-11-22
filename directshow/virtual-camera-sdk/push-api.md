@@ -31,9 +31,9 @@ imports `VisioForge.Core.VirtualCamera.Push` qualifies `VirtualVideoWriter` and 
 ## Install
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.20]" />
+<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.21]" />
 <!-- The virtual camera and virtual audio card filters -->
-<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.20]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.21]" />
 ```
 
 `Redist.VirtualCamera.x64` carries the filters Zoom, OBS and browsers load: the consumer application loads the filter,

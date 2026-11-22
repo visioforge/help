@@ -16,7 +16,7 @@ primary_api_classes:
 
 ---
 
-# Ajouter plusieurs segments d'un seul fichier vidéo en C#
+# Ajouter plusieurs segments d'un seul fichier vidéo en C\#
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 

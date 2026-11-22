@@ -98,19 +98,20 @@ private double _zoomRatio = 1.0;
 
 private void ZoomIn(double factor)
 {
-    // El zoom está expuesto en el renderer (motor clásico) o vía un ZoomEffect en
-    // el motor X — no en VideoView. El motor clásico usa
+    // El zoom está expuesto en el renderer (motor clásico) o vía un PanZoomBlock en
+    // un pipeline de Media Blocks — no en VideoView. El motor clásico usa
     // `videoCapture1.Video_Renderer.Zoom_Ratio` (y Zoom_ShiftX / Zoom_ShiftY
-    // para el desplazamiento del centro).
+    // para el desplazamiento del centro). Zoom_Ratio es un porcentaje entero
+    // sumado a 100: 0 muestra el fotograma completo, 100 duplica la escala.
     _zoomRatio = Math.Min(_zoomRatio + factor, 3.0); // Zoom máximo de 300%
-    videoCapture1.Video_Renderer.Zoom_Ratio = _zoomRatio;
+    videoCapture1.Video_Renderer.Zoom_Ratio = (int)Math.Round((_zoomRatio - 1.0) * 100);
     videoCapture1.Video_Renderer_Update();
 }
 
 private void ZoomOut(double factor)
 {
-    _zoomRatio = Math.Max(_zoomRatio - factor, 0.5); // Zoom mínimo de 50%
-    videoCapture1.Video_Renderer.Zoom_Ratio = _zoomRatio;
+    _zoomRatio = Math.Max(_zoomRatio - factor, 1.0); // Zoom mínimo de 100%: Zoom_Ratio no puede bajar de 0
+    videoCapture1.Video_Renderer.Zoom_Ratio = (int)Math.Round((_zoomRatio - 1.0) * 100);
     videoCapture1.Video_Renderer_Update();
 }
 ```

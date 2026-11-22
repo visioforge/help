@@ -1,6 +1,6 @@
 ---
 title: Diffusion vidéo et audio NDI sur réseau IP en C# .NET
-description: Diffusez vidéo et audio en NDI depuis caméras, fichiers et périphériques en C# .NET. Configuration, exemples SDK, rééchantillonnage audio et dépannage.
+description: "Envoyez et recevez vidéo et audio NDI en C# .NET : webcam, fichier ou périphérique vers NDI, source reçue par son nom, tutoriel vidéo WPF."
 tags:
   - Video Capture SDK
   - Media Blocks SDK
@@ -24,6 +24,12 @@ primary_api_classes:
   - NDIOutput
   - MediaBlockPadMediaType
   - MediaBlocksPipeline
+  - NDISourceBlock
+  - NDISourceSettings
+video:
+  id: _9aDu_hk2uw
+  upload_date: 2026-11-21T19:47:54Z
+  duration: PT10M20S
 
 ---
 
@@ -55,6 +61,85 @@ Ils fournissent les composants d'exécution qui permettent la communication NDI.
 ```csharp
 bool ndiAvailable = NDISinkBlock.IsAvailable();
 ```
+
+## Tutoriel vidéo : envoyer et recevoir du NDI en C# WPF
+
+[MediaBlocksPipeline](#){ .md-button }
+
+Le tutoriel crée une application WPF qui envoie une webcam et son microphone sur le réseau comme source NDI, avec un aperçu en direct de ce qui part, et qui reçoit n'importe quelle source NDI du réseau dans une seconde vue ; NDI Studio Monitor reçoit la même source à côté.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/_9aDu_hk2uw?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+### La version courte
+
+Le même envoi et la même réception sous forme de deux applications console en quelques lignes de C# : l'une diffuse un fichier vidéo en NDI, l'autre affiche une source NDI par son nom dans sa propre fenêtre.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/76pKYRA9hs0?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Leur code : [ndi-send-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/ndi-send-short-console) et [ndi-receive-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/ndi-receive-short-console) sur GitHub.
+
+### Envoyer une webcam en NDI
+
+Un `TeeBlock` divise la caméra : une copie va à l'aperçu, l'autre à `NDISinkBlock`, dont le nom est celui que voient les récepteurs. Le microphone va sur une seconde entrée du même puits.
+
+```cs
+var camera = new SystemVideoSourceBlock(
+    new VideoCaptureDeviceSourceSettings(_cameras[cbCamera.SelectedIndex]));
+var tee = new TeeBlock(2, MediaBlockPadMediaType.Video);
+var preview = new VideoRendererBlock(_sendPipeline, VideoView1);
+var ndiSink = new NDISinkBlock(edName.Text.Trim());
+
+_sendPipeline.Connect(camera.Output, tee.Input);
+_sendPipeline.Connect(tee.Outputs[0], preview.Input);
+_sendPipeline.Connect(tee.Outputs[1], ndiSink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+// Sans microphone : seule la vidéo est envoyée
+if (cbMicrophone.SelectedIndex >= 0)
+{
+    var microphone = new SystemAudioSourceBlock(
+        _microphones[cbMicrophone.SelectedIndex].CreateSourceSettings());
+    _sendPipeline.Connect(microphone.Output, ndiSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
+
+var started = await _sendPipeline.StartAsync();
+```
+
+### Recevoir une source NDI
+
+`DeviceEnumerator.Shared.NDISourcesAsync()` liste tous les émetteurs NDI du réseau. `NDISourceSettings.CreateAsync` se connecte à celui qui est sélectionné et lit ses formats ; il renvoie `null` quand la source est injoignable.
+
+```cs
+_ndiSources = await DeviceEnumerator.Shared.NDISourcesAsync();
+
+// Se connecte à l'émetteur et lit ses formats vidéo et audio
+var settings = await NDISourceSettings.CreateAsync(
+    _receivePipeline.GetContext(), _ndiSources[cbSource.SelectedIndex]);
+
+if (settings != null)
+{
+    var ndiSource = new NDISourceBlock(settings);
+
+    if (settings.GetInfo().VideoStreams.Count > 0)
+    {
+        var video = new VideoRendererBlock(_receivePipeline, VideoView2);
+        _receivePipeline.Connect(ndiSource.VideoOutput, video.Input);
+    }
+
+    if (settings.GetInfo().AudioStreams.Count > 0 && cbPlayAudio.IsChecked == true)
+    {
+        var speakers = new AudioRendererBlock();
+        _receivePipeline.Connect(ndiSource.AudioOutput, speakers.Input);
+    }
+
+    await _receivePipeline.StartAsync();
+}
+```
+
+Le projet complet, avec le XAML et la fermeture de la fenêtre : [ndi-send-receive-wpf sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/ndi-send-receive-wpf).
 
 ## Sortie NDI multiplateforme
 
@@ -115,13 +200,14 @@ core.Outputs_Add(ndiOutput); // core représente l'instance VideoCaptureCoreX
 
 [MediaBlocksPipeline](#){ .md-button }
 
-Le cas d'usage le plus courant est la diffusion d'une webcam et d'un microphone locaux vers NDI. Cet exemple utilise le Media Blocks SDK pour capturer depuis les périphériques système et envoyer vers NDI avec un rééchantillonnage audio correct.
+Le cas d'usage le plus courant est la diffusion d'une webcam et d'un microphone locaux vers NDI. Cet exemple utilise le Media Blocks SDK pour capturer depuis les périphériques système et les envoyer vers NDI.
 
 ### Architecture du pipeline
 
-```text
-SystemVideoSourceBlock → NDISinkBlock (entrée vidéo)
-SystemAudioSourceBlock → AudioResamplerBlock (48kHz, F32LE, stéréo) → NDISinkBlock (entrée audio)
+```mermaid
+flowchart LR
+    SystemVideoSourceBlock -->|entrée vidéo| NDISinkBlock
+    SystemAudioSourceBlock -->|entrée audio| NDISinkBlock
 ```
 
 ### Exemple de code
@@ -130,10 +216,8 @@ SystemAudioSourceBlock → AudioResamplerBlock (48kHz, F32LE, stéréo) → NDIS
 using VisioForge.Core;
 using VisioForge.Core.MediaBlocks;
 using VisioForge.Core.MediaBlocks.Sources;
-using VisioForge.Core.MediaBlocks.AudioProcessing;
 using VisioForge.Core.MediaBlocks.Sinks;
 using VisioForge.Core.Types.X.Sources;
-using VisioForge.Core.Types.X.AudioEncoders;
 
 // Initialiser le SDK une fois au démarrage
 await VisioForgeX.InitSDKAsync();
@@ -155,14 +239,9 @@ var audioSource = new SystemAudioSourceBlock(audioSettings);
 // Créer la sortie NDI
 var ndiSink = new NDISinkBlock("My Camera Stream");
 
-// Connecter la vidéo directement à NDI
+// Connecter la vidéo et l'audio ; le puits NDI convertit les deux aux formats de NDI
 pipeline.Connect(videoSource.Output, ndiSink.CreateNewInput(MediaBlockPadMediaType.Video));
-
-// Rééchantillonner l'audio en 48 kHz F32LE stéréo (requis par NDI)
-var audioResampler = new AudioResamplerBlock(
-    new AudioResamplerSettings(AudioFormatX.F32LE, 48000, 2));
-pipeline.Connect(audioSource.Output, audioResampler.Input);
-pipeline.Connect(audioResampler.Output, ndiSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+pipeline.Connect(audioSource.Output, ndiSink.CreateNewInput(MediaBlockPadMediaType.Audio));
 
 await pipeline.StartAsync();
 ```
@@ -219,10 +298,10 @@ Le Media Blocks SDK peut diffuser des fichiers multimédias locaux (MP4, MKV, AV
 
 ### Pipeline recommandé
 
-```text
-UniversalSourceBlock (fichier)
-  VideoOutput → NDISinkBlock (entrée vidéo)
-  AudioOutput → AudioResamplerBlock (48kHz, F32LE, stéréo) → NDISinkBlock (entrée audio)
+```mermaid
+flowchart LR
+    UniversalSourceBlock -->|VideoOutput → entrée vidéo| NDISinkBlock
+    UniversalSourceBlock -->|AudioOutput → entrée audio| NDISinkBlock
 ```
 
 ### Exemple de code
@@ -237,16 +316,16 @@ var fileSource = new UniversalSourceBlock(
 // Sortie NDI
 var ndiSink = new NDISinkBlock("My NDI Stream");
 
-// Connecter la vidéo directement à NDI
+// Connecter la vidéo et l'audio (s'il y en a) ; le puits NDI rééchantillonne lui-même l'audio en 48 kHz
 pipeline.Connect(fileSource.VideoOutput,
     ndiSink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-// Rééchantillonner l'audio en 48 kHz F32LE stéréo pour compatibilité NDI
-var audioResampler = new AudioResamplerBlock(
-    new AudioResamplerSettings(AudioFormatX.F32LE, 48000, 2));
-pipeline.Connect(fileSource.AudioOutput, audioResampler.Input);
-pipeline.Connect(audioResampler.Output,
-    ndiSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// Pas de piste audio : seule la vidéo est envoyée
+if (fileSource.AudioOutput != null)
+{
+    pipeline.Connect(fileSource.AudioOutput,
+        ndiSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Facultatif : activer la lecture en boucle
 pipeline.Loop = true;
@@ -256,7 +335,9 @@ await pipeline.StartAsync();
 
 ## Exigences de format audio
 
-NDI exige de l'audio **48 kHz, virgule flottante 32 bits (F32LE), entrelacé**. Lors d'une diffusion depuis des sources pouvant contenir de l'audio à d'autres fréquences d'échantillonnage (par exemple, AAC 44,1 kHz dans des fichiers MP4 ou taux variables des microphones), incluez toujours un `AudioResamplerBlock` pour convertir en 48 kHz. Sans rééchantillonnage, l'audio peut saccader, présenter des artefacts ou perdre la synchronisation avec la vidéo.
+NDI transporte de l'audio **48 kHz, virgule flottante 32 bits (F32LE), entrelacé**. `NDISinkBlock` convertit et rééchantillonne lui-même son entrée audio dans ce format : une piste AAC 44,1 kHz d'un fichier MP4 ou un microphone à une autre fréquence se connecte directement au puits.
+
+Les versions du SDK antérieures à 2026.3.1 transmettaient la fréquence audio telle quelle, et un audio à une autre fréquence saccadait ou se décalait de la vidéo. Sur ces versions, placez un `AudioResamplerBlock` entre la source audio et le puits :
 
 ```cs
 var audioResampler = new AudioResamplerBlock(
@@ -265,7 +346,7 @@ var audioResampler = new AudioResamplerBlock(
 
 ## Réception de sources NDI
 
-Ce guide se concentre sur l'envoi de vidéo et d'audio vers NDI. Pour découvrir, vous connecter, prévisualiser ou capturer des sources NDI, y compris les applications de lecteur NDI Android et MAUI, consultez la [référence de la source vidéo NDI](../../videocapture/video-sources/ip-cameras/ndi.md).
+Le [tutoriel vidéo](#tutoriel-video-envoyer-et-recevoir-du-ndi-en-c-wpf) ci-dessus choisit une source NDI dans la liste des émetteurs du réseau, dans une application WPF ; sa [version courte](#la-version-courte) en reçoit une par son nom. Pour découvrir, vous connecter, prévisualiser ou capturer des sources NDI plus en détail, y compris les applications de lecteur NDI Android et MAUI, consultez la [référence de la source vidéo NDI](../../videocapture/video-sources/ip-cameras/ndi.md).
 
 ## Résolution des problèmes
 
@@ -273,23 +354,69 @@ Ce guide se concentre sur l'envoi de vidéo et d'audio vers NDI. Pour découvrir
 
 **Symptôme :** l'audio n'est pas fluide lors de la diffusion depuis une source fichier — saccades, artefacts ou problèmes de synchronisation labiale.
 
-**Cause :** le fichier source contient de l'audio à une fréquence d'échantillonnage autre que 48 kHz (par exemple, AAC 44,1 kHz dans des fichiers MP4). NDI attend de l'audio à 48 kHz.
+**Cause :** les versions du SDK antérieures à 2026.3.1 envoyaient l'audio à la fréquence d'échantillonnage de la source (par exemple, AAC 44,1 kHz dans des fichiers MP4), et NDI attend de l'audio à 48 kHz.
 
-**Solution :** insérez un `AudioResamplerBlock` configuré pour 48 kHz F32LE stéréo entre la source fichier et le puits NDI, comme indiqué dans l'exemple de lecture de fichier ci-dessus.
+**Solution :** passez au SDK 2026.3.1 ou ultérieur, où `NDISinkBlock` rééchantillonne lui-même l'audio en 48 kHz. Sur une version plus ancienne, insérez un `AudioResamplerBlock` configuré pour 48 kHz F32LE stéréo entre la source et le puits NDI, comme indiqué dans [Exigences de format audio](#exigences-de-format-audio).
+
+## Transcription de la vidéo
+
+### Ce que nous construisons
+
+Envoyons une webcam en NDI et recevons de la vidéo NDI en retour, dans une application C# WPF avec le VisioForge Media Blocks SDK. Voici ce que nous construisons. Une application WPF qui envoie une webcam et son microphone sur le réseau comme source NDI, avec un aperçu en direct de ce qui part. La même application liste les sources NDI du réseau et reçoit n'importe laquelle dans une seconde vue. Voici l'application terminée, à gauche, qui envoie la webcam. À droite, NDI Studio Monitor, un outil NDI gratuit, reçoit la même source par le réseau. Et ici l'application reçoit sa propre source en retour : la caméra à gauche, et ce qui arrive en NDI à droite. Pourquoi NDI ? Il transporte la vidéo et l'audio sur un réseau local ordinaire. Les émetteurs s'annoncent d'eux-mêmes, un récepteur les trouve donc par leur nom : pas de serveur à lancer, pas d'adresse à taper. La latence est faible, car il a été conçu pour la production en direct. Et vMix, TriCaster, NDI Studio Monitor et bien d'autres logiciels acceptent directement une source NDI.
+
+### Prérequis
+
+Il vous faut Windows 10 ou 11, et Visual Studio 2022 ou 2026 avec la charge de travail Développement .NET Desktop. Le projet cible .NET 8 ou ultérieur. NDI a besoin de son runtime sur l'ordinateur : installez NDI Tools, gratuit et livré avec Studio Monitor, ou le NDI SDK. Et une webcam.
+
+### Créer un projet WPF
+
+Dans Visual Studio, créez un nouveau projet. Cherchez WPF, puis choisissez WPF Application pour C#. Nommez le projet NdiWpf. Choisissez .NET 10 et cliquez sur Create.
+
+### Ajouter les paquets NuGet
+
+Ajoutez maintenant deux paquets NuGet. Le Media Blocks SDK lui-même, et CrossPlatform Core, le runtime GStreamer sur lequel tournent les blocs, avec les éléments NDI d'envoi et de réception. NDI transporte de la vidéo et de l'audio non compressés, aucun paquet de codecs n'est donc nécessaire. Ou utilisez le NuGet Package Manager : clic droit sur le projet, Manage NuGet Packages, et installez VisioForge.DotNet.MediaBlocks depuis l'onglet Browse. Installez ensuite le paquet Core pour Windows x64. L'onglet Installed liste les deux. Ce sont les paquets x64, réglez donc PlatformTarget sur x64 dans le fichier projet. NDI ne fonctionne pas dans un processus Windows ARM64 natif ; sur un PC ARM, cette version x64 tourne donc en émulation.
+
+### Construire la fenêtre en XAML
+
+La fenêtre s'écrit en XAML. D'abord la fenêtre elle-même, avec trois colonnes et les deux vues vidéo, et le concepteur les dessine aussitôt. Associez l'espace de noms VisioForge.Core.UI.WPF à un préfixe, ici vf. La grille a une colonne pour les contrôles et deux pour la vidéo : VideoView1 montre la caméra envoyée, et VideoView2 la source NDI reçue. La fenêtre démarre désactivée, jusqu'à ce que le SDK soit chargé. Ensuite, les contrôles d'envoi. Un StackPanel dans la colonne de gauche : une liste déroulante pour les caméras, une pour les microphones, et une zone de texte pour le nom de la source sur le réseau. Puis Send et Stop. Stop démarre désactivé, jusqu'à ce que quelque chose soit envoyé. Enfin, les contrôles de réception. Une liste déroulante pour les sources NDI, une case Play audio, et les boutons Refresh, Receive et Stop. Chaque gestionnaire nommé par le XAML va dans MainWindow.xaml.cs, et les chapitres suivants les écrivent.
+
+### Initialiser le SDK
+
+MainWindow.xaml.cs commence par ces usings : le cœur du SDK, le pipeline et les espaces de noms des blocs utilisés : sources, sinks, renderers et le tee. Au chargement de la fenêtre, attendez une fois VisioForgeX.InitSDKAsync. Puis DeviceEnumerator liste les caméras et les microphones. Gardez les deux tableaux : le gestionnaire de Send y prend les périphériques sélectionnés. Le premier de chaque liste est sélectionné, et la fenêtre est activée. L'application a deux pipelines, l'un qui envoie et l'autre qui reçoit, et cette fonction les crée tous les deux. Les erreurs du pipeline arrivent dans l'événement OnError ; ici elles vont dans la barre de titre.
+
+### Envoyer en NDI
+
+Pour envoyer, connectez des blocs dans un pipeline. La caméra est un SystemVideoSourceBlock. Un TeeBlock la sépare en deux : une copie va vers un VideoRendererBlock sur VideoView1, l'aperçu, et l'autre vers un NDISinkBlock, nommé d'après la zone de texte. C'est ce nom que voient les récepteurs. Le microphone est un SystemAudioSourceBlock, connecté à une seconde entrée du même sink NDI. Sans microphone, seule la vidéo est envoyée. StartAsync indique si le pipeline a démarré ; sinon, le pipeline est arrêté et libéré. Il n'y a pas d'encodeur à choisir. NDISinkBlock convertit ce que fournit la caméra dans un format accepté par NDI, et rééchantillonne l'audio à 48 kilohertz. La vidéo et l'audio partent comme une seule source NDI. NDI envoie la vidéo en pleine qualité : comptez environ 100 à 150 mégabits par seconde pour un flux HD. Pour arrêter l'envoi, attendez StopAsync, puis DisposeAsync, et abandonnez le pipeline. La source disparaît du réseau.
+
+### Recevoir du NDI
+
+Refresh appelle DeviceEnumerator.Shared.NDISourcesAsync, qui renvoie tous les émetteurs NDI trouvés sur le réseau, y compris celui de cette application. Chacun a un nom : l'ordinateur, puis le nom de la source entre parenthèses. Pour recevoir, créez le second pipeline, et NDISourceSettings.CreateAsync pour la source sélectionnée. Il se connecte à l'émetteur et lit ses formats vidéo et audio ; il renvoie null quand la source est injoignable. Puis un NDISourceBlock avec ces paramètres. Si la source contient de la vidéo, sa sortie vidéo va vers un renderer sur VideoView2. L'audio n'est joué que si Play audio est coché : en recevant la propre source de l'application, il renverrait le microphone directement dans les haut-parleurs. Puis StartAsync. Si la fenêtre se ferme pendant un envoi ou une réception, annulez la fermeture, arrêtez le pipeline en cours, puis refermez. Lors de ce second passage, le SDK est libéré.
+
+### Lancer l'application
+
+Lancez l'application depuis Visual Studio. Une fois le SDK chargé, les listes de caméras et de microphones se remplissent. Cliquez sur Send. L'aperçu démarre, et la caméra est sur le réseau sous le nom VisioForge NDI. Maintenant, une autre application NDI. Ouvrez NDI Studio Monitor, faites un clic droit et choisissez la source : cet ordinateur, puis VisioForge NDI. Studio Monitor affiche la caméra, image et son, envoyée par notre application sur le réseau. Tout autre ordinateur du même réseau verrait aussi cette source. De retour dans l'application, cliquez sur Refresh. La liste contient toutes les sources NDI du réseau. Choisissez VisioForge NDI et cliquez sur Receive. La vue de droite affiche maintenant la source reçue en NDI, à côté de la caméra dont elle provient. Arrêtez la réception, arrêtez l'envoi et fermez la fenêtre.
+
+### Erreurs fréquentes
+
+Quelques erreurs fréquentes. Pas de runtime NDI sur l'ordinateur : installez NDI Tools ou le NDI SDK. Le premier lancement demande l'accès réseau au pare-feu Windows, et répondre Cancel bloque NDI pour l'application. Une version ARM64 native ne peut pas charger NDI ; compilez en x64. Et plusieurs sources HD demandent un réseau gigabit. Quel que soit le problème, le pipeline le signale dans l'événement OnError.
+
+### Étapes suivantes
+
+Il existe aussi des guides pour diffuser un fichier vidéo en NDI, pour recevoir plusieurs sources NDI à la fois, pour les lecteurs NDI sur Android et MAUI, et pour la sortie NDI du Video Capture SDK. Le code source complet est sur GitHub, et la documentation sur visioforge.com/help. Merci d'avoir regardé.
 
 ## Questions fréquentes
 
 ### Comment diffuser de la vidéo depuis une caméra vers NDI en C# ?
 
-Utilisez le Media Blocks SDK pour créer un pipeline avec `SystemVideoSourceBlock` pour la caméra, `SystemAudioSourceBlock` pour le microphone et `NDISinkBlock` comme sortie. Connectez l'audio via un `AudioResamplerBlock` réglé sur 48 kHz F32LE stéréo, requis par NDI. Voir la section [Diffusion d'une caméra vers NDI](#diffusion-dune-camera-vers-ndi) pour le code complet.
+Utilisez le Media Blocks SDK pour créer un pipeline avec `SystemVideoSourceBlock` pour la caméra, `SystemAudioSourceBlock` pour le microphone et `NDISinkBlock` comme sortie ; le puits convertit l'audio au format 48 kHz qu'utilise NDI. Voir la section [Diffusion d'une caméra vers NDI](#diffusion-dune-camera-vers-ndi) pour le code complet.
 
 ### Quel format audio NDI exige-t-il ?
 
-NDI exige de l'audio stéréo entrelacé 48 kHz, virgule flottante 32 bits (F32LE). Incluez toujours un `AudioResamplerBlock(new AudioResamplerSettings(AudioFormatX.F32LE, 48000, 2))` dans votre pipeline entre la source audio et le puits NDI. Sans rééchantillonnage correct, vous pouvez rencontrer des saccades audio, des artefacts ou des problèmes de synchronisation A/V.
+NDI utilise de l'audio entrelacé 48 kHz, virgule flottante 32 bits (F32LE). Depuis le SDK 2026.3.1, `NDISinkBlock` convertit lui-même son entrée audio dans ce format ; sur les versions antérieures, ajoutez `AudioResamplerBlock(new AudioResamplerSettings(AudioFormatX.F32LE, 48000, 2))` entre la source audio et le puits NDI, sinon l'audio peut saccader ou se décaler de la vidéo.
 
 ### Puis-je diffuser un fichier vidéo vers NDI pour la diffusion ?
 
-Oui. Utilisez `UniversalSourceBlock` pour lire le fichier, connectez la vidéo directement à `NDISinkBlock` et acheminez l'audio via `AudioResamplerBlock` pour la conversion en 48 kHz. Activez `pipeline.Loop = true` pour une diffusion continue. Ce schéma est idéal pour les serveurs de diffusion broadcast sans surcharge de rendu local.
+Oui. Utilisez `UniversalSourceBlock` pour lire le fichier et connectez ses sorties vidéo et audio à `NDISinkBlock`, qui rééchantillonne l'audio en 48 kHz. Activez `pipeline.Loop = true` pour une diffusion continue. Ce schéma est idéal pour les serveurs de diffusion broadcast sans surcharge de rendu local.
 
 ### Quelles sont les exigences système pour la diffusion NDI en .NET ?
 

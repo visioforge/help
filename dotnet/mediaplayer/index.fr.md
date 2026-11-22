@@ -109,7 +109,7 @@ Chaque application de lecteur multimédia suit le même schéma :
 7. **Libérer** — `await player.DisposeAsync()` libère toutes les ressources
 8. **Détruire le SDK** — `VisioForgeX.DestroySDK()` à l'arrêt de l'application
 
-## Scénarios courants de lecteur vidéo C#
+## Scénarios courants de lecteur vidéo C\#
 
 ### Lire un fichier vidéo en C# (MP4, AVI, MKV)
 
@@ -124,7 +124,7 @@ await player.PlayAsync();
 
 Voir le tutoriel complet : [Construire un lecteur vidéo en C#](guides/video-player-csharp.md)
 
-### Lire un flux RTSP en C#
+### Lire un flux RTSP en C\#
 
 Lisez de la vidéo en direct depuis des caméras IP et des sources RTSP. Prend en charge RTSP, HTTP, HLS et MPEG-DASH :
 

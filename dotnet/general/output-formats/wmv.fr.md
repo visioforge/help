@@ -920,7 +920,6 @@ wmvOutput2.Audio = new WMAEncoderSettings
 {
     Bitrate = 192,  // Débit binaire en Kbps
     SampleRate = 48000,  // Fréquence d'échantillonnage en Hz
-    Channels = 2  // Stéréo
 };
 
 var core2 = new VideoCaptureCoreX();
@@ -943,7 +942,6 @@ wmvOutput2.Audio = new WMAEncoderSettings
 {
     Bitrate = 256,  // Audio haute qualité
     SampleRate = 48000,
-    Channels = 2
 };
 
 var core2 = new VideoEditCoreX();
@@ -960,7 +958,6 @@ var wma = new WMAEncoderSettings
 {
     Bitrate = 128,  // Débit binaire en Kbps
     SampleRate = 48000,  // 48 kHz
-    Channels = 2  // Stéréo
 };
 
 // Configurer l'encodeur vidéo  
@@ -1013,7 +1010,6 @@ wmvOutput.Audio = new WMAEncoderSettings
 {
     Bitrate = 320,  // Qualité maximale
     SampleRate = 48000,
-    Channels = 2
 };
 
 // Paramètres vidéo. Par défaut : WMV8 à 4000 kbps.
@@ -1048,9 +1044,6 @@ var audioSettings = new WMAEncoderSettings
     
     // Fréquence d'échantillonnage en Hz - valeurs prises en charge : 44100, 48000
     SampleRate = 48000,
-    
-    // Nombre de canaux - valeurs prises en charge : 1 (mono), 2 (stéréo)
-    Channels = 2
 };
 
 // Obtenir les débits binaires pris en charge

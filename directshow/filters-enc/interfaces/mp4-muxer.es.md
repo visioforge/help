@@ -40,7 +40,7 @@ La interfaz **IMP4MuxerConfig** proporciona configuración básica para multiple
 
 ### Definiciones de Interfaz
 
-#### Definición C#
+#### Definición C\#
 
 ```csharp
 using System;
@@ -266,7 +266,7 @@ public enum MP4V10Flags
 }
 ```
 ### Definiciones de Interfaz
-#### Definición C#
+#### Definición C\#
 ```csharp
 using System;
 using System.Runtime.InteropServices;

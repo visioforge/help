@@ -202,6 +202,7 @@ Les empreintes Search utilisent un algorithme différent optimisé pour la déte
 ### Exemple de code : implémentation de recherche de fragments
 
 ```csharp
+using System.IO;
 using VisioForge.Core.VideoFingerPrinting;
 
 public class VideoFragmentSearcher

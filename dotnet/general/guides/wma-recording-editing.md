@@ -120,7 +120,6 @@ public class WmaRecorder
         // Configure WMA encoder settings
         wmaOutput.Audio.Bitrate = 192;       // 192 Kbps bitrate
         wmaOutput.Audio.SampleRate = 48000;  // 48 kHz sample rate
-        wmaOutput.Audio.Channels = 2;        // Stereo recording
 
         // Add WMA output to capture pipeline
         _videoCapture.Outputs_Add(wmaOutput, autostart: true);
@@ -237,7 +236,6 @@ class Program
             var wmaOutput = new WMAOutput(outputPath);
             wmaOutput.Audio.Bitrate = 192;
             wmaOutput.Audio.SampleRate = 48000;
-            wmaOutput.Audio.Channels = 2;
 
             videoCapture.Outputs_Add(wmaOutput, autostart: true);
 
@@ -356,7 +354,6 @@ public partial class WmaRecorderForm : Form
         var wmaOutput = new WMAOutput(txtOutputPath.Text);
         wmaOutput.Audio.Bitrate = (int)numBitrate.Value;
         wmaOutput.Audio.SampleRate = 48000;
-        wmaOutput.Audio.Channels = rbStereo.Checked ? 2 : 1;
 
         _videoCapture.Outputs_Add(wmaOutput, autostart: true);
 
@@ -403,13 +400,11 @@ The VideoCaptureCoreX class supports various audio capture configurations for di
 var wmaOutput = new WMAOutput("high_quality.wma");
 wmaOutput.Audio.Bitrate = 320;       // Maximum quality bitrate
 wmaOutput.Audio.SampleRate = 48000;  // Professional sample rate
-wmaOutput.Audio.Channels = 2;        // Stereo
 
 // Configure voice recording (smaller file size)
 var voiceOutput = new WMAOutput("voice_memo.wma");
 voiceOutput.Audio.Bitrate = 128;     // Good for voice
 voiceOutput.Audio.SampleRate = 44100; // Standard sample rate
-voiceOutput.Audio.Channels = 1;       // Mono is sufficient for voice
 
 // Check if WMA encoder is available on the system
 if (!WMAEncoderSettings.IsAvailable())
@@ -481,7 +476,6 @@ public class WmaEditor
         var wmaOutput = new WMAOutput(outputPath);
         wmaOutput.Audio.Bitrate = 192;
         wmaOutput.Audio.SampleRate = 48000;
-        wmaOutput.Audio.Channels = 2;
 
         _videoEdit.Output_Format = wmaOutput;
 
@@ -523,6 +517,7 @@ public class WmaEditor
 
 The VideoEditCoreX class allows you to merge multiple audio files into a single WMA output:
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Collections.Generic;
@@ -572,7 +567,6 @@ public class WmaMerger
             var wmaOutput = new WMAOutput(outputPath);
             wmaOutput.Audio.Bitrate = 192;
             wmaOutput.Audio.SampleRate = 48000;
-            wmaOutput.Audio.Channels = 2;
 
             videoEdit.Output_Format = wmaOutput;
 
@@ -632,7 +626,6 @@ public async Task TrimWmaFileAsync(
         var wmaOutput = new WMAOutput(outputPath);
         wmaOutput.Audio.Bitrate = 192;
         wmaOutput.Audio.SampleRate = 48000;
-        wmaOutput.Audio.Channels = 2;
 
         videoEdit.Output_Format = wmaOutput;
 
@@ -679,7 +672,6 @@ public async Task ExtractAudioToWmaAsync(
         var wmaOutput = new WMAOutput(wmaOutputPath);
         wmaOutput.Audio.Bitrate = 256;       // Higher quality for music
         wmaOutput.Audio.SampleRate = 48000;
-        wmaOutput.Audio.Channels = 2;
 
         videoEdit.Output_Format = wmaOutput;
 
@@ -751,7 +743,6 @@ public async Task EditWmaWithEffectsAsync(
         var wmaOutput = new WMAOutput(outputPath);
         wmaOutput.Audio.Bitrate = 192;
         wmaOutput.Audio.SampleRate = 48000;
-        wmaOutput.Audio.Channels = 2;
 
         videoEdit.Output_Format = wmaOutput;
 
@@ -782,10 +773,7 @@ var wmaSettings = new WMAEncoderSettings
     Bitrate = 192,
     
     // Sample rate in Hz - supported values: 44100, 48000
-    SampleRate = 48000,
-    
-    // Number of channels - supported values: 1 (mono), 2 (stereo)
-    Channels = 2
+    SampleRate = 48000
 };
 
 // Query supported configurations
@@ -808,24 +796,21 @@ Here are recommended presets for different use cases:
 var musicPreset = new WMAEncoderSettings
 {
     Bitrate = 320,
-    SampleRate = 48000,
-    Channels = 2
+    SampleRate = 48000
 };
 
 // Voice recording / podcasts
 var voicePreset = new WMAEncoderSettings
 {
     Bitrate = 128,
-    SampleRate = 44100,
-    Channels = 1
+    SampleRate = 44100
 };
 
 // Balanced quality and file size
 var balancedPreset = new WMAEncoderSettings
 {
     Bitrate = 192,
-    SampleRate = 48000,
-    Channels = 2
+    SampleRate = 48000
 };
 ```
 
@@ -978,7 +963,7 @@ Key takeaways:
 
 - **Record WMA files**: Use VideoCaptureCoreX with WMAOutput for capturing audio from system devices and reserve optimal quality settings for your output
 - **Edit WMA files**: Use VideoEditCoreX for trimming, merging, and applying effects to audio records
-- **Configuration**: The WMAEncoderSettings class allows fine-tuning of bitrate, sample rate, and channels
+- **Configuration**: The WMAEncoderSettings class allows fine-tuning of bitrate and sample rate
 - **Cross-platform**: Consider platform-specific requirements when working with Windows Media formats
 - **Windows application support**: Create WinForms, WPF, and console applications with ease
 

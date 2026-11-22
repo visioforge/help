@@ -143,6 +143,9 @@ await VisioForgeX.InitSDKAsync();
 
 ```csharp
 using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types.X.Sources;
 
 // Create a new pipeline instance
 var pipeline = new MediaBlocksPipeline();

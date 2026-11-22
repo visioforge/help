@@ -47,7 +47,7 @@ Puede usar la codificación MP3 para codificar audio en contenedores MP4, AVI, M
 
 La clase [MP3EncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.AudioEncoders.MP3EncoderSettings.html) proporciona a los desarrolladores un enfoque simplificado para configurar la codificación MP3 para proyectos de captura de audio en C#. Esta solución multiplataforma soporta varios controles de tasa y configuraciones de calidad, siendo ideal para aplicaciones de grabación MP3 en .NET en diferentes sistemas operativos.
 
-### Formatos y especificaciones soportados para grabación MP3 en C#
+### Formatos y especificaciones soportados para grabación MP3 en C\#
 
 - Formato de entrada: S16LE (Signed 16-bit Little Endian)
 - Tasas de muestreo: 8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000 Hz
@@ -72,7 +72,7 @@ El codificador soporta tres modos de control de tasa:
    - Configuración de calidad que va de 0 (mejor) a 10
    - Más eficiente para almacenamiento y mejor relación calidad-tamaño
 
-### Ejemplos de codificación MP3 en C#
+### Ejemplos de codificación MP3 en C\#
 
 Crear configuración básica del codificador MP3 con CBR.
 
@@ -236,7 +236,7 @@ El codificador soporta tres preajustes de calidad que afectan la velocidad de co
 
 ### Escenarios comunes
 
-#### Captura de música de alta calidad en C#
+#### Captura de música de alta calidad en C\#
 
 ```csharp
 // Configurar ajustes para grabación de música de alta calidad

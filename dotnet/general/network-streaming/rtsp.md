@@ -115,10 +115,12 @@ This class encapsulates all the parameters needed to define the behavior and pro
 
 *   **Network Configuration:**
     *   `Port` (int): The TCP port the server listens on for incoming RTSP connections. The default is `8554`, a common alternative to the standard (often restricted) port 554. Ensure this port is open in firewalls.
-    *   `Address` (string): The IP address the server binds to.
-        *   `"127.0.0.1"` (Default): Listens only for connections from the local machine.
-        *   `"0.0.0.0"`: Listens on all available network interfaces (use for public access).
-        *   Specific IP (e.g., `"192.168.1.100"`): Binds only to that specific network interface.
+    *   `Address` (string): The host name or IP address clients use to reach the server. It only sets the host part of `URL`; it does not choose the interfaces the server listens on. Default `"127.0.0.1"`.
+    *   `ListenAddress` (string): The local IP address the server listens on.
+        *   `"0.0.0.0"` (Default): Listens on every IPv4 interface, so other machines on the network can connect.
+        *   `"127.0.0.1"`: Listens only for connections from the local machine.
+        *   Specific IP (e.g., `"192.168.1.100"`): Listens only on that network interface.
+        *   IPv6 address: Needed for IPv6 clients, also when `Address` comes from an IPv6 URI; the default listens on IPv4 only. `"::1"` accepts only the local machine, `"::"` every IPv6 interface. On Windows an IPv6 address does not accept IPv4 clients.
     *   `Point` (string): The path component of the RTSP URL (e.g., `/live`, `/stream1`). Clients will connect to `rtsp://<Address>:<Port><Point>`. Default is `"/live"`.
 *   **Stream Configuration:**
     *   `VideoEncoder` (IVideoEncoder): An `IVideoEncoder` instance — typically an encoder-settings object (e.g., `OpenH264EncoderSettings`) or the result of `H264EncoderBlock.GetDefaultSettings()`. Defines codec, bitrate (Kbit/s), quality, etc.
@@ -139,8 +141,8 @@ When using the Media Blocks SDK, the `RTSPServerBlock` represents the actual GSt
 
 **Functionality:**
 
-*   **Media Sink:** Acts as a terminal point (sink) in a media pipeline, receiving encoded video and audio data.
-*   **Input Pads:** Provides distinct `VideoInput` and `AudioInput` pads for connecting upstream video and audio sources/encoders.
+*   **Media Sink:** Acts as a terminal point (sink) in a media pipeline, receiving uncompressed video and audio that it encodes with `VideoEncoder` and `AudioEncoder`.
+*   **Input Pads:** Provides distinct `VideoInput` and `AudioInput` pads for connecting upstream video and audio sources, not encoder blocks.
 *   **GStreamer Integration:** Manages the underlying GStreamer `rtspserver` and related elements necessary for handling client connections and streaming RTP packets.
 *   **Availability Check:** The static `IsAvailable()` method allows checking if the necessary GStreamer plugins for RTSP streaming are present on the system.
 *   **Resource Management:** Implements `IDisposable` for proper cleanup of network sockets and GStreamer resources when the block is no longer needed.
@@ -161,7 +163,7 @@ var audioEncoder = new AVENCAACEncoderSettings(); // Reliable cross-platform AAC
 var settings = new RTSPServerSettings(videoEncoder, audioEncoder)
 {
     Port = 8554,
-    Address = "0.0.0.0",  // Accessible from other machines on the network
+    ListenAddress = "0.0.0.0",  // Every interface (the default): other machines on the network can connect
     Point = "/livefeed"
 };
 
@@ -215,7 +217,8 @@ await pipeline.StartAsync();
 var secureSettings = new RTSPServerSettings(videoEncoder, audioEncoder)
 {
     Port = 8555, // Use a different port
-    Address = "192.168.1.100", // Bind to a specific internal IP
+    Address = "192.168.1.100",       // The host clients use, the host part of URL
+    ListenAddress = "192.168.1.100", // Listen only on this internal interface
     Point = "/secure",
     Username = "viewer",
     Password = "VerySecretPassword!",
@@ -242,7 +245,7 @@ var secureRtspOutput = new RTSPServerOutput(secureSettings);
     *   **AMD encoder:** `AMFH264EncoderSettings` encodes with `Usage = AMFH264EncoderUsage.Transcoding` by default. For the lowest encoder delay, set `Usage = AMFH264EncoderUsage.UltraLowLatency` (or `LowLatency`).
 3.  **Network Configuration:**
     *   **Security First:** Implement `Username` and `Password` authentication for any stream not intended for public anonymous access.
-    *   **Binding Address:** Use `"0.0.0.0"` cautiously. For enhanced security, bind explicitly to the network interface (`Address`) intended for client connections if possible.
+    *   **Listening Address:** The server listens on every interface by default (`ListenAddress = "0.0.0.0"`). For enhanced security, set `ListenAddress` to the network interface intended for client connections, or to `"127.0.0.1"` for local clients only.
     *   **Firewall Rules:** Meticulously configure system and network firewalls to allow incoming TCP connections on the chosen RTSP `Port`. Also, remember that RTP/RTCP (used for the actual media data) often use dynamic UDP ports; firewalls might need helper modules (like `nf_conntrack_rtsp` on Linux) or broad UDP port ranges opened (less secure).
 4.  **Resource Management:**
     *   **Dispose Pattern:** RTSP server instances hold network resources (sockets) and potentially complex GStreamer pipelines. *Always* ensure they are disposed of correctly using `using` statements or explicit `.Dispose()` calls in `finally` blocks to prevent resource leaks.

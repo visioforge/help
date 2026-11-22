@@ -191,8 +191,8 @@ var aviOutput = new AVIOutput();
 
 ```csharp
 var aviSettingsDialog = new AVISettingsDialog(
-  VideoCapture1.Video_Codecs.ToArray(),
-  VideoCapture1.Audio_Codecs.ToArray());
+  VideoCapture1.Video_Codecs().ToArray(),
+  VideoCapture1.Audio_Codecs().ToArray());
 
 aviSettingsDialog.ShowDialog(this);
 aviSettingsDialog.SaveSettings(ref aviOutput);
@@ -204,12 +204,12 @@ First, get available codecs:
 
 ```csharp
 // Populate codec lists
-foreach (string codec in VideoCapture1.Video_Codecs)
+foreach (string codec in VideoCapture1.Video_Codecs())
 {
   cbVideoCodecs.Items.Add(codec);
 }
 
-foreach (string codec in VideoCapture1.Audio_Codecs)
+foreach (string codec in VideoCapture1.Audio_Codecs())
 {
   cbAudioCodecs.Items.Add(codec);
 }
@@ -291,7 +291,7 @@ If you encounter "Codec not found" errors:
 
 ```csharp
 // Check if codec is available before using
-if (!VideoCapture1.Video_Codecs.Contains("H264"))
+if (!VideoCapture1.Video_Codecs().Contains("H264"))
 {
     // Fall back to another codec or show error
     MessageBox.Show("H264 codec not available. Please install required codecs.");

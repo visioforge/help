@@ -74,10 +74,10 @@ Les sections suivantes listent tous les effets disponibles. Chaque effet inclut 
 
 | Effet | SDK | Description |
 |--------|-----|-------------|
-| VideoEffectDarkness | 🪟 Classique | Ajuste l'obscurité/luminosité globale. Les valeurs supérieures à 128 assombrissent, celles inférieures éclaircissent l'image. |
+| VideoEffectDarkness | 🪟 Classique | Assombrit l'image vers le noir : 0 la laisse inchangée, 255 donne du noir. |
 | GPUVideoEffectDarkness | 🪟 Classique (GPU) | Ajustement de l'obscurité accéléré par le GPU. |
-| GPUVideoEffectBrightness | 🪟 Classique (GPU) | Ajustement de la luminosité accéléré par le GPU. Ajoute ou soustrait des valeurs uniformes aux composantes RGB. |
-| VideoEffectLightness | 🪟 Classique | Ajuste la clarté dans l'espace colorimétrique HSL, en préservant les relations de teinte et saturation. |
+| GPUVideoEffectBrightness | 🪟 Classique (GPU) | Ajustement de la luminosité accéléré par le GPU. Ajoute valeur / 255 aux composantes RGB ; 0 laisse l'image inchangée, 255 donne du blanc. |
+| VideoEffectLightness | 🪟 Classique | Éclaircit l'image vers le blanc : 0 la laisse inchangée, 255 donne du blanc. |
 | VideoBalanceVideoEffect | 🌍 Multiplateforme | Ajustement multiplateforme de la luminosité, du contraste, de la saturation et de la teinte. |
 
 #### Contraste et couleur
@@ -407,10 +407,11 @@ Tous les effets vidéo prennent en charge ces paramètres standard :
 
 ### Plages de valeurs des effets classiques
 
-La plupart des effets d'ajustement Classiques utilisent des plages 0-255 où :
-- **128** représente généralement la neutralité/aucun changement
-- **0** représente le minimum (souvent le plus sombre/faible)
-- **255** représente le maximum (souvent le plus lumineux/fort)
+Les effets d'ajustement Classiques utilisent des plages 0-255, mais la valeur neutre dépend de l'effet :
+- **0** laisse l'image inchangée pour Lightness, Darkness et Contrast
+- **255** laisse l'image inchangée pour Saturation (0 donne des niveaux de gris)
+- **255** est l'effet le plus fort pour Lightness (blanc) et Darkness (noir)
+- **GPU** : Brightness et Darkness sont neutres à **0**, Contrast et Saturation à **255** (une valeur GPU Contrast qui descend vers 0 amène l'image à un gris moyen plat)
 
 ### Transitions animées (effets classiques)
 
@@ -495,7 +496,7 @@ await videoCapture.Video_Effects_AddOrUpdateAsync(textOverlay);
 // Fondu au noir sur 3 secondes
 var fade = new VideoEffectDarkness(
     enabled: true,
-    value: 128,        // Démarrage normal
+    value: 0,          // Démarrage sans changement
     valueStop: 255,    // Fin à l'obscurité maximale
     name: "FadeOut",
     startTime: TimeSpan.FromSeconds(57),

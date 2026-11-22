@@ -397,7 +397,7 @@ VideoCapture1.Video_Renderer_Update();
 `VideoRendererSettings` exposes zoom/shift properties useful for digital PTZ on a preview:
 
 ```cs
-VideoCapture1.Video_Renderer.Zoom_Ratio  = 150; // 150%
+VideoCapture1.Video_Renderer.Zoom_Ratio  = 50;  // 150%: Zoom_Ratio is added to 100
 VideoCapture1.Video_Renderer.Zoom_ShiftX = 0;
 VideoCapture1.Video_Renderer.Zoom_ShiftY = 0;
 VideoCapture1.Video_Renderer_Update();

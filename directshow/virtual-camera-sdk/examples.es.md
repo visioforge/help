@@ -46,7 +46,7 @@ El Virtual Camera SDK proporciona tres tipos principales de filtros:
 
 ## Prerrequisitos
 
-### Proyectos C#
+### Proyectos C\#
 
 ```csharp
 using System;
@@ -101,7 +101,7 @@ DEFINE_GUID(CLSID_VFVideoPushSource,
 ---
 ## Ejemplo 1: Transmitir Archivo de Video a Cámara Virtual
 Este ejemplo demuestra la transmisión de un archivo de video a un dispositivo de cámara virtual.
-### Implementación en C#
+### Implementación en C\#
 ```csharp
 using System;
 using System.Runtime.InteropServices;
@@ -291,7 +291,7 @@ cleanup:
 
 Este ejemplo demuestra la captura desde una cámara web física y su transmisión a un dispositivo de cámara virtual.
 
-### Implementación en C#
+### Implementación en C\#
 
 ```csharp
 using System;
@@ -409,7 +409,7 @@ public class VirtualCameraFromPhysicalCamera
 ---
 ## Ejemplo 3: Transmitir Secuencia de Imágenes a Cámara Virtual (Cuadro por Cuadro)
 Este ejemplo demuestra el renderizado de cuadros individuales (secuencia de imágenes o presentación de diapositivas) a un dispositivo de cámara virtual.
-### Implementación en C#
+### Implementación en C\#
 ```csharp
 using System;
 using System.Drawing;
@@ -604,7 +604,7 @@ public class VirtualCameraFrameByFrame
 
 Este ejemplo demuestra la captura de video desde un dispositivo de cámara virtual (útil para probar o monitorear lo que se envía a la cámara virtual).
 
-### Implementación en C#
+### Implementación en C\#
 
 ```csharp
 using System;

@@ -32,7 +32,7 @@ primary_api_classes:
 
 ---
 
-# Visor de Streams RTSP y Reproductor de Cámaras IP en C#
+# Visor de Streams RTSP y Reproductor de Cámaras IP en C\#
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -61,7 +61,7 @@ Los casos de uso comunes incluyen paneles de vigilancia, aplicaciones NVR (graba
 Agregue el paquete NuGet del Media Blocks SDK a su proyecto:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
 ```
 
 También necesita los paquetes de runtime específicos de la plataforma. Para Windows:

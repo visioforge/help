@@ -90,7 +90,7 @@ Este enfoque modular le permite:
 - Agregar bloques de procesamiento adicionales (filtros, codificadores)
 - Dirigir la salida a múltiples destinos simultáneamente
 
-## Cómo Leer Códigos de Barras desde Cámara en C#
+## Cómo Leer Códigos de Barras desde Cámara en C\#
 
 Construya un escáner de códigos de barras que lee desde una webcam o dispositivo de cámara en C# paso a paso.
 
@@ -591,7 +591,7 @@ private async void ProcessPaymentQRCode(string qrData)
 }
 ```
 
-## Solución de Problemas del Escáner de Códigos de Barras en C#
+## Solución de Problemas del Escáner de Códigos de Barras en C\#
 
 ### Problema: No se Detectan Códigos de Barras
 

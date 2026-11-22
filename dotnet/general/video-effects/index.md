@@ -72,7 +72,7 @@ The following effect categories are available in both Classic and Cross-Platform
 * **Saturation and Color Grading** - Adjust color intensity and apply color corrections
   - Classic: `VideoEffectSaturation` / `GPUVideoEffectSaturation`
   - Cross-platform: `VideoBalanceVideoEffect`, `ColorEffectsVideoEffect`, `LUTVideoEffect` (not on iOS)
-* **Lightness** - HSL-based brightness adjustment preserving color relationships
+* **Lightness** - Brightness control: fills the image toward white (0 leaves it unchanged, 255 is white)
   - Classic: `VideoEffectLightness`
 * **Color Filters** - Isolate or enhance specific color channels (Red, Green, Blue)
   - Classic: `VideoEffectRed/Green/Blue`, `VideoEffectFilterRed/Green/Blue`
@@ -296,7 +296,7 @@ await videoCaptureX.Video_Effects_AddOrUpdateAsync(balance);
 // Fade to black over 3 seconds (Windows only)
 var fadeOut = new VideoEffectDarkness(
     enabled: true,
-    value: 128,        // Start at normal
+    value: 0,          // Start unchanged
     valueStop: 255,    // End at black
     name: "FadeOut",
     startTime: TimeSpan.FromSeconds(57),

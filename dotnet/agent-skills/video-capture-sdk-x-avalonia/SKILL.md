@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Video Capture SDK X exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) — webcam / IP camera / screen / NDI sources, optional MP4 / AVI / MOV / MPEG-TS / WebM recording, snapshots, pause/resume. Same C# code targets all three desktop OSes — only the UI host (Avalonia here) and the per-OS native redist NuGet package change between platforms.
 
-Pinned NuGet versions: wrapper **`2026.11.20`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.21`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Avalonia)). Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -19,7 +19,7 @@ Pinned NuGet versions: wrapper **`2026.11.20`**, Windows, macOS and Linux native
 ## When NOT to use this skill
 
 - **Windows-only WPF host** (single TFM, no per-OS conditionals): use `video-capture-sdk-x-wpf`. Same SDK, same `VideoCaptureCoreX` API.
-- **Native .NET-for-mobile/Apple hosts**: `video-capture-sdk-x-macos` (native Mac Catalyst), `video-capture-sdk-x-ios`, `video-capture-sdk-x-android`.
+- **Native .NET-for-mobile/Apple hosts**: `video-capture-sdk-x-macos` (native .NET for macOS, AppKit), `video-capture-sdk-x-ios`, `video-capture-sdk-x-android`.
 - **MAUI host** (multi-target one binary per OS, mobile-first): `video-capture-sdk-x-maui`.
 - **Custom pipeline topology** (split-with-tee, multi-source mix, runtime sink swap): use `media-blocks-sdk-net-avalonia` — `VideoCaptureCoreX` is the high-level wrapper around exactly the same engine.
 - **Playback only** (play files / streams without capturing): `media-player-sdk-x-avalonia`.
@@ -41,7 +41,7 @@ Video Capture SDK X for Avalonia is **not** a single meta-package. You add the S
 
 On Linux, GStreamer does not come from NuGet: the Linux target uses the **system-installed GStreamer** (`gstreamer1.0`, `gstreamer1.0-plugins-base`, `gstreamer1.0-plugins-good`, `gstreamer1.0-plugins-bad`, `gstreamer1.0-plugins-ugly`, `gstreamer1.0-libav` on Debian/Ubuntu; equivalent packages on Fedora/Arch). If GStreamer is not installed system-wide on the Linux target, the app launches but `VideoCaptureCoreX.StartAsync()` fails with element-not-found errors.
 
-The Linux core package is still required: without it the app starts, but every color conversion — snapshots, frame-to-bitmap conversion, overlays — fails at run time with `VisioForge_VAP is not available`. Reference only the package for the target architecture; the conditions in the csproj below pick it from the runtime identifier (`-r linux-arm64`, a publish profile, or the build machine when none is given). The block applies when the app is built on Linux; publishing for Linux from Windows or macOS skips it.
+The Linux core package is still required: without it the app starts, but every color conversion — snapshots, frame-to-bitmap conversion, overlays — fails at run time with `VisioForge_VAP is not available`. Reference only the package for the target architecture; the conditions in the csproj below pick it from the runtime identifier (`-r linux-arm64`, a publish profile, or the build machine when none is given). The block applies when the app is built on Linux and when it is published for a `linux-*` runtime identifier from any host, so a CI image can cross-publish with `-r linux-x64` or `-r linux-arm64`.
 
 ## Project setup
 
@@ -73,7 +73,7 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <TargetFramework>net10.0</TargetFramework>
   <OutputType>Exe</OutputType>
 </PropertyGroup>
-<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux')) or $(RuntimeIdentifier.StartsWith('linux-'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
 </ItemGroup>
@@ -203,7 +203,7 @@ private async void MainWindow_Activated(object sender, EventArgs e)
     _videoCapture.OnError += (_, err) => Console.WriteLine($"Capture error: {err.Message}");
 
     var devices = await DeviceEnumerator.Shared.VideoSourcesAsync();
-    if (devices.Count == 0) { Console.WriteLine("No camera"); return; }
+    if (devices.Length == 0) { Console.WriteLine("No camera"); return; }
 
     var device = devices[0];
     _videoCapture.Video_Source = new VideoCaptureDeviceSourceSettings(device)
@@ -333,7 +333,7 @@ The `references/` folder is self-contained — copy all of it into a fresh Avalo
 - **MCP server** (queryable API + class lookup): see `/.well-known/mcp.json` for the `search_api`, `get_class_info`, `get_code_example`, and `get_deployment_guide` tools.
 - **Adjacent skills**:
     - `video-capture-sdk-x-wpf` — same SDK, Windows-only WPF host with a single TFM (no per-OS conditionals).
-    - `video-capture-sdk-x-macos` — same SDK, native .NET-for-macOS (Mac Catalyst) host without Avalonia.
+    - `video-capture-sdk-x-macos` — same SDK, native .NET for macOS (AppKit) host without Avalonia.
     - `video-capture-sdk-x-winui` — same SDK, WinUI 3 / Windows App SDK host.
     - `video-edit-sdk-x-avalonia` — non-linear editor sibling (`VideoEditCoreX`) for the same Avalonia host.
     - `video-capture-sdk-x-maui` — same SDK on .NET MAUI (mobile-first multi-target).

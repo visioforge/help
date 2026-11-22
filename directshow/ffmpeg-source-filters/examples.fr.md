@@ -58,7 +58,7 @@ Chaque exemple inclut :
 #include "IFFMPEGSourceSettings.h"  // Issu du SDK
 #pragma comment(lib, "strmiids.lib")
 ```
-### Projets C#
+### Projets C\#
 ```csharp
 using VisioForge.DirectShowAPI;
 using VisioForge.DirectShowLib;
@@ -165,7 +165,7 @@ cleanup:
 }
 ```
 
-### Implémentation C#
+### Implémentation C\#
 
 ```csharp
 using System;
@@ -404,7 +404,7 @@ public void PlayFileWithHardwareAcceleration(string filename, IntPtr videoWindow
 
 Diffuser de la vidéo depuis des sources réseau.
 
-### Streaming RTSP en C#
+### Streaming RTSP en C\#
 
 ```csharp
 public void PlayRTSPStream(string rtspUrl, IntPtr videoWindowHandle)
@@ -457,7 +457,7 @@ public void PlayRTSPStream(string rtspUrl, IntPtr videoWindowHandle)
 }
 ```
 
-### Streaming HLS en C#
+### Streaming HLS en C\#
 
 ```csharp
 public void PlayHLSStream(string hlsUrl, IntPtr videoWindowHandle)
@@ -575,7 +575,7 @@ settings.ClearCustomOptions();
 
 Contrôler le comportement de mise en tampon pour différents scénarios.
 
-### Exemples de mise en tampon en C#
+### Exemples de mise en tampon en C\#
 
 ```csharp
 public enum BufferingScenario
@@ -643,7 +643,7 @@ public void PlayWithBuffering(string source, BufferingScenario scenario, IntPtr 
 ---
 ## Exemple 6 : sélection multi-flux
 Sélectionner des pistes vidéo et audio spécifiques.
-### Sélection de flux en C#
+### Sélection de flux en C\#
 ```csharp
 public void PlayWithStreamSelection(string filename, int videoStreamIndex, int audioStreamIndex, IntPtr videoWindowHandle)
 {
@@ -710,7 +710,7 @@ public void PlayWithStreamSelection(string filename, int videoStreamIndex, int a
 
 Recevoir des tampons de données hors-bande bruts transportés dans le conteneur (tels que des paquets de métadonnées SMPTE KLV dans les flux MPEG-TS). Le rappel est déclenché une fois par paquet de données et expose les octets du paquet ainsi que ses horodatages de présentation/fin.
 
-### Implémentation du rappel de données en C#
+### Implémentation du rappel de données en C\#
 
 ```csharp
 // Signature reelle (selon IFFmpegSourceSettings.h) :
@@ -790,7 +790,7 @@ public class FFMPEGDataCallbackExample
 ---
 ## Exemple 8 : rappel d'horodatage
 Surveiller le cadencement du démultiplexeur/flux par type de média.
-### Rappel d'horodatage en C#
+### Rappel d'horodatage en C\#
 ```csharp
 // Signature reelle (selon IFFmpegSourceSettings.h) :
 //   HRESULT (int mediaType, __int64 demuxerStartTime,
@@ -843,7 +843,9 @@ public void PlayWithTimestampCallback(string filename)
 
 Activer une licence achetée.
 
-### Activation de licence en C#
+Sans licence, le filtre fonctionne en version d'évaluation : il dessine un filigrane « VisioForge FFMPEG Source - trial » dans le coin supérieur gauche de la vidéo qu'il produit et n'affiche aucune boîte de dialogue. L'audio n'est pas modifié. La version d'évaluation décode aussi en logiciel : le décodage matériel est choisi à la connexion de la broche de sortie, activez donc la licence avant de connecter le filtre pour que `SetHWAccelerationEnabled` prenne effet. Une fois la licence activée, le filigrane disparaît.
+
+### Activation de licence en C\#
 
 ```csharp
 public void PlayWithLicense(string filename, string licenseKey, IntPtr videoWindowHandle)
@@ -896,7 +898,7 @@ public void PlayWithLicense(string filename, string licenseKey, IntPtr videoWind
 ---
 ## Exemple 10 : lecteur multimédia complet
 Lecteur multimédia complet avec toutes les fonctionnalités.
-### Exemple complet en C#
+### Exemple complet en C\#
 ```csharp
 using System;
 using System.Runtime.InteropServices;

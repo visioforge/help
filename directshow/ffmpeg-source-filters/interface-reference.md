@@ -89,6 +89,7 @@ int SetHWAccelerationEnabled([MarshalAs(UnmanagedType.Bool)] bool enabled);
 - Must be called **before** connecting downstream video filters
 - When enabled, the filter attempts to use hardware decoding (DXVA, NVDEC, QuickSync, etc.)
 - Falls back to software decoding if hardware acceleration is unavailable
+- An unlicensed (trial) filter always decodes in software: activate the license before connecting the filter
 - Hardware acceleration significantly improves performance for H.264, H.265, VP9, and AV1 codecs
 **Example (C++)**:
 ```cpp

@@ -270,8 +270,8 @@ Install-Package VisioForge.DotNet.Core.Redist.FFMPEG.x86
 
 ### Problemas comunes y soluciones
 
-- **Errores de códec no encontrado**: Asegúrese de haber instalado el paquete FFMPEG correcto con soporte de códec apropiado
-- **Fallos de aceleración de hardware**: Verifique compatibilidad de GPU y versiones de controladores
+- **Errores de códec no encontrado**: un codificador que el ejecutable de FFmpeg no incluye hace fallar `Start` / `StartAsync`, y `OnError` indica el codificador y el ejecutable. El `vfffmpeg64.exe` incluido no tiene libx264 ni libx265: use `H264MFSettings`, `OpenH264Settings` o un codificador por hardware, o asigne a `ExecutableFilename` una compilación de FFmpeg que los tenga. `ffmpeg -encoders` muestra lo que incluye una compilación
+- **Fallos de aceleración de hardware**: un codificador QSV, NVENC o AMF en un PC sin esa GPU arranca y después FFmpeg termina; `OnError` lo notifica con la última línea de error de FFmpeg. Verifique compatibilidad de GPU y versiones de controladores
 - **Problemas de rendimiento**: Ajuste conteo de hilos y preset de codificación según recursos de CPU disponibles
 - **Problemas de calidad de salida**: Ajuste tasa de bits, perfil y parámetros de codificación
 

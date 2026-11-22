@@ -50,7 +50,7 @@ Grabar la pantalla del escritorio en aplicaciones VB.NET (Visual Basic .NET) es 
 Agregue los siguientes paquetes a su proyecto VB.NET:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.21]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```

@@ -81,15 +81,15 @@ The Avalonia template uses central package management, so NuGet writes the versi
 
 ```xml
 <ItemGroup>
-  <PackageVersion Include="VisioForge.DotNet.Core" Version="[2026.11.20]" />
-  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.20]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" />
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.21" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.11.21" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.16" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.11.16" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.11.13" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.5" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.10.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="2026.10.26" />
 </ItemGroup>
 ```
 
@@ -115,13 +115,13 @@ Each head takes its redist in its own project file. Right-click `VisioForgeAvalo
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" />
 </ItemGroup>
-<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux')) or $(RuntimeIdentifier.StartsWith('linux-'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))" />
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))" />
 </ItemGroup>
 ```
 
-The template builds the Desktop head for plain `net10.0`, and the SDK's Windows and macOS engines need the operating system's own framework. The later properties replace the template's: `net10.0-windows` on Windows, and `net10.0-macos` on a Mac, an app bundle, which needs an application ID. Linux keeps `net10.0` and uses the GStreamer installed on the system, see [Ubuntu deployment](../deployment-x/Ubuntu.md); the last block, applied when the head is built on Linux (publishing for Linux from Windows or macOS skips it), gives it the core package for its architecture, which holds the SDK's own native libraries. The references carry no versions: those come from `Directory.Packages.props`.
+The template builds the Desktop head for plain `net10.0`, and the SDK's Windows and macOS engines need the operating system's own framework. The later properties replace the template's: `net10.0-windows` on Windows, and `net10.0-macos` on a Mac, an app bundle, which needs an application ID. Linux keeps `net10.0` and uses the GStreamer installed on the system, see [Ubuntu deployment](../deployment-x/Ubuntu.md); the last block, applied when the head is built on Linux or published for a `linux-*` runtime identifier, gives it the core package for its architecture, which holds the SDK's own native libraries. The references carry no versions: those come from `Directory.Packages.props`.
 
 ## The Android head
 

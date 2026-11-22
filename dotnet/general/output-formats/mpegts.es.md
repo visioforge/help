@@ -144,6 +144,10 @@ La clase `MPEGTSSplitSinkSettings` permite la división automática de la salida
 - Grabar videos de time-lapse
 - Implementar grabación de búfer circular
 
+!!! note "VideoEditCoreX"
+
+    La división la realiza `splitmuxsink`, que usan `VideoCaptureCoreX` y las pipelines de Media Blocks. `VideoEditCoreX` renderiza a través de GStreamer Editing Services, cuyo `encodebin` no puede segmentar la salida: rechaza `MPEGTSSplitSinkSettings` al iniciar con un error, en lugar de escribir silenciosamente un solo archivo, y lo mismo con `FileOutput = false`, que transmite a un pin de salida — ese motor escribe un archivo. `M2TSMode` se aplica en todos los motores, incluido `VideoEditCoreX`.
+
 #### Opciones de configuración
 
 ```csharp

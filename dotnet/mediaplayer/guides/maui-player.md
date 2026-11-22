@@ -25,7 +25,7 @@ primary_api_classes:
 
 ---
 
-# Build a .NET MAUI Video Player in C#
+# Build a .NET MAUI Video Player in C\#
 
 [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -55,8 +55,8 @@ primary_api_classes:
 ## NuGet Packages
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.20]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
 
 <!-- Platform redists — include only the targets you build for -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64"
@@ -130,6 +130,7 @@ Drop a `VideoView` into your page alongside a seek slider and playback buttons:
 `VideoView.GetVideoView()` returns an `IVideoView` bridge that `MediaPlayerCoreX` consumes identically on every MAUI target (WinUI, macCatalyst, AndroidX, UIKit):
 
 ```csharp
+using System.Diagnostics;
 using VisioForge.Core;
 using VisioForge.Core.MediaPlayerX;
 using VisioForge.Core.Types;

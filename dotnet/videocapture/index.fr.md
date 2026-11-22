@@ -168,9 +168,9 @@ Toute application de capture suit le même modèle :
 7. **Arrêter** — `await capture.StopAsync()` finalise le fichier de sortie
 8. **Libérer** — `await capture.DisposeAsync()` libère toutes les ressources
 
-## Scénarios courants de capture vidéo en C#
+## Scénarios courants de capture vidéo en C\#
 
-### Enregistrer une vidéo webcam en C#
+### Enregistrer une vidéo webcam en C\#
 
 Enregistrez depuis une webcam USB ou une caméra intégrée en MP4 avec H.264/AAC :
 
@@ -181,7 +181,7 @@ capture.Outputs_Add(new MP4Output("webcam.mp4"));
 
 Consultez le tutoriel complet : [Enregistrer une vidéo webcam en C#](guides/save-webcam-video.md)
 
-### Enregistrer un flux RTSP dans un fichier en C#
+### Enregistrer un flux RTSP dans un fichier en C\#
 
 Connectez-vous à des caméras IP et enregistrez des flux RTSP dans des fichiers MP4. Prend en charge les protocoles RTSP, ONVIF et HTTP :
 

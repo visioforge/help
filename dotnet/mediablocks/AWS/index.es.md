@@ -53,7 +53,6 @@ El `AWSS3SinkBlock` se configura usando `AWSS3SinkSettings`. Propiedades princip
 - `ContentDisposition` (string, opcional): Encabezado Content-Disposition para el objeto cargado.
 - `Metadata` (Dictionary&lt;string, string&gt;, opcional): Un mapa de metadatos de usuario a almacenar con el objeto.
 - `ForcePathStyle` (bool, opcional): Forzar al cliente a usar direccionamiento de estilo ruta para buckets.
-- `UseMultipartUpload` (bool, opcional, por defecto `true`): Usar carga multipart para archivos grandes.
 - `PartSize` (ulong, opcional, por defecto 5 MB): Tamaño en bytes de una parte individual usada para la carga multipart.
 - `OnError` (S3SinkOnError, opcional): Cómo manejar los errores durante la carga.
 - `RequestTimeout` (TimeSpan, opcional, por defecto 15s): Tiempo de espera para solicitudes S3 (establezca `TimeSpan.Zero` para infinito).

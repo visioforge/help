@@ -90,7 +90,7 @@ Cette approche modulaire vous permet de :
 - Ajouter d'autres blocs de traitement (filtres, encodeurs)
 - Acheminer la sortie vers plusieurs destinations simultanément
 
-## Lire des codes-barres depuis une caméra en C#
+## Lire des codes-barres depuis une caméra en C\#
 
 Construisez pas à pas un lecteur de codes-barres qui lit depuis une webcam ou un périphérique caméra en C#.
 
@@ -591,7 +591,7 @@ private async void ProcessPaymentQRCode(string qrData)
 }
 ```
 
-## Dépannage des problèmes du lecteur de codes-barres en C#
+## Dépannage des problèmes du lecteur de codes-barres en C\#
 
 ### Problème : aucun code-barres détecté
 

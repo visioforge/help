@@ -121,7 +121,7 @@ L'interface `IVFVirtualCameraSink` sert à configurer le filtre puits de caméra
 
 **Hérite de** : `IUnknown`
 
-#### Définition C#
+#### Définition C\#
 
 ```csharp
 using System;

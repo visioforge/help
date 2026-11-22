@@ -74,10 +74,10 @@ Las siguientes secciones enumeran todos los efectos disponibles. Cada efecto inc
 
 | Efecto | SDK | Descripción |
 |--------|-----|-------------|
-| VideoEffectDarkness | 🪟 Classic | Ajusta la oscuridad/luminosidad general. Valores superiores a 128 oscurecen, valores inferiores iluminan la imagen. |
+| VideoEffectDarkness | 🪟 Classic | Oscurece la imagen hacia el negro: 0 la deja sin cambios, 255 es negro. |
 | GPUVideoEffectDarkness | 🪟 Classic (GPU) | Ajuste de oscuridad acelerado por GPU. |
-| GPUVideoEffectBrightness | 🪟 Classic (GPU) | Ajuste de brillo acelerado por GPU. Añade o resta valores uniformes a los componentes RGB. |
-| VideoEffectLightness | 🪟 Classic | Ajusta la luminosidad en el espacio de color HSL, preservando las relaciones de tono y saturación. |
+| GPUVideoEffectBrightness | 🪟 Classic (GPU) | Ajuste de brillo acelerado por GPU. Suma valor / 255 a los componentes RGB; 0 deja la imagen sin cambios, 255 es blanco. |
+| VideoEffectLightness | 🪟 Classic | Aclara la imagen hacia el blanco: 0 la deja sin cambios, 255 es blanco. |
 | VideoBalanceVideoEffect | 🌍 Multiplataforma | Ajuste multiplataforma de brillo, contraste, saturación y tono. |
 
 #### Contraste y Color
@@ -407,10 +407,11 @@ Todos los efectos de video soportan estos parámetros estándar:
 
 ### Rangos de Valores de Efectos Classic
 
-La mayoría de los efectos de ajuste Classic usan rangos de valores 0-255 donde:
-- **128** típicamente representa neutral/sin cambio
-- **0** representa mínimo (a menudo más oscuro/más débil)
-- **255** representa máximo (a menudo más brillante/más fuerte)
+Los efectos de ajuste Classic usan rangos de valores 0-255, pero el valor neutro depende del efecto:
+- **0** deja la imagen sin cambios en Lightness, Darkness y Contrast
+- **255** deja la imagen sin cambios en Saturation (0 da escala de grises)
+- **255** es el efecto más fuerte en Lightness (blanco) y Darkness (negro)
+- **GPU**: Brightness y Darkness son neutros en **0**, Contrast y Saturation en **255** (un valor de GPU Contrast que baja hacia 0 lleva la imagen a un gris medio plano)
 
 ### Transiciones Animadas (Efectos Classic)
 
@@ -495,7 +496,7 @@ await videoCapture.Video_Effects_AddOrUpdateAsync(textOverlay);
 // Fundido a negro durante 3 segundos
 var fade = new VideoEffectDarkness(
     enabled: true,
-    value: 128,        // Comenzar normal
+    value: 0,          // Comenzar sin cambios
     valueStop: 255,    // Terminar en oscuridad máxima
     name: "FadeOut",
     startTime: TimeSpan.FromSeconds(57),

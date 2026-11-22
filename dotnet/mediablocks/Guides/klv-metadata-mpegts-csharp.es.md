@@ -138,7 +138,8 @@ var tsSink = new MPEGTSSinkBlock(tsSettings);
     paquete. Esto adjunta una carga KLV **estática** a la salida — no reconstruye la pista de metadatos original
     sincronizada por PCR/PTS con precisión de fotograma. Para aplicaciones que necesiten KLV por fotograma
     sincronizado con el video, alimente el KLV desde una fuente en vivo a medida que se produce, en lugar de
-    re-incrustar un archivo plano.
+    re-incrustar un archivo plano. Con una salida dividida (`MPEGTSSplitSinkSettings`), el paquete se escribe al
+    inicio de cada archivo de segmento.
 
 ## Grabar KLV en vivo durante la captura (Video Capture SDK)
 

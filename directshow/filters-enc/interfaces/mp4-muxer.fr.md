@@ -40,7 +40,7 @@ L'interface **IMP4MuxerConfig** fournit une configuration de base pour le multip
 
 ### Définitions de l'interface
 
-#### Définition C#
+#### Définition C\#
 
 ```csharp
 using System;
@@ -220,7 +220,7 @@ public enum MP4V10Flags
 }
 ```
 ### Définitions de l'interface
-#### Définition C#
+#### Définition C\#
 ```csharp
 using System;
 using System.Runtime.InteropServices;

@@ -34,7 +34,8 @@ using VisioForge.Core.VideoCaptureX;
 VisioForgeX.InitSDK();
 
 // 2. Crea el motor, enlazado a un IVideoView para preview (o null para headless).
-var videoCapture = new VideoCaptureCoreX(videoView as IVideoView);
+IVideoView? videoView = null;
+var videoCapture = new VideoCaptureCoreX(videoView);
 
 // 3. Selecciona la primera cámara y micrófono enumerados.
 var videoDevice = (await DeviceEnumerator.Shared.VideoSourcesAsync()).First();

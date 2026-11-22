@@ -54,6 +54,16 @@ La vidéo suivante illustre le processus complet de mise en place d'une applicat
   <iframe src="https://www.youtube.com/embed/fAt1Bp6qYPc?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
+### La version courte
+
+Le même enregistrement en application console en quelques lignes de C#, sans fenêtre ni aperçu en direct.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/9QAVaVWdbRQ?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Son code : [webcam-mp4-short-console sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/webcam-mp4-short-console).
+
 ## Dépôt de code source
 
 Pour les développeurs qui préfèrent examiner l'implémentation complète, tout le code source est disponible dans notre dépôt GitHub :
@@ -62,19 +72,21 @@ Pour les développeurs qui préfèrent examiner l'implémentation complète, tou
 
 ## Composants redistribuables requis
 
-Avant d'implémenter la solution, installez le paquet [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) et les paquets redistribuables nécessaires :
+Avant d'implémenter la solution, installez le paquet [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) et les paquets redistribuables nécessaires.
 
-### Composants de capture vidéo
+Réglez `PlatformTarget` dans le fichier du projet selon les redists (`x64` ou `x86`).
 
-- Pour les applications 32 bits : [Redist de capture vidéo x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
-- Pour les applications 64 bits : [Redist de capture vidéo x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
+```bash
+dotnet add package VisioForge.DotNet.Core
+dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
+dotnet add package VisioForge.DotNet.Core.Redist.MP4.x64
+```
 
-### Composants d'encodage MP4
+Pour une application 32 bits (x86), utilisez plutôt les paquets x86 : `VisioForge.DotNet.Core.Redist.VideoCapture.x86` et `VisioForge.DotNet.Core.Redist.MP4.x86`.
 
-- Pour les applications 32 bits : [Redist MP4 x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/)
-- Pour les applications 64 bits : [Redist MP4 x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
+`VisioForge.DotNet.VideoCapture`, le paquet du bloc Try it en haut de cette page, convient aussi : il installe le même `VisioForge.DotNet.Core`. Les paquets redist restent nécessaires dans les deux cas.
 
-## Exemple d'implémentation avec code C#
+## Exemple d'implémentation avec code C\#
 
 L'implémentation C# suivante montre comment créer une application Windows Forms qui capture la vidéo d'une webcam et l'enregistre dans un fichier MP4. Le formulaire contient un `VideoView`, des listes déroulantes pour la caméra, le format, la fréquence d'images et le micro, ainsi que les boutons Start et Stop ; le fichier du concepteur se trouve dans le code source indiqué plus haut. Le projet cible .NET 10 avec les usings implicites.
 

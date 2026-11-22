@@ -1871,7 +1871,7 @@ pipeline.Connect(source.AudioOutput, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
-Llame a `WHEPSourceBlock.IsAvailable()` antes de construir el pipeline: indica si el plugin `rswebrtc` de GStreamer (`whepclientsrc`, de gst-plugins-rs) está presente. En Windows y macOS, el paquete de redistribución del SDK de VisioForge lo incluye. En Linux, el SDK usa el GStreamer del sistema, que necesita la versión 1.28 o posterior con el plugin `rswebrtc` de gst-plugins-rs instalado; sin él (por ejemplo, con el GStreamer 1.24 de serie de Ubuntu 24.04), `IsAvailable()` devuelve `false`.
+Llame a `WHEPSourceBlock.IsAvailable()` antes de construir el pipeline: indica si el plugin `rswebrtc` de GStreamer (`whepclientsrc`, de gst-plugins-rs) está presente. En Windows y macOS se incluye en los paquetes `VisioForge.CrossPlatform.Core.Windows.Adds.x64` y `VisioForge.CrossPlatform.Core.macOS.Adds`. En Linux se incluye en el paquete `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`, y necesita GStreamer 1.22 o posterior (Debian 12, Ubuntu 24.04+) con los paquetes `gstreamer1.0-plugins-bad` y `gstreamer1.0-nice` de la distribución instalados; sin ellos, `IsAvailable()` devuelve `false`.
 
 #### Plataformas
 
@@ -1893,7 +1893,7 @@ El `ScreenSourceBlock` usa clases de ajustes específicas de plataforma. La elec
 - `ScreenCaptureD3D11SourceSettings` - Usar `Direct3D 11` Desktop Duplication para grabación de pantalla. Permite captura de ventana específica. (`ScreenCaptureSourceType.D3D11DesktopDuplication`)
 - `ScreenCaptureGDISourceSettings` - Usar `GDI` para grabación de pantalla. (`ScreenCaptureSourceType.GDI`)
 
-`ScreenCaptureGDISourceSettings` y `ScreenCaptureDX9SourceSettings` están obsoletos. Use `ScreenCaptureD3D11SourceSettings`. En una captura GDI o DX9 ya en curso, `UpdateLiveSettings` solo guarda la nueva posición y el cursor; se aplican en el siguiente inicio. El `Rectangle` vacío predeterminado captura todo el monitor que selecciona `Monitor`, y `UpdateLiveSettings` no lo mueve: asigne a `Rectangle` el área que desea mover.
+`ScreenCaptureGDISourceSettings` y `ScreenCaptureDX9SourceSettings` están obsoletos. Use `ScreenCaptureD3D11SourceSettings`. En una captura GDI o DX9 ya en curso, `UpdateLiveSettings` solo guarda la nueva posición y el cursor; se aplican en el siguiente inicio. El `Rectangle` vacío predeterminado captura todo el monitor que selecciona `Monitor`, y `UpdateLiveSettings` no lo mueve: asigne a `Rectangle` el área que desea mover. `ScreenCaptureDX9SourceSettings.Monitor` es el índice del adaptador de Direct3D 9, no una posición en `Screen.AllScreens`: `ScreenSourceBlock.GetDX9MonitorIndex(Screen.AllScreens[i])` devuelve el adaptador de una pantalla y `ScreenSourceBlock.GetMonitorSize(Screen.AllScreens[i])` su tamaño en píxeles físicos. En cambio, `ScreenCaptureGDISourceSettings.Monitor` es la posición del monitor en el orden de `EnumDisplayMonitors`.
 
 ##### macOS
 
@@ -2624,11 +2624,14 @@ pipeline.Connect(videoPushSource.Output, videoRenderer.Input);
 
 await pipeline.StartAsync();
 
-// Empuje frames desde su aplicación:
-// var frame = new VideoFrameX(...);
+// Empuje fotogramas desde su aplicación:
+// var frame = new VideoFrameX(pixels, width, height, stride, VideoFormatX.RGB);
 // videoPushSource.PushFrame(frame);
-// videoPushSource.ClearQueue(); // Limpiar frames en búfer si es necesario
+// frame.Free(); // Liberar la memoria asignada por este constructor
+// videoPushSource.ClearQueue(); // Limpiar fotogramas en búfer si es necesario
 ```
+
+`PushFrame` no conserva ninguna referencia al fotograma, por lo que puede reutilizarlo o liberarlo en cuanto termine la llamada. Libere un fotograma cuya memoria se asigna para usted (constructor con matriz, `Alloc`, `Clone`); de lo contrario, provoca una fuga de memoria. El fotograma deja de poder usarse después. Un fotograma que envuelve un búfer que pertenece a usted o al SDK, por ejemplo de un constructor `IntPtr` o de un evento `OnVideoFrameBuffer`, no necesita `Free()`: ahí no libera nada, y el búfer lo libera su propietario.
 
 #### Plataformas
 

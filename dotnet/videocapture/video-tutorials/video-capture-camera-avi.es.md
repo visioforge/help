@@ -28,7 +28,7 @@ video:
 
 ---
 
-# Grabación de webcam a archivo AVI en aplicaciones .NET C#
+# Grabación de webcam a archivo AVI en aplicaciones .NET C\#
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -54,10 +54,7 @@ El proyecto completo, con el archivo del diseñador, está en GitHub:
 
 ## Paquetes necesarios
 
-Instale el paquete [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) y el redist de captura de video con sus filtros DirectShow. AVI no necesita nada más:
-
-- Para aplicaciones de 64 bits: [Redist de captura de video x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
-- Para aplicaciones de 32 bits: [Redist de captura de video x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
+Instale el paquete [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) y el redist de captura de video con sus filtros DirectShow. AVI no necesita nada más.
 
 Establezca `PlatformTarget` en el archivo del proyecto según el redist (`x64` o `x86`).
 
@@ -66,7 +63,11 @@ dotnet add package VisioForge.DotNet.Core
 dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
 ```
 
-## Ejemplo de implementación con código C#
+Para una aplicación de 32 bits (x86), use en su lugar el paquete x86: `VisioForge.DotNet.Core.Redist.VideoCapture.x86`.
+
+`VisioForge.DotNet.VideoCapture`, el paquete del bloque Try it al principio de esta página, también sirve: instala el mismo `VisioForge.DotNet.Core`. Los paquetes redist son necesarios en ambos casos.
+
+## Ejemplo de implementación con código C\#
 
 El formulario tiene un `VideoView`, cuadros combinados para la cámara, el formato, la velocidad de fotogramas, el micrófono y el códec de video, una casilla «MP3 audio» y los botones Start y Stop; el archivo del diseñador está en el código fuente anterior. El proyecto usa .NET 10 con usings implícitos. En .NET Framework 4.7.2, el mismo código se compila en un proyecto de estilo SDK con `<LangVersion>10</LangVersion>` y `<ImplicitUsings>enable</ImplicitUsings>`.
 

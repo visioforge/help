@@ -38,7 +38,7 @@ Cette page fournit des exemples de code pratiques pour utiliser le filtre source
 #include "ivlcsrc.h"      // En-tete unique du SDK — declare IVlcSrc, IVlcSrc2, IVlcSrc3 + GUID CLSID/IID
 #pragma comment(lib, "strmiids.lib")
 ```
-### Projets C#
+### Projets C\#
 ```csharp
 using VisioForge.DirectShowAPI;
 using VisioForge.DirectShowLib;
@@ -127,7 +127,7 @@ cleanup:
 }
 ```
 
-### Implémentation C#
+### Implémentation C\#
 
 ```csharp
 using System;
@@ -289,7 +289,7 @@ End Class
 ---
 ## Exemple 2 : sélection de piste audio
 Lister et sélectionner les pistes audio des fichiers multi-audio.
-### Gestion des pistes audio en C#
+### Gestion des pistes audio en C\#
 ```csharp
 public class VLCAudioTrackExample
 {
@@ -398,7 +398,7 @@ void ListAndSelectAudioTracks(IVlcSrc* pVlcSrc)
 
 Sélectionner et gérer les pistes de sous-titres.
 
-### Gestion des sous-titres en C#
+### Gestion des sous-titres en C\#
 
 ```csharp
 public class VLCSubtitleExample
@@ -510,7 +510,7 @@ void ManageSubtitles(IVlcSrc* pVlcSrc)
 ---
 ## Exemple 4 : options de ligne de commande VLC personnalisées
 Transmettre des paramètres VLC personnalisés via l'interface IVlcSrc2.
-### Paramètres VLC personnalisés en C#
+### Paramètres VLC personnalisés en C\#
 ```csharp
 using System;
 using System.Collections.Generic;
@@ -671,7 +671,7 @@ private void ApplyVLCParameters(IVlcSrc2 vlcSrc2, List<string> parameters)
 
 Surcharger la fréquence d'images source via l'interface IVlcSrc3.
 
-### Surcharge de fréquence d'images en C#
+### Surcharge de fréquence d'images en C\#
 
 ```csharp
 public class VLCFrameRateExample
@@ -748,7 +748,7 @@ void SetCustomFrameRate(IBaseFilter* pFilter, double fps)
 ---
 ## Exemple 6 : streaming réseau (RTSP/HLS)
 Diffuser depuis des sources réseau.
-### Streaming réseau en C#
+### Streaming réseau en C\#
 ```csharp
 public class VLCNetworkStreamingExample
 {
@@ -867,9 +867,9 @@ public class VLCNetworkStreamingExample
 
 ## Exemple 7 : activation de licence
 
-Activer une licence achetée.
+Activer une licence achetée. `SetLicenseKey` réussit quelle que soit la clé : une clé que le filtre n'accepte pas le laisse en mode d'essai, et la vidéo porte la [bande d'essai](index.md#version-dessai). Seule une clé `null` est refusée : la méthode renvoie `E_POINTER`, qu'une déclaration `void` avec `[PreserveSig]` ne montre pas.
 
-### Activation de licence en C#
+### Activation de licence en C\#
 
 ```csharp
 public void PlayWithLicense(string filename, string licenseKey, IntPtr videoWindowHandle)
@@ -881,16 +881,9 @@ public void PlayWithLicense(string filename, string licenseKey, IntPtr videoWind
         Consts.CLSID_VFVLCSource,
         "VLC Source");
 
-    // Activer la licence
+    // Activer la licence : une clé non acceptée se voit à la bande d'essai sur la vidéo, pas à une erreur
     var registration = sourceFilter as IVFRegister;
-    if (registration != null)
-    {
-        int hr = registration.SetLicenseKey(licenseKey);
-        if (hr != 0)
-        {
-            throw new Exception("License activation failed");
-        }
-    }
+    registration?.SetLicenseKey(licenseKey);
 
     // Charger et lire le fichier
     var vlcSrc = sourceFilter as IVlcSrc;
@@ -919,7 +912,7 @@ public void PlayWithLicense(string filename, string licenseKey, IntPtr videoWind
 ---
 ## Exemple 8 : lecteur multi-piste complet
 Lecteur multimédia complet avec toutes les fonctionnalités du filtre source VLC.
-### Exemple complet en C#
+### Exemple complet en C\#
 ```csharp
 using System;
 using System.Collections.Generic;

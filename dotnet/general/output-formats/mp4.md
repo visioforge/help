@@ -164,6 +164,10 @@ The [MP4SplitSinkSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core
 - Managing disk space by limiting the number of files kept on storage
 - Implementing rolling buffer recording where only recent files are retained
 
+!!! note "VideoEditCoreX"
+
+    Splitting is done by `splitmuxsink`, which Media Blocks blocks and `VideoCaptureCoreX` use. `VideoEditCoreX` renders through GStreamer Editing Services, whose `encodebin` cannot segment the output: it refuses `MP4SplitSinkSettings` at start with an error instead of silently writing one file.
+
 **Split by File Size**
 
 Split the output when a file reaches a specific size in bytes:
@@ -465,6 +469,14 @@ mp4Output.Video_NVENC.Bitrate = 2000; // bitrate
 
 // optional parameters
 mp4Output.Video_NVENC.RateControl = NVENCRateControlMode.VBR; // rate control - CBR or VBR
+```
+
+For HEVC (H.265), set the codec with an HEVC profile and level.
+
+```cs
+mp4Output.Video_NVENC.Codec = NVENCEncoder.HEVC;
+mp4Output.Video_NVENC.Profile = NVENCVideoEncoderProfile.HEVC_Main;
+mp4Output.Video_NVENC.Level = NVENCEncoderLevel.HEVC_41;
 ```
 
 Set the audio settings.

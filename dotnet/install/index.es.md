@@ -1,5 +1,5 @@
 ---
-title: Instalar VisioForge .NET SDKs — NuGet, Visual Studio, Rider
+title: Instalar .NET SDKs con NuGet, Visual Studio y Rider
 description: Instalación por NuGet o archivos. Frameworks destino para Windows, macOS, iOS, Android y Linux. Inicialización SDK y dependencias nativas.
 tags:
   - Video Capture SDK
@@ -34,10 +34,10 @@ VisioForge ofrece potentes SDKs multimedia para desarrolladores .NET que permite
 
 VisioForge proporciona varios SDKs especializados para abordar diferentes necesidades multimedia:
 
-- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) - Para capturar video de cámaras, grabación de pantalla y streaming
-- [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) - Para edición de video, procesamiento y conversión de formato
-- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) - Para construir pipelines de procesamiento de medios personalizados
-- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) - Para crear reproductores de medios personalizados con características avanzadas
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) - Para capturar video de cámaras, grabación de pantalla y streaming ([documentación](../videocapture/index.md))
+- [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) - Para edición de video, procesamiento y conversión de formato ([documentación](../videoedit/index.md))
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) - Para construir pipelines de procesamiento de medios personalizados ([documentación](../mediablocks/index.md))
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) - Para crear reproductores de medios personalizados con características avanzadas ([documentación](../mediaplayer/index.md))
 
 ## Métodos de instalación
 

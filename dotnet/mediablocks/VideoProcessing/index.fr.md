@@ -3310,8 +3310,8 @@ var filename = "test.mp4";
 var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
 
 var videoEffects = new VideoEffectsWinBlock();
-// Exemple : ajouter un effet de luminosité
-videoEffects.Video_Effects_Add(new VideoEffectBrightness(true, 0.2));
+// Exemple : ajouter un effet de luminosité (0 = aucun changement, 255 = blanc)
+videoEffects.Video_Effects_Add(new VideoEffectLightness(true, 50));
 pipeline.Connect(fileSource.VideoOutput, videoEffects.Input);
 
 var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);

@@ -121,7 +121,7 @@ La interfaz `IVFVirtualCameraSink` se usa para configurar el filtro sink de cám
 
 **Hereda De**: `IUnknown`
 
-#### Definición C#
+#### Definición C\#
 
 ```csharp
 using System;

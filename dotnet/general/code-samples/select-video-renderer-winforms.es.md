@@ -397,7 +397,7 @@ VideoCapture1.Video_Renderer_Update();
 `VideoRendererSettings` expone propiedades de zoom/desplazamiento útiles para PTZ digital sobre la vista previa:
 
 ```cs
-VideoCapture1.Video_Renderer.Zoom_Ratio  = 150; // 150%
+VideoCapture1.Video_Renderer.Zoom_Ratio  = 50;  // 150%: Zoom_Ratio se suma a 100
 VideoCapture1.Video_Renderer.Zoom_ShiftX = 0;
 VideoCapture1.Video_Renderer.Zoom_ShiftY = 0;
 VideoCapture1.Video_Renderer_Update();

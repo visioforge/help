@@ -243,7 +243,7 @@ public struct FFMPEGOutputSettings
 
 ## Définitions de l'interface
 
-### Définition C#
+### Définition C\#
 
 ```csharp
 using System;

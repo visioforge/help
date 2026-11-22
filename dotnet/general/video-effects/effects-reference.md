@@ -74,10 +74,10 @@ The following sections list all available effects. Each effect includes SDK avai
 
 | Effect | SDK | Description |
 |--------|-----|-------------|
-| VideoEffectDarkness | 🪟 Classic | Adjusts overall darkness/lightness. Values above 128 darken, values below lighten the image. |
+| VideoEffectDarkness | 🪟 Classic | Darkens the image toward black: 0 leaves it unchanged, 255 is black. |
 | GPUVideoEffectDarkness | 🪟 Classic (GPU) | GPU-accelerated darkness adjustment. |
-| GPUVideoEffectBrightness | 🪟 Classic (GPU) | GPU-accelerated brightness adjustment. Adds or subtracts uniform values to RGB components. |
-| VideoEffectLightness | 🪟 Classic | Adjusts lightness in HSL color space, preserving hue and saturation relationships. |
+| GPUVideoEffectBrightness | 🪟 Classic (GPU) | GPU-accelerated brightness adjustment. Adds value / 255 to the RGB components; 0 leaves the image unchanged, 255 is white. |
+| VideoEffectLightness | 🪟 Classic | Lightens the image toward white: 0 leaves it unchanged, 255 is white. |
 | VideoBalanceVideoEffect | 🌍 Cross-platform | Cross-platform brightness, contrast, saturation, and hue adjustment. |
 
 #### Contrast and Color
@@ -407,10 +407,11 @@ All video effects support these standard parameters:
 
 ### Classic Effects Value Ranges
 
-Most Classic adjustment effects use 0-255 value ranges where:
-- **128** typically represents neutral/no change
-- **0** represents minimum (often darkest/weakest)
-- **255** represents maximum (often brightest/strongest)
+Classic adjustment effects use 0-255 value ranges, but the neutral value depends on the effect:
+- **0** leaves the image unchanged for Lightness, Darkness and Contrast
+- **255** leaves the image unchanged for Saturation (0 is grayscale)
+- **255** is the strongest Lightness (white) and Darkness (black)
+- **GPU**: Brightness and Darkness are neutral at **0**, Contrast and Saturation at **255** (a GPU Contrast value going toward 0 fades the image to flat mid-gray)
 
 ### Animated Transitions (Classic Effects)
 
@@ -495,7 +496,7 @@ await videoCapture.Video_Effects_AddOrUpdateAsync(textOverlay);
 // Fade to black over 3 seconds
 var fade = new VideoEffectDarkness(
     enabled: true,
-    value: 128,        // Start normal
+    value: 0,          // Start unchanged
     valueStop: 255,    // End at maximum darkness
     name: "FadeOut",
     startTime: TimeSpan.FromSeconds(57),

@@ -76,6 +76,7 @@ This guide uses the first pattern. The topology for 16 cameras:
 
 Both the WPF and MAUI examples use the same wrapper class. It takes an already-configured `RTSPSourceSettings` plus an `IVideoView`, builds a single-pipeline playback graph, and exposes async lifecycle methods plus an `OnError` event.
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Threading.Tasks;

@@ -65,11 +65,15 @@ Aquí hay un ejemplo completo basado en código de producción real que procesa 
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using VisioForge.Core.VideoFingerPrinting;
 using VisioForge.Core.VideoCaptureX;
+using VisioForge.Core.Types;
 using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.X.Sources;
 
 public class RealTimeFingerprintProcessor
 {
@@ -198,13 +202,14 @@ public class RealTimeFingerprintProcessor
             var correctedTimestamp = timestamp - _fragmentDuration * (_fragmentCount - 1);
             
             // Procesar fotograma y agregar a datos de búsqueda
+            var searchData = _searchLiveData.Data;
             VFPSearch.Process(
                 _tempBuffer,                                    // Datos del fotograma
                 e.Frame.Width,                                   // Ancho
                 e.Frame.Height,                                  // Alto
                 ((e.Frame.Width * 3 + 3) / 4) * 4,             // Stride
                 TimeSpan.FromMilliseconds(correctedTimestamp),  // Marca de tiempo
-                ref _searchLiveData.Data);                      // Datos de búsqueda
+                ref searchData);                                // Datos de búsqueda
         }
         else
         {
@@ -239,13 +244,14 @@ public class RealTimeFingerprintProcessor
         {
             CopyMemory(_tempBuffer, e.Frame.Data, e.Frame.DataSize);
             
+            var overlapData = _searchLiveOverlapData.Data;
             VFPSearch.Process(
                 _tempBuffer,
                 e.Frame.Width,
                 e.Frame.Height,
                 ((e.Frame.Width * 3 + 3) / 4) * 4,
                 TimeSpan.FromMilliseconds(timestamp),
-                ref _searchLiveOverlapData.Data);
+                ref overlapData);
         }
         else
         {
@@ -265,7 +271,8 @@ public class RealTimeFingerprintProcessor
             {
                 // Construir huella a partir de datos del fragmento
                 long dataSize;
-                IntPtr fingerprintPtr = VFPSearch.Build(out dataSize, ref fragmentData.Data);
+                var fragmentSearchData = fragmentData.Data;
+                IntPtr fingerprintPtr = VFPSearch.Build(out dataSize, ref fragmentSearchData);
                 
                 // Crear objeto de huella
                 var fingerprint = new VFPFingerPrint
@@ -275,6 +282,7 @@ public class RealTimeFingerprintProcessor
                 };
                 
                 Marshal.Copy(fingerprintPtr, fingerprint.Data, 0, (int)dataSize);
+                Marshal.FreeCoTaskMem(fingerprintPtr);
                 
                 // Buscar coincidencias contra huellas de referencia
                 SearchForMatches(fingerprint, fragmentData.StartTime);
@@ -335,19 +343,23 @@ public class RealTimeFingerprintProcessor
         _videoCapture.Start();
     }
 
-    public async Task StartNetworkStreamAsync(string streamUrl)
+    public async Task StartNetworkStreamAsync(string streamUrl, string login = null, string password = null)
     {
+        // Las credenciales van en la URL. UniversalSourceSettings no tiene la propiedad Login.
+        if (!string.IsNullOrEmpty(login))
+        {
+            var builder = new UriBuilder(streamUrl)
+            {
+                UserName = login,
+                Password = password
+            };
+            streamUrl = builder.Uri.AbsoluteUri;
+        }
+
         // Configurar fuente de stream de red
         var sourceSettings = await UniversalSourceSettings.CreateAsync(streamUrl);
-        
-        // Para cámaras IP con autenticación
-        if (requiresAuth)
-        {
-            sourceSettings.Login = "usuario";
-            sourceSettings.Password = "contraseña";
-        }
-        
-        await _videoCapture.StartAsync(sourceSettings);
+        _videoCapture.Video_Source = sourceSettings;
+        await _videoCapture.StartAsync();
     }
 
     public void Stop()
@@ -355,7 +367,7 @@ public class RealTimeFingerprintProcessor
         _videoCapture?.Stop();
         
         // Procesar fragmentos restantes
-        while (_fingerprintQueue.TryDequeue(out var fragment))
+        while (!_fingerprintQueue.IsEmpty)
         {
             ProcessQueuedFragments();
         }
@@ -452,6 +464,7 @@ IntPtr fingerprintPtr = VFPSearch.Build(out dataSize, ref searchData);
 // Copiar a array administrado
 var fingerprintData = new byte[dataSize];
 Marshal.Copy(fingerprintPtr, fingerprintData, 0, (int)dataSize);
+Marshal.FreeCoTaskMem(fingerprintPtr); // Build asigna el búfer
 ```
 
 ## Consideraciones de Rendimiento
@@ -486,7 +499,7 @@ Monitorear transmisiones de TV en vivo para contenido con derechos de autor o an
 ```csharp
 // Inicializar con biblioteca de contenido de transmisión
 var processor = new RealTimeFingerprintProcessor();
-await processor.LoadReferenceFingerprintsAsync("biblioteca_anuncios/");
+await processor.InitializeAsync();
 
 // Iniciar procesamiento del stream de transmisión
 await processor.StartNetworkStreamAsync("rtsp://servidor-transmision/stream1");
@@ -503,6 +516,7 @@ var processors = new List<RealTimeFingerprintProcessor>();
 foreach (var camera in GetSecurityCameras())
 {
     var processor = new RealTimeFingerprintProcessor();
+    await processor.InitializeAsync();
     await processor.StartNetworkStreamAsync(camera.StreamUrl);
     processors.Add(processor);
 }
@@ -515,7 +529,7 @@ Asegurar que las plataformas de streaming cumplan con restricciones de contenido
 ```csharp
 // Monitorear streams generados por usuarios
 var processor = new RealTimeFingerprintProcessor();
-await processor.LoadReferenceFingerprintsAsync("contenido_prohibido/");
+await processor.InitializeAsync();
 
 // Procesar stream entrante
 await processor.StartNetworkStreamAsync(userStreamUrl);

@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into an Avalonia UI applicati
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to an Avalonia UI application that targets **Windows, Linux, and macOS** from a single codebase. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4OutputBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring them with `pipeline.Connect(producer, consumer)`, then calling `await pipeline.StartAsync()`. Compared to the higher-level Video Capture SDK X (a single `VideoCaptureCoreX` god-object), Media Blocks gives you full control over the topology — splitting streams with tees, mixing sources, transcoding without preview, swapping sinks at runtime — at the cost of having to wire every edge yourself.
 
-Pinned NuGet versions: wrapper **`2026.11.20`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia)). Moving the wrapper to a newer 2026.x.x release means re-checking each redist against it — the csproj below carries the version pinned for each. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.21`**, Windows, macOS and Linux native redists at the versions shown in the csproj below (matches the [official Simple Video Capture Avalonia sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia)). Moving the wrapper to a newer 2026.x.x release means re-checking each redist against it — the csproj below carries the version pinned for each. Pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -41,7 +41,7 @@ Media Blocks SDK for Avalonia is **not** a single meta-package. You add the SDK 
 
 On Linux, GStreamer does not come from NuGet: the Linux target uses the **system-installed GStreamer** (`gstreamer1.0`, `gstreamer1.0-plugins-base`, `gstreamer1.0-plugins-good`, `gstreamer1.0-plugins-bad`, `gstreamer1.0-plugins-ugly`, `gstreamer1.0-libav` on Debian/Ubuntu; equivalent packages on Fedora/Arch). If GStreamer is not installed system-wide on the Linux target, the app launches but `pipeline.StartAsync()` errors with `"no element X"` for every block in your graph.
 
-The Linux core package is still required: without it the app starts, but every color conversion — snapshots, frame-to-bitmap conversion, overlays — fails at run time with `VisioForge_VAP is not available`. Reference only the package for the target architecture; the conditions in the csproj below pick it from the runtime identifier (`-r linux-arm64`, a publish profile, or the build machine when none is given). The block applies when the app is built on Linux; publishing for Linux from Windows or macOS skips it.
+The Linux core package is still required: without it the app starts, but every color conversion — snapshots, frame-to-bitmap conversion, overlays — fails at run time with `VisioForge_VAP is not available`. Reference only the package for the target architecture; the conditions in the csproj below pick it from the runtime identifier (`-r linux-arm64`, a publish profile, or the build machine when none is given). The block applies when the app is built on Linux and when it is published for a `linux-*` runtime identifier from any host, so a CI image can cross-publish with `-r linux-x64` or `-r linux-arm64`.
 
 > **Note on Windows redists vs WPF host**: the Avalonia layout requires both Core and Libav redists on Windows for any pipeline that mux es to MP4/MPEG-TS/WebM (most realistic graphs). They're declared explicitly in the conditional `<ItemGroup>` — don't rely on transitive resolution.
 
@@ -75,7 +75,7 @@ The full minimal csproj is in `references/Sample.csproj`. Adapted from the offic
   <TargetFramework>net10.0</TargetFramework>
   <OutputType>Exe</OutputType>
 </PropertyGroup>
-<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux')) or $(RuntimeIdentifier.StartsWith('linux-'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
 </ItemGroup>

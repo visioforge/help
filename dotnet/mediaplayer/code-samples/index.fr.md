@@ -172,6 +172,7 @@ L'API de liste de lecture intégrée suit l'index courant pour vous. `Playlist_P
 using System;
 using System.Threading.Tasks;
 using VisioForge.Core.MediaPlayer;
+using VisioForge.Core.Types;
 using VisioForge.Core.Types.Events;
 
 public class PlaylistPlayer

@@ -124,7 +124,7 @@ await player.PlayAsync();
 
 See the full tutorial: [Build a Video Player in C#](guides/video-player-csharp.md)
 
-### Play RTSP Stream in C#
+### Play RTSP Stream in C\#
 
 Play live video from IP cameras and RTSP sources. Supports RTSP, HTTP, HLS, and MPEG-DASH:
 

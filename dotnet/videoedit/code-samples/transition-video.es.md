@@ -24,7 +24,7 @@ primary_api_classes:
 
 ---
 
-# Crear transiciones de video profesionales entre clips en C#
+# Crear transiciones de video profesionales entre clips en C\#
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 

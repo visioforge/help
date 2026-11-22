@@ -123,6 +123,7 @@ The `IVFVirtualCameraSink` interface is used to configure the virtual camera sin
 
 #### C# Definition
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Runtime.InteropServices;

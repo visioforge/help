@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a Blazor Server applicat
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a Blazor **Server** application. Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `RTSPServerBlock`, `MP4SinkBlock`, `UniversalSourceBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. The Razor UI is just a remote control: every pipeline runs **on the server process** (the same machine hosting the ASP.NET Core app); the browser only sees status text, button clicks, and form posts. There is no `VideoView` in Blazor — to expose the live media to the user you publish it from the server (RTSP server, MP4 file, RTMP push, HLS, WebRTC WHIP, …) and let the browser consume that URL with a separate player or `<video>` element.
 
-Pinned NuGet version: **`2026.11.20`** (matches the [official RTSP Webcam Blazor Server demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Blazor)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it.
+Pinned NuGet version: **`2026.11.21`** (matches the [official RTSP Webcam Blazor Server demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Blazor)). Moving to a newer 2026.x.x release means moving the wrapper to it and re-checking each redist against it.
 
 ## When to use this skill
 
@@ -57,7 +57,7 @@ The .NET wrapper is a single package; the native redist is per-OS and **not tran
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
 </ItemGroup>
 <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
@@ -66,7 +66,7 @@ The .NET wrapper is a single package; the native redist is per-OS and **not tran
 <ItemGroup Condition="$(TargetFramework.Contains('-macos'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
 </ItemGroup>
-<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux')) or $(RuntimeIdentifier.StartsWith('linux-'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="[2026.10.26]" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))"/>
   <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.4" />
@@ -75,7 +75,7 @@ The .NET wrapper is a single package; the native redist is per-OS and **not tran
 
 keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper. A redist ahead of the wrapper is undefined behaviour and surfaces as `DllNotFoundException` or `Element 'X' not found` errors at pipeline start.
 
-On Linux the conditions pick `VisioForge.CrossPlatform.Core.Linux.x64` or `.arm64` (Raspberry Pi, ARM servers) from the runtime identifier, or from the build machine when none is given; the block applies when the app is built on Linux. `PlatformTarget` pins x64 on Windows only, so the Linux build runs on either architecture. Without the Linux package the app starts, but snapshots, frame-to-bitmap conversion and overlays fail with `VisioForge_VAP is not available`. The macOS package `VisioForge.CrossPlatform.Core.macOS` covers both Apple silicon and Intel Macs. See `references/Sample.csproj` for a complete working file.
+On Linux the conditions pick `VisioForge.CrossPlatform.Core.Linux.x64` or `.arm64` (Raspberry Pi, ARM servers) from the runtime identifier, or from the build machine when none is given; the block applies when the app is built on Linux and when it is published for a `linux-*` runtime identifier from any host. `PlatformTarget` pins x64 on Windows only, so the Linux build runs on either architecture. Without the Linux package the app starts, but snapshots, frame-to-bitmap conversion and overlays fail with `VisioForge_VAP is not available`. The macOS package `VisioForge.CrossPlatform.Core.macOS` covers both Apple silicon and Intel Macs. See `references/Sample.csproj` for a complete working file.
 
 ## Pipeline model
 

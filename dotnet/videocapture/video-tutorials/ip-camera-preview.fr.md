@@ -59,10 +59,7 @@ Le projet complet, avec le fichier du concepteur, est sur GitHub :
 
 ## Paquets requis
 
-Installez le paquet [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/), le redist de capture vidéo avec ses filtres DirectShow, et le redist LAV, le décodeur qui lit le flux RTSP. Un aperçu n'écrit aucun fichier, il n'a donc besoin d'aucun paquet d'encodeur :
-
-- Redist de capture vidéo : [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/), [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
-- Redist LAV : [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/), [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/)
+Installez le paquet [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/), le redist de capture vidéo avec ses filtres DirectShow, et le redist LAV, le décodeur qui lit le flux RTSP. Un aperçu n'écrit aucun fichier, il n'a donc besoin d'aucun paquet d'encodeur.
 
 Réglez `PlatformTarget` dans le fichier du projet selon les redists (`x64` ou `x86`).
 
@@ -72,7 +69,11 @@ dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
 dotnet add package VisioForge.DotNet.Core.Redist.LAV.x64
 ```
 
-## Exemple d'implémentation avec code C#
+Pour une application 32 bits (x86), utilisez plutôt les paquets x86 : `VisioForge.DotNet.Core.Redist.VideoCapture.x86` et `VisioForge.DotNet.Core.Redist.LAV.x86`.
+
+`VisioForge.DotNet.VideoCapture`, le paquet du bloc Try it en haut de cette page, convient aussi : il installe le même `VisioForge.DotNet.Core`. Les paquets redist restent nécessaires dans les deux cas.
+
+## Exemple d'implémentation avec code C\#
 
 Le formulaire contient un `VideoView`, des zones de texte pour l'URL, l'identifiant et le mot de passe (avec `UseSystemPasswordChar` activé), une case Pixelate cochée par défaut, et les boutons Start et Stop ; Stop est désactivé au départ. Le fichier du concepteur se trouve dans le code source ci-dessus. Le projet cible .NET 10 avec les usings implicites. Sous .NET Framework 4.7.2, le même code se compile dans un projet de style SDK avec `<LangVersion>10</LangVersion>` et `<ImplicitUsings>enable</ImplicitUsings>` ; dans `Program.cs`, remplacez `ApplicationConfiguration.Initialize()`, que .NET Framework ne génère pas, par `Application.EnableVisualStyles()` et `Application.SetCompatibleTextRenderingDefault(false)`, et réglez `<dpiAware>true</dpiAware>` dans un `app.manifest` pour garder la prise en charge du DPI système que .NET 10 active.
 

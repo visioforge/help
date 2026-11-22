@@ -33,7 +33,7 @@ Esta interfaz permite a los desarrolladores configurar niveles de calidad de cod
 
 ## Definiciones de Interfaz
 
-### Definición en C#
+### Definición en C\#
 
 ```csharp
 using System;

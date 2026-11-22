@@ -202,6 +202,7 @@ Las huellas digitales de búsqueda usan un algoritmo diferente optimizado para d
 ### Ejemplo de Código: Implementación de Búsqueda de Fragmentos
 
 ```csharp
+using System.IO;
 using VisioForge.Core.VideoFingerPrinting;
 
 public class VideoFragmentSearcher

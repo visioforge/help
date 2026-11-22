@@ -232,6 +232,7 @@ HRESULT RegisterWithUtility(const wchar_t* filterPath)
 
 Register filters from .NET applications using P/Invoke.
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Runtime.InteropServices;

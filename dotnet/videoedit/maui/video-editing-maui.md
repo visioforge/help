@@ -51,8 +51,8 @@ The full sample is on [GitHub](https://github.com/visioforge/.Net-SDK-s-samples/
 Two packages: the SDK itself and the MAUI `VideoView` control.
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.20]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
 ```
 
 `VisioForge.DotNet.Core.UI.MAUI` only supplies the `VideoView` control — on its own it cannot

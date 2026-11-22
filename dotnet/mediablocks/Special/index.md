@@ -139,11 +139,11 @@ Parameters:
 
 - `numOfOutputs` - The initial number of output pads to create (must be at least 1).
 - `mediaType` - The type of media this tee will handle (Video, Audio, or Auto).
-- `queueSettings` - Optional queue settings for controlling buffering behavior. If null, uses low-latency defaults.
+- `queueSettings` - Optional queue settings for controlling buffering behavior. If null, uses `TeeQueueSettings.Default()` (200 buffers, 2 seconds, no byte limit).
 
 ### Queue settings
 
-The `TeeQueueSettings` class (namespace `VisioForge.Core.Types.X.Special`) controls the buffering behavior for each tee output. By default, TeeBlock uses low-latency settings (1 buffer per queue) instead of GStreamer defaults (200 buffers).
+The `TeeQueueSettings` class (namespace `VisioForge.Core.Types.X.Special`) controls the buffering behavior for each tee output. When no settings are passed, TeeBlock uses `TeeQueueSettings.Default()`: 200 buffers, 2 seconds and no byte limit per queue. The defaults in the table below are those of a new `TeeQueueSettings` instance, which match `TeeQueueSettings.LowLatency()` (1 buffer).
 
 #### TeeQueueSettings properties
 
@@ -169,8 +169,10 @@ The `TeeQueueSettings` class (namespace `VisioForge.Core.Types.X.Special`) contr
 
 #### Factory methods
 
-- `TeeQueueSettings.LowLatency()` - Creates settings optimized for minimal latency (1 buffer, no byte/time limits). This is the default behavior.
-- `TeeQueueSettings.GStreamerDefaults()` - Creates settings matching GStreamer defaults (200 buffers, 10 MB, 1 second).
+- `TeeQueueSettings.LowLatency()` - Creates settings optimized for minimal latency (1 buffer, no byte/time limits).
+- `TeeQueueSettings.Default()` - The settings a `TeeBlock` uses when none are passed: 200 buffers, no byte limit, a 2-second time limit.
+
+To match the GStreamer `queue` element's own defaults instead, construct them directly: `new TeeQueueSettings { MaxSizeBuffers = 200, MaxSizeBytes = 10485760, MaxSizeTime = 1000000000 }`.
 
 ### Sample code
 
@@ -196,8 +198,13 @@ await pipeline.StartAsync();
 ### Using custom queue settings
 
 ```csharp
-// Use GStreamer default buffering (higher latency, more buffering)
-var gstreamerSettings = TeeQueueSettings.GStreamerDefaults();
+// Use the GStreamer queue element's defaults (higher latency, more buffering)
+var gstreamerSettings = new TeeQueueSettings
+{
+    MaxSizeBuffers = 200,
+    MaxSizeBytes = 10485760, // 10 MB
+    MaxSizeTime = 1000000000 // 1 second
+};
 var videoTee = new TeeBlock(2, MediaBlockPadMediaType.Video, gstreamerSettings);
 
 // Or create custom settings

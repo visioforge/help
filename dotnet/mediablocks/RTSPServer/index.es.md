@@ -16,6 +16,11 @@ primary_api_classes:
   - H264EncoderBlock
   - AACEncoderBlock
   - SystemVideoSourceBlock
+  - UniversalSourceBlock
+video:
+  id: YP5rS11zoNc
+  upload_date: 2026-11-22T09:36:39Z
+  duration: PT46S
 
 sidebar_label: RTSP Server
 ---
@@ -29,17 +34,28 @@ sidebar_label: RTSP Server
 
 El bloque Servidor RTSP crea un endpoint de servidor RTSP (Protocolo de Transmisión en Tiempo Real) para transmitir contenido de audio/video a través de redes. Los clientes pueden conectarse para recibir streams de medios en vivo o grabados con baja latencia.
 
+## Video tutorial: servir un archivo MP4 como servidor RTSP con unas pocas líneas de C\#
+
+Una aplicación de consola que sirve un archivo de vídeo como stream RTSP: `UniversalSourceBlock` lee el archivo y `RTSPServerBlock` lo codifica en H.264, y en AAC si el archivo tiene audio, y lo sirve en `rtsp://127.0.0.1:8554/live`.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/YP5rS11zoNc?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Su código: [rtsp-server-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-server-short-console) en GitHub, y [Streaming de Archivo sobre RTSP](#streaming-de-archivo-sobre-rtsp) más abajo.
+
 ## Visión general
 
 El RTSPServerBlock proporciona una implementación completa de servidor de streaming RTSP con las siguientes capacidades:
 
-- **Soporte Multi-Cliente**: Maneja conexiones simultáneas de múltiples clientes RTSP
+- **Soporte Multi-Cliente**: Maneja conexiones simultáneas de múltiples clientes RTSP, que comparten un único stream codificado
 - **Cumplimiento de Estándares**: Compatible con VLC, FFmpeg, GStreamer y visores de cámaras IP
-- **Codecs de Video**: H.264, H.265 y otros formatos comprimidos
-- **Codecs de Audio**: AAC, MP3, Opus y otros formatos
+- **Codificación Integrada**: El bloque recibe video y audio sin comprimir y los codifica él mismo
+- **Codecs de Video**: H.264, H.265 (HEVC) y VP9
+- **Codecs de Audio**: AAC, MP3, Opus y Vorbis
 - **Protocolos de Transporte**: RTP/RTCP para entrega confiable de medios
 - **Autenticación**: Soporte opcional de autenticación RTSP
-- **Configurable**: Vinculación de puerto personalizada y puntos de montaje
+- **Configurable**: Puerto, punto de montaje y dirección de escucha personalizados
 - **Baja Latencia**: Optimizado para aplicaciones de streaming en tiempo real
 
 ## Información del bloque
@@ -48,17 +64,15 @@ Nombre: RTSPServerBlock.
 
 | Dirección del pin | Tipo de medio | Cantidad de pines |
 | --- | :---: | :---: |
-| Entrada de video | video comprimido (H.264, H.265) | 1 |
-| Entrada de audio | audio comprimido (AAC, MP3, etc.) | 1 |
+| Entrada de video | video sin comprimir, codificado con `VideoEncoder` | 1 |
+| Entrada de audio | audio sin comprimir, codificado con `AudioEncoder` | 1 |
 
 ## Pipeline de ejemplo
 
 ```mermaid
 graph LR;
-    SystemVideoSourceBlock-->H264EncoderBlock;
-    SystemAudioSourceBlock-->AACEncoderBlock;
-    H264EncoderBlock-->RTSPServerBlock;
-    AACEncoderBlock-->RTSPServerBlock;
+    SystemVideoSourceBlock-->RTSPServerBlock;
+    SystemAudioSourceBlock-->RTSPServerBlock;
 ```
 
 ## Configuraciones
@@ -71,22 +85,25 @@ El RTSPServerBlock se configura usando `RTSPServerSettings`:
 - `Point` (`string`): La ruta URL bajo la que se sirve el stream (por ejemplo `/live`). Predeterminado `/live`.
 - `Username` (`string`): Nombre de usuario opcional para autenticación RTSP básica.
 - `Password` (`string`): Contraseña opcional para autenticación RTSP básica.
-- `Address` (`string`): Dirección a la que se enlaza el servidor. Predeterminado `127.0.0.1`; ponlo en `0.0.0.0` para escuchar en todas las interfaces.
+- `Address` (`string`): El nombre de host o la dirección IP con que los clientes llegan al servidor. Solo define el host de `URL`; no elige las interfaces en las que escucha el servidor. Predeterminado `127.0.0.1`.
+- `ListenAddress` (`string`): La dirección IP local en la que escucha el servidor. Predeterminado `0.0.0.0`, todas las interfaces IPv4; `127.0.0.1` acepta solo clientes del mismo equipo. Si indica aquí una dirección concreta, establezca también `Address` para que `URL` la muestre.
 - `Name` (`string`): Nombre del servidor anunciado a los clientes. Predeterminado `"VisioForge RTSP Server"`.
 - `Description` (`string`): Descripción legible. Predeterminado `"VisioForge RTSP Server"`.
 - `Latency` (`TimeSpan`): Latencia de buffering aplicada por el servidor. Predeterminado `250 ms`.
-- `URL` (`string`, solo lectura): URL computada `rtsp://{Address}:{Port}{Point}` — úsala tras construir los settings para loguear la URL visible al cliente.
-- `VideoEncoder` (`IVideoEncoder`): Configuración del codificador de video. Pasa `null` para deshabilitar el stream de video.
-- `AudioEncoder` (`IAudioEncoder`): Configuración del codificador de audio. Pasa `null` para deshabilitar el stream de audio.
+- `URL` (`string`, solo lectura): URL computada `rtsp://{Address}:{Port}{Point}` — úsela tras construir los settings para registrar la URL visible al cliente.
+- `VideoEncoder` (`IVideoEncoder`): Configuración del codificador de video: H.264, H.265 o VP9. Pase `null` para deshabilitar el stream de video.
+- `AudioEncoder` (`IAudioEncoder`): Configuración del codificador de audio: AAC, MP3, Opus o Vorbis. Pase `null` para deshabilitar el stream de audio.
 
 `RTSPServerSettings` **no tiene constructor sin parámetros**. Use uno de:
 
 - `new RTSPServerSettings(IVideoEncoder videoEncoder, IAudioEncoder audioEncoder)`
-- `new RTSPServerSettings(Uri uri, IVideoEncoder videoEncoder, IAudioEncoder audioEncoder)` — parsea host / puerto / point desde el URI.
+- `new RTSPServerSettings(Uri uri, IVideoEncoder videoEncoder, IAudioEncoder audioEncoder)` — parsea host / puerto / point desde el URI; no establece `ListenAddress`, así que para un host IPv6 establezca también `ListenAddress` en una dirección IPv6.
 
 ## Código de ejemplo
 
 ### Servidor RTSP Básico
+
+Conecte la cámara y el micrófono directamente al servidor: este los codifica con los codificadores indicados en su configuración.
 
 ```csharp
 var pipeline = new MediaBlocksPipeline();
@@ -106,34 +123,17 @@ var audioFormat = audioDevice.Formats[0];
 var audioSettings = audioDevice.CreateSourceSettings(audioFormat.ToFormat());
 var audioSource = new SystemAudioSourceBlock(audioSettings);
 
-// Crear codificador de video (clase de settings concreta — usa NVENC/QSV/AMF donde esté disponible, OpenH264 como fallback portátil)
-var h264Settings = new OpenH264EncoderSettings
-{
-    Bitrate = 2000 // kbps
-};
-var h264Encoder = new H264EncoderBlock(h264Settings);
-pipeline.Connect(videoSource.Output, h264Encoder.Input);
-
-// Crear codificador de audio (AAC multiplataforma)
-var aacSettings = new AVENCAACEncoderSettings
-{
-    Bitrate = 128 // kbps
-};
-var aacEncoder = new AACEncoderBlock(aacSettings);
-pipeline.Connect(audioSource.Output, aacEncoder.Input);
-
-// Crear servidor RTSP (el ctor de settings toma videoEncoder + audioEncoder).
-// Como pre-codificamos arriba, pasa null a ambos aquí — RTSPServerBlock solo reenvía los streams
-// codificados. Pasar codificadores concretos solo cuando quiera que el servidor codifique internamente.
-var rtspSettings = new RTSPServerSettings(videoEncoder: null, audioEncoder: null)
+// Crear servidor RTSP: codifica el video en H.264 y el audio en AAC
+var rtspSettings = new RTSPServerSettings(
+    H264EncoderBlock.GetDefaultSettings(),
+    AACEncoderBlock.GetDefaultSettings())
 {
     Port = 8554,
-    Point = "/live",
-    Address = "0.0.0.0"   // escucha en todas las interfaces; por defecto es 127.0.0.1
+    Point = "/live"
 };
 var rtspServer = new RTSPServerBlock(rtspSettings);
-pipeline.Connect(h264Encoder.Output, rtspServer.VideoInput);
-pipeline.Connect(aacEncoder.Output, rtspServer.AudioInput);
+pipeline.Connect(videoSource.Output, rtspServer.VideoInput);
+pipeline.Connect(audioSource.Output, rtspServer.AudioInput);
 
 // Iniciar streaming
 await pipeline.StartAsync();
@@ -143,28 +143,7 @@ Console.WriteLine($"Servidor RTSP iniciado en {rtspSettings.URL}");
 Console.WriteLine($"Conectar con: vlc {rtspSettings.URL}");
 ```
 
-### Dejar que el servidor codifique internamente
-
-Si prefieres alimentar frames de cámara crudos directamente al servidor RTSP y dejar que haga su propia codificación H.264, construye `RTSPServerSettings` con configuraciones concretas de codificador y omite el `H264EncoderBlock` / `AACEncoderBlock` independientes:
-
-```csharp
-var rtspSettings = new RTSPServerSettings(
-    videoEncoder: H264EncoderBlock.GetDefaultSettings(),
-    audioEncoder: null)
-{
-    Port = 8554,
-    Point = "/live",
-    Address = "0.0.0.0"
-};
-
-var rtspServer = new RTSPServerBlock(rtspSettings);
-
-// Conectar fuentes crudas (no codificadas) — el servidor codificará.
-pipeline.Connect(videoSource.Output, rtspServer.VideoInput);
-
-await pipeline.StartAsync();
-Console.WriteLine(rtspSettings.URL);
-```
+Por defecto el servidor escucha en todas las interfaces de red, así que otros equipos lo alcanzan en la dirección IP de este equipo. Para limitarlo a este equipo, establezca `ListenAddress = "127.0.0.1"`.
 
 ### Servidor RTSP con Autenticación
 
@@ -180,7 +159,7 @@ var rtspSettings = new RTSPServerSettings(
 };
 var rtspServer = new RTSPServerBlock(rtspSettings);
 
-// Configurar codificadores y conectar como arriba
+// Conectar las fuentes como arriba
 // ...
 
 await pipeline.StartAsync();
@@ -191,32 +170,41 @@ Console.WriteLine($"Servidor RTSP seguro iniciado en {rtspSettings.URL}");
 
 ### Streaming de Archivo sobre RTSP
 
+Una aplicación de consola completa que sirve un archivo MP4 (o cualquier otro archivo de vídeo que reproduzca `UniversalSourceBlock`) en `rtsp://127.0.0.1:8554/live` hasta que se pulsa Enter. Pase la ruta del archivo como primer argumento. El codificador AAC se configura solo si el archivo tiene pista de audio, de modo que un archivo solo de video da un stream solo de video.
+
 ```csharp
-var pipeline = new MediaBlocksPipeline();
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.AudioEncoders;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
 
-// Usar archivo como fuente
-var fileSettings = await UniversalSourceSettings.CreateAsync("video.mp4");
-var fileSource = new UniversalSourceBlock(fileSettings);
-
-// Crear servidor RTSP — dejar que codifique ambos streams internamente
-var rtspSettings = new RTSPServerSettings(
-    videoEncoder: H264EncoderBlock.GetDefaultSettings(),
-    audioEncoder: AACEncoderBlock.GetDefaultSettings())
-{
-    Port = 8554,
-    Point = "/vod"
-};
-var rtspServer = new RTSPServerBlock(rtspSettings);
-
-// Conectar video y audio crudos desde archivo
-pipeline.Connect(fileSource.VideoOutput, rtspServer.VideoInput);
-pipeline.Connect(fileSource.AudioOutput, rtspServer.AudioInput);
-
-await pipeline.StartAsync();
-
-// Transmitir contenido del archivo vía RTSP
-Console.WriteLine($"Servidor RTSP Video-on-Demand iniciado en {rtspSettings.URL}");
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var file = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(
+        args[0]));
+var aac = file.AudioOutput == null ? null
+    : AACEncoderBlock.GetDefaultSettings();
+var rtsp = new RTSPServerBlock(
+    new RTSPServerSettings(
+        H264EncoderBlock.GetDefaultSettings(),
+        aac));
+p.Connect(file.VideoOutput, rtsp.VideoInput);
+if (aac != null)
+    p.Connect(file.AudioOutput, rtsp.AudioInput);
+if (!await p.StartAsync()) return;
+Console.WriteLine(rtsp.Settings.URL);
+Console.ReadLine();
+await p.StopAsync();
 ```
+
+El archivo se reproduce una vez, en tiempo real, desde que se inicia el pipeline: un cliente que se conecta más tarde lo recibe a partir de ese punto. Cuando el archivo termina, los clientes conectados reciben fotogramas negros hasta que la aplicación se detiene.
 
 ## Conexión de cliente
 
@@ -262,18 +250,17 @@ gst-launch-1.0 rtspsrc location=rtsp://localhost:8554/live ! decodebin ! autovid
 
 ## Consideraciones de rendimiento
 
-- **Codificación**: Video/audio debe ser codificado antes de transmitir
+- **Codificación**: El servidor codifica una sola vez para todos los clientes; un codificador por hardware (NVENC, QSV, AMF) libera la CPU
 - **Ancho de Banda**: Monitorear ancho de banda de red para múltiples clientes
 - **Latencia**: Optimizar configuraciones del codificador para requisitos de baja latencia
 - **Clientes**: Cada cliente consume recursos del servidor y ancho de banda
 - **Puerto**: Asegurar que el firewall permita tráfico en el puerto configurado
-- **Multicast**: Usar para streaming eficiente uno-a-muchos en redes locales
 
 ## Observaciones
 
-- Los streams de video y audio deben ser comprimidos/codificados antes de alimentar al servidor RTSP
-- El servidor soporta H.264/H.265 para video y AAC/MP3/Opus para audio
-- El puerto 8554 es el puerto estándar RTSP pero puede cambiarse
+- Conecte video y audio sin comprimir; el servidor los codifica con `VideoEncoder` y `AudioEncoder`
+- El servidor soporta H.264, H.265 y VP9 para video y AAC, MP3, Opus y Vorbis para audio
+- El puerto 8554 es la alternativa habitual al puerto RTSP estándar 554, que en Linux requiere root; sirve cualquier puerto libre
 - El punto de montaje define la ruta URL para acceder al stream
 - El servidor continúa transmitiendo mientras el pipeline esté ejecutándose
 - Múltiples instancias de RTSPServerBlock pueden ejecutarse en diferentes puertos simultáneamente
@@ -303,4 +290,10 @@ Nota: Requiere GStreamer con soporte de servidor RTSP (plugin gst-rtsp-server).
 - [Configuración de fuente de cámara RTSP](../../videocapture/video-sources/ip-cameras/rtsp.md) — consumir streams RTSP en sus aplicaciones
 - [Reproductor RTSP de Media Blocks](../Guides/rtsp-player-csharp.md) — pipeline cliente para streams RTSP (combinar con este servidor)
 - [Guardar stream RTSP sin re-codificación](../Guides/rtsp-save-original-stream.md) — archivar streams desde una fuente RTSP a disco
-- [Reconexión RTSP y fallback switch](../../general/network-sources/reconnection-and-fallback.md) — maneja caídas de fuente upstream con eventos de reconexión y `FallbackSwitch` cuando alimentas este servidor desde una cámara RTSP
+- [Reconexión RTSP y fallback switch](../../general/network-sources/reconnection-and-fallback.md) — maneje caídas de fuente upstream con eventos de reconexión y `FallbackSwitch` cuando alimente este servidor desde una cámara RTSP
+
+## Transcripción del video
+
+Sirva un archivo de vídeo como stream RTSP, en unas pocas líneas de C#. Cargue el SDK y cree un pipeline. La fuente es el archivo de vídeo. `RTSPServerBlock` lo codifica en H.264, y en AAC si el archivo tiene sonido, y lo sirve en el puerto 8554. Ejecútelo con un archivo. Muestra la URL, y cualquier reproductor RTSP puede abrirla. La película, recibida por RTSP. Esta página añade una cámara y una contraseña: consulte [Servidor RTSP Básico](#servidor-rtsp-basico) y [Servidor RTSP con Autenticación](#servidor-rtsp-con-autenticacion).
+
+El archivo de vídeo es Big Buck Bunny, (c) copyright 2008, Blender Foundation, www.bigbuckbunny.org, CC BY 3.0.

@@ -69,7 +69,6 @@ var core = new VideoCaptureCoreX();
 // Créer une sortie WMA
 var wmaOutput = new WMAOutput("output.wma");
 wmaOutput.Audio.SampleRate = 48000;
-wmaOutput.Audio.Channels = 2;
 wmaOutput.Audio.Bitrate = 320;
 
 // Ajouter la sortie WMA
@@ -85,7 +84,6 @@ var core = new VideoEditCoreX();
 // Créer une sortie WMA
 var wmaOutput = new WMAOutput("output.wma");
 wmaOutput.Audio.SampleRate = 48000;
-wmaOutput.Audio.Channels = 2;
 wmaOutput.Audio.Bitrate = 320;
 
 // Ajouter la sortie WMA

@@ -108,7 +108,7 @@ Las aplicaciones .NET modernas a menudo necesitan ejecutarse en múltiples plata
 El enfoque más común es extraer frames como objetos `System.Drawing.Bitmap`:
 
 ```csharp
-using VisioForge.Core.MediaInfo;
+using VisioForge.Core.MediaInfoReaderX;
 
 public void ExtractFrameAsBitmap()
 {
@@ -129,7 +129,7 @@ public void ExtractFrameAsBitmap()
 Para aplicaciones que usan SkiaSharp para procesamiento gráfico, puede extraer frames directamente como objetos `SKBitmap`:
 
 ```csharp
-using VisioForge.Core.MediaInfo;
+using VisioForge.Core.MediaInfoReaderX;
 using SkiaSharp;
 
 public void ExtractFrameAsSkiaBitmap()
@@ -152,7 +152,7 @@ public void ExtractFrameAsSkiaBitmap()
 Para escenarios más avanzados o cuando necesita manipulación directa de píxeles, puede extraer frames como arrays de bytes RGB:
 
 ```csharp
-using VisioForge.Core.MediaInfo;
+using VisioForge.Core.MediaInfoReaderX;
 
 public void ExtractFrameAsRGBArray()
 {

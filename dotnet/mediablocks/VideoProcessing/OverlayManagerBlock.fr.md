@@ -126,7 +126,7 @@ Tous les éléments de superposition implémentent l'interface `IOverlayManagerE
 | `Name` | `string` | - | Nom optionnel pour identification |
 | `Enabled` | `bool` | `true` | Activer/désactiver la superposition |
 | `StartTime` | `TimeSpan` | `Zero` | Quand commencer à afficher (optionnel) |
-| `EndTime` | `TimeSpan` | `Zero` | Quand arrêter d'afficher (optionnel) ; `Zero` signifie sans fin |
+| `EndTime` | `TimeSpan` | `Zero` | Quand arrêter d'afficher (optionnel) ; `Zero` signifie sans fin. hors de leurs fenêtres, le `OverlayManagerFade` ou `OverlayManagerPan` le plus proche garde son état (voir plus bas) |
 | `Opacity` | `double` | `1.0` | Transparence (0.0-1.0) |
 | `Rotation` | `double` | `0.0` | Angle de rotation en degrés (0-360) |
 | `ZIndex` | `int` | `0` | Ordre des couches (plus élevé = au-dessus) |
@@ -1317,7 +1317,7 @@ L'OverlayManagerBlock prend en charge des effets avancés de transformation vid�
 
 ### OverlayManagerZoom
 
-Applique un effet de zoom à la trame vidéo, mettant à l'échelle depuis un point central.
+Applique un effet de zoom à la trame vidéo, en la mettant à l'échelle horizontalement et verticalement.
 
 ```csharp
 public class OverlayManagerZoom : IOverlayManagerElement
@@ -1325,27 +1325,28 @@ public class OverlayManagerZoom : IOverlayManagerElement
 
 | Propriété | Type | Par défaut | Description |
 |----------|------|---------|-------------|
-| `ZoomFactor` | `double` | `1.0` | Niveau de zoom (1.0 = pas de zoom, 2.0 = zoom 2x) |
-| `CenterX` | `double` | `0.5` | Centre horizontal (0.0-1.0, relatif à la trame) |
-| `CenterY` | `double` | `0.5` | Centre vertical (0.0-1.0, relatif à la trame) |
+| `ZoomX` | `double` | `1.0` | Niveau de zoom horizontal (1.0 = pas de zoom, 2.0 = zoom 2x) |
+| `ZoomY` | `double` | `1.0` | Niveau de zoom vertical (1.0 = pas de zoom, 2.0 = zoom 2x) |
+| `ShiftX` | `int` | `0` | Décalage horizontal de la trame zoomée, en pixels |
+| `ShiftY` | `int` | `0` | Décalage vertical de la trame zoomée, en pixels |
 | `InterpolationMode` | `OverlayManagerInterpolationMode` | `Bilinear` | Compromis qualité/vitesse |
 
 **Exemple :**
 
 ```csharp
-// Créer un zoom 1,5x centré sur la trame
+// Créer un zoom 1,5x
 var zoom = new OverlayManagerZoom
 {
-    ZoomFactor = 1.5,
-    CenterX = 0.5,
-    CenterY = 0.5,
+    ZoomX = 1.5,
+    ZoomY = 1.5,
     Name = "VideoZoom"
 };
 zoom.ZIndex = -1000; // Traiter avant les autres superpositions
 overlayManager.Video_Overlay_Add(zoom);
 
 // Animer le zoom au fil du temps
-zoom.ZoomFactor = 2.0; // Mise à jour dynamique
+zoom.ZoomX = 2.0; // Mise à jour dynamique
+zoom.ZoomY = 2.0;
 ```
 
 ### OverlayManagerPan
@@ -1358,23 +1359,26 @@ public class OverlayManagerPan : IOverlayManagerElement
 
 | Propriété | Type | Par défaut | Description |
 |----------|------|---------|-------------|
-| `OffsetX` | `double` | `0.0` | Décalage horizontal en pixels |
-| `OffsetY` | `double` | `0.0` | Décalage vertical en pixels |
+| `StartX` / `StartY` / `StartWidth` / `StartHeight` | `int` | `0` | Rectangle de la trame à `StartTime` |
+| `StopX` / `StopY` / `StopWidth` / `StopHeight` | `int` | `0` | Rectangle de la trame à `EndTime` |
+| `StartTime` / `EndTime` | `TimeSpan` | `Zero` | Début et fin du panoramique |
 | `InterpolationMode` | `OverlayManagerInterpolationMode` | `Bilinear` | Compromis qualité/vitesse |
 
 **Exemple :**
 
 ```csharp
-// Panoramique de la vidéo de 100 pixels à droite et 50 pixels vers le bas
-var pan = new OverlayManagerPan
-{
-    OffsetX = 100,
-    OffsetY = 50,
-    Name = "VideoPan"
-};
+// Panoramique de la vidéo de 100 pixels à droite et 50 pixels vers le bas sur 2 secondes
+var pan = OverlayManagerPan.FromRectangles(
+    (0, 0, 1920, 1080),
+    (100, 50, 1920, 1080),
+    TimeSpan.Zero,
+    TimeSpan.FromSeconds(2));
+pan.Name = "VideoPan";
 pan.ZIndex = -1000; // Traiter avant les autres superpositions
 overlayManager.Video_Overlay_Add(pan);
 ```
+
+Après `EndTime`, le rectangle de fin reste à l'écran jusqu'au début du panoramique suivant ; avant le début du premier panoramique, son rectangle de départ est affiché.
 
 ### OverlayManagerFade
 
@@ -1386,25 +1390,24 @@ public class OverlayManagerFade : IOverlayManagerElement
 
 | Propriété | Type | Par défaut | Description |
 |----------|------|---------|-------------|
-| `FadeMode` | `OverlayManagerFadeMode` | `None` | Type de fondu (None, FadeIn, FadeOut) |
-| `StartTime` | `TimeSpan` | `Zero` | Quand l'effet de fondu commence |
-| `Duration` | `TimeSpan` | `1 seconde` | Combien de temps dure le fondu |
-| `MinOpacity` | `double` | `0.0` | Opacité minimale (entièrement fondu) |
-| `MaxOpacity` | `double` | `1.0` | Opacité maximale (entièrement visible) |
+| `FadeType` | `OverlayManagerFadeType` | `FadeIn` | `FadeIn` ou `FadeOut` |
+| `StartTime` | `TimeSpan` | `Zero` | Quand le fondu commence |
+| `EndTime` | `TimeSpan` | `Zero` | Quand le fondu se termine |
+| `FadeColor` | `(byte R, byte G, byte B)` | `(0, 0, 0)` | Couleur vers laquelle la trame s'estompe |
+| `Opacity` | `double` | `1.0` | Non utilisé : l'opacité vient de l'animation de fondu |
+| `Easing` | `OverlayManagerPanEasing` | `Linear` | Courbe d'interpolation |
 
 **Exemple :**
 
 ```csharp
 // Fondu entrant de la vidéo sur 2 secondes à partir de la position de lecture
-var fade = new OverlayManagerFade
-{
-    FadeMode = OverlayManagerFadeMode.FadeIn,
-    StartTime = TimeSpan.Zero,
-    Duration = TimeSpan.FromSeconds(2),
-    Name = "VideoFade"
-};
+var position = await pipeline.Position_GetAsync();
+var fade = OverlayManagerFade.CreateFadeIn(TimeSpan.FromSeconds(2), position);
+fade.Name = "VideoFade";
 overlayManager.Video_Overlay_Add(fade);
 ```
+
+Entre deux fondus, l'état final du premier est conservé jusqu'au début du fondu suivant : après un `FadeOut`, la trame reste couverte. Avant le début du premier fondu, son état initial est affiché : un `FadeIn` garde la trame couverte.
 
 ### OverlayManagerSqueezeback
 
@@ -1430,20 +1433,26 @@ public class OverlayManagerSqueezeback : IOverlayManagerElement
 | `VideoAnimationEnabled` | `bool` | Activer l'animation de position vidéo |
 | `VideoAnimationStartRect` | `Rect` | Position de début de l'animation |
 | `VideoAnimationTargetRect` | `Rect` | Position de fin de l'animation |
-| `VideoAnimationStartTimeMs` | `double` | Heure de début de l'animation (ms) |
-| `VideoAnimationDurationMs` | `double` | Durée de l'animation (ms) |
+| `VideoAnimationStartTime` | `TimeSpan` | Heure de début de l'animation |
+| `VideoAnimationEndTime` | `TimeSpan` | Heure de fin de l'animation |
 | `VideoAnimationEasing` | `OverlayManagerPanEasing` | Fonction d'assouplissement |
 
 **Propriétés de fondu :**
 
 | Propriété | Type | Description |
 |----------|------|-------------|
-| `VideoFadeMode` | `OverlayManagerFadeMode` | Type de fondu vidéo |
-| `VideoFadeStartTimeMs` | `double` | Heure de début du fondu vidéo |
-| `VideoFadeDurationMs` | `double` | Durée du fondu vidéo |
-| `BackgroundFadeMode` | `OverlayManagerFadeMode` | Type de fondu d'arrière-plan |
-| `BackgroundFadeStartTimeMs` | `double` | Heure de début du fondu d'arrière-plan |
-| `BackgroundFadeDurationMs` | `double` | Durée du fondu d'arrière-plan |
+| `VideoFadeEnabled` | `bool` | Activer le fondu vidéo |
+| `VideoFadeType` | `OverlayManagerFadeType` | Type de fondu vidéo (`FadeIn` ou `FadeOut`) |
+| `VideoFadeStartTime` | `TimeSpan` | Heure de début du fondu vidéo |
+| `VideoFadeEndTime` | `TimeSpan` | Heure de fin du fondu vidéo |
+| `VideoFadeEasing` | `OverlayManagerPanEasing` | Fonction d'assouplissement |
+| `BackgroundFadeEnabled` | `bool` | Activer le fondu d'arrière-plan |
+| `BackgroundFadeType` | `OverlayManagerFadeType` | Type de fondu d'arrière-plan |
+| `BackgroundFadeStartTime` | `TimeSpan` | Heure de début du fondu d'arrière-plan |
+| `BackgroundFadeEndTime` | `TimeSpan` | Heure de fin du fondu d'arrière-plan |
+| `BackgroundFadeEasing` | `OverlayManagerPanEasing` | Fonction d'assouplissement |
+
+Les méthodes `StartVideoFadeIn` / `StartVideoFadeOut` / `StartBackgroundFadeIn` / `StartBackgroundFadeOut` définissent ces propriétés depuis le code ; chacune prend un début `TimeSpan`, une durée `TimeSpan` et un assouplissement facultatif.
 
 **Exemple — Squeezeback basique :**
 
@@ -1540,9 +1549,10 @@ Compromis qualité/performance pour la mise à l'échelle via `OverlayManagerInt
 
 | Valeur | Description |
 |-------|-------------|
-| `Nearest` | Le plus rapide, bords pixelisés |
+| `None` | Le plus rapide, bords pixelisés |
 | `Bilinear` | Bon équilibre qualité/vitesse |
-| `Gaussian` | Qualité supérieure, plus lent |
+| `Bicubic` | Qualité supérieure, plus lent |
+| `Lanczos` | Qualité maximale, le plus lent |
 
 ## Paramètres d'ombre
 

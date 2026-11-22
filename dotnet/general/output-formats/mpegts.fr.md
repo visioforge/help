@@ -144,6 +144,10 @@ La classe `MPEGTSSplitSinkSettings` permet la découpe automatique de la sortie 
 - Enregistrer des vidéos en time-lapse
 - Implémenter un enregistrement en tampon glissant
 
+!!! note "VideoEditCoreX"
+
+    La découpe est effectuée par `splitmuxsink`, utilisé par `VideoCaptureCoreX` et les pipelines Media Blocks. `VideoEditCoreX` effectue le rendu via GStreamer Editing Services, dont `encodebin` ne peut pas segmenter la sortie : il refuse `MPEGTSSplitSinkSettings` au démarrage avec une erreur, au lieu d'écrire silencieusement un seul fichier, et de même `FileOutput = false`, qui diffuse vers un pad de sortie — ce moteur écrit un fichier. `M2TSMode` s'applique à tous les moteurs, `VideoEditCoreX` inclus.
+
 #### Options de configuration
 
 ```csharp

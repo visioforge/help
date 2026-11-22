@@ -89,6 +89,7 @@ int SetHWAccelerationEnabled([MarshalAs(UnmanagedType.Bool)] bool enabled);
 - Doit être appelée **avant** de connecter les filtres vidéo en aval
 - Lorsqu'elle est activée, le filtre tente d'utiliser le décodage matériel (DXVA, NVDEC, QuickSync, etc.)
 - Bascule sur le décodage logiciel si l'accélération matérielle n'est pas disponible
+- Un filtre sans licence (version d'évaluation) décode toujours en logiciel : activez la licence avant de connecter le filtre
 - L'accélération matérielle améliore significativement les performances pour les codecs H.264, H.265, VP9 et AV1
 **Exemple (C++)** :
 ```cpp

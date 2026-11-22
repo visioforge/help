@@ -845,6 +845,8 @@ public void PlayWithTimestampCallback(string filename)
 
 Activate purchased license.
 
+Without a license the filter runs as a trial: it draws a "VisioForge FFMPEG Source - trial" watermark in the top-left corner of the video it outputs and shows no dialog. Audio is not changed. A trial also decodes in software: hardware decoding is chosen when the output pin connects, so activate the license before connecting the filter for `SetHWAccelerationEnabled` to take effect. Once the license is activated, the watermark is gone.
+
 ### C# License Activation
 
 ```csharp

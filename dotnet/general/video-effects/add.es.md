@@ -28,7 +28,7 @@ Los efectos de video pueden mejorar significativamente la calidad visual y la ex
 
 Al trabajar con procesamiento de video en aplicaciones .NET, a menudo necesitará aplicar varios efectos para mejorar o modificar el contenido de video. Las siguientes secciones explican el proceso paso a paso.
 
-## Implementación de código C#
+## Implementación de código C\#
 
 ### Ejemplo: Efecto de luminosidad en Media Player SDK
 

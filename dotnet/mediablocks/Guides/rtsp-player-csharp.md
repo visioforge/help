@@ -32,7 +32,7 @@ primary_api_classes:
 
 ---
 
-# RTSP Stream Viewer and IP Camera Player in C#
+# RTSP Stream Viewer and IP Camera Player in C\#
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -60,7 +60,7 @@ Common use cases include surveillance dashboards, NVR (network video recorder) a
 Add the Media Blocks SDK NuGet package to your project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
 ```
 
 You also need the platform-specific runtime packages. For Windows:

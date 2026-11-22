@@ -16,7 +16,7 @@ primary_api_classes:
 
 ---
 
-# Establecer niveles de volumen personalizados para pistas de audio en aplicaciones C#
+# Establecer niveles de volumen personalizados para pistas de audio en aplicaciones C\#
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" } [VideoEditCore](#){ .md-button }
 

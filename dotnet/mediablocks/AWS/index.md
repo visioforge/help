@@ -53,7 +53,6 @@ The `AWSS3SinkBlock` is configured using `AWSS3SinkSettings`. Key properties:
 - `ContentDisposition` (string, optional): Content-Disposition header to set for the uploaded object.
 - `Metadata` (Dictionary&lt;string, string&gt;, optional): A map of user metadata to store with the object.
 - `ForcePathStyle` (bool, optional): Force client to use path-style addressing for buckets.
-- `UseMultipartUpload` (bool, optional, default `true`): Use multipart upload for large files.
 - `PartSize` (ulong, optional, default 5 MB): Size in bytes of an individual part used for multipart upload.
 - `OnError` (S3SinkOnError, optional): How to handle errors during upload.
 - `RequestTimeout` (TimeSpan, optional, default 15s): Timeout for S3 requests (set to `TimeSpan.Zero` for infinity).

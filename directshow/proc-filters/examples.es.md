@@ -54,7 +54,7 @@ using System.Drawing;
 
 Apply a single video effect to a source.
 
-#### Implementación en C#
+#### Implementación en C\#
 
 ```csharp
 using System;

@@ -109,7 +109,7 @@ Toda aplicación de reproductor de medios sigue el mismo patrón:
 7. **Liberar** — `await player.DisposeAsync()` libera todos los recursos
 8. **Destruir SDK** — `VisioForgeX.DestroySDK()` al cerrar la aplicación
 
-## Escenarios comunes de reproductor de video en C#
+## Escenarios comunes de reproductor de video en C\#
 
 ### Reproducir archivo de video en C# (MP4, AVI, MKV)
 
@@ -124,7 +124,7 @@ await player.PlayAsync();
 
 Ver tutorial completo: [Construir un Reproductor de Video en C#](guides/video-player-csharp.md)
 
-### Reproducir Stream RTSP en C#
+### Reproducir Stream RTSP en C\#
 
 Reproduce video en vivo desde cámaras IP y fuentes RTSP. Soporta RTSP, HTTP, HLS y MPEG-DASH:
 

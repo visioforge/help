@@ -7,6 +7,8 @@ tags:
   - .NET
   - MediaBlocksPipeline
   - Windows
+  - macOS
+  - Linux
   - Streaming
   - IP Camera
   - RTSP
@@ -29,7 +31,7 @@ primary_api_classes:
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Demo Sample"
-    The code in this guide comes from the RTSP WHEP Camera Grid Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples): it adds cameras by RTSP URL, serves a grid page with every camera, and forwards each camera's WHEP requests to its own server.
+    The code in this guide comes from the RTSP WHEP Camera Grid Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples): it adds cameras by RTSP URL, serves a grid page with every camera, and forwards each camera's WHEP requests to its own server. Its console version, RTSP WHEP Camera Grid (Console), does the same on Windows, macOS and Linux, with the camera URLs on the command line.
 
     The block reference is in [Sink blocks → WHEP server](../Sinks/index.md#whep-server).
 
@@ -37,11 +39,18 @@ primary_api_classes:
 
 A browser cannot open an RTSP URL. The usual ways to put an IP camera on a web page are to transcode it to HLS (several seconds of delay and a decoder plus an encoder per camera) or to run a separate media server next to your application. This guide takes a third route: your .NET application itself becomes a WebRTC server, and the camera's H.264 goes to the browser exactly as the camera sent it.
 
+![Two cameras in a browser grid, each playing over WebRTC from its own WHEPServerSinkBlock](rtsp-cameras-in-browser-whep-grid.webp)
+
 The pipeline for one camera is two blocks:
 
 ```mermaid
 graph LR;
-    RTSPRAWSourceBlock -- H.264 --> WHEPServerSinkBlock;
+    cam["IP camera"] -- "RTSP, H.264" --> RTSPRAWSourceBlock;
+    subgraph app ["Your .NET application"]
+        RTSPRAWSourceBlock -- "H.264, not decoded" --> WHEPServerSinkBlock;
+    end
+    WHEPServerSinkBlock -- WebRTC --> b1["Browser"];
+    WHEPServerSinkBlock -- WebRTC --> b2["Browser"];
 ```
 
 - `RTSPRAWSourceBlock` connects to the camera and outputs its encoded H.264 without decoding it.
@@ -57,24 +66,25 @@ WHEP is a small HTTP protocol on top of WebRTC: one `POST` with the SDP offer, a
 
 ## Prerequisites
 
-- Windows x64. `WHEPServerSinkBlock` uses the `rswebrtc` GStreamer plugin, which ships in the Windows `Adds` runtime package.
-- .NET 10 (the demo targets `net10.0-windows`).
+- Windows x64, macOS, or Linux x64/arm64 (Debian 12, Ubuntu 24.04 and later). `WHEPServerSinkBlock` uses the `rswebrtc` GStreamer plugin, which ships in each platform's `Adds` runtime package.
+- .NET 10 (.NET 8 or later on Linux).
 - An IP camera with an H.264 RTSP stream.
-- Media Blocks SDK .NET version 2026.11.18 or later — the release that adds `WHEPServerSinkBlock`.
+- Media Blocks SDK .NET version 2026.11.20 or later on Windows — the release that adds `WHEPServerSinkBlock` — and 2026.11.21 or later on macOS and Linux.
 
 NuGet packages:
 
 - [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/) — the SDK
-- [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — GStreamer runtime for Windows x64
-- [VisioForge.CrossPlatform.Core.Windows.Adds.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Adds.x64/) — the additional plugins, `rswebrtc` among them
+- Windows: [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) and [VisioForge.CrossPlatform.Core.Windows.Adds.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Adds.x64/) — the GStreamer runtime and the additional plugins, `rswebrtc` among them
+- macOS: [VisioForge.CrossPlatform.Core.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS/) and [VisioForge.CrossPlatform.Core.macOS.Adds](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS.Adds/)
+- Linux: `VisioForge.CrossPlatform.Core.Linux.x64` and `VisioForge.CrossPlatform.Core.Linux.Adds.x64` (`.arm64` for ARM), plus the distribution's GStreamer with `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`
 
 Without the `Adds` package `WHEPServerSinkBlock.IsAvailable()` returns `false`. For deployment details see the [Deployment Guide](../../deployment-x/index.md).
 
-The browser page is a file the application serves, so copy it to the output folder in the `.csproj`, as the demo does:
+The browser page is a file the application serves. Embed it in the assembly in the `.csproj`, as the console demo does — a macOS app bundle would put a copied file under `Contents/Resources`, not next to the executable:
 
 ```xml
 <ItemGroup>
-  <Content Include="wwwroot\**" CopyToOutputDirectory="PreserveNewest" />
+  <EmbeddedResource Include="wwwroot\index.html" LogicalName="index.html" />
 </ItemGroup>
 ```
 
@@ -104,7 +114,7 @@ Only the HTTP exchange goes through the page server. The video travels over the 
 
 ## One Camera: the Complete Server
 
-The console program below is the demo's code for a single camera. It builds the pipeline, serves `wwwroot/index.html` on `http://localhost:8080/` and forwards `/whep/...` to the WHEP server on `127.0.0.1:9100`.
+The console program below is a single-camera version of the console demo. It builds the pipeline, serves the embedded `index.html` on `http://localhost:8080/` and forwards `/whep/...` to the WHEP server on `127.0.0.1:9100`.
 
 ```csharp
 using System;
@@ -133,7 +143,7 @@ try
 {
     if (!WHEPServerSinkBlock.IsAvailable())
     {
-        Console.WriteLine("WHEPServerSinkBlock is not available: the VisioForge.CrossPlatform.Core.Windows.Adds.x64 package is missing.");
+        Console.WriteLine("WHEPServerSinkBlock is not available: add the VisioForge.CrossPlatform.Core.*.Adds package for this platform.");
         return;
     }
 
@@ -210,7 +220,11 @@ async Task HandleRequestAsync(HttpListenerContext context)
 
         if (path == "/")
         {
-            await WriteAsync(response, "text/html", File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "wwwroot", "index.html")));
+            // The page embedded by the .csproj above.
+            using var page = System.Reflection.Assembly.GetEntryAssembly()!.GetManifestResourceStream("index.html")!;
+            using var html = new MemoryStream();
+            await page.CopyToAsync(html);
+            await WriteAsync(response, "text/html", html.ToArray());
         }
         else if (path.StartsWith("/whep/", StringComparison.Ordinal))
         {
@@ -342,6 +356,23 @@ The `<video>` element is `muted`, which lets the browser start playback without 
 ## Scaling to Several Cameras
 
 A `WHEPServerSinkBlock` serves one camera. For several cameras the demo runs one block per camera, each on its own port, and gives each camera its own path on the page server.
+
+```mermaid
+graph LR;
+    browser["Browser: grid page"] -- "/cam/0/whep/...<br/>/cam/1/whep/..." --> page["Page server<br/>localhost:8080"];
+    subgraph cam0 ["Camera 0"]
+        direction LR
+        r0["RTSPRAWSourceBlock"] --> w0["WHEPServerSinkBlock<br/>127.0.0.1:9100"];
+    end
+    subgraph cam1 ["Camera 1"]
+        direction LR
+        r1["RTSPRAWSourceBlock"] --> w1["WHEPServerSinkBlock<br/>127.0.0.1:9101"];
+    end
+    page -- "/whep/... to :9100" --> cam0;
+    page -- "/whep/... to :9101" --> cam1;
+```
+
+![The RTSP WHEP Camera Grid Demo window: two cameras with their WHEP URLs, the grid page link and two viewer sessions](rtsp-cameras-in-browser-whep-demo.webp)
 
 The pipeline part, from the demo's start handler — one `RTSPRAWSourceBlock` → `WHEPServerSinkBlock` pair per camera, WHEP ports counted up from 9100:
 
@@ -478,13 +509,13 @@ The block's build fails, with a message through the pipeline's `OnError` event, 
 
 ### Platforms
 
-Windows x64, with the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package. Check `WHEPServerSinkBlock.IsAvailable()` at startup, as the demo does.
+Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS with `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 with `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` and the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`. Check `WHEPServerSinkBlock.IsAvailable()` at startup, as the demo does.
 
 ## Troubleshooting
 
 | Symptom | Cause and fix |
 | --- | --- |
-| `WHEPServerSinkBlock.IsAvailable()` returns `false` | The `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package is not referenced. |
+| `WHEPServerSinkBlock.IsAvailable()` returns `false` | The platform's `Adds` package is not referenced, or on Linux the distribution packages listed in [Prerequisites](#prerequisites) are missing. |
 | `CreateAsync` throws `InvalidOperationException` ("Unable to read RTSP stream info") | The camera is unreachable, or the URL or credentials are wrong. Open the same URL in another RTSP client to check it. |
 | `StartAsync` returns `false` | Read the `OnError` messages: a port already in use, an invalid `ServerAddress`, or a camera stream that is not H.264 (H.265, MJPEG). |
 | The page shows a `fetch` error such as `Failed to fetch` | The page and the endpoint are on different origins. Serve the page from the server that forwards `/whep/`, never from disk or from another port. |

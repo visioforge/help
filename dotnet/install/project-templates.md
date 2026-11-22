@@ -28,6 +28,8 @@ The VisioForge project templates create a small, complete .NET 10 app that alrea
 
 The templates come two ways: the **VisioForge .NET Media SDK Templates** extension for Visual Studio 2026, and the `VisioForge.DotNet.Templates` package for `dotnet new`. Both carry the same eight templates.
 
+The Windows setup of the SDKs installs the `dotnet new` package for you when you click **Finish**, if the .NET 10 SDK is installed and the computer is online. It is installed for the Windows account the setup ran under: if you typed an administrator's password at the Windows prompt, that is the administrator's account. Visual Studio 2026 lists templates installed this way in **Create a new project**; if they are not listed, restart Visual Studio. Run the command from [Install from the Command Line](#install-from-the-command-line) yourself under any other account, if the setup ran without its **Finish** page (`/qn`, `/qb`, `/passive`), or when the templates are not there.
+
 ## Templates
 
 | Template | Short name | SDK | Platforms |
@@ -51,6 +53,8 @@ The capture templates open the first camera and show its preview; a list or a bu
 
 ## Install in Visual Studio 2026
 
+If the templates are already in **Create a new project**, go to step 3.
+
 1. Open **Extensions → Manage Extensions**, search for **VisioForge .NET Media SDK Templates** and click **Install**.
 2. Restart Visual Studio so the extension is installed.
 3. Open **File → New → Project** and search for **VisioForge**.
@@ -60,7 +64,7 @@ The capture templates open the first camera and show its preview; a list or a bu
 ![The VisioForge templates in the New Project dialog of Visual Studio 2026](project-templates-new-project.webp)
 
 !!! note "Visual Studio 2022"
-    The extension installs into Visual Studio 2026 only. The templates target .NET 10, which Visual Studio 2022 does not support. With Visual Studio 2022, use the command line below instead: the WPF, WinForms and Avalonia templates build and run with `dotnet run`. The Windows app of the MAUI template needs Visual Studio 2026. To add the SDK to a project of your own, see [Visual Studio](visual-studio.md).
+    The extension installs into Visual Studio 2026 only. The templates target .NET 10, which Visual Studio 2022 does not support. With Visual Studio 2022, use the command line below instead: the WPF, WinForms and Avalonia templates build and run with `dotnet run`. The Windows app of the MAUI template needs Visual Studio 2026. Visual Studio 2022 may list the templates the SDK setup installed; create the project with `dotnet new` instead. To add the SDK to a project of your own, see [Visual Studio](visual-studio.md).
 
 ## Install from the Command Line
 
@@ -78,6 +82,7 @@ dotnet run
 - The SDK NuGet packages at exact versions: the SDK, the native redist for the target platform and, for MAUI and Avalonia, the UI package.
 - A main window that calls `VisioForgeX.InitSDKAsync` when it loads and `VisioForgeX.DestroySDK` when it closes. Closing waits for the engine to stop first.
 - The engine and its video view: `VideoCaptureCoreX` with the camera list, `MediaPlayerCoreX`, or a `MediaBlocksPipeline` with a universal source, a video renderer and an audio renderer.
+- An `.mcp.json` that connects AI coding assistants (Claude Code, Visual Studio) to the [VisioForge MCP server](../general/mcp-server-usage.md). Delete it if you do not use one.
 
 The first start on a machine takes longer: the SDK builds its plugin registry once. The SDKs run in trial mode without a license key.
 

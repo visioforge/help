@@ -168,9 +168,9 @@ Toda aplicación de captura sigue el mismo patrón:
 7. **Detener** — `await capture.StopAsync()` finaliza el archivo de salida
 8. **Liberar** — `await capture.DisposeAsync()` libera todos los recursos
 
-## Escenarios comunes de captura de video en C#
+## Escenarios comunes de captura de video en C\#
 
-### Grabar video de webcam en C#
+### Grabar video de webcam en C\#
 
 Grabe desde una webcam USB o cámara integrada a MP4 con H.264/AAC:
 
@@ -181,7 +181,7 @@ capture.Outputs_Add(new MP4Output("webcam.mp4"));
 
 Ver tutorial completo: [Guardar Video de Webcam en C#](guides/save-webcam-video.md)
 
-### Guardar stream RTSP en archivo con C#
+### Guardar stream RTSP en archivo con C\#
 
 Conéctese a cámaras IP y guarde streams RTSP en archivos MP4. Soporta protocolos RTSP, ONVIF y HTTP:
 
@@ -198,7 +198,7 @@ capture.Outputs_Add(new MP4Output("ipcam.mp4"));
 
 Ver: [Cámara IP a MP4](video-tutorials/ip-camera-capture-mp4.md) | [Guía RTSP](video-sources/ip-cameras/rtsp.md) | [Guía ONVIF](video-sources/ip-cameras/onvif.md)
 
-### Captura de pantalla a MP4 en C#
+### Captura de pantalla a MP4 en C\#
 
 Grabe el escritorio o una región específica de pantalla a MP4:
 

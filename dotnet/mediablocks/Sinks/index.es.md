@@ -1198,7 +1198,7 @@ Cualquier tipo distinto de Auto hace fallar el inicio si su elemento no está di
 | `InitLocation` | Patrón del segmento de init para CMAF (p. ej., init_%03d.mp4) | HlsCmafSink |
 | `SingleMediaFile` | Un archivo multimedia que contiene todos los segmentos, direccionado por rangos de bytes en la playlist (vacío = un archivo por segmento) | HlsSink3, HlsCmafSink |
 | `PlaylistLocation` | Ruta del archivo de playlist de salida (.m3u8; la playlist maestra en multivariante) | Todos |
-| `PlaylistRoot` | URL base para los segmentos en la playlist | Todos excepto HlsMultivariantSink |
+| `PlaylistRoot` | URL base para los segmentos en la playlist; null (el valor predeterminado) los lista por nombre de archivo, relativos a la playlist | Todos excepto HlsMultivariantSink |
 | `TargetDuration` | Duración objetivo del segmento (TimeSpan) | Todos |
 | `PlaylistLength` | Número de segmentos en la playlist (0 = sin límite) | Todos |
 | `MaxFiles` | Máximo de archivos conservados en disco | Todos |
@@ -1658,7 +1658,7 @@ Use `DASHSinkSettings` para configurar la salida DASH:
 
 | Propiedad | Tipo | Valor por defecto | Descripción |
 | --- | --- | --- | --- |
-| `MPDFilename` | `string` | `c:\inetpub\wwwroot\dash\manifest.mpd` | Ruta completa del archivo de manifiesto MPD; los segmentos de medios se escriben en la misma carpeta |
+| `MPDFilename` | `string` | `VisioForge\dash\manifest.mpd` en la carpeta Vídeos del usuario en Windows (la carpeta personal en un Windows sin ella); en otras plataformas, en la carpeta personal (la carpeta Documents de la app en iOS) | Ruta completa del archivo de manifiesto MPD; los segmentos de medios se escriben en la misma carpeta |
 | `MPDBaseURL` | `string` | `""` | URL base antepuesta a los nombres de segmentos en el manifiesto |
 | `TargetDuration` | `TimeSpan` | 5 s | Duración objetivo por segmento de medios, redondeada hacia arriba a segundos enteros; `TimeSpan.Zero` desactiva la segmentación |
 | `MinBufferTime` | `TimeSpan` | 2 s | Tiempo mínimo de buffer anunciado en el manifiesto |
@@ -1724,6 +1724,8 @@ Windows, macOS, Linux.
 ### WHIP
 
 El `WHIPSinkBlock` transmite medios a servidores WebRTC usando WHIP (WebRTC-HTTP Ingestion Protocol), permitiendo transmisión en vivo de baja latencia a servicios como MediaMTX, Janus, Cloudflare Stream y otros endpoints compatibles con WHIP. El video debe estar codificado en H.264 y el audio en Opus — el bloque maneja internamente el empaquetado RTP.
+
+Para una guía paso a paso, con la publicación de la pantalla y el micrófono en MediaMTX, la autenticación, STUN y TURN, y los límites que conviene comprobar antes de publicar, consulte [Transmitir la pantalla o una cámara a navegadores web por WebRTC y publicar con WHIP](../Guides/webrtc-whip.md#parte-2-publicar-en-un-servidor-de-medios-con-whipsinkblock).
 
 #### Información del bloque
 
@@ -1798,6 +1800,8 @@ Windows, macOS, Linux.
 El `WebRTCSinkBlock` transmite audio y video directamente a navegadores web por WebRTC, con una latencia inferior a un segundo y sin servidor multimedia. El bloque ejecuta su propio servidor de señalización WebSocket y, opcionalmente, un servidor HTTP para la página de visualización. Cada navegador que se conecta obtiene su propia sesión WebRTC, su codificador y su control de congestión, de modo que un espectador en una red lenta no reduce la calidad para los demás.
 
 Las entradas aceptan video y audio sin comprimir — el bloque los codifica para cada espectador, el video en VP8 y el audio en Opus — o video ya codificado en VP8 y audio Opus, que se envían sin recodificar.
+
+Para una guía paso a paso, con el programa completo para la pantalla, una ventana o una cámara, la página de visualización, los espectadores en otros equipos y los límites que conviene comprobar antes de publicar, consulte [Transmitir la pantalla o una cámara a navegadores web por WebRTC y publicar con WHIP](../Guides/webrtc-whip.md).
 
 #### Información del bloque
 
@@ -1949,11 +1953,11 @@ Console.WriteLine(whep.EndpointUrl); // http://127.0.0.1:9100/whep/endpoint
 
 #### Disponibilidad
 
-Verifique la disponibilidad con `WHEPServerSinkBlock.IsAvailable()`. Requiere el plugin `rswebrtc` de GStreamer del paquete `VisioForge.CrossPlatform.Core.Windows.Adds.x64`.
+Verifique la disponibilidad con `WHEPServerSinkBlock.IsAvailable()`. Requiere el plugin `rswebrtc` de GStreamer del paquete `Adds` de la plataforma: `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, `VisioForge.CrossPlatform.Core.macOS.Adds` o `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`. En Linux necesita además los paquetes `gstreamer1.0-plugins-bad` y `gstreamer1.0-nice` de la distribución.
 
 #### Plataformas
 
-Windows.
+Windows x64, macOS, Linux x64/arm64.
 
 ### RIST MPEG-TS
 
@@ -2494,7 +2498,7 @@ El `VirtualCameraSinkBlock` expone la salida del pipeline como una cámara virtu
 
 Ambas entradas son opcionales: cree una entrada de video, una entrada de audio, o ambas. Use `CreateNewInput(MediaBlockPadMediaType.Video)` y `CreateNewInput(MediaBlockPadMediaType.Audio)` para añadir los pads que necesite.
 
-Este bloque es **solo para Windows**. Los filtros de fuente Virtual Camera y Virtual Audio Card deben estar registrados como COM en la máquina antes de que aparezcan los dispositivos virtuales. Use `VirtualCameraSinkBlock.IsCOMRegistered()` para comprobarlo, y `VirtualCameraSinkBlock.COMRegisterAsAdmin()` para registrarlos con una solicitud de elevación (UAC).
+Este bloque es **solo para Windows**. Los filtros de fuente Virtual Camera y Virtual Audio Card deben estar registrados como COM en la máquina antes de que aparezcan los dispositivos virtuales. Use `VirtualCameraSinkBlock.IsCOMRegistered()` para comprobarlo, y `VirtualCameraSinkBlock.COMRegisterAsAdmin()` para registrarlos con una solicitud de elevación (UAC). Un registro que apunta a una compilación anterior a la de la carpeta de la aplicación se reemplaza; un registro que apunta a una compilación más reciente nunca se reemplaza por la compilación anterior de la aplicación.
 
 Configure la salida con `VirtualCameraSinkSettings`.
 
@@ -2560,7 +2564,7 @@ await pipeline.StartAsync();
 
 #### Disponibilidad
 
-`VirtualCameraSinkBlock.IsAvailable()` devuelve `true` si el sink de cámara virtual subyacente está disponible en este sistema. `VirtualCameraSinkBlock.IsCOMRegistered()` devuelve `true` cuando ambos filtros de fuente, Virtual Camera y Virtual Audio Card, están registrados. En Windows ARM64, las compilaciones x64 y ARM64 comparten un mismo registro, por lo que cuenta el registro de cualquiera de ellas.
+`VirtualCameraSinkBlock.IsAvailable()` devuelve `true` si el sink de cámara virtual subyacente está disponible en este sistema. `VirtualCameraSinkBlock.IsCOMRegistered()` devuelve `true` cuando ambos filtros de fuente, Virtual Camera y Virtual Audio Card, están registrados desde una compilación que no es anterior a la que hay en la carpeta de la aplicación. En Windows ARM64, las compilaciones x64 y ARM64 comparten un mismo registro, por lo que cuenta el registro de cualquiera de ellas.
 
 #### Plataformas
 

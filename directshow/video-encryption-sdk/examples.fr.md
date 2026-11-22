@@ -46,7 +46,7 @@ Tous les exemples incluent des implémentations complètes en C++, C# et Delphi.
 #pragma comment(lib, "strmiids.lib")
 #pragma comment(lib, "quartz.lib")
 ```
-### Projets C#
+### Projets C\#
 ```csharp
 using System;
 using System.Runtime.InteropServices;
@@ -67,7 +67,7 @@ uses
 
 Chiffrez un fichier vidéo avec un mot de passe textuel.
 
-### Implémentation C#
+### Implémentation C\#
 
 ```csharp
 using System;
@@ -641,7 +641,7 @@ end;
 
 Déchiffrez un fichier vidéo chiffré et lisez-le.
 
-### Implémentation C# {#example-2-csharp}
+### Implémentation C\# {#example-2-csharp}
 
 <!-- code block -->
 ```csharp
@@ -769,7 +769,7 @@ public class VideoDecryption
 
 Utilisez le contenu d'un fichier comme clé de chiffrement au lieu d'un mot de passe.
 
-### Implémentation C#
+### Implémentation C\#
 
 ```csharp
 public class FileKeyEncryption
@@ -854,7 +854,7 @@ public class FileKeyEncryption
 ---
 ## Exemple 4 : utilisation de données de clé binaires
 Générez et utilisez des données de clé binaires pour le chiffrement.
-### Implémentation C# {#example-4-csharp}
+### Implémentation C\# {#example-4-csharp}
 
 <!-- code block -->
 ```csharp
@@ -941,7 +941,7 @@ public class BinaryKeyEncryption
 
 Chiffrez la vidéo avec des paramètres d'encodage H.264 spécifiques.
 
-### Implémentation C#
+### Implémentation C\#
 
 ```csharp
 public class CustomEncodingEncryption
@@ -1075,7 +1075,7 @@ public class CustomEncodingEncryption
 
 Gestion d'erreurs complète pour le chiffrement/déchiffrement.
 
-### Implémentation C# {#example-6-csharp}
+### Implémentation C\# {#example-6-csharp}
 
 <!-- code block -->
 ```csharp

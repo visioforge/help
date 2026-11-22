@@ -61,7 +61,7 @@ dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
 dotnet add package VisioForge.CrossPlatform.Libav.Windows.x64
 ```
 
-## Exemple d'implémentation en C#
+## Exemple d'implémentation en C\#
 
 ### La fenêtre (MainWindow.xaml)
 

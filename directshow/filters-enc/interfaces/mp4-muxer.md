@@ -42,6 +42,7 @@ The **IMP4MuxerConfig** interface provides basic configuration for MP4 multiplex
 
 #### C# Definition
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Runtime.InteropServices;
@@ -267,6 +268,7 @@ public enum MP4V10Flags
 ```
 ### Interface Definitions
 #### C# Definition
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Runtime.InteropServices;

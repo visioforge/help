@@ -40,7 +40,7 @@ This technical guide demonstrates how to capture C# TS video from cameras and mi
 
 Please refer to the [installation guide](../../install/index.md) for detailed instructions on how to install the VisioForge .NET SDKs on your system.
 
-## Video Capture SDK .NET (VideoCaptureCoreX) - Capture MPEG-TS in C#
+## Video Capture SDK .NET (VideoCaptureCoreX) - Capture MPEG-TS in C\#
 
 VideoCaptureCoreX provides a streamlined approach to capture TS video and audio in C#. Its component-based architecture handles the complex media pipeline, allowing developers to focus on configuration rather than lower-level implementation details when working with TS files in .NET.
 
@@ -184,7 +184,7 @@ private async Task StopCaptureAsync()
 3. **Audio Configuration**: Provides volume control and format selection.
 4. **Multiple Outputs**: Ability to add multiple output formats simultaneously.
 
-## Media Blocks SDK .NET (MediaBlocksPipeline) - Capture TS in C#
+## Media Blocks SDK .NET (MediaBlocksPipeline) - Capture TS in C\#
 
 The MediaBlocksPipeline engine in Media Blocks SDK .NET takes a different architectural approach, focusing on a modular block-based system where each component (block) has specific responsibilities in the media processing pipeline.
 

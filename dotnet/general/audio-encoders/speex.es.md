@@ -251,10 +251,12 @@ var highQualitySettings = new SpeexEncoderSettings
 Aprenda cómo capturar audio usando Speex en su aplicación C#:
 
 ```csharp
+using VisioForge.Core;
 using VisioForge.Core.Types.Events;
 using VisioForge.Core.Types.X.AudioEncoders;
 using VisioForge.Core.Types.X.Output;
 using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
 
 // Crear una instancia del núcleo Video Capture SDK
 var core = new VideoCaptureCoreX();
@@ -264,7 +266,7 @@ var api = AudioCaptureDeviceAPI.DirectSound;
 var audioInputDevice = (await DeviceEnumerator.Shared.AudioSourcesAsync()).FirstOrDefault(x => x.API == api);
 if (audioInputDevice == null)
 {
-    MessageBox.Show("No se encontró dispositivo de entrada de audio.");
+    Console.WriteLine("No se encontró dispositivo de entrada de audio.");
     return;
 }
 

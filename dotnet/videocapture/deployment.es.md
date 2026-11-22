@@ -100,7 +100,7 @@ Para control completo sobre el proceso de despliegue o en entornos con requisito
 
 4. **Filtros DirectShow:** Copie los filtros DirectShow del SDK a su carpeta de aplicación o a una carpeta redist designada (configurada vía la propiedad `CustomRedist_Path`).
 
-5. **Configuración:** Establezca la propiedad `CustomRedist_Enabled` a `true` en el evento Window Load.
+5. **Configuración:** Llame al método `CustomRedist_Enable(true)` en el evento Window Load.
 
 6. **Manejo de Arquitectura:** Para filtros LAV (que usan nombres idénticos para versiones x64 y x86), use carpetas redist separadas para cada arquitectura.
 

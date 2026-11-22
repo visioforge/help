@@ -46,7 +46,7 @@ Todos los ejemplos incluyen implementaciones completas en C++, C# y Delphi.
 #pragma comment(lib, "strmiids.lib")
 #pragma comment(lib, "quartz.lib")
 ```
-### Proyectos C#
+### Proyectos C\#
 ```csharp
 using System;
 using System.Runtime.InteropServices;
@@ -67,7 +67,7 @@ uses
 
 Encriptar un archivo de video con contraseña de texto.
 
-### Implementación en C#
+### Implementación en C\#
 
 ```csharp
 using System;
@@ -640,7 +640,7 @@ end;
 ---
 ## Ejemplo 2: Desencriptación y Reproducción de Video
 Desencriptar un archivo de video encriptado y reproducirlo.
-### Implementación en C#
+### Implementación en C\#
 ```csharp
 public class VideoDecryption
 {
@@ -766,7 +766,7 @@ public class VideoDecryption
 
 Usar el contenido de un archivo como clave de encriptación en lugar de una contraseña.
 
-### Implementación en C#
+### Implementación en C\#
 
 ```csharp
 public class FileKeyEncryption
@@ -851,7 +851,7 @@ public class FileKeyEncryption
 ---
 ## Ejemplo 4: Uso de Datos de Clave Binaria
 Generar y usar datos de clave binaria para encriptación.
-### Implementación en C#
+### Implementación en C\#
 ```csharp
 using System.Security.Cryptography;
 using System.IO;
@@ -936,7 +936,7 @@ public class BinaryKeyEncryption
 
 Encriptar video con parámetros de codificación H.264 específicos.
 
-### Implementación en C#
+### Implementación en C\#
 
 ```csharp
 public class CustomEncodingEncryption
@@ -1067,7 +1067,7 @@ public class CustomEncodingEncryption
 ---
 ## Ejemplo 6: Manejo de Errores y Validación
 Manejo de errores completo para encriptación/desencriptación.
-### Implementación en C#
+### Implementación en C\#
 ```csharp
 public class RobustEncryption
 {

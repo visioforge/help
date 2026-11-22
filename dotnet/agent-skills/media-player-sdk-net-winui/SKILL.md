@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK .NET (file/stream playback) i
 
 This skill helps you add **VisioForge Media Player SDK .NET** to a Windows App SDK / WinUI 3 desktop application. It covers playback of local files and network streams (HTTP/RTSP/UDP/file-based MMS) with seek, pause/resume, audio output control, and a position timer. WinUI 3 is the right host when you want native Windows 10/11 look-and-feel, MSIX/Store deployment, and the modern Fluent control set; for the traditional WPF stack use `media-player-sdk-net-wpf`, for WinForms use `media-player-sdk-net-winforms`. The SDK is Windows-only (DirectShow / Media Foundation under the hood).
 
-Pinned NuGet version: **`2026.11.20`** (matches the [official Simple Media Player WinUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WinUI/CSharp/Simple%20Media%20Player%20WinUI)). Newer 2026.x.x patch versions are drop-in compatible. Pinned Windows App SDK: **`Microsoft.WindowsAppSDK 1.8.251106002`**.
+Pinned NuGet version: **`2026.11.21`** (matches the [official Simple Media Player WinUI sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WinUI/CSharp/Simple%20Media%20Player%20WinUI)). Newer 2026.x.x patch versions are drop-in compatible. Pinned Windows App SDK: **`Microsoft.WindowsAppSDK 1.8.251106002`**.
 
 ## When to use this skill
 
@@ -49,10 +49,10 @@ WinUI requires **two** VisioForge packages — the SDK itself and the WinUI-spec
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="[2026.11.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.20]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.20]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.21]"/>
 </ItemGroup>
 ```
 
@@ -88,7 +88,7 @@ MediaPlayer1.Source_Mode = MediaPlayerSourceMode.LAV;
 
 Unlike the Video Capture WinUI host (which gates initialisation on `Window_Activated` because the capture engine wants a settled HWND), the Media Player WinUI sample constructs `VideoView` and `MediaPlayerCore` directly in the `MainWindow` constructor — the `CanvasControl`'s swapchain is not exercised until `PlayAsync()` runs, so the constructor timing is safe. This is a structural difference from WPF (where `<my:VideoView/>` is itself the XAML element). If you copy/paste from a WPF skill, you will get "type not found" XAML errors — there is no `<vfwinui:VideoView/>` element to drop into the XAML tree.
 
-`Source_Mode = MediaPlayerSourceMode.LAV` is the recommended default. The other modes (`DirectShow_Auto`, `DirectShow_Manual`, `MediaFoundation`) exist for legacy filter graphs or hardware-accelerated MF playback, but they require knowing exactly which DirectShow filters are installed on the target machine — fragile in a redist scenario. Stick with LAV unless you have a specific reason to switch.
+`Source_Mode = MediaPlayerSourceMode.LAV` is the recommended default. The other file modes are `File_DS` (codecs already installed on the machine), `FFMPEG`, and `File_VLC`. `File_DS` depends on DirectShow filters the redist does not ship; `FFMPEG` needs `VisioForge.DotNet.Core.Redist.FFMPEG.x64` and `File_VLC` needs `VisioForge.DotNet.Core.Redist.VLC.x64`, neither of which the sample project references. Stick with LAV unless you have a specific reason to switch.
 
 ## License registration
 
@@ -241,7 +241,7 @@ Six most common production issues in WinUI 3 — flag any of them on first run.
 
 **Cause**: the source format isn't covered by the redists currently referenced. The pinned `Sample.csproj` includes `MediaPlayer` and `LAV`, which together cover the full LAV format matrix — but a project that drops `LAV` (or pins a stale version) will fail on most modern files. Some legacy formats (e.g. RealMedia, certain WMV3 variants, encrypted ASF) still aren't handled by LAV and need the DirectShow source mode plus the right third-party filter installed on the machine.
 
-**Fix**: keep `VisioForge.DotNet.Core.Redist.LAV.x64` referenced and pinned to the same version as the main package. If LAV genuinely doesn't cover the format, switch `Source_Mode` to `DirectShow_Auto` — but then you depend on the end user having compatible filters, which voids the redist guarantees.
+**Fix**: keep `VisioForge.DotNet.Core.Redist.LAV.x64` referenced and pinned to the same version as the main package. If LAV genuinely doesn't cover the format, switch `Source_Mode` to `File_DS` — but then you depend on the end user having compatible DirectShow filters, which voids the redist guarantees.
 
 ### 5. URL plays in VLC but `OnError` fires "source unsupported" in the SDK
 

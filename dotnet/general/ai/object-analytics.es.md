@@ -213,7 +213,7 @@ generando aunque el dibujo esté deshabilitado):
 `Color`) y `PolygonZoneSettings` (`Id`, `Points`, `Anchor`, `UseNormalizedCoordinates`, `Color`)
 configuran zonas individuales tal como se muestra arriba.
 
-## API directa de analíticas en C#
+## API directa de analíticas en C\#
 
 Los tipos puros de analíticas en C# (`ByteTracker`, `LineZone`, `PolygonZone`, `DetectionFilter`)
 también están disponibles directamente, sin un pipeline de Media Blocks:

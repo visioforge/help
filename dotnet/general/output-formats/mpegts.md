@@ -144,6 +144,10 @@ The `MPEGTSSplitSinkSettings` class enables automatic splitting of MPEG-TS outpu
 - Recording time-lapse videos
 - Implementing rolling buffer recording
 
+!!! note "VideoEditCoreX"
+
+    Splitting is done by `splitmuxsink`, which `VideoCaptureCoreX` and Media Blocks pipelines use. `VideoEditCoreX` renders through GStreamer Editing Services, whose `encodebin` cannot segment the output: it refuses `MPEGTSSplitSinkSettings` at start with an error instead of silently writing one file, and likewise `FileOutput = false`, which streams to an output pin — that engine writes a file. `M2TSMode` applies to every engine, `VideoEditCoreX` included.
+
 #### Configuration Options
 
 ```csharp

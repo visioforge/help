@@ -138,7 +138,8 @@ var tsSink = new MPEGTSSinkBlock(tsSettings);
     horodatage par paquet. Cela joint une charge KLV **statique** à la sortie — il ne reconstitue pas la piste
     de métadonnées d'origine synchronisée par PCR/PTS à l'image près. Pour les applications nécessitant du KLV
     par image synchronisé avec la vidéo, alimentez le KLV depuis une source en direct au fur et à mesure de sa
-    production, au lieu de ré-intégrer un fichier plat.
+    production, au lieu de ré-intégrer un fichier plat. Avec une sortie découpée (`MPEGTSSplitSinkSettings`), le
+    paquet est écrit au début de chaque fichier de segment.
 
 ## Enregistrer le KLV en direct pendant la capture (Video Capture SDK)
 

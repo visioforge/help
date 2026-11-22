@@ -28,7 +28,7 @@ video:
 
 ---
 
-# Enregistrement de webcam vers un fichier AVI dans les applications .NET C#
+# Enregistrement de webcam vers un fichier AVI dans les applications .NET C\#
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -54,10 +54,7 @@ Le projet complet, avec le fichier du concepteur, est sur GitHub :
 
 ## Paquets requis
 
-Installez le paquet [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) et le redist de capture vidéo avec ses filtres DirectShow. AVI n'a besoin de rien d'autre :
-
-- Pour les applications 64 bits : [redist de capture vidéo x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
-- Pour les applications 32 bits : [redist de capture vidéo x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
+Installez le paquet [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) et le redist de capture vidéo avec ses filtres DirectShow. AVI n'a besoin de rien d'autre.
 
 Réglez `PlatformTarget` dans le fichier projet selon le redist (`x64` ou `x86`).
 
@@ -66,7 +63,11 @@ dotnet add package VisioForge.DotNet.Core
 dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
 ```
 
-## Exemple d'implémentation avec code C#
+Pour une application 32 bits (x86), utilisez plutôt le paquet x86 : `VisioForge.DotNet.Core.Redist.VideoCapture.x86`.
+
+`VisioForge.DotNet.VideoCapture`, le paquet du bloc Try it en haut de cette page, convient aussi : il installe le même `VisioForge.DotNet.Core`. Les paquets redist restent nécessaires dans les deux cas.
+
+## Exemple d'implémentation avec code C\#
 
 Le formulaire contient un `VideoView`, des listes déroulantes pour la caméra, le format, la fréquence d'images, le micro et le codec vidéo, une case à cocher « MP3 audio » et les boutons Start et Stop ; le fichier du concepteur se trouve dans le code source ci-dessus. Le projet cible .NET 10 avec les usings implicites. Sous .NET Framework 4.7.2, le même code se compile dans un projet de style SDK avec `<LangVersion>10</LangVersion>` et `<ImplicitUsings>enable</ImplicitUsings>`.
 

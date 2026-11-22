@@ -31,7 +31,7 @@ Cette interface permet la configuration du débit binaire, de la qualité, des p
 
 ## Définitions de l'interface
 
-### Définition C#
+### Définition C\#
 
 ```csharp
 using System;

@@ -270,8 +270,8 @@ Install-Package VisioForge.DotNet.Core.Redist.FFMPEG.x86
 
 ### Problèmes courants et solutions
 
-- **Erreurs « codec introuvable »** : assurez-vous d'avoir installé le paquet FFMPEG correct avec la prise en charge des codecs nécessaire
-- **Échecs d'accélération matérielle** : vérifiez la compatibilité du GPU et la version des pilotes
+- **Erreurs « codec introuvable »** : un encodeur absent de l'exécutable FFmpeg fait échouer `Start` / `StartAsync`, et `OnError` indique l'encodeur et l'exécutable. Le `vfffmpeg64.exe` fourni n'a ni libx264 ni libx265 : utilisez `H264MFSettings`, `OpenH264Settings` ou un encodeur matériel, ou indiquez dans `ExecutableFilename` une version de FFmpeg qui les contient. `ffmpeg -encoders` liste ce que contient une version
+- **Échecs d'accélération matérielle** : un encodeur QSV, NVENC ou AMF sur un PC sans ce GPU démarre, puis FFmpeg s'arrête ; `OnError` le signale avec la dernière ligne d'erreur de FFmpeg. Vérifiez la compatibilité du GPU et la version des pilotes
 - **Problèmes de performance** : ajustez le nombre de threads et le preset d'encodage selon les ressources CPU disponibles
 - **Problèmes de qualité de sortie** : affinez le débit, le profil et les paramètres d'encodage
 

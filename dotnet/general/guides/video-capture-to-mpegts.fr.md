@@ -40,7 +40,7 @@ Ce guide technique montre comment capturer de la vidéo TS en C# depuis des cam�
 
 Veuillez consulter le [guide d'installation](../../install/index.md) pour des instructions détaillées sur l'installation des SDK VisioForge .NET sur votre système.
 
-## Video Capture SDK .NET (VideoCaptureCoreX) — Capturer MPEG-TS en C#
+## Video Capture SDK .NET (VideoCaptureCoreX) — Capturer MPEG-TS en C\#
 
 VideoCaptureCoreX fournit une approche simplifiée pour capturer de la vidéo et de l'audio TS en C#. Son architecture orientée composants gère le pipeline multimédia complexe, ce qui permet aux développeurs de se concentrer sur la configuration plutôt que sur les détails d'implémentation de bas niveau lorsqu'ils travaillent avec des fichiers TS en .NET.
 
@@ -184,7 +184,7 @@ private async Task StopCaptureAsync()
 3. **Configuration audio** : fournit le contrôle du volume et la sélection du format.
 4. **Sorties multiples** : capacité à ajouter plusieurs formats de sortie simultanément.
 
-## Media Blocks SDK .NET (MediaBlocksPipeline) — Capturer TS en C#
+## Media Blocks SDK .NET (MediaBlocksPipeline) — Capturer TS en C\#
 
 Le moteur MediaBlocksPipeline du Media Blocks SDK .NET adopte une approche architecturale différente, axée sur un système modulaire basé sur des blocs où chaque composant (bloc) a des responsabilités spécifiques dans le pipeline de traitement multimédia.
 
@@ -382,7 +382,7 @@ Les deux SDK offrent des capacités multiplateformes, mais avec des approches di
 - [Application d'exemple VideoCaptureCoreX](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/Simple%20Video%20Capture)
 - [Application d'exemple MediaBlocksPipeline](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo)
 
-## Conclusion : choisir le bon SDK pour la capture MPEG-TS en C#
+## Conclusion : choisir le bon SDK pour la capture MPEG-TS en C\#
 
 VisioForge propose deux solutions puissantes pour enregistrer des fichiers MPEG-TS en C# et .NET :
 

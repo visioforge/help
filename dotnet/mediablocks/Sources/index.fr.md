@@ -1871,7 +1871,7 @@ pipeline.Connect(source.AudioOutput, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
-Appelez `WHEPSourceBlock.IsAvailable()` avant de construire le pipeline : la méthode indique si le plugin GStreamer `rswebrtc` (`whepclientsrc`, issu de gst-plugins-rs) est présent. Sous Windows et macOS, le package de redistribution du SDK VisioForge le fournit. Sous Linux, le SDK utilise le GStreamer du système, qui doit être en version 1.28 ou ultérieure avec le plugin `rswebrtc` de gst-plugins-rs installé ; sans lui (par exemple avec le GStreamer 1.24 fourni par Ubuntu 24.04), `IsAvailable()` renvoie `false`.
+Appelez `WHEPSourceBlock.IsAvailable()` avant de construire le pipeline : la méthode indique si le plugin GStreamer `rswebrtc` (`whepclientsrc`, issu de gst-plugins-rs) est présent. Sous Windows et macOS, il est fourni par les packages `VisioForge.CrossPlatform.Core.Windows.Adds.x64` et `VisioForge.CrossPlatform.Core.macOS.Adds`. Sous Linux, il est fourni par le package `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`, et nécessite GStreamer 1.22 ou ultérieur (Debian 12, Ubuntu 24.04+) avec les paquets `gstreamer1.0-plugins-bad` et `gstreamer1.0-nice` de la distribution installés ; sans eux, `IsAvailable()` renvoie `false`.
 
 #### Plateformes
 
@@ -1893,7 +1893,7 @@ Le `ScreenSourceBlock` utilise des classes de paramètres spécifiques à la pla
 - `ScreenCaptureD3D11SourceSettings` — utilise `Direct3D 11` Desktop Duplication pour l'enregistrement d'écran. Permet la capture d'une fenêtre spécifique. (`ScreenCaptureSourceType.D3D11DesktopDuplication`)
 - `ScreenCaptureGDISourceSettings` — utilise `GDI` pour l'enregistrement d'écran. (`ScreenCaptureSourceType.GDI`)
 
-`ScreenCaptureGDISourceSettings` et `ScreenCaptureDX9SourceSettings` sont obsolètes. Utilisez `ScreenCaptureD3D11SourceSettings`. Sur une capture GDI ou DX9 déjà en cours, `UpdateLiveSettings` mémorise seulement la nouvelle position et le curseur ; ils s'appliquent au prochain démarrage. Le `Rectangle` vide par défaut capture tout le moniteur sélectionné par `Monitor`, et `UpdateLiveSettings` ne le déplace pas : affectez à `Rectangle` la zone à déplacer.
+`ScreenCaptureGDISourceSettings` et `ScreenCaptureDX9SourceSettings` sont obsolètes. Utilisez `ScreenCaptureD3D11SourceSettings`. Sur une capture GDI ou DX9 déjà en cours, `UpdateLiveSettings` mémorise seulement la nouvelle position et le curseur ; ils s'appliquent au prochain démarrage. Le `Rectangle` vide par défaut capture tout le moniteur sélectionné par `Monitor`, et `UpdateLiveSettings` ne le déplace pas : affectez à `Rectangle` la zone à déplacer. `ScreenCaptureDX9SourceSettings.Monitor` est l'index de l'adaptateur Direct3D 9, et non une position dans `Screen.AllScreens` : `ScreenSourceBlock.GetDX9MonitorIndex(Screen.AllScreens[i])` renvoie l'adaptateur d'un écran et `ScreenSourceBlock.GetMonitorSize(Screen.AllScreens[i])` sa taille en pixels physiques. `ScreenCaptureGDISourceSettings.Monitor` est en revanche la position du moniteur dans l'ordre de `EnumDisplayMonitors`.
 
 ##### macOS
 
@@ -2625,10 +2625,13 @@ pipeline.Connect(videoPushSource.Output, videoRenderer.Input);
 await pipeline.StartAsync();
 
 // Pousser des images depuis votre application :
-// var frame = new VideoFrameX(...);
+// var frame = new VideoFrameX(pixels, width, height, stride, VideoFormatX.RGB);
 // videoPushSource.PushFrame(frame);
+// frame.Free(); // Libérer la mémoire allouée par ce constructeur
 // videoPushSource.ClearQueue(); // Vider les images mises en tampon si nécessaire
 ```
+
+`PushFrame` ne conserve aucune référence à l'image : vous pouvez la réutiliser ou la libérer dès le retour de l'appel. Libérez une image dont la mémoire est allouée pour vous (constructeur avec tableau, `Alloc`, `Clone`), sinon elle provoque une fuite de mémoire ; l'image n'est plus utilisable ensuite. Une image qui encapsule un tampon qui vous appartient ou qui appartient au SDK, par exemple issue d'un constructeur `IntPtr` ou d'un événement `OnVideoFrameBuffer`, n'a pas besoin de `Free()` : elle n'y libère rien, et c'est au propriétaire du tampon de le libérer.
 
 #### Plateformes
 

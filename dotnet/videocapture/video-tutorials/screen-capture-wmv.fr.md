@@ -32,7 +32,7 @@ video:
 
 ---
 
-# Guide d'implémentation de capture d'écran en WMV en C#
+# Guide d'implémentation de capture d'écran en WMV en C\#
 
 [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -67,10 +67,7 @@ WMV (Windows Media Video) utilise les codecs Windows Media de Microsoft et le co
 
 ## Paquets requis
 
-Installez le paquet [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) et le redist de capture vidéo. Ses filtres DirectShow comprennent la source d'écran et la source sonore What You Hear ; les encodeurs WMV sont fournis avec Windows :
-
-- Pour les applications 64 bits : [redist de capture vidéo x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
-- Pour les applications 32 bits : [redist de capture vidéo x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
+Installez le paquet [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) et le redist de capture vidéo. Ses filtres DirectShow comprennent la source d'écran et la source sonore What You Hear ; les encodeurs WMV sont fournis avec Windows.
 
 Réglez `PlatformTarget` dans le fichier projet selon le redist (`x64` ou `x86`). Sur les éditions N de Windows, installez le Media Feature Pack pour disposer des encodeurs Windows Media.
 
@@ -79,7 +76,11 @@ dotnet add package VisioForge.DotNet.Core
 dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
 ```
 
-## Exemple d'implémentation avec code C#
+Pour une application 32 bits (x86), utilisez plutôt le paquet x86 : `VisioForge.DotNet.Core.Redist.VideoCapture.x86`.
+
+`VisioForge.DotNet.VideoCapture`, le paquet du bloc Try it en haut de cette page, convient aussi : il installe le même `VisioForge.DotNet.Core`. Les paquets redist restent nécessaires dans les deux cas.
+
+## Exemple d'implémentation avec code C\#
 
 Le formulaire contient un `VideoView`, des listes déroulantes pour le moniteur, la fréquence d'images, le périphérique audio, le codec vidéo, le codec audio et le format audio, les cases « Mouse cursor » et « Record sound » (toutes deux cochées), et les boutons Start et Stop ; le fichier du concepteur se trouve dans le code source ci-dessus. Le projet cible .NET 10 avec les usings implicites. Sous .NET Framework 4.7.2, `Form1.cs` se compile sans modification dans un projet de style SDK avec `<LangVersion>10</LangVersion>` et `<ImplicitUsings>enable</ImplicitUsings>` ; dans `Program.cs`, remplacez `ApplicationConfiguration.Initialize()` par `Application.EnableVisualStyles()` et `Application.SetCompatibleTextRenderingDefault(false)`.
 

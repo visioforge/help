@@ -53,10 +53,7 @@ The complete project, with the designer file, is on GitHub:
 
 ## Required Packages
 
-Install the [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) package and the video capture redist with its DirectShow filters. The Windows Media encoders come with Windows, so nothing more is needed:
-
-- For 64-bit applications: [x64 Video Capture Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
-- For 32-bit applications: [x86 Video Capture Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
+Install the [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) package and the video capture redist with its DirectShow filters. The Windows Media encoders come with Windows, so nothing more is needed.
 
 Set `PlatformTarget` in the project file to match the redist (`x64` or `x86`). On the N editions of Windows, the Windows Media components come with the Media Feature Pack: install it first.
 
@@ -64,6 +61,10 @@ Set `PlatformTarget` in the project file to match the redist (`x64` or `x86`). O
 dotnet add package VisioForge.DotNet.Core
 dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
 ```
+
+For a 32-bit (x86) application, use the x86 package instead: `VisioForge.DotNet.Core.Redist.VideoCapture.x86`.
+
+`VisioForge.DotNet.VideoCapture`, the package in the Try it block at the top of this page, works as well: it installs the same `VisioForge.DotNet.Core`. The redist packages are needed either way.
 
 ## Implementation Example with C# Code
 

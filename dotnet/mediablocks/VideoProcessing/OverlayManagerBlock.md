@@ -126,7 +126,7 @@ All overlay elements implement the `IOverlayManagerElement` interface with these
 | `Name` | `string` | - | Optional name for identification |
 | `Enabled` | `bool` | `true` | Enable/disable the overlay |
 | `StartTime` | `TimeSpan` | `Zero` | When to start showing (optional) |
-| `EndTime` | `TimeSpan` | `Zero` | When to stop showing (optional); `Zero` means no end |
+| `EndTime` | `TimeSpan` | `Zero` | When to stop showing (optional); `Zero` means no end. outside their windows, the nearest `OverlayManagerFade` or `OverlayManagerPan` holds its state (see below) |
 | `Opacity` | `double` | `1.0` | Transparency (0.0-1.0) |
 | `Rotation` | `double` | `0.0` | Rotation angle in degrees (0-360) |
 | `ZIndex` | `int` | `0` | Layer order (higher = on top) |
@@ -1312,7 +1312,7 @@ The OverlayManagerBlock supports advanced video transformation effects that modi
 
 ### OverlayManagerZoom
 
-Applies a zoom effect to the video frame, scaling from a center point.
+Applies a zoom effect to the video frame, scaling it horizontally and vertically.
 
 ```csharp
 public class OverlayManagerZoom : IOverlayManagerElement
@@ -1320,27 +1320,28 @@ public class OverlayManagerZoom : IOverlayManagerElement
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `ZoomFactor` | `double` | `1.0` | Zoom level (1.0 = no zoom, 2.0 = 2x zoom) |
-| `CenterX` | `double` | `0.5` | Horizontal center (0.0-1.0, relative to frame) |
-| `CenterY` | `double` | `0.5` | Vertical center (0.0-1.0, relative to frame) |
+| `ZoomX` | `double` | `1.0` | Horizontal zoom level (1.0 = no zoom, 2.0 = 2x zoom) |
+| `ZoomY` | `double` | `1.0` | Vertical zoom level (1.0 = no zoom, 2.0 = 2x zoom) |
+| `ShiftX` | `int` | `0` | Horizontal shift of the zoomed frame, pixels |
+| `ShiftY` | `int` | `0` | Vertical shift of the zoomed frame, pixels |
 | `InterpolationMode` | `OverlayManagerInterpolationMode` | `Bilinear` | Quality/speed tradeoff |
 
 **Example:**
 
 ```csharp
-// Create a 1.5x zoom centered on the frame
+// Create a 1.5x zoom
 var zoom = new OverlayManagerZoom
 {
-    ZoomFactor = 1.5,
-    CenterX = 0.5,
-    CenterY = 0.5,
+    ZoomX = 1.5,
+    ZoomY = 1.5,
     Name = "VideoZoom"
 };
 zoom.ZIndex = -1000; // Process before other overlays
 overlayManager.Video_Overlay_Add(zoom);
 
 // Animate zoom over time
-zoom.ZoomFactor = 2.0; // Update dynamically
+zoom.ZoomX = 2.0; // Update dynamically
+zoom.ZoomY = 2.0;
 ```
 
 ### OverlayManagerPan
@@ -1353,23 +1354,26 @@ public class OverlayManagerPan : IOverlayManagerElement
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `OffsetX` | `double` | `0.0` | Horizontal offset in pixels |
-| `OffsetY` | `double` | `0.0` | Vertical offset in pixels |
+| `StartX` / `StartY` / `StartWidth` / `StartHeight` | `int` | `0` | Frame rectangle at `StartTime` |
+| `StopX` / `StopY` / `StopWidth` / `StopHeight` | `int` | `0` | Frame rectangle at `EndTime` |
+| `StartTime` / `EndTime` | `TimeSpan` | `Zero` | When the pan starts and ends |
 | `InterpolationMode` | `OverlayManagerInterpolationMode` | `Bilinear` | Quality/speed tradeoff |
 
 **Example:**
 
 ```csharp
-// Pan video 100 pixels right and 50 pixels down
-var pan = new OverlayManagerPan
-{
-    OffsetX = 100,
-    OffsetY = 50,
-    Name = "VideoPan"
-};
+// Pan video 100 pixels right and 50 pixels down over 2 seconds
+var pan = OverlayManagerPan.FromRectangles(
+    (0, 0, 1920, 1080),
+    (100, 50, 1920, 1080),
+    TimeSpan.Zero,
+    TimeSpan.FromSeconds(2));
+pan.Name = "VideoPan";
 pan.ZIndex = -1000; // Process before other overlays
 overlayManager.Video_Overlay_Add(pan);
 ```
+
+After `EndTime` the stop rectangle stays on screen until the next pan starts; before the first pan starts, its start rectangle is shown.
 
 ### OverlayManagerFade
 
@@ -1381,25 +1385,24 @@ public class OverlayManagerFade : IOverlayManagerElement
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `FadeMode` | `OverlayManagerFadeMode` | `None` | Fade type (None, FadeIn, FadeOut) |
-| `StartTime` | `TimeSpan` | `Zero` | When fade effect starts |
-| `Duration` | `TimeSpan` | `1 second` | How long the fade takes |
-| `MinOpacity` | `double` | `0.0` | Minimum opacity (fully faded) |
-| `MaxOpacity` | `double` | `1.0` | Maximum opacity (fully visible) |
+| `FadeType` | `OverlayManagerFadeType` | `FadeIn` | `FadeIn` or `FadeOut` |
+| `StartTime` | `TimeSpan` | `Zero` | When the fade starts |
+| `EndTime` | `TimeSpan` | `Zero` | When the fade ends |
+| `FadeColor` | `(byte R, byte G, byte B)` | `(0, 0, 0)` | Colour the frame fades to or from |
+| `Opacity` | `double` | `1.0` | Not used: the fade animation sets the opacity |
+| `Easing` | `OverlayManagerPanEasing` | `Linear` | Interpolation curve |
 
 **Example:**
 
 ```csharp
 // Fade in video over 2 seconds starting at playback position
-var fade = new OverlayManagerFade
-{
-    FadeMode = OverlayManagerFadeMode.FadeIn,
-    StartTime = TimeSpan.Zero,
-    Duration = TimeSpan.FromSeconds(2),
-    Name = "VideoFade"
-};
+var position = await pipeline.Position_GetAsync();
+var fade = OverlayManagerFade.CreateFadeIn(TimeSpan.FromSeconds(2), position);
+fade.Name = "VideoFade";
 overlayManager.Video_Overlay_Add(fade);
 ```
+
+Between two fades, the earlier fade's final state is held until the next fade starts, so after a `FadeOut` the frame stays covered. Before the first fade starts, its initial state is shown, so a `FadeIn` keeps the frame covered.
 
 ### OverlayManagerSqueezeback
 
@@ -1425,20 +1428,26 @@ public class OverlayManagerSqueezeback : IOverlayManagerElement
 | `VideoAnimationEnabled` | `bool` | Enable video position animation |
 | `VideoAnimationStartRect` | `Rect` | Animation start position |
 | `VideoAnimationTargetRect` | `Rect` | Animation end position |
-| `VideoAnimationStartTimeMs` | `double` | Animation start time (ms) |
-| `VideoAnimationDurationMs` | `double` | Animation duration (ms) |
+| `VideoAnimationStartTime` | `TimeSpan` | Animation start time |
+| `VideoAnimationEndTime` | `TimeSpan` | Animation end time |
 | `VideoAnimationEasing` | `OverlayManagerPanEasing` | Easing function |
 
 **Fade Properties:**
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `VideoFadeMode` | `OverlayManagerFadeMode` | Video fade type |
-| `VideoFadeStartTimeMs` | `double` | Video fade start time |
-| `VideoFadeDurationMs` | `double` | Video fade duration |
-| `BackgroundFadeMode` | `OverlayManagerFadeMode` | Background fade type |
-| `BackgroundFadeStartTimeMs` | `double` | Background fade start time |
-| `BackgroundFadeDurationMs` | `double` | Background fade duration |
+| `VideoFadeEnabled` | `bool` | Enable the video fade |
+| `VideoFadeType` | `OverlayManagerFadeType` | Video fade type (`FadeIn` or `FadeOut`) |
+| `VideoFadeStartTime` | `TimeSpan` | Video fade start time |
+| `VideoFadeEndTime` | `TimeSpan` | Video fade end time |
+| `VideoFadeEasing` | `OverlayManagerPanEasing` | Easing function |
+| `BackgroundFadeEnabled` | `bool` | Enable the background fade |
+| `BackgroundFadeType` | `OverlayManagerFadeType` | Background fade type |
+| `BackgroundFadeStartTime` | `TimeSpan` | Background fade start time |
+| `BackgroundFadeEndTime` | `TimeSpan` | Background fade end time |
+| `BackgroundFadeEasing` | `OverlayManagerPanEasing` | Easing function |
+
+The `StartVideoFadeIn` / `StartVideoFadeOut` / `StartBackgroundFadeIn` / `StartBackgroundFadeOut` methods set these from code, each taking a `TimeSpan` start, a `TimeSpan` duration and an optional easing.
 
 **Example - Basic Squeezeback:**
 
@@ -1535,9 +1544,10 @@ Quality/performance tradeoff for scaling via `OverlayManagerInterpolationMode`:
 
 | Value | Description |
 |-------|-------------|
-| `Nearest` | Fastest, pixelated edges |
+| `None` | Fastest, pixelated edges |
 | `Bilinear` | Good quality/speed balance |
-| `Gaussian` | Higher quality, slower |
+| `Bicubic` | Higher quality, slower |
+| `Lanczos` | Highest quality, slowest |
 
 ## Shadow Settings
 

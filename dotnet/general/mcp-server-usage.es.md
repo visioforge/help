@@ -1,5 +1,5 @@
 ---
-title: Uso del Servidor MCP de VisioForge para Desarrollo con IA
+title: Servidor MCP de VisioForge para Desarrollo .NET con IA
 description: Conecte su asistente IA al Servidor MCP de VisioForge para acceso a documentación API, guías de despliegue, ejemplos de código y conocimiento del SDK.
 tags:
   - Video Capture SDK
@@ -138,19 +138,32 @@ Agregue el Servidor MCP de VisioForge a la configuración de su espacio de traba
 
 ### Configuración a Nivel de Proyecto (Cualquier Cliente MCP)
 
-Para configuración MCP específica del proyecto, cree `.mcp.json` en la raíz de su repositorio:
+Para configuración MCP específica del proyecto, cree `.mcp.json` en la raíz de su repositorio. Claude Code lee la clave `mcpServers`; Visual Studio lee `servers` del archivo `.mcp.json` en la carpeta de la solución. Un mismo archivo puede incluir ambas:
 
 ```json
 {
+  "mcpServers": {
+    "visioforge-sdk": {
+      "type": "http",
+      "url": "https://mcp.visioforge.com/mcp"
+    }
+  },
   "servers": {
     "visioforge-sdk": {
       "type": "http",
-      "url": "https://mcp.visioforge.com/mcp",
-      "description": "Documentación del SDK de VisioForge y guías de implementación"
+      "url": "https://mcp.visioforge.com/mcp"
     }
   }
 }
 ```
+
+Los proyectos creados con las [plantillas de proyecto VisioForge](../install/project-templates.md) ya incluyen este archivo.
+
+### Context7
+
+La documentación de VisioForge también está indexada en [Context7](https://context7.com/visioforge/help) como la biblioteca `/visioforge/help`. Si su asistente tiene el servidor MCP de Context7, pídale que use esa biblioteca para guías y tutoriales, y reserve el servidor MCP de VisioForge para las firmas exactas de la API:
+
+- "Usa context7 /visioforge/help: ¿cómo grabo una cámara RTSP en MP4?"
 
 ## Herramientas MCP Disponibles
 
@@ -284,7 +297,7 @@ Obtener código de configuración específico de plataforma para copia de archiv
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.20]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.21]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
@@ -385,6 +398,13 @@ No dude en pedir código funcional:
 - "Muéstrame un ejemplo completo de..."
 - "Genera código para..."
 - "Implementación de ejemplo de..."
+
+### 5. **Nombre el Servidor en Su Solicitud**
+
+Los asistentes eligen un servidor con más fiabilidad cuando usted lo nombra:
+
+- "Usa visioforge-sdk para encontrar las propiedades de `RTSPSourceSettings`"
+- "Usa visioforge-sdk: ¿qué paquetes NuGet necesita una aplicación de captura MAUI para Android?"
 
 ## Solución de Problemas
 

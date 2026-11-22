@@ -67,10 +67,7 @@ WMV (Windows Media Video) uses Microsoft's Windows Media codecs and the ASF cont
 
 ## Required Packages
 
-Install the [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) package and the video capture redist. Its DirectShow filters include the screen source and the What You Hear sound source; the WMV encoders come with Windows:
-
-- For 64-bit applications: [x64 Video Capture Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x64/)
-- For 32-bit applications: [x86 Video Capture Redist](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoCapture.x86/)
+Install the [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core/) package and the video capture redist. Its DirectShow filters include the screen source and the What You Hear sound source; the WMV encoders come with Windows.
 
 Set `PlatformTarget` in the project file to match the redist (`x64` or `x86`). On the N editions of Windows, install the Media Feature Pack for the Windows Media encoders.
 
@@ -78,6 +75,10 @@ Set `PlatformTarget` in the project file to match the redist (`x64` or `x86`). O
 dotnet add package VisioForge.DotNet.Core
 dotnet add package VisioForge.DotNet.Core.Redist.VideoCapture.x64
 ```
+
+For a 32-bit (x86) application, use the x86 package instead: `VisioForge.DotNet.Core.Redist.VideoCapture.x86`.
+
+`VisioForge.DotNet.VideoCapture`, the package in the Try it block at the top of this page, works as well: it installs the same `VisioForge.DotNet.Core`. The redist packages are needed either way.
 
 ## Implementation Example with C# Code
 

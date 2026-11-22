@@ -194,7 +194,7 @@ Para proyectos MAUI apuntando a macOS (a través de MacCatalyst), agregue estos 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.20]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
   <!-- Solo para los bloques OpenCV -->
   <PackageReference Include="VisioForge.CrossPlatform.OpenCV.macOS" Version="[2026.11.12.2]"/>
 </ItemGroup>
@@ -306,14 +306,14 @@ VisioForge.Core.VisioForgeX.InitSDK();
 VisioForge.Core.VisioForgeX.DestroySDK();
 ```
 
-Para inicialización y limpieza asíncronas, use las variantes async:
+Para la inicialización asíncrona, use la variante asíncrona. La limpieza es síncrona:
 
 ```csharp
 // Inicialización async
 await VisioForge.Core.VisioForgeX.InitSDKAsync();
 
-// Limpieza async
-await VisioForge.Core.VisioForgeX.DestroySDKAsync();
+// Limpieza
+VisioForge.Core.VisioForgeX.DestroySDK();
 ```
 
 ## Aplicaciones de consola en macOS

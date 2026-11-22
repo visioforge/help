@@ -310,7 +310,7 @@ El SDK soporta numerosos formatos de audio incluyendo AAC, MP3, WMA, OPUS, Vorbi
     ```cs
     await core.Input_AddAudioFileAsync(
         audioFile,
-        insertTime: null, 
+        timelineInsertTime: null, 
         0);
     ```
     

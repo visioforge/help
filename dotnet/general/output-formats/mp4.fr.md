@@ -164,6 +164,10 @@ La classe [MP4SplitSinkSettings](https://api.visioforge.org/dotnet/api/VisioForg
 - La gestion de l'espace disque en limitant le nombre de fichiers conservés sur le stockage
 - L'implémentation d'un enregistrement à tampon glissant où seuls les fichiers récents sont conservés
 
+!!! note "VideoEditCoreX"
+
+    La découpe est effectuée par `splitmuxsink`, utilisé par les blocs Media Blocks et `VideoCaptureCoreX`. `VideoEditCoreX` effectue le rendu via GStreamer Editing Services, dont `encodebin` ne peut pas segmenter la sortie : il refuse `MP4SplitSinkSettings` au démarrage avec une erreur, au lieu d'écrire silencieusement un seul fichier.
+
 **Découpe par taille de fichier**
 
 Découpez la sortie lorsqu'un fichier atteint une taille spécifique en octets :
@@ -465,6 +469,14 @@ mp4Output.Video_NVENC.Bitrate = 2000; // débit binaire
 
 // paramètres facultatifs
 mp4Output.Video_NVENC.RateControl = NVENCRateControlMode.VBR; // contrôle de débit - CBR ou VBR
+```
+
+Pour HEVC (H.265), définissez le codec avec un profil et un niveau HEVC.
+
+```cs
+mp4Output.Video_NVENC.Codec = NVENCEncoder.HEVC;
+mp4Output.Video_NVENC.Profile = NVENCVideoEncoderProfile.HEVC_Main;
+mp4Output.Video_NVENC.Level = NVENCEncoderLevel.HEVC_41;
 ```
 
 Définissez les paramètres audio.

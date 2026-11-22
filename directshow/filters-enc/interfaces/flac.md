@@ -35,6 +35,7 @@ This interface allows developers to configure encoding quality levels, Linear Pr
 
 ### C# Definition
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Runtime.InteropServices;

@@ -32,7 +32,7 @@ primary_api_classes:
 
 ---
 
-# Cómo Implementar Grabación Pre-Evento para Cámaras IP en C#
+# Cómo Implementar Grabación Pre-Evento para Cámaras IP en C\#
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -104,7 +104,7 @@ graph TD;
 Necesitará el Media Blocks SDK .NET. Agréguelo a su proyecto .NET vía NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.20]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
 ```
 
 Dependiendo de su plataforma objetivo, agregue el paquete runtime nativo correspondiente. Para Windows x64:

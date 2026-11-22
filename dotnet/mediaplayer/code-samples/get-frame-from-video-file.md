@@ -107,7 +107,7 @@ Modern .NET applications often need to run on multiple platforms. The X-engine p
 The most common approach is to extract frames as `System.Drawing.Bitmap` objects:
 
 ```csharp
-using VisioForge.Core.MediaInfo;
+using VisioForge.Core.MediaInfoReaderX;
 
 public void ExtractFrameAsBitmap()
 {
@@ -128,7 +128,7 @@ public void ExtractFrameAsBitmap()
 For applications using SkiaSharp for graphics processing, you can extract frames directly as `SKBitmap` objects:
 
 ```csharp
-using VisioForge.Core.MediaInfo;
+using VisioForge.Core.MediaInfoReaderX;
 using SkiaSharp;
 
 public void ExtractFrameAsSkiaBitmap()
@@ -151,7 +151,7 @@ public void ExtractFrameAsSkiaBitmap()
 For more advanced scenarios or when you need direct pixel manipulation, you can extract frames as RGB byte arrays:
 
 ```csharp
-using VisioForge.Core.MediaInfo;
+using VisioForge.Core.MediaInfoReaderX;
 
 public void ExtractFrameAsRGBArray()
 {

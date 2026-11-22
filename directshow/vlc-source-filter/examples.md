@@ -867,7 +867,7 @@ public class VLCNetworkStreamingExample
 
 ## Example 7: License Activation
 
-Activate purchased license.
+Activate purchased license. `SetLicenseKey` succeeds for any key: a key the filter does not accept leaves it in trial mode, and the video carries the [trial strip](index.md#trial-version). Only a `null` key is refused: the method returns `E_POINTER`, which a declaration returning `void` under `[PreserveSig]` does not show.
 
 ### C# License Activation
 
@@ -881,16 +881,9 @@ public void PlayWithLicense(string filename, string licenseKey, IntPtr videoWind
         Consts.CLSID_VFVLCSource,
         "VLC Source");
 
-    // Activate license
+    // Activate license: a key that is not accepted shows as the trial strip on the video, not as an error
     var registration = sourceFilter as IVFRegister;
-    if (registration != null)
-    {
-        int hr = registration.SetLicenseKey(licenseKey);
-        if (hr != 0)
-        {
-            throw new Exception("License activation failed");
-        }
-    }
+    registration?.SetLicenseKey(licenseKey);
 
     // Load and play file
     var vlcSrc = sourceFilter as IVlcSrc;

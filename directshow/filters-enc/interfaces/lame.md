@@ -33,6 +33,7 @@ This interface allows configuration of bitrate, quality, variable bitrate (VBR) 
 
 ### C# Definition
 
+<!-- vf-compile -->
 ```csharp
 using System;
 using System.Runtime.InteropServices;

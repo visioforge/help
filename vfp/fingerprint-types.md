@@ -201,7 +201,9 @@ Search fingerprints use a different algorithm optimized for fragment detection:
 
 ### Code Example: Fragment Search Implementation
 
+<!-- vf-compile -->
 ```csharp
+using System.IO;
 using VisioForge.Core.VideoFingerPrinting;
 
 public class VideoFragmentSearcher

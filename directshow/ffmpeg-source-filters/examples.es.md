@@ -58,7 +58,7 @@ Cada muestra incluye:
 #include "IFFMPEGSourceSettings.h"  // Del SDK
 #pragma comment(lib, "strmiids.lib")
 ```
-### Proyectos C#
+### Proyectos C\#
 ```csharp
 using VisioForge.DirectShowAPI;
 using VisioForge.DirectShowLib;
@@ -165,7 +165,7 @@ cleanup:
 }
 ```
 
-### Implementación en C#
+### Implementación en C\#
 
 ```csharp
 using System;
@@ -404,7 +404,7 @@ public void PlayFileWithHardwareAcceleration(string filename, IntPtr videoWindow
 
 Transmitir video desde fuentes de red.
 
-### Transmisión RTSP en C#
+### Transmisión RTSP en C\#
 
 ```csharp
 public void PlayRTSPStream(string rtspUrl, IntPtr videoWindowHandle)
@@ -457,7 +457,7 @@ public void PlayRTSPStream(string rtspUrl, IntPtr videoWindowHandle)
 }
 ```
 
-### Transmisión HLS en C#
+### Transmisión HLS en C\#
 
 ```csharp
 public void PlayHLSStream(string hlsUrl, IntPtr videoWindowHandle)
@@ -575,7 +575,7 @@ settings.ClearCustomOptions();
 
 Controlar el comportamiento del búfer para diferentes escenarios.
 
-### Ejemplos de Búfer en C#
+### Ejemplos de Búfer en C\#
 
 ```csharp
 public enum BufferingScenario
@@ -643,7 +643,7 @@ public void PlayWithBuffering(string source, BufferingScenario scenario, IntPtr 
 ---
 ## Ejemplo 6: Selección de Múltiples Flujos
 Seleccionar pistas de video y audio específicas.
-### Selección de Flujo en C#
+### Selección de Flujo en C\#
 ```csharp
 public void PlayWithStreamSelection(string filename, int videoStreamIndex, int audioStreamIndex, IntPtr videoWindowHandle)
 {
@@ -713,7 +713,7 @@ contenedor (como paquetes de metadatos SMPTE KLV en flujos MPEG-TS). La
 devolución de llamada se dispara una vez por paquete de datos y expone los
 bytes del paquete junto con sus marcas de tiempo de presentación/fin.
 
-### Implementación de Devolución de Llamada de Datos en C#
+### Implementación de Devolución de Llamada de Datos en C\#
 
 ```csharp
 // Firma real (per IFFmpegSourceSettings.h):
@@ -794,7 +794,7 @@ public class FFMPEGDataCallbackExample
 ---
 ## Ejemplo 8: Devolución de Llamada de Marca de Tiempo
 Monitorear el tiempo del demuxer/stream por tipo de medio.
-### Devolución de Llamada de Marca de Tiempo en C#
+### Devolución de Llamada de Marca de Tiempo en C\#
 ```csharp
 // Firma real (per IFFmpegSourceSettings.h):
 //   HRESULT (int mediaType, __int64 demuxerStartTime,
@@ -848,7 +848,9 @@ public void PlayWithTimestampCallback(string filename)
 
 Activar licencia comprada.
 
-### Activación de Licencia en C#
+Sin licencia, el filtro funciona como versión de prueba: dibuja una marca de agua "VisioForge FFMPEG Source - trial" en la esquina superior izquierda del vídeo que entrega y no muestra ningún cuadro de diálogo. El audio no se modifica. La versión de prueba además decodifica por software: la decodificación por hardware se elige al conectar el pin de salida, por lo que debe activar la licencia antes de conectar el filtro para que `SetHWAccelerationEnabled` surta efecto. Una vez activada la licencia, la marca de agua desaparece.
+
+### Activación de Licencia en C\#
 
 ```csharp
 public void PlayWithLicense(string filename, string licenseKey, IntPtr videoWindowHandle)
@@ -901,7 +903,7 @@ public void PlayWithLicense(string filename, string licenseKey, IntPtr videoWind
 ---
 ## Ejemplo 10: Reproductor Multimedia Completo
 Reproductor multimedia con todas las funciones.
-### Ejemplo Completo en C#
+### Ejemplo Completo en C\#
 ```csharp
 using System;
 using System.Runtime.InteropServices;

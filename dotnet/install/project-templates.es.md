@@ -28,6 +28,8 @@ Las plantillas de proyecto VisioForge crean una aplicación .NET 10 pequeña y c
 
 Las plantillas se ofrecen de dos formas: la extensión **VisioForge .NET Media SDK Templates** para Visual Studio 2026 y el paquete `VisioForge.DotNet.Templates` para `dotnet new`. Ambas contienen las mismas ocho plantillas.
 
+El instalador de Windows de los SDK instala el paquete de `dotnet new` al hacer clic en **Finish**, si el SDK de .NET 10 está instalado y el equipo tiene conexión. Se instala para la cuenta de Windows con la que se ejecutó el instalador: si escribió la contraseña de un administrador en el aviso de Windows, es la cuenta de ese administrador. Visual Studio 2026 muestra las plantillas instaladas de esta forma en **Create a new project**; si no aparecen, reinicie Visual Studio. Ejecute usted mismo el comando de [Instalar desde la línea de comandos](#instalar-desde-la-linea-de-comandos) con cualquier otra cuenta, si el instalador se ejecutó sin su página **Finish** (`/qn`, `/qb`, `/passive`) o si las plantillas no aparecen.
+
 ## Plantillas
 
 | Plantilla | Nombre corto | SDK | Plataformas |
@@ -51,6 +53,8 @@ Las plantillas de captura abren la primera cámara y muestran su vista previa; u
 
 ## Instalar en Visual Studio 2026
 
+Si las plantillas ya aparecen en **Create a new project**, vaya al paso 3.
+
 1. Abra **Extensions → Manage Extensions**, busque **VisioForge .NET Media SDK Templates** y haga clic en **Install**.
 2. Reinicie Visual Studio para completar la instalación de la extensión.
 3. Abra **File → New → Project** y busque **VisioForge**.
@@ -60,7 +64,7 @@ Las plantillas de captura abren la primera cámara y muestran su vista previa; u
 ![Las plantillas VisioForge en el cuadro de diálogo New Project de Visual Studio 2026](project-templates-new-project.webp)
 
 !!! note "Visual Studio 2022"
-    La extensión se instala solo en Visual Studio 2026. Las plantillas usan .NET 10, que Visual Studio 2022 no admite. Con Visual Studio 2022, use en su lugar la línea de comandos de abajo: las plantillas WPF, WinForms y Avalonia se compilan y ejecutan con `dotnet run`. La aplicación de Windows de la plantilla MAUI necesita Visual Studio 2026. Para añadir el SDK a su propio proyecto, consulte [Visual Studio](visual-studio.md).
+    La extensión se instala solo en Visual Studio 2026. Las plantillas usan .NET 10, que Visual Studio 2022 no admite. Con Visual Studio 2022, use en su lugar la línea de comandos de abajo: las plantillas WPF, WinForms y Avalonia se compilan y ejecutan con `dotnet run`. La aplicación de Windows de la plantilla MAUI necesita Visual Studio 2026. Visual Studio 2022 puede mostrar las plantillas que instaló el instalador del SDK; cree el proyecto con `dotnet new` en su lugar. Para añadir el SDK a su propio proyecto, consulte [Visual Studio](visual-studio.md).
 
 ## Instalar desde la línea de comandos
 
@@ -78,6 +82,7 @@ dotnet run
 - Los paquetes NuGet del SDK en versiones exactas: el SDK, el redist nativo de la plataforma de destino y, para MAUI y Avalonia, el paquete de interfaz.
 - Una ventana principal que llama a `VisioForgeX.InitSDKAsync` al cargarse y a `VisioForgeX.DestroySDK` al cerrarse. El cierre espera primero a que el motor se detenga.
 - El motor y su vista de video: `VideoCaptureCoreX` con la lista de cámaras, `MediaPlayerCoreX`, o un `MediaBlocksPipeline` con una fuente universal, un renderizador de video y un renderizador de audio.
+- Un archivo `.mcp.json` que conecta los asistentes de programación con IA (Claude Code, Visual Studio) al [servidor MCP de VisioForge](../general/mcp-server-usage.md). Elimínelo si no usa ninguno.
 
 El primer inicio en un equipo tarda más: el SDK crea una vez su registro de plugins. Sin clave de licencia, los SDK funcionan en modo de prueba.
 
