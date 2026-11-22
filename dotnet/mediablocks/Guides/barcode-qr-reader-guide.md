@@ -27,6 +27,10 @@ primary_api_classes:
   - InputOutput
   - BarcodeDetectorEventArgs
   - UniversalSourceBlock
+video:
+  id: WLWidh6XTkg
+  upload_date: 2026-11-22T11:47:23Z
+  duration: PT54S
 
 ---
 
@@ -39,6 +43,51 @@ primary_api_classes:
 Need to read barcodes or scan QR codes from a live camera feed in C#? Unlike image-only barcode libraries, VisioForge Media Blocks SDK scans barcodes directly from real-time video streams — [webcams](../../videocapture/guides/save-webcam-video.md), [IP cameras](../../videocapture/video-sources/ip-cameras/index.md), [RTSP sources](../../general/network-streaming/rtsp.md), video files, and screen capture. This makes it the ideal .NET barcode scanner SDK for surveillance, inventory, and automation applications that process live video.
 
 This guide walks you through building a cross-platform C# barcode reader and QR code scanner that runs on Windows, Android, iOS, macOS, and Linux using .NET MAUI, Avalonia, or WPF.
+
+## Video Tutorial: Webcam QR Code & Barcode Scanner in a Few Lines of C\#
+
+A console app that reads QR codes and barcodes from the first webcam: `SystemVideoSourceBlock` captures the camera, `BarcodeDetectorBlock` in `InputOnly` mode reads every frame, and `OnBarcodeDetected` gives the type and the text of each code, printed once per code until Enter is pressed.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/WLWidh6XTkg?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Its code, on GitHub as [barcode-webcam-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/barcode-webcam-short-console):
+
+<!-- vf-compile -->
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.Special;
+using VisioForge.Core.Types.X;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var cams = await DeviceEnumerator.Shared
+    .VideoSourcesAsync();
+var cam = new SystemVideoSourceBlock(
+    new VideoCaptureDeviceSourceSettings(
+        cams[0]));
+var reader = new BarcodeDetectorBlock(
+    BarcodeDetectorMode.InputOnly);
+var seen = new HashSet<string>();
+reader.OnBarcodeDetected += (_, e) =>
+{
+    if (seen.Add(e.Value))
+        Console.WriteLine(
+            $"{e.BarcodeType}: {e.Value}");
+};
+p.Connect(cam.Output, reader.Input);
+if (!await p.StartAsync()) return;
+Console.ReadLine();
+await p.StopAsync();
+```
+
+The camera is the first video capture device the system lists. Pick another one from `VideoSourcesAsync()` by its `DisplayName`, and add a `VideoRendererBlock` for a live preview, as [Step 4](#step-4-creating-the-pipeline) does.
 
 ## Why Use Video-Based Barcode Scanning?
 
@@ -652,6 +701,8 @@ These samples demonstrate:
 - Error handling
 - Cross-platform compatibility
 
+The code of the video tutorial above is a console app without a UI: [barcode-webcam-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/barcode-webcam-short-console).
+
 ## Frequently Asked Questions
 
 ### What barcode formats can I scan from a camera in C#?
@@ -683,3 +734,7 @@ For most use cases, 10–15 FPS provides reliable detection with low CPU usage. 
 - [Special Blocks Reference](../Special/index.md) — BarcodeDetectorBlock API reference
 - [Getting Started with Media Blocks](../GettingStarted/index.md) — pipeline fundamentals
 - [Platform-Specific Deployment](../../deployment-x/index.md) — native dependency packages for all platforms
+
+## Video Transcript
+
+This is how to read QR codes and barcodes from a webcam, in a few lines of C#. Load the SDK and create a pipeline. The source is the first webcam. `BarcodeDetectorBlock` reads the frames and raises `OnBarcodeDetected` with the type and the text of each code it finds. The set prints every code once. Connect the camera to the reader, start, and wait for Enter. Run it and show the camera a code. The QR code gives its web address, and the barcode its thirteen digits. This is the barcode, decoded live from the webcam. This page adds a live preview, IP cameras and video files: see [Step 4](#step-4-creating-the-pipeline) and [Scan Barcodes from Video Files, Screen Capture, and RTSP Streams](#scan-barcodes-from-video-files-screen-capture-and-rtsp-streams).

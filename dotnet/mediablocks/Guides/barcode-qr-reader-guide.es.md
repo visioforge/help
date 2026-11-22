@@ -27,6 +27,10 @@ primary_api_classes:
   - InputOutput
   - BarcodeDetectorEventArgs
   - UniversalSourceBlock
+video:
+  id: WLWidh6XTkg
+  upload_date: 2026-11-22T11:47:23Z
+  duration: PT54S
 
 ---
 
@@ -39,6 +43,51 @@ primary_api_classes:
 ¿Necesita leer códigos de barras o escanear códigos QR desde una cámara en vivo en C#? A diferencia de las bibliotecas de códigos de barras que solo procesan imágenes, VisioForge Media Blocks SDK escanea códigos de barras directamente desde streams de video en tiempo real — [webcams](../../videocapture/guides/save-webcam-video.md), [cámaras IP](../../videocapture/video-sources/ip-cameras/index.md), [fuentes RTSP](../../general/network-streaming/rtsp.md), archivos de video y captura de pantalla. Esto lo convierte en el SDK ideal de escáner de códigos de barras .NET para aplicaciones de vigilancia, inventario y automatización que procesan video en vivo.
 
 Esta guía le muestra cómo construir un lector de códigos de barras y escáner de códigos QR multiplataforma en C# que funciona en Windows, Android, iOS, macOS y Linux usando .NET MAUI, Avalonia o WPF.
+
+## Video tutorial: escáner de códigos QR y de barras con webcam en unas pocas líneas de C\#
+
+Una aplicación de consola que lee códigos QR y códigos de barras desde la primera webcam: `SystemVideoSourceBlock` captura la cámara, `BarcodeDetectorBlock` en modo `InputOnly` lee cada fotograma y `OnBarcodeDetected` entrega el tipo y el texto de cada código, que se imprime una sola vez hasta que se pulsa Enter.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/WLWidh6XTkg?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Su código, en GitHub como [barcode-webcam-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/barcode-webcam-short-console):
+
+<!-- vf-compile -->
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.Special;
+using VisioForge.Core.Types.X;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var cams = await DeviceEnumerator.Shared
+    .VideoSourcesAsync();
+var cam = new SystemVideoSourceBlock(
+    new VideoCaptureDeviceSourceSettings(
+        cams[0]));
+var reader = new BarcodeDetectorBlock(
+    BarcodeDetectorMode.InputOnly);
+var seen = new HashSet<string>();
+reader.OnBarcodeDetected += (_, e) =>
+{
+    if (seen.Add(e.Value))
+        Console.WriteLine(
+            $"{e.BarcodeType}: {e.Value}");
+};
+p.Connect(cam.Output, reader.Input);
+if (!await p.StartAsync()) return;
+Console.ReadLine();
+await p.StopAsync();
+```
+
+La cámara es el primer dispositivo de captura de vídeo que lista el sistema. Elija otra de `VideoSourcesAsync()` por su `DisplayName` y añada un `VideoRendererBlock` para una vista previa en vivo, como hace el [Paso 4](#paso-4-creacion-del-pipeline).
 
 ## ¿Por Qué Usar Escaneo de Códigos de Barras Basado en Video?
 
@@ -652,6 +701,8 @@ Estos ejemplos demuestran:
 - Manejo de errores
 - Compatibilidad multiplataforma
 
+El código del video tutorial de arriba es una aplicación de consola sin interfaz: [barcode-webcam-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/barcode-webcam-short-console).
+
 ## Preguntas Frecuentes
 
 ### ¿Qué formatos de códigos de barras puedo escanear desde una cámara en C#?
@@ -683,3 +734,7 @@ Para la mayoría de los casos de uso, 10–15 FPS proporciona detección confiab
 - [Referencia de Bloques Especiales](../Special/index.md) — referencia API de BarcodeDetectorBlock
 - [Primeros Pasos con Media Blocks](../GettingStarted/index.md) — fundamentos del pipeline
 - [Despliegue Específico por Plataforma](../../deployment-x/index.md) — paquetes de dependencias nativas para todas las plataformas
+
+## Transcripción del video
+
+Así se leen códigos QR y códigos de barras desde una webcam, en unas pocas líneas de C#. Cargue el SDK y cree un pipeline. La fuente es la primera webcam. `BarcodeDetectorBlock` lee los fotogramas y lanza `OnBarcodeDetected` con el tipo y el texto de cada código que encuentra. El conjunto imprime cada código una sola vez. Conecte la cámara al lector, inicie y espere a que se pulse Enter. Ejecútelo y muestre un código a la cámara. El código QR da su dirección web, y el código de barras sus trece dígitos. Este es el código de barras, decodificado en vivo desde la webcam. Esta página añade una vista previa en vivo, cámaras IP y archivos de vídeo: consulte el [Paso 4](#paso-4-creacion-del-pipeline) y [Escanear Códigos de Barras desde Archivos de Video, Captura de Pantalla y Streams RTSP](#escanear-codigos-de-barras-desde-archivos-de-video-captura-de-pantalla-y-streams-rtsp).

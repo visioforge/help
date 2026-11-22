@@ -212,6 +212,8 @@ pipeline.Connect(audioSource.Output, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
+WASAPI2 liste aussi chaque périphérique de sortie parmi les sources audio, avec `AudioCaptureDeviceInfo.IsLoopback` activé. Une telle entrée de `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)`, transformée en paramètres avec `CreateSourceSettings()` et passée à `SystemAudioSourceBlock`, enregistre ce que joue cette sortie, comme `LoopbackAudioCaptureDeviceSourceSettings`.
+
 #### Exemples d'applications
 
 - [Démo de capture audio](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Audio%20Capture%20Demo)
@@ -1840,7 +1842,7 @@ Le `WHEPSourceBlock` se configure via `WHEPSourceSettings` :
 - `VideoEnabled` (bool) : créer le pin `VideoOutput`. Par défaut `true`.
 - `AudioEnabled` (bool) : créer le pin `AudioOutput`. Par défaut `true`. Au moins l'une des deux doit être activée : sinon, le constructeur de `WHEPSourceBlock` lève `ArgumentException`.
 
-Une session WebRTC n'est décrite qu'au moment où le serveur répond ; les sorties sont donc déclarées par `VideoEnabled` et `AudioEnabled`. Un flux envoyé par le serveur sans sortie correspondante est ignoré. Une sortie dont le serveur n'envoie pas le flux reste vide — désactivez-la pour un flux uniquement vidéo ou uniquement audio, afin qu'un multiplexeur en aval ne l'attende pas.
+Une session WebRTC n'est décrite qu'au moment où le serveur répond ; les sorties sont donc déclarées par `VideoEnabled` et `AudioEnabled`. Un flux envoyé par le serveur sans sortie correspondante est ignoré. Désactivez la sortie dont le serveur n'envoie pas le flux : `AudioEnabled = false` pour un flux uniquement vidéo, `VideoEnabled = false` pour un flux uniquement audio. Une sortie désactivée n'est pas demandée au serveur. Une sortie laissée active demande un flux que le serveur n'a pas : MediaMTX refuse alors la session et `OnError` signale `codecs not supported by client`, et un serveur qui l'accepte laisse la sortie vide, si bien qu'un multiplexeur en aval l'attendrait.
 
 Un échec de connexion, par exemple `404` pour un chemin sur lequel rien n'est publié, est signalé par l'événement `OnError` du pipeline. Exception : un `TurnServer` dont le nom d'hôte ne se résout pas fait attendre la connexion sans erreur ; vérifiez donc d'abord l'adresse TURN si aucune image ni aucune erreur n'arrive.
 
@@ -1873,6 +1875,16 @@ await pipeline.StartAsync();
 
 Appelez `WHEPSourceBlock.IsAvailable()` avant de construire le pipeline : la méthode indique si le plugin GStreamer `rswebrtc` (`whepclientsrc`, issu de gst-plugins-rs) est présent. Sous Windows et macOS, il est fourni par les packages `VisioForge.CrossPlatform.Core.Windows.Adds.x64` et `VisioForge.CrossPlatform.Core.macOS.Adds`. Sous Linux, il est fourni par le package `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`, et nécessite GStreamer 1.22 ou ultérieur (Debian 12, Ubuntu 24.04+) avec les paquets `gstreamer1.0-plugins-bad` et `gstreamer1.0-nice` de la distribution installés ; sans eux, `IsAvailable()` renvoie `false`.
 
+#### Lecture à faible latence
+
+Le WHEP Player Demo (WPF) du [dépôt d'exemples](https://github.com/visioforge/.Net-SDK-s-samples) est un lecteur minimal construit ainsi : saisissez une URL WHEP, et le flux est lu dans un `VideoView`. Ce qui maintient sa latence basse :
+
+- `IsSync = false` sur `VideoRendererBlock` et `AudioRendererBlock`. Chaque image est affichée dès qu'elle est décodée. Avec la valeur par défaut `true`, le moteur de rendu retient chaque image pendant la latence du pipeline, à laquelle le tampon de gigue WebRTC ajoute à lui seul 200 ms.
+- Pas de `StunServer` sur un réseau local : les adresses des machines se connectent directement. Définissez `StunServer` ou `TurnServer` lorsque le serveur est derrière un NAT.
+- `AudioEnabled = false` pour un flux uniquement vidéo, comme décrit plus haut.
+
+Mesure de bout en bout (glass to glass) sur un réseau local — une horloge à la milliseconde à l'écran, capturée, publiée via WHIP vers MediaMTX, relue via WHEP et affichée à côté de l'original, 20 relevés par codec : H.264 médiane 71 ms (56–131 ms), VP8 médiane 93 ms (36–130 ms).
+
 #### Plateformes
 
 Windows, macOS, Linux.
@@ -1897,7 +1909,7 @@ Le `ScreenSourceBlock` utilise des classes de paramètres spécifiques à la pla
 
 ##### macOS
 
-`ScreenCaptureMacOSSourceSettings` — utilise `AVFoundation` pour l'enregistrement d'écran. (`ScreenCaptureSourceType.AVFoundation`)
+`ScreenCaptureMacOSSourceSettings` — utilise `AVFoundation` pour l'enregistrement d'écran. (`ScreenCaptureSourceType.AVFoundation`) `Rectangle` s'exprime en pixels physiques de l'écran que sélectionne `Monitor`, si bien que l'image a sa taille ; sur un écran Retina, un point vaut deux pixels. Un rectangle qui ne tient pas dans l'écran fait échouer le démarrage, et `UpdateLiveSettings` le déplace pendant la capture, à la taille avec laquelle elle a démarré.
 
 ##### Linux
 

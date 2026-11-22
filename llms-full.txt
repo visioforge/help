@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-22 11:31:35 UTC (21551a23220)
+**Generated:** 2026-11-22 16:32:05 UTC (4c32b90ebf7)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 465 help documentation pages + 74 website pages
 
@@ -38200,7 +38200,7 @@ Old output class names map to today's API: `VFMP4v8v10Output` (renamed `VFMP4Out
 
 ### An "UNREGISTERED VERSION" text is drawn on the video
 
-That overlay is drawn by the 30-day trial. A purchased license comes as a `.vflicense` certificate file: load it into every engine instance with `SetLicenseCertificateAsync` before you start it. See [Video Capture SDK .NET](../../videocapture/) for an example. If the trial overlay is visible but nothing plays, the message is not the cause — check the `OnError` event for the real error.
+That overlay is drawn by the 30-day trial. Its second line names the edition the features in use require (STANDARD, PROFESSIONAL or PREMIUM), and the last line is the purchase page, visioforge.com/buy; Media Blocks pipelines and `VideoEditCoreX` draw UNREGISTERED and the address only. A purchased license comes as a `.vflicense` certificate file: load it into every engine instance with `SetLicenseCertificateAsync` before you start it. See [Video Capture SDK .NET](../../videocapture/) for an example. If the trial overlay is visible but nothing plays, the message is not the cause — check the `OnError` event for the real error.
 
 ## Hardware encoding
 
@@ -46648,6 +46648,8 @@ VideoCapture1.Audio_Play = false;
 ```
 
 The WASAPI2 API provides the most reliable loopback functionality on Windows systems, with lower latency and better performance compared to other options.
+
+WASAPI2 also lists every output device among the audio sources, with `AudioCaptureDeviceInfo.IsLoopback` set. Such an entry from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)` turned into a source with `CreateSourceSettingsVC()` records what that output plays, the same as `LoopbackAudioCaptureDeviceSourceSettings`.
 
 In VideoCaptureCore, loopback functionality is simplified with a dedicated virtual device:
 
@@ -79503,6 +79505,46 @@ Need to read barcodes or scan QR codes from a live camera feed in C#? Unlike ima
 
 This guide walks you through building a cross-platform C# barcode reader and QR code scanner that runs on Windows, Android, iOS, macOS, and Linux using .NET MAUI, Avalonia, or WPF.
 
+## Video Tutorial: Webcam QR Code & Barcode Scanner in a Few Lines of C#
+
+A console app that reads QR codes and barcodes from the first webcam: `SystemVideoSourceBlock` captures the camera, `BarcodeDetectorBlock` in `InputOnly` mode reads every frame, and `OnBarcodeDetected` gives the type and the text of each code, printed once per code until Enter is pressed.
+
+Its code, on GitHub as [barcode-webcam-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/barcode-webcam-short-console):
+
+```
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.Special;
+using VisioForge.Core.Types.X;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var cams = await DeviceEnumerator.Shared
+    .VideoSourcesAsync();
+var cam = new SystemVideoSourceBlock(
+    new VideoCaptureDeviceSourceSettings(
+        cams[0]));
+var reader = new BarcodeDetectorBlock(
+    BarcodeDetectorMode.InputOnly);
+var seen = new HashSet<string>();
+reader.OnBarcodeDetected += (_, e) =>
+{
+    if (seen.Add(e.Value))
+        Console.WriteLine(
+            $"{e.BarcodeType}: {e.Value}");
+};
+p.Connect(cam.Output, reader.Input);
+if (!await p.StartAsync()) return;
+Console.ReadLine();
+await p.StopAsync();
+```
+
+The camera is the first video capture device the system lists. Pick another one from `VideoSourcesAsync()` by its `DisplayName`, and add a `VideoRendererBlock` for a live preview, as [Step 4](#step-4-creating-the-pipeline) does.
+
 ## Why Use Video-Based Barcode Scanning?
 
 ### Key Advantages over Image-Only Libraries
@@ -80115,6 +80157,8 @@ These samples demonstrate:
 - Error handling
 - Cross-platform compatibility
 
+The code of the video tutorial above is a console app without a UI: [barcode-webcam-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/barcode-webcam-short-console).
+
 ## Frequently Asked Questions
 
 ### What barcode formats can I scan from a camera in C#?
@@ -80146,6 +80190,10 @@ For most use cases, 10–15 FPS provides reliable detection with low CPU usage. 
 - [Special Blocks Reference](../../Special/) — BarcodeDetectorBlock API reference
 - [Getting Started with Media Blocks](../../GettingStarted/) — pipeline fundamentals
 - [Platform-Specific Deployment](../../../deployment-x/) — native dependency packages for all platforms
+
+## Video Transcript
+
+This is how to read QR codes and barcodes from a webcam, in a few lines of C#. Load the SDK and create a pipeline. The source is the first webcam. `BarcodeDetectorBlock` reads the frames and raises `OnBarcodeDetected` with the type and the text of each code it finds. The set prints every code once. Connect the camera to the reader, start, and wait for Enter. Run it and show the camera a code. The QR code gives its web address, and the barcode its thirteen digits. This is the barcode, decoded live from the webcam. This page adds a live preview, IP cameras and video files: see [Step 4](#step-4-creating-the-pipeline) and [Scan Barcodes from Video Files, Screen Capture, and RTSP Streams](#scan-barcodes-from-video-files-screen-capture-and-rtsp-streams).
 
 ---END OF PAGE---
 
@@ -94140,6 +94188,8 @@ pipeline.Connect(audioSource.Output, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
+WASAPI2 also lists every output device among the audio sources, with `AudioCaptureDeviceInfo.IsLoopback` set. Such an entry from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)` turned into settings with `CreateSourceSettings()` and passed to `SystemAudioSourceBlock` records what that output plays, the same as `LoopbackAudioCaptureDeviceSourceSettings`.
+
 #### Sample applications
 
 - [Audio Capture Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Audio%20Capture%20Demo)
@@ -95750,7 +95800,7 @@ The `WHEPSourceBlock` is configured using `WHEPSourceSettings`:
 - `VideoEnabled` (bool): Create the `VideoOutput` pad. Default `true`.
 - `AudioEnabled` (bool): Create the `AudioOutput` pad. Default `true`. At least one of the two must be on: the `WHEPSourceBlock` constructor throws `ArgumentException` otherwise.
 
-A WebRTC session is described only when the server answers, so the outputs are declared by `VideoEnabled` and `AudioEnabled`. A stream the server sends without a matching output is dropped. An output whose stream the server does not send stays empty — turn it off for a video-only or audio-only stream, so that a downstream muxer does not wait for it.
+A WebRTC session is described only when the server answers, so the outputs are declared by `VideoEnabled` and `AudioEnabled`. A stream the server sends without a matching output is dropped. Turn off the output whose stream the server does not send — `AudioEnabled = false` for a video-only stream, `VideoEnabled = false` for an audio-only one. A turned-off output is not requested from the server at all. One that is left on asks for a stream the server does not have: MediaMTX then refuses the session and `OnError` reports `codecs not supported by client`, and a server that accepts it leaves the output empty, so a downstream muxer would wait for it.
 
 A connection failure, for example `404` for a path with nothing published on it, is reported through the pipeline's `OnError` event. A `TurnServer` whose host name does not resolve is the exception: the connection then waits without an error, so check the TURN address first when no frames and no error arrive.
 
@@ -95783,6 +95833,16 @@ await pipeline.StartAsync();
 
 Check `WHEPSourceBlock.IsAvailable()` before you build the pipeline: it reports whether the GStreamer `rswebrtc` plugin (`whepclientsrc`, from gst-plugins-rs) is present. On Windows and macOS it ships in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` and `VisioForge.CrossPlatform.Core.macOS.Adds` packages. On Linux it ships in the `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64` package, and needs GStreamer 1.22 or later (Debian 12, Ubuntu 24.04+) with the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice` packages installed; without them `IsAvailable()` returns `false`.
 
+#### Low-latency playback
+
+The WHEP Player Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples) is a minimal player built this way: enter a WHEP URL, and the stream plays in a `VideoView`. What keeps its latency low:
+
+- `IsSync = false` on `VideoRendererBlock` and `AudioRendererBlock`. Each frame is shown as soon as it is decoded. With the default `true`, the renderer holds every frame for the pipeline latency, and the WebRTC jitter buffer alone adds 200 ms to it.
+- No `StunServer` on a local network: the host addresses connect directly. Set `StunServer` or `TurnServer` when the server is behind NAT.
+- `AudioEnabled = false` for a video-only stream, as described above.
+
+Measured glass to glass on a local network — a millisecond clock on the screen, captured, published over WHIP to MediaMTX, read back over WHEP and shown next to the original, 20 readings per codec: H.264 median 71 ms (56–131 ms), VP8 median 93 ms (36–130 ms).
+
 #### Platforms
 
 Windows, macOS, Linux.
@@ -95807,7 +95867,7 @@ The `ScreenSourceBlock` uses platform-specific settings classes. The choice of s
 
 ##### macOS
 
-`ScreenCaptureMacOSSourceSettings` - Use `AVFoundation` for screen recording. (`ScreenCaptureSourceType.AVFoundation`)
+`ScreenCaptureMacOSSourceSettings` - Use `AVFoundation` for screen recording. (`ScreenCaptureSourceType.AVFoundation`) `Rectangle` is in the physical pixels of the display `Monitor` selects, so the frame has its size; on a Retina display a point is two pixels. A rectangle that does not fit the display fails the start, and `UpdateLiveSettings` moves it while the capture runs, at the size it started with.
 
 ##### Linux
 

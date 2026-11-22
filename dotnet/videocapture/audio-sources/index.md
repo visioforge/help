@@ -204,6 +204,8 @@ Here's how to implement it:
     
     The WASAPI2 API provides the most reliable loopback functionality on Windows systems, with lower latency and better performance compared to other options.
     
+    WASAPI2 also lists every output device among the audio sources, with `AudioCaptureDeviceInfo.IsLoopback` set. Such an entry from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)` turned into a source with `CreateSourceSettingsVC()` records what that output plays, the same as `LoopbackAudioCaptureDeviceSourceSettings`.
+    
 
 === "VideoCaptureCore"
 

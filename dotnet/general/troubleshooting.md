@@ -80,7 +80,7 @@ Old output class names map to today's API: `VFMP4v8v10Output` (renamed `VFMP4Out
 
 ### An "UNREGISTERED VERSION" text is drawn on the video
 
-That overlay is drawn by the 30-day trial. A purchased license comes as a `.vflicense` certificate file: load it into every engine instance with `SetLicenseCertificateAsync` before you start it. See [Video Capture SDK .NET](../videocapture/index.md) for an example. If the trial overlay is visible but nothing plays, the message is not the cause — check the `OnError` event for the real error.
+That overlay is drawn by the 30-day trial. Its second line names the edition the features in use require (STANDARD, PROFESSIONAL or PREMIUM), and the last line is the purchase page, visioforge.com/buy; Media Blocks pipelines and `VideoEditCoreX` draw UNREGISTERED and the address only. A purchased license comes as a `.vflicense` certificate file: load it into every engine instance with `SetLicenseCertificateAsync` before you start it. See [Video Capture SDK .NET](../videocapture/index.md) for an example. If the trial overlay is visible but nothing plays, the message is not the cause — check the `OnError` event for the real error.
 
 ## Hardware encoding
 

@@ -214,6 +214,8 @@ pipeline.Connect(audioSource.Output, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
+WASAPI2 also lists every output device among the audio sources, with `AudioCaptureDeviceInfo.IsLoopback` set. Such an entry from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)` turned into settings with `CreateSourceSettings()` and passed to `SystemAudioSourceBlock` records what that output plays, the same as `LoopbackAudioCaptureDeviceSourceSettings`.
+
 #### Sample applications
 
 - [Audio Capture Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Audio%20Capture%20Demo)
@@ -1844,7 +1846,7 @@ The `WHEPSourceBlock` is configured using `WHEPSourceSettings`:
 - `VideoEnabled` (bool): Create the `VideoOutput` pad. Default `true`.
 - `AudioEnabled` (bool): Create the `AudioOutput` pad. Default `true`. At least one of the two must be on: the `WHEPSourceBlock` constructor throws `ArgumentException` otherwise.
 
-A WebRTC session is described only when the server answers, so the outputs are declared by `VideoEnabled` and `AudioEnabled`. A stream the server sends without a matching output is dropped. An output whose stream the server does not send stays empty — turn it off for a video-only or audio-only stream, so that a downstream muxer does not wait for it.
+A WebRTC session is described only when the server answers, so the outputs are declared by `VideoEnabled` and `AudioEnabled`. A stream the server sends without a matching output is dropped. Turn off the output whose stream the server does not send — `AudioEnabled = false` for a video-only stream, `VideoEnabled = false` for an audio-only one. A turned-off output is not requested from the server at all. One that is left on asks for a stream the server does not have: MediaMTX then refuses the session and `OnError` reports `codecs not supported by client`, and a server that accepts it leaves the output empty, so a downstream muxer would wait for it.
 
 A connection failure, for example `404` for a path with nothing published on it, is reported through the pipeline's `OnError` event. A `TurnServer` whose host name does not resolve is the exception: the connection then waits without an error, so check the TURN address first when no frames and no error arrive.
 
@@ -1877,6 +1879,16 @@ await pipeline.StartAsync();
 
 Check `WHEPSourceBlock.IsAvailable()` before you build the pipeline: it reports whether the GStreamer `rswebrtc` plugin (`whepclientsrc`, from gst-plugins-rs) is present. On Windows and macOS it ships in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` and `VisioForge.CrossPlatform.Core.macOS.Adds` packages. On Linux it ships in the `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64` package, and needs GStreamer 1.22 or later (Debian 12, Ubuntu 24.04+) with the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice` packages installed; without them `IsAvailable()` returns `false`.
 
+#### Low-latency playback
+
+The WHEP Player Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples) is a minimal player built this way: enter a WHEP URL, and the stream plays in a `VideoView`. What keeps its latency low:
+
+- `IsSync = false` on `VideoRendererBlock` and `AudioRendererBlock`. Each frame is shown as soon as it is decoded. With the default `true`, the renderer holds every frame for the pipeline latency, and the WebRTC jitter buffer alone adds 200 ms to it.
+- No `StunServer` on a local network: the host addresses connect directly. Set `StunServer` or `TurnServer` when the server is behind NAT.
+- `AudioEnabled = false` for a video-only stream, as described above.
+
+Measured glass to glass on a local network — a millisecond clock on the screen, captured, published over WHIP to MediaMTX, read back over WHEP and shown next to the original, 20 readings per codec: H.264 median 71 ms (56–131 ms), VP8 median 93 ms (36–130 ms).
+
 #### Platforms
 
 Windows, macOS, Linux.
@@ -1901,7 +1913,7 @@ The `ScreenSourceBlock` uses platform-specific settings classes. The choice of s
 
 ##### macOS
 
-`ScreenCaptureMacOSSourceSettings` - Use `AVFoundation` for screen recording. (`ScreenCaptureSourceType.AVFoundation`)
+`ScreenCaptureMacOSSourceSettings` - Use `AVFoundation` for screen recording. (`ScreenCaptureSourceType.AVFoundation`) `Rectangle` is in the physical pixels of the display `Monitor` selects, so the frame has its size; on a Retina display a point is two pixels. A rectangle that does not fit the display fails the start, and `UpdateLiveSettings` moves it while the capture runs, at the size it started with.
 
 ##### Linux
 

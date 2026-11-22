@@ -80,7 +80,7 @@ Les anciens noms des classes de sortie correspondent à l'API actuelle : `VFMP4v
 
 ### Le texte « UNREGISTERED VERSION » s'affiche sur la vidéo
 
-Cette superposition est dessinée par la version d'essai de 30 jours. Une licence achetée est fournie sous la forme d'un fichier de certificat `.vflicense` : chargez-le dans chaque instance du moteur avec `SetLicenseCertificateAsync` avant de la démarrer. Un exemple se trouve dans [Video Capture SDK .NET](../videocapture/index.md). Si la superposition d'essai apparaît mais que rien n'est lu, le message n'est pas la cause : consultez l'événement `OnError` pour connaître l'erreur réelle.
+Cette superposition est dessinée par la version d'essai de 30 jours. Sa deuxième ligne indique l'édition requise par les fonctionnalités utilisées (STANDARD, PROFESSIONAL ou PREMIUM) et la dernière est la page d'achat, visioforge.com/buy ; les pipelines Media Blocks et `VideoEditCoreX` affichent seulement UNREGISTERED et l'adresse. Une licence achetée est fournie sous la forme d'un fichier de certificat `.vflicense` : chargez-le dans chaque instance du moteur avec `SetLicenseCertificateAsync` avant de la démarrer. Un exemple se trouve dans [Video Capture SDK .NET](../videocapture/index.md). Si la superposition d'essai apparaît mais que rien n'est lu, le message n'est pas la cause : consultez l'événement `OnError` pour connaître l'erreur réelle.
 
 ## Encodage matériel
 

@@ -204,6 +204,8 @@ Aquí se explica cómo implementarlo:
     
     La API WASAPI2 proporciona la funcionalidad de bucle invertido más confiable en sistemas Windows, con menor latencia y mejor rendimiento en comparación con otras opciones.
     
+    WASAPI2 también incluye cada dispositivo de salida entre las fuentes de audio, con `AudioCaptureDeviceInfo.IsLoopback` activado. Una entrada así de `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)`, convertida en fuente con `CreateSourceSettingsVC()`, graba lo que reproduce esa salida, igual que `LoopbackAudioCaptureDeviceSourceSettings`.
+    
 
 === "VideoCaptureCore"
 
