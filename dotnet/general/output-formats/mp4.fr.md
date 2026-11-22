@@ -155,6 +155,8 @@ var mp4SinkSettings = new MP4SinkSettings("output.mp4");
 var mp4Output = new MP4OutputBlock(mp4SinkSettings, h264, aac);
 ```
 
+Une application complète qui affiche une webcam et l'enregistre en MP4 avec ce bloc : [Aperçu webcam et enregistrement MP4](../../mediablocks/GettingStarted/camera-to-mp4.md).
+
 ### Découpe de fichier
 
 La classe [MP4SplitSinkSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.MP4SplitSinkSettings.html) offre des capacités de découpe automatique de fichier, vous permettant de diviser la sortie MP4 en plusieurs fichiers selon la taille, la durée ou le timecode. Cette classe peut être utilisée à la fois avec `MP4OutputBlock` (qui inclut l'encodage) et `MP4SinkBlock` (multiplexage uniquement). Cela est particulièrement utile pour :

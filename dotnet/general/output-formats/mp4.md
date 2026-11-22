@@ -155,6 +155,8 @@ var mp4SinkSettings = new MP4SinkSettings("output.mp4");
 var mp4Output = new MP4OutputBlock(mp4SinkSettings, h264, aac);
 ```
 
+A complete app that previews a webcam and records it to MP4 with this block: [Webcam Preview and MP4 Recording](../../mediablocks/GettingStarted/camera-to-mp4.md).
+
 ### File Splitting
 
 The [MP4SplitSinkSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.MP4SplitSinkSettings.html) class provides automatic file splitting capabilities, allowing you to split MP4 output into multiple files based on size, duration, or timecode. This class can be used with both `MP4OutputBlock` (which includes encoding) and `MP4SinkBlock` (muxing only). This is particularly useful for:

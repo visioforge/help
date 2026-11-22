@@ -447,6 +447,8 @@ pipeline.Connect(videoEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPa
 await pipeline.StartAsync();
 ```
 
+Pour enregistrer une caméra pendant son affichage à l'écran, la page [Aperçu webcam et enregistrement MP4](../GettingStarted/camera-to-mp4.md) divise la vidéo avec un `TeeBlock` et l'encode avec `MP4OutputBlock`.
+
 #### Plateformes
 
 Windows, macOS, Linux, iOS, Android.
@@ -1787,6 +1789,8 @@ Utilisez `WebRTCSinkSettings` pour configurer les serveurs et le débit :
 | --- | --- | --- | --- |
 | `SignallingServerHost` | `string` | `127.0.0.1` | Adresse d'écoute du serveur de signalisation ; la valeur par défaut n'accepte que les spectateurs de cette machine, `0.0.0.0` accepte ceux d'autres machines |
 | `SignallingServerPort` | `int` | `8443` | Port du serveur de signalisation |
+| `SignallingServerCertificate` | `string` | `null` | Fichier PEM du certificat (avec sa chaîne) ; avec `SignallingServerKey`, le serveur de signalisation parle `wss://`, ce dont a besoin une page de visionnage sur un site `https://` |
+| `SignallingServerKey` | `string` | `null` | Fichier PEM de la clé privée de ce certificat, non chiffrée |
 | `WebServerDirectory` | `string` | `null` | Dossier de la page de visionnage servie en HTTP ; `null` ne lance aucun serveur web |
 | `WebServerAddress` | `string` | `http://127.0.0.1:8080/` | Adresse d'écoute du serveur web |
 | `StunServer` | `string` | `null` | Serveur STUN (`stun://hostname:port`) ; `null` conserve `stun://stun.l.google.com:19302` |
@@ -1797,7 +1801,7 @@ Utilisez `WebRTCSinkSettings` pour configurer les serveurs et le débit :
 
 Les événements `ConsumerAdded` et `ConsumerRemoved` signalent chaque spectateur qui se connecte et se déconnecte, avec son identifiant de pair de signalisation. Ils sont déclenchés sur un thread GStreamer. `ConsumerRemoved` n'est pas déclenché pour les spectateurs encore connectés à l'arrêt du pipeline : leurs sessions se terminent avec lui.
 
-Le serveur web n'accepte que des adresses `http://`. `Build` échoue, avec un message `OnError`, si `SignallingServerHost` est vide, si `SignallingServerPort` est hors de la plage 1–65535, si `StartBitrate` est inférieur à 1000 ou dépasse `MaxBitrate`, si une entrée de `TurnServers` est vide, si `WebServerAddress` n'est pas une adresse `http://` avec un port dans la plage 1–65535 ou si son port est déjà utilisé.
+Le serveur web n'accepte que des adresses `http://`. `Build` échoue, avec un message `OnError`, si `SignallingServerHost` est vide, si `SignallingServerPort` est hors de la plage 1–65535, si `StartBitrate` est inférieur à 1000 ou dépasse `MaxBitrate`, si une entrée de `TurnServers` est vide, si un seul de `SignallingServerCertificate` et `SignallingServerKey` est défini, si l'un des fichiers est illisible, si la clé n'est pas celle du certificat (vérifié sous .NET 5 et versions ultérieures), si un certificat est défini avec `WebServerDirectory`, si `WebServerAddress` n'est pas une adresse `http://` avec un port dans la plage 1–65535 ou si son port est déjà utilisé.
 
 #### La page de visionnage
 

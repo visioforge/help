@@ -99,6 +99,7 @@ For applications requiring advanced image processing and computer vision capabil
 
 - [VisioForge.CrossPlatform.OpenCV.Windows.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Windows.x86) - 32-bit OpenCV support
 - [VisioForge.CrossPlatform.OpenCV.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Windows.x64) - 64-bit OpenCV support
+- [VisioForge.CrossPlatform.OpenCV.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Windows.arm64) - ARM64 OpenCV support
 
 The OpenCV integration provides access to Media Blocks in the `VisioForge.Core.MediaBlocks.OpenCV` namespace, including:
 

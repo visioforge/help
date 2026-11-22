@@ -204,7 +204,7 @@ Voici comment l'implémenter :
     
     L'API WASAPI2 fournit la fonctionnalité loopback la plus fiable sur les systèmes Windows, avec une latence plus faible et de meilleures performances par rapport aux autres options.
     
-    WASAPI2 liste aussi chaque périphérique de sortie parmi les sources audio, avec `AudioCaptureDeviceInfo.IsLoopback` activé. Une telle entrée de `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)`, transformée en source avec `CreateSourceSettingsVC()`, enregistre ce que joue cette sortie, comme `LoopbackAudioCaptureDeviceSourceSettings`.
+    WASAPI2 liste aussi chaque périphérique de sortie parmi les sources audio, avec `AudioCaptureDeviceInfo.IsLoopback` activé. Une telle entrée de `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)`, transformée en source avec `CreateSourceSettingsVC()`, enregistre ce que joue cette sortie, comme `LoopbackAudioCaptureDeviceSourceSettings`. Sous Linux, `IsLoopback` est aussi activé sur les sources moniteur des sorties PulseAudio (et de PipeWire via son serveur PulseAudio), qui enregistrent ce que joue le système.
     
 
 === "VideoCaptureCore"

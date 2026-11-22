@@ -100,6 +100,7 @@ async Task<MediaBlocksPipeline> StartCameraAsync(IVideoView videoView)
 - Aucune caméra connectée ? Omettez la ligne `device` et utilisez la mire : `var source = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());` à la place de `SystemVideoSourceBlock`. Les lignes de connexion et de démarrage sont identiques.
 - Conservez le pipeline renvoyé dans un champ et arrêtez-le à la fermeture de la fenêtre : `await pipeline.StopAsync(); pipeline.Dispose();`.
 - Sélection du périphérique et du format, captures et particularités par plateforme : [Tutoriel d'application de visualisation de caméra](camera.md).
+- Aperçu de la caméra et enregistrement avec le micro en MP4, sous forme d'application WPF complète : [Aperçu webcam et enregistrement MP4](camera-to-mp4.md).
 
 ## Concepts principaux et architecture
 
@@ -230,6 +231,7 @@ pipeline.OnStop += (sender, args) =>
 - [Implémentation complète d'un pipeline](pipeline.md)
 - [Guide de développement d'un lecteur multimédia](player.md)
 - [Tutoriel d'application de visualisation de caméra](camera.md)
+- [Aperçu webcam et enregistrement MP4](camera-to-mp4.md)
 - [Dépôt GitHub avec des exemples de code](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)
 
 Pour chaque propriété et valeur par défaut d'un bloc, consultez la [référence d'API](https://api.visioforge.org/dotnet/api/index.html).

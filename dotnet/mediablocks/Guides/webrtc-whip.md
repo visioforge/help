@@ -268,7 +268,8 @@ The page speaks the signalling protocol of the GStreamer `webrtcsink` element: J
         function send(msg) { ws.send(JSON.stringify(msg)); }
 
         function connect() {
-            ws = new WebSocket(`ws://${location.hostname}:${port}`);
+            // An https:// page needs wss://: set SignallingServerCertificate and SignallingServerKey.
+            ws = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.hostname}:${port}`);
             ws.onopen = () => send({ type: 'setPeerStatus', roles: ['listener'], meta: null });
             ws.onclose = () => { reset(); status.textContent = 'Disconnected, retrying...'; setTimeout(connect, 2000); };
             ws.onmessage = e => onMessage(e.data).catch(err => fail('Error: ' + err));
@@ -395,7 +396,23 @@ The stream takes the window's size when the capture starts. A minimized window g
 
 ### Serving the page from your own web server
 
-The block's web server is optional. With `WebServerDirectory` left `null`, only the signalling server runs; put `index.html` in your own site (ASP.NET Core, IIS, nginx) and pass the signalling port in the query string. The page connects to `ws://<the page's host>:<port>`, so the signalling server must be reachable on the same host name as the page.
+The block's web server is optional. With `WebServerDirectory` left `null`, only the signalling server runs; put `index.html` in your own site (ASP.NET Core, IIS, nginx) and pass the signalling port in the query string. The page connects to `ws://<the page's host>:<port>`, or `wss://` when the page itself is on `https://`, so the signalling server must be reachable on the same host name as the page.
+
+### A viewer page on an HTTPS site
+
+A browser blocks a `ws://` connection from an `https://` page. Give the signalling server your site's certificate and private key as PEM files and it speaks `wss://`:
+
+```csharp
+var webrtcSink = new WebRTCSinkBlock(new WebRTCSinkSettings
+{
+    SignallingServerHost = "0.0.0.0",
+    SignallingServerPort = 8443,
+    SignallingServerCertificate = @"C:\certs\fullchain.pem",
+    SignallingServerKey = @"C:\certs\privkey.pem"
+});
+```
+
+The certificate must be valid for the host name in the page's address, and the key must not be encrypted. `Build` fails, with an `OnError` message, when only one of the two is set, a file cannot be read, the key is not the certificate's (checked on .NET 5 and later), or `WebServerDirectory` is set as well. The block's own web server serves `http://` only, so put an `https://` page on your own web server (IIS, nginx, ASP.NET Core) and leave `WebServerDirectory` `null`.
 
 ### Viewers on other computers
 
@@ -403,7 +420,7 @@ The block's web server is optional. With `WebServerDirectory` left `null`, only 
 2. Allow the web port and the signalling port (8090 and 8443 here) through Windows Defender Firewall, and the application itself for the WebRTC media, which uses UDP ports chosen at run time.
 3. Open `http://<this computer's address>:8090/?signalling=8443` on the other computer.
 
-Receiving WebRTC needs no HTTPS, so plain `http://` works on a local network. `WebRTCSinkSettings` has no authentication setting: anyone who can reach the two ports can watch. Keep `127.0.0.1` when the stream should not leave the computer, and use WHIP with a media server that checks tokens when it must reach the internet.
+Receiving WebRTC needs no HTTPS, so plain `http://` works on a local network: we opened the demo's page by the computer's network address, which the browser treats as not secure, and the camera played. `WebRTCSinkSettings` has no authentication setting: anyone who can reach the two ports can watch. Keep `127.0.0.1` when the stream should not leave the computer, and use WHIP with a media server that checks tokens when it must reach the internet.
 
 ## Part 2: Publish to a Media Server with WHIPSinkBlock
 
@@ -556,6 +573,10 @@ pipeline.Connect(h264.Output, whip.CreateNewInput(MediaBlockPadMediaType.Video))
 ### Codecs
 
 `WebRTCSinkBlock` sends VP8 video and Opus audio, which every current browser plays. It takes raw video and audio, or VP8 and Opus already encoded; it does not take H.264. `WHIPSinkBlock` takes H.264 and Opus only.
+
+### Latency
+
+In our test on one Windows computer, a change in a 320×240 picture at 30 frames per second reached a viewer's decoded frame 55 to 60 ms after it left the source (median 58 ms), before the viewer's playout delay. With a window's capture and the browser's playout and display added, the screenshot at the start of this guide shows about 0.15 seconds.
 
 ### CPU and resolution
 

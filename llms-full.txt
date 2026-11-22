@@ -2,9 +2,9 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-22 16:32:05 UTC (4c32b90ebf7)
+**Generated:** 2026-11-22 19:46:14 UTC (2afe6e8f796)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
-**Content Sources:** 465 help documentation pages + 74 website pages
+**Content Sources:** 466 help documentation pages + 74 website pages
 
 ---
 
@@ -12433,6 +12433,7 @@ For applications requiring advanced image processing and computer vision capabil
 
 - [VisioForge.CrossPlatform.OpenCV.Windows.x86](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Windows.x86) - 32-bit OpenCV support
 - [VisioForge.CrossPlatform.OpenCV.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Windows.x64) - 64-bit OpenCV support
+- [VisioForge.CrossPlatform.OpenCV.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.OpenCV.Windows.arm64) - ARM64 OpenCV support
 
 The OpenCV integration provides access to Media Blocks in the `VisioForge.Core.MediaBlocks.OpenCV` namespace, including:
 
@@ -35122,6 +35123,8 @@ var mp4SinkSettings = new MP4SinkSettings("output.mp4");
 var mp4Output = new MP4OutputBlock(mp4SinkSettings, h264, aac);
 ```
 
+A complete app that previews a webcam and records it to MP4 with this block: [Webcam Preview and MP4 Recording](../../../mediablocks/GettingStarted/camera-to-mp4/).
+
 ### File Splitting
 
 The [MP4SplitSinkSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Sinks.MP4SplitSinkSettings.html) class provides automatic file splitting capabilities, allowing you to split MP4 output into multiple files based on size, duration, or timecode. This class can be used with both `MP4OutputBlock` (which includes encoding) and `MP4SinkBlock` (muxing only). This is particularly useful for:
@@ -46649,7 +46652,7 @@ VideoCapture1.Audio_Play = false;
 
 The WASAPI2 API provides the most reliable loopback functionality on Windows systems, with lower latency and better performance compared to other options.
 
-WASAPI2 also lists every output device among the audio sources, with `AudioCaptureDeviceInfo.IsLoopback` set. Such an entry from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)` turned into a source with `CreateSourceSettingsVC()` records what that output plays, the same as `LoopbackAudioCaptureDeviceSourceSettings`.
+WASAPI2 also lists every output device among the audio sources, with `AudioCaptureDeviceInfo.IsLoopback` set. Such an entry from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)` turned into a source with `CreateSourceSettingsVC()` records what that output plays, the same as `LoopbackAudioCaptureDeviceSourceSettings`. On Linux, `IsLoopback` is also set on the monitor sources of PulseAudio outputs (and of PipeWire through its PulseAudio server), which record what the system plays.
 
 In VideoCaptureCore, loopback functionality is simplified with a dedicated virtual device:
 
@@ -77617,7 +77620,274 @@ public class CameraViewerExample
 
 With Media Blocks SDK .NET, building powerful camera applications becomes straightforward. The component-based architecture provides flexibility and performance across platforms while abstracting the complexities of camera device integration.
 
+To preview the camera and record it to an MP4 file at the same time, see [Webcam Preview and MP4 Recording](../camera-to-mp4/): it adds a tee, the microphone and an MP4 output to the pipeline above.
+
 For complete source code examples, please visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo).
+
+---END OF PAGE---
+
+
+## Webcam Preview and MP4 Recording in C# with Media Blocks
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/GettingStarted/camera-to-mp4/
+**Description:** Show a webcam in a WPF window and record it with the microphone to an MP4 file in C#, in one Media Blocks pipeline with a tee, H.264 and AAC.
+**Tags:** Media Blocks SDK, .NET, MediaBlocksPipeline, Windows, macOS, Linux, Android, iOS, WPF, Capture, Webcam, MP4, H.264, AAC, C#, NuGet
+**API:** MediaBlocksPipeline, SystemVideoSourceBlock, SystemAudioSourceBlock, TeeBlock, VideoRendererBlock, MP4OutputBlock
+
+# Webcam Preview and MP4 Recording with Media Blocks SDK
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+## Overview
+
+This page builds the most common first Media Blocks app from start to finish: a WPF window that shows a webcam and records it, with the microphone, to an MP4 file. One pipeline does both:
+
+- `SystemVideoSourceBlock` captures the camera, in Full HD or HD when the camera offers one of them;
+- `TeeBlock` splits the video in two: one copy goes to the screen, the other to the file;
+- `VideoRendererBlock` draws the live picture in a `VideoView`;
+- `SystemAudioSourceBlock` captures the microphone;
+- `MP4OutputBlock` encodes H.264 video and AAC audio and writes the MP4 file;
+- `StartAsync` starts the preview and the recording together, and `StopAsync` finishes the file.
+
+The same app with a ready-made capture engine instead of a pipeline is [Save Webcam Video in C#](../../../videocapture/guides/save-webcam-video/), in Video Capture SDK .NET.
+
+```
+graph LR;
+    SystemVideoSourceBlock-->TeeBlock;
+    TeeBlock-->VideoRendererBlock;
+    TeeBlock-->MP4OutputBlock;
+    SystemAudioSourceBlock-->MP4OutputBlock;
+```
+
+## Required Packages
+
+- [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/) — the SDK; the WPF `VideoView` ships in it
+- [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — the GStreamer runtime the pipeline runs on, with the camera sources and the H.264 encoders
+- [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — the FFmpeg AAC encoder; without it the AAC encoder of Media Foundation is used
+- [VisioForge.CrossPlatform.Core.Windows.Intel.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Intel.x64/) — optional: the Intel Quick Sync H.264 encoder; without it a PC whose only GPU is Intel encodes with OpenH264 on the CPU
+
+```
+dotnet add package VisioForge.DotNet.MediaBlocks
+dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
+dotnet add package VisioForge.CrossPlatform.Libav.Windows.x64
+```
+
+The runtime packages are x64, so the project file sets `PlatformTarget`; a 32-bit app takes the `.x86` packages instead. Keep the runtime packages at the release of `VisioForge.DotNet.MediaBlocks` or just before it, as the [Getting Started guide](../) explains.
+
+```
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <!-- the PackageReference items that dotnet add package wrote -->
+</Project>
+```
+
+## The Window
+
+`MainWindow.xaml` has a `VideoView` for the picture and the **Start** and **Stop** buttons, both disabled until they can be used. The window's `Loaded` and `Closing` events are wired to the handlers in the code below.
+
+```
+<Window x:Class="CameraToMp4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wpf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"
+        Title="Camera to MP4" Width="800" Height="520"
+        Loaded="Window_Loaded" Closing="Window_Closing">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="8">
+            <Button x:Name="btStart" Content="Start" Width="100" IsEnabled="False" Click="btStart_Click" />
+            <Button x:Name="btStop" Content="Stop" Width="100" Margin="8,0,0,0" IsEnabled="False" Click="btStop_Click" />
+        </StackPanel>
+        <wpf:VideoView x:Name="VideoView1" Background="Black" />
+    </DockPanel>
+</Window>
+```
+
+## The Code
+
+`MainWindow.xaml.cs`:
+
+```
+using System.ComponentModel;
+using System.IO;
+using System.Windows;
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.Special;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types.X.Sources;
+
+namespace CameraToMp4;
+
+public partial class MainWindow : Window
+{
+    private MediaBlocksPipeline? _pipeline;
+
+    private string _outputFile = string.Empty;
+
+    private bool _failed;
+
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        await VisioForgeX.InitSDKAsync();
+        btStart.IsEnabled = true;
+    }
+
+    private async void btStart_Click(object sender, RoutedEventArgs e)
+    {
+        btStart.IsEnabled = false;
+
+        var camera = (await DeviceEnumerator.Shared.VideoSourcesAsync()).FirstOrDefault();
+        // Skip the sources that record what an output plays (WASAPI2 loopbacks, PulseAudio monitors)
+        var microphone = (await DeviceEnumerator.Shared.AudioSourcesAsync()).FirstOrDefault(d => !d.IsLoopback);
+        if (camera == null)
+        {
+            Title = "No camera found";
+            btStart.IsEnabled = true;
+            return;
+        }
+
+        _failed = false;
+        _pipeline = new MediaBlocksPipeline();
+        _pipeline.OnError += (_, args) => Dispatcher.BeginInvoke(() =>
+        {
+            _failed = true;
+            Title = args.Message;
+        });
+
+        // The camera, in Full HD or HD when it offers one of them
+        var videoSource = new SystemVideoSourceBlock(new VideoCaptureDeviceSourceSettings(camera));
+
+        // The tee sends one copy of the video to the screen and one to the file
+        var videoTee = new TeeBlock(2, MediaBlockPadMediaType.Video);
+        var videoRenderer = new VideoRendererBlock(_pipeline, VideoView1) { IsSync = false };
+
+        // H.264 on the GPU encoder when there is one, OpenH264 otherwise; AAC audio
+        _outputFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), $"camera_{DateTime.Now:yyyyMMdd_HHmmss}.mp4");
+        var mp4Output = new MP4OutputBlock(_outputFile);
+
+        _pipeline.Connect(videoSource.Output, videoTee.Input);
+        _pipeline.Connect(videoTee.Outputs[0], videoRenderer.Input);
+        _pipeline.Connect(videoTee.Outputs[1], mp4Output.CreateNewInput(MediaBlockPadMediaType.Video));
+
+        // No microphone: the file is video-only
+        if (microphone != null)
+        {
+            var audioSource = new SystemAudioSourceBlock(microphone.CreateSourceSettings());
+            _pipeline.Connect(audioSource.Output, mp4Output.CreateNewInput(MediaBlockPadMediaType.Audio));
+        }
+
+        if (await _pipeline.StartAsync())
+        {
+            Title = "Recording...";
+            btStop.IsEnabled = true;
+        }
+        else
+        {
+            if (!_failed)
+            {
+                Title = "The pipeline did not start";
+            }
+
+            await _pipeline.DisposeAsync();
+            _pipeline = null;
+            btStart.IsEnabled = true;
+        }
+    }
+
+    private async void btStop_Click(object sender, RoutedEventArgs e)
+    {
+        btStop.IsEnabled = false;
+        await StopAsync();
+        btStart.IsEnabled = true;
+    }
+
+    private async Task StopAsync()
+    {
+        if (_pipeline == null)
+        {
+            return;
+        }
+
+        await _pipeline.StopAsync(); // finishes the MP4 file
+        await _pipeline.DisposeAsync();
+        _pipeline = null;
+        if (!_failed) // after an error the title keeps the error
+        {
+            Title = "Saved: " + _outputFile;
+        }
+    }
+
+    private async void Window_Closing(object? sender, CancelEventArgs e)
+    {
+        if (!btStart.IsEnabled && !btStop.IsEnabled)
+        {
+            e.Cancel = true; // loading, starting or stopping: wait for it
+            return;
+        }
+
+        if (btStop.IsEnabled)
+        {
+            e.Cancel = true; // recording: finish the MP4 first
+            btStop.IsEnabled = false;
+            await StopAsync();
+            btStart.IsEnabled = true;
+            _ = Dispatcher.BeginInvoke(Close);
+            return;
+        }
+
+        VisioForgeX.DestroySDK();
+    }
+}
+```
+
+## How It Works
+
+1. **SDK initialization** - `VisioForgeX.InitSDKAsync` runs once, when the window loads; **Start** is enabled after it returns. `VisioForgeX.DestroySDK` releases the SDK when the window closes
+2. **Devices** - the app takes the first camera and the first microphone that `DeviceEnumerator` lists, skipping the `IsLoopback` entries that record what an output device plays (`IsLoopback` came in the first release after 2026.11.21; with 2026.11.21 or earlier, replace `!d.IsLoopback` with `d.API != AudioCaptureDeviceAPI.WASAPI2`, which has no effect outside Windows; those releases do not mark the Linux monitor sources, so pick the microphone by name there). To let the user choose, fill two combo boxes from the same lists and match by `Name` and `DisplayName`; [Device Enumeration](../device-enum/) shows the lists, and the [Camera tutorial](../camera/) shows how to pick a resolution and a frame rate
+3. **The tee** - a source output connects to one input only, so `TeeBlock` copies the video to two outputs: `Outputs[0]` goes to the renderer, `Outputs[1]` to the MP4 encoder. `IsSync = false` draws each frame when it arrives, so the preview of a live camera does not wait for the pipeline clock
+4. **The MP4 file** - On Windows `MP4OutputBlock(filename)` picks H.264 on NVIDIA NVENC, AMD AMF or Intel Quick Sync (Quick Sync needs the Intel package above), and OpenH264 on the CPU when none of them is present; on Linux, NVENC or Quick Sync when the system GStreamer has them, otherwise OpenH264. On macOS, Mac Catalyst and iOS it uses Apple VideoToolbox, and on Android the device's MediaCodec encoder; when that encoder is missing, OpenH264. Audio is AAC. `CreateNewInput` adds one video and one audio input to it. The [MP4 output page](../../../general/output-formats/mp4/) shows how to choose the encoders and their bitrates
+5. **Start and stop** - `StartAsync` starts the preview and the recording together. `StopAsync` finishes the MP4 file; a file that was not stopped is not playable. Each recording gets a new pipeline and a new file name, with the date and time, in the Videos folder
+6. **Closing** - closing the window during a recording cancels the close, awaits `StopAsync` and closes again, so the file is always finished
+
+To hear the microphone while recording, put a second `TeeBlock` with `MediaBlockPadMediaType.Audio` after `SystemAudioSourceBlock` and connect its first output to an `AudioRendererBlock` — use headphones, or the speakers feed back into the microphone. More blocks that take a tee output — network streams, a second file — are on the [Sinks page](../../Sinks/); the [Tee block](../../Special/#tee) itself has settings for its queues.
+
+## Platform Notes
+
+The pipeline, the blocks and the calls above are the same on every platform; what changes is the UI control and the runtime package.
+
+- **Windows** - the app above. WinForms uses `VisioForge.Core.UI.WinForms.VideoView` from the same package. Camera and microphone access for desktop apps is set under **Settings > Privacy & security**; when it is off, the devices cannot be opened
+- **macOS and Mac Catalyst** - the `VisioForge.CrossPlatform.Core.macOS` runtime and the `VideoView` of the Avalonia or MAUI UI package. The app bundle needs `NSCameraUsageDescription` and `NSMicrophoneUsageDescription` in its `Info.plist`, or macOS ends the app when the camera opens. See [macOS deployment](../../../deployment-x/macOS/)
+- **iOS** - the `VisioForge.CrossPlatform.Core.iOS` runtime, the same two `Info.plist` keys, and the MAUI `VideoView`. See [iOS deployment](../../../deployment-x/iOS/)
+- **Android** - the `VisioForge.CrossPlatform.Core.Android` runtime, and the `CAMERA` and `RECORD_AUDIO` permissions, declared in the manifest and granted at run time before `StartAsync`. Write the file to the app's own storage, not to the Videos folder. See [Android deployment](../../../deployment-x/Android/)
+- **Linux** - the `VisioForge.CrossPlatform.Core.Linux.x64` runtime and GStreamer 1.20+ from the distribution, with an Avalonia `VideoView`. See [Ubuntu deployment](../../../deployment-x/Ubuntu/)
+
+## Troubleshooting
+
+- **The title shows an error at Start** - the camera is in use by another app, or camera access is turned off in the system privacy settings
+- **The wrong camera or microphone is used** - the first device in the list is not the one you want; a capture card or a virtual camera can come first. Choose the device by name, as point 2 above says
+- **The file has no sound** - no microphone was found, or the system's microphone access is off for desktop apps
+- **The file does not play** - the app was closed by the debugger or ended before `StopAsync` finished the file
+
+## Related Pages
+
+- [Getting Started guide](../) - installation, packages for every platform and the pipeline basics
+- [Camera tutorial](../camera/) - device and format selection, snapshots
+- [MP4 output](../../../general/output-formats/mp4/) - encoder choice, bitrates and file splitting
+- [Sinks](../../Sinks/) - every output block, including the [MP4 sink](../../Sinks/#mp4) for already-encoded streams
+- [Simple Capture Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo) - the full WPF demo on GitHub, with device lists, MP4, MPEG-TS and WebM outputs and audio monitoring
 
 ---END OF PAGE---
 
@@ -78064,6 +78334,7 @@ async Task<MediaBlocksPipeline> StartCameraAsync(IVideoView videoView)
 - No camera attached? Drop the `device` line and use the test pattern: `var source = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());` in place of `SystemVideoSourceBlock`. The connection and start lines are the same.
 - Store the returned pipeline in a field and stop it when the window closes: `await pipeline.StopAsync(); pipeline.Dispose();`.
 - Device and format selection, snapshots and platform specifics: [Camera Viewer Application Tutorial](camera/).
+- Preview the camera and record it with the microphone to MP4, as one complete WPF app: [Webcam Preview and MP4 Recording](camera-to-mp4/).
 
 ## Core Concepts and Architecture
 
@@ -78194,6 +78465,7 @@ pipeline.OnStop += (sender, args) =>
 - [Complete Pipeline Implementation](pipeline/)
 - [Media Player Development Guide](player/)
 - [Camera Viewer Application Tutorial](camera/)
+- [Webcam Preview and MP4 Recording](camera-to-mp4/)
 - [GitHub repository with code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)
 
 For every block property and default, see the [API reference](https://api.visioforge.org/dotnet/api/index.html).
@@ -85997,7 +86269,8 @@ The page speaks the signalling protocol of the GStreamer `webrtcsink` element: J
         function send(msg) { ws.send(JSON.stringify(msg)); }
 
         function connect() {
-            ws = new WebSocket(`ws://${location.hostname}:${port}`);
+            // An https:// page needs wss://: set SignallingServerCertificate and SignallingServerKey.
+            ws = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.hostname}:${port}`);
             ws.onopen = () => send({ type: 'setPeerStatus', roles: ['listener'], meta: null });
             ws.onclose = () => { reset(); status.textContent = 'Disconnected, retrying...'; setTimeout(connect, 2000); };
             ws.onmessage = e => onMessage(e.data).catch(err => fail('Error: ' + err));
@@ -86124,7 +86397,23 @@ The stream takes the window's size when the capture starts. A minimized window g
 
 ### Serving the page from your own web server
 
-The block's web server is optional. With `WebServerDirectory` left `null`, only the signalling server runs; put `index.html` in your own site (ASP.NET Core, IIS, nginx) and pass the signalling port in the query string. The page connects to `ws://<the page's host>:<port>`, so the signalling server must be reachable on the same host name as the page.
+The block's web server is optional. With `WebServerDirectory` left `null`, only the signalling server runs; put `index.html` in your own site (ASP.NET Core, IIS, nginx) and pass the signalling port in the query string. The page connects to `ws://<the page's host>:<port>`, or `wss://` when the page itself is on `https://`, so the signalling server must be reachable on the same host name as the page.
+
+### A viewer page on an HTTPS site
+
+A browser blocks a `ws://` connection from an `https://` page. Give the signalling server your site's certificate and private key as PEM files and it speaks `wss://`:
+
+```
+var webrtcSink = new WebRTCSinkBlock(new WebRTCSinkSettings
+{
+    SignallingServerHost = "0.0.0.0",
+    SignallingServerPort = 8443,
+    SignallingServerCertificate = @"C:\certs\fullchain.pem",
+    SignallingServerKey = @"C:\certs\privkey.pem"
+});
+```
+
+The certificate must be valid for the host name in the page's address, and the key must not be encrypted. `Build` fails, with an `OnError` message, when only one of the two is set, a file cannot be read, the key is not the certificate's (checked on .NET 5 and later), or `WebServerDirectory` is set as well. The block's own web server serves `http://` only, so put an `https://` page on your own web server (IIS, nginx, ASP.NET Core) and leave `WebServerDirectory` `null`.
 
 ### Viewers on other computers
 
@@ -86132,7 +86421,7 @@ The block's web server is optional. With `WebServerDirectory` left `null`, only 
 2. Allow the web port and the signalling port (8090 and 8443 here) through Windows Defender Firewall, and the application itself for the WebRTC media, which uses UDP ports chosen at run time.
 3. Open `http://<this computer's address>:8090/?signalling=8443` on the other computer.
 
-Receiving WebRTC needs no HTTPS, so plain `http://` works on a local network. `WebRTCSinkSettings` has no authentication setting: anyone who can reach the two ports can watch. Keep `127.0.0.1` when the stream should not leave the computer, and use WHIP with a media server that checks tokens when it must reach the internet.
+Receiving WebRTC needs no HTTPS, so plain `http://` works on a local network: we opened the demo's page by the computer's network address, which the browser treats as not secure, and the camera played. `WebRTCSinkSettings` has no authentication setting: anyone who can reach the two ports can watch. Keep `127.0.0.1` when the stream should not leave the computer, and use WHIP with a media server that checks tokens when it must reach the internet.
 
 ## Part 2: Publish to a Media Server with WHIPSinkBlock
 
@@ -86282,6 +86571,10 @@ pipeline.Connect(h264.Output, whip.CreateNewInput(MediaBlockPadMediaType.Video))
 ### Codecs
 
 `WebRTCSinkBlock` sends VP8 video and Opus audio, which every current browser plays. It takes raw video and audio, or VP8 and Opus already encoded; it does not take H.264. `WHIPSinkBlock` takes H.264 and Opus only.
+
+### Latency
+
+In our test on one Windows computer, a change in a 320×240 picture at 30 frames per second reached a viewer's decoded frame 55 to 60 ms after it left the source (median 58 ms), before the viewer's playout delay. With a window's capture and the browser's playout and display added, the screenshot at the start of this guide shows about 0.15 seconds.
 
 ### CPU and resolution
 
@@ -87280,7 +87573,7 @@ Linux (Requires Nvidia DeepStream SDK, Jetson or compatible GPU).
 
 OpenCV (Open Source Computer Vision Library) blocks provide powerful video processing capabilities within the VisioForge Media Blocks SDK .NET. These blocks enable a wide range of computer vision tasks, from basic image manipulation to complex object detection and tracking.
 
-To use OpenCV blocks, add the redistributable NuGet package for your platform: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 and later, with the distribution's GStreamer 1.22 or later), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS and Mac Catalyst), `VisioForge.CrossPlatform.OpenCV.iOS` (iOS devices and arm64 simulators) or `VisioForge.CrossPlatform.OpenCV.Android` (`arm64-v8a` and `x86_64`; the 32-bit ABIs are not covered). These are the platforms the OpenCV GStreamer plugin currently ships for; on any other platform each block's `IsAvailable()` returns `false`.
+To use OpenCV blocks, add the redistributable NuGet package for your platform: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Windows.arm64` (Windows on Arm), `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 and later, with the distribution's GStreamer 1.22 or later), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS and Mac Catalyst), `VisioForge.CrossPlatform.OpenCV.iOS` (iOS devices and arm64 simulators) or `VisioForge.CrossPlatform.OpenCV.Android` (`arm64-v8a` and `x86_64`; the 32-bit ABIs are not covered). These are the platforms the OpenCV GStreamer plugin currently ships for; on any other platform each block's `IsAvailable()` returns `false`.
 
 Most OpenCV blocks typically require a `videoconvert` element before them to ensure the input video stream is in a compatible format. The SDK handles this internally when you initialize the block.
 
@@ -91905,6 +92198,8 @@ pipeline.Connect(videoEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPa
 await pipeline.StartAsync();
 ```
 
+To record a camera while it is shown on screen, the [Webcam Preview and MP4 Recording](../GettingStarted/camera-to-mp4/) page splits the video with a `TeeBlock` and encodes it with `MP4OutputBlock`.
+
 #### Platforms
 
 Windows, macOS, Linux, iOS, Android.
@@ -93241,6 +93536,8 @@ Use `WebRTCSinkSettings` to configure the servers and the bitrate:
 | --- | --- | --- | --- |
 | `SignallingServerHost` | `string` | `127.0.0.1` | Address the signalling server listens on; the default accepts viewers on this machine only, `0.0.0.0` accepts viewers from other machines |
 | `SignallingServerPort` | `int` | `8443` | Port of the signalling server |
+| `SignallingServerCertificate` | `string` | `null` | PEM certificate file (with its chain); set with `SignallingServerKey`, the signalling server speaks `wss://`, which a viewer page on an `https://` site needs |
+| `SignallingServerKey` | `string` | `null` | PEM private key file of that certificate, not encrypted |
 | `WebServerDirectory` | `string` | `null` | Folder with the viewer page served over HTTP; `null` runs no web server |
 | `WebServerAddress` | `string` | `http://127.0.0.1:8080/` | Address the web server listens on |
 | `StunServer` | `string` | `null` | STUN server (`stun://hostname:port`); `null` keeps `stun://stun.l.google.com:19302` |
@@ -93251,7 +93548,7 @@ Use `WebRTCSinkSettings` to configure the servers and the bitrate:
 
 The `ConsumerAdded` and `ConsumerRemoved` events report each viewer that connects and leaves, with its signalling peer ID. They are raised on a GStreamer thread. `ConsumerRemoved` is not raised for viewers still connected when the pipeline stops — their sessions end with it.
 
-The web server takes `http://` addresses only. `Build` fails, with an `OnError` message, when `SignallingServerHost` is empty, `SignallingServerPort` is outside 1–65535, `StartBitrate` is below 1000 or above `MaxBitrate`, a `TurnServers` entry is empty, `WebServerAddress` is not an `http://` address with a port in 1–65535, or its port is already in use.
+The web server takes `http://` addresses only. `Build` fails, with an `OnError` message, when `SignallingServerHost` is empty, `SignallingServerPort` is outside 1–65535, `StartBitrate` is below 1000 or above `MaxBitrate`, a `TurnServers` entry is empty, only one of `SignallingServerCertificate` and `SignallingServerKey` is set, either file cannot be read, the key is not the certificate's (checked on .NET 5 and later), a certificate is set together with `WebServerDirectory`, `WebServerAddress` is not an `http://` address with a port in 1–65535, or its port is already in use.
 
 #### The viewer page
 
@@ -94160,7 +94457,7 @@ await pipeline.StartAsync();
 
 #### Capture audio from speakers (loopback)
 
-Currently, loopback audio capture is supported only on Windows. Use the `LoopbackAudioCaptureDeviceSourceSettings` class to create the source settings for loopback audio capture.
+`LoopbackAudioCaptureDeviceSourceSettings` is available only on Windows; on Linux, record the monitor source of an output instead (see the end of this section). On Windows, use the `LoopbackAudioCaptureDeviceSourceSettings` class to create the source settings for loopback audio capture.
 
 WASAPI2 is used as the default API for loopback audio capture. You can specify the API to use during device enumeration.
 
@@ -94169,7 +94466,7 @@ WASAPI2 is used as the default API for loopback audio capture. You can specify t
 var pipeline = new MediaBlocksPipeline();
 
 // create audio source block
-var deviceItem = (await DeviceEnumerator.Shared.AudioOutputsAsync(AudioOutputDeviceAPI.WASAPI2))[0];
+var deviceItem = (await DeviceEnumerator.Shared.AudioOutputsAsync(AudioOutputDeviceAPI.WASAPI2)).FirstOrDefault();
 if (deviceItem == null)
 {
     return;
@@ -94188,7 +94485,7 @@ pipeline.Connect(audioSource.Output, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
-WASAPI2 also lists every output device among the audio sources, with `AudioCaptureDeviceInfo.IsLoopback` set. Such an entry from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)` turned into settings with `CreateSourceSettings()` and passed to `SystemAudioSourceBlock` records what that output plays, the same as `LoopbackAudioCaptureDeviceSourceSettings`.
+WASAPI2 also lists every output device among the audio sources, with `AudioCaptureDeviceInfo.IsLoopback` set. Such an entry from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)` turned into settings with `CreateSourceSettings()` and passed to `SystemAudioSourceBlock` records what that output plays, the same as `LoopbackAudioCaptureDeviceSourceSettings`. On Linux, `IsLoopback` is also set on the monitor sources of PulseAudio outputs (and of PipeWire through its PulseAudio server), which record what the system plays: take one from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.Pulse)` with `d => d.IsLoopback` and pass the result of its `CreateSourceSettings()` to `SystemAudioSourceBlock`. `IsLoopback`, and recording from these WASAPI2 entries, came in the first release after 2026.11.21; with older releases, use `LoopbackAudioCaptureDeviceSourceSettings` on Windows and pick the Linux monitor by its name, which the sound server translates into the system language.
 
 #### Sample applications
 
@@ -154275,19 +154572,13 @@ Minimum requirements for development and deployment
 
 Everything you need to get started
 
-[
-
-### API Documentation
+### [API Documentation](/help/docs/dotnet/videocapture/)
 
 Complete API reference with detailed descriptions
 
-](/help/docs/dotnet/videocapture/)[
-
-### Sample Projects
+### [Sample Projects](https://github.com/visioforge/.Net-SDK-s-samples)
 
 Ready-to-run examples on GitHub
-
-](https://github.com/visioforge/.Net-SDK-s-samples)
 
 ## Build with AI coding agents
 
@@ -155060,19 +155351,13 @@ Free for Non-Commercial Use: A one-developer project that earns no revenue can u
 
 Complete documentation, API reference, and sample projects
 
-[
-
-### API Documentation
+### [API Documentation](https://www.visioforge.com/help/)
 
 Complete API reference with detailed descriptions
 
-](https://www.visioforge.com/help/)[
-
-### Sample Projects
+### [Sample Projects](https://github.com/visioforge/.Net-SDK-s-samples)
 
 Ready-to-run examples on GitHub
-
-](https://github.com/visioforge/.Net-SDK-s-samples)
 
 ## Build with AI coding agents
 
@@ -155773,19 +156058,13 @@ Free for Non-Commercial Use: A one-developer project that earns no revenue can u
 
 Everything you need to get started
 
-[
-
-### API Documentation
+### [API Documentation](https://www.visioforge.com/help/docs/dotnet/videoedit/)
 
 Complete API reference with examples
 
-](https://www.visioforge.com/help/docs/dotnet/videoedit/)[
-
-### Sample Projects
+### [Sample Projects](https://github.com/visioforge/.Net-SDK-s-samples)
 
 Ready-to-run examples on GitHub
-
-](https://github.com/visioforge/.Net-SDK-s-samples)
 
 ## Build with AI coding agents
 
@@ -156447,25 +156726,17 @@ Minimum requirements for development and deployment across platforms
 
 Everything you need to get started with Media Blocks SDK
 
-[
-
-### API Documentation
+### [API Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)
 
 Complete API reference with detailed descriptions
 
-](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[
-
-### Sample Projects
+### [Sample Projects](https://github.com/visioforge/.Net-SDK-s-samples)
 
 Ready-to-run examples on GitHub
 
-](https://github.com/visioforge/.Net-SDK-s-samples)[
-
-### Unity Integration
+### [Unity Integration](https://www.visioforge.com/help/docs/dotnet/general/unity/)
 
 Setup, samples, and per-platform build guides for Unity 6
-
-](https://www.visioforge.com/help/docs/dotnet/general/unity/)
 
 ## Build with AI coding agents
 
@@ -157024,19 +157295,13 @@ Windows requirements and dependencies
 
 Complete guides for FFmpeg integration
 
-[
-
-### API Documentation
+### [API Documentation](https://www.visioforge.com/help/docs/dotnet/videoedit-ffmpeg/)
 
 Complete API reference and guides
 
-](https://www.visioforge.com/help/docs/dotnet/videoedit-ffmpeg/)[
-
-### Code Samples
+### [Code Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 
 Example projects and implementations
-
-](https://github.com/visioforge/.Net-SDK-s-samples)
 
 ## Build with AI coding agents
 
@@ -157365,15 +157630,9 @@ Flexible licensing options for businesses and developers. Start with our free tr
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/00g149cV00y2b9SeVq)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/fZe28d8EKeoS5Py3e6)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=annual)
 
@@ -157392,15 +157651,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/9B6bJ2expgUvh0tgWUg7e3k)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/9B6bJ2expgUvh0tgWUg7e3k)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/9B69AU60Taw74dHcGEg7e3l)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B69AU60Taw74dHcGEg7e3l)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=annual3)
 
@@ -157853,25 +158106,17 @@ DirectX 10 or later
 
 Explore our other DirectShow and .NET SDKs for comprehensive video processing solutions.
 
-[
-
-### Video Capture SDK .NET
+### [Video Capture SDK .NET](/video-capture-sdk-net)
 
 Capture video from webcams, IP cameras, and screens with advanced processing features.
 
-](/video-capture-sdk-net)[
-
-### Video Edit SDK .NET
+### [Video Edit SDK .NET](/video-edit-sdk-net)
 
 Edit and process video files with transitions, effects, and encoding capabilities.
 
-](/video-edit-sdk-net)[
-
-### Media Player SDK .NET
+### [Media Player SDK .NET](/media-player-sdk-net)
 
 Play video and audio files with hardware acceleration and custom rendering.
-
-](/media-player-sdk-net)
 
 ## Distribution Rights
 
@@ -157915,15 +158160,9 @@ Annual license
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/8wM28d3kq5Smguc28M)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/28o7sx3kq6Wqfq85mj)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=annual)
 
@@ -157945,15 +158184,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/dRm9AUbldeMndOhcGEg7e3n)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/dRm9AUbldeMndOhcGEg7e3n)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/cNi9AUbld9s38tX5ecg7e3o)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi9AUbld9s38tX5ecg7e3o)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=annual3)
 
@@ -157985,19 +158218,13 @@ The source code license costs €4,000, paid once by one company, and includes t
 
 [Buy Source Code License](https://buy.stripe.com/8x2fZiexpcEfdOhgWUg7e3R)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
 
-[
-
-### Online Help
+### [Online Help](/help/)
 
 Complete documentation and integration guides
 
-](/help/)[
-
-### License Agreement
+### [License Agreement](/help/docs/eula/)
 
 View the End User License Agreement
-
-](/help/docs/eula/)
 
 ## Ready to Secure Your Video Content?
 
@@ -158304,15 +158531,9 @@ Annual license
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=annual)
 
@@ -158333,15 +158554,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/6oU5kEexp9s3fWpgWUg7e3q)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/6oU5kEexp9s3fWpgWUg7e3q)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/eVq14ogFx6fReSl8qog7e3r)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq14ogFx6fReSl8qog7e3r)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=annual3)
 
@@ -158381,15 +158596,9 @@ Per server core annual license
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/aEUaEJ3kq0y2em4bJE)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/aEUaEJ3kq0y2em4bJE)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/8wM6ot2gm6Wq5Pyg12)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM6ot2gm6Wq5Pyg12)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=runtime&period=annual)
 
@@ -158434,31 +158643,21 @@ Annual licenses (Developer and Workgroup) run for one year. Bought as a subscrip
 
 Download the trial version to test all features. Full documentation and sample code included.
 
-[
-
-### Windows / .NET
+### [Windows / .NET](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)
 
 Full .NET SDK installer with samples
 
-](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[
-
-### Cross-Platform / .NET
+### [Cross-Platform / .NET](https://www.nuget.org/packages/VisioForge.DotNet.Core)
 
 NuGet package for all platforms
 
-](https://www.nuget.org/packages/VisioForge.DotNet.Core)[
-
-### Windows / C++
+### [Windows / C++](https://files.visioforge.com/trials/visioforge_video_fingerprinting_sdk_cpp_setup.exe)
 
 C++ SDK for Windows development
 
-](https://files.visioforge.com/trials/visioforge_video_fingerprinting_sdk_cpp_setup.exe)[
-
-### Linux / C++
+### [Linux / C++](https://files.visioforge.com/trials/visioforge_video_fingerprinting_sdk_cpp_linux.zip)
 
 C++ SDK for Linux platforms
-
-](https://files.visioforge.com/trials/visioforge_video_fingerprinting_sdk_cpp_linux.zip)
 
 [Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Fingerprinting%20SDK)[Online Help](/help/)[License Agreement](/help/docs/eula/)
 
@@ -158466,25 +158665,17 @@ C++ SDK for Linux platforms
 
 Explore our other DirectShow and .NET SDKs for comprehensive video processing solutions.
 
-[
-
-### Video Capture SDK .NET
+### [Video Capture SDK .NET](/video-capture-sdk-net)
 
 Capture video from webcams, IP cameras, and screens with advanced processing features.
 
-](/video-capture-sdk-net)[
-
-### Video Edit SDK .NET
+### [Video Edit SDK .NET](/video-edit-sdk-net)
 
 Edit and process video files with transitions, effects, and encoding capabilities.
 
-](/video-edit-sdk-net)[
-
-### Media Player SDK .NET
+### [Media Player SDK .NET](/media-player-sdk-net)
 
 Play video and audio files with hardware acceleration and custom rendering.
-
-](/media-player-sdk-net)
 
 ## Ready to Identify and Track Video Content?
 
@@ -159054,25 +159245,17 @@ Ideal solution for various development scenarios
 
 Documentation for Delphi and ActiveX integration
 
-[
-
-### Online Help
+### [Online Help](/help/docs/delphi/videocapture/)
 
 Comprehensive documentation and API reference
 
-](/help/docs/delphi/videocapture/)[
-
-### Sample Projects
+### [Sample Projects](https://github.com/visioforge)
 
 Full source code examples on GitHub
 
-](https://github.com/visioforge)[
-
-### Changelog
+### [Changelog](/help/docs/delphi/videocapture/changelog/)
 
 Latest updates and version notes
-
-](/help/docs/delphi/videocapture/changelog/)
 
 ### Delphi and ActiveX documentation
 
@@ -159237,15 +159420,9 @@ Annual license - 1 year of updates and support
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=annual)
 
@@ -159268,15 +159445,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/eVqbJ274XbAbfWp9usg7f05)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/eVqbJ274XbAbfWp9usg7f05)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/9B66oI891cEf6lP9usg7f06)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B66oI891cEf6lP9usg7f06)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=annual3)
 
@@ -159349,19 +159520,13 @@ Includes:
 
 [Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[
-
-### Online Help
+### [Online Help](/help/)
 
 Complete documentation and integration guides
 
-](/help/)[
-
-### License Agreement
+### [License Agreement](/help/docs/eula/)
 
 View the End User License Agreement
-
-](/help/docs/eula/)
 
 ## Ready to Start Encoding?
 
@@ -159679,15 +159844,9 @@ Professional licensing for commercial applications with comprehensive codec supp
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=annual)
 
@@ -159708,15 +159867,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/8x2eVe2OH33FfWp6igg7e3Y)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/8x2eVe2OH33FfWp6igg7e3Y)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/00wdRa1KDaw75hL220g7e3Z)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00wdRa1KDaw75hL220g7e3Z)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=annual3)
 
@@ -160066,15 +160219,9 @@ Annual license for one named developer
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=annual)
 
@@ -160095,15 +160242,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/dRm4gA891gUvcKd5ecg7f00)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/dRm4gA891gUvcKd5ecg7f00)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/5kQ00kbld8nZcKd9usg7f01)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ00kbld8nZcKd9usg7f01)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=annual3)
 
@@ -160174,19 +160315,13 @@ Includes:
 
 [Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[
-
-### Online Help
+### [Online Help](/help/)
 
 Complete documentation and integration guides
 
-](/help/)[
-
-### License Agreement
+### [License Agreement](/help/docs/eula/)
 
 View the End User License Agreement
-
-](/help/docs/eula/)
 
 ## Frequently Asked Questions
 
@@ -160407,15 +160542,9 @@ Most Popular
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=annual)
 
@@ -160436,15 +160565,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[
+[Subscription — renews yearly](https://buy.stripe.com/cNi7sMbldbAbdOh6igg7e43)
 
-Subscription — renews yearly
-
-](https://buy.stripe.com/cNi7sMbldbAbdOh6igg7e43)[
-
-One-time payment — 1 year, no auto-renewal
-
-](https://buy.stripe.com/00w6oIah95bN39D7mkg7e44)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w6oIah95bN39D7mkg7e44)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=annual3)
 
@@ -161481,43 +161604,29 @@ Media Blocks SDK .NET has one edition, and the barcode detector is part of it. I
 
 ## Documentation and samples
 
-[
-
-### Barcode and QR code scanner guide
+### [Barcode and QR code scanner guide](/help/docs/dotnet/mediablocks/Guides/barcode-qr-reader-guide/)
 
 Step-by-step guide: camera, RTSP, file and screen sources, detection events, repeated codes, platform setup.
 
-](/help/docs/dotnet/mediablocks/Guides/barcode-qr-reader-guide/)[
-
-### Special blocks reference
+### [Special blocks reference](/help/docs/dotnet/mediablocks/Special/)
 
 BarcodeDetectorBlock and DataMatrixDecoderBlock with their events and sample code.
 
-](/help/docs/dotnet/mediablocks/Special/)[
-
-### Barcode Detection WPF demo
+### [Barcode Detection WPF demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Barcode%20Detection%20Demo)
 
 Media Blocks sample: pick a camera, preview it and list every barcode found.
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Barcode%20Detection%20Demo)[
-
-### DataMatrix Detection WPF demo
+### [DataMatrix Detection WPF demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/DataMatrix%20Detection%20Demo)
 
 Media Blocks sample that reads Data Matrix codes from a camera with DataMatrixDecoderBlock.
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/DataMatrix%20Detection%20Demo)[
-
-### Barcode reader for .NET MAUI
+### [Barcode reader for .NET MAUI](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/BarcodeReaderMB)
 
 Media Blocks sample for Android, iOS, Mac Catalyst and Windows, with the camera permission request.
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/BarcodeReaderMB)[
-
-### Deployment guide
+### [Deployment guide](/help/docs/dotnet/deployment-x/)
 
 Deployment overview for Windows, macOS, Linux, Android and iOS, with a link to the detailed guide for each platform.
-
-](/help/docs/dotnet/deployment-x/)
 
 ## Start scanning barcodes from video in C#
 
@@ -161525,23 +161634,21 @@ Download the fully functional 30-day trial and run the barcode samples. Dependin
 
 ### Which SDK and edition
 
-[
-
-### Media Blocks SDK .NET
+### [Media Blocks SDK .NET](/media-blocks-sdk-net)
 
 Pipeline SDK: BarcodeDetectorBlock and DataMatrixDecoderBlock next to sources, encoders and sinks. One edition with every block.
 
 From €500/year · Lifetime from €1,800
 
-Learn more →](/media-blocks-sdk-net)[
+Learn more →
 
-### Video Capture SDK .NET
+### [Video Capture SDK .NET](/video-capture-sdk-net)
 
 Capture SDK: Barcode\_Reader\_Enabled on VideoCaptureCoreX and VideoCaptureCore. The barcode reader is in every edition; IP cameras need Professional or Premium.
 
 From €250/year · Lifetime from €900
 
-Learn more →](/video-capture-sdk-net)
+Learn more →
 
 Prices are in euros; VAT is added at checkout where it applies. One license covers both engines of Video Capture SDK .NET.
 
@@ -161678,19 +161785,17 @@ Stream
 
 Download the fully functional 30-day trial and explore our streaming demos. Depending on the engine and output, a watermark or unregistered notice may appear.
 
-[
-
-### Media Blocks SDK .NET
+### [Media Blocks SDK .NET](/media-blocks-sdk-net)
 
 Modular pipeline SDK with individual blocks for sources, encoders, and streaming sinks. Maximum flexibility for custom broadcasting architectures.
 
-Learn more →](/media-blocks-sdk-net)[
+Learn more →
 
-### Video Capture SDK .NET
+### [Video Capture SDK .NET](/video-capture-sdk-net)
 
 High-level SDK for camera capture with built-in network streaming support. Faster integration for standard broadcasting workflows.
 
-Learn more →](/video-capture-sdk-net)
+Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -161816,43 +161921,29 @@ Download the fully functional 30-day trial or add the VisioForge.DotNet.MediaBlo
 
 ## Documentation and samples
 
-[
-
-### Build a MediaBlock from a GStreamer element
+### [Build a MediaBlock from a GStreamer element](/help/docs/dotnet/mediablocks/Guides/custom-mediablock-from-gstreamer-element/)
 
 CustomMediaBlock and a typed MediaBlock subclass, step by step: pads, properties, dynamic pads and lifecycle.
 
-](/help/docs/dotnet/mediablocks/Guides/custom-mediablock-from-gstreamer-element/)[
-
-### CustomGrayscaleBlock sample
+### [CustomGrayscaleBlock sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/CustomGrayscaleBlock)
 
 Console sample that wraps videobalance both ways — with CustomMediaBlock and with a typed subclass — and records each to MP4.
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/CustomGrayscaleBlock)[
-
-### Getting started with pipelines
+### [Getting started with pipelines](/help/docs/dotnet/mediablocks/GettingStarted/pipeline/)
 
 Create a MediaBlocksPipeline, add and connect blocks, start and stop it.
 
-](/help/docs/dotnet/mediablocks/GettingStarted/pipeline/)[
-
-### Special blocks reference
+### [Special blocks reference](/help/docs/dotnet/mediablocks/Special/)
 
 CustomMediaBlock, CustomMediaBlockSettings and CustomMediaBlockPad, with every property.
 
-](/help/docs/dotnet/mediablocks/Special/)[
-
-### Deployment guide
+### [Deployment guide](/help/docs/dotnet/deployment-x/)
 
 Deployment overview for Windows, macOS, Linux, Android and iOS, with a link to the detailed guide for each platform.
 
-](/help/docs/dotnet/deployment-x/)[
-
-### Ubuntu deployment
+### [Ubuntu deployment](/help/docs/dotnet/deployment-x/Ubuntu/)
 
 Installing GStreamer 1.22 or later with apt and adding the VisioForge Linux core package.
-
-](/help/docs/dotnet/deployment-x/Ubuntu/)
 
 ## Start building GStreamer pipelines in C#
 
@@ -161860,25 +161951,23 @@ Download the fully functional 30-day trial and run the Media Blocks samples. Dep
 
 ### SDKs built on GStreamer
 
-[
-
-### Media Blocks SDK .NET
+### [Media Blocks SDK .NET](/media-blocks-sdk-net)
 
 Pipeline SDK: assemble sources, processing blocks and sinks yourself, and wrap any GStreamer element with CustomMediaBlock.
 
-Learn more →](/media-blocks-sdk-net)[
+Learn more →
 
-### Video Capture SDK .NET
+### [Video Capture SDK .NET](/video-capture-sdk-net)
 
 Capture SDK: VideoCaptureCoreX records and streams cameras, screens and audio devices on the same GStreamer-based pipeline.
 
-Learn more →](/video-capture-sdk-net)[
+Learn more →
 
-### Media Player SDK .NET
+### [Media Player SDK .NET](/media-player-sdk-net)
 
 Player SDK: MediaPlayerCoreX plays files and network streams on the same GStreamer-based pipeline.
 
-Learn more →](/media-player-sdk-net)
+Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -161944,31 +162033,21 @@ KLVParser
 
 ## Documentation and samples
 
-[
-
-### KLV / MISB metadata guide
+### [KLV / MISB metadata guide](/help/docs/dotnet/mediablocks/Guides/klv-metadata-mpegts-csharp/)
 
 Step-by-step help page: extract, decode and embed KLV, and record live KLV with Video Capture SDK.
 
-](/help/docs/dotnet/mediablocks/Guides/klv-metadata-mpegts-csharp/)[
-
-### KLV Demo (WPF)
+### [KLV Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/KLV%20Demo)
 
 Media Blocks SDK sample: extract KLV from an MPEG-TS file and view the decoded MISB ST 0601 elements.
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/KLV%20Demo)[
-
-### ip-camera-klv-mpegts-recorder
+### [ip-camera-klv-mpegts-recorder](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-klv-mpegts-recorder)
 
 Video Capture SDK sample: record a UDP MPEG-TS feed with KLV to a file, or restream it over UDP.
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_CodeSnippets/ip-camera-klv-mpegts-recorder)[
-
-### Video surveillance solutions
+### [Video surveillance solutions](/solutions/surveillance)
 
 RTSP and ONVIF cameras, multi-camera recording, motion and face detection in .NET.
-
-](/solutions/surveillance)
 
 ## Start working with KLV
 
@@ -161976,19 +162055,17 @@ Download the fully functional 30-day trial and run the KLV samples. Depending on
 
 ### SDKs with KLV support
 
-[
-
-### Media Blocks SDK .NET
+### [Media Blocks SDK .NET](/media-blocks-sdk-net)
 
 Pipeline SDK for Windows, Linux and macOS: demux, extract and embed KLV in MPEG-TS next to your own video processing.
 
-Learn more →](/media-blocks-sdk-net)[
+Learn more →
 
-### Video Capture SDK .NET
+### [Video Capture SDK .NET](/video-capture-sdk-net)
 
 Capture SDK for Windows: record or restream live MISB feeds from IP cameras and UDP sources with KLV kept in the output.
 
-Learn more →](/video-capture-sdk-net)
+Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -162109,43 +162186,29 @@ Plates are commonly treated as personal data under privacy regulations such as t
 
 ## Documentation and samples
 
-[
-
-### License plate recognition guide
+### [License plate recognition guide](/help/docs/dotnet/general/ai/license-plate-recognition/)
 
 LicensePlateRecognizerBlock and its settings: models, regional heads, every setting with its default, troubleshooting.
 
-](/help/docs/dotnet/general/ai/license-plate-recognition/)[
-
-### License Plate Recognition Demo (WPF)
+### [License Plate Recognition Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/License%20Plate%20Recognition%20Demo)
 
 Media Blocks SDK .NET sample: ANPR on a webcam, a video file or an RTSP camera, with the bundled FastALPR models.
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/License%20Plate%20Recognition%20Demo)[
-
-### AI blocks in VideoCaptureCoreX and MediaPlayerCoreX
+### [AI blocks in VideoCaptureCoreX and MediaPlayerCoreX](/help/docs/dotnet/general/ai/x-engines/)
 
 How processing blocks are added to the capture and player engines: insertion order and lifecycle.
 
-](/help/docs/dotnet/general/ai/x-engines/)[
-
-### Object detection
+### [Object detection](/help/docs/dotnet/general/ai/object-detection/)
 
 YOLOObjectDetectorBlock: detect vehicles upstream of ANPR on busy scenes.
 
-](/help/docs/dotnet/general/ai/object-detection/)[
-
-### PII redaction
+### [PII redaction](/help/docs/dotnet/general/ai/pii-redaction/)
 
 PIIRedactionBlock: blur or pixelate license plates, faces and on-screen text in video, on the device.
 
-](/help/docs/dotnet/general/ai/pii-redaction/)[
-
-### OCR for video streams
+### [OCR for video streams](/solutions/video-ocr-dotnet)
 
 OcrBlock for all other text in the video: signs, labels, lower thirds and screen content.
-
-](/solutions/video-ocr-dotnet)
 
 ## Start reading license plates
 
@@ -162153,25 +162216,23 @@ Download the fully functional 30-day trial and run the License Plate Recognition
 
 ### SDKs with license plate recognition
 
-[
-
-### Media Blocks SDK .NET
+### [Media Blocks SDK .NET](/media-blocks-sdk-net)
 
 Pipeline SDK: put LicensePlateRecognizerBlock between any source and a renderer, encoder or network output.
 
-Learn more →](/media-blocks-sdk-net)[
+Learn more →
 
-### Video Capture SDK .NET
+### [Video Capture SDK .NET](/video-capture-sdk-net)
 
 Capture SDK: add the block to VideoCaptureCoreX and read plates from cameras while you preview and record.
 
-Learn more →](/video-capture-sdk-net)[
+Learn more →
 
-### Media Player SDK .NET
+### [Media Player SDK .NET](/media-player-sdk-net)
 
 Player SDK: add the block to MediaPlayerCoreX and read plates from the files and streams you play.
 
-Learn more →](/media-player-sdk-net)
+Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -162313,43 +162374,29 @@ Video Capture SDK .NET if you want a ready capture engine: set Video\_Source, Au
 
 ## Documentation and samples
 
-[
-
-### Screen capture guide
+### [Screen capture guide](/help/docs/dotnet/videocapture/video-sources/screen/)
 
 Full screen, region and window capture with VideoCaptureCore and VideoCaptureCoreX, multi-monitor setups and troubleshooting.
 
-](/help/docs/dotnet/videocapture/video-sources/screen/)[
-
-### Screen capture to MP4 tutorial
+### [Screen capture to MP4 tutorial](/help/docs/dotnet/videocapture/video-tutorials/screen-capture-mp4/)
 
 Step-by-step C# tutorial with a video walkthrough: console recorder, system audio and GPU encoders.
 
-](/help/docs/dotnet/videocapture/video-tutorials/screen-capture-mp4/)[
-
-### Screen Capture X Demo (WPF)
+### [Screen Capture X Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/Screen_Capture)
 
 Video Capture SDK .NET sample: screen, region or window, microphone or loopback audio, MP4, WebM, AVI, MOV and MPEG-TS output.
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/Screen_Capture)[
-
-### Screen Capture MB Demo (WPF)
+### [Screen Capture MB Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Screen%20Capture)
 
 Media Blocks SDK .NET sample: screen or window capture with click highlights, preview and MP4 recording.
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Screen%20Capture)[
-
-### Screen source in Media Blocks
+### [Screen source in Media Blocks](/help/docs/dotnet/mediablocks/Sources/#screen-source-block)
 
 ScreenSourceBlock reference: the settings class for each platform and the capture technology behind it.
 
-](/help/docs/dotnet/mediablocks/Sources/#screen-source-block)[
-
-### ScreenCaptureMB (.NET MAUI)
+### [ScreenCaptureMB (.NET MAUI)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/ScreenCaptureMB)
 
 Media Blocks SDK .NET sample for Windows, Mac Catalyst, Android and iOS: screen preview and MP4 recording, with the MediaProjection prompt on Android.
-
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/ScreenCaptureMB)
 
 ## Start recording the screen
 
@@ -162357,19 +162404,17 @@ Download the fully functional 30-day trial and run the Screen Capture demos. Dep
 
 ### SDKs with screen recording
 
-[
-
-### Video Capture SDK .NET
+### [Video Capture SDK .NET](/video-capture-sdk-net)
 
 Capture engine: screen, window or region with system sound or a microphone, recorded to a file or streamed, with preview.
 
-Learn more →](/video-capture-sdk-net)[
+Learn more →
 
-### Media Blocks SDK .NET
+### [Media Blocks SDK .NET](/media-blocks-sdk-net)
 
 Pipeline SDK: ScreenSourceBlock on Windows, macOS, Linux, Android and iOS, combined with your own processing, mixing and outputs.
 
-Learn more →](/media-blocks-sdk-net)
+Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/video-capture-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -162503,19 +162548,17 @@ Record + Display
 
 Download the fully functional 30-day trial and explore our surveillance demos. Depending on the engine and output, a watermark or unregistered notice may appear.
 
-[
-
-### Media Blocks SDK .NET
+### [Media Blocks SDK .NET](/media-blocks-sdk-net)
 
 Modular pipeline SDK with individual blocks for sources, processing, and output. Maximum flexibility for custom surveillance architectures.
 
-Learn more →](/media-blocks-sdk-net)[
+Learn more →
 
-### Video Capture SDK .NET
+### [Video Capture SDK .NET](/video-capture-sdk-net)
 
 High-level SDK for camera capture and recording with built-in IP camera support. Faster integration for standard surveillance workflows.
 
-Learn more →](/video-capture-sdk-net)
+Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -162640,19 +162683,17 @@ Output (File/Preview)
 
 Download the fully functional 30-day trial and explore our editing demos. Depending on the engine and output, a watermark or unregistered notice may appear.
 
-[
-
-### Media Blocks SDK .NET
+### [Media Blocks SDK .NET](/media-blocks-sdk-net)
 
 Modular pipeline SDK with video mixer, shader effects, LUT grading, and compositing blocks. Maximum flexibility for custom editing architectures.
 
-Learn more →](/media-blocks-sdk-net)[
+Learn more →
 
-### Video Edit SDK .NET
+### [Video Edit SDK .NET](/video-edit-sdk-net)
 
 High-level SDK for video joining, trimming, and format conversion. Faster integration for standard editing workflows.
 
-Learn more →](/video-edit-sdk-net)
+Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -162775,43 +162816,29 @@ Yes. LicensePlateRecognizerBlock, YOLOObjectDetectorBlock and PIIRedactionBlock 
 
 ## Documentation and samples
 
-[
-
-### OCR text recognition guide
+### [OCR text recognition guide](/help/docs/dotnet/general/ai/ocr/)
 
 OcrBlock and OcrSettings reference: models, languages, every setting with its default, troubleshooting.
 
-](/help/docs/dotnet/general/ai/ocr/)[
-
-### OCR Text Recognition Demo (WPF)
+### [OCR Text Recognition Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/OCR%20Text%20Recognition%20Demo)
 
 Media Blocks SDK .NET sample: OCR on a webcam, a video file or an RTSP camera, with the bundled PP-OCRv5 models.
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/OCR%20Text%20Recognition%20Demo)[
-
-### OCR Text Recognition MB (MAUI)
+### [OCR Text Recognition MB (MAUI)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/OCR%20Text%20Recognition%20MB)
 
 Media Blocks OCR sample for .NET MAUI: text recognition from the device camera.
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/MAUI/OCR%20Text%20Recognition%20MB)[
-
-### AI blocks in VideoCaptureCoreX and MediaPlayerCoreX
+### [AI blocks in VideoCaptureCoreX and MediaPlayerCoreX](/help/docs/dotnet/general/ai/x-engines/)
 
 How processing blocks are added to the capture and player engines: insertion order and lifecycle.
 
-](/help/docs/dotnet/general/ai/x-engines/)[
-
-### License plate recognition (ANPR)
+### [License plate recognition (ANPR)](/help/docs/dotnet/general/ai/license-plate-recognition/)
 
 LicensePlateRecognizerBlock: a plate detector and a plate-specific OCR head, faster and more accurate than general OCR for vehicles.
 
-](/help/docs/dotnet/general/ai/license-plate-recognition/)[
-
-### PII redaction
+### [PII redaction](/help/docs/dotnet/general/ai/pii-redaction/)
 
 PIIRedactionBlock: blur or pixelate faces, license plates and on-screen text in video, on the device.
-
-](/help/docs/dotnet/general/ai/pii-redaction/)
 
 ## Start reading text from video
 
@@ -162819,25 +162846,23 @@ Download the fully functional 30-day trial and run the OCR samples. Depending on
 
 ### SDKs with OCR
 
-[
-
-### Media Blocks SDK .NET
+### [Media Blocks SDK .NET](/media-blocks-sdk-net)
 
 Pipeline SDK: put OcrBlock between any source and a renderer, encoder or network output, next to your own processing.
 
-Learn more →](/media-blocks-sdk-net)[
+Learn more →
 
-### Video Capture SDK .NET
+### [Video Capture SDK .NET](/video-capture-sdk-net)
 
 Capture SDK: add OcrBlock to VideoCaptureCoreX and recognize text from cameras while you preview and record.
 
-Learn more →](/video-capture-sdk-net)[
+Learn more →
 
-### Media Player SDK .NET
+### [Media Player SDK .NET](/media-player-sdk-net)
 
 Player SDK: add OcrBlock to MediaPlayerCoreX and read text from the files and streams you play.
 
-Learn more →](/media-player-sdk-net)
+Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
@@ -162935,43 +162960,29 @@ The project is non-commercial, earns no revenue, and I am its only developer. Re
 
 ## Legal Information
 
-[
-
-Legal Information
+[Legal Information](/legal-information)
 
 Company legal information
 
-](/legal-information)[
-
-Privacy Policy
+[Privacy Policy](/privacy-policy)
 
 How we collect and use your data
 
-](/privacy-policy)[
-
-Terms and Conditions
+[Terms and Conditions](/terms-and-conditions)
 
 Terms for using our services
 
-](/terms-and-conditions)[
-
-Refund Policy
+[Refund Policy](/refund-policy)
 
 Eligibility for a conditional refund within 30 days
 
-](/refund-policy)[
-
-Cookie Policy (EU)
+[Cookie Policy (EU)](/cookie-policy-eu)
 
 How we use cookies
 
-](/cookie-policy-eu)[
-
-Licensing
+[Licensing](/licensing)
 
 License types, trials, updates, and support
-
-](/licensing)
 
 ### Need Help?
 
@@ -163442,31 +163453,21 @@ Yes. Every product page has a free trial download. The trial is fully functional
 
 ## Documentation
 
-[
-
-### DirectShow documentation
+### [DirectShow documentation](/help/docs/directshow/)
 
 Guides and interface references for every DirectShow filter and SDK.
 
-](/help/docs/directshow/)[
-
-### Filter registration guide
+### [Filter registration guide](/help/docs/directshow/deployment/filter-registration/)
 
 Register the filters with an installer, regsvr32 or from code, with the x86 and x64 file names.
 
-](/help/docs/directshow/deployment/filter-registration/)[
-
-### Deployment
+### [Deployment](/help/docs/directshow/deployment/)
 
 What to ship with your application and how to include the filters in your installer.
 
-](/help/docs/directshow/deployment/)[
-
-### VisioForge.DirectShowAPI on NuGet
+### [VisioForge.DirectShowAPI on NuGet](https://www.nuget.org/packages/VisioForge.DirectShowAPI)
 
 .NET wrappers for the filter interfaces.
-
-](https://www.nuget.org/packages/VisioForge.DirectShowAPI)
 
 ---END OF PAGE---
 
@@ -163829,43 +163830,29 @@ If you're experiencing issues with license activation, our support team is ready
 
 ## Legal Information
 
-[
-
-Legal Information
+[Legal Information](/legal-information)
 
 Company legal information
 
-](/legal-information)[
-
-Privacy Policy
+[Privacy Policy](/privacy-policy)
 
 How we collect and use your data
 
-](/privacy-policy)[
-
-Terms and Conditions
+[Terms and Conditions](/terms-and-conditions)
 
 Terms for using our services
 
-](/terms-and-conditions)[
-
-Refund Policy
+[Refund Policy](/refund-policy)
 
 Eligibility for a conditional refund within 30 days
 
-](/refund-policy)[
-
-Cookie Policy (EU)
+[Cookie Policy (EU)](/cookie-policy-eu)
 
 How we use cookies
 
-](/cookie-policy-eu)[
-
-Licensing
+[Licensing](/licensing)
 
 License types, trials, updates, and support
-
-](/licensing)
 
 ### Need Help?
 
@@ -164022,15 +164009,9 @@ Our website supports the LLMS.txt API
 
 Access structured information about VisioForge SDKs through our LLMS.txt API endpoints:
 
-[
+[Short version](/llms.txt)
 
-Short version
-
-](/llms.txt)[
-
-Full version
-
-](/llms-full.txt)
+[Full version](/llms-full.txt)
 
 ## Context7 MCP Support
 
@@ -164123,43 +164104,29 @@ Our SDKs are designed for seamless integration with AI development workflows. Ge
 
 ## Legal Information
 
-[
-
-Legal Information
+[Legal Information](/legal-information)
 
 Company legal information
 
-](/legal-information)[
-
-Privacy Policy
+[Privacy Policy](/privacy-policy)
 
 How we collect and use your data
 
-](/privacy-policy)[
-
-Terms and Conditions
+[Terms and Conditions](/terms-and-conditions)
 
 Terms for using our services
 
-](/terms-and-conditions)[
-
-Refund Policy
+[Refund Policy](/refund-policy)
 
 Eligibility for a conditional refund within 30 days
 
-](/refund-policy)[
-
-Cookie Policy (EU)
+[Cookie Policy (EU)](/cookie-policy-eu)
 
 How we use cookies
 
-](/cookie-policy-eu)[
-
-Licensing
+[Licensing](/licensing)
 
 License types, trials, updates, and support
-
-](/licensing)
 
 ### Need Help?
 
@@ -164273,43 +164240,29 @@ By using our site or services, you consent to the terms outlined in this Privacy
 
 ## Legal Information
 
-[
-
-Legal Information
+[Legal Information](/legal-information)
 
 Company legal information
 
-](/legal-information)[
-
-Privacy Policy
+[Privacy Policy](/privacy-policy)
 
 How we collect and use your data
 
-](/privacy-policy)[
-
-Terms and Conditions
+[Terms and Conditions](/terms-and-conditions)
 
 Terms for using our services
 
-](/terms-and-conditions)[
-
-Refund Policy
+[Refund Policy](/refund-policy)
 
 Eligibility for a conditional refund within 30 days
 
-](/refund-policy)[
-
-Cookie Policy (EU)
+[Cookie Policy (EU)](/cookie-policy-eu)
 
 How we use cookies
 
-](/cookie-policy-eu)[
-
-Licensing
+[Licensing](/licensing)
 
 License types, trials, updates, and support
-
-](/licensing)
 
 ### Need Help?
 
@@ -164404,43 +164357,29 @@ VisioForge © 2006 - 2026
 
 ## Legal Information
 
-[
-
-Legal Information
+[Legal Information](/legal-information)
 
 Company legal information
 
-](/legal-information)[
-
-Privacy Policy
+[Privacy Policy](/privacy-policy)
 
 How we collect and use your data
 
-](/privacy-policy)[
-
-Terms and Conditions
+[Terms and Conditions](/terms-and-conditions)
 
 Terms for using our services
 
-](/terms-and-conditions)[
-
-Refund Policy
+[Refund Policy](/refund-policy)
 
 Eligibility for a conditional refund within 30 days
 
-](/refund-policy)[
-
-Cookie Policy (EU)
+[Cookie Policy (EU)](/cookie-policy-eu)
 
 How we use cookies
 
-](/cookie-policy-eu)[
-
-Licensing
+[Licensing](/licensing)
 
 License types, trials, updates, and support
-
-](/licensing)
 
 ### Need Help?
 
@@ -165357,25 +165296,17 @@ Not sure which SDK fits? Try them all
 
 Step-by-step guides to migrate from legacy .NET multimedia libraries
 
-[
-
-### Migrate from AForge.NET
+### [Migrate from AForge.NET](/compare/migrate-from-aforge-net)
 
 Replace the discontinued AForge.NET framework with modern VisioForge SDKs
 
-](/compare/migrate-from-aforge-net)[
-
-### Migrate from Accord.NET
+### [Migrate from Accord.NET](/compare/migrate-from-accord-net)
 
 Upgrade from Accord.NET to actively maintained VisioForge SDKs
 
-](/compare/migrate-from-accord-net)[
-
-### Migrate from DirectShow.NET
+### [Migrate from DirectShow.NET](/compare/migrate-from-directshow-net)
 
 Move from legacy DirectShow.NET to cross-platform VisioForge SDKs
-
-](/compare/migrate-from-directshow-net)
 
 ## Why Choose VisioForge
 
@@ -169012,31 +168943,21 @@ Yes. Media Player SDK .NET ships with an audio processing pipeline of 40+ effect
 
 ## Get Started
 
-[
-
-### Download Media Player SDK .NET
+### [Download Media Player SDK .NET](/media-player-sdk-net)
 
 Free trial with full functionality
 
-](/media-player-sdk-net)[
-
-### View SDK Documentation
+### [View SDK Documentation](https://www.visioforge.com/help/docs/dotnet/mediaplayer/)
 
 API reference and tutorials
 
-](https://www.visioforge.com/help/docs/dotnet/mediaplayer/)[
-
-### Explore Code Samples
+### [Explore Code Samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X)
 
 GitHub repository with examples
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X)[
-
-### Contact Sales
+### [Contact Sales](mailto:sales@visioforge.com)
 
 Custom licensing, volume pricing, and enterprise terms
-
-](mailto:sales@visioforge.com)
 
 LEADTOOLS prices as shown on componentsource.com/product/leadtools-multimedia/prices and leadtools.com/sdk/multimedia, verified 2026-11-04. Deployment and runtime licences are not price-listed and are quoted individually. Prices may change without notice. ComponentSource notes that its prices may include a personal discount.
 
@@ -169676,31 +169597,21 @@ The core architectural difference is dual-engine vs monolithic: Media Player SDK
 
 ## Get Started
 
-[
-
-### Download Media Player SDK
+### [Download Media Player SDK](/media-player-sdk-net)
 
 Free trial with full functionality
 
-](/media-player-sdk-net)[
-
-### View Documentation
+### [View Documentation](https://www.visioforge.com/help/docs/dotnet/mediaplayer/)
 
 API reference and tutorials
 
-](https://www.visioforge.com/help/docs/dotnet/mediaplayer/)[
-
-### Explore Code Samples
+### [Explore Code Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 
 GitHub repository with examples
 
-](https://github.com/visioforge/.Net-SDK-s-samples)[
-
-### Contact Sales
+### [Contact Sales](mailto:sales@visioforge.com)
 
 Custom licensing, volume pricing, and enterprise terms
-
-](mailto:sales@visioforge.com)
 
 LibVLCSharp is open source; Videolabs commercial license pricing at videolabs.io/store/libvlcsharp/, verified 2026-11-02. Prices may change without notice.
 
@@ -170148,31 +170059,21 @@ Media Player SDK builds interactive viewers; MFormats builds playout engines. Me
 
 ## Get Started with Media Player SDK
 
-[
-
-### Installation Guide
+### [Installation Guide](/help/docs/dotnet/install/)
 
 Setup for Visual Studio, Rider, and VS for Mac
 
-](/help/docs/dotnet/install/)[
-
-### Documentation
+### [Documentation](https://www.visioforge.com/help/docs/dotnet/mediaplayer/)
 
 API reference, tutorials, and deployment guides
 
-](https://www.visioforge.com/help/docs/dotnet/mediaplayer/)[
-
-### Code Samples
+### [Code Samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X)
 
 Working C# examples for Media Player
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X)[
-
-### Product Page
+### [Product Page](/media-player-sdk-net)
 
 Download free trial, explore pricing, and get started
-
-](/media-player-sdk-net)
 
 Medialooks lists no MFormats prices on its own site; the MFormats prices shown are ComponentSource reseller prices (componentsource.com/product/mformats/prices), verified 2026-11-04. ComponentSource notes that its prices may include a personal discount. Product information at medialooks.com/mformats.
 
@@ -170552,31 +170453,21 @@ Media Player SDK .NET is a dedicated playback engine; TVideoGrabber is a capture
 
 ## Get Started
 
-[
-
-### Download Media Player SDK .NET
+### [Download Media Player SDK .NET](/media-player-sdk-net)
 
 Free trial with full functionality
 
-](/media-player-sdk-net)[
-
-### View Documentation
+### [View Documentation](https://www.visioforge.com/help/docs/dotnet/mediaplayer/)
 
 API reference and tutorials
 
-](https://www.visioforge.com/help/docs/dotnet/mediaplayer/)[
-
-### Browse Code Samples
+### [Browse Code Samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X)
 
 Working C# examples for Media Player
 
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X)[
-
-### Contact Sales
+### [Contact Sales](mailto:sales@visioforge.com)
 
 Custom licensing, volume pricing, and enterprise terms
-
-](mailto:sales@visioforge.com)
 
 Datastead prices as published at datastead.com/purchase.html (TVideoGrabber €700; RTSP/RTMP/HTTP/ONVIF Source Filter and Multipurpose Encoder €950 each; NDI Filters €400; Suite of all four products €2,100), per developer excluding VAT, verified 2026-11-02. Prices may change without notice.
 
@@ -170961,31 +170852,21 @@ With VisioForge Media Player SDK .NET, you instantiate typed C# effect classes �
 
 ## Get Started with Media Player SDK
 
-[
-
-### Visit Product Page
+### [Visit Product Page](/media-player-sdk-net)
 
 Download free trial, explore pricing, and get started
 
-](/media-player-sdk-net)[
-
-### Installation Guide
+### [Installation Guide](/help/docs/dotnet/install/)
 
 Setup for Visual Studio, Rider, and VS for Mac
 
-](/help/docs/dotnet/install/)[
-
-### Documentation
+### [Documentation](https://www.visioforge.com/help/docs/dotnet/mediaplayer/)
 
 API reference, tutorials, and deployment guides
 
-](https://www.visioforge.com/help/docs/dotnet/mediaplayer/)[
-
-### Browse Code Samples
+### [Browse Code Samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X)
 
 Working C# examples for Media Player
-
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X)
 
 Viscomsoft prices as published at viscomsoft.com/products/movieplayerpro, verified 2026-11-02. Prices may change without notice.
 
@@ -171350,31 +171231,21 @@ From €250/year · Lifetime from €900
 
 ## Get Started with VisioForge .Net SDK
 
-[
-
-### Video Capture SDK
+### [Video Capture SDK](https://www.visioforge.com/video-capture-sdk-net)
 
 Replaces Accord.Video capture classes
 
-](https://www.visioforge.com/video-capture-sdk-net)[
-
-### Media Blocks SDK
+### [Media Blocks SDK](https://www.visioforge.com/media-blocks-sdk-net)
 
 Replaces Accord.Vision with pipeline-based CV blocks
 
-](https://www.visioforge.com/media-blocks-sdk-net)[
-
-### Documentation
+### [Documentation](https://www.visioforge.com/help/docs/dotnet/videocapture/)
 
 API reference, tutorials, and deployment guides
 
-](https://www.visioforge.com/help/docs/dotnet/videocapture/)[
-
-### Browse code samples
+### [Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X)
 
 Working C# examples for Video Capture
-
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X)
 
 ## Related Migration Guides
 
@@ -171843,31 +171714,21 @@ From €250/year · Lifetime from €900
 
 ## Start Your Migration
 
-[
-
-### Video Capture SDK
+### [Video Capture SDK](https://www.visioforge.com/video-capture-sdk-net)
 
 Replaces AForge.Video capture and streaming classes
 
-](https://www.visioforge.com/video-capture-sdk-net)[
-
-### Media Blocks SDK
+### [Media Blocks SDK](https://www.visioforge.com/media-blocks-sdk-net)
 
 Replaces AForge.Vision with pipeline-based CV blocks
 
-](https://www.visioforge.com/media-blocks-sdk-net)[
-
-### Documentation
+### [Documentation](https://www.visioforge.com/help/docs/dotnet/videocapture/)
 
 API reference, tutorials, and deployment guides
 
-](https://www.visioforge.com/help/docs/dotnet/videocapture/)[
-
-### Browse code samples
+### [Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X)
 
 Working C# examples
-
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X)
 
 ## Related Migration Guides
 
@@ -172453,43 +172314,29 @@ From €250/year · Lifetime from €900
 
 ## Start Your Migration
 
-[
-
-### Installation guide
+### [Installation guide](/help/docs/dotnet/install/)
 
 Setup for Visual Studio, Rider, and VS for Mac
 
-](/help/docs/dotnet/install/)[
-
-### Video Capture SDK
+### [Video Capture SDK](https://www.visioforge.com/video-capture-sdk-net)
 
 Replaces DirectShow capture filter graphs
 
-](https://www.visioforge.com/video-capture-sdk-net)[
-
-### Media Player SDK
+### [Media Player SDK](https://www.visioforge.com/media-player-sdk-net)
 
 Replaces DirectShow playback and DVD graphs
 
-](https://www.visioforge.com/media-player-sdk-net)[
-
-### Media Blocks SDK
+### [Media Blocks SDK](https://www.visioforge.com/media-blocks-sdk-net)
 
 Replaces custom filter graphs with 400+ typed blocks
 
-](https://www.visioforge.com/media-blocks-sdk-net)[
-
-### Documentation
+### [Documentation](https://www.visioforge.com/help/docs/dotnet/videocapture/)
 
 API reference, tutorials, and deployment guides
 
-](https://www.visioforge.com/help/docs/dotnet/videocapture/)[
-
-### Browse code samples
+### [Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X)
 
 Working C# examples
-
-](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X)
 
 ## Related Migration Guides
 
@@ -173363,31 +173210,21 @@ Yes, but expect a refactor of your capture and recording code. The programming m
 
 ## Get Started
 
-[
-
-### Download Video Capture SDK .NET
+### [Download Video Capture SDK .NET](/video-capture-sdk-net)
 
 Free trial with full functionality
 
-](/video-capture-sdk-net)[
-
-### View SDK Documentation
+### [View SDK Documentation](https://www.visioforge.com/help/docs/dotnet/videocapture/)
 
 API reference and tutorials
 
-](https://www.visioforge.com/help/docs/dotnet/videocapture/)[
-
-### Explore Code Samples
+### [Explore Code Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 
 GitHub repository with examples
 
-](https://github.com/visioforge/.Net-SDK-s-samples)[
-
-### Contact Sales
+### [Contact Sales](mailto:sales@visioforge.com)
 
 Custom licensing, volume pricing, and enterprise terms
-
-](mailto:sales@visioforge.com)
 
 FFmpeg is free and open source (ffmpeg.org, verified 2026-11-02); costs compared here are commercial wrapper licences and developer time.
 
@@ -174094,31 +173931,21 @@ Yes. The Video Capture SDK supports NVIDIA NVENC, Intel Quick Sync Video (QSV), 
 
 ## Get Started
 
-[
-
-### Download Video Capture SDK .NET
+### [Download Video Capture SDK .NET](/video-capture-sdk-net)
 
 Free trial with full functionality
 
-](/video-capture-sdk-net)[
-
-### View SDK Documentation
+### [View SDK Documentation](https://www.visioforge.com/help/docs/dotnet/videocapture/)
 
 API reference and tutorials
 
-](https://www.visioforge.com/help/docs/dotnet/videocapture/)[
-
-### Explore Code Samples
+### [Explore Code Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 
 GitHub repository with examples
 
-](https://github.com/visioforge/.Net-SDK-s-samples)[
-
-### Contact Sales
+### [Contact Sales](mailto:sales@visioforge.com)
 
 Custom licensing, volume pricing, and enterprise terms
-
-](mailto:sales@visioforge.com)
 
 LEADTOOLS prices as shown on componentsource.com/product/leadtools-multimedia/prices, componentsource.com/product/leadtools-multimedia-suite/prices and leadtools.com/sdk/multimedia, verified 2026-11-04. Deployment and runtime licences are not price-listed and are quoted individually; the deployment licensing policy is quoted from the LEADTOOLS deployment license FAQ (SDK 23), verified 2026-11-03. Prices may change without notice. ComponentSource notes that its prices may include a personal discount.
 
@@ -174881,31 +174708,21 @@ Video Capture SDK is a purpose-built .NET video capture engine with typed APIs, 
 
 ## Get Started
 
-[
-
-### Download Video Capture SDK .NET
+### [Download Video Capture SDK .NET](/video-capture-sdk-net)
 
 Free trial with full functionality
 
-](/video-capture-sdk-net)[
-
-### View SDK Documentation
+### [View SDK Documentation](https://www.visioforge.com/help/docs/dotnet/videocapture/)
 
 API reference and tutorials
 
-](https://www.visioforge.com/help/docs/dotnet/videocapture/)[
-
-### Explore Code Samples
+### [Explore Code Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 
 GitHub repository with examples
 
-](https://github.com/visioforge/.Net-SDK-s-samples)[
-
-### Contact Sales
+### [Contact Sales](mailto:sales@visioforge.com)
 
 Custom licensing, volume pricing, and enterprise terms
-
-](mailto:sales@visioforge.com)
 
 LibVLCSharp is open source; Videolabs commercial license pricing at videolabs.io/store/libvlcsharp/, verified 2026-11-02. Prices may change without notice.
 
@@ -175412,31 +175229,21 @@ Yes, but the programming models are different. MFormats uses a frame-based grab-
 
 ## Get Started
 
-[
-
-### Download Video Capture SDK .NET
+### [Download Video Capture SDK .NET](/video-capture-sdk-net)
 
 Free trial with full functionality
 
-](/video-capture-sdk-net)[
-
-### View SDK Documentation
+### [View SDK Documentation](https://www.visioforge.com/help/docs/dotnet/videocapture/)
 
 API reference and tutorials
 
-](https://www.visioforge.com/help/docs/dotnet/videocapture/)[
-
-### Explore Code Samples
+### [Explore Code Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 
 GitHub repository with examples
 
-](https://github.com/visioforge/.Net-SDK-s-samples)[
-
-### Contact Sales
+### [Contact Sales](mailto:sales@visioforge.com)
 
 Custom licensing, volume pricing, and enterprise terms
-
-](mailto:sales@visioforge.com)
 
 Medialooks lists no MFormats prices on its own site; the MFormats prices shown are ComponentSource reseller prices (componentsource.com/product/mformats/prices), verified 2026-11-04. ComponentSource notes that its prices may include a personal discount. Product information at medialooks.com/mformats.
 
@@ -175785,31 +175592,21 @@ With VisioForge Video Capture SDK .NET, you can save an RTSP stream to file by c
 
 ## Get Started
 
-[
-
-### Download Video Capture SDK .NET
+### [Download Video Capture SDK .NET](/video-capture-sdk-net)
 
 Free trial with full functionality
 
-](/video-capture-sdk-net)[
-
-### View SDK Documentation
+### [View SDK Documentation](https://www.visioforge.com/help/docs/dotnet/videocapture/)
 
 API reference and tutorials
 
-](https://www.visioforge.com/help/docs/dotnet/videocapture/)[
-
-### Explore Code Samples
+### [Explore Code Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 
 GitHub repository with examples
 
-](https://github.com/visioforge/.Net-SDK-s-samples)[
-
-### Contact Sales
+### [Contact Sales](mailto:sales@visioforge.com)
 
 Custom licensing, volume pricing, and enterprise terms
-
-](mailto:sales@visioforge.com)
 
 Ozeki Camera SDK prices as published at camera-sdk.com/p\_3402-prices.html, verified 2026-11-16. Prices may change without notice.
 
@@ -176455,31 +176252,21 @@ Yes. The API styles differ: TVideoGrabber uses property-based configuration, whi
 
 ## Get Started
 
-[
-
-### Download Video Capture SDK .NET
+### [Download Video Capture SDK .NET](/video-capture-sdk-net)
 
 Free trial with full functionality
 
-](/video-capture-sdk-net)[
-
-### View SDK Documentation
+### [View SDK Documentation](https://www.visioforge.com/help/docs/dotnet/videocapture/)
 
 API reference and tutorials
 
-](https://www.visioforge.com/help/docs/dotnet/videocapture/)[
-
-### Explore Code Samples
+### [Explore Code Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 
 GitHub repository with examples
 
-](https://github.com/visioforge/.Net-SDK-s-samples)[
-
-### Contact Sales
+### [Contact Sales](mailto:sales@visioforge.com)
 
 Custom licensing, volume pricing, and enterprise terms
-
-](mailto:sales@visioforge.com)
 
 Datastead prices as published at datastead.com/purchase.html (TVideoGrabber €700; RTSP/RTMP/HTTP/ONVIF Source Filter and Multipurpose Encoder €950 each; NDI Filters €400; Suite of all four products €2,100), per developer excluding VAT, verified 2026-11-02. Prices may change without notice.
 
@@ -177031,31 +176818,21 @@ Yes. Since Viscomsoft covers only basic webcam capture, migration is relatively 
 
 ## Get Started
 
-[
-
-### Download Video Capture SDK .NET
+### [Download Video Capture SDK .NET](/video-capture-sdk-net)
 
 Free trial with full functionality
 
-](/video-capture-sdk-net)[
-
-### View SDK Documentation
+### [View SDK Documentation](https://www.visioforge.com/help/docs/dotnet/videocapture/)
 
 API reference and tutorials
 
-](https://www.visioforge.com/help/docs/dotnet/videocapture/)[
-
-### Explore Code Samples
+### [Explore Code Samples](https://github.com/visioforge/.Net-SDK-s-samples)
 
 GitHub repository with examples
 
-](https://github.com/visioforge/.Net-SDK-s-samples)[
-
-### Contact Sales
+### [Contact Sales](mailto:sales@visioforge.com)
 
 Custom licensing, volume pricing, and enterprise terms
-
-](mailto:sales@visioforge.com)
 
 Viscomsoft prices as published at viscomsoft.com/products/net-video-capture-sdk/index.html, verified 2026-11-04. Prices may change without notice.
 

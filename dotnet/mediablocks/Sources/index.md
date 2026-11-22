@@ -186,7 +186,7 @@ await pipeline.StartAsync();
 
 #### Capture audio from speakers (loopback)
 
-Currently, loopback audio capture is supported only on Windows. Use the `LoopbackAudioCaptureDeviceSourceSettings` class to create the source settings for loopback audio capture.
+`LoopbackAudioCaptureDeviceSourceSettings` is available only on Windows; on Linux, record the monitor source of an output instead (see the end of this section). On Windows, use the `LoopbackAudioCaptureDeviceSourceSettings` class to create the source settings for loopback audio capture.
 
 WASAPI2 is used as the default API for loopback audio capture. You can specify the API to use during device enumeration.
 
@@ -195,7 +195,7 @@ WASAPI2 is used as the default API for loopback audio capture. You can specify t
 var pipeline = new MediaBlocksPipeline();
 
 // create audio source block
-var deviceItem = (await DeviceEnumerator.Shared.AudioOutputsAsync(AudioOutputDeviceAPI.WASAPI2))[0];
+var deviceItem = (await DeviceEnumerator.Shared.AudioOutputsAsync(AudioOutputDeviceAPI.WASAPI2)).FirstOrDefault();
 if (deviceItem == null)
 {
     return;
@@ -214,7 +214,7 @@ pipeline.Connect(audioSource.Output, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
-WASAPI2 also lists every output device among the audio sources, with `AudioCaptureDeviceInfo.IsLoopback` set. Such an entry from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)` turned into settings with `CreateSourceSettings()` and passed to `SystemAudioSourceBlock` records what that output plays, the same as `LoopbackAudioCaptureDeviceSourceSettings`.
+WASAPI2 also lists every output device among the audio sources, with `AudioCaptureDeviceInfo.IsLoopback` set. Such an entry from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.WASAPI2)` turned into settings with `CreateSourceSettings()` and passed to `SystemAudioSourceBlock` records what that output plays, the same as `LoopbackAudioCaptureDeviceSourceSettings`. On Linux, `IsLoopback` is also set on the monitor sources of PulseAudio outputs (and of PipeWire through its PulseAudio server), which record what the system plays: take one from `DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.Pulse)` with `d => d.IsLoopback` and pass the result of its `CreateSourceSettings()` to `SystemAudioSourceBlock`. `IsLoopback`, and recording from these WASAPI2 entries, came in the first release after 2026.11.21; with older releases, use `LoopbackAudioCaptureDeviceSourceSettings` on Windows and pick the Linux monitor by its name, which the sound server translates into the system language.
 
 #### Sample applications
 

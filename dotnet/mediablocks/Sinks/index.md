@@ -447,6 +447,8 @@ pipeline.Connect(videoEncoderBlock.Output, sinkBlock.CreateNewInput(MediaBlockPa
 await pipeline.StartAsync();
 ```
 
+To record a camera while it is shown on screen, the [Webcam Preview and MP4 Recording](../GettingStarted/camera-to-mp4.md) page splits the video with a `TeeBlock` and encodes it with `MP4OutputBlock`.
+
 #### Platforms
 
 Windows, macOS, Linux, iOS, Android.
@@ -1787,6 +1789,8 @@ Use `WebRTCSinkSettings` to configure the servers and the bitrate:
 | --- | --- | --- | --- |
 | `SignallingServerHost` | `string` | `127.0.0.1` | Address the signalling server listens on; the default accepts viewers on this machine only, `0.0.0.0` accepts viewers from other machines |
 | `SignallingServerPort` | `int` | `8443` | Port of the signalling server |
+| `SignallingServerCertificate` | `string` | `null` | PEM certificate file (with its chain); set with `SignallingServerKey`, the signalling server speaks `wss://`, which a viewer page on an `https://` site needs |
+| `SignallingServerKey` | `string` | `null` | PEM private key file of that certificate, not encrypted |
 | `WebServerDirectory` | `string` | `null` | Folder with the viewer page served over HTTP; `null` runs no web server |
 | `WebServerAddress` | `string` | `http://127.0.0.1:8080/` | Address the web server listens on |
 | `StunServer` | `string` | `null` | STUN server (`stun://hostname:port`); `null` keeps `stun://stun.l.google.com:19302` |
@@ -1797,7 +1801,7 @@ Use `WebRTCSinkSettings` to configure the servers and the bitrate:
 
 The `ConsumerAdded` and `ConsumerRemoved` events report each viewer that connects and leaves, with its signalling peer ID. They are raised on a GStreamer thread. `ConsumerRemoved` is not raised for viewers still connected when the pipeline stops — their sessions end with it.
 
-The web server takes `http://` addresses only. `Build` fails, with an `OnError` message, when `SignallingServerHost` is empty, `SignallingServerPort` is outside 1–65535, `StartBitrate` is below 1000 or above `MaxBitrate`, a `TurnServers` entry is empty, `WebServerAddress` is not an `http://` address with a port in 1–65535, or its port is already in use.
+The web server takes `http://` addresses only. `Build` fails, with an `OnError` message, when `SignallingServerHost` is empty, `SignallingServerPort` is outside 1–65535, `StartBitrate` is below 1000 or above `MaxBitrate`, a `TurnServers` entry is empty, only one of `SignallingServerCertificate` and `SignallingServerKey` is set, either file cannot be read, the key is not the certificate's (checked on .NET 5 and later), a certificate is set together with `WebServerDirectory`, `WebServerAddress` is not an `http://` address with a port in 1–65535, or its port is already in use.
 
 #### The viewer page
 

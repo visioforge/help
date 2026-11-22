@@ -268,7 +268,8 @@ La página habla el protocolo de señalización del elemento `webrtcsink` de GSt
         function send(msg) { ws.send(JSON.stringify(msg)); }
 
         function connect() {
-            ws = new WebSocket(`ws://${location.hostname}:${port}`);
+            // Una página https:// necesita wss://: establezca SignallingServerCertificate y SignallingServerKey.
+            ws = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.hostname}:${port}`);
             ws.onopen = () => send({ type: 'setPeerStatus', roles: ['listener'], meta: null });
             ws.onclose = () => { reset(); status.textContent = 'Disconnected, retrying...'; setTimeout(connect, 2000); };
             ws.onmessage = e => onMessage(e.data).catch(err => fail('Error: ' + err));
@@ -395,7 +396,23 @@ El flujo toma el tamaño de la ventana al iniciarse la captura. Una ventana mini
 
 ### Servir la página desde su propio servidor web
 
-El servidor web del bloque es opcional. Con `WebServerDirectory` en `null`, solo se ejecuta el servidor de señalización; ponga `index.html` en su propio sitio (ASP.NET Core, IIS, nginx) y pase el puerto de señalización en la cadena de consulta. La página se conecta a `ws://<host de la página>:<puerto>`, por lo que el servidor de señalización debe ser accesible con el mismo nombre de host que la página.
+El servidor web del bloque es opcional. Con `WebServerDirectory` en `null`, solo se ejecuta el servidor de señalización; ponga `index.html` en su propio sitio (ASP.NET Core, IIS, nginx) y pase el puerto de señalización en la cadena de consulta. La página se conecta a `ws://<host de la página>:<puerto>`, o a `wss://` cuando la propia página está en `https://`, por lo que el servidor de señalización debe ser accesible con el mismo nombre de host que la página.
+
+### Una página de visualización en un sitio HTTPS
+
+Un navegador bloquea una conexión `ws://` desde una página `https://`. Entregue al servidor de señalización el certificado y la clave privada de su sitio como archivos PEM y hablará `wss://`:
+
+```csharp
+var webrtcSink = new WebRTCSinkBlock(new WebRTCSinkSettings
+{
+    SignallingServerHost = "0.0.0.0",
+    SignallingServerPort = 8443,
+    SignallingServerCertificate = @"C:\certs\fullchain.pem",
+    SignallingServerKey = @"C:\certs\privkey.pem"
+});
+```
+
+El certificado debe ser válido para el nombre de host de la dirección de la página, y la clave no debe estar cifrada. `Build` falla, con un mensaje `OnError`, si solo se establece uno de los dos, si no se puede leer un archivo, si la clave no corresponde al certificado (se comprueba en .NET 5 y posteriores) o si también se establece `WebServerDirectory`. El servidor web del propio bloque sirve solo `http://`, así que ponga una página `https://` en su propio servidor web (IIS, nginx, ASP.NET Core) y deje `WebServerDirectory` en `null`.
 
 ### Espectadores en otros equipos
 
@@ -403,7 +420,7 @@ El servidor web del bloque es opcional. Con `WebServerDirectory` en `null`, solo
 2. Permita el puerto web y el puerto de señalización (aquí 8090 y 8443) en el Firewall de Windows Defender, y la propia aplicación para los medios WebRTC, que usan puertos UDP elegidos en tiempo de ejecución.
 3. Abra `http://<dirección de este equipo>:8090/?signalling=8443` en el otro equipo.
 
-Recibir WebRTC no requiere HTTPS, así que `http://` funciona en una red local. `WebRTCSinkSettings` no tiene ajuste de autenticación: cualquiera que alcance los dos puertos puede ver el flujo. Mantenga `127.0.0.1` cuando el flujo no deba salir del equipo, y use WHIP con un servidor de medios que compruebe tokens cuando deba llegar a Internet.
+Recibir WebRTC no requiere HTTPS, así que `http://` funciona en una red local: abrimos la página de la demo con la dirección de red del equipo, que el navegador considera no segura, y la cámara se reprodujo. `WebRTCSinkSettings` no tiene ajuste de autenticación: cualquiera que alcance los dos puertos puede ver el flujo. Mantenga `127.0.0.1` cuando el flujo no deba salir del equipo, y use WHIP con un servidor de medios que compruebe tokens cuando deba llegar a Internet.
 
 ## Parte 2: publicar en un servidor de medios con WHIPSinkBlock
 
@@ -556,6 +573,10 @@ pipeline.Connect(h264.Output, whip.CreateNewInput(MediaBlockPadMediaType.Video))
 ### Códecs
 
 `WebRTCSinkBlock` envía video VP8 y audio Opus, que reproducen todos los navegadores actuales. Admite video y audio sin comprimir, o VP8 y Opus ya codificados; no admite H.264. `WHIPSinkBlock` admite solo H.264 y Opus.
+
+### Latencia
+
+En nuestra prueba en un ordenador con Windows, un cambio en una imagen de 320×240 a 30 fotogramas por segundo llegó al fotograma decodificado del espectador entre 55 y 60 ms después de salir de la fuente (mediana de 58 ms), antes del retardo de reproducción del espectador. Sumando la captura de una ventana y la reproducción y presentación en el navegador, la captura de pantalla del principio de esta guía muestra unos 0,15 segundos.
 
 ### CPU y resolución
 

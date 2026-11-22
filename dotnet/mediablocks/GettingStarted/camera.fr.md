@@ -322,4 +322,6 @@ public class CameraViewerExample
 
 Avec Media Blocks SDK .NET, construire des applications caméra puissantes devient simple. L'architecture à composants offre flexibilité et performance sur toutes les plateformes tout en masquant la complexité de l'intégration des périphériques caméra.
 
+Pour afficher la caméra et l'enregistrer dans un fichier MP4 en même temps, consultez [Aperçu webcam et enregistrement MP4](camera-to-mp4.md) : cette page ajoute un tee, le micro et une sortie MP4 au pipeline ci-dessus.
+
 Pour des exemples de code source complets, consultez notre [dépôt GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Simple%20Capture%20Demo).
