@@ -1,6 +1,6 @@
 ---
 name: media-player-sdk-net-winui
-description: Integrate VisioForge Media Player SDK .NET (file/stream playback) into a WinUI 3 (Windows App SDK) application. Covers the WinUI-specific VideoView control, the single NuGet package, project setup, license registration, MSIX packaging quirks, supported input formats, and the most common playback pitfalls (DLL not found, missing codecs, unsupported format, trial-period expiry / unlicensed build). Use for WinUI 3 playback — for WPF use media-player-sdk-net-wpf, for WinForms use media-player-sdk-net-winforms.
+description: Integrate VisioForge Media Player SDK .NET (file/stream playback) into a WinUI 3 (Windows App SDK) application. Covers the WinUI-specific VideoView control, the SDK and redist NuGet packages, project setup, license registration, MSIX packaging quirks, supported input formats, and the most common playback pitfalls (DLL not found, missing codecs, unsupported format, trial-period expiry / unlicensed build). Use for WinUI 3 playback — for WPF use media-player-sdk-net-wpf, for WinForms use media-player-sdk-net-winforms.
 ---
 
 # Media Player SDK .NET — WinUI 3 integration
@@ -56,7 +56,7 @@ WinUI requires **two** VisioForge packages — the SDK itself and the WinUI-spec
 </ItemGroup>
 ```
 
-Unlike a transitive-only setup, the WinUI sample references the redist packages **explicitly** — the WinUI host has historically had less-reliable transitive resolution under MSIX, and pinning the redist set avoids surprise "filter not registered" errors at runtime. Pin every redist to the same version as `VisioForge.DotNet.MediaPlayer`; version drift between main and redist is undefined behaviour. The `LAV` redist is what powers `MediaPlayerSourceMode.LAV` — the recommended source mode for the broadest format coverage (covers virtually every container and codec the LAV Filters project supports: MP4, MKV, AVI, MOV, WMV, FLV, MPEG-TS, MP3, AAC, FLAC, WAV, etc.).
+`VisioForge.DotNet.MediaPlayer` is the managed SDK only and brings no native redist, so the WinUI sample, like the WPF and WinForms ones, references the redist packages **explicitly**. Pin every redist to the same version as `VisioForge.DotNet.MediaPlayer`; version drift between main and redist is undefined behaviour. The `LAV` redist is what powers `MediaPlayerSourceMode.LAV` — the recommended source mode for the broadest format coverage (covers virtually every container and codec the LAV Filters project supports: MP4, MKV, AVI, MOV, WMV, FLV, MPEG-TS, MP3, AAC, FLAC, WAV, etc.).
 
 ### Full minimal csproj
 
@@ -221,15 +221,15 @@ Six most common production issues in WinUI 3 — flag any of them on first run.
 
 ### 1. `DllNotFoundException` / "Unable to load DLL 'VisioForge_*'" (unpackaged)
 
-**Cause**: in unpackaged mode the native DLLs from `VisioForge.DotNet.Core.Redist.*.x64` need to be in the executable's directory. WinUI 3 unpackaged apps published with `dotnet publish -r win-x64` sometimes leave the redist natives in a `runtimes/win-x64/native/` subfolder that the loader doesn't search.
+**Cause**: in unpackaged mode the native DLLs from `VisioForge.DotNet.Core.Redist.*.x64` need to be in the executable's directory. The redist packages' build targets copy them there (some packages, such as LAV, FFMPEG, VLC and XIPH, into its `x64` subfolder), as in WPF and WinForms, but only for a project that references the redist packages itself: the targets do not flow through another project's references.
 
-**Fix**: publish self-contained with `dotnet publish -c Release -r win-x64 --self-contained true /p:WindowsAppSDKSelfContained=true /p:WindowsPackageType=None`. That flattens the natives into the publish root. Verify by listing the publish folder — `VisioForge_*.dll` files must sit next to the .exe.
+**Fix**: reference the redist packages in the app project itself (see `references/Sample.csproj`), then rebuild or publish (for a self-contained unpackaged app: `dotnet publish -c Release -r win-x64 --self-contained true /p:WindowsAppSDKSelfContained=true /p:WindowsPackageType=None`). Verify by listing the output folder — the `VisioForge_*` files must sit next to the .exe or in its `x64` folder.
 
 ### 2. Native DLLs missing on end-user machine (MSIX)
 
-**Cause**: MSIX strictly bounds the package contents — only what's declared as Content or comes via NuGet `runtimes/` is shipped. The redist packages register their natives correctly, but a hand-edited `.appxmanifest` or a `<Content Remove>` in the csproj can drop them.
+**Cause**: MSIX strictly bounds the package contents — only the files the build places in the package layout are shipped. The redist packages' build targets add their natives as copy-to-output items, but a hand-edited `.appxmanifest` or a `<Content Remove>` / `<None Remove>` in the csproj can drop them.
 
-**Fix**: do not exclude `runtimes/**` from MSIX content. After packaging, open the `.msix` (it's a ZIP), look under `\runtimes\win-x64\native\` for the VisioForge DLLs. If they're missing, the redist NuGets aren't being honoured — re-add them at the project level (don't rely on transitive only, see `references/Sample.csproj`).
+**Fix**: do not exclude the redist files from the package content. After packaging, open the `.msix` (it's a ZIP) and look for the `VisioForge_*` DLLs and `.ax` files at its root or in its `x64` folder. If they're missing, the redist NuGets aren't being honoured — re-add them at the project level (don't rely on transitive only, see `references/Sample.csproj`).
 
 ### 3. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
@@ -266,8 +266,8 @@ Run through these after first integration:
 - [ ] Stopping and restarting playback from the UI does not leak `MediaPlayerCore` (always call `MediaPlayer1.Dispose()` on `Window.Closed`).
 - [ ] Position slider updates smoothly while playing and lets you seek without freezing the UI (the bundled sample uses a 500 ms `DispatcherTimer` and a `_timerTag` flag to suppress feedback loops between slider events and timer ticks — keep that pattern).
 - [ ] If a purchased licence is in use: `SetLicenseCertificateAsync` is called on every `MediaPlayerCore` instance before its `PlayAsync` (otherwise the app runs in 30-day trial mode and aborts after 30 days with `"SDK TRIAL period (30 days) is over. Buy a license: https://www.visioforge.com/buy?utm_source=sdk-trial"`). Under MSIX, the certificate path is resolved via `Package.Current.InstalledLocation.Path`.
-- [ ] If publishing unpackaged: `dotnet publish -c Release -r win-x64 --self-contained true /p:WindowsAppSDKSelfContained=true /p:WindowsPackageType=None` — verify `VisioForge_*.dll` files land in the publish root, not buried under `runtimes/win-x64/native/`.
-- [ ] If publishing MSIX: open the `.msix` ZIP and confirm `\runtimes\win-x64\native\` contains the VisioForge + LAV DLLs and that `Package.appxmanifest` declares the `runFullTrust` capability.
+- [ ] If publishing unpackaged: `dotnet publish -c Release -r win-x64 --self-contained true /p:WindowsAppSDKSelfContained=true /p:WindowsPackageType=None` — verify the redist files (`VisioForge_*` DLLs and `.ax` files, LAV and VLC libraries) land in the publish root or its `x64` folder.
+- [ ] If publishing MSIX: open the `.msix` ZIP and confirm its root or its `x64` folder contains the VisioForge + LAV DLLs and `.ax` files and that `Package.appxmanifest` declares the `runFullTrust` capability.
 
 ## Bundled references
 

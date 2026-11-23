@@ -1885,6 +1885,8 @@ Le WHEP Player Demo (WPF) du [dépôt d'exemples](https://github.com/visioforge/
 
 Mesure de bout en bout (glass to glass) sur un réseau local — une horloge à la milliseconde à l'écran, capturée, publiée via WHIP vers MediaMTX, relue via WHEP et affichée à côté de l'original, 20 relevés par codec : H.264 médiane 71 ms (56–131 ms), VP8 médiane 93 ms (36–130 ms).
 
+Pour un guide pas à pas qui construit ce lecteur en WPF et mesure sa latence avec une horloge à l'écran, voir [Lire un flux WebRTC en WHEP en C# WPF](../Guides/webrtc-whep-player.md).
+
 #### Plateformes
 
 Windows, macOS, Linux, iOS.

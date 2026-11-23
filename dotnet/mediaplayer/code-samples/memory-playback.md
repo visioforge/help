@@ -321,10 +321,11 @@ public partial class MainWindow : Window
 
 ## Notes
 
-- The stream must be readable and seekable, and its `Length` must be known: the player seeks in it to find the tracks and to follow the timeline. A network or decompression stream that cannot seek is copied into a `MemoryStream` first.
+- The stream should be readable and seekable, and its `Length` known: the player seeks in it to find the tracks and to follow the timeline. A stream that cannot seek (a network or decompression stream) plays only without the LAV package, through the FFMPEG source (2026.11.23.6 or later), and only from its start to its end: every seek is refused with an error, a selection (`Selection_Start`, `Selection_Stop`) too, and an MP4 whose index (`moov`) follows the media data does not open. To seek in such a stream, copy it into a `MemoryStream` first.
+- The player waits in `Read` as long as the stream does, `StopAsync` included: give a network stream a read timeout (`NetworkStream.ReadTimeout`), so a peer that stops sending ends the playback.
 - A byte array holds the whole file in memory. For a large file, a `FileStream` reads only what the player needs.
-- Without the LAV package the player cannot tell what the stream holds: use the constructor `MemoryStreamSource(IStream stream, bool? videoPresent, bool? audioPresent, long size)` and set both flags to what the stream really contains.
-- `ManagedIStream` reads through any `Stream`, so a custom stream class — a decrypting stream, for example — plays the same way, as long as it is readable and seekable.
+- Without the LAV package, the FFMPEG source (2026.11.23.6 or later) finds the tracks in the stream itself. With an older FFMPEG source, use the constructor `MemoryStreamSource(IStream stream, bool? videoPresent, bool? audioPresent, long size)` and set both flags to what the stream really contains.
+- `ManagedIStream` reads through any `Stream`, so a custom stream class — a decrypting stream, for example — plays the same way, as long as it is readable; seekable too, to seek in it and to play it with LAV.
 
 ## Sample Applications
 
@@ -344,11 +345,11 @@ The stream is usually disposed too early, for example by a `using` block around 
 
 ### Can I play a stream downloaded from the network?
 
-Copy it into a `MemoryStream` first. A network stream cannot seek and has no length, and the player needs both.
+Copy it into a `MemoryStream` first: a network stream cannot seek. Without the LAV package, the FFMPEG source plays it as it is, from its start to its end, and refuses every seek.
 
 ### Which formats play from memory?
 
-What the LAV splitter and decoders read from a file: MP4, MKV, AVI, MOV, WMV, WebM, MPEG-TS and others. The stream holds the same bytes as the file.
+What the LAV splitter and decoders read from a file, or without LAV the FFMPEG source: MP4, MKV, AVI, MOV, WMV, WebM, MPEG-TS and others. The stream holds the same bytes as the file.
 
 ## Video Transcript
 

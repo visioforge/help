@@ -53,7 +53,7 @@ See `references/Sample.csproj` in the bundled archive. Adapted from the official
 
 ### Project platform
 
-Video Capture SDK X WPF samples use `<PlatformTarget>x64</PlatformTarget>` — this differs from the legacy SDK (which uses AnyCPU). The reason is the redist packages are split per-architecture; referencing only `.x64` and pinning `<PlatformTarget>` to match makes the runtime resolution unambiguous.
+Video Capture SDK X WPF samples use `<PlatformTarget>x64</PlatformTarget>`, as the classic-engine samples do. The reason is the redist packages are split per-architecture; referencing only `.x64` and pinning `<PlatformTarget>` to match makes the runtime resolution unambiguous.
 
 ## Mandatory engine boot
 

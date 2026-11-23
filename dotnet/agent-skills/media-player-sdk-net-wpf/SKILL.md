@@ -1,6 +1,6 @@
 ---
 name: media-player-sdk-net-wpf
-description: Integrate VisioForge Media Player SDK .NET (file/stream playback) into a Windows WPF application. Covers the single NuGet package, project setup, license registration, supported input formats, and the most common playback pitfalls (DLL not found, missing codecs, unsupported format, trial-period expiry / unlicensed build). Use when adding video/audio file or network-stream playback to a WPF app on Windows — for capture from a camera use video-capture-sdk-net-wpf, for editing use video-edit-sdk-net-wpf.
+description: Integrate VisioForge Media Player SDK .NET (file/stream playback) into a Windows WPF application. Covers the SDK and redist NuGet packages, project setup, license registration, supported input formats, and the most common playback pitfalls (DLL not found, missing codecs, unsupported format, trial-period expiry / unlicensed build). Use when adding video/audio file or network-stream playback to a WPF app on Windows — for capture from a camera use video-capture-sdk-net-wpf, for editing use video-edit-sdk-net-wpf.
 ---
 
 # Media Player SDK .NET — WPF integration
@@ -32,23 +32,27 @@ Media Player SDK .NET 2026.x supports `net472`, `netcoreapp3.1`, `net5.0-windows
 
 ### NuGet packages
 
-The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, codec runtime DLLs) come in transitively — you do **not** need to reference them explicitly for a basic file-playback scenario.
+`VisioForge.DotNet.MediaPlayer` is the managed SDK only: it depends on `VisioForge.DotNet.Core` and `VisioForge.Libs.External`, and no native redist comes in with it. Reference the redist packages explicitly, pinned to the same version. The bundled sample uses the set of the Simple Player Demo sample:
 
 ```xml
 <ItemGroup>
   <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.23]"/>
 </ItemGroup>
 ```
+
+The default `Source_Mode` is `LAV`: the SDK loads the LAV filters from `VisioForge.DotNet.Core.Redist.LAV.x64` without registering them, so without that package, on a machine without the SDK installer, files do not open.
 
 If your inputs need codec-heavy decoding (WebM/VP9, certain HEVC paths, exotic containers), add the matching redist explicitly — see "Optional codec packages" below.
 
 ### Full minimal csproj
 
-See `references/Sample.csproj` in the bundled archive. Adapted from the official Simple Player Demo sample (`_DEMOS/Media Player SDK/WPF/CSharp/Simple Player Demo/`). Changes vs upstream: the per-TFM file matrix (`net472`/`net5`/`net6`/`net7`/`net8`/`net9`/`net10`) is collapsed to a single `<TargetFramework>net10.0-windows</TargetFramework>`; `<PlatformTarget>x64</PlatformTarget>` is removed (AnyCPU is the supported default — see "Project platform" below); the analyzer block (`<EnableNETAnalyzers>`, `<AnalysisLevel>`, `<NoWarn>S2325</NoWarn>`) is dropped; the `visioforge_main_icon.ico` reference and `<Content Include="visioforge_main_icon.ico" />` are removed (the bundled `references/` folder ships **no** icon — you supply your own application icon if needed); `<AssemblyName>` is shortened to `WPF Simple Player`. The bundled file builds standalone against the public NuGet package.
+See `references/Sample.csproj` in the bundled archive. Adapted from the official Simple Player Demo sample (`_DEMOS/Media Player SDK/WPF/CSharp/Simple Player Demo/`). Changes vs upstream: the per-TFM file matrix (`net472`/`net5`/`net6`/`net7`/`net8`/`net9`/`net10`) is collapsed to a single `<TargetFramework>net10.0-windows</TargetFramework>`; `<PlatformTarget>x64</PlatformTarget>` and the sample's redist `<PackageReference>` lines are kept; the analyzer block (`<EnableNETAnalyzers>`, `<AnalysisLevel>`, `<NoWarn>S2325</NoWarn>`) is dropped; the `visioforge_main_icon.ico` reference and `<Content Include="visioforge_main_icon.ico" />` are removed (the bundled `references/` folder ships **no** icon — you supply your own application icon if needed); `<AssemblyName>` is shortened to `WPF Simple Player`. The bundled file builds standalone against the public NuGet packages.
 
 ### Project platform
 
-Use `<Platforms>AnyCPU</Platforms>` (the default). The transitive redist NuGet packages contain native DLLs for x64 *and* x86 and resolve at runtime via the `runtimes/<rid>/native/` convention. **Do not** set `<PlatformTarget>x64</PlatformTarget>` alone — that's a common cause of the "DLL not found" failure mode below. The upstream Simple Player Demo csproj forces `x64` for convenience; the bundled `references/Sample.csproj` removes it.
+Set `<PlatformTarget>x64</PlatformTarget>`, matching the `.x64` redist packages. Their build targets copy the native files into the build output (next to the exe or into its `x64` folder), and the SDK loads the files of the process architecture. For a 32-bit build, swap every `.x64` package for its `.x86` one and set `<PlatformTarget>x86</PlatformTarget>`.
 
 ## License registration
 
@@ -159,13 +163,13 @@ namespace YourApp
 
 ## Supported input formats
 
-Out-of-the-box (no additional redist needed): MP4 / MOV / M4V / M4A (H.264, H.265 via Media Foundation), AVI, WMV / ASF, MP3, WAV, AAC, FLAC, MPEG-TS, MPEG-PS. Network protocols: `http://`, `https://`, `rtsp://`, `udp://`, `rtmp://`, `mms://`.
+With the bundled set (the default `LAV` source mode, `VisioForge.DotNet.Core.Redist.LAV.x64`): MP4 / MOV / M4V / M4A (H.264, H.265 via Media Foundation), AVI, WMV / ASF, MP3, WAV, AAC, FLAC, MPEG-TS, MPEG-PS. Network protocols: `http://`, `https://`, `rtsp://`, `udp://`, `rtmp://`, `mms://`.
 
 For **WebM (VP8/VP9 + Vorbis/Opus)** and many MKV variants you need the WebM redist. For exotic containers and codecs (e.g. DV, Theora, HEVC HDR via FFmpeg, raw network sinks), add the FFMPEG or LAV redist — see the table in the next section.
 
 ## Optional codec packages
 
-You only need these if your inputs actually use them. Plain MP4/H.264, WMV, AVI, MP3, WAV, FLAC playback does not require any explicit redist — it ships in the main package.
+Add these only if your inputs use them. Plain MP4/H.264, WMV, AVI, MP3, WAV and FLAC playback needs only the bundled set.
 
 | Input format / source | Add to csproj |
 |---|---|
@@ -177,7 +181,7 @@ You only need these if your inputs actually use them. Plain MP4/H.264, WMV, AVI,
 
 Pin all redist packages to **the same version as `VisioForge.DotNet.MediaPlayer`** — version drift between main and redist is undefined behaviour.
 
-For a 32-bit deployment swap `.x64` for `.x86`. To support both architectures with a single AnyCPU build, reference both `.x64` and `.x86` of every redist package you need.
+For a 32-bit deployment swap `.x64` for `.x86` and set `<PlatformTarget>x86</PlatformTarget>`.
 
 ## Common deployment failures
 
@@ -185,9 +189,9 @@ These are the four most common production issues — flag any of them on first r
 
 ### 1. `DllNotFoundException` / "Unable to load DLL 'VisioForge_*'"
 
-**Cause**: project's `<PlatformTarget>` is set to `x64` or `x86` alone, *or* the build output is targeting a runtime identifier (`<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>`) that doesn't match the redist NuGet's native folder. The upstream Simple Player Demo csproj forces `<PlatformTarget>x64</PlatformTarget>` — when you copy that into a project that publishes for a different RID, the native DLLs no longer resolve.
+**Cause**: a redist package the code path needs is not referenced (the SDK package brings none), *or* the process architecture does not match the redist packages — a 32-bit process (an `x86` build, AnyCPU with `Prefer32Bit` on .NET Framework, or an x86 runtime identifier or `dotnet` host on .NET) or an ARM64 process with only `.x64` packages.
 
-**Fix**: keep `<Platforms>AnyCPU</Platforms>` (default) and remove any explicit `<PlatformTarget>`. If you must target a specific RID, ensure the redist NuGet contains a matching `runtimes/<rid>/native/` folder — for non-`win-x64` / `win-x86` RIDs this currently is **not** supported, the SDK is Windows-x86/x64 only.
+**Fix**: reference the redist set from "NuGet packages" above and set `<PlatformTarget>x64</PlatformTarget>` (or `.x86` packages with `x86`). On ARM64 Windows build `x64` explicitly; it runs under emulation. The SDK is Windows x86/x64 only.
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 

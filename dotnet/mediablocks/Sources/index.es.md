@@ -1885,6 +1885,8 @@ El WHEP Player Demo (WPF) del [repositorio de ejemplos](https://github.com/visio
 
 Medición de extremo a extremo (glass to glass) en una red local — un reloj de milisegundos en la pantalla, capturado, publicado por WHIP en MediaMTX, leído de vuelta por WHEP y mostrado junto al original, 20 lecturas por códec: H.264 mediana 71 ms (56–131 ms), VP8 mediana 93 ms (36–130 ms).
 
+Para una guía paso a paso que construye este reproductor en WPF y mide su latencia con un reloj en pantalla, consulte [Reproducir un stream WebRTC por WHEP en C# WPF](../Guides/webrtc-whep-player.md).
+
 #### Plataformas
 
 Windows, macOS, Linux, iOS.

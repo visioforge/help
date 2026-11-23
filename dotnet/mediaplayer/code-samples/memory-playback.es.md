@@ -321,10 +321,11 @@ public partial class MainWindow : Window
 
 ## Notas
 
-- El stream debe ser legible y admitir búsqueda, y su `Length` debe conocerse: el reproductor busca en él para encontrar las pistas y seguir la línea de tiempo. Un stream de red o de descompresión que no admite búsqueda se copia antes en un `MemoryStream`.
+- El stream debería ser legible y admitir búsqueda, y su `Length` debería conocerse: el reproductor busca en él para encontrar las pistas y seguir la línea de tiempo. Un stream que no admite búsqueda (un stream de red o de descompresión) solo se reproduce sin el paquete LAV, a través de la fuente FFMPEG (2026.11.23.6 o posterior), y solo de principio a fin: toda búsqueda se rechaza con un error, también una selección (`Selection_Start`, `Selection_Stop`), y un MP4 cuyo índice (`moov`) va después de los datos multimedia no se abre. Para buscar en un stream así, cópielo antes en un `MemoryStream`.
+- El reproductor espera en `Read` tanto como el stream, `StopAsync` incluido: dé a un stream de red un tiempo de espera de lectura (`NetworkStream.ReadTimeout`), para que un extremo que deja de enviar termine la reproducción.
 - Un array de bytes mantiene todo el archivo en memoria. Para un archivo grande, un `FileStream` lee solo lo que el reproductor necesita.
-- Sin el paquete LAV el reproductor no puede saber qué contiene el stream: use el constructor `MemoryStreamSource(IStream stream, bool? videoPresent, bool? audioPresent, long size)` y establezca ambas marcas según lo que el stream contiene realmente.
-- `ManagedIStream` lee a través de cualquier `Stream`, así que una clase de stream propia — por ejemplo, un stream que descifra — se reproduce igual, siempre que sea legible y admita búsqueda.
+- Sin el paquete LAV, la fuente FFMPEG (2026.11.23.6 o posterior) encuentra por sí misma las pistas del stream. Con una fuente FFMPEG anterior, use el constructor `MemoryStreamSource(IStream stream, bool? videoPresent, bool? audioPresent, long size)` y establezca ambas marcas según lo que el stream contiene realmente.
+- `ManagedIStream` lee a través de cualquier `Stream`, así que una clase de stream propia — por ejemplo, un stream que descifra — se reproduce igual, siempre que sea legible; y que admita búsqueda, para buscar en él y reproducirlo con LAV.
 
 ## Aplicaciones de ejemplo
 
@@ -344,11 +345,11 @@ Normalmente el stream se libera demasiado pronto, por ejemplo con un bloque `usi
 
 ### ¿Puedo reproducir un stream descargado de la red?
 
-Cópielo antes en un `MemoryStream`. Un stream de red no admite búsqueda ni tiene longitud, y el reproductor necesita ambas cosas.
+Cópielo antes en un `MemoryStream`: un stream de red no admite búsqueda. Sin el paquete LAV, la fuente FFMPEG lo reproduce tal cual, de principio a fin, y rechaza toda búsqueda.
 
 ### ¿Qué formatos se reproducen desde memoria?
 
-Los que el divisor y los decodificadores LAV leen de un archivo: MP4, MKV, AVI, MOV, WMV, WebM, MPEG-TS y otros. El stream contiene los mismos bytes que el archivo.
+Los que el divisor y los decodificadores LAV leen de un archivo, o sin LAV la fuente FFMPEG: MP4, MKV, AVI, MOV, WMV, WebM, MPEG-TS y otros. El stream contiene los mismos bytes que el archivo.
 
 ## Transcripción del video
 

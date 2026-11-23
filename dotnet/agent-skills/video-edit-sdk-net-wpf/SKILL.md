@@ -1,6 +1,6 @@
 ---
 name: video-edit-sdk-net-wpf
-description: Integrate VisioForge Video Edit SDK .NET (non-linear editor) into a Windows WPF application. Covers the timeline model, the single NuGet package, project setup, license registration, and the most common deployment pitfalls (DLL not found, missing codecs, trial-period expiry / unlicensed build). Use when adding cut/trim/merge/transcode/effects to existing video files on a WPF app — for live capture from a camera, use video-capture-sdk-net-wpf instead.
+description: Integrate VisioForge Video Edit SDK .NET (non-linear editor) into a Windows WPF application. Covers the timeline model, the SDK and redist NuGet packages, project setup, license registration, and the most common deployment pitfalls (DLL not found, missing codecs, trial-period expiry / unlicensed build). Use when adding cut/trim/merge/transcode/effects to existing video files on a WPF app — for live capture from a camera, use video-capture-sdk-net-wpf instead.
 ---
 
 # Video Edit SDK .NET — WPF integration
@@ -33,23 +33,27 @@ Video Edit SDK .NET 2026.x supports `net472`, `net5.0-windows`, `net6.0-windows`
 
 ### NuGet packages
 
-The SDK ships as a single meta-package. The redist packages (Core, MP4, FFMPEG, codec runtime DLLs) come in transitively — you do **not** need to reference them explicitly for cut / merge / MP4 transcode scenarios.
+`VisioForge.DotNet.VideoEdit` is the managed SDK only: it depends on `VisioForge.DotNet.Core` and `VisioForge.Libs.External`, and no native redist comes in with it. Reference the redist packages explicitly, pinned to the same version. The bundled sample uses the set of the Cut Video File sample:
 
 ```xml
 <ItemGroup>
   <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoEdit.x64" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.MP4.x64" Version="[2026.11.23]"/>
 </ItemGroup>
 ```
 
-Add codec-heavy outputs (WebM, FFMPEG-based custom containers) by adding the matching redist explicitly — see "Optional codec packages" below.
+`FastEdit_*Async` runs `vfffmpeg64.exe` from `VisioForge.DotNet.Core.Redist.FFMPEG.x64`. Without that package, on a machine without the SDK installer, the call fails through `OnError` with `vfffmpeg64.exe not found. Looked in: …`. Add WebM or XIPH output the same way — see "Optional codec packages" below.
 
 ### Full minimal csproj
 
-See `references/Sample.csproj`. Adapted from the official Cut Video File sample (`x:/MediaFrameworkDotNet/_SETUP/GitHub/Video Edit SDK/WPF/CSharp/Cut Video File/`). Changes vs upstream: the in-repo `<ProjectReference>` is replaced by `<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]"/>`; the demo's hard-coded `<Platform>x64</Platform>` is removed (default AnyCPU works — see "Project platform" below); `<AssemblyName>` is set to `WPF Cut Video File` for clarity. The bundled file builds standalone against the public NuGet package.
+See `references/Sample.csproj`. Adapted from the official Cut Video File sample ([`Video Edit SDK/WPF/CSharp/Cut Video File/`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK/WPF/CSharp/Cut%20Video%20File) in the public samples repository). Changes vs upstream: the in-repo `<ProjectReference>` is replaced by `<PackageReference>` lines of the sample's NuGet project (the SDK plus its four `.x64` redist packages); `<PlatformTarget>x64</PlatformTarget>` is kept and the demo's `<Platform>x64</Platform>` is dropped; `<AssemblyName>` is set to `WPF Cut Video File` for clarity. The bundled file builds standalone against the public NuGet packages.
 
 ### Project platform
 
-Use AnyCPU (the default — no `<Platform>` or `<PlatformTarget>` element required). The transitive redist NuGet packages contain native DLLs for x64 *and* x86 and resolve at runtime via the `runtimes/<rid>/native/` convention. **Do not** set `<PlatformTarget>x64</PlatformTarget>` alone — that's a common cause of the "DLL not found" failure mode below.
+Set `<PlatformTarget>x64</PlatformTarget>`, matching the `.x64` redist packages. Their build targets copy the native files into the build output (next to the exe or into its `x64` folder), and the SDK loads the files of the process architecture. For a 32-bit build, swap every `.x64` package for its `.x86` one and set `<PlatformTarget>x86</PlatformTarget>`.
 
 ## Timeline model
 
@@ -131,26 +135,26 @@ For a hello-world that exercises the timeline model and previews the result, cop
 
 ## Optional codec packages
 
-You only need these if your output format actually uses them. Default MP4 (Media Foundation hardware encoder) and the FastEdit cut path do not require any explicit redist — they ship in the main package.
+The bundled set (see "NuGet packages" above) covers the FastEdit cut path, MP4 output and the common inputs. Keep the FFMPEG package in every project: `FastEdit_*Async` runs its `vfffmpeg64.exe`, and the timeline opens every video and audio input except WMV, ASF, WMA, WAV and MP3 through its FFMPEG Source filter when LAV Filters are not registered on the machine (an app deployed with NuGet packages only) or are blacklisted, or the timeline has transitions (they disable LAV). Add the others only if your output format or inputs use them.
 
 | Output / source | Add to csproj |
 |---|---|
 | WebM (VP8/VP9 + Vorbis/Opus) | `VisioForge.DotNet.Core.Redist.WebM.x64` |
-| FFmpeg-based output (custom muxers, network sinks) | `VisioForge.DotNet.Core.Redist.FFMPEG.x64` |
-| LAV-based decoding (uncommon legacy formats) | `VisioForge.DotNet.Core.Redist.LAV.x64` |
+| `FastEdit_*Async` (cut, join); timeline inputs other than WMV, ASF, WMA, WAV and MP3 without registered LAV Filters, with them blacklisted, or with transitions; FFmpeg-based output (custom muxers, network sinks) | `VisioForge.DotNet.Core.Redist.FFMPEG.x64` |
+| LAV Filters decoding, only where LAV Filters are registered on the machine (the package does not register them) | `VisioForge.DotNet.Core.Redist.LAV.x64` |
 | Xiph (Vorbis/Theora/FLAC/Speex) standalone codecs | `VisioForge.DotNet.Core.Redist.XIPH.x64` |
 
-Pin all redist packages to **the same version as `VisioForge.DotNet.VideoEdit`** — version drift between main and redist is undefined behaviour. For a 32-bit deployment swap `.x64` for `.x86`. To support both architectures with a single AnyCPU build, reference both `.x64` and `.x86` of every redist package you need.
+Pin all redist packages to **the same version as `VisioForge.DotNet.VideoEdit`** — version drift between main and redist is undefined behaviour. For a 32-bit deployment swap `.x64` for `.x86` and set `<PlatformTarget>x86</PlatformTarget>`.
 
 ## Common deployment failures
 
 These are the four most common production issues — flag any of them on first run.
 
-### 1. `DllNotFoundException` / "Unable to load DLL 'VisioForge_*'"
+### 1. `DllNotFoundException` / "Unable to load DLL 'VisioForge_*'" / "vfffmpeg64.exe not found" / "vfffmpeg.exe not found"
 
-**Cause**: project's `<PlatformTarget>` is set to `x64` or `x86` alone, *or* the build output is targeting a runtime identifier (`<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>`) that doesn't match the redist NuGet's native folder.
+**Cause**: a redist package the code path needs is not referenced (the SDK package brings none), *or* the process architecture does not match the redist packages — a 32-bit process (an `x86` build, AnyCPU with `Prefer32Bit` on .NET Framework, or an x86 runtime identifier or `dotnet` host on .NET) or an ARM64 process with only `.x64` packages.
 
-**Fix**: keep AnyCPU (default — remove any `<Platform>x64</Platform>` carried over from the demo csproj). If you must target a specific RID, ensure the redist NuGet contains a matching `runtimes/<rid>/native/` folder — for non-`win-x64` / `win-x86` RIDs this currently is **not** supported; the SDK is Windows-x86/x64 only.
+**Fix**: reference the redist set from "NuGet packages" above and set `<PlatformTarget>x64</PlatformTarget>` (or `.x86` packages with `x86`). `FastEdit_*Async` needs `VisioForge.DotNet.Core.Redist.FFMPEG.x64`; a 32-bit process looks for `vfffmpeg.exe` from `.x86` instead and reports `vfffmpeg.exe not found`. On ARM64 Windows build `x64` explicitly; it runs under emulation. The SDK is Windows x86/x64 only.
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 
@@ -160,11 +164,11 @@ These are the four most common production issues — flag any of them on first r
 
 ### 3. `OnError` fires with "Codec not found" / "Filter not registered"
 
-**Cause**: the chosen `Output_Format` depends on a redist not referenced by the project, *or* the input file uses an exotic codec not in the default decoder set (e.g., HEVC in MOV without the LAV redist on older Windows versions).
+**Cause**: the chosen `Output_Format` depends on a redist not referenced by the project, *or* the input file uses an exotic codec not in the default decoder set (e.g., HEVC in MOV on older Windows versions).
 
 **Fix (output)**: add the corresponding redist NuGet package and rebuild — for example, `VideoEdit1.Output_Format = new WebMOutput()` without `VisioForge.DotNet.Core.Redist.WebM.x64` triggers this on the WebM filter graph instantiation.
 
-**Fix (input)**: add `VisioForge.DotNet.Core.Redist.LAV.x64` for broader decoder coverage, or transcode the input through `ffmpeg` to a known-good format first.
+**Fix (input)**: add `VisioForge.DotNet.Core.Redist.FFMPEG.x64`. Without registered LAV Filters (or with them blacklisted), or on a timeline with transitions, the timeline opens every input except WMV, ASF, WMA, WAV and MP3 through its FFMPEG Source filter, and writes the warning `add the VisioForge.DotNet.Core.Redist.FFMPEG package` to the SDK log (not to `OnError`) when it is missing. `VisioForge.DotNet.Core.Redist.LAV.x64` helps only where LAV Filters are registered on the machine; the package does not register them. Or transcode the input through `ffmpeg` to a known-good format first.
 
 ### 4. Output file is 0 bytes / corrupt after `OnStop` fires
 

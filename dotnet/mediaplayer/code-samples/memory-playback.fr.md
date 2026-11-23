@@ -321,10 +321,11 @@ public partial class MainWindow : Window
 
 ## Remarques
 
-- Le flux doit être lisible et positionnable, et sa `Length` doit être connue : le lecteur s'y positionne pour trouver les pistes et suivre la timeline. Un flux réseau ou de décompression non positionnable est d'abord copié dans un `MemoryStream`.
+- Le flux devrait être lisible et positionnable, et sa `Length` connue : le lecteur s'y positionne pour trouver les pistes et suivre la timeline. Un flux non positionnable (un flux réseau ou de décompression) ne se lit que sans le paquet LAV, par la source FFMPEG (2026.11.23.6 ou ultérieure), et seulement du début à la fin : tout positionnement est refusé avec une erreur, une sélection (`Selection_Start`, `Selection_Stop`) aussi, et un MP4 dont l'index (`moov`) suit les données multimédias ne s'ouvre pas. Pour se positionner dans un tel flux, copiez-le d'abord dans un `MemoryStream`.
+- Le lecteur attend dans `Read` aussi longtemps que le flux, `StopAsync` compris : donnez à un flux réseau un délai de lecture (`NetworkStream.ReadTimeout`), pour qu'un pair qui cesse d'envoyer termine la lecture.
 - Un tableau d'octets garde tout le fichier en mémoire. Pour un gros fichier, un `FileStream` ne lit que ce dont le lecteur a besoin.
-- Sans le paquet LAV, le lecteur ne peut pas savoir ce que contient le flux : utilisez le constructeur `MemoryStreamSource(IStream stream, bool? videoPresent, bool? audioPresent, long size)` et réglez les deux indicateurs selon ce que le flux contient réellement.
-- `ManagedIStream` lit à travers n'importe quel `Stream` : une classe de flux personnalisée — un flux qui déchiffre, par exemple — se lit de la même façon, à condition d'être lisible et positionnable.
+- Sans le paquet LAV, la source FFMPEG (2026.11.23.6 ou ultérieure) trouve elle-même les pistes du flux. Avec une source FFMPEG plus ancienne, utilisez le constructeur `MemoryStreamSource(IStream stream, bool? videoPresent, bool? audioPresent, long size)` et réglez les deux indicateurs selon ce que le flux contient réellement.
+- `ManagedIStream` lit à travers n'importe quel `Stream` : une classe de flux personnalisée — un flux qui déchiffre, par exemple — se lit de la même façon, à condition d'être lisible ; et positionnable, pour s'y positionner et le lire avec LAV.
 
 ## Applications d'exemple
 
@@ -344,11 +345,11 @@ Le plus souvent, le flux est libéré trop tôt, par exemple par un bloc `using`
 
 ### Puis-je lire un flux téléchargé depuis le réseau ?
 
-Copiez-le d'abord dans un `MemoryStream`. Un flux réseau n'est pas positionnable et n'a pas de longueur, et le lecteur a besoin des deux.
+Copiez-le d'abord dans un `MemoryStream` : un flux réseau n'est pas positionnable. Sans le paquet LAV, la source FFMPEG le lit tel quel, du début à la fin, et refuse tout positionnement.
 
 ### Quels formats se lisent depuis la mémoire ?
 
-Ceux que le séparateur et les décodeurs LAV lisent depuis un fichier : MP4, MKV, AVI, MOV, WMV, WebM, MPEG-TS et d'autres. Le flux contient les mêmes octets que le fichier.
+Ceux que le séparateur et les décodeurs LAV lisent depuis un fichier, ou sans LAV la source FFMPEG : MP4, MKV, AVI, MOV, WMV, WebM, MPEG-TS et d'autres. Le flux contient les mêmes octets que le fichier.
 
 ## Transcription de la vidéo
 

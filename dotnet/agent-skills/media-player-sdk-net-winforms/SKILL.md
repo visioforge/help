@@ -1,6 +1,6 @@
 ---
 name: media-player-sdk-net-winforms
-description: Integrate VisioForge Media Player SDK .NET (file/stream playback) into a Windows Forms application. Covers the single NuGet package, project setup, license registration, supported input formats, and the most common playback pitfalls (DLL not found, missing codecs, unsupported format, trial-period expiry / unlicensed build). Use when adding video/audio file or network-stream playback to a WinForms app on Windows — for capture use video-capture-sdk-net-winforms, for editing use video-edit-sdk-net-winforms.
+description: Integrate VisioForge Media Player SDK .NET (file/stream playback) into a Windows Forms application. Covers the SDK and redist NuGet packages, project setup, license registration, supported input formats, and the most common playback pitfalls (DLL not found, missing codecs, unsupported format, trial-period expiry / unlicensed build). Use when adding video/audio file or network-stream playback to a WinForms app on Windows — for capture use video-capture-sdk-net-winforms, for editing use video-edit-sdk-net-winforms.
 ---
 
 # Media Player SDK .NET — WinForms integration
@@ -31,23 +31,29 @@ Media Player SDK .NET 2026.x supports `net472`, `netcoreapp3.1`, `net5.0-windows
 
 ### NuGet packages
 
-The SDK ships as a single meta-package. The redist packages (Core, codec runtime DLLs) come in transitively — you do **not** need to reference them explicitly for a basic file-playback scenario.
+`VisioForge.DotNet.MediaPlayer` is the managed SDK only: it depends on `VisioForge.DotNet.Core` and `VisioForge.Libs.External`, and no native redist comes in with it. Reference the redist packages explicitly, pinned to the same version. The bundled sample uses the set of the Simple Video Player sample:
 
 ```xml
 <ItemGroup>
   <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.VLC.x64" Version="[2026.11.23]"/>
 </ItemGroup>
 ```
+
+The default `Source_Mode` is `LAV`: the SDK loads the LAV filters from `VisioForge.DotNet.Core.Redist.LAV.x64` without registering them, so without that package, on a machine without the SDK installer, files do not open.
 
 If you need codec-heavy formats (WebM VP8/VP9, certain legacy LAV-only inputs) or VLC-backed network sources, add the matching redist explicitly — see "Optional codec packages" below.
 
 ### Full minimal csproj
 
-See `references/Sample.csproj` in the bundled archive. Adapted from the official Simple Video Player sample (`_DEMOS/Media Player SDK/WinForms/CSharp/Simple Video Player/`). Changes vs upstream: the seven per-TFM upstream csprojs (`net472`, `net5..net10`) are collapsed into a single multi-target file with `<TargetFrameworks>net472;net10.0-windows</TargetFrameworks>`; demo-only properties are removed (`<ProductVersion>`, `<PlatformTarget>`, `<AssemblyVersion>` / `<FileVersion>`, the per-Configuration `<DebugType>` blocks, the `<ApplicationIcon>` / `<ApplicationManifest>` references, and the `Properties\Resources.*` and `Properties\Settings.*` Compile/EmbeddedResource entries that the modern SDK auto-includes); the SDK's own `visioforge_main_icon.ico` is deliberately not bundled into the references folder. The bundled file builds standalone against the public NuGet package.
+See `references/Sample.csproj` in the bundled archive. Adapted from the official Simple Video Player sample (`_DEMOS/Media Player SDK/WinForms/CSharp/Simple Video Player/`). Changes vs upstream: the seven per-TFM upstream csprojs (`net472`, `net5..net10`) are collapsed into a single multi-target file with `<TargetFrameworks>net472;net10.0-windows</TargetFrameworks>`; demo-only properties are removed (`<ProductVersion>`, `<AssemblyVersion>` / `<FileVersion>`, the per-Configuration `<DebugType>` blocks, the `<ApplicationIcon>` / `<ApplicationManifest>` references, and the `Properties\Resources.*` and `Properties\Settings.*` Compile/EmbeddedResource entries that the modern SDK auto-includes); the SDK's own `visioforge_main_icon.ico` is deliberately not bundled into the references folder; `<PlatformTarget>x64</PlatformTarget>` and the sample's redist `<PackageReference>` lines are kept. The bundled file builds standalone against the public NuGet packages.
 
 ### Project platform
 
-Use `<Platforms>AnyCPU</Platforms>` (the default). The transitive redist NuGet packages contain native DLLs for x64 *and* x86 and resolve at runtime via the `runtimes/<rid>/native/` convention. **Do not** set `<PlatformTarget>x64</PlatformTarget>` alone — that's a common cause of the "DLL not found" failure mode below. (Note: the upstream `net10.csproj` does pin `<PlatformTarget>x64</PlatformTarget>` — that's a legacy demo choice, the bundled `Sample.csproj` removes it on purpose.)
+Set `<PlatformTarget>x64</PlatformTarget>`, matching the `.x64` redist packages. Their build targets copy the native files into the build output (next to the exe or into its `x64` folder), and the SDK loads the files of the process architecture. For a 32-bit build, swap every `.x64` package for its `.x86` one and set `<PlatformTarget>x86</PlatformTarget>`.
 
 ## License registration
 
@@ -150,11 +156,11 @@ The set of decodable formats depends on the **`Source_Mode`** selected:
 | `FFMPEG` | FFmpeg | Network streams (HTTP, HTTPS, HLS, RTSP, RTMP, UDP, MMS), exotic containers, and anything LAV won't decode. Add `VisioForge.DotNet.Core.Redist.FFMPEG.x64`. |
 | `File_VLC` | VLC | Fallback for unusual formats VLC handles natively, plus alternative network-stream backend. Add `VisioForge.DotNet.Core.Redist.VLC.x64`. |
 
-Common extensions decoded out-of-the-box with `LAV`: `.mp4`, `.m4v`, `.mov`, `.mkv`, `.webm`, `.avi`, `.wmv`, `.asf`, `.flv`, `.ts`, `.mts`, `.m2ts`, `.mp3`, `.aac`, `.m4a`, `.flac`, `.wav`, `.ogg`, `.opus`. DRM-protected content is not supported.
+Common extensions decoded with `LAV` and the bundled set: `.mp4`, `.m4v`, `.mov`, `.mkv`, `.webm`, `.avi`, `.wmv`, `.asf`, `.flv`, `.ts`, `.mts`, `.m2ts`, `.mp3`, `.aac`, `.m4a`, `.flac`, `.wav`, `.ogg`, `.opus`. DRM-protected content is not supported.
 
 ## Optional codec packages
 
-You only need these if your `Source_Mode` (or the input format) actually uses them. Default LAV-based file playback does not require any explicit redist — it ships in the main package.
+You only need these if your `Source_Mode` (or the input format) actually uses them. Default LAV-based file playback needs `VisioForge.DotNet.Core.Redist.LAV.x64`, already in the bundled set.
 
 | Source / format | Add to csproj |
 |---|---|
@@ -166,7 +172,7 @@ You only need these if your `Source_Mode` (or the input format) actually uses th
 
 Pin all redist packages to **the same version as `VisioForge.DotNet.MediaPlayer`** — version drift between main and redist is undefined behaviour.
 
-For a 32-bit deployment swap `.x64` for `.x86`. To support both architectures with a single AnyCPU build, reference both `.x64` and `.x86` of every redist package you need.
+For a 32-bit deployment swap `.x64` for `.x86` and set `<PlatformTarget>x86</PlatformTarget>`.
 
 ## Common playback failures
 
@@ -174,9 +180,9 @@ These are the four most common production issues — flag any of them on first r
 
 ### 1. `DllNotFoundException` / "Unable to load DLL 'VisioForge_*'"
 
-**Cause**: project's `<PlatformTarget>` is set to `x64` or `x86` alone, *or* the build output is targeting a runtime identifier (`<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>`) that doesn't match the redist NuGet's native folder.
+**Cause**: a redist package the code path needs is not referenced (the SDK package brings none), *or* the process architecture does not match the redist packages — a 32-bit process (an `x86` build, AnyCPU with `Prefer32Bit` on .NET Framework, or an x86 runtime identifier or `dotnet` host on .NET) or an ARM64 process with only `.x64` packages.
 
-**Fix**: keep `<Platforms>AnyCPU</Platforms>` (default). If you must target a specific RID, ensure the redist NuGet contains a matching `runtimes/<rid>/native/` folder — for non-`win-x64` / `win-x86` RIDs this currently is **not** supported, the SDK is Windows-x86/x64 only.
+**Fix**: reference the redist set from "NuGet packages" above and set `<PlatformTarget>x64</PlatformTarget>` (or `.x86` packages with `x86`). On ARM64 Windows build `x64` explicitly; it runs under emulation. The SDK is Windows x86/x64 only.
 
 ### 2. Trial-mode message (or "SDK TRIAL period (30 days) is over") on startup
 

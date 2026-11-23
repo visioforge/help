@@ -54,11 +54,11 @@ For 32-bit deployment, swap `.x64` for `.x86` on both redists. To support both a
 
 ### Full minimal csproj
 
-See `references/Sample.csproj`. Adapted from the official Video Join Demo X sample (`x:/MediaFrameworkDotNet/_SETUP/GitHub/Video Edit SDK X/WPF/CSharp/Video Join Demo X/`). Changes vs upstream: the per-target-framework csproj fan-out (net472/net5/net6/net7/net8/net9/net10) is collapsed to a single `net10.0-windows` row; the upstream icon resource (`<Resource Include="visioforge_main_icon.ico" />`) and the matching `<Window Icon="..." />` attribute were stripped — that's the SDK's own branding icon and shouldn't ship into a user's app via this skill. The bundled file builds standalone against the public NuGet packages.
+See `references/Sample.csproj`. Adapted from the official Video Join Demo X sample ([`Video Edit SDK X/WPF/CSharp/Video Join Demo X/`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/WPF/CSharp/Video%20Join%20Demo%20X) in the public samples repository). Changes vs upstream: the per-target-framework csproj fan-out (net472/net5/net6/net7/net8/net9/net10) is collapsed to a single `net10.0-windows` row; the upstream icon resource (`<Resource Include="visioforge_main_icon.ico" />`) and the matching `<Window Icon="..." />` attribute were stripped — that's the SDK's own branding icon and shouldn't ship into a user's app via this skill. The bundled file builds standalone against the public NuGet packages.
 
 ### Project platform
 
-Video Edit SDK X WPF samples use `<PlatformTarget>x64</PlatformTarget>` — this differs from the legacy SDK (which uses AnyCPU). The reason is the redist packages are split per-architecture; referencing only `.x64` and pinning `<PlatformTarget>` to match makes the runtime resolution unambiguous.
+Video Edit SDK X WPF samples use `<PlatformTarget>x64</PlatformTarget>`, as the classic-engine samples do. The reason is the redist packages are split per-architecture; referencing only `.x64` and pinning `<PlatformTarget>` to match makes the runtime resolution unambiguous.
 
 ## Mandatory engine boot
 

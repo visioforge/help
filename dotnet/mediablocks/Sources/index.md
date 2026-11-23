@@ -1889,6 +1889,8 @@ The WHEP Player Demo (WPF) in the [samples repository](https://github.com/visiof
 
 Measured glass to glass on a local network — a millisecond clock on the screen, captured, published over WHIP to MediaMTX, read back over WHEP and shown next to the original, 20 readings per codec: H.264 median 71 ms (56–131 ms), VP8 median 93 ms (36–130 ms).
 
+For a step-by-step guide that builds this player in WPF and measures its latency with a clock on screen, see [Play a WebRTC Stream over WHEP in C# WPF](../Guides/webrtc-whep-player.md).
+
 #### Platforms
 
 Windows, macOS, Linux, iOS.
