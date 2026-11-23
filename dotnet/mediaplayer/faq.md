@@ -92,3 +92,28 @@ await player.PlayAsync();
 ```
 
 `Rate_SetAsync` changes the tempo of karaoke files too. The [Karaoke Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinForms/Karaoke%20Demo) shows a complete karaoke player.
+
+## Hardware decoding
+
+### Which hardware decoder should the FFMPEG source engine use?
+
+With `Source_Mode` set to `MediaPlayerSourceMode.FFMPEG`, set `Source_FFMPEG_HWDecoder` before `PlayAsync`. For IP cameras in Video Capture SDK .NET, the same choice is `FFMPEG_HWDecoder` in `IPCameraSourceSettings` with the `Auto_FFMPEG` engine. `DXVA2Native` is not available there.
+
+```csharp
+player.Source_Mode = MediaPlayerSourceMode.FFMPEG;
+player.Source_FFMPEG_HWDecoder = FFMPEGHWDecoder.Direct3D11;
+```
+
+| Value | Use it when |
+|---|---|
+| `Auto` (default) | You want the behaviour of earlier versions: software decoding. |
+| `Software` | The video must be decoded on the CPU, for example to work around a driver problem. |
+| `NvidiaCUDA` | The computer has an NVIDIA GPU. |
+| `IntelQuickSync` | The computer has Intel graphics. |
+| `Direct3D11` | Any GPU. A good first choice when you do not know the GPU vendor. |
+| `DXVA2CopyBack` | Any GPU, including older drivers without Direct3D 11 video decoding. |
+| `DXVA2Native` | The lowest CPU use, with EVR or madVR and without video effects or the sample grabber. |
+
+`NvidiaCUDA`, `IntelQuickSync`, `Direct3D11` and `DXVA2CopyBack` copy the decoded frames back to system memory, so every renderer, video effect and the sample grabber work with them.
+
+Every value except `Auto` is strict. When the computer has no such GPU, the GPU cannot decode the video (codec, profile, bit depth or frame size), or `DXVA2Native` has no renderer that accepts its surfaces, playback does not start and `OnError` names the decoder and the reason. The SDK never falls back to software decoding silently: handle `OnError` and choose another decoder, or `Auto`.

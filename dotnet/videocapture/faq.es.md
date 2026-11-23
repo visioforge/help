@@ -60,7 +60,7 @@ bool online = VideoCapture1.IP_Camera_CheckAvailable(
     uri, 554, System.Net.Sockets.ProtocolType.Tcp, TimeSpan.FromSeconds(5));
 ```
 
-Pase el puerto real: cuando la URL no tiene ninguno, `Uri.Port` devuelve el predeterminado del esquema, o -1 para `rtsp://`, que .NET no conoce. El puerto RTSP predeterminado es 554. El tiempo de espera cubre la conexión TCP, no la resolución del nombre del host, así que la comprobación puede bloquear más tiempo; además informa de una conexión rechazada mediante `OnError`, así que ejecútela en una tarea en segundo plano y no dentro del controlador de `OnError`. El conjunto completo de opciones de reconexión, incluido el conmutador de respaldo automático de los motores X, está en [Reconexión y respaldo RTSP](../general/network-sources/reconnection-and-fallback.md).
+Pase el puerto real: cuando la URL no tiene ninguno, `Uri.Port` devuelve el predeterminado del esquema, o -1 para `rtsp://`, que .NET no conoce. El puerto RTSP predeterminado es 554. El tiempo de espera cubre a la vez la resolución del nombre del host y la conexión TCP. Solo se admite TCP: una comprobación UDP devuelve `false`. La comprobación informa de una conexión rechazada mediante `OnError`, así que ejecútela en una tarea en segundo plano y no dentro del controlador de `OnError`. El conjunto completo de opciones de reconexión, incluido el conmutador de respaldo automático de los motores X, está en [Reconexión y respaldo RTSP](../general/network-sources/reconnection-and-fallback.md).
 
 ### El motor RTSP de baja latencia se conecta pero no muestra nada
 

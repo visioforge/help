@@ -13,6 +13,9 @@ tags:
   - Deployment
   - NuGet
   - Troubleshooting
+  - License Activation
+search:
+  boost: 2
 primary_api_classes:
   - VideoCaptureCore
   - MediaPlayerCore
@@ -76,11 +79,11 @@ Vérifiez aussi que l'application s'exécute sur la même plateforme (x64 ou x86
 
 Les anciens noms des classes de sortie correspondent à l'API actuelle : `VFMP4v8v10Output` (renommée `VFMP4Output` en version 14.2) s'appelle désormais `MP4Output`. La version 15 a scindé les contrôles d'interface uniques `VideoCapture`, `MediaPlayer` et `VideoEdit` en un contrôle `VideoView`, qui affiche la vidéo, et une classe moteur (`VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore`) qui conserve l'API de propriétés et de méthodes habituelle. Créez le moteur dans le code et passez-lui le `VideoView`, comme le font les [exemples](https://github.com/visioforge/.Net-SDK-s-samples). Pour la version actuelle, consultez le [guide de migration](../migration-from-v15.md).
 
-## Licences
+## Licences et activation { #licences }
 
-### Le texte « UNREGISTERED VERSION » s'affiche sur la vidéo
+### Une marque « TRIAL » ou « UNREGISTERED » s'affiche sur la vidéo
 
-Cette superposition est dessinée par la version d'essai de 30 jours. Sa deuxième ligne indique l'édition requise par les fonctionnalités utilisées (STANDARD, PROFESSIONAL ou PREMIUM) et la dernière est la page d'achat, visioforge.com/buy ; les pipelines Media Blocks et `VideoEditCoreX` affichent seulement UNREGISTERED et l'adresse. Une licence achetée est fournie sous la forme d'un fichier de certificat `.vflicense` : chargez-le dans chaque instance du moteur avec `SetLicenseCertificateAsync` avant de la démarrer. Un exemple se trouve dans [Video Capture SDK .NET](../videocapture/index.md). Si la superposition d'essai apparaît mais que rien n'est lu, le message n'est pas la cause : consultez l'événement `OnError` pour connaître l'erreur réelle.
+Cette superposition est dessinée par la version d'essai de 30 jours : une étiquette orange TRIAL et la page d'achat, visioforge.com/buy, dans le coin supérieur gauche. `VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore`, `VideoCaptureCoreX` et `MediaPlayerCoreX` ajoutent une ligne indiquant l'édition requise par les fonctionnalités utilisées (STANDARD, PROFESSIONAL ou PREMIUM). Les versions antérieures du SDK affichent le mot UNREGISTERED au lieu de TRIAL. Une licence achetée est fournie sous la forme d'un fichier de certificat `.vflicense` : chargez-le dans chaque instance du moteur avec `SetLicenseCertificateAsync` avant de la démarrer. Un exemple se trouve dans [Video Capture SDK .NET](../videocapture/index.md). Si la superposition d'essai apparaît mais que rien n'est lu, le message n'est pas la cause : consultez l'événement `OnError` pour connaître l'erreur réelle.
 
 ## Encodage matériel
 

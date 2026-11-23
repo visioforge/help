@@ -172,7 +172,7 @@ Six images make a 13-second video: six times 3 seconds, minus five seconds of ov
 
 ## Notes
 
-- **The trial watermark** — without a license, the SDK draws a red UNREGISTERED in the top-left corner of every frame. A license removes it; the code stays the same.
+- **The trial watermark** — without a license, the SDK draws an orange TRIAL tag with visioforge.com/buy in the top-left corner of every frame. A license removes it; the code stays the same. Both videos on this page were recorded with an earlier SDK version, which drew a red UNREGISTERED there instead.
 - **The target framework** — with `net10.0` instead of `net10.0-windows`, the app gets the Linux build of the SDK and fails with a `DllNotFoundException`.
 - **File names** — names sort as text, so `10.jpg` comes before `2.jpg`. Pad the numbers: `01`, `02`.
 - **File extensions** — the `*.jpg` pattern skips `.jpeg` files, and on macOS and Linux, where file names are case-sensitive, `.JPG` files too.

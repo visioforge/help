@@ -92,3 +92,28 @@ await player.PlayAsync();
 ```
 
 `Rate_SetAsync` también cambia el tempo de los archivos de karaoke. La [Karaoke Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinForms/Karaoke%20Demo) muestra un reproductor de karaoke completo.
+
+## Decodificación por hardware
+
+### ¿Qué decodificador por hardware debe usar el motor de origen FFMPEG?
+
+Con `Source_Mode` establecido en `MediaPlayerSourceMode.FFMPEG`, establezca `Source_FFMPEG_HWDecoder` antes de `PlayAsync`. Para cámaras IP en Video Capture SDK .NET, la misma opción es `FFMPEG_HWDecoder` en `IPCameraSourceSettings` con el motor `Auto_FFMPEG`. `DXVA2Native` no está disponible ahí.
+
+```csharp
+player.Source_Mode = MediaPlayerSourceMode.FFMPEG;
+player.Source_FFMPEG_HWDecoder = FFMPEGHWDecoder.Direct3D11;
+```
+
+| Valor | Úselo cuando |
+|---|---|
+| `Auto` (predeterminado) | Desea el comportamiento de las versiones anteriores: decodificación por software. |
+| `Software` | El video debe decodificarse en la CPU, por ejemplo para evitar un problema del controlador. |
+| `NvidiaCUDA` | El equipo tiene una GPU NVIDIA. |
+| `IntelQuickSync` | El equipo tiene gráficos Intel. |
+| `Direct3D11` | Cualquier GPU. Una buena primera opción cuando no conoce el fabricante de la GPU. |
+| `DXVA2CopyBack` | Cualquier GPU, incluidos controladores antiguos sin decodificación de video Direct3D 11. |
+| `DXVA2Native` | El menor uso de CPU, con EVR o madVR y sin efectos de video ni el sample grabber. |
+
+`NvidiaCUDA`, `IntelQuickSync`, `Direct3D11` y `DXVA2CopyBack` copian los fotogramas decodificados a la memoria del sistema, por lo que todos los renderizadores, los efectos de video y el sample grabber funcionan con ellos.
+
+Todos los valores excepto `Auto` son estrictos. Cuando el equipo no tiene esa GPU, la GPU no puede decodificar el video (códec, perfil, profundidad de bits o tamaño de fotograma) o `DXVA2Native` no tiene un renderizador que acepte sus superficies, la reproducción no se inicia y `OnError` indica el decodificador y el motivo. El SDK nunca recurre a la decodificación por software en silencio: gestione `OnError` y elija otro decodificador, o `Auto`.

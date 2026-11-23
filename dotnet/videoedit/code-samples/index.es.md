@@ -8,7 +8,7 @@ tags:
 
 ---
 
-# Ejemplos de código y tutoriales de edición de video .NET
+# Ejemplos de código de edición de video .NET — unir, combinar, superponer
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -40,7 +40,7 @@ Esta página recopila recetas en C# listas para usar para los escenarios de edic
 
 - [Editor de video iOS](ios-video-editor.md) — Creación de aplicaciones de edición de video para iPhone y iPad
 
-## Receta — Unir varios archivos fuente en un solo MP4
+## Receta — Unir, combinar o concatenar archivos de video en un solo MP4 { #receta-unir-varios-archivos-fuente-en-un-solo-mp4 }
 
 `VideoSource` acepta un nombre de archivo más tiempos de inicio/fin opcionales. Para recortar una sección de una fuente, pase los desplazamientos de inicio y fin; para usar el archivo completo, pase `null`. Cada llamada a `Input_AddVideoFile` añade a la línea de tiempo.
 

@@ -1,6 +1,6 @@
 ---
 title: Cámaras IP RTSP en el navegador con WHEP en C# .NET
-description: Muestre cámaras IP RTSP en un navegador por WebRTC (WHEP) desde una app C#, con latencia inferior a un segundo, sin recodificar ni servidor de medios.
+description: Muestre cámaras IP RTSP con sonido en un navegador por WebRTC (WHEP) desde una app C#, con latencia inferior a un segundo, sin recodificar el vídeo.
 sidebar_label: Cámaras RTSP en el navegador (WHEP)
 tags:
   - Media Blocks SDK
@@ -22,6 +22,7 @@ primary_api_classes:
   - WHEPServerSinkSettings
   - RTSPRAWSourceBlock
   - RTSPRAWSourceSettings
+  - DecodeBinBlock
   - MediaBlocksPipeline
 
 ---
@@ -37,29 +38,32 @@ primary_api_classes:
 
 ## Qué va a construir
 
-Un navegador no puede abrir una URL RTSP. Las formas habituales de llevar una cámara IP a una página web son transcodificarla a HLS (varios segundos de retardo y un decodificador más un codificador por cámara) o ejecutar un servidor de medios aparte junto a su aplicación. Esta guía sigue una tercera vía: su propia aplicación .NET se convierte en un servidor WebRTC y el H.264 de la cámara llega al navegador exactamente como lo envió la cámara.
+Un navegador no puede abrir una URL RTSP. Las formas habituales de llevar una cámara IP a una página web son transcodificarla a HLS (varios segundos de retardo y un decodificador más un codificador por cámara) o ejecutar un servidor de medios aparte junto a su aplicación. Esta guía sigue una tercera vía: su propia aplicación .NET se convierte en un servidor WebRTC, el H.264 de la cámara llega al navegador exactamente como lo envió la cámara y el audio de la cámara lo acompaña en Opus.
 
 ![Dos cámaras en la cuadrícula del navegador, cada una reproducida por WebRTC desde su propio WHEPServerSinkBlock](rtsp-cameras-in-browser-whep-grid.webp)
 
-El pipeline de una cámara son dos bloques:
+El pipeline de una cámara son dos bloques para el vídeo y un decodificador para el audio:
 
 ```mermaid
 graph LR;
-    cam["Cámara IP"] -- "RTSP, H.264" --> RTSPRAWSourceBlock;
+    cam["Cámara IP"] -- "RTSP, H.264 + AAC" --> RTSPRAWSourceBlock;
     subgraph app ["Su aplicación .NET"]
         RTSPRAWSourceBlock -- "H.264, sin decodificar" --> WHEPServerSinkBlock;
+        RTSPRAWSourceBlock -- "AAC / G.711" --> DecodeBinBlock;
+        DecodeBinBlock -- "PCM" --> WHEPServerSinkBlock;
     end
     WHEPServerSinkBlock -- WebRTC --> b1["Navegador"];
     WHEPServerSinkBlock -- WebRTC --> b2["Navegador"];
 ```
 
-- `RTSPRAWSourceBlock` se conecta a la cámara y entrega su H.264 codificado sin decodificarlo.
-- `WHEPServerSinkBlock` ejecuta un servidor WHEP (WebRTC-HTTP Egress Protocol). Un navegador le envía una oferta WebRTC por HTTP, recibe una respuesta y obtiene el vídeo por su propia sesión WebRTC.
+- `RTSPRAWSourceBlock` se conecta a la cámara y entrega su H.264 codificado sin decodificarlo, junto con su audio codificado.
+- `DecodeBinBlock` decodifica el AAC o G.711 de la cámara. Los navegadores aceptan Opus por WebRTC, así que el audio no puede pasarse tal cual como el vídeo.
+- `WHEPServerSinkBlock` ejecuta un servidor WHEP (WebRTC-HTTP Egress Protocol). Un navegador le envía una oferta WebRTC por HTTP, recibe una respuesta y obtiene el vídeo y el audio por su propia sesión WebRTC. El bloque codifica el audio a Opus para cada espectador.
 
 Lo que se gana:
 
 - **Latencia inferior a un segundo.** El navegador reproduce el flujo por WebRTC, no mediante un protocolo basado en segmentos.
-- **Casi nada de CPU por cámara, con cualquier número de espectadores.** No se decodifica ni se codifica nada: el bloque envía el flujo de la cámara a cada espectador tal como llega. Cada espectador sigue costando un ancho de banda de red igual a la tasa de bits de la cámara.
+- **Casi nada de CPU para el vídeo, con cualquier número de espectadores.** El vídeo nunca se decodifica ni se codifica: el bloque envía el flujo de la cámara a cada espectador tal como llega. El audio se decodifica una vez por cámara y se codifica a Opus para cada espectador. Cada espectador sigue costando un ancho de banda de red igual a la tasa de bits de la cámara.
 - **Sin servidor de medios.** El servidor WHEP se ejecuta dentro de su proceso; el lado del navegador son unas 20 líneas de JavaScript sin ninguna biblioteca de reproductor.
 
 WHEP es un pequeño protocolo HTTP sobre WebRTC: un `POST` con la oferta SDP, un `201 Created` con la respuesta SDP y un encabezado `Location` para la sesión, y un `DELETE` sobre ese `Location` cuando el espectador se va. Cualquier reproductor WHEP puede usar el endpoint, no solo la página de esta guía.
@@ -68,8 +72,8 @@ WHEP es un pequeño protocolo HTTP sobre WebRTC: un `POST` con la oferta SDP, un
 
 - Windows x64, macOS o Linux x64/arm64 (Debian 12, Ubuntu 24.04 y posteriores). `WHEPServerSinkBlock` usa el plugin `rswebrtc` de GStreamer, que se distribuye en el paquete de runtime `Adds` de cada plataforma.
 - .NET 10 (.NET 8 o posterior en Linux).
-- Una cámara IP con un flujo RTSP H.264.
-- Media Blocks SDK .NET versión 2026.11.20 o posterior en Windows, la versión que añade `WHEPServerSinkBlock`, y 2026.11.21 o posterior en macOS y Linux.
+- Una cámara IP con un flujo RTSP H.264; para el sonido, una cámara que envíe audio (AAC o G.711).
+- Media Blocks SDK .NET versión 2026.11.20 o posterior en Windows, la versión que añade `WHEPServerSinkBlock`, y 2026.11.21 o posterior en macOS y Linux. La entrada de audio, `WHEPServerSinkBlock.AudioInput`, requiere la 2026.11.23 o posterior.
 
 Paquetes NuGet:
 
@@ -105,12 +109,12 @@ sequenceDiagram
     Page->>WHEPServerSinkBlock: POST /whep/endpoint
     WHEPServerSinkBlock-->>Page: 201 Created, respuesta SDP, Location
     Page-->>Browser: 201 Created, respuesta SDP, Location
-    WHEPServerSinkBlock-)Browser: H.264 de la cámara por WebRTC
+    WHEPServerSinkBlock-)Browser: H.264 de la cámara y audio Opus por WebRTC
     Browser->>Page: DELETE Location (página cerrada)
     Page->>WHEPServerSinkBlock: DELETE Location
 ```
 
-Solo el intercambio HTTP pasa por el servidor de la página. El vídeo viaja por la conexión WebRTC que establecen la oferta y la respuesta.
+Solo el intercambio HTTP pasa por el servidor de la página. El vídeo y el audio viajan por la conexión WebRTC que establecen la oferta y la respuesta.
 
 ## Una cámara: el servidor completo
 
@@ -127,6 +131,7 @@ using VisioForge.Core;
 using VisioForge.Core.MediaBlocks;
 using VisioForge.Core.MediaBlocks.Sinks;
 using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.Special;
 using VisioForge.Core.Types.X.Sinks;
 using VisioForge.Core.Types.X.Sources;
 
@@ -150,8 +155,8 @@ try
     pipeline = new MediaBlocksPipeline();
     pipeline.OnError += (s, e) => Console.WriteLine(e.Message);
 
-    // H.264 codificado directamente de la cámara, sin audio: los navegadores aceptan Opus, no el AAC de la cámara.
-    var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.64:554/stream1"), "admin", "password", audioEnabled: false);
+    // H.264 codificado directamente de la cámara, y su audio si lo tiene (CreateAsync desactiva el audio en caso contrario).
+    var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.64:554/stream1"), "admin", "password", audioEnabled: true);
     var rtsp = new RTSPRAWSourceBlock(rtspSettings);
 
     // El servidor WHEP escucha solo en loopback; los navegadores llegan a él a través del servidor de la página de abajo.
@@ -159,7 +164,15 @@ try
     whep.ConsumerAdded += (s, e) => Console.WriteLine($"Viewer connected: {e.PeerId}");
     whep.ConsumerRemoved += (s, e) => Console.WriteLine($"Viewer left: {e.PeerId}");
 
-    pipeline.Connect(rtsp.VideoOutput, whep.Input);
+    pipeline.Connect(rtsp.VideoOutput, whep.VideoInput);
+
+    // Los navegadores aceptan Opus, no el AAC o G.711 de la cámara: se decodifica aquí y el servidor WHEP lo codifica a Opus.
+    if (rtspSettings.AudioEnabled)
+    {
+        var audioDecoder = new DecodeBinBlock(renderVideo: false, renderAudio: true, renderSubtitle: false);
+        pipeline.Connect(rtsp.AudioOutput, audioDecoder.Input);
+        pipeline.Connect(audioDecoder.AudioOutput, whep.AudioInput);
+    }
 
     // La página y las solicitudes WHEP comparten un origen: whepserversink no envía encabezados CORS.
     pageServer = new HttpListener();
@@ -278,8 +291,9 @@ static async Task WriteAsync(HttpListenerResponse response, string? contentType,
 
 Qué hace cada parte:
 
-- **`RTSPRAWSourceSettings.CreateAsync`** se conecta a la cámara y lee la descripción de su flujo antes de construir el pipeline. `audioEnabled: false` deja fuera el audio de la cámara: el servidor WHEP tiene una sola entrada de vídeo y los navegadores aceptan Opus por WebRTC, no el AAC o G.711 que envía una cámara. `CreateAsync` lanza `InvalidOperationException` cuando no puede leer el flujo: la cámara está desconectada, la URL es incorrecta o se rechazan las credenciales.
-- **`RTSPRAWSourceBlock.VideoOutput`** lleva el H.264 codificado de la cámara. Conectarlo directamente a **`WHEPServerSinkBlock.Input`** es toda la ruta de medios: ni decodificador ni codificador.
+- **`RTSPRAWSourceSettings.CreateAsync`** se conecta a la cámara y lee la descripción de su flujo antes de construir el pipeline. Con `audioEnabled: true` conserva el audio de la cámara y desactiva `AudioEnabled` cuando la cámara no envía ninguno; el código solo conecta el audio en ese caso. `CreateAsync` lanza `InvalidOperationException` cuando no puede leer el flujo: la cámara está desconectada, la URL es incorrecta o se rechazan las credenciales.
+- **`RTSPRAWSourceBlock.VideoOutput`** lleva el H.264 codificado de la cámara. Conectarlo directamente a **`WHEPServerSinkBlock.VideoInput`** (el mismo pad que `Input`) es toda la ruta del vídeo: ni decodificador ni codificador.
+- **`RTSPRAWSourceBlock.AudioOutput`** lleva el audio codificado de la cámara. **`DecodeBinBlock`**, solo con `renderAudio`, lo decodifica, y **`WHEPServerSinkBlock.AudioInput`** recibe el audio sin comprimir y lo codifica a Opus para cada espectador. Una cámara mono llega al navegador como dos canales idénticos.
 - **`WHEPServerSinkSettings.ServerAddress`** es la dirección en la que escucha el servidor WHEP. `127.0.0.1` lo deja accesible solo desde esta máquina, que es lo que conviene cuando el servidor de la página le reenvía las solicitudes. La propiedad `EndpointUrl` del bloque devuelve la URL a la que envían los reproductores; aquí, `http://127.0.0.1:9100/whep/endpoint`.
 - **`ConsumerAdded` / `ConsumerRemoved`** informan de cada espectador que se conecta y se va, con su ID de sesión en `PeerId`. Se generan en un hilo de GStreamer: en una aplicación con interfaz, páselos al hilo de la interfaz sin bloquearlo; la demo usa `Dispatcher.BeginInvoke`. `ConsumerRemoved` no se genera para los espectadores aún conectados cuando se detiene el pipeline; sus sesiones terminan con él.
 - **`try` / `finally`** informa de lo que falló (`CreateAsync` con la cámara, `HttpListener.Start` con un puerto ocupado) y el `finally` cierra el servidor de la página, detiene y libera el pipeline y llama a `VisioForgeX.DestroySDK()`, tanto si el inicio tuvo éxito como si falló.
@@ -306,7 +320,7 @@ Coloque este archivo en `wwwroot/index.html`. La función `play` es el reproduct
 </head>
 <body>
 <figure>
-    <video id="video" autoplay muted playsinline></video>
+    <video id="video" autoplay muted playsinline controls></video>
     <figcaption id="caption" data-name="Camera">Camera</figcaption>
 </figure>
 <script>
@@ -317,7 +331,10 @@ Coloque este archivo en `wwwroot/index.html`. La función `play` es el reproduct
     async function play(endpoint, video, caption) {
         const pc = new RTCPeerConnection({ iceServers });
         pc.addTransceiver('video', { direction: 'recvonly' });
-        pc.ontrack = e => video.srcObject = e.streams[0] || new MediaStream([e.track]);
+        pc.addTransceiver('audio', { direction: 'recvonly' });
+        // El vídeo y el audio llegan como dos pistas; ambas van al único flujo que reproduce el elemento video.
+        video.srcObject = new MediaStream();
+        pc.ontrack = e => video.srcObject.addTrack(e.track);
 
         await pc.setLocalDescription(await pc.createOffer());
         // Enviar la oferta con todos los candidatos ICE dentro.
@@ -345,13 +362,13 @@ Coloque este archivo en `wwwroot/index.html`. La función `play` es el reproduct
 
 Paso a paso:
 
-1. **Un transceptor de vídeo solo de recepción.** La página solo mira, así que ofrece recibir una pista de vídeo y no envía nada.
+1. **Transceptores de vídeo y audio solo de recepción.** La página solo mira y escucha, así que ofrece recibir una pista de vídeo y una de audio y no envía nada. Una cámara sin audio deja inactiva la parte de audio de la respuesta y el vídeo se reproduce solo.
 2. **Esperar a que termine la recopilación ICE** antes de enviar la oferta. Así todos los candidatos de red viajan dentro del único `POST` y el reproductor nunca necesita las solicitudes `PATCH` de WHEP para trickle ICE.
 3. **Enviar con `POST` la oferta SDP** con `Content-Type: application/sdp`. El servidor responde `201 Created` con la respuesta SDP en el cuerpo.
-4. **Aplicar la respuesta.** WebRTC se conecta y `ontrack` entrega la pista de la cámara al elemento `<video>`.
+4. **Aplicar la respuesta.** WebRTC se conecta y `ontrack` añade cada pista, de vídeo y de audio, al flujo que reproduce el elemento `<video>`.
 5. **Eliminar la sesión en `pagehide`.** El encabezado `Location` identifica la sesión; `keepalive: true` permite que el `DELETE` salga mientras la página se descarga. El servidor genera entonces `ConsumerRemoved`.
 
-El elemento `<video>` está en `muted`, lo que permite al navegador iniciar la reproducción sin un clic, y en `playsinline` para los navegadores móviles. El pie muestra el estado de la conexión (`connecting`, `connected`, `failed`), que es lo primero que hay que mirar cuando un recuadro se queda en negro.
+El elemento `<video>` está en `muted`, lo que permite al navegador iniciar la reproducción sin un clic; `controls` permite al espectador activar el sonido, y `playsinline` es para los navegadores móviles. Los navegadores no reproducen sonido automáticamente antes de que el espectador interactúe con la página, así que una página que deba sonar de inmediato quita el silencio desde un manejador de clic. El pie muestra el estado de la conexión (`connecting`, `connected`, `failed`), que es lo primero que hay que mirar cuando un recuadro se queda en negro.
 
 ## Escalar a varias cámaras
 
@@ -363,10 +380,12 @@ graph LR;
     subgraph cam0 ["Cámara 0"]
         direction LR
         r0["RTSPRAWSourceBlock"] --> w0["WHEPServerSinkBlock<br/>127.0.0.1:9100"];
+        r0 --> d0["DecodeBinBlock"] --> w0;
     end
     subgraph cam1 ["Cámara 1"]
         direction LR
         r1["RTSPRAWSourceBlock"] --> w1["WHEPServerSinkBlock<br/>127.0.0.1:9101"];
+        r1 --> d1["DecodeBinBlock"] --> w1;
     end
     page -- "/whep/... a :9100" --> cam0;
     page -- "/whep/... a :9101" --> cam1;
@@ -374,15 +393,15 @@ graph LR;
 
 ![Ventana de la RTSP WHEP Camera Grid Demo: dos cámaras con sus URL WHEP, el enlace a la página de la cuadrícula y dos sesiones de espectador](rtsp-cameras-in-browser-whep-demo.webp)
 
-La parte del pipeline, tomada del manejador de inicio de la demo: un par `RTSPRAWSourceBlock` → `WHEPServerSinkBlock` por cámara, con puertos WHEP a partir de 9100:
+La parte del pipeline, tomada del manejador de inicio de la demo: un par `RTSPRAWSourceBlock` → `WHEPServerSinkBlock` por cámara, con un `DecodeBinBlock` para cada cámara que tenga audio y puertos WHEP a partir de 9100:
 
 ```csharp
 for (var i = 0; i < _cameras.Count; i++)
 {
     var camera = _cameras[i];
 
-    // H.264 codificado directamente de la cámara, sin audio: los navegadores aceptan Opus, no el AAC de la cámara.
-    var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(camera.Url, camera.Login, camera.Password, audioEnabled: false);
+    // H.264 codificado directamente de la cámara, y su audio si lo tiene (CreateAsync desactiva el audio en caso contrario).
+    var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(camera.Url, camera.Login, camera.Password, audioEnabled: true);
     var rtsp = new RTSPRAWSourceBlock(rtspSettings);
 
     // Un servidor WHEP por cámara; solo esta app habla con él, los navegadores pasan por el servidor de la página de abajo.
@@ -390,7 +409,15 @@ for (var i = 0; i < _cameras.Count; i++)
     whep.ConsumerAdded += (s, args) => UpdateViewers(+1);
     whep.ConsumerRemoved += (s, args) => UpdateViewers(-1);
 
-    _pipeline.Connect(rtsp.VideoOutput, whep.Input);
+    _pipeline.Connect(rtsp.VideoOutput, whep.VideoInput);
+
+    // Los navegadores aceptan Opus, no el AAC o G.711 de la cámara: se decodifica aquí y el servidor WHEP lo codifica a Opus.
+    if (rtspSettings.AudioEnabled)
+    {
+        var audioDecoder = new DecodeBinBlock(renderVideo: false, renderAudio: true, renderSubtitle: false);
+        _pipeline.Connect(rtsp.AudioOutput, audioDecoder.Input);
+        _pipeline.Connect(audioDecoder.AudioOutput, whep.AudioInput);
+    }
 }
 ```
 
@@ -431,7 +458,7 @@ El servidor de la página de la demo también responde a `/cameras` con el núme
     const count = await (await fetch('/cameras')).json();
     for (let i = 0; i < count; i++) {
         const figure = document.createElement('figure');
-        const video = Object.assign(document.createElement('video'), { autoplay: true, muted: true, playsInline: true });
+        const video = Object.assign(document.createElement('video'), { autoplay: true, muted: true, playsInline: true, controls: true });
         const caption = document.createElement('figcaption');
         caption.dataset.name = caption.textContent = `Camera ${i}`;
         figure.append(video, caption);
@@ -460,9 +487,11 @@ El flujo de la cámara llega al navegador intacto, así que el decodificador Web
 
 El propio `WHEPSourceBlock` del SDK ofrece H.264 solo como constrained baseline con el `profile-level-id` exacto `42e016`, que los flujos de las cámaras no cumplen, por lo que no obtiene imagen de este bloque. Use un navegador o un reproductor que envíe `level-asymmetry-allowed=1`, como hacen los navegadores.
 
-### Sin audio
+### Audio
 
-El bloque tiene una entrada, para vídeo. Cree la fuente RTSP con `audioEnabled: false`.
+`AudioInput` recibe audio sin comprimir y el bloque lo codifica a Opus para cada espectador, el único códec de audio que todos los navegadores aceptan por WebRTC; el audio ya codificado (el AAC de la cámara) no se puede conectar, así que decodifíquelo antes con `DecodeBinBlock`. Una cámara mono se envía como dos canales idénticos. Conecte el audio solo cuando la cámara lo tenga: el servidor WHEP empieza a escuchar solo cuando cada entrada conectada ha entregado su formato, así que una entrada de audio que no recibe nada lo mantiene cerrado. `CreateAsync` desactiva `AudioEnabled` para una cámara sin audio, que es la comprobación que hace el código anterior. Dos cámaras necesitan `audioEnabled: false`: una que declara audio en la descripción de su flujo pero no lo envía, que mantiene el servidor cerrado de la misma forma, y una cuyo códec de audio no tiene decodificador, que hace fallar el pipeline; en la cuadrícula de cámaras de más arriba un único pipeline lleva todas las cámaras.
+
+Opus se codifica para cada espectador, así que cada espectador añade un codificador de audio; el vídeo, que pasa tal cual, no añade ninguno.
 
 ### Dirección de escucha
 
@@ -518,6 +547,8 @@ Windows x64 con `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS con `Vis
 | `WHEPServerSinkBlock.IsAvailable()` devuelve `false` | El paquete `Adds` de la plataforma no está referenciado o, en Linux, faltan los paquetes de la distribución indicados en [Requisitos previos](#requisitos-previos). |
 | `CreateAsync` lanza `InvalidOperationException` ("Unable to read RTSP stream info") | La cámara no es accesible, o la URL o las credenciales son incorrectas. Abra la misma URL en otro cliente RTSP para comprobarla. |
 | `StartAsync` devuelve `false` | Lea los mensajes de `OnError`: un puerto ya en uso, un `ServerAddress` no válido o un flujo de cámara que no es H.264 (H.265, MJPEG). |
+| El vídeo se reproduce sin sonido | El elemento `<video>` empieza en silencio: active el sonido con sus controles. Si la cámara no envía audio, `CreateAsync` desactivó `AudioEnabled` y no se conectó audio; revise la configuración de audio de la cámara. |
+| La página muestra `HTTP 502` con el audio conectado | La entrada de audio no recibió nada, así que el servidor WHEP nunca empezó a escuchar. Conecte `AudioInput` solo para una cámara que envíe audio; para una cámara que declara audio pero no lo envía, cree la fuente con `audioEnabled: false`. |
 | La página muestra un error de `fetch` como `Failed to fetch` | La página y el endpoint están en orígenes distintos. Sirva la página desde el servidor que reenvía `/whep/`, nunca desde el disco ni desde otro puerto. |
 | La página muestra `HTTP 404` o `HTTP 502` | El servidor de la página no reenvió la ruta, o el servidor WHEP no se está ejecutando en el puerto de reenvío. |
 | El pie se queda en `connecting` y luego pasa a `failed` | El navegador no puede llegar a la máquina de la aplicación por WebRTC. Revise el firewall de esa máquina; para espectadores fuera de la red local configure STUN/TURN en ambos lados: `StunServer` y `TurnServer` para el servidor, `iceServers` en la página. |
@@ -527,8 +558,8 @@ Windows x64 con `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS con `Vis
 
 ## ¿Servidor WHEP, WebRTC, WHIP o HLS?
 
-- **`WHEPServerSinkBlock`** (esta guía): la fuente ya es H.264 (una cámara IP) y los espectadores son navegadores de su red. Passthrough, sin codificador, sin servidor de medios, solo vídeo.
-- **[`WebRTCSinkBlock`](../Sinks/index.md#webrtc)**: el vídeo está sin comprimir o se procesa en el pipeline (una webcam, la pantalla, superposiciones, analítica), o necesita audio. Codifica para cada espectador (vídeo VP8, audio Opus) con control de congestión por espectador, a costa de un codificador por espectador, y usa el protocolo de señalización WebSocket de `webrtcsink` en lugar de WHEP.
+- **`WHEPServerSinkBlock`** (esta guía): la fuente ya es H.264 (una cámara IP) y los espectadores son navegadores de su red. Vídeo en passthrough sin codificador, audio codificado a Opus, sin servidor de medios.
+- **[`WebRTCSinkBlock`](../Sinks/index.md#webrtc)**: el vídeo está sin comprimir o se procesa en el pipeline (una webcam, la pantalla, superposiciones, analítica). Codifica para cada espectador (vídeo VP8, audio Opus) con control de congestión por espectador, a costa de un codificador por espectador, y usa el protocolo de señalización WebSocket de `webrtcsink` en lugar de WHEP.
 - **[`WHIPSinkBlock`](../Sinks/index.md#whip)**: ya tiene un servidor de medios WebRTC (MediaMTX, Janus, Cloudflare Stream) y quiere que la aplicación le envíe un flujo; el servidor se encarga entonces de los espectadores. Requiere vídeo H.264 y audio Opus; funciona en Windows, macOS y Linux.
 - **[HLS](../Sinks/index.md#hls)**: espectadores en internet a través de una CDN o de un reproductor `<video>` simple, cuando un retardo de varios segundos es aceptable. Consulte también [streaming HLS](../../general/network-streaming/hls-streaming.md) y la guía del [reproductor HLS para ASP.NET Web Forms](aspnet-webforms-hls-player.md).
 
@@ -540,15 +571,15 @@ No. Los navegadores no implementan RTSP. El flujo tiene que llegar a la página 
 
 ### ¿La aplicación recodifica el vídeo?
 
-No. `RTSPRAWSourceBlock` entrega el H.264 codificado de la cámara y `WHEPServerSinkBlock` lo envía a cada espectador tal como llega. Por eso una cámara cuesta casi nada de CPU, la vean cuantos espectadores la vean, y también por eso la cámara debe enviar H.264 en un perfil que el navegador pueda decodificar.
+No. `RTSPRAWSourceBlock` entrega el H.264 codificado de la cámara y `WHEPServerSinkBlock` lo envía a cada espectador tal como llega. Por eso el vídeo cuesta casi nada de CPU, lo vean cuantos espectadores lo vean, y también por eso la cámara debe enviar H.264 en un perfil que el navegador pueda decodificar. Solo el audio se recodifica, a Opus.
 
 ### ¿Necesito un servidor de medios como MediaMTX o Janus?
 
 No. El servidor WHEP se ejecuta dentro de su proceso .NET. Solo necesita un servidor de medios si quiere que él gestione a los espectadores, por ejemplo en internet; en ese caso, envíele el flujo con `WHIPSinkBlock`.
 
-### ¿Por qué no hay audio?
+### ¿Cómo llega el audio de la cámara al navegador?
 
-El bloque tiene una única entrada de vídeo. Los navegadores reciben Opus por WebRTC y las cámaras IP envían AAC o G.711, así que el audio de la cámara no puede pasarse tal cual. Cree la fuente con `audioEnabled: false`. Cuando necesite audio en el navegador, use `WebRTCSinkBlock`, que lo codifica a Opus.
+Los navegadores reciben Opus por WebRTC y las cámaras IP envían AAC o G.711, así que el audio no puede pasarse tal cual como el vídeo. Cree la fuente con `audioEnabled: true`, decodifique `RTSPRAWSourceBlock.AudioOutput` con `DecodeBinBlock` y conecte el decodificador a `WHEPServerSinkBlock.AudioInput`: el bloque lo codifica a Opus para cada espectador. La página ofrece un transceptor de audio y reproduce ambas pistas en un único elemento `<video>`, que empieza en silencio hasta que el espectador activa el sonido.
 
 ### ¿Puedo reproducir el flujo con algo que no sea un navegador?
 
@@ -556,7 +587,7 @@ Sí, cualquier reproductor WHEP puede enviar una oferta al endpoint. La excepci�
 
 ### ¿Cuántas cámaras y espectadores puede servir una aplicación?
 
-No hay codificación por espectador, así que el límite es el ancho de banda de red: cada espectador de cada cámara recibe la tasa de bits completa de esa cámara. Use los subflujos de las cámaras para las vistas en cuadrícula.
+No hay codificación de vídeo por espectador (solo un codificador Opus por espectador para el audio), así que el límite es el ancho de banda de red: cada espectador de cada cámara recibe la tasa de bits completa de esa cámara. Use los subflujos de las cámaras para las vistas en cuadrícula.
 
 ## Véase también
 

@@ -13,6 +13,9 @@ tags:
   - Deployment
   - NuGet
   - Troubleshooting
+  - License Activation
+search:
+  boost: 2
 primary_api_classes:
   - VideoCaptureCore
   - MediaPlayerCore
@@ -76,11 +79,11 @@ Also check that the application runs as the same platform (x64 or x86) as the re
 
 Old output class names map to today's API: `VFMP4v8v10Output` (renamed `VFMP4Output` in version 14.2) is now `MP4Output`. Version 15 split the single `VideoCapture`, `MediaPlayer` and `VideoEdit` UI controls into a `VideoView` control that renders video and an engine class (`VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore`) that keeps the familiar property and method API. Create the engine in code and pass it the `VideoView`, as the [samples](https://github.com/visioforge/.Net-SDK-s-samples) do. For the current version, see the [migration guide](../migration-from-v15.md).
 
-## Licensing
+## Licensing and activation { #licensing }
 
-### An "UNREGISTERED VERSION" text is drawn on the video
+### A "TRIAL" or "UNREGISTERED" mark is drawn on the video
 
-That overlay is drawn by the 30-day trial. Its second line names the edition the features in use require (STANDARD, PROFESSIONAL or PREMIUM), and the last line is the purchase page, visioforge.com/buy; Media Blocks pipelines and `VideoEditCoreX` draw UNREGISTERED and the address only. A purchased license comes as a `.vflicense` certificate file: load it into every engine instance with `SetLicenseCertificateAsync` before you start it. See [Video Capture SDK .NET](../videocapture/index.md) for an example. If the trial overlay is visible but nothing plays, the message is not the cause — check the `OnError` event for the real error.
+That overlay is drawn by the 30-day trial: an orange TRIAL tag and the purchase page, visioforge.com/buy, in the top-left corner. `VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore`, `VideoCaptureCoreX` and `MediaPlayerCoreX` add a line naming the edition the features in use require (STANDARD, PROFESSIONAL or PREMIUM). Earlier SDK versions draw the word UNREGISTERED instead of TRIAL. A purchased license comes as a `.vflicense` certificate file: load it into every engine instance with `SetLicenseCertificateAsync` before you start it. See [Video Capture SDK .NET](../videocapture/index.md) for an example. If the trial overlay is visible but nothing plays, the message is not the cause — check the `OnError` event for the real error.
 
 ## Hardware encoding
 

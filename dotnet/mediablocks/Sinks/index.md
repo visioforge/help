@@ -1851,7 +1851,7 @@ Windows.
 
 The `WHEPServerSinkBlock` shows a camera in web browsers over WebRTC through WHEP (WebRTC-HTTP Egress Protocol). It runs a WHEP server: a browser, or any other WHEP player, posts its offer to the block's endpoint and gets its own WebRTC session.
 
-Connect encoded H.264 video, for example the output of `RTSPRAWSourceBlock`: the block sends the camera's stream to every viewer as it arrives, with no decoding or encoding, so a camera costs almost no CPU however many viewers watch it. This is the answer to "how do I show my RTSP cameras on a web page" for surveillance and NVR applications.
+Connect encoded H.264 video, for example the output of `RTSPRAWSourceBlock`: the block sends the camera's stream to every viewer as it arrives, with no decoding or encoding, so a camera costs almost no CPU however many viewers watch it. Connect raw audio to `AudioInput` — the camera's AAC or G.711 decoded by `DecodeBinBlock` — and the block encodes it to Opus for each viewer; a mono source is sent as two identical channels. This is the answer to "how do I show my RTSP cameras on a web page" for surveillance and NVR applications.
 
 #### Block info
 
@@ -1860,6 +1860,7 @@ Name: WHEPServerSinkBlock.
 | Pin direction | Media type | Pins count |
 | --- | :---: | :---: |
 | Input video | H.264 | one |
+| Input audio | uncompressed audio | one (optional) |
 
 #### Settings
 
@@ -1875,13 +1876,13 @@ Players post their offer to `/whep/endpoint` on the server; the block's `Endpoin
 
 The `ConsumerAdded` and `ConsumerRemoved` events report each player that connects and leaves, with its session ID. They are raised on a GStreamer thread. `ConsumerRemoved` is not raised for players still connected when the pipeline stops — their sessions end with it.
 
-The server takes `http://` addresses only. `Build` fails, with an `OnError` message, when `ServerAddress` is not an `http://` address with a port in 1–65535, or its port is already in use. The input takes encoded H.264 only: raw video or another codec fails the start instead of being encoded for every viewer.
+The server takes `http://` addresses only. `Build` fails, with an `OnError` message, when `ServerAddress` is not an `http://` address with a port in 1–65535, or its port is already in use. The video input takes encoded H.264 only: raw video or another codec fails the start instead of being encoded for every viewer. Connect `AudioInput` only when the source has audio: the server starts listening only once every connected input has delivered its format.
 
 #### The web page
 
 The WHEP server sends no CORS headers, so a browser accepts its answers only on a page served from the same address and port. Serve the page from your own HTTP server and forward the WHEP requests (`POST`, `PATCH`, `DELETE` under `/whep/`) to the block's server — in your application, or with a reverse proxy such as nginx or IIS. When you forward several cameras under different paths, rewrite the `Location` header of the answer to the same path.
 
-The browser side is about 20 lines of JavaScript: create an `RTCPeerConnection` with a receive-only video transceiver, post its offer to the endpoint with `Content-Type: application/sdp`, and apply the answer. Receiving WebRTC needs no HTTPS, so viewers on the local network can use plain `http://`.
+The browser side is about 20 lines of JavaScript: create an `RTCPeerConnection` with receive-only video and audio transceivers, post its offer to the endpoint with `Content-Type: application/sdp`, and apply the answer. Receiving WebRTC needs no HTTPS, so viewers on the local network can use plain `http://`.
 
 Chromium-based browsers (Chrome, Edge) played a camera's 1080p Main profile H.264 in our tests. Whether a browser plays a profile depends on its WebRTC decoder: one that takes only constrained baseline shows no picture for a Main or High profile camera. When a viewer's browser shows an empty tile, open the page in Chrome or Edge, or switch the camera's stream to the Baseline profile if the camera offers one. Most browsers cannot play H.265 over WebRTC: use the camera's H.264 stream.
 
@@ -1896,6 +1897,8 @@ For a step-by-step walkthrough — the complete server and browser code, several
 ```mermaid
 graph LR;
     RTSPRAWSourceBlock -- H.264 --> WHEPServerSinkBlock;
+    RTSPRAWSourceBlock -- AAC --> DecodeBinBlock;
+    DecodeBinBlock -- PCM --> WHEPServerSinkBlock;
 ```
 
 #### Sample code
@@ -1903,8 +1906,8 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-// Encoded H.264 straight from the camera; no audio, browsers take Opus.
-var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.64:554/stream1"), "admin", "password", audioEnabled: false);
+// Encoded H.264 straight from the camera, and its audio if it has any.
+var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.64:554/stream1"), "admin", "password", audioEnabled: true);
 var rtsp = new RTSPRAWSourceBlock(rtspSettings);
 
 var whep = new WHEPServerSinkBlock(new WHEPServerSinkSettings
@@ -1914,7 +1917,15 @@ var whep = new WHEPServerSinkBlock(new WHEPServerSinkSettings
 
 whep.ConsumerAdded += (s, e) => Console.WriteLine($"Viewer connected: {e.PeerId}");
 
-pipeline.Connect(rtsp.VideoOutput, whep.Input);
+pipeline.Connect(rtsp.VideoOutput, whep.VideoInput);
+
+// The camera's AAC or G.711, decoded; the block encodes it to Opus for each viewer.
+if (rtspSettings.AudioEnabled)
+{
+    var audioDecoder = new DecodeBinBlock(renderVideo: false, renderAudio: true, renderSubtitle: false);
+    pipeline.Connect(rtsp.AudioOutput, audioDecoder.Input);
+    pipeline.Connect(audioDecoder.AudioOutput, whep.AudioInput);
+}
 
 await pipeline.StartAsync();
 

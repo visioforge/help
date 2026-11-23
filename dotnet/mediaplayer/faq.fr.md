@@ -92,3 +92,28 @@ await player.PlayAsync();
 ```
 
 `Rate_SetAsync` modifie aussi le tempo des fichiers karaoké. La [Karaoke Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinForms/Karaoke%20Demo) présente un lecteur karaoké complet.
+
+## Décodage matériel
+
+### Quel décodeur matériel le moteur source FFMPEG doit-il utiliser ?
+
+Avec `Source_Mode` défini sur `MediaPlayerSourceMode.FFMPEG`, définissez `Source_FFMPEG_HWDecoder` avant `PlayAsync`. Pour les caméras IP dans Video Capture SDK .NET, le même choix est `FFMPEG_HWDecoder` dans `IPCameraSourceSettings` avec le moteur `Auto_FFMPEG`. `DXVA2Native` n'y est pas disponible.
+
+```csharp
+player.Source_Mode = MediaPlayerSourceMode.FFMPEG;
+player.Source_FFMPEG_HWDecoder = FFMPEGHWDecoder.Direct3D11;
+```
+
+| Valeur | À utiliser quand |
+|---|---|
+| `Auto` (par défaut) | Vous voulez le comportement des versions précédentes : décodage logiciel. |
+| `Software` | La vidéo doit être décodée par le processeur, par exemple pour contourner un problème de pilote. |
+| `NvidiaCUDA` | L'ordinateur dispose d'un GPU NVIDIA. |
+| `IntelQuickSync` | L'ordinateur dispose d'une carte graphique Intel. |
+| `Direct3D11` | Tout GPU. Un bon premier choix si vous ne connaissez pas le fabricant du GPU. |
+| `DXVA2CopyBack` | Tout GPU, y compris d'anciens pilotes sans décodage vidéo Direct3D 11. |
+| `DXVA2Native` | La plus faible charge processeur, avec EVR ou madVR, sans effets vidéo ni sample grabber. |
+
+`NvidiaCUDA`, `IntelQuickSync`, `Direct3D11` et `DXVA2CopyBack` recopient les images décodées en mémoire système : tous les moteurs de rendu, les effets vidéo et le sample grabber fonctionnent avec eux.
+
+Toutes les valeurs sauf `Auto` sont strictes. Si l'ordinateur ne dispose pas de ce GPU, si le GPU ne peut pas décoder la vidéo (codec, profil, profondeur de bits ou taille d'image), ou si `DXVA2Native` n'a pas de moteur de rendu qui accepte ses surfaces, la lecture ne démarre pas et `OnError` indique le décodeur et la raison. Le SDK ne revient jamais silencieusement au décodage logiciel : gérez `OnError` et choisissez un autre décodeur, ou `Auto`.

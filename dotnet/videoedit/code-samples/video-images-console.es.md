@@ -172,7 +172,7 @@ Seis imágenes dan un video de 13 segundos: seis veces 3 segundos, menos cinco s
 
 ## Notas
 
-- **La marca de agua de prueba**: sin licencia, el SDK dibuja un UNREGISTERED rojo en la esquina superior izquierda de cada fotograma. Una licencia la elimina; el código no cambia.
+- **La marca de agua de prueba**: sin licencia, el SDK dibuja una etiqueta naranja TRIAL con visioforge.com/buy en la esquina superior izquierda de cada fotograma. Una licencia la elimina; el código no cambia. Los dos videos de esta página se grabaron con una versión anterior del SDK, que dibujaba en su lugar un UNREGISTERED rojo.
 - **El framework de destino**: con `net10.0` en lugar de `net10.0-windows`, la aplicación recibe la compilación para Linux del SDK y falla con una `DllNotFoundException`.
 - **Nombres de archivo**: los nombres se ordenan como texto, así que `10.jpg` va antes que `2.jpg`. Rellene los números: `01`, `02`.
 - **Extensiones de archivo**: el patrón `*.jpg` omite los archivos `.jpeg` y, en macOS y Linux, donde los nombres distinguen mayúsculas y minúsculas, también los `.JPG`.

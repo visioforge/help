@@ -8,7 +8,7 @@ tags:
 
 ---
 
-# .NET Video Editing Code Examples & Tutorials
+# .NET Video Editing Code Examples — Join, Merge, Overlay
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -40,7 +40,7 @@ This page collects ready-to-use C# recipes for the most common editing scenarios
 
 - [iOS Video Editor](ios-video-editor.md) — Building video editing apps for iPhone and iPad
 
-## Recipe — Join Multiple Source Files into a Single MP4
+## Recipe — Join, Merge or Concatenate Video Files into One MP4 { #recipe-join-multiple-source-files-into-a-single-mp4 }
 
 `VideoSource` accepts a filename plus optional start/stop times. To trim a section from a source, pass the start and stop offsets; to use the whole file, pass `null`. Each call to `Input_AddVideoFile` appends to the timeline.
 

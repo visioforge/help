@@ -1866,6 +1866,95 @@ Console.WriteLine(json);
 
 Windows, macOS, Linux, iOS, Android.
 
+### Host de plug-ins VST® 3
+
+![Logotipo VST Compatible](vst-compatible-logo.webp){ width="120" }
+
+El `VST3AudioBlock` ejecuta un plug-in de efecto de audio VST® 3 (un paquete `.vst3`) en la ruta de audio: reverberaciones, compresores, ecualizadores, reducción de ruido, cualquiera instalado en el equipo. El audio mono y estéreo se convierte al formato de 32 bits en coma flotante del plug-in y de vuelta. La latencia que informa el plug-in se compensa, de modo que la salida sigue sincronizada con el video.
+
+El SDK no incluye ningún plug-in: indique al bloque uno instalado en el equipo. Las carpetas habituales son `C:\Program Files\Common Files\VST3` en Windows, `/Library/Audio/Plug-Ins/VST3` en macOS y `~/.vst3` o `/usr/lib/vst3` en Linux.
+
+El plug-in se carga con la primera llamada que lo necesita, o al iniciar el pipeline, así que sus parámetros y presets pueden leerse y configurarse antes de la reproducción. Los valores de los parámetros están normalizados, de 0.0 a 1.0; `VST3ParameterInfo.Text` y `Units` dan el valor tal como lo muestra el plug-in. La ventana de edición propia del plug-in no se muestra: contrólelo mediante sus parámetros.
+
+#### Información del bloque
+
+Nombre: VST3AudioBlock.
+
+Dirección del pin | Tipo de medio | Cantidad de pines
+--- | :---: | :---:
+Entrada | Audio sin comprimir, mono o estéreo | 1
+Salida | Audio sin comprimir | 1
+
+#### Configuración
+
+| Miembro | Tipo | Descripción |
+|----------|------|-------------|
+| `Location` (constructor: `location`) | `string` | Ruta al paquete `.vst3` |
+| `ClassIndex` (constructor: `classIndex`, predeterminado `0`) | `int` | Qué efecto cargar cuando el paquete contiene varios (`GetClassNames()` los enumera) |
+| `Bypass` | `bool` | Deja pasar el audio sin procesar; puede cambiarse durante la reproducción |
+| `Latency` | `int` | La latencia que informa el plug-in, en muestras; 0 hasta que ha procesado audio |
+| `ClassName` | `string` | El nombre del efecto cargado; `null` antes de cargar el plug-in |
+
+Métodos clave:
+
+- `GetParameters()` -- retorna un `VST3ParameterInfo` por cada parámetro: `ID`, `Title`, `Units`, `StepCount`, `DefaultValue`, `Flags`, `Value` y `Text`.
+- `GetParameter(uint id)` y `SetParameter(uint id, double value)` -- leen y configuran un valor normalizado, también durante la reproducción. `GetParameter` retorna -1.0 y `SetParameter` retorna `false` para un ID que el plug-in no tiene, o cuando el plug-in no se carga.
+- `GetState()` y `SetState(byte[] preset)` -- guardan y restauran el estado completo del plug-in en formato `.vstpreset`.
+- `VST3AudioBlock.IsAvailable()` -- indica si el host VST 3 está presente en esta plataforma.
+
+Un paquete que no puede cargarse hace fallar el inicio del pipeline con un error que nombra el paquete y la causa.
+
+**Elemento GStreamer**: `vfvst3filter`
+
+#### Pipeline de ejemplo
+
+```mermaid
+graph LR;
+    UniversalSourceBlock-->VST3AudioBlock;
+    VST3AudioBlock-->AudioRendererBlock;
+```
+
+#### Código de ejemplo
+
+El ejemplo usa Dragonfly Room Reverb, una reverberación gratuita y de código abierto (GPL-3.0) para Windows, macOS y Linux, de [github.com/michaelwillis/dragonfly-reverb](https://github.com/michaelwillis/dragonfly-reverb/releases). Descomprima la versión y copie `DragonflyRoomReverb.vst3` en la carpeta VST 3.
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp3"));
+
+var reverb = new VST3AudioBlock(@"C:\Program Files\Common Files\VST3\DragonflyRoomReverb.vst3");
+pipeline.Connect(fileSource.AudioOutput, reverb.Input);
+
+var audioRenderer = new AudioRendererBlock();
+pipeline.Connect(reverb.Output, audioRenderer.Input);
+
+// The plug-in loads here, before the pipeline starts.
+foreach (var parameter in reverb.GetParameters())
+{
+    Console.WriteLine($"{parameter.ID}: {parameter}"); // for example "6: Size: 12.000000 m"
+}
+
+// A larger room: normalized 0.8 is 27.2 m in this plug-in.
+var size = reverb.GetParameters().First(p => p.Title == "Size");
+reverb.SetParameter(size.ID, 0.8);
+
+await pipeline.StartAsync();
+
+// Save the settings as a preset, and restore them later with SetState.
+var preset = reverb.GetState();
+if (preset != null)
+{
+    File.WriteAllBytes("room.vstpreset", preset);
+}
+```
+
+#### Plataformas
+
+Windows x64, macOS (Apple Silicon e Intel) y Linux x64, incluidos en los paquetes `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, `VisioForge.CrossPlatform.Core.macOS.Adds` y `VisioForge.CrossPlatform.Core.Linux.Adds.x64`. En Linux el GStreamer del sistema debe ser 1.22 o posterior. Windows x86 y ARM64, Linux ARM64, iOS y Android aún no son compatibles. El plug-in debe estar compilado para la misma arquitectura que la aplicación: una aplicación de 64 bits carga plug-ins de 64 bits.
+
+VST es una marca registrada de Steinberg Media Technologies GmbH.
+
 ### Mezcla de canales ponderada
 
 El `WeightedChannelMixBlock` mezcla los canales estéreo izquierdo y derecho con pesos ajustables de forma independiente, produciendo una salida mono o estéreo. Se utiliza principalmente para fuentes de doble mono, como audio de karaoke donde un canal lleva una pista instrumental y el otro una mezcla completa.

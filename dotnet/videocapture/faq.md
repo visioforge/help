@@ -60,7 +60,7 @@ bool online = VideoCapture1.IP_Camera_CheckAvailable(
     uri, 554, System.Net.Sockets.ProtocolType.Tcp, TimeSpan.FromSeconds(5));
 ```
 
-Pass the real port: when the URL has none, `Uri.Port` returns the scheme default, or -1 for `rtsp://`, which .NET does not know. The default RTSP port is 554. The timeout covers the TCP connection, not the host name lookup, so the check can block longer; it also reports a refused connection through `OnError`, so run it on a background task and not from inside the `OnError` handler. The full set of reconnection options, including the automatic fallback switch of the X engines, is in [RTSP reconnection and fallback](../general/network-sources/reconnection-and-fallback.md).
+Pass the real port: when the URL has none, `Uri.Port` returns the scheme default, or -1 for `rtsp://`, which .NET does not know. The default RTSP port is 554. The timeout covers the host name lookup and the TCP connection together. Only TCP is supported: a UDP check returns `false`. The check reports a refused connection through `OnError`, so run it on a background task and not from inside the `OnError` handler. The full set of reconnection options, including the automatic fallback switch of the X engines, is in [RTSP reconnection and fallback](../general/network-sources/reconnection-and-fallback.md).
 
 ### The low-latency RTSP engine connects but shows nothing
 

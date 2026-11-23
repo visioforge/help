@@ -1884,7 +1884,7 @@ Windows.
 
 El `WHEPServerSinkBlock` muestra una cámara en navegadores web por WebRTC mediante WHEP (WebRTC-HTTP Egress Protocol). Ejecuta un servidor WHEP: un navegador, o cualquier otro reproductor WHEP, envía su oferta al endpoint del bloque y obtiene su propia sesión WebRTC.
 
-Conecte video H.264 ya codificado, por ejemplo la salida de `RTSPRAWSourceBlock`: el bloque envía el flujo de la cámara a cada espectador tal como llega, sin decodificar ni codificar, de modo que una cámara apenas consume CPU sin importar cuántos espectadores la vean. Esta es la respuesta a «cómo muestro mis cámaras RTSP en una página web» para aplicaciones de videovigilancia y NVR.
+Conecte video H.264 ya codificado, por ejemplo la salida de `RTSPRAWSourceBlock`: el bloque envía el flujo de la cámara a cada espectador tal como llega, sin decodificar ni codificar, de modo que una cámara apenas consume CPU sin importar cuántos espectadores la vean. Conecte audio sin comprimir a `AudioInput` (el AAC o G.711 de la cámara decodificado por `DecodeBinBlock`) y el bloque lo codifica a Opus para cada espectador; una fuente mono se envía como dos canales idénticos. Esta es la respuesta a «cómo muestro mis cámaras RTSP en una página web» para aplicaciones de videovigilancia y NVR.
 
 #### Información del bloque
 
@@ -1893,6 +1893,7 @@ Nombre: WHEPServerSinkBlock.
 | Dirección del pin | Tipo de medio | Conteo de pines |
 | --- | :---: | :---: |
 | Entrada de video | H.264 | uno |
+| Entrada de audio | audio sin comprimir | uno (opcional) |
 
 #### Configuración
 
@@ -1908,13 +1909,13 @@ Los reproductores envían su oferta a `/whep/endpoint` en el servidor; la propie
 
 Los eventos `ConsumerAdded` y `ConsumerRemoved` informan de cada reproductor que se conecta y se desconecta, con su ID de sesión. Se generan en un hilo de GStreamer. `ConsumerRemoved` no se genera para los reproductores que siguen conectados cuando el pipeline se detiene: sus sesiones terminan con él.
 
-El servidor solo acepta direcciones `http://`. `Build` falla, con un mensaje `OnError`, cuando `ServerAddress` no es una dirección `http://` con un puerto entre 1 y 65535, o cuando su puerto ya está en uso. La entrada solo acepta H.264 codificado: el vídeo sin comprimir u otro códec hacen fallar el inicio en lugar de codificarse para cada espectador.
+El servidor solo acepta direcciones `http://`. `Build` falla, con un mensaje `OnError`, cuando `ServerAddress` no es una dirección `http://` con un puerto entre 1 y 65535, o cuando su puerto ya está en uso. La entrada de vídeo solo acepta H.264 codificado: el vídeo sin comprimir u otro códec hacen fallar el inicio en lugar de codificarse para cada espectador. Conecte `AudioInput` solo cuando la fuente tenga audio: el servidor empieza a escuchar solo cuando cada entrada conectada ha entregado su formato.
 
 #### La página web
 
 El servidor WHEP no envía encabezados CORS, por lo que un navegador acepta sus respuestas solo en una página servida desde la misma dirección y el mismo puerto. Sirva la página desde su propio servidor HTTP y reenvíe las solicitudes WHEP (`POST`, `PATCH`, `DELETE` bajo `/whep/`) al servidor del bloque, en su aplicación o con un proxy inverso como nginx o IIS. Si reenvía varias cámaras bajo rutas distintas, reescriba el encabezado `Location` de la respuesta con la misma ruta.
 
-En el navegador bastan unas 20 líneas de JavaScript: cree un `RTCPeerConnection` con un transceptor de video solo de recepción, envíe su oferta al endpoint con `Content-Type: application/sdp` y aplique la respuesta. Recibir WebRTC no requiere HTTPS, así que los espectadores de la red local pueden usar `http://`.
+En el navegador bastan unas 20 líneas de JavaScript: cree un `RTCPeerConnection` con transceptores de video y audio solo de recepción, envíe su oferta al endpoint con `Content-Type: application/sdp` y aplique la respuesta. Recibir WebRTC no requiere HTTPS, así que los espectadores de la red local pueden usar `http://`.
 
 En nuestras pruebas, los navegadores basados en Chromium (Chrome, Edge) reprodujeron el H.264 1080p de perfil Main de una cámara. Que un navegador reproduzca un perfil depende de su decodificador WebRTC: uno que solo acepta constrained baseline no muestra imagen de una cámara con perfil Main o High. Si el navegador de un espectador muestra un recuadro vacío, abra la página en Chrome o Edge, o cambie el flujo de la cámara al perfil Baseline si la cámara lo ofrece. La mayoría de los navegadores no puede reproducir H.265 por WebRTC: use el flujo H.264 de la cámara.
 
@@ -1929,6 +1930,8 @@ Para una guía paso a paso, con el código completo del servidor y del navegador
 ```mermaid
 graph LR;
     RTSPRAWSourceBlock -- H.264 --> WHEPServerSinkBlock;
+    RTSPRAWSourceBlock -- AAC --> DecodeBinBlock;
+    DecodeBinBlock -- PCM --> WHEPServerSinkBlock;
 ```
 
 #### Código de muestra
@@ -1936,8 +1939,8 @@ graph LR;
 ```csharp
 var pipeline = new MediaBlocksPipeline();
 
-// H.264 codificado directamente de la cámara; sin audio, los navegadores usan Opus.
-var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.64:554/stream1"), "admin", "password", audioEnabled: false);
+// H.264 codificado directamente de la cámara, y su audio si lo tiene.
+var rtspSettings = await RTSPRAWSourceSettings.CreateAsync(new Uri("rtsp://192.168.1.64:554/stream1"), "admin", "password", audioEnabled: true);
 var rtsp = new RTSPRAWSourceBlock(rtspSettings);
 
 var whep = new WHEPServerSinkBlock(new WHEPServerSinkSettings
@@ -1947,7 +1950,15 @@ var whep = new WHEPServerSinkBlock(new WHEPServerSinkSettings
 
 whep.ConsumerAdded += (s, e) => Console.WriteLine($"Viewer connected: {e.PeerId}");
 
-pipeline.Connect(rtsp.VideoOutput, whep.Input);
+pipeline.Connect(rtsp.VideoOutput, whep.VideoInput);
+
+// El AAC o G.711 de la cámara, decodificado; el bloque lo codifica a Opus para cada espectador.
+if (rtspSettings.AudioEnabled)
+{
+    var audioDecoder = new DecodeBinBlock(renderVideo: false, renderAudio: true, renderSubtitle: false);
+    pipeline.Connect(rtsp.AudioOutput, audioDecoder.Input);
+    pipeline.Connect(audioDecoder.AudioOutput, whep.AudioInput);
+}
 
 await pipeline.StartAsync();
 

@@ -8,7 +8,7 @@ tags:
 
 ---
 
-# Exemples de code et tutoriels d'édition vidéo .NET
+# Exemples de code d'édition vidéo .NET — joindre, fusionner, superposer
 
 [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net){ .md-button .md-button--primary target="_blank" }
 
@@ -40,7 +40,7 @@ Cette page rassemble des recettes C# prêtes à l'emploi pour les scénarios d'�
 
 - [Éditeur vidéo iOS](ios-video-editor.md) — Création d'applications d'édition vidéo pour iPhone et iPad
 
-## Recette — Concaténer plusieurs fichiers sources en un seul MP4
+## Recette — Joindre, fusionner ou concaténer des fichiers vidéo en un seul MP4 { #recette-concatener-plusieurs-fichiers-sources-en-un-seul-mp4 }
 
 `VideoSource` accepte un nom de fichier plus des temps de début/fin optionnels. Pour rogner une section d'une source, passez les décalages de début et de fin ; pour utiliser le fichier complet, passez `null`. Chaque appel à `Input_AddVideoFile` ajoute à la timeline.
 
